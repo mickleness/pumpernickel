@@ -1,0 +1,1 @@
+The "throbber" project contains a simple Java implementation of a throbber Swing component.
