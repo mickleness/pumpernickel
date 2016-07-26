@@ -1,0 +1,1 @@
+The "common" project is a small collection of core classes that most Pumpernickel projects use.
