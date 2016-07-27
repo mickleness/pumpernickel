@@ -1,0 +1,1 @@
+The "graphics" project contains classes related to Graphics2D classes, icons, or the GraphicsWriter classes.
