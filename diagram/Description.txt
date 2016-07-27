@@ -1,0 +1,1 @@
+The "diagram" project contains classes related to making diagrams (especially focusing on ERD's, or inheritance).
