@@ -1,0 +1,1 @@
+The "swing" project contains several small or helper classes related to Swing components.
