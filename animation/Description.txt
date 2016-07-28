@@ -1,0 +1,1 @@
+The "animation" project contains classes that model animations.
