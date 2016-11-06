@@ -1,1 +1,0 @@
-The "writing" project contains classes that mimic writing text in an animation.
