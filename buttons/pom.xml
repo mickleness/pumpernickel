@@ -4,7 +4,7 @@
 
   <groupId>com.pump</groupId>
   <artifactId>pump-buttons</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.00</version>
   <packaging>jar</packaging>
 
   <name>pump-buttons</name>
@@ -24,7 +24,7 @@
     <dependency>
       <groupId>com.pump</groupId>
       <artifactId>pump-awt</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0.00</version>
     </dependency>
   </dependencies>
 </project>

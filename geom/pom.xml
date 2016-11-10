@@ -4,7 +4,7 @@
 
   <groupId>com.pump</groupId>
   <artifactId>pump-geom</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.00</version>
   <packaging>jar</packaging>
 
   <name>pump-geom</name>
@@ -24,7 +24,7 @@
     <dependency>
       <groupId>com.pump</groupId>
       <artifactId>pump-common</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0.00</version>
     </dependency>
   </dependencies>
 </project>
