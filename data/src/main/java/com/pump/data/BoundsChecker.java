@@ -9,6 +9,21 @@ import java.io.Serializable;
  */
 public abstract class BoundsChecker<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * This BoundsChecker will throw an IllegalArgumentException if a candidate value is null.
+	 */
+	@SuppressWarnings({ "rawtypes" })
+	public static BoundsChecker NOT_NULL = new BoundsChecker() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void check(Key key, Object t) throws IllegalArgumentException {
+			if(t==null)
+				throw new IllegalArgumentException("The key \""+key+"\" should not be null");
+		}
+		
+	};
 
 	/** Check that a potential value is an accepted value.
 	 * @param key the key this value will be assigned to.

@@ -4,15 +4,46 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.prefs.Preferences;
 
+import com.pump.data.encoder.ValueEncoder;
+
+/**
+ * This describes a key/attribute and its associated generic type.
+ * <p>
+ * This also includes optional {@link BoundsChecker BoundsCheckers}
+ * which are triggered in the {@link #validate(Object)} method.
+ * <p>
+ * Each <code>Key</code> is also capable of serializing/deserializing an
+ * object as a String. The <code>Key</code> class itself is abstract, and each
+ * subclass knows how to read/write data itself.
+ * 
+ * @param <T> the type of object this Key relates to.
+ */
 public class Key<T> implements CharSequence, Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	protected final String name;
 	protected final Class<T> type;
 	protected List<BoundsChecker<T>> checkers;
+	protected T defaultValue;
+	protected ValueEncoder<T> encoder;
 	
 	public Key(Class<T> type,String name) {
+		this(type, name, null);
+	}
+	
+	public Key(Class<T> type,String name,T defaultValue) {
+		this(type, name, defaultValue, true);
+	}
+	
+	public Key(Class<T> type,String name,T defaultValue,boolean canBeNull) {
+		this(type, name, defaultValue, canBeNull, ValueEncoder.getDefaultEncoder(type));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Key(Class<T> type,String name,T defaultValue,boolean canBeNull,ValueEncoder<T> encoder) {
 		if(type==null)
 			throw new NullPointerException();
 		if(name==null)
@@ -20,8 +51,13 @@ public class Key<T> implements CharSequence, Serializable {
 		if(name.length()==0)
 			throw new IllegalArgumentException();
 		
+		this.defaultValue = defaultValue;
 		this.type = type;
 		this.name = name;
+		this.encoder = encoder;
+		
+		if(!canBeNull)
+			addBoundsChecker(BoundsChecker.NOT_NULL);
 	}
 	
 	public void addBoundsChecker(BoundsChecker<T> bc) {
@@ -64,6 +100,8 @@ public class Key<T> implements CharSequence, Serializable {
 			return false;
 		if(!type.equals(other.type))
 			return false;
+		if(!Objects.equals(defaultValue, other.defaultValue))
+			return false;
 		return true;
 	}
 
@@ -81,14 +119,26 @@ public class Key<T> implements CharSequence, Serializable {
 		}
 		return returnValue;
 	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public T put(Map attributes, T value) {
+	
+	/**
+	 * Validate the argument against all of this key's BoundsCheckers (if any).
+	 * 
+	 * @param value the value to check. This may be null.
+	 * 
+	 * @throws IllegalArgumentException, or any other RuntimeException that
+	 * BoundsCheckers may consider appropriate.
+	 */
+	public void validate(T value) {
 		if(checkers!=null) {
 			for(BoundsChecker<T> checker : checkers) {
 				checker.check(this, value);
 			}
 		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public T put(Map attributes, T value) {
+		validate(value);
 		
 		if(value==null) {
 			return (T) attributes.remove(toString());
@@ -100,5 +150,79 @@ public class Key<T> implements CharSequence, Serializable {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public T get(Map attributes) {
 		return (T) attributes.get(toString());
+	}
+	
+	/**
+	 * Returns the name of this key, which is equivalent to {@link #toString()}.
+	 * 
+	 * @return the name of this key, which is equivalent to {@link #toString()}.
+	 */
+	public String getName()
+	{
+		return name;
+	}
+	
+	/**
+	 * Store an attribute in a Preferences object.
+	 * 
+	 * @param prefs the destination to store the object int.
+	 * @param value the value to write.
+	 */
+	public void set(Preferences prefs,T value) {
+		validate(value);
+		
+		if(value==null) {
+			prefs.remove(getName());
+		} else {
+			ValueEncoder<T> encoder = getEncoder();
+			String encodedValue = encoder.encode(value);
+			prefs.put(getName(), encodedValue);
+		}
+	}
+	
+	/** Check to see if a value must be serialized.
+	 * 
+	 * @param value a value to validate
+	 * @return true if the argument matches the default value. Note subclasses
+	 * may override this to identify approximate matches. (For example:
+	 * consider an AffineTransform where 1 value is within .00001 of an identity
+	 * transform.)
+	 */
+	public boolean isDefault(T value) {
+		return Objects.equals(defaultValue, value);
+	}
+
+	/**
+	 * 
+	 * @return the default value for this key (may be null).
+	 */
+	public T getDefaultValue() {
+		return defaultValue;
+	}
+
+	/**
+	 * Retrieve a value from a Preferences object, or return a default value.
+	 * 
+	 * @param prefs the preferences object to consult.
+	 * @param defaultValue the default value if no other value is provided.
+	 * @return either the stored value in the preferences, or the defaultValue if the preferences don't include this key.
+	 */
+	public T get(Preferences prefs,T defaultValue) {
+		String value = prefs.get(getName(), null);
+		if(value==null) {
+			return defaultValue;
+		}
+		
+		return getEncoder().parse(value);
+	}
+	
+	public ValueEncoder<T> getEncoder() {
+		return encoder;
+	}
+	
+	/** @return the generic parameters this attribute relies on. The default implementation returns an empty array.
+	 */
+	public Key<?>[] getGenericParameters() {
+		return new Key<?>[] {};
 	}
 }
