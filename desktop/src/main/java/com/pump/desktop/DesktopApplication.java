@@ -33,6 +33,7 @@ import com.pump.desktop.error.BugReporter;
 import com.pump.desktop.error.ErrorDialogThrowableHandler;
 import com.pump.desktop.error.ErrorManager;
 import com.pump.desktop.logging.SessionLog;
+import com.pump.desktop.temp.TempFileManager;
 import com.pump.util.JVM;
 import com.pump.window.WindowList;
 
@@ -59,6 +60,7 @@ public class DesktopApplication {
 	    		(frameClass==null ? "null" : frameClass.getName()) +")");
 	    JVM.printProfile();
 	    ErrorManager.initialize(simpleAppName);
+	    TempFileManager.initialize(qualifiedAppName);
 		AWTMonitor.installAWTListener(simpleAppName, false);
 		CacheManager.initialize(qualifiedAppName, version);
 		
