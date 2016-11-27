@@ -27,7 +27,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -38,6 +37,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -71,6 +72,9 @@ import com.pump.image.pixel.quantize.MedianCutColorQuantization;
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.inspector.InspectorLayout;
 import com.pump.io.SuffixFilenameFilter;
+import com.pump.job.Job;
+import com.pump.job.JobManager;
+import com.pump.swing.ThrobberManager;
 
 
 /** A simple demo program that applies color and image quantization to
@@ -103,6 +107,11 @@ sandboxDemo = true
 @ResourceSample( sample="new com.bric.image.pixel.quantize.QuantizationDemo( )" )
 public class ImageQuantizationDemo extends JPanel {
 	private static final long serialVersionUID = 1L;
+	
+	public static final String KEY_ORIGINAL_IMAGE = ImageQuantizationDemo.class+"#originalImage";
+	public static final String KEY_REDUCED_IMAGE = ImageQuantizationDemo.class+"#reducedImage";
+	public static final String KEY_ORIGINAL_COLOR_SET = ImageQuantizationDemo.class+"#colorSet";
+	public static final String KEY_REDUCED_COLOR_SET = ImageQuantizationDemo.class+"#reducedColorSet";
 
 	/** A map of color cell bounds to the color they represent. */
 	Map<Rectangle, Color> cells = new HashMap<Rectangle, Color>();
@@ -116,6 +125,7 @@ public class ImageQuantizationDemo extends JPanel {
 
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
+			BufferedImage reducedImage = (BufferedImage) ImageQuantizationDemo.this.getClientProperty(KEY_REDUCED_IMAGE);
 			if(reducedImage!=null) {
 				Graphics2D g2 = (Graphics2D)g.create();
 				g2.drawImage(reducedImage, 0, 0, null);
@@ -148,14 +158,11 @@ public class ImageQuantizationDemo extends JPanel {
 		}
 	};
 	JSlider reductionSlider = new JSlider(2, 256);
-	BufferedImage originalImage = null;
-	BufferedImage reducedImage = null;
-	ColorSet originalImageColors = null;
-	ColorSet reducedImageColors = null;
 	JComboBox<String> reductionType = new JComboBox<String>();
 	JComboBox<ImageQuantization> quantizationType = new JComboBox<ImageQuantization>();
 	JLabel quantizationLabel = new JLabel("Quantization:");
-
+	JobManager jobManager = new JobManager(1);
+	ThrobberManager throbberManager = new ThrobberManager(jobManager);
 
 	public ImageQuantizationDemo() {
 		setLayout(new GridBagLayout());
@@ -172,7 +179,7 @@ public class ImageQuantizationDemo extends JPanel {
 		InspectorLayout layout = new InspectorGridBagLayout(controls);
 		layout.addRow(fileLabel, filePath, true, browseButton);
 		layout.addRow(colorCountLabel, reductionSlider, true, reductionType);
-		layout.addRow(quantizationLabel, quantizationType, false);
+		layout.addRow(quantizationLabel, quantizationType, false, throbberManager.createThrobber());
 		
 		reductionType.addItem("Biased");
 		reductionType.addItem("Median Cut (Simplest)");
@@ -205,7 +212,7 @@ public class ImageQuantizationDemo extends JPanel {
 		
 		reductionSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				updateReducedColorList();
+				jobManager.addJob(new QuantizeOriginalColorSetJob());
 			}
 		});
 		Dimension d = new Dimension(400, 400);
@@ -216,19 +223,19 @@ public class ImageQuantizationDemo extends JPanel {
 		pixelPanel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				updateCells();
+				jobManager.addJob(new ResizePixelCellsJob());
 			}
 		});
 
 		quantizationType.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				updateReducedImage();
+				jobManager.addJob(new QuantizeImageJob());
 			}
 		});
 		
 		reductionType.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				updateReducedColorList();
+				jobManager.addJob(new QuantizeOriginalColorSetJob());
 			}
 		});
 		
@@ -251,6 +258,42 @@ public class ImageQuantizationDemo extends JPanel {
 		quantizationType.addItem( ImageQuantization.MEDIUM_DIFFUSION );
 		quantizationType.addItem( ImageQuantization.SIMPLEST_DIFFUSION );
 		quantizationType.addItem( ImageQuantization.NEAREST_NEIGHBOR );
+
+		
+		addPropertyChangeListener(KEY_ORIGINAL_IMAGE, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				jobManager.addJob(new UpdateOriginalColorSetJob());
+			}
+		});
+		
+		addPropertyChangeListener(KEY_ORIGINAL_COLOR_SET, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				jobManager.addJob(new QuantizeOriginalColorSetJob());
+			}
+		});
+		
+		addPropertyChangeListener(KEY_REDUCED_COLOR_SET, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				jobManager.addJob(new QuantizeImageJob());
+			}
+		});
+		
+		addPropertyChangeListener(KEY_REDUCED_IMAGE, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				BufferedImage reducedImage = (BufferedImage) getClientProperty(KEY_REDUCED_IMAGE);
+				contentPanel.setPreferredSize( new Dimension(reducedImage.getWidth(), reducedImage.getHeight()) );
+				contentPanel.repaint();
+				contentScrollPane.revalidate();
+			}
+		});
 	}
 	
 	/** If invoked from within a Frame: this pulls up a FileDialog to
@@ -275,187 +318,193 @@ public class ImageQuantizationDemo extends JPanel {
 		if(d==null) return null;
 		return new File(fd.getDirectory()+fd.getFile());
 	}
-
-	private boolean dirtyColorList = false;
-	private void updateReducedColorList() {
-		dirtyColorList = true;
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				doUpdateReducedColorList();
-			}
-		});
-	}
-	
-	private void doUpdateReducedColorList() {
-		if(dirtyColorList==false)
-			return;
-		dirtyColorList = false;
-		reducedImageColors = null;
-		if(originalImageColors!=null) {
-			ColorQuantization cq = null;
-			if(reductionType.getSelectedIndex()==0) {
-				cq = new BiasedMedianCutColorQuantization(.1f);
-			} else {
-				cq = new MedianCutColorQuantization();
-			}
-			reducedImageColors = cq.createReducedSet( originalImageColors, reductionSlider.getValue(), true );
-		}
-		contentScrollPane.repaint();
-
-		updateReducedImage();
-		updateCells();
-	}
-	
-	private void updateReducedImage() {
-		reducedImage = null;
-		contentPanel.repaint();
-		if(reducedImageColors==null)
-			return;
-		
-		IndexColorModel icm = reducedImageColors.createIndexColorModel(false, false);
-		ColorLUT lut = new ColorLUT(icm);
-		reducedImage = ((ImageQuantization)quantizationType.getSelectedItem()).createImage(originalImage, lut);
-		contentPanel.setPreferredSize( new Dimension(reducedImage.getWidth(), reducedImage.getHeight()) );
-		
-	}
-	
-	private void updateCells() {
-		int x = 0;
-		int y = 0;
-		cells.clear();
-		if(reducedImageColors!=null) {
-			Color[] color = reducedImageColors.getColors();
-
-			/** This is a crude hard-to-explain approach to sorting
-			 * colors into clusters that humans find reasonably appealing.
-			 * (That is: without a 3D representation it's hard to
-			 * express a series of 3D-data points in 2D space.)
-			 */
-			
-			Comparator<Color> hueComparator = new Comparator<Color>() {
-
-				public int compare(Color c1, Color c2) {
-					float[] hsb1 = new float[3];
-					float[] hsb2 = new float[3];
-					Color.RGBtoHSB(c1.getRed(), c1.getGreen(), c1.getBlue(), hsb1);
-					Color.RGBtoHSB(c2.getRed(), c2.getGreen(), c2.getBlue(), hsb2);
-					if(hsb1[0]<hsb2[0]) {
-						return -1;
-					} else if(hsb1[0]>hsb2[0]) {
-						return 1;
-					} else if(hsb1[1]<hsb2[1]) {
-						return -1;
-					} else if(hsb1[1]>hsb2[1]) {
-						return 1;
-					} else if(hsb1[2]<hsb2[2]) {
-						return -1;
-					} else if(hsb1[2]>hsb2[2]) {
-						return 1;
-					}
-					return 0;
-				}
-				
-			};
-			Comparator<Color> brightnessComparator = new Comparator<Color>() {
-
-				public int compare(Color c1, Color c2) {
-					float[] hsb1 = new float[3];
-					float[] hsb2 = new float[3];
-					Color.RGBtoHSB(c1.getRed(), c1.getGreen(), c1.getBlue(), hsb1);
-					Color.RGBtoHSB(c2.getRed(), c2.getGreen(), c2.getBlue(), hsb2);
-					if(hsb1[2]<hsb2[2]) {
-						return -1;
-					} else if(hsb1[2]>hsb2[2]) {
-						return 1;
-					} else if(hsb1[0]<hsb2[0]) {
-						return -1;
-					} else if(hsb1[0]>hsb2[0]) {
-						return 1;
-					} else if(hsb1[1]<hsb2[1]) {
-						return -1;
-					} else if(hsb1[1]>hsb2[1]) {
-						return 1;
-					}
-					return 0;
-				}
-				
-			};
-			
-			Set<Color> tier1 = new TreeSet<Color>(hueComparator);
-			Set<Color> tier2 = new TreeSet<Color>(hueComparator);
-			Set<Color> tier3 = new TreeSet<Color>(brightnessComparator);
-
-			for(int a = 0; a<color.length; a++) {
-				float[] hsb = new float[3];
-				Color.RGBtoHSB(color[a].getRed(), color[a].getGreen(), color[a].getBlue(), hsb);
-				float k = hsb[1] + hsb[2];
-				if(k>1.2) {
-					tier1.add(color[a]);
-				} else if(k>.7) {
-					tier2.add(color[a]);
-				} else {
-					tier3.add(color[a]);
-				}
-			}
-			
-			for(int a = 0; a<3; a++) {
-				Set<Color> set = null;
-				if(a==0) {
-					set = tier1;
-				} else if(a==1) {
-					set = tier2;
-				} else if(a==2) {
-					set = tier3;
-				}
-				Color[] array = set.toArray(new Color[set.size()]);
-				for(int b = 0; b<array.length; b++) {
-					cells.put(new Rectangle(x, y, CELL_SIZE, CELL_SIZE), array[b]);
-					
-					x += CELL_SIZE;
-					if(x>=pixelPanel.getWidth()) {
-						x = 0;
-						y += CELL_SIZE;
-					}
-				}
-			}
-		}
-		pixelPanel.repaint();
-	}
 	
 	protected void setFile(File f) {
-		originalImage = null;
-		originalImageColors = null;
-		if(f==null) {
-			originalImage = new BufferedImage(500, 500, BufferedImage.TYPE_INT_RGB);
-			int[] pixels = new int[originalImage.getWidth()];
-			for(int y = 0; y<originalImage.getHeight(); y++) {
-				for(int x = 0; x<pixels.length; x++) {
-					float hue = ((float)x)/((float)pixels.length);
-					float saturation = ((float)y)/((float)originalImage.getHeight());
-					int rgb = Color.HSBtoRGB(hue, saturation,	1);
-					pixels[x] = rgb;
-				}
-				originalImage.getRaster().setDataElements(0, y, pixels.length, 1, pixels);
-			}
-			updateColorList();
-		} else {
-			String s = f.getAbsolutePath();
-			if(!filePath.getText().equals(s)) {
-				filePath.setText(s);
-			}
-			try {
-				originalImage = ImageIO.read(f);
-				updateColorList();
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
+		String s = f.getAbsolutePath();
+		if(!filePath.getText().equals(s)) {
+			filePath.setText(s);
 		}
-		repaint();
+		try {
+			BufferedImage originalImage = ImageIO.read(f);
+			putClientProperty(KEY_ORIGINAL_IMAGE, originalImage);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	private void updateColorList() {
-		originalImageColors = new ColorSet();
-		originalImageColors.addColors(originalImage);
-		updateReducedColorList();
+	class QuantizeOriginalColorSetJob extends Job {
+
+
+		@Override
+		public String getReplacementId() {
+			return "quantize original color set";
+		}
+
+		@Override
+		protected void runJob() throws Exception {
+			ColorSet originalImageColors = (ColorSet) getClientProperty(KEY_ORIGINAL_COLOR_SET);
+			if(originalImageColors!=null) {
+				ColorQuantization cq = null;
+				if(reductionType.getSelectedIndex()==0) {
+					cq = new BiasedMedianCutColorQuantization(.1f);
+				} else {
+					cq = new MedianCutColorQuantization();
+				}
+				ColorSet reducedImageColors = cq.createReducedSet( originalImageColors, reductionSlider.getValue(), true );
+				putClientProperty(KEY_REDUCED_COLOR_SET, reducedImageColors);
+			}
+		}
+	}
+	
+	class UpdateOriginalColorSetJob extends Job {
+		@Override
+		protected void runJob() throws Exception {
+			BufferedImage originalImage = (BufferedImage) getClientProperty(KEY_ORIGINAL_IMAGE);
+			ColorSet originalImageColors = new ColorSet();
+			if(originalImage!=null) {
+				originalImageColors.addColors(originalImage);
+				putClientProperty(KEY_ORIGINAL_COLOR_SET, originalImageColors);
+			}
+		}
+
+		@Override
+		public String getReplacementId() {
+			return "update original color list";
+		}
+	}
+	
+	class QuantizeImageJob extends Job {
+		@Override
+		public String getReplacementId() {
+			return "quantize image";
+		}
+
+		@Override
+		protected void runJob() throws Exception {
+			ColorSet reducedImageColors = (ColorSet) getClientProperty(KEY_REDUCED_COLOR_SET);
+			BufferedImage originalImage = (BufferedImage) getClientProperty(KEY_ORIGINAL_IMAGE);
+			if(reducedImageColors!=null && originalImage!=null) {
+				IndexColorModel icm = reducedImageColors.createIndexColorModel(false, false);
+				ColorLUT lut = new ColorLUT(icm);
+				BufferedImage reducedImage = ((ImageQuantization)quantizationType.getSelectedItem()).createImage(originalImage, lut);
+				putClientProperty(KEY_REDUCED_IMAGE, reducedImage);
+				jobManager.addJob(new ResizePixelCellsJob());
+			}
+		}
+	}
+	
+	Comparator<Color> hueComparator = new Comparator<Color>() {
+
+		public int compare(Color c1, Color c2) {
+			float[] hsb1 = new float[3];
+			float[] hsb2 = new float[3];
+			Color.RGBtoHSB(c1.getRed(), c1.getGreen(), c1.getBlue(), hsb1);
+			Color.RGBtoHSB(c2.getRed(), c2.getGreen(), c2.getBlue(), hsb2);
+			if(hsb1[0]<hsb2[0]) {
+				return -1;
+			} else if(hsb1[0]>hsb2[0]) {
+				return 1;
+			} else if(hsb1[1]<hsb2[1]) {
+				return -1;
+			} else if(hsb1[1]>hsb2[1]) {
+				return 1;
+			} else if(hsb1[2]<hsb2[2]) {
+				return -1;
+			} else if(hsb1[2]>hsb2[2]) {
+				return 1;
+			}
+			return 0;
+		}
+		
+	};
+	
+	Comparator<Color> brightnessComparator = new Comparator<Color>() {
+
+		public int compare(Color c1, Color c2) {
+			float[] hsb1 = new float[3];
+			float[] hsb2 = new float[3];
+			Color.RGBtoHSB(c1.getRed(), c1.getGreen(), c1.getBlue(), hsb1);
+			Color.RGBtoHSB(c2.getRed(), c2.getGreen(), c2.getBlue(), hsb2);
+			if(hsb1[2]<hsb2[2]) {
+				return -1;
+			} else if(hsb1[2]>hsb2[2]) {
+				return 1;
+			} else if(hsb1[0]<hsb2[0]) {
+				return -1;
+			} else if(hsb1[0]>hsb2[0]) {
+				return 1;
+			} else if(hsb1[1]<hsb2[1]) {
+				return -1;
+			} else if(hsb1[1]>hsb2[1]) {
+				return 1;
+			}
+			return 0;
+		}
+		
+	};
+	
+	class ResizePixelCellsJob extends Job {
+		@Override
+		public String getReplacementId() {
+			return "resize pixel cells";
+		}
+
+		@Override
+		protected void runJob() throws Exception {
+			ColorSet reducedImageColors = (ColorSet) getClientProperty(KEY_REDUCED_COLOR_SET);
+			
+			int x = 0;
+			int y = 0;
+			cells.clear();
+			if(reducedImageColors!=null) {
+				Color[] color = reducedImageColors.getColors();
+
+				/** This is a crude hard-to-explain approach to sorting
+				 * colors into clusters that humans find reasonably appealing.
+				 * (That is: without a 3D representation it's hard to
+				 * express a series of 3D-data points in 2D space.)
+				 */
+				
+				Set<Color> tier1 = new TreeSet<Color>(hueComparator);
+				Set<Color> tier2 = new TreeSet<Color>(hueComparator);
+				Set<Color> tier3 = new TreeSet<Color>(brightnessComparator);
+
+				for(int a = 0; a<color.length; a++) {
+					float[] hsb = new float[3];
+					Color.RGBtoHSB(color[a].getRed(), color[a].getGreen(), color[a].getBlue(), hsb);
+					float k = hsb[1] + hsb[2];
+					if(k>1.2) {
+						tier1.add(color[a]);
+					} else if(k>.7) {
+						tier2.add(color[a]);
+					} else {
+						tier3.add(color[a]);
+					}
+				}
+				
+				for(int a = 0; a<3; a++) {
+					Set<Color> set = null;
+					if(a==0) {
+						set = tier1;
+					} else if(a==1) {
+						set = tier2;
+					} else if(a==2) {
+						set = tier3;
+					}
+					Color[] array = set.toArray(new Color[set.size()]);
+					for(int b = 0; b<array.length; b++) {
+						cells.put(new Rectangle(x, y, CELL_SIZE, CELL_SIZE), array[b]);
+						
+						x += CELL_SIZE;
+						if(x>=pixelPanel.getWidth()) {
+							x = 0;
+							y += CELL_SIZE;
+						}
+					}
+				}
+			}
+			pixelPanel.repaint();
+		}
+		
 	}
 }
