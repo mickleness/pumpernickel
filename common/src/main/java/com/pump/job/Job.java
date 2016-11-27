@@ -136,6 +136,22 @@ public abstract class Job implements Runnable, Cancellable {
 	public int getPriority() {
 		return properties.get(PRIORITY);
 	}
+	
+	/**
+	 * If this is non-null, then the {@link JobManager} should immediately
+	 * replace all jobs with the same replacement-id.
+	 * <p>
+	 * For example, if a job is initiated every time the user adjusts a
+	 * JSlider and those jobs have the id "recalculate", then instead of queuing
+	 * of queuing 500 jobs only one job will be enqueued. The JobManager
+	 * may (at its discretion) also try to cancel an active job if its replacement
+	 * id matches an incoming job's replacement id.
+	 * 
+	 * @return an identifying String, or null if this attribute isn't used.
+	 */
+	public String getReplacementId() {
+		return null;
+	}
 
 	/** Adds a listener interested in description changes.
 	 * @param l this listener will be notified if this job's description changes.

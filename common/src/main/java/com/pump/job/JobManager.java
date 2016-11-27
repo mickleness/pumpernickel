@@ -21,10 +21,12 @@ package com.pump.job;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
@@ -47,6 +49,13 @@ public class JobManager {
 	 * is currently doing.
 	 */
 	public static interface Listener {
+		/** This is called when an error occurs executing a job.
+		 * <p>This is probably invoked on a thread that executes
+		 * jobs, so this should not perform EDT work and should
+		 * probably be very light (triggering other threads if necessary).
+		 */
+		public void jobError(JobManager manager,Job job,Throwable t);
+		
 		/** This is called before a job begins executing. When this
 		 * is invoked: the active job count of the JobManager will
 		 * have changed.
@@ -91,23 +100,33 @@ public class JobManager {
 			changeListener = cl;
 		}
 
+		@Override
 		public void jobAdded(JobManager m,Job... job) {
 			changeListener.stateChanged(new ChangeEvent(m));
 		}
 
+		@Override
+		public void jobError(JobManager m,Job job,Throwable throwable) {
+			changeListener.stateChanged(new ChangeEvent(m));
+		}
+
+		@Override
 		public void jobQueued(JobManager m,Job... job) {
 			changeListener.stateChanged(new ChangeEvent(m));
 		}
 
+		@Override
 		public void jobRemoved(JobManager m,Job... job) {
 			changeListener.stateChanged(new ChangeEvent(m));
 		}
 
+		@Override
 		public void jobSkipped(JobManager m, Job... job) {
 			changeListener.stateChanged(new ChangeEvent(m));
 		}
 	}
-	
+
+	private static final int ERROR = -1;
 	private static final int ADD = 0;
 	private static final int REMOVE = 1;
 	private static final int SKIP = 2;
@@ -122,18 +141,34 @@ public class JobManager {
 					if(job==null) return;
 					active.add(job);
 				}
-				if(job!=null && (!job.isCancelled())) {
-					fireListeners(ADD, job);
+				if(job!=null) {
+					int type = ERROR;
+					Throwable throwable = null;
 					try {
-						job.run();
+						if(!job.isCancelled()) {
+							fireListeners(ADD, job);
+							job.run();
+							type = REMOVE;
+						} else {
+							type = SKIP;
+						}
+					} catch(Throwable t) {
+						throwable = t;
 					} finally {
 						synchronized(active) {
 							active.remove(job);
 						}
-						fireListeners(REMOVE, job);
+						synchronized(queue) {
+							String id = job.getReplacementId();
+							if(id!=null)
+								jobsByReplacementId.remove(id);
+						}
+						if(throwable!=null) {
+							fireErrorListener(job, throwable);
+						} else {
+							fireListeners(type, job);
+						}
 					}
-				} else if(job!=null) {
-					fireListeners(SKIP, job);
 				}
 			}
 		}
@@ -155,6 +190,7 @@ public class JobManager {
 	private final TreeMap<Integer, List<Job>> queue = new TreeMap<Integer, List<Job>>(reverseIntComparator);
 	private final Set<Job> active = new HashSet<Job>();
 	private final int threadCount;
+	private final Map<String, Job> jobsByReplacementId = new HashMap<>();
 
 	transient List<Listener> listeners;
 	transient ExecutorService service;
@@ -258,6 +294,13 @@ public class JobManager {
 				}
 			}
 			for(Job job : jobs) {
+				String replacementId = job.getReplacementId();
+				if(replacementId!=null) {
+					Job oldJob = jobsByReplacementId.get(replacementId);
+					if(oldJob!=null)
+						oldJob.cancel();
+					jobsByReplacementId.put(replacementId, job);
+				}
 				Integer key = new Integer(job.getPriority());
 				List<Job> list = queue.get(key);
 				if (list == null) {
@@ -372,7 +415,20 @@ public class JobManager {
 		}
 	}
 	
-	private void fireListeners(int type,Job... job) {
+	private synchronized void fireErrorListener(Job job,Throwable t) {
+		if(listeners==null)
+			return;
+		
+		for(Listener l : listeners) {
+			try {
+				l.jobError(JobManager.this, job, t);
+			} catch(Throwable t2) {
+				t2.printStackTrace();
+			}
+		}
+	}
+	
+	private synchronized void fireListeners(int type,Job... job) {
 		if(listeners==null)
 			return;
 		
