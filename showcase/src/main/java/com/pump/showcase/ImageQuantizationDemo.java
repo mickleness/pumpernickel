@@ -48,14 +48,12 @@ import java.util.TreeSet;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -70,6 +68,8 @@ import com.pump.image.pixel.quantize.ColorQuantization;
 import com.pump.image.pixel.quantize.ColorSet;
 import com.pump.image.pixel.quantize.ImageQuantization;
 import com.pump.image.pixel.quantize.MedianCutColorQuantization;
+import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.InspectorLayout;
 import com.pump.io.SuffixFilenameFilter;
 
 
@@ -169,33 +169,10 @@ public class ImageQuantizationDemo extends JPanel {
 		c.gridx++; c.weightx = 0;
 		add(pixelPanel, c);
 		
-		c = new GridBagConstraints();
-		c.insets = new Insets(3,3,3,3);
-		c.anchor = GridBagConstraints.EAST;
-		c.gridx = 0; c.gridy = 0; c.weightx = 0; c.weighty = 0;
-		controls.add( fileLabel, c);
-		c.anchor = GridBagConstraints.WEST;
-		c.gridx++; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridwidth = 10;
-		controls.add(filePath, c);
-		c.gridx+=c.gridwidth; c.weightx = 0; c.fill = GridBagConstraints.NONE; c.gridwidth = 1;
-		controls.add(browseButton, c);
-		
-		c.gridy++; c.gridx = 0;
-		c.anchor = GridBagConstraints.EAST;
-		controls.add(colorCountLabel, c);
-		c.gridx++;
-		c.anchor = GridBagConstraints.WEST;
-		controls.add(reductionSlider, c);
-		c.gridx++;
-		controls.add(reductionType, c);
-
-		c.gridy++; c.gridx = 0;
-		c.anchor = GridBagConstraints.EAST;
-		controls.add(quantizationLabel, c);
-		c.gridx++;
-		c.anchor = GridBagConstraints.WEST;
-		controls.add(quantizationType, c);
+		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		layout.addRow(fileLabel, filePath, true, browseButton);
+		layout.addRow(colorCountLabel, reductionSlider, true, reductionType);
+		layout.addRow(quantizationLabel, quantizationType, false);
 		
 		reductionType.addItem("Biased");
 		reductionType.addItem("Median Cut (Simplest)");
