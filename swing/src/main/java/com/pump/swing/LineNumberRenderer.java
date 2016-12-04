@@ -167,7 +167,7 @@ public abstract class LineNumberRenderer {
 			try {
 				int pos = lineNumber<lineBreaks.length ? (lineBreaks[lineNumber]) : src.length();
 				Rectangle r = jtc.getUI().modelToView(jtc, pos, Bias.Forward);
-				if(g.hitClip(2, r.y, 2, r.height)) {
+				if(r!=null && g.hitClip(2, r.y, 2, r.height)) {
 					g.setColor( rowColors[lineNumber%rowColors.length] );
 					g.fillRect(0, lastY, (int)(getWidth()+.5f), r.y + r.height - lastY);
 					g.setColor(Color.gray);
@@ -175,7 +175,8 @@ public abstract class LineNumberRenderer {
 					Rectangle2D bounds = font.getStringBounds(str, frc);
 					g.drawString( str, (float)(getWidth() - bounds.getWidth() - 8), (float)(r.y + r.height/2 - bounds.getHeight()/2 + g.getFont().getLineMetrics(str, frc).getAscent() ) );
 				}
-				lastY = r.y + r.height;
+				if(r!=null)
+					lastY = r.y + r.height;
 			} catch (BadLocationException e) {
 				throw new RuntimeException(e);
 			}
