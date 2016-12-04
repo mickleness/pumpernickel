@@ -4,17 +4,13 @@ import java.awt.FileDialog;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.prefs.Preferences;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
@@ -26,7 +22,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import com.pump.UserCancelledException;
-import com.pump.data.Key;
 import com.pump.io.SuffixFilenameFilter;
 import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
@@ -39,22 +34,20 @@ import com.pump.util.BasicReceiver;
 import com.pump.util.JVM;
 import com.pump.window.WindowList;
 
-
-/** This frame is associated with a file and automatically prompts the
- * user to save when the window is being closed.
- *
- */
-public abstract class SaveableFrame extends JFrame {
-	private static final long serialVersionUID = 1L;
+public abstract class SaveControls {
 
 	/** This client property of the JRootPane should map to a java.io.File.
 	 * This is how this object identifies the File that we're using, and on
 	 * Macs using this key correctly updates the titlebar of frames.
 	 * @see <a href="https://developer.apple.com/library/mac/technotes/tn2007/tn2196.html#WINDOW_DOCUMENTFILE">Apple Tech Note 2196</a>
 	 */
-	public static final String FILE_KEY = "Window.documentFile";
-
-	public static final Key<Rectangle> KEY_BOUNDS = new Key<Rectangle>(Rectangle.class, "frame-bounds");
+	public static final String KEY_FILE = "Window.documentFile";
+	
+	protected static final String KEY_SAVE_CONTROLS = SaveControls.class.getName()+"#saveControls";
+	
+	public static SaveControls get(JFrame f) {
+		return (SaveControls)f.getRootPane().getClientProperty(KEY_SAVE_CONTROLS);
+	}
 	
 	protected AbstractAction openAction = new AbstractAction("Open...") {
 		private static final long serialVersionUID = 1L;
@@ -94,8 +87,10 @@ public abstract class SaveableFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			Window[] window = WindowList.getWindows(true, false);
 			for(int a = window.length-1; a>=0; a--) {
-				if(window[a] instanceof SaveableFrame) {
-					if( !((SaveableFrame)window[a]).tryToClose() )
+				JFrame frame = window[a] instanceof JFrame ? ((JFrame)window[a]) : null;
+				SaveControls c = frame==null ? null : SaveControls.get(frame);
+				if(c!=null) {
+					if( !c.tryToClose() )
 						return;
 				} else {
 					window[a].setVisible(false);
@@ -103,47 +98,33 @@ public abstract class SaveableFrame extends JFrame {
 			}
 		}
 	};
+
 	protected JMenuItem openItem = new JMenuItem(openAction);
 	protected JMenuItem saveItem = new JMenuItem(saveAction);
 	protected JMenuItem exitItem = new JMenuItem(exitAction);
 	protected RecentMenu recentMenu = new RecentMenu.Preference(true, getClass());
-	protected Preferences prefs = Preferences.userNodeForPackage(getClass());
+	protected JFrame frame;
 	
-	private boolean shownYet = false;
-	private boolean saveBoundsInPrefs;
-	
-	public SaveableFrame(boolean restoreBounds) {
-		this("", restoreBounds);
-	}
-	
-	@Override
-	public void pack() {
-		if(saveBoundsInPrefs && (!shownYet) ) {
-			Rectangle bounds = KEY_BOUNDS.get(prefs, null);
-			if(bounds!=null) {
-				setBounds(bounds);
-				return;
-			}
-		}
-		super.pack();
-	}
-	
-	public SaveableFrame(String title,boolean restoreBounds) {
-		super(title);
-		saveBoundsInPrefs = restoreBounds;
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		addWindowListener(new WindowAdapter() {
+	public SaveControls(JFrame frame) {
+		if(frame==null)
+			throw new NullPointerException();
+		
+		this.frame = frame;
+		
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter() {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
 				tryToClose();
 			}
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				shownYet = true;
-			}
 		});
+		
+		SaveControls oldControls = get(frame);
+		if(oldControls!=null)
+			throw new IllegalStateException("SaveControls were already registered for this frame.");
+		frame.getRootPane().putClientProperty(KEY_SAVE_CONTROLS, this);
+		
 		openItem.setAccelerator(KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		saveItem.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		char exitChar = JVM.isMac ? 'Q' : KeyEvent.VK_F4;
@@ -159,25 +140,130 @@ public abstract class SaveableFrame extends JFrame {
 				}
 			}
 		});
+	}
+
+	public void openFile()
+			throws UserCancelledException, Exception {
+
+		if(isDocumentDirty()) {
+			File oldFile = getFile();
+			String docName = oldFile==null ? null : oldFile.getName();
+			int choice = QDialog.showSaveChangesDialog(
+					frame,
+					docName,
+					true);
+			if(choice==DialogFooter.DONT_SAVE_OPTION) {
+				//do nothing
+			} else if(choice==DialogFooter.CANCEL_OPTION) {
+				throw new UserCancelledException();
+			} else if(choice==DialogFooter.SAVE_OPTION) {
+				try {
+					if(oldFile==null) {
+						oldFile = doSaveAs();
+						//this will quickly change, but for the moment:
+						setFile(oldFile);
+					} else {
+						showSaveDialogAndDoSave(oldFile);
+					}
+				} catch(Exception e2) {
+					e2.printStackTrace();
+					//erg, don't replace our file if a problem came up saving:
+					return;
+				}
+			}
+		}
 		
-		addComponentListener(new ComponentAdapter() {
+		File file = this.showFileDialog(FileDialog.LOAD, "Open File...", null, getDocumentFileExtension());
+		if(file==null) throw new UserCancelledException();
+		openFile(file);
+		recentMenu.addFile(file);
+		setFile(file);
+	}
+	
+	/** Return the document file extension for files this SaveableFrame represents.
+	 * For example "jpg" or "txt".
+	 * @return the document file extension for files this SaveableFrame represents.
+	 */
+	public abstract String getDocumentFileExtension();
+	
+	protected abstract void openFile(File file) throws UserCancelledException, Exception;
+	
+	public File getFile() {
+		return (File)frame.getRootPane().getClientProperty(KEY_FILE);
+	}
+	
+	public void setFile(File f) {
+		frame.getRootPane().putClientProperty(KEY_FILE, f);
+	}
+	
+	/** Returns whether this window contains unsaved changes. This may
+	 * be called on or off the EDT, so it needs to be fast and
+	 * thread-safe.
+	 * 
+	 * @return whether this window contains unsaved changes.
+	 */
+	public abstract boolean isDocumentDirty();
+	
+	/** Save the document this window represents to the argument provided.
+	 * This should never be called on the EDT, because saving may take
+	 * an undefined amount of time.
+	 * @param f the file to save to. This should never be null, because
+	 * that would require prompting the user for a save-as dialog
+	 * which needs to be handled on the EDT (and this call needs to be
+	 * off the EDT). This argument may not always be the same as 
+	 * <code>this.getFile()</code>. For example: calling <code>saveFile(newFile)</code>
+	 * can be used to implement a "Save As..." function. Note this method
+	 * does not replace this SaveableFrame's file with the argument.
+	 * @param cancellable an optional argument. If non-null then this method needs
+	 * to constantly poll this object to see if the user indicated they wanted to cancel
+	 * this operation. In that case this method should wrap up as cleanly as possible and
+	 * throw a UserCancelledException
+	 * @throws UserCancelledException if the user cancelled this operation
+	 * @throws Exception if an unknown problem came up saving.
+	 * 
+	 */
+	public abstract void saveFile(File f,Cancellable cancellable) throws UserCancelledException,
+		Exception;
 
-			@Override
-			public void componentResized(ComponentEvent e) {
-				saveWindowLocation();
+	/**
+	 * If true then the user saved their changes as this method was called.
+	 * If false then the user did not choose to save anything, or there was nothing
+	 * to save.
+	 * This may also throw a {@code UserCancelledException}
+	 * 
+	 * @return
+	 */
+	public boolean tryToClose() throws UserCancelledException {
+		if(!isDocumentDirty()) {
+			frame.setVisible(false);
+			return false;
+		}
+		
+		File file = getFile();
+		String docName = file==null ? null : file.getName();
+		int choice = QDialog.showSaveChangesDialog(
+				frame,
+				docName,
+				true);
+		if(choice==DialogFooter.DONT_SAVE_OPTION) {
+			frame.setVisible(false);
+			return false;
+		} else if(choice==DialogFooter.CANCEL_OPTION) {
+			throw new UserCancelledException();
+		}
+		
+		try {
+			if(file==null) {
+				file = doSaveAs();
+				setFile(file);
+			} else {
+				showSaveDialogAndDoSave(file);
 			}
-
-			@Override
-			public void componentMoved(ComponentEvent e) {
-				saveWindowLocation();
-			}
-			
-			private void saveWindowLocation() {
-				if(saveBoundsInPrefs)
-					KEY_BOUNDS.set(prefs, SaveableFrame.this.getBounds());
-			}
-			
-		});
+			frame.setVisible(false);
+		} catch(Exception e2) {
+			e2.printStackTrace();
+		}
+		return true;
 	}
 	
 	/** This should be called on the EDT
@@ -211,7 +297,7 @@ public abstract class SaveableFrame extends JFrame {
 			String... documentFileExtension) throws UserCancelledException {
 		if(!(dialogMode==FileDialog.LOAD || dialogMode==FileDialog.SAVE))
 			throw new IllegalArgumentException("dialogMode must be LOAD or SAVE");
-		FileDialog fd = new FileDialog(this, dialogTitle, dialogMode);
+		FileDialog fd = new FileDialog(frame, dialogTitle, dialogMode);
 		SuffixFilenameFilter filter = null;
 		if(documentFileExtension!=null && documentFileExtension.length>0) {
 			filter = new SuffixFilenameFilter(documentFileExtension);
@@ -254,7 +340,7 @@ public abstract class SaveableFrame extends JFrame {
 		c.gridy++;
 		content.add(pb, c);
 		
-		final QDialog qd = new QDialog(this, 
+		final QDialog qd = new QDialog(frame, 
 				"Saving \""+s+"\"", 
 				QDialog.getIcon(QDialog.PLAIN_MESSAGE),
 				content, 
@@ -293,129 +379,36 @@ public abstract class SaveableFrame extends JFrame {
 			throw saveThrowables.getElementAt(0);
 		}
 	}
-	
-	/** Return the document file extension for files this SaveableFrame represents.
-	 * For example "jpg" or "txt".
-	 * @return the document file extension for files this SaveableFrame represents.
-	 */
-	public abstract String getDocumentFileExtension();
 
+	public AbstractAction getExitAction() {
+		return exitAction;
+	}
 
-	public void openFile()
-			throws UserCancelledException, Exception {
-
-		if(isDocumentDirty()) {
-			File oldFile = getFile();
-			String docName = oldFile==null ? null : oldFile.getName();
-			int choice = QDialog.showSaveChangesDialog(
-					SaveableFrame.this,
-					docName,
-					true);
-			if(choice==DialogFooter.DONT_SAVE_OPTION) {
-				//do nothing
-			} else if(choice==DialogFooter.CANCEL_OPTION) {
-				throw new UserCancelledException();
-			} else if(choice==DialogFooter.SAVE_OPTION) {
-				try {
-					if(oldFile==null) {
-						oldFile = doSaveAs();
-						//this will quickly change, but for the moment:
-						setFile(oldFile);
-					} else {
-						showSaveDialogAndDoSave(oldFile);
-					}
-				} catch(Exception e2) {
-					e2.printStackTrace();
-					//erg, don't replace our file if a problem came up saving:
-					return;
-				}
-			}
-		}
-		
-		File file = this.showFileDialog(FileDialog.LOAD, "Open File...", null, getDocumentFileExtension());
-		if(file==null) throw new UserCancelledException();
-		openFile(file);
-		recentMenu.addFile(file);
-		setFile(file);
+	public JMenuItem getExitMenuItem() {
+		return exitItem;
 	}
 	
-	protected abstract void openFile(File file) throws UserCancelledException, Exception;
-	
-	public File getFile() {
-		return (File)getRootPane().getClientProperty(FILE_KEY);
+	public JFrame getFrame() {
+		return frame;
 	}
 	
-	public void setFile(File f) {
-		getRootPane().putClientProperty(FILE_KEY, f);
+	public JMenuItem getOpenMenuItem() {
+		return openItem;
 	}
 	
-	/** Returns whether this window contains unsaved changes. This may
-	 * be called on or off the EDT, so it needs to be fast and
-	 * thread-safe.
-	 * 
-	 * @return whether this window contains unsaved changes.
-	 */
-	public abstract boolean isDocumentDirty();
+	public AbstractAction getOpenAction() {
+		return openAction;
+	}
 	
-	/** Save the document this window represents to the argument provided.
-	 * This should never be called on the EDT, because saving may take
-	 * an undefined amount of time.
-	 * @param f the file to save to. This should never be null, because
-	 * that would require prompting the user for a save-as dialog
-	 * which needs to be handled on the EDT (and this call needs to be
-	 * off the EDT). This argument may not always be the same as 
-	 * <code>this.getFile()</code>. For example: calling <code>saveFile(newFile)</code>
-	 * can be used to implement a "Save As..." function. Note this method
-	 * does not replace this SaveableFrame's file with the argument.
-	 * @param cancellable an optional argument. If non-null then this method needs
-	 * to constantly poll this object to see if the user indicated they wanted to cancel
-	 * this operation. In that case this method should wrap up as cleanly as possible and
-	 * throw a UserCancelledException
-	 * @throws UserCancelledException if the user cancelled this operation
-	 * @throws Exception if an unknown problem came up saving.
-	 * 
-	 */
-	public abstract void saveFile(File f,Cancellable cancellable) throws UserCancelledException,
-		Exception;
-
-	/**
-	 * If true then the user saved their changes as this method was called.
-	 * If false then the user did not choose to save anything, or there was nothing
-	 * to save.
-	 * This may also throw a {@code UserCancelledException}
-	 * 
-	 * @return
-	 */
-	public boolean tryToClose() throws UserCancelledException {
-		if(!isDocumentDirty()) {
-			setVisible(false);
-			return false;
-		}
-		
-		File file = getFile();
-		String docName = file==null ? null : file.getName();
-		int choice = QDialog.showSaveChangesDialog(
-				SaveableFrame.this,
-				docName,
-				true);
-		if(choice==DialogFooter.DONT_SAVE_OPTION) {
-			setVisible(false);
-			return false;
-		} else if(choice==DialogFooter.CANCEL_OPTION) {
-			throw new UserCancelledException();
-		}
-		
-		try {
-			if(file==null) {
-				file = doSaveAs();
-				setFile(file);
-			} else {
-				showSaveDialogAndDoSave(file);
-			}
-			setVisible(false);
-		} catch(Exception e2) {
-			e2.printStackTrace();
-		}
-		return true;
+	public RecentMenu getRecentMenu() {
+		return recentMenu;
+	}
+	
+	public AbstractAction getSaveAction() {
+		return saveAction;
+	}
+	
+	public JMenuItem getSaveMenuItem() {
+		return saveItem;
 	}
 }
