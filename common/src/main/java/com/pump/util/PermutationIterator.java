@@ -57,6 +57,7 @@ public class PermutationIterator<T> implements Iterator<T[]>
 	public PermutationIterator(Class<T> type,Collection<T> allElements) {
 		elementType = type;
 		elements = (T[])Array.newInstance(type, allElements.size());
+		allElements.toArray(elements);
 		
 		for(int a = 0; a<elements.length; a++) {
 			for(int b = a+1; b<elements.length; b++) {
