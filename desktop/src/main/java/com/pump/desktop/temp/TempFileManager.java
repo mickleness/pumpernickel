@@ -88,7 +88,7 @@ public class TempFileManager {
 		
 		FileLock lock = lock(lockedFile);
 		
-		//clean up past sessions, in case they were died prematurely
+		//clean up past sessions, in case they died prematurely
 		new CleanThread(appDir, localDir, null).start();
 		
 		//clean up this session -- later
