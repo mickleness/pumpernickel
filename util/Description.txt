@@ -1,1 +1,0 @@
-The "util" project contains common data structures, or common code for manipulating data.
