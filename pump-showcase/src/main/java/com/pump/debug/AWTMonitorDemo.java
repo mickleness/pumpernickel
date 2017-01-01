@@ -12,14 +12,13 @@ package com.pump.debug;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Label;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
 import com.pump.blog.Blurb;
 import com.pump.swing.BasicConsole;
@@ -42,7 +41,7 @@ public class AWTMonitorDemo extends JPanel {
 	
 	JButton lock = new JButton("Lock For 5 Seconds");
 	BasicConsole console = new BasicConsole(false, false);
-	JTextArea description = new JTextArea("The AWTMonitor class listens to the event dispatch thread (EDT) and notices when it has been unresponsive for several seconds. When this condition is detected, it can do two things:\n\n1. Dump all active threads to the console. If you can get your hands on the console output (hopefully it's in a log file somewhere), then you can use this information to debug the situation. There is probably a task is taking too long (so it should either be optimized or moved to another thread), or that you have a deadlock that will never recover.\n\n2. A separate optional \"panic listener\" can be notified. This is notified after an even longer timeout period. This can do any number of things, such as autosave your document (if possible), kill the EDT (which is dangerous, but what do you have to lose at this point?), or launch another process to present the user with options.\n\nThis demo only shows option #1. By locking the EDT for 5 seconds, the console below should print stack traces of all threads. (It will only become visible when the EDT becomes responsive again, though.)");
+	JTextArea description = new JTextArea("The AWTMonitor class listends to the event dispatch thread (EDT) and notices when it has been unresponsive for several seconds. When this condition is detected, it can do two things:\n\n1. Dump all active threads to the console. If you can get your hands on the console output (hopefully it's in a log file somewhere), then you can use this information to debug the situation. The probably is probably that a task is taking too long (so it should either be optimized or moved to another thread), or that you have a deadlock that will never recover.\n\n2. There is a separate optional \"panic listener\", which after an even longer period of time is triggered. This can do any number of things, such as autosave your document (if possible), kill the EDT (which is dangerous, but what do you have to lose at this point?), or launch another process to present the user with options.\n\nThis demo only shows option #1. By locking the EDT for 5 seconds, the console below should print stack traces of all threads. (It will only become visible when the EDT becomes responsive again, though.)");
 
 	public AWTMonitorDemo() {
 
@@ -57,6 +56,22 @@ public class AWTMonitorDemo extends JPanel {
 					 }
 				}
 			}
+		});
+		
+		//don't show any output from the app starting up,
+		//let the user click the "Lock" button to add output so there's
+		//more of a cause-and-effect:
+		
+		console.addHierarchyListener(new HierarchyListener() {
+			
+			@Override
+			public void hierarchyChanged(HierarchyEvent e) {
+				if(console.isShowing()) {
+					console.setText("");
+					console.removeHierarchyListener(this);
+				}
+			}
+			
 		});
 		
 		description.setLineWrap(true);
