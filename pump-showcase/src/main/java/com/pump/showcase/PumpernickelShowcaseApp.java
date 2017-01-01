@@ -53,18 +53,17 @@ public class PumpernickelShowcaseApp extends JFrame {
 		getContentPane().setPreferredSize(new Dimension(800, 600));
 		
 		try {
-			sectionContainer.addSection("transition2d", "Animation: Transitions (2D)").getBody().add(new Transition2DDemo());
-			sectionContainer.addSection("transition3d", "Animation: Transitions (3D)").getBody().add(new Transition3DDemo());
-			sectionContainer.addSection("brushedMetal", "Brushed Metal").getBody().add(new BrushedMetalDemo());
-			sectionContainer.addSection("bmpComparison", "BMP ImageIO Comparison").getBody().add(new BmpComparisonDemo());
-			sectionContainer.addSection("alphaComposite", "AlphaComposite").getBody().add(new AlphaCompositeDemo());
-			sectionContainer.addSection("bristleStroke", "Strokes: Bristle").getBody().add(new BristleStrokeDemo());
-			sectionContainer.addSection("brushStroke", "Strokes: Brush").getBody().add(new BrushStrokeDemo());
-			sectionContainer.addSection("calligraphyStroke", "Strokes: Calligraphy").getBody().add(new CalligraphyStrokeDemo());
-			sectionContainer.addSection("charcoalStroke", "Strokes: Charcoal").getBody().add(new CharcoalStrokeDemo());
-			sectionContainer.addSection("swivelAnim", "Animation: Swivel Path").getBody().add(new SwivelPathAnimationDemo(this));
-			sectionContainer.addSection("textEffectAnim", "Animation: Text Effect").getBody().add(new TextEffectDemo());
-			sectionContainer.addSection("writingShapeDemo", "Animation: Writing Shape").getBody().add(new WritingShapeDemo());
+			addSection("transition2d", "Animation: Transitions (2D)", new Transition2DDemo(), Layout.STRETCH_TO_FIT);
+			addSection("transition3d", "Animation: Transitions (3D)", new Transition3DDemo(), Layout.STRETCH_TO_FIT);
+			addSection("brushedMetal", "Brushed Metal", new BrushedMetalDemo(), Layout.STRETCH_TO_FIT);
+			addSection("bmpComparison", "BMP ImageIO Comparison", new BmpComparisonDemo(), Layout.STRETCH_TO_FIT);
+			addSection("alphaComposite", "AlphaComposite", new AlphaCompositeDemo(), Layout.STRETCH_TO_FIT);
+			addSection("bristleStroke", "Strokes: Bristle", new BristleStrokeDemo(), Layout.STRETCH_TO_FIT);
+			addSection("brushStroke", "Strokes: Brush", new BrushStrokeDemo(), Layout.STRETCH_TO_FIT);
+			addSection("calligraphyStroke", "Strokes: Calligraphy", new CalligraphyStrokeDemo(), Layout.STRETCH_TO_FIT);
+			addSection("charcoalStroke", "Strokes: Charcoal", new CharcoalStrokeDemo(), Layout.STRETCH_TO_FIT);
+			addSection("swivelAnim", "Animation: Swivel Path", new SwivelPathAnimationDemo(this), Layout.STRETCH_TO_FIT);
+			addSection("textEffectAnim", "Animation: Text Effect", new TextEffectDemo(), Layout.STRETCH_TO_FIT);
 			addSection("awtMonitor", "AWT Monitor", new AWTMonitorDemo(), Layout.STRETCH_TO_FIT);
 			addSection("halftoneGradient", "Gradient: Halftone", new HalftoneGradientDemo(), Layout.STRETCH_TO_FIT);
 			addSection("colorBandDemo", "Gradient: Color Band", new ColorBandDemo(this), Layout.STRETCH_TO_FIT);

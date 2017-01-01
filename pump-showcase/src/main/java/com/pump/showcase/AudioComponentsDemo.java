@@ -3,6 +3,7 @@ package com.pump.showcase;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.SystemColor;
@@ -80,6 +81,7 @@ public class AudioComponentsDemo extends MultiWindowDemo {
 					e.printStackTrace();
 				}
 			}
+			
 			getContentPane().add(apc);
 			getRootPane().putClientProperty(KEY_DESCRIPTION, "This window demonstrates a minimal audio playback UI.");
 		}
@@ -394,15 +396,13 @@ public class AudioComponentsDemo extends MultiWindowDemo {
 			super();
 			listModel.addElement(new SoundSource("Bugaboo.wav"));
 			listModel.addElement(new SoundSource("Ludic.wav"));
-			listModel.addElement(new SoundSource("Sphynx.wav"));
-			listModel.addElement(new SoundSource("Tizzy.wav"));
 			listModel.addElement(new SoundSource("Unctuous.wav"));
 		
 			list.setCellRenderer(new SoundCellRenderer());
 			list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-			list.setVisibleRowCount(2);
+			list.setVisibleRowCount(1);
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			list.setPreferredSize(new Dimension(152*3, 172*2));
+			list.setPreferredSize(new Dimension(152*3, 172*1));
 			
 			list.setUI(new DecoratedListUI());
 			list.putClientProperty(DecoratedListUI.KEY_DECORATIONS, new ListDecoration[] { closeDecoration, playbackDecoration });
@@ -410,14 +410,15 @@ public class AudioComponentsDemo extends MultiWindowDemo {
 			list.setBackground(Color.white);
 			list.setOpaque(true);
 			
+			putClientProperty(MultiWindowDemo.KEY_DESCRIPTION, "This window models UI elements similar to the Finder in Mac OS X sometimes previews sounds.");
 			getContentPane().add(list);
 		}
 	}
 	
 	public AudioComponentsDemo()
 	{
-		addPane(new AudioPlayerComponentDemo());
-		addPane(new SoundListDemo());
+		addPane(new AudioPlayerComponentDemo(), 0, 0, 1, 1, GridBagConstraints.NONE);
+		addPane(new SoundListDemo(), 0, 1, 1, 1, GridBagConstraints.NONE);
 	}
 
 }

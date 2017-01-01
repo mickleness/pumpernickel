@@ -623,8 +623,8 @@ public class SwingComponentsDemo extends MultiWindowDemo {
 	}
 	
 	public SwingComponentsDemo() {
-		addPane(new ThrobberDemo());
-		addPane(new BreadCrumbDemo());
-		addPane(new DecoratedTreeDemo());
+		addPane(new ThrobberDemo(), 0, 1, 1, 1, GridBagConstraints.NONE);
+		addPane(new BreadCrumbDemo(), 0, 0, 2, 1, GridBagConstraints.NONE);
+		addPane(new DecoratedTreeDemo(), 1, 1, 1, 1, GridBagConstraints.NONE);
 	}
 }
