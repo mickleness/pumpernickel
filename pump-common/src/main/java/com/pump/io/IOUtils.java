@@ -486,15 +486,17 @@ public class IOUtils {
 	 * and exits this method if the two files are identical. This avoids any writing, but it introduces
 	 * a separate pass (reading) before any writing begins.
 	 * @throws IOException
+	 * 
+	 * @return false if we aborted without writing anything, true if the operation wrote/copied the file.
 	 */
-	public synchronized static void copy(File src,File dst,boolean abortIfIdentical) throws IOException {
+	public synchronized static boolean copy(File src,File dst,boolean abortIfIdentical) throws IOException {
 		if(!dst.getParentFile().exists())
 			if(!dst.getParentFile().mkdirs())
 				throw new IOException("mkdirs failed for "+dst.getParentFile().getAbsolutePath());
 		
 		if(abortIfIdentical) {
 			if(equals(src, dst))
-				return;
+				return false;
 		}
 		
 		if(useCP==null || useCP) {
@@ -503,7 +505,7 @@ public class IOUtils {
 				Process process = Runtime.getRuntime().exec( cmd );
 				int rv = process.waitFor();
 				if(rv==0) 
-					return;
+					return true;
 			} catch(Exception e) {
 				if(e.getMessage().contains("Cannot run program \"cp\"")) {
 					useCP = Boolean.FALSE;
@@ -525,6 +527,7 @@ public class IOUtils {
 				out.write(b1,0,k);
 				k = in.read(b1);
 			}
+			return true;
 		} catch(IOException | RuntimeException e) {
 			System.err.println("src = "+src.getAbsolutePath());
 			System.err.println("dst = "+dst.getAbsolutePath());
