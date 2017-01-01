@@ -255,8 +255,13 @@ public class AlphaCompositeDemo extends JPanel {
 				g.setPaint(checkerboard);
 			} else {
 				g.setPaint(Color.white);
-			}
+			}			
 			g.fillRect(0,0,getWidth(),getHeight());
+
+			Rectangle bounds = shape1.getBounds();
+			bounds.add(shape2.getBounds());
+			g.translate( getWidth() / 2 - bounds.width/2, getHeight()/2 - bounds.height/2);
+			
 			g.drawImage(image, 0, 0, null);
 			if(cleanDemo==false) {
 				g.setColor(Color.black);
