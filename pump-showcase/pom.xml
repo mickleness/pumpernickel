@@ -41,6 +41,11 @@
       <artifactId>pump-desktop</artifactId>
       <version>1.0.00</version>
     </dependency>
+    <dependency>
+      <groupId>com.pump</groupId>
+      <artifactId>pump-gif</artifactId>
+      <version>1.0.00</version>
+    </dependency>
   </dependencies>
   
   <build>
