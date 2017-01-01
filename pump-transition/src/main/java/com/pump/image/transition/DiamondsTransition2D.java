@@ -18,15 +18,15 @@ import java.awt.geom.Path2D;
  * to these diamonds.) Here are playback samples:
  * <p><table summary="Sample Animations of DiamondsTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/DiamondsTransition2D/Diamonds(10).gif" alt="Diamonds (10)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DiamondsTransition2D/Diamonds(10).gif" alt="Diamonds (10)">
  * <p>Diamonds (10)
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/DiamondsTransition2D/Diamonds(20).gif" alt="Diamonds (20)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DiamondsTransition2D/Diamonds(20).gif" alt="Diamonds (20)">
  * <p>Diamonds (20)
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/DiamondsTransition2D/Diamonds(40).gif" alt="Diamonds (40)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DiamondsTransition2D/Diamonds(40).gif" alt="Diamonds (40)">
  * <p>Diamonds (40)
  * </td>
  * </tr></table>

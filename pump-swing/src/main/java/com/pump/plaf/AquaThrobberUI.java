@@ -24,9 +24,9 @@ import javax.swing.JComponent;
 /** Twelve short line segments that rotate in a clockwise direction. The line segments are painted in the component's foreground color,
  * with varying levels of opacity.
  * <p><table summary="Sample Animations of AquaThrobberUI" cellpadding="10"><tr>
- * <td><img src="https://javagraphics.java.net/resources/throbber/AquaThrobberUI.gif" alt="AquaThrobberUI"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/AquaThrobberUIx2.gif" alt="AquaThrobberUI Magnified 2x"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/AquaThrobberUIx4.gif" alt="AquaThrobberUI Magnified 4x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUI.gif" alt="AquaThrobberUI"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUIx2.gif" alt="AquaThrobberUI Magnified 2x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUIx4.gif" alt="AquaThrobberUI Magnified 4x"></td>
  * </tr></table>
  * <p>On installation: the component's foreground is set to gray,
  * but if that is changed then that color is used to render this animation.

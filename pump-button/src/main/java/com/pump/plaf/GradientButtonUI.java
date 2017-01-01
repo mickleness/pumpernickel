@@ -19,7 +19,7 @@ import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
 /** This resembles the "gradient" button UI as seen in Mac OS 10.5.
- * <p><img src="https://javagraphics.java.net/resources/filledbuttonui/GradientButtonUI.png" alt="GradientButtonUI Screenshot">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/GradientButtonUI.png" alt="GradientButtonUI Screenshot">
  * <P>It is not intended to be an exact replica, but it is very similar.
  * <P>According to <a href="http://nadeausoftware.com/node/87">this</a> article, the "gradient" look
  * is originally intended to:

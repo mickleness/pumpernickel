@@ -29,7 +29,7 @@ import javax.swing.plaf.ComponentUI;
 
 /** This resembles the L&amp;F used on XP for buttons that have no
  * visible L&amp;F until they are rolled over.
- * <p><img src="https://javagraphics.java.net/resources/filledbuttonui/XPSubtleButtonUI.png" alt="XPSubtleButtonUI Screenshot">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/XPSubtleButtonUI.png" alt="XPSubtleButtonUI Screenshot">
  * 
  * @see com.bric.plaf.FilledButtonUIDemo
  **/

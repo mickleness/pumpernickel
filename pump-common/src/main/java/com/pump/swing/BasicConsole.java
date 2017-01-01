@@ -43,7 +43,7 @@ import com.pump.util.ThreadedSemaphore;
 /** A modest JTextArea that appends text from thread-safe PrintStreams, and helps
  * format tab-separated tables.
  * <p>Here is a screenshot illustrating the expected usage of this class:
- * <p><img src="https://javagraphics.java.net/resources/ShapeBoundsDemo.png" alt="Screenshot of ShapeBoundsDemo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ShapeBoundsDemo.png" alt="Screenshot of ShapeBoundsDemo">
  * 
  * @see <a href="http://javagraphics.blogspot.com/2015/03/text-managing-console-in-swing.html">Text: Managing a Console in Swing</a>
  * @see com.bric.io.ConsoleLogger

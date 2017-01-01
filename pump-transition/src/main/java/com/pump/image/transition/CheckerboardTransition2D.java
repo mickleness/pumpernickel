@@ -19,19 +19,19 @@ import com.pump.geom.TransformUtils;
 /** This creates a checkerboard pattern that grows to reveal the new frame. Here are playback samples:
  * <p><table summary="Sample Animations of CheckerboardTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CheckerboardTransition2D/CheckerboardLeft.gif" alt="Checkerboard Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CheckerboardTransition2D/CheckerboardLeft.gif" alt="Checkerboard Left">
  * <p>Checkerboard Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CheckerboardTransition2D/CheckerboardRight.gif" alt="Checkerboard Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CheckerboardTransition2D/CheckerboardRight.gif" alt="Checkerboard Right">
  * <p>Checkerboard Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CheckerboardTransition2D/CheckerboardUp.gif" alt="Checkerboard Up">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CheckerboardTransition2D/CheckerboardUp.gif" alt="Checkerboard Up">
  * <p>Checkerboard Up
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CheckerboardTransition2D/CheckerboardDown.gif" alt="Checkerboard Down">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CheckerboardTransition2D/CheckerboardDown.gif" alt="Checkerboard Down">
  * <p>Checkerboard Down
  * </td>
  * </tr></table>

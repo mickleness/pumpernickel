@@ -24,11 +24,11 @@ import com.pump.geom.ShapeUtils;
  * frame; inside the shape is the incoming image. Here are playback samples:
  * <p><table summary="Sample Animations of SpiralTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SpiralTransition2D/SpiralSprawl.gif" alt="Spiral Sprawl">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SpiralTransition2D/SpiralSprawl.gif" alt="Spiral Sprawl">
  * <p>Spiral Sprawl
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SpiralTransition2D/Spiral.gif" alt="Spiral">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SpiralTransition2D/Spiral.gif" alt="Spiral">
  * <p>Spiral
  * </td>
  * </tr></table>

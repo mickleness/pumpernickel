@@ -16,19 +16,19 @@ import java.awt.geom.AffineTransform;
 /** This is the standard "slide" transition. Here are playback samples:
  * <p><table summary="Sample Animations of SlideTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SlideTransition2D/SlideLeft.gif" alt="Slide Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SlideTransition2D/SlideLeft.gif" alt="Slide Left">
  * <p>Slide Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SlideTransition2D/SlideRight.gif" alt="Slide Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SlideTransition2D/SlideRight.gif" alt="Slide Right">
  * <p>Slide Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SlideTransition2D/SlideUp.gif" alt="Slide Up">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SlideTransition2D/SlideUp.gif" alt="Slide Up">
  * <p>Slide Up
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SlideTransition2D/SlideDown.gif" alt="Slide Down">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SlideTransition2D/SlideDown.gif" alt="Slide Down">
  * <p>Slide Down
  * </td>
  * </tr></table>

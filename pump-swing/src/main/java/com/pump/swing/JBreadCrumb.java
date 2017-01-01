@@ -22,7 +22,7 @@ import com.pump.plaf.BreadCrumbUI;
 /** A navigation UI component to help present and navigate a tree-based
  * hierarchy.
  *<p>Here are two possible UI's depicting the same basic data:
- *<p><img src="https://javagraphics.java.net/resources/screenshot_breadcrumb_demo.png" alt="Sample Screenshots of JBreadCrumb">
+ *<p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/screenshot_breadcrumb_demo.png" alt="Sample Screenshots of JBreadCrumb">
  *
  * @param <T> the type of data used used to model this series of nodes.
  * @see #PATH_KEY

@@ -19,7 +19,7 @@ import java.util.Random;
 
 /** This is a playful series of dots bubbling up from nowhere to
  * produce the incoming image. Here is a playback sample:
- * <p><img src="https://javagraphics.java.net/resources/transition/DotsTransition2D/Dots.gif" alt="DotsTransition2D Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DotsTransition2D/Dots.gif" alt="DotsTransition2D Demo">
  * 
  */
 public class DotsTransition2D extends AbstractClippedTransition2D {

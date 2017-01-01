@@ -19,28 +19,28 @@ import java.util.List;
  * strips that grow in width/height respectively to reveal the new frame. Here are playback samples:
  * <p><table summary="Sample Animations of BlindsTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BlindsTransition2D/BlindsLeft(4).gif" alt="Blinds Left (4)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsLeft(4).gif" alt="Blinds Left (4)">
  * <p>Blinds Left (4)
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BlindsTransition2D/BlindsLeft(10).gif" alt="Blinds Left (10)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsLeft(10).gif" alt="Blinds Left (10)">
  * <p>Blinds Left (10)
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BlindsTransition2D/BlindsLeft(20).gif" alt="Blinds Left (20)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsLeft(20).gif" alt="Blinds Left (20)">
  * <p>Blinds Left (20)
  * </td>
  * </tr><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BlindsTransition2D/BlindsRight(10).gif" alt="Blinds Right (10)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsRight(10).gif" alt="Blinds Right (10)">
  * <p>Blinds Right (10)
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BlindsTransition2D/BlindsUp(10).gif" alt="Blinds Up (10)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsUp(10).gif" alt="Blinds Up (10)">
  * <p>Blinds Up (10)
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BlindsTransition2D/BlindsDown(10).gif" alt="Blinds Down (10)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsDown(10).gif" alt="Blinds Down (10)">
  * <p>Blinds Down (10)
  * </td>
  * </tr></table>

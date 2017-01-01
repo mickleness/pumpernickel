@@ -30,11 +30,11 @@ import com.pump.geom.TransformUtils;
  * <p>Here are playback samples:
  * <p><table summary="Sample Animations of FlurryTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FlurryTransition2D/FlurryIn.gif" alt="Flurry In">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlurryTransition2D/FlurryIn.gif" alt="Flurry In">
  * <p>Flurry In
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FlurryTransition2D/FlurryOut.gif" alt="Flurry Out">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlurryTransition2D/FlurryOut.gif" alt="Flurry Out">
  * <p>Flurry Out
  * </td>
  * </tr></table>

@@ -31,7 +31,7 @@ import com.pump.geom.GeneralPathWriter;
 import com.pump.geom.MeasuredShape;
 
 /** This reveals text from left-to-right with a kind of hand-written scrawl-like look:
- * <p><img src="https://javagraphics.java.net/resources/outline-text-effect.gif" alt="outline text effect demo"></p>
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/outline-text-effect.gif" alt="outline text effect demo"></p>
  */
 public class OutlineTextEffect implements TextEffect {
 	protected static final Color DEFAULT_FILL = new Color(0,100,200);

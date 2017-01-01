@@ -26,11 +26,11 @@ import com.pump.geom.TransformUtils;
  * scratching a scratch-and-win game ticket.) Here are playback samples:
  * <p><table summary="Sample Animations of ScribbleTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/ScribbleTransition2D/Scribble.gif" alt="Scribble">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScribbleTransition2D/Scribble.gif" alt="Scribble">
  * <p>Scribble
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/ScribbleTransition2D/ScribbleTwice.gif" alt="Scribble Twice">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScribbleTransition2D/ScribbleTwice.gif" alt="Scribble Twice">
  * <p>Scribble Twice
  * </td>
  * </tr></table>

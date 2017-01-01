@@ -30,8 +30,8 @@ import com.pump.blog.ResourceSample;
  * <p>Here are some samples:
  * <table summary="Resource&#160;Samples&#160;for&#160;com.bric.swing.resources.StarIcon"><tr>
  * <td></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/StarIcon/Filled.png" alt="new&#160;com.bric.swing.resources.StarIcon(&#160;16,&#160;16,&#160;false)"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/StarIcon/Empty.png" alt="new&#160;com.bric.swing.resources.StarIcon(&#160;16,&#160;16,&#160;true)"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/StarIcon/Filled.png" alt="new&#160;com.bric.swing.resources.StarIcon(&#160;16,&#160;16,&#160;false)"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/StarIcon/Empty.png" alt="new&#160;com.bric.swing.resources.StarIcon(&#160;16,&#160;16,&#160;true)"></td>
  * </tr><tr>
  * <td></td>
  * <td>Filled</td>

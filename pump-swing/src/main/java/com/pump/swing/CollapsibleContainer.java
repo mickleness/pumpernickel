@@ -61,7 +61,7 @@ import com.pump.plaf.UIEffect;
  * alter it.)
  * <p>The {@link CollapsibleContainerDemoHelper} creates this animation
  * showing off this demo app:
- * <p><img src="https://javagraphics.java.net/resources/collapsiblecontainer.gif" style="border:1px solid gray" alt="CollapsibleContainer Animation">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/collapsiblecontainer.gif" style="border:1px solid gray" alt="CollapsibleContainer Animation">
  * 
  * <p>TODO: in addition to a weight-based model, we also need an alternative
  * priority-based model. As a use case: consider a gap that has a priority of 1,

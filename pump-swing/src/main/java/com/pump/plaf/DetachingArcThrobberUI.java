@@ -22,9 +22,9 @@ import javax.swing.JComponent;
 /** A <code>ThrobberUI</code> that shows 3 arcs detaching
  * from a circle and floating outward while fading away.
  * <p><table summary="Sample Animations of DetachingArcThrobberUI" cellpadding="10"><tr>
- * <td><img src="https://javagraphics.java.net/resources/throbber/DetachingArcThrobberUI.gif" alt="DetachingArcThrobberUI"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/DetachingArcThrobberUIx2.gif" alt="DetachingArcThrobberUI, Magnified 2x"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/DetachingArcThrobberUIx4.gif" alt="DetachingArcThrobberUI, Magnified 4x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/DetachingArcThrobberUI.gif" alt="DetachingArcThrobberUI"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/DetachingArcThrobberUIx2.gif" alt="DetachingArcThrobberUI, Magnified 2x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/DetachingArcThrobberUIx4.gif" alt="DetachingArcThrobberUI, Magnified 4x"></td>
  * </tr></table>
  * <p>On installation: the component's foreground is set to black,
  * but if that is changed then that color is used to render this animation.

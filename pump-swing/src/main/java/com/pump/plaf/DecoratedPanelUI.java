@@ -65,19 +65,19 @@ import com.pump.util.ObservableProperties.Key;
  * but they should help demonstrate what different attributes do.)
  * <p><table summary="Sample DecoratedPanel Configurations" cellpadding="20"><tr><td>
  * Glaze:
- * <p><img src="https://javagraphics.java.net/resources/decorated-panel/glaze-demo.gif" alt="Glaze Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/glaze-demo.gif" alt="Glaze Demo">
  * </td><td>
  * Bevel:
- * <p><img src="https://javagraphics.java.net/resources/decorated-panel/bevel-demo.gif" alt="Bevel Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/bevel-demo.gif" alt="Bevel Demo">
  * </td><td>
  * Corners:
- * <p><img src="https://javagraphics.java.net/resources/decorated-panel/corner-demo.gif" alt="Corner Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/corner-demo.gif" alt="Corner Demo">
  * </td></tr><tr><td>
  * Scribble:
- * <p><img src="https://javagraphics.java.net/resources/decorated-panel/scribble-demo.gif" alt="Scribble Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/scribble-demo.gif" alt="Scribble Demo">
  * </td><td>
  * Shadow:
- * <p><img src="https://javagraphics.java.net/resources/decorated-panel/shadow-demo.gif" alt="Shadow Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/shadow-demo.gif" alt="Shadow Demo">
  * </td></tr></table>
  * 
  * @see com.bric.plaf.DecoratedPanelUIDemo
@@ -87,7 +87,7 @@ public class DecoratedPanelUI extends PanelUI {
 	
 	/** Create a simple <code>DecoratedPanelUI</code> that is tinted a little bit
 	 * darker than normal panels with a bevel shadow oriented at the top.
-	 * <p><img src="https://javagraphics.java.net/resources/decorated-panel/createDarkRecessedUI.png" alt="Dark Recessed Demo">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createDarkRecessedUI.png" alt="Dark Recessed Demo">
 	 */
 	public static DecoratedPanelUI createDarkRecessedUI() {
 		DecoratedPanelUI ui = new DecoratedPanelUI();
@@ -103,7 +103,7 @@ public class DecoratedPanelUI extends PanelUI {
 	}
 
 	/** Create a plain <code>DecoratedPanelUI</code> with a thin rounded border.
-	 * <p><img src="https://javagraphics.java.net/resources/decorated-panel/createMinimalRoundedUI.png" alt="Minimal Rounded Demo">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createMinimalRoundedUI.png" alt="Minimal Rounded Demo">
 	 */
 	public static DecoratedPanelUI createMinimalRoundedUI() {
 		DecoratedPanelUI ui = new DecoratedPanelUI();
@@ -117,7 +117,7 @@ public class DecoratedPanelUI extends PanelUI {
 	}
 
 	/** Create a simple <code>DecoratedPanelUI</code> with a light shadow.
-	 * <p><img src="https://javagraphics.java.net/resources/decorated-panel/createSubtleShadowUI.png" alt="Subtle Shadow Demo">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createSubtleShadowUI.png" alt="Subtle Shadow Demo">
 	 */
 	public static DecoratedPanelUI createSubtleShadowUI() {
 		DecoratedPanelUI ui = new DecoratedPanelUI();
@@ -139,7 +139,7 @@ public class DecoratedPanelUI extends PanelUI {
 
 	/** Create a <code>DecoratedPanelUI</code> with a scribble
 	 * border (resembling torn paper) and a light shadow/border.
-	 * <p><img src="https://javagraphics.java.net/resources/decorated-panel/createSubtleScribbleUI.png" alt="Subtle Scribble Demo">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createSubtleScribbleUI.png" alt="Subtle Scribble Demo">
 	 */
 	public static DecoratedPanelUI createSubtleScribbleUI() {
 		DecoratedPanelUI ui = new DecoratedPanelUI();
@@ -155,7 +155,7 @@ public class DecoratedPanelUI extends PanelUI {
 
 	/** Create a <code>DecoratedPanelUI</code> with a large rounded border,
 	 * strong bevels, and a large glaze.
-	 * <p><img src="https://javagraphics.java.net/resources/decorated-panel/createPlasticUI.png" alt="Plastic Demo">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createPlasticUI.png" alt="Plastic Demo">
 	 */
 	public static DecoratedPanelUI createPlasticUI() {
 		DecoratedPanelUI ui = new DecoratedPanelUI();
@@ -176,7 +176,7 @@ public class DecoratedPanelUI extends PanelUI {
 	/** Create a <code>DecoratedPanelUI</code> that uses a special
 	 * <code>Renderer</code> to simulate a brushed metal look with small
 	 * but rounded corners.
-	 * <p><img src="https://javagraphics.java.net/resources/decorated-panel/createBrushedMetalUI.png" alt="Brushed Metal Demo">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createBrushedMetalUI.png" alt="Brushed Metal Demo">
 	 */
 	public static DecoratedPanelUI createBrushedMetalUI() {
 		Renderer brushedMetalRenderer = new Renderer() {

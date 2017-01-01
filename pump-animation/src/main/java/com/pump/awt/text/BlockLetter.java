@@ -47,7 +47,7 @@ public abstract class BlockLetter {
 	
 	/** This BlockLetter has no gradients; the depth of the
 	 * letter is one uniform (unnuanced) Paint:
-	 * <p><img src="https://javagraphics.java.net/resources/simple-block-text.png" alt="simple block text">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/simple-block-text.png" alt="simple block text">
 	 * <p>This will be slightly faster than the <code>Gradient</code>
 	 * implementation, so if you are performing animation for the 
 	 * user this might be the best choice.
@@ -110,7 +110,7 @@ public abstract class BlockLetter {
 	 * whose fill is a 2-color gradient that can be a function
 	 * of the angle of the tangent curve of the letter.
 	 * <p>Here is a sample:
-	 * <p><img src="https://javagraphics.java.net/resources/gradient-block-text.png" alt="gradient block text demo">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/gradient-block-text.png" alt="gradient block text demo">
 	 */
 	public static class Gradient extends BlockLetter {
 

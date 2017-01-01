@@ -21,7 +21,7 @@ import java.util.Random;
 
 /** In a square-ish way, this resembles an image coming into focus like
  * a mirage in a desert.  Here is a playback sample:
- * <p><img src="https://javagraphics.java.net/resources/transition/MirageTransition2D/Mirage.gif" alt="MirageTransition2D Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/MirageTransition2D/Mirage.gif" alt="MirageTransition2D Demo">
  * 
  */
 public class MirageTransition2D extends Transition2D {

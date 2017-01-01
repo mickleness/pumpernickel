@@ -23,15 +23,15 @@ import com.pump.geom.RectangularTransform;
  * next frame underneath. Here are playback samples:
  * <p><table summary="Sample Animations of SquaresTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SquaresTransition2D/Squares(10x10).gif" alt="Squares (10x10)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SquaresTransition2D/Squares(10x10).gif" alt="Squares (10x10)">
  * <p>Squares (10x10)
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SquaresTransition2D/Squares(20x20).gif" alt="Squares (20x20)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SquaresTransition2D/Squares(20x20).gif" alt="Squares (20x20)">
  * <p>Squares (20x20)
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SquaresTransition2D/Squares(30x30).gif" alt="Squares (30x30)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SquaresTransition2D/Squares(30x30).gif" alt="Squares (30x30)">
  * <p>Squares (30x30)
  * </td>
  * </tr></table>

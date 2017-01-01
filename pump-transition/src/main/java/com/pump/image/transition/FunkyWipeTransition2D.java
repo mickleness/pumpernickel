@@ -29,11 +29,11 @@ import com.pump.geom.RectangularTransform;
  * <p>Here are playback samples:
  * <p><table summary="Sample Animations of FunkyWipeTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FunkyWipeTransition2D/FunkyWipeCircular.gif" alt="Funky Wipe Circular">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FunkyWipeTransition2D/FunkyWipeCircular.gif" alt="Funky Wipe Circular">
  * <p>Funky Wipe Circular
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FunkyWipeTransition2D/FunkyWipeAcross.gif" alt="Funky Wipe Across"> 
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FunkyWipeTransition2D/FunkyWipeAcross.gif" alt="Funky Wipe Across"> 
  * <p>Funky Wipe Across
  * </td>
  * </tr></table>

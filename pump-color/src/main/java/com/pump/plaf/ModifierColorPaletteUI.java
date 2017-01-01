@@ -28,10 +28,10 @@ import com.pump.util.JVM;
  * <p>Here are the different possible color sets this UI uses:
  * <table summary="Resource&#160;Samples&#160;for&#160;com.bric.plaf.ModifierColorPaletteUI"><tr>
  * <td></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_DEFAULT_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_DEFAULT_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_MUTED_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_MUTED_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_FLESH_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_FLESH_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_EARTH_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_EARTH_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_DEFAULT_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_DEFAULT_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_MUTED_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_MUTED_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_FLESH_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_FLESH_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_EARTH_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_EARTH_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
  * </tr><tr>
  * <td></td>
  * <td>SHEET_DEFAULT_GRID</td>
@@ -40,10 +40,10 @@ import com.pump.util.JVM;
  * <td>SHEET_EARTH_GRID</td>
  * </tr><tr>
  * <td></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_DEFAULT_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_DEFAULT_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_MUTED_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_MUTED_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_FLESH_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_FLESH_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_EARTH_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_EARTH_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_DEFAULT_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_DEFAULT_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_MUTED_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_MUTED_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_FLESH_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_FLESH_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_EARTH_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_EARTH_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"></td>
  * </tr><tr>
  * <td></td>
  * <td>SHEET_DEFAULT_CONTINUOUS</td>
@@ -71,28 +71,28 @@ import com.pump.util.JVM;
 	tableIntroduction = "Here are the different possible color sets this UI uses:")
 public class ModifierColorPaletteUI extends FadingColorPaletteUI {
 
-	/** <img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_DEFAULT_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_DEFAULT_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
+	/** <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_DEFAULT_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_DEFAULT_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
 	public static final ColorSet SHEET_DEFAULT_GRID = new DefaultColors(true,10,12);
 	
-	/** <img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_MUTED_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_MUTED_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
+	/** <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_MUTED_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_MUTED_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
 	public static final ColorSet SHEET_MUTED_GRID = new MutedColors(true,10,11);
 	
-	/** <img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_FLESH_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_FLESH_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
+	/** <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_FLESH_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_FLESH_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
 	public static final ColorSet SHEET_FLESH_GRID = new FleshColors(true,8,7);
 	
-	/** <img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_EARTH_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_EARTH_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
+	/** <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_EARTH_GRID.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_EARTH_GRID.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
 	public static final ColorSet SHEET_EARTH_GRID = new EarthColors(true,8,7);
 	
-	/** <img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_DEFAULT_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_DEFAULT_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
+	/** <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_DEFAULT_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_DEFAULT_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
 	public static final ColorSet SHEET_DEFAULT_CONTINUOUS = new DefaultColors(false,10,12); //giving a # of columns makes gray column size same as grid
 	
-	/** <img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_MUTED_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_MUTED_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
+	/** <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_MUTED_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_MUTED_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
 	public static final ColorSet SHEET_MUTED_CONTINUOUS = new MutedColors(false);
 	
-	/** <img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_FLESH_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_FLESH_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
+	/** <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_FLESH_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_FLESH_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
 	public static final ColorSet SHEET_FLESH_CONTINUOUS = new FleshColors(false);
 	
-	/** <img src="https://javagraphics.java.net/resources/samples/ModifierColorPaletteUI/SHEET_EARTH_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_EARTH_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
+	/** <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/ModifierColorPaletteUI/SHEET_EARTH_CONTINUOUS.png" alt="&#160;com.bric.plaf.ModifierColorPaletteUI.SHEET_EARTH_CONTINUOUS.paintSample(&#160;new&#160;java.awt.Dimension(160,&#160;120),&#160;true&#160;)&#160;"> */
 	public static final ColorSet SHEET_EARTH_CONTINUOUS = new EarthColors(false);
 	/**  */
 	

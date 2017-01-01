@@ -16,11 +16,11 @@ import java.awt.geom.AffineTransform;
 /** This spins one frame in/out from the center. Here are playback samples:
  * <p><table summary="Sample Animations of RotateTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/RotateTransition2D/RotateIn.gif" alt="Rotate In">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RotateTransition2D/RotateIn.gif" alt="Rotate In">
  * <p>Rotate In
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/RotateTransition2D/RotateOut.gif" alt="Rotate Out">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RotateTransition2D/RotateOut.gif" alt="Rotate Out">
  * <p>Rotate Out
  * </td>
  * </tr></table>

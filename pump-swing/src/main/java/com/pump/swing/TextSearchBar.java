@@ -57,8 +57,8 @@ import com.pump.plaf.RoundTextFieldUI;
  * <p>Here are some samples:
  * <table summary="Resource&#160;Samples&#160;for&#160;com.bric.swing.TextSearchBar"><tr>
  * <td></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/TextSearchBar/Safari.png" alt="com.bric.swing.TextSearchBar.createSafariStyleBar(new&#160;javax.swing.JTextArea())"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/TextSearchBar/Firefox.png" alt="com.bric.swing.TextSearchBar.createFirefoxStyleBar(new&#160;javax.swing.JTextArea())"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/TextSearchBar/Safari.png" alt="com.bric.swing.TextSearchBar.createSafariStyleBar(new&#160;javax.swing.JTextArea())"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/TextSearchBar/Firefox.png" alt="com.bric.swing.TextSearchBar.createFirefoxStyleBar(new&#160;javax.swing.JTextArea())"></td>
  * </tr><tr>
  * <td></td>
  * <td>Safari</td>

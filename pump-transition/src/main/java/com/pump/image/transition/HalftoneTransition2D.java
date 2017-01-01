@@ -26,11 +26,11 @@ import java.util.List;
  * <p>Here are playback samples:
  * <p><table summary="Sample Animations of HalftoneTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/HalftoneTransition2D/HalftoneIn.gif" alt="Halftone In">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/HalftoneTransition2D/HalftoneIn.gif" alt="Halftone In">
  * <p>Halftone In
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/HalftoneTransition2D/HalftoneOut.gif" alt="Halftone Out">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/HalftoneTransition2D/HalftoneOut.gif" alt="Halftone Out">
  * <p>Halftone Out
  * </td>
  * </tr></table>

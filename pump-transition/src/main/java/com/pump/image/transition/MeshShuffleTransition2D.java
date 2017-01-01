@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** The concept here was to resemble a deck of cards being shuffled. Here is a playback sample:
- * <p><img src="https://javagraphics.java.net/resources/transition/MeshShuffleTransition2D/MeshShuffle.gif" alt="MeshShuffleTransition2D Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/MeshShuffleTransition2D/MeshShuffle.gif" alt="MeshShuffleTransition2D Demo">
  *
  */
 public class MeshShuffleTransition2D extends Transition2D {

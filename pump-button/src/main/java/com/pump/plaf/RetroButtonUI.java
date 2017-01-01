@@ -22,7 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
 /**
- * <img src="https://javagraphics.java.net/resources/filledbuttonui/RetroButtonUI.png" alt="RetroButtonUI Screenshot">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/RetroButtonUI.png" alt="RetroButtonUI Screenshot">
  * 
  * @see com.bric.plaf.FilledButtonUIDemo
  */

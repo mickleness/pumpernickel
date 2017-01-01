@@ -19,15 +19,15 @@ import java.util.Random;
  * clipping of the incoming shape is this liquid-dripping outline. Here are playback samples:
  * <p><table summary="Sample Animations of GooTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/GooTransition2D/Goo(10).gif" alt="Goo (10)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/GooTransition2D/Goo(10).gif" alt="Goo (10)">
  * <p>Goo (10)
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/GooTransition2D/Goo(20).gif" alt="Goo (10)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/GooTransition2D/Goo(20).gif" alt="Goo (10)">
  * <p>Goo (20)
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/GooTransition2D/Goo(50).gif" alt="Goo (10)">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/GooTransition2D/Goo(50).gif" alt="Goo (10)">
  * <p>Goo (50)
  * </td>
  * </tr></table>

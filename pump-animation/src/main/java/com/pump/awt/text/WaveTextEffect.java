@@ -28,7 +28,7 @@ import java.util.List;
 
 /** This ripples across the text (from-left-to-right) using a transparent
  * stencil-like appearance:
- * <p><img src="https://javagraphics.java.net/resources/wave-text-effect.gif" alt="demo of the WaveTextEffect" ></p>
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/wave-text-effect.gif" alt="demo of the WaveTextEffect" ></p>
  */
 public class WaveTextEffect implements TextEffect {
 	int width, height;

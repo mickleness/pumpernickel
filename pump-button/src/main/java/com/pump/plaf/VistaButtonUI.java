@@ -21,7 +21,7 @@ import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
 /** A <code>ButtonUI</code> that resembles buttons in Vista.
- * <p><img src="https://javagraphics.java.net/resources/filledbuttonui/VistaButtonUI.png" alt="VistaButtonUI Screenshot">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/VistaButtonUI.png" alt="VistaButtonUI Screenshot">
  * <P>As of this writing this UI does not perform animated
  * fades, but is otherwise a reasonable replica.
  * 

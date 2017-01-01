@@ -20,11 +20,11 @@ import com.pump.geom.TransformUtils;
  * and after a little bit of wobbling it settles down. Here are playback samples:
  * <p><table summary="Sample Animations of TossTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/TossTransition2D/TossLeft.gif" alt="Toss Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/TossTransition2D/TossLeft.gif" alt="Toss Left">
  * <p>Toss Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/TossTransition2D/TossRight.gif" alt="Toss Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/TossTransition2D/TossRight.gif" alt="Toss Right">
  * <p>Toss Right
  * </td>
  * </tr></table>

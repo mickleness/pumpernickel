@@ -14,7 +14,7 @@ import java.awt.Dimension;
 import java.awt.geom.AffineTransform;
 
 /** This is basically a "slide down" transition, but with a bounce at the bottom. Here is a playback sample:
- * <p><img src="https://javagraphics.java.net/resources/transition/DropTransition2D/Drop.gif" alt="DropTransition2D Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DropTransition2D/Drop.gif" alt="DropTransition2D Demo">
  */
 public class DropTransition2D extends Transition2D {
 

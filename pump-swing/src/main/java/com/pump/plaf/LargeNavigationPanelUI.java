@@ -55,8 +55,8 @@ import com.pump.swing.NavigationButtons;
  * <p>Here are some samples:
  * <table summary="Resource&#160;Samples&#160;for&#160;com.bric.plaf.LargeNavigationPanelUI"><tr>
  * <td></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/LargeNavigationPanelUI/SpinnerNumberModel.png" alt="com.pump.plaf.LargeNavigationPanelUI.createDemo(true)"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/LargeNavigationPanelUI/Any Other Model.png" alt="com.pump.plaf.LargeNavigationPanelUI.createDemo(false)"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/LargeNavigationPanelUI/SpinnerNumberModel.png" alt="com.pump.plaf.LargeNavigationPanelUI.createDemo(true)"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/LargeNavigationPanelUI/Any Other Model.png" alt="com.pump.plaf.LargeNavigationPanelUI.createDemo(false)"></td>
  * </tr><tr>
  * <td></td>
  * <td>SpinnerNumberModel</td>

@@ -35,57 +35,57 @@ import com.pump.image.thumbnail.BasicThumbnail;
  * <p>Here are possible customizations the {@link #PALETTE_CELL_STYLE_PROPERTY} and {@link #PALETTE_STYLE_PROPERTY} allow:
  * <p>
  * <table summary="Sample Color Set Configurations"><tr><td></td><td>Default Cell</td><td>Shadow Cell</td><td>Scribble Cell</td></tr>
- * <tr><td>Default Palette</td><td><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_default_default.png" alt="Default Palette Style, Default Cell Style"></td>
- * <td><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_default_shadow.png" alt="Default Palette Style, Shadow Cell Style"></td>
- * <td><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_default_scribble.png" alt="Default Palette Style, Scribble Cell Style"></td></tr>
- * <tr><td>Gradient Palette</td><td><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_gradient_default.png" alt="Gradient Palette Style, Default Cell Style"></td>
- * <td><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_gradient_shadow.png" alt="Gradient Palette Style, Shadow Cell Style"></td>
- * <td><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_gradient_scribble.png" alt="Gradient Palette Style, Scribble Cell Style"></td></tr>
- * <tr><td>Streaks Palette</td><td><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_streaks_default.png" alt="Streak Palette Style, Default Cell Style"></td>
- * <td><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_streaks_shadow.png" alt="Streak Palette Style, Shadow Cell Style"></td>
- * <td><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_streaks_scribble.png" alt="Streak Palette Style, Scribble Cell Style"></td></tr></table>
+ * <tr><td>Default Palette</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_default_default.png" alt="Default Palette Style, Default Cell Style"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_default_shadow.png" alt="Default Palette Style, Shadow Cell Style"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_default_scribble.png" alt="Default Palette Style, Scribble Cell Style"></td></tr>
+ * <tr><td>Gradient Palette</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_gradient_default.png" alt="Gradient Palette Style, Default Cell Style"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_gradient_shadow.png" alt="Gradient Palette Style, Shadow Cell Style"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_gradient_scribble.png" alt="Gradient Palette Style, Scribble Cell Style"></td></tr>
+ * <tr><td>Streaks Palette</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_streaks_default.png" alt="Streak Palette Style, Default Cell Style"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_streaks_shadow.png" alt="Streak Palette Style, Shadow Cell Style"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_streaks_scribble.png" alt="Streak Palette Style, Scribble Cell Style"></td></tr></table>
  * 
  * TODO: rename to distinguish from <code>com.pump.pixel.image.quantize.ColorSet</code>
  */
 public abstract class ColorSet {
 	
 	/** A possible palette style value.
-	 * <p><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_streaks_default.png" alt="Streaks">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_streaks_default.png" alt="Streaks">
 	 * 
 	 * @see #PALETTE_STYLE_PROPERTY
 	 */
 	public static final String PALETTE_STYLE_STREAKS = "streaks";
 
 	/** A possible palette style value.
-	 * <p><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_gradient_default.png" alt="Gradient">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_gradient_default.png" alt="Gradient">
 	 * 
 	 * @see #PALETTE_STYLE_PROPERTY
 	 */
 	public static final String PALETTE_STYLE_GRADIENT = "gradient";
 
 	/** A possible palette style value.
-	 * <p><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_default_default.png" alt="Default">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_default_default.png" alt="Default">
 	 * 
 	 * @see #PALETTE_STYLE_PROPERTY
 	 */
 	public static final String PALETTE_STYLE_DEFAULT = "default";
 
 	/** A possible palette cell style value.
-	 * <p><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_default_shadow.png" alt="Shadow">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_default_shadow.png" alt="Shadow">
 	 * 
 	 * @see #PALETTE_CELL_STYLE_PROPERTY
 	 */
 	public static final String PALETTE_CELL_STYLE_SHADOW = "shadow";
 
 	/** A possible palette cell style value.
-	 * <p><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_default_scribble.png" alt="Scribble">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_default_scribble.png" alt="Scribble">
 	 * 
 	 * @see #PALETTE_CELL_STYLE_PROPERTY
 	 */
 	public static final String PALETTE_CELL_STYLE_SCRIBBLE = "scribble";
 
 	/** A possible palette cell style value.
-	 * <p><img src="https://javagraphics.java.net/resources/ColorPaletteDemo/style_default_default.png" alt="Default">
+	 * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ColorPaletteDemo/style_default_default.png" alt="Default">
 	 * 
 	 * @see #PALETTE_CELL_STYLE_PROPERTY
 	 */

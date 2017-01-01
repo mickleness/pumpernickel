@@ -24,7 +24,7 @@ import java.util.Random;
 /** This effect begins and ends with <code>BlockLetters</code> with no height.
  * During the animation: the text pops up, pulses twice, and then returns to
  * its original state:
- * <p><img src="https://javagraphics.java.net/resources/explode-text-effect.gif" alt="explode text effect demo"></p>
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/explode-text-effect.gif" alt="explode text effect demo"></p>
  * <p>The colors of the blocks are randomly generated within a certain HSB range. The
  * angles are distributed in an arc from left-to-right.</p>
  */

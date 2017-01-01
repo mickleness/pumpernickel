@@ -19,7 +19,7 @@ import java.util.List;
 import com.pump.geom.RectangularTransform;
 
 /** This is a blend transition with a subtle zoom in/out added. Here is a playback sample:
- * <p><img src="https://javagraphics.java.net/resources/transition/MotionBlendTransition2D/MotionBlend.gif" alt="MotionBlendTransition2D Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/MotionBlendTransition2D/MotionBlend.gif" alt="MotionBlendTransition2D Demo">
 */
 public class MotionBlendTransition2D extends Transition2D {
 

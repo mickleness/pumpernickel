@@ -17,35 +17,35 @@ import java.awt.geom.AffineTransform;
  * is a hinge involved. Here are playback samples:
  * <p><table summary="Sample Animations of PivotTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PivotTransition2D/PivotInTopLeft.gif" alt="Pivot In Top Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PivotTransition2D/PivotInTopLeft.gif" alt="Pivot In Top Left">
  * <p>Pivot In Top Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PivotTransition2D/PivotInTopRight.gif" alt="Pivot In Top Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PivotTransition2D/PivotInTopRight.gif" alt="Pivot In Top Right">
  * <p>Pivot In Top Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PivotTransition2D/PivotInBottomLeft.gif" alt="Pivot In Bottom Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PivotTransition2D/PivotInBottomLeft.gif" alt="Pivot In Bottom Left">
  * <p>Pivot In Bottom Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PivotTransition2D/PivotInBottomRight.gif" alt="Pivot In Bottom Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PivotTransition2D/PivotInBottomRight.gif" alt="Pivot In Bottom Right">
  * <p>Pivot In Bottom Right
  * </td><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PivotTransition2D/PivotOutTopLeft.gif" alt="Pivot Out Top Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PivotTransition2D/PivotOutTopLeft.gif" alt="Pivot Out Top Left">
  * <p>Pivot Out Top Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PivotTransition2D/PivotOutTopRight.gif" alt="Pivot Out Top Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PivotTransition2D/PivotOutTopRight.gif" alt="Pivot Out Top Right">
  * <p>Pivot Out Top Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PivotTransition2D/PivotOutBottomLeft.gif" alt="Pivot Out Bottom Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PivotTransition2D/PivotOutBottomLeft.gif" alt="Pivot Out Bottom Left">
  * <p>Pivot Out Bottom Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PivotTransition2D/PivotOutBottomRight.gif" alt="Pivot Out Top Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PivotTransition2D/PivotOutBottomRight.gif" alt="Pivot Out Top Right">
  * <p>Pivot Out Bottom Right
  * </td>
  * </tr></table>

@@ -24,7 +24,7 @@ import java.util.Map;
 
 /** This begins and ends in an undecorated state, and during the animation the
  * letters are punched for emphasis:
- * <p><img src="https://javagraphics.java.net/resources/punch-text-effect.gif" alt="punch text effect demo"></p>
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/punch-text-effect.gif" alt="punch text effect demo"></p>
  */
 public class PunchTextEffect implements TextEffect {
 	int width, height;

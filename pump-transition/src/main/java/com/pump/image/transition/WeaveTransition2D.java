@@ -18,7 +18,7 @@ import java.util.List;
 
 /** This paints the incoming frame in thin horizontal strips that slide
  * into place. Here is a playback sample:
- * <p><img src="https://javagraphics.java.net/resources/transition/WeaveTransition2D/Weave.gif" alt="WeaveTransition2D Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WeaveTransition2D/Weave.gif" alt="WeaveTransition2D Demo">
  * 
  */
 public class WeaveTransition2D extends Transition2D {

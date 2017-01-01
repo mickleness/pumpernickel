@@ -20,9 +20,9 @@ import com.pump.plaf.ThrobberUI;
  * or too large (because a task must be expressed in a tiny amount of space). Here
  * are some possible UI implementations:
  * <p><table summary="Sample ThrobberUIs" cellpadding="10"><tr>
- * <td><img src="https://javagraphics.java.net/resources/throbber/AquaThrobberUIx2.gif" alt="Sample of AquaThrobberUI"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/ChasingArrowsThrobberUIx2.gif" alt="Sample of ChasingArrowsThrobberUI"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/PulsingCirclesThrobberUIx2.gif" alt="Sample of PulsingCirclesThrobberUI"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUIx2.gif" alt="Sample of AquaThrobberUI"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/ChasingArrowsThrobberUIx2.gif" alt="Sample of ChasingArrowsThrobberUI"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/PulsingCirclesThrobberUIx2.gif" alt="Sample of PulsingCirclesThrobberUI"></td>
  * </tr></table>
  * <p><a href="https://developer.apple.com/library/mac/documentation/UserExperience/Conceptual/AppleHIGuidelines/Controls/Controls.html#//apple_ref/doc/uid/TP30000359-TPXREF106">Apple's OSX Human Interface Guidelines</a> call this an "Asynchronous Progress Indicator",
  * and describe it as follows:

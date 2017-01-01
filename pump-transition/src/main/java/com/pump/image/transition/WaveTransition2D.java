@@ -20,19 +20,19 @@ import com.pump.geom.TransformUtils;
  * whipping in the wind. Here are playback samples:
  * <p><table summary="Sample Animations of WaveTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/WaveTransition2D/WaveLeft.gif" alt="Wave Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WaveTransition2D/WaveLeft.gif" alt="Wave Left">
  * <p>Wave Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/WaveTransition2D/WaveRight.gif" alt="Wave Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WaveTransition2D/WaveRight.gif" alt="Wave Right">
  * <p>Wave Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/WaveTransition2D/WaveUp.gif" alt="Wave Up">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WaveTransition2D/WaveUp.gif" alt="Wave Up">
  * <p>Wave Up
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/WaveTransition2D/WaveDown.gif" alt="Wave Down">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WaveTransition2D/WaveDown.gif" alt="Wave Down">
  * <p>Wave Down
  * </td>
  * </tr></table>

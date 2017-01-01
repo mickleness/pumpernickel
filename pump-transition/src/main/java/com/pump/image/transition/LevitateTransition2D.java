@@ -19,7 +19,7 @@ import java.util.List;
 /** This breaks the existing image into 6 horizontal strips, and then
  * (after a gently wobbly start) that levitate/accelerate up and out of
  * the frame, revealing the next image. Here is a playback sample:
- * <p><img src="https://javagraphics.java.net/resources/transition/LevitateTransition2D/Levitate.gif" alt="LevitateTransition2D Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/LevitateTransition2D/Levitate.gif" alt="LevitateTransition2D Demo">
  * 
  */
 public class LevitateTransition2D extends Transition2D {

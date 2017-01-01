@@ -21,9 +21,9 @@ import javax.swing.JComponent;
 
 /** A <code>ThrobberUI</code> showing 3 pivoting circles.
  * <p><table summary="Sample Animations of PivotingCirclesThrobberUI" cellpadding="10"><tr>
- * <td><img src="https://javagraphics.java.net/resources/throbber/PivotingCirclesThrobberUI.gif" alt="PivotingCirclesThrobberUI"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/PivotingCirclesThrobberUIx2.gif" alt="PivotingCirclesThrobberUI, Magnified 2x"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/PivotingCirclesThrobberUIx4.gif" alt="PivotingCirclesThrobberUI, Magnified 4x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/PivotingCirclesThrobberUI.gif" alt="PivotingCirclesThrobberUI"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/PivotingCirclesThrobberUIx2.gif" alt="PivotingCirclesThrobberUI, Magnified 2x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/PivotingCirclesThrobberUIx4.gif" alt="PivotingCirclesThrobberUI, Magnified 4x"></td>
  * </tr></table>
  * <p>On installation: the component's foreground is set to black,
  * but if that is changed then that color is used to render this animation.

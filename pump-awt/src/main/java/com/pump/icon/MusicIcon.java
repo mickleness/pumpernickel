@@ -55,10 +55,10 @@ import com.pump.geom.ShapeStringUtils;
  * <p>Here are some samples:
  * <table summary="Resource&#160;Samples&#160;for&#160;com.bric.swing.resources.MusicIcon"><tr>
  * <td></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/MusicIcon/24x24.png" alt="new&#160;com.bric.swing.resources.MusicIcon(24)"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/MusicIcon/32x32.png" alt="new&#160;com.bric.swing.resources.MusicIcon(32)"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/MusicIcon/64x64.png" alt="new&#160;com.bric.swing.resources.MusicIcon(64)"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/MusicIcon/128x128.png" alt="new&#160;com.bric.swing.resources.MusicIcon(128)"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/MusicIcon/24x24.png" alt="new&#160;com.bric.swing.resources.MusicIcon(24)"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/MusicIcon/32x32.png" alt="new&#160;com.bric.swing.resources.MusicIcon(32)"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/MusicIcon/64x64.png" alt="new&#160;com.bric.swing.resources.MusicIcon(64)"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/MusicIcon/128x128.png" alt="new&#160;com.bric.swing.resources.MusicIcon(128)"></td>
  * </tr><tr>
  * <td></td>
  * <td>24x24</td>

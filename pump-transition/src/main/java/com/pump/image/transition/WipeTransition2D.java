@@ -16,19 +16,19 @@ import java.awt.geom.Rectangle2D;
 /** This is the standard "wipe" transition. Here are playback samples:
  * <p><table summary="Sample Animations of WipeTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/WipeTransition2D/WipeLeft.gif" alt="Wipe Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WipeTransition2D/WipeLeft.gif" alt="Wipe Left">
  * <p>Wipe Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/WipeTransition2D/WipeRight.gif" alt="Wipe Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WipeTransition2D/WipeRight.gif" alt="Wipe Right">
  * <p>Wipe Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/WipeTransition2D/WipeUp.gif" alt="Wipe Up">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WipeTransition2D/WipeUp.gif" alt="Wipe Up">
  * <p>Wipe Up
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/WipeTransition2D/WipeDown.gif" alt="Wipe Down">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WipeTransition2D/WipeDown.gif" alt="Wipe Down">
  * <p>Wipe Down
  * </td>
  * </tr></table>

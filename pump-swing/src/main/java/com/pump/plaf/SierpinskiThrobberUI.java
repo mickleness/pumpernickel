@@ -22,9 +22,9 @@ import javax.swing.JComponent;
 /** A <code>ThrobberUI</code> that paints an inner and outer Sierpinski
  * triangle rotating clockwise and spiraling inward.
  * <p><table summary="Sample Animations of SierpinskiThrobberUI" cellpadding="10"><tr>
- * <td><img src="https://javagraphics.java.net/resources/throbber/SierpinskiThrobberUI.gif" alt="SierpinskiThrobberUI"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/SierpinskiThrobberUIx2.gif" alt="SierpinskiThrobberUI, Magnified 2x"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/SierpinskiThrobberUIx4.gif" alt="SierpinskiThrobberUI, Magnified 4x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/SierpinskiThrobberUI.gif" alt="SierpinskiThrobberUI"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/SierpinskiThrobberUIx2.gif" alt="SierpinskiThrobberUI, Magnified 2x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/SierpinskiThrobberUIx4.gif" alt="SierpinskiThrobberUI, Magnified 4x"></td>
  * </tr></table>
  * <p>On installation: the component's foreground is set to black,
  * but if that is changed then that color is used to render this animation.

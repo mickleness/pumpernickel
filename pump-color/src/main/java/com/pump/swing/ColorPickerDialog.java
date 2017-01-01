@@ -27,7 +27,7 @@ import com.pump.swing.DialogFooter.EscapeKeyBehavior;
 
 /** This wraps a <code>ColorPicker</code> in a simple dialog with "OK" and "Cancel" options.
  * <P>(This object is used by the static calls in <code>ColorPicker</code> to show a dialog.)
- * <br><IMG SRC="https://javagraphics.java.net/resources/colorpicker.png" alt="Screenshot of ColorPickerDialog">
+ * <br><IMG SRC="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker.png" alt="Screenshot of ColorPickerDialog">
  * 
  * @see ColorPicker
  * @see ColorPickerPanel

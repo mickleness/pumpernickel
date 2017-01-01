@@ -19,11 +19,11 @@ import java.awt.geom.Rectangle2D;
 /** This uses clipping to sweep out a circular path, revealing the new frame. Here are playback samples:
  * <p><table summary="Sample Animations of RadialWipeTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/RadialWipeTransition2D/RadialWipeClockwise.gif" alt="Radial Wipe Clockwise">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RadialWipeTransition2D/RadialWipeClockwise.gif" alt="Radial Wipe Clockwise">
  * <p>Radial Wipe Clockwise
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/RadialWipeTransition2D/RadialWipeCounterclockwise.gif" alt="Radial Wipe Counterclockwise">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RadialWipeTransition2D/RadialWipeCounterclockwise.gif" alt="Radial Wipe Counterclockwise">
  * <p>Radial Wipe Counterclockwise
  * </td>
  * </tr></table>

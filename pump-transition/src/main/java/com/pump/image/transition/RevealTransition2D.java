@@ -17,19 +17,19 @@ import java.awt.geom.AffineTransform;
  * underneath. Here are playback samples:
  * <p><table summary="Sample Animations of RevealTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/RevealTransition2D/RevealLeft.gif" alt="Reveal Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RevealTransition2D/RevealLeft.gif" alt="Reveal Left">
  * <p>Reveal Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/RevealTransition2D/RevealRight.gif" alt="Reveal Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RevealTransition2D/RevealRight.gif" alt="Reveal Right">
  * <p>Reveal Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/RevealTransition2D/RevealUp.gif" alt="Reveal Up">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RevealTransition2D/RevealUp.gif" alt="Reveal Up">
  * <p>Reveal Up
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/RevealTransition2D/RevealDown.gif" alt="Reveal Down">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RevealTransition2D/RevealDown.gif" alt="Reveal Down">
  * <p>Reveal Down
  * </td>
  * </tr></table>

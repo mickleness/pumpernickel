@@ -20,9 +20,9 @@ import javax.swing.JComponent;
 /** A <code>ThrobberUI</code> showing 3 circles pulsing outward that also move
  * in a clockwise rotation.
  * <p><table summary="Sample Animations of PulsingCirclesThrobberUI" cellpadding="10"><tr>
- * <td><img src="https://javagraphics.java.net/resources/throbber/PulsingCirclesThrobberUI.gif" alt="PulsingCirclesThrobberUI"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/PulsingCirclesThrobberUIx2.gif" alt="PulsingCirclesThrobberUI, Magnified 2x"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/PulsingCirclesThrobberUIx4.gif" alt="PulsingCirclesThrobberUI, Magnified 4x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/PulsingCirclesThrobberUI.gif" alt="PulsingCirclesThrobberUI"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/PulsingCirclesThrobberUIx2.gif" alt="PulsingCirclesThrobberUI, Magnified 2x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/PulsingCirclesThrobberUIx4.gif" alt="PulsingCirclesThrobberUI, Magnified 4x"></td>
  * </tr></table>
  * <p>On installation: the component's foreground is set to dark gray,
  * but if that is changed then that color is used to render this animation.

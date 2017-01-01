@@ -17,19 +17,19 @@ import java.awt.geom.Rectangle2D;
  * This is also known as the "barn-door effect". Here are playback samples:
  * <p><table summary="Sample Animations of SplitTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SplitTransition2D/SplitHorizontalIn.gif" alt="Split Horizontal In">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SplitTransition2D/SplitHorizontalIn.gif" alt="Split Horizontal In">
  * <p>Split Horizontal In
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SplitTransition2D/SplitHorizontalOut.gif" alt="Split Horizontal Out">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SplitTransition2D/SplitHorizontalOut.gif" alt="Split Horizontal Out">
  * <p>Split Horizontal Out
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SplitTransition2D/SplitVerticalIn.gif" alt="Split Vertical In">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SplitTransition2D/SplitVerticalIn.gif" alt="Split Vertical In">
  * <p>Split Vertical In
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SplitTransition2D/SplitVerticalOut.gif" alt="Split Vertical Out">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SplitTransition2D/SplitVerticalOut.gif" alt="Split Vertical Out">
  * <p>Split Vertical Out
  * </td>
  * </tr></table>

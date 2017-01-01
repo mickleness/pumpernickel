@@ -20,11 +20,11 @@ import com.pump.geom.RectangularTransform;
 /** This zooms one frame in/out from the center. Here are playback samples:
  * <p><table summary="Sample Animations of ScaleTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/ScaleTransition2D/ScaleIn.gif" alt="Scale In">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScaleTransition2D/ScaleIn.gif" alt="Scale In">
  * <p>Scale In
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/ScaleTransition2D/ScaleOut.gif" alt="Scale Out">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScaleTransition2D/ScaleOut.gif" alt="Scale Out">
  * <p>Scale Out
  * </td>
  * </tr></table>

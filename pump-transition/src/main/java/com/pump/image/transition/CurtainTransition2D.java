@@ -20,7 +20,7 @@ import com.pump.geom.RectangularTransform;
  * right halves, as if a curtain is being opened.
  * 
  * <P>This is basically a "Split Vertical", except the two halves are squished. Here is a playback sample:
- * <p><img src="https://javagraphics.java.net/resources/transition/CurtainTransition2D/Curtain.gif" alt="CurtainTransition2D Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CurtainTransition2D/Curtain.gif" alt="CurtainTransition2D Demo">
  *
  */
 public class CurtainTransition2D extends Transition2D {

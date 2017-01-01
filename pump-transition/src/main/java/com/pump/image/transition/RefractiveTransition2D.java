@@ -20,7 +20,7 @@ import java.util.List;
 /** This resembles a lens with several faces, showing several fractured
  *  copies of the same image.  As the transition progresses the incoming image
  *  becomes more focused and opaque. Here is a playback sample:
- * <p><img src="https://javagraphics.java.net/resources/transition/RefractiveTransition2D/Refractive.gif" alt="RefractiveTransition2D Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RefractiveTransition2D/Refractive.gif" alt="RefractiveTransition2D Demo">
  *
  */
 public class RefractiveTransition2D extends Transition2D {

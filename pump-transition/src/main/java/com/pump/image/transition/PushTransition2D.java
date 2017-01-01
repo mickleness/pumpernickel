@@ -16,19 +16,19 @@ import java.awt.geom.AffineTransform;
 /** This is the standard "push" transition. Here are playback samples:
  * <p><table summary="Sample Animations of PushTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PushTransition2D/PushLeft.gif" alt="Push Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PushTransition2D/PushLeft.gif" alt="Push Left">
  * <p>Push Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PushTransition2D/PushRight.gif" alt="Push Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PushTransition2D/PushRight.gif" alt="Push Right">
  * <p>Push Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PushTransition2D/PushUp.gif" alt="Push Up">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PushTransition2D/PushUp.gif" alt="Push Up">
  * <p>Push Up
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/PushTransition2D/PushDown.gif" alt="Push Down">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/PushTransition2D/PushDown.gif" alt="Push Down">
  * <p>Push Down
  * </td>
  * </tr></table>

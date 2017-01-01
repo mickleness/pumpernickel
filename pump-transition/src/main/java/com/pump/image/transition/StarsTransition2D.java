@@ -30,11 +30,11 @@ import com.pump.geom.TransformUtils;
  * shrinking stars that spin off towards a distant point. Here are playback samples:
  * <p><table summary="Sample Animations of StarsTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/StarsTransition2D/StarsLeft.gif" alt="Stars Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/StarsTransition2D/StarsLeft.gif" alt="Stars Left">
  * <p>Stars Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/StarsTransition2D/StarsRight.gif" alt="Stars Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/StarsTransition2D/StarsRight.gif" alt="Stars Right">
  * <p>Stars Right
  * </td>
  * </tr></table>

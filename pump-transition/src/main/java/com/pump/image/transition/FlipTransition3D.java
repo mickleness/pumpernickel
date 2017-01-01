@@ -25,36 +25,36 @@ import com.pump.util.ResourcePool;
  * Here are playback samples:
  * <p><table summary="Sample Animations of FlipTransition3D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FlipTransition3D/FlipLeft.gif" alt="Flip Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipLeft.gif" alt="Flip Left">
  * <p>Flip Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FlipTransition3D/FlipRight.gif" alt="Flip Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipRight.gif" alt="Flip Right">
  * <p>Flip Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FlipTransition3D/FlipUp.gif" alt="Flip Up">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipUp.gif" alt="Flip Up">
  * <p>Flip Up
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FlipTransition3D/FlipDown.gif" alt="Flip Down">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipDown.gif" alt="Flip Down">
  * <p>Flip Down
  * </td>
  * </tr><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FlipTransition3D/FlipLeftFlush.gif" alt="Flip Left Flush">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipLeftFlush.gif" alt="Flip Left Flush">
  * <p>Flip Left Flush
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FlipTransition3D/FlipRightFlush.gif" alt="Flip Right Flush">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipRightFlush.gif" alt="Flip Right Flush">
  * <p>Flip Right Flush
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FlipTransition3D/FlipUpFlush.gif" alt="Flip Up Flush">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipUpFlush.gif" alt="Flip Up Flush">
  * <p>Flip Up Flush
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/FlipTransition3D/FlipDownFlush.gif" alt="Flip Down Flush">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipDownFlush.gif" alt="Flip Down Flush">
  * <p>Flip Down Flush
  * </td>
  * </tr></table>

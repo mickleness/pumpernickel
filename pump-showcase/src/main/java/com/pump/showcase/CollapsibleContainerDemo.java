@@ -45,7 +45,7 @@ import com.pump.swing.SectionContainer.Section;
 /** A demo app for the <code>CollapsibleContainer</code> class.
  * <p>The {@link CollapsibleContainerDemoHelper} creates this animation
  * showing off this demo app:
- * <p><img src="https://javagraphics.java.net/resources/collapsiblecontainer.gif" style="border:1px solid gray" alt="CollapsibleContainer Animation">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/collapsiblecontainer.gif" style="border:1px solid gray" alt="CollapsibleContainer Animation">
  * 
  */
 @Blurb (

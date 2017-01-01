@@ -20,19 +20,19 @@ import java.util.Random;
  * the new frame. Here are playback samples:
  * <p><table summary="Sample Animations of BarsTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BarsTransition2D/BarsHorizontalRandom.gif" alt="Bars Horizontal Random">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BarsTransition2D/BarsHorizontalRandom.gif" alt="Bars Horizontal Random">
  * <p>Bars Horizontal Random
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BarsTransition2D/BarsHorizontal.gif" alt="Bars Horizontal">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BarsTransition2D/BarsHorizontal.gif" alt="Bars Horizontal">
  * <p>Bars Horizontal
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BarsTransition2D/BarsVerticalRandom.gif" alt="Bars Vertical Random">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BarsTransition2D/BarsVerticalRandom.gif" alt="Bars Vertical Random">
  * <p>Bars Vertical Random
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BarsTransition2D/BarsVertical.gif" alt="Bars Vertical">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BarsTransition2D/BarsVertical.gif" alt="Bars Vertical">
  * <p>Bars Vertical
  * </td>
  * </tr></table>

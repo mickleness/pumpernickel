@@ -46,9 +46,9 @@ import com.pump.util.ObservableProperties.NonNullBoundsChecker;
  * <p>Here are some samples:
  * <table summary="Resource&#160;Samples&#160;for&#160;com.bric.awt.TextBlock"><tr>
  * <td></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/TextBlock/sample.png" alt="new&#160;com.bric.awt.TextBlock(0,&#160;&#34;Example&#160;Red&#34;)"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/TextBlock/sample2.png" alt="new&#160;com.bric.awt.TextBlock(.2,&#160;&#34;Greenish&#160;Example&#34;)"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/TextBlock/sample3.png" alt="new&#160;com.bric.awt.TextBlock(.5,&#160;&#34;Example&#160;Cyan&#34;)"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/TextBlock/sample.png" alt="new&#160;com.bric.awt.TextBlock(0,&#160;&#34;Example&#160;Red&#34;)"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/TextBlock/sample2.png" alt="new&#160;com.bric.awt.TextBlock(.2,&#160;&#34;Greenish&#160;Example&#34;)"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/TextBlock/sample3.png" alt="new&#160;com.bric.awt.TextBlock(.5,&#160;&#34;Example&#160;Cyan&#34;)"></td>
  * </tr><tr>
  * <td></td>
  * </tr></table>

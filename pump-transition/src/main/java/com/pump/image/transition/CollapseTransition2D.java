@@ -18,7 +18,7 @@ import java.util.List;
 
 /** In this transition the original image is split into 6 horizontal strips,
  * and they collapse downward to reveal the next image underneath. Here is a playback sample:
- * <p><img src="https://javagraphics.java.net/resources/transition/CollapseTransition2D/Collapse.gif" alt="CollapseTransition2D Demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CollapseTransition2D/Collapse.gif" alt="CollapseTransition2D Demo">
  *
  */
 public class CollapseTransition2D extends Transition2D {

@@ -36,19 +36,18 @@ import com.pump.geom.ShapeBounds;
  * <p>Here are some samples:
  * <table summary="Resource&#160;Samples&#160;for&#160;com.bric.swing.resources.GlyphIcon"><tr>
  * <td></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/GlyphIcon/Note.png" alt="com.bric.swing.resources.GlyphIcon.NOTE"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/GlyphIcon/Recycle.png" alt="com.bric.swing.resources.GlyphIcon.RECYCLE"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/GlyphIcon/Writing Hand.png" alt="com.bric.swing.resources.GlyphIcon.WRITING_HAND"></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/GlyphIcon/Flower.png" alt="com.bric.swing.resources.GlyphIcon.FLOWER"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GlyphIcon/Note.png" alt="com.bric.swing.resources.GlyphIcon.NOTE"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GlyphIcon/Recycle.png" alt="com.bric.swing.resources.GlyphIcon.RECYCLE"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GlyphIcon/Writing Hand.png" alt="com.bric.swing.resources.GlyphIcon.WRITING_HAND"></td>
  * </tr><tr>
  * <td></td>
  * <td>Note</td>
  * <td>Recycle</td>
  * <td>Writing Hand</td>
- * <td>Flower</td>
  * </tr><tr>
  * <td></td>
- * <td><img src="https://javagraphics.java.net/resources/samples/GlyphIcon/Warning.png" alt="com.bric.swing.resources.GlyphIcon.WARNING"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GlyphIcon/Flower.png" alt="com.bric.swing.resources.GlyphIcon.FLOWER"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GlyphIcon/Warning.png" alt="com.bric.swing.resources.GlyphIcon.WARNING"></td>
  * </tr><tr>
  * <td></td>
  * <td>Flower</td>

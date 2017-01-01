@@ -45,14 +45,14 @@ import com.pump.plaf.ColorPickerSliderUI;
  * To use this class to create a color choosing dialog, simply call:
  * <BR><code>ColorPicker.showDialog(frame, originalColor);</code>
  * <P>Here is a screenshot of the dialog that call will invoke:
- * <br><IMG SRC="https://javagraphics.java.net/resources/colorpicker.png" alt="ColorPicker Screenshot">
+ * <br><IMG SRC="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker.png" alt="ColorPicker Screenshot">
  * <p>However this does not have to invoked as a black-box color dialog. This class
  * is simply a panel, and you can customize and resize it for other looks.
  * For example, you might try the following panel:</p>
  * <BR><code>ColorPicker picker = new ColorPicker(false, false);</code>
  * <BR><code>picker.setPreferredSize(new Dimension(200,160));</code>
  * <BR><code>picker.setMode(ColorPicker.HUE);</code>
- * <br><IMG SRC="https://javagraphics.java.net/resources/colorpicker3.png" alt="ColorPicker Small Screenshot">
+ * <br><IMG SRC="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker3.png" alt="ColorPicker Small Screenshot">
  * <P>This will create a miniature color picker that still lets the user choose
  * from every available color, but it does not include all the buttons and
  * numeric controls on the right side of the panel. This might be ideal if you

@@ -16,11 +16,11 @@ import java.awt.geom.GeneralPath;
 /** This clips to the shape of a star zooming in/out. Here are playback samples:
  * <p><table summary="Sample Animations of StarTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/StarTransition2D/StarIn.gif" alt="Star In">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/StarTransition2D/StarIn.gif" alt="Star In">
  * <p>Star In
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/StarTransition2D/StarOut.gif" alt="Star Out">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/StarTransition2D/StarOut.gif" alt="Star Out">
  * <p>Star Out
  * </td>
  * </tr></table>

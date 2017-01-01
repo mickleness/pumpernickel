@@ -23,36 +23,36 @@ import com.pump.util.ResourcePool;
 /** This transition rotates a cube 90 degrees to reveal the next image. Here are playback samples:
  * <p><table summary="Sample Animations of CubeTransition3D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CubeTransition3D/CubeLeft.gif" alt="Cube Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CubeTransition3D/CubeLeft.gif" alt="Cube Left">
  * <p>Cube Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CubeTransition3D/CubeRight.gif" alt="Cube Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CubeTransition3D/CubeRight.gif" alt="Cube Right">
  * <p>Cube Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CubeTransition3D/CubeUp.gif" alt="Cube Up">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CubeTransition3D/CubeUp.gif" alt="Cube Up">
  * <p>Cube Up
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CubeTransition3D/CubeDown.gif" alt="Cube Down">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CubeTransition3D/CubeDown.gif" alt="Cube Down">
  * <p>Cube Down
  * </td>
  * </tr><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CubeTransition3D/CubeLeftFlush.gif" alt="Cube Left Flush">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CubeTransition3D/CubeLeftFlush.gif" alt="Cube Left Flush">
  * <p>Cube Left Flush
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CubeTransition3D/CubeRightFlush.gif" alt="Cube Right Flush">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CubeTransition3D/CubeRightFlush.gif" alt="Cube Right Flush">
  * <p>Cube Right Flush
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CubeTransition3D/CubeUpFlush.gif" alt="Cube UP Flush">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CubeTransition3D/CubeUpFlush.gif" alt="Cube UP Flush">
  * <p>Cube Up Flush
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/CubeTransition3D/CubeDownFlush.gif" alt="Cube Down Flush">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CubeTransition3D/CubeDownFlush.gif" alt="Cube Down Flush">
  * <p>Cube Down Flush
  * </td>
  * </tr></table>

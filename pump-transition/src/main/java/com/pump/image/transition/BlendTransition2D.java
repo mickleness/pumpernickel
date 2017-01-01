@@ -14,7 +14,7 @@ import java.awt.Dimension;
 
 /** Also know as the "Fade" transition, this simply fades in the opacity of the incoming
  * frame. Here is a playback sample:
- * <p><img src="https://javagraphics.java.net/resources/transition/BlendTransition2D/Blend.gif" alt="BlendTransition2D demo">
+ * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlendTransition2D/Blend.gif" alt="BlendTransition2D demo">
  *
  */
 public class BlendTransition2D extends Transition2D {

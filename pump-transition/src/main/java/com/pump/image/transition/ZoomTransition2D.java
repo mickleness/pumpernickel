@@ -16,19 +16,19 @@ import java.awt.geom.Point2D;
  * is at the end of a conveyer belt. Here are playback samples:
  * <p><table summary="Sample Animations of ZoomTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/ZoomTransition2D/ZoomLeft.gif" alt="Zoom Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomLeft.gif" alt="Zoom Left">
  * <p>Zoom Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/ZoomTransition2D/ZoomRight.gif" alt="Zoom Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomRight.gif" alt="Zoom Right">
  * <p>Zoom Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/ZoomTransition2D/ZoomLeftStationary.gif" alt="Zoom Left Stationary">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomLeftStationary.gif" alt="Zoom Left Stationary">
  * <p>Zoom Left Stationary
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/ZoomTransition2D/ZoomRightStationary.gif" alt="Zoom Right Stationary">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomRightStationary.gif" alt="Zoom Right Stationary">
  * <p>Zoom Right Stationary
  * </td>
  * </tr></table>

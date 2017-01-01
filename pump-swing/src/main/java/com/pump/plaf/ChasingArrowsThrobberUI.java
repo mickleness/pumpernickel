@@ -22,9 +22,9 @@ import javax.swing.JComponent;
 
 /** A <code>ThrobberUI</code> of two arrows that rotate clockwise.
  * <p><table summary="Sample Animations of ChasingArrowsThrobberUI" cellpadding="10"><tr>
- * <td><img src="https://javagraphics.java.net/resources/throbber/ChasingArrowsThrobberUI.gif" alt="ChassingArrowsThrobberUI"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/ChasingArrowsThrobberUIx2.gif" alt="ChassingArrowsThrobberUI Magnified 2x"></td>
- * <td><img src="https://javagraphics.java.net/resources/throbber/ChasingArrowsThrobberUIx4.gif" alt="ChassingArrowsThrobberUI Magnified 4x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/ChasingArrowsThrobberUI.gif" alt="ChassingArrowsThrobberUI"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/ChasingArrowsThrobberUIx2.gif" alt="ChassingArrowsThrobberUI Magnified 2x"></td>
+ * <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/ChasingArrowsThrobberUIx4.gif" alt="ChassingArrowsThrobberUI Magnified 4x"></td>
  * </tr></table>
  * <p>On installation: the component's foreground is set to dark gray,
  * but if that is changed then that color is used to render this animation.

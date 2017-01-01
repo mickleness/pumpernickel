@@ -18,11 +18,11 @@ import java.awt.geom.Point2D;
  * background and the new image rotates forward. Here are playback samples:
  * <p><table summary="Sample Animations of SwivelTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SwivelTransition2D/SwivelCounterclockwise.gif" alt="Swivel Counterclockwise">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SwivelTransition2D/SwivelCounterclockwise.gif" alt="Swivel Counterclockwise">
  * <p>Swivel Counterclockwise
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/SwivelTransition2D/SwivelClockwise.gif" alt="Swivel Clockwise">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SwivelTransition2D/SwivelClockwise.gif" alt="Swivel Clockwise">
  * <p>Swivel Clockwise
  * </td>
  * </tr></table>

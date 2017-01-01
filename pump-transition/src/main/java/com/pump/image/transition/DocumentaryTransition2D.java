@@ -22,19 +22,19 @@ import com.pump.geom.RectangularTransform;
 /** This is a combination of zooming and panning.  It is reminiscent of PBS documentaries. Here are playback samples:
  * <p><table summary="Sample Animations of DocumentaryTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/DocumentaryTransition2D/DocumentaryLeft.gif" alt="Documentary Left">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DocumentaryTransition2D/DocumentaryLeft.gif" alt="Documentary Left">
  * <p>Documentary Left
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/DocumentaryTransition2D/DocumentaryRight.gif" alt="Documentary Right">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DocumentaryTransition2D/DocumentaryRight.gif" alt="Documentary Right">
  * <p>Documentary Right
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/DocumentaryTransition2D/DocumentaryUp.gif" alt="Documentary Up">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DocumentaryTransition2D/DocumentaryUp.gif" alt="Documentary Up">
  * <p>Documentary Up
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/DocumentaryTransition2D/DocumentaryDown.gif" alt="Documentary Down">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DocumentaryTransition2D/DocumentaryDown.gif" alt="Documentary Down">
  * <p>Documentary Down
  * </td>
  * </tr></table>

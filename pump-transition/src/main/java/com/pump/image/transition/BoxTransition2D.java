@@ -16,11 +16,11 @@ import java.awt.geom.Rectangle2D;
 /** This clips to the shape of a square zooming in/out. Here are playback samples:
  * <p><table summary="Sample Animations of BoxTransition2D" cellspacing="50" border="0"><tr>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BoxTransition2D/BoxIn.gif" alt="Box In">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BoxTransition2D/BoxIn.gif" alt="Box In">
  * <p>Box In
  * </td>
  * <td align="center">
- * <img src="https://javagraphics.java.net/resources/transition/BoxTransition2D/BoxOut.gif" alt="Box Out">
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BoxTransition2D/BoxOut.gif" alt="Box Out">
  * <p>Box Out
  * </td>
  * </tr></table>
