@@ -36,6 +36,11 @@
       <artifactId>pump-quicktime</artifactId>
       <version>1.0.00</version>
     </dependency>
+    <dependency>
+      <groupId>com.pump</groupId>
+      <artifactId>pump-desktop</artifactId>
+      <version>1.0.00</version>
+    </dependency>
   </dependencies>
   
   <build>
