@@ -27,6 +27,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-awt"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-image"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-button"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/pump-geom"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

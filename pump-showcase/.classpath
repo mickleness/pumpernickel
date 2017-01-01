@@ -27,7 +27,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-animation"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-gif"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-common"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/pump-geom"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-swing"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-awt"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-button"/>

@@ -1,21 +1,12 @@
-/*
- * @(#)JavaTextComponentHighlighter.java
- *
- * $Date: 2016-02-05 12:28:23 -0500 (Fri, 05 Feb 2016) $
- *
- * Copyright (c) 2015 by Jeremy Wood.
- * All rights reserved.
- *
- * The copyright of this software is owned by Jeremy Wood. 
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * Jeremy Wood. For details see accompanying license terms.
+/**
+ * This software is released as part of the Pumpernickel project.
  * 
- * This software is probably, but not necessarily, discussed here:
- * https://javagraphics.java.net/
+ * All com.pump resources in the Pumpernickel project are distributed under the
+ * MIT License:
+ * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
  * 
- * That site should also contain the most recent official version
- * of this software.  (See the SVN repository for more details.)
+ * More information about the Pumpernickel project is available here:
+ * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.swing;
 

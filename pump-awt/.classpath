@@ -22,7 +22,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/pump-geom"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-common"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

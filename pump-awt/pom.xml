@@ -24,7 +24,7 @@
   <dependencies>
     <dependency>
       <groupId>com.pump</groupId>
-      <artifactId>pump-geom</artifactId>
+      <artifactId>pump-common</artifactId>
       <version>1.0.00</version>
     </dependency>
   </dependencies>

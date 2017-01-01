@@ -1,1 +1,0 @@
-The "geom" project includes classes related to shapes, including the areax project.

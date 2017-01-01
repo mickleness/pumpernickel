@@ -23,7 +23,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-common"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/pump-geom"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-image"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-animation"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
