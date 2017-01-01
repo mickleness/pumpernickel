@@ -44,7 +44,7 @@ public class ListSectionContainer extends SectionContainer {
 		
 		list = new JList<Section>( getSections().getListModelEDTMirror() );
 		listScrollPane = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, list, content);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane, content);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		setLayout(new GridBagLayout());
