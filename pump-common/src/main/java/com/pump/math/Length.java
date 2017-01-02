@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 public class Length implements Comparable<Length> {
 
 	/** The localized strings. */
-	private static ResourceBundle strings = ResourceBundle.getBundle("com.bric.math.Length");
+	private static ResourceBundle strings = ResourceBundle.getBundle("com.pump.math.Length");
 
 	private static Map<String, Unit> unitTable = new HashMap<String, Unit>();
 	private static ArrayList<Unit> unitsList = new ArrayList<Unit>();

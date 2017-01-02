@@ -29,7 +29,7 @@ import com.pump.util.JVM;
 /** A set of static methods for common dialog needs.
  */
 public class QOptionPaneCommon {
-	private static final ResourceBundle strings = ResourceBundle.getBundle("com/bric/swing/resources/QOptionPaneCommon") ;
+	private static final ResourceBundle strings = ResourceBundle.getBundle("com/pump/swing/QOptionPaneCommon") ;
 	private static boolean debugWithScreenshots = false;
 	
 	/** Use this for the a normal save dialog.
