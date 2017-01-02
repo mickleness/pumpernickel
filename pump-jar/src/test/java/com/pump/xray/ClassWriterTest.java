@@ -21,22 +21,23 @@ public class ClassWriterTest extends TestCase {
 	}
 	
 	public void assertEquals(Class type, String resourceName) throws Exception {
+		String str = null;
 		try {
 			ClassWriter writer = new ClassWriter(null, type, true);
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			IndentedPrintStream ips = new IndentedPrintStream(out, true, "UTF-8");
 			writer.write(ips, true);
 			
-			String str = new String(out.toByteArray(), "UTF-8");
+			str = new String(out.toByteArray(), "UTF-8");
 			URL resource = ClassWriterTest.class.getResource(resourceName);
 			String str2;
 			try(InputStream in = resource.openStream()) {
-				str2 = IOUtils.read(in);
+				str2 = IOUtils.read(in, "UTF-8");
 			}
-			str2 = str2.replace("\n", "\r\n");
 			assertEquals(str2, str);
 		} catch(AssertionFailedError e) {
 			System.err.println("Failure for \""+resourceName+"\" ("+type.getName()+")");
+			System.err.println(str);
 			throw e;
 		}
 	}

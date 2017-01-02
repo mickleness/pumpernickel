@@ -12,7 +12,7 @@ public class ConstructorWriter extends ConstructorOrMethodWriter {
 	Constructor constructor;
 	
 	public ConstructorWriter(JarBuilder builder,Constructor constructor) {
-		super(builder, constructor.getModifiers(), null, constructor.getName(), constructor.getParameterTypes(), constructor.getExceptionTypes());	
+		super(builder, constructor.getModifiers(), null, constructor.getDeclaringClass().getSimpleName(), constructor.getParameterTypes(), constructor.getExceptionTypes());	
 		this.constructor = constructor;
 	}
 	
