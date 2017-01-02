@@ -32,9 +32,10 @@ public class FieldWriter extends StreamWriter {
 	}
 	
 	private Object getSupportedConstantValue() throws IllegalArgumentException, IllegalAccessException {
-		boolean isConstant = field!=null && Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers());
-        if (isConstant)
-        {
+		boolean isPublicConstant = field!=null && Modifier.isPublic(field.getModifiers()) && 
+				Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers());
+        if (isPublicConstant)
+        {	
     		Class valueType = field.getType();
             if (String.class.equals(valueType) || 
             		Character.TYPE.equals(valueType) || 
@@ -47,6 +48,9 @@ public class FieldWriter extends StreamWriter {
                     Double.TYPE.equals(valueType)   ||
                     Byte.TYPE.equals(valueType)  )
             {
+            	//I'm not sure why this is necessary if it's public, but at least one IllegalAccessException came up that this resolved:
+            	field.setAccessible(true);
+            	
             	return field.get(null);
             }
         }
