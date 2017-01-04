@@ -3,30 +3,64 @@ package com.pump.xray;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
+
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
 
 import org.junit.Test;
 
 import com.pump.io.IOUtils;
 import com.pump.io.IndentedPrintStream;
 
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
-
 public class ClassWriterTest extends TestCase {
+	
+	/**
+	 * This is modeled after a compiler issue observed in the ObservableSet
+	 * when x-ray first tried to autogenerate those signatures.
+	 * <p>
+	 * Apparently have a static parameterized class and a nested non-static
+	 * parameterized class <em>requires</em> we use the simple class name
+	 * (in this case: "Operation") instead of the fully qualified class name
+	 * ("com.xyz.DummyClass.Operation")
+	 */
+	static class DummyClass<T> {
+
+		class Operation<R> {
+			public R run() {
+				return null;
+			}
+		}
+		
+		protected <R> R execute(Operation<R> arg0) {
+			return null;
+		}
+	}
 	
 	@Test
 	public void testObject() throws Exception {
 		assertEquals(Object.class, "Object.snippet");
 		assertEquals(CharSequence.class, "CharSequence.snippet");
+		assertEquals(DummyClass.class, "DummyClass.snippet");
 	}
 	
 	public void assertEquals(Class type, String resourceName) throws Exception {
 		String str = null;
 		try {
-			ClassWriter writer = new ClassWriter(null, type, true);
+			SourceCodeManager m = new SourceCodeManager();
+			m.addClasses(type);
+			
+			ClassWriter writer;
+			if(type.getDeclaringClass()==null) {
+				writer = m.build().values().iterator().next();
+			} else {
+				Class z = type.getDeclaringClass()==null ? type : type.getDeclaringClass();
+				writer = m.build().get(z);
+				writer = writer.getDeclaredType(type);
+			}
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			IndentedPrintStream ips = new IndentedPrintStream(out, true, "UTF-8");
-			writer.write(ips, true);
+			ClassWriterStream cws = new ClassWriterStream(out, true, "UTF-8");
+			writer.write(cws, true);
 			
 			str = new String(out.toByteArray(), "UTF-8");
 			URL resource = ClassWriterTest.class.getResource(resourceName);

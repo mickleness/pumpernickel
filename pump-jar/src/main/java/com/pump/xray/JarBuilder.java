@@ -14,13 +14,10 @@ import com.pump.io.NullOutputStream;
 
 public class JarBuilder {
 	
-	Map<Class, Collection<Class>> classMap = new HashMap<>();
-	
 	Manifest manifest;
 	
-	public JarBuilder(Class... classes) {
+	public JarBuilder() {
 		manifest = createManifest();
-		addClasses(classes);
 	}
 	
 	protected Manifest createManifest() {
@@ -40,55 +37,9 @@ public class JarBuilder {
 		this.manifest = manifest;
 	}
 	
-	public void addClasses(Class... classes) {
-		for(Class t : classes) {
-			if(t==null)
-				throw new NullPointerException();
-			catalogClass(t);
-		}
-	}
-	
-	protected void catalogClass(Class z) {
-        if(!classMap.containsKey(z)) {
-            classMap.put(z, new HashSet<Class>());
-            Class child = z;
-            Class parent = child.getDeclaringClass();
-            while(parent!=null) {
-                Collection<Class> t = classMap.get(parent);
-                if(t==null) {
-                    t = new HashSet<>();
-                    classMap.put(parent, t);
-                }
-                t.add(child);
-                child = parent;
-                parent = parent.getDeclaringClass();
-            }
-        }
-	}
-	
-	public void run(OutputStream out) throws IOException {
-		int startingSize, endingSize;
-		do {
-			startingSize = classMap.size();
-			write(new NullOutputStream());
-			endingSize = classMap.size();
-		} while(startingSize != endingSize);
-		
-		write(out);
-	}
-	
 	protected void write(OutputStream out) throws IOException {
 		try(JarOutputStream jarOut = new JarOutputStream(out, manifest)) {
 			
 		}
-	}
-
-	public boolean isSupported(Class t) {
-        if (t.getPackage() == null)
-            return false;
-        if (t.getPackage().getName().startsWith("java"))
-            return false;
-
-        return true;
 	}
 }

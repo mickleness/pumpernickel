@@ -2,59 +2,64 @@ package com.pump.xray;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-
-import com.pump.io.IndentedPrintStream;
-import com.pump.io.java.JavaEncoding;
+import java.util.Map;
 
 public class FieldWriter extends StreamWriter {
 
 	protected Field field;
-	
-	public FieldWriter(JarBuilder builder,Field field) {
-		super(builder);
+
+	public FieldWriter(SourceCodeManager sourceCodeManager,Field field) {
+		super(sourceCodeManager);
 		this.field = field;
 	}
-	
+
 	public Field getField() {
 		return field;
 	}
 
 	@Override
-	public void write(IndentedPrintStream ips, boolean emptyFile) throws Exception {
-		ips.print( toString( field.getModifiers() ));
-		ips.print( ' ' + toString(field.getType(), true)+" "+field.getName());
-		Object value = getSupportedConstantValue();
+	public void write(ClassWriterStream cws, boolean emptyFile) throws Exception {
+		cws.print( toString( field.getModifiers() ));
+		cws.print( ' ' + toString(cws.getNameMap(), field.getGenericType(), true)+" "+field.getName());
+		Object value = getSupportedConstantValue(cws.getNameMap());
 		if(value!=null) {
-			ips.println(" = "+toString(value)+";");
+			cws.println(" = "+value+";");
 		} else {
-			ips.println(";");
+			cws.println(";");
 		}
 	}
-	
-	private Object getSupportedConstantValue() throws IllegalArgumentException, IllegalAccessException {
-		boolean isPublicConstant = field!=null && Modifier.isPublic(field.getModifiers()) && 
-				Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers());
-        if (isPublicConstant)
-        {	
-    		Class valueType = field.getType();
-            if (String.class.equals(valueType) || 
-            		Character.TYPE.equals(valueType) || 
-            		Long.TYPE.equals(valueType) ||
-            		Float.TYPE.equals(valueType) ||
-            		Integer.TYPE.equals(valueType) ||
-                    Short.TYPE.equals(valueType)  ||
-                    Float.TYPE.equals(valueType)  ||
-                    Boolean.TYPE.equals(valueType)  ||
-                    Double.TYPE.equals(valueType)   ||
-                    Byte.TYPE.equals(valueType)  )
-            {
-            	//I'm not sure why this is necessary if it's public, but at least one IllegalAccessException came up that this resolved:
-            	field.setAccessible(true);
-            	
-            	return field.get(null);
-            }
-        }
-        return null;
+
+	private String getSupportedConstantValue(Map<String, String> nameToSimpleName) throws IllegalArgumentException, IllegalAccessException {
+		boolean isFinal = field!=null && Modifier.isFinal(field.getModifiers());
+		if (isFinal)
+		{	
+			String returnValue = null;
+			Class valueType = field.getType();
+			if (String.class.equals(valueType) || 
+					Character.TYPE.equals(valueType) || 
+					Long.TYPE.equals(valueType) ||
+					Float.TYPE.equals(valueType) ||
+					Integer.TYPE.equals(valueType) ||
+					Short.TYPE.equals(valueType)  ||
+					Float.TYPE.equals(valueType)  ||
+					Boolean.TYPE.equals(valueType)  ||
+					Double.TYPE.equals(valueType)   ||
+					Byte.TYPE.equals(valueType)  )
+			{
+				boolean isStatic = Modifier.isStatic(field.getModifiers());
+				if (isStatic) {
+					field.setAccessible(true);
+					Object v = field.get(null);
+					returnValue = toString(v);
+				} else {
+					returnValue = getValue(nameToSimpleName, valueType, false);
+				}
+			}
+			if(returnValue==null)
+				return "null";
+			return returnValue;
+		}
+		return null;
 	}
-	
+
 }

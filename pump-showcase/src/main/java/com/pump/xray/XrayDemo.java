@@ -1,6 +1,7 @@
 package com.pump.xray;
 
 import java.io.File;
+import java.util.Collection;
 
 import com.pump.desktop.temp.TempFileManager;
 import com.pump.io.FileTreeIterator;
@@ -22,7 +23,7 @@ public class XrayDemo {
 		FileTreeIterator iter = new FileTreeIterator(pumpernickelDir, "java");
 		File srcDir = TempFileManager.get().createFile("source", "path");
 		srcDir.mkdirs();
-		JarBuilder builder = new JarBuilder();
+		SourceCodeManager sourceCodeManager = new SourceCodeManager();
 		while(iter.hasNext()) {
 			File javaFile = iter.next();
 			if(javaFile.getAbsolutePath().contains("pump-release"))
@@ -31,12 +32,15 @@ public class XrayDemo {
 			JavaClassSummary jcs = new JavaClassSummary(javaFile);
 			String classname = jcs.getCanonicalName();
 			Class t = Class.forName(classname);
-			ClassWriter w = new ClassWriter(builder, t, true);
+			sourceCodeManager.addClasses(t);
+		}
+		
+		Collection<ClassWriter> writers = sourceCodeManager.build().values();
+		for(ClassWriter writer : writers) {
+			String classname = writer.getType().getName();
 			File dest = new File(srcDir.getAbsolutePath() + File.separator + classname.replace(".", File.separator)+".java");
-			IOUtils.write(dest, w.toString(), false);
+			IOUtils.write(dest, writer.toString(), false);
 		}
 		System.currentTimeMillis();
 	}
-	
-	
 }

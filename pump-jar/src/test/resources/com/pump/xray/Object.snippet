@@ -5,16 +5,16 @@ public class Object {
 	public Object() {
 	}
 	
-	native protected java.lang.Object clone() throws java.lang.CloneNotSupportedException;
+	native protected Object clone() throws java.lang.CloneNotSupportedException;
 	
 	protected void finalize() throws java.lang.Throwable {
 	}
 	
-	public boolean equals(java.lang.Object arg0) {
+	public boolean equals(Object arg0) {
 		return false;
 	}
 	
-	public final native java.lang.Class getClass();
+	public final native java.lang.Class<?> getClass();
 	
 	public final native void notify();
 	

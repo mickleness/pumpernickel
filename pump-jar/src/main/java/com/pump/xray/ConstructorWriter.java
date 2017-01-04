@@ -1,23 +1,39 @@
 package com.pump.xray;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import com.pump.io.IndentedPrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConstructorWriter extends ConstructorOrMethodWriter {
 
 	Constructor constructor;
 	
-	public ConstructorWriter(JarBuilder builder,Constructor constructor) {
-		super(builder, constructor.getModifiers(), null, constructor.getDeclaringClass().getSimpleName(), constructor.getParameterTypes(), constructor.getExceptionTypes());	
+	public ConstructorWriter(SourceCodeManager sourceCodeManager,Constructor constructor) {
+		super(sourceCodeManager, constructor.getModifiers(), constructor.getTypeParameters(), null, constructor.getDeclaringClass().getSimpleName(), constructor.getGenericParameterTypes(), constructor.getGenericExceptionTypes());	
 		this.constructor = constructor;
+		
+		//for inner classes where the first parameter is the declaring class, trim
+		//that
+		if(constructor.getDeclaringClass().getDeclaringClass()!=null) {
+			Class[] params = constructor.getParameterTypes();
+			if(params.length>0 && params[0].equals(constructor.getDeclaringClass().getDeclaringClass())) {
+				Type[] newParamTypes = new Type[paramTypes.length-1];
+				System.arraycopy(paramTypes, 1, newParamTypes, 0, paramTypes.length-1);
+				paramTypes = newParamTypes;
+			}
+		}
+		
 	}
 	
 	@Override
-	protected void writeBody(IndentedPrintStream ips) {
+	protected void writeBody(ClassWriterStream cws) {
 		Class type = constructor.getDeclaringClass();
 		type = type.getSuperclass();
 		if(type!=null) {
@@ -68,24 +84,64 @@ public class ConstructorWriter extends ConstructorOrMethodWriter {
 				}
 
 				private boolean isCompatible(Class throwType) {
-					for(Class t : ConstructorWriter.this.throwsTypes) {
-						if(t.isAssignableFrom(throwType))
+					for(Type t : ConstructorWriter.this.throwsTypes) {
+						Class c = null;
+						if(t instanceof Class) {
+							c = (Class)t;
+						}
+						if(c!=null && c.isAssignableFrom(throwType))
 							return true;
 					}
+					
 					return false;
 				}
 				
 			};
 			
 			Arrays.sort(superConstructors, constructorComparator);
-			ips.print("super(");
+			cws.print("super(");
+			
+			// This is a map of type variable names, relative to the super class.
+			Map<String, Type> typeVariableNameMap = new HashMap<>();
+			Type[] genericParams = superConstructors[0].getGenericParameterTypes();
+			TypeVariable[] superTypeParameters = superConstructors[0].getDeclaringClass().getTypeParameters();
+			Type declaringSuperClassGenerics = constructor.getDeclaringClass().getGenericSuperclass();
+			if(declaringSuperClassGenerics instanceof ParameterizedType) {
+				ParameterizedType pt = (ParameterizedType)declaringSuperClassGenerics;
+				Type[] actual = pt.getActualTypeArguments();
+				for(int a = 0; a<superTypeParameters.length; a++) {
+					typeVariableNameMap.put(superTypeParameters[a].getName(), actual[a]);
+				}
+			}
+			
 			Class[] paramTypes = superConstructors[0].getParameterTypes();
 			for(int a = 0; a<paramTypes.length; a++) {
 				if(a>0)
-					ips.print(", ");;
-				ips.print(getValue(paramTypes[a], true));
+					cws.print(", ");
+				if(genericParams[a] instanceof TypeVariable) {
+					TypeVariable typeVar = (TypeVariable)genericParams[a];
+					String name = typeVar.getName();
+					Type t = typeVariableNameMap.get(name);
+					String s = "("+toString(cws.getNameMap(), t, true)+") null";
+					cws.print(s);
+				} else if(genericParams[a] instanceof GenericArrayType) {
+					Type k = genericParams[a];
+					String suffix = "";
+					while(k instanceof GenericArrayType) {
+						GenericArrayType gat = (GenericArrayType)k;
+						k = gat.getGenericComponentType();
+						suffix += "[]";
+					}
+					TypeVariable typeVar = (TypeVariable)k;
+					String name = typeVar.getName();
+					Type t = typeVariableNameMap.get(name);
+					String s = "("+toString(cws.getNameMap(), t, true)+suffix+") null";
+					cws.print(s);
+				} else {
+					cws.print(getValue(cws.getNameMap(), paramTypes[a], true));
+				}
 			}
-			ips.println(");");
+			cws.println(");");
 		}
 	}
 }
