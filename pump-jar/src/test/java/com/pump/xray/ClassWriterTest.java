@@ -36,12 +36,29 @@ public class ClassWriterTest extends TestCase {
 			return null;
 		}
 	}
+
+	/**
+	 * This is modeled after a compiler issue observed in the ObservableSet
+	 * when x-ray first tried to autogenerate those signatures.
+	 * <p>
+	 * Apparently have a static parameterized class and a nested non-static
+	 * parameterized class <em>requires</em> we use the simple class name
+	 * (in this case: "Operation") instead of the fully qualified class name
+	 * ("com.xyz.DummyClass.Operation")
+	 */
+	static class DummyClass2 {
+		
+		public DummyClass2(String... varArgs) {}
+		
+		public void method(int... varArgs) {}
+	}
 	
 	@Test
 	public void testObject() throws Exception {
 		assertEquals(Object.class, "Object.snippet");
 		assertEquals(CharSequence.class, "CharSequence.snippet");
 		assertEquals(DummyClass.class, "DummyClass.snippet");
+		assertEquals(DummyClass2.class, "DummyClass2.snippet");
 	}
 	
 	public void assertEquals(Class type, String resourceName) throws Exception {
@@ -60,6 +77,7 @@ public class ClassWriterTest extends TestCase {
 			}
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			ClassWriterStream cws = new ClassWriterStream(out, true, "UTF-8");
+			writer.setJavadocEnabled(false);
 			writer.write(cws, true);
 			
 			str = new String(out.toByteArray(), "UTF-8");

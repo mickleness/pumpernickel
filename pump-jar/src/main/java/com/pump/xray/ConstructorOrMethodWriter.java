@@ -14,12 +14,14 @@ public class ConstructorOrMethodWriter extends StreamWriter {
 	protected String name;
 	protected boolean writeBody;
 	protected TypeVariable[] typeVariables;
+	protected boolean isVarArgs;
 	
-	public ConstructorOrMethodWriter(SourceCodeManager sourceCodeManager,int modifiers,TypeVariable[] typeVariables,Type returnType,String name,Type[] paramTypes,Type[] throwsTypes) {
+	public ConstructorOrMethodWriter(SourceCodeManager sourceCodeManager,int modifiers,TypeVariable[] typeVariables,Type returnType,String name,Type[] paramTypes,Type[] throwsTypes,boolean isVarArgs) {
 		super(sourceCodeManager);
 		this.modifiers = modifiers;
 		this.returnType = returnType;
 		this.name = name;
+		this.isVarArgs = isVarArgs;
 		this.paramTypes = paramTypes;
 		this.throwsTypes = throwsTypes;
 		this.typeVariables = typeVariables;
@@ -49,7 +51,12 @@ public class ConstructorOrMethodWriter extends StreamWriter {
 		for(int a = 0; a<paramTypes.length; a++) {
 			if(a>0)
 				cws.print(", ");
-			cws.print( toString(nameToSimpleName, paramTypes[a], true)+" arg"+a);
+			String s = toString(nameToSimpleName, paramTypes[a], true)+" arg"+a;
+			if(isVarArgs) {
+				int i = s.lastIndexOf("[]");
+				s = s.substring(0, i) + "..." + s.substring(i+2);
+			}
+			cws.print( s );
 		}
 		cws.print(")");
 		if(throwsTypes.length>0) {

@@ -16,7 +16,7 @@ public class ConstructorWriter extends ConstructorOrMethodWriter {
 	Constructor constructor;
 	
 	public ConstructorWriter(SourceCodeManager sourceCodeManager,Constructor constructor) {
-		super(sourceCodeManager, constructor.getModifiers(), constructor.getTypeParameters(), null, constructor.getDeclaringClass().getSimpleName(), constructor.getGenericParameterTypes(), constructor.getGenericExceptionTypes());	
+		super(sourceCodeManager, constructor.getModifiers(), constructor.getTypeParameters(), null, constructor.getDeclaringClass().getSimpleName(), constructor.getGenericParameterTypes(), constructor.getGenericExceptionTypes(), constructor.isVarArgs());	
 		this.constructor = constructor;
 		
 		//for inner classes where the first parameter is the declaring class, trim

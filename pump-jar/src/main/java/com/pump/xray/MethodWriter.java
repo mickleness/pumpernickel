@@ -6,7 +6,7 @@ import java.lang.reflect.Modifier;
 public class MethodWriter extends ConstructorOrMethodWriter {
 
 	public MethodWriter(SourceCodeManager sourceCodeManager,Method method) {
-		super(sourceCodeManager, method.getModifiers(), method.getTypeParameters(), method.getGenericReturnType(), method.getName(), method.getGenericParameterTypes(), method.getGenericExceptionTypes());	
+		super(sourceCodeManager, method.getModifiers(), method.getTypeParameters(), method.getGenericReturnType(), method.getName(), method.getGenericParameterTypes(), method.getGenericExceptionTypes(), method.isVarArgs());	
 		
 		if(method.getDeclaringClass().isInterface()) {
 			if( Modifier.isAbstract(modifiers) ) {
