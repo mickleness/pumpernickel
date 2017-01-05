@@ -1,7 +1,7 @@
 package com.pump.xray;
 
 import java.io.File;
-import java.util.Collection;
+import java.io.FileOutputStream;
 
 import com.pump.desktop.temp.TempFileManager;
 import com.pump.io.FileTreeIterator;
@@ -12,10 +12,13 @@ public class XrayDemo {
 	public static void main(String[] args) throws Exception {
 		TempFileManager.initialize("xray-demo");
 		XrayDemo d = new XrayDemo();
-		d.run();
-		
-		System.out.println("Done.");
-		System.exit(0);
+		try {
+			d.run();
+			
+			System.out.println("Done.");
+		} finally {
+			System.exit(0);
+		}
 	}
 
 	public void run() throws Exception {
@@ -31,16 +34,15 @@ public class XrayDemo {
 			
 			JavaClassSummary jcs = new JavaClassSummary(javaFile);
 			String classname = jcs.getCanonicalName();
-			Class t = Class.forName(classname);
+			Class<?> t = Class.forName(classname);
 			sourceCodeManager.addClasses(t);
 		}
 		
-		Collection<ClassWriter> writers = sourceCodeManager.build().values();
-		for(ClassWriter writer : writers) {
-			String classname = writer.getType().getName();
-			File dest = new File(srcDir.getAbsolutePath() + File.separator + classname.replace(".", File.separator)+".java");
-			IOUtils.write(dest, writer.toString(), false);
+		JarBuilder jarBuilder = new JarBuilder(sourceCodeManager);
+		File jarFile = IOUtils.getUniqueFile(new File(System.getProperty("user.home")), "xray-demo.jar", false, false);
+		try(FileOutputStream out = new FileOutputStream(jarFile)) {
+			jarBuilder.write(out);
 		}
-		System.currentTimeMillis();
+		System.out.println("Wrote "+jarFile.getAbsolutePath());
 	}
 }
