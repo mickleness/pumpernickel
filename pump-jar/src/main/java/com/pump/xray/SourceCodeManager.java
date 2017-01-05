@@ -1,11 +1,14 @@
 package com.pump.xray;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.pump.io.IOUtils;
 import com.pump.io.NullOutputStream;
 
 public class SourceCodeManager {
@@ -98,5 +101,13 @@ public class SourceCodeManager {
             return false;
 
         return true;
+	}
+	
+	public void write(File destDir,Collection<ClassWriter> writers) throws IOException {
+		for(ClassWriter writer : writers) {
+			String classname = writer.getType().getName();
+			File dest = new File(destDir.getAbsolutePath() + File.separator + classname.replace(".", File.separator)+".java");
+			IOUtils.write(dest, writer.toString(), false);
+		}
 	}
 }
