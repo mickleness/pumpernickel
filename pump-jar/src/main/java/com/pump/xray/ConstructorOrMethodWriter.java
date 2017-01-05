@@ -52,7 +52,7 @@ public class ConstructorOrMethodWriter extends StreamWriter {
 			if(a>0)
 				cws.print(", ");
 			String s = toString(nameToSimpleName, paramTypes[a], true)+" arg"+a;
-			if(isVarArgs) {
+			if(isVarArgs && a==paramTypes.length-1) {
 				int i = s.lastIndexOf("[]");
 				s = s.substring(0, i) + "..." + s.substring(i+2);
 			}
