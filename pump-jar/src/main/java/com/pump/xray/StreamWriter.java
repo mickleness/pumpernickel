@@ -268,7 +268,7 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 	public String toString() {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try(ClassWriterStream ips = new ClassWriterStream(out, true, "UTF-8")) {
-			write(ips, true);
+			write(ips);
 			return new String(out.toByteArray(), "UTF-8");
 		} catch(RuntimeException e) {
 			throw e;
@@ -281,7 +281,6 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 	 * Write this java source code to a stream.
 	 * 
 	 * @param cps the stream to write to.
-	 * @param emptyFile true if this is the topmost object being represented in this stream.
 	 */
-	public abstract void write(ClassWriterStream cps, boolean emptyFile) throws Exception;
+	public abstract void write(ClassWriterStream cps) throws Exception;
 }

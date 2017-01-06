@@ -136,9 +136,11 @@ public class ClassWriter extends StreamWriter {
 	}
 
 	@Override
-	public void write(ClassWriterStream cws, boolean emptyFile) throws Exception {
+	public void write(ClassWriterStream cws) throws Exception {
 		Map<String, String> nameToSimpleName = cws.getNameMap();
-		if(emptyFile) {
+		
+		//this is a tricky way of asking if we're the topmost ClassWriter in this source code
+		if(nameToSimpleName.size()==0) {
 			nameToSimpleName.clear();
 			populateNameMap(nameToSimpleName, this);
 			
@@ -260,19 +262,19 @@ public class ClassWriter extends StreamWriter {
 	 */
 	protected void writeClassOrInterfaceBody(ClassWriterStream cws) throws Exception {
 		for(StreamWriter w : members) {
-			w.write(cws, false);
+			w.write(cws);
 			cws.println();
 		}
 		for(StreamWriter f : fields) {
-			f.write(cws, false);
+			f.write(cws);
 		}
 		for(ConstructorWriter c : constructors) {
 			cws.println();
-			c.write(cws, false);
+			c.write(cws);
 		}
 		for(MethodWriter m : methods) {
 			cws.println();
-			m.write(cws, false);
+			m.write(cws);
 		}
 	}
 	
@@ -284,7 +286,7 @@ public class ClassWriter extends StreamWriter {
 	 */
 	protected void writeEnumBody(ClassWriterStream cws) throws Exception {
 		for(StreamWriter w : members) {
-			w.write(cws, false);
+			w.write(cws);
 			cws.println();
 		}
 		boolean started = false;
@@ -301,12 +303,12 @@ public class ClassWriter extends StreamWriter {
 		
 		for(FieldWriter f : fields) {
 			if(!f.getField().isEnumConstant()) {
-				f.write(cws, false);
+				f.write(cws);
 			}
 		}
 		for(MethodWriter m : methods) {
 			cws.println();
-			m.write(cws, false);
+			m.write(cws);
 		}
 	}
 

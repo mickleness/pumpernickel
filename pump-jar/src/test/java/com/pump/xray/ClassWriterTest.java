@@ -88,7 +88,7 @@ public class ClassWriterTest extends TestCase {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			ClassWriterStream cws = new ClassWriterStream(out, true, "UTF-8");
 			writer.setJavadocEnabled(false);
-			writer.write(cws, true);
+			writer.write(cws);
 			
 			str = new String(out.toByteArray(), "UTF-8");
 			URL resource = ClassWriterTest.class.getResource(resourceName);

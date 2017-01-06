@@ -54,7 +54,7 @@ public class ConstructorOrMethodWriter extends StreamWriter {
 	}
 
 	@Override
-	public void write(ClassWriterStream cws, boolean emptyFile) throws Exception {
+	public void write(ClassWriterStream cws) throws Exception {
 		cws.print( toString(modifiers) );
 		
 		Map<String, String> nameToSimpleName = cws.getNameMap();

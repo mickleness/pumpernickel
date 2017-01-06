@@ -45,7 +45,7 @@ public class FieldWriter extends StreamWriter {
 	}
 
 	@Override
-	public void write(ClassWriterStream cws, boolean emptyFile) throws Exception {
+	public void write(ClassWriterStream cws) throws Exception {
 		cws.print( toString( field.getModifiers() ));
 		cws.print( ' ' + toString(cws.getNameMap(), field.getGenericType(), true)+" "+field.getName());
 		Object value = getSupportedConstantValue(cws.getNameMap());

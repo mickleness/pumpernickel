@@ -62,7 +62,7 @@ public class SourceCodeManager {
 			startingSize = classMap.size();
 			for(Class t : classMap.keySet().toArray(new Class[classMap.size()])) {
 				ClassWriter w = new ClassWriter(this, t, true);
-				w.write(new ClassWriterStream(new NullOutputStream(), true, "UTF-8"), true);
+				w.write(new ClassWriterStream(new NullOutputStream(), true, "UTF-8"));
 			}
 			endingSize = classMap.size();
 		} while(startingSize != endingSize);
