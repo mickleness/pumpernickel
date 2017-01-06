@@ -200,7 +200,7 @@ public class ClassWriter extends StreamWriter {
 				for(int a = 0; a<typeParameters.length; a++) {
 					if(a>0)
 						cws.print(", ");
-					cws.print( toString(nameToSimpleName, typeParameters[a], true) );
+					cws.print( toString(nameToSimpleName, typeParameters[a]) );
 				}
 				cws.print(">");
 			}
@@ -208,7 +208,7 @@ public class ClassWriter extends StreamWriter {
         	Type genericSuperclass = type.getGenericSuperclass();
 			if (genericSuperclass != null)
             {
-				cws.print(" extends " + toString(nameToSimpleName, genericSuperclass, true));
+				cws.print(" extends " + toString(nameToSimpleName, genericSuperclass));
             }
 
         	Type[] genericInterfaces = type.getGenericInterfaces();
@@ -222,7 +222,7 @@ public class ClassWriter extends StreamWriter {
                 	cws.print(" implements ");
                 for(int x=0; x<classesLen; x++)
                 {
-                	cws.print(toString(nameToSimpleName, genericInterfaces[x], true));
+                	cws.print(toString(nameToSimpleName, genericInterfaces[x]));
                     if(x < classesLen - 1)
                     {
                     	cws.print(", ");

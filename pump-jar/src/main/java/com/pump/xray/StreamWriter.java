@@ -127,12 +127,11 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 	 * to simplify names. This is not just a nicety to make code more readable: in rare
 	 * cases this is a requirement to avoid compiler errors.
 	 * @param t the Type to represent.
-	 * @param catalog
 	 * @return java code representing the Type provided.
 	 */
-	protected String toString(Map<String, String> nameToSimpleName, Type t,boolean catalog) {
+	protected String toString(Map<String, String> nameToSimpleName, Type t) {
 		if(t instanceof Class) {
-			return toString( nameToSimpleName, (Class)t, catalog);
+			return toString( nameToSimpleName, (Class)t);
 		}
 		if(t instanceof ParameterizedType) {
 			ParameterizedType p = (ParameterizedType)t;
@@ -140,13 +139,13 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 			Type owner = p.getOwnerType();
 			Type raw = p.getRawType();
 			StringBuilder sb = new StringBuilder();
-			sb.append( toString(nameToSimpleName, raw, catalog) );
+			sb.append( toString(nameToSimpleName, raw) );
 			if(args.length>0) {
 				sb.append( "<" );
 				for(int a = 0; a<args.length; a++) {
 					if(a>0)
 						sb.append(", ");
-					sb.append(toString(nameToSimpleName, args[a], catalog));
+					sb.append(toString(nameToSimpleName, args[a]));
 				}
 				sb.append( ">" );
 			}
@@ -159,7 +158,7 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 			return name;
 		} else if(t instanceof GenericArrayType) {
 			GenericArrayType g = (GenericArrayType)t;
-			return toString( nameToSimpleName, g.getGenericComponentType(), catalog)+"[]";
+			return toString( nameToSimpleName, g.getGenericComponentType())+"[]";
 		} else if(t instanceof WildcardType) {
 			WildcardType w = (WildcardType)t;
 			Type[] lowerBounds = w.getLowerBounds();
@@ -167,7 +166,7 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 			if(upperBounds.length==1 && upperBounds[0].equals(Object.class)) {
 				return "?";
 			} else if(upperBounds.length==1) {
-				return "? extends "+toString(nameToSimpleName, upperBounds[0], catalog);
+				return "? extends "+toString(nameToSimpleName, upperBounds[0]);
 			}
 		}
 		return t.toString();
@@ -181,18 +180,17 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 	 * to simplify names. This is not just a nicety to make code more readable: in rare
 	 * cases this is a requirement to avoid compiler errors.
 	 * @param t the Class to write.
-	 * @param catalog
 	 * @return java code representing the Class provided.
 	 */
-	protected String toString(Map<String, String> nameToSimpleName, Class t,boolean catalog) {
+	protected String toString(Map<String, String> nameToSimpleName, Class t) {
         String name = null;
 
-        if (catalog && sourceCodeManager!=null && sourceCodeManager.isSupported(t)) {
+        if (sourceCodeManager!=null && sourceCodeManager.isSupported(t)) {
         	sourceCodeManager.addClasses(t);
         }
 
         if(t.isArray()) {
-            return toString(nameToSimpleName, t.getComponentType(), catalog)+"[]";
+            return toString(nameToSimpleName, t.getComponentType())+"[]";
         }
         name = t.getName();
 
@@ -239,7 +237,7 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 		} else if(Boolean.TYPE.equals(type)) {
 			value = Boolean.FALSE.toString();
 		} else if(cast) {
-			value = "("+toString(nameToSimpleName, type, true)+") null";
+			value = "("+toString(nameToSimpleName, type)+") null";
 		} else {
 			value = "null";
 		}

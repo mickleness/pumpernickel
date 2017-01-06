@@ -146,7 +146,7 @@ public class ConstructorWriter extends ConstructorOrMethodWriter {
 					TypeVariable typeVar = (TypeVariable)genericParams[a];
 					String name = typeVar.getName();
 					Type t = typeVariableNameMap.get(name);
-					String s = "("+toString(cws.getNameMap(), t, true)+") null";
+					String s = "("+toString(cws.getNameMap(), t)+") null";
 					cws.print(s);
 				} else if(genericParams[a] instanceof GenericArrayType) {
 					Type k = genericParams[a];
@@ -159,7 +159,7 @@ public class ConstructorWriter extends ConstructorOrMethodWriter {
 					TypeVariable typeVar = (TypeVariable)k;
 					String name = typeVar.getName();
 					Type t = typeVariableNameMap.get(name);
-					String s = "("+toString(cws.getNameMap(), t, true)+suffix+") null";
+					String s = "("+toString(cws.getNameMap(), t)+suffix+") null";
 					cws.print(s);
 				} else {
 					cws.print(getValue(cws.getNameMap(), paramTypes[a], true));
