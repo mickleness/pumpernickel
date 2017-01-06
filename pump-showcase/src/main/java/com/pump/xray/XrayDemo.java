@@ -24,9 +24,10 @@ public class XrayDemo {
 		XrayDemo d = new XrayDemo();
 		try {
 			d.run();
-			
-			System.out.println("Done.");
+		} catch(Throwable t) {
+			t.printStackTrace();
 		} finally {
+			System.out.println("Done.");
 			System.exit(0);
 		}
 	}
@@ -39,7 +40,7 @@ public class XrayDemo {
 		SourceCodeManager sourceCodeManager = new SourceCodeManager();
 		while(iter.hasNext()) {
 			File javaFile = iter.next();
-			if(javaFile.getAbsolutePath().contains("pump-release"))
+			if(javaFile.getAbsolutePath().contains("pump-release") || javaFile.getName().endsWith("package-info.java"))
 				continue;
 			
 			JavaClassSummary jcs = new JavaClassSummary(javaFile);
