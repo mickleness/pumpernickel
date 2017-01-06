@@ -161,6 +161,16 @@ public class Key<T> implements CharSequence, Serializable {
 	public T get(Map attributes) {
 		return (T) attributes.get(toString());
 	}
+
+	/**
+	 * Remove this key from the map provided.
+	 * 
+	 * @return the value this key mapped to before it was removed.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public T remove(Map attributes) {
+		return (T) attributes.remove(toString());
+	}
 	
 	/**
 	 * Returns the name of this key, which is equivalent to {@link #toString()}.
