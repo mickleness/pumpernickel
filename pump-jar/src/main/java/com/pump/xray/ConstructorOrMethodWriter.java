@@ -15,6 +15,9 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Map;
 
+/**
+ * This writes a java.lang.reflect.Method or java.lang.reflect.Constructor.
+ */
 public class ConstructorOrMethodWriter extends StreamWriter {
 
 	protected int modifiers;
@@ -26,6 +29,18 @@ public class ConstructorOrMethodWriter extends StreamWriter {
 	protected TypeVariable[] typeVariables;
 	protected boolean isVarArgs;
 	
+	/**
+	 * Create a new ConstructorOrMethodWriter.
+	 * 
+	 * @param sourceCodeManager the optional SourceCodeManager.
+	 * @param modifiers the modifiers of this method/constructor.
+	 * @param typeVariables the type variables (if any) of this method/constructor.
+	 * @param returnType the optional return type; may be null.
+	 * @param name the name of this method/constructor
+	 * @param paramTypes the parameter types of this method/constructor
+	 * @param throwsTypes the throw types of this method/constructor.
+	 * @param isVarArgs true if the last parameter is a varargs parameter.
+	 */
 	public ConstructorOrMethodWriter(SourceCodeManager sourceCodeManager,int modifiers,TypeVariable[] typeVariables,Type returnType,String name,Type[] paramTypes,Type[] throwsTypes,boolean isVarArgs) {
 		super(sourceCodeManager);
 		this.modifiers = modifiers;
@@ -88,6 +103,10 @@ public class ConstructorOrMethodWriter extends StreamWriter {
 		}
 	}
 
+	/**
+	 * Write the body of this method/constructor. The default implementation
+	 * supplies "return [..];" if necessary.
+	 */
 	protected void writeBody(ClassWriterStream cws) {
 		if(!Void.TYPE.equals(returnType)) {
 			if(returnType instanceof Class) {

@@ -21,10 +21,18 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This writes a java.lang.reflect.Constructor.
+ */
 public class ConstructorWriter extends ConstructorOrMethodWriter {
 
 	Constructor constructor;
 	
+	/** Create a new ConstructorWriter.
+	 * 
+	 * @param sourceCodeManager an optional SourceCodeManager.
+	 * @param constructor the Constructor this writer represents.
+	 */
 	public ConstructorWriter(SourceCodeManager sourceCodeManager,Constructor constructor) {
 		super(sourceCodeManager, constructor.getModifiers(), constructor.getTypeParameters(), null, constructor.getDeclaringClass().getSimpleName(), constructor.getGenericParameterTypes(), constructor.getGenericExceptionTypes(), constructor.isVarArgs());	
 		this.constructor = constructor;
@@ -42,6 +50,12 @@ public class ConstructorWriter extends ConstructorOrMethodWriter {
 		
 	}
 	
+	/**
+	 * This picks an appropriate "super(..)" constructor to write.
+	 * It tries to find any constructor that appropriately matches the
+	 * throws declaration of this constructor. This also takes into accounts
+	 * generics, which can get a little tricky.
+	 */
 	@Override
 	protected void writeBody(ClassWriterStream cws) {
 		Class type = constructor.getDeclaringClass();

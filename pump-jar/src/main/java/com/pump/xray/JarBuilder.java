@@ -32,7 +32,6 @@ import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
-import javax.tools.JavaFileManager.Location;
 import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 import javax.tools.SimpleJavaFileObject;
@@ -43,16 +42,26 @@ import com.pump.io.FileTreeIterator;
 import com.pump.io.IOUtils;
 import com.pump.io.java.JavaClassSummary;
 
+/**
+ * This writes an x-ray jar.
+ */
 public class JarBuilder {
 	
-	Manifest manifest;
-	SourceCodeManager sourceCodeManager;
+	protected Manifest manifest;
+	protected SourceCodeManager sourceCodeManager;
 	
+	/**
+	 * Create a new JarBuilder.
+	 * 
+	 * @param sourceCodeManager the SourceCodeManager that catalogs all the
+	 * required Class objects and ultimately builds the map of ClassWriters.
+	 */
 	public JarBuilder(SourceCodeManager sourceCodeManager) {
 		manifest = createManifest();
 		this.sourceCodeManager = sourceCodeManager;
 	}
 	
+	/** Create a Manifest for the jar. */
 	protected Manifest createManifest() {
 		Manifest manifest = new Manifest();
         Attributes attributes = manifest.getMainAttributes();
@@ -60,17 +69,26 @@ public class JarBuilder {
         return manifest;
 	}
 	
+	/** Return the manifest for the jar. */
 	public Manifest getManifest() {
 		return manifest;
 	}
 	
+	/** Assign the manifest of the jar. This must be called before {@link #write(OutputStream)}.
+	 * 
+	 * @param manifest the new manifest to assign. This may not be null.
+	 */
 	public void setManifest(Manifest manifest) {
 		if(manifest==null)
 			throw new NullPointerException();
 		this.manifest = manifest;
 	}
 	
-	protected void write(OutputStream out) throws Exception {
+	/** Write this jar. 
+	 * 
+	 * @param out the stream to write the jar file to.
+	 */
+	public void write(OutputStream out) throws Exception {
 
 		class MyJavaFileObject extends SimpleJavaFileObject {
 			File file;

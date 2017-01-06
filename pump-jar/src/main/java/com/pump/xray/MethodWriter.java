@@ -13,8 +13,16 @@ package com.pump.xray;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+/**
+ * This writes a java.lang.reflect.Method.
+ */
 public class MethodWriter extends ConstructorOrMethodWriter {
 
+	/** Create a new MethodWriter.
+	 * 
+	 * @param sourceCodeManager an optional SourceCodeManager.
+	 * @param method the method this MethodWriter emulates.
+	 */
 	public MethodWriter(SourceCodeManager sourceCodeManager,Method method) {
 		super(sourceCodeManager, method.getModifiers(), method.getTypeParameters(), method.getGenericReturnType(), method.getName(), method.getGenericParameterTypes(), method.getGenericExceptionTypes(), method.isVarArgs());	
 		

@@ -22,6 +22,8 @@ import java.util.Map;
 
 import com.pump.io.java.JavaEncoding;
 
+/** This writes java code to a {@link ClassWriterStream}.
+ */
 public abstract class StreamWriter implements Comparable<StreamWriter> {
 	
 	/**
@@ -83,14 +85,20 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
         return sb.toString().trim();
 	}
 
+	/** An optional SourceCodeManager. */
 	protected SourceCodeManager sourceCodeManager;
 	
 	public StreamWriter(SourceCodeManager sourceCodeManager) {
 		this.sourceCodeManager = sourceCodeManager;
 	}
 
+	/**
+	 * Convert a value to java code, or return null.
+	 * @param value a value, such as a String, Character, Float, Long, Short, Byte, Integer, Boolean or Double.
+	 * 
+	 * @return a java code representation of this object, or null if the argument isn't supported.
+	 */
 	protected String toString(Object value) {
-
 		if(value instanceof String) {
 			String str = (String)value;
 			return "\""+JavaEncoding.encode(str)+"\"";
@@ -111,6 +119,17 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 		return null;
 	}
 	
+	/**
+	 * Convert a Type object to java code.
+	 * 
+	 * @param nameToSimpleName a map of fully qualified java names to simple names,
+	 * such as "java.lang.Thread" to "Thread". This method takes this map into account
+	 * to simplify names. This is not just a nicety to make code more readable: in rare
+	 * cases this is a requirement to avoid compiler errors.
+	 * @param t the Type to represent.
+	 * @param catalog
+	 * @return java code representing the Type provided.
+	 */
 	protected String toString(Map<String, String> nameToSimpleName, Type t,boolean catalog) {
 		if(t instanceof Class) {
 			return toString( nameToSimpleName, (Class)t, catalog);
@@ -155,12 +174,15 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 	}
 	
 	/**
+	 * Convert a Class object to java code.
 	 * 
-	 * @param nameToSimpleName an optional map of a fully qualified name to a simple name.
-	 * In rare cases this is required to produce compilable code.
-	 * @param t
+	 * @param nameToSimpleName a map of fully qualified java names to simple names,
+	 * such as "java.lang.Thread" to "Thread". This method takes this map into account
+	 * to simplify names. This is not just a nicety to make code more readable: in rare
+	 * cases this is a requirement to avoid compiler errors.
+	 * @param t the Class to write.
 	 * @param catalog
-	 * @return
+	 * @return java code representing the Class provided.
 	 */
 	protected String toString(Map<String, String> nameToSimpleName, Class t,boolean catalog) {
         String name = null;
@@ -182,6 +204,22 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
         return str;
 	}
 
+	/**
+	 * Return the default value of the type provided.
+	 * 
+	 * @param nameToSimpleName a map of fully qualified java names to simple names,
+	 * such as "java.lang.Thread" to "Thread". This method takes this map into account
+	 * to simplify names. This is not just a nicety to make code more readable: in rare
+	 * cases this is a requirement to avoid compiler errors.
+	 * @param type the Class to represent
+	 * @param cast true if this should preface the value with a cast (if appropriate).
+	 * For example: when writing a constructor we shouldn't say "super(null)", because
+	 * the compiler may flag that as ambiguous. Instead we should say "super( (java.lang.Thread) null)".
+	 * @return a java representation of a default value for the type provided, such as
+	 * "0L" (for longs), "'?'" (for chars), "(short)0" (for shorts), or "null" for objects.
+	 * 
+	 * This method will not return null. (But it may return "null").
+	 */
 	protected String getValue(Map<String, String> nameToSimpleName, Class type,boolean cast) {
 		String value;
 		if(Character.TYPE.equals(type)) {
@@ -240,10 +278,10 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 	}
 	
 	/**
+	 * Write this java source code to a stream.
 	 * 
-	 * @param cps
-	 * @param emptyFile
-	 * @throws Exception
+	 * @param cps the stream to write to.
+	 * @param emptyFile true if this is the topmost object being represented in this stream.
 	 */
 	public abstract void write(ClassWriterStream cps, boolean emptyFile) throws Exception;
 }
