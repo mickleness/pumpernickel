@@ -179,6 +179,7 @@ public class JarBuilder {
 					while(iter.hasNext()) {
 			        	File f = iter.next();
 			        	String name = f.getAbsolutePath().substring(tmpDir.getAbsolutePath().length()+1);
+			        	name = name.replace(File.separator, "/");
 						jarOut.putNextEntry(new JarEntry(name));
 						try(FileInputStream fileIn = new FileInputStream(f)) {
 							IOUtils.write(fileIn, jarOut);
