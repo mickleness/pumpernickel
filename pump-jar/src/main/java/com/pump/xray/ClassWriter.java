@@ -87,7 +87,7 @@ public class ClassWriter extends StreamWriter {
 	 * but there are a few more subtle rules, too:
 	 * <ul><li>No synthetic fields</li>
 	 * <li>If no non-private constructors were found, we include private constructors</li>
-	 * <li>No synthetic methods.</li>
+	 * <li>No synthetic methods.</li></ul>
 	 */
 	protected void autopopulate() {
 		Field[] fields = type.getDeclaredFields();
