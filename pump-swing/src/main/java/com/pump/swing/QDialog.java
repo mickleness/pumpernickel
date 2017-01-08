@@ -52,8 +52,8 @@ import com.pump.window.WindowDragger;
 
 /** This is an alternative to <code>JOptionPane</code> dialogs.
  * <P>The main distinctions are:
- * <ul><LI> Use of the {@link com.bric.swing.FixedWidthTextArea}, so you don't have to worry about line breaks.</li>
- * <LI> Use of the {@link com.bric.swing.DialogFooter}, to give more flexible options in the dialog footer (particularly for a help button).</li>
+ * <ul><LI> Use of the {@link com.pump.swing.FixedWidthTextArea}, so you don't have to worry about line breaks.</li>
+ * <LI> Use of the {@link com.pump.swing.DialogFooter}, to give more flexible options in the dialog footer (particularly for a help button).</li>
  * <LI> Several OS-specific enhancements to blend in with individual platforms.</LI></ul>
  * <P>This class tries to observe conventions from Microsoft and Apple when possible,
  * but it does not claim to follow strict adherence to their guidelines.
@@ -120,12 +120,12 @@ import com.pump.window.WindowDragger;
  * the last element in the <code>content</code> panel.  This is an arbitrary component.  It was
  * originally intended to be a <Code>JTextField</code>, but it could be command links or
  * anything your heart desires.</li>
- * <LI> <b><code>footer</code></b> the controls at the bottom of this dialog.  See {@link com.bric.swing.DialogFooter}
+ * <LI> <b><code>footer</code></b> the controls at the bottom of this dialog.  See {@link com.pump.swing.DialogFooter}
  * for more information.  Several method signatures don't require a <code>DialogFooter</code> directly,
  * but create one for you based on other arguments.</li>
  * <LI> <b><code>options</code></b> this is used to indicate what buttons the user can
  * select to dismiss this dialog (for example DialogFooter.OK_CANCEL_OPTION or DialogFooter.YES_NO_OPTION).
- * See {@link com.bric.swing.DialogFooter} for more information.</li>
+ * See {@link com.pump.swing.DialogFooter} for more information.</li>
  * <LI> <b><code>closeable</code></b> whether the user should be able to close this dialog without
  * using a commit button.  If this is <code>true</code>, then the close
  * decoration can dismiss a dialog.  (In this case the <code>showDialog()</code> methods will either return
@@ -648,7 +648,7 @@ public class QDialog extends JDialog
      * @param dialogTitle the optional dialog title.
      * @param icon the optional icon to display in this dialog.
      * @param content the component to display in the middle of this dialog.
-     * @param footer the {@link com.bric.swing.DialogFooter} for this dialog.
+     * @param footer the {@link com.pump.swing.DialogFooter} for this dialog.
      * @param closeable whether the close decoration should dismiss
      * this dialog.
      * @param dontShowKey if non-null, a do-not-show-again checkbox will appear.
@@ -668,7 +668,7 @@ public class QDialog extends JDialog
      * @param dialogTitle the optional dialog title.
      * @param icon the optional icon to display in this dialog.
      * @param content the component to display in the middle of this dialog.
-     * @param footer the {@link com.bric.swing.DialogFooter} for this dialog.
+     * @param footer the {@link com.pump.swing.DialogFooter} for this dialog.
      * @param closeable whether the close decoration should dismiss
      * this dialog.
      * @param dontShowKey if non-null, a do-not-show-again checkbox will appear.

@@ -31,7 +31,7 @@ import javax.swing.plaf.ComponentUI;
  * visible L&amp;F until they are rolled over.
  * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/XPSubtleButtonUI.png" alt="XPSubtleButtonUI Screenshot">
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  **/
 public class XPSubtleButtonUI extends FilledButtonUI {
 	private static final Color strokeColor = new Color(0xCECDC3);

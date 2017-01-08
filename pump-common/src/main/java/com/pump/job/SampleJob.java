@@ -223,7 +223,7 @@ public abstract class SampleJob<T> {
 	/** Calculate a series of samples.
 	 * 
 	 * <p>This method may be asked to recreate redundant
-	 * data. (The {@link com.bric.job.SampleJobExecutor} makes
+	 * data. (The {@link com.pump.job.SampleJobExecutor} makes
 	 * sure never to do this, but there is technically nothing
 	 * wrong with it.)
 	 * 
@@ -240,7 +240,7 @@ public abstract class SampleJob<T> {
 	/** Calculate a series of samples.
 	 * 
 	 * <p>This method may be asked to recreate redundant
-	 * data. (The {@link com.bric.job.SampleJobExecutor} makes
+	 * data. (The {@link com.pump.job.SampleJobExecutor} makes
 	 * sure never to do this, but there is technically nothing
 	 * wrong with it.)
 	 * 
@@ -264,7 +264,7 @@ public abstract class SampleJob<T> {
 	 * Boundary checking is provided by the {@link #calculate(long, int)} method.
 	 * 
 	 * <p>This method may be asked to recreate redundant
-	 * data. (The {@link com.bric.job.SampleJobExecutor} makes
+	 * data. (The {@link com.pump.job.SampleJobExecutor} makes
 	 * sure never to do this, but there is technically nothing
 	 * wrong with it.)
 	 * 

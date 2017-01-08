@@ -62,7 +62,7 @@ public class JFancyBox extends JComponent {
 	private static final long serialVersionUID = 1L;
 	
 	/** A close icon with a border and a light shadow.
-	 * This is meant to be displayed at a larger size than its cousin the {@link com.bric.swing.resources.CloseIcon}.
+	 * This is meant to be displayed at a larger size than its cousin the {@link com.pump.icon.CloseIcon}.
 	 */
 	public static class FancyCloseIcon implements Icon {
 		

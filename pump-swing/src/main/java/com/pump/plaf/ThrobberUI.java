@@ -28,7 +28,7 @@ import javax.swing.plaf.ComponentUI;
 
 import com.pump.swing.JThrobber;
 
-/** The ComponentUI for {@link com.bric.swing.JThrobber}.
+/** The ComponentUI for {@link com.pump.swing.JThrobber}.
  */
 public abstract class ThrobberUI extends ComponentUI {
 	

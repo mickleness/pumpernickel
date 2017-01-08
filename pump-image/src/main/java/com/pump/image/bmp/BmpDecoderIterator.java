@@ -23,7 +23,7 @@ import com.pump.image.pixel.IndexedBytePixelIterator;
 import com.pump.image.pixel.PixelConverter;
 import com.pump.io.MeasuredInputStream;
 
-/** A {@link com.bric.image.pixel.BytePixelIterator} that reads
+/** A {@link com.pump.image.pixel.BytePixelIterator} that reads
  * simple BMP graphics.  You cannot directly instantiate
  * this object because a BMP image may require a 
  * <code>BytePixelIterator</code> or a <codE>IndexedBytePixelIterator</code>

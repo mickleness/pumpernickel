@@ -20,7 +20,7 @@ import javax.swing.plaf.ComponentUI;
 
 /** <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/CapsuleButtonUI.png" alt="CapsuleButtonUI Screenshot">
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  */
 public class CapsuleButtonUI extends FilledButtonUI {
 

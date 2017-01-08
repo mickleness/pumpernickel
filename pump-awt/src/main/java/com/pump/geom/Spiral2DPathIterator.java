@@ -18,7 +18,7 @@ import java.awt.geom.GeneralPath;
  * <code><br> &nbsp; centerX+coilGap*(t+coilOffset)*Math.cos(2*Math.PI*t*m+angularOffset);</code>
  * <code><br> &nbsp; centerY+coilGap*(t+coilOffset)*Math.sin(2*Math.PI*t*m+angularOffset);</code>
  * 
- * @see com.bric.geom.Spiral2D
+ * @see com.pump.geom.Spiral2D
  */
 public class Spiral2DPathIterator extends ParametricPathIterator {
 	/** Create a spiral stored in a <code>GeneralPath</code>.

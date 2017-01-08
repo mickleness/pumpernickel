@@ -35,7 +35,7 @@ import javax.swing.plaf.ComponentUI;
  * appears inside the button.
  *
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  */
 public class PlasticButtonUI extends FilledButtonUI {
 

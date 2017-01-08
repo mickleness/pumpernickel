@@ -26,7 +26,7 @@ import javax.swing.plaf.ComponentUI;
  * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/TexturedButtonUI.png" alt="TexturedButtonUI Screenshot">
  * <p>It is not intended to be an exact replica, but it is very similar.
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  */
 public class TexturedButtonUI extends FilledButtonUI {
 	

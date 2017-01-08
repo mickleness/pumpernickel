@@ -19,7 +19,7 @@ import com.pump.awt.BrushStroke;
 import com.pump.blog.Blurb;
 import com.pump.blog.ResourceSample;
 
-/** A simple demo program showing off the {@link com.bric.awt.BrushStroke}.
+/** A simple demo program showing off the {@link com.pump.awt.BrushStroke}.
  * 
  *
  * 

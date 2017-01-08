@@ -23,7 +23,7 @@ import com.pump.util.Receiver;
  * 
  * <p>These can only be instantiated by a <code>LocationFactory</code>.
  * 
- * @see com.bric.io.location.LocationFactory
+ * @see com.pump.io.location.LocationFactory
  */
 public class URLLocation extends CachedLocation {
 	IOLocation parent;

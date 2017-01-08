@@ -25,7 +25,7 @@ import javax.swing.plaf.ComponentUI;
  * is originally intended to indicate:
  * <br>"a choice in limiting the scope of an operation, such as the buttons at the top of a Finder when searching."
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  */
 public class RoundRectButtonUI extends FilledButtonUI {
 	public final static ButtonShape ROUNDRECT_SHAPE = new ButtonShape(8, Short.MAX_VALUE);

@@ -62,7 +62,7 @@ public class OptimizedGraphics2D extends Graphics2D {
 	
 	public enum Option {
 
-		/** This flag uses the {@link com.bric.geom.Clipper} class to
+		/** This flag uses the {@link com.pump.geom.Clipper} class to
 		 * avoid using the <code>Area</code> class (if possible) when
 		 * clipping this <code>Graphics2D</code>.
 		 * <P>This will come into play when this graphics already has

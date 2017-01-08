@@ -30,7 +30,7 @@ import javax.swing.event.ChangeListener;
  * <P>This menu will automatically update itself to always list all
  * visible Frames.  Their title will appear in this menu, or the text
  * "Untitled" will be used if no frame title is available.
- * <P>This uses the {@link com.bric.window.WindowList} to keep track
+ * <P>This uses the {@link com.pump.window.WindowList} to keep track
  * of frames, their order, and their layering.
  * <P>As of this version, this class is not a perfect replica of Apple's menu.  It lacks
  * a few key elements:

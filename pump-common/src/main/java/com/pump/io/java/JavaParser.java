@@ -29,7 +29,7 @@ import com.pump.util.BasicReceiver;
 import com.pump.util.Receiver;
 
 /**
- * This helps convert Java source code into Java {@link com.bric.io.Token} objects.
+ * This helps convert Java source code into Java {@link com.pump.io.Token} objects.
  */
 public class JavaParser {
 	
@@ -446,7 +446,7 @@ public class JavaParser {
 	
 	/** Parse Java source code.
 	 * 
-	 * @param reader the reader to create {@link com.bric.io.Token} objects from.
+	 * @param reader the reader to create {@link com.pump.io.Token} objects from.
 	 * @param includeWhitespaceTokens if false then this will ignore {@link WhitespaceToken} objects.
 	 * @param receiver the object that will receive tokens as they become available.
 	 * @throws IOException
@@ -839,7 +839,7 @@ public class JavaParser {
 
 	/** Parse Java source code.
 	 * 
-	 * @param reader the reader to create {@link com.bric.io.Token} objects from.
+	 * @param reader the reader to create {@link com.pump.io.Token} objects from.
 	 * @param includeWhitespaceTokens if false then this will ignore {@link WhitespaceToken} objects.
 	 * @return an array of Tokens from the String provided.
 	 * @throws IOException
@@ -852,7 +852,7 @@ public class JavaParser {
 
 	/** Parse tokens, and then group them by line
 	 * 
-	 * @param reader the reader to create {@link com.bric.io.Token} objects from.
+	 * @param reader the reader to create {@link com.pump.io.Token} objects from.
 	 * @param includeWhitespaceTokens if false then this will ignore {@link WhitespaceToken} objects.
 	 * @return each element in the outer array is a line of text.
 	 */

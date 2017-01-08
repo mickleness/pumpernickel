@@ -25,7 +25,7 @@ import javax.swing.plaf.ComponentUI;
  * is originally intended to:
  * <br>"select among options, such as different ways of viewing something".
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  */
 public class GradientButtonUI extends FilledButtonUI {
 	public static final ButtonShape GRADIENT_SHAPE = new ButtonShape(0,0);

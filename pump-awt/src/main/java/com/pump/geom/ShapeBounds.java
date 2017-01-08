@@ -22,7 +22,7 @@ import java.awt.geom.Rectangle2D;
  * so here I present a method to get the bounds without resorting to
  * the very-accurate-but-very-slow <code>java.awt.geom.Area</code> class.
  * 
- * @see com.bric.geom.ShapeBoundsDemo
+ * @see com.pump.showcase.ShapeBoundsDemo
  */
 public class ShapeBounds {
 	/** This calculates the precise bounds of a shape.

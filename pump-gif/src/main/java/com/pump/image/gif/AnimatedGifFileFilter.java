@@ -15,7 +15,7 @@ import java.io.FilenameFilter;
 import java.util.ResourceBundle;
 
 /** A filefilter that only shows animated GIFs.
- * @see com.bric.image.gif.GifReader#isAnimatedGIF(File)
+ * @see com.pump.image.gif.GifReader#isAnimatedGIF(File)
  */
 public class AnimatedGifFileFilter extends javax.swing.filechooser.FileFilter
 		implements FilenameFilter, java.io.FileFilter {

@@ -294,7 +294,7 @@ public class ObservableProperties implements Serializable {
 		/** Retrieve this key from a map of values or return the default value provided
 		 * if the key is not identified.
 		 * <p>Note the key name in the map does not have
-		 * to be exact. For example if the map was generated via {@link com.bric.util.ObservableProperties#getMap(boolean, boolean, String...)}
+		 * to be exact. For example if the map was generated via {@link com.pump.util.ObservableProperties#getMap(boolean, boolean, String...)}
 		 * then in might have text prepended or appended to the technical key name. As soon as a partial match is identified
 		 * that matches this key name (that also is consistent with the type required by this Key): then that
 		 * value is returned. For this reason: key names should err on the side of being more specific/thorough than not.

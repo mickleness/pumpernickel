@@ -65,8 +65,8 @@ import com.pump.plaf.ColorPickerSliderUI;
  * a <code>PropertyChangeListener</code> listening
  * for changes to the <code>OPACITY_PROPERTY</code>.
  * 
- * @see com.bric.swing.ColorPickerDialog
- * @see com.bric.swing.ColorPickerPanel
+ * @see com.pump.swing.ColorPickerDialog
+ * @see com.pump.swing.ColorPickerPanel
  * 
  */
 public class ColorPicker extends JPanel {

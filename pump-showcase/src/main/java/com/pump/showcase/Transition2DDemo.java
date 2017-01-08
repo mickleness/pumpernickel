@@ -59,7 +59,7 @@ import com.pump.image.transition.ZoomTransition2D;
 
 /** A demo of the {@link Transition2D} architecture.
  * 
- * @see com.bric.image.transition.Transition3DDemo
+ * @see com.pump.showcase.Transition3DDemo
  *
  */
 @Blurb (

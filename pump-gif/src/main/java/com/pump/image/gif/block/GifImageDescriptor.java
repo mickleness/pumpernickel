@@ -12,7 +12,7 @@ package com.pump.image.gif.block;
 
 /**
  * There must be <code>GifImageDescriptor</code> for each
- * {@link com.bric.image.gif.block.GifImageDataBlock}. This block will precede the
+ * {@link com.pump.image.gif.block.GifImageDataBlock}. This block will precede the
  * image data, but there <i>may</i> be a local color table immediately
  * following this block.
  * <P>
@@ -177,7 +177,7 @@ public class GifImageDescriptor extends GifGraphicRenderingBlock {
 
 	/**
 	 * @return <code>true</code> if this block is followed by a
-	 *         {@link com.bric.image.gif.block.GifLocalColorTable}.
+	 *         {@link com.pump.image.gif.block.GifLocalColorTable}.
 	 */
 	public boolean hasLocalColorTable() {
 		int i = b[8] & 0xFF;
@@ -192,7 +192,7 @@ public class GifImageDescriptor extends GifGraphicRenderingBlock {
 	 *         interlaced in a four-pass interlace pattern, described in
 	 *         Appendix E of the GIF file format specification.
 	 *         <P>
-	 *         See {@link com.bric.image.gif.block.GifInterlace}.
+	 *         See {@link com.pump.image.gif.block.GifInterlace}.
 	 */
 	public boolean isInterlaced() {
 		int i = b[8] & 0xFF;
@@ -217,7 +217,7 @@ public class GifImageDescriptor extends GifGraphicRenderingBlock {
 
 	/**
 	 * @return <code>true</code> if there is a
-	 *         {@link com.bric.image.gif.block.GifLocalColorTable} following this
+	 *         {@link com.pump.image.gif.block.GifLocalColorTable} following this
 	 *         block, and that color table is sorted in order of decreasing
 	 *         importance.
 	 */
@@ -267,7 +267,7 @@ public class GifImageDescriptor extends GifGraphicRenderingBlock {
 
 	/**
 	 * @return the number of colors in the following
-	 *         {@link com.bric.image.gif.block.GifLocalColorTable}.
+	 *         {@link com.pump.image.gif.block.GifLocalColorTable}.
 	 */
 	public int getLocalColorTableSize() {
 		int i = b[8] & 0xFF;

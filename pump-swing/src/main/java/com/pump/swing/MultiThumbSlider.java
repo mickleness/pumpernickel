@@ -70,7 +70,7 @@ import com.pump.util.JVM;
  * meant to store the relative position of thumbs, then you may set this to a trivial
  * stub-like object like a String or Character.
  * 
- * @see com.bric.swing.MultiThumbSliderDemo
+ * @see com.pump.swing.MultiThumbSliderDemo
  */
 public class MultiThumbSlider<T> extends JComponent {
 	private static final long serialVersionUID = 1L;

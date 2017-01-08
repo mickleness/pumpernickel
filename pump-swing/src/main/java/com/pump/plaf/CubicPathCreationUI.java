@@ -44,7 +44,7 @@ import com.pump.swing.ShapeCreationPanel.Selection;
 
 
 /** A {@link ShapeCreationUI} to create a series of {@link CubicPath} shapes.
- * @see com.bric.geom.CubicPath
+ * @see com.pump.geom.CubicPath
  */
 public class CubicPathCreationUI extends ShapeCreationUI {
 

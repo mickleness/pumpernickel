@@ -46,7 +46,7 @@ import java.util.TreeSet;
  * <p>Every time you retrieve an object from this pool, you should
  * wrap the following code in a try/finally block and return
  * the object back to this pool when finished.
- * @see ResourcePoolDemo
+ * @see com.pump.showcase.ResourcePoolDemo
  */
 public class ResourcePool {
 	

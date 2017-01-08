@@ -17,7 +17,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 
-/** This executes a {@link com.bric.job.SampleJob} across
+/** This executes a {@link com.pump.job.SampleJob} across
  * a given number of threads until all samples are processed,
  * an error occurs, or <code>abort()</code> is invoked.
  * 

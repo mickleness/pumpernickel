@@ -46,9 +46,9 @@ import com.pump.image.transition.Transition;
  * shouldn't matter too much, because ideally a transition should be about a quarter
  * of a second.)</li></ul>
  * 
- * @see com.bric.image.transition.Transition2DDemo
- * @see com.bric.swing.TransitionPanelDemo
- * @see com.bric.swing.TransitionTabbedPane
+ * @see com.pump.showcase.Transition2DDemo
+ * @see com.pump.swing.TransitionPanelDemo
+ * @see com.pump.swing.TransitionTabbedPane
  */
 public class TransitionPanel extends JComponent {
 	private static final long serialVersionUID = 1L;

@@ -13,7 +13,7 @@ package com.pump.image.gif.block;
 import java.awt.image.IndexColorModel;
 
 /**
- * This immediately follows a {@link com.bric.image.gif.block.GifImageDescriptor}
+ * This immediately follows a {@link com.pump.image.gif.block.GifImageDescriptor}
  * block if its <code>hasLocalColorTable()</code> method returns
  * <code>true</code>. The GIF file format specification points out:
  * <P>

@@ -24,6 +24,10 @@ public class UpdateSourceCodeHeader {
 		FileTreeIterator iter = new FileTreeIterator(dir, "java");
 		while(iter.hasNext()) {
 			File file = iter.next();
+			
+			if(file.getName().contains("package-info"))
+				continue;
+			
 			String str = IOUtils.read(file);
 			int i1 = str.indexOf("package ");
 			

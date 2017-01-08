@@ -37,7 +37,7 @@ import com.pump.math.MathG;
 
 /** This is a simple Java implementation of image transformations.
  * <p>This is the result of 12 different potential optimizations.
- * @see com.bric.image.BasicImageContextDemo
+ * @see com.pump.image.BasicImageContextDemo
  */
 public class BasicImageContext extends ImageContext {
 	final int width, height;

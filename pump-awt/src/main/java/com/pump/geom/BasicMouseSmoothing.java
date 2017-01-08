@@ -25,7 +25,7 @@ import java.util.StringTokenizer;
  * collect those points and return nice curved shapes.  Some points will
  * be "dropped" for the sake of creating a smoother curve.
  *
- * @see com.bric.plaf.MouseSmoothingShapeCreationUI
+ * @see com.pump.plaf.MouseSmoothingShapeCreationUI
  */
 public class BasicMouseSmoothing implements MouseSmoothing {
 	/** The amount of error that is allowed when creating segments. */

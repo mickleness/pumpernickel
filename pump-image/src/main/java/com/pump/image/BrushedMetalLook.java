@@ -34,7 +34,7 @@ import com.pump.image.pixel.IntRGBConverter;
 
 /**
  * 
- * @see com.bric.image.BrushedMetalDemo
+ * @see com.pump.showcase.BrushedMetalDemo
  */
 public class BrushedMetalLook {
 	

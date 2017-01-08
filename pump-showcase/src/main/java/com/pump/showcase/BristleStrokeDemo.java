@@ -18,7 +18,7 @@ import com.pump.awt.BristleStroke;
 import com.pump.blog.Blurb;
 import com.pump.blog.ResourceSample;
 
-/** A simple demo program showing off the {@link com.bric.awt.BristleStroke}. 
+/** A simple demo program showing off the {@link com.pump.awt.BristleStroke}. 
  *
  *
  * 

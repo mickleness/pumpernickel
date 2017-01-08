@@ -66,8 +66,8 @@ import com.pump.plaf.PlafPaintUtils;
  * the height of this component: depending on which is smaller.
  *
  *
- * @see com.bric.swing.ColorPicker
- * @see com.bric.swing.ColorPickerDialog
+ * @see com.pump.swing.ColorPicker
+ * @see com.pump.swing.ColorPickerDialog
  */
 public class ColorPickerPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

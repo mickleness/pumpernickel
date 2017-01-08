@@ -25,7 +25,7 @@ import javax.swing.plaf.ComponentUI;
  * <P>This relies on careful borders and highlights
  * more than most other ButtonUIs in this package.
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  **/
 public class XPButtonUI extends FilledButtonUI {
 	private static final Color strokeColor = new Color(0,60,116);

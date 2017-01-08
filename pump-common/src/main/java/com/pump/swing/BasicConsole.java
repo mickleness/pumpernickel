@@ -46,7 +46,7 @@ import com.pump.util.ThreadedSemaphore;
  * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ShapeBoundsDemo.png" alt="Screenshot of ShapeBoundsDemo">
  * 
  * @see <a href="http://javagraphics.blogspot.com/2015/03/text-managing-console-in-swing.html">Text: Managing a Console in Swing</a>
- * @see com.bric.io.ConsoleLogger
+ * @see com.pump.io.ConsoleLogger
  */
 @Blurb (
 		filename = "BasicConsole",

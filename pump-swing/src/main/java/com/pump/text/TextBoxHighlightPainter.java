@@ -24,7 +24,7 @@ import javax.swing.text.JTextComponent;
 
 import com.pump.awt.TextBlock;
 
-/** This combines a {@link com.bric.awt.TextBlock} and a 
+/** This combines a {@link com.pump.awt.TextBlock} and a 
  * {@link javax.swing.text.Highlighter.HighlightPainter}.
  * 
  */

@@ -28,7 +28,7 @@ import javax.swing.plaf.ComponentUI;
  * is often used for:
  * <BR>"Buttons on a tool bar, or buttons smaller than a standard button".
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  */
 public class SquareButtonUI extends FilledButtonUI {
 	

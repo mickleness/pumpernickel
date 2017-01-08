@@ -28,7 +28,7 @@ import java.util.List;
  * <li>One accepting a <code>nodeIndex</code> and <code>pathIndex</code>.  This breaks
  * the shape up into separate paths, and looks at all the nodes in a given path.</li></ul>
  * 
- * @see com.bric.plaf.CubicPathCreationUI
+ * @see com.pump.plaf.CubicPathCreationUI
  * 
  */
 public final class CubicPath extends AbstractShape {

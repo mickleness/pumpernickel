@@ -80,7 +80,7 @@ import com.pump.plaf.UIEffect.State;
  * be inside the shape.  (That is, a 'C' or 'O' shape is not valid.)
  * <P>This layout is not tested with HTML-rendered text.
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  * @see <a href="http://javagraphics.blogspot.com/2009/08/buttons-new-uis.html">Buttons: New UIs</a>
  * 
  */
@@ -1255,12 +1255,12 @@ public abstract class FilledButtonUI extends ButtonUI implements PositionConstan
 		super.uninstallUI(c);
 	}
 
-	/** Return the {@link com.bric.plaf.ButtonFill} used by this FilledButtonUI. */
+	/** Return the {@link com.pump.plaf.ButtonFill} used by this FilledButtonUI. */
 	public ButtonFill getButtonFill() {
 		return fill;
 	}
 	
-	/** Return the {@link com.bric.plaf.ButtonShape} used by this FilledButtonUI. */
+	/** Return the {@link com.pump.plaf.ButtonShape} used by this FilledButtonUI. */
 	public ButtonShape getButtonShape() {
 		return shape;
 	}
@@ -1280,7 +1280,7 @@ public abstract class FilledButtonUI extends ButtonUI implements PositionConstan
 		return info.fill.contains(x,y);
 	}
 	
-	/** Create a {@link com.bric.plaf.FilledComboBoxUI} modeled after this <code>FilledButtonUI</code>. */
+	/** Create a {@link com.pump.plaf.FilledComboBoxUI} modeled after this <code>FilledButtonUI</code>. */
 	public FilledComboBoxUI createComboBoxUI() {
 		return new FilledComboBoxUI(this);
 	}

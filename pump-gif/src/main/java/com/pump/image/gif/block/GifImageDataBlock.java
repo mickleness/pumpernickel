@@ -30,9 +30,9 @@ import com.pump.image.pixel.quantize.ImageQuantization;
  * table.
  * <P>
  * This is not technically a
- * {@link com.bric.image.gif.block.GifGraphicRenderingBlock}, because it is, by
+ * {@link com.pump.image.gif.block.GifGraphicRenderingBlock}, because it is, by
  * itself, meaningless. It must be preceded by a
- * {@link com.bric.image.gif.block.GifImageDescriptor} block; so that is considered
+ * {@link com.pump.image.gif.block.GifImageDescriptor} block; so that is considered
  * the real "graphic rendering block".
  */
 public class GifImageDataBlock extends GifBlock {

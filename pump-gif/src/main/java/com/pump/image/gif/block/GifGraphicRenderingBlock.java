@@ -12,7 +12,7 @@ package com.pump.image.gif.block;
 
 /**
  * This is just a little layer of classification among
- * {@link com.bric.image.gif.block.GifBlock}s. The GIF file format specification
+ * {@link com.pump.image.gif.block.GifBlock}s. The GIF file format specification
  * explains this type of block as:
  * <P>
  * "containing information and data used to render a graphic on the display

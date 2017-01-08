@@ -12,7 +12,7 @@ package com.pump.image.gif.block;
 
 /**
  * This optional block may precede any
- * {@link com.bric.image.gif.block.GifGraphicRenderingBlock}.
+ * {@link com.pump.image.gif.block.GifGraphicRenderingBlock}.
  * <P>
  * The four static disposal modes are described below. The GIF file format
  * describes these, but the following webpage describes them much

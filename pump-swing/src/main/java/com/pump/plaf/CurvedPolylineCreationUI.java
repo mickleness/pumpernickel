@@ -39,7 +39,7 @@ import com.pump.swing.ShapeCreationPanel.Selection;
 
 /** A {@link ShapeCreationUI} to create a series of {@link CurvedPolyline} shapes.
  * 
- * @see com.bric.geom.CurvedPolyline
+ * @see com.pump.geom.CurvedPolyline
  */
 public class CurvedPolylineCreationUI extends ShapeCreationUI {
 

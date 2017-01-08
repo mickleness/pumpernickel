@@ -22,7 +22,7 @@ import java.util.Map;
 /** This class parses JPEG metadata to retrieve properties or
  * thumbnails.
  * 
- * @see com.bric.image.jpeg.JPEGMetaDataDemo
+ * @see com.pump.image.jpeg.JPEGMetaDataDemo
  */
 public class JPEGMetaData {
 	

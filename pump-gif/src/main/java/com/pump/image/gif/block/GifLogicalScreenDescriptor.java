@@ -109,7 +109,7 @@ public class GifLogicalScreenDescriptor extends GifBlock {
 
 	/**
 	 * @return <code>true</code>if a
-	 *          {@link com.bric.image.gif.block.GifGlobalColorTable} follows this
+	 *          {@link com.pump.image.gif.block.GifGlobalColorTable} follows this
 	 *          block in the GIF file.
 	 */
 	public boolean hasGlobalColorTable() {
@@ -118,7 +118,7 @@ public class GifLogicalScreenDescriptor extends GifBlock {
 
 	/**
 	 * @return <code>true</code> if the
-	 *          {@link com.bric.image.gif.block.GifGlobalColorTable} is sorted. If
+	 *          {@link com.pump.image.gif.block.GifGlobalColorTable} is sorted. If
 	 *          <code>hasGlobalColorTable()</code> is <code>false</code>,
 	 *          then this also returns <code>false</code>.
 	 *          <P>
@@ -192,7 +192,7 @@ public class GifLogicalScreenDescriptor extends GifBlock {
 	}
 
 	/**
-	 * Index into the {@link com.bric.image.gif.block.GifGlobalColorTable} for the
+	 * Index into the {@link com.pump.image.gif.block.GifGlobalColorTable} for the
 	 * Background Color. The Background Color is the color used for those pixels
 	 * on the screen that are not covered by an image.
 	 */

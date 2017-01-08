@@ -24,7 +24,7 @@ import com.pump.image.thumbnail.BasicThumbnail.Layer;
 /** This is an abstract model to format thumbnails.
  * <p>Here "format thumbnails" refers to adding small tasteful decorations
  * to a scaled image to make a professional looking graphic.
- * This class uses the {@link com.bric.image.pixel.Scaling} class to implement
+ * This class uses the {@link com.pump.image.pixel.Scaling} class to implement
  * the actual scaling. (If all you're interested in in scaling a large image,
  * then please refer to that class, at the <a href="http://javagraphics.blogspot.com/2010/06/images-scaling-down.html">
  * accompanying discussion</a>.)

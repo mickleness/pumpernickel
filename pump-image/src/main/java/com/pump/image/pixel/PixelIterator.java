@@ -14,8 +14,8 @@ package com.pump.image.pixel;
  * This iterates over an image, one row of pixels at a time.
  * <P>
  * Note this interface is not complete by itself: the
- * {@link com.bric.image.pixel.BytePixelIterator} and the
- * {@link com.bric.image.pixel.IntPixelIterator} interfaces add the crucial
+ * {@link com.pump.image.pixel.BytePixelIterator} and the
+ * {@link com.pump.image.pixel.IntPixelIterator} interfaces add the crucial
  * <code>next(array)</code> method (where the <code>array</code> argument is
  * expressed either in bytes or ints).
  * 
@@ -90,8 +90,8 @@ public interface PixelIterator {
 	 * length should at least be <code>getMinimumArrayLength()</code>.
 	 * <P>(Note the <code>next()</code> method is not in this interface: it
 	 * exists in the subinterfaces:
-	 * {@link com.bric.image.pixel.BytePixelIterator} and
-	 * {@link com.bric.image.pixel.IntPixelIterator}.
+	 * {@link com.pump.image.pixel.BytePixelIterator} and
+	 * {@link com.pump.image.pixel.IntPixelIterator}.
 	 * <P>You should <i>not</i> assume you know what this value is. For example:
 	 * If an iterator is actually a 4-byte iterator that is reducing to a 3-byte
 	 * format, then this value may be 4*getWidth() instead of the expected

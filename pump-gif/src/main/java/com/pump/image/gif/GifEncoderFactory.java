@@ -11,7 +11,7 @@
 package com.pump.image.gif;
 
 
-/** A factory to create a {@link com.bric.image.gif.GifEncoder}.
+/** A factory to create a {@link com.pump.image.gif.GifEncoder}.
  */
 public class GifEncoderFactory {
 	private static GifEncoderFactory factory = new GifEncoderFactory();

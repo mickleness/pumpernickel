@@ -80,7 +80,7 @@ import com.pump.util.ObservableProperties.Key;
  * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/shadow-demo.gif" alt="Shadow Demo">
  * </td></tr></table>
  * 
- * @see com.bric.plaf.DecoratedPanelUIDemo
+ * @see com.pump.showcase.DecoratedPanelUIDemo
  * @see <a href="http://javagraphics.blogspot.com/2014/03/panels-improved-panelui.html">Panels: an Improved UI</a>
  */
 public class DecoratedPanelUI extends PanelUI {

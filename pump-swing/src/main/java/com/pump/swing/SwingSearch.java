@@ -430,7 +430,7 @@ public class SwingSearch {
 	}
 
 	/** This can create a highlight effect for a selection of text.
-	 * Originally this was designed to work with the {@link com.bric.plaf.AbstractSearchHighlight} class,
+	 * Originally this was designed to work with the {@link com.pump.plaf.AbstractSearchHighlight} class,
 	 * but it can work with any object that has a constructor accepting the
 	 * same arguments this method uses.
 	 * <P>By default this will use the <code>AquaSearchHighlight</code>,
@@ -458,7 +458,7 @@ public class SwingSearch {
 	}
 
 	/** This can create a highlight effect for a selection of text.
-	 * Originally this was designed to work with the {@link com.bric.plaf.AbstractSearchHighlight} class,
+	 * Originally this was designed to work with the {@link com.pump.plaf.AbstractSearchHighlight} class,
 	 * but it can work with any object that has a constructor accepting the
 	 * same arguments this method uses.
 	 * <P>By default this will use the <code>AquaSearchHighlight</code>,

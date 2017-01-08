@@ -23,9 +23,9 @@ import com.pump.image.ImageSize;
 import com.pump.image.bmp.BmpDecoderIterator;
 
 /** This contains a few static methods for scaling BufferedImages
- * using the {@link com.bric.image.pixel.ScalingIterator}.
+ * using the {@link com.pump.image.pixel.ScalingIterator}.
  * 
- * @see com.bric.geom.Dimension2D.scaleProportionally
+ * @see com.pump.geom.Dimension2D.scaleProportionally
  * @see <a href="http://javagraphics.blogspot.com/2010/06/images-scaling-down.html">http://javagraphics.blogspot.com/2010/06/images-scaling-down.html</a>
  */
 public class Scaling {

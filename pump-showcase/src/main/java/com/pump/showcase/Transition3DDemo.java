@@ -24,7 +24,7 @@ import com.pump.image.transition.Transition3D;
 
 /** A demo of the {@link Transition3D} classes.
  * 
- * @see com.bric.image.transition.Transition2DDemo
+ * @see com.pump.showcase.Transition2DDemo
  */
 @Blurb (
 filename = "Transition3D",

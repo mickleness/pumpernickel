@@ -79,10 +79,10 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 	 * all the pixel data in a single pass.  (That is: it might have provided
 	 * row 1, 3, and then row 2.  The <code>GenericImageSinglePassIterator</code>
 	 * requires this data be delivered in consecutive rows.)
-	 * <p>If this occurs, I recommend trying the {@link com.bric.image.bmp.BmpEncoder}
+	 * <p>If this occurs, I recommend trying the {@link com.pump.image.bmp.BmpEncoder}
 	 * class.  This can write an image to a <code>RandomAccessFile</code> in
-	 * multiple arbitrary passes as a BMP, and then the {@link com.bric.image.bmp.BmpDecoder}
-	 * can read the final image back in a {@link com.bric.image.pixel.PixelIterator}.
+	 * multiple arbitrary passes as a BMP, and then the {@link com.pump.image.bmp.BmpDecoder}
+	 * can read the final image back in a {@link com.pump.image.pixel.PixelIterator}.
 	 */
 	public static class NonSinglePassException extends RuntimeException {
 		private static final long serialVersionUID = 1L;

@@ -19,7 +19,7 @@ import java.awt.geom.Point2D;
  * <code><br> &nbsp; centerX+coilGap*(t+coilOffset)*Math.cos(2*Math.PI*t*m+angularOffset);</code>
  * <code><br> &nbsp; centerY+coilGap*(t+coilOffset)*Math.sin(2*Math.PI*t*m+angularOffset);</code>
  * 
- * @see com.bric.geom.Spiral2DPathIterator
+ * @see com.pump.geom.Spiral2DPathIterator
  */
 public class Spiral2D extends AbstractShape {
 

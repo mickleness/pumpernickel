@@ -27,7 +27,7 @@ import com.pump.data.Key;
  * <p>
  * Internally a branch considers a "bean" to basically be a map of Strings to Objects.
  * If possible: it is preferred to use {@link com.pump.data.Key keys} to refer to the
- * keys in these maps, because that offers type safety and possible {@Link com.pump.data.BoundsChecker bounds checking}.
+ * keys in these maps, because that offers type safety and possible {@link com.pump.data.BoundsChecker bounds checking}.
  * But that is optional, and it is up to the caller to responsibly make sure keys
  * don't conflict with one other. (For example: if one <code>Key</code> object is named
  * "roomNumber" and relates to an Integer, but another <code>Key</code> object relates to

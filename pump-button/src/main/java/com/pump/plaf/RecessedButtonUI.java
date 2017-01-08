@@ -27,7 +27,7 @@ import javax.swing.plaf.ComponentUI;
  * <br>"to indicate a choice in limiting the scope of an operation, such as the buttons at the top of a Finder when searching."
  * 
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  */
 public class RecessedButtonUI extends FilledButtonUI {
 	

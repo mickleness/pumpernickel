@@ -20,8 +20,8 @@ import java.lang.annotation.RetentionPolicy;
 public @interface ResourceSample {
 	
 	/** An array of strings used to construct a particular resource.
-	 * <p>For example: "new com.bric.swing.resources.TriangleIcon( 24, 24, new Color( 0 ) )"
-	 * <p>This is something that {@link com.bric.reflect.Reflection#parse(String)} is capable of parsing.
+	 * <p>For example: "new com.pump.swing.resources.TriangleIcon( 24, 24, new Color( 0 ) )"
+	 * <p>This is something that {@link com.pump.reflect.Reflection#parse(String)} is capable of parsing.
 	 */
 	String[] sample();
 	

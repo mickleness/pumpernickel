@@ -25,7 +25,7 @@ import javax.swing.plaf.ComponentUI;
  * <P>As of this writing this UI does not perform animated
  * fades, but is otherwise a reasonable replica.
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  */
 public class VistaButtonUI extends FilledButtonUI {
 

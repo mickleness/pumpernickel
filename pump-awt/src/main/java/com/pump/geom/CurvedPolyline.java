@@ -21,7 +21,7 @@ import java.util.List;
  * freehand shape tool works, but the magnitude of the tangents still requires
  * some adjusting.
  * 
- * @see com.bric.plaf.CurvedPolylineCreationUI
+ * @see com.pump.plaf.CurvedPolylineCreationUI
  */
 public class CurvedPolyline extends AbstractShape {
 	

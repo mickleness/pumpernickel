@@ -57,7 +57,7 @@ import com.pump.swing.JBreadCrumb.BreadCrumbFormatter;
 import com.pump.swing.NavigationListener;
 import com.pump.swing.NavigationListener.ListSelectionType;
 
-/** The ComponentUI for {@link com.bric.swing.JBreadCrumb}.
+/** The ComponentUI for {@link com.pump.swing.JBreadCrumb}.
  */
 public class BreadCrumbUI extends ComponentUI {
 	protected static final String PATH_NODE_KEY = BreadCrumbUI.class.getName()+".pathNode";

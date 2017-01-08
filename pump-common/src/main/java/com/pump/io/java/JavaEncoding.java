@@ -15,7 +15,7 @@ import java.util.Set;
 
 /** Static methods related to reading and writing strings that use a \ character to escape characters.
  * 
- * @see com.bric.io.HTMLEncoding
+ * @see com.pump.io.HTMLEncoding
  */
 public class JavaEncoding {
 	

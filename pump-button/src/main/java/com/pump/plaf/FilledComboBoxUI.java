@@ -53,7 +53,7 @@ import javax.swing.plaf.basic.ComboPopup;
 import com.pump.icon.TriangleIcon;
 import com.pump.icon.UpDownIcon;
 
-/** A <code>BasicComboBoxUI</code> that models its appearance after a {@link com.bric.plaf.FilledButtonUI}.
+/** A <code>BasicComboBoxUI</code> that models its appearance after a {@link com.pump.plaf.FilledButtonUI}.
  */
 public class FilledComboBoxUI extends BasicComboBoxUI {
 	
@@ -61,7 +61,7 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 	/** Create a new instance of the FilledComboBoxUI.
 	 * <p>Note this leaves which <code>FilledButtonUI</code> you want ambiguous.
 	 * First this will check against the UIManager's <code>ButtonUI</code> property,
-	 * and if that is not a <code>FilledButtonUI</code> then the {@link com.bric.plaf.RoundRectButtonUI}
+	 * and if that is not a <code>FilledButtonUI</code> then the {@link com.pump.plaf.RoundRectButtonUI}
 	 * will be used.
 	 * <p>This method is required if you want to make this ComboBoxUI the default
 	 * UI by invoking:
@@ -315,12 +315,12 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		};
 	}
 	
-	/** @return the {@link com.bric.plaf.ButtonFill} used by this FilledComboBoxUI. */
+	/** @return the {@link com.pump.plaf.ButtonFill} used by this FilledComboBoxUI. */
 	public ButtonFill getButtonFill() {
 		return buttonUI.getButtonFill();
 	}
 
-	/** @return the {@link com.bric.plaf.ButtonShape} used by this FilledComboBoxUI. */
+	/** @return the {@link com.pump.plaf.ButtonShape} used by this FilledComboBoxUI. */
 	public ButtonShape getButtonShape() {
 		return buttonUI.getButtonShape();
 	}

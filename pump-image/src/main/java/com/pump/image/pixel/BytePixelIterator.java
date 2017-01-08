@@ -12,7 +12,7 @@ package com.pump.image.pixel;
 
 
 /**
- * This is a {@link com.bric.image.pixel.PixelIterator} that iterates over an
+ * This is a {@link com.pump.image.pixel.PixelIterator} that iterates over an
  * image that expresses its pixels in bytes.
  */
 public interface BytePixelIterator extends PixelIterator {

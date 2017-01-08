@@ -29,7 +29,7 @@ import javax.swing.plaf.ComponentUI;
  * is often used for:
  * <BR>"Buttons with icons, or buttons sized larger than a standard Mac button".
  * 
- * @see com.bric.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  */
 public class BevelButtonUI extends FilledButtonUI {
 	public static final ButtonShape BEVEL_SHAPE = new ButtonShape(4,4);

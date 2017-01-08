@@ -18,7 +18,7 @@ import com.pump.util.ThreadedSemaphore;
 /** This logs the System.err and System.out streams
  * to a text file.
  *
- * @see com.bric.swing.BasicConsole
+ * @see com.pump.swing.BasicConsole
  */
 public class ConsoleLogger extends FileLogger {
 	boolean logOut = true;

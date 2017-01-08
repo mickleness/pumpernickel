@@ -24,7 +24,7 @@ import com.pump.swing.ShapeCreationPanel.Selection;
 
 /** A {@link ShapeCreationUI} to create a series of {@link BasicMouseSmoothing} shapes.
  * 
- * @see com.bric.geom.BasicMouseSmoothing
+ * @see com.pump.geom.BasicMouseSmoothing
  */
 public class MouseSmoothingShapeCreationUI extends ShapeCreationUI {
 	

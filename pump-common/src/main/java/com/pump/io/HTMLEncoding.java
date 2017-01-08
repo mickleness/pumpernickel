@@ -24,7 +24,7 @@ import java.util.Set;
  * 
  * <p>These were originally based on a list from www.w3schools.com, but that link is dead now.
  * 
- * @see com.bric.io.java.JavaEncoding
+ * @see com.pump.io.java.JavaEncoding
  */
 public class HTMLEncoding {
 	static class EscapeChar {

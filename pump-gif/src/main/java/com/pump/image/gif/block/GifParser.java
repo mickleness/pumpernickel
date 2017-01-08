@@ -16,7 +16,7 @@ import java.io.InputStream;
 
 /**
  * This efficiently parses out an <code>InputStream</code> into the
- * appropriate {@link com.bric.image.gif.block.GifBlock}'s.
+ * appropriate {@link com.pump.image.gif.block.GifBlock}'s.
  */
 public class GifParser {
 	private final InputStream in;
@@ -87,13 +87,13 @@ public class GifParser {
 	private GifImageDescriptor lastImageDescriptor;
 
 	/**
-	 * This reads the next {@link com.bric.image.gif.block.GifBlock}
+	 * This reads the next {@link com.pump.image.gif.block.GifBlock}
 	 * <P>
 	 * Note that if this method returns a <code>APPLICATION_EXTENSION</code>,
-	 * it may be a {@link com.bric.image.gif.block.GifLoopingApplicationExtension} or
-	 * a {@link com.bric.image.gif.block.GifApplicationExtension}.
+	 * it may be a {@link com.pump.image.gif.block.GifLoopingApplicationExtension} or
+	 * a {@link com.pump.image.gif.block.GifApplicationExtension}.
 	 * 
-	 * @return the next {@link com.bric.image.gif.block.GifBlock}, or
+	 * @return the next {@link com.pump.image.gif.block.GifBlock}, or
 	 *         <code>null</code> if there are no more blocks to read.
 	 * @throws IOException if an IO problem occurs.
 	 */
@@ -179,7 +179,7 @@ public class GifParser {
 	}
 
 	/**
-	 * @return a field from {@link com.bric.image.gif.block.GifBlock}, or
+	 * @return a field from {@link com.pump.image.gif.block.GifBlock}, or
 	 *         <code>-1</code> if there are no more blocks.
 	 * @throws IOException if an IO problem occurs.
 	 */
@@ -355,7 +355,7 @@ public class GifParser {
 
 	/**
 	 * @return <code>true</code> if there are more
-	 *         {@link com.bric.image.gif.block.GifBlock}s available to read.
+	 *         {@link com.pump.image.gif.block.GifBlock}s available to read.
 	 * @throws IOException if an IO problem occurs.
 	 */
 	public boolean hasMoreBlocks() throws IOException {

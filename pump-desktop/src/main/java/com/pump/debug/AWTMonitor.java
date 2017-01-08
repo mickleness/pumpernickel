@@ -25,8 +25,8 @@ import com.pump.util.JVM;
  * traces is printed to the console.
  * <P>After 15 seconds if the thread is unresponsive, the
  * <code>panicListener</code> is notified (if it is non-null).
- * By default the <code>panicListener</code> is a {@link com.bric.debug.PanicDialogPrompt},
- * but you can nullify this value or create your own {@link com.bric.debug.AWTPanicListener}.
+ * By default the <code>panicListener</code> is a {@link com.pump.debug.PanicDialogPrompt},
+ * but you can nullify this value or create your own {@link com.pump.debug.AWTPanicListener}.
  * 
  */
 public class AWTMonitor {

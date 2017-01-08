@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-/** This manages a queue of {@link com.bric.job.Job} objects.
+/** This manages a queue of {@link com.pump.job.Job} objects.
  * Jobs are first sorted by priority, and then handled on a FIFO basis.
  * If a job is next in line but is classified as being dependent on other
  * (unfinished) jobs, then it is skipped until those jobs are processed.
