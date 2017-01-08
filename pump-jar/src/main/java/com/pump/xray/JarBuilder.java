@@ -44,6 +44,8 @@ import com.pump.io.java.JavaClassSummary;
 
 /**
  * This writes an x-ray jar.
+ * 
+ * TODO: merge this with the JarWriter class, which has a similar purpose but completely different implementation.
  */
 public class JarBuilder {
 	
