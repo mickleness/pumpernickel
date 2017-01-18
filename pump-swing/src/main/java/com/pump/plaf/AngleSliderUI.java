@@ -38,11 +38,24 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.SliderUI;
 
+import com.pump.blog.Blurb;
+
 /** This UI renders a <code>JSlider</code> as a circular dial, and then value of the slider represents an angle from [0,2*pi).
  * 
  * <P>This class (and subclasses) can not respond to several slider properties such as orientation, inversion, tickmarks, labels, etc.
  * 
  */
+@Blurb (
+title = "Angles: need GUI widget for angles?",
+releaseDate = "May 2008",
+summary = "Take a <a href=\"http://java.sun.com/javase/6/docs/api/index.html?javax/swing/JSlider.html\"><code>JSlider</code></a>. "+
+"Add a <code><a href=\"https://javagraphics.java.net/doc/com/bric/plaf/AngleSliderUI.html\">AngleSliderUI</a></code>. "+
+"Voila!  You have a GUI widget for angles.\n"+
+"<P>Comes in Aqua and non-Aqua flavors.",
+article = "http://javagraphics.blogspot.com/2008/05/angles-need-gui-widget-for-angles.html",
+javadocLink = true,
+imageName = "AngleSliderUI.png"
+)
 public class AngleSliderUI extends SliderUI {
 	
 	/** Mutable data associated with each AngleSliderUI. */

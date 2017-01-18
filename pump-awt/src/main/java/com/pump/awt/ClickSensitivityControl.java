@@ -24,6 +24,8 @@ import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
+import com.pump.blog.Blurb;
+
 
 /** This class lets mouseClicked events be triggered even if the
  * mouse moves a few pixels.
@@ -33,6 +35,12 @@ import javax.swing.SwingUtilities;
  * in numbers, we need to allow a few extra pixels to trigger
  * a mouseClicked event.
  */
+@Blurb (
+title = "Mouse Click Events: Adding Wiggle Room",
+releaseDate = "February 2011",
+summary = "This triggers mouseClicked events even if the mouse moves a few pixels between click and release.",
+article = "http://javagraphics.blogspot.com/2011/02/mouse-click-events-adding-wiggle-room.html",
+javadocLink = true)
 public class ClickSensitivityControl {
 	/** The distance between the point where the mouse is
 	 * pressed and where it is released that is allowed to

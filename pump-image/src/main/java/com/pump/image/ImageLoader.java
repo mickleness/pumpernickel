@@ -30,6 +30,7 @@ import java.util.Properties;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.pump.blog.Blurb;
 import com.pump.swing.Cancellable;
 
 /** This class can convert an abstract <code>Image</code> into a ARGB <code>BufferedImage</code>.
@@ -41,8 +42,16 @@ import com.pump.swing.Cancellable;
  * methods (such as ImageIO) may return an arbitrary image type.
  * (And this class doesn't require a <code>java.awt.Component</code> to initialize; why
  * does the MediaTracker do that?  It's just a strange animal.)
-
  */
+@Blurb (
+title = "Images: Studying MediaTracker",
+releaseDate = "April 2007",
+summary = "I never did trust <a href=\"http://download.oracle.com/javase/6/docs/api/java/awt/MediaTracker.html\">MediaTracker</a>. "+
+"(Why does it require a <code>java.awt.Component</code> to tell if an image is loaded?)\n"+
+"<p>Here I wrote my own class that converts abstract <code>java.awt.Images</code> into <code>BufferedImages</code>.",
+article = "http://javagraphics.blogspot.com/2007/04/images-studying-mediatracker.html",
+javadocLink = true
+)
 public class ImageLoader {
 	private static boolean debug = false;
 	private static final DirectColorModel ARGBModel = (DirectColorModel)ColorModel.getRGBdefault();

@@ -22,21 +22,12 @@ import java.awt.image.BufferedImage;
 import java.io.PrintStream;
 import java.util.Arrays;
 
-import com.pump.blog.Blurb;
 import com.pump.image.ImageLoader;
 import com.pump.image.pixel.Scaling;
 
 /** A demo app that shows off the <code>Scaling</code> class.
  *
  */
-@Blurb (
-filename = "Scaling",
-title = "Images: Scaling Down",
-releaseDate = "June 2010",
-summary = "This improves the image quality and memory allocation when scaling large <code>BufferedImages</code> to thumbnails.",
-link = "http://javagraphics.blogspot.com/2010/06/images-scaling-down.html",
-sandboxDemo = true
-)
 public class ImageScalingDemo extends OutputDemo {
 
 	public ImageScalingDemo() {

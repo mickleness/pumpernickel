@@ -10,5 +10,19 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pump-desktop"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-image"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-animation"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-audio"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-awt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-button"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-color"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-data"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-diagram"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-gif"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-location"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-quicktime"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-showcase"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-swing"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pump-transition"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

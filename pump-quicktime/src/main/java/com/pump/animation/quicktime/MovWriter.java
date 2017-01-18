@@ -29,6 +29,7 @@ import javax.sound.sampled.AudioSystem;
 
 import com.pump.audio.CombinedAudioInputStream;
 import com.pump.audio.SilentAudioInputStream;
+import com.pump.blog.Blurb;
 import com.pump.image.ImageSize;
 import com.pump.io.MeasuredOutputStream;
 
@@ -48,6 +49,16 @@ import com.pump.io.MeasuredOutputStream;
  * used to correctly set the size headers.
  *
  */
+@Blurb (
+title = "Movies: Writing MOV Files Without QuickTime",
+releaseDate = "June 2008",
+summary = "This article presents a class that can write a .mov file as a series of " +
+"images and PCM audio.\n" +
+"<p>This movie uses a combination of JPG/PNG and WAV encoding, which is very poor " +
+"compression.  But this format is not subject to nasty patent/royalty issues.",
+article = "http://javagraphics.blogspot.com/2008/06/movies-writing-mov-files-without.html",
+javadocLink = false
+)
 public abstract class MovWriter {
 	
 	/** This is used to indicate that a frame requested an unacceptable duration, such as 0 or -1. */

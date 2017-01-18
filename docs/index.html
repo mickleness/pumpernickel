@@ -1,0 +1,988 @@
+<html><body>
+<p>The <b>Pumpernickel</b> project is a library of open-source code covering a wide range of topics.
+I'd love to tell you that there's a singular purpose or mission statement driving everything in this
+project, but the reality is: this is a collection of classes and tools that I've worked on over the years for
+a variety of projects and needs.
+<p>Please feel free to browse the <a href="https://mickleness.github.io/pumpernickel/javadoc/">javadoc</a> and the 
+<a href="https://github.com/mickleness/pumpernickel">repository</a> and to <a href="mailto:mickleness@gmail.com">email me</a> directly with feedback or suggestions.
+<p>Everything in the <code>com.pump</code> codebase is released here under a MIT license.
+<p>If you want a quick jump start into some of the code covered here, download the latest
+<a href="https://github.com/mickleness/pumpernickel/tree/master/pump-release/com/pump/pump-showcase">showcase</a> jar
+and open it. This includes some of the obvious splashy stuff like color dialogs and multithumb sliders, but it also
+includes some performance tests that present alternatives to certain <code>ImageIO</code> functions or <code>java.awt.geom.Area</code> performance problems.
+<h4>Highlights</h4>
+<p>Some, but not all, of the topics/classes covered in this library are:
+<p/>
+<div align="center">
+<table border="0" cellspacing="0px" cellpadding="0px" padding="0px" width="650px"><tr><td>
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2009/10/alphacomposites-which-does-what.html">AlphaComposites: Which Does What?</a></span><br>October 2009</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/showcase/AlphaCompositeDemo.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/CompositeDemo.png" width="130" height="90" alt="Demo Graphic"><p>This is a very short article with a little hands-on demo of how the different <code><a href="http://download.oracle.com/javase/6/docs/api/java/awt/AlphaComposite.html">AlphaComposite</a></code> types interact.
+<p>This doesn't necessarily teach anything or present new ideas; it's just a quick guide to consult if you need it.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/05/angles-need-gui-widget-for-angles.html">Angles: need GUI widget for angles?</a></span><br>May 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/plaf/AngleSliderUI.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/AngleSliderUI.png" width="90" height="54" alt="Demo Graphic"><p>Take a <a href="http://java.sun.com/javase/6/docs/api/index.html?javax/swing/JSlider.html"><code>JSlider</code></a>. Add a <code><a href="https://javagraphics.java.net/doc/com/bric/plaf/AngleSliderUI.html">AngleSliderUI</a></code>. Voila!  You have a GUI widget for angles.
+<P>Comes in Aqua and non-Aqua flavors.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}">Brushed Metal</span><br>TBA</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/showcase/BrushedMetalDemo.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/BrushedMetal.png" width="116" height="57" alt="Demo Graphic"><p>The <a href="https://javagraphics.java.net/doc/com/bric/image/BrushedMetalLook.html">BrushedMetalLook</a> class provides a few static methods to create BufferedImages that resemble brushed metal.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2009/08/buttons-new-uis.html">Buttons: New UIs</a></span><br>August 2009</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/plaf/FilledButtonUI.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/FilledButtonUI.png" width="167" height="42" alt="Demo Graphic"><p>Sure the buttons in <a href="http://developer.apple.com/mac/library/technotes/tn2007/tn2196.html#BUTTONS">Apple's Tech Note 2196</a> are great, but they're so... black-box-ish. And they're only available on Macs.
+<p>This article sets up a <a href="https://javagraphics.java.net/doc/com/bric/plaf/FilledButtonUI.html">new framework</a> for <code>ButtonUIs</code>, and provides around 10 UI's to choose from. (But you can make more if you want to...) Also each <code>ButtonUI</code> can be turned into a <code>ComboBoxUI</code>.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2007/04/jcolorchooser-making-alternative.html">Colors: a Color Dialog</a></span><br>April 2007</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/ColorPicker.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/ColorPicker.png" width="121" height="90" alt="Demo Graphic"><p>This is a Photoshop-style color choosing dialog.
+<p>You can pull some parts of it apart for customization, but out-of-the-box it offers a great interface if you're dealing with a power user.
+<p>Of course: all dialogs are at least slightly evil, and they should be used with care...
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}">Colors: a ColorPalette</span><br>January 2010</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/ColorPalette.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/ColorPalette.png" width="117" height="90" alt="Demo Graphic"><p>This is an isolated GUI component from <a href="http://javagraphics.blogspot.com/2010/01/colors-good-gui-for-selecting-colors.html">this article</a>.
+<p>This app shows the progression of several different concepts for ColorPalettes.  (Hopefully each one is an improvement over the previous...)
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2010/01/colors-good-gui-for-selecting-colors.html">Colors: a Good GUI for Selecting Colors</a></span><br>January 2010</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/ColorWell.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/Colors.png" width="81" height="90" alt="Demo Graphic"><p>This jar includes <i>all</i> my color-related GUI components: the <code><a href="https://javagraphics.java.net/doc/com/bric/swing/ColorPicker.html">ColorPicker</a></code>, the <code><a href="https://javagraphics.java.net/doc/com/bric/swing/ColorWell.html">ColorWell</a></code>, and the <code><a href="https://javagraphics.java.net/doc/com/bric/swing/ColorPalette.html">ColorPalette</a></code>.
+<p>I'm not going to argue that this will meet your needs and save the world; but it includes a lot of useful tools and it might help (save the world).
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/06/customize-toolbar-implementing-mac-like.html">Customize Toolbar: Implementing Mac-Like Toolbars</a></span><br>June 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/toolbar/CustomizedToolbar.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>In lots of Apple's software there's a handy menu option called "Customize Toolbar" that lets users drag and drop components in a toolbar.  It's functional <i>and</i> great eye candy.
+<p>This article presents a similar mechanism for Java.  A single thumbnail doesn't do justice to this feature, but if you go to the article you'll see a screencast.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/06/event-dispatch-thread-responding-to.html">Event Dispatch Thread: Responding to Deadlocks</a></span><br>June 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/debug/AWTMonitor.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>What can you do when your event dispatch thread is blocked?
+<P>For starters: this article mentions how to automatically detect this situation and get great console output to help pinpoint the problem. Also this delves into a very murky partial solution.  (It has worked multiple times for me, but it uses unsafe deprecated black magic.)
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients: Avoiding Color Banding</a></span><br>March 2014</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/awt/GradientTexturePaint.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This article explores the problem of color banding in linear gradients and presents a partial solution.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/05/gradients-gui-widget-to-design-them.html">Gradients: a GUI Widget to Design Them</a></span><br>May 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/GradientSlider.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/GradientSlider.png" width="150" height="27" alt="Demo Graphic"><p>This is a GUI component to arrange the distribution of colors for multicolor gradients. It is similar to a <code>JSlider</code>, but it supports multiple thumbs and maps each thumb to a <code>Color</code>.
+<p>(By default it also leans heavily on some existing color GUI widgets I wrote, but you can replace those with your own components if you want to.)
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2009/11/gradients-halftone-gradient.html">Gradients: a Halftone Gradient</a></span><br>November 2009</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/awt/HalftoneGradient.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/HalftoneGradient.png" width="130" height="90" alt="Demo Graphic"><p>This is a handy little gradient that resembles halftone print.
+<p>I came across this idea by accident while working on the <code><a href="https://javagraphics.java.net/doc/com/bric/awt/TransformedTexturePaint.html">TransformedTexturePaint</a></code> class.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/12/graphics2d-serializable-vector-graphics.html">Graphics2D: Serializable Vector Graphics</a></span><br>December 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/graphics/GraphicsWriter.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This has been a real life-saver when I'm trying to debug our graphics-rich desktop apps at work.
+<p>Whenever something isn't rendering right this lets you see the stack trace of each graphic instruction.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2014/05/images-3d-transitions-and.html">Images: 3D Transforms and Transitions</a></span><br>April 2014</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/image/transition/Transition3D.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/Transition3D.png" width="90" height="90" alt="Demo Graphic"><p>This explores how to render <code>BufferedImages</code> through <code>PerspectiveTransforms</code>, and offers a few new 3D-based transitions.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2010/06/images-bmps-and-thumbnails.html">Images: BMPs and Thumbnails</a></span><br>June 2010</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/image/bmp/package-info.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This provides an efficient mechanism for creating BMP thumbnails, and a crude BMP decoder/encoder. The {@link com.pump.showcase.BmpComparisonDemo BmpComparisonDemo} helps showcase performance details for reading/writing BMP files.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2014/02/images-color-palette-reduction.html">Images: Color Palette Reduction</a></span><br>February 2014</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/image/pixel/quantize/ImageQuantization.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/QuantizationDemo.png" width="136" height="63" alt="Demo Graphic"><p>This is a crash course in a pure-Java implementation of color reduction for images (aka "image quantization"). This provides a median cut color reduction algorithm and a few different levels of error diffusion to help reduce images from millions of colors to a few hundred.
+<p>(This is a prerequisite for writing a gif encoder.)
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2010/03/images-reading-jpeg-thumbnails.html">Images: Reading JPEG Thumbnails</a></span><br>March 2010</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/image/jpeg/JPEGMetaData.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>Most JPEG files have embedded thumbnails.  This features a light parser that fetches these thumbnails -- including some thumbnails <code>JAI</code> might miss -- and this new code is a fraction of the install size of JAI.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2010/06/images-scaling-down.html">Images: Scaling Down</a></span><br>June 2010</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/image/pixel/Scaling.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/Scaling.png" width="111" height="90" alt="Demo Graphic"><p>This improves the image quality and memory allocation when scaling large <code>BufferedImages</code> to thumbnails.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2011/05/images-scaling-jpegs-and-pngs.html">Images: Scaling JPEGs and PNGs</a></span><br>May 2011</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/image/pixel/GenericImageSinglePassIterator.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>Need to scale megapixel JPEGs on-the-fly without loading them entirely into memory? This might just do the trick.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2007/04/images-studying-mediatracker.html">Images: Studying MediaTracker</a></span><br>April 2007</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/image/ImageLoader.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>I never did trust <a href="http://download.oracle.com/javase/6/docs/api/java/awt/MediaTracker.html">MediaTracker</a>. (Why does it require a <code>java.awt.Component</code> to tell if an image is loaded?)
+<p>Here I wrote my own class that converts abstract <code>java.awt.Images</code> into <code>BufferedImages</code>.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2014/03/implementing-jthrobber.html">Implementing a JThrobber </a></span><br>March 2014</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/JThrobber.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/JThrobber.png" width="130" height="50" alt="Demo Graphic"><p>This introduces <a href="https://javagraphics.java.net/doc/com/bric/swing/JThrobber.html">a new component</a> for showing asynchronous indeterminate feedback.
+<p>They're vector-based, so while they're originally designed to be less than 20x20 pixels: they scale well if you need them to. The article/demo app also include some fun non-standard alternative UIs (that were fun to design, but I don't necessarily recommend).
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/06/joptionpane-making-alternative.html">JOptionPane: Making an Alternative</a></span><br>June 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/QDialog.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/QDialog.png" width="170" height="60" alt="Demo Graphic"><p>I find the <code>JOptionPane</code> hard to work with sometimes.  If you want a really polished dialog -- with a help button, the right spacing, the right controls to escape, etc. -- you might just want to make a <a href="https://javagraphics.java.net/doc/com/bric/swing/QDialog.html">new model</a>.
+<p>Really: check out the javadocs for this one.  There's a lot of research/explanation in there.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}">Jars: Building Concise Jars</span><br>January 2009</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/jar/JarWriterApp.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>If I used an ant script or Eclipse's built-in jar-exporting widget: I'd need to specify up front the classes I want to put into a jar.
+<p>This class uses the <code>javac</code> command to figure that out for me.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2009/06/layouts-designing-inspector.html">Layouts: Designing an Inspector</a></span><br>June 2009</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/inspector/InspectorLayout.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/Inspector.png" width="125" height="90" alt="Demo Graphic"><p>This article examines the notion of a well-designed inspector.
+<p>It uses <a href="https://javagraphics.java.net/doc/com/bric/inspector/InspectorLayout.html">this interface</a> to  layout the components, and it presents a few implementations of that interface (with varying degrees of success/hackery).
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2012/06/listuis-adding-decorations-to-cells.html">ListUIs: Adding decorations to cells</a></span><br>June 2012</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/plaf/DecoratedListUI.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/SoundList.png" width="90" height="90" alt="Demo Graphic"><p>This demonstrates a new ListUI to add decorations to JList cells. The demo emulates Apple's music file icons.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2012/07/lists-observable-list-for-uis.html">Lists: An Observable List for UIs</a></span><br>July 2012</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/util/ObservableList.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This article presents a <code>java.util.List</code> implementation designed with UI interaction in mind. This includes thread safety, efficiency, and listeners.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2011/02/mouse-click-events-adding-wiggle-room.html">Mouse Click Events: Adding Wiggle Room</a></span><br>February 2011</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/awt/ClickSensitivityControl.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This triggers mouseClicked events even if the mouse moves a few pixels between click and release.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/06/movies-writing-mov-files-without.html">Movies: Writing MOV Files Without QuickTime</a></span><br>June 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/animation/quicktime/MovWriter.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This article presents a class that can write a .mov file as a series of images and PCM audio.
+<p>This movie uses a combination of JPG/PNG and WAV encoding, which is very poor compression.  But this format is not subject to nasty patent/royalty issues.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2014/01/navigation-breadcrumbs.html">Navigation: Bread Crumbs</a></span><br>January 2014</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/JBreadCrumb.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/JBreadCrumbDemo.png" width="159" height="50" alt="Demo Graphic"><p>A Swing implementation of collapsible bread crumbs.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2014/03/panels-collapsible-sections.html">Panels: Collapsible Sections</a></span><br>March 2014</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/CollapsibleContainer.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>A Swing implementation of a vertical series of collapsible panels. Panel heights are determined with vertical weights, and as the user toggles the visibility of panels: the UI is animated.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2014/03/panels-improved-panelui.html">Panels: an Improved PanelUI</a></span><br>March 2014</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/plaf/DecoratedPanelUI.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/DecoratedPanelUI.png" width="90" height="90" alt="Demo Graphic"><p>This explores a new <code>PanelUI</code> to spruce up panels. This achieves a variety of looks, including a textured plastic look (shown to the right), a simple faded drop shadow, a modern recessed subpanel with a light bevel shadow, and a hand-torn edge.
+<p>The edges are the most important part, and they are achieved with a separate <code>javax.swing.Border</code> that can be used independently of this UI.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2014/04/performance-constructing-arrays-and.html">Performance: Constructing Arrays and Images</a></span><br>April 2014</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/util/ResourcePool.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This examines the cost of constructing arrays and BufferedImages, vs caching and reusing existing arrays.
+<p>This is intended to be used for highly repetitive tasks (such as batch image processing or rendering work).
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2009/05/math-studying-performance.html">Performance: Studying Math</a></span><br>May 2009</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/math/MathG.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>The <code><a href="http://java.sun.com/javase/6/docs/api/java/lang/Math.html">java.lang.Math</a></code> class was designed with accuracy in mind.
+<p>But if you're dealing with graphics: you can probably fudge on some accuracy in exchange for speed.  What methods can be improved?
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2007/04/pixelgrabber-studying-performance.html">Performance: Studying the PixelGrabber</a></span><br>April 2007</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/image/ARGBPixelGrabber.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>Can we improve on the <a href="http://java.sun.com/javase/6/docs/api/index.html?java/awt/image/PixelGrabber.html"><code>java.awt.PixelGrabber</code></a>?
+<p>If you're only working with a <code>BufferedImage</code> and not an abstract <code>Image</code>: you might be able to really improve performance with the <code><a href="https://javagraphics.java.net/doc/com/bric/image/ARGBPixelGrabber.html">ARGBPixelGrabber</a></code>.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/11/preferences-aqua-like-preferences.html">Preferences: Aqua-Like Preferences</a></span><br>November 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/PreferencePanel.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This emulates two types of preferences on Mac: several rows of preferences (like the System Preferences) or one row of preferences (like Mail, Safari, etc.).
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/11/print-dialogs-laying-out-tiles.html">Print Dialogs: Laying Out Tiles</a></span><br>November 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/print/swing/PrintLayoutDialog.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/PrintLayoutDialog.png" width="137" height="90" alt="Demo Graphic"><p>This introduces <a href="https://javagraphics.java.net/doc/com/bric/print/PrintLayout.html">an object</a> to lay out several graphic objects on a sheet of paper, and a dialog to preview and edit this layout.
+<p>(Oh: and it prints.)
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/11/screen-capture-recording-java-apps.html">Screen Capture: Recording Java Apps</a></span><br>June 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/animation/capture/ScreenCapture.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>The <a href="http://java.sun.com/javase/6/docs/api/java/awt/Robot.html">Robot</a> class can capture parts of your screen as an image, but it can be slow to process so many pixels.  This article ties into the <code>RepaintManager</code> to only capture the areas of interest.
+<p>Also this jar can export this animation as a MOV file (using JPEG moving encoding).  All 100% Java.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2014/03/shapes-modeling-cubic-shapes-without.html">Shapes: A ComponentUI to Create and Edit Shapes</a></span><br>March 2014</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/ShapeCreationPanel.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This is a UI component that lets the user define shapes. There are currently 3 unique UIs to define shapes (each with its own strengths and weaknesses). There are a couple of different UIs that can be applied to this, and I haven't yet written up a blog article on the subject.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2007/05/shapes-calculating-bounds.html">Shapes: Calculating Bounds</a></span><br>May 2007</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/geom/ShapeBounds.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>How do you get the bounds of a shape? A <code>GeneralPath</code> or <code>Path2D</code> may return a larger rectangle than necessary. The Area class is accurate, but painfully slow. This demonstrates the <a href="https://javagraphics.java.net/doc/com/bric/geom/ShapeBounds.html">ShapeBounds</a> class, which is accurate and near instant.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2007/04/shapes-clipping-to-rectangle.html">Shapes: Clipping to a Rectangle</a></span><br>April 2007</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/geom/Clipper.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>What's the most common shape we need to clip to?  A <code>Rectangle</code>.
+<p>But if we use <code>Areas</code> our performance will tank.  This demonstrates a simple model that iterates over a path exactly once to get the clipped shape.
+<p>(This does not use Sutherland-Hodgman clipping algorithm or the Weiler-Atherton clipping algorithm.)
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="https://javagraphics.java.net/areax/">Shapes: Creating an Alternative to the Area Class</a></span><br>August 2010</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/geom/AreaX.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This project branches off the <code>Area</code> class and optimizes parts of its performance. The underlying algorithms are not changed, but (in some cases) the performance is considerably improved.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2010/06/shapes-implementing-freehand-pencil.html">Shapes: Implementing a Freehand Pencil Tool</a></span><br>June 2010</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/geom/MouseSmoothing.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>If the user drags the mouse over a <code>JComponent</code>, then you can collect a series of points. This project takes those points and replaces the line segments with attractive bezier curves.
+<p>This is one of three <a href="https://javagraphics.java.net/index.html#ShapeCreationPanelDemo">ShapeCreationPanelUIs</a>.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2009/02/shapes-measuring-length.html">Shapes: Measuring Length</a></span><br>February 2009</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/geom/MeasuredShape.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>An uninteresting but very useful class that deals with measuring shapes.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2010/03/shapes-parametric-equations-and-spirals.html">Shapes: Parametric Equations (and Spirals!)</a></span><br>March 2010</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/geom/Spiral2D.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/Spiral2D.png" width="90" height="90" alt="Demo Graphic"><p>This is a two-fold article:
+<br>1. This presents the <code>ParametricPathIterator</code> to convert parametric equations into <code>java.awt.Shapes</code>.
+<br>2. As a proof of concept: this presents the <code>Spiral2D</code>.</br>
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2015/01/sliders-creating-slider-with-multiple.html">Sliders: Creating a Slider with Multiple Thumbs</a></span><br>January 2015</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/MultiThumbSlider.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/MultiThumbSlider.png" width="150" height="32" alt="Demo Graphic"><p>This is a GUI component that mimicks the <code>javax.swing.JSlider</code>, except it supports an arbitrary number of thumbs. There are currently three UI implementations for this component: one for Apple, one for Windows, and one for Metal.<p>What happens when thumbs intersect/overlap? There are 3 enums for that: NUDGE_OTHER, STOP_AGAINST, and JUMP_OVER_OTHER.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}">Slideshows: Transitions & SWFs</span><br>April 2007</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/image/transition/Transition2D.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/Transition2D.png" width="90" height="90" alt="Demo Graphic"><p>A fun set of transitions defined with a simple vector-graphics-ish <a href="https://javagraphics.java.net/doc/com/bric/image/transition/Transition2D.html">architecture</a>.
+<p>The demo includes a player and minimal Flash export.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/05/strokes-bristle-stroke.html">Strokes: a Bristle Stroke</a></span><br>May 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/awt/BristleStroke.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/BristleStroke.png" width="170" height="66" alt="Demo Graphic"><p>A stroke based on splattering lots of tiny shapes along a path.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2007/04/strokes-brush-stroke.html">Strokes: a Brush Stroke</a></span><br>April 2007</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/awt/BrushStroke.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/BrushStroke.png" width="170" height="66" alt="Demo Graphic"><p>A stroke based on rendering several smaller strokes in parallel along a path.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2009/05/strokes-calligraphy-stroke.html">Strokes: a Calligraphy Stroke</a></span><br>May 2009</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/awt/CalligraphyStroke.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/CalligraphyStroke.png" width="170" height="66" alt="Demo Graphic"><p>A stroke that resembles a nib at a fixed angle.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/12/strokes-charcoal-stroke.html">Strokes: a Charcoal Stroke</a></span><br>December 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/awt/CharcoalStroke.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/CharcoalStroke.png" width="170" height="66" alt="Demo Graphic"><p>A stroke with grooves in the edges that resembles charcoal on pavement.
+<P>This stroke is actually a filter than can modify any shape, but the only current suitable examples are <code>BasicStrokes</code> and <code>CalligraphyStrokes</code>.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2011/02/text-effects-and-block-shadows.html">Text: Effects and Block Shadows</a></span><br>February 2011</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/awt/text/TextEffect.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/TextEffect.png" width="170" height="90" alt="Demo Graphic"><p>Create some fun text effects using block shadows.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2015/12/text-formatting-source-code-in-swing.html">Text: Formatting Source Code in Swing</a></span><br>December 2015</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/JavaTextComponentHighlighter.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/JavaTextComponentHighlighterDemo.png" width="170" height="90" alt="Demo Graphic"><p>This article discusses how to set up a <code>JTextPane</code> to render Java source code with stylized font attributes and line numbers.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2014/11/text-handwriting-text-effect.html">Text: Handwriting Text Effect</a></span><br>Nov 2014</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/awt/text/writing/WritingFont.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This visual effect draws text over time similar to how a human would. Unlike a simple wipe-right transition (which would work with any font), this requires specially formatted font-like shape data. The current implementation is modeled after the public domain font <a href="http://comicneue.com/">Comic Neue</a>.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2015/03/text-managing-console-in-swing.html">Text: Managing a Console in Swing</a></span><br>March 2015</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/BasicConsole.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This discusses options for presenting a console-like Swing component.<p>The class I end up developing is the <a href="https://javagraphics.java.net/doc/com/bric/swing/BasicConsole.html">BasicConsole</a>: a thread-safe JTextArea that highlights multiple PrintStreams in different colors and offers modest support for tab-formatted tables.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2009/12/text-prompts-and-search-fields.html">Text: Prompts and Search Fields</a></span><br>December 2009</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/plaf/RoundTextFieldUI.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/PromptSearch.png" width="150" height="66" alt="Demo Graphic"><p>This article has 2 goals:
+<br>1. Display a gray prompt over a <code>JTextField</code> if it doesn't have the focus.</br>
+<br>2. Implement a <code><a href="https://javagraphics.java.net/doc/com/bric/plaf/RoundTextFieldUI.html">RoundTextFieldUI</a></code> (with an optional magnifying glass).</br>
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2009/12/text-searching-jtextcomponents.html">Text: Searching JTextComponents</a></span><br>December 2009</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/TextSearchBar.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/TextSearch.png" width="72" height="68" alt="Demo Graphic"><p>This discusses different GUIs for the user to search for a string in a <code>JTextComponent</code>.
+<p>This includes the common search dialog, the model Safari uses and the model Firefox uses.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/06/text-height-gui-layout-and-text-boxes.html">Text: Text Height and GUI Layout</a></span><br>June 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/swing/FixedWidthTextArea.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This walks through how to find the preferred height of a block of text, and provides a GUI component to display text with a fixed width.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/06/texturepaints-and-affinetransforms.html">TexturePaints and AffineTransforms</a></span><br>June 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/awt/TransformedTexturePaint.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>This discusses/demos a class that combines these two elements.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2012/08/thumbnails-formatting-thumbnails.html">Thumbnails: Formatting Thumbnails</a></span><br>August 2012</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/image/thumbnail/BasicThumbnail.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/BasicThumbnail.png" width="90" height="90" alt="Demo Graphic"><p>This presents a simple model to decorate thumbnails.
+<p>Each thumbnail is rendered as a series of consecutive layers, including shadows  and borders. The thumbnail is created by passing a source image (as a File, URL, or Image) and a maximum dimension size for the formatted thumbnail.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2012/05/treeuis-adding-decorations-to-cells.html">TreeUIs: Adding Decorations to Cells</a></span><br>May 2012</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/plaf/DecoratedTreeUI.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/DecoratedTreeUI.png" width="154" height="85" alt="Demo Graphic"><p>This new TreeUI adds icons on the right side of a tree that can serve as indicators or buttons. This uses a combination of advanced TreeCellRenderers and MouseListeners, so these decorations do not actually exist in the Swing hierarchy.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2008/11/windows-adding-window-menu.html">Windows: Adding a Window Menu</a></span><br>November 2008</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/window/WindowMenu.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<img align="right" style="padding:8px" src="blurbs/WindowMenu.png" width="76" height="80" alt="Demo Graphic"><p>This article discusses and emulates the "Window" menu found on Macs.
+<br clear=right/>
+
+<table border="0" cellspacing="0px" cellpadding="10px" padding="0px" width="650px">
+	<tr>
+		<td style="background: linear-gradient( rgb(255, 255, 255), rgb(241, 241, 241));border:1px solid rgb(220,220,220);width=100%;height=100%;box-shadow: 0px 1px 3px #888888;">
+			<table width="100%">
+				<tr>
+					<td><span style="font-weight: bold;font-size:110%;}"><a href="http://javagraphics.blogspot.com/2007/04/windows-dragging-made-easy.html">Windows: Dragging Made Easy</a></span><br>April 2007</td>
+					<td style="text-align:right;vertical-align:text-top;"><span style="font-weight: bold;}"><a href="https://mickleness.github.io/pumpernickel/javadoc/com/pump/window/WindowDragger.html">Javadoc</a></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p>Sometimes you want to be able to click and drag a window, palette, dialog etc.
+<br clear=right/>
+
+
+</td></tr></table>
+</div>
+
+</body></html>

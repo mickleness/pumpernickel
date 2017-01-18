@@ -21,14 +21,12 @@ import com.pump.blog.Blurb;
  * @see <a href="http://en.wikipedia.org/wiki/Smoothing">Smoothing</a>
  */
 @Blurb (
-filename = "MouseSmoothing",
 title = "Shapes: Implementing a Freehand Pencil Tool",
 releaseDate = "June 2010",
 summary = "If the user drags the mouse over a <code>JComponent</code>, then you can collect a series of points. "+
 "This project takes those points and replaces the line segments with attractive bezier curves.\n"+
 "<p>This is one of three <a href=\"https://javagraphics.java.net/index.html#ShapeCreationPanelDemo\">ShapeCreationPanelUIs</a>.",
-link = "http://javagraphics.blogspot.com/2010/06/shapes-implementing-freehand-pencil.html",
-sandboxDemo = false
+article = "http://javagraphics.blogspot.com/2010/06/shapes-implementing-freehand-pencil.html"
 )
 public interface MouseSmoothing {
 	

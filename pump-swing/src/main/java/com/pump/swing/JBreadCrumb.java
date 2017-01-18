@@ -17,6 +17,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 
+import com.pump.blog.Blurb;
 import com.pump.plaf.BreadCrumbUI;
 
 /** A navigation UI component to help present and navigate a tree-based
@@ -27,6 +28,13 @@ import com.pump.plaf.BreadCrumbUI;
  * @param <T> the type of data used used to model this series of nodes.
  * @see #PATH_KEY
  */
+@Blurb (
+imageName = "JBreadCrumbDemo.png",
+title = "Navigation: Bread Crumbs",
+releaseDate = "January 2014",
+summary = "A Swing implementation of collapsible bread crumbs.",
+article = "http://javagraphics.blogspot.com/2014/01/navigation-breadcrumbs.html"
+)
 public class JBreadCrumb<T> extends JComponent {
 	private static final long serialVersionUID = 1L;
 

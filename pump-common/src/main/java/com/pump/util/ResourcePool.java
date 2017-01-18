@@ -23,6 +23,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.pump.blog.Blurb;
+
 /** This object manages a pool of resources (arrays and images)
  * for frequent repetitive reuse.
  * <p>Sometimes constantly reallocating
@@ -48,6 +50,13 @@ import java.util.TreeSet;
  * the object back to this pool when finished.
  * @see com.pump.showcase.ResourcePoolDemo
  */
+@Blurb (
+title = "Performance: Constructing Arrays and Images",
+releaseDate = "April 2014",
+summary = "This examines the cost of constructing arrays and BufferedImages, vs caching and reusing existing arrays.\n"+
+"<p>This is intended to be used for highly repetitive tasks (such as batch image processing or rendering work).",
+article = "http://javagraphics.blogspot.com/2014/04/performance-constructing-arrays-and.html"
+)
 public class ResourcePool {
 	
 	private enum Type { IMAGE, FLOAT, INT, DOUBLE, SHORT, LONG, BYTE };

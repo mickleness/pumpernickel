@@ -43,6 +43,7 @@ import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.text.JTextComponent;
 
+import com.pump.blog.Blurb;
 import com.pump.blog.ResourceSample;
 import com.pump.icon.CloseIcon;
 import com.pump.icon.TriangleIcon;
@@ -72,6 +73,14 @@ import com.pump.plaf.RoundTextFieldUI;
 				"com.bric.swing.TextSearchBar.createFirefoxStyleBar(new javax.swing.JTextArea())"
 		},
 		names = {"Safari", "Firefox"} )
+@Blurb (
+imageName = "TextSearch.png",
+title = "Text: Searching JTextComponents",
+releaseDate = "December 2009",
+summary = "This discusses different GUIs for the user to search for a string in a <code>JTextComponent</code>.\n"+
+		"<p>This includes the common search dialog, the model Safari uses and the model Firefox uses.",
+article = "http://javagraphics.blogspot.com/2009/12/text-searching-jtextcomponents.html"
+)
 public class TextSearchBar extends JPanel {
 	private static final long serialVersionUID = 1L;
 	protected static ResourceBundle strings = ResourceBundle.getBundle("com.pump.swing.TextSearchBar");

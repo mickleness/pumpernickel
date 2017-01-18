@@ -12,7 +12,6 @@ package com.pump.showcase;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -38,7 +37,6 @@ import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import com.pump.blog.Blurb;
 import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.SectionContainer.Section;
 
@@ -48,19 +46,6 @@ import com.pump.swing.SectionContainer.Section;
  * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/collapsiblecontainer.gif" style="border:1px solid gray" alt="CollapsibleContainer Animation">
  * 
  */
-@Blurb (
-filename = "CollapsibleContainerDemo",
-title = "Panels: Collapsible Sections",
-releaseDate = "March 2014",
-summary = "A Swing implementation of a vertical series of collapsible panels. "+
-"Panel heights are determined with vertical weights, and as the user toggles the "+
-"visibility of panels: the UI is animated.",
-instructions = "This applet demonstrates the <code>CollapsibleContainer</code>. "+
-"Click each header to toggle its visibility, and observe how the UI animates to "+
-"comply with your instruction.",
-link = "http://javagraphics.blogspot.com/2014/03/panels-collapsible-sections.html",
-sandboxDemo = true
-)
 public class CollapsibleContainerDemo extends JPanel {
 	private static final long serialVersionUID = 1L;
 	

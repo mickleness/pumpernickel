@@ -39,6 +39,7 @@ import javax.swing.text.JTextComponent;
 import com.pump.animation.AnimationReader;
 import com.pump.animation.ResettableAnimationReader;
 import com.pump.awt.MouseTracker;
+import com.pump.blog.Blurb;
 import com.pump.image.ImageLoader;
 import com.pump.io.IOUtils;
 
@@ -56,6 +57,14 @@ import com.pump.io.IOUtils;
  * could be used to capture pixel data from the screen.
  * <P>Note this assumes there is only 1 monitor of interest to record from.
  */
+@Blurb (
+title = "Screen Capture: Recording Java Apps",
+releaseDate = "June 2008",
+summary = "The <a href=\"http://java.sun.com/javase/6/docs/api/java/awt/Robot.html\">Robot</a> class can capture parts of your screen as an image, "+
+"but it can be slow to process so many pixels.  This article ties into the <code>RepaintManager</code> to only capture the areas of interest.\n"+
+"<p>Also this jar can export this animation as a MOV file (using JPEG moving encoding).  All 100% Java.",
+article = "http://javagraphics.blogspot.com/2008/11/screen-capture-recording-java-apps.html"
+)
 public abstract class ScreenCapture {
 
 	/** This monitors the areas that Java repaints, and on request it will

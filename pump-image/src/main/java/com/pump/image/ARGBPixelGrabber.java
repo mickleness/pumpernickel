@@ -32,14 +32,12 @@ import com.pump.blog.Blurb;
  * 
  */
 @Blurb (
-filename = "ARGBPixelGrabber",
 title = "Performance: Studying the PixelGrabber",
 releaseDate = "April 2007",
 summary = "Can we improve on the <a href=\"http://java.sun.com/javase/6/docs/api/index.html?java/awt/image/PixelGrabber.html\"><code>java.awt.PixelGrabber</code></a>?\n"+
 "<p>If you're only working with a <code>BufferedImage</code> and not an abstract <code>Image</code>: "+
 "you might be able to really improve performance with the <code><a href=\"https://javagraphics.java.net/doc/com/bric/image/ARGBPixelGrabber.html\">ARGBPixelGrabber</a></code>.",
-link = "http://javagraphics.blogspot.com/2007/04/pixelgrabber-studying-performance.html",
-sandboxDemo = false
+article = "http://javagraphics.blogspot.com/2007/04/pixelgrabber-studying-performance.html"
 )
 public class ARGBPixelGrabber {
     

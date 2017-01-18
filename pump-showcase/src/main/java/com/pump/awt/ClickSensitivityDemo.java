@@ -29,28 +29,11 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.blog.Blurb;
 import com.pump.swing.BasicConsole;
 
 /** A simple demo program showing off the {@link ClickSensitivityControl}. 
  *
  **/
-@Blurb (
-filename = "ClickEventEnabler",
-title = "Mouse Click Events: Adding Wiggle Room",
-releaseDate = "February 2011",
-summary = "This triggers mouseClicked events even if the mouse moves a few pixels between click and release.",
-instructions = "This applet demonstrates how the <code>ClickEventEnabler.html</code> redefines "+
-"mouse click events to allow for a little bit of mouse movement.\n"+
-"<p>When you click a label: if a MouseEvent.MOUSE_CLICKED event was received then it will "+
-"pulse with a color. So if you click either label and don't move the mouse at all: they will pulse.\n"+
-"<p>However if you press the mouse button, move the cursor a pixel or two, and then release: only "+
-"the second label will pulse.\n"+
-"<p>The tolerance spinner controls the number of pixels you can move the mouse and still receive "+
-"a <code>mouseClicked()</code> notification.",
-link = "http://javagraphics.blogspot.com/2011/02/mouse-click-events-adding-wiggle-room.html",
-sandboxDemo = true
-)
 public class ClickSensitivityDemo extends JPanel {
 	private static final long serialVersionUID = 1L;
 

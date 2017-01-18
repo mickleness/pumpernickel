@@ -37,15 +37,11 @@ import com.pump.blog.Blurb;
  */
 @Deprecated
 @Blurb (
-filename = "FixedWidthTextArea",
 title = "Text: Text Height and GUI Layout",
 releaseDate = "June 2008",
 summary = "This walks through how to find the preferred height of a block of text, "+
 		"and provides a GUI component to display text with a fixed width.",
-instructions = "",
-link = "http://javagraphics.blogspot.com/2008/06/text-height-gui-layout-and-text-boxes.html",
-sandboxDemo = false
-)
+article = "http://javagraphics.blogspot.com/2008/06/text-height-gui-layout-and-text-boxes.html")
 public class FixedWidthTextArea extends JTextArea {
 	private static final long serialVersionUID = 1L;
 	

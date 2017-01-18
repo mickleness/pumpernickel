@@ -98,13 +98,12 @@ import com.pump.blog.Blurb;
  * to create the appropriate <code>ObservableList</code> subclass.
  */
 @Blurb (
-filename = "ObservableList",
 title = "Lists: An Observable List for UIs",
 releaseDate = "July 2012",
 summary = "This article presents a <code>java.util.List</code> implementation designed with "+
 "UI interaction in mind. This includes thread safety, efficiency, and listeners.",
-link = "http://javagraphics.blogspot.com/2012/07/lists-observable-list-for-uis.html",
-sandboxDemo = false
+article = "http://javagraphics.blogspot.com/2012/07/lists-observable-list-for-uis.html",
+javadocLink = true
 )
 public class ObservableList<T> extends AbstractList<T> implements RandomAccess {
 	

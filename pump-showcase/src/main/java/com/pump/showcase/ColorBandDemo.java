@@ -31,7 +31,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.awt.GradientTexturePaint;
-import com.pump.blog.Blurb;
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.swing.ColorWell;
 import com.pump.swing.MagnificationPanel;
@@ -39,21 +38,6 @@ import com.pump.swing.MagnificationPanel;
 /** This small demo app features two horizontal gradients, and each shows
  * below it a zoomed-in image highlighting where pixels change.
  */
-@Blurb (
-filename = "ColorBandDemo",
-title = "Gradients: Avoiding Color Banding",
-releaseDate = "March 2014",
-summary = "This article explores the problem of color banding in linear gradients and presents a partial solution.",
-instructions = "This applet shows two horizontal gradients.\n"+
-"<p>The first uses Java's default gradient implementation, and the second uses the revised "+
-"<code>GradientTexturePaint</code>. Below each is a panel that amplifies where each pixel "+
-"change occurs (toggling between black and gray).\n"+
-"<p>Drag the scrubber (or play the animation) to observe color banding in progress.\n"+
-"<p>This is meant to demonstrate that the second panel shows less severe color banding than Java's "+
-"default implementation.",
-link = "http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html",
-sandboxDemo = true
-)
 public class ColorBandDemo extends JPanel {
 	private static final long serialVersionUID = 1L;
 

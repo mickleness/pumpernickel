@@ -18,6 +18,7 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
+import com.pump.blog.Blurb;
 import com.pump.io.Token;
 import com.pump.io.java.JavaParser.CharToken;
 import com.pump.io.java.JavaParser.CommentToken;
@@ -29,6 +30,14 @@ import com.pump.text.TextComponentHighlighter;
 /** This highlights text using a monospaced formatting scheme similar to the default
  * Eclipse formatting options.
  */
+@Blurb (
+imageName = "JavaTextComponentHighlighterDemo.png",
+title = "Text: Formatting Source Code in Swing",
+releaseDate = "December 2015",
+summary = "This article discusses how to set up a <code>JTextPane</code> to render Java source code with "+
+		"stylized font attributes and line numbers.",
+article = "http://javagraphics.blogspot.com/2015/12/text-formatting-source-code-in-swing.html"
+)
 public class JavaTextComponentHighlighter extends TextComponentHighlighter {
 
 	protected SimpleAttributeSet defaultAttributes;

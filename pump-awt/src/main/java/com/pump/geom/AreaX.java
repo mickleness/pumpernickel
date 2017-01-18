@@ -110,14 +110,11 @@ import com.pump.geom.area.CurveX;
  * @see <a href="https://javagraphics.java.net/areax/">https://javagraphics.java.net/areax/</a>
  */
 @Blurb (
-filename = "AreaX",
 title = "Shapes: Creating an Alternative to the Area Class",
 releaseDate = "August 2010",
 summary = "This project branches off the <code>Area</code> class and optimizes parts of its performance. "+
 "The underlying algorithms are not changed, but (in some cases) the performance is considerably improved.",
-instructions = "",
-link = "https://javagraphics.java.net/areax/",
-sandboxDemo = false
+article = "https://javagraphics.java.net/areax/"
 )
 public class AreaX implements  Shape, Cloneable {
 	public static final int RELATIONSHIP_LHS_CONTAINS = 0;

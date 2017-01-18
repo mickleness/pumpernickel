@@ -10,7 +10,6 @@
  */
 package com.pump.showcase;
 
-import com.pump.blog.Blurb;
 import com.pump.image.transition.BarsTransition2D;
 import com.pump.image.transition.BlendTransition2D;
 import com.pump.image.transition.BlindsTransition2D;
@@ -62,19 +61,6 @@ import com.pump.image.transition.ZoomTransition2D;
  * @see com.pump.showcase.Transition3DDemo
  *
  */
-@Blurb (
-filename = "Transition2D",
-title = "Slideshows: Transitions & SWFs",
-releaseDate = "April 2007",
-summary = "A fun set of transitions defined with a simple vector-graphics-ish "+
-"<a href=\"https://javagraphics.java.net/doc/com/bric/image/transition/Transition2D.html\">architecture</a>.\n"+
-"<p>The demo includes a player and minimal Flash export.",
-instructions = "This applet demonstrates animations using the <code>Transition2D</code> architecture.\n"+
-"<p>Use the JComboBox to select your transition, the spinner to specify your duration, and the auto-looping playback will show you what that transition looks like.\n"+
-"<p>You can also pause the playback and drag the scrubber manually to see how each transition progresses.",
-link = "http://javagraphics.blogspot.com/2007/04/slideshows-transitions-swf.html",
-sandboxDemo = true
-)
 public class Transition2DDemo extends TransitionDemo {
 	private static final long serialVersionUID = 1L;
 

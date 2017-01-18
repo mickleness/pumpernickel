@@ -17,7 +17,6 @@ import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-import com.pump.blog.Blurb;
 import com.pump.util.JVM;
 import com.pump.util.ResourcePool;
 
@@ -25,16 +24,6 @@ import com.pump.util.ResourcePool;
  * whether the ResourcePool marks an improvement or not.
  * 
  **/
-@Blurb (
-filename = "ResourcePoolDemo",
-title = "Performance: Constructing Arrays and Images",
-releaseDate = "April 2014",
-summary = "This examines the cost of constructing arrays and BufferedImages, vs caching and reusing existing arrays.\n"+
-"<p>This is intended to be used for highly repetitive tasks (such as batch image processing or rendering work).",
-instructions = "Just wait a few seconds for the applet to begin. A table of data will be printed to the applet below, ending with \"done\" when finished.",
-link = "http://javagraphics.blogspot.com/2014/04/performance-constructing-arrays-and.html",
-sandboxDemo = true
-)
 public class ResourcePoolDemo extends OutputDemo {
 	
 	

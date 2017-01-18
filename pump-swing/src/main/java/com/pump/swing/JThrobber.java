@@ -13,6 +13,7 @@ package com.pump.swing;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
+import com.pump.blog.Blurb;
 import com.pump.plaf.ThrobberUI;
 
 /** This is a simple animated component used to indicate activity when a
@@ -56,6 +57,18 @@ import com.pump.plaf.ThrobberUI;
  * external device). In contrast to a progress bar, a throbber does not convey how much of the 
  * action has been completed.</blockquote>
  */
+@Blurb (
+imageName = "JThrobber.png",
+title = "Implementing a JThrobber ",
+releaseDate = "March 2014",
+summary = "This introduces <a href=\"https://javagraphics.java.net/doc/com/bric/swing/JThrobber.html\">a new component</a> for "+
+"showing asynchronous indeterminate feedback.\n"+
+"<p>They're vector-based, so while they're originally designed to be less than 20x20 pixels: "+
+"they scale well if you need them to. The article/demo app also include some fun non-standard "+
+"alternative UIs (that were fun to design, but I don't necessarily recommend).",
+article = "http://javagraphics.blogspot.com/2014/03/implementing-jthrobber.html",
+javadocLink = true
+)
 public class JThrobber extends JComponent {
 	private static final long serialVersionUID = 1L;
 

@@ -44,6 +44,7 @@ import javax.imageio.ImageIO;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import com.pump.blog.Blurb;
 import com.pump.reflect.Reflection;
 import com.pump.util.EnumerationIterator;
 
@@ -59,6 +60,14 @@ import com.pump.util.EnumerationIterator;
  * example, this model was originally designed to help export graphics to PPTX files.)
  * 
  */
+@Blurb (
+title = "Graphics2D: Serializable Vector Graphics",
+releaseDate = "December 2008",
+article = "http://javagraphics.blogspot.com/2008/12/graphics2d-serializable-vector-graphics.html",
+summary = "This has been a real life-saver when I'm trying to debug our graphics-rich desktop apps at work.\n"+
+"<p>Whenever something isn't rendering right this lets you see the stack trace of each graphic instruction.",
+javadocLink = true
+)
 public class GraphicsWriter extends AbstractGraphics2D 
 	implements GraphicInstruction, Serializable, MutableTreeNode {
 	

@@ -72,7 +72,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("brushStroke", "Strokes: Brush", new BrushStrokeDemo(), Layout.STRETCH_TO_FIT);
 			addSection("calligraphyStroke", "Strokes: Calligraphy", new CalligraphyStrokeDemo(), Layout.STRETCH_TO_FIT);
 			addSection("charcoalStroke", "Strokes: Charcoal", new CharcoalStrokeDemo(), Layout.STRETCH_TO_FIT);
-			addSection("swivelAnim", "Animation: Swivel Path", new SwivelPathAnimationDemo(this), Layout.STRETCH_TO_FIT);
 			addSection("textEffectAnim", "Animation: Text Effect", new TextEffectDemo(), Layout.STRETCH_TO_FIT);
 			addSection("awtMonitor", "AWT Monitor", new AWTMonitorDemo(), Layout.STRETCH_TO_FIT);
 			addSection("halftoneGradient", "Gradient: Halftone", new HalftoneGradientDemo(), Layout.STRETCH_TO_FIT);

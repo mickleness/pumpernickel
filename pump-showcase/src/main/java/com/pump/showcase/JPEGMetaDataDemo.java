@@ -32,7 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import com.pump.blog.Blurb;
 import com.pump.image.jpeg.JPEGMetaData;
 import com.pump.image.thumbnail.Thumbnail;
 import com.pump.swing.BasicConsole;
@@ -43,16 +42,6 @@ import com.pump.util.JVM;
 /** A simple demo for the {@link JPEGMetaData} class.
  * 
  */
-@Blurb (
-filename = "JPEGMetaData",
-title = "Images: Reading JPEG Thumbnails",
-releaseDate = "March 2010",
-summary = "Most JPEG files have embedded thumbnails.  This features a light parser that fetches "+
-"these thumbnails -- including some thumbnails <code>JAI</code> might miss -- and this new code is "+
-"a fraction of the install size of JAI.",
-link = "http://javagraphics.blogspot.com/2010/03/images-reading-jpeg-thumbnails.html",
-sandboxDemo = true
-)
 public class JPEGMetaDataDemo extends JPanel {
 	private static final long serialVersionUID = 1L;
 

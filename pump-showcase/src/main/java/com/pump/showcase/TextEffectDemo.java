@@ -36,21 +36,10 @@ import com.pump.awt.text.TextEffect;
 import com.pump.awt.text.WaveTextEffect;
 import com.pump.awt.text.WriteTextEffect;
 import com.pump.awt.text.writing.WritingFont;
-import com.pump.blog.Blurb;
 
 /** An applet demonstrating a few simple text effects.
  * 
  */
-@Blurb (
-filename = "TextEffect",
-title = "Text: Effects and Block Shadows",
-releaseDate = "February 2011",
-summary = "Create some fun text effects using block shadows.",
-instructions = "This applet demonstrates a few simple <code>TextEffects</code>.\n"+
-"<p>Type text in the text field and click one of the buttons to see an animation.",
-link = "http://javagraphics.blogspot.com/2011/02/text-effects-and-block-shadows.html",
-sandboxDemo = true
-)
 public class TextEffectDemo extends JPanel {
 	private static final long serialVersionUID = 1L;
 	

@@ -42,6 +42,7 @@ import javax.swing.plaf.PanelUI;
 import com.pump.awt.GradientTexturePaint;
 import com.pump.awt.GradientTexturePaint.Cycle;
 import com.pump.awt.Scribbler;
+import com.pump.blog.Blurb;
 import com.pump.geom.GeneralPathWriter;
 import com.pump.image.BrushedMetalLook;
 import com.pump.util.ObservableProperties;
@@ -83,6 +84,17 @@ import com.pump.util.ObservableProperties.Key;
  * @see com.pump.showcase.DecoratedPanelUIDemo
  * @see <a href="http://javagraphics.blogspot.com/2014/03/panels-improved-panelui.html">Panels: an Improved UI</a>
  */
+@Blurb (
+title = "Panels: an Improved PanelUI",
+releaseDate = "March 2014",
+summary = "This explores a new <code>PanelUI</code> to spruce up panels. This achieves a variety "+
+"of looks, including a textured plastic look (shown to the right), a simple faded drop shadow, "+
+"a modern recessed subpanel with a light bevel shadow, and a hand-torn edge.\n"+
+"<p>The edges are the most important part, and they are achieved with "+
+"a separate <code>javax.swing.Border</code> that can be used independently of this UI.",
+article = "http://javagraphics.blogspot.com/2014/03/panels-improved-panelui.html",
+imageName = "DecoratedPanelUI.png"
+)
 public class DecoratedPanelUI extends PanelUI {
 	
 	/** Create a simple <code>DecoratedPanelUI</code> that is tinted a little bit

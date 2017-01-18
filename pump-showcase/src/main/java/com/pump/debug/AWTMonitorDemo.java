@@ -20,23 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import com.pump.blog.Blurb;
 import com.pump.swing.BasicConsole;
 
 /**
  * This is a simple app demoing the {@link AWTMonitor}
  * 
  */
-@Blurb (
-filename = "AWTMonitor",
-title = "Event Dispatch Thread: Responding to Deadlocks",
-releaseDate = "June 2008",
-summary = "What can you do when your event dispatch thread is blocked?\n"+
-"<P>For starters: this article mentions how to automatically detect this situation and get great console output to help pinpoint the problem. "+
-"Also this delves into a very murky partial solution.  (It has worked multiple times for me, but it uses unsafe deprecated black magic.)",
-link = "http://javagraphics.blogspot.com/2008/06/event-dispatch-thread-responding-to.html",
-sandboxDemo = false
-)
 public class AWTMonitorDemo extends JPanel {
 	
 	JButton lock = new JButton("Lock For 5 Seconds");

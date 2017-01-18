@@ -87,13 +87,11 @@ import com.pump.window.WindowDragger;
  * 
  */
 @Blurb (
-filename = "PreferencePanel",
 title = "Preferences: Aqua-Like Preferences",
 releaseDate = "November 2008",
 summary = "This emulates two types of preferences on Mac: several rows of preferences (like the System "+
 		"Preferences) or one row of preferences (like Mail, Safari, etc.).",
-link = "http://javagraphics.blogspot.com/2008/11/preferences-aqua-like-preferences.html",
-sandboxDemo = true
+article = "http://javagraphics.blogspot.com/2008/11/preferences-aqua-like-preferences.html"
 )
 public class PreferencePanel extends JPanel {
 	private static final long serialVersionUID = 1L;

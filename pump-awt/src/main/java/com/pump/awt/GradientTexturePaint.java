@@ -24,6 +24,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.util.HashMap;
 
+import com.pump.blog.Blurb;
 import com.pump.math.MathG;
 
 /** A linear gradient based on a <code>java.awt.TexturePaint</code>.
@@ -32,6 +33,13 @@ import com.pump.math.MathG;
   * @see <a href="http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients: Avoiding Color Banding</a>
   * @see <a href="http://javagraphics.blogspot.com/2009/11/gradients-boring-discussion.html">Gradients: a Boring Discussion</a>
   */
+@Blurb (
+title = "Gradients: Avoiding Color Banding",
+releaseDate = "March 2014",
+summary = "This article explores the problem of color banding in linear gradients and presents a partial solution.",
+article = "http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html",
+javadocLink = true
+)
 public class GradientTexturePaint implements Paint {
 	
 	/** This is an advanced option only used for testing/debugging.

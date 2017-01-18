@@ -31,12 +31,10 @@ import com.pump.util.JVM;
  * function, but I haven't explored the subject in depth.
  */
 @Blurb (
-filename = "WindowDragger",
 title = "Windows: Dragging Made Easy",
 releaseDate = "April 2007",
 summary = "Sometimes you want to be able to click and drag a window, palette, dialog etc.",
-link = "http://javagraphics.blogspot.com/2007/04/windows-dragging-made-easy.html",
-sandboxDemo = false
+article = "http://javagraphics.blogspot.com/2007/04/windows-dragging-made-easy.html"
 )
 public class WindowDragger extends MouseInputAdapter {	
 	Point mouseLoc;

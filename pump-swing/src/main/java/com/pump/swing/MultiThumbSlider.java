@@ -22,6 +22,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ComponentUI;
 
+import com.pump.blog.Blurb;
 import com.pump.plaf.MultiThumbSliderUI;
 import com.pump.util.JVM;
 
@@ -72,6 +73,18 @@ import com.pump.util.JVM;
  * 
  * @see com.pump.swing.MultiThumbSliderDemo
  */
+@Blurb (
+imageName = "MultiThumbSlider.png",
+title = "Sliders: Creating a Slider with Multiple Thumbs",
+releaseDate = "January 2015",
+summary = "This is a GUI component that mimicks the <code>javax.swing.JSlider</code>, "
+		+ "except it supports an arbitrary number of thumbs. There are currently three "
+		+ "UI implementations for this component: one for Apple, one for Windows, and "
+		+ "one for Metal."
+		+ "<p>What happens when thumbs intersect/overlap? There are 3 enums for that: "
+		+ "NUDGE_OTHER, STOP_AGAINST, and JUMP_OVER_OTHER.",
+article = "http://javagraphics.blogspot.com/2015/01/sliders-creating-slider-with-multiple.html"
+)
 public class MultiThumbSlider<T> extends JComponent {
 	private static final long serialVersionUID = 1L;
 	

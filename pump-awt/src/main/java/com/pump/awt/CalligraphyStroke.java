@@ -14,6 +14,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 
+import com.pump.blog.Blurb;
 import com.pump.geom.GeneralPathWriter;
 
 /**
@@ -21,7 +22,15 @@ import com.pump.geom.GeneralPathWriter;
  * <P>
  * The angle of the pen (or nib) is fixed.
  * 
+ * @see CalligraphyPathWriter
  */
+@Blurb (
+title = "Strokes: a Calligraphy Stroke",
+releaseDate = "May 2009",
+summary = "A stroke that resembles a nib at a fixed angle.",
+article = "http://javagraphics.blogspot.com/2009/05/strokes-calligraphy-stroke.html",
+imageName = "CalligraphyStroke.png"
+)
 public class CalligraphyStroke implements Stroke {
 
 	/** The width of this stroke in pixels. */

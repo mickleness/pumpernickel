@@ -46,26 +46,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeListener;
 
 import com.pump.audio.AudioPlayer;
-import com.pump.blog.Blurb;
 import com.pump.icon.MusicIcon;
 import com.pump.plaf.CloseDecoration;
 import com.pump.plaf.DecoratedListUI;
 import com.pump.plaf.DecoratedListUI.ListDecoration;
 import com.pump.swing.AudioPlayerComponent;
 
-@Blurb (
-filename = "SoundList",
-title = "ListUIs: Adding decorations to cells",
-releaseDate = "June 2012",
-summary = "This demonstrates a new ListUI to add decorations to JList cells. "+
-	"The demo emulates Apple's music file icons.",
-instructions = "This applet demonstrates the <code>ListDecoration</code> feature by emulating how Apple's Finder "+
-	"lets you play back audio files.\n"+
-	"<p>(There might be a slight lag between click the play button and hearing audio; that has to do with the audio "+
-	"buffering and not the list UI!)",
-link = "http://javagraphics.blogspot.com/2012/06/listuis-adding-decorations-to-cells.html", 
-sandboxDemo = false
-)
 public class AudioComponentsDemo extends MultiWindowDemo {
 
 	private static final long serialVersionUID = 1L;

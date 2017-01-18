@@ -10,6 +10,7 @@
  */
 package com.pump.math;
 
+import com.pump.blog.Blurb;
 import com.pump.math.function.Function;
 import com.pump.math.function.PiecewiseFunction;
 import com.pump.math.function.PolynomialFunction;
@@ -28,6 +29,14 @@ import com.pump.math.function.PolynomialFunction;
  * of java.lang.Math and com.bric.math.MathG.
  *
  */
+@Blurb (
+title = "Performance: Studying Math",
+releaseDate = "May 2009",
+summary = "The <code><a href=\"http://java.sun.com/javase/6/docs/api/java/lang/Math.html\">java.lang.Math</a></code> "+
+"class was designed with accuracy in mind.\n"+
+"<p>But if you're dealing with graphics: you can probably fudge on some accuracy in exchange for speed.  What methods can be improved?",
+article = "http://javagraphics.blogspot.com/2009/05/math-studying-performance.html"
+)
 public abstract class MathG {
 
 	/** Finds the closest integer that is less than or equal to the argument as a double.

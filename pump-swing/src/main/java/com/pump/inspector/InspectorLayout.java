@@ -13,12 +13,25 @@ package com.pump.inspector;
 import javax.swing.JComponent;
 import javax.swing.JSeparator;
 
+import com.pump.blog.Blurb;
+
 /** This interface adds GUI elements to an inspector. 
  * <P>Currently this assumes the GUI is based in a left-to-right language,
  * although it would not be too hard to change this in the future.
  * <P>Each row/separator is added in a top-to-bottom order.
  * 
  */
+@Blurb (
+imageName = "Inspector.png",
+title = "Layouts: Designing an Inspector",
+releaseDate = "June 2009",
+summary = "This article examines the notion of a well-designed inspector.\n"+
+"<p>It uses <a href=\"https://javagraphics.java.net/doc/com/bric/inspector/InspectorLayout.html\">this interface</a> to "+
+" layout the components, and it presents a few implementations "+
+"of that interface (with varying degrees of success/hackery).",
+article = "http://javagraphics.blogspot.com/2009/06/layouts-designing-inspector.html",
+javadocLink = true
+)
 public interface InspectorLayout {
 	/** Appends a new row containing only 1 object to this inspector.
 	 * 

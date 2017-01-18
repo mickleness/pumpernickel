@@ -28,6 +28,7 @@ import javax.swing.JDialog;
 import javax.swing.SpinnerNumberModel;
 
 import com.pump.awt.Paintable;
+import com.pump.blog.Blurb;
 import com.pump.print.PrintLayout;
 import com.pump.swing.DialogFooter;
 import com.pump.swing.HelpComponent;
@@ -35,6 +36,15 @@ import com.pump.swing.HelpComponent;
 /** This dialog prompts the user to design a PrintLayout object.
  * 
  */
+@Blurb (
+imageName = "PrintLayoutDialog.png",
+title = "Print Dialogs: Laying Out Tiles",
+releaseDate = "November 2008",
+summary = "This introduces <a href=\"https://javagraphics.java.net/doc/com/bric/print/PrintLayout.html\">an object</a> " +
+"to lay out several graphic objects on a sheet of paper, and a dialog to preview and edit this layout.\n" +
+"<p>(Oh: and it prints.)",
+article = "http://javagraphics.blogspot.com/2008/11/print-dialogs-laying-out-tiles.html"
+)
 public class PrintLayoutDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;

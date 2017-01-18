@@ -41,6 +41,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.pump.blog.Blurb;
 import com.pump.icon.EmptyIcon;
 import com.pump.icon.RotatedIcon;
 import com.pump.icon.TriangleIcon;
@@ -67,6 +68,13 @@ import com.pump.plaf.UIEffect;
  * priority-based model. As a use case: consider a gap that has a priority of 1,
  * and a scrollpane that has a priority of 2.
  */
+@Blurb (
+title = "Panels: Collapsible Sections",
+releaseDate = "March 2014",
+summary = "A Swing implementation of a vertical series of collapsible panels. "+
+"Panel heights are determined with vertical weights, and as the user toggles the "+
+"visibility of panels: the UI is animated.",
+article = "http://javagraphics.blogspot.com/2014/03/panels-collapsible-sections.html")
 public class CollapsibleContainer extends SectionContainer {
 	private static final long serialVersionUID = 1L;
 

@@ -42,7 +42,6 @@ import javax.imageio.stream.ImageInputStream;
 import javax.swing.JPanel;
 
 import com.pump.awt.Dimension2D;
-import com.pump.blog.Blurb;
 import com.pump.image.pixel.GenericImageSinglePassIterator;
 import com.pump.math.MathG;
 import com.pump.swing.BasicConsole;
@@ -53,15 +52,8 @@ import com.pump.util.JVM;
  * <p>The original incentive for this comparison was to test the
  * GenericImageSinglePassIterator class.
  *
+ * TODO: this is currently in the image project, but it should be in the showcase project
  */
-@Blurb (
-filename = "ScalingJPEGDemo",
-title = "Images: Scaling JPEGs and PNGs",
-releaseDate = "May 2011",
-summary = "Need to scale megapixel JPEGs on-the-fly without loading them entirely into memory? This might just do the trick.",
-link = "http://javagraphics.blogspot.com/2011/05/images-scaling-jpegs-and-pngs.html",
-sandboxDemo = true
-)
 public class ScalingJPEGDemo {
 
 	static abstract class ScalingReader {

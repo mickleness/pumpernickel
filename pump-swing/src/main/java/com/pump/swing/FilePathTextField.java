@@ -26,15 +26,6 @@ import com.pump.plaf.LabelCellRenderer;
 /** A text field for file paths that autocompletes matching file names.
  * 
  */
-@Blurb (
-filename = "FilePathTextField",
-title = "Text Field: Autocomplete File paths",
-releaseDate = "TBA",
-summary = "This text field helps autopopulate with valid file paths, and [when finished] "+
-"should offer a popup menu of options (like an autocompleting URL field).",
-scrapped = "This is unfinished, but partially functional.",
-sandboxDemo = false
-)
 public class FilePathTextField extends AutocompleteTextField<File> {
 	private static final long serialVersionUID = 1L;
 	

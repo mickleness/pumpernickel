@@ -36,7 +36,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import com.pump.blog.Blurb;
 import com.pump.image.bmp.BmpDecoder;
 import com.pump.image.bmp.BmpEncoder;
 import com.pump.image.thumbnail.Thumbnail;
@@ -52,15 +51,6 @@ import com.pump.util.JVM;
  * <p>Also the BMP image itself is displayed in a separate window so you can
  * visually confirm that the results are what you expect.
  */
-@Blurb (
-filename = "BmpComparisonDemo",
-title = "Images: BMPs and Thumbnails",
-releaseDate = "June 2010",
-summary = "This provides an efficient mechanism for creating BMP thumbnails, "+
-"and a crude BMP decoder/encoder.",
-link = "http://javagraphics.blogspot.com/2010/06/images-bmps-and-thumbnails.html",
-sandboxDemo = true
-)
 public class BmpComparisonDemo extends JPanel {
 	private static final long serialVersionUID = 1L;
 

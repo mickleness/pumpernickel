@@ -24,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
-import com.pump.blog.Blurb;
 import com.pump.plaf.PlafPaintUtils;
 import com.pump.plaf.TexturePaintPanelUI;
 import com.pump.swing.PartialLineBorder;
@@ -34,17 +33,6 @@ import com.pump.util.JVM;
 /** A demo app for the {@link CustomizedToolbar}.
  *
  */
-@Blurb (
-filename = "CustomizedToolbar",
-title = "Customize Toolbar: Implementing Mac-Like Toolbars",
-releaseDate = "June 2008",
-summary = "In lots of Apple's software there's a handy menu option called \"Customize Toolbar\" that "+
-"lets users drag and drop components in a toolbar.  It's functional <i>and</i> great eye candy.\n"+
-"<p>This article presents a similar mechanism for Java.  A single thumbnail doesn't do justice to this feature, but "+
-"if you go to the article you'll see a screencast.",
-link = "http://javagraphics.blogspot.com/2008/06/customize-toolbar-implementing-mac-like.html",
-sandboxDemo = true
-)
 public class CustomizedToolbarDemo extends JPanel {
 	private static final long serialVersionUID = 1L;
 

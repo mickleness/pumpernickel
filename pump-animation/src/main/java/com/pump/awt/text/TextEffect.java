@@ -13,7 +13,15 @@ package com.pump.awt.text;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 
+import com.pump.blog.Blurb;
+
 /** This is a common interface for visual text effects. */
+@Blurb (
+title = "Text: Effects and Block Shadows",
+releaseDate = "February 2011",
+summary = "Create some fun text effects using block shadows.",
+article = "http://javagraphics.blogspot.com/2011/02/text-effects-and-block-shadows.html",
+imageName = "TextEffect.png")
 public interface TextEffect {
 	
 	/** Paint this effect.
