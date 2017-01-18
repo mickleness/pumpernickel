@@ -45,8 +45,7 @@ title = "ListUIs: Adding decorations to cells",
 releaseDate = "June 2012",
 summary = "This demonstrates a new ListUI to add decorations to JList cells. "+
 	"The demo emulates Apple's music file icons.",
-article = "http://javagraphics.blogspot.com/2012/06/listuis-adding-decorations-to-cells.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2012/06/listuis-adding-decorations-to-cells.html"
 )
 public class DecoratedListUI extends BasicListUI {
 	

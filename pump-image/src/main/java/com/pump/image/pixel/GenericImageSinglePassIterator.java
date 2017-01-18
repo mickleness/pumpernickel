@@ -65,8 +65,7 @@ import com.pump.util.PushPullQueue;
 title = "Images: Scaling JPEGs and PNGs",
 releaseDate = "May 2011",
 summary = "Need to scale megapixel JPEGs on-the-fly without loading them entirely into memory? This might just do the trick.",
-article = "http://javagraphics.blogspot.com/2011/05/images-scaling-jpegs-and-pngs.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2011/05/images-scaling-jpegs-and-pngs.html"
 )
 public abstract class GenericImageSinglePassIterator implements PixelIterator {
 	

@@ -34,7 +34,6 @@ title = "Images: Scaling Down",
 releaseDate = "June 2010",
 summary = "This improves the image quality and memory allocation when scaling large <code>BufferedImages</code> to thumbnails.",
 article = "http://javagraphics.blogspot.com/2010/06/images-scaling-down.html",
-javadocLink = true,
 imageName = "Scaling.png"
 )
 public class Scaling {

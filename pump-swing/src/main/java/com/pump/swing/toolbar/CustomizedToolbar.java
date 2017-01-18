@@ -88,8 +88,7 @@ summary = "In lots of Apple's software there's a handy menu option called \"Cust
 "lets users drag and drop components in a toolbar.  It's functional <i>and</i> great eye candy.\n"+
 "<p>This article presents a similar mechanism for Java.  A single thumbnail doesn't do justice to this feature, but "+
 "if you go to the article you'll see a screencast.",
-article = "http://javagraphics.blogspot.com/2008/06/customize-toolbar-implementing-mac-like.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2008/06/customize-toolbar-implementing-mac-like.html"
 )
 public class CustomizedToolbar extends JPanel {
 	private static final long serialVersionUID = 1L;

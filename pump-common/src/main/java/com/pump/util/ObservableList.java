@@ -102,8 +102,7 @@ title = "Lists: An Observable List for UIs",
 releaseDate = "July 2012",
 summary = "This article presents a <code>java.util.List</code> implementation designed with "+
 "UI interaction in mind. This includes thread safety, efficiency, and listeners.",
-article = "http://javagraphics.blogspot.com/2012/07/lists-observable-list-for-uis.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2012/07/lists-observable-list-for-uis.html"
 )
 public class ObservableList<T> extends AbstractList<T> implements RandomAccess {
 	

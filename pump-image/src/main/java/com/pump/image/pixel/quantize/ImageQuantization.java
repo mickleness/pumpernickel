@@ -28,8 +28,7 @@ summary = "This is a crash course in a pure-Java implementation of color reducti
 "(aka \"image quantization\"). This provides a median cut color reduction algorithm and a few different "+
 "levels of error diffusion to help reduce images from millions of colors to a few hundred.\n"+
 "<p>(This is a prerequisite for writing a gif encoder.)",
-article = "http://javagraphics.blogspot.com/2014/02/images-color-palette-reduction.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2014/02/images-color-palette-reduction.html"
 )
 public abstract class ImageQuantization {
 	

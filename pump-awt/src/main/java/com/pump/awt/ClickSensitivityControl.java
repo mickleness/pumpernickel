@@ -39,8 +39,7 @@ import com.pump.blog.Blurb;
 title = "Mouse Click Events: Adding Wiggle Room",
 releaseDate = "February 2011",
 summary = "This triggers mouseClicked events even if the mouse moves a few pixels between click and release.",
-article = "http://javagraphics.blogspot.com/2011/02/mouse-click-events-adding-wiggle-room.html",
-javadocLink = true)
+article = "http://javagraphics.blogspot.com/2011/02/mouse-click-events-adding-wiggle-room.html")
 public class ClickSensitivityControl {
 	/** The distance between the point where the mouse is
 	 * pressed and where it is released that is allowed to

@@ -25,6 +25,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import com.pump.blog.Blurb;
 import com.pump.geom.GeneralPathWriter;
 import com.pump.geom.InsetPathWriter;
 import com.pump.geom.MeasuredShape;
@@ -33,9 +34,17 @@ import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.IntRGBConverter;
 
 /**
+ * This contains static methods related to a brushed metal look.
  * 
  * @see com.pump.showcase.BrushedMetalDemo
  */
+@Blurb (
+title = "Brushed Metal",
+releaseDate = "April 2013",
+summary = "The <a href=\"https://javagraphics.java.net/doc/com/bric/image/BrushedMetalLook.html\">BrushedMetalLook</a> class provides a few static methods to create BufferedImages "
+		+ "that resemble brushed metal.",
+		imageName = "BrushedMetal.png"
+)
 public class BrushedMetalLook {
 	
 	/** Return a 200x200 tiling image with horizontal brushed metal tinted to a particular color.

@@ -65,8 +65,7 @@ title = "Graphics2D: Serializable Vector Graphics",
 releaseDate = "December 2008",
 article = "http://javagraphics.blogspot.com/2008/12/graphics2d-serializable-vector-graphics.html",
 summary = "This has been a real life-saver when I'm trying to debug our graphics-rich desktop apps at work.\n"+
-"<p>Whenever something isn't rendering right this lets you see the stack trace of each graphic instruction.",
-javadocLink = true
+"<p>Whenever something isn't rendering right this lets you see the stack trace of each graphic instruction."
 )
 public class GraphicsWriter extends AbstractGraphics2D 
 	implements GraphicInstruction, Serializable, MutableTreeNode {

@@ -38,8 +38,7 @@ summary = "This jar includes <i>all</i> my color-related GUI components: "+
 "the <code><a href=\"https://javagraphics.java.net/doc/com/bric/swing/ColorPalette.html\">ColorPalette</a></code>.\n"+
 "<p>I'm not going to argue that this will meet your needs and save the world; but it includes a lot of useful tools "+
 "and it might help (save the world).",
-article = "http://javagraphics.blogspot.com/2010/01/colors-good-gui-for-selecting-colors.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2010/01/colors-good-gui-for-selecting-colors.html"
 )
 @ResourceSample( sample = {"new com.pump.swing.ColorWell( java.awt.Color.blue )"} )
 public class ColorWell extends ColorComponent {

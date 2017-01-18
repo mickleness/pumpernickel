@@ -57,8 +57,7 @@ summary = "This is a GUI component to arrange the "+
 "multiple thumbs and maps each thumb to a <code>Color</code>.\n"+
 "<p>(By default it also leans heavily on some existing color GUI "+
 "widgets I wrote, but you can replace those with your own components if you want to.)",
-article = "http://javagraphics.blogspot.com/2008/05/gradients-gui-widget-to-design-them.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2008/05/gradients-gui-widget-to-design-them.html"
 )
 public class GradientSlider extends MultiThumbSlider<Color> {
 

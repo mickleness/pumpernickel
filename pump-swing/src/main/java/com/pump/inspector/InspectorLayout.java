@@ -29,8 +29,7 @@ summary = "This article examines the notion of a well-designed inspector.\n"+
 "<p>It uses <a href=\"https://javagraphics.java.net/doc/com/bric/inspector/InspectorLayout.html\">this interface</a> to "+
 " layout the components, and it presents a few implementations "+
 "of that interface (with varying degrees of success/hackery).",
-article = "http://javagraphics.blogspot.com/2009/06/layouts-designing-inspector.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2009/06/layouts-designing-inspector.html"
 )
 public interface InspectorLayout {
 	/** Appends a new row containing only 1 object to this inspector.

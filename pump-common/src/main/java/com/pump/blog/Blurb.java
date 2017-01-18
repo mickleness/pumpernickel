@@ -35,7 +35,4 @@ public @interface Blurb {
 
 	/** This optional attribute is the image file name shown on the index page. */
 	String imageName() default "";
-	
-	/** If true then this blurb automatically includes a link to the javadoc of the class this Blurb is attached to. */
-	boolean javadocLink() default false;
 }

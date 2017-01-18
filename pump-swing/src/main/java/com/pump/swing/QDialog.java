@@ -185,8 +185,7 @@ summary = "I find the <code>JOptionPane</code> hard to work with sometimes.  If 
 "escape, etc. -- you might just want to make a "+
 "<a href=\"https://javagraphics.java.net/doc/com/bric/swing/QDialog.html\">new model</a>.\n"+
 "<p>Really: check out the javadocs for this one.  There's a lot of research/explanation in there.",
-article = "http://javagraphics.blogspot.com/2008/06/joptionpane-making-alternative.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2008/06/joptionpane-making-alternative.html"
 )
 public class QDialog extends JDialog 
 {

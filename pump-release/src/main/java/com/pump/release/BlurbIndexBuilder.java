@@ -41,6 +41,11 @@ public class BlurbIndexBuilder {
 			return b.title().compareTo(o.blurb.getBlurb().title());
 		}
 		
+		@Override
+		public String toString() {
+			return blurb.getBlurbClass().getName();
+		}
+		
 		/** Express this blurb as a snippet of HTML. */
 		public String getHTML() {
 			Blurb b = blurb.getBlurb();
@@ -77,7 +82,12 @@ public class BlurbIndexBuilder {
 				
 				stringWriter.append("\t\t\t\t\t<td style=\"text-align:right;vertical-align:text-top;\"><span style=\"font-weight: bold;}\">");
 				Class blurbClass = blurb.getBlurbClass();
-				String javadocUrl = "https://mickleness.github.io/pumpernickel/javadoc/" + blurbClass.getName().replace(".", "/") + ".html";
+				String javadocUrl;
+				if(blurbClass.getName().endsWith("package-info")) {
+					javadocUrl = "https://mickleness.github.io/pumpernickel/javadoc/" + blurbClass.getName().replace(".", "/").replace("package-info",  "package-summary") + ".html";
+				} else {
+					javadocUrl = "https://mickleness.github.io/pumpernickel/javadoc/" + blurbClass.getName().replace(".", "/") + ".html";
+				}
 				stringWriter.append("<a href=\"" + javadocUrl + "\">Javadoc</a>");
 				stringWriter.append("</span></td>\n");
 			}
@@ -134,7 +144,7 @@ public class BlurbIndexBuilder {
 		
 		StringBuilder sb = new StringBuilder();
 		for(BlurbWriteup w : writeups) {
-			sb.append(w.getHTML()+"\n");
+			sb.append(w.getHTML()+"\n<br>\n");
 		}
 		String indexText = templateString.replace("<!insertTable>", sb.toString());
 

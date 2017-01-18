@@ -49,8 +49,7 @@ releaseDate = "April 2007",
 summary = "I never did trust <a href=\"http://download.oracle.com/javase/6/docs/api/java/awt/MediaTracker.html\">MediaTracker</a>. "+
 "(Why does it require a <code>java.awt.Component</code> to tell if an image is loaded?)\n"+
 "<p>Here I wrote my own class that converts abstract <code>java.awt.Images</code> into <code>BufferedImages</code>.",
-article = "http://javagraphics.blogspot.com/2007/04/images-studying-mediatracker.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2007/04/images-studying-mediatracker.html"
 )
 public class ImageLoader {
 	private static boolean debug = false;

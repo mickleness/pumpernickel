@@ -32,8 +32,7 @@ releaseDate = "March 2010",
 summary = "Most JPEG files have embedded thumbnails.  This features a light parser that fetches "+
 "these thumbnails -- including some thumbnails <code>JAI</code> might miss -- and this new code is "+
 "a fraction of the install size of JAI.",
-article = "http://javagraphics.blogspot.com/2010/03/images-reading-jpeg-thumbnails.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2010/03/images-reading-jpeg-thumbnails.html"
 )
 public class JPEGMetaData {
 	

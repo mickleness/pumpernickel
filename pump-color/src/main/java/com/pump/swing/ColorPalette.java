@@ -32,8 +32,7 @@ imageName = "ColorPalette.png",
 title = "Colors: a ColorPalette",
 releaseDate = "January 2010",
 summary = "This is an isolated GUI component from <a href=\"http://javagraphics.blogspot.com/2010/01/colors-good-gui-for-selecting-colors.html\">this article</a>.\n"+
-"<p>This app shows the progression of several different concepts for ColorPalettes.  (Hopefully each one is an improvement over the previous...)",
-javadocLink = true
+"<p>This app shows the progression of several different concepts for ColorPalettes.  (Hopefully each one is an improvement over the previous...)"
 )
 @ResourceSample( sample = { "new com.bric.swing.ColorPalette( java.awt.Color.blue )"} )
 public class ColorPalette extends ColorComponent {

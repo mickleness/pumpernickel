@@ -44,5 +44,7 @@ public class ReleaseApp {
 		
 		System.out.println();
 		System.out.println("Done.");
+		
+		System.exit(0);
 	}
 }

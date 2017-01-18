@@ -93,7 +93,6 @@ summary = "Sure the buttons in <a href=\"http://developer.apple.com/mac/library/
 	"<code>ButtonUIs</code>, and provides around 10 UI's to choose from. "+
 	"(But you can make more if you want to...) Also each <code>ButtonUI</code> can be turned into a <code>ComboBoxUI</code>.",
 article = "http://javagraphics.blogspot.com/2009/08/buttons-new-uis.html",
-javadocLink = true,
 imageName = "FilledButtonUI.png"
 )
 public abstract class FilledButtonUI extends ButtonUI implements PositionConstants {

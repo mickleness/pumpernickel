@@ -53,7 +53,6 @@ summary = "Take a <a href=\"http://java.sun.com/javase/6/docs/api/index.html?jav
 "Voila!  You have a GUI widget for angles.\n"+
 "<P>Comes in Aqua and non-Aqua flavors.",
 article = "http://javagraphics.blogspot.com/2008/05/angles-need-gui-widget-for-angles.html",
-javadocLink = true,
 imageName = "AngleSliderUI.png"
 )
 public class AngleSliderUI extends SliderUI {

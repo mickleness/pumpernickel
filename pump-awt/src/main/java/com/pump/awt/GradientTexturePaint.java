@@ -37,8 +37,7 @@ import com.pump.math.MathG;
 title = "Gradients: Avoiding Color Banding",
 releaseDate = "March 2014",
 summary = "This article explores the problem of color banding in linear gradients and presents a partial solution.",
-article = "http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html"
 )
 public class GradientTexturePaint implements Paint {
 	

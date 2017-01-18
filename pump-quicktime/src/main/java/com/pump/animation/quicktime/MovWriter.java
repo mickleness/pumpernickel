@@ -56,8 +56,7 @@ summary = "This article presents a class that can write a .mov file as a series 
 "images and PCM audio.\n" +
 "<p>This movie uses a combination of JPG/PNG and WAV encoding, which is very poor " +
 "compression.  But this format is not subject to nasty patent/royalty issues.",
-article = "http://javagraphics.blogspot.com/2008/06/movies-writing-mov-files-without.html",
-javadocLink = false
+article = "http://javagraphics.blogspot.com/2008/06/movies-writing-mov-files-without.html"
 )
 public abstract class MovWriter {
 	

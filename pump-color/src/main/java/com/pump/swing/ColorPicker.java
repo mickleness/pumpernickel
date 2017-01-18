@@ -78,8 +78,7 @@ summary = "This is a Photoshop-style color choosing dialog.\n"+
 "<p>You can pull some parts of it apart for customization, but out-of-the-box it "+
 "offers a great interface if you're dealing with a power user.\n"+
 "<p>Of course: all dialogs are at least slightly evil, and they should be used with care...",
-article = "http://javagraphics.blogspot.com/2007/04/jcolorchooser-making-alternative.html",
-javadocLink = true
+article = "http://javagraphics.blogspot.com/2007/04/jcolorchooser-making-alternative.html"
 )
 public class ColorPicker extends JPanel {
 	private static final long serialVersionUID = 3L;

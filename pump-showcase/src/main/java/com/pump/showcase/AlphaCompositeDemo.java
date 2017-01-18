@@ -61,8 +61,7 @@ releaseDate = "October 2009",
 summary = "This is a very short article with a little hands-on demo of how the different <code><a href=\"http://download.oracle.com/javase/6/docs/api/java/awt/AlphaComposite.html\">AlphaComposite</a></code> types interact.\n"+
 "<p>This doesn't necessarily teach anything or present new ideas; it's just a quick guide to consult if you need it.",
 article = "http://javagraphics.blogspot.com/2009/10/alphacomposites-which-does-what.html",
-imageName = "CompositeDemo.png",
-javadocLink = true
+imageName = "CompositeDemo.png"
 )
 @ResourceSample( sample="new com.bric.awt.CompositeDemo()" )
 public class AlphaCompositeDemo extends JPanel {

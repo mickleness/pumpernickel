@@ -23,7 +23,6 @@ releaseDate = "April 2014",
 summary = "This explores how to render <code>BufferedImages</code> through <code>PerspectiveTransforms</code>, "+
 "and offers a few new 3D-based transitions.",
 article = "http://javagraphics.blogspot.com/2014/05/images-3d-transitions-and.html",
-javadocLink = true,
 imageName = "Transition3D.png")
 public abstract class Transition3D extends AbstractTransition {
 
