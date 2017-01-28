@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
+import javax.swing.JComponent;
+
 import com.pump.data.encoder.ValueEncoder;
 
 /**
@@ -156,10 +158,71 @@ public class Key<T> implements CharSequence, Serializable {
 			return (T) attributes.put(toString(), value);
 		}
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+
+	@SuppressWarnings({ "unchecked" })
+	public T putClientProperty(JComponent jcomponent, T value) {
+		validate(value);
+		
+		String str = toString();
+		T returnValue = (T) jcomponent.getClientProperty(str);
+		jcomponent.putClientProperty(str, value);
+		
+		return returnValue;
+	}
+
+	/**
+	 * Return the value of this key based on the map provided, or
+	 * {@link #getDefaultValue()} is the map doesn't contain the requested value.
+	 * 
+	 * @param attributes the attributes to inspect.
+	 * @return the value of this key based on the map provided.
+	 */
+	@SuppressWarnings({ "rawtypes" })
 	public T get(Map attributes) {
-		return (T) attributes.get(toString());
+		return get(attributes, true);
+	}
+	
+	/**
+	 * Return the value of this key based on the map provided.
+	 * 
+	 * @param attributes the attributes to inspect.
+	 * @param applyDefaultValue if true and the map doesn't contain the key,
+	 * then {@link #getDefaultValue()} is returned.
+	 * @return the value of this key based on the map provided.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public T get(Map attributes,boolean applyDefaultValue) {
+		T value = (T) attributes.get(toString());
+		if(value==null && applyDefaultValue)
+			value = getDefaultValue();
+		return value;
+	}
+
+	/**
+	 * Return the value of this key in a jcomponent's client properties,
+	 * or {@link #getDefaultValue()} if the value is undefined.
+	 * 
+	 * @param jcomponent component with the client properties to inspect
+	 * @return the value of this key based on the map provided.
+	 */
+	public T getClientProperty(JComponent jcomponent) {
+		return getClientProperty(jcomponent, true);
+	}
+	
+	/**
+	 * Return the value of this key in a jcomponent's client properties.
+	 * 
+	 * @param jcomponent component with the client properties to inspect
+	 * @param applyDefaultValue if true and the map doesn't contain the key,
+	 * then {@link #getDefaultValue()} is returned.
+	 * @return the value of this key based on the map provided.
+	 */
+	@SuppressWarnings({ "unchecked" })
+	public T getClientProperty(JComponent jcomponent,boolean applyDefaultValue) {
+		T value = (T) jcomponent.getClientProperty(toString());
+		if(value==null && applyDefaultValue)
+			value = getDefaultValue();
+		return value;
 	}
 
 	/**
@@ -230,7 +293,7 @@ public class Key<T> implements CharSequence, Serializable {
 	public T get(Preferences prefs,T defaultValue) {
 		String value = prefs.get(getName(), null);
 		if(value==null) {
-			return defaultValue;
+			return getDefaultValue();
 		}
 		
 		return getEncoder().parse(value);
