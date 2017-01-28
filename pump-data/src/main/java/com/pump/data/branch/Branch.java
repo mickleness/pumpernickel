@@ -30,9 +30,10 @@ import com.pump.data.Key;
  * keys in these maps, because that offers type safety and possible {@link com.pump.data.BoundsChecker bounds checking}.
  * But that is optional, and it is up to the caller to responsibly make sure keys
  * don't conflict with one other. (For example: if one <code>Key</code> object is named
- * "roomNumber" and relates to an Integer, but another <code>Key</code> object relates to
+ * "roomNumber" and relates to an Integer, but another <code>Key</code> is also
+ * named "roomNumber" and relates to
  * a Short: sooner or later a ClassCastException will probably result as you interact with
- * this data, but internally it is simply keyed on "roomNumber".)
+ * this data, because internally both are simply keyed with the String "roomNumber".)
  * <p>
  * It's important to note that the <code>Revision</code> objects this Branch
  * interacts with are unique to this Branch. Although a <code>Revision</code> may
