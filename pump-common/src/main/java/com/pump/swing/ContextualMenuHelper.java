@@ -217,7 +217,11 @@ public class ContextualMenuHelper {
 	public static void clear(JComponent component) {
 		ContextualMenuHelper cmh = (ContextualMenuHelper)component.getClientProperty(MENU_KEY);
 		if(cmh==null) return;
-		cmh.popup.removeAll();
+		cmh.clear();
+	}
+	
+	public void clear() {
+		popup.removeAll();
 	}
 
 	public void addMenuItem(JMenuItem menuItem)
