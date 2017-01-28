@@ -45,6 +45,15 @@ public class BeanMap {
 	}
 	
 	/**
+	 * Apply all the values in the incoming map.
+	 * 
+	 * @param incomingData a series of key/value pairs to install in this object.
+	 */
+	public void putAll(Map<String, Object> incomingData) {
+		data.putAll(incomingData);
+	}
+	
+	/**
 	 * Return the value associated with a key.
 	 * 
 	 * @param key the key to retrieve the value for.
