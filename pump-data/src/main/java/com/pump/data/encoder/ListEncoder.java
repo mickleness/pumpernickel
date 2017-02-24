@@ -39,6 +39,15 @@ public class ListEncoder<S> extends ValueEncoder<List<S>> {
 		this.elementEncoder = elementEncoder;
 	}
 
+	/**
+	 * Return the encoder responsible for elements in this list.
+	 * 
+	 * @return the encoder responsible for elements in this list.
+	 */
+	public ValueEncoder<S> getElementEncoder() {
+		return elementEncoder;
+	}
+	
 	@Override
 	public List<S> parse(String str) {
 		List<S> returnValue;
