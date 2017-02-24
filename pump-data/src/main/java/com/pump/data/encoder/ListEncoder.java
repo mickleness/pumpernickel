@@ -10,7 +10,10 @@
  */
 package com.pump.data.encoder;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.pump.io.java.JavaEncoding;
 
 public class ListEncoder<S> extends ValueEncoder<List<S>> {
 
@@ -38,8 +41,65 @@ public class ListEncoder<S> extends ValueEncoder<List<S>> {
 
 	@Override
 	public List<S> parse(String str) {
-		// TODO Auto-generated method stub
-		return null;
+		List<S> returnValue;
+		if(elementEncoder.getType().equals(String.class)) {
+			returnValue = (List<S>) parseStringList(str);
+		} else {
+			//TODO: examine more complex values, including nested lists
+			//we can searh opened brackets/parentheses, then quotes, then find their closing pairs, etc.
+			String[] terms = str.split(",");
+			returnValue = new ArrayList<>(terms.length);
+			for(int a = 0; a<terms.length; a++) {
+				S value = elementEncoder.parse(terms[a]);
+				returnValue.add( value );
+			}
+		}
+		
+		return returnValue;
+	}
+
+	private List<String> parseStringList(String str) {
+		List<String> returnValue = new ArrayList<>();
+		StringBuffer sb = new StringBuffer();
+		int i = 0;
+		while(i<str.length()) {
+			while(i<str.length() && Character.isWhitespace(str.charAt(i))) {
+				i++;
+			}
+			
+			if(i>=str.length())
+				break;
+			
+			char ch = str.charAt(i);
+			if(ch!='"')
+				throw new IllegalArgumentException("Unexpected character at start of phrase: "+ch);
+			i++;
+			
+			readValue : while(true) {
+				int j = JavaEncoding.decode(str, i, sb);
+				if(str.substring(i, j).equals("\"")) {
+					returnValue.add( sb.substring(0, sb.length()-1).toString() );
+					sb = new StringBuffer();
+					i = j;
+					break readValue;
+				}
+				i = j;
+			}
+
+			while(i<str.length() && Character.isWhitespace(str.charAt(i))) {
+				i++;
+			}
+			
+			if(i>=str.length())
+				break;
+			
+			ch = str.charAt(i);
+			if(ch!=',')
+				throw new IllegalArgumentException("Unexpected character after phrase: "+ch);
+			i++;
+		}
+		
+		return returnValue;
 	}
 
 	@Override
@@ -51,7 +111,6 @@ public class ListEncoder<S> extends ValueEncoder<List<S>> {
 			if(sb.length()>0) {
 				sb.append(",");
 			}
-			//TODO: look for commas, maybe escape chars in embedded value, maybe give special treatment for the STRING encoder
 			sb.append(encodedElement);
 		}
 		return sb.toString();

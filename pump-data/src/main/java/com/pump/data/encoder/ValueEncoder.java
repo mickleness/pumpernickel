@@ -262,6 +262,10 @@ public abstract class ValueEncoder<T> {
 		this.type = type;
 	}
 	
+	public Class<T> getType() {
+		return type;
+	}
+	
 	public abstract T parse(String str);
 	
 	public abstract String encode(T value);
