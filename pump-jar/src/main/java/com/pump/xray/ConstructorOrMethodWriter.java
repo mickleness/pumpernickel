@@ -64,19 +64,19 @@ public class ConstructorOrMethodWriter extends StreamWriter {
 			for(int a = 0; a<typeVariables.length; a++) {
 				if(a>0)
 					cws.print(", ");
-				cws.print( toString(nameToSimpleName, typeVariables[a]) );
+				cws.print( toString(nameToSimpleName, typeVariables[a], true) );
 			}
 			cws.print(">");
 		}
 		
 		if(returnType!=null) {
-			cws.print(" "+toString(nameToSimpleName, returnType) );
+			cws.print(" "+toString(nameToSimpleName, returnType, false) );
 		}
 		cws.print(" "+name+"(" );
 		for(int a = 0; a<paramTypes.length; a++) {
 			if(a>0)
 				cws.print(", ");
-			String s = toString(nameToSimpleName, paramTypes[a])+" arg"+a;
+			String s = toString(nameToSimpleName, paramTypes[a], false)+" arg"+a;
 			if(isVarArgs && a==paramTypes.length-1) {
 				int i = s.lastIndexOf("[]");
 				s = s.substring(0, i) + "..." + s.substring(i+2);
@@ -89,7 +89,7 @@ public class ConstructorOrMethodWriter extends StreamWriter {
 			for(int a = 0; a<throwsTypes.length; a++) {
 				if(a>0)
 					cws.print(", ");
-				cws.print( toString(nameToSimpleName, throwsTypes[a]) );
+				cws.print( toString(nameToSimpleName, throwsTypes[a], false) );
 			}
 		}
 		if(!writeBody) {

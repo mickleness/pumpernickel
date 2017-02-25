@@ -129,7 +129,7 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 	 * @param t the Type to represent.
 	 * @return java code representing the Type provided.
 	 */
-	protected String toString(Map<String, String> nameToSimpleName, Type t) {
+	protected String toString(Map<String, String> nameToSimpleName, Type t,boolean declaration) {
 		if(t instanceof Class) {
 			return toString( nameToSimpleName, (Class)t);
 		}
@@ -139,13 +139,13 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 			Type owner = p.getOwnerType();
 			Type raw = p.getRawType();
 			StringBuilder sb = new StringBuilder();
-			sb.append( toString(nameToSimpleName, raw) );
+			sb.append( toString(nameToSimpleName, raw, declaration) );
 			if(args.length>0) {
 				sb.append( "<" );
 				for(int a = 0; a<args.length; a++) {
 					if(a>0)
 						sb.append(", ");
-					sb.append(toString(nameToSimpleName, args[a]));
+					sb.append(toString(nameToSimpleName, args[a], false));
 				}
 				sb.append( ">" );
 			}
@@ -155,10 +155,15 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 			String name = v.getName();
 			GenericDeclaration dec = v.getGenericDeclaration();
 			Type[] bounds = v.getBounds();
+			if(declaration && bounds.length==1 && (bounds[0] instanceof Class) && (!bounds[0].equals(Object.class))) {
+				return name+" extends "+((Class)bounds[0]).getName();
+			} else if(declaration && bounds.length==1 && (bounds[0] instanceof ParameterizedType)) {
+				return name+" extends "+toString(nameToSimpleName, bounds[0], false);
+			}
 			return name;
 		} else if(t instanceof GenericArrayType) {
 			GenericArrayType g = (GenericArrayType)t;
-			return toString( nameToSimpleName, g.getGenericComponentType())+"[]";
+			return toString( nameToSimpleName, g.getGenericComponentType(), declaration)+"[]";
 		} else if(t instanceof WildcardType) {
 			WildcardType w = (WildcardType)t;
 			Type[] lowerBounds = w.getLowerBounds();
@@ -166,7 +171,7 @@ public abstract class StreamWriter implements Comparable<StreamWriter> {
 			if(upperBounds.length==1 && upperBounds[0].equals(Object.class)) {
 				return "?";
 			} else if(upperBounds.length==1) {
-				return "? extends "+toString(nameToSimpleName, upperBounds[0]);
+				return "? extends "+toString(nameToSimpleName, upperBounds[0], declaration);
 			}
 		}
 		return t.toString();
