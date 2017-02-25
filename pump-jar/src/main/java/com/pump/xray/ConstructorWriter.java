@@ -10,6 +10,7 @@
  */
 package com.pump.xray;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Modifier;
@@ -39,15 +40,27 @@ public class ConstructorWriter extends ConstructorOrMethodWriter {
 		
 		//for inner classes where the first parameter is the declaring class, trim
 		//that
-		if(constructor.getDeclaringClass().getDeclaringClass()!=null) {
-			Class[] params = constructor.getParameterTypes();
-			if(params.length>0 && params[0].equals(constructor.getDeclaringClass().getDeclaringClass())) {
-				Type[] newParamTypes = new Type[paramTypes.length-1];
-				System.arraycopy(paramTypes, 1, newParamTypes, 0, paramTypes.length-1);
-				paramTypes = newParamTypes;
+		if(isNestedClassWithArtificialFirstArgument(constructor)) {
+			
+			paramTypes = removeFirstElement(Type.class, paramTypes);
+		}
+	}
+	
+	private static <T> T[] removeFirstElement(Class<T> arrayElementType,T[] original) {
+		T[] copy = (T[]) Array.newInstance(arrayElementType, original.length-1);
+		System.arraycopy(original, 1, copy, 0, copy.length);
+		return copy;
+	}
+	
+	private static boolean isNestedClassWithArtificialFirstArgument(Constructor c) {
+		if(c.getDeclaringClass().getDeclaringClass()!=null) {
+			Class[] params = c.getParameterTypes();
+			if(params.length>0 && params[0].equals(c.getDeclaringClass().getDeclaringClass())) {
+				return true;
 			}
 		}
 		
+		return false;
 	}
 	
 	/**
@@ -138,7 +151,12 @@ public class ConstructorWriter extends ConstructorOrMethodWriter {
 				}
 			}
 			
-			Class[] paramTypes = superConstructors[0].getParameterTypes();
+			Class[] paramTypes = superConstructors[0].getParameterTypes();    			
+			if( isNestedClassWithArtificialFirstArgument(superConstructors[0])) {
+				paramTypes = removeFirstElement(Class.class, paramTypes);
+				genericParams = removeFirstElement(Type.class, genericParams);
+			}
+			
 			for(int a = 0; a<paramTypes.length; a++) {
 				if(a>0)
 					cws.print(", ");
