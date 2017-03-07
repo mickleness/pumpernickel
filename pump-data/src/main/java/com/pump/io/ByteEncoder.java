@@ -39,7 +39,6 @@ public abstract class ByteEncoder implements AutoCloseable {
 	 * @see #push(int)
 	 * @see #pull()
 	 */
-	@Override
 	public synchronized void close() {
 		if(closed)
 			return;
