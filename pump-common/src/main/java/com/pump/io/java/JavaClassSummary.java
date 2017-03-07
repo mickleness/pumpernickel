@@ -20,6 +20,8 @@ import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Stack;
@@ -210,5 +212,13 @@ public class JavaClassSummary
 			return null;
 		}
 		return packageName + "." + filename;
+	}
+	
+	/**
+	 * Return the imported classnames. Note here a "name" might be "java.util.*", or
+	 * it might be an explicit classname such as "java.util.HashMap".
+	 */
+	public Collection<String> getImportClassnames() {
+		return new HashSet<>(importedClasses);
 	}
 }
