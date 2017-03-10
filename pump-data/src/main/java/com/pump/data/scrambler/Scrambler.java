@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import java.util.Random;
 import com.pump.io.ByteEncoder;
 import com.pump.io.ChainedByteEncoder;
 import com.pump.math.KeyedRandom;
+import com.pump.util.ResourcePool;
 
 /** 
  * This is a cipher that reencodes data using a key. The encoding algorithm is identical
@@ -69,7 +71,7 @@ import com.pump.math.KeyedRandom;
  * 
  * @see #createEncoder(String, boolean)
  */
-public class Scrambler extends ByteEncoder {
+public class Scrambler extends ChainedByteEncoder {
 	
 	/** The provides a command-line tool to encode and decode files.
 	 * 
@@ -348,350 +350,7 @@ public class Scrambler extends ByteEncoder {
 		 */
 		protected abstract void reorder(List<Integer> srcList,int srcPos,int length,int[] dest,int destPos);
 	};
-	
-	public static interface SubstitutionModel {
 		
-		/** This alters bytes (ranging from [0,255]) so the data is transformed.
-		 * This is invoked on bytes inside a run if this Scrambler was constructed
-		 * with "allowSubstitutions" set to true.
-		 * <p>
-		 * The tricky thing about rearranging bytes is the Scrambler class
-		 * relies on the number of 1's/0's in a byte, so that number may not
-		 * change. For example: the value "00110000" may be transformed
-		 * into "00001100", but it can't be transformed into "11001111".
-		 * 
-		 * @param array the array containing bytes to alter
-		 * @param arrayOffset the first element in the array to alter
-		 * @param length the number of elements in the array to alter
-		 */
-		public void applySubstitutions(int[] array, int arrayOffset, int length);
-		
-		public SubstitutionModel clone();
-		
-		public SubstitutionModel nextLayer();
-	}
-	
-	/**
-	 * This model assumes you have a fixed set of characters you plan on working with.
-	 * <p>
-	 * This is a great fit if you want to obfuscate a registration code (where you are
-	 * sure you understand the original character set), but it is not appropriate if
-	 * arbitrary data might be input.
-	 */
-	public static class CharacterSubstitutionModel implements SubstitutionModel {
-		Map<Integer, List<Integer>> charMap = new HashMap<>();
-		
-
-		public CharacterSubstitutionModel(String chars) {
-			this(chars.toCharArray());
-		}
-
-		private CharacterSubstitutionModel(CharacterSubstitutionModel other) {
-			this.charMap = other.charMap;
-		}
-
-		@Override
-		public CharacterSubstitutionModel clone() {
-			return new CharacterSubstitutionModel(this);
-		}
-		
-		public CharacterSubstitutionModel(char... chars) {
-			charMap = new HashMap<>();
-			for(int a = 0; a<chars.length; a++) {
-				int i = (int)chars[a];
-				if(i<0 || i>=256)
-					throw new RuntimeException("character index "+a+" ("+chars[a]+") cannot be represented as an int within [0,255].");
-				int ones = countOnes(i);
-				
-				List<Integer> k = charMap.get(ones);
-				if(k==null) {
-					k = new ArrayList<>();
-					charMap.put(ones, k);
-				}
-				if(!k.contains(i)) {
-					k.add(i);
-				}
-			}
-		}
-		
-		private CharacterSubstitutionModel(Map<Integer, List<Integer>> charMap) {
-			this.charMap = charMap;
-		}
-
-		public CharacterSubstitutionModel nextLayer() {
-			Map<Integer, List<Integer>> nextMap = new HashMap<>();
-			for(Entry<Integer, List<Integer>> entry : charMap.entrySet()) {
-				List<Integer> list = entry.getValue();
-				List<Integer> copy = new ArrayList<>();
-				copy.addAll(list);
-				Integer e = copy.remove(0);
-				copy.add(e);
-				nextMap.put(entry.getKey(), copy);
-			}
-			return new CharacterSubstitutionModel(nextMap);
-		}
-		
-		private int countOnes(int k) {
-			String s = Integer.toBinaryString(k);
-			int sum = 0;
-			for(int a = 0; a<s.length(); a++) {
-				if(s.charAt(a)=='1')
-					sum++;
-			}
-			return sum;
-		}
-		
-		protected int[] getSections(int sectionCount,int total) {
-			int[] returnValue = new int[sectionCount];
-			int charCount = total;
-			for(int a = 0; a<returnValue.length; a++) {
-				returnValue[a] = charCount / (sectionCount - a);
-				charCount -= returnValue[a];
-			}
-			return returnValue;
-		}
-
-		@Override
-		public void applySubstitutions(int[] array, int arrayOffset, int length) {
-			for(int a = 0; a<length; a++) {
-				int oldValue = array[arrayOffset + a];
-				int ones = countOnes(oldValue);
-				
-				List<Integer> candidates = charMap.get(ones);
-				Integer position = candidates.indexOf(oldValue);
-				if(position==-1)
-					throw new IllegalArgumentException("The byte "+oldValue+" ("+((char)oldValue)+") was not included in the original characters used to created this CharacterSubstitutionModel.");
-				
-				
-				int newPos = candidates.size() - 1 - position;
-				int newValue = candidates.get(newPos);
-				array[arrayOffset + a] = newValue;
-			}
-		}
-	}
-
-	/**
-	 * This SubstitutionModel treats all data as bytes.
-	 * <p>
-	 * This may make data "ugly", because a letter that has a simple
-	 * ASCII representation like 'A' might get mutated to strange punctuation
-	 * or a backspace (ASCII 8).
-	 */
-	public static class ByteSubstitutionModel implements SubstitutionModel {
-
-		private static int[] reverseByteLUT;
-		
-		private int runCtr = 0;
-		
-		public ByteSubstitutionModel() {
-			if(reverseByteLUT==null) {
-				reverseByteLUT = new int[256];
-				//this is a little kludgy, but it's a one-time expense:
-				for(int a = 0; a<reverseByteLUT.length; a++) {
-					String s = Integer.toBinaryString(a);
-					while(s.length()<8) {
-						s = "0"+s;
-					}
-					StringBuffer reverse = new StringBuffer();
-					for(int b = s.length()-1; b>=0; b--) {
-						reverse.append(s.charAt(b));
-					}
-					reverseByteLUT[a] = Integer.parseInt( reverse.toString(), 2 );
-				}
-			}
-		}
-		
-		private ByteSubstitutionModel(ByteSubstitutionModel other) {
-			this.runCtr = other.runCtr;
-		}
-		
-		@Override
-		public ByteSubstitutionModel clone() {
-			return new ByteSubstitutionModel(this);
-		}
-		
-		@Override
-		public void applySubstitutions(int[] array, int arrayOffset, int length) {
-			
-			runCtr = (runCtr+1)%3;
-			switch(runCtr) {
-				case 0:
-					//reverse the middle two bits: 00011000
-					for(int a = 0; a<length; a++) {
-						int d = array[a+arrayOffset];
-						array[a+arrayOffset] = (d & 0xE7) + (reverseByteLUT[d] & 0x18);
-					}
-					break;
-				case 1:
-					//reverse the middle four bits: 00111100
-					for(int a = 0; a<length; a++) {
-						int d = array[a+arrayOffset];
-						array[a+arrayOffset] = (d & 0xC3) + (reverseByteLUT[d] & 0x3C);
-					}
-					break;
-				default:
-					//reverse the middle six bits: 01111110
-					for(int a = 0; a<length; a++) {
-						int d = array[a+arrayOffset];
-						array[a+arrayOffset] = (d & 0x81) + (reverseByteLUT[d] & 0x7E);
-					}
-					break;
-			}
-		}
-
-		@Override
-		public SubstitutionModel nextLayer() {
-			//TODO: improve this?
-			return clone();
-		}
-	}
-	
-	private static ReorderType[] reorderTypes = new ReorderType[] { ReorderType.CUT_DECK, ReorderType.REVERSE_CUT_DECK, ReorderType.REVERSE, ReorderType.REVERSE_PAIRS };
-	private class Run {
-		RunType type = null;
-		List<Integer> bytes = new ArrayList<Integer>();
-		
-		private void reset(RunType type) {
-			this.type = type;
-			bytes.clear();
-		}
-		
-		private int[] encode() {
-			int[] array = new int[bytes.size()];
-			ReorderType reorderType = random!=null ?
-					reorderTypes[ random.nextInt(reorderTypes.length) ] :
-					reorderTypes[ (reorderCycle++)%reorderTypes.length ];
-			int arrayOffset;
-			int length;
-			if(RunType.BOTH_MARKERS.equals(type)) {
-				array[0] = bytes.get(0);
-				array[array.length-1] = bytes.get(bytes.size()-1);
-				length = bytes.size()-2;
-				arrayOffset = 1;
-			} else if (RunType.NO_MARKER.equals(type)) {
-				arrayOffset = 0;
-				length = bytes.size();
-			} else {
-				array[0] = bytes.get(0);
-				length = bytes.size()-1;
-				arrayOffset = 1;
-			}
-			reorderType.reorder(bytes, arrayOffset, length, array, arrayOffset);
-			if(substitutionModel!=null) {
-				substitutionModel.applySubstitutions(array, arrayOffset, length);
-			}
-			return array;
-		}
-	}
-	
-	int capacity = 15;
-	Random random;
-	final Run currentRun = new Run();
-	final SubstitutionModel substitutionModel;
-	int oneCount;
-	int reorderCycle = 0;
-	boolean[] markerLUT;
-	
-	/** Create a Scrambler that uses four 1's as the definition of a marker and does not allow substitutions.
-	 * 
-	 * @param random the Random to use as data is being encoded. This may be null.
-	 */
-	public Scrambler(Random random) {
-		this(random, 4, false);
-	}
-
-	/** Create a Scrambler.
-	 * 
-	 * @param random the Random to use as data is being encoded. This may be null.
-	 * @param oneCount the number of 1's in a byte that are required to flag it as a marker.
-	 * @param allowSubstitutions if false then this only ever rearranges bytes without
-	 * altering them. If true then this transforms bytes so the output may contain bytes not
-	 * present in the original.
-	 */
-	public Scrambler(Random random,int oneCount,boolean allowSubstitutions) {
-		this(random, oneCount, allowSubstitutions ? new ByteSubstitutionModel() : null);
-	}
-
-	/** Create a Scrambler.
-	 * 
-	 * @param random the Random to use as data is being encoded. This may be null.
-	 * @param oneCount the number of 1's in a byte that are required to flag it as a marker.
-	 * @param substitutionModel the optional SubstitutionModel this object may
-	 * apply to replace bytes.
-	 */
-	public Scrambler(Random random,int oneCount,SubstitutionModel substitutionModel) {
-		this.oneCount = oneCount;
-		this.substitutionModel = substitutionModel;
-		this.random = random;
-		resetRun();
-		markerLUT = new boolean[256];
-		for(int a = 0; a<markerLUT.length; a++) {
-			markerLUT[a] = isMarker(a);
-		}
-	}
-	
-	@Override
-	public synchronized void push(int b) {
-		if(closed) throw new IllegalStateException("This Scrambler has already been closed.");
-		
-		boolean completesRun = false;
-		if(markerLUT[b]) {
-			if(RunType.NO_MARKER.equals(currentRun.type)) {
-				pushChunk(currentRun.encode());
-				resetRun();
-			}
-			
-			if(currentRun.type==null) {
-				currentRun.reset( RunType.STARTING_MARKER );
-			} else if(RunType.STARTING_MARKER.equals(currentRun.type)) {
-				currentRun.type = RunType.BOTH_MARKERS;
-				completesRun = true;
-			}
-		} else {
-			if(currentRun.type==null) {
-				currentRun.reset( RunType.NO_MARKER );
-			}
-		}
-		currentRun.bytes.add(b);
-		if(completesRun || currentRun.bytes.size()==capacity) {
-			pushChunk(currentRun.encode());
-			resetRun();
-		}
-	}
-	
-	private void resetRun() {
-		currentRun.reset(null);
-		if(random!=null) {
-			capacity = 2 + random.nextInt(50);
-		}
-	}
-	
-	/** Determine whether a byte is a marker.
-	 * Note this is assumed to be static through the lifetime of this
-	 * Scrambler. (It is used to create a LUT when this Scrambler
-	 * is first constructed.)
-	 * 
-	 * @param b a byte (represented as a [0,255] integer).
-	 * @return true if the byte is considered a marker.
-	 */
-	protected boolean isMarker(int b) {
-		int ones = 0;
-		int z = b;
-		for(int s = 0; s<8; s++) {
-			if( ((z >> s) & 0x01)!=0) {
-				ones++;
-			}
-		}
-		return ones==oneCount;
-	}
-	
-	
-	protected void flush() {
-		if(currentRun.type!=null) {
-			pushChunk(currentRun.encode());
-			resetRun();
-		}
-	}
 
 	/** Create a complex encoder based on a passkey.
 	 * <p>This actually creates dozens of Scrambler instances and
@@ -702,7 +361,7 @@ public class Scrambler extends ByteEncoder {
 	 * @return the complex encoder based on the key.
 	 */
 	public static ByteEncoder createEncoder(String key,boolean allowSubstitutions) {
-		return createEncoder(key, allowSubstitutions ? new ByteSubstitutionModel() : null);
+		return new Scrambler(key, allowSubstitutions ? new ByteSubstitutionModel() : null);
 	}
 
 	/** Create a complex encoder based on a passkey.
@@ -714,38 +373,38 @@ public class Scrambler extends ByteEncoder {
 	 * scramble data.
 	 * @return the complex encoder based on the key.
 	 */
-	public static ByteEncoder createEncoder(String key,SubstitutionModel substitutionModel) {
-		List<Integer> k = new ArrayList<Integer>();
-		Random random = key==null ? new Random(0) : new KeyedRandom(key);
-		for(int a = 0; a<100; a++) {
-			int v = random.nextInt(8);
-			while(k.size()>0 && k.get(k.size()-1)==v) {
-				v = random.nextInt(8);
-			}
-			k.add( v );
+	public Scrambler(String key,ScramblerSubstitutionModel substitutionModel) {
+		List<ScramblerMarkerRule> k = new ArrayList<ScramblerMarkerRule>();
+		for(int a = 0; a<256; a++) {
+			k.add(new ScramblerMarkerRule.Fixed(a));
 		}
-		List<Scrambler> encoders = new ArrayList<Scrambler>();
-		SubstitutionModel currentLayer = substitutionModel;
-		List<SubstitutionModel> substitutionModels = new ArrayList<>();
+		for(int a = 0; a<32; a++) {
+			k.add(new ScramblerMarkerRule.OneCount(a%8));
+		}
+		Random random = key==null ? new Random(0) : new KeyedRandom(key);
+		Collections.shuffle(k, random);
 		
+		List<ScramblerLayer> encoders = new ArrayList<>();
+		ScramblerSubstitutionModel currentLayer = substitutionModel;
+		List<ScramblerSubstitutionModel> substitutionModels = new ArrayList<>();
 		
 		for(int a = 0; a<k.size(); a++) {
 			currentLayer = currentLayer==null ? null : currentLayer.nextLayer();
 			substitutionModels.add(currentLayer);
 			Random r = key==null ? new Random(a) : new KeyedRandom(key+a);
-			encoders.add(new Scrambler(r, k.get(a), substitutionModels.get(a)) );
+			ScramblerLayer layer = new ScramblerLayer(r, k.get(a), substitutionModels.get(a));
+			encoders.add(layer);
 		}
 		for(int a = k.size()-2; a>=0; a--) {
 			currentLayer = substitutionModels.get(a);
 			currentLayer = currentLayer==null ? null : currentLayer.clone();
 			Random r = key==null ? new Random(a) : new KeyedRandom(key+a);
-			encoders.add(new Scrambler(r, k.get(a), currentLayer) );
+			encoders.add(new ScramblerLayer(r, k.get(a), currentLayer) );
 		}
 		
-		Scrambler[] series = encoders.toArray(new Scrambler[encoders.size()]);
+		ScramblerLayer[] series = encoders.toArray(new ScramblerLayer[encoders.size()]);
 		
-		ChainedByteEncoder chain = new ChainedByteEncoder(series);
-		return chain;
+		addEncoders(series);
 	}
 
 	/** Reencode a String using a Scrambler.
@@ -769,7 +428,8 @@ public class Scrambler extends ByteEncoder {
 	 * @return the String data after passing through a Scrambler.
 	 */
 	public static String encode(String key,String charset,String s) {
-		ByteEncoder encoder = createEncoder(key, new CharacterSubstitutionModel(charset.toCharArray()) );
+		ScramblerSubstitutionModel model = new CharacterSubstitutionModel(charset.toCharArray());
+		Scrambler encoder = new Scrambler(key, model );
 		return encode(encoder, s);
 	}
 }

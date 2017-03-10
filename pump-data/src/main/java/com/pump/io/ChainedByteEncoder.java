@@ -1,5 +1,7 @@
 package com.pump.io;
 
+import com.pump.data.scrambler.Scrambler;
+
 /** A series of ByteEncoders linked together.
  * <p>As an abstract example: consider a series of translators.
  * [ German->French, French->English, English->Chinese].
@@ -13,8 +15,16 @@ public class ChainedByteEncoder extends ByteEncoder {
 		this.encoders = encoders;
 	}
 
+	public synchronized void addEncoders(ByteEncoder... newEncoders) {
+		ByteEncoder[] copy = new ByteEncoder[encoders.length + newEncoders.length];
+		System.arraycopy(encoders, 0, copy, 0, encoders.length);
+		System.arraycopy(newEncoders, 0, copy, encoders.length, newEncoders.length);
+		encoders = copy;
+	}
+
 	@Override
 	public synchronized void push(int b) {
+		//TODO: make non-recursive implementation
 		push(encoders.length-1, b);
 	}
 	
