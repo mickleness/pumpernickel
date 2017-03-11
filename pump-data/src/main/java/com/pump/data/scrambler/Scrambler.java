@@ -8,16 +8,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import com.pump.io.ByteEncoder;
+import com.pump.io.ByteEncoder.DataListener;
 import com.pump.io.ChainedByteEncoder;
 import com.pump.math.KeyedRandom;
-import com.pump.util.ResourcePool;
 
 /** 
  * This is a cipher that reencodes data using a key. The encoding algorithm is identical
@@ -71,7 +68,7 @@ import com.pump.util.ResourcePool;
  * 
  * @see #createEncoder(String, boolean)
  */
-public class Scrambler extends ChainedByteEncoder {
+public class Scrambler {
 	
 	/** The provides a command-line tool to encode and decode files.
 	 * 
@@ -357,12 +354,58 @@ public class Scrambler extends ChainedByteEncoder {
 	 * chains them together.
 	 * 
 	 * @param key an optional key to guide the random number generation.
-	 * @param allowSubstitutions if true then characters will be transformed as well as rearranged.
 	 * @return the complex encoder based on the key.
 	 */
-	public static ByteEncoder createEncoder(String key,boolean allowSubstitutions) {
-		return new Scrambler(key, allowSubstitutions ? new ByteSubstitutionModel() : null);
+	public static ByteEncoder createEncoder(String key) {
+		return new Scrambler(key, new ByteSubstitutionModel()).createEncoder();
 	}
+
+	/** Reencode a String using a Scrambler.
+	 * 
+	 * @param key an optional key to guide the random number generation.
+	 * @param s the String to reencode
+	 * @return the String data after passing through a Scrambler.
+	 */
+	public static String encode(String key,String s) {
+		ByteEncoder encoder = createEncoder(key);
+		return ByteEncoder.encode(encoder, s);
+	}
+
+	/** Reencode a String using a Scrambler.
+	 * 
+	 * @param key an optional key to guide the random number generation.
+	 * @param charset a set of characters to use for character substitution.
+	 * @param s the String to reencode
+	 * @return the String data after passing through a Scrambler.
+	 */
+	public static String encode(String key,String charset,String s) {
+		ScramblerSubstitutionModel model = new CharacterSubstitutionModel(charset.toCharArray());
+		Scrambler scrambler = new Scrambler(key, model );
+		return ByteEncoder.encode(scrambler.createEncoder(), s);
+	}
+	
+	static class ScramblerLayerFactory {
+		
+		long randomSeed;
+		ScramblerMarkerRule rule;
+		ScramblerSubstitutionModel substitutionModel;
+		
+		ScramblerLayerFactory(long randomSeed, ScramblerMarkerRule rule, ScramblerSubstitutionModel substitutionModel) {
+			if(rule==null)
+				throw new NullPointerException();
+			if(substitutionModel==null)
+				throw new NullPointerException();
+			
+			this.randomSeed = randomSeed;
+			this.rule = rule;
+			this.substitutionModel = substitutionModel;
+		}
+		public ScramblerLayer createLayer() {
+			return new ScramblerLayer(randomSeed, rule, substitutionModel.clone());
+		}
+	}
+
+	protected List<ScramblerLayerFactory> layers = new ArrayList<>();
 
 	/** Create a complex encoder based on a passkey.
 	 * <p>This actually creates dozens of Scrambler instances and
@@ -384,52 +427,28 @@ public class Scrambler extends ChainedByteEncoder {
 		Random random = key==null ? new Random(0) : new KeyedRandom(key);
 		Collections.shuffle(k, random);
 		
-		List<ScramblerLayer> encoders = new ArrayList<>();
 		ScramblerSubstitutionModel currentLayer = substitutionModel;
 		List<ScramblerSubstitutionModel> substitutionModels = new ArrayList<>();
 		
 		for(int a = 0; a<k.size(); a++) {
 			currentLayer = currentLayer==null ? null : currentLayer.nextLayer();
 			substitutionModels.add(currentLayer);
-			Random r = key==null ? new Random(a) : new KeyedRandom(key+a);
-			ScramblerLayer layer = new ScramblerLayer(r, k.get(a), substitutionModels.get(a));
-			encoders.add(layer);
+			layers.add(new ScramblerLayerFactory(random.nextLong(), k.get(a), substitutionModels.get(a)));
 		}
 		for(int a = k.size()-2; a>=0; a--) {
 			currentLayer = substitutionModels.get(a);
 			currentLayer = currentLayer==null ? null : currentLayer.clone();
-			Random r = key==null ? new Random(a) : new KeyedRandom(key+a);
-			encoders.add(new ScramblerLayer(r, k.get(a), currentLayer) );
+			layers.add(new ScramblerLayerFactory(random.nextLong(), k.get(a), currentLayer));
 		}
-		
-		ScramblerLayer[] series = encoders.toArray(new ScramblerLayer[encoders.size()]);
-		
-		addEncoders(series);
 	}
-
-	/** Reencode a String using a Scrambler.
-	 * 
-	 * @param key an optional key to guide the random number generation.
-	 * @param allowSubstitutions if true then characters will be transformed as well as rearranged.
-	 * @param s the String to reencode
-	 * @return the String data after passing through a Scrambler.
-	 */
-	public static String encode(String key,boolean allowSubstitutions,String s) {
-		ByteEncoder encoder = createEncoder(key, allowSubstitutions);
-		return encode(encoder, s);
-	}
-
-
-	/** Reencode a String using a Scrambler.
-	 * 
-	 * @param key an optional key to guide the random number generation.
-	 * @param charset a set of characters to use for character substitution.
-	 * @param s the String to reencode
-	 * @return the String data after passing through a Scrambler.
-	 */
-	public static String encode(String key,String charset,String s) {
-		ScramblerSubstitutionModel model = new CharacterSubstitutionModel(charset.toCharArray());
-		Scrambler encoder = new Scrambler(key, model );
-		return encode(encoder, s);
+	
+	protected ChainedByteEncoder createEncoder() {
+		ScramblerLayer[] copy = new ScramblerLayer[layers.size()];
+		for(int a = 0; a<layers.size(); a++) {
+			copy[a] = layers.get(a).createLayer();
+		}
+		ChainedByteEncoder chainedEncoders = new ChainedByteEncoder(copy);
+		return chainedEncoders;
+		
 	}
 }

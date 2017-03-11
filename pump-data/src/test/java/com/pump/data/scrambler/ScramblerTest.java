@@ -202,16 +202,13 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 
 	private void testEncodeDecode(String string) {
 		String key = "narwhal";
-		//test both with and without substitutions
-		for(boolean useByteEncoder : new boolean[] { true, false} ) {
-			String encoded = Scrambler.encode(key, useByteEncoder, string);
-			
-			if(string.length()>10) //because a short word (like "odd") can be reshuffled only a few possible ways ("odd", "dod", "ddo")
-				assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
-			System.out.println(encoded);
-			String decoded = Scrambler.encode(key, useByteEncoder, encoded);
-			assertEquals(string, decoded);
-		}
+		String encoded = Scrambler.encode(key, string);
+		
+		if(string.length()>10) //because a short word (like "odd") can be reshuffled only a few possible ways ("odd", "dod", "ddo")
+			assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
+		System.out.println(encoded);
+		String decoded = Scrambler.encode(key, encoded);
+		assertEquals(string, decoded);
 		
 		//also use the character substitution model:
 		Collection<Character> allChars = new TreeSet<>();
@@ -223,11 +220,11 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 			charset.append(ch);
 		}
 
-		String encoded = Scrambler.encode(key, charset.toString(), string);
+		encoded = Scrambler.encode(key, charset.toString(), string);
 		if(string.length()>10)
 			assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
 		System.out.println(encoded);
-		String decoded = Scrambler.encode(key, charset.toString(), encoded);
+		decoded = Scrambler.encode(key, charset.toString(), encoded);
 		assertEquals(string, decoded);
 	}
 	

@@ -135,7 +135,7 @@ public abstract class ByteEncoder implements AutoCloseable {
 	 * @param s the String to reencode
 	 * @return the String data after passing through the encoder.
 	 */
-	protected static String encode(final ByteEncoder encoder,String s) {
+	public static String encode(final ByteEncoder encoder,String s) {
 		InputStream in = null;
 		ByteArrayOutputStream out = null;
 		try {

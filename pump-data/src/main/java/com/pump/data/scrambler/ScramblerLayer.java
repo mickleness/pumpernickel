@@ -200,12 +200,12 @@ public class ScramblerLayer extends ByteEncoder {
 	 * @param substitutionModel the optional SubstitutionModel this object may
 	 * apply to replace bytes.
 	 */
-	public ScramblerLayer(Random random,ScramblerMarkerRule markerRule,ScramblerSubstitutionModel substitutionModel) {
+	public ScramblerLayer(long randomSeed,ScramblerMarkerRule markerRule,ScramblerSubstitutionModel substitutionModel) {
 		if(markerRule==null)
 			throw new NullPointerException();
 		this.markerRule = markerRule;
 		this.substitutionModel = substitutionModel;
-		this.random = random;
+		this.random = new Random(randomSeed);
 		resetRun();
 	}
 	

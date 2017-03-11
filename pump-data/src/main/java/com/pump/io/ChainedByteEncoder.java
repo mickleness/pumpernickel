@@ -1,6 +1,5 @@
 package com.pump.io;
 
-import com.pump.data.scrambler.Scrambler;
 
 /** A series of ByteEncoders linked together.
  * <p>As an abstract example: consider a series of translators.

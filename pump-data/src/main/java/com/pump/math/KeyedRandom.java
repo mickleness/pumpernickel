@@ -4,19 +4,20 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /** This is a Random implementation that is seeded by a String or a BigInteger.
+ * <p>This means you give this a complex seed of arbitrary length, but this 
+ * remains a deterministic pseudo-random number generator (unlike SecureRandom).
  * <p>This delegates to an array of Randoms seeded by 64-bit chunks of the original
  * master seed, so the complexity/variety of this Random is related to the length/size
  * of the master seed.
- * <p>This is intended to give you a reproducible set of random numbers based on a 
- * phrase or password.
  */
 public class KeyedRandom extends Random {
 	private static final long serialVersionUID = 1L;
 
 	protected final Random[] random;
-	int ctr = 0;
+	AtomicInteger ctr = new AtomicInteger(0);
 	
 	/** Create a new KeyedRandom.
 	 * 
@@ -58,17 +59,21 @@ public class KeyedRandom extends Random {
 		}
 		random = list.toArray(new Random[list.size()]);
 	}
+	
+	protected Random[] getRandoms() {
+		return random;
+	}
 
 	@Override
 	public int nextInt(int bound) {
-		ctr = (ctr++)%random.length;
-		return random[ctr].nextInt(bound);
+		int k = ctr.incrementAndGet()%random.length;
+		return random[k].nextInt(bound);
 	}
 
 	@Override
 	protected int next(int bits) {
-		ctr = (ctr++)%random.length;
+		int k = ctr.incrementAndGet()%random.length;
 		int b = 1 << bits;
-		return random[ctr].nextInt( b );
+		return random[k].nextInt( b );
 	}
 }
