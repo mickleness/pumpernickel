@@ -69,6 +69,12 @@ public class KeyedRandom extends Random {
 		int k = ctr.incrementAndGet()%random.length;
 		return random[k].nextInt(bound);
 	}
+	
+	@Override
+    public long nextLong() {
+		int k = ctr.incrementAndGet()%random.length;
+		return random[k].nextLong();
+    }
 
 	@Override
 	protected int next(int bits) {
