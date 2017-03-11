@@ -384,7 +384,7 @@ public class Scrambler {
 
 	protected List<ScramblerLayerFactory> layers = new ArrayList<>();
 
-	public Scrambler(String key) {
+	public Scrambler(CharSequence key) {
 		this(key, null);
 	}
 
