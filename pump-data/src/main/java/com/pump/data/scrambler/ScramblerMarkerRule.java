@@ -12,12 +12,19 @@ public abstract class ScramblerMarkerRule {
 		public boolean isMarker(int i) {
 			return i==marker;
 		}
+		
+		@Override
+		public String toString() {
+			return "["+marker+"]";
+		}
 	}
 
 	public static class OneCount extends ScramblerMarkerRule {
 		boolean[] bytes = new boolean[256];
+		int oneCount;
 		
 		public OneCount(int oneCount) {
+			this.oneCount = oneCount;
 			if(oneCount<0 || oneCount>8)
 				throw new IllegalArgumentException("The argument ("+oneCount+") should be between 0 and 8.");
 			for(int a = 0; a<bytes.length; a++) {
@@ -40,6 +47,11 @@ public abstract class ScramblerMarkerRule {
 
 		public boolean isMarker(int i) {
 			return bytes[i];
+		}
+		
+		@Override
+		public String toString() {
+			return "{"+oneCount+"}";
 		}
 	}
 	
