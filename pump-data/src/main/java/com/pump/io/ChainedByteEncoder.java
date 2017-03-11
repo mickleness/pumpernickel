@@ -1,5 +1,9 @@
 package com.pump.io;
 
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 
 /** A series of ByteEncoders linked together.
  * <p>As an abstract example: consider a series of translators.

@@ -18,6 +18,4 @@ public interface ScramblerSubstitutionModel {
 	public void applySubstitutions(ScramblerMarkerRule markerRule,int[] array, int arrayOffset, int length);
 	
 	public ScramblerSubstitutionModel clone();
-	
-	public ScramblerSubstitutionModel nextLayer();
 }

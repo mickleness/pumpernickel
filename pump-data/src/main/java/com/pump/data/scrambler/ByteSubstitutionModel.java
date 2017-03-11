@@ -76,10 +76,4 @@ public class ByteSubstitutionModel implements ScramblerSubstitutionModel {
 				break;
 		}
 	}
-
-	@Override
-	public ByteSubstitutionModel nextLayer() {
-		//TODO: improve this?
-		return clone();
-	}
 }

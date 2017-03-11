@@ -202,12 +202,13 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 
 	private void testEncodeDecode(String string) {
 		String key = "narwhal";
-		String encoded = Scrambler.encode(key, string);
+		Scrambler scrambler = new Scrambler(key);
+		String encoded = scrambler.encode(string);
 		
 		if(string.length()>10) //because a short word (like "odd") can be reshuffled only a few possible ways ("odd", "dod", "ddo")
 			assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
 		System.out.println(encoded);
-		String decoded = Scrambler.encode(key, encoded);
+		String decoded = scrambler.encode(encoded);
 		assertEquals(string, decoded);
 		
 		//also use the character substitution model:

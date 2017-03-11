@@ -3,7 +3,6 @@ package com.pump.math;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -13,31 +12,12 @@ import com.pump.TestingStrings;
 
 public class KeyedRandomTest extends TestCase implements TestingStrings {
 	
-	/** This simply makes protected inner workings accessible.
-	 */
-	class KeyedRandom2 extends KeyedRandom {
-		private static final long serialVersionUID = 1L;
-
-		public KeyedRandom2(BigInteger key) {
-			super(key);
-		}
-
-		public KeyedRandom2(String key) {
-			super(key);
-		}
-		
-		public Random[] getRandoms() {
-			return random;
-		}
-		
-	}
-	
 	/** This makes sure the KeyedRandom creates an array of Randoms with the expected
 	 * length.
 	 */
 	public void testRandomCount() {
 		BigInteger key = new BigInteger(largeNumber);
-		KeyedRandom2 random = new KeyedRandom2(key);
+		KeyedRandom random = new KeyedRandom(key);
 		int k = (int)( Math.ceil( ((double)key.bitLength())/64.0 )+.5);
 		int j = random.getRandoms().length;
 		assertTrue( "unexpected inner breakdown of Random array ("+k+"!="+j+")", k==j );

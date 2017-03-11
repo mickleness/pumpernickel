@@ -3,6 +3,7 @@ package com.pump.data.scrambler;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -347,29 +348,6 @@ public class Scrambler {
 		 */
 		protected abstract void reorder(List<Integer> srcList,int srcPos,int length,int[] dest,int destPos);
 	};
-		
-
-	/** Create a complex encoder based on a passkey.
-	 * <p>This actually creates dozens of Scrambler instances and
-	 * chains them together.
-	 * 
-	 * @param key an optional key to guide the random number generation.
-	 * @return the complex encoder based on the key.
-	 */
-	public static ByteEncoder createEncoder(String key) {
-		return new Scrambler(key, new ByteSubstitutionModel()).createEncoder();
-	}
-
-	/** Reencode a String using a Scrambler.
-	 * 
-	 * @param key an optional key to guide the random number generation.
-	 * @param s the String to reencode
-	 * @return the String data after passing through a Scrambler.
-	 */
-	public static String encode(String key,String s) {
-		ByteEncoder encoder = createEncoder(key);
-		return ByteEncoder.encode(encoder, s);
-	}
 
 	/** Reencode a String using a Scrambler.
 	 * 
@@ -379,8 +357,7 @@ public class Scrambler {
 	 * @return the String data after passing through a Scrambler.
 	 */
 	public static String encode(String key,String charset,String s) {
-		ScramblerSubstitutionModel model = new CharacterSubstitutionModel(charset.toCharArray());
-		Scrambler scrambler = new Scrambler(key, model );
+		Scrambler scrambler = new Scrambler(key, charset );
 		return ByteEncoder.encode(scrambler.createEncoder(), s);
 	}
 	
@@ -407,6 +384,10 @@ public class Scrambler {
 
 	protected List<ScramblerLayerFactory> layers = new ArrayList<>();
 
+	public Scrambler(String key) {
+		this(key, null);
+	}
+
 	/** Create a complex encoder based on a passkey.
 	 * <p>This actually creates dozens of Scrambler instances and
 	 * chains them together.
@@ -416,7 +397,7 @@ public class Scrambler {
 	 * scramble data.
 	 * @return the complex encoder based on the key.
 	 */
-	public Scrambler(String key,ScramblerSubstitutionModel substitutionModel) {
+	public Scrambler(CharSequence key,CharSequence characterSet) {
 		List<ScramblerMarkerRule> k = new ArrayList<ScramblerMarkerRule>();
 		for(int a = 0; a<256; a++) {
 			k.add(new ScramblerMarkerRule.Fixed(a));
@@ -427,19 +408,29 @@ public class Scrambler {
 		Random random = key==null ? new Random(0) : new KeyedRandom(key);
 		Collections.shuffle(k, random);
 		
-		ScramblerSubstitutionModel currentLayer = substitutionModel;
 		List<ScramblerSubstitutionModel> substitutionModels = new ArrayList<>();
 		
+		char[] charArray = characterSet == null ? null : characterSet.toString().toCharArray();
+		
 		for(int a = 0; a<k.size(); a++) {
-			currentLayer = currentLayer==null ? null : currentLayer.nextLayer();
-			substitutionModels.add(currentLayer);
+			ScramblerSubstitutionModel substitutionModel = characterSet==null ? 
+					new ByteSubstitutionModel() : 
+					new CharacterSubstitutionModel(charArray);
+			substitutionModels.add(substitutionModel);
 			layers.add(new ScramblerLayerFactory(random.nextLong(), k.get(a), substitutionModels.get(a)));
 		}
 		for(int a = k.size()-2; a>=0; a--) {
-			currentLayer = substitutionModels.get(a);
-			currentLayer = currentLayer==null ? null : currentLayer.clone();
-			layers.add(new ScramblerLayerFactory(random.nextLong(), k.get(a), currentLayer));
+			ScramblerSubstitutionModel substitutionModel = substitutionModels.get(a);
+			layers.add(new ScramblerLayerFactory(random.nextLong(), k.get(a), substitutionModel.clone()));
 		}
+	}
+	
+	public InputStream createInputStream(InputStream in) throws IOException {
+		return createEncoder().createInputStream(in);
+	}
+	
+	public OutputStream createOutputStream(OutputStream in) {
+		return createEncoder().createOutputStream(in);
 	}
 	
 	protected ChainedByteEncoder createEncoder() {
@@ -450,5 +441,9 @@ public class Scrambler {
 		ChainedByteEncoder chainedEncoders = new ChainedByteEncoder(copy);
 		return chainedEncoders;
 		
+	}
+
+	public String encode(String string) {
+		return ByteEncoder.encode(createEncoder(), string);
 	}
 }

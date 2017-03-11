@@ -51,23 +51,6 @@ public class CharacterSubstitutionModel implements ScramblerSubstitutionModel {
 		}
 	}
 	
-	private CharacterSubstitutionModel(Map<Integer, List<Integer>> charMap) {
-		this.charMap = charMap;
-	}
-
-	public CharacterSubstitutionModel nextLayer() {
-		Map<Integer, List<Integer>> nextMap = new HashMap<>();
-		for(Entry<Integer, List<Integer>> entry : charMap.entrySet()) {
-			List<Integer> list = entry.getValue();
-			List<Integer> copy = new ArrayList<>();
-			copy.addAll(list);
-			Integer e = copy.remove(0);
-			copy.add(e);
-			nextMap.put(entry.getKey(), copy);
-		}
-		return new CharacterSubstitutionModel(nextMap);
-	}
-	
 	public static int countOnes(int k) {
 		String s = Integer.toBinaryString(k);
 		int sum = 0;

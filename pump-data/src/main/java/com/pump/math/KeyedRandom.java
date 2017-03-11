@@ -26,11 +26,11 @@ public class KeyedRandom extends Random {
 	 * chunks to act as a series of seeds for other <code>java.util.Random</code>
 	 * objects.
 	 */
-	public KeyedRandom(String seed) {
+	public KeyedRandom(CharSequence seed) {
 		this(convertToBigInteger(seed));
 	}
 
-	private static BigInteger convertToBigInteger(String key) {
+	private static BigInteger convertToBigInteger(CharSequence key) {
 		BigInteger i = null;
 		for(int a = 0; a<key.length(); a++) {
 			char ch = key.charAt(a);

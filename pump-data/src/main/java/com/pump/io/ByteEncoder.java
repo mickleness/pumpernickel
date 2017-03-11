@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 /** This object encodes a series of bytes (expressed as [0,255] integers).
@@ -176,5 +177,70 @@ public abstract class ByteEncoder implements AutoCloseable {
 				out.close();
 			} catch(IOException e) {}
 		}
+	}
+	
+	protected class EncodedInputStream extends InputStream {
+		InputStream in;
+		int[] currentChunk;
+		int chunkIndex;
+		
+		protected EncodedInputStream(InputStream in) throws IOException {
+			this.in = in;
+			queueNext();
+		}
+
+		private synchronized void queueNext() throws IOException {
+			chunkIndex = 0;
+			do {
+				currentChunk = pullImmediately();
+				if(currentChunk==null || currentChunk.length>0) {
+					return;
+				}
+				int z = in.read();
+				if(z==-1) {
+					close();
+				} else {
+					push(z);
+				}
+			} while(true);
+		}
+
+		@Override
+		public synchronized int read() throws IOException {
+			if(currentChunk==null)
+				return -1;
+			int value = currentChunk[chunkIndex];
+			chunkIndex++;
+			if(chunkIndex>=currentChunk.length)
+				queueNext();
+			return value;
+		}
+	}
+	
+	class EncodedOutputStream extends OutputStream {
+		OutputStream out;
+		
+		protected EncodedOutputStream(OutputStream out) {
+			this.out = out;
+		}
+
+		@Override
+		public void write(int b) throws IOException {
+			push(b);
+		}
+		
+		@Override
+		public void close() throws IOException {
+			super.close();
+			ByteEncoder.this.close();
+		}
+	}
+
+	public InputStream createInputStream(InputStream in) throws IOException {
+		return new EncodedInputStream(in);
+	}
+
+	public OutputStream createOutputStream(OutputStream out) {
+		return new EncodedOutputStream(out);
 	}
 }
