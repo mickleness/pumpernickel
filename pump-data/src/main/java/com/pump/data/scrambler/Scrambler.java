@@ -79,13 +79,7 @@ public class Scrambler {
 	 * @throws IOException 
 	 */
 	public static void main(String args[]) throws IOException {
-		for(int a = 0; a<10; a++) {
-			String s = "PRODUCT00000"+a;
-			System.out.println(s+" -> "+Scrambler.encode("zanzibar", "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", s));
-		}
-		System.out.println( Scrambler.encode("zanzibar", "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", "D9L0ODD8DDQCH"));
-		
-		/*List<String> argList = new ArrayList<String>();
+		List<String> argList = new ArrayList<String>();
 		for(String s : args) { 
 			if(s.startsWith("-")) s = s.toLowerCase();
 			argList.add(s);
@@ -138,9 +132,6 @@ public class Scrambler {
 			argList.remove(i);
 		}
 		
-		boolean substitutions = argList.remove("-substitutions");
-		
-
 		File dst = null;
 		i = argList.indexOf("-dst");
 		if(i!=-1) {
@@ -167,16 +158,14 @@ public class Scrambler {
 				+ "consider using an industry standard (such as AES) for essential security needs. Note this tool does "
 				+ "not distinguish encryption from decryption. (That is: one pass encrypts data, and another pass "
 				+ "decrypts it.)\n\n"+
-				"Usage: -src filepath [-dst filepath] [-ext scrmbl] [-pwd password] [-substitutions]\n\n"+
+				"Usage: -src filepath [-dst filepath] [-ext scrmbl] [-pwd password]\n\n"+
 				"Options:\n"+
 				"\t-src: the source file you want to encode/decode.\n"+
 				"\t-dst: the destination file you want to write data to.\n"+
 				"\t-ext: if dst is omitted, then the source file will be renamed with this file extension. "
 				+ "\"scrmblr\" is used by default.\n"+
 				"\t-pwd: the password used to encrypt files. If this is not included then you will be prompted "
-				+ "for a password (with echoing disabled) once the program begins.\n"+
-				"\t-substitutions: this flag will activate substitutions. By default the Scrambler only rearranges "
-				+ "bytes, but if this is activated then it also alters bytes for added security.");
+				+ "for a password (with echoing disabled) once the program begins.");
 			System.exit(exitCode);
 		}
 
@@ -213,9 +202,9 @@ public class Scrambler {
 		}
 
 		System.out.println("Source file: "+src.getAbsolutePath());
-		ByteEncoder encoder = createEncoder(password, substitutions);
+		ByteEncoder encoder = new Scrambler(password).createEncoder();
 		write(encoder, src, dst);
-		System.out.println("Successfully encoded to: "+dst.getAbsolutePath());*/
+		System.out.println("Successfully encoded to: "+dst.getAbsolutePath());
 	}
 	
 	public static void write(ByteEncoder encoder,File src,File dst) throws IOException {
