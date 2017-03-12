@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pump.io.ByteEncoder;
-import com.pump.util.ResourcePool;
 
 /** 
  * This is a cipher that reencodes data using a key. The encoding algorithm is identical
@@ -234,14 +233,14 @@ public class ScramblerLayer extends ByteEncoder {
 		}
 	}
 	
-	int[] lastCopy;
 	private synchronized void pushChunk(int[] data, int length) throws IOException {
-		if(lastCopy!=null)
-			ResourcePool.get().put(lastCopy);
-		int[] copy = ResourcePool.get().getIntArray(length);
-		System.arraycopy(data, 0, copy, 0, length);
-		super.pushChunk(copy);
-		lastCopy = copy;
+		if(data.length==length) {
+			super.pushChunk(data);
+		} else {
+			int[] copy = new int[length];
+			System.arraycopy(data, 0, copy, 0, length);
+			super.pushChunk(copy);
+		}
 	}
 
 	private void resetRun() {
