@@ -185,16 +185,6 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 
 	@Test
 	public void testEncodeDecode() {
-		System.out.println( "0: "+CharacterSubstitutionModel.countOnes('0') );
-		System.out.println( "1: "+CharacterSubstitutionModel.countOnes('1') );
-		System.out.println( "2: "+CharacterSubstitutionModel.countOnes('2') );
-		System.out.println( "3: "+CharacterSubstitutionModel.countOnes('3') );
-		System.out.println( "4: "+CharacterSubstitutionModel.countOnes('4') );
-		System.out.println( "5: "+CharacterSubstitutionModel.countOnes('5') );
-		System.out.println( "6: "+CharacterSubstitutionModel.countOnes('6') );
-		System.out.println( "7: "+CharacterSubstitutionModel.countOnes('7') );
-		System.out.println( "8: "+CharacterSubstitutionModel.countOnes('8') );
-		System.out.println( "9: "+CharacterSubstitutionModel.countOnes('9') );
 		for(String s : strings) {
 			testEncodeDecode(s);
 		}
@@ -207,7 +197,6 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 		
 		if(string.length()>10) //because a short word (like "odd") can be reshuffled only a few possible ways ("odd", "dod", "ddo")
 			assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
-		System.out.println(encoded);
 		String decoded = scrambler.encode(encoded);
 		assertEquals(string, decoded);
 		
@@ -224,7 +213,6 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 		encoded = Scrambler.encode(key, charset.toString(), string);
 		if(string.length()>10)
 			assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
-		System.out.println(encoded);
 		decoded = Scrambler.encode(key, charset.toString(), encoded);
 		assertEquals(string, decoded);
 	}
@@ -237,8 +225,6 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 			String s = "PRODUCT00000"+a;
 			String s2 = Scrambler.encode(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", s);
 			encoded.add(s2);
-			
-			System.out.println(s+" -> "+s2);
 		}
 		
 		for(int a = 0; a<encoded.size(); a++) {
