@@ -277,10 +277,11 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 	@Test
 	public void testPredictability() {
 		String password = "barbaric background eyes finishing solitary pitch";
+		Scrambler scrambler = new Scrambler(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 		List<String> encoded = new ArrayList<>();
 		for(int a = 0; a<10; a++) {
 			String s = "PRODUCT00000"+a;
-			String s2 = Scrambler.encode(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", s);
+			String s2 = scrambler.encode(s);
 			encoded.add(s2);
 		}
 		
@@ -290,9 +291,28 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 				int similar = countSimilarLetters(s, encoded.get(b));
 				if(similar==s.length()-1) {
 					fail(s+" and "+encoded.get(b)+" were too similar ("+
-							Scrambler.encode(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", s)+" vs "+
-							Scrambler.encode(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", encoded.get(b))+")");
+							scrambler.encode(s) +" vs "+
+							scrambler.encode(encoded.get(b))+")");
 				}
+			}
+			
+			// make sure if we alter letters by guessing that we don't stumble back into a valid combination:
+			for(int b = 0; b<s.length(); b++) {
+				String pre = s.substring(0,b) + (char) (s.charAt(b) - 1) + s.substring(b+1);
+				String actual = s;
+				String post = s.substring(0,b) +(char) (s.charAt(b) + 1) + s.substring(b+1);
+				
+				try {
+					pre = scrambler.encode(pre);
+				} catch(Exception e) {}
+				actual = scrambler.encode(actual);
+				try {
+					post = scrambler.encode(post);
+				} catch(Exception e) {}
+				
+				assertFalse(pre.contains("PRODUCT"));
+				assertTrue(actual.contains("PRODUCT"));
+				assertFalse(post.contains("PRODUCT"));
 			}
 		}
 	}
