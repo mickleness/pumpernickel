@@ -159,9 +159,7 @@ public class ScramblerLayer extends ByteEncoder {
 		}
 		
 		private int[] encode() {
-			ReorderType reorderType = random!=null ?
-					reorderTypes[ random.nextInt(reorderTypes.length) ] :
-					reorderTypes[ (reorderCycle++)%reorderTypes.length ];
+			ReorderType reorderType = reorderTypes[ (reorderCycle++)%reorderTypes.length ];
 			int arrayOffset;
 			int l;
 			if(RunType.BOTH_MARKERS.equals(type)) {
@@ -186,8 +184,7 @@ public class ScramblerLayer extends ByteEncoder {
 		}
 	}
 	
-	int capacity = 15;
-	Random random;
+	int capacity;
 	final Run currentRun = new Run();
 	final ScramblerSubstitutionModel substitutionModel;
 	ScramblerMarkerRule markerRule;
@@ -200,12 +197,11 @@ public class ScramblerLayer extends ByteEncoder {
 	 * @param substitutionModel the optional SubstitutionModel this object may
 	 * apply to replace bytes.
 	 */
-	public ScramblerLayer(long randomSeed,ScramblerMarkerRule markerRule,ScramblerSubstitutionModel substitutionModel) {
+	public ScramblerLayer(int capacitySeed,ScramblerMarkerRule markerRule,ScramblerSubstitutionModel substitutionModel) {
 		if(markerRule==null)
 			throw new NullPointerException();
 		this.markerRule = markerRule;
 		this.substitutionModel = substitutionModel;
-		this.random = new Random(randomSeed);
 		resetRun();
 	}
 	
@@ -250,10 +246,11 @@ public class ScramblerLayer extends ByteEncoder {
 
 	private void resetRun() {
 		currentRun.reset(null);
-		if(random!=null) {
-			capacity = 2 + random.nextInt(50);
-		}
+		capacity = (capacity + CAPACITY_INCR) % CAPACITY_MAX + 2;
 	}
+	
+	protected static int CAPACITY_MAX = 60;
+	protected static int CAPACITY_INCR = 11;
 	
 	protected void flush() {
 		if(currentRun.type!=null) {

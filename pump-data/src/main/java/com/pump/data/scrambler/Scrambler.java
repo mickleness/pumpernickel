@@ -363,22 +363,22 @@ public class Scrambler {
 	
 	static class ScramblerLayerFactory {
 		
-		long randomSeed;
+		int capacitySeed;
 		ScramblerMarkerRule rule;
 		ScramblerSubstitutionModel substitutionModel;
 		
-		ScramblerLayerFactory(long randomSeed, ScramblerMarkerRule rule, ScramblerSubstitutionModel substitutionModel) {
+		ScramblerLayerFactory(int capacitySeed, ScramblerMarkerRule rule, ScramblerSubstitutionModel substitutionModel) {
 			if(rule==null)
 				throw new NullPointerException();
 			if(substitutionModel==null)
 				throw new NullPointerException();
 			
-			this.randomSeed = randomSeed;
+			this.capacitySeed = capacitySeed;
 			this.rule = rule;
 			this.substitutionModel = substitutionModel;
 		}
 		public ScramblerLayer createLayer() {
-			return new ScramblerLayer(randomSeed, rule, substitutionModel.clone());
+			return new ScramblerLayer(capacitySeed, rule, substitutionModel.clone());
 		}
 	}
 
@@ -417,11 +417,11 @@ public class Scrambler {
 					new ByteSubstitutionModel() : 
 					new CharacterSubstitutionModel(charArray);
 			substitutionModels.add(substitutionModel);
-			layers.add(new ScramblerLayerFactory(random.nextLong(), k.get(a), substitutionModels.get(a)));
+			layers.add(new ScramblerLayerFactory(random.nextInt(ScramblerLayer.CAPACITY_MAX), k.get(a), substitutionModels.get(a)));
 		}
 		for(int a = k.size()-2; a>=0; a--) {
 			ScramblerSubstitutionModel substitutionModel = substitutionModels.get(a);
-			layers.add(new ScramblerLayerFactory(random.nextLong(), k.get(a), substitutionModel.clone()));
+			layers.add(new ScramblerLayerFactory(random.nextInt(ScramblerLayer.CAPACITY_MAX), k.get(a), substitutionModel.clone()));
 		}
 	}
 	
