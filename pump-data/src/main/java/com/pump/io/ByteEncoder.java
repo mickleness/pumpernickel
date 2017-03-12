@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
+import java.util.List;
 
 /** This object encodes a series of bytes (expressed as [0,255] integers).
  * <p>This data can be made available either in a dual-threaded push/pull model,
@@ -17,8 +19,8 @@ public abstract class ByteEncoder implements AutoCloseable {
 	 * This is is intended for single-threaded encoding.
 	 */
 	public static interface DataListener {
-		public void chunkAvailable(ByteEncoder encoder);
-		public void encoderClosed(ByteEncoder encoder);
+		public void chunkAvailable(ByteEncoder encoder) throws IOException;
+		public void encoderClosed(ByteEncoder encoder) throws IOException;
 	}
 	
 	protected boolean closed = false;
@@ -40,7 +42,8 @@ public abstract class ByteEncoder implements AutoCloseable {
 	 * @see #push(int)
 	 * @see #pull()
 	 */
-	public synchronized void close() {
+	@Override
+	public synchronized void close() throws IOException {
 		if(closed)
 			return;
 		
@@ -60,7 +63,7 @@ public abstract class ByteEncoder implements AutoCloseable {
 	 * @see #push(int)
 	 * @see #close()
 	 */
-	public synchronized int[] pull() {
+	public synchronized int[] pull() throws IOException {
 		while(outgoingData==null && (!closed)) {
 			try {
 				wait();
@@ -82,13 +85,13 @@ public abstract class ByteEncoder implements AutoCloseable {
 	 * @see #pull()
 	 * @see #close()
 	 */
-	public abstract void push(int b);
+	public abstract void push(int b) throws IOException;
 	
 	/** This is exclusively called during <code>close()</code> to give this encoder
 	 * an opportunity to write any remaining data.
 	 * 
 	 */
-	protected abstract void flush();
+	protected abstract void flush() throws IOException;
 	
 	private static final int[] EMPTY_ARRAY = new int[] {};
 	/** This will return one of three things: an array of
@@ -119,7 +122,7 @@ public abstract class ByteEncoder implements AutoCloseable {
 	 * 
 	 * @param data a chunk of data that is ready to be pulled.
 	 */
-	protected void pushChunk(int[] data) {
+	protected void pushChunk(int[] data) throws IOException {
 		while(outgoingData!=null) {
 			try {
 				wait();
@@ -180,59 +183,61 @@ public abstract class ByteEncoder implements AutoCloseable {
 	}
 	
 	protected class EncodedInputStream extends InputStream {
+		class Chunk {
+			int[] data;
+			int pos;
+			
+			public Chunk(int[] array) {
+				data = new int[array.length];
+				System.arraycopy(array, 0, data, 0, array.length);
+			}
+		}
+		
 		InputStream in;
-		int[] currentChunk;
-		int chunkIndex;
+		List<Chunk> chunks = new LinkedList<>();
 		
 		protected EncodedInputStream(InputStream in) throws IOException {
 			this.in = in;
+			setListener(new DataListener() {
+				@Override
+				public void chunkAvailable(ByteEncoder encoder) throws IOException {
+					int[] array = encoder.pull();
+					if(array.length!=0)
+						chunks.add(new Chunk(array));
+				}
+
+				@Override
+				public void encoderClosed(ByteEncoder encoder) throws IOException {}
+			});
 			queueNext();
 		}
 
+		int ctr = 0;
 		private synchronized void queueNext() throws IOException {
-			chunkIndex = 0;
-			do {
-				currentChunk = pullImmediately();
-				if(currentChunk==null || currentChunk.length>0) {
-					return;
-				}
+			while(chunks.size()==0) {
 				int z = in.read();
 				if(z==-1) {
-					close();
+					ByteEncoder.this.close();
+					return;
 				} else {
 					push(z);
+					ctr++;
 				}
-			} while(true);
+			}
 		}
 
 		@Override
 		public synchronized int read() throws IOException {
-			if(currentChunk==null)
+			if(chunks.size()==0)
 				return -1;
-			int value = currentChunk[chunkIndex];
-			chunkIndex++;
-			if(chunkIndex>=currentChunk.length)
+			Chunk chunk = chunks.get(0);
+			int value = chunk.data[chunk.pos++];
+			if(chunk.pos==chunk.data.length) {
+				chunks.remove(0);
+			}
+			if(chunks.size()==0)
 				queueNext();
 			return value;
-		}
-	}
-	
-	class EncodedOutputStream extends OutputStream {
-		OutputStream out;
-		
-		protected EncodedOutputStream(OutputStream out) {
-			this.out = out;
-		}
-
-		@Override
-		public void write(int b) throws IOException {
-			push(b);
-		}
-		
-		@Override
-		public void close() throws IOException {
-			super.close();
-			ByteEncoder.this.close();
 		}
 	}
 
@@ -240,7 +245,30 @@ public abstract class ByteEncoder implements AutoCloseable {
 		return new EncodedInputStream(in);
 	}
 
-	public OutputStream createOutputStream(OutputStream out) {
-		return new EncodedOutputStream(out);
+	public OutputStream createOutputStream(final OutputStream out) {
+		setListener(new DataListener() {
+			@Override
+			public void chunkAvailable(ByteEncoder encoder) throws IOException {
+				int[] chunk = encoder.pull();
+				for(int a = 0; a<chunk.length; a++) {
+					out.write(chunk[a]);
+				}
+			}
+
+			@Override
+			public void encoderClosed(ByteEncoder encoder) throws IOException {}
+		});
+		return new OutputStream() {
+			@Override
+			public void write(int b) throws IOException {
+				push(b);
+			}
+			
+			@Override
+			public void close() throws IOException {
+				super.close();
+				ByteEncoder.this.close();
+			}
+		};
 	}
 }

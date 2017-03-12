@@ -1,5 +1,11 @@
 package com.pump.data.scrambler;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -184,37 +190,88 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 	}
 
 	@Test
-	public void testEncodeDecode() {
+	public void testEncodeDecode() throws Exception{
 		for(String s : strings) {
-			testEncodeDecode(s);
+			testEncodeDecodeUsingStrings(s);
+			testEncodeDecodeUsingStreams(s);
 		}
 	}
 
-	private void testEncodeDecode(String string) {
+	private void testEncodeDecodeUsingStreams(String string) throws IOException {
 		String key = "narwhal";
 		Scrambler scrambler = new Scrambler(key);
-		String encoded = scrambler.encode(string);
-		
-		if(string.length()>10) //because a short word (like "odd") can be reshuffled only a few possible ways ("odd", "dod", "ddo")
-			assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
-		String decoded = scrambler.encode(encoded);
-		assertEquals(string, decoded);
-		
-		//also use the character substitution model:
-		Collection<Character> allChars = new TreeSet<>();
-		for(int a = 0; a<string.length(); a++) {
-			allChars.add(string.charAt(a));
+		byte[] unencodedData = string.getBytes(Charset.forName("UTF-8"));
+		byte[] encodedData;
+		try(ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
+			try(OutputStream scrambleOut = scrambler.createOutputStream(byteOut)) {
+				scrambleOut.write(unencodedData);
+			}
+			encodedData = byteOut.toByteArray();
 		}
-		StringBuilder charset = new StringBuilder();
-		for(Character ch : allChars) {
-			charset.append(ch);
+		
+		assertEquals(unencodedData.length, encodedData.length);
+		assertFalse(equals(unencodedData, encodedData));
+		
+		byte[] finalUnencodedData;
+		try(ByteArrayInputStream byteIn = new ByteArrayInputStream(encodedData)) {
+			try(InputStream in = scrambler.createInputStream(byteIn)) {
+				try(ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+					byte[] block = new byte[4096];
+					int t = in.read(block);
+					while(t!=-1) {
+						buffer.write(block,0,t);
+						t = in.read(block);
+					}
+					finalUnencodedData = buffer.toByteArray();
+				}
+			}
 		}
 
-		encoded = Scrambler.encode(key, charset.toString(), string);
-		if(string.length()>10)
-			assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
-		decoded = Scrambler.encode(key, charset.toString(), encoded);
-		assertEquals(string, decoded);
+		assertTrue(equals(unencodedData, finalUnencodedData));
+	}
+
+	private boolean equals(byte[] array1, byte[] array2) {
+		if(array1.length!=array2.length)
+			return false;
+		for(int a = 0; a<array1.length; a++) {
+			if(array1[a]!=array2[a])
+				return false;
+		}
+		return true;
+	}
+
+	private void testEncodeDecodeUsingStrings(String string) {
+		String key = "narwhal";
+
+		//also use the bytes substitution model:
+		{
+			Scrambler scrambler = new Scrambler(key);
+			String encoded = scrambler.encode(string);
+			
+			if(string.length()>10) //because a short word (like "odd") can be reshuffled only a few possible ways ("odd", "dod", "ddo")
+				assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
+			String decoded = scrambler.encode(encoded);
+			assertEquals(string, decoded);
+		}
+
+		//also use the character substitution model:
+		{
+			Collection<Character> allChars = new TreeSet<>();
+			for(int a = 0; a<string.length(); a++) {
+				allChars.add(string.charAt(a));
+			}
+			StringBuilder charset = new StringBuilder();
+			for(Character ch : allChars) {
+				charset.append(ch);
+			}
+			Scrambler scrambler = new Scrambler(key, charset);
+
+			String encoded = scrambler.encode(string);
+			if(string.length()>10)
+				assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
+			String decoded = scrambler.encode(encoded);
+			assertEquals(string, decoded);
+		}
 	}
 	
 	@Test

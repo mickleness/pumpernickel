@@ -398,7 +398,7 @@ public class Scrambler {
 	 * @return the complex encoder based on the key.
 	 */
 	public Scrambler(CharSequence key,CharSequence characterSet) {
-		List<ScramblerMarkerRule> k = new ArrayList<ScramblerMarkerRule>();
+		List<ScramblerMarkerRule> k = new ArrayList<>(256 + 32);
 		for(int a = 0; a<256; a++) {
 			k.add(new ScramblerMarkerRule.Fixed(a));
 		}
@@ -407,6 +407,11 @@ public class Scrambler {
 		}
 		Random random = key==null ? new Random(0) : new KeyedRandom(key);
 		Collections.shuffle(k, random);
+
+		List<Integer> capacitySeeds = new ArrayList<>(256+32);
+		for(int a = 0; a<k.size(); a++) {
+			capacitySeeds.add(random.nextInt(ScramblerLayer.CAPACITY_MAX));
+		}
 		
 		List<ScramblerSubstitutionModel> substitutionModels = new ArrayList<>();
 		
@@ -417,11 +422,11 @@ public class Scrambler {
 					new ByteSubstitutionModel() : 
 					new CharacterSubstitutionModel(charArray);
 			substitutionModels.add(substitutionModel);
-			layers.add(new ScramblerLayerFactory(random.nextInt(ScramblerLayer.CAPACITY_MAX), k.get(a), substitutionModels.get(a)));
+			layers.add(new ScramblerLayerFactory(capacitySeeds.get(a), k.get(a), substitutionModels.get(a)));
 		}
 		for(int a = k.size()-2; a>=0; a--) {
 			ScramblerSubstitutionModel substitutionModel = substitutionModels.get(a);
-			layers.add(new ScramblerLayerFactory(random.nextInt(ScramblerLayer.CAPACITY_MAX), k.get(a), substitutionModel.clone()));
+			layers.add(new ScramblerLayerFactory(capacitySeeds.get(a), k.get(a), substitutionModel.clone()));
 		}
 	}
 	

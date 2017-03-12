@@ -1,8 +1,6 @@
 package com.pump.io;
 
-import java.io.FilterInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 
 /** A series of ByteEncoders linked together.
@@ -26,12 +24,12 @@ public class ChainedByteEncoder extends ByteEncoder {
 	}
 
 	@Override
-	public synchronized void push(int b) {
+	public synchronized void push(int b) throws IOException {
 		//TODO: make non-recursive implementation
 		push(encoders.length-1, b);
 	}
 	
-	protected void push(int encoderIndex,int data) {
+	protected void push(int encoderIndex,int data) throws IOException {
 		encoders[encoderIndex].push(data);
 		
 		int[] newChunk = encoders[encoderIndex].pullImmediately();
@@ -47,7 +45,7 @@ public class ChainedByteEncoder extends ByteEncoder {
 	}
 
 	@Override
-	protected void flush() {
+	protected void flush() throws IOException {
 		int i = encoders.length-1;
 		while(i>=0) {
 			int[] data = encoders[i].pullImmediately();

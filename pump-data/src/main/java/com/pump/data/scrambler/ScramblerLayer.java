@@ -1,8 +1,8 @@
 package com.pump.data.scrambler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.pump.io.ByteEncoder;
 import com.pump.util.ResourcePool;
@@ -206,7 +206,7 @@ public class ScramblerLayer extends ByteEncoder {
 	}
 	
 	@Override
-	public synchronized void push(int b) {
+	public synchronized void push(int b) throws IOException {
 		if(closed) throw new IllegalStateException("This Scrambler has already been closed.");
 		
 		boolean completesRun = false;
@@ -235,7 +235,7 @@ public class ScramblerLayer extends ByteEncoder {
 	}
 	
 	int[] lastCopy;
-	private synchronized void pushChunk(int[] data, int length) {
+	private synchronized void pushChunk(int[] data, int length) throws IOException {
 		if(lastCopy!=null)
 			ResourcePool.get().put(lastCopy);
 		int[] copy = ResourcePool.get().getIntArray(length);
@@ -252,7 +252,7 @@ public class ScramblerLayer extends ByteEncoder {
 	protected static int CAPACITY_MAX = 60;
 	protected static int CAPACITY_INCR = 11;
 	
-	protected void flush() {
+	protected void flush() throws IOException {
 		if(currentRun.type!=null) {
 			pushChunk(currentRun.encode(), currentRun.length);
 			resetRun();
