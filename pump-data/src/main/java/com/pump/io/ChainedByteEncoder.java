@@ -10,62 +10,73 @@ import java.io.IOException;
  *  receive Chinese.
  */
 public class ChainedByteEncoder extends ByteEncoder {
+	
+	class MyDataListener implements DataListener {
+		int index;
+		MyDataListener(int index) {
+			this.index = index;
+		}
+		
+		@Override
+		public void chunkAvailable(ByteEncoder encoder) throws IOException {
+			int[] chunk;
+			do {
+				chunk = encoder.pullImmediately();
+				if(chunk!=null && chunk.length>0) {
+					if(index==0) {
+						pushChunk(chunk);
+					} else {
+						for(int a = 0; a<chunk.length; a++) {
+							encoders[index-1].push(chunk[a]);
+						}
+					}
+				}
+			} while(chunk!=null && chunk.length>0);
+		}
+		
+		@Override
+		public void encoderClosed(ByteEncoder encoder) throws IOException {
+			chunkAvailable(encoder);
+		}
+	}
+	
 	ByteEncoder[] encoders;	
 
 	public ChainedByteEncoder(ByteEncoder... encoders) {
-		this.encoders = encoders;
+		addEncoders(encoders);
 	}
 
 	public synchronized void addEncoders(ByteEncoder... newEncoders) {
-		ByteEncoder[] copy = new ByteEncoder[encoders.length + newEncoders.length];
-		System.arraycopy(encoders, 0, copy, 0, encoders.length);
-		System.arraycopy(newEncoders, 0, copy, encoders.length, newEncoders.length);
+
+		int k = encoders==null ? 0 : encoders.length;
+		for(int a = 0; a<newEncoders.length; a++) {
+			if(newEncoders[a].getDataListener()!=null)
+				throw new IllegalArgumentException();
+			newEncoders[a].setListener(new MyDataListener(a+k));
+		}
+		
+		ByteEncoder[] copy;
+		if(encoders==null) {
+			copy = new ByteEncoder[newEncoders.length];
+			System.arraycopy(newEncoders, 0, copy, 0, newEncoders.length);
+		} else {
+			copy = new ByteEncoder[encoders.length + newEncoders.length];
+			System.arraycopy(encoders, 0, copy, 0, encoders.length);
+			System.arraycopy(newEncoders, 0, copy, encoders.length, newEncoders.length);
+		}
+		
 		encoders = copy;
 	}
 
 	@Override
 	public synchronized void push(int b) throws IOException {
-		//TODO: make non-recursive implementation
-		push(encoders.length-1, b);
-	}
-	
-	protected void push(int encoderIndex,int data) throws IOException {
-		encoders[encoderIndex].push(data);
-		
-		int[] newChunk = encoders[encoderIndex].pullImmediately();
-		if(newChunk!=null && newChunk.length>0) {
-			if(encoderIndex==0) {
-				pushChunk(newChunk);
-			} else {
-				for(int a = 0; a<newChunk.length; a++) {
-					push(encoderIndex-1, newChunk[a]);
-				}
-			}
-		}
+		encoders[encoders.length-1].push(b);
 	}
 
 	@Override
 	protected void flush() throws IOException {
-		int i = encoders.length-1;
-		while(i>=0) {
-			int[] data = encoders[i].pullImmediately();
-			if(i>0) {
-				for(int a = 0; a<data.length; a++) {
-					push(i-1, data[a]);
-				}
-			} else {
-				pushChunk(data);
-			}
-			encoders[i].close();
-			data = encoders[i].pullImmediately();
-			if(i>0) {
-				for(int a = 0; data!=null && a<data.length; a++) {
-					push(i-1, data[a]);
-				}
-			} else {
-				pushChunk(data);
-			}
-			i--;
+		for(int a = encoders.length-1; a>=0; a--) {
+			encoders[a].close();
 		}
 	}
 }

@@ -24,6 +24,7 @@ public abstract class ByteEncoder implements AutoCloseable {
 	}
 	
 	protected boolean closed = false;
+	private int waiting = 0;
 	DataListener listener = null;
 
 	/** Assign a DataListener for this encoder.
@@ -50,7 +51,8 @@ public abstract class ByteEncoder implements AutoCloseable {
 		flush();
 		closed = true;
 		if(listener!=null) listener.encoderClosed(this);
-		notify();
+		if(waiting>0)
+			notify();
 	}
 	
 	/** Pull a series of bytes (all within [0,255]) as
@@ -65,13 +67,19 @@ public abstract class ByteEncoder implements AutoCloseable {
 	 */
 	public synchronized int[] pull() throws IOException {
 		while(outgoingData==null && (!closed)) {
+			waiting++;
 			try {
 				wait();
-			} catch(InterruptedException e) {}
+			} catch(InterruptedException e) {
+			} finally {
+				waiting--;
+			}
+			
 		}
 		int[] returnValue = outgoingData;
 		outgoingData = null;
-		notify();
+		if(waiting>0)
+			notify();
 		return returnValue;
 	}
 	
@@ -124,13 +132,19 @@ public abstract class ByteEncoder implements AutoCloseable {
 	 */
 	protected void pushChunk(int[] data) throws IOException {
 		while(outgoingData!=null) {
+			waiting++;
 			try {
 				wait();
-			} catch(InterruptedException e) {}
+			} catch(InterruptedException e) {
+				
+			} finally {
+				waiting--;
+			}
 		}
 		outgoingData = data;
 		if(listener!=null) listener.chunkAvailable(this);
-		notify();
+		if(waiting>0)
+			notify();
 	}
 
 	/** Reencode a String using a ByteEncoder.
@@ -270,5 +284,9 @@ public abstract class ByteEncoder implements AutoCloseable {
 				ByteEncoder.this.close();
 			}
 		};
+	}
+
+	public synchronized DataListener getDataListener() {
+		return listener;
 	}
 }
