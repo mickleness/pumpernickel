@@ -3,14 +3,15 @@ package com.pump.data.scrambler;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import com.pump.io.ByteEncoder;
 import com.pump.io.ByteEncoder.DataListener;
@@ -388,11 +389,24 @@ public class Scrambler {
 	 */
 	public Scrambler(CharSequence key,CharSequence characterSet) {
 		List<ScramblerMarkerRule> k = new ArrayList<>(256 + 32);
-		for(int a = 0; a<256; a++) {
-			k.add(new ScramblerMarkerRule.Fixed(a));
-		}
-		for(int a = 0; a<32; a++) {
-			k.add(new ScramblerMarkerRule.OneCount(a%8));
+		
+		if(characterSet==null) {
+			for(int a = 0; a<256; a++) {
+				k.add(new ScramblerMarkerRule.Fixed(a));
+			}
+			for(int a = 0; a<32; a++) {
+				k.add(new ScramblerMarkerRule.OneCount(a%8));
+			}
+		} else {
+			Set<Integer> covered = new HashSet<>();
+			for(int a = 0; a<characterSet.length(); a++) {
+				int ch = characterSet.charAt(a);
+				if(covered.add(ch))
+					k.add(new ScramblerMarkerRule.Fixed(ch));
+			}
+			for(int a = 0; a<8; a++) {
+				k.add(new ScramblerMarkerRule.OneCount(a%8));
+			}
 		}
 		Random random = key==null ? new Random(0) : new KeyedRandom(key);
 		Collections.shuffle(k, random);
