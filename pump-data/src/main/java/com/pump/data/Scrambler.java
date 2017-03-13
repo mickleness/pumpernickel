@@ -530,7 +530,7 @@ public class Scrambler {
 	};
 
 	protected List<MarkerRule> layers = new ArrayList<>();
-	protected SubstitutionModel substitutionModel;
+	protected List<SubstitutionModel> substitutionModels = new ArrayList<>();
 
 	public Scrambler(CharSequence key) {
 		this(key, null);
@@ -570,15 +570,18 @@ public class Scrambler {
 		Collections.shuffle(k, random);
 
 		char[] charArray = characterSet == null ? null : characterSet.toString().toCharArray();
-		substitutionModel = characterSet==null ? 
-				new ByteSubstitutionModel(random) : 
-				new CharacterSubstitutionModel(random, charArray);
 				
 		for(int a = 0; a<k.size(); a++) {
 			layers.add(k.get(a));
+
+			SubstitutionModel substitutionModel = characterSet==null ? 
+					new ByteSubstitutionModel(random) : 
+					new CharacterSubstitutionModel(random, charArray);
+			substitutionModels.add(substitutionModel);
 		}
 		for(int a = k.size()-2; a>=0; a--) {
-			layers.add(k.get(a));
+			layers.add(layers.get(a));
+			substitutionModels.add(substitutionModels.get(a));
 		}
 	}
 	
@@ -621,7 +624,7 @@ public class Scrambler {
 	protected ChainedByteEncoder createEncoder() {
 		Layer[] copy = new Layer[layers.size()];
 		for(int a = 0; a<layers.size(); a++) {
-			copy[a] = new Layer(layers.get(a), substitutionModel.clone());
+			copy[a] = new Layer(layers.get(a), substitutionModels.get(a).clone());
 		}
 		ChainedByteEncoder chainedEncoders = new ChainedByteEncoder(copy);
 		return chainedEncoders;
