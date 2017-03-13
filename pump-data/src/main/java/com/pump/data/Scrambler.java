@@ -292,8 +292,8 @@ public class Scrambler {
 		Map<Integer, List<Integer>> charMap = new HashMap<>();
 		
 
-		public CharacterSubstitutionModel(String chars) {
-			this(chars.toCharArray());
+		public CharacterSubstitutionModel(Random random, String chars) {
+			this(random, chars.toCharArray());
 		}
 
 		private CharacterSubstitutionModel(CharacterSubstitutionModel other) {
@@ -305,7 +305,7 @@ public class Scrambler {
 			return new CharacterSubstitutionModel(this);
 		}
 		
-		public CharacterSubstitutionModel(char... chars) {
+		public CharacterSubstitutionModel(Random random, char... chars) {
 			charMap = new HashMap<>();
 			for(int a = 0; a<chars.length; a++) {
 				int i = (int)chars[a];
@@ -321,6 +321,10 @@ public class Scrambler {
 				if(!k.contains(i)) {
 					k.add(i);
 				}
+			}
+			
+			for(List<Integer> value : charMap.values()) {
+				Collections.shuffle(value, random);
 			}
 		}
 		
@@ -377,7 +381,9 @@ public class Scrambler {
 		
 		private int runCtr = 0;
 		
-		public ByteSubstitutionModel() {
+		public ByteSubstitutionModel(Random random) {
+			runCtr = random.nextInt(3);
+			
 			if(reverseByteLUT==null) {
 				reverseByteLUT = new int[256];
 				//this is a little kludgy, but it's a one-time expense:
@@ -565,15 +571,10 @@ public class Scrambler {
 		Random random = key==null ? new Random(0) : new KeyedRandom(key);
 		Collections.shuffle(k, random);
 
-		List<Integer> capacitySeeds = new ArrayList<>(256+32);
-		for(int a = 0; a<k.size(); a++) {
-			capacitySeeds.add(random.nextInt(Layer.CAPACITY_MAX));
-		}
-
 		char[] charArray = characterSet == null ? null : characterSet.toString().toCharArray();
 		substitutionModel = characterSet==null ? 
-				new ByteSubstitutionModel() : 
-				new CharacterSubstitutionModel(charArray);
+				new ByteSubstitutionModel(random) : 
+				new CharacterSubstitutionModel(random, charArray);
 				
 		for(int a = 0; a<k.size(); a++) {
 			layers.add(k.get(a));
