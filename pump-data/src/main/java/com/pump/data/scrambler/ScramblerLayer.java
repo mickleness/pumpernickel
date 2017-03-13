@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pump.data.scrambler.Scrambler.MarkerRule;
+import com.pump.data.scrambler.Scrambler.SubstitutionModel;
 import com.pump.io.ByteEncoder;
 
 /** 
@@ -186,7 +187,7 @@ public class ScramblerLayer extends ByteEncoder {
 	
 	int capacity;
 	final Run currentRun = new Run();
-	final ScramblerSubstitutionModel substitutionModel;
+	final SubstitutionModel substitutionModel;
 	MarkerRule markerRule;
 	int reorderCycle = 0;
 
@@ -197,7 +198,7 @@ public class ScramblerLayer extends ByteEncoder {
 	 * @param substitutionModel the optional SubstitutionModel this object may
 	 * apply to replace bytes.
 	 */
-	public ScramblerLayer(int capacitySeed,MarkerRule markerRule,ScramblerSubstitutionModel substitutionModel) {
+	public ScramblerLayer(int capacitySeed,MarkerRule markerRule,SubstitutionModel substitutionModel) {
 		if(markerRule==null)
 			throw new NullPointerException();
 		this.markerRule = markerRule;

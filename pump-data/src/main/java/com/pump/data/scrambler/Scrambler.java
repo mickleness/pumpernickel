@@ -9,8 +9,10 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -313,6 +315,185 @@ public class Scrambler {
 		}
 	}
 	
+	public interface SubstitutionModel {
+		
+		/** This alters bytes (ranging from [0,255]) so the data is transformed.
+		 * This is invoked on bytes inside a run if this Scrambler was constructed
+		 * with "allowSubstitutions" set to true.
+		 * <p>
+		 * The tricky thing about rearranging bytes is the Scrambler class
+		 * relies on the number of 1's/0's in a byte, so that number may not
+		 * change. For example: the value "00110000" may be transformed
+		 * into "00001100", but it can't be transformed into "11001111".
+		 * 
+		 * @param array the array containing bytes to alter
+		 * @param arrayOffset the first element in the array to alter
+		 * @param length the number of elements in the array to alter
+		 */
+		public void applySubstitutions(MarkerRule markerRule,int[] array, int arrayOffset, int length);
+		
+		public SubstitutionModel clone();
+	}
+	
+	/**
+	 * This model assumes you have a fixed set of characters you plan on working with.
+	 * <p>
+	 * This is a great fit if you want to obfuscate a registration code (where you are
+	 * sure you understand the original character set), but it is not appropriate if
+	 * arbitrary data might be input.
+	 */
+	protected static class CharacterSubstitutionModel implements SubstitutionModel {
+		Map<Integer, List<Integer>> charMap = new HashMap<>();
+		
+
+		public CharacterSubstitutionModel(String chars) {
+			this(chars.toCharArray());
+		}
+
+		private CharacterSubstitutionModel(CharacterSubstitutionModel other) {
+			this.charMap = other.charMap;
+		}
+
+		@Override
+		public CharacterSubstitutionModel clone() {
+			return new CharacterSubstitutionModel(this);
+		}
+		
+		public CharacterSubstitutionModel(char... chars) {
+			charMap = new HashMap<>();
+			for(int a = 0; a<chars.length; a++) {
+				int i = (int)chars[a];
+				if(i<0 || i>=256)
+					throw new RuntimeException("character index "+a+" ("+chars[a]+") cannot be represented as an int within [0,255].");
+				int ones = countOnes(i);
+				
+				List<Integer> k = charMap.get(ones);
+				if(k==null) {
+					k = new ArrayList<>();
+					charMap.put(ones, k);
+				}
+				if(!k.contains(i)) {
+					k.add(i);
+				}
+			}
+		}
+		
+		public static int countOnes(int k) {
+			String s = Integer.toBinaryString(k);
+			int sum = 0;
+			for(int a = 0; a<s.length(); a++) {
+				if(s.charAt(a)=='1')
+					sum++;
+			}
+			return sum;
+		}
+		
+		protected int[] getSections(int sectionCount,int total) {
+			int[] returnValue = new int[sectionCount];
+			int charCount = total;
+			for(int a = 0; a<returnValue.length; a++) {
+				returnValue[a] = charCount / (sectionCount - a);
+				charCount -= returnValue[a];
+			}
+			return returnValue;
+		}
+
+		@Override
+		public void applySubstitutions(MarkerRule markerRule,int[] array, int arrayOffset, int length) {
+			for(int a = 0; a<length; a++) {
+				int oldValue = array[arrayOffset + a];
+				int ones = countOnes(oldValue);
+				
+				List<Integer> candidates = charMap.get(ones);
+				Integer position = candidates.indexOf(oldValue);
+				if(position==-1)
+					throw new IllegalArgumentException("The byte "+oldValue+" ("+((char)oldValue)+") was not included in the original characters used to created this CharacterSubstitutionModel.");
+				
+				
+				int newPos = candidates.size() - 1 - position;
+				int newValue = candidates.get(newPos);
+				if(!markerRule.isMarker(newValue))
+					array[arrayOffset + a] = newValue;
+			}
+		}
+	}
+	
+	/**
+	 * This SubstitutionModel treats all data as bytes.
+	 * <p>
+	 * This may make data "ugly", because a letter that has a simple
+	 * ASCII representation like 'A' might get mutated to strange punctuation
+	 * or a backspace (ASCII 8).
+	 */
+	protected static class ByteSubstitutionModel implements SubstitutionModel {
+
+		private static int[] reverseByteLUT;
+		
+		private int runCtr = 0;
+		
+		public ByteSubstitutionModel() {
+			if(reverseByteLUT==null) {
+				reverseByteLUT = new int[256];
+				//this is a little kludgy, but it's a one-time expense:
+				for(int a = 0; a<reverseByteLUT.length; a++) {
+					String s = Integer.toBinaryString(a);
+					while(s.length()<8) {
+						s = "0"+s;
+					}
+					StringBuffer reverse = new StringBuffer();
+					for(int b = s.length()-1; b>=0; b--) {
+						reverse.append(s.charAt(b));
+					}
+					reverseByteLUT[a] = Integer.parseInt( reverse.toString(), 2 );
+				}
+			}
+		}
+		
+		private ByteSubstitutionModel(ByteSubstitutionModel other) {
+			this.runCtr = other.runCtr;
+		}
+		
+		@Override
+		public ByteSubstitutionModel clone() {
+			return new ByteSubstitutionModel(this);
+		}
+		
+		@Override
+		public void applySubstitutions(MarkerRule markerRule, int[] array, int arrayOffset, int length) {
+			
+			runCtr = (runCtr+1)%3;
+			switch(runCtr) {
+				case 0:
+					//reverse the middle two bits: 00011000
+					for(int a = 0; a<length; a++) {
+						int d = array[a+arrayOffset];
+						int newValue = (d & 0xE7) + (reverseByteLUT[d] & 0x18);
+						if(!markerRule.isMarker(newValue))
+							array[a+arrayOffset] = newValue;
+					}
+					break;
+				case 1:
+					//reverse the middle four bits: 00111100
+					for(int a = 0; a<length; a++) {
+						int d = array[a+arrayOffset];
+						int newValue = (d & 0xC3) + (reverseByteLUT[d] & 0x3C);
+						if(!markerRule.isMarker(newValue))
+							array[a+arrayOffset] = newValue;
+					}
+					break;
+				default:
+					//reverse the middle six bits: 01111110
+					for(int a = 0; a<length; a++) {
+						int d = array[a+arrayOffset];
+						int newValue = (d & 0x81) + (reverseByteLUT[d] & 0x7E);
+						if(!markerRule.isMarker(newValue))
+							array[a+arrayOffset] = newValue;
+					}
+					break;
+			}
+		}
+	}
+	
 	protected enum RunType { NO_MARKER, STARTING_MARKER, BOTH_MARKERS };
 	
 	/** This is a way of reordering bytes that when invoked twice results in the
@@ -402,9 +583,9 @@ public class Scrambler {
 		
 		int capacitySeed;
 		MarkerRule rule;
-		ScramblerSubstitutionModel substitutionModel;
+		SubstitutionModel substitutionModel;
 		
-		ScramblerLayerFactory(int capacitySeed, MarkerRule rule, ScramblerSubstitutionModel substitutionModel) {
+		ScramblerLayerFactory(int capacitySeed, MarkerRule rule, SubstitutionModel substitutionModel) {
 			if(rule==null)
 				throw new NullPointerException();
 			if(substitutionModel==null)
@@ -464,7 +645,7 @@ public class Scrambler {
 		}
 
 		char[] charArray = characterSet == null ? null : characterSet.toString().toCharArray();
-		ScramblerSubstitutionModel substitutionModel = characterSet==null ? 
+		SubstitutionModel substitutionModel = characterSet==null ? 
 				new ByteSubstitutionModel() : 
 				new CharacterSubstitutionModel(charArray);
 				
