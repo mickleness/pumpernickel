@@ -148,92 +148,6 @@ public class Scrambler {
 	 */
 	protected static class Layer extends ByteEncoder {
 		
-		private enum RunType { NO_MARKER, STARTING_MARKER, BOTH_MARKERS };
-		
-		/** This is a way of reordering bytes that when invoked twice results in the
-		 * original data.
-		 */
-		protected enum ReorderType {
-
-			/** "ABCDEF" is encoded as "ABCDEF" */
-			NORMAL() {
-				@Override
-				protected void reorder(List<Integer> srcList, int srcPos,
-						int length, int[] dest, int destPos) {
-					for(int a = 0; a<length; a++) {
-						dest[destPos+a] = srcList.get(srcPos+a);
-					}
-				}
-			},
-
-			/** "ABCDEF" is encoded as "FEDCBA" */
-			REVERSE() {
-				@Override
-				protected void reorder(List<Integer> srcList, int srcPos,
-						int length, int[] dest, int destPos) {
-					for(int a = 0; a<length; a++) {
-						dest[destPos+a] = srcList.get(length-1-a+srcPos);
-					}
-				}
-			},
-			
-			/** "ABCDEF" is encoded as "BA"+"DC"+"FE" */
-			REVERSE_PAIRS() {
-				@Override
-				protected void reorder(List<Integer> srcList, int srcPos,
-						int length, int[] dest, int destPos) {
-					for(int a = 0; a<length; a+=2) {
-						if(a+1<length) {
-							dest[destPos+a] = srcList.get(srcPos+a+1);
-							dest[destPos+a+1] = srcList.get(srcPos+a);
-						} else {
-							dest[destPos+a] = srcList.get(srcPos+a);
-						}
-					}
-				}
-			},
-			
-			/** "ABCDEF" is encoded as "DEF"+"ABC" */
-			CUT_DECK() {
-				@Override
-				protected void reorder(List<Integer> srcList, int srcPos,
-						int length, int[] dest, int destPos) {
-					int split = length/2;
-					dest[destPos+length-1] = srcList.get(srcPos+length-1);
-					for(int a = 0; a<split; a++) {
-						dest[destPos+a] = srcList.get(srcPos+a+split);
-						dest[destPos+a+split] = srcList.get(srcPos+a);
-					}
-				}
-			},
-
-			/** "ABCDEF" is encoded as "CBA"+"FED" */
-			REVERSE_CUT_DECK() {
-				@Override
-				protected void reorder(List<Integer> srcList, int srcPos,
-						int length, int[] dest, int destPos) {
-					int split = length/2;
-					for(int a = 0; a<split; a++) {
-						dest[destPos+a] = srcList.get(srcPos+split-1-a);
-					}
-					for(int a = split; a<length; a++) {
-						dest[destPos+a] = srcList.get(srcPos+length-1-a+split);
-					}
-				}
-			};
-			
-			/** Reorder a series of integers.
-			 * 
-			 * @param srcList the integers to reorder
-			 * @param srcPos the index in the srcList to begin enumeration options
-			 * @param length the number of elements to transfer/reorder
-			 * @param dest the array to store the data in
-			 * @param destPos the first index in the dest array to write to
-			 */
-			protected abstract void reorder(List<Integer> srcList,int srcPos,int length,int[] dest,int destPos);
-		};
-		
-
 		private static ReorderType[] reorderTypes = new ReorderType[] { ReorderType.CUT_DECK, ReorderType.REVERSE_CUT_DECK, ReorderType.REVERSE, ReorderType.REVERSE_PAIRS };
 		private class Run {
 			RunType type = null;
@@ -284,7 +198,7 @@ public class Scrambler {
 		 * @param substitutionModel the optional SubstitutionModel this object may
 		 * apply to replace bytes.
 		 */
-		public Layer(int capacitySeed,MarkerRule markerRule,SubstitutionModel substitutionModel) {
+		public Layer(MarkerRule markerRule,SubstitutionModel substitutionModel) {
 			if(markerRule==null)
 				throw new NullPointerException();
 			this.markerRule = markerRule;
@@ -610,27 +524,8 @@ public class Scrambler {
 		 */
 		protected abstract void reorder(List<Integer> srcList,int srcPos,int length,int[] dest,int destPos);
 	};
-	
-	class LayerFactory {
-		
-		int capacitySeed;
-		MarkerRule rule;
-		
-		LayerFactory(int capacitySeed, MarkerRule rule) {
-			if(rule==null)
-				throw new NullPointerException();
-			if(substitutionModel==null)
-				throw new NullPointerException();
-			
-			this.capacitySeed = capacitySeed;
-			this.rule = rule;
-		}
-		public Layer createLayer() {
-			return new Layer(capacitySeed, rule, substitutionModel.clone());
-		}
-	}
 
-	protected List<LayerFactory> layers = new ArrayList<>();
+	protected List<MarkerRule> layers = new ArrayList<>();
 	protected SubstitutionModel substitutionModel;
 
 	public Scrambler(CharSequence key) {
@@ -681,10 +576,10 @@ public class Scrambler {
 				new CharacterSubstitutionModel(charArray);
 				
 		for(int a = 0; a<k.size(); a++) {
-			layers.add(new LayerFactory(capacitySeeds.get(a), k.get(a)));
+			layers.add(k.get(a));
 		}
 		for(int a = k.size()-2; a>=0; a--) {
-			layers.add(new LayerFactory(capacitySeeds.get(a), k.get(a)));
+			layers.add(k.get(a));
 		}
 	}
 	
@@ -699,7 +594,7 @@ public class Scrambler {
 	protected ChainedByteEncoder createEncoder() {
 		Layer[] copy = new Layer[layers.size()];
 		for(int a = 0; a<layers.size(); a++) {
-			copy[a] = layers.get(a).createLayer();
+			copy[a] = new Layer(layers.get(a), substitutionModel.clone());
 		}
 		ChainedByteEncoder chainedEncoders = new ChainedByteEncoder(copy);
 		return chainedEncoders;
