@@ -245,14 +245,18 @@ public class Scrambler {
 			}
 		}
 
+		protected static int CAPACITY_MAX = 60;
+		protected static int CAPACITY_INCR = 11;
+		
+		/**
+		 * Clear out the current run and alter the capacity.
+		 */
 		private void resetRun() {
 			currentRun.reset(null);
 			capacity = (capacity + CAPACITY_INCR) % CAPACITY_MAX + 2;
 		}
 		
-		protected static int CAPACITY_MAX = 60;
-		protected static int CAPACITY_INCR = 11;
-		
+		@Override
 		protected void flush() throws IOException {
 			if(currentRun.type!=null) {
 				pushChunk(currentRun.encode(), currentRun.length);
@@ -261,23 +265,28 @@ public class Scrambler {
 		}
 	}
 	
+	/**
+	 * This changes (substitutes) some bytes for other bytes.
+	 */
 	public interface SubstitutionModel {
 		
-		/** This alters bytes (ranging from [0,255]) so the data is transformed.
-		 * This is invoked on bytes inside a run if this Scrambler was constructed
-		 * with "allowSubstitutions" set to true.
+		/** 
+		 * This changes (substitutes) some bytes for other bytes.
 		 * <p>
-		 * The tricky thing about rearranging bytes is the Scrambler class
-		 * relies on the number of 1's/0's in a byte, so that number may not
-		 * change. For example: the value "00110000" may be transformed
-		 * into "00001100", but it can't be transformed into "11001111".
+		 * This will only be called for a run of text that does not include
+		 * any markers, and it's crucial that no byte in this run is altered
+		 * so that it becomes a marker.
 		 * 
+		 * @param markerRule the rule to determine what is and isn't a marker.
 		 * @param array the array containing bytes to alter
 		 * @param arrayOffset the first element in the array to alter
 		 * @param length the number of elements in the array to alter
 		 */
 		public void applySubstitutions(MarkerRule markerRule,int[] array, int arrayOffset, int length);
 		
+		/**
+		 * Clone this substitution model.
+		 */
 		public SubstitutionModel clone();
 	}
 	
@@ -337,16 +346,6 @@ public class Scrambler {
 			}
 			return sum;
 		}
-		
-		protected int[] getSections(int sectionCount,int total) {
-			int[] returnValue = new int[sectionCount];
-			int charCount = total;
-			for(int a = 0; a<returnValue.length; a++) {
-				returnValue[a] = charCount / (sectionCount - a);
-				charCount -= returnValue[a];
-			}
-			return returnValue;
-		}
 
 		@Override
 		public void applySubstitutions(MarkerRule markerRule,int[] array, int arrayOffset, int length) {
@@ -372,8 +371,7 @@ public class Scrambler {
 	 * This SubstitutionModel treats all data as bytes.
 	 * <p>
 	 * This may make data "ugly", because a letter that has a simple
-	 * ASCII representation like 'A' might get mutated to strange punctuation
-	 * or a backspace (ASCII 8).
+	 * ASCII representation like 'A' might become a control character.
 	 */
 	protected static class ByteSubstitutionModel implements SubstitutionModel {
 
@@ -584,14 +582,42 @@ public class Scrambler {
 		}
 	}
 	
+	/**
+	 * Create an InputStream that decodes/encodes the stream provided as it is read.
+	 * <p>
+	 * It is essential to close this stream to guarantee that any unprocessed bytes
+	 * in the buffer are fully processed.
+	 * 
+	 * @param in a stream of data to read.
+	 * @return a decoded/encoded copy of the original data.
+	 * 
+	 * @throws IOException
+	 */
 	public InputStream createInputStream(InputStream in) throws IOException {
 		return createEncoder().createInputStream(in);
 	}
-	
+
+	/**
+	 * Create an OutputStream that decodes/encodes the data as it is written to the underlying stream.
+	 * <p>
+	 * It is essential to close this stream to guarantee that any unprocessed bytes
+	 * in the buffer are fully processed.
+	 * 
+	 * @param in a stream to write encoded/data to.
+	 * @return a stream that writes data before encoding it and passing it to the argument stream.
+	 * 
+	 * @throws IOException
+	 */
 	public OutputStream createOutputStream(OutputStream in) {
 		return createEncoder().createOutputStream(in);
 	}
 	
+	/**
+	 * Create a new encoder using the configuration data in this Scrambler.
+	 * <p>
+	 * This Scrambler object basically serves as a factory to produce this object
+	 * as needed.
+	 */
 	protected ChainedByteEncoder createEncoder() {
 		Layer[] copy = new Layer[layers.size()];
 		for(int a = 0; a<layers.size(); a++) {
@@ -602,10 +628,26 @@ public class Scrambler {
 		
 	}
 
+	/**
+	 * Encode/decode a String.
+	 * 
+	 * @param string the string to encode/decode.
+	 * @return an encoded/decoded String.
+	 */
 	public String encode(String string) {
 		return createEncoder().encode(string);
 	}
 
+	/**
+	 * Encode/decode a String using a particular Charset.
+	 * 
+	 * @param string the string to encode/decode.
+	 * @param charset the charset used to convert the String data to/from bytes. Technically this is
+	 * not essential to get right, because no matter what reversible data will be generated... but using
+	 * the wrong charset can be the difference between getting English characters and Korean characters
+	 * back.
+	 * @return an encoded/decoded String.
+	 */
 	public String encode(String string,Charset charset) {
 		return createEncoder().encode(string, charset);
 	}
