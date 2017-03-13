@@ -192,14 +192,18 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 	@Test
 	public void testEncodeDecode() throws Exception{
 		for(String s : strings) {
-			testEncodeDecodeUsingStrings(s);
-			testEncodeDecodeUsingStreams(s);
+			testEncodeDecode(s);
 		}
 	}
 
-	private void testEncodeDecodeUsingStreams(String string) throws IOException {
+	private void testEncodeDecode(String string) throws IOException {
 		String key = "narwhal";
-		Scrambler scrambler = new Scrambler(key);
+		testEncodeDecodeData( new Scrambler(key), string);
+		testEncodeDecodeData( new Scrambler(key, string), string);
+	}
+	
+
+	private void testEncodeDecodeData(Scrambler scrambler,String string) throws IOException {
 		byte[] unencodedData = string.getBytes(Charset.forName("UTF-8"));
 		byte[] encodedData;
 		try(ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
@@ -239,41 +243,15 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 		}
 		return true;
 	}
-
-	private void testEncodeDecodeUsingStrings(String string) {
-		String key = "narwhal";
-
-		//also use the bytes substitution model:
-		{
-			Scrambler scrambler = new Scrambler(key);
-			String encoded = scrambler.encode(string);
-			
-			if(string.length()>10) //because a short word (like "odd") can be reshuffled only a few possible ways ("odd", "dod", "ddo")
-				assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
-			String decoded = scrambler.encode(encoded);
-			assertEquals(string, decoded);
-		}
-
-		//also use the character substitution model:
-		{
-			Collection<Character> allChars = new TreeSet<>();
-			for(int a = 0; a<string.length(); a++) {
-				allChars.add(string.charAt(a));
-			}
-			StringBuilder charset = new StringBuilder();
-			for(Character ch : allChars) {
-				charset.append(ch);
-			}
-			Scrambler scrambler = new Scrambler(key, charset);
-
-			String encoded = scrambler.encode(string);
-			if(string.length()>10)
-				assertFalse("the encoded value was identical to the input: \""+string+"\"", string.equals(encoded));
-			String decoded = scrambler.encode(encoded);
-			assertEquals(string, decoded);
-		}
-	}
 	
+	/**
+	 * In this test we encode "PRODUCT000000"-"PRODUCT000010", and we make sure
+	 * that the encoded Strings are not too similar.
+	 * <p>
+	 * This test triggered a complete refactor of the Scrambler architecture because
+	 * some strings were easily "hackable". (That is: you could modify just 1 character
+	 * and, when decoded, your String would still start with "PRODUCT000").
+	 */
 	@Test
 	public void testPredictability() {
 		String password = "barbaric background eyes finishing solitary pitch";
@@ -317,9 +295,12 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 		}
 	}
 
+	/**
+	 * Count the number of letters in the exact same position between the two Strings
+	 */
 	private int countSimilarLetters(String s1, String s2) {
 		int sum = 0;
-		for(int a = 0; a<s1.length(); a++) {
+		for(int a = 0; a<Math.min(s1.length(), s2.length()); a++) {
 			char ch1 = s1.charAt(a);
 			char ch2 = s2.charAt(a);
 			if(ch1==ch2)
