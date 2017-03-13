@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -254,7 +255,7 @@ public class Scrambler {
 		}
 	}
 	
-	private enum RunType { NO_MARKER, STARTING_MARKER, BOTH_MARKERS };
+	protected enum RunType { NO_MARKER, STARTING_MARKER, BOTH_MARKERS };
 	
 	/** This is a way of reordering bytes that when invoked twice results in the
 	 * original data.
@@ -338,18 +339,6 @@ public class Scrambler {
 		 */
 		protected abstract void reorder(List<Integer> srcList,int srcPos,int length,int[] dest,int destPos);
 	};
-
-	/** Reencode a String using a Scrambler.
-	 * 
-	 * @param key an optional key to guide the random number generation.
-	 * @param charset a set of characters to use for character substitution.
-	 * @param s the String to reencode
-	 * @return the String data after passing through a Scrambler.
-	 */
-	public static String encode(String key,String charset,String s) {
-		Scrambler scrambler = new Scrambler(key, charset );
-		return ByteEncoder.encode(scrambler.createEncoder(), s);
-	}
 	
 	static class ScramblerLayerFactory {
 		
@@ -452,6 +441,10 @@ public class Scrambler {
 	}
 
 	public String encode(String string) {
-		return ByteEncoder.encode(createEncoder(), string);
+		return createEncoder().encode(string);
+	}
+
+	public String encode(String string,Charset charset) {
+		return createEncoder().encode(string, charset);
 	}
 }

@@ -1,10 +1,10 @@
 package com.pump.io;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
@@ -147,52 +147,25 @@ public abstract class ByteEncoder implements AutoCloseable {
 			notify();
 	}
 
-	/** Reencode a String using a ByteEncoder.
-	 * 
-	 * @param encoder the encoder to use to rewrite a String
-	 * @param s the String to reencode
-	 * @return the String data after passing through the encoder.
-	 */
-	public static String encode(final ByteEncoder encoder,String s) {
-		InputStream in = null;
-		ByteArrayOutputStream out = null;
-		try {
-			in = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
-			final ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-			out = bOut;
-			
-			encoder.setListener(new DataListener() {
+	public String encode(String string) {
+		return encode(string, StandardCharsets.UTF_8);
+	}
 
-				@Override
-				public void chunkAvailable(ByteEncoder encoder) {
-					int[] array = encoder.pullImmediately();
-					for(int a = 0; a<array.length; a++) {
-						bOut.write(array[a]);
-					}
-				}
-
-				@Override
-				public void encoderClosed(ByteEncoder encoder) {}
-				
-			});
-			
-			int k = in.read();
-			while(k!=-1) {
-				encoder.push(k);
-				k = in.read();
+	public String encode(String string,Charset charset) {
+		byte[] data = string.getBytes(charset);
+		data = encode(data);
+		return new String(data, charset);
+	}
+	
+	public byte[] encode(byte[] data) {
+		try(ByteArrayOutputStream byteOut = new ByteArrayOutputStream(data.length)) {
+			try(OutputStream out = createOutputStream(byteOut)) {
+				out.write(data);
 			}
-			encoder.close();
-			return new String( out.toByteArray(), StandardCharsets.UTF_8 );
+			return byteOut.toByteArray();
 		} catch(IOException e) {
-			// this is bad. why would we get an IOException if the String is in memory?
+			//this shouldn't happen if we're dealing in-memory IO.
 			throw new RuntimeException(e);
-		} finally {
-			try {
-				in.close();
-			} catch(IOException e) {}
-			try {
-				out.close();
-			} catch(IOException e) {}
 		}
 	}
 	
