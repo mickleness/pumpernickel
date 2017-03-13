@@ -404,20 +404,16 @@ public class Scrambler {
 		for(int a = 0; a<k.size(); a++) {
 			capacitySeeds.add(random.nextInt(ScramblerLayer.CAPACITY_MAX));
 		}
-		
-		List<ScramblerSubstitutionModel> substitutionModels = new ArrayList<>();
-		
+
 		char[] charArray = characterSet == null ? null : characterSet.toString().toCharArray();
-		
+		ScramblerSubstitutionModel substitutionModel = characterSet==null ? 
+				new ByteSubstitutionModel() : 
+				new CharacterSubstitutionModel(charArray);
+				
 		for(int a = 0; a<k.size(); a++) {
-			ScramblerSubstitutionModel substitutionModel = characterSet==null ? 
-					new ByteSubstitutionModel() : 
-					new CharacterSubstitutionModel(charArray);
-			substitutionModels.add(substitutionModel);
-			layers.add(new ScramblerLayerFactory(capacitySeeds.get(a), k.get(a), substitutionModels.get(a)));
+			layers.add(new ScramblerLayerFactory(capacitySeeds.get(a), k.get(a), substitutionModel.clone() ));
 		}
 		for(int a = k.size()-2; a>=0; a--) {
-			ScramblerSubstitutionModel substitutionModel = substitutionModels.get(a);
 			layers.add(new ScramblerLayerFactory(capacitySeeds.get(a), k.get(a), substitutionModel.clone()));
 		}
 	}
