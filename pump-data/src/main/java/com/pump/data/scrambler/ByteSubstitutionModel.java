@@ -1,5 +1,7 @@
 package com.pump.data.scrambler;
 
+import com.pump.data.scrambler.Scrambler.MarkerRule;
+
 
 
 /**
@@ -43,7 +45,7 @@ public class ByteSubstitutionModel implements ScramblerSubstitutionModel {
 	}
 	
 	@Override
-	public void applySubstitutions(ScramblerMarkerRule markerRule, int[] array, int arrayOffset, int length) {
+	public void applySubstitutions(MarkerRule markerRule, int[] array, int arrayOffset, int length) {
 		
 		runCtr = (runCtr+1)%3;
 		switch(runCtr) {

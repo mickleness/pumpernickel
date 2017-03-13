@@ -209,6 +209,64 @@ public class Scrambler {
 		System.out.println("Successfully encoded to: "+dst.getAbsolutePath());
 	}
 	
+	public static abstract class MarkerRule {
+		
+		public static class Fixed extends MarkerRule {
+			int marker;
+			
+			public Fixed(int marker) {
+				this.marker = marker;
+			}
+			
+			public boolean isMarker(int i) {
+				return i==marker;
+			}
+			
+			@Override
+			public String toString() {
+				return "["+marker+"]";
+			}
+		}
+
+		public static class OneCount extends MarkerRule {
+			boolean[] bytes = new boolean[256];
+			int oneCount;
+			
+			public OneCount(int oneCount) {
+				this.oneCount = oneCount;
+				if(oneCount<0 || oneCount>8)
+					throw new IllegalArgumentException("The argument ("+oneCount+") should be between 0 and 8.");
+				for(int a = 0; a<bytes.length; a++) {
+					bytes[a] = getOneCount(a)==oneCount;
+				}
+			}
+			
+			public static int getOneCount(int i) {
+				if(i<0 || i>255)
+					throw new IllegalArgumentException("The argument ("+i+") must be between [0, 255].");
+				
+				int sum = 0;
+				for(int a = 0; a<8; a++) {
+					int j = i >> a;
+					if(j%2==1)
+						sum++;
+				}
+				return sum;
+			}
+
+			public boolean isMarker(int i) {
+				return bytes[i];
+			}
+			
+			@Override
+			public String toString() {
+				return "{"+oneCount+"}";
+			}
+		}
+		
+		public abstract boolean isMarker(int i);
+	}
+	
 	public static void write(ByteEncoder encoder,File src,File dst) throws IOException {
 		if(dst.exists()) {
 			if(!dst.delete())
@@ -343,10 +401,10 @@ public class Scrambler {
 	static class ScramblerLayerFactory {
 		
 		int capacitySeed;
-		ScramblerMarkerRule rule;
+		MarkerRule rule;
 		ScramblerSubstitutionModel substitutionModel;
 		
-		ScramblerLayerFactory(int capacitySeed, ScramblerMarkerRule rule, ScramblerSubstitutionModel substitutionModel) {
+		ScramblerLayerFactory(int capacitySeed, MarkerRule rule, ScramblerSubstitutionModel substitutionModel) {
 			if(rule==null)
 				throw new NullPointerException();
 			if(substitutionModel==null)
@@ -377,24 +435,24 @@ public class Scrambler {
 	 * @return the complex encoder based on the key.
 	 */
 	public Scrambler(CharSequence key,CharSequence characterSet) {
-		List<ScramblerMarkerRule> k = new ArrayList<>(256 + 32);
+		List<MarkerRule> k = new ArrayList<>(256 + 32);
 		
 		if(characterSet==null) {
 			for(int a = 0; a<256; a++) {
-				k.add(new ScramblerMarkerRule.Fixed(a));
+				k.add(new MarkerRule.Fixed(a));
 			}
 			for(int a = 0; a<32; a++) {
-				k.add(new ScramblerMarkerRule.OneCount(a%8));
+				k.add(new MarkerRule.OneCount(a%8));
 			}
 		} else {
 			Set<Integer> covered = new HashSet<>();
 			for(int a = 0; a<characterSet.length(); a++) {
 				int ch = characterSet.charAt(a);
 				if(covered.add(ch))
-					k.add(new ScramblerMarkerRule.Fixed(ch));
+					k.add(new MarkerRule.Fixed(ch));
 			}
 			for(int a = 0; a<8; a++) {
-				k.add(new ScramblerMarkerRule.OneCount(a%8));
+				k.add(new MarkerRule.OneCount(a%8));
 			}
 		}
 		Random random = key==null ? new Random(0) : new KeyedRandom(key);

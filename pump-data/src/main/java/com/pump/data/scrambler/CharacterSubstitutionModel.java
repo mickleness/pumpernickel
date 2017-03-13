@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+
+import com.pump.data.scrambler.Scrambler.MarkerRule;
 
 
 
@@ -72,7 +73,7 @@ public class CharacterSubstitutionModel implements ScramblerSubstitutionModel {
 	}
 
 	@Override
-	public void applySubstitutions(ScramblerMarkerRule markerRule,int[] array, int arrayOffset, int length) {
+	public void applySubstitutions(MarkerRule markerRule,int[] array, int arrayOffset, int length) {
 		for(int a = 0; a<length; a++) {
 			int oldValue = array[arrayOffset + a];
 			int ones = countOnes(oldValue);
