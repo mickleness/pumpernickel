@@ -1,8 +1,5 @@
 package com.pump.data;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,202 +14,67 @@ import java.util.Random;
 import java.util.Set;
 
 import com.pump.io.ByteEncoder;
-import com.pump.io.ByteEncoder.DataListener;
 import com.pump.io.ChainedByteEncoder;
 import com.pump.math.KeyedRandom;
 
 /** 
- * This is a cipher that reencodes data using a key. The encoding algorithm is identical
- * to the decoding algorithm, and it can use a piped stream of data.
+ * This is a cipher that outputs data where the encoding and decoding algorithm
+ * are identical. (That is: this object has no designation of "encoded" or "unencoded" data.
+ * As long as the same Scrambler object is used: the same process converts A to B and then
+ * B to A.)
  * <p>
- * A single Scrambler instance in isolation offers a small change that the human eye can
- * easily decipher (or at least recognize), but the static methods in this class layer
- * dozens of Scramblers on top of each other so the result is unrecognizable.
+ * Standard disclaimer: this may have its use cases, but it is no substitute for
+ * industry-standard security if that's what you're looking for.
  * <p>
- * This encoder operates by looking for <em>marker</em> bytes. We'll eventually encounter
- * one of three conditions:
- * <ul><li>We found two marker bytes (one to open and one to close)
- * so we can look at the run of bytes between them.</li>
- * <li>We've read i-consecutive bytes without encountering any markers, so we'll look at those
- * i-many bytes.</li>
- * <li>We found one marker, and then we read j-many consecutive bytes without finding a
- * matching closing marker, so we'll look at those j-many bytes.</li>/ul>
+ * A Scrambler can be configured in one of two ways:
+ * <ol><li>Without a character set. This object thinks and operates in bytes. This is useful
+ * when you're encoding blocks of raw binary data.</li>
+ * <li>With a character set. This object requires all incoming data to be part of this
+ * character set, and it will only ever output data in this character set. This is useful
+ * if you want to obfuscate well-formed Strings. For example you can scramble a series
+ * of registration codes that resemble "PRODUCT001". (The character set you'll pass in will
+ * be the complete alphabet and 10 digits.)</li></ol>
  * <p>
- * When we evaluate a run of bytes we use a {@link ReorderType} to rearrange those bytes.
- * These methods are guaranteed to be reversible, so if you pass data through a single
- * Scrambler object and then pass it through the same Scrambler object: your data is
- * restored to its original condition.
+ * This object obfuscates your data in two ways:
+ * <ol><li>A series of reordering <em>layers</em>. Each layer uses one or more maker characters.
+ * When we reach two markers (or identify x-many chars past an orphaned marker, or we pass y-many
+ * chars without any marker), we identify a <em>run</em>. This object alternates over a few
+ * {@link ReorderType ReorderTypes} that rearrange this data in a completely reversible way.
+ * This approach simply reorders your incoming data.</li>
+ * <li>Additionally we use a {@link SubstitutionModel} to replace bytes. So if you execute
+ * a Scrambler against "PRODUCT001" (using a whole alphabet), then the result may include
+ * any A-Z letter. (When a character set is used, we use a {@link CharacterSubstitutionModel}.
+ * Otherwise we use a {@link ByteSubstitutionModel}.) The substitution models are also fully
+ * reversible.
+ * </li></ol>
  * <p>
- * There is also an optional {@link SubstitutionModel} you can apply to this run of bytes.
- * A substitution model is basically a lookup code that can be further used to obfuscate data.
- * Everything described up to this point only rearranges existing data, but this can alter the
- * bytes.
- * <h3>Layering</h3>
- * If you apply one Scrambler ("X") twice, then your output is identical to your input. Similarly if you
- * run Scramblers X, Y, Y, X or X, Y, Z, Z, Y, X: then your data is unchanged. But if you use an
- * odd number of transformations then the data stays encrypted. For example: X, Y, Z, Y, X.
+ * A single layer by itself doesn't sufficiently scramble your data, but this places
+ * builds n-many layers together. Each layer is fully reversible, so if you pass
+ * your input through A and then pass that output through A again, you'll get your
+ * original input. Similarly if you pass your input through A, then B, then B, then A:
+ * you'll end up with your original input. If you pass your input through A-B-C-B-A:
+ * then you have something unique. But that unique thing can be decoded by similarly passing
+ * through A-B-C-B-A again.
  * <p>
- * When you use one of the static methods in this class you'll layer approximately 100
- * Scramblers together, so the results should be sufficiently unrecognizable.
+ * The number of layers this uses varies. For raw bytes, this uses about 300 layers
+ * (one for each byte, plus a few extra for good measure). When you've supplied a character
+ * set, this uses one layer for every unique letter in that character set.
  * <p>
- * <h3>Usage</h3>
- * <p>
- * When I first started playing with this idea: I had hoped to use it for security. But
- * that was a pipe dream, and in reality: you should never use anything except standard
- * Java security/encryption classes to encrypt data.
- * <p>
- * However over the years this has ended up being useful in a couple of scenarios:
- * <ul><li>One employer insisted we share unique identifiers with customers but at the
- * same time we should NOT reveal the actual UID our database used. This class let
- * us scramble the UID in an easily reversible way; consumers received a unique identifier
- * that we could make sense of in future sessions, but if a malicious consumer tried to
- * execute SQL using that UID they would fail.</li>
- * <li>Registration codes. Suppose you just want to encode "PRODUCT000001", "PRODUCT000002", 
- * "PRODUCT000003", etc. This provides a simple/reversible model to encode those values.</li></ul>
- * 
- * 
- * @see #createEncoder(String, boolean)
+ * Each Scrambler is also keyed using a password. This is used to generate pseudorandom
+ * numbers used to shuffle the layers and make other decisions to mix up the results.
  */
 public class Scrambler {
 	
-	/** The provides a command-line tool to encode and decode files.
-	 * 
-	 * <code>Scrambler -src filepath -dst filepath -ext styx -pwd password -substitutions</code>
-	 * 
-	 * @param args
-	 * @throws IOException 
+	/**
+	 * This class determines whether a byte is a marker or not.
 	 */
-	public static void main(String args[]) throws IOException {
-		List<String> argList = new ArrayList<String>();
-		for(String s : args) { 
-			if(s.startsWith("-")) s = s.toLowerCase();
-			argList.add(s);
-		}
-		
-		String ext = "scrmblr";
-		int i = argList.indexOf("-ext");
-		if(i!=-1) {
-			try {
-				ext = argList.remove(i+1);
-			} catch(IndexOutOfBoundsException e) {
-				System.err.println("error: \"-ext\" was declared but no extension was identified.");
-				System.exit(1);
-			}
-			argList.remove(i);
-			
-			//if the user prepended this with a period, delete it:
-			if(ext.startsWith("."))
-				ext = ext.substring(1);
-		}
-		
-		File src = null;
-		i = argList.indexOf("-src");
-		if(i!=-1) {
-			try {
-				src = new File(argList.remove(i+1));
-			} catch(IndexOutOfBoundsException e) {
-				System.err.println("error: \"-src\" was declared but no source file was identified.");
-				System.exit(1);
-			}
-			argList.remove(i);
-			if(!src.exists()) {
-				System.err.println("error: the source file does not exist ("+src.getAbsolutePath()+").");
-				System.exit(1);
-			} else if(!src.canRead()) {
-				System.err.println("error: the source file can not be read ("+src.getAbsolutePath()+").");
-				System.exit(1);
-			}
-		}
-		
-		String password = null;
-		i = argList.indexOf("-pwd");
-		if(i!=-1) {
-			try {
-				password = argList.remove(i+1);
-			} catch(IndexOutOfBoundsException e) {
-				System.err.println("error: \"-pwd\" was declared but no password was identified.");
-				System.exit(1);
-			}
-			argList.remove(i);
-		}
-		
-		File dst = null;
-		i = argList.indexOf("-dst");
-		if(i!=-1) {
-			try {
-				dst = new File(argList.remove(i+1));
-			} catch(IndexOutOfBoundsException e) {
-				System.err.println("error: \"-dst\" was declared but no destination file was identified.");
-				System.exit(1);
-			}
-			argList.remove(i);
-		}
-		
-		if(argList.size()>0) {
-			int exitCode = argList.size()==1 && 
-					(argList.get(0).equals("?") 
-					 || argList.get(0).equals("-help")
-					 || argList.get(0).equals("help") ) ? 0 : 1;
-			
-			if(exitCode==1) {
-				System.err.println("Illegal option(s): "+argList);
-			}
-			System.out.println("Scrambler Manual:\n\n"+
-				"Scrambler is an amateur/hackish encryption implementation. It is only intended for casual use, please "
-				+ "consider using an industry standard (such as AES) for essential security needs. Note this tool does "
-				+ "not distinguish encryption from decryption. (That is: one pass encrypts data, and another pass "
-				+ "decrypts it.)\n\n"+
-				"Usage: -src filepath [-dst filepath] [-ext scrmbl] [-pwd password]\n\n"+
-				"Options:\n"+
-				"\t-src: the source file you want to encode/decode.\n"+
-				"\t-dst: the destination file you want to write data to.\n"+
-				"\t-ext: if dst is omitted, then the source file will be renamed with this file extension. "
-				+ "\"scrmblr\" is used by default.\n"+
-				"\t-pwd: the password used to encrypt files. If this is not included then you will be prompted "
-				+ "for a password (with echoing disabled) once the program begins.");
-			System.exit(exitCode);
-		}
-
-		if(src==null) {
-			System.err.println("error: the -src argument is required See \"-help\" for instructions.");
-			System.exit(1);
-		}
-		
-		if(password==null) {
-			System.out.println("Password:");
-			password = new String(System.console().readPassword());
-		}
-		
-		if(src.isDirectory()) {
-			System.err.println("error: the source file is a directory. This version of Scrambler does not yet support encoding directories.");
-			System.exit(1);
-		}
-		if(dst!=null && dst.exists() && dst.isDirectory()) {
-			System.err.println("error: the destination file is a directory. Directories are not yet supported (and the source file is not a directory, which is weird!)");
-			System.exit(1);
-		} else if(dst==null) {
-			String s = src.getAbsolutePath();
-			if(s.endsWith("."+ext)) {
-				//it already resembles xyz.scrmblr
-				String shortName = s.substring(0, s.length()-ext.length()-1);
-				File file = new File(shortName);
-				if(!file.exists()) {
-					dst = file;
-				}
-			}
-			if(dst==null) {
-				dst = new File(s+"."+ext);
-			}
-		}
-
-		System.out.println("Source file: "+src.getAbsolutePath());
-		ByteEncoder encoder = new Scrambler(password).createEncoder();
-		write(encoder, src, dst);
-		System.out.println("Successfully encoded to: "+dst.getAbsolutePath());
-	}
-	
 	public static abstract class MarkerRule {
 		
+		/**
+		 * This MarkerRule uses a fixed byte as a marker. For example, if we
+		 * designate 0x33 as a marker, then every call to <code>isMarker( 0x33 )</code>
+		 * will return true.
+		 */
 		public static class Fixed extends MarkerRule {
 			int marker;
 			
@@ -220,6 +82,7 @@ public class Scrambler {
 				this.marker = marker;
 			}
 			
+			@Override
 			public boolean isMarker(int i) {
 				return i==marker;
 			}
@@ -230,6 +93,15 @@ public class Scrambler {
 			}
 		}
 
+		/**
+		 * This rule converts a byte to binary and counts the number of ones.
+		 * If a byte has the expect number of ones, then it is considered a marker.
+		 * <p>
+		 * So if this OneCount object expects two 1's, then the
+		 * bytes like <code>00000011</code> and <code>10000001</code> will be
+		 * identified as markers.
+		 * 
+		 */
 		public static class OneCount extends MarkerRule {
 			boolean[] bytes = new boolean[256];
 			int oneCount;
@@ -256,6 +128,7 @@ public class Scrambler {
 				return sum;
 			}
 
+			@Override
 			public boolean isMarker(int i) {
 				return bytes[i];
 			}
@@ -269,52 +142,10 @@ public class Scrambler {
 		public abstract boolean isMarker(int i);
 	}
 	
-	public static void write(ByteEncoder encoder,File src,File dst) throws IOException {
-		if(dst.exists()) {
-			if(!dst.delete())
-				throw new IOException("Unable to delete existing destination file: "+dst.getAbsolutePath());
-		}
-		if(!dst.createNewFile())
-			throw new IOException("Unable to create empty destination file: "+dst.getAbsolutePath());
-		try(InputStream in = new FileInputStream(src)) {
-			try(final OutputStream out = new FileOutputStream(dst)) {
-				final IOException[] writingProblem = new IOException[] { null };
-				encoder.setListener(new DataListener() {
-
-					@Override
-					public void chunkAvailable(ByteEncoder encoder) {
-						try {
-							int[] array = encoder.pullImmediately();
-							for(int k : array) {
-								out.write(k);
-							}
-						} catch(IOException e) {
-							writingProblem[0] = e;
-						}
-					}
-
-					@Override
-					public void encoderClosed(ByteEncoder encoder) {}
-					
-				});
-				int k = in.read();
-				while(k!=-1) {
-					encoder.push(k);
-					if(writingProblem[0]!=null) throw writingProblem[0];
-					k = in.read();
-				}
-				encoder.close();
-
-				int[] array = encoder.pullImmediately();
-				if(array!=null) {
-					for(int k2 : array) {
-						out.write(k2);
-					}
-				}
-			}
-		}
-	}
-	
+	/**
+	 * This is one layer of encoders in a {@link ChainedByteEncoder}
+	 * responsible for partially obfuscating byte data.
+	 */
 	protected static class Layer extends ByteEncoder {
 		
 		private enum RunType { NO_MARKER, STARTING_MARKER, BOTH_MARKERS };
@@ -446,7 +277,7 @@ public class Scrambler {
 		MarkerRule markerRule;
 		int reorderCycle = 0;
 
-		/** Create a Scrambler.
+		/** Create a Layer.
 		 * 
 		 * @param random the Random to use as data is being encoded. This may be null.
 		 * @param oneCount the number of 1's in a byte that are required to flag it as a marker.
@@ -780,13 +611,12 @@ public class Scrambler {
 		protected abstract void reorder(List<Integer> srcList,int srcPos,int length,int[] dest,int destPos);
 	};
 	
-	static class ScramblerLayerFactory {
+	class LayerFactory {
 		
 		int capacitySeed;
 		MarkerRule rule;
-		SubstitutionModel substitutionModel;
 		
-		ScramblerLayerFactory(int capacitySeed, MarkerRule rule, SubstitutionModel substitutionModel) {
+		LayerFactory(int capacitySeed, MarkerRule rule) {
 			if(rule==null)
 				throw new NullPointerException();
 			if(substitutionModel==null)
@@ -794,14 +624,14 @@ public class Scrambler {
 			
 			this.capacitySeed = capacitySeed;
 			this.rule = rule;
-			this.substitutionModel = substitutionModel;
 		}
 		public Layer createLayer() {
 			return new Layer(capacitySeed, rule, substitutionModel.clone());
 		}
 	}
 
-	protected List<ScramblerLayerFactory> layers = new ArrayList<>();
+	protected List<LayerFactory> layers = new ArrayList<>();
+	protected SubstitutionModel substitutionModel;
 
 	public Scrambler(CharSequence key) {
 		this(key, null);
@@ -846,15 +676,15 @@ public class Scrambler {
 		}
 
 		char[] charArray = characterSet == null ? null : characterSet.toString().toCharArray();
-		SubstitutionModel substitutionModel = characterSet==null ? 
+		substitutionModel = characterSet==null ? 
 				new ByteSubstitutionModel() : 
 				new CharacterSubstitutionModel(charArray);
 				
 		for(int a = 0; a<k.size(); a++) {
-			layers.add(new ScramblerLayerFactory(capacitySeeds.get(a), k.get(a), substitutionModel.clone() ));
+			layers.add(new LayerFactory(capacitySeeds.get(a), k.get(a)));
 		}
 		for(int a = k.size()-2; a>=0; a--) {
-			layers.add(new ScramblerLayerFactory(capacitySeeds.get(a), k.get(a), substitutionModel.clone()));
+			layers.add(new LayerFactory(capacitySeeds.get(a), k.get(a)));
 		}
 	}
 	
