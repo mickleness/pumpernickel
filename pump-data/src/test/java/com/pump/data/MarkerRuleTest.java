@@ -1,10 +1,10 @@
-package com.pump.data.scrambler;
+package com.pump.data;
 
 import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import com.pump.data.scrambler.Scrambler.MarkerRule;
+import com.pump.data.Scrambler.MarkerRule;
 
 public class MarkerRuleTest extends TestCase {
 	@Test

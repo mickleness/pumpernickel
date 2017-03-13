@@ -1,4 +1,4 @@
-package com.pump.data.scrambler;
+package com.pump.data;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -7,16 +7,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.TreeSet;
 
 import junit.framework.TestCase;
 
 import org.junit.Test;
 
 import com.pump.TestingStrings;
-import com.pump.data.scrambler.Scrambler.ReorderType;
+import com.pump.data.Scrambler.ReorderType;
 
 public class ScramblerTest extends TestCase implements TestingStrings {
 
