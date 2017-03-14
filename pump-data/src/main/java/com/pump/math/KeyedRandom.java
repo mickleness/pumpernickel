@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /** This is a Random implementation that is seeded by a String or a BigInteger.
- * <p>This means you give this a complex seed of arbitrary length, but this 
+ * <p>This means you can give this object a complex seed of arbitrary length, but this 
  * remains a deterministic pseudo-random number generator (unlike SecureRandom).
  * <p>This delegates to an array of Randoms seeded by 64-bit chunks of the original
  * master seed, so the complexity/variety of this Random is related to the length/size

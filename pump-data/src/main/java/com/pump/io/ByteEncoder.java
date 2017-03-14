@@ -11,7 +11,7 @@ import java.util.List;
 
 /** This object encodes a series of bytes (expressed as [0,255] integers).
  * <p>This data can be made available either in a dual-threaded push/pull model,
- * or in a single-threaded model by using the inner DataListener interface.
+ * or in a single-threaded model by using the inner {@link DataListener} interface.
  */
 public abstract class ByteEncoder implements AutoCloseable {
 
@@ -25,15 +25,24 @@ public abstract class ByteEncoder implements AutoCloseable {
 	
 	protected boolean closed = false;
 	private int waiting = 0;
-	DataListener listener = null;
+	private DataListener listener = null;
 
 	/** Assign a DataListener for this encoder.
+	 * <p>
+	 * An encoder only has 1 listener at a time, so you cannot add multiple listeners.
 	 * 
 	 * @param listener the listener to assign. This replaces any
 	 * previously assigned listener.
 	 */
 	public synchronized void setListener(DataListener listener) {
 		this.listener = listener;
+	}
+
+	/**
+	 * Return the existing DataListener that has already been assigned to this encoder.
+	 */
+	public synchronized DataListener getDataListener() {
+		return listener;
 	}
 	
 	/** This indicates that no more data will be made available.
@@ -97,7 +106,6 @@ public abstract class ByteEncoder implements AutoCloseable {
 	
 	/** This is exclusively called during <code>close()</code> to give this encoder
 	 * an opportunity to write any remaining data.
-	 * 
 	 */
 	protected abstract void flush() throws IOException;
 	
@@ -125,8 +133,8 @@ public abstract class ByteEncoder implements AutoCloseable {
 	private int[] outgoingData;
 	
 	/** Make a chunk of data available to be read.
-	 * This method may block until previously pushed chunks are
-	 * cleared.
+	 * If there is any data that hasn't been processed yet, then this method may 
+	 * block until previously pushed chunks are cleared by calling {@link #pull()}.
 	 * 
 	 * @param data a chunk of data that is ready to be pulled.
 	 */
@@ -147,16 +155,41 @@ public abstract class ByteEncoder implements AutoCloseable {
 			notify();
 	}
 
+	/**
+	 * Encode a String using UTF-8.
+	 * <p>
+	 * This breaks the String into an array of bytes, passes the bytes through this
+	 * encoder, and returns the resulting bytes re-assembled in a String using UTF-8.
+	 * 
+	 * @param string the String to encode.
+	 * @return the encoded String.
+	 */
 	public String encode(String string) {
 		return encode(string, StandardCharsets.UTF_8);
 	}
 
+	/**
+	 * Encode a String.
+	 * <p>
+	 * This breaks the String into an array of bytes, passes the bytes through this
+	 * encoder, and returns the resulting bytes re-assembled into a String.
+	 * 
+	 * @param string the String to encode.
+	 * @param charset the charset to convert the String to byte data.
+	 * @return the encoded String.
+	 */
 	public String encode(String string,Charset charset) {
 		byte[] data = string.getBytes(charset);
 		data = encode(data);
 		return new String(data, charset);
 	}
 	
+	/**
+	 * Encode an array of bytes.
+	 * 
+	 * @param data the bytes to encode.
+	 * @return the encoded bytes.
+	 */
 	public byte[] encode(byte[] data) {
 		try(ByteArrayOutputStream byteOut = new ByteArrayOutputStream(data.length)) {
 			try(OutputStream out = createOutputStream(byteOut)) {
@@ -169,6 +202,9 @@ public abstract class ByteEncoder implements AutoCloseable {
 		}
 	}
 	
+	/**
+	 * This filters an InputStream through this encoder.
+	 */
 	protected class EncodedInputStream extends InputStream {
 		class Chunk {
 			int[] data;
@@ -228,11 +264,24 @@ public abstract class ByteEncoder implements AutoCloseable {
 		}
 	}
 
-	public InputStream createInputStream(InputStream in) throws IOException {
+	/** Create an InputStrem that filters the argument's incoming data
+	 * through this encoder.
+	 * 
+	 * @param in the InputStream to filter.
+	 * @return the encoded InputStream.
+	 */
+	public synchronized InputStream createInputStream(InputStream in) throws IOException {
 		return new EncodedInputStream(in);
 	}
 
-	public OutputStream createOutputStream(final OutputStream out) {
+	/** Create an OutputStream that encodes the data as it is written to the
+	 * underlying OutputStream.
+	 * 
+	 * @param out the OutputStream to write encoded data to.
+	 * @return a stream that encodes data as it writes it to the underlying
+	 * OutputStream.
+	 */
+	public synchronized OutputStream createOutputStream(final OutputStream out) {
 		setListener(new DataListener() {
 			@Override
 			public void chunkAvailable(ByteEncoder encoder) throws IOException {
@@ -257,9 +306,5 @@ public abstract class ByteEncoder implements AutoCloseable {
 				ByteEncoder.this.close();
 			}
 		};
-	}
-
-	public synchronized DataListener getDataListener() {
-		return listener;
 	}
 }

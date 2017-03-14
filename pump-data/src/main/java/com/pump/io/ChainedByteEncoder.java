@@ -40,14 +40,18 @@ public class ChainedByteEncoder extends ByteEncoder {
 		}
 	}
 	
-	ByteEncoder[] encoders;	
+	private boolean addedData = false;
+	protected ByteEncoder[] encoders;	
 
 	public ChainedByteEncoder(ByteEncoder... encoders) {
 		addEncoders(encoders);
 	}
 
+	/** Add one or more encoders to this ChainedByteEncoder. */
 	public synchronized void addEncoders(ByteEncoder... newEncoders) {
-
+		if(addedData)
+			throw new IllegalStateException("You cannot add encoders after push(b) has been called. Encoders must be configured before writing data.");
+		
 		int k = encoders==null ? 0 : encoders.length;
 		for(int a = 0; a<newEncoders.length; a++) {
 			if(newEncoders[a].getDataListener()!=null)
@@ -70,6 +74,7 @@ public class ChainedByteEncoder extends ByteEncoder {
 
 	@Override
 	public synchronized void push(int b) throws IOException {
+		addedData = true;
 		encoders[encoders.length-1].push(b);
 	}
 
