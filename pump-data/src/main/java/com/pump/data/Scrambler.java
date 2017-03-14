@@ -167,20 +167,22 @@ public class Scrambler {
 				if(RunType.BOTH_MARKERS.equals(type)) {
 					l = length-2;
 					arrayOffset = 1;
+					bytes[0] = data[0];
+					bytes[length-1] = data[length-1];
 				} else if (RunType.NO_MARKER.equals(type)) {
 					arrayOffset = 0;
 					l = length;
 				} else {
 					l = length-1;
 					arrayOffset = 1;
+					bytes[0] = data[0];
 				}
-				System.arraycopy(data, 0, bytes, 0, length);
-				reorderType.reorder(bytes, arrayOffset, l, data, arrayOffset);
+				reorderType.reorder(data, arrayOffset, l, bytes, arrayOffset);
 				
 				if(substitutionModel!=null) {
-					substitutionModel.applySubstitutions(markerRule, data, arrayOffset, l);
+					substitutionModel.applySubstitutions(markerRule, bytes, arrayOffset, l);
 				}
-				return data;
+				return bytes;
 			}
 		}
 		
