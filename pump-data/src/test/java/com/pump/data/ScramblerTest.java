@@ -20,12 +20,12 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 
 	@Test
 	public void testReorderReverse() {
-		List<Integer> list = new ArrayList<Integer>();
+		int[] list = new int[20];
 		for(int a = 50; a<70; a++) {
-			list.add(a);
+			list[a-50] = a;
 		}
-		int[] array = new int[list.size()];
-		ReorderType.REVERSE.reorder(list, 0, list.size(), array, 0);
+		int[] array = new int[list.length];
+		ReorderType.REVERSE.reorder(list, 0, list.length, array, 0);
 		int[] expected = new int[] { 69, 68, 67, 66, 65, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50 };
 		for(int a = 0; a<array.length; a++) {
 			assertEquals(expected[a], array[a]);
@@ -34,12 +34,12 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 
 	@Test
 	public void testReorderNormal() {
-		List<Integer> list = new ArrayList<Integer>();
+		int[] list = new int[20];
 		for(int a = 50; a<70; a++) {
-			list.add(a);
+			list[a-50] = a;
 		}
-		int[] array = new int[list.size()];
-		ReorderType.NORMAL.reorder(list, 0, list.size(), array, 0);
+		int[] array = new int[list.length];
+		ReorderType.NORMAL.reorder(list, 0, list.length, array, 0);
 		int[] expected = new int[] { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69 };
 		for(int a = 0; a<array.length; a++) {
 			assertEquals(expected[a], array[a]);
@@ -48,24 +48,24 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 
 	@Test
 	public void testReorderReversePair() {
-		List<Integer> list = new ArrayList<Integer>();
+		int[] list = new int[20];
 		for(int a = 50; a<70; a++) {
-			list.add(a);
+			list[a-50] = a;
 		}
-		int[] array = new int[list.size()];
-		ReorderType.REVERSE_PAIRS.reorder(list, 0, list.size(), array, 0);
+		int[] array = new int[list.length];
+		ReorderType.REVERSE_PAIRS.reorder(list, 0, list.length, array, 0);
 		int[] expected = new int[] { 51, 50, 53, 52, 55, 54, 57, 56, 59, 58, 61, 60, 63, 62, 65, 64, 67, 66, 69, 68 };
 		for(int a = 0; a<array.length; a++) {
 			assertEquals(expected[a], array[a]);
 		}
 		
 		//test it with an odd number of elements:
-		list.clear();
+		list = new int[19];
 		for(int a = 50; a<69; a++) {
-			list.add(a);
+			list[a-50] = a;
 		}
-		array = new int[list.size()];
-		ReorderType.REVERSE_PAIRS.reorder(list, 0, list.size(), array, 0);
+		array = new int[list.length];
+		ReorderType.REVERSE_PAIRS.reorder(list, 0, list.length, array, 0);
 		expected = new int[] { 51, 50, 53, 52, 55, 54, 57, 56, 59, 58, 61, 60, 63, 62, 65, 64, 67, 66, 68 };
 		for(int a = 0; a<array.length; a++) {
 			assertEquals(expected[a], array[a]);
@@ -81,50 +81,53 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 
 	private void testReorderType(ReorderType reorderType) {
 		for(int max = 15; max<25; max++) {
-			List<Integer> srcList = new ArrayList<>();
+			int[] srcList = new int[max];
 			for(int a = 0; a<max; a++) {
-				srcList.add(a);
+				srcList[a] = a;
 			}
-			int[] dest = new int[srcList.size()];
-			int[] dest2 = new int[srcList.size()];
-			reorderType.reorder(srcList, 0, srcList.size(), dest, 0);
+			int[] dest = new int[srcList.length];
+			int[] dest2 = new int[srcList.length];
+			reorderType.reorder(srcList, 0, srcList.length, dest, 0);
 			
-			List<Integer> src2 = new ArrayList<>();
+			int[] src2 = new int[dest.length];
 			for(int a = 0; a<dest.length; a++) {
-				src2.add(dest[a]);
+				src2[a] = dest[a];
 			}
 			
-			reorderType.reorder(src2, 0, srcList.size(), dest2, 0);
+			reorderType.reorder(src2, 0, srcList.length, dest2, 0);
 
-			List<Integer> src3 = new ArrayList<>();
+			int[] src3 = new int[dest2.length];
 			for(int a = 0; a<dest2.length; a++) {
-				src3.add(dest2[a]);
+				src3[a] = dest2[a];
 			}
 			
-			assertEquals(srcList, src3);
+			assertEquals(srcList.length, src3.length);
+			for(int a = 0; a<srcList.length; a++) {
+				assertEquals(srcList[a], src3[a]);
+			}
 		}
 	}
 
 	@Test
 	public void testReorderCutDeck() {
-		List<Integer> list = new ArrayList<Integer>();
+		int[] list = new int[20];
 		for(int a = 50; a<70; a++) {
-			list.add(a);
+			list[a-50] = a;
 		}
-		int[] array = new int[list.size()];
-		ReorderType.CUT_DECK.reorder(list, 0, list.size(), array, 0);
+		int[] array = new int[list.length];
+		ReorderType.CUT_DECK.reorder(list, 0, list.length, array, 0);
 		int[] expected = new int[] { 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59 };
 		for(int a = 0; a<array.length; a++) {
 			assertEquals(expected[a], array[a]);
 		}
 		
 		//test it with an odd number of elements:
-		list.clear();
+		list = new int[19];
 		for(int a = 50; a<69; a++) {
-			list.add(a);
+			list[a-50] = a;
 		}
-		array = new int[list.size()];
-		ReorderType.CUT_DECK.reorder(list, 0, list.size(), array, 0);
+		array = new int[list.length];
+		ReorderType.CUT_DECK.reorder(list, 0, list.length, array, 0);
 		expected = new int[] { 59, 60, 61, 62, 63, 64, 65, 66, 67, 50, 51, 52, 53, 54, 55, 56, 57, 58, 68 };
 		for(int a = 0; a<array.length; a++) {
 			assertEquals(expected[a], array[a]);
@@ -133,24 +136,24 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 
 	@Test
 	public void testReverseCutDeck() {
-		List<Integer> list = new ArrayList<Integer>();
+		int[] list = new int[20];
 		for(int a = 50; a<70; a++) {
-			list.add(a);
+			list[a-50] = a;
 		}
-		int[] array = new int[list.size()];
-		ReorderType.REVERSE_CUT_DECK.reorder(list, 0, list.size(), array, 0);
+		int[] array = new int[list.length];
+		ReorderType.REVERSE_CUT_DECK.reorder(list, 0, list.length, array, 0);
 		int[] expected = new int[] { 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 69, 68, 67, 66, 65, 64, 63, 62, 61, 60 };
 		for(int a = 0; a<array.length; a++) {
 			assertEquals(expected[a], array[a]);
 		}
 		
 		//test it with an odd number of elements:
-		list.clear();
+		list = new int[19];
 		for(int a = 50; a<69; a++) {
-			list.add(a);
+			list[a-50] = a;
 		}
-		array = new int[list.size()];
-		ReorderType.REVERSE_CUT_DECK.reorder(list, 0, list.size(), array, 0);
+		array = new int[list.length];
+		ReorderType.REVERSE_CUT_DECK.reorder(list, 0, list.length, array, 0);
 		expected = new int[] { 58, 57, 56, 55, 54, 53, 52, 51, 50, 68, 67, 66, 65, 64, 63, 62, 61, 60, 59 };
 		for(int a = 0; a<array.length; a++) {
 			assertEquals(expected[a], array[a]);
@@ -169,19 +172,19 @@ public class ScramblerTest extends TestCase implements TestingStrings {
 
 	@Test
 	private void testReorderRepeat(ReorderType type, String s) {
-		List<Integer> list = new ArrayList<Integer>(s.length());
+		int[] list = new int[s.length()];
 		for(int a = 0; a<s.length(); a++) {
-			list.add( (int)s.charAt(a) );
+			list[a] =  (int)s.charAt(a);
 		}
-		int[] array = new int[list.size()];
-		type.reorder(list, 0, list.size(), array, 0);
+		int[] array = new int[list.length];
+		type.reorder(list, 0, list.length, array, 0);
 		
-		List<Integer> list2 = new ArrayList<Integer>();
-		int[] array2 = new int[list.size()];
+		int[] list2 = new int[array.length];
+		int[] array2 = new int[list.length];
 		for(int a = 0; a<array.length; a++) {
-			list2.add(array[a]);
+			list2[a] = array[a];
 		}
-		type.reorder(list2, 0, list2.size(), array2, 0);
+		type.reorder(list2, 0, list2.length, array2, 0);
 		for(int a = 0; a<s.length(); a++) {
 			assertEquals( type+" failed for char #"+a, (int)s.charAt(a), array2[a] );
 		}

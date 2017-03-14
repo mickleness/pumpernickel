@@ -158,7 +158,8 @@ public class Scrambler {
 				this.type = type;
 				length = 0;
 			}
-			
+
+			private int[] bytes = new int[100];
 			private int[] encode() {
 				ReorderType reorderType = reorderTypes[ (reorderCycle++)%reorderTypes.length ];
 				int arrayOffset;
@@ -173,11 +174,9 @@ public class Scrambler {
 					l = length-1;
 					arrayOffset = 1;
 				}
-				List<Integer> bytes = new ArrayList<>(length);
-				for(int a = 0; a<length; a++) {
-					bytes.add(data[a]);
-				}
+				System.arraycopy(data, 0, bytes, 0, length);
 				reorderType.reorder(bytes, arrayOffset, l, data, arrayOffset);
+				
 				if(substitutionModel!=null) {
 					substitutionModel.applySubstitutions(markerRule, data, arrayOffset, l);
 				}
@@ -454,10 +453,10 @@ public class Scrambler {
 		/** "ABCDEF" is encoded as "ABCDEF" */
 		NORMAL() {
 			@Override
-			protected void reorder(List<Integer> srcList, int srcPos,
+			protected void reorder(int[] srcList, int srcPos,
 					int length, int[] dest, int destPos) {
 				for(int a = 0; a<length; a++) {
-					dest[destPos+a] = srcList.get(srcPos+a);
+					dest[destPos+a] = srcList[srcPos+a];
 				}
 			}
 		},
@@ -465,10 +464,10 @@ public class Scrambler {
 		/** "ABCDEF" is encoded as "FEDCBA" */
 		REVERSE() {
 			@Override
-			protected void reorder(List<Integer> srcList, int srcPos,
+			protected void reorder(int[] srcList, int srcPos,
 					int length, int[] dest, int destPos) {
 				for(int a = 0; a<length; a++) {
-					dest[destPos+a] = srcList.get(length-1-a+srcPos);
+					dest[destPos+a] = srcList[length-1-a+srcPos];
 				}
 			}
 		},
@@ -476,14 +475,14 @@ public class Scrambler {
 		/** "ABCDEF" is encoded as "BA"+"DC"+"FE" */
 		REVERSE_PAIRS() {
 			@Override
-			protected void reorder(List<Integer> srcList, int srcPos,
+			protected void reorder(int[] srcList, int srcPos,
 					int length, int[] dest, int destPos) {
 				for(int a = 0; a<length; a+=2) {
 					if(a+1<length) {
-						dest[destPos+a] = srcList.get(srcPos+a+1);
-						dest[destPos+a+1] = srcList.get(srcPos+a);
+						dest[destPos+a] = srcList[srcPos+a+1];
+						dest[destPos+a+1] = srcList[srcPos+a];
 					} else {
-						dest[destPos+a] = srcList.get(srcPos+a);
+						dest[destPos+a] = srcList[srcPos+a];
 					}
 				}
 			}
@@ -492,13 +491,13 @@ public class Scrambler {
 		/** "ABCDEF" is encoded as "DEF"+"ABC" */
 		CUT_DECK() {
 			@Override
-			protected void reorder(List<Integer> srcList, int srcPos,
+			protected void reorder(int[] srcList, int srcPos,
 					int length, int[] dest, int destPos) {
 				int split = length/2;
-				dest[destPos+length-1] = srcList.get(srcPos+length-1);
+				dest[destPos+length-1] = srcList[srcPos+length-1];
 				for(int a = 0; a<split; a++) {
-					dest[destPos+a] = srcList.get(srcPos+a+split);
-					dest[destPos+a+split] = srcList.get(srcPos+a);
+					dest[destPos+a] = srcList[srcPos+a+split];
+					dest[destPos+a+split] = srcList[srcPos+a];
 				}
 			}
 		},
@@ -506,14 +505,14 @@ public class Scrambler {
 		/** "ABCDEF" is encoded as "CBA"+"FED" */
 		REVERSE_CUT_DECK() {
 			@Override
-			protected void reorder(List<Integer> srcList, int srcPos,
+			protected void reorder(int[] srcList, int srcPos,
 					int length, int[] dest, int destPos) {
 				int split = length/2;
 				for(int a = 0; a<split; a++) {
-					dest[destPos+a] = srcList.get(srcPos+split-1-a);
+					dest[destPos+a] = srcList[srcPos+split-1-a];
 				}
 				for(int a = split; a<length; a++) {
-					dest[destPos+a] = srcList.get(srcPos+length-1-a+split);
+					dest[destPos+a] = srcList[srcPos+length-1-a+split];
 				}
 			}
 		};
@@ -526,7 +525,7 @@ public class Scrambler {
 		 * @param dest the array to store the data in
 		 * @param destPos the first index in the dest array to write to
 		 */
-		protected abstract void reorder(List<Integer> srcList,int srcPos,int length,int[] dest,int destPos);
+		protected abstract void reorder(int[] srcList,int srcPos,int length,int[] dest,int destPos);
 	};
 
 	protected List<MarkerRule> layers = new ArrayList<>();
