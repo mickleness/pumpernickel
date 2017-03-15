@@ -848,7 +848,7 @@ public class IOUtils {
 					m = new HashMap<String, AtomicLong>();
 					dirMap.put(parentFile, m);
 				}
-				ctr = m.get(parentFile);
+				ctr = m.get(name);
 				if(ctr==null) {
 					ctr = new AtomicLong(1);
 					m.put(name, ctr);
