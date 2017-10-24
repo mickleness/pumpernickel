@@ -6,21 +6,22 @@
   <artifactId>pump-showcase</artifactId>
   <version>1.0.00</version>
   <packaging>jar</packaging>
-  <repositories>
-    <repository>
-        <id>com.pump</id>
-        <url>https://github.com/mickleness/pumpernickel/tree/master/pump-release/</url>
-    </repository>
-  </repositories>
-  <url>https://github.com/mickleness/pumpernickel/tree/master/pump-showcase</url>
+
+  <parent>
+    <groupId>com.pump</groupId>
+    <artifactId>pumpernickel</artifactId>
+    <version>1.0.00</version>
+  </parent>
 
   <name>pump-showcase</name>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+  <url>https://github.com/mickleness/pumpernickel/tree/master/pump-showcase</url>
 
   <dependencies>
+    <dependency>
+      <groupId>com.pump</groupId>
+      <artifactId>pump-jar</artifactId>
+      <version>1.0.00</version>
+    </dependency>
     <dependency>
       <groupId>com.pump</groupId>
       <artifactId>pump-transition</artifactId>
@@ -47,10 +48,9 @@
       <version>1.0.00</version>
     </dependency>
   </dependencies>
-  
+
   <build>
     <plugins>
-    
       <!-- Build an executable JAR -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -59,14 +59,11 @@
         <configuration>
           <archive>
             <manifest>
-              <!-- <addClasspath>true</addClasspath> -->
               <mainClass>com.pump.showcase.PumpernickelShowcaseApp</mainClass>
             </manifest>
           </archive>
         </configuration>
       </plugin>
-      
-      
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
@@ -75,7 +72,6 @@
           </descriptorRefs>
         </configuration>
       </plugin>
-        
     </plugins>
   </build>
 </project>
