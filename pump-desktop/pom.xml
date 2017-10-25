@@ -6,19 +6,15 @@
   <artifactId>pump-desktop</artifactId>
   <version>1.0.00</version>
   <packaging>jar</packaging>
-  <repositories>
-    <repository>
-        <id>com.pump</id>
-        <url>https://github.com/mickleness/pumpernickel/tree/master/pump-release/</url>
-    </repository>
-  </repositories>
-  <url>https://github.com/mickleness/pumpernickel/tree/master/pump-desktop</url>
+
+  <parent>
+    <groupId>com.pump</groupId>
+    <artifactId>pumpernickel</artifactId>
+    <version>1.0.00</version>
+  </parent>
 
   <name>pump-desktop</name>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+  <url>https://github.com/mickleness/pumpernickel/tree/master/pump-desktop</url>
 
   <dependencies>
     <dependency>

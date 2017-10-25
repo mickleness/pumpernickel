@@ -7,9 +7,12 @@
   <version>1.0.00</version>
   <packaging>jar</packaging>
 
+  <parent>
+    <groupId>com.pump</groupId>
+    <artifactId>pumpernickel</artifactId>
+    <version>1.0.00</version>
+  </parent>
+
   <name>pump-common</name>
   <url>https://github.com/mickleness/pumpernickel/tree/master/common</url>
-
-  <dependencies>
-  </dependencies>
 </project>
