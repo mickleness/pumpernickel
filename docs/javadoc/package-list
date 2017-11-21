@@ -9,6 +9,7 @@ com.pump.awt.dnd
 com.pump.awt.text
 com.pump.awt.text.writing
 com.pump.blog
+com.pump.breakout
 com.pump.data
 com.pump.data.branch
 com.pump.data.encoder
