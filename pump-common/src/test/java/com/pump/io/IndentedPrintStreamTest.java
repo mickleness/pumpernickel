@@ -14,6 +14,8 @@ import java.io.ByteArrayOutputStream;
 
 import org.junit.Test;
 
+import com.pump.util.JVM;
+
 import junit.framework.TestCase;
 
 public class IndentedPrintStreamTest extends TestCase {
@@ -34,6 +36,7 @@ public class IndentedPrintStreamTest extends TestCase {
 		}
 		
 		String txt = new String(out.toByteArray(), "UTF-8");
-		assertEquals("Outer Text\r\n\tMiddle Text\r\n\t\tInner Text\r\n\tMore Middle Text\r\nMore Outer Text\r\n", txt);
+		String lineBreak = JVM.isWindows ? "\r\n" : "\n";
+		assertEquals("Outer Text" + lineBreak+"\tMiddle Text"+lineBreak+"\t\tInner Text"+lineBreak+"\tMore Middle Text"+lineBreak+"More Outer Text"+lineBreak, txt);
 	}
 }
