@@ -38,11 +38,6 @@ public class ReleaseApp {
 		javadocBuilder.run(workspace);
 		
 		System.out.println();
-		System.out.println("Running FavenReleaseBuilder:");
-		FavenReleaseBuilder releaseBuilder = new FavenReleaseBuilder();
-		releaseBuilder.run(workspace.getProjects().values(), workspace.getReleases());
-		
-		System.out.println();
 		System.out.println("Done.");
 		
 		System.exit(0);
