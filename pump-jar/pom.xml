@@ -4,7 +4,7 @@
 
   <groupId>com.pump</groupId>
   <artifactId>pump-jar</artifactId>
-  <version>1.0.00</version>
+  <version>1.0.01-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <parent>
