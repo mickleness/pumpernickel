@@ -12,6 +12,12 @@ package com.pump.release;
 
 import com.pump.desktop.temp.TempFileManager;
 
+/**
+ * Instructions:
+ * <ol><li>Run this app</li>
+ * <li>Right-click pumpernickel/pom.xml and select "Run As...". Select "Maven install"</li>
+ * <li>Run "BackupJars" app.</li></ol>
+ */
 public class ReleaseApp {
 	public static void main(String[] args) throws Exception {
 		TempFileManager.initialize("Pumpernickel-Prep");
