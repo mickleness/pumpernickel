@@ -46,7 +46,7 @@ public class KeyedRandomTest extends TestCase implements TestingStrings {
 	
 	private void testDistribution(KeyedRandom random) {
 		SortedMap<Integer, MutableLong> map = new TreeMap<Integer, MutableLong>();
-		for(long a = 0; a<0xfffffff; a++) {
+		for(long a = 0; a<0xffff; a++) {
 			double v = random.nextDouble();
 			int i = (int)(v*100);
 			MutableLong z = map.get(i);
@@ -65,7 +65,7 @@ public class KeyedRandomTest extends TestCase implements TestingStrings {
 			diffs = diffs.add( square );
 		}
 		
-		double ratio = new BigDecimal(median).divide(BigDecimal.valueOf(2).pow(28).divide(BigDecimal.valueOf(100))).doubleValue();
+		double ratio = new BigDecimal(median).divide(BigDecimal.valueOf(2).pow(16).divide(BigDecimal.valueOf(100))).doubleValue();
 		assertTrue(ratio+" needs to be close to 1.0", ratio>.99 && ratio<1.01);
 		BigInteger stdDev = diffs.divide(BigInteger.valueOf(map.size()));
 		assertTrue( isLong(stdDev) );
