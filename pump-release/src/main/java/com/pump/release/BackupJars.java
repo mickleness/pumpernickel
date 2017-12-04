@@ -18,6 +18,7 @@ import java.util.prefs.Preferences;
 import javax.swing.JFrame;
 
 import com.pump.io.FileTree;
+import com.pump.io.IOUtils;
 import com.pump.swing.TextInputDialog;
 import com.pump.swing.TextInputDialog.FilePathInputHandler;
 import com.pump.swing.TextInputDialog.StringInputHandler;
@@ -42,17 +43,26 @@ public class BackupJars {
 		File mavenDir = new File(mavenDirPath);
 		Workspace workspace = new Workspace();
 		String k = "com"+File.separator+"pump"+File.separator;
-		for(File jarFile : new FileTree(mavenDir, "jar")) {
-			String path = jarFile.getAbsolutePath();
+		for(File file : new FileTree(mavenDir)) {
+			String path = file.getAbsolutePath();
 			int i = path.indexOf(k);
-			if(i!=-1) {
-				String remainder = path.substring(i + k.length());
-				String[] terms = remainder.split("\\"+File.separator);
-				JarId jarId = new JarId(terms[0], terms[1]);
-				workspace.getReleases().setJar(jarId, jarFile);
+			if(i!=-1 && (!file.getName().equals(".DS_STORE"))) {
+				String remainder = path.substring(i);
+				String z = workspace.getReleases().getDirectory() + File.separator + remainder;
+				File newFile = new File(z);
+				
+				if(file.isDirectory()) {
+					newFile.mkdirs();
+				} else {
+					boolean result = IOUtils.copy(file, newFile, true);
+					if(result) {
+						System.out.println("Copied "+file.getAbsolutePath()+" to "+newFile.getAbsolutePath());			
+					} else {
+						System.out.println("Skipped "+file.getAbsolutePath()+" to "+newFile.getAbsolutePath());
+					}
+				}
 			}
 		}
-		workspace.getReleases().save();
 		System.out.println("Done");
 		System.exit(0);
 	}
