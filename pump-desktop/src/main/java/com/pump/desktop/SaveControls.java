@@ -183,18 +183,25 @@ public abstract class SaveControls {
 			}
 		}
 		
-		File file = this.showFileDialog(FileDialog.LOAD, "Open File...", null, getDocumentFileExtension());
+		File file = this.showFileDialog(FileDialog.LOAD, "Open File...", null, getReadableDocumentFileExtensions());
 		if(file==null) throw new UserCancelledException();
 		openFile(file);
 		recentMenu.addFile(file);
 		setFile(file);
 	}
 	
-	/** Return the document file extension for files this SaveableFrame represents.
+	/** Return the document file extensions for files this SaveControls interacts with.
 	 * For example "jpg" or "txt".
-	 * @return the document file extension for files this SaveableFrame represents.
+	 * @return the document file extensions for files this SaveControls interacts with.
 	 */
-	public abstract String getDocumentFileExtension();
+	public abstract String[] getReadableDocumentFileExtensions();
+	
+	/**
+	 * Return the document file extension that should be used for new saves. This may dynamically change during runtime.
+	 * 
+	 * @return the document file extension that should be used for new saves.
+	 */
+	public abstract String getWriteableDocumentFileExtension();
 	
 	protected abstract void openFile(File file) throws UserCancelledException, Exception;
 	
@@ -222,8 +229,7 @@ public abstract class SaveControls {
 	 * which needs to be handled on the EDT (and this call needs to be
 	 * off the EDT). This argument may not always be the same as 
 	 * <code>this.getFile()</code>. For example: calling <code>saveFile(newFile)</code>
-	 * can be used to implement a "Save As..." function. Note this method
-	 * does not replace this SaveableFrame's file with the argument.
+	 * can be used to implement a "Save As..." function.
 	 * @param cancellable an optional argument. If non-null then this method needs
 	 * to constantly poll this object to see if the user indicated they wanted to cancel
 	 * this operation. In that case this method should wrap up as cleanly as possible and
@@ -282,7 +288,7 @@ public abstract class SaveControls {
 	 */
 	protected File doSaveAs() throws UserCancelledException, Exception {
 		File defaultFile = getFile();
-		String ext = getDocumentFileExtension();
+		String ext = getWriteableDocumentFileExtension();
 		File file = showFileDialog(FileDialog.SAVE, "Save As", defaultFile, ext);
 		showSaveDialogAndDoSave(file);
 		setFile(file);
