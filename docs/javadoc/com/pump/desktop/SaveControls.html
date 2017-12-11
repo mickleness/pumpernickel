@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":6,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":6,"i13":10,"i14":6,"i15":6,"i16":10,"i17":10,"i18":10,"i19":10};
+var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":6,"i9":10,"i10":10,"i11":10,"i12":6,"i13":6,"i14":10,"i15":6,"i16":6,"i17":10,"i18":10,"i19":10,"i20":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -213,34 +213,34 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#get-javax.swing.JFrame-">get</a></span>(javax.swing.JFrame&nbsp;f)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>abstract java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getDocumentFileExtension--">getDocumentFileExtension</a></span>()</code>
-<div class="block">Return the document file extension for files this SaveableFrame represents.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code>javax.swing.AbstractAction</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getExitAction--">getExitAction</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>javax.swing.JMenuItem</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getExitMenuItem--">getExitMenuItem</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getFile--">getFile</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>javax.swing.JFrame</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getFrame--">getFrame</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>javax.swing.AbstractAction</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getOpenAction--">getOpenAction</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>javax.swing.JMenuItem</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getOpenMenuItem--">getOpenMenuItem</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>abstract java.lang.String[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getReadableDocumentFileExtensions--">getReadableDocumentFileExtensions</a></span>()</code>
+<div class="block">Return the document file extensions for files this SaveControls interacts with.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../com/pump/swing/RecentMenu.html" title="class in com.pump.swing">RecentMenu</a></code></td>
@@ -255,31 +255,37 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getSaveMenuItem--">getSaveMenuItem</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
+<td class="colFirst"><code>abstract java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getWriteableDocumentFileExtension--">getWriteableDocumentFileExtension</a></span>()</code>
+<div class="block">Return the document file extension that should be used for new saves.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#isDocumentDirty--">isDocumentDirty</a></span>()</code>
 <div class="block">Returns whether this window contains unsaved changes.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#openFile--">openFile</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#openFile-java.io.File-">openFile</a></span>(java.io.File&nbsp;file)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#saveFile-java.io.File-com.pump.swing.Cancellable-">saveFile</a></span>(java.io.File&nbsp;f,
         <a href="../../../com/pump/swing/Cancellable.html" title="interface in com.pump.swing">Cancellable</a>&nbsp;cancellable)</code>
 <div class="block">Save the document this window represents to the argument provided.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#setFile-java.io.File-">setFile</a></span>(java.io.File&nbsp;f)</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>protected java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#showFileDialog-int-java.lang.String-java.io.File-java.lang.String...-">showFileDialog</a></span>(int&nbsp;dialogMode,
               java.lang.String&nbsp;dialogTitle,
@@ -288,13 +294,13 @@ extends java.lang.Object</pre>
 <div class="block">Show a FileDialog.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#showSaveDialogAndDoSave-java.io.File-">showSaveDialogAndDoSave</a></span>(java.io.File&nbsp;file)</code>
 <div class="block">This is called on the EDT to save to a File.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#tryToClose--">tryToClose</a></span>()</code>
 <div class="block">If true then the user saved their changes as this method was called.</div>
@@ -470,18 +476,32 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="getDocumentFileExtension--">
+<a name="getReadableDocumentFileExtensions--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getDocumentFileExtension</h4>
-<pre>public abstract&nbsp;java.lang.String&nbsp;getDocumentFileExtension()</pre>
-<div class="block">Return the document file extension for files this SaveableFrame represents.
+<h4>getReadableDocumentFileExtensions</h4>
+<pre>public abstract&nbsp;java.lang.String[]&nbsp;getReadableDocumentFileExtensions()</pre>
+<div class="block">Return the document file extensions for files this SaveControls interacts with.
  For example "jpg" or "txt".</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the document file extension for files this SaveableFrame represents.</dd>
+<dd>the document file extensions for files this SaveControls interacts with.</dd>
+</dl>
+</li>
+</ul>
+<a name="getWriteableDocumentFileExtension--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getWriteableDocumentFileExtension</h4>
+<pre>public abstract&nbsp;java.lang.String&nbsp;getWriteableDocumentFileExtension()</pre>
+<div class="block">Return the document file extension that should be used for new saves. This may dynamically change during runtime.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the document file extension that should be used for new saves.</dd>
 </dl>
 </li>
 </ul>
@@ -555,8 +575,7 @@ extends java.lang.Object</pre>
  which needs to be handled on the EDT (and this call needs to be
  off the EDT). This argument may not always be the same as 
  <code>this.getFile()</code>. For example: calling <code>saveFile(newFile)</code>
- can be used to implement a "Save As..." function. Note this method
- does not replace this SaveableFrame's file with the argument.</dd>
+ can be used to implement a "Save As..." function.</dd>
 <dd><code>cancellable</code> - an optional argument. If non-null then this method needs
  to constantly poll this object to see if the user indicated they wanted to cancel
  this operation. In that case this method should wrap up as cleanly as possible and
