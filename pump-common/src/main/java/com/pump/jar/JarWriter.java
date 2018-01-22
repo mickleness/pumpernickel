@@ -39,7 +39,7 @@ import java.util.zip.ZipInputStream;
 
 import com.pump.io.FileTreeIterator;
 import com.pump.io.IOUtils;
-import com.pump.io.java.JavaStringHarvester;
+import com.pump.io.parser.java.JavaStringHarvester;
 import com.pump.util.BufferedPipe;
 
 /** This helps create jars.

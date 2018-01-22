@@ -100,6 +100,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("mathGDemo", "Math: MathG Comparison", new MathGDemo(), Layout.STRETCH_TO_FIT);
 			addSection("mathEquations", "Math: Gaussian Elimination", new EquationsDemo(), Layout.STRETCH_TO_FIT);
 			addSection("textSourceCode", "Text: Java Source Code Component", new JavaTextComponentHighlighterDemo(true), Layout.STRETCH_TO_FIT);
+			addSection("textXML", "Text: XML Component", new XMLTextComponentHighlighterDemo(true), Layout.STRETCH_TO_FIT);
 			addSection("textSearchDemo", "Text: Search Controls", new TextSearchDemo(), Layout.STRETCH_TO_FIT);
 			addSection("gifWriter", "Images: Creating Animated Gifs", new GifWriterDemo(), Layout.STRETCH_TO_FIT);
 			//TODO: add CubicIntersectionsPanel with 18-degree polynomial?

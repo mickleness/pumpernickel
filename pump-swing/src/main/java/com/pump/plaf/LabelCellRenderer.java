@@ -68,7 +68,8 @@ public class LabelCellRenderer<T> implements ListCellRenderer<T>, TreeCellRender
 	/** Adjust the text and the icon of the <code>label</code> field.
 	 */
 	protected void formatLabel(T value) {
-		label.setText(value.toString());
+		String str = value==null ? "" : value.toString();
+		label.setText(str);
 		label.setIcon(null);
 	}
 	

@@ -20,25 +20,21 @@ import javax.swing.text.StyleConstants;
 
 import com.pump.blog.Blurb;
 import com.pump.io.Token;
+import com.pump.io.java.JavaParser;
 import com.pump.io.java.JavaParser.CharToken;
 import com.pump.io.java.JavaParser.CommentToken;
 import com.pump.io.java.JavaParser.StringToken;
 import com.pump.io.java.JavaParser.SymbolCharToken;
 import com.pump.io.java.JavaParser.WordToken;
-import com.pump.text.TextComponentHighlighter;
+import com.pump.text.TokenTextComponentHighlighter;
 
-/** This highlights text using a monospaced formatting scheme similar to the default
- * Eclipse formatting options.
+/**
+ * This highlights text using a monospaced formatting scheme similar to the
+ * default Eclipse formatting options.
  */
-@Blurb (
-imageName = "JavaTextComponentHighlighterDemo.png",
-title = "Text: Formatting Source Code in Swing",
-releaseDate = "December 2015",
-summary = "This article discusses how to set up a <code>JTextPane</code> to render Java source code with "+
-		"stylized font attributes and line numbers.",
-article = "http://javagraphics.blogspot.com/2015/12/text-formatting-source-code-in-swing.html"
-)
-public class JavaTextComponentHighlighter extends TextComponentHighlighter {
+@Blurb(imageName = "JavaTextComponentHighlighterDemo.png", title = "Text: Formatting Source Code in Swing", releaseDate = "December 2015", summary = "This article discusses how to set up a <code>JTextPane</code> to render Java source code with "
+		+ "stylized font attributes and line numbers.", article = "http://javagraphics.blogspot.com/2015/12/text-formatting-source-code-in-swing.html")
+public class JavaTextComponentHighlighter extends TokenTextComponentHighlighter {
 
 	protected SimpleAttributeSet defaultAttributes;
 	protected SimpleAttributeSet keywordAttributes;
@@ -46,9 +42,11 @@ public class JavaTextComponentHighlighter extends TextComponentHighlighter {
 	protected SimpleAttributeSet stringAttributes;
 	protected SimpleAttributeSet importantPunctuationAttributes;
 
-	/** Create a new JavaTextComponentHighlighter.
+	/**
+	 * Create a new JavaTextComponentHighlighter.
 	 * 
-	 * @param jtc the text component to apply formatting to.
+	 * @param jtc
+	 *            the text component to apply formatting to.
 	 */
 	public JavaTextComponentHighlighter(JTextComponent jtc) {
 		super(jtc);
@@ -57,73 +55,75 @@ public class JavaTextComponentHighlighter extends TextComponentHighlighter {
 		jtc.getCaret().setBlinkRate(500);
 
 		initializeAttributes();
-		
-		Font defaultFont = new Font(StyleConstants.getFontFamily(defaultAttributes), 0, StyleConstants.getFontSize(defaultAttributes));
-		jtc.setFont( defaultFont );
+
+		Font defaultFont = new Font(
+				StyleConstants.getFontFamily(defaultAttributes), 0,
+				StyleConstants.getFontSize(defaultAttributes));
+		jtc.setFont(defaultFont);
 	}
-	
+
 	@Override
 	protected SimpleAttributeSet getDefaultAttributes() {
 		initializeAttributes();
 		return defaultAttributes;
 	}
-	
 
 	/** Initialize the SimpleAttributeSets used to format text. */
 	protected void initializeAttributes() {
-		if(defaultAttributes==null) {
-    		Color keywordColor = new Color(127, 0, 85);
-    		Color commentColor = new Color(0, 140, 0);
-    		Color stringColor = new Color(45, 0, 255);
-    
-    		defaultAttributes = new SimpleAttributeSet();
-    		StyleConstants.setFontFamily(defaultAttributes, "Courier");
-    		StyleConstants.setFontSize(defaultAttributes, 14);
-    
-    		keywordAttributes = new SimpleAttributeSet(defaultAttributes);
-    		StyleConstants.setBold(keywordAttributes, true);
-    		StyleConstants.setForeground(keywordAttributes, keywordColor);
-    
-    		commentAttributes = new SimpleAttributeSet(defaultAttributes);
-    		StyleConstants.setForeground(commentAttributes, commentColor);
-    
-    		stringAttributes = new SimpleAttributeSet(defaultAttributes);
-    		StyleConstants.setForeground(stringAttributes, stringColor);
-    
-    		importantPunctuationAttributes = new SimpleAttributeSet(defaultAttributes);
-    		StyleConstants.setBold(importantPunctuationAttributes, true);
+		if (defaultAttributes == null) {
+			Color keywordColor = new Color(127, 0, 85);
+			Color commentColor = new Color(0, 140, 0);
+			Color stringColor = new Color(45, 0, 255);
+
+			defaultAttributes = new SimpleAttributeSet();
+			StyleConstants.setFontFamily(defaultAttributes, "Courier");
+			StyleConstants.setFontSize(defaultAttributes, 14);
+
+			keywordAttributes = new SimpleAttributeSet(defaultAttributes);
+			StyleConstants.setBold(keywordAttributes, true);
+			StyleConstants.setForeground(keywordAttributes, keywordColor);
+
+			commentAttributes = new SimpleAttributeSet(defaultAttributes);
+			StyleConstants.setForeground(commentAttributes, commentColor);
+
+			stringAttributes = new SimpleAttributeSet(defaultAttributes);
+			StyleConstants.setForeground(stringAttributes, stringColor);
+
+			importantPunctuationAttributes = new SimpleAttributeSet(
+					defaultAttributes);
+			StyleConstants.setBold(importantPunctuationAttributes, true);
 		}
 	}
 
 	@Override
-	protected AttributeSet getAttributes(Token[] tokens, int tokenIndex, int selectionStart, int selectionEnd)
-	{
+	protected AttributeSet getAttributes(Token[] tokens, int tokenIndex,
+			int selectionStart, int selectionEnd) {
 		Token token = tokens[tokenIndex];
-		if (token instanceof StringToken || token instanceof CharToken)
-		{
+		if (token instanceof StringToken || token instanceof CharToken) {
 			return stringAttributes;
 		}
 
-		if (token instanceof WordToken)
-		{
+		if (token instanceof WordToken) {
 			WordToken word = (WordToken) token;
 			if (word.isKeyword || word.isLiteral)
 				return keywordAttributes;
 		}
 
-		if (token instanceof CommentToken)
-		{
+		if (token instanceof CommentToken) {
 			return commentAttributes;
 		}
 
-		if (token instanceof SymbolCharToken)
-		{
+		if (token instanceof SymbolCharToken) {
 			char ch = ((SymbolCharToken) token).getChar();
-			if (ch == ';' || ch == ',')
-			{
+			if (ch == ';' || ch == ',') {
 				return importantPunctuationAttributes;
 			}
 		}
 		return defaultAttributes;
+	}
+
+	@Override
+	protected Token[] createTokens(String inputText) {
+		return JavaParser.parse(inputText, true);
 	}
 }

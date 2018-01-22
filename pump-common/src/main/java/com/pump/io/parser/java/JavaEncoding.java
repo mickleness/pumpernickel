@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.io.java;
+package com.pump.io.parser.java;
 
 import java.util.HashSet;
 import java.util.Set;
