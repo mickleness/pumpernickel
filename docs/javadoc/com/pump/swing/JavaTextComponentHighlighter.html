@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -102,7 +102,12 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../com/pump/text/TextComponentHighlighter.html" title="class in com.pump.text">com.pump.text.TextComponentHighlighter</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../com/pump/text/TokenTextComponentHighlighter.html" title="class in com.pump.text">com.pump.text.TokenTextComponentHighlighter</a></li>
+<li>
+<ul class="inheritance">
 <li>com.pump.swing.JavaTextComponentHighlighter</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -114,9 +119,9 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">JavaTextComponentHighlighter</span>
-extends <a href="../../../com/pump/text/TextComponentHighlighter.html" title="class in com.pump.text">TextComponentHighlighter</a></pre>
-<div class="block">This highlights text using a monospaced formatting scheme similar to the default
- Eclipse formatting options.</div>
+extends <a href="../../../com/pump/text/TokenTextComponentHighlighter.html" title="class in com.pump.text">TokenTextComponentHighlighter</a></pre>
+<div class="block">This highlights text using a monospaced formatting scheme similar to the
+ default Eclipse formatting options.</div>
 </li>
 </ul>
 </div>
@@ -197,19 +202,23 @@ extends <a href="../../../com/pump/text/TextComponentHighlighter.html" title="cl
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>protected Token[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#createTokens-java.lang.String-">createTokens</a></span>(java.lang.String&nbsp;inputText)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected javax.swing.text.AttributeSet</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#getAttributes-com.pump.io.Token:A-int-int-int-">getAttributes</a></span>(<a href="../../../com/pump/io/Token.html" title="class in com.pump.io">Token</a>[]&nbsp;tokens,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#getAttributes-Token:A-int-int-int-">getAttributes</a></span>(Token[]&nbsp;tokens,
              int&nbsp;tokenIndex,
              int&nbsp;selectionStart,
              int&nbsp;selectionEnd)</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected javax.swing.text.SimpleAttributeSet</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#getDefaultAttributes--">getDefaultAttributes</a></span>()</code>
 <div class="block">Return the default attributes for this JTextComponent.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#initializeAttributes--">initializeAttributes</a></span>()</code>
 <div class="block">Initialize the SimpleAttributeSets used to format text.</div>
@@ -217,11 +226,18 @@ extends <a href="../../../com/pump/text/TextComponentHighlighter.html" title="cl
 </tr>
 </table>
 <ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.com.pump.text.TokenTextComponentHighlighter">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.pump.text.<a href="../../../com/pump/text/TokenTextComponentHighlighter.html" title="class in com.pump.text">TokenTextComponentHighlighter</a></h3>
+<code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html#formatTextComponent-java.lang.String-javax.swing.text.StyledDocument-int-int-">formatTextComponent</a>, <a href="../../../com/pump/text/TokenTextComponentHighlighter.html#getHighlightPainter-Token:A-int-int-int-">getHighlightPainter</a>, <a href="../../../com/pump/text/TokenTextComponentHighlighter.html#getTokens-java.lang.String-boolean-">getTokens</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.com.pump.text.TextComponentHighlighter">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;com.pump.text.<a href="../../../com/pump/text/TextComponentHighlighter.html" title="class in com.pump.text">TextComponentHighlighter</a></h3>
-<code><a href="../../../com/pump/text/TextComponentHighlighter.html#addDocumentListeners--">addDocumentListeners</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#documentTextChanged-boolean-">documentTextChanged</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#getHighlightPainter-com.pump.io.Token:A-int-int-int-">getHighlightPainter</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#getTokens--">getTokens</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#getTokens-java.lang.String-boolean-">getTokens</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#isActive--">isActive</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#printOnce-java.lang.String-">printOnce</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#refresh-boolean-">refresh</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#rehighlightText-java.lang.String-int-int-">rehighlightText</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#removeDocumentListeners--">removeDocumentListeners</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#setActive-boolean-">setActive</a></code></li>
+<code><a href="../../../com/pump/text/TextComponentHighlighter.html#addDocumentListeners--">addDocumentListeners</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#documentTextChanged-boolean-">documentTextChanged</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#isActive--">isActive</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#printOnce-java.lang.String-">printOnce</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#refresh-boolean-">refresh</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#rehighlightText-java.lang.String-int-int-">rehighlightText</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#removeDocumentListeners--">removeDocumentListeners</a>, <a href="../../../com/pump/text/TextComponentHighlighter.html#setActive-boolean-">setActive</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -344,21 +360,34 @@ extends <a href="../../../com/pump/text/TextComponentHighlighter.html" title="cl
 <div class="block">Initialize the SimpleAttributeSets used to format text.</div>
 </li>
 </ul>
-<a name="getAttributes-com.pump.io.Token:A-int-int-int-">
+<a name="getAttributes-Token:A-int-int-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getAttributes</h4>
-<pre>protected&nbsp;javax.swing.text.AttributeSet&nbsp;getAttributes(<a href="../../../com/pump/io/Token.html" title="class in com.pump.io">Token</a>[]&nbsp;tokens,
+<pre>protected&nbsp;javax.swing.text.AttributeSet&nbsp;getAttributes(Token[]&nbsp;tokens,
                                                       int&nbsp;tokenIndex,
                                                       int&nbsp;selectionStart,
                                                       int&nbsp;selectionEnd)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../com/pump/text/TextComponentHighlighter.html#getAttributes-com.pump.io.Token:A-int-int-int-">getAttributes</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/text/TextComponentHighlighter.html" title="class in com.pump.text">TextComponentHighlighter</a></code></dd>
+<dd><code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html#getAttributes-Token:A-int-int-int-">getAttributes</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html" title="class in com.pump.text">TokenTextComponentHighlighter</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the AttributeSet for tokenIndex in the list of tokens.</dd>
+</dl>
+</li>
+</ul>
+<a name="createTokens-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>createTokens</h4>
+<pre>protected&nbsp;Token[]&nbsp;createTokens(java.lang.String&nbsp;inputText)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html#createTokens-java.lang.String-">createTokens</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html" title="class in com.pump.text">TokenTextComponentHighlighter</a></code></dd>
 </dl>
 </li>
 </ul>

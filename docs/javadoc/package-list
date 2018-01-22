@@ -40,8 +40,10 @@ com.pump.image.thumbnail
 com.pump.image.transition
 com.pump.inspector
 com.pump.io
-com.pump.io.java
 com.pump.io.location
+com.pump.io.parser
+com.pump.io.parser.java
+com.pump.io.parser.xml
 com.pump.jar
 com.pump.job
 com.pump.mac

@@ -114,8 +114,10 @@
 <li><a href="com/pump/image/transition/package-tree.html">com.pump.image.transition</a>, </li>
 <li><a href="com/pump/inspector/package-tree.html">com.pump.inspector</a>, </li>
 <li><a href="com/pump/io/package-tree.html">com.pump.io</a>, </li>
-<li><a href="com/pump/io/java/package-tree.html">com.pump.io.java</a>, </li>
 <li><a href="com/pump/io/location/package-tree.html">com.pump.io.location</a>, </li>
+<li><a href="com/pump/io/parser/package-tree.html">com.pump.io.parser</a>, </li>
+<li><a href="com/pump/io/parser/java/package-tree.html">com.pump.io.parser.java</a>, </li>
+<li><a href="com/pump/io/parser/xml/package-tree.html">com.pump.io.parser.xml</a>, </li>
 <li><a href="com/pump/jar/package-tree.html">com.pump.jar</a>, </li>
 <li><a href="com/pump/job/package-tree.html">com.pump.job</a>, </li>
 <li><a href="com/pump/mac/package-tree.html">com.pump.mac</a>, </li>
@@ -546,6 +548,7 @@
 </ul>
 </li>
 <li type="circle">com.pump.awt.text.writing.<a href="com/pump/awt/text/writing/WritingTextArea.html" title="class in com.pump.awt.text.writing"><span class="typeNameLink">WritingTextArea</span></a></li>
+<li type="circle">com.pump.showcase.<a href="com/pump/showcase/XMLTextComponentHighlighterDemo.html" title="class in com.pump.showcase"><span class="typeNameLink">XMLTextComponentHighlighterDemo</span></a></li>
 <li type="circle">com.pump.plaf.<a href="com/pump/plaf/XPDirectoryControls.html" title="class in com.pump.plaf"><span class="typeNameLink">XPDirectoryControls</span></a></li>
 </ul>
 </li>
@@ -975,6 +978,7 @@
 <li type="circle">com.pump.io.<a href="com/pump/io/FileTree.html" title="class in com.pump.io"><span class="typeNameLink">FileTree</span></a> (implements java.lang.Iterable&lt;T&gt;)</li>
 <li type="circle">com.pump.util.<a href="com/pump/util/FilteredIterator.html" title="class in com.pump.util"><span class="typeNameLink">FilteredIterator</span></a>&lt;T&gt; (implements java.util.Iterator&lt;E&gt;)</li>
 <li type="circle">com.pump.icon.<a href="com/pump/icon/FirstIcon.html" title="class in com.pump.icon"><span class="typeNameLink">FirstIcon</span></a> (implements javax.swing.Icon)</li>
+<li type="circle">com.pump.util.<a href="com/pump/util/FixedCapacityMap.html" title="class in com.pump.util"><span class="typeNameLink">FixedCapacityMap</span></a>&lt;K,V&gt; (implements java.util.Map&lt;K,V&gt;, java.io.Serializable)</li>
 <li type="circle">com.pump.swing.<a href="com/pump/swing/FocusedBorder.html" title="class in com.pump.swing"><span class="typeNameLink">FocusedBorder</span></a> (implements javax.swing.border.Border)</li>
 <li type="circle">java.awt.FocusTraversalPolicy
 <ul>
@@ -1154,10 +1158,9 @@
 <li type="circle">com.pump.xray.<a href="com/pump/xray/JarBuilder.html" title="class in com.pump.xray"><span class="typeNameLink">JarBuilder</span></a></li>
 <li type="circle">com.pump.jar.<a href="com/pump/jar/JarSigner.html" title="class in com.pump.jar"><span class="typeNameLink">JarSigner</span></a></li>
 <li type="circle">com.pump.jar.<a href="com/pump/jar/JarWriter.html" title="class in com.pump.jar"><span class="typeNameLink">JarWriter</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaClassSummary.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaClassSummary</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaEncoding.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaEncoding</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaStringHarvester.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaStringHarvester</span></a></li>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaClassSummary.html" title="class in com.pump.io.parser.java"><span class="typeNameLink">JavaClassSummary</span></a></li>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaEncoding.html" title="class in com.pump.io.parser.java"><span class="typeNameLink">JavaEncoding</span></a></li>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaStringHarvester.html" title="class in com.pump.io.parser.java"><span class="typeNameLink">JavaStringHarvester</span></a></li>
 <li type="circle">com.pump.swing.<a href="com/pump/swing/JFancyBox.FancyCloseIcon.html" title="class in com.pump.swing"><span class="typeNameLink">JFancyBox.FancyCloseIcon</span></a> (implements javax.swing.Icon)</li>
 <li type="circle">com.pump.job.<a href="com/pump/job/Job.html" title="class in com.pump.job"><span class="typeNameLink">Job</span></a> (implements com.pump.swing.<a href="com/pump/swing/Cancellable.html" title="interface in com.pump.swing">Cancellable</a>, java.lang.Runnable)
 <ul>
@@ -1297,6 +1300,13 @@
 <li type="circle">com.pump.animation.quicktime.<a href="com/pump/animation/quicktime/EditAtom.html" title="class in com.pump.animation.quicktime"><span class="typeNameLink">EditAtom</span></a></li>
 </ul>
 </li>
+<li type="circle">com.pump.io.parser.<a href="com/pump/io/parser/Parser.html" title="class in com.pump.io.parser"><span class="typeNameLink">Parser</span></a>
+<ul>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaParser.html" title="class in com.pump.io.parser.java"><span class="typeNameLink">JavaParser</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser</span></a></li>
+</ul>
+</li>
+<li type="circle">com.pump.io.parser.<a href="com/pump/io/parser/Parser.SkipWhiteSpaceReceiver.html" title="class in com.pump.io.parser"><span class="typeNameLink">Parser.SkipWhiteSpaceReceiver</span></a> (implements com.pump.util.<a href="com/pump/util/Receiver.html" title="interface in com.pump.util">Receiver</a>&lt;T&gt;)</li>
 <li type="circle">com.pump.swing.<a href="com/pump/swing/PartialLineBorder.html" title="class in com.pump.swing"><span class="typeNameLink">PartialLineBorder</span></a> (implements javax.swing.border.Border)</li>
 <li type="circle">com.pump.util.<a href="com/pump/util/PartitionIterator.html" title="class in com.pump.util"><span class="typeNameLink">PartitionIterator</span></a>&lt;T&gt; (implements java.util.Iterator&lt;E&gt;)</li>
 <li type="circle">com.pump.geom.<a href="com/pump/geom/PathSegment.html" title="class in com.pump.geom"><span class="typeNameLink">PathSegment</span></a>
@@ -1338,6 +1348,7 @@
 <li type="circle">com.pump.math.<a href="com/pump/math/PrimeFactors.html" title="class in com.pump.math"><span class="typeNameLink">PrimeFactors</span></a></li>
 <li type="circle">com.pump.print.<a href="com/pump/print/PrintablePaintable.html" title="class in com.pump.print"><span class="typeNameLink">PrintablePaintable</span></a> (implements java.awt.print.Printable)</li>
 <li type="circle">com.pump.print.<a href="com/pump/print/PrintLayout.html" title="class in com.pump.print"><span class="typeNameLink">PrintLayout</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/Prolog.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">Prolog</span></a></li>
 <li type="circle">com.pump.util.<a href="com/pump/util/Property.html" title="class in com.pump.util"><span class="typeNameLink">Property</span></a>&lt;T&gt;
 <ul>
 <li type="circle">com.pump.util.<a href="com/pump/util/BooleanProperty.html" title="class in com.pump.util"><span class="typeNameLink">BooleanProperty</span></a></li>
@@ -1484,7 +1495,12 @@
 <li type="circle">com.pump.awt.<a href="com/pump/awt/TextBoxPaintable.html" title="class in com.pump.awt"><span class="typeNameLink">TextBoxPaintable</span></a> (implements com.pump.awt.<a href="com/pump/awt/Paintable.html" title="interface in com.pump.awt">Paintable</a>)</li>
 <li type="circle">com.pump.text.<a href="com/pump/text/TextComponentHighlighter.html" title="class in com.pump.text"><span class="typeNameLink">TextComponentHighlighter</span></a>
 <ul>
+<li type="circle">com.pump.text.<a href="com/pump/text/TokenTextComponentHighlighter.html" title="class in com.pump.text"><span class="typeNameLink">TokenTextComponentHighlighter</span></a>
+<ul>
 <li type="circle">com.pump.swing.<a href="com/pump/swing/JavaTextComponentHighlighter.html" title="class in com.pump.swing"><span class="typeNameLink">JavaTextComponentHighlighter</span></a></li>
+<li type="circle">com.pump.swing.<a href="com/pump/swing/XMLTextComponentHighlighter.html" title="class in com.pump.swing"><span class="typeNameLink">XMLTextComponentHighlighter</span></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li type="circle">com.pump.swing.<a href="com/pump/swing/TextContextualMenuHelper.html" title="class in com.pump.swing"><span class="typeNameLink">TextContextualMenuHelper</span></a></li>
@@ -1554,7 +1570,7 @@
 <li type="circle">com.pump.math.<a href="com/pump/math/MutableDouble.ComparisonException.html" title="class in com.pump.math"><span class="typeNameLink">MutableDouble.ComparisonException</span></a></li>
 <li type="circle">com.pump.util.<a href="com/pump/util/ObservableList.RecursiveListenerModificationException.html" title="class in com.pump.util"><span class="typeNameLink">ObservableList.RecursiveListenerModificationException</span></a></li>
 <li type="circle">com.pump.util.<a href="com/pump/util/ObservableSet.RecursiveListenerModificationException.html" title="class in com.pump.util"><span class="typeNameLink">ObservableSet.RecursiveListenerModificationException</span></a></li>
-<li type="circle">com.pump.io.<a href="com/pump/io/ParserException.html" title="class in com.pump.io"><span class="typeNameLink">ParserException</span></a></li>
+<li type="circle">com.pump.io.parser.<a href="com/pump/io/parser/ParserException.html" title="class in com.pump.io.parser"><span class="typeNameLink">ParserException</span></a></li>
 <li type="circle">com.pump.<a href="com/pump/UserCancelledException.html" title="class in com.pump"><span class="typeNameLink">UserCancelledException</span></a></li>
 </ul>
 </li>
@@ -1579,26 +1595,43 @@
 </li>
 <li type="circle">com.pump.animation.quicktime.<a href="com/pump/animation/quicktime/TimeToSampleAtom.html" title="class in com.pump.animation.quicktime"><span class="typeNameLink">TimeToSampleAtom</span></a></li>
 <li type="circle">com.pump.animation.quicktime.<a href="com/pump/animation/quicktime/TimeToSampleAtom.TimeToSampleEntry.html" title="class in com.pump.animation.quicktime"><span class="typeNameLink">TimeToSampleAtom.TimeToSampleEntry</span></a></li>
-<li type="circle">com.pump.io.<a href="com/pump/io/Token.html" title="class in com.pump.io"><span class="typeNameLink">Token</span></a> (implements java.lang.Comparable&lt;T&gt;)
+<li type="circle">com.pump.io.parser.<a href="com/pump/io/parser/Token.html" title="class in com.pump.io.parser"><span class="typeNameLink">Token</span></a> (implements java.lang.Comparable&lt;T&gt;)
 <ul>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.CharToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.CharToken</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.CommentToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.CommentToken</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.NumberToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.NumberToken</span></a>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaParser.CharToken.html" title="class in com.pump.io.parser.java"><span class="typeNameLink">JavaParser.CharToken</span></a></li>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaParser.NumberToken.html" title="class in com.pump.io.parser.java"><span class="typeNameLink">JavaParser.NumberToken</span></a>
 <ul>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.DoubleToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.DoubleToken</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.FloatToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.FloatToken</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.IntegerToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.IntegerToken</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.LongToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.LongToken</span></a></li>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaParser.DoubleToken.html" title="class in com.pump.io.parser.java"><span class="typeNameLink">JavaParser.DoubleToken</span></a></li>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaParser.FloatToken.html" title="class in com.pump.io.parser.java"><span class="typeNameLink">JavaParser.FloatToken</span></a></li>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaParser.IntegerToken.html" title="class in com.pump.io.parser.java"><span class="typeNameLink">JavaParser.IntegerToken</span></a></li>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaParser.LongToken.html" title="class in com.pump.io.parser.java"><span class="typeNameLink">JavaParser.LongToken</span></a></li>
 </ul>
 </li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.StringToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.StringToken</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.SymbolCharToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.SymbolCharToken</span></a>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaParser.WordToken.html" title="class in com.pump.io.parser.java"><span class="typeNameLink">JavaParser.WordToken</span></a></li>
+<li type="circle">com.pump.io.parser.<a href="com/pump/io/parser/Parser.CommentToken.html" title="class in com.pump.io.parser"><span class="typeNameLink">Parser.CommentToken</span></a></li>
+<li type="circle">com.pump.io.parser.<a href="com/pump/io/parser/Parser.StringToken.html" title="class in com.pump.io.parser"><span class="typeNameLink">Parser.StringToken</span></a></li>
+<li type="circle">com.pump.io.parser.<a href="com/pump/io/parser/Parser.SymbolCharToken.html" title="class in com.pump.io.parser"><span class="typeNameLink">Parser.SymbolCharToken</span></a>
 <ul>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.BracketCharToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.BracketCharToken</span></a></li>
+<li type="circle">com.pump.io.parser.<a href="com/pump/io/parser/Parser.BracketCharToken.html" title="class in com.pump.io.parser"><span class="typeNameLink">Parser.BracketCharToken</span></a> (implements com.pump.io.parser.<a href="com/pump/io/parser/MatchingToken.html" title="interface in com.pump.io.parser">MatchingToken</a>&lt;T&gt;)</li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.AssignmentToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.AssignmentToken</span></a></li>
 </ul>
 </li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.WhitespaceToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.WhitespaceToken</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.WordToken.html" title="class in com.pump.io.java"><span class="typeNameLink">JavaParser.WordToken</span></a></li>
+<li type="circle">com.pump.io.parser.<a href="com/pump/io/parser/Parser.WhitespaceToken.html" title="class in com.pump.io.parser"><span class="typeNameLink">Parser.WhitespaceToken</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.CommentStartToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.CommentStartToken</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.CommentToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.CommentToken</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.ContentToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.ContentToken</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.TagDeclarationToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.TagDeclarationToken</span></a>&lt;Z&gt; (implements com.pump.io.parser.<a href="com/pump/io/parser/MatchingToken.html" title="interface in com.pump.io.parser">MatchingToken</a>&lt;T&gt;)
+<ul>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.EndCommentToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.EndCommentToken</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.EndDTDTagToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.EndDTDTagToken</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.EndPrologToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.EndPrologToken</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.EndTagToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.EndTagToken</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.StartCommentToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.StartCommentToken</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.StartDTDTagToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.StartDTDTagToken</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.StartPrologToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.StartPrologToken</span></a></li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.StartTagToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.StartTagToken</span></a></li>
+</ul>
+</li>
+<li type="circle">com.pump.io.parser.xml.<a href="com/pump/io/parser/xml/XMLParser.WordToken.html" title="class in com.pump.io.parser.xml"><span class="typeNameLink">XMLParser.WordToken</span></a></li>
 </ul>
 </li>
 <li type="circle">com.pump.animation.quicktime.<a href="com/pump/animation/quicktime/TrackHeaderAtom.html" title="class in com.pump.animation.quicktime"><span class="typeNameLink">TrackHeaderAtom</span></a></li>
@@ -1722,6 +1755,7 @@
 </li>
 <li type="circle">com.pump.swing.<a href="com/pump/swing/JBreadCrumb.BreadCrumbFormatter.html" title="interface in com.pump.swing"><span class="typeNameLink">JBreadCrumb.BreadCrumbFormatter</span></a>&lt;T&gt;</li>
 <li type="circle">com.pump.job.<a href="com/pump/job/JobManager.Listener.html" title="interface in com.pump.job"><span class="typeNameLink">JobManager.Listener</span></a></li>
+<li type="circle">com.pump.io.parser.<a href="com/pump/io/parser/MatchingToken.html" title="interface in com.pump.io.parser"><span class="typeNameLink">MatchingToken</span></a>&lt;T&gt;</li>
 <li type="circle">com.pump.jar.<a href="com/pump/jar/MissingJarResponseManager.html" title="interface in com.pump.jar"><span class="typeNameLink">MissingJarResponseManager</span></a></li>
 <li type="circle">com.pump.geom.<a href="com/pump/geom/MouseSmoothing.html" title="interface in com.pump.geom"><span class="typeNameLink">MouseSmoothing</span></a></li>
 <li type="circle">com.pump.swing.<a href="com/pump/swing/NavigationListener.html" title="interface in com.pump.swing"><span class="typeNameLink">NavigationListener</span></a>&lt;T&gt;</li>
@@ -1797,6 +1831,9 @@
 <li type="circle">com.pump.util.<a href="com/pump/util/ObservableSet.SetDataEvent.Type.html" title="enum in com.pump.util"><span class="typeNameLink">ObservableSet.SetDataEvent.Type</span></a></li>
 <li type="circle">com.pump.jar.<a href="com/pump/jar/MissingJarResponse.html" title="enum in com.pump.jar"><span class="typeNameLink">MissingJarResponse</span></a></li>
 <li type="circle">com.pump.job.<a href="com/pump/job/SampleJobExecutor.State.html" title="enum in com.pump.job"><span class="typeNameLink">SampleJobExecutor.State</span></a></li>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaParser.JavaModifier.html" title="enum in com.pump.io.parser.java"><span class="typeNameLink">JavaParser.JavaModifier</span></a></li>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaParser.DeclarationType.html" title="enum in com.pump.io.parser.java"><span class="typeNameLink">JavaParser.DeclarationType</span></a></li>
+<li type="circle">com.pump.io.parser.java.<a href="com/pump/io/parser/java/JavaParser.BracketType.html" title="enum in com.pump.io.parser.java"><span class="typeNameLink">JavaParser.BracketType</span></a></li>
 <li type="circle">com.pump.geom.intersect.<a href="com/pump/geom/intersect/IntersectionIdentifier.Return.html" title="enum in com.pump.geom.intersect"><span class="typeNameLink">IntersectionIdentifier.Return</span></a></li>
 <li type="circle">com.pump.swing.<a href="com/pump/swing/BasicConsole.DefaultPrintStream.html" title="enum in com.pump.swing"><span class="typeNameLink">BasicConsole.DefaultPrintStream</span></a></li>
 <li type="circle">com.pump.swing.<a href="com/pump/swing/DialogFooter.EscapeKeyBehavior.html" title="enum in com.pump.swing"><span class="typeNameLink">DialogFooter.EscapeKeyBehavior</span></a></li>
@@ -1809,9 +1846,6 @@
 <li type="circle">com.pump.awt.<a href="com/pump/awt/CompositePaintable.Tiling.html" title="enum in com.pump.awt"><span class="typeNameLink">CompositePaintable.Tiling</span></a></li>
 <li type="circle">com.pump.awt.<a href="com/pump/awt/RowLayout.ComponentConstraints.HorizontalAlignment.html" title="enum in com.pump.awt"><span class="typeNameLink">RowLayout.ComponentConstraints.HorizontalAlignment</span></a></li>
 <li type="circle">com.pump.diagram.<a href="com/pump/diagram/Relationship.html" title="enum in com.pump.diagram"><span class="typeNameLink">Relationship</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.JavaModifier.html" title="enum in com.pump.io.java"><span class="typeNameLink">JavaParser.JavaModifier</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.DeclarationType.html" title="enum in com.pump.io.java"><span class="typeNameLink">JavaParser.DeclarationType</span></a></li>
-<li type="circle">com.pump.io.java.<a href="com/pump/io/java/JavaParser.BracketType.html" title="enum in com.pump.io.java"><span class="typeNameLink">JavaParser.BracketType</span></a></li>
 </ul>
 </li>
 </ul>

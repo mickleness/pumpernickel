@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":6,"i9":10,"i10":10,"i11":10,"i12":6,"i13":6,"i14":10,"i15":6,"i16":6,"i17":10,"i18":10,"i19":10,"i20":10};
+var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":6,"i10":10,"i11":10,"i12":10,"i13":6,"i14":6,"i15":10,"i16":6,"i17":6,"i18":10,"i19":10,"i20":10,"i21":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -225,67 +225,73 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getFile--">getFile</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>protected java.io.FilenameFilter</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getFilenameFilter-java.lang.String...-">getFilenameFilter</a></span>(java.lang.String...&nbsp;documentFileExtension)</code>
+<div class="block">Return a FilenameFilter for the document file extensions, or null if all files should be accepted.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>javax.swing.JFrame</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getFrame--">getFrame</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>javax.swing.AbstractAction</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getOpenAction--">getOpenAction</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>javax.swing.JMenuItem</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getOpenMenuItem--">getOpenMenuItem</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>abstract java.lang.String[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getReadableDocumentFileExtensions--">getReadableDocumentFileExtensions</a></span>()</code>
 <div class="block">Return the document file extensions for files this SaveControls interacts with.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../com/pump/swing/RecentMenu.html" title="class in com.pump.swing">RecentMenu</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getRecentMenu--">getRecentMenu</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>javax.swing.AbstractAction</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getSaveAction--">getSaveAction</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>javax.swing.JMenuItem</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getSaveMenuItem--">getSaveMenuItem</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>abstract java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getWriteableDocumentFileExtension--">getWriteableDocumentFileExtension</a></span>()</code>
 <div class="block">Return the document file extension that should be used for new saves.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#isDocumentDirty--">isDocumentDirty</a></span>()</code>
 <div class="block">Returns whether this window contains unsaved changes.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#openFile--">openFile</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#openFile-java.io.File-">openFile</a></span>(java.io.File&nbsp;file)</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#saveFile-java.io.File-com.pump.swing.Cancellable-">saveFile</a></span>(java.io.File&nbsp;f,
         <a href="../../../com/pump/swing/Cancellable.html" title="interface in com.pump.swing">Cancellable</a>&nbsp;cancellable)</code>
 <div class="block">Save the document this window represents to the argument provided.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#setFile-java.io.File-">setFile</a></span>(java.io.File&nbsp;f)</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>protected java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#showFileDialog-int-java.lang.String-java.io.File-java.lang.String...-">showFileDialog</a></span>(int&nbsp;dialogMode,
               java.lang.String&nbsp;dialogTitle,
@@ -294,13 +300,13 @@ extends java.lang.Object</pre>
 <div class="block">Show a FileDialog.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#showSaveDialogAndDoSave-java.io.File-">showSaveDialogAndDoSave</a></span>(java.io.File&nbsp;file)</code>
 <div class="block">This is called on the EDT to save to a File.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#tryToClose--">tryToClose</a></span>()</code>
 <div class="block">If true then the user saved their changes as this method was called.</div>
@@ -651,6 +657,22 @@ extends java.lang.Object</pre>
 <dd>the File the user chose.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../com/pump/UserCancelledException.html" title="class in com.pump">UserCancelledException</a></code> - if the user cancelled this dialog.</dd>
+</dl>
+</li>
+</ul>
+<a name="getFilenameFilter-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFilenameFilter</h4>
+<pre>protected&nbsp;java.io.FilenameFilter&nbsp;getFilenameFilter(java.lang.String...&nbsp;documentFileExtension)</pre>
+<div class="block">Return a FilenameFilter for the document file extensions, or null if all files should be accepted.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>documentFileExtension</code> - an optional list of file extensions we should support.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a FilenameFilter, or null.</dd>
 </dl>
 </li>
 </ul>

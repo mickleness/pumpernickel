@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -120,9 +120,11 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">LookAheadReader</span>
 extends java.io.Reader
 implements java.lang.AutoCloseable</pre>
-<div class="block">This reads data but also provides a couple of convenient .peek() methods to look ahead. 
- My compiler professor would consider this approach to parsing "cheating", but I think it makes the code more readable.
- <p>The internals of this class use an array-backed circular queue.</div>
+<div class="block">This reads data but also provides a couple of convenient .peek() methods to
+ look ahead. My compiler professor would consider this approach to parsing
+ "cheating", but I think it makes the code more readable.
+ <p>
+ The internals of this class use an array-backed circular queue.</div>
 </li>
 </ul>
 </div>
@@ -236,12 +238,18 @@ implements java.lang.AutoCloseable</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/LookAheadReader.html#next-boolean-">next</a></span>(boolean&nbsp;repopulateQueue)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/LookAheadReader.html#next-int-">next</a></span>(int&nbsp;n)</code>
+<div class="block">Cycle to the next n-th character.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>char</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/LookAheadReader.html#peek-int-">peek</a></span>(int&nbsp;length)</code>
 <div class="block">Peek at a character several characters ahead.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/LookAheadReader.html#peekWord-boolean-boolean-boolean-">peekWord</a></span>(boolean&nbsp;includeLetters,
         boolean&nbsp;includeDigits,
@@ -249,44 +257,45 @@ implements java.lang.AutoCloseable</pre>
 <div class="block">Peek at remaining characters.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/LookAheadReader.html#populateQueue--">populateQueue</a></span>()</code>
 <div class="block">Fill the queue to its maximum storage potential.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/LookAheadReader.html#read-char:A-int-int-">read</a></span>(char[]&nbsp;cbuf,
     int&nbsp;off,
     int&nbsp;len)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/LookAheadReader.html#read-java.nio.CharBuffer-">read</a></span>(java.nio.CharBuffer&nbsp;target)</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/LookAheadReader.html#readLine-int-">readLine</a></span>(int&nbsp;charLimit)</code>
 <div class="block">Read one line of text from this reader.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/LookAheadReader.html#skip-long-">skip</a></span>(long&nbsp;charsToSkip)</code>
 <div class="block">Skip a fixed amount of characters.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/LookAheadReader.html#skipLineBreak--">skipLineBreak</a></span>()</code>
 <div class="block">Skip the current line break, if any.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/LookAheadReader.html#skipWhitespace--">skipWhitespace</a></span>()</code>
-<div class="block">Skip whitespace until either the reader is finished or a non-whitespace char is the current char.</div>
+<div class="block">Skip whitespace until either the reader is finished or a non-whitespace
+ char is the current char.</div>
 </td>
 </tr>
 </table>
@@ -417,7 +426,8 @@ implements java.lang.AutoCloseable</pre>
 <div class="block">Return the current character from this reader.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current character from this reader, or <code>CharacterIterator.DONE</code> if finished</dd>
+<dd>the current character from this reader, or
+         <code>CharacterIterator.DONE</code> if finished</dd>
 </dl>
 </li>
 </ul>
@@ -431,11 +441,13 @@ implements java.lang.AutoCloseable</pre>
 <div class="block">Peek at a character several characters ahead.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>length</code> - the number of characters to look ahead. If this is zero, then this method is equivalent to <a href="../../../com/pump/io/LookAheadReader.html#current--"><code>current()</code></a>.
-            If this is one, then this returns the Character after current(), etc.</dd>
+<dd><code>length</code> - the number of characters to look ahead. If this is zero, then
+            this method is equivalent to <a href="../../../com/pump/io/LookAheadReader.html#current--"><code>current()</code></a>. If this is
+            one, then this returns the Character after current(), etc.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the character that is length-many spaces ahead, or <code>CharacterIterator.DONE</code> if the end
- of the character stream is reached.</dd>
+<dd>the character that is length-many spaces ahead, or
+         <code>CharacterIterator.DONE</code> if the end of the
+         character stream is reached.</dd>
 </dl>
 </li>
 </ul>
@@ -450,7 +462,28 @@ implements java.lang.AutoCloseable</pre>
 <div class="block">Cycle to the next character.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if a new character is available, false if we've reached the end of the stream.</dd>
+<dd>true if a new character is available, false if we've reached the
+         end of the stream.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd>
+</dl>
+</li>
+</ul>
+<a name="next-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>next</h4>
+<pre>public&nbsp;boolean&nbsp;next(int&nbsp;n)
+             throws java.io.IOException</pre>
+<div class="block">Cycle to the next n-th character.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>ctr</code> - the number of characters to read over.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>if a new character is available, false if we've reached the end
+         of the stream.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -516,8 +549,8 @@ implements java.lang.AutoCloseable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>charsToSkip</code> - the number of characters to skip.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the number of characters that were skipped (this may be different from the argument if the end of the
-         file is reached).</dd>
+<dd>the number of characters that were skipped (this may be different
+         from the argument if the end of the file is reached).</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -552,7 +585,8 @@ implements java.lang.AutoCloseable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - a character to check</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the argument is \n or \r, false for any other value (including null)</dd>
+<dd>true if the argument is \n or \r, false for any other value
+         (including null)</dd>
 </dl>
 </li>
 </ul>
@@ -567,11 +601,13 @@ implements java.lang.AutoCloseable</pre>
 <div class="block">Read one line of text from this reader.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>charLimit</code> - the maximum number of characters to read before throwing an exception.</dd>
+<dd><code>charLimit</code> - the maximum number of characters to read before throwing an
+            exception.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a line of text</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code> - if an IOException occurred reading data, or if the charLimit was exceeded, or an EOFException.</dd>
+<dd><code>java.io.IOException</code> - if an IOException occurred reading data, or if the charLimit
+             was exceeded, or an EOFException.</dd>
 </dl>
 </li>
 </ul>
@@ -589,7 +625,8 @@ implements java.lang.AutoCloseable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>includeLetters</code> - if true then letters are allowed/included.</dd>
 <dd><code>includeDigits</code> - if true then digits are allowed/included.</dd>
-<dd><code>includeOtherNonWhitespace</code> - if true then other characters (such as punctuation) are allowed/included.</dd>
+<dd><code>includeOtherNonWhitespace</code> - if true then other characters (such as punctuation) are
+            allowed/included.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a peek of the next available word.</dd>
 </dl>
@@ -603,7 +640,8 @@ implements java.lang.AutoCloseable</pre>
 <h4>skipWhitespace</h4>
 <pre>public&nbsp;void&nbsp;skipWhitespace()
                     throws java.io.IOException</pre>
-<div class="block">Skip whitespace until either the reader is finished or a non-whitespace char is the current char.</div>
+<div class="block">Skip whitespace until either the reader is finished or a non-whitespace
+ char is the current char.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
