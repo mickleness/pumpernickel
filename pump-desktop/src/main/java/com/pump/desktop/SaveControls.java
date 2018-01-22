@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FilenameFilter;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
@@ -314,9 +315,8 @@ public abstract class SaveControls {
 		if(!(dialogMode==FileDialog.LOAD || dialogMode==FileDialog.SAVE))
 			throw new IllegalArgumentException("dialogMode must be LOAD or SAVE");
 		FileDialog fd = new FileDialog(frame, dialogTitle, dialogMode);
-		SuffixFilenameFilter filter = null;
-		if(documentFileExtension!=null && documentFileExtension.length>0) {
-			filter = new SuffixFilenameFilter(documentFileExtension);
+		FilenameFilter filter = getFilenameFilter(documentFileExtension);
+		if(filter!=null) {
 			fd.setFilenameFilter(filter);
 		}
 		if(defaultFile!=null) {
@@ -328,7 +328,8 @@ public abstract class SaveControls {
 		if(fd.getFile()==null) throw new UserCancelledException();
 		String s = fd.getFile();
 		//this is going to cause problems on a sandboxed Mac:
-		if(filter!=null && (!filter.accept( new File(fd.getDirectory(), s)))) {
+		File f = new File(fd.getDirectory(), s);
+		if(filter!=null && (!filter.accept(f.getParentFile(), f.getName()))) {
 			//TODO: if we change the file path (even a little), we need to
 			//run a new (separate) check to see if the file exists and offer
 			//a new do-you-want-to-replace dialog
@@ -337,6 +338,20 @@ public abstract class SaveControls {
 		File file = new File(fd.getDirectory()+s);
 		return file;
 		
+	}
+
+	/**
+	 * Return a FilenameFilter for the document file extensions, or null if all files should be accepted.
+	 * 
+	 * @param documentFileExtension an optional list of file extensions we should support.
+	 * @return a FilenameFilter, or null.
+	 */
+	protected FilenameFilter getFilenameFilter(String... documentFileExtension) {
+		FilenameFilter filter = null;
+		if(documentFileExtension!=null && documentFileExtension.length>0) {
+			filter = new SuffixFilenameFilter(documentFileExtension);
+		}
+		return filter;
 	}
 
 	/** This is called on the EDT to save to a File. This pulls up an indeterminate progress
