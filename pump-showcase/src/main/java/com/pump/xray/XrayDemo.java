@@ -16,7 +16,7 @@ import java.io.FileOutputStream;
 import com.pump.desktop.temp.TempFileManager;
 import com.pump.io.FileTreeIterator;
 import com.pump.io.IOUtils;
-import com.pump.io.java.JavaClassSummary;
+import com.pump.io.parser.java.JavaClassSummary;
 
 public class XrayDemo {
 	public static void main(String[] args) throws Exception {
@@ -24,7 +24,7 @@ public class XrayDemo {
 		XrayDemo d = new XrayDemo();
 		try {
 			d.run();
-		} catch(Throwable t) {
+		} catch (Throwable t) {
 			t.printStackTrace();
 		} finally {
 			System.out.println("Done.");
@@ -33,27 +33,31 @@ public class XrayDemo {
 	}
 
 	public void run() throws Exception {
-		File pumpernickelDir = new File(System.getProperty("user.dir")).getParentFile();
+		File pumpernickelDir = new File(System.getProperty("user.dir"))
+				.getParentFile();
 		FileTreeIterator iter = new FileTreeIterator(pumpernickelDir, "java");
 		File srcDir = TempFileManager.get().createFile("source", "path");
 		srcDir.mkdirs();
 		SourceCodeManager sourceCodeManager = new SourceCodeManager();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			File javaFile = iter.next();
-			if(javaFile.getAbsolutePath().contains("pump-release") || javaFile.getName().endsWith("package-info.java"))
+			if (javaFile.getAbsolutePath().contains("pump-release")
+					|| javaFile.getName().endsWith("package-info.java"))
 				continue;
-			
+
 			JavaClassSummary jcs = new JavaClassSummary(javaFile);
 			String classname = jcs.getCanonicalName();
 			Class<?> t = Class.forName(classname);
 			sourceCodeManager.addClasses(t);
 		}
-		
+
 		JarBuilder jarBuilder = new JarBuilder(sourceCodeManager);
-		File jarFile = IOUtils.getUniqueFile(new File(System.getProperty("user.home")), "xray-demo.jar", false, false);
-		try(FileOutputStream out = new FileOutputStream(jarFile)) {
+		File jarFile = IOUtils.getUniqueFile(
+				new File(System.getProperty("user.home")), "xray-demo.jar",
+				false, false);
+		try (FileOutputStream out = new FileOutputStream(jarFile)) {
 			jarBuilder.write(out);
 		}
-		System.out.println("Wrote "+jarFile.getAbsolutePath());
+		System.out.println("Wrote " + jarFile.getAbsolutePath());
 	}
 }

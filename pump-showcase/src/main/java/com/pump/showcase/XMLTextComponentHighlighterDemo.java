@@ -26,7 +26,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Highlighter.HighlightPainter;
 
-import com.pump.io.Token;
+import com.pump.io.parser.Token;
 import com.pump.swing.LineNumberBorder;
 import com.pump.swing.XMLTextComponentHighlighter;
 import com.pump.text.TextBoxHighlightPainter;

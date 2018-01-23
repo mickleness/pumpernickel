@@ -21,9 +21,13 @@ import javax.swing.text.Highlighter.HighlightPainter;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledDocument;
 
-import com.pump.io.Token;
-import com.pump.io.java.JavaParser.WhitespaceToken;
+import com.pump.io.parser.Parser.UnparsedToken;
+import com.pump.io.parser.Parser.WhitespaceToken;
+import com.pump.io.parser.ParserException;
+import com.pump.io.parser.Token;
+import com.pump.util.BasicReceiver;
 import com.pump.util.FixedCapacityMap;
+import com.pump.util.Receiver;
 
 /**
  * This TextComponentHighlighter relies on {@link Token Tokens}.
@@ -48,9 +52,22 @@ public abstract class TokenTextComponentHighlighter extends
 
 		ParseResults(String inputText) {
 			try {
-				tokens = createTokens(inputText);
+				BasicReceiver<Token> receiver = new BasicReceiver<>();
+				try {
+					createTokens(inputText, receiver);
+				} catch (ParserException e) {
+					Token lastToken = receiver.getSize() == 0 ? null : receiver
+							.getElementAt(receiver.getSize() - 1);
+					int pos = lastToken == null ? 0 : lastToken
+							.getDocumentEndIndex();
+					receiver.add(new UnparsedToken(pos, inputText, e));
+				}
+				tokens = receiver.toArray(new Token[receiver.getSize()]);
 			} catch (RuntimeException r) {
 				rEx = r;
+			} catch (Exception e) {
+				e.printStackTrace();
+				tokens = new Token[] { new Token(inputText, 0, 0, 0) };
 			} catch (Error e) {
 				error = e;
 			}
@@ -106,9 +123,6 @@ public abstract class TokenTextComponentHighlighter extends
 		text = text.replace("\r\n", "\n");
 		ParseResults results = cachedValues.get(text);
 		if (results == null) {
-			while (cachedValues.size() > 3) {
-				cachedValues.remove(cachedValues.keySet().iterator().next());
-			}
 			results = new ParseResults(text);
 			cachedValues.put(text, results);
 		}
@@ -117,7 +131,8 @@ public abstract class TokenTextComponentHighlighter extends
 		return results.getStrippedTokens();
 	}
 
-	protected abstract Token[] createTokens(String inputText);
+	protected abstract void createTokens(String inputText,
+			Receiver<Token> receiver) throws Exception;
 
 	@Override
 	protected void formatTextComponent(String text, StyledDocument doc,

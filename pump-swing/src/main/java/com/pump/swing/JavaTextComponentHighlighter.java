@@ -12,6 +12,8 @@ package com.pump.swing;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.Reader;
+import java.io.StringReader;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.JTextComponent;
@@ -19,14 +21,16 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import com.pump.blog.Blurb;
-import com.pump.io.Token;
-import com.pump.io.java.JavaParser;
-import com.pump.io.java.JavaParser.CharToken;
-import com.pump.io.java.JavaParser.CommentToken;
-import com.pump.io.java.JavaParser.StringToken;
-import com.pump.io.java.JavaParser.SymbolCharToken;
-import com.pump.io.java.JavaParser.WordToken;
+import com.pump.io.parser.Parser.CommentToken;
+import com.pump.io.parser.Parser.StringToken;
+import com.pump.io.parser.Parser.SymbolCharToken;
+import com.pump.io.parser.Parser.UnparsedToken;
+import com.pump.io.parser.Token;
+import com.pump.io.parser.java.JavaParser;
+import com.pump.io.parser.java.JavaParser.CharToken;
+import com.pump.io.parser.java.JavaParser.WordToken;
 import com.pump.text.TokenTextComponentHighlighter;
+import com.pump.util.Receiver;
 
 /**
  * This highlights text using a monospaced formatting scheme similar to the
@@ -38,6 +42,7 @@ public class JavaTextComponentHighlighter extends TokenTextComponentHighlighter 
 
 	protected SimpleAttributeSet defaultAttributes;
 	protected SimpleAttributeSet keywordAttributes;
+	protected SimpleAttributeSet errorAttributes;
 	protected SimpleAttributeSet commentAttributes;
 	protected SimpleAttributeSet stringAttributes;
 	protected SimpleAttributeSet importantPunctuationAttributes;
@@ -74,6 +79,7 @@ public class JavaTextComponentHighlighter extends TokenTextComponentHighlighter 
 			Color keywordColor = new Color(127, 0, 85);
 			Color commentColor = new Color(0, 140, 0);
 			Color stringColor = new Color(45, 0, 255);
+			Color errorColor = new Color(200, 0, 25);
 
 			defaultAttributes = new SimpleAttributeSet();
 			StyleConstants.setFontFamily(defaultAttributes, "Courier");
@@ -88,6 +94,9 @@ public class JavaTextComponentHighlighter extends TokenTextComponentHighlighter 
 
 			stringAttributes = new SimpleAttributeSet(defaultAttributes);
 			StyleConstants.setForeground(stringAttributes, stringColor);
+
+			errorAttributes = new SimpleAttributeSet(defaultAttributes);
+			StyleConstants.setForeground(errorAttributes, errorColor);
 
 			importantPunctuationAttributes = new SimpleAttributeSet(
 					defaultAttributes);
@@ -113,6 +122,10 @@ public class JavaTextComponentHighlighter extends TokenTextComponentHighlighter 
 			return commentAttributes;
 		}
 
+		if (token instanceof UnparsedToken) {
+			return errorAttributes;
+		}
+
 		if (token instanceof SymbolCharToken) {
 			char ch = ((SymbolCharToken) token).getChar();
 			if (ch == ';' || ch == ',') {
@@ -123,7 +136,10 @@ public class JavaTextComponentHighlighter extends TokenTextComponentHighlighter 
 	}
 
 	@Override
-	protected Token[] createTokens(String inputText) {
-		return JavaParser.parse(inputText, true);
+	protected void createTokens(String inputText, Receiver<Token> receiver)
+			throws Exception {
+		try (Reader reader = new StringReader(inputText)) {
+			new JavaParser().parse(reader, receiver);
+		}
 	}
 }

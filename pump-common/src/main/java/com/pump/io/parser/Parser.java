@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,6 +37,57 @@ public abstract class Parser {
 
 		public CommentToken(String tokenText, int tokenStart) {
 			this(tokenText, tokenStart, 0, tokenStart);
+		}
+	}
+
+	public static class UnparsedToken extends Token {
+
+		private static int getLinePosition(int docPosition, String doc) {
+			int lastLineStart = 0;
+			for (int a = 0; a < doc.length(); a++) {
+				char ch = doc.charAt(a);
+				char next = a + 1 < doc.length() ? doc.charAt(a + 1)
+						: CharacterIterator.DONE;
+				if (ch == '\r' && next == '\n') {
+					lastLineStart = a + 2;
+					a++;
+				} else if (ch == '\n' || ch == '\r') {
+					lastLineStart = a + 1;
+				}
+			}
+			return docPosition - lastLineStart;
+		}
+
+		private static int getLineNumber(int docPosition, String doc) {
+			int lineNumber = 0;
+			for (int a = 0; a < doc.length(); a++) {
+				char ch = doc.charAt(a);
+				char next = a + 1 < doc.length() ? doc.charAt(a + 1)
+						: CharacterIterator.DONE;
+				if (ch == '\r' && next == '\n') {
+					lineNumber++;
+					a++;
+				} else if (ch == '\n' || ch == '\r') {
+					lineNumber++;
+				}
+			}
+			return lineNumber;
+		}
+
+		ParserException e;
+
+		/**
+		 * 
+		 * @param docPosition
+		 *            the last position in the document of parsable content.
+		 * @param doc
+		 *            the original document.
+		 */
+		public UnparsedToken(int docPosition, String doc, ParserException e) {
+			super(doc.substring(docPosition),
+					getLinePosition(docPosition, doc), getLineNumber(
+							docPosition, doc), docPosition);
+			setException(e);
 		}
 	}
 

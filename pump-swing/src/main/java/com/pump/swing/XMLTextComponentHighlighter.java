@@ -18,19 +18,23 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import com.pump.io.Token;
-import com.pump.io.java.JavaParser.CharToken;
-import com.pump.io.java.JavaParser.CommentToken;
-import com.pump.io.java.JavaParser.StringToken;
-import com.pump.io.java.JavaParser.SymbolCharToken;
-import com.pump.io.java.JavaParser.WordToken;
+import com.pump.io.parser.Parser.StringToken;
+import com.pump.io.parser.Parser.SymbolCharToken;
+import com.pump.io.parser.Parser.UnparsedToken;
+import com.pump.io.parser.Token;
+import com.pump.io.parser.java.JavaParser.CharToken;
 import com.pump.io.parser.xml.XMLParser;
+import com.pump.io.parser.xml.XMLParser.CommentToken;
+import com.pump.io.parser.xml.XMLParser.TagDeclarationToken;
+import com.pump.io.parser.xml.XMLParser.WordToken;
 import com.pump.text.TokenTextComponentHighlighter;
+import com.pump.util.Receiver;
 
 public class XMLTextComponentHighlighter extends TokenTextComponentHighlighter {
 
 	protected SimpleAttributeSet defaultAttributes;
-	protected SimpleAttributeSet keywordAttributes;
+	protected SimpleAttributeSet elementNameAttributes;
+	protected SimpleAttributeSet errorAttributes;
 	protected SimpleAttributeSet commentAttributes;
 	protected SimpleAttributeSet stringAttributes;
 	protected SimpleAttributeSet importantPunctuationAttributes;
@@ -67,17 +71,21 @@ public class XMLTextComponentHighlighter extends TokenTextComponentHighlighter {
 			Color keywordColor = new Color(127, 0, 85);
 			Color commentColor = new Color(0, 140, 0);
 			Color stringColor = new Color(45, 0, 255);
+			Color errorColor = new Color(200, 0, 25);
 
 			defaultAttributes = new SimpleAttributeSet();
 			StyleConstants.setFontFamily(defaultAttributes, "Courier");
 			StyleConstants.setFontSize(defaultAttributes, 14);
 
-			keywordAttributes = new SimpleAttributeSet(defaultAttributes);
-			StyleConstants.setBold(keywordAttributes, true);
-			StyleConstants.setForeground(keywordAttributes, keywordColor);
+			elementNameAttributes = new SimpleAttributeSet(defaultAttributes);
+			StyleConstants.setBold(elementNameAttributes, true);
+			StyleConstants.setForeground(elementNameAttributes, keywordColor);
 
 			commentAttributes = new SimpleAttributeSet(defaultAttributes);
 			StyleConstants.setForeground(commentAttributes, commentColor);
+
+			errorAttributes = new SimpleAttributeSet(defaultAttributes);
+			StyleConstants.setForeground(errorAttributes, errorColor);
 
 			stringAttributes = new SimpleAttributeSet(defaultAttributes);
 			StyleConstants.setForeground(stringAttributes, stringColor);
@@ -96,14 +104,17 @@ public class XMLTextComponentHighlighter extends TokenTextComponentHighlighter {
 			return stringAttributes;
 		}
 
-		if (token instanceof WordToken) {
-			WordToken word = (WordToken) token;
-			if (word.isKeyword || word.isLiteral)
-				return keywordAttributes;
+		Token prev = tokenIndex == 0 ? null : tokens[tokenIndex - 1];
+		if (token instanceof WordToken && prev instanceof TagDeclarationToken) {
+			return elementNameAttributes;
 		}
 
 		if (token instanceof CommentToken) {
 			return commentAttributes;
+		}
+
+		if (token instanceof UnparsedToken) {
+			return errorAttributes;
 		}
 
 		if (token instanceof SymbolCharToken) {
@@ -116,7 +127,8 @@ public class XMLTextComponentHighlighter extends TokenTextComponentHighlighter {
 	}
 
 	@Override
-	protected Token[] createTokens(String inputText) {
-		return new XMLParser().parse(inputText, true);
+	protected void createTokens(String inputText, Receiver<Token> receiver)
+			throws Exception {
+		new XMLParser().parse(inputText, receiver);
 	}
 }

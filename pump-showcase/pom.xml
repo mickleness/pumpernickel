@@ -10,7 +10,7 @@
   <parent>
     <groupId>com.pump</groupId>
     <artifactId>pumpernickel</artifactId>
-    <version>1.0.00</version>
+    <version>1.0.01-SNAPSHOT</version>
   </parent>
 
   <name>pump-showcase</name>
@@ -20,32 +20,32 @@
     <dependency>
       <groupId>com.pump</groupId>
       <artifactId>pump-jar</artifactId>
-      <version>1.0.00</version>
+      <version>1.0.01-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.pump</groupId>
       <artifactId>pump-transition</artifactId>
-      <version>1.0.00</version>
+      <version>1.0.01-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.pump</groupId>
       <artifactId>pump-color</artifactId>
-      <version>1.0.00</version>
+      <version>1.0.01-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.pump</groupId>
       <artifactId>pump-quicktime</artifactId>
-      <version>1.0.00</version>
+      <version>1.0.01-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.pump</groupId>
       <artifactId>pump-desktop</artifactId>
-      <version>1.0.00</version>
+      <version>1.0.01-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.pump</groupId>
       <artifactId>pump-gif</artifactId>
-      <version>1.0.00</version>
+      <version>1.0.01-SNAPSHOT</version>
     </dependency>
   </dependencies>
 

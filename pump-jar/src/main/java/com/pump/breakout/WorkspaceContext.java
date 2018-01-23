@@ -20,7 +20,7 @@ import java.util.Map;
 
 import com.pump.io.FileTreeIterator;
 import com.pump.io.IOUtils;
-import com.pump.io.java.JavaClassSummary;
+import com.pump.io.parser.java.JavaClassSummary;
 
 /**
  * This describes the java and jar files available in a workspace.
@@ -38,22 +38,24 @@ public class WorkspaceContext {
 	public WorkspaceContext() throws IOException {
 		addSourcePath(new File(System.getProperty("user.dir")));
 	}
-	
-	/** Create a new WorkspaceContext with an initial source path.
+
+	/**
+	 * Create a new WorkspaceContext with an initial source path.
 	 * 
-	 * @param sourcePath the directory containing java/jar files.
+	 * @param sourcePath
+	 *            the directory containing java/jar files.
 	 */
 	public WorkspaceContext(File sourcePath) throws IOException {
 		addSourcePath(sourcePath);
 	}
-	
+
 	/**
 	 * Return a map of jar file names to jars.
 	 */
 	public synchronized Map<String, File> getJars() {
 		return new HashMap<>(fileNameToJar);
 	}
-	
+
 	/**
 	 * Return a map of class names to Java file.
 	 */
@@ -64,24 +66,31 @@ public class WorkspaceContext {
 	/**
 	 * Add a source path to this context.
 	 * <p>
-	 * This method exhaustively searches this directory for all .java and .jar files
+	 * This method exhaustively searches this directory for all .java and .jar
+	 * files
 	 */
 	public synchronized void addSourcePath(File sourcePath) throws IOException {
 		sourcePaths.add(sourcePath);
 		FileTreeIterator iter = new FileTreeIterator(sourcePath, "java", "jar");
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			File file = iter.next();
-			if(file.getAbsolutePath().toLowerCase().endsWith("java")) {
+			if (file.getAbsolutePath().toLowerCase().endsWith("java")) {
 				String name = JavaClassSummary.getClassName(file);
 				File existingFile = classNameToFileMap.get(name);
-				if(existingFile!=null && !IOUtils.equals(existingFile, file)) {
-					throw new RuntimeException("The class name \""+name+"\" was defined in "+existingFile.getAbsolutePath()+" and "+file.getAbsolutePath()+".");
+				if (existingFile != null && !IOUtils.equals(existingFile, file)) {
+					throw new RuntimeException("The class name \"" + name
+							+ "\" was defined in "
+							+ existingFile.getAbsolutePath() + " and "
+							+ file.getAbsolutePath() + ".");
 				}
 				classNameToFileMap.put(name, file);
-			} else if(file.getAbsolutePath().toLowerCase().endsWith("jar")) {
+			} else if (file.getAbsolutePath().toLowerCase().endsWith("jar")) {
 				File existingJar = fileNameToJar.get(file.getName());
-				if(existingJar!=null && !IOUtils.equals(existingJar, file)) {
-					throw new RuntimeException("The jar name \""+file.getName()+"\" was defined in "+existingJar+" and "+file.getAbsolutePath()+".");
+				if (existingJar != null && !IOUtils.equals(existingJar, file)) {
+					throw new RuntimeException("The jar name \""
+							+ file.getName() + "\" was defined in "
+							+ existingJar + " and " + file.getAbsolutePath()
+							+ ".");
 				}
 				fileNameToJar.put(file.getName(), file);
 			}
@@ -89,8 +98,8 @@ public class WorkspaceContext {
 	}
 
 	/**
-	 * Return the java file associated with a class name, or null if that classname
-	 * isn't available in this context.
+	 * Return the java file associated with a class name, or null if that
+	 * classname isn't available in this context.
 	 */
 	public synchronized File getJavaFile(String className) {
 		return classNameToFileMap.get(className);

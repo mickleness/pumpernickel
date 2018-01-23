@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.text.CharacterIterator;
 import java.util.Arrays;
 
@@ -290,6 +291,12 @@ public class XMLParser extends Parser {
 			encoding = "utf-8";
 		}
 		try (InputStreamReader reader = new InputStreamReader(in, encoding)) {
+			parse(reader, receiver);
+		}
+	}
+
+	public void parse(String xml, Receiver<Token> receiver) throws IOException {
+		try (Reader reader = new StringReader(xml)) {
 			parse(reader, receiver);
 		}
 	}
