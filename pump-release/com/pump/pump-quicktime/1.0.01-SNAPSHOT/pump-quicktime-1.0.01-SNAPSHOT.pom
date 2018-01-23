@@ -10,7 +10,7 @@
   <parent>
     <groupId>com.pump</groupId>
     <artifactId>pumpernickel</artifactId>
-    <version>1.0.00</version>
+    <version>1.0.01-SNAPSHOT</version>
   </parent>
 
   <name>pump-quicktime</name>
@@ -20,12 +20,12 @@
     <dependency>
       <groupId>com.pump</groupId>
       <artifactId>pump-animation</artifactId>
-      <version>1.0.00</version>
+      <version>1.0.01-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.pump</groupId>
       <artifactId>pump-audio</artifactId>
-      <version>1.0.00</version>
+      <version>1.0.01-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
