@@ -17,36 +17,45 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.pump.Ignorable;
+
 public class ErrorManager {
-	
+
 	private static ErrorManager GLOBAL;
-	
+
 	/**
 	 * 
-	 * @param applicationName the name of the application. This may be shown in feedback to the user.
-	 * @throws SecurityException if you don't have permission to call Thread.setDefaultUncaughtExceptionHandler()
+	 * @param applicationName
+	 *            the name of the application. This may be shown in feedback to
+	 *            the user.
+	 * @throws SecurityException
+	 *             if you don't have permission to call
+	 *             Thread.setDefaultUncaughtExceptionHandler()
 	 */
-	public static synchronized void initialize(String applicationName)  throws SecurityException  {
-		if(GLOBAL!=null)
-			throw new RuntimeException("ErrorManager already initialized using "+GLOBAL.applicationName);
+	public static synchronized void initialize(String applicationName)
+			throws SecurityException {
+		if (GLOBAL != null)
+			throw new RuntimeException(
+					"ErrorManager already initialized using "
+							+ GLOBAL.applicationName);
 		GLOBAL = new ErrorManager(applicationName);
 	}
-	
+
 	public static synchronized ErrorManager get() {
 		return GLOBAL;
 	}
-	
+
 	List<ThrowableHandler> handlers = new LinkedList<>();
 	String applicationName;
 	ErrorDialogThrowableHandler defaultHandler = new ErrorDialogThrowableHandler();
-	
+
 	ErrorManager(String applicationName) throws SecurityException {
-		if(applicationName==null)
+		if (applicationName == null)
 			throw new NullPointerException();
-		
+
 		this.applicationName = applicationName;
 		handlers.add(defaultHandler);
-		
+
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
@@ -54,28 +63,33 @@ public class ErrorManager {
 			}
 		});
 	}
-	
+
 	public void addHandler(ThrowableHandler handler) {
-		synchronized(handlers) {
+		synchronized (handlers) {
 			handlers.add(0, handler);
 		}
 	}
-	
+
 	public ThrowableHandler process(Throwable t) {
 		return process(new ThrowableDescriptor(t));
 	}
 
 	private int recursionCtr = 0;
+
 	public ThrowableHandler process(ThrowableDescriptor td) {
 		recursionCtr++;
 		try {
-			synchronized(handlers) {
-				for(ThrowableHandler handler : handlers) {
+			synchronized (handlers) {
+				if (td.throwable instanceof Ignorable
+						&& ((Ignorable) td.throwable).isIgnored()) {
+					return null;
+				}
+				for (ThrowableHandler handler : handlers) {
 					try {
-						if(handler.processThrowable(td))
+						if (handler.processThrowable(td))
 							return handler;
-					} catch(Exception e) {
-						if(recursionCtr==1)
+					} catch (Exception e) {
+						if (recursionCtr == 1)
 							e.printStackTrace();
 					}
 				}
@@ -86,30 +100,31 @@ public class ErrorManager {
 		return null;
 	}
 
-	public static ErrorDialogThrowableHandler getDefaultErrorHandler()
-	{
+	public static ErrorDialogThrowableHandler getDefaultErrorHandler() {
 		return GLOBAL.defaultHandler;
 	}
 
-	/** Print an exception to the console without invoking an error dialog.
+	/**
+	 * Print an exception to the console without invoking an error dialog.
 	 * 
-	 * @param e the exception to print to the console.
+	 * @param e
+	 *            the exception to print to the console.
 	 */
-	public static void println(Throwable e)
-	{
+	public static void println(Throwable e) {
 		System.err.println(getStackTrace(e));
 	}
 
 	public static String getStackTrace(Throwable throwable) {
-		try(StringWriter sWriter = new StringWriter()) {
-			try(PrintWriter pWriter = new PrintWriter(sWriter)) {
+		try (StringWriter sWriter = new StringWriter()) {
+			try (PrintWriter pWriter = new PrintWriter(sWriter)) {
 				throwable.printStackTrace(pWriter);
 			}
 			sWriter.close();
 			return sWriter.toString();
-		} catch(IOException e2) {
-			//this should never happen for a StringWriter
-			System.err.println("ErrorManager: An error occurred printing a "+throwable.getClass().getCanonicalName());
+		} catch (IOException e2) {
+			// this should never happen for a StringWriter
+			System.err.println("ErrorManager: An error occurred printing a "
+					+ throwable.getClass().getCanonicalName());
 			return "error";
 		}
 	}

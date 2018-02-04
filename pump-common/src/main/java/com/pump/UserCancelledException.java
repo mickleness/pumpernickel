@@ -10,20 +10,45 @@
  */
 package com.pump;
 
-
-/** An exception that indicates an operation was cancelled, either
- * directly or indirectly by something the user did.
+/**
+ * An exception that indicates an operation was cancelled, either directly or
+ * indirectly by something the user did.
  */
-public class UserCancelledException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+public class UserCancelledException extends RuntimeException implements
+		Ignorable {
+	private static final long serialVersionUID = 1L;
 
-	public UserCancelledException() {}
+	boolean ignored;
+
+	public UserCancelledException() {
+		this(false);
+	}
 
 	public UserCancelledException(String msg) {
-		super(msg);
+		this(msg, false);
 	}
 
 	public UserCancelledException(Throwable cause) {
+		this(cause, false);
+	}
+
+	public UserCancelledException(boolean ignored) {
+		super();
+		this.ignored = ignored;
+	}
+
+	public UserCancelledException(String msg, boolean ignored) {
+		super(msg);
+		this.ignored = ignored;
+	}
+
+	public UserCancelledException(Throwable cause, boolean ignored) {
 		super(cause);
+		this.ignored = ignored;
+	}
+
+	@Override
+	public boolean isIgnored() {
+		return ignored;
 	}
 }
