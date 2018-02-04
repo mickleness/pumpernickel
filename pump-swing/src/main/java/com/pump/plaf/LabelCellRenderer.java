@@ -10,6 +10,7 @@
  */
 package com.pump.plaf;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
@@ -17,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTree;
@@ -26,70 +28,86 @@ import javax.swing.tree.TreeCellRenderer;
 
 import com.pump.util.JVM;
 
-public class LabelCellRenderer<T> implements ListCellRenderer<T>, TreeCellRenderer, CellRendererConstants {
+public class LabelCellRenderer<T> implements ListCellRenderer<T>,
+		TreeCellRenderer, CellRendererConstants {
+
+	/**
+	 * If this client property is defined on a JComponent this informs whether
+	 * this renderer will apply alternating ("zebra") stripes to list elements.
+	 * <p>
+	 * For example, see <a href=
+	 * "https://ux.stackexchange.com/questions/3562/to-use-or-not-to-use-zebra-stripes-or-alternating-row-colors-for-tables"
+	 * >articles like this</a>.
+	 */
+	public static final String PROPERTY_ALTERNATING_BACKGROUND = LabelCellRenderer.class
+			.getName() + "#alternatingBackground";
 
 	protected JLabel label;
 	protected JComboBox<?> comboBox;
 	protected Collection<WeakReference<JList>> lists = new HashSet<>();
 	protected boolean addKeyListener;
-	
+
 	public LabelCellRenderer() {
 		this(null, false);
 	}
-	
+
 	/**
 	 * 
-	 * @param comboBox an optional reference to the JComboBox. This may be used
-	 * to render certain aspects (such as keyboard focus), and it is required
-	 * for the argument "addKeyListener" to work.
-	 * @param addKeyListener if true then key listeners
-	 * are added both to JLists and the JComboBox argument to help select items based
-	 * on the user's typing.
+	 * @param comboBox
+	 *            an optional reference to the JComboBox. This may be used to
+	 *            render certain aspects (such as keyboard focus), and it is
+	 *            required for the argument "addKeyListener" to work.
+	 * @param addKeyListener
+	 *            if true then key listeners are added both to JLists and the
+	 *            JComboBox argument to help select items based on the user's
+	 *            typing.
 	 */
-	public LabelCellRenderer(JComboBox<?> comboBox,boolean addKeyListener) {
+	public LabelCellRenderer(JComboBox<?> comboBox, boolean addKeyListener) {
 		this.addKeyListener = addKeyListener;
-		if(comboBox!=null) {
+		if (comboBox != null) {
 			this.comboBox = comboBox;
-			if(addKeyListener) {
+			if (addKeyListener) {
 				comboBox.addKeyListener(new ListKeyListener(comboBox));
 			}
 		}
 		label = createLabel();
 		label.setBorder(EMPTY_BORDER);
 	}
-	
+
 	/**
 	 * This is provided as a hook for subclasses to create their own JLabels.
 	 */
 	protected JLabel createLabel() {
 		return new JLabel();
 	}
-	
-	/** Adjust the text and the icon of the <code>label</code> field.
+
+	/**
+	 * Adjust the text and the icon of the <code>label</code> field.
 	 */
 	protected void formatLabel(T value) {
-		String str = value==null ? "" : value.toString();
+		String str = value == null ? "" : value.toString();
 		label.setText(str);
 		label.setIcon(null);
 	}
-	
+
 	/** Return the label this renderer uses. */
 	public JLabel getLabel() {
 		return label;
 	}
 
 	@Override
-	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean isSelected, boolean expanded,
-			boolean leaf, int row, boolean hasFocus) {
-		//TODO: this is missing the key listener
-		
-		formatLabel( (T)value);
-		
-		formatLabelColors(isSelected);
-		label.setOpaque(row!=-1);
-														
-		if(isFocusBorderActive()) {
-			if(comboBox!=null && comboBox.hasFocus() && row==-1) {
+	public Component getTreeCellRendererComponent(JTree tree, Object value,
+			boolean isSelected, boolean expanded, boolean leaf, int row,
+			boolean hasFocus) {
+		// TODO: this is missing the key listener
+
+		formatLabel((T) value);
+
+		formatLabelColors(tree, isSelected, row);
+		label.setOpaque(row != -1);
+
+		if (isFocusBorderActive()) {
+			if (comboBox != null && comboBox.hasFocus() && row == -1) {
 				label.setBorder(FOCUS_BORDER);
 			} else {
 				label.setBorder(EMPTY_BORDER);
@@ -101,18 +119,17 @@ public class LabelCellRenderer<T> implements ListCellRenderer<T>, TreeCellRender
 	@Override
 	public Component getListCellRendererComponent(JList<? extends T> list,
 			T value, int index, boolean isSelected, boolean cellHasFocus) {
-		if(addKeyListener && list!=null && registerList(list))
-		{
+		if (addKeyListener && list != null && registerList(list)) {
 			list.addKeyListener(new ListKeyListener(list));
 		}
-		
+
 		formatLabel(value);
-		
-		formatLabelColors(isSelected);
-		label.setOpaque(index!=-1);
-														
-		if(isFocusBorderActive()) {
-			if(comboBox!=null && comboBox.hasFocus() && index==-1) {
+
+		formatLabelColors(list, isSelected, index);
+		label.setOpaque(index != -1);
+
+		if (isFocusBorderActive()) {
+			if (comboBox != null && comboBox.hasFocus() && index == -1) {
 				label.setBorder(FOCUS_BORDER);
 			} else {
 				label.setBorder(EMPTY_BORDER);
@@ -120,16 +137,16 @@ public class LabelCellRenderer<T> implements ListCellRenderer<T>, TreeCellRender
 		}
 		return label;
 	}
-	
+
 	private boolean registerList(JList<? extends T> list) {
 		Iterator<WeakReference<JList>> iter = lists.iterator();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			WeakReference<JList> ref = iter.next();
 			JList knownList = ref.get();
-			if(knownList==null) {
+			if (knownList == null) {
 				iter.remove();
 			}
-			if(knownList==list) {
+			if (knownList == list) {
 				return false;
 			}
 		}
@@ -137,39 +154,62 @@ public class LabelCellRenderer<T> implements ListCellRenderer<T>, TreeCellRender
 		return true;
 	}
 
-	protected void formatLabelColors(boolean isSelected) {
-		if(comboBox!=null)
-		{
-			if(isSelected) {
-				label.setBackground(UIManager.getColor("ComboBox.selectionBackground"));
-				label.setForeground(UIManager.getColor("ComboBox.selectionForeground"));
+	protected void formatLabelColors(JComponent jc, boolean isSelected,
+			int rowNumber) {
+		if (comboBox != null) {
+			if (isSelected) {
+				label.setBackground(UIManager
+						.getColor("ComboBox.selectionBackground"));
+				label.setForeground(UIManager
+						.getColor("ComboBox.selectionForeground"));
 			} else {
 				label.setBackground(UIManager.getColor("ComboBox.background"));
 				label.setForeground(UIManager.getColor("ComboBox.foreground"));
 			}
 		} else {
-			if(isSelected) {
-				label.setBackground(UIManager.getColor("Menu.selectionBackground"));
-				label.setForeground(UIManager.getColor("Menu.selectionForeground"));
+			if (isSelected) {
+				label.setBackground(UIManager
+						.getColor("Menu.selectionBackground"));
+				label.setForeground(UIManager
+						.getColor("Menu.selectionForeground"));
 			} else {
-				label.setBackground(UIManager.getColor("Menu.background"));
+				Color background = UIManager.getColor("Menu.background");
+				if (rowNumber % 2 == 1 && isAlternatingBackround(jc)) {
+					background = darken(background);
+				}
+				label.setBackground(background);
 				label.setForeground(UIManager.getColor("Menu.foreground"));
 			}
 		}
 	}
 
-	/** If this returns true then the border of the label may be modified
-	 * to depict focus.
+	private Color darken(Color c) {
+		return new Color((int) (c.getRed() * .985),
+				(int) (c.getGreen() * .985), (int) (c.getBlue() * .985),
+				c.getAlpha());
+	}
+
+	private boolean isAlternatingBackround(JComponent jc) {
+		Boolean b = (Boolean) jc
+				.getClientProperty(PROPERTY_ALTERNATING_BACKGROUND);
+		if (b == null) {
+			b = jc instanceof JTree;
+		}
+		return b.booleanValue();
+	}
+
+	/**
+	 * If this returns true then the border of the label may be modified to
+	 * depict focus.
 	 * 
 	 * @return if true then the border of the label may be modified to depict
-	 * focus. The default implementation tries to figure out if the if
-	 * UI actually renders the focus through the border.
+	 *         focus. The default implementation tries to figure out if the if
+	 *         UI actually renders the focus through the border.
 	 */
 	protected boolean isFocusBorderActive() {
-		if(comboBox!=null && comboBox.getUI() instanceof FilledComboBoxUI)
+		if (comboBox != null && comboBox.getUI() instanceof FilledComboBoxUI)
 			return false;
 		return !JVM.isMac;
 	}
-	
-	
+
 }
