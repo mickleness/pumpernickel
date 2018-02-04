@@ -10,16 +10,15 @@
  */
 package com.pump.job;
 
-
-/** This wraps a Runnable inside a <code>Job</code>.
- * When possible it is better to use a robust model (like a Job)
- * that offers the ability to cancel jobs, add listeners, and 
- * (through listeners) valuable UI feedback.
+/**
+ * This wraps a Runnable inside a <code>Job</code>. When possible it is better
+ * to use a robust model (like a Job) that offers the ability to cancel jobs,
+ * add listeners, and (through listeners) valuable UI feedback.
  */
 public class JobRunnable extends Job {
 	Runnable runnable;
-	
-	JobRunnable(Runnable r) {
+
+	public JobRunnable(Runnable r) {
 		super();
 		runnable = r;
 	}
@@ -28,5 +27,5 @@ public class JobRunnable extends Job {
 	protected void runJob() {
 		runnable.run();
 	};
-	
+
 }
