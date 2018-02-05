@@ -78,7 +78,7 @@ public abstract class KeyListenerNavigator extends KeyAdapter {
 	 * @return a String that was extracted from the component, or null if no
 	 *         String was identified.
 	 */
-	protected String getText(Component component) {
+	public static String getText(Component component) {
 		if (component instanceof JTextComponent)
 			return ((JTextComponent) component).getText();
 		if (component instanceof JLabel)
