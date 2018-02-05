@@ -41,16 +41,28 @@ public class LocationTreePane extends JComponent {
 	tree = new JTree() {
 	    private static final long serialVersionUID = 1L;
 
+	    int recursionCtr = 0;
+
 	    @Override
 	    public String convertValueToText(Object value, boolean selected,
 		    boolean expanded, boolean leaf, int row, boolean hasFocus) {
-		Component c = getCellRenderer().getTreeCellRendererComponent(
-			this, value, selected, expanded, leaf, row, hasFocus);
-		String str = KeyListenerNavigator.getText(c);
-		if (str != null)
-		    return str;
-		return super.convertValueToText(value, selected, expanded,
-			leaf, row, hasFocus);
+		if (recursionCtr > 0) {
+		    return super.convertValueToText(value, selected, expanded,
+			    leaf, row, hasFocus);
+		}
+		recursionCtr++;
+		try {
+		    Component c = getCellRenderer()
+			    .getTreeCellRendererComponent(this, value,
+				    selected, expanded, leaf, row, hasFocus);
+		    String str = KeyListenerNavigator.getText(c);
+		    if (str != null)
+			return str;
+		    return super.convertValueToText(value, selected, expanded,
+			    leaf, row, hasFocus);
+		} finally {
+		    recursionCtr--;
+		}
 	    }
 
 	};
