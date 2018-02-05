@@ -304,6 +304,7 @@ public class LocationTreePaneUI extends ComponentUI {
 		    }
 		});
 
+	ltp.getTree().addKeyListener(new TreeKeyListener());
 	ltp.getTree().setRootVisible(false);
 	ltp.getTree().setCellRenderer(new LocationCellRenderer());
 	ltp.getTree().setUI(new LocationTreePaneTreeUI());
