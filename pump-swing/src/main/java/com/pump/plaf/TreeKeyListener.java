@@ -15,6 +15,7 @@ public class TreeKeyListener extends KeyListenerNavigator {
 
 	@Override
 	protected boolean changeSelectionUsingText(KeyEvent e, String inputStr) {
+		inputStr = inputStr.toUpperCase();
 		JTree tree = (JTree) e.getComponent();
 
 		int[] selection = tree.getSelectionRows();
@@ -31,7 +32,7 @@ public class TreeKeyListener extends KeyListenerNavigator {
 							tree.isFocusOwner());
 			String str = getText(renderer);
 			if (str != null && str.length() >= 0
-					&& str.startsWith("" + e.getKeyChar())) {
+					&& str.toUpperCase().startsWith(inputStr)) {
 				tree.setSelectionPath(path);
 				e.consume();
 				return true;
