@@ -19,14 +19,37 @@ import javax.swing.text.JTextComponent;
  */
 public abstract class KeyListenerNavigator extends KeyAdapter {
 	StringBuffer typedText = new StringBuffer();
-	long lastKeyPress = -1;
+	long lastKeyEvent = -1;
+	boolean useKeyPressed;
+
+	/**
+	 * @param useKeyPressed
+	 *            if true then this only fires notifications for KeyPressed
+	 *            events, if false then this uses KeyTyped events.
+	 */
+	public KeyListenerNavigator(boolean useKeyPressed) {
+		this.useKeyPressed = useKeyPressed;
+	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if (useKeyPressed) {
+			keyEvent(e);
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		if (!useKeyPressed) {
+			keyEvent(e);
+		}
+	}
+
+	protected void keyEvent(KeyEvent e) {
 		Number delay = (Number) UIManager.get("textSelectionDelay");
 		if (delay == null)
 			delay = Integer.valueOf(500);
-		if (e.getWhen() - lastKeyPress > delay.intValue()) {
+		if (e.getWhen() - lastKeyEvent > delay.intValue()) {
 			typedText.delete(0, typedText.length());
 		}
 
@@ -45,7 +68,7 @@ public abstract class KeyListenerNavigator extends KeyAdapter {
 		}
 
 		if (!origTypedText.equals(typedText.toString())) {
-			lastKeyPress = e.getWhen();
+			lastKeyEvent = e.getWhen();
 			boolean success = changeSelectionUsingText(e, typedText.toString());
 			if (success)
 				e.consume();

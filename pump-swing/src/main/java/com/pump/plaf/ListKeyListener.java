@@ -31,12 +31,14 @@ public class ListKeyListener extends KeyListenerNavigator {
 	JList list;
 
 	public ListKeyListener(JList list) {
+		super(true);
 		if (list == null)
 			throw new NullPointerException();
 		this.list = list;
 	}
 
 	public ListKeyListener(JComboBox comboBox) {
+		super(true);
 		if (comboBox == null)
 			throw new NullPointerException();
 		this.comboBox = comboBox;

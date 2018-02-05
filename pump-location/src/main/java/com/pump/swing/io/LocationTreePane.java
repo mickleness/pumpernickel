@@ -47,6 +47,8 @@ public class LocationTreePane extends JComponent {
 	    public String convertValueToText(Object value, boolean selected,
 		    boolean expanded, boolean leaf, int row, boolean hasFocus) {
 		if (recursionCtr > 0) {
+		    // the default renderer call this method, so we need to
+		    // abort for recursive calls
 		    return super.convertValueToText(value, selected, expanded,
 			    leaf, row, hasFocus);
 		}

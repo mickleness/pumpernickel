@@ -10,8 +10,46 @@ import javax.swing.tree.TreePath;
 
 /**
  * This changes the selection in a JTree based on text the user typed.
+ * <p>
+ * Note the BasicTreeUI already has a KeyListener that effectively tries to do
+ * what this does (except it doesn't support creating short Strings with more
+ * than one character). That mechanism relies on
+ * {@link JTree#convertValueToText(Object, boolean, boolean, boolean, int, boolean)}
+ * , so if you want leverage that with a {@link LabelCellRenderer}, you can
+ * override that method so it resembles:
+ * 
+ * <pre>
+ * int recursionCtr = 0;
+ * 
+ * &#064;Override
+ * public String convertValueToText(Object value, boolean selected,
+ * 		boolean expanded, boolean leaf, int row, boolean hasFocus) {
+ * 	if (recursionCtr &gt; 0) {
+ * 		// the default renderer call this method, so we need to
+ * 		// abort for recursive calls
+ * 		return super.convertValueToText(value, selected, expanded, leaf, row,
+ * 				hasFocus);
+ * 	}
+ * 	recursionCtr++;
+ * 	try {
+ * 		Component c = getCellRenderer().getTreeCellRendererComponent(this,
+ * 				value, selected, expanded, leaf, row, hasFocus);
+ * 		String str = KeyListenerNavigator.getText(c);
+ * 		if (str != null)
+ * 			return str;
+ * 		return super.convertValueToText(value, selected, expanded, leaf, row,
+ * 				hasFocus);
+ * 	} finally {
+ * 		recursionCtr--;
+ * 	}
+ * }
+ * </pre>
  */
 public class TreeKeyListener extends KeyListenerNavigator {
+
+	public TreeKeyListener() {
+		super(false);
+	}
 
 	@Override
 	protected boolean changeSelectionUsingText(KeyEvent e, String inputStr) {
