@@ -34,7 +34,6 @@ public class TreeKeyListener extends KeyListenerNavigator {
 			if (str != null && str.length() >= 0
 					&& str.toUpperCase().startsWith(inputStr)) {
 				tree.setSelectionPath(path);
-				e.consume();
 				return true;
 			}
 		}

@@ -6,6 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JLabel;
+import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
 
 /**
@@ -22,14 +23,20 @@ public abstract class KeyListenerNavigator extends KeyAdapter {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getWhen() - lastKeyPress > 500) {
+		Number delay = (Number) UIManager.get("textSelectionDelay");
+		if (delay == null)
+			delay = Integer.valueOf(500);
+		if (e.getWhen() - lastKeyPress > delay.intValue()) {
 			typedText.delete(0, typedText.length());
 		}
-		if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-			if (typedText.length() == 0) {
-				return;
+
+		String origTypedText = typedText.toString();
+
+		if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE
+				|| e.getKeyCode() == KeyEvent.VK_DELETE) {
+			if (typedText.length() != 0) {
+				typedText.substring(0, typedText.length() - 1);
 			}
-			typedText.substring(0, typedText.length() - 1);
 		} else {
 			char ch = e.getKeyChar();
 			if (ch != KeyEvent.CHAR_UNDEFINED) {
@@ -37,10 +44,12 @@ public abstract class KeyListenerNavigator extends KeyAdapter {
 			}
 		}
 
-		lastKeyPress = e.getWhen();
-		boolean success = changeSelectionUsingText(e, typedText.toString());
-		if (success)
-			e.consume();
+		if (!origTypedText.equals(typedText.toString())) {
+			lastKeyPress = e.getWhen();
+			boolean success = changeSelectionUsingText(e, typedText.toString());
+			if (success)
+				e.consume();
+		}
 	}
 
 	/**
