@@ -10,6 +10,7 @@
  */
 package com.pump.swing.io;
 
+import java.awt.Component;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -19,6 +20,7 @@ import javax.swing.UIManager;
 
 import com.pump.data.Key;
 import com.pump.io.location.IOLocation;
+import com.pump.plaf.KeyListenerNavigator;
 import com.pump.plaf.LocationTreePaneUI;
 
 /**
@@ -36,7 +38,22 @@ public class LocationTreePane extends JComponent {
     JTree tree;
 
     public LocationTreePane(IOLocation... roots) {
-	tree = new JTree();
+	tree = new JTree() {
+	    private static final long serialVersionUID = 1L;
+
+	    @Override
+	    public String convertValueToText(Object value, boolean selected,
+		    boolean expanded, boolean leaf, int row, boolean hasFocus) {
+		Component c = getCellRenderer().getTreeCellRendererComponent(
+			this, value, selected, expanded, leaf, row, hasFocus);
+		String str = KeyListenerNavigator.getText(c);
+		if (str != null)
+		    return str;
+		return super.convertValueToText(value, selected, expanded,
+			leaf, row, hasFocus);
+	    }
+
+	};
 	setRoots(roots);
 	updateUI();
     }
