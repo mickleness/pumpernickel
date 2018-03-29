@@ -32,6 +32,7 @@ import com.pump.io.parser.Parser.WhitespaceToken;
 import com.pump.io.parser.Token;
 import com.pump.io.parser.java.JavaClassSummary;
 import com.pump.io.parser.java.JavaParser;
+import com.pump.io.parser.java.JavaParser.BracketType;
 import com.pump.io.parser.java.JavaParser.WordToken;
 
 /**
@@ -388,9 +389,9 @@ public class Breakout {
 		 */
 		private int parseDeclaration(Token[] tokens, int index) {
 			List<Token> myTokens = new ArrayList<>();
+			int level = 0;
 			while (index < tokens.length) {
 				if ("{".equals(tokens[index].getText())) {
-					int level = 0;
 					do {
 						myTokens.add(tokens[index]);
 						if ("{".equals(tokens[index].getText())) {
@@ -407,6 +408,17 @@ public class Breakout {
 				} else {
 					myTokens.add(tokens[index]);
 				}
+
+				for (BracketType t : BracketType.values()) {
+					if (Character.toString(t.openChar).equals(
+							tokens[index].getText())) {
+						level++;
+					} else if (Character.toString(t.closeChar).equals(
+							tokens[index].getText())) {
+						level--;
+					}
+				}
+
 				index++;
 			}
 			return index;
