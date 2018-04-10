@@ -98,6 +98,7 @@ public abstract class SaveControls {
 	protected RecentMenu recentMenu = new RecentMenu.Preference(true,
 			getClass());
 	protected JFrame frame;
+	protected boolean multipleDocuments;
 
 	public SaveControls(JFrame frame) {
 		if (frame == null)
@@ -139,7 +140,7 @@ public abstract class SaveControls {
 
 	public void openFile() throws UserCancelledException, Exception {
 
-		if (isDocumentDirty()) {
+		if (!isMultipleDocuments() && isDocumentDirty()) {
 			File oldFile = getFile();
 			String docName = oldFile == null ? null : oldFile.getName();
 			int choice = QDialog.showSaveChangesDialog(frame, docName, true);
@@ -181,6 +182,27 @@ public abstract class SaveControls {
 	 *         interacts with.
 	 */
 	public abstract String[] getReadableDocumentFileExtensions();
+
+	/**
+	 * Set whether this fram should support having multiple documents open at
+	 * once.
+	 */
+	public void setMultipleDocuments(boolean multipleDocuments) {
+		this.multipleDocuments = multipleDocuments;
+	}
+
+	/**
+	 * Return true if this frame is capable of representing multiple documents
+	 * at once.
+	 * <p>
+	 * When a frame can NOT display multiple documents: the "Open..." command
+	 * needs to first close the current document before opening a new document.
+	 * (But when a frame can support multiple documents: existing documents are
+	 * not modified when opening a new file.)
+	 */
+	public boolean isMultipleDocuments() {
+		return multipleDocuments;
+	}
 
 	/**
 	 * Return the document file extension that should be used for new saves.
