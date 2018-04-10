@@ -124,43 +124,63 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">FlipTransition3D</span>
 extends <a href="../../../../com/pump/image/transition/Transition3D.html" title="class in com.pump.image.transition">Transition3D</a></pre>
-<div class="block">This transition flips the viewing surface over 180 degrees to reveal the inverted back.
- Here are playback samples:
- <p><table summary="Sample Animations of FlipTransition3D" cellspacing="50" border="0"><tr>
+<div class="block">This transition flips the viewing surface over 180 degrees to reveal the
+ inverted back. Here are playback samples:
+ <p>
+ <table summary="Sample Animations of FlipTransition3D" cellspacing="50" border="0">
+ <tr>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipLeft.gif" alt="Flip Left">
- <p>Flip Left
- </td>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipLeft.gif"
+ alt="Flip Left">
+ <p>
+ Flip Left</td>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipRight.gif" alt="Flip Right">
- <p>Flip Right
- </td>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipRight.gif"
+ alt="Flip Right">
+ <p>
+ Flip Right</td>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipUp.gif" alt="Flip Up">
- <p>Flip Up
- </td>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipUp.gif"
+ alt="Flip Up">
+ <p>
+ Flip Up</td>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipDown.gif" alt="Flip Down">
- <p>Flip Down
- </td>
- </tr><tr>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipDown.gif"
+ alt="Flip Down">
+ <p>
+ Flip Down</td>
+ </tr>
+ <tr>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipLeftFlush.gif" alt="Flip Left Flush">
- <p>Flip Left Flush
- </td>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipLeftFlush.gif"
+ alt="Flip Left Flush">
+ <p>
+ Flip Left Flush</td>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipRightFlush.gif" alt="Flip Right Flush">
- <p>Flip Right Flush
- </td>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipRightFlush.gif"
+ alt="Flip Right Flush">
+ <p>
+ Flip Right Flush</td>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipUpFlush.gif" alt="Flip Up Flush">
- <p>Flip Up Flush
- </td>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipUpFlush.gif"
+ alt="Flip Up Flush">
+ <p>
+ Flip Up Flush</td>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipDownFlush.gif" alt="Flip Down Flush">
- <p>Flip Down Flush
- </td>
- </tr></table></div>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlipTransition3D/FlipDownFlush.gif"
+ alt="Flip Down Flush">
+ <p>
+ Flip Down Flush</td>
+ </tr>
+ </table></div>
 </li>
 </ul>
 </div>
@@ -248,9 +268,7 @@ extends <a href="../../../../com/pump/image/transition/Transition3D.html" title=
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/transition/FlipTransition3D.html#getDemoTransitions--">getDemoTransitions</a></span>()</code>
-<div class="block">This public static method is used by the 
- <code>com.bric.image.transition.Transition2DDemoHelper</code>
- class to create sample animations of this transition.</div>
+<div class="block">TODO: remove all getDemoTransitions() methods or create a new tool to invoke them.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -305,12 +323,14 @@ extends <a href="../../../../com/pump/image/transition/Transition3D.html" title=
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>direction</code> - one of the Transition constants: UP, DOWN, LEFT or RIGHT</dd>
-<dd><code>flush</code> - whether the z-axis should remain flush with the target destination.
- For example: if this is false then as a surface flips to the right a vertical edge
- will be pulled towards the camera and grow larger in height than than the target
- destination. So the center of the flip is constant. But if this is true: then
- the center of the flip pulls farther away from the camera to make sure that vertical
- edge is never larger than the height of the target graphics area.</dd>
+<dd><code>flush</code> - whether the z-axis should remain flush with the target
+            destination. For example: if this is false then as a surface
+            flips to the right a vertical edge will be pulled towards the
+            camera and grow larger in height than than the target
+            destination. So the center of the flip is constant. But if
+            this is true: then the center of the flip pulls farther away
+            from the camera to make sure that vertical edge is never
+            larger than the height of the target graphics area.</dd>
 </dl>
 </li>
 </ul>
@@ -327,12 +347,14 @@ extends <a href="../../../../com/pump/image/transition/Transition3D.html" title=
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>direction</code> - one of the Transition constants: UP, DOWN, LEFT or RIGHT</dd>
-<dd><code>flush</code> - whether the z-axis should remain flush with the target destination.
- For example: if this is false then as a surface flips to the right a vertical edge
- will be pulled towards the camera and grow larger in height than than the target
- destination. So the center of the flip is constant. But if this is true: then
- the center of the flip pulls farther away from the camera to make sure that vertical
- edge is never larger than the height of the target graphics area.</dd>
+<dd><code>flush</code> - whether the z-axis should remain flush with the target
+            destination. For example: if this is false then as a surface
+            flips to the right a vertical edge will be pulled towards the
+            camera and grow larger in height than than the target
+            destination. So the center of the flip is constant. But if
+            this is true: then the center of the flip pulls farther away
+            from the camera to make sure that vertical edge is never
+            larger than the height of the target graphics area.</dd>
 <dd><code>background</code> - the optional background color to paint behind this transition.</dd>
 </dl>
 </li>
@@ -352,13 +374,11 @@ extends <a href="../../../../com/pump/image/transition/Transition3D.html" title=
 <li class="blockList">
 <h4>getDemoTransitions</h4>
 <pre>public static&nbsp;<a href="../../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[]&nbsp;getDemoTransitions()</pre>
-<div class="block">This public static method is used by the 
- <code>com.bric.image.transition.Transition2DDemoHelper</code>
- class to create sample animations of this transition.</div>
+<div class="block">TODO: remove all getDemoTransitions() methods or create a new tool to invoke them.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the transitions that should be used to demonstrate this
- transition.</dd>
+         transition.</dd>
 </dl>
 </li>
 </ul>

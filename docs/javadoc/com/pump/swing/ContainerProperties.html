@@ -129,15 +129,19 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ContainerProperties</span>
 extends java.util.Properties</pre>
-<div class="block">This helps serialize and deserialize simple UIs based on the names of components.
- For example, if you have a selected JCheckBox with the name "is-preloaded", then after
- calling <a href="../../../com/pump/swing/ContainerProperties.html#catalog-java.awt.Container-"><code>catalog(Container)</code></a> on any parent of that JCheckBox this ContainerProperties
- will include "is-preloaded=true". Similarly when you call <code>#install(Container, UncaughtExceptionHandler)</code>
+<div class="block">This helps serialize and deserialize simple UIs based on the names of
+ components. For example, if you have a selected JCheckBox with the name
+ "is-preloaded", then after calling <a href="../../../com/pump/swing/ContainerProperties.html#catalog-java.awt.Container-"><code>catalog(Container)</code></a> on any parent
+ of that JCheckBox this ContainerProperties will include "is-preloaded=true".
+ Similarly when you call <code>#install(Container, UncaughtExceptionHandler)</code>
  it will parse that value and set the UI accordingly.
- <p>This only supports a small set of data types in JToggleButtons, JTextComponents, JComboBoxes and JLists:
- primitives, Strings, BigDecimals, BigIntegers, and Files. It's possible this object
- can serialize values but it won't be able to deserialize them later.
- <p>This is a quick and light tool intended to help with settings, but it is not
+ <p>
+ This only supports a small set of data types in JToggleButtons,
+ JTextComponents, JComboBoxes and JLists: primitives, Strings, BigDecimals,
+ BigIntegers, and Files. It's possible this object can serialize values but it
+ won't be able to deserialize them later.
+ <p>
+ This is a quick and light tool intended to help with settings, but it is not
  a good solution for complex (or crucial) saved data.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -196,7 +200,8 @@ extends java.util.Properties</pre>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ContainerProperties.html#ContainerProperties-java.awt.Container-">ContainerProperties</a></span>(java.awt.Container&nbsp;container)</code>
-<div class="block">Create a ContainerProperties that catalogs all descendants of the argument.</div>
+<div class="block">Create a ContainerProperties that catalogs all descendants of the
+ argument.</div>
 </td>
 </tr>
 </table>
@@ -317,11 +322,12 @@ extends java.util.Properties</pre>
 <li class="blockList">
 <h4>ContainerProperties</h4>
 <pre>public&nbsp;ContainerProperties(java.awt.Container&nbsp;container)</pre>
-<div class="block">Create a ContainerProperties that catalogs all descendants of the argument.</div>
+<div class="block">Create a ContainerProperties that catalogs all descendants of the
+ argument.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>container</code> - a Container with textfields, buttons, comboboxes, etc. that you
- want to catalog with this ContainerProperties.</dd>
+<dd><code>container</code> - a Container with textfields, buttons, comboboxes, etc. that
+            you want to catalog with this ContainerProperties.</dd>
 </dl>
 </li>
 </ul>
@@ -343,8 +349,8 @@ extends java.util.Properties</pre>
 <div class="block">Catalog all descendants of the argument.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>container</code> - a Container with textfields, buttons, comboboxes, etc. that you
- want to catalog with this ContainerProperties.</dd>
+<dd><code>container</code> - a Container with textfields, buttons, comboboxes, etc. that
+            you want to catalog with this ContainerProperties.</dd>
 </dl>
 </li>
 </ul>
@@ -395,9 +401,12 @@ extends java.util.Properties</pre>
 <div class="block">Install these properties on a Container's descendants.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>container</code> - Configure all the components in the argument that match properties stored in this ContainerProperties.</dd>
-<dd><code>handler</code> - this will be notified as exceptions come up. If this is null, then a default exception handler is used
- that quietly prints messages to System.err but continues to iterate over all possible components.</dd>
+<dd><code>container</code> - Configure all the components in the argument that match
+            properties stored in this ContainerProperties.</dd>
+<dd><code>handler</code> - this will be notified as exceptions come up. If this is null,
+            then a default exception handler is used that quietly prints
+            messages to System.err but continues to iterate over all
+            possible components.</dd>
 </dl>
 </li>
 </ul>

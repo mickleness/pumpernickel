@@ -110,23 +110,27 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">WildcardPattern</span>
 extends java.lang.Object</pre>
-<div class="block">This is a specialized pattern matching mechanism for common
- wildcard conventions. This class will hopefully be more efficient
- and transparent than the existing <code>java.util.regex.Pattern</code>
- and <code>java.util.regex.Matcher</code> classes. (This class will not
- be as flexible/powerful, though.)
+<div class="block">This is a specialized pattern matching mechanism for common wildcard
+ conventions. This class will hopefully be more efficient and transparent than
+ the existing <code>java.util.regex.Pattern</code> and
+ <code>java.util.regex.Matcher</code> classes. (This class will not be as
+ flexible/powerful, though.)
  
- <p>The following description of wildcards is copied directly from
- <a href="http://www.linfo.org/wildcard.html">http://www.linfo.org/wildcard.html</a>.
- The naming conventions in this class follow these descriptions:
+ <p>
+ The following description of wildcards is copied directly from <a
+ href="http://www.linfo.org/wildcard.html"
+ >http://www.linfo.org/wildcard.html</a>. The naming conventions in this class
+ follow these descriptions:
  
  <h3>Star Wildcard</h3>
- <p>Three types of wildcards are used with Linux commands. The most frequently
+ <p>
+ Three types of wildcards are used with Linux commands. The most frequently
  employed and usually the most useful is the star wildcard, which is the same
  as an asterisk (*). The star wildcard has the broadest meaning of any of the
  wildcards, as it can represent zero characters, all single characters or any
  string.
- <p>As an example, the file command provides information about any filesystem
+ <p>
+ As an example, the file command provides information about any filesystem
  object (i.e., file, directory or link) that is provided to it as an argument
  (i.e., input). Because the star wildcard represents every string, it can be
  used as the argument for file to return information about every object in the
@@ -134,111 +138,142 @@ extends java.lang.Object</pre>
  every object in the current directory (i.e., the directory in which the user
  is currently working):
  
- <P><code>file *</code>
+ <P>
+ <code>file *</code>
  
- <p>If there are no matches, an error message is returned, such as *: can't stat
+ <p>
+ If there are no matches, an error message is returned, such as *: can't stat
  `*' (No such file or directory).. In the case of this example, the only way
  that there would be no matches is if the directory were empty.
  
- <p>Wildcards can be combined with other characters to represent parts of
+ <p>
+ Wildcards can be combined with other characters to represent parts of
  strings. For example, to represent any filesystem object that has a .jpg
  filename extension, *.jpg would be used. Likewise, a* would represent all
  objects that begin with a lower case (i.e., small) letter a.
  
- <p>As another example, the following would tell the ls command (which is used to
+ <p>
+ As another example, the following would tell the ls command (which is used to
  list files) to provide the names of all files in the current directory that
  have an .html or a .txt extension:
  
- <p><code>ls *.html *.txt</code>
+ <p>
+ <code>ls *.html *.txt</code>
  
- <p>Likewise, the following would tell the rm command (which is used to remove
+ <p>
+ Likewise, the following would tell the rm command (which is used to remove
  files and directories) to delete all files in the current directory that have
  the string xxx in their name:
  
- <p><code>rm *xxx*</code>
+ <p>
+ <code>rm *xxx*</code>
  
  
  <h3>Question Mark Wildcard</h3>
  
- <p>The question mark (?) is used as a wildcard character in shell commands to
+ <p>
+ The question mark (?) is used as a wildcard character in shell commands to
  represent exactly one character, which can be any single character. Thus, two
  question marks in succession would represent any two characters in
  succession, and three question marks in succession would represent any string
  consisting of three characters.
  
- <p>Thus, for example, the following would return data on all objects in the
+ <p>
+ Thus, for example, the following would return data on all objects in the
  current directory whose names, inclusive of any extensions, are exactly three
  characters in length:
  
- <p><code>file ???</code>
+ <p>
+ <code>file ???</code>
  
- <p>And the following would provide data on all objects whose names are one, two
+ <p>
+ And the following would provide data on all objects whose names are one, two
  or three characters in length:
  
- <p><code>file ? ?? ???</code>
+ <p>
+ <code>file ? ?? ???</code>
  
- <p>As is the case with the star wildcard, the question mark wildcard can be used
+ <p>
+ As is the case with the star wildcard, the question mark wildcard can be used
  in combination with other characters. For example, the following would
  provide information about all objects in the current directory that begin
  with the letter a and are five characters in length:
  
- <p><code>file a????</code>
+ <p>
+ <code>file a????</code>
  
- <p>The question mark wildcard can also be used in combination with other
+ <p>
+ The question mark wildcard can also be used in combination with other
  wildcards when separated by some other character. For example, the following
  would return a list of all files in the current directory that have a
  three-character filename extension:
  
- <p><code>ls *.???</code>
+ <p>
+ <code>ls *.???</code>
  
  
  <h3>Square Brackets Wildcard</h3>
  
- <p>The third type of wildcard in shell commands is a pair of square brackets,
+ <p>
+ The third type of wildcard in shell commands is a pair of square brackets,
  which can represent any of the characters enclosed in the brackets. Thus, for
  example, the following would provide information about all objects in the
  current directory that have an x, y and/or z in them:
  
- <p><code>file *[xyz]*</code>
+ <p>
+ <code>file *[xyz]*</code>
  
- <p>And the following would list all files that had an extension that begins with
+ <p>
+ And the following would list all files that had an extension that begins with
  x, y or z:
  
- <p><code>ls *.[xyz]*</code>
+ <p>
+ <code>ls *.[xyz]*</code>
  
- <p>The same results can be achieved by merely using the star and question mark
+ <p>
+ The same results can be achieved by merely using the star and question mark
  wildcards. However, it is clearly more efficient to use the bracket wildcard.
  
- <p>When a hyphen is used between two characters in the square brackets wildcard,
+ <p>
+ When a hyphen is used between two characters in the square brackets wildcard,
  it indicates a range inclusive of those two characters. For example, the
  following would provide information about all of the objects in the current
  directory that begin with any letter from a through f:
  
- <p><code>file [a-f]*</code>
+ <p>
+ <code>file [a-f]*</code>
  
- <p>And the following would provide information about every object in the current
+ <p>
+ And the following would provide information about every object in the current
  directory whose name includes at least one numeral:
  
- <p><code>file *[0-9]*</code>
+ <p>
+ <code>file *[0-9]*</code>
  
- <p>The use of the square brackets to indicate a range can be combined with its
+ <p>
+ The use of the square brackets to indicate a range can be combined with its
  use to indicate a list. Thus, for example, the following would provide
  information about all filesystem objects whose names begin with any letter
  from a through c or begin with s or t:
  
- <p><code>file [a-cst]*</code>
+ <p>
+ <code>file [a-cst]*</code>
  
- <p>Likewise, multiple sets of ranges can be specified. Thus, for instance, the
+ <p>
+ Likewise, multiple sets of ranges can be specified. Thus, for instance, the
  following would return information about all objects whose names begin with
  the first three or the final three lower case letters of the alphabet:
  
- <p><code>file [a-cx-z]*</code>
+ <p>
+ <code>file [a-cx-z]*</code>
  
- <p>Sometimes it can be useful to have a succession of square bracket wildcards.
+ <p>
+ Sometimes it can be useful to have a succession of square bracket wildcards.
  For example, the following would display all filenames in the current
  directory that consist of jones followed by a three-digit number:
  
- <p><code>ls jones[0-9][0-9][0-9]</code></div>
+ <p>
+ <code>ls jones[0-9][0-9][0-9]</code></div>
 </li>
 </ul>
 </div>
@@ -285,9 +320,8 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.StarWildcard.html" title="class in com.pump.text">WildcardPattern.StarWildcard</a></span></code>
-<div class="block">The star wildcard has the broadest meaning of any of the
- wildcards, as it can represent zero characters, all single characters or any
- string.</div>
+<div class="block">The star wildcard has the broadest meaning of any of the wildcards, as it
+ can represent zero characters, all single characters or any string.</div>
 </td>
 </tr>
 </table>
@@ -481,9 +515,8 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;int&nbsp;getMaximumLength()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the maximum number of characters in this pattern.
- This may return Integer.MAX_VALUE if this pattern contains
- an asterisk.</dd>
+<dd>the maximum number of characters in this pattern. This may return
+         Integer.MAX_VALUE if this pattern contains an asterisk.</dd>
 </dl>
 </li>
 </ul>
@@ -497,9 +530,10 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>whether this pattern contains a StarWildcard.
- <p>The StarWildcard may be considerably more
- complicated to evaluate, so other objects evaluating this
- pattern might often be interested in knowing this.</dd>
+         <p>
+         The StarWildcard may be considerably more complicated to
+         evaluate, so other objects evaluating this pattern might often be
+         interested in knowing this.</dd>
 </dl>
 </li>
 </ul>

@@ -120,16 +120,17 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">MutablePath</span>
 extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.pump.geom">AbstractShape</a></pre>
 <div class="block">A shape that lets you modify individual segments.
-<P>This shape has the notion of several distinct
-paths where each path begins with a separator <code>moveoTo()</code>
-instruction.  There are some methods that treat this object
-as one long string of segments, and some methods that recognize
-that you can access each path separately.
-<P>Several methods here match the signatures of <code>GeneralPath</code>
-methods for convenience.  Internally field and methods are made
-private/final because of the thorough verification that happens as you
-manipulate this object: subclasses shouldn't let you position anything
-other than a SEG_MOVETO after a SEG_CLOSE, for example.</div>
+ <P>
+ This shape has the notion of several distinct paths where each path begins
+ with a separator <code>moveoTo()</code> instruction. There are some methods
+ that treat this object as one long string of segments, and some methods that
+ recognize that you can access each path separately.
+ <P>
+ Several methods here match the signatures of <code>GeneralPath</code> methods
+ for convenience. Internally field and methods are made private/final because
+ of the thorough verification that happens as you manipulate this object:
+ subclasses shouldn't let you position anything other than a SEG_MOVETO after
+ a SEG_CLOSE, for example.</div>
 </li>
 </ul>
 </div>
@@ -668,9 +669,9 @@ other than a SEG_MOVETO after a SEG_CLOSE, for example.</div>
 <pre>public&nbsp;boolean&nbsp;setSegment(int&nbsp;index,
                           int&nbsp;type,
                           double[]&nbsp;coords)</pre>
-<div class="block">Redefine a segment.  This lets you do anything without an exception:
- you could technically make a path begin a SEG_CLOSE, or place ten
- SEG_MOVETOs next to each other.</div>
+<div class="block">Redefine a segment. This lets you do anything without an exception: you
+ could technically make a path begin a SEG_CLOSE, or place ten SEG_MOVETOs
+ next to each other.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - </dd>
@@ -688,9 +689,9 @@ other than a SEG_MOVETO after a SEG_CLOSE, for example.</div>
 <pre>public&nbsp;boolean&nbsp;setSegment(int&nbsp;index,
                           int&nbsp;type,
                           float[]&nbsp;coords)</pre>
-<div class="block">Redefine a segment.  This lets you do anything without an exception:
- you could technically make a path begin a SEG_CLOSE, or place ten
- SEG_MOVETOs next to each other.</div>
+<div class="block">Redefine a segment. This lets you do anything without an exception: you
+ could technically make a path begin a SEG_CLOSE, or place ten SEG_MOVETOs
+ next to each other.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - </dd>

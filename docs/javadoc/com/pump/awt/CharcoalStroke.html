@@ -118,11 +118,11 @@ implements <a href="../../../com/pump/awt/FilteredStroke.html" title="interface 
 <div class="block">This applies the <a href="../../../com/pump/awt/CharcoalEffect.html" title="class in com.pump.awt"><code>CharcoalEffect</code></a> to another <code>Stroke</code>.
  
  By default this is built on top of a <code>BasicStroke</code>, but you can
- use any other relatively simple stroke.  The nature of the charcoal effect
+ use any other relatively simple stroke. The nature of the charcoal effect
  requires continuous areas of at least 2 pixels to really be visible.
- <P>  It is not recommended to layer a <code>CharcoalStroke</code> on top
- of another <code>CharcoalStroke</code>, because they are very
- complex.</div>
+ <P>
+ It is not recommended to layer a <code>CharcoalStroke</code> on top of
+ another <code>CharcoalStroke</code>, because they are very complex.</div>
 </li>
 </ul>
 </div>
@@ -143,16 +143,16 @@ implements <a href="../../../com/pump/awt/FilteredStroke.html" title="interface 
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/awt/CharcoalStroke.html#CharcoalStroke-float-float-">CharcoalStroke</a></span>(float&nbsp;width,
               float&nbsp;crackSize)</code>
-<div class="block">This creates a <code>CharcoalStroke</code> on top of a
- simple <code>BasicStroke</code>, with a fixed angle of 45 degrees.</div>
+<div class="block">This creates a <code>CharcoalStroke</code> on top of a simple
+ <code>BasicStroke</code>, with a fixed angle of 45 degrees.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/awt/CharcoalStroke.html#CharcoalStroke-float-float-float-">CharcoalStroke</a></span>(float&nbsp;width,
               float&nbsp;crackSize,
               float&nbsp;angle)</code>
-<div class="block">Create a new <code>CharcoalStroke</code> built on top of
- a <code>BasicStroke</code>.</div>
+<div class="block">Create a new <code>CharcoalStroke</code> built on top of a
+ <code>BasicStroke</code>.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -160,8 +160,8 @@ implements <a href="../../../com/pump/awt/FilteredStroke.html" title="interface 
               float&nbsp;crackSize,
               float&nbsp;angle,
               int&nbsp;randomSeed)</code>
-<div class="block">Create a new <code>CharcoalStroke</code> built on top of
- another <code>Stroke</code>.</div>
+<div class="block">Create a new <code>CharcoalStroke</code> built on top of another
+ <code>Stroke</code>.</div>
 </td>
 </tr>
 </table>
@@ -186,15 +186,13 @@ implements <a href="../../../com/pump/awt/FilteredStroke.html" title="interface 
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../com/pump/awt/CharcoalStroke.html" title="class in com.pump.awt">CharcoalStroke</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/CharcoalStroke.html#deriveStroke-float-">deriveStroke</a></span>(float&nbsp;cracks)</code>
-<div class="block">Creates a similar stroke where only the crack depth (0-1) is
- redefined.</div>
+<div class="block">Creates a similar stroke where only the crack depth (0-1) is redefined.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../com/pump/awt/FilteredStroke.html" title="interface in com.pump.awt">FilteredStroke</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/CharcoalStroke.html#deriveStroke-java.awt.Stroke-">deriveStroke</a></span>(java.awt.Stroke&nbsp;newStroke)</code>
-<div class="block">Creates a similar stroke where the underlying stroke is
- redefined.</div>
+<div class="block">Creates a similar stroke where the underlying stroke is redefined.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -249,8 +247,8 @@ implements <a href="../../../com/pump/awt/FilteredStroke.html" title="interface 
 <pre>public&nbsp;CharcoalStroke(float&nbsp;width,
                       float&nbsp;crackSize,
                       float&nbsp;angle)</pre>
-<div class="block">Create a new <code>CharcoalStroke</code> built on top of
- a <code>BasicStroke</code>.</div>
+<div class="block">Create a new <code>CharcoalStroke</code> built on top of a
+ <code>BasicStroke</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>width</code> - the width of the <code>BasicStroke</code>.</dd>
@@ -269,8 +267,8 @@ implements <a href="../../../com/pump/awt/FilteredStroke.html" title="interface 
                       float&nbsp;crackSize,
                       float&nbsp;angle,
                       int&nbsp;randomSeed)</pre>
-<div class="block">Create a new <code>CharcoalStroke</code> built on top of
- another <code>Stroke</code>.</div>
+<div class="block">Create a new <code>CharcoalStroke</code> built on top of another
+ <code>Stroke</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - the stroke to apply the charcoal effect to.</dd>
@@ -288,8 +286,8 @@ implements <a href="../../../com/pump/awt/FilteredStroke.html" title="interface 
 <h4>CharcoalStroke</h4>
 <pre>public&nbsp;CharcoalStroke(float&nbsp;width,
                       float&nbsp;crackSize)</pre>
-<div class="block">This creates a <code>CharcoalStroke</code> on top of a
- simple <code>BasicStroke</code>, with a fixed angle of 45 degrees.</div>
+<div class="block">This creates a <code>CharcoalStroke</code> on top of a simple
+ <code>BasicStroke</code>, with a fixed angle of 45 degrees.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>width</code> - the width of the <code>BasicStroke</code></dd>
@@ -338,8 +336,7 @@ implements <a href="../../../com/pump/awt/FilteredStroke.html" title="interface 
 <li class="blockList">
 <h4>deriveStroke</h4>
 <pre>public&nbsp;<a href="../../../com/pump/awt/CharcoalStroke.html" title="class in com.pump.awt">CharcoalStroke</a>&nbsp;deriveStroke(float&nbsp;cracks)</pre>
-<div class="block">Creates a similar stroke where only the crack depth (0-1) is
- redefined.</div>
+<div class="block">Creates a similar stroke where only the crack depth (0-1) is redefined.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cracks</code> - the new crack depth.</dd>
@@ -355,17 +352,16 @@ implements <a href="../../../com/pump/awt/FilteredStroke.html" title="interface 
 <li class="blockList">
 <h4>deriveStroke</h4>
 <pre>public&nbsp;<a href="../../../com/pump/awt/FilteredStroke.html" title="interface in com.pump.awt">FilteredStroke</a>&nbsp;deriveStroke(java.awt.Stroke&nbsp;newStroke)</pre>
-<div class="block">Creates a similar stroke where the underlying stroke is
- redefined.</div>
+<div class="block">Creates a similar stroke where the underlying stroke is redefined.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/awt/FilteredStroke.html#deriveStroke-java.awt.Stroke-">deriveStroke</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/awt/FilteredStroke.html" title="interface in com.pump.awt">FilteredStroke</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>newStroke</code> - the new underlying Stroke.  This could be
- a <code>BasicShape</code>, or your own stroke.  It is not
- recommended to layer a <code>CharcoalStroke</code> on top
- of another <code>CharcoalStroke</code>, because they are very
- complex.</dd>
+<dd><code>newStroke</code> - the new underlying Stroke. This could be a
+            <code>BasicShape</code>, or your own stroke. It is not
+            recommended to layer a <code>CharcoalStroke</code> on top of
+            another <code>CharcoalStroke</code>, because they are very
+            complex.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a new stroke that is built on top of <code>s</code></dd>
 </dl>
@@ -408,8 +404,8 @@ implements <a href="../../../com/pump/awt/FilteredStroke.html" title="interface 
 <li class="blockList">
 <h4>getCrackSize</h4>
 <pre>public&nbsp;float&nbsp;getCrackSize()</pre>
-<div class="block">Returns the crack size.  This is a float from 0 to 1 indicating how
- deep the cracks in this effect run.</div>
+<div class="block">Returns the crack size. This is a float from 0 to 1 indicating how deep
+ the cracks in this effect run.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the crack size, as a float from [0, 1].</dd>

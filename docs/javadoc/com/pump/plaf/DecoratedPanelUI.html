@@ -120,42 +120,68 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">DecoratedPanelUI</span>
 extends javax.swing.plaf.PanelUI</pre>
-<div class="block">This <code>PanelUI</code> offers several attributes to provide
- more modern and sophisticated panels.
- <p>The attributes are broken up into two groups:
- <ul><li>Border Attributes: these are applied to the border, which can
- be applied separately as a <code>javax.swing.Border</code>.</li>
- <li>Panel Attributes: these are applied to the panel as a whole,
- which means they affect the middle of the panel as well as the
- border.</li></ul>
- <p>The <a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Renderer</code></a> class manages painting all attributes. Both
- the <a href="../../../com/pump/plaf/DecoratedPanelUI.Border.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Border</code></a> and the <code>DecoratedPanelUI</code> defer
- to the same <code>Renderer</code> to paint everything. (But both entities
- clip the Graphics2D destination strategically to only paint
- the appropriate portions.)
- <p>Here are examples of some of the harder-to-describe attributes. (These samples may not
- show each feature in the most compelling/flattering presentation,
- but they should help demonstrate what different attributes do.)
- <p><table summary="Sample DecoratedPanel Configurations" cellpadding="20"><tr><td>
+<div class="block">This <code>PanelUI</code> offers several attributes to provide more modern
+ and sophisticated panels.
+ <p>
+ The attributes are broken up into two groups:
+ <ul>
+ <li>Border Attributes: these are applied to the border, which can be applied
+ separately as a <code>javax.swing.Border</code>.</li>
+ <li>Panel Attributes: these are applied to the panel as a whole, which means
+ they affect the middle of the panel as well as the border.</li>
+ </ul>
+ <p>
+ The <a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Renderer</code></a> class manages painting all attributes. Both the
+ <a href="../../../com/pump/plaf/DecoratedPanelUI.Border.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Border</code></a> and the <code>DecoratedPanelUI</code> defer to the same
+ <code>Renderer</code> to paint everything. (But both entities clip the
+ Graphics2D destination strategically to only paint the appropriate portions.)
+ <p>
+ Here are examples of some of the harder-to-describe attributes. (These
+ samples may not show each feature in the most compelling/flattering
+ presentation, but they should help demonstrate what different attributes do.)
+ <p>
+ <table summary="Sample DecoratedPanel Configurations" cellpadding="20">
+ <tr>
+ <td>
  Glaze:
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/glaze-demo.gif" alt="Glaze Demo">
- </td><td>
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/glaze-demo.gif"
+ alt="Glaze Demo"></td>
+ <td>
  Bevel:
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/bevel-demo.gif" alt="Bevel Demo">
- </td><td>
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/bevel-demo.gif"
+ alt="Bevel Demo"></td>
+ <td>
  Corners:
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/corner-demo.gif" alt="Corner Demo">
- </td></tr><tr><td>
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/corner-demo.gif"
+ alt="Corner Demo"></td>
+ </tr>
+ <tr>
+ <td>
  Scribble:
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/scribble-demo.gif" alt="Scribble Demo">
- </td><td>
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/scribble-demo.gif"
+ alt="Scribble Demo"></td>
+ <td>
  Shadow:
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/shadow-demo.gif" alt="Shadow Demo">
- </td></tr></table></div>
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/shadow-demo.gif"
+ alt="Shadow Demo"></td>
+ </tr>
+ </table></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/showcase/DecoratedPanelUIDemo.html" title="class in com.pump.showcase"><code>DecoratedPanelUIDemo</code></a>, 
-<a href="http://javagraphics.blogspot.com/2014/03/panels-improved-panelui.html">Panels: an Improved UI</a></dd>
+<a
+      href="http://javagraphics.blogspot.com/2014/03/panels-improved-panelui.html">Panels:
+      an Improved UI</a></dd>
 </dl>
 </li>
 </ul>
@@ -184,8 +210,8 @@ extends javax.swing.plaf.PanelUI</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html" title="class in com.pump.plaf">DecoratedPanelUI.Renderer</a></span></code>
-<div class="block">This is used by both the <a href="../../../com/pump/plaf/DecoratedPanelUI.Border.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Border</code></a> and the <a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf"><code>DecoratedPanelUI</code></a> to
- render all the attributes.</div>
+<div class="block">This is used by both the <a href="../../../com/pump/plaf/DecoratedPanelUI.Border.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Border</code></a> and the <a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf"><code>DecoratedPanelUI</code></a>
+ to render all the attributes.</div>
 </td>
 </tr>
 </table>
@@ -259,7 +285,8 @@ extends javax.swing.plaf.PanelUI</pre>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/DecoratedPanelUI.html#DecoratedPanelUI--">DecoratedPanelUI</a></span>()</code>
-<div class="block">Create a new <code>DecoratedPanelUI</code> with a default <a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Renderer</code></a>.</div>
+<div class="block">Create a new <code>DecoratedPanelUI</code> with a default
+ <a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Renderer</code></a>.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -300,8 +327,8 @@ extends javax.swing.plaf.PanelUI</pre>
 <td class="colFirst"><code>static <a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf">DecoratedPanelUI</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/DecoratedPanelUI.html#createBrushedMetalUI--">createBrushedMetalUI</a></span>()</code>
 <div class="block">Create a <code>DecoratedPanelUI</code> that uses a special
- <code>Renderer</code> to simulate a brushed metal look with small
- but rounded corners.</div>
+ <code>Renderer</code> to simulate a brushed metal look with small but
+ rounded corners.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -327,8 +354,8 @@ extends javax.swing.plaf.PanelUI</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf">DecoratedPanelUI</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/DecoratedPanelUI.html#createSubtleScribbleUI--">createSubtleScribbleUI</a></span>()</code>
-<div class="block">Create a <code>DecoratedPanelUI</code> with a scribble
- border (resembling torn paper) and a light shadow/border.</div>
+<div class="block">Create a <code>DecoratedPanelUI</code> with a scribble border (resembling
+ torn paper) and a light shadow/border.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -426,8 +453,8 @@ extends javax.swing.plaf.PanelUI</pre>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/DecoratedPanelUI.html#setColors-java.awt.Color-">setColors</a></span>(java.awt.Color&nbsp;c)</code>
-<div class="block">Set the top and bottom colors to the same value,
- making this a uniform color.</div>
+<div class="block">Set the top and bottom colors to the same value, making this a uniform
+ color.</div>
 </td>
 </tr>
 <tr id="i24" class="altColor">
@@ -528,10 +555,10 @@ extends javax.swing.plaf.PanelUI</pre>
 <li class="blockList">
 <h4>COLOR_TOP</h4>
 <pre>public static final&nbsp;<a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;java.awt.Color&gt; COLOR_TOP</pre>
-<div class="block">The attribute defining the top color of the vertical gradient.
- If this is null, then only the COLOR_BOTTOM is used.
- If that is also null, then the panel background is used.
- (And if that is null or <code>panel.isOpaque()</code> is false, then the body is left empty.</div>
+<div class="block">The attribute defining the top color of the vertical gradient. If this is
+ null, then only the COLOR_BOTTOM is used. If that is also null, then the
+ panel background is used. (And if that is null or
+ <code>panel.isOpaque()</code> is false, then the body is left empty.</div>
 </li>
 </ul>
 <a name="COLOR_BOTTOM">
@@ -541,10 +568,10 @@ extends javax.swing.plaf.PanelUI</pre>
 <li class="blockList">
 <h4>COLOR_BOTTOM</h4>
 <pre>public static final&nbsp;<a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;java.awt.Color&gt; COLOR_BOTTOM</pre>
-<div class="block">The attribute defining the bottom color of the vertical gradient.
- If this is null, then only the COLOR_TOP is used.
- If that is also null, then the panel background is used.
- (And if that is null or <code>panel.isOpaque()</code> is false, then the body is left empty.</div>
+<div class="block">The attribute defining the bottom color of the vertical gradient. If this
+ is null, then only the COLOR_TOP is used. If that is also null, then the
+ panel background is used. (And if that is null or
+ <code>panel.isOpaque()</code> is false, then the body is left empty.</div>
 </li>
 </ul>
 <a name="border">
@@ -589,7 +616,8 @@ extends javax.swing.plaf.PanelUI</pre>
 <li class="blockList">
 <h4>DecoratedPanelUI</h4>
 <pre>public&nbsp;DecoratedPanelUI()</pre>
-<div class="block">Create a new <code>DecoratedPanelUI</code> with a default <a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Renderer</code></a>.</div>
+<div class="block">Create a new <code>DecoratedPanelUI</code> with a default
+ <a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Renderer</code></a>.</div>
 </li>
 </ul>
 <a name="DecoratedPanelUI-com.pump.plaf.DecoratedPanelUI.Renderer-">
@@ -619,7 +647,10 @@ extends javax.swing.plaf.PanelUI</pre>
 <pre>public static&nbsp;<a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf">DecoratedPanelUI</a>&nbsp;createDarkRecessedUI()</pre>
 <div class="block">Create a simple <code>DecoratedPanelUI</code> that is tinted a little bit
  darker than normal panels with a bevel shadow oriented at the top.
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createDarkRecessedUI.png" alt="Dark Recessed Demo"></div>
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createDarkRecessedUI.png"
+ alt="Dark Recessed Demo"></div>
 </li>
 </ul>
 <a name="createMinimalRoundedUI--">
@@ -630,7 +661,10 @@ extends javax.swing.plaf.PanelUI</pre>
 <h4>createMinimalRoundedUI</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf">DecoratedPanelUI</a>&nbsp;createMinimalRoundedUI()</pre>
 <div class="block">Create a plain <code>DecoratedPanelUI</code> with a thin rounded border.
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createMinimalRoundedUI.png" alt="Minimal Rounded Demo"></div>
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createMinimalRoundedUI.png"
+ alt="Minimal Rounded Demo"></div>
 </li>
 </ul>
 <a name="createSubtleShadowUI--">
@@ -641,7 +675,10 @@ extends javax.swing.plaf.PanelUI</pre>
 <h4>createSubtleShadowUI</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf">DecoratedPanelUI</a>&nbsp;createSubtleShadowUI()</pre>
 <div class="block">Create a simple <code>DecoratedPanelUI</code> with a light shadow.
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createSubtleShadowUI.png" alt="Subtle Shadow Demo"></div>
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createSubtleShadowUI.png"
+ alt="Subtle Shadow Demo"></div>
 </li>
 </ul>
 <a name="createSubtleScribbleUI--">
@@ -651,9 +688,12 @@ extends javax.swing.plaf.PanelUI</pre>
 <li class="blockList">
 <h4>createSubtleScribbleUI</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf">DecoratedPanelUI</a>&nbsp;createSubtleScribbleUI()</pre>
-<div class="block">Create a <code>DecoratedPanelUI</code> with a scribble
- border (resembling torn paper) and a light shadow/border.
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createSubtleScribbleUI.png" alt="Subtle Scribble Demo"></div>
+<div class="block">Create a <code>DecoratedPanelUI</code> with a scribble border (resembling
+ torn paper) and a light shadow/border.
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createSubtleScribbleUI.png"
+ alt="Subtle Scribble Demo"></div>
 </li>
 </ul>
 <a name="createPlasticUI--">
@@ -665,7 +705,10 @@ extends javax.swing.plaf.PanelUI</pre>
 <pre>public static&nbsp;<a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf">DecoratedPanelUI</a>&nbsp;createPlasticUI()</pre>
 <div class="block">Create a <code>DecoratedPanelUI</code> with a large rounded border,
  strong bevels, and a large glaze.
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createPlasticUI.png" alt="Plastic Demo"></div>
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createPlasticUI.png"
+ alt="Plastic Demo"></div>
 </li>
 </ul>
 <a name="createBrushedMetalUI--">
@@ -676,9 +719,12 @@ extends javax.swing.plaf.PanelUI</pre>
 <h4>createBrushedMetalUI</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf">DecoratedPanelUI</a>&nbsp;createBrushedMetalUI()</pre>
 <div class="block">Create a <code>DecoratedPanelUI</code> that uses a special
- <code>Renderer</code> to simulate a brushed metal look with small
- but rounded corners.
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createBrushedMetalUI.png" alt="Brushed Metal Demo"></div>
+ <code>Renderer</code> to simulate a brushed metal look with small but
+ rounded corners.
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createBrushedMetalUI.png"
+ alt="Brushed Metal Demo"></div>
 </li>
 </ul>
 <a name="isSupported-com.pump.util.ObservableProperties.Key-">
@@ -750,9 +796,9 @@ extends javax.swing.plaf.PanelUI</pre>
 <h4>getBorder</h4>
 <pre>public&nbsp;<a href="../../../com/pump/plaf/DecoratedPanelUI.Border.html" title="class in com.pump.plaf">DecoratedPanelUI.Border</a>&nbsp;getBorder()</pre>
 <div class="block">Return the <a href="../../../com/pump/plaf/DecoratedPanelUI.Border.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Border</code></a> for this UI. This border is automatically
- installed when <code>panel.setUI(this)</code> is called. (Or more specifically:
- this is automatically installed when <code>this.installUI(panel)</code>
- is called.)</div>
+ installed when <code>panel.setUI(this)</code> is called. (Or more
+ specifically: this is automatically installed when
+ <code>this.installUI(panel)</code> is called.)</div>
 </li>
 </ul>
 <a name="getShape-java.awt.Component-">
@@ -786,9 +832,10 @@ extends javax.swing.plaf.PanelUI</pre>
 <pre>public&nbsp;void&nbsp;paint(java.awt.Graphics&nbsp;g,
                   javax.swing.JComponent&nbsp;c)</pre>
 <div class="block">This paints the UI.
- <p>This method relies on the <a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Renderer</code></a> class to paint everything,
- but first it clips the Graphics2D to hide the border (so the border
- will render separately).</div>
+ <p>
+ This method relies on the <a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Renderer</code></a> class to paint everything, but
+ first it clips the Graphics2D to hide the border (so the border will
+ render separately).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>paint</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.ComponentUI</code></dd>
@@ -896,8 +943,8 @@ extends javax.swing.plaf.PanelUI</pre>
 <li class="blockList">
 <h4>setColors</h4>
 <pre>public&nbsp;void&nbsp;setColors(java.awt.Color&nbsp;c)</pre>
-<div class="block">Set the top and bottom colors to the same value,
- making this a uniform color.</div>
+<div class="block">Set the top and bottom colors to the same value, making this a uniform
+ color.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/plaf/DecoratedPanelUI.html#COLOR_TOP"><code>COLOR_TOP</code></a>, 
@@ -983,9 +1030,10 @@ extends javax.swing.plaf.PanelUI</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>a</code> - the first color</dd>
 <dd><code>b</code> - the second color</dd>
-<dd><code>p</code> - the progress (as a decimal between zero and one) to use.
- When p is zero, the color returned is "a".  When p is one, the color
- returned is "b".  When p is .5, the color is 50% "a" and 50% "b", etc.</dd>
+<dd><code>p</code> - the progress (as a decimal between zero and one) to use. When
+            p is zero, the color returned is "a". When p is one, the color
+            returned is "b". When p is .5, the color is 50% "a" and 50%
+            "b", etc.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a color that is between a and b.</dd>
 </dl>

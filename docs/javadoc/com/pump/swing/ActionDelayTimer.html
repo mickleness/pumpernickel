@@ -120,17 +120,20 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">ActionDelayTimer</span>
 extends javax.swing.Timer</pre>
 <div class="block">This timer can delay executing a task until a condition stabilizes.
- <p>For example: suppose you want to display a warning when a condition is
- consistently met. This condition must be consistently met for 2 seconds,
- and then <code>setState(true)</code> will be called. If at any point in
- those 2 seconds the method <code>checkCondition()</code> is polled and
- returns <code>false</code>: then the timer resets and we wait for another
- 2 seconds of uninterrupted success. Likewise once <code>setState(true)</code>
- has been invoked: this timer will wait for 2 seconds of interrupted failed
- conditions to invoke <code>setState(false)</code>.
- <p>The intention here is to avoid annoying the user with constant flickering
+ <p>
+ For example: suppose you want to display a warning when a condition is
+ consistently met. This condition must be consistently met for 2 seconds, and
+ then <code>setState(true)</code> will be called. If at any point in those 2
+ seconds the method <code>checkCondition()</code> is polled and returns
+ <code>false</code>: then the timer resets and we wait for another 2 seconds
+ of uninterrupted success. Likewise once <code>setState(true)</code> has been
+ invoked: this timer will wait for 2 seconds of interrupted failed conditions
+ to invoke <code>setState(false)</code>.
+ <p>
+ The intention here is to avoid annoying the user with constant flickering
  feedback.
- <p>It is assumed the default state is false (that is, pretend that
+ <p>
+ It is assumed the default state is false (that is, pretend that
  <code>setState(false)</code> has already been invoked once).</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -233,7 +236,7 @@ extends javax.swing.Timer</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>waitingPeriod</code> - the number of milliseconds that the condition must be constant
- before <code>setState(..)</code> is called.</dd>
+            before <code>setState(..)</code> is called.</dd>
 </dl>
 </li>
 </ul>

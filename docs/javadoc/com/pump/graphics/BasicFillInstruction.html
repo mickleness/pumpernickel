@@ -229,15 +229,14 @@ implements <a href="../../../com/pump/graphics/FillInstruction.html" title="inte
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/BasicFillInstruction.html#getSource--">getSource</a></span>()</code>
-<div class="block">Returns a string for developers to recognize the source
- of this instruction.</div>
+<div class="block">Returns a string for developers to recognize the source of this
+ instruction.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>java.awt.geom.AffineTransform</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/BasicFillInstruction.html#getTransform--">getTransform</a></span>()</code>
-<div class="block">Returns the <code>AffineTransform</code> this shape is
- viewed through.</div>
+<div class="block">Returns the <code>AffineTransform</code> this shape is viewed through.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
@@ -349,7 +348,7 @@ implements <a href="../../../com/pump/graphics/FillInstruction.html" title="inte
 <li class="blockList">
 <h4>getClipping</h4>
 <pre>public&nbsp;java.awt.Shape&nbsp;getClipping()</pre>
-<div class="block">Returns the optional clipping.  (May be null.)  Note this clipping is
+<div class="block">Returns the optional clipping. (May be null.) Note this clipping is
  applied <i>before</i> the <code>AffineTransform</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -364,8 +363,7 @@ implements <a href="../../../com/pump/graphics/FillInstruction.html" title="inte
 <li class="blockList">
 <h4>getTransform</h4>
 <pre>public&nbsp;java.awt.geom.AffineTransform&nbsp;getTransform()</pre>
-<div class="block">Returns the <code>AffineTransform</code> this shape is
- viewed through.</div>
+<div class="block">Returns the <code>AffineTransform</code> this shape is viewed through.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/FillInstruction.html#getTransform--">getTransform</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/FillInstruction.html" title="interface in com.pump.graphics">FillInstruction</a></code></dd>
@@ -398,8 +396,7 @@ implements <a href="../../../com/pump/graphics/FillInstruction.html" title="inte
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>includeTransform</code> - whether to transform the shape.</dd>
-<dd><code>includeClipping</code> - whether to clip the shape, if a clipping is
- provided.</dd>
+<dd><code>includeClipping</code> - whether to clip the shape, if a clipping is provided.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the shape this instruction renders.</dd>
 </dl>
@@ -456,8 +453,7 @@ implements <a href="../../../com/pump/graphics/FillInstruction.html" title="inte
 <h4>setParent</h4>
 <pre>public&nbsp;void&nbsp;setParent(<a href="../../../com/pump/graphics/GraphicsWriter.html" title="class in com.pump.graphics">GraphicsWriter</a>&nbsp;parent)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html#setParent-com.pump.graphics.GraphicsWriter-">GraphicInstruction</a></code></span></div>
-<div class="block">Sets the parent of this tree node.
- This method</div>
+<div class="block">Sets the parent of this tree node. This method</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/GraphicInstruction.html#setParent-com.pump.graphics.GraphicsWriter-">setParent</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></dd>
@@ -563,10 +559,9 @@ implements <a href="../../../com/pump/graphics/FillInstruction.html" title="inte
 <h4>getSource</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getSource()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html#getSource--">GraphicInstruction</a></code></span></div>
-<div class="block">Returns a string for developers to recognize the source
- of this instruction.  By default this returns a stack trace,
- but it may return "Unknown" if the <code>GraphicsWriter</code>
- debugging flag is false.</div>
+<div class="block">Returns a string for developers to recognize the source of this
+ instruction. By default this returns a stack trace, but it may return
+ "Unknown" if the <code>GraphicsWriter</code> debugging flag is false.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/GraphicInstruction.html#getSource--">getSource</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></dd>

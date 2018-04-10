@@ -115,10 +115,11 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">SimplifiedPathIterator</span>
 extends java.lang.Object
 implements java.awt.geom.PathIterator</pre>
-<div class="block">This filters a <code>PathIterator</code> and makes sure
- that each curve is of the smallest possible degree.
- <P>In addition to being more efficient, this can avoid
- divide-by-zero errors for some operations.</div>
+<div class="block">This filters a <code>PathIterator</code> and makes sure that each curve is of
+ the smallest possible degree.
+ <P>
+ In addition to being more efficient, this can avoid divide-by-zero errors for
+ some operations.</div>
 </li>
 </ul>
 </div>
@@ -153,8 +154,7 @@ implements java.awt.geom.PathIterator</pre>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/geom/SimplifiedPathIterator.html#SimplifiedPathIterator-java.awt.geom.PathIterator-">SimplifiedPathIterator</a></span>(java.awt.geom.PathIterator&nbsp;i)</code>
-<div class="block">Creates a new SimplifiedPathIterator that filters
- the argument.</div>
+<div class="block">Creates a new SimplifiedPathIterator that filters the argument.</div>
 </td>
 </tr>
 </table>
@@ -250,8 +250,7 @@ implements java.awt.geom.PathIterator</pre>
 <li class="blockList">
 <h4>SimplifiedPathIterator</h4>
 <pre>public&nbsp;SimplifiedPathIterator(java.awt.geom.PathIterator&nbsp;i)</pre>
-<div class="block">Creates a new SimplifiedPathIterator that filters
- the argument.</div>
+<div class="block">Creates a new SimplifiedPathIterator that filters the argument.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - </dd>
@@ -278,9 +277,8 @@ implements java.awt.geom.PathIterator</pre>
                                 double&nbsp;y2,
                                 double&nbsp;x3,
                                 double&nbsp;y3)</pre>
-<div class="block">Returns true if all 3 points are on the same line.
- This checks to see if:
- <BR><code>x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2)&lt;TOL*TOL</code></div>
+<div class="block">Returns true if all 3 points are on the same line. This checks to see if: <BR>
+ <code>x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2)&lt;TOL*TOL</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x1</code> - the x-coordinate of point #1</dd>
@@ -312,8 +310,8 @@ implements java.awt.geom.PathIterator</pre>
 <dd><code>lastY</code> - the previous Y value from which this segment begins</dd>
 <dd><code>data</code> - the data of the current segment.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new segment type, or the original <code>type</code>
- argument if nothing was modified.</dd>
+<dd>the new segment type, or the original <code>type</code> argument
+         if nothing was modified.</dd>
 </dl>
 </li>
 </ul>
@@ -335,8 +333,8 @@ implements java.awt.geom.PathIterator</pre>
 <dd><code>lastY</code> - the previous Y value from which this segment begins</dd>
 <dd><code>data</code> - the data of the current segment.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new segment type, or the original <code>type</code>
- argument if nothing was modified.</dd>
+<dd>the new segment type, or the original <code>type</code> argument
+         if nothing was modified.</dd>
 </dl>
 </li>
 </ul>

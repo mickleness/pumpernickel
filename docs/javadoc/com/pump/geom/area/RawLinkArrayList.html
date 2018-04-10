@@ -137,8 +137,7 @@ extends java.lang.Object</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>protected com.pump.geom.area.CurveLinkX[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/RawLinkArrayList.html#elementData">elementData</a></span></code>
-<div class="block">The array buffer into which the components of the list are
- stored.</div>
+<div class="block">The array buffer into which the components of the list are stored.</div>
 </td>
 </tr>
 </table>
@@ -192,9 +191,9 @@ extends java.lang.Object</pre>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/RawLinkArrayList.html#ensureCapacity-int-">ensureCapacity</a></span>(int&nbsp;minCapacity)</code>
-<div class="block">Increases the capacity of this list, if necessary, to ensure 
- that it can hold at least the number of components specified by 
- the minimum capacity argument.</div>
+<div class="block">Increases the capacity of this list, if necessary, to ensure that it can
+ hold at least the number of components specified by the minimum capacity
+ argument.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -252,10 +251,12 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>elementData</h4>
 <pre>protected&nbsp;com.pump.geom.area.CurveLinkX[] elementData</pre>
-<div class="block">The array buffer into which the components of the list are
- stored. The capacity of the list is the length of this array buffer, 
- and is at least large enough to contain all the list elements.<p>
- This array must be of type <code>type</code>.<p>
+<div class="block">The array buffer into which the components of the list are stored. The
+ capacity of the list is the length of this array buffer, and is at least
+ large enough to contain all the list elements.
+ <p>
+ This array must be of type <code>type</code>.
+ <p>
  Any array elements following the last element in the list are null.</div>
 </li>
 </ul>
@@ -266,9 +267,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>elementCount</h4>
 <pre>protected&nbsp;int elementCount</pre>
-<div class="block">The number of valid components in this list. 
- Components <tt>elementData[0]</tt> through 
- <tt>elementData[elementCount-1]</tt> are the actual items.</div>
+<div class="block">The number of valid components in this list. Components
+ <tt>elementData[0]</tt> through <tt>elementData[elementCount-1]</tt> are
+ the actual items.</div>
 </li>
 </ul>
 </li>
@@ -291,8 +292,7 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>initialCapacity</code> - the initial capacity of the list.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if the specified initial capacity
-               is negative</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - if the specified initial capacity is negative</dd>
 </dl>
 </li>
 </ul>
@@ -311,19 +311,19 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>ensureCapacity</h4>
 <pre>protected&nbsp;void&nbsp;ensureCapacity(int&nbsp;minCapacity)</pre>
-<div class="block">Increases the capacity of this list, if necessary, to ensure 
- that it can hold at least the number of components specified by 
- the minimum capacity argument.
+<div class="block">Increases the capacity of this list, if necessary, to ensure that it can
+ hold at least the number of components specified by the minimum capacity
+ argument.
 
- <p>If the current capacity of this list is less than
- <tt>minCapacity</tt>, then its capacity is increased by replacing its
- internal data array, kept in the field <tt>elementData</tt>, with a
- larger one.  The size of the new data array will be the old size plus
- <tt>capacityIncrement</tt>, unless the value of
- <tt>capacityIncrement</tt> is less than or equal to zero, in which case
- the new capacity will be twice the old capacity; but if this new size
- is still smaller than <tt>minCapacity</tt>, then the new capacity will
- be <tt>minCapacity</tt>.</div>
+ <p>
+ If the current capacity of this list is less than <tt>minCapacity</tt>,
+ then its capacity is increased by replacing its internal data array, kept
+ in the field <tt>elementData</tt>, with a larger one. The size of the new
+ data array will be the old size plus <tt>capacityIncrement</tt>, unless
+ the value of <tt>capacityIncrement</tt> is less than or equal to zero, in
+ which case the new capacity will be twice the old capacity; but if this
+ new size is still smaller than <tt>minCapacity</tt>, then the new
+ capacity will be <tt>minCapacity</tt>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>minCapacity</code> - the desired minimum capacity.</dd>
@@ -358,8 +358,8 @@ extends java.lang.Object</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>object at the specified index</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.ArrayIndexOutOfBoundsException</code> - index is out of range (index
-                  &lt; 0 || index &gt;= size()).</dd>
+<dd><code>java.lang.ArrayIndexOutOfBoundsException</code> - index is out of range (index &lt; 0 || index &gt;=
+                size()).</dd>
 </dl>
 </li>
 </ul>
@@ -373,9 +373,8 @@ extends java.lang.Object</pre>
 <div class="block">Tests if this list has no components.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if and only if this list has 
-          no components, that is, its size is zero;
-          <code>false</code> otherwise.</dd>
+<dd><code>true</code> if and only if this list has no components,
+         that is, its size is zero; <code>false</code> otherwise.</dd>
 </dl>
 </li>
 </ul>
@@ -386,8 +385,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>clear</h4>
 <pre>protected&nbsp;void&nbsp;clear()</pre>
-<div class="block">Removes all of the elements from this list.  The list will
- be empty after this call returns.</div>
+<div class="block">Removes all of the elements from this list. The list will be empty after
+ this call returns.</div>
 </li>
 </ul>
 <a name="add-com.pump.geom.area.CurveLinkX-">

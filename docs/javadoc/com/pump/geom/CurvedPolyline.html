@@ -120,9 +120,10 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">CurvedPolyline</span>
 extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.pump.geom">AbstractShape</a></pre>
 <div class="block">A polyline that adds curvature to all nodes.
- <p>TODO: this is loosely based on my perception of how the Google Docs
- freehand shape tool works, but the magnitude of the tangents still requires
- some adjusting.</div>
+ <p>
+ TODO: this is loosely based on my perception of how the Google Docs freehand
+ shape tool works, but the magnitude of the tangents still requires some
+ adjusting.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/plaf/CurvedPolylineCreationUI.html" title="class in com.pump.plaf"><code>CurvedPolylineCreationUI</code></a></dd>
@@ -258,10 +259,9 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/CurvedPolyline.html#toString--">toString</a></span>()</code>
-<div class="block">This expresses this shape as a series of points, 
- written as "m [X] [Y] l [X] [Y] l [X] [Y] ..."
- Note that although this shape includes cubic data,
- it is expressed simply as points (linear data).</div>
+<div class="block">This expresses this shape as a series of points, written as
+ "m [X] [Y] l [X] [Y] l [X] [Y] ..." Note that although this shape
+ includes cubic data, it is expressed simply as points (linear data).</div>
 </td>
 </tr>
 </table>
@@ -404,10 +404,9 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <li class="blockList">
 <h4>toString</h4>
 <pre>public&nbsp;java.lang.String&nbsp;toString()</pre>
-<div class="block">This expresses this shape as a series of points, 
- written as "m [X] [Y] l [X] [Y] l [X] [Y] ..."
- Note that although this shape includes cubic data,
- it is expressed simply as points (linear data).</div>
+<div class="block">This expresses this shape as a series of points, written as
+ "m [X] [Y] l [X] [Y] l [X] [Y] ..." Note that although this shape
+ includes cubic data, it is expressed simply as points (linear data).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -435,7 +434,7 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>newWindingRule</code> - <code>PathIterator.WIND_EVEN_ODD</code> or
- <code>PathIterator.WIND_NON_ZERO</code>.</dd>
+            <code>PathIterator.WIND_NON_ZERO</code>.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if a change occurred.</dd>
 </dl>

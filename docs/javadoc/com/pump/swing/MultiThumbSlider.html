@@ -123,10 +123,11 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>T</code> - the type of data each float maps to. For example: in the GradientSlider
- this value is a Color. Sometimes this property may be unnecessary. If this slider is only
- meant to store the relative position of thumbs, then you may set this to a trivial
- stub-like object like a String or Character.</dd>
+<dd><code>T</code> - the type of data each float maps to. For example: in the
+            GradientSlider this value is a Color. Sometimes this property may
+            be unnecessary. If this slider is only meant to store the relative
+            position of thumbs, then you may set this to a trivial stub-like
+            object like a String or Character.</dd>
 </dl>
 <dl>
 <dt>All Implemented Interfaces:</dt>
@@ -140,50 +141,64 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">MultiThumbSlider&lt;T&gt;</span>
 extends javax.swing.JComponent</pre>
-<div class="block">This JComponent resembles a <code>JSlider</code>, except there are
- at least two thumbs.  A <code>JSlider</code> is designed to modify
- one number within a certain range of values.  By contrast a <code>MultiThumbSlider</code>
- actually modifies a <i>table</i> of data.  Each thumb in a <code>MultiThumbSlider</code>
- should be thought of as a key, and it maps to an abstract value.  In the case
- of the <code>GradientSlider</code>: each value is a <code>java.awt.Color</code>.
- Other subclasses could come along that map to other abstract objects.  (For example,
- a <code>VolumeSlider</code> might map each thumb to a specific volume level.  This
- type of widget would let the user control fading in/out of an audio track.)
- <P>The slider graphically represents the domain from zero to one, so each thumb
- is always positioned within that domain.  If the user drags
- a thumb outside this domain: that thumb disappears.
- <P>There is always a selected thumb in each slider when this slider has the
- keyboard focus.  The user can press the tab key (or shift-tab) to transfer focus to different
- thumbs.  Also the arrow keys can be used to control the selected thumb.
- <P>The user can click and drag any thumb to a new location.  If a thumb is dragged
- so it is less than zero or greater than one: then that thumb is removed.  If the user
- clicks between two existing thumbs: a new thumb is created if <code>autoAdd</code> is
- set to <code>true</code>.  (If <code>autoAdd</code> is set to false: nothing happens.)
- <P>There are unimplemented methods in this class: <code>doDoubleClick()</code> and
- <code>doPopup()</code>.  The UI will invoke these methods as needed; this gives the
- user a chance to edit the values represented at a particular point.
- <P>Also using the keyboard:
- <ul><LI>In a horizontal slider, the user can press modifier+left or modifer+right to insert
- a new thumb to the left/right of the currently selected thumb.  (Where "modifier" refers
- to <code>Toolkit.getDefaultTookit().getMenuShortcutKeyMask()</code>.  On Mac this is META, and on Windows
- this is CONTROL.)  Likewise on a vertical slider the up/down arrow keys can be used to add
- thumbs.</li>
+<div class="block">This JComponent resembles a <code>JSlider</code>, except there are at least
+ two thumbs. A <code>JSlider</code> is designed to modify one number within a
+ certain range of values. By contrast a <code>MultiThumbSlider</code> actually
+ modifies a <i>table</i> of data. Each thumb in a
+ <code>MultiThumbSlider</code> should be thought of as a key, and it maps to
+ an abstract value. In the case of the <code>GradientSlider</code>: each value
+ is a <code>java.awt.Color</code>. Other subclasses could come along that map
+ to other abstract objects. (For example, a <code>VolumeSlider</code> might
+ map each thumb to a specific volume level. This type of widget would let the
+ user control fading in/out of an audio track.)
+ <P>
+ The slider graphically represents the domain from zero to one, so each thumb
+ is always positioned within that domain. If the user drags a thumb outside
+ this domain: that thumb disappears.
+ <P>
+ There is always a selected thumb in each slider when this slider has the
+ keyboard focus. The user can press the tab key (or shift-tab) to transfer
+ focus to different thumbs. Also the arrow keys can be used to control the
+ selected thumb.
+ <P>
+ The user can click and drag any thumb to a new location. If a thumb is
+ dragged so it is less than zero or greater than one: then that thumb is
+ removed. If the user clicks between two existing thumbs: a new thumb is
+ created if <code>autoAdd</code> is set to <code>true</code>. (If
+ <code>autoAdd</code> is set to false: nothing happens.)
+ <P>
+ There are unimplemented methods in this class: <code>doDoubleClick()</code>
+ and <code>doPopup()</code>. The UI will invoke these methods as needed; this
+ gives the user a chance to edit the values represented at a particular point.
+ <P>
+ Also using the keyboard:
+ <ul>
+ <LI>In a horizontal slider, the user can press modifier+left or modifer+right
+ to insert a new thumb to the left/right of the currently selected thumb.
+ (Where "modifier" refers to
+ <code>Toolkit.getDefaultTookit().getMenuShortcutKeyMask()</code>. On Mac this
+ is META, and on Windows this is CONTROL.) Likewise on a vertical slider the
+ up/down arrow keys can be used to add thumbs.</li>
  <LI>The delete/backspace key can be used to remove thumbs.</li>
- <LI>In a horizontal slider, the down arrow key can be used to invoke <code>doPopup()</code>.
- This should invoke a <code>JPopupMenu</code> that is keyboard accessible, so the user should be
- able to navigate this component without a mouse.  Likewise on a vertical slider the right
- arrow key should do the same.</li>
- <LI>The space bar or return key invokes <code>doDoubleClick()</code>.</LI></ul>
- <P>Because thumbs can be abstractly inserted, the values each thumb represents should be
- tween-able.  That is, if there is a value at zero and a value at one, the call
- <code>getValue(.5f)</code> must return a value that is halfway between those values.
- <P>Also note that although the thumbs must always be between zero and one: the minimum
- and maximum thumbs do not have to be zero and one.  The user can adjust them so the
- minimum thumb is, say, .2f, and the maximum thumb is .5f.</div>
+ <LI>In a horizontal slider, the down arrow key can be used to invoke
+ <code>doPopup()</code>. This should invoke a <code>JPopupMenu</code> that is
+ keyboard accessible, so the user should be able to navigate this component
+ without a mouse. Likewise on a vertical slider the right arrow key should do
+ the same.</li>
+ <LI>The space bar or return key invokes <code>doDoubleClick()</code>.</LI>
+ </ul>
+ <P>
+ Because thumbs can be abstractly inserted, the values each thumb represents
+ should be tween-able. That is, if there is a value at zero and a value at
+ one, the call <code>getValue(.5f)</code> must return a value that is halfway
+ between those values.
+ <P>
+ Also note that although the thumbs must always be between zero and one: the
+ minimum and maximum thumbs do not have to be zero and one. The user can
+ adjust them so the minimum thumb is, say, .2f, and the maximum thumb is .5f.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><code>com.pump.swing.MultiThumbSliderDemo</code>, 
-<a href="../../../serialized-form.html#com.pump.swing.MultiThumbSlider">Serialized Form</a></dd>
+<dd><a href="../../../serialized-form.html#com.pump.swing.MultiThumbSlider">Serialized Form</a></dd>
 </dl>
 </li>
 </ul>
@@ -248,19 +263,22 @@ extends javax.swing.JComponent</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#ADJUST_PROPERTY">ADJUST_PROPERTY</a></span></code>
-<div class="block">The property that is changed when <code>setValueIsAdjusting(b)</code> is called.</div>
+<div class="block">The property that is changed when <code>setValueIsAdjusting(b)</code> is
+ called.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#AUTOADD_PROPERTY">AUTOADD_PROPERTY</a></span></code>
-<div class="block">The property that controls whether clicking between thumbs automatically adds a thumb.</div>
+<div class="block">The property that controls whether clicking between thumbs automatically
+ adds a thumb.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#COLLISION_PROPERTY">COLLISION_PROPERTY</a></span></code>
-<div class="block">The property that is changed when <code>setCollisionPolicy(c)</code> is called.</div>
+<div class="block">The property that is changed when <code>setCollisionPolicy(c)</code> is
+ called.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -278,31 +296,36 @@ extends javax.swing.JComponent</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#ORIENTATION_PROPERTY">ORIENTATION_PROPERTY</a></span></code>
-<div class="block">The property that is changed when <code>setOrientation(i)</code> is called.</div>
+<div class="block">The property that is changed when <code>setOrientation(i)</code> is
+ called.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#PAINT_TICKS_PROPERTY">PAINT_TICKS_PROPERTY</a></span></code>
-<div class="block">The property that is changed when <code>setPaintTicks(b)</code> is called.</div>
+<div class="block">The property that is changed when <code>setPaintTicks(b)</code> is
+ called.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#REMOVAL_ALLOWED">REMOVAL_ALLOWED</a></span></code>
-<div class="block">The property that controls whether the user can remove a thumb (either by dragging or with the delete key).</div>
+<div class="block">The property that controls whether the user can remove a thumb (either by
+ dragging or with the delete key).</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#SELECTED_THUMB_PROPERTY">SELECTED_THUMB_PROPERTY</a></span></code>
-<div class="block">The property that is changed when <code>setSelectedThumb()</code> is called.</div>
+<div class="block">The property that is changed when <code>setSelectedThumb()</code> is
+ called.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#THUMB_MINIMUM_PROPERTY">THUMB_MINIMUM_PROPERTY</a></span></code>
-<div class="block">The property that is changed when <code>setMinimumThumbnailCount(b)</code> is called.</div>
+<div class="block">The property that is changed when
+ <code>setMinimumThumbnailCount(b)</code> is called.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -401,8 +424,8 @@ extends javax.swing.JComponent</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#addChangeListener-javax.swing.event.ChangeListener-">addChangeListener</a></span>(javax.swing.event.ChangeListener&nbsp;l)</code>
-<div class="block">This listener will be notified when the colors/positions of
- this slider are modified.</div>
+<div class="block">This listener will be notified when the colors/positions of this slider
+ are modified.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -429,8 +452,8 @@ extends javax.swing.JComponent</pre>
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#doPopup-int-int-">doPopup</a></span>(int&nbsp;x,
        int&nbsp;y)</code>
-<div class="block">An optional method subclasses can override to react to the user's
- request for a contextual menu.</div>
+<div class="block">An optional method subclasses can override to react to the user's request
+ for a contextual menu.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -457,7 +480,7 @@ extends javax.swing.JComponent</pre>
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#getSelectedThumb--">getSelectedThumb</a></span>()</code>
 <div class="block">Returns the selected thumb index, or -1 if this component doesn't have
-  the keyboard focus.</div>
+ the keyboard focus.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -491,8 +514,8 @@ extends javax.swing.JComponent</pre>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#isAutoAdding--">isAutoAdding</a></span>()</code>
-<div class="block">Whether thumbs are automatically added when the
- user clicks in a space that doesn't already have a thumb.</div>
+<div class="block">Whether thumbs are automatically added when the user clicks in a space
+ that doesn't already have a thumb.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -536,8 +559,8 @@ extends javax.swing.JComponent</pre>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#setAutoAdding-boolean-">setAutoAdding</a></span>(boolean&nbsp;b)</code>
-<div class="block">Controls whether thumbs are automatically added when the
- user clicks in a space that doesn't already have a thumb.</div>
+<div class="block">Controls whether thumbs are automatically added when the user clicks in a
+ space that doesn't already have a thumb.</div>
 </td>
 </tr>
 <tr id="i24" class="altColor">
@@ -587,8 +610,8 @@ extends javax.swing.JComponent</pre>
 <tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#setValueIsAdjusting-boolean-">setValueIsAdjusting</a></span>(boolean&nbsp;b)</code>
-<div class="block">This is used to notify other objects when the user is in the process
- of adjusting values in this slider.</div>
+<div class="block">This is used to notify other objects when the user is in the process of
+ adjusting values in this slider.</div>
 </td>
 </tr>
 <tr id="i34" class="altColor">
@@ -601,17 +624,17 @@ extends javax.swing.JComponent</pre>
 <tr id="i35" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#transferFocus--">transferFocus</a></span>()</code>
-<div class="block">Depending on which thumb is selected, this may shift the focus
- to the next available thumb, or it may shift the focus to the
- next focusable <code>JComponent</code>.</div>
+<div class="block">Depending on which thumb is selected, this may shift the focus to the
+ next available thumb, or it may shift the focus to the next focusable
+ <code>JComponent</code>.</div>
 </td>
 </tr>
 <tr id="i36" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MultiThumbSlider.html#transferFocusBackward--">transferFocusBackward</a></span>()</code>
-<div class="block">Depending on which thumb is selected, this may shift the focus
- to the previous available thumb, or it may shift the focus to the
- previous focusable <code>JComponent</code>.</div>
+<div class="block">Depending on which thumb is selected, this may shift the focus to the
+ previous available thumb, or it may shift the focus to the previous
+ focusable <code>JComponent</code>.</div>
 </td>
 </tr>
 <tr id="i37" class="rowColor">
@@ -668,7 +691,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>AUTOADD_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String AUTOADD_PROPERTY</pre>
-<div class="block">The property that controls whether clicking between thumbs automatically adds a thumb.</div>
+<div class="block">The property that controls whether clicking between thumbs automatically
+ adds a thumb.</div>
 </li>
 </ul>
 <a name="REMOVAL_ALLOWED">
@@ -678,7 +702,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>REMOVAL_ALLOWED</h4>
 <pre>public static final&nbsp;java.lang.String REMOVAL_ALLOWED</pre>
-<div class="block">The property that controls whether the user can remove a thumb (either by dragging or with the delete key).</div>
+<div class="block">The property that controls whether the user can remove a thumb (either by
+ dragging or with the delete key).</div>
 </li>
 </ul>
 <a name="SELECTED_THUMB_PROPERTY">
@@ -688,7 +713,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>SELECTED_THUMB_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String SELECTED_THUMB_PROPERTY</pre>
-<div class="block">The property that is changed when <code>setSelectedThumb()</code> is called.</div>
+<div class="block">The property that is changed when <code>setSelectedThumb()</code> is
+ called.</div>
 </li>
 </ul>
 <a name="COLLISION_PROPERTY">
@@ -698,7 +724,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>COLLISION_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String COLLISION_PROPERTY</pre>
-<div class="block">The property that is changed when <code>setCollisionPolicy(c)</code> is called.</div>
+<div class="block">The property that is changed when <code>setCollisionPolicy(c)</code> is
+ called.</div>
 </li>
 </ul>
 <a name="INVERTED_PROPERTY">
@@ -728,7 +755,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>THUMB_MINIMUM_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String THUMB_MINIMUM_PROPERTY</pre>
-<div class="block">The property that is changed when <code>setMinimumThumbnailCount(b)</code> is called.</div>
+<div class="block">The property that is changed when
+ <code>setMinimumThumbnailCount(b)</code> is called.</div>
 </li>
 </ul>
 <a name="ORIENTATION_PROPERTY">
@@ -738,7 +766,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>ORIENTATION_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String ORIENTATION_PROPERTY</pre>
-<div class="block">The property that is changed when <code>setOrientation(i)</code> is called.</div>
+<div class="block">The property that is changed when <code>setOrientation(i)</code> is
+ called.</div>
 </li>
 </ul>
 <a name="VALUES_PROPERTY">
@@ -749,9 +778,9 @@ extends javax.swing.JComponent</pre>
 <h4>VALUES_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String VALUES_PROPERTY</pre>
 <div class="block">The property that is changed when <code>setValues()</code> is called.
- Note this is used when either the positions or the values are updated, because
- they need to be updated at the same time to maintain an exact one-to-one
- ratio.</div>
+ Note this is used when either the positions or the values are updated,
+ because they need to be updated at the same time to maintain an exact
+ one-to-one ratio.</div>
 </li>
 </ul>
 <a name="ADJUST_PROPERTY">
@@ -761,7 +790,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>ADJUST_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String ADJUST_PROPERTY</pre>
-<div class="block">The property that is changed when <code>setValueIsAdjusting(b)</code> is called.</div>
+<div class="block">The property that is changed when <code>setValueIsAdjusting(b)</code> is
+ called.</div>
 </li>
 </ul>
 <a name="PAINT_TICKS_PROPERTY">
@@ -771,7 +801,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>PAINT_TICKS_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String PAINT_TICKS_PROPERTY</pre>
-<div class="block">The property that is changed when <code>setPaintTicks(b)</code> is called.</div>
+<div class="block">The property that is changed when <code>setPaintTicks(b)</code> is
+ called.</div>
 </li>
 </ul>
 <a name="thumbPositions">
@@ -844,7 +875,8 @@ extends javax.swing.JComponent</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>thumbPositions</code> - an array of values from zero to one.</dd>
-<dd><code>values</code> - an array of values, each value corresponds to a value in <code>thumbPositions</code>.</dd>
+<dd><code>values</code> - an array of values, each value corresponds to a value in
+            <code>thumbPositions</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -864,7 +896,8 @@ extends javax.swing.JComponent</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>orientation</code> - must be <code>HORIZONTAL</code> or <code>VERTICAL</code></dd>
 <dd><code>thumbPositions</code> - an array of values from zero to one.</dd>
-<dd><code>values</code> - an array of values, each value corresponds to a value in <code>thumbPositions</code>.</dd>
+<dd><code>values</code> - an array of values, each value corresponds to a value in
+            <code>thumbPositions</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -914,11 +947,12 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>addChangeListener</h4>
 <pre>public&nbsp;void&nbsp;addChangeListener(javax.swing.event.ChangeListener&nbsp;l)</pre>
-<div class="block">This listener will be notified when the colors/positions of
- this slider are modified.
- <P>Note you can also listen to these events by listening to
- the <code>VALUES_PROPERTY</code>, but this mechanism is provided
- as a convenience to resemble the <code>JSlider</code> model.</div>
+<div class="block">This listener will be notified when the colors/positions of this slider
+ are modified.
+ <P>
+ Note you can also listen to these events by listening to the
+ <code>VALUES_PROPERTY</code>, but this mechanism is provided as a
+ convenience to resemble the <code>JSlider</code> model.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>l</code> - the <code>ChangeListener</code> to add.</dd>
@@ -952,9 +986,9 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>transferFocus</h4>
 <pre>public&nbsp;void&nbsp;transferFocus()</pre>
-<div class="block">Depending on which thumb is selected, this may shift the focus
- to the next available thumb, or it may shift the focus to the
- next focusable <code>JComponent</code>.</div>
+<div class="block">Depending on which thumb is selected, this may shift the focus to the
+ next available thumb, or it may shift the focus to the next focusable
+ <code>JComponent</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>transferFocus</code>&nbsp;in class&nbsp;<code>java.awt.Component</code></dd>
@@ -968,9 +1002,9 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>transferFocusBackward</h4>
 <pre>public&nbsp;void&nbsp;transferFocusBackward()</pre>
-<div class="block">Depending on which thumb is selected, this may shift the focus
- to the previous available thumb, or it may shift the focus to the
- previous focusable <code>JComponent</code>.</div>
+<div class="block">Depending on which thumb is selected, this may shift the focus to the
+ previous available thumb, or it may shift the focus to the previous
+ focusable <code>JComponent</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>transferFocusBackward</code>&nbsp;in class&nbsp;<code>java.awt.Component</code></dd>
@@ -985,9 +1019,9 @@ extends javax.swing.JComponent</pre>
 <h4>createValueForInsertion</h4>
 <pre>public&nbsp;<a href="../../../com/pump/swing/MultiThumbSlider.html" title="type parameter in MultiThumbSlider">T</a>&nbsp;createValueForInsertion(float&nbsp;pos)</pre>
 <div class="block">This creates a new value for insertion.
- <P>If the <code>pos</code> argument
- is outside the domain of thumbs, then a value still needs to be
- returned.</div>
+ <P>
+ If the <code>pos</code> argument is outside the domain of thumbs, then a
+ value still needs to be returned.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pos</code> - a position between zero and one</dd>
@@ -1019,25 +1053,27 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;boolean&nbsp;doDoubleClick(int&nbsp;x,
                              int&nbsp;y)</pre>
 <div class="block">An optional method subclasses can override to react to the user's
- double-click.  When a thumb is double-clicked the user is trying to edit
- the value for that thumb.  A double-click probably
- suggests the user wants a detailed set of controls to edit a value, such
- as a dialog.
- <P>Note this method will be called with arguments (-1,-1) if
- the space bar or return key is pressed.
- <P>By default this method does nothing, and returns <code>false</code>
- <P>Note the (x,y) information passed to this method is only provided so
- subclasses can position components (such as a JPopupMenu).  It can be
+ double-click. When a thumb is double-clicked the user is trying to edit
+ the value for that thumb. A double-click probably suggests the user wants
+ a detailed set of controls to edit a value, such as a dialog.
+ <P>
+ Note this method will be called with arguments (-1,-1) if the space bar
+ or return key is pressed.
+ <P>
+ By default this method does nothing, and returns <code>false</code>
+ <P>
+ Note the (x,y) information passed to this method is only provided so
+ subclasses can position components (such as a JPopupMenu). It can be
  assumed for a double-click event that the user has selected a thumb
- (since one click will click/create a thumb) and intends to edit the currently
- selected thumb.</div>
+ (since one click will click/create a thumb) and intends to edit the
+ currently selected thumb.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - the x-value of the mouse click location</dd>
 <dd><code>y</code> - the y-value of the mouse click location</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this event was consumed, or acted upon.
- <code>false</code> if this is unimplemented.</dd>
+         <code>false</code> if this is unimplemented.</dd>
 </dl>
 </li>
 </ul>
@@ -1049,18 +1085,19 @@ extends javax.swing.JComponent</pre>
 <h4>doPopup</h4>
 <pre>public&nbsp;boolean&nbsp;doPopup(int&nbsp;x,
                        int&nbsp;y)</pre>
-<div class="block">An optional method subclasses can override to react to the user's
- request for a contextual menu.  When a thumb is right-clicked the
- user is trying to edit the value for that thumb.  A right-click probably
- suggests the user wants very quick, simple options to adjust a thumb.
- <P>By default this method does nothing, and returns <code>false</code></div>
+<div class="block">An optional method subclasses can override to react to the user's request
+ for a contextual menu. When a thumb is right-clicked the user is trying
+ to edit the value for that thumb. A right-click probably suggests the
+ user wants very quick, simple options to adjust a thumb.
+ <P>
+ By default this method does nothing, and returns <code>false</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - the x-value of the mouse click location</dd>
 <dd><code>y</code> - the y-value of the mouse click location</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this event was consumed, or acted upon.
- <code>false</code> if this is unimplemented.</dd>
+         <code>false</code> if this is unimplemented.</dd>
 </dl>
 </li>
 </ul>
@@ -1086,7 +1123,8 @@ extends javax.swing.JComponent</pre>
 <h4>setPaintTicks</h4>
 <pre>public&nbsp;void&nbsp;setPaintTicks(boolean&nbsp;b)</pre>
 <div class="block">Turns on/off the painted tick marks for this slider.
- <P>This triggers a <code>PropertyChangeEvent</code> for 
+ <P>
+ This triggers a <code>PropertyChangeEvent</code> for
  <code>PAINT_TICKS_PROPERTY</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1102,8 +1140,10 @@ extends javax.swing.JComponent</pre>
 <h4>addThumb</h4>
 <pre>public&nbsp;int&nbsp;addThumb(float&nbsp;pos)</pre>
 <div class="block">This creates and inserts a thumb at a position indicated.
- <P>This method relies on the abstract <code>createValueForInsertion(float)</code> to
- determine what value to put at the new thumb location.</div>
+ <P>
+ This method relies on the abstract
+ <code>createValueForInsertion(float)</code> to determine what value to
+ put at the new thumb location.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pos</code> - the new thumb position</dd>
@@ -1121,12 +1161,14 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>setValueIsAdjusting</h4>
 <pre>public&nbsp;void&nbsp;setValueIsAdjusting(boolean&nbsp;b)</pre>
-<div class="block">This is used to notify other objects when the user is in the process
- of adjusting values in this slider.
- <P>A listener may not want to act on certain changes until this property
- is <code>false</code> if it is expensive to process certain changes.
+<div class="block">This is used to notify other objects when the user is in the process of
+ adjusting values in this slider.
+ <P>
+ A listener may not want to act on certain changes until this property is
+ <code>false</code> if it is expensive to process certain changes.
  
- <P>This triggers a <code>PropertyChangeEvent</code> for 
+ <P>
+ This triggers a <code>PropertyChangeEvent</code> for
  <code>ADJUST_PROPERTY</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1156,9 +1198,11 @@ extends javax.swing.JComponent</pre>
 <h4>getThumbPositions</h4>
 <pre>public&nbsp;float[]&nbsp;getThumbPositions()</pre>
 <div class="block">The thumb positions for this slider.
- <P>There is a one-to-one correspondence between this array and the
+ <P>
+ There is a one-to-one correspondence between this array and the
  <code>getValues()</code> array.
- <P>This array is always sorted in ascending order.</div>
+ <P>
+ This array is always sorted in ascending order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an array of the positions of thumbs.</dd>
@@ -1173,7 +1217,8 @@ extends javax.swing.JComponent</pre>
 <h4>getValues</h4>
 <pre>public&nbsp;<a href="../../../com/pump/swing/MultiThumbSlider.html" title="type parameter in MultiThumbSlider">T</a>[]&nbsp;getValues()</pre>
 <div class="block">The values for thumbs for this slider.
- <P>There is a one-to-one correspondence between this array and the
+ <P>
+ There is a one-to-one correspondence between this array and the
  <code>getThumbPositions()</code> array.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1191,11 +1236,12 @@ extends javax.swing.JComponent</pre>
 <h4>setValues</h4>
 <pre>public&nbsp;void&nbsp;setValues(float[]&nbsp;thumbPositions,
                       <a href="../../../com/pump/swing/MultiThumbSlider.html" title="type parameter in MultiThumbSlider">T</a>[]&nbsp;values)</pre>
-<div class="block">This assigns new positions/values for the thumbs in this slider.
- The two must be assigned at exactly the same time, so there is
- always the same number of thumbs/sliders.
+<div class="block">This assigns new positions/values for the thumbs in this slider. The two
+ must be assigned at exactly the same time, so there is always the same
+ number of thumbs/sliders.
  
- <P>This triggers a <code>PropertyChangeEvent</code> for 
+ <P>
+ This triggers a <code>PropertyChangeEvent</code> for
  <code>VALUES_PROPERTY</code>, and possibly for the
  <code>SELECTED_THUMB_PROPERTY</code> if that had to be adjusted, too.</div>
 <dl>
@@ -1203,8 +1249,8 @@ extends javax.swing.JComponent</pre>
 <dd><code>thumbPositions</code> - an array of the new position of each thumb</dd>
 <dd><code>values</code> - an array of the value associated with each thumb</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if the size of the arrays are different,
- or if the thumbPositions array is not sorted in ascending order.</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - if the size of the arrays are different, or if the
+             thumbPositions array is not sorted in ascending order.</dd>
 </dl>
 </li>
 </ul>
@@ -1229,11 +1275,13 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>setSelectedThumb</h4>
 <pre>public&nbsp;void&nbsp;setSelectedThumb(int&nbsp;index)</pre>
-<div class="block">Assigns the currently selected thumb.  A value of -1 indicates
- that no thumb is currently selected.
- <P>A slider should always have a selected thumb if it has the keyboard focus, though,
- so be careful when you modify this.
- <P>This triggers a <code>PropertyChangeEvent</code> for 
+<div class="block">Assigns the currently selected thumb. A value of -1 indicates that no
+ thumb is currently selected.
+ <P>
+ A slider should always have a selected thumb if it has the keyboard
+ focus, though, so be careful when you modify this.
+ <P>
+ This triggers a <code>PropertyChangeEvent</code> for
  <code>SELECTED_THUMB_PROPERTY</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1249,7 +1297,7 @@ extends javax.swing.JComponent</pre>
 <h4>getSelectedThumb</h4>
 <pre>public&nbsp;int&nbsp;getSelectedThumb()</pre>
 <div class="block">Returns the selected thumb index, or -1 if this component doesn't have
-  the keyboard focus.</div>
+ the keyboard focus.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the selected thumb index</dd>
@@ -1264,17 +1312,20 @@ extends javax.swing.JComponent</pre>
 <h4>getSelectedThumb</h4>
 <pre>public&nbsp;int&nbsp;getSelectedThumb(boolean&nbsp;ignoreIfUnfocused)</pre>
 <div class="block">Returns the currently selected thumb index.
- <P>Note this might be -1, indicating that there is no selected thumb.
+ <P>
+ Note this might be -1, indicating that there is no selected thumb.
  
- <P>It is recommend you use the <code>getSelectedThumb()</code> method
- most of the time.  This method is made public so UI's can provide
- a better user experience as this component gains and loses focus.</div>
+ <P>
+ It is recommend you use the <code>getSelectedThumb()</code> method most
+ of the time. This method is made public so UI's can provide a better user
+ experience as this component gains and loses focus.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>ignoreIfUnfocused</code> - if this component doesn't have focus and this
- is <code>true</code>, then this returns -1.  If this is <code>false</code>
- then this returns the internal value used to store the selected index, but
- the user may not realize this thumb is "selected".</dd>
+<dd><code>ignoreIfUnfocused</code> - if this component doesn't have focus and this is
+            <code>true</code>, then this returns -1. If this is
+            <code>false</code> then this returns the internal value used
+            to store the selected index, but the user may not realize this
+            thumb is "selected".</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the selected thumb</dd>
 </dl>
@@ -1287,8 +1338,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>setAutoAdding</h4>
 <pre>public&nbsp;void&nbsp;setAutoAdding(boolean&nbsp;b)</pre>
-<div class="block">Controls whether thumbs are automatically added when the
- user clicks in a space that doesn't already have a thumb.</div>
+<div class="block">Controls whether thumbs are automatically added when the user clicks in a
+ space that doesn't already have a thumb.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>b</code> - whether auto adding is active or not</dd>
@@ -1302,8 +1353,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>isAutoAdding</h4>
 <pre>public&nbsp;boolean&nbsp;isAutoAdding()</pre>
-<div class="block">Whether thumbs are automatically added when the
- user clicks in a space that doesn't already have a thumb.</div>
+<div class="block">Whether thumbs are automatically added when the user clicks in a space
+ that doesn't already have a thumb.</div>
 </li>
 </ul>
 <a name="getOrientation--">
@@ -1353,7 +1404,8 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;void&nbsp;setInverted(boolean&nbsp;b)</pre>
 <div class="block">Assigns whether this slider is inverted or not.
  
- <P>This triggers a <code>PropertyChangeEvent</code> for 
+ <P>
+ This triggers a <code>PropertyChangeEvent</code> for
  <code>INVERTED_PROPERTY</code>.</div>
 </li>
 </ul>

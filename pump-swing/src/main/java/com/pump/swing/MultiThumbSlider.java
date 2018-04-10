@@ -89,8 +89,6 @@ import com.pump.util.JVM;
  *            be unnecessary. If this slider is only meant to store the relative
  *            position of thumbs, then you may set this to a trivial stub-like
  *            object like a String or Character.
- * 
- * @see com.pump.swing.MultiThumbSliderDemo
  */
 @Blurb(imageName = "MultiThumbSlider.png", title = "Sliders: Creating a Slider with Multiple Thumbs", releaseDate = "January 2015", summary = "This is a GUI component that mimicks the <code>javax.swing.JSlider</code>, "
 		+ "except it supports an arbitrary number of thumbs. There are currently three "

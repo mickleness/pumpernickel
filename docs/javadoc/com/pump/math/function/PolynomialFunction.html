@@ -176,8 +176,8 @@ implements <a href="../../../../com/pump/math/function/Function.html" title="int
          double&nbsp;y1,
          double&nbsp;x2,
          double&nbsp;y2)</code>
-<div class="block">Creates a linear <code>PolynomialFunction</code> that passes through
- the two points provided.</div>
+<div class="block">Creates a linear <code>PolynomialFunction</code> that passes through the
+ two points provided.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -239,10 +239,9 @@ implements <a href="../../../../com/pump/math/function/Function.html" title="int
 <div class="block">Create a new <code>PolynomialFunction</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>coeffs</code> - the coefficients of this polynomial.  The first
- coefficient corresponds to the highest power of x.  So
- if coeffs is [2, 3, 4] then this function will
- evaluate as (2*t*t+3*t+4).</dd>
+<dd><code>coeffs</code> - the coefficients of this polynomial. The first coefficient
+            corresponds to the highest power of x. So if coeffs is [2, 3,
+            4] then this function will evaluate as (2*t*t+3*t+4).</dd>
 </dl>
 </li>
 </ul>
@@ -264,8 +263,8 @@ implements <a href="../../../../com/pump/math/function/Function.html" title="int
                                            double&nbsp;y1,
                                            double&nbsp;x2,
                                            double&nbsp;y2)</pre>
-<div class="block">Creates a linear <code>PolynomialFunction</code> that passes through
- the two points provided.</div>
+<div class="block">Creates a linear <code>PolynomialFunction</code> that passes through the
+ two points provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x1</code> - the x-coordinate of the first point.</dd>
@@ -273,7 +272,8 @@ implements <a href="../../../../com/pump/math/function/Function.html" title="int
 <dd><code>x2</code> - the x-coordinate of the second point.</dd>
 <dd><code>y2</code> - the y-coordinate of the second point.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a <code>PolynomialFunction</code> that passes through the points provided.</dd>
+<dd>a <code>PolynomialFunction</code> that passes through the points
+         provided.</dd>
 </dl>
 </li>
 </ul>
@@ -290,8 +290,8 @@ implements <a href="../../../../com/pump/math/function/Function.html" title="int
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>xs</code> - an array of x-coordinates.</dd>
-<dd><code>ys</code> - an array of y-coordinates.  Each element in this array
- corresponds to an element of the x coordinates.</dd>
+<dd><code>ys</code> - an array of y-coordinates. Each element in this array
+            corresponds to an element of the x coordinates.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a function that matches the coordinates provided.</dd>
 </dl>
@@ -307,16 +307,16 @@ implements <a href="../../../../com/pump/math/function/Function.html" title="int
                                            double[]&nbsp;ys,
                                            double[]&nbsp;yDerivatives)</pre>
 <div class="block">Creates a <code>PolynomialFunction</code> that uses the coordinates
- provided.
- <br>The function returned will pass through all the points provided, with
- the dy/dx values provided.</div>
+ provided. <br>
+ The function returned will pass through all the points provided, with the
+ dy/dx values provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>xs</code> - an array of x-coordinates.</dd>
-<dd><code>ys</code> - an array of y-coordinates.  Each element in this array
- corresponds to an element of the x coordinates.</dd>
-<dd><code>yDerivatives</code> - an array of dy/dx values.  Each element in this array
- corresponds to an element of the x coordinates.</dd>
+<dd><code>ys</code> - an array of y-coordinates. Each element in this array
+            corresponds to an element of the x coordinates.</dd>
+<dd><code>yDerivatives</code> - an array of dy/dx values. Each element in this array
+            corresponds to an element of the x coordinates.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a function that matches the coordinates provided.</dd>
 </dl>
@@ -371,8 +371,8 @@ implements <a href="../../../../com/pump/math/function/Function.html" title="int
 <h4>evaluateInverse</h4>
 <pre>public&nbsp;double[]&nbsp;evaluateInverse(double&nbsp;y)</pre>
 <div class="block">Solve this polynomial function by recursive exploring all the derivatives
- and strategically applying Newton's Method. This is imperfect, but a decent
- analytical guess.</div>
+ and strategically applying Newton's Method. This is imperfect, but a
+ decent analytical guess.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/math/function/Function.html#evaluateInverse-double-">evaluateInverse</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/math/function/Function.html" title="interface in com.pump.math.function">Function</a></code></dd>

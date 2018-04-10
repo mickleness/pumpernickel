@@ -144,128 +144,200 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">QDialog</span>
 extends javax.swing.JDialog</pre>
 <div class="block">This is an alternative to <code>JOptionPane</code> dialogs.
- <P>The main distinctions are:
- <ul><LI> Use of the <a href="../../../com/pump/swing/FixedWidthTextArea.html" title="class in com.pump.swing"><code>FixedWidthTextArea</code></a>, so you don't have to worry about line breaks.</li>
- <LI> Use of the <a href="../../../com/pump/swing/DialogFooter.html" title="class in com.pump.swing"><code>DialogFooter</code></a>, to give more flexible options in the dialog footer (particularly for a help button).</li>
- <LI> Several OS-specific enhancements to blend in with individual platforms.</LI></ul>
- <P>This class tries to observe conventions from Microsoft and Apple when possible,
- but it does not claim to follow strict adherence to their guidelines.
+ <P>
+ The main distinctions are:
+ <ul>
+ <LI>Use of the <a href="../../../com/pump/swing/FixedWidthTextArea.html" title="class in com.pump.swing"><code>FixedWidthTextArea</code></a>, so you don't have
+ to worry about line breaks.</li>
+ <LI>Use of the <a href="../../../com/pump/swing/DialogFooter.html" title="class in com.pump.swing"><code>DialogFooter</code></a>, to give more flexible
+ options in the dialog footer (particularly for a help button).</li>
+ <LI>Several OS-specific enhancements to blend in with individual platforms.</LI>
+ </ul>
+ <P>
+ This class tries to observe conventions from Microsoft and Apple when
+ possible, but it does not claim to follow strict adherence to their
+ guidelines.
  <H3>Core Parameters</H3>
- <P>There are several different method options/parameters you can use to set up a QDialog.  Here
- is a thorough discussion of what the main parameters mean, and how to use each:
- <ul><LI> <b><code>frame</code></b> the optional component to host this dialog.
- <P>On Mac in Java 1.6+, if this is non-null then the dialog will be presented
- as a sheet to this frame, unless <code>setDocumentModal(false)</code> has been called.</li>
- <LI> <b><code>icon</code></b> the optional icon/image to present on the left side of this dialog.
- <P>Microsoft <A HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx">cautions</A>:
- "Don't use large graphics that serve no purpose beyond filling space with eye candy." 
- <A HREF="http://msdn.microsoft.com/en-us/library/aa511277.aspx">Also</A>: "Not every message needs
- an icon. Icons are not a way to decorate messages."
- <P>At the same time, Apple 
- <A HREF="http://developer.apple.com/documentation/UserExperience/Conceptual/AppleHIGuidelines/XHIGWindows/chapter_18_section_7.html#//apple_ref/doc/uid/20000961-BACFBACB">points out</A>: 
+ <P>
+ There are several different method options/parameters you can use to set up a
+ QDialog. Here is a thorough discussion of what the main parameters mean, and
+ how to use each:
+ <ul>
+ <LI><b><code>frame</code></b> the optional component to host this dialog.
+ <P>
+ On Mac in Java 1.6+, if this is non-null then the dialog will be presented as
+ a sheet to this frame, unless <code>setDocumentModal(false)</code> has been
+ called.</li>
+ <LI><b><code>icon</code></b> the optional icon/image to present on the left
+ side of this dialog.
+ <P>
+ Microsoft <A
+ HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx">cautions</A>:
+ "Don't use large graphics that serve no purpose beyond filling space with eye candy."
+ <A HREF="http://msdn.microsoft.com/en-us/library/aa511277.aspx">Also</A>:
+ "Not every message needs an icon. Icons are not a way to decorate messages."
+ <P>
+ At the same time, Apple <A HREF=
+ "http://developer.apple.com/documentation/UserExperience/Conceptual/AppleHIGuidelines/XHIGWindows/chapter_18_section_7.html#//apple_ref/doc/uid/20000961-BACFBACB"
+ >points out</A>:
  "Because of the Mac OS X window layering model, an icon is necessary to make it clear to the user which application is displaying the alert."
- <P>This contradiction is a little tricky, but it's not as bad as it sounds.  Microsoft's
- comments were especially geared toward the abuse of warning and error icons.  In fact
- both Microsoft and Apple agree strongly on this point:
- <BR>&nbsp; &nbsp; &nbsp; Microsoft says: "We overwarn in Windows programs ... [this] makes using a program
- feel like a hazardous activity, and it detracts from truly significant issues."
- <BR>&nbsp; &nbsp; &nbsp; Apple says: "Don't use a caution icon for tasks whose only purpose is to overwrite or remove data,
- such as Save or Empty Trash; too-frequent use of the caution icon dilutes its significance."
- <P>Both companies stress that if you over-use warning (and error) icons, they lose their
- significance to users: so try to keep the usage of those icons to a minimum.
- <P>But what to do about icons in general?  Microsoft insists they are optional.  Apple says
- they are not.  Actually Apple has already provided a partial solution:
- Macs don't actually have a QUESTION or INFORMATION icons like other L&amp;F's do.  For those
- messages all you see is the applications icon (that is, the icon has nothing to
- do with a "question message", or an "information message").  So they already brand most of your
- dialogs with your application for you.
- <P>So QDialog takes this a step further to provide a cross-platform solution: when
- you request a <code>PLAIN_MESSAGE</code> dialog containing only text, on Macs you'll
- still receive the application icon, but on other platforms there will be no icon.
- If you don't like this behavior: you can find a <code>QDialog.showDialog()</code>
- method that lets you <i>explicitly</i> define the icon as <code>null</code>.</li>
- <LI> <b><code>dialogTitle</code></b> the title of this dialog.  Although technically optional, this is recommended by both Vista and Apple:
- <P>Apple <A HREF="http://developer.apple.com/documentation/UserExperience/Conceptual/AppleHIGuidelines/XHIGWindows/chapter_18_section_7.html#//apple_ref/doc/uid/20000961-BACFBACB">advises</A>
- using "a title that matches the command" that invoked this dialog.
- <BR>Vista <A HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx">says</a>:
+ <P>
+ This contradiction is a little tricky, but it's not as bad as it sounds.
+ Microsoft's comments were especially geared toward the abuse of warning and
+ error icons. In fact both Microsoft and Apple agree strongly on this point: <BR>
+ &nbsp; &nbsp; &nbsp; Microsoft says: "We overwarn in Windows programs ...
+ [this] makes using a program feel like a hazardous activity, and it detracts
+ from truly significant issues." <BR>
+ &nbsp; &nbsp; &nbsp; Apple says: "Don't use a caution icon for tasks whose
+ only purpose is to overwrite or remove data, such as Save or Empty Trash;
+ too-frequent use of the caution icon dilutes its significance."
+ <P>
+ Both companies stress that if you over-use warning (and error) icons, they
+ lose their significance to users: so try to keep the usage of those icons to
+ a minimum.
+ <P>
+ But what to do about icons in general? Microsoft insists they are optional.
+ Apple says they are not. Actually Apple has already provided a partial
+ solution: Macs don't actually have a QUESTION or INFORMATION icons like other
+ L&amp;F's do. For those messages all you see is the applications icon (that
+ is, the icon has nothing to do with a "question message", or an
+ "information message"). So they already brand most of your dialogs with your
+ application for you.
+ <P>
+ So QDialog takes this a step further to provide a cross-platform solution:
+ when you request a <code>PLAIN_MESSAGE</code> dialog containing only text, on
+ Macs you'll still receive the application icon, but on other platforms there
+ will be no icon. If you don't like this behavior: you can find a
+ <code>QDialog.showDialog()</code> method that lets you <i>explicitly</i>
+ define the icon as <code>null</code>.</li>
+ <LI><b><code>dialogTitle</code></b> the title of this dialog. Although
+ technically optional, this is recommended by both Vista and Apple:
+ <P>
+ Apple <A HREF=
+ "http://developer.apple.com/documentation/UserExperience/Conceptual/AppleHIGuidelines/XHIGWindows/chapter_18_section_7.html#//apple_ref/doc/uid/20000961-BACFBACB"
+ >advises</A> using "a title that matches the command" that invoked this
+ dialog. <BR>
+ Vista <A
+ HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx">says</a>:
  "Use the title to identify the command, feature, or program where a dialog box came from."
- <P>Note on Mac in Java 1.6+, dialogs can be presented as sheet if the <code>frame</code> argument
- is non-null.  This makes the title irrelevant, so while it is advised to include a title:
- don't assume it will always be visible in all platforms.
- <P>Meanwhile it's not hard to find examples on either platform that don't follow
- this advice.  (For example: I just emptied the trash on my Mac: no dialog title there.)</li>
- <LI> <b><code>content</code></b> the main message/controls you want to present to the user.
- <P>This can be any component, but some method signatures of <code>showDialog()</code> let
- you specify the following 3 elements and composes the <code>content</code> based on
- those.
- <P>&nbsp; &nbsp; &nbsp; <b><code>boldMessage</code></b> this can be used to help create the <code>content</code>
- argument if that parameter is not explicitly provided.  Apple calls this the "message text",
- and defines it as "provid[ing] a short, simple summary of the error or condition that
- summoned the alert. This should be a complete sentence; often it is presented as a question."
- <P>Vista also uses a combination of bold/plain text in several dialogs, but I don't think
- they have a universally succinct rule explaining it.
- <P>&nbsp; &nbsp; &nbsp; <b><code>plainMessage</code></b> this follows the <code>boldMessage</code> and is also
- part of the <Code>content</code> component.  Apple calls this the "informative text",
- and defines it as "provid[ing] a fuller description of the situation, its consequences,
- and ways to get out of it. For example, a warning that an action cannot be undone is an
- appropriate use of informative text."
- <P>&nbsp; &nbsp; &nbsp; <b><code>innerComponent</code></b> this follows the <code>plainMessage</code> and is
- the last element in the <code>content</code> panel.  This is an arbitrary component.  It was
- originally intended to be a <Code>JTextField</code>, but it could be command links or
- anything your heart desires.</li>
- <LI> <b><code>footer</code></b> the controls at the bottom of this dialog.  See <a href="../../../com/pump/swing/DialogFooter.html" title="class in com.pump.swing"><code>DialogFooter</code></a>
- for more information.  Several method signatures don't require a <code>DialogFooter</code> directly,
- but create one for you based on other arguments.</li>
- <LI> <b><code>options</code></b> this is used to indicate what buttons the user can
- select to dismiss this dialog (for example DialogFooter.OK_CANCEL_OPTION or DialogFooter.YES_NO_OPTION).
- See <a href="../../../com/pump/swing/DialogFooter.html" title="class in com.pump.swing"><code>DialogFooter</code></a> for more information.</li>
- <LI> <b><code>closeable</code></b> whether the user should be able to close this dialog without
- using a commit button.  If this is <code>true</code>, then the close
- decoration can dismiss a dialog.  (In this case the <code>showDialog()</code> methods will either return
- CANCEL_OPTION or -1.)
- <P>If this is <code>false</code>, then (if the title bar is visible) the close decoration will
- remain visible but it will not function.  (This is because, to my knowledge, the close decoration
- cannot be suppressed in Java.)  This means the dialog must be dismissed via one of the action buttons.
- <P>If this value is not specified, then it is treated as <code>true</code> if one
- of the options available in the DialogFooter.CANCEL_OPTION.  Otherwise this is treated as <code>false</code>.
- For example, a DialogFooter.YES_NO_OPTION dialog will not be closeable, but a DialogFooter.YES_NO_CANCEL_OPTION dialog will be.</li>
- <LI> <b><code>dontShowKey</code></b> if non-null, then a do-not-show-again checkbox will be provided.  This string
- serves as the unique key to the preferences that stores whether the user has already
- selected this checkbox.  So this does not need to be human-readable, but it needs to be unique for
+ <P>
+ Note on Mac in Java 1.6+, dialogs can be presented as sheet if the
+ <code>frame</code> argument is non-null. This makes the title irrelevant, so
+ while it is advised to include a title: don't assume it will always be
+ visible in all platforms.
+ <P>
+ Meanwhile it's not hard to find examples on either platform that don't follow
+ this advice. (For example: I just emptied the trash on my Mac: no dialog
+ title there.)</li>
+ <LI><b><code>content</code></b> the main message/controls you want to present
+ to the user.
+ <P>
+ This can be any component, but some method signatures of
+ <code>showDialog()</code> let you specify the following 3 elements and
+ composes the <code>content</code> based on those.
+ <P>
+ &nbsp; &nbsp; &nbsp; <b><code>boldMessage</code></b> this can be used to help
+ create the <code>content</code> argument if that parameter is not explicitly
+ provided. Apple calls this the "message text", and defines it as "provid[ing]
+ a short, simple summary of the error or condition that summoned the alert.
+ This should be a complete sentence; often it is presented as a question."
+ <P>
+ Vista also uses a combination of bold/plain text in several dialogs, but I
+ don't think they have a universally succinct rule explaining it.
+ <P>
+ &nbsp; &nbsp; &nbsp; <b><code>plainMessage</code></b> this follows the
+ <code>boldMessage</code> and is also part of the <Code>content</code>
+ component. Apple calls this the "informative text", and defines it as
+ "provid[ing] a fuller description of the situation, its consequences, and
+ ways to get out of it. For example, a warning that an action cannot be undone
+ is an appropriate use of informative text."
+ <P>
+ &nbsp; &nbsp; &nbsp; <b><code>innerComponent</code></b> this follows the
+ <code>plainMessage</code> and is the last element in the <code>content</code>
+ panel. This is an arbitrary component. It was originally intended to be a
+ <Code>JTextField</code>, but it could be command links or anything your heart
+ desires.</li>
+ <LI><b><code>footer</code></b> the controls at the bottom of this dialog. See
+ <a href="../../../com/pump/swing/DialogFooter.html" title="class in com.pump.swing"><code>DialogFooter</code></a> for more information. Several method
+ signatures don't require a <code>DialogFooter</code> directly, but create one
+ for you based on other arguments.</li>
+ <LI><b><code>options</code></b> this is used to indicate what buttons the
+ user can select to dismiss this dialog (for example
+ DialogFooter.OK_CANCEL_OPTION or DialogFooter.YES_NO_OPTION). See
+ <a href="../../../com/pump/swing/DialogFooter.html" title="class in com.pump.swing"><code>DialogFooter</code></a> for more information.</li>
+ <LI><b><code>closeable</code></b> whether the user should be able to close
+ this dialog without using a commit button. If this is <code>true</code>, then
+ the close decoration can dismiss a dialog. (In this case the
+ <code>showDialog()</code> methods will either return CANCEL_OPTION or -1.)
+ <P>
+ If this is <code>false</code>, then (if the title bar is visible) the close
+ decoration will remain visible but it will not function. (This is because, to
+ my knowledge, the close decoration cannot be suppressed in Java.) This means
+ the dialog must be dismissed via one of the action buttons.
+ <P>
+ If this value is not specified, then it is treated as <code>true</code> if
+ one of the options available in the DialogFooter.CANCEL_OPTION. Otherwise
+ this is treated as <code>false</code>. For example, a
+ DialogFooter.YES_NO_OPTION dialog will not be closeable, but a
+ DialogFooter.YES_NO_CANCEL_OPTION dialog will be.</li>
+ <LI><b><code>dontShowKey</code></b> if non-null, then a do-not-show-again
+ checkbox will be provided. This string serves as the unique key to the
+ preferences that stores whether the user has already selected this checkbox.
+ So this does not need to be human-readable, but it needs to be unique for
  every dialog that offers this feature.
- <P>See the field <code>prefStorage</code> for more information about how this value is stored.
- <P>If the user has ever selected this checkbox, then this method returns -1 or DialogFooter.CANCEL_OPTION, as if
- the user closed this dialog box using the close decoration.  It does not make sense for this
- checkbox to appear when there is no option to 'cancel' a dialog, or when a dialog is not closeable.
- <P>Note this feature should be used reluctantly.  The Vista interface guidelines state:
- <BR>"If you think your dialog box needs a <i>Don't show this item again</i> option, that is a
- clear sign that it is annoying and potentially unnecessary."
- <P>(The article continues to discuss/suggest alternatives.)
- <BR>Or as Werner Randelshofer advised, "Get rid of this feature. Dialogs which are candidates
- for such a checkbox, shouldn't be in the UI in the first place."</li>
- <LI> <b><code>alwaysApplyKey</code></b> if non-null, then a always-apply-this-decision checkbox will be provided.  This string
- serves as the unique key to the preferences that stores whether the user has already
- selected that checkbox.  So this does not need to be human-readable, but it needs to be unique for
- every dialog that offers this feature.
- <P>See the field <code>prefStorage</code> for more information about how this value is stored.
- <P>If the user has ever selected this checkbox, then this method returns the index of the last
- commit button the user selected.  It does not make sense for this checkbox to appear when
- this dialog concerns possible data-loss, because the user could permanently choose to
- lose data.
- <P>Like the "dont show again" checkbox: this should be used very reluctantly.  If you think you need
- either of these checkboxes: your entire dialog/workflow might benefit from redesign.</LI></ul>
+ <P>
+ See the field <code>prefStorage</code> for more information about how this
+ value is stored.
+ <P>
+ If the user has ever selected this checkbox, then this method returns -1 or
+ DialogFooter.CANCEL_OPTION, as if the user closed this dialog box using the
+ close decoration. It does not make sense for this checkbox to appear when
+ there is no option to 'cancel' a dialog, or when a dialog is not closeable.
+ <P>
+ Note this feature should be used reluctantly. The Vista interface guidelines
+ state: <BR>
+ "If you think your dialog box needs a <i>Don't show this item again</i>
+ option, that is a clear sign that it is annoying and potentially
+ unnecessary."
+ <P>
+ (The article continues to discuss/suggest alternatives.) <BR>
+ Or as Werner Randelshofer advised, "Get rid of this feature. Dialogs which
+ are candidates for such a checkbox, shouldn't be in the UI in the first
+ place."</li>
+ <LI><b><code>alwaysApplyKey</code></b> if non-null, then a
+ always-apply-this-decision checkbox will be provided. This string serves as
+ the unique key to the preferences that stores whether the user has already
+ selected that checkbox. So this does not need to be human-readable, but it
+ needs to be unique for every dialog that offers this feature.
+ <P>
+ See the field <code>prefStorage</code> for more information about how this
+ value is stored.
+ <P>
+ If the user has ever selected this checkbox, then this method returns the
+ index of the last commit button the user selected. It does not make sense for
+ this checkbox to appear when this dialog concerns possible data-loss, because
+ the user could permanently choose to lose data.
+ <P>
+ Like the "dont show again" checkbox: this should be used very reluctantly. If
+ you think you need either of these checkboxes: your entire dialog/workflow
+ might benefit from redesign.</LI>
+ </ul>
  <H3>Platform Differences</H3>
- Because I was mostly studying Vista and Apple guidelines, the main GUI differences
- are designed mostly for these two environments.  There are several OS-specific adjustments
- that take place in this class:
- <ul><LI> Insets are different on different platforms.</li>
- <LI> On Vista the help link is <i>removed from the footer</i> and placed just
- below the <code>content</code> area.  This is because in big bold letters the
- Vista guidelines <A HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx#help">say</A>:
+ Because I was mostly studying Vista and Apple guidelines, the main GUI
+ differences are designed mostly for these two environments. There are several
+ OS-specific adjustments that take place in this class:
+ <ul>
+ <LI>Insets are different on different platforms.</li>
+ <LI>On Vista the help link is <i>removed from the footer</i> and placed just
+ below the <code>content</code> area. This is because in big bold letters the
+ Vista guidelines <A
+ HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx#help">say</A>:
  "Locate Help links at the bottom of the content area of the dialog box."</li>
- <LI> Also on Vista a separator is added between the content area and the footer.</li>
- <LI> Macs use sheets in Java 1.6+ if the <code>frame</code> argument is
- non-null.</LI></ul></div>
+ <LI>Also on Vista a separator is added between the content area and the
+ footer.</li>
+ <LI>Macs use sheets in Java 1.6+ if the <code>frame</code> argument is
+ non-null.</LI>
+ </ul></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.swing.QDialog">Serialized Form</a></dd>
@@ -384,9 +456,8 @@ extends javax.swing.JDialog</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../com/pump/util/Storage.html" title="interface in com.pump.util">Storage</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/QDialog.html#prefStorage">prefStorage</a></span></code>
-<div class="block">This is used to store information about when the user
- selects a "Don't Show This Again" or a
- "Always Apply This Decision" checkbox.</div>
+<div class="block">This is used to store information about when the user selects a
+ "Don't Show This Again" or a "Always Apply This Decision" checkbox.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -398,9 +469,8 @@ extends javax.swing.JDialog</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/QDialog.html#showMnemonics">showMnemonics</a></span></code>
-<div class="block">If this is <code>true</code>, then the mnemonics on
- buttons should be displayed when this class creates
- a dialog.</div>
+<div class="block">If this is <code>true</code>, then the mnemonics on buttons should be
+ displayed when this class creates a dialog.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -517,8 +587,8 @@ extends javax.swing.JDialog</pre>
                   java.lang.String&nbsp;plainText,
                   javax.swing.JComponent&nbsp;innerComponent,
                   boolean&nbsp;selectable)</code>
-<div class="block">Creates the typical panel that contains the heart of the message/information
- presented to the user.</div>
+<div class="block">Creates the typical panel that contains the heart of the
+ message/information presented to the user.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -560,28 +630,30 @@ extends javax.swing.JDialog</pre>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/QDialog.html#getPreconditionedResponse--">getPreconditionedResponse</a></span>()</code>
-<div class="block">If <code>hasPreconditionedResponse()</code> is true,
- this should be called instead of making the dialog visible.</div>
+<div class="block">If <code>hasPreconditionedResponse()</code> is true, this should be
+ called instead of making the dialog visible.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>javax.swing.JButton</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/QDialog.html#getSelectedButton--">getSelectedButton</a></span>()</code>
-<div class="block">Returns the footer dismissal button that was last clicked after this dialog was made visible.</div>
+<div class="block">Returns the footer dismissal button that was last clicked after this
+ dialog was made visible.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/QDialog.html#getSelectedIndex--">getSelectedIndex</a></span>()</code>
-<div class="block">Returns the index of the button in the footer used to dismiss this dialog.</div>
+<div class="block">Returns the index of the button in the footer used to dismiss this
+ dialog.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/QDialog.html#hasPreconditionedResponse--">hasPreconditionedResponse</a></span>()</code>
-<div class="block">This consults the dontShowKey and alwaysApplyKey,
- and returns <code>true</code> if the user has previously
- selected either of those options.</div>
+<div class="block">This consults the dontShowKey and alwaysApplyKey, and returns
+ <code>true</code> if the user has previously selected either of those
+ options.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -811,15 +883,15 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>showMnemonics</h4>
 <pre>public static&nbsp;boolean showMnemonics</pre>
-<div class="block">If this is <code>true</code>, then the mnemonics on
- buttons should be displayed when this class creates
- a dialog.
- <P>By default this is <code>false</code>.
- <P>Note this operates by "hijacking" the UIManager
- property "Button.showMnemonics" just before/after
- this dialog is displayed.  It is possible this
- could have adverse effects, but so far no side-effects
- have been observed.</div>
+<div class="block">If this is <code>true</code>, then the mnemonics on buttons should be
+ displayed when this class creates a dialog.
+ <P>
+ By default this is <code>false</code>.
+ <P>
+ Note this operates by "hijacking" the UIManager property
+ "Button.showMnemonics" just before/after this dialog is displayed. It is
+ possible this could have adverse effects, but so far no side-effects have
+ been observed.</div>
 </li>
 </ul>
 <a name="prefStorage">
@@ -829,15 +901,15 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>prefStorage</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/util/Storage.html" title="interface in com.pump.util">Storage</a> prefStorage</pre>
-<div class="block">This is used to store information about when the user
- selects a "Don't Show This Again" or a
- "Always Apply This Decision" checkbox.
- <P>The default implementation defers to Java's standard
- <code>Preferences</code> class, but it's made public so
- you can override it.  There should probably be some
- way in your program for the user to reset these preferences.
- <BR>(The default implementation stores keys in:
- <BR><code>Preferences.userNodeForPackage(QDialog.class)</code>.)</div>
+<div class="block">This is used to store information about when the user selects a
+ "Don't Show This Again" or a "Always Apply This Decision" checkbox.
+ <P>
+ The default implementation defers to Java's standard
+ <code>Preferences</code> class, but it's made public so you can override
+ it. There should probably be some way in your program for the user to
+ reset these preferences. <BR>
+ (The default implementation stores keys in: <BR>
+ <code>Preferences.userNodeForPackage(QDialog.class)</code>.)</div>
 </li>
 </ul>
 <a name="PLAIN_MESSAGE">
@@ -848,10 +920,13 @@ extends javax.swing.JDialog</pre>
 <h4>PLAIN_MESSAGE</h4>
 <pre>public static final&nbsp;int PLAIN_MESSAGE</pre>
 <div class="block">Used for plain messages that have no standard icon.
- <P>See the javadocs for this class regarding important notes about
- how QDialog can interpret this constant.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.PLAIN_MESSAGE for QDialog.PLAIN_MESSAGE.</div>
+ <P>
+ See the javadocs for this class regarding important notes about how
+ QDialog can interpret this constant.
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.PLAIN_MESSAGE for
+ QDialog.PLAIN_MESSAGE.</div>
 </li>
 </ul>
 <a name="INFORMATION_MESSAGE">
@@ -861,10 +936,13 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>INFORMATION_MESSAGE</h4>
 <pre>public static final&nbsp;int INFORMATION_MESSAGE</pre>
-<div class="block">Used for information messages.  This is used to indicate a specific icon.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.INFORMATION_MESSAGE for QDialog.INFORMATION_MESSAGE.
- <P>(On Macs this icon is the application's icon.)</div>
+<div class="block">Used for information messages. This is used to indicate a specific icon.
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.INFORMATION_MESSAGE for
+ QDialog.INFORMATION_MESSAGE.
+ <P>
+ (On Macs this icon is the application's icon.)</div>
 </li>
 </ul>
 <a name="QUESTION_MESSAGE">
@@ -874,10 +952,13 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>QUESTION_MESSAGE</h4>
 <pre>public static final&nbsp;int QUESTION_MESSAGE</pre>
-<div class="block">Used for question messages.  This is used to indicate a specific icon.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.QUESTION_MESSAGE for QDialog.QUESTION_MESSAGE.
- <P>(On Macs this icon is the application's icon.).</div>
+<div class="block">Used for question messages. This is used to indicate a specific icon.
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.QUESTION_MESSAGE for
+ QDialog.QUESTION_MESSAGE.
+ <P>
+ (On Macs this icon is the application's icon.).</div>
 </li>
 </ul>
 <a name="WARNING_MESSAGE">
@@ -887,9 +968,11 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>WARNING_MESSAGE</h4>
 <pre>public static final&nbsp;int WARNING_MESSAGE</pre>
-<div class="block">Used for warning messages.  This is used to indicate a specific icon.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.WARNING_MESSAGE for QDialog.WARNING_MESSAGE.</div>
+<div class="block">Used for warning messages. This is used to indicate a specific icon.
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.WARNING_MESSAGE for
+ QDialog.WARNING_MESSAGE.</div>
 </li>
 </ul>
 <a name="ERROR_MESSAGE">
@@ -899,9 +982,11 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>ERROR_MESSAGE</h4>
 <pre>public static final&nbsp;int ERROR_MESSAGE</pre>
-<div class="block">Used for error messages.  This is used to indicate a specific icon.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.ERROR_MESSAGE for QDialog.ERROR_MESSAGE.</div>
+<div class="block">Used for error messages. This is used to indicate a specific icon.
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.ERROR_MESSAGE for
+ QDialog.ERROR_MESSAGE.</div>
 </li>
 </ul>
 <a name="strings">
@@ -1096,11 +1181,12 @@ extends javax.swing.JDialog</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>frame</code> - the parent frame</dd>
 <dd><code>documentName</code> - the optional document name</dd>
-<dd><code>saveTriggersDialog</code> - if this is <code>true</code>, then the "Save"
- button will have "..." appended to the end to indicate a dialog will
- be necessary.</dd>
+<dd><code>saveTriggersDialog</code> - if this is <code>true</code>, then the "Save" button will have
+            "..." appended to the end to indicate a dialog will be
+            necessary.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>one of the option constants: DialogFooter.CANCEL_OPTION, DialogFooter.SAVE_OPTION, DialogFooter.DONT_SAVE_OPTION</dd>
+<dd>one of the option constants: DialogFooter.CANCEL_OPTION,
+         DialogFooter.SAVE_OPTION, DialogFooter.DONT_SAVE_OPTION</dd>
 </dl>
 </li>
 </ul>
@@ -1114,29 +1200,34 @@ extends javax.swing.JDialog</pre>
                                                         java.lang.String&nbsp;plainText,
                                                         javax.swing.JComponent&nbsp;innerComponent,
                                                         boolean&nbsp;selectable)</pre>
-<div class="block">Creates the typical panel that contains the heart of the message/information
- presented to the user.
- <P>If this method creates a text area, it will use
+<div class="block">Creates the typical panel that contains the heart of the
+ message/information presented to the user.
+ <P>
+ If this method creates a text area, it will use
  <code>UIManager.getFont("OptionPane.messageFont")</code> as its font.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>boldText</code> - the topmost text to appear.
- <P>This is formatted in bold, in a <code>FixedWidthTextArea</code>.
- This may be null.</dd>
-<dd><code>plainText</code> - this appears below <code>boldText</code>, in a <code>FixedWidthTextArea</code>.
- On Macs, if <code>boldText</code> is non-null, the
- <code>plainText</code> is displayed at a slightly smaller font size
- (using <code>JComponent.sizeVariant</code> of <code>small</code>.)</dd>
-<dd><code>innerComponent</code> - this optional component will appear below both
- text areas.  This will be asked to fill the width
- of this panel.
- This was originally added as a convenient way to add a <code>JTextField</code>
- to a dialog, but any custom component could go here.</dd>
+            <P>
+            This is formatted in bold, in a
+            <code>FixedWidthTextArea</code>. This may be null.</dd>
+<dd><code>plainText</code> - this appears below <code>boldText</code>, in a
+            <code>FixedWidthTextArea</code>. On Macs, if
+            <code>boldText</code> is non-null, the <code>plainText</code>
+            is displayed at a slightly smaller font size (using
+            <code>JComponent.sizeVariant</code> of <code>small</code>.)</dd>
+<dd><code>innerComponent</code> - this optional component will appear below both text areas.
+            This will be asked to fill the width of this panel. This was
+            originally added as a convenient way to add a
+            <code>JTextField</code> to a dialog, but any custom component
+            could go here.</dd>
 <dd><code>selectable</code> - controls whether the text should be selectable.
- <P>The Apple Interface Guidelines state:
- <BR>"When it provides an obvious user benefit, static text in a dialog
- should be selectable. For example, a user should be able to copy an error
- message, a serial number, or IP address to paste elsewhere."</dd>
+            <P>
+            The Apple Interface Guidelines state: <BR>
+            "When it provides an obvious user benefit, static text in a
+            dialog should be selectable. For example, a user should be
+            able to copy an error message, a serial number, or IP address
+            to paste elsewhere."</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the component to display in the center of a dialog.</dd>
 </dl>
@@ -1161,29 +1252,35 @@ extends javax.swing.JDialog</pre>
                              java.lang.String&nbsp;alwaysApplyKey,
                              <a href="../../../com/pump/swing/DialogFooter.EscapeKeyBehavior.html" title="enum in com.pump.swing">DialogFooter.EscapeKeyBehavior</a>&nbsp;escapeKeyBehavior)</pre>
 <div class="block">This presents a modal dialog to the user.
- <P>These arguments are discussed in more detail in the "Core Parameters"
+ <P>
+ These arguments are discussed in more detail in the "Core Parameters"
  section of QDialog's javadocs.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>frame</code> - the optional frame this dialog belongs to.</dd>
 <dd><code>dialogTitle</code> - the optional dialog title.</dd>
-<dd><code>type</code> - the dialog type; this is used to determine the icon (such as INFORMATION_MESSAGE).</dd>
+<dd><code>type</code> - the dialog type; this is used to determine the icon (such as
+            INFORMATION_MESSAGE).</dd>
 <dd><code>boldMessage</code> - the optional message to appear in bold</dd>
 <dd><code>plainMessage</code> - the optional message to appear in a plain font</dd>
 <dd><code>innerComponent</code> - the optional component to appear below
- <code>boldMessage</code> and <code>plainMessage</code>.</dd>
-<dd><code>lowerLeftComponent</code> - an optional component to put in the lower-left of the dialog footer.
- This is generally intended to be a help button.  See <code>HelpComponent</code>.</dd>
-<dd><code>options</code> - one of DialogFooter's OPTIONS constants (such as DialogFooter.YES_NO_CANCEL_OPTION)
- indicating what buttons are present in the <code>DialogFooter</code>.</dd>
-<dd><code>defaultOption</code> - the button that is the default option for this dialog (such as DialogFooter.YES_OPTION),
- or -1 if there is no default option.</dd>
+            <code>boldMessage</code> and <code>plainMessage</code>.</dd>
+<dd><code>lowerLeftComponent</code> - an optional component to put in the lower-left of the dialog
+            footer. This is generally intended to be a help button. See
+            <code>HelpComponent</code>.</dd>
+<dd><code>options</code> - one of DialogFooter's OPTIONS constants (such as
+            DialogFooter.YES_NO_CANCEL_OPTION) indicating what buttons are
+            present in the <code>DialogFooter</code>.</dd>
+<dd><code>defaultOption</code> - the button that is the default option for this dialog (such as
+            DialogFooter.YES_OPTION), or -1 if there is no default option.</dd>
 <dd><code>dontShowKey</code> - if non-null, a do-not-show-again checkbox will appear.</dd>
-<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will appear.</dd>
+<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will
+            appear.</dd>
 <dd><code>escapeKeyBehavior</code> - a DialogFooter constant for the escape key behavior.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the option the user selected (such as DialogFooter.YES_OPTION).  If the dialog is
- dismissed the returned value is DialogFooter.CANCEL_OPTION.</dd>
+<dd>the option the user selected (such as DialogFooter.YES_OPTION).
+         If the dialog is dismissed the returned value is
+         DialogFooter.CANCEL_OPTION.</dd>
 </dl>
 </li>
 </ul>
@@ -1204,26 +1301,31 @@ extends javax.swing.JDialog</pre>
                              java.lang.String&nbsp;alwaysApplyKey,
                              <a href="../../../com/pump/swing/DialogFooter.EscapeKeyBehavior.html" title="enum in com.pump.swing">DialogFooter.EscapeKeyBehavior</a>&nbsp;escapeKeyBehavior)</pre>
 <div class="block">This presents a modal dialog to the user.
- <P>These arguments are discussed in more detail in the "Core Parameters"
+ <P>
+ These arguments are discussed in more detail in the "Core Parameters"
  section of QDialog's javadocs.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>frame</code> - the optional frame this dialog belongs to.</dd>
 <dd><code>dialogTitle</code> - the optional dialog title.</dd>
-<dd><code>type</code> - the dialog type; this is used to determine the icon (such as INFORMATION_MESSAGE).</dd>
+<dd><code>type</code> - the dialog type; this is used to determine the icon (such as
+            INFORMATION_MESSAGE).</dd>
 <dd><code>content</code> - the component to display in the middle of this dialog.</dd>
-<dd><code>leftControls</code> - controls such as "Help" or "Reset" that appear on
- the left side of the <code>DialogFooter</code>.</dd>
-<dd><code>options</code> - one of the DialogFooter's OPTIONS constants (such as DialogFooter.YES_NO_CANCEL_OPTION)
- indicating what buttons are present in the <code>DialogFooter</code>.</dd>
-<dd><code>defaultOption</code> - the button that is the default option for this dialog (such as DialogFooter.YES_OPTION),
- or -1 if there is no default option.</dd>
+<dd><code>leftControls</code> - controls such as "Help" or "Reset" that appear on the left
+            side of the <code>DialogFooter</code>.</dd>
+<dd><code>options</code> - one of the DialogFooter's OPTIONS constants (such as
+            DialogFooter.YES_NO_CANCEL_OPTION) indicating what buttons are
+            present in the <code>DialogFooter</code>.</dd>
+<dd><code>defaultOption</code> - the button that is the default option for this dialog (such as
+            DialogFooter.YES_OPTION), or -1 if there is no default option.</dd>
 <dd><code>dontShowKey</code> - if non-null, a do-not-show-again checkbox will appear.</dd>
-<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will appear.</dd>
+<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will
+            appear.</dd>
 <dd><code>escapeKeyBehavior</code> - one of the <code>DialogFooter.ESCAPE_KEY</code> constants.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the option the user selected (such as DialogFooter.YES_OPTION).  If the dialog is
- dismissed the returned value is DialogFooter.CANCEL_OPTION.</dd>
+<dd>the option the user selected (such as DialogFooter.YES_OPTION).
+         If the dialog is dismissed the returned value is
+         DialogFooter.CANCEL_OPTION.</dd>
 </dl>
 </li>
 </ul>
@@ -1244,26 +1346,31 @@ extends javax.swing.JDialog</pre>
                              java.lang.String&nbsp;alwaysApplyKey,
                              <a href="../../../com/pump/swing/DialogFooter.EscapeKeyBehavior.html" title="enum in com.pump.swing">DialogFooter.EscapeKeyBehavior</a>&nbsp;escapeKeyBehavior)</pre>
 <div class="block">This presents a modal dialog to the user.
- <P>These arguments are discussed in more detail in the "Core Parameters"
+ <P>
+ These arguments are discussed in more detail in the "Core Parameters"
  section of QDialog's javadocs.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dialog</code> - the optional dialog this dialog belongs to.</dd>
 <dd><code>dialogTitle</code> - the optional dialog title.</dd>
-<dd><code>type</code> - the dialog type; this is used to determine the icon (such as INFORMATION_MESSAGE).</dd>
+<dd><code>type</code> - the dialog type; this is used to determine the icon (such as
+            INFORMATION_MESSAGE).</dd>
 <dd><code>content</code> - the component to display in the middle of this dialog.</dd>
-<dd><code>leftControls</code> - controls such as "Help" or "Reset" that appear on
- the left side of the <code>DialogFooter</code>.</dd>
-<dd><code>options</code> - one of the DialogFooter's OPTIONS constants (such as DialogFooter.YES_NO_CANCEL_OPTION)
- indicating what buttons are present in the <code>DialogFooter</code>.</dd>
-<dd><code>defaultOption</code> - the button that is the default option for this dialog (such as DialogFooter.YES_OPTION),
- or -1 if there is no default option.</dd>
+<dd><code>leftControls</code> - controls such as "Help" or "Reset" that appear on the left
+            side of the <code>DialogFooter</code>.</dd>
+<dd><code>options</code> - one of the DialogFooter's OPTIONS constants (such as
+            DialogFooter.YES_NO_CANCEL_OPTION) indicating what buttons are
+            present in the <code>DialogFooter</code>.</dd>
+<dd><code>defaultOption</code> - the button that is the default option for this dialog (such as
+            DialogFooter.YES_OPTION), or -1 if there is no default option.</dd>
 <dd><code>dontShowKey</code> - if non-null, a do-not-show-again checkbox will appear.</dd>
-<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will appear.</dd>
+<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will
+            appear.</dd>
 <dd><code>escapeKeyBehavior</code> - one of the <code>DialogFooter.ESCAPE_KEY</code> constants.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the option the user selected (such as DialogFooter.YES_OPTION).  If the dialog is
- dismissed the returned value is DialogFooter.CANCEL_OPTION.</dd>
+<dd>the option the user selected (such as DialogFooter.YES_OPTION).
+         If the dialog is dismissed the returned value is
+         DialogFooter.CANCEL_OPTION.</dd>
 </dl>
 </li>
 </ul>
@@ -1285,30 +1392,34 @@ extends javax.swing.JDialog</pre>
                              java.lang.String&nbsp;alwaysApplyKey,
                              <a href="../../../com/pump/swing/DialogFooter.EscapeKeyBehavior.html" title="enum in com.pump.swing">DialogFooter.EscapeKeyBehavior</a>&nbsp;escapeKeyBehavior)</pre>
 <div class="block">This presents a modal dialog to the user.
- <P>These arguments are discussed in more detail in the "Core Parameters"
+ <P>
+ These arguments are discussed in more detail in the "Core Parameters"
  section of QDialog's javadocs.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>frame</code> - the optional frame this dialog belongs to.</dd>
 <dd><code>dialogTitle</code> - the optional dialog title.</dd>
-<dd><code>type</code> - the dialog type; this is used to determine the icon (such as INFORMATION_MESSAGE).</dd>
+<dd><code>type</code> - the dialog type; this is used to determine the icon (such as
+            INFORMATION_MESSAGE).</dd>
 <dd><code>content</code> - the component to display in the middle of this dialog.</dd>
-<dd><code>leftControls</code> - controls such as "Help" or "Reset" that appear on
- the left side of the <code>DialogFooter</code>.</dd>
-<dd><code>buttonNames</code> - the names of buttons to use on the right side of
- the <code>DialogFooter</code>.  These should be listed in
- order of priority (for example, if "Save" is the most important
- and "Cancel" is the least, they should be listed: "Save", "Cancel".)</dd>
-<dd><code>defaultButtonIndex</code> - the index of the button name that is
- the default, or -1 if there is no default button.</dd>
-<dd><code>closeable</code> - whether the close decoration can dismiss
- this dialog.</dd>
+<dd><code>leftControls</code> - controls such as "Help" or "Reset" that appear on the left
+            side of the <code>DialogFooter</code>.</dd>
+<dd><code>buttonNames</code> - the names of buttons to use on the right side of the
+            <code>DialogFooter</code>. These should be listed in order of
+            priority (for example, if "Save" is the most important and
+            "Cancel" is the least, they should be listed: "Save",
+            "Cancel".)</dd>
+<dd><code>defaultButtonIndex</code> - the index of the button name that is the default, or -1 if
+            there is no default button.</dd>
+<dd><code>closeable</code> - whether the close decoration can dismiss this dialog.</dd>
 <dd><code>dontShowKey</code> - if non-null, a do-not-show-again checkbox will appear.</dd>
-<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will appear.</dd>
+<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will
+            appear.</dd>
 <dd><code>escapeKeyBehavior</code> - see the <code>DialogFooter.ESCAPE_KEY</code> constants.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the index of the button in the footer's dismissable buttons that was pressed, or -1
- if this dialog was closed without pressing a commit button (via the close decoration)</dd>
+<dd>the index of the button in the footer's dismissable buttons that
+         was pressed, or -1 if this dialog was closed without pressing a
+         commit button (via the close decoration)</dd>
 </dl>
 </li>
 </ul>
@@ -1320,18 +1431,17 @@ extends javax.swing.JDialog</pre>
 <h4>getIcon</h4>
 <pre>public static&nbsp;javax.swing.Icon&nbsp;getIcon(int&nbsp;dialogType)</pre>
 <div class="block">This returns the standard icon for a specific dialog type.
- <P>A <code>PLAIN_MESSAGE</code> dialog has a null icon, except
- on Mac (see the javadocs for this class for a discussion of how
- icons are used).
- <BR>All other dialog types consult the <code>UIManager</code> for
- the appropriate icon:
- "OptionPane.informationIcon", "OptionPane.warningIcon",
+ <P>
+ A <code>PLAIN_MESSAGE</code> dialog has a null icon, except on Mac (see
+ the javadocs for this class for a discussion of how icons are used). <BR>
+ All other dialog types consult the <code>UIManager</code> for the
+ appropriate icon: "OptionPane.informationIcon", "OptionPane.warningIcon",
  "OptionPane.questionIcon", or "OptionPane.errorIcon".</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dialogType</code> - must be <code>PLAIN_MESSAGE</code>,
- <code>ERROR_MESSAGE</code>, <code>WARNING_MESSAGE</code>,
- <code>QUESTION_MESSAGE</code>, or <code>INFORMATION_MESSAGE</code>.</dd>
+<dd><code>dialogType</code> - must be <code>PLAIN_MESSAGE</code>, <code>ERROR_MESSAGE</code>
+            , <code>WARNING_MESSAGE</code>, <code>QUESTION_MESSAGE</code>,
+            or <code>INFORMATION_MESSAGE</code>.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an <code>Icon</code> associated with a type of dialog.</dd>
 </dl>
@@ -1352,8 +1462,11 @@ extends javax.swing.JDialog</pre>
                              java.lang.String&nbsp;dontShowKey,
                              java.lang.String&nbsp;alwaysApplyKey)</pre>
 <div class="block">This presents a modal dialog to the user.
- <P>This is the "real" method that actually creates and lays out the <code>JDialog</code>.
- <P>These arguments are discussed in more detail in the "Core Parameters"
+ <P>
+ This is the "real" method that actually creates and lays out the
+ <code>JDialog</code>.
+ <P>
+ These arguments are discussed in more detail in the "Core Parameters"
  section of QDialog's javadocs.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1362,13 +1475,14 @@ extends javax.swing.JDialog</pre>
 <dd><code>icon</code> - the optional icon to display in this dialog.</dd>
 <dd><code>content</code> - the component to display in the middle of this dialog.</dd>
 <dd><code>footer</code> - the <a href="../../../com/pump/swing/DialogFooter.html" title="class in com.pump.swing"><code>DialogFooter</code></a> for this dialog.</dd>
-<dd><code>closeable</code> - whether the close decoration should dismiss
- this dialog.</dd>
+<dd><code>closeable</code> - whether the close decoration should dismiss this dialog.</dd>
 <dd><code>dontShowKey</code> - if non-null, a do-not-show-again checkbox will appear.</dd>
-<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will appear.</dd>
+<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will
+            appear.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the index of the button in the footer's dismissable buttons that was pressed, or -1
- if this dialog was closed without pressing a commit button (via the close decoration)</dd>
+<dd>the index of the button in the footer's dismissable buttons that
+         was pressed, or -1 if this dialog was closed without pressing a
+         commit button (via the close decoration)</dd>
 </dl>
 </li>
 </ul>
@@ -1387,8 +1501,11 @@ extends javax.swing.JDialog</pre>
                              java.lang.String&nbsp;dontShowKey,
                              java.lang.String&nbsp;alwaysApplyKey)</pre>
 <div class="block">This presents a modal dialog to the user.
- <P>This is the "real" method that actually creates and lays out the <code>JDialog</code>.
- <P>These arguments are discussed in more detail in the "Core Parameters"
+ <P>
+ This is the "real" method that actually creates and lays out the
+ <code>JDialog</code>.
+ <P>
+ These arguments are discussed in more detail in the "Core Parameters"
  section of QDialog's javadocs.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1397,13 +1514,14 @@ extends javax.swing.JDialog</pre>
 <dd><code>icon</code> - the optional icon to display in this dialog.</dd>
 <dd><code>content</code> - the component to display in the middle of this dialog.</dd>
 <dd><code>footer</code> - the <a href="../../../com/pump/swing/DialogFooter.html" title="class in com.pump.swing"><code>DialogFooter</code></a> for this dialog.</dd>
-<dd><code>closeable</code> - whether the close decoration should dismiss
- this dialog.</dd>
+<dd><code>closeable</code> - whether the close decoration should dismiss this dialog.</dd>
 <dd><code>dontShowKey</code> - if non-null, a do-not-show-again checkbox will appear.</dd>
-<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will appear.</dd>
+<dd><code>alwaysApplyKey</code> - if non-null, a always-apply-this-decision checkbox will
+            appear.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the index of the button in the footer's dismissable buttons that was pressed, or -1
- if this dialog was closed without pressing a commit button (via the close decoration)</dd>
+<dd>the index of the button in the footer's dismissable buttons that
+         was pressed, or -1 if this dialog was closed without pressing a
+         commit button (via the close decoration)</dd>
 </dl>
 </li>
 </ul>
@@ -1451,8 +1569,8 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>setDocumentModal</h4>
 <pre>public&nbsp;void&nbsp;setDocumentModal(boolean&nbsp;b)</pre>
-<div class="block">In Java 1.6 this calls <code>setModalityType(DOCUMENT_MODAL)</code>.
- Also on Macs this will use sheets.</div>
+<div class="block">In Java 1.6 this calls <code>setModalityType(DOCUMENT_MODAL)</code>. Also
+ on Macs this will use sheets.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>b</code> - whether this dialog is document modal.</dd>
@@ -1585,8 +1703,9 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>getSelectedButton</h4>
 <pre>public&nbsp;javax.swing.JButton&nbsp;getSelectedButton()</pre>
-<div class="block">Returns the footer dismissal button that was last clicked after this dialog was made visible.
- This method may return null if no button has been clicked yet.</div>
+<div class="block">Returns the footer dismissal button that was last clicked after this
+ dialog was made visible. This method may return null if no button has
+ been clicked yet.</div>
 </li>
 </ul>
 <a name="getSelectedIndex--">
@@ -1596,7 +1715,8 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>getSelectedIndex</h4>
 <pre>public&nbsp;int&nbsp;getSelectedIndex()</pre>
-<div class="block">Returns the index of the button in the footer used to dismiss this dialog.</div>
+<div class="block">Returns the index of the button in the footer used to dismiss this
+ dialog.</div>
 </li>
 </ul>
 <a name="pack--">
@@ -1619,9 +1739,9 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>hasPreconditionedResponse</h4>
 <pre>public&nbsp;boolean&nbsp;hasPreconditionedResponse()</pre>
-<div class="block">This consults the dontShowKey and alwaysApplyKey,
- and returns <code>true</code> if the user has previously
- selected either of those options.</div>
+<div class="block">This consults the dontShowKey and alwaysApplyKey, and returns
+ <code>true</code> if the user has previously selected either of those
+ options.</div>
 </li>
 </ul>
 <a name="getPreconditionedResponse--">
@@ -1631,12 +1751,12 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>getPreconditionedResponse</h4>
 <pre>public&nbsp;int&nbsp;getPreconditionedResponse()</pre>
-<div class="block">If <code>hasPreconditionedResponse()</code> is true,
- this should be called instead of making the dialog visible.</div>
+<div class="block">If <code>hasPreconditionedResponse()</code> is true, this should be
+ called instead of making the dialog visible.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the index of the footer option the user wanted to
- automatically select.</dd>
+<dd>the index of the footer option the user wanted to automatically
+         select.</dd>
 </dl>
 </li>
 </ul>

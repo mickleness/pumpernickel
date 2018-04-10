@@ -125,19 +125,20 @@ extends java.lang.Object
 implements java.lang.Comparable&lt;<a href="../../../com/pump/text/TextDiff.DiffSegment.html" title="class in com.pump.text">TextDiff.DiffSegment</a>&gt;</pre>
 <div class="block">This represents a segment of a diff solution.
  <p>
- This abstract class has two subclasses: the <code>SharedSegment</code> is
- a String that is shared between both branch A and B, and the {code SplitSegment}
- is two Strings that deviate depending on which branch you're following.
+ This abstract class has two subclasses: the <code>SharedSegment</code> is a
+ String that is shared between both branch A and B, and the {code
+ SplitSegment} is two Strings that deviate depending on which branch
+ you're following.
  <p>
- This is illustrated in the <a href="../../../com/pump/text/TextDiff.html" title="class in com.pump.text"><code>TextDiff</code></a> javadoc with diagrams. Each column
- in those diagrams is a DiffSegment object.
+ This is illustrated in the <a href="../../../com/pump/text/TextDiff.html" title="class in com.pump.text"><code>TextDiff</code></a> javadoc with diagrams. Each
+ column in those diagrams is a DiffSegment object.
  <p>
  This object is a node in a linked list. Originally you are given the head
- of the list as the complete solution, and you can call <code>next()</code> to traverse
- to the tail of this list.
+ of the list as the complete solution, and you can call <code>next()</code> to
+ traverse to the tail of this list.
  <p>
- If this is put into a sorted data structure, these segments are sorted
- by complexity (with the least complex graph sorted first).</div>
+ If this is put into a sorted data structure, these segments are sorted by
+ complexity (with the least complex graph sorted first).</div>
 </li>
 </ul>
 </div>
@@ -210,7 +211,8 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/text/TextDiff.Diff
 <td class="colFirst"><code><a href="../../../com/pump/text/TextDiff.DiffSegment.html" title="class in com.pump.text">TextDiff.DiffSegment</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/TextDiff.DiffSegment.html#append-java.lang.String-java.lang.String-">append</a></span>(java.lang.String&nbsp;strA,
       java.lang.String&nbsp;strB)</code>
-<div class="block">Clone this node and append the two Strings provided to each respective branch.</div>
+<div class="block">Clone this node and append the two Strings provided to each
+ respective branch.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -238,8 +240,8 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/text/TextDiff.Diff
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/TextDiff.DiffSegment.html#containsSplit-java.util.Collection-">containsSplit</a></span>(java.util.Collection&lt;java.lang.String&gt;&nbsp;values)</code>
-<div class="block">Return true if this graph contains a split where one
- of the words is in the argument provided.</div>
+<div class="block">Return true if this graph contains a split where one of the words is
+ in the argument provided.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -282,7 +284,8 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/text/TextDiff.Diff
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../com/pump/text/TextDiff.DiffSegment.html" title="class in com.pump.text">TextDiff.DiffSegment</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/TextDiff.DiffSegment.html#previous--">previous</a></span>()</code>
-<div class="block">Return the previous node in this list, or null if this is the head node.</div>
+<div class="block">Return the previous node in this list, or null if this is the head
+ node.</div>
 </td>
 </tr>
 </table>
@@ -380,10 +383,12 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/text/TextDiff.Diff
 <li class="blockList">
 <h4>previous</h4>
 <pre>public&nbsp;<a href="../../../com/pump/text/TextDiff.DiffSegment.html" title="class in com.pump.text">TextDiff.DiffSegment</a>&nbsp;previous()</pre>
-<div class="block">Return the previous node in this list, or null if this is the head node.</div>
+<div class="block">Return the previous node in this list, or null if this is the head
+ node.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the previous node in this list, or null if this is the head node.</dd>
+<dd>the previous node in this list, or null if this is the head
+         node.</dd>
 </dl>
 </li>
 </ul>
@@ -441,8 +446,8 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/text/TextDiff.Diff
 <div class="block">Clone this node and all its subsequent nodes.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>swapBranches</code> - if true then branch A and B should swap
- as we clone this node.</dd>
+<dd><code>swapBranches</code> - if true then branch A and B should swap as we clone this
+            node.</dd>
 </dl>
 </li>
 </ul>
@@ -457,16 +462,17 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/text/TextDiff.Diff
 <div class="block">Return the text of this node.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>branch</code> - the branch of this node to consider. For a <code>SharedSegment</code>
- this argument is ignored, but for a <code>SplitSegment</code> this argument
- controls which String is returned.</dd>
-<dd><code>appendSubsequentNodes</code> - if true then this appends all
- subsequent nodes. This is useful if just want the whole String of a branch.
- If you need to study individual pieces more carefully then you may want to
- pass false here.</dd>
+<dd><code>branch</code> - the branch of this node to consider. For a
+            <code>SharedSegment</code> this argument is ignored, but for a
+            <code>SplitSegment</code> this argument controls which String
+            is returned.</dd>
+<dd><code>appendSubsequentNodes</code> - if true then this appends all subsequent nodes. This is
+            useful if just want the whole String of a branch. If you
+            need to study individual pieces more carefully then you
+            may want to pass false here.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the text of this node. This returns the raw text with no quotations
- or square/curly brackets.</dd>
+<dd>the text of this node. This returns the raw text with no
+         quotations or square/curly brackets.</dd>
 </dl>
 </li>
 </ul>
@@ -508,19 +514,21 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/text/TextDiff.Diff
 <h4>append</h4>
 <pre>public&nbsp;<a href="../../../com/pump/text/TextDiff.DiffSegment.html" title="class in com.pump.text">TextDiff.DiffSegment</a>&nbsp;append(java.lang.String&nbsp;strA,
                                    java.lang.String&nbsp;strB)</pre>
-<div class="block">Clone this node and append the two Strings provided to each respective branch.
+<div class="block">Clone this node and append the two Strings provided to each
+ respective branch.
  <p>
- Warning: some splits are considered "unnecessary", and are rejected. When
- an unnecessary split is detected this method returns null. For example the
- diff "[h]{h}ello" is rejected, because when the first characters of a split
- are the same: we have a redundant/unnecessary split.</div>
+ Warning: some splits are considered "unnecessary", and are rejected.
+ When an unnecessary split is detected this method returns null. For
+ example the diff "[h]{h}ello" is rejected, because when the first
+ characters of a split are the same: we have a redundant/unnecessary
+ split.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>strA</code> - the String to append to branch A.</dd>
 <dd><code>strB</code> - the String to append to branch B.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new node that represents this node + the arguments or null if
- this split is not allowed.</dd>
+<dd>the new node that represents this node + the arguments or
+         null if this split is not allowed.</dd>
 </dl>
 </li>
 </ul>
@@ -559,28 +567,32 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/text/TextDiff.Diff
  <p>
  For example if string A is "underwater" and string B is "water", then
  the diff of these will be "[under]water". So calling
- <code>myDiff.isSubset(Branch.B)</code> will return true, because the B branch
- ("water") is a subset of the A branch ("underwater").
+ <code>myDiff.isSubset(Branch.B)</code> will return true, because the B
+ branch ("water") is a subset of the A branch ("underwater").
  <p>
  However if string A is "underwater" and string B is "watered", then
- the diff will be "[under]water{ed}". Here calling <code>isSubset(..)</code>
- for either branch returns false, because neither is a subset of the other.
+ the diff will be "[under]water{ed}". Here calling
+ <code>isSubset(..)</code> for either branch returns false, because neither
+ is a subset of the other.
  <p>
- The examples above are trivial because they cluster all the words together,
- but the utility of this method has to do with abbreviations. For example
- given the strings "association" and "assn": the second branch is considered
- a subset of the first, even though the diff resembles "ass[ociatio]n".
+ The examples above are trivial because they cluster all the words
+ together, but the utility of this method has to do with
+ abbreviations. For example given the strings "association" and
+ "assn": the second branch is considered a subset of the first, even
+ though the diff resembles "ass[ociatio]n".
  <p>
- As a word of caution: this is helpful at identifying abbreviations, but it
- can also be misleading. For example "ne" is a subset of "northeast" (as expected),
- but "ne" is <i>also</i> a subset of "northwest". Similarly "intl" is a subset
- of "international", but it is also a subset of "intelligence". And "cm" is a subset
- of "centimeter", but it also a subset of "camp".</div>
+ As a word of caution: this is helpful at identifying abbreviations,
+ but it can also be misleading. For example "ne" is a subset of
+ "northeast" (as expected), but "ne" is <i>also</i> a subset of
+ "northwest". Similarly "intl" is a subset of "international", but it
+ is also a subset of "intelligence". And "cm" is a subset of
+ "centimeter", but it also a subset of "camp".</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>b</code> - the branch that might be a subset of the opposite branch.</dd>
+<dd><code>x</code> - the branch that might be a subset of the opposite branch.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the argument branch is a subset of the opposite branch.</dd>
+<dd>true if the argument branch is a subset of the opposite
+         branch.</dd>
 </dl>
 </li>
 </ul>
@@ -591,14 +603,14 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/text/TextDiff.Diff
 <li class="blockList">
 <h4>containsSplit</h4>
 <pre>public&nbsp;boolean&nbsp;containsSplit(java.util.Collection&lt;java.lang.String&gt;&nbsp;values)</pre>
-<div class="block">Return true if this graph contains a split where one
- of the words is in the argument provided.</div>
+<div class="block">Return true if this graph contains a split where one of the words is
+ in the argument provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>values</code> - a collection of Strings to check against.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if this graph contains a split that contains
- text from the argument.</dd>
+<dd>true if this graph contains a split that contains text from
+         the argument.</dd>
 </dl>
 </li>
 </ul>

@@ -115,8 +115,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">NudgeSearchHighlight</span>
 extends <a href="../../../com/pump/plaf/AbstractSearchHighlight.html" title="class in com.pump.plaf">AbstractSearchHighlight</a></pre>
-<div class="block">This is a subtle highlight effect that moves a translucent
- copy of the text around vertically.  Just a little.</div>
+<div class="block">This is a subtle highlight effect that moves a translucent copy of the text
+ around vertically. Just a little.</div>
 </li>
 </ul>
 </div>
@@ -277,16 +277,15 @@ extends <a href="../../../com/pump/plaf/AbstractSearchHighlight.html" title="cla
 <pre>protected&nbsp;void&nbsp;paintHighlightBackground(java.awt.Graphics2D&nbsp;g,
                                         java.awt.Rectangle&nbsp;textRect)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/plaf/AbstractSearchHighlight.html#paintHighlightBackground-java.awt.Graphics2D-java.awt.Rectangle-">AbstractSearchHighlight</a></code></span></div>
-<div class="block">This paints the background underneath the text in the image.
- This might be an opaque shape, for example.</div>
+<div class="block">This paints the background underneath the text in the image. This might
+ be an opaque shape, for example.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/plaf/AbstractSearchHighlight.html#paintHighlightBackground-java.awt.Graphics2D-java.awt.Rectangle-">paintHighlightBackground</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/plaf/AbstractSearchHighlight.html" title="class in com.pump.plaf">AbstractSearchHighlight</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graphics to paint to.</dd>
-<dd><code>textRect</code> - where the text will be rendered.
- A shape enclosing the text should add a few pixels of padding around
- this rectangle.</dd>
+<dd><code>textRect</code> - where the text will be rendered. A shape enclosing the text
+            should add a few pixels of padding around this rectangle.</dd>
 </dl>
 </li>
 </ul>
@@ -299,18 +298,19 @@ extends <a href="../../../com/pump/plaf/AbstractSearchHighlight.html" title="cla
 <pre>protected&nbsp;void&nbsp;updateAnimation(javax.swing.JComponent[]&nbsp;highlights,
                                float&nbsp;fraction)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/plaf/AbstractSearchHighlight.html#updateAnimation-javax.swing.JComponent:A-float-">AbstractSearchHighlight</a></code></span></div>
-<div class="block">This is constantly called while the animation is playing.  It
- gives you an optional chance to modify the highlights a little bit.</div>
+<div class="block">This is constantly called while the animation is playing. It gives you an
+ optional chance to modify the highlights a little bit.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/plaf/AbstractSearchHighlight.html#updateAnimation-javax.swing.JComponent:A-float-">updateAnimation</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/plaf/AbstractSearchHighlight.html" title="class in com.pump.plaf">AbstractSearchHighlight</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>highlights</code> - the components to modify.  You should change the
- client property "opacity" (to be a number from [0, 1]) and "transform"
- (to be an AffineTransform) to modify these highlights.</dd>
+<dd><code>highlights</code> - the components to modify. You should change the client
+            property "opacity" (to be a number from [0, 1]) and
+            "transform" (to be an AffineTransform) to modify these
+            highlights.</dd>
 <dd><code>fraction</code> - a fraction from [0, 1], indicating how progressed this
- animation is.  After <code>t = 1</code> this method is no longer called
- and this highlight will fade out.</dd>
+            animation is. After <code>t = 1</code> this method is no
+            longer called and this highlight will fade out.</dd>
 </dl>
 </li>
 </ul>

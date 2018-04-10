@@ -125,7 +125,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">FilledComboBoxUI</span>
 extends javax.swing.plaf.basic.BasicComboBoxUI</pre>
-<div class="block">A <code>BasicComboBoxUI</code> that models its appearance after a <a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com.pump.plaf"><code>FilledButtonUI</code></a>.</div>
+<div class="block">A <code>BasicComboBoxUI</code> that models its appearance after a
+ <a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com.pump.plaf"><code>FilledButtonUI</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -172,8 +173,8 @@ extends javax.swing.plaf.basic.BasicComboBoxUI</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/FilledComboBoxUI.html#IS_POP_DOWN_KEY">IS_POP_DOWN_KEY</a></span></code>
-<div class="block">The client property that determines whether the popup menu
- pops down or up.</div>
+<div class="block">The client property that determines whether the popup menu pops down or
+ up.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -282,8 +283,8 @@ extends javax.swing.plaf.basic.BasicComboBoxUI</pre>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/FilledComboBoxUI.html#isPopDown--">isPopDown</a></span>()</code>
-<div class="block">A combobox can either pop <i>down</i> (below the combobox),
- or it can pop <i>up</i> (or "over").</div>
+<div class="block">A combobox can either pop <i>down</i> (below the combobox), or it can pop
+ <i>up</i> (or "over").</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
@@ -368,12 +369,14 @@ extends javax.swing.plaf.basic.BasicComboBoxUI</pre>
 <li class="blockList">
 <h4>IS_POP_DOWN_KEY</h4>
 <pre>public static final&nbsp;java.lang.String IS_POP_DOWN_KEY</pre>
-<div class="block">The client property that determines whether the popup menu
- pops down or up.</div>
+<div class="block">The client property that determines whether the popup menu pops down or
+ up.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/plaf/FilledComboBoxUI.html#isPopDown--"><code>isPopDown()</code></a>, 
-<a href="https://developer.apple.com/library/mac/#technotes/tn2007/tn2196.html">Apple Tech Note 2196</a>, 
+<a
+      href="https://developer.apple.com/library/mac/#technotes/tn2007/tn2196.html">Apple
+      Tech Note 2196</a>, 
 <a href="../../../constant-values.html#com.pump.plaf.FilledComboBoxUI.IS_POP_DOWN_KEY">Constant Field Values</a></dd>
 </dl>
 </li>
@@ -438,13 +441,15 @@ extends javax.swing.plaf.basic.BasicComboBoxUI</pre>
 <h4>createUI</h4>
 <pre>public static&nbsp;javax.swing.plaf.ComponentUI&nbsp;createUI(javax.swing.JComponent&nbsp;c)</pre>
 <div class="block">Create a new instance of the FilledComboBoxUI.
- <p>Note this leaves which <code>FilledButtonUI</code> you want ambiguous.
- First this will check against the UIManager's <code>ButtonUI</code> property,
- and if that is not a <code>FilledButtonUI</code> then the <a href="../../../com/pump/plaf/RoundRectButtonUI.html" title="class in com.pump.plaf"><code>RoundRectButtonUI</code></a>
- will be used.
- <p>This method is required if you want to make this ComboBoxUI the default
- UI by invoking:
- <br><code>UIManager.getDefaults().put("ComboBoxUI", "com.pump.plaf.FilledComboBoxUI");</code></div>
+ <p>
+ Note this leaves which <code>FilledButtonUI</code> you want ambiguous.
+ First this will check against the UIManager's <code>ButtonUI</code>
+ property, and if that is not a <code>FilledButtonUI</code> then the
+ <a href="../../../com/pump/plaf/RoundRectButtonUI.html" title="class in com.pump.plaf"><code>RoundRectButtonUI</code></a> will be used.
+ <p>
+ This method is required if you want to make this ComboBoxUI the default
+ UI by invoking: <br>
+ <code>UIManager.getDefaults().put("ComboBoxUI", "com.pump.plaf.FilledComboBoxUI");</code></div>
 </li>
 </ul>
 <a name="getXArc-java.awt.geom.GeneralPath-">
@@ -516,7 +521,8 @@ extends javax.swing.plaf.basic.BasicComboBoxUI</pre>
 <pre>public&nbsp;<a href="../../../com/pump/plaf/ButtonFill.html" title="class in com.pump.plaf">ButtonFill</a>&nbsp;getButtonFill()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <a href="../../../com/pump/plaf/ButtonFill.html" title="class in com.pump.plaf"><code>ButtonFill</code></a> used by this FilledComboBoxUI.</dd>
+<dd>the <a href="../../../com/pump/plaf/ButtonFill.html" title="class in com.pump.plaf"><code>ButtonFill</code></a> used by this
+         FilledComboBoxUI.</dd>
 </dl>
 </li>
 </ul>
@@ -529,7 +535,8 @@ extends javax.swing.plaf.basic.BasicComboBoxUI</pre>
 <pre>public&nbsp;<a href="../../../com/pump/plaf/ButtonShape.html" title="class in com.pump.plaf">ButtonShape</a>&nbsp;getButtonShape()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <a href="../../../com/pump/plaf/ButtonShape.html" title="class in com.pump.plaf"><code>ButtonShape</code></a> used by this FilledComboBoxUI.</dd>
+<dd>the <a href="../../../com/pump/plaf/ButtonShape.html" title="class in com.pump.plaf"><code>ButtonShape</code></a> used by this
+         FilledComboBoxUI.</dd>
 </dl>
 </li>
 </ul>
@@ -601,23 +608,27 @@ extends javax.swing.plaf.basic.BasicComboBoxUI</pre>
 <li class="blockList">
 <h4>isPopDown</h4>
 <pre>protected&nbsp;boolean&nbsp;isPopDown()</pre>
-<div class="block">A combobox can either pop <i>down</i> (below the combobox),
- or it can pop <i>up</i> (or "over"). The default implementation
- for the BasicComboBoxUI is down, but this default implementation for
- this class is up. You can customize this by
- assigning the client property "JComboBox.isPopDown" to a Boolean.
- <p>The following excerpt from Apple's technical note 2196 explains
- when to use each:
- <p>This property alters the JComboBox's style to specify if it is 
- intended to be a pop-down or a pop-up control. Pop-downs should be 
- used when the user is expected to choose an action from the pop-down 
- menu. Pop-ups should be used when the user is expected to make a 
- choice from the pop-up menu that does not cause an action like a 
- button would. Pop-up menus always appear over the pop-up control, 
- whereas pop-down menus always appear below the pop-down control.</div>
+<div class="block">A combobox can either pop <i>down</i> (below the combobox), or it can pop
+ <i>up</i> (or "over"). The default implementation for the BasicComboBoxUI
+ is down, but this default implementation for this class is up. You can
+ customize this by assigning the client property "JComboBox.isPopDown" to
+ a Boolean.
+ <p>
+ The following excerpt from Apple's technical note 2196 explains when to
+ use each:
+ <p>
+ This property alters the JComboBox's style to specify if it is intended
+ to be a pop-down or a pop-up control. Pop-downs should be used when the
+ user is expected to choose an action from the pop-down menu. Pop-ups
+ should be used when the user is expected to make a choice from the pop-up
+ menu that does not cause an action like a button would. Pop-up menus
+ always appear over the pop-up control, whereas pop-down menus always
+ appear below the pop-down control.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="https://developer.apple.com/library/mac/#technotes/tn2007/tn2196.html">Apple Tech Note 2196</a></dd>
+<dd><a
+      href="https://developer.apple.com/library/mac/#technotes/tn2007/tn2196.html">Apple
+      Tech Note 2196</a></dd>
 </dl>
 </li>
 </ul>
@@ -672,8 +683,9 @@ extends javax.swing.plaf.basic.BasicComboBoxUI</pre>
 <li class="blockList">
 <h4>getButtons</h4>
 <pre>public&nbsp;javax.swing.JButton[]&nbsp;getButtons()</pre>
-<div class="block">Return the buttons used to render this ComboBoxUI.
- Note one of these buttons isn't really part of the Swing component hierarchy, but it is used for rendering.</div>
+<div class="block">Return the buttons used to render this ComboBoxUI. Note one of these
+ buttons isn't really part of the Swing component hierarchy, but it is
+ used for rendering.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the buttons used to render this ComboBoxUI.</dd>

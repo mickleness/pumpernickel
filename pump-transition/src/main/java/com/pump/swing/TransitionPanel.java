@@ -53,7 +53,6 @@ import com.pump.image.transition.Transition;
  * </ul>
  * 
  * @see com.pump.showcase.Transition2DDemo
- * @see com.pump.swing.TransitionPanelDemo
  * @see com.pump.swing.TransitionTabbedPane
  */
 public class TransitionPanel extends JComponent {

@@ -64,9 +64,6 @@ import com.pump.plaf.UIEffect;
  * to prevent the user from toggling the collapsed state. (But you can still
  * programmatically alter it.)
  * <p>
- * The {@link CollapsibleContainerDemoHelper} creates this animation showing off
- * this demo app:
- * <p>
  * <img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/collapsiblecontainer.gif"
  * style="border:1px solid gray" alt="CollapsibleContainer Animation">

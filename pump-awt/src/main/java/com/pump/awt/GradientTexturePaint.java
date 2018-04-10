@@ -537,7 +537,7 @@ public class GradientTexturePaint implements Paint {
 	 *            the first point
 	 * @param c1
 	 *            the first color
-	 * @param x2
+	 * @param p2
 	 *            the second point
 	 * @param c2
 	 *            the second color

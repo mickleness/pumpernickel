@@ -129,8 +129,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">MagnificationPanel</span>
 extends javax.swing.JComponent</pre>
-<div class="block">A panel that offers a magnified view of another <code>Component</code>
- based on the mouse location.</div>
+<div class="block">A panel that offers a magnified view of another <code>Component</code> based
+ on the mouse location.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.swing.MagnificationPanel">Serialized Form</a></dd>
@@ -261,8 +261,7 @@ extends javax.swing.JComponent</pre>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MagnificationPanel.html#setInstruction-java.lang.String-">setInstruction</a></span>(java.lang.String&nbsp;text)</code>
-<div class="block">Set instructional text that is displayed when no image data
- is in use.</div>
+<div class="block">Set instructional text that is displayed when no image data is in use.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -344,8 +343,10 @@ extends javax.swing.JComponent</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>zoomedComponent</code> - the component to zoom in on.</dd>
-<dd><code>visiblePixelWidth</code> - the number of pixels to show horizontally (this is used to compute the preferred size)</dd>
-<dd><code>visiblePixelHeight</code> - the number of pixels to show vertically (this is used to compute the preferred size)</dd>
+<dd><code>visiblePixelWidth</code> - the number of pixels to show horizontally (this is used to
+            compute the preferred size)</dd>
+<dd><code>visiblePixelHeight</code> - the number of pixels to show vertically (this is used to
+            compute the preferred size)</dd>
 <dd><code>pixelSize</code> - the magnification of each pixel (4, 8, etc.)</dd>
 </dl>
 </li>
@@ -365,8 +366,7 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>setInstruction</h4>
 <pre>public&nbsp;void&nbsp;setInstruction(java.lang.String&nbsp;text)</pre>
-<div class="block">Set instructional text that is displayed when no image data
- is in use.</div>
+<div class="block">Set instructional text that is displayed when no image data is in use.</div>
 </li>
 </ul>
 <a name="isPixelated--">
@@ -386,13 +386,12 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>setPixelated</h4>
 <pre>public&nbsp;void&nbsp;setPixelated(boolean&nbsp;b)</pre>
-<div class="block">Define whether the zoomed view is meant to be pixelated.
- By default this attribute is true, but if false then
- the component is painted through an AffineTransform to
- achieve the zoom. If the underlying component uses
- vector graphics, then this panel will demonstrate that.
- (If the underlying component uses pixelated images,
- then this property will make no difference.)</div>
+<div class="block">Define whether the zoomed view is meant to be pixelated. By default this
+ attribute is true, but if false then the component is painted through an
+ AffineTransform to achieve the zoom. If the underlying component uses
+ vector graphics, then this panel will demonstrate that. (If the
+ underlying component uses pixelated images, then this property will make
+ no difference.)</div>
 </li>
 </ul>
 <a name="refresh--">

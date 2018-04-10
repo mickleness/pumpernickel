@@ -115,12 +115,11 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">CalligraphyPathWriter</span>
 extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></pre>
-<div class="block">This creates a calligraphic or ribbon-like effect while
- tracing a shape.
- <p>There are two separate shape bodies being written.  If you
- paint them separately: this creates an "over" and "under" effect.
- If you paint them the same color: then this class is basically
- a <code>java.awt.Stroke</code>.</div>
+<div class="block">This creates a calligraphic or ribbon-like effect while tracing a shape.
+ <p>
+ There are two separate shape bodies being written. If you paint them
+ separately: this creates an "over" and "under" effect. If you paint them the
+ same color: then this class is basically a <code>java.awt.Stroke</code>.</div>
 </li>
 </ul>
 </div>
@@ -173,7 +172,8 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/CalligraphyPathWriter.html#closePath--">closePath</a></span>()</code>
-<div class="block">Closes the current subpath by drawing a straight line back to the coordinates of the last moveTo.</div>
+<div class="block">Closes the current subpath by drawing a straight line back to the
+ coordinates of the last moveTo.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -184,7 +184,10 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
        float&nbsp;cy2,
        float&nbsp;x,
        float&nbsp;y)</code>
-<div class="block">Adds a curved segment, defined by three new points, to the path by drawing a Bezier curve that intersects both the current coordinates and the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2) as Bezier control points.</div>
+<div class="block">Adds a curved segment, defined by three new points, to the path by
+ drawing a Bezier curve that intersects both the current coordinates and
+ the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2)
+ as Bezier control points.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -198,7 +201,8 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/CalligraphyPathWriter.html#lineTo-float-float-">lineTo</a></span>(float&nbsp;x,
       float&nbsp;y)</code>
-<div class="block">Adds a point to the path by drawing a straight line from the current coordinates to the new specified coordinates.</div>
+<div class="block">Adds a point to the path by drawing a straight line from the current
+ coordinates to the new specified coordinates.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -214,7 +218,10 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
       float&nbsp;cy,
       float&nbsp;x,
       float&nbsp;y)</code>
-<div class="block">Adds a curved segment, defined by two new points, to the path by drawing a Quadratic curve that intersects both the current coordinates and the coordinates (x2, y2), using the specified point (x1, y1) as a quadratic parametric control point.</div>
+<div class="block">Adds a curved segment, defined by two new points, to the path by drawing
+ a Quadratic curve that intersects both the current coordinates and the
+ coordinates (x2, y2), using the specified point (x1, y1) as a quadratic
+ parametric control point.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -266,19 +273,22 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>angle</code> - the angle of the nib in this path.</dd>
-<dd><code>offset1</code> - the offset of one side of the traced shape.
- One side of shape you trace will be offset by:
- <br>(+offset1*cos(angle), +offset1*sin(angle) )
- <p>It is possible for this value to be zero, which means one
- side of this path will exactly line up with the original shape
- being traced.
- <p>If both offsets are equal: then no new path segments will be
- visible because they will be pencil then.
- <p>To achieve a simple stroke: one offset should be (+width/2),
- and the other offset should be (-width/2).</dd>
-<dd><code>offset2</code> - the offset of the other side of the traced shape.
- This side of shape will be offset by:
- <br>(+offset2*cos(angle), +offset2*sin(angle) )</dd>
+<dd><code>offset1</code> - the offset of one side of the traced shape. One side of shape
+            you trace will be offset by: <br>
+            (+offset1*cos(angle), +offset1*sin(angle) )
+            <p>
+            It is possible for this value to be zero, which means one side
+            of this path will exactly line up with the original shape
+            being traced.
+            <p>
+            If both offsets are equal: then no new path segments will be
+            visible because they will be pencil then.
+            <p>
+            To achieve a simple stroke: one offset should be (+width/2),
+            and the other offset should be (-width/2).</dd>
+<dd><code>offset2</code> - the offset of the other side of the traced shape. This side of
+            shape will be offset by: <br>
+            (+offset2*cos(angle), +offset2*sin(angle) )</dd>
 <dd><code>destination</code> - the destination for the data to write.</dd>
 </dl>
 </li>
@@ -298,23 +308,26 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>angle</code> - the angle of the nib in this path.</dd>
-<dd><code>offset1</code> - the offset of one side of the traced shape.
- One side of shape you trace will be offset by:
- <br>(+offset1*cos(angle), +offset1*sin(angle) )
- <p>It is possible for this value to be zero, which means one
- side of this path will exactly line up with the original shape
- being traced.
- <p>If both offsets are equal: then no new path segments will be
- visible because they will be pencil then.
- <p>To achieve a simple stroke: one offset should be (+width/2),
- and the other offset should be (-width/2).</dd>
-<dd><code>offset2</code> - the offset of the other side of the traced shape.
- This side of shape will be offset by:
- <br>(+offset2*cos(angle), +offset2*sin(angle) )</dd>
+<dd><code>offset1</code> - the offset of one side of the traced shape. One side of shape
+            you trace will be offset by: <br>
+            (+offset1*cos(angle), +offset1*sin(angle) )
+            <p>
+            It is possible for this value to be zero, which means one side
+            of this path will exactly line up with the original shape
+            being traced.
+            <p>
+            If both offsets are equal: then no new path segments will be
+            visible because they will be pencil then.
+            <p>
+            To achieve a simple stroke: one offset should be (+width/2),
+            and the other offset should be (-width/2).</dd>
+<dd><code>offset2</code> - the offset of the other side of the traced shape. This side of
+            shape will be offset by: <br>
+            (+offset2*cos(angle), +offset2*sin(angle) )</dd>
 <dd><code>dest1</code> - the destination for half of the calligraphic shape.</dd>
-<dd><code>dest2</code> - the destination for the other half.  This may be the
- same as <code>dest1</code> if you plan on painting this path
- at the same time with the same fill.</dd>
+<dd><code>dest2</code> - the destination for the other half. This may be the same as
+            <code>dest1</code> if you plan on painting this path at the
+            same time with the same fill.</dd>
 </dl>
 </li>
 </ul>
@@ -354,7 +367,8 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <pre>public&nbsp;void&nbsp;lineTo(float&nbsp;x,
                    float&nbsp;y)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html#lineTo-float-float-">PathWriter</a></code></span></div>
-<div class="block">Adds a point to the path by drawing a straight line from the current coordinates to the new specified coordinates.</div>
+<div class="block">Adds a point to the path by drawing a straight line from the current
+ coordinates to the new specified coordinates.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/PathWriter.html#lineTo-float-float-">lineTo</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></code></dd>
@@ -375,7 +389,10 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
                    float&nbsp;x,
                    float&nbsp;y)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html#quadTo-float-float-float-float-">PathWriter</a></code></span></div>
-<div class="block">Adds a curved segment, defined by two new points, to the path by drawing a Quadratic curve that intersects both the current coordinates and the coordinates (x2, y2), using the specified point (x1, y1) as a quadratic parametric control point.</div>
+<div class="block">Adds a curved segment, defined by two new points, to the path by drawing
+ a Quadratic curve that intersects both the current coordinates and the
+ coordinates (x2, y2), using the specified point (x1, y1) as a quadratic
+ parametric control point.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/PathWriter.html#quadTo-float-float-float-float-">quadTo</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></code></dd>
@@ -400,7 +417,10 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
                     float&nbsp;x,
                     float&nbsp;y)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html#curveTo-float-float-float-float-float-float-">PathWriter</a></code></span></div>
-<div class="block">Adds a curved segment, defined by three new points, to the path by drawing a Bezier curve that intersects both the current coordinates and the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2) as Bezier control points.</div>
+<div class="block">Adds a curved segment, defined by three new points, to the path by
+ drawing a Bezier curve that intersects both the current coordinates and
+ the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2)
+ as Bezier control points.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/PathWriter.html#curveTo-float-float-float-float-float-float-">curveTo</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></code></dd>
@@ -422,7 +442,8 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <h4>closePath</h4>
 <pre>public&nbsp;void&nbsp;closePath()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html#closePath--">PathWriter</a></code></span></div>
-<div class="block">Closes the current subpath by drawing a straight line back to the coordinates of the last moveTo.</div>
+<div class="block">Closes the current subpath by drawing a straight line back to the
+ coordinates of the last moveTo.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/PathWriter.html#closePath--">closePath</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></code></dd>
@@ -438,8 +459,9 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <pre>public&nbsp;void&nbsp;write(java.awt.Shape&nbsp;s)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html#write-java.awt.Shape-">PathWriter</a></code></span></div>
 <div class="block">Writes a shape.
- <P>This iterates through the shape and makes the appropriate
- calls to <code>moveTo()</code>, <code>curveTo()</code>, etc.</div>
+ <P>
+ This iterates through the shape and makes the appropriate calls to
+ <code>moveTo()</code>, <code>curveTo()</code>, etc.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/geom/PathWriter.html#write-java.awt.Shape-">write</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></code></dd>
@@ -458,12 +480,14 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html#flush--">PathWriter</a></code></span></div>
 <div class="block">This guarantees that this writer has flushed all currently written
  information.
- <P>For example, some writers may need to perform complex calculations
- and re-organize shapes.  Or some writers may simply be buffering
- path instructions to better manage memory.  Calling this method
- guarantees that all path instructions be immediately processed.
- <P>Because some writers may be manipulating path data you should
- <i>not call this method</i> until all shape data has been written.</div>
+ <P>
+ For example, some writers may need to perform complex calculations and
+ re-organize shapes. Or some writers may simply be buffering path
+ instructions to better manage memory. Calling this method guarantees that
+ all path instructions be immediately processed.
+ <P>
+ Because some writers may be manipulating path data you should <i>not call
+ this method</i> until all shape data has been written.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/PathWriter.html#flush--">flush</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></code></dd>

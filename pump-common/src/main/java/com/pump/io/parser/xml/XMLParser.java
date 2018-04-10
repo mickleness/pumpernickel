@@ -36,8 +36,9 @@ public class XMLParser extends Parser {
 		}
 
 		/**
-		 * Return true if this token begins "</". For example the tag "<name>"
-		 * is an opening tag, and the tag "</name>" is a closing tag.
+		 * Return true if this token begins "&lt;/". For example the tag
+		 * "&lt;name&gt;" is an opening tag, and the tag "&lt;/name&gt;" is a
+		 * closing tag.
 		 * 
 		 * @return
 		 */

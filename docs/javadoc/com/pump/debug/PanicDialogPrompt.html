@@ -115,15 +115,19 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">PanicDialogPrompt</span>
 extends java.lang.Object
 implements <a href="../../../com/pump/debug/AWTPanicListener.html" title="interface in com.pump.debug">AWTPanicListener</a></pre>
-<div class="block">This controversial class launches a new process to ask the user
- if they want to try to abort the event dispatch thread (by calling Thread.stop()).
- <P>There are several legitimate reasons to disparage this class:
- <ul><li>Thread.stop() has been deprecated for ages, and is unsafe.</li>
+<div class="block">This controversial class launches a new process to ask the user if they want
+ to try to abort the event dispatch thread (by calling Thread.stop()).
+ <P>
+ There are several legitimate reasons to disparage this class:
+ <ul>
+ <li>Thread.stop() has been deprecated for ages, and is unsafe.</li>
  <li>Launching another process is a tacky solution.</li>
- <li>The dialog that results is hard for a user to understand.</li></ul>
- <P>... and the list goes on.  That being said: this class has saved my program
- before.  (That is: the AWT thread was locked -- because of my own programming
- blunders -- and this class perked up and restored control for me.  As a result
+ <li>The dialog that results is hard for a user to understand.</li>
+ </ul>
+ <P>
+ ... and the list goes on. That being said: this class has saved my program
+ before. (That is: the AWT thread was locked -- because of my own programming
+ blunders -- and this class perked up and restored control for me. As a result
  I didn't lose saved work!)</div>
 </li>
 </ul>
@@ -182,8 +186,8 @@ implements <a href="../../../com/pump/debug/AWTPanicListener.html" title="interf
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/debug/PanicDialogPrompt.html#askToStopAWTThread-java.lang.String-">askToStopAWTThread</a></span>(java.lang.String&nbsp;applicationName)</code>
-<div class="block">This launches another process to prompt the user to cancel
- the current activity.</div>
+<div class="block">This launches another process to prompt the user to cancel the current
+ activity.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -193,16 +197,16 @@ implements <a href="../../../com/pump/debug/AWTPanicListener.html" title="interf
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/debug/PanicDialogPrompt.html#main-java.lang.String:A-">main</a></span>(java.lang.String[]&nbsp;args)</code>
-<div class="block">Pass the name of an application as the argument, and this
- main() method prompts the user with a dialog asking them
- if they want to abort whatever that application is currently doing.</div>
+<div class="block">Pass the name of an application as the argument, and this main() method
+ prompts the user with a dialog asking them if they want to abort whatever
+ that application is currently doing.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/debug/PanicDialogPrompt.html#stopAWTThread--">stopAWTThread</a></span>()</code>
-<div class="block">This uses the unsafe <code>Thread.stop()</code> method
- on the AWT thread to try to regain control of the application.</div>
+<div class="block">This uses the unsafe <code>Thread.stop()</code> method on the AWT thread
+ to try to regain control of the application.</div>
 </td>
 </tr>
 </table>
@@ -268,9 +272,9 @@ implements <a href="../../../com/pump/debug/AWTPanicListener.html" title="interf
 <li class="blockList">
 <h4>main</h4>
 <pre>public static&nbsp;void&nbsp;main(java.lang.String[]&nbsp;args)</pre>
-<div class="block">Pass the name of an application as the argument, and this
- main() method prompts the user with a dialog asking them
- if they want to abort whatever that application is currently doing.</div>
+<div class="block">Pass the name of an application as the argument, and this main() method
+ prompts the user with a dialog asking them if they want to abort whatever
+ that application is currently doing.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>args</code> - the application's arguments. (This is unused.)</dd>
@@ -297,14 +301,13 @@ implements <a href="../../../com/pump/debug/AWTPanicListener.html" title="interf
 <li class="blockList">
 <h4>askToStopAWTThread</h4>
 <pre>public static&nbsp;void&nbsp;askToStopAWTThread(java.lang.String&nbsp;applicationName)</pre>
-<div class="block">This launches another process to prompt the user to cancel
- the current activity.  If the other process indicates that
- the user wants to cancel, then this method will
- call <code>stopAWTThread</code></div>
+<div class="block">This launches another process to prompt the user to cancel the current
+ activity. If the other process indicates that the user wants to cancel,
+ then this method will call <code>stopAWTThread</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>applicationName</code> - the name to present to the user
- of the application this might affect.</dd>
+<dd><code>applicationName</code> - the name to present to the user of the application this might
+            affect.</dd>
 </dl>
 </li>
 </ul>
@@ -315,8 +318,8 @@ implements <a href="../../../com/pump/debug/AWTPanicListener.html" title="interf
 <li class="blockList">
 <h4>stopAWTThread</h4>
 <pre>public static&nbsp;void&nbsp;stopAWTThread()</pre>
-<div class="block">This uses the unsafe <code>Thread.stop()</code> method
- on the AWT thread to try to regain control of the application.</div>
+<div class="block">This uses the unsafe <code>Thread.stop()</code> method on the AWT thread
+ to try to regain control of the application.</div>
 </li>
 </ul>
 </li>

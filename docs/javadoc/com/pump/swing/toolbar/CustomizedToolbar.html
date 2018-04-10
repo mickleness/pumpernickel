@@ -134,20 +134,28 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">CustomizedToolbar</span>
 extends javax.swing.JPanel</pre>
-<div class="block">This toolbar mimick's Apple's standard toolbars and their
- drag-and-drop customization.
- <P>There are certain assumptions made about this component, such as:
- <ul><LI>This will be given lots of horizontal space.</li>
- <LI>Components you try to display in it will be of similar "reasonable" heights.</li>
+<div class="block">This toolbar mimick's Apple's standard toolbars and their drag-and-drop
+ customization.
+ <P>
+ There are certain assumptions made about this component, such as:
+ <ul>
+ <LI>This will be given lots of horizontal space.</li>
+ <LI>Components you try to display in it will be of similar "reasonable"
+ heights.</li>
  <LI>This will be used in a JFrame.</li>
- <LI>You will not need to call <code>setVisible()</code> on components in this toolbar.</LI></ul>
- <P>There is room for improvement in this implementation.  As of this writing:
- <ul><LI>The "show icon/text" combobox is not yet implemented.</li>
+ <LI>You will not need to call <code>setVisible()</code> on components in this
+ toolbar.</LI>
+ </ul>
+ <P>
+ There is room for improvement in this implementation. As of this writing:
+ <ul>
+ <LI>The "show icon/text" combobox is not yet implemented.</li>
  <LI>Cocoa toolbars elegantly cut off components and have left/right scrolling
  arrows when the toolbar is not given enough horizontal space: this toolbar
  currently does not address this problem.</li>
- <LI>Also there are at least 2 TODO notes in this class itself, commenting
- on aesthetic bugs.</LI></ul></div>
+ <LI>Also there are at least 2 TODO notes in this class itself, commenting on
+ aesthetic bugs.</LI>
+ </ul></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../serialized-form.html#com.pump.swing.toolbar.CustomizedToolbar">Serialized Form</a></dd>
@@ -318,17 +326,16 @@ extends javax.swing.JPanel</pre>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>javax.swing.JComponent[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/swing/toolbar/CustomizedToolbar.html#getPossibleComponents--">getPossibleComponents</a></span>()</code>
-<div class="block">Returns the components that may or may not be visible
- in this toolbar, depending on how the user has configured
- this toolbar.</div>
+<div class="block">Returns the components that may or may not be visible in this toolbar,
+ depending on how the user has configured this toolbar.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/swing/toolbar/CustomizedToolbar.html#isDarkBackground-java.awt.Window-">isDarkBackground</a></span>(java.awt.Window&nbsp;w)</code>
-<div class="block">Are we painting against a dark background?
- This checks the JVM version, the os, and whether the window's ultimate parent
- uses Apple's brush-metal-look.</div>
+<div class="block">Are we painting against a dark background? This checks the JVM version,
+ the os, and whether the window's ultimate parent uses Apple's
+ brush-metal-look.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -437,24 +444,31 @@ extends javax.swing.JPanel</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>components</code> - the components that may be in this toolbar.
- <P>Each component must have a unique name; this is how the order
- of each component is stored between sessions.</dd>
-<dd><code>defaults</code> - the default order of the components.  This array
- should contain the names of the components in the previous argument.
- <P>These defaults are used when there are no preferences to indicate how to lay
- out this toolbar.
- <P>Special/reserved names include:
- <ul><LI>"-": used to indicate a JSeparator.</li>
- <LI>" ": used to indicate a regular gap.</li>
- <LI>"\t": used to indicate a flexible gap.</LI></ul>
- <P>You can use as many of these special names as you like, but actual
- components in the previous argument should only be referenced once.</dd>
-<dd><code>toolbarName</code> - a unique name for this type of toolbar.  This name
- serves as a key in the preferences to retrieve the order of the components
- in this toolbar.  Most applications will only have 1 type of customized
- toolbar.  Apple's Mail application has at least 2 toolbars: one
- in the main window, and one when you compose a new message.  So
- each type of window should use a unique name.</dd>
+            <P>
+            Each component must have a unique name; this is how the order
+            of each component is stored between sessions.</dd>
+<dd><code>defaults</code> - the default order of the components. This array should contain
+            the names of the components in the previous argument.
+            <P>
+            These defaults are used when there are no preferences to
+            indicate how to lay out this toolbar.
+            <P>
+            Special/reserved names include:
+            <ul>
+            <LI>"-": used to indicate a JSeparator.</li>
+            <LI>" ": used to indicate a regular gap.</li>
+            <LI>"\t": used to indicate a flexible gap.</LI>
+            </ul>
+            <P>
+            You can use as many of these special names as you like, but
+            actual components in the previous argument should only be
+            referenced once.</dd>
+<dd><code>toolbarName</code> - a unique name for this type of toolbar. This name serves as a
+            key in the preferences to retrieve the order of the components
+            in this toolbar. Most applications will only have 1 type of
+            customized toolbar. Apple's Mail application has at least 2
+            toolbars: one in the main window, and one when you compose a
+            new message. So each type of window should use a unique name.</dd>
 </dl>
 </li>
 </ul>
@@ -493,9 +507,9 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>isDarkBackground</h4>
 <pre>protected static&nbsp;boolean&nbsp;isDarkBackground(java.awt.Window&nbsp;w)</pre>
-<div class="block">Are we painting against a dark background?
- This checks the JVM version, the os, and whether the window's ultimate parent
- uses Apple's brush-metal-look.</div>
+<div class="block">Are we painting against a dark background? This checks the JVM version,
+ the os, and whether the window's ultimate parent uses Apple's
+ brush-metal-look.</div>
 </li>
 </ul>
 <a name="getDefaultContents--">
@@ -514,9 +528,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getPossibleComponents</h4>
 <pre>public&nbsp;javax.swing.JComponent[]&nbsp;getPossibleComponents()</pre>
-<div class="block">Returns the components that may or may not be visible
- in this toolbar, depending on how the user has configured
- this toolbar.</div>
+<div class="block">Returns the components that may or may not be visible in this toolbar,
+ depending on how the user has configured this toolbar.</div>
 </li>
 </ul>
 <a name="endDrag-java.awt.dnd.DragSourceDropEvent-">
@@ -575,9 +588,9 @@ extends javax.swing.JPanel</pre>
 <h4>getComponent</h4>
 <pre>protected&nbsp;javax.swing.JComponent&nbsp;getComponent(java.lang.String&nbsp;name)</pre>
 <div class="block">Gets the component that has a certain name.
- <P>The argument should be a name of a component that
- was passed when you created this toolbar, or one
- of the special names: "-", " ", "\t"</div>
+ <P>
+ The argument should be a name of a component that was passed when you
+ created this toolbar, or one of the special names: "-", " ", "\t"</div>
 </li>
 </ul>
 <a name="displayDialog-int-">
@@ -588,16 +601,17 @@ extends javax.swing.JPanel</pre>
 <h4>displayDialog</h4>
 <pre>public&nbsp;void&nbsp;displayDialog(int&nbsp;dialogMaxWidth)</pre>
 <div class="block">Displays the dialog that lets the user customize this component.
- <P>This covers the underlying JFrame in a transparent sheet so
- the toolbar can also send/receive drag and drop events appropriately,
- and to block out the rest of the GUI so the dialog appears modal.
- (It is not technically modal, because otherwise we would have trouble
- interacting with the toolbar underneath.)</div>
+ <P>
+ This covers the underlying JFrame in a transparent sheet so the toolbar
+ can also send/receive drag and drop events appropriately, and to block
+ out the rest of the GUI so the dialog appears modal. (It is not
+ technically modal, because otherwise we would have trouble interacting
+ with the toolbar underneath.)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dialogMaxWidth</code> - this is the width used to decide when to wrap
- rows of components.  Depending on the size of your toolbar, and the 
- platform, you may want to change this number.</dd>
+<dd><code>dialogMaxWidth</code> - this is the width used to decide when to wrap rows of
+            components. Depending on the size of your toolbar, and the
+            platform, you may want to change this number.</dd>
 </dl>
 </li>
 </ul>

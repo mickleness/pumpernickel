@@ -134,21 +134,23 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">TransitionTabbedPane</span>
 extends javax.swing.JTabbedPane</pre>
-<div class="block">This is a <code>JTabbedPane</code> that applies a transition
- every time the selected tab changes.
- <P>By default this uses a wipe transition, but any <code>Transition2D</code>
- can be applied if you override the <code>getTransition2D()</code> method.
+<div class="block">This is a <code>JTabbedPane</code> that applies a transition every time the
+ selected tab changes.
+ <P>
+ By default this uses a wipe transition, but any <code>Transition2D</code> can
+ be applied if you override the <code>getTransition2D()</code> method.
  <H3>Implementation</H3>
- Each time a new component is added to this tabbed pane, it is enveloped
- in a special container.  This container overrides its <code>paint()</code>
- method, so when a transition should be applied only that transition is painted.
+ Each time a new component is added to this tabbed pane, it is enveloped in a
+ special container. This container overrides its <code>paint()</code> method,
+ so when a transition should be applied only that transition is painted.
  However, because it is only a container: <code>MouseEvents</code> will always
  be delegated directly to the components (even though they may not appear in
  their "real" location until the transition finishes).
- <P>The special envelope container will be returned if you call:
- <BR><code>myTabs.getComponentAt(index)</code>
- <BR>So if you use this method to traverse your GUI, you should be aware that
- the components you directly added aren't returned here in their original form.
+ <P>
+ The special envelope container will be returned if you call: <BR>
+ <code>myTabs.getComponentAt(index)</code> <BR>
+ So if you use this method to traverse your GUI, you should be aware that the
+ components you directly added aren't returned here in their original form.
  But this is not a typical call for programmers to make, so I don't think this
  will be a major problem.</div>
 <dl>
@@ -335,8 +337,8 @@ extends javax.swing.JTabbedPane</pre>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/TransitionTabbedPane.html#indexOfComponent-java.awt.Component-">indexOfComponent</a></span>(java.awt.Component&nbsp;component)</code>
-<div class="block">This checks both the envelope container and the contents
- of the envelope for the component provided.</div>
+<div class="block">This checks both the envelope container and the contents of the envelope
+ for the component provided.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -474,9 +476,11 @@ extends javax.swing.JTabbedPane</pre>
 <pre>protected&nbsp;<a href="../../../com/pump/image/transition/Transition2D.html" title="class in com.pump.image.transition">Transition2D</a>&nbsp;getTransition2D(int&nbsp;prevSelectedIndex,
                                        int&nbsp;newSelectedIndex)</pre>
 <div class="block">This returns a wipe transition.
- <P>The wipe moves to the left if the old index is less than the
- new index, or right otherwise.
- <P>Subclasses can override this method to implement their own transitions.</div>
+ <P>
+ The wipe moves to the left if the old index is less than the new index,
+ or right otherwise.
+ <P>
+ Subclasses can override this method to implement their own transitions.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>prevSelectedIndex</code> - the initial index.</dd>
@@ -635,8 +639,8 @@ extends javax.swing.JTabbedPane</pre>
 <li class="blockList">
 <h4>indexOfComponent</h4>
 <pre>public&nbsp;int&nbsp;indexOfComponent(java.awt.Component&nbsp;component)</pre>
-<div class="block">This checks both the envelope container and the contents
- of the envelope for the component provided.</div>
+<div class="block">This checks both the envelope container and the contents of the envelope
+ for the component provided.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>indexOfComponent</code>&nbsp;in class&nbsp;<code>javax.swing.JTabbedPane</code></dd>

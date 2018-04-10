@@ -108,10 +108,11 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>K</code> - the type of bean ids. For example, if all beans are identified
- by a unique UID this may be a String. This could also be a class that encapsulates
- a bean type and a bean name (so when ID might be "Student" and "123", which would be
- separate than "Staff" and "123").</dd>
+<dd><code>K</code> - the type of bean ids. For example, if all beans are identified by
+            a unique UID this may be a String. This could also be a class that
+            encapsulates a bean type and a bean name (so when ID might be
+            "Student" and "123", which would be separate than "Staff" and
+            "123").</dd>
 </dl>
 <dl>
 <dt>All Implemented Interfaces:</dt>
@@ -126,8 +127,8 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">AbstractBranch&lt;K&gt;</span>
 extends java.lang.Object
 implements <a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch">Branch</a>&lt;K&gt;</pre>
-<div class="block">This is a helper class implements or redirects a few basic methods
- of the <a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch"><code>Branch</code></a> interface.</div>
+<div class="block">This is a helper class implements or redirects a few basic methods of the
+ <a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch"><code>Branch</code></a> interface.</div>
 </li>
 </ul>
 </div>
@@ -420,15 +421,16 @@ implements <a href="../../../../com/pump/data/branch/Branch.html" title="interfa
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/data/branch/Branch.html#setBean-K-java.util.Map-boolean-">setBean</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch">Branch</a>&lt;<a href="../../../../com/pump/data/branch/AbstractBranch.html" title="type parameter in AbstractBranch">K</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>beanId</code> - the id of the bean to modify. If this bean does not
- already exist, a new bean with this ID is created.</dd>
-<dd><code>beanData</code> - the data to store in this bean. This may be empty, but
- it may not be null.</dd>
-<dd><code>completeReplacement</code> - if false then the incoming data is merged with
- any existing data. If true then any existing data is deleted and replaced
- with the previous argument.</dd>
+<dd><code>beanId</code> - the id of the bean to modify. If this bean does not already
+            exist, a new bean with this ID is created.</dd>
+<dd><code>beanData</code> - the data to store in this bean. This may be empty, but it may
+            not be null.</dd>
+<dd><code>completeReplacement</code> - if false then the incoming data is merged with any existing
+            data. If true then any existing data is deleted and replaced
+            with the previous argument.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if this created a bean, false if it modified an existing bean.</dd>
+<dd>true if this created a bean, false if it modified an existing
+         bean.</dd>
 </dl>
 </li>
 </ul>
@@ -542,8 +544,8 @@ implements <a href="../../../../com/pump/data/branch/Branch.html" title="interfa
 <dd><code>beanId</code> - the bean to get the field of.</dd>
 <dd><code>fieldName</code> - the name of the field to get.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the indicated field from the indicated bean,
- or null if that field is undefined.</dd>
+<dd>the indicated field from the indicated bean, or null if that
+         field is undefined.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/data/branch/MissingBeanException.html" title="class in com.pump.data.branch">MissingBeanException</a></code> - if the beanId provided isn't a recognized bean.</dd>
 </dl>
@@ -561,10 +563,10 @@ implements <a href="../../../../com/pump/data/branch/Branch.html" title="interfa
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/data/branch/Branch.html#getState-K-">Branch</a></code></span></div>
 <div class="block">Return the state of a bean relative to this branch.
  <p>
- For example, if this branch is aware of deleting this bean,
- then it may return <code>DELETED</code>. However if this branch created
- this bean, deleted it, and then saved to its parent branch:
- the parent branch may return <code>UNDEFINED</code>.
+ For example, if this branch is aware of deleting this bean, then it may
+ return <code>DELETED</code>. However if this branch created this bean,
+ deleted it, and then saved to its parent branch: the parent branch may
+ return <code>UNDEFINED</code>.
  <p>
  If a bean was created in a parent branch, then this may return
  <code>EXISTS</code>, but if a bean was created in this branch (and it is
@@ -601,8 +603,8 @@ implements <a href="../../../../com/pump/data/branch/Branch.html" title="interfa
 <dd><code>beanId</code> - the bean to get the field of.</dd>
 <dd><code>field</code> - the field to get.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the indicated field from the indicated bean,
- or null if that field is undefined.</dd>
+<dd>the indicated field from the indicated bean, or null if that
+         field is undefined.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/data/branch/MissingBeanException.html" title="class in com.pump.data.branch">MissingBeanException</a></code> - if the beanId provided isn't a recognized bean.</dd>
 </dl>
@@ -628,17 +630,18 @@ implements <a href="../../../../com/pump/data/branch/Branch.html" title="interfa
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>beanId</code> - the bean to get the field of.</dd>
 <dd><code>field</code> - the field to get.</dd>
-<dd><code>revision</code> - the revision for which the field value should be dated. For example
- if a field starts out with the value of "abc" at revision #1, and then at revision #10 it
- becomes "xyz", then if you pass revision #5 to this method: it will return "abc".
- <p>
- If this is null: the current value will be returned.
- <p>
- This is used by branches to reconstruct a model of a bean based on exactly when
- the branch was created.</dd>
+<dd><code>revision</code> - the revision for which the field value should be dated. For
+            example if a field starts out with the value of "abc" at
+            revision #1, and then at revision #10 it becomes "xyz", then
+            if you pass revision #5 to this method: it will return "abc".
+            <p>
+            If this is null: the current value will be returned.
+            <p>
+            This is used by branches to reconstruct a model of a bean
+            based on exactly when the branch was created.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the indicated field from the indicated bean as of the indicated revision,
- or null if that field is undefined.</dd>
+<dd>the indicated field from the indicated bean as of the indicated
+         revision, or null if that field is undefined.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/data/branch/MissingBeanException.html" title="class in com.pump.data.branch">MissingBeanException</a></code> - if the beanId provided isn't a recognized bean.</dd>
 </dl>
@@ -659,11 +662,12 @@ implements <a href="../../../../com/pump/data/branch/Branch.html" title="interfa
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/data/branch/Branch.html#setField-K-com.pump.data.Key-V-">Branch</a></code></span></div>
 <div class="block">Assign a field for a bean.
  <p>
- This method will consult the key's <a href="../../../../com/pump/data/Key.html#getBoundsCheckers--"><code>bounds checkers</code></a>
- to validate the incoming value.
+ This method will consult the key's
+ <a href="../../../../com/pump/data/Key.html#getBoundsCheckers--"><code>bounds checkers</code></a> to validate
+ the incoming value.
  <p>
- Because this performs additional validations and is parameterized, this is the
- prefered method to set field data if possible.</div>
+ Because this performs additional validations and is parameterized, this
+ is the prefered method to set field data if possible.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/data/branch/Branch.html#setField-K-com.pump.data.Key-V-">setField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch">Branch</a>&lt;<a href="../../../../com/pump/data/branch/AbstractBranch.html" title="type parameter in AbstractBranch">K</a>&gt;</code></dd>
@@ -672,7 +676,8 @@ implements <a href="../../../../com/pump/data/branch/Branch.html" title="interfa
 <dd><code>field</code> - the field to modify.</dd>
 <dd><code>newValue</code> - the new value to assign to this field (may be null).</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the previous value this field held, or null if it was previously undefined.</dd>
+<dd>the previous value this field held, or null if it was previously
+         undefined.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/data/branch/MissingBeanException.html" title="class in com.pump.data.branch">MissingBeanException</a></code> - if the beanId provided isn't a recognized bean.</dd>
 </dl>
@@ -700,8 +705,8 @@ implements <a href="../../../../com/pump/data/branch/Branch.html" title="interfa
 <dd><code>field</code> - the field to examine.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the last revision in which a particular field was modified for a
- given bean, or null if there is no record in this branch of any such
- modification.</dd>
+         given bean, or null if there is no record in this branch of any
+         such modification.</dd>
 </dl>
 </li>
 </ul>

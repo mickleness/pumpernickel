@@ -119,13 +119,14 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">TransformedTexturePaint</span>
 extends java.lang.Object
 implements java.awt.Paint</pre>
-<div class="block">This effectively extends <code>TexturePaint</code> to support
- arbitrary <code>AffineTransforms</code> inside this paint object.
- <P>This does not technically extend the <code>TexturePaint</code>
- class, although it does relay most calls to an internal
- <code>TexturePaint</code>.  This is because some graphics pipelines
- (notably Java 1.4 on Mac) will fail to work the paint context
- correctly if this class officially extends <code>TexturePaint</code>.</div>
+<div class="block">This effectively extends <code>TexturePaint</code> to support arbitrary
+ <code>AffineTransforms</code> inside this paint object.
+ <P>
+ This does not technically extend the <code>TexturePaint</code> class,
+ although it does relay most calls to an internal <code>TexturePaint</code>.
+ This is because some graphics pipelines (notably Java 1.4 on Mac) will fail
+ to work the paint context correctly if this class officially extends
+ <code>TexturePaint</code>.</div>
 </li>
 </ul>
 </div>

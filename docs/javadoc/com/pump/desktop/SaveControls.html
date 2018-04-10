@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":6,"i10":10,"i11":10,"i12":10,"i13":6,"i14":6,"i15":10,"i16":6,"i17":6,"i18":10,"i19":10,"i20":10,"i21":10};
+var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":6,"i8":10,"i9":10,"i10":10,"i11":6,"i12":6,"i13":10,"i14":10,"i15":6,"i16":6,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -129,14 +129,6 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected javax.swing.AbstractAction</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#exitAction">exitAction</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected javax.swing.JMenuItem</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#exitItem">exitItem</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>protected javax.swing.JFrame</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#frame">frame</a></span></code>&nbsp;</td>
 </tr>
@@ -151,22 +143,26 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#KEY_SAVE_CONTROLS">KEY_SAVE_CONTROLS</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#multipleDocuments">multipleDocuments</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected javax.swing.AbstractAction</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#openAction">openAction</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected javax.swing.JMenuItem</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#openItem">openItem</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../com/pump/swing/RecentMenu.html" title="class in com.pump.swing">RecentMenu</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#recentMenu">recentMenu</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected javax.swing.AbstractAction</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#saveAction">saveAction</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected javax.swing.JMenuItem</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#saveItem">saveItem</a></span></code>&nbsp;</td>
 </tr>
@@ -213,83 +209,91 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#get-javax.swing.JFrame-">get</a></span>(javax.swing.JFrame&nbsp;f)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>javax.swing.AbstractAction</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getExitAction--">getExitAction</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>javax.swing.JMenuItem</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getExitMenuItem--">getExitMenuItem</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getFile--">getFile</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected java.io.FilenameFilter</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getFilenameFilter-java.lang.String...-">getFilenameFilter</a></span>(java.lang.String...&nbsp;documentFileExtension)</code>
-<div class="block">Return a FilenameFilter for the document file extensions, or null if all files should be accepted.</div>
+<div class="block">Return a FilenameFilter for the document file extensions, or null if all
+ files should be accepted.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>javax.swing.JFrame</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getFrame--">getFrame</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>javax.swing.AbstractAction</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getOpenAction--">getOpenAction</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>javax.swing.JMenuItem</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getOpenMenuItem--">getOpenMenuItem</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>abstract java.lang.String[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getReadableDocumentFileExtensions--">getReadableDocumentFileExtensions</a></span>()</code>
-<div class="block">Return the document file extensions for files this SaveControls interacts with.</div>
+<div class="block">Return the document file extensions for files this SaveControls interacts
+ with.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../com/pump/swing/RecentMenu.html" title="class in com.pump.swing">RecentMenu</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getRecentMenu--">getRecentMenu</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>javax.swing.AbstractAction</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getSaveAction--">getSaveAction</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>javax.swing.JMenuItem</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getSaveMenuItem--">getSaveMenuItem</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>abstract java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#getWriteableDocumentFileExtension--">getWriteableDocumentFileExtension</a></span>()</code>
 <div class="block">Return the document file extension that should be used for new saves.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#isDocumentDirty--">isDocumentDirty</a></span>()</code>
 <div class="block">Returns whether this window contains unsaved changes.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#isMultipleDocuments--">isMultipleDocuments</a></span>()</code>
+<div class="block">Return true if this frame is capable of representing multiple documents
+ at once.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#openFile--">openFile</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#openFile-java.io.File-">openFile</a></span>(java.io.File&nbsp;file)</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#saveFile-java.io.File-com.pump.swing.Cancellable-">saveFile</a></span>(java.io.File&nbsp;f,
         <a href="../../../com/pump/swing/Cancellable.html" title="interface in com.pump.swing">Cancellable</a>&nbsp;cancellable)</code>
 <div class="block">Save the document this window represents to the argument provided.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#setFile-java.io.File-">setFile</a></span>(java.io.File&nbsp;f)</code>&nbsp;</td>
+</tr>
+<tr id="i18" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/SaveControls.html#setMultipleDocuments-boolean-">setMultipleDocuments</a></span>(boolean&nbsp;multipleDocuments)</code>
+<div class="block">Set whether this fram should support having multiple documents open at
+ once.</div>
+</td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>protected java.io.File</code></td>
@@ -341,12 +345,14 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>KEY_FILE</h4>
 <pre>public static final&nbsp;java.lang.String KEY_FILE</pre>
-<div class="block">This client property of the JRootPane should map to a java.io.File.
- This is how this object identifies the File that we're using, and on
- Macs using this key correctly updates the titlebar of frames.</div>
+<div class="block">This client property of the JRootPane should map to a java.io.File. This
+ is how this object identifies the File that we're using, and on Macs
+ using this key correctly updates the titlebar of frames.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="https://developer.apple.com/library/mac/technotes/tn2007/tn2196.html#WINDOW_DOCUMENTFILE">Apple Tech Note 2196</a>, 
+<dd><a
+      href="https://developer.apple.com/library/mac/technotes/tn2007/tn2196.html#WINDOW_DOCUMENTFILE">Apple
+      Tech Note 2196</a>, 
 <a href="../../../constant-values.html#com.pump.desktop.SaveControls.KEY_FILE">Constant Field Values</a></dd>
 </dl>
 </li>
@@ -378,15 +384,6 @@ extends java.lang.Object</pre>
 <pre>protected&nbsp;javax.swing.AbstractAction saveAction</pre>
 </li>
 </ul>
-<a name="exitAction">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>exitAction</h4>
-<pre>protected&nbsp;javax.swing.AbstractAction exitAction</pre>
-</li>
-</ul>
 <a name="openItem">
 <!--   -->
 </a>
@@ -405,15 +402,6 @@ extends java.lang.Object</pre>
 <pre>protected&nbsp;javax.swing.JMenuItem saveItem</pre>
 </li>
 </ul>
-<a name="exitItem">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>exitItem</h4>
-<pre>protected&nbsp;javax.swing.JMenuItem exitItem</pre>
-</li>
-</ul>
 <a name="recentMenu">
 <!--   -->
 </a>
@@ -426,10 +414,19 @@ extends java.lang.Object</pre>
 <a name="frame">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>frame</h4>
 <pre>protected&nbsp;javax.swing.JFrame frame</pre>
+</li>
+</ul>
+<a name="multipleDocuments">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>multipleDocuments</h4>
+<pre>protected&nbsp;boolean multipleDocuments</pre>
 </li>
 </ul>
 </li>
@@ -489,12 +486,40 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getReadableDocumentFileExtensions</h4>
 <pre>public abstract&nbsp;java.lang.String[]&nbsp;getReadableDocumentFileExtensions()</pre>
-<div class="block">Return the document file extensions for files this SaveControls interacts with.
- For example "jpg" or "txt".</div>
+<div class="block">Return the document file extensions for files this SaveControls interacts
+ with. For example "jpg" or "txt".</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the document file extensions for files this SaveControls interacts with.</dd>
+<dd>the document file extensions for files this SaveControls
+         interacts with.</dd>
 </dl>
+</li>
+</ul>
+<a name="setMultipleDocuments-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setMultipleDocuments</h4>
+<pre>public&nbsp;void&nbsp;setMultipleDocuments(boolean&nbsp;multipleDocuments)</pre>
+<div class="block">Set whether this fram should support having multiple documents open at
+ once.</div>
+</li>
+</ul>
+<a name="isMultipleDocuments--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isMultipleDocuments</h4>
+<pre>public&nbsp;boolean&nbsp;isMultipleDocuments()</pre>
+<div class="block">Return true if this frame is capable of representing multiple documents
+ at once.
+ <p>
+ When a frame can NOT display multiple documents: the "Open..." command
+ needs to first close the current document before opening a new document.
+ (But when a frame can support multiple documents: existing documents are
+ not modified when opening a new file.)</div>
 </li>
 </ul>
 <a name="getWriteableDocumentFileExtension--">
@@ -504,7 +529,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getWriteableDocumentFileExtension</h4>
 <pre>public abstract&nbsp;java.lang.String&nbsp;getWriteableDocumentFileExtension()</pre>
-<div class="block">Return the document file extension that should be used for new saves. This may dynamically change during runtime.</div>
+<div class="block">Return the document file extension that should be used for new saves.
+ This may dynamically change during runtime.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the document file extension that should be used for new saves.</dd>
@@ -552,9 +578,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>isDocumentDirty</h4>
 <pre>public abstract&nbsp;boolean&nbsp;isDocumentDirty()</pre>
-<div class="block">Returns whether this window contains unsaved changes. This may
- be called on or off the EDT, so it needs to be fast and
- thread-safe.</div>
+<div class="block">Returns whether this window contains unsaved changes. This may be called
+ on or off the EDT, so it needs to be fast and thread-safe.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>whether this window contains unsaved changes.</dd>
@@ -571,21 +596,23 @@ extends java.lang.Object</pre>
                               <a href="../../../com/pump/swing/Cancellable.html" title="interface in com.pump.swing">Cancellable</a>&nbsp;cancellable)
                        throws <a href="../../../com/pump/UserCancelledException.html" title="class in com.pump">UserCancelledException</a>,
                               java.lang.Exception</pre>
-<div class="block">Save the document this window represents to the argument provided.
- This should never be called on the EDT, because saving may take
- an undefined amount of time.</div>
+<div class="block">Save the document this window represents to the argument provided. This
+ should never be called on the EDT, because saving may take an undefined
+ amount of time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>f</code> - the file to save to. This should never be null, because
- that would require prompting the user for a save-as dialog
- which needs to be handled on the EDT (and this call needs to be
- off the EDT). This argument may not always be the same as 
- <code>this.getFile()</code>. For example: calling <code>saveFile(newFile)</code>
- can be used to implement a "Save As..." function.</dd>
-<dd><code>cancellable</code> - an optional argument. If non-null then this method needs
- to constantly poll this object to see if the user indicated they wanted to cancel
- this operation. In that case this method should wrap up as cleanly as possible and
- throw a UserCancelledException</dd>
+<dd><code>f</code> - the file to save to. This should never be null, because that
+            would require prompting the user for a save-as dialog which
+            needs to be handled on the EDT (and this call needs to be off
+            the EDT). This argument may not always be the same as
+            <code>this.getFile()</code>. For example: calling
+            <code>saveFile(newFile)</code> can be used to implement a
+            "Save As..." function.</dd>
+<dd><code>cancellable</code> - an optional argument. If non-null then this method needs to
+            constantly poll this object to see if the user indicated they
+            wanted to cancel this operation. In that case this method
+            should wrap up as cleanly as possible and throw a
+            UserCancelledException</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../com/pump/UserCancelledException.html" title="class in com.pump">UserCancelledException</a></code> - if the user cancelled this operation</dd>
 <dd><code>java.lang.Exception</code> - if an unknown problem came up saving.</dd>
@@ -600,10 +627,9 @@ extends java.lang.Object</pre>
 <h4>tryToClose</h4>
 <pre>public&nbsp;boolean&nbsp;tryToClose()
                    throws <a href="../../../com/pump/UserCancelledException.html" title="class in com.pump">UserCancelledException</a></pre>
-<div class="block">If true then the user saved their changes as this method was called.
- If false then the user did not choose to save anything, or there was nothing
- to save.
- This may also throw a <code>UserCancelledException</code></div>
+<div class="block">If true then the user saved their changes as this method was called. If
+ false then the user did not choose to save anything, or there was nothing
+ to save. This may also throw a <code>UserCancelledException</code></div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -647,12 +673,12 @@ extends java.lang.Object</pre>
 <dd><code>dialogMode</code> - must be FileDialog.LOAD or FileDialog.SAVE</dd>
 <dd><code>dialogTitle</code> - the title of this dialog.</dd>
 <dd><code>defaultFile</code> - an optional file to initially select.</dd>
-<dd><code>documentFileExtension</code> - an optional extension to apply, or array of
- extensions to accept.
- This is used both as a file filter for this dialog and the zeroeth element is manually
- appended to the filename if necessary during a save. It is OK to leave this null/empty for
- an open dialog, but it is highly discouraged to leave this null for
- a save dialog.</dd>
+<dd><code>documentFileExtension</code> - an optional extension to apply, or array of extensions to
+            accept. This is used both as a file filter for this dialog and
+            the zeroeth element is manually appended to the filename if
+            necessary during a save. It is OK to leave this null/empty for
+            an open dialog, but it is highly discouraged to leave this
+            null for a save dialog.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the File the user chose.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -667,7 +693,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getFilenameFilter</h4>
 <pre>protected&nbsp;java.io.FilenameFilter&nbsp;getFilenameFilter(java.lang.String...&nbsp;documentFileExtension)</pre>
-<div class="block">Return a FilenameFilter for the document file extensions, or null if all files should be accepted.</div>
+<div class="block">Return a FilenameFilter for the document file extensions, or null if all
+ files should be accepted.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>documentFileExtension</code> - an optional list of file extensions we should support.</dd>
@@ -684,30 +711,13 @@ extends java.lang.Object</pre>
 <h4>showSaveDialogAndDoSave</h4>
 <pre>protected&nbsp;void&nbsp;showSaveDialogAndDoSave(java.io.File&nbsp;file)
                                 throws java.lang.Exception</pre>
-<div class="block">This is called on the EDT to save to a File. This pulls up an indeterminate progress
- bar dialog with a cancel button while the save operation is in progress.</div>
+<div class="block">This is called on the EDT to save to a File. This pulls up an
+ indeterminate progress bar dialog with a cancel button while the save
+ operation is in progress.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.Exception</code></dd>
 </dl>
-</li>
-</ul>
-<a name="getExitAction--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getExitAction</h4>
-<pre>public&nbsp;javax.swing.AbstractAction&nbsp;getExitAction()</pre>
-</li>
-</ul>
-<a name="getExitMenuItem--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getExitMenuItem</h4>
-<pre>public&nbsp;javax.swing.JMenuItem&nbsp;getExitMenuItem()</pre>
 </li>
 </ul>
 <a name="getFrame--">

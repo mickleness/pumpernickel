@@ -135,8 +135,9 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">FilePanel</span>
 extends javax.swing.JPanel</pre>
 <div class="block">A panel that helps select a file.
- <p>If launched in a JNLP, then this uses the local FileOpenService to select
- a File. Otherwise this uses the standard FileDialog (which requires this
+ <p>
+ If launched in a JNLP, then this uses the local FileOpenService to select a
+ File. Otherwise this uses the standard FileDialog (which requires this
  component be a descendant of Frame).</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -291,14 +292,16 @@ extends javax.swing.JPanel</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/FilePanel.html#doBrowse--">doBrowse</a></span>()</code>
-<div class="block">Show a browse dialog, using the current file extensions if they are defined.</div>
+<div class="block">Show a browse dialog, using the current file extensions if they are
+ defined.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../com/pump/swing/FilePanel.FileData.html" title="class in com.pump.swing">FilePanel.FileData</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/FilePanel.html#doBrowse-java.awt.Component-java.lang.String:A-">doBrowse</a></span>(java.awt.Component&nbsp;component,
         java.lang.String[]&nbsp;extensions)</code>
-<div class="block">Show a browse dialog, using the current file extensions if they are defined.</div>
+<div class="block">Show a browse dialog, using the current file extensions if they are
+ defined.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -332,7 +335,8 @@ extends javax.swing.JPanel</pre>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>javax.swing.JPanel</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/FilePanel.html#getRightPanel--">getRightPanel</a></span>()</code>
-<div class="block">Return the right panel, containing the file label, text field, and browse button.</div>
+<div class="block">Return the right panel, containing the file label, text field, and browse
+ button.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -448,10 +452,11 @@ extends javax.swing.JPanel</pre>
 <div class="block">Creates a FilePanel.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fileID</code> - the text in the identifying label on the left. Usually this will read "File:",
- or something similar.</dd>
+<dd><code>fileID</code> - the text in the identifying label on the left. Usually this
+            will read "File:", or something similar.</dd>
 <dd><code>extensions</code> - the file extensions this panel supports.</dd>
-<dd><code>otherComponents</code> - additional components to put next to the "Browse..." button (such as a throbber, or other buttons)</dd>
+<dd><code>otherComponents</code> - additional components to put next to the "Browse..." button
+            (such as a throbber, or other buttons)</dd>
 </dl>
 </li>
 </ul>
@@ -497,8 +502,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getExtensions</h4>
 <pre>public&nbsp;java.lang.String[]&nbsp;getExtensions()</pre>
-<div class="block">Return the file extensions accepted in file dialogs. This array
- may be null if not file filter is applied.</div>
+<div class="block">Return the file extensions accepted in file dialogs. This array may be
+ null if not file filter is applied.</div>
 </li>
 </ul>
 <a name="doBrowse--">
@@ -508,9 +513,11 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>doBrowse</h4>
 <pre>public&nbsp;void&nbsp;doBrowse()</pre>
-<div class="block">Show a browse dialog, using the current file extensions if they are defined.
- <p>In a JNLP session this uses a FileOpenService, but otherwise this
- uses an AWT file dialog.</div>
+<div class="block">Show a browse dialog, using the current file extensions if they are
+ defined.
+ <p>
+ In a JNLP session this uses a FileOpenService, but otherwise this uses an
+ AWT file dialog.</div>
 </li>
 </ul>
 <a name="doBrowse-java.awt.Component-java.lang.String:A-">
@@ -521,17 +528,20 @@ extends javax.swing.JPanel</pre>
 <h4>doBrowse</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/swing/FilePanel.FileData.html" title="class in com.pump.swing">FilePanel.FileData</a>&nbsp;doBrowse(java.awt.Component&nbsp;component,
                                           java.lang.String[]&nbsp;extensions)</pre>
-<div class="block">Show a browse dialog, using the current file extensions if they are defined.
- <p>In a JNLP session this uses a FileOpenService, but otherwise this
- uses an AWT file dialog.</div>
+<div class="block">Show a browse dialog, using the current file extensions if they are
+ defined.
+ <p>
+ In a JNLP session this uses a FileOpenService, but otherwise this uses an
+ AWT file dialog.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>component</code> - a component that relates to the Frame the possible dialog may be
- anchored to. This can be any component that is showing.</dd>
-<dd><code>extensions</code> - a list of possible extensions (or null if all files are accepted).</dd>
+<dd><code>component</code> - a component that relates to the Frame the possible dialog may
+            be anchored to. This can be any component that is showing.</dd>
+<dd><code>extensions</code> - a list of possible extensions (or null if all files are
+            accepted).</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the FileData the user selected, or null if the user cancelled this
- operation.</dd>
+<dd>the FileData the user selected, or null if the user cancelled
+         this operation.</dd>
 </dl>
 </li>
 </ul>
@@ -552,7 +562,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getRightPanel</h4>
 <pre>public&nbsp;javax.swing.JPanel&nbsp;getRightPanel()</pre>
-<div class="block">Return the right panel, containing the file label, text field, and browse button.</div>
+<div class="block">Return the right panel, containing the file label, text field, and browse
+ button.</div>
 </li>
 </ul>
 <a name="getIDLabel--">
@@ -562,8 +573,9 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getIDLabel</h4>
 <pre>public&nbsp;javax.swing.JLabel&nbsp;getIDLabel()</pre>
-<div class="block">Return the identifying label on the left that labels this file. This should
- contain text like "File:" or "Source:", but is not going to mention the file name.</div>
+<div class="block">Return the identifying label on the left that labels this file. This
+ should contain text like "File:" or "Source:", but is not going to
+ mention the file name.</div>
 </li>
 </ul>
 <a name="getFileLabel--">
@@ -573,8 +585,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getFileLabel</h4>
 <pre>public&nbsp;javax.swing.JLabel&nbsp;getFileLabel()</pre>
-<div class="block">Return the label representing the currently selected file. This will
- be visible if <code>isEditable()</code> returns false.</div>
+<div class="block">Return the label representing the currently selected file. This will be
+ visible if <code>isEditable()</code> returns false.</div>
 </li>
 </ul>
 <a name="getBrowseButton--">
@@ -584,8 +596,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getBrowseButton</h4>
 <pre>public&nbsp;javax.swing.JButton&nbsp;getBrowseButton()</pre>
-<div class="block">Returns the "Browse..." button. This will be enabled if it is attached
-  to a Frame.</div>
+<div class="block">Returns the "Browse..." button. This will be enabled if it is attached to
+ a Frame.</div>
 </li>
 </ul>
 </li>

@@ -169,8 +169,8 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/awt/dnd/DnDUtils.html#setupFileDragSource-javax.swing.JComponent-int-">setupFileDragSource</a></span>(javax.swing.JComponent&nbsp;component,
                    int&nbsp;actions)</code>
-<div class="block">This configures a DragSource so the argument will always initiate a drag operation for
- a file.</div>
+<div class="block">This configures a DragSource so the argument will always initiate a drag
+ operation for a file.</div>
 </td>
 </tr>
 </table>
@@ -237,13 +237,16 @@ extends java.lang.Object</pre>
 <h4>setupFileDragSource</h4>
 <pre>public static&nbsp;void&nbsp;setupFileDragSource(javax.swing.JComponent&nbsp;component,
                                        int&nbsp;actions)</pre>
-<div class="block">This configures a DragSource so the argument will always initiate a drag operation for
- a file. The java.io.File object used is <code>component.getClientProperty(KEY_FILE)</code>
- (which may change for every drag).</div>
+<div class="block">This configures a DragSource so the argument will always initiate a drag
+ operation for a file. The java.io.File object used is
+ <code>component.getClientProperty(KEY_FILE)</code> (which may change for
+ every drag).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>component</code> - a JComponent which should define the client property KEY_FILE as a java.io.File.</dd>
-<dd><code>actions</code> - one of the DnDConstants.ACTION_X constants. A good default is COPY_OR_MOVE.</dd>
+<dd><code>component</code> - a JComponent which should define the client property KEY_FILE
+            as a java.io.File.</dd>
+<dd><code>actions</code> - one of the DnDConstants.ACTION_X constants. A good default is
+            COPY_OR_MOVE.</dd>
 </dl>
 </li>
 </ul>

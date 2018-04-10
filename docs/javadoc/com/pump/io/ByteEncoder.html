@@ -120,8 +120,9 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object
 implements java.lang.AutoCloseable</pre>
 <div class="block">This object encodes a series of bytes (expressed as [0,255] integers).
- <p>This data can be made available either in a dual-threaded push/pull model,
- or in a single-threaded model by using the inner <a href="../../../com/pump/io/ByteEncoder.DataListener.html" title="interface in com.pump.io"><code>ByteEncoder.DataListener</code></a> interface.</div>
+ <p>
+ This data can be made available either in a dual-threaded push/pull model, or
+ in a single-threaded model by using the inner <a href="../../../com/pump/io/ByteEncoder.DataListener.html" title="interface in com.pump.io"><code>ByteEncoder.DataListener</code></a> interface.</div>
 </li>
 </ul>
 </div>
@@ -212,8 +213,8 @@ implements java.lang.AutoCloseable</pre>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.io.InputStream</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/ByteEncoder.html#createInputStream-java.io.InputStream-">createInputStream</a></span>(java.io.InputStream&nbsp;in)</code>
-<div class="block">Create an InputStrem that filters the argument's incoming data
- through this encoder.</div>
+<div class="block">Create an InputStrem that filters the argument's incoming data through
+ this encoder.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -245,29 +246,29 @@ implements java.lang.AutoCloseable</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/ByteEncoder.html#flush--">flush</a></span>()</code>
-<div class="block">This is exclusively called during <code>close()</code> to give this encoder
- an opportunity to write any remaining data.</div>
+<div class="block">This is exclusively called during <code>close()</code> to give this
+ encoder an opportunity to write any remaining data.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../com/pump/io/ByteEncoder.DataListener.html" title="interface in com.pump.io">ByteEncoder.DataListener</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/ByteEncoder.html#getDataListener--">getDataListener</a></span>()</code>
-<div class="block">Return the existing DataListener that has already been assigned to this encoder.</div>
+<div class="block">Return the existing DataListener that has already been assigned to this
+ encoder.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/ByteEncoder.html#pull--">pull</a></span>()</code>
-<div class="block">Pull a series of bytes (all within [0,255]) as
- they become available.</div>
+<div class="block">Pull a series of bytes (all within [0,255]) as they become available.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/ByteEncoder.html#pullImmediately--">pullImmediately</a></span>()</code>
-<div class="block">This will return one of three things: an array of
- available bytes, an empty array if no data is available,
- or null if this encoder has been closed.</div>
+<div class="block">This will return one of three things: an array of available bytes, an
+ empty array if no data is available, or null if this encoder has been
+ closed.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -353,11 +354,12 @@ implements java.lang.AutoCloseable</pre>
 <pre>public&nbsp;void&nbsp;setListener(<a href="../../../com/pump/io/ByteEncoder.DataListener.html" title="interface in com.pump.io">ByteEncoder.DataListener</a>&nbsp;listener)</pre>
 <div class="block">Assign a DataListener for this encoder.
  <p>
- An encoder only has 1 listener at a time, so you cannot add multiple listeners.</div>
+ An encoder only has 1 listener at a time, so you cannot add multiple
+ listeners.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>listener</code> - the listener to assign. This replaces any
- previously assigned listener.</dd>
+<dd><code>listener</code> - the listener to assign. This replaces any previously assigned
+            listener.</dd>
 </dl>
 </li>
 </ul>
@@ -368,7 +370,8 @@ implements java.lang.AutoCloseable</pre>
 <li class="blockList">
 <h4>getDataListener</h4>
 <pre>public&nbsp;<a href="../../../com/pump/io/ByteEncoder.DataListener.html" title="interface in com.pump.io">ByteEncoder.DataListener</a>&nbsp;getDataListener()</pre>
-<div class="block">Return the existing DataListener that has already been assigned to this encoder.</div>
+<div class="block">Return the existing DataListener that has already been assigned to this
+ encoder.</div>
 </li>
 </ul>
 <a name="close--">
@@ -380,8 +383,11 @@ implements java.lang.AutoCloseable</pre>
 <pre>public&nbsp;void&nbsp;close()
            throws java.io.IOException</pre>
 <div class="block">This indicates that no more data will be made available.
- <p>Subsequent calls to <code>push()</code> will result in an <code>IllegalStateException</code>.
- Calling this method may immediately release new data (which you can access by calling <code>pullImmediately</code>).</div>
+ <p>
+ Subsequent calls to <code>push()</code> will result in an
+ <code>IllegalStateException</code>. Calling this method may immediately
+ release new data (which you can access by calling
+ <code>pullImmediately</code>).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>close</code>&nbsp;in interface&nbsp;<code>java.lang.AutoCloseable</code></dd>
@@ -401,12 +407,11 @@ implements java.lang.AutoCloseable</pre>
 <h4>pull</h4>
 <pre>public&nbsp;int[]&nbsp;pull()
            throws java.io.IOException</pre>
-<div class="block">Pull a series of bytes (all within [0,255]) as
- they become available.</div>
+<div class="block">Pull a series of bytes (all within [0,255]) as they become available.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>encoded bytes, or null if if <code>close()</code> 
- has been called.</dd>
+<dd>encoded bytes, or null if if <code>close()</code> has been
+         called.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -425,9 +430,10 @@ implements java.lang.AutoCloseable</pre>
 <pre>public abstract&nbsp;void&nbsp;push(int&nbsp;b)
                    throws java.io.IOException</pre>
 <div class="block">Push a byte for this encoder to process.
- <p>As data accumulates it will eventually have to be
- retrieved via the <code>pull()</code> method. This method
- may block if data is waiting to be retrieved.</div>
+ <p>
+ As data accumulates it will eventually have to be retrieved via the
+ <code>pull()</code> method. This method may block if data is waiting to
+ be retrieved.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>b</code> - a byte from [0, 255]</dd>
@@ -447,8 +453,8 @@ implements java.lang.AutoCloseable</pre>
 <h4>flush</h4>
 <pre>protected abstract&nbsp;void&nbsp;flush()
                        throws java.io.IOException</pre>
-<div class="block">This is exclusively called during <code>close()</code> to give this encoder
- an opportunity to write any remaining data.</div>
+<div class="block">This is exclusively called during <code>close()</code> to give this
+ encoder an opportunity to write any remaining data.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
@@ -462,14 +468,13 @@ implements java.lang.AutoCloseable</pre>
 <li class="blockList">
 <h4>pullImmediately</h4>
 <pre>public&nbsp;int[]&nbsp;pullImmediately()</pre>
-<div class="block">This will return one of three things: an array of
- available bytes, an empty array if no data is available,
- or null if this encoder has been closed.</div>
+<div class="block">This will return one of three things: an array of available bytes, an
+ empty array if no data is available, or null if this encoder has been
+ closed.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>One of three things: an array of
- available bytes, an empty array if no data is available,
- or null if this encoder has been closed.</dd>
+<dd>One of three things: an array of available bytes, an empty array
+         if no data is available, or null if this encoder has been closed.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/io/ByteEncoder.html#pull--"><code>pull()</code></a>, 
 <a href="../../../com/pump/io/ByteEncoder.html#push-int-"><code>push(int)</code></a>, 
@@ -485,9 +490,9 @@ implements java.lang.AutoCloseable</pre>
 <h4>pushChunk</h4>
 <pre>protected&nbsp;void&nbsp;pushChunk(int[]&nbsp;data)
                   throws java.io.IOException</pre>
-<div class="block">Make a chunk of data available to be read.
- If there is any data that hasn't been processed yet, then this method may 
- block until previously pushed chunks are cleared by calling <a href="../../../com/pump/io/ByteEncoder.html#pull--"><code>pull()</code></a>.</div>
+<div class="block">Make a chunk of data available to be read. If there is any data that
+ hasn't been processed yet, then this method may block until previously
+ pushed chunks are cleared by calling <a href="../../../com/pump/io/ByteEncoder.html#pull--"><code>pull()</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - a chunk of data that is ready to be pulled.</dd>
@@ -505,8 +510,9 @@ implements java.lang.AutoCloseable</pre>
 <pre>public&nbsp;java.lang.String&nbsp;encode(java.lang.String&nbsp;string)</pre>
 <div class="block">Encode a String using UTF-8.
  <p>
- This breaks the String into an array of bytes, passes the bytes through this
- encoder, and returns the resulting bytes re-assembled in a String using UTF-8.</div>
+ This breaks the String into an array of bytes, passes the bytes through
+ this encoder, and returns the resulting bytes re-assembled in a String
+ using UTF-8.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>string</code> - the String to encode.</dd>
@@ -525,8 +531,8 @@ implements java.lang.AutoCloseable</pre>
                                java.nio.charset.Charset&nbsp;charset)</pre>
 <div class="block">Encode a String.
  <p>
- This breaks the String into an array of bytes, passes the bytes through this
- encoder, and returns the resulting bytes re-assembled into a String.</div>
+ This breaks the String into an array of bytes, passes the bytes through
+ this encoder, and returns the resulting bytes re-assembled into a String.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>string</code> - the String to encode.</dd>
@@ -560,8 +566,8 @@ implements java.lang.AutoCloseable</pre>
 <h4>createInputStream</h4>
 <pre>public&nbsp;java.io.InputStream&nbsp;createInputStream(java.io.InputStream&nbsp;in)
                                       throws java.io.IOException</pre>
-<div class="block">Create an InputStrem that filters the argument's incoming data
- through this encoder.</div>
+<div class="block">Create an InputStrem that filters the argument's incoming data through
+ this encoder.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - the InputStream to filter.</dd>
@@ -586,7 +592,7 @@ implements java.lang.AutoCloseable</pre>
 <dd><code>out</code> - the OutputStream to write encoded data to.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a stream that encodes data as it writes it to the underlying
- OutputStream.</dd>
+         OutputStream.</dd>
 </dl>
 </li>
 </ul>

@@ -245,8 +245,7 @@ extends javax.swing.JComponent</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/swing/io/LocationBrowser.html#addChangeListener-javax.swing.event.ChangeListener-">addChangeListener</a></span>(javax.swing.event.ChangeListener&nbsp;l)</code>
-<div class="block">This listener is notified when <code>isLoading()</code>
- changes value.</div>
+<div class="block">This listener is notified when <code>isLoading()</code> changes value.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -307,8 +306,8 @@ extends javax.swing.JComponent</pre>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/swing/io/LocationBrowser.html#setRefreshOnWindowActivation-boolean-">setRefreshOnWindowActivation</a></span>(boolean&nbsp;refreshOnWindowActivation)</code>
-<div class="block">Control whether this component refreshes its directory listing
- when it observes the containing window has reactivated.</div>
+<div class="block">Control whether this component refreshes its directory listing when it
+ observes the containing window has reactivated.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
@@ -399,24 +398,27 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;void&nbsp;refresh(boolean&nbsp;clear,
                     boolean&nbsp;blockUntilFinished)</pre>
 <div class="block">Refreshes this browser.
- <P>This means a new thread will start that asks the current
- directory for its contents.</div>
+ <P>
+ This means a new thread will start that asks the current directory for
+ its contents.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>clear</code> - whether this request should first clear the
- current contents.
- <P>Eventually -- once the threads finish -- the contents of this
- browser will exactly match the contents of the current directory.
- But consider the case of adding a new folder to the displayed directory:
- if we call <code>refresh(true)</code> then all the other files will be
- removed and the list will repopulate from scratch.  This results in
- a flickering GUI for the user (or worse, if the file system is slow to
- respond: such as a slow FTP connection).  But if we call 
- <code>refresh(false)</code> then there is no flicker.  New files are
- added where appropriate, and at the end a call to <code>replaceAll()</code>
- guarantees that removed files will also be noticed.</dd>
-<dd><code>blockUntilFinished</code> - if true then this method won't
- return until the refresh is complete.</dd>
+<dd><code>clear</code> - whether this request should first clear the current contents.
+            <P>
+            Eventually -- once the threads finish -- the contents of this
+            browser will exactly match the contents of the current
+            directory. But consider the case of adding a new folder to the
+            displayed directory: if we call <code>refresh(true)</code>
+            then all the other files will be removed and the list will
+            repopulate from scratch. This results in a flickering GUI for
+            the user (or worse, if the file system is slow to respond:
+            such as a slow FTP connection). But if we call
+            <code>refresh(false)</code> then there is no flicker. New
+            files are added where appropriate, and at the end a call to
+            <code>replaceAll()</code> guarantees that removed files will
+            also be noticed.</dd>
+<dd><code>blockUntilFinished</code> - if true then this method won't return until the refresh is
+            complete.</dd>
 </dl>
 </li>
 </ul>
@@ -429,10 +431,9 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;javax.swing.ListModel&nbsp;getListModel()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the directory contents.
- Note that it will change until <code>isLoading()</code>
- returns <code>false</code>, and these changes
- will not occur on the event dispatch thread.</dd>
+<dd>the directory contents. Note that it will change until
+         <code>isLoading()</code> returns <code>false</code>, and these
+         changes will not occur on the event dispatch thread.</dd>
 </dl>
 </li>
 </ul>
@@ -445,8 +446,8 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;<a href="../../../../com/pump/swing/io/IOSelectionModel.html" title="class in com.pump.swing.io">IOSelectionModel</a>&nbsp;getSelectionModel()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The model for which files are currently selected
- in the current directory.</dd>
+<dd>The model for which files are currently selected in the current
+         directory.</dd>
 </dl>
 </li>
 </ul>
@@ -459,10 +460,9 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;<a href="../../../../com/pump/swing/io/LocationHistory.html" title="class in com.pump.swing.io">LocationHistory</a>&nbsp;getLocationHistory()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the model for which directory is currently
- being displayed.  If this is changed then
- the <code>ListModel</code> and <code>IOSelectionModel</code>
- will both be changed.</dd>
+<dd>the model for which directory is currently being displayed. If
+         this is changed then the <code>ListModel</code> and
+         <code>IOSelectionModel</code> will both be changed.</dd>
 </dl>
 </li>
 </ul>
@@ -484,9 +484,9 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;boolean&nbsp;isLoading()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>whether the <code>ListModel</code> is still being generated.
- If you add <code>ChangeListeners</code> to this object: they
- will be notified when this method changes its return value;</dd>
+<dd>whether the <code>ListModel</code> is still being generated. If
+         you add <code>ChangeListeners</code> to this object: they will be
+         notified when this method changes its return value;</dd>
 </dl>
 </li>
 </ul>
@@ -497,8 +497,7 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>addChangeListener</h4>
 <pre>public&nbsp;void&nbsp;addChangeListener(javax.swing.event.ChangeListener&nbsp;l)</pre>
-<div class="block">This listener is notified when <code>isLoading()</code>
- changes value.</div>
+<div class="block">This listener is notified when <code>isLoading()</code> changes value.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>l</code> - the listener to add</dd>
@@ -592,17 +591,18 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>setRefreshOnWindowActivation</h4>
 <pre>public&nbsp;void&nbsp;setRefreshOnWindowActivation(boolean&nbsp;refreshOnWindowActivation)</pre>
-<div class="block">Control whether this component refreshes its directory listing
- when it observes the containing window has reactivated.
- <P>For example: if someone leaves this dialog and navigates to
- the file system, then delete/renames files, and switches back
- to this component, then it makes sense to refresh automatically.
- However if the user is navigated, for example, a company-specific
- server (cloud), then it is less likely the file system changed.</div>
+<div class="block">Control whether this component refreshes its directory listing when it
+ observes the containing window has reactivated.
+ <P>
+ For example: if someone leaves this dialog and navigates to the file
+ system, then delete/renames files, and switches back to this component,
+ then it makes sense to refresh automatically. However if the user is
+ navigated, for example, a company-specific server (cloud), then it is
+ less likely the file system changed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>refreshOnWindowActivation</code> - whether this component refreshes
- when the containing window is reactivated.</dd>
+<dd><code>refreshOnWindowActivation</code> - whether this component refreshes when the containing window is
+            reactivated.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/swing/io/LocationBrowser.html#isRefreshOnWindowActivation--"><code>isRefreshOnWindowActivation()</code></a></dd>
 </dl>
@@ -617,8 +617,8 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;boolean&nbsp;isRefreshOnWindowActivation()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>whether this component refreshes its directory listing
- when it observes the containing window has reactivated.</dd>
+<dd>whether this component refreshes its directory listing when it
+         observes the containing window has reactivated.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/swing/io/LocationBrowser.html#setRefreshOnWindowActivation-boolean-"><code>setRefreshOnWindowActivation(boolean)</code></a></dd>
 </dl>

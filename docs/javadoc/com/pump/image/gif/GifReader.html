@@ -118,9 +118,11 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <div class="block">This is an efficient way to iterate through a GIF image. This efficiently
  pipes image data from an <code>InputStream</code> and converts it into 2
  important pieces of information:
- <ul><li>image: a <code>BufferedImage</code> representing a frame</li>
- <li>duration: a <code>long</code>, representing the time (in
- milliseconds) a frame should be visible.</li></ul>
+ <ul>
+ <li>image: a <code>BufferedImage</code> representing a frame</li>
+ <li>duration: a <code>long</code>, representing the time (in milliseconds) a
+ frame should be visible.</li>
+ </ul>
  <P>
  This class does not "look ahead" any more than it has to to prepare this
  information, so it has no way of knowing how many frames there are without
@@ -128,8 +130,8 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
  <P>
  Also to minimize the memory this class allocates, this object will not keep
  any data in memory from previous frames: once you've called
- <code>nextFrame()</code> the previous data is discarded. This should make
- it possible to traverse through obscenely large GIF files (I've seen 2-second
+ <code>nextFrame()</code> the previous data is discarded. This should make it
+ possible to traverse through obscenely large GIF files (I've seen 2-second
  GIF files that are over 1 MB).</div>
 </li>
 </ul>
@@ -220,8 +222,8 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/gif/GifReader.html#getDuration--">getDuration</a></span>()</code>
-<div class="block">This method will return <code>-1</code> if the
- total duration of the animation is not yet known.</div>
+<div class="block">This method will return <code>-1</code> if the total duration of the
+ animation is not yet known.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -239,8 +241,8 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/gif/GifReader.html#getFrameCount--">getFrameCount</a></span>()</code>
-<div class="block">If this can be determined, this returns the number of
- frames this reader will read.</div>
+<div class="block">If this can be determined, this returns the number of frames this reader
+ will read.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -290,15 +292,15 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/gif/GifReader.html#isAnimatedGIF-java.io.File-">isAnimatedGIF</a></span>(java.io.File&nbsp;file)</code>
-<div class="block">Returns <code>true</code> if this file is a supported GIF file with
- more than 1 frame.</div>
+<div class="block">Returns <code>true</code> if this file is a supported GIF file with more
+ than 1 frame.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/gif/GifReader.html#isAnimatedGIF-java.io.InputStream-">isAnimatedGIF</a></span>(java.io.InputStream&nbsp;in)</code>
-<div class="block">Returns <code>true</code> if this <code>InputStream</code> is a
- supported GIF with more than 1 frame.</div>
+<div class="block">Returns <code>true</code> if this <code>InputStream</code> is a supported
+ GIF with more than 1 frame.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
@@ -311,8 +313,8 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/gif/GifReader.html#isGIF-java.io.InputStream-">isGIF</a></span>(java.io.InputStream&nbsp;in)</code>
-<div class="block">Returns <code>true</code> if this <code>InputStream</code> is a
- supported GIF with at least 1 frame.</div>
+<div class="block">Returns <code>true</code> if this <code>InputStream</code> is a supported
+ GIF with at least 1 frame.</div>
 </td>
 </tr>
 </table>
@@ -431,8 +433,8 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <li class="blockList">
 <h4>isAnimatedGIF</h4>
 <pre>public static&nbsp;boolean&nbsp;isAnimatedGIF(java.io.File&nbsp;file)</pre>
-<div class="block">Returns <code>true</code> if this file is a supported GIF file with
- more than 1 frame.
+<div class="block">Returns <code>true</code> if this file is a supported GIF file with more
+ than 1 frame.
  <P>
  This method is optimized to skim incoming data, so it should be a pretty
  light call.</div>
@@ -452,10 +454,10 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <li class="blockList">
 <h4>isGIF</h4>
 <pre>public static&nbsp;boolean&nbsp;isGIF(java.io.InputStream&nbsp;in)</pre>
-<div class="block">Returns <code>true</code> if this <code>InputStream</code> is a
- supported GIF with at least 1 frame. Note that this method assumes
- responsibility of <code>in</code>, and will close this
- <code>InputStream</code> after it has read what it needs to.
+<div class="block">Returns <code>true</code> if this <code>InputStream</code> is a supported
+ GIF with at least 1 frame. Note that this method assumes responsibility
+ of <code>in</code>, and will close this <code>InputStream</code> after it
+ has read what it needs to.
  <P>
  This method is optimized to skim incoming data, so it should be a pretty
  light call as long as the <code>.skip()</code> method of the
@@ -464,8 +466,8 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - the <code>InputStream</code> to check</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if this package can parse out this GIF into
-         at least 1 frame.</dd>
+<dd><code>true</code> if this package can parse out this GIF into at
+         least 1 frame.</dd>
 </dl>
 </li>
 </ul>
@@ -476,10 +478,10 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <li class="blockList">
 <h4>isAnimatedGIF</h4>
 <pre>public static&nbsp;boolean&nbsp;isAnimatedGIF(java.io.InputStream&nbsp;in)</pre>
-<div class="block">Returns <code>true</code> if this <code>InputStream</code> is a
- supported GIF with more than 1 frame. Note that this method assumes
- responsibility of <code>in</code>, and will close this
- <code>InputStream</code> after it has read what it needs to.
+<div class="block">Returns <code>true</code> if this <code>InputStream</code> is a supported
+ GIF with more than 1 frame. Note that this method assumes responsibility
+ of <code>in</code>, and will close this <code>InputStream</code> after it
+ has read what it needs to.
  <P>
  This method is optimized to skim incoming data, so it should be a pretty
  light call as long as the <code>.skip()</code> method of the
@@ -548,11 +550,12 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <h4>getFrameCount</h4>
 <pre>public&nbsp;int&nbsp;getFrameCount()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/animation/AnimationReader.html#getFrameCount--">AnimationReader</a></code></span></div>
-<div class="block">If this can be determined, this returns the number of
- frames this reader will read.
- <P>Otherwise this returns -1.  Note that since this
- pipes images through consecutively (without caching
- anything), this may return -1 more often than you'd like.</div>
+<div class="block">If this can be determined, this returns the number of frames this reader
+ will read.
+ <P>
+ Otherwise this returns -1. Note that since this pipes images through
+ consecutively (without caching anything), this may return -1 more often
+ than you'd like.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/animation/AnimationReader.html#getFrameCount--">getFrameCount</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/animation/AnimationReader.html" title="interface in com.pump.animation">AnimationReader</a></code></dd>
@@ -569,16 +572,15 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <h4>getDuration</h4>
 <pre>public&nbsp;double&nbsp;getDuration()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/animation/AnimationReader.html#getDuration--">AnimationReader</a></code></span></div>
-<div class="block">This method will return <code>-1</code> if the
- total duration of the animation is not yet known.
- Otherwise it returns the duration (in seconds)
- if this animation.</div>
+<div class="block">This method will return <code>-1</code> if the total duration of the
+ animation is not yet known. Otherwise it returns the duration (in
+ seconds) if this animation.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/animation/AnimationReader.html#getDuration--">getDuration</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/animation/AnimationReader.html" title="interface in com.pump.animation">AnimationReader</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the total duration of this animation, or -1 if it
- is not yet known.</dd>
+<dd>the total duration of this animation, or -1 if it is not yet
+         known.</dd>
 </dl>
 </li>
 </ul>
@@ -633,8 +635,8 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/animation/AnimationReader.html#getLoopCount--">getLoopCount</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/animation/AnimationReader.html" title="interface in com.pump.animation">AnimationReader</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the number loops, or <code>LOOP_FOREVER</code>, or -1
- if it is not yet known.</dd>
+<dd>the number loops, or <code>LOOP_FOREVER</code>, or -1 if it is
+         not yet known.</dd>
 </dl>
 </li>
 </ul>
@@ -652,11 +654,10 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/animation/AnimationReader.html#getNextFrame-boolean-">getNextFrame</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/animation/AnimationReader.html" title="interface in com.pump.animation">AnimationReader</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>cloneImage</code> - if this is <code>true</code>, this method will always
-            return a new <code>BufferedImage</code>. If this is
-            <code>false</code>, then this method may constantly return
-            the same <code>BufferedImage</code>, updated for each
-            frame.</dd>
+<dd><code>cloneImage</code> - if this is <code>true</code>, this method will always return a
+            new <code>BufferedImage</code>. If this is <code>false</code>,
+            then this method may constantly return the same
+            <code>BufferedImage</code>, updated for each frame.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the next frame image, or <code>null</code> if there are no more
          frames.</dd>
@@ -673,8 +674,8 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <h4>getLocalColorTable</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/image/gif/block/GifColorTable.html" title="class in com.pump.image.gif.block">GifColorTable</a>&nbsp;getLocalColorTable()</pre>
 <div class="block">If a local color table exists for the last frame returned by
- <code>getNextFrame()</code>, then this method returns that table. It
- is possible (and likely) that this method will often return
+ <code>getNextFrame()</code>, then this method returns that table. It is
+ possible (and likely) that this method will often return
  <code>null</code>, indicating that a global color table is being used.</div>
 </li>
 </ul>
@@ -708,8 +709,8 @@ implements <a href="../../../../com/pump/animation/AnimationReader.html" title="
 <dd><code><a href="../../../../com/pump/animation/AnimationReader.html#getFrameDuration--">getFrameDuration</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/animation/AnimationReader.html" title="interface in com.pump.animation">AnimationReader</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the duration of the last frame provided by
-         <code>getNextFrame()</code> in milliseconds. This information
-         is not required in a GIF so this method may (in rare occasions)
+         <code>getNextFrame()</code> in milliseconds. This information is
+         not required in a GIF so this method may (in rare occasions)
          return zero.</dd>
 </dl>
 </li>

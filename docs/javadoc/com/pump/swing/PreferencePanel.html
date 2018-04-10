@@ -134,31 +134,33 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PreferencePanel</span>
 extends javax.swing.JPanel</pre>
-<div class="block">A panel for managing several different preference components.
- Each preference panel is associated with a single button.
- This is modeled after OS X's preference system.
- <P>This component can be used with 1 row of buttons, in which case
- it behaves similar to a JTabbedPane (where each tab is actually
- a toggle button).  Ken Orr has put together a great JTabbedPaneUI
- based on this concept: http://code.google.com/p/macwidgets/ .
- <P>However this component also supports multiple rows of buttons,
- if you have several different preference components to manage.
- Each row has a name, and every element in a row should be vaguely
- related to that name.  When this panel shows multiple rows, the
- top of the panel has a browser-like header with a back/forward
- button, and a "Show All" button (similar to a "Home" button).
- <P>There are pros and cos to whether this widget should be displayed
- in a dialog vs a frame.  On the one hand, to get a really Mac-like
- experience (which is the goal of this imitation), you should use a
- Frame.  Also a Frame is the best way to get the brushed-metal
- look (although in 10.5 the look in no way resembles brushed-metal, that's
- just its name).  However, dialogs are easier.  Dialogs can be modal.
- With a frame on a Mac, you need to provide some sort of JMenuBar to
- give a native look-and-feel experience.  And a frame requires your
- preferences to all give live feedback: with a dialog you can wait
- until the modal dialog is dismissed.  Did I just make excuses for lazy
- programmers?  Hard to say.  But I left the option in this class for you
- to create with a dialog or frame for it.</div>
+<div class="block">A panel for managing several different preference components. Each preference
+ panel is associated with a single button. This is modeled after OS X's
+ preference system.
+ <P>
+ This component can be used with 1 row of buttons, in which case it behaves
+ similar to a JTabbedPane (where each tab is actually a toggle button). Ken
+ Orr has put together a great JTabbedPaneUI based on this concept:
+ http://code.google.com/p/macwidgets/ .
+ <P>
+ However this component also supports multiple rows of buttons, if you have
+ several different preference components to manage. Each row has a name, and
+ every element in a row should be vaguely related to that name. When this
+ panel shows multiple rows, the top of the panel has a browser-like header
+ with a back/forward button, and a "Show All" button (similar to a "Home"
+ button).
+ <P>
+ There are pros and cos to whether this widget should be displayed in a dialog
+ vs a frame. On the one hand, to get a really Mac-like experience (which is
+ the goal of this imitation), you should use a Frame. Also a Frame is the best
+ way to get the brushed-metal look (although in 10.5 the look in no way
+ resembles brushed-metal, that's just its name). However, dialogs are easier.
+ Dialogs can be modal. With a frame on a Mac, you need to provide some sort of
+ JMenuBar to give a native look-and-feel experience. And a frame requires your
+ preferences to all give live feedback: with a dialog you can wait until the
+ modal dialog is dismissed. Did I just make excuses for lazy programmers? Hard
+ to say. But I left the option in this class for you to create with a dialog
+ or frame for it.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.swing.PreferencePanel">Serialized Form</a></dd>
@@ -320,8 +322,8 @@ extends javax.swing.JPanel</pre>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/PreferencePanel.html#isFixedSize--">isFixedSize</a></span>()</code>
-<div class="block">Indicates whether this panel should stay at a constant
- size, regardless of which preference is selected.</div>
+<div class="block">Indicates whether this panel should stay at a constant size, regardless
+ of which preference is selected.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -337,8 +339,8 @@ extends javax.swing.JPanel</pre>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/PreferencePanel.html#setFixedSize-boolean-">setFixedSize</a></span>(boolean&nbsp;b)</code>
-<div class="block">Controls whether this panel is always sized to fit the largest
- possible component.</div>
+<div class="block">Controls whether this panel is always sized to fit the largest possible
+ component.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -439,8 +441,9 @@ extends javax.swing.JPanel</pre>
 <pre>public static&nbsp;javax.swing.Action closeDialogAndDisposeAction</pre>
 <div class="block">This action takes the Window associated with the source of this event,
  hides it, and then calls <code>dispose()</code> on it.
- <P>(This will not throw an exception if there is no parent window,
- but it does nothing in that case...)</div>
+ <P>
+ (This will not throw an exception if there is no parent window, but it
+ does nothing in that case...)</div>
 </li>
 </ul>
 </li>
@@ -535,8 +538,8 @@ extends javax.swing.JPanel</pre>
 <pre>public&nbsp;void&nbsp;addButtonRow(javax.swing.AbstractButton[]&nbsp;buttons,
                          javax.swing.JComponent[]&nbsp;components,
                          java.lang.String&nbsp;title)</pre>
-<div class="block">Add a row of buttons to this PreferencePanel.
- Each button corresponds to the component of the same index.</div>
+<div class="block">Add a row of buttons to this PreferencePanel. Each button corresponds to
+ the component of the same index.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>buttons</code> - </dd>
@@ -552,10 +555,9 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>setButtonInsets</h4>
 <pre>public&nbsp;void&nbsp;setButtonInsets(java.awt.Insets&nbsp;i)</pre>
-<div class="block">Define the insets used to pad the component buttons.
- <BR>(This property is only used when more than 1
- row is visible.  If only 1 row is used, then the
- buttons are wrapped in a JToolBar, and the default
+<div class="block">Define the insets used to pad the component buttons. <BR>
+ (This property is only used when more than 1 row is visible. If only 1
+ row is used, then the buttons are wrapped in a JToolBar, and the default
  look-and-feel behavior for that toolbar is used.)</div>
 </li>
 </ul>
@@ -566,9 +568,9 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>setLabelInsets</h4>
 <pre>public&nbsp;void&nbsp;setLabelInsets(java.awt.Insets&nbsp;i)</pre>
-<div class="block">Define the insets used to pad the row labels.
- <BR>(This property is only used when labels are visible,
- which only occurs when there is more than 1 row.)</div>
+<div class="block">Define the insets used to pad the row labels. <BR>
+ (This property is only used when labels are visible, which only occurs
+ when there is more than 1 row.)</div>
 </li>
 </ul>
 <a name="getLabelInsets--">
@@ -578,9 +580,9 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getLabelInsets</h4>
 <pre>public&nbsp;java.awt.Insets&nbsp;getLabelInsets()</pre>
-<div class="block">Returns the insets used to pad the row labels.
- <BR>(This property is only used when labels are visible,
- which only occurs when there is more than 1 row.)</div>
+<div class="block">Returns the insets used to pad the row labels. <BR>
+ (This property is only used when labels are visible, which only occurs
+ when there is more than 1 row.)</div>
 </li>
 </ul>
 <a name="getButtonInsets--">
@@ -590,10 +592,9 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getButtonInsets</h4>
 <pre>public&nbsp;java.awt.Insets&nbsp;getButtonInsets()</pre>
-<div class="block">Returns the insets used to pad the component buttons.
- <BR>(This property is only used when more than 1
- row is visible.  If only 1 row is used, then the
- buttons are wrapped in a JToolBar, and the default
+<div class="block">Returns the insets used to pad the component buttons. <BR>
+ (This property is only used when more than 1 row is visible. If only 1
+ row is used, then the buttons are wrapped in a JToolBar, and the default
  look-and-feel behavior for that toolbar is used.)</div>
 </li>
 </ul>
@@ -604,8 +605,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>isFixedSize</h4>
 <pre>public&nbsp;boolean&nbsp;isFixedSize()</pre>
-<div class="block">Indicates whether this panel should stay at a constant
- size, regardless of which preference is selected.</div>
+<div class="block">Indicates whether this panel should stay at a constant size, regardless
+ of which preference is selected.</div>
 </li>
 </ul>
 <a name="setFixedSize-boolean-">
@@ -615,11 +616,10 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>setFixedSize</h4>
 <pre>public&nbsp;void&nbsp;setFixedSize(boolean&nbsp;b)</pre>
-<div class="block">Controls whether this panel is always sized to fit the largest
- possible component.  If this is true, then no matter how
- the panel is adjusted it should not change its preferred size.
- If this is false, then depending on which control is visible the
- preferred size of this panel may change.</div>
+<div class="block">Controls whether this panel is always sized to fit the largest possible
+ component. If this is true, then no matter how the panel is adjusted it
+ should not change its preferred size. If this is false, then depending on
+ which control is visible the preferred size of this panel may change.</div>
 </li>
 </ul>
 <a name="createDialog-java.awt.Frame-java.lang.String-">

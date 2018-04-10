@@ -124,9 +124,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">AbstractGraphics2D</span>
 extends java.awt.Graphics2D</pre>
-<div class="block">This implements several methods to get <code>Graphics2D</code>'s
- off the ground.  Methods that are implemented here may not be
- especially efficient.</div>
+<div class="block">This implements several methods to get <code>Graphics2D</code>'s off the
+ ground. Methods that are implemented here may not be especially efficient.</div>
 </li>
 </ul>
 </div>
@@ -297,7 +296,8 @@ extends java.awt.Graphics2D</pre>
          java.awt.image.BufferedImageOp&nbsp;op,
          int&nbsp;x,
          int&nbsp;y)</code>
-<div class="block">This creates a new image from this operation, renders that image, and flushes it.</div>
+<div class="block">This creates a new image from this operation, renders that image, and
+ flushes it.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -305,8 +305,8 @@ extends java.awt.Graphics2D</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawImage-java.awt.Image-java.awt.geom.AffineTransform-java.awt.image.ImageObserver-">drawImage</a></span>(java.awt.Image&nbsp;i,
          java.awt.geom.AffineTransform&nbsp;t,
          java.awt.image.ImageObserver&nbsp;obs)</code>
-<div class="block">This changes the transform of this <code>Graphics2D</code>,
- renderings the image, and restores the transform of this image.</div>
+<div class="block">This changes the transform of this <code>Graphics2D</code>, renderings
+ the image, and restores the transform of this image.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -363,7 +363,9 @@ extends java.awt.Graphics2D</pre>
          int&nbsp;sx2,
          int&nbsp;sy2,
          java.awt.image.ImageObserver&nbsp;observer)</code>
-<div class="block">Calls <code>drawImage(img, dx1, dy1, dy1, dy2, sx1, sy1, sx2, sy2, null, observer)</code>.</div>
+<div class="block">Calls
+ <code>drawImage(img, dx1, dy1, dy1, dy2, sx1, sy1, sx2, sy2, null, observer)</code>
+ .</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
@@ -418,8 +420,8 @@ extends java.awt.Graphics2D</pre>
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawRenderedImage-java.awt.image.RenderedImage-java.awt.geom.AffineTransform-">drawRenderedImage</a></span>(java.awt.image.RenderedImage&nbsp;i,
                  java.awt.geom.AffineTransform&nbsp;t)</code>
-<div class="block">If <code>i</code> is not a <code>BufferedImage</code>, then
- a new <code>BufferedImage</code> is created just to render this image.</div>
+<div class="block">If <code>i</code> is not a <code>BufferedImage</code>, then a new
+ <code>BufferedImage</code> is created just to render this image.</div>
 </td>
 </tr>
 <tr id="i21" class="rowColor">
@@ -438,7 +440,7 @@ extends java.awt.Graphics2D</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawString-java.text.AttributedCharacterIterator-float-float-">drawString</a></span>(java.text.AttributedCharacterIterator&nbsp;aci,
           float&nbsp;x,
           float&nbsp;y)</code>
-<div class="block">Creates a <code>TextLayout</code> and calls 
+<div class="block">Creates a <code>TextLayout</code> and calls
  <code>TextLayout.draw(g,x,y)</code>.</div>
 </td>
 </tr>
@@ -455,7 +457,8 @@ extends java.awt.Graphics2D</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawString-java.lang.String-float-float-">drawString</a></span>(java.lang.String&nbsp;s,
           float&nbsp;x,
           float&nbsp;y)</code>
-<div class="block">Creates a <code>GlyphVector</code> and calls <code>drawGlyphVector()</code>.</div>
+<div class="block">Creates a <code>GlyphVector</code> and calls
+ <code>drawGlyphVector()</code>.</div>
 </td>
 </tr>
 <tr id="i25" class="rowColor">
@@ -668,8 +671,8 @@ extends java.awt.Graphics2D</pre>
 <tr id="i63" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/AbstractGraphics2D.html#setXORMode-java.awt.Color-">setXORMode</a></span>(java.awt.Color&nbsp;c1)</code>
-<div class="block">This throws an <code>UnsupportedOperationException</code>
- XOR is not supported.</div>
+<div class="block">This throws an <code>UnsupportedOperationException</code> XOR is not
+ supported.</div>
 </td>
 </tr>
 <tr id="i64" class="altColor">
@@ -813,8 +816,8 @@ extends java.awt.Graphics2D</pre>
 <h4>clipping</h4>
 <pre>protected&nbsp;java.awt.Shape clipping</pre>
 <div class="block">This is the area of the destination clipped <i>before</i> any
- transformations are applied.
- This will be an Area, a Rectangle, or a Rectangle2D.</div>
+ transformations are applied. This will be an Area, a Rectangle, or a
+ Rectangle2D.</div>
 </li>
 </ul>
 <a name="name">
@@ -824,7 +827,8 @@ extends java.awt.Graphics2D</pre>
 <li class="blockList">
 <h4>name</h4>
 <pre>protected&nbsp;java.lang.String name</pre>
-<div class="block">The optional name.  Used for debugging, or naming groups in vector graphics.</div>
+<div class="block">The optional name. Used for debugging, or naming groups in vector
+ graphics.</div>
 </li>
 </ul>
 </li>
@@ -879,8 +883,7 @@ extends java.awt.Graphics2D</pre>
 <li class="blockList">
 <h4>getName</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getName()</pre>
-<div class="block">Returns the name of this Graphics2D.
- The default name is "Untitled".</div>
+<div class="block">Returns the name of this Graphics2D. The default name is "Untitled".</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the name of this Graphics2D.</dd>
@@ -1245,8 +1248,8 @@ extends java.awt.Graphics2D</pre>
 <pre>public&nbsp;boolean&nbsp;drawImage(java.awt.Image&nbsp;i,
                          java.awt.geom.AffineTransform&nbsp;t,
                          java.awt.image.ImageObserver&nbsp;obs)</pre>
-<div class="block">This changes the transform of this <code>Graphics2D</code>,
- renderings the image, and restores the transform of this image.</div>
+<div class="block">This changes the transform of this <code>Graphics2D</code>, renderings
+ the image, and restores the transform of this image.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>drawImage</code>&nbsp;in class&nbsp;<code>java.awt.Graphics2D</code></dd>
@@ -1260,8 +1263,8 @@ extends java.awt.Graphics2D</pre>
 <li class="blockList">
 <h4>setPaintMode</h4>
 <pre>public&nbsp;void&nbsp;setPaintMode()</pre>
-<div class="block">This does nothing, because setXORMode is unsupported.
- Therefore we're always in paint mode.</div>
+<div class="block">This does nothing, because setXORMode is unsupported. Therefore we're
+ always in paint mode.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setPaintMode</code>&nbsp;in class&nbsp;<code>java.awt.Graphics</code></dd>
@@ -1288,8 +1291,8 @@ extends java.awt.Graphics2D</pre>
 <li class="blockList">
 <h4>setXORMode</h4>
 <pre>public&nbsp;void&nbsp;setXORMode(java.awt.Color&nbsp;c1)</pre>
-<div class="block">This throws an <code>UnsupportedOperationException</code>
- XOR is not supported.</div>
+<div class="block">This throws an <code>UnsupportedOperationException</code> XOR is not
+ supported.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setXORMode</code>&nbsp;in class&nbsp;<code>java.awt.Graphics</code></dd>
@@ -1306,7 +1309,8 @@ extends java.awt.Graphics2D</pre>
                       java.awt.image.BufferedImageOp&nbsp;op,
                       int&nbsp;x,
                       int&nbsp;y)</pre>
-<div class="block">This creates a new image from this operation, renders that image, and flushes it.</div>
+<div class="block">This creates a new image from this operation, renders that image, and
+ flushes it.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>drawImage</code>&nbsp;in class&nbsp;<code>java.awt.Graphics2D</code></dd>
@@ -1321,8 +1325,8 @@ extends java.awt.Graphics2D</pre>
 <h4>drawRenderedImage</h4>
 <pre>public&nbsp;void&nbsp;drawRenderedImage(java.awt.image.RenderedImage&nbsp;i,
                               java.awt.geom.AffineTransform&nbsp;t)</pre>
-<div class="block">If <code>i</code> is not a <code>BufferedImage</code>, then
- a new <code>BufferedImage</code> is created just to render this image.</div>
+<div class="block">If <code>i</code> is not a <code>BufferedImage</code>, then a new
+ <code>BufferedImage</code> is created just to render this image.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>drawRenderedImage</code>&nbsp;in class&nbsp;<code>java.awt.Graphics2D</code></dd>
@@ -1385,7 +1389,8 @@ extends java.awt.Graphics2D</pre>
 <pre>public&nbsp;void&nbsp;drawString(java.lang.String&nbsp;s,
                        float&nbsp;x,
                        float&nbsp;y)</pre>
-<div class="block">Creates a <code>GlyphVector</code> and calls <code>drawGlyphVector()</code>.</div>
+<div class="block">Creates a <code>GlyphVector</code> and calls
+ <code>drawGlyphVector()</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>drawString</code>&nbsp;in class&nbsp;<code>java.awt.Graphics2D</code></dd>
@@ -1417,10 +1422,11 @@ extends java.awt.Graphics2D</pre>
 <pre>public&nbsp;void&nbsp;drawString(java.text.AttributedCharacterIterator&nbsp;aci,
                        float&nbsp;x,
                        float&nbsp;y)</pre>
-<div class="block">Creates a <code>TextLayout</code> and calls 
+<div class="block">Creates a <code>TextLayout</code> and calls
  <code>TextLayout.draw(g,x,y)</code>.
- <P>This way if the AttributedCharacterIterator represents several
- different fills, they'll be handled correctly.</div>
+ <P>
+ This way if the AttributedCharacterIterator represents several different
+ fills, they'll be handled correctly.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>drawString</code>&nbsp;in class&nbsp;<code>java.awt.Graphics2D</code></dd>
@@ -1843,7 +1849,9 @@ extends java.awt.Graphics2D</pre>
                          int&nbsp;sx2,
                          int&nbsp;sy2,
                          java.awt.image.ImageObserver&nbsp;observer)</pre>
-<div class="block">Calls <code>drawImage(img, dx1, dy1, dy1, dy2, sx1, sy1, sx2, sy2, null, observer)</code>.</div>
+<div class="block">Calls
+ <code>drawImage(img, dx1, dy1, dy1, dy2, sx1, sy1, sx2, sy2, null, observer)</code>
+ .</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>drawImage</code>&nbsp;in class&nbsp;<code>java.awt.Graphics</code></dd>

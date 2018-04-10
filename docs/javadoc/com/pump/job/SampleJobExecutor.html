@@ -110,13 +110,12 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">SampleJobExecutor&lt;T&gt;</span>
 extends java.lang.Object</pre>
-<div class="block">This executes a <a href="../../../com/pump/job/SampleJob.html" title="class in com.pump.job"><code>SampleJob</code></a> across
- a given number of threads until all samples are processed,
- an error occurs, or <code>abort()</code> is invoked.
+<div class="block">This executes a <a href="../../../com/pump/job/SampleJob.html" title="class in com.pump.job"><code>SampleJob</code></a> across a given number of
+ threads until all samples are processed, an error occurs, or
+ <code>abort()</code> is invoked.
  
- You need to extend this class and override
- <code>processResults()</code> and <code>processThrowable()</code>
- to make sense of the job results.</div>
+ You need to extend this class and override <code>processResults()</code> and
+ <code>processThrowable()</code> to make sense of the job results.</div>
 </li>
 </ul>
 </div>
@@ -194,8 +193,7 @@ extends java.lang.Object</pre>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/job/SampleJobExecutor.html#join--">join</a></span>()</code>
-<div class="block">Blocks until the job is fully executed, aborted,
- or an error occurs.</div>
+<div class="block">Blocks until the job is fully executed, aborted, or an error occurs.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -211,8 +209,7 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/job/SampleJobExecutor.html#processThrowable-long-long-java.lang.Throwable-">processThrowable</a></span>(long&nbsp;index,
                 long&nbsp;length,
                 java.lang.Throwable&nbsp;throwable)</code>
-<div class="block">Process an error that occurred when we tried to get
- a series of results.</div>
+<div class="block">Process an error that occurred when we tried to get a series of results.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -269,9 +266,9 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>job</code> - the job to execute.</dd>
 <dd><code>threadCount</code> - the number of threads to use.</dd>
-<dd><code>sampleIncrement</code> - the number of samples requested
- at a time. This must be an <code>int</code> (instead of a <code>long</code>)
- because we'll create an array of this size.</dd>
+<dd><code>sampleIncrement</code> - the number of samples requested at a time. This must be an
+            <code>int</code> (instead of a <code>long</code>) because
+            we'll create an array of this size.</dd>
 </dl>
 </li>
 </ul>
@@ -293,9 +290,9 @@ extends java.lang.Object</pre>
 <div class="block">Start all the threads this executor manages.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>join</code> - if <code>false</code> then this
- method returns immediately. If <code>true</code>
- then this method blocks until the execution is complete.</dd>
+<dd><code>join</code> - if <code>false</code> then this method returns immediately. If
+            <code>true</code> then this method blocks until the execution
+            is complete.</dd>
 </dl>
 </li>
 </ul>
@@ -306,8 +303,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>abort</h4>
 <pre>public&nbsp;boolean&nbsp;abort()</pre>
-<div class="block">Return true if this changed the state to ABORTED.
- This method may be ignored if the state is already FINISHED or ERROR.</div>
+<div class="block">Return true if this changed the state to ABORTED. This method may be
+ ignored if the state is already FINISHED or ERROR.</div>
 </li>
 </ul>
 <a name="setState-com.pump.job.SampleJobExecutor.State-">
@@ -362,12 +359,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>join</h4>
 <pre>public&nbsp;void&nbsp;join()</pre>
-<div class="block">Blocks until the job is fully executed, aborted,
- or an error occurs.
+<div class="block">Blocks until the job is fully executed, aborted, or an error occurs.
  
- <P> (That is: when this
- method returns the <code>getState()</code> method
- is guaranteed to not return <code>State.ACTIVE</code>.)</div>
+ <P>
+ (That is: when this method returns the <code>getState()</code> method is
+ guaranteed to not return <code>State.ACTIVE</code>.)</div>
 </li>
 </ul>
 <a name="processResults-long-int-java.lang.Object:A-">
@@ -384,12 +380,12 @@ extends java.lang.Object</pre>
 <div class="block">Process a series of results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>index</code> - the initial index.
- The zereoth index of the <code>results</code> array
- is this index in the larger data model.</dd>
-<dd><code>length</code> - the number of results. The <code>results</code>
- array is always this size. (Or if it is larger: then the array
- is being recycled and you can ignore results after that.)</dd>
+<dd><code>index</code> - the initial index. The zereoth index of the
+            <code>results</code> array is this index in the larger data
+            model.</dd>
+<dd><code>length</code> - the number of results. The <code>results</code> array is
+            always this size. (Or if it is larger: then the array is being
+            recycled and you can ignore results after that.)</dd>
 <dd><code>results</code> - the results.</dd>
 </dl>
 </li>
@@ -403,12 +399,10 @@ extends java.lang.Object</pre>
 <pre>protected&nbsp;void&nbsp;processThrowable(long&nbsp;index,
                                 long&nbsp;length,
                                 java.lang.Throwable&nbsp;throwable)</pre>
-<div class="block">Process an error that occurred when we tried to get
- a series of results.
+<div class="block">Process an error that occurred when we tried to get a series of results.
  
- The default implementation of this class just outputs
- a little information (including the stacktrace) to
- System.err.</div>
+ The default implementation of this class just outputs a little
+ information (including the stacktrace) to System.err.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - the initial requested index.</dd>

@@ -128,12 +128,13 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">AbstractShapeTransition2D</span>
 extends <a href="../../../../com/pump/image/transition/Transition2D.html" title="class in com.pump.image.transition">Transition2D</a></pre>
-<div class="block">This takes any abstract silhouette and will zoom it in/out to reveal
- the new frame.
+<div class="block">This takes any abstract silhouette and will zoom it in/out to reveal the new
+ frame.
  
- <P>This class is actually a little bit clever, because it will study
- exactly to what proportion it has to zoom the silhouette to completely
- cover the frame size.</div>
+ <P>
+ This class is actually a little bit clever, because it will study exactly to
+ what proportion it has to zoom the silhouette to completely cover the frame
+ size.</div>
 </li>
 </ul>
 </div>
@@ -194,7 +195,8 @@ extends <a href="../../../../com/pump/image/transition/Transition2D.html" title=
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/transition/AbstractShapeTransition2D.html#calculateMultiplier-java.awt.Dimension-">calculateMultiplier</a></span>(java.awt.Dimension&nbsp;size)</code>
-<div class="block">Calculating the scaling ratio for the shape to fit the dimensions provided.</div>
+<div class="block">Calculating the scaling ratio for the shape to fit the dimensions
+ provided.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -273,8 +275,9 @@ extends <a href="../../../../com/pump/image/transition/Transition2D.html" title=
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>type</code> - must be IN or OUT.
- <P>This indicates whether the shape grows or shrinks as this
- transition progresses.</dd>
+            <P>
+            This indicates whether the shape grows or shrinks as this
+            transition progresses.</dd>
 </dl>
 </li>
 </ul>
@@ -302,7 +305,8 @@ extends <a href="../../../../com/pump/image/transition/Transition2D.html" title=
 <li class="blockList">
 <h4>calculateMultiplier</h4>
 <pre>protected&nbsp;float&nbsp;calculateMultiplier(java.awt.Dimension&nbsp;size)</pre>
-<div class="block">Calculating the scaling ratio for the shape to fit the dimensions provided.</div>
+<div class="block">Calculating the scaling ratio for the shape to fit the dimensions
+ provided.</div>
 </li>
 </ul>
 <a name="getInstructions-float-java.awt.Dimension-">
@@ -319,9 +323,9 @@ extends <a href="../../../../com/pump/image/transition/Transition2D.html" title=
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/transition/Transition2D.html#getInstructions-float-java.awt.Dimension-">getInstructions</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/image/transition/Transition2D.html" title="class in com.pump.image.transition">Transition2D</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>progress</code> - a float from [0,1].  When this is zero, these instructions should
- render the initial frame.  When this is one, these instructions should render
- the final frame.</dd>
+<dd><code>progress</code> - a float from [0,1]. When this is zero, these instructions
+            should render the initial frame. When this is one, these
+            instructions should render the final frame.</dd>
 </dl>
 </li>
 </ul>

@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../com/pump/plaf/LocationBrowserUI.html" title="class in com.pump.plaf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../com/pump/plaf/MetalMultiThumbSliderUI.html" title="class in com.pump.plaf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/plaf/LocationTreePaneUI.html" title="class in com.pump.plaf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?com/pump/plaf/LocationPaneUI.html" target="_top">Frames</a></li>
@@ -272,13 +272,15 @@ extends javax.swing.plaf.ComponentUI</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/LocationPaneUI.html#fireCancelListeners--">fireCancelListeners</a></span>()</code>
-<div class="block">This is called automatically when <code>commitButtonPressed()</code> returns <code>true</code>.</div>
+<div class="block">This is called automatically when <code>commitButtonPressed()</code>
+ returns <code>true</code>.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/LocationPaneUI.html#fireCommitListeners--">fireCommitListeners</a></span>()</code>
-<div class="block">This is called automatically when <code>commitButtonPressed()</code> returns <code>true</code>.</div>
+<div class="block">This is called automatically when <code>commitButtonPressed()</code>
+ returns <code>true</code>.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -320,8 +322,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/LocationPaneUI.html#isNewFolderOpened--">isNewFolderOpened</a></span>()</code>
-<div class="block">This is used in <code>createNewFolder()</code> to decide
- whether to open newly created folders, or merely select them.</div>
+<div class="block">This is used in <code>createNewFolder()</code> to decide whether to open
+ newly created folders, or merely select them.</div>
 </td>
 </tr>
 <tr id="i17" class="rowColor">
@@ -349,8 +351,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/LocationPaneUI.html#updateDirectoryControls--">updateDirectoryControls</a></span>()</code>
-<div class="block">This calls updateNextButton(), updateBackButton(), updateNewFolderButton(),
- updateUpButton(), and updateComboBox().</div>
+<div class="block">This calls updateNextButton(), updateBackButton(),
+ updateNewFolderButton(), updateUpButton(), and updateComboBox().</div>
 </td>
 </tr>
 <tr id="i22" class="altColor">
@@ -586,7 +588,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>setShortcutsActive</h4>
 <pre>protected&nbsp;void&nbsp;setShortcutsActive(boolean&nbsp;b)</pre>
-<div class="block">Turn on/off special shortcuts. For example: on Mac command+D should navigate to the desktop.</div>
+<div class="block">Turn on/off special shortcuts. For example: on Mac command+D should
+ navigate to the desktop.</div>
 </li>
 </ul>
 <a name="addCancelListener-java.awt.event.ActionListener-">
@@ -598,9 +601,9 @@ extends javax.swing.plaf.ComponentUI</pre>
 <pre>public&nbsp;void&nbsp;addCancelListener(java.awt.event.ActionListener&nbsp;l)</pre>
 <div class="block">This is the recommended way to know when this dialog has been cancelled.
  If you call <code>getCommitButton().addActionListener()</code> you will
- be notified when the commit button is clicked, but some UI's might
- also check to see if the current file name replaces an existing file
- and prompt the user according.</div>
+ be notified when the commit button is clicked, but some UI's might also
+ check to see if the current file name replaces an existing file and
+ prompt the user according.</div>
 </li>
 </ul>
 <a name="addCommitListener-java.awt.event.ActionListener-">
@@ -612,9 +615,9 @@ extends javax.swing.plaf.ComponentUI</pre>
 <pre>public&nbsp;void&nbsp;addCommitListener(java.awt.event.ActionListener&nbsp;l)</pre>
 <div class="block">This is the recommended way to know when this dialog has been committed.
  If you call <code>getCommitButton().addActionListener()</code> you will
- be notified when the commit button is clicked, but some UI's might
- also check to see if the current file name replaces an existing file
- and prompt the user according.</div>
+ be notified when the commit button is clicked, but some UI's might also
+ check to see if the current file name replaces an existing file and
+ prompt the user according.</div>
 </li>
 </ul>
 <a name="fireCommitListeners--">
@@ -624,7 +627,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>fireCommitListeners</h4>
 <pre>protected&nbsp;void&nbsp;fireCommitListeners()</pre>
-<div class="block">This is called automatically when <code>commitButtonPressed()</code> returns <code>true</code>.</div>
+<div class="block">This is called automatically when <code>commitButtonPressed()</code>
+ returns <code>true</code>.</div>
 </li>
 </ul>
 <a name="fireCancelListeners--">
@@ -634,7 +638,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>fireCancelListeners</h4>
 <pre>protected&nbsp;void&nbsp;fireCancelListeners()</pre>
-<div class="block">This is called automatically when <code>commitButtonPressed()</code> returns <code>true</code>.</div>
+<div class="block">This is called automatically when <code>commitButtonPressed()</code>
+ returns <code>true</code>.</div>
 </li>
 </ul>
 <a name="commitButtonPressed--">
@@ -647,10 +652,13 @@ extends javax.swing.plaf.ComponentUI</pre>
 <div class="block">This method is called when the <code>commitButton</code> is pressed.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true this dialog should close normally.  <code>false</code> indicates
- that the dialog should not close, and presumably some other action is being taken.
- <p>For example, in a save pane if a file with this name is detected: then a
- subclass might prompt the user with an error dialog and return <code>false</code>.</dd>
+<dd>true this dialog should close normally. <code>false</code>
+         indicates that the dialog should not close, and presumably some
+         other action is being taken.
+         <p>
+         For example, in a save pane if a file with this name is detected:
+         then a subclass might prompt the user with an error dialog and
+         return <code>false</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -664,10 +672,13 @@ extends javax.swing.plaf.ComponentUI</pre>
 <div class="block">This method is called when the <code>commitButton</code> is pressed.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true this dialog should close normally.  <code>false</code> indicates
- that the dialog should not close, and presumably some other action is being taken.
- <p>For example, if a file with this name is detected: then a subclass might prompt
- the user with an error dialog and return <code>false</code>.</dd>
+<dd>true this dialog should close normally. <code>false</code>
+         indicates that the dialog should not close, and presumably some
+         other action is being taken.
+         <p>
+         For example, if a file with this name is detected: then a
+         subclass might prompt the user with an error dialog and return
+         <code>false</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -696,9 +707,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>updateNextButton</h4>
 <pre>protected&nbsp;void&nbsp;updateNextButton()</pre>
-<div class="block">Update the enabled state of the next button.
- This is automatically called when the current displayed
- directory changes.</div>
+<div class="block">Update the enabled state of the next button. This is automatically called
+ when the current displayed directory changes.</div>
 </li>
 </ul>
 <a name="updateBackButton--">
@@ -708,9 +718,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>updateBackButton</h4>
 <pre>protected&nbsp;void&nbsp;updateBackButton()</pre>
-<div class="block">Update the enabled state of the back button.
- This is automatically called when the current displayed
- directory changes.</div>
+<div class="block">Update the enabled state of the back button. This is automatically called
+ when the current displayed directory changes.</div>
 </li>
 </ul>
 <a name="updateUpButton--">
@@ -720,9 +729,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>updateUpButton</h4>
 <pre>protected&nbsp;void&nbsp;updateUpButton()</pre>
-<div class="block">Update the enabled state of the up button.
- This is automatically called when the current displayed
- directory changes.</div>
+<div class="block">Update the enabled state of the up button. This is automatically called
+ when the current displayed directory changes.</div>
 </li>
 </ul>
 <a name="updateNewFolderButton--">
@@ -732,9 +740,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>updateNewFolderButton</h4>
 <pre>protected&nbsp;void&nbsp;updateNewFolderButton()</pre>
-<div class="block">Update the enabled state of the new folder button.
- This is automatically called when the current displayed
- directory changes.</div>
+<div class="block">Update the enabled state of the new folder button. This is automatically
+ called when the current displayed directory changes.</div>
 </li>
 </ul>
 <a name="updateComboBox--">
@@ -745,12 +752,13 @@ extends javax.swing.plaf.ComponentUI</pre>
 <h4>updateComboBox</h4>
 <pre>protected&nbsp;void&nbsp;updateComboBox()</pre>
 <div class="block">Update the contents and enabled state of the combobox.
- <p>Subclasses must increment the protected field "adjustingComboBox"
- before changing the contents/selection of this combobox, otherwise
- events will be inappropriately fired.  (Then decrement the field
- again when finished.)
- <p>This is automatically called when the current displayed
- directory changes.</div>
+ <p>
+ Subclasses must increment the protected field "adjustingComboBox" before
+ changing the contents/selection of this combobox, otherwise events will
+ be inappropriately fired. (Then decrement the field again when finished.)
+ <p>
+ This is automatically called when the current displayed directory
+ changes.</div>
 </li>
 </ul>
 <a name="updateDirectoryControls--">
@@ -760,8 +768,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>updateDirectoryControls</h4>
 <pre>protected&nbsp;void&nbsp;updateDirectoryControls()</pre>
-<div class="block">This calls updateNextButton(), updateBackButton(), updateNewFolderButton(),
- updateUpButton(), and updateComboBox().</div>
+<div class="block">This calls updateNextButton(), updateBackButton(),
+ updateNewFolderButton(), updateUpButton(), and updateComboBox().</div>
 </li>
 </ul>
 <a name="getCommitButton--">
@@ -789,11 +797,12 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>getNewFolderName</h4>
 <pre>protected abstract&nbsp;java.lang.String&nbsp;getNewFolderName()</pre>
-<div class="block">The default name for a new directory.  This may prompt the user for
- a dialog.</div>
+<div class="block">The default name for a new directory. This may prompt the user for a
+ dialog.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>if this returns <code>null</code> then no directory should be created.</dd>
+<dd>if this returns <code>null</code> then no directory should be
+         created.</dd>
 </dl>
 </li>
 </ul>
@@ -804,8 +813,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>createNewFolder</h4>
 <pre>protected&nbsp;void&nbsp;createNewFolder()</pre>
-<div class="block">This is called when the user clicks the <code>newFolderButton</code>.
- The default implementation uses <code>getNewFolderName()</code>, possibly
+<div class="block">This is called when the user clicks the <code>newFolderButton</code>. The
+ default implementation uses <code>getNewFolderName()</code>, possibly
  followed by a number if a file already exists with that name.</div>
 </li>
 </ul>
@@ -816,8 +825,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>isNewFolderOpened</h4>
 <pre>protected&nbsp;boolean&nbsp;isNewFolderOpened()</pre>
-<div class="block">This is used in <code>createNewFolder()</code> to decide
- whether to open newly created folders, or merely select them.</div>
+<div class="block">This is used in <code>createNewFolder()</code> to decide whether to open
+ newly created folders, or merely select them.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>returns <code>false</code>.</dd>
@@ -831,11 +840,11 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>createNewFolder</h4>
 <pre>protected&nbsp;void&nbsp;createNewFolder(<a href="../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;newDirectory)</pre>
-<div class="block">This is a convenience method to help create a new folder.
- This will guarantee that the directory will be visible,
- refresh the browser, select the newly created directory,
- and any other misc GUI needs.
- <p>This is called by <code>createNewFolder()</code>.</div>
+<div class="block">This is a convenience method to help create a new folder. This will
+ guarantee that the directory will be visible, refresh the browser, select
+ the newly created directory, and any other misc GUI needs.
+ <p>
+ This is called by <code>createNewFolder()</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>newDirectory</code> - the new location to create.</dd>
@@ -924,7 +933,7 @@ extends javax.swing.plaf.ComponentUI</pre>
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../com/pump/plaf/LocationBrowserUI.html" title="class in com.pump.plaf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../com/pump/plaf/MetalMultiThumbSliderUI.html" title="class in com.pump.plaf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/plaf/LocationTreePaneUI.html" title="class in com.pump.plaf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?com/pump/plaf/LocationPaneUI.html" target="_top">Frames</a></li>

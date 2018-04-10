@@ -110,17 +110,18 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">MathG</span>
 extends java.lang.Object</pre>
-<div class="block">This provides some alternative implementations of a few methods from
- the Math class.
- <P>This class may use approximations with various levels of error.  The "G"
- in the name stands for "Graphics", because it was originally conceived
- as a tool to speed up graphics.  When I iterate over every pixel in an image
- to perform some operation: I don't really need the precision that the Math
- class offers.
- <P>Many thanks to Oleg E. for some insights regarding machine error and
- design.
- <P>See MathGDemo.java for a set of tests comparing the speed/accuracy
- of java.lang.Math and com.bric.math.MathG.</div>
+<div class="block">This provides some alternative implementations of a few methods from the Math
+ class.
+ <P>
+ This class may use approximations with various levels of error. The "G" in
+ the name stands for "Graphics", because it was originally conceived as a tool
+ to speed up graphics. When I iterate over every pixel in an image to perform
+ some operation: I don't really need the precision that the Math class offers.
+ <P>
+ Many thanks to Oleg E. for some insights regarding machine error and design.
+ <P>
+ See MathGDemo.java for a set of tests comparing the speed/accuracy of
+ java.lang.Math and com.pump.math.MathG.</div>
 </li>
 </ul>
 </div>
@@ -159,46 +160,50 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/MathG.html#acos-double-">acos</a></span>(double&nbsp;v)</code>
-<div class="block">Returns an approximate value of the acos(v) that should be
- within plus-or-minus .00004 of the value returned by Math.acos().</div>
+<div class="block">Returns an approximate value of the acos(v) that should be within
+ plus-or-minus .00004 of the value returned by Math.acos().</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/MathG.html#ceilDouble-double-">ceilDouble</a></span>(double&nbsp;d)</code>
-<div class="block">Finds the closest integer that is greater than or equal to the argument as a double.</div>
+<div class="block">Finds the closest integer that is greater than or equal to the argument
+ as a double.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/MathG.html#ceilInt-double-">ceilInt</a></span>(double&nbsp;d)</code>
-<div class="block">Finds the closest integer that is greater than or equal to the argument as an int.</div>
+<div class="block">Finds the closest integer that is greater than or equal to the argument
+ as an int.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/MathG.html#cos00004-double-">cos00004</a></span>(double&nbsp;v)</code>
-<div class="block">Returns an approximate value of the cos(v) that should be
- within plus-or-minus .00004 of the value returned by Math.cos().</div>
+<div class="block">Returns an approximate value of the cos(v) that should be within
+ plus-or-minus .00004 of the value returned by Math.cos().</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/MathG.html#cos01-double-">cos01</a></span>(double&nbsp;v)</code>
-<div class="block">Returns an approximate value of the cos(v) that should be
- within plus-or-minus .0108 of the value returned by Math.cos().</div>
+<div class="block">Returns an approximate value of the cos(v) that should be within
+ plus-or-minus .0108 of the value returned by Math.cos().</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/MathG.html#floorDouble-double-">floorDouble</a></span>(double&nbsp;d)</code>
-<div class="block">Finds the closest integer that is less than or equal to the argument as a double.</div>
+<div class="block">Finds the closest integer that is less than or equal to the argument as a
+ double.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/MathG.html#floorInt-double-">floorInt</a></span>(double&nbsp;d)</code>
-<div class="block">Finds the closest integer that is less than or equal to the argument as an int.</div>
+<div class="block">Finds the closest integer that is less than or equal to the argument as
+ an int.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -216,15 +221,15 @@ extends java.lang.Object</pre>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/MathG.html#sin00004-double-">sin00004</a></span>(double&nbsp;v)</code>
-<div class="block">Returns an approximate value of the sin(v) that should be
- within plus-or-minus .00004 of the value returned by Math.sin().</div>
+<div class="block">Returns an approximate value of the sin(v) that should be within
+ plus-or-minus .00004 of the value returned by Math.sin().</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/MathG.html#sin01-double-">sin01</a></span>(double&nbsp;v)</code>
-<div class="block">Returns an approximate value of the sin(v) that should be
- within plus-or-minus .0108 of the value returned by Math.sin().</div>
+<div class="block">Returns an approximate value of the sin(v) that should be within
+ plus-or-minus .0108 of the value returned by Math.sin().</div>
 </td>
 </tr>
 </table>
@@ -273,8 +278,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>floorDouble</h4>
 <pre>public static final&nbsp;double&nbsp;floorDouble(double&nbsp;d)</pre>
-<div class="block">Finds the closest integer that is less than or equal to the argument as a double.
- <BR>Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
+<div class="block">Finds the closest integer that is less than or equal to the argument as a
+ double. <BR>
+ Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>d</code> - the value to calculate the floor of.</dd>
@@ -290,8 +296,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>floorInt</h4>
 <pre>public static final&nbsp;int&nbsp;floorInt(double&nbsp;d)</pre>
-<div class="block">Finds the closest integer that is less than or equal to the argument as an int.
- <BR>Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
+<div class="block">Finds the closest integer that is less than or equal to the argument as
+ an int. <BR>
+ Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>d</code> - the value to calculate the floor of.</dd>
@@ -307,8 +314,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>roundInt</h4>
 <pre>public static final&nbsp;int&nbsp;roundInt(double&nbsp;d)</pre>
-<div class="block">Rounds a double to the nearest integer value.
- <BR>Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
+<div class="block">Rounds a double to the nearest integer value. <BR>
+ Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>d</code> - the value to round.</dd>
@@ -324,8 +331,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>roundDouble</h4>
 <pre>public static final&nbsp;double&nbsp;roundDouble(double&nbsp;d)</pre>
-<div class="block">Rounds a double to the nearest integer value.
- <BR>Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
+<div class="block">Rounds a double to the nearest integer value. <BR>
+ Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>d</code> - the value to round.</dd>
@@ -341,8 +348,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>ceilInt</h4>
 <pre>public static final&nbsp;int&nbsp;ceilInt(double&nbsp;d)</pre>
-<div class="block">Finds the closest integer that is greater than or equal to the argument as an int.
- <BR>Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
+<div class="block">Finds the closest integer that is greater than or equal to the argument
+ as an int. <BR>
+ Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>d</code> - the value to calculate the ceil of.</dd>
@@ -358,13 +366,15 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>ceilDouble</h4>
 <pre>public static final&nbsp;double&nbsp;ceilDouble(double&nbsp;d)</pre>
-<div class="block">Finds the closest integer that is greater than or equal to the argument as a double.
- <BR>Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
+<div class="block">Finds the closest integer that is greater than or equal to the argument
+ as a double. <BR>
+ Warning: do not use an argument greater than 1e10, or less than 1e-10.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>d</code> - the value to calculate the ceil of.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the closest integer that is greater than the argument as a double.</dd>
+<dd>the closest integer that is greater than the argument as a
+         double.</dd>
 </dl>
 </li>
 </ul>
@@ -375,10 +385,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>sin01</h4>
 <pre>public static final&nbsp;double&nbsp;sin01(double&nbsp;v)</pre>
-<div class="block">Returns an approximate value of the sin(v) that should be
- within plus-or-minus .0108 of the value returned by Math.sin().
- <P>If the argument is greater in magnitude than 1e10, then
- this delegates to Math.sin().</div>
+<div class="block">Returns an approximate value of the sin(v) that should be within
+ plus-or-minus .0108 of the value returned by Math.sin().
+ <P>
+ If the argument is greater in magnitude than 1e10, then this delegates to
+ Math.sin().</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - </dd>
@@ -394,10 +405,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>cos01</h4>
 <pre>public static final&nbsp;double&nbsp;cos01(double&nbsp;v)</pre>
-<div class="block">Returns an approximate value of the cos(v) that should be
- within plus-or-minus .0108 of the value returned by Math.cos().
- <P>If the argument is greater in magnitude than 1e10, then
- this delegates to Math.cos().</div>
+<div class="block">Returns an approximate value of the cos(v) that should be within
+ plus-or-minus .0108 of the value returned by Math.cos().
+ <P>
+ If the argument is greater in magnitude than 1e10, then this delegates to
+ Math.cos().</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - </dd>
@@ -413,10 +425,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>sin00004</h4>
 <pre>public static final&nbsp;double&nbsp;sin00004(double&nbsp;v)</pre>
-<div class="block">Returns an approximate value of the sin(v) that should be
- within plus-or-minus .00004 of the value returned by Math.sin().
- <P>If the argument is greater in magnitude than 1e10, then
- this delegates to Math.sin().</div>
+<div class="block">Returns an approximate value of the sin(v) that should be within
+ plus-or-minus .00004 of the value returned by Math.sin().
+ <P>
+ If the argument is greater in magnitude than 1e10, then this delegates to
+ Math.sin().</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - </dd>
@@ -432,8 +445,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>acos</h4>
 <pre>public static final&nbsp;double&nbsp;acos(double&nbsp;v)</pre>
-<div class="block">Returns an approximate value of the acos(v) that should be
- within plus-or-minus .00004 of the value returned by Math.acos().</div>
+<div class="block">Returns an approximate value of the acos(v) that should be within
+ plus-or-minus .00004 of the value returned by Math.acos().</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - </dd>
@@ -449,10 +462,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>cos00004</h4>
 <pre>public static final&nbsp;double&nbsp;cos00004(double&nbsp;v)</pre>
-<div class="block">Returns an approximate value of the cos(v) that should be
- within plus-or-minus .00004 of the value returned by Math.cos().
- <P>If the argument is greater in magnitude than 1e10, then
- this delegates to Math.cos().</div>
+<div class="block">Returns an approximate value of the cos(v) that should be within
+ plus-or-minus .00004 of the value returned by Math.cos().
+ <P>
+ If the argument is greater in magnitude than 1e10, then this delegates to
+ Math.cos().</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - </dd>

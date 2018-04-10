@@ -187,8 +187,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/LocationBrowserUI.html#installGUI-javax.swing.JComponent-">installGUI</a></span>(javax.swing.JComponent&nbsp;comp)</code>
-<div class="block">This is called during the <code>installUI</code> method to set up
- the controls visible in this <code>LocationBrowserUI</code>.</div>
+<div class="block">This is called during the <code>installUI</code> method to set up the
+ controls visible in this <code>LocationBrowserUI</code>.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -199,16 +199,15 @@ extends javax.swing.plaf.ComponentUI</pre>
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/LocationBrowserUI.html#repaint-com.pump.io.location.IOLocation-boolean-">repaint</a></span>(<a href="../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;loc,
        boolean&nbsp;thumbnail)</code>
-<div class="block">This will be called on the event dispatch thread when
- the GraphicsCache has indicated the loc has a new graphic
- available.</div>
+<div class="block">This will be called on the event dispatch thread when the GraphicsCache
+ has indicated the loc has a new graphic available.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/LocationBrowserUI.html#stringTyped-java.lang.String-">stringTyped</a></span>(java.lang.String&nbsp;s)</code>
-<div class="block">This is called by <code>typingListener</code> when the user
- has typed a string.</div>
+<div class="block">This is called by <code>typingListener</code> when the user has typed a
+ string.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -293,13 +292,13 @@ extends javax.swing.plaf.ComponentUI</pre>
 <h4>repaint</h4>
 <pre>protected abstract&nbsp;void&nbsp;repaint(<a href="../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;loc,
                                 boolean&nbsp;thumbnail)</pre>
-<div class="block">This will be called on the event dispatch thread when
- the GraphicsCache has indicated the loc has a new graphic
- available.</div>
+<div class="block">This will be called on the event dispatch thread when the GraphicsCache
+ has indicated the loc has a new graphic available.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>loc</code> - </dd>
-<dd><code>thumbnail</code> - if true then a thumbnail is available, if false then an icon is available.</dd>
+<dd><code>thumbnail</code> - if true then a thumbnail is available, if false then an icon
+            is available.</dd>
 </dl>
 </li>
 </ul>
@@ -310,8 +309,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>installGUI</h4>
 <pre>protected abstract&nbsp;void&nbsp;installGUI(javax.swing.JComponent&nbsp;comp)</pre>
-<div class="block">This is called during the <code>installUI</code> method to set up
- the controls visible in this <code>LocationBrowserUI</code>.</div>
+<div class="block">This is called during the <code>installUI</code> method to set up the
+ controls visible in this <code>LocationBrowserUI</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>comp</code> - the panel to install the GUI in.</dd>
@@ -372,9 +371,9 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>stringTyped</h4>
 <pre>protected&nbsp;void&nbsp;stringTyped(java.lang.String&nbsp;s)</pre>
-<div class="block">This is called by <code>typingListener</code> when the user
- has typed a string.  By default it will select the first item
- in the directory that starts with the same text.</div>
+<div class="block">This is called by <code>typingListener</code> when the user has typed a
+ string. By default it will select the first item in the directory that
+ starts with the same text.</div>
 </li>
 </ul>
 <a name="getVisibleLocationSize--">
@@ -384,9 +383,9 @@ extends javax.swing.plaf.ComponentUI</pre>
 <li class="blockList">
 <h4>getVisibleLocationSize</h4>
 <pre>public abstract&nbsp;int&nbsp;getVisibleLocationSize()</pre>
-<div class="block">Returns the number of currently visible locations.
- If this is zero, then an indeterminant progress bar
- may appear while this location is still loading.</div>
+<div class="block">Returns the number of currently visible locations. If this is zero, then
+ an indeterminant progress bar may appear while this location is still
+ loading.</div>
 </li>
 </ul>
 </li>

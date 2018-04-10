@@ -110,12 +110,12 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ShapeBounds</span>
 extends java.lang.Object</pre>
-<div class="block">This class features an efficient and accurate
- <code>getBounds()</code> method.  The <code>java.awt.Shape</code>
- API clearly states that the <code>Shape.getBounds2D()</code> method
- may return a rectangle larger than the bounds of the actual shape,
- so here I present a method to get the bounds without resorting to
- the very-accurate-but-very-slow <code>java.awt.geom.Area</code> class.</div>
+<div class="block">This class features an efficient and accurate <code>getBounds()</code>
+ method. The <code>java.awt.Shape</code> API clearly states that the
+ <code>Shape.getBounds2D()</code> method may return a rectangle larger than
+ the bounds of the actual shape, so here I present a method to get the bounds
+ without resorting to the very-accurate-but-very-slow
+ <code>java.awt.geom.Area</code> class.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/showcase/ShapeBoundsDemo.html" title="class in com.pump.showcase"><code>ShapeBoundsDemo</code></a></dd>
@@ -250,8 +250,8 @@ extends java.lang.Object</pre>
 <div class="block">This calculates the precise bounds of a shape.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>shape</code> - the shape you want the bounds of.
- This method throws a NullPointerException if this is null.</dd>
+<dd><code>shape</code> - the shape you want the bounds of. This method throws a
+            NullPointerException if this is null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the bounds of <code>shape</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -280,12 +280,13 @@ extends java.lang.Object</pre>
 <div class="block">This calculates the precise bounds of a shape.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>shape</code> - the shape you want the bounds of.
- This method throws a NullPointerException if this is null.</dd>
+<dd><code>shape</code> - the shape you want the bounds of. This method throws a
+            NullPointerException if this is null.</dd>
 <dd><code>transform</code> - if this is non-null, then this method returns the bounds of
- <code>shape</code> as seen through <code>t</code>.</dd>
+            <code>shape</code> as seen through <code>t</code>.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the bounds of <code>shape</code>, as seen through <code>transform</code>.</dd>
+<dd>the bounds of <code>shape</code>, as seen through
+         <code>transform</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../com/pump/geom/EmptyPathException.html" title="class in com.pump.geom">EmptyPathException</a></code> - if the shape argument is empty.</dd>
 </dl>
@@ -304,15 +305,16 @@ extends java.lang.Object</pre>
 <div class="block">This calculates the precise bounds of a shape.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>shape</code> - the shape you want the bounds of.
- This method throws a NullPointerException if this is null.</dd>
+<dd><code>shape</code> - the shape you want the bounds of. This method throws a
+            NullPointerException if this is null.</dd>
 <dd><code>transform</code> - if this is non-null, then this method returns the bounds of
- <code>shape</code> as seen through <code>t</code>.</dd>
-<dd><code>r</code> - if this is non-null, then the result is stored in
- this rectangle.  This is useful when you need to call this method
- repeatedly without allocating a lot of memory.</dd>
+            <code>shape</code> as seen through <code>t</code>.</dd>
+<dd><code>r</code> - if this is non-null, then the result is stored in this
+            rectangle. This is useful when you need to call this method
+            repeatedly without allocating a lot of memory.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the bounds of <code>shape</code>, as seen through <code>transform</code>.</dd>
+<dd>the bounds of <code>shape</code>, as seen through
+         <code>transform</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../com/pump/geom/EmptyPathException.html" title="class in com.pump.geom">EmptyPathException</a></code> - if the shape argument is empty.</dd>
 </dl>
@@ -330,11 +332,11 @@ extends java.lang.Object</pre>
 <div class="block">This calculates the precise bounds of a shape.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>shape</code> - the shape you want the bounds of.
- This method throws a NullPointerException if this is null.</dd>
-<dd><code>r</code> - if this is non-null, then the result is stored in
- this rectangle.  This is useful when you need to call this method
- repeatedly without allocating a lot of memory.</dd>
+<dd><code>shape</code> - the shape you want the bounds of. This method throws a
+            NullPointerException if this is null.</dd>
+<dd><code>r</code> - if this is non-null, then the result is stored in this
+            rectangle. This is useful when you need to call this method
+            repeatedly without allocating a lot of memory.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the bounds of <code>shape</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -352,8 +354,8 @@ extends java.lang.Object</pre>
 <div class="block">This calculates the precise bounds of a shape.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>i</code> - the shape you want the bounds of.
- This method throws a NullPointerException if this is null.</dd>
+<dd><code>i</code> - the shape you want the bounds of. This method throws a
+            NullPointerException if this is null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the bounds of <code>i</code>.</dd>
 </dl>
@@ -370,11 +372,11 @@ extends java.lang.Object</pre>
 <div class="block">This calculates the precise bounds of a shape.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>i</code> - the shape you want the bounds of.
- This method throws a NullPointerException if this is null.</dd>
-<dd><code>r</code> - if this is non-null, then the result is stored in
- this rectangle.  This is useful when you need to call this method
- repeatedly without allocating a lot of memory.</dd>
+<dd><code>i</code> - the shape you want the bounds of. This method throws a
+            NullPointerException if this is null.</dd>
+<dd><code>r</code> - if this is non-null, then the result is stored in this
+            rectangle. This is useful when you need to call this method
+            repeatedly without allocating a lot of memory.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the bounds of <code>i</code>.</dd>
 </dl>

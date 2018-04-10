@@ -103,8 +103,8 @@ public class TextDiff {
 	 * <p>
 	 * This abstract class has two subclasses: the {@code SharedSegment} is a
 	 * String that is shared between both branch A and B, and the {code
-	 * SplitSegment} is two Strings that deviate depending on which branch you're
-	 * following.
+	 * SplitSegment} is two Strings that deviate depending on which branch
+	 * you're following.
 	 * <p>
 	 * This is illustrated in the {@link TextDiff} javadoc with diagrams. Each
 	 * column in those diagrams is a DiffSegment object.
@@ -399,7 +399,7 @@ public class TextDiff {
 		 * is also a subset of "intelligence". And "cm" is a subset of
 		 * "centimeter", but it also a subset of "camp".
 		 * 
-		 * @param b
+		 * @param x
 		 *            the branch that might be a subset of the opposite branch.
 		 * @return true if the argument branch is a subset of the opposite
 		 *         branch.

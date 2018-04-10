@@ -131,15 +131,18 @@ var activeTableTab = "activeTableTab";
 extends <a href="../../../com/pump/graphics/AbstractGraphics2D.html" title="class in com.pump.graphics">AbstractGraphics2D</a>
 implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a>, java.io.Serializable, javax.swing.tree.MutableTreeNode</pre>
 <div class="block">This object provides a simple way to model/export layered vector graphics.
- <P>As you render objects to this writer, several <a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics"><code>GraphicInstruction</code></a> objects
- are collected in a stack.  An exception is thrown if you attempt to use any
- composite that is not a <code>AlphaComposite.SRC_OVER</code>, because this assumes
- each element is rendered "on top of" all existing elements.
- <P>The concept here is that simple vector art can be stored and translated.  This
- object (and all instructions) should be fully serializable.  Also you can pass this
- <code>Graphics2D</code> to any existing <code>paint()</code> method and then sift
- through the resulting instructions to export the data to another format.  (For
- example, this model was originally designed to help export graphics to PPTX files.)</div>
+ <P>
+ As you render objects to this writer, several <a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics"><code>GraphicInstruction</code></a>
+ objects are collected in a stack. An exception is thrown if you attempt to
+ use any composite that is not a <code>AlphaComposite.SRC_OVER</code>, because
+ this assumes each element is rendered "on top of" all existing elements.
+ <P>
+ The concept here is that simple vector art can be stored and translated. This
+ object (and all instructions) should be fully serializable. Also you can pass
+ this <code>Graphics2D</code> to any existing <code>paint()</code> method and
+ then sift through the resulting instructions to export the data to another
+ format. (For example, this model was originally designed to help export
+ graphics to PPTX files.)</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.graphics.GraphicsWriter">Serialized Form</a></dd>
@@ -165,8 +168,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <tr class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicsWriter.html#DEBUGGING">DEBUGGING</a></span></code>
-<div class="block">If this is true, then GraphicInstruction.getSource() will return
- part of the stack trace of the call that created an instruction.</div>
+<div class="block">If this is true, then GraphicInstruction.getSource() will return part of
+ the stack trace of the call that created an instruction.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -259,7 +262,7 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicsWriter.html#drawString-java.text.AttributedCharacterIterator-float-float-">drawString</a></span>(java.text.AttributedCharacterIterator&nbsp;aci,
           float&nbsp;x,
           float&nbsp;y)</code>
-<div class="block">Creates a <code>TextLayout</code> and calls 
+<div class="block">Creates a <code>TextLayout</code> and calls
  <code>TextLayout.draw(g,x,y)</code>.</div>
 </td>
 </tr>
@@ -276,7 +279,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicsWriter.html#drawString-java.lang.String-float-float-">drawString</a></span>(java.lang.String&nbsp;s,
           float&nbsp;x,
           float&nbsp;y)</code>
-<div class="block">Creates a <code>GlyphVector</code> and calls <code>drawGlyphVector()</code>.</div>
+<div class="block">Creates a <code>GlyphVector</code> and calls
+ <code>drawGlyphVector()</code>.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -298,7 +302,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>java.awt.geom.Rectangle2D</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicsWriter.html#getBounds--">getBounds</a></span>()</code>
-<div class="block">Returns the bounds that would be affected if <code>paint()</code> were called.</div>
+<div class="block">Returns the bounds that would be affected if <code>paint()</code> were
+ called.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
@@ -330,8 +335,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicsWriter.html#getSource--">getSource</a></span>()</code>
-<div class="block">Returns a string for developers to recognize the source
- of this instruction.</div>
+<div class="block">Returns a string for developers to recognize the source of this
+ instruction.</div>
 </td>
 </tr>
 <tr id="i20" class="altColor">
@@ -402,8 +407,7 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <tr id="i34" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicsWriter.html#toString-java.awt.AlphaComposite-">toString</a></span>(java.awt.AlphaComposite&nbsp;c)</code>
-<div class="block">The AlphaComposite class doesn't have a useful
- toString() method</div>
+<div class="block">The AlphaComposite class doesn't have a useful toString() method</div>
 </td>
 </tr>
 </table>
@@ -469,8 +473,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <li class="blockList">
 <h4>DEBUGGING</h4>
 <pre>public static&nbsp;boolean DEBUGGING</pre>
-<div class="block">If this is true, then GraphicInstruction.getSource() will return
- part of the stack trace of the call that created an instruction.</div>
+<div class="block">If this is true, then GraphicInstruction.getSource() will return part of
+ the stack trace of the call that created an instruction.</div>
 </li>
 </ul>
 <a name="EMPTY_ENUMERATION">
@@ -499,13 +503,14 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <pre>public&nbsp;GraphicsWriter(boolean&nbsp;createMakesNewGroup)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>createMakesNewGroup</code> - if this is true, then when
- Graphics2D.create() is called for this object, a new writer
- will be created that contains its own distinct list of
- instructions.  If this is false, then the same instruction list
- is shared between this object and its clone.
- <P>This can be used to imply the existence of groups in vector
- graphics.</dd>
+<dd><code>createMakesNewGroup</code> - if this is true, then when Graphics2D.create() is called for
+            this object, a new writer will be created that contains its
+            own distinct list of instructions. If this is false, then the
+            same instruction list is shared between this object and its
+            clone.
+            <P>
+            This can be used to imply the existence of groups in vector
+            graphics.</dd>
 </dl>
 </li>
 </ul>
@@ -519,15 +524,15 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
                       int&nbsp;instructionLimit)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>createMakesNewGroup</code> - if this is true, then when
- Graphics2D.create() is called for this object, a new writer
- will be created that contains its own distinct list of
- instructions.  If this is false, then the same instruction list
- is shared between this object and its clone.
- <P>This can be used to imply the existence of groups in vector
- graphics.</dd>
-<dd><code>instructionLimit</code> - the maximum number of instructions this writer will
- store.</dd>
+<dd><code>createMakesNewGroup</code> - if this is true, then when Graphics2D.create() is called for
+            this object, a new writer will be created that contains its
+            own distinct list of instructions. If this is false, then the
+            same instruction list is shared between this object and its
+            clone.
+            <P>
+            This can be used to imply the existence of groups in vector
+            graphics.</dd>
+<dd><code>instructionLimit</code> - the maximum number of instructions this writer will store.</dd>
 </dl>
 </li>
 </ul>
@@ -557,7 +562,7 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <h4>saveAsPNG</h4>
 <pre>public&nbsp;void&nbsp;saveAsPNG(java.io.File&nbsp;file)
                throws java.io.IOException</pre>
-<div class="block">Exports this data as a PNG.  (This is intended only for debugging.)</div>
+<div class="block">Exports this data as a PNG. (This is intended only for debugging.)</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
@@ -611,8 +616,9 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <h4>getInstructions</h4>
 <pre>public&nbsp;<a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a>[]&nbsp;getInstructions(boolean&nbsp;simplify)</pre>
 <div class="block">Returns a list of instructions to render to recreate this graphics.
- <P>Depending on how this writer was constructed, this may contain
- other <code>GraphicsWriter</code> objects (suggesting nested groups).</div>
+ <P>
+ Depending on how this writer was constructed, this may contain other
+ <code>GraphicsWriter</code> objects (suggesting nested groups).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>simplify</code> - this removes empty groups/instructions from the instructions.</dd>
@@ -690,8 +696,7 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <li class="blockList">
 <h4>toString</h4>
 <pre>public static&nbsp;java.lang.String&nbsp;toString(java.awt.AlphaComposite&nbsp;c)</pre>
-<div class="block">The AlphaComposite class doesn't have a useful
- toString() method</div>
+<div class="block">The AlphaComposite class doesn't have a useful toString() method</div>
 </li>
 </ul>
 <a name="setOpacity-float-">
@@ -724,7 +729,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <li class="blockList">
 <h4>getBounds</h4>
 <pre>public&nbsp;java.awt.geom.Rectangle2D&nbsp;getBounds()</pre>
-<div class="block">Returns the bounds that would be affected if <code>paint()</code> were called.</div>
+<div class="block">Returns the bounds that would be affected if <code>paint()</code> were
+ called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/GraphicInstruction.html#getBounds--">getBounds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></dd>
@@ -741,10 +747,11 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
                        float&nbsp;x,
                        float&nbsp;y)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawString-java.text.AttributedCharacterIterator-float-float-">AbstractGraphics2D</a></code></span></div>
-<div class="block">Creates a <code>TextLayout</code> and calls 
+<div class="block">Creates a <code>TextLayout</code> and calls
  <code>TextLayout.draw(g,x,y)</code>.
- <P>This way if the AttributedCharacterIterator represents several
- different fills, they'll be handled correctly.</div>
+ <P>
+ This way if the AttributedCharacterIterator represents several different
+ fills, they'll be handled correctly.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawString-java.text.AttributedCharacterIterator-float-float-">drawString</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/graphics/AbstractGraphics2D.html" title="class in com.pump.graphics">AbstractGraphics2D</a></code></dd>
@@ -778,7 +785,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
                        float&nbsp;x,
                        float&nbsp;y)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawString-java.lang.String-float-float-">AbstractGraphics2D</a></code></span></div>
-<div class="block">Creates a <code>GlyphVector</code> and calls <code>drawGlyphVector()</code>.</div>
+<div class="block">Creates a <code>GlyphVector</code> and calls
+ <code>drawGlyphVector()</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawString-java.lang.String-float-float-">drawString</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/graphics/AbstractGraphics2D.html" title="class in com.pump.graphics">AbstractGraphics2D</a></code></dd>
@@ -810,8 +818,7 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <h4>setParent</h4>
 <pre>public&nbsp;void&nbsp;setParent(<a href="../../../com/pump/graphics/GraphicsWriter.html" title="class in com.pump.graphics">GraphicsWriter</a>&nbsp;parent)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html#setParent-com.pump.graphics.GraphicsWriter-">GraphicInstruction</a></code></span></div>
-<div class="block">Sets the parent of this tree node.
- This method</div>
+<div class="block">Sets the parent of this tree node. This method</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/GraphicInstruction.html#setParent-com.pump.graphics.GraphicsWriter-">setParent</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></dd>
@@ -1014,10 +1021,9 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <h4>getSource</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getSource()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html#getSource--">GraphicInstruction</a></code></span></div>
-<div class="block">Returns a string for developers to recognize the source
- of this instruction.  By default this returns a stack trace,
- but it may return "Unknown" if the <code>GraphicsWriter</code>
- debugging flag is false.</div>
+<div class="block">Returns a string for developers to recognize the source of this
+ instruction. By default this returns a stack trace, but it may return
+ "Unknown" if the <code>GraphicsWriter</code> debugging flag is false.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/GraphicInstruction.html#getSource--">getSource</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></dd>

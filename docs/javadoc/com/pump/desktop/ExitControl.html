@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 
-<title>BeanMap</title>
+<title>ExitControl</title>
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 <script type="text/javascript" src="../../../script.js"></script>
@@ -12,13 +12,13 @@
 <script type="text/javascript"><!--
     try {
         if (location.href.indexOf('is-external=true') == -1) {
-            parent.document.title="BeanMap";
+            parent.document.title="ExitControl";
         }
     }
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -48,12 +48,12 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
-<li><a href="../../../com/pump/data/BeanMapConverter.html" title="interface in com.pump.data"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/desktop/DesktopApplication.html" title="class in com.pump.desktop"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/desktop/PositionedFrame.html" title="class in com.pump.desktop"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
-<li><a href="../../../index.html?com/pump/data/BeanMap.html" target="_top">Frames</a></li>
-<li><a href="BeanMap.html" target="_top">No&nbsp;Frames</a></li>
+<li><a href="../../../index.html?com/pump/desktop/ExitControl.html" target="_top">Frames</a></li>
+<li><a href="ExitControl.html" target="_top">No&nbsp;Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="../../../allclasses-noframe.html">All&nbsp;Classes</a></li>
@@ -91,15 +91,15 @@ var activeTableTab = "activeTableTab";
 <!-- ========= END OF TOP NAVBAR ========= -->
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">com.pump.data</div>
-<h2 title="Class BeanMap" class="title">Class BeanMap</h2>
+<div class="subTitle">com.pump.desktop</div>
+<h2 title="Class ExitControl" class="title">Class ExitControl</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>com.pump.data.BeanMap</li>
+<li>com.pump.desktop.ExitControl</li>
 </ul>
 </li>
 </ul>
@@ -108,9 +108,37 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">BeanMap</span>
+<pre>public class <span class="typeNameLabel">ExitControl</span>
 extends java.lang.Object</pre>
-<div class="block">This is a simple map container with get/set values that use <a href="../../../com/pump/data/Key.html" title="class in com.pump.data"><code>Key</code></a> objects.</div>
+<div class="block">This helps manage a menu item to exit an application.
+ <p>
+ When exiting is requested this dispatched a WINDOW_CLOSING event to your
+ frame. If you already have code similar to the block below, then this
+ behavior will directly complement that model:
+ <p>
+ 
+ <pre>
+ setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+ addWindowListener(new WindowAdapter() {
+ 
+        &#064;Override
+        public void windowClosing(WindowEvent e) {
+                String docName = &quot;Untitled&quot;;
+                int choice = QDialog.showSaveChangesDialog(ButtercupFrame.this,
+                                docName, true);
+ 
+                if (choice == DialogFooter.SAVE_OPTION) {
+                        save();
+                }
+                if (choice == DialogFooter.DONT_SAVE_OPTION
+                                || choice == DialogFooter.SAVE_OPTION) {
+                        setVisible(false);
+                } else if (choice == DialogFooter.CANCEL_OPTION) {
+                        throw new UserCancelledException();
+                }
+        }
+ });
+ </pre></div>
 </li>
 </ul>
 </div>
@@ -130,8 +158,12 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/BeanMap.html#data">data</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>protected javax.swing.AbstractAction</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/ExitControl.html#exitAction">exitAction</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected javax.swing.JMenuItem</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/ExitControl.html#exitItem">exitItem</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -148,14 +180,7 @@ extends java.lang.Object</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/data/BeanMap.html#BeanMap--">BeanMap</a></span>()</code>
-<div class="block">Create an empty BeanMap.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/data/BeanMap.html#BeanMap-java.util.Map-">BeanMap</a></span>(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;attributes)</code>
-<div class="block">Create a BeanMap</div>
-</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/ExitControl.html#ExitControl--">ExitControl</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -173,37 +198,12 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/BeanMap.html#equals-java.lang.Object-">equals</a></span>(java.lang.Object&nbsp;obj)</code>&nbsp;</td>
+<td class="colFirst"><code>javax.swing.AbstractAction</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/ExitControl.html#getExitAction--">getExitAction</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/BeanMap.html#get-com.pump.data.Key-">get</a></span>(<a href="../../../com/pump/data/Key.html" title="class in com.pump.data">Key</a>&lt;T&gt;&nbsp;key)</code>
-<div class="block">Return the value associated with a key.</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/BeanMap.html#getMap--">getMap</a></span>()</code>
-<div class="block">Return a copy of all the key/value pairs in this object.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/BeanMap.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/BeanMap.html#putAll-java.util.Map-">putAll</a></span>(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;incomingData)</code>
-<div class="block">Apply all the values in the incoming map.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/BeanMap.html#set-com.pump.data.Key-T-">set</a></span>(<a href="../../../com/pump/data/Key.html" title="class in com.pump.data">Key</a>&lt;T&gt;&nbsp;key,
-   T&nbsp;value)</code>
-<div class="block">Set a key/value pair in this object.</div>
-</td>
+<td class="colFirst"><code>javax.swing.JMenuItem</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/desktop/ExitControl.html#getExitMenuItem--">getExitMenuItem</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -211,7 +211,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -227,13 +227,22 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="data">
+<a name="exitAction">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>exitAction</h4>
+<pre>protected&nbsp;javax.swing.AbstractAction exitAction</pre>
+</li>
+</ul>
+<a name="exitItem">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>data</h4>
-<pre>protected&nbsp;java.util.Map&lt;java.lang.String,java.lang.Object&gt; data</pre>
+<h4>exitItem</h4>
+<pre>protected&nbsp;javax.swing.JMenuItem exitItem</pre>
 </li>
 </ul>
 </li>
@@ -244,28 +253,13 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="BeanMap--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>BeanMap</h4>
-<pre>public&nbsp;BeanMap()</pre>
-<div class="block">Create an empty BeanMap.</div>
-</li>
-</ul>
-<a name="BeanMap-java.util.Map-">
+<a name="ExitControl--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>BeanMap</h4>
-<pre>public&nbsp;BeanMap(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;attributes)</pre>
-<div class="block">Create a BeanMap</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>attributes</code> - the attributes to copy into this object.</dd>
-</dl>
+<h4>ExitControl</h4>
+<pre>public&nbsp;ExitControl()</pre>
 </li>
 </ul>
 </li>
@@ -276,90 +270,22 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="set-com.pump.data.Key-java.lang.Object-">
-<!--   -->
-</a><a name="set-com.pump.data.Key-T-">
+<a name="getExitAction--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>set</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;set(<a href="../../../com/pump/data/Key.html" title="class in com.pump.data">Key</a>&lt;T&gt;&nbsp;key,
-                 T&nbsp;value)</pre>
-<div class="block">Set a key/value pair in this object.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>key</code> - the key to retrieve the value of.</dd>
-<dd><code>value</code> - the value to assign to the key.</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the previous value the key mapped to.</dd>
-</dl>
+<h4>getExitAction</h4>
+<pre>public&nbsp;javax.swing.AbstractAction&nbsp;getExitAction()</pre>
 </li>
 </ul>
-<a name="putAll-java.util.Map-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>putAll</h4>
-<pre>public&nbsp;void&nbsp;putAll(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;incomingData)</pre>
-<div class="block">Apply all the values in the incoming map.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>incomingData</code> - a series of key/value pairs to install in this object.</dd>
-</dl>
-</li>
-</ul>
-<a name="get-com.pump.data.Key-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>get</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get(<a href="../../../com/pump/data/Key.html" title="class in com.pump.data">Key</a>&lt;T&gt;&nbsp;key)</pre>
-<div class="block">Return the value associated with a key.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>key</code> - the key to retrieve the value for.</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the value associated with the provided key.</dd>
-</dl>
-</li>
-</ul>
-<a name="hashCode--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;hashCode()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
-</dl>
-</li>
-</ul>
-<a name="equals-java.lang.Object-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;equals(java.lang.Object&nbsp;obj)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
-</dl>
-</li>
-</ul>
-<a name="getMap--">
+<a name="getExitMenuItem--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getMap</h4>
-<pre>public&nbsp;java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;getMap()</pre>
-<div class="block">Return a copy of all the key/value pairs in this object.</div>
+<h4>getExitMenuItem</h4>
+<pre>public&nbsp;javax.swing.JMenuItem&nbsp;getExitMenuItem()</pre>
 </li>
 </ul>
 </li>
@@ -389,12 +315,12 @@ extends java.lang.Object</pre>
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
-<li><a href="../../../com/pump/data/BeanMapConverter.html" title="interface in com.pump.data"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/desktop/DesktopApplication.html" title="class in com.pump.desktop"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/desktop/PositionedFrame.html" title="class in com.pump.desktop"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
-<li><a href="../../../index.html?com/pump/data/BeanMap.html" target="_top">Frames</a></li>
-<li><a href="BeanMap.html" target="_top">No&nbsp;Frames</a></li>
+<li><a href="../../../index.html?com/pump/desktop/ExitControl.html" target="_top">Frames</a></li>
+<li><a href="ExitControl.html" target="_top">No&nbsp;Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_bottom">
 <li><a href="../../../allclasses-noframe.html">All&nbsp;Classes</a></li>

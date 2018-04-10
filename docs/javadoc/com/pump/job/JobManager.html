@@ -110,12 +110,14 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">JobManager</span>
 extends java.lang.Object</pre>
-<div class="block">This manages a queue of <a href="../../../com/pump/job/Job.html" title="class in com.pump.job"><code>Job</code></a> objects.
- Jobs are first sorted by priority, and then handled on a FIFO basis.
- If a job is next in line but is classified as being dependent on other
- (unfinished) jobs, then it is skipped until those jobs are processed.
- <p>TODO: This does not resolve circular dependencies.
- <p>This relies on the <code>java.util.concurrent.Executor</code> and related
+<div class="block">This manages a queue of <a href="../../../com/pump/job/Job.html" title="class in com.pump.job"><code>Job</code></a> objects. Jobs are first
+ sorted by priority, and then handled on a FIFO basis. If a job is next in
+ line but is classified as being dependent on other (unfinished) jobs, then it
+ is skipped until those jobs are processed.
+ <p>
+ TODO: This does not resolve circular dependencies.
+ <p>
+ This relies on the <code>java.util.concurrent.Executor</code> and related
  classes, but it offers more useful feedback to help keep UIs up-to-date.</div>
 </li>
 </ul>
@@ -138,8 +140,8 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/job/JobManager.Listener.html" title="interface in com.pump.job">JobManager.Listener</a></span></code>
-<div class="block">This offers a model for simple notification of what this JobManager
- is currently doing.</div>
+<div class="block">This offers a model for simple notification of what this JobManager is
+ currently doing.</div>
 </td>
 </tr>
 </table>
@@ -346,13 +348,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>addChangeListener</h4>
 <pre>public&nbsp;boolean&nbsp;addChangeListener(javax.swing.event.ChangeListener&nbsp;l)</pre>
-<div class="block">Adds a ChangeListener to this JobManager. This is notified of
- the same events as a <a href="../../../com/pump/job/JobManager.Listener.html" title="interface in com.pump.job"><code>JobManager.Listener</code></a>; it's just more generic.</div>
+<div class="block">Adds a ChangeListener to this JobManager. This is notified of the same
+ events as a <a href="../../../com/pump/job/JobManager.Listener.html" title="interface in com.pump.job"><code>JobManager.Listener</code></a>; it's just more generic.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>l</code> - this listener will be notified when that state
- of this manager changes (active/inactive) and when jobs
- finish (or stop) running.</dd>
+<dd><code>l</code> - this listener will be notified when that state of this manager
+            changes (active/inactive) and when jobs finish (or stop)
+            running.</dd>
 </dl>
 </li>
 </ul>
@@ -376,14 +378,14 @@ extends java.lang.Object</pre>
 <div class="block">Returns the number of jobs in this JobManager.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>includeActiveJobs</code> - if true then this also
- includes the number of active jobs. If false then this
- only includes pending jobs that are not currently
- being processed. (This is no way accounts for completed jobs.)</dd>
+<dd><code>includeActiveJobs</code> - if true then this also includes the number of active jobs. If
+            false then this only includes pending jobs that are not
+            currently being processed. (This is no way accounts for
+            completed jobs.)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>if false then this includes only the pending jobs
- that have not started.  If true then this returns the
- pending jobs + the current job.</dd>
+<dd>if false then this includes only the pending jobs that have not
+         started. If true then this returns the pending jobs + the current
+         job.</dd>
 </dl>
 </li>
 </ul>
@@ -398,8 +400,9 @@ extends java.lang.Object</pre>
  This has no effect if the job is already in progress.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the job was removed/skipped, false if the job was not found
- in the pending queue. (It might already be executing, or have otherwise finished.)</dd>
+<dd>true if the job was removed/skipped, false if the job was not
+         found in the pending queue. (It might already be executing, or
+         have otherwise finished.)</dd>
 </dl>
 </li>
 </ul>
@@ -413,8 +416,7 @@ extends java.lang.Object</pre>
 <div class="block">Remove all pending jobs.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>cancelActiveJobs</code> - if true then this additionally
- cancels every active job.</dd>
+<dd><code>cancelActiveJobs</code> - if true then this additionally cancels every active job.</dd>
 </dl>
 </li>
 </ul>

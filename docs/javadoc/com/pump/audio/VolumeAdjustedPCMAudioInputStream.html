@@ -318,8 +318,8 @@ extends <a href="../../../com/pump/audio/FrameFilterAudioInputStream.html" title
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - the array storing the sample frames.</dd>
 <dd><code>off</code> - the offset in this array the frames begin at.</dd>
-<dd><code>frameCount</code> - the number of frames to filter. So the
- number of bytes filtered should equals (frameCount * this.frameSize).</dd>
+<dd><code>frameCount</code> - the number of frames to filter. So the number of bytes
+            filtered should equals (frameCount * this.frameSize).</dd>
 </dl>
 </li>
 </ul>
@@ -336,11 +336,12 @@ extends <a href="../../../com/pump/audio/FrameFilterAudioInputStream.html" title
 <dd><code>time</code> - the time (in seconds) to retrieve the volume for</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the volume multiplier. For example: 0=silent, .5=half volume,
- 1.0=normal volume, 2.0=double volume. 
- <p>The method <code>filterFrames(..)</code> calls this method and imposes
- a minimum and maximum on the returned value, so if you double or quintuple
- the volume: you may get distorted audio but you will not be encoding invalid
- PCM values.</dd>
+         1.0=normal volume, 2.0=double volume.
+         <p>
+         The method <code>filterFrames(..)</code> calls this method and
+         imposes a minimum and maximum on the returned value, so if you
+         double or quintuple the volume: you may get distorted audio but
+         you will not be encoding invalid PCM values.</dd>
 </dl>
 </li>
 </ul>

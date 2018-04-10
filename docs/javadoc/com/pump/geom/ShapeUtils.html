@@ -157,8 +157,8 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static java.awt.geom.Point2D</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/ShapeUtils.html#getPoint-java.awt.Shape-float-">getPoint</a></span>(java.awt.Shape&nbsp;shape,
         float&nbsp;progress)</code>
-<div class="block">TSimilar to tracing, this progresses a dot from the beginning
- to the end of this path.</div>
+<div class="block">TSimilar to tracing, this progresses a dot from the beginning to the end
+ of this path.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -182,7 +182,8 @@ extends java.lang.Object</pre>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/ShapeUtils.html#isValid-java.awt.Shape-">isValid</a></span>(java.awt.Shape&nbsp;shape)</code>
-<div class="block">Return false if any coordinates in this shape contain NaN or Infinite values.</div>
+<div class="block">Return false if any coordinates in this shape contain NaN or Infinite
+ values.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -238,7 +239,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>isValid</h4>
 <pre>public static&nbsp;boolean&nbsp;isValid(java.awt.Shape&nbsp;shape)</pre>
-<div class="block">Return false if any coordinates in this shape contain NaN or Infinite values.</div>
+<div class="block">Return false if any coordinates in this shape contain NaN or Infinite
+ values.</div>
 </li>
 </ul>
 <a name="traceShape-java.awt.Shape-float-">
@@ -249,15 +251,16 @@ extends java.lang.Object</pre>
 <h4>traceShape</h4>
 <pre>public static&nbsp;java.awt.geom.GeneralPath&nbsp;traceShape(java.awt.Shape&nbsp;shape,
                                                    float&nbsp;progress)</pre>
-<div class="block">This traces the shape provided.  This can be used to create
- a "drawing" effect.
- <P>This assumes every segment is equally important/long, which is
- not always the case.</div>
+<div class="block">This traces the shape provided. This can be used to create a "drawing"
+ effect.
+ <P>
+ This assumes every segment is equally important/long, which is not always
+ the case.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shape</code> - </dd>
-<dd><code>progress</code> - a float from [0,1], indicating what fraction
- of the shape provided should be traced.</dd>
+<dd><code>progress</code> - a float from [0,1], indicating what fraction of the shape
+            provided should be traced.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a portion of the shape provided</dd>
 </dl>
@@ -271,8 +274,8 @@ extends java.lang.Object</pre>
 <h4>getPoint</h4>
 <pre>public static&nbsp;java.awt.geom.Point2D&nbsp;getPoint(java.awt.Shape&nbsp;shape,
                                              float&nbsp;progress)</pre>
-<div class="block">TSimilar to tracing, this progresses a dot from the beginning
- to the end of this path.</div>
+<div class="block">TSimilar to tracing, this progresses a dot from the beginning to the end
+ of this path.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shape</code> - </dd>
@@ -323,7 +326,8 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shape</code> - the shape to inspect</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if every subpath in the shape provided ends with a SEG_CLOSE.</dd>
+<dd>true if every subpath in the shape provided ends with a
+         SEG_CLOSE.</dd>
 </dl>
 </li>
 </ul>

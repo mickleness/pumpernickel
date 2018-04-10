@@ -117,84 +117,71 @@ extends java.lang.Object
 implements java.awt.Shape, java.lang.Cloneable</pre>
 <div class="block">This class is a direct branch from the <code>java.awt.geom.Area</code>.
  <p>
- An <code>AreaX</code> object stores and manipulates a
- resolution-independent description of an enclosed area of
- 2-dimensional space.
- <code>AreaX</code> objects can be transformed and can perform
- various Constructive Area Geometry (CAG) operations when combined
- with other <code>AreaX</code> objects.
- The CAG operations include area
- <a href="../../../com/pump/geom/AreaX.html#add-java.awt.Shape-"><code>addition</code></a>, <a href="../../../com/pump/geom/AreaX.html#subtract-java.awt.Shape-"><code>subtraction</code></a>,
- <a href="../../../com/pump/geom/AreaX.html#intersect-java.awt.Shape-"><code>intersection</code></a>, and <a href="../../../com/pump/geom/AreaX.html#exclusiveOr-java.awt.Shape-"><code>exclusive or</code></a>.
- See the linked method documentation for examples of the various
- operations.
+ An <code>AreaX</code> object stores and manipulates a resolution-independent
+ description of an enclosed area of 2-dimensional space. <code>AreaX</code>
+ objects can be transformed and can perform various Constructive Area Geometry
+ (CAG) operations when combined with other <code>AreaX</code> objects. The CAG
+ operations include area <a href="../../../com/pump/geom/AreaX.html#add-java.awt.Shape-"><code>addition</code></a>, <a href="../../../com/pump/geom/AreaX.html#subtract-java.awt.Shape-"><code>subtraction</code></a>,
+ <a href="../../../com/pump/geom/AreaX.html#intersect-java.awt.Shape-"><code>intersection</code></a>, and <a href="../../../com/pump/geom/AreaX.html#exclusiveOr-java.awt.Shape-"><code>exclusive or</code></a>. See
+ the linked method documentation for examples of the various operations.
  <p>
- The <code>AreaX</code> class implements the <code>Shape</code>
- interface and provides full support for all of its hit-testing
- and path iteration facilities, but an <code>AreaX</code> is more
- specific than a generalized path in a number of ways:
+ The <code>AreaX</code> class implements the <code>Shape</code> interface and
+ provides full support for all of its hit-testing and path iteration
+ facilities, but an <code>AreaX</code> is more specific than a generalized
+ path in a number of ways:
  <ul>
- <li>Only closed paths and sub-paths are stored.
-     <code>AreaX</code> objects constructed from unclosed paths
-     are implicitly closed during construction as if those paths
-     had been filled by the <code>Graphics2D.fill</code> method.
- <li>The interiors of the individual stored sub-paths are all
-     non-empty and non-overlapping.  Paths are decomposed during
-     construction into separate component non-overlapping parts,
-     empty pieces of the path are discarded, and then these
-     non-empty and non-overlapping properties are maintained
-     through all subsequent CAG operations.  Outlines of different
-     component sub-paths may touch each other, as long as they
-     do not cross so that their enclosed areas overlap.
- <li>The geometry of the path describing the outline of the
-     <code>AreaX</code> resembles the path from which it was
-     constructed only in that it describes the same enclosed
-     2-dimensional area, but may use entirely different types
-     and ordering of the path segments to do so.
+ <li>Only closed paths and sub-paths are stored. <code>AreaX</code> objects
+ constructed from unclosed paths are implicitly closed during construction as
+ if those paths had been filled by the <code>Graphics2D.fill</code> method.
+ <li>The interiors of the individual stored sub-paths are all non-empty and
+ non-overlapping. Paths are decomposed during construction into separate
+ component non-overlapping parts, empty pieces of the path are discarded, and
+ then these non-empty and non-overlapping properties are maintained through
+ all subsequent CAG operations. Outlines of different component sub-paths may
+ touch each other, as long as they do not cross so that their enclosed areas
+ overlap.
+ <li>The geometry of the path describing the outline of the <code>AreaX</code>
+ resembles the path from which it was constructed only in that it describes
+ the same enclosed 2-dimensional area, but may use entirely different types
+ and ordering of the path segments to do so.
  </ul>
- Interesting issues which are not always obvious when using
- the <code>AreaX</code> include:
+ Interesting issues which are not always obvious when using the
+ <code>AreaX</code> include:
  <ul>
- <li>Creating an <code>AreaX</code> from an unclosed (open)
-     <code>Shape</code> results in a closed outline in the
-     <code>AreaX</code> object.
- <li>Creating an <code>AreaX</code> from a <code>Shape</code>
-     which encloses no area (even when "closed") produces an
-     empty <code>AreaX</code>.  A common example of this issue
-     is that producing an <code>AreaX</code> from a line will
-     be empty since the line encloses no area.  An empty
-     <code>AreaX</code> will iterate no geometry in its
-     <code>PathIterator</code> objects.
- <li>A self-intersecting <code>Shape</code> may be split into
-     two (or more) sub-paths each enclosing one of the
-     non-intersecting portions of the original path.
- <li>An <code>AreaX</code> may take more path segments to
-     describe the same geometry even when the original
-     outline is simple and obvious.  The analysis that the
-     <code>AreaX</code> class must perform on the path may
-     not reflect the same concepts of "simple and obvious"
-     as a human being perceives.
+ <li>Creating an <code>AreaX</code> from an unclosed (open) <code>Shape</code>
+ results in a closed outline in the <code>AreaX</code> object.
+ <li>Creating an <code>AreaX</code> from a <code>Shape</code> which encloses
+ no area (even when "closed") produces an empty <code>AreaX</code>. A common
+ example of this issue is that producing an <code>AreaX</code> from a line
+ will be empty since the line encloses no area. An empty <code>AreaX</code>
+ will iterate no geometry in its <code>PathIterator</code> objects.
+ <li>A self-intersecting <code>Shape</code> may be split into two (or more)
+ sub-paths each enclosing one of the non-intersecting portions of the original
+ path.
+ <li>An <code>AreaX</code> may take more path segments to describe the same
+ geometry even when the original outline is simple and obvious. The analysis
+ that the <code>AreaX</code> class must perform on the path may not reflect
+ the same concepts of "simple and obvious" as a human being perceives.
  </ul>
  
- <p>What is stated above is directly copied from the <code>java.awt.geom.Area</code>
- javadocs.  Below are notes specifically related to the <code>AreaX</code> class:
- <p>The AreaX class is intended to achieve exactly the same 
- visual results as the Area class.  However several possible
- optimizations have been carefully implemented to reach those
- results faster.
- <p>The most customizable change is the implementation of
- the <code>AreaXRules</code> object.  Developers are encouraged to
- subclass this object and experiment with it.  (And if they
- make improvements: email them to me to include in this project!)
- <p>Each <code>AreaX</code> object has a reference to a rules
- object that can be changed by calling: <code>myArea.setRules()</code>.
- However you can also change the <i>default</i> rules for all
- future <code>AreaX</code> objects by calling:
- <code>UIManager.put("AreaX.rules", myRules)</code>.</div>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="https://javagraphics.java.net/areax/">https://javagraphics.java.net/areax/</a></dd>
-</dl>
+ <p>
+ What is stated above is directly copied from the
+ <code>java.awt.geom.Area</code> javadocs. Below are notes specifically
+ related to the <code>AreaX</code> class:
+ <p>
+ The AreaX class is intended to achieve exactly the same visual results as the
+ Area class. However several possible optimizations have been carefully
+ implemented to reach those results faster.
+ <p>
+ The most customizable change is the implementation of the
+ <code>AreaXRules</code> object. Developers are encouraged to subclass this
+ object and experiment with it. (And if they make improvements: email them to
+ me to include in this project!)
+ <p>
+ Each <code>AreaX</code> object has a reference to a rules object that can be
+ changed by calling: <code>myArea.setRules()</code>. However you can also
+ change the <i>default</i> rules for all future <code>AreaX</code> objects by
+ calling: <code>UIManager.put("AreaX.rules", myRules)</code>.</div>
 </li>
 </ul>
 </div>
@@ -255,8 +242,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#AreaX-java.awt.Shape-">AreaX</a></span>(java.awt.Shape&nbsp;s)</code>
-<div class="block">The <code>AreaX</code> class creates an area geometry from the
- specified <code>Shape</code> object.</div>
+<div class="block">The <code>AreaX</code> class creates an area geometry from the specified
+ <code>Shape</code> object.</div>
 </td>
 </tr>
 </table>
@@ -277,8 +264,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#add-java.awt.Shape-">add</a></span>(java.awt.Shape&nbsp;rhs)</code>
-<div class="block">Adds the shape of the specified <code>Shape</code> to the
- shape of this <code>AreaX</code>.</div>
+<div class="block">Adds the shape of the specified <code>Shape</code> to the shape of this
+ <code>AreaX</code>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -292,8 +279,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#contains-java.awt.geom.AffineTransform-java.awt.Shape-java.awt.geom.AffineTransform-">contains</a></span>(java.awt.geom.AffineTransform&nbsp;lhsTransform,
         java.awt.Shape&nbsp;shape,
         java.awt.geom.AffineTransform&nbsp;transform)</code>
-<div class="block">This uses <code>getRelationship()</code> to determine if the argument
- is inside this shape.</div>
+<div class="block">This uses <code>getRelationship()</code> to determine if the argument is
+ inside this shape.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -319,104 +306,104 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#contains-java.awt.Shape-">contains</a></span>(java.awt.Shape&nbsp;shape)</code>
-<div class="block">This uses <code>getRelationship()</code> to determine if the argument
- is inside this shape.</div>
+<div class="block">This uses <code>getRelationship()</code> to determine if the argument is
+ inside this shape.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#contains-java.awt.Shape-java.awt.geom.AffineTransform-">contains</a></span>(java.awt.Shape&nbsp;shape,
         java.awt.geom.AffineTransform&nbsp;transform)</code>
-<div class="block">This uses <code>getRelationship()</code> to determine if the argument
- is inside this shape.</div>
+<div class="block">This uses <code>getRelationship()</code> to determine if the argument is
+ inside this shape.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#createTransformedArea-java.awt.geom.AffineTransform-">createTransformedArea</a></span>(java.awt.geom.AffineTransform&nbsp;t)</code>
-<div class="block">Creates a new <code>AreaX</code> object that contains the same
- geometry as this <code>AreaX</code> transformed by the specified
+<div class="block">Creates a new <code>AreaX</code> object that contains the same geometry
+ as this <code>AreaX</code> transformed by the specified
  <code>AffineTransform</code>.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#equals-com.pump.geom.AreaX-">equals</a></span>(<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;other)</code>
-<div class="block">Tests whether the geometries of the two <code>AreaX</code> objects
- are equal.</div>
+<div class="block">Tests whether the geometries of the two <code>AreaX</code> objects are
+ equal.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#exclusiveOr-java.awt.Shape-">exclusiveOr</a></span>(java.awt.Shape&nbsp;rhs)</code>
-<div class="block">Sets the shape of this <code>AreaX</code> to be the combined area
- of its current shape and the shape of the specified <code>Shape</code>,
- minus their intersection.</div>
+<div class="block">Sets the shape of this <code>AreaX</code> to be the combined area of its
+ current shape and the shape of the specified <code>Shape</code>, minus
+ their intersection.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#executeAdd-com.pump.geom.AreaX-">executeAdd</a></span>(<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;rhs)</code>
-<div class="block">Adds the shape of the specified <code>AreaX</code> to the
- shape of this <code>AreaX</code>.</div>
+<div class="block">Adds the shape of the specified <code>AreaX</code> to the shape of this
+ <code>AreaX</code>.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#executeExclusiveOr-com.pump.geom.AreaX-">executeExclusiveOr</a></span>(<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;rhs)</code>
-<div class="block">Sets the shape of this <code>AreaX</code> to be the combined area
- of its current shape and the shape of the specified <code>AreaX</code>,
- minus their intersection.</div>
+<div class="block">Sets the shape of this <code>AreaX</code> to be the combined area of its
+ current shape and the shape of the specified <code>AreaX</code>, minus
+ their intersection.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#executeIntersect-com.pump.geom.AreaX-">executeIntersect</a></span>(<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;rhs)</code>
-<div class="block">Sets the shape of this <code>AreaX</code> to the intersection of
- its current shape and the shape of the specified <code>AreaX</code>.</div>
+<div class="block">Sets the shape of this <code>AreaX</code> to the intersection of its
+ current shape and the shape of the specified <code>AreaX</code>.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#executeSubtract-com.pump.geom.AreaX-">executeSubtract</a></span>(<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;rhs)</code>
-<div class="block">Subtracts the shape of the specified <code>AreaX</code> from the
- shape of this <code>AreaX</code>.</div>
+<div class="block">Subtracts the shape of the specified <code>AreaX</code> from the shape of
+ this <code>AreaX</code>.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#getBody--">getBody</a></span>()</code>
-<div class="block">This returns the <code>AreaXBody</code> that currently
- expressed the data in this <code>AreaX</code>.</div>
+<div class="block">This returns the <code>AreaXBody</code> that currently expressed the data
+ in this <code>AreaX</code>.</div>
 </td>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>java.awt.Rectangle</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#getBounds--">getBounds</a></span>()</code>
-<div class="block">Returns a bounding <code>Rectangle</code> that completely encloses
- this <code>AreaX</code>.</div>
+<div class="block">Returns a bounding <code>Rectangle</code> that completely encloses this
+ <code>AreaX</code>.</div>
 </td>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>java.awt.geom.Rectangle2D</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#getBounds2D--">getBounds2D</a></span>()</code>
-<div class="block">Returns a high precision bounding <code>Rectangle2D</code> that
- completely encloses this <code>AreaX</code>.</div>
+<div class="block">Returns a high precision bounding <code>Rectangle2D</code> that completely
+ encloses this <code>AreaX</code>.</div>
 </td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>java.awt.geom.PathIterator</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#getPathIterator-java.awt.geom.AffineTransform-">getPathIterator</a></span>(java.awt.geom.AffineTransform&nbsp;at)</code>
-<div class="block">Creates a <code>PathIterator</code> for the outline of this
- <code>AreaX</code> object.</div>
+<div class="block">Creates a <code>PathIterator</code> for the outline of this <code>AreaX</code>
+ object.</div>
 </td>
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>java.awt.geom.PathIterator</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#getPathIterator-java.awt.geom.AffineTransform-double-">getPathIterator</a></span>(java.awt.geom.AffineTransform&nbsp;at,
                double&nbsp;flatness)</code>
-<div class="block">Creates a <code>PathIterator</code> for the flattened outline of
- this <code>AreaX</code> object.</div>
+<div class="block">Creates a <code>PathIterator</code> for the flattened outline of this
+ <code>AreaX</code> object.</div>
 </td>
 </tr>
 <tr id="i21" class="rowColor">
@@ -435,8 +422,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#intersect-java.awt.Shape-">intersect</a></span>(java.awt.Shape&nbsp;rhs)</code>
-<div class="block">Sets the shape of this <code>AreaX</code> to the intersection of
- its current shape and the shape of the specified <code>Shape</code>.</div>
+<div class="block">Sets the shape of this <code>AreaX</code> to the intersection of its
+ current shape and the shape of the specified <code>Shape</code>.</div>
 </td>
 </tr>
 <tr id="i24" class="altColor">
@@ -483,8 +470,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <tr id="i30" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#isPolygonal--">isPolygonal</a></span>()</code>
-<div class="block">Tests whether this <code>AreaX</code> consists entirely of
- straight edged polygonal geometry.</div>
+<div class="block">Tests whether this <code>AreaX</code> consists entirely of straight edged
+ polygonal geometry.</div>
 </td>
 </tr>
 <tr id="i31" class="rowColor">
@@ -496,8 +483,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <tr id="i32" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#isSingular--">isSingular</a></span>()</code>
-<div class="block">Tests whether this <code>AreaX</code> is comprised of a single
- closed subpath.</div>
+<div class="block">Tests whether this <code>AreaX</code> is comprised of a single closed
+ subpath.</div>
 </td>
 </tr>
 <tr id="i33" class="rowColor">
@@ -510,8 +497,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <tr id="i34" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#reset--">reset</a></span>()</code>
-<div class="block">Removes all of the geometry from this <code>AreaX</code> and
- restores it to an empty area.</div>
+<div class="block">Removes all of the geometry from this <code>AreaX</code> and restores it
+ to an empty area.</div>
 </td>
 </tr>
 <tr id="i35" class="rowColor">
@@ -521,8 +508,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <tr id="i36" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/AreaX.html#subtract-java.awt.Shape-">subtract</a></span>(java.awt.Shape&nbsp;rhs)</code>
-<div class="block">Subtracts the shape of the specified <code>Shape</code> from the
- shape of this <code>AreaX</code>.</div>
+<div class="block">Subtracts the shape of the specified <code>Shape</code> from the shape of
+ this <code>AreaX</code>.</div>
 </td>
 </tr>
 <tr id="i37" class="rowColor">
@@ -641,16 +628,17 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>AreaX</h4>
 <pre>public&nbsp;AreaX(java.awt.Shape&nbsp;s)</pre>
-<div class="block">The <code>AreaX</code> class creates an area geometry from the
- specified <code>Shape</code> object.  The geometry is explicitly
- closed, if the <code>Shape</code> is not already closed.  The
- fill rule (even-odd or winding) specified by the geometry of the
- <code>Shape</code> is used to determine the resulting enclosed area.</div>
+<div class="block">The <code>AreaX</code> class creates an area geometry from the specified
+ <code>Shape</code> object. The geometry is explicitly closed, if the
+ <code>Shape</code> is not already closed. The fill rule (even-odd or
+ winding) specified by the geometry of the <code>Shape</code> is used to
+ determine the resulting enclosed area.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - the <code>Shape</code> from which the area is constructed.
- <p>If this is an <code>AreaX</code>, then this constructor forces 
- any pending operations to be performed.</dd>
+            <p>
+            If this is an <code>AreaX</code>, then this constructor forces
+            any pending operations to be performed.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>s</code> is null</dd>
 </dl>
@@ -690,9 +678,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <h4>processQueue</h4>
 <pre>public&nbsp;void&nbsp;processQueue()</pre>
 <div class="block">This immediately executes all pending operations on this
- <code>AreaX</code>.  It should not be necessary for
- other objects to need to call this method, except to 
- manager the time/cost of execution.</div>
+ <code>AreaX</code>. It should not be necessary for other objects to need
+ to call this method, except to manager the time/cost of execution.</div>
 </li>
 </ul>
 <a name="getBody--">
@@ -702,11 +689,11 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>getBody</h4>
 <pre>public&nbsp;<a href="../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;getBody()</pre>
-<div class="block">This returns the <code>AreaXBody</code> that currently
- expressed the data in this <code>AreaX</code>.
- This object will constantly be replaced as new operations
- are performed.
- <p>This forces any pending operations to be performed.</div>
+<div class="block">This returns the <code>AreaXBody</code> that currently expressed the data
+ in this <code>AreaX</code>. This object will constantly be replaced as
+ new operations are performed.
+ <p>
+ This forces any pending operations to be performed.</div>
 </li>
 </ul>
 <a name="add-java.awt.Shape-">
@@ -716,19 +703,19 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>add</h4>
 <pre>public&nbsp;void&nbsp;add(java.awt.Shape&nbsp;rhs)</pre>
-<div class="block">Adds the shape of the specified <code>Shape</code> to the
- shape of this <code>AreaX</code>.
- The resulting shape of this <code>AreaX</code> will include
- the union of both shapes, or all areas that were contained
- in either this or the specified <code>AreaX</code>.
+<div class="block">Adds the shape of the specified <code>Shape</code> to the shape of this
+ <code>AreaX</code>. The resulting shape of this <code>AreaX</code> will
+ include the union of both shapes, or all areas that were contained in
+ either this or the specified <code>AreaX</code>.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.add(a2);
-
+ 
         a1(before)     +         a2         =     a1(after)
-
+ 
      ################     ################     ################
      ##############         ##############     ################
      ############             ############     ################
@@ -738,12 +725,12 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
      ####                             ####     ####        ####
      ##                                 ##     ##            ##
  </pre>
- <p>This call does not immediately execute.  It adds this operation
- to a queue of operations that are processed as required.</div>
+ <p>
+ This call does not immediately execute. It adds this operation to a queue
+ of operations that are processed as required.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rhs</code> - the <code>Shape</code> to be added to the
-          current shape</dd>
+<dd><code>rhs</code> - the <code>Shape</code> to be added to the current shape</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -756,13 +743,14 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>contains</h4>
 <pre>public&nbsp;boolean&nbsp;contains(java.awt.Shape&nbsp;shape)</pre>
-<div class="block">This uses <code>getRelationship()</code> to determine if the argument
- is inside this shape.</div>
+<div class="block">This uses <code>getRelationship()</code> to determine if the argument is
+ inside this shape.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shape</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true whether the argument is completely contained inside this shape.</dd>
+<dd>true whether the argument is completely contained inside this
+         shape.</dd>
 </dl>
 </li>
 </ul>
@@ -774,14 +762,15 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <h4>contains</h4>
 <pre>public&nbsp;boolean&nbsp;contains(java.awt.Shape&nbsp;shape,
                         java.awt.geom.AffineTransform&nbsp;transform)</pre>
-<div class="block">This uses <code>getRelationship()</code> to determine if the argument
- is inside this shape.</div>
+<div class="block">This uses <code>getRelationship()</code> to determine if the argument is
+ inside this shape.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shape</code> - </dd>
 <dd><code>transform</code> - a transform to apply to the argument shape.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true whether the argument (when transformed) is completely contained inside this shape.</dd>
+<dd>true whether the argument (when transformed) is completely
+         contained inside this shape.</dd>
 </dl>
 </li>
 </ul>
@@ -794,15 +783,16 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <pre>public&nbsp;boolean&nbsp;contains(java.awt.geom.AffineTransform&nbsp;lhsTransform,
                         java.awt.Shape&nbsp;shape,
                         java.awt.geom.AffineTransform&nbsp;transform)</pre>
-<div class="block">This uses <code>getRelationship()</code> to determine if the argument
- is inside this shape.</div>
+<div class="block">This uses <code>getRelationship()</code> to determine if the argument is
+ inside this shape.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>lhsTransform</code> - the optional transform to apply to this operand.</dd>
 <dd><code>shape</code> - </dd>
 <dd><code>transform</code> - an optional transform to apply to the argument shape.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true whether the argument (when transformed) is completely contained inside this shape.</dd>
+<dd>true whether the argument (when transformed) is completely
+         contained inside this shape.</dd>
 </dl>
 </li>
 </ul>
@@ -819,7 +809,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shape</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true whether the argument (when transformed) intersects this shape.</dd>
+<dd>true whether the argument (when transformed) intersects this
+         shape.</dd>
 </dl>
 </li>
 </ul>
@@ -838,7 +829,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <dd><code>shape</code> - </dd>
 <dd><code>transform</code> - a transform to apply to the argument shape.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true whether the argument (when transformed) intersects this shape.</dd>
+<dd>true whether the argument (when transformed) intersects this
+         shape.</dd>
 </dl>
 </li>
 </ul>
@@ -859,7 +851,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <dd><code>shape</code> - </dd>
 <dd><code>transform</code> - an optional transform to apply to the argument shape.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true whether the argument (when transformed) intersects this shape.</dd>
+<dd>true whether the argument (when transformed) intersects this
+         shape.</dd>
 </dl>
 </li>
 </ul>
@@ -880,8 +873,9 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <dd><code>shape</code> - </dd>
 <dd><code>transform</code> - an optional transform to apply to the argument.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>one of the 4 relationship constants: RELATIONSHIP_LHS_CONTAINS, RELATIONSHIP_RHS_CONTAINS,
- RELATIONSHIP_NONE, or RELATIONSHIP_COMPLEX.</dd>
+<dd>one of the 4 relationship constants: RELATIONSHIP_LHS_CONTAINS,
+         RELATIONSHIP_RHS_CONTAINS, RELATIONSHIP_NONE, or
+         RELATIONSHIP_COMPLEX.</dd>
 </dl>
 </li>
 </ul>
@@ -892,19 +886,19 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>executeAdd</h4>
 <pre>public&nbsp;void&nbsp;executeAdd(<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;rhs)</pre>
-<div class="block">Adds the shape of the specified <code>AreaX</code> to the
- shape of this <code>AreaX</code>.
- The resulting shape of this <code>AreaX</code> will include
- the union of both shapes, or all areas that were contained
- in either this or the specified <code>AreaX</code>.
+<div class="block">Adds the shape of the specified <code>AreaX</code> to the shape of this
+ <code>AreaX</code>. The resulting shape of this <code>AreaX</code> will
+ include the union of both shapes, or all areas that were contained in
+ either this or the specified <code>AreaX</code>.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.add(a2);
-
+ 
         a1(before)     +         a2         =     a1(after)
-
+ 
      ################     ################     ################
      ##############         ##############     ################
      ############             ############     ################
@@ -914,12 +908,12 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
      ####                             ####     ####        ####
      ##                                 ##     ##            ##
  </pre>
- <p>This call immediately executes.  It executes any pending
- operations first, and then executes this add.</div>
+ <p>
+ This call immediately executes. It executes any pending operations first,
+ and then executes this add.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rhs</code> - the <code>AreaX</code> to be added to the
-          current shape</dd>
+<dd><code>rhs</code> - the <code>AreaX</code> to be added to the current shape</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -932,19 +926,19 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>subtract</h4>
 <pre>public&nbsp;void&nbsp;subtract(java.awt.Shape&nbsp;rhs)</pre>
-<div class="block">Subtracts the shape of the specified <code>Shape</code> from the
- shape of this <code>AreaX</code>.
- The resulting shape of this <code>AreaX</code> will include
- areas that were contained only in this <code>AreaX</code>
+<div class="block">Subtracts the shape of the specified <code>Shape</code> from the shape of
+ this <code>AreaX</code>. The resulting shape of this <code>AreaX</code>
+ will include areas that were contained only in this <code>AreaX</code>
  and not in the specified <code>AreaX</code>.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.subtract(a2);
-
+ 
         a1(before)     -         a2         =     a1(after)
-
+ 
      ################     ################
      ##############         ##############     ##
      ############             ############     ####
@@ -954,12 +948,12 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
      ####                             ####     ####
      ##                                 ##     ##
  </pre>
- <p>This call does not immediately execute.  It adds this operation
- to a queue of operations that are processed as required.</div>
+ <p>
+ This call does not immediately execute. It adds this operation to a queue
+ of operations that are processed as required.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rhs</code> - the <code>AreaX</code> to be subtracted from the
-                current shape</dd>
+<dd><code>rhs</code> - the <code>AreaX</code> to be subtracted from the current shape</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -972,19 +966,19 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>executeSubtract</h4>
 <pre>public&nbsp;void&nbsp;executeSubtract(<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;rhs)</pre>
-<div class="block">Subtracts the shape of the specified <code>AreaX</code> from the
- shape of this <code>AreaX</code>.
- The resulting shape of this <code>AreaX</code> will include
- areas that were contained only in this <code>AreaX</code>
+<div class="block">Subtracts the shape of the specified <code>AreaX</code> from the shape of
+ this <code>AreaX</code>. The resulting shape of this <code>AreaX</code>
+ will include areas that were contained only in this <code>AreaX</code>
  and not in the specified <code>AreaX</code>.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.subtract(a2);
-
+ 
         a1(before)     -         a2         =     a1(after)
-
+ 
      ################     ################
      ##############         ##############     ##
      ############             ############     ####
@@ -994,12 +988,12 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
      ####                             ####     ####
      ##                                 ##     ##
  </pre>
- <p>This call immediately executes.  It executes any pending
- operations first, and then executes this add.</div>
+ <p>
+ This call immediately executes. It executes any pending operations first,
+ and then executes this add.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rhs</code> - the <code>AreaX</code> to be subtracted from the
-                current shape</dd>
+<dd><code>rhs</code> - the <code>AreaX</code> to be subtracted from the current shape</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -1012,19 +1006,20 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>intersect</h4>
 <pre>public&nbsp;void&nbsp;intersect(java.awt.Shape&nbsp;rhs)</pre>
-<div class="block">Sets the shape of this <code>AreaX</code> to the intersection of
- its current shape and the shape of the specified <code>Shape</code>.
- The resulting shape of this <code>AreaX</code> will include
- only areas that were contained in both this <code>AreaX</code>
- and also in the specified <code>AreaX</code>.
+<div class="block">Sets the shape of this <code>AreaX</code> to the intersection of its
+ current shape and the shape of the specified <code>Shape</code>. The
+ resulting shape of this <code>AreaX</code> will include only areas that
+ were contained in both this <code>AreaX</code> and also in the specified
+ <code>AreaX</code>.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.intersect(a2);
-
+ 
       a1(before)   intersect     a2         =     a1(after)
-
+ 
      ################     ################     ################
      ##############         ##############       ############
      ############             ############         ########
@@ -1034,12 +1029,13 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
      ####                             ####
      ##                                 ##
  </pre>
- <p>This call does not immediately execute.  It adds this operation
- to a queue of operations that are processed as required.</div>
+ <p>
+ This call does not immediately execute. It adds this operation to a queue
+ of operations that are processed as required.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rhs</code> - the <code>AreaX</code> to be intersected with this
-                <code>AreaX</code></dd>
+            <code>AreaX</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -1052,19 +1048,20 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>executeIntersect</h4>
 <pre>public&nbsp;void&nbsp;executeIntersect(<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;rhs)</pre>
-<div class="block">Sets the shape of this <code>AreaX</code> to the intersection of
- its current shape and the shape of the specified <code>AreaX</code>.
- The resulting shape of this <code>AreaX</code> will include
- only areas that were contained in both this <code>AreaX</code>
- and also in the specified <code>AreaX</code>.
+<div class="block">Sets the shape of this <code>AreaX</code> to the intersection of its
+ current shape and the shape of the specified <code>AreaX</code>. The
+ resulting shape of this <code>AreaX</code> will include only areas that
+ were contained in both this <code>AreaX</code> and also in the specified
+ <code>AreaX</code>.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.intersect(a2);
-
+ 
       a1(before)   intersect     a2         =     a1(after)
-
+ 
      ################     ################     ################
      ##############         ##############       ############
      ############             ############         ########
@@ -1074,12 +1071,13 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
      ####                             ####
      ##                                 ##
  </pre>
- <p>This call immediately executes.  It executes any pending
- operations first, and then executes this add.</div>
+ <p>
+ This call immediately executes. It executes any pending operations first,
+ and then executes this add.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rhs</code> - the <code>AreaX</code> to be intersected with this
-                <code>AreaX</code></dd>
+            <code>AreaX</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -1092,20 +1090,20 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>exclusiveOr</h4>
 <pre>public&nbsp;void&nbsp;exclusiveOr(java.awt.Shape&nbsp;rhs)</pre>
-<div class="block">Sets the shape of this <code>AreaX</code> to be the combined area
- of its current shape and the shape of the specified <code>Shape</code>,
- minus their intersection.
- The resulting shape of this <code>AreaX</code> will include
- only areas that were contained in either this <code>AreaX</code>
+<div class="block">Sets the shape of this <code>AreaX</code> to be the combined area of its
+ current shape and the shape of the specified <code>Shape</code>, minus
+ their intersection. The resulting shape of this <code>AreaX</code> will
+ include only areas that were contained in either this <code>AreaX</code>
  or in the specified <code>AreaX</code>, but not in both.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.exclusiveOr(a2);
-
+ 
         a1(before)    xor        a2         =     a1(after)
-
+ 
      ################     ################
      ##############         ##############     ##            ##
      ############             ############     ####        ####
@@ -1115,12 +1113,13 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
      ####                             ####     ####        ####
      ##                                 ##     ##            ##
  </pre>
- <p>This call does not immediately execute.  It adds this operation
- to a queue of operations that are processed as required.</div>
+ <p>
+ This call does not immediately execute. It adds this operation to a queue
+ of operations that are processed as required.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rhs</code> - the <code>AreaX</code> to be exclusive ORed with this
-                <code>AreaX</code>.</dd>
+            <code>AreaX</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -1133,20 +1132,20 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>executeExclusiveOr</h4>
 <pre>public&nbsp;void&nbsp;executeExclusiveOr(<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;rhs)</pre>
-<div class="block">Sets the shape of this <code>AreaX</code> to be the combined area
- of its current shape and the shape of the specified <code>AreaX</code>,
- minus their intersection.
- The resulting shape of this <code>AreaX</code> will include
- only areas that were contained in either this <code>AreaX</code>
+<div class="block">Sets the shape of this <code>AreaX</code> to be the combined area of its
+ current shape and the shape of the specified <code>AreaX</code>, minus
+ their intersection. The resulting shape of this <code>AreaX</code> will
+ include only areas that were contained in either this <code>AreaX</code>
  or in the specified <code>AreaX</code>, but not in both.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.exclusiveOr(a2);
-
+ 
         a1(before)    xor        a2         =     a1(after)
-
+ 
      ################     ################
      ##############         ##############     ##            ##
      ############             ############     ####        ####
@@ -1156,12 +1155,13 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
      ####                             ####     ####        ####
      ##                                 ##     ##            ##
  </pre>
- <p>This call immediately executes.  It executes any pending
- operations first, and then executes this add.</div>
+ <p>
+ This call immediately executes. It executes any pending operations first,
+ and then executes this add.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rhs</code> - the <code>AreaX</code> to be exclusive ORed with this
-                <code>AreaX</code>.</dd>
+            <code>AreaX</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -1174,8 +1174,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>reset</h4>
 <pre>public&nbsp;void&nbsp;reset()</pre>
-<div class="block">Removes all of the geometry from this <code>AreaX</code> and
- restores it to an empty area.</div>
+<div class="block">Removes all of the geometry from this <code>AreaX</code> and restores it
+ to an empty area.</div>
 </li>
 </ul>
 <a name="isEmpty--">
@@ -1186,11 +1186,12 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <h4>isEmpty</h4>
 <pre>public&nbsp;boolean&nbsp;isEmpty()</pre>
 <div class="block">Tests whether this <code>AreaX</code> object encloses any area.
- <p>This forces any pending operations to be performed.</div>
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if this <code>AreaX</code> object
- represents an empty area; <code>false</code> otherwise.</dd>
+<dd><code>true</code> if this <code>AreaX</code> object represents an
+         empty area; <code>false</code> otherwise.</dd>
 </dl>
 </li>
 </ul>
@@ -1201,14 +1202,14 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>isPolygonal</h4>
 <pre>public&nbsp;boolean&nbsp;isPolygonal()</pre>
-<div class="block">Tests whether this <code>AreaX</code> consists entirely of
- straight edged polygonal geometry.
- <p>This forces any pending operations to be performed.</div>
+<div class="block">Tests whether this <code>AreaX</code> consists entirely of straight edged
+ polygonal geometry.
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if the geometry of this
- <code>AreaX</code> consists entirely of line segments;
- <code>false</code> otherwise.</dd>
+<dd><code>true</code> if the geometry of this <code>AreaX</code>
+         consists entirely of line segments; <code>false</code> otherwise.</dd>
 </dl>
 </li>
 </ul>
@@ -1220,12 +1221,12 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <h4>isRectangular</h4>
 <pre>public&nbsp;boolean&nbsp;isRectangular()</pre>
 <div class="block">Tests whether this <code>AreaX</code> is rectangular in shape.
- <p>This forces any pending operations to be performed.</div>
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if the geometry of this
- <code>AreaX</code> is rectangular in shape; <code>false</code>
- otherwise.</dd>
+<dd><code>true</code> if the geometry of this <code>AreaX</code> is
+         rectangular in shape; <code>false</code> otherwise.</dd>
 </dl>
 </li>
 </ul>
@@ -1236,17 +1237,18 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>isSingular</h4>
 <pre>public&nbsp;boolean&nbsp;isSingular()</pre>
-<div class="block">Tests whether this <code>AreaX</code> is comprised of a single
- closed subpath.  This method returns <code>true</code> if the
- path contains 0 or 1 subpaths, or <code>false</code> if the path
- contains more than 1 subpath.  The subpaths are counted by the
- number of <code>SEG_MOVETO</code>  segments
- that appear in the path.
- <p>This forces any pending operations to be performed.</div>
+<div class="block">Tests whether this <code>AreaX</code> is comprised of a single closed
+ subpath. This method returns <code>true</code> if the path contains 0 or
+ 1 subpaths, or <code>false</code> if the path contains more than 1
+ subpath. The subpaths are counted by the number of
+ <code>SEG_MOVETO</code> segments that appear in the
+ path.
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if the <code>AreaX</code> is comprised
- of a single basic geometry; <code>false</code> otherwise.</dd>
+<dd><code>true</code> if the <code>AreaX</code> is comprised of a
+         single basic geometry; <code>false</code> otherwise.</dd>
 </dl>
 </li>
 </ul>
@@ -1257,21 +1259,20 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>getBounds2D</h4>
 <pre>public&nbsp;java.awt.geom.Rectangle2D&nbsp;getBounds2D()</pre>
-<div class="block">Returns a high precision bounding <code>Rectangle2D</code> that
- completely encloses this <code>AreaX</code>.
+<div class="block">Returns a high precision bounding <code>Rectangle2D</code> that completely
+ encloses this <code>AreaX</code>.
  <p>
- The Area class will attempt to return the tightest bounding
- box possible for the Shape.  The bounding box will not be
- padded to include the control points of curves in the outline
- of the Shape, but should tightly fit the actual geometry of
- the outline itself.
- <p>This forces any pending operations to be performed.</div>
+ The Area class will attempt to return the tightest bounding box possible
+ for the Shape. The bounding box will not be padded to include the control
+ points of curves in the outline of the Shape, but should tightly fit the
+ actual geometry of the outline itself.
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getBounds2D</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the bounding <code>Rectangle2D</code> for the
- <code>AreaX</code>.</dd>
+<dd>the bounding <code>Rectangle2D</code> for the <code>AreaX</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -1282,24 +1283,23 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>getBounds</h4>
 <pre>public&nbsp;java.awt.Rectangle&nbsp;getBounds()</pre>
-<div class="block">Returns a bounding <code>Rectangle</code> that completely encloses
- this <code>AreaX</code>.
+<div class="block">Returns a bounding <code>Rectangle</code> that completely encloses this
+ <code>AreaX</code>.
  <p>
- The Area class will attempt to return the tightest bounding
- box possible for the Shape.  The bounding box will not be
- padded to include the control points of curves in the outline
- of the Shape, but should tightly fit the actual geometry of
- the outline itself.  Since the returned object represents
- the bounding box with integers, the bounding box can only be
- as tight as the nearest integer coordinates that encompass
- the geometry of the Shape.
- <p>This forces any pending operations to be performed.</div>
+ The Area class will attempt to return the tightest bounding box possible
+ for the Shape. The bounding box will not be padded to include the control
+ points of curves in the outline of the Shape, but should tightly fit the
+ actual geometry of the outline itself. Since the returned object
+ represents the bounding box with integers, the bounding box can only be
+ as tight as the nearest integer coordinates that encompass the geometry
+ of the Shape.
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getBounds</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the bounding <code>Rectangle</code> for the
- <code>AreaX</code>.</dd>
+<dd>the bounding <code>Rectangle</code> for the <code>AreaX</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -1311,7 +1311,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <h4>clone</h4>
 <pre>public&nbsp;<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;clone()</pre>
 <div class="block">Returns an exact copy of this <code>AreaX</code> object.
- <p>This forces any pending operations to be performed.</div>
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>clone</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -1327,17 +1328,17 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>equals</h4>
 <pre>public&nbsp;boolean&nbsp;equals(<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;other)</pre>
-<div class="block">Tests whether the geometries of the two <code>AreaX</code> objects
- are equal.
- This method will return false if the argument is null.
- <p>This forces any pending operations to be performed.</div>
+<div class="block">Tests whether the geometries of the two <code>AreaX</code> objects are
+ equal. This method will return false if the argument is null.
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>other</code> - the <code>AreaX</code> to be compared to this
-                <code>AreaX</code></dd>
+            <code>AreaX</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if the two geometries are equal;
-                <code>false</code> otherwise.</dd>
+         <code>false</code> otherwise.</dd>
 </dl>
 </li>
 </ul>
@@ -1349,9 +1350,10 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <h4>transform</h4>
 <pre>public&nbsp;void&nbsp;transform(java.awt.geom.AffineTransform&nbsp;t)</pre>
 <div class="block">Transforms the geometry of this <code>AreaX</code> using the specified
- <code>AffineTransform</code>.  The geometry is transformed in place, which
+ <code>AffineTransform</code>. The geometry is transformed in place, which
  permanently changes the enclosed area defined by this object.
- <p>This forces any pending operations to be performed.</div>
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>t</code> - the transformation used to transform the area</dd>
@@ -1367,18 +1369,19 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>createTransformedArea</h4>
 <pre>public&nbsp;<a href="../../../com/pump/geom/AreaX.html" title="class in com.pump.geom">AreaX</a>&nbsp;createTransformedArea(java.awt.geom.AffineTransform&nbsp;t)</pre>
-<div class="block">Creates a new <code>AreaX</code> object that contains the same
- geometry as this <code>AreaX</code> transformed by the specified
- <code>AffineTransform</code>.  This <code>AreaX</code> object
- is unchanged.
- <p>This forces any pending operations to be performed.</div>
+<div class="block">Creates a new <code>AreaX</code> object that contains the same geometry
+ as this <code>AreaX</code> transformed by the specified
+ <code>AffineTransform</code>. This <code>AreaX</code> object is
+ unchanged.
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>t</code> - the specified <code>AffineTransform</code> used to transform
-           the new <code>AreaX</code></dd>
+            the new <code>AreaX</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a new <code>AreaX</code> object representing the transformed
-           geometry.</dd>
+         geometry.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>t</code> is null</dd>
 </dl>
@@ -1393,7 +1396,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <pre>public&nbsp;boolean&nbsp;contains(double&nbsp;x,
                         double&nbsp;y)</pre>
 <div class="block">
- <p>This forces any pending operations to be performed.</div>
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>contains</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
@@ -1408,7 +1412,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <h4>contains</h4>
 <pre>public&nbsp;boolean&nbsp;contains(java.awt.geom.Point2D&nbsp;p)</pre>
 <div class="block">
- <p>This forces any pending operations to be performed.</div>
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>contains</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
@@ -1426,7 +1431,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
                         double&nbsp;w,
                         double&nbsp;h)</pre>
 <div class="block">
- <p>This forces any pending operations to be performed.</div>
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>contains</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
@@ -1441,7 +1447,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <h4>contains</h4>
 <pre>public&nbsp;boolean&nbsp;contains(java.awt.geom.Rectangle2D&nbsp;r)</pre>
 <div class="block">
- <p>This forces any pending operations to be performed.</div>
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>contains</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
@@ -1459,7 +1466,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
                           double&nbsp;w,
                           double&nbsp;h)</pre>
 <div class="block">
- <p>This forces any pending operations to be performed.</div>
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>intersects</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
@@ -1474,7 +1482,8 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <h4>intersects</h4>
 <pre>public&nbsp;boolean&nbsp;intersects(java.awt.geom.Rectangle2D&nbsp;r)</pre>
 <div class="block">
- <p>This forces any pending operations to be performed.</div>
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>intersects</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
@@ -1488,20 +1497,20 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <li class="blockList">
 <h4>getPathIterator</h4>
 <pre>public&nbsp;java.awt.geom.PathIterator&nbsp;getPathIterator(java.awt.geom.AffineTransform&nbsp;at)</pre>
-<div class="block">Creates a <code>PathIterator</code> for the outline of this
- <code>AreaX</code> object.  This <code>AreaX</code> object is unchanged.
- <p>This forces any pending operations to be performed.</div>
+<div class="block">Creates a <code>PathIterator</code> for the outline of this <code>AreaX</code>
+ object. This <code>AreaX</code> object is unchanged.
+ <p>
+ This forces any pending operations to be performed.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getPathIterator</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>at</code> - an optional <code>AffineTransform</code> to be applied to
- the coordinates as they are returned in the iteration, or
- <code>null</code> if untransformed coordinates are desired</dd>
+<dd><code>at</code> - an optional <code>AffineTransform</code> to be applied to the
+            coordinates as they are returned in the iteration, or
+            <code>null</code> if untransformed coordinates are desired</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <code>PathIterator</code> object that returns the
-                geometry of the outline of this <code>AreaX</code>, one
-                segment at a time.</dd>
+<dd>the <code>PathIterator</code> object that returns the geometry of
+         the outline of this <code>AreaX</code>, one segment at a time.</dd>
 </dl>
 </li>
 </ul>
@@ -1513,26 +1522,23 @@ implements java.awt.Shape, java.lang.Cloneable</pre>
 <h4>getPathIterator</h4>
 <pre>public&nbsp;java.awt.geom.PathIterator&nbsp;getPathIterator(java.awt.geom.AffineTransform&nbsp;at,
                                                   double&nbsp;flatness)</pre>
-<div class="block">Creates a <code>PathIterator</code> for the flattened outline of
- this <code>AreaX</code> object.  Only uncurved path segments
- represented by the SEG_MOVETO, SEG_LINETO, and SEG_CLOSE point
- types are returned by the iterator.  This <code>AreaX</code>
- object is unchanged.</div>
+<div class="block">Creates a <code>PathIterator</code> for the flattened outline of this
+ <code>AreaX</code> object. Only uncurved path segments represented by the
+ SEG_MOVETO, SEG_LINETO, and SEG_CLOSE point types are returned by the
+ iterator. This <code>AreaX</code> object is unchanged.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getPathIterator</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>at</code> - an optional <code>AffineTransform</code> to be
- applied to the coordinates as they are returned in the
- iteration, or <code>null</code> if untransformed coordinates
- are desired</dd>
-<dd><code>flatness</code> - the maximum amount that the control points
- for a given curve can vary from colinear before a subdivided
- curve is replaced by a straight line connecting the end points</dd>
+<dd><code>at</code> - an optional <code>AffineTransform</code> to be applied to the
+            coordinates as they are returned in the iteration, or
+            <code>null</code> if untransformed coordinates are desired</dd>
+<dd><code>flatness</code> - the maximum amount that the control points for a given curve
+            can vary from colinear before a subdivided curve is replaced
+            by a straight line connecting the end points</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <code>PathIterator</code> object that returns the
- geometry of the outline of this <code>AreaX</code>, one segment
- at a time.</dd>
+<dd>the <code>PathIterator</code> object that returns the geometry of
+         the outline of this <code>AreaX</code>, one segment at a time.</dd>
 </dl>
 </li>
 </ul>

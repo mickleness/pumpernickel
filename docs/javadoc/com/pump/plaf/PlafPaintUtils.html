@@ -150,9 +150,9 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PlafPaintUtils.html#drawBevel-java.awt.Graphics2D-java.awt.Rectangle-">drawBevel</a></span>(java.awt.Graphics2D&nbsp;g,
          java.awt.Rectangle&nbsp;r)</code>
-<div class="block">Uses translucent shades of white and black to draw highlights
- and shadows around a rectangle, and then frames the rectangle
- with a shade of gray (120).</div>
+<div class="block">Uses translucent shades of white and black to draw highlights and shadows
+ around a rectangle, and then frames the rectangle with a shade of gray
+ (120).</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -243,10 +243,10 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;java.awt.Color&nbsp;getFocusRingColor()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the color used to indicate when a component has
- focus.  By default this uses the color (64,113,167), but you can
- override this by calling:
- <BR><code>UIManager.put("focusRing",customColor);</code></dd>
+<dd>the color used to indicate when a component has focus. By default
+         this uses the color (64,113,167), but you can override this by
+         calling: <BR>
+         <code>UIManager.put("focusRing",customColor);</code></dd>
 </dl>
 </li>
 </ul>
@@ -259,11 +259,11 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;paintFocus(java.awt.Graphics2D&nbsp;g,
                               java.awt.Shape&nbsp;shape,
                               int&nbsp;pixelSize)</pre>
-<div class="block">Paints 3 different strokes around a shape to indicate focus.
- The widest stroke is the most transparent, so this achieves a nice
- "glow" effect.
- <P>The catch is that you have to render this underneath the shape,
- and the shape should be filled completely.</div>
+<div class="block">Paints 3 different strokes around a shape to indicate focus. The widest
+ stroke is the most transparent, so this achieves a nice "glow" effect.
+ <P>
+ The catch is that you have to render this underneath the shape, and the
+ shape should be filled completely.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graphics to paint to</dd>
@@ -283,18 +283,19 @@ extends java.lang.Object</pre>
                               int&nbsp;pixelSize,
                               java.awt.Color&nbsp;focusColor,
                               boolean&nbsp;changeRenderingHints)</pre>
-<div class="block">Paints 3 different strokes around a shape to indicate focus.
- The widest stroke is the most transparent, so this achieves a nice
- "glow" effect.
- <P>The catch is that you have to render this underneath the shape,
- and the shape should be filled completely.</div>
+<div class="block">Paints 3 different strokes around a shape to indicate focus. The widest
+ stroke is the most transparent, so this achieves a nice "glow" effect.
+ <P>
+ The catch is that you have to render this underneath the shape, and the
+ shape should be filled completely.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graphics to paint to</dd>
 <dd><code>shape</code> - the shape to outline</dd>
 <dd><code>pixelSize</code> - the number of pixels the outline should cover.</dd>
 <dd><code>focusColor</code> - the color of the focus ring to paint</dd>
-<dd><code>changeRenderingHints</code> - if true then the rendering hints will be modified, if false they will be left in tact</dd>
+<dd><code>changeRenderingHints</code> - if true then the rendering hints will be modified, if false
+            they will be left in tact</dd>
 </dl>
 </li>
 </ul>
@@ -306,11 +307,12 @@ extends java.lang.Object</pre>
 <h4>drawBevel</h4>
 <pre>public static&nbsp;void&nbsp;drawBevel(java.awt.Graphics2D&nbsp;g,
                              java.awt.Rectangle&nbsp;r)</pre>
-<div class="block">Uses translucent shades of white and black to draw highlights
- and shadows around a rectangle, and then frames the rectangle
- with a shade of gray (120).
- <P>This should be called to add a finishing touch on top of
- existing graphics.</div>
+<div class="block">Uses translucent shades of white and black to draw highlights and shadows
+ around a rectangle, and then frames the rectangle with a shade of gray
+ (120).
+ <P>
+ This should be called to add a finishing touch on top of existing
+ graphics.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graphics to paint to.</dd>

@@ -115,18 +115,22 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">ScreenCapture</span>
 extends java.lang.Object</pre>
 <div class="block">This creates an animation recording the screen.
- <P>This ties into several Java-level components: it uses
- a <code>RepaintManager</code> and two different <code>AWTEventListeners</code>.
- Because of this, it is pretty efficient at only capturing/recording
- what data is appropriate.  However it does not capture data that happens
- outside of Java's control/awareness.
- <P>Note this class is abstract, and it does not actually capture pixels from
- the screen.  That is up to subclasses to implement.  The <code>RobotScreenCapture</code>
- class achieves this using the <code>Robot</code> object, and the
- <code>ComponentPaintCapture</code> relies on the <code>Component.paint()</code> method.
- It is also possible to use 3rd parties. For example: when QTJ was still in use, that
- could be used to capture pixel data from the screen.
- <P>Note this assumes there is only 1 monitor of interest to record from.</div>
+ <P>
+ This ties into several Java-level components: it uses a
+ <code>RepaintManager</code> and two different <code>AWTEventListeners</code>.
+ Because of this, it is pretty efficient at only capturing/recording what data
+ is appropriate. However it does not capture data that happens outside of
+ Java's control/awareness.
+ <P>
+ Note this class is abstract, and it does not actually capture pixels from the
+ screen. That is up to subclasses to implement. The
+ <code>RobotScreenCapture</code> class achieves this using the
+ <code>Robot</code> object, and the <code>ComponentPaintCapture</code> relies
+ on the <code>Component.paint()</code> method. It is also possible to use 3rd
+ parties. For example: when QTJ was still in use, that could be used to
+ capture pixel data from the screen.
+ <P>
+ Note this assumes there is only 1 monitor of interest to record from.</div>
 </li>
 </ul>
 </div>
@@ -167,14 +171,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/pump/animation/capture/ScreenCapture.html#ScreenCapture--">ScreenCapture</a></span>()</code>
-<div class="block">Constructs a <code>ScreenCapture</code> object that will
- record the entire screen.</div>
+<div class="block">Constructs a <code>ScreenCapture</code> object that will record the
+ entire screen.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/pump/animation/capture/ScreenCapture.html#ScreenCapture-java.awt.Rectangle-">ScreenCapture</a></span>(java.awt.Rectangle&nbsp;captureBounds)</code>
-<div class="block">Constructs a <code>ScreenCapture</code> object that will
- record only the rectangle provided.</div>
+<div class="block">Constructs a <code>ScreenCapture</code> object that will record only the
+ rectangle provided.</div>
 </td>
 </tr>
 </table>
@@ -195,8 +199,8 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected abstract java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/animation/capture/ScreenCapture.html#capture-java.awt.Rectangle-">capture</a></span>(java.awt.Rectangle&nbsp;r)</code>
-<div class="block">This captures a portion of the screen and returns a File
- representing that image.</div>
+<div class="block">This captures a portion of the screen and returns a File representing
+ that image.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -214,8 +218,8 @@ extends java.lang.Object</pre>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/animation/capture/ScreenCapture.html#setTargetedRepaints-boolean-">setTargetedRepaints</a></span>(boolean&nbsp;targetedRepaints)</code>
-<div class="block">Control whether this stores only targeted repaints (true) or
- whether this aggressively repaints everything constantly (false).</div>
+<div class="block">Control whether this stores only targeted repaints (true) or whether this
+ aggressively repaints everything constantly (false).</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -277,8 +281,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>ScreenCapture</h4>
 <pre>public&nbsp;ScreenCapture(java.awt.Rectangle&nbsp;captureBounds)</pre>
-<div class="block">Constructs a <code>ScreenCapture</code> object that will
- record only the rectangle provided.</div>
+<div class="block">Constructs a <code>ScreenCapture</code> object that will record only the
+ rectangle provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>captureBounds</code> - the rectangle to record within.</dd>
@@ -292,8 +296,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>ScreenCapture</h4>
 <pre>public&nbsp;ScreenCapture()</pre>
-<div class="block">Constructs a <code>ScreenCapture</code> object that will
- record the entire screen.</div>
+<div class="block">Constructs a <code>ScreenCapture</code> object that will record the
+ entire screen.</div>
 </li>
 </ul>
 </li>
@@ -311,10 +315,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setTargetedRepaints</h4>
 <pre>public&nbsp;void&nbsp;setTargetedRepaints(boolean&nbsp;targetedRepaints)</pre>
-<div class="block">Control whether this stores only targeted repaints (true) or
- whether this aggressively repaints everything constantly (false).
- The default is <code>true</code>.
- <p>This serves as a safety net. Ideally it shouldn't be necessary.</div>
+<div class="block">Control whether this stores only targeted repaints (true) or whether this
+ aggressively repaints everything constantly (false). The default is
+ <code>true</code>.
+ <p>
+ This serves as a safety net. Ideally it shouldn't be necessary.</div>
 </li>
 </ul>
 <a name="getPlaybackRate--">
@@ -324,9 +329,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getPlaybackRate</h4>
 <pre>public&nbsp;double&nbsp;getPlaybackRate()</pre>
-<div class="block">Return the playback rate. By default this property is 1, but you can accelerate or decelerate
- it if desired. Note this properties is applied to the entire recording (you can't change
- it mid-recording and change playback speed for only part of the animation).</div>
+<div class="block">Return the playback rate. By default this property is 1, but you can
+ accelerate or decelerate it if desired. Note this properties is applied
+ to the entire recording (you can't change it mid-recording and change
+ playback speed for only part of the animation).</div>
 </li>
 </ul>
 <a name="setPlaybackRate-double-">
@@ -336,9 +342,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setPlaybackRate</h4>
 <pre>public&nbsp;void&nbsp;setPlaybackRate(double&nbsp;playbackRate)</pre>
-<div class="block">Set the playback rate. By default this property is 1, but you can accelerate or decelerate
- it if desired. Note this properties is applied to the entire recording (you can't change
- it mid-recording and change playback speed for only part of the animation).</div>
+<div class="block">Set the playback rate. By default this property is 1, but you can
+ accelerate or decelerate it if desired. Note this properties is applied
+ to the entire recording (you can't change it mid-recording and change
+ playback speed for only part of the animation).</div>
 </li>
 </ul>
 <a name="start--">
@@ -373,14 +380,14 @@ extends java.lang.Object</pre>
 <h4>capture</h4>
 <pre>protected abstract&nbsp;java.io.File&nbsp;capture(java.awt.Rectangle&nbsp;r)
                                  throws java.lang.Exception</pre>
-<div class="block">This captures a portion of the screen and returns a File
- representing that image.</div>
+<div class="block">This captures a portion of the screen and returns a File representing
+ that image.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>r</code> - the rectangle to capture</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a file representing the image captured.  This should be
- of a "normal" image format (PNG, JPEG, etc.)</dd>
+<dd>a file representing the image captured. This should be of a
+         "normal" image format (PNG, JPEG, etc.)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.Exception</code></dd>
 </dl>

@@ -193,7 +193,8 @@ extends java.lang.Object</pre>
                        java.lang.String&nbsp;appName,
                        int&nbsp;documentCount,
                        boolean&nbsp;useSheets)</code>
-<div class="block">Display a dialog prompting the user to review all unsaved changes, discard them, or cancel.</div>
+<div class="block">Display a dialog prompting the user to review all unsaved changes,
+ discard them, or cancel.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -201,7 +202,8 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/QOptionPaneCommon.html#showReviewChangesDialog-javax.swing.JDesktopPane-java.lang.String-int-">showReviewChangesDialog</a></span>(javax.swing.JDesktopPane&nbsp;desktopPane,
                        java.lang.String&nbsp;appName,
                        int&nbsp;documentCount)</code>
-<div class="block">Display a dialog prompting the user to review all unsaved changes, discard them, or cancel.</div>
+<div class="block">Display a dialog prompting the user to review all unsaved changes,
+ discard them, or cancel.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -352,8 +354,8 @@ extends java.lang.Object</pre>
 <dd><code>appName</code> - the application name</dd>
 <dd><code>documentName</code> - the name of the document</dd>
 <dd><code>filePath</code> - the path of the document</dd>
-<dd><code>saveProducesDialog</code> - whether clicking "Save" will produce another dialog.
- (Ellipses may be appended to the save button in this case.)</dd>
+<dd><code>saveProducesDialog</code> - whether clicking "Save" will produce another dialog. (Ellipses
+            may be appended to the save button in this case.)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>one of the QDialog constants for SAVE, DONT_SAVE or CANCEL.</dd>
 </dl>
@@ -372,17 +374,18 @@ extends java.lang.Object</pre>
                                                         boolean&nbsp;saveProducesDialog,
                                                         int&nbsp;fileState)</pre>
 <div class="block">Display a dialog prompting the user to save, don't save, or cancel.
- <p>Note this produces does not have a return value because the
- resulting JInternalFrame is not modal (so it doesn't return immediately).
- This method exists only as a demonstration.</div>
+ <p>
+ Note this produces does not have a return value because the resulting
+ JInternalFrame is not modal (so it doesn't return immediately). This
+ method exists only as a demonstration.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>desktopPane</code> - the desktopPane that contains this dialog.</dd>
 <dd><code>appName</code> - the application name</dd>
 <dd><code>documentName</code> - the name of the document</dd>
 <dd><code>filePath</code> - the path of the document</dd>
-<dd><code>saveProducesDialog</code> - whether clicking "Save" will produce another dialog.
- (Ellipses may be appended to the save button in this case.)</dd>
+<dd><code>saveProducesDialog</code> - whether clicking "Save" will produce another dialog. (Ellipses
+            may be appended to the save button in this case.)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the internal frame created.</dd>
 </dl>
@@ -398,12 +401,15 @@ extends java.lang.Object</pre>
                                           java.lang.String&nbsp;appName,
                                           int&nbsp;documentCount,
                                           boolean&nbsp;useSheets)</pre>
-<div class="block">Display a dialog prompting the user to review all unsaved changes, discard them, or cancel.
- <p>This is similar to a save dialog, except it is shown when the user has multiple 
- unsaved files open.
- <P>Pressing the escape key triggers the cancel button, but this button
- does not have mnemonics for "Review Changes..." and "Discard Changes".
- I assume this is because the most likely mnemonic for "Discard Changes" is
+<div class="block">Display a dialog prompting the user to review all unsaved changes,
+ discard them, or cancel.
+ <p>
+ This is similar to a save dialog, except it is shown when the user has
+ multiple unsaved files open.
+ <P>
+ Pressing the escape key triggers the cancel button, but this button does
+ not have mnemonics for "Review Changes..." and "Discard Changes". I
+ assume this is because the most likely mnemonic for "Discard Changes" is
  "D", and if the user skims this dialog and automatically tries to select
  the "D" option without thinking: that user is risking losing much more
  data than the foremost window alone might suggest.</div>
@@ -413,7 +419,8 @@ extends java.lang.Object</pre>
 <dd><code>appName</code> - the application name.</dd>
 <dd><code>documentCount</code> - the number of open documents.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>REVIEW_CHANGES_OPTION, DISCARD_CHANGES_OPTION, or DialogFooter.CANCEL_OPTION.</dd>
+<dd>REVIEW_CHANGES_OPTION, DISCARD_CHANGES_OPTION, or
+         DialogFooter.CANCEL_OPTION.</dd>
 </dl>
 </li>
 </ul>
@@ -426,18 +433,22 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;javax.swing.JInternalFrame&nbsp;showReviewChangesDialog(javax.swing.JDesktopPane&nbsp;desktopPane,
                                                                  java.lang.String&nbsp;appName,
                                                                  int&nbsp;documentCount)</pre>
-<div class="block">Display a dialog prompting the user to review all unsaved changes, discard them, or cancel.
- <p>This is similar to a save dialog, except it is shown when the user has multiple 
- unsaved files open.
- <P>Pressing the escape key triggers the cancel button, but this button
- does not have mnemonics for "Review Changes..." and "Discard Changes".
- I assume this is because the most likely mnemonic for "Discard Changes" is
+<div class="block">Display a dialog prompting the user to review all unsaved changes,
+ discard them, or cancel.
+ <p>
+ This is similar to a save dialog, except it is shown when the user has
+ multiple unsaved files open.
+ <P>
+ Pressing the escape key triggers the cancel button, but this button does
+ not have mnemonics for "Review Changes..." and "Discard Changes". I
+ assume this is because the most likely mnemonic for "Discard Changes" is
  "D", and if the user skims this dialog and automatically tries to select
  the "D" option without thinking: that user is risking losing much more
  data than the foremost window alone might suggest.
- <p>Note this produces does not have a return value because the
- resulting JInternalFrame is not modal (so it doesn't return immediately).
- This method exists only as a demonstration.</div>
+ <p>
+ Note this produces does not have a return value because the resulting
+ JInternalFrame is not modal (so it doesn't return immediately). This
+ method exists only as a demonstration.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>desktopPane</code> - the desktopPane that contains this dialog.</dd>

@@ -115,9 +115,10 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">Length</span>
 extends java.lang.Object
 implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" title="class in com.pump.math">Length</a>&gt;</pre>
-<div class="block">This is a measure of length.
- A <code>Length</code> object includes a value and a unit.
- <P>A set of common units of length are included in this class.</div>
+<div class="block">This is a measure of length. A <code>Length</code> object includes a value
+ and a unit.
+ <P>
+ A set of common units of length are included in this class.</div>
 </li>
 </ul>
 </div>
@@ -270,15 +271,14 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" 
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/Length.html#compareTo-com.pump.math.Length-">compareTo</a></span>(<a href="../../../com/pump/math/Length.html" title="class in com.pump.math">Length</a>&nbsp;l)</code>
-<div class="block">Compares the distance of this <code>Length</code>
- object with another.</div>
+<div class="block">Compares the distance of this <code>Length</code> object with another.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/Length.html#equals-java.lang.Object-">equals</a></span>(java.lang.Object&nbsp;obj)</code>
-<div class="block">This returns <code>true</code> if two <code>Length</code>
- objects measure the same distance, regardless of their units.</div>
+<div class="block">This returns <code>true</code> if two <code>Length</code> objects measure
+ the same distance, regardless of their units.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -302,15 +302,14 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" 
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/Length.html#getValue-com.pump.math.Length.Unit-">getValue</a></span>(<a href="../../../com/pump/math/Length.Unit.html" title="class in com.pump.math">Length.Unit</a>&nbsp;u)</code>
-<div class="block">Returns the numeric value of this distance in the 
- unit specified.</div>
+<div class="block">Returns the numeric value of this distance in the unit specified.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/Length.html#setUnit-com.pump.math.Length.Unit-">setUnit</a></span>(<a href="../../../com/pump/math/Length.Unit.html" title="class in com.pump.math">Length.Unit</a>&nbsp;u2)</code>
-<div class="block">Changes the unit of this length, but the actual
- distance measured remains the same.</div>
+<div class="block">Changes the unit of this length, but the actual distance measured remains
+ the same.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -329,8 +328,7 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" 
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/math/Length.html#toString--">toString</a></span>()</code>
-<div class="block">Returns the value of this length followed by
- the unit abbreviation.</div>
+<div class="block">Returns the value of this length followed by the unit abbreviation.</div>
 </td>
 </tr>
 </table>
@@ -527,11 +525,10 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" 
 <li class="blockList">
 <h4>setUnit</h4>
 <pre>public&nbsp;void&nbsp;setUnit(<a href="../../../com/pump/math/Length.Unit.html" title="class in com.pump.math">Length.Unit</a>&nbsp;u2)</pre>
-<div class="block">Changes the unit of this length, but the actual
- distance measured remains the same.
- (That is, if this obviously previously represented
- "100 cm", and you called <code>setUnit(Length.METER)</code>,
- then this object now represents "1 m".)</div>
+<div class="block">Changes the unit of this length, but the actual distance measured remains
+ the same. (That is, if this obviously previously represented "100 cm",
+ and you called <code>setUnit(Length.METER)</code>, then this object now
+ represents "1 m".)</div>
 </li>
 </ul>
 <a name="getUnitByName-java.lang.String-">
@@ -542,15 +539,14 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" 
 <h4>getUnitByName</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/math/Length.Unit.html" title="class in com.pump.math">Length.Unit</a>&nbsp;getUnitByName(java.lang.String&nbsp;name)</pre>
 <div class="block">Returns a unit associated with a given name.
- <P>This looks for abbreviations and full spellings
- of unit names.</div>
+ <P>
+ This looks for abbreviations and full spellings of unit names.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>name</code> - a name for a unit.  This is not
- case sensitive.</dd>
+<dd><code>name</code> - a name for a unit. This is not case sensitive.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the unit associated with that name, or
- <code>null</code> if no units are found.</dd>
+<dd>the unit associated with that name, or <code>null</code> if no
+         units are found.</dd>
 </dl>
 </li>
 </ul>
@@ -561,8 +557,8 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" 
 <li class="blockList">
 <h4>equals</h4>
 <pre>public&nbsp;boolean&nbsp;equals(java.lang.Object&nbsp;obj)</pre>
-<div class="block">This returns <code>true</code> if two <code>Length</code>
- objects measure the same distance, regardless of their units.</div>
+<div class="block">This returns <code>true</code> if two <code>Length</code> objects measure
+ the same distance, regardless of their units.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -576,8 +572,7 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" 
 <li class="blockList">
 <h4>getValue</h4>
 <pre>public&nbsp;double&nbsp;getValue(<a href="../../../com/pump/math/Length.Unit.html" title="class in com.pump.math">Length.Unit</a>&nbsp;u)</pre>
-<div class="block">Returns the numeric value of this distance in the 
- unit specified.</div>
+<div class="block">Returns the numeric value of this distance in the unit specified.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>u</code> - the unit to get the value in</dd>
@@ -604,8 +599,8 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" 
 <li class="blockList">
 <h4>add</h4>
 <pre>public&nbsp;void&nbsp;add(<a href="../../../com/pump/math/Length.html" title="class in com.pump.math">Length</a>&nbsp;l)</pre>
-<div class="block">Add the argument to this <code>Length</code> object.
- The units of both objects are unchanged.</div>
+<div class="block">Add the argument to this <code>Length</code> object. The units of both
+ objects are unchanged.</div>
 </li>
 </ul>
 <a name="subtract-com.pump.math.Length-">
@@ -615,8 +610,8 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" 
 <li class="blockList">
 <h4>subtract</h4>
 <pre>public&nbsp;void&nbsp;subtract(<a href="../../../com/pump/math/Length.html" title="class in com.pump.math">Length</a>&nbsp;l)</pre>
-<div class="block">Subtracts the argument from this <code>Length</code> object.
- The units of both objects are unchanged.</div>
+<div class="block">Subtracts the argument from this <code>Length</code> object. The units of
+ both objects are unchanged.</div>
 </li>
 </ul>
 <a name="getUnit--">
@@ -636,8 +631,7 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" 
 <li class="blockList">
 <h4>compareTo</h4>
 <pre>public&nbsp;int&nbsp;compareTo(<a href="../../../com/pump/math/Length.html" title="class in com.pump.math">Length</a>&nbsp;l)</pre>
-<div class="block">Compares the distance of this <code>Length</code>
- object with another.</div>
+<div class="block">Compares the distance of this <code>Length</code> object with another.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>compareTo</code>&nbsp;in interface&nbsp;<code>java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" title="class in com.pump.math">Length</a>&gt;</code></dd>
@@ -651,8 +645,8 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/math/Length.html" 
 <li class="blockList">
 <h4>toString</h4>
 <pre>public&nbsp;java.lang.String&nbsp;toString()</pre>
-<div class="block">Returns the value of this length followed by
- the unit abbreviation.  For example: "3 mi" or "2.0 mm".</div>
+<div class="block">Returns the value of this length followed by the unit abbreviation. For
+ example: "3 mi" or "2.0 mm".</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>

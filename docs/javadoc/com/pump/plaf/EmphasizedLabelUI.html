@@ -130,15 +130,17 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">EmphasizedLabelUI</span>
 extends javax.swing.plaf.basic.BasicLabelUI</pre>
 <div class="block">This is adapted from Ken Orr's EmphasizedLabelUI in the MacWidgets project.
- (The original is licensed under GNU Lesser General Public License)
- See MacWidgets for details: http://code.google.com/p/macwidgets/
+ (The original is licensed under GNU Lesser General Public License) See
+ MacWidgets for details: http://code.google.com/p/macwidgets/
  
  This is based on the same code released in v0.9.5, except:
- <ul><li>it doesn't reference WindowUtils.  (The static method <code>isParentWindowFocused</code> was
- pasted into this class).
- <li>The shadow color is optional</li></ul>
+ <ul>
+ <li>it doesn't reference WindowUtils. (The static method
+ <code>isParentWindowFocused</code> was pasted into this class).
+ <li>The shadow color is optional</li>
+ </ul>
  
- I migrated this into the bric.plaf directory so it won't conflict with any
+ I migrated this into the pump.plaf directory so it won't conflict with any
  possible future updates.</div>
 </li>
 </ul>
@@ -229,7 +231,8 @@ extends javax.swing.plaf.basic.BasicLabelUI</pre>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/EmphasizedLabelUI.html#isParentWindowFocused-java.awt.Component-">isParentWindowFocused</a></span>(java.awt.Component&nbsp;component)</code>
-<div class="block"><code>true</code> if the given <code>Component</code>'s has a parent <code>Window</code> (i.e.</div>
+<div class="block"><code>true</code> if the given <code>Component</code>'s has a parent <code>Window</code>
+ (i.e.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -355,9 +358,9 @@ extends javax.swing.plaf.basic.BasicLabelUI</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>focusedTextColor</code> - the color to draw the text with when the parent
-                           <code>Window</code> has focus.</dd>
+            <code>Window</code> has focus.</dd>
 <dd><code>unfocusedTextColor</code> - the color to draw the text with when the parent
-                           <code>Window</code> does not have focus.</dd>
+            <code>Window</code> does not have focus.</dd>
 <dd><code>emphasisColor</code> - the color to draw the emphasis text with.</dd>
 </dl>
 </li>
@@ -403,14 +406,16 @@ extends javax.swing.plaf.basic.BasicLabelUI</pre>
 <li class="blockList">
 <h4>isParentWindowFocused</h4>
 <pre>public static&nbsp;boolean&nbsp;isParentWindowFocused(java.awt.Component&nbsp;component)</pre>
-<div class="block"><code>true</code> if the given <code>Component</code>'s has a parent <code>Window</code> (i.e. it's not
- null) and that <code>Window</code> is currently active (focused).</div>
+<div class="block"><code>true</code> if the given <code>Component</code>'s has a parent <code>Window</code>
+ (i.e. it's not null) and that <code>Window</code> is currently active
+ (focused).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>component</code> - the <code>Component</code> to check the parent <code>Window</code>'s focus for.</dd>
+<dd><code>component</code> - the <code>Component</code> to check the parent <code>Window</code>'s
+            focus for.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if the given <code>Component</code>'s parent <code>Window</code> is currently
-         active.</dd>
+<dd><code>true</code> if the given <code>Component</code>'s parent
+         <code>Window</code> is currently active.</dd>
 </dl>
 </li>
 </ul>

@@ -119,9 +119,9 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">PermutationIterator&lt;T&gt;</span>
 extends java.lang.Object
 implements java.util.Iterator&lt;T[]&gt;</pre>
-<div class="block">This creates all the possible permutations of a collection of objects.
- For example, given the elements "A", "B", "C", this will return all 6 possible ways to rearrange
- these letters: ABC, ACB, BAC, BCA, CAB, CBA.</div>
+<div class="block">This creates all the possible permutations of a collection of objects. For
+ example, given the elements "A", "B", "C", this will return all 6 possible
+ ways to rearrange these letters: ABC, ACB, BAC, BCA, CAB, CBA.</div>
 </li>
 </ul>
 </div>
@@ -202,7 +202,8 @@ implements java.util.Iterator&lt;T[]&gt;</pre>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../com/pump/util/PermutationIterator.html" title="type parameter in PermutationIterator">T</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/PermutationIterator.html#next-T:A-">next</a></span>(<a href="../../../com/pump/util/PermutationIterator.html" title="type parameter in PermutationIterator">T</a>[]&nbsp;dest)</code>
-<div class="block">Calculate the next permutation sequence and store it in the array provided.</div>
+<div class="block">Calculate the next permutation sequence and store it in the array
+ provided.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -294,9 +295,10 @@ implements java.util.Iterator&lt;T[]&gt;</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>allElements</code> - all the elements this iterator will provide permutations of.
- Note just walking through all possible permutations of a 10-element list
- involves 3,628,800 iterations, so this gets very expensive very fast. Less than 8
- elements, though, and you should probably be OK.</dd>
+            Note just walking through all possible permutations of a
+            10-element list involves 3,628,800 iterations, so this gets
+            very expensive very fast. Less than 8 elements, though, and
+            you should probably be OK.</dd>
 </dl>
 </li>
 </ul>
@@ -343,10 +345,11 @@ implements java.util.Iterator&lt;T[]&gt;</pre>
 <li class="blockList">
 <h4>next</h4>
 <pre>public&nbsp;<a href="../../../com/pump/util/PermutationIterator.html" title="type parameter in PermutationIterator">T</a>[]&nbsp;next(<a href="../../../com/pump/util/PermutationIterator.html" title="type parameter in PermutationIterator">T</a>[]&nbsp;dest)</pre>
-<div class="block">Calculate the next permutation sequence and store it in the array provided.
+<div class="block">Calculate the next permutation sequence and store it in the array
+ provided.
  <p>
- For large/demanding iterations, reusing the target array may save you a little
- bit of performance.</div>
+ For large/demanding iterations, reusing the target array may save you a
+ little bit of performance.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dest</code> - the array to store the permutation sequence in.</dd>

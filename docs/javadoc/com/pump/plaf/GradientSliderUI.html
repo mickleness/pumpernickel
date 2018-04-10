@@ -126,31 +126,59 @@ var activeTableTab = "activeTableTab";
 extends <a href="../../../com/pump/plaf/MultiThumbSliderUI.html" title="class in com.pump.plaf">MultiThumbSliderUI</a>&lt;java.awt.Color&gt;</pre>
 <div class="block">The UI for the GradientSlider class.
  
- There are a few properties you can use to customize the UI
- of a GradientSlider.  You can set these for each slider
- by calling:
- <BR><code>slider.putClientProperty(key,value);</code>
- <P>Or you can set these globally by calling:
- <BR><code>UIManager.put(key,value);</code>
- <P>The available properties are:
- <P><TABLE summary="GradientSliderUI Client Properties" BORDER="1" CELLPADDING=5>
+ There are a few properties you can use to customize the UI of a
+ GradientSlider. You can set these for each slider by calling: <BR>
+ <code>slider.putClientProperty(key,value);</code>
+ <P>
+ Or you can set these globally by calling: <BR>
+ <code>UIManager.put(key,value);</code>
+ <P>
+ The available properties are:
+ <P>
+ <TABLE summary="GradientSliderUI Client Properties" BORDER="1" CELLPADDING=5>
  <TR>
- <TD>Property Name</TD><TD>Default Value</TD><TD>Description</td>
+ <TD>Property Name</TD>
+ <TD>Default Value</TD>
+ <TD>Description</td>
  </TR>
  <TR>
- <TD>GradientSlider.useBevel</TD><TD>"false"</TD><TD>If this is <code>true</code>, then this slider will be painted in a rectangle with a bevel effect around the borders.  If this is <code>false</code>, then this slider will be painted in a rounded rectangle.</td>
+ <TD>GradientSlider.useBevel</TD>
+ <TD>"false"</TD>
+ <TD>If this is <code>true</code>, then this slider will be painted in a
+ rectangle with a bevel effect around the borders. If this is
+ <code>false</code>, then this slider will be painted in a rounded rectangle.</td>
  </TR>
  <TR>
- <TD>GradientSlider.showTranslucency</TD><TD>"true"</TD><TD>If this is <code>true</code>, then the slider will reflect the opacity of the colors in the gradient, and paint a checkered background underneath the colors to indicate opacity.  If this is <code>false</code>, then this slider will always paint with completely opaque colors, although the actual colors may be translucent.</td>
+ <TD>GradientSlider.showTranslucency</TD>
+ <TD>"true"</TD>
+ <TD>If this is <code>true</code>, then the slider will reflect the opacity of
+ the colors in the gradient, and paint a checkered background underneath the
+ colors to indicate opacity. If this is <code>false</code>, then this slider
+ will always paint with completely opaque colors, although the actual colors
+ may be translucent.</td>
  </TR>
  <TR>
- <TD>GradientSlider.colorPickerIncludesOpacity</TD><TD>"true"</TD><TD>This is used when the user double-clicks a color and a ColorPicker dialog is invoked.  (So this value may not have any meaning if you override <code>GradientSlider.doDoubleClick()</code>.)  This controls whether the opacity/alpha controls are available in that dialog.  This does <i>not</i> control whether translucent colors can be used in this slider: translucent colors are always allowed, if the user can enter them.</TD>
+ <TD>GradientSlider.colorPickerIncludesOpacity</TD>
+ <TD>"true"</TD>
+ <TD>This is used when the user double-clicks a color and a ColorPicker dialog
+ is invoked. (So this value may not have any meaning if you override
+ <code>GradientSlider.doDoubleClick()</code>.) This controls whether the
+ opacity/alpha controls are available in that dialog. This does <i>not</i>
+ control whether translucent colors can be used in this slider: translucent
+ colors are always allowed, if the user can enter them.</TD>
  </TR>
  <TR>
- <TD>MultiThumbSlider.indicateComponent</TD><TD>"true"</TD><TD>If this is <code>true</code>, then the thumbs will only paint on this component when the mouse is inside this slider <i>or</i> when this slider as the keyboard focus.</td>
+ <TD>MultiThumbSlider.indicateComponent</TD>
+ <TD>"true"</TD>
+ <TD>If this is <code>true</code>, then the thumbs will only paint on this
+ component when the mouse is inside this slider <i>or</i> when this slider as
+ the keyboard focus.</td>
  </TR>
  <TR>
- <TD>MultiThumbSlider.indicateThumb</TD><TD>"true"</TD><TD>If this is <code>true</code>, then the thumb the mouse is over will gently fade into a slightly different color.</td>
+ <TD>MultiThumbSlider.indicateThumb</TD>
+ <TD>"true"</TD>
+ <TD>If this is <code>true</code>, then the thumb the mouse is over will
+ gently fade into a slightly different color.</td>
  </TR>
  </TABLE></div>
 </li>
@@ -237,7 +265,8 @@ extends <a href="../../../com/pump/plaf/MultiThumbSliderUI.html" title="class in
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/GradientSliderUI.html#getPreferredComponentDepth--">getPreferredComponentDepth</a></span>()</code>
-<div class="block">Return the typical height of a horizontally oriented slider, or the width of the vertically oriented slider.</div>
+<div class="block">Return the typical height of a horizontally oriented slider, or the width
+ of the vertically oriented slider.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -323,12 +352,14 @@ extends <a href="../../../com/pump/plaf/MultiThumbSliderUI.html" title="class in
 <h4>getPreferredComponentDepth</h4>
 <pre>protected&nbsp;int&nbsp;getPreferredComponentDepth()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/plaf/MultiThumbSliderUI.html#getPreferredComponentDepth--">MultiThumbSliderUI</a></code></span></div>
-<div class="block">Return the typical height of a horizontally oriented slider, or the width of the vertically oriented slider.</div>
+<div class="block">Return the typical height of a horizontally oriented slider, or the width
+ of the vertically oriented slider.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/plaf/MultiThumbSliderUI.html#getPreferredComponentDepth--">getPreferredComponentDepth</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/plaf/MultiThumbSliderUI.html" title="class in com.pump.plaf">MultiThumbSliderUI</a>&lt;java.awt.Color&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the typical height of a horizontally oriented slider, or the width of the vertically oriented slider.</dd>
+<dd>the typical height of a horizontally oriented slider, or the
+         width of the vertically oriented slider.</dd>
 </dl>
 </li>
 </ul>

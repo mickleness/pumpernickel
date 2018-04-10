@@ -115,7 +115,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">MedianCutColorQuantization</span>
 extends <a href="../../../../../com/pump/image/pixel/quantize/ColorQuantization.html" title="class in com.pump.image.pixel.quantize">ColorQuantization</a></pre>
-<div class="block">This is a <a href="http://en.wikipedia.org/wiki/Median_cut">median cut color reduction algorithm</a>.
+<div class="block">This is a <a href="http://en.wikipedia.org/wiki/Median_cut">median cut color
+ reduction algorithm</a>.
  <P>
  This treats colors as points in 3-dimensional RGB space. The list of points
  is sorted by its red value. Then this list is split in half. Each half is
@@ -124,7 +125,8 @@ extends <a href="../../../../../com/pump/image/pixel/quantize/ColorQuantization.
  green, and blue. In this way we isolate clusters of colors with similar
  values. So if we want to reduce a color set to <i>k</i> colors, then we
  simply identify <i>k</i>-many clusters, and take the average RGB value of
- each cluster.</P>
+ each cluster.
+ </P>
  <P>
  When we average the RGB values we take into account the frequency of each
  color value. That is: if there are 100 occurrences of red of 1 occurrence of
@@ -230,11 +232,13 @@ extends <a href="../../../../../com/pump/image/pixel/quantize/ColorQuantization.
 <dd><code>originalSet</code> - the large color set to reduce.</dd>
 <dd><code>maximumColorCount</code> - the number of colors to reduce to.</dd>
 <dd><code>retainOriginalIntegrity</code> - if true then the argument <code>originalSet</code> should not
- be modified. If false: then this method may change the original color set at its discretion.
- (In some algorithms: this may save a lot of time.)</dd>
+            be modified. If false: then this method may change the
+            original color set at its discretion. (In some algorithms:
+            this may save a lot of time.)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a <code>ColorSet</code> that conforms to maximumColorCount. (This method
- may return the <code>originalSet</code> argument if it was already small enough.)</dd>
+<dd>a <code>ColorSet</code> that conforms to maximumColorCount. (This
+         method may return the <code>originalSet</code> argument if it was
+         already small enough.)</dd>
 </dl>
 </li>
 </ul>

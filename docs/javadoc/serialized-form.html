@@ -84,6 +84,17 @@
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
 </dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>ignored</h4>
+<pre>boolean ignored</pre>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -173,9 +184,8 @@
 <li class="blockList">
 <h4>pauseBeats</h4>
 <pre>float pauseBeats</pre>
-<div class="block">The pause before writing this stroke. The unit of 1 should
- correspond approximately to the pause of writing a space
- between words.</div>
+<div class="block">The pause before writing this stroke. The unit of 1 should correspond
+ approximately to the pause of writing a space between words.</div>
 </li>
 <li class="blockListLast">
 <h4>shape</h4>
@@ -359,6 +369,51 @@
 <li class="blockList">
 <h2 title="Package">Package&nbsp;com.pump.data</h2>
 <ul class="blockList">
+<li class="blockList"><a name="com.pump.data.AttributeDataImpl">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/data/AttributeDataImpl.html" title="class in com.pump.data">com.pump.data.AttributeDataImpl</a> extends java.lang.Object implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialization Methods</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>readObject</h4>
+<pre>private&nbsp;void&nbsp;readObject(java.io.ObjectInputStream&nbsp;in)
+                 throws java.io.IOException,
+                        java.lang.ClassNotFoundException</pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd>
+<dd><code>java.lang.ClassNotFoundException</code></dd>
+</dl>
+</li>
+<li class="blockListLast">
+<h4>writeObject</h4>
+<pre>private&nbsp;void&nbsp;writeObject(java.io.ObjectOutputStream&nbsp;out)
+                  throws java.io.IOException</pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd>
+</dl>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>data</h4>
+<pre>java.util.Map&lt;K,V&gt; data</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="com.pump.data.BoundsChecker">
 <!--   -->
 </a>
@@ -399,6 +454,43 @@
 <li class="blockListLast">
 <h4>encoder</h4>
 <pre><a href="com/pump/data/encoder/ValueEncoder.html" title="class in com.pump.data.encoder">ValueEncoder</a>&lt;<a href="com/pump/data/encoder/ValueEncoder.html" title="type parameter in ValueEncoder">T</a>&gt; encoder</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="com.pump.data.TreeNode.NoChildren">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/data/TreeNode.NoChildren.html" title="class in com.pump.data">com.pump.data.TreeNode.NoChildren</a> extends <a href="com/pump/data/TreeNodeImpl.html" title="class in com.pump.data">TreeNodeImpl</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="com.pump.data.TreeNodeImpl">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/data/TreeNodeImpl.html" title="class in com.pump.data">com.pump.data.TreeNodeImpl</a> extends <a href="com/pump/data/AttributeDataImpl.html" title="class in com.pump.data">AttributeDataImpl</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>parent</h4>
+<pre><a href="com/pump/data/TreeNode.html" title="interface in com.pump.data">TreeNode</a>&lt;<a href="com/pump/data/TreeNode.html" title="type parameter in TreeNode">P</a> extends <a href="com/pump/data/TreeNode.html" title="interface in com.pump.data">TreeNode</a>&lt;?,?&gt;,<a href="com/pump/data/TreeNode.html" title="type parameter in TreeNode">C</a> extends <a href="com/pump/data/TreeNode.html" title="interface in com.pump.data">TreeNode</a>&lt;?,?&gt;&gt; parent</pre>
+</li>
+<li class="blockList">
+<h4>children</h4>
+<pre>java.util.List&lt;E&gt; children</pre>
+</li>
+<li class="blockListLast">
+<h4>lock</h4>
+<pre>java.util.concurrent.locks.ReentrantReadWriteLock lock</pre>
 </li>
 </ul>
 </li>
@@ -1526,7 +1618,7 @@
 <li class="blockListLast">
 <h4>pixelCount</h4>
 <pre>long pixelCount</pre>
-<div class="block">A cached value of the number of pixels. This is equivalent to the sum of 
+<div class="block">A cached value of the number of pixels. This is equivalent to the sum of
  all the values in <code>tree</code>.</div>
 </li>
 </ul>
@@ -2391,14 +2483,14 @@
 <li class="blockList">
 <h4>commitChanges</h4>
 <pre>boolean commitChanges</pre>
-<div class="block">Used to indicate if the changes should be saved when
- this dialog is hidden.</div>
+<div class="block">Used to indicate if the changes should be saved when this dialog is
+ hidden.</div>
 </li>
 <li class="blockList">
 <h4>originalPrintLayout</h4>
 <pre><a href="com/pump/print/PrintLayout.html" title="class in com.pump.print">PrintLayout</a> originalPrintLayout</pre>
-<div class="block">The original layout passed to the constructor.
- This is only updated when the user presses OK or Print.</div>
+<div class="block">The original layout passed to the constructor. This is only updated when
+ the user presses OK or Print.</div>
 </li>
 <li class="blockListLast">
 <h4>actionListener</h4>
@@ -3248,14 +3340,14 @@
 <li class="blockList">
 <h4>refreshRunnables</h4>
 <pre>java.util.List&lt;E&gt; refreshRunnables</pre>
-<div class="block">A series of Runnables to execute that refresh the inspector UI
- when the DecoratedPanelUI changes.</div>
+<div class="block">A series of Runnables to execute that refresh the inspector UI when the
+ DecoratedPanelUI changes.</div>
 </li>
 <li class="blockListLast">
 <h4>refreshing</h4>
 <pre>int refreshing</pre>
-<div class="block">When non-zero, we're in the processing of refreshing the inspector
- and listeners should stand down.</div>
+<div class="block">When non-zero, we're in the processing of refreshing the inspector and
+ listeners should stand down.</div>
 </li>
 </ul>
 </li>
@@ -3517,10 +3609,10 @@
 <li class="blockListLast">
 <h4>cachedPaints</h4>
 <pre>java.util.Map&lt;K,V&gt; cachedPaints</pre>
-<div class="block">If the "Animate" checkbox is selected, then this program will quickly churn through
- megabytes of memory to constantly create the tiles for every repaint.  Instead
- let's cache those paints.  This cache gets cleared for any property other than
- the offset.</div>
+<div class="block">If the "Animate" checkbox is selected, then this program will quickly
+ churn through megabytes of memory to constantly create the tiles for
+ every repaint. Instead let's cache those paints. This cache gets cleared
+ for any property other than the offset.</div>
 </li>
 </ul>
 </li>
@@ -3729,6 +3821,74 @@
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
 </dl>
+</li>
+<li class="blockList"><a name="com.pump.showcase.MovWriterDemo">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/showcase/MovWriterDemo.html" title="class in com.pump.showcase">com.pump.showcase.MovWriterDemo</a> extends javax.swing.JPanel implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>visualPanel</h4>
+<pre>javax.swing.JPanel visualPanel</pre>
+</li>
+<li class="blockList">
+<h4>exportButton</h4>
+<pre>javax.swing.JButton exportButton</pre>
+</li>
+<li class="blockList">
+<h4>framesSpinner</h4>
+<pre>javax.swing.JSpinner framesSpinner</pre>
+</li>
+<li class="blockList">
+<h4>fpsSpinner</h4>
+<pre>javax.swing.JSpinner fpsSpinner</pre>
+</li>
+<li class="blockList">
+<h4>formatComboBox</h4>
+<pre>javax.swing.JComboBox&lt;E&gt; formatComboBox</pre>
+</li>
+<li class="blockList">
+<h4>jpegQuality</h4>
+<pre>javax.swing.JSpinner jpegQuality</pre>
+</li>
+<li class="blockList">
+<h4>writeAudio</h4>
+<pre>javax.swing.JCheckBox writeAudio</pre>
+</li>
+<li class="blockList">
+<h4>audioPanel</h4>
+<pre>javax.swing.JPanel audioPanel</pre>
+</li>
+<li class="blockList">
+<h4>audioFileList</h4>
+<pre><a href="com/pump/util/ObservableList.html" title="class in com.pump.util">ObservableList</a>&lt;<a href="com/pump/util/ObservableList.html" title="type parameter in ObservableList">T</a>&gt; audioFileList</pre>
+</li>
+<li class="blockList">
+<h4>audioFiles</h4>
+<pre>javax.swing.JList&lt;E&gt; audioFiles</pre>
+</li>
+<li class="blockList">
+<h4>addButton</h4>
+<pre>javax.swing.JButton addButton</pre>
+</li>
+<li class="blockList">
+<h4>animationController</h4>
+<pre><a href="com/pump/swing/AnimationController.html" title="class in com.pump.swing">AnimationController</a> animationController</pre>
+</li>
+<li class="blockListLast">
+<h4>animationPreview</h4>
+<pre>javax.swing.JPanel animationPreview</pre>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 <li class="blockList"><a name="com.pump.showcase.MultiWindowDemo">
 <!--   -->
@@ -4425,8 +4585,8 @@
 <li class="blockList">
 <h4>preferenceKey</h4>
 <pre>java.lang.String preferenceKey</pre>
-<div class="block">This optional key name combined with the "preference" field is used to store/retrieve the last
- value the user applied to this field</div>
+<div class="block">This optional key name combined with the "preference" field is used to
+ store/retrieve the last value the user applied to this field</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="com/pump/swing/AutocompleteTextField.html#preferences"><code>AutocompleteTextField.preferences</code></a></dd>
@@ -4653,48 +4813,53 @@
 <li class="blockList">
 <h4>adjustingSpinners</h4>
 <pre>int adjustingSpinners</pre>
-<div class="block">Used to indicate when we're internally adjusting the value of the spinners.
- If this equals zero, then incoming events are triggered by the user and must be processed.
- If this is not equal to zero, then incoming events are triggered by another method
- that's already responding to the user's actions.</div>
+<div class="block">Used to indicate when we're internally adjusting the value of the
+ spinners. If this equals zero, then incoming events are triggered by the
+ user and must be processed. If this is not equal to zero, then incoming
+ events are triggered by another method that's already responding to the
+ user's actions.</div>
 </li>
 <li class="blockList">
 <h4>adjustingSlider</h4>
 <pre>int adjustingSlider</pre>
 <div class="block">Used to indicate when we're internally adjusting the value of the slider.
- If this equals zero, then incoming events are triggered by the user and must be processed.
- If this is not equal to zero, then incoming events are triggered by another method
- that's already responding to the user's actions.</div>
+ If this equals zero, then incoming events are triggered by the user and
+ must be processed. If this is not equal to zero, then incoming events are
+ triggered by another method that's already responding to the user's
+ actions.</div>
 </li>
 <li class="blockList">
 <h4>adjustingColorPanel</h4>
 <pre>int adjustingColorPanel</pre>
-<div class="block">Used to indicate when we're internally adjusting the selected color of the ColorPanel.
- If this equals zero, then incoming events are triggered by the user and must be processed.
- If this is not equal to zero, then incoming events are triggered by another method
- that's already responding to the user's actions.</div>
+<div class="block">Used to indicate when we're internally adjusting the selected color of
+ the ColorPanel. If this equals zero, then incoming events are triggered
+ by the user and must be processed. If this is not equal to zero, then
+ incoming events are triggered by another method that's already responding
+ to the user's actions.</div>
 </li>
 <li class="blockList">
 <h4>adjustingHexField</h4>
 <pre>int adjustingHexField</pre>
-<div class="block">Used to indicate when we're internally adjusting the value of the hex field.
- If this equals zero, then incoming events are triggered by the user and must be processed.
- If this is not equal to zero, then incoming events are triggered by another method
- that's already responding to the user's actions.</div>
+<div class="block">Used to indicate when we're internally adjusting the value of the hex
+ field. If this equals zero, then incoming events are triggered by the
+ user and must be processed. If this is not equal to zero, then incoming
+ events are triggered by another method that's already responding to the
+ user's actions.</div>
 </li>
 <li class="blockList">
 <h4>adjustingOpacity</h4>
 <pre>int adjustingOpacity</pre>
-<div class="block">Used to indicate when we're internally adjusting the value of the opacity.
- If this equals zero, then incoming events are triggered by the user and must be processed.
- If this is not equal to zero, then incoming events are triggered by another method
- that's already responding to the user's actions.</div>
+<div class="block">Used to indicate when we're internally adjusting the value of the
+ opacity. If this equals zero, then incoming events are triggered by the
+ user and must be processed. If this is not equal to zero, then incoming
+ events are triggered by another method that's already responding to the
+ user's actions.</div>
 </li>
 <li class="blockList">
 <h4>expertControls</h4>
 <pre>javax.swing.JPanel expertControls</pre>
-<div class="block">The "expert" controls are the controls on the right side
- of this panel: the labels/spinners/radio buttons.</div>
+<div class="block">The "expert" controls are the controls on the right side of this panel:
+ the labels/spinners/radio buttons.</div>
 </li>
 <li class="blockList">
 <h4>colorPanel</h4>
@@ -6379,8 +6544,7 @@
 <li class="blockList">
 <h4>windowListener</h4>
 <pre>java.awt.event.WindowListener windowListener</pre>
-<div class="block">Why did the user switch windows around?  Did the file
- system change?</div>
+<div class="block">Why did the user switch windows around? Did the file system change?</div>
 </li>
 <li class="blockList">
 <h4>id</h4>
@@ -6475,6 +6639,26 @@
 <dd>1L</dd>
 </dl>
 </li>
+<li class="blockList"><a name="com.pump.swing.io.LocationTreePane">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/swing/io/LocationTreePane.html" title="class in com.pump.swing.io">com.pump.swing.io.LocationTreePane</a> extends javax.swing.JComponent implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>tree</h4>
+<pre>javax.swing.JTree tree</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="com.pump.swing.io.OpenLocationPane">
 <!--   -->
 </a>
@@ -6533,21 +6717,19 @@
 <li class="blockList">
 <h4>draggingFromToolbar</h4>
 <pre>boolean draggingFromToolbar</pre>
-<div class="block">Whether a drag is originating from the toolbar, or the
- dialog. This can make a big difference on how the drag is treated.</div>
+<div class="block">Whether a drag is originating from the toolbar, or the dialog. This can
+ make a big difference on how the drag is treated.</div>
 </li>
 <li class="blockList">
 <h4>draggingDefaults</h4>
 <pre>boolean draggingDefaults</pre>
-<div class="block">Whether the default set of controls is being dragged to
- the toolbar.</div>
+<div class="block">Whether the default set of controls is being dragged to the toolbar.</div>
 </li>
 <li class="blockList">
 <h4>minimumHeight</h4>
 <pre>int minimumHeight</pre>
-<div class="block">The minimum height of this toolbar, based on the
- preferred height of all its components (whether they
- are visible or not.</div>
+<div class="block">The minimum height of this toolbar, based on the preferred height of all
+ its components (whether they are visible or not.</div>
 </li>
 <li class="blockList">
 <h4>componentInsets</h4>
@@ -6574,11 +6756,11 @@
 <li class="blockListLast">
 <h4>updatedWhileShowing</h4>
 <pre>boolean updatedWhileShowing</pre>
-<div class="block">This hard-to-describe variable has to do with when things
- are initialized, and laying out this toolbar.
- <P>If things are set up incorrectly: all the components
- slide into place in an animation.  :)  This is "neat", but
- gratuitous eye-candy.</div>
+<div class="block">This hard-to-describe variable has to do with when things are
+ initialized, and laying out this toolbar.
+ <P>
+ If things are set up incorrectly: all the components slide into place in
+ an animation. :) This is "neat", but gratuitous eye-candy.</div>
 </li>
 </ul>
 </li>
@@ -6796,11 +6978,9 @@
 <li class="blockList">
 <h4>bringItem</h4>
 <pre>javax.swing.JMenuItem bringItem</pre>
-<div class="block">The "Bright All to Front" menu item.
- TODO: this is implemented hackish-ly and causes windows
- to flicker over one another.  I'm not sure it's worth
- keeping; for now the lines that add it to the menu
- are commented out.</div>
+<div class="block">The "Bright All to Front" menu item. TODO: this is implemented hackish-ly
+ and causes windows to flicker over one another. I'm not sure it's worth
+ keeping; for now the lines that add it to the menu are commented out.</div>
 </li>
 <li class="blockList">
 <h4>updateRunnable</h4>

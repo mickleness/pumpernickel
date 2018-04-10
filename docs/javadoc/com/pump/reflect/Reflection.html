@@ -132,7 +132,8 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static java.lang.Object</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/reflect/Reflection.html#INVOCATION_ERROR">INVOCATION_ERROR</a></span></code>
-<div class="block">This object is returned by <code>invokeMethod(..)</code> when an error occurs.</div>
+<div class="block">This object is returned by <code>invokeMethod(..)</code> when an error
+ occurs.</div>
 </td>
 </tr>
 </table>
@@ -171,8 +172,8 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>protected static &lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/reflect/Reflection.html#construct-java.lang.Class-java.lang.String-">construct</a></span>(java.lang.Class&lt;T&gt;&nbsp;t,
          java.lang.String&nbsp;arguments)</code>
-<div class="block">This constructs an instance of t if a constructor is found
- that matches the arguments provided.</div>
+<div class="block">This constructs an instance of t if a constructor is found that matches
+ the arguments provided.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -188,29 +189,31 @@ extends java.lang.Object</pre>
             java.lang.Object&nbsp;obj,
             java.lang.String&nbsp;methodName,
             java.lang.Object[]&nbsp;arguments)</code>
-<div class="block">This uses reflection to call a method that may not exist in the compiling JVM.</div>
+<div class="block">This uses reflection to call a method that may not exist in the compiling
+ JVM.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/reflect/Reflection.html#nameStaticField-java.lang.Class-java.lang.Object-">nameStaticField</a></span>(java.lang.Class&lt;?&gt;&nbsp;c,
                java.lang.Object&nbsp;value)</code>
-<div class="block">This debugging tool combs through a class and
- tells you what public static field has the value
- you've provided.</div>
+<div class="block">This debugging tool combs through a class and tells you what public
+ static field has the value you've provided.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static java.lang.Object</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/reflect/Reflection.html#parse-java.lang.String-">parse</a></span>(java.lang.String&nbsp;input)</code>
-<div class="block">Parse an object as null, an int, a long, a float, a String, a static field, or "new xyz(..)" (where ".." looks recursively for a comma-separated
- list of arguments)).</div>
+<div class="block">Parse an object as null, an int, a long, a float, a String, a static
+ field, or "new xyz(..)" (where ".." looks recursively for a
+ comma-separated list of arguments)).</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected static java.lang.Object[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/reflect/Reflection.html#parseCommaSeparatedList-java.lang.String-">parseCommaSeparatedList</a></span>(java.lang.String&nbsp;arguments)</code>
-<div class="block">Return an array of objects based on a comma-separated description of its contents.</div>
+<div class="block">Return an array of objects based on a comma-separated description of its
+ contents.</div>
 </td>
 </tr>
 </table>
@@ -242,7 +245,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>INVOCATION_ERROR</h4>
 <pre>public static final&nbsp;java.lang.Object INVOCATION_ERROR</pre>
-<div class="block">This object is returned by <code>invokeMethod(..)</code> when an error occurs.</div>
+<div class="block">This object is returned by <code>invokeMethod(..)</code> when an error
+ occurs.</div>
 </li>
 </ul>
 </li>
@@ -292,7 +296,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>parseCommaSeparatedList</h4>
 <pre>protected static&nbsp;java.lang.Object[]&nbsp;parseCommaSeparatedList(java.lang.String&nbsp;arguments)</pre>
-<div class="block">Return an array of objects based on a comma-separated description of its contents.</div>
+<div class="block">Return an array of objects based on a comma-separated description of its
+ contents.</div>
 </li>
 </ul>
 <a name="parse-java.lang.String-">
@@ -302,13 +307,17 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>parse</h4>
 <pre>public static&nbsp;java.lang.Object&nbsp;parse(java.lang.String&nbsp;input)</pre>
-<div class="block">Parse an object as null, an int, a long, a float, a String, a static field, or "new xyz(..)" (where ".." looks recursively for a comma-separated
- list of arguments)).
- <p>For example, you can call:
- <br><code>parse( "new Color( 255, 0, 128 )" );</code>
- <br><code>parse( "new com.bric.swing.resources.ArrowIcon( javax.swing.SwingConstants.EAST, 24, 24 )" );</code>
- <br><code>parse( "new com.bric.swing.resources.TriangleIcon( javax.swing.SwingConstants.EAST, 24, 24, new Color(0)" );</code>
- <p>The class name/constants must be fully qualified.</div>
+<div class="block">Parse an object as null, an int, a long, a float, a String, a static
+ field, or "new xyz(..)" (where ".." looks recursively for a
+ comma-separated list of arguments)).
+ <p>
+ For example, you can call: <br>
+ <code>parse( "new Color( 255, 0, 128 )" );</code> <br>
+ <code>parse( "new com.pump.swing.resources.ArrowIcon( javax.swing.SwingConstants.EAST, 24, 24 )" );</code>
+ <br>
+ <code>parse( "new com.pump.swing.resources.TriangleIcon( javax.swing.SwingConstants.EAST, 24, 24, new Color(0)" );</code>
+ <p>
+ The class name/constants must be fully qualified.</div>
 </li>
 </ul>
 <a name="construct-java.lang.Class-java.lang.String-">
@@ -319,18 +328,18 @@ extends java.lang.Object</pre>
 <h4>construct</h4>
 <pre>protected static&nbsp;&lt;T&gt;&nbsp;T&nbsp;construct(java.lang.Class&lt;T&gt;&nbsp;t,
                                  java.lang.String&nbsp;arguments)</pre>
-<div class="block">This constructs an instance of t if a constructor is found
- that matches the arguments provided. This will not identify
- a varargs constructor. If multiple constructors match the arguments
- provided, this method will choose one to use</div>
+<div class="block">This constructs an instance of t if a constructor is found that matches
+ the arguments provided. This will not identify a varargs constructor. If
+ multiple constructors match the arguments provided, this method will
+ choose one to use</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>t</code> - the type of class to construct.</dd>
-<dd><code>arguments</code> - a comma separated list of simple arguments, such
- as primitives, strings, or static fields.</dd>
+<dd><code>arguments</code> - a comma separated list of simple arguments, such as
+            primitives, strings, or static fields.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a new instance of t created using the arguments provided,
- or an exception will be thrown.</dd>
+<dd>a new instance of t created using the arguments provided, or an
+         exception will be thrown.</dd>
 </dl>
 </li>
 </ul>
@@ -344,11 +353,12 @@ extends java.lang.Object</pre>
                                             java.lang.Object&nbsp;obj,
                                             java.lang.String&nbsp;methodName,
                                             java.lang.Object[]&nbsp;arguments)</pre>
-<div class="block">This uses reflection to call a method that may not exist in the compiling JVM.</div>
+<div class="block">This uses reflection to call a method that may not exist in the compiling
+ JVM.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>INVOCATION_ERROR if an error occurs (details are printed to the console), or the return
- value of the invocation.</dd>
+<dd>INVOCATION_ERROR if an error occurs (details are printed to the
+         console), or the return value of the invocation.</dd>
 </dl>
 </li>
 </ul>
@@ -360,21 +370,21 @@ extends java.lang.Object</pre>
 <h4>nameStaticField</h4>
 <pre>public static&nbsp;java.lang.String&nbsp;nameStaticField(java.lang.Class&lt;?&gt;&nbsp;c,
                                                java.lang.Object&nbsp;value)</pre>
-<div class="block">This debugging tool combs through a class and
- tells you what public static field has the value
- you've provided.
- <P> For example, you can call:
- <BR><code>nameStaticField(BufferedImage.class,new Integer(BufferedImage.TYPE_INT_ARGB))</code>
- <BR>And this method will return "TYPE_INT_ARGB".</div>
+<div class="block">This debugging tool combs through a class and tells you what public
+ static field has the value you've provided.
+ <P>
+ For example, you can call: <BR>
+ <code>nameStaticField(BufferedImage.class,new Integer(BufferedImage.TYPE_INT_ARGB))</code>
+ <BR>
+ And this method will return "TYPE_INT_ARGB".</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - the class of interest</dd>
-<dd><code>value</code> - the value.  Primitives must be wrapped.</dd>
+<dd><code>value</code> - the value. Primitives must be wrapped.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the string of the field with that value, or
- <code>null</code> if not hits were found.
- (Or if multiple hits were found, this returns a
- list of possible matches.)</dd>
+<dd>the string of the field with that value, or <code>null</code> if
+         not hits were found. (Or if multiple hits were found, this
+         returns a list of possible matches.)</dd>
 </dl>
 </li>
 </ul>

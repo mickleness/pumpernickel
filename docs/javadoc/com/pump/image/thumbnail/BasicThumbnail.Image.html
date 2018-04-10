@@ -119,9 +119,8 @@ var activeTableTab = "activeTableTab";
 <pre>public static class <span class="typeNameLabel">BasicThumbnail.Image</span>
 extends java.lang.Object
 implements <a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.html" title="interface in com.pump.image.thumbnail">BasicThumbnail.Layer</a></pre>
-<div class="block">This layer paints the actual scaled source image.
- This layer has no insets, but it does have an optional background
- color and curvature.</div>
+<div class="block">This layer paints the actual scaled source image. This layer has no
+ insets, but it does have an optional background color and curvature.</div>
 </li>
 </ul>
 </div>
@@ -355,10 +354,10 @@ implements <a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.ht
 <h4>getInsets</h4>
 <pre>public&nbsp;java.awt.Insets&nbsp;getInsets()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.html#getInsets--">BasicThumbnail.Layer</a></code></span></div>
-<div class="block">Return the size of this layer.
- Note that rounded corners may fall outside of these insets;
- that is why it is important that these layers always be painted
- in the correct z-order to achieve the right result.</div>
+<div class="block">Return the size of this layer. Note that rounded corners may fall
+ outside of these insets; that is why it is important that these
+ layers always be painted in the correct z-order to achieve the right
+ result.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.html#getInsets--">getInsets</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.html" title="interface in com.pump.image.thumbnail">BasicThumbnail.Layer</a></code></dd>
@@ -376,8 +375,8 @@ implements <a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.ht
                   int&nbsp;y,
                   int&nbsp;width,
                   int&nbsp;height)</pre>
-<div class="block">If a background color was provided: this paints that background.
- This method is not capable of painting the scaled image, though.</div>
+<div class="block">If a background color was provided: this paints that background. This
+ method is not capable of painting the scaled image, though.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.html#paint-java.awt.Graphics2D-int-int-int-int-">paint</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.html" title="interface in com.pump.image.thumbnail">BasicThumbnail.Layer</a></code></dd>

@@ -127,11 +127,12 @@
 <br>
 <pre>public static class <span class="typeNameLabel">ObservableList.RecursiveListenerModificationException</span>
 extends java.lang.RuntimeException</pre>
-<div class="block">This is thrown when notifying a <code>ListDataListener</code> resulted
- in further modifying this list when it shouldn't have.
- <p>Synchronized listeners are always forbidden from altering the list,
- and unsynchronized listeners have an optional argument when they are added
- to declare whether they can modify the list or not.</div>
+<div class="block">This is thrown when notifying a <code>ListDataListener</code> resulted in
+ further modifying this list when it shouldn't have.
+ <p>
+ Synchronized listeners are always forbidden from altering the list, and
+ unsynchronized listeners have an optional argument when they are added to
+ declare whether they can modify the list or not.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.util.ObservableList.RecursiveListenerModificationException">Serialized Form</a></dd>

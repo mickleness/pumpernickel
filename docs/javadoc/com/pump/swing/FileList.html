@@ -138,8 +138,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">FileList</span>
 extends javax.swing.JPanel</pre>
-<div class="block">This is a list of files in a certain directory.  Each file is listed as
- one <code>JComponent</code> in a vertical list.</div>
+<div class="block">This is a list of files in a certain directory. Each file is listed as one
+ <code>JComponent</code> in a vertical list.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.swing.FileList">Serialized Form</a></dd>
@@ -288,8 +288,7 @@ extends javax.swing.JPanel</pre>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>java.io.File[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/FileList.html#getAllFiles--">getAllFiles</a></span>()</code>
-<div class="block">Returns all available files -- although some might not
- be visible.</div>
+<div class="block">Returns all available files -- although some might not be visible.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -435,8 +434,10 @@ extends javax.swing.JPanel</pre>
                 <a href="../../../com/pump/util/SearchConstraints.html" title="class in com.pump.util">SearchConstraints</a>&lt;java.io.File&gt;&nbsp;constraints)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>primaryFileFilter</code> - this optional filter is immutable and supersedes any possible SearchConstraints.</dd>
-<dd><code>constraints</code> - this optional set of constraints is used to fine-tune what the primary FileFilter accepts.</dd>
+<dd><code>primaryFileFilter</code> - this optional filter is immutable and supersedes any possible
+            SearchConstraints.</dd>
+<dd><code>constraints</code> - this optional set of constraints is used to fine-tune what the
+            primary FileFilter accepts.</dd>
 </dl>
 </li>
 </ul>
@@ -452,8 +453,10 @@ extends javax.swing.JPanel</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>directories</code> - an initial set of directories this FileList refers to.</dd>
-<dd><code>primaryFileFilter</code> - this optional filter is immutable and supersedes any possible SearchConstraints.</dd>
-<dd><code>constraints</code> - this optional set of constraints is used to fine-tune what the primary FileFilter accepts.</dd>
+<dd><code>primaryFileFilter</code> - this optional filter is immutable and supersedes any possible
+            SearchConstraints.</dd>
+<dd><code>constraints</code> - this optional set of constraints is used to fine-tune what the
+            primary FileFilter accepts.</dd>
 </dl>
 </li>
 </ul>
@@ -520,9 +523,9 @@ extends javax.swing.JPanel</pre>
 <div class="block">Returns the files currently displayed in this list.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the files current displayed in this list. This
- will include files that pass the primary FileFilter
- and the current SearchConstraints.</dd>
+<dd>the files current displayed in this list. This will include files
+         that pass the primary FileFilter and the current
+         SearchConstraints.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/swing/FileList.html#getAllFiles--"><code>getAllFiles()</code></a></dd>
 </dl>
@@ -535,13 +538,13 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getAllFiles</h4>
 <pre>public&nbsp;java.io.File[]&nbsp;getAllFiles()</pre>
-<div class="block">Returns all available files -- although some might not
- be visible.</div>
+<div class="block">Returns all available files -- although some might not be visible.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all known available files that pass the primary FileFilter. Note
- this includes files that do NOT pass the current SearchConstraints. These
- files may change if the thread that is scanning for Files is still ongoing.</dd>
+         this includes files that do NOT pass the current
+         SearchConstraints. These files may change if the thread that is
+         scanning for Files is still ongoing.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/swing/FileList.html#getVisibleFiles--"><code>getVisibleFiles()</code></a></dd>
 </dl>

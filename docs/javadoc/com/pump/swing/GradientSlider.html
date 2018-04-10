@@ -134,20 +134,24 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">GradientSlider</span>
 extends <a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in com.pump.swing">MultiThumbSlider</a>&lt;java.awt.Color&gt;</pre>
-<div class="block">This component lets the user manipulate the colors in a gradient.
- A <code>GradientSlider</code> can contain any number of thumbs.  The
- slider itself represents a range of values from zero to one, so the thumbs
- must always be within this range.  Each thumb maps to a specific <code>Color</code>.
- <P>There are some specific properties you can set to customize the look-and-feel
+<div class="block">This component lets the user manipulate the colors in a gradient. A
+ <code>GradientSlider</code> can contain any number of thumbs. The slider
+ itself represents a range of values from zero to one, so the thumbs must
+ always be within this range. Each thumb maps to a specific <code>Color</code>
+ .
+ <P>
+ There are some specific properties you can set to customize the look-and-feel
  of this slider in the default <a href="../../../com/pump/plaf/GradientSliderUI.html" title="class in com.pump.plaf"><code>GradientSliderUI</code></a> class.
- <P>The UI for each slider is loaded from the UIManager property: "GradientSliderUI".
- By default this is "com.pump.plaf.GradientSliderUI".
- <p>The <code>GradientSliderDemoHelper</code> creates this sample graphic:
- <br><img src="https://javagraphics.java.net/blurbs/GradientSlider.png" alt="Screenshot of the GradientSlider"></div>
+ <P>
+ The UI for each slider is loaded from the UIManager property:
+ "GradientSliderUI". By default this is "com.pump.plaf.GradientSliderUI".
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/gradientslider.jpg"
+ alt="Screenshot of the GradientSlider"></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><code>com.pump.swing.GradientSliderDemo</code>, 
-<a href="../../../serialized-form.html#com.pump.swing.GradientSlider">Serialized Form</a></dd>
+<dd><a href="../../../serialized-form.html#com.pump.swing.GradientSlider">Serialized Form</a></dd>
 </dl>
 </li>
 </ul>
@@ -240,14 +244,14 @@ extends <a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in 
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/swing/GradientSlider.html#GradientSlider--">GradientSlider</a></span>()</code>
-<div class="block">Create a horizontal <code>GradientSlider</code> that
- represents a gradient from white to black.</div>
+<div class="block">Create a horizontal <code>GradientSlider</code> that represents a
+ gradient from white to black.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/swing/GradientSlider.html#GradientSlider-int-">GradientSlider</a></span>(int&nbsp;orientation)</code>
-<div class="block">Create a <code>GradientSlider</code> that represents a
- gradient form white to black.</div>
+<div class="block">Create a <code>GradientSlider</code> that represents a gradient form
+ white to black.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -282,16 +286,16 @@ extends <a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in 
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/GradientSlider.html#doDoubleClick-int-int-">doDoubleClick</a></span>(int&nbsp;x,
              int&nbsp;y)</code>
-<div class="block">This invokes a <code>ColorPicker</code> dialog to edit
- the thumb at the selected index.</div>
+<div class="block">This invokes a <code>ColorPicker</code> dialog to edit the thumb at the
+ selected index.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/GradientSlider.html#doPopup-int-int-">doPopup</a></span>(int&nbsp;x,
        int&nbsp;y)</code>
-<div class="block">This shows a mini ColorPicker panel to let the user
- change the selected color.</div>
+<div class="block">This shows a mini ColorPicker panel to let the user change the selected
+ color.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -363,8 +367,8 @@ extends <a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in 
 <li class="blockList">
 <h4>GradientSlider</h4>
 <pre>public&nbsp;GradientSlider()</pre>
-<div class="block">Create a horizontal <code>GradientSlider</code> that
- represents a gradient from white to black.</div>
+<div class="block">Create a horizontal <code>GradientSlider</code> that represents a
+ gradient from white to black.</div>
 </li>
 </ul>
 <a name="GradientSlider-int-">
@@ -374,8 +378,8 @@ extends <a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in 
 <li class="blockList">
 <h4>GradientSlider</h4>
 <pre>public&nbsp;GradientSlider(int&nbsp;orientation)</pre>
-<div class="block">Create a <code>GradientSlider</code> that represents a
- gradient form white to black.</div>
+<div class="block">Create a <code>GradientSlider</code> that represents a gradient form
+ white to black.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>orientation</code> - HORIZONTAL or VERTICAL</dd>
@@ -398,9 +402,8 @@ extends <a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in 
 <dd><code>thumbPositions</code> - the initial positions of each thumb</dd>
 <dd><code>values</code> - the initial colors at each position</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if the number of elements in
- <code>thumbPositions</code> does not equal the number of elements
- in <code>values</code>.</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - if the number of elements in <code>thumbPositions</code> does
+             not equal the number of elements in <code>values</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -421,9 +424,9 @@ extends <a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in 
 <pre>public&nbsp;java.awt.Color&nbsp;createValueForInsertion(float&nbsp;pos)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/swing/MultiThumbSlider.html#createValueForInsertion-float-">MultiThumbSlider</a></code></span></div>
 <div class="block">This creates a new value for insertion.
- <P>If the <code>pos</code> argument
- is outside the domain of thumbs, then a value still needs to be
- returned.</div>
+ <P>
+ If the <code>pos</code> argument is outside the domain of thumbs, then a
+ value still needs to be returned.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/swing/MultiThumbSlider.html#createValueForInsertion-float-">createValueForInsertion</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in com.pump.swing">MultiThumbSlider</a>&lt;java.awt.Color&gt;</code></dd>
@@ -442,8 +445,8 @@ extends <a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in 
 <h4>doDoubleClick</h4>
 <pre>public&nbsp;boolean&nbsp;doDoubleClick(int&nbsp;x,
                              int&nbsp;y)</pre>
-<div class="block">This invokes a <code>ColorPicker</code> dialog to edit
- the thumb at the selected index.</div>
+<div class="block">This invokes a <code>ColorPicker</code> dialog to edit the thumb at the
+ selected index.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/swing/MultiThumbSlider.html#doDoubleClick-int-int-">doDoubleClick</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in com.pump.swing">MultiThumbSlider</a>&lt;java.awt.Color&gt;</code></dd>
@@ -452,7 +455,7 @@ extends <a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in 
 <dd><code>y</code> - the y-value of the mouse click location</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this event was consumed, or acted upon.
- <code>false</code> if this is unimplemented.</dd>
+         <code>false</code> if this is unimplemented.</dd>
 </dl>
 </li>
 </ul>
@@ -464,8 +467,8 @@ extends <a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in 
 <h4>doPopup</h4>
 <pre>public&nbsp;boolean&nbsp;doPopup(int&nbsp;x,
                        int&nbsp;y)</pre>
-<div class="block">This shows a mini ColorPicker panel to let the user
- change the selected color.</div>
+<div class="block">This shows a mini ColorPicker panel to let the user change the selected
+ color.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/swing/MultiThumbSlider.html#doPopup-int-int-">doPopup</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in com.pump.swing">MultiThumbSlider</a>&lt;java.awt.Color&gt;</code></dd>
@@ -474,7 +477,7 @@ extends <a href="../../../com/pump/swing/MultiThumbSlider.html" title="class in 
 <dd><code>y</code> - the y-value of the mouse click location</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if this event was consumed, or acted upon.
- <code>false</code> if this is unimplemented.</dd>
+         <code>false</code> if this is unimplemented.</dd>
 </dl>
 </li>
 </ul>

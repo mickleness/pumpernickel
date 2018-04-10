@@ -221,12 +221,6 @@ public class Scrambler {
 		/**
 		 * Create a Layer.
 		 * 
-		 * @param random
-		 *            the Random to use as data is being encoded. This may be
-		 *            null.
-		 * @param oneCount
-		 *            the number of 1's in a byte that are required to flag it
-		 *            as a marker.
 		 * @param substitutionModel
 		 *            the optional SubstitutionModel this object may apply to
 		 *            replace bytes.
@@ -607,10 +601,9 @@ public class Scrambler {
 	 * 
 	 * @param key
 	 *            an optional key to guide the random number generation.
-	 * @param substitutionModel
-	 *            an optional (but recommended) substitution model to further
-	 *            scramble data.
-	 * @return the complex encoder based on the key.
+	 * @param characterSet
+	 *            an optional (but recommended) character set used to create a
+	 *            substitution model to further scramble data.
 	 */
 	public Scrambler(CharSequence key, CharSequence characterSet) {
 		List<MarkerRule> k = new ArrayList<>(256 + 32);
@@ -680,8 +673,6 @@ public class Scrambler {
 	 *            a stream to write encoded/data to.
 	 * @return a stream that writes data before encoding it and passing it to
 	 *         the argument stream.
-	 * 
-	 * @throws IOException
 	 */
 	public OutputStream createOutputStream(OutputStream in) {
 		return createEncoder().createOutputStream(in);

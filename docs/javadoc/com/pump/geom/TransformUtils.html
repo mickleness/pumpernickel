@@ -110,9 +110,9 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">TransformUtils</span>
 extends java.lang.Object</pre>
-<div class="block">This is a collection of methods that deal with AffineTransforms.
- Note the PerspectiveTransform class already has static methods that
- perform similar functions.</div>
+<div class="block">This is a collection of methods that deal with AffineTransforms. Note the
+ PerspectiveTransform class already has static methods that perform similar
+ functions.</div>
 </li>
 </ul>
 </div>
@@ -162,8 +162,8 @@ extends java.lang.Object</pre>
                      double&nbsp;newY2,
                      double&nbsp;newX3,
                      double&nbsp;newY3)</code>
-<div class="block">Given 3 points, this will return the <code>AffineTransform</code> that links each <code>initial</code>
- to <code>final</code> point.</div>
+<div class="block">Given 3 points, this will return the <code>AffineTransform</code> that
+ links each <code>initial</code> to <code>final</code> point.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -174,8 +174,8 @@ extends java.lang.Object</pre>
                      java.awt.geom.Point2D&nbsp;finalP1,
                      java.awt.geom.Point2D&nbsp;finalP2,
                      java.awt.geom.Point2D&nbsp;finalP3)</code>
-<div class="block">Given 3 points, this will return the <code>AffineTransform</code> that links each <code>initial</code>
- to <code>final</code> point.</div>
+<div class="block">Given 3 points, this will return the <code>AffineTransform</code> that
+ links each <code>initial</code> to <code>final</code> point.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -247,14 +247,14 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getRotationAngle</h4>
 <pre>public static&nbsp;double&nbsp;getRotationAngle(java.awt.geom.AffineTransform&nbsp;transform)</pre>
-<div class="block">Compute the rotation angle of an affine transformation.
- Counter-clockwise rotation is considered positive.</div>
+<div class="block">Compute the rotation angle of an affine transformation. Counter-clockwise
+ rotation is considered positive.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>transform</code> - the AffineTransform to analyze.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>rotation angle in radians (beween -pi and pi),
-  or NaN if the transformation is bogus.</dd>
+<dd>rotation angle in radians (beween -pi and pi), or NaN if the
+         transformation is bogus.</dd>
 </dl>
 </li>
 </ul>
@@ -270,9 +270,10 @@ extends java.lang.Object</pre>
                                                                   java.awt.geom.Point2D&nbsp;finalP1,
                                                                   java.awt.geom.Point2D&nbsp;finalP2,
                                                                   java.awt.geom.Point2D&nbsp;finalP3)</pre>
-<div class="block">Given 3 points, this will return the <code>AffineTransform</code> that links each <code>initial</code>
- to <code>final</code> point.
- <P> This uses the <code>solve(matrix,true)</code> method.</div>
+<div class="block">Given 3 points, this will return the <code>AffineTransform</code> that
+ links each <code>initial</code> to <code>final</code> point.
+ <P>
+ This uses the <code>solve(matrix,true)</code> method.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>initialP1</code> - the point that transforms into finalP1</dd>
@@ -282,7 +283,8 @@ extends java.lang.Object</pre>
 <dd><code>finalP2</code> - the point that originated at initialP2</dd>
 <dd><code>finalP3</code> - the point that originated at initialP3</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an AffineTransform that maps from the initial points to the final points.</dd>
+<dd>an AffineTransform that maps from the initial points to the final
+         points.</dd>
 </dl>
 </li>
 </ul>
@@ -296,13 +298,15 @@ extends java.lang.Object</pre>
                                                                   java.awt.geom.Rectangle2D&nbsp;r2)</pre>
 <div class="block">This will return the <code>AffineTransform</code> that maps one rectangle
  onto another.
- <P> This uses the <code>solve(matrix,true)</code> method.</div>
+ <P>
+ This uses the <code>solve(matrix,true)</code> method.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>r1</code> - the rectangle that transforms into r2</dd>
 <dd><code>r2</code> - the rectangle that originated at r1</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an AffineTransform that maps from the initial rectangle to the final rectangle.</dd>
+<dd>an AffineTransform that maps from the initial rectangle to the
+         final rectangle.</dd>
 </dl>
 </li>
 </ul>
@@ -324,9 +328,10 @@ extends java.lang.Object</pre>
                                                                   double&nbsp;newY2,
                                                                   double&nbsp;newX3,
                                                                   double&nbsp;newY3)</pre>
-<div class="block">Given 3 points, this will return the <code>AffineTransform</code> that links each <code>initial</code>
- to <code>final</code> point.
- <P> This uses the <code>solve(matrix,true)</code> method.</div>
+<div class="block">Given 3 points, this will return the <code>AffineTransform</code> that
+ links each <code>initial</code> to <code>final</code> point.
+ <P>
+ This uses the <code>solve(matrix,true)</code> method.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>oldX1</code> - the x-coordinate of the untransformed first point</dd>
@@ -342,7 +347,8 @@ extends java.lang.Object</pre>
 <dd><code>newX3</code> - the x-coordinate of the transformed third point</dd>
 <dd><code>newY3</code> - the y-coordinate of the transformed third point</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an AffineTransform that maps from the initial points to the final points.</dd>
+<dd>an AffineTransform that maps from the initial points to the final
+         points.</dd>
 </dl>
 </li>
 </ul>
@@ -361,15 +367,15 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>a</code> - the initial AffineTransform</dd>
 <dd><code>b</code> - the final AffineTransform</dd>
-<dd><code>progress</code> - a float between zero and one, where zero
- represents <code>a</code> and one represents <code>b</code>.
- Values outside this range will not throw an exception, but they will
- make some funky results.</dd>
-<dd><code>createNewObject</code> - indicates whether a new AffineTransform
- should be constructed, or if one of the arguments can be
- used to store the results</dd>
+<dd><code>progress</code> - a float between zero and one, where zero represents
+            <code>a</code> and one represents <code>b</code>. Values
+            outside this range will not throw an exception, but they will
+            make some funky results.</dd>
+<dd><code>createNewObject</code> - indicates whether a new AffineTransform should be constructed,
+            or if one of the arguments can be used to store the results</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a transform that is somehow between <code>a</code> and <code>b</code>.</dd>
+<dd>a transform that is somehow between <code>a</code> and
+         <code>b</code>.</dd>
 </dl>
 </li>
 </ul>

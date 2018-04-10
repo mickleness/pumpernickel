@@ -116,11 +116,13 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object
 implements java.io.Serializable</pre>
 <div class="block">This manages multiple sets of properties, including listeners.
- <p>Eventually we might want to ramp this up to rival
- the <a href="../../../com/pump/util/ObservableList.html" title="class in com.pump.util"><code>ObservableList</code></a> in terms of synchronized modification safeguards and
+ <p>
+ Eventually we might want to ramp this up to rival the <a href="../../../com/pump/util/ObservableList.html" title="class in com.pump.util"><code>ObservableList</code></a>
+ in terms of synchronized modification safeguards and
  <code>RecursiveListenerModificationExceptions</code>.
- <p>Notes this includes parameterized keys, and it is technically possible to have
- two keys that use the same name but map to different types.</div>
+ <p>
+ Notes this includes parameterized keys, and it is technically possible to
+ have two keys that use the same name but map to different types.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.util.ObservableProperties">Serialized Form</a></dd>
@@ -224,7 +226,8 @@ implements java.io.Serializable</pre>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#ObservableProperties-java.lang.String...-">ObservableProperties</a></span>(java.lang.String...&nbsp;groupNames)</code>
-<div class="block">Create a new ObservableProperties with a limited set of possible group IDs.</div>
+<div class="block">Create a new ObservableProperties with a limited set of possible group
+ IDs.</div>
 </td>
 </tr>
 </table>
@@ -307,8 +310,8 @@ implements java.io.Serializable</pre>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#endEdit-com.pump.util.ObservableProperties.Edit-">endEdit</a></span>(<a href="../../../com/pump/util/ObservableProperties.Edit.html" title="class in com.pump.util">ObservableProperties.Edit</a>&nbsp;endedEdit)</code>
-<div class="block">This must be called after <a href="../../../com/pump/util/ObservableProperties.html#beginEdit--"><code>beginEdit()</code></a> to reactive
- listeners for this object.</div>
+<div class="block">This must be called after <a href="../../../com/pump/util/ObservableProperties.html#beginEdit--"><code>beginEdit()</code></a> to reactive listeners for
+ this object.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -341,21 +344,22 @@ implements java.io.Serializable</pre>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>java.util.Map&lt;<a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;?&gt;,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#getMap-java.lang.String-">getMap</a></span>(java.lang.String&nbsp;groupName)</code>
-<div class="block">Return all the properties in a particular category of this ObservableProperties.</div>
+<div class="block">Return all the properties in a particular category of this
+ ObservableProperties.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>java.beans.PropertyChangeListener[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#getPropertyListeners--">getPropertyListeners</a></span>()</code>
-<div class="block">Return all the PropertyChangeListeners that listen for changes to
- DEFAULT properties.</div>
+<div class="block">Return all the PropertyChangeListeners that listen for changes to DEFAULT
+ properties.</div>
 </td>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>java.beans.PropertyChangeListener[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#getPropertyListeners-java.lang.String-">getPropertyListeners</a></span>(java.lang.String&nbsp;propertyGroup)</code>
-<div class="block">Return all the PropertyChangeListeners that listen for changes to
- a given group of properties.</div>
+<div class="block">Return all the PropertyChangeListeners that listen for changes to a given
+ group of properties.</div>
 </td>
 </tr>
 <tr id="i18" class="altColor">
@@ -447,8 +451,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>DEFAULT</h4>
 <pre>public static final&nbsp;java.lang.String DEFAULT</pre>
-<div class="block">The string "default". This is recommended for a group of properties that represent
- vital elements of an object, and are serializable.</div>
+<div class="block">The string "default". This is recommended for a group of properties that
+ represent vital elements of an object, and are serializable.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.util.ObservableProperties.DEFAULT">Constant Field Values</a></dd>
@@ -462,8 +466,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>TRANSIENT</h4>
 <pre>public static final&nbsp;java.lang.String TRANSIENT</pre>
-<div class="block">The string "transient". This is recommended for a group of properties that are not
- meant to be serialized (cached indices, renderings, etc.).</div>
+<div class="block">The string "transient". This is recommended for a group of properties
+ that are not meant to be serialized (cached indices, renderings, etc.).</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.util.ObservableProperties.TRANSIENT">Constant Field Values</a></dd>
@@ -505,11 +509,13 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>ObservableProperties</h4>
 <pre>public&nbsp;ObservableProperties(java.lang.String...&nbsp;groupNames)</pre>
-<div class="block">Create a new ObservableProperties with a limited set of possible group IDs.</div>
+<div class="block">Create a new ObservableProperties with a limited set of possible group
+ IDs.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>groupNames</code> - the group IDs this object allows. (If null: then all group IDs are allowed.)
- If non-null: then attempting to access a group ID not in this set will result in an exception.</dd>
+<dd><code>groupNames</code> - the group IDs this object allows. (If null: then all group IDs
+            are allowed.) If non-null: then attempting to access a group
+            ID not in this set will result in an exception.</dd>
 </dl>
 </li>
 </ul>
@@ -530,16 +536,17 @@ implements java.io.Serializable</pre>
 <pre>public&nbsp;<a href="../../../com/pump/util/ObservableProperties.Edit.html" title="class in com.pump.util">ObservableProperties.Edit</a>&nbsp;beginEdit()</pre>
 <div class="block">Begin recording an edit that suspends all listeners until
  <a href="../../../com/pump/util/ObservableProperties.html#endEdit-com.pump.util.ObservableProperties.Edit-"><code>endEdit(Edit)</code></a> is called.
- <p>This is needed when it is dangerous for a listener to get
- an incomplete picture of the state of this object. For example
- if you are changing the VALUE key to 5 and the MAXIMUM key to 8,
- if a listener were notified after the first step and the MAXIMUM value
- was an older value (such as 3), then it might throw an exception
- because it assumes the VALUE is always less than the MAXIMUM.</div>
+ <p>
+ This is needed when it is dangerous for a listener to get an incomplete
+ picture of the state of this object. For example if you are changing the
+ VALUE key to 5 and the MAXIMUM key to 8, if a listener were notified
+ after the first step and the MAXIMUM value was an older value (such as
+ 3), then it might throw an exception because it assumes the VALUE is
+ always less than the MAXIMUM.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a unique identifier to pass to <code>endEdit()</code> when your
- changes are complete.</dd>
+         changes are complete.</dd>
 </dl>
 </li>
 </ul>
@@ -550,12 +557,13 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>endEdit</h4>
 <pre>public&nbsp;void&nbsp;endEdit(<a href="../../../com/pump/util/ObservableProperties.Edit.html" title="class in com.pump.util">ObservableProperties.Edit</a>&nbsp;endedEdit)</pre>
-<div class="block">This must be called after <a href="../../../com/pump/util/ObservableProperties.html#beginEdit--"><code>beginEdit()</code></a> to reactive
- listeners for this object.</div>
+<div class="block">This must be called after <a href="../../../com/pump/util/ObservableProperties.html#beginEdit--"><code>beginEdit()</code></a> to reactive listeners for
+ this object.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>endedEdit</code> - a token created by a call to <a href="../../../com/pump/util/ObservableProperties.html#beginEdit--"><code>beginEdit()</code></a>. When
- there are no unresolved edits: all pending PropertyChangeEvents will be flushed.</dd>
+<dd><code>endedEdit</code> - a token created by a call to <a href="../../../com/pump/util/ObservableProperties.html#beginEdit--"><code>beginEdit()</code></a>. When there
+            are no unresolved edits: all pending PropertyChangeEvents will
+            be flushed.</dd>
 </dl>
 </li>
 </ul>
@@ -592,7 +600,8 @@ implements java.io.Serializable</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all the group names currently in use. (This is not related to the
- Strings passed during construction that limit the possible group names.)</dd>
+         Strings passed during construction that limit the possible group
+         names.)</dd>
 </dl>
 </li>
 </ul>
@@ -635,8 +644,8 @@ implements java.io.Serializable</pre>
 <div class="block">Add a PropertyChangeListener for a given group of properties.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>propertyGroup</code> - the group of properties this relates to.
- For example: <a href="../../../com/pump/util/ObservableProperties.html#DEFAULT"><code>DEFAULT</code></a> or <a href="../../../com/pump/util/ObservableProperties.html#TRANSIENT"><code>TRANSIENT</code></a>.</dd>
+<dd><code>propertyGroup</code> - the group of properties this relates to. For example:
+            <a href="../../../com/pump/util/ObservableProperties.html#DEFAULT"><code>DEFAULT</code></a> or <a href="../../../com/pump/util/ObservableProperties.html#TRANSIENT"><code>TRANSIENT</code></a>.</dd>
 <dd><code>pcl</code> - the listener to add.</dd>
 </dl>
 </li>
@@ -653,10 +662,11 @@ implements java.io.Serializable</pre>
 <div class="block">Add a PropertyChangeListener for a key in a given group of properties.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>propertyGroup</code> - the group of properties this relates to.
- For example: <a href="../../../com/pump/util/ObservableProperties.html#DEFAULT"><code>DEFAULT</code></a> or <a href="../../../com/pump/util/ObservableProperties.html#TRANSIENT"><code>TRANSIENT</code></a>.</dd>
-<dd><code>key</code> - an optional key that limits what this listener which notified about.
- If null: then this listener will be notified for all changes.</dd>
+<dd><code>propertyGroup</code> - the group of properties this relates to. For example:
+            <a href="../../../com/pump/util/ObservableProperties.html#DEFAULT"><code>DEFAULT</code></a> or <a href="../../../com/pump/util/ObservableProperties.html#TRANSIENT"><code>TRANSIENT</code></a>.</dd>
+<dd><code>key</code> - an optional key that limits what this listener which notified
+            about. If null: then this listener will be notified for all
+            changes.</dd>
 <dd><code>pcl</code> - the listener to add.</dd>
 </dl>
 </li>
@@ -673,10 +683,11 @@ implements java.io.Serializable</pre>
 <div class="block">Add a ChangeListener for a key in a given group of properties.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>propertyGroup</code> - the group of properties this relates to.
- For example: <a href="../../../com/pump/util/ObservableProperties.html#DEFAULT"><code>DEFAULT</code></a> or <a href="../../../com/pump/util/ObservableProperties.html#TRANSIENT"><code>TRANSIENT</code></a>.</dd>
-<dd><code>key</code> - an optional key that limits what this listener which notified about.
- If null: then this listener will be notified for all changes.</dd>
+<dd><code>propertyGroup</code> - the group of properties this relates to. For example:
+            <a href="../../../com/pump/util/ObservableProperties.html#DEFAULT"><code>DEFAULT</code></a> or <a href="../../../com/pump/util/ObservableProperties.html#TRANSIENT"><code>TRANSIENT</code></a>.</dd>
+<dd><code>key</code> - an optional key that limits what this listener which notified
+            about. If null: then this listener will be notified for all
+            changes.</dd>
 <dd><code>changeListener</code> - the ChangeListener to be notified</dd>
 </dl>
 </li>
@@ -693,10 +704,11 @@ implements java.io.Serializable</pre>
 <div class="block">Add an ActionListener for a key in a given group of properties.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>propertyGroup</code> - the group of properties this relates to.
- For example: <a href="../../../com/pump/util/ObservableProperties.html#DEFAULT"><code>DEFAULT</code></a> or <a href="../../../com/pump/util/ObservableProperties.html#TRANSIENT"><code>TRANSIENT</code></a>.</dd>
-<dd><code>key</code> - an optional key that limits what this listener which notified about.
- If null: then this listener will be notified for all changes.</dd>
+<dd><code>propertyGroup</code> - the group of properties this relates to. For example:
+            <a href="../../../com/pump/util/ObservableProperties.html#DEFAULT"><code>DEFAULT</code></a> or <a href="../../../com/pump/util/ObservableProperties.html#TRANSIENT"><code>TRANSIENT</code></a>.</dd>
+<dd><code>key</code> - an optional key that limits what this listener which notified
+            about. If null: then this listener will be notified for all
+            changes.</dd>
 <dd><code>actionListener</code> - the ActionListener to be notified.</dd>
 </dl>
 </li>
@@ -708,8 +720,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>getPropertyListeners</h4>
 <pre>public&nbsp;java.beans.PropertyChangeListener[]&nbsp;getPropertyListeners()</pre>
-<div class="block">Return all the PropertyChangeListeners that listen for changes to
- DEFAULT properties.</div>
+<div class="block">Return all the PropertyChangeListeners that listen for changes to DEFAULT
+ properties.</div>
 </li>
 </ul>
 <a name="getPropertyListeners-java.lang.String-">
@@ -719,12 +731,12 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>getPropertyListeners</h4>
 <pre>public&nbsp;java.beans.PropertyChangeListener[]&nbsp;getPropertyListeners(java.lang.String&nbsp;propertyGroup)</pre>
-<div class="block">Return all the PropertyChangeListeners that listen for changes to
- a given group of properties.</div>
+<div class="block">Return all the PropertyChangeListeners that listen for changes to a given
+ group of properties.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>propertyGroup</code> - the group of properties this relates to.
- For example: <a href="../../../com/pump/util/ObservableProperties.html#DEFAULT"><code>DEFAULT</code></a> or <a href="../../../com/pump/util/ObservableProperties.html#TRANSIENT"><code>TRANSIENT</code></a>.</dd>
+<dd><code>propertyGroup</code> - the group of properties this relates to. For example:
+            <a href="../../../com/pump/util/ObservableProperties.html#DEFAULT"><code>DEFAULT</code></a> or <a href="../../../com/pump/util/ObservableProperties.html#TRANSIENT"><code>TRANSIENT</code></a>.</dd>
 </dl>
 </li>
 </ul>
@@ -812,10 +824,11 @@ implements java.io.Serializable</pre>
 <div class="block">Set a property in a given property group.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>propertyGroup</code> - the property group to consult. (Recommended values are DEFAULT or TRANSIENT.) This
- cannot be null. Each ObservableProperties object may be constructed with a finite set of acceptable
- property groups: if that is the case for this object and this group ID is not part of this set, then
- an exception is thrown.</dd>
+<dd><code>propertyGroup</code> - the property group to consult. (Recommended values are DEFAULT
+            or TRANSIENT.) This cannot be null. Each ObservableProperties
+            object may be constructed with a finite set of acceptable
+            property groups: if that is the case for this object and this
+            group ID is not part of this set, then an exception is thrown.</dd>
 <dd><code>key</code> - the key to set.</dd>
 <dd><code>value</code> - the value to set. If null: then this key is removed.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -834,10 +847,11 @@ implements java.io.Serializable</pre>
 <div class="block">Return a property from a given property group.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>propertyGroup</code> - the property group to consult. (Recommended values are DEFAULT or TRANSIENT.) This
- cannot be null. Each ObservableProperties object may be constructed with a finite set of acceptable
- property groups: if that is the case for this object and this group ID is not part of this set, then
- an exception is thrown.</dd>
+<dd><code>propertyGroup</code> - the property group to consult. (Recommended values are DEFAULT
+            or TRANSIENT.) This cannot be null. Each ObservableProperties
+            object may be constructed with a finite set of acceptable
+            property groups: if that is the case for this object and this
+            group ID is not part of this set, then an exception is thrown.</dd>
 <dd><code>key</code> - the key to retrieve.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the current value.</dd>
@@ -853,8 +867,8 @@ implements java.io.Serializable</pre>
 <pre>public&nbsp;java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;getMap()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a condensed map of all group IDs.
- This will include all group IDs and prepend them to keys.</dd>
+<dd>a condensed map of all group IDs. This will include all group IDs
+         and prepend them to keys.</dd>
 </dl>
 </li>
 </ul>
@@ -884,15 +898,17 @@ implements java.io.Serializable</pre>
                                                                java.lang.String...&nbsp;groupIDs)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>prependGroupID</code> - if true, then the groupID will be prepended to all keys.
- It is highly recommended that this be true, because if this is false and different
- groups have similar sounding keys: then those groups cannot be safely condensed
- to a single map and exception will be thrown.</dd>
-<dd><code>identifyClassNames</code> - if true then keys will be uniquely identified by
- including their class name.</dd>
-<dd><code>groupIDs</code> - an optional list of group IDs to poll. If null: then all group IDs
- are included. For example: you might want to only return the DEFAULT group, at
- which point it would be safe to pass <code>false</code> for <code>prependGroupID</code>.</dd>
+<dd><code>prependGroupID</code> - if true, then the groupID will be prepended to all keys. It is
+            highly recommended that this be true, because if this is false
+            and different groups have similar sounding keys: then those
+            groups cannot be safely condensed to a single map and
+            exception will be thrown.</dd>
+<dd><code>identifyClassNames</code> - if true then keys will be uniquely identified by including
+            their class name.</dd>
+<dd><code>groupIDs</code> - an optional list of group IDs to poll. If null: then all group
+            IDs are included. For example: you might want to only return
+            the DEFAULT group, at which point it would be safe to pass
+            <code>false</code> for <code>prependGroupID</code>.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a condensed map of all group IDs.</dd>
 </dl>
@@ -965,13 +981,14 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>getMap</h4>
 <pre>public&nbsp;java.util.Map&lt;<a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;?&gt;,java.lang.Object&gt;&nbsp;getMap(java.lang.String&nbsp;groupName)</pre>
-<div class="block">Return all the properties in a particular category of this ObservableProperties.</div>
+<div class="block">Return all the properties in a particular category of this
+ ObservableProperties.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>groupName</code> - the name of the group (such as DEFAULT or TRANSIENT)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>all the properties in the group provided. This will be an empty map if the group name
- is unused.</dd>
+<dd>all the properties in the group provided. This will be an empty
+         map if the group name is unused.</dd>
 </dl>
 </li>
 </ul>

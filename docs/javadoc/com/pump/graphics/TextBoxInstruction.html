@@ -116,14 +116,16 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object
 implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a>, java.io.Serializable</pre>
 <div class="block">A <code>GraphicInstruction</code> for text boxes.
- <P>This is a more complicated instruction than the others, because fonts
- are not guaranteed to be consistent between runtimes.  It is highly
- recommended that text boxes be given several pixels of "wiggle room"
- when their boxes are being designed, so if a font is missing or if
- spacing changes the text is still laid out reasonably.
- <P>By default this first version assumes the text should be centered in
- the text box, but it wouldn't be hard to offer horizontal (and vertical!)
- alignment if needed.
+ <P>
+ This is a more complicated instruction than the others, because fonts are not
+ guaranteed to be consistent between runtimes. It is highly recommended that
+ text boxes be given several pixels of "wiggle room" when their boxes are
+ being designed, so if a font is missing or if spacing changes the text is
+ still laid out reasonably.
+ <P>
+ By default this first version assumes the text should be centered in the text
+ box, but it wouldn't be hard to offer horizontal (and vertical!) alignment if
+ needed.
  
  TODO: test text boxes with multiple lines of text</div>
 <dl>
@@ -270,8 +272,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/TextBoxInstruction.html#getSource--">getSource</a></span>()</code>
-<div class="block">Returns a string for developers to recognize the source
- of this instruction.</div>
+<div class="block">Returns a string for developers to recognize the source of this
+ instruction.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -343,16 +345,17 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>box</code> - the bounds of this text box</dd>
-<dd><code>background</code> - the optional background color.  May be null.</dd>
-<dd><code>frame</code> - the optional frame color.  May be null.</dd>
-<dd><code>frameThickness</code> - the optional frame thickness.  May be zero.</dd>
+<dd><code>background</code> - the optional background color. May be null.</dd>
+<dd><code>frame</code> - the optional frame color. May be null.</dd>
+<dd><code>frameThickness</code> - the optional frame thickness. May be zero.</dd>
 <dd><code>text</code> - the text to display in this box.</dd>
 <dd><code>insets</code> - the insets between the box bounds and the text.</dd>
 <dd><code>transform</code> - the transform this box is shown through.</dd>
-<dd><code>clipping</code> - the clipping.  The clipping is applied <i>before</i> the
- transform.</dd>
-<dd><code>opacity</code> - the opacity of this text box.  (This will translate into an AlphaComposite
- applied to everything: the background, frame, and text.)</dd>
+<dd><code>clipping</code> - the clipping. The clipping is applied <i>before</i> the
+            transform.</dd>
+<dd><code>opacity</code> - the opacity of this text box. (This will translate into an
+            AlphaComposite applied to everything: the background, frame,
+            and text.)</dd>
 </dl>
 </li>
 </ul>
@@ -376,26 +379,33 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>box</code> - the bounds of this text box</dd>
-<dd><code>background</code> - the optional background color.  May be null.</dd>
-<dd><code>frame</code> - the optional frame color.  May be null.</dd>
-<dd><code>frameThickness</code> - the optional frame thickness.  May be zero.</dd>
+<dd><code>background</code> - the optional background color. May be null.</dd>
+<dd><code>frame</code> - the optional frame color. May be null.</dd>
+<dd><code>frameThickness</code> - the optional frame thickness. May be zero.</dd>
 <dd><code>text</code> - the text to display in this box.</dd>
 <dd><code>insets</code> - the insets between the box bounds and the text.</dd>
 <dd><code>transform</code> - the transform this box is shown through.</dd>
-<dd><code>clipping</code> - the clipping.  The clipping is applied <i>before</i> the
- transform.</dd>
-<dd><code>maxWidth</code> - normally this would be the width of the box, but you can provide a custom value for this
- if you need to.  A width of Float.MAX_VALUE indicates that all the text should be displayed in 1 line.
+<dd><code>clipping</code> - the clipping. The clipping is applied <i>before</i> the
+            transform.</dd>
+<dd><code>maxWidth</code> - normally this would be the width of the box, but you can
+            provide a custom value for this if you need to. A width of
+            Float.MAX_VALUE indicates that all the text should be
+            displayed in 1 line.
  
- <P>For example, in the GraphicsWriter the drawString() methods use this constructor and pass
- an argument of Float.MAX_VALUE, because those boxes are guaranteed to be 1 line of text,
- and fit in the bounds provided.  And, more importantly: if I set the LineBreakMeasurer
- strictly to the appropriate width: it fails.  In one example I had to add 7 to the
- width the resulting TextLayout actually needed to avoid my text being split into
- 2 lines.  So really what I'm saying is: this is a hackish solution to a problem/bug I
- was facing with the LineBreakMeasurer that made no sense.</dd>
-<dd><code>opacity</code> - the opacity of this text box.  (This will translate into an AlphaComposite
- applied to everything: the background, frame, and text.)</dd>
+            <P>
+            For example, in the GraphicsWriter the drawString() methods
+            use this constructor and pass an argument of Float.MAX_VALUE,
+            because those boxes are guaranteed to be 1 line of text, and
+            fit in the bounds provided. And, more importantly: if I set
+            the LineBreakMeasurer strictly to the appropriate width: it
+            fails. In one example I had to add 7 to the width the
+            resulting TextLayout actually needed to avoid my text being
+            split into 2 lines. So really what I'm saying is: this is a
+            hackish solution to a problem/bug I was facing with the
+            LineBreakMeasurer that made no sense.</dd>
+<dd><code>opacity</code> - the opacity of this text box. (This will translate into an
+            AlphaComposite applied to everything: the background, frame,
+            and text.)</dd>
 </dl>
 </li>
 </ul>
@@ -414,7 +424,7 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <li class="blockList">
 <h4>getBackground</h4>
 <pre>public&nbsp;java.awt.Color&nbsp;getBackground()</pre>
-<div class="block">Returns the optional background color of this text box.  May be null.</div>
+<div class="block">Returns the optional background color of this text box. May be null.</div>
 </li>
 </ul>
 <a name="getFrame--">
@@ -424,7 +434,7 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <li class="blockList">
 <h4>getFrame</h4>
 <pre>public&nbsp;java.awt.Color&nbsp;getFrame()</pre>
-<div class="block">Returns the optional frame color of this text box.  May be null.</div>
+<div class="block">Returns the optional frame color of this text box. May be null.</div>
 </li>
 </ul>
 <a name="getOpacity--">
@@ -464,8 +474,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <li class="blockList">
 <h4>getMaxWidth</h4>
 <pre>public&nbsp;float&nbsp;getMaxWidth()</pre>
-<div class="block">Returns the maximum width of a line of text in this text box.
- This may be based on the bounds of this text box, or it may be Float.MAX_VALUE,
+<div class="block">Returns the maximum width of a line of text in this text box. This may be
+ based on the bounds of this text box, or it may be Float.MAX_VALUE,
  indicating that all the text should fit on one line.</div>
 </li>
 </ul>
@@ -496,8 +506,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <li class="blockList">
 <h4>getClipping</h4>
 <pre>public&nbsp;java.awt.Shape&nbsp;getClipping()</pre>
-<div class="block">Returns the clipping used in this instruction.  (May be null.) Note this clipping is
- applied <i>before</i> the <code>AffineTransform</code>.</div>
+<div class="block">Returns the clipping used in this instruction. (May be null.) Note this
+ clipping is applied <i>before</i> the <code>AffineTransform</code>.</div>
 </li>
 </ul>
 <a name="getBox--">
@@ -517,9 +527,9 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <li class="blockList">
 <h4>getBounds</h4>
 <pre>public&nbsp;java.awt.geom.Rectangle2D&nbsp;getBounds()</pre>
-<div class="block">Returns the rectangle enclosing this text box.
- Unlike <code>getBox()</code>, this takes into account the
- stroke width and <code>AffineTransform</code>.</div>
+<div class="block">Returns the rectangle enclosing this text box. Unlike
+ <code>getBox()</code>, this takes into account the stroke width and
+ <code>AffineTransform</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/GraphicInstruction.html#getBounds--">getBounds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></dd>
@@ -548,8 +558,7 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <h4>setParent</h4>
 <pre>public&nbsp;void&nbsp;setParent(<a href="../../../com/pump/graphics/GraphicsWriter.html" title="class in com.pump.graphics">GraphicsWriter</a>&nbsp;parent)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html#setParent-com.pump.graphics.GraphicsWriter-">GraphicInstruction</a></code></span></div>
-<div class="block">Sets the parent of this tree node.
- This method</div>
+<div class="block">Sets the parent of this tree node. This method</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/GraphicInstruction.html#setParent-com.pump.graphics.GraphicsWriter-">setParent</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></dd>
@@ -655,10 +664,9 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <h4>getSource</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getSource()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html#getSource--">GraphicInstruction</a></code></span></div>
-<div class="block">Returns a string for developers to recognize the source
- of this instruction.  By default this returns a stack trace,
- but it may return "Unknown" if the <code>GraphicsWriter</code>
- debugging flag is false.</div>
+<div class="block">Returns a string for developers to recognize the source of this
+ instruction. By default this returns a stack trace, but it may return
+ "Unknown" if the <code>GraphicsWriter</code> debugging flag is false.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/GraphicInstruction.html#getSource--">getSource</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></dd>

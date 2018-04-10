@@ -46,11 +46,9 @@ import com.pump.plaf.MultiThumbSliderUI;
  * The UI for each slider is loaded from the UIManager property:
  * "GradientSliderUI". By default this is "com.pump.plaf.GradientSliderUI".
  * <p>
- * The {@link GradientSliderDemoHelper} creates this sample graphic: <br>
- * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/gradientslider.jpg"
+ * <img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/gradientslider.jpg"
  * alt="Screenshot of the GradientSlider">
- * 
- * @see com.pump.swing.GradientSliderDemo
  *
  */
 @Blurb(imageName = "GradientSlider.png", title = "Gradients: a GUI Widget to Design Them", releaseDate = "May 2008", summary = "This is a GUI component to arrange the "

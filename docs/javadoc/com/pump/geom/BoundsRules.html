@@ -115,19 +115,21 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">BoundsRules</span>
 extends <a href="../../../com/pump/geom/AreaXRules.html" title="class in com.pump.geom">AreaXRules</a></pre>
-<div class="block">These are <code>AreaXRules</code> that are tested against
- calculating the addition of several related shapes (as in clip art).
- <p>This compares the bounds of the shapes in the queue, and
- performs two possible optimization:
- <ul><li>Unconnected Shapes: if the bounds of two operands don't touch
- at all, then they may be merged.  ("Merging" is an optimized type
- of addition.)</li>
- <li>Inner Shapes: if an outer shape contains the bounds of an inner
- shape, then the inner shape is dropped.  (Adding it would make no
- difference to the final result.)</li></ul>
- <p>These rules are only tested against the addition of shapes.  They
- should work for other operations, but the performance gains might
- be negligible.</div>
+<div class="block">These are <code>AreaXRules</code> that are tested against calculating the
+ addition of several related shapes (as in clip art).
+ <p>
+ This compares the bounds of the shapes in the queue, and performs two
+ possible optimization:
+ <ul>
+ <li>Unconnected Shapes: if the bounds of two operands don't touch at all,
+ then they may be merged. ("Merging" is an optimized type of addition.)</li>
+ <li>Inner Shapes: if an outer shape contains the bounds of an inner shape,
+ then the inner shape is dropped. (Adding it would make no difference to the
+ final result.)</li>
+ </ul>
+ <p>
+ These rules are only tested against the addition of shapes. They should work
+ for other operations, but the performance gains might be negligible.</div>
 </li>
 </ul>
 </div>
@@ -147,8 +149,8 @@ extends <a href="../../../com/pump/geom/AreaXRules.html" title="class in com.pum
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/geom/BoundsRules.html#BoundsRules--">BoundsRules</a></span>()</code>
-<div class="block">Creates a new <code>BoundsRules</code> object with all
- possible optimizations.</div>
+<div class="block">Creates a new <code>BoundsRules</code> object with all possible
+ optimizations.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -213,8 +215,8 @@ extends <a href="../../../com/pump/geom/AreaXRules.html" title="class in com.pum
 <li class="blockList">
 <h4>BoundsRules</h4>
 <pre>public&nbsp;BoundsRules()</pre>
-<div class="block">Creates a new <code>BoundsRules</code> object with all
- possible optimizations.</div>
+<div class="block">Creates a new <code>BoundsRules</code> object with all possible
+ optimizations.</div>
 </li>
 </ul>
 <a name="BoundsRules-boolean-boolean-">
@@ -228,10 +230,10 @@ extends <a href="../../../com/pump/geom/AreaXRules.html" title="class in com.pum
 <div class="block">Creates a new <code>BoundsRules</code> object.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>lookForInnerShapes</code> - if this is true then these rules will
- look for inner shapes and ignore them.</dd>
-<dd><code>lookForDisconnectedShapes</code> - if this is true then these rules
- will look for disconnected shapes and merge them.</dd>
+<dd><code>lookForInnerShapes</code> - if this is true then these rules will look for inner shapes
+            and ignore them.</dd>
+<dd><code>lookForDisconnectedShapes</code> - if this is true then these rules will look for disconnected
+            shapes and merge them.</dd>
 </dl>
 </li>
 </ul>
@@ -254,8 +256,8 @@ extends <a href="../../../com/pump/geom/AreaXRules.html" title="class in com.pum
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/geom/AreaXRules.html#execute-com.pump.geom.area.AreaXBody-com.pump.geom.AreaXOperation:A-">execute</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/AreaXRules.html" title="class in com.pump.geom">AreaXRules</a></code></dd>
-<dd><code>operations</code> - an array of operations to perform.  Null elements in this
- array are skipped.</dd>
+<dd><code>operations</code> - an array of operations to perform. Null elements in this array
+            are skipped.</dd>
 </dl>
 </li>
 </ul>

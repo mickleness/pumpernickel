@@ -120,9 +120,9 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">BasicShapeInstruction</span>
 extends <a href="../../../com/pump/graphics/BasicFillInstruction.html" title="class in com.pump.graphics">BasicFillInstruction</a>
 implements <a href="../../../com/pump/graphics/DrawInstruction.html" title="interface in com.pump.graphics">DrawInstruction</a>, java.io.Serializable</pre>
-<div class="block">This paints a <a href="../../../com/pump/graphics/FillInstruction.html" title="interface in com.pump.graphics"><code>FillInstruction</code></a> and then a <a href="../../../com/pump/graphics/DrawInstruction.html" title="interface in com.pump.graphics"><code>DrawInstruction</code></a> on top
- of it.  This requires the shape, clipping, transform, and opacities of the fill
- and the stroke be the same.
+<div class="block">This paints a <a href="../../../com/pump/graphics/FillInstruction.html" title="interface in com.pump.graphics"><code>FillInstruction</code></a> and then a <a href="../../../com/pump/graphics/DrawInstruction.html" title="interface in com.pump.graphics"><code>DrawInstruction</code></a> on
+ top of it. This requires the shape, clipping, transform, and opacities of the
+ fill and the stroke be the same.
 
  It is technically possible that the stroke or fill be null, but it is
  recommended to use the most appropriate instruction for each graphic
@@ -202,7 +202,8 @@ implements <a href="../../../com/pump/graphics/DrawInstruction.html" title="inte
 <td class="colFirst"><code>static <a href="../../../com/pump/graphics/BasicShapeInstruction.html" title="class in com.pump.graphics">BasicShapeInstruction</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/BasicShapeInstruction.html#merge-com.pump.graphics.FillInstruction-com.pump.graphics.DrawInstruction-">merge</a></span>(<a href="../../../com/pump/graphics/FillInstruction.html" title="interface in com.pump.graphics">FillInstruction</a>&nbsp;fillInstr,
      <a href="../../../com/pump/graphics/DrawInstruction.html" title="interface in com.pump.graphics">DrawInstruction</a>&nbsp;drawInstr)</code>
-<div class="block">Returns a ShapeInstruction if possible that embodies both argument instructions.</div>
+<div class="block">Returns a ShapeInstruction if possible that embodies both argument
+ instructions.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -303,16 +304,16 @@ implements <a href="../../../com/pump/graphics/DrawInstruction.html" title="inte
 <h4>merge</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/graphics/BasicShapeInstruction.html" title="class in com.pump.graphics">BasicShapeInstruction</a>&nbsp;merge(<a href="../../../com/pump/graphics/FillInstruction.html" title="interface in com.pump.graphics">FillInstruction</a>&nbsp;fillInstr,
                                           <a href="../../../com/pump/graphics/DrawInstruction.html" title="interface in com.pump.graphics">DrawInstruction</a>&nbsp;drawInstr)</pre>
-<div class="block">Returns a ShapeInstruction if possible that embodies both argument instructions.
- If not possible (because the fill, transform, or clipping is a problem), then
- this returns null.</div>
+<div class="block">Returns a ShapeInstruction if possible that embodies both argument
+ instructions. If not possible (because the fill, transform, or clipping
+ is a problem), then this returns null.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fillInstr</code> - </dd>
 <dd><code>drawInstr</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a new instruction representing both argument instructions, or null if
- it isn't possible to combine these instructions.</dd>
+<dd>a new instruction representing both argument instructions, or
+         null if it isn't possible to combine these instructions.</dd>
 </dl>
 </li>
 </ul>

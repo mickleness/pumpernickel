@@ -123,8 +123,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>protected static class <span class="typeNameLabel">Scrambler.Layer</span>
 extends <a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump.io">ByteEncoder</a></pre>
-<div class="block">This is one layer of encoders in a <a href="../../../com/pump/io/ChainedByteEncoder.html" title="class in com.pump.io"><code>ChainedByteEncoder</code></a>
- responsible for partially obfuscating byte data.</div>
+<div class="block">This is one layer of encoders in a <a href="../../../com/pump/io/ChainedByteEncoder.html" title="class in com.pump.io"><code>ChainedByteEncoder</code></a> responsible
+ for partially obfuscating byte data.</div>
 </li>
 </ul>
 </div>
@@ -211,8 +211,8 @@ extends <a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/Scrambler.Layer.html#flush--">flush</a></span>()</code>
-<div class="block">This is exclusively called during <code>close()</code> to give this encoder
- an opportunity to write any remaining data.</div>
+<div class="block">This is exclusively called during <code>close()</code> to give this
+ encoder an opportunity to write any remaining data.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -287,10 +287,8 @@ extends <a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump
 <div class="block">Create a Layer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>random</code> - the Random to use as data is being encoded. This may be null.</dd>
-<dd><code>oneCount</code> - the number of 1's in a byte that are required to flag it as a marker.</dd>
-<dd><code>substitutionModel</code> - the optional SubstitutionModel this object may
- apply to replace bytes.</dd>
+<dd><code>substitutionModel</code> - the optional SubstitutionModel this object may apply to
+            replace bytes.</dd>
 </dl>
 </li>
 </ul>
@@ -312,9 +310,10 @@ extends <a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump
           throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/io/ByteEncoder.html#push-int-">ByteEncoder</a></code></span></div>
 <div class="block">Push a byte for this encoder to process.
- <p>As data accumulates it will eventually have to be
- retrieved via the <code>pull()</code> method. This method
- may block if data is waiting to be retrieved.</div>
+ <p>
+ As data accumulates it will eventually have to be retrieved via the
+ <code>pull()</code> method. This method may block if data is waiting to
+ be retrieved.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/io/ByteEncoder.html#push-int-">push</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump.io">ByteEncoder</a></code></dd>
@@ -337,8 +336,8 @@ extends <a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump
 <pre>protected&nbsp;void&nbsp;flush()
               throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/io/ByteEncoder.html#flush--">ByteEncoder</a></code></span></div>
-<div class="block">This is exclusively called during <code>close()</code> to give this encoder
- an opportunity to write any remaining data.</div>
+<div class="block">This is exclusively called during <code>close()</code> to give this
+ encoder an opportunity to write any remaining data.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/io/ByteEncoder.html#flush--">flush</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump.io">ByteEncoder</a></code></dd>

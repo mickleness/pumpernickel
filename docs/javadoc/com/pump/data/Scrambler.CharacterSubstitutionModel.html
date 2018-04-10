@@ -119,11 +119,12 @@ var activeTableTab = "activeTableTab";
 <pre>protected static class <span class="typeNameLabel">Scrambler.CharacterSubstitutionModel</span>
 extends java.lang.Object
 implements <a href="../../../com/pump/data/Scrambler.SubstitutionModel.html" title="interface in com.pump.data">Scrambler.SubstitutionModel</a></pre>
-<div class="block">This model assumes you have a fixed set of characters you plan on working with.
+<div class="block">This model assumes you have a fixed set of characters you plan on working
+ with.
  <p>
- This is a great fit if you want to obfuscate a registration code (where you are
- sure you understand the original character set), but it is not appropriate if
- arbitrary data might be input.</div>
+ This is a great fit if you want to obfuscate a registration code (where
+ you are sure you understand the original character set), but it is not
+ appropriate if arbitrary data might be input.</div>
 </li>
 </ul>
 </div>
@@ -272,9 +273,9 @@ implements <a href="../../../com/pump/data/Scrambler.SubstitutionModel.html" tit
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/data/Scrambler.SubstitutionModel.html#applySubstitutions-com.pump.data.Scrambler.MarkerRule-int:A-int-int-">Scrambler.SubstitutionModel</a></code></span></div>
 <div class="block">This changes (substitutes) some bytes for other bytes.
  <p>
- This will only be called for a run of text that does not include
- any markers, and it's crucial that no byte in this run is altered
- so that it becomes a marker.</div>
+ This will only be called for a run of text that does not include any
+ markers, and it's crucial that no byte in this run is altered so that
+ it becomes a marker.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/data/Scrambler.SubstitutionModel.html#applySubstitutions-com.pump.data.Scrambler.MarkerRule-int:A-int-int-">applySubstitutions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/Scrambler.SubstitutionModel.html" title="interface in com.pump.data">Scrambler.SubstitutionModel</a></code></dd>

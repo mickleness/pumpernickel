@@ -118,8 +118,9 @@ implements javax.swing.border.Border</pre>
 <div class="block">This combines a <code>javax.swing.Border</code> with a <a href="../../../com/pump/swing/LineNumberRenderer.html" title="class in com.pump.swing"><code>LineNumberRenderer</code></a>
  to help paint the line numbers for a <code>JTextComponent</code>.
  <p>
- The advantage of offering line numbers in a border is: it can float outside the
- viewport, so as the user scrolls horizontally the line numbers remain visible.</div>
+ The advantage of offering line numbers in a border is: it can float outside
+ the viewport, so as the user scrolls horizontally the line numbers remain
+ visible.</div>
 </li>
 </ul>
 </div>
@@ -336,15 +337,14 @@ implements javax.swing.border.Border</pre>
 <h4>install</h4>
 <pre>public static&nbsp;void&nbsp;install(javax.swing.JScrollPane&nbsp;scrollPane,
                            javax.swing.JTextPane&nbsp;textPane)</pre>
-<div class="block">Add a new LineNumberBorder to a JScrollPane.
- Note this supplements the existing border without replacing it
- (using a <code>CompoundBorder</code>).</div>
+<div class="block">Add a new LineNumberBorder to a JScrollPane. Note this supplements the
+ existing border without replacing it (using a <code>CompoundBorder</code>).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>scrollPane</code> - the scrollPane to modify the border of.</dd>
-<dd><code>textPane</code> - the text component to map line numbers to. It is assumed
- (but not enforced) that this text component is in the viewport of this
- scrollpane.</dd>
+<dd><code>textPane</code> - the text component to map line numbers to. It is assumed (but
+            not enforced) that this text component is in the viewport of
+            this scrollpane.</dd>
 </dl>
 </li>
 </ul>

@@ -111,49 +111,56 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">Scrambler</span>
 extends java.lang.Object</pre>
 <div class="block">This is a cipher that outputs data where the encoding and decoding algorithm
- are identical. (That is: this object has no designation of "encoded" or "unencoded" data.
- As long as the same Scrambler object is used: the same process converts A to B and then
- B to A.)
+ are identical. (That is: this object has no designation of "encoded" or
+ "unencoded" data. As long as the same Scrambler object is used: the same
+ process converts A to B and then B to A.)
  <p>
  Standard disclaimer: this may have its use cases, but it is no substitute for
  industry-standard security if that's what you're looking for.
  <p>
  A Scrambler can be configured in one of two ways:
- <ol><li>Without a character set. This object thinks and operates in bytes. This is useful
- when you're encoding blocks of raw binary data.</li>
- <li>With a character set. This object requires all incoming data to be part of this
- character set, and it will only ever output data in this character set. This is useful
- if you want to obfuscate well-formed Strings. For example you can scramble a series
- of registration codes that resemble "PRODUCT001". (The character set you'll pass in will
- be the complete alphabet and 10 digits.)</li></ol>
+ <ol>
+ <li>Without a character set. This object thinks and operates in bytes. This
+ is useful when you're encoding blocks of raw binary data.</li>
+ <li>With a character set. This object requires all incoming data to be part
+ of this character set, and it will only ever output data in this character
+ set. This is useful if you want to obfuscate well-formed Strings. For example
+ you can scramble a series of registration codes that resemble "PRODUCT001".
+ (The character set you'll pass in will be the complete alphabet and 10
+ digits.)</li>
+ </ol>
  <p>
  This object obfuscates your data in two ways:
- <ol><li>A series of reordering <em>layers</em>. Each layer uses one or more maker characters.
- When we reach two markers (or identify x-many chars past an orphaned marker, or we pass y-many
- chars without any marker), we identify a <em>run</em>. This object alternates over a few
- <a href="../../../com/pump/data/Scrambler.ReorderType.html" title="enum in com.pump.data"><code>ReorderTypes</code></a> that rearrange this data in a completely reversible way.
- This approach simply reorders your incoming data.</li>
- <li>Additionally we use a <a href="../../../com/pump/data/Scrambler.SubstitutionModel.html" title="interface in com.pump.data"><code>Scrambler.SubstitutionModel</code></a> to replace bytes. So if you execute
- a Scrambler against "PRODUCT001" (using a whole alphabet), then the result may include
- any A-Z letter. (When a character set is used, we use a <a href="../../../com/pump/data/Scrambler.CharacterSubstitutionModel.html" title="class in com.pump.data"><code>Scrambler.CharacterSubstitutionModel</code></a>.
- Otherwise we use a <a href="../../../com/pump/data/Scrambler.ByteSubstitutionModel.html" title="class in com.pump.data"><code>Scrambler.ByteSubstitutionModel</code></a>.) The substitution models are also fully
- reversible.
- </li></ol>
+ <ol>
+ <li>A series of reordering <em>layers</em>. Each layer uses one or more maker
+ characters. When we reach two markers (or identify x-many chars past an
+ orphaned marker, or we pass y-many chars without any marker), we identify a
+ <em>run</em>. This object alternates over a few <a href="../../../com/pump/data/Scrambler.ReorderType.html" title="enum in com.pump.data"><code>ReorderTypes</code></a> that rearrange this data in a completely reversible way. This
+ approach simply reorders your incoming data.</li>
+ <li>Additionally we use a <a href="../../../com/pump/data/Scrambler.SubstitutionModel.html" title="interface in com.pump.data"><code>Scrambler.SubstitutionModel</code></a> to replace bytes. So if
+ you execute a Scrambler against "PRODUCT001" (using a whole alphabet), then
+ the result may include any A-Z letter. (When a character set is used, we use
+ a <a href="../../../com/pump/data/Scrambler.CharacterSubstitutionModel.html" title="class in com.pump.data"><code>Scrambler.CharacterSubstitutionModel</code></a>. Otherwise we use a
+ <a href="../../../com/pump/data/Scrambler.ByteSubstitutionModel.html" title="class in com.pump.data"><code>Scrambler.ByteSubstitutionModel</code></a>.) The substitution models are also fully
+ reversible.</li>
+ </ol>
  <p>
- A single layer by itself doesn't sufficiently scramble your data, but this places
- builds n-many layers together. Each layer is fully reversible, so if you pass
- your input through A and then pass that output through A again, you'll get your
- original input. Similarly if you pass your input through A, then B, then B, then A:
- you'll end up with your original input. If you pass your input through A-B-C-B-A:
- then you have something unique. But that unique thing can be decoded by similarly passing
- through A-B-C-B-A again.
+ A single layer by itself doesn't sufficiently scramble your data, but this
+ places builds n-many layers together. Each layer is fully reversible, so if
+ you pass your input through A and then pass that output through A again,
+ you'll get your original input. Similarly if you pass your input through A,
+ then B, then B, then A: you'll end up with your original input. If you pass
+ your input through A-B-C-B-A: then you have something unique. But that unique
+ thing can be decoded by similarly passing through A-B-C-B-A again.
  <p>
- The number of layers this uses varies. For raw bytes, this uses about 300 layers
- (one for each byte, plus a few extra for good measure). When you've supplied a character
- set, this uses one layer for every unique letter in that character set.
+ The number of layers this uses varies. For raw bytes, this uses about 300
+ layers (one for each byte, plus a few extra for good measure). When you've
+ supplied a character set, this uses one layer for every unique letter in that
+ character set.
  <p>
- Each Scrambler is also keyed using a password. This is used to generate pseudorandom
- numbers used to shuffle the layers and make other decisions to mix up the results.</div>
+ Each Scrambler is also keyed using a password. This is used to generate
+ pseudorandom numbers used to shuffle the layers and make other decisions to
+ mix up the results.</div>
 </li>
 </ul>
 </div>
@@ -181,14 +188,15 @@ extends java.lang.Object</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/Scrambler.CharacterSubstitutionModel.html" title="class in com.pump.data">Scrambler.CharacterSubstitutionModel</a></span></code>
-<div class="block">This model assumes you have a fixed set of characters you plan on working with.</div>
+<div class="block">This model assumes you have a fixed set of characters you plan on working
+ with.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/Scrambler.Layer.html" title="class in com.pump.data">Scrambler.Layer</a></span></code>
-<div class="block">This is one layer of encoders in a <a href="../../../com/pump/io/ChainedByteEncoder.html" title="class in com.pump.io"><code>ChainedByteEncoder</code></a>
- responsible for partially obfuscating byte data.</div>
+<div class="block">This is one layer of encoders in a <a href="../../../com/pump/io/ChainedByteEncoder.html" title="class in com.pump.io"><code>ChainedByteEncoder</code></a> responsible
+ for partially obfuscating byte data.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -284,13 +292,15 @@ extends java.lang.Object</pre>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.io.InputStream</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/Scrambler.html#createInputStream-java.io.InputStream-">createInputStream</a></span>(java.io.InputStream&nbsp;in)</code>
-<div class="block">Create an InputStream that decodes/encodes the stream provided as it is read.</div>
+<div class="block">Create an InputStream that decodes/encodes the stream provided as it is
+ read.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>java.io.OutputStream</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/Scrambler.html#createOutputStream-java.io.OutputStream-">createOutputStream</a></span>(java.io.OutputStream&nbsp;in)</code>
-<div class="block">Create an OutputStream that decodes/encodes the data as it is written to the underlying stream.</div>
+<div class="block">Create an OutputStream that decodes/encodes the data as it is written to
+ the underlying stream.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -372,13 +382,14 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;Scrambler(java.lang.CharSequence&nbsp;key,
                  java.lang.CharSequence&nbsp;characterSet)</pre>
 <div class="block">Create a complex encoder based on a passkey.
- <p>This actually creates dozens of Scrambler instances and
- chains them together.</div>
+ <p>
+ This actually creates dozens of Scrambler instances and chains them
+ together.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - an optional key to guide the random number generation.</dd>
-<dd><code>substitutionModel</code> - an optional (but recommended) substitution model to further
- scramble data.</dd>
+<dd><code>characterSet</code> - an optional (but recommended) character set used to create a
+            substitution model to further scramble data.</dd>
 </dl>
 </li>
 </ul>
@@ -398,10 +409,11 @@ extends java.lang.Object</pre>
 <h4>createInputStream</h4>
 <pre>public&nbsp;java.io.InputStream&nbsp;createInputStream(java.io.InputStream&nbsp;in)
                                       throws java.io.IOException</pre>
-<div class="block">Create an InputStream that decodes/encodes the stream provided as it is read.
+<div class="block">Create an InputStream that decodes/encodes the stream provided as it is
+ read.
  <p>
- It is essential to close this stream to guarantee that any unprocessed bytes
- in the buffer are fully processed.</div>
+ It is essential to close this stream to guarantee that any unprocessed
+ bytes in the buffer are fully processed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - a stream of data to read.</dd>
@@ -419,17 +431,17 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>createOutputStream</h4>
 <pre>public&nbsp;java.io.OutputStream&nbsp;createOutputStream(java.io.OutputStream&nbsp;in)</pre>
-<div class="block">Create an OutputStream that decodes/encodes the data as it is written to the underlying stream.
+<div class="block">Create an OutputStream that decodes/encodes the data as it is written to
+ the underlying stream.
  <p>
- It is essential to close this stream to guarantee that any unprocessed bytes
- in the buffer are fully processed.</div>
+ It is essential to close this stream to guarantee that any unprocessed
+ bytes in the buffer are fully processed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - a stream to write encoded/data to.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a stream that writes data before encoding it and passing it to the argument stream.</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code></dd>
+<dd>a stream that writes data before encoding it and passing it to
+         the argument stream.</dd>
 </dl>
 </li>
 </ul>
@@ -442,8 +454,8 @@ extends java.lang.Object</pre>
 <pre>protected&nbsp;<a href="../../../com/pump/io/ChainedByteEncoder.html" title="class in com.pump.io">ChainedByteEncoder</a>&nbsp;createEncoder()</pre>
 <div class="block">Create a new encoder using the configuration data in this Scrambler.
  <p>
- This Scrambler object basically serves as a factory to produce this object
- as needed.</div>
+ This Scrambler object basically serves as a factory to produce this
+ object as needed.</div>
 </li>
 </ul>
 <a name="encode-java.lang.String-">
@@ -474,10 +486,11 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>string</code> - the string to encode/decode.</dd>
-<dd><code>charset</code> - the charset used to convert the String data to/from bytes. Technically this is
- not essential to get right, because no matter what reversible data will be generated... but using
- the wrong charset can be the difference between getting English characters and Korean characters
- back.</dd>
+<dd><code>charset</code> - the charset used to convert the String data to/from bytes.
+            Technically this is not essential to get right, because no
+            matter what reversible data will be generated... but using the
+            wrong charset can be the difference between getting English
+            characters and Korean characters back.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an encoded/decoded String.</dd>
 </dl>

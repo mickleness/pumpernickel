@@ -124,16 +124,18 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">GuardedInputStream</span>
 extends <a href="../../../com/pump/io/MeasuredInputStream.html" title="class in com.pump.io">MeasuredInputStream</a></pre>
-<div class="block">This filtered stream places an initial limit on the number of bytes
- that can be read.  Once this limit is reached, all methods in this object
- return -1 indicating we're at the EOF, although the underlying InputStream
- is not touched.
- <P>This object is useful when parsing files where specific blocks of a file have
- a predetermined size: with this object you can guarantee you read only
- a fixed number of bytes.  So if data inside the block is corrupt, or if you
- want to loosely guard how you read each block, this object will make sure you
+<div class="block">This filtered stream places an initial limit on the number of bytes that can
+ be read. Once this limit is reached, all methods in this object return -1
+ indicating we're at the EOF, although the underlying InputStream is not
+ touched.
+ <P>
+ This object is useful when parsing files where specific blocks of a file have
+ a predetermined size: with this object you can guarantee you read only a
+ fixed number of bytes. So if data inside the block is corrupt, or if you want
+ to loosely guard how you read each block, this object will make sure you
  don't read too far.
- <P>The <code>mark()</code> and <code>reset()</code> methods are not supported.</div>
+ <P>
+ The <code>mark()</code> and <code>reset()</code> methods are not supported.</div>
 </li>
 </ul>
 </div>
@@ -182,8 +184,8 @@ extends <a href="../../../com/pump/io/MeasuredInputStream.html" title="class in 
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/GuardedInputStream.html#isAtLimit--">isAtLimit</a></span>()</code>
-<div class="block">Whether any more data can be read from this stream (due to the limit
- it was constructed with).</div>
+<div class="block">Whether any more data can be read from this stream (due to the limit it
+ was constructed with).</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -259,8 +261,8 @@ extends <a href="../../../com/pump/io/MeasuredInputStream.html" title="class in 
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - the underlying <code>InputStream</code> to use.</dd>
 <dd><code>limit</code> - the maximum number of bytes that will be read.</dd>
-<dd><code>canClose</code> - if this is <code>false</code>, then calling
- <code>close</code> will not actually close the underlying stream.</dd>
+<dd><code>canClose</code> - if this is <code>false</code>, then calling <code>close</code>
+            will not actually close the underlying stream.</dd>
 </dl>
 </li>
 </ul>
@@ -279,8 +281,8 @@ extends <a href="../../../com/pump/io/MeasuredInputStream.html" title="class in 
 <li class="blockList">
 <h4>isAtLimit</h4>
 <pre>public&nbsp;boolean&nbsp;isAtLimit()</pre>
-<div class="block">Whether any more data can be read from this stream (due to the limit
- it was constructed with).</div>
+<div class="block">Whether any more data can be read from this stream (due to the limit it
+ was constructed with).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the limit has been reached, and no more data can be read.</dd>
@@ -355,11 +357,12 @@ extends <a href="../../../com/pump/io/MeasuredInputStream.html" title="class in 
 <h4>getRemainingLimit</h4>
 <pre>public&nbsp;long&nbsp;getRemainingLimit()</pre>
 <div class="block">Returns the number of bytes that are allowed to be read.
- <P>This number has nothing to do with the number of bytes
- that are actually remaining in the underlying <code>InputStream</code>.
- For example, if this <code>GuardedInputStream</code> was designed to
- read at most 1000 bytes, then this method may return 1000 -- even though
- there may only be 500 bytes available in the underlying <code>InputStream</code>.</div>
+ <P>
+ This number has nothing to do with the number of bytes that are actually
+ remaining in the underlying <code>InputStream</code>. For example, if
+ this <code>GuardedInputStream</code> was designed to read at most 1000
+ bytes, then this method may return 1000 -- even though there may only be
+ 500 bytes available in the underlying <code>InputStream</code>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the number of bytes that are allowed to be read.</dd>

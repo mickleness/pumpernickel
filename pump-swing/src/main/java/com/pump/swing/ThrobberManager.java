@@ -23,7 +23,7 @@ import com.pump.job.JobManager;
  * This helps associate any number of throbbers with activity.
  * <p>
  * Call {@link #createToken()} to activate all possible throbbers, and then
- * after some time call {@link #returnToken(Object)} to return the token.
+ * after some time call {@link #returnToken(Token)} to return the token.
  * <p>
  * Your usage should resemble:
  * 
@@ -156,7 +156,7 @@ public class ThrobberManager {
 	 * Create (borrow) a new token from this manager.
 	 * 
 	 * @return the object that should be eventually passed to
-	 *         {@link #returnToken(Object)}.
+	 *         {@link #returnToken(Token)}.
 	 */
 	public Token createToken() {
 		boolean fireListeners;

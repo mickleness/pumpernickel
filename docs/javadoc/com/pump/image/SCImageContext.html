@@ -117,25 +117,21 @@ var activeTableTab = "activeTableTab";
 extends <a href="../../../com/pump/image/ImageContext.html" title="class in com.pump.image">ImageContext</a></pre>
 <div class="block">Spatial-Coherence optimized implementation of ImageContext.
  <p>
- This implementation takes advantage of spatial coherence between
- pixels to improve the rendering performance.
- <p> 
- Instead of performing a perspective transform for each individual
- pixel, this implementation only transforms the four corners of the
- image, and then uses hyperbolic interpolation for the remaining pixels.
+ This implementation takes advantage of spatial coherence between pixels to
+ improve the rendering performance.
  <p>
- In order to take advantage of spacial coherence, the number of tiles
- should be kept low, because only a small amount of spatial coherence
- is shared between tiles. Therefore this implementation is best suited
- for systems with a small number of processors.
+ Instead of performing a perspective transform for each individual pixel, this
+ implementation only transforms the four corners of the image, and then uses
+ hyperbolic interpolation for the remaining pixels.
  <p>
- This class only implements nearest neighbor interpolation. A higher
- quality interpolation scheme can easily implemented by super sampling
- pixels from the source image.</div>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><code>ImageContextDemo</code></dd>
-</dl>
+ In order to take advantage of spacial coherence, the number of tiles should
+ be kept low, because only a small amount of spatial coherence is shared
+ between tiles. Therefore this implementation is best suited for systems with
+ a small number of processors.
+ <p>
+ This class only implements nearest neighbor interpolation. A higher quality
+ interpolation scheme can easily implemented by super sampling pixels from the
+ source image.</div>
 </li>
 </ul>
 </div>
@@ -170,7 +166,8 @@ extends <a href="../../../com/pump/image/ImageContext.html" title="class in com.
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/image/SCImageContext.html#SCImageContext-java.awt.image.BufferedImage-">SCImageContext</a></span>(java.awt.image.BufferedImage&nbsp;bi)</code>
-<div class="block">Create a Graphics3D context that paints to a destination image using 6 threads.</div>
+<div class="block">Create a Graphics3D context that paints to a destination image using 6
+ threads.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -252,7 +249,8 @@ extends <a href="../../../com/pump/image/ImageContext.html" title="class in com.
 <li class="blockList">
 <h4>SCImageContext</h4>
 <pre>public&nbsp;SCImageContext(java.awt.image.BufferedImage&nbsp;bi)</pre>
-<div class="block">Create a Graphics3D context that paints to a destination image using 6 threads.</div>
+<div class="block">Create a Graphics3D context that paints to a destination image using 6
+ threads.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>bi</code> - an RGB or ARGB image.</dd>
@@ -271,8 +269,9 @@ extends <a href="../../../com/pump/image/ImageContext.html" title="class in com.
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>bi</code> - an RGB or ARGB image.</dd>
-<dd><code>numberOfThreads</code> - if positive then this is the number of threads used to
- render tiles. If zero then calls to <code>drawImage</code> are not multithreaded.</dd>
+<dd><code>numberOfThreads</code> - if positive then this is the number of threads used to render
+            tiles. If zero then calls to <code>drawImage</code> are not
+            multithreaded.</dd>
 </dl>
 </li>
 </ul>
@@ -306,10 +305,12 @@ extends <a href="../../../com/pump/image/ImageContext.html" title="class in com.
                       java.awt.geom.Point2D&nbsp;bottomRight,
                       java.awt.geom.Point2D&nbsp;bottomLeft)</pre>
 <div class="block">Draw an image to this Graphics3D.
- <p>This respects the interpolation rendering hints. When the
- interpolation hint is missing, this will also consult the antialiasing
- hint or the render hint. The bilinear hint is used by default.
- <p>This uses a source over composite.</div>
+ <p>
+ This respects the interpolation rendering hints. When the interpolation
+ hint is missing, this will also consult the antialiasing hint or the
+ render hint. The bilinear hint is used by default.
+ <p>
+ This uses a source over composite.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/image/ImageContext.html#drawImage-java.awt.image.BufferedImage-java.awt.geom.Point2D-java.awt.geom.Point2D-java.awt.geom.Point2D-java.awt.geom.Point2D-">drawImage</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/image/ImageContext.html" title="class in com.pump.image">ImageContext</a></code></dd>

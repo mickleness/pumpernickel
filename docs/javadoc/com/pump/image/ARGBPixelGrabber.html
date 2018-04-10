@@ -110,13 +110,16 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ARGBPixelGrabber</span>
 extends java.lang.Object</pre>
-<div class="block">This is based conceptually on the <code>java.awt.image.PixelGrabber</code> class,
- except this is designed to be optimized for several types of <code>BufferedImages</code>.
- This should both save time and prevent <code>BufferedImage</code>'s from becoming un-managed.
- <P>If this is asked to iterate over the image data for a non-supported <code>Image</code>,
- then this class will defer to a <code>PixelGrabber</code>.
- <P>You'll get the best performance out of this class if you iterate over 1 row of data
- at a time and recycle the array you're using.</div>
+<div class="block">This is based conceptually on the <code>java.awt.image.PixelGrabber</code>
+ class, except this is designed to be optimized for several types of
+ <code>BufferedImages</code>. This should both save time and prevent
+ <code>BufferedImage</code>'s from becoming un-managed.
+ <P>
+ If this is asked to iterate over the image data for a non-supported
+ <code>Image</code>, then this class will defer to a <code>PixelGrabber</code>.
+ <P>
+ You'll get the best performance out of this class if you iterate over 1 row
+ of data at a time and recycle the array you're using.</div>
 </li>
 </ul>
 </div>
@@ -226,8 +229,7 @@ extends java.lang.Object</pre>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/image/ARGBPixelGrabber.html#next-int:A-">next</a></span>(int[]&nbsp;data)</code>
-<div class="block">This will fill the array <code>data</code> with incoming
- pixel data.</div>
+<div class="block">This will fill the array <code>data</code> with incoming pixel data.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -235,15 +237,14 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/image/ARGBPixelGrabber.html#next-int:A-int-int-">next</a></span>(int[]&nbsp;data,
     int&nbsp;arrayOffset,
     int&nbsp;arrayLength)</code>
-<div class="block">Fills the array provided with
- ARGB pixel data.</div>
+<div class="block">Fills the array provided with ARGB pixel data.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/image/ARGBPixelGrabber.html#reset--">reset</a></span>()</code>
-<div class="block">This will reset the iterator to begin iterating over
- this image data again.</div>
+<div class="block">This will reset the iterator to begin iterating over this image data
+ again.</div>
 </td>
 </tr>
 </table>
@@ -317,9 +318,9 @@ extends java.lang.Object</pre>
 <div class="block">Create an ARGBPixelGrabber to iterate over <code>i</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rect</code> - if non-null, then this object will only iterate over
- this rectangle.  An exception may be thrown if <code>rect</code>
- is not completely contained within <code>i</code></dd>
+<dd><code>rect</code> - if non-null, then this object will only iterate over this
+            rectangle. An exception may be thrown if <code>rect</code> is
+            not completely contained within <code>i</code></dd>
 </dl>
 </li>
 </ul>
@@ -349,9 +350,9 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;int&nbsp;getWidth()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the width of the image.
- Note this <i>may</i> be different from <code>BufferedImage.getWidth()</code> if you
- asked this grabber to clip to a subset of the image.</dd>
+<dd>the width of the image. Note this <i>may</i> be different from
+         <code>BufferedImage.getWidth()</code> if you asked this grabber
+         to clip to a subset of the image.</dd>
 </dl>
 </li>
 </ul>
@@ -364,9 +365,9 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;int&nbsp;getHeight()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the height of the image.
- Note this <i>may</i> be different from <code>BufferedImage.getWidth()</code> if you
- asked this grabber to clip to a subset of the image.</dd>
+<dd>the height of the image. Note this <i>may</i> be different from
+         <code>BufferedImage.getWidth()</code> if you asked this grabber
+         to clip to a subset of the image.</dd>
 </dl>
 </li>
 </ul>
@@ -377,17 +378,19 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>isBufferedImageTypeSupported</h4>
 <pre>protected static&nbsp;boolean&nbsp;isBufferedImageTypeSupported(int&nbsp;t)</pre>
-<div class="block">This indicates whether a BufferedImageType is supported.
- Currently support image types include:
- <ul><li>BufferedImage.TYPE_INT_RGB</li>
- <li>BufferedImage.TYPE_INT_ARGB</li> 
+<div class="block">This indicates whether a BufferedImageType is supported. Currently
+ support image types include:
+ <ul>
+ <li>BufferedImage.TYPE_INT_RGB</li>
+ <li>BufferedImage.TYPE_INT_ARGB</li>
  <li>BufferedImage.TYPE_INT_ARGB_PRE</li>
  <li>BufferedImage.TYPE_INT_BGR</li>
  <li>BufferedImage.TYPE_3BYTE_BGR</li>
  <li>BufferedImage.TYPE_4BYTE_ABGR</li>
  <li>BufferedImage.TYPE_4BYTE_ABGR_PRE</li>
  <li>BufferedImage.TYPE_BYTE_GRAY</li>
- <li>BufferedImage.TYPE_BYTE_INDEXED</li></ul></div>
+ <li>BufferedImage.TYPE_BYTE_INDEXED</li>
+ </ul></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>t</code> - </dd>
@@ -406,9 +409,8 @@ extends java.lang.Object</pre>
 <div class="block">Indicates whether all the data has been returned yet.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if there is no more data.
- If there is no more data, then all calls to <code>next</code>
- will return zero.</dd>
+<dd><code>true</code> if there is no more data. If there is no more
+         data, then all calls to <code>next</code> will return zero.</dd>
 </dl>
 </li>
 </ul>
@@ -420,21 +422,22 @@ extends java.lang.Object</pre>
 <h4>getPixels</h4>
 <pre>public&nbsp;int[]&nbsp;getPixels()</pre>
 <div class="block">This returns all the pixels of this image at once.
- <P>This method is provided largely to be consistant with
- the <code>java.awt.image.PixelGrabber</code>.  If it is
- possible, it is probably more efficient to iterate over the pixel
- data one row at a time.
- <P>This method returns the entire image in bulk, and does
- not interact with the "iterator" nature of this object.
- So calling this method will not affect the state
- of <code>isDone</code>, or the state of future
- calls to <code>next(...)</code>.
- <P>Calling this method is equivalent to calling:
- <BR><code>getPixels(new int[getWidth()*getHeight()]);</code></div>
+ <P>
+ This method is provided largely to be consistant with the
+ <code>java.awt.image.PixelGrabber</code>. If it is possible, it is
+ probably more efficient to iterate over the pixel data one row at a time.
+ <P>
+ This method returns the entire image in bulk, and does not interact with
+ the "iterator" nature of this object. So calling this method will not
+ affect the state of <code>isDone</code>, or the state of future calls to
+ <code>next(...)</code>.
+ <P>
+ Calling this method is equivalent to calling: <BR>
+ <code>getPixels(new int[getWidth()*getHeight()]);</code></div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array that is <code>getWidth()*getHeight()</code>
- units long, containing all the ARGB data of this image.</dd>
+<dd>an array that is <code>getWidth()*getHeight()</code> units long,
+         containing all the ARGB data of this image.</dd>
 </dl>
 </li>
 </ul>
@@ -445,8 +448,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>reset</h4>
 <pre>public&nbsp;void&nbsp;reset()</pre>
-<div class="block">This will reset the iterator to begin iterating over
- this image data again.</div>
+<div class="block">This will reset the iterator to begin iterating over this image data
+ again.</div>
 </li>
 </ul>
 <a name="getPixels-int:A-">
@@ -457,25 +460,25 @@ extends java.lang.Object</pre>
 <h4>getPixels</h4>
 <pre>public&nbsp;int[]&nbsp;getPixels(int[]&nbsp;array)</pre>
 <div class="block">This returns all the pixels of this image at once.
- <P>This method is provided largely to be consistant with
- the <code>java.awt.image.PixelGrabber</code>.  If it is
- possible, it is probably more efficient to iterate over the pixel
- data one row at a time.
- <P>This method returns the entire image in bulk, and does
- not interact with the "iterator" nature of this object.
- So calling this method will not affect the state
- of <code>isDone</code>, or the state of future
- calls to <code>next(...)</code>.</div>
+ <P>
+ This method is provided largely to be consistant with the
+ <code>java.awt.image.PixelGrabber</code>. If it is possible, it is
+ probably more efficient to iterate over the pixel data one row at a time.
+ <P>
+ This method returns the entire image in bulk, and does not interact with
+ the "iterator" nature of this object. So calling this method will not
+ affect the state of <code>isDone</code>, or the state of future calls to
+ <code>next(...)</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>array</code> - this is the destination array to store this
- data in.  If this is <code>null</code> then a new
- array will be created for you.
- An exception will be thrown if the array is not large enough to accomodate
- all the pixel data.</dd>
+<dd><code>array</code> - this is the destination array to store this data in. If this
+            is <code>null</code> then a new array will be created for you.
+            An exception will be thrown if the array is not large enough
+            to accomodate all the pixel data.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array containing all the pixel data of this image.  If <code>array</code>
- was non-null, then this returns the argument <code>array</code></dd>
+<dd>an array containing all the pixel data of this image. If
+         <code>array</code> was non-null, then this returns the argument
+         <code>array</code></dd>
 </dl>
 </li>
 </ul>
@@ -486,16 +489,17 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>next</h4>
 <pre>public&nbsp;int&nbsp;next(int[]&nbsp;data)</pre>
-<div class="block">This will fill the array <code>data</code> with incoming
- pixel data.  (Unless the end of the image is reached.)
- <P>This is equivalent to calling:
- <BR><code>next(data,0,data.length);</code></div>
+<div class="block">This will fill the array <code>data</code> with incoming pixel data.
+ (Unless the end of the image is reached.)
+ <P>
+ This is equivalent to calling: <BR>
+ <code>next(data,0,data.length);</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - the array to store the data in</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the number of pixels read.  This will be the length
- of <code>data</code> unless the end of the image is reached.</dd>
+<dd>the number of pixels read. This will be the length of
+         <code>data</code> unless the end of the image is reached.</dd>
 </dl>
 </li>
 </ul>
@@ -508,37 +512,34 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;int&nbsp;next(int[]&nbsp;data,
                 int&nbsp;arrayOffset,
                 int&nbsp;arrayLength)</pre>
-<div class="block">Fills the array provided with
- ARGB pixel data.</div>
+<div class="block">Fills the array provided with ARGB pixel data.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>data</code> - the array to fill.
- This array can be of arbitrary length, but you may
- see better performance if you ask for <code>getWidth()</code>
- many pixels at a time.</dd>
-<dd><code>arrayOffset</code> - this is the index to begin
- writing to in <code>data</code>.
- <P>If the image involved is a <code>BufferedImage</code>
- of type <code>ARGB_PRE</code>, <code>ARGB</code> or <code>RGB</code>
- then you will see improved performance if this value is zero.</dd>
-<dd><code>arrayLength</code> - this is the amount of data
- that should be read into <code>data</code>.
- An exception will be thrown if this method is asked
- to write more pixel data than will fit in the array.
- <P>If this value is a non-positive number, then an
- arbitrary number of pixels will be stored in
- the array.</dd>
+<dd><code>data</code> - the array to fill. This array can be of arbitrary length, but
+            you may see better performance if you ask for
+            <code>getWidth()</code> many pixels at a time.</dd>
+<dd><code>arrayOffset</code> - this is the index to begin writing to in <code>data</code>.
+            <P>
+            If the image involved is a <code>BufferedImage</code> of type
+            <code>ARGB_PRE</code>, <code>ARGB</code> or <code>RGB</code>
+            then you will see improved performance if this value is zero.</dd>
+<dd><code>arrayLength</code> - this is the amount of data that should be read into
+            <code>data</code>. An exception will be thrown if this method
+            is asked to write more pixel data than will fit in the array.
+            <P>
+            If this value is a non-positive number, then an arbitrary
+            number of pixels will be stored in the array.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the number of pixels written
- in this array.  This will generally be equal
- to <code>arrayLength</code>, except in 2 cases:
- <ul><li>When this iterator has finished.</li>
- <li>When <code>arrayLength</code> is non-positive.
- In this case this object gets to decide how
- many pixels to return at a time.</li></ul>
- <P>This will only return 0
- if <code>isDone()</code> returns
- <code>true</code>.</dd>
+<dd>the number of pixels written in this array. This will generally
+         be equal to <code>arrayLength</code>, except in 2 cases:
+         <ul>
+         <li>When this iterator has finished.</li> <li>When <code>
+         arrayLength</code> is non-positive. In this case this object gets
+         to decide how many pixels to return at a time.</li>
+         </ul>
+         <P>
+         This will only return 0 if <code>isDone()</code> returns
+         <code>true</code>.</dd>
 </dl>
 </li>
 </ul>

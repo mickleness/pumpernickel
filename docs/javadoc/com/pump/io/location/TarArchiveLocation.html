@@ -200,9 +200,9 @@ extends <a href="../../../../com/pump/io/location/ArchiveLocation.html" title="c
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected org.apache.tools.tar.TarEntry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/TarArchiveLocation.html#createDirectory-java.lang.String-">createDirectory</a></span>(java.lang.String&nbsp;path)</code>
-<div class="block">This is invoked when the root node is cataloging the
- contents of an archive and it comes across "abc/foo.jpg"
- before there is a directory titled "abc".</div>
+<div class="block">This is invoked when the root node is cataloging the contents of an
+ archive and it comes across "abc/foo.jpg" before there is a directory
+ titled "abc".</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -214,8 +214,8 @@ extends <a href="../../../../com/pump/io/location/ArchiveLocation.html" title="c
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/TarArchiveLocation.html#getArchivePath--">getArchivePath</a></span>()</code>
-<div class="block">Return the path within the archive to this resource, or null if this
- is the root of this archive.</div>
+<div class="block">Return the path within the archive to this resource, or null if this is
+ the root of this archive.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -307,8 +307,8 @@ extends <a href="../../../../com/pump/io/location/ArchiveLocation.html" title="c
 <h4>getArchivePath</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getArchivePath()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/ArchiveLocation.html#getArchivePath--">ArchiveLocation</a></code></span></div>
-<div class="block">Return the path within the archive to this resource, or null if this
- is the root of this archive.</div>
+<div class="block">Return the path within the archive to this resource, or null if this is
+ the root of this archive.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/ArchiveLocation.html#getArchivePath--">getArchivePath</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/ArchiveLocation.html" title="class in com.pump.io.location">ArchiveLocation</a>&lt;org.apache.tools.tar.TarEntry&gt;</code></dd>
@@ -340,7 +340,8 @@ extends <a href="../../../../com/pump/io/location/ArchiveLocation.html" title="c
                            throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/ArchiveLocation.html#listArchiveEntries-com.pump.util.Receiver-">ArchiveLocation</a></code></span></div>
 <div class="block">List all the archive entries.
- <p>This is only invoked on the root ArchiveLocation.</div>
+ <p>
+ This is only invoked on the root ArchiveLocation.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/ArchiveLocation.html#listArchiveEntries-com.pump.util.Receiver-">listArchiveEntries</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/ArchiveLocation.html" title="class in com.pump.io.location">ArchiveLocation</a>&lt;org.apache.tools.tar.TarEntry&gt;</code></dd>
@@ -359,18 +360,17 @@ extends <a href="../../../../com/pump/io/location/ArchiveLocation.html" title="c
 <h4>createDirectory</h4>
 <pre>protected&nbsp;org.apache.tools.tar.TarEntry&nbsp;createDirectory(java.lang.String&nbsp;path)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/ArchiveLocation.html#createDirectory-java.lang.String-">ArchiveLocation</a></code></span></div>
-<div class="block">This is invoked when the root node is cataloging the
- contents of an archive and it comes across "abc/foo.jpg"
- before there is a directory titled "abc". We'd much rather
- have a separate archive entry for the "abc" directory (so
- we can correctly define all the meta info), but this
+<div class="block">This is invoked when the root node is cataloging the contents of an
+ archive and it comes across "abc/foo.jpg" before there is a directory
+ titled "abc". We'd much rather have a separate archive entry for the
+ "abc" directory (so we can correctly define all the meta info), but this
  runner-up approach still gets the job done.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/ArchiveLocation.html#createDirectory-java.lang.String-">createDirectory</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/ArchiveLocation.html" title="class in com.pump.io.location">ArchiveLocation</a>&lt;org.apache.tools.tar.TarEntry&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>path</code> - the full archive path name of a directory we need to
- catalog a file.</dd>
+<dd><code>path</code> - the full archive path name of a directory we need to catalog a
+            file.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an archive entry representing that path name.</dd>
 </dl>
@@ -451,9 +451,9 @@ extends <a href="../../../../com/pump/io/location/ArchiveLocation.html" title="c
 <pre>public&nbsp;java.io.InputStream&nbsp;createInputStream(org.apache.tools.tar.TarEntry&nbsp;entry)
                                       throws java.io.IOException</pre>
 <div class="block">Create an InputStream for a TarEntry.
- <p>The root TarArchiveLocation catalogs every TarEntry,
- so this method provides (very nearly) random access
- to entries.</div>
+ <p>
+ The root TarArchiveLocation catalogs every TarEntry, so this method
+ provides (very nearly) random access to entries.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/ArchiveLocation.html#createInputStream-T-">createInputStream</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/ArchiveLocation.html" title="class in com.pump.io.location">ArchiveLocation</a>&lt;org.apache.tools.tar.TarEntry&gt;</code></dd>

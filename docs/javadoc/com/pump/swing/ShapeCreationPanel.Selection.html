@@ -114,8 +114,9 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public static class <span class="typeNameLabel">ShapeCreationPanel.Selection</span>
 extends java.lang.Object</pre>
-<div class="block">Data used to articulate exactly what the user has selected (or indicated).
- Not all UIs will support identifying all the information available in this class.</div>
+<div class="block">Data used to articulate exactly what the user has selected (or
+ indicated). Not all UIs will support identifying all the information
+ available in this class.</div>
 </li>
 </ul>
 </div>
@@ -213,8 +214,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Selection</h4>
 <pre>public&nbsp;Selection()</pre>
-<div class="block">Create an empty selection. 
- This is equivalent to <code>new Selection(-1, -1, null)</code>.</div>
+<div class="block">Create an empty selection. This is equivalent to
+ <code>new Selection(-1, -1, null)</code>.</div>
 </li>
 </ul>
 <a name="Selection-int-int-com.pump.swing.ShapeCreationPanel.Handle-">
@@ -229,12 +230,13 @@ extends java.lang.Object</pre>
 <div class="block">Create a new Selection.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>shapeIndex</code> - the shape index being interacted with, or -1 if no
- shape is involved.</dd>
-<dd><code>nodeIndex</code> - the node index being interacted with, or -1 if no
- node is involved.</dd>
-<dd><code>handle</code> - the handle being interacted with. If null this is reset
- to PRIMARY, although it is not consulted if the nodeIndex is -1.</dd>
+<dd><code>shapeIndex</code> - the shape index being interacted with, or -1 if no shape
+            is involved.</dd>
+<dd><code>nodeIndex</code> - the node index being interacted with, or -1 if no node is
+            involved.</dd>
+<dd><code>handle</code> - the handle being interacted with. If null this is reset to
+            PRIMARY, although it is not consulted if the nodeIndex is
+            -1.</dd>
 </dl>
 </li>
 </ul>
@@ -268,7 +270,8 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;int&nbsp;getNodeIndex()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the node index (relative to the shape index, which is relative to the <a href="../../../com/pump/swing/ShapeCreationPanel.DataModel.html" title="class in com.pump.swing"><code>ShapeCreationPanel.DataModel</code></a>).</dd>
+<dd>the node index (relative to the shape index, which is relative
+         to the <a href="../../../com/pump/swing/ShapeCreationPanel.DataModel.html" title="class in com.pump.swing"><code>ShapeCreationPanel.DataModel</code></a>).</dd>
 </dl>
 </li>
 </ul>
@@ -281,7 +284,8 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;<a href="../../../com/pump/swing/ShapeCreationPanel.Handle.html" title="enum in com.pump.swing">ShapeCreationPanel.Handle</a>&nbsp;getHandle()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the handle (relative to the node index, which is relative to the shape index).</dd>
+<dd>the handle (relative to the node index, which is relative to
+         the shape index).</dd>
 </dl>
 </li>
 </ul>

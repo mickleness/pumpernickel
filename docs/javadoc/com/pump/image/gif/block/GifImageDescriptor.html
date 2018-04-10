@@ -125,8 +125,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">GifImageDescriptor</span>
 extends <a href="../../../../../com/pump/image/gif/block/GifGraphicRenderingBlock.html" title="class in com.pump.image.gif.block">GifGraphicRenderingBlock</a></pre>
 <div class="block">There must be <code>GifImageDescriptor</code> for each
- <a href="../../../../../com/pump/image/gif/block/GifImageDataBlock.html" title="class in com.pump.image.gif.block"><code>GifImageDataBlock</code></a>. This block will precede the
- image data, but there <i>may</i> be a local color table immediately
+ <a href="../../../../../com/pump/image/gif/block/GifImageDataBlock.html" title="class in com.pump.image.gif.block"><code>GifImageDataBlock</code></a>. This block will precede
+ the image data, but there <i>may</i> be a local color table immediately
  following this block.
  <P>
  The GIF file format specification describes this block as follows:
@@ -592,8 +592,8 @@ extends <a href="../../../../../com/pump/image/gif/block/GifGraphicRenderingBloc
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if there is a
-         <a href="../../../../../com/pump/image/gif/block/GifLocalColorTable.html" title="class in com.pump.image.gif.block"><code>GifLocalColorTable</code></a> following this
-         block, and that color table is sorted in order of decreasing
+         <a href="../../../../../com/pump/image/gif/block/GifLocalColorTable.html" title="class in com.pump.image.gif.block"><code>GifLocalColorTable</code></a> following
+         this block, and that color table is sorted in order of decreasing
          importance.</dd>
 </dl>
 </li>
@@ -617,13 +617,12 @@ extends <a href="../../../../../com/pump/image/gif/block/GifGraphicRenderingBloc
 <div class="block">Assigns the local color table size for this block. If you pass 0 or -1 to
  this method, this effectively turns off the local color table.
  <P>
- If <code>i</code> is 0 or -1, subsequent calls
- to <code>hasLocalColorTable()</code> will return <code>false</code>.</div>
+ If <code>i</code> is 0 or -1, subsequent calls to
+ <code>hasLocalColorTable()</code> will return <code>false</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>size</code> - must be a power of 2 between 2 and 256,
- or else -1 or 0 to indicate that there is no local
- color table.</dd>
+<dd><code>size</code> - must be a power of 2 between 2 and 256, or else -1 or 0 to
+            indicate that there is no local color table.</dd>
 </dl>
 </li>
 </ul>

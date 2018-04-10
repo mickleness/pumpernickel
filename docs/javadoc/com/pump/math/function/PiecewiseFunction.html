@@ -115,9 +115,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">PiecewiseFunction</span>
 extends java.lang.Object
 implements <a href="../../../../com/pump/math/function/Function.html" title="interface in com.pump.math.function">Function</a></pre>
-<div class="block">This function pieces several separate functions together.
- This makes no guarantees about continuity; it is possible this
- function is discontinuous.</div>
+<div class="block">This function pieces several separate functions together. This makes no
+ guarantees about continuity; it is possible this function is discontinuous.</div>
 </li>
 </ul>
 </div>
@@ -230,12 +229,14 @@ implements <a href="../../../../com/pump/math/function/Function.html" title="int
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>functions</code> - </dd>
-<dd><code>upperBounds</code> - the right-most edge of functions.  If there
- are n-elements in <code>functions</code>, there should be (n-1)
- elements in this array.
- <P>So if you pass 2 functions [a, b], and this value is the array [k],
- then for all values less than k: <code>a</code> will be used.  For
- all values greater than k, <code>b</code> will be be used.</dd>
+<dd><code>upperBounds</code> - the right-most edge of functions. If there are n-elements in
+            <code>functions</code>, there should be (n-1) elements in this
+            array.
+            <P>
+            So if you pass 2 functions [a, b], and this value is the array
+            [k], then for all values less than k: <code>a</code> will be
+            used. For all values greater than k, <code>b</code> will be be
+            used.</dd>
 </dl>
 </li>
 </ul>
@@ -259,19 +260,20 @@ implements <a href="../../../../com/pump/math/function/Function.html" title="int
                                        double&nbsp;max,
                                        int&nbsp;functions)</pre>
 <div class="block">This creates a <code>PiecewiseFunction</code> that resembles another
- function.  This method should be used when the argument <code>f</code>
- is normally expensive to calculate, and generally predictable/simple
- in curvature.
- <p>The pieces of the new <code>PiecewiseFunction</code> are going
- to be <code>PolynomialFunctions</code>.</div>
+ function. This method should be used when the argument <code>f</code> is
+ normally expensive to calculate, and generally predictable/simple in
+ curvature.
+ <p>
+ The pieces of the new <code>PiecewiseFunction</code> are going to be
+ <code>PolynomialFunctions</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>f</code> - the function to mimic.</dd>
 <dd><code>fDeriv</code> - a derivative of <code>f</code>.</dd>
 <dd><code>min</code> - the left edge of the domain you're interested in mimicking.</dd>
 <dd><code>max</code> - the right edge of the domain you're interested in mimicking.</dd>
-<dd><code>functions</code> - the number of functions/partitions the <code>PiecewiseFunction</code> should
- use.</dd>
+<dd><code>functions</code> - the number of functions/partitions the
+            <code>PiecewiseFunction</code> should use.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a function that resembles another function.</dd>
 </dl>

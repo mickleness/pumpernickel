@@ -143,9 +143,9 @@ extends java.lang.Object</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/CurveX.html#RECT_INTERSECTS">RECT_INTERSECTS</a></span></code>
-<div class="block">The rectangle intersection test counts the number of times
- that the path crosses through the shadow that the rectangle
- projects to the right towards (x =&gt; +INFINITY).</div>
+<div class="block">The rectangle intersection test counts the number of times that the path
+ crosses through the shadow that the rectangle projects to the right
+ towards (x =&gt; +INFINITY).</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -372,8 +372,8 @@ extends java.lang.Object</pre>
                       double&nbsp;x1,
                       double&nbsp;y1,
                       int&nbsp;level)</code>
-<div class="block">Calculates the number of times the cubic from (x0,y0) to (x1,y1)
- crosses the ray extending to the right from (px,py).</div>
+<div class="block">Calculates the number of times the cubic from (x0,y0) to (x1,y1) crosses
+ the ray extending to the right from (px,py).</div>
 </td>
 </tr>
 <tr id="i35" class="rowColor">
@@ -384,8 +384,8 @@ extends java.lang.Object</pre>
                      double&nbsp;y0,
                      double&nbsp;x1,
                      double&nbsp;y1)</code>
-<div class="block">Calculates the number of times the line from (x0,y0) to (x1,y1)
- crosses the ray extending to the right from (px,py).</div>
+<div class="block">Calculates the number of times the line from (x0,y0) to (x1,y1) crosses
+ the ray extending to the right from (px,py).</div>
 </td>
 </tr>
 <tr id="i36" class="altColor">
@@ -393,8 +393,8 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/CurveX.html#pointCrossingsForPath-java.awt.geom.PathIterator-double-double-">pointCrossingsForPath</a></span>(java.awt.geom.PathIterator&nbsp;pi,
                      double&nbsp;px,
                      double&nbsp;py)</code>
-<div class="block">Calculates the number of times the given path
- crosses the ray extending to the right from (px,py).</div>
+<div class="block">Calculates the number of times the given path crosses the ray extending
+ to the right from (px,py).</div>
 </td>
 </tr>
 <tr id="i37" class="rowColor">
@@ -408,8 +408,8 @@ extends java.lang.Object</pre>
                      double&nbsp;x1,
                      double&nbsp;y1,
                      int&nbsp;level)</code>
-<div class="block">Calculates the number of times the quad from (x0,y0) to (x1,y1)
- crosses the ray extending to the right from (px,py).</div>
+<div class="block">Calculates the number of times the quad from (x0,y0) to (x1,y1) crosses
+ the ray extending to the right from (px,py).</div>
 </td>
 </tr>
 <tr id="i38" class="altColor">
@@ -432,8 +432,8 @@ extends java.lang.Object</pre>
                      double&nbsp;x1,
                      double&nbsp;y1,
                      int&nbsp;level)</code>
-<div class="block">Accumulate the number of times the cubic crosses the shadow
- extending to the right of the rectangle.</div>
+<div class="block">Accumulate the number of times the cubic crosses the shadow extending to
+ the right of the rectangle.</div>
 </td>
 </tr>
 <tr id="i40" class="altColor">
@@ -447,8 +447,8 @@ extends java.lang.Object</pre>
                     double&nbsp;y0,
                     double&nbsp;x1,
                     double&nbsp;y1)</code>
-<div class="block">Accumulate the number of times the line crosses the shadow
- extending to the right of the rectangle.</div>
+<div class="block">Accumulate the number of times the line crosses the shadow extending to
+ the right of the rectangle.</div>
 </td>
 </tr>
 <tr id="i41" class="rowColor">
@@ -458,8 +458,8 @@ extends java.lang.Object</pre>
                     double&nbsp;rymin,
                     double&nbsp;rxmax,
                     double&nbsp;rymax)</code>
-<div class="block">Accumulate the number of times the path crosses the shadow
- extending to the right of the rectangle.</div>
+<div class="block">Accumulate the number of times the path crosses the shadow extending to
+ the right of the rectangle.</div>
 </td>
 </tr>
 <tr id="i42" class="altColor">
@@ -476,8 +476,8 @@ extends java.lang.Object</pre>
                     double&nbsp;x1,
                     double&nbsp;y1,
                     int&nbsp;level)</code>
-<div class="block">Accumulate the number of times the quad crosses the shadow
- extending to the right of the rectangle.</div>
+<div class="block">Accumulate the number of times the quad crosses the shadow extending to
+ the right of the rectangle.</div>
 </td>
 </tr>
 <tr id="i43" class="rowColor">
@@ -579,34 +579,31 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>RECT_INTERSECTS</h4>
 <pre>public static final&nbsp;int RECT_INTERSECTS</pre>
-<div class="block">The rectangle intersection test counts the number of times
- that the path crosses through the shadow that the rectangle
- projects to the right towards (x =&gt; +INFINITY).
+<div class="block">The rectangle intersection test counts the number of times that the path
+ crosses through the shadow that the rectangle projects to the right
+ towards (x =&gt; +INFINITY).
 
- During processing of the path it actually counts every time
- the path crosses either or both of the top and bottom edges
- of that shadow.  If the path enters from the top, the count
- is incremented.  If it then exits back through the top, the
- same way it came in, the count is decremented and there is
- no impact on the winding count.  If, instead, the path exits
- out the bottom, then the count is incremented again and a
- full pass through the shadow is indicated by the winding count
- having been incremented by 2.
+ During processing of the path it actually counts every time the path
+ crosses either or both of the top and bottom edges of that shadow. If the
+ path enters from the top, the count is incremented. If it then exits back
+ through the top, the same way it came in, the count is decremented and
+ there is no impact on the winding count. If, instead, the path exits out
+ the bottom, then the count is incremented again and a full pass through
+ the shadow is indicated by the winding count having been incremented by
+ 2.
 
- Thus, the winding count that it accumulates is actually double
- the real winding count.  Since the path is continuous, the
- final answer should be a multiple of 2, otherwise there is a
- logic error somewhere.
+ Thus, the winding count that it accumulates is actually double the real
+ winding count. Since the path is continuous, the final answer should be a
+ multiple of 2, otherwise there is a logic error somewhere.
 
- If the path ever has a direct hit on the rectangle, then a
- special value is returned.  This special value terminates
- all ongoing accumulation on up through the call chain and
- ends up getting returned to the calling function which can
- then produce an answer directly.  For intersection tests,
- the answer is always "true" if the path intersects the
- rectangle.  For containment tests, the answer is always
- "false" if the path intersects the rectangle.  Thus, no
- further processing is ever needed if an intersection occurs.</div>
+ If the path ever has a direct hit on the rectangle, then a special value
+ is returned. This special value terminates all ongoing accumulation on up
+ through the call chain and ends up getting returned to the calling
+ function which can then produce an answer directly. For intersection
+ tests, the answer is always "true" if the path intersects the rectangle.
+ For containment tests, the answer is always "false" if the path
+ intersects the rectangle. Thus, no further processing is ever needed if
+ an intersection occurs.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../constant-values.html#com.pump.geom.area.CurveX.RECT_INTERSECTS">Constant Field Values</a></dd>
@@ -708,18 +705,15 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;int&nbsp;pointCrossingsForPath(java.awt.geom.PathIterator&nbsp;pi,
                                         double&nbsp;px,
                                         double&nbsp;py)</pre>
-<div class="block">Calculates the number of times the given path
- crosses the ray extending to the right from (px,py).
- If the point lies on a part of the path,
- then no crossings are counted for that intersection.
- +1 is added for each crossing where the Y coordinate is increasing
- -1 is added for each crossing where the Y coordinate is decreasing
- The return value is the sum of all crossings for every segment in
- the path.
- The path must start with a SEG_MOVETO, otherwise an exception is
- thrown.
- The caller must check p[xy] for NaN values.
- The caller may also reject infinite p[xy] values as well.</div>
+<div class="block">Calculates the number of times the given path crosses the ray extending
+ to the right from (px,py). If the point lies on a part of the path, then
+ no crossings are counted for that intersection. +1 is added for each
+ crossing where the Y coordinate is increasing -1 is added for each
+ crossing where the Y coordinate is decreasing The return value is the sum
+ of all crossings for every segment in the path. The path must start with
+ a SEG_MOVETO, otherwise an exception is thrown. The caller must check
+ p[xy] for NaN values. The caller may also reject infinite p[xy] values as
+ well.</div>
 </li>
 </ul>
 <a name="pointCrossingsForLine-double-double-double-double-double-double-">
@@ -734,11 +728,11 @@ extends java.lang.Object</pre>
                                         double&nbsp;y0,
                                         double&nbsp;x1,
                                         double&nbsp;y1)</pre>
-<div class="block">Calculates the number of times the line from (x0,y0) to (x1,y1)
- crosses the ray extending to the right from (px,py).
- If the point lies on the line, then no crossings are recorded.
- +1 is returned for a crossing where the Y coordinate is increasing
- -1 is returned for a crossing where the Y coordinate is decreasing</div>
+<div class="block">Calculates the number of times the line from (x0,y0) to (x1,y1) crosses
+ the ray extending to the right from (px,py). If the point lies on the
+ line, then no crossings are recorded. +1 is returned for a crossing where
+ the Y coordinate is increasing -1 is returned for a crossing where the Y
+ coordinate is decreasing</div>
 </li>
 </ul>
 <a name="pointCrossingsForQuad-double-double-double-double-double-double-double-double-int-">
@@ -756,14 +750,13 @@ extends java.lang.Object</pre>
                                         double&nbsp;x1,
                                         double&nbsp;y1,
                                         int&nbsp;level)</pre>
-<div class="block">Calculates the number of times the quad from (x0,y0) to (x1,y1)
- crosses the ray extending to the right from (px,py).
- If the point lies on a part of the curve,
- then no crossings are counted for that intersection.
- the level parameter should be 0 at the top-level call and will count
- up for each recursion level to prevent infinite recursion
- +1 is added for each crossing where the Y coordinate is increasing
- -1 is added for each crossing where the Y coordinate is decreasing</div>
+<div class="block">Calculates the number of times the quad from (x0,y0) to (x1,y1) crosses
+ the ray extending to the right from (px,py). If the point lies on a part
+ of the curve, then no crossings are counted for that intersection. the
+ level parameter should be 0 at the top-level call and will count up for
+ each recursion level to prevent infinite recursion +1 is added for each
+ crossing where the Y coordinate is increasing -1 is added for each
+ crossing where the Y coordinate is decreasing</div>
 </li>
 </ul>
 <a name="pointCrossingsForCubic-double-double-double-double-double-double-double-double-double-double-int-">
@@ -783,14 +776,13 @@ extends java.lang.Object</pre>
                                          double&nbsp;x1,
                                          double&nbsp;y1,
                                          int&nbsp;level)</pre>
-<div class="block">Calculates the number of times the cubic from (x0,y0) to (x1,y1)
- crosses the ray extending to the right from (px,py).
- If the point lies on a part of the curve,
- then no crossings are counted for that intersection.
- the level parameter should be 0 at the top-level call and will count
- up for each recursion level to prevent infinite recursion
- +1 is added for each crossing where the Y coordinate is increasing
- -1 is added for each crossing where the Y coordinate is decreasing</div>
+<div class="block">Calculates the number of times the cubic from (x0,y0) to (x1,y1) crosses
+ the ray extending to the right from (px,py). If the point lies on a part
+ of the curve, then no crossings are counted for that intersection. the
+ level parameter should be 0 at the top-level call and will count up for
+ each recursion level to prevent infinite recursion +1 is added for each
+ crossing where the Y coordinate is increasing -1 is added for each
+ crossing where the Y coordinate is decreasing</div>
 </li>
 </ul>
 <a name="rectCrossingsForPath-java.awt.geom.PathIterator-double-double-double-double-">
@@ -804,16 +796,14 @@ extends java.lang.Object</pre>
                                        double&nbsp;rymin,
                                        double&nbsp;rxmax,
                                        double&nbsp;rymax)</pre>
-<div class="block">Accumulate the number of times the path crosses the shadow
- extending to the right of the rectangle.  See the comment
- for the RECT_INTERSECTS constant for more complete details.
- The return value is the sum of all crossings for both the
- top and bottom of the shadow for every segment in the path,
- or the special value RECT_INTERSECTS if the path ever enters
- the interior of the rectangle.
- The path must start with a SEG_MOVETO, otherwise an exception is
- thrown.
- The caller must check r[xy]{min,max} for NaN values.</div>
+<div class="block">Accumulate the number of times the path crosses the shadow extending to
+ the right of the rectangle. See the comment for the RECT_INTERSECTS
+ constant for more complete details. The return value is the sum of all
+ crossings for both the top and bottom of the shadow for every segment in
+ the path, or the special value RECT_INTERSECTS if the path ever enters
+ the interior of the rectangle. The path must start with a SEG_MOVETO,
+ otherwise an exception is thrown. The caller must check r[xy]{min,max}
+ for NaN values.</div>
 </li>
 </ul>
 <a name="rectCrossingsForLine-int-double-double-double-double-double-double-double-double-">
@@ -831,9 +821,9 @@ extends java.lang.Object</pre>
                                        double&nbsp;y0,
                                        double&nbsp;x1,
                                        double&nbsp;y1)</pre>
-<div class="block">Accumulate the number of times the line crosses the shadow
- extending to the right of the rectangle.  See the comment
- for the RECT_INTERSECTS constant for more complete details.</div>
+<div class="block">Accumulate the number of times the line crosses the shadow extending to
+ the right of the rectangle. See the comment for the RECT_INTERSECTS
+ constant for more complete details.</div>
 </li>
 </ul>
 <a name="rectCrossingsForQuad-int-double-double-double-double-double-double-double-double-double-double-int-">
@@ -854,9 +844,9 @@ extends java.lang.Object</pre>
                                        double&nbsp;x1,
                                        double&nbsp;y1,
                                        int&nbsp;level)</pre>
-<div class="block">Accumulate the number of times the quad crosses the shadow
- extending to the right of the rectangle.  See the comment
- for the RECT_INTERSECTS constant for more complete details.</div>
+<div class="block">Accumulate the number of times the quad crosses the shadow extending to
+ the right of the rectangle. See the comment for the RECT_INTERSECTS
+ constant for more complete details.</div>
 </li>
 </ul>
 <a name="rectCrossingsForCubic-int-double-double-double-double-double-double-double-double-double-double-double-double-int-">
@@ -879,9 +869,9 @@ extends java.lang.Object</pre>
                                         double&nbsp;x1,
                                         double&nbsp;y1,
                                         int&nbsp;level)</pre>
-<div class="block">Accumulate the number of times the cubic crosses the shadow
- extending to the right of the rectangle.  See the comment
- for the RECT_INTERSECTS constant for more complete details.</div>
+<div class="block">Accumulate the number of times the cubic crosses the shadow extending to
+ the right of the rectangle. See the comment for the RECT_INTERSECTS
+ constant for more complete details.</div>
 </li>
 </ul>
 <a name="getDirection--">

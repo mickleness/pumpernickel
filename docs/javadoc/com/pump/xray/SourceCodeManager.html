@@ -110,16 +110,17 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">SourceCodeManager</span>
 extends java.lang.Object</pre>
-<div class="block">This manages a catalog of classes. If you call
- <a href="../../../com/pump/xray/SourceCodeManager.html#addClasses-java.lang.Class...-"><code>addClasses(Class...)</code></a> with exactly one Class object
- and then call <a href="../../../com/pump/xray/SourceCodeManager.html#build--"><code>build()</code></a>, this will reach around and identify
- all the dependencies required to fully represent the class in question.
- (And the dependencies of those dependencies, and so on.) For example:
- you can't represent all the public method signatures of a java.util.HashMap
- without a java.util.Map, a java.util.Iterator, a java.util.Map$Entry, etc.
+<div class="block">This manages a catalog of classes. If you call <a href="../../../com/pump/xray/SourceCodeManager.html#addClasses-java.lang.Class...-"><code>addClasses(Class...)</code></a>
+ with exactly one Class object and then call <a href="../../../com/pump/xray/SourceCodeManager.html#build--"><code>build()</code></a>, this will reach
+ around and identify all the dependencies required to fully represent the
+ class in question. (And the dependencies of those dependencies, and so on.)
+ For example: you can't represent all the public method signatures of a
+ java.util.HashMap without a java.util.Map, a java.util.Iterator, a
+ java.util.Map$Entry, etc.
  <p>
- By passing a SourceCodeManager to all <code>StreamWriter</code> subclasses: we
- give them a callback to constantly declare a need for more classes as they write data.</div>
+ By passing a SourceCodeManager to all <code>StreamWriter</code> subclasses:
+ we give them a callback to constantly declare a need for more classes as they
+ write data.</div>
 </li>
 </ul>
 </div>
@@ -185,13 +186,15 @@ extends java.lang.Object</pre>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.Class,<a href="../../../com/pump/xray/ClassWriter.html" title="class in com.pump.xray">ClassWriter</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/xray/SourceCodeManager.html#build--">build</a></span>()</code>
-<div class="block">This explores required classes and adds to the classes this manager identifies.</div>
+<div class="block">This explores required classes and adds to the classes this manager
+ identifies.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/xray/SourceCodeManager.html#catalogClass-java.lang.Class-">catalogClass</a></span>(java.lang.Class&nbsp;z)</code>
-<div class="block">Catalog a Class as being required to emulate/represent in the x-ray'd jar.</div>
+<div class="block">Catalog a Class as being required to emulate/represent in the x-ray'd
+ jar.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -203,14 +206,16 @@ extends java.lang.Object</pre>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/xray/SourceCodeManager.html#isSupported-java.lang.Class-">isSupported</a></span>(java.lang.Class&nbsp;t)</code>
-<div class="block">Return true if the argument should be supported/represented in the x-ray'd jar.</div>
+<div class="block">Return true if the argument should be supported/represented in the
+ x-ray'd jar.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/xray/SourceCodeManager.html#populateInnerClasses-com.pump.xray.ClassWriter-java.util.Map-">populateInnerClasses</a></span>(<a href="../../../com/pump/xray/ClassWriter.html" title="class in com.pump.xray">ClassWriter</a>&nbsp;writer,
                     java.util.Map&lt;java.lang.Class,java.util.Collection&lt;java.lang.Class&gt;&gt;&nbsp;allClasses)</code>
-<div class="block">Given a parent class's ClassWriter this populates all the necessary inner classes (if any).</div>
+<div class="block">Given a parent class's ClassWriter this populates all the necessary inner
+ classes (if any).</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -249,9 +254,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>classMap</h4>
 <pre>protected&nbsp;java.util.Map&lt;java.lang.Class,java.util.Collection&lt;java.lang.Class&gt;&gt; classMap</pre>
-<div class="block">A map of every class to the classes it contains.
- This is effectively a tree structure compressed into a map,
- where the parent is the key and the children are the values.</div>
+<div class="block">A map of every class to the classes it contains. This is effectively a
+ tree structure compressed into a map, where the parent is the key and the
+ children are the values.</div>
 </li>
 </ul>
 </li>
@@ -297,7 +302,8 @@ extends java.lang.Object</pre>
 <h4>build</h4>
 <pre>public&nbsp;java.util.Map&lt;java.lang.Class,<a href="../../../com/pump/xray/ClassWriter.html" title="class in com.pump.xray">ClassWriter</a>&gt;&nbsp;build()
                                                  throws java.lang.Exception</pre>
-<div class="block">This explores required classes and adds to the classes this manager identifies.</div>
+<div class="block">This explores required classes and adds to the classes this manager
+ identifies.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.Exception</code></dd>
@@ -312,11 +318,14 @@ extends java.lang.Object</pre>
 <h4>populateInnerClasses</h4>
 <pre>protected&nbsp;void&nbsp;populateInnerClasses(<a href="../../../com/pump/xray/ClassWriter.html" title="class in com.pump.xray">ClassWriter</a>&nbsp;writer,
                                     java.util.Map&lt;java.lang.Class,java.util.Collection&lt;java.lang.Class&gt;&gt;&nbsp;allClasses)</pre>
-<div class="block">Given a parent class's ClassWriter this populates all the necessary inner classes (if any).</div>
+<div class="block">Given a parent class's ClassWriter this populates all the necessary inner
+ classes (if any).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>writer</code> - the parent ClassWriter to possibly add declared/nested classes to.</dd>
-<dd><code>allClasses</code> - a map of all classes, where the key is the parent and the value is a collection of its children.</dd>
+<dd><code>writer</code> - the parent ClassWriter to possibly add declared/nested classes
+            to.</dd>
+<dd><code>allClasses</code> - a map of all classes, where the key is the parent and the
+            value is a collection of its children.</dd>
 </dl>
 </li>
 </ul>
@@ -327,9 +336,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getClassMap</h4>
 <pre>public&nbsp;java.util.Map&lt;java.lang.Class,java.util.Collection&lt;java.lang.Class&gt;&gt;&nbsp;getClassMap()</pre>
-<div class="block">Return a map of every class to the classes it contains.
- This is effectively a tree structure compressed into a map,
- where the parent is the key and the children are the values.</div>
+<div class="block">Return a map of every class to the classes it contains. This is
+ effectively a tree structure compressed into a map, where the parent is
+ the key and the children are the values.</div>
 </li>
 </ul>
 <a name="catalogClass-java.lang.Class-">
@@ -339,7 +348,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>catalogClass</h4>
 <pre>protected&nbsp;void&nbsp;catalogClass(java.lang.Class&nbsp;z)</pre>
-<div class="block">Catalog a Class as being required to emulate/represent in the x-ray'd jar.</div>
+<div class="block">Catalog a Class as being required to emulate/represent in the x-ray'd
+ jar.</div>
 </li>
 </ul>
 <a name="isSupported-java.lang.Class-">
@@ -349,10 +359,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>isSupported</h4>
 <pre>public&nbsp;boolean&nbsp;isSupported(java.lang.Class&nbsp;t)</pre>
-<div class="block">Return true if the argument should be supported/represented in the x-ray'd jar.
+<div class="block">Return true if the argument should be supported/represented in the
+ x-ray'd jar.
  <p>
- Subclasses may override this to impose their own rules about what is and isn't
- appropriate to inlude.</div>
+ Subclasses may override this to impose their own rules about what is and
+ isn't appropriate to inlude.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>t</code> - the class to evaluate.</dd>

@@ -115,9 +115,9 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ErrorDiffusionImageQuantization</span>
 extends <a href="../../../../../com/pump/image/pixel/quantize/ImageQuantization.html" title="class in com.pump.image.pixel.quantize">ImageQuantization</a></pre>
-<div class="block">This applies <a href="http://en.wikipedia.org/wiki/Error_diffusion">error diffusion</a>
- to an image. Note the <a href="../../../../../com/pump/image/pixel/quantize/ImageQuantization.html" title="class in com.pump.image.pixel.quantize"><code>ImageQuantization</code></a> class offers a few static fields with
- pre-configured error diffusion settings.</div>
+<div class="block">This applies <a href="http://en.wikipedia.org/wiki/Error_diffusion">error
+ diffusion</a> to an image. Note the <a href="../../../../../com/pump/image/pixel/quantize/ImageQuantization.html" title="class in com.pump.image.pixel.quantize"><code>ImageQuantization</code></a> class offers a
+ few static fields with pre-configured error diffusion settings.</div>
 </li>
 </ul>
 </div>
@@ -139,7 +139,8 @@ extends <a href="../../../../../com/pump/image/pixel/quantize/ImageQuantization.
 <tr class="altColor">
 <td class="colFirst"><code>protected class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/pump/image/pixel/quantize/ErrorDiffusionImageQuantization.ErrorDiffusionIndexedBytePixelIterator.html" title="class in com.pump.image.pixel.quantize">ErrorDiffusionImageQuantization.ErrorDiffusionIndexedBytePixelIterator</a></span></code>
-<div class="block">The pixel iterator that implements the error diffusion image quantization.</div>
+<div class="block">The pixel iterator that implements the error diffusion image
+ quantization.</div>
 </td>
 </tr>
 </table>
@@ -246,11 +247,11 @@ extends <a href="../../../../../com/pump/image/pixel/quantize/ImageQuantization.
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>kernel</code> - a two-dimension kernel used to distribute error to adjacent
- pixels. The top-middle cell of this kernel is assumed to be the pixel
- currently being evaluated. Everything in the top row to the left of that
- cell should be zero (because those pixels have already been processed).
- The <a href="../../../../../com/pump/image/pixel/quantize/ImageQuantization.html" title="class in com.pump.image.pixel.quantize"><code>ImageQuantization</code></a> class offers a few static fields with
- popular kernels.</dd>
+            pixels. The top-middle cell of this kernel is assumed to be
+            the pixel currently being evaluated. Everything in the top row
+            to the left of that cell should be zero (because those pixels
+            have already been processed). The <a href="../../../../../com/pump/image/pixel/quantize/ImageQuantization.html" title="class in com.pump.image.pixel.quantize"><code>ImageQuantization</code></a>
+            class offers a few static fields with popular kernels.</dd>
 </dl>
 </li>
 </ul>
@@ -278,8 +279,8 @@ extends <a href="../../../../../com/pump/image/pixel/quantize/ImageQuantization.
 <dd><code><a href="../../../../../com/pump/image/pixel/quantize/ImageQuantization.html#createImageData-java.awt.image.BufferedImage-com.pump.image.pixel.quantize.ColorLUT-">createImageData</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/pump/image/pixel/quantize/ImageQuantization.html" title="class in com.pump.image.pixel.quantize">ImageQuantization</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - the image to downsample.</dd>
-<dd><code>colorLUT</code> - the new color table to use. This must be created from
- an IndexColorModel.</dd>
+<dd><code>colorLUT</code> - the new color table to use. This must be created from an
+            IndexColorModel.</dd>
 </dl>
 </li>
 </ul>

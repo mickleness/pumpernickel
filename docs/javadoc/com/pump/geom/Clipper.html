@@ -150,9 +150,9 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/Clipper.html#clip-java.awt.Graphics2D-java.awt.Shape-">clip</a></span>(java.awt.Graphics2D&nbsp;g,
     java.awt.Shape&nbsp;newClip)</code>
-<div class="block">By default if a Graphics2D is asked to clip to a new shape,
- it may resort to Area objects if either the current clipping
- and the new clipping are not rectangles.</div>
+<div class="block">By default if a Graphics2D is asked to clip to a new shape, it may resort
+ to Area objects if either the current clipping and the new clipping are
+ not rectangles.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -245,8 +245,9 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - a shape that you want clipped</dd>
 <dd><code>t</code> - the transform to transform <code>s</code> by.
- <P>This may be <code>null</code>, indicating that <code>s</code> should
- not be transformed.</dd>
+            <P>
+            This may be <code>null</code>, indicating that <code>s</code>
+            should not be transformed.</dd>
 <dd><code>r</code> - the rectangle to clip to</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a <code>GeneralPath</code> enclosing the new shape.</dd>
@@ -261,15 +262,17 @@ extends java.lang.Object</pre>
 <h4>clip</h4>
 <pre>public static&nbsp;void&nbsp;clip(java.awt.Graphics2D&nbsp;g,
                         java.awt.Shape&nbsp;newClip)</pre>
-<div class="block">By default if a Graphics2D is asked to clip to a new shape,
- it may resort to Area objects if either the current clipping
- and the new clipping are not rectangles.
- <P>This method with offer a slight improvement over this model:
- if <i>either</i> the old clip or the new clip is a rectangle,
- then this uses the <code>Clipper.clipToRect()</code> method.
- This avoids the slow-but-accurate Area class.
- <P>This should only be used to replace <code>Graphics2D.clip()</code>,
- not <code>Graphics2D.setClip()</code>.</div>
+<div class="block">By default if a Graphics2D is asked to clip to a new shape, it may resort
+ to Area objects if either the current clipping and the new clipping are
+ not rectangles.
+ <P>
+ This method with offer a slight improvement over this model: if
+ <i>either</i> the old clip or the new clip is a rectangle, then this uses
+ the <code>Clipper.clipToRect()</code> method. This avoids the
+ slow-but-accurate Area class.
+ <P>
+ This should only be used to replace <code>Graphics2D.clip()</code>, not
+ <code>Graphics2D.setClip()</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graphics2D to clip to</dd>

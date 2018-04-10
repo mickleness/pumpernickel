@@ -111,9 +111,9 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">ModifierTracker</span>
 extends java.lang.Object</pre>
 <div class="block">This keeps track of which modifiers are currently pressed.
- <P>For example, if you need the cursor to change when the alt key
- is pressed: just add a listener to this class and you will be notified
- when appropriate.</div>
+ <P>
+ For example, if you need the cursor to change when the alt key is pressed:
+ just add a listener to this class and you will be notified when appropriate.</div>
 </li>
 </ul>
 </div>
@@ -270,12 +270,13 @@ extends java.lang.Object</pre>
 <h4>track</h4>
 <pre>public static&nbsp;void&nbsp;track(javax.swing.JApplet&nbsp;applet)</pre>
 <div class="block">Add KeyListeners to everything in an applet.
- <P>Unsigned applets can't simply add an event listener
- to the toolkit for security reasons, so this method provides
- an alternative approach.
- <P>This alternative should work in controlled environments where
- components are not added to an applet after this method is called,
- but in other cases it might fail.</div>
+ <P>
+ Unsigned applets can't simply add an event listener to the toolkit for
+ security reasons, so this method provides an alternative approach.
+ <P>
+ This alternative should work in controlled environments where components
+ are not added to an applet after this method is called, but in other
+ cases it might fail.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>applet</code> - the applet to track</dd>

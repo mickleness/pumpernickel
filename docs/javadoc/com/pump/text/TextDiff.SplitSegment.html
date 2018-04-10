@@ -123,7 +123,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public static class <span class="typeNameLabel">TextDiff.SplitSegment</span>
 extends <a href="../../../com/pump/text/TextDiff.DiffSegment.html" title="class in com.pump.text">TextDiff.DiffSegment</a></pre>
-<div class="block">This segment represents two unique Strings depending on whether you're reading branch A or B.</div>
+<div class="block">This segment represents two unique Strings depending on whether you're
+ reading branch A or B.</div>
 </li>
 </ul>
 </div>
@@ -314,8 +315,8 @@ extends <a href="../../../com/pump/text/TextDiff.DiffSegment.html" title="class 
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/text/TextDiff.DiffSegment.html#clone-boolean-">clone</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/text/TextDiff.DiffSegment.html" title="class in com.pump.text">TextDiff.DiffSegment</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>swapBranches</code> - if true then branch A and B should swap
- as we clone this node.</dd>
+<dd><code>swapBranches</code> - if true then branch A and B should swap as we clone this
+            node.</dd>
 </dl>
 </li>
 </ul>
@@ -333,16 +334,17 @@ extends <a href="../../../com/pump/text/TextDiff.DiffSegment.html" title="class 
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/text/TextDiff.DiffSegment.html#getText-com.pump.text.TextDiff.Branch-boolean-">getText</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/text/TextDiff.DiffSegment.html" title="class in com.pump.text">TextDiff.DiffSegment</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>branch</code> - the branch of this node to consider. For a <code>SharedSegment</code>
- this argument is ignored, but for a <code>SplitSegment</code> this argument
- controls which String is returned.</dd>
-<dd><code>appendSubsequentNodes</code> - if true then this appends all
- subsequent nodes. This is useful if just want the whole String of a branch.
- If you need to study individual pieces more carefully then you may want to
- pass false here.</dd>
+<dd><code>branch</code> - the branch of this node to consider. For a
+            <code>SharedSegment</code> this argument is ignored, but for a
+            <code>SplitSegment</code> this argument controls which String
+            is returned.</dd>
+<dd><code>appendSubsequentNodes</code> - if true then this appends all subsequent nodes. This is
+            useful if just want the whole String of a branch. If you
+            need to study individual pieces more carefully then you
+            may want to pass false here.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the text of this node. This returns the raw text with no quotations
- or square/curly brackets.</dd>
+<dd>the text of this node. This returns the raw text with no
+         quotations or square/curly brackets.</dd>
 </dl>
 </li>
 </ul>

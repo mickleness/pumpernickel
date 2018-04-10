@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -111,9 +111,10 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">IOUtils</span>
 extends java.lang.Object</pre>
 <div class="block">A collection of static methods relating to Files and IO operations.
- <P>These methods should have very few class dependencies; if you're
- considering adding a method that will require several other classes/packages,
- please put it in a different location.</div>
+ <P>
+ These methods should have very few class dependencies; if you're considering
+ adding a method that will require several other classes/packages, please put
+ it in a different location.</div>
 </li>
 </ul>
 </div>
@@ -219,25 +220,30 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#formatIndex-int-int-">formatIndex</a></span>(int&nbsp;index,
-           int&nbsp;totalSize)</code>
-<div class="block">Format a number as String that can be always be large enough to hold "totalSize" digits.</div>
-</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#formatFileSize-long-">formatFileSize</a></span>(long&nbsp;byteCount)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#formatIndex-int-int-">formatIndex</a></span>(int&nbsp;index,
+           int&nbsp;totalSize)</code>
+<div class="block">Format a number as String that can be always be large enough to hold
+ "totalSize" digits.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#getCRC-java.io.InputStream-boolean-">getCRC</a></span>(java.io.InputStream&nbsp;in,
       boolean&nbsp;close)</code>
 <div class="block">Calculate the CRC32 checksum of all the data in an InputStream.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#getLength-java.io.InputStream-">getLength</a></span>(java.io.InputStream&nbsp;in)</code>
 <div class="block">Return the length of an InputStream.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#getUniqueFile-java.io.File-java.lang.String-boolean-boolean-">getUniqueFile</a></span>(java.io.File&nbsp;parentFile,
              java.lang.String&nbsp;name,
@@ -246,103 +252,102 @@ extends java.lang.Object</pre>
 <div class="block">Returns a file that does not yet exist.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#getUniqueTempFile-java.lang.String-">getUniqueTempFile</a></span>(java.lang.String&nbsp;name)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#isAlias-java.io.File-">isAlias</a></span>(java.io.File&nbsp;file)</code>
 <div class="block">Return true if this file is an alias to another file.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#isZip-java.io.File-">isZip</a></span>(java.io.File&nbsp;file)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#load-java.util.Properties-java.io.File-">load</a></span>(java.util.Properties&nbsp;p,
     java.io.File&nbsp;file)</code>
 <div class="block">Loads properties into a file.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#load-java.util.Properties-java.net.URL-">load</a></span>(java.util.Properties&nbsp;p,
     java.net.URL&nbsp;url)</code>
 <div class="block">Loads properties into a file.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#read-java.io.File-">read</a></span>(java.io.File&nbsp;file)</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#read-java.io.InputStream-">read</a></span>(java.io.InputStream&nbsp;in)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#read-java.io.InputStream-byte:A-">read</a></span>(java.io.InputStream&nbsp;in,
     byte[]&nbsp;dest)</code>
 <div class="block">Read data into the destination array.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#read-java.io.InputStream-java.lang.String-">read</a></span>(java.io.InputStream&nbsp;in,
     java.lang.String&nbsp;charsetName)</code>&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#read-java.io.Reader-">read</a></span>(java.io.Reader&nbsp;r)</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static java.lang.String[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#readLines-java.io.File-int-">readLines</a></span>(java.io.File&nbsp;file,
          int&nbsp;maxArraySize)</code>&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static java.lang.String[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#readLines-java.io.InputStream-int-">readLines</a></span>(java.io.InputStream&nbsp;in,
          int&nbsp;maxArraySize)</code>&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>static java.util.Map&lt;java.lang.String,java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#readMap-java.net.URL-">readMap</a></span>(java.net.URL&nbsp;resource)</code>
 <div class="block">Create a simple map based on key/values separated by an "=".</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#reveal-java.io.File-">reveal</a></span>(java.io.File&nbsp;file)</code>
 <div class="block">Reveal (select) a file in the operating system.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#serialize-java.io.Serializable-java.io.File-">serialize</a></span>(java.io.Serializable&nbsp;object,
          java.io.File&nbsp;dest)</code>
 <div class="block">Serialize and compress an object to the file path provided.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#skipFully-java.io.InputStream-long-">skipFully</a></span>(java.io.InputStream&nbsp;in,
          long&nbsp;amount)</code>
-<div class="block">The description of InputStream.skip() is
- unfulfilling.</div>
+<div class="block">The description of InputStream.skip() is unfulfilling.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#write-java.io.File-java.io.OutputStream-">write</a></span>(java.io.File&nbsp;file,
      java.io.OutputStream&nbsp;out)</code>
 <div class="block">Writes a file to an OutputStream.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#write-java.io.File-java.lang.String-boolean-">write</a></span>(java.io.File&nbsp;file,
      java.lang.String&nbsp;text,
@@ -350,29 +355,28 @@ extends java.lang.Object</pre>
 <div class="block">Write the text provided to a File.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#write-java.io.InputStream-java.io.File-">write</a></span>(java.io.InputStream&nbsp;in,
      java.io.File&nbsp;dest)</code>
 <div class="block">Writes the entire InputStream into the destination file.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#write-java.io.InputStream-java.io.OutputStream-">write</a></span>(java.io.InputStream&nbsp;in,
      java.io.OutputStream&nbsp;out)</code>
 <div class="block">Writes the InputStream into the OutputStream.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#write-java.util.Properties-java.io.File-">write</a></span>(java.util.Properties&nbsp;p,
      java.io.File&nbsp;file)</code>
-<div class="block">Writes a <code>Properties</code> object to
- a <code>File</code>.</div>
+<div class="block">Writes a <code>Properties</code> object to a <code>File</code>.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#writeLines-java.io.File-java.lang.String:A-boolean-">writeLines</a></span>(java.io.File&nbsp;file,
           java.lang.String[]&nbsp;lines,
@@ -380,7 +384,7 @@ extends java.lang.Object</pre>
 <div class="block">Rewrite a file using the lines provided.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#zipEquals-java.io.File-java.io.File-java.lang.String...-">zipEquals</a></span>(java.io.File&nbsp;zip1,
          java.io.File&nbsp;zip2,
@@ -456,9 +460,24 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - the file to return the size of.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a human-readable String representing
- a file's size. For example, this may return "67.3 KB"
- or "203.4 MB".</dd>
+<dd>a human-readable String representing a file's size. For example,
+         this may return "67.3 KB" or "203.4 MB".</dd>
+</dl>
+</li>
+</ul>
+<a name="formatFileSize-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>formatFileSize</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;formatFileSize(long&nbsp;byteCount)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>byteCount</code> - the size of a file in bytes.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a human-readable String representing a file's size. For example,
+         this may return "67.3 KB" or "203.4 MB".</dd>
 </dl>
 </li>
 </ul>
@@ -470,9 +489,10 @@ extends java.lang.Object</pre>
 <h4>formatIndex</h4>
 <pre>public static&nbsp;java.lang.String&nbsp;formatIndex(int&nbsp;index,
                                            int&nbsp;totalSize)</pre>
-<div class="block">Format a number as String that can be always be large enough to hold "totalSize" digits.
- So for example: "1" should be formatted as "001" if there will eventually be "235" elements,
- but it should be formatted as "01" if there will only be "23" elements.</div>
+<div class="block">Format a number as String that can be always be large enough to hold
+ "totalSize" digits. So for example: "1" should be formatted as "001" if
+ there will eventually be "235" elements, but it should be formatted as
+ "01" if there will only be "23" elements.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - the index to format.</dd>
@@ -491,13 +511,11 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;long&nbsp;skipFully(java.io.InputStream&nbsp;in,
                              long&nbsp;amount)
                       throws java.io.IOException</pre>
-<div class="block">The description of InputStream.skip() is
- unfulfilling.  It is perfectly OK for
- InputStream.skip() to return zero, but
- not necessarily mean EOF.
- <P>This method will skip either the number of bytes
- requested, or if it falls short that indicates we read
- to the end of the file.</div>
+<div class="block">The description of InputStream.skip() is unfulfilling. It is perfectly OK
+ for InputStream.skip() to return zero, but not necessarily mean EOF.
+ <P>
+ This method will skip either the number of bytes requested, or if it
+ falls short that indicates we read to the end of the file.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - the InputStream to skip bytes from</dd>
@@ -517,8 +535,8 @@ extends java.lang.Object</pre>
 <h4>delete</h4>
 <pre>public static&nbsp;boolean&nbsp;delete(java.io.File&nbsp;file)</pre>
 <div class="block">Delete this file and all its children, if any.
- <p>Special OS-specific commands
- may be applied to optimize deletion.</div>
+ <p>
+ Special OS-specific commands may be applied to optimize deletion.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - the file to delete.</dd>
@@ -555,16 +573,16 @@ extends java.lang.Object</pre>
                                 java.io.File&nbsp;zip2,
                                 java.lang.String...&nbsp;ignorableEntries)
                          throws java.io.IOException</pre>
-<div class="block">Returns true if these zip files act like equivalent sets.
- The order of the zip entries is not important: if they contain
- exactly the same contents, this returns true.</div>
+<div class="block">Returns true if these zip files act like equivalent sets. The order of
+ the zip entries is not important: if they contain exactly the same
+ contents, this returns true.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>zip1</code> - one zip file</dd>
 <dd><code>zip2</code> - another zip file</dd>
 <dd><code>ignorableEntries</code> - if non-null then this if a ZipEntry matches any of these
- patterns it is ignored in the comparison. For example "*.RSA" will skip all
- entries that end in ".RSA".</dd>
+            patterns it is ignored in the comparison. For example "*.RSA"
+            will skip all entries that end in ".RSA".</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the two zip archives are equivalent sets</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -580,8 +598,8 @@ extends java.lang.Object</pre>
 <h4>getLength</h4>
 <pre>public static&nbsp;long&nbsp;getLength(java.io.InputStream&nbsp;in)
                       throws java.io.IOException</pre>
-<div class="block">Return the length of an InputStream. This is measured by invoking <code>InputStream.skip(..)</code>
- and <code>InputStream.read()</code>.</div>
+<div class="block">Return the length of an InputStream. This is measured by invoking
+ <code>InputStream.skip(..)</code> and <code>InputStream.read()</code>.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
@@ -601,7 +619,8 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - the InputStream to read to completion.</dd>
-<dd><code>close</code> - whether this method will invoke <code>in.close()</code> on completion.</dd>
+<dd><code>close</code> - whether this method will invoke <code>in.close()</code> on
+            completion.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the CRC32 checksum for this InputStream.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -649,9 +668,8 @@ extends java.lang.Object</pre>
 <dd><code>file1</code> - the first file</dd>
 <dd><code>file2</code> - the second file</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if two files are exactly equal.
- This will call <code>zipEquals()</code> if both files
- are zip files.</dd>
+<dd>true if two files are exactly equal. This will call
+         <code>zipEquals()</code> if both files are zip files.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
 </dl>
@@ -672,7 +690,8 @@ extends java.lang.Object</pre>
 <dd><code>in</code> - the InputStream to read.</dd>
 <dd><code>dest</code> - the destination to write to</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the number of bytes read (note this will be less than dest.length when the end of the stream is reached).</dd>
+<dd>the number of bytes read (note this will be less than dest.length
+         when the end of the stream is reached).</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -687,14 +706,15 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;copy(java.io.File&nbsp;src,
                         java.io.File&nbsp;dst)
                  throws java.io.IOException</pre>
-<div class="block">Writes a copy of a file. This is shorthand for <code>copy(src, dst, false)</code>.</div>
+<div class="block">Writes a copy of a file. This is shorthand for
+ <code>copy(src, dst, false)</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>src</code> - the file to copy</dd>
-<dd><code>dst</code> - the location to write the new file.
- This method also invokes parentFile.mkdirs() and
- dst.createNewFile(). If either of these methods return false
- then an IOException is thrown before any data transfer is attempted.</dd>
+<dd><code>dst</code> - the location to write the new file. This method also invokes
+            parentFile.mkdirs() and dst.createNewFile(). If either of
+            these methods return false then an IOException is thrown
+            before any data transfer is attempted.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -714,15 +734,18 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>src</code> - the file to copy</dd>
-<dd><code>dst</code> - the location to write the new file.
- This method also invokes parentFile.mkdirs() and
- dst.createNewFile(). If either of these methods return false
- then an IOException is thrown before any data transfer is attempted.</dd>
-<dd><code>abortIfIdentical</code> - if true then this method first calls <code>equals(src, dst)</code>,
- and exits this method if the two files are identical. This avoids any writing, but it introduces
- a separate pass (reading) before any writing begins.</dd>
+<dd><code>dst</code> - the location to write the new file. This method also invokes
+            parentFile.mkdirs() and dst.createNewFile(). If either of
+            these methods return false then an IOException is thrown
+            before any data transfer is attempted.</dd>
+<dd><code>abortIfIdentical</code> - if true then this method first calls
+            <code>equals(src, dst)</code>, and exits this method if the
+            two files are identical. This avoids any writing, but it
+            introduces a separate pass (reading) before any writing
+            begins.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>false if we aborted without writing anything, true if the operation wrote/copied the file.</dd>
+<dd>false if we aborted without writing anything, true if the
+         operation wrote/copied the file.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -743,11 +766,11 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - the file to write to</dd>
 <dd><code>lines</code> - the new lines to write.</dd>
-<dd><code>abortIfNoChange</code> - if true then this method first checks
- whether the current file exactly matches what will be written.</dd>
+<dd><code>abortIfNoChange</code> - if true then this method first checks whether the current file
+            exactly matches what will be written.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the file was written, false if this method returned
- without writing anything.</dd>
+         without writing anything.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -767,8 +790,9 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - the file to read</dd>
-<dd><code>maxArraySize</code> - the maximum number of lines this method will return.
- If this is negative then it is ignored and all lines will always be read.</dd>
+<dd><code>maxArraySize</code> - the maximum number of lines this method will return. If this
+            is negative then it is ignored and all lines will always be
+            read.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all the lines of text in a text file.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -790,8 +814,9 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - the input stream to read.</dd>
-<dd><code>maxArraySize</code> - the maximum number of lines this method will return.
- If this is negative then it is ignored and all lines will always be read.</dd>
+<dd><code>maxArraySize</code> - the maximum number of lines this method will return. If this
+            is negative then it is ignored and all lines will always be
+            read.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all the lines of text in a text file.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -816,11 +841,11 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - the file to write to.</dd>
 <dd><code>text</code> - the text to write.</dd>
-<dd><code>abortIfNoChange</code> - if true then this method first checks
- whether the current file exactly matches what will be written.</dd>
+<dd><code>abortIfNoChange</code> - if true then this method first checks whether the current file
+            exactly matches what will be written.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the file was written, false if this method returned
- without writing anything.</dd>
+         without writing anything.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
 </dl>
@@ -838,8 +863,8 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - the file to read</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the contents of a file as a String, or null if
- the file does not exists.</dd>
+<dd>the contents of a file as a String, or null if the file does not
+         exists.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
 </dl>
@@ -876,7 +901,7 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - the InputStream to read to completion.</dd>
 <dd><code>charsetName</code> - The optional name of a supported
-         <code></code>charset<code></code></dd>
+            <code></code>charset<code></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the String read from the InputStream.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -942,8 +967,7 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;write(java.util.Properties&nbsp;p,
                          java.io.File&nbsp;file)
                   throws java.io.IOException</pre>
-<div class="block">Writes a <code>Properties</code> object to
- a <code>File</code>.</div>
+<div class="block">Writes a <code>Properties</code> object to a <code>File</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>p</code> - the Properties to write</dd>
@@ -963,7 +987,8 @@ extends java.lang.Object</pre>
                         java.io.File&nbsp;file)
                  throws java.io.IOException</pre>
 <div class="block">Loads properties into a file.
- <P>This assumes the file was written with the
+ <P>
+ This assumes the file was written with the
  <code>Properties.store()</code> method.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -984,7 +1009,8 @@ extends java.lang.Object</pre>
                         java.net.URL&nbsp;url)
                  throws java.io.IOException</pre>
 <div class="block">Loads properties into a file.
- <P>This assumes the file was written with the
+ <P>
+ This assumes the file was written with the
  <code>Properties.store()</code> method.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1023,8 +1049,8 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;write(java.io.InputStream&nbsp;in,
                          java.io.OutputStream&nbsp;out)
                   throws java.io.IOException</pre>
-<div class="block">Writes the InputStream into the OutputStream.
- This does not close anything.</div>
+<div class="block">Writes the InputStream into the OutputStream. This does not close
+ anything.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - the data to read.</dd>
@@ -1043,8 +1069,8 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;java.io.File&nbsp;getUniqueTempFile(java.lang.String&nbsp;name)</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a temp file path that does not yet exist with the
- base name provided.</dd>
+<dd>a temp file path that does not yet exist with the base name
+         provided.</dd>
 </dl>
 </li>
 </ul>
@@ -1059,20 +1085,24 @@ extends java.lang.Object</pre>
                                          boolean&nbsp;includeSpaces,
                                          boolean&nbsp;uniquePerSession)</pre>
 <div class="block">Returns a file that does not yet exist.
- <p>If a file of the given name and parent does not already
- exist, then this method simply returns <code>new File(parentFile, name)</code>.</div>
+ <p>
+ If a file of the given name and parent does not already exist, then this
+ method simply returns <code>new File(parentFile, name)</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>parentFile</code> - the directory to create the file in.</dd>
-<dd><code>name</code> - the starting name, which this method might modify to guarantee unique-ness.</dd>
-<dd><code>includeSpaces</code> - if false then there will be no spaces in the returned file name.
- (If there were already spaces in the path of the parent, though: those are unchanged.)</dd>
+<dd><code>name</code> - the starting name, which this method might modify to guarantee
+            unique-ness.</dd>
+<dd><code>includeSpaces</code> - if false then there will be no spaces in the returned file
+            name. (If there were already spaces in the path of the parent,
+            though: those are unchanged.)</dd>
 <dd><code>uniquePerSession</code> - if true then the File returned will be unique in this session.
- This is useful for multithreaded environments if the user isn't going to interact
- with these directories (such as temp directories). But it is bad if this helps
- rename a saved file. (Just because we previously used "Untitled 2" does NOT mean that
- if the user has since deleted "Untitled" and "Untitled 2" that we need to iterate
- to the unique "Untitled 3" option.)</dd>
+            This is useful for multithreaded environments if the user
+            isn't going to interact with these directories (such as temp
+            directories). But it is bad if this helps rename a saved file.
+            (Just because we previously used "Untitled 2" does NOT mean
+            that if the user has since deleted "Untitled" and "Untitled 2"
+            that we need to iterate to the unique "Untitled 3" option.)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a File object that maps to something that does not yet exist.</dd>
 </dl>
@@ -1085,13 +1115,14 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>reveal</h4>
 <pre>public static&nbsp;boolean&nbsp;reveal(java.io.File&nbsp;file)</pre>
-<div class="block">Reveal (select) a file in the operating system. This will be platform-specific,
- and for now is only supported on Mac.</div>
+<div class="block">Reveal (select) a file in the operating system. This will be
+ platform-specific, and for now is only supported on Mac.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - the file to reveal.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if this method is reasonably confident the request was successful. False otherwise.</dd>
+<dd>true if this method is reasonably confident the request was
+         successful. False otherwise.</dd>
 </dl>
 </li>
 </ul>

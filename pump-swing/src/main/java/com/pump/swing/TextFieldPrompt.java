@@ -34,8 +34,6 @@ import com.pump.graphics.TextOnlyGraphics2D;
 /**
  * This is an untouchable text field that sits on top of a parent
  * <code>JTextField</code> providing a text prompt.
- * 
- * @see com.pump.swing.PromptSearchDemo
  */
 public class TextFieldPrompt extends JTextField {
 	private static final long serialVersionUID = 1L;

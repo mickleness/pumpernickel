@@ -119,11 +119,11 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">AbstractShape</span>
 extends java.lang.Object
 implements java.awt.Shape</pre>
-<div class="block">This is a class that implements all <code>Shape</code> methods
- except for <code>getPathIterator(AffineTransform)</code>.
- Because all the other methods consult <code>getPathIterator()</code>
- it is essential that when subclasses implement that method it be
- very light.  See <code>MutablePath</code> as a possible example.</div>
+<div class="block">This is a class that implements all <code>Shape</code> methods except for
+ <code>getPathIterator(AffineTransform)</code>. Because all the other methods
+ consult <code>getPathIterator()</code> it is essential that when subclasses
+ implement that method it be very light. See <code>MutablePath</code> as a
+ possible example.</div>
 </li>
 </ul>
 </div>
@@ -405,9 +405,9 @@ implements java.awt.Shape</pre>
 <pre>protected&nbsp;int&nbsp;countCrossings(double&nbsp;x,
                              double&nbsp;y,
                              java.awt.geom.AffineTransform&nbsp;transform)</pre>
-<div class="block">This counts the number of crossings from (-infinity,y) to (x,y).
- This total is used in combination with the winding rule to determine
- when a point is inside a shape.</div>
+<div class="block">This counts the number of crossings from (-infinity,y) to (x,y). This
+ total is used in combination with the winding rule to determine when a
+ point is inside a shape.</div>
 </li>
 </ul>
 <a name="identifyCrossings-double-double-double-double-java.awt.geom.AffineTransform-">
@@ -422,7 +422,8 @@ implements java.awt.Shape</pre>
                                     double&nbsp;h,
                                     java.awt.geom.AffineTransform&nbsp;transform)</pre>
 <div class="block">This checks to see if the rectangle argument ever crosses this shape.
- This method returns immediately when/if it finds proof of an intersection.</div>
+ This method returns immediately when/if it finds proof of an
+ intersection.</div>
 </li>
 </ul>
 <a name="intersects-double-double-double-double-">

@@ -124,12 +124,14 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">GuardedOutputStream</span>
 extends <a href="../../../com/pump/io/MeasuredOutputStream.html" title="class in com.pump.io">MeasuredOutputStream</a></pre>
-<div class="block">This restricts the amount of data that can be written
- to an underlying <code>OutputStream</code>.
- <P>This is especially useful in unit testing to ensure
- that certain blocks of data do not exceed their allotted size.
- <P>An IOException is thrown if you attempt to write more
- data than this stream was told to allow.</div>
+<div class="block">This restricts the amount of data that can be written to an underlying
+ <code>OutputStream</code>.
+ <P>
+ This is especially useful in unit testing to ensure that certain blocks of
+ data do not exceed their allotted size.
+ <P>
+ An IOException is thrown if you attempt to write more data than this stream
+ was told to allow.</div>
 </li>
 </ul>
 </div>
@@ -264,7 +266,8 @@ extends <a href="../../../com/pump/io/MeasuredOutputStream.html" title="class in
 <h4>getLimit</h4>
 <pre>public&nbsp;long&nbsp;getLimit()</pre>
 <div class="block">The number of bytes that can still be written to this stream.
- <P>(This value changes every time <code>write()</code> is called.)</div>
+ <P>
+ (This value changes every time <code>write()</code> is called.)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the number of bytes that can still be written to this stream.</dd>

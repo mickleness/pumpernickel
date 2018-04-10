@@ -117,13 +117,13 @@ var activeTableTab = "activeTableTab";
 extends <a href="../../../../com/pump/animation/capture/ScreenCapture.html" title="class in com.pump.animation.capture">ScreenCapture</a></pre>
 <div class="block">This implementation of <a href="../../../../com/pump/animation/capture/ScreenCapture.html" title="class in com.pump.animation.capture"><code>ScreenCapture</code></a> relies on the
  <code>java.awt.Component.paint(Graphic)</code> method.
- <p>This is safer than the <code>RobotScreenCapture</code> (which involves
- higher security levels), but as a result: this can't capture as much.
- For example: if tooltips or palettes or menus float above a component,
- then they probably won't be captured by this recording. Also this will
- continue recording the component in question even if the user switches
- windows/applications, but the Robot would capture exactly what the user
- sees on their display.</div>
+ <p>
+ This is safer than the <code>RobotScreenCapture</code> (which involves higher
+ security levels), but as a result: this can't capture as much. For example:
+ if tooltips or palettes or menus float above a component, then they probably
+ won't be captured by this recording. Also this will continue recording the
+ component in question even if the user switches windows/applications, but the
+ Robot would capture exactly what the user sees on their display.</div>
 </li>
 </ul>
 </div>
@@ -177,8 +177,8 @@ extends <a href="../../../../com/pump/animation/capture/ScreenCapture.html" titl
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/animation/capture/ComponentPaintCapture.html#capture-java.awt.Rectangle-">capture</a></span>(java.awt.Rectangle&nbsp;r)</code>
-<div class="block">This captures a portion of the screen and returns a File
- representing that image.</div>
+<div class="block">This captures a portion of the screen and returns a File representing
+ that image.</div>
 </td>
 </tr>
 </table>
@@ -219,9 +219,9 @@ extends <a href="../../../../com/pump/animation/capture/ScreenCapture.html" titl
 <pre>public&nbsp;ComponentPaintCapture(java.awt.Component&nbsp;c)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>c</code> - the component to invoke <code>paint(Graphics)</code>.
- This should probably be a <code>java.awt.Frame</code>, or some other
- important container.</dd>
+<dd><code>c</code> - the component to invoke <code>paint(Graphics)</code>. This
+            should probably be a <code>java.awt.Frame</code>, or some
+            other important container.</dd>
 </dl>
 </li>
 </ul>
@@ -242,16 +242,16 @@ extends <a href="../../../../com/pump/animation/capture/ScreenCapture.html" titl
 <pre>protected&nbsp;java.io.File&nbsp;capture(java.awt.Rectangle&nbsp;r)
                         throws java.lang.Exception</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/animation/capture/ScreenCapture.html#capture-java.awt.Rectangle-">ScreenCapture</a></code></span></div>
-<div class="block">This captures a portion of the screen and returns a File
- representing that image.</div>
+<div class="block">This captures a portion of the screen and returns a File representing
+ that image.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/animation/capture/ScreenCapture.html#capture-java.awt.Rectangle-">capture</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/animation/capture/ScreenCapture.html" title="class in com.pump.animation.capture">ScreenCapture</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>r</code> - the rectangle to capture</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a file representing the image captured.  This should be
- of a "normal" image format (PNG, JPEG, etc.)</dd>
+<dd>a file representing the image captured. This should be of a
+         "normal" image format (PNG, JPEG, etc.)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.Exception</code></dd>
 </dl>

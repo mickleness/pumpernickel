@@ -114,8 +114,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>protected abstract static class <span class="typeNameLabel">Thumbnail.ImageSource</span>
 extends java.lang.Object</pre>
-<div class="block">An image source that can scale to a specific size.
- This abstract class may rely on a BufferedImage, Image, File, or URL.</div>
+<div class="block">An image source that can scale to a specific size. This abstract class
+ may rely on a BufferedImage, Image, File, or URL.</div>
 </li>
 </ul>
 </div>
@@ -220,10 +220,11 @@ extends java.lang.Object</pre>
 <div class="block">Scale the source image to a specific size</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>destinationSize</code> - the exact size to scale the image source to.
- The image may be stretched as needed to fit this size.
- <p>It is assumed (but not enforced) that the destinationSize
- will be smaller than the source width/height.</dd>
+<dd><code>destinationSize</code> - the exact size to scale the image source to. The image may
+            be stretched as needed to fit this size.
+            <p>
+            It is assumed (but not enforced) that the destinationSize
+            will be smaller than the source width/height.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a scaled copy of this size.</dd>
 </dl>

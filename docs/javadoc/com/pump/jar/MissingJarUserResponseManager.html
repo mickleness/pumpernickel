@@ -120,10 +120,11 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">MissingJarUserResponseManager</span>
 extends <a href="../../../com/pump/jar/MissingJarPreferenceResponseManager.html" title="class in com.pump.jar">MissingJarPreferenceResponseManager</a></pre>
 <div class="block">When creating a jar we have to decide what to do with external jar
- dependencies: should we disregard them (like we should sure javax.jnlp.* classes),
- copy the entire jar (like we should for JFreeChart), or copy only the specific
- classes we need?
- <p>This class helps manage this decision.</div>
+ dependencies: should we disregard them (like we should sure javax.jnlp.*
+ classes), copy the entire jar (like we should for JFreeChart), or copy only
+ the specific classes we need?
+ <p>
+ This class helps manage this decision.</div>
 </li>
 </ul>
 </div>
@@ -165,7 +166,8 @@ extends <a href="../../../com/pump/jar/MissingJarPreferenceResponseManager.html"
                 java.util.Map&lt;java.io.File,<a href="../../../com/pump/jar/MissingJarResponse.html" title="enum in com.pump.jar">MissingJarResponse</a>&gt;&nbsp;requiredJars,
                 java.util.Set&lt;java.io.File&gt;&nbsp;keySet,
                 java.lang.String&nbsp;name)</code>
-<div class="block">Show a modal dialog prompting the user to associate a Behavior to one or more jar Files.</div>
+<div class="block">Show a modal dialog prompting the user to associate a Behavior to one or
+ more jar Files.</div>
 </td>
 </tr>
 </table>
@@ -224,20 +226,28 @@ extends <a href="../../../com/pump/jar/MissingJarPreferenceResponseManager.html"
                              java.util.Map&lt;java.io.File,<a href="../../../com/pump/jar/MissingJarResponse.html" title="enum in com.pump.jar">MissingJarResponse</a>&gt;&nbsp;requiredJars,
                              java.util.Set&lt;java.io.File&gt;&nbsp;keySet,
                              java.lang.String&nbsp;name)</pre>
-<div class="block">Show a modal dialog prompting the user to associate a Behavior to one or more jar Files.
- <p>This "OK" button on this dialog is disabled until a behavior is chosen for each file.</div>
+<div class="block">Show a modal dialog prompting the user to associate a Behavior to one or
+ more jar Files.
+ <p>
+ This "OK" button on this dialog is disabled until a behavior is chosen
+ for each file.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/jar/MissingJarResponseManager.html#resolveBehaviors-com.pump.jar.MissingJarResponseManager-java.util.Map-java.util.Set-java.lang.String-">resolveBehaviors</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/jar/MissingJarResponseManager.html" title="interface in com.pump.jar">MissingJarResponseManager</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/jar/MissingJarPreferenceResponseManager.html#resolveBehaviors-com.pump.jar.MissingJarResponseManager-java.util.Map-java.util.Set-java.lang.String-">resolveBehaviors</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/jar/MissingJarPreferenceResponseManager.html" title="class in com.pump.jar">MissingJarPreferenceResponseManager</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>choiceModel</code> - the choice model used.</dd>
-<dd><code>jarBehaviors</code> - known jar behaviors. This is where the users choices will be stored, so it may be empty but it can not be null.
- This is also used to set up the dialog if you want to preset certain choices.</dd>
-<dd><code>jarFiles</code> - the set of jar files that the user will make choices for. When this dialog is dismissed it is guaranteed that the
- jarBehaviors map will have a non-null value associated with each of these Files.</dd>
-<dd><code>primaryClassName</code> - the UI needs the name of the compiled class to explain things to the user.</dd>
+<dd><code>keySet</code> - the set of jar files that the user will make choices for. When
+            this dialog is dismissed it is guaranteed that the
+            jarBehaviors map will have a non-null value associated with
+            each of these Files.</dd>
+<dd><code>name</code> - the UI needs the name of the compiled class to explain things
+            to the user.</dd>
+<dd><code>manager</code> - the choice model used.</dd>
+<dd><code>requiredJars</code> - known jar behaviors. This is where the users choices will be
+            stored, so it may be empty but it can not be null. This is
+            also used to set up the dialog if you want to preset certain
+            choices.</dd>
 </dl>
 </li>
 </ul>

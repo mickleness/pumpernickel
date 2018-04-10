@@ -1,18 +1,12 @@
-/*
- * @(#)MovWriterApp
- *
- * $Date: 2015-03-11 01:41:06 -0400 (Wed, 11 Mar 2015) $
- *
- * Copyright (c) 2012 by Jeremy Wood.
- * All rights reserved.
- *
- * The copyright of this software is owned by Jeremy Wood. 
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * Jeremy Wood. For details see accompanying license terms.
+/**
+ * This software is released as part of the Pumpernickel project.
  * 
- * This software is probably, but not necessarily, discussed here:
- * https://github.com/mickleness/pumpernickel
+ * All com.pump resources in the Pumpernickel project are distributed under the
+ * MIT License:
+ * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * 
+ * More information about the Pumpernickel project is available here:
+ * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.showcase;
 

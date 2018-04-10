@@ -176,13 +176,15 @@ implements <a href="../../../com/pump/util/CloseableMeasurableIterator.html" tit
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected java.lang.Float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/ZipIterator.html#getFileSize--">getFileSize</a></span>()</code>
-<div class="block">Return the file size of the data being read, or null if that is indeterminate.</div>
+<div class="block">Return the file size of the data being read, or null if that is
+ indeterminate.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/ZipIterator.html#getProgress--">getProgress</a></span>()</code>
-<div class="block">Return the progress (as a fraction from [0,1]) of the amount read, or a negative number to indicate the progress is indeterminate.</div>
+<div class="block">Return the progress (as a fraction from [0,1]) of the amount read, or a
+ negative number to indicate the progress is indeterminate.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -192,7 +194,8 @@ implements <a href="../../../com/pump/util/CloseableMeasurableIterator.html" tit
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/ZipIterator.html#initialize--">initialize</a></span>()</code>
-<div class="block">This is an optional hook subclasses can use to do a preprocessing filter on the incoming data if needed.</div>
+<div class="block">This is an optional hook subclasses can use to do a preprocessing filter
+ on the incoming data if needed.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -296,9 +299,11 @@ implements <a href="../../../com/pump/util/CloseableMeasurableIterator.html" tit
 <li class="blockList">
 <h4>getFileSize</h4>
 <pre>protected&nbsp;java.lang.Float&nbsp;getFileSize()</pre>
-<div class="block">Return the file size of the data being read, or null if that is indeterminate.
+<div class="block">Return the file size of the data being read, or null if that is
+ indeterminate.
  <p>
- The default implementation only returns a non-null value if this iterator interacts with a File or FileDataSource.</div>
+ The default implementation only returns a non-null value if this iterator
+ interacts with a File or FileDataSource.</div>
 </li>
 </ul>
 <a name="finalize--">
@@ -335,8 +340,9 @@ implements <a href="../../../com/pump/util/CloseableMeasurableIterator.html" tit
 <div class="block">Convert the data from an InputStream into an element for this iterator.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>inputStream</code> - the stream to read the data from. Although this stream is derived directly from the 
- File/DataSource this iterator relates to: it is safe to call <code>close()</code> on it.</dd>
+<dd><code>inputStream</code> - the stream to read the data from. Although this stream is
+            derived directly from the File/DataSource this iterator
+            relates to: it is safe to call <code>close()</code> on it.</dd>
 <dd><code>zipEntry</code> - the ZipEntry this stream represents.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an element parsed from the InputStream.</dd>
@@ -352,11 +358,8 @@ implements <a href="../../../com/pump/util/CloseableMeasurableIterator.html" tit
 <li class="blockList">
 <h4>initialize</h4>
 <pre>protected&nbsp;void&nbsp;initialize()</pre>
-<div class="block">This is an optional hook subclasses can use to do a preprocessing filter on the incoming data if needed.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dataSource</code> - </dd>
-</dl>
+<div class="block">This is an optional hook subclasses can use to do a preprocessing filter
+ on the incoming data if needed.</div>
 </li>
 </ul>
 <a name="hasNext--">
@@ -419,7 +422,8 @@ implements <a href="../../../com/pump/util/CloseableMeasurableIterator.html" tit
 <h4>getProgress</h4>
 <pre>public&nbsp;float&nbsp;getProgress()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/util/CloseableMeasurableIterator.html#getProgress--">CloseableMeasurableIterator</a></code></span></div>
-<div class="block">Return the progress (as a fraction from [0,1]) of the amount read, or a negative number to indicate the progress is indeterminate.</div>
+<div class="block">Return the progress (as a fraction from [0,1]) of the amount read, or a
+ negative number to indicate the progress is indeterminate.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/util/CloseableMeasurableIterator.html#getProgress--">getProgress</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/util/CloseableMeasurableIterator.html" title="interface in com.pump.util">CloseableMeasurableIterator</a>&lt;<a href="../../../com/pump/io/ZipIterator.html" title="type parameter in ZipIterator">T</a>&gt;</code></dd>

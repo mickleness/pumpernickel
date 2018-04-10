@@ -110,7 +110,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">SwingSearch</span>
 extends java.lang.Object</pre>
-<div class="block">Some static methods relating to searching a <code>JTextComponent</code> or <code>JTable</code>.</div>
+<div class="block">Some static methods relating to searching a <code>JTextComponent</code> or
+ <code>JTable</code>.</div>
 </li>
 </ul>
 </div>
@@ -252,14 +253,15 @@ extends java.lang.Object</pre>
                            java.lang.String&nbsp;searchPhrase,
                            boolean&nbsp;forward,
                            boolean&nbsp;matchCase)</pre>
-<div class="block">This performs a basic search, starting from the current selection.
- Also this consults <code>UIManager.get("beepWhenSearchFails")</code>
- to determine whether to beep or not if a match is not found.</div>
+<div class="block">This performs a basic search, starting from the current selection. Also
+ this consults <code>UIManager.get("beepWhenSearchFails")</code> to
+ determine whether to beep or not if a match is not found.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>textComponent</code> - the component to search.</dd>
 <dd><code>searchPhrase</code> - the phrase to search for.</dd>
-<dd><code>forward</code> - whether to move forward or backward (aka "next" or "previous").</dd>
+<dd><code>forward</code> - whether to move forward or backward (aka "next" or
+            "previous").</dd>
 <dd><code>matchCase</code> - whether to match the case or not.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if a match is found, false otherwise.</dd>
@@ -276,14 +278,15 @@ extends java.lang.Object</pre>
                            java.lang.String&nbsp;searchPhrase,
                            boolean&nbsp;forward,
                            boolean&nbsp;matchCase)</pre>
-<div class="block">This performs a basic search, starting from the current selection.
- Also this consults <code>UIManager.get("beepWhenSearchFails")</code>
- to determine whether to beep or not if a match is not found.</div>
+<div class="block">This performs a basic search, starting from the current selection. Also
+ this consults <code>UIManager.get("beepWhenSearchFails")</code> to
+ determine whether to beep or not if a match is not found.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>table</code> - the component to search.</dd>
 <dd><code>searchPhrase</code> - the phrase to search for.</dd>
-<dd><code>forward</code> - whether to move forward or backward (aka "next" or "previous").</dd>
+<dd><code>forward</code> - whether to move forward or backward (aka "next" or
+            "previous").</dd>
 <dd><code>matchCase</code> - whether to match the case or not.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if a match is found, false otherwise.</dd>
@@ -322,9 +325,9 @@ extends java.lang.Object</pre>
                            boolean&nbsp;matchCase,
                            int&nbsp;startingIndex,
                            int[]&nbsp;selection)</pre>
-<div class="block">This performs a basic search, starting from a specific index.
- If a match is found, the indices are stored in the <code>selection</code> array,
- and <code>true</code> is returned.</div>
+<div class="block">This performs a basic search, starting from a specific index. If a match
+ is found, the indices are stored in the <code>selection</code> array, and
+ <code>true</code> is returned.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>textComponent</code> - the component to search.</dd>
@@ -334,8 +337,8 @@ extends java.lang.Object</pre>
 <dd><code>startingIndex</code> - the index in the document to begin searching.</dd>
 <dd><code>selection</code> - the array to store the indices in if a match is found.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the array provided now contains two indices enclosing
- the search phrase.</dd>
+<dd>true if the array provided now contains two indices enclosing the
+         search phrase.</dd>
 </dl>
 </li>
 </ul>
@@ -348,13 +351,16 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;highlight(javax.swing.text.JTextComponent&nbsp;tc,
                              int&nbsp;selectionStart,
                              int&nbsp;selectionEnd)</pre>
-<div class="block">This can create a highlight effect for a selection of text.
- Originally this was designed to work with the <a href="../../../com/pump/plaf/AbstractSearchHighlight.html" title="class in com.pump.plaf"><code>AbstractSearchHighlight</code></a> class,
- but it can work with any object that has a constructor accepting the
- same arguments this method uses.
- <P>By default this will use the <code>AquaSearchHighlight</code>,
- but you can call <Code>UIManager.put("textSearchHighlightEffect", myClassName)</code>
- to change this default class.</div>
+<div class="block">This can create a highlight effect for a selection of text. Originally
+ this was designed to work with the
+ <a href="../../../com/pump/plaf/AbstractSearchHighlight.html" title="class in com.pump.plaf"><code>AbstractSearchHighlight</code></a> class, but it can work with
+ any object that has a constructor accepting the same arguments this
+ method uses.
+ <P>
+ By default this will use the <code>AquaSearchHighlight</code>, but you
+ can call
+ <Code>UIManager.put("textSearchHighlightEffect", myClassName)</code> to
+ change this default class.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>tc</code> - the text component.</dd>
@@ -372,13 +378,16 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;highlight(javax.swing.JTable&nbsp;table,
                              int&nbsp;selectedRow,
                              int&nbsp;selectedColumn)</pre>
-<div class="block">This can create a highlight effect for a selection of text.
- Originally this was designed to work with the <a href="../../../com/pump/plaf/AbstractSearchHighlight.html" title="class in com.pump.plaf"><code>AbstractSearchHighlight</code></a> class,
- but it can work with any object that has a constructor accepting the
- same arguments this method uses.
- <P>By default this will use the <code>AquaSearchHighlight</code>,
- but you can call <Code>UIManager.put("textSearchHighlightEffect", myClassName)</code>
- to change this default class.</div>
+<div class="block">This can create a highlight effect for a selection of text. Originally
+ this was designed to work with the
+ <a href="../../../com/pump/plaf/AbstractSearchHighlight.html" title="class in com.pump.plaf"><code>AbstractSearchHighlight</code></a> class, but it can work with
+ any object that has a constructor accepting the same arguments this
+ method uses.
+ <P>
+ By default this will use the <code>AquaSearchHighlight</code>, but you
+ can call
+ <Code>UIManager.put("textSearchHighlightEffect", myClassName)</code> to
+ change this default class.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>table</code> - the table to highlight.</dd>

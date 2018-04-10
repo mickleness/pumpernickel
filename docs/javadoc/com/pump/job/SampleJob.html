@@ -114,14 +114,14 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">SampleJob&lt;T&gt;</span>
 extends java.lang.Object</pre>
-<div class="block">A job that calculates a series of samples. This series is identified
- by <code>longs</code>: so it can be so large that you should not store
- the results in memory unless you know an instance of this class
- is dealing with a limited amount of data.
+<div class="block">A job that calculates a series of samples. This series is identified by
+ <code>longs</code>: so it can be so large that you should not store the
+ results in memory unless you know an instance of this class is dealing with a
+ limited amount of data.
  
- <p>A <code>WeakReference</code> is kept of this job
- so it can be retrieved by its ID (until garbage
- collection consumes it).</div>
+ <p>
+ A <code>WeakReference</code> is kept of this job so it can be retrieved by
+ its ID (until garbage collection consumes it).</div>
 </li>
 </ul>
 </div>
@@ -268,8 +268,8 @@ extends java.lang.Object</pre>
                  long&nbsp;sampleCount)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>id</code> - a unique identifier for this job. This must
- be unique for the entire session.</dd>
+<dd><code>id</code> - a unique identifier for this job. This must be unique for the
+            entire session.</dd>
 <dd><code>sampleCount</code> - the number of samples this job can calculate.</dd>
 </dl>
 </li>
@@ -317,13 +317,14 @@ extends java.lang.Object</pre>
 <pre>public final&nbsp;<a href="../../../com/pump/job/SampleJob.html" title="type parameter in SampleJob">T</a>[]&nbsp;calculate(<a href="../../../com/pump/job/SampleJob.Range.html" title="class in com.pump.job">SampleJob.Range</a>&nbsp;range)</pre>
 <div class="block">Calculate a series of samples.
  
- <p>This method may be asked to recreate redundant
- data. (The <a href="../../../com/pump/job/SampleJobExecutor.html" title="class in com.pump.job"><code>SampleJobExecutor</code></a> makes
- sure never to do this, but there is technically nothing
- wrong with it.)
+ <p>
+ This method may be asked to recreate redundant data. (The
+ <a href="../../../com/pump/job/SampleJobExecutor.html" title="class in com.pump.job"><code>SampleJobExecutor</code></a> makes sure never to do this, but
+ there is technically nothing wrong with it.)
  
- <p>This method simply performs a few boundary checks
- and invokes <a href="../../../com/pump/job/SampleJob.html#doCalculate-long-long-"><code>doCalculate(long, long)</code></a></div>
+ <p>
+ This method simply performs a few boundary checks and invokes
+ <a href="../../../com/pump/job/SampleJob.html#doCalculate-long-long-"><code>doCalculate(long, long)</code></a></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>range</code> - the range of samples to calculate.</dd>
@@ -342,13 +343,14 @@ extends java.lang.Object</pre>
                            int&nbsp;length)</pre>
 <div class="block">Calculate a series of samples.
  
- <p>This method may be asked to recreate redundant
- data. (The <a href="../../../com/pump/job/SampleJobExecutor.html" title="class in com.pump.job"><code>SampleJobExecutor</code></a> makes
- sure never to do this, but there is technically nothing
- wrong with it.)
+ <p>
+ This method may be asked to recreate redundant data. (The
+ <a href="../../../com/pump/job/SampleJobExecutor.html" title="class in com.pump.job"><code>SampleJobExecutor</code></a> makes sure never to do this, but
+ there is technically nothing wrong with it.)
  
- <p>This method simply performs a few boundary checks
- and invokes <a href="../../../com/pump/job/SampleJob.html#doCalculate-long-long-"><code>doCalculate(long, long)</code></a></div>
+ <p>
+ This method simply performs a few boundary checks and invokes
+ <a href="../../../com/pump/job/SampleJob.html#doCalculate-long-long-"><code>doCalculate(long, long)</code></a></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>sampleIndex</code> - the initial sample.</dd>
@@ -368,13 +370,14 @@ extends java.lang.Object</pre>
                                    long&nbsp;length)</pre>
 <div class="block">Calculate a series of samples.
  
- <p>Subclasses must override this method to generate data.
- Boundary checking is provided by the <a href="../../../com/pump/job/SampleJob.html#calculate-long-int-"><code>calculate(long, int)</code></a> method.
+ <p>
+ Subclasses must override this method to generate data. Boundary checking
+ is provided by the <a href="../../../com/pump/job/SampleJob.html#calculate-long-int-"><code>calculate(long, int)</code></a> method.
  
- <p>This method may be asked to recreate redundant
- data. (The <a href="../../../com/pump/job/SampleJobExecutor.html" title="class in com.pump.job"><code>SampleJobExecutor</code></a> makes
- sure never to do this, but there is technically nothing
- wrong with it.)</div>
+ <p>
+ This method may be asked to recreate redundant data. (The
+ <a href="../../../com/pump/job/SampleJobExecutor.html" title="class in com.pump.job"><code>SampleJobExecutor</code></a> makes sure never to do this, but
+ there is technically nothing wrong with it.)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>sampleIndex</code> - the initial sample.</dd>

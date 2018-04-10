@@ -119,13 +119,13 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">FocusArrowListener</span>
 extends java.awt.event.KeyAdapter</pre>
-<div class="block">This listens for arrow keys and shifts
- the keyboard focus accordingly.
- So if you press the left arrow key, the component
- to the left of the source component requests the focus.
- <P>This scans for the first available component whose
- <code>isFocusable()</code> method returns <code>true</code>.
- If no such component is found: nothing happens.</div>
+<div class="block">This listens for arrow keys and shifts the keyboard focus accordingly. So if
+ you press the left arrow key, the component to the left of the source
+ component requests the focus.
+ <P>
+ This scans for the first available component whose <code>isFocusable()</code>
+ method returns <code>true</code>. If no such component is found: nothing
+ happens.</div>
 </li>
 </ul>
 </div>
@@ -164,8 +164,7 @@ extends java.awt.event.KeyAdapter</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static java.util.Set&lt;java.awt.Component&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/FocusArrowListener.html#getFocusableComponents-java.awt.Component-">getFocusableComponents</a></span>(java.awt.Component&nbsp;currentFocusOwner)</code>
-<div class="block">Returns a set of all the components that
- can have the keyboard focus.</div>
+<div class="block">Returns a set of all the components that can have the keyboard focus.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -257,11 +256,10 @@ extends java.awt.event.KeyAdapter</pre>
 <dd><code>dy</code> - the amount to increment y.</dd>
 <dd><code>src</code> - the source to traverse from.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if another component requested the focus
- as a result of this method.  This may return false if
- no suitable component was found to shift focus to.
- (If you press the right arrow key on the right-most
- component, for example.)</dd>
+<dd>true if another component requested the focus as a result of this
+         method. This may return false if no suitable component was found
+         to shift focus to. (If you press the right arrow key on the
+         right-most component, for example.)</dd>
 </dl>
 </li>
 </ul>
@@ -272,20 +270,19 @@ extends java.awt.event.KeyAdapter</pre>
 <li class="blockList">
 <h4>getFocusableComponents</h4>
 <pre>public static&nbsp;java.util.Set&lt;java.awt.Component&gt;&nbsp;getFocusableComponents(java.awt.Component&nbsp;currentFocusOwner)</pre>
-<div class="block">Returns a set of all the components that
- can have the keyboard focus.
- <P>My first implementation involved of this concept
- simply involved asking JCompnonents if they were
- focusable, but in the <code>FilledButtonTest</code> this
- resulted in shifting focus to the ContentPane.  Although
- it is technically focusable: if I used the tab key
- I did <i>not</i> get this result.  So I studied
- the inner workings for Component.transferFocus()
- and ended up with a method that involved
- calls to <code>getFocusCycleRootAncestor()</code>,
- and <code>getFocusTraversalPolicy()</code>.
- <P>(Also credit goes to Werner for originally tipping me off
- towards looking at FocusTraversalPolicies.)</div>
+<div class="block">Returns a set of all the components that can have the keyboard focus.
+ <P>
+ My first implementation involved of this concept simply involved asking
+ JCompnonents if they were focusable, but in the
+ <code>FilledButtonTest</code> this resulted in shifting focus to the
+ ContentPane. Although it is technically focusable: if I used the tab key
+ I did <i>not</i> get this result. So I studied the inner workings for
+ Component.transferFocus() and ended up with a method that involved calls
+ to <code>getFocusCycleRootAncestor()</code>, and
+ <code>getFocusTraversalPolicy()</code>.
+ <P>
+ (Also credit goes to Werner for originally tipping me off towards looking
+ at FocusTraversalPolicies.)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>currentFocusOwner</code> - the current focus owner.</dd>

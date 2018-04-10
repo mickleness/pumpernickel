@@ -110,11 +110,14 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">SessionLog</span>
 extends java.lang.Object</pre>
-<div class="block">This class combines the ConsoleLogger (which records System.err and System.out to a file)
- and java's Logger architecture (which can now also log to the same ConsoleLogger file).
- <p>This is intended for use with desktop applications, and each user session of the
- desktop application is recorded in a unique file. The static initializer for this
- class also manages a directory that keeps multiple files from past sessions.</div>
+<div class="block">This class combines the ConsoleLogger (which records System.err and
+ System.out to a file) and java's Logger architecture (which can now also log
+ to the same ConsoleLogger file).
+ <p>
+ This is intended for use with desktop applications, and each user session of
+ the desktop application is recorded in a unique file. The static initializer
+ for this class also manages a directory that keeps multiple files from past
+ sessions.</div>
 </li>
 </ul>
 </div>
@@ -149,7 +152,8 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/logging/SessionLog.html#initialize-java.lang.String-java.lang.Integer-">initialize</a></span>(java.lang.String&nbsp;appName,
           java.lang.Integer&nbsp;limit)</code>
-<div class="block">This initializes a ConsoleLogger based in a constant directory called "[MyApp] Logs".</div>
+<div class="block">This initializes a ConsoleLogger based in a constant directory called
+ "[MyApp] Logs".</div>
 </td>
 </tr>
 </table>
@@ -183,20 +187,22 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;initialize(java.lang.String&nbsp;appName,
                               java.lang.Integer&nbsp;limit)
                        throws java.io.IOException</pre>
-<div class="block">This initializes a ConsoleLogger based in a constant directory called "[MyApp] Logs".
- <p>The problem with using just one file as the console log is: by the time
- end users report a bug/exception/problem to you, they may be several sessions away
- from the session with the original problem. (Especially if the original problem made
- them force quit the application.) By storing several logs in the same folder: we can
- usually retrieve the correct log.</div>
+<div class="block">This initializes a ConsoleLogger based in a constant directory called
+ "[MyApp] Logs".
+ <p>
+ The problem with using just one file as the console log is: by the time
+ end users report a bug/exception/problem to you, they may be several
+ sessions away from the session with the original problem. (Especially if
+ the original problem made them force quit the application.) By storing
+ several logs in the same folder: we can usually retrieve the correct log.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>appName</code> - The name of the application that is collecting logs.
- For example, if this is "Gemini" then the directory "Gemini Logs" will be used.
- It will help to provide a more qualified path name to guarantee uniqueness,
- such as "com.bric.gemini".</dd>
+<dd><code>appName</code> - The name of the application that is collecting logs. For
+            example, if this is "Gemini" then the directory "Gemini Logs"
+            will be used. It will help to provide a more qualified path
+            name to guarantee uniqueness, such as "com.pump.gemini".</dd>
 <dd><code>limit</code> - if non-null, then this method will sift through all other logs
- in this directory and only retain the most recent n-many logs.</dd>
+            in this directory and only retain the most recent n-many logs.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>

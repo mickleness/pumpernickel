@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../com/pump/desktop/ConsoleFrame.html" title="class in com.pump.desktop"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../com/pump/desktop/PositionedFrame.html" title="class in com.pump.desktop"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/desktop/ExitControl.html" title="class in com.pump.desktop"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?com/pump/desktop/DesktopApplication.html" target="_top">Frames</a></li>
@@ -208,13 +208,18 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>qualifiedAppName</code> - a String such as "com.apple.GarageBand"</dd>
 <dd><code>simpleAppName</code> - a String such as "GarageBand"</dd>
-<dd><code>version</code> - a String representing the version. This should only contain letters, numbers, periods and/or hyphens.</dd>
-<dd><code>supportEmail</code> - if non-null then error dialogs will include a "Report..." button to help users
- email tech support about exceptions that occur during a session.</dd>
-<dd><code>frameClass</code> - if non-null then we'll add a listener that guarantees to exit the app after all Frames of the type frameClass
- are closed. (This does not in any way help manage saving dirty windows, this just makes sure the process doesn't silently linger
- after the user has closed all UI components.) As a default you can just use Frame.class here, but if you are focused
- on a very specific extension of JFrame you can use that subclass.</dd>
+<dd><code>version</code> - a String representing the version. This should only contain
+            letters, numbers, periods and/or hyphens.</dd>
+<dd><code>supportEmail</code> - if non-null then error dialogs will include a "Report..."
+            button to help users email tech support about exceptions that
+            occur during a session.</dd>
+<dd><code>frameClass</code> - if non-null then we'll add a listener that guarantees to exit
+            the app after all Frames of the type frameClass are closed.
+            (This does not in any way help manage saving dirty windows,
+            this just makes sure the process doesn't silently linger after
+            the user has closed all UI components.) As a default you can
+            just use Frame.class here, but if you are focused on a very
+            specific extension of JFrame you can use that subclass.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -248,7 +253,7 @@ extends java.lang.Object</pre>
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../com/pump/desktop/ConsoleFrame.html" title="class in com.pump.desktop"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../com/pump/desktop/PositionedFrame.html" title="class in com.pump.desktop"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/desktop/ExitControl.html" title="class in com.pump.desktop"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?com/pump/desktop/DesktopApplication.html" target="_top">Frames</a></li>

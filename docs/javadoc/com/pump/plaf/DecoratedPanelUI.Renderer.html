@@ -114,14 +114,16 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public static class <span class="typeNameLabel">DecoratedPanelUI.Renderer</span>
 extends java.lang.Object</pre>
-<div class="block">This is used by both the <a href="../../../com/pump/plaf/DecoratedPanelUI.Border.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Border</code></a> and the <a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf"><code>DecoratedPanelUI</code></a> to
- render all the attributes.
- <p>You can override some methods to provide unique looks. For example
- by override the <a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html#paintBody-java.awt.Graphics2D-java.awt.Component-java.util.Map-"><code>paintBody(Graphics2D, Component, Map)</code></a> method
- you can fill the body with a texture paint to resemble brushed metal (which
- makes the attributes <a href="../../../com/pump/plaf/DecoratedPanelUI.html#COLOR_TOP"><code>DecoratedPanelUI.COLOR_TOP</code></a> and <a href="../../../com/pump/plaf/DecoratedPanelUI.html#COLOR_BOTTOM"><code>DecoratedPanelUI.COLOR_BOTTOM</code></a>
- irrelevant). If customizing renderers via subclasses becomes a common pattern then
- this class should be refactored to somehow take that into account.</div>
+<div class="block">This is used by both the <a href="../../../com/pump/plaf/DecoratedPanelUI.Border.html" title="class in com.pump.plaf"><code>DecoratedPanelUI.Border</code></a> and the <a href="../../../com/pump/plaf/DecoratedPanelUI.html" title="class in com.pump.plaf"><code>DecoratedPanelUI</code></a>
+ to render all the attributes.
+ <p>
+ You can override some methods to provide unique looks. For example by
+ override the <a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html#paintBody-java.awt.Graphics2D-java.awt.Component-java.util.Map-"><code>paintBody(Graphics2D, Component, Map)</code></a> method you
+ can fill the body with a texture paint to resemble brushed metal (which
+ makes the attributes <a href="../../../com/pump/plaf/DecoratedPanelUI.html#COLOR_TOP"><code>DecoratedPanelUI.COLOR_TOP</code></a> and
+ <a href="../../../com/pump/plaf/DecoratedPanelUI.html#COLOR_BOTTOM"><code>DecoratedPanelUI.COLOR_BOTTOM</code></a> irrelevant). If customizing
+ renderers via subclasses becomes a common pattern then this class should
+ be refactored to somehow take that into account.</div>
 </li>
 </ul>
 </div>
@@ -189,7 +191,8 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html#paint-java.awt.Graphics2D-java.awt.Component-java.util.Map-">paint</a></span>(java.awt.Graphics2D&nbsp;g,
      java.awt.Component&nbsp;c,
      java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;attributes)</code>
-<div class="block">Paints everything in this renderer, after updating the body/glaze shapes.</div>
+<div class="block">Paints everything in this renderer, after updating the body/glaze
+ shapes.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -238,7 +241,8 @@ extends java.lang.Object</pre>
                java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;map,
                java.awt.geom.GeneralPath&nbsp;body,
                int&nbsp;extraPadding)</code>
-<div class="block">Redefine the GeneralPath argument provided with the new border/body outline of this UI.</div>
+<div class="block">Redefine the GeneralPath argument provided with the new border/body
+ outline of this UI.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -246,7 +250,8 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html#updateGlazeShape-java.awt.Component-java.util.Map-java.awt.geom.GeneralPath-">updateGlazeShape</a></span>(java.awt.Component&nbsp;c,
                 java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;attributes,
                 java.awt.geom.GeneralPath&nbsp;glaze)</code>
-<div class="block">Redefine the GeneralPath argument provided with the new glaze outline of this UI.</div>
+<div class="block">Redefine the GeneralPath argument provided with the new glaze outline
+ of this UI.</div>
 </td>
 </tr>
 </table>
@@ -333,12 +338,13 @@ extends java.lang.Object</pre>
                                java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;map,
                                java.awt.geom.GeneralPath&nbsp;body,
                                int&nbsp;extraPadding)</pre>
-<div class="block">Redefine the GeneralPath argument provided with the new border/body outline of this UI.</div>
+<div class="block">Redefine the GeneralPath argument provided with the new border/body
+ outline of this UI.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - the component being painted.</dd>
-<dd><code>map</code> - the attributes. At any given time: some attributes
- might be missing.</dd>
+<dd><code>map</code> - the attributes. At any given time: some attributes might
+            be missing.</dd>
 <dd><code>body</code> - the path this method redefines.</dd>
 <dd><code>extraPadding</code> - a positive integer that expands the size of this shape.</dd>
 </dl>
@@ -353,12 +359,13 @@ extends java.lang.Object</pre>
 <pre>protected&nbsp;void&nbsp;updateGlazeShape(java.awt.Component&nbsp;c,
                                 java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;attributes,
                                 java.awt.geom.GeneralPath&nbsp;glaze)</pre>
-<div class="block">Redefine the GeneralPath argument provided with the new glaze outline of this UI.</div>
+<div class="block">Redefine the GeneralPath argument provided with the new glaze outline
+ of this UI.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - the component being painted.</dd>
-<dd><code>attributes</code> - the attributes. At any given time: some attributes
- might be missing.</dd>
+<dd><code>attributes</code> - the attributes. At any given time: some attributes might
+            be missing.</dd>
 <dd><code>glaze</code> - the path this method redefines.</dd>
 </dl>
 </li>
@@ -404,13 +411,15 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;void&nbsp;paint(java.awt.Graphics2D&nbsp;g,
                   java.awt.Component&nbsp;c,
                   java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;attributes)</pre>
-<div class="block">Paints everything in this renderer, after updating the body/glaze shapes.
- Specifically this invokes the paint methods in this order:
- <ol><li><a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html#paintDropShadow-java.awt.Graphics2D-java.awt.Component-java.util.Map-"><code>paintDropShadow(Graphics2D, Component, Map)</code></a>
+<div class="block">Paints everything in this renderer, after updating the body/glaze
+ shapes. Specifically this invokes the paint methods in this order:
+ <ol>
+ <li><a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html#paintDropShadow-java.awt.Graphics2D-java.awt.Component-java.util.Map-"><code>paintDropShadow(Graphics2D, Component, Map)</code></a>
  <li><a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html#paintBody-java.awt.Graphics2D-java.awt.Component-java.util.Map-"><code>paintBody(Graphics2D, Component, Map)</code></a>
  <li><a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html#paintBevels-java.awt.Graphics2D-java.awt.Component-java.util.Map-"><code>paintBevels(Graphics2D, Component, Map)</code></a>
  <li><a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html#paintGlaze-java.awt.Graphics2D-java.awt.Component-java.util.Map-"><code>paintGlaze(Graphics2D, Component, Map)</code></a>
- <li><a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html#paintBorder-java.awt.Graphics2D-java.awt.Component-java.util.Map-"><code>paintBorder(Graphics2D, Component, Map)</code></a></li></ol></div>
+ <li><a href="../../../com/pump/plaf/DecoratedPanelUI.Renderer.html#paintBorder-java.awt.Graphics2D-java.awt.Component-java.util.Map-"><code>paintBorder(Graphics2D, Component, Map)</code></a></li>
+ </ol></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graphics to paint to.</dd>

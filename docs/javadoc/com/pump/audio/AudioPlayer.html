@@ -112,8 +112,8 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object</pre>
 <div class="block">An object that manages playing back a resource.
  
- This offers the ability to play and pause, and adds listeners
- (either in real-time or at fixed polling intervals).</div>
+ This offers the ability to play and pause, and adds listeners (either in
+ real-time or at fixed polling intervals).</div>
 </li>
 </ul>
 </div>
@@ -176,15 +176,15 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/audio/AudioPlayer.html#addEDTListener-com.pump.audio.AudioPlayer.Listener-int-">addEDTListener</a></span>(<a href="../../../com/pump/audio/AudioPlayer.Listener.html" title="interface in com.pump.audio">AudioPlayer.Listener</a>&nbsp;l,
               int&nbsp;updateInterval)</code>
-<div class="block">This listener will receive coalesced events at a given
- interval on the event dispatch thread.</div>
+<div class="block">This listener will receive coalesced events at a given interval on the
+ event dispatch thread.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/audio/AudioPlayer.html#addListener-com.pump.audio.AudioPlayer.Listener-">addListener</a></span>(<a href="../../../com/pump/audio/AudioPlayer.Listener.html" title="interface in com.pump.audio">AudioPlayer.Listener</a>&nbsp;l)</code>
-<div class="block">This listener will be updated in real-time, in the 
- thread that is processing the audio.</div>
+<div class="block">This listener will be updated in real-time, in the thread that is
+ processing the audio.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -242,7 +242,8 @@ extends java.lang.Object</pre>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/audio/AudioPlayer.html#removeEDTListener-com.pump.audio.AudioPlayer.Listener-">removeEDTListener</a></span>(<a href="../../../com/pump/audio/AudioPlayer.Listener.html" title="interface in com.pump.audio">AudioPlayer.Listener</a>&nbsp;l)</code>
-<div class="block">Remove a listener previously added by calling <code>addEDTListener()</code>.</div>
+<div class="block">Remove a listener previously added by calling
+ <code>addEDTListener()</code>.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
@@ -303,7 +304,8 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>javax.sound.sampled.LineUnavailableException</code> - if a line is unavailable.</dd>
-<dd><code>java.lang.UnsupportedOperationException</code> - if this AudioPlayer doesn't support playing the stream argument</dd>
+<dd><code>java.lang.UnsupportedOperationException</code> - if this AudioPlayer doesn't support playing the stream
+             argument</dd>
 </dl>
 </li>
 </ul>
@@ -324,14 +326,16 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>stream</code> - the AudioInputStream to play.</dd>
-<dd><code>startTime</code> - the time to skip to when playing starts.
- A value of zero means this plays from the beginning, 1 means it skips one second, etc.</dd>
+<dd><code>startTime</code> - the time to skip to when playing starts. A value of zero means
+            this plays from the beginning, 1 means it skips one second,
+            etc.</dd>
 <dd><code>listener</code> - an optional Listener to update.</dd>
 <dd><code>cancellable</code> - an optional Cancellable to consult.</dd>
 <dd><code>blocking</code> - whether this call is blocking or not.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>javax.sound.sampled.LineUnavailableException</code> - if a line is unavailable.</dd>
-<dd><code>java.lang.UnsupportedOperationException</code> - if this static method doesn't support playing the stream argument</dd>
+<dd><code>java.lang.UnsupportedOperationException</code> - if this static method doesn't support playing the stream
+             argument</dd>
 </dl>
 </li>
 </ul>
@@ -343,14 +347,12 @@ extends java.lang.Object</pre>
 <h4>addEDTListener</h4>
 <pre>public&nbsp;void&nbsp;addEDTListener(<a href="../../../com/pump/audio/AudioPlayer.Listener.html" title="interface in com.pump.audio">AudioPlayer.Listener</a>&nbsp;l,
                            int&nbsp;updateInterval)</pre>
-<div class="block">This listener will receive coalesced events at a given
- interval on the event dispatch thread. This will in no
- way impact audio playback.</div>
+<div class="block">This listener will receive coalesced events at a given interval on the
+ event dispatch thread. This will in no way impact audio playback.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>l</code> - the listener to add.</dd>
-<dd><code>updateInterval</code> - the number of milliseconds between
- possible events.</dd>
+<dd><code>updateInterval</code> - the number of milliseconds between possible events.</dd>
 </dl>
 </li>
 </ul>
@@ -361,10 +363,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>addListener</h4>
 <pre>public&nbsp;void&nbsp;addListener(<a href="../../../com/pump/audio/AudioPlayer.Listener.html" title="interface in com.pump.audio">AudioPlayer.Listener</a>&nbsp;l)</pre>
-<div class="block">This listener will be updated in real-time, in the 
- thread that is processing the audio. If this method
- is expensive: sound playback will be choppy as we wait
- for this listener to finish.</div>
+<div class="block">This listener will be updated in real-time, in the thread that is
+ processing the audio. If this method is expensive: sound playback will be
+ choppy as we wait for this listener to finish.</div>
 </li>
 </ul>
 <a name="removeListener-com.pump.audio.AudioPlayer.Listener-">
@@ -390,7 +391,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>removeEDTListener</h4>
 <pre>public&nbsp;boolean&nbsp;removeEDTListener(<a href="../../../com/pump/audio/AudioPlayer.Listener.html" title="interface in com.pump.audio">AudioPlayer.Listener</a>&nbsp;l)</pre>
-<div class="block">Remove a listener previously added by calling <code>addEDTListener()</code>.</div>
+<div class="block">Remove a listener previously added by calling
+ <code>addEDTListener()</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>l</code> - the listener to remove.</dd>

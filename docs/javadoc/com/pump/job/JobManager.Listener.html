@@ -105,8 +105,8 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public static interface <span class="typeNameLabel">JobManager.Listener</span></pre>
-<div class="block">This offers a model for simple notification of what this JobManager
- is currently doing.</div>
+<div class="block">This offers a model for simple notification of what this JobManager is
+ currently doing.</div>
 </li>
 </ul>
 </div>
@@ -158,9 +158,9 @@ var activeTableTab = "activeTableTab";
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/job/JobManager.Listener.html#jobSkipped-com.pump.job.JobManager-com.pump.job.Job...-">jobSkipped</a></span>(<a href="../../../com/pump/job/JobManager.html" title="class in com.pump.job">JobManager</a>&nbsp;manager,
           <a href="../../../com/pump/job/Job.html" title="class in com.pump.job">Job</a>...&nbsp;job)</code>
-<div class="block">This is called when a job is skipped over, either
- because it was cancelled or because it was removed
- from the pending job queue in this manager.</div>
+<div class="block">This is called when a job is skipped over, either because it was
+ cancelled or because it was removed from the pending job queue in
+ this manager.</div>
 </td>
 </tr>
 </table>
@@ -188,9 +188,10 @@ var activeTableTab = "activeTableTab";
               <a href="../../../com/pump/job/Job.html" title="class in com.pump.job">Job</a>&nbsp;job,
               java.lang.Throwable&nbsp;t)</pre>
 <div class="block">This is called when an error occurs executing a job.
- <p>This is probably invoked on a thread that executes
- jobs, so this should not perform EDT work and should
- probably be very light (triggering other threads if necessary).</div>
+ <p>
+ This is probably invoked on a thread that executes jobs, so this
+ should not perform EDT work and should probably be very light
+ (triggering other threads if necessary).</div>
 </li>
 </ul>
 <a name="jobAdded-com.pump.job.JobManager-com.pump.job.Job...-">
@@ -201,12 +202,12 @@ var activeTableTab = "activeTableTab";
 <h4>jobAdded</h4>
 <pre>void&nbsp;jobAdded(<a href="../../../com/pump/job/JobManager.html" title="class in com.pump.job">JobManager</a>&nbsp;manager,
               <a href="../../../com/pump/job/Job.html" title="class in com.pump.job">Job</a>...&nbsp;job)</pre>
-<div class="block">This is called before a job begins executing. When this
- is invoked: the active job count of the JobManager will
- have changed.
- <p>This is probably invoked on a thread that executes
- jobs, so this should not perform EDT work and should
- probably be very light (triggering other threads if necessary).</div>
+<div class="block">This is called before a job begins executing. When this is invoked:
+ the active job count of the JobManager will have changed.
+ <p>
+ This is probably invoked on a thread that executes jobs, so this
+ should not perform EDT work and should probably be very light
+ (triggering other threads if necessary).</div>
 </li>
 </ul>
 <a name="jobRemoved-com.pump.job.JobManager-com.pump.job.Job...-">
@@ -217,12 +218,12 @@ var activeTableTab = "activeTableTab";
 <h4>jobRemoved</h4>
 <pre>void&nbsp;jobRemoved(<a href="../../../com/pump/job/JobManager.html" title="class in com.pump.job">JobManager</a>&nbsp;manager,
                 <a href="../../../com/pump/job/Job.html" title="class in com.pump.job">Job</a>...&nbsp;job)</pre>
-<div class="block">This is called when a job finished executing. When this
- is invoked: the active job count of the JobManager will
- have changed.
- <p>This is probably invoked on a thread that executes
- jobs, so this should not perform EDT work and should
- probably be very light (triggering other threads if necessary).</div>
+<div class="block">This is called when a job finished executing. When this is invoked:
+ the active job count of the JobManager will have changed.
+ <p>
+ This is probably invoked on a thread that executes jobs, so this
+ should not perform EDT work and should probably be very light
+ (triggering other threads if necessary).</div>
 </li>
 </ul>
 <a name="jobSkipped-com.pump.job.JobManager-com.pump.job.Job...-">
@@ -233,14 +234,14 @@ var activeTableTab = "activeTableTab";
 <h4>jobSkipped</h4>
 <pre>void&nbsp;jobSkipped(<a href="../../../com/pump/job/JobManager.html" title="class in com.pump.job">JobManager</a>&nbsp;manager,
                 <a href="../../../com/pump/job/Job.html" title="class in com.pump.job">Job</a>...&nbsp;job)</pre>
-<div class="block">This is called when a job is skipped over, either
- because it was cancelled or because it was removed
- from the pending job queue in this manager.
- When this is invoked:
- the pending count of the JobManager will have changed.
- <p>This is probably invoked on a thread that executes
- jobs, so this should not perform EDT work and should
- probably be very light (triggering other threads if necessary).</div>
+<div class="block">This is called when a job is skipped over, either because it was
+ cancelled or because it was removed from the pending job queue in
+ this manager. When this is invoked: the pending count of the
+ JobManager will have changed.
+ <p>
+ This is probably invoked on a thread that executes jobs, so this
+ should not perform EDT work and should probably be very light
+ (triggering other threads if necessary).</div>
 </li>
 </ul>
 <a name="jobQueued-com.pump.job.JobManager-com.pump.job.Job...-">
@@ -251,10 +252,11 @@ var activeTableTab = "activeTableTab";
 <h4>jobQueued</h4>
 <pre>void&nbsp;jobQueued(<a href="../../../com/pump/job/JobManager.html" title="class in com.pump.job">JobManager</a>&nbsp;manager,
                <a href="../../../com/pump/job/Job.html" title="class in com.pump.job">Job</a>...&nbsp;job)</pre>
-<div class="block">This is called when a job is added to the queue of pending jobs. When this
- is invoked: the pending job count of the JobManager will
- have changed.
- <p>This is probably invoked on the thread that added the job.</div>
+<div class="block">This is called when a job is added to the queue of pending jobs. When
+ this is invoked: the pending job count of the JobManager will have
+ changed.
+ <p>
+ This is probably invoked on the thread that added the job.</div>
 </li>
 </ul>
 </li>

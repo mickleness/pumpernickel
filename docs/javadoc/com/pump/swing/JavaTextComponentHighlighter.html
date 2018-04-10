@@ -150,13 +150,17 @@ extends <a href="../../../com/pump/text/TokenTextComponentHighlighter.html" titl
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected javax.swing.text.SimpleAttributeSet</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#importantPunctuationAttributes">importantPunctuationAttributes</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#errorAttributes">errorAttributes</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected javax.swing.text.SimpleAttributeSet</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#keywordAttributes">keywordAttributes</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#importantPunctuationAttributes">importantPunctuationAttributes</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected javax.swing.text.SimpleAttributeSet</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#keywordAttributes">keywordAttributes</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected javax.swing.text.SimpleAttributeSet</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#stringAttributes">stringAttributes</a></span></code>&nbsp;</td>
 </tr>
@@ -202,12 +206,13 @@ extends <a href="../../../com/pump/text/TokenTextComponentHighlighter.html" titl
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>protected Token[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#createTokens-java.lang.String-">createTokens</a></span>(java.lang.String&nbsp;inputText)</code>&nbsp;</td>
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#createTokens-java.lang.String-com.pump.util.Receiver-">createTokens</a></span>(java.lang.String&nbsp;inputText,
+            <a href="../../../com/pump/util/Receiver.html" title="interface in com.pump.util">Receiver</a>&lt;<a href="../../../com/pump/io/parser/Token.html" title="class in com.pump.io.parser">Token</a>&gt;&nbsp;receiver)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected javax.swing.text.AttributeSet</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#getAttributes-Token:A-int-int-int-">getAttributes</a></span>(Token[]&nbsp;tokens,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JavaTextComponentHighlighter.html#getAttributes-com.pump.io.parser.Token:A-int-int-int-">getAttributes</a></span>(<a href="../../../com/pump/io/parser/Token.html" title="class in com.pump.io.parser">Token</a>[]&nbsp;tokens,
              int&nbsp;tokenIndex,
              int&nbsp;selectionStart,
              int&nbsp;selectionEnd)</code>&nbsp;</td>
@@ -230,7 +235,7 @@ extends <a href="../../../com/pump/text/TokenTextComponentHighlighter.html" titl
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;com.pump.text.<a href="../../../com/pump/text/TokenTextComponentHighlighter.html" title="class in com.pump.text">TokenTextComponentHighlighter</a></h3>
-<code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html#formatTextComponent-java.lang.String-javax.swing.text.StyledDocument-int-int-">formatTextComponent</a>, <a href="../../../com/pump/text/TokenTextComponentHighlighter.html#getHighlightPainter-Token:A-int-int-int-">getHighlightPainter</a>, <a href="../../../com/pump/text/TokenTextComponentHighlighter.html#getTokens-java.lang.String-boolean-">getTokens</a></code></li>
+<code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html#formatTextComponent-java.lang.String-javax.swing.text.StyledDocument-int-int-">formatTextComponent</a>, <a href="../../../com/pump/text/TokenTextComponentHighlighter.html#getHighlightPainter-com.pump.io.parser.Token:A-int-int-int-">getHighlightPainter</a>, <a href="../../../com/pump/text/TokenTextComponentHighlighter.html#getTokens-java.lang.String-boolean-">getTokens</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.com.pump.text.TextComponentHighlighter">
@@ -276,6 +281,15 @@ extends <a href="../../../com/pump/text/TokenTextComponentHighlighter.html" titl
 <li class="blockList">
 <h4>keywordAttributes</h4>
 <pre>protected&nbsp;javax.swing.text.SimpleAttributeSet keywordAttributes</pre>
+</li>
+</ul>
+<a name="errorAttributes">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>errorAttributes</h4>
+<pre>protected&nbsp;javax.swing.text.SimpleAttributeSet errorAttributes</pre>
 </li>
 </ul>
 <a name="commentAttributes">
@@ -360,34 +374,38 @@ extends <a href="../../../com/pump/text/TokenTextComponentHighlighter.html" titl
 <div class="block">Initialize the SimpleAttributeSets used to format text.</div>
 </li>
 </ul>
-<a name="getAttributes-Token:A-int-int-int-">
+<a name="getAttributes-com.pump.io.parser.Token:A-int-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getAttributes</h4>
-<pre>protected&nbsp;javax.swing.text.AttributeSet&nbsp;getAttributes(Token[]&nbsp;tokens,
+<pre>protected&nbsp;javax.swing.text.AttributeSet&nbsp;getAttributes(<a href="../../../com/pump/io/parser/Token.html" title="class in com.pump.io.parser">Token</a>[]&nbsp;tokens,
                                                       int&nbsp;tokenIndex,
                                                       int&nbsp;selectionStart,
                                                       int&nbsp;selectionEnd)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html#getAttributes-Token:A-int-int-int-">getAttributes</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html" title="class in com.pump.text">TokenTextComponentHighlighter</a></code></dd>
+<dd><code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html#getAttributes-com.pump.io.parser.Token:A-int-int-int-">getAttributes</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html" title="class in com.pump.text">TokenTextComponentHighlighter</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the AttributeSet for tokenIndex in the list of tokens.</dd>
 </dl>
 </li>
 </ul>
-<a name="createTokens-java.lang.String-">
+<a name="createTokens-java.lang.String-com.pump.util.Receiver-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>createTokens</h4>
-<pre>protected&nbsp;Token[]&nbsp;createTokens(java.lang.String&nbsp;inputText)</pre>
+<pre>protected&nbsp;void&nbsp;createTokens(java.lang.String&nbsp;inputText,
+                            <a href="../../../com/pump/util/Receiver.html" title="interface in com.pump.util">Receiver</a>&lt;<a href="../../../com/pump/io/parser/Token.html" title="class in com.pump.io.parser">Token</a>&gt;&nbsp;receiver)
+                     throws java.lang.Exception</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html#createTokens-java.lang.String-">createTokens</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html" title="class in com.pump.text">TokenTextComponentHighlighter</a></code></dd>
+<dd><code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html#createTokens-java.lang.String-com.pump.util.Receiver-">createTokens</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/text/TokenTextComponentHighlighter.html" title="class in com.pump.text">TokenTextComponentHighlighter</a></code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.Exception</code></dd>
 </dl>
 </li>
 </ul>

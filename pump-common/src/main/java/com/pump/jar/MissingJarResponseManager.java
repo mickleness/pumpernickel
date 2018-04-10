@@ -64,12 +64,12 @@ public interface MissingJarResponseManager {
 	 *            stored, so it may be empty but it can not be null. This is
 	 *            also used to set up the dialog if you want to preset certain
 	 *            choices.
-	 * @param jarFiles
+	 * @param keySet
 	 *            the set of jar files that the user will make choices for. When
 	 *            this dialog is dismissed it is guaranteed that the
 	 *            jarBehaviors map will have a non-null value associated with
 	 *            each of these Files.
-	 * @param primaryClassName
+	 * @param name
 	 *            the UI needs the name of the compiled class to explain things
 	 *            to the user.
 	 */

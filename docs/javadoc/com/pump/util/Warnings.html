@@ -205,12 +205,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>printOnce</h4>
 <pre>public static&nbsp;void&nbsp;printOnce(java.lang.String&nbsp;message)</pre>
-<div class="block">Prints a message once to System.err.
- A unique string will only be printed once per session.
- This is intended for cases where a developer should be alerted
- to a possible problem, but the console should not be flooded
- with messages.  Also the "problem" is one that only deserves a
- warning -- not an exception.</div>
+<div class="block">Prints a message once to System.err. A unique string will only be printed
+ once per session. This is intended for cases where a developer should be
+ alerted to a possible problem, but the console should not be flooded with
+ messages. Also the "problem" is one that only deserves a warning -- not
+ an exception.</div>
 </li>
 </ul>
 <a name="println-java.lang.String-long-">
@@ -222,12 +221,14 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;println(java.lang.String&nbsp;text,
                            long&nbsp;delay)</pre>
 <div class="block">Prints this message to the console, but only once every so often.
- <P>This is intended to prevent the console from being flooded with
- warning messages for a frequently occurring problem/situation.</div>
+ <P>
+ This is intended to prevent the console from being flooded with warning
+ messages for a frequently occurring problem/situation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>text</code> - the message to print.</dd>
-<dd><code>delay</code> - the number of milliseconds to wait before another message may be printed.</dd>
+<dd><code>delay</code> - the number of milliseconds to wait before another message may
+            be printed.</dd>
 </dl>
 </li>
 </ul>

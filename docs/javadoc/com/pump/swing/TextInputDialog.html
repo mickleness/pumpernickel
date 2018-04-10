@@ -252,17 +252,20 @@ extends java.lang.Object</pre>
                        java.lang.String&nbsp;textFieldToolTip,
                        java.lang.String&nbsp;initialTextFieldText,
                        <a href="../../../com/pump/swing/TextInputDialog.StringInputHandler.html" title="interface in com.pump.swing">TextInputDialog.StringInputHandler</a>&nbsp;handler)</pre>
-<div class="block">Create a QDialog to prompt the user for text input. This method should be called on the EDT.</div>
+<div class="block">Create a QDialog to prompt the user for text input. This method should be
+ called on the EDT.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>frame</code> - the frame that will own the dialog.</dd>
 <dd><code>dialogTitle</code> - the title of the dialog.</dd>
 <dd><code>boldMessage</code> - the optional bold message for the content pane.</dd>
-<dd><code>plainMessage</code> - the optional plain message for the content pane to display below the bold message.</dd>
+<dd><code>plainMessage</code> - the optional plain message for the content pane to display
+            below the bold message.</dd>
 <dd><code>textFieldPrompt</code> - the optional text field prompt.</dd>
 <dd><code>textFieldToolTip</code> - the optional text field tooltip.</dd>
 <dd><code>initialTextFieldText</code> - the initial text to populate the text field with.</dd>
-<dd><code>handler</code> - the optional handler used to control UI elements in the dialog.</dd>
+<dd><code>handler</code> - the optional handler used to control UI elements in the
+            dialog.</dd>
 </dl>
 </li>
 </ul>
@@ -290,23 +293,27 @@ extends java.lang.Object</pre>
                                     java.util.prefs.Preferences&nbsp;prefs,
                                     java.lang.String&nbsp;preferenceKey,
                                     <a href="../../../com/pump/swing/TextInputDialog.StringInputHandler.html" title="interface in com.pump.swing">TextInputDialog.StringInputHandler</a>&nbsp;handler)</pre>
-<div class="block">Show a QDialog prompting the user for text input. This method reads and writes a 
- value from the Preferences object provided. (If you don't want to use Preferences, 
- use another static method.)</div>
+<div class="block">Show a QDialog prompting the user for text input. This method reads and
+ writes a value from the Preferences object provided. (If you don't want
+ to use Preferences, use another static method.)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>frame</code> - the frame that will own the dialog.</dd>
 <dd><code>dialogTitle</code> - the title of the dialog.</dd>
 <dd><code>boldMessage</code> - the optional bold message for the content pane.</dd>
-<dd><code>plainMessage</code> - the optional plain message for the content pane to display below the bold message.</dd>
+<dd><code>plainMessage</code> - the optional plain message for the content pane to display
+            below the bold message.</dd>
 <dd><code>textFieldPrompt</code> - the optional text field prompt.</dd>
 <dd><code>textFieldToolTip</code> - the optional text field tooltip.</dd>
-<dd><code>defaultTextFieldText</code> - the text to show in the text field if the preferences don't offer any starting text.</dd>
+<dd><code>defaultTextFieldText</code> - the text to show in the text field if the preferences don't
+            offer any starting text.</dd>
 <dd><code>prefs</code> - the preferences to consult.</dd>
 <dd><code>preferenceKey</code> - the key to consult in the Preferences argument.</dd>
-<dd><code>handler</code> - the optional handler used to control UI elements in the dialog.</dd>
+<dd><code>handler</code> - the optional handler used to control UI elements in the
+            dialog.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the String the user entered, or null if the user cancelled the dialog.</dd>
+<dd>the String the user entered, or null if the user cancelled the
+         dialog.</dd>
 </dl>
 </li>
 </ul>
@@ -330,13 +337,16 @@ extends java.lang.Object</pre>
 <dd><code>frame</code> - the frame that will own the dialog.</dd>
 <dd><code>dialogTitle</code> - the title of the dialog.</dd>
 <dd><code>boldMessage</code> - the optional bold message for the content pane.</dd>
-<dd><code>plainMessage</code> - the optional plain message for the content pane to display below the bold message.</dd>
+<dd><code>plainMessage</code> - the optional plain message for the content pane to display
+            below the bold message.</dd>
 <dd><code>textFieldPrompt</code> - the optional text field prompt.</dd>
 <dd><code>textFieldToolTip</code> - the optional text field tooltip.</dd>
 <dd><code>initialTextFieldText</code> - the initial text to populate the text field with.</dd>
-<dd><code>handler</code> - the optional handler used to control UI elements in the dialog.</dd>
+<dd><code>handler</code> - the optional handler used to control UI elements in the
+            dialog.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the String the user entered, or null if the user cancelled the dialog.</dd>
+<dd>the String the user entered, or null if the user cancelled the
+         dialog.</dd>
 </dl>
 </li>
 </ul>
@@ -350,7 +360,8 @@ extends java.lang.Object</pre>
 <div class="block">Show this dialog. This method should be called on the EDT.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the String the user input, or null if the user cancelled out of this dialog.</dd>
+<dd>the String the user input, or null if the user cancelled out of
+         this dialog.</dd>
 </dl>
 </li>
 </ul>

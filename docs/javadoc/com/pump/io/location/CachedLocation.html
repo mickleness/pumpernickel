@@ -121,16 +121,18 @@ var activeTableTab = "activeTableTab";
 extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></pre>
 <div class="block">This is an <code>IOLocation</code> that caches most simple properties
  (include children) for immediate return.
- <p>It's tempting to think that these calls should generally be fast,
- but we've seen <code>java.io.File.exists()</code> stall for several seconds
- at a time when the file system is experiencing network connectivity problems.
- <p>By caching all of these values: it becomes imperative that you invoke
+ <p>
+ It's tempting to think that these calls should generally be fast, but we've
+ seen <code>java.io.File.exists()</code> stall for several seconds at a time
+ when the file system is experiencing network connectivity problems.
+ <p>
+ By caching all of these values: it becomes imperative that you invoke
  <a href="../../../../com/pump/io/location/CachedLocation.html#flush--"><code>flush()</code></a> at the appropriate times to clear cached data. For example:
- after writing, deleting or renaming a file the data should be flushed. You might
- also consider flushing cached data when a file navigation dialog is reactivated
- (because the user might have just switched from the OS back to the app after
- manipulating files). But the other 90% of the time: the cached value should be
- reasonably trustworthy.</div>
+ after writing, deleting or renaming a file the data should be flushed. You
+ might also consider flushing cached data when a file navigation dialog is
+ reactivated (because the user might have just switched from the OS back to
+ the app after manipulating files). But the other 90% of the time: the cached
+ value should be reasonably trustworthy.</div>
 </li>
 </ul>
 </div>
@@ -345,8 +347,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <td class="colFirst"><code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/CachedLocation.html#listChildren-com.pump.util.Receiver-com.pump.swing.BasicCancellable-">listChildren</a></span>(<a href="../../../../com/pump/util/Receiver.html" title="interface in com.pump.util">Receiver</a>&lt;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&gt;&nbsp;receiver,
             <a href="../../../../com/pump/swing/BasicCancellable.html" title="class in com.pump.swing">BasicCancellable</a>&nbsp;cancellable)</code>
-<div class="block">This method starts a separate thread that gathers and caches
- the children of this location.</div>
+<div class="block">This method starts a separate thread that gathers and caches the children
+ of this location.</div>
 </td>
 </tr>
 <tr id="i25" class="rowColor">
@@ -420,11 +422,10 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <h4>flush</h4>
 <pre>public&nbsp;void&nbsp;flush()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#flush--">IOLocation</a></code></span></div>
-<div class="block">This flushes any cached information about this location.
- Some locations may cache several properties: the children,
- isHidden, exists, etc.  This method should be called when
- we know that something has changed and all cached values
- should be purged.</div>
+<div class="block">This flushes any cached information about this location. Some locations
+ may cache several properties: the children, isHidden, exists, etc. This
+ method should be called when we know that something has changed and all
+ cached values should be purged.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#flush--">flush</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -439,26 +440,25 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <h4>listChildren</h4>
 <pre>public final&nbsp;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>[]&nbsp;listChildren(<a href="../../../../com/pump/util/Receiver.html" title="interface in com.pump.util">Receiver</a>&lt;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&gt;&nbsp;receiver,
                                        <a href="../../../../com/pump/swing/BasicCancellable.html" title="class in com.pump.swing">BasicCancellable</a>&nbsp;cancellable)</pre>
-<div class="block">This method starts a separate thread that gathers and caches
- the children of this location. Subsequent calls to listChildren()
- will return immediately, unless <code>flush()</code> has cleared
- the cached data of this <code>IOLocation</code>.
+<div class="block">This method starts a separate thread that gathers and caches the children
+ of this location. Subsequent calls to listChildren() will return
+ immediately, unless <code>flush()</code> has cleared the cached data of
+ this <code>IOLocation</code>.
  
- <p>TODO: take into account the last modified time.</div>
+ <p>
+ TODO: take into account the last modified time.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#listChildren-com.pump.util.Receiver-com.pump.swing.BasicCancellable-">listChildren</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>receiver</code> - an optional <code>Receiver</code> to be
- notified as each child is processed.</dd>
-<dd><code>cancellable</code> - an optional <code>Cancellable</code>.
- If non-null: classes that
- extend this class should constantly poll it to see
- if <code>isCancelled()</code> is <code>true</code>.</dd>
+<dd><code>receiver</code> - an optional <code>Receiver</code> to be notified as each child
+            is processed.</dd>
+<dd><code>cancellable</code> - an optional <code>Cancellable</code>. If non-null: classes
+            that extend this class should constantly poll it to see if
+            <code>isCancelled()</code> is <code>true</code>.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>all the children (if any) of this object.
- This should not return null, but may return an empty
- array for non-directories.</dd>
+<dd>all the children (if any) of this object. This should not return
+         null, but may return an empty array for non-directories.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/CachedLocation.html#doListChildren-com.pump.util.Receiver-com.pump.swing.Cancellable-"><code>doListChildren(Receiver, Cancellable)</code></a></dd>
 </dl>
@@ -472,8 +472,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <h4>doListChildren</h4>
 <pre>protected abstract&nbsp;void&nbsp;doListChildren(<a href="../../../../com/pump/util/Receiver.html" title="interface in com.pump.util">Receiver</a>&lt;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&gt;&nbsp;receiver,
                                        <a href="../../../../com/pump/swing/Cancellable.html" title="interface in com.pump.swing">Cancellable</a>&nbsp;cancellable)</pre>
-<div class="block">List the children of this location. This is invoked by <code>listChildren()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">List the children of this location. This is invoked by
+ <code>listChildren()</code>, but this value is cached for future use
+ until <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/CachedLocation.html#flush--"><code>flush()</code></a>, 
@@ -488,8 +489,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>doGetPath</h4>
 <pre>protected abstract&nbsp;java.lang.String&nbsp;doGetPath()</pre>
-<div class="block">Return the path of this location. This is invoked by <code>getPath()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return the path of this location. This is invoked by
+ <code>getPath()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/CachedLocation.html#flush--"><code>flush()</code></a>, 
@@ -504,8 +506,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>doGetName</h4>
 <pre>protected abstract&nbsp;java.lang.String&nbsp;doGetName()</pre>
-<div class="block">Return the name of this location. This is invoked by <code>getName()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return the name of this location. This is invoked by
+ <code>getName()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/CachedLocation.html#flush--"><code>flush()</code></a>, 
@@ -520,8 +523,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>doCanWrite</h4>
 <pre>protected abstract&nbsp;boolean&nbsp;doCanWrite()</pre>
-<div class="block">Return whether this location can be written to. This is invoked by <code>canWrite()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location can be written to. This is invoked by
+ <code>canWrite()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/CachedLocation.html#flush--"><code>flush()</code></a>, 
@@ -536,8 +540,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>doCanRead</h4>
 <pre>protected abstract&nbsp;boolean&nbsp;doCanRead()</pre>
-<div class="block">Return whether this location can be read. This is invoked by <code>canRead()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location can be read. This is invoked by
+ <code>canRead()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/CachedLocation.html#flush--"><code>flush()</code></a>, 
@@ -552,8 +557,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>doIsDirectory</h4>
 <pre>protected abstract&nbsp;boolean&nbsp;doIsDirectory()</pre>
-<div class="block">Return whether this location is a directory. This is invoked by <code>isDirectory()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location is a directory. This is invoked by
+ <code>isDirectory()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/CachedLocation.html#flush--"><code>flush()</code></a>, 
@@ -568,8 +574,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>doIsHidden</h4>
 <pre>protected abstract&nbsp;boolean&nbsp;doIsHidden()</pre>
-<div class="block">Return whether this location is hidden. This is invoked by <code>isHidden()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location is hidden. This is invoked by
+ <code>isHidden()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/CachedLocation.html#flush--"><code>flush()</code></a>, 
@@ -584,8 +591,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>doIsAlias</h4>
 <pre>protected abstract&nbsp;boolean&nbsp;doIsAlias()</pre>
-<div class="block">Return whether this location is an alias. This is invoked by <code>isAlias</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location is an alias. This is invoked by
+ <code>isAlias</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/CachedLocation.html#flush--"><code>flush()</code></a>, 
@@ -600,8 +608,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>doIsNavigable</h4>
 <pre>protected abstract&nbsp;boolean&nbsp;doIsNavigable()</pre>
-<div class="block">Return whether this location is navigable. This is invoked by <code>isNavigable()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location is navigable. This is invoked by
+ <code>isNavigable()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/CachedLocation.html#flush--"><code>flush()</code></a>, 
@@ -616,8 +625,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>doExists</h4>
 <pre>protected abstract&nbsp;boolean&nbsp;doExists()</pre>
-<div class="block">Return whether this location exists. This is invoked by <code>exists()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location exists. This is invoked by
+ <code>exists()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/CachedLocation.html#flush--"><code>flush()</code></a>, 
@@ -633,8 +643,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <h4>doLength</h4>
 <pre>protected abstract&nbsp;long&nbsp;doLength()
                           throws java.io.IOException</pre>
-<div class="block">Return the file length of this location. This is invoked by <code>length()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return the file length of this location. This is invoked by
+ <code>length()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
@@ -652,8 +663,9 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <h4>doGetModificationDate</h4>
 <pre>protected abstract&nbsp;long&nbsp;doGetModificationDate()
                                        throws java.io.IOException</pre>
-<div class="block">Return the last modification date of this location. This is invoked by <code>getModificationDate()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return the last modification date of this location. This is invoked by
+ <code>getModificationDate()</code>, but this value is cached for future
+ use until <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
@@ -706,8 +718,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>canWrite</h4>
 <pre>public final&nbsp;boolean&nbsp;canWrite()</pre>
-<div class="block">Return whether this location can be written to. This method originally calls
- <code>doCanWrite()</code>, but this value is then cached until
+<div class="block">Return whether this location can be written to. This method originally
+ calls <code>doCanWrite()</code>, but this value is then cached until
  <code>flush()</code> is invoked.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

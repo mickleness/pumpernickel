@@ -139,13 +139,12 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">HSBInlineDemo</span>
 extends <a href="../../../com/pump/showcase/OutputDemo.html" title="class in com.pump.showcase">OutputDemo</a></pre>
-<div class="block">This demonstrates the performance difference
- you see in a tight loop iterating over pixels
- if you avoid making any external method calls.
- <P>On my computers (Mac OS 10.3.9 and Mac OS 10.4.9)
- I see about ta 20% improvement in performance
- with the <code>filterQuickly</code> method than with
- the <code>filterSlowly</code> method.</div>
+<div class="block">This demonstrates the performance difference you see in a tight loop
+ iterating over pixels if you avoid making any external method calls.
+ <P>
+ On my computers (Mac OS 10.3.9 and Mac OS 10.4.9) I see about ta 20%
+ improvement in performance with the <code>filterQuickly</code> method than
+ with the <code>filterSlowly</code> method.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.showcase.HSBInlineDemo">Serialized Form</a></dd>
@@ -262,9 +261,8 @@ extends <a href="../../../com/pump/showcase/OutputDemo.html" title="class in com
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/HSBInlineDemo.html#filterWithInlining-java.awt.image.BufferedImage-java.awt.image.BufferedImage-float-">filterWithInlining</a></span>(java.awt.image.BufferedImage&nbsp;src,
                   java.awt.image.BufferedImage&nbsp;dest,
                   float&nbsp;hueShift)</code>
-<div class="block">This method does the same thing filterSlowly
- does, but it doesn't rely on any extra method
- calls.</div>
+<div class="block">This method does the same thing filterSlowly does, but it doesn't rely on
+ any extra method calls.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -272,8 +270,8 @@ extends <a href="../../../com/pump/showcase/OutputDemo.html" title="class in com
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/HSBInlineDemo.html#filterWithoutInlining-java.awt.image.BufferedImage-java.awt.image.BufferedImage-float-">filterWithoutInlining</a></span>(java.awt.image.BufferedImage&nbsp;src,
                      java.awt.image.BufferedImage&nbsp;dest,
                      float&nbsp;hueShift)</code>
-<div class="block">This shifts the hue of every pixel in src
- by calling Color.HSBtoRGB and Color.RGBtoHSB</div>
+<div class="block">This shifts the hue of every pixel in src by calling Color.HSBtoRGB and
+ Color.RGBtoHSB</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -356,8 +354,8 @@ extends <a href="../../../com/pump/showcase/OutputDemo.html" title="class in com
 <pre>public static&nbsp;void&nbsp;filterWithoutInlining(java.awt.image.BufferedImage&nbsp;src,
                                          java.awt.image.BufferedImage&nbsp;dest,
                                          float&nbsp;hueShift)</pre>
-<div class="block">This shifts the hue of every pixel in src
- by calling Color.HSBtoRGB and Color.RGBtoHSB</div>
+<div class="block">This shifts the hue of every pixel in src by calling Color.HSBtoRGB and
+ Color.RGBtoHSB</div>
 </li>
 </ul>
 <a name="filterWithInlining-java.awt.image.BufferedImage-java.awt.image.BufferedImage-float-">
@@ -369,10 +367,9 @@ extends <a href="../../../com/pump/showcase/OutputDemo.html" title="class in com
 <pre>public static&nbsp;void&nbsp;filterWithInlining(java.awt.image.BufferedImage&nbsp;src,
                                       java.awt.image.BufferedImage&nbsp;dest,
                                       float&nbsp;hueShift)</pre>
-<div class="block">This method does the same thing filterSlowly
- does, but it doesn't rely on any extra method
- calls.  It shows about a 20% improvement in
- performance on my computer.</div>
+<div class="block">This method does the same thing filterSlowly does, but it doesn't rely on
+ any extra method calls. It shows about a 20% improvement in performance
+ on my computer.</div>
 </li>
 </ul>
 <a name="run--">

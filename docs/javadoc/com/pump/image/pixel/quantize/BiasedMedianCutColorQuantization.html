@@ -116,17 +116,21 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">BiasedMedianCutColorQuantization</span>
 extends <a href="../../../../../com/pump/image/pixel/quantize/ColorQuantization.html" title="class in com.pump.image.pixel.quantize">ColorQuantization</a></pre>
 <div class="block">This is a modified <code>MedianCutColorQuantization</code>.
- <p>Before applying the median cut algorithm: this sorts all colors
- by frequency. Then, given a fixed threshold, it evaluates which
- colors occur so frequently that they should be preserved exactly as-is.
- <p>For example: if the color white makes up 15% of the pixels, and you
- pass a threshold such as .1 (10%), then the color white will be preserved
- in the reduced palette.
- <p>Without this precaution: important colors may still be averaged with
- other colors in a cluster.
- <p>(Previous revisions of this class include attempts to offer
- additional biases (based on human perception of color), but those experiments
- were abandoned after no discernible improvement was made.)</div>
+ <p>
+ Before applying the median cut algorithm: this sorts all colors by frequency.
+ Then, given a fixed threshold, it evaluates which colors occur so frequently
+ that they should be preserved exactly as-is.
+ <p>
+ For example: if the color white makes up 15% of the pixels, and you pass a
+ threshold such as .1 (10%), then the color white will be preserved in the
+ reduced palette.
+ <p>
+ Without this precaution: important colors may still be averaged with other
+ colors in a cluster.
+ <p>
+ (Previous revisions of this class include attempts to offer additional biases
+ (based on human perception of color), but those experiments were abandoned
+ after no discernible improvement was made.)</div>
 </li>
 </ul>
 </div>
@@ -146,14 +150,14 @@ extends <a href="../../../../../com/pump/image/pixel/quantize/ColorQuantization.
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../com/pump/image/pixel/quantize/BiasedMedianCutColorQuantization.html#BiasedMedianCutColorQuantization--">BiasedMedianCutColorQuantization</a></span>()</code>
-<div class="block">Create a <code>BiasedMedianCutColorQuantization</code> with
- a threshold of .1 (10%).</div>
+<div class="block">Create a <code>BiasedMedianCutColorQuantization</code> with a threshold
+ of .1 (10%).</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../com/pump/image/pixel/quantize/BiasedMedianCutColorQuantization.html#BiasedMedianCutColorQuantization-float-">BiasedMedianCutColorQuantization</a></span>(float&nbsp;pureColorThreshold)</code>
-<div class="block">Create a <code>BiasedMedianCutColorQuantization</code> with
- a fixed threshold.</div>
+<div class="block">Create a <code>BiasedMedianCutColorQuantization</code> with a fixed
+ threshold.</div>
 </td>
 </tr>
 </table>
@@ -208,8 +212,8 @@ extends <a href="../../../../../com/pump/image/pixel/quantize/ColorQuantization.
 <li class="blockList">
 <h4>BiasedMedianCutColorQuantization</h4>
 <pre>public&nbsp;BiasedMedianCutColorQuantization()</pre>
-<div class="block">Create a <code>BiasedMedianCutColorQuantization</code> with
- a threshold of .1 (10%).</div>
+<div class="block">Create a <code>BiasedMedianCutColorQuantization</code> with a threshold
+ of .1 (10%).</div>
 </li>
 </ul>
 <a name="BiasedMedianCutColorQuantization-float-">
@@ -219,14 +223,14 @@ extends <a href="../../../../../com/pump/image/pixel/quantize/ColorQuantization.
 <li class="blockList">
 <h4>BiasedMedianCutColorQuantization</h4>
 <pre>public&nbsp;BiasedMedianCutColorQuantization(float&nbsp;pureColorThreshold)</pre>
-<div class="block">Create a <code>BiasedMedianCutColorQuantization</code> with
- a fixed threshold.</div>
+<div class="block">Create a <code>BiasedMedianCutColorQuantization</code> with a fixed
+ threshold.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>pureColorThreshold</code> - a fractional value (from 0-1) representing
- the cut-off point for a color to be considered so important that it
- is added to the finished set as-is. A recommended value for this is
- around .1 (10%).</dd>
+<dd><code>pureColorThreshold</code> - a fractional value (from 0-1) representing the cut-off point
+            for a color to be considered so important that it is added to
+            the finished set as-is. A recommended value for this is around
+            .1 (10%).</dd>
 </dl>
 </li>
 </ul>
@@ -256,11 +260,13 @@ extends <a href="../../../../../com/pump/image/pixel/quantize/ColorQuantization.
 <dd><code>originalSet</code> - the large color set to reduce.</dd>
 <dd><code>maximumColorCount</code> - the number of colors to reduce to.</dd>
 <dd><code>retainOriginalIntegrity</code> - if true then the argument <code>originalSet</code> should not
- be modified. If false: then this method may change the original color set at its discretion.
- (In some algorithms: this may save a lot of time.)</dd>
+            be modified. If false: then this method may change the
+            original color set at its discretion. (In some algorithms:
+            this may save a lot of time.)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a <code>ColorSet</code> that conforms to maximumColorCount. (This method
- may return the <code>originalSet</code> argument if it was already small enough.)</dd>
+<dd>a <code>ColorSet</code> that conforms to maximumColorCount. (This
+         method may return the <code>originalSet</code> argument if it was
+         already small enough.)</dd>
 </dl>
 </li>
 </ul>

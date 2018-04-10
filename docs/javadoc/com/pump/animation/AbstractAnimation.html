@@ -114,8 +114,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">AbstractAnimation</span>
 extends java.lang.Object</pre>
-<div class="block">This represents an animation that you can append
- frames to.</div>
+<div class="block">This represents an animation that you can append frames to.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/animation/AbstractAnimation.html#addFrame-java.awt.image.BufferedImage-int-"><code>addFrame(BufferedImage, int)</code></a>, 
@@ -142,8 +141,7 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>protected static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/animation/AbstractAnimation.Frame.html" title="class in com.pump.animation">AbstractAnimation.Frame</a></span></code>
-<div class="block">An abstract representation of a frame from
- an animation.</div>
+<div class="block">An abstract representation of a frame from an animation.</div>
 </td>
 </tr>
 </table>
@@ -258,7 +256,7 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>bi</code> - the image to append. This must be the width and height of this
- animation.</dd>
+            animation.</dd>
 <dd><code>duration</code> - the duration (in ms) of this frame.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if a problem occurs writing the image data</dd>
@@ -294,14 +292,14 @@ extends java.lang.Object</pre>
 <h4>createReader</h4>
 <pre>public&nbsp;<a href="../../../com/pump/animation/ResettableAnimationReader.html" title="interface in com.pump.animation">ResettableAnimationReader</a>&nbsp;createReader()</pre>
 <div class="block">Create a new <code>ResettableAnimationReader</code> that iterates over
- this <code>AbstractAnimation</code>. Note the reader will only
- iterate over frames that exist as of the instant this method is
- invoked -- so if you add another 100 frames after calling this
- method then this reader will not include them.</div>
+ this <code>AbstractAnimation</code>. Note the reader will only iterate
+ over frames that exist as of the instant this method is invoked -- so if
+ you add another 100 frames after calling this method then this reader
+ will not include them.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a new ResettableAnimationReader for what currently exists
- in this animation.</dd>
+<dd>a new ResettableAnimationReader for what currently exists in this
+         animation.</dd>
 </dl>
 </li>
 </ul>

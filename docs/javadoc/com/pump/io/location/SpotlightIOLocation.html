@@ -194,13 +194,15 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>java.io.InputStream</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/SpotlightIOLocation.html#createInputStream--">createInputStream</a></span>()</code>
-<div class="block">Creates an <code>InputStream</code> to read from this location -- if possible.</div>
+<div class="block">Creates an <code>InputStream</code> to read from this location -- if
+ possible.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.io.OutputStream</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/SpotlightIOLocation.html#createOutputStream--">createOutputStream</a></span>()</code>
-<div class="block">Creates an <code>OutputStream</code> to write to this location -- if possible.</div>
+<div class="block">Creates an <code>OutputStream</code> to write to this location -- if
+ possible.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -315,8 +317,7 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>java.net.URL</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/SpotlightIOLocation.html#getURL--">getURL</a></span>()</code>
-<div class="block">If possible this will return a URL pointing to this
- location.</div>
+<div class="block">If possible this will return a URL pointing to this location.</div>
 </td>
 </tr>
 <tr id="i21" class="rowColor">
@@ -402,8 +403,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>doGetPath</h4>
 <pre>protected&nbsp;java.lang.String&nbsp;doGetPath()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doGetPath--">CachedLocation</a></code></span></div>
-<div class="block">Return the path of this location. This is invoked by <code>getPath()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return the path of this location. This is invoked by
+ <code>getPath()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doGetPath--">doGetPath</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -421,8 +423,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>doCanRead</h4>
 <pre>protected&nbsp;boolean&nbsp;doCanRead()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doCanRead--">CachedLocation</a></code></span></div>
-<div class="block">Return whether this location can be read. This is invoked by <code>canRead()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location can be read. This is invoked by
+ <code>canRead()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doCanRead--">doCanRead</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -440,8 +443,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>doCanWrite</h4>
 <pre>protected&nbsp;boolean&nbsp;doCanWrite()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doCanWrite--">CachedLocation</a></code></span></div>
-<div class="block">Return whether this location can be written to. This is invoked by <code>canWrite()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location can be written to. This is invoked by
+ <code>canWrite()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doCanWrite--">doCanWrite</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -475,9 +479,8 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <pre>public&nbsp;void&nbsp;mkdir()
            throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#mkdir--">IOLocation</a></code></span></div>
-<div class="block">Creates a directory at this location.
- This will throw an exception if a file already
- exists at this location.</div>
+<div class="block">Creates a directory at this location. This will throw an exception if a
+ file already exists at this location.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#mkdir--">mkdir</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -495,15 +498,15 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>getChild</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;getChild(java.lang.String&nbsp;name)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#getChild-java.lang.String-">IOLocation</a></code></span></div>
-<div class="block">This returns a reference to a child of this location.
- This may return null if this location cannot contain children
- (either because it is a file and not a directory, or because
- it is a directory that doesn't have write privileges).
- <p>Also note that this can return a child that does not
- exist.
- <p>The default implementation only polls existing
- children: subclasses are encouraged to override this
- to return locations that do not yet exist.</div>
+<div class="block">This returns a reference to a child of this location. This may return
+ null if this location cannot contain children (either because it is a
+ file and not a directory, or because it is a directory that doesn't have
+ write privileges).
+ <p>
+ Also note that this can return a child that does not exist.
+ <p>
+ The default implementation only polls existing children: subclasses are
+ encouraged to override this to return locations that do not yet exist.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#getChild-java.lang.String-">getChild</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -523,7 +526,8 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <pre>public&nbsp;java.io.InputStream&nbsp;createInputStream()
                                       throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#createInputStream--">IOLocation</a></code></span></div>
-<div class="block">Creates an <code>InputStream</code> to read from this location -- if possible.</div>
+<div class="block">Creates an <code>InputStream</code> to read from this location -- if
+ possible.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#createInputStream--">createInputStream</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -541,7 +545,8 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <pre>public&nbsp;java.io.OutputStream&nbsp;createOutputStream()
                                         throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#createOutputStream--">IOLocation</a></code></span></div>
-<div class="block">Creates an <code>OutputStream</code> to write to this location -- if possible.</div>
+<div class="block">Creates an <code>OutputStream</code> to write to this location -- if
+ possible.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#createOutputStream--">createOutputStream</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -578,8 +583,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>doExists</h4>
 <pre>protected&nbsp;boolean&nbsp;doExists()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doExists--">CachedLocation</a></code></span></div>
-<div class="block">Return whether this location exists. This is invoked by <code>exists()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location exists. This is invoked by
+ <code>exists()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doExists--">doExists</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -597,8 +603,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>doGetModificationDate</h4>
 <pre>protected&nbsp;long&nbsp;doGetModificationDate()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doGetModificationDate--">CachedLocation</a></code></span></div>
-<div class="block">Return the last modification date of this location. This is invoked by <code>getModificationDate()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return the last modification date of this location. This is invoked by
+ <code>getModificationDate()</code>, but this value is cached for future
+ use until <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doGetModificationDate--">doGetModificationDate</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -616,8 +623,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>doGetName</h4>
 <pre>protected&nbsp;java.lang.String&nbsp;doGetName()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doGetName--">CachedLocation</a></code></span></div>
-<div class="block">Return the name of this location. This is invoked by <code>getName()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return the name of this location. This is invoked by
+ <code>getName()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doGetName--">doGetName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -651,8 +659,8 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <pre>public&nbsp;java.lang.String&nbsp;getParentPath()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#getParentPath--">IOLocation</a></code></span></div>
 <div class="block">Returns the parent path of this node.
- <p>This should be equivalent to calling:
- <code>getParent().getPath()</code>.</div>
+ <p>
+ This should be equivalent to calling: <code>getParent().getPath()</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#getParentPath--">getParentPath</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -667,8 +675,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>doIsAlias</h4>
 <pre>protected&nbsp;boolean&nbsp;doIsAlias()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doIsAlias--">CachedLocation</a></code></span></div>
-<div class="block">Return whether this location is an alias. This is invoked by <code>isAlias</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location is an alias. This is invoked by
+ <code>isAlias</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doIsAlias--">doIsAlias</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -686,8 +695,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>doIsDirectory</h4>
 <pre>protected&nbsp;boolean&nbsp;doIsDirectory()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doIsDirectory--">CachedLocation</a></code></span></div>
-<div class="block">Return whether this location is a directory. This is invoked by <code>isDirectory()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location is a directory. This is invoked by
+ <code>isDirectory()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doIsDirectory--">doIsDirectory</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -705,8 +715,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>doIsHidden</h4>
 <pre>protected&nbsp;boolean&nbsp;doIsHidden()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doIsHidden--">CachedLocation</a></code></span></div>
-<div class="block">Return whether this location is hidden. This is invoked by <code>isHidden()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location is hidden. This is invoked by
+ <code>isHidden()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doIsHidden--">doIsHidden</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -733,8 +744,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>doLength</h4>
 <pre>protected&nbsp;long&nbsp;doLength()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doLength--">CachedLocation</a></code></span></div>
-<div class="block">Return the file length of this location. This is invoked by <code>length()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return the file length of this location. This is invoked by
+ <code>length()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doLength--">doLength</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -752,8 +764,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>doIsNavigable</h4>
 <pre>protected&nbsp;boolean&nbsp;doIsNavigable()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doIsNavigable--">CachedLocation</a></code></span></div>
-<div class="block">Return whether this location is navigable. This is invoked by <code>isNavigable()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">Return whether this location is navigable. This is invoked by
+ <code>isNavigable()</code>, but this value is cached for future use until
+ <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doIsNavigable--">doIsNavigable</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -787,8 +800,9 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <pre>protected&nbsp;void&nbsp;doListChildren(<a href="../../../../com/pump/util/Receiver.html" title="interface in com.pump.util">Receiver</a>&lt;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&gt;&nbsp;receiver,
                               <a href="../../../../com/pump/swing/Cancellable.html" title="interface in com.pump.swing">Cancellable</a>&nbsp;cancellable)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html#doListChildren-com.pump.util.Receiver-com.pump.swing.Cancellable-">CachedLocation</a></code></span></div>
-<div class="block">List the children of this location. This is invoked by <code>listChildren()</code>,
- but this value is cached for future use until <code>flush()</code> is called.</div>
+<div class="block">List the children of this location. This is invoked by
+ <code>listChildren()</code>, but this value is cached for future use
+ until <code>flush()</code> is called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/CachedLocation.html#doListChildren-com.pump.util.Receiver-com.pump.swing.Cancellable-">doListChildren</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/CachedLocation.html" title="class in com.pump.io.location">CachedLocation</a></code></dd>
@@ -807,17 +821,21 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <pre>public&nbsp;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;setName(java.lang.String&nbsp;s)
                    throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#setName-java.lang.String-">IOLocation</a></code></span></div>
-<div class="block">This changes the name of this location.  If there are resources currently
- at this location: those resources should be moved if <code>getName().equals(s)</code>
- is <code>false</code> and no exceptions occur.
- <P>This method is not capable of moving a resource to another directory structure.</div>
+<div class="block">This changes the name of this location. If there are resources currently
+ at this location: those resources should be moved if
+ <code>getName().equals(s)</code> is <code>false</code> and no exceptions
+ occur.
+ <P>
+ This method is not capable of moving a resource to another directory
+ structure.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#setName-java.lang.String-">setName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - the name name of this resource.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new IOLocation the resource formerly at this location can now be accessed from.</dd>
+<dd>the new IOLocation the resource formerly at this location can now
+         be accessed from.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.SetNameException.html" title="class in com.pump.io.location">IOLocation.SetNameException</a></code> - if an error occurred renaming this file.</dd>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
@@ -832,11 +850,10 @@ implements <a href="../../../../com/pump/io/location/SearchResults.html" title="
 <h4>getURL</h4>
 <pre>public&nbsp;java.net.URL&nbsp;getURL()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#getURL--">IOLocation</a></code></span></div>
-<div class="block">If possible this will return a URL pointing to this
- location.  This may return <code>null</code> if no such
- URL exists. (For example: a collection of search results
- is a directory of valid IOLocations that does not have
- a URL.)</div>
+<div class="block">If possible this will return a URL pointing to this location. This may
+ return <code>null</code> if no such URL exists. (For example: a
+ collection of search results is a directory of valid IOLocations that
+ does not have a URL.)</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#getURL--">getURL</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>

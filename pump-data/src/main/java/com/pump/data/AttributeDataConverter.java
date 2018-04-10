@@ -36,8 +36,6 @@ public interface AttributeDataConverter<K, B> {
 	 * This needs to be a relatively light/fast call, because it may be
 	 * consulted frequently.
 	 * 
-	 * @param source
-	 *            the branch that supplied this data.
 	 * @param beanId
 	 *            the id of the bean requested.
 	 * @param beanData

@@ -115,11 +115,13 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">Thumbnail</span>
 extends java.lang.Object</pre>
 <div class="block">This is an abstract model to format thumbnails.
- <p>Here "format thumbnails" refers to adding small tasteful decorations
- to a scaled image to make a professional looking graphic.
- This class uses the <a href="../../../../com/pump/image/pixel/Scaling.html" title="class in com.pump.image.pixel"><code>Scaling</code></a> class to implement
- the actual scaling. (If all you're interested in in scaling a large image,
- then please refer to that class, at the <a href="http://javagraphics.blogspot.com/2010/06/images-scaling-down.html">
+ <p>
+ Here "format thumbnails" refers to adding small tasteful decorations to a
+ scaled image to make a professional looking graphic. This class uses the
+ <a href="../../../../com/pump/image/pixel/Scaling.html" title="class in com.pump.image.pixel"><code>Scaling</code></a> class to implement the actual scaling.
+ (If all you're interested in in scaling a large image, then please refer to
+ that class, at the <a
+ href="http://javagraphics.blogspot.com/2010/06/images-scaling-down.html">
  accompanying discussion</a>.)</div>
 </li>
 </ul>
@@ -169,7 +171,8 @@ extends java.lang.Object</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static java.awt.RenderingHints</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/thumbnail/Thumbnail.html#qualityHints">qualityHints</a></span></code>
-<div class="block">A set of high-quality rendering hints for the keys ANTIALIASING, INTERPOLATION, COLOR_RENDER, STROKE, and RENDER.</div>
+<div class="block">A set of high-quality rendering hints for the keys ANTIALIASING,
+ INTERPOLATION, COLOR_RENDER, STROKE, and RENDER.</div>
 </td>
 </tr>
 </table>
@@ -278,7 +281,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>qualityHints</h4>
 <pre>protected static final&nbsp;java.awt.RenderingHints qualityHints</pre>
-<div class="block">A set of high-quality rendering hints for the keys ANTIALIASING, INTERPOLATION, COLOR_RENDER, STROKE, and RENDER.</div>
+<div class="block">A set of high-quality rendering hints for the keys ANTIALIASING,
+ INTERPOLATION, COLOR_RENDER, STROKE, and RENDER.</div>
 </li>
 </ul>
 </li>
@@ -318,14 +322,16 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - a url for a PNG, JPG, GIF, or BMP image.</dd>
-<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the
- returned thumbnail may be smaller than these bounds. For example:
- if you have a 4:3 landscape-oriented picture and the maximum size is
- 64x64 pixels, then the return image will be 64 pixels wide and
- approximately 48 pixels tall. (It may not be exactly 48 pixels tall,
- depending on the decorations this thumbnail format may add.)
- <p>If the source image is already smaller than the maxSize, then
- the source image is not scaled to create this thumbnail.</dd>
+<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the returned
+            thumbnail may be smaller than these bounds. For example: if
+            you have a 4:3 landscape-oriented picture and the maximum size
+            is 64x64 pixels, then the return image will be 64 pixels wide
+            and approximately 48 pixels tall. (It may not be exactly 48
+            pixels tall, depending on the decorations this thumbnail
+            format may add.)
+            <p>
+            If the source image is already smaller than the maxSize, then
+            the source image is not scaled to create this thumbnail.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an image that is at most maxSize dimensions.</dd>
 </dl>
@@ -343,14 +349,16 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - an image to create a thumbnail for.</dd>
-<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the
- returned thumbnail may be smaller than these bounds. For example:
- if you have a 4:3 landscape-oriented picture and the maximum size is
- 64x64 pixels, then the return image will be 64 pixels wide and
- approximately 48 pixels tall. (It may not be exactly 48 pixels tall,
- depending on the decorations this thumbnail format may add.)
- <p>If the source image is already smaller than the maxSize, then
- the source image is not scaled to create this thumbnail.</dd>
+<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the returned
+            thumbnail may be smaller than these bounds. For example: if
+            you have a 4:3 landscape-oriented picture and the maximum size
+            is 64x64 pixels, then the return image will be 64 pixels wide
+            and approximately 48 pixels tall. (It may not be exactly 48
+            pixels tall, depending on the decorations this thumbnail
+            format may add.)
+            <p>
+            If the source image is already smaller than the maxSize, then
+            the source image is not scaled to create this thumbnail.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an image that is at most maxSize dimensions.</dd>
 </dl>
@@ -368,14 +376,16 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - a file for a PNG, JPG, GIF, or BMP image.</dd>
-<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the
- returned thumbnail may be smaller than these bounds. For example:
- if you have a 4:3 landscape-oriented picture and the maximum size is
- 64x64 pixels, then the return image will be 64 pixels wide and
- approximately 48 pixels tall. (It may not be exactly 48 pixels tall,
- depending on the decorations this thumbnail format may add.)
- <p>If the source image is already smaller than the maxSize, then
- the source image is not scaled to create this thumbnail.</dd>
+<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the returned
+            thumbnail may be smaller than these bounds. For example: if
+            you have a 4:3 landscape-oriented picture and the maximum size
+            is 64x64 pixels, then the return image will be 64 pixels wide
+            and approximately 48 pixels tall. (It may not be exactly 48
+            pixels tall, depending on the decorations this thumbnail
+            format may add.)
+            <p>
+            If the source image is already smaller than the maxSize, then
+            the source image is not scaled to create this thumbnail.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an image that is at most maxSize dimensions.</dd>
 </dl>
@@ -393,14 +403,16 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - an image to create a thumbnail for.</dd>
-<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the
- returned thumbnail may be smaller than these bounds. For example:
- if you have a 4:3 landscape-oriented picture and the maximum size is
- 64x64 pixels, then the return image will be 64 pixels wide and
- approximately 48 pixels tall. (It may not be exactly 48 pixels tall,
- depending on the decorations this thumbnail format may add.)
- <p>If the source image is already smaller than the maxSize, then
- the source image is not scaled to create this thumbnail.</dd>
+<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the returned
+            thumbnail may be smaller than these bounds. For example: if
+            you have a 4:3 landscape-oriented picture and the maximum size
+            is 64x64 pixels, then the return image will be 64 pixels wide
+            and approximately 48 pixels tall. (It may not be exactly 48
+            pixels tall, depending on the decorations this thumbnail
+            format may add.)
+            <p>
+            If the source image is already smaller than the maxSize, then
+            the source image is not scaled to create this thumbnail.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an image that is at most maxSize dimensions.</dd>
 </dl>
@@ -418,14 +430,16 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - the image source.</dd>
-<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the
- returned thumbnail may be smaller than these bounds. For example:
- if you have a 4:3 landscape-oriented picture and the maximum size is
- 64x64 pixels, then the return image will be 64 pixels wide and
- approximately 48 pixels tall. (It may not be exactly 48 pixels tall,
- depending on the decorations this thumbnail format may add.)
- <p>If the source image is already smaller than the maxSize, then
- the source image is not scaled to create this thumbnail.</dd>
+<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the returned
+            thumbnail may be smaller than these bounds. For example: if
+            you have a 4:3 landscape-oriented picture and the maximum size
+            is 64x64 pixels, then the return image will be 64 pixels wide
+            and approximately 48 pixels tall. (It may not be exactly 48
+            pixels tall, depending on the decorations this thumbnail
+            format may add.)
+            <p>
+            If the source image is already smaller than the maxSize, then
+            the source image is not scaled to create this thumbnail.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an image that is at most maxSize dimensions.</dd>
 </dl>

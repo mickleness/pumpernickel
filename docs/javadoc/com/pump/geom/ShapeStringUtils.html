@@ -150,23 +150,23 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static java.awt.geom.GeneralPath</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/ShapeStringUtils.html#createGeneralPath-java.lang.String-">createGeneralPath</a></span>(java.lang.String&nbsp;s)</code>
-<div class="block">This creates a <code>GeneralPath</code> of rule WIND_EVEN_ODD
- that represents this shape data.</div>
+<div class="block">This creates a <code>GeneralPath</code> of rule WIND_EVEN_ODD that
+ represents this shape data.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static java.awt.geom.PathIterator</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/ShapeStringUtils.html#createPathIterator-java.lang.String-">createPathIterator</a></span>(java.lang.String&nbsp;s)</code>
-<div class="block">This creates a <code>PathIterator</code> that iterates
- over the text in <code>s</code>.</div>
+<div class="block">This creates a <code>PathIterator</code> that iterates over the text in
+ <code>s</code>.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static java.awt.geom.PathIterator</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/ShapeStringUtils.html#createPathIterator-java.lang.String-int-">createPathIterator</a></span>(java.lang.String&nbsp;s,
                   int&nbsp;windingRule)</code>
-<div class="block">This creates a <code>PathIterator</code> that iterates
- over the text in <code>s</code>.</div>
+<div class="block">This creates a <code>PathIterator</code> that iterates over the text in
+ <code>s</code>.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -225,14 +225,16 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>toString</h4>
 <pre>public static&nbsp;java.lang.String&nbsp;toString(java.awt.Shape&nbsp;s)</pre>
-<div class="block">This describes a shape in a <code>String</code>.  The model is used
- is based on how SVG encodes shape data.
- <P>The call:
- <BR><code>ShapeUtils.createPathIterator(ShapeUtils.toString(shape));</code>
- <BR>should result in an identical shape.
- <P>The shape data is formatted as a single letter (m, l, q, c, z)
- followed by the appropriate number of points (2, 2, 4, 6, 0 respectively).
- This uses floats, not doubles, so it will not contain strings with an exponent
+<div class="block">This describes a shape in a <code>String</code>. The model is used is
+ based on how SVG encodes shape data.
+ <P>
+ The call: <BR>
+ <code>ShapeUtils.createPathIterator(ShapeUtils.toString(shape));</code> <BR>
+ should result in an identical shape.
+ <P>
+ The shape data is formatted as a single letter (m, l, q, c, z) followed
+ by the appropriate number of points (2, 2, 4, 6, 0 respectively). This
+ uses floats, not doubles, so it will not contain strings with an exponent
  (i.e. "1.3e-4").</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -258,14 +260,17 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>createPathIterator</h4>
 <pre>public static&nbsp;java.awt.geom.PathIterator&nbsp;createPathIterator(java.lang.String&nbsp;s)</pre>
-<div class="block">This creates a <code>PathIterator</code> that iterates
- over the text in <code>s</code>.
- <P>The shape returned uses winding rule WIND_EVEN_ODD.</div>
+<div class="block">This creates a <code>PathIterator</code> that iterates over the text in
+ <code>s</code>.
+ <P>
+ The shape returned uses winding rule WIND_EVEN_ODD.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - textual representation of a path.
- <P>This should be the output of <code>ShapeUtils.toString()</code>,
- resembling: "m 1 2 l 3 4 q 5 6 7 8 c 9 10 11 12 13 14 z"</dd>
+            <P>
+            This should be the output of
+            <code>ShapeUtils.toString()</code>, resembling:
+            "m 1 2 l 3 4 q 5 6 7 8 c 9 10 11 12 13 14 z"</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a <code>PathIterator</code> that will iterate over the data in s.</dd>
 </dl>
@@ -278,17 +283,20 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>createGeneralPath</h4>
 <pre>public static&nbsp;java.awt.geom.GeneralPath&nbsp;createGeneralPath(java.lang.String&nbsp;s)</pre>
-<div class="block">This creates a <code>GeneralPath</code> of rule WIND_EVEN_ODD
- that represents this shape data.
- <P>This method simply calls:
- <BR><code>GeneralPath p = new GeneralPath();</code>
- <BR><code>p.append(createPathIterator(s),true);</code>
- <BR><code>return p;</code></div>
+<div class="block">This creates a <code>GeneralPath</code> of rule WIND_EVEN_ODD that
+ represents this shape data.
+ <P>
+ This method simply calls: <BR>
+ <code>GeneralPath p = new GeneralPath();</code> <BR>
+ <code>p.append(createPathIterator(s),true);</code> <BR>
+ <code>return p;</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - textual representation of a path.
- <P>This should be the output of <code>ShapeUtils.toString()</code>,
- resembling: "m 1 2 l 3 4 q 5 6 7 8 c 9 10 11 12 13 14 z"</dd>
+            <P>
+            This should be the output of
+            <code>ShapeUtils.toString()</code>, resembling:
+            "m 1 2 l 3 4 q 5 6 7 8 c 9 10 11 12 13 14 z"</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a <code>GeneralPath</code> that represents this shape.</dd>
 </dl>
@@ -302,15 +310,17 @@ extends java.lang.Object</pre>
 <h4>createPathIterator</h4>
 <pre>public static&nbsp;java.awt.geom.PathIterator&nbsp;createPathIterator(java.lang.String&nbsp;s,
                                                             int&nbsp;windingRule)</pre>
-<div class="block">This creates a <code>PathIterator</code> that iterates
- over the text in <code>s</code>.</div>
+<div class="block">This creates a <code>PathIterator</code> that iterates over the text in
+ <code>s</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - textual representation of a path.</dd>
-<dd><code>windingRule</code> - the winding rule to use.
- (This should be PathIterator.WIND_NON_ZERO or PathIterator.WIND_EVEN_ODD.)
- <P>This should be the output of <code>ShapeUtils.toString()</code>,
- resembling: "m 1 2 l 3 4 q 5 6 7 8 c 9 10 11 12 13 14 z"</dd>
+<dd><code>windingRule</code> - the winding rule to use. (This should be
+            PathIterator.WIND_NON_ZERO or PathIterator.WIND_EVEN_ODD.)
+            <P>
+            This should be the output of
+            <code>ShapeUtils.toString()</code>, resembling:
+            "m 1 2 l 3 4 q 5 6 7 8 c 9 10 11 12 13 14 z"</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a <code>PathIterator</code> that will iterate over the data in s.</dd>
 </dl>

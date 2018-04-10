@@ -105,11 +105,12 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public static interface <span class="typeNameLabel">JBreadCrumb.BreadCrumbFormatter&lt;T&gt;</span></pre>
-<div class="block">Each bread crumb is represented by a JLabel, and this
- gives you the opportunity to format that label. For example,
- if this component navigated <code>java.io.Files</code>, then
- you should apply a <code>BreadCrumbFormatter</code> that
- invoked <code>label.setText(file.getName())</code> and <code>label.setIcon(fileIcon)</code>.</div>
+<div class="block">Each bread crumb is represented by a JLabel, and this gives you the
+ opportunity to format that label. For example, if this component
+ navigated <code>java.io.Files</code>, then you should apply a
+ <code>BreadCrumbFormatter</code> that invoked
+ <code>label.setText(file.getName())</code> and
+ <code>label.setIcon(fileIcon)</code>.</div>
 </li>
 </ul>
 </div>
@@ -165,8 +166,9 @@ var activeTableTab = "activeTableTab";
             <a href="../../../com/pump/swing/JBreadCrumb.BreadCrumbFormatter.html" title="type parameter in JBreadCrumb.BreadCrumbFormatter">T</a>&nbsp;pathNode,
             int&nbsp;index)</pre>
 <div class="block">Format a label to accommodate the path node (crumb) provided.
- <p>For example: this might add specific icons, or change the font
- or opacity based on what this label is representing.</div>
+ <p>
+ For example: this might add specific icons, or change the font or
+ opacity based on what this label is representing.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>container</code> - the <code>JBreadCrumb</code> this is part of.</dd>

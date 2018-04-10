@@ -130,11 +130,16 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">RecessedButtonUI</span>
 extends <a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com.pump.plaf">FilledButtonUI</a></pre>
 <div class="block">This resembles the "recessed" button UI as seen in Mac OS 10.5.
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/RecessedButtonUI.png" alt="RecessedButtonUI Screenshot">
- <P>It is not intended to be an exact replica, but it is very similar.
- <P>According to <a href="http://nadeausoftware.com/node/87">this</a> article, the "recessed" and "roundRect" look
- is originally intended to indicate:
- <br>"to indicate a choice in limiting the scope of an operation, such as the buttons at the top of a Finder when searching."</div>
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/RecessedButtonUI.png"
+ alt="RecessedButtonUI Screenshot">
+ <P>
+ It is not intended to be an exact replica, but it is very similar.
+ <P>
+ According to <a href="http://nadeausoftware.com/node/87">this</a> article,
+ the "recessed" and "roundRect" look is originally intended to indicate: <br>
+ "to indicate a choice in limiting the scope of an operation, such as the buttons at the top of a Finder when searching."</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/showcase/FilledButtonUIDemo.html" title="class in com.pump.showcase"><code>FilledButtonUIDemo</code></a></dd>
@@ -333,9 +338,10 @@ extends <a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com
 <h4>createUI</h4>
 <pre>public static&nbsp;javax.swing.plaf.ComponentUI&nbsp;createUI(javax.swing.JComponent&nbsp;c)</pre>
 <div class="block">Create a new instance of this ButtonUI for a component.
- <p>This method is required if you want to make this ButtonUI the default
- UI by invoking:
- <br><code>UIManager.getDefaults().put("ButtonUI", "com.pump.plaf.RecessedButtonUI");</code></div>
+ <p>
+ This method is required if you want to make this ButtonUI the default UI
+ by invoking: <br>
+ <code>UIManager.getDefaults().put("ButtonUI", "com.pump.plaf.RecessedButtonUI");</code></div>
 </li>
 </ul>
 <a name="paintStroke-java.awt.Graphics2D-com.pump.plaf.FilledButtonUI.ButtonInfo-">
@@ -359,7 +365,7 @@ extends <a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com
 <li class="blockList">
 <h4>isFillOpaque</h4>
 <pre>public&nbsp;boolean&nbsp;isFillOpaque()</pre>
-<div class="block">Returns false.  This button is designed to be translucent.</div>
+<div class="block">Returns false. This button is designed to be translucent.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/plaf/FilledButtonUI.html#isFillOpaque--">isFillOpaque</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com.pump.plaf">FilledButtonUI</a></code></dd>

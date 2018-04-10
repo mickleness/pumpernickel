@@ -143,8 +143,8 @@ extends java.lang.Enum&lt;<a href="../../../../../com/pump/image/gif/block/GifGr
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../com/pump/image/gif/block/GifGraphicControlExtension.DisposalMethod.html#LEAVE">LEAVE</a></span></code>
-<div class="block">In this option, any pixels not covered up by the next frame continue to
- display.</div>
+<div class="block">In this option, any pixels not covered up by the next frame continue
+ to display.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -160,8 +160,8 @@ extends java.lang.Enum&lt;<a href="../../../../../com/pump/image/gif/block/GifGr
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../com/pump/image/gif/block/GifGraphicControlExtension.DisposalMethod.html#RESTORE_BACKGROUND">RESTORE_BACKGROUND</a></span></code>
-<div class="block">The background color or background tile - rather than a previous frame -
- shows through transparent pixels.</div>
+<div class="block">The background color or background tile - rather than a previous
+ frame - shows through transparent pixels.</div>
 </td>
 </tr>
 </table>
@@ -262,12 +262,13 @@ the order they are declared.</div>
  <code>http://www.webreference.com/content/studio/disposal.html </code>)
  <P>
  That site was generally very useful, but when I followed this
- implementation I found at least one GIF that didn't load correctly. This
- is a very cryptic disposal mode. The GIF file format specification
- explains this as: "No disposal specified. The decoder is not required to
- take any action." So it sounds like a wild guess -- at best -- to me. I
- end up treating it mostly like <code>DISPOSAL_MODE_LEAVE</code>, and
- that seems to yield better results.</div>
+ implementation I found at least one GIF that didn't load correctly.
+ This is a very cryptic disposal mode. The GIF file format
+ specification explains this as: "No disposal specified. The decoder
+ is not required to take any action." So it sounds like a wild guess
+ -- at best -- to me. I end up treating it mostly like
+ <code>DISPOSAL_MODE_LEAVE</code>, and that seems to yield better
+ results.</div>
 </li>
 </ul>
 <a name="LEAVE">
@@ -277,14 +278,15 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>LEAVE</h4>
 <pre>public static final&nbsp;<a href="../../../../../com/pump/image/gif/block/GifGraphicControlExtension.DisposalMethod.html" title="enum in com.pump.image.gif.block">GifGraphicControlExtension.DisposalMethod</a> LEAVE</pre>
-<div class="block">In this option, any pixels not covered up by the next frame continue to
- display. This is the setting used most often for optimized animations.
+<div class="block">In this option, any pixels not covered up by the next frame continue
+ to display. This is the setting used most often for optimized
+ animations.
  <P>
  (This description copied from
  <code>http://www.webreference.com/content/studio/disposal.html </code>)
  <P>
- Or the GIF file format specification explains this as: "Do not dispose.
- The graphic is to be left in place."</div>
+ Or the GIF file format specification explains this as: "Do not
+ dispose. The graphic is to be left in place."</div>
 </li>
 </ul>
 <a name="RESTORE_BACKGROUND">
@@ -294,22 +296,23 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>RESTORE_BACKGROUND</h4>
 <pre>public static final&nbsp;<a href="../../../../../com/pump/image/gif/block/GifGraphicControlExtension.DisposalMethod.html" title="enum in com.pump.image.gif.block">GifGraphicControlExtension.DisposalMethod</a> RESTORE_BACKGROUND</pre>
-<div class="block">The background color or background tile - rather than a previous frame -
- shows through transparent pixels. In the GIF specification, you can set a
- background color.
+<div class="block">The background color or background tile - rather than a previous
+ frame - shows through transparent pixels. In the GIF specification,
+ you can set a background color.
  <P>
  (This description copied from {code
  http://www.webreference.com/content/studio/disposal.html })
  <P>
  Or the GIF file format specification explains this as: "Restore to
- background color. The area used by the graphic must be restored to the
- background color."
+ background color. The area used by the graphic must be restored to
+ the background color."
  <P>
  However of these are misleading/incorrect. There is a very important
- exception: if a transparent pixel is defined, and this is the disposal
- mode, then the image needs to be made transparent. Note this only applies
- to the rectangle a frame defines, so if the gif is 100x100 pixels
- but a frame only spans 20x20 pixels: then only those 20x20 pixels are affected.</div>
+ exception: if a transparent pixel is defined, and this is the
+ disposal mode, then the image needs to be made transparent. Note this
+ only applies to the rectangle a frame defines, so if the gif is
+ 100x100 pixels but a frame only spans 20x20 pixels: then only those
+ 20x20 pixels are affected.</div>
 </li>
 </ul>
 <a name="PREVIOUS">
@@ -325,8 +328,8 @@ the order they are declared.</div>
  <code>http://www.webreference.com/content/studio/disposal.html </code>)
  <P>
  Or the GIF file format specification explains this as: "Restore to
- previous. The decoder is required to restore the area overwritten by the
- graphic with what was there prior to rendering the graphic."</div>
+ previous. The decoder is required to restore the area overwritten by
+ the graphic with what was there prior to rendering the graphic."</div>
 </li>
 </ul>
 </li>

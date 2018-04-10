@@ -110,27 +110,30 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">DockIcon</span>
 extends java.lang.Object</pre>
-<div class="block">This uses reflection to set the dock icon.
- If you're using Mac 10.5+, this uses the new
- methods mentioned here:
- http://developer.apple.com/releasenotes/Java/JavaLeopardUpdate2RN/ResolvedIssues/chapter_3_section_13.html
+<div class="block">This uses reflection to set the dock icon. If you're using Mac 10.5+, this
+ uses the new methods mentioned here:
+ http://developer.apple.com/releasenotes/Java
+ /JavaLeopardUpdate2RN/ResolvedIssues/chapter_3_section_13.html
  
- <P>Otherwise this tries to use the older Cocoa classes
- (which are ideal for Mac 10.4-ish).
+ <P>
+ Otherwise this tries to use the older Cocoa classes (which are ideal for Mac
+ 10.4-ish).
  
- <P>Note that the "correct" way to set the dock icon
- changed once, and it may change again, so I would
- be reluctant to use this feature as a vital element
- in my program.  (That is: it may fail in coming years.)
+ <P>
+ Note that the "correct" way to set the dock icon changed once, and it may
+ change again, so I would be reluctant to use this feature as a vital element
+ in my program. (That is: it may fail in coming years.)
  
- <P>The Cocoa classes are deprecated, but if you have
- users running 10.4 it's probably the best way to go.
- You must add "System/Library/Java" to your classpath
- (either in Eclipse, your app's Info.plist, etc.) for
- the Cocoa classes to work.</div>
+ <P>
+ The Cocoa classes are deprecated, but if you have users running 10.4 it's
+ probably the best way to go. You must add "System/Library/Java" to your
+ classpath (either in Eclipse, your app's Info.plist, etc.) for the Cocoa
+ classes to work.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="http://javagraphics.blogspot.com/2007/06/dock-icon-setting-dock-icon.html">Dock Icon: Setting the Dock Icon</a></dd>
+<dd><a
+      href="http://javagraphics.blogspot.com/2007/06/dock-icon-setting-dock-icon.html">Dock
+      Icon: Setting the Dock Icon</a></dd>
 </dl>
 </li>
 </ul>
@@ -174,8 +177,7 @@ extends java.lang.Object</pre>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/mac/DockIcon.html#set-java.awt.image.BufferedImage-">set</a></span>(java.awt.image.BufferedImage&nbsp;i)</code>
-<div class="block">This tries to reassign the icon of this application
- in the dock.</div>
+<div class="block">This tries to reassign the icon of this application in the dock.</div>
 </td>
 </tr>
 </table>
@@ -237,12 +239,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>set</h4>
 <pre>public static&nbsp;boolean&nbsp;set(java.awt.image.BufferedImage&nbsp;i)</pre>
-<div class="block">This tries to reassign the icon of this application
- in the dock.</div>
+<div class="block">This tries to reassign the icon of this application in the dock.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>i</code> - the image to set the dock icon to.  If this is
- null, then the default icon is restored.</dd>
+<dd><code>i</code> - the image to set the dock icon to. If this is null, then the
+            default icon is restored.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if it appears this call worked.</dd>
 </dl>

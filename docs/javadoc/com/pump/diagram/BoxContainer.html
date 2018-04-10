@@ -115,9 +115,10 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">BoxContainer</span>
 extends java.lang.Object
 implements java.io.Serializable</pre>
-<div class="block">This contains a series of boxes, connectors, and logic information.
- When serialized: boxes and connectors are always saved. ConnectorLogics may be dropped
- depending on whether they implement Serializable (which is your choice).</div>
+<div class="block">This contains a series of boxes, connectors, and logic information. When
+ serialized: boxes and connectors are always saved. ConnectorLogics may be
+ dropped depending on whether they implement Serializable (which is your
+ choice).</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.diagram.BoxContainer">Serialized Form</a></dd>
@@ -188,7 +189,8 @@ implements java.io.Serializable</pre>
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/diagram/BoxContainer.html#addChangeListener-javax.swing.event.ChangeListener-boolean-">addChangeListener</a></span>(javax.swing.event.ChangeListener&nbsp;changeListener,
                  boolean&nbsp;allowsModification)</code>
-<div class="block">Add a listener to be notified any time a box, connector, or logic is modified.</div>
+<div class="block">Add a listener to be notified any time a box, connector, or logic is
+ modified.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -316,13 +318,15 @@ implements java.io.Serializable</pre>
 <h4>addChangeListener</h4>
 <pre>public&nbsp;void&nbsp;addChangeListener(javax.swing.event.ChangeListener&nbsp;changeListener,
                               boolean&nbsp;allowsModification)</pre>
-<div class="block">Add a listener to be notified any time a box, connector, or logic is modified.</div>
+<div class="block">Add a listener to be notified any time a box, connector, or logic is
+ modified.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>changeListener</code> - the listener to be notified.</dd>
-<dd><code>allowsModification</code> - false if this listener should be forbidden from modifying
- the data. This is recommended to prevent cascading/looping changes, but it may be
- considered a safety mechanism which it's OK to disable if you know what you're doing.</dd>
+<dd><code>allowsModification</code> - false if this listener should be forbidden from modifying the
+            data. This is recommended to prevent cascading/looping
+            changes, but it may be considered a safety mechanism which
+            it's OK to disable if you know what you're doing.</dd>
 </dl>
 </li>
 </ul>

@@ -138,33 +138,41 @@
 <br>
 <pre>public class <span class="typeNameLabel">WindowMenu</span>
 extends javax.swing.JMenu</pre>
-<div class="block">This is a Window menu resembling <A HREF="http://developer.apple.com/documentation/UserExperience/Conceptual/AppleHIGuidelines/XHIGMenus/chapter_17_section_4.html#//apple_ref/doc/uid/TP30000356-TPXREF106">the menu</A> found in most Cocoa
- applications.
- <P>This menu will automatically update itself to always list all
- visible Frames.  Their title will appear in this menu, or the text
- "Untitled" will be used if no frame title is available.
- <P>This uses the <a href="../../../com/pump/window/WindowList.html" title="class in com.pump.window"><code>WindowList</code></a> to keep track
- of frames, their order, and their layering.
- <P>As of this version, this class is not a perfect replica of Apple's menu.  It lacks
- a few key elements:
- <BR>1.  The "Zoom" menu item.  In Java it is not directly possible to emulate this
- behavior.  Probably a JNI-based approach would be simplest way to add this feature.
- <BR>2.  Window titles do not have a bullet displayed next to their name when
- they have unsaved changes, or a diamond displayed next to their name when minimized.
- I started to develop a <code>FrameMenuItemUI</code> to address this problem, but
- then realized that if a Java program on Mac uses the screen menubar (which is the
- preferred behavior): customized MenuItemUI's are ignored.  Apple does some
- slight-of-hand and maps every JMenuItem to some sort of Cocoa peer, so the UI is
- ignored.
- <BR>3.  Holding down the option/alt key doesn't toggle menu items like "Minimize".
- I was able to implement this when a JMenuBar is placed in the JFrame, but not when
- the screen menubar is used.
+<div class="block">This is a Window menu resembling <A HREF=
+ "http://developer.apple.com/documentation/UserExperience/Conceptual/AppleHIGuidelines/XHIGMenus/chapter_17_section_4.html#//apple_ref/doc/uid/TP30000356-TPXREF106"
+ >the menu</A> found in most Cocoa applications.
+ <P>
+ This menu will automatically update itself to always list all visible Frames.
+ Their title will appear in this menu, or the text "Untitled" will be used if
+ no frame title is available.
+ <P>
+ This uses the <a href="../../../com/pump/window/WindowList.html" title="class in com.pump.window"><code>WindowList</code></a> to keep track of frames,
+ their order, and their layering.
+ <P>
+ As of this version, this class is not a perfect replica of Apple's menu. It
+ lacks a few key elements: <BR>
+ 1. The "Zoom" menu item. In Java it is not directly possible to emulate this
+ behavior. Probably a JNI-based approach would be simplest way to add this
+ feature. <BR>
+ 2. Window titles do not have a bullet displayed next to their name when they
+ have unsaved changes, or a diamond displayed next to their name when
+ minimized. I started to develop a <code>FrameMenuItemUI</code> to address
+ this problem, but then realized that if a Java program on Mac uses the screen
+ menubar (which is the preferred behavior): customized MenuItemUI's are
+ ignored. Apple does some slight-of-hand and maps every JMenuItem to some sort
+ of Cocoa peer, so the UI is ignored. <BR>
+ 3. Holding down the option/alt key doesn't toggle menu items like "Minimize".
+ I was able to implement this when a JMenuBar is placed in the JFrame, but not
+ when the screen menubar is used.
  
- <P>So ironically: I can get more Mac-like behavior on non-Macs.  (Which defeats the
- purpose.)  But in the mean time: really all I personally need from my Window menu is
- a list of available frames, so this meets my needs for now.
- <P>This can't run inside a Java sandbox because it refers to the WindowList
- which invokes <code>Toolkit.getDefaultToolkit().addAWTEventListener(..)</code>.</div>
+ <P>
+ So ironically: I can get more Mac-like behavior on non-Macs. (Which defeats
+ the purpose.) But in the mean time: really all I personally need from my
+ Window menu is a list of available frames, so this meets my needs for now.
+ <P>
+ This can't run inside a Java sandbox because it refers to the WindowList
+ which invokes
+ <code>Toolkit.getDefaultToolkit().addAWTEventListener(..)</code>.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.window.WindowMenu">Serialized Form</a></dd>
@@ -402,8 +410,7 @@ extends javax.swing.JMenu</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>frame</code> - the frame that this menu belongs to.</dd>
-<dd><code>extraItems</code> - an optional array of extra items to put in
- this menu.</dd>
+<dd><code>extraItems</code> - an optional array of extra items to put in this menu.</dd>
 </dl>
 </li>
 </ul>

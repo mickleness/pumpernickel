@@ -158,8 +158,8 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/io/FileTreeIterator.html#FileTreeIterator-java.io.File-">FileTreeIterator</a></span>(java.io.File&nbsp;parent)</code>
-<div class="block">Creates a new <code>FileTreeIterator</code> that
- iterates over every non-directory file in this tree.</div>
+<div class="block">Creates a new <code>FileTreeIterator</code> that iterates over every
+ non-directory file in this tree.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -193,16 +193,15 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <td class="colFirst"><code>static java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/FileTreeIterator.html#find-java.io.File-java.lang.String-">find</a></span>(java.io.File&nbsp;dir,
     java.lang.String&nbsp;fileName)</code>
-<div class="block">This finds the first file in the directory that matches
- the name provided.</div>
+<div class="block">This finds the first file in the directory that matches the name
+ provided.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static java.io.File[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/FileTreeIterator.html#findAll-java.io.File:A-java.lang.String-">findAll</a></span>(java.io.File[]&nbsp;dir,
        java.lang.String&nbsp;fileName)</code>
-<div class="block">This finds all files in the directory that match
- the exact name provided.</div>
+<div class="block">This finds all files in the directory that match the exact name provided.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -210,8 +209,8 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/FileTreeIterator.html#findAll-java.io.File:A-java.lang.String-java.io.FileFilter-">findAll</a></span>(java.io.File[]&nbsp;dir,
        java.lang.String&nbsp;fileBaseName,
        java.io.FileFilter&nbsp;fileFilter)</code>
-<div class="block">This finds all files in the directory that match
- the name and filter provided.</div>
+<div class="block">This finds all files in the directory that match the name and filter
+ provided.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -219,22 +218,19 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/FileTreeIterator.html#findAll-java.io.File:A-java.lang.String-java.lang.String:A-">findAll</a></span>(java.io.File[]&nbsp;dir,
        java.lang.String&nbsp;fileBaseName,
        java.lang.String[]&nbsp;fileExtensions)</code>
-<div class="block">This finds all files in the directory that match
- the name provided.</div>
+<div class="block">This finds all files in the directory that match the name provided.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/FileTreeIterator.html#isAlias-java.io.File-">isAlias</a></span>(java.io.File&nbsp;file)</code>
-<div class="block">This checks to see if a <code>File</code> is
- a symlink/alias.</div>
+<div class="block">This checks to see if a <code>File</code> is a symlink/alias.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/FileTreeIterator.html#isReturnValue-java.io.File-">isReturnValue</a></span>(java.io.File&nbsp;node)</code>
-<div class="block">Return true if this node can be returned
- by this iterator.</div>
+<div class="block">Return true if this node can be returned by this iterator.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -307,11 +303,12 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <div class="block">Creates a new <code>FileTreeIterator</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>parent</code> - the root file to begin searching in.
- For best results this should be parent.getCanonicalFile(). Otherwise
- case sensitivity might accidentally result in some files being flagged
- as aliases. (That is: if the user inputs a file path in a case insensitive
- manner, and then we call isAlias(myFile), it may return a false positive.)</dd>
+<dd><code>parent</code> - the root file to begin searching in. For best results this
+            should be parent.getCanonicalFile(). Otherwise case
+            sensitivity might accidentally result in some files being
+            flagged as aliases. (That is: if the user inputs a file path
+            in a case insensitive manner, and then we call
+            isAlias(myFile), it may return a false positive.)</dd>
 <dd><code>filter</code> - the filter determining what files to list.</dd>
 </dl>
 </li>
@@ -327,11 +324,12 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <div class="block">Creates a new <code>FileTreeIterator</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>parent</code> - the root file to begin searching in.
- For best results this should be parent.getCanonicalFile(). Otherwise
- case sensitivity might accidentally result in some files being flagged
- as aliases. (That is: if the user inputs a file path in a case insensitive
- manner, and then we call isAlias(myFile), it may return a false positive.)</dd>
+<dd><code>parent</code> - the root file to begin searching in. For best results this
+            should be parent.getCanonicalFile(). Otherwise case
+            sensitivity might accidentally result in some files being
+            flagged as aliases. (That is: if the user inputs a file path
+            in a case insensitive manner, and then we call
+            isAlias(myFile), it may return a false positive.)</dd>
 <dd><code>extensions</code> - the file name extensions to search for.</dd>
 </dl>
 </li>
@@ -343,8 +341,8 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <li class="blockList">
 <h4>FileTreeIterator</h4>
 <pre>public&nbsp;FileTreeIterator(java.io.File&nbsp;parent)</pre>
-<div class="block">Creates a new <code>FileTreeIterator</code> that
- iterates over every non-directory file in this tree.</div>
+<div class="block">Creates a new <code>FileTreeIterator</code> that iterates over every
+ non-directory file in this tree.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>parent</code> - the root file to begin searching in.</dd>
@@ -367,15 +365,15 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <h4>find</h4>
 <pre>public static&nbsp;java.io.File&nbsp;find(java.io.File&nbsp;dir,
                                 java.lang.String&nbsp;fileName)</pre>
-<div class="block">This finds the first file in the directory that matches
- the name provided.</div>
+<div class="block">This finds the first file in the directory that matches the name
+ provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dir</code> - </dd>
 <dd><code>fileName</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a file nested inside dir that matches the file name provided,
- or null if no such file is found.</dd>
+<dd>a file nested inside dir that matches the file name provided, or
+         null if no such file is found.</dd>
 </dl>
 </li>
 </ul>
@@ -387,17 +385,16 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <h4>findAll</h4>
 <pre>public static&nbsp;java.io.File[]&nbsp;findAll(java.io.File[]&nbsp;dir,
                                      java.lang.String&nbsp;fileName)</pre>
-<div class="block">This finds all files in the directory that match
- the exact name provided.</div>
+<div class="block">This finds all files in the directory that match the exact name provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dir</code> - the directories to search in. Null elements
- in this array are skipped, but if the array itself is null then
- a <code>NullPointerException</code> is thrown.</dd>
+<dd><code>dir</code> - the directories to search in. Null elements in this array are
+            skipped, but if the array itself is null then a
+            <code>NullPointerException</code> is thrown.</dd>
 <dd><code>fileName</code> - the exact file name to search for.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>files nested inside dir that satisfy this search.
- This may return an empty array but will not return null.</dd>
+<dd>files nested inside dir that satisfy this search. This may return
+         an empty array but will not return null.</dd>
 </dl>
 </li>
 </ul>
@@ -410,18 +407,17 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <pre>public static&nbsp;java.io.File[]&nbsp;findAll(java.io.File[]&nbsp;dir,
                                      java.lang.String&nbsp;fileBaseName,
                                      java.lang.String[]&nbsp;fileExtensions)</pre>
-<div class="block">This finds all files in the directory that match
- the name provided.</div>
+<div class="block">This finds all files in the directory that match the name provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dir</code> - the directories to search in. Null elements
- in this array are skipped, but if the array itself is null then
- a <code>NullPointerException</code> is thrown.</dd>
+<dd><code>dir</code> - the directories to search in. Null elements in this array are
+            skipped, but if the array itself is null then a
+            <code>NullPointerException</code> is thrown.</dd>
 <dd><code>fileBaseName</code> - the name of the file without the file extension</dd>
 <dd><code>fileExtensions</code> - the file extensions search check against.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>files nested inside dir that satisfy this search.
- This may return an empty array but will not return null.</dd>
+<dd>files nested inside dir that satisfy this search. This may return
+         an empty array but will not return null.</dd>
 </dl>
 </li>
 </ul>
@@ -434,18 +430,18 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <pre>public static&nbsp;java.io.File[]&nbsp;findAll(java.io.File[]&nbsp;dir,
                                      java.lang.String&nbsp;fileBaseName,
                                      java.io.FileFilter&nbsp;fileFilter)</pre>
-<div class="block">This finds all files in the directory that match
- the name and filter provided.</div>
+<div class="block">This finds all files in the directory that match the name and filter
+ provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dir</code> - the directories to search in. Null elements
- in this array are skipped, but if the array itself is null then
- a <code>NullPointerException</code> is thrown.</dd>
+<dd><code>dir</code> - the directories to search in. Null elements in this array are
+            skipped, but if the array itself is null then a
+            <code>NullPointerException</code> is thrown.</dd>
 <dd><code>fileBaseName</code> - the name of the file without the file extension</dd>
 <dd><code>fileFilter</code> - the optional FileFilter</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>files nested inside dir that satisfy this search.
- This may return an empty array but will not return null.</dd>
+<dd>files nested inside dir that satisfy this search. This may return
+         an empty array but will not return null.</dd>
 </dl>
 </li>
 </ul>
@@ -457,13 +453,15 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <h4>listChildren</h4>
 <pre>protected&nbsp;java.io.File[]&nbsp;listChildren(java.io.File&nbsp;parent)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/util/TreeIterator.html#listChildren-T-">TreeIterator</a></code></span></div>
-<div class="block">List the children of a parent this object should iterate over.
- This method does not need to worry about filtering the children.
- <p>(In fact too much filtering at this step can be a problem.
- For example: if a file iterator wants to only return files with
- a certain extension this method still needs to return directories,
- or the iterator won't search deep enough.)
- <p>This may return null, or include null elements in the return array.</div>
+<div class="block">List the children of a parent this object should iterate over. This
+ method does not need to worry about filtering the children.
+ <p>
+ (In fact too much filtering at this step can be a problem. For example:
+ if a file iterator wants to only return files with a certain extension
+ this method still needs to return directories, or the iterator won't
+ search deep enough.)
+ <p>
+ This may return null, or include null elements in the return array.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/util/TreeIterator.html#listChildren-T-">listChildren</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/util/TreeIterator.html" title="class in com.pump.util">TreeIterator</a>&lt;java.io.File&gt;</code></dd>
@@ -478,20 +476,20 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <h4>isReturnValue</h4>
 <pre>protected&nbsp;boolean&nbsp;isReturnValue(java.io.File&nbsp;node)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/util/TreeIterator.html#isReturnValue-T-">TreeIterator</a></code></span></div>
-<div class="block">Return true if this node can be returned
- by this iterator. This method acts like a filter:
- it may be called hundreds of times as we iterate
- over a tree until we find an acceptable value for
- <code>next()</code> to return.
- <p>The implementation is simply to return <code>true</code>.</div>
+<div class="block">Return true if this node can be returned by this iterator. This method
+ acts like a filter: it may be called hundreds of times as we iterate over
+ a tree until we find an acceptable value for <code>next()</code> to
+ return.
+ <p>
+ The implementation is simply to return <code>true</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/util/TreeIterator.html#isReturnValue-T-">isReturnValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/util/TreeIterator.html" title="class in com.pump.util">TreeIterator</a>&lt;java.io.File&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>node</code> - a possible return value for <code>next()</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>false</code> if this is unacceptable and
- we have to keep searching.</dd>
+<dd><code>false</code> if this is unacceptable and we have to keep
+         searching.</dd>
 </dl>
 </li>
 </ul>
@@ -502,10 +500,9 @@ extends <a href="../../../com/pump/util/TreeIterator.html" title="class in com.p
 <li class="blockList">
 <h4>isAlias</h4>
 <pre>public static&nbsp;boolean&nbsp;isAlias(java.io.File&nbsp;file)</pre>
-<div class="block">This checks to see if a <code>File</code> is
- a symlink/alias.  Unfortunately this is not
- officially supported in the <code>File</code> method
- signatures, so this uses a potentially awkward approach.</div>
+<div class="block">This checks to see if a <code>File</code> is a symlink/alias.
+ Unfortunately this is not officially supported in the <code>File</code>
+ method signatures, so this uses a potentially awkward approach.</div>
 </li>
 </ul>
 </li>

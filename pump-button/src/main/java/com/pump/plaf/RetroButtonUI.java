@@ -26,7 +26,7 @@ import javax.swing.plaf.ComponentUI;
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/RetroButtonUI.png"
  * alt="RetroButtonUI Screenshot">
  * 
- * @see com.pump.plaf.FilledButtonUIDemo
+ * @see com.pump.showcase.FilledButtonUIDemo
  */
 public class RetroButtonUI extends FilledButtonUI {
 

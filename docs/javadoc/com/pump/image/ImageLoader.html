@@ -110,15 +110,19 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ImageLoader</span>
 extends java.lang.Object</pre>
-<div class="block">This class can convert an abstract <code>Image</code> into a ARGB <code>BufferedImage</code>.
- <P>It was written to replace the <code>MediaTracker</code>; on my Macs this class is faster
- and more efficient.  It has come to my attention that on Linux this may not be the case
- (see my <A HREF="http://javagraphics.blogspot.com/2007/04/images-studying-mediatracker.html">blog</A>
- for more discussion.)
- <P>Also this class has the added advantage of always returning an RGB image.  Using other
- methods (such as ImageIO) may return an arbitrary image type.
- (And this class doesn't require a <code>java.awt.Component</code> to initialize; why
- does the MediaTracker do that?  It's just a strange animal.)</div>
+<div class="block">This class can convert an abstract <code>Image</code> into a ARGB
+ <code>BufferedImage</code>.
+ <P>
+ It was written to replace the <code>MediaTracker</code>; on my Macs this
+ class is faster and more efficient. It has come to my attention that on Linux
+ this may not be the case (see my <A HREF=
+ "http://javagraphics.blogspot.com/2007/04/images-studying-mediatracker.html"
+ >blog</A> for more discussion.)
+ <P>
+ Also this class has the added advantage of always returning an RGB image.
+ Using other methods (such as ImageIO) may return an arbitrary image type.
+ (And this class doesn't require a <code>java.awt.Component</code> to
+ initialize; why does the MediaTracker do that? It's just a strange animal.)</div>
 </li>
 </ul>
 </div>
@@ -193,20 +197,22 @@ extends java.lang.Object</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>java.awt.image.BufferedImage</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/image/ImageLoader.html#getImage--">getImage</a></span>()</code>
-<div class="block">This blocks until the image has finished loading, an error occurs, or the operation has been cancelled.</div>
+<div class="block">This blocks until the image has finished loading, an error occurs, or the
+ operation has been cancelled.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/image/ImageLoader.html#getProgress--">getProgress</a></span>()</code>
-<div class="block">Returns a float from [0,1] <i>approximating</i> how much of the image
- is loaded.</div>
+<div class="block">Returns a float from [0,1] <i>approximating</i> how much of the image is
+ loaded.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>java.awt.Dimension</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/image/ImageLoader.html#getSize--">getSize</a></span>()</code>
-<div class="block">Returns the dimension of this image, or null if the dimensions are not yet known.</div>
+<div class="block">Returns the dimension of this image, or null if the dimensions are not
+ yet known.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -253,18 +259,20 @@ extends java.lang.Object</pre>
                    <a href="../../../com/pump/swing/Cancellable.html" title="interface in com.pump.swing">Cancellable</a>&nbsp;c,
                    javax.swing.event.ChangeListener&nbsp;changeListener,
                    java.lang.String&nbsp;description)</pre>
-<div class="block">This constructs an ImageLoader.  As soon as an ImageLoader is constructed
- the <code>ImageProducer</code> is asked to start producing data.  (However
+<div class="block">This constructs an ImageLoader. As soon as an ImageLoader is constructed
+ the <code>ImageProducer</code> is asked to start producing data. (However
  constructing this object will not block waiting on the image data.)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>p</code> - the source of this image</dd>
 <dd><code>c</code> - an optional <code>Cancellable</code> object.</dd>
-<dd><code>changeListener</code> - an optional <code>ChangeListener</code>.  This will be notified
- when a change occurs.  It can be added here in the constructor because loading the image
- begins immediately; depending on how <code>ImageProducer.startProduction</code> is implemented
- this <i>may</i> be a blocking call so the <code>ChangeListener</code> needs to be added
- before the loading begins</dd>
+<dd><code>changeListener</code> - an optional <code>ChangeListener</code>. This will be notified
+            when a change occurs. It can be added here in the constructor
+            because loading the image begins immediately; depending on how
+            <code>ImageProducer.startProduction</code> is implemented this
+            <i>may</i> be a blocking call so the
+            <code>ChangeListener</code> needs to be added before the
+            loading begins</dd>
 <dd><code>description</code> - an optional description that may be useful for debugging</dd>
 </dl>
 </li>
@@ -303,8 +311,9 @@ extends java.lang.Object</pre>
 <h4>createImage</h4>
 <pre>public static&nbsp;java.awt.image.BufferedImage&nbsp;createImage(java.awt.Image&nbsp;i)</pre>
 <div class="block">This returns an ARGB BufferedImage depicting the argument <code>i</code>.
- <P>Note that if <code>i</code> is already an ARGB BufferedImage, then it
- is immediately returned and this method does NOT duplicate it.</div>
+ <P>
+ Note that if <code>i</code> is already an ARGB BufferedImage, then it is
+ immediately returned and this method does NOT duplicate it.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - </dd>
@@ -330,9 +339,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>addChangeListener</h4>
 <pre>public&nbsp;void&nbsp;addChangeListener(javax.swing.event.ChangeListener&nbsp;l)</pre>
-<div class="block">Adds a ChangeListener to this loader.
- This listener will be notified either when the image is fully loaded/created,
- or when <code>getProgress()</code> changes value.</div>
+<div class="block">Adds a ChangeListener to this loader. This listener will be notified
+ either when the image is fully loaded/created, or when
+ <code>getProgress()</code> changes value.</div>
 </li>
 </ul>
 <a name="removeChangeListener-javax.swing.event.ChangeListener-">
@@ -352,16 +361,20 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getProgress</h4>
 <pre>public&nbsp;float&nbsp;getProgress()</pre>
-<div class="block">Returns a float from [0,1] <i>approximating</i> how much of the image
- is loaded.  If your image were a text document, this is basically telling
- you where the text cursor was last placed.  However the <code>ImageProducer</code>
- may make several different iterations over the image to deliver the complete
- image, so it is completely possible that this value will range from 0 to 1 a few
- different times.
- <P>I wish this could be more precise, but I don't see how more precision is
- possible given the way the <code>ImageProducer</code>/<code>ImageConsumer</code> model works.
- <P>For the most part, this will be a straight-forward 1-pass system.  If you limit
- yourself to certain types of images (like PNGs) this is probably the case.</div>
+<div class="block">Returns a float from [0,1] <i>approximating</i> how much of the image is
+ loaded. If your image were a text document, this is basically telling you
+ where the text cursor was last placed. However the
+ <code>ImageProducer</code> may make several different iterations over the
+ image to deliver the complete image, so it is completely possible that
+ this value will range from 0 to 1 a few different times.
+ <P>
+ I wish this could be more precise, but I don't see how more precision is
+ possible given the way the <code>ImageProducer</code>/
+ <code>ImageConsumer</code> model works.
+ <P>
+ For the most part, this will be a straight-forward 1-pass system. If you
+ limit yourself to certain types of images (like PNGs) this is probably
+ the case.</div>
 </li>
 </ul>
 <a name="isDone--">
@@ -372,7 +385,8 @@ extends java.lang.Object</pre>
 <h4>isDone</h4>
 <pre>public&nbsp;boolean&nbsp;isDone()</pre>
 <div class="block">This indicates whether this <code>ImageLoader</code> is finished.
- <P>Unlike <code>getProgress()</code>, this is guaranteed to be 100%
+ <P>
+ Unlike <code>getProgress()</code>, this is guaranteed to be 100%
  accurate.</div>
 </li>
 </ul>
@@ -383,7 +397,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getSize</h4>
 <pre>public&nbsp;java.awt.Dimension&nbsp;getSize()</pre>
-<div class="block">Returns the dimension of this image, or null if the dimensions are not yet known.</div>
+<div class="block">Returns the dimension of this image, or null if the dimensions are not
+ yet known.</div>
 </li>
 </ul>
 <a name="fireChangeListeners--">
@@ -403,10 +418,12 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getImage</h4>
 <pre>public&nbsp;java.awt.image.BufferedImage&nbsp;getImage()</pre>
-<div class="block">This blocks until the image has finished loading, an error occurs, or the operation has been cancelled.</div>
+<div class="block">This blocks until the image has finished loading, an error occurs, or the
+ operation has been cancelled.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the ARGB image represented in the original ImageProducer, or <code>null</code> if the operation was cancelled.</dd>
+<dd>the ARGB image represented in the original ImageProducer, or
+         <code>null</code> if the operation was cancelled.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.RuntimeException</code> - if an error occurred while loading this image</dd>
 </dl>

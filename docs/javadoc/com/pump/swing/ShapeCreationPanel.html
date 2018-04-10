@@ -130,12 +130,14 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">ShapeCreationPanel</span>
 extends javax.swing.JComponent</pre>
 <div class="block">A panel used to define a series of shapes.
- <p>There are a few different <code>ShapeCreationUIs</code> to choose
- from. Once the appropriate UI is installed: just call
- <code>shapePanel.setMode( MODE_CREATE )</code> to the user to be
- able to draw shapes in this panel.
- <p>You may want to override the UI to paint additional components
- or to better control the stroke/paints used.</div>
+ <p>
+ There are a few different <code>ShapeCreationUIs</code> to choose from. Once
+ the appropriate UI is installed: just call
+ <code>shapePanel.setMode( MODE_CREATE )</code> to the user to be able to draw
+ shapes in this panel.
+ <p>
+ You may want to override the UI to paint additional components or to better
+ control the stroke/paints used.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.swing.ShapeCreationPanel">Serialized Form</a></dd>
@@ -189,13 +191,15 @@ extends javax.swing.JComponent</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ShapeCreationPanel.Selection.html" title="class in com.pump.swing">ShapeCreationPanel.Selection</a></span></code>
-<div class="block">Data used to articulate exactly what the user has selected (or indicated).</div>
+<div class="block">Data used to articulate exactly what the user has selected (or
+ indicated).</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ShapeCreationPanel.SelectionModel.html" title="class in com.pump.swing">ShapeCreationPanel.SelectionModel</a></span></code>
-<div class="block">This manages the selection and indication of a <a href="../../../com/pump/swing/ShapeCreationPanel.html" title="class in com.pump.swing"><code>ShapeCreationPanel</code></a>.</div>
+<div class="block">This manages the selection and indication of a <a href="../../../com/pump/swing/ShapeCreationPanel.html" title="class in com.pump.swing"><code>ShapeCreationPanel</code></a>
+ .</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -285,7 +289,8 @@ extends javax.swing.JComponent</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ShapeCreationPanel.html#TRANSFORM_KEY">TRANSFORM_KEY</a></span></code>
-<div class="block">The client property key used to identify the <code>AffineTransform</code>.</div>
+<div class="block">The client property key used to identify the <code>AffineTransform</code>
+ .</div>
 </td>
 </tr>
 </table>
@@ -495,7 +500,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>TRANSFORM_KEY</h4>
 <pre>public static final&nbsp;java.lang.String TRANSFORM_KEY</pre>
-<div class="block">The client property key used to identify the <code>AffineTransform</code>.</div>
+<div class="block">The client property key used to identify the <code>AffineTransform</code>
+ .</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/swing/ShapeCreationPanel.html#setTransform-java.awt.geom.AffineTransform-"><code>setTransform(AffineTransform)</code></a></dd>
@@ -551,8 +557,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>MODE_DEFAULT</h4>
 <pre>public static final&nbsp;java.lang.String MODE_DEFAULT</pre>
-<div class="block">This is default mode for this panel. In this mode shapes can usually be selected,
- translated, and deleted: but not created.</div>
+<div class="block">This is default mode for this panel. In this mode shapes can usually be
+ selected, translated, and deleted: but not created.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/swing/ShapeCreationPanel.html#getMode--"><code>getMode()</code></a>, 
@@ -567,8 +573,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>MODE_CREATE</h4>
 <pre>public static final&nbsp;java.lang.String MODE_CREATE</pre>
-<div class="block">This is the mode used exclusively for creating shapes. In this mode when the
- user clicks in this panel: new shapes are added to the data model.</div>
+<div class="block">This is the mode used exclusively for creating shapes. In this mode when
+ the user clicks in this panel: new shapes are added to the data model.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/swing/ShapeCreationPanel.html#getMode--"><code>getMode()</code></a>, 
@@ -610,8 +616,8 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;<a href="../../../com/pump/swing/ShapeCreationPanel.SelectionModel.html" title="class in com.pump.swing">ShapeCreationPanel.SelectionModel</a>&nbsp;getSelectionModel()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <a href="../../../com/pump/swing/ShapeCreationPanel.SelectionModel.html" title="class in com.pump.swing"><code>ShapeCreationPanel.SelectionModel</code></a> used to monitor the
- selection and indication of this panel.</dd>
+<dd>the <a href="../../../com/pump/swing/ShapeCreationPanel.SelectionModel.html" title="class in com.pump.swing"><code>ShapeCreationPanel.SelectionModel</code></a> used to monitor the selection and
+         indication of this panel.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/swing/ShapeCreationPanel.html#setSelectionModel-com.pump.swing.ShapeCreationPanel.SelectionModel-"><code>setSelectionModel(SelectionModel)</code></a></dd>
 </dl>
@@ -642,8 +648,8 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;<a href="../../../com/pump/swing/ShapeCreationPanel.DataModel.html" title="class in com.pump.swing">ShapeCreationPanel.DataModel</a>&nbsp;getDataModel()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <a href="../../../com/pump/swing/ShapeCreationPanel.DataModel.html" title="class in com.pump.swing"><code>ShapeCreationPanel.DataModel</code></a> that stores all the shape
- data in this panel.</dd>
+<dd>the <a href="../../../com/pump/swing/ShapeCreationPanel.DataModel.html" title="class in com.pump.swing"><code>ShapeCreationPanel.DataModel</code></a> that stores all the shape data in this
+         panel.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/swing/ShapeCreationPanel.html#setDataModel-com.pump.swing.ShapeCreationPanel.DataModel-"><code>setDataModel(DataModel)</code></a></dd>
 </dl>
@@ -718,8 +724,8 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;int&nbsp;getHandleSize()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the size of handles (in pixels). This is not affected
- by the transform.</dd>
+<dd>the size of handles (in pixels). This is not affected by the
+         transform.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/swing/ShapeCreationPanel.html#setHandleSize-int-"><code>setHandleSize(int)</code></a></dd>
 </dl>

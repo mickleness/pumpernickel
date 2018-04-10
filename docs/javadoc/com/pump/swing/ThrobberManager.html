@@ -112,24 +112,26 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object</pre>
 <div class="block">This helps associate any number of throbbers with activity.
  <p>
- Call <a href="../../../com/pump/swing/ThrobberManager.html#createToken--"><code>createToken()</code></a> to activate all possible throbbers,
- and then after some time call <code>#returnToken(Object)</code> to return
- the token.
+ Call <a href="../../../com/pump/swing/ThrobberManager.html#createToken--"><code>createToken()</code></a> to activate all possible throbbers, and then
+ after some time call <a href="../../../com/pump/swing/ThrobberManager.html#returnToken-com.pump.swing.ThrobberManager.Token-"><code>returnToken(Token)</code></a> to return the token.
  <p>
  Your usage should resemble:
- <pre> Thread myThread = new Thread() {
-   public void run() {
-     Object token = throbberManager.createToken();
-     try {
-       //do complicated task
-     } finally {
-       throbberManager.returnToken(token);
-     }
-   }
- };</pre>
+ 
+ <pre>
+ Thread myThread = new Thread() {
+        public void run() {
+                Object token = throbberManager.createToken();
+                try {
+                        // do complicated task
+                } finally {
+                        throbberManager.returnToken(token);
+                }
+        }
+ };
+ </pre>
  <p>
- Any JThrobbers this object creates will automatically toggle their visibility based on
- whether any tokens have been checked out.</div>
+ Any JThrobbers this object creates will automatically toggle their visibility
+ based on whether any tokens have been checked out.</div>
 </li>
 </ul>
 </div>
@@ -217,16 +219,15 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ThrobberManager.html#addChangeListener-javax.swing.event.ChangeListener-">addChangeListener</a></span>(javax.swing.event.ChangeListener&nbsp;cl)</code>
-<div class="block">Add a ChangeListener to be notified when the number of borrowed
- tokens changes.</div>
+<div class="block">Add a ChangeListener to be notified when the number of borrowed tokens
+ changes.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../com/pump/swing/JThrobber.html" title="class in com.pump.swing">JThrobber</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ThrobberManager.html#createThrobber--">createThrobber</a></span>()</code>
-<div class="block">Create a new JThrobber that will automatically toggle its
- visibility based on whether any entity has borrowed tokens
- against this manager.</div>
+<div class="block">Create a new JThrobber that will automatically toggle its visibility
+ based on whether any entity has borrowed tokens against this manager.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -238,8 +239,7 @@ extends java.lang.Object</pre>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ThrobberManager.html#isActive--">isActive</a></span>()</code>
-<div class="block">Return true if any threads have borrowed tokens against this
- manager.</div>
+<div class="block">Return true if any threads have borrowed tokens against this manager.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -321,8 +321,8 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;ThrobberManager(<a href="../../../com/pump/job/JobManager.html" title="class in com.pump.job">JobManager</a>&nbsp;jobManager)</pre>
 <div class="block">Create a ThrobberManager that joins with the JobManager provided.
  <p>
- This is a convenience method for creating an empty constructor and then calling
- <a href="../../../com/pump/swing/ThrobberManager.html#join-com.pump.job.JobManager-"><code>join(JobManager)</code></a>.</div>
+ This is a convenience method for creating an empty constructor and then
+ calling <a href="../../../com/pump/swing/ThrobberManager.html#join-com.pump.job.JobManager-"><code>join(JobManager)</code></a>.</div>
 </li>
 </ul>
 </li>
@@ -340,9 +340,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>join</h4>
 <pre>public&nbsp;void&nbsp;join(<a href="../../../com/pump/job/JobManager.html" title="class in com.pump.job">JobManager</a>&nbsp;jobManager)</pre>
-<div class="block">This combines this ThrobberManager with the JobManager provided.
- When the JobManager is active: this ThrobberManager will also be active.
- You may continue to independently use <a href="../../../com/pump/swing/ThrobberManager.html#createToken--"><code>createToken()</code></a> to further add
+<div class="block">This combines this ThrobberManager with the JobManager provided. When the
+ JobManager is active: this ThrobberManager will also be active. You may
+ continue to independently use <a href="../../../com/pump/swing/ThrobberManager.html#createToken--"><code>createToken()</code></a> to further add
  activity to this manager. (For that matter, you may also join this
  manager to multiple JobManagers if you want to.)</div>
 <dl>
@@ -358,9 +358,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>createThrobber</h4>
 <pre>public&nbsp;<a href="../../../com/pump/swing/JThrobber.html" title="class in com.pump.swing">JThrobber</a>&nbsp;createThrobber()</pre>
-<div class="block">Create a new JThrobber that will automatically toggle its
- visibility based on whether any entity has borrowed tokens
- against this manager.</div>
+<div class="block">Create a new JThrobber that will automatically toggle its visibility
+ based on whether any entity has borrowed tokens against this manager.</div>
 </li>
 </ul>
 <a name="isActive--">
@@ -370,8 +369,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>isActive</h4>
 <pre>public&nbsp;boolean&nbsp;isActive()</pre>
-<div class="block">Return true if any threads have borrowed tokens against this
- manager.</div>
+<div class="block">Return true if any threads have borrowed tokens against this manager.</div>
 </li>
 </ul>
 <a name="createToken--">
@@ -385,7 +383,7 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the object that should be eventually passed to
- <code>#returnToken(Object)</code>.</dd>
+         <a href="../../../com/pump/swing/ThrobberManager.html#returnToken-com.pump.swing.ThrobberManager.Token-"><code>returnToken(Token)</code></a>.</dd>
 </dl>
 </li>
 </ul>
@@ -396,11 +394,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>addChangeListener</h4>
 <pre>public&nbsp;void&nbsp;addChangeListener(javax.swing.event.ChangeListener&nbsp;cl)</pre>
-<div class="block">Add a ChangeListener to be notified when the number of borrowed
- tokens changes. This is only notified when the first token is borrowed
- or the last token is returned. (That is: this only distinguishes between "active"
- and "inactive". It doesn't notify listeners if a 2nd token is borrowed, because
- then it only changes from "active" to "active".)</div>
+<div class="block">Add a ChangeListener to be notified when the number of borrowed tokens
+ changes. This is only notified when the first token is borrowed or the
+ last token is returned. (That is: this only distinguishes between
+ "active" and "inactive". It doesn't notify listeners if a 2nd token is
+ borrowed, because then it only changes from "active" to "active".)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cl</code> - </dd>

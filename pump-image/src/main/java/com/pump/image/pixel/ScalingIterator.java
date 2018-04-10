@@ -21,7 +21,6 @@ import com.pump.math.MathG;
  * <code>get()</code> methods or instantiate the two subclasses:
  * <code>IntScalingIterator</code> or <code>ByteScalingIterator</code>.
  * 
- * @see com.pump.image.pixel.ScalingDemo
  * @see "http://javagraphics.blogspot.com/2010/06/images-scaling-down.html"
  */
 public abstract class ScalingIterator implements PixelIterator {

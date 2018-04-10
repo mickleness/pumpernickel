@@ -115,19 +115,19 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">BinarySearchIntersectionIdentifier</span>
 extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html" title="class in com.pump.geom.intersect">IntersectionIdentifier</a></pre>
-<div class="block">This <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html" title="class in com.pump.geom.intersect"><code>IntersectionIdentifier</code></a> uses a 2D binary search
- to hone in on potential intersections.
- <P>It breaks curves up according to their critical points,
- so each curve segment is guaranteed to only move in 1
- general direction between any two give t values.
+<div class="block">This <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html" title="class in com.pump.geom.intersect"><code>IntersectionIdentifier</code></a> uses a 2D binary search to hone in on
+ potential intersections.
+ <P>
+ It breaks curves up according to their critical points, so each curve segment
+ is guaranteed to only move in 1 general direction between any two give t
+ values.
  
- TODO warning: this project is buggy. The CurveIntersectionApp can
- be used to highlight several instances where two cubic curves do not
- produce intersections (even though the human eye can tell they should).
- Also sometimes exceptions are thrown. The simplest starting point for these
- issues is:
- Curve 1: m 100.0 100.0 c 125.0 125.0 125.0 275.0 100.0 300.0
- Curve 2: m 113.0 120.0 c 88.0 145.0 88.0 295.0 113.0 320.0</div>
+ TODO warning: this project is buggy. The CurveIntersectionApp can be used to
+ highlight several instances where two cubic curves do not produce
+ intersections (even though the human eye can tell they should). Also
+ sometimes exceptions are thrown. The simplest starting point for these issues
+ is: Curve 1: m 100.0 100.0 c 125.0 125.0 125.0 275.0 100.0 300.0 Curve 2: m
+ 113.0 120.0 c 88.0 145.0 88.0 295.0 113.0 320.0</div>
 </li>
 </ul>
 </div>
@@ -199,7 +199,8 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
           double[]&nbsp;dest,
           int&nbsp;offset,
           <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.Return.html" title="enum in com.pump.geom.intersect">IntersectionIdentifier.Return</a>&nbsp;returnType)</code>
-<div class="block">Identify the intersection(s) of two cubic curves, expressed as parametric equations.</div>
+<div class="block">Identify the intersection(s) of two cubic curves, expressed as parametric
+ equations.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -219,7 +220,8 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
          double[]&nbsp;dest,
          int&nbsp;offset,
          <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.Return.html" title="enum in com.pump.geom.intersect">IntersectionIdentifier.Return</a>&nbsp;returnType)</code>
-<div class="block">Identify the intersection(s) of a line and a cubic curve, expressed as parametric equations.</div>
+<div class="block">Identify the intersection(s) of a line and a cubic curve, expressed as
+ parametric equations.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -237,7 +239,8 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
              double[]&nbsp;dest,
              int&nbsp;offset,
              <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.Return.html" title="enum in com.pump.geom.intersect">IntersectionIdentifier.Return</a>&nbsp;returnType)</code>
-<div class="block">Identify the intersection(s) of a line and a parabola, expressed as parametric equations.</div>
+<div class="block">Identify the intersection(s) of a line and a parabola, expressed as
+ parametric equations.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -259,7 +262,8 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
               double[]&nbsp;dest,
               int&nbsp;offset,
               <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.Return.html" title="enum in com.pump.geom.intersect">IntersectionIdentifier.Return</a>&nbsp;returnType)</code>
-<div class="block">Identify the intersection(s) of a parabola and a cubic curve, expressed as parametric equations.</div>
+<div class="block">Identify the intersection(s) of a parabola and a cubic curve, expressed
+ as parametric equations.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -279,7 +283,8 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
                   double[]&nbsp;dest,
                   int&nbsp;offset,
                   <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.Return.html" title="enum in com.pump.geom.intersect">IntersectionIdentifier.Return</a>&nbsp;returnType)</code>
-<div class="block">Identify the intersection(s) of two parabolas, expressed as parametric equations.</div>
+<div class="block">Identify the intersection(s) of two parabolas, expressed as parametric
+ equations.</div>
 </td>
 </tr>
 </table>
@@ -348,7 +353,8 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
                          int&nbsp;offset,
                          <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.Return.html" title="enum in com.pump.geom.intersect">IntersectionIdentifier.Return</a>&nbsp;returnType)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html#lineQuadratic-double-double-double-double-double-double-double-double-double-double-double:A-int-com.pump.geom.intersect.IntersectionIdentifier.Return-">IntersectionIdentifier</a></code></span></div>
-<div class="block">Identify the intersection(s) of a line and a parabola, expressed as parametric equations.</div>
+<div class="block">Identify the intersection(s) of a line and a parabola, expressed as
+ parametric equations.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html#lineQuadratic-double-double-double-double-double-double-double-double-double-double-double:A-int-com.pump.geom.intersect.IntersectionIdentifier.Return-">lineQuadratic</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html" title="class in com.pump.geom.intersect">IntersectionIdentifier</a></code></dd>
@@ -357,12 +363,18 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
 <dd><code>bx1</code> - the coefficient "bx1" in the equation "x1(t1) = ax1*t1+bx1"</dd>
 <dd><code>ay1</code> - the coefficient "ay1" in the equation "y1(t1) = ay1*t1+by1"</dd>
 <dd><code>by1</code> - the coefficient "by1" in the equation "y1(t1) = ay1*t1+by1"</dd>
-<dd><code>ax2</code> - the coefficient "ax2" in the equation "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
-<dd><code>bx2</code> - the coefficient "bx2" in the equation "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
-<dd><code>cx2</code> - the coefficient "cx2" in the equation "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
-<dd><code>ay2</code> - the coefficient "ay2" in the equation "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
-<dd><code>by2</code> - the coefficient "by2" in the equation "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
-<dd><code>cy2</code> - the coefficient "cy2" in the equation "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
+<dd><code>ax2</code> - the coefficient "ax2" in the equation
+            "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
+<dd><code>bx2</code> - the coefficient "bx2" in the equation
+            "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
+<dd><code>cx2</code> - the coefficient "cx2" in the equation
+            "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
+<dd><code>ay2</code> - the coefficient "ay2" in the equation
+            "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
+<dd><code>by2</code> - the coefficient "by2" in the equation
+            "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
+<dd><code>cy2</code> - the coefficient "cy2" in the equation
+            "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
 <dd><code>dest</code> - the destination to write the time intersections in.</dd>
 <dd><code>offset</code> - the offset in the array to start writing at.</dd>
 <dd><code>returnType</code> - the type of data to store in <code>dest</code>.</dd>
@@ -393,7 +405,8 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
                      int&nbsp;offset,
                      <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.Return.html" title="enum in com.pump.geom.intersect">IntersectionIdentifier.Return</a>&nbsp;returnType)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html#lineCubic-double-double-double-double-double-double-double-double-double-double-double-double-double:A-int-com.pump.geom.intersect.IntersectionIdentifier.Return-">IntersectionIdentifier</a></code></span></div>
-<div class="block">Identify the intersection(s) of a line and a cubic curve, expressed as parametric equations.</div>
+<div class="block">Identify the intersection(s) of a line and a cubic curve, expressed as
+ parametric equations.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html#lineCubic-double-double-double-double-double-double-double-double-double-double-double-double-double:A-int-com.pump.geom.intersect.IntersectionIdentifier.Return-">lineCubic</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html" title="class in com.pump.geom.intersect">IntersectionIdentifier</a></code></dd>
@@ -402,14 +415,22 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
 <dd><code>bx1</code> - the coefficient "bx1" in the equation "x1(t1) = ax1*t1+bx1"</dd>
 <dd><code>ay1</code> - the coefficient "ay1" in the equation "y1(t1) = ay1*t1+by1"</dd>
 <dd><code>by1</code> - the coefficient "by1" in the equation "y1(t1) = ay1*t1+by1"</dd>
-<dd><code>ax2</code> - the coefficient "ax2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>bx2</code> - the coefficient "bx2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>cx2</code> - the coefficient "cx2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>dx2</code> - the coefficient "dx2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>ay2</code> - the coefficient "ay2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
-<dd><code>by2</code> - the coefficient "by2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
-<dd><code>cy2</code> - the coefficient "by2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
-<dd><code>dy2</code> - the coefficient "dy2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>ax2</code> - the coefficient "ax2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>bx2</code> - the coefficient "bx2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>cx2</code> - the coefficient "cx2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>dx2</code> - the coefficient "dx2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>ay2</code> - the coefficient "ay2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>by2</code> - the coefficient "by2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>cy2</code> - the coefficient "by2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>dy2</code> - the coefficient "dy2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
 <dd><code>dest</code> - the destination to write the time intersections in.</dd>
 <dd><code>offset</code> - the offset in the array to start writing at.</dd>
 <dd><code>returnType</code> - the type of data to store in <code>dest</code>.</dd>
@@ -440,23 +461,36 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
                               int&nbsp;offset,
                               <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.Return.html" title="enum in com.pump.geom.intersect">IntersectionIdentifier.Return</a>&nbsp;returnType)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html#quadraticQuadratic-double-double-double-double-double-double-double-double-double-double-double-double-double:A-int-com.pump.geom.intersect.IntersectionIdentifier.Return-">IntersectionIdentifier</a></code></span></div>
-<div class="block">Identify the intersection(s) of two parabolas, expressed as parametric equations.</div>
+<div class="block">Identify the intersection(s) of two parabolas, expressed as parametric
+ equations.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html#quadraticQuadratic-double-double-double-double-double-double-double-double-double-double-double-double-double:A-int-com.pump.geom.intersect.IntersectionIdentifier.Return-">quadraticQuadratic</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html" title="class in com.pump.geom.intersect">IntersectionIdentifier</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>ax1</code> - the coefficient "ax1" in the equation "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
-<dd><code>bx1</code> - the coefficient "bx1" in the equation "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
-<dd><code>cx1</code> - the coefficient "cx1" in the equation "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
-<dd><code>ay1</code> - the coefficient "ay1" in the equation "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
-<dd><code>by1</code> - the coefficient "by1" in the equation "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
-<dd><code>cy1</code> - the coefficient "by1" in the equation "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
-<dd><code>ax2</code> - the coefficient "ax2" in the equation "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
-<dd><code>bx2</code> - the coefficient "bx2" in the equation "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
-<dd><code>cx2</code> - the coefficient "cx2" in the equation "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
-<dd><code>ay2</code> - the coefficient "ay2" in the equation "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
-<dd><code>by2</code> - the coefficient "by2" in the equation "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
-<dd><code>cy2</code> - the coefficient "cy2" in the equation "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
+<dd><code>ax1</code> - the coefficient "ax1" in the equation
+            "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
+<dd><code>bx1</code> - the coefficient "bx1" in the equation
+            "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
+<dd><code>cx1</code> - the coefficient "cx1" in the equation
+            "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
+<dd><code>ay1</code> - the coefficient "ay1" in the equation
+            "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
+<dd><code>by1</code> - the coefficient "by1" in the equation
+            "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
+<dd><code>cy1</code> - the coefficient "by1" in the equation
+            "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
+<dd><code>ax2</code> - the coefficient "ax2" in the equation
+            "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
+<dd><code>bx2</code> - the coefficient "bx2" in the equation
+            "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
+<dd><code>cx2</code> - the coefficient "cx2" in the equation
+            "x2(t2) = ax2*t2*t2+bx2*t2+cx2"</dd>
+<dd><code>ay2</code> - the coefficient "ay2" in the equation
+            "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
+<dd><code>by2</code> - the coefficient "by2" in the equation
+            "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
+<dd><code>cy2</code> - the coefficient "cy2" in the equation
+            "y2(t2) = ay2*t2*t2+by2*t2+cy2"</dd>
 <dd><code>dest</code> - the destination to write the time intersections in.</dd>
 <dd><code>offset</code> - the offset in the array to start writing at.</dd>
 <dd><code>returnType</code> - the type of data to store in <code>dest</code>.</dd>
@@ -489,25 +523,40 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
                           int&nbsp;offset,
                           <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.Return.html" title="enum in com.pump.geom.intersect">IntersectionIdentifier.Return</a>&nbsp;returnType)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html#quadraticCubic-double-double-double-double-double-double-double-double-double-double-double-double-double-double-double:A-int-com.pump.geom.intersect.IntersectionIdentifier.Return-">IntersectionIdentifier</a></code></span></div>
-<div class="block">Identify the intersection(s) of a parabola and a cubic curve, expressed as parametric equations.</div>
+<div class="block">Identify the intersection(s) of a parabola and a cubic curve, expressed
+ as parametric equations.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html#quadraticCubic-double-double-double-double-double-double-double-double-double-double-double-double-double-double-double:A-int-com.pump.geom.intersect.IntersectionIdentifier.Return-">quadraticCubic</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html" title="class in com.pump.geom.intersect">IntersectionIdentifier</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>ax1</code> - the coefficient "ax1" in the equation "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
-<dd><code>bx1</code> - the coefficient "bx1" in the equation "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
-<dd><code>cx1</code> - the coefficient "cx1" in the equation "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
-<dd><code>ay1</code> - the coefficient "ay1" in the equation "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
-<dd><code>by1</code> - the coefficient "by1" in the equation "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
-<dd><code>cy1</code> - the coefficient "by1" in the equation "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
-<dd><code>ax2</code> - the coefficient "ax2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>bx2</code> - the coefficient "bx2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>cx2</code> - the coefficient "cx2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>dx2</code> - the coefficient "dx2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>ay2</code> - the coefficient "ay2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
-<dd><code>by2</code> - the coefficient "by2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
-<dd><code>cy2</code> - the coefficient "by2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
-<dd><code>dy2</code> - the coefficient "dy2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>ax1</code> - the coefficient "ax1" in the equation
+            "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
+<dd><code>bx1</code> - the coefficient "bx1" in the equation
+            "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
+<dd><code>cx1</code> - the coefficient "cx1" in the equation
+            "x1(t1) = ax1*t1*t1+bx1*t1+cx1"</dd>
+<dd><code>ay1</code> - the coefficient "ay1" in the equation
+            "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
+<dd><code>by1</code> - the coefficient "by1" in the equation
+            "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
+<dd><code>cy1</code> - the coefficient "by1" in the equation
+            "y1(t1) = ay1*t1*t1+by1*t1+cy1"</dd>
+<dd><code>ax2</code> - the coefficient "ax2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>bx2</code> - the coefficient "bx2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>cx2</code> - the coefficient "cx2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>dx2</code> - the coefficient "dx2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>ay2</code> - the coefficient "ay2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>by2</code> - the coefficient "by2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>cy2</code> - the coefficient "by2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>dy2</code> - the coefficient "dy2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
 <dd><code>dest</code> - the destination to write the time intersections in.</dd>
 <dd><code>offset</code> - the offset in the array to start writing at.</dd>
 <dd><code>returnType</code> - the type of data to store in <code>dest</code>.</dd>
@@ -542,27 +591,44 @@ extends <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html
                       int&nbsp;offset,
                       <a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.Return.html" title="enum in com.pump.geom.intersect">IntersectionIdentifier.Return</a>&nbsp;returnType)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html#cubicCubic-double-double-double-double-double-double-double-double-double-double-double-double-double-double-double-double-double:A-int-com.pump.geom.intersect.IntersectionIdentifier.Return-">IntersectionIdentifier</a></code></span></div>
-<div class="block">Identify the intersection(s) of two cubic curves, expressed as parametric equations.</div>
+<div class="block">Identify the intersection(s) of two cubic curves, expressed as parametric
+ equations.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html#cubicCubic-double-double-double-double-double-double-double-double-double-double-double-double-double-double-double-double-double:A-int-com.pump.geom.intersect.IntersectionIdentifier.Return-">cubicCubic</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/geom/intersect/IntersectionIdentifier.html" title="class in com.pump.geom.intersect">IntersectionIdentifier</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>ax1</code> - the coefficient "ax1" in the equation "x1(t1) = ax1*t1*t1*t1+bx1*t1*t1+cx1*t1+dx1"</dd>
-<dd><code>bx1</code> - the coefficient "bx1" in the equation "x1(t1) = ax1*t1*t1*t1+bx1*t1*t1+cx1*t1+dx1"</dd>
-<dd><code>cx1</code> - the coefficient "cx1" in the equation "x1(t1) = ax1*t1*t1*t1+bx1*t1*t1+cx1*t1+dx1"</dd>
-<dd><code>dx1</code> - the coefficient "dx1" in the equation "x1(t1) = ax1*t1*t1*t1+bx1*t1*t1+cx1*t1+dx1"</dd>
-<dd><code>ay1</code> - the coefficient "ay1" in the equation "y1(t1) = ay1*t1*t1*t1+by1*t1*t1+cy1*t1+dy1"</dd>
-<dd><code>by1</code> - the coefficient "by1" in the equation "y1(t1) = ay1*t1*t1*t1+by1*t1*t1+cy1*t1+dy1"</dd>
-<dd><code>cy1</code> - the coefficient "by1" in the equation "y1(t1) = ay1*t1*t1*t1+by1*t1*t1+cy1*t1+dy1"</dd>
-<dd><code>dy1</code> - the coefficient "dy1" in the equation "y1(t1) = ay1*t1*t1*t1+by1*t1*t1+cy1*t1+dy1"</dd>
-<dd><code>ax2</code> - the coefficient "ax2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>bx2</code> - the coefficient "bx2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>cx2</code> - the coefficient "cx2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>dx2</code> - the coefficient "dx2" in the equation "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
-<dd><code>ay2</code> - the coefficient "ay2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
-<dd><code>by2</code> - the coefficient "by2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
-<dd><code>cy2</code> - the coefficient "by2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
-<dd><code>dy2</code> - the coefficient "dy2" in the equation "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>ax1</code> - the coefficient "ax1" in the equation
+            "x1(t1) = ax1*t1*t1*t1+bx1*t1*t1+cx1*t1+dx1"</dd>
+<dd><code>bx1</code> - the coefficient "bx1" in the equation
+            "x1(t1) = ax1*t1*t1*t1+bx1*t1*t1+cx1*t1+dx1"</dd>
+<dd><code>cx1</code> - the coefficient "cx1" in the equation
+            "x1(t1) = ax1*t1*t1*t1+bx1*t1*t1+cx1*t1+dx1"</dd>
+<dd><code>dx1</code> - the coefficient "dx1" in the equation
+            "x1(t1) = ax1*t1*t1*t1+bx1*t1*t1+cx1*t1+dx1"</dd>
+<dd><code>ay1</code> - the coefficient "ay1" in the equation
+            "y1(t1) = ay1*t1*t1*t1+by1*t1*t1+cy1*t1+dy1"</dd>
+<dd><code>by1</code> - the coefficient "by1" in the equation
+            "y1(t1) = ay1*t1*t1*t1+by1*t1*t1+cy1*t1+dy1"</dd>
+<dd><code>cy1</code> - the coefficient "by1" in the equation
+            "y1(t1) = ay1*t1*t1*t1+by1*t1*t1+cy1*t1+dy1"</dd>
+<dd><code>dy1</code> - the coefficient "dy1" in the equation
+            "y1(t1) = ay1*t1*t1*t1+by1*t1*t1+cy1*t1+dy1"</dd>
+<dd><code>ax2</code> - the coefficient "ax2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>bx2</code> - the coefficient "bx2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>cx2</code> - the coefficient "cx2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>dx2</code> - the coefficient "dx2" in the equation
+            "x2(t2) = ax2*t2*t2*t2+bx2*t2*t2+cx2*t2+dx2"</dd>
+<dd><code>ay2</code> - the coefficient "ay2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>by2</code> - the coefficient "by2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>cy2</code> - the coefficient "by2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
+<dd><code>dy2</code> - the coefficient "dy2" in the equation
+            "y2(t2) = ay2*t2*t2*t2+by2*t2*t2+cy2*t2+dy2"</dd>
 <dd><code>dest</code> - the destination to write the time intersections in.</dd>
 <dd><code>offset</code> - the offset in the array to start writing at.</dd>
 <dd><code>returnType</code> - the type of data to store in <code>dest</code>.</dd>

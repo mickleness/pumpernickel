@@ -114,10 +114,13 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ChunkOffsetAtom</span>
 extends java.lang.Object</pre>
-<div class="block">This is not a public class because I expect to make some significant
- changes to this project in the next year.
- <P>Use at your own risk.  This class (and its package) may change in future releases.
- <P>Not that I'm promising there will be future releases.  There may not be.  :)</div>
+<div class="block">This is not a public class because I expect to make some significant changes
+ to this project in the next year.
+ <P>
+ Use at your own risk. This class (and its package) may change in future
+ releases.
+ <P>
+ Not that I'm promising there will be future releases. There may not be. :)</div>
 </li>
 </ul>
 </div>
@@ -241,8 +244,8 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/animation/quicktime/ChunkOffsetAtom.html#getHighestTrackID--">getHighestTrackID</a></span>()</code>
 <div class="block">Call this on the root of the dom tree to identify all
- <code>TrackHeaderAtoms</code> and determine the highest
- track ID used in this movie</div>
+ <code>TrackHeaderAtoms</code> and determine the highest track ID used in
+ this movie</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -268,8 +271,8 @@ extends java.lang.Object</pre>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>protected long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/animation/quicktime/ChunkOffsetAtom.html#getSize--">getSize</a></span>()</code>
-<div class="block">Returns the complete size of this atom, including the 8 byte header that is not
- written in the <code>writeContents</code> method.</div>
+<div class="block">Returns the complete size of this atom, including the 8 byte header that
+ is not written in the <code>writeContents</code> method.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -460,9 +463,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>ABBREVIATE</h4>
 <pre>protected static&nbsp;boolean ABBREVIATE</pre>
-<div class="block">This limits the output toString() will produce.
- This is true by default.  Very useful for debugging so your
- console isn't flooded with information.</div>
+<div class="block">This limits the output toString() will produce. This is true by default.
+ Very useful for debugging so your console isn't flooded with information.</div>
 </li>
 </ul>
 <a name="EMPTY_ENUMERATION">
@@ -586,13 +588,15 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getIdentifier</h4>
 <pre>protected&nbsp;java.lang.String&nbsp;getIdentifier()</pre>
-<div class="block">Returns the 4-byte identifier this atom uses.  These identifiers are often
+<div class="block">Returns the 4-byte identifier this atom uses. These identifiers are often
  defined in the QT file format.
- <P>(Although this uses a <code>java.lang.String</code>, serious badness
- will follow if this value is not exactly 4-bytes long.</div>
+ <P>
+ (Although this uses a <code>java.lang.String</code>, serious badness will
+ follow if this value is not exactly 4-bytes long.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the 4-byte identifier this atom uses (such as "moov", "trak", etc.)</dd>
+<dd>the 4-byte identifier this atom uses (such as "moov", "trak",
+         etc.)</dd>
 </dl>
 </li>
 </ul>
@@ -603,11 +607,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getSize</h4>
 <pre>protected&nbsp;long&nbsp;getSize()</pre>
-<div class="block">Returns the complete size of this atom, including the 8 byte header that is not
- written in the <code>writeContents</code> method.
- <P>Subclasses are encouraged to override this method if it is easy to calculate
- the number of bytes that will be written.  By default this method uses a
- <code>NullOutputStream</code> to actually write the data and measure its length.</div>
+<div class="block">Returns the complete size of this atom, including the 8 byte header that
+ is not written in the <code>writeContents</code> method.
+ <P>
+ Subclasses are encouraged to override this method if it is easy to
+ calculate the number of bytes that will be written. By default this
+ method uses a <code>NullOutputStream</code> to actually write the data
+ and measure its length.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the complete size of this atom.</dd>
@@ -622,14 +628,15 @@ extends java.lang.Object</pre>
 <h4>writeContents</h4>
 <pre>protected&nbsp;void&nbsp;writeContents(<a href="../../../../com/pump/io/GuardedOutputStream.html" title="class in com.pump.io">GuardedOutputStream</a>&nbsp;out)
                       throws java.io.IOException</pre>
-<div class="block">Writes the contents of this atom, minus the first 8 bytes.  This is called
+<div class="block">Writes the contents of this atom, minus the first 8 bytes. This is called
  from the <code>write()</code> method.
- <P>(The first 8 bytes are always the size of this atom, and its identifier.
+ <P>
+ (The first 8 bytes are always the size of this atom, and its identifier.
  Those are already written when this is called.)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>out</code> - a <code>GuardedOutputStream</code> that is restricted to write only
- a fixed number of bytes.</dd>
+<dd><code>out</code> - a <code>GuardedOutputStream</code> that is restricted to write
+            only a fixed number of bytes.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -1201,8 +1208,8 @@ extends java.lang.Object</pre>
 <h4>getHighestTrackID</h4>
 <pre>public&nbsp;long&nbsp;getHighestTrackID()</pre>
 <div class="block">Call this on the root of the dom tree to identify all
- <code>TrackHeaderAtoms</code> and determine the highest
- track ID used in this movie</div>
+ <code>TrackHeaderAtoms</code> and determine the highest track ID used in
+ this movie</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the highest track ID contained in this node</dd>

@@ -211,8 +211,8 @@ implements <a href="../../../com/pump/jar/MissingJarResponseManager.html" title=
 <div class="block">Create a new Preferences-backed choice.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>name</code> - the project name, which is used to distinguish the
- preferences so different projects can make different choices.</dd>
+<dd><code>name</code> - the project name, which is used to distinguish the preferences
+            so different projects can make different choices.</dd>
 </dl>
 </li>
 </ul>
@@ -237,11 +237,11 @@ implements <a href="../../../com/pump/jar/MissingJarResponseManager.html" title=
 <dd><code><a href="../../../com/pump/jar/MissingJarResponseManager.html#getBehavior-java.io.File-boolean-">getBehavior</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/jar/MissingJarResponseManager.html" title="interface in com.pump.jar">MissingJarResponseManager</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - the file to fetch the Behavior for.</dd>
-<dd><code>applyToNonrequiredJars</code> - if true then we know for certain that this
- file is needed. If false then we're not sure if this file is required.</dd>
+<dd><code>applyToNonrequiredJars</code> - if true then we know for certain that this file is needed. If
+            false then we're not sure if this file is required.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the last Behavior assigned to this File.
- This may return null if no Behavior is defined.</dd>
+<dd>the last Behavior assigned to this File. This may return null if
+         no Behavior is defined.</dd>
 </dl>
 </li>
 </ul>
@@ -271,21 +271,22 @@ implements <a href="../../../com/pump/jar/MissingJarResponseManager.html" title=
 <pre>public&nbsp;<a href="../../../com/pump/jar/MissingJarResponse.html" title="enum in com.pump.jar">MissingJarResponse</a>&nbsp;guessBehavior(java.io.File&nbsp;jarFile)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/jar/MissingJarResponseManager.html#guessBehavior-java.io.File-">MissingJarResponseManager</a></code></span></div>
 <div class="block">This method guesses the desired behavior.
- <p>If <code>getBehavior()</code> has already returned
- <code>null</code> then we're going to show a dialog to
- the user to make them decide. But this method helps
- prepopulate the choices. If the user likes what they see,
+ <p>
+ If <code>getBehavior()</code> has already returned <code>null</code> then
+ we're going to show a dialog to the user to make them decide. But this
+ method helps prepopulate the choices. If the user likes what they see,
  they can just hit the return key and move on.
- <p>This method may consult other projects and see
- if they have already stored a Behavior for this file.</div>
+ <p>
+ This method may consult other projects and see if they have already
+ stored a Behavior for this file.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/jar/MissingJarResponseManager.html#guessBehavior-java.io.File-">guessBehavior</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/jar/MissingJarResponseManager.html" title="interface in com.pump.jar">MissingJarResponseManager</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>jarFile</code> - the file to guess the Behavior for.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a reasonable guess at the Behavior to associate
- with this File, or null.</dd>
+<dd>a reasonable guess at the Behavior to associate with this File,
+         or null.</dd>
 </dl>
 </li>
 </ul>
@@ -304,8 +305,16 @@ implements <a href="../../../com/pump/jar/MissingJarResponseManager.html" title=
 <dd><code><a href="../../../com/pump/jar/MissingJarResponseManager.html#resolveBehaviors-com.pump.jar.MissingJarResponseManager-java.util.Map-java.util.Set-java.lang.String-">resolveBehaviors</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/jar/MissingJarResponseManager.html" title="interface in com.pump.jar">MissingJarResponseManager</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>manager</code> - the choice model used.</dd>
-<dd><code>requiredJars</code> - known jar behaviors. This is where the users choices will be stored, so it may be empty but it can not be null.
- This is also used to set up the dialog if you want to preset certain choices.</dd>
+<dd><code>requiredJars</code> - known jar behaviors. This is where the users choices will be
+            stored, so it may be empty but it can not be null. This is
+            also used to set up the dialog if you want to preset certain
+            choices.</dd>
+<dd><code>keySet</code> - the set of jar files that the user will make choices for. When
+            this dialog is dismissed it is guaranteed that the
+            jarBehaviors map will have a non-null value associated with
+            each of these Files.</dd>
+<dd><code>name</code> - the UI needs the name of the compiled class to explain things
+            to the user.</dd>
 </dl>
 </li>
 </ul>

@@ -134,23 +134,28 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">RenderingHintsContextMenu</span>
 extends javax.swing.JPopupMenu</pre>
-<div class="block">This provides a context menu for a component that lets
- the user adjust the RenderingHints being used.
- <P>This is intended as a tool for developers; not for
- general use.
- <P>Note this menu cannot actually change the <code>RenderingHints</code>
- of a component unless you override the <code>paint()</code> method.
- <P>For example, a possible demo of this component might look like this:
+<div class="block">This provides a context menu for a component that lets the user adjust the
+ RenderingHints being used.
+ <P>
+ This is intended as a tool for developers; not for general use.
+ <P>
+ Note this menu cannot actually change the <code>RenderingHints</code> of a
+ component unless you override the <code>paint()</code> method.
+ <P>
+ For example, a possible demo of this component might look like this: <BR>
  <BR>
- <BR><code>RenderingHintsContextMenu myContextMenu = new RenderingHintsContextMenu(myComponent)</code>
- <BR><code>JComponent myComponent = new JComponent() {</code>
- <BR><code> &nbsp; public void paint(Graphics g) {</code>
- <br><code> &nbsp; &nbsp; ((Graphics2D)g).setRenderingHints(myContextMenu.getRenderingHints());</code>
- <br><code> &nbsp; &nbsp; ... paint something</code>
- <br><code> &nbsp; }</code>
- <br><code>};</code>
- <P>The component that this menu is created for will receive
- a call to <code>repaint()</code> whenever a hint is changed.</div>
+ <code>RenderingHintsContextMenu myContextMenu = new RenderingHintsContextMenu(myComponent)</code>
+ <BR>
+ <code>JComponent myComponent = new JComponent() {</code> <BR>
+ <code> &nbsp; public void paint(Graphics g) {</code> <br>
+ <code> &nbsp; &nbsp; ((Graphics2D)g).setRenderingHints(myContextMenu.getRenderingHints());</code>
+ <br>
+ <code> &nbsp; &nbsp; ... paint something</code> <br>
+ <code> &nbsp; }</code> <br>
+ <code>};</code>
+ <P>
+ The component that this menu is created for will receive a call to
+ <code>repaint()</code> whenever a hint is changed.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.swing.RenderingHintsContextMenu">Serialized Form</a></dd>
@@ -239,15 +244,15 @@ extends javax.swing.JPopupMenu</pre>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/swing/RenderingHintsContextMenu.html#RenderingHintsContextMenu-javax.swing.JComponent-">RenderingHintsContextMenu</a></span>(javax.swing.JComponent&nbsp;jc)</code>
-<div class="block">Constructs a new <code>RenderingHintsContextMenu</code> that
- includes every available hint.</div>
+<div class="block">Constructs a new <code>RenderingHintsContextMenu</code> that includes
+ every available hint.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/swing/RenderingHintsContextMenu.html#RenderingHintsContextMenu-javax.swing.JComponent-java.awt.RenderingHints.Key:A-">RenderingHintsContextMenu</a></span>(javax.swing.JComponent&nbsp;jc,
                          java.awt.RenderingHints.Key[]&nbsp;keys)</code>
-<div class="block">Constructs a new <code>RenderingHintsContextMenu</code> that
- includes only the specified hints.</div>
+<div class="block">Constructs a new <code>RenderingHintsContextMenu</code> that includes
+ only the specified hints.</div>
 </td>
 </tr>
 </table>
@@ -276,8 +281,7 @@ extends javax.swing.JPopupMenu</pre>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>java.awt.RenderingHints</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/RenderingHintsContextMenu.html#getRenderingHints--">getRenderingHints</a></span>()</code>
-<div class="block">Returns the keys this contextual menu current
- represents.</div>
+<div class="block">Returns the keys this contextual menu current represents.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -348,13 +352,13 @@ extends javax.swing.JPopupMenu</pre>
 <li class="blockList">
 <h4>RenderingHintsContextMenu</h4>
 <pre>public&nbsp;RenderingHintsContextMenu(javax.swing.JComponent&nbsp;jc)</pre>
-<div class="block">Constructs a new <code>RenderingHintsContextMenu</code> that
- includes every available hint.</div>
+<div class="block">Constructs a new <code>RenderingHintsContextMenu</code> that includes
+ every available hint.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>jc</code> - the component to repaint when a hint is changed.
- Note the <code>paint()</code> must be designed to consult this
- object for the correct rendering hints.</dd>
+<dd><code>jc</code> - the component to repaint when a hint is changed. Note the
+            <code>paint()</code> must be designed to consult this object
+            for the correct rendering hints.</dd>
 </dl>
 </li>
 </ul>
@@ -366,13 +370,13 @@ extends javax.swing.JPopupMenu</pre>
 <h4>RenderingHintsContextMenu</h4>
 <pre>public&nbsp;RenderingHintsContextMenu(javax.swing.JComponent&nbsp;jc,
                                  java.awt.RenderingHints.Key[]&nbsp;keys)</pre>
-<div class="block">Constructs a new <code>RenderingHintsContextMenu</code> that
- includes only the specified hints.</div>
+<div class="block">Constructs a new <code>RenderingHintsContextMenu</code> that includes
+ only the specified hints.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>jc</code> - the component to repaint when a hint is changed.
- Note the <code>paint()</code> must be designed to consult this
- object for the correct rendering hints.</dd>
+<dd><code>jc</code> - the component to repaint when a hint is changed. Note the
+            <code>paint()</code> must be designed to consult this object
+            for the correct rendering hints.</dd>
 <dd><code>keys</code> - the keys this menu should include.</dd>
 </dl>
 </li>
@@ -430,8 +434,7 @@ extends javax.swing.JPopupMenu</pre>
 <li class="blockList">
 <h4>getRenderingHints</h4>
 <pre>public&nbsp;java.awt.RenderingHints&nbsp;getRenderingHints()</pre>
-<div class="block">Returns the keys this contextual menu current
- represents.</div>
+<div class="block">Returns the keys this contextual menu current represents.</div>
 </li>
 </ul>
 </li>

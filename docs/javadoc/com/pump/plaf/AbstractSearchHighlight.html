@@ -114,19 +114,21 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">AbstractSearchHighlight</span>
 extends java.lang.Object</pre>
-<div class="block">This renders a temporary effect somehow animating a selection
- in a JTextComponent.
- This assumes the text component is in a JFrame, JApplet, or other
- RootPaneContainer because it renders the animation with the help
- of the LayeredPane.
- <P>This creates images of the selection when constructed, and
- renders those images through JComponents.  Once the image is drawn
- it cannot be modified, but you can modify it's opacity and
- transform through the <code>updateAnimation</code> method.
- <P>Also you can modify the duration of the animation by calling
- <code>UIManager.put("SearchHighlight.duration",new Integer(millis))</code>, 
+<div class="block">This renders a temporary effect somehow animating a selection in a
+ JTextComponent. This assumes the text component is in a JFrame, JApplet, or
+ other RootPaneContainer because it renders the animation with the help of the
+ LayeredPane.
+ <P>
+ This creates images of the selection when constructed, and renders those
+ images through JComponents. Once the image is drawn it cannot be modified,
+ but you can modify it's opacity and transform through the
+ <code>updateAnimation</code> method.
+ <P>
+ Also you can modify the duration of the animation by calling
+ <code>UIManager.put("SearchHighlight.duration",new Integer(millis))</code>,
  or overriding the <code>getDuration()</code> method of this object.
- <P>This is automatically created by calling <code>TextSearch.highlight()</code>.</div>
+ <P>
+ This is automatically created by calling <code>TextSearch.highlight()</code>.</div>
 </li>
 </ul>
 </div>
@@ -186,8 +188,8 @@ extends java.lang.Object</pre>
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AbstractSearchHighlight.html#AbstractSearchHighlight-javax.swing.text.JTextComponent-int-int-">AbstractSearchHighlight</a></span>(javax.swing.text.JTextComponent&nbsp;jtc,
                        int&nbsp;startIndex,
                        int&nbsp;endIndex)</code>
-<div class="block">Creates a new search highlight that captures the text from
- [startIndex, endIndex].</div>
+<div class="block">Creates a new search highlight that captures the text from [startIndex,
+ endIndex].</div>
 </td>
 </tr>
 </table>
@@ -254,8 +256,8 @@ extends java.lang.Object</pre>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AbstractSearchHighlight.html#paintOnlyText-java.awt.Graphics2D-">paintOnlyText</a></span>(java.awt.Graphics2D&nbsp;g)</code>
-<div class="block">Paints the text from the <code>JTextComponent</code> in the
- rectangle provided.</div>
+<div class="block">Paints the text from the <code>JTextComponent</code> in the rectangle
+ provided.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -340,8 +342,8 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;AbstractSearchHighlight(javax.swing.text.JTextComponent&nbsp;jtc,
                                int&nbsp;startIndex,
                                int&nbsp;endIndex)</pre>
-<div class="block">Creates a new search highlight that captures the text from
- [startIndex, endIndex].</div>
+<div class="block">Creates a new search highlight that captures the text from [startIndex,
+ endIndex].</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>jtc</code> - the text component being used.</dd>
@@ -412,14 +414,13 @@ extends java.lang.Object</pre>
 <h4>paintHighlightBackground</h4>
 <pre>protected&nbsp;void&nbsp;paintHighlightBackground(java.awt.Graphics2D&nbsp;g,
                                         java.awt.Rectangle&nbsp;textRect)</pre>
-<div class="block">This paints the background underneath the text in the image.
- This might be an opaque shape, for example.</div>
+<div class="block">This paints the background underneath the text in the image. This might
+ be an opaque shape, for example.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graphics to paint to.</dd>
-<dd><code>textRect</code> - where the text will be rendered.
- A shape enclosing the text should add a few pixels of padding around
- this rectangle.</dd>
+<dd><code>textRect</code> - where the text will be rendered. A shape enclosing the text
+            should add a few pixels of padding around this rectangle.</dd>
 </dl>
 </li>
 </ul>
@@ -441,16 +442,17 @@ extends java.lang.Object</pre>
 <h4>updateAnimation</h4>
 <pre>protected abstract&nbsp;void&nbsp;updateAnimation(javax.swing.JComponent[]&nbsp;highlights,
                                         float&nbsp;fraction)</pre>
-<div class="block">This is constantly called while the animation is playing.  It
- gives you an optional chance to modify the highlights a little bit.</div>
+<div class="block">This is constantly called while the animation is playing. It gives you an
+ optional chance to modify the highlights a little bit.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>highlights</code> - the components to modify.  You should change the
- client property "opacity" (to be a number from [0, 1]) and "transform"
- (to be an AffineTransform) to modify these highlights.</dd>
+<dd><code>highlights</code> - the components to modify. You should change the client
+            property "opacity" (to be a number from [0, 1]) and
+            "transform" (to be an AffineTransform) to modify these
+            highlights.</dd>
 <dd><code>fraction</code> - a fraction from [0, 1], indicating how progressed this
- animation is.  After <code>t = 1</code> this method is no longer called
- and this highlight will fade out.</dd>
+            animation is. After <code>t = 1</code> this method is no
+            longer called and this highlight will fade out.</dd>
 </dl>
 </li>
 </ul>
@@ -461,9 +463,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>paintOnlyText</h4>
 <pre>protected&nbsp;void&nbsp;paintOnlyText(java.awt.Graphics2D&nbsp;g)</pre>
-<div class="block">Paints the text from the <code>JTextComponent</code> in the
- rectangle provided.  You should clip this Graphics2D before
- calling this method, though.</div>
+<div class="block">Paints the text from the <code>JTextComponent</code> in the rectangle
+ provided. You should clip this Graphics2D before calling this method,
+ though.</div>
 </li>
 </ul>
 <a name="getSelectionBounds-int-int-javax.swing.text.JTextComponent-">
@@ -475,9 +477,8 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;java.awt.Rectangle[]&nbsp;getSelectionBounds(int&nbsp;startIndex,
                                                       int&nbsp;endIndex,
                                                       javax.swing.text.JTextComponent&nbsp;jtc)</pre>
-<div class="block">This returns all the rectangles needed to enclose the selection.
- Usually this is just one rectangle, but in cases of a line break
- this may be two.</div>
+<div class="block">This returns all the rectangles needed to enclose the selection. Usually
+ this is just one rectangle, but in cases of a line break this may be two.</div>
 </li>
 </ul>
 <a name="getDuration--">

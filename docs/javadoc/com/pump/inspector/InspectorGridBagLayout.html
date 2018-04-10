@@ -226,8 +226,8 @@ implements <a href="../../../com/pump/inspector/InspectorLayout.html" title="int
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/inspector/InspectorGridBagLayout.html#clear--">clear</a></span>()</code>
-<div class="block">Removes all elements from this inspector, usually so elements
- can be re-added.</div>
+<div class="block">Removes all elements from this inspector, usually so elements can be
+ re-added.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -303,10 +303,10 @@ implements <a href="../../../com/pump/inspector/InspectorLayout.html" title="int
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>panel</code> - the panel to use.</dd>
-<dd><code>idAnchorFactor</code> - this is used to anchor IDs either at the top
- or center of a row.  If you divide the height of the right hand side
- by the height of the left hand side and is less than this factor:
- the id is centered.  Otherwise the id is anchored at the top.</dd>
+<dd><code>idAnchorFactor</code> - this is used to anchor IDs either at the top or center of a
+            row. If you divide the height of the right hand side by the
+            height of the left hand side and is less than this factor: the
+            id is centered. Otherwise the id is anchored at the top.</dd>
 </dl>
 </li>
 </ul>
@@ -326,8 +326,8 @@ implements <a href="../../../com/pump/inspector/InspectorLayout.html" title="int
 <h4>clear</h4>
 <pre>public&nbsp;void&nbsp;clear()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/inspector/InspectorLayout.html#clear--">InspectorLayout</a></code></span></div>
-<div class="block">Removes all elements from this inspector, usually so elements
- can be re-added.</div>
+<div class="block">Removes all elements from this inspector, usually so elements can be
+ re-added.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/inspector/InspectorLayout.html#clear--">clear</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/inspector/InspectorLayout.html" title="interface in com.pump.inspector">InspectorLayout</a></code></dd>
@@ -342,9 +342,9 @@ implements <a href="../../../com/pump/inspector/InspectorLayout.html" title="int
 <h4>addGap</h4>
 <pre>public&nbsp;void&nbsp;addGap()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/inspector/InspectorLayout.html#addGap--">InspectorLayout</a></code></span></div>
-<div class="block">Appends a gap to this inspector.  All the rows should be their
- preferred/minimum height, but all vertical gaps will distribute
- the remaining vertical space evenly.</div>
+<div class="block">Appends a gap to this inspector. All the rows should be their
+ preferred/minimum height, but all vertical gaps will distribute the
+ remaining vertical space evenly.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/inspector/InspectorLayout.html#addGap--">addGap</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/inspector/InspectorLayout.html" title="interface in com.pump.inspector">InspectorLayout</a></code></dd>
@@ -384,7 +384,7 @@ implements <a href="../../../com/pump/inspector/InspectorLayout.html" title="int
 <dd><code>comp</code> - the component to add.</dd>
 <dd><code>alignment</code> - one of the SwingConstants values: LEFT, CENTER, RIGHT.</dd>
 <dd><code>stretch</code> - whether to stretch this component to fill the space
- horizontally or not.</dd>
+            horizontally or not.</dd>
 </dl>
 </li>
 </ul>
@@ -403,9 +403,10 @@ implements <a href="../../../com/pump/inspector/InspectorLayout.html" title="int
 <dd><code>comp</code> - </dd>
 <dd><code>alignment</code> - </dd>
 <dd><code>stretch</code> - </dd>
-<dd><code>weighty</code> - a value of zero means this component will be squished vertically
- to take up the least amount of space. On rare occasion components that should stretch
- (like scrollpanes) may need a value of 1.0 here instead.</dd>
+<dd><code>weighty</code> - a value of zero means this component will be squished
+            vertically to take up the least amount of space. On rare
+            occasion components that should stretch (like scrollpanes) may
+            need a value of 1.0 here instead.</dd>
 </dl>
 </li>
 </ul>
@@ -426,11 +427,12 @@ implements <a href="../../../com/pump/inspector/InspectorLayout.html" title="int
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/inspector/InspectorLayout.html#addRow-javax.swing.JComponent-javax.swing.JComponent-boolean-">addRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/inspector/InspectorLayout.html" title="interface in com.pump.inspector">InspectorLayout</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>identifier</code> - the control on the left.  This should usually contain text.
- A <code>JLabel</code> or a <code>JCheckBox</code> is recommended.</dd>
+<dd><code>identifier</code> - the control on the left. This should usually contain text. A
+            <code>JLabel</code> or a <code>JCheckBox</code> is
+            recommended.</dd>
 <dd><code>control</code> - any more complex control on the right.</dd>
-<dd><code>stretchControlToFill</code> - whether this control should stretch to fit
- the remaining width.</dd>
+<dd><code>stretchControlToFill</code> - whether this control should stretch to fit the remaining
+            width.</dd>
 </dl>
 </li>
 </ul>
@@ -447,18 +449,19 @@ implements <a href="../../../com/pump/inspector/InspectorLayout.html" title="int
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/inspector/InspectorLayout.html#addRow-javax.swing.JComponent-javax.swing.JComponent-boolean-javax.swing.JComponent-">InspectorLayout</a></code></span></div>
 <div class="block">Appends a new row containing 3 objects to this inspector.
  
- The identifier is right-aligned.  The leftControl is
- right-aligned, and the rightControl is right-aligned against
- the far right margin of the inspector.</div>
+ The identifier is right-aligned. The leftControl is right-aligned, and
+ the rightControl is right-aligned against the far right margin of the
+ inspector.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/inspector/InspectorLayout.html#addRow-javax.swing.JComponent-javax.swing.JComponent-boolean-javax.swing.JComponent-">addRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/inspector/InspectorLayout.html" title="interface in com.pump.inspector">InspectorLayout</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>identifier</code> - the control on the left.  This should usually contain text.
- A <code>JLabel</code> or a <code>JCheckBox</code> is recommended.</dd>
+<dd><code>identifier</code> - the control on the left. This should usually contain text. A
+            <code>JLabel</code> or a <code>JCheckBox</code> is
+            recommended.</dd>
 <dd><code>leftControl</code> - any other control.</dd>
-<dd><code>stretchLeftControl</code> - whether the <code>leftControl</code>
- should stretch to fit the remaining width.</dd>
+<dd><code>stretchLeftControl</code> - whether the <code>leftControl</code> should stretch to fit the
+            remaining width.</dd>
 <dd><code>rightControl</code> - the element to add on the right.</dd>
 </dl>
 </li>

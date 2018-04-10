@@ -120,7 +120,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">Spiral2D</span>
 extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.pump.geom">AbstractShape</a></pre>
 <div class="block">The <code>Spiral2D</code> class defines a spiral shape.
- <p>This shape can be modeled by:
+ <p>
+ This shape can be modeled by:
  <code><br> &nbsp; centerX+coilGap*(t+coilOffset)*Math.cos(2*Math.PI*t*m+angularOffset);</code>
  <code><br> &nbsp; centerY+coilGap*(t+coilOffset)*Math.sin(2*Math.PI*t*m+angularOffset);</code></div>
 <dl>
@@ -189,7 +190,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
                         double&nbsp;endX,
                         double&nbsp;endY,
                         double&nbsp;numCoils)</code>
-<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point, and a fixed number of coils.</div>
+<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point,
+ and a fixed number of coils.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -197,7 +199,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/Spiral2D.html#createWithFixedCoilCount-java.awt.geom.Point2D-java.awt.geom.Point2D-double-">createWithFixedCoilCount</a></span>(java.awt.geom.Point2D&nbsp;center,
                         java.awt.geom.Point2D&nbsp;end,
                         double&nbsp;numCoils)</code>
-<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point, and a fixed number of coils.</div>
+<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point,
+ and a fixed number of coils.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -207,7 +210,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
                       double&nbsp;endX,
                       double&nbsp;endY,
                       double&nbsp;coilGap)</code>
-<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point, and a fixed gap between coils.</div>
+<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point,
+ and a fixed gap between coils.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -215,7 +219,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/Spiral2D.html#createWithFixedCoilGap-java.awt.geom.Point2D-java.awt.geom.Point2D-double-">createWithFixedCoilGap</a></span>(java.awt.geom.Point2D&nbsp;center,
                       java.awt.geom.Point2D&nbsp;end,
                       double&nbsp;coilGap)</code>
-<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point, and a fixed gap between coils.</div>
+<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point,
+ and a fixed gap between coils.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -338,8 +343,9 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dd><code>coils</code> - the number of coils in this spiral.</dd>
 <dd><code>angularOffset</code> - the angle at the center of this spiral.</dd>
 <dd><code>coilOffset</code> - the space from the center of the spiral to where the path
- begins painting.</dd>
-<dd><code>clockwise</code> - whether this spiral moves clockwise or counterclockwise from the center.</dd>
+            begins painting.</dd>
+<dd><code>clockwise</code> - whether this spiral moves clockwise or counterclockwise from
+            the center.</dd>
 </dl>
 </li>
 </ul>
@@ -366,11 +372,12 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dd><code>coils</code> - the number of coils in this spiral.</dd>
 <dd><code>angularOffset</code> - the angle at the center of this spiral.</dd>
 <dd><code>coilOffset</code> - the space from the center of the spiral to where the path
- begins painting.</dd>
-<dd><code>clockwise</code> - whether this spiral moves clockwise or counterclockwise from the center.</dd>
-<dd><code>outward</code> - whether this spiral spins outward from the center, or inward toward the center.
- This argument only matters if you are going to study the <code>PathIterator</code> this
- shape produces.</dd>
+            begins painting.</dd>
+<dd><code>clockwise</code> - whether this spiral moves clockwise or counterclockwise from
+            the center.</dd>
+<dd><code>outward</code> - whether this spiral spins outward from the center, or inward
+            toward the center. This argument only matters if you are going
+            to study the <code>PathIterator</code> this shape produces.</dd>
 </dl>
 </li>
 </ul>
@@ -391,7 +398,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <pre>public static&nbsp;<a href="../../../com/pump/geom/Spiral2D.html" title="class in com.pump.geom">Spiral2D</a>&nbsp;createWithFixedCoilGap(java.awt.geom.Point2D&nbsp;center,
                                               java.awt.geom.Point2D&nbsp;end,
                                               double&nbsp;coilGap)</pre>
-<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point, and a fixed gap between coils.</div>
+<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point,
+ and a fixed gap between coils.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>center</code> - the center of this spiral.</dd>
@@ -413,7 +421,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
                                               double&nbsp;endX,
                                               double&nbsp;endY,
                                               double&nbsp;coilGap)</pre>
-<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point, and a fixed gap between coils.</div>
+<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point,
+ and a fixed gap between coils.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>centerX</code> - the x-coordinate of the center of the spiral.</dd>
@@ -435,7 +444,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <pre>public static&nbsp;<a href="../../../com/pump/geom/Spiral2D.html" title="class in com.pump.geom">Spiral2D</a>&nbsp;createWithFixedCoilCount(java.awt.geom.Point2D&nbsp;center,
                                                 java.awt.geom.Point2D&nbsp;end,
                                                 double&nbsp;numCoils)</pre>
-<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point, and a fixed number of coils.</div>
+<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point,
+ and a fixed number of coils.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>center</code> - the center of the spiral.</dd>
@@ -457,7 +467,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
                                                 double&nbsp;endX,
                                                 double&nbsp;endY,
                                                 double&nbsp;numCoils)</pre>
-<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point, and a fixed number of coils.</div>
+<div class="block">Creates a new <code>Spiral2D</code> with a center point, an end point,
+ and a fixed number of coils.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>centerX</code> - the x-coordinate of the center of the spiral.</dd>

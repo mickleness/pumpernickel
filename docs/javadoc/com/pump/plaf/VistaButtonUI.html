@@ -130,9 +130,13 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">VistaButtonUI</span>
 extends <a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com.pump.plaf">FilledButtonUI</a></pre>
 <div class="block">A <code>ButtonUI</code> that resembles buttons in Vista.
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/VistaButtonUI.png" alt="VistaButtonUI Screenshot">
- <P>As of this writing this UI does not perform animated
- fades, but is otherwise a reasonable replica.</div>
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/VistaButtonUI.png"
+ alt="VistaButtonUI Screenshot">
+ <P>
+ As of this writing this UI does not perform animated fades, but is otherwise
+ a reasonable replica.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/showcase/FilledButtonUIDemo.html" title="class in com.pump.showcase"><code>FilledButtonUIDemo</code></a></dd>
@@ -229,16 +233,15 @@ extends <a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../com/pump/plaf/FilledButtonUI.PaintFocus.html" title="enum in com.pump.plaf">FilledButtonUI.PaintFocus</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/VistaButtonUI.html#getFocusPainting-javax.swing.AbstractButton-">getFocusPainting</a></span>(javax.swing.AbstractButton&nbsp;button)</code>
-<div class="block">Returns one of the PAINT_FOCUS constants
- declared in this object.</div>
+<div class="block">Returns one of the PAINT_FOCUS constants declared in this object.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/VistaButtonUI.html#isFillOpaque--">isFillOpaque</a></span>()</code>
-<div class="block">This may be used to take some shortcuts in rendering the button if
- it is assumed that -- when enabled and isContentArea is true --
- the filled area of this button is opaque.</div>
+<div class="block">This may be used to take some shortcuts in rendering the button if it is
+ assumed that -- when enabled and isContentArea is true -- the filled area
+ of this button is opaque.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -324,9 +327,10 @@ extends <a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com
 <h4>createUI</h4>
 <pre>public static&nbsp;javax.swing.plaf.ComponentUI&nbsp;createUI(javax.swing.JComponent&nbsp;c)</pre>
 <div class="block">Create a new instance of this ButtonUI for a component.
- <p>This method is required if you want to make this ButtonUI the default
- UI by invoking:
- <br><code>UIManager.getDefaults().put("ButtonUI", "com.pump.plaf.VistaButtonUI");</code></div>
+ <p>
+ This method is required if you want to make this ButtonUI the default UI
+ by invoking: <br>
+ <code>UIManager.getDefaults().put("ButtonUI", "com.pump.plaf.VistaButtonUI");</code></div>
 </li>
 </ul>
 <a name="getFocusPainting-javax.swing.AbstractButton-">
@@ -337,44 +341,37 @@ extends <a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com
 <h4>getFocusPainting</h4>
 <pre>public&nbsp;<a href="../../../com/pump/plaf/FilledButtonUI.PaintFocus.html" title="enum in com.pump.plaf">FilledButtonUI.PaintFocus</a>&nbsp;getFocusPainting(javax.swing.AbstractButton&nbsp;button)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/plaf/FilledButtonUI.html#getFocusPainting-javax.swing.AbstractButton-">FilledButtonUI</a></code></span></div>
-<div class="block">Returns one of the PAINT_FOCUS constants
- declared in this object.  If PAINT_NO_FOCUS is used,
- then this class automatically paints no focus.  In
- that case a subclass would be responsible for any rendering of
- focus.
- <P>If PAINT_FOCUS_OUTSIDE is used, then
- a few rings of focus are painted outside
- this component under this component.
- The order of painting is:
- <BR>1.  Shadow Highlight
- <BR>2.  Focus
- <BR>3.  Background Fill
- <BR>4.  Stroke
- <P>If PAINT_FOCUS_INSIDE is used, then
- a few rings of focus are painted inside
- this component.
- The order of painting is:
- <BR>1.  Shadow Highlight
- <BR>2.  Background Fill
- <BR>3.  Focus
- <BR>4.  Stroke
- <P>If PAINT_FOCUS_BOTH is used, then
- the focus appears both inside and
- outside the filled area.
- The order of painting is:
- <BR>1.  Shadow Highlight
- <BR>2.  Background Fill
- <BR>3.  Stroke
- <BR>4.  Focus
+<div class="block">Returns one of the PAINT_FOCUS constants declared in this object. If
+ PAINT_NO_FOCUS is used, then this class automatically paints no focus. In
+ that case a subclass would be responsible for any rendering of focus.
+ <P>
+ If PAINT_FOCUS_OUTSIDE is used, then a few rings of focus are painted
+ outside this component under this component. The order of painting is: <BR>
+ 1. Shadow Highlight <BR>
+ 2. Focus <BR>
+ 3. Background Fill <BR>
+ 4. Stroke
+ <P>
+ If PAINT_FOCUS_INSIDE is used, then a few rings of focus are painted
+ inside this component. The order of painting is: <BR>
+ 1. Shadow Highlight <BR>
+ 2. Background Fill <BR>
+ 3. Focus <BR>
+ 4. Stroke
+ <P>
+ If PAINT_FOCUS_BOTH is used, then the focus appears both inside and
+ outside the filled area. The order of painting is: <BR>
+ 1. Shadow Highlight <BR>
+ 2. Background Fill <BR>
+ 3. Stroke <BR>
+ 4. Focus
  
- <P>By default this returns PAINT_FOCUS_OUTSIDE
- if a shape is defined, or if this button
- is in a single row or column of buttons.
- (That is, if the horizontal or vertical position
- is "only").  Otherwise this returns PAINT_FOCUS_INSIDE,
- because once you get to inner buttons the focus
- <i>has</i> to be painted on the inside to remain
- visible.</div>
+ <P>
+ By default this returns PAINT_FOCUS_OUTSIDE if a shape is defined, or if
+ this button is in a single row or column of buttons. (That is, if the
+ horizontal or vertical position is "only"). Otherwise this returns
+ PAINT_FOCUS_INSIDE, because once you get to inner buttons the focus
+ <i>has</i> to be painted on the inside to remain visible.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/plaf/FilledButtonUI.html#getFocusPainting-javax.swing.AbstractButton-">getFocusPainting</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com.pump.plaf">FilledButtonUI</a></code></dd>
@@ -403,9 +400,9 @@ extends <a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com
 <h4>isFillOpaque</h4>
 <pre>public&nbsp;boolean&nbsp;isFillOpaque()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/plaf/FilledButtonUI.html#isFillOpaque--">FilledButtonUI</a></code></span></div>
-<div class="block">This may be used to take some shortcuts in rendering the button if
- it is assumed that -- when enabled and isContentArea is true --
- the filled area of this button is opaque.</div>
+<div class="block">This may be used to take some shortcuts in rendering the button if it is
+ assumed that -- when enabled and isContentArea is true -- the filled area
+ of this button is opaque.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/plaf/FilledButtonUI.html#isFillOpaque--">isFillOpaque</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/plaf/FilledButtonUI.html" title="class in com.pump.plaf">FilledButtonUI</a></code></dd>

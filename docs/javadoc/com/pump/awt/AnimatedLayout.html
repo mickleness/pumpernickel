@@ -115,14 +115,16 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">AnimatedLayout</span>
 extends java.lang.Object
 implements java.awt.LayoutManager2</pre>
-<div class="block">A layout that smoothly animates components as they need to
- move from one location to another.
- <P>This is achieved by calling:
- <BR><code>myComponent.putClientProperty(DESTINATION, newDestination)</code>
- <P>This layout then nudges the component until it reaches that destination.
- The nudge is proportional to the distance that the component has to cover,
- giving the impression of a decelerating animation as the object approaches
- its destination.</div>
+<div class="block">A layout that smoothly animates components as they need to move from one
+ location to another.
+ <P>
+ This is achieved by calling: <BR>
+ <code>myComponent.putClientProperty(DESTINATION, newDestination)</code>
+ <P>
+ This layout then nudges the component until it reaches that destination. The
+ nudge is proportional to the distance that the component has to cover, giving
+ the impression of a decelerating animation as the object approaches its
+ destination.</div>
 </li>
 </ul>
 </div>
@@ -265,8 +267,8 @@ implements java.awt.LayoutManager2</pre>
 <li class="blockList">
 <h4>DELAY</h4>
 <pre>public static&nbsp;int DELAY</pre>
-<div class="block">This is the delay, in milliseconds, between adjustments.
- I find 30 to be almost "too fast" and 50 almost "too slow".</div>
+<div class="block">This is the delay, in milliseconds, between adjustments. I find 30 to be
+ almost "too fast" and 50 almost "too slow".</div>
 </li>
 </ul>
 <a name="DESTINATION">

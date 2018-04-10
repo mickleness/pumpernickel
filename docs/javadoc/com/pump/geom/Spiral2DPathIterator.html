@@ -120,7 +120,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">Spiral2DPathIterator</span>
 extends <a href="../../../com/pump/geom/ParametricPathIterator.html" title="class in com.pump.geom">ParametricPathIterator</a></pre>
 <div class="block">The iterates over a spiral shape.
- <p>This path can be modeled by:
+ <p>
+ This path can be modeled by:
  <code><br> &nbsp; centerX+coilGap*(t+coilOffset)*Math.cos(2*Math.PI*t*m+angularOffset);</code>
  <code><br> &nbsp; centerY+coilGap*(t+coilOffset)*Math.sin(2*Math.PI*t*m+angularOffset);</code></div>
 <dl>
@@ -303,12 +304,13 @@ extends <a href="../../../com/pump/geom/ParametricPathIterator.html" title="clas
 <dd><code>coils</code> - the number of coils in this spiral.</dd>
 <dd><code>angularOffset</code> - the angle at the center of this spiral.</dd>
 <dd><code>coilOffset</code> - the space from the center of the spiral to where the path
- begins painting.</dd>
+            begins painting.</dd>
 <dd><code>clockwise</code> - whether this spiral spins out from the center</dd>
-<dd><code>outward</code> - whether this spiral spins out from the center, or inwards towards it.
- clockwise (true) or counter-clockwise (false).
- This argument only matters if you're going to closely study the path this
- iterator returns.  If you simply render it: this argument is meaningless.</dd>
+<dd><code>outward</code> - whether this spiral spins out from the center, or inwards
+            towards it. clockwise (true) or counter-clockwise (false).
+            This argument only matters if you're going to closely study
+            the path this iterator returns. If you simply render it: this
+            argument is meaningless.</dd>
 </dl>
 </li>
 </ul>
@@ -334,9 +336,9 @@ extends <a href="../../../com/pump/geom/ParametricPathIterator.html" title="clas
 <dd><code>coils</code> - the number of coils in this spiral.</dd>
 <dd><code>angularOffset</code> - the angle at the center of this spiral.</dd>
 <dd><code>coilOffset</code> - the space from the center of the spiral to where the path
- begins painting.</dd>
-<dd><code>clockwise</code> - whether this spiral spins out from the center
- clockwise (true) or counter-clockwise (false).</dd>
+            begins painting.</dd>
+<dd><code>clockwise</code> - whether this spiral spins out from the center clockwise (true)
+            or counter-clockwise (false).</dd>
 </dl>
 </li>
 </ul>
@@ -364,12 +366,13 @@ extends <a href="../../../com/pump/geom/ParametricPathIterator.html" title="clas
 <dd><code>coils</code> - the number of coils in this spiral.</dd>
 <dd><code>angularOffset</code> - the angle at the center of this spiral.</dd>
 <dd><code>coilOffset</code> - the space from the center of the spiral to where the path
- begins painting.</dd>
-<dd><code>clockwise</code> - whether this spiral spins out from the center
- clockwise (true) or counter-clockwise (false).</dd>
-<dd><code>outward</code> - whether this spiral spins out from the center, or inwards towards it.
- This argument only matters if you're going to closely study the path this
- iterator returns.  If you simply render it: this argument is meaningless.</dd>
+            begins painting.</dd>
+<dd><code>clockwise</code> - whether this spiral spins out from the center clockwise (true)
+            or counter-clockwise (false).</dd>
+<dd><code>outward</code> - whether this spiral spins out from the center, or inwards
+            towards it. This argument only matters if you're going to
+            closely study the path this iterator returns. If you simply
+            render it: this argument is meaningless.</dd>
 <dd><code>transform</code> - an optional AffineTransform to apply to this path.</dd>
 </dl>
 </li>
@@ -405,12 +408,13 @@ extends <a href="../../../com/pump/geom/ParametricPathIterator.html" title="clas
 <dd><code>coils</code> - the number of coils in this spiral.</dd>
 <dd><code>angularOffset</code> - the angle at the center of this spiral.</dd>
 <dd><code>coilOffset</code> - the space from the center of the spiral to where the path
- begins painting.</dd>
+            begins painting.</dd>
 <dd><code>clockwise</code> - whether this spiral spins out from the center</dd>
-<dd><code>outward</code> - whether this spiral spins out from the center, or inwards towards it.
- clockwise (true) or counter-clockwise (false).
- This argument only matters if you're going to closely study the path this
- iterator returns.  If you simply render it: this argument is meaningless.</dd>
+<dd><code>outward</code> - whether this spiral spins out from the center, or inwards
+            towards it. clockwise (true) or counter-clockwise (false).
+            This argument only matters if you're going to closely study
+            the path this iterator returns. If you simply render it: this
+            argument is meaningless.</dd>
 </dl>
 </li>
 </ul>
@@ -479,8 +483,8 @@ extends <a href="../../../com/pump/geom/ParametricPathIterator.html" title="clas
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/ParametricPathIterator.html#getMaxT--">getMaxT</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/ParametricPathIterator.html" title="class in com.pump.geom">ParametricPathIterator</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the max value for t.  Once this value is used
- this PathIterator is finished.</dd>
+<dd>the max value for t. Once this value is used this PathIterator is
+         finished.</dd>
 </dl>
 </li>
 </ul>
@@ -492,10 +496,9 @@ extends <a href="../../../com/pump/geom/ParametricPathIterator.html" title="clas
 <h4>getNextT</h4>
 <pre>protected&nbsp;double&nbsp;getNextT(double&nbsp;t)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/ParametricPathIterator.html#getNextT-double-">ParametricPathIterator</a></code></span></div>
-<div class="block">The t-value that we should use next.
- If this is greater than <code>getMaxT()</code>, then
- the maximum is used in the next segment and this
- PathIterator is finished.</div>
+<div class="block">The t-value that we should use next. If this is greater than
+ <code>getMaxT()</code>, then the maximum is used in the next segment and
+ this PathIterator is finished.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/ParametricPathIterator.html#getNextT-double-">getNextT</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/ParametricPathIterator.html" title="class in com.pump.geom">ParametricPathIterator</a></code></dd>

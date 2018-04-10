@@ -120,7 +120,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">CurvedPolylineCreationUI</span>
 extends <a href="../../../com/pump/plaf/ShapeCreationUI.html" title="class in com.pump.plaf">ShapeCreationUI</a></pre>
-<div class="block">A <a href="../../../com/pump/plaf/ShapeCreationUI.html" title="class in com.pump.plaf"><code>ShapeCreationUI</code></a> to create a series of <a href="../../../com/pump/geom/CurvedPolyline.html" title="class in com.pump.geom"><code>CurvedPolyline</code></a> shapes.</div>
+<div class="block">A <a href="../../../com/pump/plaf/ShapeCreationUI.html" title="class in com.pump.plaf"><code>ShapeCreationUI</code></a> to create a series of <a href="../../../com/pump/geom/CurvedPolyline.html" title="class in com.pump.geom"><code>CurvedPolyline</code></a>
+ shapes.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/geom/CurvedPolyline.html" title="class in com.pump.geom"><code>CurvedPolyline</code></a></dd>
@@ -299,10 +300,12 @@ extends <a href="../../../com/pump/plaf/ShapeCreationUI.html" title="class in co
 <pre>protected&nbsp;java.awt.Shape&nbsp;validate(java.awt.Shape&nbsp;shape)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/plaf/ShapeCreationUI.html#validate-java.awt.Shape-">ShapeCreationUI</a></code></span></div>
 <div class="block">This converts the argument to a shape compatible with this UI.
- <p>For example: the CurvedPolylineCreationUI only wants to
- work with CurvedPolylines. This may necessarily lose some shape data
- in making it conform to the expected format.
- <p>The default implementation simply returns the argument.</div>
+ <p>
+ For example: the CurvedPolylineCreationUI only wants to work with
+ CurvedPolylines. This may necessarily lose some shape data in making it
+ conform to the expected format.
+ <p>
+ The default implementation simply returns the argument.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/plaf/ShapeCreationUI.html#validate-java.awt.Shape-">validate</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/plaf/ShapeCreationUI.html" title="class in com.pump.plaf">ShapeCreationUI</a></code></dd>
@@ -354,9 +357,10 @@ extends <a href="../../../com/pump/plaf/ShapeCreationUI.html" title="class in co
                              <a href="../../../com/pump/swing/ShapeCreationPanel.html" title="class in com.pump.swing">ShapeCreationPanel</a>&nbsp;scp)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/plaf/ShapeCreationUI.html#paintControls-java.awt.Graphics2D-com.pump.swing.ShapeCreationPanel-">ShapeCreationUI</a></code></span></div>
 <div class="block">Paint handles/controls above the shape data.
- <p>When implementing this method: note that this is always invoked,
- and you need to consult the ShapeCreationPanel to determine when
- handles are supposed to be active.</div>
+ <p>
+ When implementing this method: note that this is always invoked, and you
+ need to consult the ShapeCreationPanel to determine when handles are
+ supposed to be active.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/plaf/ShapeCreationUI.html#paintControls-java.awt.Graphics2D-com.pump.swing.ShapeCreationPanel-">paintControls</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/plaf/ShapeCreationUI.html" title="class in com.pump.plaf">ShapeCreationUI</a></code></dd>

@@ -115,12 +115,12 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">PathWriter</span>
 extends java.lang.Object</pre>
 <div class="block">This object writes path data.
- <P>With this abstract class you could filter shape data as it is
- being written.  The simplest extension of this is the
- <a href="../../../com/pump/geom/GeneralPathWriter.html" title="class in com.pump.geom"><code>GeneralPathWriter</code></a>.
+ <P>
+ With this abstract class you could filter shape data as it is being written.
+ The simplest extension of this is the <a href="../../../com/pump/geom/GeneralPathWriter.html" title="class in com.pump.geom"><code>GeneralPathWriter</code></a>.
  
- <P>This is designed to match the <code>GeneralPath</code> method
- signatures.</div>
+ <P>
+ This is designed to match the <code>GeneralPath</code> method signatures.</div>
 </li>
 </ul>
 </div>
@@ -159,7 +159,8 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/PathWriter.html#closePath--">closePath</a></span>()</code>
-<div class="block">Closes the current subpath by drawing a straight line back to the coordinates of the last moveTo.</div>
+<div class="block">Closes the current subpath by drawing a straight line back to the
+ coordinates of the last moveTo.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -175,7 +176,8 @@ extends java.lang.Object</pre>
        double&nbsp;by,
        double&nbsp;cy,
        double&nbsp;dy)</code>
-<div class="block">This appends a cubic curve to the GeneralPath provided that ranges from t = t0 to t = t1.</div>
+<div class="block">This appends a cubic curve to the GeneralPath provided that ranges from t
+ = t0 to t = t1.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -191,7 +193,8 @@ extends java.lang.Object</pre>
        double&nbsp;by,
        double&nbsp;cy,
        double&nbsp;dy)</code>
-<div class="block">This appends a cubic curve to the PathWriter provided that ranges from t = t0 to t = t1.</div>
+<div class="block">This appends a cubic curve to the PathWriter provided that ranges from t
+ = t0 to t = t1.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -202,7 +205,10 @@ extends java.lang.Object</pre>
        float&nbsp;cy2,
        float&nbsp;x,
        float&nbsp;y)</code>
-<div class="block">Adds a curved segment, defined by three new points, to the path by drawing a Bezier curve that intersects both the current coordinates and the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2) as Bezier control points.</div>
+<div class="block">Adds a curved segment, defined by three new points, to the path by
+ drawing a Bezier curve that intersects both the current coordinates and
+ the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2)
+ as Bezier control points.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -216,7 +222,8 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/PathWriter.html#lineTo-float-float-">lineTo</a></span>(float&nbsp;x,
       float&nbsp;y)</code>
-<div class="block">Adds a point to the path by drawing a straight line from the current coordinates to the new specified coordinates.</div>
+<div class="block">Adds a point to the path by drawing a straight line from the current
+ coordinates to the new specified coordinates.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -232,7 +239,10 @@ extends java.lang.Object</pre>
       float&nbsp;cy,
       float&nbsp;x,
       float&nbsp;y)</code>
-<div class="block">Adds a curved segment, defined by two new points, to the path by drawing a Quadratic curve that intersects both the current coordinates and the coordinates (x2, y2), using the specified point (x1, y1) as a quadratic parametric control point.</div>
+<div class="block">Adds a curved segment, defined by two new points, to the path by drawing
+ a Quadratic curve that intersects both the current coordinates and the
+ coordinates (x2, y2), using the specified point (x1, y1) as a quadratic
+ parametric control point.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -246,7 +256,8 @@ extends java.lang.Object</pre>
       double&nbsp;ay,
       double&nbsp;by,
       double&nbsp;cy)</code>
-<div class="block">This appends a quadratic curve to the GeneralPath provided that ranges from t = t0 to t = t1.</div>
+<div class="block">This appends a quadratic curve to the GeneralPath provided that ranges
+ from t = t0 to t = t1.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -260,7 +271,8 @@ extends java.lang.Object</pre>
       double&nbsp;ay,
       double&nbsp;by,
       double&nbsp;cy)</code>
-<div class="block">This appends a quadratic curve to the PathWriter provided that ranges from t = t0 to t = t1.</div>
+<div class="block">This appends a quadratic curve to the PathWriter provided that ranges
+ from t = t0 to t = t1.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -338,7 +350,8 @@ extends java.lang.Object</pre>
 <h4>lineTo</h4>
 <pre>public abstract&nbsp;void&nbsp;lineTo(float&nbsp;x,
                             float&nbsp;y)</pre>
-<div class="block">Adds a point to the path by drawing a straight line from the current coordinates to the new specified coordinates.</div>
+<div class="block">Adds a point to the path by drawing a straight line from the current
+ coordinates to the new specified coordinates.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - the x-coordinate of the end point.</dd>
@@ -356,7 +369,10 @@ extends java.lang.Object</pre>
                             float&nbsp;cy,
                             float&nbsp;x,
                             float&nbsp;y)</pre>
-<div class="block">Adds a curved segment, defined by two new points, to the path by drawing a Quadratic curve that intersects both the current coordinates and the coordinates (x2, y2), using the specified point (x1, y1) as a quadratic parametric control point.</div>
+<div class="block">Adds a curved segment, defined by two new points, to the path by drawing
+ a Quadratic curve that intersects both the current coordinates and the
+ coordinates (x2, y2), using the specified point (x1, y1) as a quadratic
+ parametric control point.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cx</code> - the x-coordinate of the control point.</dd>
@@ -378,7 +394,10 @@ extends java.lang.Object</pre>
                              float&nbsp;cy2,
                              float&nbsp;x,
                              float&nbsp;y)</pre>
-<div class="block">Adds a curved segment, defined by three new points, to the path by drawing a Bezier curve that intersects both the current coordinates and the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2) as Bezier control points.</div>
+<div class="block">Adds a curved segment, defined by three new points, to the path by
+ drawing a Bezier curve that intersects both the current coordinates and
+ the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2)
+ as Bezier control points.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cx1</code> - the x-coordinate of the first control point.</dd>
@@ -397,7 +416,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>closePath</h4>
 <pre>public abstract&nbsp;void&nbsp;closePath()</pre>
-<div class="block">Closes the current subpath by drawing a straight line back to the coordinates of the last moveTo.</div>
+<div class="block">Closes the current subpath by drawing a straight line back to the
+ coordinates of the last moveTo.</div>
 </li>
 </ul>
 <a name="flush--">
@@ -409,12 +429,14 @@ extends java.lang.Object</pre>
 <pre>public abstract&nbsp;void&nbsp;flush()</pre>
 <div class="block">This guarantees that this writer has flushed all currently written
  information.
- <P>For example, some writers may need to perform complex calculations
- and re-organize shapes.  Or some writers may simply be buffering
- path instructions to better manage memory.  Calling this method
- guarantees that all path instructions be immediately processed.
- <P>Because some writers may be manipulating path data you should
- <i>not call this method</i> until all shape data has been written.</div>
+ <P>
+ For example, some writers may need to perform complex calculations and
+ re-organize shapes. Or some writers may simply be buffering path
+ instructions to better manage memory. Calling this method guarantees that
+ all path instructions be immediately processed.
+ <P>
+ Because some writers may be manipulating path data you should <i>not call
+ this method</i> until all shape data has been written.</div>
 </li>
 </ul>
 <a name="write-java.awt.Shape-">
@@ -425,8 +447,9 @@ extends java.lang.Object</pre>
 <h4>write</h4>
 <pre>public&nbsp;void&nbsp;write(java.awt.Shape&nbsp;s)</pre>
 <div class="block">Writes a shape.
- <P>This iterates through the shape and makes the appropriate
- calls to <code>moveTo()</code>, <code>curveTo()</code>, etc.</div>
+ <P>
+ This iterates through the shape and makes the appropriate calls to
+ <code>moveTo()</code>, <code>curveTo()</code>, etc.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - the shape to write.</dd>
@@ -441,8 +464,9 @@ extends java.lang.Object</pre>
 <h4>write</h4>
 <pre>public&nbsp;void&nbsp;write(java.awt.geom.PathIterator&nbsp;i)</pre>
 <div class="block">Writes a path.
- <P>This iterates through the path and makes the appropriate
- calls to <code>moveTo()</code>, <code>curveTo()</code>, etc.</div>
+ <P>
+ This iterates through the path and makes the appropriate calls to
+ <code>moveTo()</code>, <code>curveTo()</code>, etc.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - the path to write.</dd>
@@ -466,19 +490,24 @@ extends java.lang.Object</pre>
                            double&nbsp;by,
                            double&nbsp;cy,
                            double&nbsp;dy)</pre>
-<div class="block">This appends a cubic curve to the GeneralPath provided that ranges from t = t0 to t = t1.
- This assumes that the path already ends at the point (ax*t0*t0*t0+bx*t0*t0+cx*t0+dx, ay*t0*t0*t0+by*t0*t0+cy*t0+dx).</div>
+<div class="block">This appends a cubic curve to the GeneralPath provided that ranges from t
+ = t0 to t = t1. This assumes that the path already ends at the point
+ (ax*t0*t0*t0+bx*t0*t0+cx*t0+dx, ay*t0*t0*t0+by*t0*t0+cy*t0+dx).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>path</code> - the path to append data to.</dd>
 <dd><code>t0</code> - the t-value for the beginning of this curve</dd>
 <dd><code>t1</code> - the t-value for the end of this curve</dd>
-<dd><code>ax</code> - the coefficient for the (t^3) term of the x parametric equation</dd>
-<dd><code>bx</code> - the coefficient for the (t^2) term of the x parametric equation</dd>
+<dd><code>ax</code> - the coefficient for the (t^3) term of the x parametric
+            equation</dd>
+<dd><code>bx</code> - the coefficient for the (t^2) term of the x parametric
+            equation</dd>
 <dd><code>cx</code> - the coefficient for the t term of the x parametric equation</dd>
 <dd><code>dx</code> - the constant for the x parametric equation.</dd>
-<dd><code>ay</code> - the coefficient for the (t^3) term of the y parametric equation</dd>
-<dd><code>by</code> - the coefficient for the (t^2) term of the y parametric equation</dd>
+<dd><code>ay</code> - the coefficient for the (t^3) term of the y parametric
+            equation</dd>
+<dd><code>by</code> - the coefficient for the (t^2) term of the y parametric
+            equation</dd>
 <dd><code>cy</code> - the coefficient for the t term of the y parametric equation</dd>
 <dd><code>dy</code> - the constant for the y parametric equation.</dd>
 </dl>
@@ -501,19 +530,24 @@ extends java.lang.Object</pre>
                            double&nbsp;by,
                            double&nbsp;cy,
                            double&nbsp;dy)</pre>
-<div class="block">This appends a cubic curve to the PathWriter provided that ranges from t = t0 to t = t1.
- This assumes that the path already ends at the point (ax*t0*t0*t0+bx*t0*t0+cx*t0+dx, ay*t0*t0*t0+by*t0*t0+cy*t0+dx).</div>
+<div class="block">This appends a cubic curve to the PathWriter provided that ranges from t
+ = t0 to t = t1. This assumes that the path already ends at the point
+ (ax*t0*t0*t0+bx*t0*t0+cx*t0+dx, ay*t0*t0*t0+by*t0*t0+cy*t0+dx).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>path</code> - the path to append data to.</dd>
 <dd><code>t0</code> - the t-value for the beginning of this curve</dd>
 <dd><code>t1</code> - the t-value for the end of this curve</dd>
-<dd><code>ax</code> - the coefficient for the (t^3) term of the x parametric equation</dd>
-<dd><code>bx</code> - the coefficient for the (t^2) term of the x parametric equation</dd>
+<dd><code>ax</code> - the coefficient for the (t^3) term of the x parametric
+            equation</dd>
+<dd><code>bx</code> - the coefficient for the (t^2) term of the x parametric
+            equation</dd>
 <dd><code>cx</code> - the coefficient for the t term of the x parametric equation</dd>
 <dd><code>dx</code> - the constant for the x parametric equation.</dd>
-<dd><code>ay</code> - the coefficient for the (t^3) term of the y parametric equation</dd>
-<dd><code>by</code> - the coefficient for the (t^2) term of the y parametric equation</dd>
+<dd><code>ay</code> - the coefficient for the (t^3) term of the y parametric
+            equation</dd>
+<dd><code>by</code> - the coefficient for the (t^2) term of the y parametric
+            equation</dd>
 <dd><code>cy</code> - the coefficient for the t term of the y parametric equation</dd>
 <dd><code>dy</code> - the constant for the y parametric equation.</dd>
 </dl>
@@ -534,17 +568,20 @@ extends java.lang.Object</pre>
                           double&nbsp;ay,
                           double&nbsp;by,
                           double&nbsp;cy)</pre>
-<div class="block">This appends a quadratic curve to the GeneralPath provided that ranges from t = t0 to t = t1.
- This assumes that the path already ends at the point (ax*t0*t0+bx*t0+cx, ay*t0*t0+by*t0+cy).</div>
+<div class="block">This appends a quadratic curve to the GeneralPath provided that ranges
+ from t = t0 to t = t1. This assumes that the path already ends at the
+ point (ax*t0*t0+bx*t0+cx, ay*t0*t0+by*t0+cy).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>path</code> - the path to append data to.</dd>
 <dd><code>t0</code> - the t-value for the beginning of this curve</dd>
 <dd><code>t1</code> - the t-value for the end of this curve</dd>
-<dd><code>ax</code> - the coefficient for the (t^2) term of the x parametric equation</dd>
+<dd><code>ax</code> - the coefficient for the (t^2) term of the x parametric
+            equation</dd>
 <dd><code>bx</code> - the coefficient for the t term of the x parametric equation</dd>
 <dd><code>cx</code> - the constant for the x parametric equation.</dd>
-<dd><code>ay</code> - the coefficient for the (t^2) term of the y parametric equation</dd>
+<dd><code>ay</code> - the coefficient for the (t^2) term of the y parametric
+            equation</dd>
 <dd><code>by</code> - the coefficient for the t term of the y parametric equation</dd>
 <dd><code>cy</code> - the constant for the y parametric equation.</dd>
 </dl>
@@ -565,17 +602,20 @@ extends java.lang.Object</pre>
                           double&nbsp;ay,
                           double&nbsp;by,
                           double&nbsp;cy)</pre>
-<div class="block">This appends a quadratic curve to the PathWriter provided that ranges from t = t0 to t = t1.
- This assumes that the path already ends at the point (ax*t0*t0+bx*t0+cx, ay*t0*t0+by*t0+cy).</div>
+<div class="block">This appends a quadratic curve to the PathWriter provided that ranges
+ from t = t0 to t = t1. This assumes that the path already ends at the
+ point (ax*t0*t0+bx*t0+cx, ay*t0*t0+by*t0+cy).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>path</code> - the path to append data to.</dd>
 <dd><code>t0</code> - the t-value for the beginning of this curve</dd>
 <dd><code>t1</code> - the t-value for the end of this curve</dd>
-<dd><code>ax</code> - the coefficient for the (t^2) term of the x parametric equation</dd>
+<dd><code>ax</code> - the coefficient for the (t^2) term of the x parametric
+            equation</dd>
 <dd><code>bx</code> - the coefficient for the t term of the x parametric equation</dd>
 <dd><code>cx</code> - the constant for the x parametric equation.</dd>
-<dd><code>ay</code> - the coefficient for the (t^2) term of the y parametric equation</dd>
+<dd><code>ay</code> - the coefficient for the (t^2) term of the y parametric
+            equation</dd>
 <dd><code>by</code> - the coefficient for the t term of the y parametric equation</dd>
 <dd><code>cy</code> - the constant for the y parametric equation.</dd>
 </dl>

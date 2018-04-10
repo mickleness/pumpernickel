@@ -115,13 +115,14 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">ImageContext</span>
 extends java.lang.Object</pre>
 <div class="block">This context paints a BufferedImage using 4 corner points.
- <p>As of this writing: this is only expected to support RGB or ARGB images.
- <p>(The standard <code>java.awt.Graphics2D</code> supports
- <code>AffineTransforms</code>, which effectively use 3 corner points.
- Using a 4th point is mathematically harder to do, but is considered
- crucial for projecting a plane as if in a 3D view. The
- <code>PerspectiveTransform</code> class generally handles the math
- of the transform itself.)</div>
+ <p>
+ As of this writing: this is only expected to support RGB or ARGB images.
+ <p>
+ (The standard <code>java.awt.Graphics2D</code> supports
+ <code>AffineTransforms</code>, which effectively use 3 corner points. Using a
+ 4th point is mathematically harder to do, but is considered crucial for
+ projecting a plane as if in a 3D view. The <code>PerspectiveTransform</code>
+ class generally handles the math of the transform itself.)</div>
 </li>
 </ul>
 </div>
@@ -280,8 +281,9 @@ extends java.lang.Object</pre>
 <h4>create</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/image/ImageContext.html" title="class in com.pump.image">ImageContext</a>&nbsp;create(java.awt.image.BufferedImage&nbsp;image)</pre>
 <div class="block">Create an <code>ImageContext</code> for a <code>BufferedImage</code>.
- <p>This is shorthand for:
- <br><code>ImageContextFactory.get().create(image)</code></div>
+ <p>
+ This is shorthand for: <br>
+ <code>ImageContextFactory.get().create(image)</code></div>
 </li>
 </ul>
 <a name="drawImage-java.awt.image.BufferedImage-java.awt.geom.Point2D-java.awt.geom.Point2D-java.awt.geom.Point2D-java.awt.geom.Point2D-">
@@ -334,11 +336,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getInterpolationRenderingHint</h4>
 <pre>protected&nbsp;java.lang.Object&nbsp;getInterpolationRenderingHint()</pre>
-<div class="block">Return the interpolation rendering hint to use. This will not
- return null. If this is undefined, then the antialiasing
- and rendering hints are consulted (which will return either
- NEAREST_NEIGHBOR or BILINEAR). If nothing is defined then this
- returns BILINEAR.</div>
+<div class="block">Return the interpolation rendering hint to use. This will not return
+ null. If this is undefined, then the antialiasing and rendering hints are
+ consulted (which will return either NEAREST_NEIGHBOR or BILINEAR). If
+ nothing is defined then this returns BILINEAR.</div>
 </li>
 </ul>
 </li>

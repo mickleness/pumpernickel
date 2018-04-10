@@ -129,10 +129,11 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">MockComponent</span>
 extends javax.swing.JComponent</pre>
-<div class="block">This component stores an image of another component, and displays only
- that image.
- <P>This is useful as a proxy/substitute for existing components that
- already have a permanent home in the UI.</div>
+<div class="block">This component stores an image of another component, and displays only that
+ image.
+ <P>
+ This is useful as a proxy/substitute for existing components that already
+ have a permanent home in the UI.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.swing.MockComponent">Serialized Form</a></dd>
@@ -295,9 +296,9 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>MockComponent</h4>
 <pre>public&nbsp;MockComponent(java.awt.image.BufferedImage&nbsp;bi)</pre>
-<div class="block">This creates a MockComponent that displays the image provided.
- A shallow reference to this image is used, so you should not
- modify the argument image.</div>
+<div class="block">This creates a MockComponent that displays the image provided. A shallow
+ reference to this image is used, so you should not modify the argument
+ image.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>bi</code> - </dd>
@@ -312,12 +313,14 @@ extends javax.swing.JComponent</pre>
 <h4>MockComponent</h4>
 <pre>public&nbsp;MockComponent(javax.swing.JComponent&nbsp;c)</pre>
 <div class="block">Creates a MockComponent that resembles the argument component.
- <P>Note this method will traverse c and its subcomponents and may
+ <P>
+ Note this method will traverse c and its subcomponents and may
  temporarily change properties of inner components: such as the focused
  state, the visibility, etc.
- <P>The goal is of this component is not to mirror the exact state of
- a component, but rather to provide a sample image of this component in
- its plain, unmodified, unused state.</div>
+ <P>
+ The goal is of this component is not to mirror the exact state of a
+ component, but rather to provide a sample image of this component in its
+ plain, unmodified, unused state.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - </dd>

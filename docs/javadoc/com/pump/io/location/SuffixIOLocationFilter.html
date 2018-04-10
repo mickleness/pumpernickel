@@ -162,8 +162,8 @@ extends <a href="../../../../com/pump/io/location/IOLocationFilter.html" title="
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/SuffixIOLocationFilter.html#suffixMatches-java.lang.String-">suffixMatches</a></span>(java.lang.String&nbsp;path)</code>
-<div class="block">Return true if the path argument should be accepted
- by this suffix filter.</div>
+<div class="block">Return true if the path argument should be accepted by this suffix
+ filter.</div>
 </td>
 </tr>
 </table>
@@ -224,22 +224,24 @@ extends <a href="../../../../com/pump/io/location/IOLocationFilter.html" title="
 <pre>public&nbsp;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;filter(<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;loc)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocationFilter.html#filter-com.pump.io.location.IOLocation-">IOLocationFilter</a></code></span></div>
 <div class="block">This filters a location.
- <P>If this returns <code>null</code> then the argument was
- not accepted.  For example, a hidden file might not
- be accepted in a list of visible files.
- <P>Also this may return a completely new object.  For example
- you can filter zip archives into a <code>ZipArchiveLocation</code>
- to make that archive traversable.
- <P>A lot of the time, however, this method will simply return
- the argument untouched.</div>
+ <P>
+ If this returns <code>null</code> then the argument was not accepted. For
+ example, a hidden file might not be accepted in a list of visible files.
+ <P>
+ Also this may return a completely new object. For example you can filter
+ zip archives into a <code>ZipArchiveLocation</code> to make that archive
+ traversable.
+ <P>
+ A lot of the time, however, this method will simply return the argument
+ untouched.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocationFilter.html#filter-com.pump.io.location.IOLocation-">filter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocationFilter.html" title="class in com.pump.io.location">IOLocationFilter</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>loc</code> - the location to consider.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the location to use, or <code>null</code> if this
- location is not accepted.</dd>
+<dd>the location to use, or <code>null</code> if this location is not
+         accepted.</dd>
 </dl>
 </li>
 </ul>
@@ -250,8 +252,8 @@ extends <a href="../../../../com/pump/io/location/IOLocationFilter.html" title="
 <li class="blockList">
 <h4>suffixMatches</h4>
 <pre>public&nbsp;boolean&nbsp;suffixMatches(java.lang.String&nbsp;path)</pre>
-<div class="block">Return true if the path argument should be accepted
- by this suffix filter.</div>
+<div class="block">Return true if the path argument should be accepted by this suffix
+ filter.</div>
 </li>
 </ul>
 </li>

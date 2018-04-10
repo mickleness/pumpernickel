@@ -115,12 +115,13 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">SubstringIterator</span>
 extends java.lang.Object
 implements java.util.Iterator&lt;java.lang.String&gt;</pre>
-<div class="block">This iterates over all possible substrings of a <code>java.lang.String</code>.
- For example: the string "abcde" will yield: "abcde", "abcd", "bcde", "abc", "bcd",
- "cde", "ab", "bc", "cd", "de", "a", "b", "c", "d", "e".
- <p>There is also an option to return only unique substrings.  If this option
- is active and the original string is "apple", then "p" will only be returned once
- instead of twice.</div>
+<div class="block">This iterates over all possible substrings of a <code>java.lang.String</code>
+ . For example: the string "abcde" will yield: "abcde", "abcd", "bcde", "abc",
+ "bcd", "cde", "ab", "bc", "cd", "de", "a", "b", "c", "d", "e".
+ <p>
+ There is also an option to return only unique substrings. If this option is
+ active and the original string is "apple", then "p" will only be returned
+ once instead of twice.</div>
 </li>
 </ul>
 </div>
@@ -140,8 +141,8 @@ implements java.util.Iterator&lt;java.lang.String&gt;</pre>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/util/SubstringIterator.html#SubstringIterator-java.lang.String-">SubstringIterator</a></span>(java.lang.String&nbsp;text)</code>
-<div class="block">Create a <code>SubstringIterator</code> that returns
- every possible substring of the original text.</div>
+<div class="block">Create a <code>SubstringIterator</code> that returns every possible
+ substring of the original text.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -168,8 +169,8 @@ implements java.util.Iterator&lt;java.lang.String&gt;</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/SubstringIterator.html#getCurrentLength--">getCurrentLength</a></span>()</code>
-<div class="block">Returns the length of the substring to be returned by
- <code>next()</code>.</div>
+<div class="block">Returns the length of the substring to be returned by <code>next()</code>
+ .</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -220,8 +221,8 @@ implements java.util.Iterator&lt;java.lang.String&gt;</pre>
 <li class="blockList">
 <h4>SubstringIterator</h4>
 <pre>public&nbsp;SubstringIterator(java.lang.String&nbsp;text)</pre>
-<div class="block">Create a <code>SubstringIterator</code> that returns
- every possible substring of the original text.</div>
+<div class="block">Create a <code>SubstringIterator</code> that returns every possible
+ substring of the original text.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>text</code> - the text to break into substrings.</dd>
@@ -240,10 +241,9 @@ implements java.util.Iterator&lt;java.lang.String&gt;</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>text</code> - the text to break into substrings.</dd>
-<dd><code>onlyUniqueSubstrings</code> - if this is true then this
- iterator will never return the same substring twice.
- For example substrings of "maintain" may include two copies
- of "ain" if this boolean is false.</dd>
+<dd><code>onlyUniqueSubstrings</code> - if this is true then this iterator will never return the same
+            substring twice. For example substrings of "maintain" may
+            include two copies of "ain" if this boolean is false.</dd>
 </dl>
 </li>
 </ul>
@@ -275,9 +275,9 @@ implements java.util.Iterator&lt;java.lang.String&gt;</pre>
 <li class="blockList">
 <h4>getCurrentLength</h4>
 <pre>public&nbsp;int&nbsp;getCurrentLength()</pre>
-<div class="block">Returns the length of the substring to be returned by
- <code>next()</code>.  This value decreases from the original
- string length to 1 as this iterator progresses.</div>
+<div class="block">Returns the length of the substring to be returned by <code>next()</code>
+ . This value decreases from the original string length to 1 as this
+ iterator progresses.</div>
 </li>
 </ul>
 <a name="next--">

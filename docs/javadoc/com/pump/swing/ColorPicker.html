@@ -134,30 +134,44 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ColorPicker</span>
 extends javax.swing.JPanel</pre>
-<div class="block"><p>This is a panel that offers a robust set of controls to pick a color.
- <P>This was originally intended to replace the <code>JColorChooser</code>.
- To use this class to create a color choosing dialog, simply call:
- <BR><code>ColorPicker.showDialog(frame, originalColor);</code>
- <P>Here is a screenshot of the dialog that call will invoke:
- <br><IMG SRC="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker.png" alt="ColorPicker Screenshot">
- <p>However this does not have to invoked as a black-box color dialog. This class
- is simply a panel, and you can customize and resize it for other looks.
- For example, you might try the following panel:</p>
- <BR><code>ColorPicker picker = new ColorPicker(false, false);</code>
- <BR><code>picker.setPreferredSize(new Dimension(200,160));</code>
- <BR><code>picker.setMode(ColorPicker.HUE);</code>
- <br><IMG SRC="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker3.png" alt="ColorPicker Small Screenshot">
- <P>This will create a miniature color picker that still lets the user choose
+<div class="block"><p>
+ This is a panel that offers a robust set of controls to pick a color.
+ <P>
+ This was originally intended to replace the <code>JColorChooser</code>. To
+ use this class to create a color choosing dialog, simply call: <BR>
+ <code>ColorPicker.showDialog(frame, originalColor);</code>
+ <P>
+ Here is a screenshot of the dialog that call will invoke: <br>
+ <IMG SRC=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker.png"
+ alt="ColorPicker Screenshot">
+ <p>
+ However this does not have to invoked as a black-box color dialog. This class
+ is simply a panel, and you can customize and resize it for other looks. For
+ example, you might try the following panel:
+ </p>
+ <BR>
+ <code>ColorPicker picker = new ColorPicker(false, false);</code> <BR>
+ <code>picker.setPreferredSize(new Dimension(200,160));</code> <BR>
+ <code>picker.setMode(ColorPicker.HUE);</code> <br>
+ <IMG SRC=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker3.png"
+ alt="ColorPicker Small Screenshot">
+ <P>
+ This will create a miniature color picker that still lets the user choose
  from every available color, but it does not include all the buttons and
  numeric controls on the right side of the panel. This might be ideal if you
- are working with limited space, or non-power-users who don't need the
- RGB values of a color.
- <P>To listen to color changes to this panel, you can add a <code>PropertyChangeListener</code>
- listening for changes to the <code>SELECTED_COLOR_PROPERTY</code>. This will be triggered only
- when the RGB value of the selected color changes.
- <P>To listen to opacity changes to this panel, use 
- a <code>PropertyChangeListener</code> listening
- for changes to the <code>OPACITY_PROPERTY</code>.</div>
+ are working with limited space, or non-power-users who don't need the RGB
+ values of a color.
+ <P>
+ To listen to color changes to this panel, you can add a
+ <code>PropertyChangeListener</code> listening for changes to the
+ <code>SELECTED_COLOR_PROPERTY</code>. This will be triggered only when the
+ RGB value of the selected color changes.
+ <P>
+ To listen to opacity changes to this panel, use a
+ <code>PropertyChangeListener</code> listening for changes to the
+ <code>OPACITY_PROPERTY</code>.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><code>ColorPickerDialog</code>, 
@@ -245,8 +259,8 @@ extends javax.swing.JPanel</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ColorPicker.html#MODE_CONTROLS_VISIBLE_PROPERTY">MODE_CONTROLS_VISIBLE_PROPERTY</a></span></code>
-<div class="block"><code>PropertyChangeEvents</code> will be triggered for this property when <code>setModeControlsVisible()</code>
- is called.</div>
+<div class="block"><code>PropertyChangeEvents</code> will be triggered for this property when
+ <code>setModeControlsVisible()</code> is called.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -258,8 +272,8 @@ extends javax.swing.JPanel</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ColorPicker.html#OPACITY_PROPERTY">OPACITY_PROPERTY</a></span></code>
-<div class="block"><code>PropertyChangeEvents</code> will be triggered when the opacity value is
- adjusted.</div>
+<div class="block"><code>PropertyChangeEvents</code> will be triggered when the opacity value
+ is adjusted.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -277,8 +291,8 @@ extends javax.swing.JPanel</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ColorPicker.html#SELECTED_COLOR_PROPERTY">SELECTED_COLOR_PROPERTY</a></span></code>
-<div class="block"><code>PropertyChangeEvents</code> will be triggered for this property when the selected color
- changes.</div>
+<div class="block"><code>PropertyChangeEvents</code> will be triggered for this property when
+ the selected color changes.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -324,7 +338,8 @@ extends javax.swing.JPanel</pre>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ColorPicker.html#ColorPicker--">ColorPicker</a></span>()</code>
-<div class="block">Create a new <code>ColorPicker</code> with all controls visible except opacity.</div>
+<div class="block">Create a new <code>ColorPicker</code> with all controls visible except
+ opacity.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -389,8 +404,8 @@ extends javax.swing.JPanel</pre>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ColorPicker.html#setExpertControlsVisible-boolean-">setExpertControlsVisible</a></span>(boolean&nbsp;b)</code>
-<div class="block">The labels/spinners/buttons on the right side of a <code>ColorPicker</code>
- are optional.</div>
+<div class="block">The labels/spinners/buttons on the right side of a
+ <code>ColorPicker</code> are optional.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -548,12 +563,14 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>SELECTED_COLOR_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String SELECTED_COLOR_PROPERTY</pre>
-<div class="block"><code>PropertyChangeEvents</code> will be triggered for this property when the selected color
- changes.
- <P>(Events are only created when then RGB values of the color change.  This means, for example,
- that the change from HSB(0,0,0) to HSB(.4,0,0) will <i>not</i> generate events, because when the
- brightness stays zero the RGB color remains (0,0,0).  So although the hue moved around, the color
- is still black, so no events are created.)</div>
+<div class="block"><code>PropertyChangeEvents</code> will be triggered for this property when
+ the selected color changes.
+ <P>
+ (Events are only created when then RGB values of the color change. This
+ means, for example, that the change from HSB(0,0,0) to HSB(.4,0,0) will
+ <i>not</i> generate events, because when the brightness stays zero the
+ RGB color remains (0,0,0). So although the hue moved around, the color is
+ still black, so no events are created.)</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.swing.ColorPicker.SELECTED_COLOR_PROPERTY">Constant Field Values</a></dd>
@@ -567,8 +584,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>MODE_CONTROLS_VISIBLE_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String MODE_CONTROLS_VISIBLE_PROPERTY</pre>
-<div class="block"><code>PropertyChangeEvents</code> will be triggered for this property when <code>setModeControlsVisible()</code>
- is called.</div>
+<div class="block"><code>PropertyChangeEvents</code> will be triggered for this property when
+ <code>setModeControlsVisible()</code> is called.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.swing.ColorPicker.MODE_CONTROLS_VISIBLE_PROPERTY">Constant Field Values</a></dd>
@@ -582,8 +599,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>OPACITY_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String OPACITY_PROPERTY</pre>
-<div class="block"><code>PropertyChangeEvents</code> will be triggered when the opacity value is
- adjusted.</div>
+<div class="block"><code>PropertyChangeEvents</code> will be triggered when the opacity value
+ is adjusted.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.swing.ColorPicker.OPACITY_PROPERTY">Constant Field Values</a></dd>
@@ -598,7 +615,8 @@ extends javax.swing.JPanel</pre>
 <h4>MODE_PROPERTY</h4>
 <pre>public static final&nbsp;java.lang.String MODE_PROPERTY</pre>
 <div class="block"><code>PropertyChangeEvents</code> will be triggered when the mode changes.
- (That is, when the wheel switches from HUE, SAT, BRI, RED, GREEN, or BLUE modes.)</div>
+ (That is, when the wheel switches from HUE, SAT, BRI, RED, GREEN, or BLUE
+ modes.)</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.swing.ColorPicker.MODE_PROPERTY">Constant Field Values</a></dd>
@@ -704,7 +722,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>ColorPicker</h4>
 <pre>public&nbsp;ColorPicker()</pre>
-<div class="block">Create a new <code>ColorPicker</code> with all controls visible except opacity.</div>
+<div class="block">Create a new <code>ColorPicker</code> with all controls visible except
+ opacity.</div>
 </li>
 </ul>
 <a name="ColorPicker-boolean-boolean-">
@@ -719,10 +738,12 @@ extends javax.swing.JPanel</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>showExpertControls</code> - the labels/spinners/buttons on the right side of a
- <code>ColorPicker</code> are optional.  This boolean will control whether they
- are shown or not.
- <P>It may be that your users will never need or want numeric control when
- they choose their colors, so hiding this may simplify your interface.</dd>
+            <code>ColorPicker</code> are optional. This boolean will
+            control whether they are shown or not.
+            <P>
+            It may be that your users will never need or want numeric
+            control when they choose their colors, so hiding this may
+            simplify your interface.</dd>
 <dd><code>includeOpacity</code> - whether the opacity controls will be shown</dd>
 </dl>
 </li>
@@ -744,15 +765,20 @@ extends javax.swing.JPanel</pre>
 <pre>public static&nbsp;java.awt.Color&nbsp;showDialog(java.awt.Window&nbsp;owner,
                                         java.awt.Color&nbsp;originalColor)</pre>
 <div class="block">This creates a modal dialog prompting the user to select a color.
- <P>This uses a generic dialog title: "Choose a Color", and does not include opacity.</div>
+ <P>
+ This uses a generic dialog title: "Choose a Color", and does not include
+ opacity.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>owner</code> - the dialog this new dialog belongs to.  This must be a Frame or a Dialog.
- Java 1.6 supports Windows here, but this package is designed/compiled to work in Java 1.4,
- so an <code>IllegalArgumentException</code> will be thrown if this component is a <code>Window</code>.</dd>
+<dd><code>owner</code> - the dialog this new dialog belongs to. This must be a Frame or
+            a Dialog. Java 1.6 supports Windows here, but this package is
+            designed/compiled to work in Java 1.4, so an
+            <code>IllegalArgumentException</code> will be thrown if this
+            component is a <code>Window</code>.</dd>
 <dd><code>originalColor</code> - the color the <code>ColorPicker</code> initially points to.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <code>Color</code> the user chooses, or <code>null</code> if the user cancels the dialog.</dd>
+<dd>the <code>Color</code> the user chooses, or <code>null</code> if
+         the user cancels the dialog.</dd>
 </dl>
 </li>
 </ul>
@@ -766,16 +792,20 @@ extends javax.swing.JPanel</pre>
                                         java.awt.Color&nbsp;originalColor,
                                         boolean&nbsp;includeOpacity)</pre>
 <div class="block">This creates a modal dialog prompting the user to select a color.
- <P>This uses a generic dialog title: "Choose a Color".</div>
+ <P>
+ This uses a generic dialog title: "Choose a Color".</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>owner</code> - the dialog this new dialog belongs to.  This must be a Frame or a Dialog.
- Java 1.6 supports Windows here, but this package is designed/compiled to work in Java 1.4,
- so an <code>IllegalArgumentException</code> will be thrown if this component is a <code>Window</code>.</dd>
+<dd><code>owner</code> - the dialog this new dialog belongs to. This must be a Frame or
+            a Dialog. Java 1.6 supports Windows here, but this package is
+            designed/compiled to work in Java 1.4, so an
+            <code>IllegalArgumentException</code> will be thrown if this
+            component is a <code>Window</code>.</dd>
 <dd><code>originalColor</code> - the color the <code>ColorPicker</code> initially points to.</dd>
 <dd><code>includeOpacity</code> - whether to add a control for the opacity of the color.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <code>Color</code> the user chooses, or <code>null</code> if the user cancels the dialog.</dd>
+<dd>the <code>Color</code> the user chooses, or <code>null</code> if
+         the user cancels the dialog.</dd>
 </dl>
 </li>
 </ul>
@@ -792,14 +822,17 @@ extends javax.swing.JPanel</pre>
 <div class="block">This creates a modal dialog prompting the user to select a color.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>owner</code> - the dialog this new dialog belongs to.  This must be a Frame or a Dialog.
- Java 1.6 supports Windows here, but this package is designed/compiled to work in Java 1.4,
- so an <code>IllegalArgumentException</code> will be thrown if this component is a <code>Window</code>.</dd>
+<dd><code>owner</code> - the dialog this new dialog belongs to. This must be a Frame or
+            a Dialog. Java 1.6 supports Windows here, but this package is
+            designed/compiled to work in Java 1.4, so an
+            <code>IllegalArgumentException</code> will be thrown if this
+            component is a <code>Window</code>.</dd>
 <dd><code>title</code> - the title for the dialog.</dd>
 <dd><code>originalColor</code> - the color the <code>ColorPicker</code> initially points to.</dd>
 <dd><code>includeOpacity</code> - whether to add a control for the opacity of the color.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <code>Color</code> the user chooses, or <code>null</code> if the user cancels the dialog.</dd>
+<dd>the <code>Color</code> the user chooses, or <code>null</code> if
+         the user cancels the dialog.</dd>
 </dl>
 </li>
 </ul>
@@ -811,8 +844,10 @@ extends javax.swing.JPanel</pre>
 <h4>setHexControlsVisible</h4>
 <pre>public&nbsp;void&nbsp;setHexControlsVisible(boolean&nbsp;b)</pre>
 <div class="block">This controls whether the hex field (and label) are visible or not.
- <P>Note this lives inside the "expert controls", so if <code>setExpertControlsVisible(false)</code>
- has been called, then calling this method makes no difference: the hex controls will be hidden.</div>
+ <P>
+ Note this lives inside the "expert controls", so if
+ <code>setExpertControlsVisible(false)</code> has been called, then
+ calling this method makes no difference: the hex controls will be hidden.</div>
 </li>
 </ul>
 <a name="setPreviewSwatchVisible-boolean-">
@@ -823,8 +858,10 @@ extends javax.swing.JPanel</pre>
 <h4>setPreviewSwatchVisible</h4>
 <pre>public&nbsp;void&nbsp;setPreviewSwatchVisible(boolean&nbsp;b)</pre>
 <div class="block">This controls whether the preview swatch visible or not.
- <P>Note this lives inside the "expert controls", so if <code>setExpertControlsVisible(false)</code>
- has been called, then calling this method makes no difference: the swatch will be hidden.</div>
+ <P>
+ Note this lives inside the "expert controls", so if
+ <code>setExpertControlsVisible(false)</code> has been called, then
+ calling this method makes no difference: the swatch will be hidden.</div>
 </li>
 </ul>
 <a name="setExpertControlsVisible-boolean-">
@@ -834,9 +871,11 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>setExpertControlsVisible</h4>
 <pre>public&nbsp;void&nbsp;setExpertControlsVisible(boolean&nbsp;b)</pre>
-<div class="block">The labels/spinners/buttons on the right side of a <code>ColorPicker</code>
- are optional.  This method will control whether they are shown or not.
- <P>It may be that your users will never need or want numeric control when
+<div class="block">The labels/spinners/buttons on the right side of a
+ <code>ColorPicker</code> are optional. This method will control whether
+ they are shown or not.
+ <P>
+ It may be that your users will never need or want numeric control when
  they choose their colors, so hiding this may simplify your interface.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -853,8 +892,8 @@ extends javax.swing.JPanel</pre>
 <pre>public&nbsp;float[]&nbsp;getHSB()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current HSB coordinates of this <code>ColorPicker</code>.
- Each value is between [0,1].</dd>
+<dd>the current HSB coordinates of this <code>ColorPicker</code>. Each
+         value is between [0,1].</dd>
 </dl>
 </li>
 </ul>
@@ -867,8 +906,8 @@ extends javax.swing.JPanel</pre>
 <pre>public&nbsp;int[]&nbsp;getRGB()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current RGB coordinates of this <code>ColorPicker</code>.
- Each value is between [0,255].</dd>
+<dd>the current RGB coordinates of this <code>ColorPicker</code>. Each
+         value is between [0,255].</dd>
 </dl>
 </li>
 </ul>
@@ -907,9 +946,9 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>setMode</h4>
 <pre>public&nbsp;void&nbsp;setMode(int&nbsp;mode)</pre>
-<div class="block">Sets the mode of this <code>ColorPicker</code>.
- This is especially useful if this picker is in non-expert mode, so
- the radio buttons are not visible for the user to directly select.</div>
+<div class="block">Sets the mode of this <code>ColorPicker</code>. This is especially useful
+ if this picker is in non-expert mode, so the radio buttons are not
+ visible for the user to directly select.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>mode</code> - must be HUE, SAT, BRI, RED, GREEN or BLUE.</dd>
@@ -924,9 +963,12 @@ extends javax.swing.JPanel</pre>
 <h4>setModeControlsVisible</h4>
 <pre>public&nbsp;void&nbsp;setModeControlsVisible(boolean&nbsp;b)</pre>
 <div class="block">This controls whether the radio buttons that adjust the mode are visible.
- <P>(These buttons appear next to the spinners in the expert controls.)
- <P>Note these live inside the "expert controls", so if <code>setExpertControlsVisible(false)</code>
- has been called, then these will never be visible.</div>
+ <P>
+ (These buttons appear next to the spinners in the expert controls.)
+ <P>
+ Note these live inside the "expert controls", so if
+ <code>setExpertControlsVisible(false)</code> has been called, then these
+ will never be visible.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>b</code> - </dd>
@@ -942,11 +984,13 @@ extends javax.swing.JPanel</pre>
 <pre>public&nbsp;int&nbsp;getMode()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current mode of this <code>ColorPicker</code>.
- <BR>This will return <code>HUE</code>,  <code>SAT</code>,  <code>BRI</code>, 
- <code>RED</code>,  <code>GREEN</code>, or <code>BLUE</code>.
- <P>The default mode is <code>BRI</code>, because that provides the most
- aesthetic/recognizable color wheel.</dd>
+<dd>the current mode of this <code>ColorPicker</code>. <BR>
+         This will return <code>HUE</code>, <code>SAT</code>,
+         <code>BRI</code>, <code>RED</code>, <code>GREEN</code>, or
+         <code>BLUE</code>.
+         <P>
+         The default mode is <code>BRI</code>, because that provides the
+         most aesthetic/recognizable color wheel.</dd>
 </dl>
 </li>
 </ul>
@@ -957,8 +1001,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>setColor</h4>
 <pre>public&nbsp;void&nbsp;setColor(java.awt.Color&nbsp;c)</pre>
-<div class="block">Sets the current color of this <code>ColorPicker</code>.
- This method simply calls <code>setRGB()</code> and <code>setOpacity()</code>.</div>
+<div class="block">Sets the current color of this <code>ColorPicker</code>. This method
+ simply calls <code>setRGB()</code> and <code>setOpacity()</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - the new color to use.</dd>
@@ -977,9 +1021,9 @@ extends javax.swing.JPanel</pre>
 <div class="block">Sets the current color of this <code>ColorPicker</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>r</code> - the red value.  Must be between [0,255].</dd>
-<dd><code>g</code> - the green value.  Must be between [0,255].</dd>
-<dd><code>b</code> - the blue value.  Must be between [0,255].</dd>
+<dd><code>r</code> - the red value. Must be between [0,255].</dd>
+<dd><code>g</code> - the green value. Must be between [0,255].</dd>
+<dd><code>b</code> - the blue value. Must be between [0,255].</dd>
 </dl>
 </li>
 </ul>
@@ -992,10 +1036,12 @@ extends javax.swing.JPanel</pre>
 <pre>public&nbsp;java.awt.Color&nbsp;getColor()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current <code>Color</code> this <code>ColorPicker</code> has selected.
- <P>This is equivalent to:
- <BR><code>int[] i = getRGB();</code>
- <BR><code>return new Color(i[0], i[1], i[2], opacitySlider.getValue());</code></dd>
+<dd>the current <code>Color</code> this <code>ColorPicker</code> has
+         selected.
+         <P>
+         This is equivalent to: <BR>
+         <code>int[] i = getRGB();</code> <BR>
+         <code>return new Color(i[0], i[1], i[2], opacitySlider.getValue());</code></dd>
 </dl>
 </li>
 </ul>
@@ -1007,10 +1053,14 @@ extends javax.swing.JPanel</pre>
 <h4>getExpertControls</h4>
 <pre>public&nbsp;javax.swing.JPanel&nbsp;getExpertControls()</pre>
 <div class="block">This returns the panel with several rows of spinner controls.
- <P>Note you can also call methods such as <code>setRGBControlsVisible()</code> to adjust
- which controls are showing.
- <P>(This returns the panel this <code>ColorPicker</code> uses, so if you put it in
- another container, it will be removed from this <code>ColorPicker</code>.)</div>
+ <P>
+ Note you can also call methods such as
+ <code>setRGBControlsVisible()</code> to adjust which controls are
+ showing.
+ <P>
+ (This returns the panel this <code>ColorPicker</code> uses, so if you put
+ it in another container, it will be removed from this
+ <code>ColorPicker</code>.)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the panel with several rows of spinner controls.</dd>
@@ -1025,8 +1075,10 @@ extends javax.swing.JPanel</pre>
 <h4>setRGBControlsVisible</h4>
 <pre>public&nbsp;void&nbsp;setRGBControlsVisible(boolean&nbsp;b)</pre>
 <div class="block">This shows or hides the RGB spinner controls.
- <P>Note these live inside the "expert controls", so if <code>setExpertControlsVisible(false)</code>
- has been called, then calling this method makes no difference: the RGB controls will be hidden.</div>
+ <P>
+ Note these live inside the "expert controls", so if
+ <code>setExpertControlsVisible(false)</code> has been called, then
+ calling this method makes no difference: the RGB controls will be hidden.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>b</code> - whether the controls should be visible or not.</dd>
@@ -1041,8 +1093,10 @@ extends javax.swing.JPanel</pre>
 <h4>setHSBControlsVisible</h4>
 <pre>public&nbsp;void&nbsp;setHSBControlsVisible(boolean&nbsp;b)</pre>
 <div class="block">This shows or hides the HSB spinner controls.
- <P>Note these live inside the "expert controls", so if <code>setExpertControlsVisible(false)</code>
- has been called, then calling this method makes no difference: the HSB controls will be hidden.</div>
+ <P>
+ Note these live inside the "expert controls", so if
+ <code>setExpertControlsVisible(false)</code> has been called, then
+ calling this method makes no difference: the HSB controls will be hidden.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>b</code> - whether the controls should be visible or not.</dd>
@@ -1057,9 +1111,11 @@ extends javax.swing.JPanel</pre>
 <h4>setOpacityVisible</h4>
 <pre>public&nbsp;void&nbsp;setOpacityVisible(boolean&nbsp;b)</pre>
 <div class="block">This shows or hides the alpha controls.
- <P>Note the alpha spinner live inside the "expert controls", so if <code>setExpertControlsVisible(false)</code>
- has been called, then this method does not affect that spinner.
- However, the opacity slider is <i>not</i> affected by the visibility of the export controls.</div>
+ <P>
+ Note the alpha spinner live inside the "expert controls", so if
+ <code>setExpertControlsVisible(false)</code> has been called, then this
+ method does not affect that spinner. However, the opacity slider is
+ <i>not</i> affected by the visibility of the export controls.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>b</code> - </dd>
@@ -1075,7 +1131,8 @@ extends javax.swing.JPanel</pre>
 <pre>public&nbsp;<a href="../../../com/pump/swing/ColorPickerPanel.html" title="class in com.pump.swing">ColorPickerPanel</a>&nbsp;getColorPanel()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <code>ColorPickerPanel</code> this <code>ColorPicker</code> displays.</dd>
+<dd>the <code>ColorPickerPanel</code> this <code>ColorPicker</code>
+         displays.</dd>
 </dl>
 </li>
 </ul>
@@ -1092,8 +1149,8 @@ extends javax.swing.JPanel</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>h</code> - the hue value.</dd>
-<dd><code>s</code> - the saturation value.  Must be between [0,1].</dd>
-<dd><code>b</code> - the blue value.  Must be between [0,1].</dd>
+<dd><code>s</code> - the saturation value. Must be between [0,1].</dd>
+<dd><code>b</code> - the blue value. Must be between [0,1].</dd>
 </dl>
 </li>
 </ul>

@@ -110,32 +110,37 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">AreaXBody</span>
 extends java.lang.Object</pre>
-<div class="block">This is a list of <code>CurveX</code> segments that makes up the shape
- of an <code>AreaX</code>.
- <p>This is based on the <code>Vector</code> named "curves" in the
- original <code>java.awt.geom.Area</code> class.  However this class
- has a few key modifications:
- <ul><li>The bounds are internally updated constantly.</li>
- <li>The methods to add curves are protected.  So while this list can
- be iterated over via public methods, it is immutable to classes outside
- this package.  This is a deliberate choice to facilitate the
+<div class="block">This is a list of <code>CurveX</code> segments that makes up the shape of an
+ <code>AreaX</code>.
+ <p>
+ This is based on the <code>Vector</code> named "curves" in the original
+ <code>java.awt.geom.Area</code> class. However this class has a few key
+ modifications:
+ <ul>
+ <li>The bounds are internally updated constantly.</li>
+ <li>The methods to add curves are protected. So while this list can be
+ iterated over via public methods, it is immutable to classes outside this
+ package. This is a deliberate choice to facilitate the
  <code>AreaXRules</code> model.
  <li>This object adds the concept of validation (more on this below).</li>
- <li>This object is not synchronized.  The <code>AreaX</code> class is,
- but this class is not.  This is for internal behind-the-scenes work:
- it is the caller's responsibility to synchronize method calls safely.</li></ul>
+ <li>This object is not synchronized. The <code>AreaX</code> class is, but
+ this class is not. This is for internal behind-the-scenes work: it is the
+ caller's responsibility to synchronize method calls safely.</li>
+ </ul>
  <h3>Validation</h3>
- This concept is new to the <code>AreaX</code> package, but the code is
- not new.  The original <code>Area</code> class automatically validated everything
- all the time.  Here I separated this process because -- as we start
- dealing with complex <code>AreaXRules</code> -- we can get some
- performance improvements if we don't validate all shapes.
- <p>A "valid" body is one that has been primed for geometric operations.  An
- "invalid" body is one that has not yet been primed -- it is a raw dump
- of another shape.
- <p>In the end: all shapes that are involved in computing an add, xor,
- intersect or subtract are validated.  But we don't have to perform
- an expensive validation in order to see whether Shape A contains Shape B.</div>
+ This concept is new to the <code>AreaX</code> package, but the code is not
+ new. The original <code>Area</code> class automatically validated everything
+ all the time. Here I separated this process because -- as we start dealing
+ with complex <code>AreaXRules</code> -- we can get some performance
+ improvements if we don't validate all shapes.
+ <p>
+ A "valid" body is one that has been primed for geometric operations. An
+ "invalid" body is one that has not yet been primed -- it is a raw dump of
+ another shape.
+ <p>
+ In the end: all shapes that are involved in computing an add, xor, intersect
+ or subtract are validated. But we don't have to perform an expensive
+ validation in order to see whether Shape A contains Shape B.</div>
 </li>
 </ul>
 </div>
@@ -163,8 +168,7 @@ extends java.lang.Object</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../com/pump/geom/area/CurveX.html" title="class in com.pump.geom.area">CurveX</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/AreaXBody.html#elementData">elementData</a></span></code>
-<div class="block">The array buffer into which the components of the list are
- stored.</div>
+<div class="block">The array buffer into which the components of the list are stored.</div>
 </td>
 </tr>
 </table>
@@ -205,8 +209,8 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/AreaXBody.html#add-com.pump.geom.area.AreaXBody-">add</a></span>(<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs)</code>
-<div class="block">Calculates the addition of the specified <code>AreaXBody</code>
- with this <code>AreaXBody</code>.</div>
+<div class="block">Calculates the addition of the specified <code>AreaXBody</code> with this
+ <code>AreaXBody</code>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -242,9 +246,9 @@ extends java.lang.Object</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/AreaXBody.html#ensureCapacity-int-">ensureCapacity</a></span>(int&nbsp;minCapacity)</code>
-<div class="block">Increases the capacity of this list, if necessary, to ensure 
- that it can hold at least the number of components specified by 
- the minimum capacity argument.</div>
+<div class="block">Increases the capacity of this list, if necessary, to ensure that it can
+ hold at least the number of components specified by the minimum capacity
+ argument.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -270,8 +274,8 @@ extends java.lang.Object</pre>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>java.awt.geom.PathIterator</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/AreaXBody.html#getPathIterator-java.awt.geom.AffineTransform-">getPathIterator</a></span>(java.awt.geom.AffineTransform&nbsp;at)</code>
-<div class="block">Creates a <code>PathIterator</code> for the outline of this
- <code>AreaX</code> data.</div>
+<div class="block">Creates a <code>PathIterator</code> for the outline of this <code>AreaX</code>
+ data.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -279,8 +283,8 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/AreaXBody.html#getRelationship-java.awt.geom.AffineTransform-com.pump.geom.area.AreaXBody-java.awt.geom.AffineTransform-">getRelationship</a></span>(java.awt.geom.AffineTransform&nbsp;lhsTransform,
                <a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs,
                java.awt.geom.AffineTransform&nbsp;at)</code>
-<div class="block">Studies this object (the LHS) and the argument (the RHS)
- to determine the relationship.</div>
+<div class="block">Studies this object (the LHS) and the argument (the RHS) to determine the
+ relationship.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
@@ -288,24 +292,24 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/AreaXBody.html#getRelationship-java.awt.geom.AffineTransform-java.awt.Shape-java.awt.geom.AffineTransform-">getRelationship</a></span>(java.awt.geom.AffineTransform&nbsp;lhsTransform,
                java.awt.Shape&nbsp;rhs,
                java.awt.geom.AffineTransform&nbsp;at)</code>
-<div class="block">Studies this object (the LHS) and the argument (the RHS)
- to determine the relationship.</div>
+<div class="block">Studies this object (the LHS) and the argument (the RHS) to determine the
+ relationship.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/AreaXBody.html#getRelationship-com.pump.geom.area.AreaXBody-java.awt.geom.AffineTransform-">getRelationship</a></span>(<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs,
                java.awt.geom.AffineTransform&nbsp;at)</code>
-<div class="block">Studies this object (the LHS) and the argument (the RHS)
- to determine the relationship.</div>
+<div class="block">Studies this object (the LHS) and the argument (the RHS) to determine the
+ relationship.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/AreaXBody.html#getRelationship-java.awt.Shape-java.awt.geom.AffineTransform-">getRelationship</a></span>(java.awt.Shape&nbsp;rhs,
                java.awt.geom.AffineTransform&nbsp;at)</code>
-<div class="block">Studies this object (the LHS) and the argument (the RHS)
- to determine the relationship.</div>
+<div class="block">Studies this object (the LHS) and the argument (the RHS) to determine the
+ relationship.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -317,8 +321,8 @@ extends java.lang.Object</pre>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/AreaXBody.html#intersect-com.pump.geom.area.AreaXBody-">intersect</a></span>(<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs)</code>
-<div class="block">Calculate the <code>AreaXBody</code> of the intersection of
- its current shape and the shape of the specified <code>AreaXBody</code>.</div>
+<div class="block">Calculate the <code>AreaXBody</code> of the intersection of its current
+ shape and the shape of the specified <code>AreaXBody</code>.</div>
 </td>
 </tr>
 <tr id="i18" class="altColor">
@@ -373,9 +377,9 @@ extends java.lang.Object</pre>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code><a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/geom/area/AreaXBody.html#xor-com.pump.geom.area.AreaXBody-">xor</a></span>(<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs)</code>
-<div class="block">The resulting shape of this operation will include
- only areas that were contained in either this <code>AreaXBody</code>
- or in the specified <code>AreaXBody</code>, but not in both.</div>
+<div class="block">The resulting shape of this operation will include only areas that were
+ contained in either this <code>AreaXBody</code> or in the specified
+ <code>AreaXBody</code>, but not in both.</div>
 </td>
 </tr>
 </table>
@@ -407,10 +411,12 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>elementData</h4>
 <pre>protected&nbsp;<a href="../../../../com/pump/geom/area/CurveX.html" title="class in com.pump.geom.area">CurveX</a>[] elementData</pre>
-<div class="block">The array buffer into which the components of the list are
- stored. The capacity of the list is the length of this array buffer, 
- and is at least large enough to contain all the list elements.<p>
- This array must be of type <code>type</code>.<p>
+<div class="block">The array buffer into which the components of the list are stored. The
+ capacity of the list is the length of this array buffer, and is at least
+ large enough to contain all the list elements.
+ <p>
+ This array must be of type <code>type</code>.
+ <p>
  Any array elements following the last element in the list are null.</div>
 </li>
 </ul>
@@ -421,9 +427,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>elementCount</h4>
 <pre>protected&nbsp;int elementCount</pre>
-<div class="block">The number of valid components in this list. 
- Components <tt>elementData[0]</tt> through 
- <tt>elementData[elementCount-1]</tt> are the actual items.</div>
+<div class="block">The number of valid components in this list. Components
+ <tt>elementData[0]</tt> through <tt>elementData[elementCount-1]</tt> are
+ the actual items.</div>
 </li>
 </ul>
 </li>
@@ -445,13 +451,12 @@ extends java.lang.Object</pre>
 <div class="block">Constructs an empty list with the specified initial capacity.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>validationOperator</code> - if this body is not yet valid, this is
- the operation that will validate it.  If this is null then this
- body is considered valid.</dd>
+<dd><code>validationOperator</code> - if this body is not yet valid, this is the operation that will
+            validate it. If this is null then this body is considered
+            valid.</dd>
 <dd><code>initialCapacity</code> - the initial capacity of the list.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if the specified initial capacity
-               is negative</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - if the specified initial capacity is negative</dd>
 </dl>
 </li>
 </ul>
@@ -481,8 +486,8 @@ extends java.lang.Object</pre>
 <h4>getRelationship</h4>
 <pre>public&nbsp;int&nbsp;getRelationship(java.awt.Shape&nbsp;rhs,
                            java.awt.geom.AffineTransform&nbsp;at)</pre>
-<div class="block">Studies this object (the LHS) and the argument (the RHS)
- to determine the relationship.</div>
+<div class="block">Studies this object (the LHS) and the argument (the RHS) to determine the
+ relationship.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rhs</code> - a shape to iterate over.</dd>
@@ -501,8 +506,8 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;int&nbsp;getRelationship(java.awt.geom.AffineTransform&nbsp;lhsTransform,
                            java.awt.Shape&nbsp;rhs,
                            java.awt.geom.AffineTransform&nbsp;at)</pre>
-<div class="block">Studies this object (the LHS) and the argument (the RHS)
- to determine the relationship.</div>
+<div class="block">Studies this object (the LHS) and the argument (the RHS) to determine the
+ relationship.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>lhsTransform</code> - an optional AffineTransform to apply to this operand.</dd>
@@ -521,8 +526,8 @@ extends java.lang.Object</pre>
 <h4>getRelationship</h4>
 <pre>public&nbsp;int&nbsp;getRelationship(<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs,
                            java.awt.geom.AffineTransform&nbsp;at)</pre>
-<div class="block">Studies this object (the LHS) and the argument (the RHS)
- to determine the relationship.</div>
+<div class="block">Studies this object (the LHS) and the argument (the RHS) to determine the
+ relationship.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rhs</code> - a shape to iterate over.</dd>
@@ -541,8 +546,8 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;int&nbsp;getRelationship(java.awt.geom.AffineTransform&nbsp;lhsTransform,
                            <a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs,
                            java.awt.geom.AffineTransform&nbsp;at)</pre>
-<div class="block">Studies this object (the LHS) and the argument (the RHS)
- to determine the relationship.</div>
+<div class="block">Studies this object (the LHS) and the argument (the RHS) to determine the
+ relationship.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>lhsTransform</code> - an optional AffineTransform to apply to this operand.</dd>
@@ -575,8 +580,9 @@ extends java.lang.Object</pre>
 <h4>isValidated</h4>
 <pre>public&nbsp;boolean&nbsp;isValidated()</pre>
 <div class="block">Returns whether this body is validated or not.
- <p>Validation is an expensive process of restructuring a primitive <code>AreaXBody</code>
- so it is primed for geometric operations.</div>
+ <p>
+ Validation is an expensive process of restructuring a primitive
+ <code>AreaXBody</code> so it is primed for geometric operations.</div>
 </li>
 </ul>
 <a name="validate--">
@@ -586,12 +592,14 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>validate</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;validate()</pre>
-<div class="block">This returns a validated copy of this object.  If this body is already
+<div class="block">This returns a validated copy of this object. If this body is already
  validated, then this object is returned.
- <p>If this object is invalid but this method has already been performed,
+ <p>
+ If this object is invalid but this method has already been performed,
  then the previously created object is returned.
- <p>Otherwise: this body is validated.  This is expensive but required
- for other operations.</div>
+ <p>
+ Otherwise: this body is validated. This is expensive but required for
+ other operations.</div>
 </li>
 </ul>
 <a name="equals-java.lang.Object-">
@@ -615,9 +623,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>hashCode</h4>
 <pre>public&nbsp;int&nbsp;hashCode()</pre>
-<div class="block">Returns a hashcode based on the bounds of this body.
- This way a validated and unvalidated body will nearly
- always have the same hashcode.</div>
+<div class="block">Returns a hashcode based on the bounds of this body. This way a validated
+ and unvalidated body will nearly always have the same hashcode.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -702,9 +709,8 @@ extends java.lang.Object</pre>
 <div class="block">Tests if this list has no components.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if and only if this list has 
-          no components, that is, its size is zero;
-          <code>false</code> otherwise.</dd>
+<dd><code>true</code> if and only if this list has no components,
+         that is, its size is zero; <code>false</code> otherwise.</dd>
 </dl>
 </li>
 </ul>
@@ -738,17 +744,16 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getPathIterator</h4>
 <pre>public&nbsp;java.awt.geom.PathIterator&nbsp;getPathIterator(java.awt.geom.AffineTransform&nbsp;at)</pre>
-<div class="block">Creates a <code>PathIterator</code> for the outline of this
- <code>AreaX</code> data.</div>
+<div class="block">Creates a <code>PathIterator</code> for the outline of this <code>AreaX</code>
+ data.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>at</code> - an optional <code>AffineTransform</code> to be applied to
- the coordinates as they are returned in the iteration, or
- <code>null</code> if untransformed coordinates are desired</dd>
+<dd><code>at</code> - an optional <code>AffineTransform</code> to be applied to the
+            coordinates as they are returned in the iteration, or
+            <code>null</code> if untransformed coordinates are desired</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <code>PathIterator</code> object that returns the
-                geometry of the outline of this <code>AreaX</code>, one
-                segment at a time.</dd>
+<dd>the <code>PathIterator</code> object that returns the geometry of
+         the outline of this <code>AreaX</code>, one segment at a time.</dd>
 </dl>
 </li>
 </ul>
@@ -759,19 +764,19 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>add</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;add(<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs)</pre>
-<div class="block">Calculates the addition of the specified <code>AreaXBody</code>
- with this <code>AreaXBody</code>.
- The resulting shape will include
- the union of both shapes, or all areas that were contained
- in either this or the specified <code>AreaX</code>.
+<div class="block">Calculates the addition of the specified <code>AreaXBody</code> with this
+ <code>AreaXBody</code>. The resulting shape will include the union of
+ both shapes, or all areas that were contained in either this or the
+ specified <code>AreaX</code>.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.add(a2);
-
+ 
         a1(before)     +         a2         =     a1(after)
-
+ 
      ################     ################     ################
      ##############         ##############     ################
      ############             ############     ################
@@ -783,11 +788,10 @@ extends java.lang.Object</pre>
  </pre></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rhs</code> - the <code>AreaXBody</code> to be added to the
-          this body.</dd>
+<dd><code>rhs</code> - the <code>AreaXBody</code> to be added to the this body.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new <code>AreaXBody</code> of this operation.
-          This object and the operator are not modified.</dd>
+<dd>the new <code>AreaXBody</code> of this operation. This object and
+         the operator are not modified.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -801,10 +805,10 @@ extends java.lang.Object</pre>
 <h4>merge</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;merge(<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs)</pre>
 <div class="block">This simply merges two bodies together.
- <p>WARNING: use this only when it is guaranteed that the LHS
- and RHS do not overlap in any way.  This is much more efficient
- than calling <code>add()</code>, but it will be very dangerous
- if misused.</div>
+ <p>
+ WARNING: use this only when it is guaranteed that the LHS and RHS do not
+ overlap in any way. This is much more efficient than calling
+ <code>add()</code>, but it will be very dangerous if misused.</div>
 </li>
 </ul>
 <a name="merge-java.util.List-int-int-">
@@ -817,10 +821,10 @@ extends java.lang.Object</pre>
                        int&nbsp;startIndex,
                        int&nbsp;endIndex)</pre>
 <div class="block">This simply merges multiple bodies together.
- <p>WARNING: use this only when it is guaranteed that the LHS
- and RHS do not overlap in any way.  This is much more efficient
- than calling <code>add()</code>, but it will be very dangerous
- if misused.</div>
+ <p>
+ WARNING: use this only when it is guaranteed that the LHS and RHS do not
+ overlap in any way. This is much more efficient than calling
+ <code>add()</code>, but it will be very dangerous if misused.</div>
 </li>
 </ul>
 <a name="subtract-com.pump.geom.area.AreaXBody-">
@@ -831,18 +835,19 @@ extends java.lang.Object</pre>
 <h4>subtract</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;subtract(<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs)</pre>
 <div class="block">Subtracts the shape of the specified <code>AreaXBody</code> from the
- shape of this <code>AreaXBody</code>.
- The resulting <code>AreaXBody</code> will include
- areas that were contained only in this <code>AreaXBody</code>
- and not in the argument <code>AreaXBody</code>.
+ shape of this <code>AreaXBody</code>. The resulting
+ <code>AreaXBody</code> will include areas that were contained only in
+ this <code>AreaXBody</code> and not in the argument
+ <code>AreaXBody</code>.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.subtract(a2);
-
+ 
         a1(before)     -         a2         =     a1(after)
-
+ 
      ################     ################
      ##############         ##############     ##
      ############             ############     ####
@@ -854,11 +859,11 @@ extends java.lang.Object</pre>
  </pre></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rhs</code> - the <code>AreaXBody</code> to be subtracted from the
-                current shape</dd>
+<dd><code>rhs</code> - the <code>AreaXBody</code> to be subtracted from the current
+            shape</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new <code>AreaXBody</code> of this operation.
-          This object and the operator are not modified.</dd>
+<dd>the new <code>AreaXBody</code> of this operation. This object and
+         the operator are not modified.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -871,19 +876,19 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>intersect</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;intersect(<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs)</pre>
-<div class="block">Calculate the <code>AreaXBody</code> of the intersection of
- its current shape and the shape of the specified <code>AreaXBody</code>.
- The resulting shape will include
- only areas that were contained in both this <code>AreaXBody</code>
- and also in the specified <code>AreaXBody</code>.
+<div class="block">Calculate the <code>AreaXBody</code> of the intersection of its current
+ shape and the shape of the specified <code>AreaXBody</code>. The
+ resulting shape will include only areas that were contained in both this
+ <code>AreaXBody</code> and also in the specified <code>AreaXBody</code>.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.intersect(a2);
-
+ 
       a1(before)   intersect     a2         =     a1(after)
-
+ 
      ################     ################     ################
      ##############         ##############       ############
      ############             ############         ########
@@ -896,10 +901,10 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rhs</code> - the <code>AreaXBody</code> to be intersected with this
-                <code>AreaXBody</code></dd>
+            <code>AreaXBody</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new <code>AreaXBody</code> of this operation.
-          This object and the operator are not modified.</dd>
+<dd>the new <code>AreaXBody</code> of this operation. This object and
+         the operator are not modified.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -912,17 +917,18 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>xor</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;xor(<a href="../../../../com/pump/geom/area/AreaXBody.html" title="class in com.pump.geom.area">AreaXBody</a>&nbsp;rhs)</pre>
-<div class="block">The resulting shape of this operation will include
- only areas that were contained in either this <code>AreaXBody</code>
- or in the specified <code>AreaXBody</code>, but not in both.
+<div class="block">The resulting shape of this operation will include only areas that were
+ contained in either this <code>AreaXBody</code> or in the specified
+ <code>AreaXBody</code>, but not in both.
+ 
  <pre>
      // Example:
      Area a1 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 0,8]);
      Area a2 = new Area([triangle 0,0 =&gt; 8,0 =&gt; 8,8]);
      a1.exclusiveOr(a2);
-
+ 
         a1(before)    xor        a2         =     a1(after)
-
+ 
      ################     ################
      ##############         ##############     ##            ##
      ############             ############     ####        ####
@@ -932,15 +938,16 @@ extends java.lang.Object</pre>
      ####                             ####     ####        ####
      ##                                 ##     ##            ##
  </pre>
- <p>This call immediately executes.  It executes any pending
- operations first, and then executes this add.</div>
+ <p>
+ This call immediately executes. It executes any pending operations first,
+ and then executes this add.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rhs</code> - the <code>AreaXBody</code> to be exclusive ORed with this
-                <code>AreaXBody</code>.</dd>
+            <code>AreaXBody</code>.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new <code>AreaXBody</code> of this operation.
-          This object and the operator are not modified.</dd>
+<dd>the new <code>AreaXBody</code> of this operation. This object and
+         the operator are not modified.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if <code>rhs</code> is null</dd>
 </dl>
@@ -953,19 +960,19 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>ensureCapacity</h4>
 <pre>protected&nbsp;void&nbsp;ensureCapacity(int&nbsp;minCapacity)</pre>
-<div class="block">Increases the capacity of this list, if necessary, to ensure 
- that it can hold at least the number of components specified by 
- the minimum capacity argument.
+<div class="block">Increases the capacity of this list, if necessary, to ensure that it can
+ hold at least the number of components specified by the minimum capacity
+ argument.
 
- <p>If the current capacity of this list is less than
- <tt>minCapacity</tt>, then its capacity is increased by replacing its
- internal data array, kept in the field <tt>elementData</tt>, with a
- larger one.  The size of the new data array will be the old size plus
- <tt>capacityIncrement</tt>, unless the value of
- <tt>capacityIncrement</tt> is less than or equal to zero, in which case
- the new capacity will be twice the old capacity; but if this new size
- is still smaller than <tt>minCapacity</tt>, then the new capacity will
- be <tt>minCapacity</tt>.</div>
+ <p>
+ If the current capacity of this list is less than <tt>minCapacity</tt>,
+ then its capacity is increased by replacing its internal data array, kept
+ in the field <tt>elementData</tt>, with a larger one. The size of the new
+ data array will be the old size plus <tt>capacityIncrement</tt>, unless
+ the value of <tt>capacityIncrement</tt> is less than or equal to zero, in
+ which case the new capacity will be twice the old capacity; but if this
+ new size is still smaller than <tt>minCapacity</tt>, then the new
+ capacity will be <tt>minCapacity</tt>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>minCapacity</code> - the desired minimum capacity.</dd>

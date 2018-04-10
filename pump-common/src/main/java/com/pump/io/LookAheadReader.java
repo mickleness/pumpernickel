@@ -122,7 +122,7 @@ public class LookAheadReader extends Reader implements AutoCloseable {
 	/**
 	 * Cycle to the next n-th character.
 	 * 
-	 * @param ctr
+	 * @param n
 	 *            the number of characters to read over.
 	 * @return if a new character is available, false if we've reached the end
 	 *         of the stream.

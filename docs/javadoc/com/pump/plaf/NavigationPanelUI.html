@@ -129,13 +129,16 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">NavigationPanelUI</span>
 extends javax.swing.plaf.basic.BasicSpinnerUI</pre>
-<div class="block">This is the abstract parent class for JSpinners intended to navigate a collection of objects/properties.
+<div class="block">This is the abstract parent class for JSpinners intended to navigate a
+ collection of objects/properties.
  <p>
  The following code will automatically format your panel to include a label
  that reads "Page 5 of 10" or "Image 1 of 2", etc:
- <pre>mySpinner.putClientProperty( 
-                NavigationPanelUI.PROPERTY_DESCRIPTOR, 
-                new NumberSpinnerDescriptor(mySpinner, "Page"));</pre></div>
+ 
+ <pre>
+ mySpinner.putClientProperty(NavigationPanelUI.PROPERTY_DESCRIPTOR,
+                new NumberSpinnerDescriptor(mySpinner, &quot;Page&quot;));
+ </pre></div>
 </li>
 </ul>
 </div>
@@ -208,13 +211,15 @@ extends javax.swing.plaf.basic.BasicSpinnerUI</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/NavigationPanelUI.html#PROPERTY_DESCRIPTOR">PROPERTY_DESCRIPTOR</a></span></code>
-<div class="block">This maps to a Callable&lt;String&gt; used to describe this spinner in a label.</div>
+<div class="block">This maps to a Callable&lt;String&gt; used to describe this spinner in a
+ label.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/NavigationPanelUI.html#PROPERTY_DRAGGABLE">PROPERTY_DRAGGABLE</a></span></code>
-<div class="block">This maps to a Boolean indicating whether the user should be able to drag this spinner around.</div>
+<div class="block">This maps to a Boolean indicating whether the user should be able to drag
+ this spinner around.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -304,7 +309,8 @@ extends javax.swing.plaf.basic.BasicSpinnerUI</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/NavigationPanelUI.html#setValue-javax.swing.JSpinner-int-int-">setValue</a></span>(javax.swing.JSpinner&nbsp;spinner,
         int&nbsp;newValue,
         int&nbsp;newMax)</code>
-<div class="block">Suspend all listeners, then adjust the value max, then resume all listeners and fire them exactly once.</div>
+<div class="block">Suspend all listeners, then adjust the value max, then resume all
+ listeners and fire them exactly once.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -360,7 +366,8 @@ extends javax.swing.plaf.basic.BasicSpinnerUI</pre>
 <li class="blockList">
 <h4>PROPERTY_DESCRIPTOR</h4>
 <pre>public static final&nbsp;java.lang.String PROPERTY_DESCRIPTOR</pre>
-<div class="block">This maps to a Callable&lt;String&gt; used to describe this spinner in a label.</div>
+<div class="block">This maps to a Callable&lt;String&gt; used to describe this spinner in a
+ label.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.plaf.NavigationPanelUI.PROPERTY_DESCRIPTOR">Constant Field Values</a></dd>
@@ -374,7 +381,8 @@ extends javax.swing.plaf.basic.BasicSpinnerUI</pre>
 <li class="blockList">
 <h4>PROPERTY_DRAGGABLE</h4>
 <pre>public static final&nbsp;java.lang.String PROPERTY_DRAGGABLE</pre>
-<div class="block">This maps to a Boolean indicating whether the user should be able to drag this spinner around.</div>
+<div class="block">This maps to a Boolean indicating whether the user should be able to drag
+ this spinner around.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.plaf.NavigationPanelUI.PROPERTY_DRAGGABLE">Constant Field Values</a></dd>
@@ -506,10 +514,11 @@ extends javax.swing.plaf.basic.BasicSpinnerUI</pre>
 <h4>refreshLabel</h4>
 <pre>public&nbsp;void&nbsp;refreshLabel(javax.swing.JSpinner&nbsp;spinner,
                          javax.swing.JLabel&nbsp;label)</pre>
-<div class="block">Refresh a label to describe the contents of a spinner.
- The consults the <a href="../../../com/pump/plaf/NavigationPanelUI.html#PROPERTY_DESCRIPTOR"><code>PROPERTY_DESCRIPTOR</code></a> client property for the spinner,
- and if it is defined then it is used to format the label text. If that property
- is not defined, then the label is basically set to spinner.getValue().toString().</div>
+<div class="block">Refresh a label to describe the contents of a spinner. The consults the
+ <a href="../../../com/pump/plaf/NavigationPanelUI.html#PROPERTY_DESCRIPTOR"><code>PROPERTY_DESCRIPTOR</code></a> client property for the spinner, and if it
+ is defined then it is used to format the label text. If that property is
+ not defined, then the label is basically set to
+ spinner.getValue().toString().</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>spinner</code> - the spinner to consult.</dd>
@@ -607,7 +616,8 @@ extends javax.swing.plaf.basic.BasicSpinnerUI</pre>
 <pre>public static&nbsp;void&nbsp;setValue(javax.swing.JSpinner&nbsp;spinner,
                             int&nbsp;newValue,
                             int&nbsp;newMax)</pre>
-<div class="block">Suspend all listeners, then adjust the value max, then resume all listeners and fire them exactly once.</div>
+<div class="block">Suspend all listeners, then adjust the value max, then resume all
+ listeners and fire them exactly once.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>spinner</code> - </dd>

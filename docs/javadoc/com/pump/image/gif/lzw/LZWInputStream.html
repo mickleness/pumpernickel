@@ -127,12 +127,12 @@ extends java.io.InputStream</pre>
  <P>
  General info about LZW compression: <BR>
  LZW compression dates back to the 80's. It's surrounded by a lot of
- controversy because it was published and widely used for many years <i>before</i>
- Unisys decided to enforce their patent on it... but all such patents --
- including international ones -- are now expired. Meanwhile, I read once that
- ZIP compression is generally as good or better than LZW compression, so for
- my regular compression needs, I'm sticking with Java's built in
- ZipInputStream and ZipOutputStream classes.
+ controversy because it was published and widely used for many years
+ <i>before</i> Unisys decided to enforce their patent on it... but all such
+ patents -- including international ones -- are now expired. Meanwhile, I read
+ once that ZIP compression is generally as good or better than LZW
+ compression, so for my regular compression needs, I'm sticking with Java's
+ built in ZipInputStream and ZipOutputStream classes.
  <P>
  <P>
  The pseudo-code for basic LZW decompression reads as follows: <BR>
@@ -155,13 +155,15 @@ extends java.io.InputStream</pre>
  <P>
  <P>
  There are a couple of extra twists to GIF decompression:
- <ul><LI>There is a <code>clearCode</code>. Any time this is encountered, the
+ <ul>
+ <LI>There is a <code>clearCode</code>. Any time this is encountered, the
  table of keys will be emptied.</li>
  <LI>The first entry has to be the <code>clearCode</code>.</li>
- <LI>There are 2 ways to stop reading data. One is a special end-of-file
- code; when this is encountered, we stop reading. The other is to simply run
- out of incoming bytes.</li>
- <LI>Codes can only reach 12 bits at most.</LI></ul>
+ <LI>There are 2 ways to stop reading data. One is a special end-of-file code;
+ when this is encountered, we stop reading. The other is to simply run out of
+ incoming bytes.</li>
+ <LI>Codes can only reach 12 bits at most.</LI>
+ </ul>
  <P>
  <P>
  These LZW classes would not be possible without Jef Poskanzer's GIF classes.

@@ -111,14 +111,21 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">BufferedPipe</span>
 extends java.lang.Object</pre>
 <div class="block">This pipes data from an InputStream to a PrintStream.
- <p>The original intended usage for this class is:
- <p><pre>Process process = ...;
+ <p>
+ The original intended usage for this class is:
+ <p>
+ 
+ <pre>
+ Process process = ...;
  new BufferedPipe(process.getInputStream(), System.out);
- new BufferedPipe(process.getErrorStream(), System.err);</pre>
- <p>On construction this immediately creates a new thread that
- buffers the InputStream until no more data is available.
- <p>(I'm surprised/confused the PipedInputStream and PipedOutputStream
- are so narrowly defined that they don't already support this functionality?)</div>
+ new BufferedPipe(process.getErrorStream(), System.err);
+ </pre>
+ <p>
+ On construction this immediately creates a new thread that buffers the
+ InputStream until no more data is available.
+ <p>
+ (I'm surprised/confused the PipedInputStream and PipedOutputStream are so
+ narrowly defined that they don't already support this functionality?)</div>
 </li>
 </ul>
 </div>
@@ -224,10 +231,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>process</h4>
 <pre>protected&nbsp;void&nbsp;process(java.lang.String&nbsp;s)</pre>
-<div class="block">Process a buffered line of text as it is becomes available.
- Subclasses can override this to provide additional functionality.
- The default implementation here simply relays this text to
- the PrintStream provided on construction.</div>
+<div class="block">Process a buffered line of text as it is becomes available. Subclasses
+ can override this to provide additional functionality. The default
+ implementation here simply relays this text to the PrintStream provided
+ on construction.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - the new line of text to process.</dd>

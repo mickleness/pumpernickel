@@ -110,11 +110,13 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ColorLUT</span>
 extends java.lang.Object</pre>
-<div class="block">This is a tool to help reduce the time it takes to map an arbitrary color
- to its closest match(es) in limited color set.
- <p>Internally: this breaks up the 3D color cube into hundreds of smaller subcubes.
- So instead of searching through all possible colors every time we require a match:
- we hone in on the exact subcube and iterate outward a cycle or two.</div>
+<div class="block">This is a tool to help reduce the time it takes to map an arbitrary color to
+ its closest match(es) in limited color set.
+ <p>
+ Internally: this breaks up the 3D color cube into hundreds of smaller
+ subcubes. So instead of searching through all possible colors every time we
+ require a match: we hone in on the exact subcube and iterate outward a cycle
+ or two.</div>
 </li>
 </ul>
 </div>
@@ -185,8 +187,9 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>java.awt.image.IndexColorModel</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/pump/image/pixel/quantize/ColorLUT.html#getIndexColorModel--">getIndexColorModel</a></span>()</code>
-<div class="block">Returns the IndexColorModel used to create this <code>ColorLUT</code>,
- or <code>null</code> if this was not created with an <code>IndexColorModel</code>.</div>
+<div class="block">Returns the IndexColorModel used to create this <code>ColorLUT</code>, or
+ <code>null</code> if this was not created with an
+ <code>IndexColorModel</code>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -266,8 +269,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getIndexColorModel</h4>
 <pre>public&nbsp;java.awt.image.IndexColorModel&nbsp;getIndexColorModel()</pre>
-<div class="block">Returns the IndexColorModel used to create this <code>ColorLUT</code>,
- or <code>null</code> if this was not created with an <code>IndexColorModel</code>.</div>
+<div class="block">Returns the IndexColorModel used to create this <code>ColorLUT</code>, or
+ <code>null</code> if this was not created with an
+ <code>IndexColorModel</code>.</div>
 </li>
 </ul>
 <a name="getIndexMatch-int-int-int-">

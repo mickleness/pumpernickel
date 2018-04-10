@@ -119,13 +119,13 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">ParametricPathIterator</span>
 extends java.lang.Object
 implements java.awt.geom.PathIterator</pre>
-<div class="block">This iterates over a path defined by a parametric equation.
- To subclass it you need to be able to evaluate x(t), y(t),
- dx(t) and dy(t).
- <P>Also subclasses are responsible for knowing how much to
- increment t by for each path segment.
- <P>This object will translate the parametric function into
- cubic bezier curves.</div>
+<div class="block">This iterates over a path defined by a parametric equation. To subclass it
+ you need to be able to evaluate x(t), y(t), dx(t) and dy(t).
+ <P>
+ Also subclasses are responsible for knowing how much to increment t by for
+ each path segment.
+ <P>
+ This object will translate the parametric function into cubic bezier curves.</div>
 </li>
 </ul>
 </div>
@@ -283,8 +283,8 @@ implements java.awt.geom.PathIterator</pre>
 <div class="block">Create a new <code>ParametricPathIterator</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>windingRule</code> - the winding rule.  This must be <code>WIND_EVEN_ODD</code> 
- or <code>WIND_NON_ZERO</code></dd>
+<dd><code>windingRule</code> - the winding rule. This must be <code>WIND_EVEN_ODD</code> or
+            <code>WIND_NON_ZERO</code></dd>
 <dd><code>transform</code> - an optional transform to pass these segments through.</dd>
 </dl>
 </li>
@@ -392,8 +392,8 @@ implements java.awt.geom.PathIterator</pre>
 <li class="blockList">
 <h4>next</h4>
 <pre>public final&nbsp;void&nbsp;next()</pre>
-<div class="block">Iterates to the next segment.  This will consult
- <code>getNextT()</code> and <code>getMaxT()</code></div>
+<div class="block">Iterates to the next segment. This will consult <code>getNextT()</code>
+ and <code>getMaxT()</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>next</code>&nbsp;in interface&nbsp;<code>java.awt.geom.PathIterator</code></dd>
@@ -410,8 +410,8 @@ implements java.awt.geom.PathIterator</pre>
 <div class="block">The highest value for t.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the max value for t.  Once this value is used
- this PathIterator is finished.</dd>
+<dd>the max value for t. Once this value is used this PathIterator is
+         finished.</dd>
 </dl>
 </li>
 </ul>
@@ -422,10 +422,9 @@ implements java.awt.geom.PathIterator</pre>
 <li class="blockList">
 <h4>getNextT</h4>
 <pre>protected abstract&nbsp;double&nbsp;getNextT(double&nbsp;t)</pre>
-<div class="block">The t-value that we should use next.
- If this is greater than <code>getMaxT()</code>, then
- the maximum is used in the next segment and this
- PathIterator is finished.</div>
+<div class="block">The t-value that we should use next. If this is greater than
+ <code>getMaxT()</code>, then the maximum is used in the next segment and
+ this PathIterator is finished.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>t</code> - the current t-value</dd>

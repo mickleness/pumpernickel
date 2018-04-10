@@ -114,11 +114,10 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">BlockLetter</span>
 extends java.lang.Object</pre>
-<div class="block">This is a basic 3D representation of a letter.
- It has a fixed depth, so the dimensions of this effect
- can be calculated as:
- <br>double dx = getDepth()*Math.cos(angle);
- <br>double dy = getDepth()*Math.sin(angle);</div>
+<div class="block">This is a basic 3D representation of a letter. It has a fixed depth, so the
+ dimensions of this effect can be calculated as: <br>
+ double dx = getDepth()*Math.cos(angle); <br>
+ double dy = getDepth()*Math.sin(angle);</div>
 </li>
 </ul>
 </div>
@@ -146,8 +145,8 @@ extends java.lang.Object</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/awt/text/BlockLetter.Simple.html" title="class in com.pump.awt.text">BlockLetter.Simple</a></span></code>
-<div class="block">This BlockLetter has no gradients; the depth of the
- letter is one uniform (unnuanced) Paint:</div>
+<div class="block">This BlockLetter has no gradients; the depth of the letter is one uniform
+ (unnuanced) Paint:</div>
 </td>
 </tr>
 </table>
@@ -283,7 +282,8 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/awt/text/BlockLetter.html#prep-java.awt.Graphics2D-float-float-">prep</a></span>(java.awt.Graphics2D&nbsp;g,
     float&nbsp;x,
     float&nbsp;y)</code>
-<div class="block">Prepares this Graphics2D to paint this BlockLetter at the given (x,y) coordinate.</div>
+<div class="block">Prepares this Graphics2D to paint this BlockLetter at the given (x,y)
+ coordinate.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -444,13 +444,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getDepth</h4>
 <pre>public&nbsp;float&nbsp;getDepth()</pre>
-<div class="block">Return the total depth of this BlockLetter. This is
- the hypotenuse of displacement; to identify the x and y
- displacement use:
- <br>double dx = getDepth()*Math.cos(angle);
- <br>double dy = getDepth()*Math.sin(angle);
- <p>If this is zero, then this BlockLetter should simply render
- as the original character glyph.</div>
+<div class="block">Return the total depth of this BlockLetter. This is the hypotenuse of
+ displacement; to identify the x and y displacement use: <br>
+ double dx = getDepth()*Math.cos(angle); <br>
+ double dy = getDepth()*Math.sin(angle);
+ <p>
+ If this is zero, then this BlockLetter should simply render as the
+ original character glyph.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the total depth of this BlockLetter.</dd>
@@ -586,8 +586,9 @@ extends java.lang.Object</pre>
                             float&nbsp;x,
                             float&nbsp;y)</pre>
 <div class="block">Paint the foreground of this BlockLetter.
- <P>If the method <code>paintDepth()</code> isn't invoked, then
- this method will still present normal-looking (non-3D) text.</div>
+ <P>
+ If the method <code>paintDepth()</code> isn't invoked, then this method
+ will still present normal-looking (non-3D) text.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graphics to draw to</dd>
@@ -605,14 +606,16 @@ extends java.lang.Object</pre>
 <pre>protected&nbsp;java.awt.Graphics2D&nbsp;prep(java.awt.Graphics2D&nbsp;g,
                                    float&nbsp;x,
                                    float&nbsp;y)</pre>
-<div class="block">Prepares this Graphics2D to paint this BlockLetter at the given (x,y) coordinate.</div>
+<div class="block">Prepares this Graphics2D to paint this BlockLetter at the given (x,y)
+ coordinate.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the Graphics2D to paint to</dd>
 <dd><code>x</code> - the x-coordinate to paint to</dd>
 <dd><code>y</code> - the y-coordinate to paint to</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a cloned Graphics2D to paint to. When complete you should dispose this Graphics2D.</dd>
+<dd>a cloned Graphics2D to paint to. When complete you should dispose
+         this Graphics2D.</dd>
 </dl>
 </li>
 </ul>

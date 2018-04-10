@@ -117,17 +117,19 @@ extends java.lang.Object</pre>
  Java's printing conventions.
  <P>
  The following are elements in this layout information:
- <ul><LI>Header/Footer: this is html-formatted text that may appear at the
+ <ul>
+ <LI>Header/Footer: this is html-formatted text that may appear at the
  top/bottom of each page.</li>
  <LI>Insets: these are margins for this page.</li>
- <LI>Inner Padding: this is the space that will appear between all
- components. This includes the space between cells, and the space between
- cells and headers/footers.</li>
+ <LI>Inner Padding: this is the space that will appear between all components.
+ This includes the space between cells, and the space between cells and
+ headers/footers.</li>
  <LI>Flip Pattern: an array of flip instructions that will be followed
  alternatingly. For example, an array of {NONE, NONE, BOTH, BOTH} will flip
  the last 2 tiles, so if you folder the paper correctly you can make 4 tiles
  into a greeting card. I know, it's complicated... and if you don't ever want
- to flip tiles: you never need to use it.</LI></ul></div>
+ to flip tiles: you never need to use it.</LI>
+ </ul></div>
 </li>
 </ul>
 </div>
@@ -177,8 +179,8 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/print/PrintLayout.html#PROPERTY_FLIP_PATTERN">PROPERTY_FLIP_PATTERN</a></span></code>
-<div class="block">This is used to notify <code>PropertyChangeListeners</code> when the
- flip pattern changes.</div>
+<div class="block">This is used to notify <code>PropertyChangeListeners</code> when the flip
+ pattern changes.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -320,8 +322,8 @@ extends java.lang.Object</pre>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.awt.print.PageFormat</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/print/PrintLayout.html#createPageFormat--">createPageFormat</a></span>()</code>
-<div class="block">Returns a newly create <code>PageFormat</code> that includes most of
- the information in this object.</div>
+<div class="block">Returns a newly create <code>PageFormat</code> that includes most of the
+ information in this object.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -656,8 +658,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>PROPERTY_FLIP_PATTERN</h4>
 <pre>public static final&nbsp;java.lang.String PROPERTY_FLIP_PATTERN</pre>
-<div class="block">This is used to notify <code>PropertyChangeListeners</code> when the
- flip pattern changes.</div>
+<div class="block">This is used to notify <code>PropertyChangeListeners</code> when the flip
+ pattern changes.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.print.PrintLayout.PROPERTY_FLIP_PATTERN">Constant Field Values</a></dd>
@@ -880,8 +882,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>toString</h4>
 <pre>public static&nbsp;java.lang.String&nbsp;toString(java.awt.print.PageFormat&nbsp;f)</pre>
-<div class="block">This describes a <code>PageFormat</code> as a String. This is provided
- as a debugging tool, because <code>PageFormat.toString()</code> doesn't
+<div class="block">This describes a <code>PageFormat</code> as a String. This is provided as
+ a debugging tool, because <code>PageFormat.toString()</code> doesn't
  support this itself.</div>
 </li>
 </ul>
@@ -1003,8 +1005,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>createPageFormat</h4>
 <pre>public&nbsp;java.awt.print.PageFormat&nbsp;createPageFormat()</pre>
-<div class="block">Returns a newly create <code>PageFormat</code> that includes most of
- the information in this object.</div>
+<div class="block">Returns a newly create <code>PageFormat</code> that includes most of the
+ information in this object.</div>
 </li>
 </ul>
 <a name="getOrientation--">
@@ -1250,8 +1252,8 @@ extends java.lang.Object</pre>
             In most cases this should be zero, but for some previews it
             can be a preset value.
             <P>
-            This value is used to replace the text "&lt;PageNumber/" in the
-            header/footer text.</dd>
+            This value is used to replace the text "&lt;PageNumber/" in
+            the header/footer text.</dd>
 <dd><code>pgCount</code> - the total number of pages.
             <P>
             This value is used to replace the text "&lt;PageCount/" in the
@@ -1279,8 +1281,8 @@ extends java.lang.Object</pre>
             In most cases this can be zero, but for some previews it can
             be a preset value.
             <P>
-            This value is used to replace the text "&lt;PageNumber/" in the
-            header/footer text.</dd>
+            This value is used to replace the text "&lt;PageNumber/" in
+            the header/footer text.</dd>
 <dd><code>pgCount</code> - the total number of pages.
             <P>
             This value is used to replace the text "&lt;PageCount/" in the

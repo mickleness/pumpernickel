@@ -140,7 +140,8 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static java.util.Collection&lt;java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/Abbreviation.html#SMALL_WORDS">SMALL_WORDS</a></span></code>
-<div class="block">A collection of small (filler) words you can strip away from titles/sentences without losing much meaning/context.</div>
+<div class="block">A collection of small (filler) words you can strip away from
+ titles/sentences without losing much meaning/context.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -186,8 +187,9 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static java.util.List&lt;java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/Abbreviation.html#getMeaningfulWords-java.lang.CharSequence-">getMeaningfulWords</a></span>(java.lang.CharSequence&nbsp;str)</code>
-<div class="block">This collapses white space, identifies alphanumeric chars, and removes 
- small words like "a", "of" or "the" (words you wouldn't capitalize in a book title).</div>
+<div class="block">This collapses white space, identifies alphanumeric chars, and removes
+ small words like "a", "of" or "the" (words you wouldn't capitalize in a
+ book title).</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -196,8 +198,8 @@ extends java.lang.Object</pre>
               java.lang.String&nbsp;strA,
               java.lang.String&nbsp;strB,
               int&nbsp;requiredSharedChars)</code>
-<div class="block">Return true if it is reasonable to assume strA and strB are equivalent because
- of the use of abbreviations.</div>
+<div class="block">Return true if it is reasonable to assume strA and strB are equivalent
+ because of the use of abbreviations.</div>
 </td>
 </tr>
 </table>
@@ -229,7 +231,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>SMALL_WORDS</h4>
 <pre>public static final&nbsp;java.util.Collection&lt;java.lang.String&gt; SMALL_WORDS</pre>
-<div class="block">A collection of small (filler) words you can strip away from titles/sentences without losing much meaning/context.</div>
+<div class="block">A collection of small (filler) words you can strip away from
+ titles/sentences without losing much meaning/context.</div>
 </li>
 </ul>
 <a name="REPLACEMENT_WORDS">
@@ -303,23 +306,28 @@ extends java.lang.Object</pre>
                                      java.lang.String&nbsp;strA,
                                      java.lang.String&nbsp;strB,
                                      int&nbsp;requiredSharedChars)</pre>
-<div class="block">Return true if it is reasonable to assume strA and strB are equivalent because
- of the use of abbreviations. This assumes the Strings are expressed in English.
+<div class="block">Return true if it is reasonable to assume strA and strB are equivalent
+ because of the use of abbreviations. This assumes the Strings are
+ expressed in English.
  <p>
- For example if this compares "agri department" with "agriculture dept" it will return true.
- Note neither String is strictly an abbreviation of the other, but if you split them into
- individual words: it can be said that each word is an abbreviation of the other.
+ For example if this compares "agri department" with "agriculture dept" it
+ will return true. Note neither String is strictly an abbreviation of the
+ other, but if you split them into individual words: it can be said that
+ each word is an abbreviation of the other.
  <p>
- This strips out small helper words (like "a", "the", "of") in this comparison, and looks for
- common prefixes and suffixes (while "important" is a subset of "unimportant", the former
- shouldn't be considered an abbreviation of the latter).
+ This strips out small helper words (like "a", "the", "of") in this
+ comparison, and looks for common prefixes and suffixes (while "important"
+ is a subset of "unimportant", the former shouldn't be considered an
+ abbreviation of the latter).
  <p>
- This method is case insensitive, may also strip out some punctuation characters.</div>
+ This method is case insensitive, may also strip out some punctuation
+ characters.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>diff</code> - an optional TextDiff. Each TextDiff object caches results, so if you
- have frequent (and finite) Strings to compare, you may want to reuse the same
- TextDiff object. Otherwise one is created and destroyed.</dd>
+<dd><code>diff</code> - an optional TextDiff. Each TextDiff object caches results, so
+            if you have frequent (and finite) Strings to compare, you may
+            want to reuse the same TextDiff object. Otherwise one is
+            created and destroyed.</dd>
 <dd><code>strA</code> - the first string to compare.</dd>
 <dd><code>strB</code> - the second string to compare.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -333,8 +341,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getMeaningfulWords</h4>
 <pre>public static&nbsp;java.util.List&lt;java.lang.String&gt;&nbsp;getMeaningfulWords(java.lang.CharSequence&nbsp;str)</pre>
-<div class="block">This collapses white space, identifies alphanumeric chars, and removes 
- small words like "a", "of" or "the" (words you wouldn't capitalize in a book title).</div>
+<div class="block">This collapses white space, identifies alphanumeric chars, and removes
+ small words like "a", "of" or "the" (words you wouldn't capitalize in a
+ book title).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>str</code> - the characters to extract words from.</dd>

@@ -125,70 +125,88 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">ObservableList&lt;T&gt;</span>
 extends java.util.AbstractList&lt;T&gt;
 implements java.util.RandomAccess</pre>
-<div class="block">This wraps an existing <code>java.util.List</code> in an
- observable structure.
- <p>This is primarily intended for UI development, so the
- existing <code>java.awt.event.ListDataListener</code> interface
- is used to notify observers about changes to this list.
- (Debatably a better observer interface could be developed,
- but at least for the time being this doesn't seem necessary.)
- <p>This object distinguishes between two types of listeners:
- <ul><li>A synchronized listener (see <a href="../../../com/pump/util/ObservableList.html#addSynchronizedListener-javax.swing.event.ListDataListener-boolean-"><code>addSynchronizedListener(ListDataListener, boolean)</code></a>)
- will be notified in a way that guarantees the list has not
- been modified since the <code>ListDataEvent</code> occurred.
- That is: neither this listener nor any preceding synchronized listeners
- can modify this list.</li>
- <li>An unsynchronized listener (see <a href="../../../com/pump/util/ObservableList.html#addUnsynchronizedListener-javax.swing.event.ListDataListener-boolean-boolean-"><code>addUnsynchronizedListener(ListDataListener, boolean, boolean)</code></a>)
- has the option to modify this list. And because any other
- preceding unsynchronized listener may have already modified
- this listener: it is not safe for an unsynchronized listener
- to assume the incoming <code>ListDataEvent</code> still contains
- valid indices.</li></ul>
- <p>The level of detail used to calculate <code>ListDataEvents</code>
- will vary, depending on whether any attached listener asked for
- a high level of detail. Often in UIs a developer effectively needs
- a <code>ChangeListener</code> to indicate something (anything!)
- changed: if that is all you're interested in, then you can save
- some computational effort by not receiving highly detailed events.
- Many operations (such as <a href="../../../com/pump/util/ObservableList.html#set-int-T-"><code>set(int, Object)</code></a> or <a href="../../../com/pump/util/ObservableList.html#remove-int-"><code>remove(int)</code></a>)
- always return precise events because they are trivial to compute,
- but set operations like <a href="../../../com/pump/util/ObservableList.html#retainAll-java.util.Collection-"><code>retainAll(Collection)</code></a> or <a href="../../../com/pump/util/ObservableList.html#setAll-java.util.List-"><code>setAll(List)</code></a>
- can be expensive for large lists: in these methods the level of detail
- you asked for is taken into consideration.
+<div class="block">This wraps an existing <code>java.util.List</code> in an observable
+ structure.
+ <p>
+ This is primarily intended for UI development, so the existing
+ <code>java.awt.event.ListDataListener</code> interface is used to notify
+ observers about changes to this list. (Debatably a better observer interface
+ could be developed, but at least for the time being this doesn't seem
+ necessary.)
+ <p>
+ This object distinguishes between two types of listeners:
+ <ul>
+ <li>A synchronized listener (see
+ <a href="../../../com/pump/util/ObservableList.html#addSynchronizedListener-javax.swing.event.ListDataListener-boolean-"><code>addSynchronizedListener(ListDataListener, boolean)</code></a>) will be notified
+ in a way that guarantees the list has not been modified since the
+ <code>ListDataEvent</code> occurred. That is: neither this listener nor any
+ preceding synchronized listeners can modify this list.</li>
+ <li>An unsynchronized listener (see
+ <a href="../../../com/pump/util/ObservableList.html#addUnsynchronizedListener-javax.swing.event.ListDataListener-boolean-boolean-"><code>addUnsynchronizedListener(ListDataListener, boolean, boolean)</code></a>) has
+ the option to modify this list. And because any other preceding
+ unsynchronized listener may have already modified this listener: it is not
+ safe for an unsynchronized listener to assume the incoming
+ <code>ListDataEvent</code> still contains valid indices.</li>
+ </ul>
+ <p>
+ The level of detail used to calculate <code>ListDataEvents</code> will vary,
+ depending on whether any attached listener asked for a high level of detail.
+ Often in UIs a developer effectively needs a <code>ChangeListener</code> to
+ indicate something (anything!) changed: if that is all you're interested in,
+ then you can save some computational effort by not receiving highly detailed
+ events. Many operations (such as <a href="../../../com/pump/util/ObservableList.html#set-int-T-"><code>set(int, Object)</code></a> or
+ <a href="../../../com/pump/util/ObservableList.html#remove-int-"><code>remove(int)</code></a>) always return precise events because they are trivial
+ to compute, but set operations like <a href="../../../com/pump/util/ObservableList.html#retainAll-java.util.Collection-"><code>retainAll(Collection)</code></a> or
+ <a href="../../../com/pump/util/ObservableList.html#setAll-java.util.List-"><code>setAll(List)</code></a> can be expensive for large lists: in these methods the
+ level of detail you asked for is taken into consideration.
  <h3>Threading and Synchronization</h3>
- <p>This list is designed to support access from multiple threads.
- Any read-like operation (<a href="../../../com/pump/util/ObservableList.html#get-int-"><code>get(int)</code></a>, <a href="../../../com/pump/util/ObservableList.html#indexOf-java.lang.Object-"><code>indexOf(Object)</code></a>, or even
- <a href="../../../com/pump/util/ObservableList.html#containsAll-java.util.Collection-"><code>containsAll(Collection)</code></a>) can run simultaneously with other
- read operations. However write-like operations (<a href="../../../com/pump/util/ObservableList.html#set-int-T-"><code>set(int, Object)</code></a>, <a href="../../../com/pump/util/ObservableList.html#clear--"><code>clear()</code></a>,
- <a href="../../../com/pump/util/ObservableList.html#setAll-java.util.List-"><code>setAll(List)</code></a>) are mutually exclusive. Even read
+ <p>
+ This list is designed to support access from multiple threads. Any read-like
+ operation (<a href="../../../com/pump/util/ObservableList.html#get-int-"><code>get(int)</code></a>, <a href="../../../com/pump/util/ObservableList.html#indexOf-java.lang.Object-"><code>indexOf(Object)</code></a>, or even
+ <a href="../../../com/pump/util/ObservableList.html#containsAll-java.util.Collection-"><code>containsAll(Collection)</code></a>) can run simultaneously with other read
+ operations. However write-like operations (<a href="../../../com/pump/util/ObservableList.html#set-int-T-"><code>set(int, Object)</code></a>,
+ <a href="../../../com/pump/util/ObservableList.html#clear--"><code>clear()</code></a>, <a href="../../../com/pump/util/ObservableList.html#setAll-java.util.List-"><code>setAll(List)</code></a>) are mutually exclusive. Even read
  operations are not allowed during <i>part</i> of a write operation. (However
- once the operation itself is completed -- but before all listeners
- have completed -- read operations are allowed.)
- <p>Because this list uses its own model of synchronization, it is not necessary
+ once the operation itself is completed -- but before all listeners have
+ completed -- read operations are allowed.)
+ <p>
+ Because this list uses its own model of synchronization, it is not necessary
  for the underlying delegate list to be synchronized.
- <p>Note however that if you bypass this <code>ObservableList</code>, then you
+ <p>
+ Note however that if you bypass this <code>ObservableList</code>, then you
  have unsynchronized and unobserved changes:
- <p><blockquote><pre>ArrayList myList = new ArrayList();
-ObservableList myObservableList = new ObservableList(myList);
-myList.addAll(...);</pre></blockquote>
+ <p>
+ <blockquote>
+ 
+ <pre>
+ ArrayList myList = new ArrayList();
+ ObservableList myObservableList = new ObservableList(myList);
+ myList.addAll(...);
+ </pre>
+ 
+ </blockquote>
  <H3><code>ListModels</code></h3>
- <p>Also for further convenience this object has two methods related
- to <code>ListModels</code>:
- <ul><li><a href="../../../com/pump/util/ObservableList.html#getListModelEDTMirror--"><code>getListModelEDTMirror()</code></a>: this creates a separate list mirroring
- this list that is only ever updated in the event dispatch thread. Pro's: thread-safe.
- Con's: potentially expensive redundancy, and there will be (brief) times when
- the EDT still refers to elements you already removed.</li>
- <li><a href="../../../com/pump/util/ObservableList.html#getListModelView-boolean-"><code>getListModelView(boolean)</code></a>: this provides a real-time view
- of this list as a <code>ListModel</code>. Pro's: very light weight. Con's: if used
- in a <code>JList</code>, then this <code>ObservableList</code> should only ever
- be updated in the EDT.</li></ul>
+ <p>
+ Also for further convenience this object has two methods related to
+ <code>ListModels</code>:
+ <ul>
+ <li><a href="../../../com/pump/util/ObservableList.html#getListModelEDTMirror--"><code>getListModelEDTMirror()</code></a>: this creates a separate list mirroring
+ this list that is only ever updated in the event dispatch thread. Pro's:
+ thread-safe. Con's: potentially expensive redundancy, and there will be
+ (brief) times when the EDT still refers to elements you already removed.</li>
+ <li><a href="../../../com/pump/util/ObservableList.html#getListModelView-boolean-"><code>getListModelView(boolean)</code></a>: this provides a real-time view of
+ this list as a <code>ListModel</code>. Pro's: very light weight. Con's: if
+ used in a <code>JList</code>, then this <code>ObservableList</code> should
+ only ever be updated in the EDT.</li>
+ </ul>
  <h3>Implementation Details</h3>
- <p>This class implements the <code>RandomAccess</code> interfaces, because most
+ <p>
+ This class implements the <code>RandomAccess</code> interfaces, because most
  of the time this list is expected to delegate to list that implements
  <code>RandomAccess</code>, like the <code>java.util.ArrayList</code>. (The
- <code>ArrayList</code> is the default list model inside this list.) In the future
- if this becomes a questionable assumption we might introduce factory methods
- to create the appropriate <code>ObservableList</code> subclass.</div>
+ <code>ArrayList</code> is the default list model inside this list.) In the
+ future if this becomes a questionable assumption we might introduce factory
+ methods to create the appropriate <code>ObservableList</code> subclass.</div>
 </li>
 </ul>
 </div>
@@ -222,8 +240,8 @@ myList.addAll(...);</pre></blockquote>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableList.RecursiveListenerModificationException.html" title="class in com.pump.util">ObservableList.RecursiveListenerModificationException</a></span></code>
-<div class="block">This is thrown when notifying a <code>ListDataListener</code> resulted
- in further modifying this list when it shouldn't have.</div>
+<div class="block">This is thrown when notifying a <code>ListDataListener</code> resulted in
+ further modifying this list when it shouldn't have.</div>
 </td>
 </tr>
 </table>
@@ -296,7 +314,8 @@ myList.addAll(...);</pre></blockquote>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableList.html#ObservableList--">ObservableList</a></span>()</code>
-<div class="block">Create a ObservableList using an <code>ArrayList</code> as its implementation.</div>
+<div class="block">Create a ObservableList using an <code>ArrayList</code> as its
+ implementation.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -306,8 +325,8 @@ myList.addAll(...);</pre></blockquote>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableList.html#ObservableList-T...-">ObservableList</a></span>(<a href="../../../com/pump/util/ObservableList.html" title="type parameter in ObservableList">T</a>...&nbsp;elements)</code>
-<div class="block">Create a ObservableList using an <code>ArrayList</code> as its implementation
- with the elements provided.</div>
+<div class="block">Create a ObservableList using an <code>ArrayList</code> as its
+ implementation with the elements provided.</div>
 </td>
 </tr>
 </table>
@@ -355,23 +374,23 @@ myList.addAll(...);</pre></blockquote>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableList.html#addSynchronizedChangeListener-javax.swing.event.ChangeListener-">addSynchronizedChangeListener</a></span>(javax.swing.event.ChangeListener&nbsp;changeListener)</code>
-<div class="block">Adds a <code>ChangeListener</code> that will be notified of changes
- to this list in a synchronized lock.</div>
+<div class="block">Adds a <code>ChangeListener</code> that will be notified of changes to
+ this list in a synchronized lock.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableList.html#addSynchronizedListener-javax.swing.event.ListDataListener-boolean-">addSynchronizedListener</a></span>(javax.swing.event.ListDataListener&nbsp;listener,
                        boolean&nbsp;detailedEvents)</code>
-<div class="block">Adds a <code>ListDataListener</code> that will be notified of changes
- to this list in a synchronized lock.</div>
+<div class="block">Adds a <code>ListDataListener</code> that will be notified of changes to
+ this list in a synchronized lock.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableList.html#addUnsynchronizedChangeListener-javax.swing.event.ChangeListener-boolean-">addUnsynchronizedChangeListener</a></span>(javax.swing.event.ChangeListener&nbsp;changeListener,
                                boolean&nbsp;allowsModification)</code>
-<div class="block">Add an unsynchronized <code>ChangeListener</code> that will be notified 
+<div class="block">Add an unsynchronized <code>ChangeListener</code> that will be notified
  of changes to this list in an unprotected thread.</div>
 </td>
 </tr>
@@ -380,7 +399,7 @@ myList.addAll(...);</pre></blockquote>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableList.html#addUnsynchronizedListener-javax.swing.event.ListDataListener-boolean-boolean-">addUnsynchronizedListener</a></span>(javax.swing.event.ListDataListener&nbsp;listener,
                          boolean&nbsp;detailedEvents,
                          boolean&nbsp;allowsModification)</code>
-<div class="block">Add an unsynchronized <code>ListDataListener</code> that will be notified 
+<div class="block">Add an unsynchronized <code>ListDataListener</code> that will be notified
  of changes to this list in an unprotected thread.</div>
 </td>
 </tr>
@@ -391,8 +410,8 @@ myList.addAll(...);</pre></blockquote>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>java.lang.Object</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableList.html#clone--">clone</a></span>()</code>
-<div class="block">Creates a <code>ObservableList</code> with the same list structure,
- but with no listeners.</div>
+<div class="block">Creates a <code>ObservableList</code> with the same list structure, but
+ with no listeners.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -414,8 +433,8 @@ myList.addAll(...);</pre></blockquote>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>protected &lt;R&gt;&nbsp;R</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableList.html#execute-com.pump.util.ObservableList.Operation-">execute</a></span>(com.pump.util.ObservableList.Operation&lt;R&gt;&nbsp;operation)</code>
-<div class="block">This method executes all Operations, keeping
- thread safety and listeners in mind.</div>
+<div class="block">This method executes all Operations, keeping thread safety and listeners
+ in mind.</div>
 </td>
 </tr>
 <tr id="i17" class="rowColor">
@@ -445,8 +464,7 @@ myList.addAll(...);</pre></blockquote>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>javax.swing.ListModel</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableList.html#getListModelView-boolean-">getListModelView</a></span>(boolean&nbsp;updateListenersSynchronously)</code>
-<div class="block">This returns a non-mutable <code>ListModel</code> view
- of this list.</div>
+<div class="block">This returns a non-mutable <code>ListModel</code> view of this list.</div>
 </td>
 </tr>
 <tr id="i22" class="altColor">
@@ -691,7 +709,8 @@ myList.addAll(...);</pre></blockquote>
 <li class="blockList">
 <h4>ObservableList</h4>
 <pre>public&nbsp;ObservableList()</pre>
-<div class="block">Create a ObservableList using an <code>ArrayList</code> as its implementation.</div>
+<div class="block">Create a ObservableList using an <code>ArrayList</code> as its
+ implementation.</div>
 </li>
 </ul>
 <a name="ObservableList-java.lang.Object:A-">
@@ -703,8 +722,8 @@ myList.addAll(...);</pre></blockquote>
 <li class="blockList">
 <h4>ObservableList</h4>
 <pre>public&nbsp;ObservableList(<a href="../../../com/pump/util/ObservableList.html" title="type parameter in ObservableList">T</a>...&nbsp;elements)</pre>
-<div class="block">Create a ObservableList using an <code>ArrayList</code> as its implementation
- with the elements provided.</div>
+<div class="block">Create a ObservableList using an <code>ArrayList</code> as its
+ implementation with the elements provided.</div>
 </li>
 </ul>
 <a name="ObservableList-java.util.List-">
@@ -733,42 +752,54 @@ myList.addAll(...);</pre></blockquote>
 <h4>addSynchronizedListener</h4>
 <pre>public&nbsp;void&nbsp;addSynchronizedListener(javax.swing.event.ListDataListener&nbsp;listener,
                                     boolean&nbsp;detailedEvents)</pre>
-<div class="block">Adds a <code>ListDataListener</code> that will be notified of changes
- to this list in a synchronized lock. This lock guarantees that no other
+<div class="block">Adds a <code>ListDataListener</code> that will be notified of changes to
+ this list in a synchronized lock. This lock guarantees that no other
  thread will alter the contents of this list until this listener returns
  control of the thread.
- <p>For example: if this list received an addition
- then the listener's <code>intervalAdded()</code> method will be notified.
- Other threads may simultaneously poll this list (by calling <a href="../../../com/pump/util/ObservableList.html#get-int-"><code>get(int)</code></a>
- or <a href="../../../com/pump/util/ObservableList.html#size--"><code>size()</code></a> or even <a href="../../../com/pump/util/ObservableList.html#containsAll-java.util.Collection-"><code>containsAll(Collection)</code></a>), but no other thread
- can modify the contents of this list (for example by calling <a href="../../../com/pump/util/ObservableList.html#remove-int-"><code>remove(int)</code></a>
- or <a href="../../../com/pump/util/ObservableList.html#clear--"><code>clear()</code></a>) until this listener is finished processing the event.
- <p>Because of this lock: it is important that synchronized listeners
- be relatively lightweight. If this listener can trigger a cascade of other
+ <p>
+ For example: if this list received an addition then the listener's
+ <code>intervalAdded()</code> method will be notified. Other threads may
+ simultaneously poll this list (by calling <a href="../../../com/pump/util/ObservableList.html#get-int-"><code>get(int)</code></a> or
+ <a href="../../../com/pump/util/ObservableList.html#size--"><code>size()</code></a> or even <a href="../../../com/pump/util/ObservableList.html#containsAll-java.util.Collection-"><code>containsAll(Collection)</code></a>), but no other
+ thread can modify the contents of this list (for example by calling
+ <a href="../../../com/pump/util/ObservableList.html#remove-int-"><code>remove(int)</code></a> or <a href="../../../com/pump/util/ObservableList.html#clear--"><code>clear()</code></a>) until this listener is finished
+ processing the event.
+ <p>
+ Because of this lock: it is important that synchronized listeners be
+ relatively lightweight. If this listener can trigger a cascade of other
  listeners and complex operations: it should either:
- <ul><li>Invoke those complicated operations later (in a separate thread, or by 
- calling <code>SwingUtilities.invokeLater(Runnable)</code>), or</li>
- <li>This listener should be an unsynchronized listener.</li></ul>
- <p>Because there might be other <code>ListDataListeners</code> waiting
- to be notified when this listener returns, and because those listeners
- are also guaranteed that the list will exactly reflect the <code>ListDataEvent</code>
- they are receiving: this listener is not allowed
- to further modify this list. If this listener tries to modify this
- list (directly or indirectly) a <code>RecursiveListenerModificationException</code> will be thrown.</div>
+ <ul>
+ <li>Invoke those complicated operations later (in a separate thread, or
+ by calling <code>SwingUtilities.invokeLater(Runnable)</code>), or</li>
+ <li>This listener should be an unsynchronized listener.</li>
+ </ul>
+ <p>
+ Because there might be other <code>ListDataListeners</code> waiting to be
+ notified when this listener returns, and because those listeners are also
+ guaranteed that the list will exactly reflect the
+ <code>ListDataEvent</code> they are receiving: this listener is not
+ allowed to further modify this list. If this listener tries to modify
+ this list (directly or indirectly) a
+ <code>RecursiveListenerModificationException</code> will be thrown.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>listener</code> - the listener to add to this list.</dd>
-<dd><code>detailedEvents</code> - if true then the <code>ListDataEvents</code> all
- listeners receive will be as detailed as possible. For example: when
- a complicated operation is performed (like <a href="../../../com/pump/util/ObservableList.html#retainAll-java.util.Collection-"><code>retainAll(Collection)</code></a> or <a href="../../../com/pump/util/ObservableList.html#setAll-java.util.List-"><code>setAll(List)</code></a>)
- calculating a "detailed event" involves inspecting the before and after states of this list,
- and after reviewing 1,000,000 elements: it might be clear that the event the
- appropriate event is just a <code>ListDataEvent.INTERVAL_REMOVED</code> event of 2 elements.
- However if no listeners are interested in detailed events, then the same operation
- might notify listeners of a <code>ListDataEvent.CONTENTS_CHANGED</code> event ranging from
- elements [0, 1000000]. If you just want to know when something (anything) changed: then
- <code>detailedEvents</code> should be false for performance. But if you want to know
- more specific information, this argument should be <code>true</code>.</dd>
+<dd><code>detailedEvents</code> - if true then the <code>ListDataEvents</code> all listeners
+            receive will be as detailed as possible. For example: when a
+            complicated operation is performed (like
+            <a href="../../../com/pump/util/ObservableList.html#retainAll-java.util.Collection-"><code>retainAll(Collection)</code></a> or <a href="../../../com/pump/util/ObservableList.html#setAll-java.util.List-"><code>setAll(List)</code></a>)
+            calculating a "detailed event" involves inspecting the before
+            and after states of this list, and after reviewing 1,000,000
+            elements: it might be clear that the event the appropriate
+            event is just a <code>ListDataEvent.INTERVAL_REMOVED</code>
+            event of 2 elements. However if no listeners are interested in
+            detailed events, then the same operation might notify
+            listeners of a <code>ListDataEvent.CONTENTS_CHANGED</code>
+            event ranging from elements [0, 1000000]. If you just want to
+            know when something (anything) changed: then
+            <code>detailedEvents</code> should be false for performance.
+            But if you want to know more specific information, this
+            argument should be <code>true</code>.</dd>
 <dd><code>listener</code> - the listener to add to this list.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/util/ObservableList.html#removeSynchronizedListener-javax.swing.event.ListDataListener-"><code>removeSynchronizedListener(ListDataListener)</code></a>, 
@@ -799,33 +830,42 @@ myList.addAll(...);</pre></blockquote>
 <pre>public&nbsp;void&nbsp;addUnsynchronizedListener(javax.swing.event.ListDataListener&nbsp;listener,
                                       boolean&nbsp;detailedEvents,
                                       boolean&nbsp;allowsModification)</pre>
-<div class="block">Add an unsynchronized <code>ListDataListener</code> that will be notified 
+<div class="block">Add an unsynchronized <code>ListDataListener</code> that will be notified
  of changes to this list in an unprotected thread.
- <p>For example: if an addition is made to this list, then the listener's
- <code>intervalAdded()</code> method is called. However during this method:
- another thread might call <code>list.clear()</code>, so the <code>ListDataEvent</code>
- the listener received may not contain specific reliable data anymore.
- <p>This method should be used if the listener is not especially interested
+ <p>
+ For example: if an addition is made to this list, then the listener's
+ <code>intervalAdded()</code> method is called. However during this
+ method: another thread might call <code>list.clear()</code>, so the
+ <code>ListDataEvent</code> the listener received may not contain specific
+ reliable data anymore.
+ <p>
+ This method should be used if the listener is not especially interested
  in specifics, or may be very expensive and cannot risk blocking further
  modifications for a long period of time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>listener</code> - the listener to add to this list.</dd>
-<dd><code>detailedEvents</code> - if true then the <code>ListDataEvents</code> all
- listeners receive will be as detailed as possible. For example: when
- a complicated operation is performed (like <a href="../../../com/pump/util/ObservableList.html#retainAll-java.util.Collection-"><code>retainAll(Collection)</code></a> or <a href="../../../com/pump/util/ObservableList.html#setAll-java.util.List-"><code>setAll(List)</code></a>)
- calculating a "detailed event" involves inspecting the before and after states of this list,
- and after reviewing 1,000,000 elements: it might be clear that the event the
- appropriate event is just a <code>ListDataEvent.INTERVAL_REMOVED</code> event of 2 elements.
- However if no listeners are interested in detailed events, then the same operation
- might notify listeners of a <code>ListDataEvent.CONTENTS_CHANGED</code> event ranging from
- elements [0, 1000000]. If you just want to know when something (anything) changed: then
- <code>detailedEvents</code> should be false for performance. But if you want to know
- more specific information, this argument should be <code>true</code>.</dd>
+<dd><code>detailedEvents</code> - if true then the <code>ListDataEvents</code> all listeners
+            receive will be as detailed as possible. For example: when a
+            complicated operation is performed (like
+            <a href="../../../com/pump/util/ObservableList.html#retainAll-java.util.Collection-"><code>retainAll(Collection)</code></a> or <a href="../../../com/pump/util/ObservableList.html#setAll-java.util.List-"><code>setAll(List)</code></a>)
+            calculating a "detailed event" involves inspecting the before
+            and after states of this list, and after reviewing 1,000,000
+            elements: it might be clear that the event the appropriate
+            event is just a <code>ListDataEvent.INTERVAL_REMOVED</code>
+            event of 2 elements. However if no listeners are interested in
+            detailed events, then the same operation might notify
+            listeners of a <code>ListDataEvent.CONTENTS_CHANGED</code>
+            event ranging from elements [0, 1000000]. If you just want to
+            know when something (anything) changed: then
+            <code>detailedEvents</code> should be false for performance.
+            But if you want to know more specific information, this
+            argument should be <code>true</code>.</dd>
 <dd><code>allowsModification</code> - if this is false then and if this listener tries to further
- modify this list: a <code>RecursiveListenerModificationException</code> will be thrown.
- This is largely intended as a safeguard for developers to prevent against unintended 
- looping/cascading listeners.</dd>
+            modify this list: a
+            <code>RecursiveListenerModificationException</code> will be
+            thrown. This is largely intended as a safeguard for developers
+            to prevent against unintended looping/cascading listeners.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/util/ObservableList.html#removeUnsynchronizedListener-javax.swing.event.ListDataListener-"><code>removeUnsynchronizedListener(ListDataListener)</code></a>, 
 <a href="../../../com/pump/util/ObservableList.html#addSynchronizedListener-javax.swing.event.ListDataListener-boolean-"><code>addSynchronizedListener(ListDataListener, boolean)</code></a></dd>
@@ -839,8 +879,8 @@ myList.addAll(...);</pre></blockquote>
 <li class="blockList">
 <h4>addSynchronizedChangeListener</h4>
 <pre>public&nbsp;void&nbsp;addSynchronizedChangeListener(javax.swing.event.ChangeListener&nbsp;changeListener)</pre>
-<div class="block">Adds a <code>ChangeListener</code> that will be notified of changes
- to this list in a synchronized lock. This lock guarantees that no other
+<div class="block">Adds a <code>ChangeListener</code> that will be notified of changes to
+ this list in a synchronized lock. This lock guarantees that no other
  thread will alter the contents of this list until this listener returns
  control of the thread.</div>
 <dl>
@@ -861,15 +901,16 @@ myList.addAll(...);</pre></blockquote>
 <h4>addUnsynchronizedChangeListener</h4>
 <pre>public&nbsp;void&nbsp;addUnsynchronizedChangeListener(javax.swing.event.ChangeListener&nbsp;changeListener,
                                             boolean&nbsp;allowsModification)</pre>
-<div class="block">Add an unsynchronized <code>ChangeListener</code> that will be notified 
+<div class="block">Add an unsynchronized <code>ChangeListener</code> that will be notified
  of changes to this list in an unprotected thread.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>changeListener</code> - the listener to add to this list.</dd>
 <dd><code>allowsModification</code> - if this is false then and if this listener tries to further
- modify this list: a <code>RecursiveListenerModificationException</code> will be thrown.
- This is largely intended as a safeguard for developers to prevent against unintended 
- looping/cascading listeners.</dd>
+            modify this list: a
+            <code>RecursiveListenerModificationException</code> will be
+            thrown. This is largely intended as a safeguard for developers
+            to prevent against unintended looping/cascading listeners.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/util/ObservableList.html#removeUnsynchronizedChangeListener-javax.swing.event.ChangeListener-"><code>removeUnsynchronizedChangeListener(ChangeListener)</code></a>, 
 <a href="../../../com/pump/util/ObservableList.html#addUnsynchronizedListener-javax.swing.event.ListDataListener-boolean-boolean-"><code>addUnsynchronizedListener(ListDataListener, boolean, boolean)</code></a></dd>
@@ -936,8 +977,8 @@ myList.addAll(...);</pre></blockquote>
 <li class="blockList">
 <h4>execute</h4>
 <pre>protected&nbsp;&lt;R&gt;&nbsp;R&nbsp;execute(com.pump.util.ObservableList.Operation&lt;R&gt;&nbsp;operation)</pre>
-<div class="block">This method executes all Operations, keeping
- thread safety and listeners in mind.</div>
+<div class="block">This method executes all Operations, keeping thread safety and listeners
+ in mind.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
 <dd><code>R</code> - the parameterized type of the operation</dd>
@@ -1329,24 +1370,26 @@ myList.addAll(...);</pre></blockquote>
 <pre>public&nbsp;<a href="../../../com/pump/util/ObservableList.EDTMirror.html" title="class in com.pump.util">ObservableList.EDTMirror</a>&lt;<a href="../../../com/pump/util/ObservableList.html" title="type parameter in ObservableList">T</a>&gt;&nbsp;getListModelEDTMirror()</pre>
 <div class="block">This returns a non-mutable <code>ListModel</code> mirror of this list
  that is guaranteed to only update in the event dispatch thread.
- <p>This is intended for <code>JLists</code>, or other UI elements.
- <p>Because this is intentionally multithreaded: it is likely
- that this mirror will briefly contain outdated elements. That is
- to say: removing an element from this list does not mean the UI 
- is done interacting with it.
- <p>This mirror requires maintaining a separate copy of this list.
- Most references in Java are 8 bytes, so if you have a 1,024
- element list: this list will be approximately 8KB, and each
- additional EDT mirror you construct will be another 8KB. This may
- be an acceptable amount (depending on how many of these lists
- you have), but if you have a 1,000,000-element list, then this
- list is about 8 MB, and each EDT mirror is another 8 MB. My point
- is: if this list may have several thousand elements, then this
- mirror is not trivial to construct and maintain.</div>
+ <p>
+ This is intended for <code>JLists</code>, or other UI elements.
+ <p>
+ Because this is intentionally multithreaded: it is likely that this
+ mirror will briefly contain outdated elements. That is to say: removing
+ an element from this list does not mean the UI is done interacting with
+ it.
+ <p>
+ This mirror requires maintaining a separate copy of this list. Most
+ references in Java are 8 bytes, so if you have a 1,024 element list: this
+ list will be approximately 8KB, and each additional EDT mirror you
+ construct will be another 8KB. This may be an acceptable amount
+ (depending on how many of these lists you have), but if you have a
+ 1,000,000-element list, then this list is about 8 MB, and each EDT mirror
+ is another 8 MB. My point is: if this list may have several thousand
+ elements, then this mirror is not trivial to construct and maintain.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a non-mutable <code>ListModel</code> mirror of this list
- that is guaranteed to only update in the event dispatch thread.</dd>
+<dd>a non-mutable <code>ListModel</code> mirror of this list that is
+         guaranteed to only update in the event dispatch thread.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/util/ObservableList.html#getListModelView-boolean-"><code>getListModelView(boolean)</code></a></dd>
 </dl>
@@ -1361,27 +1404,29 @@ myList.addAll(...);</pre></blockquote>
 <pre>public&nbsp;<a href="../../../com/pump/util/ObservableList.EDTMirror.html" title="class in com.pump.util">ObservableList.EDTMirror</a>&lt;<a href="../../../com/pump/util/ObservableList.html" title="type parameter in ObservableList">T</a>&gt;&nbsp;getListModelEDTMirror(<a href="../../../com/pump/util/ObservableList.Filter.html" title="class in com.pump.util">ObservableList.Filter</a>&lt;<a href="../../../com/pump/util/ObservableList.html" title="type parameter in ObservableList">T</a>&gt;&nbsp;t)</pre>
 <div class="block">This returns a non-mutable <code>ListModel</code> mirror of this list
  that is guaranteed to only update in the event dispatch thread.
- <p>This is intended for <code>JLists</code>, or other UI elements.
- <p>Because this is intentionally multithreaded: it is likely
- that this mirror will briefly contain outdated elements. That is
- to say: removing an element from this list does not mean the UI 
- is done interacting with it.
- <p>This mirror requires maintaining a separate copy of this list.
- Most references in Java are 8 bytes, so if you have a 1,024
- element list: this list will be approximately 8KB, and each
- additional EDT mirror you construct will be another 8KB. This may
- be an acceptable amount (depending on how many of these lists
- you have), but if you have a 1,000,000-element list, then this
- list is about 8 MB, and each EDT mirror is another 8 MB. My point
- is: if this list may have several thousand elements, then this
- mirror is not trivial to construct and maintain.</div>
+ <p>
+ This is intended for <code>JLists</code>, or other UI elements.
+ <p>
+ Because this is intentionally multithreaded: it is likely that this
+ mirror will briefly contain outdated elements. That is to say: removing
+ an element from this list does not mean the UI is done interacting with
+ it.
+ <p>
+ This mirror requires maintaining a separate copy of this list. Most
+ references in Java are 8 bytes, so if you have a 1,024 element list: this
+ list will be approximately 8KB, and each additional EDT mirror you
+ construct will be another 8KB. This may be an acceptable amount
+ (depending on how many of these lists you have), but if you have a
+ 1,000,000-element list, then this list is about 8 MB, and each EDT mirror
+ is another 8 MB. My point is: if this list may have several thousand
+ elements, then this mirror is not trivial to construct and maintain.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>t</code> - an optional filter that restricts what the mirrored list
- contains.</dd>
+            contains.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a non-mutable <code>ListModel</code> mirror of this list
- that is guaranteed to only update in the event dispatch thread.</dd>
+<dd>a non-mutable <code>ListModel</code> mirror of this list that is
+         guaranteed to only update in the event dispatch thread.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/util/ObservableList.html#getListModelView-boolean-"><code>getListModelView(boolean)</code></a></dd>
 </dl>
@@ -1394,27 +1439,26 @@ myList.addAll(...);</pre></blockquote>
 <li class="blockList">
 <h4>getListModelView</h4>
 <pre>public&nbsp;javax.swing.ListModel&nbsp;getListModelView(boolean&nbsp;updateListenersSynchronously)</pre>
-<div class="block">This returns a non-mutable <code>ListModel</code> view
- of this list. This <code>ListModel</code> notifies
- its listeners of changes exactly as they occur on
- the original thread.
- <p>This view is an interface that interacts directly with
- this list; it is <i>not</i> a copy of this list like
- <a href="../../../com/pump/util/ObservableList.html#getListModelEDTMirror--"><code>getListModelEDTMirror()</code></a>. So if this list occupies
- 8 MB of memory: invoking this method will allocate
+<div class="block">This returns a non-mutable <code>ListModel</code> view of this list. This
+ <code>ListModel</code> notifies its listeners of changes exactly as they
+ occur on the original thread.
+ <p>
+ This view is an interface that interacts directly with this list; it is
+ <i>not</i> a copy of this list like <a href="../../../com/pump/util/ObservableList.html#getListModelEDTMirror--"><code>getListModelEDTMirror()</code></a>. So
+ if this list occupies 8 MB of memory: invoking this method will allocate
  less than 1 KB of memory.
- <p>The downside to this view is: it does not make
- any guarantees regarding the event dispatch thread. So
- if this new <code>ListModel</code> is being used in
- a <code>JList</code>: you need to take responsibility to
- only update this list in the event dispatch thread.
- <p>If the <code>ObservableList</code> implemented the
- <code>ListModel</code> interface: then this method
- wouldn't be unnecessary. (That is: the list model view
- and this list would be the same object.) The decision
- to not make this class a <code>ListModel</code> was a
- deliberate design choice to force developers to think
- about whether they needed a view or an EDT-specific mirror.</div>
+ <p>
+ The downside to this view is: it does not make any guarantees regarding
+ the event dispatch thread. So if this new <code>ListModel</code> is being
+ used in a <code>JList</code>: you need to take responsibility to only
+ update this list in the event dispatch thread.
+ <p>
+ If the <code>ObservableList</code> implemented the <code>ListModel</code>
+ interface: then this method wouldn't be unnecessary. (That is: the list
+ model view and this list would be the same object.) The decision to not
+ make this class a <code>ListModel</code> was a deliberate design choice
+ to force developers to think about whether they needed a view or an
+ EDT-specific mirror.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/util/ObservableList.html#getListModelEDTMirror--"><code>getListModelEDTMirror()</code></a></dd>
@@ -1428,8 +1472,8 @@ myList.addAll(...);</pre></blockquote>
 <li class="blockList">
 <h4>clone</h4>
 <pre>public&nbsp;java.lang.Object&nbsp;clone()</pre>
-<div class="block">Creates a <code>ObservableList</code> with the same list structure,
- but with no listeners.</div>
+<div class="block">Creates a <code>ObservableList</code> with the same list structure, but
+ with no listeners.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>clone</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -1491,9 +1535,10 @@ myList.addAll(...);</pre></blockquote>
 <h4>toArray</h4>
 <pre>public&nbsp;<a href="../../../com/pump/util/ObservableList.html" title="type parameter in ObservableList">T</a>[]&nbsp;toArray(java.lang.Class&lt;<a href="../../../com/pump/util/ObservableList.html" title="type parameter in ObservableList">T</a>&gt;&nbsp;componentType)</pre>
 <div class="block">Create an array returning all the elements of this list.
- <p>This method uses the existing read/write locking architecture
- the ObservableList uses, so it is safer than synchronizing
- this list to extract the elements separately.</div>
+ <p>
+ This method uses the existing read/write locking architecture the
+ ObservableList uses, so it is safer than synchronizing this list to
+ extract the elements separately.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>componentType</code> - the component type of the array.</dd>

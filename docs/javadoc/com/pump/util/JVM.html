@@ -111,10 +111,10 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">JVM</span>
 extends java.lang.Object</pre>
 <div class="block">Static methods relating to the JVM environment.
- <P>Instead of burying a constant like "isQuartz" in its most
- relevant class (such as OptimizedGraphics2D), it should be
- stored here so if other classes need to access it they don't
- necessary have to</div>
+ <P>
+ Instead of burying a constant like "isQuartz" in its most relevant class
+ (such as OptimizedGraphics2D), it should be stored here so if other classes
+ need to access it they don't necessary have to</div>
 </li>
 </ul>
 </div>
@@ -178,8 +178,8 @@ extends java.lang.Object</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/JVM.html#javaVersion">javaVersion</a></span></code>
-<div class="block">The major Java version being used (1.4, 1.5, 1.6, etc.), or
- -1 if this value couldn't be correctly determined.</div>
+<div class="block">The major Java version being used (1.4, 1.5, 1.6, etc.), or -1 if this
+ value couldn't be correctly determined.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -233,8 +233,8 @@ extends java.lang.Object</pre>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/JVM.html#getProfile--">getProfile</a></span>()</code>
-<div class="block">Gets basic information about this session's JVM:
- the OS name &amp; version, the Java version, and (on Mac) whether Quartz is being used.</div>
+<div class="block">Gets basic information about this session's JVM: the OS name &amp;
+ version, the Java version, and (on Mac) whether Quartz is being used.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -246,8 +246,8 @@ extends java.lang.Object</pre>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/JVM.html#printProfile--">printProfile</a></span>()</code>
-<div class="block">Prints basic information about this session's JVM:
- the OS name &amp; version, the Java version, and (on Mac) whether Quartz is being used.</div>
+<div class="block">Prints basic information about this session's JVM: the OS name &amp;
+ version, the Java version, and (on Mac) whether Quartz is being used.</div>
 </td>
 </tr>
 </table>
@@ -279,8 +279,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>javaVersion</h4>
 <pre>public static final&nbsp;float javaVersion</pre>
-<div class="block">The major Java version being used (1.4, 1.5, 1.6, etc.), or
- -1 if this value couldn't be correctly determined.</div>
+<div class="block">The major Java version being used (1.4, 1.5, 1.6, etc.), or -1 if this
+ value couldn't be correctly determined.</div>
 </li>
 </ul>
 <a name="isMac">
@@ -360,9 +360,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>usingQuartz</h4>
 <pre>public static final&nbsp;boolean usingQuartz</pre>
-<div class="block">If on a Mac: whether Quartz is the rendering pipeline.
- In applets this may throw a security exception; if this
- cannot be ascertained we assume it is false.</div>
+<div class="block">If on a Mac: whether Quartz is the rendering pipeline. In applets this
+ may throw a security exception; if this cannot be ascertained we assume
+ it is false.</div>
 </li>
 </ul>
 </li>
@@ -411,8 +411,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>printProfile</h4>
 <pre>public static&nbsp;void&nbsp;printProfile()</pre>
-<div class="block">Prints basic information about this session's JVM:
- the OS name &amp; version, the Java version, and (on Mac) whether Quartz is being used.</div>
+<div class="block">Prints basic information about this session's JVM: the OS name &amp;
+ version, the Java version, and (on Mac) whether Quartz is being used.</div>
 </li>
 </ul>
 <a name="getProfile--">
@@ -422,8 +422,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getProfile</h4>
 <pre>public static&nbsp;java.lang.String&nbsp;getProfile()</pre>
-<div class="block">Gets basic information about this session's JVM:
- the OS name &amp; version, the Java version, and (on Mac) whether Quartz is being used.</div>
+<div class="block">Gets basic information about this session's JVM: the OS name &amp;
+ version, the Java version, and (on Mac) whether Quartz is being used.</div>
 </li>
 </ul>
 <a name="getMajorJavaVersion--">
@@ -434,14 +434,15 @@ extends java.lang.Object</pre>
 <h4>getMajorJavaVersion</h4>
 <pre>public static&nbsp;float&nbsp;getMajorJavaVersion()
                                  throws java.security.AccessControlException</pre>
-<div class="block">This converts the system property "java.version" to a float value.
- This drops rightmost digits until a legitimate float can be parsed.
- <BR>For example, this converts "1.6.0_05" to "1.6".
- <BR>This value is cached as the system property "java.major.version".  Although
- technically this value is a String, it will always be parseable as a float.</div>
+<div class="block">This converts the system property "java.version" to a float value. This
+ drops rightmost digits until a legitimate float can be parsed. <BR>
+ For example, this converts "1.6.0_05" to "1.6". <BR>
+ This value is cached as the system property "java.major.version".
+ Although technically this value is a String, it will always be parseable
+ as a float.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.security.AccessControlException</code> - this may be thrown in unsigned applets!  Beware!</dd>
+<dd><code>java.security.AccessControlException</code> - this may be thrown in unsigned applets! Beware!</dd>
 </dl>
 </li>
 </ul>
@@ -454,8 +455,7 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;float&nbsp;getMajorJavaVersion(boolean&nbsp;catchSecurityException)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>catchSecurityException</code> - if true and an exception occurs,
- then -1 is returned.</dd>
+<dd><code>catchSecurityException</code> - if true and an exception occurs, then -1 is returned.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the major java version, or -1 if this can't be determined/</dd>
 </dl>

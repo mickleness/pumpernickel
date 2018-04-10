@@ -315,8 +315,9 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;fixCorruptSizeFields(java.io.File&nbsp;wavFile)
                                  throws java.io.IOException</pre>
 <div class="block">This method fixes a file with corrupt size fields.
- <p>A <code>RandomAccessFile</code> is used to redefine the size
- of the "RIFF" and "data" chunks based on the real file size.</div>
+ <p>
+ A <code>RandomAccessFile</code> is used to redefine the size of the
+ "RIFF" and "data" chunks based on the real file size.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
@@ -331,19 +332,21 @@ extends java.lang.Object</pre>
 <h4>isValidSizeHeader</h4>
 <pre>public static&nbsp;boolean&nbsp;isValidSizeHeader(java.io.File&nbsp;wavFile)</pre>
 <div class="block">This validates the first header of a wave file.
- <p>This method was written in response to QTJ's MovieExporter
- occasionally converting MP3s to a wave file incorrectly. The
- resulting wave file contained all the correct PCM data, but
- the chunk size of the "RIFF" and "data" chunks are zero.
- <p>This method only validates the first header. If this method
- returns false, the method <code>fixCorruptSizeFields()</code>
- should fix the problem.</div>
+ <p>
+ This method was written in response to QTJ's MovieExporter occasionally
+ converting MP3s to a wave file incorrectly. The resulting wave file
+ contained all the correct PCM data, but the chunk size of the "RIFF" and
+ "data" chunks are zero.
+ <p>
+ This method only validates the first header. If this method returns
+ false, the method <code>fixCorruptSizeFields()</code> should fix the
+ problem.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>wavFile</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the the "RIFF" size header is consistent with
- the real file size.</dd>
+<dd>true if the the "RIFF" size header is consistent with the real
+         file size.</dd>
 </dl>
 </li>
 </ul>
@@ -370,9 +373,9 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;javax.sound.sampled.AudioInputStream&nbsp;createAudioInputStream(java.io.InputStream&nbsp;in)
                                                                    throws java.io.IOException</pre>
 <div class="block">Create an AudioInputStream based on a wave file's InputStream.
- <p>This was mostly an exercise on my part, I do not have any reason
- to recommend this method over using AudioSystem's default wave file
- support.</div>
+ <p>
+ This was mostly an exercise on my part, I do not have any reason to
+ recommend this method over using AudioSystem's default wave file support.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - the input to create an AudioInputStream for.</dd>
@@ -390,8 +393,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getAudioFormat</h4>
 <pre>public&nbsp;javax.sound.sampled.AudioFormat&nbsp;getAudioFormat()</pre>
-<div class="block">Returns an AudioFormat object based on the last WavFormatChunk read.
- Note this will be null until <code>read()</code> is called.</div>
+<div class="block">Returns an AudioFormat object based on the last WavFormatChunk read. Note
+ this will be null until <code>read()</code> is called.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the AudioFormat for this WavReader.</dd>
@@ -419,8 +422,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getFormatChunk</h4>
 <pre>public&nbsp;<a href="../../../com/pump/audio/WavFormatChunk.html" title="class in com.pump.audio">WavFormatChunk</a>&nbsp;getFormatChunk()</pre>
-<div class="block">Returns the last WavFormatChunk read.
- Note this will be null until <code>read()</code> is called.</div>
+<div class="block">Returns the last WavFormatChunk read. Note this will be null until
+ <code>read()</code> is called.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the format chunk for this WavReader.</dd>

@@ -293,7 +293,7 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>jarSrc</code> - the source jar to copy</dd>
 <dd><code>jarDest</code> - the destination to write a new jar to. (If a file already
- exists here then an exception is thrown.)</dd>
+            exists here then an exception is thrown.)</dd>
 <dd><code>extensionToOmit</code> - the file extension to exclude from the new jar</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
@@ -308,9 +308,9 @@ extends java.lang.Object</pre>
 <h4>addSourcepath</h4>
 <pre>public&nbsp;void&nbsp;addSourcepath(java.io.File&nbsp;sourcepath)
                    throws java.io.IOException</pre>
-<div class="block">Adds all the .java files in this directory.
- As java files are added, they are scanned and
- other resources may be added, also (such as PNGs, properties files, etc.)</div>
+<div class="block">Adds all the .java files in this directory. As java files are added, they
+ are scanned and other resources may be added, also (such as PNGs,
+ properties files, etc.)</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
@@ -377,8 +377,8 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>path</code> - the resource name in the jar archive, using File.separator</dd>
-<dd><code>file</code> - the file to add. This is not consulted until <code>createJar()</code>
- is called.</dd>
+<dd><code>file</code> - the file to add. This is not consulted until
+            <code>createJar()</code> is called.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -404,14 +404,14 @@ extends java.lang.Object</pre>
 <dd><code>compilerVersion</code> - the java compiler version to use (1.6, 1.8, etc)</dd>
 <dd><code>manifest</code> - the optional manifest to embed in this jar file.</dd>
 <dd><code>jarDest</code> - the .jar file to write to.</dd>
-<dd><code>filter</code> - a filter to control which files are added to the jar. 
- By default all related files will be added to this jar 
- (java files, class files, related resources), but you may want
- to exclude certain files.</dd>
+<dd><code>filter</code> - a filter to control which files are added to the jar. By
+            default all related files will be added to this jar (java
+            files, class files, related resources), but you may want to
+            exclude certain files.</dd>
 <dd><code>jarChoice</code> - an optional model to decide what to do with dependencies.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>text describing what went wrong if compilation problems occurred. This returns null if this method
- was successful.</dd>
+<dd>text describing what went wrong if compilation problems occurred.
+         This returns null if this method was successful.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
 </dl>
@@ -461,9 +461,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getClassName</h4>
 <pre>public static&nbsp;java.lang.String&nbsp;getClassName(java.io.File&nbsp;javaFile)</pre>
-<div class="block">Returns the class name for a given .java file.
- For example, given the file "Thread.java", this
- should return "java.lang.Thread".</div>
+<div class="block">Returns the class name for a given .java file. For example, given the
+ file "Thread.java", this should return "java.lang.Thread".</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>javaFile</code> - the java file to query.</dd>
@@ -479,9 +478,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getPackage</h4>
 <pre>public static&nbsp;java.lang.String&nbsp;getPackage(java.io.File&nbsp;file)</pre>
-<div class="block">Returns the package name of a file.  This string is declared
- towards the beginning of a file.  If this file
- begins with "package com.foo" then this method returns "com.foo".</div>
+<div class="block">Returns the package name of a file. This string is declared towards the
+ beginning of a file. If this file begins with "package com.foo" then this
+ method returns "com.foo".</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - </dd>

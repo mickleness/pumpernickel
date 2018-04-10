@@ -255,13 +255,13 @@ implements <a href="../../../../com/pump/image/transition/Transition.html" title
 <h4>createImage</h4>
 <pre>public static&nbsp;java.awt.image.BufferedImage&nbsp;createImage(java.lang.String&nbsp;text,
                                                        boolean&nbsp;light)</pre>
-<div class="block">Create an image with the text provided and a gradient background. This
- is intended to facilitate simple demos of transitions.</div>
+<div class="block">Create an image with the text provided and a gradient background. This is
+ intended to facilitate simple demos of transitions.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>text</code> - the text to render, probably just 1 or 2 letters will do.</dd>
-<dd><code>light</code> - whether to use a light (red/yellow) background or a dark (green/blue)
- background.</dd>
+<dd><code>light</code> - whether to use a light (red/yellow) background or a dark
+            (green/blue) background.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an image to test transitions with.</dd>
 </dl>
@@ -277,14 +277,14 @@ implements <a href="../../../../com/pump/image/transition/Transition.html" title
                                                        java.lang.String&nbsp;text,
                                                        boolean&nbsp;light,
                                                        boolean&nbsp;useGradients)</pre>
-<div class="block">Create an image with the text provided. This
- is intended to facilitate simple demos of transitions.</div>
+<div class="block">Create an image with the text provided. This is intended to facilitate
+ simple demos of transitions.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>size</code> - the width and height of this image.</dd>
 <dd><code>text</code> - the text to render, probably just 1 or 2 letters will do.</dd>
-<dd><code>light</code> - whether to use a light (red/yellow) background or a dark (green/blue)
- background.</dd>
+<dd><code>light</code> - whether to use a light (red/yellow) background or a dark
+            (green/blue) background.</dd>
 <dd><code>useGradients</code> - whether to use gradients as a background or not.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an image to test transitions with.</dd>
@@ -308,9 +308,11 @@ implements <a href="../../../../com/pump/image/transition/Transition.html" title
 <dd><code>g</code> - the Graphics2D to render to.</dd>
 <dd><code>frameA</code> - the first frame</dd>
 <dd><code>frameB</code> - the second frame</dd>
-<dd><code>progress</code> - a value between zero and one indicating how
- progressed this transition is.
- <P>At progress = 0, frameA should be shown.  At progress = 1, frameB should be shown.</dd>
+<dd><code>progress</code> - a value between zero and one indicating how progressed this
+            transition is.
+            <P>
+            At progress = 0, frameA should be shown. At progress = 1,
+            frameB should be shown.</dd>
 </dl>
 </li>
 </ul>

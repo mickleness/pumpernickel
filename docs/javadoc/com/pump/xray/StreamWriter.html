@@ -300,7 +300,8 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/xray/StreamWriter.
 <div class="block">Convert a constant representing modifiers to a String.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>modifiers</code> - modifiers, such as <code>Modifier.ABSTRACT + Modifier.PUBLIC</code></dd>
+<dd><code>modifiers</code> - modifiers, such as
+            <code>Modifier.ABSTRACT + Modifier.PUBLIC</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a Java-formatted string, such as "public abstract"</dd>
 </dl>
@@ -316,9 +317,11 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/xray/StreamWriter.
 <div class="block">Convert a value to java code, or return null.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>value</code> - a value, such as a String, Character, Float, Long, Short, Byte, Integer, Boolean or Double.</dd>
+<dd><code>value</code> - a value, such as a String, Character, Float, Long, Short,
+            Byte, Integer, Boolean or Double.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a java code representation of this object, or null if the argument isn't supported.</dd>
+<dd>a java code representation of this object, or null if the
+         argument isn't supported.</dd>
 </dl>
 </li>
 </ul>
@@ -334,10 +337,11 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/xray/StreamWriter.
 <div class="block">Convert a Type object to java code.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>nameToSimpleName</code> - a map of fully qualified java names to simple names,
- such as "java.lang.Thread" to "Thread". This method takes this map into account
- to simplify names. This is not just a nicety to make code more readable: in rare
- cases this is a requirement to avoid compiler errors.</dd>
+<dd><code>nameToSimpleName</code> - a map of fully qualified java names to simple names, such as
+            "java.lang.Thread" to "Thread". This method takes this map
+            into account to simplify names. This is not just a nicety to
+            make code more readable: in rare cases this is a requirement
+            to avoid compiler errors.</dd>
 <dd><code>t</code> - the Type to represent.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>java code representing the Type provided.</dd>
@@ -355,10 +359,11 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/xray/StreamWriter.
 <div class="block">Convert a Class object to java code.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>nameToSimpleName</code> - a map of fully qualified java names to simple names,
- such as "java.lang.Thread" to "Thread". This method takes this map into account
- to simplify names. This is not just a nicety to make code more readable: in rare
- cases this is a requirement to avoid compiler errors.</dd>
+<dd><code>nameToSimpleName</code> - a map of fully qualified java names to simple names, such as
+            "java.lang.Thread" to "Thread". This method takes this map
+            into account to simplify names. This is not just a nicety to
+            make code more readable: in rare cases this is a requirement
+            to avoid compiler errors.</dd>
 <dd><code>t</code> - the Class to write.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>java code representing the Class provided.</dd>
@@ -377,19 +382,23 @@ implements java.lang.Comparable&lt;<a href="../../../com/pump/xray/StreamWriter.
 <div class="block">Return the default value of the type provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>nameToSimpleName</code> - a map of fully qualified java names to simple names,
- such as "java.lang.Thread" to "Thread". This method takes this map into account
- to simplify names. This is not just a nicety to make code more readable: in rare
- cases this is a requirement to avoid compiler errors.</dd>
+<dd><code>nameToSimpleName</code> - a map of fully qualified java names to simple names, such as
+            "java.lang.Thread" to "Thread". This method takes this map
+            into account to simplify names. This is not just a nicety to
+            make code more readable: in rare cases this is a requirement
+            to avoid compiler errors.</dd>
 <dd><code>type</code> - the Class to represent</dd>
-<dd><code>cast</code> - true if this should preface the value with a cast (if appropriate).
- For example: when writing a constructor we shouldn't say "super(null)", because
- the compiler may flag that as ambiguous. Instead we should say "super( (java.lang.Thread) null)".</dd>
+<dd><code>cast</code> - true if this should preface the value with a cast (if
+            appropriate). For example: when writing a constructor we
+            shouldn't say "super(null)", because the compiler may flag
+            that as ambiguous. Instead we should say
+            "super( (java.lang.Thread) null)".</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a java representation of a default value for the type provided, such as
- "0L" (for longs), "'?'" (for chars), "(short)0" (for shorts), or "null" for objects.
+<dd>a java representation of a default value for the type provided,
+         such as "0L" (for longs), "'?'" (for chars), "(short)0" (for
+         shorts), or "null" for objects.
  
- This method will not return null. (But it may return "null").</dd>
+         This method will not return null. (But it may return "null").</dd>
 </dl>
 </li>
 </ul>

@@ -116,10 +116,11 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object
 implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface in com.pump.geom">MouseSmoothing</a></pre>
 <div class="block">This collects a series of points and creates a smooth curve.
- <P>For example, if the user drags the mouse and a shape is made from
- those points it will appear jagged and unappealing.  This class will
- collect those points and return nice curved shapes.  Some points will
- be "dropped" for the sake of creating a smoother curve.</div>
+ <P>
+ For example, if the user drags the mouse and a shape is made from those
+ points it will appear jagged and unappealing. This class will collect those
+ points and return nice curved shapes. Some points will be "dropped" for the
+ sake of creating a smoother curve.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/plaf/MouseSmoothingShapeCreationUI.html" title="class in com.pump.plaf"><code>MouseSmoothingShapeCreationUI</code></a></dd>
@@ -145,8 +146,8 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <tr class="altColor">
 <td class="colFirst"><code>protected float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/BasicMouseSmoothing.html#bezierFactor">bezierFactor</a></span></code>
-<div class="block">The multiplier used to determine how far bezier control points are
- from the end points.</div>
+<div class="block">The multiplier used to determine how far bezier control points are from
+ the end points.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -158,7 +159,8 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <tr class="altColor">
 <td class="colFirst"><code>protected java.util.List&lt;com.pump.geom.BasicMouseSmoothing.VNode&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/BasicMouseSmoothing.html#nodes">nodes</a></span></code>
-<div class="block">A list of <code>VNode</code> objects, representing the points to be smoothed.</div>
+<div class="block">A list of <code>VNode</code> objects, representing the points to be
+ smoothed.</div>
 </td>
 </tr>
 </table>
@@ -179,7 +181,8 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <tr class="altColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/BasicMouseSmoothing.html#BasicMouseSmoothing--">BasicMouseSmoothing</a></span>()</code>
-<div class="block">Creates a default <code>BasicMouseSmoothing</code> with the recommended settings.</div>
+<div class="block">Creates a default <code>BasicMouseSmoothing</code> with the recommended
+ settings.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -190,8 +193,8 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <tr class="altColor">
 <td class="colFirst"><code>protected </code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/BasicMouseSmoothing.html#BasicMouseSmoothing-java.lang.String-">BasicMouseSmoothing</a></span>(java.lang.String&nbsp;s)</code>
-<div class="block">This constructor accepts a String created by BasicMouseSmoothing.toString()
- to recreate a BasicMouseSmoothing object.</div>
+<div class="block">This constructor accepts a String created by
+ BasicMouseSmoothing.toString() to recreate a BasicMouseSmoothing object.</div>
 </td>
 </tr>
 </table>
@@ -322,8 +325,8 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <li class="blockList">
 <h4>bezierFactor</h4>
 <pre>protected&nbsp;float bezierFactor</pre>
-<div class="block">The multiplier used to determine how far bezier control points are
- from the end points.</div>
+<div class="block">The multiplier used to determine how far bezier control points are from
+ the end points.</div>
 </li>
 </ul>
 <a name="nodes">
@@ -333,7 +336,8 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <li class="blockList">
 <h4>nodes</h4>
 <pre>protected&nbsp;java.util.List&lt;com.pump.geom.BasicMouseSmoothing.VNode&gt; nodes</pre>
-<div class="block">A list of <code>VNode</code> objects, representing the points to be smoothed.</div>
+<div class="block">A list of <code>VNode</code> objects, representing the points to be
+ smoothed.</div>
 </li>
 </ul>
 </li>
@@ -351,7 +355,8 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <li class="blockList">
 <h4>BasicMouseSmoothing</h4>
 <pre>public&nbsp;BasicMouseSmoothing()</pre>
-<div class="block">Creates a default <code>BasicMouseSmoothing</code> with the recommended settings.</div>
+<div class="block">Creates a default <code>BasicMouseSmoothing</code> with the recommended
+ settings.</div>
 </li>
 </ul>
 <a name="BasicMouseSmoothing-float-float-">
@@ -365,10 +370,10 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>errorTolerance</code> - The error tolerance is used to control how much the new shape
- can deviate from the original.  A recommended value is .2.</dd>
-<dd><code>bezierFactor</code> - The bezier factor is used to control how "strong" the
- bezier control points are.  That is: how far away they are
- from the endpoints of each arc.  A recommended value is 1/3.</dd>
+            can deviate from the original. A recommended value is .2.</dd>
+<dd><code>bezierFactor</code> - The bezier factor is used to control how "strong" the bezier
+            control points are. That is: how far away they are from the
+            endpoints of each arc. A recommended value is 1/3.</dd>
 </dl>
 </li>
 </ul>
@@ -379,9 +384,10 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <li class="blockList">
 <h4>BasicMouseSmoothing</h4>
 <pre>protected&nbsp;BasicMouseSmoothing(java.lang.String&nbsp;s)</pre>
-<div class="block">This constructor accepts a String created by BasicMouseSmoothing.toString()
- to recreate a BasicMouseSmoothing object.
- <P>This is intended for debugging.</div>
+<div class="block">This constructor accepts a String created by
+ BasicMouseSmoothing.toString() to recreate a BasicMouseSmoothing object.
+ <P>
+ This is intended for debugging.</div>
 </li>
 </ul>
 </li>
@@ -431,7 +437,7 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>f</code> - The error tolerance is used to control how much the new shape
- can deviate from the original.  A recommended value is .2.</dd>
+            can deviate from the original. A recommended value is .2.</dd>
 </dl>
 </li>
 </ul>
@@ -445,9 +451,9 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <div class="block">Sets the bezier factor for this <code>BasicMouseSmoothing</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>f</code> - The bezier factor is used to control how "strong" the
- bezier control points are.  That is: how far away they are
- from the endpoints of each arc.  A recommended value is 1/3.</dd>
+<dd><code>f</code> - The bezier factor is used to control how "strong" the bezier
+            control points are. That is: how far away they are from the
+            endpoints of each arc. A recommended value is 1/3.</dd>
 </dl>
 </li>
 </ul>
@@ -505,9 +511,9 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <pre>public&nbsp;boolean&nbsp;isEmpty()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/geom/MouseSmoothing.html#isEmpty--">MouseSmoothing</a></code></span></div>
 <div class="block">Returns whether this data set is empty.
- <p>This will be empty either when it is first
- constructed, or after <code>reset()</code> has
- been called.</div>
+ <p>
+ This will be empty either when it is first constructed, or after
+ <code>reset()</code> has been called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/MouseSmoothing.html#isEmpty--">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/geom/MouseSmoothing.html" title="interface in com.pump.geom">MouseSmoothing</a></code></dd>
@@ -523,12 +529,17 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <pre>public&nbsp;java.awt.geom.GeneralPath&nbsp;getShape()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/geom/MouseSmoothing.html#getShape--">MouseSmoothing</a></code></span></div>
 <div class="block">Returns the shape this data represents when smoothed.
- <p>This is equivalent to calling:
- <pre>GeneralPath path = new GeneralPath();
+ <p>
+ This is equivalent to calling:
+ 
+ <pre>
+ GeneralPath path = new GeneralPath();
  getShape(path);
- return path;</pre>
- <p>It is possible that this MouseSmoothing is empty,
- and no shape data will be added.</div>
+ return path;
+ </pre>
+ <p>
+ It is possible that this MouseSmoothing is empty, and no shape data will
+ be added.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/MouseSmoothing.html#getShape--">getShape</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/geom/MouseSmoothing.html" title="interface in com.pump.geom">MouseSmoothing</a></code></dd>
@@ -544,15 +555,16 @@ implements <a href="../../../com/pump/geom/MouseSmoothing.html" title="interface
 <pre>public&nbsp;void&nbsp;getShape(java.awt.geom.GeneralPath&nbsp;path)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/geom/MouseSmoothing.html#getShape-java.awt.geom.GeneralPath-">MouseSmoothing</a></code></span></div>
 <div class="block">Returns the shape this data represents when smoothed.
- <p>This will not empty the argument before appending data.
- <p>It is possible that this MouseSmoothing is empty,
- and no shape data will be added.</div>
+ <p>
+ This will not empty the argument before appending data.
+ <p>
+ It is possible that this MouseSmoothing is empty, and no shape data will
+ be added.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/MouseSmoothing.html#getShape-java.awt.geom.GeneralPath-">getShape</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/geom/MouseSmoothing.html" title="interface in com.pump.geom">MouseSmoothing</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>path</code> - the <code>GeneralPath</code> to append
- shape data to.</dd>
+<dd><code>path</code> - the <code>GeneralPath</code> to append shape data to.</dd>
 </dl>
 </li>
 </ul>

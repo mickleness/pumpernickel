@@ -212,8 +212,8 @@ extends java.lang.Object</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static java.lang.Object</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/cache/CacheManager.html#uncache-java.io.File-">uncache</a></span>(java.io.File&nbsp;cachedObject)</code>
-<div class="block">Uncache an object previously cached by 
- calling <a href="../../../../com/pump/desktop/cache/CacheManager.html#cache-java.lang.Object-java.io.File-"><code>cache(Object, File)</code></a>.</div>
+<div class="block">Uncache an object previously cached by calling
+ <a href="../../../../com/pump/desktop/cache/CacheManager.html#cache-java.lang.Object-java.io.File-"><code>cache(Object, File)</code></a>.</div>
 </td>
 </tr>
 </table>
@@ -294,9 +294,10 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>appName</code> - </dd>
-<dd><code>version</code> - this optional version name will be used to create a version-specific folder within
- the cache.
- If this is non-null: then all inactive directories (from previous versions) will be deleted.</dd>
+<dd><code>version</code> - this optional version name will be used to create a
+            version-specific folder within the cache. If this is non-null:
+            then all inactive directories (from previous versions) will be
+            deleted.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -318,13 +319,13 @@ extends java.lang.Object</pre>
 <h4>getCacheDirectory</h4>
 <pre>public static&nbsp;java.io.File&nbsp;getCacheDirectory(java.lang.String&nbsp;appName)
                                       throws java.io.IOException</pre>
-<div class="block">This returns or creates a cache directory for your current user. The returned
- file should exist and have write privileges.</div>
+<div class="block">This returns or creates a cache directory for your current user. The
+ returned file should exist and have write privileges.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>appName</code> - this is used as part (or all) of the directory name.
- For best results this should be a qualified name like "com.apple.GarageBand"
- instead of simply "GarageBand".</dd>
+<dd><code>appName</code> - this is used as part (or all) of the directory name. For best
+            results this should be a qualified name like
+            "com.apple.GarageBand" instead of simply "GarageBand".</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the cache directory</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -343,12 +344,13 @@ extends java.lang.Object</pre>
                        throws java.io.IOException</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>appName</code> - this is used as part (or all) of the directory name.
- For best results this should be a qualified name like "com.apple.GarageBand"
- instead of simply "GarageBand".</dd>
-<dd><code>version</code> - a String representing the version of this application.
- This is used to create a folder (so it should not contain slashes or colons), and it
- lets us differentiate and clear cached resources when the version changes.</dd>
+<dd><code>appName</code> - this is used as part (or all) of the directory name. For best
+            results this should be a qualified name like
+            "com.apple.GarageBand" instead of simply "GarageBand".</dd>
+<dd><code>version</code> - a String representing the version of this application. This is
+            used to create a folder (so it should not contain slashes or
+            colons), and it lets us differentiate and clear cached
+            resources when the version changes.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -373,14 +375,16 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>versioned</code> - if true then the directory this returns is going to be unique
- to the version this CacheManager was initialized/constructed with. (So if this
- was constructed with a null version, this scenario returns a null file.)
- If false then this directory will be static across versions.</dd>
+            to the version this CacheManager was initialized/constructed
+            with. (So if this was constructed with a null version, this
+            scenario returns a null file.) If false then this directory
+            will be static across versions.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a directory that should be persistent across sessions. This will not
- be null (unless you asked for the versioned dir but didn't construct
- this object with a version), but it may be empty (either the user/system may choose to clear it,
- or it will be empty the first time the app is run).</dd>
+<dd>a directory that should be persistent across sessions. This will
+         not be null (unless you asked for the versioned dir but didn't
+         construct this object with a version), but it may be empty
+         (either the user/system may choose to clear it, or it will be
+         empty the first time the app is run).</dd>
 </dl>
 </li>
 </ul>
@@ -407,8 +411,8 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;java.lang.Object&nbsp;uncache(java.io.File&nbsp;cachedObject)
                                 throws java.io.IOException,
                                        java.lang.ClassNotFoundException</pre>
-<div class="block">Uncache an object previously cached by 
- calling <a href="../../../../com/pump/desktop/cache/CacheManager.html#cache-java.lang.Object-java.io.File-"><code>cache(Object, File)</code></a>.</div>
+<div class="block">Uncache an object previously cached by calling
+ <a href="../../../../com/pump/desktop/cache/CacheManager.html#cache-java.lang.Object-java.io.File-"><code>cache(Object, File)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cachedObject</code> - the file to uncache.</dd>

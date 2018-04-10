@@ -124,9 +124,10 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">MeasuredInputStream</span>
 extends java.io.InputStream</pre>
 <div class="block">This <code>InputStream</code> relays information from an underlying
- <code>InputStream</code> while measuring how many bytes have been
- read or skipped.
- <P>Note marking is not supported in this object.</div>
+ <code>InputStream</code> while measuring how many bytes have been read or
+ skipped.
+ <P>
+ Note marking is not supported in this object.</div>
 </li>
 </ul>
 </div>
@@ -215,8 +216,8 @@ extends java.io.InputStream</pre>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/MeasuredInputStream.html#setCloseable-boolean-">setCloseable</a></span>(boolean&nbsp;b)</code>
-<div class="block">Control whether calling <code>close()</code> affects
-  the underlying InputStream.</div>
+<div class="block">Control whether calling <code>close()</code> affects the underlying
+ InputStream.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -269,15 +270,15 @@ extends java.io.InputStream</pre>
 <li class="blockList">
 <h4>setCloseable</h4>
 <pre>public&nbsp;void&nbsp;setCloseable(boolean&nbsp;b)</pre>
-<div class="block">Control whether calling <code>close()</code> affects
-  the underlying InputStream. This is useful in cases when you pass
-  an InputStream to a 3rd party decoder that helpfully tries to close
-  the stream as it wraps up, but there is still data to be read later (such
-  as when working with a ZipInputStream).</div>
+<div class="block">Control whether calling <code>close()</code> affects the underlying
+ InputStream. This is useful in cases when you pass an InputStream to a
+ 3rd party decoder that helpfully tries to close the stream as it wraps
+ up, but there is still data to be read later (such as when working with a
+ ZipInputStream).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>b</code> - whether calling <code>close()</code> will close
- the underlying InputStream.</dd>
+<dd><code>b</code> - whether calling <code>close()</code> will close the underlying
+            InputStream.</dd>
 </dl>
 </li>
 </ul>
@@ -456,9 +457,8 @@ extends java.io.InputStream</pre>
 <h4>seek</h4>
 <pre>public&nbsp;void&nbsp;seek(long&nbsp;pos)
           throws java.io.IOException</pre>
-<div class="block">This skips forward to the requested position.
- If the requested position is less than the current
- position, then an exception is thrown.</div>
+<div class="block">This skips forward to the requested position. If the requested position
+ is less than the current position, then an exception is thrown.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pos</code> - </dd>

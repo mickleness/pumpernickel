@@ -110,8 +110,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">GraphicCache</span>
 extends java.lang.Object</pre>
-<div class="block">This caches icons and thumbnails of <code>IOLocations</code>.
- Calling <code>clear()</code> empties all cached graphics.</div>
+<div class="block">This caches icons and thumbnails of <code>IOLocations</code>. Calling
+ <code>clear()</code> empties all cached graphics.</div>
 </li>
 </ul>
 </div>
@@ -350,11 +350,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>requestIcon</h4>
 <pre>public&nbsp;javax.swing.Icon&nbsp;requestIcon(<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;loc)</pre>
-<div class="block">This returns a cached icon or null immediately.
- If no graphic was cached: then background threads will
- begin retrieving a icon.  If they succeed, they will
- fire <code>PropertyChangeListeners</code> with the <code>IOLocation</code>
- as the source.</div>
+<div class="block">This returns a cached icon or null immediately. If no graphic was cached:
+ then background threads will begin retrieving a icon. If they succeed,
+ they will fire <code>PropertyChangeListeners</code> with the
+ <code>IOLocation</code> as the source.</div>
 </li>
 </ul>
 <a name="requestThumbnail-com.pump.io.location.IOLocation-">
@@ -364,11 +363,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>requestThumbnail</h4>
 <pre>public&nbsp;java.awt.image.BufferedImage&nbsp;requestThumbnail(<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;loc)</pre>
-<div class="block">This returns a cached thumbnail or null immediately.
- If no graphic was cached: then background threads will
- begin retrieving a thumbnail.  If they succeed, they will
- fire <code>PropertyChangeListeners</code> with the <code>IOLocation</code>
- as the source.</div>
+<div class="block">This returns a cached thumbnail or null immediately. If no graphic was
+ cached: then background threads will begin retrieving a thumbnail. If
+ they succeed, they will fire <code>PropertyChangeListeners</code> with
+ the <code>IOLocation</code> as the source.</div>
 </li>
 </ul>
 <a name="addExceptionHandler-java.awt.event.ActionListener-">
@@ -379,8 +377,8 @@ extends java.lang.Object</pre>
 <h4>addExceptionHandler</h4>
 <pre>public&nbsp;void&nbsp;addExceptionHandler(java.awt.event.ActionListener&nbsp;l)</pre>
 <div class="block">Add a listener to handle exceptions.
- <p>When this ActionListener is notified the Throwable will
- be the source.</div>
+ <p>
+ When this ActionListener is notified the Throwable will be the source.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>l</code> - </dd>

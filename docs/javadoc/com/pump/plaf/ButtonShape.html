@@ -202,8 +202,7 @@ implements <a href="../../../com/pump/plaf/PositionConstants.html" title="interf
            int&nbsp;maxTopLeftRadius,
            int&nbsp;maxBottomLeftRadius,
            int&nbsp;maxBottomRightRadius)</code>
-<div class="block">This constructor gives you control over each corner of the
- button.</div>
+<div class="block">This constructor gives you control over each corner of the button.</div>
 </td>
 </tr>
 </table>
@@ -365,10 +364,10 @@ implements <a href="../../../com/pump/plaf/PositionConstants.html" title="interf
 <div class="block">Create a new <code>ButtonShape</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>maxRadius</code> - the max radius for corners.  If the corners should always
- be rounded, then this should be a very large number.</dd>
-<dd><code>preferredRadius</code> - the preferred radius for corners.  This may define the
- preferred height of a button.</dd>
+<dd><code>maxRadius</code> - the max radius for corners. If the corners should always be
+            rounded, then this should be a very large number.</dd>
+<dd><code>preferredRadius</code> - the preferred radius for corners. This may define the
+            preferred height of a button.</dd>
 </dl>
 </li>
 </ul>
@@ -386,9 +385,9 @@ implements <a href="../../../com/pump/plaf/PositionConstants.html" title="interf
                    int&nbsp;maxTopLeftRadius,
                    int&nbsp;maxBottomLeftRadius,
                    int&nbsp;maxBottomRightRadius)</pre>
-<div class="block">This constructor gives you control over each corner of the
- button.  Most of the time you can probably use the other (simpler)
- constructor, unless you need this level of control.</div>
+<div class="block">This constructor gives you control over each corner of the button. Most
+ of the time you can probably use the other (simpler) constructor, unless
+ you need this level of control.</div>
 </li>
 </ul>
 </li>
@@ -417,9 +416,9 @@ implements <a href="../../../com/pump/plaf/PositionConstants.html" title="interf
 <dd><code>contentWidth</code> - the width of the innards of this button.</dd>
 <dd><code>contentHeight</code> - the height of the innards of this button.</dd>
 <dd><code>padding</code> - the padding between the contents and the border.</dd>
-<dd><code>customShape</code> - if non-null, then this shape is scaled to fit the
- rectangle containing the contents and the padding.  This is how
- you apply a custom button shape (like a circle, diamond, arrow, etc.)</dd>
+<dd><code>customShape</code> - if non-null, then this shape is scaled to fit the rectangle
+            containing the contents and the padding. This is how you apply
+            a custom button shape (like a circle, diamond, arrow, etc.)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the preferred size of this method.</dd>
 </dl>
@@ -457,22 +456,21 @@ implements <a href="../../../com/pump/plaf/PositionConstants.html" title="interf
                                           int&nbsp;verticalPosition,
                                           boolean&nbsp;includeStrokePartitions,
                                           java.awt.Shape&nbsp;customShape)</pre>
-<div class="block">Calculates the shape of this button, given certain constraints.
- Note if this is smaller than the preferred size then, well,
- the results may look bad.</div>
+<div class="block">Calculates the shape of this button, given certain constraints. Note if
+ this is smaller than the preferred size then, well, the results may look
+ bad.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fillPath</code> - an optional destination for the button shape.</dd>
-<dd><code>strokePath</code> - an optional destination for the border.
- Often the border and fill will be the same, but in some
- cases where line segments are meant to be missing: they will
- be unique.</dd>
+<dd><code>strokePath</code> - an optional destination for the border. Often the border and
+            fill will be the same, but in some cases where line segments
+            are meant to be missing: they will be unique.</dd>
 <dd><code>width</code> - the width to stretch this fill to.</dd>
 <dd><code>height</code> - the height to stretch this fill to.</dd>
 <dd><code>horizontalPosition</code> - POS_ONLY, POS_LEFT, POS_RIGHT or POS_MIDDLE</dd>
 <dd><code>verticalPosition</code> - POS_ONLY, POS_TOP, POS_BOTTOM or POS_MIDDLE</dd>
-<dd><code>customShape</code> - the special shape this button should take.
- This may be a circle, diamond, arrow, etc.</dd>
+<dd><code>customShape</code> - the special shape this button should take. This may be a
+            circle, diamond, arrow, etc.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the shape of this button, given these constraints.</dd>
 </dl>

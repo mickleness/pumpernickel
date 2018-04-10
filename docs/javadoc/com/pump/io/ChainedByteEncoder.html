@@ -120,10 +120,10 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">ChainedByteEncoder</span>
 extends <a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump.io">ByteEncoder</a></pre>
 <div class="block">A series of ByteEncoders linked together.
- <p>As an abstract example: consider a series of translators.
- [ German->French, French->English, English->Chinese].
-  By inputting German into this model, you would eventually
-  receive Chinese.</div>
+ <p>
+ As an abstract example: consider a series of translators. [ German to French,
+ French to English, English to Chinese]. By inputting German into this model, you
+ would eventually receive Chinese.</div>
 </li>
 </ul>
 </div>
@@ -209,8 +209,8 @@ extends <a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/ChainedByteEncoder.html#flush--">flush</a></span>()</code>
-<div class="block">This is exclusively called during <code>close()</code> to give this encoder
- an opportunity to write any remaining data.</div>
+<div class="block">This is exclusively called during <code>close()</code> to give this
+ encoder an opportunity to write any remaining data.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -302,9 +302,10 @@ extends <a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump
           throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/io/ByteEncoder.html#push-int-">ByteEncoder</a></code></span></div>
 <div class="block">Push a byte for this encoder to process.
- <p>As data accumulates it will eventually have to be
- retrieved via the <code>pull()</code> method. This method
- may block if data is waiting to be retrieved.</div>
+ <p>
+ As data accumulates it will eventually have to be retrieved via the
+ <code>pull()</code> method. This method may block if data is waiting to
+ be retrieved.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/io/ByteEncoder.html#push-int-">push</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump.io">ByteEncoder</a></code></dd>
@@ -327,8 +328,8 @@ extends <a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump
 <pre>protected&nbsp;void&nbsp;flush()
               throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/io/ByteEncoder.html#flush--">ByteEncoder</a></code></span></div>
-<div class="block">This is exclusively called during <code>close()</code> to give this encoder
- an opportunity to write any remaining data.</div>
+<div class="block">This is exclusively called during <code>close()</code> to give this
+ encoder an opportunity to write any remaining data.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/io/ByteEncoder.html#flush--">flush</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump.io">ByteEncoder</a></code></dd>

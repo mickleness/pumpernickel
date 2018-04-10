@@ -110,29 +110,33 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ResourcePool</span>
 extends java.lang.Object</pre>
-<div class="block">This object manages a pool of resources (arrays and images)
- for frequent repetitive reuse.
- <p>Sometimes constantly reallocating
- resources in tight loops can be an expensive drain, so this
- should help relieve that performance expense.
- <p>This pool also has limitations, though, so it does not
- introduce a memory leak. Strong references to resources are
- purged after a fixed time interval (usually 5 seconds). Also
- there are limits to the number of resources of any given
- type that will be stored. There are two such limits:
- <ul><li>A limit of the exact resource type. For example: by default
- there will only be 5 images of the same width, height and type.</li>
- <li>A limit of all resources of a given type. For example: by
- default there will only be 20 images total.</li></ul>
- <p>(Arrays have a higher tolerance.)
- <p>It is still possible to abuse this model and introduce
- memory problems, in the same way that is possible to run
- out of memory just by constructing a few 10,000x10,000 images.
- But when used responsibly, this should be a valuable tool to
- easy the cost of constructing thousands of similar objects.
- <p>Every time you retrieve an object from this pool, you should
- wrap the following code in a try/finally block and return
- the object back to this pool when finished.</div>
+<div class="block">This object manages a pool of resources (arrays and images) for frequent
+ repetitive reuse.
+ <p>
+ Sometimes constantly reallocating resources in tight loops can be an
+ expensive drain, so this should help relieve that performance expense.
+ <p>
+ This pool also has limitations, though, so it does not introduce a memory
+ leak. Strong references to resources are purged after a fixed time interval
+ (usually 5 seconds). Also there are limits to the number of resources of any
+ given type that will be stored. There are two such limits:
+ <ul>
+ <li>A limit of the exact resource type. For example: by default there will
+ only be 5 images of the same width, height and type.</li>
+ <li>A limit of all resources of a given type. For example: by default there
+ will only be 20 images total.</li>
+ </ul>
+ <p>
+ (Arrays have a higher tolerance.)
+ <p>
+ It is still possible to abuse this model and introduce memory problems, in
+ the same way that is possible to run out of memory just by constructing a few
+ 10,000x10,000 images. But when used responsibly, this should be a valuable
+ tool to easy the cost of constructing thousands of similar objects.
+ <p>
+ Every time you retrieve an object from this pool, you should wrap the
+ following code in a try/finally block and return the object back to this pool
+ when finished.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/showcase/ResourcePoolDemo.html" title="class in com.pump.showcase"><code>ResourcePoolDemo</code></a></dd>
@@ -198,8 +202,8 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ResourcePool.html#clean--">clean</a></span>()</code>
-<div class="block">Iterate over all resources and make sure nothing has expired
- based on the current time limits and time stamps.</div>
+<div class="block">Iterate over all resources and make sure nothing has expired based on the
+ current time limits and time stamps.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -362,8 +366,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>clean</h4>
 <pre>protected&nbsp;void&nbsp;clean()</pre>
-<div class="block">Iterate over all resources and make sure nothing has expired
- based on the current time limits and time stamps.</div>
+<div class="block">Iterate over all resources and make sure nothing has expired based on the
+ current time limits and time stamps.</div>
 </li>
 </ul>
 <a name="getLimit-com.pump.util.ResourcePool.Type-">
@@ -386,19 +390,18 @@ extends java.lang.Object</pre>
                                              int&nbsp;height,
                                              int&nbsp;type,
                                              boolean&nbsp;clear)</pre>
-<div class="block">Return a BufferedImage from this pool. If no cached
- images exists matching these parameters: then a new image
- is created.</div>
+<div class="block">Return a BufferedImage from this pool. If no cached images exists
+ matching these parameters: then a new image is created.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>width</code> - the width of the image.</dd>
 <dd><code>height</code> - the height of the image.</dd>
 <dd><code>type</code> - the type of the image.</dd>
-<dd><code>clear</code> - if true and a cached image is identified: then
- that image is first cleared (using an AlphaComposite.Clear).</dd>
+<dd><code>clear</code> - if true and a cached image is identified: then that image is
+            first cleared (using an AlphaComposite.Clear).</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an image matching the arguments provided. If possible this
- will recycle a previously cached image.</dd>
+<dd>an image matching the arguments provided. If possible this will
+         recycle a previously cached image.</dd>
 </dl>
 </li>
 </ul>
@@ -422,9 +425,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getIntArray</h4>
 <pre>public&nbsp;int[]&nbsp;getIntArray(int&nbsp;length)</pre>
-<div class="block">Return an int array from this pool. If no cached
- int array exists matching the requested length: then a new array
- is created.</div>
+<div class="block">Return an int array from this pool. If no cached int array exists
+ matching the requested length: then a new array is created.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>length</code> - the array length</dd>
@@ -438,9 +440,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getFloatArray</h4>
 <pre>public&nbsp;float[]&nbsp;getFloatArray(int&nbsp;length)</pre>
-<div class="block">Return a float array from this pool. If no cached
- float array exists matching the requested length: then a new array
- is created.</div>
+<div class="block">Return a float array from this pool. If no cached float array exists
+ matching the requested length: then a new array is created.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>length</code> - the array length</dd>
@@ -454,9 +455,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getDoubleArray</h4>
 <pre>public&nbsp;double[]&nbsp;getDoubleArray(int&nbsp;length)</pre>
-<div class="block">Return a double array from this pool. If no cached
- double array exists matching the requested length: then a new array
- is created.</div>
+<div class="block">Return a double array from this pool. If no cached double array exists
+ matching the requested length: then a new array is created.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>length</code> - the array length</dd>
@@ -470,9 +470,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getShortArray</h4>
 <pre>public&nbsp;short[]&nbsp;getShortArray(int&nbsp;length)</pre>
-<div class="block">Return a short array from this pool. If no cached
- short array exists matching the requested length: then a new array
- is created.</div>
+<div class="block">Return a short array from this pool. If no cached short array exists
+ matching the requested length: then a new array is created.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>length</code> - the array length</dd>
@@ -486,9 +485,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getLongArray</h4>
 <pre>public&nbsp;long[]&nbsp;getLongArray(int&nbsp;length)</pre>
-<div class="block">Return a long array from this pool. If no cached
- long array exists matching the requested length: then a new array
- is created.</div>
+<div class="block">Return a long array from this pool. If no cached long array exists
+ matching the requested length: then a new array is created.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>length</code> - the array length</dd>
@@ -502,9 +500,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getByteArray</h4>
 <pre>public&nbsp;byte[]&nbsp;getByteArray(int&nbsp;length)</pre>
-<div class="block">Return a byte array from this pool. If no cached
- byte array exists matching the requested length: then a new array
- is created.</div>
+<div class="block">Return a byte array from this pool. If no cached byte array exists
+ matching the requested length: then a new array is created.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>length</code> - the array length</dd>
@@ -521,9 +518,8 @@ extends java.lang.Object</pre>
 <div class="block">Store an array in this pool for future reuse.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the array was stored, false if
- this pool is not currently accepting any more
- arrays of this type/size.</dd>
+<dd>true if the array was stored, false if this pool is not currently
+         accepting any more arrays of this type/size.</dd>
 </dl>
 </li>
 </ul>
@@ -537,9 +533,8 @@ extends java.lang.Object</pre>
 <div class="block">Store an array in this pool for future reuse.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the array was stored, false if
- this pool is not currently accepting any more
- arrays of this type/size.</dd>
+<dd>true if the array was stored, false if this pool is not currently
+         accepting any more arrays of this type/size.</dd>
 </dl>
 </li>
 </ul>
@@ -553,9 +548,8 @@ extends java.lang.Object</pre>
 <div class="block">Store an array in this pool for future reuse.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the array was stored, false if
- this pool is not currently accepting any more
- arrays of this type/size.</dd>
+<dd>true if the array was stored, false if this pool is not currently
+         accepting any more arrays of this type/size.</dd>
 </dl>
 </li>
 </ul>
@@ -569,9 +563,8 @@ extends java.lang.Object</pre>
 <div class="block">Store an array in this pool for future reuse.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the array was stored, false if
- this pool is not currently accepting any more
- arrays of this type/size.</dd>
+<dd>true if the array was stored, false if this pool is not currently
+         accepting any more arrays of this type/size.</dd>
 </dl>
 </li>
 </ul>
@@ -585,9 +578,8 @@ extends java.lang.Object</pre>
 <div class="block">Store an array in this pool for future reuse.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the array was stored, false if
- this pool is not currently accepting any more
- arrays of this type/size.</dd>
+<dd>true if the array was stored, false if this pool is not currently
+         accepting any more arrays of this type/size.</dd>
 </dl>
 </li>
 </ul>
@@ -601,9 +593,8 @@ extends java.lang.Object</pre>
 <div class="block">Store an array in this pool for future reuse.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the array was stored, false if
- this pool is not currently accepting any more
- arrays of this type/size.</dd>
+<dd>true if the array was stored, false if this pool is not currently
+         accepting any more arrays of this type/size.</dd>
 </dl>
 </li>
 </ul>
@@ -617,9 +608,8 @@ extends java.lang.Object</pre>
 <div class="block">Store an image in this pool for future reuse.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the image was stored, false if
- this pool is not currently accepting any more
- images of this type/size.</dd>
+<dd>true if the image was stored, false if this pool is not currently
+         accepting any more images of this type/size.</dd>
 </dl>
 </li>
 </ul>

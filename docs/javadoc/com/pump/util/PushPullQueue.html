@@ -114,10 +114,13 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PushPullQueue&lt;T&gt;</span>
 extends java.lang.Object</pre>
-<div class="block">This is a one-element list; at most only one element can exist in this queue at any time.
- It is intended to be used by two threads for handing off information.
- <p>In the future this can be replaced with a <code>SynchronousQueue</code> when this codebase
- is adapted to Java 1.5.  But for Java 1.4 I ended up adapting my own solution.</div>
+<div class="block">This is a one-element list; at most only one element can exist in this queue
+ at any time. It is intended to be used by two threads for handing off
+ information.
+ <p>
+ In the future this can be replaced with a <code>SynchronousQueue</code> when
+ this codebase is adapted to Java 1.5. But for Java 1.4 I ended up adapting my
+ own solution.</div>
 </li>
 </ul>
 </div>
@@ -185,8 +188,8 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/PushPullQueue.html#push-T-long-">push</a></span>(<a href="../../../com/pump/util/PushPullQueue.html" title="type parameter in PushPullQueue">T</a>&nbsp;newObject,
     long&nbsp;timeout)</code>
-<div class="block">This puts on object on the queue, and then blocks until another
- thread removes it.</div>
+<div class="block">This puts on object on the queue, and then blocks until another thread
+ removes it.</div>
 </td>
 </tr>
 </table>
@@ -252,10 +255,10 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>timeout</code> - the duration to wait, or a non-positive value if this request
- should never timeout.</dd>
+            should never timeout.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an object recently added to this queue.  This will never return
- null.</dd>
+<dd>an object recently added to this queue. This will never return
+         null.</dd>
 </dl>
 </li>
 </ul>
@@ -268,9 +271,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>push</h4>
 <pre>public&nbsp;void&nbsp;push(<a href="../../../com/pump/util/PushPullQueue.html" title="type parameter in PushPullQueue">T</a>&nbsp;newObject)</pre>
-<div class="block">This pushes an object on the queue and immediately returns.  Unlike the other
- push() method this does <i>not</i> wait for another thread to pull this value
- before returning.</div>
+<div class="block">This pushes an object on the queue and immediately returns. Unlike the
+ other push() method this does <i>not</i> wait for another thread to pull
+ this value before returning.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>newObject</code> - the newObject to add to the queue.</dd>
@@ -287,13 +290,13 @@ extends java.lang.Object</pre>
 <h4>push</h4>
 <pre>public&nbsp;void&nbsp;push(<a href="../../../com/pump/util/PushPullQueue.html" title="type parameter in PushPullQueue">T</a>&nbsp;newObject,
                  long&nbsp;timeout)</pre>
-<div class="block">This puts on object on the queue, and then blocks until another
- thread removes it.</div>
+<div class="block">This puts on object on the queue, and then blocks until another thread
+ removes it.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>newObject</code> - the object to add to the queue.</dd>
 <dd><code>timeout</code> - the duration to wait, or a non-positive value if this method
- should never timeout.</dd>
+            should never timeout.</dd>
 </dl>
 </li>
 </ul>
@@ -305,9 +308,10 @@ extends java.lang.Object</pre>
 <h4>iteratePush</h4>
 <pre>protected&nbsp;void&nbsp;iteratePush()</pre>
 <div class="block">This method is called during <code>push(...)</code>.
- <p>Currently this does nothing, but subclasses can override it to
- abort push operations by throwing a <code>RuntimeException</code>
- if this operation is aborted.</div>
+ <p>
+ Currently this does nothing, but subclasses can override it to abort push
+ operations by throwing a <code>RuntimeException</code> if this operation
+ is aborted.</div>
 </li>
 </ul>
 <a name="iteratePull--">
@@ -318,9 +322,10 @@ extends java.lang.Object</pre>
 <h4>iteratePull</h4>
 <pre>protected&nbsp;void&nbsp;iteratePull()</pre>
 <div class="block">This method is called during <code>pull(...)</code>.
- <p>Currently this does nothing, but subclasses can override it to
- abort pull operations by throwing a <code>RuntimeException</code>
- if this operation is aborted.</div>
+ <p>
+ Currently this does nothing, but subclasses can override it to abort pull
+ operations by throwing a <code>RuntimeException</code> if this operation
+ is aborted.</div>
 </li>
 </ul>
 </li>

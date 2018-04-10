@@ -125,9 +125,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">BaselineGraphics2D</span>
 extends <a href="../../../com/pump/graphics/AbstractGraphics2D.html" title="class in com.pump.graphics">AbstractGraphics2D</a></pre>
-<div class="block">This simply records the baselines that text is drawn at.
- These values are stored as Integers in the <code>baselines</code>
- field of this object.</div>
+<div class="block">This simply records the baselines that text is drawn at. These values are
+ stored as Integers in the <code>baselines</code> field of this object.</div>
 </li>
 </ul>
 </div>
@@ -236,7 +235,7 @@ extends <a href="../../../com/pump/graphics/AbstractGraphics2D.html" title="clas
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/BaselineGraphics2D.html#drawString-java.text.AttributedCharacterIterator-float-float-">drawString</a></span>(java.text.AttributedCharacterIterator&nbsp;aci,
           float&nbsp;x,
           float&nbsp;y)</code>
-<div class="block">Creates a <code>TextLayout</code> and calls 
+<div class="block">Creates a <code>TextLayout</code> and calls
  <code>TextLayout.draw(g,x,y)</code>.</div>
 </td>
 </tr>
@@ -253,7 +252,8 @@ extends <a href="../../../com/pump/graphics/AbstractGraphics2D.html" title="clas
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/BaselineGraphics2D.html#drawString-java.lang.String-float-float-">drawString</a></span>(java.lang.String&nbsp;s,
           float&nbsp;x,
           float&nbsp;y)</code>
-<div class="block">Creates a <code>GlyphVector</code> and calls <code>drawGlyphVector()</code>.</div>
+<div class="block">Creates a <code>GlyphVector</code> and calls
+ <code>drawGlyphVector()</code>.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -453,7 +453,8 @@ extends <a href="../../../com/pump/graphics/AbstractGraphics2D.html" title="clas
                        float&nbsp;x,
                        float&nbsp;y)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawString-java.lang.String-float-float-">AbstractGraphics2D</a></code></span></div>
-<div class="block">Creates a <code>GlyphVector</code> and calls <code>drawGlyphVector()</code>.</div>
+<div class="block">Creates a <code>GlyphVector</code> and calls
+ <code>drawGlyphVector()</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawString-java.lang.String-float-float-">drawString</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/graphics/AbstractGraphics2D.html" title="class in com.pump.graphics">AbstractGraphics2D</a></code></dd>
@@ -470,10 +471,11 @@ extends <a href="../../../com/pump/graphics/AbstractGraphics2D.html" title="clas
                        float&nbsp;x,
                        float&nbsp;y)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawString-java.text.AttributedCharacterIterator-float-float-">AbstractGraphics2D</a></code></span></div>
-<div class="block">Creates a <code>TextLayout</code> and calls 
+<div class="block">Creates a <code>TextLayout</code> and calls
  <code>TextLayout.draw(g,x,y)</code>.
- <P>This way if the AttributedCharacterIterator represents several
- different fills, they'll be handled correctly.</div>
+ <P>
+ This way if the AttributedCharacterIterator represents several different
+ fills, they'll be handled correctly.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/AbstractGraphics2D.html#drawString-java.text.AttributedCharacterIterator-float-float-">drawString</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/graphics/AbstractGraphics2D.html" title="class in com.pump.graphics">AbstractGraphics2D</a></code></dd>
@@ -556,10 +558,10 @@ extends <a href="../../../com/pump/graphics/AbstractGraphics2D.html" title="clas
 <h4>getBaselines</h4>
 <pre>public&nbsp;int[]&nbsp;getBaselines()</pre>
 <div class="block">Returns all the baselines used for this Graphics2D.
- <p>This class is very basic, and a baseline is recorded
- whether or not it falls inside the clipped area.  Also
- rotated baselines are not recorded, because, well, they
- make things complicated.</div>
+ <p>
+ This class is very basic, and a baseline is recorded whether or not it
+ falls inside the clipped area. Also rotated baselines are not recorded,
+ because, well, they make things complicated.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all the baselines used for this Graphics2D.</dd>

@@ -112,15 +112,15 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object</pre>
 <div class="block">This abstract renderer paints line numbers that relate to a JTextComponent.
  <p>
- Originally this was conceived as a panel that would sit immediately to the left
- of the text component, but that created problems if the text component was
- in a scrollpane (as is often the case) that scrolled horizontally: the line numbers
- quickly were out-of-view and useless.
+ Originally this was conceived as a panel that would sit immediately to the
+ left of the text component, but that created problems if the text component
+ was in a scrollpane (as is often the case) that scrolled horizontally: the
+ line numbers quickly were out-of-view and useless.
  <p>
- To resolve this problem: this logic was abstract into its own class (to be applied
- in multiple possible usages), and the <a href="../../../com/pump/swing/LineNumberBorder.html" title="class in com.pump.swing"><code>LineNumberBorder</code></a> class is recommended
- instead to make a <code>java.swing.border</code> that joins against a JScrollPane to achieve
- the correct effect.</div>
+ To resolve this problem: this logic was abstract into its own class (to be
+ applied in multiple possible usages), and the <a href="../../../com/pump/swing/LineNumberBorder.html" title="class in com.pump.swing"><code>LineNumberBorder</code></a> class
+ is recommended instead to make a <code>java.swing.border</code> that joins against
+ a JScrollPane to achieve the correct effect.</div>
 </li>
 </ul>
 </div>

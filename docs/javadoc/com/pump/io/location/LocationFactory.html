@@ -375,10 +375,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>create</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;create(java.io.File&nbsp;file)</pre>
-<div class="block">Create an <code>IOLocation</code> based on a <code>File</code>.
- This factory may not return a <code>FileLocation</code>. (For
- example: it might return a <code>ZipArchiveLocation</code>, or
- a special subclass of <code>FileLocation</code>.)</div>
+<div class="block">Create an <code>IOLocation</code> based on a <code>File</code>. This
+ factory may not return a <code>FileLocation</code>. (For example: it
+ might return a <code>ZipArchiveLocation</code>, or a special subclass of
+ <code>FileLocation</code>.)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - </dd>
@@ -394,9 +394,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>createFileLocation</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/io/location/FileLocation.html" title="class in com.pump.io.location">FileLocation</a>&nbsp;createFileLocation(java.io.File&nbsp;file)</pre>
-<div class="block">Create a <code>FileLocation</code> based on a <code>File</code>. 
- This is not recommended unless you explicitly need
- a <code>FileLocation</code>.</div>
+<div class="block">Create a <code>FileLocation</code> based on a <code>File</code>. This is
+ not recommended unless you explicitly need a <code>FileLocation</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - </dd>
@@ -414,9 +413,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>createURLLocation</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/io/location/URLLocation.html" title="class in com.pump.io.location">URLLocation</a>&nbsp;createURLLocation(java.net.URL&nbsp;url)</pre>
-<div class="block">Create a <code>URLLocation</code> based on a <code>URL</code>. 
- This is not recommended unless you explicitly need
- a <code>URLLocation</code>.</div>
+<div class="block">Create a <code>URLLocation</code> based on a <code>URL</code>. This is
+ not recommended unless you explicitly need a <code>URLLocation</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>url</code> - </dd>
@@ -438,10 +436,11 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>url</code> - the url this is based on.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an <code>IOLocation</code> based on a <code>URL</code>.
- This factory may not return a <code>URLLocation</code>. (For
- example: it might return a <code>FileLocation</code>, a <code>ZipArchiveLocation</code>, or
- a special subclass of <code>URLLocation</code>.)</dd>
+<dd>an <code>IOLocation</code> based on a <code>URL</code>. This
+         factory may not return a <code>URLLocation</code>. (For example:
+         it might return a <code>FileLocation</code>, a
+         <code>ZipArchiveLocation</code>, or a special subclass of
+         <code>URLLocation</code>.)</dd>
 </dl>
 </li>
 </ul>

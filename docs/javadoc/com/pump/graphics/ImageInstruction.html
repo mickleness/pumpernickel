@@ -117,16 +117,18 @@ extends java.lang.Object
 implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a>, java.io.Serializable</pre>
 <div class="block">An instruction to draw an image.
 
- This instruction should be equivalent to calling this code:
- <br><code>g = (Graphics2D)g.create();</code>
- <br><code>g.clip(clipping);</code>
- <br><code>g.setTransform(transform);</code>
- <br><code>g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,opacity));</code>
- <br><code>g.drawImage(bi, destRect.x, destRect.y, </code>
- <br><code> &nbsp; destRect.x+destRect.width, destRect.y+destRect.height, </code>
- <br><code> &nbsp; sourceRect.x, sourceRect.y, </code>
- <br><code> &nbsp; sourceRect.x+sourceRect.width, sourceRect.y+sourceRect.height,</code>
- <br><code> &nbsp; null);</code></div>
+ This instruction should be equivalent to calling this code: <br>
+ <code>g = (Graphics2D)g.create();</code> <br>
+ <code>g.clip(clipping);</code> <br>
+ <code>g.setTransform(transform);</code> <br>
+ <code>g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,opacity));</code>
+ <br>
+ <code>g.drawImage(bi, destRect.x, destRect.y, </code> <br>
+ <code> &nbsp; destRect.x+destRect.width, destRect.y+destRect.height, </code> <br>
+ <code> &nbsp; sourceRect.x, sourceRect.y, </code> <br>
+ <code> &nbsp; sourceRect.x+sourceRect.width, sourceRect.y+sourceRect.height,</code>
+ <br>
+ <code> &nbsp; null);</code></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.graphics.ImageInstruction">Serialized Form</a></dd>
@@ -237,8 +239,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/ImageInstruction.html#getSource--">getSource</a></span>()</code>
-<div class="block">Returns a string for developers to recognize the source
- of this instruction.</div>
+<div class="block">Returns a string for developers to recognize the source of this
+ instruction.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
@@ -356,8 +358,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <li class="blockList">
 <h4>getSourceRect</h4>
 <pre>public&nbsp;java.awt.Rectangle&nbsp;getSourceRect()</pre>
-<div class="block">The source rectangle.  This is anchored at (0,0) and should not
- exceed the width/height of the original image.</div>
+<div class="block">The source rectangle. This is anchored at (0,0) and should not exceed the
+ width/height of the original image.</div>
 </li>
 </ul>
 <a name="getTransform--">
@@ -387,8 +389,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <li class="blockList">
 <h4>getBounds</h4>
 <pre>public&nbsp;java.awt.geom.Rectangle2D&nbsp;getBounds()</pre>
-<div class="block">Returns the area affected by this instruction.
- This takes into account the transform and clipping.</div>
+<div class="block">Returns the area affected by this instruction. This takes into account
+ the transform and clipping.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/GraphicInstruction.html#getBounds--">getBounds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></dd>
@@ -417,7 +419,8 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <h4>getTransformedShape</h4>
 <pre>public&nbsp;java.awt.geom.Area&nbsp;getTransformedShape()</pre>
 <div class="block">This is the outline of the area that this instruction actually affects.
- This may return an empty area if the clipping and destination rect don't intersect.</div>
+ This may return an empty area if the clipping and destination rect don't
+ intersect.</div>
 </li>
 </ul>
 <a name="getImage--">
@@ -438,11 +441,10 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <h4>getResizedDestRect</h4>
 <pre>public&nbsp;java.awt.geom.Rectangle2D&nbsp;getResizedDestRect()</pre>
 <div class="block">This returns the destination rectangle that is resized so it should
- render the entire buffered image.  That is: the entire buffered
- image should be stretched so (0,0) and (w,h) fit within
- the rectangle returned by this method.  This eliminates the need for
- the sourceRect data, because it is now implied that the sourceRect
- is (0,0,w,h).</div>
+ render the entire buffered image. That is: the entire buffered image
+ should be stretched so (0,0) and (w,h) fit within the rectangle returned
+ by this method. This eliminates the need for the sourceRect data, because
+ it is now implied that the sourceRect is (0,0,w,h).</div>
 </li>
 </ul>
 <a name="setParent-com.pump.graphics.GraphicsWriter-">
@@ -453,8 +455,7 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <h4>setParent</h4>
 <pre>public&nbsp;void&nbsp;setParent(<a href="../../../com/pump/graphics/GraphicsWriter.html" title="class in com.pump.graphics">GraphicsWriter</a>&nbsp;parent)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html#setParent-com.pump.graphics.GraphicsWriter-">GraphicInstruction</a></code></span></div>
-<div class="block">Sets the parent of this tree node.
- This method</div>
+<div class="block">Sets the parent of this tree node. This method</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/GraphicInstruction.html#setParent-com.pump.graphics.GraphicsWriter-">setParent</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></dd>
@@ -560,10 +561,9 @@ implements <a href="../../../com/pump/graphics/GraphicInstruction.html" title="i
 <h4>getSource</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getSource()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html#getSource--">GraphicInstruction</a></code></span></div>
-<div class="block">Returns a string for developers to recognize the source
- of this instruction.  By default this returns a stack trace,
- but it may return "Unknown" if the <code>GraphicsWriter</code>
- debugging flag is false.</div>
+<div class="block">Returns a string for developers to recognize the source of this
+ instruction. By default this returns a stack trace, but it may return
+ "Unknown" if the <code>GraphicsWriter</code> debugging flag is false.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/graphics/GraphicInstruction.html#getSource--">getSource</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></dd>

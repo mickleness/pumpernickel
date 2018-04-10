@@ -120,13 +120,13 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object
 implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="interface in com.pump.image.pixel">PixelIterator</a></pre>
 <div class="block">This iterator scales another iterator as it is being read.
- <p>You cannot directly instantiate this class, but you can
- use the static <code>get()</code> methods or instantiate the two
- subclasses: <code>IntScalingIterator</code> or <code>ByteScalingIterator</code>.</div>
+ <p>
+ You cannot directly instantiate this class, but you can use the static
+ <code>get()</code> methods or instantiate the two subclasses:
+ <code>IntScalingIterator</code> or <code>ByteScalingIterator</code>.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><code>com.pump.image.pixel.ScalingDemo</code>, 
-"http://javagraphics.blogspot.com/2010/06/images-scaling-down.html"</dd>
+<dd>"http://javagraphics.blogspot.com/2010/06/images-scaling-down.html"</dd>
 </dl>
 </li>
 </ul>
@@ -254,22 +254,21 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/pixel/ScalingIterator.html#isOpaque--">isOpaque</a></span>()</code>
-<div class="block">Returns true if this image is guaranteed to be an
- opaque image.</div>
+<div class="block">Returns true if this image is guaranteed to be an opaque image.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/pixel/ScalingIterator.html#isSupportedByteType-int-">isSupportedByteType</a></span>(int&nbsp;type)</code>
-<div class="block">Checks the incoming image type against the 4 byte types this
- class supports.</div>
+<div class="block">Checks the incoming image type against the 4 byte types this class
+ supports.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>protected static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/pixel/ScalingIterator.html#isSupportedIntType-int-">isSupportedIntType</a></span>(int&nbsp;type)</code>
-<div class="block">Checks the incoming image type against the 4 int types this
- class supports.</div>
+<div class="block">Checks the incoming image type against the 4 int types this class
+ supports.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
@@ -327,12 +326,14 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <pre>public static&nbsp;<a href="../../../../com/pump/image/pixel/ScalingIterator.IntScalingIterator.html" title="class in com.pump.image.pixel">ScalingIterator.IntScalingIterator</a>&nbsp;get(<a href="../../../../com/pump/image/pixel/IntPixelIterator.html" title="interface in com.pump.image.pixel">IntPixelIterator</a>&nbsp;i,
                                                      float&nbsp;scaledRatio)</pre>
 <div class="block">Returns a <code>IntPixelIterator</code> scaled to a specific ratio.
- <p>If the ratio is 1.0: then this method returns the argument provided.
+ <p>
+ If the ratio is 1.0: then this method returns the argument provided.
  Otherwise a new scaled iterator is returned.
- <p>If the image type of the source image is one of the four supported
- int-based types (ARGB, ARGB_PRE, RGB, or BGR) then the new scaled iterator
- will also use that type.  Otherwise the new iterator will use ARGB or RGB
- (depending on whether the source image is opaque or not).</div>
+ <p>
+ If the image type of the source image is one of the four supported
+ int-based types (ARGB, ARGB_PRE, RGB, or BGR) then the new scaled
+ iterator will also use that type. Otherwise the new iterator will use
+ ARGB or RGB (depending on whether the source image is opaque or not).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - the incoming source image data.</dd>
@@ -351,12 +352,14 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <pre>public static&nbsp;<a href="../../../../com/pump/image/pixel/ScalingIterator.ByteScalingIterator.html" title="class in com.pump.image.pixel">ScalingIterator.ByteScalingIterator</a>&nbsp;get(<a href="../../../../com/pump/image/pixel/BytePixelIterator.html" title="interface in com.pump.image.pixel">BytePixelIterator</a>&nbsp;i,
                                                       float&nbsp;scaledRatio)</pre>
 <div class="block">Returns a <code>BytePixelIterator</code> scaled to a specific ratio.
- <p>If the ratio is 1.0: then this method returns the argument provided.
+ <p>
+ If the ratio is 1.0: then this method returns the argument provided.
  Otherwise a new scaled iterator is returned.
- <p>If the image type of the source image is one of the four supported
- byte-based types (ABGR, ABGR_PRE, BGR, or GRAY) then the new scaled iterator
- will also use that type.  Otherwise the new iterator will use ABGR or BGR
- (depending on whether the source image is opaque or not).</div>
+ <p>
+ If the image type of the source image is one of the four supported
+ byte-based types (ABGR, ABGR_PRE, BGR, or GRAY) then the new scaled
+ iterator will also use that type. Otherwise the new iterator will use
+ ABGR or BGR (depending on whether the source image is opaque or not).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - the incoming source image data.</dd>
@@ -375,11 +378,14 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <pre>public static&nbsp;<a href="../../../../com/pump/image/pixel/PixelIterator.html" title="interface in com.pump.image.pixel">PixelIterator</a>&nbsp;get(<a href="../../../../com/pump/image/pixel/PixelIterator.html" title="interface in com.pump.image.pixel">PixelIterator</a>&nbsp;i,
                                 float&nbsp;scaledRatio)</pre>
 <div class="block">Returns a <code>PixelIterator</code> scaled to a specific ratio.
- <p>If the ratio is 1.0: then this method returns the argument provided.
+ <p>
+ If the ratio is 1.0: then this method returns the argument provided.
  Otherwise a new scaled iterator is returned.
- <p>If the image type of the source image is one of the eight supported
- types: then the new scaled iterator will also use that type.  Otherwise 
- the new iterator will use ABGR / BGR (for bytes) or ARGB / RGB (for ints).</div>
+ <p>
+ If the image type of the source image is one of the eight supported
+ types: then the new scaled iterator will also use that type. Otherwise
+ the new iterator will use ABGR / BGR (for bytes) or ARGB / RGB (for
+ ints).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - the incoming source image data.</dd>
@@ -396,8 +402,8 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <li class="blockList">
 <h4>isSupportedIntType</h4>
 <pre>protected static&nbsp;boolean&nbsp;isSupportedIntType(int&nbsp;type)</pre>
-<div class="block">Checks the incoming image type against the 4 int types this
- class supports.</div>
+<div class="block">Checks the incoming image type against the 4 int types this class
+ supports.</div>
 </li>
 </ul>
 <a name="isSupportedByteType-int-">
@@ -407,8 +413,8 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <li class="blockList">
 <h4>isSupportedByteType</h4>
 <pre>protected static&nbsp;boolean&nbsp;isSupportedByteType(int&nbsp;type)</pre>
-<div class="block">Checks the incoming image type against the 4 byte types this
- class supports.</div>
+<div class="block">Checks the incoming image type against the 4 byte types this class
+ supports.</div>
 </li>
 </ul>
 <a name="get-com.pump.image.pixel.IntPixelIterator-int-int-">
@@ -421,13 +427,15 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
                                    int&nbsp;newWidth,
                                    int&nbsp;newHeight)</pre>
 <div class="block">Returns a <code>IntPixelIterator</code> with a fixed width and height.
- <p>If the source image is already the width and height specified: then this
- method returns the argument provided.  Otherwise a new scaled iterator is
+ <p>
+ If the source image is already the width and height specified: then this
+ method returns the argument provided. Otherwise a new scaled iterator is
  returned.
- <p>If the image type of the source image is one of the four supported
- int-based types (ARGB, ARGB_PRE, RGB, or BGR) then the new scaled iterator
- will also use that type.  Otherwise the new iterator will use ARGB or RGB
- (depending on whether the source image is opaque or not).</div>
+ <p>
+ If the image type of the source image is one of the four supported
+ int-based types (ARGB, ARGB_PRE, RGB, or BGR) then the new scaled
+ iterator will also use that type. Otherwise the new iterator will use
+ ARGB or RGB (depending on whether the source image is opaque or not).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - the incoming source image data.</dd>
@@ -448,13 +456,15 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
                                     int&nbsp;newWidth,
                                     int&nbsp;newHeight)</pre>
 <div class="block">Returns a <code>BytePixelIterator</code> with a fixed width and height.
- <p>If the source image is already the width and height specified: then this
- method returns the argument provided.  Otherwise a new scaled iterator is
+ <p>
+ If the source image is already the width and height specified: then this
+ method returns the argument provided. Otherwise a new scaled iterator is
  returned.
- <p>If the image type of the source image is one of the four supported
- byte-based types (ABGR, ABGR_PRE, BGR, or GRAY) then the new scaled iterator
- will also use that type.  Otherwise the new iterator will use ABGR or BGR
- (depending on whether the source image is opaque or not).</div>
+ <p>
+ If the image type of the source image is one of the four supported
+ byte-based types (ABGR, ABGR_PRE, BGR, or GRAY) then the new scaled
+ iterator will also use that type. Otherwise the new iterator will use
+ ABGR or BGR (depending on whether the source image is opaque or not).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - the incoming source image data.</dd>
@@ -475,12 +485,15 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
                                 int&nbsp;newWidth,
                                 int&nbsp;newHeight)</pre>
 <div class="block">Returns a <code>PixelIterator</code> with a fixed width and height.
- <p>If the source image is already the width and height specified: then this
- method returns the argument provided.  Otherwise a new scaled iterator is
+ <p>
+ If the source image is already the width and height specified: then this
+ method returns the argument provided. Otherwise a new scaled iterator is
  returned.
- <p>If the image type of the source image is one of the eight supported
- types: then the new scaled iterator will also use that type.  Otherwise 
- the new iterator will use ABGR / BGR (for bytes) or ARGB / RGB (for ints).</div>
+ <p>
+ If the image type of the source image is one of the eight supported
+ types: then the new scaled iterator will also use that type. Otherwise
+ the new iterator will use ABGR / BGR (for bytes) or ARGB / RGB (for
+ ints).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - the incoming source image data.</dd>
@@ -599,11 +612,10 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <h4>isOpaque</h4>
 <pre>public&nbsp;boolean&nbsp;isOpaque()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/image/pixel/PixelIterator.html#isOpaque--">PixelIterator</a></code></span></div>
-<div class="block">Returns true if this image is guaranteed to be an
- opaque image.  This has to do with the pixel type
- of this image and not its content. (For example: an
- image with an alpha channel that happens to be opaque
- may still return false.)</div>
+<div class="block">Returns true if this image is guaranteed to be an opaque image. This has
+ to do with the pixel type of this image and not its content. (For
+ example: an image with an alpha channel that happens to be opaque may
+ still return false.)</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/pixel/PixelIterator.html#isOpaque--">isOpaque</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/image/pixel/PixelIterator.html" title="interface in com.pump.image.pixel">PixelIterator</a></code></dd>

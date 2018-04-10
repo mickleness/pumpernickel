@@ -116,7 +116,8 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object
 implements java.io.Serializable</pre>
 <div class="block">This represents a single closed path.
- <P>This object can trace arbitrary amounts of itself using the
+ <P>
+ This object can trace arbitrary amounts of itself using the
  <code>writeShape()</code> methods.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -143,8 +144,7 @@ implements java.io.Serializable</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/MeasuredShape.html#DEFAULT_SPACING">DEFAULT_SPACING</a></span></code>
-<div class="block">This is the increments t goes throw as each shape segment is
- traversed.</div>
+<div class="block">This is the increments t goes throw as each shape segment is traversed.</div>
 </td>
 </tr>
 </table>
@@ -175,8 +175,8 @@ implements java.io.Serializable</pre>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/geom/MeasuredShape.html#MeasuredShape-java.awt.Shape-">MeasuredShape</a></span>(java.awt.Shape&nbsp;s)</code>
-<div class="block">Construct a <code>MeasuredShape</code> from a <code>Shape</code>,
- using the default spacing.</div>
+<div class="block">Construct a <code>MeasuredShape</code> from a <code>Shape</code>, using
+ the default spacing.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -248,8 +248,8 @@ implements java.io.Serializable</pre>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../com/pump/geom/MeasuredShape.html" title="class in com.pump.geom">MeasuredShape</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/MeasuredShape.html#getSubpaths-java.awt.geom.PathIterator-">getSubpaths</a></span>(java.awt.geom.PathIterator&nbsp;i)</code>
-<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method
- will safely break up a path into separate subpaths and create one
+<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method will
+ safely break up a path into separate subpaths and create one
  MeasuredShape for each.</div>
 </td>
 </tr>
@@ -257,16 +257,16 @@ implements java.io.Serializable</pre>
 <td class="colFirst"><code>static <a href="../../../com/pump/geom/MeasuredShape.html" title="class in com.pump.geom">MeasuredShape</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/MeasuredShape.html#getSubpaths-java.awt.geom.PathIterator-float-">getSubpaths</a></span>(java.awt.geom.PathIterator&nbsp;i,
            float&nbsp;spacing)</code>
-<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method
- will safely break up a path into separate subpaths and create one
+<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method will
+ safely break up a path into separate subpaths and create one
  MeasuredShape for each.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../com/pump/geom/MeasuredShape.html" title="class in com.pump.geom">MeasuredShape</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/MeasuredShape.html#getSubpaths-java.awt.Shape-">getSubpaths</a></span>(java.awt.Shape&nbsp;s)</code>
-<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method
- will safely break up a path into separate subpaths and create one
+<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method will
+ safely break up a path into separate subpaths and create one
  MeasuredShape for each.</div>
 </td>
 </tr>
@@ -274,15 +274,16 @@ implements java.io.Serializable</pre>
 <td class="colFirst"><code>static <a href="../../../com/pump/geom/MeasuredShape.html" title="class in com.pump.geom">MeasuredShape</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/MeasuredShape.html#getSubpaths-java.awt.Shape-float-">getSubpaths</a></span>(java.awt.Shape&nbsp;s,
            float&nbsp;spacing)</code>
-<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method
- will safely break up a path into separate subpaths and create one
+<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method will
+ safely break up a path into separate subpaths and create one
  MeasuredShape for each.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/MeasuredShape.html#getTangentSlope-float-">getTangentSlope</a></span>(float&nbsp;distance)</code>
-<div class="block">Returns the tangent slope at a certain distance from the beginning of this shape.</div>
+<div class="block">Returns the tangent slope at a certain distance from the beginning of
+ this shape.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -343,11 +344,11 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>DEFAULT_SPACING</h4>
 <pre>public static final&nbsp;float DEFAULT_SPACING</pre>
-<div class="block">This is the increments t goes throw as each shape segment is
- traversed.  For quadratic and cubic curves, this affects
- how the shape distance is measured.  The default value is .05,
- meaning quadratic and cubic curves are converted to linear segments
- connecting at t = 0, t = .05, t = .1, ... t = .95, t = 1.</div>
+<div class="block">This is the increments t goes throw as each shape segment is traversed.
+ For quadratic and cubic curves, this affects how the shape distance is
+ measured. The default value is .05, meaning quadratic and cubic curves
+ are converted to linear segments connecting at t = 0, t = .05, t = .1,
+ ... t = .95, t = 1.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.geom.MeasuredShape.DEFAULT_SPACING">Constant Field Values</a></dd>
@@ -369,8 +370,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>MeasuredShape</h4>
 <pre>public&nbsp;MeasuredShape(java.awt.Shape&nbsp;s)</pre>
-<div class="block">Construct a <code>MeasuredShape</code> from a <code>Shape</code>,
- using the default spacing.</div>
+<div class="block">Construct a <code>MeasuredShape</code> from a <code>Shape</code>, using
+ the default spacing.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - the shape data</dd>
@@ -391,8 +392,8 @@ implements java.io.Serializable</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - the shape data to create</dd>
-<dd><code>spacing</code> - the value to increment t as each segment is traversed.
- The default value is .05.</dd>
+<dd><code>spacing</code> - the value to increment t as each segment is traversed. The
+            default value is .05.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.IllegalArgumentException</code> - if the shape has more than 1 path.</dd>
 </dl>
@@ -427,8 +428,8 @@ implements java.io.Serializable</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - the shape data to create</dd>
-<dd><code>spacing</code> - the value to increment t as each segment is traversed.
- The default value is .05.</dd>
+<dd><code>spacing</code> - the value to increment t as each segment is traversed. The
+            default value is .05.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.IllegalArgumentException</code> - if the shape has more than 1 path.</dd>
 </dl>
@@ -449,8 +450,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>getSubpaths</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/geom/MeasuredShape.html" title="class in com.pump.geom">MeasuredShape</a>[]&nbsp;getSubpaths(java.awt.Shape&nbsp;s)</pre>
-<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method
- will safely break up a path into separate subpaths and create one
+<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method will
+ safely break up a path into separate subpaths and create one
  MeasuredShape for each.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -468,8 +469,8 @@ implements java.io.Serializable</pre>
 <h4>getSubpaths</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/geom/MeasuredShape.html" title="class in com.pump.geom">MeasuredShape</a>[]&nbsp;getSubpaths(java.awt.Shape&nbsp;s,
                                           float&nbsp;spacing)</pre>
-<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method
- will safely break up a path into separate subpaths and create one
+<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method will
+ safely break up a path into separate subpaths and create one
  MeasuredShape for each.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -487,8 +488,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>getSubpaths</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/geom/MeasuredShape.html" title="class in com.pump.geom">MeasuredShape</a>[]&nbsp;getSubpaths(java.awt.geom.PathIterator&nbsp;i)</pre>
-<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method
- will safely break up a path into separate subpaths and create one
+<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method will
+ safely break up a path into separate subpaths and create one
  MeasuredShape for each.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -506,8 +507,8 @@ implements java.io.Serializable</pre>
 <h4>getSubpaths</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/geom/MeasuredShape.html" title="class in com.pump.geom">MeasuredShape</a>[]&nbsp;getSubpaths(java.awt.geom.PathIterator&nbsp;i,
                                           float&nbsp;spacing)</pre>
-<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method
- will safely break up a path into separate subpaths and create one
+<div class="block">Because a MeasuredShape must be exactly 1 subpath, this method will
+ safely break up a path into separate subpaths and create one
  MeasuredShape for each.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -538,8 +539,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>getClosedDistance</h4>
 <pre>public&nbsp;float&nbsp;getClosedDistance()</pre>
-<div class="block">The distance of this shape, assuming that the path is closed.
- This will be greater than or equal to <code>getOriginalDistance()</code>.</div>
+<div class="block">The distance of this shape, assuming that the path is closed. This will
+ be greater than or equal to <code>getOriginalDistance()</code>.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/geom/MeasuredShape.html#getOriginalDistance--"><code>getOriginalDistance()</code></a></dd>
@@ -555,7 +556,8 @@ implements java.io.Serializable</pre>
 <pre>public&nbsp;float&nbsp;getOriginalDistance()</pre>
 <div class="block">The distance of the shape used to construct this
  <code>MeasuredShape</code>.
- <p>This will be less than or equal to <code>getClosedDistance()</code>.</div>
+ <p>
+ This will be less than or equal to <code>getClosedDistance()</code>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The distance this path covered when the shape was constructed.</dd>
@@ -586,8 +588,9 @@ implements java.io.Serializable</pre>
 <h4>getMoveToX</h4>
 <pre>public&nbsp;float&nbsp;getMoveToX()</pre>
 <div class="block">Returns the x-value of where this path begins.
- <P>Because a <code>MeasuredShape</code> can only be one
- path, there is only possible <code>moveTo()</code>.</div>
+ <P>
+ Because a <code>MeasuredShape</code> can only be one path, there is only
+ possible <code>moveTo()</code>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the x-value of where this path begins.</dd>
@@ -602,8 +605,9 @@ implements java.io.Serializable</pre>
 <h4>getMoveToY</h4>
 <pre>public&nbsp;float&nbsp;getMoveToY()</pre>
 <div class="block">Returns the y-value of where this path begins.
- <P>Because a <code>MeasuredShape</code> can only be one
- path, there is only possible <code>moveTo()</code>.</div>
+ <P>
+ Because a <code>MeasuredShape</code> can only be one path, there is only
+ possible <code>moveTo()</code>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the y-value of where this path begins.</dd>
@@ -623,8 +627,9 @@ implements java.io.Serializable</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>position</code> - a fraction from zero to one indicating where to start tracing</dd>
-<dd><code>length</code> - a fraction from negative one to one indicating how much to trace.
- If this value is negative then the shape will be traced backwards.</dd>
+<dd><code>length</code> - a fraction from negative one to one indicating how much to
+            trace. If this value is negative then the shape will be traced
+            backwards.</dd>
 <dd><code>w</code> - the destination to write to</dd>
 </dl>
 </li>
@@ -643,13 +648,14 @@ implements java.io.Serializable</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>position</code> - a fraction from zero to one indicating where to start tracing</dd>
-<dd><code>length</code> - a fraction from negative one to one indicating how much to trace.
- If this value is negative then the shape will be traced backwards.</dd>
+<dd><code>length</code> - a fraction from negative one to one indicating how much to
+            trace. If this value is negative then the shape will be traced
+            backwards.</dd>
 <dd><code>w</code> - the destination to write to</dd>
-<dd><code>includeMoveTo</code> - this controls whether a moveTo is the first thing
- written to the path.
- Note setting this to <code>false</code> means its the caller's responsibility
- to make sure the path is in the correct position.</dd>
+<dd><code>includeMoveTo</code> - this controls whether a moveTo is the first thing written to
+            the path. Note setting this to <code>false</code> means its
+            the caller's responsibility to make sure the path is in the
+            correct position.</dd>
 </dl>
 </li>
 </ul>
@@ -665,11 +671,12 @@ implements java.io.Serializable</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>distance</code> - the distance from the beginning of this shape to measure</dd>
-<dd><code>dest</code> - the destination to store the result in.  (If this is null a new
- Point2D will be constructed.)</dd>
+<dd><code>dest</code> - the destination to store the result in. (If this is null a new
+            Point2D will be constructed.)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the point at a certain distance from the beginning of this shape.
- Note this will be <code>dest</code> if <code>dest</code> is non-null.</dd>
+         Note this will be <code>dest</code> if <code>dest</code> is
+         non-null.</dd>
 </dl>
 </li>
 </ul>
@@ -680,9 +687,10 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>getTangentSlope</h4>
 <pre>public&nbsp;float&nbsp;getTangentSlope(float&nbsp;distance)</pre>
-<div class="block">Returns the tangent slope at a certain distance from the beginning of this shape.
- The behavior of this method when the point you request falls exactly on an edge
- (that is, when two bordering segments don't have a continuous slope) is undefined.</div>
+<div class="block">Returns the tangent slope at a certain distance from the beginning of
+ this shape. The behavior of this method when the point you request falls
+ exactly on an edge (that is, when two bordering segments don't have a
+ continuous slope) is undefined.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>distance</code> - the distance from the beginning of this shape to measure</dd>
@@ -698,8 +706,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>getCommonDistance</h4>
 <pre>public&nbsp;float&nbsp;getCommonDistance(<a href="../../../com/pump/geom/MeasuredShape.html" title="class in com.pump.geom">MeasuredShape</a>&nbsp;s)</pre>
-<div class="block">Returns the length that this shape has in common with the argument.
- This assumes the two shapes begin at the same point, and in the same
+<div class="block">Returns the length that this shape has in common with the argument. This
+ assumes the two shapes begin at the same point, and in the same
  direction.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -719,8 +727,9 @@ implements java.io.Serializable</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>position</code> - a fraction from zero to one indicating where to start tracing</dd>
-<dd><code>length</code> - a fraction from negative one to one indicating how much to trace.
- If this value is negative then the shape will be traced backwards.</dd>
+<dd><code>length</code> - a fraction from negative one to one indicating how much to
+            trace. If this value is negative then the shape will be traced
+            backwards.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a new path</dd>
 </dl>

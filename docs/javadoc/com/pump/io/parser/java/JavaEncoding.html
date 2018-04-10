@@ -110,7 +110,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">JavaEncoding</span>
 extends java.lang.Object</pre>
-<div class="block">Static methods related to reading and writing strings that use a \ character to escape characters.</div>
+<div class="block">Static methods related to reading and writing strings that use a \ character
+ to escape characters.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../com/pump/io/HTMLEncoding.html" title="class in com.pump.io"><code>HTMLEncoding</code></a></dd>
@@ -174,8 +175,8 @@ extends java.lang.Object</pre>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/pump/io/parser/java/JavaEncoding.html#encode-java.lang.String-">encode</a></span>(java.lang.String&nbsp;str)</code>
-<div class="block">Encode a String using the Java conventions (using a \ character for special chars, including unicode
- identifiers.</div>
+<div class="block">Encode a String using the Java conventions (using a \ character for
+ special chars, including unicode identifiers.</div>
 </td>
 </tr>
 </table>
@@ -225,9 +226,9 @@ extends java.lang.Object</pre>
 <h4>encode</h4>
 <pre>public static&nbsp;void&nbsp;encode(char&nbsp;ch,
                           java.lang.StringBuffer&nbsp;dest)</pre>
-<div class="block">Write a character to a StringBuffer. For example a tab character is written
- as "\t". If a character is not a simple recognized character, then it is written
- with unicode encoding ("ģ").</div>
+<div class="block">Write a character to a StringBuffer. For example a tab character is
+ written as "\t". If a character is not a simple recognized character,
+ then it is written with unicode encoding ("ģ").</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ch</code> - the character to encode.</dd>
@@ -247,15 +248,18 @@ extends java.lang.Object</pre>
 <div class="block">Reads (or decodes) one character, such as "\\t" or "ሴ" or simply "x"</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>s</code> - the String being read. This should NOT include the beginning/ending quotes.</dd>
+<dd><code>s</code> - the String being read. This should NOT include the
+            beginning/ending quotes.</dd>
 <dd><code>index</code> - the index within s to start reading.</dd>
-<dd><code>dest</code> - the buffer to write to. This may be null, in which case you won't be storing
- the parsed data (but you can still monitor the character index).</dd>
+<dd><code>dest</code> - the buffer to write to. This may be null, in which case you
+            won't be storing the parsed data (but you can still monitor
+            the character index).</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new index the next character should begin reading from. For example
- if the initial index is 0 for the String "x", then this returns 1 because the index
- only increased by 1 character. But if the initial index is 0 for the String "ģ", then this
- returns 6, so the cursor is positioned after the '3'.</dd>
+<dd>the new index the next character should begin reading from. For
+         example if the initial index is 0 for the String "x", then this
+         returns 1 because the index only increased by 1 character. But if
+         the initial index is 0 for the String "ģ", then this returns
+         6, so the cursor is positioned after the '3'.</dd>
 </dl>
 </li>
 </ul>
@@ -266,14 +270,15 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>encode</h4>
 <pre>public static&nbsp;java.lang.String&nbsp;encode(java.lang.String&nbsp;str)</pre>
-<div class="block">Encode a String using the Java conventions (using a \ character for special chars, including unicode
- identifiers.</div>
+<div class="block">Encode a String using the Java conventions (using a \ character for
+ special chars, including unicode identifiers.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>str</code> - a String to encode.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a String that a Java compiler will accept. For example a tab character becomes "\t", or complex
- characters might use unicode encoding such as "ģ".</dd>
+<dd>a String that a Java compiler will accept. For example a tab
+         character becomes "\t", or complex characters might use unicode
+         encoding such as "ģ".</dd>
 </dl>
 </li>
 </ul>

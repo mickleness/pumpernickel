@@ -120,11 +120,14 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">KeyedRandom</span>
 extends java.util.Random</pre>
 <div class="block">This is a Random implementation that is seeded by a String or a BigInteger.
- <p>This means you can give this object a complex seed of arbitrary length, but this 
- remains a deterministic pseudo-random number generator (unlike SecureRandom).
- <p>This delegates to an array of Randoms seeded by 64-bit chunks of the original
- master seed, so the complexity/variety of this Random is related to the length/size
- of the master seed.</div>
+ <p>
+ This means you can give this object a complex seed of arbitrary length, but
+ this remains a deterministic pseudo-random number generator (unlike
+ SecureRandom).
+ <p>
+ This delegates to an array of Randoms seeded by 64-bit chunks of the original
+ master seed, so the complexity/variety of this Random is related to the
+ length/size of the master seed.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.math.KeyedRandom">Serialized Form</a></dd>
@@ -262,10 +265,10 @@ extends java.util.Random</pre>
 <div class="block">Create a new KeyedRandom.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>seed</code> - the string that acts as a seed.
- This is converted to a BigInteger, which is broken into 64-bit
- chunks to act as a series of seeds for other <code>java.util.Random</code>
- objects.</dd>
+<dd><code>seed</code> - the string that acts as a seed. This is converted to a
+            BigInteger, which is broken into 64-bit chunks to act as a
+            series of seeds for other <code>java.util.Random</code>
+            objects.</dd>
 </dl>
 </li>
 </ul>
@@ -279,8 +282,8 @@ extends java.util.Random</pre>
 <div class="block">Create a new KeyedRandom.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>seed</code> - this is broken into 64-bit chunks to act as a series of 
- seeds for other <code>java.util.Random</code> objects.</dd>
+<dd><code>seed</code> - this is broken into 64-bit chunks to act as a series of seeds
+            for other <code>java.util.Random</code> objects.</dd>
 </dl>
 </li>
 </ul>

@@ -119,11 +119,11 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">MemoryBranch&lt;K&gt;</span>
 extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="class in com.pump.data.branch">AbstractBranch</a>&lt;K&gt;</pre>
-<div class="block">This is an implementation of <a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch"><code>Branch</code></a> that stores all its revisions
- in memory.
+<div class="block">This is an implementation of <a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch"><code>Branch</code></a> that stores all its revisions in
+ memory.
  <p>
- This should not be used for a large-scale implementation of hundreds of thousands
- of beans, but it can generally accommodate thousands of beans.</div>
+ This should not be used for a large-scale implementation of hundreds of
+ thousands of beans, but it can generally accommodate thousands of beans.</div>
 </li>
 </ul>
 </div>
@@ -260,8 +260,8 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../com/pump/data/branch/Revision.html" title="class in com.pump.data.branch">Revision</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/data/branch/MemoryBranch.html#getLastRevision-K-">getLastRevision</a></span>(<a href="../../../../com/pump/data/branch/MemoryBranch.html" title="type parameter in MemoryBranch">K</a>&nbsp;beanId)</code>
-<div class="block">Return the last revision in which a bean was modified, or null if
- this bean was never modified in this branch.</div>
+<div class="block">Return the last revision in which a bean was modified, or null if this
+ bean was never modified in this branch.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -289,13 +289,14 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <td class="colFirst"><code><a href="../../../../com/pump/data/BeanState.html" title="enum in com.pump.data">BeanState</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/data/branch/MemoryBranch.html#getState-K-com.pump.data.branch.Revision-">getState</a></span>(<a href="../../../../com/pump/data/branch/MemoryBranch.html" title="type parameter in MemoryBranch">K</a>&nbsp;beanId,
         <a href="../../../../com/pump/data/branch/Revision.html" title="class in com.pump.data.branch">Revision</a>&nbsp;revision)</code>
-<div class="block">Return the state of a bean relative to this branch as of a certain revision.</div>
+<div class="block">Return the state of a bean relative to this branch as of a certain
+ revision.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/data/branch/MemoryBranch.html#releaseLock-java.lang.Object-">releaseLock</a></span>(java.lang.Object&nbsp;lock)</code>
-<div class="block">Release a lock previously acquired via <a href="../../../../com/pump/data/branch/Branch.html#acquireReadLock--"><code>Branch.acquireReadLock()</code></a> or 
+<div class="block">Release a lock previously acquired via <a href="../../../../com/pump/data/branch/Branch.html#acquireReadLock--"><code>Branch.acquireReadLock()</code></a> or
  <a href="../../../../com/pump/data/branch/Branch.html#acquireWriteLock--"><code>Branch.acquireWriteLock()</code></a>.</div>
 </td>
 </tr>
@@ -316,8 +317,8 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/data/branch/MemoryBranch.html#setUncaughtExceptionHandler-java.lang.Thread.UncaughtExceptionHandler-">setUncaughtExceptionHandler</a></span>(java.lang.Thread.UncaughtExceptionHandler&nbsp;handler)</code>
-<div class="block">This handler will be notified if a BranchListener throws an exception during
- <a href="../../../../com/pump/data/branch/BranchListener.html#branchSaved-com.pump.data.branch.Branch-com.pump.data.branch.Branch-"><code>BranchListener.branchSaved(Branch, Branch)</code></a>.</div>
+<div class="block">This handler will be notified if a BranchListener throws an exception
+ during <a href="../../../../com/pump/data/branch/BranchListener.html#branchSaved-com.pump.data.branch.Branch-com.pump.data.branch.Branch-"><code>BranchListener.branchSaved(Branch, Branch)</code></a>.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -458,10 +459,11 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <div class="block">Create a new child of this branch.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>name</code> - a human-readable name that may be mentioned in Exceptions
- or other feedback. For example, if you try to save this branch
- the error will be much more helpful if it can resemble: "The branch 'add new page'
- couldn't be added to 'root'." This is optional but recommended.</dd>
+<dd><code>name</code> - a human-readable name that may be mentioned in Exceptions or
+            other feedback. For example, if you try to save this branch
+            the error will be much more helpful if it can resemble: "The
+            branch 'add new page' couldn't be added to 'root'." This is
+            optional but recommended.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a new child of this branch.</dd>
 </dl>
@@ -494,8 +496,8 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
  <a href="../../../../com/pump/data/branch/Branch.html#releaseLock-java.lang.Object-"><code>Branch.releaseLock(Object)</code></a>.
  <p>
  Implementations may choose how to reasonable manage their locks. For
- example, an implementation may not distinguish between a read
- and a write lock. Locks must be reentrant within the same thread, though.</div>
+ example, an implementation may not distinguish between a read and a write
+ lock. Locks must be reentrant within the same thread, though.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a reentrant read lock for this branch.</dd>
@@ -526,12 +528,12 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <h4>releaseLock</h4>
 <pre>public&nbsp;void&nbsp;releaseLock(java.lang.Object&nbsp;lock)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/data/branch/Branch.html#releaseLock-java.lang.Object-">Branch</a></code></span></div>
-<div class="block">Release a lock previously acquired via <a href="../../../../com/pump/data/branch/Branch.html#acquireReadLock--"><code>Branch.acquireReadLock()</code></a> or 
+<div class="block">Release a lock previously acquired via <a href="../../../../com/pump/data/branch/Branch.html#acquireReadLock--"><code>Branch.acquireReadLock()</code></a> or
  <a href="../../../../com/pump/data/branch/Branch.html#acquireWriteLock--"><code>Branch.acquireWriteLock()</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>lock</code> - a read or write lock previously previously acquired via 
- <a href="../../../../com/pump/data/branch/Branch.html#acquireReadLock--"><code>Branch.acquireReadLock()</code></a> or <a href="../../../../com/pump/data/branch/Branch.html#acquireWriteLock--"><code>Branch.acquireWriteLock()</code></a>.</dd>
+<dd><code>lock</code> - a read or write lock previously previously acquired via
+            <a href="../../../../com/pump/data/branch/Branch.html#acquireReadLock--"><code>Branch.acquireReadLock()</code></a> or <a href="../../../../com/pump/data/branch/Branch.html#acquireWriteLock--"><code>Branch.acquireWriteLock()</code></a>.</dd>
 </dl>
 </li>
 </ul>
@@ -546,12 +548,13 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <pre>public&nbsp;<a href="../../../../com/pump/data/BeanState.html" title="enum in com.pump.data">BeanState</a>&nbsp;getState(<a href="../../../../com/pump/data/branch/MemoryBranch.html" title="type parameter in MemoryBranch">K</a>&nbsp;beanId,
                           <a href="../../../../com/pump/data/branch/Revision.html" title="class in com.pump.data.branch">Revision</a>&nbsp;revision)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/data/branch/Branch.html#getState-K-com.pump.data.branch.Revision-">Branch</a></code></span></div>
-<div class="block">Return the state of a bean relative to this branch as of a certain revision.
+<div class="block">Return the state of a bean relative to this branch as of a certain
+ revision.
  <p>
- For example, if this branch is aware of deleting this bean,
- then it may return <code>DELETED</code>. However if this branch created
- this bean, deleted it, and then saved to its parent branch:
- the parent branch may return <code>UNDEFINED</code>.
+ For example, if this branch is aware of deleting this bean, then it may
+ return <code>DELETED</code>. However if this branch created this bean,
+ deleted it, and then saved to its parent branch: the parent branch may
+ return <code>UNDEFINED</code>.
  <p>
  If a bean was created in a parent branch, then this may return
  <code>EXISTS</code>, but if a bean was created in this branch (and it is
@@ -561,8 +564,8 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>beanId</code> - the id of the bean to examine.</dd>
-<dd><code>revision</code> - the latest revision to consider. If this is null
- you can assume you're interacting with the most recent revision.</dd>
+<dd><code>revision</code> - the latest revision to consider. If this is null you can
+            assume you're interacting with the most recent revision.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the state of this bean relative to this branch.</dd>
 </dl>
@@ -586,17 +589,18 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>beanId</code> - the bean to get the field of.</dd>
 <dd><code>fieldName</code> - the name of the field to get.</dd>
-<dd><code>revision</code> - the revision for which the field value should be dated. For example
- if a field starts out with the value of "abc" at revision #1, and then at revision #10 it
- becomes "xyz", then if you pass revision #5 to this method: it will return "abc".
- <p>
- If this is null: the current value will be returned.
- <p>
- This is used by branches to reconstruct a model of a bean based on exactly when
- the branch was created.</dd>
+<dd><code>revision</code> - the revision for which the field value should be dated. For
+            example if a field starts out with the value of "abc" at
+            revision #1, and then at revision #10 it becomes "xyz", then
+            if you pass revision #5 to this method: it will return "abc".
+            <p>
+            If this is null: the current value will be returned.
+            <p>
+            This is used by branches to reconstruct a model of a bean
+            based on exactly when the branch was created.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the indicated field from the indicated bean as of the indicated revision,
- or null if that field is undefined.</dd>
+<dd>the indicated field from the indicated bean as of the indicated
+         revision, or null if that field is undefined.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/data/branch/MissingBeanException.html" title="class in com.pump.data.branch">MissingBeanException</a></code> - if the beanId provided isn't a recognized bean.</dd>
 </dl>
@@ -622,7 +626,8 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <dd><code>fieldName</code> - the name of the field to modify.</dd>
 <dd><code>newValue</code> - the new value to assign to this field (may be null).</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the previous value this field held, or null if it was previously undefined.</dd>
+<dd>the previous value this field held, or null if it was previously
+         undefined.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/data/branch/MissingBeanException.html" title="class in com.pump.data.branch">MissingBeanException</a></code> - if the beanId provided isn't a recognized bean.</dd>
 </dl>
@@ -678,15 +683,15 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <h4>getLastRevision</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/data/branch/Revision.html" title="class in com.pump.data.branch">Revision</a>&nbsp;getLastRevision(<a href="../../../../com/pump/data/branch/MemoryBranch.html" title="type parameter in MemoryBranch">K</a>&nbsp;beanId)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/data/branch/Branch.html#getLastRevision-K-">Branch</a></code></span></div>
-<div class="block">Return the last revision in which a bean was modified, or null if
- this bean was never modified in this branch. Note this may be null
- if a bean exists but was last modified in a parent branch.</div>
+<div class="block">Return the last revision in which a bean was modified, or null if this
+ bean was never modified in this branch. Note this may be null if a bean
+ exists but was last modified in a parent branch.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>beanId</code> - the ID of the bean to examine.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the last revision in which a bean was modified. Note this may be null
- if a bean exists but was last modified in a parent branch.</dd>
+<dd>the last revision in which a bean was modified. Note this may be
+         null if a bean exists but was last modified in a parent branch.</dd>
 </dl>
 </li>
 </ul>
@@ -710,8 +715,8 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <dd><code>fieldName</code> - the field to examine.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the last revision in which a particular field was modified for a
- given bean, or null if there is no record in this branch of any such
- modification.</dd>
+         given bean, or null if there is no record in this branch of any
+         such modification.</dd>
 </dl>
 </li>
 </ul>
@@ -725,8 +730,8 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/data/branch/Branch.html#getModifiedBeans--">Branch</a></code></span></div>
 <div class="block">Return all the beans this branch modified.
  <p>
- This may choose not to mention beans that were both created and destroyed in this
- branch.</div>
+ This may choose not to mention beans that were both created and destroyed
+ in this branch.</div>
 </li>
 </ul>
 <a name="save--">
@@ -739,23 +744,26 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
           throws <a href="../../../../com/pump/data/branch/SaveException.html" title="class in com.pump.data.branch">SaveException</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/data/branch/Branch.html#save--">Branch</a></code></span></div>
 <div class="block">This saves all the changes in this branch to its parent. (This may also
- be considered  "merge", "commit" or "push".)
+ be considered "merge", "commit" or "push".)
  <p>
- This will immediately throw a <code>NullPointerException</code> if there is no parent.
+ This will immediately throw a <code>NullPointerException</code> if there
+ is no parent.
  <p>
- This requires acquiring a read lock on this branch and a write lock
- on its parent.
+ This requires acquiring a read lock on this branch and a write lock on
+ its parent.
  <p>
- This method only saves changes performed since the last call to <code>save()</code>.</div>
+ This method only saves changes performed since the last call to
+ <code>save()</code>.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../../../com/pump/data/branch/SaveException.html" title="class in com.pump.data.branch">SaveException</a></code> - if this branch contains changes that may conflict
- with its parent.
- <p>
- This method may choose to NOT throw a SaveException if both branches modified
- a bean/field in the same way. For example, if both branches deleted bean X, or
- assigned the same value to the same field: then we don't necessarily have
- a collision problem.</dd>
+<dd><code><a href="../../../../com/pump/data/branch/SaveException.html" title="class in com.pump.data.branch">SaveException</a></code> - if this branch contains changes that may conflict with its
+             parent.
+             <p>
+             This method may choose to NOT throw a SaveException if both
+             branches modified a bean/field in the same way. For example,
+             if both branches deleted bean X, or assigned the same value
+             to the same field: then we don't necessarily have a collision
+             problem.</dd>
 </dl>
 </li>
 </ul>
@@ -766,8 +774,8 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <li class="blockList">
 <h4>setUncaughtExceptionHandler</h4>
 <pre>public&nbsp;void&nbsp;setUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler&nbsp;handler)</pre>
-<div class="block">This handler will be notified if a BranchListener throws an exception during
- <a href="../../../../com/pump/data/branch/BranchListener.html#branchSaved-com.pump.data.branch.Branch-com.pump.data.branch.Branch-"><code>BranchListener.branchSaved(Branch, Branch)</code></a>.
+<div class="block">This handler will be notified if a BranchListener throws an exception
+ during <a href="../../../../com/pump/data/branch/BranchListener.html#branchSaved-com.pump.data.branch.Branch-com.pump.data.branch.Branch-"><code>BranchListener.branchSaved(Branch, Branch)</code></a>.
  <p>
  The default handler just called <code>ex.printStackTrace()</code>.</div>
 <dl>
@@ -797,13 +805,14 @@ extends <a href="../../../../com/pump/data/branch/AbstractBranch.html" title="cl
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/data/branch/Branch.html#getBean-K-">Branch</a></code></span></div>
 <div class="block">Return all the key/value pairs for a bean.
  <p>
- This consults all possible parents to create a complete representation of the
- bean.</div>
+ This consults all possible parents to create a complete representation of
+ the bean.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>beanId</code> - the bean to fetch the key/value pairs of.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a map representing all the key/value pairs in a bean, or null if the bean is undefined.</dd>
+<dd>a map representing all the key/value pairs in a bean, or null if
+         the bean is undefined.</dd>
 </dl>
 </li>
 </ul>

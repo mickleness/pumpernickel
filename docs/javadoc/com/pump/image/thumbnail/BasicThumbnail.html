@@ -115,18 +115,18 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">BasicThumbnail</span>
 extends <a href="../../../../com/pump/image/thumbnail/Thumbnail.html" title="class in com.pump.image.thumbnail">Thumbnail</a></pre>
-<div class="block">This provides a simple thumbnail format offering shadows, borders,
- and rotation. This object and its members are immutable.
- <P>A <code>BasicThumbnail</code> consists of a series of z-ordered layers,
- where each layer is rendered above the previous. Each layer is a
- <a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.html" title="interface in com.pump.image.thumbnail"><code>BasicThumbnail.Layer</code></a> object, and has an associated set of insets. Although most
- layers support a variable degree of curvature (for rounded corners),
- the insets reflect the official size of the layer. When scaling an image
- to fit within a maximum thumbnail size: these insets are combined to 
- calculate the size the source image has to be scaled to. (For example:
- if the maximum thumbnail size is 64x64, but each side of this
- thumbnail has 5 pixels of padding, then the image will be scaled to
- fit within a 54x54 area.)</div>
+<div class="block">This provides a simple thumbnail format offering shadows, borders, and
+ rotation. This object and its members are immutable.
+ <P>
+ A <code>BasicThumbnail</code> consists of a series of z-ordered layers, where
+ each layer is rendered above the previous. Each layer is a <a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.html" title="interface in com.pump.image.thumbnail"><code>BasicThumbnail.Layer</code></a>
+ object, and has an associated set of insets. Although most layers support a
+ variable degree of curvature (for rounded corners), the insets reflect the
+ official size of the layer. When scaling an image to fit within a maximum
+ thumbnail size: these insets are combined to calculate the size the source
+ image has to be scaled to. (For example: if the maximum thumbnail size is
+ 64x64, but each side of this thumbnail has 5 pixels of padding, then the
+ image will be scaled to fit within a 54x54 area.)</div>
 </li>
 </ul>
 </div>
@@ -194,8 +194,8 @@ extends <a href="../../../../com/pump/image/thumbnail/Thumbnail.html" title="cla
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../com/pump/image/thumbnail/BasicThumbnail.html" title="class in com.pump.image.thumbnail">BasicThumbnail</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/thumbnail/BasicThumbnail.html#Aqua">Aqua</a></span></code>
-<div class="block">A thumbnail format that resembles the icon observed on Mac 10.7.4 in
- the Finder for image thumbnails.</div>
+<div class="block">A thumbnail format that resembles the icon observed on Mac 10.7.4 in the
+ Finder for image thumbnails.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -365,11 +365,12 @@ extends <a href="../../../../com/pump/image/thumbnail/Thumbnail.html" title="cla
 <li class="blockList">
 <h4>Aqua</h4>
 <pre>public static&nbsp;<a href="../../../../com/pump/image/thumbnail/BasicThumbnail.html" title="class in com.pump.image.thumbnail">BasicThumbnail</a> Aqua</pre>
-<div class="block">A thumbnail format that resembles the icon observed on Mac 10.7.4 in
- the Finder for image thumbnails.
- <p>Specifically: this consists of a light 2-pixel shadow, 1-pixel a gray frame, then 2 pixels of
- white, then another 1-pixel frame. This is not intended to  be a perfect
- replica, but it is similar in appearance.</div>
+<div class="block">A thumbnail format that resembles the icon observed on Mac 10.7.4 in the
+ Finder for image thumbnails.
+ <p>
+ Specifically: this consists of a light 2-pixel shadow, 1-pixel a gray
+ frame, then 2 pixels of white, then another 1-pixel frame. This is not
+ intended to be a perfect replica, but it is similar in appearance.</div>
 </li>
 </ul>
 <a name="layers">
@@ -418,9 +419,9 @@ extends <a href="../../../../com/pump/image/thumbnail/Thumbnail.html" title="cla
 <h4>BasicThumbnail</h4>
 <pre>public&nbsp;BasicThumbnail(<a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.html" title="interface in com.pump.image.thumbnail">BasicThumbnail.Layer</a>[]&nbsp;e)</pre>
 <div class="block">Create a BasicThumbnail with no rotation.
- <p>If there isn't an Image layer in the list of layers
- provided: then a plain Image layer (with no curvature and
- a white background) is added.</div>
+ <p>
+ If there isn't an Image layer in the list of layers provided: then a
+ plain Image layer (with no curvature and a white background) is added.</div>
 </li>
 </ul>
 <a name="BasicThumbnail-com.pump.image.thumbnail.BasicThumbnail.Layer:A-float-">
@@ -432,9 +433,9 @@ extends <a href="../../../../com/pump/image/thumbnail/Thumbnail.html" title="cla
 <pre>public&nbsp;BasicThumbnail(<a href="../../../../com/pump/image/thumbnail/BasicThumbnail.Layer.html" title="interface in com.pump.image.thumbnail">BasicThumbnail.Layer</a>[]&nbsp;e,
                       float&nbsp;theta)</pre>
 <div class="block">Create a BasicThumbnail.
- <p>If there isn't an Image layer in the list of layers
- provided: then a plain Image layer (with no curvature and
- a white background) is added.</div>
+ <p>
+ If there isn't an Image layer in the list of layers provided: then a
+ plain Image layer (with no curvature and a white background) is added.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>theta</code> - the rotation of this thumbnail.</dd>
@@ -454,10 +455,9 @@ extends <a href="../../../../com/pump/image/thumbnail/Thumbnail.html" title="cla
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>theta</code> - the rotation of this thumbnail.</dd>
-<dd><code>addImageIfMissing</code> - if an Image layer is missing
- and this boolean is true: a plain Image layer is added.
- This is generally to be true except in certain (rare)
- debugging instances.</dd>
+<dd><code>addImageIfMissing</code> - if an Image layer is missing and this boolean is true: a plain
+            Image layer is added. This is generally to be true except in
+            certain (rare) debugging instances.</dd>
 </dl>
 </li>
 </ul>
@@ -513,14 +513,16 @@ extends <a href="../../../../com/pump/image/thumbnail/Thumbnail.html" title="cla
 <dd><code><a href="../../../../com/pump/image/thumbnail/Thumbnail.html#create-com.pump.image.thumbnail.Thumbnail.ImageSource-java.awt.Dimension-">create</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/image/thumbnail/Thumbnail.html" title="class in com.pump.image.thumbnail">Thumbnail</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - the image source.</dd>
-<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the
- returned thumbnail may be smaller than these bounds. For example:
- if you have a 4:3 landscape-oriented picture and the maximum size is
- 64x64 pixels, then the return image will be 64 pixels wide and
- approximately 48 pixels tall. (It may not be exactly 48 pixels tall,
- depending on the decorations this thumbnail format may add.)
- <p>If the source image is already smaller than the maxSize, then
- the source image is not scaled to create this thumbnail.</dd>
+<dd><code>maxSize</code> - the maximum dimensions of the thumbnail. Note the returned
+            thumbnail may be smaller than these bounds. For example: if
+            you have a 4:3 landscape-oriented picture and the maximum size
+            is 64x64 pixels, then the return image will be 64 pixels wide
+            and approximately 48 pixels tall. (It may not be exactly 48
+            pixels tall, depending on the decorations this thumbnail
+            format may add.)
+            <p>
+            If the source image is already smaller than the maxSize, then
+            the source image is not scaled to create this thumbnail.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an image that is at most maxSize dimensions.</dd>
 </dl>

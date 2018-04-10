@@ -14,8 +14,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * This is used by the {@link CreateSamplesJob} to apply screenshots/animations
- * to javadocs.
+ * This was previously used to to apply screenshots/animations to javadocs. It
+ * is currently no longer used/consulted.
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ResourceSample {

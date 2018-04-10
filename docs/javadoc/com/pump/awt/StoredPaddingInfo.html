@@ -115,12 +115,10 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">StoredPaddingInfo</span>
 extends <a href="../../../com/pump/awt/PaddingInfo.html" title="class in com.pump.awt">PaddingInfo</a></pre>
-<div class="block">This maintains a list of the padding of certain components.
- This assumes, for example, that all JCheckBoxes using the
- same look-and-feel will use the same padding. Whenever
- a cached value is missing, this defers to the
- more expensive <code>PaddingInfo.get()</code> method
- and stores that value.</div>
+<div class="block">This maintains a list of the padding of certain components. This assumes, for
+ example, that all JCheckBoxes using the same look-and-feel will use the same
+ padding. Whenever a cached value is missing, this defers to the more
+ expensive <code>PaddingInfo.get()</code> method and stores that value.</div>
 </li>
 </ul>
 </div>
@@ -256,17 +254,15 @@ extends <a href="../../../com/pump/awt/PaddingInfo.html" title="class in com.pum
 <h4>get</h4>
 <pre>public&nbsp;java.awt.Insets&nbsp;get(java.awt.Component&nbsp;jc)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/awt/PaddingInfo.html#get-java.awt.Component-">PaddingInfo</a></code></span></div>
-<div class="block">This returns the empty pixels that pad a component.
- If the insets can't be determined empty
- insets are returned (0,0,0,0).</div>
+<div class="block">This returns the empty pixels that pad a component. If the insets can't
+ be determined empty insets are returned (0,0,0,0).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../com/pump/awt/PaddingInfo.html#get-java.awt.Component-">get</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/awt/PaddingInfo.html" title="class in com.pump.awt">PaddingInfo</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>jc</code> - the component to study.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the empty pixels that pad a component
- as insets.</dd>
+<dd>the empty pixels that pad a component as insets.</dd>
 </dl>
 </li>
 </ul>

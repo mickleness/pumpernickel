@@ -213,8 +213,8 @@ extends <a href="../../../../../com/pump/image/gif/block/GifExtensionBlock.html"
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/pump/image/gif/block/GifLoopingApplicationExtension.html" title="class in com.pump.image.gif.block">GifLoopingApplicationExtension</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/pump/image/gif/block/GifApplicationExtension.html#convertToLoopingExtension--">convertToLoopingExtension</a></span>()</code>
-<div class="block">If <code>isLoopingExtension()</code> returns <code>true</code>, then
- this method converts this block to a
+<div class="block">If <code>isLoopingExtension()</code> returns <code>true</code>, then this
+ method converts this block to a
  <a href="../../../../../com/pump/image/gif/block/GifLoopingApplicationExtension.html" title="class in com.pump.image.gif.block"><code>GifLoopingApplicationExtension</code></a>.</div>
 </td>
 </tr>
@@ -243,8 +243,8 @@ extends <a href="../../../../../com/pump/image/gif/block/GifExtensionBlock.html"
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/pump/image/gif/block/GifApplicationExtension.html#isLoopingExtension--">isLoopingExtension</a></span>()</code>
-<div class="block">This returns <code>true</code> if this block actually describes how
- this GIF should loop.</div>
+<div class="block">This returns <code>true</code> if this block actually describes how this
+ GIF should loop.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -314,9 +314,9 @@ extends <a href="../../../../../com/pump/image/gif/block/GifExtensionBlock.html"
 <h4>GifApplicationExtension</h4>
 <pre>protected&nbsp;GifApplicationExtension(byte[]&nbsp;header,
                                   byte[]&nbsp;data)</pre>
-<div class="block">Creates a <code>GifApplicationExtension</code>. The byte arrays used
- to create this object are NOT cloned, it's assumed they will not be
- changed or reused after this object is constructed.</div>
+<div class="block">Creates a <code>GifApplicationExtension</code>. The byte arrays used to
+ create this object are NOT cloned, it's assumed they will not be changed
+ or reused after this object is constructed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>header</code> - the 11-byte header of this block. This is the 8-byte
@@ -385,8 +385,8 @@ extends <a href="../../../../../com/pump/image/gif/block/GifExtensionBlock.html"
 <li class="blockList">
 <h4>isLoopingExtension</h4>
 <pre>public&nbsp;boolean&nbsp;isLoopingExtension()</pre>
-<div class="block">This returns <code>true</code> if this block actually describes how
- this GIF should loop. If this returns <code>true</code>, then
+<div class="block">This returns <code>true</code> if this block actually describes how this
+ GIF should loop. If this returns <code>true</code>, then
  <code>convertToLoopingExtension()</code> should not return
  <code>null</code>.</div>
 </li>
@@ -398,12 +398,12 @@ extends <a href="../../../../../com/pump/image/gif/block/GifExtensionBlock.html"
 <li class="blockList">
 <h4>convertToLoopingExtension</h4>
 <pre>public&nbsp;<a href="../../../../../com/pump/image/gif/block/GifLoopingApplicationExtension.html" title="class in com.pump.image.gif.block">GifLoopingApplicationExtension</a>&nbsp;convertToLoopingExtension()</pre>
-<div class="block">If <code>isLoopingExtension()</code> returns <code>true</code>, then
- this method converts this block to a
+<div class="block">If <code>isLoopingExtension()</code> returns <code>true</code>, then this
+ method converts this block to a
  <a href="../../../../../com/pump/image/gif/block/GifLoopingApplicationExtension.html" title="class in com.pump.image.gif.block"><code>GifLoopingApplicationExtension</code></a>.
  <P>
- Otherwise this returns <code>null</code>, and prints an exception to
- the console.</div>
+ Otherwise this returns <code>null</code>, and prints an exception to the
+ console.</div>
 </li>
 </ul>
 <a name="getBytes--">
@@ -487,12 +487,12 @@ extends <a href="../../../../../com/pump/image/gif/block/GifExtensionBlock.html"
          the authenitication code for the popular "NETSCAPE" looping
          extension.
  
- <P>
- The GIF file format specification says:
- <P>
- An Application program may use an algorithm to compute a binary code that
- uniquely identifies it as the application owning the Application
- Extension.</dd>
+         <P>
+         The GIF file format specification says:
+         <P>
+         An Application program may use an algorithm to compute a binary
+         code that uniquely identifies it as the application owning the
+         Application Extension.</dd>
 </dl>
 </li>
 </ul>

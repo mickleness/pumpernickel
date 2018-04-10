@@ -131,7 +131,8 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/audio/WavFormatChunk.html#avgBytesPerSecond">avgBytesPerSecond</a></span></code>
-<div class="block">This value indicates how many bytes of wave data must be streamed to a D/A converter per second in order to play the wave file.</div>
+<div class="block">This value indicates how many bytes of wave data must be streamed to a
+ D/A converter per second in order to play the wave file.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -185,7 +186,8 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/audio/WavFormatChunk.html#numChannels">numChannels</a></span></code>
-<div class="block">The number of channels specifies how many separate audio signals that are encoded in the wave data chunk.</div>
+<div class="block">The number of channels specifies how many separate audio signals that are
+ encoded in the wave data chunk.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -411,7 +413,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>numChannels</h4>
 <pre>public&nbsp;int numChannels</pre>
-<div class="block">The number of channels specifies how many separate audio signals that are encoded in the wave data chunk. A value of 1 means a mono signal, a value of 2 means a stereo signal, etc.</div>
+<div class="block">The number of channels specifies how many separate audio signals that are
+ encoded in the wave data chunk. A value of 1 means a mono signal, a value
+ of 2 means a stereo signal, etc.</div>
 </li>
 </ul>
 <a name="sampleRate">
@@ -421,7 +425,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>sampleRate</h4>
 <pre>public&nbsp;long sampleRate</pre>
-<div class="block">The number of sample slices per second. This value is unaffected by the number of channels.</div>
+<div class="block">The number of sample slices per second. This value is unaffected by the
+ number of channels.</div>
 </li>
 </ul>
 <a name="avgBytesPerSecond">
@@ -431,7 +436,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>avgBytesPerSecond</h4>
 <pre>public&nbsp;long avgBytesPerSecond</pre>
-<div class="block">This value indicates how many bytes of wave data must be streamed to a D/A converter per second in order to play the wave file. This information is useful when determining if data can be streamed from the source fast enough to keep up with playback. This value can be easily calculated with the formula: AvgBytesPerSec = SampleRate * BlockAlign</div>
+<div class="block">This value indicates how many bytes of wave data must be streamed to a
+ D/A converter per second in order to play the wave file. This information
+ is useful when determining if data can be streamed from the source fast
+ enough to keep up with playback. This value can be easily calculated with
+ the formula: AvgBytesPerSec = SampleRate * BlockAlign</div>
 </li>
 </ul>
 <a name="blockAlign">
@@ -441,7 +450,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>blockAlign</h4>
 <pre>public&nbsp;int blockAlign</pre>
-<div class="block">The number of bytes per sample slice. This value is not affected by the number of channels and can be calculated with the formula: BlockAlign = SignificantBitsPerSample / 8 * NumChannels</div>
+<div class="block">The number of bytes per sample slice. This value is not affected by the
+ number of channels and can be calculated with the formula: BlockAlign =
+ SignificantBitsPerSample / 8 * NumChannels</div>
 </li>
 </ul>
 <a name="sigBitsPerSample">
@@ -451,7 +462,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>sigBitsPerSample</h4>
 <pre>public&nbsp;int sigBitsPerSample</pre>
-<div class="block">This value specifies the number of bits used to define each sample. This value is usually 8, 16, 24 or 32. If the number of bits is not byte aligned (a multiple of 8) then the number of bytes used per sample is rounded up to the nearest byte size and the unused bytes are set to 0 and ignored.</div>
+<div class="block">This value specifies the number of bits used to define each sample. This
+ value is usually 8, 16, 24 or 32. If the number of bits is not byte
+ aligned (a multiple of 8) then the number of bytes used per sample is
+ rounded up to the nearest byte size and the unused bytes are set to 0 and
+ ignored.</div>
 </li>
 </ul>
 </li>
@@ -474,10 +489,19 @@ extends java.lang.Object</pre>
                       int&nbsp;sigBitsPerSample)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>compressionCode</code> - Any value is acceptable, but COMPRESSION_PCM (0x0001) is the most common.</dd>
-<dd><code>numChannels</code> - The number of channels specifies how many separate audio signals that are encoded in the wave data chunk. A value of 1 means a mono signal, a value of 2 means a stereo signal, etc.</dd>
-<dd><code>sampleRate</code> - The number of sample slices per second. This value is unaffected by the number of channels.</dd>
-<dd><code>sigBitsPerSample</code> - This value specifies the number of bits used to define each sample. This value is unaffected by the number of channels.  This value is usually 8, 16, 24 or 32. If the number of bits is not byte aligned (a multiple of 8) then the number of bytes used per sample is rounded up to the nearest byte size and the unused bytes are set to 0 and ignored.</dd>
+<dd><code>compressionCode</code> - Any value is acceptable, but COMPRESSION_PCM (0x0001) is the
+            most common.</dd>
+<dd><code>numChannels</code> - The number of channels specifies how many separate audio
+            signals that are encoded in the wave data chunk. A value of 1
+            means a mono signal, a value of 2 means a stereo signal, etc.</dd>
+<dd><code>sampleRate</code> - The number of sample slices per second. This value is
+            unaffected by the number of channels.</dd>
+<dd><code>sigBitsPerSample</code> - This value specifies the number of bits used to define each
+            sample. This value is unaffected by the number of channels.
+            This value is usually 8, 16, 24 or 32. If the number of bits
+            is not byte aligned (a multiple of 8) then the number of bytes
+            used per sample is rounded up to the nearest byte size and the
+            unused bytes are set to 0 and ignored.</dd>
 </dl>
 </li>
 </ul>
@@ -495,12 +519,28 @@ extends java.lang.Object</pre>
                       int&nbsp;sigBitsPerSample)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>compressionCode</code> - Any value is acceptable, but COMPRESSION_PCM (0x0001) is the most common.</dd>
-<dd><code>numChannels</code> - The number of channels specifies how many separate audio signals that are encoded in the wave data chunk. A value of 1 means a mono signal, a value of 2 means a stereo signal, etc.</dd>
-<dd><code>sampleRate</code> - The number of sample slices per second. This value is unaffected by the number of channels.</dd>
-<dd><code>avgBytesPerSecond</code> - This value indicates how many bytes of wave data must be streamed to a D/A converter per second in order to play the wave file. This information is useful when determining if data can be streamed from the source fast enough to keep up with playback. This value can be easily calculated with the formula: AvgBytesPerSec = SampleRate * BlockAlign</dd>
-<dd><code>blockAlign</code> - The number of bytes per sample slice. This value is not affected by the number of channels and can be calculated with the formula: BlockAlign = SignificantBitsPerSample / 8 * NumChannels</dd>
-<dd><code>sigBitsPerSample</code> - This value specifies the number of bits used to define each sample. This value is usually 8, 16, 24 or 32. If the number of bits is not byte aligned (a multiple of 8) then the number of bytes used per sample is rounded up to the nearest byte size and the unused bytes are set to 0 and ignored.</dd>
+<dd><code>compressionCode</code> - Any value is acceptable, but COMPRESSION_PCM (0x0001) is the
+            most common.</dd>
+<dd><code>numChannels</code> - The number of channels specifies how many separate audio
+            signals that are encoded in the wave data chunk. A value of 1
+            means a mono signal, a value of 2 means a stereo signal, etc.</dd>
+<dd><code>sampleRate</code> - The number of sample slices per second. This value is
+            unaffected by the number of channels.</dd>
+<dd><code>avgBytesPerSecond</code> - This value indicates how many bytes of wave data must be
+            streamed to a D/A converter per second in order to play the
+            wave file. This information is useful when determining if data
+            can be streamed from the source fast enough to keep up with
+            playback. This value can be easily calculated with the
+            formula: AvgBytesPerSec = SampleRate * BlockAlign</dd>
+<dd><code>blockAlign</code> - The number of bytes per sample slice. This value is not
+            affected by the number of channels and can be calculated with
+            the formula: BlockAlign = SignificantBitsPerSample / 8 *
+            NumChannels</dd>
+<dd><code>sigBitsPerSample</code> - This value specifies the number of bits used to define each
+            sample. This value is usually 8, 16, 24 or 32. If the number
+            of bits is not byte aligned (a multiple of 8) then the number
+            of bytes used per sample is rounded up to the nearest byte
+            size and the unused bytes are set to 0 and ignored.</dd>
 </dl>
 </li>
 </ul>

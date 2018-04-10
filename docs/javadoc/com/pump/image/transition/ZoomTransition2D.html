@@ -129,26 +129,37 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ZoomTransition2D</span>
 extends <a href="../../../../com/pump/image/transition/AbstractPlanarTransition2D.html" title="class in com.pump.image.transition">AbstractPlanarTransition2D</a></pre>
-<div class="block">In this 3D-ish transition the 2 frames slide forward, as if the viewer
- is at the end of a conveyer belt. Here are playback samples:
- <p><table summary="Sample Animations of ZoomTransition2D" cellspacing="50" border="0"><tr>
+<div class="block">In this 3D-ish transition the 2 frames slide forward, as if the viewer is at
+ the end of a conveyer belt. Here are playback samples:
+ <p>
+ <table summary="Sample Animations of ZoomTransition2D" cellspacing="50" border="0">
+ <tr>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomLeft.gif" alt="Zoom Left">
- <p>Zoom Left
- </td>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomLeft.gif"
+ alt="Zoom Left">
+ <p>
+ Zoom Left</td>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomRight.gif" alt="Zoom Right">
- <p>Zoom Right
- </td>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomRight.gif"
+ alt="Zoom Right">
+ <p>
+ Zoom Right</td>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomLeftStationary.gif" alt="Zoom Left Stationary">
- <p>Zoom Left Stationary
- </td>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomLeftStationary.gif"
+ alt="Zoom Left Stationary">
+ <p>
+ Zoom Left Stationary</td>
  <td align="center">
- <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomRightStationary.gif" alt="Zoom Right Stationary">
- <p>Zoom Right Stationary
- </td>
- </tr></table></div>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ZoomTransition2D/ZoomRightStationary.gif"
+ alt="Zoom Right Stationary">
+ <p>
+ Zoom Right Stationary</td>
+ </tr>
+ </table></div>
 </li>
 </ul>
 </div>
@@ -215,9 +226,7 @@ extends <a href="../../../../com/pump/image/transition/AbstractPlanarTransition2
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/transition/ZoomTransition2D.html#getDemoTransitions--">getDemoTransitions</a></span>()</code>
-<div class="block">This public static method is used by the 
- <code>com.bric.image.transition.Transition2DDemoHelper</code>
- class to create sample animations of this transition.</div>
+<div class="block">TODO: remove all getDemoTransitions() methods or create a new tool to invoke them.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -346,13 +355,11 @@ extends <a href="../../../../com/pump/image/transition/AbstractPlanarTransition2
 <li class="blockList">
 <h4>getDemoTransitions</h4>
 <pre>public static&nbsp;<a href="../../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[]&nbsp;getDemoTransitions()</pre>
-<div class="block">This public static method is used by the 
- <code>com.bric.image.transition.Transition2DDemoHelper</code>
- class to create sample animations of this transition.</div>
+<div class="block">TODO: remove all getDemoTransitions() methods or create a new tool to invoke them.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the transitions that should be used to demonstrate this
- transition.</dd>
+         transition.</dd>
 </dl>
 </li>
 </ul>
@@ -394,15 +401,12 @@ extends <a href="../../../../com/pump/image/transition/AbstractPlanarTransition2
 <h4>getFrameBLocation</h4>
 <pre>public&nbsp;java.awt.geom.Point2D&nbsp;getFrameBLocation(float&nbsp;p)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/image/transition/AbstractPlanarTransition2D.html#getFrameBLocation-float-">AbstractPlanarTransition2D</a></code></span></div>
-<div class="block">This should be a dot within the rectangle (0,0,1,1).
- Imagine the rectangle is a diagram of a stage
- (you know, a theatrical stage, facing an audience).
- When the point is (.5,1), this frame is exactly
- centered in the user's field of view.
- At (.5,0) this frame is centered, but small -- as if
- in the distance.  So the y-coordinate is used to
- represent depth, and the x-coordinate is used to
- represent horizontal movement.</div>
+<div class="block">This should be a dot within the rectangle (0,0,1,1). Imagine the
+ rectangle is a diagram of a stage (you know, a theatrical stage, facing
+ an audience). When the point is (.5,1), this frame is exactly centered in
+ the user's field of view. At (.5,0) this frame is centered, but small --
+ as if in the distance. So the y-coordinate is used to represent depth,
+ and the x-coordinate is used to represent horizontal movement.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/transition/AbstractPlanarTransition2D.html#getFrameBLocation-float-">getFrameBLocation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/image/transition/AbstractPlanarTransition2D.html" title="class in com.pump.image.transition">AbstractPlanarTransition2D</a></code></dd>
@@ -417,15 +421,12 @@ extends <a href="../../../../com/pump/image/transition/AbstractPlanarTransition2
 <h4>getFrameALocation</h4>
 <pre>public&nbsp;java.awt.geom.Point2D&nbsp;getFrameALocation(float&nbsp;p)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/image/transition/AbstractPlanarTransition2D.html#getFrameALocation-float-">AbstractPlanarTransition2D</a></code></span></div>
-<div class="block">This should be a dot within the rectangle (0,0,1,1).
- Imagine the rectangle is a diagram of a stage
- (you know, a theatrical stage, facing an audience).
- When the point is (.5,1), this frame is exactly
- centered in the user's field of view.
- At (.5,0) this frame is centered, but small -- as if
- in the distance.  So the y-coordinate is used to
- represent depth, and the x-coordinate is used to
- represent horizontal movement.</div>
+<div class="block">This should be a dot within the rectangle (0,0,1,1). Imagine the
+ rectangle is a diagram of a stage (you know, a theatrical stage, facing
+ an audience). When the point is (.5,1), this frame is exactly centered in
+ the user's field of view. At (.5,0) this frame is centered, but small --
+ as if in the distance. So the y-coordinate is used to represent depth,
+ and the x-coordinate is used to represent horizontal movement.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/transition/AbstractPlanarTransition2D.html#getFrameALocation-float-">getFrameALocation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/image/transition/AbstractPlanarTransition2D.html" title="class in com.pump.image.transition">AbstractPlanarTransition2D</a></code></dd>

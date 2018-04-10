@@ -317,36 +317,43 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;solve(double[][]&nbsp;coefficients)</pre>
 <div class="block">Given a matrix of variable coefficients for a linear system of equations,
  this will solve for each variable.
- <P> For example, if you have the three equations:
- <BR> 2x + y + z = 1
- <BR> 6x + 2y + z = -1
- <BR> -2x + 2y + z = 7
- <P> You can call:
- <code><BR>double[][] coeffs = { { 2, 1, 1, 1},</code>
+ <P>
+ For example, if you have the three equations: <BR>
+ 2x + y + z = 1 <BR>
+ 6x + 2y + z = -1 <BR>
+ -2x + 2y + z = 7
+ <P>
+ You can call: <code><BR>double[][] coeffs = { { 2, 1, 1, 1},</code>
  <code><BR>                      { 6, 2, 1, -1},</code>
  <code><BR>                                             { -2, 2, 1, 7} };</code>
  <code><BR>Equations.solve(coeffs,true);</code>
- <P> Then this method will simplify the matrix to:
- <code><BR>{ { 1, 0, 0, -1}, </code>
- <code><BR>  { 0, 1, 0, 2}, </code>
+ <P>
+ Then this method will simplify the matrix to:
+ <code><BR>{ { 1, 0, 0, -1}, </code> <code><BR>  { 0, 1, 0, 2}, </code>
  <code><BR>  { 0, 0, 1, 1} }</code>
- <P> This indicates that:
- <BR> 1*x+0*y+0*z = -1
- <BR> 0*x+1*y+0*z = 2
- <BR> 0*x+0*y+1*z = 1
- <P> This method uses Gaussian Elimination and back substitution.
- <P> Note that due to the limits of double-precision, some safeguards were
- built-in that may round values less than .00000001 to zero.  If you
- need better precision, you may have to copy and paste the algorithm
- in this code and use a more precise number format.</div>
+ <P>
+ This indicates that: <BR>
+ 1*x+0*y+0*z = -1 <BR>
+ 0*x+1*y+0*z = 2 <BR>
+ 0*x+0*y+1*z = 1
+ <P>
+ This method uses Gaussian Elimination and back substitution.
+ <P>
+ Note that due to the limits of double-precision, some safeguards were
+ built-in that may round values less than .00000001 to zero. If you need
+ better precision, you may have to copy and paste the algorithm in this
+ code and use a more precise number format.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>coefficients</code> - the matrix of coefficients.  It must be N x (N+1) units in size.</dd>
+<dd><code>coefficients</code> - the matrix of coefficients. It must be N x (N+1) units in
+            size.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if it is impossible to solve for each variable.  In this case an
- exception is thrown, and no guarantee is made regarding the final state of the
- <code>coefficients</code> matrix.
- <P> Also an exception may be thrown if the matrix is not correctly sized.</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - if it is impossible to solve for each variable. In this case
+             an exception is thrown, and no guarantee is made regarding
+             the final state of the <code>coefficients</code> matrix.
+             <P>
+             Also an exception may be thrown if the matrix is not
+             correctly sized.</dd>
 </dl>
 </li>
 </ul>
@@ -359,36 +366,43 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;solve(java.math.BigDecimal[][]&nbsp;coefficients)</pre>
 <div class="block">Given a matrix of variable coefficients for a linear system of equations,
  this will solve for each variable.
- <P> For example, if you have the three equations:
- <BR> 2x + y + z = 1
- <BR> 6x + 2y + z = -1
- <BR> -2x + 2y + z = 7
- <P> You can call:
- <code><BR>double[][] coeffs = { { 2, 1, 1, 1},</code>
+ <P>
+ For example, if you have the three equations: <BR>
+ 2x + y + z = 1 <BR>
+ 6x + 2y + z = -1 <BR>
+ -2x + 2y + z = 7
+ <P>
+ You can call: <code><BR>double[][] coeffs = { { 2, 1, 1, 1},</code>
  <code><BR>                      { 6, 2, 1, -1},</code>
  <code><BR>                                             { -2, 2, 1, 7} };</code>
  <code><BR>Equations.solve(coeffs,true);</code>
- <P> Then this method will simplify the matrix to:
- <code><BR>{ { 1, 0, 0, -1}, </code>
- <code><BR>  { 0, 1, 0, 2}, </code>
+ <P>
+ Then this method will simplify the matrix to:
+ <code><BR>{ { 1, 0, 0, -1}, </code> <code><BR>  { 0, 1, 0, 2}, </code>
  <code><BR>  { 0, 0, 1, 1} }</code>
- <P> This indicates that:
- <BR> 1*x+0*y+0*z = -1
- <BR> 0*x+1*y+0*z = 2
- <BR> 0*x+0*y+1*z = 1
- <P> This method uses Gaussian Elimination and back substitution.
- <P> Note that due to the limits of double-precision, some safeguards were
- built-in that may round values less than .00000001 to zero.  If you
- need better precision, you may have to copy and paste the algorithm
- in this code and use a more precise number format.</div>
+ <P>
+ This indicates that: <BR>
+ 1*x+0*y+0*z = -1 <BR>
+ 0*x+1*y+0*z = 2 <BR>
+ 0*x+0*y+1*z = 1
+ <P>
+ This method uses Gaussian Elimination and back substitution.
+ <P>
+ Note that due to the limits of double-precision, some safeguards were
+ built-in that may round values less than .00000001 to zero. If you need
+ better precision, you may have to copy and paste the algorithm in this
+ code and use a more precise number format.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>coefficients</code> - the matrix of coefficients.  It must be N x (N+1) units in size.</dd>
+<dd><code>coefficients</code> - the matrix of coefficients. It must be N x (N+1) units in
+            size.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if it is impossible to solve for each variable.  In this case an
- exception is thrown, and no guarantee is made regarding the final state of the
- <code>coefficients</code> matrix.
- <P> Also an exception may be thrown if the matrix is not correctly sized.</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - if it is impossible to solve for each variable. In this case
+             an exception is thrown, and no guarantee is made regarding
+             the final state of the <code>coefficients</code> matrix.
+             <P>
+             Also an exception may be thrown if the matrix is not
+             correctly sized.</dd>
 </dl>
 </li>
 </ul>
@@ -402,43 +416,53 @@ extends java.lang.Object</pre>
                          boolean&nbsp;sort)</pre>
 <div class="block">Given a matrix of variable coefficients for a linear system of equations,
  this will solve for each variable.
- <P> For example, if you have the three equations:
- <BR> 2x + y + z = 1
- <BR> 6x + 2y + z = -1
- <BR> -2x + 2y + z = 7
- <P> You can call:
- <code><BR>double[][] coeffs = { { 2, 1, 1, 1},</code>
+ <P>
+ For example, if you have the three equations: <BR>
+ 2x + y + z = 1 <BR>
+ 6x + 2y + z = -1 <BR>
+ -2x + 2y + z = 7
+ <P>
+ You can call: <code><BR>double[][] coeffs = { { 2, 1, 1, 1},</code>
  <code><BR>                      { 6, 2, 1, -1},</code>
  <code> <BR>                                            { -2, 2, 1, 7} };</code>
  <code><BR>Equations.solve(coeffs,true);</code>
- <P> Then this method will simplify the matrix to:
- <code><BR>{ { 1, 0, 0, -1}, </code>
- <code><BR>  { 0, 1, 0, 2}, </code>
+ <P>
+ Then this method will simplify the matrix to:
+ <code><BR>{ { 1, 0, 0, -1}, </code> <code><BR>  { 0, 1, 0, 2}, </code>
  <code><BR>  { 0, 0, 1, 1} }</code>
- <P> This indicates that:
- <BR> 1*x+0*y+0*z = -1
- <BR> 0*x+1*y+0*z = 2
- <BR> 0*x+0*y+1*z = 1
- <P> This method uses Gaussian Elimination and back substitution.
- <P> Note that due to the limits of double-precision, some safeguards were
- built-in that may round values less than .00000001 to zero.  If you
- need better precision, you may have to copy and paste the algorithm
- in this code and use a more precise number format.</div>
+ <P>
+ This indicates that: <BR>
+ 1*x+0*y+0*z = -1 <BR>
+ 0*x+1*y+0*z = 2 <BR>
+ 0*x+0*y+1*z = 1
+ <P>
+ This method uses Gaussian Elimination and back substitution.
+ <P>
+ Note that due to the limits of double-precision, some safeguards were
+ built-in that may round values less than .00000001 to zero. If you need
+ better precision, you may have to copy and paste the algorithm in this
+ code and use a more precise number format.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>coefficients</code> - the matrix of coefficients.  It must be N x (N+1) units in size.</dd>
-<dd><code>sort</code> - If this is <code>true</code>, then you're guaranteed for your final solution
- to be sorted such that the 1's form a diagonal line from [0,0] to [N,N].  If this
- is <code>false</code>, then the solution <i>may</i> not form a diagonal line of 1's.
- <P> (If there are no zeroes in the matrix, the diagonal line will be there by default,
- but if zeroes are present then some rows may have to be skipped and the normal order
- is disrupted.)
- <P> The sort is performed by calling <code>Arrays.sort()</code>.</dd>
+<dd><code>coefficients</code> - the matrix of coefficients. It must be N x (N+1) units in
+            size.</dd>
+<dd><code>sort</code> - If this is <code>true</code>, then you're guaranteed for your
+            final solution to be sorted such that the 1's form a diagonal
+            line from [0,0] to [N,N]. If this is <code>false</code>, then
+            the solution <i>may</i> not form a diagonal line of 1's.
+            <P>
+            (If there are no zeroes in the matrix, the diagonal line will
+            be there by default, but if zeroes are present then some rows
+            may have to be skipped and the normal order is disrupted.)
+            <P>
+            The sort is performed by calling <code>Arrays.sort()</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if it is impossible to solve for each variable.  In this case an
- exception is thrown, and no guarantee is made regarding the final state of the
- <code>coefficients</code> matrix.
- <P> Also an exception may be thrown if the matrix is not correctly sized.</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - if it is impossible to solve for each variable. In this case
+             an exception is thrown, and no guarantee is made regarding
+             the final state of the <code>coefficients</code> matrix.
+             <P>
+             Also an exception may be thrown if the matrix is not
+             correctly sized.</dd>
 </dl>
 </li>
 </ul>
@@ -452,43 +476,53 @@ extends java.lang.Object</pre>
                          boolean&nbsp;sort)</pre>
 <div class="block">Given a matrix of variable coefficients for a linear system of equations,
  this will solve for each variable.
- <P> For example, if you have the three equations:
- <BR> 2x + y + z = 1
- <BR> 6x + 2y + z = -1
- <BR> -2x + 2y + z = 7
- <P> You can call:
- <code><BR>double[][] coeffs = { { 2, 1, 1, 1},</code>
+ <P>
+ For example, if you have the three equations: <BR>
+ 2x + y + z = 1 <BR>
+ 6x + 2y + z = -1 <BR>
+ -2x + 2y + z = 7
+ <P>
+ You can call: <code><BR>double[][] coeffs = { { 2, 1, 1, 1},</code>
  <code><BR>                      { 6, 2, 1, -1},</code>
  <code> <BR>                                            { -2, 2, 1, 7} };</code>
  <code><BR>Equations.solve(coeffs,true);</code>
- <P> Then this method will simplify the matrix to:
- <code><BR>{ { 1, 0, 0, -1}, </code>
- <code><BR>  { 0, 1, 0, 2}, </code>
+ <P>
+ Then this method will simplify the matrix to:
+ <code><BR>{ { 1, 0, 0, -1}, </code> <code><BR>  { 0, 1, 0, 2}, </code>
  <code><BR>  { 0, 0, 1, 1} }</code>
- <P> This indicates that:
- <BR> 1*x+0*y+0*z = -1
- <BR> 0*x+1*y+0*z = 2
- <BR> 0*x+0*y+1*z = 1
- <P> This method uses Gaussian Elimination and back substitution.
- <P> Note that due to the limits of double-precision, some safeguards were
- built-in that may round values less than .00000001 to zero.  If you
- need better precision, you may have to copy and paste the algorithm
- in this code and use a more precise number format.</div>
+ <P>
+ This indicates that: <BR>
+ 1*x+0*y+0*z = -1 <BR>
+ 0*x+1*y+0*z = 2 <BR>
+ 0*x+0*y+1*z = 1
+ <P>
+ This method uses Gaussian Elimination and back substitution.
+ <P>
+ Note that due to the limits of double-precision, some safeguards were
+ built-in that may round values less than .00000001 to zero. If you need
+ better precision, you may have to copy and paste the algorithm in this
+ code and use a more precise number format.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>coefficients</code> - the matrix of coefficients.  It must be N x (N+1) units in size.</dd>
-<dd><code>sort</code> - If this is <code>true</code>, then you're guaranteed for your final solution
- to be sorted such that the 1's form a diagonal line from [0,0] to [N,N].  If this
- is <code>false</code>, then the solution <i>may</i> not form a diagonal line of 1's.
- <P> (If there are no zeroes in the matrix, the diagonal line will be there by default,
- but if zeroes are present then some rows may have to be skipped and the normal order
- is disrupted.)
- <P> The sort is performed by calling <code>Arrays.sort()</code>.</dd>
+<dd><code>coefficients</code> - the matrix of coefficients. It must be N x (N+1) units in
+            size.</dd>
+<dd><code>sort</code> - If this is <code>true</code>, then you're guaranteed for your
+            final solution to be sorted such that the 1's form a diagonal
+            line from [0,0] to [N,N]. If this is <code>false</code>, then
+            the solution <i>may</i> not form a diagonal line of 1's.
+            <P>
+            (If there are no zeroes in the matrix, the diagonal line will
+            be there by default, but if zeroes are present then some rows
+            may have to be skipped and the normal order is disrupted.)
+            <P>
+            The sort is performed by calling <code>Arrays.sort()</code>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if it is impossible to solve for each variable.  In this case an
- exception is thrown, and no guarantee is made regarding the final state of the
- <code>coefficients</code> matrix.
- <P> Also an exception may be thrown if the matrix is not correctly sized.</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - if it is impossible to solve for each variable. In this case
+             an exception is thrown, and no guarantee is made regarding
+             the final state of the <code>coefficients</code> matrix.
+             <P>
+             Also an exception may be thrown if the matrix is not
+             correctly sized.</dd>
 </dl>
 </li>
 </ul>

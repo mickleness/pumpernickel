@@ -120,10 +120,12 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object
 implements java.util.Set&lt;T&gt;</pre>
 <div class="block">A <code>Set</code> that allows listeners.
- <p>This class is just a wrapper that manages the listeners;
- the actual work is done by another <code>Set</code> of your choice.
- <p>The synchronization model here is similar to (but not as thorough as)
- the architecture used for the ObservableList.</div>
+ <p>
+ This class is just a wrapper that manages the listeners; the actual work is
+ done by another <code>Set</code> of your choice.
+ <p>
+ The synchronization model here is similar to (but not as thorough as) the
+ architecture used for the ObservableList.</div>
 </li>
 </ul>
 </div>
@@ -151,8 +153,8 @@ implements java.util.Set&lt;T&gt;</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableSet.RecursiveListenerModificationException.html" title="class in com.pump.util">ObservableSet.RecursiveListenerModificationException</a></span></code>
-<div class="block">This is thrown when notifying a <code>Listener</code> resulted
- in further modifying this set.</div>
+<div class="block">This is thrown when notifying a <code>Listener</code> resulted in further
+ modifying this set.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -382,7 +384,8 @@ implements java.util.Set&lt;T&gt;</pre>
 <div class="block">Create an ObservableSet that uses a HashSet.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>componentType</code> - the component type to be used when converting this set to an array.</dd>
+<dd><code>componentType</code> - the component type to be used when converting this set to an
+            array.</dd>
 </dl>
 </li>
 </ul>
@@ -396,7 +399,8 @@ implements java.util.Set&lt;T&gt;</pre>
                      java.util.Set&lt;<a href="../../../com/pump/util/ObservableSet.html" title="type parameter in ObservableSet">T</a>&gt;&nbsp;s)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>componentType</code> - the component type to be used when converting this set to an array.</dd>
+<dd><code>componentType</code> - the component type to be used when converting this set to an
+            array.</dd>
 <dd><code>s</code> - the model used for data storage.</dd>
 </dl>
 </li>
@@ -698,9 +702,10 @@ implements java.util.Set&lt;T&gt;</pre>
 <h4>toComponentArray</h4>
 <pre>public&nbsp;<a href="../../../com/pump/util/ObservableSet.html" title="type parameter in ObservableSet">T</a>[]&nbsp;toComponentArray()</pre>
 <div class="block">Create an array returning all the elements of this set.
- <p>This method uses the existing read/write locking architecture
- the ObservableSet uses, so it is safer than synchronizing
- this list to extract the elements separately.</div>
+ <p>
+ This method uses the existing read/write locking architecture the
+ ObservableSet uses, so it is safer than synchronizing this list to
+ extract the elements separately.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an array representation of all elements in this set.</dd>

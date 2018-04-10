@@ -116,12 +116,14 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">InsetPathWriter</span>
 extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></pre>
 <div class="block">This traces a path <i>next to</i> the path that is being written.
- <P>If you trace two new paths (one on either side of the original path)
- and then join those two new paths together: you've just created an outline/stroke
- of your original path.
- <P>To compare this with the BasicStroke class: this class uses a JOIN_BEVEL
- and does not address caps (however if you just draw a line from one
- inset path to another: that is a CAP_BUTT.)</div>
+ <P>
+ If you trace two new paths (one on either side of the original path) and then
+ join those two new paths together: you've just created an outline/stroke of
+ your original path.
+ <P>
+ To compare this with the BasicStroke class: this class uses a JOIN_BEVEL and
+ does not address caps (however if you just draw a line from one inset path to
+ another: that is a CAP_BUTT.)</div>
 </li>
 </ul>
 </div>
@@ -171,7 +173,8 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/InsetPathWriter.html#closePath--">closePath</a></span>()</code>
-<div class="block">Closes the current subpath by drawing a straight line back to the coordinates of the last moveTo.</div>
+<div class="block">Closes the current subpath by drawing a straight line back to the
+ coordinates of the last moveTo.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -182,7 +185,10 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
        float&nbsp;cy2,
        float&nbsp;x,
        float&nbsp;y)</code>
-<div class="block">Adds a curved segment, defined by three new points, to the path by drawing a Bezier curve that intersects both the current coordinates and the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2) as Bezier control points.</div>
+<div class="block">Adds a curved segment, defined by three new points, to the path by
+ drawing a Bezier curve that intersects both the current coordinates and
+ the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2)
+ as Bezier control points.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -196,7 +202,8 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/InsetPathWriter.html#lineTo-float-float-">lineTo</a></span>(float&nbsp;x,
       float&nbsp;y)</code>
-<div class="block">Adds a point to the path by drawing a straight line from the current coordinates to the new specified coordinates.</div>
+<div class="block">Adds a point to the path by drawing a straight line from the current
+ coordinates to the new specified coordinates.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -212,7 +219,10 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
       float&nbsp;ctrlY,
       float&nbsp;x,
       float&nbsp;y)</code>
-<div class="block">Adds a curved segment, defined by two new points, to the path by drawing a Quadratic curve that intersects both the current coordinates and the coordinates (x2, y2), using the specified point (x1, y1) as a quadratic parametric control point.</div>
+<div class="block">Adds a curved segment, defined by two new points, to the path by drawing
+ a Quadratic curve that intersects both the current coordinates and the
+ coordinates (x2, y2), using the specified point (x1, y1) as a quadratic
+ parametric control point.</div>
 </td>
 </tr>
 </table>
@@ -258,10 +268,9 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>w</code> - the destination to write the new path data to.</dd>
 <dd><code>inset</code> - the number of pixels to inset</dd>
-<dd><code>clockwise</code> - where to draw the inset path.
- If this is true, then the path is drawn at 90 degrees clockwise
- to the original path.  Otherwise this is drawn at 90 degrees
- counterclockwise.</dd>
+<dd><code>clockwise</code> - where to draw the inset path. If this is true, then the path
+            is drawn at 90 degrees clockwise to the original path.
+            Otherwise this is drawn at 90 degrees counterclockwise.</dd>
 </dl>
 </li>
 </ul>
@@ -279,10 +288,10 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>w</code> - the destination to write the new path data to.</dd>
 <dd><code>inset</code> - the number of pixels to inset</dd>
-<dd><code>theta</code> - the angle the path will be written at.
- That is: if you draw a line tangent to the original path, and then
- move <code>(+inset*cos(theta), +inset*sin(theta))</code>, that is
- where this path will be written.</dd>
+<dd><code>theta</code> - the angle the path will be written at. That is: if you draw a
+            line tangent to the original path, and then move
+            <code>(+inset*cos(theta), +inset*sin(theta))</code>, that is
+            where this path will be written.</dd>
 </dl>
 </li>
 </ul>
@@ -302,7 +311,8 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <h4>closePath</h4>
 <pre>public&nbsp;void&nbsp;closePath()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html#closePath--">PathWriter</a></code></span></div>
-<div class="block">Closes the current subpath by drawing a straight line back to the coordinates of the last moveTo.</div>
+<div class="block">Closes the current subpath by drawing a straight line back to the
+ coordinates of the last moveTo.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/PathWriter.html#closePath--">closePath</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></code></dd>
@@ -322,7 +332,10 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
                     float&nbsp;x,
                     float&nbsp;y)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html#curveTo-float-float-float-float-float-float-">PathWriter</a></code></span></div>
-<div class="block">Adds a curved segment, defined by three new points, to the path by drawing a Bezier curve that intersects both the current coordinates and the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2) as Bezier control points.</div>
+<div class="block">Adds a curved segment, defined by three new points, to the path by
+ drawing a Bezier curve that intersects both the current coordinates and
+ the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2)
+ as Bezier control points.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/PathWriter.html#curveTo-float-float-float-float-float-float-">curveTo</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></code></dd>
@@ -345,7 +358,8 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <pre>public&nbsp;void&nbsp;lineTo(float&nbsp;x,
                    float&nbsp;y)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html#lineTo-float-float-">PathWriter</a></code></span></div>
-<div class="block">Adds a point to the path by drawing a straight line from the current coordinates to the new specified coordinates.</div>
+<div class="block">Adds a point to the path by drawing a straight line from the current
+ coordinates to the new specified coordinates.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/PathWriter.html#lineTo-float-float-">lineTo</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></code></dd>
@@ -384,12 +398,14 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html#flush--">PathWriter</a></code></span></div>
 <div class="block">This guarantees that this writer has flushed all currently written
  information.
- <P>For example, some writers may need to perform complex calculations
- and re-organize shapes.  Or some writers may simply be buffering
- path instructions to better manage memory.  Calling this method
- guarantees that all path instructions be immediately processed.
- <P>Because some writers may be manipulating path data you should
- <i>not call this method</i> until all shape data has been written.</div>
+ <P>
+ For example, some writers may need to perform complex calculations and
+ re-organize shapes. Or some writers may simply be buffering path
+ instructions to better manage memory. Calling this method guarantees that
+ all path instructions be immediately processed.
+ <P>
+ Because some writers may be manipulating path data you should <i>not call
+ this method</i> until all shape data has been written.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/PathWriter.html#flush--">flush</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></code></dd>
@@ -407,7 +423,10 @@ extends <a href="../../../com/pump/geom/PathWriter.html" title="class in com.pum
                    float&nbsp;x,
                    float&nbsp;y)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html#quadTo-float-float-float-float-">PathWriter</a></code></span></div>
-<div class="block">Adds a curved segment, defined by two new points, to the path by drawing a Quadratic curve that intersects both the current coordinates and the coordinates (x2, y2), using the specified point (x1, y1) as a quadratic parametric control point.</div>
+<div class="block">Adds a curved segment, defined by two new points, to the path by drawing
+ a Quadratic curve that intersects both the current coordinates and the
+ coordinates (x2, y2), using the specified point (x1, y1) as a quadratic
+ parametric control point.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/PathWriter.html#quadTo-float-float-float-float-">quadTo</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/PathWriter.html" title="class in com.pump.geom">PathWriter</a></code></dd>

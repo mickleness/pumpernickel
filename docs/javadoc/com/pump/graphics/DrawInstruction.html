@@ -111,15 +111,17 @@ var activeTableTab = "activeTableTab";
 <pre>public interface <span class="typeNameLabel">DrawInstruction</span>
 extends <a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></pre>
 <div class="block">This instruction paints the stroke of a shape.
- <P>The <code>paint()</code> method should render something equivalent to what
- these lines of code produce:
- <br><code>g = (Graphics2D)g.create();</code>
- <br><code>g.clip(getClipping());</code>
- <br><code>g.setTransform(getTransform());</code>
- <br><code>g.setStroke(getStroke());</code>
- <br><code>g.setPaint(getStrokePaint());</code>
- <br><code>g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,opacity));</code>
- <br><code>g.draw(getShape());</code></div>
+ <P>
+ The <code>paint()</code> method should render something equivalent to what
+ these lines of code produce: <br>
+ <code>g = (Graphics2D)g.create();</code> <br>
+ <code>g.clip(getClipping());</code> <br>
+ <code>g.setTransform(getTransform());</code> <br>
+ <code>g.setStroke(getStroke());</code> <br>
+ <code>g.setPaint(getStrokePaint());</code> <br>
+ <code>g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,opacity));</code>
+ <br>
+ <code>g.draw(getShape());</code></div>
 </li>
 </ul>
 </div>
@@ -266,7 +268,8 @@ extends <a href="../../../com/pump/graphics/GraphicInstruction.html" title="inte
 <li class="blockList">
 <h4>getClipping</h4>
 <pre>java.awt.Shape&nbsp;getClipping()</pre>
-<div class="block">Returns the optional clipping.  This is <i>not</i> relative to the <code>AffineTransform</code> used.</div>
+<div class="block">Returns the optional clipping. This is <i>not</i> relative to the
+ <code>AffineTransform</code> used.</div>
 </li>
 </ul>
 <a name="getOpacity--">

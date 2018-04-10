@@ -129,16 +129,20 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">WavPCMAudioInputStreamFilter</span>
 extends <a href="../../../com/pump/audio/FrameFilterAudioInputStream.html" title="class in com.pump.audio">FrameFilterAudioInputStream</a></pre>
-<div class="block">This converts PCM audio to a wav-friendly AudioFormat.
- This filter can perform three conversions:
- <ul><li>Convert big endian to little endian.</li>
+<div class="block">This converts PCM audio to a wav-friendly AudioFormat. This filter can
+ perform three conversions:
+ <ul>
+ <li>Convert big endian to little endian.</li>
  <li>Convert signed 8-bit to unsigned 8-bit.</li>
- <li>Convert unsigned 16-bit to signed 16-bit.</li></ul>
- <p>It is technically possible for a wav file to have big-endian
- encoding if the header begins with "RIFX" instead of "RIFF", but
- this class assumes you want to write the traditional "RIFF" header.
- <p>This class is not capable of converting non-PCM audio samples to
- a wav-friendly AudioFormat, though.</div>
+ <li>Convert unsigned 16-bit to signed 16-bit.</li>
+ </ul>
+ <p>
+ It is technically possible for a wav file to have big-endian encoding if the
+ header begins with "RIFX" instead of "RIFF", but this class assumes you want
+ to write the traditional "RIFF" header.
+ <p>
+ This class is not capable of converting non-PCM audio samples to a
+ wav-friendly AudioFormat, though.</div>
 </li>
 </ul>
 </div>
@@ -269,11 +273,12 @@ extends <a href="../../../com/pump/audio/FrameFilterAudioInputStream.html" title
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>format</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if this AudioFormat is ready to be output to a wav audio file.
- This will return false if the format is big-endian, or if the sign doesn't match
- the sample size. In wav files: 16-bit audio is signed, and 8-bit audio is
- unsigned. So if this format represents 16-bit unsigned or 8-bit signed: then
- this method returns false.</dd>
+<dd>true if this AudioFormat is ready to be output to a wav audio
+         file. This will return false if the format is big-endian, or if
+         the sign doesn't match the sample size. In wav files: 16-bit
+         audio is signed, and 8-bit audio is unsigned. So if this format
+         represents 16-bit unsigned or 8-bit signed: then this method
+         returns false.</dd>
 </dl>
 </li>
 </ul>
@@ -307,8 +312,8 @@ extends <a href="../../../com/pump/audio/FrameFilterAudioInputStream.html" title
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - the array storing the sample frames.</dd>
 <dd><code>off</code> - the offset in this array the frames begin at.</dd>
-<dd><code>frameCount</code> - the number of frames to filter. So the
- number of bytes filtered should equals (frameCount * this.frameSize).</dd>
+<dd><code>frameCount</code> - the number of frames to filter. So the number of bytes
+            filtered should equals (frameCount * this.frameSize).</dd>
 </dl>
 </li>
 </ul>

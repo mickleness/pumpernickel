@@ -110,12 +110,13 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">Scaling</span>
 extends java.lang.Object</pre>
-<div class="block">This contains a few static methods for scaling BufferedImages
- using the <a href="../../../../com/pump/image/pixel/ScalingIterator.html" title="class in com.pump.image.pixel"><code>ScalingIterator</code></a>.</div>
+<div class="block">This contains a few static methods for scaling BufferedImages using the
+ <a href="../../../../com/pump/image/pixel/ScalingIterator.html" title="class in com.pump.image.pixel"><code>ScalingIterator</code></a>.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><code>com.pump.geom.Dimension2D.scaleProportionally</code>, 
-<a href="http://javagraphics.blogspot.com/2010/06/images-scaling-down.html">http://javagraphics.blogspot.com/2010/06/images-scaling-down.html</a></dd>
+<dd><a href="../../../../com/pump/awt/Dimension2D.html#scaleProportionally-java.awt.Dimension-java.awt.Dimension-"><code>Dimension2D.scaleProportionally(Dimension, Dimension)</code></a>, 
+<a
+      href="http://javagraphics.blogspot.com/2010/06/images-scaling-down.html">http://javagraphics.blogspot.com/2010/06/images-scaling-down.html</a></dd>
 </dl>
 </li>
 </ul>
@@ -272,10 +273,9 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - the source image.</dd>
-<dd><code>dest</code> - the destination image.  This must be
- smaller than the source image or an exception
- will be thrown.  Also this need to be of
- type <code>BufferedImage.TYPE_INT_ARGB</code>.</dd>
+<dd><code>dest</code> - the destination image. This must be smaller than the source
+            image or an exception will be thrown. Also this need to be of
+            type <code>BufferedImage.TYPE_INT_ARGB</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -292,14 +292,13 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - the source image.</dd>
-<dd><code>w</code> - the new width. This must
- be less than the width of the source image, or an
- exception will be thrown.</dd>
-<dd><code>h</code> - the new height. This must
- be less than the height of the source image, or an
- exception will be thrown.</dd>
+<dd><code>w</code> - the new width. This must be less than the width of the source
+            image, or an exception will be thrown.</dd>
+<dd><code>h</code> - the new height. This must be less than the height of the
+            source image, or an exception will be thrown.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a new scaled image of type <code>BufferedImage.TYPE_INT_ARGB</code>.</dd>
+<dd>a new scaled image of type
+         <code>BufferedImage.TYPE_INT_ARGB</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -315,12 +314,12 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - the source image.</dd>
-<dd><code>destSize</code> - the size of the new image.  This must
- be smaller than the size of the source image, or an
- exception will be thrown.</dd>
+<dd><code>destSize</code> - the size of the new image. This must be smaller than the size
+            of the source image, or an exception will be thrown.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a new scaled image of type <code>BufferedImage.TYPE_INT_ARGB</code>
- or <code>BufferedImage.TYPE_INT_RGB</code>.</dd>
+<dd>a new scaled image of type
+         <code>BufferedImage.TYPE_INT_ARGB</code> or
+         <code>BufferedImage.TYPE_INT_RGB</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -337,11 +336,13 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - the source image file.</dd>
-<dd><code>preferredType</code> - <code>TYPE_INT_RGB</code>, <code>TYPE_INT_ARGB</code>, <code>TYPE_3BYTE_BGR</code>, <code>TYPE_4BYTE_ABGR</code>.</dd>
+<dd><code>preferredType</code> - <code>TYPE_INT_RGB</code>, <code>TYPE_INT_ARGB</code>,
+            <code>TYPE_3BYTE_BGR</code>, <code>TYPE_4BYTE_ABGR</code>.</dd>
 <dd><code>destSize</code> - the size of the new image.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a new scaled image of type <code>BufferedImage.TYPE_INT_ARGB</code>
- or <code>BufferedImage.TYPE_INT_RGB</code>.</dd>
+<dd>a new scaled image of type
+         <code>BufferedImage.TYPE_INT_ARGB</code> or
+         <code>BufferedImage.TYPE_INT_RGB</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -358,11 +359,13 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - the source image file.</dd>
-<dd><code>preferredType</code> - <code>TYPE_INT_RGB</code>, <code>TYPE_INT_ARGB</code>, <code>TYPE_3BYTE_BGR</code>, <code>TYPE_4BYTE_ABGR</code>.</dd>
+<dd><code>preferredType</code> - <code>TYPE_INT_RGB</code>, <code>TYPE_INT_ARGB</code>,
+            <code>TYPE_3BYTE_BGR</code>, <code>TYPE_4BYTE_ABGR</code>.</dd>
 <dd><code>destSize</code> - the size of the new image.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a new scaled image of type <code>BufferedImage.TYPE_INT_ARGB</code>
- or <code>BufferedImage.TYPE_INT_RGB</code>.</dd>
+<dd>a new scaled image of type
+         <code>BufferedImage.TYPE_INT_ARGB</code> or
+         <code>BufferedImage.TYPE_INT_RGB</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -378,22 +381,23 @@ extends java.lang.Object</pre>
 <div class="block">Scales the source image into the dest.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>source</code> - the source image.  This may not be null.</dd>
-<dd><code>dest</code> - the destination image.  If non-null: this image must
- be at least <code>destSize</code> pixels in size or an
- exception will be thrown.  If this is null: an image will
- be created that is <code>destSize</code> pixels.
- <p>This argument can be the same as the
- <code>source</code> argument.  This may save some memory
- allocation, but it will permanently alter the
- source image.
- <p>Also this need to be of
- type <code>BufferedImage.TYPE_INT_ARGB</code>.</dd>
-<dd><code>destSize</code> - the dimensions to write to.  It is guaranteed
- that these pixels will be replaced in the dest image.</dd>
+<dd><code>source</code> - the source image. This may not be null.</dd>
+<dd><code>dest</code> - the destination image. If non-null: this image must be at
+            least <code>destSize</code> pixels in size or an exception
+            will be thrown. If this is null: an image will be created that
+            is <code>destSize</code> pixels.
+            <p>
+            This argument can be the same as the <code>source</code>
+            argument. This may save some memory allocation, but it will
+            permanently alter the source image.
+            <p>
+            Also this need to be of type
+            <code>BufferedImage.TYPE_INT_ARGB</code>.</dd>
+<dd><code>destSize</code> - the dimensions to write to. It is guaranteed that these pixels
+            will be replaced in the dest image.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the <code>dest</code> argument, or a new image if no
- <code>dest</code> argument was provided.</dd>
+         <code>dest</code> argument was provided.</dd>
 </dl>
 </li>
 </ul>
@@ -409,23 +413,24 @@ extends java.lang.Object</pre>
 <div class="block">Scales the source image into the dest.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>source</code> - the source image.  This may not be null.</dd>
-<dd><code>dest</code> - the destination image.  If non-null: this image must
- be at least <code>destSize</code> pixels in size or an
- exception will be thrown.  If this is null: an image will
- be created that is <code>destSize</code> pixels.
- <p>This argument can be the same as the
- <code>source</code> argument.  This may save some memory
- allocation, but it will permanently alter the
- source image.
- <p>Also this need to be of
- type <code>BufferedImage.TYPE_INT_ARGB</code>.</dd>
-<dd><code>destSize</code> - the dimensions to write to. It is guaranteed
- that these pixels will be replaced in the dest image. If this is null
- then the image will not be scaled.</dd>
+<dd><code>source</code> - the source image. This may not be null.</dd>
+<dd><code>dest</code> - the destination image. If non-null: this image must be at
+            least <code>destSize</code> pixels in size or an exception
+            will be thrown. If this is null: an image will be created that
+            is <code>destSize</code> pixels.
+            <p>
+            This argument can be the same as the <code>source</code>
+            argument. This may save some memory allocation, but it will
+            permanently alter the source image.
+            <p>
+            Also this need to be of type
+            <code>BufferedImage.TYPE_INT_ARGB</code>.</dd>
+<dd><code>destSize</code> - the dimensions to write to. It is guaranteed that these pixels
+            will be replaced in the dest image. If this is null then the
+            image will not be scaled.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the <code>dest</code> argument, or a new image if no
- <code>dest</code> argument was provided.</dd>
+         <code>dest</code> argument was provided.</dd>
 </dl>
 </li>
 </ul>
@@ -439,8 +444,9 @@ extends java.lang.Object</pre>
                                                                int&nbsp;maxWidth,
                                                                int&nbsp;maxHeight)</pre>
 <div class="block">Scales the source image proportionally to a new, smaller size.
- <p>The new image will either have a width of <code>maxWidth</code>
- or a height of <code>maxHeight</code> (or both).</div>
+ <p>
+ The new image will either have a width of <code>maxWidth</code> or a
+ height of <code>maxHeight</code> (or both).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>image</code> - the source image to scale.</dd>
@@ -460,8 +466,9 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;java.awt.image.BufferedImage&nbsp;scaleProportionally(java.awt.image.BufferedImage&nbsp;image,
                                                                java.awt.Dimension&nbsp;maxSize)</pre>
 <div class="block">Scales the source image proportionally to a new, smaller size.
- <p>The new image will either have a height of <code>maxWidth</code>
- or a height of <code>maxHeight</code> (or both).</div>
+ <p>
+ The new image will either have a height of <code>maxWidth</code> or a
+ height of <code>maxHeight</code> (or both).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>image</code> - the source image to scale.</dd>

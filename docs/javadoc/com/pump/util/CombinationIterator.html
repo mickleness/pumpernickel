@@ -120,23 +120,31 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object
 implements java.util.Iterator&lt;java.util.List&lt;T&gt;&gt;</pre>
 <div class="block">This iterates through every combination of a list of arrays. For example:
- <pre>List&lt;String[]&gt; input = new ArrayList&lt;&gt;();
-input.add(new String[] {"1", "2", "3"});
-input.add(new String[] {"apple", "orange"});
-input.add(new String[] {"X"});
-CombinationIterator&lt;String&gt; iter = new CombinationIterator&lt;&gt;(input);
-while(iter.hasNext()) {
+ 
+ <pre>
+ List&lt;String[]&gt; input = new ArrayList&lt;&gt;();
+ input.add(new String[] { &quot;1&quot;, &quot;2&quot;, &quot;3&quot; });
+ input.add(new String[] { &quot;apple&quot;, &quot;orange&quot; });
+ input.add(new String[] { &quot;X&quot; });
+ CombinationIterator&lt;String&gt; iter = new CombinationIterator&lt;&gt;(input);
+ while (iter.hasNext()) {
         System.out.println(iter.next());
-}</pre>
- <p>This code will output this list:
- <ul><li>"1", "apple", "X"</li>
+ }
+ </pre>
+ <p>
+ This code will output this list:
+ <ul>
+ <li>"1", "apple", "X"</li>
  <li>"1", "orange", "X"</li>
  <li>"2", "apple", "X"</li>
  <li>"2", "orange", "X"</li>
  <li>"3", "apple", "X"</li>
- <li>"3", "orange", "X"</li></ul>
- <p>It helps to visualize this as a slot machine, where "1", "2", "3" are vertically stacked as
- one place/slot in the machine. "apple", "orange" is the next slot, and "X" is always the 3rd slot.</div>
+ <li>"3", "orange", "X"</li>
+ </ul>
+ <p>
+ It helps to visualize this as a slot machine, where "1", "2", "3" are
+ vertically stacked as one place/slot in the machine. "apple", "orange" is the
+ next slot, and "X" is always the 3rd slot.</div>
 </li>
 </ul>
 </div>

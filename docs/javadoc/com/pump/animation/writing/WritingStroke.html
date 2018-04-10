@@ -115,16 +115,16 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">WritingStroke</span>
 extends java.lang.Object
 implements java.io.Serializable</pre>
-<div class="block">A single segment of a hand-drawn graphic. 
- This includes a path to trace and a pause.
- <p>The pause measured in "beats", which are an arbitrary
- construct. (And they can be accelerated or decelerated, just
- like the writing rate.) A pause beat should correspond to
- the amount of time used to leave a space between words.
- So if that corresponds to a unit of 1, then you might
- want to add a pause of length .05 or .1 when you lift up
- your pen and write the straight line in a "Q". Or you might
- put a pause of .25 or .5 when writing the three dots an ellipses.</div>
+<div class="block">A single segment of a hand-drawn graphic. This includes a path to trace and a
+ pause.
+ <p>
+ The pause measured in "beats", which are an arbitrary construct. (And they
+ can be accelerated or decelerated, just like the writing rate.) A pause beat
+ should correspond to the amount of time used to leave a space between words.
+ So if that corresponds to a unit of 1, then you might want to add a pause of
+ length .05 or .1 when you lift up your pen and write the straight line in a
+ "Q". Or you might put a pause of .25 or .5 when writing the three dots an
+ ellipses.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../serialized-form.html#com.pump.animation.writing.WritingStroke">Serialized Form</a></dd>
@@ -186,7 +186,8 @@ implements java.io.Serializable</pre>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/pump/animation/writing/WritingStroke.html#WritingStroke-java.lang.String-">WritingStroke</a></span>(java.lang.String&nbsp;s)</code>
-<div class="block">Create a new WritingStroke based on output from a previous call to toString()</div>
+<div class="block">Create a new WritingStroke based on output from a previous call to
+ toString()</div>
 </td>
 </tr>
 </table>
@@ -290,9 +291,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>pauseBeats</h4>
 <pre>protected&nbsp;float pauseBeats</pre>
-<div class="block">The pause before writing this stroke. The unit of 1 should
- correspond approximately to the pause of writing a space
- between words.</div>
+<div class="block">The pause before writing this stroke. The unit of 1 should correspond
+ approximately to the pause of writing a space between words.</div>
 </li>
 </ul>
 <a name="shape">
@@ -346,7 +346,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>WritingStroke</h4>
 <pre>public&nbsp;WritingStroke(java.lang.String&nbsp;s)</pre>
-<div class="block">Create a new WritingStroke based on output from a previous call to toString()</div>
+<div class="block">Create a new WritingStroke based on output from a previous call to
+ toString()</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - previous output from <code>WritingStroke.toString()</code></dd>
@@ -368,9 +369,9 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>toString</h4>
 <pre>public&nbsp;java.lang.String&nbsp;toString()</pre>
-<div class="block">Serialize this stroke as a String. This mimics the standard shape
- output (m, l, q, c, z), except it also includes the instruction "w"
- (for the pause beat), which includes 1 argument.</div>
+<div class="block">Serialize this stroke as a String. This mimics the standard shape output
+ (m, l, q, c, z), except it also includes the instruction "w" (for the
+ pause beat), which includes 1 argument.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -398,13 +399,15 @@ implements java.io.Serializable</pre>
 <h4>deriveWStroke</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/animation/writing/WritingStroke.html" title="class in com.pump.animation.writing">WritingStroke</a>&nbsp;deriveWStroke(float&nbsp;newPauseBeats)</pre>
 <div class="block">Create a WritingStroke with the same shape but a new pause.
- <p>WritingStrokes are immutable, so this method is necessary to create similar-but-different
- copy.</div>
+ <p>
+ WritingStrokes are immutable, so this method is necessary to create
+ similar-but-different copy.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>newPauseBeats</code> - the new pause to create a stroke for.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a similar WritingStroke using the same shape but a new initial pause.</dd>
+<dd>a similar WritingStroke using the same shape but a new initial
+         pause.</dd>
 </dl>
 </li>
 </ul>
@@ -416,8 +419,9 @@ implements java.io.Serializable</pre>
 <h4>deriveWStroke</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/animation/writing/WritingStroke.html" title="class in com.pump.animation.writing">WritingStroke</a>&nbsp;deriveWStroke(java.awt.Shape&nbsp;newShape)</pre>
 <div class="block">Create a WritingStroke with the same pause but a new shape.
- <p>WritingStrokes are immutable, so this method is necessary to create similar-but-different
- copy.</div>
+ <p>
+ WritingStrokes are immutable, so this method is necessary to create
+ similar-but-different copy.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>newShape</code> - the new shape to create a stroke for</dd>
@@ -462,7 +466,8 @@ implements java.io.Serializable</pre>
 <h4>getPauseBeats</h4>
 <pre>public&nbsp;float&nbsp;getPauseBeats()</pre>
 <div class="block">Returns the pause before writing this stroke.
- <p>A unit of 1 is approximately the gap used to add a space between words.</div>
+ <p>
+ A unit of 1 is approximately the gap used to add a space between words.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the pause before writing this stroke.</dd>
@@ -502,14 +507,16 @@ implements java.io.Serializable</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the Graphics2D to paint to.</dd>
-<dd><code>t</code> - the time (in seconds), where t=0 is the beginning of rendering this
- stroke.</dd>
+<dd><code>t</code> - the time (in seconds), where t=0 is the beginning of rendering
+            this stroke.</dd>
 <dd><code>beatsPerSecond</code> - the number of beats per second.</dd>
 <dd><code>pixelsPerSecond</code> - the number of pixels per second.</dd>
 <dd><code>transform</code> - an optional AffineTransform to apply to this stroke.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>whether the stroke is completely rendered. This should be equivalent
- to <code>(t &lt; getDuration( beatsPerSecond, pixelsPerSecond)</code> .</dd>
+<dd>whether the stroke is completely rendered. This should be
+         equivalent to
+         <code>(t &lt; getDuration( beatsPerSecond, pixelsPerSecond)</code>
+         .</dd>
 </dl>
 </li>
 </ul>

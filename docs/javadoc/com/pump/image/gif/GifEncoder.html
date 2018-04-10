@@ -114,8 +114,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">GifEncoder</span>
 extends java.lang.Object</pre>
-<div class="block">This is simple model for an object that can encode a GIF. This is
- designed to work tightly with the <a href="../../../../com/pump/image/gif/GifWriter.html" title="class in com.pump.image.gif"><code>GifWriter</code></a>.</div>
+<div class="block">This is simple model for an object that can encode a GIF. This is designed to
+ work tightly with the <a href="../../../../com/pump/image/gif/GifWriter.html" title="class in com.pump.image.gif"><code>GifWriter</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -245,10 +245,13 @@ extends java.lang.Object</pre>
 <pre>public abstract&nbsp;void&nbsp;flush(java.io.OutputStream&nbsp;out)
                     throws java.io.IOException</pre>
 <div class="block">Flush any remaining data. Simple encoders will not need to do anything
- here, but a more complex encoder might not have committed certain data yet.
- <p>(This method is not supposed to close the <code>OutputStream</code>, or
+ here, but a more complex encoder might not have committed certain data
+ yet.
+ <p>
+ (This method is not supposed to close the <code>OutputStream</code>, or
  append a <a href="../../../../com/pump/image/gif/block/GifTrailerBlock.html" title="class in com.pump.image.gif.block"><code>GifTrailerBlock</code></a>.)
- <p>After this is invoked: no more images should be written.</div>
+ <p>
+ After this is invoked: no more images should be written.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>

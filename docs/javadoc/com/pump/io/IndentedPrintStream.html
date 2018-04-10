@@ -133,23 +133,26 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">IndentedPrintStream</span>
 extends java.io.PrintStream</pre>
-<div class="block">This PrintStream helps manage indentation when you invoke any <code>print(x)</code> or
- <code>println(x)</code> method.
+<div class="block">This PrintStream helps manage indentation when you invoke any
+ <code>print(x)</code> or <code>println(x)</code> method.
  <p>
- In addition to use <a href="../../../com/pump/io/IndentedPrintStream.html#indent--"><code>indent()</code></a> and <a href="../../../com/pump/io/IndentedPrintStream.html#unindent--"><code>unindent()</code></a>, you can use the try-with-resources syntax
- so your code would resemble:
+ In addition to use <a href="../../../com/pump/io/IndentedPrintStream.html#indent--"><code>indent()</code></a> and <a href="../../../com/pump/io/IndentedPrintStream.html#unindent--"><code>unindent()</code></a>, you can use the
+ try-with-resources syntax so your code would resemble:
  <p>
- <pre> try(IndentedPrintStream ips = new IndentedPrintStream(out, true, "UTF-8")) {
-        ips.println("Outer Text");
-        try(AutoCloseable c = ips.indent()) {
-                ips.println("Middle Text");
-                try(AutoCloseable c2 = ips.indent()) {
-                        ips.println("Inner Text");
+ 
+ <pre>
+ try (IndentedPrintStream ips = new IndentedPrintStream(out, true, &quot;UTF-8&quot;)) {
+        ips.println(&quot;Outer Text&quot;);
+        try (AutoCloseable c = ips.indent()) {
+                ips.println(&quot;Middle Text&quot;);
+                try (AutoCloseable c2 = ips.indent()) {
+                        ips.println(&quot;Inner Text&quot;);
                 }
-                ips.println("More Middle Text");
+                ips.println(&quot;More Middle Text&quot;);
         }
-        ips.println("More Outer Text");
-}</pre></div>
+        ips.println(&quot;More Outer Text&quot;);
+ }
+ </pre></div>
 </li>
 </ul>
 </div>
@@ -246,7 +249,8 @@ extends java.io.PrintStream</pre>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IndentedPrintStream.html#prePrint--">prePrint</a></span>()</code>
-<div class="block">If we're on an empty line, this first prints the appropriate indentation (if any).</div>
+<div class="block">If we're on an empty line, this first prints the appropriate indentation
+ (if any).</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -440,7 +444,8 @@ extends java.io.PrintStream</pre>
 <dd><code>out</code> - </dd>
 <dd><code>autoFlush</code> - </dd>
 <dd><code>encoding</code> - </dd>
-<dd><code>indentationString</code> - the String used to indent each section of code. "\t" is the recommended default.</dd>
+<dd><code>indentationString</code> - the String used to indent each section of code. "\t" is the
+            recommended default.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.UnsupportedEncodingException</code></dd>
 </dl>
@@ -464,7 +469,8 @@ extends java.io.PrintStream</pre>
 <div class="block">Indent this stream one unit.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an optional AutoCloseable that will unindent this stream one unit when closed.</dd>
+<dd>an optional AutoCloseable that will unindent this stream one unit
+         when closed.</dd>
 </dl>
 </li>
 </ul>
@@ -478,10 +484,11 @@ extends java.io.PrintStream</pre>
 <div class="block">Indent this stream n-many units.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>n</code> - the number of units to indent. This may be negative to unindent. (If this is zero:
- this method does nothing.)</dd>
+<dd><code>n</code> - the number of units to indent. This may be negative to
+            unindent. (If this is zero: this method does nothing.)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an optional AutoCloseable that will unindent this stream one unit when closed.</dd>
+<dd>an optional AutoCloseable that will unindent this stream one unit
+         when closed.</dd>
 </dl>
 </li>
 </ul>
@@ -502,7 +509,8 @@ extends java.io.PrintStream</pre>
 <li class="blockList">
 <h4>prePrint</h4>
 <pre>protected&nbsp;void&nbsp;prePrint()</pre>
-<div class="block">If we're on an empty line, this first prints the appropriate indentation (if any).</div>
+<div class="block">If we're on an empty line, this first prints the appropriate indentation
+ (if any).</div>
 </li>
 </ul>
 <a name="print-boolean-">

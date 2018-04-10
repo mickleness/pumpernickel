@@ -148,7 +148,8 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/SuffixFilenameFilter.html#POLICY_IGNORE_DIRECTORY_STATUS">POLICY_IGNORE_DIRECTORY_STATUS</a></span></code>
-<div class="block">The method isDirectory() is never consulted: this accepts/rejects all files based only on their suffix.</div>
+<div class="block">The method isDirectory() is never consulted: this accepts/rejects all
+ files based only on their suffix.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -264,15 +265,15 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/SuffixFilenameFilter.html#getDescription--">getDescription</a></span>()</code>
-<div class="block">If a specific description was provided: this
- returns the predefined description.</div>
+<div class="block">If a specific description was provided: this returns the predefined
+ description.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/SuffixFilenameFilter.html#isAcceptedName-java.lang.String-">isAcceptedName</a></span>(java.lang.String&nbsp;name)</code>
-<div class="block">This returns true if the name ends in one of the suffixes
- defined in this filter.</div>
+<div class="block">This returns true if the name ends in one of the suffixes defined in this
+ filter.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -324,7 +325,8 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <li class="blockList">
 <h4>POLICY_IGNORE_DIRECTORY_STATUS</h4>
 <pre>public static final&nbsp;int POLICY_IGNORE_DIRECTORY_STATUS</pre>
-<div class="block">The method isDirectory() is never consulted: this accepts/rejects all files based only on their suffix.</div>
+<div class="block">The method isDirectory() is never consulted: this accepts/rejects all
+ files based only on their suffix.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.io.SuffixFilenameFilter.POLICY_IGNORE_DIRECTORY_STATUS">Constant Field Values</a></dd>
@@ -375,14 +377,14 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <h4>SuffixFilenameFilter</h4>
 <pre>public&nbsp;SuffixFilenameFilter(java.lang.String&nbsp;suffix,
                             int&nbsp;directoryPolicy)</pre>
-<div class="block">This creates a new SuffixFilenameFilter.
- Note that if "*" is one of the suffixes:
- then only directories will be rejected by this filter.</div>
+<div class="block">This creates a new SuffixFilenameFilter. Note that if "*" is one of the
+ suffixes: then only directories will be rejected by this filter.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>suffix</code> - a file name suffix to accept such as "foo" or ".foo".</dd>
 <dd><code>directoryPolicy</code> - must be <code>POLICY_ACCEPT_ALL_DIRECTORIES</code>,
- <code>POLICY_REJECT_ALL_DIRECTORIES</code> or <code>POLICY_IGNORE_DIRECTORY_STATUS</code>.</dd>
+            <code>POLICY_REJECT_ALL_DIRECTORIES</code> or
+            <code>POLICY_IGNORE_DIRECTORY_STATUS</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -395,15 +397,15 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <pre>public&nbsp;SuffixFilenameFilter(java.lang.String&nbsp;suffix1,
                             java.lang.String&nbsp;suffix2,
                             int&nbsp;directoryPolicy)</pre>
-<div class="block">This creates a new SuffixFilenameFilter.
- Note that if "*" is one of the suffixes:
- then only directories will be rejected by this filter.</div>
+<div class="block">This creates a new SuffixFilenameFilter. Note that if "*" is one of the
+ suffixes: then only directories will be rejected by this filter.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>suffix1</code> - a file name suffix to accept such as "foo" or ".foo".</dd>
 <dd><code>suffix2</code> - a file name suffix to accept such as "goo" or ".goo".</dd>
 <dd><code>directoryPolicy</code> - must be <code>POLICY_ACCEPT_ALL_DIRECTORIES</code>,
- <code>POLICY_REJECT_ALL_DIRECTORIES</code> or <code>POLICY_IGNORE_DIRECTORY_STATUS</code>.</dd>
+            <code>POLICY_REJECT_ALL_DIRECTORIES</code> or
+            <code>POLICY_IGNORE_DIRECTORY_STATUS</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -417,16 +419,16 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
                             java.lang.String&nbsp;suffix2,
                             java.lang.String&nbsp;suffix3,
                             int&nbsp;directoryPolicy)</pre>
-<div class="block">This creates a new SuffixFilenameFilter.
- Note that if "*" is one of the suffixes:
- then only directories will be rejected by this filter.</div>
+<div class="block">This creates a new SuffixFilenameFilter. Note that if "*" is one of the
+ suffixes: then only directories will be rejected by this filter.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>suffix1</code> - a file name suffix to accept such as "foo" or ".foo".</dd>
 <dd><code>suffix2</code> - a file name suffix to accept such as "goo" or ".goo".</dd>
 <dd><code>suffix3</code> - a file name suffix to accept such as "boo" or ".boo".</dd>
 <dd><code>directoryPolicy</code> - must be <code>POLICY_ACCEPT_ALL_DIRECTORIES</code>,
- <code>POLICY_REJECT_ALL_DIRECTORIES</code> or <code>POLICY_IGNORE_DIRECTORY_STATUS</code>.</dd>
+            <code>POLICY_REJECT_ALL_DIRECTORIES</code> or
+            <code>POLICY_IGNORE_DIRECTORY_STATUS</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -438,14 +440,14 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <h4>SuffixFilenameFilter</h4>
 <pre>public&nbsp;SuffixFilenameFilter(java.lang.String[]&nbsp;suffixes,
                             int&nbsp;directoryPolicy)</pre>
-<div class="block">This creates a new SuffixFilenameFilter.
- Note that if "*" is one of the suffixes:
- then only directories will be rejected by this filter.</div>
+<div class="block">This creates a new SuffixFilenameFilter. Note that if "*" is one of the
+ suffixes: then only directories will be rejected by this filter.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>suffixes</code> - the suffixes this filter will accept such as "foo" or ".foo".</dd>
 <dd><code>directoryPolicy</code> - must be <code>POLICY_ACCEPT_ALL_DIRECTORIES</code>,
- <code>POLICY_REJECT_ALL_DIRECTORIES</code> or <code>POLICY_IGNORE_DIRECTORY_STATUS</code>.</dd>
+            <code>POLICY_REJECT_ALL_DIRECTORIES</code> or
+            <code>POLICY_IGNORE_DIRECTORY_STATUS</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -457,8 +459,8 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <h4>SuffixFilenameFilter</h4>
 <pre>public&nbsp;SuffixFilenameFilter(java.lang.String&nbsp;suffix)</pre>
 <div class="block">This creates a new SuffixFilenameFilter that does not accept directories.
- Note that if "*" is one of the suffixes:
- then only directories will be rejected by this filter.</div>
+ Note that if "*" is one of the suffixes: then only directories will be
+ rejected by this filter.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>suffix</code> - the file name suffix to accept such as "foo" or ".foo".</dd>
@@ -474,8 +476,8 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <pre>public&nbsp;SuffixFilenameFilter(java.lang.String&nbsp;suffix1,
                             java.lang.String&nbsp;suffix2)</pre>
 <div class="block">This creates a new SuffixFilenameFilter that does not accept directories.
- Note that if "*" is one of the suffixes:
- then only directories will be rejected by this filter.</div>
+ Note that if "*" is one of the suffixes: then only directories will be
+ rejected by this filter.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>suffix1</code> - a file name suffix to accept such as "foo" or ".foo".</dd>
@@ -493,8 +495,8 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
                             java.lang.String&nbsp;suffix2,
                             java.lang.String&nbsp;suffix3)</pre>
 <div class="block">This creates a new SuffixFilenameFilter that does not accept directories.
- Note that if "*" is one of the suffixes:
- then only directories will be rejected by this filter.</div>
+ Note that if "*" is one of the suffixes: then only directories will be
+ rejected by this filter.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>suffix1</code> - a file name suffix to accept such as "foo" or ".foo".</dd>
@@ -513,8 +515,9 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <div class="block">This creates a new SuffixFilenameFilter that does not accept directories.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>suffixes</code> - the suffixes to accept such as "foo" or ".foo".  Note that
- if "*" is one of the suffixes: then only directories will be rejected by this filter.</dd>
+<dd><code>suffixes</code> - the suffixes to accept such as "foo" or ".foo". Note that if
+            "*" is one of the suffixes: then only directories will be
+            rejected by this filter.</dd>
 </dl>
 </li>
 </ul>
@@ -547,12 +550,14 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <li class="blockList">
 <h4>accept</h4>
 <pre>public&nbsp;boolean&nbsp;accept(java.io.File&nbsp;file)</pre>
-<div class="block">Returns <code>true</code> if this filter accepts the argument.
- This will be determined by:
- <ul><li>Whether the file is a directory and what the <code>directoryPolicy</code>
- of this filter is.
+<div class="block">Returns <code>true</code> if this filter accepts the argument. This will
+ be determined by:
+ <ul>
+ <li>Whether the file is a directory and what the
+ <code>directoryPolicy</code> of this filter is.
  <li>Whether one of the accepted suffixes is "*"
- <li>Whether the argument name ends in one of the suffixes</ul></div>
+ <li>Whether the argument name ends in one of the suffixes
+ </ul></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>accept</code>&nbsp;in interface&nbsp;<code>java.io.FileFilter</code></dd>
@@ -568,9 +573,9 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <li class="blockList">
 <h4>isAcceptedName</h4>
 <pre>public&nbsp;boolean&nbsp;isAcceptedName(java.lang.String&nbsp;name)</pre>
-<div class="block">This returns true if the name ends in one of the suffixes
- defined in this filter.  (Or this returns true if one of the
- suffixes in this filter is "*").</div>
+<div class="block">This returns true if the name ends in one of the suffixes defined in this
+ filter. (Or this returns true if one of the suffixes in this filter is
+ "*").</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>name</code> - </dd>
@@ -584,8 +589,8 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <li class="blockList">
 <h4>setDescription</h4>
 <pre>public&nbsp;void&nbsp;setDescription(java.lang.String&nbsp;description)</pre>
-<div class="block">Assigns the description for this filter.
- If null, then a default description will be provided.</div>
+<div class="block">Assigns the description for this filter. If null, then a default
+ description will be provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>description</code> - </dd>
@@ -612,9 +617,9 @@ implements java.io.FilenameFilter, java.io.FileFilter</pre>
 <li class="blockList">
 <h4>getDescription</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getDescription()</pre>
-<div class="block">If a specific description was provided: this
- returns the predefined description.  Otherwise this
- returns a string such as "GIF and JPEG files".</div>
+<div class="block">If a specific description was provided: this returns the predefined
+ description. Otherwise this returns a string such as
+ "GIF and JPEG files".</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getDescription</code>&nbsp;in class&nbsp;<code>javax.swing.filechooser.FileFilter</code></dd>

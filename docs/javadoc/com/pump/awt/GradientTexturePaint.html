@@ -116,12 +116,17 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object
 implements java.awt.Paint</pre>
 <div class="block">A linear gradient based on a <code>java.awt.TexturePaint</code>.
- <p>This goes to extra lengths to reduce color banding more than Java's
- default gradient implementation, and is generally comparable in performance.</div>
+ <p>
+ This goes to extra lengths to reduce color banding more than Java's default
+ gradient implementation, and is generally comparable in performance.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients: Avoiding Color Banding</a>, 
-<a href="http://javagraphics.blogspot.com/2009/11/gradients-boring-discussion.html">Gradients: a Boring Discussion</a></dd>
+<dd><a
+      href="http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients:
+      Avoiding Color Banding</a>, 
+<a
+      href="http://javagraphics.blogspot.com/2009/11/gradients-boring-discussion.html">Gradients:
+      a Boring Discussion</a></dd>
 </dl>
 </li>
 </ul>
@@ -310,7 +315,8 @@ implements java.awt.Paint</pre>
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/GradientTexturePaint.html#getTransparency--">getTransparency</a></span>()</code>
 <div class="block">Return <code>Transparency.OPAQUE</code> if all the colors in this
- gradient are opaque, otherwise this returns <code>Transparency.TRANSLUCENT</code>.</div>
+ gradient are opaque, otherwise this returns
+ <code>Transparency.TRANSLUCENT</code>.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -321,8 +327,9 @@ implements java.awt.Paint</pre>
               float&nbsp;y1,
               float&nbsp;x2,
               float&nbsp;y2)</code>
-<div class="block">Return true if this combination of colors and fractions should apply error diffusion prevent
- <a href="http://en.wikipedia.org/wiki/Colour_banding">color banding</a>.</div>
+<div class="block">Return true if this combination of colors and fractions should apply
+ error diffusion prevent <a
+ href="http://en.wikipedia.org/wiki/Colour_banding">color banding</a>.</div>
 </td>
 </tr>
 </table>
@@ -494,7 +501,7 @@ implements java.awt.Paint</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>p1</code> - the first point</dd>
 <dd><code>c1</code> - the first color</dd>
-<dd><code>x2</code> - the second point</dd>
+<dd><code>p2</code> - the second point</dd>
 <dd><code>c2</code> - the second color</dd>
 </dl>
 </li>
@@ -516,9 +523,8 @@ implements java.awt.Paint</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>colors</code> - the colors to use in this gradient.</dd>
-<dd><code>fractions</code> - the fractions to use in this gradient.  These
- must be ascending fractions from [0,1].  Each fraction
- corresponds to a color.</dd>
+<dd><code>fractions</code> - the fractions to use in this gradient. These must be ascending
+            fractions from [0,1]. Each fraction corresponds to a color.</dd>
 <dd><code>x1</code> - the x-value of the first coordinate.</dd>
 <dd><code>y1</code> - the y-value of the first coordinate.</dd>
 <dd><code>x2</code> - the x-value of the second coordinate.</dd>
@@ -542,9 +548,8 @@ implements java.awt.Paint</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>colors</code> - the colors to use in this gradient.</dd>
-<dd><code>fractions</code> - the fractions to use in this gradient.  These
- must be ascending fractions from [0,1].  Each fraction
- corresponds to a color.</dd>
+<dd><code>fractions</code> - the fractions to use in this gradient. These must be ascending
+            fractions from [0,1]. Each fraction corresponds to a color.</dd>
 <dd><code>p1</code> - the first point.</dd>
 <dd><code>p2</code> - the second point.</dd>
 <dd><code>cycle</code> - TILE is recommended for best performance.</dd>
@@ -571,8 +576,7 @@ implements java.awt.Paint</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>colors</code> - the colors to check for alpha components</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if any of the colors in the argument are
- not fully opaque.</dd>
+<dd>true if any of the colors in the argument are not fully opaque.</dd>
 </dl>
 </li>
 </ul>
@@ -588,23 +592,25 @@ implements java.awt.Paint</pre>
                                      float&nbsp;y1,
                                      float&nbsp;x2,
                                      float&nbsp;y2)</pre>
-<div class="block">Return true if this combination of colors and fractions should apply error diffusion prevent
- <a href="http://en.wikipedia.org/wiki/Colour_banding">color banding</a>.</div>
+<div class="block">Return true if this combination of colors and fractions should apply
+ error diffusion prevent <a
+ href="http://en.wikipedia.org/wiki/Colour_banding">color banding</a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>colors</code> - the colors to use in this gradient.</dd>
-<dd><code>fractions</code> - the fractions to use in this gradient.  These
- must be ascending fractions from [0,1].  Each fraction
- corresponds to a color.</dd>
+<dd><code>fractions</code> - the fractions to use in this gradient. These must be ascending
+            fractions from [0,1]. Each fraction corresponds to a color.</dd>
 <dd><code>x1</code> - the x-value of the first coordinate.</dd>
 <dd><code>y1</code> - the y-value of the first coordinate.</dd>
 <dd><code>x2</code> - the x-value of the second coordinate.</dd>
 <dd><code>y2</code> - the y-value of the second coordinate.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the gradient the arguments described should apply error
- diffusion to prevent color banding.</dd>
+         diffusion to prevent color banding.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients: Avoiding Color Banding</a></dd>
+<dd><a
+      href="http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients:
+      Avoiding Color Banding</a></dd>
 </dl>
 </li>
 </ul>
@@ -632,8 +638,8 @@ implements java.awt.Paint</pre>
 <li class="blockList">
 <h4>getColors</h4>
 <pre>public&nbsp;java.awt.Color[]&nbsp;getColors()</pre>
-<div class="block">Return the colors in this gradient. Each color corresponds to
- a value in {link #getFractions()}.</div>
+<div class="block">Return the colors in this gradient. Each color corresponds to a value in
+ {link #getFractions()}.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the colors in this gradient.</dd>
@@ -647,8 +653,8 @@ implements java.awt.Paint</pre>
 <li class="blockList">
 <h4>getFractions</h4>
 <pre>public&nbsp;float[]&nbsp;getFractions()</pre>
-<div class="block">Return the fractions in this gradient. Each fraction corresponds to
- a value in {link #getColors()}.</div>
+<div class="block">Return the fractions in this gradient. Each fraction corresponds to a
+ value in {link #getColors()}.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the fractions in this gradient.</dd>
@@ -663,7 +669,8 @@ implements java.awt.Paint</pre>
 <h4>getTransparency</h4>
 <pre>public&nbsp;int&nbsp;getTransparency()</pre>
 <div class="block">Return <code>Transparency.OPAQUE</code> if all the colors in this
- gradient are opaque, otherwise this returns <code>Transparency.TRANSLUCENT</code>.</div>
+ gradient are opaque, otherwise this returns
+ <code>Transparency.TRANSLUCENT</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getTransparency</code>&nbsp;in interface&nbsp;<code>java.awt.Transparency</code></dd>

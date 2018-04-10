@@ -185,8 +185,8 @@ implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener</pre
 <tr class="altColor">
 <td class="colFirst"><code>protected float[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/MultiThumbSliderUI.html#thumbIndications">thumbIndications</a></span></code>
-<div class="block">A float from zero to one, indicating whether that thumb should be highlighted
- or not.</div>
+<div class="block">A float from zero to one, indicating whether that thumb should be
+ highlighted or not.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -253,7 +253,8 @@ implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener</pre
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected abstract int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/MultiThumbSliderUI.html#getPreferredComponentDepth--">getPreferredComponentDepth</a></span>()</code>
-<div class="block">Return the typical height of a horizontally oriented slider, or the width of the vertically oriented slider.</div>
+<div class="block">Return the typical height of a horizontally oriented slider, or the width
+ of the vertically oriented slider.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -429,8 +430,8 @@ implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener</pre
 <li class="blockList">
 <h4>thumbIndications</h4>
 <pre>protected&nbsp;float[] thumbIndications</pre>
-<div class="block">A float from zero to one, indicating whether that thumb should be highlighted
- or not.</div>
+<div class="block">A float from zero to one, indicating whether that thumb should be
+ highlighted or not.</div>
 </li>
 </ul>
 <a name="trackRect">
@@ -532,10 +533,12 @@ implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener</pre
 <li class="blockList">
 <h4>getPreferredComponentDepth</h4>
 <pre>protected abstract&nbsp;int&nbsp;getPreferredComponentDepth()</pre>
-<div class="block">Return the typical height of a horizontally oriented slider, or the width of the vertically oriented slider.</div>
+<div class="block">Return the typical height of a horizontally oriented slider, or the width
+ of the vertically oriented slider.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the typical height of a horizontally oriented slider, or the width of the vertically oriented slider.</dd>
+<dd>the typical height of a horizontally oriented slider, or the
+         width of the vertically oriented slider.</dd>
 </dl>
 </li>
 </ul>
@@ -645,9 +648,9 @@ implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener</pre
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>thumbIndex</code> - the index of the thumb to render.</dd>
 <dd><code>center</code> - an optional center to focus the thumb around. If this is null
- then the current (real) center is used, but this can be supplied manually
- to consider possible shapes and visual size constraints based on the
- current collision policy.</dd>
+            then the current (real) center is used, but this can be
+            supplied manually to consider possible shapes and visual size
+            constraints based on the current collision policy.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the shape used to render a specific thumb.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -681,8 +684,8 @@ implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener</pre
 <pre>protected&nbsp;boolean&nbsp;getThumbAntialiasing()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if Thumbs should be rendered with curved antialiasing. False if
- a crisp pixelated appearance is expected.</dd>
+<dd>true if Thumbs should be rendered with curved antialiasing. False
+         if a crisp pixelated appearance is expected.</dd>
 </dl>
 </li>
 </ul>
@@ -709,9 +712,9 @@ implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener</pre
 <li class="blockList">
 <h4>getThumb</h4>
 <pre>public&nbsp;<a href="../../../com/pump/plaf/MultiThumbSliderUI.Thumb.html" title="enum in com.pump.plaf">MultiThumbSliderUI.Thumb</a>&nbsp;getThumb(int&nbsp;thumbIndex)</pre>
-<div class="block">Return the Thumb option used to render a specific thumb.
- The default implementation here consults the client property MultiThumbSliderUI.THUMB_SHAPE_PROPERTY,
- and returns Circle by default.</div>
+<div class="block">Return the Thumb option used to render a specific thumb. The default
+ implementation here consults the client property
+ MultiThumbSliderUI.THUMB_SHAPE_PROPERTY, and returns Circle by default.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>thumbIndex</code> - the index of the thumb to render.</dd>
@@ -757,11 +760,11 @@ implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener</pre
 <pre>public static&nbsp;&lt;K&gt;&nbsp;K&nbsp;getProperty(javax.swing.JComponent&nbsp;jc,
                                 java.lang.String&nbsp;propertyName,
                                 K&nbsp;defaultValue)</pre>
-<div class="block">This retrieves a property.
- If the component has this property manually set (by calling
- <code>component.putClientProperty()</code>), then that value will be returned.
- Otherwise this method refers to <code>UIManager.get()</code>.  If that
- value is missing, this returns <code>defaultValue</code></div>
+<div class="block">This retrieves a property. If the component has this property manually
+ set (by calling <code>component.putClientProperty()</code>), then that
+ value will be returned. Otherwise this method refers to
+ <code>UIManager.get()</code>. If that value is missing, this returns
+ <code>defaultValue</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>jc</code> - </dd>
@@ -784,8 +787,8 @@ implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener</pre
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the thumbs are valid.  False if there are two
- thumbs with the same value (this is not allowed)</dd>
+<dd>true if the thumbs are valid. False if there are two thumbs with
+         the same value (this is not allowed)</dd>
 </dl>
 </li>
 </ul>
@@ -798,8 +801,9 @@ implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener</pre
 <pre>protected&nbsp;boolean&nbsp;addThumb(int&nbsp;index1,
                            int&nbsp;index2)</pre>
 <div class="block">This will try to add a thumb between index1 and index2.
- <P>This method will not add a thumb if there is already a very
- small distance between these two endpoints</div>
+ <P>
+ This method will not add a thumb if there is already a very small
+ distance between these two endpoints</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index1</code> - </dd>

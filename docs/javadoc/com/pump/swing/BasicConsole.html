@@ -141,11 +141,17 @@ var activeTableTab = "activeTableTab";
 extends javax.swing.JTextArea</pre>
 <div class="block">A modest JTextArea that appends text from thread-safe PrintStreams, and helps
  format tab-separated tables.
- <p>Here is a screenshot illustrating the expected usage of this class:
- <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ShapeBoundsDemo.png" alt="Screenshot of ShapeBoundsDemo"></div>
+ <p>
+ Here is a screenshot illustrating the expected usage of this class:
+ <p>
+ <img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ShapeBoundsDemo.png"
+ alt="Screenshot of ShapeBoundsDemo"></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="http://javagraphics.blogspot.com/2015/03/text-managing-console-in-swing.html">Text: Managing a Console in Swing</a>, 
+<dd><a
+      href="http://javagraphics.blogspot.com/2015/03/text-managing-console-in-swing.html">Text:
+      Managing a Console in Swing</a>, 
 <a href="../../../com/pump/io/ConsoleLogger.html" title="class in com.pump.io"><code>ConsoleLogger</code></a>, 
 <a href="../../../serialized-form.html#com.pump.swing.BasicConsole">Serialized Form</a></dd>
 </dl>
@@ -292,8 +298,8 @@ extends javax.swing.JTextArea</pre>
       boolean&nbsp;reassignSystemOutputStream,
       boolean&nbsp;resizeTabSpacing,
       boolean&nbsp;exitOnClose)</code>
-<div class="block">Create and display a BasicConsole in a JScrollPane in a new JFrame
- that is set to EXIT_ON_CLOSE.</div>
+<div class="block">Create and display a BasicConsole in a JScrollPane in a new JFrame that
+ is set to EXIT_ON_CLOSE.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -389,13 +395,15 @@ extends javax.swing.JTextArea</pre>
                     boolean&nbsp;resizeTabSpacing)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>reassignSystemOutputStream</code> - if true then System.out and System.err will be
- reassigned. Note this may cause security-related exceptions in some environments.
- Instead: if you have control of the output you're looking for consider using
- <code>createPrintStream()</code> to create a customized PrintStream to direct
- your data towards and not interact with <code>System.out</code>.</dd>
-<dd><code>resizeTabSpacing</code> - if true then this component will change the tab-spacing
- to display tab-separated columns in a table.</dd>
+<dd><code>reassignSystemOutputStream</code> - if true then System.out and System.err will be reassigned.
+            Note this may cause security-related exceptions in some
+            environments. Instead: if you have control of the output
+            you're looking for consider using
+            <code>createPrintStream()</code> to create a customized
+            PrintStream to direct your data towards and not interact with
+            <code>System.out</code>.</dd>
+<dd><code>resizeTabSpacing</code> - if true then this component will change the tab-spacing to
+            display tab-separated columns in a table.</dd>
 </dl>
 </li>
 </ul>
@@ -427,22 +435,26 @@ extends javax.swing.JTextArea</pre>
                                   boolean&nbsp;reassignSystemOutputStream,
                                   boolean&nbsp;resizeTabSpacing,
                                   boolean&nbsp;exitOnClose)</pre>
-<div class="block">Create and display a BasicConsole in a JScrollPane in a new JFrame
- that is set to EXIT_ON_CLOSE.
- <p>If called outside the EDT: this method will block until the EDT
- has a chance to set everything up.</div>
+<div class="block">Create and display a BasicConsole in a JScrollPane in a new JFrame that
+ is set to EXIT_ON_CLOSE.
+ <p>
+ If called outside the EDT: this method will block until the EDT has a
+ chance to set everything up.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>reassignSystemOutputStream</code> - if true then System.out and System.err will be
- reassigned. Note this may cause security-related exceptions in some environments.
- Instead: if you have control of the output you're looking for consider using
- <code>createPrintStream()</code> to create a customized PrintStream to direct
- your data towards and not interact with <code>System.out</code>.</dd>
+<dd><code>reassignSystemOutputStream</code> - if true then System.out and System.err will be reassigned.
+            Note this may cause security-related exceptions in some
+            environments. Instead: if you have control of the output
+            you're looking for consider using
+            <code>createPrintStream()</code> to create a customized
+            PrintStream to direct your data towards and not interact with
+            <code>System.out</code>.</dd>
 <dd><code>resizeTabSpacing</code> - if true then this component is going to contain table-like
- data. If false then the tab spacing is unchanged.</dd>
-<dd><code>exitOnClose</code> - if true then the JFrame that displays this BasicConsole is set to EXIT_ON_CLOSE.
- This is intended for apps where this is the only UI. For apps where this is only an auxiliary part of the UI,
- this argument needs to be false.</dd>
+            data. If false then the tab spacing is unchanged.</dd>
+<dd><code>exitOnClose</code> - if true then the JFrame that displays this BasicConsole is set
+            to EXIT_ON_CLOSE. This is intended for apps where this is the
+            only UI. For apps where this is only an auxiliary part of the
+            UI, this argument needs to be false.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a new BasicConsole.</dd>
 </dl>
@@ -455,13 +467,13 @@ extends javax.swing.JTextArea</pre>
 <li class="blockList">
 <h4>createPrintStream</h4>
 <pre>public&nbsp;java.io.PrintStream&nbsp;createPrintStream(boolean&nbsp;applyErrHighlighter)</pre>
-<div class="block">Create a new PrintStrem that appends text to this BasicConsole.
- This method and the PrintStream it returns are thread-safe.</div>
+<div class="block">Create a new PrintStrem that appends text to this BasicConsole. This
+ method and the PrintStream it returns are thread-safe.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>applyErrHighlighter</code> - if true then text printed to this
- stream will be highlighted with a translucent red. If false
- then the text will come in undecorated.</dd>
+<dd><code>applyErrHighlighter</code> - if true then text printed to this stream will be highlighted
+            with a translucent red. If false then the text will come in
+            undecorated.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a PrintStream that appends data to this BasicConsole.</dd>
 </dl>
@@ -475,16 +487,17 @@ extends javax.swing.JTextArea</pre>
 <h4>createPrintStream</h4>
 <pre>public&nbsp;java.io.PrintStream&nbsp;createPrintStream(boolean&nbsp;applyErrHighlighter,
                                              java.io.PrintStream&nbsp;delegatePrintStream)</pre>
-<div class="block">Create a new PrintStrem that appends text to this BasicConsole.
- This method and the PrintStream it returns are thread-safe.</div>
+<div class="block">Create a new PrintStrem that appends text to this BasicConsole. This
+ method and the PrintStream it returns are thread-safe.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>applyErrHighlighter</code> - if true then text printed to this
- stream will be highlighted with a translucent red. If false
- then the text will come in undecorated.</dd>
-<dd><code>delegatePrintStream</code> - a PrintStream that also receives all
- incoming stream data. This lets you layer a PrintStream on top of
- the default System.out if you are running from a dev environment like Eclipse.</dd>
+<dd><code>applyErrHighlighter</code> - if true then text printed to this stream will be highlighted
+            with a translucent red. If false then the text will come in
+            undecorated.</dd>
+<dd><code>delegatePrintStream</code> - a PrintStream that also receives all incoming stream data.
+            This lets you layer a PrintStream on top of the default
+            System.out if you are running from a dev environment like
+            Eclipse.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a PrintStream that appends data to this BasicConsole.</dd>
 </dl>
@@ -497,14 +510,15 @@ extends javax.swing.JTextArea</pre>
 <li class="blockList">
 <h4>createPrintStream</h4>
 <pre>public&nbsp;java.io.PrintStream&nbsp;createPrintStream(java.awt.Color&nbsp;highlighterColor)</pre>
-<div class="block">Create a new PrintStrem that appends text to this BasicConsole.
- This method and the PrintStream it returns are thread-safe.</div>
+<div class="block">Create a new PrintStrem that appends text to this BasicConsole. This
+ method and the PrintStream it returns are thread-safe.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>highlighterColor</code> - the optional highlighter color this PrintStream uses.
- This color should include some opacity so it combines with (and does not
- obscure) the default text selection highlight. (So instead of making a soft opaque
- red, you should make a bright red that is translucent.)</dd>
+<dd><code>highlighterColor</code> - the optional highlighter color this PrintStream uses. This
+            color should include some opacity so it combines with (and
+            does not obscure) the default text selection highlight. (So
+            instead of making a soft opaque red, you should make a bright
+            red that is translucent.)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a PrintStream that appends data to this BasicConsole.</dd>
 </dl>
@@ -518,17 +532,19 @@ extends javax.swing.JTextArea</pre>
 <h4>createPrintStream</h4>
 <pre>public&nbsp;java.io.PrintStream&nbsp;createPrintStream(java.awt.Color&nbsp;highlighterColor,
                                              java.io.PrintStream&nbsp;delegatePrintStream)</pre>
-<div class="block">Create a new PrintStrem that appends text to this BasicConsole.
- This method and the PrintStream it returns are thread-safe.</div>
+<div class="block">Create a new PrintStrem that appends text to this BasicConsole. This
+ method and the PrintStream it returns are thread-safe.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>highlighterColor</code> - the optional highlighter color this PrintStream uses.
- This color should include some opacity so it combines with (and does not
- obscure) the default text selection highlight. (So instead of making a soft opaque
- red, you should make a bright red that is translucent.)</dd>
-<dd><code>delegatePrintStream</code> - a PrintStream that also receives all
- incoming stream data. This lets you layer a PrintStream on top of
- the default System.out if you are running from a dev environment like Eclipse.</dd>
+<dd><code>highlighterColor</code> - the optional highlighter color this PrintStream uses. This
+            color should include some opacity so it combines with (and
+            does not obscure) the default text selection highlight. (So
+            instead of making a soft opaque red, you should make a bright
+            red that is translucent.)</dd>
+<dd><code>delegatePrintStream</code> - a PrintStream that also receives all incoming stream data.
+            This lets you layer a PrintStream on top of the default
+            System.out if you are running from a dev environment like
+            Eclipse.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a PrintStream that appends data to this BasicConsole.</dd>
 </dl>
@@ -542,9 +558,10 @@ extends javax.swing.JTextArea</pre>
 <h4>append</h4>
 <pre>public&nbsp;void&nbsp;append(java.lang.String&nbsp;s,
                    java.awt.Color&nbsp;highlight)</pre>
-<div class="block">This is the only recommended way to add text to this component.
- TODO: change the BasicConsole so it inherits from JComponent and not JTextArea.
- Make it impossible to accidentally access text data through alternative methods.</div>
+<div class="block">This is the only recommended way to add text to this component. TODO:
+ change the BasicConsole so it inherits from JComponent and not JTextArea.
+ Make it impossible to accidentally access text data through alternative
+ methods.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - the text to append to this console.</dd>

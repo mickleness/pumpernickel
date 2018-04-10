@@ -111,7 +111,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">WritingShape</span>
 extends java.lang.Object</pre>
 <div class="block">A series of related <a href="../../../../com/pump/animation/writing/WritingStroke.html" title="class in com.pump.animation.writing"><code>WritingStroke</code></a> objects to paint sequentially.
- <p>This is used to give the impression of painting strokes over time.</div>
+ <p>
+ This is used to give the impression of painting strokes over time.</div>
 </li>
 </ul>
 </div>
@@ -195,14 +196,15 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/animation/writing/WritingShape.html#addPropertyChangeListener-java.beans.PropertyChangeListener-">addPropertyChangeListener</a></span>(java.beans.PropertyChangeListener&nbsp;pcl)</code>
-<div class="block">Add a PropertyChangeListener that will be notified when the bounds of this
- WritingShape change.</div>
+<div class="block">Add a PropertyChangeListener that will be notified when the bounds of
+ this WritingShape change.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/animation/writing/WritingShape.html#assign-java.lang.String-">assign</a></span>(java.lang.String&nbsp;s)</code>
-<div class="block">Invoke <code>reset()</code> and reformat this shape from the string provided.</div>
+<div class="block">Invoke <code>reset()</code> and reformat this shape from the string
+ provided.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -247,7 +249,8 @@ extends java.lang.Object</pre>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/animation/writing/WritingShape.html#reset--">reset</a></span>()</code>
-<div class="block">Reset this WritingShape to have no strokes and a unit rectangle as bounds.</div>
+<div class="block">Reset this WritingShape to have no strokes and a unit rectangle as
+ bounds.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -291,10 +294,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>BOUNDS_KEY</h4>
 <pre>public static final&nbsp;<a href="../../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;java.awt.geom.Rectangle2D&gt; BOUNDS_KEY</pre>
-<div class="block">The key that relates to the bounds of this shape.
- Note these are not the literal bounds; this is the expected frame. Strokes do
- not need to fill these bounds, and they can liberally step outside of these
- bounds for occasional flourishes.</div>
+<div class="block">The key that relates to the bounds of this shape. Note these are not the
+ literal bounds; this is the expected frame. Strokes do not need to fill
+ these bounds, and they can liberally step outside of these bounds for
+ occasional flourishes.</div>
 </li>
 </ul>
 <a name="strokes">
@@ -314,7 +317,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>properties</h4>
 <pre>protected final&nbsp;<a href="../../../../com/pump/util/ObservableProperties.html" title="class in com.pump.util">ObservableProperties</a> properties</pre>
-<div class="block">The properties this shape manages. Currently this only manages the BOUNDS_KEY.</div>
+<div class="block">The properties this shape manages. Currently this only manages the
+ BOUNDS_KEY.</div>
 </li>
 </ul>
 </li>
@@ -378,7 +382,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>reset</h4>
 <pre>public&nbsp;void&nbsp;reset()</pre>
-<div class="block">Reset this WritingShape to have no strokes and a unit rectangle as bounds.</div>
+<div class="block">Reset this WritingShape to have no strokes and a unit rectangle as
+ bounds.</div>
 </li>
 </ul>
 <a name="assign-java.lang.String-">
@@ -388,7 +393,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>assign</h4>
 <pre>public&nbsp;void&nbsp;assign(java.lang.String&nbsp;s)</pre>
-<div class="block">Invoke <code>reset()</code> and reformat this shape from the string provided.</div>
+<div class="block">Invoke <code>reset()</code> and reformat this shape from the string
+ provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - previous output from WritingShape.toString()</dd>
@@ -402,10 +408,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>toString</h4>
 <pre>public&nbsp;java.lang.String&nbsp;toString()</pre>
-<div class="block">Serialize this shape as a String. This mimics the standard shape
- output (m, l, q, c, z), except it also includes the instruction "b" (4 arguments
- for the bounds), and "w" (1 argument for the pause beat). The "w" instruction
- happens to separate each unique WritingStroke.</div>
+<div class="block">Serialize this shape as a String. This mimics the standard shape output
+ (m, l, q, c, z), except it also includes the instruction "b" (4 arguments
+ for the bounds), and "w" (1 argument for the pause beat). The "w"
+ instruction happens to separate each unique WritingStroke.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -419,11 +425,12 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>addPropertyChangeListener</h4>
 <pre>public&nbsp;void&nbsp;addPropertyChangeListener(java.beans.PropertyChangeListener&nbsp;pcl)</pre>
-<div class="block">Add a PropertyChangeListener that will be notified when the bounds of this
- WritingShape change.</div>
+<div class="block">Add a PropertyChangeListener that will be notified when the bounds of
+ this WritingShape change.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>pcl</code> - a new listener to receive notifications when the bounds change.</dd>
+<dd><code>pcl</code> - a new listener to receive notifications when the bounds
+            change.</dd>
 </dl>
 </li>
 </ul>
@@ -463,9 +470,10 @@ extends java.lang.Object</pre>
 <h4>setBounds</h4>
 <pre>public&nbsp;void&nbsp;setBounds(java.awt.geom.Rectangle2D&nbsp;r)</pre>
 <div class="block">Assign the bounds of this shape.
- <p>Note these are not the literal bounds; this is the expected frame. Strokes do
- not need to fill these bounds, and they can liberally step outside of these
- bounds for occasional flourishes.</div>
+ <p>
+ Note these are not the literal bounds; this is the expected frame.
+ Strokes do not need to fill these bounds, and they can liberally step
+ outside of these bounds for occasional flourishes.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>r</code> - the new bounds for this shape.</dd>
@@ -480,9 +488,10 @@ extends java.lang.Object</pre>
 <h4>getBounds</h4>
 <pre>public&nbsp;java.awt.geom.Rectangle2D&nbsp;getBounds()</pre>
 <div class="block">Return the bounds of this shape.
- <p>Note these are not the literal bounds; this is the expected frame. Strokes do
- not need to fill these bounds, and they can liberally step outside of these
- bounds for occasional flourishes.</div>
+ <p>
+ Note these are not the literal bounds; this is the expected frame.
+ Strokes do not need to fill these bounds, and they can liberally step
+ outside of these bounds for occasional flourishes.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the bounds of this shape.</dd>
@@ -532,15 +541,17 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the Graphics to paint to.</dd>
 <dd><code>bounds</code> - the bounds of this shape to draw to. The Graphics2D will be
- transformed so every stroke will fit in this argument as if it were
- <code>WritingShape.getBounds()</code>.</dd>
-<dd><code>time</code> - the time (in seconds), where t=0 is the beginning of rendering this
- shape.</dd>
+            transformed so every stroke will fit in this argument as if it
+            were <code>WritingShape.getBounds()</code>.</dd>
+<dd><code>time</code> - the time (in seconds), where t=0 is the beginning of rendering
+            this shape.</dd>
 <dd><code>beatsPerSecond</code> - the number of beats per second.</dd>
 <dd><code>pixelsPerSecond</code> - the number of pixels per second.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>whether the shape is completely rendered. This should be equivalent
- to <code>(t &lt; getDuration( beatsPerSecond, pixelsPerSecond)</code> .</dd>
+<dd>whether the shape is completely rendered. This should be
+         equivalent to
+         <code>(t &lt; getDuration( beatsPerSecond, pixelsPerSecond)</code>
+         .</dd>
 </dl>
 </li>
 </ul>

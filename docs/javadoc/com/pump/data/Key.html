@@ -121,12 +121,12 @@ extends java.lang.Object
 implements java.lang.CharSequence, java.io.Serializable</pre>
 <div class="block">This describes a key/attribute and its associated generic type.
  <p>
- This also includes optional <a href="../../../com/pump/data/BoundsChecker.html" title="class in com.pump.data"><code>BoundsCheckers</code></a>
- which are triggered in the <a href="../../../com/pump/data/Key.html#validate-T-"><code>validate(Object)</code></a> method.
+ This also includes optional <a href="../../../com/pump/data/BoundsChecker.html" title="class in com.pump.data"><code>BoundsCheckers</code></a> which are
+ triggered in the <a href="../../../com/pump/data/Key.html#validate-T-"><code>validate(Object)</code></a> method.
  <p>
- Each <code>Key</code> is also capable of serializing/deserializing an
- object as a String. The <code>Key</code> class itself is abstract, and each
- subclass knows how to read/write data itself.</div>
+ Each <code>Key</code> is also capable of serializing/deserializing an object
+ as a String. The <code>Key</code> class itself is abstract, and each subclass
+ knows how to read/write data itself.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.data.Key">Serialized Form</a></dd>
@@ -236,7 +236,8 @@ implements java.lang.CharSequence, java.io.Serializable</pre>
 <td class="colFirst"><code><a href="../../../com/pump/data/Key.html" title="type parameter in Key">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/Key.html#get-java.util.Map-">get</a></span>(java.util.Map&nbsp;attributes)</code>
 <div class="block">Return the value of this key based on the map provided, or
- <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> is the map doesn't contain the requested value.</div>
+ <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> is the map doesn't contain the requested
+ value.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -260,8 +261,8 @@ implements java.lang.CharSequence, java.io.Serializable</pre>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../com/pump/data/Key.html" title="type parameter in Key">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/Key.html#getClientProperty-javax.swing.JComponent-">getClientProperty</a></span>(javax.swing.JComponent&nbsp;jcomponent)</code>
-<div class="block">Return the value of this key in a jcomponent's client properties,
- or <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> if the value is undefined.</div>
+<div class="block">Return the value of this key in a jcomponent's client properties, or
+ <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> if the value is undefined.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -609,8 +610,8 @@ implements java.lang.CharSequence, java.io.Serializable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - the value to check. This may be null.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>IllegalArgumentException,</code> - or any other RuntimeException that
- BoundsCheckers may consider appropriate.</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - , or any other RuntimeException that BoundsCheckers may
+             consider appropriate.</dd>
 </dl>
 </li>
 </ul>
@@ -646,7 +647,8 @@ implements java.lang.CharSequence, java.io.Serializable</pre>
 <h4>get</h4>
 <pre>public&nbsp;<a href="../../../com/pump/data/Key.html" title="type parameter in Key">T</a>&nbsp;get(java.util.Map&nbsp;attributes)</pre>
 <div class="block">Return the value of this key based on the map provided, or
- <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> is the map doesn't contain the requested value.</div>
+ <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> is the map doesn't contain the requested
+ value.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>attributes</code> - the attributes to inspect.</dd>
@@ -667,8 +669,8 @@ implements java.lang.CharSequence, java.io.Serializable</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>attributes</code> - the attributes to inspect.</dd>
-<dd><code>applyDefaultValue</code> - if true and the map doesn't contain the key,
- then <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> is returned.</dd>
+<dd><code>applyDefaultValue</code> - if true and the map doesn't contain the key, then
+            <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> is returned.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the value of this key based on the map provided.</dd>
 </dl>
@@ -681,8 +683,8 @@ implements java.lang.CharSequence, java.io.Serializable</pre>
 <li class="blockList">
 <h4>getClientProperty</h4>
 <pre>public&nbsp;<a href="../../../com/pump/data/Key.html" title="type parameter in Key">T</a>&nbsp;getClientProperty(javax.swing.JComponent&nbsp;jcomponent)</pre>
-<div class="block">Return the value of this key in a jcomponent's client properties,
- or <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> if the value is undefined.</div>
+<div class="block">Return the value of this key in a jcomponent's client properties, or
+ <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> if the value is undefined.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>jcomponent</code> - component with the client properties to inspect</dd>
@@ -703,8 +705,8 @@ implements java.lang.CharSequence, java.io.Serializable</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>jcomponent</code> - component with the client properties to inspect</dd>
-<dd><code>applyDefaultValue</code> - if true and the map doesn't contain the key,
- then <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> is returned.</dd>
+<dd><code>applyDefaultValue</code> - if true and the map doesn't contain the key, then
+            <a href="../../../com/pump/data/Key.html#getDefaultValue--"><code>getDefaultValue()</code></a> is returned.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the value of this key based on the map provided.</dd>
 </dl>
@@ -771,9 +773,9 @@ implements java.lang.CharSequence, java.io.Serializable</pre>
 <dd><code>value</code> - a value to validate</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the argument matches the default value. Note subclasses
- may override this to identify approximate matches. (For example:
- consider an AffineTransform where 1 value is within .00001 of an identity
- transform.)</dd>
+         may override this to identify approximate matches. (For example:
+         consider an AffineTransform where 1 value is within .00001 of an
+         identity transform.)</dd>
 </dl>
 </li>
 </ul>
@@ -806,7 +808,8 @@ implements java.lang.CharSequence, java.io.Serializable</pre>
 <dd><code>prefs</code> - the preferences object to consult.</dd>
 <dd><code>defaultValue</code> - the default value if no other value is provided.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>either the stored value in the preferences, or the defaultValue if the preferences don't include this key.</dd>
+<dd>either the stored value in the preferences, or the defaultValue
+         if the preferences don't include this key.</dd>
 </dl>
 </li>
 </ul>
@@ -828,7 +831,8 @@ implements java.lang.CharSequence, java.io.Serializable</pre>
 <pre>public&nbsp;<a href="../../../com/pump/data/Key.html" title="class in com.pump.data">Key</a>&lt;?&gt;[]&nbsp;getGenericParameters()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the generic parameters this attribute relies on. The default implementation returns an empty array.</dd>
+<dd>the generic parameters this attribute relies on. The default
+         implementation returns an empty array.</dd>
 </dl>
 </li>
 </ul>

@@ -167,8 +167,8 @@ extends <a href="../../../com/pump/geom/PathSegment.html" title="class in com.pu
 <tr class="rowColor">
 <td class="colFirst"><code>protected static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/PathSegment.Float.html#ZERO">ZERO</a></span></code>
-<div class="block">A very small value that is considered "equivalent to zero"
- in some operations where machine error may occur.</div>
+<div class="block">A very small value that is considered "equivalent to zero" in some
+ operations where machine error may occur.</div>
 </td>
 </tr>
 </table>
@@ -307,8 +307,8 @@ extends <a href="../../../com/pump/geom/PathSegment.html" title="class in com.pu
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../com/pump/geom/PathSegment.Float.html" title="class in com.pump.geom">PathSegment.Float</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/PathSegment.Float.html#newSegment--">newSegment</a></span>()</code>
-<div class="block">Subclasses must override this method to return
- a segment of the correct type.</div>
+<div class="block">Subclasses must override this method to return a segment of the
+ correct type.</div>
 </td>
 </tr>
 <tr id="i18" class="altColor">
@@ -400,8 +400,8 @@ extends <a href="../../../com/pump/geom/PathSegment.html" title="class in com.pu
 <li class="blockList">
 <h4>ZERO</h4>
 <pre>protected static final&nbsp;float ZERO</pre>
-<div class="block">A very small value that is considered "equivalent to zero"
- in some operations where machine error may occur.</div>
+<div class="block">A very small value that is considered "equivalent to zero" in some
+ operations where machine error may occur.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.geom.PathSegment.Float.ZERO">Constant Field Values</a></dd>
@@ -426,9 +426,8 @@ extends <a href="../../../com/pump/geom/PathSegment.html" title="class in com.pu
              float&nbsp;moveY)</pre>
 <div class="block">Initializes a SEG_MOVETO segment.
  
- This is the only publicly available constructor: to
- add other segments you should use the methods lineTo,
- cubicTo, etc.</div>
+ This is the only publicly available constructor: to add other
+ segments you should use the methods lineTo, cubicTo, etc.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>moveX</code> - </dd>
@@ -461,8 +460,8 @@ extends <a href="../../../com/pump/geom/PathSegment.html" title="class in com.pu
 <li class="blockList">
 <h4>newSegment</h4>
 <pre>protected&nbsp;<a href="../../../com/pump/geom/PathSegment.Float.html" title="class in com.pump.geom">PathSegment.Float</a>&nbsp;newSegment()</pre>
-<div class="block">Subclasses must override this method to return
- a segment of the correct type.</div>
+<div class="block">Subclasses must override this method to return a segment of the
+ correct type.</div>
 </li>
 </ul>
 <a name="getXCoeffs--">
@@ -514,8 +513,8 @@ extends <a href="../../../com/pump/geom/PathSegment.html" title="class in com.pu
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>t</code> - the t-value to get the tangent angle for.</dd>
-<dd><code>confine</code> - this may confine the result to [-pi/2,pi/2].
- If this is false, then the result may range from [-pi,pi].</dd>
+<dd><code>confine</code> - this may confine the result to [-pi/2,pi/2]. If this is
+            false, then the result may range from [-pi,pi].</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the tangent angle (in radians).</dd>
 </dl>
@@ -543,17 +542,16 @@ extends <a href="../../../com/pump/geom/PathSegment.html" title="class in com.pu
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>t</code> - the t-value to get the tangent angle for.</dd>
-<dd><code>direction</code> - in the (extremely) rare case where the
- tangent slope is ambiguous, this indicates which side
- of the t argument to look at.
- That is, if you approach t from a smaller value,
- the angle might be K.  If you approach t from a larger
- value, the angle might be (K+pi).  This will happen
- when the direction of the curve is undefined at t, because
- the curve is switching from K to (K+pi).
- When this argument is positive, it assumes t is being
- approached by values greater than t.  When negative, it
- assumes t is approached from values less than t.</dd>
+<dd><code>direction</code> - in the (extremely) rare case where the tangent slope is
+            ambiguous, this indicates which side of the t argument to
+            look at. That is, if you approach t from a smaller value,
+            the angle might be K. If you approach t from a larger
+            value, the angle might be (K+pi). This will happen when
+            the direction of the curve is undefined at t, because the
+            curve is switching from K to (K+pi). When this argument is
+            positive, it assumes t is being approached by values
+            greater than t. When negative, it assumes t is approached
+            from values less than t.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the tangent angle (in radians).</dd>
 </dl>

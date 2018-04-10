@@ -120,9 +120,10 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">ShapeCreationUI</span>
 extends javax.swing.plaf.ComponentUI</pre>
 <div class="block">A UI for a <a href="../../../com/pump/swing/ShapeCreationPanel.html" title="class in com.pump.swing"><code>ShapeCreationPanel</code></a>.
- <p>This abstract superclass offers a few common functions, but
- subclasses most implement specific <code>MouseListeners</code>
- and implementation of each handle.</div>
+ <p>
+ This abstract superclass offers a few common functions, but subclasses most
+ implement specific <code>MouseListeners</code> and implementation of each
+ handle.</div>
 </li>
 </ul>
 </div>
@@ -194,8 +195,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/ShapeCreationUI.html#paint-java.awt.Graphics-javax.swing.JComponent-">paint</a></span>(java.awt.Graphics&nbsp;g0,
      javax.swing.JComponent&nbsp;c)</code>
-<div class="block">Invokes <a href="../../../com/pump/plaf/ShapeCreationUI.html#paintShapes-java.awt.Graphics2D-com.pump.swing.ShapeCreationPanel-"><code>paintShapes(Graphics2D, ShapeCreationPanel)</code></a> and
- then <a href="../../../com/pump/plaf/ShapeCreationUI.html#paintControls-java.awt.Graphics2D-com.pump.swing.ShapeCreationPanel-"><code>paintControls(Graphics2D, ShapeCreationPanel)</code></a></div>
+<div class="block">Invokes <a href="../../../com/pump/plaf/ShapeCreationUI.html#paintShapes-java.awt.Graphics2D-com.pump.swing.ShapeCreationPanel-"><code>paintShapes(Graphics2D, ShapeCreationPanel)</code></a> and then
+ <a href="../../../com/pump/plaf/ShapeCreationUI.html#paintControls-java.awt.Graphics2D-com.pump.swing.ShapeCreationPanel-"><code>paintControls(Graphics2D, ShapeCreationPanel)</code></a></div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -311,10 +312,12 @@ extends javax.swing.plaf.ComponentUI</pre>
 <h4>validate</h4>
 <pre>protected&nbsp;java.awt.Shape&nbsp;validate(java.awt.Shape&nbsp;shape)</pre>
 <div class="block">This converts the argument to a shape compatible with this UI.
- <p>For example: the CurvedPolylineCreationUI only wants to
- work with CurvedPolylines. This may necessarily lose some shape data
- in making it conform to the expected format.
- <p>The default implementation simply returns the argument.</div>
+ <p>
+ For example: the CurvedPolylineCreationUI only wants to work with
+ CurvedPolylines. This may necessarily lose some shape data in making it
+ conform to the expected format.
+ <p>
+ The default implementation simply returns the argument.</div>
 </li>
 </ul>
 <a name="getSelectedShape-com.pump.swing.ShapeCreationPanel-java.awt.geom.Point2D-">
@@ -325,12 +328,14 @@ extends javax.swing.plaf.ComponentUI</pre>
 <h4>getSelectedShape</h4>
 <pre>protected&nbsp;<a href="../../../com/pump/swing/ShapeCreationPanel.Selection.html" title="class in com.pump.swing">ShapeCreationPanel.Selection</a>&nbsp;getSelectedShape(<a href="../../../com/pump/swing/ShapeCreationPanel.html" title="class in com.pump.swing">ShapeCreationPanel</a>&nbsp;scp,
                                                         java.awt.geom.Point2D&nbsp;mouseLoc)</pre>
-<div class="block">Return a Selection for a shape. This takes into account <code>getStroke(scp, shapeIndex)</code>
- and should be consulted after possible matches for handles have been ruled out.</div>
+<div class="block">Return a Selection for a shape. This takes into account
+ <code>getStroke(scp, shapeIndex)</code> and should be consulted after
+ possible matches for handles have been ruled out.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>mouseLoc</code> - an un-transformed mouse location (that is: this comes directly from a MouseEvent
- and is relative to the ShapeCreationPanel's coordinates).</dd>
+<dd><code>mouseLoc</code> - an un-transformed mouse location (that is: this comes directly
+            from a MouseEvent and is relative to the ShapeCreationPanel's
+            coordinates).</dd>
 </dl>
 </li>
 </ul>
@@ -380,8 +385,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 <h4>paint</h4>
 <pre>public&nbsp;void&nbsp;paint(java.awt.Graphics&nbsp;g0,
                   javax.swing.JComponent&nbsp;c)</pre>
-<div class="block">Invokes <a href="../../../com/pump/plaf/ShapeCreationUI.html#paintShapes-java.awt.Graphics2D-com.pump.swing.ShapeCreationPanel-"><code>paintShapes(Graphics2D, ShapeCreationPanel)</code></a> and
- then <a href="../../../com/pump/plaf/ShapeCreationUI.html#paintControls-java.awt.Graphics2D-com.pump.swing.ShapeCreationPanel-"><code>paintControls(Graphics2D, ShapeCreationPanel)</code></a></div>
+<div class="block">Invokes <a href="../../../com/pump/plaf/ShapeCreationUI.html#paintShapes-java.awt.Graphics2D-com.pump.swing.ShapeCreationPanel-"><code>paintShapes(Graphics2D, ShapeCreationPanel)</code></a> and then
+ <a href="../../../com/pump/plaf/ShapeCreationUI.html#paintControls-java.awt.Graphics2D-com.pump.swing.ShapeCreationPanel-"><code>paintControls(Graphics2D, ShapeCreationPanel)</code></a></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>paint</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.ComponentUI</code></dd>
@@ -407,9 +412,10 @@ extends javax.swing.plaf.ComponentUI</pre>
 <h4>getStroke</h4>
 <pre>protected&nbsp;java.awt.Stroke&nbsp;getStroke(<a href="../../../com/pump/swing/ShapeCreationPanel.html" title="class in com.pump.swing">ShapeCreationPanel</a>&nbsp;panel,
                                     int&nbsp;shapeIndex)</pre>
-<div class="block">Return the stroke used to paint a WritingStroke. This stroke is independent
- of the panel's AffineTransform. (So if the stroke is expected to scale with the
- transform, then this method needs to consult the AffineTransform and change accordingly.)</div>
+<div class="block">Return the stroke used to paint a WritingStroke. This stroke is
+ independent of the panel's AffineTransform. (So if the stroke is expected
+ to scale with the transform, then this method needs to consult the
+ AffineTransform and change accordingly.)</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/plaf/ShapeCreationUI.html#paintShape-java.awt.Graphics2D-com.pump.swing.ShapeCreationPanel-int-java.awt.Shape-"><code>paintShape(Graphics2D,ShapeCreationPanel,int,Shape)</code></a></dd>
@@ -426,10 +432,11 @@ extends javax.swing.plaf.ComponentUI</pre>
                           <a href="../../../com/pump/swing/ShapeCreationPanel.html" title="class in com.pump.swing">ShapeCreationPanel</a>&nbsp;panel,
                           int&nbsp;shapeIndex,
                           java.awt.Shape&nbsp;transformedShape)</pre>
-<div class="block">This paints an individual shape.
- Subclasses may override this to control the color/stroke of shapes.
- <p>The default implementation here paints a 2-pixel focus ring around
- a shape if it is the currently selected shape.</div>
+<div class="block">This paints an individual shape. Subclasses may override this to control
+ the color/stroke of shapes.
+ <p>
+ The default implementation here paints a 2-pixel focus ring around a
+ shape if it is the currently selected shape.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/plaf/ShapeCreationUI.html#getStroke-com.pump.swing.ShapeCreationPanel-int-"><code>getStroke(ShapeCreationPanel, int)</code></a></dd>
@@ -445,9 +452,10 @@ extends javax.swing.plaf.ComponentUI</pre>
 <pre>protected&nbsp;void&nbsp;paintControls(java.awt.Graphics2D&nbsp;g,
                              <a href="../../../com/pump/swing/ShapeCreationPanel.html" title="class in com.pump.swing">ShapeCreationPanel</a>&nbsp;scp)</pre>
 <div class="block">Paint handles/controls above the shape data.
- <p>When implementing this method: note that this is always invoked,
- and you need to consult the ShapeCreationPanel to determine when
- handles are supposed to be active.</div>
+ <p>
+ When implementing this method: note that this is always invoked, and you
+ need to consult the ShapeCreationPanel to determine when handles are
+ supposed to be active.</div>
 </li>
 </ul>
 </li>

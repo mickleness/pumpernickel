@@ -114,7 +114,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">IOLocation</span>
 extends java.lang.Object</pre>
-<div class="block">An abstract representation for file systems, URLs, archives, search results, etc.</div>
+<div class="block">An abstract representation for file systems, URLs, archives, search results,
+ etc.</div>
 </li>
 </ul>
 </div>
@@ -158,15 +159,14 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/IOLocation.MissingParentException.html" title="class in com.pump.io.location">IOLocation.MissingParentException</a></span></code>
-<div class="block">This is used to indicate the parent of a location
- was expected and not available.</div>
+<div class="block">This is used to indicate the parent of a location was expected and not
+ available.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/IOLocation.SetNameException.html" title="class in com.pump.io.location">IOLocation.SetNameException</a></span></code>
-<div class="block">This is used to indicate that changing the name
- of a location failed.</div>
+<div class="block">This is used to indicate that changing the name of a location failed.</div>
 </td>
 </tr>
 </table>
@@ -233,8 +233,8 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/IOLocation.html#canRead--">canRead</a></span>()</code>
-<div class="block">If this returns true then <code>createInputStream()</code> should
- return successfully.</div>
+<div class="block">If this returns true then <code>createInputStream()</code> should return
+ successfully.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -259,13 +259,15 @@ extends java.lang.Object</pre>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>abstract java.io.InputStream</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/IOLocation.html#createInputStream--">createInputStream</a></span>()</code>
-<div class="block">Creates an <code>InputStream</code> to read from this location -- if possible.</div>
+<div class="block">Creates an <code>InputStream</code> to read from this location -- if
+ possible.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>abstract java.io.OutputStream</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/IOLocation.html#createOutputStream--">createOutputStream</a></span>()</code>
-<div class="block">Creates an <code>OutputStream</code> to write to this location -- if possible.</div>
+<div class="block">Creates an <code>OutputStream</code> to write to this location -- if
+ possible.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -303,8 +305,8 @@ extends java.lang.Object</pre>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/IOLocation.html#getExtension--">getExtension</a></span>()</code>
-<div class="block">Return the file extension of this resource, or null if it does
- not exist (as will often be the case for directories).</div>
+<div class="block">Return the file extension of this resource, or null if it does not exist
+ (as will often be the case for directories).</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
@@ -363,15 +365,13 @@ extends java.lang.Object</pre>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>javax.swing.tree.TreePath</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/IOLocation.html#getTreePath-boolean-">getTreePath</a></span>(boolean&nbsp;stringsOnly)</code>
-<div class="block">Returns a <code>TreePath</code> of this node
- and all its parents.</div>
+<div class="block">Returns a <code>TreePath</code> of this node and all its parents.</div>
 </td>
 </tr>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code>abstract java.net.URL</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/IOLocation.html#getURL--">getURL</a></span>()</code>
-<div class="block">If possible this will return a URL pointing to this
- location.</div>
+<div class="block">If possible this will return a URL pointing to this location.</div>
 </td>
 </tr>
 <tr id="i24" class="altColor">
@@ -387,8 +387,8 @@ extends java.lang.Object</pre>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code>protected static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/IOLocation.html#isDefaultNavigable-com.pump.io.location.IOLocation-">isDefaultNavigable</a></span>(<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;loc)</code>
-<div class="block">This indicates if the user is encouraged to navigate
- inside this location by default.</div>
+<div class="block">This indicates if the user is encouraged to navigate inside this location
+ by default.</div>
 </td>
 </tr>
 <tr id="i27" class="rowColor">
@@ -406,8 +406,8 @@ extends java.lang.Object</pre>
 <tr id="i29" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/IOLocation.html#isNavigable--">isNavigable</a></span>()</code>
-<div class="block">This indicates if the user is encouraged to navigate
- inside this location.</div>
+<div class="block">This indicates if the user is encouraged to navigate inside this
+ location.</div>
 </td>
 </tr>
 <tr id="i30" class="altColor">
@@ -432,8 +432,8 @@ extends java.lang.Object</pre>
 <tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/IOLocation.html#mkdirs--">mkdirs</a></span>()</code>
-<div class="block">Creates a directory at this location and creates
- all necessary parent directories.</div>
+<div class="block">Creates a directory at this location and creates all necessary parent
+ directories.</div>
 </td>
 </tr>
 <tr id="i34" class="altColor">
@@ -471,10 +471,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>omitMacBundles</h4>
 <pre>public static&nbsp;boolean omitMacBundles</pre>
-<div class="block">This indicates that Mac bundles should not be navigable. For example:
- the file "Safari.app" is technically a directory, but because it
- ends with a bundle-identifying suffix (".app"): the method
- <code>isNavigable()</code> will (by default) return <code>false</code>.</div>
+<div class="block">This indicates that Mac bundles should not be navigable. For example: the
+ file "Safari.app" is technically a directory, but because it ends with a
+ bundle-identifying suffix (".app"): the method <code>isNavigable()</code>
+ will (by default) return <code>false</code>.</div>
 </li>
 </ul>
 <a name="FOLDER_ICON">
@@ -527,14 +527,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getPath</h4>
 <pre>public abstract&nbsp;java.lang.String&nbsp;getPath()</pre>
-<div class="block">This returns a unique path for this location.
- This could be used for sorting, hashtables, or otherwise
- uniquely identifying this object.
- <P>Note this needs to <i>uniquely</i> the path, so
- different location types should include their unique
- prefixes.  (a file-based location should start with
- something like "file://", and a ftp-based location
- should start with "ftp://", etc.)</div>
+<div class="block">This returns a unique path for this location. This could be used for
+ sorting, hashtables, or otherwise uniquely identifying this object.
+ <P>
+ Note this needs to <i>uniquely</i> the path, so different location types
+ should include their unique prefixes. (a file-based location should start
+ with something like "file://", and a ftp-based location should start with
+ "ftp://", etc.)</div>
 </li>
 </ul>
 <a name="flush--">
@@ -544,11 +543,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>flush</h4>
 <pre>public&nbsp;void&nbsp;flush()</pre>
-<div class="block">This flushes any cached information about this location.
- Some locations may cache several properties: the children,
- isHidden, exists, etc.  This method should be called when
- we know that something has changed and all cached values
- should be purged.</div>
+<div class="block">This flushes any cached information about this location. Some locations
+ may cache several properties: the children, isHidden, exists, etc. This
+ method should be called when we know that something has changed and all
+ cached values should be purged.</div>
 </li>
 </ul>
 <a name="hashCode--">
@@ -585,7 +583,8 @@ extends java.lang.Object</pre>
 <h4>getName</h4>
 <pre>public abstract&nbsp;java.lang.String&nbsp;getName()</pre>
 <div class="block">This returns the file name of this location.
- <P>This should be the end of <code>getPath()</code>.</div>
+ <P>
+ This should be the end of <code>getPath()</code>.</div>
 </li>
 </ul>
 <a name="contains-java.lang.String-">
@@ -605,10 +604,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>canWrite</h4>
 <pre>public abstract&nbsp;boolean&nbsp;canWrite()</pre>
-<div class="block">Returns true if this is a location you can write to.
- If this returns true, then directories should be able
- to call <code>createDirectory()</code> and <code>createFile()</code>
- and files should be able to call <code>createOutputStream()</code>.</div>
+<div class="block">Returns true if this is a location you can write to. If this returns
+ true, then directories should be able to call
+ <code>createDirectory()</code> and <code>createFile()</code> and files
+ should be able to call <code>createOutputStream()</code>.</div>
 </li>
 </ul>
 <a name="isDirectory--">
@@ -639,8 +638,8 @@ extends java.lang.Object</pre>
 <h4>getParentPath</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getParentPath()</pre>
 <div class="block">Returns the parent path of this node.
- <p>This should be equivalent to calling:
- <code>getParent().getPath()</code>.</div>
+ <p>
+ This should be equivalent to calling: <code>getParent().getPath()</code>.</div>
 </li>
 </ul>
 <a name="getTreePath-boolean-">
@@ -650,13 +649,12 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getTreePath</h4>
 <pre>public&nbsp;javax.swing.tree.TreePath&nbsp;getTreePath(boolean&nbsp;stringsOnly)</pre>
-<div class="block">Returns a <code>TreePath</code> of this node
- and all its parents.</div>
+<div class="block">Returns a <code>TreePath</code> of this node and all its parents.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>stringsOnly</code> - if true then the TreePath should
- contains <code>String</code> objects; if <code>false</code>
- then this should return <code>IOLocation</code> objects.</dd>
+<dd><code>stringsOnly</code> - if true then the TreePath should contains <code>String</code>
+            objects; if <code>false</code> then this should return
+            <code>IOLocation</code> objects.</dd>
 </dl>
 </li>
 </ul>
@@ -668,15 +666,15 @@ extends java.lang.Object</pre>
 <h4>getChild</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;getChild(java.lang.String&nbsp;name)
                     throws java.io.IOException</pre>
-<div class="block">This returns a reference to a child of this location.
- This may return null if this location cannot contain children
- (either because it is a file and not a directory, or because
- it is a directory that doesn't have write privileges).
- <p>Also note that this can return a child that does not
- exist.
- <p>The default implementation only polls existing
- children: subclasses are encouraged to override this
- to return locations that do not yet exist.</div>
+<div class="block">This returns a reference to a child of this location. This may return
+ null if this location cannot contain children (either because it is a
+ file and not a directory, or because it is a directory that doesn't have
+ write privileges).
+ <p>
+ Also note that this can return a child that does not exist.
+ <p>
+ The default implementation only polls existing children: subclasses are
+ encouraged to override this to return locations that do not yet exist.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>name</code> - the name of the child.</dd>
@@ -696,9 +694,8 @@ extends java.lang.Object</pre>
 <pre>public abstract&nbsp;void&nbsp;mkdir()
                     throws java.io.IOException,
                            <a href="../../../../com/pump/io/location/IOLocation.MakeDirectoryException.html" title="class in com.pump.io.location">IOLocation.MakeDirectoryException</a></pre>
-<div class="block">Creates a directory at this location.
- This will throw an exception if a file already
- exists at this location.</div>
+<div class="block">Creates a directory at this location. This will throw an exception if a
+ file already exists at this location.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.MakeDirectoryException.html" title="class in com.pump.io.location">IOLocation.MakeDirectoryException</a></code> - if an error occurs making a directory.</dd>
@@ -715,8 +712,8 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;void&nbsp;mkdirs()
             throws java.io.IOException,
                    <a href="../../../../com/pump/io/location/IOLocation.MakeDirectoryException.html" title="class in com.pump.io.location">IOLocation.MakeDirectoryException</a></pre>
-<div class="block">Creates a directory at this location and creates
- all necessary parent directories.</div>
+<div class="block">Creates a directory at this location and creates all necessary parent
+ directories.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.MakeDirectoryException.html" title="class in com.pump.io.location">IOLocation.MakeDirectoryException</a></code> - if an error occurs making a directory.</dd>
@@ -731,11 +728,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getURL</h4>
 <pre>public abstract&nbsp;java.net.URL&nbsp;getURL()</pre>
-<div class="block">If possible this will return a URL pointing to this
- location.  This may return <code>null</code> if no such
- URL exists. (For example: a collection of search results
- is a directory of valid IOLocations that does not have
- a URL.)</div>
+<div class="block">If possible this will return a URL pointing to this location. This may
+ return <code>null</code> if no such URL exists. (For example: a
+ collection of search results is a directory of valid IOLocations that
+ does not have a URL.)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a URL to this location, if it exists.</dd>
@@ -753,16 +749,14 @@ extends java.lang.Object</pre>
 <div class="block">This lists the children of this directory.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>receiver</code> - an optional <code>Receiver</code> to be
- notified as each child is processed.</dd>
-<dd><code>cancellable</code> - an optional <code>Cancellable</code>.
- If non-null: classes that
- extend this class should constantly poll it to see
- if <code>isCancelled()</code> is <code>true</code>.</dd>
+<dd><code>receiver</code> - an optional <code>Receiver</code> to be notified as each child
+            is processed.</dd>
+<dd><code>cancellable</code> - an optional <code>Cancellable</code>. If non-null: classes
+            that extend this class should constantly poll it to see if
+            <code>isCancelled()</code> is <code>true</code>.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>all the children (if any) of this object.
- This should not return null, but may return an empty
- array for non-directories.</dd>
+<dd>all the children (if any) of this object. This should not return
+         null, but may return an empty array for non-directories.</dd>
 </dl>
 </li>
 </ul>
@@ -773,14 +767,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getIcon</h4>
 <pre>public&nbsp;javax.swing.Icon&nbsp;getIcon(<a href="../../../../com/pump/swing/BasicCancellable.html" title="class in com.pump.swing">BasicCancellable</a>&nbsp;cancellable)</pre>
-<div class="block">Returns the optional icon for this location.  This may
- return <code>null</code>.</div>
+<div class="block">Returns the optional icon for this location. This may return
+ <code>null</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>cancellable</code> - it is crucial to call <code>finish()</code> on
- this object when this method finishes.  Also you should
- constantly poll it to see if <code>isCancelled()</code> is
- <code>true</code>.</dd>
+<dd><code>cancellable</code> - it is crucial to call <code>finish()</code> on this object
+            when this method finishes. Also you should constantly poll it
+            to see if <code>isCancelled()</code> is <code>true</code>.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the optional icon for this location.</dd>
 </dl>
@@ -794,19 +787,18 @@ extends java.lang.Object</pre>
 <h4>getThumbnail</h4>
 <pre>public&nbsp;java.awt.image.BufferedImage&nbsp;getThumbnail(java.awt.Dimension&nbsp;maxSize,
                                                  <a href="../../../../com/pump/swing/Cancellable.html" title="interface in com.pump.swing">Cancellable</a>&nbsp;cancellable)</pre>
-<div class="block">Returns the optional thumbnail for this location.  This may
- return <code>null</code>.</div>
+<div class="block">Returns the optional thumbnail for this location. This may return
+ <code>null</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>maxSize</code> - the maximum size of this thumbnail.  Preferably
- one of the dimensions of the returned image should match
- one of the dimensions of this argument.  (that is, if you
- pass 128x128, the the width or height of the returned
- thumbnail should be 128)</dd>
-<dd><code>cancellable</code> - it is crucial to call <code>finish()</code> on
- this object when this method finishes.  Also you should
- constantly poll it to see if <code>isCancelled()</code> is
- <code>true</code>.</dd>
+<dd><code>maxSize</code> - the maximum size of this thumbnail. Preferably one of the
+            dimensions of the returned image should match one of the
+            dimensions of this argument. (that is, if you pass 128x128,
+            the the width or height of the returned thumbnail should be
+            128)</dd>
+<dd><code>cancellable</code> - it is crucial to call <code>finish()</code> on this object
+            when this method finishes. Also you should constantly poll it
+            to see if <code>isCancelled()</code> is <code>true</code>.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the optional icon for this location.</dd>
 </dl>
@@ -836,8 +828,8 @@ extends java.lang.Object</pre>
 <dd><code>size</code> - the size this thumbnail will be.</dd>
 <dd><code>cancellable</code> - an optional cancellable.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a thumbnail, or null if the smaller thumbnails that
- are required were not found.</dd>
+<dd>a thumbnail, or null if the smaller thumbnails that are required
+         were not found.</dd>
 </dl>
 </li>
 </ul>
@@ -857,8 +849,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getExtension</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getExtension()</pre>
-<div class="block">Return the file extension of this resource, or null if it does
- not exist (as will often be the case for directories).</div>
+<div class="block">Return the file extension of this resource, or null if it does not exist
+ (as will often be the case for directories).</div>
 </li>
 </ul>
 <a name="setName-java.lang.String-">
@@ -870,15 +862,19 @@ extends java.lang.Object</pre>
 <pre>public abstract&nbsp;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;setName(java.lang.String&nbsp;s)
                             throws java.io.IOException,
                                    <a href="../../../../com/pump/io/location/IOLocation.SetNameException.html" title="class in com.pump.io.location">IOLocation.SetNameException</a></pre>
-<div class="block">This changes the name of this location.  If there are resources currently
- at this location: those resources should be moved if <code>getName().equals(s)</code>
- is <code>false</code> and no exceptions occur.
- <P>This method is not capable of moving a resource to another directory structure.</div>
+<div class="block">This changes the name of this location. If there are resources currently
+ at this location: those resources should be moved if
+ <code>getName().equals(s)</code> is <code>false</code> and no exceptions
+ occur.
+ <P>
+ This method is not capable of moving a resource to another directory
+ structure.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - the name name of this resource.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new IOLocation the resource formerly at this location can now be accessed from.</dd>
+<dd>the new IOLocation the resource formerly at this location can now
+         be accessed from.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.SetNameException.html" title="class in com.pump.io.location">IOLocation.SetNameException</a></code> - if an error occurred renaming this file.</dd>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
@@ -893,7 +889,8 @@ extends java.lang.Object</pre>
 <h4>createInputStream</h4>
 <pre>public abstract&nbsp;java.io.InputStream&nbsp;createInputStream()
                                                throws java.io.IOException</pre>
-<div class="block">Creates an <code>InputStream</code> to read from this location -- if possible.</div>
+<div class="block">Creates an <code>InputStream</code> to read from this location -- if
+ possible.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
@@ -909,7 +906,8 @@ extends java.lang.Object</pre>
 <pre>public abstract&nbsp;java.io.OutputStream&nbsp;createOutputStream()
                                                  throws java.io.IOException,
                                                         <a href="../../../../com/pump/io/location/IOLocation.FileCreationException.html" title="class in com.pump.io.location">IOLocation.FileCreationException</a></pre>
-<div class="block">Creates an <code>OutputStream</code> to write to this location -- if possible.</div>
+<div class="block">Creates an <code>OutputStream</code> to write to this location -- if
+ possible.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.FileCreationException.html" title="class in com.pump.io.location">IOLocation.FileCreationException</a></code> - if an error occurred creating this resource.</dd>
@@ -959,10 +957,10 @@ extends java.lang.Object</pre>
 <h4>exists</h4>
 <pre>public abstract&nbsp;boolean&nbsp;exists()</pre>
 <div class="block">Indicates whether this resource exists.
- <p>Generally <code>IOLocation</code> objects are hard to
- come across if they aren't associated with a resource, but
- if you delete or rename a location successfully this will
- return <code>false</code>.</div>
+ <p>
+ Generally <code>IOLocation</code> objects are hard to come across if they
+ aren't associated with a resource, but if you delete or rename a location
+ successfully this will return <code>false</code>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if this location represents a resource that exists.</dd>
@@ -1020,16 +1018,18 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>isNavigable</h4>
 <pre>public&nbsp;boolean&nbsp;isNavigable()</pre>
-<div class="block">This indicates if the user is encouraged to navigate
- inside this location.
- <P>For example, on Macs certain folders end in ".app".  Although
- technically these are directories, users shouldn't navigate inside
- them.
- <p>Also: archive files (like the ZipArchiveLocation) are a file (and
- not a directory), but they are navigable.
- <p>By default this returns <code>isDirectory()</code>,
- but if <code>omitMacBundles</code> is true this will return false
- if this location's name ends with a suffix like ".app".</div>
+<div class="block">This indicates if the user is encouraged to navigate inside this
+ location.
+ <P>
+ For example, on Macs certain folders end in ".app". Although technically
+ these are directories, users shouldn't navigate inside them.
+ <p>
+ Also: archive files (like the ZipArchiveLocation) are a file (and not a
+ directory), but they are navigable.
+ <p>
+ By default this returns <code>isDirectory()</code>, but if
+ <code>omitMacBundles</code> is true this will return false if this
+ location's name ends with a suffix like ".app".</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if this resource is a directory that should be navigable.</dd>
@@ -1045,8 +1045,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>isDefaultNavigable</h4>
 <pre>protected static&nbsp;boolean&nbsp;isDefaultNavigable(<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;loc)</pre>
-<div class="block">This indicates if the user is encouraged to navigate
- inside this location by default.</div>
+<div class="block">This indicates if the user is encouraged to navigate inside this location
+ by default.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/io/location/IOLocation.html#omitMacBundles"><code>omitMacBundles</code></a></dd>
@@ -1060,8 +1060,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>canRead</h4>
 <pre>public abstract&nbsp;boolean&nbsp;canRead()</pre>
-<div class="block">If this returns true then <code>createInputStream()</code> should
- return successfully.</div>
+<div class="block">If this returns true then <code>createInputStream()</code> should return
+ successfully.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if this is a resource you have permission to read.</dd>
@@ -1075,14 +1075,14 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getGroup</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/io/location/IOLocationGroup.html" title="interface in com.pump.io.location">IOLocationGroup</a>&nbsp;getGroup()</pre>
-<div class="block">This may return a group shared between related IOLocations.
- For example: if this location is accessed via a connection
- with a name and password, then all related locations should
- return the same object.  When the user switches to a location
- in a different group: then the former group's <code>dispose()</code>
- method is called.
- <p>This may return null if the <code>IOLocationGroup</code> is 
- not necessary.</div>
+<div class="block">This may return a group shared between related IOLocations. For example:
+ if this location is accessed via a connection with a name and password,
+ then all related locations should return the same object. When the user
+ switches to a location in a different group: then the former group's
+ <code>dispose()</code> method is called.
+ <p>
+ This may return null if the <code>IOLocationGroup</code> is not
+ necessary.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a IOLocationGroup for this resource</dd>

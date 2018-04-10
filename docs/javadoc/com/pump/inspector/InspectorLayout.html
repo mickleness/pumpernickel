@@ -105,10 +105,12 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">InspectorLayout</span></pre>
-<div class="block">This interface adds GUI elements to an inspector. 
- <P>Currently this assumes the GUI is based in a left-to-right language,
- although it would not be too hard to change this in the future.
- <P>Each row/separator is added in a top-to-bottom order.</div>
+<div class="block">This interface adds GUI elements to an inspector.
+ <P>
+ Currently this assumes the GUI is based in a left-to-right language, although
+ it would not be too hard to change this in the future.
+ <P>
+ Each row/separator is added in a top-to-bottom order.</div>
 </li>
 </ul>
 </div>
@@ -167,8 +169,8 @@ var activeTableTab = "activeTableTab";
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/inspector/InspectorLayout.html#clear--">clear</a></span>()</code>
-<div class="block">Removes all elements from this inspector, usually so elements
- can be re-added.</div>
+<div class="block">Removes all elements from this inspector, usually so elements can be
+ re-added.</div>
 </td>
 </tr>
 </table>
@@ -201,7 +203,7 @@ var activeTableTab = "activeTableTab";
 <dd><code>component</code> - the component to add.</dd>
 <dd><code>alignment</code> - one of the SwingConstants values: LEFT, CENTER, RIGHT.</dd>
 <dd><code>stretchToFill</code> - whether to stretch this component to fill the space
- horizontally or not.</dd>
+            horizontally or not.</dd>
 </dl>
 </li>
 </ul>
@@ -219,11 +221,12 @@ var activeTableTab = "activeTableTab";
  The identifier is right-aligned, and the control is left-aligned.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>identifier</code> - the control on the left.  This should usually contain text.
- A <code>JLabel</code> or a <code>JCheckBox</code> is recommended.</dd>
+<dd><code>identifier</code> - the control on the left. This should usually contain text. A
+            <code>JLabel</code> or a <code>JCheckBox</code> is
+            recommended.</dd>
 <dd><code>control</code> - any more complex control on the right.</dd>
-<dd><code>stretchControlToFill</code> - whether this control should stretch to fit
- the remaining width.</dd>
+<dd><code>stretchControlToFill</code> - whether this control should stretch to fit the remaining
+            width.</dd>
 </dl>
 </li>
 </ul>
@@ -239,16 +242,17 @@ var activeTableTab = "activeTableTab";
             javax.swing.JComponent&nbsp;rightControl)</pre>
 <div class="block">Appends a new row containing 3 objects to this inspector.
  
- The identifier is right-aligned.  The leftControl is
- right-aligned, and the rightControl is right-aligned against
- the far right margin of the inspector.</div>
+ The identifier is right-aligned. The leftControl is right-aligned, and
+ the rightControl is right-aligned against the far right margin of the
+ inspector.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>identifier</code> - the control on the left.  This should usually contain text.
- A <code>JLabel</code> or a <code>JCheckBox</code> is recommended.</dd>
+<dd><code>identifier</code> - the control on the left. This should usually contain text. A
+            <code>JLabel</code> or a <code>JCheckBox</code> is
+            recommended.</dd>
 <dd><code>leftControl</code> - any other control.</dd>
-<dd><code>stretchToFill</code> - whether the <code>leftControl</code>
- should stretch to fit the remaining width.</dd>
+<dd><code>stretchToFill</code> - whether the <code>leftControl</code> should stretch to fit the
+            remaining width.</dd>
 <dd><code>rightControl</code> - the element to add on the right.</dd>
 </dl>
 </li>
@@ -270,9 +274,9 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>addGap</h4>
 <pre>void&nbsp;addGap()</pre>
-<div class="block">Appends a gap to this inspector.  All the rows should be their
- preferred/minimum height, but all vertical gaps will distribute
- the remaining vertical space evenly.</div>
+<div class="block">Appends a gap to this inspector. All the rows should be their
+ preferred/minimum height, but all vertical gaps will distribute the
+ remaining vertical space evenly.</div>
 </li>
 </ul>
 <a name="clear--">
@@ -282,8 +286,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>clear</h4>
 <pre>void&nbsp;clear()</pre>
-<div class="block">Removes all elements from this inspector, usually so elements
- can be re-added.</div>
+<div class="block">Removes all elements from this inspector, usually so elements can be
+ re-added.</div>
 </li>
 </ul>
 </li>

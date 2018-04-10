@@ -153,24 +153,21 @@ implements <a href="../../../../com/pump/io/location/IOLocationGroup.html" title
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>java.lang.Object</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/BasicLocationGroup.html#addConsumer--">addConsumer</a></span>()</code>
-<div class="block">Notify this group than an object is interested
- in continually using the <code>IOLocations</code>
- that belong to this group.</div>
+<div class="block">Notify this group than an object is interested in continually using the
+ <code>IOLocations</code> that belong to this group.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/BasicLocationGroup.html#isActive--">isActive</a></span>()</code>
-<div class="block">Return true if there is a consumer still listening
- to this group.</div>
+<div class="block">Return true if there is a consumer still listening to this group.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/BasicLocationGroup.html#releaseConsumer-java.lang.Object-">releaseConsumer</a></span>(java.lang.Object&nbsp;key)</code>
-<div class="block">Notify this group than an external object
- is no longer interested in using the <code>IOLocations</code>
- in this group.</div>
+<div class="block">Notify this group than an external object is no longer interested in
+ using the <code>IOLocations</code> in this group.</div>
 </td>
 </tr>
 </table>
@@ -220,22 +217,20 @@ implements <a href="../../../../com/pump/io/location/IOLocationGroup.html" title
 <h4>addConsumer</h4>
 <pre>public&nbsp;java.lang.Object&nbsp;addConsumer()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocationGroup.html#addConsumer--">IOLocationGroup</a></code></span></div>
-<div class="block">Notify this group than an object is interested
- in continually using the <code>IOLocations</code>
- that belong to this group.
- <p>For example: a <code>LocationPane</code> will
- be a consumer as long as it is visible.  Also
- an object that is writing to locations will
- call this method.</div>
+<div class="block">Notify this group than an object is interested in continually using the
+ <code>IOLocations</code> that belong to this group.
+ <p>
+ For example: a <code>LocationPane</code> will be a consumer as long as it
+ is visible. Also an object that is writing to locations will call this
+ method.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocationGroup.html#addConsumer--">addConsumer</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/io/location/IOLocationGroup.html" title="interface in com.pump.io.location">IOLocationGroup</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a unique key identifying the consumer.
- When the consumer is finished using this group,
- it should call <code>releaseConsumer(key)</code>
- When a group has no outstanding keys: it may
- want to flush resources, or log out.</dd>
+<dd>a unique key identifying the consumer. When the consumer is
+         finished using this group, it should call
+         <code>releaseConsumer(key)</code> When a group has no outstanding
+         keys: it may want to flush resources, or log out.</dd>
 </dl>
 </li>
 </ul>
@@ -247,9 +242,8 @@ implements <a href="../../../../com/pump/io/location/IOLocationGroup.html" title
 <h4>releaseConsumer</h4>
 <pre>public&nbsp;void&nbsp;releaseConsumer(java.lang.Object&nbsp;key)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocationGroup.html#releaseConsumer-java.lang.Object-">IOLocationGroup</a></code></span></div>
-<div class="block">Notify this group than an external object
- is no longer interested in using the <code>IOLocations</code>
- in this group.</div>
+<div class="block">Notify this group than an external object is no longer interested in
+ using the <code>IOLocations</code> in this group.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocationGroup.html#releaseConsumer-java.lang.Object-">releaseConsumer</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/io/location/IOLocationGroup.html" title="interface in com.pump.io.location">IOLocationGroup</a></code></dd>
@@ -266,10 +260,9 @@ implements <a href="../../../../com/pump/io/location/IOLocationGroup.html" title
 <h4>isActive</h4>
 <pre>public&nbsp;boolean&nbsp;isActive()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocationGroup.html#isActive--">IOLocationGroup</a></code></span></div>
-<div class="block">Return true if there is a consumer still listening
- to this group. Once <code>releaseConsumer()</code>
- has been called for every consumer that was added:
- this will return false;</div>
+<div class="block">Return true if there is a consumer still listening to this group. Once
+ <code>releaseConsumer()</code> has been called for every consumer that
+ was added: this will return false;</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocationGroup.html#isActive--">isActive</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/io/location/IOLocationGroup.html" title="interface in com.pump.io.location">IOLocationGroup</a></code></dd>

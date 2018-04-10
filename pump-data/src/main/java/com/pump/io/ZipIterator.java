@@ -100,8 +100,6 @@ public abstract class ZipIterator<T> implements CloseableMeasurableIterator<T> {
 	/**
 	 * This is an optional hook subclasses can use to do a preprocessing filter
 	 * on the incoming data if needed.
-	 * 
-	 * @param dataSource
 	 */
 	protected void initialize() {
 

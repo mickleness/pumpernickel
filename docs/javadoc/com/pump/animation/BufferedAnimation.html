@@ -115,9 +115,11 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">BufferedAnimation</span>
 extends <a href="../../../com/pump/animation/AbstractAnimation.html" title="class in com.pump.animation">AbstractAnimation</a></pre>
-<div class="block">This stores an animation in memory as a series of <code>BufferedImages</code>.
- <p>If applies to indefinitely large animations: this will result in
- an <code>OutOfMemoryError</code>.</div>
+<div class="block">This stores an animation in memory as a series of <code>BufferedImages</code>
+ .
+ <p>
+ If applies to indefinitely large animations: this will result in an
+ <code>OutOfMemoryError</code>.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/animation/CachedAnimation.html" title="class in com.pump.animation"><code>CachedAnimation</code></a></dd>
@@ -247,13 +249,14 @@ extends <a href="../../../com/pump/animation/AbstractAnimation.html" title="clas
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>bi</code> - the image to append. This must be the width and height of this
- animation.</dd>
-<dd><code>cloneImage</code> - if true then this image will be cloned. Because this
- animation is represented as a series of <code>BufferedImages</code> stored
- in memory: you must clone the image if you want to continually pass the
- same <code>BufferedImage</code> to this method. (Otherwise all previous frames
- will be corrupt.) If you always pass a unique <code>BufferedImage</code> to
- this method: then this argument can be false.</dd>
+            animation.</dd>
+<dd><code>cloneImage</code> - if true then this image will be cloned. Because this animation
+            is represented as a series of <code>BufferedImages</code>
+            stored in memory: you must clone the image if you want to
+            continually pass the same <code>BufferedImage</code> to this
+            method. (Otherwise all previous frames will be corrupt.) If
+            you always pass a unique <code>BufferedImage</code> to this
+            method: then this argument can be false.</dd>
 <dd><code>duration</code> - the duration (in ms) of this frame.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if a problem occurs writing the frame data.</dd>

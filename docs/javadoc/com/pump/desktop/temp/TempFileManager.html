@@ -112,15 +112,16 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object</pre>
 <div class="block">This is a session-based manager for temp files.
  <p>
- Every active session is designated a unique folder that temp files are stored in.
- This folder is deleted either when the session ends (healthily), or the next
- time <a href="../../../../com/pump/desktop/temp/TempFileManager.html#initialize-java.lang.String-"><code>initialize(String)</code></a> is called for the same application.
+ Every active session is designated a unique folder that temp files are stored
+ in. This folder is deleted either when the session ends (healthily), or the
+ next time <a href="../../../../com/pump/desktop/temp/TempFileManager.html#initialize-java.lang.String-"><code>initialize(String)</code></a> is called for the same application.
  <p>
- The default <code>File.createTempFile(String, String)</code> method is nice,
- but it does not guarantee files will be purged over time. Even if you remember to 
- call <code>File.deleteOnExit()</code>, there isn't a mechanism to make sure
- the file is deleted on relaunch. (That is: if lightning strikes and app doesn't
- exit normally: the next best time to delete the file is when the app is relaunched.)</div>
+ The default <code>File.createTempFile(String, String)</code> method is
+ nice, but it does not guarantee files will be purged over time. Even if you
+ remember to call <code>File.deleteOnExit()</code>, there isn't a mechanism
+ to make sure the file is deleted on relaunch. (That is: if lightning strikes
+ and app doesn't exit normally: the next best time to delete the file is when
+ the app is relaunched.)</div>
 </li>
 </ul>
 </div>
@@ -143,8 +144,8 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/temp/TempFileManager.html#createFile-java.lang.String-java.lang.String-">createFile</a></span>(java.lang.String&nbsp;prefix,
           java.lang.String&nbsp;ext)</code>
-<div class="block">Create a new temporary file that will be deleted either
- at the end of the current session or at the beginning of the next session.</div>
+<div class="block">Create a new temporary file that will be deleted either at the end of the
+ current session or at the beginning of the next session.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -192,8 +193,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>get</h4>
 <pre>public static&nbsp;<a href="../../../../com/pump/desktop/temp/TempFileManager.html" title="class in com.pump.desktop.temp">TempFileManager</a>&nbsp;get()</pre>
-<div class="block">Get the current TempFileManager. <a href="../../../../com/pump/desktop/temp/TempFileManager.html#initialize-java.lang.String-"><code>initialize(String)</code></a> must be called
- before this method or an exception is thrown.</div>
+<div class="block">Get the current TempFileManager. <a href="../../../../com/pump/desktop/temp/TempFileManager.html#initialize-java.lang.String-"><code>initialize(String)</code></a> must be
+ called before this method or an exception is thrown.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the current TempFileManager.</dd>
@@ -210,11 +211,12 @@ extends java.lang.Object</pre>
                           throws java.io.IOException</pre>
 <div class="block">Initialize a static TempFileManager for the rest of this session.
  <p>
- Subsequent attempts to initialize this will return false and print a warning
- message to System.err.</div>
+ Subsequent attempts to initialize this will return false and print a
+ warning message to System.err.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>appName</code> - the application name. This is used in the file path of temp files.</dd>
+<dd><code>appName</code> - the application name. This is used in the file path of temp
+            files.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if this call initialized a TempFileManager, false otherwise.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -239,8 +241,8 @@ extends java.lang.Object</pre>
 <h4>createFile</h4>
 <pre>public&nbsp;java.io.File&nbsp;createFile(java.lang.String&nbsp;prefix,
                                java.lang.String&nbsp;ext)</pre>
-<div class="block">Create a new temporary file that will be deleted either
- at the end of the current session or at the beginning of the next session.</div>
+<div class="block">Create a new temporary file that will be deleted either at the end of the
+ current session or at the beginning of the next session.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>prefix</code> - an optional prefix</dd>

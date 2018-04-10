@@ -29,8 +29,8 @@ import com.pump.io.parser.Token;
 import com.pump.util.Receiver;
 
 /**
- * This helps convert Java source code into Java {@link com.pump.io.Token}
- * objects.
+ * This helps convert Java source code into Java
+ * {@link com.pump.io.parser.Token} objects.
  */
 public class JavaParser extends Parser {
 

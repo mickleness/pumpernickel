@@ -369,19 +369,20 @@ extends javax.swing.JDialog</pre>
                          <a href="../../../../com/pump/print/PrintLayout.html" title="class in com.pump.print">PrintLayout</a>&nbsp;printLayout,
                          <a href="../../../../com/pump/awt/Paintable.html" title="interface in com.pump.awt">Paintable</a>[]&nbsp;tiles,
                          java.lang.String&nbsp;helpURL)</pre>
-<div class="block">Creates a new dialog with the Paintable tiles that might be printed.
- This is the recommended constructor to use if you have the Paintable
- objects ready at this point.</div>
+<div class="block">Creates a new dialog with the Paintable tiles that might be printed. This
+ is the recommended constructor to use if you have the Paintable objects
+ ready at this point.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>parent</code> - the parent Frame.</dd>
 <dd><code>title</code> - the dialog title.</dd>
 <dd><code>printLayout</code> - the PrintLayout to use.
- <P>This is modified only after 'OK' or 'Print' is selected.  At that
- point the user's changes are stored in this layout.</dd>
+            <P>
+            This is modified only after 'OK' or 'Print' is selected. At
+            that point the user's changes are stored in this layout.</dd>
 <dd><code>tiles</code> - the tiles to print.</dd>
-<dd><code>helpURL</code> - an optional URL that will provide a button/link for
- help in the lower-left corner of the dialog.  This may be null.</dd>
+<dd><code>helpURL</code> - an optional URL that will provide a button/link for help in
+            the lower-left corner of the dialog. This may be null.</dd>
 </dl>
 </li>
 </ul>
@@ -396,20 +397,21 @@ extends javax.swing.JDialog</pre>
                          <a href="../../../../com/pump/print/PrintLayout.html" title="class in com.pump.print">PrintLayout</a>&nbsp;layout,
                          java.lang.String&nbsp;helpURL)
                   throws java.awt.HeadlessException</pre>
-<div class="block">Creates a new dialog.
- It is recommended that you provide the Paintables up front, so you should
- use the other constructor.  But if this is not possible, then this
- constructor will create a valid dialog.  In this case you need to overwrite
- the print() method: otherwise this dialog has no idea what to print.</div>
+<div class="block">Creates a new dialog. It is recommended that you provide the Paintables
+ up front, so you should use the other constructor. But if this is not
+ possible, then this constructor will create a valid dialog. In this case
+ you need to overwrite the print() method: otherwise this dialog has no
+ idea what to print.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>parent</code> - the parent Frame.</dd>
 <dd><code>title</code> - the dialog title.</dd>
 <dd><code>layout</code> - the PrintLayout to use.
- <P>This is modified only after 'OK' or 'Print' is selected.  At that
- point the user's changes are stored in this layout.</dd>
-<dd><code>helpURL</code> - an optional URL that will provide a button/link for
- help in the lower-left corner of the dialog.  This may be null.</dd>
+            <P>
+            This is modified only after 'OK' or 'Print' is selected. At
+            that point the user's changes are stored in this layout.</dd>
+<dd><code>helpURL</code> - an optional URL that will provide a button/link for help in
+            the lower-left corner of the dialog. This may be null.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.awt.HeadlessException</code> - if this is invoked in a headless environment.</dd>
 </dl>
@@ -463,9 +465,9 @@ extends javax.swing.JDialog</pre>
 <li class="blockList">
 <h4>print</h4>
 <pre>public&nbsp;void&nbsp;print()</pre>
-<div class="block">This is equivalent to click the "Print" button.
- This method will throw an exception if this dialog was
- not constructed with an array of Paintable objects.</div>
+<div class="block">This is equivalent to click the "Print" button. This method will throw an
+ exception if this dialog was not constructed with an array of Paintable
+ objects.</div>
 </li>
 </ul>
 </li>

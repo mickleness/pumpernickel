@@ -110,8 +110,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">JPEGMetaData</span>
 extends java.lang.Object</pre>
-<div class="block">This class parses JPEG metadata to retrieve properties or
- thumbnails.</div>
+<div class="block">This class parses JPEG metadata to retrieve properties or thumbnails.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/pump/showcase/JPEGMetaDataDemo.html" title="class in com.pump.showcase"><code>JPEGMetaDataDemo</code></a></dd>
@@ -199,44 +198,38 @@ extends java.lang.Object</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/jpeg/JPEGMetaData.html#processAPP0-com.pump.image.jpeg.APP0Data-">processAPP0</a></span>(com.pump.image.jpeg.APP0Data&nbsp;data)</code>
-<div class="block">This is called when an <code>APP0Data</code> object
- has been parsed.</div>
+<div class="block">This is called when an <code>APP0Data</code> object has been parsed.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/jpeg/JPEGMetaData.html#processAPP1-com.pump.image.jpeg.APP1Data-">processAPP1</a></span>(com.pump.image.jpeg.APP1Data&nbsp;data)</code>
-<div class="block">This is called when an <code>APP1Data</code> object
- has been parsed.</div>
+<div class="block">This is called when an <code>APP1Data</code> object has been parsed.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/jpeg/JPEGMetaData.html#processAPP13-com.pump.image.jpeg.APP13Data-">processAPP13</a></span>(com.pump.image.jpeg.APP13Data&nbsp;data)</code>
-<div class="block">This is called when an <code>APP13Data</code> object
- has been parsed.</div>
+<div class="block">This is called when an <code>APP13Data</code> object has been parsed.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/jpeg/JPEGMetaData.html#processAPP2-com.pump.image.jpeg.APP2Data-">processAPP2</a></span>(com.pump.image.jpeg.APP2Data&nbsp;data)</code>
-<div class="block">This is called when an <code>APP2Data</code> object
- has been parsed.</div>
+<div class="block">This is called when an <code>APP2Data</code> object has been parsed.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/jpeg/JPEGMetaData.html#processComment-java.lang.String-">processComment</a></span>(java.lang.String&nbsp;comment)</code>
-<div class="block">This is called when a comment marker
- has been parsed.</div>
+<div class="block">This is called when a comment marker has been parsed.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/jpeg/JPEGMetaData.html#processException-java.lang.Exception-java.lang.String-">processException</a></span>(java.lang.Exception&nbsp;e,
                 java.lang.String&nbsp;marker)</code>
-<div class="block">This is called when an exception occurs trying to parse
- an block of data.</div>
+<div class="block">This is called when an exception occurs trying to parse an block of data.</div>
 </td>
 </tr>
 </table>
@@ -274,9 +267,9 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - the JPEG image.</dd>
-<dd><code>fetchThumbnail</code> - whether the thumbnail should be retrieved.  If
- this is false then <code>getThumbnail()</code> will return false,
- but properties will still be loaded (if possible).</dd>
+<dd><code>fetchThumbnail</code> - whether the thumbnail should be retrieved. If this is false
+            then <code>getThumbnail()</code> will return false, but
+            properties will still be loaded (if possible).</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -295,9 +288,9 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>in</code> - the JPEG image.</dd>
-<dd><code>fetchThumbnail</code> - whether the thumbnail should be retrieved.  If
- this is false then <code>getThumbnail()</code> will return false,
- but properties will still be loaded (if possible).</dd>
+<dd><code>fetchThumbnail</code> - whether the thumbnail should be retrieved. If this is false
+            then <code>getThumbnail()</code> will return false, but
+            properties will still be loaded (if possible).</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
@@ -319,8 +312,8 @@ extends java.lang.Object</pre>
 <h4>getThumbnail</h4>
 <pre>public static&nbsp;java.awt.image.BufferedImage&nbsp;getThumbnail(java.io.File&nbsp;file)
                                                  throws java.io.IOException</pre>
-<div class="block">Extract a thumbnail from a JPEG file, if possible.
- This may return null if no thumbnail can be found.</div>
+<div class="block">Extract a thumbnail from a JPEG file, if possible. This may return null
+ if no thumbnail can be found.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
@@ -335,8 +328,8 @@ extends java.lang.Object</pre>
 <h4>getThumbnail</h4>
 <pre>public static&nbsp;java.awt.image.BufferedImage&nbsp;getThumbnail(java.io.InputStream&nbsp;in)
                                                  throws java.io.IOException</pre>
-<div class="block">Extract a thumbnail from a JPEG image, if possible.
- This may return null if no thumbnail can be found.</div>
+<div class="block">Extract a thumbnail from a JPEG image, if possible. This may return null
+ if no thumbnail can be found.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
@@ -351,8 +344,8 @@ extends java.lang.Object</pre>
 <h4>getThumbnail</h4>
 <pre>public static&nbsp;java.awt.image.BufferedImage&nbsp;getThumbnail(java.net.URL&nbsp;url)
                                                  throws java.io.IOException</pre>
-<div class="block">Extract a thumbnail from a JPEG image, if possible.
- This may return null if no thumbnail can be found.</div>
+<div class="block">Extract a thumbnail from a JPEG image, if possible. This may return null
+ if no thumbnail can be found.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
@@ -367,15 +360,14 @@ extends java.lang.Object</pre>
 <h4>processException</h4>
 <pre>protected&nbsp;void&nbsp;processException(java.lang.Exception&nbsp;e,
                                 java.lang.String&nbsp;marker)</pre>
-<div class="block">This is called when an exception occurs trying to parse
- an block of data.  The default implementation is simply to
- call <code>e.printStackTrace()</code>, but subclasses
- can override this as needed.</div>
+<div class="block">This is called when an exception occurs trying to parse an block of data.
+ The default implementation is simply to call
+ <code>e.printStackTrace()</code>, but subclasses can override this as
+ needed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>e</code> - the exception that occurred.</dd>
-<dd><code>marker</code> - the type of marker we were trying to
- process.</dd>
+<dd><code>marker</code> - the type of marker we were trying to process.</dd>
 </dl>
 </li>
 </ul>
@@ -386,11 +378,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>processAPP0</h4>
 <pre>protected&nbsp;void&nbsp;processAPP0(com.pump.image.jpeg.APP0Data&nbsp;data)</pre>
-<div class="block">This is called when an <code>APP0Data</code> object
- has been parsed.
- <P>The default implementation is simply to retrieve
- the thumbnail, but subclasses can override this to
- do extra work.</div>
+<div class="block">This is called when an <code>APP0Data</code> object has been parsed.
+ <P>
+ The default implementation is simply to retrieve the thumbnail, but
+ subclasses can override this to do extra work.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - the newly parsed data.</dd>
@@ -404,11 +395,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>processAPP13</h4>
 <pre>protected&nbsp;void&nbsp;processAPP13(com.pump.image.jpeg.APP13Data&nbsp;data)</pre>
-<div class="block">This is called when an <code>APP13Data</code> object
- has been parsed.
- <P>The default implementation is simply to retrieve
- the thumbnail, but subclasses can override this to
- do extra work.</div>
+<div class="block">This is called when an <code>APP13Data</code> object has been parsed.
+ <P>
+ The default implementation is simply to retrieve the thumbnail, but
+ subclasses can override this to do extra work.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - the newly parsed data.</dd>
@@ -422,11 +412,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>processAPP2</h4>
 <pre>protected&nbsp;void&nbsp;processAPP2(com.pump.image.jpeg.APP2Data&nbsp;data)</pre>
-<div class="block">This is called when an <code>APP2Data</code> object
- has been parsed.
- <P>The default implementation is simply to retrieve
- the thumbnail, but subclasses can override this to
- do extra work.</div>
+<div class="block">This is called when an <code>APP2Data</code> object has been parsed.
+ <P>
+ The default implementation is simply to retrieve the thumbnail, but
+ subclasses can override this to do extra work.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - the newly parsed data.</dd>
@@ -440,12 +429,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>processAPP1</h4>
 <pre>protected&nbsp;void&nbsp;processAPP1(com.pump.image.jpeg.APP1Data&nbsp;data)</pre>
-<div class="block">This is called when an <code>APP1Data</code> object
- has been parsed.
- <P>The default implementation is to retrieve
- the thumbnail and add the properties,
- but subclasses can override this to
- do extra work.</div>
+<div class="block">This is called when an <code>APP1Data</code> object has been parsed.
+ <P>
+ The default implementation is to retrieve the thumbnail and add the
+ properties, but subclasses can override this to do extra work.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - the newly parsed data.</dd>
@@ -459,11 +446,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>processComment</h4>
 <pre>protected&nbsp;void&nbsp;processComment(java.lang.String&nbsp;comment)</pre>
-<div class="block">This is called when a comment marker
- has been parsed.
- <P>The default implementation is to add this
- comment, but subclasses can override this to
- do extra work.</div>
+<div class="block">This is called when a comment marker has been parsed.
+ <P>
+ The default implementation is to add this comment, but subclasses can
+ override this to do extra work.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>comment</code> - the newly parsed comment.</dd>
@@ -477,11 +463,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getProperties</h4>
 <pre>public&nbsp;java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;getProperties()</pre>
-<div class="block">Returns the map of properties found in this JPEG.
- This will not be null, but it may be empty.
- <p>Note this does not return a clone of this map, so
- if you change the contents of this map then this
- metadata object is permanently altered.</div>
+<div class="block">Returns the map of properties found in this JPEG. This will not be null,
+ but it may be empty.
+ <p>
+ Note this does not return a clone of this map, so if you change the
+ contents of this map then this metadata object is permanently altered.</div>
 </li>
 </ul>
 <a name="getComments--">
@@ -501,8 +487,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getThumbnail</h4>
 <pre>public&nbsp;java.awt.image.BufferedImage&nbsp;getThumbnail()</pre>
-<div class="block">Returns the thumbnail if one exists.  This may return
- null.</div>
+<div class="block">Returns the thumbnail if one exists. This may return null.</div>
 </li>
 </ul>
 </li>

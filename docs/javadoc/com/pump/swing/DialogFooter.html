@@ -134,63 +134,71 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">DialogFooter</span>
 extends javax.swing.JPanel</pre>
-<div class="block">This is a row of buttons, intended to be displayed at the
- bottom of a dialog.  This class is strongly related to the
- <a href="../../../com/pump/swing/QDialog.html" title="class in com.pump.swing"><code>QDialog</code></a> project, although the
- <code>DialogFooter</code> can exist by itself.
- <P>On the left of a footer are controls that should apply to the dialog itself,
- such as "Help" button, or a "Reset Preferences" button.
- On the far right are buttons that should dismiss this dialog.  They
- may be presented in different orders on different platforms based
- on the <code>reverseButtonOrder</code> boolean.
- <P>Buttons are also generally normalized, so the widths of buttons
- are equal.
- <P>This object will "latch onto" the RootPane that contains it.  It is assumed
+<div class="block">This is a row of buttons, intended to be displayed at the bottom of a dialog.
+ This class is strongly related to the <a href="../../../com/pump/swing/QDialog.html" title="class in com.pump.swing"><code>QDialog</code></a> project,
+ although the <code>DialogFooter</code> can exist by itself.
+ <P>
+ On the left of a footer are controls that should apply to the dialog itself,
+ such as "Help" button, or a "Reset Preferences" button. On the far right are
+ buttons that should dismiss this dialog. They may be presented in different
+ orders on different platforms based on the <code>reverseButtonOrder</code>
+ boolean.
+ <P>
+ Buttons are also generally normalized, so the widths of buttons are equal.
+ <P>
+ This object will "latch onto" the RootPane that contains it. It is assumed
  two DialogFooters will not be contained in the same RootPane. It is also
- assumed the same DialogFooter will not be passed around to several
- different RootPanes.
- <h3>Preset Options</h3>
- This class has several OPTION constants to create specific buttons.
- <P>In each constant the first option is the default button unless
- you specify otherwise.  The Apple Interface Guidelines advises:
- "The default button should be the button that represents the
- action that the user is most likely to perform if that action isn't
- potentially dangerous."
- <P>The YES_NO options should be approached with special reluctance.
- Microsoft <A HREF="http://msdn.microsoft.com/en-us/library/aa511331.aspx">cautions</A>,
- "Use Yes and No buttons only to respond to yes or no questions."  This seems
+ assumed the same DialogFooter will not be passed around to several different
+ RootPanes.
+ <h3>Preset Options</h3> This class has several OPTION constants to create
+ specific buttons.
+ <P>
+ In each constant the first option is the default button unless you specify
+ otherwise. The Apple Interface Guidelines advises: "The default button should
+ be the button that represents the action that the user is most likely to
+ perform if that action isn't potentially dangerous."
+ <P>
+ The YES_NO options should be approached with special reluctance. Microsoft <A
+ HREF="http://msdn.microsoft.com/en-us/library/aa511331.aspx">cautions</A>,
+ "Use Yes and No buttons only to respond to yes or no questions." This seems
  obvious enough, but Apple adds, "Button names should correspond to the action
- the user performs when pressing the button-for example, Erase, Save, or Delete."
- So instead of presenting a YES_NO dialog with the question "Do you want to continue?"
- a better dialog might provide the options "Cancel" and "Continue".  In short: we
- as developers might tend to lazily use this option and phrase dialogs in such
- a way that yes/no options make sense, but in fact the commit buttons should be
- more descriptive.
- <P>Partly because of the need to avoid yes/no questions, <code>DialogFooter</code> introduces the
- dialog type: SAVE_DONT_SAVE_CANCEL_OPTION.  This is mostly straightforward, but
- there is one catch: on Mac the buttons
- are reordered: "Save", "Cancel" and "Don't Save".  This is to conform with standard
- Mac behavior.  (Or, more specifically: because the Apple guidelines
- state that a button that can cause permanent data loss be as physically far
- from a "safe" button as possible.)  On all other platforms the buttons are
- listed in the order "Save", "Don't Save" and "Cancel".
- <P>Also note the field <a href="../../../com/pump/swing/DialogFooter.html#reverseButtonOrder"><code>reverseButtonOrder</code></a>
- controls the order each option is presented in the dialog from left-to-right.
+ the user performs when pressing the button-for example, Erase, Save, or
+ Delete." So instead of presenting a YES_NO dialog with the question
+ "Do you want to continue?" a better dialog might provide the options "Cancel"
+ and "Continue". In short: we as developers might tend to lazily use this
+ option and phrase dialogs in such a way that yes/no options make sense, but
+ in fact the commit buttons should be more descriptive.
+ <P>
+ Partly because of the need to avoid yes/no questions,
+ <code>DialogFooter</code> introduces the dialog type:
+ SAVE_DONT_SAVE_CANCEL_OPTION. This is mostly straightforward, but there is
+ one catch: on Mac the buttons are reordered: "Save", "Cancel" and
+ "Don't Save". This is to conform with standard Mac behavior. (Or, more
+ specifically: because the Apple guidelines state that a button that can cause
+ permanent data loss be as physically far from a "safe" button as possible.)
+ On all other platforms the buttons are listed in the order "Save",
+ "Don't Save" and "Cancel".
+ <P>
+ Also note the field <a href="../../../com/pump/swing/DialogFooter.html#reverseButtonOrder"><code>reverseButtonOrder</code></a> controls the order each
+ option is presented in the dialog from left-to-right.
  <h3>Platform Differences</h3>
  These are based mostly on studying Apple and Vista interface guidelines.
- <ul><LI> On Mac, command-period acts like the escape key in dialogs.</li>
- <LI> On Mac the Help component is the standard Mac help icon.  On other platforms
- the help component is a <a href="../../../com/pump/swing/JLink.html" title="class in com.pump.swing"><code>JLink</code></a>.</li>
- <LI> By default button order is reversed on Macs compared to other platforms.  See
- the <code>DialogFooter.reverseButtonOrder</code> field for details.</li>
- <LI> There is a static boolean to control whether button mnemonics should be
- universally activated.  This was added because
- when studying Windows XP there seemed to be no fixed rules for whether to
- use mnemonics or not.  (Some dialogs show them, some dialogs don't.)  So I
- leave it to your discretion to activate them.  I think this boolean should never be
- activated on Vista or Mac, but on XP and Linux flavors: that's up to you.  (Remember
- using the alt key usually activates the mnemonics in most Java look-and-feels, so just
- because they aren't universally active doesn't mean you're hurting accessibility needs.)</LI></ul></div>
+ <ul>
+ <LI>On Mac, command-period acts like the escape key in dialogs.</li>
+ <LI>On Mac the Help component is the standard Mac help icon. On other
+ platforms the help component is a <a href="../../../com/pump/swing/JLink.html" title="class in com.pump.swing"><code>JLink</code></a>.</li>
+ <LI>By default button order is reversed on Macs compared to other platforms.
+ See the <code>DialogFooter.reverseButtonOrder</code> field for details.</li>
+ <LI>There is a static boolean to control whether button mnemonics should be
+ universally activated. This was added because when studying Windows XP there
+ seemed to be no fixed rules for whether to use mnemonics or not. (Some
+ dialogs show them, some dialogs don't.) So I leave it to your discretion to
+ activate them. I think this boolean should never be activated on Vista or
+ Mac, but on XP and Linux flavors: that's up to you. (Remember using the alt
+ key usually activates the mnemonics in most Java look-and-feels, so just
+ because they aren't universally active doesn't mean you're hurting
+ accessibility needs.)</LI>
+ </ul></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.swing.DialogFooter">Serialized Form</a></dd>
@@ -300,7 +308,8 @@ extends javax.swing.JPanel</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/DialogFooter.html#DONT_SAVE_SAVE_OPTION">DONT_SAVE_SAVE_OPTION</a></span></code>
-<div class="block">Used to indicate a dialog should present a "Don't Save" and "Save" option.</div>
+<div class="block">Used to indicate a dialog should present a "Don't Save" and "Save"
+ option.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -338,7 +347,8 @@ extends javax.swing.JPanel</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/DialogFooter.html#PROPERTY_OPTION">PROPERTY_OPTION</a></span></code>
-<div class="block">This is the client property of buttons created in static methods by this class.</div>
+<div class="block">This is the client property of buttons created in static methods by this
+ class.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -350,14 +360,15 @@ extends javax.swing.JPanel</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/DialogFooter.html#reverseButtonOrder">reverseButtonOrder</a></span></code>
-<div class="block">This indicates whether the dismiss controls should be displayed in reverse
- order.</div>
+<div class="block">This indicates whether the dismiss controls should be displayed in
+ reverse order.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/DialogFooter.html#SAVE_DONT_SAVE_CANCEL_OPTION">SAVE_DONT_SAVE_CANCEL_OPTION</a></span></code>
-<div class="block">Used to indicate a dialog should present a "Save", "Don't Save", and "Cancel" option.</div>
+<div class="block">Used to indicate a dialog should present a "Save", "Don't Save", and
+ "Cancel" option.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -375,14 +386,15 @@ extends javax.swing.JPanel</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/DialogFooter.html#UNDEFINED_OPTION">UNDEFINED_OPTION</a></span></code>
-<div class="block">Used to indicate the user selected an option not otherwise
- specified in this set of constants.</div>
+<div class="block">Used to indicate the user selected an option not otherwise specified in
+ this set of constants.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/DialogFooter.html#YES_NO_CANCEL_OPTION">YES_NO_CANCEL_OPTION</a></span></code>
-<div class="block">Used to indicate a dialog should present a "Yes", "No", and "Cancel" option.</div>
+<div class="block">Used to indicate a dialog should present a "Yes", "No", and "Cancel"
+ option.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -500,7 +512,8 @@ extends javax.swing.JPanel</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static javax.swing.JButton</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/DialogFooter.html#createDontSaveButton--">createDontSaveButton</a></span>()</code>
-<div class="block">Creates a new "Don't Save" button that is not triggered by the escape key.</div>
+<div class="block">Creates a new "Don't Save" button that is not triggered by the escape
+ key.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -566,7 +579,8 @@ extends javax.swing.JPanel</pre>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>javax.swing.JComponent[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/DialogFooter.html#getDismissControls--">getDismissControls</a></span>()</code>
-<div class="block">Returns a copy of the <code>dismissControls</code> array used to construct this footer.</div>
+<div class="block">Returns a copy of the <code>dismissControls</code> array used to
+ construct this footer.</div>
 </td>
 </tr>
 <tr id="i18" class="altColor">
@@ -578,7 +592,8 @@ extends javax.swing.JPanel</pre>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>javax.swing.JComponent[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/DialogFooter.html#getLeftControls--">getLeftControls</a></span>()</code>
-<div class="block">Returns a copy of the <code>leftControls</code> array used to construct this footer.</div>
+<div class="block">Returns a copy of the <code>leftControls</code> array used to construct
+ this footer.</div>
 </td>
 </tr>
 <tr id="i20" class="altColor">
@@ -590,16 +605,15 @@ extends javax.swing.JPanel</pre>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/DialogFooter.html#makeEscapeKeyActivate-javax.swing.AbstractButton-">makeEscapeKeyActivate</a></span>(javax.swing.AbstractButton&nbsp;button)</code>
-<div class="block">This guarantees that when the escape key is pressed
- (if its parent window has the keyboard focus) this button
- is clicked.</div>
+<div class="block">This guarantees that when the escape key is pressed (if its parent window
+ has the keyboard focus) this button is clicked.</div>
 </td>
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/DialogFooter.html#normalizeButtons-javax.swing.JButton:A-">normalizeButtons</a></span>(javax.swing.JButton[]&nbsp;buttons)</code>
-<div class="block">This takes a set of buttons and gives them all the width/height
- of the largest button among them.</div>
+<div class="block">This takes a set of buttons and gives them all the width/height of the
+ largest button among them.</div>
 </td>
 </tr>
 <tr id="i23" class="rowColor">
@@ -713,7 +727,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>PROPERTY_OPTION</h4>
 <pre>public static&nbsp;java.lang.String PROPERTY_OPTION</pre>
-<div class="block">This is the client property of buttons created in static methods by this class.</div>
+<div class="block">This is the client property of buttons created in static methods by this
+ class.</div>
 </li>
 </ul>
 <a name="CANCEL_OPTION">
@@ -723,11 +738,13 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>CANCEL_OPTION</h4>
 <pre>public static final&nbsp;int CANCEL_OPTION</pre>
-<div class="block">Used to indicate the user selected "Cancel" in a dialog.
- <BR>Also this can be used as a dialog type, to indicate that "Cancel" should
+<div class="block">Used to indicate the user selected "Cancel" in a dialog. <BR>
+ Also this can be used as a dialog type, to indicate that "Cancel" should
  be the only option presented to the user.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.CANCEL_OPTION for DialogFooter.CANCEL_OPTION.</div>
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.CANCEL_OPTION for
+ DialogFooter.CANCEL_OPTION.</div>
 </li>
 </ul>
 <a name="OK_OPTION">
@@ -737,11 +754,13 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>OK_OPTION</h4>
 <pre>public static final&nbsp;int OK_OPTION</pre>
-<div class="block">Used to indicate the user selected "OK" in a dialog.
- <BR>Also this can be used as a dialog type, to indicate that "OK" should
- be the only option presented to the user.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.OK_OPTION for DialogFooter.OK_OPTION.</div>
+<div class="block">Used to indicate the user selected "OK" in a dialog. <BR>
+ Also this can be used as a dialog type, to indicate that "OK" should be
+ the only option presented to the user.
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.OK_OPTION for
+ DialogFooter.OK_OPTION.</div>
 </li>
 </ul>
 <a name="NO_OPTION">
@@ -751,11 +770,13 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>NO_OPTION</h4>
 <pre>public static final&nbsp;int NO_OPTION</pre>
-<div class="block">Used to indicate the user selected "No" in a dialog.
- <BR>Also this can be used as a dialog type, to indicate that "No" should
- be the only option presented to the user.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.NO_OPTION for DialogFooter.NO_OPTION.</div>
+<div class="block">Used to indicate the user selected "No" in a dialog. <BR>
+ Also this can be used as a dialog type, to indicate that "No" should be
+ the only option presented to the user.
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.NO_OPTION for
+ DialogFooter.NO_OPTION.</div>
 </li>
 </ul>
 <a name="YES_OPTION">
@@ -765,11 +786,13 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>YES_OPTION</h4>
 <pre>public static final&nbsp;int YES_OPTION</pre>
-<div class="block">Used to indicate the user selected "Yes" in a dialog.
- <BR>Also this can be used as a dialog type, to indicate that "Yes" should
- be the only option presented to the user.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.YES_OPTION for DialogFooter.YES_OPTION.</div>
+<div class="block">Used to indicate the user selected "Yes" in a dialog. <BR>
+ Also this can be used as a dialog type, to indicate that "Yes" should be
+ the only option presented to the user.
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.YES_OPTION for
+ DialogFooter.YES_OPTION.</div>
 </li>
 </ul>
 <a name="YES_NO_OPTION">
@@ -780,8 +803,10 @@ extends javax.swing.JPanel</pre>
 <h4>YES_NO_OPTION</h4>
 <pre>public static final&nbsp;int YES_NO_OPTION</pre>
 <div class="block">Used to indicate a dialog should present a "Yes" and "No" option.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.YES_NO_OPTION for DialogFooter.YES_NO_OPTION.</div>
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.YES_NO_OPTION for
+ DialogFooter.YES_NO_OPTION.</div>
 </li>
 </ul>
 <a name="YES_NO_CANCEL_OPTION">
@@ -791,9 +816,12 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>YES_NO_CANCEL_OPTION</h4>
 <pre>public static final&nbsp;int YES_NO_CANCEL_OPTION</pre>
-<div class="block">Used to indicate a dialog should present a "Yes", "No", and "Cancel" option.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.YES_NO_CANCEL_OPTION for DialogFooter.YES_NO_CANCEL_OPTION.</div>
+<div class="block">Used to indicate a dialog should present a "Yes", "No", and "Cancel"
+ option.
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.YES_NO_CANCEL_OPTION for
+ DialogFooter.YES_NO_CANCEL_OPTION.</div>
 </li>
 </ul>
 <a name="OK_CANCEL_OPTION">
@@ -804,8 +832,10 @@ extends javax.swing.JPanel</pre>
 <h4>OK_CANCEL_OPTION</h4>
 <pre>public static final&nbsp;int OK_CANCEL_OPTION</pre>
 <div class="block">Used to indicate a dialog should present a "OK" and "Cancel" option.
- <P>Note the usage is similar to JOptionPane's, but the numerical value is
- different, so you cannot substitute JOptionPane.OK_CANCEL_OPTION for DialogFooter.OK_CANCEL_OPTION.</div>
+ <P>
+ Note the usage is similar to JOptionPane's, but the numerical value is
+ different, so you cannot substitute JOptionPane.OK_CANCEL_OPTION for
+ DialogFooter.OK_CANCEL_OPTION.</div>
 </li>
 </ul>
 <a name="SAVE_DONT_SAVE_CANCEL_OPTION">
@@ -815,7 +845,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>SAVE_DONT_SAVE_CANCEL_OPTION</h4>
 <pre>public static final&nbsp;int SAVE_DONT_SAVE_CANCEL_OPTION</pre>
-<div class="block">Used to indicate a dialog should present a "Save", "Don't Save", and "Cancel" option.</div>
+<div class="block">Used to indicate a dialog should present a "Save", "Don't Save", and
+ "Cancel" option.</div>
 </li>
 </ul>
 <a name="DONT_SAVE_SAVE_OPTION">
@@ -825,8 +856,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>DONT_SAVE_SAVE_OPTION</h4>
 <pre>public static final&nbsp;int DONT_SAVE_SAVE_OPTION</pre>
-<div class="block">Used to indicate a dialog should present a "Don't Save" and "Save" option.
- This will be used for QOptionPaneCommon.FILE_EXTERNAL_CHANGES.</div>
+<div class="block">Used to indicate a dialog should present a "Don't Save" and "Save"
+ option. This will be used for QOptionPaneCommon.FILE_EXTERNAL_CHANGES.</div>
 </li>
 </ul>
 <a name="SAVE_OPTION">
@@ -836,9 +867,9 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>SAVE_OPTION</h4>
 <pre>public static final&nbsp;int SAVE_OPTION</pre>
-<div class="block">Used to indicate the user selected "Save" in a dialog.
- <BR>Also this can be used as a dialog type, to indicate that "Save"
- should be the only option presented to the user.</div>
+<div class="block">Used to indicate the user selected "Save" in a dialog. <BR>
+ Also this can be used as a dialog type, to indicate that "Save" should be
+ the only option presented to the user.</div>
 </li>
 </ul>
 <a name="DONT_SAVE_OPTION">
@@ -848,8 +879,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>DONT_SAVE_OPTION</h4>
 <pre>public static final&nbsp;int DONT_SAVE_OPTION</pre>
-<div class="block">Used to indicate the user selected "Don't Save" in a dialog.
- <BR>Also this can be used as a dialog type, to indicate that "Don't Save"
+<div class="block">Used to indicate the user selected "Don't Save" in a dialog. <BR>
+ Also this can be used as a dialog type, to indicate that "Don't Save"
  should be the only option presented to the user.</div>
 </li>
 </ul>
@@ -860,12 +891,12 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>UNDEFINED_OPTION</h4>
 <pre>public static final&nbsp;int UNDEFINED_OPTION</pre>
-<div class="block">Used to indicate the user selected an option not otherwise
- specified in this set of constants.  It may be possible
- that the user closed this dialog with the close decoration,
- or else another agent dismissed this dialog.
- <p>If you use a safely predesigned set of options this
- will not be used.</div>
+<div class="block">Used to indicate the user selected an option not otherwise specified in
+ this set of constants. It may be possible that the user closed this
+ dialog with the close decoration, or else another agent dismissed this
+ dialog.
+ <p>
+ If you use a safely predesigned set of options this will not be used.</div>
 </li>
 </ul>
 <a name="PROPERTY_META_SHORTCUT">
@@ -890,7 +921,7 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>PROPERTY_UNSAFE</h4>
 <pre>public static final&nbsp;java.lang.String PROPERTY_UNSAFE</pre>
-<div class="block">This client property is used to indicate a button is "unsafe".  Apple
+<div class="block">This client property is used to indicate a button is "unsafe". Apple
  guidelines state that "unsafe" buttons (such as "discard changes") should
  be several pixels away from "safe" buttons.</div>
 <dl>
@@ -906,16 +937,21 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>reverseButtonOrder</h4>
 <pre>public static&nbsp;boolean reverseButtonOrder</pre>
-<div class="block">This indicates whether the dismiss controls should be displayed in reverse
- order.  When you construct a DialogFooter, the dismiss controls should be listed
- in order of priority (with the most preferred listed first, the least preferred last).
- If this boolean is false, then those components will be listed in that order.  If this is
- true, then those components will be listed in the reverse order.
- <P>By default on Mac this is true, because Macs put the default button on the right
- side of dialogs.  On all other platforms this is false by default.
- <P>Window's <A HREF="http://msdn.microsoft.com/en-us/library/ms997497.aspx">guidelines</A>
- advise to, "Position the most important button -- typically the default command --
- as the first button in the set."</div>
+<div class="block">This indicates whether the dismiss controls should be displayed in
+ reverse order. When you construct a DialogFooter, the dismiss controls
+ should be listed in order of priority (with the most preferred listed
+ first, the least preferred last). If this boolean is false, then those
+ components will be listed in that order. If this is true, then those
+ components will be listed in the reverse order.
+ <P>
+ By default on Mac this is true, because Macs put the default button on
+ the right side of dialogs. On all other platforms this is false by
+ default.
+ <P>
+ Window's <A
+ HREF="http://msdn.microsoft.com/en-us/library/ms997497.aspx">guidelines
+ </A> advise to, "Position the most important button -- typically the
+ default command -- as the first button in the set."</div>
 </li>
 </ul>
 <a name="leftControls">
@@ -972,8 +1008,9 @@ extends javax.swing.JPanel</pre>
 <pre>public static&nbsp;javax.swing.Action closeDialogAndDisposeAction</pre>
 <div class="block">This action takes the Window associated with the source of this event,
  hides it, and then calls <code>dispose()</code> on it.
- <P>(This will not throw an exception if there is no parent window,
- but it does nothing in that case...)</div>
+ <P>
+ (This will not throw an exception if there is no parent window, but it
+ does nothing in that case...)</div>
 </li>
 </ul>
 </li>
@@ -997,14 +1034,16 @@ extends javax.swing.JPanel</pre>
 <div class="block">Create a new <code>DialogFooter</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>leftControls</code> - the controls on the left side of this dialog, such as a help component, or a "Reset" button.</dd>
-<dd><code>dismissControls</code> - the controls on the right side of this dialog that should dismiss this dialog.  Also
- called "action" buttons.</dd>
-<dd><code>autoClose</code> - whether the dismiss buttons should automatically close the containing window.
- If this is <code>false</code>, then it is assumed someone else is taking care of closing/disposing the
- containing dialog</dd>
-<dd><code>defaultButton</code> - the optional button in <code>dismissControls</code> to make the default button in this dialog.
- (May be null.)</dd>
+<dd><code>leftControls</code> - the controls on the left side of this dialog, such as a help
+            component, or a "Reset" button.</dd>
+<dd><code>dismissControls</code> - the controls on the right side of this dialog that should
+            dismiss this dialog. Also called "action" buttons.</dd>
+<dd><code>autoClose</code> - whether the dismiss buttons should automatically close the
+            containing window. If this is <code>false</code>, then it is
+            assumed someone else is taking care of closing/disposing the
+            containing dialog</dd>
+<dd><code>defaultButton</code> - the optional button in <code>dismissControls</code> to make
+            the default button in this dialog. (May be null.)</dd>
 </dl>
 </li>
 </ul>
@@ -1026,10 +1065,10 @@ extends javax.swing.JPanel</pre>
 <div class="block">Creates a new "Cancel" button.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape
- key will trigger this button.  (Also on Macs command-period will act
- like the escape key.)  This should be <code>false</code> if this button
- can lead to permanent data loss.</dd>
+<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape key will trigger this button.
+            (Also on Macs command-period will act like the escape key.)
+            This should be <code>false</code> if this button can lead to
+            permanent data loss.</dd>
 </dl>
 </li>
 </ul>
@@ -1040,11 +1079,11 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>makeEscapeKeyActivate</h4>
 <pre>public static&nbsp;void&nbsp;makeEscapeKeyActivate(javax.swing.AbstractButton&nbsp;button)</pre>
-<div class="block">This guarantees that when the escape key is pressed
- (if its parent window has the keyboard focus) this button
- is clicked.
- <p>It is assumed that no two buttons will try to consume
- escape keys in the same window.</div>
+<div class="block">This guarantees that when the escape key is pressed (if its parent window
+ has the keyboard focus) this button is clicked.
+ <p>
+ It is assumed that no two buttons will try to consume escape keys in the
+ same window.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>button</code> - the button to trigger when the escape key is pressed.</dd>
@@ -1071,10 +1110,10 @@ extends javax.swing.JPanel</pre>
 <div class="block">Creates a new "OK" button.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape
- key will trigger this button.  (Also on Macs command-period will act
- like the escape key.)  This should be <code>false</code> if this button
- can lead to permanent data loss.</dd>
+<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape key will trigger this button.
+            (Also on Macs command-period will act like the escape key.)
+            This should be <code>false</code> if this button can lead to
+            permanent data loss.</dd>
 </dl>
 </li>
 </ul>
@@ -1098,10 +1137,10 @@ extends javax.swing.JPanel</pre>
 <div class="block">Creates a new "Yes" button.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape
- key will trigger this button.  (Also on Macs command-period will act
- like the escape key.)  This should be <code>false</code> if this button
- can lead to permanent data loss.</dd>
+<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape key will trigger this button.
+            (Also on Macs command-period will act like the escape key.)
+            This should be <code>false</code> if this button can lead to
+            permanent data loss.</dd>
 </dl>
 </li>
 </ul>
@@ -1125,10 +1164,10 @@ extends javax.swing.JPanel</pre>
 <div class="block">Creates a new "No" button.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape
- key will trigger this button.  (Also on Macs command-period will act
- like the escape key.)  This should be <code>false</code> if this button
- can lead to permanent data loss.</dd>
+<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape key will trigger this button.
+            (Also on Macs command-period will act like the escape key.)
+            This should be <code>false</code> if this button can lead to
+            permanent data loss.</dd>
 </dl>
 </li>
 </ul>
@@ -1152,10 +1191,10 @@ extends javax.swing.JPanel</pre>
 <div class="block">Creates a new "Save" button.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape
- key will trigger this button.  (Also on Macs command-period will act
- like the escape key.)  This should be <code>false</code> if this button
- can lead to permanent data loss.</dd>
+<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape key will trigger this button.
+            (Also on Macs command-period will act like the escape key.)
+            This should be <code>false</code> if this button can lead to
+            permanent data loss.</dd>
 </dl>
 </li>
 </ul>
@@ -1166,7 +1205,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>createDontSaveButton</h4>
 <pre>public static&nbsp;javax.swing.JButton&nbsp;createDontSaveButton()</pre>
-<div class="block">Creates a new "Don't Save" button that is not triggered by the escape key.</div>
+<div class="block">Creates a new "Don't Save" button that is not triggered by the escape
+ key.</div>
 </li>
 </ul>
 <a name="createDontSaveButton-boolean-">
@@ -1179,10 +1219,10 @@ extends javax.swing.JPanel</pre>
 <div class="block">Creates a new "Don't Save" button.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape
- key will trigger this button.  (Also on Macs command-period will act
- like the escape key.)  This should be <code>false</code> if this button
- can lead to permanent data loss.</dd>
+<dd><code>escapeKeyIsTrigger</code> - if true then pressing the escape key will trigger this button.
+            (Also on Macs command-period will act like the escape key.)
+            This should be <code>false</code> if this button can lead to
+            permanent data loss.</dd>
 </dl>
 </li>
 </ul>
@@ -1194,12 +1234,14 @@ extends javax.swing.JPanel</pre>
 <h4>createDialogFooter</h4>
 <pre>public static&nbsp;<a href="../../../com/pump/swing/DialogFooter.html" title="class in com.pump.swing">DialogFooter</a>&nbsp;createDialogFooter(int&nbsp;options,
                                               <a href="../../../com/pump/swing/DialogFooter.EscapeKeyBehavior.html" title="enum in com.pump.swing">DialogFooter.EscapeKeyBehavior</a>&nbsp;escapeKeyBehavior)</pre>
-<div class="block">Creates a <code>DialogFooter</code> and assigns a default button.
- The default button is the first button listed in the button type.  For example,
- a YES_NO_CANCEL_OPTION dialog will make the YES_OPTION the default button.</div>
+<div class="block">Creates a <code>DialogFooter</code> and assigns a default button. The
+ default button is the first button listed in the button type. For
+ example, a YES_NO_CANCEL_OPTION dialog will make the YES_OPTION the
+ default button.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>options</code> - one of the OPTIONS fields in this class, such as YES_NO_OPTION or CANCEL_OPTION.</dd>
+<dd><code>options</code> - one of the OPTIONS fields in this class, such as YES_NO_OPTION
+            or CANCEL_OPTION.</dd>
 <dd><code>escapeKeyBehavior</code> - one of the EscapeKeyBehavior options in this class.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a <code>DialogFooter</code></dd>
@@ -1215,16 +1257,22 @@ extends javax.swing.JPanel</pre>
 <pre>public static&nbsp;<a href="../../../com/pump/swing/DialogFooter.html" title="class in com.pump.swing">DialogFooter</a>&nbsp;createDialogFooter(javax.swing.JComponent[]&nbsp;leftComponents,
                                               int&nbsp;options,
                                               <a href="../../../com/pump/swing/DialogFooter.EscapeKeyBehavior.html" title="enum in com.pump.swing">DialogFooter.EscapeKeyBehavior</a>&nbsp;escapeKeyBehavior)</pre>
-<div class="block">Creates a <code>DialogFooter</code> and assigns a default button.
- The default button is the first button listed in the button type.  For example,
- a YES_NO_CANCEL_OPTION dialog will make the YES_OPTION the default button.
- <P>To use a different default button, use the other <code>createDialogFooter()</code> method.</div>
+<div class="block">Creates a <code>DialogFooter</code> and assigns a default button. The
+ default button is the first button listed in the button type. For
+ example, a YES_NO_CANCEL_OPTION dialog will make the YES_OPTION the
+ default button.
+ <P>
+ To use a different default button, use the other
+ <code>createDialogFooter()</code> method.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>leftComponents</code> - the components to put on the left side of the footer.
- <P>The Apple guidelines state that this area is reserved for
- "button[s] that affect the contents of the dialog itself, such as Reset [or Help]".</dd>
-<dd><code>options</code> - one of the OPTIONS fields in this class, such as YES_NO_OPTION or CANCEL_OPTION.</dd>
+            <P>
+            The Apple guidelines state that this area is reserved for
+            "button[s] that affect the contents of the dialog itself, such as Reset [or Help]"
+            .</dd>
+<dd><code>options</code> - one of the OPTIONS fields in this class, such as YES_NO_OPTION
+            or CANCEL_OPTION.</dd>
 <dd><code>escapeKeyBehavior</code> - one of the EscapeKeyBehavior options in this class.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a <code>DialogFooter</code></dd>
@@ -1245,11 +1293,15 @@ extends javax.swing.JPanel</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>leftComponents</code> - the components to put on the left side of the footer.
- <P>The Apple guidelines state that this area is reserved for
- "button[s] that affect the contents of the dialog itself, such as Reset [or Help]".</dd>
-<dd><code>options</code> - one of the OPTIONS fields in this class, such as YES_NO_OPTION or CANCEL_OPTION.</dd>
-<dd><code>defaultButton</code> - the OPTION field corresponding to the button that
- should be the default button, or -1 if there should be no default button.</dd>
+            <P>
+            The Apple guidelines state that this area is reserved for
+            "button[s] that affect the contents of the dialog itself, such as Reset [or Help]"
+            .</dd>
+<dd><code>options</code> - one of the OPTIONS fields in this class, such as YES_NO_OPTION
+            or CANCEL_OPTION.</dd>
+<dd><code>defaultButton</code> - the OPTION field corresponding to the button that should be
+            the default button, or -1 if there should be no default
+            button.</dd>
 <dd><code>escapeKeyBehavior</code> - one of the EscapeKeyBehavior options in this class.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a <code>DialogFooter</code></dd>
@@ -1300,10 +1352,11 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>normalizeButtons</h4>
 <pre>public static&nbsp;void&nbsp;normalizeButtons(javax.swing.JButton[]&nbsp;buttons)</pre>
-<div class="block">This takes a set of buttons and gives them all the width/height
- of the largest button among them.
- <P>(More specifically, this sets the <code>preferredSize</code>
- of each button to the largest preferred size in the list of buttons.</div>
+<div class="block">This takes a set of buttons and gives them all the width/height of the
+ largest button among them.
+ <P>
+ (More specifically, this sets the <code>preferredSize</code> of each
+ button to the largest preferred size in the list of buttons.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>buttons</code> - an array of buttons.</dd>
@@ -1317,8 +1370,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>isUnsafe</h4>
 <pre>public static&nbsp;boolean&nbsp;isUnsafe(javax.swing.JComponent&nbsp;c)</pre>
-<div class="block">This indicates that an action button risks losing user's data.
- On Macs an unsafe button is spaced farther away from safe buttons.</div>
+<div class="block">This indicates that an action button risks losing user's data. On Macs an
+ unsafe button is spaced farther away from safe buttons.</div>
 </li>
 </ul>
 <a name="setUnsafe-javax.swing.JComponent-boolean-">
@@ -1342,7 +1395,8 @@ extends javax.swing.JPanel</pre>
 <div class="block">Adds an <code>ActionListener</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>l</code> - this listener will be notified when a <code>dismissControl</code> is activated.</dd>
+<dd><code>l</code> - this listener will be notified when a
+            <code>dismissControl</code> is activated.</dd>
 </dl>
 </li>
 </ul>
@@ -1364,11 +1418,11 @@ extends javax.swing.JPanel</pre>
 <h4>getLastSelectedComponent</h4>
 <pre>public&nbsp;javax.swing.JComponent&nbsp;getLastSelectedComponent()</pre>
 <div class="block">Returns the component last used to dismiss the dialog.
- <P>Note the components on the left side of this footer
- (such as a "Help" button or a "Reset Preferences" button)
- do NOT dismiss the dialog, and so this method has nothing
- to do with those components.  This only relates to the components on the
- right side of dialog.</div>
+ <P>
+ Note the components on the left side of this footer (such as a "Help"
+ button or a "Reset Preferences" button) do NOT dismiss the dialog, and so
+ this method has nothing to do with those components. This only relates to
+ the components on the right side of dialog.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the component last used to dismiss the dialog.</dd>
@@ -1385,9 +1439,11 @@ extends javax.swing.JPanel</pre>
 <div class="block">Finds a certain type of button, if it is available.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>buttonType</code> - of the options in this class (such as YES_OPTION or CANCEL_OPTION)</dd>
+<dd><code>buttonType</code> - of the options in this class (such as YES_OPTION or
+            CANCEL_OPTION)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the button that maps to that option, or null if no such button was found.</dd>
+<dd>the button that maps to that option, or null if no such button
+         was found.</dd>
 </dl>
 </li>
 </ul>
@@ -1401,7 +1457,8 @@ extends javax.swing.JPanel</pre>
 <div class="block">Returns true if a certain button type is available in this footer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>buttonType</code> - of the options in this class (such as YES_OPTION or CANCEL_OPTION)</dd>
+<dd><code>buttonType</code> - of the options in this class (such as YES_OPTION or
+            CANCEL_OPTION)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if a button corresponding to the option provided exists.</dd>
 </dl>
@@ -1415,9 +1472,10 @@ extends javax.swing.JPanel</pre>
 <h4>reset</h4>
 <pre>public&nbsp;void&nbsp;reset()</pre>
 <div class="block">This resets the value of <code>lastSelectedComponent</code> to null.
- <P>If this footer is recycled in different dialogs, then you may
- need to nullify this value for <code>getLastSelectedComponent()</code>
- to remain relevant.</div>
+ <P>
+ If this footer is recycled in different dialogs, then you may need to
+ nullify this value for <code>getLastSelectedComponent()</code> to remain
+ relevant.</div>
 </li>
 </ul>
 <a name="getDismissControls--">
@@ -1427,7 +1485,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getDismissControls</h4>
 <pre>public&nbsp;javax.swing.JComponent[]&nbsp;getDismissControls()</pre>
-<div class="block">Returns a copy of the <code>dismissControls</code> array used to construct this footer.</div>
+<div class="block">Returns a copy of the <code>dismissControls</code> array used to
+ construct this footer.</div>
 </li>
 </ul>
 <a name="setAutoClose-boolean-">
@@ -1446,7 +1505,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getLeftControls</h4>
 <pre>public&nbsp;javax.swing.JComponent[]&nbsp;getLeftControls()</pre>
-<div class="block">Returns a copy of the <code>leftControls</code> array used to construct this footer.</div>
+<div class="block">Returns a copy of the <code>leftControls</code> array used to construct
+ this footer.</div>
 </li>
 </ul>
 <a name="setLeftComponents-javax.swing.JComponent...-">

@@ -134,27 +134,32 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ColorPickerPanel</span>
 extends javax.swing.JPanel</pre>
-<div class="block">This is the large graphic element in the <code>ColorPicker</code>
- that depicts a wide range of colors.
- <P>This panel can operate in 6 different modes.  In each mode a different
+<div class="block">This is the large graphic element in the <code>ColorPicker</code> that
+ depicts a wide range of colors.
+ <P>
+ This panel can operate in 6 different modes. In each mode a different
  property is held constant: hue, saturation, brightness, red, green, or blue.
- (Each property is identified with a constant in the <code>ColorPicker</code> class,
- such as: <code>ColorPicker.HUE</code> or <code>ColorPicker.GREEN</code>.)
- <P>In saturation and brightness mode, a wheel is used.  Although it doesn't
- use as many pixels as a square does: it is a very aesthetic model since the hue can
- wrap around in a complete circle.  (Also, on top of looks, this is how most
- people learn to think the color spectrum, so it has that advantage, too).
- In all other modes a square is used.
- <P>The user can click in this panel to select a new color.  The selected color is
- highlighted with a circle drawn around it.  Also once this
- component has the keyboard focus, the user can use the arrow keys to
- traverse the available colors.
- <P>Note this component is public and exists independently of the
- <code>ColorPicker</code> class.  The only way this class is dependent
- on the <code>ColorPicker</code> class is when the constants for the modes
- are used.
- <P>The graphic in this panel will be based on either the width or
- the height of this component: depending on which is smaller.</div>
+ (Each property is identified with a constant in the <code>ColorPicker</code>
+ class, such as: <code>ColorPicker.HUE</code> or
+ <code>ColorPicker.GREEN</code>.)
+ <P>
+ In saturation and brightness mode, a wheel is used. Although it doesn't use
+ as many pixels as a square does: it is a very aesthetic model since the hue
+ can wrap around in a complete circle. (Also, on top of looks, this is how
+ most people learn to think the color spectrum, so it has that advantage,
+ too). In all other modes a square is used.
+ <P>
+ The user can click in this panel to select a new color. The selected color is
+ highlighted with a circle drawn around it. Also once this component has the
+ keyboard focus, the user can use the arrow keys to traverse the available
+ colors.
+ <P>
+ Note this component is public and exists independently of the
+ <code>ColorPicker</code> class. The only way this class is dependent on the
+ <code>ColorPicker</code> class is when the constants for the modes are used.
+ <P>
+ The graphic in this panel will be based on either the width or the height of
+ this component: depending on which is smaller.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/swing/ColorPicker.html" title="class in com.pump.swing"><code>ColorPicker</code></a>, 
@@ -279,8 +284,7 @@ extends javax.swing.JPanel</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ColorPickerPanel.html#addChangeListener-javax.swing.event.ChangeListener-">addChangeListener</a></span>(javax.swing.event.ChangeListener&nbsp;l)</code>
-<div class="block">This listener will be notified when the current HSB or RGB values
- change.</div>
+<div class="block">This listener will be notified when the current HSB or RGB values change.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -314,8 +318,8 @@ extends javax.swing.JPanel</pre>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/ColorPickerPanel.html#removeChangeListener-javax.swing.event.ChangeListener-">removeChangeListener</a></span>(javax.swing.event.ChangeListener&nbsp;l)</code>
-<div class="block">Remove a <code>ChangeListener</code> so it is no longer
- notified when the selected color changes.</div>
+<div class="block">Remove a <code>ChangeListener</code> so it is no longer notified when the
+ selected color changes.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -397,12 +401,12 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>MAX_SIZE</h4>
 <pre>public static final&nbsp;int MAX_SIZE</pre>
-<div class="block">The maximum size the graphic will be.  No matter
-  how big the panel becomes, the graphic will not exceed
-  this length.
-  <P>(This is enforced because only 1 BufferedImage is used
-  to render the graphic.  This image is created once at a fixed
-  size and is never replaced.)</div>
+<div class="block">The maximum size the graphic will be. No matter how big the panel
+ becomes, the graphic will not exceed this length.
+ <P>
+ (This is enforced because only 1 BufferedImage is used to render the
+ graphic. This image is created once at a fixed size and is never
+ replaced.)</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#com.pump.swing.ColorPickerPanel.MAX_SIZE">Constant Field Values</a></dd>
@@ -442,8 +446,7 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>addChangeListener</h4>
 <pre>public&nbsp;void&nbsp;addChangeListener(javax.swing.event.ChangeListener&nbsp;l)</pre>
-<div class="block">This listener will be notified when the current HSB or RGB values
- change.</div>
+<div class="block">This listener will be notified when the current HSB or RGB values change.</div>
 </li>
 </ul>
 <a name="removeChangeListener-javax.swing.event.ChangeListener-">
@@ -453,8 +456,8 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>removeChangeListener</h4>
 <pre>public&nbsp;void&nbsp;removeChangeListener(javax.swing.event.ChangeListener&nbsp;l)</pre>
-<div class="block">Remove a <code>ChangeListener</code> so it is no longer
- notified when the selected color changes.</div>
+<div class="block">Remove a <code>ChangeListener</code> so it is no longer notified when the
+ selected color changes.</div>
 </li>
 </ul>
 <a name="fireChangeListeners--">
@@ -489,8 +492,10 @@ extends javax.swing.JPanel</pre>
 <div class="block">Set the mode of this panel.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>mode</code> - This must be one of the following constants from the <code>ColorPicker</code> class:
- <code>HUE</code>, <code>SAT</code>, <code>BRI</code>, <code>RED</code>, <code>GREEN</code>, or <code>BLUE</code></dd>
+<dd><code>mode</code> - This must be one of the following constants from the
+            <code>ColorPicker</code> class: <code>HUE</code>,
+            <code>SAT</code>, <code>BRI</code>, <code>RED</code>,
+            <code>GREEN</code>, or <code>BLUE</code></dd>
 </dl>
 </li>
 </ul>
@@ -504,10 +509,11 @@ extends javax.swing.JPanel</pre>
                    int&nbsp;g,
                    int&nbsp;b)</pre>
 <div class="block">Sets the selected color of this panel.
- <P>If this panel is in HUE, SAT, or BRI mode, then
- this method converts these values to HSB coordinates
- and calls <code>setHSB</code>.
- <P>This method may regenerate the graphic if necessary.</div>
+ <P>
+ If this panel is in HUE, SAT, or BRI mode, then this method converts
+ these values to HSB coordinates and calls <code>setHSB</code>.
+ <P>
+ This method may regenerate the graphic if necessary.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>r</code> - the red value of the selected color.</dd>
@@ -525,8 +531,7 @@ extends javax.swing.JPanel</pre>
 <pre>public&nbsp;float[]&nbsp;getHSB()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the HSB values of the selected color.
- Each value is between [0,1].</dd>
+<dd>the HSB values of the selected color. Each value is between [0,1].</dd>
 </dl>
 </li>
 </ul>
@@ -539,8 +544,8 @@ extends javax.swing.JPanel</pre>
 <pre>public&nbsp;int[]&nbsp;getRGB()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the RGB values of the selected color.
- Each value is between [0,255].</dd>
+<dd>the RGB values of the selected color. Each value is between
+         [0,255].</dd>
 </dl>
 </li>
 </ul>
@@ -586,10 +591,11 @@ extends javax.swing.JPanel</pre>
                    float&nbsp;s,
                    float&nbsp;b)</pre>
 <div class="block">Sets the selected color of this panel.
- <P>If this panel is in RED, GREEN, or BLUE mode, then
- this method converts these values to RGB coordinates
- and calls <code>setRGB</code>.
- <P>This method may regenerate the graphic if necessary.</div>
+ <P>
+ If this panel is in RED, GREEN, or BLUE mode, then this method converts
+ these values to RGB coordinates and calls <code>setRGB</code>.
+ <P>
+ This method may regenerate the graphic if necessary.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>h</code> - the hue value of the selected color.</dd>

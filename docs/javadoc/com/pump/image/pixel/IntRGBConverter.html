@@ -298,16 +298,18 @@ implements <a href="../../../../com/pump/image/pixel/IntPixelIterator.html" titl
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/image/pixel/PixelIterator.html#getMinimumArrayLength--">PixelIterator</a></code></span></div>
 <div class="block">The minimum length an array should be that is used to retrieve a row of
  pixel data.
- <P>When you call <code>next(array)</code> on this iterator, the array's
+ <P>
+ When you call <code>next(array)</code> on this iterator, the array's
  length should at least be <code>getMinimumArrayLength()</code>.
- <P>(Note the <code>next()</code> method is not in this interface: it
- exists in the subinterfaces:
- <a href="../../../../com/pump/image/pixel/BytePixelIterator.html" title="interface in com.pump.image.pixel"><code>BytePixelIterator</code></a> and
+ <P>
+ (Note the <code>next()</code> method is not in this interface: it exists
+ in the subinterfaces: <a href="../../../../com/pump/image/pixel/BytePixelIterator.html" title="interface in com.pump.image.pixel"><code>BytePixelIterator</code></a> and
  <a href="../../../../com/pump/image/pixel/IntPixelIterator.html" title="interface in com.pump.image.pixel"><code>IntPixelIterator</code></a>.
- <P>You should <i>not</i> assume you know what this value is. For example:
- If an iterator is actually a 4-byte iterator that is reducing to a 3-byte
+ <P>
+ You should <i>not</i> assume you know what this value is. For example: If
+ an iterator is actually a 4-byte iterator that is reducing to a 3-byte
  format, then this value may be 4*getWidth() instead of the expected
- 3*getWidth().  Conversion and scaling is performed in the original array
+ 3*getWidth(). Conversion and scaling is performed in the original array
  if possible to minimize overhead.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -326,8 +328,8 @@ implements <a href="../../../../com/pump/image/pixel/IntPixelIterator.html" titl
 <h4>getType</h4>
 <pre>public&nbsp;int&nbsp;getType()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/image/pixel/PixelIterator.html#getType--">PixelIterator</a></code></span></div>
-<div class="block">The format of this pixel iterator. This will probably be one
- of the BufferedImage type constants.</div>
+<div class="block">The format of this pixel iterator. This will probably be one of the
+ BufferedImage type constants.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/pixel/PixelIterator.html#getType--">getType</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/image/pixel/PixelIterator.html" title="interface in com.pump.image.pixel">PixelIterator</a></code></dd>
@@ -343,8 +345,9 @@ implements <a href="../../../../com/pump/image/pixel/IntPixelIterator.html" titl
 <pre>public&nbsp;int&nbsp;getPixelSize()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../com/pump/image/pixel/PixelIterator.html#getPixelSize--">PixelIterator</a></code></span></div>
 <div class="block">The number of array elements used to store 1 pixel.
- <P>So in TYPE_4BYTE_ARGB this will be 4, but in TYPE_INT_ARGB 
- this will be 1.</div>
+ <P>
+ So in TYPE_4BYTE_ARGB this will be 4, but in TYPE_INT_ARGB this will be
+ 1.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/pixel/PixelIterator.html#getPixelSize--">getPixelSize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/image/pixel/PixelIterator.html" title="interface in com.pump.image.pixel">PixelIterator</a></code></dd>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9};
+var methods = {"i0":9,"i1":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -156,12 +156,6 @@ extends java.lang.Object</pre>
 <div class="block">Return the icon of a File.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/icon/FileIcon.html#main-java.lang.String:A-">main</a></span>(java.lang.String[]&nbsp;args)</code>
-<div class="block">This captures a File's icon and saves it as a PNG.</div>
-</td>
-</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -201,25 +195,6 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="main-java.lang.String:A-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>main</h4>
-<pre>public static&nbsp;void&nbsp;main(java.lang.String[]&nbsp;args)
-                 throws java.io.IOException</pre>
-<div class="block">This captures a File's icon and saves it as a PNG.
- This is tested on Mac; I'm not sure how it will perform
- on Windows. You may need to modify the icon size. As of this
- writing on Mac: you can pass most any Dimension object and
- the icon will scale upwards safely.</div>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code></dd>
-</dl>
-</li>
-</ul>
 <a name="getIcon-java.io.File-">
 <!--   -->
 </a>
@@ -228,8 +203,8 @@ extends java.lang.Object</pre>
 <h4>getIcon</h4>
 <pre>public static&nbsp;javax.swing.Icon&nbsp;getIcon(java.io.File&nbsp;file)</pre>
 <div class="block">Return the icon of a File.
- <p>Unfortunately Windows and Mac require different
- approaches.</div>
+ <p>
+ Unfortunately Windows and Mac require different approaches.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - the file to get the icon of.</dd>

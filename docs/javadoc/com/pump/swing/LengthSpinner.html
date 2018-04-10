@@ -135,17 +135,22 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">LengthSpinner</span>
 extends javax.swing.JSpinner</pre>
 <div class="block">A <code>JSpinner</code> that adjusts <code>Length</code> values.
- <P>You can monitor the unit this spinner is currently using two ways:
- <P>1. Add a <code>PropertyChangeListener</code> to this object, and listen
- for <code>PROPERTY_UNIT</code> changes.  Likewise you can call
- <code>putClientProperty(PROPERTY_UNIT, ...)</code> to change
- the unit currently displayed.
- <P>2. Get the <code>SpinnerModel</code> for this spinner, which will
- be a <code>LengthSpinnerModel</code>.  This class contains methods
- to get and set the <code>Length.Unit</code> that is in use.</div>
+ <P>
+ You can monitor the unit this spinner is currently using two ways:
+ <P>
+ 1. Add a <code>PropertyChangeListener</code> to this object, and listen for
+ <code>PROPERTY_UNIT</code> changes. Likewise you can call
+ <code>putClientProperty(PROPERTY_UNIT, ...)</code> to change the unit
+ currently displayed.
+ <P>
+ 2. Get the <code>SpinnerModel</code> for this spinner, which will be a
+ <code>LengthSpinnerModel</code>. This class contains methods to get and set
+ the <code>Length.Unit</code> that is in use.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="http://javagraphics.blogspot.com/2008/11/internationalization-measuring-lengths.html">Internationalization: Measuring Lengths</a>, 
+<dd><a
+      href="http://javagraphics.blogspot.com/2008/11/internationalization-measuring-lengths.html">Internationalization:
+      Measuring Lengths</a>, 
 <a href="../../../serialized-form.html#com.pump.swing.LengthSpinner">Serialized Form</a></dd>
 </dl>
 </li>
@@ -206,8 +211,7 @@ extends javax.swing.JSpinner</pre>
 <td class="colFirst"><code>static java.util.prefs.Preferences</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/LengthSpinner.html#prefs">prefs</a></span></code>
 <div class="block">This is where the last-used unit is stored for
- <code>LengthSpinners</code> with a shared
- <code>preferenceKey</code>.</div>
+ <code>LengthSpinners</code> with a shared <code>preferenceKey</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -257,8 +261,8 @@ extends javax.swing.JSpinner</pre>
              double&nbsp;cmMax,
              <a href="../../../com/pump/math/Length.Unit.html" title="class in com.pump.math">Length.Unit</a>&nbsp;defaultUnit,
              java.lang.String&nbsp;preferenceKey)</code>
-<div class="block">Creates a <code>LengthSpinner</code> with a
- "standard" set of step sizes (each step size is 1 or .5).</div>
+<div class="block">Creates a <code>LengthSpinner</code> with a "standard" set of step sizes
+ (each step size is 1 or .5).</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -269,8 +273,8 @@ extends javax.swing.JSpinner</pre>
              <a href="../../../com/pump/math/Length.Unit.html" title="class in com.pump.math">Length.Unit</a>&nbsp;unit,
              java.text.DecimalFormat&nbsp;numberFormat,
              java.lang.String&nbsp;preferenceKey)</code>
-<div class="block">Creates a new <code>LengthSpinner</code> using numbers
- meant for only 1 type of unit.</div>
+<div class="block">Creates a new <code>LengthSpinner</code> using numbers meant for only 1
+ type of unit.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -279,8 +283,8 @@ extends javax.swing.JSpinner</pre>
              double&nbsp;cmMax,
              <a href="../../../com/pump/math/Length.Unit.html" title="class in com.pump.math">Length.Unit</a>&nbsp;defaultUnit,
              java.lang.String&nbsp;preferenceKey)</code>
-<div class="block">Creates a <code>LengthSpinner</code> with a
- "standard" set of step sizes and minimums of zero.</div>
+<div class="block">Creates a <code>LengthSpinner</code> with a "standard" set of step sizes
+ and minimums of zero.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -316,8 +320,8 @@ extends javax.swing.JSpinner</pre>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/LengthSpinner.html#getColumns--">getColumns</a></span>()</code>
-<div class="block">This returns the number of columns the text field in the
- spinner editor is designed for.</div>
+<div class="block">This returns the number of columns the text field in the spinner editor
+ is designed for.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -335,8 +339,8 @@ extends javax.swing.JSpinner</pre>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/LengthSpinner.html#setColumns-int-">setColumns</a></span>(int&nbsp;c)</code>
-<div class="block">This directly sets the number of columns in the text field
- in the spinner editor.</div>
+<div class="block">This directly sets the number of columns in the text field in the spinner
+ editor.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -435,10 +439,9 @@ extends javax.swing.JSpinner</pre>
 <h4>prefs</h4>
 <pre>public static&nbsp;java.util.prefs.Preferences prefs</pre>
 <div class="block">This is where the last-used unit is stored for
- <code>LengthSpinners</code> with a shared
- <code>preferenceKey</code>.  By default
- this value is:
- <BR><code>Preferences.userNodeForPackage(LengthSpinner.class)</code></div>
+ <code>LengthSpinners</code> with a shared <code>preferenceKey</code>. By
+ default this value is: <BR>
+ <code>Preferences.userNodeForPackage(LengthSpinner.class)</code></div>
 </li>
 </ul>
 </li>
@@ -462,15 +465,15 @@ extends javax.swing.JSpinner</pre>
                      <a href="../../../com/pump/math/Length.Unit.html" title="class in com.pump.math">Length.Unit</a>&nbsp;unit,
                      java.text.DecimalFormat&nbsp;numberFormat,
                      java.lang.String&nbsp;preferenceKey)</pre>
-<div class="block">Creates a new <code>LengthSpinner</code> using numbers
- meant for only 1 type of unit.
- <P>This is not really recommended, unless your users
- have to comply with certain length restrictions.  For
- example, if the default unit is inch and the step size is 1,
- then when the user increases or decreases this spinner it
- will always use a step size of 1 inch.  So if this spinner
- is set to work in centimeters: then the user will see a step
- size of 2.54 cm.</div>
+<div class="block">Creates a new <code>LengthSpinner</code> using numbers meant for only 1
+ type of unit.
+ <P>
+ This is not really recommended, unless your users have to comply with
+ certain length restrictions. For example, if the default unit is inch and
+ the step size is 1, then when the user increases or decreases this
+ spinner it will always use a step size of 1 inch. So if this spinner is
+ set to work in centimeters: then the user will see a step size of 2.54
+ cm.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - the initial value</dd>
@@ -479,13 +482,11 @@ extends javax.swing.JSpinner</pre>
 <dd><code>stepSize</code> - the step size</dd>
 <dd><code>unit</code> - the default unit</dd>
 <dd><code>numberFormat</code> - an optional format to specify how to round/display values.</dd>
-<dd><code>preferenceKey</code> - an optional key to save the
- unit the user views this data in across sessions.
- If this is null, then the preferred unit is not saved
- between sessions.  If this is non-null, then this
- key is used to store/retrieve the unit the user
- prefers for this spinner (and all other spinners that
- share the same key).</dd>
+<dd><code>preferenceKey</code> - an optional key to save the unit the user views this data in
+            across sessions. If this is null, then the preferred unit is
+            not saved between sessions. If this is non-null, then this key
+            is used to store/retrieve the unit the user prefers for this
+            spinner (and all other spinners that share the same key).</dd>
 </dl>
 </li>
 </ul>
@@ -500,26 +501,22 @@ extends javax.swing.JSpinner</pre>
                      double&nbsp;cmMax,
                      <a href="../../../com/pump/math/Length.Unit.html" title="class in com.pump.math">Length.Unit</a>&nbsp;defaultUnit,
                      java.lang.String&nbsp;preferenceKey)</pre>
-<div class="block">Creates a <code>LengthSpinner</code> with a
- "standard" set of step sizes and minimums of zero.</div>
+<div class="block">Creates a <code>LengthSpinner</code> with a "standard" set of step sizes
+ and minimums of zero.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - the initial value, in the default unit</dd>
-<dd><code>inchMax</code> - the maximum value in inches.  (The
- maximum value for feet/yards will be computed from
- this value.)</dd>
-<dd><code>cmMax</code> - the maximum value in centimeters. (The
- maximum value for other metric lengths will be computed
- from this value.)</dd>
-<dd><code>defaultUnit</code> - the default unit to use when
- the preferenceKey is null or uninitialized.</dd>
-<dd><code>preferenceKey</code> - an optional key to save the
- unit the user views this data in across sessions.
- If this is null, then the preferred unit is not saved
- between sessions.  If this is non-null, then this
- key is used to store/retrieve the unit the user
- prefers for this spinner (and all other spinners that
- share the same key).</dd>
+<dd><code>inchMax</code> - the maximum value in inches. (The maximum value for feet/yards
+            will be computed from this value.)</dd>
+<dd><code>cmMax</code> - the maximum value in centimeters. (The maximum value for other
+            metric lengths will be computed from this value.)</dd>
+<dd><code>defaultUnit</code> - the default unit to use when the preferenceKey is null or
+            uninitialized.</dd>
+<dd><code>preferenceKey</code> - an optional key to save the unit the user views this data in
+            across sessions. If this is null, then the preferred unit is
+            not saved between sessions. If this is non-null, then this key
+            is used to store/retrieve the unit the user prefers for this
+            spinner (and all other spinners that share the same key).</dd>
 </dl>
 </li>
 </ul>
@@ -536,32 +533,26 @@ extends javax.swing.JSpinner</pre>
                      double&nbsp;cmMax,
                      <a href="../../../com/pump/math/Length.Unit.html" title="class in com.pump.math">Length.Unit</a>&nbsp;defaultUnit,
                      java.lang.String&nbsp;preferenceKey)</pre>
-<div class="block">Creates a <code>LengthSpinner</code> with a
- "standard" set of step sizes (each step size is 1 or .5).</div>
+<div class="block">Creates a <code>LengthSpinner</code> with a "standard" set of step sizes
+ (each step size is 1 or .5).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - the initial value, in the default unit</dd>
-<dd><code>inchMin</code> - the minimum value in inches.  (The
- minimum value for feet/yards will be computed from
- this value.)</dd>
-<dd><code>cmMin</code> - the minimum value in centimeters. (The
- minimum value for other metric lengths will be computed
- from this value.)</dd>
-<dd><code>inchMax</code> - the maximum value in inches.  (The
- maximum value for feet/yards will be computed from
- this value.)</dd>
-<dd><code>cmMax</code> - the maximum value in centimeters. (The
- maximum value for other metric lengths will be computed
- from this value.)</dd>
-<dd><code>defaultUnit</code> - the default unit to use when
- the preferenceKey is null or uninitialized.</dd>
-<dd><code>preferenceKey</code> - an optional key to save the
- unit the user views this data in across sessions.
- If this is null, then the preferred unit is not saved
- between sessions.  If this is non-null, then this
- key is used to store/retrieve the unit the user
- prefers for this spinner (and all other spinners that
- share the same key).</dd>
+<dd><code>inchMin</code> - the minimum value in inches. (The minimum value for feet/yards
+            will be computed from this value.)</dd>
+<dd><code>cmMin</code> - the minimum value in centimeters. (The minimum value for other
+            metric lengths will be computed from this value.)</dd>
+<dd><code>inchMax</code> - the maximum value in inches. (The maximum value for feet/yards
+            will be computed from this value.)</dd>
+<dd><code>cmMax</code> - the maximum value in centimeters. (The maximum value for other
+            metric lengths will be computed from this value.)</dd>
+<dd><code>defaultUnit</code> - the default unit to use when the preferenceKey is null or
+            uninitialized.</dd>
+<dd><code>preferenceKey</code> - an optional key to save the unit the user views this data in
+            across sessions. If this is null, then the preferred unit is
+            not saved between sessions. If this is non-null, then this key
+            is used to store/retrieve the unit the user prefers for this
+            spinner (and all other spinners that share the same key).</dd>
 </dl>
 </li>
 </ul>
@@ -579,48 +570,40 @@ extends javax.swing.JSpinner</pre>
                      java.text.DecimalFormat&nbsp;numberFormat,
                      java.lang.String&nbsp;preferenceKey)</pre>
 <div class="block">Creates a new <code>LengthSpinner</code>.
- <P>This is the constructor all other constructors delegate to.</div>
+ <P>
+ This is the constructor all other constructors delegate to.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - the initial value, in the default unit.</dd>
-<dd><code>mins</code> - a table of minimum values.  Each entry in this
- table has a key/value pair of Length.Unit/Length.
- Depending on the unit the user is currently using,
- different minimums may be used.  If a minimum is
- not defined for the current unit, then the 
- minimum for the default unit is used.
- (At the very least this table <i>must</i> contain
- an entry for the default unit; an exception is
- thrown otherwise.)</dd>
-<dd><code>maxs</code> - a table of maximum values.  Each entry in this
- table has a key/value pair of Length.Unit/Length.
- Depending on the unit the user is currently using,
- different maximums may be used.  If a maximum is
- not defined for the current unit, then the 
- maximum for the default unit is used.
- (At the very least this table <i>must</i> contain
- an entry for the default unit; an exception is
- thrown otherwise.)</dd>
-<dd><code>stepSizes</code> - a table of step size values.  Each entry in this
- table has a key/value pair of Length.Unit/Length.
- Depending on the unit the user is currently using,
- different step sizes may be used.  If a step size is
- not defined for the current unit, then the 
- step size for the default unit is used.
- (At the very least this table <i>must</i> contain
- an entry for the default unit; an exception is
- thrown otherwise.)</dd>
-<dd><code>unit</code> - the default unit to use when
- the preferenceKey is null or uninitialized.</dd>
-<dd><code>numberFormat</code> - an optional format for the
- numeric part of the length.</dd>
-<dd><code>preferenceKey</code> - an optional key to save the
- unit the user views this data in across sessions.
- If this is null, then the preferred unit is not saved
- between sessions.  If this is non-null, then this
- key is used to store/retrieve the unit the user
- prefers for this spinner (and all other spinners that
- share the same key).</dd>
+<dd><code>mins</code> - a table of minimum values. Each entry in this table has a
+            key/value pair of Length.Unit/Length. Depending on the unit
+            the user is currently using, different minimums may be used.
+            If a minimum is not defined for the current unit, then the
+            minimum for the default unit is used. (At the very least this
+            table <i>must</i> contain an entry for the default unit; an
+            exception is thrown otherwise.)</dd>
+<dd><code>maxs</code> - a table of maximum values. Each entry in this table has a
+            key/value pair of Length.Unit/Length. Depending on the unit
+            the user is currently using, different maximums may be used.
+            If a maximum is not defined for the current unit, then the
+            maximum for the default unit is used. (At the very least this
+            table <i>must</i> contain an entry for the default unit; an
+            exception is thrown otherwise.)</dd>
+<dd><code>stepSizes</code> - a table of step size values. Each entry in this table has a
+            key/value pair of Length.Unit/Length. Depending on the unit
+            the user is currently using, different step sizes may be used.
+            If a step size is not defined for the current unit, then the
+            step size for the default unit is used. (At the very least
+            this table <i>must</i> contain an entry for the default unit;
+            an exception is thrown otherwise.)</dd>
+<dd><code>unit</code> - the default unit to use when the preferenceKey is null or
+            uninitialized.</dd>
+<dd><code>numberFormat</code> - an optional format for the numeric part of the length.</dd>
+<dd><code>preferenceKey</code> - an optional key to save the unit the user views this data in
+            across sessions. If this is null, then the preferred unit is
+            not saved between sessions. If this is non-null, then this key
+            is used to store/retrieve the unit the user prefers for this
+            spinner (and all other spinners that share the same key).</dd>
 </dl>
 </li>
 </ul>
@@ -667,10 +650,11 @@ extends javax.swing.JSpinner</pre>
 <li class="blockList">
 <h4>setColumns</h4>
 <pre>public&nbsp;void&nbsp;setColumns(int&nbsp;c)</pre>
-<div class="block">This directly sets the number of columns in the text field
- in the spinner editor.
- <P>The field picks a reasonable number of default columns,
- but you may find it necessary to increase this in certain cases.</div>
+<div class="block">This directly sets the number of columns in the text field in the spinner
+ editor.
+ <P>
+ The field picks a reasonable number of default columns, but you may find
+ it necessary to increase this in certain cases.</div>
 </li>
 </ul>
 <a name="getColumns--">
@@ -680,8 +664,8 @@ extends javax.swing.JSpinner</pre>
 <li class="blockList">
 <h4>getColumns</h4>
 <pre>public&nbsp;int&nbsp;getColumns()</pre>
-<div class="block">This returns the number of columns the text field in the
- spinner editor is designed for.</div>
+<div class="block">This returns the number of columns the text field in the spinner editor
+ is designed for.</div>
 </li>
 </ul>
 <a name="setEditor-javax.swing.JComponent-">
@@ -691,9 +675,9 @@ extends javax.swing.JSpinner</pre>
 <li class="blockList">
 <h4>setEditor</h4>
 <pre>public&nbsp;void&nbsp;setEditor(javax.swing.JComponent&nbsp;c)</pre>
-<div class="block">Sets the spinner editor.  If the argument
- is not a <code>LengthSpinnerEditor</code> then
- an <code>IllegalArgumentException</code> is thrown.</div>
+<div class="block">Sets the spinner editor. If the argument is not a
+ <code>LengthSpinnerEditor</code> then an
+ <code>IllegalArgumentException</code> is thrown.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>setEditor</code>&nbsp;in class&nbsp;<code>javax.swing.JSpinner</code></dd>
@@ -707,9 +691,9 @@ extends javax.swing.JSpinner</pre>
 <li class="blockList">
 <h4>setModel</h4>
 <pre>public&nbsp;void&nbsp;setModel(javax.swing.SpinnerModel&nbsp;c)</pre>
-<div class="block">Sets the spinner model.  If the argument
- is not a <code>LengthSpinnerModel</code> then
- an <code>IllegalArgumentException</code> is thrown.</div>
+<div class="block">Sets the spinner model. If the argument is not a
+ <code>LengthSpinnerModel</code> then an
+ <code>IllegalArgumentException</code> is thrown.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>setModel</code>&nbsp;in class&nbsp;<code>javax.swing.JSpinner</code></dd>
@@ -758,10 +742,9 @@ extends javax.swing.JSpinner</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - the new value.</dd>
-<dd><code>changeUnitsToMatchArgument</code> - if this is false, then the
- units currently being used in this <code>LengthSpinner</code>
- are retained.  Otherwise this spinner takes on the units of the
- argument.</dd>
+<dd><code>changeUnitsToMatchArgument</code> - if this is false, then the units currently being used in this
+            <code>LengthSpinner</code> are retained. Otherwise this
+            spinner takes on the units of the argument.</dd>
 </dl>
 </li>
 </ul>

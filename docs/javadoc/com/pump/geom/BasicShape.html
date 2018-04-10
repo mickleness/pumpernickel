@@ -268,7 +268,8 @@ implements java.awt.Shape</pre>
 <td class="colFirst"><code>java.awt.geom.PathIterator</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/BasicShape.html#getPathIterator-java.awt.geom.AffineTransform-double-">getPathIterator</a></span>(java.awt.geom.AffineTransform&nbsp;at,
                double&nbsp;flatness)</code>
-<div class="block">Creates a <code>FlatteningPathIterator</code> for the outline of this object.</div>
+<div class="block">Creates a <code>FlatteningPathIterator</code> for the outline of this
+ object.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
@@ -277,8 +278,7 @@ implements java.awt.Shape</pre>
                  double&nbsp;y,
                  double&nbsp;w,
                  double&nbsp;h)</code>
-<div class="block">This checks 2 things:
- 1.</div>
+<div class="block">This checks 2 things: 1.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -315,8 +315,8 @@ implements java.awt.Shape</pre>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/BasicShape.html#releaseIterators--">releaseIterators</a></span>()</code>
-<div class="block">When we are about to modify this object we need
- to synch on this object and call this method.</div>
+<div class="block">When we are about to modify this object we need to synch on this object
+ and call this method.</div>
 </td>
 </tr>
 <tr id="i22" class="altColor">
@@ -352,8 +352,8 @@ implements java.awt.Shape</pre>
 <tr id="i27" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/BasicShape.html#updateBounds--">updateBounds</a></span>()</code>
-<div class="block">This method should be called when this shape has
- undergone a transformation.</div>
+<div class="block">This method should be called when this shape has undergone a
+ transformation.</div>
 </td>
 </tr>
 </table>
@@ -387,10 +387,10 @@ implements java.awt.Shape</pre>
 <pre>public&nbsp;BasicShape(java.awt.Shape&nbsp;shape)</pre>
 <div class="block">Creates a <code>BasicShape</code> from a shape.
  
- <p>If the shape is a simple shape in the <code>java.awt.geom</code>
- package, then you should use a constructor that accepts a
- <code>Shape</code> argument instead of a <code>PathIterator</code>
- argument.</div>
+ <p>
+ If the shape is a simple shape in the <code>java.awt.geom</code> package,
+ then you should use a constructor that accepts a <code>Shape</code>
+ argument instead of a <code>PathIterator</code> argument.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shape</code> - the shape data to copy.</dd>
@@ -407,10 +407,10 @@ implements java.awt.Shape</pre>
                   java.awt.geom.AffineTransform&nbsp;transform)</pre>
 <div class="block">Creates a <code>BasicShape</code> from a shape.
  
- <p>If the shape is a simple shape in the <code>java.awt.geom</code>
- package, then you should use a constructor that accepts a
- <code>Shape</code> argument instead of a <code>PathIterator</code>
- argument.</div>
+ <p>
+ If the shape is a simple shape in the <code>java.awt.geom</code> package,
+ then you should use a constructor that accepts a <code>Shape</code>
+ argument instead of a <code>PathIterator</code> argument.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shape</code> - the shape data to copy.</dd>
@@ -444,12 +444,12 @@ implements java.awt.Shape</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - path data.</dd>
-<dd><code>ignoreWinding</code> - if a path is WIND_NON_ZERO, then it normally
- will be converted.  However some shapes (rectangles, circles, etc)
- don't need to be converted, so if you pass <code>true</code> here
- then that conversion will be skipped.  By default you should pass
- <code>false</code> if you don't know the nature of the 
- <code>PathIterator</code> you're working with.</dd>
+<dd><code>ignoreWinding</code> - if a path is WIND_NON_ZERO, then it normally will be
+            converted. However some shapes (rectangles, circles, etc)
+            don't need to be converted, so if you pass <code>true</code>
+            here then that conversion will be skipped. By default you
+            should pass <code>false</code> if you don't know the nature of
+            the <code>PathIterator</code> you're working with.</dd>
 </dl>
 </li>
 </ul>
@@ -463,8 +463,8 @@ implements java.awt.Shape</pre>
 <div class="block">Creates a BasicShape from a serialized string.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>s</code> - this string should be the result of a former call to:
- <br><code>myBasicShape.toString()</code></dd>
+<dd><code>s</code> - this string should be the result of a former call to: <br>
+            <code>myBasicShape.toString()</code></dd>
 </dl>
 </li>
 </ul>
@@ -500,7 +500,7 @@ implements java.awt.Shape</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v1</code> - the first value</dd>
 <dd><code>v2</code> - the second value</dd>
-<dd><code>tolerance</code> - the acceptable tolerance.  Must be positive.</dd>
+<dd><code>tolerance</code> - the acceptable tolerance. Must be positive.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if abs(v1-v2)&lt;=tolerance</dd>
 </dl>
@@ -524,8 +524,8 @@ implements java.awt.Shape</pre>
 <pre>protected static&nbsp;java.lang.String&nbsp;toString(double[]&nbsp;array,
                                            int&nbsp;offset,
                                            int&nbsp;len)</pre>
-<div class="block">This lists an array of double values as a String.
- Mostly used for debugging.</div>
+<div class="block">This lists an array of double values as a String. Mostly used for
+ debugging.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>array</code> - </dd>
@@ -550,8 +550,8 @@ implements java.awt.Shape</pre>
 <li class="blockList">
 <h4>updateBounds</h4>
 <pre>protected&nbsp;void&nbsp;updateBounds()</pre>
-<div class="block">This method should be called when this shape has
- undergone a transformation.</div>
+<div class="block">This method should be called when this shape has undergone a
+ transformation.</div>
 </li>
 </ul>
 <a name="contains-java.awt.geom.Point2D-">
@@ -626,9 +626,9 @@ implements java.awt.Shape</pre>
 <h4>add</h4>
 <pre>public&nbsp;void&nbsp;add(<a href="../../../com/pump/geom/BasicShape.html" title="class in com.pump.geom">BasicShape</a>&nbsp;shape)</pre>
 <div class="block">Adds the argument shape to this shape.
- <P>If shape B is added to shape A, then
- the resulting shape will contain points in either
- A or B.</div>
+ <P>
+ If shape B is added to shape A, then the resulting shape will contain
+ points in either A or B.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shape</code> - the shape to add.</dd>
@@ -643,13 +643,13 @@ implements java.awt.Shape</pre>
 <h4>subtract</h4>
 <pre>public&nbsp;void&nbsp;subtract(<a href="../../../com/pump/geom/BasicShape.html" title="class in com.pump.geom">BasicShape</a>&nbsp;shape)</pre>
 <div class="block">Subtracts the argument shape from this shape.
- <P>If shape B is subtracted from shape A, then
- the resulting shape will contain only points in
- A that do not also lie in B.</div>
+ <P>
+ If shape B is subtracted from shape A, then the resulting shape will
+ contain only points in A that do not also lie in B.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>shape</code> - the shape to subtract.  For best performance
- this should be a BasicShape.</dd>
+<dd><code>shape</code> - the shape to subtract. For best performance this should be a
+            BasicShape.</dd>
 </dl>
 </li>
 </ul>
@@ -660,15 +660,15 @@ implements java.awt.Shape</pre>
 <li class="blockList">
 <h4>intersect</h4>
 <pre>public&nbsp;void&nbsp;intersect(<a href="../../../com/pump/geom/BasicShape.html" title="class in com.pump.geom">BasicShape</a>&nbsp;shape)</pre>
-<div class="block">Intersects the argument shape with this shape.
- This is also referred to as "clipping".
- <P>If shape A is intersected with shape B, then
- the resulting shape will contain only points in
- both A and B.</div>
+<div class="block">Intersects the argument shape with this shape. This is also referred to
+ as "clipping".
+ <P>
+ If shape A is intersected with shape B, then the resulting shape will
+ contain only points in both A and B.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>shape</code> - the shape to intersect with.  For best performance
- this should be a BasicShape.</dd>
+<dd><code>shape</code> - the shape to intersect with. For best performance this should
+            be a BasicShape.</dd>
 </dl>
 </li>
 </ul>
@@ -683,8 +683,9 @@ implements java.awt.Shape</pre>
                                     double&nbsp;y,
                                     boolean&nbsp;includeEdges)</pre>
 <div class="block">This counts the number of crossings from (-infinity,y) to (x,y).
- <P>This total is used in combination with the winding rule to determine
- when a point is inside a shape.</div>
+ <P>
+ This total is used in combination with the winding rule to determine when
+ a point is inside a shape.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>includeEdges</code> - whether a point exactly on the edge of the shape counts.</dd>
@@ -717,9 +718,9 @@ implements java.awt.Shape</pre>
                                     double&nbsp;y,
                                     double&nbsp;w,
                                     double&nbsp;h)</pre>
-<div class="block">This checks 2 things:
- 1.  Does this shape have any segments that lie completely inside the bounds provided?
- 2.  Does this shape have any segments that cross the bounds provided?</div>
+<div class="block">This checks 2 things: 1. Does this shape have any segments that lie
+ completely inside the bounds provided? 2. Does this shape have any
+ segments that cross the bounds provided?</div>
 </li>
 </ul>
 <a name="getBounds--">
@@ -743,11 +744,12 @@ implements java.awt.Shape</pre>
 <h4>identifyIntersections</h4>
 <pre>protected&nbsp;com.pump.geom.Intersection&nbsp;identifyIntersections(<a href="../../../com/pump/geom/BasicShape.html" title="class in com.pump.geom">BasicShape</a>&nbsp;shape)</pre>
 <div class="block">This identifies all the intersections of this shape and the argument.
- This relies on an <code>IntersectionIdentifier</code> to find
- those intersections.
- <p>This replaces any previously existing intersection information
- in the two BasicShapes, so you cannot call this method on different
- threads simultaneously for the same shapes.</div>
+ This relies on an <code>IntersectionIdentifier</code> to find those
+ intersections.
+ <p>
+ This replaces any previously existing intersection information in the two
+ BasicShapes, so you cannot call this method on different threads
+ simultaneously for the same shapes.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shape</code> - the other shape to identify intersections with.</dd>
@@ -799,7 +801,8 @@ implements java.awt.Shape</pre>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getPathIterator</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>at</code> - an optional <code>AffineTransform</code> to apply to this shape data</dd>
+<dd><code>at</code> - an optional <code>AffineTransform</code> to apply to this
+            shape data</dd>
 </dl>
 </li>
 </ul>
@@ -811,15 +814,17 @@ implements java.awt.Shape</pre>
 <h4>getPathIterator</h4>
 <pre>public&nbsp;java.awt.geom.PathIterator&nbsp;getPathIterator(java.awt.geom.AffineTransform&nbsp;at,
                                                   double&nbsp;flatness)</pre>
-<div class="block">Creates a <code>FlatteningPathIterator</code> for the outline of this object.</div>
+<div class="block">Creates a <code>FlatteningPathIterator</code> for the outline of this
+ object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getPathIterator</code>&nbsp;in interface&nbsp;<code>java.awt.Shape</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>at</code> - an optional <code>AffineTransform</code> to apply to this shape data</dd>
-<dd><code>flatness</code> - the maximum amount that the control points for a given curve can
- vary from colinear before a subdivided curve is replaced by a straight line
- connecting the endpoints</dd>
+<dd><code>at</code> - an optional <code>AffineTransform</code> to apply to this
+            shape data</dd>
+<dd><code>flatness</code> - the maximum amount that the control points for a given curve
+            can vary from colinear before a subdivided curve is replaced
+            by a straight line connecting the endpoints</dd>
 </dl>
 </li>
 </ul>
@@ -874,9 +879,10 @@ implements java.awt.Shape</pre>
 <h4>toString</h4>
 <pre>public&nbsp;java.lang.String&nbsp;toString()</pre>
 <div class="block">A <code>java.lang.String</code> representation of this shape.
- <P>Note that this <code>String</code> can later be passed as
- an argument to the constructor to re-create this shape, so this is
- a very efficient way to serialize this data.</div>
+ <P>
+ Note that this <code>String</code> can later be passed as an argument to
+ the constructor to re-create this shape, so this is a very efficient way
+ to serialize this data.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -890,12 +896,10 @@ implements java.awt.Shape</pre>
 <li class="blockList">
 <h4>releaseIterators</h4>
 <pre>protected&nbsp;void&nbsp;releaseIterators()</pre>
-<div class="block">When we are about to modify this object we need
- to synch on this object and call this method.
- This will make sure any iterators that
- still depend on this shape have a copy of their
- original data in tact, and they don't try to
- iterate over our modified data.</div>
+<div class="block">When we are about to modify this object we need to synch on this object
+ and call this method. This will make sure any iterators that still depend
+ on this shape have a copy of their original data in tact, and they don't
+ try to iterate over our modified data.</div>
 </li>
 </ul>
 </li>

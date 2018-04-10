@@ -130,27 +130,31 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">TransitionPanel</span>
 extends javax.swing.JComponent</pre>
 <div class="block">This panel renders some refreshes through transitions.
- <p>The <a href="../../../com/pump/swing/TransitionPanel.html#startTransition-com.pump.image.transition.Transition-java.lang.Runnable-float-"><code>startTransition(Transition, Runnable, float)</code></a> method
- takes a snapshot of the current body of this panel, then executes the
+ <p>
+ The <a href="../../../com/pump/swing/TransitionPanel.html#startTransition-com.pump.image.transition.Transition-java.lang.Runnable-float-"><code>startTransition(Transition, Runnable, float)</code></a> method takes a
+ snapshot of the current body of this panel, then executes the
  <code>Runnable</code> argument, then takes a second snapshot, and then
- executes the <code>com.bric.image.transition.Transition2D</code>.
- <p>Internally the <code>TransitionPanel</code> uses a <code>CardLayout</code>
+ executes the <a href="../../../com/pump/image/transition/Transition2D.html" title="class in com.pump.image.transition"><code>Transition2D</code></a>.
+ <p>
+ Internally the <code>TransitionPanel</code> uses a <code>CardLayout</code>
  with two panels:
- <ul><li>The body: this panel is accessible via <a href="../../../com/pump/swing/TransitionPanel.html#getBody--"><code>getBody()</code></a>, and is at
- your disposal to configure however you'd like. The only thing to keep in mind is:
- setting it to invisible won't actually free up screen space like it normally would.
- Instead you need to set this <code>TransitionPanel</code> to invisible.</li>
- <li>The transition panel: this is only made visible during a transition. It is important
- to completely obscure/remove the body during a transition, because otherwise more
- complex UI components (like <code>JSpinners</code>) may flicker and render over
- the transition for a split second. Also because this replaces the body: nothing in
- the body is capable of receiving user input during the transition. (However this
- shouldn't matter too much, because ideally a transition should be about a quarter
- of a second.)</li></ul></div>
+ <ul>
+ <li>The body: this panel is accessible via <a href="../../../com/pump/swing/TransitionPanel.html#getBody--"><code>getBody()</code></a>, and is at your
+ disposal to configure however you'd like. The only thing to keep in mind is:
+ setting it to invisible won't actually free up screen space like it normally
+ would. Instead you need to set this <code>TransitionPanel</code> to
+ invisible.</li>
+ <li>The transition panel: this is only made visible during a transition. It
+ is important to completely obscure/remove the body during a transition,
+ because otherwise more complex UI components (like <code>JSpinners</code>)
+ may flicker and render over the transition for a split second. Also because
+ this replaces the body: nothing in the body is capable of receiving user
+ input during the transition. (However this shouldn't matter too much, because
+ ideally a transition should be about a quarter of a second.)</li>
+ </ul></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/showcase/Transition2DDemo.html" title="class in com.pump.showcase"><code>Transition2DDemo</code></a>, 
-<code>com.pump.swing.TransitionPanelDemo</code>, 
 <a href="../../../com/pump/swing/TransitionTabbedPane.html" title="class in com.pump.swing"><code>TransitionTabbedPane</code></a>, 
 <a href="../../../serialized-form.html#com.pump.swing.TransitionPanel">Serialized Form</a></dd>
 </dl>
@@ -367,17 +371,19 @@ extends javax.swing.JComponent</pre>
 <pre>public&nbsp;void&nbsp;startTransition(<a href="../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>&nbsp;transition,
                             java.lang.Runnable&nbsp;runnable,
                             float&nbsp;duration)</pre>
-<div class="block">Begin a transition. While a transition is in the progress:
- the body panel is not technically visible, so components in that
- panel can't be interacted.
- <p>This manages animations in a FIFO queue, so no animations will overlap
+<div class="block">Begin a transition. While a transition is in the progress: the body panel
+ is not technically visible, so components in that panel can't be
+ interacted.
+ <p>
+ This manages animations in a FIFO queue, so no animations will overlap
  but each call will be respected.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>transition</code> - the transition to invoke.</dd>
-<dd><code>runnable</code> - a runnable to be invoked on the EDT that will change the appearance
- of the body panel. A snapshot is taken before and after this runnable is executed, and
- those snapshots are what is animated.</dd>
+<dd><code>runnable</code> - a runnable to be invoked on the EDT that will change the
+            appearance of the body panel. A snapshot is taken before and
+            after this runnable is executed, and those snapshots are what
+            is animated.</dd>
 <dd><code>duration</code> - The duration (in seconds) of the animation.</dd>
 </dl>
 </li>
@@ -389,8 +395,8 @@ extends javax.swing.JComponent</pre>
 <li class="blockList">
 <h4>isAnimating</h4>
 <pre>public&nbsp;boolean&nbsp;isAnimating()</pre>
-<div class="block">Return true if an animation is in progress. If several animations queued up,
- then this may take several seconds to return false.</div>
+<div class="block">Return true if an animation is in progress. If several animations queued
+ up, then this may take several seconds to return false.</div>
 </li>
 </ul>
 <a name="getBody--">
@@ -401,8 +407,10 @@ extends javax.swing.JComponent</pre>
 <h4>getBody</h4>
 <pre>public&nbsp;javax.swing.JPanel&nbsp;getBody()</pre>
 <div class="block">Return the body of this panel that you should modify.
- <p>You should not add components directly to this <code>TransitionPanel</code>,
- but you can do whatever you want to the panel this method returns.</div>
+ <p>
+ You should not add components directly to this
+ <code>TransitionPanel</code>, but you can do whatever you want to the
+ panel this method returns.</div>
 </li>
 </ul>
 </li>

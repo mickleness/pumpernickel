@@ -94,8 +94,8 @@
 <br>
 <pre>@Retention(value=RUNTIME)
 public @interface <span class="memberNameLabel">ResourceSample</span></pre>
-<div class="block">This is used by the <code>CreateSamplesJob</code> to apply screenshots/animations
- to javadocs.</div>
+<div class="block">This was previously used to to apply screenshots/animations to javadocs. It
+ is currently no longer used/consulted.</div>
 </li>
 </ul>
 </div>
@@ -138,7 +138,8 @@ public @interface <span class="memberNameLabel">ResourceSample</span></pre>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/blog/ResourceSample.html#columnCount--">columnCount</a></span></code>
-<div class="block">This is the number of columns to show if the samples are presented in a table.</div>
+<div class="block">This is the number of columns to show if the samples are presented in a
+ table.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -188,8 +189,12 @@ public @interface <span class="memberNameLabel">ResourceSample</span></pre>
 <h4>sample</h4>
 <pre>public abstract&nbsp;java.lang.String[]&nbsp;sample</pre>
 <div class="block">An array of strings used to construct a particular resource.
- <p>For example: "new com.pump.swing.resources.TriangleIcon( 24, 24, new Color( 0 ) )"
- <p>This is something that <a href="../../../com/pump/reflect/Reflection.html#parse-java.lang.String-"><code>Reflection.parse(String)</code></a> is capable of parsing.</div>
+ <p>
+ For example:
+ "new com.pump.swing.resources.TriangleIcon( 24, 24, new Color( 0 ) )"
+ <p>
+ This is something that <a href="../../../com/pump/reflect/Reflection.html#parse-java.lang.String-"><code>Reflection.parse(String)</code></a>
+ is capable of parsing.</div>
 </li>
 </ul>
 </li>
@@ -203,9 +208,9 @@ public @interface <span class="memberNameLabel">ResourceSample</span></pre>
 <li class="blockList">
 <h4>names</h4>
 <pre>public abstract&nbsp;java.lang.String[]&nbsp;names</pre>
-<div class="block">Return a list of the names of the samples provided. There should be a 1:1 correspondence
- for every sample provided. By default this returns an empty array, which indicates
- that nothing will be labeled.</div>
+<div class="block">Return a list of the names of the samples provided. There should be a 1:1
+ correspondence for every sample provided. By default this returns an
+ empty array, which indicates that nothing will be labeled.</div>
 <dl>
 <dt>Default:</dt>
 <dd>{}</dd>
@@ -222,8 +227,8 @@ public @interface <span class="memberNameLabel">ResourceSample</span></pre>
 <li class="blockList">
 <h4>columnCount</h4>
 <pre>public abstract&nbsp;int&nbsp;columnCount</pre>
-<div class="block">This is the number of columns to show if the samples are presented in a table.
- The default value is 4.</div>
+<div class="block">This is the number of columns to show if the samples are presented in a
+ table. The default value is 4.</div>
 <dl>
 <dt>Default:</dt>
 <dd>4</dd>
@@ -274,7 +279,8 @@ public @interface <span class="memberNameLabel">ResourceSample</span></pre>
 <li class="blockList">
 <h4>tableIntroduction</h4>
 <pre>public abstract&nbsp;java.lang.String&nbsp;tableIntroduction</pre>
-<div class="block">The text that precedes the table of samples. The default value is "Here are some samples:"</div>
+<div class="block">The text that precedes the table of samples. The default value is
+ "Here are some samples:"</div>
 <dl>
 <dt>Default:</dt>
 <dd>"Here are some samples:"</dd>

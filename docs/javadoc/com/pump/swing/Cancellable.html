@@ -106,17 +106,18 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">Cancellable</span></pre>
 <div class="block">An interface for operations that can be cancelled.
- <P>This is useful when two different threads are involved in
- an operation: Thread A wants to monitor an operation and Thread B
- is actually performing it.  If the user indicates they want to
- cancel the operation then Thread A calls <code>cancel()</code>.
- Thread B should be checking the value of <code>isCanceled()</code>
- regularly, and abort if it returns <code>true</code> (maybe by
- throwing a <code>UserCanceledException</code>).
- <P>That is the primary use of this class.  In some cases the
- opposite is also useful: when Thread B completes an operation it
- should call <code>finish()</code>, and Thread A can relay this
- status by regularly checking <code>isFinished()</code>.</div>
+ <P>
+ This is useful when two different threads are involved in an operation:
+ Thread A wants to monitor an operation and Thread B is actually performing
+ it. If the user indicates they want to cancel the operation then Thread A
+ calls <code>cancel()</code>. Thread B should be checking the value of
+ <code>isCanceled()</code> regularly, and abort if it returns
+ <code>true</code> (maybe by throwing a <code>UserCanceledException</code>).
+ <P>
+ That is the primary use of this class. In some cases the opposite is also
+ useful: when Thread B completes an operation it should call
+ <code>finish()</code>, and Thread A can relay this status by regularly
+ checking <code>isFinished()</code>.</div>
 </li>
 </ul>
 </div>
@@ -138,8 +139,8 @@ var activeTableTab = "activeTableTab";
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/Cancellable.html#addCancelListener-java.awt.event.ActionListener-">addCancelListener</a></span>(java.awt.event.ActionListener&nbsp;l)</code>
-<div class="block">You can also add a listener to be notified when <code>cancel()</code>
- is called.</div>
+<div class="block">You can also add a listener to be notified when <code>cancel()</code> is
+ called.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -217,12 +218,12 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>addCancelListener</h4>
 <pre>void&nbsp;addCancelListener(java.awt.event.ActionListener&nbsp;l)</pre>
-<div class="block">You can also add a listener to be notified when <code>cancel()</code>
- is called.  However if Thread A is opening a complex file, and Thread B
- is the event dispatch thread where <code>cancel()</code> is triggered:
- then this listener will either be notified on Thread B or perhaps
- Thread C: Thread A is still unaware the operation is canceled unless
- other measures are taken.</div>
+<div class="block">You can also add a listener to be notified when <code>cancel()</code> is
+ called. However if Thread A is opening a complex file, and Thread B is
+ the event dispatch thread where <code>cancel()</code> is triggered: then
+ this listener will either be notified on Thread B or perhaps Thread C:
+ Thread A is still unaware the operation is canceled unless other measures
+ are taken.</div>
 </li>
 </ul>
 <a name="addFinishListener-java.awt.event.ActionListener-">

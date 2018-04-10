@@ -110,9 +110,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">BmpEncoder</span>
 extends java.lang.Object</pre>
-<div class="block">This is a set of static calls to write a simple BMP 2.x image, 
- either in 24-bit or 32-bit depending on whether the source image 
- is opaque.</div>
+<div class="block">This is a set of static calls to write a simple BMP 2.x image, either in
+ 24-bit or 32-bit depending on whether the source image is opaque.</div>
 </li>
 </ul>
 </div>
@@ -273,7 +272,8 @@ extends java.lang.Object</pre>
 <h4>LOAD_IMAGE_TIMEOUT</h4>
 <pre>public static&nbsp;long LOAD_IMAGE_TIMEOUT</pre>
 <div class="block">The number of milliseconds we will wait for a <code>java.awt.Image</code>
- to finish sending all its pixel data.  The default value is 15,000 (15 seconds).</div>
+ to finish sending all its pixel data. The default value is 15,000 (15
+ seconds).</div>
 </li>
 </ul>
 </li>
@@ -310,8 +310,9 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;java.awt.image.BufferedImage&nbsp;read(java.io.File&nbsp;sourceFile)
                                          throws java.io.IOException</pre>
 <div class="block">This reads a PNG, JPG or GIF file as a BufferedImage.
- <p>This method writes the image out to a temporary BMP file, 
- and then reads it back using a BMP decoder.
+ <p>
+ This method writes the image out to a temporary BMP file, and then reads
+ it back using a BMP decoder.
  
  TODO: rename this bizarre and deceiving method</div>
 <dl>
@@ -329,17 +330,17 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;void&nbsp;write(java.awt.Image&nbsp;image,
                          java.io.File&nbsp;dest)
                   throws java.io.IOException</pre>
-<div class="block">Write an image to a file.  If the image argument is a
+<div class="block">Write an image to a file. If the image argument is a
  <code>BufferedImage</code>: then this method calls
  <code>write(BufferedImage, OutputStream)</code>.
- <p>There is a known bug in Oracle's GIF decoder that can
- result in images with less than 256 giving incorrect image
- dimensions.  (I have 2 sample images that reproduce this
- consistently, but I don't own the images so I can't distribute
- them.)  The <code>read(File)</code> method avoids this problem
- by using <code>ImageIO</code> to get the dimensions of the
- source image, but since that's not an option with this method:
- the resulting BMP might be too large.</div>
+ <p>
+ There is a known bug in Oracle's GIF decoder that can result in images
+ with less than 256 giving incorrect image dimensions. (I have 2 sample
+ images that reproduce this consistently, but I don't own the images so I
+ can't distribute them.) The <code>read(File)</code> method avoids this
+ problem by using <code>ImageIO</code> to get the dimensions of the source
+ image, but since that's not an option with this method: the resulting BMP
+ might be too large.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>image</code> - </dd>
@@ -411,7 +412,7 @@ extends java.lang.Object</pre>
                                  int&nbsp;width,
                                  int&nbsp;height,
                                  int&nbsp;bitsPerPixel)</pre>
-<div class="block">This will write a BMP header.  This will write HEADER_SIZE many bytes.</div>
+<div class="block">This will write a BMP header. This will write HEADER_SIZE many bytes.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>destinationArray</code> - the array to write the header in.</dd>
@@ -420,7 +421,8 @@ extends java.lang.Object</pre>
 <dd><code>height</code> - the height of the image.</dd>
 <dd><code>bitsPerPixel</code> - must be 24 or 32.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the scan line size of this BMP.  All rows are expected to be this many bytes in length.</dd>
+<dd>the scan line size of this BMP. All rows are expected to be this
+         many bytes in length.</dd>
 </dl>
 </li>
 </ul>

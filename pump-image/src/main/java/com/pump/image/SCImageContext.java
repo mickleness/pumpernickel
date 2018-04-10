@@ -49,8 +49,6 @@ import com.pump.math.MathG;
  * interpolation scheme can easily implemented by super sampling pixels from the
  * source image.
  *
- * @see ImageContextDemo
- *
  * @author Werner Randelshofer
  */
 public class SCImageContext extends ImageContext {

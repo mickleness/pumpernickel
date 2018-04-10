@@ -123,8 +123,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">Transition2D</span>
 extends <a href="../../../../com/pump/image/transition/AbstractTransition.html" title="class in com.pump.image.transition">AbstractTransition</a></pre>
-<div class="block">This uses Java2D operations to transition between two images.
- Each operation is wrapped up in a Transition2DInstruction object.</div>
+<div class="block">This uses Java2D operations to transition between two images. Each operation
+ is wrapped up in a Transition2DInstruction object.</div>
 </li>
 </ul>
 </div>
@@ -181,8 +181,8 @@ extends <a href="../../../../com/pump/image/transition/AbstractTransition.html" 
        java.awt.image.BufferedImage&nbsp;frameA,
        java.awt.image.BufferedImage&nbsp;frameB,
        float&nbsp;progress)</code>
-<div class="block">This calls Transition2DInstruction.paint() for each instruction
- in this transition.</div>
+<div class="block">This calls Transition2DInstruction.paint() for each instruction in this
+ transition.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -249,9 +249,9 @@ extends <a href="../../../../com/pump/image/transition/AbstractTransition.html" 
 <div class="block">This determines how to transition from A to B.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>progress</code> - a float from [0,1].  When this is zero, these instructions should
- render the initial frame.  When this is one, these instructions should render
- the final frame.</dd>
+<dd><code>progress</code> - a float from [0,1]. When this is zero, these instructions
+            should render the initial frame. When this is one, these
+            instructions should render the final frame.</dd>
 </dl>
 </li>
 </ul>
@@ -265,10 +265,11 @@ extends <a href="../../../../com/pump/image/transition/AbstractTransition.html" 
                              java.awt.image.BufferedImage&nbsp;frameA,
                              java.awt.image.BufferedImage&nbsp;frameB,
                              float&nbsp;progress)</pre>
-<div class="block">This calls Transition2DInstruction.paint() for each instruction
- in this transition.
- <P>It is made final to reinforce that the instructions should be
- all that is needed to implement these transitions.</div>
+<div class="block">This calls Transition2DInstruction.paint() for each instruction in this
+ transition.
+ <P>
+ It is made final to reinforce that the instructions should be all that is
+ needed to implement these transitions.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/transition/AbstractTransition.html#doPaint-java.awt.Graphics2D-java.awt.image.BufferedImage-java.awt.image.BufferedImage-float-">doPaint</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/image/transition/AbstractTransition.html" title="class in com.pump.image.transition">AbstractTransition</a></code></dd>

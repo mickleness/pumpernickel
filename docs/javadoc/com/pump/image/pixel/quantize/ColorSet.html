@@ -115,8 +115,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">ColorSet</span>
 extends java.lang.Object
 implements java.io.Serializable</pre>
-<div class="block">This class stores information about the frequency of colors.
- This assumes all colors are opaque.</div>
+<div class="block">This class stores information about the frequency of colors. This assumes all
+ colors are opaque.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../serialized-form.html#com.pump.image.pixel.quantize.ColorSet">Serialized Form</a></dd>
@@ -198,7 +198,7 @@ implements java.io.Serializable</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/pump/image/pixel/quantize/ColorSet.html#addColor-java.awt.Color-">addColor</a></span>(java.awt.Color&nbsp;c)</code>
-<div class="block">Add one occurrence of this  of this color.</div>
+<div class="block">Add one occurrence of this of this color.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -206,7 +206,7 @@ implements java.io.Serializable</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/pump/image/pixel/quantize/ColorSet.html#addColor-int-int-int-">addColor</a></span>(int&nbsp;r,
         int&nbsp;g,
         int&nbsp;b)</code>
-<div class="block">Add one occurrence of this  of this color.</div>
+<div class="block">Add one occurrence of this of this color.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -370,9 +370,9 @@ implements java.io.Serializable</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cloneData</code> - if true then the inner data in this object will be safely
- cloned. If false then this will return a pointer to the data that backs this object.
- This may help the efficiency of some algorithms, but of course it needs to be done with
- caution.</dd>
+            cloned. If false then this will return a pointer to the data
+            that backs this object. This may help the efficiency of some
+            algorithms, but of course it needs to be done with caution.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a map of RGB colors to the number of occurrences of each color.</dd>
 </dl>
@@ -438,8 +438,8 @@ implements java.io.Serializable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>l</code> - another ColorSet to compare against</dd>
 <dd><code>compareColorsOnly</code> - if this is <code>true</code> then this method <i>only</i>
-            checks to see that two <code>ColorSets</code> contain the
-            same colors, not necessarily the same pixel count.</dd>
+            checks to see that two <code>ColorSets</code> contain the same
+            colors, not necessarily the same pixel count.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if two sets are equal</dd>
 </dl>
@@ -488,7 +488,8 @@ implements java.io.Serializable</pre>
 <dd><code>r</code> - the red component of this color from [0, 255]</dd>
 <dd><code>g</code> - the green component of this color from [0, 255]</dd>
 <dd><code>b</code> - the blue component of this color from [0, 255]</dd>
-<dd><code>occurrence</code> - the number of occurrences of this color (must be greater than zero)</dd>
+<dd><code>occurrence</code> - the number of occurrences of this color (must be greater than
+            zero)</dd>
 </dl>
 </li>
 </ul>
@@ -526,8 +527,9 @@ implements java.io.Serializable</pre>
 <h4>createIndexColorModel</h4>
 <pre>public&nbsp;java.awt.image.IndexColorModel&nbsp;createIndexColorModel(boolean&nbsp;includeTransparentPixel,
                                                             boolean&nbsp;optimizeForGifs)</pre>
-<div class="block">This creates an <code>IndexColorModel</code>. This method does not perform
- any color reduction: it just converts this data set to a <code>IndexColorModel</code>.
+<div class="block">This creates an <code>IndexColorModel</code>. This method does not
+ perform any color reduction: it just converts this data set to a
+ <code>IndexColorModel</code>.
  <P>
  This method will throw an exception if this set represents over 256
  colors (or if this set is over 255 colors and
@@ -558,8 +560,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>addColors</h4>
 <pre>public&nbsp;void&nbsp;addColors(java.awt.image.BufferedImage&nbsp;i)</pre>
-<div class="block">Add all the pixels in this iterator that are more than 50% opaque.
- This does not account for premultiplied alpha.</div>
+<div class="block">Add all the pixels in this iterator that are more than 50% opaque. This
+ does not account for premultiplied alpha.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - the image to process.</dd>
@@ -573,8 +575,8 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>addColors</h4>
 <pre>public&nbsp;void&nbsp;addColors(<a href="../../../../../com/pump/image/pixel/IntARGBConverter.html" title="class in com.pump.image.pixel">IntARGBConverter</a>&nbsp;i)</pre>
-<div class="block">Add all the pixels in this iterator that are more than 50% opaque.
- This does not account for premultiplied alpha.</div>
+<div class="block">Add all the pixels in this iterator that are more than 50% opaque. This
+ does not account for premultiplied alpha.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - the pixel data to process.</dd>
@@ -588,7 +590,7 @@ implements java.io.Serializable</pre>
 <li class="blockList">
 <h4>addColor</h4>
 <pre>public&nbsp;void&nbsp;addColor(java.awt.Color&nbsp;c)</pre>
-<div class="block">Add one occurrence of this  of this color.</div>
+<div class="block">Add one occurrence of this of this color.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - the color to add</dd>
@@ -604,7 +606,7 @@ implements java.io.Serializable</pre>
 <pre>public&nbsp;void&nbsp;addColor(int&nbsp;r,
                      int&nbsp;g,
                      int&nbsp;b)</pre>
-<div class="block">Add one occurrence of this  of this color.</div>
+<div class="block">Add one occurrence of this of this color.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>r</code> - the red component of the color to add.</dd>
@@ -636,8 +638,7 @@ implements java.io.Serializable</pre>
 <pre>public&nbsp;java.awt.Color[]&nbsp;getColors(boolean&nbsp;prependTransparentPixel)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>prependTransparentPixel</code> - true if the first color
- returned should be fully transparent.</dd>
+<dd><code>prependTransparentPixel</code> - true if the first color returned should be fully transparent.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all the colors in this <code>ColorSet</code>.</dd>
 </dl>

@@ -101,14 +101,16 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">BranchListener&lt;K&gt;</span></pre>
-<div class="block">This listener supports two methods related to saving a branch to its parent branch.
+<div class="block">This listener supports two methods related to saving a branch to its parent
+ branch.
  <p>
- One method is notified before a save, and is encouraged to throw an exception.
- Any exception will effectively abort the save, so this acts as a form of validation.
+ One method is notified before a save, and is encouraged to throw an
+ exception. Any exception will effectively abort the save, so this acts as a
+ form of validation.
  <p>
- The other method is notified after a save, and it is not supposed to throw
- an exception. This may be used to trigger an update in other parts of the application,
- for example.</div>
+ The other method is notified after a save, and it is not supposed to throw an
+ exception. This may be used to trigger an update in other parts of the
+ application, for example.</div>
 </li>
 </ul>
 </div>
@@ -131,8 +133,8 @@ var activeTableTab = "activeTableTab";
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/data/branch/BranchListener.html#beforeSave-com.pump.data.branch.Branch-com.pump.data.branch.Branch-">beforeSave</a></span>(<a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch">Branch</a>&lt;<a href="../../../../com/pump/data/branch/BranchListener.html" title="type parameter in BranchListener">K</a>&gt;&nbsp;parent,
           <a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch">Branch</a>&lt;<a href="../../../../com/pump/data/branch/BranchListener.html" title="type parameter in BranchListener">K</a>&gt;&nbsp;child)</code>
-<div class="block">This method is called when a child branch is being saved to its parent before
- data is saved to the parent.</div>
+<div class="block">This method is called when a child branch is being saved to its parent
+ before data is saved to the parent.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -166,25 +168,24 @@ var activeTableTab = "activeTableTab";
 <pre>void&nbsp;beforeSave(<a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch">Branch</a>&lt;<a href="../../../../com/pump/data/branch/BranchListener.html" title="type parameter in BranchListener">K</a>&gt;&nbsp;parent,
                 <a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch">Branch</a>&lt;<a href="../../../../com/pump/data/branch/BranchListener.html" title="type parameter in BranchListener">K</a>&gt;&nbsp;child)
          throws <a href="../../../../com/pump/data/branch/SaveException.html" title="class in com.pump.data.branch">SaveException</a></pre>
-<div class="block">This method is called when a child branch is being saved to its parent before
- data is saved to the parent.
- During invocation we should have a write lock on the parent and a read lock
- on the child.
+<div class="block">This method is called when a child branch is being saved to its parent
+ before data is saved to the parent. During invocation we should have a
+ write lock on the parent and a read lock on the child.
  <p>
- This method may throw a <code>SaveException</code> if it wants to abort this
- commit. This method functions as a hook to add custom validation logic to review
- a branch before changes are saved. Any other <code>RuntimeException</code> will
- also abort the commit.
+ This method may throw a <code>SaveException</code> if it wants to abort
+ this commit. This method functions as a hook to add custom validation
+ logic to review a branch before changes are saved. Any other
+ <code>RuntimeException</code> will also abort the commit.
  <p>
- If one listener throws a SaveException here, other listeners may also be notified
- so the exceptions can be collected and combined.</div>
+ If one listener throws a SaveException here, other listeners may also be
+ notified so the exceptions can be collected and combined.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>parent</code> - the parent branch the child is being saved to.</dd>
 <dd><code>child</code> - the child branch the parent is absorbing.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../../../com/pump/data/branch/SaveException.html" title="class in com.pump.data.branch">SaveException</a></code> - if this save request should be rejected. Note this can
- be a <a href="../../../../com/pump/data/branch/MultipleSaveException.html" title="class in com.pump.data.branch"><code>MultipleSaveException</code></a> to represent multiple problems.</dd>
+<dd><code><a href="../../../../com/pump/data/branch/SaveException.html" title="class in com.pump.data.branch">SaveException</a></code> - if this save request should be rejected. Note this can be a
+             <a href="../../../../com/pump/data/branch/MultipleSaveException.html" title="class in com.pump.data.branch"><code>MultipleSaveException</code></a> to represent multiple problems.</dd>
 </dl>
 </li>
 </ul>
@@ -196,12 +197,14 @@ var activeTableTab = "activeTableTab";
 <h4>branchSaved</h4>
 <pre>void&nbsp;branchSaved(<a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch">Branch</a>&lt;<a href="../../../../com/pump/data/branch/BranchListener.html" title="type parameter in BranchListener">K</a>&gt;&nbsp;parent,
                  <a href="../../../../com/pump/data/branch/Branch.html" title="interface in com.pump.data.branch">Branch</a>&lt;<a href="../../../../com/pump/data/branch/BranchListener.html" title="type parameter in BranchListener">K</a>&gt;&nbsp;child)</pre>
-<div class="block">This method is called after a branch has been saved to its parent.
- During invocation we should have a read lock on both the parent and child branch.
+<div class="block">This method is called after a branch has been saved to its parent. During
+ invocation we should have a read lock on both the parent and child
+ branch.
  <p>
- This method should not throw an exception. This method functions more as a traditional
- listener: it should inspect, but not typically edit. If one listener throws an exception,
- it should not prevent other listeners from also being notified.</div>
+ This method should not throw an exception. This method functions more as
+ a traditional listener: it should inspect, but not typically edit. If one
+ listener throws an exception, it should not prevent other listeners from
+ also being notified.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>parent</code> - the parent branch the child was committed to.</dd>

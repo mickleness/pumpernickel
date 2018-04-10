@@ -116,34 +116,39 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object
 implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="interface in com.pump.image.pixel">PixelIterator</a></pre>
 <div class="block">This pixel iterator processes a <code>java.awt.Image</code> in a single pass
- (either top-to-bottom or bottom-to-top).  The advantage of this class is that
+ (either top-to-bottom or bottom-to-top). The advantage of this class is that
  it pipes all this information through the iterator interface as it becomes
  available: so a buffer of the <i>entire</i> image is not kept in memory.
- <p>This uses the <code>ImageConsumer</code>/<code>ImageProducer</code> model
- for collecting image data.
- <p>If you combine this with the <code>ScalingIterator</code> class: then
- this means you can pipe data from a large abstract image into a small
- thumbnail without consuming too much memory.  For example: I can create
- a thumbnail of a 18967x13606 pixel JPEG in just a few seconds with
- a very low memory footprint using this class.
- <p>The disadvantage to this class is it relies on being able to
- read images in a <i>single pass</i>.  There is no guarantee that the
- <code>ImageProducer</code> will actually provide all the data in
- a single pass of consecutive rows. (Unfortunately the <code>ImageConsumer</code> hint
- regarding single passes appears to not be set correctly for many JPGs, so
- this object disregards that flag as unreliable).
- <p>What this means is: unless you are 100% confident that your <code>java.awt.Image</code>
- will be read in a single pass you need to wrap this iterator in a thorough
- try/catch clause, and be prepared for the possibility that it may fail
- and throw a <code>NonSinglePassException</code>.
- <p>Because this is piping data from the <code>ImageProducer</code> in
- another thread: it is recommended that you call <code>next(...)</code> or <code>skip()</code> until
- this iterator has no more pixel data.  There are some safeguards in place to 
- recover the other thread (a 5-second timeout as well as awareness of when
- this object is finalized), but those are unpleasant safety nets.  In many
- cases the AWT toolkit will only launch 4 "Image Fetcher" threads at a time:
- if all 4 are hung for a minimum of 5 seconds, then <i>no other images</i> can
- be processed through the AWT toolkit during that time.</div>
+ <p>
+ This uses the <code>ImageConsumer</code>/<code>ImageProducer</code> model for
+ collecting image data.
+ <p>
+ If you combine this with the <code>ScalingIterator</code> class: then this
+ means you can pipe data from a large abstract image into a small thumbnail
+ without consuming too much memory. For example: I can create a thumbnail of a
+ 18967x13606 pixel JPEG in just a few seconds with a very low memory footprint
+ using this class.
+ <p>
+ The disadvantage to this class is it relies on being able to read images in a
+ <i>single pass</i>. There is no guarantee that the <code>ImageProducer</code>
+ will actually provide all the data in a single pass of consecutive rows.
+ (Unfortunately the <code>ImageConsumer</code> hint regarding single passes
+ appears to not be set correctly for many JPGs, so this object disregards that
+ flag as unreliable).
+ <p>
+ What this means is: unless you are 100% confident that your
+ <code>java.awt.Image</code> will be read in a single pass you need to wrap
+ this iterator in a thorough try/catch clause, and be prepared for the
+ possibility that it may fail and throw a <code>NonSinglePassException</code>.
+ <p>
+ Because this is piping data from the <code>ImageProducer</code> in another
+ thread: it is recommended that you call <code>next(...)</code> or
+ <code>skip()</code> until this iterator has no more pixel data. There are
+ some safeguards in place to recover the other thread (a 5-second timeout as
+ well as awareness of when this object is finalized), but those are unpleasant
+ safety nets. In many cases the AWT toolkit will only launch 4 "Image Fetcher"
+ threads at a time: if all 4 are hung for a minimum of 5 seconds, then <i>no
+ other images</i> can be processed through the AWT toolkit during that time.</div>
 </li>
 </ul>
 </div>
@@ -165,8 +170,8 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.NonSinglePassException.html" title="class in com.pump.image.pixel">GenericImageSinglePassIterator.NonSinglePassException</a></span></code>
-<div class="block">This exception indicates that the source image did not provide
- all the pixel data in a single pass.</div>
+<div class="block">This exception indicates that the source image did not provide all the
+ pixel data in a single pass.</div>
 </td>
 </tr>
 </table>
@@ -187,15 +192,14 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <tr class="altColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.html#TIMEOUT_FOR_CONSTRUCTION">TIMEOUT_FOR_CONSTRUCTION</a></span></code>
-<div class="block">The number of milliseconds threads wait before timing out
- for construction.</div>
+<div class="block">The number of milliseconds threads wait before timing out for
+ construction.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.html#TIMEOUT_IN_PROCESS">TIMEOUT_IN_PROCESS</a></span></code>
-<div class="block">The number of milliseconds threads wait before timing out
- while reading.</div>
+<div class="block">The number of milliseconds threads wait before timing out while reading.</div>
 </td>
 </tr>
 </table>
@@ -235,16 +239,16 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <td class="colFirst"><code>static <a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.html" title="class in com.pump.image.pixel">GenericImageSinglePassIterator</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.html#get-java.io.File-int-">get</a></span>(java.io.File&nbsp;file,
    int&nbsp;iteratorType)</code>
-<div class="block">Returns a <code>GenericImageSinglePassIterator</code> that is
- either a <code>IntPixelIterator</code> or a <code>BytePixelIterator</code>.</div>
+<div class="block">Returns a <code>GenericImageSinglePassIterator</code> that is either a
+ <code>IntPixelIterator</code> or a <code>BytePixelIterator</code>.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.html" title="class in com.pump.image.pixel">GenericImageSinglePassIterator</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.html#get-java.awt.Image-int-">get</a></span>(java.awt.Image&nbsp;image,
    int&nbsp;iteratorType)</code>
-<div class="block">Returns a <code>GenericImageSinglePassIterator</code> that is
- either a <code>IntPixelIterator</code> or a <code>BytePixelIterator</code>.</div>
+<div class="block">Returns a <code>GenericImageSinglePassIterator</code> that is either a
+ <code>IntPixelIterator</code> or a <code>BytePixelIterator</code>.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -270,8 +274,7 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.html#getMinimumArrayLength--">getMinimumArrayLength</a></span>()</code>
-<div class="block">The length to create arrays to pass to the
- <code>next(...)</code> method.</div>
+<div class="block">The length to create arrays to pass to the <code>next(...)</code> method.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -289,15 +292,15 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.html#isDone--">isDone</a></span>()</code>
-<div class="block">If false then there is still pixel data to process
- by calling <code>next(...)</code>.</div>
+<div class="block">If false then there is still pixel data to process by calling
+ <code>next(...)</code>.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.html#isOpaque--">isOpaque</a></span>()</code>
-<div class="block">Returns true if the pixel type of this iterator can only
- express opaque images.</div>
+<div class="block">Returns true if the pixel type of this iterator can only express opaque
+ images.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -348,8 +351,7 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <li class="blockList">
 <h4>TIMEOUT_IN_PROCESS</h4>
 <pre>public static&nbsp;long TIMEOUT_IN_PROCESS</pre>
-<div class="block">The number of milliseconds threads wait before timing out
- while reading.
+<div class="block">The number of milliseconds threads wait before timing out while reading.
  By default this is 5000.</div>
 </li>
 </ul>
@@ -360,10 +362,9 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <li class="blockList">
 <h4>TIMEOUT_FOR_CONSTRUCTION</h4>
 <pre>public static&nbsp;long TIMEOUT_FOR_CONSTRUCTION</pre>
-<div class="block">The number of milliseconds threads wait before timing out
- for construction.  Note construction may be severely delayed,
- because Java's AWT classes only allow 4 threads at a time.
- By default this is 120,000.</div>
+<div class="block">The number of milliseconds threads wait before timing out for
+ construction. Note construction may be severely delayed, because Java's
+ AWT classes only allow 4 threads at a time. By default this is 120,000.</div>
 </li>
 </ul>
 </li>
@@ -385,12 +386,14 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <div class="block">Returns a <code>GenericImageSinglePassIntIterator</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>file</code> - <code>Toolkit.createImage(filePath)</code> is used to create the
- <code>java.awt.Image</code>, so the supported image types are JPG, PNG and GIF.</dd>
-<dd><code>iteratorType</code> - one of these 4 BufferedImage types:
- TYPE_INT_ARGB, TYPE_INT_ARGB_PRE, TYPE_INT_RGB, TYPE_INT_BGR.</dd>
+<dd><code>file</code> - <code>Toolkit.createImage(filePath)</code> is used to create
+            the <code>java.awt.Image</code>, so the supported image types
+            are JPG, PNG and GIF.</dd>
+<dd><code>iteratorType</code> - one of these 4 BufferedImage types: TYPE_INT_ARGB,
+            TYPE_INT_ARGB_PRE, TYPE_INT_RGB, TYPE_INT_BGR.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a <code>GenericImageSinglePassIntIterator</code> for the file provided.</dd>
+<dd>a <code>GenericImageSinglePassIntIterator</code> for the file
+         provided.</dd>
 </dl>
 </li>
 </ul>
@@ -405,12 +408,14 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <div class="block">Returns a <code>GenericImageSinglePassByteIterator</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>file</code> - <code>Toolkit.createImage(filePath)</code> is used to create the
- <code>java.awt.Image</code>, so the supported image types are JPG, PNG and GIF.</dd>
-<dd><code>iteratorType</code> - one of these 4 BufferedImage types:
- TYPE_3BYTE_BGR, TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE.</dd>
+<dd><code>file</code> - <code>Toolkit.createImage(filePath)</code> is used to create
+            the <code>java.awt.Image</code>, so the supported image types
+            are JPG, PNG and GIF.</dd>
+<dd><code>iteratorType</code> - one of these 4 BufferedImage types: TYPE_3BYTE_BGR,
+            TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a <code>GenericImageSinglePassByteIterator</code> for the file provided.</dd>
+<dd>a <code>GenericImageSinglePassByteIterator</code> for the file
+         provided.</dd>
 </dl>
 </li>
 </ul>
@@ -422,17 +427,19 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <h4>get</h4>
 <pre>public static&nbsp;<a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.html" title="class in com.pump.image.pixel">GenericImageSinglePassIterator</a>&nbsp;get(java.io.File&nbsp;file,
                                                  int&nbsp;iteratorType)</pre>
-<div class="block">Returns a <code>GenericImageSinglePassIterator</code> that is
- either a <code>IntPixelIterator</code> or a <code>BytePixelIterator</code>.</div>
+<div class="block">Returns a <code>GenericImageSinglePassIterator</code> that is either a
+ <code>IntPixelIterator</code> or a <code>BytePixelIterator</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>file</code> - <code>Toolkit.createImage(filePath)</code> is used to create the
- <code>java.awt.Image</code>, so the supported image types are JPG, PNG and GIF.</dd>
-<dd><code>iteratorType</code> - one of these 8 BufferedImage types:
- TYPE_INT_ARGB, TYPE_INT_ARGB_PRE, TYPE_INT_RGB, TYPE_INT_BGR,
- TYPE_3BYTE_BGR, TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE.</dd>
+<dd><code>file</code> - <code>Toolkit.createImage(filePath)</code> is used to create
+            the <code>java.awt.Image</code>, so the supported image types
+            are JPG, PNG and GIF.</dd>
+<dd><code>iteratorType</code> - one of these 8 BufferedImage types: TYPE_INT_ARGB,
+            TYPE_INT_ARGB_PRE, TYPE_INT_RGB, TYPE_INT_BGR, TYPE_3BYTE_BGR,
+            TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a <code>GenericImageSinglePassIterator</code> for the file provided.</dd>
+<dd>a <code>GenericImageSinglePassIterator</code> for the file
+         provided.</dd>
 </dl>
 </li>
 </ul>
@@ -445,14 +452,15 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <pre>public static&nbsp;java.awt.image.BufferedImage&nbsp;createScaledImage(java.net.URL&nbsp;url,
                                                              java.awt.Dimension&nbsp;maxSize)</pre>
 <div class="block">Create a scaled image from a URL.
- <p>If the graphic is already smaller than the maximum size you
- request: then the graphic is returned at its original size.</div>
+ <p>
+ If the graphic is already smaller than the maximum size you request: then
+ the graphic is returned at its original size.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>url</code> - the graphic to create a thumbnail of.</dd>
-<dd><code>maxSize</code> - the largest bounds of the thumbnail.  For example:
- if the graphic is 1024x768, and you pass a maximum bounds of 120x120:
- then the resulting thumbnail will be 120x90.</dd>
+<dd><code>maxSize</code> - the largest bounds of the thumbnail. For example: if the
+            graphic is 1024x768, and you pass a maximum bounds of 120x120:
+            then the resulting thumbnail will be 120x90.</dd>
 </dl>
 </li>
 </ul>
@@ -464,16 +472,17 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <h4>get</h4>
 <pre>public static&nbsp;<a href="../../../../com/pump/image/pixel/GenericImageSinglePassIterator.html" title="class in com.pump.image.pixel">GenericImageSinglePassIterator</a>&nbsp;get(java.awt.Image&nbsp;image,
                                                  int&nbsp;iteratorType)</pre>
-<div class="block">Returns a <code>GenericImageSinglePassIterator</code> that is
- either a <code>IntPixelIterator</code> or a <code>BytePixelIterator</code>.</div>
+<div class="block">Returns a <code>GenericImageSinglePassIterator</code> that is either a
+ <code>IntPixelIterator</code> or a <code>BytePixelIterator</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>image</code> - the image to iterate over.</dd>
-<dd><code>iteratorType</code> - one of these 8 BufferedImage types:
- TYPE_INT_ARGB, TYPE_INT_ARGB_PRE, TYPE_INT_RGB, TYPE_INT_BGR,
- TYPE_3BYTE_BGR, TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE.</dd>
+<dd><code>iteratorType</code> - one of these 8 BufferedImage types: TYPE_INT_ARGB,
+            TYPE_INT_ARGB_PRE, TYPE_INT_RGB, TYPE_INT_BGR, TYPE_3BYTE_BGR,
+            TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a <code>GenericImageSinglePassIterator</code> for the image provided.</dd>
+<dd>a <code>GenericImageSinglePassIterator</code> for the image
+         provided.</dd>
 </dl>
 </li>
 </ul>
@@ -484,9 +493,10 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <li class="blockList">
 <h4>getType</h4>
 <pre>public&nbsp;int&nbsp;getType()</pre>
-<div class="block">Returns the pixel type of this iterator.  This will be one of these 8 BufferedImage types:
- TYPE_INT_ARGB, TYPE_INT_ARGB_PRE, TYPE_INT_RGB, TYPE_INT_BGR,
- TYPE_3BYTE_BGR, TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE.</div>
+<div class="block">Returns the pixel type of this iterator. This will be one of these 8
+ BufferedImage types: TYPE_INT_ARGB, TYPE_INT_ARGB_PRE, TYPE_INT_RGB,
+ TYPE_INT_BGR, TYPE_3BYTE_BGR, TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR,
+ TYPE_4BYTE_ABGR_PRE.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/pixel/PixelIterator.html#getType--">getType</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/image/pixel/PixelIterator.html" title="interface in com.pump.image.pixel">PixelIterator</a></code></dd>
@@ -500,8 +510,8 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <li class="blockList">
 <h4>isOpaque</h4>
 <pre>public&nbsp;boolean&nbsp;isOpaque()</pre>
-<div class="block">Returns true if the pixel type of this iterator can only
- express opaque images.</div>
+<div class="block">Returns true if the pixel type of this iterator can only express opaque
+ images.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/pixel/PixelIterator.html#isOpaque--">isOpaque</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/image/pixel/PixelIterator.html" title="interface in com.pump.image.pixel">PixelIterator</a></code></dd>
@@ -515,8 +525,8 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <li class="blockList">
 <h4>isDone</h4>
 <pre>public&nbsp;boolean&nbsp;isDone()</pre>
-<div class="block">If false then there is still pixel data to process
- by calling <code>next(...)</code>.</div>
+<div class="block">If false then there is still pixel data to process by calling
+ <code>next(...)</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/pixel/PixelIterator.html#isDone--">isDone</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/image/pixel/PixelIterator.html" title="interface in com.pump.image.pixel">PixelIterator</a></code></dd>
@@ -578,8 +588,7 @@ implements <a href="../../../../com/pump/image/pixel/PixelIterator.html" title="
 <li class="blockList">
 <h4>getMinimumArrayLength</h4>
 <pre>public&nbsp;int&nbsp;getMinimumArrayLength()</pre>
-<div class="block">The length to create arrays to pass to the
- <code>next(...)</code> method.</div>
+<div class="block">The length to create arrays to pass to the <code>next(...)</code> method.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/image/pixel/PixelIterator.html#getMinimumArrayLength--">getMinimumArrayLength</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/pump/image/pixel/PixelIterator.html" title="interface in com.pump.image.pixel">PixelIterator</a></code></dd>

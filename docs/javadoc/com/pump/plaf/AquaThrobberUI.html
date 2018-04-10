@@ -120,17 +120,29 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">AquaThrobberUI</span>
 extends <a href="../../../com/pump/plaf/ThrobberUI.html" title="class in com.pump.plaf">ThrobberUI</a></pre>
-<div class="block">Twelve short line segments that rotate in a clockwise direction. The line segments are painted in the component's foreground color,
- with varying levels of opacity.
- <p><table summary="Sample Animations of AquaThrobberUI" cellpadding="10"><tr>
- <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUI.gif" alt="AquaThrobberUI"></td>
- <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUIx2.gif" alt="AquaThrobberUI Magnified 2x"></td>
- <td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUIx4.gif" alt="AquaThrobberUI Magnified 4x"></td>
- </tr></table>
- <p>On installation: the component's foreground is set to gray,
- but if that is changed then that color is used to render this animation.
- <P>The default period for this animation is 500, but you can modify
- this with the period client properties <a href="../../../com/pump/plaf/ThrobberUI.html#PERIOD_KEY"><code>ThrobberUI.PERIOD_KEY</code></a> or
+<div class="block">Twelve short line segments that rotate in a clockwise direction. The line
+ segments are painted in the component's foreground color, with varying levels
+ of opacity.
+ <p>
+ <table summary="Sample Animations of AquaThrobberUI" cellpadding="10">
+ <tr>
+ <td><img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUI.gif"
+ alt="AquaThrobberUI"></td>
+ <td><img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUIx2.gif"
+ alt="AquaThrobberUI Magnified 2x"></td>
+ <td><img src=
+ "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUIx4.gif"
+ alt="AquaThrobberUI Magnified 4x"></td>
+ </tr>
+ </table>
+ <p>
+ On installation: the component's foreground is set to gray, but if that is
+ changed then that color is used to render this animation.
+ <P>
+ The default period for this animation is 500, but you can modify this with
+ the period client properties <a href="../../../com/pump/plaf/ThrobberUI.html#PERIOD_KEY"><code>ThrobberUI.PERIOD_KEY</code></a> or
  <a href="../../../com/pump/plaf/ThrobberUI.html#PERIOD_MULTIPLIER_KEY"><code>ThrobberUI.PERIOD_MULTIPLIER_KEY</code></a>.</div>
 </li>
 </ul>
@@ -215,8 +227,8 @@ extends <a href="../../../com/pump/plaf/ThrobberUI.html" title="class in com.pum
      int&nbsp;r1,
      int&nbsp;r2,
      float&nbsp;strokeWidth)</code>
-<div class="block">Paints the 12 angular lines in a circle often used to indicate
- progress in the Aqua interface.</div>
+<div class="block">Paints the 12 angular lines in a circle often used to indicate progress
+ in the Aqua interface.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -317,23 +329,26 @@ extends <a href="../../../com/pump/plaf/ThrobberUI.html" title="class in com.pum
                          int&nbsp;r1,
                          int&nbsp;r2,
                          float&nbsp;strokeWidth)</pre>
-<div class="block">Paints the 12 angular lines in a circle often used to indicate
- progress in the Aqua interface.
- <p>It is strongly recommended that you use quality rendering hints
- (include stroke control) to achieve an aesthetic look.</div>
+<div class="block">Paints the 12 angular lines in a circle often used to indicate progress
+ in the Aqua interface.
+ <p>
+ It is strongly recommended that you use quality rendering hints (include
+ stroke control) to achieve an aesthetic look.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graphics to paint to</dd>
-<dd><code>fraction</code> - a fractional value between [0,1] indicating how far
- the angle has progress. As this value increases the highlighted line
- segment moves clockwise. The default behavior is for this value to iterate
- from [0,1] in approximately 1 second.</dd>
-<dd><code>foreground</code> - the color of the darkest line segment. All other line
- segments are calculated as translucent shades of this color.</dd>
+<dd><code>fraction</code> - a fractional value between [0,1] indicating how far the angle
+            has progress. As this value increases the highlighted line
+            segment moves clockwise. The default behavior is for this
+            value to iterate from [0,1] in approximately 1 second.</dd>
+<dd><code>foreground</code> - the color of the darkest line segment. All other line segments
+            are calculated as translucent shades of this color.</dd>
 <dd><code>centerX</code> - the x-value of the center of this circle.</dd>
 <dd><code>centerY</code> - the y-value of the center of this circle.</dd>
-<dd><code>r1</code> - the radius of one end point of a line segment in this circle. The default value is 5.</dd>
-<dd><code>r2</code> - the radius of the other end point of a line segment in this circle. The default value is 8.</dd>
+<dd><code>r1</code> - the radius of one end point of a line segment in this circle.
+            The default value is 5.</dd>
+<dd><code>r2</code> - the radius of the other end point of a line segment in this
+            circle. The default value is 8.</dd>
 <dd><code>strokeWidth</code> - the width of the stroke. The default value is 1.9f.</dd>
 </dl>
 </li>
@@ -362,25 +377,22 @@ extends <a href="../../../com/pump/plaf/ThrobberUI.html" title="class in com.pum
                             java.awt.Dimension&nbsp;size,
                             java.lang.Float&nbsp;fixedFraction)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/plaf/ThrobberUI.html#paintForeground-java.awt.Graphics2D-javax.swing.JComponent-java.awt.Dimension-java.lang.Float-">ThrobberUI</a></code></span></div>
-<div class="block">Paints the foreground. The Graphics2D passed to this object
- is configured as if you were painting <code>size</code> argument
- (which is the preferred size). So if the preferred size of this
- ThrobberUI is 16x16, you always paint as if you're painting to a
- 16x16 area.</div>
+<div class="block">Paints the foreground. The Graphics2D passed to this object is configured
+ as if you were painting <code>size</code> argument (which is the
+ preferred size). So if the preferred size of this ThrobberUI is 16x16,
+ you always paint as if you're painting to a 16x16 area.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/plaf/ThrobberUI.html#paintForeground-java.awt.Graphics2D-javax.swing.JComponent-java.awt.Dimension-java.lang.Float-">paintForeground</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/plaf/ThrobberUI.html" title="class in com.pump.plaf">ThrobberUI</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the graphics to paint to.</dd>
-<dd><code>jc</code> - the component to paint, this may be null if
- used as an Icon.</dd>
-<dd><code>size</code> - the dimensions to paint to.
- Assume these are the dimensions of the component you
- are painting (the Graphics2D has been transformed to
- work within these dimensions).</dd>
-<dd><code>fixedFraction</code> - an optional fixed fraction from [0, 1] representing
- the state of this animation. If null: then this should be derived from
- the current time.</dd>
+<dd><code>jc</code> - the component to paint, this may be null if used as an Icon.</dd>
+<dd><code>size</code> - the dimensions to paint to. Assume these are the dimensions of
+            the component you are painting (the Graphics2D has been
+            transformed to work within these dimensions).</dd>
+<dd><code>fixedFraction</code> - an optional fixed fraction from [0, 1] representing the state
+            of this animation. If null: then this should be derived from
+            the current time.</dd>
 </dl>
 </li>
 </ul>
@@ -392,9 +404,9 @@ extends <a href="../../../com/pump/plaf/ThrobberUI.html" title="class in com.pum
 <h4>getDefaultForeground</h4>
 <pre>public&nbsp;java.awt.Color&nbsp;getDefaultForeground()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../com/pump/plaf/ThrobberUI.html#getDefaultForeground--">ThrobberUI</a></code></span></div>
-<div class="block">Return the default foreground color for this throbber. If
- this is not null: then during <code>installUI()</code>
- this will be assigned as the new foreground color.</div>
+<div class="block">Return the default foreground color for this throbber. If this is not
+ null: then during <code>installUI()</code> this will be assigned as the
+ new foreground color.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/plaf/ThrobberUI.html#getDefaultForeground--">getDefaultForeground</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/plaf/ThrobberUI.html" title="class in com.pump.plaf">ThrobberUI</a></code></dd>

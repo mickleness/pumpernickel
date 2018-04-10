@@ -113,8 +113,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>T</code> - an object describing each archive entry. For example:
- a <code>ZipEntry</code> or <code>TarEntry</code>.</dd>
+<dd><code>T</code> - an object describing each archive entry. For example: a
+            <code>ZipEntry</code> or <code>TarEntry</code>.</dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -125,17 +125,19 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">ArchiveLocation&lt;T&gt;</span>
 extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></pre>
 <div class="block">This represents an archive and all of its children.
- <P>This abstract superclass manages the tree structure and
- loading logic for subclasses. The loading is executed in a
- separated thread, but when there are no entities waiting for
- information about an archive: that thread is cancelled.
- <P>Both the root node (which doesn't have an <code>ArchiveEntry</code>)
- and all child nodes (which do) are represented with this class.
- This design choice introduces some inner complexity, but it was
- to simplify developer's interaction with this class. (That is:
- now they can just check <code>if(x instanceof TarArchiveLocation)</code>
- without worrying about whether an <code>IOLocation</code> might really
- resemble <code>ArchiveLocation$NodeSubclass</code>.)</div>
+ <P>
+ This abstract superclass manages the tree structure and loading logic for
+ subclasses. The loading is executed in a separated thread, but when there are
+ no entities waiting for information about an archive: that thread is
+ cancelled.
+ <P>
+ Both the root node (which doesn't have an <code>ArchiveEntry</code>) and all
+ child nodes (which do) are represented with this class. This design choice
+ introduces some inner complexity, but it was to simplify developer's
+ interaction with this class. (That is: now they can just check
+ <code>if(x instanceof TarArchiveLocation)</code> without worrying about
+ whether an <code>IOLocation</code> might really resemble
+ <code>ArchiveLocation$NodeSubclass</code>.)</div>
 </li>
 </ul>
 </div>
@@ -238,8 +240,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/ArchiveLocation.html#canRead--">canRead</a></span>()</code>
-<div class="block">If this returns true then <code>createInputStream()</code> should
- return successfully.</div>
+<div class="block">If this returns true then <code>createInputStream()</code> should return
+ successfully.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -256,15 +258,16 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../com/pump/io/location/ArchiveLocation.html" title="type parameter in ArchiveLocation">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/ArchiveLocation.html#createDirectory-java.lang.String-">createDirectory</a></span>(java.lang.String&nbsp;path)</code>
-<div class="block">This is invoked when the root node is cataloging the
- contents of an archive and it comes across "abc/foo.jpg"
- before there is a directory titled "abc".</div>
+<div class="block">This is invoked when the root node is cataloging the contents of an
+ archive and it comes across "abc/foo.jpg" before there is a directory
+ titled "abc".</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>java.io.InputStream</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/ArchiveLocation.html#createInputStream--">createInputStream</a></span>()</code>
-<div class="block">Creates an <code>InputStream</code> to read from this location -- if possible.</div>
+<div class="block">Creates an <code>InputStream</code> to read from this location -- if
+ possible.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -274,7 +277,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>java.io.OutputStream</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/ArchiveLocation.html#createOutputStream--">createOutputStream</a></span>()</code>
-<div class="block">Creates an <code>OutputStream</code> to write to this location -- if possible.</div>
+<div class="block">Creates an <code>OutputStream</code> to write to this location -- if
+ possible.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -298,8 +302,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>protected abstract java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/ArchiveLocation.html#getArchivePath--">getArchivePath</a></span>()</code>
-<div class="block">Return the path within the archive to this resource, or null if this
- is the root of this archive.</div>
+<div class="block">Return the path within the archive to this resource, or null if this is
+ the root of this archive.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -349,8 +353,7 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>java.net.URL</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/ArchiveLocation.html#getURL--">getURL</a></span>()</code>
-<div class="block">If possible this will return a URL pointing to this
- location.</div>
+<div class="block">If possible this will return a URL pointing to this location.</div>
 </td>
 </tr>
 <tr id="i20" class="altColor">
@@ -382,8 +385,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <tr id="i25" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/location/ArchiveLocation.html#isNavigable--">isNavigable</a></span>()</code>
-<div class="block">This indicates if the user is encouraged to navigate
- inside this location.</div>
+<div class="block">This indicates if the user is encouraged to navigate inside this
+ location.</div>
 </td>
 </tr>
 <tr id="i26" class="altColor">
@@ -475,8 +478,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>archive</h4>
 <pre>protected final&nbsp;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a> archive</pre>
-<div class="block">For the root node, this points to the archive.
- For all other nodes this is null.</div>
+<div class="block">For the root node, this points to the archive. For all other nodes this
+ is null.</div>
 </li>
 </ul>
 <a name="children">
@@ -506,8 +509,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <div class="block">The constructor for the root node.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>archive</code> - the resource this archive refers to.
- For example: this may be a "*.tar" or "*.zip" file.</dd>
+<dd><code>archive</code> - the resource this archive refers to. For example: this may be
+            a "*.tar" or "*.zip" file.</dd>
 </dl>
 </li>
 </ul>
@@ -525,8 +528,7 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>root</code> - the root node.</dd>
-<dd><code>entry</code> - the entry-specific information this node
- represents.</dd>
+<dd><code>entry</code> - the entry-specific information this node represents.</dd>
 </dl>
 </li>
 </ul>
@@ -546,16 +548,18 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <h4>isNavigable</h4>
 <pre>public&nbsp;boolean&nbsp;isNavigable()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#isNavigable--">IOLocation</a></code></span></div>
-<div class="block">This indicates if the user is encouraged to navigate
- inside this location.
- <P>For example, on Macs certain folders end in ".app".  Although
- technically these are directories, users shouldn't navigate inside
- them.
- <p>Also: archive files (like the ZipArchiveLocation) are a file (and
- not a directory), but they are navigable.
- <p>By default this returns <code>isDirectory()</code>,
- but if <code>omitMacBundles</code> is true this will return false
- if this location's name ends with a suffix like ".app".</div>
+<div class="block">This indicates if the user is encouraged to navigate inside this
+ location.
+ <P>
+ For example, on Macs certain folders end in ".app". Although technically
+ these are directories, users shouldn't navigate inside them.
+ <p>
+ Also: archive files (like the ZipArchiveLocation) are a file (and not a
+ directory), but they are navigable.
+ <p>
+ By default this returns <code>isDirectory()</code>, but if
+ <code>omitMacBundles</code> is true this will return false if this
+ location's name ends with a suffix like ".app".</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#isNavigable--">isNavigable</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -573,8 +577,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>getArchiveEntry</h4>
 <pre>public final&nbsp;<a href="../../../../com/pump/io/location/ArchiveLocation.html" title="type parameter in ArchiveLocation">T</a>&nbsp;getArchiveEntry()</pre>
-<div class="block">Return a description of this archive entry. This will
- return null for the root container.</div>
+<div class="block">Return a description of this archive entry. This will return null for the
+ root container.</div>
 </li>
 </ul>
 <a name="getPath--">
@@ -585,14 +589,13 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <h4>getPath</h4>
 <pre>public final&nbsp;java.lang.String&nbsp;getPath()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#getPath--">IOLocation</a></code></span></div>
-<div class="block">This returns a unique path for this location.
- This could be used for sorting, hashtables, or otherwise
- uniquely identifying this object.
- <P>Note this needs to <i>uniquely</i> the path, so
- different location types should include their unique
- prefixes.  (a file-based location should start with
- something like "file://", and a ftp-based location
- should start with "ftp://", etc.)</div>
+<div class="block">This returns a unique path for this location. This could be used for
+ sorting, hashtables, or otherwise uniquely identifying this object.
+ <P>
+ Note this needs to <i>uniquely</i> the path, so different location types
+ should include their unique prefixes. (a file-based location should start
+ with something like "file://", and a ftp-based location should start with
+ "ftp://", etc.)</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#getPath--">getPath</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -608,7 +611,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <pre>public final&nbsp;java.lang.String&nbsp;getName()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#getName--">IOLocation</a></code></span></div>
 <div class="block">This returns the file name of this location.
- <P>This should be the end of <code>getPath()</code>.</div>
+ <P>
+ This should be the end of <code>getPath()</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#getName--">getName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -662,15 +666,15 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <pre>public final&nbsp;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;getChild(java.lang.String&nbsp;name)
                           throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#getChild-java.lang.String-">IOLocation</a></code></span></div>
-<div class="block">This returns a reference to a child of this location.
- This may return null if this location cannot contain children
- (either because it is a file and not a directory, or because
- it is a directory that doesn't have write privileges).
- <p>Also note that this can return a child that does not
- exist.
- <p>The default implementation only polls existing
- children: subclasses are encouraged to override this
- to return locations that do not yet exist.</div>
+<div class="block">This returns a reference to a child of this location. This may return
+ null if this location cannot contain children (either because it is a
+ file and not a directory, or because it is a directory that doesn't have
+ write privileges).
+ <p>
+ Also note that this can return a child that does not exist.
+ <p>
+ The default implementation only polls existing children: subclasses are
+ encouraged to override this to return locations that do not yet exist.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#getChild-java.lang.String-">getChild</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -692,9 +696,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <pre>public final&nbsp;void&nbsp;mkdir()
                  throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#mkdir--">IOLocation</a></code></span></div>
-<div class="block">Creates a directory at this location.
- This will throw an exception if a file already
- exists at this location.</div>
+<div class="block">Creates a directory at this location. This will throw an exception if a
+ file already exists at this location.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#mkdir--">mkdir</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -712,11 +715,10 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <h4>getURL</h4>
 <pre>public final&nbsp;java.net.URL&nbsp;getURL()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#getURL--">IOLocation</a></code></span></div>
-<div class="block">If possible this will return a URL pointing to this
- location.  This may return <code>null</code> if no such
- URL exists. (For example: a collection of search results
- is a directory of valid IOLocations that does not have
- a URL.)</div>
+<div class="block">If possible this will return a URL pointing to this location. This may
+ return <code>null</code> if no such URL exists. (For example: a
+ collection of search results is a directory of valid IOLocations that
+ does not have a URL.)</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#getURL--">getURL</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -734,17 +736,21 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <pre>public&nbsp;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;setName(java.lang.String&nbsp;s)
                    throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#setName-java.lang.String-">IOLocation</a></code></span></div>
-<div class="block">This changes the name of this location.  If there are resources currently
- at this location: those resources should be moved if <code>getName().equals(s)</code>
- is <code>false</code> and no exceptions occur.
- <P>This method is not capable of moving a resource to another directory structure.</div>
+<div class="block">This changes the name of this location. If there are resources currently
+ at this location: those resources should be moved if
+ <code>getName().equals(s)</code> is <code>false</code> and no exceptions
+ occur.
+ <P>
+ This method is not capable of moving a resource to another directory
+ structure.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#setName-java.lang.String-">setName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - the name name of this resource.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new IOLocation the resource formerly at this location can now be accessed from.</dd>
+<dd>the new IOLocation the resource formerly at this location can now
+         be accessed from.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.SetNameException.html" title="class in com.pump.io.location">IOLocation.SetNameException</a></code> - if an error occurred renaming this file.</dd>
 <dd><code>java.io.IOException</code> - if an IO problem occurs.</dd>
@@ -760,7 +766,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <pre>public&nbsp;java.io.OutputStream&nbsp;createOutputStream()
                                         throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#createOutputStream--">IOLocation</a></code></span></div>
-<div class="block">Creates an <code>OutputStream</code> to write to this location -- if possible.</div>
+<div class="block">Creates an <code>OutputStream</code> to write to this location -- if
+ possible.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#createOutputStream--">createOutputStream</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -798,10 +805,10 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <pre>public final&nbsp;boolean&nbsp;exists()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#exists--">IOLocation</a></code></span></div>
 <div class="block">Indicates whether this resource exists.
- <p>Generally <code>IOLocation</code> objects are hard to
- come across if they aren't associated with a resource, but
- if you delete or rename a location successfully this will
- return <code>false</code>.</div>
+ <p>
+ Generally <code>IOLocation</code> objects are hard to come across if they
+ aren't associated with a resource, but if you delete or rename a location
+ successfully this will return <code>false</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#exists--">exists</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -835,8 +842,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <h4>canRead</h4>
 <pre>public&nbsp;boolean&nbsp;canRead()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#canRead--">IOLocation</a></code></span></div>
-<div class="block">If this returns true then <code>createInputStream()</code> should
- return successfully.</div>
+<div class="block">If this returns true then <code>createInputStream()</code> should return
+ successfully.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#canRead--">canRead</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -859,16 +866,14 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#listChildren-com.pump.util.Receiver-com.pump.swing.BasicCancellable-">listChildren</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>receiver</code> - an optional <code>Receiver</code> to be
- notified as each child is processed.</dd>
-<dd><code>cancellable</code> - an optional <code>Cancellable</code>.
- If non-null: classes that
- extend this class should constantly poll it to see
- if <code>isCancelled()</code> is <code>true</code>.</dd>
+<dd><code>receiver</code> - an optional <code>Receiver</code> to be notified as each child
+            is processed.</dd>
+<dd><code>cancellable</code> - an optional <code>Cancellable</code>. If non-null: classes
+            that extend this class should constantly poll it to see if
+            <code>isCancelled()</code> is <code>true</code>.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>all the children (if any) of this object.
- This should not return null, but may return an empty
- array for non-directories.</dd>
+<dd>all the children (if any) of this object. This should not return
+         null, but may return an empty array for non-directories.</dd>
 </dl>
 </li>
 </ul>
@@ -892,16 +897,15 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>createDirectory</h4>
 <pre>protected abstract&nbsp;<a href="../../../../com/pump/io/location/ArchiveLocation.html" title="type parameter in ArchiveLocation">T</a>&nbsp;createDirectory(java.lang.String&nbsp;path)</pre>
-<div class="block">This is invoked when the root node is cataloging the
- contents of an archive and it comes across "abc/foo.jpg"
- before there is a directory titled "abc". We'd much rather
- have a separate archive entry for the "abc" directory (so
- we can correctly define all the meta info), but this
+<div class="block">This is invoked when the root node is cataloging the contents of an
+ archive and it comes across "abc/foo.jpg" before there is a directory
+ titled "abc". We'd much rather have a separate archive entry for the
+ "abc" directory (so we can correctly define all the meta info), but this
  runner-up approach still gets the job done.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>path</code> - the full archive path name of a directory we need to
- catalog a file.</dd>
+<dd><code>path</code> - the full archive path name of a directory we need to catalog a
+            file.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an archive entry representing that path name.</dd>
 </dl>
@@ -926,7 +930,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <pre>protected abstract&nbsp;void&nbsp;listArchiveEntries(<a href="../../../../com/pump/util/Receiver.html" title="interface in com.pump.util">Receiver</a>&lt;<a href="../../../../com/pump/io/location/ArchiveLocation.html" title="type parameter in ArchiveLocation">T</a>&gt;&nbsp;receiver)
                                     throws java.io.IOException</pre>
 <div class="block">List all the archive entries.
- <p>This is only invoked on the root ArchiveLocation.</div>
+ <p>
+ This is only invoked on the root ArchiveLocation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>receiver</code> - the object to give new archive entries to.</dd>
@@ -954,8 +959,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <li class="blockList">
 <h4>getArchivePath</h4>
 <pre>protected abstract&nbsp;java.lang.String&nbsp;getArchivePath()</pre>
-<div class="block">Return the path within the archive to this resource, or null if this
- is the root of this archive.</div>
+<div class="block">Return the path within the archive to this resource, or null if this is
+ the root of this archive.</div>
 </li>
 </ul>
 <a name="isDirectory--">
@@ -1081,7 +1086,8 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <pre>public final&nbsp;java.io.InputStream&nbsp;createInputStream()
                                             throws java.io.IOException</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#createInputStream--">IOLocation</a></code></span></div>
-<div class="block">Creates an <code>InputStream</code> to read from this location -- if possible.</div>
+<div class="block">Creates an <code>InputStream</code> to read from this location -- if
+ possible.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#createInputStream--">createInputStream</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>
@@ -1114,14 +1120,14 @@ extends <a href="../../../../com/pump/io/location/IOLocation.html" title="class 
 <h4>getGroup</h4>
 <pre>public&nbsp;<a href="../../../../com/pump/io/location/IOLocationGroup.html" title="interface in com.pump.io.location">IOLocationGroup</a>&nbsp;getGroup()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html#getGroup--">IOLocation</a></code></span></div>
-<div class="block">This may return a group shared between related IOLocations.
- For example: if this location is accessed via a connection
- with a name and password, then all related locations should
- return the same object.  When the user switches to a location
- in a different group: then the former group's <code>dispose()</code>
- method is called.
- <p>This may return null if the <code>IOLocationGroup</code> is 
- not necessary.</div>
+<div class="block">This may return a group shared between related IOLocations. For example:
+ if this location is accessed via a connection with a name and password,
+ then all related locations should return the same object. When the user
+ switches to a location in a different group: then the former group's
+ <code>dispose()</code> method is called.
+ <p>
+ This may return null if the <code>IOLocationGroup</code> is not
+ necessary.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../com/pump/io/location/IOLocation.html#getGroup--">getGroup</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a></code></dd>

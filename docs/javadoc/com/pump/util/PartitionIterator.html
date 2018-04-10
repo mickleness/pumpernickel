@@ -116,19 +116,14 @@ var activeTableTab = "activeTableTab";
 extends java.lang.Object
 implements java.util.Iterator&lt;java.util.List&lt;java.util.List&lt;T&gt;&gt;&gt;</pre>
 <div class="block">This breaks a list up into a series of partitions. For example, if you pass
- in the elements [A, B, C] with a partition count of 2, then this will return the lists:
- [], [A, B, C]
- [A], [B, C]
- [A, B], [C]
- [A, B, C], []
+ in the elements [A, B, C] with a partition count of 2, then this will return
+ the lists: [], [A, B, C] [A], [B, C] [A, B], [C] [A, B, C], []
  
- You can also define a minimum partition size. For example: if this is 1, then the
- example above will only include:
- [A], [B, C]
- [A, B], [C]
+ You can also define a minimum partition size. For example: if this is 1, then
+ the example above will only include: [A], [B, C] [A, B], [C]
  
- The minimum partition size is enforced in the <a href="../../../com/pump/util/PartitionIterator.html#isValid-java.util.List-"><code>isValid(List)</code></a> method, which subclasses can
- further modify if necessary to filter out combinations.</div>
+ The minimum partition size is enforced in the <a href="../../../com/pump/util/PartitionIterator.html#isValid-java.util.List-"><code>isValid(List)</code></a> method,
+ which subclasses can further modify if necessary to filter out combinations.</div>
 </li>
 </ul>
 </div>

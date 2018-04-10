@@ -197,8 +197,8 @@ extends <a href="../../../com/pump/plaf/ButtonFill.html" title="class in com.pum
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>abstract java.awt.Paint</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/SimpleButtonFill.html#getRolloverFill-java.awt.Rectangle-">getRolloverFill</a></span>(java.awt.Rectangle&nbsp;fillRect)</code>
-<div class="block">The rollover fill of this button, or null if there is
- no special fill for rollovers.</div>
+<div class="block">The rollover fill of this button, or null if there is no special fill for
+ rollovers.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -291,10 +291,9 @@ extends <a href="../../../com/pump/plaf/ButtonFill.html" title="class in com.pum
 <li class="blockList">
 <h4>getDarkestFill</h4>
 <pre>public abstract&nbsp;java.awt.Paint&nbsp;getDarkestFill(java.awt.Rectangle&nbsp;fillRect)</pre>
-<div class="block">This fill is the darkest shade for this button.
- This is used for <code>JToggleButtons</code> to depict
- a selected state. If this is null, then
- <code>getDarkerFill()</code> may be used instead.</div>
+<div class="block">This fill is the darkest shade for this button. This is used for
+ <code>JToggleButtons</code> to depict a selected state. If this is null,
+ then <code>getDarkerFill()</code> may be used instead.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fillRect</code> - the rectangle the fill applies to.</dd>
@@ -310,17 +309,15 @@ extends <a href="../../../com/pump/plaf/ButtonFill.html" title="class in com.pum
 <li class="blockList">
 <h4>getDarkerFill</h4>
 <pre>public abstract&nbsp;java.awt.Paint&nbsp;getDarkerFill(java.awt.Rectangle&nbsp;fillRect)</pre>
-<div class="block">This fill is slightly darker than the normal fill.
- Depending on whether the button being rendered is
- a <code>JToggleButton</code>: this may be the fill
- used for the pressed state or (in non-toggle-buttons)
- the selected state.</div>
+<div class="block">This fill is slightly darker than the normal fill. Depending on whether
+ the button being rendered is a <code>JToggleButton</code>: this may be
+ the fill used for the pressed state or (in non-toggle-buttons) the
+ selected state.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fillRect</code> - the rectangle the fill applies to.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the paint to use when this button is pressed or
- selected.</dd>
+<dd>the paint to use when this button is pressed or selected.</dd>
 </dl>
 </li>
 </ul>
@@ -331,9 +328,9 @@ extends <a href="../../../com/pump/plaf/ButtonFill.html" title="class in com.pum
 <li class="blockList">
 <h4>getRolloverFill</h4>
 <pre>public abstract&nbsp;java.awt.Paint&nbsp;getRolloverFill(java.awt.Rectangle&nbsp;fillRect)</pre>
-<div class="block">The rollover fill of this button, or null if there is
- no special fill for rollovers.  If this is null, then
- <code>getDarkestFill()</code> may be used instead.</div>
+<div class="block">The rollover fill of this button, or null if there is no special fill for
+ rollovers. If this is null, then <code>getDarkestFill()</code> may be
+ used instead.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fillRect</code> - the rectangle the fill applies to.</dd>
@@ -349,7 +346,7 @@ extends <a href="../../../com/pump/plaf/ButtonFill.html" title="class in com.pum
 <li class="blockList">
 <h4>getNormalFill</h4>
 <pre>public abstract&nbsp;java.awt.Paint&nbsp;getNormalFill(java.awt.Rectangle&nbsp;fillRect)</pre>
-<div class="block">The normal fill of this button.  Unlike the other <code>getter()</code>
+<div class="block">The normal fill of this button. Unlike the other <code>getter()</code>
  methods in this class: this cannot return null.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

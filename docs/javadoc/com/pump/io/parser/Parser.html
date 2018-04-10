@@ -164,6 +164,10 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/parser/Parser.UnparsedToken.html" title="class in com.pump.io.parser">Parser.UnparsedToken</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/io/parser/Parser.WhitespaceToken.html" title="class in com.pump.io.parser">Parser.WhitespaceToken</a></span></code>
 <div class="block">This token is used to represent a consecutive series of whitespace.</div>
 </td>
@@ -288,7 +292,8 @@ extends java.lang.Object</pre>
 <div class="block">Parse Java source code.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>reader</code> - the stream to create <code>Token</code> objects from.</dd>
+<dd><code>in</code> - the stream to create <a href="../../../../com/pump/io/parser/Token.html" title="class in com.pump.io.parser"><code>Token</code></a> objects
+            from.</dd>
 <dd><code>includeWhitespaceTokens</code> - if false then this will ignore <a href="../../../../com/pump/io/parser/Parser.WhitespaceToken.html" title="class in com.pump.io.parser"><code>Parser.WhitespaceToken</code></a>
             objects.</dd>
 <dd><code>receiver</code> - the object that will receive tokens as they become available.</dd>
@@ -310,7 +315,8 @@ extends java.lang.Object</pre>
 <div class="block">Parse Java source code.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>in</code> - the stream to create <code>Token</code> objects from.</dd>
+<dd><code>in</code> - the stream to create <a href="../../../../com/pump/io/parser/Token.html" title="class in com.pump.io.parser"><code>Token</code></a> objects
+            from.</dd>
 <dd><code>includeWhitespaceTokens</code> - if false then this will ignore <a href="../../../../com/pump/io/parser/Parser.WhitespaceToken.html" title="class in com.pump.io.parser"><code>Parser.WhitespaceToken</code></a>
             objects.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -333,7 +339,8 @@ extends java.lang.Object</pre>
 <div class="block">Parse tokens, and then group them by line</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>in</code> - the stream to create <code>Token</code> objects from.</dd>
+<dd><code>in</code> - the stream to create <a href="../../../../com/pump/io/parser/Token.html" title="class in com.pump.io.parser"><code>Token</code></a> objects
+            from.</dd>
 <dd><code>includeWhitespaceTokens</code> - if false then this will ignore <a href="../../../../com/pump/io/parser/Parser.WhitespaceToken.html" title="class in com.pump.io.parser"><code>Parser.WhitespaceToken</code></a>
             objects.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -377,7 +384,8 @@ extends java.lang.Object</pre>
 <div class="block">Parse data from an InputStream.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>in</code> - the stream to create <code>Token</code> objects from.</dd>
+<dd><code>in</code> - the stream to create <a href="../../../../com/pump/io/parser/Token.html" title="class in com.pump.io.parser"><code>Token</code></a> objects
+            from.</dd>
 <dd><code>receiver</code> - the receiver in which tokens are placed as they are parsed.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.Exception</code></dd>

@@ -119,15 +119,19 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public final class <span class="typeNameLabel">CubicPath</span>
 extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.pump.geom">AbstractShape</a></pre>
-<div class="block">This is an editable path based on cubic bezier segments.
- Each node has "previous" and "next" control point.
- <p>The scale factor is used to limit the magnitude of the
- the control points.
- <p>Several methods have two sets of arguments:
- <ul><li>One only accepting the <code>nodeIndex</code>.  This looks at <i>all</i>
+<div class="block">This is an editable path based on cubic bezier segments. Each node has
+ "previous" and "next" control point.
+ <p>
+ The scale factor is used to limit the magnitude of the the control points.
+ <p>
+ Several methods have two sets of arguments:
+ <ul>
+ <li>One only accepting the <code>nodeIndex</code>. This looks at <i>all</i>
  nodes in the entire shape.
- <li>One accepting a <code>nodeIndex</code> and <code>pathIndex</code>.  This breaks
- the shape up into separate paths, and looks at all the nodes in a given path.</li></ul></div>
+ <li>One accepting a <code>nodeIndex</code> and <code>pathIndex</code>. This
+ breaks the shape up into separate paths, and looks at all the nodes in a
+ given path.</li>
+ </ul></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/pump/plaf/CubicPathCreationUI.html" title="class in com.pump.plaf"><code>CubicPathCreationUI</code></a></dd>
@@ -457,8 +461,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/CubicPath.html#setNextControlForNodeFromPrev-int-boolean-">setNextControlForNodeFromPrev</a></span>(int&nbsp;nodeIndex,
                              boolean&nbsp;includeDistance)</code>
-<div class="block">Sets the coordinates of the next control point for a node based on
- the previous control point.</div>
+<div class="block">Sets the coordinates of the next control point for a node based on the
+ previous control point.</div>
 </td>
 </tr>
 <tr id="i40" class="altColor">
@@ -466,8 +470,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/CubicPath.html#setNextControlForNodeFromPrev-int-int-boolean-">setNextControlForNodeFromPrev</a></span>(int&nbsp;pathIndex,
                              int&nbsp;nodeIndex,
                              boolean&nbsp;includeDistance)</code>
-<div class="block">Sets the coordinates of the next control point for a node based on
- the previous control point.</div>
+<div class="block">Sets the coordinates of the next control point for a node based on the
+ previous control point.</div>
 </td>
 </tr>
 <tr id="i41" class="rowColor">
@@ -641,11 +645,10 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <li class="blockList">
 <h4>setScaleFactor</h4>
 <pre>public&nbsp;boolean&nbsp;setScaleFactor(double&nbsp;sf)</pre>
-<div class="block">This sets the scale factor for this shape.  The default
- value is 1.0.</div>
+<div class="block">This sets the scale factor for this shape. The default value is 1.0.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>sf</code> - new the scale factor.  This must be greater than zero.</dd>
+<dd><code>sf</code> - new the scale factor. This must be greater than zero.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if this changed the scale factor.</dd>
 </dl>
@@ -732,7 +735,7 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>nodeIndex</code> - the node to examine.</dd>
 <dd><code>equalDistance</code> - if this is true then the control points have to be collinear
- <i>and</i> equidistant to the node point.</dd>
+            <i>and</i> equidistant to the node point.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the node is smooth.</dd>
 </dl>
@@ -753,7 +756,7 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dd><code>pathIndex</code> - the path to examine.</dd>
 <dd><code>nodeIndex</code> - the node to examine.</dd>
 <dd><code>equalDistance</code> - if this is true then the control points have to be collinear
- <i>and</i> equidistant to the node point.</dd>
+            <i>and</i> equidistant to the node point.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the node is smooth.</dd>
 </dl>
@@ -920,9 +923,10 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>nodeIndex</code> - the node index.</dd>
-<dd><code>dest</code> - the object to store the coordinates in.  May be null.</dd>
+<dd><code>dest</code> - the object to store the coordinates in. May be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>this will return the <code>dest</code> argument if it wasn't null.</dd>
+<dd>this will return the <code>dest</code> argument if it wasn't
+         null.</dd>
 </dl>
 </li>
 </ul>
@@ -950,9 +954,10 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pathIndex</code> - the path index.</dd>
 <dd><code>nodeIndex</code> - the node index.</dd>
-<dd><code>dest</code> - the object to store the coordinates in.  May be null.</dd>
+<dd><code>dest</code> - the object to store the coordinates in. May be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>this will return the <code>dest</code> argument if it wasn't null.</dd>
+<dd>this will return the <code>dest</code> argument if it wasn't
+         null.</dd>
 </dl>
 </li>
 </ul>
@@ -968,10 +973,11 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>nodeIndex</code> - the node index.</dd>
-<dd><code>p</code> - the object to store the coordinates in.  May be null.</dd>
+<dd><code>p</code> - the object to store the coordinates in. May be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>this will return <code>null</code> if there is no previous control point
- for this node.  Or this will return <code>p</code> if it wasn't null.</dd>
+<dd>this will return <code>null</code> if there is no previous
+         control point for this node. Or this will return <code>p</code>
+         if it wasn't null.</dd>
 </dl>
 </li>
 </ul>
@@ -984,13 +990,14 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <pre>public&nbsp;boolean&nbsp;setNextControlForNodeFromPrev(int&nbsp;pathIndex,
                                              int&nbsp;nodeIndex,
                                              boolean&nbsp;includeDistance)</pre>
-<div class="block">Sets the coordinates of the next control point for a node based on
- the previous control point.</div>
+<div class="block">Sets the coordinates of the next control point for a node based on the
+ previous control point.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pathIndex</code> - the path index.</dd>
 <dd><code>nodeIndex</code> - the node index.</dd>
-<dd><code>includeDistance</code> - whether the distances between control points and the node should be equal.</dd>
+<dd><code>includeDistance</code> - whether the distances between control points and the node
+            should be equal.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if this changed the shape.</dd>
 </dl>
@@ -1004,12 +1011,13 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <h4>setNextControlForNodeFromPrev</h4>
 <pre>public&nbsp;boolean&nbsp;setNextControlForNodeFromPrev(int&nbsp;nodeIndex,
                                              boolean&nbsp;includeDistance)</pre>
-<div class="block">Sets the coordinates of the next control point for a node based on
- the previous control point.</div>
+<div class="block">Sets the coordinates of the next control point for a node based on the
+ previous control point.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>nodeIndex</code> - the node index.</dd>
-<dd><code>includeDistance</code> - whether the distances between control points and the node should be equal.</dd>
+<dd><code>includeDistance</code> - whether the distances between control points and the node
+            should be equal.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if this changed the shape.</dd>
 </dl>
@@ -1030,7 +1038,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pathIndex</code> - the path index.</dd>
 <dd><code>nodeIndex</code> - the node index.</dd>
-<dd><code>includeDistance</code> - whether the distances between control points and the node should be equal.</dd>
+<dd><code>includeDistance</code> - whether the distances between control points and the node
+            should be equal.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if this changed the shape.</dd>
 </dl>
@@ -1049,7 +1058,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>nodeIndex</code> - the node index.</dd>
-<dd><code>includeDistance</code> - whether the distances between control points and the node should be equal.</dd>
+<dd><code>includeDistance</code> - whether the distances between control points and the node
+            should be equal.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if this changed the shape.</dd>
 </dl>
@@ -1121,9 +1131,9 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <h4>getNextNode</h4>
 <pre>public&nbsp;java.awt.geom.Point2D&nbsp;getNextNode(int&nbsp;nodeIndex,
                                          java.awt.geom.Point2D&nbsp;dest)</pre>
-<div class="block">Gets the next node after the indicated node.
- This may be useful if <code>nodeIndex</code> is the last node of a path
- and the "next" node is the zeroth node in this path.</div>
+<div class="block">Gets the next node after the indicated node. This may be useful if
+ <code>nodeIndex</code> is the last node of a path and the "next" node is
+ the zeroth node in this path.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>nodeIndex</code> - the node index.</dd>
@@ -1142,9 +1152,9 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <pre>public&nbsp;java.awt.geom.Point2D&nbsp;getNextNode(int&nbsp;pathIndex,
                                          int&nbsp;nodeIndex,
                                          java.awt.geom.Point2D&nbsp;dest)</pre>
-<div class="block">Gets the next node after the indicated node.
- This may be useful if <code>nodeIndex</code> is the last node of a path
- and the "next" node is the zeroth node in this path.</div>
+<div class="block">Gets the next node after the indicated node. This may be useful if
+ <code>nodeIndex</code> is the last node of a path and the "next" node is
+ the zeroth node in this path.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pathIndex</code> - the path index.</dd>
@@ -1163,9 +1173,9 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <h4>getPrevNode</h4>
 <pre>public&nbsp;java.awt.geom.Point2D&nbsp;getPrevNode(int&nbsp;nodeIndex,
                                          java.awt.geom.Point2D&nbsp;dest)</pre>
-<div class="block">Gets the previous node before the indicated node.
- This may be useful if <code>nodeIndex</code> is the zeroth node of a path
- and the "previous" node is the last node in this path.</div>
+<div class="block">Gets the previous node before the indicated node. This may be useful if
+ <code>nodeIndex</code> is the zeroth node of a path and the "previous"
+ node is the last node in this path.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>nodeIndex</code> - the node index.</dd>
@@ -1184,9 +1194,9 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <pre>public&nbsp;java.awt.geom.Point2D&nbsp;getPrevNode(int&nbsp;pathIndex,
                                          int&nbsp;nodeIndex,
                                          java.awt.geom.Point2D&nbsp;dest)</pre>
-<div class="block">Gets the previous node before the indicated node.
- This may be useful if <code>nodeIndex</code> is the zeroth node of a path
- and the "previous" node is the last node in this path.</div>
+<div class="block">Gets the previous node before the indicated node. This may be useful if
+ <code>nodeIndex</code> is the zeroth node of a path and the "previous"
+ node is the last node in this path.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pathIndex</code> - the path index.</dd>
@@ -1295,8 +1305,9 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dd><code>nodeIndex</code> - the node index.</dd>
 <dd><code>dest</code> - the optional destination to store the control point in.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>may return <code>null</code> if there is no next control point for a node.  Otherwise
- this will return <code>dest</code> if it is non-null.</dd>
+<dd>may return <code>null</code> if there is no next control point
+         for a node. Otherwise this will return <code>dest</code> if it is
+         non-null.</dd>
 </dl>
 </li>
 </ul>
@@ -1382,8 +1393,9 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dd><code>nodeIndex</code> - the node index.</dd>
 <dd><code>dest</code> - the optional destination to store the control point in.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>may return <code>null</code> if there is no next control point for a node.  Otherwise
- this will return <code>dest</code> if it is non-null.</dd>
+<dd>may return <code>null</code> if there is no next control point
+         for a node. Otherwise this will return <code>dest</code> if it is
+         non-null.</dd>
 </dl>
 </li>
 </ul>
@@ -1402,8 +1414,9 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dd><code>nodeIndex</code> - the node index.</dd>
 <dd><code>dest</code> - the optional destination to store the control point in.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>may return <code>null</code> if there is no next control point for a node.  Otherwise
- this will return <code>dest</code> if it is non-null.</dd>
+<dd>may return <code>null</code> if there is no next control point
+         for a node. Otherwise this will return <code>dest</code> if it is
+         non-null.</dd>
 </dl>
 </li>
 </ul>
@@ -1423,8 +1436,9 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dd><code>nodeIndex</code> - the node index.</dd>
 <dd><code>dest</code> - the optional destination to store the control point in.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>may return <code>null</code> if there is no next control point for a node.  Otherwise
- this will return <code>dest</code> if it is non-null.</dd>
+<dd>may return <code>null</code> if there is no next control point
+         for a node. Otherwise this will return <code>dest</code> if it is
+         non-null.</dd>
 </dl>
 </li>
 </ul>
@@ -1570,7 +1584,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/geom/AbstractShape.html#getWindingRule--">getWindingRule</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/geom/AbstractShape.html" title="class in com.pump.geom">AbstractShape</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>this will be <code>WIND_NON_ZERO</code> or <code>WIND_EVEN_ODD</code>.</dd>
+<dd>this will be <code>WIND_NON_ZERO</code> or
+         <code>WIND_EVEN_ODD</code>.</dd>
 </dl>
 </li>
 </ul>
@@ -1584,7 +1599,8 @@ extends <a href="../../../com/pump/geom/AbstractShape.html" title="class in com.
 <div class="block">Sets the winding rule.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>newRule</code> - the new winding rule.  This must be <code>WIND_NON_ZERO</code> or <code>WIND_EVEN_ODD</code>.</dd>
+<dd><code>newRule</code> - the new winding rule. This must be <code>WIND_NON_ZERO</code>
+            or <code>WIND_EVEN_ODD</code>.</dd>
 </dl>
 </li>
 </ul>

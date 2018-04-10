@@ -119,7 +119,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">IOLocationTreeIterator</span>
 extends <a href="../../../../com/pump/util/TreeIterator.html" title="class in com.pump.util">TreeIterator</a>&lt;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&gt;</pre>
-<div class="block">A <code>TreeIterator</code> similar to the <code>FileTreeIterator</code> class.</div>
+<div class="block">A <code>TreeIterator</code> similar to the <code>FileTreeIterator</code>
+ class.</div>
 </li>
 </ul>
 </div>
@@ -233,8 +234,8 @@ extends <a href="../../../../com/pump/util/TreeIterator.html" title="class in co
 <li class="blockList">
 <h4>filter</h4>
 <pre>public final&nbsp;<a href="../../../../com/pump/io/location/IOLocationFilter.html" title="class in com.pump.io.location">IOLocationFilter</a> filter</pre>
-<div class="block">The optional filter applied to this iterator. IOLocations that
- do not pass this filter will not be returned.</div>
+<div class="block">The optional filter applied to this iterator. IOLocations that do not
+ pass this filter will not be returned.</div>
 </li>
 </ul>
 </li>
@@ -258,9 +259,9 @@ extends <a href="../../../../com/pump/util/TreeIterator.html" title="class in co
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>parent</code> - the root node to begin iterating over.</dd>
 <dd><code>includeRoot</code> - whether this iterator should include the root node.</dd>
-<dd><code>filter</code> - an optional (but strongly recommended) filter. At the very least:
- consider applying a filter that strips out aliases. Otherwise this could lead
- to a recursive unending file tree.</dd>
+<dd><code>filter</code> - an optional (but strongly recommended) filter. At the very
+            least: consider applying a filter that strips out aliases.
+            Otherwise this could lead to a recursive unending file tree.</dd>
 </dl>
 </li>
 </ul>
@@ -290,13 +291,15 @@ extends <a href="../../../../com/pump/util/TreeIterator.html" title="class in co
 <h4>listChildren</h4>
 <pre>protected&nbsp;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>[]&nbsp;listChildren(<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&nbsp;parent)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../com/pump/util/TreeIterator.html#listChildren-T-">TreeIterator</a></code></span></div>
-<div class="block">List the children of a parent this object should iterate over.
- This method does not need to worry about filtering the children.
- <p>(In fact too much filtering at this step can be a problem.
- For example: if a file iterator wants to only return files with
- a certain extension this method still needs to return directories,
- or the iterator won't search deep enough.)
- <p>This may return null, or include null elements in the return array.</div>
+<div class="block">List the children of a parent this object should iterate over. This
+ method does not need to worry about filtering the children.
+ <p>
+ (In fact too much filtering at this step can be a problem. For example:
+ if a file iterator wants to only return files with a certain extension
+ this method still needs to return directories, or the iterator won't
+ search deep enough.)
+ <p>
+ This may return null, or include null elements in the return array.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/pump/util/TreeIterator.html#listChildren-T-">listChildren</a></code>&nbsp;in class&nbsp;<code><a href="../../../../com/pump/util/TreeIterator.html" title="class in com.pump.util">TreeIterator</a>&lt;<a href="../../../../com/pump/io/location/IOLocation.html" title="class in com.pump.io.location">IOLocation</a>&gt;</code></dd>
