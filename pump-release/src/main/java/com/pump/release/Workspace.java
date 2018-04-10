@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.pump.blog.Blurb;
-import com.pump.data.BeanMap;
+import com.pump.data.AttributeDataImpl;
 import com.pump.data.Key;
 import com.pump.io.parser.java.JavaClassSummary;
 import com.pump.release.Project.MissingPomException;
@@ -25,7 +25,7 @@ public class Workspace {
 	/** A placeholder object a file that should be deleted/missing. */
 	static File DELETED_FILE = new File("deleted file");
 
-	static class BlurbInfo extends BeanMap {
+	static class BlurbInfo extends AttributeDataImpl {
 
 		public static final Key<Class> KEY_CLASS = new Key<>(Class.class,
 				"class");
@@ -38,11 +38,11 @@ public class Workspace {
 		}
 
 		public Blurb getBlurb() {
-			return KEY_BLURB.get(getMap());
+			return KEY_BLURB.get(getAttributeMap());
 		}
 
 		public Class getBlurbClass() {
-			return KEY_CLASS.get(getMap());
+			return KEY_CLASS.get(getAttributeMap());
 		}
 	}
 
