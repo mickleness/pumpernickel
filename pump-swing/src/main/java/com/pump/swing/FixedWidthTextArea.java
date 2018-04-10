@@ -33,7 +33,7 @@ import com.pump.blog.Blurb;
  * This is a JTextArea with a fixed width. Its preferred height will adjust
  * depending on the text inside it.
  *
- * @deprecated see com.bric.awt.TextSize
+ * @deprecated see com.pump.awt.TextSize
  */
 @Deprecated
 @Blurb(title = "Text: Text Height and GUI Layout", releaseDate = "June 2008", summary = "This walks through how to find the preferred height of a block of text, "

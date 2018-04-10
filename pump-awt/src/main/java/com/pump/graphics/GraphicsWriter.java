@@ -498,7 +498,7 @@ public class GraphicsWriter extends AbstractGraphics2D implements
 
 	/**
 	 * Returns the current stack trace, minus all lines that involve
-	 * "com.bric.graphics" objects.
+	 * "com.pump.graphics" objects.
 	 */
 	static String getCaller() {
 		if (DEBUGGING == false)
@@ -508,7 +508,7 @@ public class GraphicsWriter extends AbstractGraphics2D implements
 		int ctr = 0;
 		for (int a = 0; a < trace.length; a++) {
 			if (trace[a].getClassName().indexOf(
-					"com.bric.graphics.GraphicsWriter") == 0
+					"com.pump.graphics.GraphicsWriter") == 0
 					|| trace[a].getClassName().indexOf("java.lang.Thread") == 0) {
 				ctr++;
 				trace[a] = null;

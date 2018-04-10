@@ -27,7 +27,7 @@ import com.pump.math.function.PolynomialFunction;
  * Many thanks to Oleg E. for some insights regarding machine error and design.
  * <P>
  * See MathGDemo.java for a set of tests comparing the speed/accuracy of
- * java.lang.Math and com.bric.math.MathG.
+ * java.lang.Math and com.pump.math.MathG.
  *
  */
 @Blurb(title = "Performance: Studying Math", releaseDate = "May 2009", summary = "The <code><a href=\"http://java.sun.com/javase/6/docs/api/java/lang/Math.html\">java.lang.Math</a></code> "

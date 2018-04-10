@@ -56,7 +56,7 @@ import com.pump.util.ThreadedSemaphore;
  * @see com.pump.io.ConsoleLogger
  */
 @Blurb(title = "Text: Managing a Console in Swing", releaseDate = "March 2015", summary = "This discusses options for presenting a console-like Swing component."
-		+ "<p>The class I end up developing is the <a href=\"https://javagraphics.java.net/doc/com/bric/swing/BasicConsole.html\">BasicConsole</a>: "
+		+ "<p>The class I end up developing is the BasicConsole: "
 		+ "a thread-safe JTextArea that highlights multiple PrintStreams in different colors and offers modest support for tab-formatted tables.", article = "http://javagraphics.blogspot.com/2015/03/text-managing-console-in-swing.html")
 public class BasicConsole extends JTextArea {
 	private static final long serialVersionUID = 1L;

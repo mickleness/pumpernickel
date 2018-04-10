@@ -27,7 +27,7 @@ class VideoSampleDescriptionEntry extends SampleDescriptionEntry {
 	 * generated the compressed data. Often this field contains 'appl' to
 	 * indicate Apple Computer, Inc.
 	 */
-	String vendor = "bric";
+	String vendor = "pump";
 	/**
 	 * A 32-bit integer containing a value from 0 to 1023 indicating the degree
 	 * of temporal compression.

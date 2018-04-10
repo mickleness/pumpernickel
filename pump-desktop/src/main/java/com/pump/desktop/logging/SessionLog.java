@@ -55,7 +55,7 @@ public class SessionLog {
 	 *            The name of the application that is collecting logs. For
 	 *            example, if this is "Gemini" then the directory "Gemini Logs"
 	 *            will be used. It will help to provide a more qualified path
-	 *            name to guarantee uniqueness, such as "com.bric.gemini".
+	 *            name to guarantee uniqueness, such as "com.pump.gemini".
 	 * @param limit
 	 *            if non-null, then this method will sift through all other logs
 	 *            in this directory and only retain the most recent n-many logs.

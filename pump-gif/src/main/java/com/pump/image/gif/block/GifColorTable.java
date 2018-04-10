@@ -105,7 +105,7 @@ public abstract class GifColorTable extends GifBlock {
 	}
 
 	public void write(Writer out) throws IOException {
-		out.write("com.bric.gif.parser.GifColorTable[");
+		out.write("com.pump.gif.parser.GifColorTable[");
 		for (int a = 0; a < data.length / 3; a++) {
 			if (a != 0)
 				out.write(", ");
@@ -127,7 +127,7 @@ public abstract class GifColorTable extends GifBlock {
 	}
 
 	public GifColorTable(String s) {
-		if (s.startsWith("com.bric.gif.parser.GifColorTable[") == false) {
+		if (s.startsWith("com.pump.gif.parser.GifColorTable[") == false) {
 			System.err.println("s=\"" + s + "\"");
 			throw new IllegalArgumentException(
 					"This string does not begin with \"GifColorTable[\"");

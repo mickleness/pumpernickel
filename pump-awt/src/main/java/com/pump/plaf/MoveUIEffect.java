@@ -42,7 +42,7 @@ public class MoveUIEffect extends UIEffect {
 		/**
 		 * This effect may be applied to invisible components, where other
 		 * special configurations guarantee they still get painted (for example:
-		 * see {@link com.bric.awt.RowLayout}). In this case we should manually
+		 * see {@link com.pump.awt.RowLayout}). In this case we should manually
 		 * invoke a repaint.
 		 * <p>
 		 * (When a component is visible, this will result in redundant repaint

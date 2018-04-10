@@ -250,7 +250,7 @@ public class DecoratedListUI extends BasicListUI {
 	 * <code>ListDecorations</code> for this UI to interact with the
 	 * decorations.
 	 */
-	public static final String KEY_DECORATIONS = "bric.DecoratedListUI.Decorations";
+	public static final String KEY_DECORATIONS = "pump.DecoratedListUI.Decorations";
 
 	static class ArmedDecorationInfo {
 		ListDecoration decoration;

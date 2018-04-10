@@ -54,7 +54,7 @@ public class GraphicCache {
      * <p>
      * This should probably not be greater than 4 if the AWT package is being
      * used to load images. Only 4 "Image Fetcher" threads are opened
-     * simultaneously. The bric Scaling class uses the AWT classes.
+     * simultaneously. The pump Scaling class uses the AWT classes.
      * 
      */
     final Thread[] iconThreads = new Thread[3];

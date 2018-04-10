@@ -94,7 +94,7 @@ import com.pump.plaf.UIEffect.State;
  */
 @Blurb(title = "Buttons: New UIs", releaseDate = "August 2009", summary = "Sure the buttons in <a href=\"http://developer.apple.com/mac/library/technotes/tn2007/tn2196.html#BUTTONS\">Apple's Tech Note 2196</a> "
 		+ "are great, but they're so... black-box-ish. And they're only available on Macs.\n"
-		+ "<p>This article sets up a <a href=\"https://javagraphics.java.net/doc/com/bric/plaf/FilledButtonUI.html\">new framework</a> for "
+		+ "<p>This article sets up a new framework for "
 		+ "<code>ButtonUIs</code>, and provides around 10 UI's to choose from. "
 		+ "(But you can make more if you want to...) Also each <code>ButtonUI</code> can be turned into a <code>ComboBoxUI</code>.", article = "http://javagraphics.blogspot.com/2009/08/buttons-new-uis.html", imageName = "FilledButtonUI.png")
 public abstract class FilledButtonUI extends ButtonUI implements

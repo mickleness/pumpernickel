@@ -136,7 +136,7 @@ public class JavadocBuilder {
 		// String cmd = "javadoc -J-mx140m"+
 		// " -d "+destDir+
 		// " -tagletPath "+tagletPath +
-		// " -taglet com.bric.blog.SampleTaglet" +
+		// " -taglet com.pump.blog.SampleTaglet" +
 		// " -classpath "+srcPathsString+File.pathSeparator+System.getProperty("java.class.path")+
 		// " "+packageNames;
 		String cmd = "javadoc -J-mx140m -d " + javadocDest.getCanonicalPath()

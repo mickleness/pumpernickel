@@ -38,7 +38,7 @@ import com.pump.image.pixel.IntRGBConverter;
  * 
  * @see com.pump.showcase.BrushedMetalDemo
  */
-@Blurb(title = "Brushed Metal", releaseDate = "April 2013", summary = "The <a href=\"https://javagraphics.java.net/doc/com/bric/image/BrushedMetalLook.html\">BrushedMetalLook</a> class provides a few static methods to create BufferedImages "
+@Blurb(title = "Brushed Metal", releaseDate = "April 2013", summary = "The BrushedMetalLook class provides a few static methods to create BufferedImages "
 		+ "that resemble brushed metal.", imageName = "BrushedMetal.png")
 public class BrushedMetalLook {
 

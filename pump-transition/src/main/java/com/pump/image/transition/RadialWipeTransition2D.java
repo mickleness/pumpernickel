@@ -41,9 +41,7 @@ import java.awt.geom.Rectangle2D;
 public class RadialWipeTransition2D extends Transition2D {
 
 	/**
-	 * This public static method is used by the
-	 * {@link com.bric.image.transition.Transition2DDemoHelper} class to create
-	 * sample animations of this transition.
+	 * TODO: remove all getDemoTransitions() methods or create a new tool to invoke them.
 	 * 
 	 * @return the transitions that should be used to demonstrate this
 	 *         transition.

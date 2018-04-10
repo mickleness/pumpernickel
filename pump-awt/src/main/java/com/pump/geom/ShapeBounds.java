@@ -29,7 +29,7 @@ import com.pump.blog.Blurb;
  */
 @Blurb(title = "Shapes: Calculating Bounds", releaseDate = "May 2007", summary = "How do you get the bounds of a shape? A <code>GeneralPath</code> or <code>Path2D</code> may return a larger rectangle than necessary. "
 		+ "The Area class is accurate, but painfully slow. This demonstrates the "
-		+ "<a href=\"https://javagraphics.java.net/doc/com/bric/geom/ShapeBounds.html\">ShapeBounds</a> class, which is accurate and near instant.", article = "http://javagraphics.blogspot.com/2007/05/shapes-calculating-bounds.html")
+		+ "ShapeBounds class, which is accurate and near instant.", article = "http://javagraphics.blogspot.com/2007/05/shapes-calculating-bounds.html")
 public class ShapeBounds {
 	/**
 	 * This calculates the precise bounds of a shape.

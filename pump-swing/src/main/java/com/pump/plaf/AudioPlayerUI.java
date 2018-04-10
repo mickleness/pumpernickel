@@ -133,7 +133,7 @@ public class AudioPlayerUI extends ComponentUI {
 	protected void installDefaultSource(AudioPlayerComponent c) {
 		try {
 			c.setSource(new URL(
-					"https://java.net/projects/javagraphics/sources/svn/content/trunk/src/com/bric/swing/resources/Ludic.wav"));
+					"https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-showcase/src/main/resources/com/pump/showcase/Ludic.wav"));
 		} catch (MalformedURLException e) {
 			c.setSource(null);
 			e.printStackTrace();

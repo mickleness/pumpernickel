@@ -47,7 +47,7 @@ import com.pump.plaf.MultiThumbSliderUI;
  * "GradientSliderUI". By default this is "com.pump.plaf.GradientSliderUI".
  * <p>
  * The {@link GradientSliderDemoHelper} creates this sample graphic: <br>
- * <img src="https://javagraphics.java.net/blurbs/GradientSlider.png"
+ * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/gradientslider.jpg"
  * alt="Screenshot of the GradientSlider">
  * 
  * @see com.pump.swing.GradientSliderDemo

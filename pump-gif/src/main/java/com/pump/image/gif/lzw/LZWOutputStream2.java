@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * This is encoder analogous to the {@link com.bric.gif.lzw.LZWInputStream}.
+ * This is encoder analogous to the {@link com.pump.gif.lzw.LZWInputStream}.
  * 
  * <P>
  * This encodes a series of bytes as LZW-compressed data.

@@ -35,7 +35,7 @@ import com.pump.math.MathG;
  */
 @Blurb(title = "Gradients: a Halftone Gradient", releaseDate = "November 2009", summary = "This is a handy little gradient that resembles halftone print.\n"
 		+ "<p>I came across this idea by accident while working on the "
-		+ "<code><a href=\"https://javagraphics.java.net/doc/com/bric/awt/TransformedTexturePaint.html\">TransformedTexturePaint</a></code> class.", article = "http://javagraphics.blogspot.com/2009/11/gradients-halftone-gradient.html", imageName = "HalftoneGradient.png")
+		+ "<code>TransformedTexturePaint</code> class.", article = "http://javagraphics.blogspot.com/2009/11/gradients-halftone-gradient.html", imageName = "HalftoneGradient.png")
 public class HalftoneGradient extends TransformedTexturePaint {
 
 	public static final int TYPE_DIAMOND = 1;

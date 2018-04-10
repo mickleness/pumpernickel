@@ -33,7 +33,7 @@ import com.pump.image.transition.Transition;
  * The {@link #startTransition(Transition, Runnable, float)} method takes a
  * snapshot of the current body of this panel, then executes the
  * <code>Runnable</code> argument, then takes a second snapshot, and then
- * executes the {@link com.bric.image.transition.Transition2D}.
+ * executes the {@link com.pump.image.transition.Transition2D}.
  * <p>
  * Internally the <code>TransitionPanel</code> uses a <code>CardLayout</code>
  * with two panels:

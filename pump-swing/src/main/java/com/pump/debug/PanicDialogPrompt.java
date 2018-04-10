@@ -129,12 +129,12 @@ public class PanicDialogPrompt implements AWTPanicListener {
 						new String[] { "java",
 								"-Xdock:name=" + applicationName + " Monitor",
 								"-classpath", classpath,
-								"com.bric.debug.PanicDialogPrompt",
+								"com.pump.debug.PanicDialogPrompt",
 								applicationName });
 			} else {
 				monitorProcess = Runtime.getRuntime().exec(
 						new String[] { "java", "-classpath", classpath,
-								"com.bric.debug.PanicDialogPrompt",
+								"com.pump.debug.PanicDialogPrompt",
 								applicationName });
 			}
 			monitorProcess.waitFor();

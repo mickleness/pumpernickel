@@ -296,7 +296,7 @@ public class DialogFooter extends JPanel {
 
 		private void setRootPaneContainer(JButton button, RootPaneContainer c) {
 			RootPaneContainer lastContainer = (RootPaneContainer) button
-					.getClientProperty("bric.footer.rpc");
+					.getClientProperty("pump.footer.rpc");
 			if (lastContainer == c)
 				return;
 
@@ -331,7 +331,7 @@ public class DialogFooter extends JPanel {
 									JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
 							.put(commandPeriodKey, escapeKey);
 			}
-			button.putClientProperty("bric.footer.rpc", c);
+			button.putClientProperty("pump.footer.rpc", c);
 		}
 
 		public void ancestorMoved(AncestorEvent event) {

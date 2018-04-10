@@ -22,7 +22,7 @@ import com.pump.blog.Blurb;
  * 
  */
 @Blurb(title = "Slideshows: Transitions & SWFs", releaseDate = "April 2007", summary = "A fun set of transitions defined with a simple vector-graphics-ish "
-		+ "<a href=\"https://javagraphics.java.net/doc/com/bric/image/transition/Transition2D.html\">architecture</a>.\n"
+		+ "Transition2Ds.\n"
 		+ "<p>The demo includes a player and minimal Flash export.", imageName = "Transition2D.png")
 public abstract class Transition2D extends AbstractTransition {
 

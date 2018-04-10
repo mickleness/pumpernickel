@@ -35,7 +35,7 @@ import javax.swing.plaf.basic.BasicLabelUI;
  * <li>The shadow color is optional</li>
  * </ul>
  * 
- * I migrated this into the bric.plaf directory so it won't conflict with any
+ * I migrated this into the pump.plaf directory so it won't conflict with any
  * possible future updates.
  */
 public class EmphasizedLabelUI extends BasicLabelUI {

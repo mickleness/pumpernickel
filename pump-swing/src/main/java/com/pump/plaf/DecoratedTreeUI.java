@@ -86,7 +86,7 @@ public class DecoratedTreeUI extends BasicTreeUI {
 	 * <code>TreeDecorations</code> for this UI to interact with the
 	 * decorations.
 	 */
-	public static final String KEY_DECORATIONS = "bric.DecoratedTreeUI.Decorations";
+	public static final String KEY_DECORATIONS = "pump.DecoratedTreeUI.Decorations";
 
 	/**
 	 * A <code>TreeDecoration</code> is an icon that is painted on the rightmost

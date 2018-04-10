@@ -328,14 +328,14 @@ public abstract class MovWriter {
 					totalSamples);
 			mdiaAtom.add(mediaHeader);
 			HandlerReferenceAtom handlerRef1 = new HandlerReferenceAtom("mhlr",
-					"soun", "bric");
+					"soun", "pump");
 			mdiaAtom.add(handlerRef1);
 			ParentAtom minf = new ParentAtom("minf");
 			mdiaAtom.add(minf);
 			SoundMediaInformationHeaderAtom smhd = new SoundMediaInformationHeaderAtom();
 			minf.add(smhd);
 			HandlerReferenceAtom handlerRef2 = new HandlerReferenceAtom("dhlr",
-					"alis", "bric");
+					"alis", "pump");
 			minf.add(handlerRef2);
 			ParentAtom dinf = new ParentAtom("dinf");
 			minf.add(dinf);

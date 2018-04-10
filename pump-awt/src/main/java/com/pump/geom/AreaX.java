@@ -98,12 +98,7 @@ import com.pump.geom.area.CurveX;
  * changed by calling: <code>myArea.setRules()</code>. However you can also
  * change the <i>default</i> rules for all future <code>AreaX</code> objects by
  * calling: <code>UIManager.put("AreaX.rules", myRules)</code>.
- * 
- * @see <a
- *      href="https://javagraphics.java.net/areax/">https://javagraphics.java.net/areax/</a>
  */
-@Blurb(title = "Shapes: Creating an Alternative to the Area Class", releaseDate = "August 2010", summary = "This project branches off the <code>Area</code> class and optimizes parts of its performance. "
-		+ "The underlying algorithms are not changed, but (in some cases) the performance is considerably improved.", article = "https://javagraphics.java.net/areax/")
 public class AreaX implements Shape, Cloneable {
 	public static final int RELATIONSHIP_LHS_CONTAINS = 0;
 	public static final int RELATIONSHIP_RHS_CONTAINS = 1;

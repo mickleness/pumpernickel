@@ -196,10 +196,10 @@ public class BasicQOptionPaneUI extends QOptionPaneUI {
 		"QOptionPaneUI_MacOSX.properties".length();
 
 		try {
-			return ResourceBundle.getBundle("com/bric/plaf/" + sb.toString());
+			return ResourceBundle.getBundle("com/pump/plaf/" + sb.toString());
 		} catch (Throwable t) {
 			return ResourceBundle
-					.getBundle("com/bric/plaf/QOptionPaneUI_Windows7");
+					.getBundle("com/pump/plaf/QOptionPaneUI_Windows7");
 		}
 	}
 

@@ -40,7 +40,7 @@ public class PumpLicense {
 					+ " by Jeremy Wood.  They are available under the Modified BSD license (see below).");
 			ps.println("<P>Any resources not in the \"com.pump\" package may be subject to additional license terms and restrictions.");
 			ps.println("<P>If you have any questions about this jar, the relevant licenses, the source code, etc., please contact <A HREF=\"mailto:mickleness+java@gmail.com\">mickleness+java@gmail.com</A>.");
-			ps.println("<P>This jar is part of the \"javagraphics\" project, discussed <A HREF=\"https://javagraphics.java.net/\">here</A>.");
+			ps.println("<P>This jar is part of the \"pumpernickel\" project, discussed <A HREF=\"https://github.com/mickleness/pumpernickel/\">here</A>.");
 			ps.println("<h3>Modified BSD License</H3>");
 			ps.println("<P>Copyright (c) " + year + ", Jeremy Wood.");
 			ps.println("<BR>All rights reserved.");

@@ -251,8 +251,7 @@ import com.pump.window.WindowDragger;
  */
 @Blurb(imageName = "QDialog.png", title = "JOptionPane: Making an Alternative", releaseDate = "June 2008", summary = "I find the <code>JOptionPane</code> hard to work with sometimes.  If you want "
 		+ "a really polished dialog -- with a help button, the right spacing, the right controls to "
-		+ "escape, etc. -- you might just want to make a "
-		+ "<a href=\"https://javagraphics.java.net/doc/com/bric/swing/QDialog.html\">new model</a>.\n"
+		+ "escape, etc. -- you might just want to make a QDialog instead.\n"
 		+ "<p>Really: check out the javadocs for this one.  There's a lot of research/explanation in there.", article = "http://javagraphics.blogspot.com/2008/06/joptionpane-making-alternative.html")
 public class QDialog extends JDialog {
 	private static final long serialVersionUID = 1L;

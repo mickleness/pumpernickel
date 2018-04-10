@@ -102,9 +102,9 @@ public class Reflection {
 	 * <p>
 	 * For example, you can call: <br>
 	 * <code>parse( "new Color( 255, 0, 128 )" );</code> <br>
-	 * <code>parse( "new com.bric.swing.resources.ArrowIcon( javax.swing.SwingConstants.EAST, 24, 24 )" );</code>
+	 * <code>parse( "new com.pump.swing.resources.ArrowIcon( javax.swing.SwingConstants.EAST, 24, 24 )" );</code>
 	 * <br>
-	 * <code>parse( "new com.bric.swing.resources.TriangleIcon( javax.swing.SwingConstants.EAST, 24, 24, new Color(0)" );</code>
+	 * <code>parse( "new com.pump.swing.resources.TriangleIcon( javax.swing.SwingConstants.EAST, 24, 24, new Color(0)" );</code>
 	 * <p>
 	 * The class name/constants must be fully qualified.
 	 */

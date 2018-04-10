@@ -613,7 +613,7 @@ public class JarWriter {
 							// search for properties files relative to the java
 							// file.
 							// This will resemble
-							// "com.bric.swing.resources.DialogFooter"
+							// "com.pump.swing.resources.DialogFooter"
 							String propertiesPath = strings[a].replace('.',
 									File.separatorChar) + ".properties";
 							File propertiesFile = input.pathMap

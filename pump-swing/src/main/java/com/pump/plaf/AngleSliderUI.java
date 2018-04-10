@@ -50,7 +50,7 @@ import com.pump.blog.Blurb;
  * 
  */
 @Blurb(title = "Angles: need GUI widget for angles?", releaseDate = "May 2008", summary = "Take a <a href=\"http://java.sun.com/javase/6/docs/api/index.html?javax/swing/JSlider.html\"><code>JSlider</code></a>. "
-		+ "Add a <code><a href=\"https://javagraphics.java.net/doc/com/bric/plaf/AngleSliderUI.html\">AngleSliderUI</a></code>. "
+		+ "Add a <code>AngleSliderUI</code>. "
 		+ "Voila!  You have a GUI widget for angles.\n"
 		+ "<P>Comes in Aqua and non-Aqua flavors.", article = "http://javagraphics.blogspot.com/2008/05/angles-need-gui-widget-for-angles.html", imageName = "AngleSliderUI.png")
 public class AngleSliderUI extends SliderUI {
