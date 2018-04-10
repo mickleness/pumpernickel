@@ -31,7 +31,8 @@ public class FileLabelList extends FileList {
 		return new JLabel(getText(file));
 	}
 
-	/** Returns the text a label should display for a given File.
+	/**
+	 * Returns the text a label should display for a given File.
 	 * 
 	 */
 	protected String getText(File file) {

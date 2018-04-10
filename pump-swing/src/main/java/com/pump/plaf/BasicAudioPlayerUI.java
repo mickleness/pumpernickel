@@ -40,47 +40,53 @@ import com.pump.swing.AudioPlayerComponent;
 
 public class BasicAudioPlayerUI extends AudioPlayerUI {
 
-	
-	/** This method has to exist in order for to make this UI the button
-	 * default by calling:
-	 * <br><code>UIManager.getDefaults().put("ButtonUI", "com.pump.plaf.BevelButtonUI");</code>
+	/**
+	 * This method has to exist in order for to make this UI the button default
+	 * by calling: <br>
+	 * <code>UIManager.getDefaults().put("ButtonUI", "com.pump.plaf.BevelButtonUI");</code>
 	 */
-    public static ComponentUI createUI(JComponent c) {
-        return new BasicAudioPlayerUI();
-    }
-	
+	public static ComponentUI createUI(JComponent c) {
+		return new BasicAudioPlayerUI();
+	}
+
 	static class URLPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 		JTextField field = new JTextField(10);
 		JLabel label = new JLabel("URL:");
-		
+
 		public URLPanel(String fieldText) {
 			super(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0; c.gridy = 0; c.weightx = 0; c.weighty = 1;
-			c.insets = new Insets(3,3,3,3);
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weightx = 0;
+			c.weighty = 1;
+			c.insets = new Insets(3, 3, 3, 3);
 			add(label, c);
-			c.gridx++; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+			c.gridx++;
+			c.weightx = 1;
+			c.fill = GridBagConstraints.HORIZONTAL;
 			add(field, c);
-			if(fieldText!=null)
+			if (fieldText != null)
 				field.setText(fieldText);
 		}
 	}
-	
+
 	static class Fields {
 		final AudioPlayerComponent apc;
-		
-		JButton playButton = new JButton(new TriangleIcon(SwingConstants.EAST, 12, 12));
+
+		JButton playButton = new JButton(new TriangleIcon(SwingConstants.EAST,
+				12, 12));
 		JButton pauseButton = new JButton(new PauseIcon(12, 12));
-		//JSlider volumeSlider = new JSlider(0,100,100);
-		JSlider playbackProgress = new JSlider(0,100,0);
+		// JSlider volumeSlider = new JSlider(0,100,100);
+		JSlider playbackProgress = new JSlider(0, 100, 0);
 		JButton browseButton = new JButton("Browse...");
 		URLPanel urlPanel = new URLPanel(null);
-	
+
 		protected Fields(AudioPlayerComponent apc) {
 			this.apc = apc;
 		}
-		
+
 		protected void uninstall() {
 			apc.remove(playButton);
 			apc.remove(pauseButton);
@@ -88,29 +94,35 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			apc.remove(browseButton);
 			apc.remove(urlPanel);
 		}
-		
+
 		protected void install() {
 			apc.removeAll();
 			apc.setLayout(new GridBagLayout());
 			GridBagConstraints gbc = new GridBagConstraints();
-			gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1;
-			gbc.insets = new Insets(3,3,3,3);
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.weightx = 1;
+			gbc.weighty = 1;
+			gbc.insets = new Insets(3, 3, 3, 3);
 			gbc.fill = GridBagConstraints.NONE;
 			gbc.gridwidth = GridBagConstraints.REMAINDER;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			apc.add(urlPanel, gbc);
-			gbc.gridy++; gbc.weightx = 0;
+			gbc.gridy++;
+			gbc.weightx = 0;
 			gbc.gridwidth = 1;
 			apc.add(playButton, gbc);
 			apc.add(pauseButton, gbc);
-			gbc.gridx++; gbc.weightx = 1;
+			gbc.gridx++;
+			gbc.weightx = 1;
 			apc.add(playbackProgress, gbc);
-			gbc.gridx++; gbc.weightx = 0;
+			gbc.gridx++;
+			gbc.weightx = 0;
 			apc.add(browseButton, gbc);
-			
+
 			playButton.setBorderPainted(false);
 			pauseButton.setBorderPainted(false);
-			
+
 			browseButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					apc.getUI().doBrowseForFile(apc);
@@ -119,9 +131,11 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			playButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					float startTime = 0;
-					if(playbackProgress.getValue()<playbackProgress.getMaximum()) {
-						startTime = (((float)(playbackProgress.getValue()-playbackProgress.getMinimum()))/
-								((float)(playbackProgress.getMaximum()-playbackProgress.getMinimum())));
+					if (playbackProgress.getValue() < playbackProgress
+							.getMaximum()) {
+						startTime = (((float) (playbackProgress.getValue() - playbackProgress
+								.getMinimum())) / ((float) (playbackProgress
+								.getMaximum() - playbackProgress.getMinimum())));
 					}
 					apc.getUI().doPlay(apc, new StartTime(startTime, true));
 				}
@@ -131,17 +145,17 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 					apc.getUI().doPause(apc);
 				}
 			});
-			
+
 			updateUI();
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					updateUI();
 				}
-			});	
+			});
 		}
 
 		protected void updateUI() {
-			if(!SwingUtilities.isEventDispatchThread()) {
+			if (!SwingUtilities.isEventDispatchThread()) {
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						updateUI();
@@ -149,80 +163,88 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 				});
 				return;
 			}
-			
+
 			URL source = apc.getSource();
-			String text = source==null ? "" : source.toString();
+			String text = source == null ? "" : source.toString();
 			urlPanel.field.setText(text);
 			boolean playing = false;
 			playButton.setVisible(!playing);
 			pauseButton.setVisible(playing);
-			
+
 			Window w = SwingUtilities.getWindowAncestor(apc);
-			browseButton.setEnabled(w!=null);
-			if(browseButton.isEnabled()) {
+			browseButton.setEnabled(w != null);
+			if (browseButton.isEnabled()) {
 				browseButton.setToolTipText("Select an audio file to play...");
 			} else {
-				browseButton.setToolTipText("This button is not supported unless this component is in an accessible java.awt.Window.");
+				browseButton
+						.setToolTipText("This button is not supported unless this component is in an accessible java.awt.Window.");
 			}
 		}
 	}
-	
-	private static final String FIELDS_KEY = BasicAudioPlayerUI.class.getName()+".fields";
+
+	private static final String FIELDS_KEY = BasicAudioPlayerUI.class.getName()
+			+ ".fields";
 
 	PropertyChangeListener updateSourceListener = new PropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent evt) {
-			JComponent src = evt.getSource() instanceof JComponent ? (JComponent)evt.getSource() : null;
-			updateComponents( (AudioPlayerComponent)src );
+			JComponent src = evt.getSource() instanceof JComponent ? (JComponent) evt
+					.getSource() : null;
+			updateComponents((AudioPlayerComponent) src);
 		}
 	};
-	
+
 	HierarchyListener hierarchyListener = new HierarchyListener() {
 
 		@Override
 		public void hierarchyChanged(HierarchyEvent e) {
 			Component c = e.getComponent();
-			if(c instanceof AudioPlayerComponent) {
-				AudioPlayerComponent jc = (AudioPlayerComponent)c;
-				if(jc.getUI() instanceof BasicAudioPlayerUI) {
-					((BasicAudioPlayerUI)jc.getUI()).updateComponents( (AudioPlayerComponent)jc );
+			if (c instanceof AudioPlayerComponent) {
+				AudioPlayerComponent jc = (AudioPlayerComponent) c;
+				if (jc.getUI() instanceof BasicAudioPlayerUI) {
+					((BasicAudioPlayerUI) jc.getUI())
+							.updateComponents((AudioPlayerComponent) jc);
 				}
 			}
 		}
-		
+
 	};
-	
+
 	protected void updateComponents(AudioPlayerComponent apc) {
 		Fields fields = getFields(apc);
 		fields.updateUI();
 	}
-	
-	public BasicAudioPlayerUI() {}
-	
+
+	public BasicAudioPlayerUI() {
+	}
+
 	@Override
 	public void installUI(JComponent c) {
 		super.installUI(c);
 
 		getFields(c).install();
-		c.addPropertyChangeListener(AudioPlayerComponent.SOURCE_KEY, updateSourceListener);
+		c.addPropertyChangeListener(AudioPlayerComponent.SOURCE_KEY,
+				updateSourceListener);
 		c.addHierarchyListener(hierarchyListener);
 	}
-	
+
 	protected Fields getFields(JComponent c) {
-		if(c==null) return null;
-		Fields fields = (Fields)c.getClientProperty(FIELDS_KEY);
-		if(fields==null) {
-			fields = new Fields( (AudioPlayerComponent)c );
+		if (c == null)
+			return null;
+		Fields fields = (Fields) c.getClientProperty(FIELDS_KEY);
+		if (fields == null) {
+			fields = new Fields((AudioPlayerComponent) c);
 			c.putClientProperty(FIELDS_KEY, fields);
 		}
 		return fields;
 	}
-	
+
 	@Override
 	public void uninstallUI(JComponent c) {
 		super.uninstallUI(c);
 
 		getFields(c).uninstall();
-		c.removePropertyChangeListener(AudioPlayerComponent.SOURCE_KEY, updateSourceListener);
+		c.removePropertyChangeListener(AudioPlayerComponent.SOURCE_KEY,
+				updateSourceListener);
 		c.removeHierarchyListener(hierarchyListener);
 	}
 
@@ -232,17 +254,20 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 		fields.playButton.setVisible(false);
 		fields.pauseButton.setVisible(true);
 	}
-	
+
 	@Override
-	protected void notifyPlaybackProgress(AudioPlayerComponent apc,float timeElapsed, float timeAsFraction) {
+	protected void notifyPlaybackProgress(AudioPlayerComponent apc,
+			float timeElapsed, float timeAsFraction) {
 		Fields fields = getFields(apc);
-		int span = fields.playbackProgress.getMaximum()-fields.playbackProgress.getMinimum();
-		int v = (int)(span*timeAsFraction + fields.playbackProgress.getMinimum());
-		fields.playbackProgress.setValue( v );
+		int span = fields.playbackProgress.getMaximum()
+				- fields.playbackProgress.getMinimum();
+		int v = (int) (span * timeAsFraction + fields.playbackProgress
+				.getMinimum());
+		fields.playbackProgress.setValue(v);
 	}
 
 	@Override
-	protected void notifyPlaybackStopped(AudioPlayerComponent apc,Throwable t) {
+	protected void notifyPlaybackStopped(AudioPlayerComponent apc, Throwable t) {
 		Fields fields = getFields(apc);
 		fields.playButton.setVisible(true);
 		fields.pauseButton.setVisible(false);

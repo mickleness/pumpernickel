@@ -17,20 +17,21 @@ import javax.swing.JEditorPane;
 
 import com.pump.awt.Paintable;
 
-/** This renders HTML text as a <code>Paintable</code> object.
+/**
+ * This renders HTML text as a <code>Paintable</code> object.
  *
  */
 class HTMLPaintable implements Paintable {
 
 	JEditorPane editorPane = new JEditorPane();
 	int width, height;
-	
+
 	public HTMLPaintable() {
 		editorPane.setContentType("text/html");
 		editorPane.setEditable(false);
 		editorPane.setOpaque(false);
 	}
-	
+
 	@Override
 	public Object clone() {
 		HTMLPaintable newGuy = new HTMLPaintable();
@@ -40,41 +41,44 @@ class HTMLPaintable implements Paintable {
 		newGuy.lastHTMLText = lastHTMLText;
 		return newGuy;
 	}
-	
+
 	private String lastHTMLText = "";
-	/** Sets the html text of this paintable, and a maximum width.
-	 * The height is then calculated and determined, based on the text
-	 * and the width provided.
+
+	/**
+	 * Sets the html text of this paintable, and a maximum width. The height is
+	 * then calculated and determined, based on the text and the width provided.
 	 * 
-	 * @param htmlText the html text to use
-	 * @param w the maximum width
+	 * @param htmlText
+	 *            the html text to use
+	 * @param w
+	 *            the maximum width
 	 * @return whether this call visually changed this object.
 	 */
-	public boolean define(String htmlText,int w) {
+	public boolean define(String htmlText, int w) {
 		width = w;
-		
-		if(lastHTMLText.equals(htmlText))
+
+		if (lastHTMLText.equals(htmlText))
 			return false;
-		
+
 		lastHTMLText = htmlText;
-		
-		if(htmlText.length()==0) {
+
+		if (htmlText.length() == 0) {
 			setHeight(0);
 			editorPane.setText("");
 		} else {
 			editorPane.setText(htmlText);
-			editorPane.setBounds(new Rectangle(0,0,w,1000000));
+			editorPane.setBounds(new Rectangle(0, 0, w, 1000000));
 			setHeight(editorPane.getPreferredSize().height);
 		}
 		return true;
 	}
-	
+
 	private void setHeight(int h) {
-		if(h==height)
+		if (h == height)
 			return;
 		height = h;
 	}
-	
+
 	/** The height of this paintable, in pixels. */
 	public int getHeight() {
 		return height;
@@ -87,7 +91,7 @@ class HTMLPaintable implements Paintable {
 
 	/** Paints this object. */
 	public void paint(Graphics2D g) {
-		editorPane.setBounds(new Rectangle(0,0,width,height));
+		editorPane.setBounds(new Rectangle(0, 0, width, height));
 		editorPane.paint(g);
 	}
 }

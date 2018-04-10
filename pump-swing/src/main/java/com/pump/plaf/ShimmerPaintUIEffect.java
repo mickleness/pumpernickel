@@ -26,30 +26,31 @@ public class ShimmerPaintUIEffect extends PaintUIEffect {
 		/** A new shimmer to the effects list. */
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			AbstractButton button = (AbstractButton)e.getSource();
+			AbstractButton button = (AbstractButton) e.getSource();
 			ButtonUI ui = button.getUI();
-			if(ui instanceof FilledButtonUI) {
-				FilledButtonUI fui = (FilledButtonUI)ui;
+			if (ui instanceof FilledButtonUI) {
+				FilledButtonUI fui = (FilledButtonUI) ui;
 				fui.getEffects(button).add(new ShimmerPaintUIEffect(button));
 			}
 		}
-		
-		/** Kill the effects if the user moused over the component
-		 * really quickly.
+
+		/**
+		 * Kill the effects if the user moused over the component really
+		 * quickly.
 		 */
 		@Override
 		public void mouseExited(MouseEvent e) {
-			AbstractButton button = (AbstractButton)e.getSource();
+			AbstractButton button = (AbstractButton) e.getSource();
 			ButtonUI ui = button.getUI();
-			if(ui instanceof FilledButtonUI) {
-				FilledButtonUI fui = (FilledButtonUI)ui;
+			if (ui instanceof FilledButtonUI) {
+				FilledButtonUI fui = (FilledButtonUI) ui;
 				List<PaintUIEffect> list = fui.getEffects(button);
 				int ctr = 0;
-				while(ctr<list.size()) {
+				while (ctr < list.size()) {
 					PaintUIEffect effect = list.get(ctr);
-					if(effect instanceof ShimmerPaintUIEffect &&
-							effect.getProgress()<.2f &&
-							effect.getComponent()==button) {
+					if (effect instanceof ShimmerPaintUIEffect
+							&& effect.getProgress() < .2f
+							&& effect.getComponent() == button) {
 						list.remove(ctr);
 					} else {
 						ctr++;
@@ -58,13 +59,13 @@ public class ShimmerPaintUIEffect extends PaintUIEffect {
 			}
 		}
 	};
-	
+
 	final AbstractButton button;
 	final GeneralPath p = new GeneralPath();
-	
+
 	float slantWidth = 10;
 	float shimmerWidth = 20;
-	
+
 	public ShimmerPaintUIEffect(AbstractButton button) {
 		super(button, 500, 40);
 		this.button = button;
@@ -73,7 +74,7 @@ public class ShimmerPaintUIEffect extends PaintUIEffect {
 	@Override
 	public void paint(Graphics2D g) {
 		float p2 = (progress - .2f) / .8f;
-		FilledButtonUI ui = (FilledButtonUI)button.getUI();
+		FilledButtonUI ui = (FilledButtonUI) button.getUI();
 		float dx = p2 * (button.getWidth() + slantWidth + shimmerWidth);
 		p.reset();
 		p.moveTo(dx, 0);
@@ -85,7 +86,7 @@ public class ShimmerPaintUIEffect extends PaintUIEffect {
 		g.setColor(new Color(255, 255, 255, 100));
 		g.fill(p);
 	}
-	
+
 	@Override
 	public boolean isBackground() {
 		return false;

@@ -27,7 +27,7 @@ import com.pump.swing.TextInputDialog.StringInputHandler;
  * See instructions in {@link ReleaseApp}.
  */
 public class BackupJars {
-	
+
 	public static void main(String[] args) throws IOException {
 		final FileFilter fileFilter = new FileFilter() {
 			@Override
@@ -36,29 +36,39 @@ public class BackupJars {
 			}
 		};
 		StringInputHandler handler = new FilePathInputHandler(fileFilter);
-		String mavenDirPath = TextInputDialog.show(new JFrame(), "Select Directory", "What is the source directory?", "Please enter the root directory Maven jars are currently stored in.", "Directory Path", "Directory Path", null, Preferences.userNodeForPackage(BackupJars.class), "mavenPath", handler);
-		if(mavenDirPath==null) {
+		String mavenDirPath = TextInputDialog
+				.show(new JFrame(),
+						"Select Directory",
+						"What is the source directory?",
+						"Please enter the root directory Maven jars are currently stored in.",
+						"Directory Path", "Directory Path", null,
+						Preferences.userNodeForPackage(BackupJars.class),
+						"mavenPath", handler);
+		if (mavenDirPath == null) {
 			return;
 		}
 		File mavenDir = new File(mavenDirPath);
 		Workspace workspace = new Workspace();
-		String k = "com"+File.separator+"pump"+File.separator;
-		for(File file : new FileTree(mavenDir)) {
+		String k = "com" + File.separator + "pump" + File.separator;
+		for (File file : new FileTree(mavenDir)) {
 			String path = file.getAbsolutePath();
 			int i = path.indexOf(k);
-			if(i!=-1 && (!file.getName().equals(".DS_STORE"))) {
+			if (i != -1 && (!file.getName().equals(".DS_STORE"))) {
 				String remainder = path.substring(i);
-				String z = workspace.getReleases().getDirectory() + File.separator + remainder;
+				String z = workspace.getReleases().getDirectory()
+						+ File.separator + remainder;
 				File newFile = new File(z);
-				
-				if(file.isDirectory()) {
+
+				if (file.isDirectory()) {
 					newFile.mkdirs();
 				} else {
 					boolean result = IOUtils.copy(file, newFile, true);
-					if(result) {
-						System.out.println("Copied "+file.getAbsolutePath()+" to "+newFile.getAbsolutePath());			
+					if (result) {
+						System.out.println("Copied " + file.getAbsolutePath()
+								+ " to " + newFile.getAbsolutePath());
 					} else {
-						System.out.println("Skipped "+file.getAbsolutePath()+" to "+newFile.getAbsolutePath());
+						System.out.println("Skipped " + file.getAbsolutePath()
+								+ " to " + newFile.getAbsolutePath());
 					}
 				}
 			}

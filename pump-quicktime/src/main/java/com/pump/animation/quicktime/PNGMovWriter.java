@@ -18,7 +18,8 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-/** A MovWriter that encodes frames as a series of PNG images.
+/**
+ * A MovWriter that encodes frames as a series of PNG images.
  */
 public class PNGMovWriter extends MovWriter {
 
@@ -28,13 +29,14 @@ public class PNGMovWriter extends MovWriter {
 
 	@Override
 	protected VideoSampleDescriptionEntry getVideoSampleDescriptionEntry() {
-		return VideoSampleDescriptionEntry.createPNGDescription( videoTrack.w, videoTrack.h);
+		return VideoSampleDescriptionEntry.createPNGDescription(videoTrack.w,
+				videoTrack.h);
 	}
 
 	@Override
 	protected void writeFrame(OutputStream out, BufferedImage image,
 			Map<String, Object> settings) throws IOException {
-		if(!ImageIO.write(image, "png", out))
+		if (!ImageIO.write(image, "png", out))
 			throw new IOException("writed failed");
 	}
 }

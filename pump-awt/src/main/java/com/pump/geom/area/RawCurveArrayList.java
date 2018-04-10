@@ -10,7 +10,6 @@
  */
 package com.pump.geom.area;
 
-
 public class RawCurveArrayList extends CurveList {
 
 	protected RawCurveArrayList(int initialCapacity) {
@@ -18,8 +17,8 @@ public class RawCurveArrayList extends CurveList {
 	}
 
 	/**
-	 * Removes all of the elements from this list.  The list will
-	 * be empty after this call returns.
+	 * Removes all of the elements from this list. The list will be empty after
+	 * this call returns.
 	 */
 	protected void clear() {
 		// Let gc do its work
@@ -32,7 +31,7 @@ public class RawCurveArrayList extends CurveList {
 	protected CurveX[] getArray() {
 		return elementData;
 	}
-	
+
 	protected CurveX[] getArray(int minArraySize) {
 		ensureCapacity(minArraySize);
 		return elementData;

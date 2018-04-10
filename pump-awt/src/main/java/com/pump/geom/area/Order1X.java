@@ -21,10 +21,7 @@ final class Order1X extends CurveX {
 	final private double xmin;
 	final private double xmax;
 
-	public Order1X(double x0, double y0,
-			double x1, double y1,
-			int direction)
-	{
+	public Order1X(double x0, double y0, double x1, double y1, int direction) {
 		super(direction);
 		this.x0 = x0;
 		this.y0 = y0;
@@ -102,7 +99,7 @@ final class Order1X extends CurveX {
 		if (y >= y1) {
 			return x1;
 		}
-//		assert(y0 != y1); /* No horizontal lines... */
+		// assert(y0 != y1); /* No horizontal lines... */
 		return (x0 + (y - y0) * (x1 - x0) / (y1 - y0));
 	}
 
@@ -233,7 +230,8 @@ final class Order1X extends CurveX {
 		}
 		yrange[1] = Math.min(Math.min(yrange[1], y1), c1.y1);
 		if (yrange[1] <= yrange[0]) {
-			throw new InternalError("backstepping from "+yrange[0]+" to "+yrange[1]);
+			throw new InternalError("backstepping from " + yrange[0] + " to "
+					+ yrange[1]);
 		}
 		if (xmax <= c1.xmin) {
 			return (xmin == c1.xmax) ? 0 : -1;
@@ -242,36 +240,22 @@ final class Order1X extends CurveX {
 			return 1;
 		}
 		/*
-		 * If "this" is curve A and "other" is curve B, then...
-		 * xA(y) = x0A + (y - y0A) (x1A - x0A) / (y1A - y0A)
-		 * xB(y) = x0B + (y - y0B) (x1B - x0B) / (y1B - y0B)
-		 * xA(y) == xB(y)
-		 * x0A + (y - y0A) (x1A - x0A) / (y1A - y0A)
-		 *    == x0B + (y - y0B) (x1B - x0B) / (y1B - y0B)
-		 * 0 == x0A (y1A - y0A) (y1B - y0B) + (y - y0A) (x1A - x0A) (y1B - y0B)
-		 *    - x0B (y1A - y0A) (y1B - y0B) - (y - y0B) (x1B - x0B) (y1A - y0A)
-		 * 0 == (x0A - x0B) (y1A - y0A) (y1B - y0B)
-		 *    + (y - y0A) (x1A - x0A) (y1B - y0B)
-		 *    - (y - y0B) (x1B - x0B) (y1A - y0A)
-		 * If (dxA == x1A - x0A), etc...
-		 * 0 == (x0A - x0B) * dyA * dyB
-		 *    + (y - y0A) * dxA * dyB
-		 *    - (y - y0B) * dxB * dyA
-		 * 0 == (x0A - x0B) * dyA * dyB
-		 *    + y * dxA * dyB - y0A * dxA * dyB
-		 *    - y * dxB * dyA + y0B * dxB * dyA
-		 * 0 == (x0A - x0B) * dyA * dyB
-		 *    + y * dxA * dyB - y * dxB * dyA
-		 *    - y0A * dxA * dyB + y0B * dxB * dyA
-		 * 0 == (x0A - x0B) * dyA * dyB
-		 *    + y * (dxA * dyB - dxB * dyA)
-		 *    - y0A * dxA * dyB + y0B * dxB * dyA
-		 * y == ((x0A - x0B) * dyA * dyB
-		 *       - y0A * dxA * dyB + y0B * dxB * dyA)
-		 *    / (-(dxA * dyB - dxB * dyA))
-		 * y == ((x0A - x0B) * dyA * dyB
-		 *       - y0A * dxA * dyB + y0B * dxB * dyA)
-		 *    / (dxB * dyA - dxA * dyB)
+		 * If "this" is curve A and "other" is curve B, then... xA(y) = x0A + (y
+		 * - y0A) (x1A - x0A) / (y1A - y0A) xB(y) = x0B + (y - y0B) (x1B - x0B)
+		 * / (y1B - y0B) xA(y) == xB(y) x0A + (y - y0A) (x1A - x0A) / (y1A -
+		 * y0A) == x0B + (y - y0B) (x1B - x0B) / (y1B - y0B) 0 == x0A (y1A -
+		 * y0A) (y1B - y0B) + (y - y0A) (x1A - x0A) (y1B - y0B) - x0B (y1A -
+		 * y0A) (y1B - y0B) - (y - y0B) (x1B - x0B) (y1A - y0A) 0 == (x0A - x0B)
+		 * (y1A - y0A) (y1B - y0B) + (y - y0A) (x1A - x0A) (y1B - y0B) - (y -
+		 * y0B) (x1B - x0B) (y1A - y0A) If (dxA == x1A - x0A), etc... 0 == (x0A
+		 * - x0B) * dyA * dyB + (y - y0A) * dxA * dyB - (y - y0B) * dxB * dyA 0
+		 * == (x0A - x0B) * dyA * dyB + y * dxA * dyB - y0A * dxA * dyB - y *
+		 * dxB * dyA + y0B * dxB * dyA 0 == (x0A - x0B) * dyA * dyB + y * dxA *
+		 * dyB - y * dxB * dyA - y0A * dxA * dyB + y0B * dxB * dyA 0 == (x0A -
+		 * x0B) * dyA * dyB + y * (dxA * dyB - dxB * dyA) - y0A * dxA * dyB +
+		 * y0B * dxB * dyA y == ((x0A - x0B) * dyA * dyB - y0A * dxA * dyB + y0B
+		 * * dxB * dyA) / (-(dxA * dyB - dxB * dyA)) y == ((x0A - x0B) * dyA *
+		 * dyB - y0A * dxA * dyB + y0B * dxB * dyA) / (dxB * dyA - dxA * dyB)
 		 */
 		double dxa = x1 - x0;
 		double dya = y1 - y0;
@@ -280,27 +264,26 @@ final class Order1X extends CurveX {
 		double denom = dxb * dya - dxa * dyb;
 		double y;
 		if (denom != 0) {
-			double num = ((x0 - c1.x0) * dya * dyb
-					- y0 * dxa * dyb
-					+ c1.y0 * dxb * dya);
+			double num = ((x0 - c1.x0) * dya * dyb - y0 * dxa * dyb + c1.y0
+					* dxb * dya);
 			y = num / denom;
 			if (y <= yrange[0]) {
-//				intersection is above us
-//				Use bottom-most common y for comparison
+				// intersection is above us
+				// Use bottom-most common y for comparison
 				y = Math.min(y1, c1.y1);
 			} else {
-//				intersection is below the top of our range
+				// intersection is below the top of our range
 				if (y < yrange[1]) {
-//					If intersection is in our range, adjust valid range
+					// If intersection is in our range, adjust valid range
 					yrange[1] = y;
 				}
-//				Use top-most common y for comparison
+				// Use top-most common y for comparison
 				y = Math.max(y0, c1.y0);
 			}
 		} else {
-//			lines are parallel, choose any common y for comparison
-//			Note - prefer an endpoint for speed of calculating the X
-//			(see shortcuts in Order1.XforY())
+			// lines are parallel, choose any common y for comparison
+			// Note - prefer an endpoint for speed of calculating the X
+			// (see shortcuts in Order1.XforY())
 			y = Math.max(y0, c1.y0);
 		}
 		return orderof(XforY(y), c1.XforY(y));

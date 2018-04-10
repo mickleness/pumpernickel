@@ -28,12 +28,12 @@ public class JarId {
 
 	@Override
 	public String toString() {
-		return artifactId+":"+version;
+		return artifactId + ":" + version;
 	}
 
 	@Override
 	public boolean equals(Object t) {
-		if(!(t instanceof JarId))
+		if (!(t instanceof JarId))
 			return false;
 		return toString().equals(t.toString());
 	}

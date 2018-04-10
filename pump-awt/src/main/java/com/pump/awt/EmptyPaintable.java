@@ -16,12 +16,12 @@ import java.awt.Graphics2D;
 public class EmptyPaintable implements Paintable {
 	Color color;
 	int width, height;
-	
-	public EmptyPaintable(int width,int height) {
+
+	public EmptyPaintable(int width, int height) {
 		this(null, width, height);
 	}
-	
-	public EmptyPaintable(Color color,int width,int height) {
+
+	public EmptyPaintable(Color color, int width, int height) {
 		this.width = width;
 		this.height = height;
 		this.color = color;
@@ -36,7 +36,7 @@ public class EmptyPaintable implements Paintable {
 	}
 
 	public void paint(Graphics2D g) {
-		if(color!=null) {
+		if (color != null) {
 			g.setColor(color);
 			g.fillRect(0, 0, width, height);
 		}

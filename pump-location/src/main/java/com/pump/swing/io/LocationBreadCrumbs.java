@@ -19,59 +19,58 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.io.location.IOLocation;
 import com.pump.swing.JBreadCrumb;
-import com.pump.swing.JBreadCrumb.BreadCrumbFormatter;
 import com.pump.swing.NavigationListener;
-import com.pump.swing.NavigationListener.ListSelectionType;
 
 public class LocationBreadCrumbs extends JBreadCrumb<IOLocation> {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public LocationBreadCrumbs() {
-		setFormatter(new BreadCrumbFormatter<IOLocation>() {
+    public LocationBreadCrumbs() {
+	setFormatter(new BreadCrumbFormatter<IOLocation>() {
 
-			public void format(JBreadCrumb<IOLocation> container, JLabel label,
-					IOLocation pathNode, int index) {
-				label.setText(pathNode.getName());
-				label.setIcon(pathNode.getIcon(null));
-			}
-			
-		});
-	}
+	    public void format(JBreadCrumb<IOLocation> container, JLabel label,
+		    IOLocation pathNode, int index) {
+		label.setText(pathNode.getName());
+		label.setIcon(pathNode.getIcon(null));
+	    }
 
-	public LocationBreadCrumbs(final LocationHistory history) {
-		this();
-		history.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				setPath(getPath(history.getLocation()));
-			}
-		});
+	});
+    }
+
+    public LocationBreadCrumbs(final LocationHistory history) {
+	this();
+	history.addChangeListener(new ChangeListener() {
+	    public void stateChanged(ChangeEvent e) {
 		setPath(getPath(history.getLocation()));
-		
-		addNavigationListener(new NavigationListener<IOLocation>() {
+	    }
+	});
+	setPath(getPath(history.getLocation()));
 
-			public boolean elementsSelected(
-					NavigationListener.ListSelectionType type,
-					IOLocation... elements) {
-				if(ListSelectionType.DOUBLE_CLICK.equals(type)) {
-					history.append( elements[0] );
-					return true;
-				}
-				return false;
-			}
-			
-		});
-	}
-	
-	/** Create a tree path of parents ending with the location provided.
-	 */
-	protected IOLocation[] getPath(IOLocation loc) {
-		List<IOLocation> path = new LinkedList<IOLocation>();
-		IOLocation t = loc;
-		while(true) {
-			if(t==null || path.contains(t) || path.size()>50) 
-				return path.toArray(new IOLocation[path.size()]);
-			path.add(0, t);
-			t = t.getParent();
+	addNavigationListener(new NavigationListener<IOLocation>() {
+
+	    public boolean elementsSelected(
+		    NavigationListener.ListSelectionType type,
+		    IOLocation... elements) {
+		if (ListSelectionType.DOUBLE_CLICK.equals(type)) {
+		    history.append(elements[0]);
+		    return true;
 		}
+		return false;
+	    }
+
+	});
+    }
+
+    /**
+     * Create a tree path of parents ending with the location provided.
+     */
+    protected IOLocation[] getPath(IOLocation loc) {
+	List<IOLocation> path = new LinkedList<IOLocation>();
+	IOLocation t = loc;
+	while (true) {
+	    if (t == null || path.contains(t) || path.size() > 50)
+		return path.toArray(new IOLocation[path.size()]);
+	    path.add(0, t);
+	    t = t.getParent();
 	}
+    }
 }

@@ -17,14 +17,15 @@ import java.io.FileFilter;
  * This is an Iterable wrapper for the {@link FileTreeIterator} class.
  */
 public class FileTree implements Iterable<File> {
-	
+
 	File dir;
 	FileFilter filter;
-	
+
 	/**
 	 * Create a new FileTree.
 	 * 
-	 * @param dir the directory to traverse.
+	 * @param dir
+	 *            the directory to traverse.
 	 */
 	public FileTree(File dir) {
 		this.dir = dir;
@@ -33,10 +34,12 @@ public class FileTree implements Iterable<File> {
 	/**
 	 * Create a new FileTree.
 	 * 
-	 * @param dir the directory to traverse.
-	 * @param filter the optional FileFilter to apply.
+	 * @param dir
+	 *            the directory to traverse.
+	 * @param filter
+	 *            the optional FileFilter to apply.
 	 */
-	public FileTree(File dir,FileFilter filter) {
+	public FileTree(File dir, FileFilter filter) {
 		this.dir = dir;
 		this.filter = filter;
 	}
@@ -44,10 +47,12 @@ public class FileTree implements Iterable<File> {
 	/**
 	 * Create a new FileTree.
 	 * 
-	 * @param dir the directory to traverse.
-	 * @param extensions a series of file extensions to filter for.
+	 * @param dir
+	 *            the directory to traverse.
+	 * @param extensions
+	 *            a series of file extensions to filter for.
 	 */
-	public FileTree(File dir,String... extensions) {
+	public FileTree(File dir, String... extensions) {
 		this(dir, new SuffixFilenameFilter(extensions));
 	}
 

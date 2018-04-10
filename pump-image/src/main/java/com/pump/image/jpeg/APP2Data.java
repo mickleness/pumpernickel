@@ -12,13 +12,16 @@ package com.pump.image.jpeg;
 
 import java.io.IOException;
 
-/** Two of several thousand images on my computer had an APP2
- * block with a thumbnail:
- * <br>/Library/Mail Downloads/100_0824.JPG
- * <br>/Users/bricolage1/Pictures/iPhoto Library/Originals/2007/May 24, 2007/Picture 004.jpg
+/**
+ * Two of several thousand images on my computer had an APP2 block with a
+ * thumbnail: <br>
+ * /Library/Mail Downloads/100_0824.JPG <br>
+ * /Users/bricolage1/Pictures/iPhoto Library/Originals/2007/May 24, 2007/Picture
+ * 004.jpg
  */
 class APP2Data extends GenericDataWithThumbnail {
-	APP2Data(JPEGMarkerInputStream in, boolean storeThumbnail) throws IOException {
+	APP2Data(JPEGMarkerInputStream in, boolean storeThumbnail)
+			throws IOException {
 		super(in, storeThumbnail);
 	}
 }

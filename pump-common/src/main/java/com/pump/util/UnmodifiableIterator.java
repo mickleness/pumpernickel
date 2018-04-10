@@ -12,18 +12,19 @@ package com.pump.util;
 
 import java.util.Iterator;
 
-/** This is an Iterator that throws an <code>UnsupportedOperationException()</code>
- * when <code>remove()</code> is called. This guarantees the underlying iterator
- * won't be modified.
+/**
+ * This is an Iterator that throws an
+ * <code>UnsupportedOperationException()</code> when <code>remove()</code> is
+ * called. This guarantees the underlying iterator won't be modified.
  */
 public class UnmodifiableIterator<T> implements Iterator<T> {
 
 	Iterator<T> iter;
-	
+
 	public UnmodifiableIterator(Iterator<T> iter) {
 		this.iter = iter;
 	}
-	
+
 	public boolean hasNext() {
 		return iter.hasNext();
 	}

@@ -24,25 +24,27 @@ public class BasicReceiver<T> implements Receiver<T>, ListModel<T>, Iterable<T> 
 	List<T> list = new ArrayList<T>();
 	List<ListDataListener> listeners = new ArrayList<ListDataListener>();
 	List<Receiver<T>> receivers = new ArrayList<Receiver<T>>();
-	
-	/** Bind another <code>Receiver</code> to this object, so when
-	 * elements are added to this receiver, the argument receives
-	 * those elements too.
+
+	/**
+	 * Bind another <code>Receiver</code> to this object, so when elements are
+	 * added to this receiver, the argument receives those elements too.
 	 * 
-	 * @param receiver the new receiver.
-	 * @param addExistingElements whether the new receiver should
-	 * receive a copy of all existing elements.
+	 * @param receiver
+	 *            the new receiver.
+	 * @param addExistingElements
+	 *            whether the new receiver should receive a copy of all existing
+	 *            elements.
 	 */
-	public void add(Receiver<T> receiver,boolean addExistingElements) {
-		synchronized(this) {
-			if(addExistingElements) {
-				//because we can't create an array of type T: we'll
-				//add these one at a time
-				for(int a = 0; a<list.size(); a++) {
-					
-					//ugh. Stupid varargs and ClassCastExceptions...
+	public void add(Receiver<T> receiver, boolean addExistingElements) {
+		synchronized (this) {
+			if (addExistingElements) {
+				// because we can't create an array of type T: we'll
+				// add these one at a time
+				for (int a = 0; a < list.size(); a++) {
+
+					// ugh. Stupid varargs and ClassCastExceptions...
 					T element = list.get(a);
-					T[] array = (T[])Array.newInstance(element.getClass(), 1);
+					T[] array = (T[]) Array.newInstance(element.getClass(), 1);
 					array[0] = element;
 					receiver.add(array);
 				}
@@ -50,33 +52,35 @@ public class BasicReceiver<T> implements Receiver<T>, ListModel<T>, Iterable<T> 
 			receivers.add(receiver);
 		}
 	}
-	
+
 	public T[] toArray(T[] array) {
-		for(int a = 0; a<list.size(); a++) {
+		for (int a = 0; a < list.size(); a++) {
 			array[a] = list.get(a);
 		}
 		return array;
 	}
-	
+
 	@Override
 	public void add(T... elements) {
-		if(elements.length==0) return;
-		
+		if (elements.length == 0)
+			return;
+
 		int index1, index2;
-		synchronized(this) {
-			//to describe the event:
+		synchronized (this) {
+			// to describe the event:
 			index1 = list.size();
-			index2 = index1 + elements.length-1;
-			
-			for(T t : elements) {
+			index2 = index1 + elements.length - 1;
+
+			for (T t : elements) {
 				list.add(t);
 			}
-			for(Receiver<T> receiver : receivers) {
+			for (Receiver<T> receiver : receivers) {
 				receiver.add(elements);
 			}
 		}
-		for(ListDataListener listener : listeners) {
-			listener.intervalAdded(new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, index1, index2));
+		for (ListDataListener listener : listeners) {
+			listener.intervalAdded(new ListDataEvent(this,
+					ListDataEvent.INTERVAL_ADDED, index1, index2));
 		}
 	}
 
@@ -95,9 +99,9 @@ public class BasicReceiver<T> implements Receiver<T>, ListModel<T>, Iterable<T> 
 		return list.get(index);
 	}
 
-	/** Add a ListDataListener. This will only be issued
-	 * INTERVAL_ADDED events, because a Receiver object
-	 * only supports add operations.
+	/**
+	 * Add a ListDataListener. This will only be issued INTERVAL_ADDED events,
+	 * because a Receiver object only supports add operations.
 	 */
 	public void addListDataListener(ListDataListener l) {
 		listeners.add(l);

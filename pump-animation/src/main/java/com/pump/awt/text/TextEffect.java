@@ -16,23 +16,21 @@ import java.awt.Graphics2D;
 import com.pump.blog.Blurb;
 
 /** This is a common interface for visual text effects. */
-@Blurb (
-title = "Text: Effects and Block Shadows",
-releaseDate = "February 2011",
-summary = "Create some fun text effects using block shadows.",
-article = "http://javagraphics.blogspot.com/2011/02/text-effects-and-block-shadows.html",
-imageName = "TextEffect.png")
+@Blurb(title = "Text: Effects and Block Shadows", releaseDate = "February 2011", summary = "Create some fun text effects using block shadows.", article = "http://javagraphics.blogspot.com/2011/02/text-effects-and-block-shadows.html", imageName = "TextEffect.png")
 public interface TextEffect {
-	
-	/** Paint this effect.
+
+	/**
+	 * Paint this effect.
 	 * 
-	 * @param g the Graphics2D to paint to.
-	 * @param fraction a float from [0, 1] indicating how far along
-	 * this effect it.
+	 * @param g
+	 *            the Graphics2D to paint to.
+	 * @param fraction
+	 *            a float from [0, 1] indicating how far along this effect it.
 	 */
-	public void paint(Graphics2D g,float fraction);
-	
-	/** An optional method to retrieve the preferred size. May return null.
+	public void paint(Graphics2D g, float fraction);
+
+	/**
+	 * An optional method to retrieve the preferred size. May return null.
 	 * 
 	 */
 	public Dimension getPreferredSize();

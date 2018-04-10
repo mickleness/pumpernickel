@@ -39,35 +39,35 @@ final class Order3X extends CurveX {
 	final private double ycoeff2;
 	final private double ycoeff3;
 
-	public static void insert(CurveList curves, double tmp[],
-			double x0, double y0,
-			double cx0, double cy0,
-			double cx1, double cy1,
-			double x1, double y1,
-			int direction)
-	{
+	public static void insert(CurveList curves, double tmp[], double x0,
+			double y0, double cx0, double cy0, double cx1, double cy1,
+			double x1, double y1, int direction) {
 		int numparams = getHorizontalParams(y0, cy0, cy1, y1, tmp);
 		if (numparams == 0) {
-//			We are using addInstance here to avoid inserting horisontal
-//			segments
+			// We are using addInstance here to avoid inserting horisontal
+			// segments
 			addInstance(curves, x0, y0, cx0, cy0, cx1, cy1, x1, y1, direction);
 			return;
 		}
-//		Store coordinates for splitting at tmp[3..10]
-		tmp[3] = x0;  tmp[4]  = y0;
-		tmp[5] = cx0; tmp[6]  = cy0;
-		tmp[7] = cx1; tmp[8]  = cy1;
-		tmp[9] = x1;  tmp[10] = y1;
+		// Store coordinates for splitting at tmp[3..10]
+		tmp[3] = x0;
+		tmp[4] = y0;
+		tmp[5] = cx0;
+		tmp[6] = cy0;
+		tmp[7] = cx1;
+		tmp[8] = cy1;
+		tmp[9] = x1;
+		tmp[10] = y1;
 		double t = tmp[0];
 		if (numparams > 1 && t > tmp[1]) {
-//			Perform a "2 element sort"...
+			// Perform a "2 element sort"...
 			tmp[0] = tmp[1];
 			tmp[1] = t;
 			t = tmp[0];
 		}
 		split(tmp, 3, t);
 		if (numparams > 1) {
-//			Recalculate tmp[1] relative to the range [tmp[0]...1]
+			// Recalculate tmp[1] relative to the range [tmp[0]...1]
 			t = (tmp[1] - t) / (1 - t);
 			split(tmp, 9, t);
 		}
@@ -76,12 +76,9 @@ final class Order3X extends CurveX {
 			index += numparams * 6;
 		}
 		while (numparams >= 0) {
-			addInstance(curves,
-					tmp[index + 0], tmp[index + 1],
-					tmp[index + 2], tmp[index + 3],
-					tmp[index + 4], tmp[index + 5],
-					tmp[index + 6], tmp[index + 7],
-					direction);
+			addInstance(curves, tmp[index + 0], tmp[index + 1], tmp[index + 2],
+					tmp[index + 3], tmp[index + 4], tmp[index + 5],
+					tmp[index + 6], tmp[index + 7], direction);
 			numparams--;
 			if (direction == INCREASING) {
 				index += 6;
@@ -91,12 +88,9 @@ final class Order3X extends CurveX {
 		}
 	}
 
-	public static void addInstance(CurveList curves,
-			double x0, double y0,
-			double cx0, double cy0,
-			double cx1, double cy1,
-			double x1, double y1,
-			int direction) {
+	public static void addInstance(CurveList curves, double x0, double y0,
+			double cx0, double cy0, double cx1, double cy1, double x1,
+			double y1, int direction) {
 		if (y0 > y1) {
 			curves.add(new Order3X(x1, y1, cx1, cy1, cx0, cy0, x0, y0,
 					-direction));
@@ -107,46 +101,26 @@ final class Order3X extends CurveX {
 	}
 
 	/*
-	 * Return the count of the number of horizontal sections of the
-	 * specified cubic Bezier curve.  Put the parameters for the
-	 * horizontal sections into the specified <code>ret</code> array.
-	 * <p>
-	 * If we examine the parametric equation in t, we have:
-	 *   Py(t) = C0(1-t)^3 + 3CP0 t(1-t)^2 + 3CP1 t^2(1-t) + C1 t^3
-	 *         = C0 - 3C0t + 3C0t^2 - C0t^3 +
-	 *           3CP0t - 6CP0t^2 + 3CP0t^3 +
-	 *           3CP1t^2 - 3CP1t^3 +
-	 *           C1t^3
-	 *   Py(t) = (C1 - 3CP1 + 3CP0 - C0) t^3 +
-	 *           (3C0 - 6CP0 + 3CP1) t^2 +
-	 *           (3CP0 - 3C0) t +
-	 *           (C0)
-	 * If we take the derivative, we get:
-	 *   Py(t) = Dt^3 + At^2 + Bt + C
-	 *   dPy(t) = 3Dt^2 + 2At + B = 0
-	 *        0 = 3*(C1 - 3*CP1 + 3*CP0 - C0)t^2
-	 *          + 2*(3*CP1 - 6*CP0 + 3*C0)t
-	 *          + (3*CP0 - 3*C0)
-	 *        0 = 3*(C1 - 3*CP1 + 3*CP0 - C0)t^2
-	 *          + 3*2*(CP1 - 2*CP0 + C0)t
-	 *          + 3*(CP0 - C0)
-	 *        0 = (C1 - CP1 - CP1 - CP1 + CP0 + CP0 + CP0 - C0)t^2
-	 *          + 2*(CP1 - CP0 - CP0 + C0)t
-	 *          + (CP0 - C0)
-	 *        0 = (C1 - CP1 + CP0 - CP1 + CP0 - CP1 + CP0 - C0)t^2
-	 *          + 2*(CP1 - CP0 - CP0 + C0)t
-	 *          + (CP0 - C0)
-	 *        0 = ((C1 - CP1) - (CP1 - CP0) - (CP1 - CP0) + (CP0 - C0))t^2
-	 *          + 2*((CP1 - CP0) - (CP0 - C0))t
-	 *          + (CP0 - C0)
-	 * Note that this method will return 0 if the equation is a line,
-	 * which is either always horizontal or never horizontal.
-	 * Completely horizontal curves need to be eliminated by other
-	 * means outside of this method.
+	 * Return the count of the number of horizontal sections of the specified
+	 * cubic Bezier curve. Put the parameters for the horizontal sections into
+	 * the specified <code>ret</code> array. <p> If we examine the parametric
+	 * equation in t, we have: Py(t) = C0(1-t)^3 + 3CP0 t(1-t)^2 + 3CP1 t^2(1-t)
+	 * + C1 t^3 = C0 - 3C0t + 3C0t^2 - C0t^3 + 3CP0t - 6CP0t^2 + 3CP0t^3 +
+	 * 3CP1t^2 - 3CP1t^3 + C1t^3 Py(t) = (C1 - 3CP1 + 3CP0 - C0) t^3 + (3C0 -
+	 * 6CP0 + 3CP1) t^2 + (3CP0 - 3C0) t + (C0) If we take the derivative, we
+	 * get: Py(t) = Dt^3 + At^2 + Bt + C dPy(t) = 3Dt^2 + 2At + B = 0 0 = 3*(C1
+	 * - 3*CP1 + 3*CP0 - C0)t^2 + 2*(3*CP1 - 6*CP0 + 3*C0)t + (3*CP0 - 3*C0) 0 =
+	 * 3*(C1 - 3*CP1 + 3*CP0 - C0)t^2 + 3*2*(CP1 - 2*CP0 + C0)t + 3*(CP0 - C0) 0
+	 * = (C1 - CP1 - CP1 - CP1 + CP0 + CP0 + CP0 - C0)t^2 + 2*(CP1 - CP0 - CP0 +
+	 * C0)t + (CP0 - C0) 0 = (C1 - CP1 + CP0 - CP1 + CP0 - CP1 + CP0 - C0)t^2 +
+	 * 2*(CP1 - CP0 - CP0 + C0)t + (CP0 - C0) 0 = ((C1 - CP1) - (CP1 - CP0) -
+	 * (CP1 - CP0) + (CP0 - C0))t^2 + 2*((CP1 - CP0) - (CP0 - C0))t + (CP0 - C0)
+	 * Note that this method will return 0 if the equation is a line, which is
+	 * either always horizontal or never horizontal. Completely horizontal
+	 * curves need to be eliminated by other means outside of this method.
 	 */
-	public static int getHorizontalParams(double c0, double cp0,
-			double cp1, double c1,
-			double ret[]) {
+	public static int getHorizontalParams(double c0, double cp0, double cp1,
+			double c1, double ret[]) {
 		if (c0 <= cp0 && cp0 <= cp1 && cp1 <= c1) {
 			return 0;
 		}
@@ -160,7 +134,7 @@ final class Order3X extends CurveX {
 		int j = 0;
 		for (int i = 0; i < numroots; i++) {
 			double t = ret[i];
-//			No splits at t==0 and t==1
+			// No splits at t==0 and t==1
 			if (t > 0 && t < 1) {
 				if (j < i) {
 					ret[j] = t;
@@ -172,23 +146,23 @@ final class Order3X extends CurveX {
 	}
 
 	/*
-	 * Split the cubic Bezier stored at coords[pos...pos+7] representing
-	 * the parametric range [0..1] into two subcurves representing the
-	 * parametric subranges [0..t] and [t..1].  Store the results back
-	 * into the array at coords[pos...pos+7] and coords[pos+6...pos+13].
+	 * Split the cubic Bezier stored at coords[pos...pos+7] representing the
+	 * parametric range [0..1] into two subcurves representing the parametric
+	 * subranges [0..t] and [t..1]. Store the results back into the array at
+	 * coords[pos...pos+7] and coords[pos+6...pos+13].
 	 */
 	public static void split(double coords[], int pos, double t) {
 		double x0, y0, cx0, cy0, cx1, cy1, x1, y1;
-		coords[pos+12] = x1 = coords[pos+6];
-		coords[pos+13] = y1 = coords[pos+7];
-		cx1 = coords[pos+4];
-		cy1 = coords[pos+5];
+		coords[pos + 12] = x1 = coords[pos + 6];
+		coords[pos + 13] = y1 = coords[pos + 7];
+		cx1 = coords[pos + 4];
+		cy1 = coords[pos + 5];
 		x1 = cx1 + (x1 - cx1) * t;
 		y1 = cy1 + (y1 - cy1) * t;
-		x0 = coords[pos+0];
-		y0 = coords[pos+1];
-		cx0 = coords[pos+2];
-		cy0 = coords[pos+3];
+		x0 = coords[pos + 0];
+		y0 = coords[pos + 1];
+		cx0 = coords[pos + 2];
+		cy0 = coords[pos + 3];
 		x0 = x0 + (cx0 - x0) * t;
 		y0 = y0 + (cy0 - y0) * t;
 		cx0 = cx0 + (cx1 - cx0) * t;
@@ -197,30 +171,28 @@ final class Order3X extends CurveX {
 		cy1 = cy0 + (y1 - cy0) * t;
 		cx0 = x0 + (cx0 - x0) * t;
 		cy0 = y0 + (cy0 - y0) * t;
-		coords[pos+2] = x0;
-		coords[pos+3] = y0;
-		coords[pos+4] = cx0;
-		coords[pos+5] = cy0;
-		coords[pos+6] = cx0 + (cx1 - cx0) * t;
-		coords[pos+7] = cy0 + (cy1 - cy0) * t;
-		coords[pos+8] = cx1;
-		coords[pos+9] = cy1;
-		coords[pos+10] = x1;
-		coords[pos+11] = y1;
+		coords[pos + 2] = x0;
+		coords[pos + 3] = y0;
+		coords[pos + 4] = cx0;
+		coords[pos + 5] = cy0;
+		coords[pos + 6] = cx0 + (cx1 - cx0) * t;
+		coords[pos + 7] = cy0 + (cy1 - cy0) * t;
+		coords[pos + 8] = cx1;
+		coords[pos + 9] = cy1;
+		coords[pos + 10] = x1;
+		coords[pos + 11] = y1;
 	}
 
-	public Order3X(double x0, double y0,
-			double cx0, double cy0,
-			double cx1, double cy1,
-			double x1, double y1,
-			int direction)
-	{
+	public Order3X(double x0, double y0, double cx0, double cy0, double cx1,
+			double cy1, double x1, double y1, int direction) {
 		super(direction);
-//		REMIND: Better accuracy in the root finding methods would
-//		ensure that cys are in range.  As it stands, they are never
-//		more than "1 mantissa bit" out of range...
-		if (cy0 < y0) cy0 = y0;
-		if (cy1 > y1) cy1 = y1;
+		// REMIND: Better accuracy in the root finding methods would
+		// ensure that cys are in range. As it stands, they are never
+		// more than "1 mantissa bit" out of range...
+		if (cy0 < y0)
+			cy0 = y0;
+		if (cy1 > y1)
+			cy1 = y1;
 		this.x0 = x0;
 		this.y0 = y0;
 		this.cx0 = cx0;
@@ -321,22 +293,27 @@ final class Order3X extends CurveX {
 	private double YforT3;
 
 	/*
-	 * Solve the cubic whose coefficients are in the a,b,c,d fields and
-	 * return the first root in the range [0, 1].
-	 * The cubic solved is represented by the equation:
-	 *     x^3 + (ycoeff2)x^2 + (ycoeff1)x + (ycoeff0) = y
+	 * Solve the cubic whose coefficients are in the a,b,c,d fields and return
+	 * the first root in the range [0, 1]. The cubic solved is represented by
+	 * the equation: x^3 + (ycoeff2)x^2 + (ycoeff1)x + (ycoeff0) = y
+	 * 
 	 * @return the first valid root (in the range [0, 1])
 	 */
 	@Override
 	public double TforY(double y) {
-		if (y <= y0) return 0;
-		if (y >= y1) return 1;
-		if (y == YforT1) return TforY1;
-		if (y == YforT2) return TforY2;
-		if (y == YforT3) return TforY3;
-//		From Numerical Recipes, 5.6, Quadratic and Cubic Equations
+		if (y <= y0)
+			return 0;
+		if (y >= y1)
+			return 1;
+		if (y == YforT1)
+			return TforY1;
+		if (y == YforT2)
+			return TforY2;
+		if (y == YforT3)
+			return TforY3;
+		// From Numerical Recipes, 5.6, Quadratic and Cubic Equations
 		if (ycoeff3 == 0.0) {
-//			The cubic degenerated to quadratic (or line or ...).
+			// The cubic degenerated to quadratic (or line or ...).
 			return Order2X.TforY(y, ycoeff0, ycoeff1, ycoeff2);
 		}
 		double a = ycoeff2 / ycoeff3;
@@ -354,11 +331,11 @@ final class Order3X extends CurveX {
 			t = refine(a, b, c, y, Q * Math.cos(theta / 3.0) - a_3);
 			if (t < 0) {
 				t = refine(a, b, c, y,
-						Q * Math.cos((theta + Math.PI * 2.0)/ 3.0) - a_3);
+						Q * Math.cos((theta + Math.PI * 2.0) / 3.0) - a_3);
 			}
 			if (t < 0) {
 				t = refine(a, b, c, y,
-						Q * Math.cos((theta - Math.PI * 2.0)/ 3.0) - a_3);
+						Q * Math.cos((theta - Math.PI * 2.0) / 3.0) - a_3);
 			}
 		} else {
 			boolean neg = (R < 0.0);
@@ -374,7 +351,7 @@ final class Order3X extends CurveX {
 			t = refine(a, b, c, y, (A + B) - a_3);
 		}
 		if (t < 0) {
-//			throw new InternalError("bad t");
+			// throw new InternalError("bad t");
 			double t0 = 0;
 			double t1 = 1;
 			while (true) {
@@ -403,9 +380,7 @@ final class Order3X extends CurveX {
 		return t;
 	}
 
-	public double refine(double a, double b, double c,
-			double target, double t)
-	{
+	public double refine(double a, double b, double c, double target, double t) {
 		if (t < -0.1 || t > 1.1) {
 			return -1;
 		}
@@ -506,7 +481,7 @@ final class Order3X extends CurveX {
 
 	@Override
 	public double nextVertical(double t0, double t1) {
-		double eqn[] = {xcoeff1, 2 * xcoeff2, 3 * xcoeff3};
+		double eqn[] = { xcoeff1, 2 * xcoeff2, 3 * xcoeff3 };
 		int numroots = QuadCurve2D.solveQuadratic(eqn, eqn);
 		for (int i = 0; i < numroots; i++) {
 			if (eqn[i] > t0 && eqn[i] < t1) {
@@ -519,7 +494,7 @@ final class Order3X extends CurveX {
 	@Override
 	public void enlarge(Rectangle2D r) {
 		r.add(x0, y0);
-		double eqn[] = {xcoeff1, 2 * xcoeff2, 3 * xcoeff3};
+		double eqn[] = { xcoeff1, 2 * xcoeff2, 3 * xcoeff3 };
 		int numroots = QuadCurve2D.solveQuadratic(eqn, eqn);
 		for (int i = 0; i < numroots; i++) {
 			double t = eqn[i];
@@ -548,19 +523,17 @@ final class Order3X extends CurveX {
 		eqn[6] = x1;
 		eqn[7] = y1;
 		if (t0 > t1) {
-			/* This happens in only rare cases where ystart is
-			 * very near yend and solving for the yend root ends
-			 * up stepping slightly lower in t than solving for
-			 * the ystart root.
-			 * Ideally we might want to skip this tiny little
-			 * segment and just fudge the surrounding coordinates
-			 * to bridge the gap left behind, but there is no way
-			 * to do that from here.  Higher levels could
-			 * potentially eliminate these tiny "fixup" segments,
-			 * but not without a lot of extra work on the code that
-			 * coalesces chains of curves into subpaths.  The
-			 * simplest solution for now is to just reorder the t
-			 * values and chop out a miniscule curve piece.
+			/*
+			 * This happens in only rare cases where ystart is very near yend
+			 * and solving for the yend root ends up stepping slightly lower in
+			 * t than solving for the ystart root. Ideally we might want to skip
+			 * this tiny little segment and just fudge the surrounding
+			 * coordinates to bridge the gap left behind, but there is no way to
+			 * do that from here. Higher levels could potentially eliminate
+			 * these tiny "fixup" segments, but not without a lot of extra work
+			 * on the code that coalesces chains of curves into subpaths. The
+			 * simplest solution for now is to just reorder the t values and
+			 * chop out a miniscule curve piece.
 			 */
 			double t = t0;
 			t0 = t1;
@@ -576,11 +549,8 @@ final class Order3X extends CurveX {
 			split(eqn, 0, t0 / t1);
 			i = 6;
 		}
-		return new Order3X(eqn[i+0], ystart,
-				eqn[i+2], eqn[i+3],
-				eqn[i+4], eqn[i+5],
-				eqn[i+6], yend,
-				dir);
+		return new Order3X(eqn[i + 0], ystart, eqn[i + 2], eqn[i + 3],
+				eqn[i + 4], eqn[i + 5], eqn[i + 6], yend, dir);
 	}
 
 	@Override
@@ -610,7 +580,7 @@ final class Order3X extends CurveX {
 
 	@Override
 	public String controlPointString() {
-		return (("("+round(getCX0())+", "+round(getCY0())+"), ")+
-				("("+round(getCX1())+", "+round(getCY1())+"), "));
+		return (("(" + round(getCX0()) + ", " + round(getCY0()) + "), ") + ("("
+				+ round(getCX1()) + ", " + round(getCY1()) + "), "));
 	}
 }

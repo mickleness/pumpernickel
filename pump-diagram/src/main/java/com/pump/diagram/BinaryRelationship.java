@@ -10,11 +10,11 @@
  */
 package com.pump.diagram;
 
-public class BinaryRelationship
-{
+public class BinaryRelationship {
 	public final Relationship relationshipSideA, relationshipSideB;
-	
-	public BinaryRelationship(Relationship relationshipSideA, Relationship relationshipSideB) {
+
+	public BinaryRelationship(Relationship relationshipSideA,
+			Relationship relationshipSideB) {
 		this.relationshipSideA = relationshipSideA;
 		this.relationshipSideB = relationshipSideB;
 	}

@@ -23,14 +23,13 @@ import com.pump.swing.TextHighlightSheet;
 public class FirefoxSearchHighlight extends AbstractSearchHighlight {
 
 	protected static Color tackyGreenish = new Color(0x38D878);
-	
+
 	public FirefoxSearchHighlight(JTextComponent jtc, int startIndex,
 			int endIndex) {
 		super(jtc, startIndex, endIndex);
 	}
-	
-	public FirefoxSearchHighlight(JTable table, int rowIndex, int columnIndex)
-	{
+
+	public FirefoxSearchHighlight(JTable table, int rowIndex, int columnIndex) {
 		super(table, rowIndex, columnIndex);
 	}
 
@@ -43,12 +42,12 @@ public class FirefoxSearchHighlight extends AbstractSearchHighlight {
 	protected void paintHighlightBackground(Graphics2D g, Rectangle textRect) {
 		g.setColor(tackyGreenish);
 		int i = TextHighlightSheet.FIREFOX_PADDING;
-		g.fillRect(textRect.x-i, textRect.y-i, textRect.width+2*i, textRect.height+2*i);
+		g.fillRect(textRect.x - i, textRect.y - i, textRect.width + 2 * i,
+				textRect.height + 2 * i);
 	}
 
-
-
 	@Override
-	protected void updateAnimation(JComponent[] highlights, float fraction) {}
+	protected void updateAnimation(JComponent[] highlights, float fraction) {
+	}
 
 }

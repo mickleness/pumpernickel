@@ -28,12 +28,12 @@ import com.pump.util.CloseableMeasurableIterator;
  * @param <T>
  */
 public abstract class ZipIterator<T> implements CloseableMeasurableIterator<T> {
-	
+
 	DataSource dataSource;
 	float progress = -1;
 	T nextElement;
 	boolean closed = false;
-	
+
 	MeasuredInputStream measuredIn;
 	ZipInputStream zipIn;
 	Float fileSize;
@@ -47,27 +47,29 @@ public abstract class ZipIterator<T> implements CloseableMeasurableIterator<T> {
 	}
 
 	public ZipIterator(DataSource dataSource) throws Exception {
-		if(dataSource==null)
+		if (dataSource == null)
 			throw new NullPointerException();
 		this.dataSource = dataSource;
 		initialize();
-		
+
 		measuredIn = new MeasuredInputStream(getDataSource().getInputStream());
 		zipIn = new ZipInputStream(measuredIn);
 		fileSize = getFileSize();
 
 		queueNext();
 	}
-	
+
 	/**
-	 * Return the file size of the data being read, or null if that is indeterminate.
+	 * Return the file size of the data being read, or null if that is
+	 * indeterminate.
 	 * <p>
-	 * The default implementation only returns a non-null value if this iterator interacts with a File or FileDataSource.
+	 * The default implementation only returns a non-null value if this iterator
+	 * interacts with a File or FileDataSource.
 	 */
 	protected Float getFileSize() {
 		DataSource ds = getDataSource();
-		if(ds instanceof FileDataSource) {
-			return Float.valueOf( ((FileDataSource)ds).getFile().length() );
+		if (ds instanceof FileDataSource) {
+			return Float.valueOf(((FileDataSource) ds).getFile().length());
 		}
 		return null;
 	}
@@ -84,15 +86,21 @@ public abstract class ZipIterator<T> implements CloseableMeasurableIterator<T> {
 	/**
 	 * Convert the data from an InputStream into an element for this iterator.
 	 * 
-	 * @param inputStream the stream to read the data from. Although this stream is derived directly from the 
-	 * File/DataSource this iterator relates to: it is safe to call <code>close()</code> on it.
-	 * @param zipEntry the ZipEntry this stream represents.
+	 * @param inputStream
+	 *            the stream to read the data from. Although this stream is
+	 *            derived directly from the File/DataSource this iterator
+	 *            relates to: it is safe to call <code>close()</code> on it.
+	 * @param zipEntry
+	 *            the ZipEntry this stream represents.
 	 * @return an element parsed from the InputStream.
 	 */
-	protected abstract T parseZipEntry(InputStream inputStream, ZipEntry zipEntry) throws Exception;
+	protected abstract T parseZipEntry(InputStream inputStream,
+			ZipEntry zipEntry) throws Exception;
 
 	/**
-	 * This is an optional hook subclasses can use to do a preprocessing filter on the incoming data if needed.
+	 * This is an optional hook subclasses can use to do a preprocessing filter
+	 * on the incoming data if needed.
+	 * 
 	 * @param dataSource
 	 */
 	protected void initialize() {
@@ -100,16 +108,14 @@ public abstract class ZipIterator<T> implements CloseableMeasurableIterator<T> {
 	}
 
 	private void queueNext() throws Exception {
-		if(fileSize!=null) {
-			progress = measuredIn.getReadBytes()
-					/ fileSize.floatValue();
+		if (fileSize != null) {
+			progress = measuredIn.getReadBytes() / fileSize.floatValue();
 		}
 		ZipEntry entry = zipIn.getNextEntry();
-		if(entry!=null) {
-			MeasuredInputStream entryStream = new MeasuredInputStream(
-					zipIn);
+		if (entry != null) {
+			MeasuredInputStream entryStream = new MeasuredInputStream(zipIn);
 			entryStream.setCloseable(false);
-			nextElement = parseZipEntry(entryStream, entry); 
+			nextElement = parseZipEntry(entryStream, entry);
 		} else {
 			nextElement = null;
 		}

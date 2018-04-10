@@ -10,15 +10,18 @@
  */
 package com.pump.debug;
 
-/** This listener is notified when the event dispatch thread is
- * blocked for a substantial amount of time.
- * <P>This type of listener could, for example, try to submit
- * information to the developer, or try to do an emergency auto-save
- * and exit the application.
- * <P>This listener may want to immediately call <code>SwingUtilities.invokeLater()</code>
- * with a runnable that can <i>cancel</i> whatever this listener is doing.
- * That way if the event dispatch thread does resume business as usual: this
- * listener will abort whatever it's working on.
+/**
+ * This listener is notified when the event dispatch thread is blocked for a
+ * substantial amount of time.
+ * <P>
+ * This type of listener could, for example, try to submit information to the
+ * developer, or try to do an emergency auto-save and exit the application.
+ * <P>
+ * This listener may want to immediately call
+ * <code>SwingUtilities.invokeLater()</code> with a runnable that can
+ * <i>cancel</i> whatever this listener is doing. That way if the event dispatch
+ * thread does resume business as usual: this listener will abort whatever it's
+ * working on.
  *
  */
 public interface AWTPanicListener {

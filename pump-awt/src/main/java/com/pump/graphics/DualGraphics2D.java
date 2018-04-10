@@ -114,8 +114,8 @@ public class DualGraphics2D extends Graphics2D {
 
 	@Override
 	public Graphics create() {
-		return new DualGraphics2D((Graphics2D) g1.create(), (Graphics2D) g2
-				.create());
+		return new DualGraphics2D((Graphics2D) g1.create(),
+				(Graphics2D) g2.create());
 	}
 
 	@Override

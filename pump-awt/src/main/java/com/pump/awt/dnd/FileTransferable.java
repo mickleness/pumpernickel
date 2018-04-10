@@ -18,16 +18,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** A transferable for an array of files.
- * <p>This uses the standard {@link java.awt.datatransfer.DataFlavor#javaFileListFlavor}
+/**
+ * A transferable for an array of files.
+ * <p>
+ * This uses the standard
+ * {@link java.awt.datatransfer.DataFlavor#javaFileListFlavor}
  */
 public class FileTransferable implements Transferable {
 	File[] files;
-	
+
 	public FileTransferable(File... file) {
 		this.files = file;
 	}
-	
+
 	@Override
 	public DataFlavor[] getTransferDataFlavors() {
 		return new DataFlavor[] { DataFlavor.javaFileListFlavor };
@@ -41,14 +44,14 @@ public class FileTransferable implements Transferable {
 	@Override
 	public Object getTransferData(DataFlavor flavor)
 			throws UnsupportedFlavorException, IOException {
-		if(!isDataFlavorSupported(flavor)) {
+		if (!isDataFlavorSupported(flavor)) {
 			throw new UnsupportedFlavorException(flavor);
 		}
 		List<File> list = new ArrayList<>();
-		for(File file : files) {
+		for (File file : files) {
 			list.add(file);
 		}
 		return list;
 	}
-	
+
 }

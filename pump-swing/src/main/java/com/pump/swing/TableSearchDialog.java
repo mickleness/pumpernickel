@@ -12,30 +12,28 @@ package com.pump.swing;
 
 import javax.swing.JTable;
 
-public class TableSearchDialog extends AbstractSearchDialog 
-{
+public class TableSearchDialog extends AbstractSearchDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	/** This creates a <code>TableSearchDialog</code> for the user
-	 * to search a table.
+	/**
+	 * This creates a <code>TableSearchDialog</code> for the user to search a
+	 * table.
 	 */
 	public static void search(JTable table) {
 		TableSearchDialog dialog = new TableSearchDialog(table);
 		dialog.setVisible(true);
 	}
-	
+
 	protected JTable table;
-	
-	public TableSearchDialog(JTable table)
-	{
+
+	public TableSearchDialog(JTable table) {
 		super(table);
 		this.table = table;
 	}
 
 	@Override
-	protected boolean doNextSearch(boolean forward)
-	{
+	protected boolean doNextSearch(boolean forward) {
 		return SwingSearch.find(table, textField.getText(), forward, false);
 	}
 

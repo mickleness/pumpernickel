@@ -38,43 +38,45 @@ import com.pump.util.Property;
 
 public class PropertyInspector extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
+
 	InspectorLayout layout;
 	Property[] properties = new Property[0];
+
 	public PropertyInspector() {
 		layout = new InspectorGridBagLayout(this);
 	}
-	
+
 	public void clear() {
 		layout.clear();
 	}
-	
+
 	public void setPropertiesEnabled(boolean b) {
-		for(int a = 0; a<properties.length; a++) {
-			if(properties[a].isUserAdjustable())
+		for (int a = 0; a < properties.length; a++) {
+			if (properties[a].isUserAdjustable())
 				properties[a].setEnabled(b);
 		}
 	}
-	
+
 	public void setProperties(Property[] properties) {
 		layout.clear();
-		this.properties = properties; //TODO: clone?
-		for(int a = 0; a<properties.length; a++) {
+		this.properties = properties; // TODO: clone?
+		for (int a = 0; a < properties.length; a++) {
 			PropertyEditor editor;
-			if(properties[a] instanceof BooleanProperty) {
-				BooleanProperty bp = (BooleanProperty)properties[a];
+			if (properties[a] instanceof BooleanProperty) {
+				BooleanProperty bp = (BooleanProperty) properties[a];
 				editor = new BooleanPropertyEditor(bp);
-			} else if(properties[a] instanceof IntProperty) {
-				IntProperty ip = (IntProperty)properties[a];
+			} else if (properties[a] instanceof IntProperty) {
+				IntProperty ip = (IntProperty) properties[a];
 				editor = new IntPropertyEditor(ip);
-			} else if(properties[a] instanceof FloatProperty) {
-				FloatProperty fp = (FloatProperty)properties[a];
+			} else if (properties[a] instanceof FloatProperty) {
+				FloatProperty fp = (FloatProperty) properties[a];
 				editor = new FloatPropertyEditor(fp);
-			} else if(properties[a] instanceof EnumProperty) {
-				EnumProperty ep = (EnumProperty)properties[a];
+			} else if (properties[a] instanceof EnumProperty) {
+				EnumProperty ep = (EnumProperty) properties[a];
 				editor = new EnumPropertyEditor(ep);
 			} else {
-				throw new RuntimeException("Unsupported property: "+properties[a]);
+				throw new RuntimeException("Unsupported property: "
+						+ properties[a]);
 			}
 			editor.install(layout);
 		}
@@ -93,15 +95,16 @@ abstract class PropertyEditor {
 			SwingUtilities.invokeLater(updateRunnable);
 		}
 	};
+
 	public PropertyEditor(Property p) {
 		this.p = p;
 		p.addPropertyChangeListener(listener);
 	}
-	
+
 	public abstract void install(InspectorLayout layout);
-	
+
 	public abstract void update();
-	
+
 }
 
 class BooleanPropertyEditor extends PropertyEditor {
@@ -109,41 +112,44 @@ class BooleanPropertyEditor extends PropertyEditor {
 	JLabel valueLabel = new JLabel();
 	JPanel idContainer = new JPanel(new GridBagLayout());
 	JPanel valueContainer = new JPanel(new GridBagLayout());
-	
+
 	JCheckBox box = new JCheckBox();
 	private int adjusting = 0;
+
 	public BooleanPropertyEditor(BooleanProperty p) {
 		super(p);
 		box.setText(p.getName());
 		box.addItemListener(new ItemListener() {
 
 			public void itemStateChanged(ItemEvent e) {
-				if(adjusting>0) return;
+				if (adjusting > 0)
+					return;
 				adjusting++;
 				try {
-					BooleanPropertyEditor.this.p.setValue( box.isSelected() ? Boolean.TRUE : Boolean.FALSE );
+					BooleanPropertyEditor.this.p.setValue(box.isSelected() ? Boolean.TRUE
+							: Boolean.FALSE);
 				} finally {
 					adjusting--;
 				}
 			}
-			
+
 		});
 		update();
 	}
 
 	@Override
 	public void install(InspectorLayout layout) {
-		idLabel.setText(p.getName()+":");
+		idLabel.setText(p.getName() + ":");
 		layout.addRow(idContainer, valueContainer, false);
 	}
 
-	
 	@Override
 	public void update() {
-		if(adjusting>0) return;
+		if (adjusting > 0)
+			return;
 		adjusting++;
 		try {
-			box.setSelected( ((BooleanProperty)p).getValue() );
+			box.setSelected(((BooleanProperty) p).getValue());
 		} finally {
 			adjusting--;
 		}
@@ -151,47 +157,53 @@ class BooleanPropertyEditor extends PropertyEditor {
 		idLabel.setEnabled(p.isEnabled());
 		valueLabel.setEnabled(p.isEnabled());
 		box.setEnabled(p.isEnabled());
-		
-		if(p.isUserAdjustable() && box.getParent()!=idContainer) {
+
+		if (p.isUserAdjustable() && box.getParent() != idContainer) {
 			install(box, idContainer);
 			install(null, valueContainer);
-		} else if(p.isUserAdjustable()==false && idLabel.getParent()!=valueContainer) {
+		} else if (p.isUserAdjustable() == false
+				&& idLabel.getParent() != valueContainer) {
 			install(idLabel, idContainer);
 			install(valueLabel, valueContainer);
 		}
-		if(valueLabel.isShowing())
-			valueLabel.setText( p.getValue().toString() );
+		if (valueLabel.isShowing())
+			valueLabel.setText(p.getValue().toString());
 	}
-	
-	private void install(JComponent comp,JPanel parent) {
+
+	private void install(JComponent comp, JPanel parent) {
 		parent.removeAll();
-		if(comp!=null) {
+		if (comp != null) {
 			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0; c.gridy = 0; c.weightx = 1; c.weighty = 1;
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weightx = 1;
+			c.weighty = 1;
 			parent.add(comp, c);
 		}
 		parent.revalidate();
 	}
 }
 
-
 class IntPropertyEditor extends PropertyEditor {
 	JSpinner spinner;
 	JLabel label = new JLabel();
 	JPanel valueContainer = new JPanel(new GridBagLayout());
 	JLabel value = new JLabel();
-	
+
 	private int adjusting = 0;
+
 	public IntPropertyEditor(IntProperty p) {
 		super(p);
-		SpinnerNumberModel model = new SpinnerNumberModel(p.getValue().intValue(), p.getMin(), p.getMax(), 1);
+		SpinnerNumberModel model = new SpinnerNumberModel(p.getValue()
+				.intValue(), p.getMin(), p.getMax(), 1);
 		spinner = new JSpinner(model);
 		spinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if(adjusting>0) return;
+				if (adjusting > 0)
+					return;
 				adjusting++;
 				try {
-					IntPropertyEditor.this.p.setValue( spinner.getValue() );
+					IntPropertyEditor.this.p.setValue(spinner.getValue());
 				} finally {
 					adjusting--;
 				}
@@ -202,17 +214,17 @@ class IntPropertyEditor extends PropertyEditor {
 
 	@Override
 	public void install(InspectorLayout layout) {
-		label.setText(p.getName()+":");
+		label.setText(p.getName() + ":");
 		layout.addRow(label, valueContainer, false);
 	}
 
-	
 	@Override
 	public void update() {
-		if(adjusting>0) return;
+		if (adjusting > 0)
+			return;
 		adjusting++;
 		try {
-			spinner.setValue( p.getValue() );
+			spinner.setValue(p.getValue());
 		} finally {
 			adjusting--;
 		}
@@ -220,21 +232,25 @@ class IntPropertyEditor extends PropertyEditor {
 		label.setEnabled(p.isEnabled());
 		spinner.setEnabled(p.isEnabled());
 		value.setEnabled(p.isEnabled());
-		
-		if(p.isUserAdjustable() && spinner.getParent()!=valueContainer) {
+
+		if (p.isUserAdjustable() && spinner.getParent() != valueContainer) {
 			install(spinner, valueContainer);
-		} else if(p.isUserAdjustable()==false && value.getParent()!=valueContainer) {
+		} else if (p.isUserAdjustable() == false
+				&& value.getParent() != valueContainer) {
 			install(value, valueContainer);
 		}
-		if(value.isShowing())
-			value.setText( p.getValue().toString() );
+		if (value.isShowing())
+			value.setText(p.getValue().toString());
 	}
 
-	private void install(JComponent comp,JPanel parent) {
+	private void install(JComponent comp, JPanel parent) {
 		parent.removeAll();
-		if(comp!=null) {
+		if (comp != null) {
 			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0; c.gridy = 0; c.weightx = 1; c.weighty = 1;
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weightx = 1;
+			c.weighty = 1;
 			parent.add(comp, c);
 		}
 		parent.revalidate();
@@ -247,18 +263,21 @@ class FloatPropertyEditor extends PropertyEditor {
 	JPanel valueContainer = new JPanel(new GridBagLayout());
 	JLabel value = new JLabel();
 	private int adjusting = 0;
-	
+
 	public FloatPropertyEditor(FloatProperty p) {
 		super(p);
-		SpinnerNumberModel model = new SpinnerNumberModel(p.getValue().floatValue(), p.getMin(), p.getMax(), 1);
+		SpinnerNumberModel model = new SpinnerNumberModel(p.getValue()
+				.floatValue(), p.getMin(), p.getMax(), 1);
 		spinner = new JSpinner(model);
 		spinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if(adjusting>0) return;
+				if (adjusting > 0)
+					return;
 				adjusting++;
 				try {
-					Number n = (Number)spinner.getValue();
-					FloatPropertyEditor.this.p.setValue( new Float(n.floatValue()) );
+					Number n = (Number) spinner.getValue();
+					FloatPropertyEditor.this.p.setValue(new Float(n
+							.floatValue()));
 				} finally {
 					adjusting--;
 				}
@@ -269,16 +288,17 @@ class FloatPropertyEditor extends PropertyEditor {
 
 	@Override
 	public void install(InspectorLayout layout) {
-		label.setText(p.getName()+":");
+		label.setText(p.getName() + ":");
 		layout.addRow(label, valueContainer, false);
 	}
-	
+
 	@Override
 	public void update() {
-		if(adjusting>0) return;
+		if (adjusting > 0)
+			return;
 		adjusting++;
 		try {
-			spinner.setValue( p.getValue() );
+			spinner.setValue(p.getValue());
 		} finally {
 			adjusting--;
 		}
@@ -286,28 +306,30 @@ class FloatPropertyEditor extends PropertyEditor {
 		label.setEnabled(p.isEnabled());
 		spinner.setEnabled(p.isEnabled());
 		value.setEnabled(p.isEnabled());
-		
-		if(p.isUserAdjustable() && spinner.getParent()!=valueContainer) {
+
+		if (p.isUserAdjustable() && spinner.getParent() != valueContainer) {
 			install(spinner, valueContainer);
-		} else if(p.isUserAdjustable()==false && value.getParent()!=valueContainer) {
+		} else if (p.isUserAdjustable() == false
+				&& value.getParent() != valueContainer) {
 			install(value, valueContainer);
 		}
-		if(value.isShowing())
-			value.setText( p.getValue().toString() );
+		if (value.isShowing())
+			value.setText(p.getValue().toString());
 	}
 
-	private void install(JComponent comp,JPanel parent) {
+	private void install(JComponent comp, JPanel parent) {
 		parent.removeAll();
-		if(comp!=null) {
+		if (comp != null) {
 			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0; c.gridy = 0; c.weightx = 1; c.weighty = 1;
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weightx = 1;
+			c.weighty = 1;
 			parent.add(comp, c);
 		}
 		parent.revalidate();
 	}
 }
-
-
 
 class EnumPropertyEditor extends PropertyEditor {
 	JComboBox comboBox;
@@ -315,40 +337,42 @@ class EnumPropertyEditor extends PropertyEditor {
 	JPanel valueContainer = new JPanel(new GridBagLayout());
 	JLabel value = new JLabel();
 	private int adjusting = 0;
-	
+
 	public EnumPropertyEditor(EnumProperty p) {
 		super(p);
-		
+
 		comboBox = new JComboBox(p.getValues());
-		
-		comboBox.addActionListener(new ActionListener() { 
+
+		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(adjusting>0) return;
+				if (adjusting > 0)
+					return;
 				adjusting++;
 				try {
-					EnumPropertyEditor.this.p.setValue( comboBox.getSelectedItem() );
+					EnumPropertyEditor.this.p.setValue(comboBox
+							.getSelectedItem());
 				} finally {
 					adjusting--;
 				}
 			}
 		});
-		
+
 		update();
 	}
 
 	@Override
 	public void install(InspectorLayout layout) {
-		label.setText(p.getName()+":");
+		label.setText(p.getName() + ":");
 		layout.addRow(label, valueContainer, false);
 	}
 
-	
 	@Override
 	public void update() {
-		if(adjusting>0) return;
+		if (adjusting > 0)
+			return;
 		adjusting++;
 		try {
-			comboBox.setSelectedItem( p.getValue() );
+			comboBox.setSelectedItem(p.getValue());
 		} finally {
 			adjusting--;
 		}
@@ -356,21 +380,25 @@ class EnumPropertyEditor extends PropertyEditor {
 		label.setEnabled(p.isEnabled());
 		comboBox.setEnabled(p.isEnabled());
 		value.setEnabled(p.isEnabled());
-		
-		if(p.isUserAdjustable() && comboBox.getParent()!=valueContainer) {
+
+		if (p.isUserAdjustable() && comboBox.getParent() != valueContainer) {
 			install(comboBox, valueContainer);
-		} else if(p.isUserAdjustable()==false && value.getParent()!=valueContainer) {
+		} else if (p.isUserAdjustable() == false
+				&& value.getParent() != valueContainer) {
 			install(value, valueContainer);
 		}
-		if(value.isShowing())
-			value.setText( p.getValue().toString() );
+		if (value.isShowing())
+			value.setText(p.getValue().toString());
 	}
 
-	private void install(JComponent comp,JPanel parent) {
+	private void install(JComponent comp, JPanel parent) {
 		parent.removeAll();
-		if(comp!=null) {
+		if (comp != null) {
 			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0; c.gridy = 0; c.weightx = 1; c.weighty = 1;
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weightx = 1;
+			c.weighty = 1;
 			parent.add(comp, c);
 		}
 		parent.revalidate();

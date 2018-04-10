@@ -17,7 +17,9 @@ import java.awt.Rectangle;
 import com.pump.awt.text.writing.WritingFont;
 import com.pump.awt.text.writing.WritingTextLayout;
 
-/** A TextEffect that draws text using a {@link com.pump.awt.text.writing.WritingFont}.
+/**
+ * A TextEffect that draws text using a
+ * {@link com.pump.awt.text.writing.WritingFont}.
  */
 public class WriteTextEffect implements TextEffect {
 	Dimension size;
@@ -25,8 +27,7 @@ public class WriteTextEffect implements TextEffect {
 	String text;
 	WritingTextLayout layout;
 
-	public WriteTextEffect(WritingFont font, String text, int width,
-			int height) {
+	public WriteTextEffect(WritingFont font, String text, int width, int height) {
 		this.font = font;
 		this.text = text;
 		size = new Dimension(width, height);
@@ -35,12 +36,13 @@ public class WriteTextEffect implements TextEffect {
 
 	@Override
 	public void paint(Graphics2D g, float fraction) {
-		layout.paint(g, new Rectangle(0,0,size.width,size.height), fraction*layout.getDuration());
+		layout.paint(g, new Rectangle(0, 0, size.width, size.height), fraction
+				* layout.getDuration());
 	}
 
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(size.width,size.height);
+		return new Dimension(size.width, size.height);
 	}
 
 }

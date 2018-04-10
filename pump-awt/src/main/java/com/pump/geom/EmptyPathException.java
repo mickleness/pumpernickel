@@ -10,11 +10,11 @@
  */
 package com.pump.geom;
 
-
-/** This indicates that a path had no shape data.
- * <P>This means it had no lines, quadratic or cubic
- * segments in it (although it may have had a MOVE_TO
- * and a CLOSE segment).
+/**
+ * This indicates that a path had no shape data.
+ * <P>
+ * This means it had no lines, quadratic or cubic segments in it (although it
+ * may have had a MOVE_TO and a CLOSE segment).
  *
  */
 public class EmptyPathException extends RuntimeException {

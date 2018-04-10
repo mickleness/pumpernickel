@@ -10,11 +10,15 @@
  */
 package com.pump.animation.quicktime;
 
- /** This is not a public class because I expect to make some significant
-  * changes to this project in the next year.
-  * <P>Use at your own risk.  This class (and its package) may change in future releases.
-  * <P>Not that I'm promising there will be future releases.  There may not be.  :)
-  */
+/**
+ * This is not a public class because I expect to make some significant changes
+ * to this project in the next year.
+ * <P>
+ * Use at your own risk. This class (and its package) may change in future
+ * releases.
+ * <P>
+ * Not that I'm promising there will be future releases. There may not be. :)
+ */
 class GraphicsModeConstants {
 	public static final int COPY = 0x00;
 	public static final int DITHER_COPY = 0x40;

@@ -12,12 +12,14 @@ package com.pump.image.pixel;
 
 import java.awt.image.IndexColorModel;
 
-/** An interface for a {@link com.pump.image.pixel.BytePixelIterator}
- * of type <code>BufferedImage.TYPE_BYTE_INDEXED</code>.
+/**
+ * An interface for a {@link com.pump.image.pixel.BytePixelIterator} of type
+ * <code>BufferedImage.TYPE_BYTE_INDEXED</code>.
  */
 public interface IndexedBytePixelIterator extends BytePixelIterator {
 
-	/** Returns the <code>IndexColorModel</code> this iterator uses.
+	/**
+	 * Returns the <code>IndexColorModel</code> this iterator uses.
 	 */
 	public abstract IndexColorModel getIndexColorModel();
 }

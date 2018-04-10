@@ -26,31 +26,25 @@ import com.pump.io.IOUtils;
 import com.pump.swing.BasicConsole;
 import com.pump.swing.ContextualMenuHelper;
 
-public class ConsoleFrame
-{
+public class ConsoleFrame {
 	static ConsoleFrame GLOBAL;
-	
+
 	public static synchronized ConsoleFrame get() {
-		if(GLOBAL==null) {
+		if (GLOBAL == null) {
 			GLOBAL = new ConsoleFrame();
 		}
 		return GLOBAL;
 	}
 
-	BasicConsole							console		= new BasicConsole(BasicConsole.DefaultPrintStream.EXTEND,
-																false);
-	JScrollPane								scrollPane	= new JScrollPane(console);
-	JFrame									consoleWindow;
+	BasicConsole console = new BasicConsole(
+			BasicConsole.DefaultPrintStream.EXTEND, false);
+	JScrollPane scrollPane = new JScrollPane(console);
+	JFrame consoleWindow;
 
-	
-	public void showConsole()
-	{
-		if (!SwingUtilities.isEventDispatchThread())
-		{
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
+	public void showConsole() {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
 					showConsole();
 				}
 			});
@@ -60,14 +54,10 @@ public class ConsoleFrame
 		get().consoleWindow.toFront();
 	}
 
-	public void toggleConsole()
-	{
-		if (!SwingUtilities.isEventDispatchThread())
-		{
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
+	public void toggleConsole() {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
 					toggleConsole();
 				}
 			});
@@ -76,19 +66,17 @@ public class ConsoleFrame
 		get().consoleWindow.setVisible(!consoleWindow.isVisible());
 	}
 
-	private ConsoleFrame()
-	{
+	private ConsoleFrame() {
 		consoleWindow = new JFrame("Console");
 		consoleWindow.getContentPane().add(scrollPane);
 		scrollPane.setPreferredSize(new Dimension(900, 500));
 		consoleWindow.pack();
-		ContextualMenuHelper.add(console, "Save as...", new Runnable()
-		{
+		ContextualMenuHelper.add(console, "Save as...", new Runnable() {
 
 			@Override
-			public void run()
-			{
-				FileDialog fd = new FileDialog(consoleWindow, "Save TXT As...", FileDialog.SAVE);
+			public void run() {
+				FileDialog fd = new FileDialog(consoleWindow, "Save TXT As...",
+						FileDialog.SAVE);
 				fd.pack();
 				fd.setLocationRelativeTo(null);
 				fd.setVisible(true);
@@ -96,14 +84,12 @@ public class ConsoleFrame
 				if (fd.getFile() == null)
 					return;
 				File file = new File(fd.getDirectory() + fd.getFile());
-				try
-				{
-					if ( (!file.exists()) && (!file.createNewFile()))
-						throw new IOException("createNewFile failed for " + file.getAbsolutePath());
+				try {
+					if ((!file.exists()) && (!file.createNewFile()))
+						throw new IOException("createNewFile failed for "
+								+ file.getAbsolutePath());
 					IOUtils.write(file, console.getText(), true);
-				}
-				catch (IOException e)
-				{
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -111,13 +97,11 @@ public class ConsoleFrame
 		});
 	}
 
-	public JButton createShowButton()
-	{
+	public JButton createShowButton() {
 		JButton button = new JButton("Show Console");
 		button.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				showConsole();
 			}
 		});

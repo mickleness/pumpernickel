@@ -30,8 +30,9 @@ import com.pump.plaf.LabelCellRenderer;
 public class ListSectionContainer extends SectionContainer {
 
 	private static final long serialVersionUID = 1L;
-	
-	public static class SectionListCellRenderer extends LabelCellRenderer<Section> {
+
+	public static class SectionListCellRenderer extends
+			LabelCellRenderer<Section> {
 
 		@Override
 		protected void formatLabel(Section value) {
@@ -44,82 +45,97 @@ public class ListSectionContainer extends SectionContainer {
 	protected JPanel content = new JPanel(new GridBagLayout());
 	protected JScrollPane listScrollPane;
 	protected JPanel noSelectionPanel = new JPanel();
-	
-	/**  If true then we'll automatically select the first element in the list.
+
+	/**
+	 * If true then we'll automatically select the first element in the list.
 	 */
 	protected boolean autoSelectActive = true;
-	
+
 	public ListSectionContainer(boolean alphabetize) {
 		super(alphabetize);
-		
-		list = new JList<Section>( getSections().getListModelEDTMirror() );
-		listScrollPane = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane, content);
+
+		list = new JList<Section>(getSections().getListModelEDTMirror());
+		listScrollPane = new JScrollPane(list,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane,
+				content);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0; c.gridy = 0; c.weightx = 1; c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		add(splitPane, c);
-		
+
 		getSections().addUnsynchronizedChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				if(list.getSelectedIndex()==-1 && isAutoSelectActive()) {
+				if (list.getSelectedIndex() == -1 && isAutoSelectActive()) {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
-							if(list.getModel().getSize()>0 && list.getSelectedIndex()==-1) {
+							if (list.getModel().getSize() > 0
+									&& list.getSelectedIndex() == -1) {
 								list.setSelectedIndex(0);
 							}
 						}
 					});
 				}
 			}
-			
-		}, false);
-		
-		list.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
-			int lastSelectedIndex = -1;
-			
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				int selectedIndex = list.getSelectedIndex();
-				
-				try {
-					if(isAutoSelectActive()) {
-						//we're trying to avoid an empty selection:
-						if(selectedIndex==-1 && lastSelectedIndex!=-1 && lastSelectedIndex<list.getModel().getSize()) {
-							list.setSelectedIndex(lastSelectedIndex);
+		}, false);
+
+		list.getSelectionModel().addListSelectionListener(
+				new ListSelectionListener() {
+
+					int lastSelectedIndex = -1;
+
+					@Override
+					public void valueChanged(ListSelectionEvent e) {
+						int selectedIndex = list.getSelectedIndex();
+
+						try {
+							if (isAutoSelectActive()) {
+								// we're trying to avoid an empty selection:
+								if (selectedIndex == -1
+										&& lastSelectedIndex != -1
+										&& lastSelectedIndex < list.getModel()
+												.getSize()) {
+									list.setSelectedIndex(lastSelectedIndex);
+								}
+							}
+							updateContentPanel();
+						} finally {
+							lastSelectedIndex = selectedIndex;
 						}
 					}
-					updateContentPanel();
-				} finally {
-					lastSelectedIndex = selectedIndex;
-				}
-			}
-			
-		});
-		
+
+				});
+
 		list.setCellRenderer(new SectionListCellRenderer());
-		
+
 		updateContentPanel();
 	}
-	
+
 	protected void updateContentPanel() {
 		Section section = list.getSelectedValue();
 		JPanel child;
-		if(section==null) {
+		if (section == null) {
 			child = noSelectionPanel;
 		} else {
 			child = section.getBody();
 		}
-		
+
 		content.removeAll();
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0; c.gridy = 0; c.weightx = 1; c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		content.add(child, c);
 
@@ -128,11 +144,13 @@ public class ListSectionContainer extends SectionContainer {
 		content.setPreferredSize(new Dimension(50, 50));
 		content.repaint();
 	}
-	
+
 	/**
-	 * Return true if we should automatically select the first element in the list.
+	 * Return true if we should automatically select the first element in the
+	 * list.
 	 * 
-	 * @return true if we should automatically select the first element in the list.
+	 * @return true if we should automatically select the first element in the
+	 *         list.
 	 */
 	public boolean isAutoSelectActive() {
 		return autoSelectActive;

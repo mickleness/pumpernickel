@@ -14,12 +14,12 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 
 public class EarthColors extends ColorSet {
-	
+
 	public EarthColors(boolean grid) {
 		super(grid);
 	}
-	
-	public EarthColors(boolean grid,int rows,int columns) {
+
+	public EarthColors(boolean grid, int rows, int columns) {
 		super(grid, rows, columns);
 	}
 
@@ -50,18 +50,19 @@ public class EarthColors extends ColorSet {
 
 		float xFraction, yFraction;
 
-		if(hue>.1) {
-			xFraction = (float)(Math.pow( (hue-.1)*2, 1.0/.7 ) );
+		if (hue > .1) {
+			xFraction = (float) (Math.pow((hue - .1) * 2, 1.0 / .7));
 		} else {
 			xFraction = 0;
 		}
-		if(xFraction>1) xFraction = 1;
+		if (xFraction > 1)
+			xFraction = 1;
 
-		//we can't look at saturation, because it may have a max capped on it
+		// we can't look at saturation, because it may have a max capped on it
 
-		yFraction = (float)Math.sqrt((1 - .2f * Math.pow(
-				1 - (.8 * xFraction + .2), 2)-brightness)/.8);
-		
+		yFraction = (float) Math.sqrt((1 - .2f * Math.pow(
+				1 - (.8 * xFraction + .2), 2) - brightness) / .8);
+
 		return new Point2D.Float(xFraction, yFraction);
 	}
 

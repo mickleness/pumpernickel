@@ -15,33 +15,34 @@ import java.util.Comparator;
 public class RawSortedEdgeArrayList extends RawEdgeArrayList {
 
 	Comparator<EdgeX> comparator;
-	
-	protected RawSortedEdgeArrayList(int initialCapacity,Comparator<EdgeX> comparator) {
+
+	protected RawSortedEdgeArrayList(int initialCapacity,
+			Comparator<EdgeX> comparator) {
 		super(initialCapacity);
 		this.comparator = comparator;
 	}
-
 
 	@Override
 	protected void add(EdgeX element) {
 		int min = 0;
 		int max = elementCount;
-		while(min!=max) {
-			int middle = (min+max)/2;
+		while (min != max) {
+			int middle = (min + max) / 2;
 			int k = comparator.compare(get(middle), element);
-			if(k==0) {
-				min = middle+1;
-				max = middle+1;
-			} else if(k<1) {
-				min = middle+1;
+			if (k == 0) {
+				min = middle + 1;
+				max = middle + 1;
+			} else if (k < 1) {
+				min = middle + 1;
 			} else {
 				max = middle;
 			}
 		}
 
 		ensureCapacity(elementCount + 1);
-		if(elementCount-min>0) {
-			System.arraycopy(elementData, min, elementData, min + 1, elementCount - min);
+		if (elementCount - min > 0) {
+			System.arraycopy(elementData, min, elementData, min + 1,
+					elementCount - min);
 		}
 		elementData[min] = element;
 		elementCount++;

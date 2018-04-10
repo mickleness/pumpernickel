@@ -12,7 +12,8 @@ package com.pump.image.gif.block;
 
 /**
  * This 1-byte block identifies the end of a GIF file.
- * <P>It's value is simply <code>"0x3B"</code>.
+ * <P>
+ * It's value is simply <code>"0x3B"</code>.
  */
 public class GifTrailerBlock extends GifBlock {
 

@@ -15,16 +15,19 @@ package com.pump.data;
  */
 public enum BeanState {
 	/**
-	 * This indicates that a bean was recently created. Here "recent" may relate to
-	 * the time at which it was created or to a series of events which triggered its creation.
+	 * This indicates that a bean was recently created. Here "recent" may relate
+	 * to the time at which it was created or to a series of events which
+	 * triggered its creation.
 	 */
-	CREATED, 
+	CREATED,
 	/**
-	 * This indicates that a bean currently exists, although it was not recently created.
+	 * This indicates that a bean currently exists, although it was not recently
+	 * created.
 	 */
 	EXISTS,
 	/**
-	 * This indicates a bean is known to have previously existed, but has been deleted.
+	 * This indicates a bean is known to have previously existed, but has been
+	 * deleted.
 	 */
 	DELETED,
 	/**

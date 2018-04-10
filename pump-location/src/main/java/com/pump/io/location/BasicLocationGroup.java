@@ -14,22 +14,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BasicLocationGroup implements IOLocationGroup {
-	long consumerCtr = 0;
-	Set<Long> checkedOutKeys = new HashSet<Long>();
+    long consumerCtr = 0;
+    Set<Long> checkedOutKeys = new HashSet<Long>();
 
-	public synchronized Object addConsumer() {
-		Long returnValue = consumerCtr++;
-		checkedOutKeys.add(returnValue);
-		return returnValue;
-		
-	}
+    public synchronized Object addConsumer() {
+	Long returnValue = consumerCtr++;
+	checkedOutKeys.add(returnValue);
+	return returnValue;
 
-	public synchronized void releaseConsumer(Object key) {
-		checkedOutKeys.remove(key);
-	}
-	
-	public synchronized boolean isActive() {
-		return checkedOutKeys.size()>0;
-	}
+    }
+
+    public synchronized void releaseConsumer(Object key) {
+	checkedOutKeys.remove(key);
+    }
+
+    public synchronized boolean isActive() {
+	return checkedOutKeys.size() > 0;
+    }
 
 }

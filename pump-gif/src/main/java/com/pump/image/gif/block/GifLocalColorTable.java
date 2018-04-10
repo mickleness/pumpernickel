@@ -13,9 +13,10 @@ package com.pump.image.gif.block;
 import java.awt.image.IndexColorModel;
 
 /**
- * This immediately follows a {@link com.pump.image.gif.block.GifImageDescriptor}
- * block if its <code>hasLocalColorTable()</code> method returns
- * <code>true</code>. The GIF file format specification points out:
+ * This immediately follows a
+ * {@link com.pump.image.gif.block.GifImageDescriptor} block if its
+ * <code>hasLocalColorTable()</code> method returns <code>true</code>. The GIF
+ * file format specification points out:
  * <P>
  * "...at most one Local Color Table may be present per Image Descriptor and its
  * scope is the single image associated with the Image Descriptor that precedes

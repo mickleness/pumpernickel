@@ -27,65 +27,65 @@ import com.pump.swing.io.LocationBrowser;
 
 public class AquaListLocationBrowserUI extends ListLocationBrowserUI {
 
-	public AquaListLocationBrowserUI(LocationBrowser b) {
-		super(b);
-	}
+    public AquaListLocationBrowserUI(LocationBrowser b) {
+	super(b);
+    }
 
-	@Override
-	public TableCellRenderer getTableCellRenderer() {
-		return new AquaTableCellRenderer(browser.getGraphicCache());
-	}
+    @Override
+    public TableCellRenderer getTableCellRenderer() {
+	return new AquaTableCellRenderer(browser.getGraphicCache());
+    }
 }
 
-//TODO: put in separate file
+// TODO: put in separate file
 class AquaTableCellRenderer implements TableCellRenderer {
-	JLabel label = new JLabel();
-	Color background = Color.white;
-	Color altBackground = new Color(0xEDF3FE);
-	Color foreground = Color.black;
-	Insets iconPadding = new Insets(0,10,0,4);
-	GraphicCache graphicCache;
-	
-	public AquaTableCellRenderer(GraphicCache gc) {
-		graphicCache = gc;
+    JLabel label = new JLabel();
+    Color background = Color.white;
+    Color altBackground = new Color(0xEDF3FE);
+    Color foreground = Color.black;
+    Insets iconPadding = new Insets(0, 10, 0, 4);
+    GraphicCache graphicCache;
+
+    public AquaTableCellRenderer(GraphicCache gc) {
+	graphicCache = gc;
+    }
+
+    public Component getTableCellRendererComponent(JTable table, Object value,
+	    boolean isSelected, boolean hasFocus, int row, int column) {
+	String text = "";
+	Icon icon = null;
+
+	if (value instanceof IOLocation) {
+	    IOLocation l = (IOLocation) value;
+	    text = l.getName();
+	    icon = graphicCache.requestIcon(l);
+	    if (icon == null) {
+		if (l.isDirectory()) {
+		    icon = IOLocation.FOLDER_ICON;
+		} else {
+		    icon = IOLocation.FILE_ICON;
+		}
+	    }
+	    icon = new PaddedIcon(icon, iconPadding);
+	} else {
+	    text = value.toString();
 	}
 
-	public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column) {
-		String text = "";
-		Icon icon = null;
-		
-		if(value instanceof IOLocation) {
-			IOLocation l = (IOLocation)value;
-			text = l.getName();
-			icon = graphicCache.requestIcon(l);
-			if(icon==null) {
-				if(l.isDirectory()) {
-					icon = IOLocation.FOLDER_ICON;
-				} else {
-					icon = IOLocation.FILE_ICON;
-				}
-			}
-			icon = new PaddedIcon( icon, iconPadding);
-		} else {
-			text = value.toString();
-		}
-		
-		label.setIcon(icon);
-		label.setText(text);
-		if(isSelected) {
-			label.setForeground(SystemColor.controlLtHighlight);
-			label.setBackground(SystemColor.controlHighlight);
-		} else {
-			label.setForeground(foreground);
-			if(row%2==0) {
-				label.setBackground(background);
-			} else {
-				label.setBackground(altBackground);
-			}
-		}
-		label.setOpaque(true);
-		
-		return label;
-	}	
+	label.setIcon(icon);
+	label.setText(text);
+	if (isSelected) {
+	    label.setForeground(SystemColor.controlLtHighlight);
+	    label.setBackground(SystemColor.controlHighlight);
+	} else {
+	    label.setForeground(foreground);
+	    if (row % 2 == 0) {
+		label.setBackground(background);
+	    } else {
+		label.setBackground(altBackground);
+	    }
+	}
+	label.setOpaque(true);
+
+	return label;
+    }
 }

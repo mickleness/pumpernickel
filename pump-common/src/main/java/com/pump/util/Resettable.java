@@ -10,10 +10,9 @@
  */
 package com.pump.util;
 
-
 /** An interface for objects that can be reset to a starting state or condition. */
 public interface Resettable {
-	
+
 	/** Resets this object to its original state. */
 	public void reset();
 }

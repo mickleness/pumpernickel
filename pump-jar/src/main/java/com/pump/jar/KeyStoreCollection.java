@@ -25,7 +25,7 @@ public class KeyStoreCollection extends FileCollection {
 
 	@Override
 	public void process(File file) {
-		if(jksFileFilter.accept(file) && file.exists())
+		if (jksFileFilter.accept(file) && file.exists())
 			files.add(file);
 	}
 

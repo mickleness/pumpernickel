@@ -19,4 +19,4 @@
  * a potentially complex architecture -- or a snapshot of an architecture -- this tool will
  * help you get there.
  */
-package com.pump.breakout; 
+package com.pump.breakout;

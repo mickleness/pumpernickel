@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * This efficiently parses out an <code>InputStream</code> into the
- * appropriate {@link com.pump.image.gif.block.GifBlock}'s.
+ * This efficiently parses out an <code>InputStream</code> into the appropriate
+ * {@link com.pump.image.gif.block.GifBlock}'s.
  */
 public class GifParser {
 	private final InputStream in;
@@ -89,13 +89,14 @@ public class GifParser {
 	/**
 	 * This reads the next {@link com.pump.image.gif.block.GifBlock}
 	 * <P>
-	 * Note that if this method returns a <code>APPLICATION_EXTENSION</code>,
-	 * it may be a {@link com.pump.image.gif.block.GifLoopingApplicationExtension} or
-	 * a {@link com.pump.image.gif.block.GifApplicationExtension}.
+	 * Note that if this method returns a <code>APPLICATION_EXTENSION</code>, it
+	 * may be a {@link com.pump.image.gif.block.GifLoopingApplicationExtension}
+	 * or a {@link com.pump.image.gif.block.GifApplicationExtension}.
 	 * 
 	 * @return the next {@link com.pump.image.gif.block.GifBlock}, or
 	 *         <code>null</code> if there are no more blocks to read.
-	 * @throws IOException if an IO problem occurs.
+	 * @throws IOException
+	 *             if an IO problem occurs.
 	 */
 	public GifBlock readNextBlock() throws IOException {
 		int i = getNextBlockType();
@@ -172,7 +173,9 @@ public class GifParser {
 
 	/**
 	 * This closes the underlying <code>InputStream</code>.
-	 * @throws IOException if an IO problem occurs.
+	 * 
+	 * @throws IOException
+	 *             if an IO problem occurs.
 	 */
 	public void close() throws IOException {
 		in.close();
@@ -181,7 +184,8 @@ public class GifParser {
 	/**
 	 * @return a field from {@link com.pump.image.gif.block.GifBlock}, or
 	 *         <code>-1</code> if there are no more blocks.
-	 * @throws IOException if an IO problem occurs.
+	 * @throws IOException
+	 *             if an IO problem occurs.
 	 */
 	public int getNextBlockType() throws IOException {
 		if (finishedReading == true)
@@ -269,7 +273,9 @@ public class GifParser {
 	 * if a GIF file has more than 1 image block (that is, is it an "animated
 	 * GIF" or not), or if you want to skim an input stream to count the number
 	 * of frames, or the total duration of all the frames, etc.
-	 * @throws IOException if an IO problem occurs.
+	 * 
+	 * @throws IOException
+	 *             if an IO problem occurs.
 	 */
 	public void skipNextBlock() throws IOException {
 		int i = getNextBlockType();
@@ -356,7 +362,8 @@ public class GifParser {
 	/**
 	 * @return <code>true</code> if there are more
 	 *         {@link com.pump.image.gif.block.GifBlock}s available to read.
-	 * @throws IOException if an IO problem occurs.
+	 * @throws IOException
+	 *             if an IO problem occurs.
 	 */
 	public boolean hasMoreBlocks() throws IOException {
 		int i = getNextBlockType();

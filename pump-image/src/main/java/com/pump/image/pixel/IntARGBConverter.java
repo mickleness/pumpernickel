@@ -12,7 +12,8 @@ package com.pump.image.pixel;
 
 import java.awt.image.BufferedImage;
 
-/** A <code>PixelConverter</code> that converts all data to ARGB-formatted
+/**
+ * A <code>PixelConverter</code> that converts all data to ARGB-formatted
  * integers.
  */
 public class IntARGBConverter extends PixelConverter implements
@@ -28,11 +29,11 @@ public class IntARGBConverter extends PixelConverter implements
 	public void skip() {
 		if (byteIterator != null) {
 			byteIterator.skip();
-		} else if(intIterator!=null) {
+		} else if (intIterator != null) {
 			intIterator.skip();
 		}
 	}
-	
+
 	public void next(int[] dest) {
 		if (byteIterator != null) {
 			if (byteScratch == null) {
@@ -51,10 +52,10 @@ public class IntARGBConverter extends PixelConverter implements
 				break;
 			case TYPE_4BYTE_BGRA:
 				for (int a = 0; a < width; a++) {
-					dest[a] = (( byteScratch[4 * a + 3] & 0xff ) << 24)
-							+ (( byteScratch[4 * a + 0] & 0xff ) << 16)
-							+ (( byteScratch[4 * a + 1] & 0xff ) << 8)
-							+ (( byteScratch[4 * a + 2] & 0xff ));
+					dest[a] = ((byteScratch[4 * a + 3] & 0xff) << 24)
+							+ ((byteScratch[4 * a + 0] & 0xff) << 16)
+							+ ((byteScratch[4 * a + 1] & 0xff) << 8)
+							+ ((byteScratch[4 * a + 2] & 0xff));
 				}
 				break;
 			case BufferedImage.TYPE_4BYTE_ABGR:
@@ -68,23 +69,24 @@ public class IntARGBConverter extends PixelConverter implements
 			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
 				for (int a = 0; a < width; a++) {
 					alpha = (byteScratch[4 * a + 0] & 0xff);
-					if(alpha!=0) {
+					if (alpha != 0) {
 						dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
-								+ ((byteScratch[4 * a + 3] & 0xff) * 255 / alpha << 16)
-								+ ((byteScratch[4 * a + 2] & 0xff) * 255 / alpha << 8)
+								+ ((byteScratch[4 * a + 3] & 0xff) * 255
+										/ alpha << 16)
+								+ ((byteScratch[4 * a + 2] & 0xff) * 255
+										/ alpha << 8)
 								+ ((byteScratch[4 * a + 1] & 0xff) * 255 / alpha);
 					} else {
 						dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
 								+ ((byteScratch[4 * a + 3] & 0xff) << 16)
 								+ ((byteScratch[4 * a + 2] & 0xff) << 8)
-								+ ((byteScratch[4 * a + 1] & 0xff) );
+								+ ((byteScratch[4 * a + 1] & 0xff));
 					}
 				}
 				break;
 			case PixelIterator.TYPE_3BYTE_RGB:
 				for (int a = 0; a < width; a++) {
-					dest[a] = 0xff000000
-							+ ((byteScratch[3 * a + 2] & 0xff))
+					dest[a] = 0xff000000 + ((byteScratch[3 * a + 2] & 0xff))
 							+ ((byteScratch[3 * a + 1] & 0xff) << 8)
 							+ ((byteScratch[3 * a + 0] & 0xff) << 16);
 				}
@@ -100,16 +102,18 @@ public class IntARGBConverter extends PixelConverter implements
 			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
 				for (int a = 0; a < width; a++) {
 					alpha = (byteScratch[4 * a + 0] & 0xff);
-					if(alpha!=0) {
+					if (alpha != 0) {
 						dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
-								+ ((byteScratch[4 * a + 1] & 0xff) * 255 / alpha << 16)
-								+ ((byteScratch[4 * a + 2] & 0xff) * 255 / alpha << 8)
+								+ ((byteScratch[4 * a + 1] & 0xff) * 255
+										/ alpha << 16)
+								+ ((byteScratch[4 * a + 2] & 0xff) * 255
+										/ alpha << 8)
 								+ ((byteScratch[4 * a + 3] & 0xff) * 255 / alpha);
 					} else {
 						dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
 								+ ((byteScratch[4 * a + 1] & 0xff) << 16)
 								+ ((byteScratch[4 * a + 2] & 0xff) << 8)
-								+ ((byteScratch[4 * a + 3] & 0xff) );
+								+ ((byteScratch[4 * a + 3] & 0xff));
 					}
 				}
 				break;
@@ -138,11 +142,9 @@ public class IntARGBConverter extends PixelConverter implements
 						int red = (rTable[byteScratch[a] & 0xff] & 0xff);
 						int green = (gTable[byteScratch[a] & 0xff] & 0xff);
 						int blue = (bTable[byteScratch[a] & 0xff] & 0xff);
-						dest[a] = (alpha << 24)
-								+ (red << 16)
-								+ (green << 8)
+						dest[a] = (alpha << 24) + (red << 16) + (green << 8)
 								+ (blue);
-					} catch(RuntimeException e) {
+					} catch (RuntimeException e) {
 						throw e;
 					}
 				}

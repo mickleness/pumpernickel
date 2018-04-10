@@ -21,43 +21,47 @@ import com.pump.icon.FileIcon;
 public class FileLabel extends JLabel {
 	private static final long serialVersionUID = 1L;
 
-
 	/**
-	 * @param file a file this label should represent.
-	 * @param actions one of the DnDConstants.ACTION_X constants
+	 * @param file
+	 *            a file this label should represent.
+	 * @param actions
+	 *            one of the DnDConstants.ACTION_X constants
 	 */
-	public FileLabel(File file,int actions) {
+	public FileLabel(File file, int actions) {
 		this(actions);
 		setFile(file);
 	}
-	
+
 	/**
 	 * 
-	 * @param actions one of the DnDConstants.ACTION_X constants. A good default is COPY_OR_MOVE.
+	 * @param actions
+	 *            one of the DnDConstants.ACTION_X constants. A good default is
+	 *            COPY_OR_MOVE.
 	 */
 	public FileLabel(int actions) {
-		addPropertyChangeListener(DnDUtils.KEY_FILE, new PropertyChangeListener() {
+		addPropertyChangeListener(DnDUtils.KEY_FILE,
+				new PropertyChangeListener() {
 
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				File file = getFile();
-				if(file==null) {
-					setIcon(null);
-					setText("");
-				} else {
-					setIcon( FileIcon.getIcon(file) );
-					setText( file.getName() );
-				}
-			}
-			
-		});
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						File file = getFile();
+						if (file == null) {
+							setIcon(null);
+							setText("");
+						} else {
+							setIcon(FileIcon.getIcon(file));
+							setText(file.getName());
+						}
+					}
+
+				});
 		DnDUtils.setupFileDragSource(this, actions);
 	}
-	
+
 	public File getFile() {
-		return (File)getClientProperty(DnDUtils.KEY_FILE);
+		return (File) getClientProperty(DnDUtils.KEY_FILE);
 	}
-	
+
 	public void setFile(File file) {
 		putClientProperty(DnDUtils.KEY_FILE, file);
 	}

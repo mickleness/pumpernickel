@@ -34,137 +34,143 @@ import javax.swing.JScrollBar;
 import com.pump.swing.ColorPalette;
 
 public abstract class ScrollableColorPaletteUI extends ColorPaletteUI {
-	
+
 	private static ComponentListener componentListener = new ComponentListener() {
 
-		public void componentHidden(ComponentEvent e) {}
+		public void componentHidden(ComponentEvent e) {
+		}
 
-		public void componentMoved(ComponentEvent e) {}
+		public void componentMoved(ComponentEvent e) {
+		}
 
 		public void componentResized(ComponentEvent e) {
-			ColorPalette cp = (ColorPalette)e.getSource();
-			ScrollableColorPaletteUI ui = (ScrollableColorPaletteUI)cp.getUI();
+			ColorPalette cp = (ColorPalette) e.getSource();
+			ScrollableColorPaletteUI ui = (ScrollableColorPaletteUI) cp.getUI();
 			ui.updateScrollBarBounds(cp);
 		}
 
-		public void componentShown(ComponentEvent e) {}
-		
+		public void componentShown(ComponentEvent e) {
+		}
+
 	};
-	
+
 	static PropertyChangeListener showScrollBarsListener = new PropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent evt) {
-			ColorPalette cp = (ColorPalette)evt.getSource();
-			ScrollableColorPaletteUI ui = (ScrollableColorPaletteUI)cp.getUI();
+			ColorPalette cp = (ColorPalette) evt.getSource();
+			ScrollableColorPaletteUI ui = (ScrollableColorPaletteUI) cp.getUI();
 			ui.updateScrollBarBounds(cp);
 		}
 	};
-	
+
 	protected static AdjustmentListener scrollBarListener = new AdjustmentListener() {
 		public void adjustmentValueChanged(AdjustmentEvent e) {
-			JScrollBar b = (JScrollBar)e.getSource();
-			ColorPalette cp = (ColorPalette)b.getParent();
+			JScrollBar b = (JScrollBar) e.getSource();
+			ColorPalette cp = (ColorPalette) b.getParent();
 			cp.requestFocus();
 			cp.repaint();
 		}
 	};
-	
-	public ScrollableColorPaletteUI() {}
-	
+
+	public ScrollableColorPaletteUI() {
+	}
+
 	protected final int getVerticalScrollValue(ColorPalette cp) {
 		JScrollBar vBar = getVerticalScrollBar(cp);
-		if(vBar==null)
+		if (vBar == null)
 			return 0;
 		return vBar.getValue();
 	}
-	
+
 	protected final int getHorizontalScrollValue(ColorPalette cp) {
 		JScrollBar hBar = getHorizontalScrollBar(cp);
-		if(hBar==null)
+		if (hBar == null)
 			return 0;
 		return hBar.getValue();
 	}
-	
+
 	protected abstract int getVerticalScrollMax(ColorPalette cp);
-	
+
 	protected abstract int getHorizontalScrollMax(ColorPalette cp);
-	
+
 	static final MouseWheelListener mouseWheelListener = new MouseWheelListener() {
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			ColorPalette cp = (ColorPalette)e.getSource();
-			ScrollableColorPaletteUI ui = (ScrollableColorPaletteUI)cp.getUI();
-			
+			ColorPalette cp = (ColorPalette) e.getSource();
+			ScrollableColorPaletteUI ui = (ScrollableColorPaletteUI) cp.getUI();
+
 			int dx = 0;
 			int dy = 0;
-			if( ( e.getModifiers() & InputEvent.SHIFT_MASK ) == 0 ) {
+			if ((e.getModifiers() & InputEvent.SHIFT_MASK) == 0) {
 				dy = e.getWheelRotation();
 			} else {
 				dx = e.getWheelRotation();
 			}
-			ui.scroll(cp,dx,dy);
+			ui.scroll(cp, dx, dy);
 		}
 	};
-	
+
 	protected boolean isWrapping(ColorPalette cp) {
-		Boolean b = (Boolean)cp.getClientProperty("wrapAround");
-		if(b==null) b = Boolean.FALSE;
+		Boolean b = (Boolean) cp.getClientProperty("wrapAround");
+		if (b == null)
+			b = Boolean.FALSE;
 		return b.booleanValue();
 	}
-	
-	protected void scroll(ColorPalette cp,int dx,int dy) {
+
+	protected void scroll(ColorPalette cp, int dx, int dy) {
 		JScrollBar hBar = getHorizontalScrollBar(cp);
 		JScrollBar vBar = getVerticalScrollBar(cp);
-		
-		int x = (hBar==null) ? dx : hBar.getValue()+dx;
-		int y = (vBar==null) ? dy : vBar.getValue()+dy;
-		
-		int xMax = (hBar==null) ? 1 : hBar.getMaximum();
-		int yMax = (vBar==null) ? 1 : vBar.getMaximum();
-		if(isWrapping(cp)) {
-			while(x<0) {
-				x = x+(xMax+1);
+
+		int x = (hBar == null) ? dx : hBar.getValue() + dx;
+		int y = (vBar == null) ? dy : vBar.getValue() + dy;
+
+		int xMax = (hBar == null) ? 1 : hBar.getMaximum();
+		int yMax = (vBar == null) ? 1 : vBar.getMaximum();
+		if (isWrapping(cp)) {
+			while (x < 0) {
+				x = x + (xMax + 1);
 			}
-			if(x>xMax) {
-				x = x%(xMax+1);
+			if (x > xMax) {
+				x = x % (xMax + 1);
 			}
-			while(y<0) {
-				y = y+(yMax+1);
+			while (y < 0) {
+				y = y + (yMax + 1);
 			}
-			if(y>yMax) {
-				y = y%(yMax+1);
+			if (y > yMax) {
+				y = y % (yMax + 1);
 			}
 		} else {
-			if(x<0)
+			if (x < 0)
 				x = 0;
-			if(x>xMax)
+			if (x > xMax)
 				x = xMax;
-			if(y<0)
+			if (y < 0)
 				y = 0;
-			if(y>yMax)
+			if (y > yMax)
 				y = yMax;
 		}
-		
-		if(hBar!=null)
+
+		if (hBar != null)
 			hBar.setValue(x);
-		if(vBar!=null)
+		if (vBar != null)
 			vBar.setValue(y);
-		
+
 		cp.repaint();
 	}
-	
+
 	public final JScrollBar getHorizontalScrollBar(ColorPalette cp) {
-		for(int index = 0; index<cp.getComponentCount(); index++) {
+		for (int index = 0; index < cp.getComponentCount(); index++) {
 			Component comp = cp.getComponent(index);
-			if(comp instanceof JScrollBar) {
-				JScrollBar jsb = (JScrollBar)comp;
-				if(jsb.getOrientation()==Adjustable.HORIZONTAL) {
+			if (comp instanceof JScrollBar) {
+				JScrollBar jsb = (JScrollBar) comp;
+				if (jsb.getOrientation() == Adjustable.HORIZONTAL) {
 					return jsb;
 				}
 			}
 		}
-		
+
 		int max = getHorizontalScrollMax(cp);
-		if(max>1) {
-			JScrollBar hBar = new JScrollBar(Adjustable.HORIZONTAL, 0, 0, 0, max);
+		if (max > 1) {
+			JScrollBar hBar = new JScrollBar(Adjustable.HORIZONTAL, 0, 0, 0,
+					max);
 			hBar.addAdjustmentListener(scrollBarListener);
 			cp.add(hBar);
 			hBar.putClientProperty("JComponent.sizeVariant", "mini");
@@ -172,24 +178,23 @@ public abstract class ScrollableColorPaletteUI extends ColorPaletteUI {
 			updateScrollBarBounds(cp);
 			return hBar;
 		}
-		
-		
+
 		return null;
 	}
-	
+
 	public final JScrollBar getVerticalScrollBar(ColorPalette cp) {
-		for(int index = 0; index<cp.getComponentCount(); index++) {
+		for (int index = 0; index < cp.getComponentCount(); index++) {
 			Component comp = cp.getComponent(index);
-			if(comp instanceof JScrollBar) {
-				JScrollBar jsb = (JScrollBar)comp;
-				if(jsb.getOrientation()==Adjustable.VERTICAL) {
+			if (comp instanceof JScrollBar) {
+				JScrollBar jsb = (JScrollBar) comp;
+				if (jsb.getOrientation() == Adjustable.VERTICAL) {
 					return jsb;
 				}
 			}
 		}
-		
+
 		int max = getVerticalScrollMax(cp);
-		if(max>1) {
+		if (max > 1) {
 			JScrollBar vBar = new JScrollBar(Adjustable.VERTICAL, 0, 0, 0, max);
 			vBar.addAdjustmentListener(scrollBarListener);
 			cp.add(vBar);
@@ -198,57 +203,56 @@ public abstract class ScrollableColorPaletteUI extends ColorPaletteUI {
 			updateScrollBarBounds(cp);
 			return vBar;
 		}
-		
-		
+
 		return null;
 	}
-	
+
 	protected final void updateScrollBarBounds(ColorPalette cp) {
-		Boolean show = (Boolean)cp.getClientProperty("showScrollBars");
-		if(show==null) show = Boolean.TRUE;
-		
+		Boolean show = (Boolean) cp.getClientProperty("showScrollBars");
+		if (show == null)
+			show = Boolean.TRUE;
+
 		JScrollBar hBar = getHorizontalScrollBar(cp);
 		JScrollBar vBar = getVerticalScrollBar(cp);
-		
+
 		Rectangle paletteBounds = getImageBounds(cp);
 
-		if(hBar!=null && vBar!=null && show.booleanValue()) {
+		if (hBar != null && vBar != null && show.booleanValue()) {
 			Dimension dh = hBar.getPreferredSize();
 			Dimension dv = vBar.getPreferredSize();
-			hBar.setBounds(paletteBounds.x,
-					paletteBounds.y+paletteBounds.height,
-					paletteBounds.width, dh.height);
+			hBar.setBounds(paletteBounds.x, paletteBounds.y
+					+ paletteBounds.height, paletteBounds.width, dh.height);
 
-			vBar.setBounds(paletteBounds.x+paletteBounds.width,
+			vBar.setBounds(paletteBounds.x + paletteBounds.width,
 					paletteBounds.y, dv.width, paletteBounds.height);
-		} else if(hBar!=null && show.booleanValue()) {
+		} else if (hBar != null && show.booleanValue()) {
 			Dimension d = hBar.getPreferredSize();
-			hBar.setBounds(paletteBounds.x,
-					paletteBounds.y+paletteBounds.height,
-					paletteBounds.width, d.height);
-		} else if(vBar!=null && show.booleanValue()) {
+			hBar.setBounds(paletteBounds.x, paletteBounds.y
+					+ paletteBounds.height, paletteBounds.width, d.height);
+		} else if (vBar != null && show.booleanValue()) {
 			Dimension d = vBar.getPreferredSize();
 
-			vBar.setBounds(paletteBounds.x+paletteBounds.width,
+			vBar.setBounds(paletteBounds.x + paletteBounds.width,
 					paletteBounds.y, d.width, paletteBounds.height);
 		}
 	}
-	
+
 	@Override
 	protected final Insets getImageInsets(ColorPalette cp) {
 		Insets insets = super.getImageInsets(cp);
 
-		Boolean show = (Boolean)cp.getClientProperty("showScrollBars");
-		if(show==null) show = Boolean.TRUE;
-		
-		if(show.booleanValue()) {
+		Boolean show = (Boolean) cp.getClientProperty("showScrollBars");
+		if (show == null)
+			show = Boolean.TRUE;
+
+		if (show.booleanValue()) {
 			JScrollBar hBar = getHorizontalScrollBar(cp);
 			JScrollBar vBar = getVerticalScrollBar(cp);
-			
-			if(hBar!=null) {
+
+			if (hBar != null) {
 				insets.bottom += hBar.getHeight();
 			}
-			if(vBar!=null) {
+			if (vBar != null) {
 				insets.right += vBar.getWidth();
 			}
 		}
@@ -272,12 +276,13 @@ public abstract class ScrollableColorPaletteUI extends ColorPaletteUI {
 	}
 
 	@Override
-	protected void processKeyEvent(KeyEvent keyEvent,int dx,int dy) {
-		if( (keyEvent.getModifiers() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) > 0) {
-			ColorPalette cp = (ColorPalette)keyEvent.getSource();
-			
+	protected void processKeyEvent(KeyEvent keyEvent, int dx, int dy) {
+		if ((keyEvent.getModifiers() & Toolkit.getDefaultToolkit()
+				.getMenuShortcutKeyMask()) > 0) {
+			ColorPalette cp = (ColorPalette) keyEvent.getSource();
+
 			keyEvent.consume();
-			
+
 			scroll(cp, dx, dy);
 			return;
 		}

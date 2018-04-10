@@ -10,8 +10,8 @@
  */
 package com.pump.image.gif;
 
-
-/** Constants related to gifs.
+/**
+ * Constants related to gifs.
  */
 public interface GifConstants {
 

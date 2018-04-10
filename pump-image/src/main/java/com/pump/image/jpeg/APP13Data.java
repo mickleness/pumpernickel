@@ -12,13 +12,14 @@ package com.pump.image.jpeg;
 
 import java.io.IOException;
 
-/** I have no understanding of what this block is, except that
- * it includes a full JPEG thumbnail.
- * One website referred to it as "Photoshop IRB", but unless I can
- * get specs from Adobe it's hard to make sense of...
+/**
+ * I have no understanding of what this block is, except that it includes a full
+ * JPEG thumbnail. One website referred to it as "Photoshop IRB", but unless I
+ * can get specs from Adobe it's hard to make sense of...
  */
 class APP13Data extends GenericDataWithThumbnail {
-	APP13Data(JPEGMarkerInputStream in, boolean storeThumbnail) throws IOException {
+	APP13Data(JPEGMarkerInputStream in, boolean storeThumbnail)
+			throws IOException {
 		super(in, storeThumbnail);
 	}
 }

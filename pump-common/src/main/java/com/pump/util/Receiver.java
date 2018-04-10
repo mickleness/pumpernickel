@@ -10,14 +10,16 @@
  */
 package com.pump.util;
 
-
-/** A simple interface for depositing an element.
+/**
+ * A simple interface for depositing an element.
  */
 public interface Receiver<T> {
-	
-	/** Add elements to this receiver.
+
+	/**
+	 * Add elements to this receiver.
 	 * 
-	 * @param elements the elements to add to this receiver.
+	 * @param elements
+	 *            the elements to add to this receiver.
 	 */
 	public void add(T... elements);
 }

@@ -40,9 +40,11 @@ import com.pump.image.gif.block.GifPlainTextExtension;
  * This is an efficient way to iterate through a GIF image. This efficiently
  * pipes image data from an <code>InputStream</code> and converts it into 2
  * important pieces of information:
- * <ul><li>image: a <code>BufferedImage</code> representing a frame</li>
- * <li>duration: a <code>long</code>, representing the time (in
- * milliseconds) a frame should be visible.</li></ul>
+ * <ul>
+ * <li>image: a <code>BufferedImage</code> representing a frame</li>
+ * <li>duration: a <code>long</code>, representing the time (in milliseconds) a
+ * frame should be visible.</li>
+ * </ul>
  * <P>
  * This class does not "look ahead" any more than it has to to prepare this
  * information, so it has no way of knowing how many frames there are without
@@ -50,8 +52,8 @@ import com.pump.image.gif.block.GifPlainTextExtension;
  * <P>
  * Also to minimize the memory this class allocates, this object will not keep
  * any data in memory from previous frames: once you've called
- * <code>nextFrame()</code> the previous data is discarded. This should make
- * it possible to traverse through obscenely large GIF files (I've seen 2-second
+ * <code>nextFrame()</code> the previous data is discarded. This should make it
+ * possible to traverse through obscenely large GIF files (I've seen 2-second
  * GIF files that are over 1 MB).
  */
 public class GifReader implements AnimationReader, GifConstants {
@@ -136,8 +138,8 @@ public class GifReader implements AnimationReader, GifConstants {
 	}
 
 	/**
-	 * Returns <code>true</code> if this file is a supported GIF file with
-	 * more than 1 frame.
+	 * Returns <code>true</code> if this file is a supported GIF file with more
+	 * than 1 frame.
 	 * <P>
 	 * This method is optimized to skim incoming data, so it should be a pretty
 	 * light call.
@@ -169,10 +171,10 @@ public class GifReader implements AnimationReader, GifConstants {
 	}
 
 	/**
-	 * Returns <code>true</code> if this <code>InputStream</code> is a
-	 * supported GIF with at least 1 frame. Note that this method assumes
-	 * responsibility of <code>in</code>, and will close this
-	 * <code>InputStream</code> after it has read what it needs to.
+	 * Returns <code>true</code> if this <code>InputStream</code> is a supported
+	 * GIF with at least 1 frame. Note that this method assumes responsibility
+	 * of <code>in</code>, and will close this <code>InputStream</code> after it
+	 * has read what it needs to.
 	 * <P>
 	 * This method is optimized to skim incoming data, so it should be a pretty
 	 * light call as long as the <code>.skip()</code> method of the
@@ -180,8 +182,8 @@ public class GifReader implements AnimationReader, GifConstants {
 	 * 
 	 * @param in
 	 *            the <code>InputStream</code> to check
-	 * @return <code>true</code> if this package can parse out this GIF into
-	 *         at least 1 frame.
+	 * @return <code>true</code> if this package can parse out this GIF into at
+	 *         least 1 frame.
 	 */
 	public static boolean isGIF(InputStream in) {
 		GifParser p = null;
@@ -210,10 +212,10 @@ public class GifReader implements AnimationReader, GifConstants {
 	}
 
 	/**
-	 * Returns <code>true</code> if this <code>InputStream</code> is a
-	 * supported GIF with more than 1 frame. Note that this method assumes
-	 * responsibility of <code>in</code>, and will close this
-	 * <code>InputStream</code> after it has read what it needs to.
+	 * Returns <code>true</code> if this <code>InputStream</code> is a supported
+	 * GIF with more than 1 frame. Note that this method assumes responsibility
+	 * of <code>in</code>, and will close this <code>InputStream</code> after it
+	 * has read what it needs to.
 	 * <P>
 	 * This method is optimized to skim incoming data, so it should be a pretty
 	 * light call as long as the <code>.skip()</code> method of the
@@ -383,7 +385,7 @@ public class GifReader implements AnimationReader, GifConstants {
 	}
 
 	public double getDuration() {
-		return ((double)duration)/1000.0 ;
+		return ((double) duration) / 1000.0;
 	}
 
 	/**
@@ -434,11 +436,10 @@ public class GifReader implements AnimationReader, GifConstants {
 	 * <code>null</code> if no image data is available.
 	 * 
 	 * @param cloneImage
-	 *            if this is <code>true</code>, this method will always
-	 *            return a new <code>BufferedImage</code>. If this is
-	 *            <code>false</code>, then this method may constantly return
-	 *            the same <code>BufferedImage</code>, updated for each
-	 *            frame.
+	 *            if this is <code>true</code>, this method will always return a
+	 *            new <code>BufferedImage</code>. If this is <code>false</code>,
+	 *            then this method may constantly return the same
+	 *            <code>BufferedImage</code>, updated for each frame.
 	 * @return the next frame image, or <code>null</code> if there are no more
 	 *         frames.
 	 */
@@ -505,8 +506,8 @@ public class GifReader implements AnimationReader, GifConstants {
 
 	/**
 	 * If a local color table exists for the last frame returned by
-	 * <code>getNextFrame()</code>, then this method returns that table. It
-	 * is possible (and likely) that this method will often return
+	 * <code>getNextFrame()</code>, then this method returns that table. It is
+	 * possible (and likely) that this method will often return
 	 * <code>null</code>, indicating that a global color table is being used.
 	 */
 	public GifColorTable getLocalColorTable() {
@@ -527,13 +528,13 @@ public class GifReader implements AnimationReader, GifConstants {
 
 	/**
 	 * @return the duration of the last frame provided by
-	 *         <code>getNextFrame()</code> in milliseconds. This information
-	 *         is not required in a GIF so this method may (in rare occasions)
+	 *         <code>getNextFrame()</code> in milliseconds. This information is
+	 *         not required in a GIF so this method may (in rare occasions)
 	 *         return zero.
 	 */
 	public double getFrameDuration() {
 		if (gce != null)
-			return ((double)gce.getDelayTime()) / 100.0;
+			return ((double) gce.getDelayTime()) / 100.0;
 		return 0;
 	}
 
@@ -561,7 +562,6 @@ public class GifReader implements AnimationReader, GifConstants {
 			this.imageData = imageData;
 			this.logicalScreenDescriptor = lgsd;
 
-			
 			if (gce != null)
 				disposalMethod = gce.getDisposalMethod();
 
@@ -640,7 +640,7 @@ public class GifReader implements AnimationReader, GifConstants {
 				return;
 			}
 
-			if (disposalMethod == DisposalMethod.RESTORE_BACKGROUND ) {
+			if (disposalMethod == DisposalMethod.RESTORE_BACKGROUND) {
 				int[] i = new int[imageDescriptor.getWidth()];
 				// restore to the background
 				/**

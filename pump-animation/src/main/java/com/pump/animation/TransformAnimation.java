@@ -12,16 +12,22 @@ package com.pump.animation;
 
 import java.awt.geom.AffineTransform;
 
-/** This creates an AffineTransform based on an input time value from [0, 1].
+/**
+ * This creates an AffineTransform based on an input time value from [0, 1].
  */
 public interface TransformAnimation {
-	
-	/** A new transform based on the time, width and height.
+
+	/**
+	 * A new transform based on the time, width and height.
 	 * 
-	 * @param progress a float within [0, 1].
-	 * @param viewWidth the width of the animation.
-	 * @param viewHeight the height of the animation.
+	 * @param progress
+	 *            a float within [0, 1].
+	 * @param viewWidth
+	 *            the width of the animation.
+	 * @param viewHeight
+	 *            the height of the animation.
 	 * @return the AffineTransform for the argument.
 	 */
-	public AffineTransform getTransform(float progress,int viewWidth,int viewHeight);
+	public AffineTransform getTransform(float progress, int viewWidth,
+			int viewHeight);
 }

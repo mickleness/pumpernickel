@@ -18,10 +18,12 @@ import java.util.Iterator;
  *
  * @param <T>
  */
-public interface CloseableMeasurableIterator<T> extends AutoCloseable, Iterator<T> {
-	
+public interface CloseableMeasurableIterator<T> extends AutoCloseable,
+		Iterator<T> {
+
 	/**
-	 * Return the progress (as a fraction from [0,1]) of the amount read, or a negative number to indicate the progress is indeterminate.
+	 * Return the progress (as a fraction from [0,1]) of the amount read, or a
+	 * negative number to indicate the progress is indeterminate.
 	 */
 	public float getProgress();
 }

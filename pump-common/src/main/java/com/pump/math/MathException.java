@@ -10,14 +10,16 @@
  */
 package com.pump.math;
 
-/** A collection of exceptions related to math.
+/**
+ * A collection of exceptions related to math.
  * 
  */
 public class MathException extends Exception {
 	private static final long serialVersionUID = 1L;
 
-	/** An exception used when an operand or calculation
-	 * involves a negative number and it shouldn't.
+	/**
+	 * An exception used when an operand or calculation involves a negative
+	 * number and it shouldn't.
 	 */
 	public static class NegativeException extends MathException {
 		private static final long serialVersionUID = 1L;
@@ -44,7 +46,8 @@ public class MathException extends Exception {
 		}
 	}
 
-	/** An exception used when an operation results in overflow.
+	/**
+	 * An exception used when an operation results in overflow.
 	 */
 	public static class OverflowException extends MathException {
 		private static final long serialVersionUID = 1L;
@@ -70,7 +73,7 @@ public class MathException extends Exception {
 			super(cause);
 		}
 	}
-	
+
 	public static class NonIntegerException extends MathException {
 		private static final long serialVersionUID = 1L;
 
@@ -95,7 +98,7 @@ public class MathException extends Exception {
 			super(cause);
 		}
 	}
-	
+
 	public static class DivideByZeroException extends MathException {
 		private static final long serialVersionUID = 1L;
 

@@ -52,227 +52,293 @@ import javax.swing.tree.TreePath;
 
 import com.pump.blog.Blurb;
 
-/** This <code>TreeUI</code> adds an arbitrary number of decorations on the right
- * side of the tree. These decorations are rendered with the <code>TreeCellRenderer</code>,
- * so they are not <code>JComponents</code> capable of receiving events. However this UI
- * is designed to recognize when they are clicked, and therefore can notify <code>ActionListeners</code>
- * so the user will perceive these decorations as similar to buttons.
- * <p>Regarding accessibility: you should not make decorations responsible for essential functions.
- * For example: a user cannot use the tab key to navigate to a decoration, and there is no tooltip.
- * These behaviors (and others) might be essential behaviors for users with certain disabilities. I
- * recommend keeping menu items, contextual menus, and other redundant tools available to also access
- * features that decorations trigger.
- * <p>This UI supplements the tree's <code>TreeCellRenderer</code> by placing the component it returns
- * inside another <code>TreeCellRenderer</code>, so the original renderer should always be in tact.
- * <p>There is a known bug that this UI cannot correctly transmit whether a tree cell should have
- * the keyboard focus, so that boolean is always relayed as <code>false</code>.
+/**
+ * This <code>TreeUI</code> adds an arbitrary number of decorations on the right
+ * side of the tree. These decorations are rendered with the
+ * <code>TreeCellRenderer</code>, so they are not <code>JComponents</code>
+ * capable of receiving events. However this UI is designed to recognize when
+ * they are clicked, and therefore can notify <code>ActionListeners</code> so
+ * the user will perceive these decorations as similar to buttons.
+ * <p>
+ * Regarding accessibility: you should not make decorations responsible for
+ * essential functions. For example: a user cannot use the tab key to navigate
+ * to a decoration, and there is no tooltip. These behaviors (and others) might
+ * be essential behaviors for users with certain disabilities. I recommend
+ * keeping menu items, contextual menus, and other redundant tools available to
+ * also access features that decorations trigger.
+ * <p>
+ * This UI supplements the tree's <code>TreeCellRenderer</code> by placing the
+ * component it returns inside another <code>TreeCellRenderer</code>, so the
+ * original renderer should always be in tact.
+ * <p>
+ * There is a known bug that this UI cannot correctly transmit whether a tree
+ * cell should have the keyboard focus, so that boolean is always relayed as
+ * <code>false</code>.
  * 
  */
-@Blurb (
-imageName = "DecoratedTreeUI.png",
-title = "TreeUIs: Adding Decorations to Cells",
-releaseDate = "May 2012",
-summary = "This new TreeUI adds icons on the right side of a tree that can serve as indicators or buttons. "+
-"This uses a combination of advanced TreeCellRenderers and MouseListeners, so these decorations do not actually "+
-"exist in the Swing hierarchy.",
-article = "http://javagraphics.blogspot.com/2012/05/treeuis-adding-decorations-to-cells.html"
-)
+@Blurb(imageName = "DecoratedTreeUI.png", title = "TreeUIs: Adding Decorations to Cells", releaseDate = "May 2012", summary = "This new TreeUI adds icons on the right side of a tree that can serve as indicators or buttons. "
+		+ "This uses a combination of advanced TreeCellRenderers and MouseListeners, so these decorations do not actually "
+		+ "exist in the Swing hierarchy.", article = "http://javagraphics.blogspot.com/2012/05/treeuis-adding-decorations-to-cells.html")
 public class DecoratedTreeUI extends BasicTreeUI {
-	
-	/** A tree must define this client property as an array of <code>TreeDecorations</code>
-	 * for this UI to interact with the decorations.
+
+	/**
+	 * A tree must define this client property as an array of
+	 * <code>TreeDecorations</code> for this UI to interact with the
+	 * decorations.
 	 */
 	public static final String KEY_DECORATIONS = "bric.DecoratedTreeUI.Decorations";
-	
-	/** A <code>TreeDecoration</code> is an icon that is painted on the rightmost edge
-	 * of the tree UI. This icon is not technically associated with a <code>JComponent</code>,
-	 * but the <code>DecoratedTreeUI</code> will trigger ActionEvents when the icon is pressed.
+
+	/**
+	 * A <code>TreeDecoration</code> is an icon that is painted on the rightmost
+	 * edge of the tree UI. This icon is not technically associated with a
+	 * <code>JComponent</code>, but the <code>DecoratedTreeUI</code> will
+	 * trigger ActionEvents when the icon is pressed.
 	 */
 	public abstract static class TreeDecoration {
-		/** Returns the icon this decoration should currently render.
-		 * <p>It is assumed this icon will not change dimensions.
+		/**
+		 * Returns the icon this decoration should currently render.
+		 * <p>
+		 * It is assumed this icon will not change dimensions.
 		 * 
-		 * @param tree the tree being rendered
-		 * @param value the tree node being rendered
-		 * @param selected whether the tree node is selected
-		 * @param expanded whether the tree node is expanded
-		 * @param leaf whether the tree node is a leaf node
-		 * @param row the row index of the tree node
-		 * @param isRollover whether the mouse is hovering over this decoration
-		 * @param isPressed whether the mouse is pressed to arm this icon, similar to how
-		 * buttons are armed.
+		 * @param tree
+		 *            the tree being rendered
+		 * @param value
+		 *            the tree node being rendered
+		 * @param selected
+		 *            whether the tree node is selected
+		 * @param expanded
+		 *            whether the tree node is expanded
+		 * @param leaf
+		 *            whether the tree node is a leaf node
+		 * @param row
+		 *            the row index of the tree node
+		 * @param isRollover
+		 *            whether the mouse is hovering over this decoration
+		 * @param isPressed
+		 *            whether the mouse is pressed to arm this icon, similar to
+		 *            how buttons are armed.
 		 * @return the icon this decoration should currently render.
 		 */
-		public abstract Icon getIcon(JTree tree, Object value, boolean selected, boolean expanded, 
-				boolean leaf, int row, boolean isRollover,boolean isPressed);
-		
-		/** Returns whether this decoration is visible.
+		public abstract Icon getIcon(JTree tree, Object value,
+				boolean selected, boolean expanded, boolean leaf, int row,
+				boolean isRollover, boolean isPressed);
+
+		/**
+		 * Returns whether this decoration is visible.
 		 * 
-		 * @param tree the tree being rendered
-		 * @param value the tree node being rendered
-		 * @param selected whether the tree node is selected
-		 * @param expanded whether the tree node is expanded
-		 * @param leaf whether the tree node is a leaf node
-		 * @param row the row index of the tree node
+		 * @param tree
+		 *            the tree being rendered
+		 * @param value
+		 *            the tree node being rendered
+		 * @param selected
+		 *            whether the tree node is selected
+		 * @param expanded
+		 *            whether the tree node is expanded
+		 * @param leaf
+		 *            whether the tree node is a leaf node
+		 * @param row
+		 *            the row index of the tree node
 		 * @return whether this decoration is visible.
 		 */
-		public abstract boolean isVisible(JTree tree, Object value, boolean selected, boolean expanded, 
-				boolean leaf, int row, boolean hasFocus);
-		
-		/** Returns an optional ActionListener to be notified when this decoration is clicked.
-		 * If this returns null then no ActionEvent will be issued when this decoration is clicked.
+		public abstract boolean isVisible(JTree tree, Object value,
+				boolean selected, boolean expanded, boolean leaf, int row,
+				boolean hasFocus);
+
+		/**
+		 * Returns an optional ActionListener to be notified when this
+		 * decoration is clicked. If this returns null then no ActionEvent will
+		 * be issued when this decoration is clicked.
 		 * 
-		 * @param tree the tree being rendered
-		 * @param value the tree node being rendered
-		 * @param selected whether the tree node is selected
-		 * @param expanded whether the tree node is expanded
-		 * @param leaf whether the tree node is a leaf node
-		 * @param row the row index of the tree node
-		 * @return an optional ActionListener to be notified when this decoration is clicked.
+		 * @param tree
+		 *            the tree being rendered
+		 * @param value
+		 *            the tree node being rendered
+		 * @param selected
+		 *            whether the tree node is selected
+		 * @param expanded
+		 *            whether the tree node is expanded
+		 * @param leaf
+		 *            whether the tree node is a leaf node
+		 * @param row
+		 *            the row index of the tree node
+		 * @return an optional ActionListener to be notified when this
+		 *         decoration is clicked.
 		 */
-		public abstract ActionListener getActionListener(JTree tree, Object value, boolean selected, boolean expanded, 
-				boolean leaf, int row, boolean hasFocus);
+		public abstract ActionListener getActionListener(JTree tree,
+				Object value, boolean selected, boolean expanded, boolean leaf,
+				int row, boolean hasFocus);
 	}
-	
-	/** This is a simple 3-state <code>TreeDecoration</code> that stores a fixed
+
+	/**
+	 * This is a simple 3-state <code>TreeDecoration</code> that stores a fixed
 	 * "normal", "rollover" and "pressed" icon state.
-	 * <p>The default implementation of <code>isVisible(..)</code> will only
-	 * render this decoration when a tree node is selected. This is just an aesthetic
-	 * choice you are free to override. (The original motivation for this decision was:
-	 * too many decorations might become visual clutter.)
-	 * <p>It is assumed that if a rollover or pressed icon is provided that it will be
-	 * the same size as the normal icon.
+	 * <p>
+	 * The default implementation of <code>isVisible(..)</code> will only render
+	 * this decoration when a tree node is selected. This is just an aesthetic
+	 * choice you are free to override. (The original motivation for this
+	 * decision was: too many decorations might become visual clutter.)
+	 * <p>
+	 * It is assumed that if a rollover or pressed icon is provided that it will
+	 * be the same size as the normal icon.
 	 */
 	public static class BasicTreeDecoration extends TreeDecoration {
-		
+
 		Icon normalIcon, rolloverIcon, pressedIcon;
 		ActionListener actionListener;
-		
-		/** Create a decoration with only one icon and no ActionListener.
+
+		/**
+		 * Create a decoration with only one icon and no ActionListener.
 		 * 
 		 * @param normalIcon
 		 */
 		public BasicTreeDecoration(Icon normalIcon) {
-			if(normalIcon==null)
+			if (normalIcon == null)
 				throw new NullPointerException();
 			this.normalIcon = normalIcon;
 		}
-		
-		/** Create a clickable decoration with 3 states and an ActionListener.
+
+		/**
+		 * Create a clickable decoration with 3 states and an ActionListener.
 		 * 
-		 * @param normalIcon the default icon. This may not be null.
-		 * @param rolloverIcon an optional icon to display when the mouse hovers over this decoration.
-		 * @param pressedIcon an optional icon to display when the mouse clicks this decoration.
-		 * @param actionListener an optional ActionListener to receive events when this decoration is clicked.
+		 * @param normalIcon
+		 *            the default icon. This may not be null.
+		 * @param rolloverIcon
+		 *            an optional icon to display when the mouse hovers over
+		 *            this decoration.
+		 * @param pressedIcon
+		 *            an optional icon to display when the mouse clicks this
+		 *            decoration.
+		 * @param actionListener
+		 *            an optional ActionListener to receive events when this
+		 *            decoration is clicked.
 		 */
-		public BasicTreeDecoration(Icon normalIcon,Icon rolloverIcon,Icon pressedIcon,ActionListener actionListener) {
+		public BasicTreeDecoration(Icon normalIcon, Icon rolloverIcon,
+				Icon pressedIcon, ActionListener actionListener) {
 			this(normalIcon);
 			this.rolloverIcon = rolloverIcon;
 			this.pressedIcon = pressedIcon;
 			this.actionListener = actionListener;
 		}
-		
+
 		@Override
-		public Icon getIcon(JTree tree, Object value, boolean selected, boolean expanded, 
-				boolean leaf, int row, boolean isRollover,boolean isPressed) {
-			if(isPressed && pressedIcon!=null)
+		public Icon getIcon(JTree tree, Object value, boolean selected,
+				boolean expanded, boolean leaf, int row, boolean isRollover,
+				boolean isPressed) {
+			if (isPressed && pressedIcon != null)
 				return pressedIcon;
-			if(isRollover && rolloverIcon!=null)
+			if (isRollover && rolloverIcon != null)
 				return rolloverIcon;
 			return normalIcon;
-			
+
 		}
-		
+
 		/** Returns true if the node is selected. */
 		@Override
-		public boolean isVisible(JTree tree, Object value, boolean selected, boolean expanded, 
-				boolean leaf, int row, boolean hasFocus) {
+		public boolean isVisible(JTree tree, Object value, boolean selected,
+				boolean expanded, boolean leaf, int row, boolean hasFocus) {
 			return selected;
 		}
-		
+
 		@Override
-		public ActionListener getActionListener(JTree tree, Object value, boolean selected, boolean expanded, 
-				boolean leaf, int row, boolean hasFocus) {
+		public ActionListener getActionListener(JTree tree, Object value,
+				boolean selected, boolean expanded, boolean leaf, int row,
+				boolean hasFocus) {
 			return actionListener;
 		}
 	}
-	
+
 	private static class RowInfo {
 		int rowIndex;
 		JTree tree;
+
 		RowInfo(JTree tree, int rowIndex) {
 			this.tree = tree;
 			this.rowIndex = rowIndex;
 		}
+
 		@Override
 		public boolean equals(Object obj) {
-			if(!(obj instanceof RowInfo))
+			if (!(obj instanceof RowInfo))
 				return false;
-			RowInfo i = (RowInfo)obj;
-			if(i.rowIndex!=rowIndex)
+			RowInfo i = (RowInfo) obj;
+			if (i.rowIndex != rowIndex)
 				return false;
-			if(i.tree!=tree)
+			if (i.tree != tree)
 				return false;
 			return true;
 		}
+
 		@Override
 		public int hashCode() {
 			return rowIndex;
 		}
 	}
-	
-	/** A TreeDecoration that continually repaints itself as long as it is visible.
-	 * This is used for animating decorations.
+
+	/**
+	 * A TreeDecoration that continually repaints itself as long as it is
+	 * visible. This is used for animating decorations.
 	 */
 	public static class RepaintingTreeDecoration extends TreeDecoration {
 		Timer repaintTimer;
 		ActionListener repaintListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RowInfo[] rows;
-				synchronized(repaintingRows) {
-					rows = repaintingRows.toArray(new RowInfo[repaintingRows.size()]);
-					if(rows.length==0) {
+				synchronized (repaintingRows) {
+					rows = repaintingRows.toArray(new RowInfo[repaintingRows
+							.size()]);
+					if (rows.length == 0) {
 						repaintTimer.stop();
 					}
 				}
-				for(int a = 0; a<rows.length; a++) {
-					Rectangle rowBounds = rows[a].tree.getRowBounds(rows[a].rowIndex);
+				for (int a = 0; a < rows.length; a++) {
+					Rectangle rowBounds = rows[a].tree
+							.getRowBounds(rows[a].rowIndex);
 					rows[a].tree.repaint(rowBounds);
 				}
 			}
 		};
 		Set<RowInfo> repaintingRows = new HashSet<RowInfo>();
 		protected final TreeDecoration decoration;
-		
-		public RepaintingTreeDecoration(Icon normalIcon,int repaintInterval) {
+
+		public RepaintingTreeDecoration(Icon normalIcon, int repaintInterval) {
 			this(new BasicTreeDecoration(normalIcon), repaintInterval);
 		}
-		
-		public RepaintingTreeDecoration(TreeDecoration treeDecoration,int repaintInterval) {
-			if(treeDecoration==null) throw new NullPointerException();
+
+		public RepaintingTreeDecoration(TreeDecoration treeDecoration,
+				int repaintInterval) {
+			if (treeDecoration == null)
+				throw new NullPointerException();
 			this.decoration = treeDecoration;
 			repaintTimer = new Timer(repaintInterval, repaintListener);
 		}
 
-		/** Returns whether this decoration should be visible.
-		 * <p>Do not override this method. To customize the visibility of
-		 * this object, change the <code>TreeDecoration</code> this decoration
+		/**
+		 * Returns whether this decoration should be visible.
+		 * <p>
+		 * Do not override this method. To customize the visibility of this
+		 * object, change the <code>TreeDecoration</code> this decoration
 		 * delegates to.
 		 */
 		@Override
-		public final boolean isVisible(JTree tree, Object value, boolean selected, boolean expanded, 
-				boolean leaf, int row, boolean hasFocus) {
-			/* This method is final because this implementation is what guarantees this decoration
-			 * will continually repeat. I overrode this by mistake when I wrote the PulsingTreeDecoration,
-			 * and ended up with a timer that continually repainted even when the decoration was not
-			 * actually visible. Instead the correct behavior is for the decoration field to have
-			 * specialized visibility instructions.
+		public final boolean isVisible(JTree tree, Object value,
+				boolean selected, boolean expanded, boolean leaf, int row,
+				boolean hasFocus) {
+			/*
+			 * This method is final because this implementation is what
+			 * guarantees this decoration will continually repeat. I overrode
+			 * this by mistake when I wrote the PulsingTreeDecoration, and ended
+			 * up with a timer that continually repainted even when the
+			 * decoration was not actually visible. Instead the correct behavior
+			 * is for the decoration field to have specialized visibility
+			 * instructions.
 			 */
-			boolean returnValue = decoration.isVisible(tree, value, selected, expanded, leaf, row, hasFocus);
-			synchronized(repaintingRows) {
+			boolean returnValue = decoration.isVisible(tree, value, selected,
+					expanded, leaf, row, hasFocus);
+			synchronized (repaintingRows) {
 				RowInfo rowInfo = new RowInfo(tree, row);
-				if(returnValue) {
-					if(repaintingRows.add(rowInfo) && (!repaintTimer.isRunning())) {
+				if (returnValue) {
+					if (repaintingRows.add(rowInfo)
+							&& (!repaintTimer.isRunning())) {
 						repaintTimer.start();
 					}
 				} else {
@@ -286,14 +352,16 @@ public class DecoratedTreeUI extends BasicTreeUI {
 		public Icon getIcon(JTree tree, Object value, boolean selected,
 				boolean expanded, boolean leaf, int row, boolean isRollover,
 				boolean isPressed) {
-			return decoration.getIcon(tree, value, selected, expanded, leaf, row, isRollover, isPressed);
+			return decoration.getIcon(tree, value, selected, expanded, leaf,
+					row, isRollover, isPressed);
 		}
 
 		@Override
 		public ActionListener getActionListener(JTree tree, Object value,
 				boolean selected, boolean expanded, boolean leaf, int row,
 				boolean hasFocus) {
-			return decoration.getActionListener(tree, value, selected, expanded, leaf, row, hasFocus);
+			return decoration.getActionListener(tree, value, selected,
+					expanded, leaf, row, hasFocus);
 		}
 	}
 
@@ -305,60 +373,66 @@ public class DecoratedTreeUI extends BasicTreeUI {
 		}
 
 		@Override
-		public Rectangle getNodeDimensions(Object value, int row, int depth, 
-				boolean expanded, Rectangle bounds)  {
-			Rectangle r = src.getNodeDimensions(value, row, depth, expanded, bounds);
+		public Rectangle getNodeDimensions(Object value, int row, int depth,
+				boolean expanded, Rectangle bounds) {
+			Rectangle r = src.getNodeDimensions(value, row, depth, expanded,
+					bounds);
 			int maxWidth = getMaxWidth();
 			r.width = Math.max(0, maxWidth - r.x);
 			return r;
 		}
 	}
-	
+
 	protected class DecoratedRenderer implements TreeCellRenderer {
 		TreeCellRenderer renderer;
 		GridBagConstraints c = new GridBagConstraints();
 		JPanel panel = new JPanel(new GridBagLayout());
-		
+
 		DecoratedRenderer(TreeCellRenderer renderer) {
 			this.renderer = renderer;
 		}
 
-		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, 
-				boolean leaf, int row, boolean hasFocus) {
+		public Component getTreeCellRendererComponent(JTree tree, Object value,
+				boolean selected, boolean expanded, boolean leaf, int row,
+				boolean hasFocus) {
 			panel.removeAll();
-			Component core = renderer.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-			c.gridx = 0; c.gridy = 0; 
-			c.weightx = 1; c.weighty = 1;
+			Component core = renderer.getTreeCellRendererComponent(tree, value,
+					selected, expanded, leaf, row, hasFocus);
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weightx = 1;
+			c.weighty = 1;
 			c.anchor = GridBagConstraints.WEST;
 			panel.add(core, c);
-			
+
 			c.weightx = 0;
 			c.anchor = GridBagConstraints.EAST;
-			JComponent[] decorations = getDecorations(tree, value, selected, expanded, leaf, row, hasFocus);
-			for(int a = 0; a<decorations.length; a++) {
+			JComponent[] decorations = getDecorations(tree, value, selected,
+					expanded, leaf, row, hasFocus);
+			for (int a = 0; a < decorations.length; a++) {
 				c.gridx++;
 				panel.add(decorations[a], c);
 			}
-			
-			if(stretchBackgroundHighlight) {
-				if(core instanceof DefaultTreeCellRenderer) {
-					DefaultTreeCellRenderer r = (DefaultTreeCellRenderer)core;
-					if(selected) {
-						panel.setBackground( r.getBackgroundSelectionColor() );
+
+			if (stretchBackgroundHighlight) {
+				if (core instanceof DefaultTreeCellRenderer) {
+					DefaultTreeCellRenderer r = (DefaultTreeCellRenderer) core;
+					if (selected) {
+						panel.setBackground(r.getBackgroundSelectionColor());
 					} else {
-						panel.setBackground( r.getBackgroundNonSelectionColor() );
+						panel.setBackground(r.getBackgroundNonSelectionColor());
 					}
 				} else {
-					panel.setBackground( core.getBackground() );
+					panel.setBackground(core.getBackground());
 				}
 			} else {
 				panel.setBackground(tree.getBackground());
 			}
-			
+
 			return panel;
 		}
 	}
-	
+
 	static class ArmedDecorationInfo {
 		TreeDecoration decoration;
 		JTree tree;
@@ -366,8 +440,10 @@ public class DecoratedTreeUI extends BasicTreeUI {
 		boolean selected, expanded, leaf;
 		int row;
 		Rectangle decorationBounds;
-		
-		ArmedDecorationInfo(TreeDecoration decoration,JTree tree,Object value,boolean selected,boolean expanded,boolean leaf,int row,Rectangle decorationBounds) {
+
+		ArmedDecorationInfo(TreeDecoration decoration, JTree tree,
+				Object value, boolean selected, boolean expanded, boolean leaf,
+				int row, Rectangle decorationBounds) {
 			this.decoration = decoration;
 			this.tree = tree;
 			this.value = value;
@@ -380,10 +456,10 @@ public class DecoratedTreeUI extends BasicTreeUI {
 	}
 
 	ArmedDecorationInfo armedDecoration;
-	
+
 	class DecoratedMouseAdapter extends MouseAdapter {
 		MouseListener mouseListener;
-		
+
 		public DecoratedMouseAdapter(MouseListener originalListener) {
 			this.mouseListener = originalListener;
 		}
@@ -394,30 +470,32 @@ public class DecoratedTreeUI extends BasicTreeUI {
 		}
 
 		int lastRowIndex = -1;
-		/** 
+
+		/**
 		 * 
-		 * @param repaint force a repaint, intended for mouse presses/releases.
+		 * @param repaint
+		 *            force a repaint, intended for mouse presses/releases.
 		 */
 		private void repaintDecorations(boolean repaint) {
 			int rowIndex = tree.getRowForLocation(mouseX, mouseY);
-			if(rowIndex!=lastRowIndex || repaint) {
+			if (rowIndex != lastRowIndex || repaint) {
 				Rectangle lastBounds = tree.getRowBounds(lastRowIndex);
-				if(lastBounds!=null)
+				if (lastBounds != null)
 					tree.repaint(lastBounds);
 			}
 			Rectangle bounds = tree.getRowBounds(rowIndex);
-			if(bounds!=null)
+			if (bounds != null)
 				tree.repaint(bounds);
 			lastRowIndex = rowIndex;
 		}
-		
+
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			mouseX = e.getX();
 			mouseY = e.getY();
 			repaintDecorations(false);
-			if(mouseListener instanceof MouseMotionListener)
-				((MouseMotionListener)mouseListener).mouseDragged(e);
+			if (mouseListener instanceof MouseMotionListener)
+				((MouseMotionListener) mouseListener).mouseDragged(e);
 		}
 
 		@Override
@@ -435,43 +513,53 @@ public class DecoratedTreeUI extends BasicTreeUI {
 			mouseX = e.getX();
 			mouseY = e.getY();
 			repaintDecorations(false);
-			if(mouseListener instanceof MouseMotionListener)
-				((MouseMotionListener)mouseListener).mouseMoved(e);
+			if (mouseListener instanceof MouseMotionListener)
+				((MouseMotionListener) mouseListener).mouseMoved(e);
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			mousePressed = e.getButton()==MouseEvent.BUTTON1;
+			mousePressed = e.getButton() == MouseEvent.BUTTON1;
 			mouseX = e.getX();
 			mouseY = e.getY();
 			repaintDecorations(true);
-			
+
 			armedDecoration = getDecorationAtMouseLoc();
-			
+
 			mouseListener.mousePressed(e);
 		}
-		
+
 		private ArmedDecorationInfo getDecorationAtMouseLoc() {
 			int row = tree.getRowForLocation(mouseX, mouseY);
 			boolean selected = tree.getSelectionModel().isRowSelected(row);
 			boolean expanded = tree.isExpanded(row);
 			TreePath path = tree.getPathForRow(row);
-			if(path==null) return null;
+			if (path == null)
+				return null;
 			Object value = path.getLastPathComponent();
-			boolean leaf = value instanceof TreeNode && ((TreeNode)value).getChildCount()==0;
+			boolean leaf = value instanceof TreeNode
+					&& ((TreeNode) value).getChildCount() == 0;
 			boolean hasFocus = tree.hasFocus();
 			Rectangle rowBounds = tree.getRowBounds(row);
-			TreeDecoration[] decorations = (TreeDecoration[])tree.getClientProperty(KEY_DECORATIONS);
-			if(decorations==null) return null;
+			TreeDecoration[] decorations = (TreeDecoration[]) tree
+					.getClientProperty(KEY_DECORATIONS);
+			if (decorations == null)
+				return null;
 			int maxX = rowBounds.x + rowBounds.width;
-			for(int a = decorations.length-1; a>=0; a--) {
-				if(decorations[a].isVisible(tree, value, selected, expanded, leaf, row, hasFocus)) {
-					Icon normalIcon = decorations[a].getIcon(tree, value, selected, expanded, leaf, row, false, false);
-					Dimension size = new Dimension(normalIcon.getIconWidth(), normalIcon.getIconHeight());
+			for (int a = decorations.length - 1; a >= 0; a--) {
+				if (decorations[a].isVisible(tree, value, selected, expanded,
+						leaf, row, hasFocus)) {
+					Icon normalIcon = decorations[a].getIcon(tree, value,
+							selected, expanded, leaf, row, false, false);
+					Dimension size = new Dimension(normalIcon.getIconWidth(),
+							normalIcon.getIconHeight());
 					int minX = maxX - size.width;
-					if(mouseX>=minX && mouseX<maxX) {
-						Rectangle decorationBounds = new Rectangle(minX, rowBounds.y, maxX - minX, rowBounds.height);
-						return new ArmedDecorationInfo(decorations[a], tree, value, selected, expanded, leaf, row, decorationBounds);
+					if (mouseX >= minX && mouseX < maxX) {
+						Rectangle decorationBounds = new Rectangle(minX,
+								rowBounds.y, maxX - minX, rowBounds.height);
+						return new ArmedDecorationInfo(decorations[a], tree,
+								value, selected, expanded, leaf, row,
+								decorationBounds);
 					}
 					maxX = minX;
 				}
@@ -481,25 +569,30 @@ public class DecoratedTreeUI extends BasicTreeUI {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			mousePressed = e.getButton()!=MouseEvent.BUTTON1;
+			mousePressed = e.getButton() != MouseEvent.BUTTON1;
 			mouseX = e.getX();
 			mouseY = e.getY();
 			repaintDecorations(true);
 			mouseListener.mouseReleased(e);
-			
+
 			try {
-				if(armedDecoration!=null && armedDecoration.decorationBounds.contains(mouseX, mouseY)) {
-					ActionListener actionListener = armedDecoration.decoration.getActionListener(tree, 
-							armedDecoration.value, 
-							armedDecoration.selected, 
-							armedDecoration.expanded, 
-							armedDecoration.leaf, 
-							armedDecoration.row, 
-							false );
-					if(actionListener!=null) {
-						actionListener.actionPerformed(new ActionEvent(armedDecoration.decoration, 0, "decoration click"));
-						//this isn't really our responsibility, but a sloppy decoration may forget to
-						//repaint if something changed... (and a one-time repaint won't hurt, right?)
+				if (armedDecoration != null
+						&& armedDecoration.decorationBounds.contains(mouseX,
+								mouseY)) {
+					ActionListener actionListener = armedDecoration.decoration
+							.getActionListener(tree, armedDecoration.value,
+									armedDecoration.selected,
+									armedDecoration.expanded,
+									armedDecoration.leaf, armedDecoration.row,
+									false);
+					if (actionListener != null) {
+						actionListener.actionPerformed(new ActionEvent(
+								armedDecoration.decoration, 0,
+								"decoration click"));
+						// this isn't really our responsibility, but a sloppy
+						// decoration may forget to
+						// repaint if something changed... (and a one-time
+						// repaint won't hurt, right?)
 						tree.repaint(armedDecoration.row);
 					}
 				}
@@ -510,77 +603,93 @@ public class DecoratedTreeUI extends BasicTreeUI {
 
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			if(mouseListener instanceof MouseWheelListener)
-				((MouseWheelListener)mouseListener).mouseWheelMoved(e);
+			if (mouseListener instanceof MouseWheelListener)
+				((MouseWheelListener) mouseListener).mouseWheelMoved(e);
 		}
 	}
 
 	protected int mouseX, mouseY;
 	protected boolean mousePressed = false;
 	protected boolean stretchBackgroundHighlight;
-	
-	/** Create a DecoratedTreeUI that stretchs the background highlight.
+
+	/**
+	 * Create a DecoratedTreeUI that stretchs the background highlight.
 	 */
 	public DecoratedTreeUI() {
 		this(true);
 	}
-	
-	/** Create a DecoratedTreeUI.
+
+	/**
+	 * Create a DecoratedTreeUI.
 	 * 
-	 * @param stretchBackgroundHighlight whether the background highlight should be stretched to the width
-	 * of the tree or not.
+	 * @param stretchBackgroundHighlight
+	 *            whether the background highlight should be stretched to the
+	 *            width of the tree or not.
 	 */
 	public DecoratedTreeUI(boolean stretchBackgroundHighlight) {
 		this.stretchBackgroundHighlight = stretchBackgroundHighlight;
 	}
-	
+
 	private transient List<JLabel> labels = new ArrayList<JLabel>();
 	int insideGetDecorations = 0;
-	protected JComponent[] getDecorations(JTree tree,Object value,boolean selected,
-			boolean expanded,boolean leaf,int row,boolean hasFocus) {
-		
-		/** This can lead to a recursive loop when calculating bounds if we let it...
+
+	protected JComponent[] getDecorations(JTree tree, Object value,
+			boolean selected, boolean expanded, boolean leaf, int row,
+			boolean hasFocus) {
+
+		/**
+		 * This can lead to a recursive loop when calculating bounds if we let
+		 * it...
 		 */
-		if(insideGetDecorations>0) return new JComponent[] {};
-		
+		if (insideGetDecorations > 0)
+			return new JComponent[] {};
+
 		insideGetDecorations++;
 		try {
-			TreeDecoration[] decorations = (TreeDecoration[])tree.getClientProperty(KEY_DECORATIONS);
-			if(decorations==null)
+			TreeDecoration[] decorations = (TreeDecoration[]) tree
+					.getClientProperty(KEY_DECORATIONS);
+			if (decorations == null)
 				return new JComponent[] {};
 			Rectangle rowBounds = tree.getRowBounds(row);
-			if(rowBounds==null)
+			if (rowBounds == null)
 				return new JComponent[] {};
-			
+
 			JLabel[] c = new JLabel[decorations.length];
-			for(int a = 0; a<c.length; a++) {
-				if(a>=labels.size()) {
+			for (int a = 0; a < c.length; a++) {
+				if (a >= labels.size()) {
 					JLabel label = new JLabel();
 					label.setBorder(null);
 					labels.add(label);
 				}
-				boolean isVisible = decorations[a].isVisible(tree, value, selected, expanded, leaf, row, hasFocus);
+				boolean isVisible = decorations[a].isVisible(tree, value,
+						selected, expanded, leaf, row, hasFocus);
 				c[a] = labels.get(a);
-				c[a].setVisible( isVisible );
+				c[a].setVisible(isVisible);
 			}
 			int maxX = rowBounds.x + rowBounds.width;
-			for(int a = c.length-1; a>=0; a--) {
-				if(c[a].isVisible()) {
-					Icon normalIcon = decorations[a].getIcon(tree, value, selected, expanded, leaf, row, false, false);
-					Dimension size = new Dimension(normalIcon.getIconWidth(), normalIcon.getIconHeight());
+			for (int a = c.length - 1; a >= 0; a--) {
+				if (c[a].isVisible()) {
+					Icon normalIcon = decorations[a].getIcon(tree, value,
+							selected, expanded, leaf, row, false, false);
+					Dimension size = new Dimension(normalIcon.getIconWidth(),
+							normalIcon.getIconHeight());
 					int minX = maxX - size.width;
-					if( mousePressed && armedDecoration!=null && 
-							armedDecoration.value==value && 
-							armedDecoration.decoration==decorations[a]) {
-						Icon pressedIcon = decorations[a].getIcon(tree, value, selected, expanded, leaf, row, true, true);
+					if (mousePressed && armedDecoration != null
+							&& armedDecoration.value == value
+							&& armedDecoration.decoration == decorations[a]) {
+						Icon pressedIcon = decorations[a].getIcon(tree, value,
+								selected, expanded, leaf, row, true, true);
 						c[a].setIcon(pressedIcon);
-					} else if( (!mousePressed) && mouseX >= minX && mouseX < maxX && mouseY >=rowBounds.y && mouseY < (rowBounds.y + rowBounds.height) ) {
-						Icon rolloverIcon = decorations[a].getIcon(tree, value, selected, expanded, leaf, row, true, false);
+					} else if ((!mousePressed) && mouseX >= minX
+							&& mouseX < maxX && mouseY >= rowBounds.y
+							&& mouseY < (rowBounds.y + rowBounds.height)) {
+						Icon rolloverIcon = decorations[a].getIcon(tree, value,
+								selected, expanded, leaf, row, true, false);
 						c[a].setIcon(rolloverIcon);
 					} else {
 						c[a].setIcon(normalIcon);
 					}
-					
+
 					maxX = minX;
 				} else {
 					c[a].setIcon(null);
@@ -591,26 +700,26 @@ public class DecoratedTreeUI extends BasicTreeUI {
 			insideGetDecorations--;
 		}
 	}
-	
+
 	protected KeyAdapter keyListener = new KeyAdapter() {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
+			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				int row = tree.getLeadSelectionRow();
-				if(row>=0) {
+				if (row >= 0) {
 					tree.expandRow(row);
 				}
 				e.consume();
-			} else if(e.getKeyCode()==KeyEvent.VK_LEFT) {
+			} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				int row = tree.getLeadSelectionRow();
-				if(row>=0) {
+				if (row >= 0) {
 					tree.collapseRow(row);
 				}
 				e.consume();
 			}
 		}
 	};
-	
+
 	protected ComponentListener invalidationComponentListener = new ComponentAdapter() {
 		@Override
 		public void componentResized(ComponentEvent e) {
@@ -620,8 +729,8 @@ public class DecoratedTreeUI extends BasicTreeUI {
 
 	private int getMaxWidth() {
 		int maxWidth = tree.getWidth();
-		if(tree.getParent() instanceof JViewport) {
-			JViewport viewport = (JViewport)tree.getParent();
+		if (tree.getParent() instanceof JViewport) {
+			JViewport viewport = (JViewport) tree.getParent();
 			maxWidth = viewport.getViewRect().width;
 		}
 		return maxWidth;
@@ -632,65 +741,60 @@ public class DecoratedTreeUI extends BasicTreeUI {
 		NodeDimensions returnValue = super.createNodeDimensions();
 		return new ExtendedNodeDimensions(returnValue);
 	}
-	
-	/** This is copied from BasicTreeUI.java. The only
-	 * modifications are:
-	 * <ul><li>The background color is painted across the entire width of
-	 *the tree.</li>
-	 * <li>Because of the above requirement: the expand control
-	 * is redundantly painted on top of that rectangle for visibility.</li>
-	 * <li>We never inform the CellRenderer whether focus is present.
-	 * (That argument is left false, because we don't have access to
-	 * private fields the original logic wanted.)</li></ul>
+
+	/**
+	 * This is copied from BasicTreeUI.java. The only modifications are:
+	 * <ul>
+	 * <li>The background color is painted across the entire width of the tree.</li>
+	 * <li>Because of the above requirement: the expand control is redundantly
+	 * painted on top of that rectangle for visibility.</li>
+	 * <li>We never inform the CellRenderer whether focus is present. (That
+	 * argument is left false, because we don't have access to private fields
+	 * the original logic wanted.)</li>
+	 * </ul>
 	 */
 	@Override
-	protected void paintRow(Graphics g, Rectangle clipBounds,
-			Insets insets, Rectangle bounds, TreePath path,
-			int row, boolean isExpanded,
+	protected void paintRow(Graphics g, Rectangle clipBounds, Insets insets,
+			Rectangle bounds, TreePath path, int row, boolean isExpanded,
 			boolean hasBeenExpanded, boolean isLeaf) {
 		// Don't paint the renderer if editing this row.
-		if(editingComponent != null && editingRow == row)
+		if (editingComponent != null && editingRow == row)
 			return;
 
-		//this is in BasicTreeUI, but getLeadSelectionRow() is private.
+		// this is in BasicTreeUI, but getLeadSelectionRow() is private.
 		/*
-		int leadIndex;
-	
-		if(tree.hasFocus()) {
-		    leadIndex = getLeadSelectionRow();
-		}
-		else
-		    leadIndex = -1;
+		 * int leadIndex;
+		 * 
+		 * if(tree.hasFocus()) { leadIndex = getLeadSelectionRow(); } else
+		 * leadIndex = -1;
 		 */
 
 		Component component;
 
-		component = currentCellRenderer.getTreeCellRendererComponent
-		(tree, path.getLastPathComponent(),
-				tree.isRowSelected(row), isExpanded, isLeaf, row,
-				false);
+		component = currentCellRenderer.getTreeCellRendererComponent(tree,
+				path.getLastPathComponent(), tree.isRowSelected(row),
+				isExpanded, isLeaf, row, false);
 
-		if(component.isOpaque()) {
+		if (component.isOpaque()) {
 			Color bkgnd = component.getBackground();
 			g.setColor(bkgnd);
 			g.fillRect(0, bounds.y, tree.getWidth(), bounds.height);
 
-			if(shouldPaintExpandControl(path, row, isExpanded,
+			if (shouldPaintExpandControl(path, row, isExpanded,
 					hasBeenExpanded, isLeaf)) {
-				paintExpandControl(g, bounds, insets, bounds,
-						path, row, isExpanded,
-						hasBeenExpanded, isLeaf);
+				paintExpandControl(g, bounds, insets, bounds, path, row,
+						isExpanded, hasBeenExpanded, isLeaf);
 			}
 		}
 
 		rendererPane.paintComponent(g, component, tree, bounds.x, bounds.y,
-				bounds.width, bounds.height, true);	
+				bounds.width, bounds.height, true);
 	}
 
 	@Override
 	public void installUI(JComponent c) {
 		super.installUI(c);
-		if(tree!=null) {
+		if (tree != null) {
 			tree.addComponentListener(invalidationComponentListener);
 			tree.addKeyListener(keyListener);
 		}
@@ -698,7 +802,7 @@ public class DecoratedTreeUI extends BasicTreeUI {
 
 	@Override
 	public void uninstallUI(JComponent c) {
-		if(tree!=null) {
+		if (tree != null) {
 			tree.removeComponentListener(invalidationComponentListener);
 			tree.removeKeyListener(keyListener);
 		}
@@ -708,8 +812,8 @@ public class DecoratedTreeUI extends BasicTreeUI {
 	@Override
 	protected void updateRenderer() {
 		super.updateRenderer();
-		if(currentCellRenderer!=null) {
-			if(!(currentCellRenderer instanceof DecoratedRenderer)) {
+		if (currentCellRenderer != null) {
+			if (!(currentCellRenderer instanceof DecoratedRenderer)) {
 				currentCellRenderer = new DecoratedRenderer(currentCellRenderer);
 			}
 		}
@@ -717,7 +821,8 @@ public class DecoratedTreeUI extends BasicTreeUI {
 
 	@Override
 	protected MouseListener createMouseListener() {
-		MouseAdapter decoratedMouseAdapter = new DecoratedMouseAdapter(super.createMouseListener());
+		MouseAdapter decoratedMouseAdapter = new DecoratedMouseAdapter(
+				super.createMouseListener());
 		return decoratedMouseAdapter;
 	}
 }

@@ -14,11 +14,11 @@ import com.pump.swing.ColorPalette;
 
 public class SimpleColorPaletteUI extends ColorPaletteUI {
 	public final ColorSet colorSet;
-	
+
 	public SimpleColorPaletteUI() {
 		this(new DefaultColors(true));
 	}
-	
+
 	public SimpleColorPaletteUI(ColorSet colors) {
 		colorSet = colors;
 	}

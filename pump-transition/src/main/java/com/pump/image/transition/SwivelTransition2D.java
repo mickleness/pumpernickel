@@ -13,107 +13,122 @@ package com.pump.image.transition;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 
-/** This transition resembles two still images on a turntable.  The table spins
+/**
+ * This transition resembles two still images on a turntable. The table spins
  * clockwise or counter-clockwise, and the foremost image rotates to the
  * background and the new image rotates forward. Here are playback samples:
- * <p><table summary="Sample Animations of SwivelTransition2D" cellspacing="50" border="0"><tr>
+ * <p>
+ * <table summary="Sample Animations of SwivelTransition2D" cellspacing="50" border="0">
+ * <tr>
  * <td align="center">
- * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SwivelTransition2D/SwivelCounterclockwise.gif" alt="Swivel Counterclockwise">
- * <p>Swivel Counterclockwise
- * </td>
+ * <img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SwivelTransition2D/SwivelCounterclockwise.gif"
+ * alt="Swivel Counterclockwise">
+ * <p>
+ * Swivel Counterclockwise</td>
  * <td align="center">
- * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SwivelTransition2D/SwivelClockwise.gif" alt="Swivel Clockwise">
- * <p>Swivel Clockwise
- * </td>
- * </tr></table>
+ * <img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SwivelTransition2D/SwivelClockwise.gif"
+ * alt="Swivel Clockwise">
+ * <p>
+ * Swivel Clockwise</td>
+ * </tr>
+ * </table>
  *
  */
 public class SwivelTransition2D extends AbstractPlanarTransition2D {
-	
-	/** This public static method is used by the 
-	 * {@link com.bric.image.transition.Transition2DDemoHelper}
-	 * class to create sample animations of this transition.
+
+	/**
+	 * This public static method is used by the
+	 * {@link com.bric.image.transition.Transition2DDemoHelper} class to create
+	 * sample animations of this transition.
+	 * 
 	 * @return the transitions that should be used to demonstrate this
-	 * transition.
+	 *         transition.
 	 */
 	public static Transition[] getDemoTransitions() {
-		return new Transition[] {
-				new SwivelTransition2D(COUNTER_CLOCKWISE), 
-				new SwivelTransition2D(CLOCKWISE)
-		};
+		return new Transition[] { new SwivelTransition2D(COUNTER_CLOCKWISE),
+				new SwivelTransition2D(CLOCKWISE) };
 	}
-	
+
 	int multiplier;
 
-	/** Creates a new swivel transition that moves clockwise.
+	/**
+	 * Creates a new swivel transition that moves clockwise.
 	 * 
 	 */
 	public SwivelTransition2D() {
 		this(CLOCKWISE);
 	}
 
-	/** Creates a new swivel transition against a black background.
+	/**
+	 * Creates a new swivel transition against a black background.
 	 * 
-	 * @param direction must be CLOCKWISE or MOVE_COUNTERCLOCKWISE.
+	 * @param direction
+	 *            must be CLOCKWISE or MOVE_COUNTERCLOCKWISE.
 	 */
 	public SwivelTransition2D(int direction) {
 		this(Color.black, direction);
 	}
-	
-	/** Creates a new swivel transition.
+
+	/**
+	 * Creates a new swivel transition.
 	 * 
-	 * @param direction must be CLOCKWISE or MOVE_COUNTERCLOCKWISE.
+	 * @param direction
+	 *            must be CLOCKWISE or MOVE_COUNTERCLOCKWISE.
 	 */
-	public SwivelTransition2D(Color background,int direction) {
+	public SwivelTransition2D(Color background, int direction) {
 		super(background);
-		if(direction==CLOCKWISE) {
+		if (direction == CLOCKWISE) {
 			multiplier = 1;
-		} else if(direction==COUNTER_CLOCKWISE) {
+		} else if (direction == COUNTER_CLOCKWISE) {
 			multiplier = -1;
 		} else {
-			throw new IllegalArgumentException("The direction must be CLOCKWISE or COUNTER_CLOCKWISE");
+			throw new IllegalArgumentException(
+					"The direction must be CLOCKWISE or COUNTER_CLOCKWISE");
 		}
 	}
 
-	
 	@Override
 	public String toString() {
-        if(multiplier==-1) {
-		return "Swivel Counterclockwise";
-        }
-        return "Swivel Clockwise";
+		if (multiplier == -1) {
+			return "Swivel Counterclockwise";
+		}
+		return "Swivel Clockwise";
 	}
-	
+
 	@Override
 	public float getFrameAOpacity(float p) {
-		if(p<.5f) {
+		if (p < .5f) {
 			return 1f;
 		}
-		p = 1-(p-.5f)/.5f;
-		p = (float)Math.sqrt(p);
+		p = 1 - (p - .5f) / .5f;
+		p = (float) Math.sqrt(p);
 		return p;
 	}
-	
+
 	@Override
 	public float getFrameBOpacity(float p) {
-		if(p>.5f)
+		if (p > .5f)
 			return 1f;
-		p = p/.5f;
-		p = (float)Math.pow(p, .5);
+		p = p / .5f;
+		p = (float) Math.pow(p, .5);
 		return p;
 	}
 
 	@Override
 	public Point2D getFrameALocation(float p) {
-		p = multiplier*p;
-		return new Point2D.Double(.5*Math.cos(Math.PI*p+Math.PI/2)+.5,
-				.5*Math.sin(Math.PI*p+Math.PI/2)+.5);
+		p = multiplier * p;
+		return new Point2D.Double(
+				.5 * Math.cos(Math.PI * p + Math.PI / 2) + .5,
+				.5 * Math.sin(Math.PI * p + Math.PI / 2) + .5);
 	}
-	
+
 	@Override
 	public Point2D getFrameBLocation(float p) {
-		p = multiplier*p;
-		return new Point2D.Double(.5*Math.cos(Math.PI*p+3*Math.PI/2)+.5,
-				.5*Math.sin(Math.PI*p+3*Math.PI/2)+.5);
+		p = multiplier * p;
+		return new Point2D.Double(
+				.5 * Math.cos(Math.PI * p + 3 * Math.PI / 2) + .5,
+				.5 * Math.sin(Math.PI * p + 3 * Math.PI / 2) + .5);
 	}
 }

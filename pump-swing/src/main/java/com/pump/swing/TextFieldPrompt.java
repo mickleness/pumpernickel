@@ -31,11 +31,12 @@ import javax.swing.plaf.TextUI;
 
 import com.pump.graphics.TextOnlyGraphics2D;
 
-/** This is an untouchable text field that sits on top
-* of a parent <code>JTextField</code> providing a text prompt.
-* 
-* @see com.pump.swing.PromptSearchDemo
-*/
+/**
+ * This is an untouchable text field that sits on top of a parent
+ * <code>JTextField</code> providing a text prompt.
+ * 
+ * @see com.pump.swing.PromptSearchDemo
+ */
 public class TextFieldPrompt extends JTextField {
 	private static final long serialVersionUID = 1L;
 
@@ -51,16 +52,17 @@ public class TextFieldPrompt extends JTextField {
 			updateVisibility();
 		}
 	};
-	
+
 	FocusListener focusListener = new FocusListener() {
 		public void focusGained(FocusEvent e) {
 			updateVisibility();
 		}
+
 		public void focusLost(FocusEvent e) {
 			updateVisibility();
 		}
 	};
-	
+
 	DocumentListener documentListener = new DocumentListener() {
 
 		@Override
@@ -76,48 +78,58 @@ public class TextFieldPrompt extends JTextField {
 		public void removeUpdate(DocumentEvent e) {
 			insertUpdate(e);
 		}
-		
+
 	};
-	
+
 	PropertyChangeListener propertyListener = new PropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent evt) {
 			String n = evt.getPropertyName();
-			if(n.equals("useSearchIcon") || n.equals("JTextField.variant")) {
+			if (n.equals("useSearchIcon") || n.equals("JTextField.variant")) {
 				putClientProperty(n, evt.getNewValue());
 			}
 		}
 	};
 
-	/** Creates a new <code>TextFieldPrompt</code>.
+	/**
+	 * Creates a new <code>TextFieldPrompt</code>.
 	 * 
-	 * @param parent the text field to add this prompt to.
-	 * @param promptText the text to display as the prompt.  This can
-	 * easily be controlled with <code>getText()</code> and <code>setText()</code>.
+	 * @param parent
+	 *            the text field to add this prompt to.
+	 * @param promptText
+	 *            the text to display as the prompt. This can easily be
+	 *            controlled with <code>getText()</code> and
+	 *            <code>setText()</code>.
 	 */
-	public TextFieldPrompt(JTextField parent,String promptText) {
-		this(parent,null,promptText);
+	public TextFieldPrompt(JTextField parent, String promptText) {
+		this(parent, null, promptText);
 	}
-	
-	/** Creates a new <code>TextFieldPrompt</code>.
+
+	/**
+	 * Creates a new <code>TextFieldPrompt</code>.
 	 * 
-	 * @param parent the text field to add this prompt to.
-	 * @param promptColor the color of this prompt text.
-	 * @param promptText the text to display as the prompt.  This can
-	 * easily be controlled with <code>getText()</code> and <code>setText()</code>.
+	 * @param parent
+	 *            the text field to add this prompt to.
+	 * @param promptColor
+	 *            the color of this prompt text.
+	 * @param promptText
+	 *            the text to display as the prompt. This can easily be
+	 *            controlled with <code>getText()</code> and
+	 *            <code>setText()</code>.
 	 */
-	public TextFieldPrompt(JTextField parent,Color promptColor,String promptText) {
+	public TextFieldPrompt(JTextField parent, Color promptColor,
+			String promptText) {
 		super(promptText);
-		
-		if(promptColor==null)
+
+		if (promptColor == null)
 			promptColor = Color.gray;
-		
+
 		parent.add(this);
-		
+
 		setFocusable(false);
 		setEditable(false);
 		setForeground(promptColor);
 		setOpaque(false);
-		
+
 		addHierarchyListener(hierarchyListener);
 		parent.addComponentListener(componentListener);
 		addComponentListener(componentListener);
@@ -125,27 +137,34 @@ public class TextFieldPrompt extends JTextField {
 		parent.getDocument().addDocumentListener(documentListener);
 		parent.addPropertyChangeListener(propertyListener);
 
-		putClientProperty( "useSearchIcon", parent.getClientProperty("useSearchIcon"));
-		putClientProperty( "JTextField.variant", parent.getClientProperty("JTextField.variant"));
-		
+		putClientProperty("useSearchIcon",
+				parent.getClientProperty("useSearchIcon"));
+		putClientProperty("JTextField.variant",
+				parent.getClientProperty("JTextField.variant"));
+
 		updateBounds();
 		try {
 			try {
 				TextUI ui = parent.getUI();
-				Constructor<?> noArgConstructor = ui.getClass().getConstructor(new Class[] {});
-				TextUI newUI = (TextUI)noArgConstructor.newInstance(new Object[] {});
+				Constructor<?> noArgConstructor = ui.getClass().getConstructor(
+						new Class[] {});
+				TextUI newUI = (TextUI) noArgConstructor
+						.newInstance(new Object[] {});
 				setUI(newUI);
 				return;
-			} catch(Throwable t) {}
-	
+			} catch (Throwable t) {
+			}
+
 			try {
 				TextUI ui = parent.getUI();
-				Constructor<?> noArgConstructor = ui.getClass().getConstructor(new Class[] { JTextField.class });
-				TextUI newUI = (TextUI)noArgConstructor.newInstance(new Object[] { this });
+				Constructor<?> noArgConstructor = ui.getClass().getConstructor(
+						new Class[] { JTextField.class });
+				TextUI newUI = (TextUI) noArgConstructor
+						.newInstance(new Object[] { this });
 				setUI(newUI);
-			} catch(RuntimeException e) {
+			} catch (RuntimeException e) {
 				throw e;
-			} catch(Throwable t) {
+			} catch (Throwable t) {
 				RuntimeException e2 = new RuntimeException();
 				e2.initCause(t);
 				throw e2;
@@ -154,41 +173,42 @@ public class TextFieldPrompt extends JTextField {
 			updateVisibility();
 		}
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
-		super.paint( new TextOnlyGraphics2D((Graphics2D)g, null) );
+		super.paint(new TextOnlyGraphics2D((Graphics2D) g, null));
 	}
-	
+
 	@Override
 	public boolean contains(int x, int y) {
 		return false;
 	}
-	
+
 	private Runnable updateBoundsRunnable = new Runnable() {
 		public void run() {
 			updateBounds();
 		}
 	};
 	private int adjustingBounds = 0;
+
 	private void updateBounds() {
-		if(SwingUtilities.isEventDispatchThread()==false) {
+		if (SwingUtilities.isEventDispatchThread() == false) {
 			SwingUtilities.invokeLater(updateBoundsRunnable);
 			return;
 		}
-		if(adjustingBounds>0)
+		if (adjustingBounds > 0)
 			return;
-		
+
 		adjustingBounds++;
 		try {
-			JTextField parent = (JTextField)getParent();
-			setBounds(0,0,parent.getWidth(),parent.getHeight());
+			JTextField parent = (JTextField) getParent();
+			setBounds(0, 0, parent.getWidth(), parent.getHeight());
 			updateVisibility();
 		} finally {
 			adjustingBounds--;
 		}
 	}
-	
+
 	private Runnable updateVisibilityRunnable = new Runnable() {
 		public void run() {
 			updateVisibility();
@@ -196,15 +216,15 @@ public class TextFieldPrompt extends JTextField {
 	};
 
 	private void updateVisibility() {
-		if(SwingUtilities.isEventDispatchThread()==false) {
+		if (SwingUtilities.isEventDispatchThread() == false) {
 			SwingUtilities.invokeLater(updateVisibilityRunnable);
 			return;
 		}
-		JTextField parent = (JTextField)getParent();
+		JTextField parent = (JTextField) getParent();
 		boolean focused = parent.hasFocus();
-		boolean empty = parent.getText().length()==0;
-		setVisible( (!focused) && empty );
-		if(isVisible())
+		boolean empty = parent.getText().length() == 0;
+		setVisible((!focused) && empty);
+		if (isVisible())
 			updateBounds();
 	}
 }

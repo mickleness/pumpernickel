@@ -27,25 +27,25 @@ import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
-/** This resembles the L&amp;F used on XP for buttons that have no
- * visible L&amp;F until they are rolled over.
- * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/XPSubtleButtonUI.png" alt="XPSubtleButtonUI Screenshot">
+/**
+ * This resembles the L&amp;F used on XP for buttons that have no visible
+ * L&amp;F until they are rolled over.
+ * <p>
+ * <img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/XPSubtleButtonUI.png"
+ * alt="XPSubtleButtonUI Screenshot">
  * 
  * @see com.pump.showcase.FilledButtonUIDemo
  **/
 public class XPSubtleButtonUI extends FilledButtonUI {
 	private static final Color strokeColor = new Color(0xCECDC3);
-	private static final Color shadowHighlight = new Color(255,255,255,120);
+	private static final Color shadowHighlight = new Color(255, 255, 255, 120);
 	private static final Color[] normalColors = new Color[] {
-		new Color(255,255,255),
-		new Color(240,240,240)
-	};
+			new Color(255, 255, 255), new Color(240, 240, 240) };
 	private static final Color[] pressedColors = new Color[] {
-		new Color(230,230,224),
-		new Color(224,224,215)
-	};
-	
-	public static final ButtonShape XP_SHAPE = new ButtonShape(3,3);
+			new Color(230, 230, 224), new Color(224, 224, 215) };
+
+	public static final ButtonShape XP_SHAPE = new ButtonShape(3, 3);
 	public static final ButtonFill XP_FILL = new ButtonFill() {
 		@Override
 		public Paint getStroke(AbstractButton button, Rectangle fillRect) {
@@ -54,47 +54,44 @@ public class XPSubtleButtonUI extends FilledButtonUI {
 
 		@Override
 		public Paint getFill(AbstractButton button, Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("xp.subtle.normal", 
-					fillRect.height, fillRect.y,
-					weights, normalColors);
+			return PlafPaintUtils.getVerticalGradient("xp.subtle.normal",
+					fillRect.height, fillRect.y, weights, normalColors);
 		}
 
 		@Override
 		public Color getShadowHighlight(AbstractButton button) {
 			return shadowHighlight;
-		}		
+		}
 	};
 
 	private static XPSubtleButtonUI xpSubtleButtonUI = new XPSubtleButtonUI();
 
-	/** Create a new instance of this ButtonUI for a component.
-	 * <p>This method is required if you want to make this ButtonUI the default
-	 * UI by invoking:
-	 * <br><code>UIManager.getDefaults().put("ButtonUI", "com.pump.plaf.XPSubtleButtonUI");</code>
+	/**
+	 * Create a new instance of this ButtonUI for a component.
+	 * <p>
+	 * This method is required if you want to make this ButtonUI the default UI
+	 * by invoking: <br>
+	 * <code>UIManager.getDefaults().put("ButtonUI", "com.pump.plaf.XPSubtleButtonUI");</code>
 	 */
-    public static ComponentUI createUI(JComponent c) {
-        return xpSubtleButtonUI;
-    }
-	
-	public XPSubtleButtonUI() {
-		super(XP_FILL,XP_SHAPE);
+	public static ComponentUI createUI(JComponent c) {
+		return xpSubtleButtonUI;
 	}
 
-	private static final float[] weights = new float[] {0, 1};
-	
-	private static final Color[] shadow = new Color[] {
-		new Color(0,0,0,25),
-		new Color(0,0,0,18),
-		new Color(0,0,0,10)
-	};
-	
+	public XPSubtleButtonUI() {
+		super(XP_FILL, XP_SHAPE);
+	}
+
+	private static final float[] weights = new float[] { 0, 1 };
+
+	private static final Color[] shadow = new Color[] { new Color(0, 0, 0, 25),
+			new Color(0, 0, 0, 18), new Color(0, 0, 0, 10) };
+
 	private static final Color[] highlight = new Color[] {
-		new Color(234,233,227),
-		new Color(242,241,238)
-	};
-	
-	/** This returns PaintFocus.NONE, because paintBackground() handles
-	 * rendering the focus.
+			new Color(234, 233, 227), new Color(242, 241, 238) };
+
+	/**
+	 * This returns PaintFocus.NONE, because paintBackground() handles rendering
+	 * the focus.
 	 */
 	@Override
 	public PaintFocus getFocusPainting(AbstractButton button) {
@@ -104,69 +101,69 @@ public class XPSubtleButtonUI extends FilledButtonUI {
 	@Override
 	public void paintBackground(Graphics2D g, ButtonInfo info) {
 		super.paintBackground(g, info);
-		
-		g = (Graphics2D)g.create();
-		
+
+		g = (Graphics2D) g.create();
+
 		g.clip(info.fill);
 
-		if(info.button.getModel().isPressed() ||
-				info.button.getModel().isArmed() ||
-				info.button.getModel().isSelected() ||
-				FilledButtonUI.isSpacebarPressed(info.button)) {
-			if(info.button.isContentAreaFilled()) {
-				g.setPaint( PlafPaintUtils.getVerticalGradient("xp.subtle.pressed", 
-						info.fillBounds.height, info.fillBounds.y,
-						weights, pressedColors) );
+		if (info.button.getModel().isPressed()
+				|| info.button.getModel().isArmed()
+				|| info.button.getModel().isSelected()
+				|| FilledButtonUI.isSpacebarPressed(info.button)) {
+			if (info.button.isContentAreaFilled()) {
+				g.setPaint(PlafPaintUtils.getVerticalGradient(
+						"xp.subtle.pressed", info.fillBounds.height,
+						info.fillBounds.y, weights, pressedColors));
 				g.fill(info.fillBounds);
 			}
 			g.setStroke(new BasicStroke(1));
 			g.setColor(shadow[0]);
-			g.translate(0,1);
+			g.translate(0, 1);
 			g.draw(info.fill);
 			g.setColor(shadow[1]);
-			g.translate(1,1);
+			g.translate(1, 1);
 			g.draw(info.fill);
 			g.setColor(shadow[2]);
-			g.translate(1,1);
+			g.translate(1, 1);
 			g.draw(info.fill);
-			g.translate(-2,-3);
-			
-			if(info.button.isContentAreaFilled()) {
-				//this just looks weird if there's no content...
+			g.translate(-2, -3);
+
+			if (info.button.isContentAreaFilled()) {
+				// this just looks weird if there's no content...
 				g.setColor(highlight[0]);
-				g.translate(0,-2);
+				g.translate(0, -2);
 				g.draw(info.fill);
 				g.setColor(highlight[1]);
-				g.translate(0,1);
+				g.translate(0, 1);
 				g.draw(info.fill);
 			}
-		} 
+		}
 		g.dispose();
 	}
-	
+
 	MouseListener rolloverListener = new MouseAdapter() {
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			AbstractButton c = (AbstractButton)e.getSource();
-			c.putClientProperty(ROLLOVER,Boolean.TRUE);
+			AbstractButton c = (AbstractButton) e.getSource();
+			c.putClientProperty(ROLLOVER, Boolean.TRUE);
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			AbstractButton c = (AbstractButton)e.getSource();
-			c.putClientProperty(ROLLOVER,Boolean.FALSE);
+			AbstractButton c = (AbstractButton) e.getSource();
+			c.putClientProperty(ROLLOVER, Boolean.FALSE);
 		}
-		
+
 	};
-	
+
 	protected void updateContentAndBorder(AbstractButton c) {
 		boolean mouseInside = isRollover(c);
 		boolean focus = hasFocus(c);
 		c.setContentAreaFilled((mouseInside || focus) && c.isEnabled());
 		c.setBorderPainted((mouseInside || focus) && c.isEnabled());
 	}
-	
+
 	@Override
 	public boolean isFillOpaque() {
 		return false;
@@ -175,37 +172,38 @@ public class XPSubtleButtonUI extends FilledButtonUI {
 	PropertyChangeListener enabledListener = new PropertyChangeListener() {
 
 		public void propertyChange(PropertyChangeEvent evt) {
-			updateContentAndBorder( (AbstractButton)evt.getSource() );
+			updateContentAndBorder((AbstractButton) evt.getSource());
 		}
-		
+
 	};
-	
+
 	FocusListener focusListener = new FocusListener() {
 
 		public void focusGained(FocusEvent e) {
-			updateContentAndBorder( (AbstractButton)e.getSource() );
+			updateContentAndBorder((AbstractButton) e.getSource());
 		}
 
 		public void focusLost(FocusEvent e) {
-			updateContentAndBorder( (AbstractButton)e.getSource() );
+			updateContentAndBorder((AbstractButton) e.getSource());
 		}
-		
+
 	};
-	
+
 	PropertyChangeListener updatePropertyListener = new PropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent e) {
-			updateContentAndBorder( (AbstractButton)e.getSource() );
+			updateContentAndBorder((AbstractButton) e.getSource());
 		}
 	};
-	
+
 	@Override
 	public void installUI(JComponent c) {
 		super.installUI(c);
 		c.addMouseListener(rolloverListener);
 		c.addPropertyChangeListener("enabled", enabledListener);
 		c.addFocusListener(focusListener);
-		c.addPropertyChangeListener(FilledButtonUI.ROLLOVER, updatePropertyListener);
-		updateContentAndBorder( (AbstractButton)c );
+		c.addPropertyChangeListener(FilledButtonUI.ROLLOVER,
+				updatePropertyListener);
+		updateContentAndBorder((AbstractButton) c);
 	}
 
 	@Override
@@ -214,6 +212,7 @@ public class XPSubtleButtonUI extends FilledButtonUI {
 		c.removeMouseListener(rolloverListener);
 		c.removeFocusListener(focusListener);
 		c.removePropertyChangeListener("enabled", enabledListener);
-		c.removePropertyChangeListener(FilledButtonUI.ROLLOVER, updatePropertyListener);
+		c.removePropertyChangeListener(FilledButtonUI.ROLLOVER,
+				updatePropertyListener);
 	}
 }

@@ -30,84 +30,87 @@ import com.pump.image.BrushedMetalLook;
 
 public class RenderedShape {
 	static int strokeWidth = 20;
-	static BasicStroke stroke = new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+	static BasicStroke stroke = new BasicStroke(strokeWidth,
+			BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
 	Shape shape;
 	BufferedImage image;
 	Rectangle imageBounds;
 	Area body;
 	int dx = 0;
 	int dy = 0;
-	
-	public RenderedShape(Shape shape,Color color) {
+
+	public RenderedShape(Shape shape, Color color) {
 		this.shape = shape;
 		imageBounds = ShapeBounds.getBounds(shape).getBounds();
-		imageBounds.x -= strokeWidth/2 + 3;
-		imageBounds.y -= strokeWidth/2 + 3;
+		imageBounds.x -= strokeWidth / 2 + 3;
+		imageBounds.y -= strokeWidth / 2 + 3;
 		imageBounds.width += strokeWidth + 6;
 		imageBounds.height += strokeWidth + 6;
-		image = BrushedMetalLook.paint(shape, strokeWidth, imageBounds, color, true);
-		body = new Area( stroke.createStrokedShape(shape) );
+		image = BrushedMetalLook.paint(shape, strokeWidth, imageBounds, color,
+				true);
+		body = new Area(stroke.createStrokedShape(shape));
 	}
-	
-	public boolean contains(int x,int y) {
+
+	public boolean contains(int x, int y) {
 		return body.contains(x - dx, y - dy);
 	}
-	
+
 	public void paint(Graphics g) {
-		g.drawImage(image,dx+imageBounds.x, dy+imageBounds.y,null);
+		g.drawImage(image, dx + imageBounds.x, dy + imageBounds.y, null);
 	}
-	
-	public void paint(Graphics g,double x,double y,RenderedShape otherShape,boolean debug) {
-		Graphics2D g2 = (Graphics2D)g.create();
+
+	public void paint(Graphics g, double x, double y, RenderedShape otherShape,
+			boolean debug) {
+		Graphics2D g2 = (Graphics2D) g.create();
 		Area clip = new Area(body);
 		clip.transform(AffineTransform.getTranslateInstance(dx, dy));
-		clip.intersect(new Area(new Ellipse2D.Double(x - strokeWidth*3/2, y - strokeWidth*3/2, strokeWidth*3, strokeWidth*3)));
-		
+		clip.intersect(new Area(new Ellipse2D.Double(x - strokeWidth * 3 / 2, y
+				- strokeWidth * 3 / 2, strokeWidth * 3, strokeWidth * 3)));
+
 		Area otherBody = new Area(otherShape.body);
-		otherBody.transform(AffineTransform.getTranslateInstance(otherShape.dx, otherShape.dy));
+		otherBody.transform(AffineTransform.getTranslateInstance(otherShape.dx,
+				otherShape.dy));
 		clip.intersect(otherBody);
-		
+
 		g2.clip(clip);
-		if(debug) {
+		if (debug) {
 			g2.setStroke(new BasicStroke(5));
 			g2.setColor(Color.green);
 			g2.draw(clip);
 		}
 		g2.translate(dx, dy);
-		if(debug) {
+		if (debug) {
 			g2.setColor(Color.cyan);
 			g2.draw(body);
 		}
 		g2.translate(imageBounds.x, imageBounds.y);
-		if(debug) {
-			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .75f));
+		if (debug) {
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+					.75f));
 		}
-		g2.drawImage(image,0,0,null);
+		g2.drawImage(image, 0, 0, null);
 		g2.dispose();
 	}
-	
-	public void getIntersections(final RenderedShape other,final Collection<Intersection> dest) {
-		AffineTransform myTranslation = AffineTransform.getTranslateInstance(dx, dy);
-		AffineTransform otherTranslation = AffineTransform.getTranslateInstance(other.dx, other.dy);
-		IntersectionIdentifier.get().getIntersections( 
-				shape, myTranslation, 
+
+	public void getIntersections(final RenderedShape other,
+			final Collection<Intersection> dest) {
+		AffineTransform myTranslation = AffineTransform.getTranslateInstance(
+				dx, dy);
+		AffineTransform otherTranslation = AffineTransform
+				.getTranslateInstance(other.dx, other.dy);
+		IntersectionIdentifier.get().getIntersections(shape, myTranslation,
 				other.shape, otherTranslation,
 				new SimpleIntersectionListener() {
 
 					@Override
 					public void intersection(double x, double y, double t1,
 							double t2, int segmentIndex1, int segmentIndex2) {
-						dest.add(new Intersection(
-								RenderedShape.this,
-								other,
-								x, y,
-								segmentIndex1, t1,
-								segmentIndex2, t2
-							));
-						
+						dest.add(new Intersection(RenderedShape.this, other, x,
+								y, segmentIndex1, t1, segmentIndex2, t2));
+
 					}
-					
+
 				});
-		
+
 	}
 }

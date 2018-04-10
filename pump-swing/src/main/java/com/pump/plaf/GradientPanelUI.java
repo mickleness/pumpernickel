@@ -18,30 +18,32 @@ import java.awt.LinearGradientPaint;
 import javax.swing.JComponent;
 import javax.swing.plaf.PanelUI;
 
-/** This is a PanelUI with a two-color vertical gradient.
+/**
+ * This is a PanelUI with a two-color vertical gradient.
  * 
  */
 public class GradientPanelUI extends PanelUI {
 	Color[] colors;
 	float[] fractions;
-	public GradientPanelUI(Color color1,Color color2) {
+
+	public GradientPanelUI(Color color1, Color color2) {
 		fractions = new float[] { 0, 1 };
 		colors = new Color[] { color1, color2 };
 	}
 
 	int cachedHeight = -11111;
 	LinearGradientPaint paint;
-	
+
 	@Override
 	public void paint(Graphics g0, JComponent c) {
 		int width = c.getWidth();
 		int height = c.getHeight();
-		if(height!=cachedHeight) {
+		if (height != cachedHeight) {
 			paint = new LinearGradientPaint(0, 0, 0, height, fractions, colors);
 			cachedHeight = height;
 		}
-		Graphics2D g = (Graphics2D)g0;
+		Graphics2D g = (Graphics2D) g0;
 		g.setPaint(paint);
-		g.fillRect(0,0,width,height);
+		g.fillRect(0, 0, width, height);
 	}
 }

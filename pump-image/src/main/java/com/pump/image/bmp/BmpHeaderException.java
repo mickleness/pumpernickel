@@ -12,8 +12,9 @@ package com.pump.image.bmp;
 
 import java.io.IOException;
 
-/** Thrown when an input stream does not begin with "BM",
- * which signals this isn't a valid BMP image.
+/**
+ * Thrown when an input stream does not begin with "BM", which signals this
+ * isn't a valid BMP image.
  *
  */
 public class BmpHeaderException extends IOException {

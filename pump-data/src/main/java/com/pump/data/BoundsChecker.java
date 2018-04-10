@@ -12,16 +12,19 @@ package com.pump.data;
 
 import java.io.Serializable;
 
-/** This can be used for bounds checking as values are about to be assigned.
- * It is an optional mechanism to automate IllegalArgumentExceptions.
+/**
+ * This can be used for bounds checking as values are about to be assigned. It
+ * is an optional mechanism to automate IllegalArgumentExceptions.
  * 
- * @param <T> the type of argument this checks.
+ * @param <T>
+ *            the type of argument this checks.
  */
 public abstract class BoundsChecker<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * This BoundsChecker will throw an IllegalArgumentException if a candidate value is null.
+	 * This BoundsChecker will throw an IllegalArgumentException if a candidate
+	 * value is null.
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	public static BoundsChecker NOT_NULL = new BoundsChecker() {
@@ -29,18 +32,23 @@ public abstract class BoundsChecker<T> implements Serializable {
 
 		@Override
 		public void check(Key key, Object t) throws IllegalArgumentException {
-			if(t==null)
-				throw new IllegalArgumentException("The key \""+key+"\" should not be null");
+			if (t == null)
+				throw new IllegalArgumentException("The key \"" + key
+						+ "\" should not be null");
 		}
-		
+
 	};
 
-	/** Check that a potential value is an accepted value.
-	 * @param key the key this value will be assigned to.
-	 * @param t the value to check.
+	/**
+	 * Check that a potential value is an accepted value.
 	 * 
-	 * @throws IllegalArgumentException if the argument is somehow not an acceptable
-	 * property value.
+	 * @param key
+	 *            the key this value will be assigned to.
+	 * @param t
+	 *            the value to check.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             if the argument is somehow not an acceptable property value.
 	 */
-	public abstract void check(Key<T> key,T t) throws IllegalArgumentException;
+	public abstract void check(Key<T> key, T t) throws IllegalArgumentException;
 }

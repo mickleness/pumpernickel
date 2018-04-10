@@ -36,20 +36,18 @@ final class ChainEndX {
 	}
 
 	/*
-	 * Returns head of a complete chain to be added to subcurves
-	 * or null if the links did not complete such a chain.
+	 * Returns head of a complete chain to be added to subcurves or null if the
+	 * links did not complete such a chain.
 	 */
 	public CurveLinkX linkTo(ChainEndX that) {
-		if (etag == AreaOpX.ETAG_IGNORE ||
-				that.etag == AreaOpX.ETAG_IGNORE)
-		{
+		if (etag == AreaOpX.ETAG_IGNORE || that.etag == AreaOpX.ETAG_IGNORE) {
 			throw new InternalError("ChainEnd linked more than once!");
 		}
 		if (etag == that.etag) {
 			throw new InternalError("Linking chains of the same type!");
 		}
 		ChainEndX enter, exit;
-//		assert(partner.etag != that.partner.etag);
+		// assert(partner.etag != that.partner.etag);
 		if (etag == AreaOpX.ETAG_ENTER) {
 			enter = this;
 			exit = that;
@@ -57,17 +55,17 @@ final class ChainEndX {
 			enter = that;
 			exit = this;
 		}
-//		Now make sure these ChainEnds are not linked to any others...
+		// Now make sure these ChainEnds are not linked to any others...
 		etag = AreaOpX.ETAG_IGNORE;
 		that.etag = AreaOpX.ETAG_IGNORE;
-//		Now link everything up...
+		// Now link everything up...
 		enter.tail.setNext(exit.head);
 		enter.tail = exit.tail;
 		if (partner == that) {
-//			Curve has closed on itself...
+			// Curve has closed on itself...
 			return enter.head;
 		}
-//		Link this chain into one end of the chain formed by the partners
+		// Link this chain into one end of the chain formed by the partners
 		ChainEndX otherenter = exit.partner;
 		ChainEndX otherexit = enter.partner;
 		otherenter.partner = otherexit;

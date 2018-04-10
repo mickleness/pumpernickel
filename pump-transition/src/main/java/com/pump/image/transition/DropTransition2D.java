@@ -13,8 +13,13 @@ package com.pump.image.transition;
 import java.awt.Dimension;
 import java.awt.geom.AffineTransform;
 
-/** This is basically a "slide down" transition, but with a bounce at the bottom. Here is a playback sample:
- * <p><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DropTransition2D/Drop.gif" alt="DropTransition2D Demo">
+/**
+ * This is basically a "slide down" transition, but with a bounce at the bottom.
+ * Here is a playback sample:
+ * <p>
+ * <img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DropTransition2D/Drop.gif"
+ * alt="DropTransition2D Demo">
  */
 public class DropTransition2D extends Transition2D {
 
@@ -22,23 +27,22 @@ public class DropTransition2D extends Transition2D {
 	public Transition2DInstruction[] getInstructions(float progress,
 			Dimension size) {
 		float dy;
-		if(progress<.8) {
-			progress = progress/.8f;
-			dy = -progress*progress+1;
-			dy = 1-dy;
+		if (progress < .8) {
+			progress = progress / .8f;
+			dy = -progress * progress + 1;
+			dy = 1 - dy;
 		} else {
-			progress = (progress-.8f)/.2f;
-			dy = -4*(progress-.5f)*(progress-.5f)+1;
-			dy = 1-dy*.1f;
+			progress = (progress - .8f) / .2f;
+			dy = -4 * (progress - .5f) * (progress - .5f) + 1;
+			dy = 1 - dy * .1f;
 		}
-		AffineTransform transform = AffineTransform.getTranslateInstance(0,dy*size.height-size.height);
-		
-		return new ImageInstruction[] {
-				new ImageInstruction(true),
-				new ImageInstruction(false,transform,null)
-		};
+		AffineTransform transform = AffineTransform.getTranslateInstance(0, dy
+				* size.height - size.height);
+
+		return new ImageInstruction[] { new ImageInstruction(true),
+				new ImageInstruction(false, transform, null) };
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Drop";

@@ -18,14 +18,15 @@ class SoundSampleDescriptionAtom extends SampleDescriptionAtom {
 	public SoundSampleDescriptionAtom() {
 		super();
 	}
-	
+
 	public SoundSampleDescriptionAtom(Atom parent, InputStream in)
 			throws IOException {
 		super(parent, in);
 	}
-	
+
 	@Override
-	protected SampleDescriptionEntry readEntry(InputStream in) throws IOException {
+	protected SampleDescriptionEntry readEntry(InputStream in)
+			throws IOException {
 		return new SoundSampleDescriptionEntry(in);
 	}
 }

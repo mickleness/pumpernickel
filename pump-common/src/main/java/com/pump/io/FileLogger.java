@@ -16,19 +16,22 @@ import java.io.IOException;
 
 import com.pump.util.JVM;
 
-/** This logs text to a file.
+/**
+ * This logs text to a file.
  */
 public class FileLogger {
 
 	File f;
-	
+
 	public FileLogger(String name) {
 		this(createLocalLog(name));
 	}
 
-	/** This attempts to create a log in the "right" location
-	 * for a given OS.
-	 * @param fileName the name of the file, such as "My App.txt".
+	/**
+	 * This attempts to create a log in the "right" location for a given OS.
+	 * 
+	 * @param fileName
+	 *            the name of the file, such as "My App.txt".
 	 * @return the location this file should be.
 	 */
 	public static File createLocalLog(String fileName) {
@@ -47,7 +50,8 @@ public class FileLogger {
 		this.f = f;
 		if (!f.exists()) {
 			try {
-				if (f.getParentFile()!=null && f.getParentFile().exists() == false)
+				if (f.getParentFile() != null
+						&& f.getParentFile().exists() == false)
 					f.getParentFile().mkdirs();
 				f.createNewFile();
 			} catch (IOException e) {
@@ -57,7 +61,7 @@ public class FileLogger {
 	}
 
 	public void print(Object obj) {
-		if(obj==null) 
+		if (obj == null)
 			obj = "null";
 		print2(obj.toString());
 	}
@@ -82,12 +86,11 @@ public class FileLogger {
 				out.close();
 			} catch (IOException e) {
 				if (inside == 1) {
-					/** This little clause is intended for logging the
-					 * console output.  If we're logging the
-					 * console output, but then an error occurs
-					 * ~and we print it to the console~ then we might
-					 * enter a nasty loop.  Instead only print one
-					 * error.
+					/**
+					 * This little clause is intended for logging the console
+					 * output. If we're logging the console output, but then an
+					 * error occurs ~and we print it to the console~ then we
+					 * might enter a nasty loop. Instead only print one error.
 					 */
 					e.printStackTrace();
 				}

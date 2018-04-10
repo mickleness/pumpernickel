@@ -52,7 +52,7 @@ public abstract class PixelConverter implements PixelIterator {
 		width = i.getWidth();
 
 		if (i instanceof IndexedBytePixelIterator) {
-			IndexedBytePixelIterator ibpi = (IndexedBytePixelIterator)i;
+			IndexedBytePixelIterator ibpi = (IndexedBytePixelIterator) i;
 			byteIterator = ibpi;
 			indexModel = ibpi.getIndexColorModel();
 			intIterator = null;

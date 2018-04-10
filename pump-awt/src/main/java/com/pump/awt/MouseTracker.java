@@ -32,59 +32,66 @@ public class MouseTracker {
 	static {
 		AWTEventListener listener = new AWTEventListener() {
 			public void eventDispatched(AWTEvent e) {
-				if(e instanceof MouseEvent) {
-					MouseEvent k = (MouseEvent)e;
+				if (e instanceof MouseEvent) {
+					MouseEvent k = (MouseEvent) e;
 					boolean change = false;
-					
+
 					int oldX = mouseLoc.x;
 					int oldY = mouseLoc.y;
-					synchronized(mouseLoc) {
+					synchronized (mouseLoc) {
 						mouseLoc.x = k.getX();
 						mouseLoc.y = k.getY();
-						SwingUtilities.convertPointToScreen(mouseLoc, k.getComponent());
+						SwingUtilities.convertPointToScreen(mouseLoc,
+								k.getComponent());
 					}
-					if(oldX!=mouseLoc.x || oldY!=mouseLoc.y)
+					if (oldX != mouseLoc.x || oldY != mouseLoc.y)
 						change = true;
-					
-					if(k.getID()==MouseEvent.MOUSE_PRESSED) {
+
+					if (k.getID() == MouseEvent.MOUSE_PRESSED) {
 						Integer key = new Integer(k.getButton());
 						Boolean state = pressedButtons.get(key);
-						if(state==null) state = Boolean.FALSE;
-						if(state.equals(Boolean.FALSE)) {
-							pressedButtons.put(key,Boolean.TRUE);
+						if (state == null)
+							state = Boolean.FALSE;
+						if (state.equals(Boolean.FALSE)) {
+							pressedButtons.put(key, Boolean.TRUE);
 							change = true;
 						}
-					} else if(k.getID()==MouseEvent.MOUSE_MOVED && k.getButton()==0) {
-						/** This is a general precaution, and is especially
+					} else if (k.getID() == MouseEvent.MOUSE_MOVED
+							&& k.getButton() == 0) {
+						/**
+						 * This is a general precaution, and is especially
 						 * essential for drag and drop gestures.
 						 * 
-						 * We never receive a MOUSE_RELEASED event if a drag
-						 * and drop gesture is initiated, which can leave the
+						 * We never receive a MOUSE_RELEASED event if a drag and
+						 * drop gesture is initiated, which can leave the
 						 * mistaken impressed that a button is pressed when it
-						 * really isn't.  But as soon as a MOUSE_MOVED event comes
-						 * along we can clear the pressed buttons and be OK.
+						 * really isn't. But as soon as a MOUSE_MOVED event
+						 * comes along we can clear the pressed buttons and be
+						 * OK.
 						 * 
-						 * This means we'll be inaccurate when a drag and
-						 * drop gesture ends only until the user moves the mouse
-						 * again.  It's not perfect, but it's acceptable.
+						 * This means we'll be inaccurate when a drag and drop
+						 * gesture ends only until the user moves the mouse
+						 * again. It's not perfect, but it's acceptable.
 						 */
-						Iterator<Boolean> values = pressedButtons.values().iterator();
-						while(values.hasNext()) {
-							if(Boolean.TRUE.equals(values.next()))
+						Iterator<Boolean> values = pressedButtons.values()
+								.iterator();
+						while (values.hasNext()) {
+							if (Boolean.TRUE.equals(values.next()))
 								change = true;
 						}
 						pressedButtons.clear();
-					} else if(k.getID()==MouseEvent.MOUSE_RELEASED) {
+					} else if (k.getID() == MouseEvent.MOUSE_RELEASED) {
 						Integer key = new Integer(k.getButton());
 						Boolean state = pressedButtons.get(key);
-						if(state==null) state = Boolean.FALSE;
-						if(state.equals(Boolean.TRUE)) {
-							pressedButtons.put(key,Boolean.FALSE);
+						if (state == null)
+							state = Boolean.FALSE;
+						if (state.equals(Boolean.TRUE)) {
+							pressedButtons.put(key, Boolean.FALSE);
 							change = true;
 						}
 					}
-					
-					if(change)
+
+					if (change)
 						fireChangeListeners();
 				}
 			}
@@ -94,66 +101,72 @@ public class MouseTracker {
 		Toolkit.getDefaultToolkit().addAWTEventListener(listener,
 				AWTEvent.MOUSE_EVENT_MASK);
 	}
-	
-	/** Return true if the specified button is pressed.
+
+	/**
+	 * Return true if the specified button is pressed.
 	 * 
-	 * @param buttonMask a button mask, such as MouseEvent.BUTTON1
+	 * @param buttonMask
+	 *            a button mask, such as MouseEvent.BUTTON1
 	 * @return true if that button is pressed
 	 */
 	public synchronized static boolean isButtonPressed(int buttonMask) {
 		Integer key = new Integer(buttonMask);
 		Boolean b = pressedButtons.get(key);
-		if(b==null) return false;
+		if (b == null)
+			return false;
 		return b.booleanValue();
 	}
-	
-	/** @return true if any button is pressed.
+
+	/**
+	 * @return true if any button is pressed.
 	 */
 	public synchronized static boolean isButtonPressed() {
 		Iterator<Integer> e = pressedButtons.keySet().iterator();
-		while(e.hasNext()) {
+		while (e.hasNext()) {
 			Boolean b = pressedButtons.get(e.next());
-			if(b.equals(Boolean.TRUE)) {
+			if (b.equals(Boolean.TRUE)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/** @return the x-coordinate of the mouse location. */
 	public static int getX() {
-		synchronized(mouseLoc) {
+		synchronized (mouseLoc) {
 			return mouseLoc.x;
 		}
 	}
 
 	/** @return the y-coordinate of the mouse location. */
 	public static int getY() {
-		synchronized(mouseLoc) {
+		synchronized (mouseLoc) {
 			return mouseLoc.y;
 		}
 	}
-	
+
 	private static List<ChangeListener> listeners;
-	
+
 	public static void addChangeListener(ChangeListener l) {
-		if(listeners==null)
+		if (listeners == null)
 			listeners = new ArrayList<ChangeListener>();
 		listeners.add(l);
 	}
-	
+
 	public static void removeChangeListener(ChangeListener l) {
-		if(listeners==null) return;
+		if (listeners == null)
+			return;
 		listeners.remove(l);
 	}
-	
+
 	private static void fireChangeListeners() {
-		if(listeners==null) return;
-		for(int a = 0; a<listeners.size(); a++) {
+		if (listeners == null)
+			return;
+		for (int a = 0; a < listeners.size(); a++) {
 			ChangeListener l = listeners.get(a);
 			try {
 				l.stateChanged(new ChangeEvent(MouseTracker.class));
-			} catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

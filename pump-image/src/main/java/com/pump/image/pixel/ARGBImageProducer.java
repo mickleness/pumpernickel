@@ -17,8 +17,8 @@ import java.awt.image.ImageProducer;
 import java.util.ArrayList;
 import java.util.List;
 
-/** A simple <code>ImageProducer</code> based on a
- * <code>PixelIterator</code>.
+/**
+ * A simple <code>ImageProducer</code> based on a <code>PixelIterator</code>.
  *
  */
 public class ARGBImageProducer implements ImageProducer {

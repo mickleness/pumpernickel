@@ -10,33 +10,35 @@
  */
 package com.pump.util;
 
-
 public class IntProperty extends Property<Integer> {
 	final int min, max;
-	
-	public IntProperty(String name,int minValue,int maxValue,int defaultValue) {
+
+	public IntProperty(String name, int minValue, int maxValue, int defaultValue) {
 		super(name);
 		min = minValue;
 		max = maxValue;
-		if(max<min)
-			throw new IllegalArgumentException("the max ("+max+") is less than the min ("+min+")");
-	
+		if (max < min)
+			throw new IllegalArgumentException("the max (" + max
+					+ ") is less than the min (" + min + ")");
+
 		setValue(defaultValue);
 	}
-	
+
 	public int getMin() {
 		return min;
 	}
-	
+
 	public int getMax() {
 		return max;
 	}
-	
+
 	@Override
 	protected void validateValue(Integer value) {
-		if(value<min)
-			throw new IllegalArgumentException("the value ("+value+") is less than the min ("+min+")");
-		if(value>max)
-			throw new IllegalArgumentException("the value ("+value+") is greater than the max ("+max+")");
+		if (value < min)
+			throw new IllegalArgumentException("the value (" + value
+					+ ") is less than the min (" + min + ")");
+		if (value > max)
+			throw new IllegalArgumentException("the value (" + value
+					+ ") is greater than the max (" + max + ")");
 	}
 }

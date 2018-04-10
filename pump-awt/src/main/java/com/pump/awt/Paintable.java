@@ -12,11 +12,14 @@ package com.pump.awt;
 
 import java.awt.Graphics2D;
 
-/** An object that can be painted.
+/**
+ * An object that can be painted.
  *
  **/
 public interface Paintable {
 	public int getWidth();
+
 	public int getHeight();
+
 	public void paint(Graphics2D g);
 }

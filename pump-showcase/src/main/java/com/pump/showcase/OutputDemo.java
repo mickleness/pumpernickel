@@ -32,27 +32,33 @@ public abstract class OutputDemo extends JPanel implements Runnable {
 	protected JButton runButton;
 	protected JThrobber throbber = new JThrobber();
 	protected BasicConsole console;
-	
-	public OutputDemo(String runButtonText,boolean resizeConsoleTabSpacing) {
+
+	public OutputDemo(String runButtonText, boolean resizeConsoleTabSpacing) {
 		runButton = new JButton(runButtonText);
 		console = new BasicConsole(false, resizeConsoleTabSpacing);
-		
+
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0; c.gridy = 0; c.weightx = 1; c.weighty = 0;
-		c.insets = new Insets(3,3,3,3);
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.insets = new Insets(3, 3, 3, 3);
 		c.anchor = GridBagConstraints.WEST;
 		add(runButton, c);
 		c.anchor = GridBagConstraints.EAST;
 		c.gridx++;
 		add(throbber, c);
-		c.gridy++; c.gridx = 0; c.weighty = 1; c.gridwidth = GridBagConstraints.REMAINDER;
+		c.gridy++;
+		c.gridx = 0;
+		c.weighty = 1;
+		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(3,0,0,0);
+		c.insets = new Insets(3, 0, 0, 0);
 		add(new JScrollPane(console), c);
-		
+
 		throbber.setVisible(false);
-		
+
 		runButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				runButton.setEnabled(false);
@@ -74,7 +80,7 @@ public abstract class OutputDemo extends JPanel implements Runnable {
 				thread.start();
 			}
 		});
-		
+
 		addHierarchyListener(new HierarchyListener() {
 			boolean wasShowing = false;
 			boolean needToRun = true;
@@ -82,13 +88,13 @@ public abstract class OutputDemo extends JPanel implements Runnable {
 			@Override
 			public void hierarchyChanged(HierarchyEvent e) {
 				boolean isShowing = isShowing();
-				if(isShowing && (!wasShowing) && needToRun) {
+				if (isShowing && (!wasShowing) && needToRun) {
 					needToRun = false;
 					runButton.doClick();
 				}
 				wasShowing = isShowing;
 			}
-			
+
 		});
 	}
 }

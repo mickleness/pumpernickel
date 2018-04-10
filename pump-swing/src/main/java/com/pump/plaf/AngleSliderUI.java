@@ -40,161 +40,173 @@ import javax.swing.plaf.SliderUI;
 
 import com.pump.blog.Blurb;
 
-/** This UI renders a <code>JSlider</code> as a circular dial, and then value of the slider represents an angle from [0,2*pi).
+/**
+ * This UI renders a <code>JSlider</code> as a circular dial, and then value of
+ * the slider represents an angle from [0,2*pi).
  * 
- * <P>This class (and subclasses) can not respond to several slider properties such as orientation, inversion, tickmarks, labels, etc.
+ * <P>
+ * This class (and subclasses) can not respond to several slider properties such
+ * as orientation, inversion, tickmarks, labels, etc.
  * 
  */
-@Blurb (
-title = "Angles: need GUI widget for angles?",
-releaseDate = "May 2008",
-summary = "Take a <a href=\"http://java.sun.com/javase/6/docs/api/index.html?javax/swing/JSlider.html\"><code>JSlider</code></a>. "+
-"Add a <code><a href=\"https://javagraphics.java.net/doc/com/bric/plaf/AngleSliderUI.html\">AngleSliderUI</a></code>. "+
-"Voila!  You have a GUI widget for angles.\n"+
-"<P>Comes in Aqua and non-Aqua flavors.",
-article = "http://javagraphics.blogspot.com/2008/05/angles-need-gui-widget-for-angles.html",
-imageName = "AngleSliderUI.png"
-)
+@Blurb(title = "Angles: need GUI widget for angles?", releaseDate = "May 2008", summary = "Take a <a href=\"http://java.sun.com/javase/6/docs/api/index.html?javax/swing/JSlider.html\"><code>JSlider</code></a>. "
+		+ "Add a <code><a href=\"https://javagraphics.java.net/doc/com/bric/plaf/AngleSliderUI.html\">AngleSliderUI</a></code>. "
+		+ "Voila!  You have a GUI widget for angles.\n"
+		+ "<P>Comes in Aqua and non-Aqua flavors.", article = "http://javagraphics.blogspot.com/2008/05/angles-need-gui-widget-for-angles.html", imageName = "AngleSliderUI.png")
 public class AngleSliderUI extends SliderUI {
-	
+
 	/** Mutable data associated with each AngleSliderUI. */
 	protected static class Data {
-		
-		/** The dial that this slider paints.
-		 * <P>This is updated in the <code>calculateGeometry()</code>.
+
+		/**
+		 * The dial that this slider paints.
+		 * <P>
+		 * This is updated in the <code>calculateGeometry()</code>.
 		 */
 		protected Ellipse2D dial;
 
-		/** The insets to pad the dial with.
-		 * If the focus is painted via a ring outside the dial, then this
-		 * needs to allow for that ring.
+		/**
+		 * The insets to pad the dial with. If the focus is painted via a ring
+		 * outside the dial, then this needs to allow for that ring.
 		 */
-		protected Insets insets = new Insets(4,4,5,5);
-		
-		/** Indicate when the mouse is pressed and dragged around this component.
+		protected Insets insets = new Insets(4, 4, 5, 5);
+
+		/**
+		 * Indicate when the mouse is pressed and dragged around this component.
 		 * 
 		 */
 		protected boolean mousePressed = false;
 	}
-	
-	protected static String DATA_KEY = AngleSliderUI.class.getName()+".data";
-	private static String REPAINT_CHANGE_LISTENER_KEY = AngleSliderUI.class.getName()+".rcl";
-	
+
+	protected static String DATA_KEY = AngleSliderUI.class.getName() + ".data";
+	private static String REPAINT_CHANGE_LISTENER_KEY = AngleSliderUI.class
+			.getName() + ".rcl";
+
 	/** Return the Data object associated with a slider. */
 	protected Data getData(JSlider slider) {
-		Data data = (Data)slider.getClientProperty(DATA_KEY);
-		if(data==null) {
+		Data data = (Data) slider.getClientProperty(DATA_KEY);
+		if (data == null) {
 			data = new Data();
 			slider.putClientProperty(DATA_KEY, data);
 		}
 		return data;
 	}
-	
-	/** Calls <code>calculateGeometry()</code> when the slider is resized.
+
+	/**
+	 * Calls <code>calculateGeometry()</code> when the slider is resized.
 	 */
 	protected ComponentListener componentListener = new ComponentAdapter() {
 		@Override
 		public void componentResized(ComponentEvent e) {
-			calculateGeometry( (JSlider)e.getComponent() );
+			calculateGeometry((JSlider) e.getComponent());
 		}
 	};
-	
-	/** Responds to arrow keys.
+
+	/**
+	 * Responds to arrow keys.
 	 */
 	protected KeyListener keyListener = new KeyAdapter() {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			JSlider slider = (JSlider)e.getComponent();
+			JSlider slider = (JSlider) e.getComponent();
 			int k = e.getKeyCode();
-			if(k==KeyEvent.VK_LEFT || k==KeyEvent.VK_UP) {
+			if (k == KeyEvent.VK_LEFT || k == KeyEvent.VK_UP) {
 				int i = slider.getValue();
 				i--;
-				if(i<slider.getMinimum()) i = slider.getMaximum();
+				if (i < slider.getMinimum())
+					i = slider.getMaximum();
 				slider.setValue(i);
-			} else if(k==KeyEvent.VK_RIGHT || k==KeyEvent.VK_DOWN) {
+			} else if (k == KeyEvent.VK_RIGHT || k == KeyEvent.VK_DOWN) {
 				int i = slider.getValue();
 				i++;
-				if(i>slider.getMaximum()) i = slider.getMinimum();
+				if (i > slider.getMaximum())
+					i = slider.getMinimum();
 				slider.setValue(i);
 			}
 		}
 	};
-	
-	/** Responds to mouse events.
+
+	/**
+	 * Responds to mouse events.
 	 */
 	protected MouseInputAdapter mouseListener = new MouseInputAdapter() {
 		@Override
 		public void mousePressed(MouseEvent e) {
-			JSlider slider = (JSlider)e.getComponent();
-			
-			if(slider.isEnabled()==false)
+			JSlider slider = (JSlider) e.getComponent();
+
+			if (slider.isEnabled() == false)
 				return;
-			
-            if(slider.isRequestFocusEnabled()) {
-                slider.requestFocus();
-            }
+
+			if (slider.isRequestFocusEnabled()) {
+				slider.requestFocus();
+			}
 			Data data = getData(slider);
 			slider.setValueIsAdjusting(true);
-			float centerX = (float)data.dial.getCenterX();
-			float centerY = (float)data.dial.getCenterY();
-			double angle = Math.atan2(e.getY()-centerY,e.getX()-centerX);
-			angle = angle/(2*Math.PI);
-			if(angle<0) angle += 1;
-			int v = (int)(angle*(slider.getMaximum()-slider.getMinimum())+slider.getMinimum());
+			float centerX = (float) data.dial.getCenterX();
+			float centerY = (float) data.dial.getCenterY();
+			double angle = Math.atan2(e.getY() - centerY, e.getX() - centerX);
+			angle = angle / (2 * Math.PI);
+			if (angle < 0)
+				angle += 1;
+			int v = (int) (angle * (slider.getMaximum() - slider.getMinimum()) + slider
+					.getMinimum());
 			slider.setValue(v);
 			data.mousePressed = true;
 			e.consume();
 		}
-		
+
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			mousePressed(e);
 		}
-		
+
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			JSlider slider = (JSlider)e.getComponent();
-			
-			if(slider.isEnabled()==false)
+			JSlider slider = (JSlider) e.getComponent();
+
+			if (slider.isEnabled() == false)
 				return;
-			
+
 			slider.setValueIsAdjusting(false);
 			Data data = getData(slider);
 			data.mousePressed = false;
 			calculateGeometry(slider);
 		}
 	};
-	
+
 	/** Repaints when the focus changes. */
-    protected FocusListener focusListener  = new FocusListener() {
-        public void focusGained(FocusEvent e) {
-        	e.getComponent().repaint();
-        } 
-        public void focusLost(FocusEvent e) { 
-        	e.getComponent().repaint();
-        }
-    };
-    
-    /** This updates/defines the <code>dial</code> field of this object, based on the
-     * size of this component and the <code>insets</code> field.
-     * The <code>paint()</code> method should use the <code>dial</code> field to render
-     * the slider.
-     * 
-     */
-    protected void calculateGeometry(JSlider slider) {
-    	Data data = getData(slider);
-    	if(data.dial==null)
-    		data.dial = new Ellipse2D.Float();
-    	Dimension size = slider.getSize();
-    	Insets i = getBorderInsets(slider);
-    	
-    	float r = Math.min(size.width-data.insets.left-data.insets.right-i.left-i.right, 
-    			size.height-data.insets.top-data.insets.bottom-i.top-i.bottom)/2f;
-    	float centerX = size.width/2f;
-    	float centerY = size.height/2f;
-    	data.dial.setFrame(centerX-r,centerY-r,2*r,2*r);
-    	slider.repaint();
-    }
+	protected FocusListener focusListener = new FocusListener() {
+		public void focusGained(FocusEvent e) {
+			e.getComponent().repaint();
+		}
+
+		public void focusLost(FocusEvent e) {
+			e.getComponent().repaint();
+		}
+	};
+
+	/**
+	 * This updates/defines the <code>dial</code> field of this object, based on
+	 * the size of this component and the <code>insets</code> field. The
+	 * <code>paint()</code> method should use the <code>dial</code> field to
+	 * render the slider.
+	 * 
+	 */
+	protected void calculateGeometry(JSlider slider) {
+		Data data = getData(slider);
+		if (data.dial == null)
+			data.dial = new Ellipse2D.Float();
+		Dimension size = slider.getSize();
+		Insets i = getBorderInsets(slider);
+
+		float r = Math.min(size.width - data.insets.left - data.insets.right
+				- i.left - i.right, size.height - data.insets.top
+				- data.insets.bottom - i.top - i.bottom) / 2f;
+		float centerX = size.width / 2f;
+		float centerY = size.height / 2f;
+		data.dial.setFrame(centerX - r, centerY - r, 2 * r, 2 * r);
+		slider.repaint();
+	}
 
 	@Override
 	public Dimension getMaximumSize(JComponent c) {
@@ -208,21 +220,21 @@ public class AngleSliderUI extends SliderUI {
 	public Dimension getMinimumSize(JComponent c) {
 		return getPreferredSize(c);
 	}
-	
-	/** Return the insets for the border, or an empty Insets
-	 * object.
+
+	/**
+	 * Return the insets for the border, or an empty Insets object.
 	 */
 	protected Insets getBorderInsets(JComponent c) {
 		Border b = c.getBorder();
-		Insets i = (b==null) ? new Insets(0,0,0,0) : b.getBorderInsets(c);
+		Insets i = (b == null) ? new Insets(0, 0, 0, 0) : b.getBorderInsets(c);
 		return i;
 	}
-	
-	/** Returns the preferred dimensions for this JSlider without
-	 * a border.
+
+	/**
+	 * Returns the preferred dimensions for this JSlider without a border.
 	 */
 	protected Dimension getPreferredBaseDimension(JComponent c) {
-		return new Dimension(40,40);
+		return new Dimension(40, 40);
 	}
 
 	@Override
@@ -233,10 +245,10 @@ public class AngleSliderUI extends SliderUI {
 		base.height += i.top + i.bottom;
 		return base;
 	}
-	
+
 	private static class RepaintChangeListener implements ChangeListener {
 		final JComponent jc;
-		
+
 		RepaintChangeListener(JComponent jc) {
 			this.jc = jc;
 		}
@@ -248,120 +260,130 @@ public class AngleSliderUI extends SliderUI {
 
 	@Override
 	public void installUI(JComponent c) {
-		JSlider slider = (JSlider)c;
+		JSlider slider = (JSlider) c;
 		slider.addFocusListener(focusListener);
 		slider.addMouseListener(mouseListener);
 		slider.addMouseMotionListener(mouseListener);
-	    slider.addComponentListener(componentListener);
-	    RepaintChangeListener rcl = new RepaintChangeListener(c);
-	    slider.getModel().addChangeListener(rcl);
-	    slider.putClientProperty(REPAINT_CHANGE_LISTENER_KEY, rcl);
-	    slider.addKeyListener(keyListener);
-	    slider.setFocusable(true);
-	    slider.setRequestFocusEnabled(true);
-	    calculateGeometry((JSlider)c);
+		slider.addComponentListener(componentListener);
+		RepaintChangeListener rcl = new RepaintChangeListener(c);
+		slider.getModel().addChangeListener(rcl);
+		slider.putClientProperty(REPAINT_CHANGE_LISTENER_KEY, rcl);
+		slider.addKeyListener(keyListener);
+		slider.setFocusable(true);
+		slider.setRequestFocusEnabled(true);
+		calculateGeometry((JSlider) c);
 	}
-	
 
-	public static Color tweenColor(Color c1,Color c2,float progress) {
-		if(c1.equals(c2)) return c1;
-		int r = (int)(c1.getRed()*(1-progress)+c2.getRed()*progress+.5f);
-		int g = (int)(c1.getGreen()*(1-progress)+c2.getGreen()*progress+.5f);
-		int b = (int)(c1.getBlue()*(1-progress)+c2.getBlue()*progress+.5f);
-		int a = (int)(c1.getAlpha()*(1-progress)+c2.getAlpha()*progress+.5f);
-		return new Color( r, g, b, a);
+	public static Color tweenColor(Color c1, Color c2, float progress) {
+		if (c1.equals(c2))
+			return c1;
+		int r = (int) (c1.getRed() * (1 - progress) + c2.getRed() * progress + .5f);
+		int g = (int) (c1.getGreen() * (1 - progress) + c2.getGreen()
+				* progress + .5f);
+		int b = (int) (c1.getBlue() * (1 - progress) + c2.getBlue() * progress + .5f);
+		int a = (int) (c1.getAlpha() * (1 - progress) + c2.getAlpha()
+				* progress + .5f);
+		return new Color(r, g, b, a);
 	}
 
 	@Override
 	public void paint(Graphics g0, JComponent c) {
-		Graphics2D g = (Graphics2D)g0;
-		JSlider slider = (JSlider)c;
-		if(slider.isOpaque()) {
+		Graphics2D g = (Graphics2D) g0;
+		JSlider slider = (JSlider) c;
+		if (slider.isOpaque()) {
 			g.setColor(slider.getBackground());
-			g.fillRect(0,0,slider.getWidth(), slider.getHeight());
+			g.fillRect(0, 0, slider.getWidth(), slider.getHeight());
 		}
 
 		Composite oldComposite = null;
-		if(slider.isEnabled()==false) {
+		if (slider.isEnabled() == false) {
 			oldComposite = g.getComposite();
-			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,.5f));
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+					.5f));
 		}
-		
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
-			//paint a circular shadow
-		/*g.translate(2,2);
-		g.setColor(new Color(0,0,0,20));
-		g.fill(new Ellipse2D.Double(dial.getX()-2,dial.getY()-2,dial.getWidth()+4,dial.getHeight()+4));
-		g.setColor(new Color(0,0,0,40));
-		g.fill(new Ellipse2D.Double(dial.getX()-1,dial.getY()-1,dial.getWidth()+2,dial.getHeight()+2));
-		g.setColor(new Color(0,0,0,80));
-		g.fill(new Ellipse2D.Double(dial.getX()-0,dial.getY()-0,dial.getWidth()+0,dial.getHeight()+0));
-		g.translate(-2,-2);*/
-		
+
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+
+		// paint a circular shadow
+		/*
+		 * g.translate(2,2); g.setColor(new Color(0,0,0,20)); g.fill(new
+		 * Ellipse2D
+		 * .Double(dial.getX()-2,dial.getY()-2,dial.getWidth()+4,dial.getHeight
+		 * ()+4)); g.setColor(new Color(0,0,0,40)); g.fill(new
+		 * Ellipse2D.Double(dial
+		 * .getX()-1,dial.getY()-1,dial.getWidth()+2,dial.getHeight()+2));
+		 * g.setColor(new Color(0,0,0,80)); g.fill(new
+		 * Ellipse2D.Double(dial.getX
+		 * ()-0,dial.getY()-0,dial.getWidth()+0,dial.getHeight()+0));
+		 * g.translate(-2,-2);
+		 */
 
 		Data data = getData(slider);
-		if(slider.hasFocus()) {
+		if (slider.hasFocus()) {
 			PlafPaintUtils.paintFocus(g, data.dial, 4);
 		}
-		
-		//g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-		
+
+		// g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+		// RenderingHints.VALUE_ANTIALIAS_OFF);
+
 		Shape oldClip = g.getClip();
 		g.clip(data.dial);
 		int d = data.mousePressed ? -50 : 0;
-		for(int a = 0; a<5; a++) {
-			float f = (a)/4f;
-			g.setColor(tweenColor(new Color(150+d,150+d,150+d),new Color(212+d,212+d,212+d),f));
+		for (int a = 0; a < 5; a++) {
+			float f = (a) / 4f;
+			g.setColor(tweenColor(new Color(150 + d, 150 + d, 150 + d),
+					new Color(212 + d, 212 + d, 212 + d), f));
 			g.translate(0, a);
 			g.fill(data.dial);
 			g.translate(0, -a);
 		}
 		g.setClip(oldClip);
-		
+
 		g.setColor(border);
 		g.draw(data.dial);
 
-		float angle = (float)(slider.getValue()-slider.getMinimum())/(((float)(slider.getMaximum()-slider.getMinimum())));
-		angle = angle*(float)(2*Math.PI);
-		
-		float centerX = (float)data.dial.getCenterX();
-		float centerY = (float)data.dial.getCenterY();
-		float radius = (float)Math.min(centerX-data.dial.getX(), centerY-data.dial.getY())-6;
-		float x = (float)(centerX+radius*Math.cos(angle));
-		float y = (float)(centerY+radius*Math.sin(angle));
-		Ellipse2D knob = new Ellipse2D.Float(
-				x-2,y-2,4,4
-		);
-		if(slider.hasFocus()) {
+		float angle = (float) (slider.getValue() - slider.getMinimum())
+				/ (((float) (slider.getMaximum() - slider.getMinimum())));
+		angle = angle * (float) (2 * Math.PI);
+
+		float centerX = (float) data.dial.getCenterX();
+		float centerY = (float) data.dial.getCenterY();
+		float radius = (float) Math.min(centerX - data.dial.getX(), centerY
+				- data.dial.getY()) - 6;
+		float x = (float) (centerX + radius * Math.cos(angle));
+		float y = (float) (centerY + radius * Math.sin(angle));
+		Ellipse2D knob = new Ellipse2D.Float(x - 2, y - 2, 4, 4);
+		if (slider.hasFocus()) {
 			g.setColor(Color.gray);
 			g.fill(knob);
 			g.setColor(Color.darkGray);
 			g.draw(knob);
 		} else {
-			g.setColor(new Color(180,180,180));
+			g.setColor(new Color(180, 180, 180));
 			g.fill(knob);
 			g.setColor(border);
 			g.draw(knob);
 		}
 
-		if(oldComposite!=null) {
+		if (oldComposite != null) {
 			g.setComposite(oldComposite);
 		}
-		
+
 	}
-	
-	private static final Color border = new Color(100,100,100);
+
+	private static final Color border = new Color(100, 100, 100);
 
 	@Override
 	public void uninstallUI(JComponent c) {
-		JSlider slider = (JSlider)c;
+		JSlider slider = (JSlider) c;
 		slider.removeFocusListener(focusListener);
 		slider.removeMouseListener(mouseListener);
 		slider.removeMouseMotionListener(mouseListener);
-	    slider.removeComponentListener(componentListener);
-	    RepaintChangeListener rcl = (RepaintChangeListener)slider.getClientProperty(REPAINT_CHANGE_LISTENER_KEY);
-	    slider.getModel().removeChangeListener(rcl);
-	    slider.removeKeyListener(keyListener);
+		slider.removeComponentListener(componentListener);
+		RepaintChangeListener rcl = (RepaintChangeListener) slider
+				.getClientProperty(REPAINT_CHANGE_LISTENER_KEY);
+		slider.getModel().removeChangeListener(rcl);
+		slider.removeKeyListener(keyListener);
 	}
 }

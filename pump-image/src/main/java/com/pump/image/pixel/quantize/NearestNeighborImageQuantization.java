@@ -16,22 +16,28 @@ import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.IndexedBytePixelIterator;
 import com.pump.image.pixel.IntARGBConverter;
 
-
-/** This implements image quantization using a nearest-neighbor approach.
- * <p>This was largely developed as a baseline to test against. Unless you
- * have a specific reason for seeking this: I strongly recommend using
+/**
+ * This implements image quantization using a nearest-neighbor approach.
+ * <p>
+ * This was largely developed as a baseline to test against. Unless you have a
+ * specific reason for seeking this: I strongly recommend using
  * {@link ErrorDiffusionImageQuantization} instead.
  */
 public class NearestNeighborImageQuantization extends ImageQuantization {
-	
-	/** The pixel iterator that implements the nearest neighbor image quantization. */
-	protected static class NearestNeighborIndexedBytePixelIterator extends AbstractIndexedBytePixelIterator {
+
+	/**
+	 * The pixel iterator that implements the nearest neighbor image
+	 * quantization.
+	 */
+	protected static class NearestNeighborIndexedBytePixelIterator extends
+			AbstractIndexedBytePixelIterator {
 
 		int[] incomingRow;
 		IntARGBConverter iter;
 		protected int y = 0;
-		
-		NearestNeighborIndexedBytePixelIterator(BufferedImage source, ColorLUT lut) {
+
+		NearestNeighborIndexedBytePixelIterator(BufferedImage source,
+				ColorLUT lut) {
 			super(source, lut);
 			incomingRow = new int[getWidth()];
 			iter = new IntARGBConverter(BufferedImageIterator.get(source));
@@ -41,37 +47,37 @@ public class NearestNeighborImageQuantization extends ImageQuantization {
 			iter.skip();
 			y++;
 		}
-		
+
 		public void next(byte[] dest) {
 			iter.next(incomingRow);
-			
-			if(isOpaque()) {
-				
-				for(int x = 0; x<iter.getWidth(); x++) {
+
+			if (isOpaque()) {
+
+				for (int x = 0; x < iter.getWidth(); x++) {
 					int r = (incomingRow[x] >> 16) & 0xff;
 					int g = (incomingRow[x] >> 8) & 0xff;
 					int b = (incomingRow[x] >> 0) & 0xff;
-					
+
 					int index = lut.getIndexMatch(r, g, b);
-					
-					dest[x] = (byte)( index );
+
+					dest[x] = (byte) (index);
 				}
 			} else {
 				int t = icm.getTransparentPixel();
-				for(int x = 0; x<iter.getWidth(); x++) {
+				for (int x = 0; x < iter.getWidth(); x++) {
 					int index;
 					int a = (incomingRow[x] >> 24) & 0xff;
-					if(a<128) {
+					if (a < 128) {
 						index = t;
 					} else {
 						int r = (incomingRow[x] >> 16) & 0xff;
 						int g = (incomingRow[x] >> 8) & 0xff;
 						int b = (incomingRow[x] >> 0) & 0xff;
-						
+
 						index = lut.getIndexMatch(r, g, b);
 					}
-					
-					dest[x] = (byte)( index );
+
+					dest[x] = (byte) (index);
 				}
 			}
 			y++;
@@ -81,8 +87,7 @@ public class NearestNeighborImageQuantization extends ImageQuantization {
 			return y == getHeight();
 		}
 	}
-	
-	
+
 	@Override
 	public IndexedBytePixelIterator createImageData(BufferedImage source,
 			ColorLUT colorLUT) {

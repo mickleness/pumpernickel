@@ -29,16 +29,18 @@ import javax.swing.text.JTextComponent;
  * This combines a {@code javax.swing.Border} with a {@link LineNumberRenderer}
  * to help paint the line numbers for a {@code JTextComponent}.
  * <p>
- * The advantage of offering line numbers in a border is: it can float outside the
- * viewport, so as the user scrolls horizontally the line numbers remain visible.
+ * The advantage of offering line numbers in a border is: it can float outside
+ * the viewport, so as the user scrolls horizontally the line numbers remain
+ * visible.
  */
 public class LineNumberBorder implements Border {
 
 	protected LineNumberRenderer renderer;
 	protected int width = 0;
 	protected JScrollPane scrollPane;
-	
-	protected LineNumberBorder(JScrollPane scrollPane,JTextComponent textComponent) {
+
+	protected LineNumberBorder(JScrollPane scrollPane,
+			JTextComponent textComponent) {
 		this.scrollPane = scrollPane;
 		renderer = new LineNumberRenderer(textComponent) {
 
@@ -55,14 +57,14 @@ public class LineNumberBorder implements Border {
 			@Override
 			protected void repaint() {
 				JComponent t = jtc;
-				while(t!=null) {
+				while (t != null) {
 					Border b = t.getBorder();
-					if(containsThisBorder(b)) {
+					if (containsThisBorder(b)) {
 						t.repaint();
 						return;
 					}
-					if(t.getParent() instanceof JComponent) {
-						t = (JComponent)t.getParent();
+					if (t.getParent() instanceof JComponent) {
+						t = (JComponent) t.getParent();
 					} else {
 						return;
 					}
@@ -70,31 +72,33 @@ public class LineNumberBorder implements Border {
 			}
 
 			private boolean containsThisBorder(Border b) {
-				if(b==LineNumberBorder.this) {
+				if (b == LineNumberBorder.this) {
 					return true;
-				} else if(b instanceof CompoundBorder) {
-					CompoundBorder cb = (CompoundBorder)b;
-					return containsThisBorder(cb.getInsideBorder()) || containsThisBorder(cb.getOutsideBorder());
+				} else if (b instanceof CompoundBorder) {
+					CompoundBorder cb = (CompoundBorder) b;
+					return containsThisBorder(cb.getInsideBorder())
+							|| containsThisBorder(cb.getOutsideBorder());
 				}
 				return false;
 			}
-			
+
 		};
 	}
 
 	@Override
-	public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-		Graphics2D g2 = (Graphics2D)g.create();
+	public void paintBorder(Component c, Graphics g, int x, int y, int width,
+			int height) {
+		Graphics2D g2 = (Graphics2D) g.create();
 		Point viewPosition = scrollPane.getViewport().getViewPosition();
 		g2.clipRect(x, y, width, height);
-		g2.translate(- viewPosition.x, - viewPosition.y);
+		g2.translate(-viewPosition.x, -viewPosition.y);
 		renderer.paintComponent(g2);
 		g2.dispose();
 	}
 
 	@Override
 	public Insets getBorderInsets(Component c) {
-		return new Insets(0,width,0,0);
+		return new Insets(0, width, 0, 0);
 	}
 
 	@Override
@@ -102,26 +106,29 @@ public class LineNumberBorder implements Border {
 		return false;
 	}
 
-	/** Add a new LineNumberBorder to a JScrollPane.
-	 * Note this supplements the existing border without replacing it
-	 * (using a {@code CompoundBorder}).
+	/**
+	 * Add a new LineNumberBorder to a JScrollPane. Note this supplements the
+	 * existing border without replacing it (using a {@code CompoundBorder}).
 	 * 
-	 * @param scrollPane the scrollPane to modify the border of.
-	 * @param textPane the text component to map line numbers to. It is assumed
-	 * (but not enforced) that this text component is in the viewport of this
-	 * scrollpane.
+	 * @param scrollPane
+	 *            the scrollPane to modify the border of.
+	 * @param textPane
+	 *            the text component to map line numbers to. It is assumed (but
+	 *            not enforced) that this text component is in the viewport of
+	 *            this scrollpane.
 	 */
 	public static void install(final JScrollPane scrollPane, JTextPane textPane) {
 		LineNumberBorder border = new LineNumberBorder(scrollPane, textPane);
 		Border oldBorder = scrollPane.getBorder();
 		scrollPane.setBorder(new CompoundBorder(border, oldBorder));
-		scrollPane.getVerticalScrollBar().getModel().addChangeListener(new ChangeListener() {
+		scrollPane.getVerticalScrollBar().getModel()
+				.addChangeListener(new ChangeListener() {
 
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				scrollPane.repaint();
-			}
-		});
+					@Override
+					public void stateChanged(ChangeEvent e) {
+						scrollPane.repaint();
+					}
+				});
 	}
 
 }

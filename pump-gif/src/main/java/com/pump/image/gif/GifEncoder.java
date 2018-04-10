@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * This is simple model for an object that can encode a GIF. This is
- * designed to work tightly with the {@link com.pump.image.gif.GifWriter}.
+ * This is simple model for an object that can encode a GIF. This is designed to
+ * work tightly with the {@link com.pump.image.gif.GifWriter}.
  */
 public abstract class GifEncoder {
 	/**
@@ -41,16 +41,22 @@ public abstract class GifEncoder {
 	 * @throws IOException
 	 *             if the <code>OutputStream</code> gives us any trouble.
 	 */
-	public abstract void writeImage(OutputStream out,BufferedImage image, int frameDurationInCentiseconds, IndexColorModel globalModel,
-			boolean writeLocalColorTable)
-			throws IOException;
+	public abstract void writeImage(OutputStream out, BufferedImage image,
+			int frameDurationInCentiseconds, IndexColorModel globalModel,
+			boolean writeLocalColorTable) throws IOException;
 
-	/** Flush any remaining data. Simple encoders will not need to do anything
-	 * here, but a more complex encoder might not have committed certain data yet.
-	 * <p>(This method is not supposed to close the <code>OutputStream</code>, or
+	/**
+	 * Flush any remaining data. Simple encoders will not need to do anything
+	 * here, but a more complex encoder might not have committed certain data
+	 * yet.
+	 * <p>
+	 * (This method is not supposed to close the <code>OutputStream</code>, or
 	 * append a {@link com.pump.image.gif.block.GifTrailerBlock}.)
-	 * <p>After this is invoked: no more images should be written.
-	 * @throws IOException if an IO problem occurs.
+	 * <p>
+	 * After this is invoked: no more images should be written.
+	 * 
+	 * @throws IOException
+	 *             if an IO problem occurs.
 	 */
 	public abstract void flush(OutputStream out) throws IOException;
 }

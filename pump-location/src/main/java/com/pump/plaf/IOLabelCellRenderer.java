@@ -22,62 +22,62 @@ import com.pump.io.location.IOLocation;
 import com.pump.swing.io.GraphicCache;
 
 public class IOLabelCellRenderer extends LabelCellRenderer {
-	final JComboBox comboBox;
-	final GraphicCache graphicCache;
+    final JComboBox comboBox;
+    final GraphicCache graphicCache;
 
-	public IOLabelCellRenderer(JComboBox jc,GraphicCache graphicsCache) {
-		this.comboBox = jc;
-		this.graphicCache = graphicsCache;
-		graphicCache.addPropertyChangeListener(new PropertyChangeListener() {
+    public IOLabelCellRenderer(JComboBox jc, GraphicCache graphicsCache) {
+	this.comboBox = jc;
+	this.graphicCache = graphicsCache;
+	graphicCache.addPropertyChangeListener(new PropertyChangeListener() {
 
-			public void propertyChange(PropertyChangeEvent evt) {
-				SwingUtilities.invokeLater( new RepaintRunnable(evt) );
-			}
-		});
-	}
-	
-	class RepaintRunnable implements Runnable {
-		PropertyChangeEvent evt;
-		
-		public RepaintRunnable(PropertyChangeEvent e) {
-			evt = e;
-		}
-		
-		public void run() {
-			if(evt.getPropertyName().equals(GraphicCache.ICON_PROPERTY)) {
-				IOLocation loc = (IOLocation)evt.getSource();
-				for(int a = 0; a<comboBox.getItemCount(); a++) {
-					if(comboBox.getItemAt(a).equals(loc)) {
-						comboBox.repaint();
-						return;
-					}
-				}
-			}
-		}
-	}
-	
-	@Override
-	protected void formatLabel(Object value) {
-		String text;
-		Icon icon = null;
-		if(value instanceof IOLocation) {
-			IOLocation l = (IOLocation)value;
-			text = l.getName();
+	    public void propertyChange(PropertyChangeEvent evt) {
+		SwingUtilities.invokeLater(new RepaintRunnable(evt));
+	    }
+	});
+    }
 
-			icon = graphicCache.requestIcon(l);
-		} else if(value!=null) {
-			text = value.toString();
-		} else {
-			text = "";
-		}
-		if(icon==null) {
-			icon = IOLocation.FOLDER_ICON;
-		}
-		
-		icon = new PaddedIcon( icon, iconPadding);
-		
-		label.setIcon(icon);
-		label.setText(text);
+    class RepaintRunnable implements Runnable {
+	PropertyChangeEvent evt;
+
+	public RepaintRunnable(PropertyChangeEvent e) {
+	    evt = e;
 	}
-	
+
+	public void run() {
+	    if (evt.getPropertyName().equals(GraphicCache.ICON_PROPERTY)) {
+		IOLocation loc = (IOLocation) evt.getSource();
+		for (int a = 0; a < comboBox.getItemCount(); a++) {
+		    if (comboBox.getItemAt(a).equals(loc)) {
+			comboBox.repaint();
+			return;
+		    }
+		}
+	    }
+	}
+    }
+
+    @Override
+    protected void formatLabel(Object value) {
+	String text;
+	Icon icon = null;
+	if (value instanceof IOLocation) {
+	    IOLocation l = (IOLocation) value;
+	    text = l.getName();
+
+	    icon = graphicCache.requestIcon(l);
+	} else if (value != null) {
+	    text = value.toString();
+	} else {
+	    text = "";
+	}
+	if (icon == null) {
+	    icon = IOLocation.FOLDER_ICON;
+	}
+
+	icon = new PaddedIcon(icon, iconPadding);
+
+	label.setIcon(icon);
+	label.setText(text);
+    }
+
 }

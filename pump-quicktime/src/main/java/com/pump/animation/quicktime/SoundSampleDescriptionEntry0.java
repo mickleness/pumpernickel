@@ -16,53 +16,54 @@ import java.io.OutputStream;
 
 /** A sound sample description entry, version 0. */
 public class SoundSampleDescriptionEntry0 extends SampleDescriptionEntry {
-	/** A 16-bit integer that holds the sample description version (currently 0 or 1). */
+	/**
+	 * A 16-bit integer that holds the sample description version (currently 0
+	 * or 1).
+	 */
 	int version;
-	
+
 	/** A 16-bit integer that must be set to 0. */
 	int revision;
-	
+
 	/** A 32-bit integer that must be set to 0. */
 	long vendor;
-	
-	/** A 16-bit integer that indicates the number
-	 * of sound channels used by the sound sample
-	 * Set to 1 for monaural sounds, 2 for stereo
-	 * sounds. Higher numbers of channels
-	 * are not supported. 
+
+	/**
+	 * A 16-bit integer that indicates the number of sound channels used by the
+	 * sound sample Set to 1 for monaural sounds, 2 for stereo sounds. Higher
+	 * numbers of channels are not supported.
 	 */
 	int channelCount;
-	
-	/** A 16-bit integer that specifies the number
-	 * of bits in each uncompressed sound sample. Allowable 
-	 * values are 8 or 16. Formats using more than 16 bits
-	 * per sample set this field to 16 and use sound 
-	 * description version1. */
+
+	/**
+	 * A 16-bit integer that specifies the number of bits in each uncompressed
+	 * sound sample. Allowable values are 8 or 16. Formats using more than 16
+	 * bits per sample set this field to 16 and use sound description version1.
+	 */
 	int sampleBitSize;
-	
-	/** A 16-bit integer that must be set to 0 for version
-	 * 0 sound descriptions. This may be set to -2 for some 
-	 * version 1 sound descriptions. */
+
+	/**
+	 * A 16-bit integer that must be set to 0 for version 0 sound descriptions.
+	 * This may be set to -2 for some version 1 sound descriptions.
+	 */
 	int compressionID;
-	
+
 	/** A 16-bit integer that must be set to 0. */
 	int packetSize;
-	
-	/** A 32-bit unsigned fixed-point number (16.16) that 
-	 * indicates the rate at which the sound samples were 
-	 * obtained. The integer portion of this number should
-	 * match the media's timescale. Many older version 0
-	 * files have values of 22254.5454 or 11127.2727, but
-	 * most files have integer values, such as 44100.
-	 * Sample rates greater than 2^16 are not supported. 
+
+	/**
+	 * A 32-bit unsigned fixed-point number (16.16) that indicates the rate at
+	 * which the sound samples were obtained. The integer portion of this number
+	 * should match the media's timescale. Many older version 0 files have
+	 * values of 22254.5454 or 11127.2727, but most files have integer values,
+	 * such as 44100. Sample rates greater than 2^16 are not supported.
 	 */
 	float sampleRate;
-	
-	public SoundSampleDescriptionEntry0(String type,int dataReference,
-			int version, int revision,
-			int vendor,int channelCount,
-			int sampleBitSize, int compressionID,
-			int packetSize, float sampleRate) {
+
+	public SoundSampleDescriptionEntry0(String type, int dataReference,
+			int version, int revision, int vendor, int channelCount,
+			int sampleBitSize, int compressionID, int packetSize,
+			float sampleRate) {
 		super(type, dataReference);
 		this.version = version;
 		this.revision = revision;
@@ -73,11 +74,12 @@ public class SoundSampleDescriptionEntry0 extends SampleDescriptionEntry {
 		this.packetSize = packetSize;
 		this.sampleRate = sampleRate;
 	}
-	
-	public SoundSampleDescriptionEntry0(String type,int dataReference,byte[] data) {
+
+	public SoundSampleDescriptionEntry0(String type, int dataReference,
+			byte[] data) {
 		super(type, dataReference);
-		
-		if(data.length!=20)
+
+		if (data.length != 20)
 			throw new IllegalArgumentException();
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
 		try {
@@ -89,18 +91,23 @@ public class SoundSampleDescriptionEntry0 extends SampleDescriptionEntry {
 			compressionID = Atom.read16Int(in);
 			packetSize = Atom.read16Int(in);
 			sampleRate = Atom.read16_16UnsignedFloat(in);
-		} catch(IOException e) {
-			//this should never happen
+		} catch (IOException e) {
+			// this should never happen
 			RuntimeException e2 = new RuntimeException();
 			e2.initCause(e);
 			throw e2;
 		}
 	}
-	
+
 	@Override
 	public String toString() {
-		return "SoundSampleDescriptionEntry0[ type = \""+type+"\", dataRef = "+dataReference+", version = "+version+", revision = "+revision+", vendor = "+vendor+", channelCount = "+channelCount+
-		", sampleBitSize = "+sampleBitSize+", compressionID = "+compressionID+", packetSize = "+packetSize+", sampleRate = "+sampleRate+"]";
+		return "SoundSampleDescriptionEntry0[ type = \"" + type
+				+ "\", dataRef = " + dataReference + ", version = " + version
+				+ ", revision = " + revision + ", vendor = " + vendor
+				+ ", channelCount = " + channelCount + ", sampleBitSize = "
+				+ sampleBitSize + ", compressionID = " + compressionID
+				+ ", packetSize = " + packetSize + ", sampleRate = "
+				+ sampleRate + "]";
 	}
 
 	@Override
@@ -114,7 +121,7 @@ public class SoundSampleDescriptionEntry0 extends SampleDescriptionEntry {
 		Atom.write32String(out, type);
 		Atom.write48Int(out, 0);
 		Atom.write16Int(out, dataReference);
-		
+
 		Atom.write16Int(out, version);
 		Atom.write16Int(out, revision);
 		Atom.write32Int(out, vendor);

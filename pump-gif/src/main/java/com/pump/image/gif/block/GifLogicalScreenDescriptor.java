@@ -109,8 +109,8 @@ public class GifLogicalScreenDescriptor extends GifBlock {
 
 	/**
 	 * @return <code>true</code>if a
-	 *          {@link com.pump.image.gif.block.GifGlobalColorTable} follows this
-	 *          block in the GIF file.
+	 *         {@link com.pump.image.gif.block.GifGlobalColorTable} follows this
+	 *         block in the GIF file.
 	 */
 	public boolean hasGlobalColorTable() {
 		return (b[4] & 0x80) > 0;
@@ -118,19 +118,19 @@ public class GifLogicalScreenDescriptor extends GifBlock {
 
 	/**
 	 * @return <code>true</code> if the
-	 *          {@link com.pump.image.gif.block.GifGlobalColorTable} is sorted. If
-	 *          <code>hasGlobalColorTable()</code> is <code>false</code>,
-	 *          then this also returns <code>false</code>.
-	 *          <P>
-	 *          This is not really of modern use. The original GIF specification
-	 *          states the following:
-	 *          <P>
-	 *          "If this is <code>true</code>, the Global Color Table is
-	 *          sorted, in order of decreasing importance Typically, the order
-	 *          would be decreasing frequency, with most frequent color first.
-	 *          This assists a decoder, with fewer available colors, in choosing
-	 *          the best subset of colors; the decoder may use an initial
-	 *          segment of the table to render the graphic."
+	 *         {@link com.pump.image.gif.block.GifGlobalColorTable} is sorted.
+	 *         If <code>hasGlobalColorTable()</code> is <code>false</code>, then
+	 *         this also returns <code>false</code>.
+	 *         <P>
+	 *         This is not really of modern use. The original GIF specification
+	 *         states the following:
+	 *         <P>
+	 *         "If this is <code>true</code>, the Global Color Table is sorted,
+	 *         in order of decreasing importance Typically, the order would be
+	 *         decreasing frequency, with most frequent color first. This
+	 *         assists a decoder, with fewer available colors, in choosing the
+	 *         best subset of colors; the decoder may use an initial segment of
+	 *         the table to render the graphic."
 	 */
 	public boolean isSorted() {
 		if (hasGlobalColorTable() == false)
@@ -192,9 +192,9 @@ public class GifLogicalScreenDescriptor extends GifBlock {
 	}
 
 	/**
-	 * Index into the {@link com.pump.image.gif.block.GifGlobalColorTable} for the
-	 * Background Color. The Background Color is the color used for those pixels
-	 * on the screen that are not covered by an image.
+	 * Index into the {@link com.pump.image.gif.block.GifGlobalColorTable} for
+	 * the Background Color. The Background Color is the color used for those
+	 * pixels on the screen that are not covered by an image.
 	 */
 	public int getBackgroundColorIndex() {
 		return (b[5] & 0xFF);

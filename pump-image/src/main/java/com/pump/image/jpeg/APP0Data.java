@@ -24,46 +24,50 @@ class APP0Data {
 	int horizontalDensity, verticalDensity;
 	int thumbnailWidth, thumbnailHeight;
 	BufferedImage thumbnail;
-	
-	APP0Data(JPEGMarkerInputStream in,boolean storeThumbnail) throws IOException {
-		//TODO: also support JFXX ("JFIF Extention")
-		//http://en.wikipedia.org/wiki/JPEG_File_Interchange_Format
-		//the problem is: I can't find a single file that uses this.
+
+	APP0Data(JPEGMarkerInputStream in, boolean storeThumbnail)
+			throws IOException {
+		// TODO: also support JFXX ("JFIF Extention")
+		// http://en.wikipedia.org/wiki/JPEG_File_Interchange_Format
+		// the problem is: I can't find a single file that uses this.
 		byte[] array = new byte[9];
-		if(in.readFully(array, 5)!=5)
+		if (in.readFully(array, 5) != 5)
 			throw new IOException("APP0 expected to begin with \"JFIF_\".");
-		if(array[0]!=74 || array[1]!=70 || array[2]!=73 || array[3]!=70 || array[4]!=0)
+		if (array[0] != 74 || array[1] != 70 || array[2] != 73
+				|| array[3] != 70 || array[4] != 0)
 			throw new IOException("APP0 expected to begin with \"JFIF_\".");
-		if(in.readFully(array, 9)!=9) {
+		if (in.readFully(array, 9) != 9) {
 			throw new IOException("APP0 expected to at least 9 bytes of data.");
 		}
-		setVersionMajor( array[0] & 0xff);
-		setVersionMinor( array[1] & 0xff);
-		setUnits( array[2] & 0xff );
-		setHorizontalDensity( ((array[3] & 0xff) << 16) + (array[4] & 0xff) );
-		setVerticalDensity( ((array[5] & 0xff) << 16) + (array[6] & 0xff) );
-		setThumbnailWidth( array[7] & 0xff );
-		setThumbnailHeight( array[8] & 0xff );
-		if( thumbnailWidth*thumbnailHeight>0 && storeThumbnail) {
-			//TODO: test this.  I haven't found a single file that uses
-			//an APP0 thumbnail, so this code has never been tested.
-			byte[] dataByte = new byte[ thumbnailWidth*3 ];
-			int[] dataInt = new int[ thumbnailWidth ];
+		setVersionMajor(array[0] & 0xff);
+		setVersionMinor(array[1] & 0xff);
+		setUnits(array[2] & 0xff);
+		setHorizontalDensity(((array[3] & 0xff) << 16) + (array[4] & 0xff));
+		setVerticalDensity(((array[5] & 0xff) << 16) + (array[6] & 0xff));
+		setThumbnailWidth(array[7] & 0xff);
+		setThumbnailHeight(array[8] & 0xff);
+		if (thumbnailWidth * thumbnailHeight > 0 && storeThumbnail) {
+			// TODO: test this. I haven't found a single file that uses
+			// an APP0 thumbnail, so this code has never been tested.
+			byte[] dataByte = new byte[thumbnailWidth * 3];
+			int[] dataInt = new int[thumbnailWidth];
 			in.readFully(dataByte, dataByte.length);
-			BufferedImage image = new BufferedImage(getThumbnailWidth(), getThumbnailHeight(), BufferedImage.TYPE_INT_RGB);
-			for(int y = 0; y<thumbnailHeight; y++) {
-				for(int x = 0; x<thumbnailWidth; x++) {
-					int r = (dataByte[x*3] & 0xff);
-					int g = (dataByte[x*3+1] & 0xff);
-					int b = (dataByte[x*3+2] & 0xff);
+			BufferedImage image = new BufferedImage(getThumbnailWidth(),
+					getThumbnailHeight(), BufferedImage.TYPE_INT_RGB);
+			for (int y = 0; y < thumbnailHeight; y++) {
+				for (int x = 0; x < thumbnailWidth; x++) {
+					int r = (dataByte[x * 3] & 0xff);
+					int g = (dataByte[x * 3 + 1] & 0xff);
+					int b = (dataByte[x * 3 + 2] & 0xff);
 					dataInt[x] = (r << 16) + (g << 8) + (b);
 				}
-				image.getRaster().setDataElements(0, y, thumbnailWidth, 1, array);
+				image.getRaster().setDataElements(0, y, thumbnailWidth, 1,
+						array);
 			}
 			setThumbnail(image);
 		}
 	}
-	
+
 	public int getVersionMajor() {
 		return versionMajor;
 	}
@@ -120,7 +124,8 @@ class APP0Data {
 		this.thumbnailHeight = thumbnailHeight;
 	}
 
-	/** This returns the thumbnail found in this APP0 block if it exists.
+	/**
+	 * This returns the thumbnail found in this APP0 block if it exists.
 	 * 
 	 */
 	public BufferedImage getThumbnail() {
@@ -129,7 +134,7 @@ class APP0Data {
 
 	public void setThumbnail(BufferedImage thumbnail) {
 		this.thumbnail = thumbnail;
-		setThumbnailWidth( thumbnail.getWidth() );
-		setThumbnailHeight( thumbnail.getHeight() );
+		setThumbnailWidth(thumbnail.getWidth());
+		setThumbnailHeight(thumbnail.getHeight());
 	}
 }

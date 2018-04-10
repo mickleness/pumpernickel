@@ -18,34 +18,39 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioFormat.Encoding;
 import javax.sound.sampled.AudioInputStream;
 
-/** A silent AudioInputStream.
+/**
+ * A silent AudioInputStream.
  * 
  */
 public class SilentAudioInputStream extends AudioInputStream {
-	
+
 	long sampleCount;
-	
-	/** A silent AudioInputStream that lasts a fixed number of samples.
+
+	/**
+	 * A silent AudioInputStream that lasts a fixed number of samples.
 	 * 
 	 * @param format
-	 * @param sampleCount the number of samples to read.
+	 * @param sampleCount
+	 *            the number of samples to read.
 	 */
-	public SilentAudioInputStream(AudioFormat format,long sampleCount) {
-		super(new InnerSilentInputStream( (format.getSampleSizeInBits()==8 && format.getEncoding().equals(Encoding.PCM_UNSIGNED)) ?
-				(byte)127 : (byte)0 ), 
-				format, sampleCount);
+	public SilentAudioInputStream(AudioFormat format, long sampleCount) {
+		super(
+				new InnerSilentInputStream(
+						(format.getSampleSizeInBits() == 8 && format
+								.getEncoding().equals(Encoding.PCM_UNSIGNED)) ? (byte) 127
+								: (byte) 0), format, sampleCount);
 		this.sampleCount = sampleCount;
 	}
-	
+
 	/** A stream that returns infinite zeroes. */
-	private static class InnerSilentInputStream extends InputStream {	
+	private static class InnerSilentInputStream extends InputStream {
 		long bytesRead = 0;
 		byte value;
-		
+
 		InnerSilentInputStream(byte value) {
 			this.value = value;
 		}
-		
+
 		@Override
 		public int read() throws IOException {
 			bytesRead++;
@@ -59,8 +64,8 @@ public class SilentAudioInputStream extends AudioInputStream {
 
 		@Override
 		public int read(byte[] b, int off, int len) throws IOException {
-			Arrays.fill(b, off, off+len, value);
-			bytesRead+=len;
+			Arrays.fill(b, off, off + len, value);
+			bytesRead += len;
 			return len;
 		}
 
@@ -76,13 +81,16 @@ public class SilentAudioInputStream extends AudioInputStream {
 		}
 
 		@Override
-		public void close() throws IOException {}
+		public void close() throws IOException {
+		}
 
 		@Override
-		public synchronized void mark(int readlimit) {}
+		public synchronized void mark(int readlimit) {
+		}
 
 		@Override
-		public synchronized void reset() throws IOException {}
+		public synchronized void reset() throws IOException {
+		}
 
 		@Override
 		public boolean markSupported() {

@@ -14,14 +14,15 @@ import java.awt.Frame;
 
 import javax.swing.JDialog;
 
-/** The dialog used when <code>OpenLocationPane</code> or
+/**
+ * The dialog used when <code>OpenLocationPane</code> or
  * <code>SaveLocationPane</code> invoke <code>showDialog()</code>
  *
  */
 public class LocationPaneDialog extends JDialog {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected LocationPaneDialog(Frame parent) {
-		super(parent);
-	}
+    protected LocationPaneDialog(Frame parent) {
+	super(parent);
+    }
 }

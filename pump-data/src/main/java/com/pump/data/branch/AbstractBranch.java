@@ -21,109 +21,121 @@ import com.pump.data.BoundsChecker;
 import com.pump.data.Key;
 
 /**
- * This is a helper class implements or redirects a few basic methods
- * of the {@link Branch} interface.
+ * This is a helper class implements or redirects a few basic methods of the
+ * {@link Branch} interface.
  *
- * @param <K> the type of bean ids. For example, if all beans are identified
- * by a unique UID this may be a String. This could also be a class that encapsulates
- * a bean type and a bean name (so when ID might be "Student" and "123", which would be
- * separate than "Staff" and "123").
+ * @param <K>
+ *            the type of bean ids. For example, if all beans are identified by
+ *            a unique UID this may be a String. This could also be a class that
+ *            encapsulates a bean type and a bean name (so when ID might be
+ *            "Student" and "123", which would be separate than "Staff" and
+ *            "123").
  */
 public abstract class AbstractBranch<K> implements Branch<K> {
 
 	protected Branch<K> parent;
 	protected Revision parentRevision;
 	protected String name;
-	protected Revision initialRevision = new Revision( this, Long.valueOf(0) );
+	protected Revision initialRevision = new Revision(this, Long.valueOf(0));
 	protected List<BranchListener<K>> listeners = new ArrayList<>();
-	
+
 	public AbstractBranch(String name) {
 		this(null, null, name);
 	}
 
-	protected AbstractBranch(Branch<K> parent,Revision parentRevision,String name) {
-		if(name==null)
+	protected AbstractBranch(Branch<K> parent, Revision parentRevision,
+			String name) {
+		if (name == null)
 			name = "Untitled";
-		if(parent!=null && parentRevision==null)
+		if (parent != null && parentRevision == null)
 			throw new NullPointerException();
-		if(parent!=null && parentRevision!=null && parentRevision.getBranch()!=parent)
-			throw new IllegalRevisionBranchException("The revision provided relates to branch \""+parentRevision.getBranch().getName()+"\" (not \""+parent.getName()+"\"", parent, parentRevision);
-		
+		if (parent != null && parentRevision != null
+				&& parentRevision.getBranch() != parent)
+			throw new IllegalRevisionBranchException(
+					"The revision provided relates to branch \""
+							+ parentRevision.getBranch().getName()
+							+ "\" (not \"" + parent.getName() + "\"", parent,
+					parentRevision);
+
 		this.parent = parent;
 		this.name = name;
 		this.parentRevision = parentRevision;
 	}
 
 	@Override
-	public boolean setBean(K beanId,Map<String, Object> beanData, boolean completeReplacement) {
-		if(beanId==null)
+	public boolean setBean(K beanId, Map<String, Object> beanData,
+			boolean completeReplacement) {
+		if (beanId == null)
 			throw new NullPointerException();
-		if(beanData==null)
+		if (beanData == null)
 			throw new NullPointerException();
-		
+
 		Object writeLock = acquireWriteLock();
 		boolean returnValue;
 		try {
 			try {
 				BeanState state = getState(beanId);
-				if(state==BeanState.DELETED || state==BeanState.UNDEFINED) {
+				if (state == BeanState.DELETED || state == BeanState.UNDEFINED) {
 					try {
 						createBean(beanId);
 						returnValue = true;
 					} catch (DuplicateBeanIdException e) {
-						//this shouldn't happen if we just confirmed the bean doesn't exist
+						// this shouldn't happen if we just confirmed the bean
+						// doesn't exist
 						throw new RuntimeException(e);
 					}
 				} else {
 					returnValue = false;
-					
-					if(completeReplacement) {
+
+					if (completeReplacement) {
 						Map<String, Object> existingBean = getBean(beanId);
-						Collection<String> fieldsToDelete = existingBean.keySet();
+						Collection<String> fieldsToDelete = existingBean
+								.keySet();
 						fieldsToDelete.removeAll(beanData.keySet());
-						for(String field : fieldsToDelete) {
+						for (String field : fieldsToDelete) {
 							setField(beanId, field, null);
 						}
 					}
 				}
-			
-				for(Entry<String, Object> entry : beanData.entrySet()) {
+
+				for (Entry<String, Object> entry : beanData.entrySet()) {
 					setField(beanId, entry.getKey(), entry.getValue());
 				}
-			} catch(MissingBeanException e) {
-				//this shouldn't happen if we just created the bean as necessary...
+			} catch (MissingBeanException e) {
+				// this shouldn't happen if we just created the bean as
+				// necessary...
 				throw new RuntimeException(e);
 			}
 		} finally {
 			releaseLock(writeLock);
 		}
-		
+
 		return returnValue;
 	}
 
 	@SuppressWarnings("unchecked")
 	public BranchListener<K>[] getListeners() {
-		synchronized(listeners) {
+		synchronized (listeners) {
 			return listeners.toArray(new BranchListener[listeners.size()]);
 		}
 	}
-	
+
 	@Override
 	public void addBranchListener(BranchListener<K> branchListener) {
-		if(branchListener==null)
+		if (branchListener == null)
 			return;
-		
-		synchronized(listeners) {
+
+		synchronized (listeners) {
 			listeners.add(branchListener);
 		}
 	}
 
 	@Override
 	public void removeBranchListener(BranchListener<K> branchListener) {
-		if(branchListener==null)
+		if (branchListener == null)
 			return;
-		
-		synchronized(listeners) {
+
+		synchronized (listeners) {
 			listeners.remove(branchListener);
 		}
 	}
@@ -144,7 +156,8 @@ public abstract class AbstractBranch<K> implements Branch<K> {
 	}
 
 	@Override
-	public Object getField(K beanId,String fieldName) throws MissingBeanException {
+	public Object getField(K beanId, String fieldName)
+			throws MissingBeanException {
 		return getField(beanId, fieldName, null);
 	}
 
@@ -164,31 +177,33 @@ public abstract class AbstractBranch<K> implements Branch<K> {
 			throws MissingBeanException {
 		Object value = getField(beanId, field.toString(), revision);
 		Class<V> type = field.getType();
-		if(value==null || type.isInstance(value))
-		{
+		if (value == null || type.isInstance(value)) {
 			return (V) value;
 		}
-		throw new ClassCastException("The field \""+field.toString()+"\" should be a "+type.getName()+", but it was a "+value.getClass().getName()+".");
+		throw new ClassCastException("The field \"" + field.toString()
+				+ "\" should be a " + type.getName() + ", but it was a "
+				+ value.getClass().getName() + ".");
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <V> V setField(K beanId, Key<V> field, V newValue)
 			throws MissingBeanException {
-		if(field==null)
+		if (field == null)
 			throw new NullPointerException();
-		
-		for(BoundsChecker<V> boundsChecker : field.getBoundsCheckers()) {
+
+		for (BoundsChecker<V> boundsChecker : field.getBoundsCheckers()) {
 			boundsChecker.check(field, newValue);
 		}
-		
+
 		Object value = setField(beanId, field.toString(), newValue);
 		Class<V> type = field.getType();
-		if(value==null || type.isInstance(value))
-		{
+		if (value == null || type.isInstance(value)) {
 			return (V) value;
 		}
-		throw new ClassCastException("The field \""+field.toString()+"\" should be a "+type.getName()+", but it was a "+value.getClass().getName()+".");
+		throw new ClassCastException("The field \"" + field.toString()
+				+ "\" should be a " + type.getName() + ", but it was a "
+				+ value.getClass().getName() + ".");
 	}
 
 	@Override

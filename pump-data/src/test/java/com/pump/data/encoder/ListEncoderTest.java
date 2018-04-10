@@ -40,9 +40,9 @@ public class ListEncoderTest extends TestCase {
 	private void test(List<?> list, String expectedEncoding) {
 		ListEncoder encoder = new ListEncoder(list.get(0).getClass());
 		assertEquals(expectedEncoding, encoder.encode(list));
-		
+
 		List clone = encoder.parse(expectedEncoding);
 		assertEquals(list, clone);
-		
+
 	}
 }

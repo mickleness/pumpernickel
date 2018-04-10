@@ -24,7 +24,8 @@ final class CurveLinkX {
 		this.ybot = yend;
 		this.etag = etag;
 		if (ytop < curve.getYTop() || ybot > curve.getYBot()) {
-			throw new InternalError("bad curvelink ["+ytop+"=>"+ybot+"] for "+curve);
+			throw new InternalError("bad curvelink [" + ytop + "=>" + ybot
+					+ "] for " + curve);
 		}
 	}
 
@@ -33,13 +34,13 @@ final class CurveLinkX {
 	}
 
 	public boolean absorb(CurveX curve, double ystart, double yend, int etag) {
-		if (this.curve != curve || this.etag != etag ||
-				ybot < ystart || ytop > yend)
-		{
+		if (this.curve != curve || this.etag != etag || ybot < ystart
+				|| ytop > yend) {
 			return false;
 		}
 		if (ystart < curve.getYTop() || yend > curve.getYBot()) {
-			throw new InternalError("bad curvelink ["+ystart+"=>"+yend+"] for "+curve);
+			throw new InternalError("bad curvelink [" + ystart + "=>" + yend
+					+ "] for " + curve);
 		}
 		this.ytop = Math.min(ytop, ystart);
 		this.ybot = Math.max(ybot, yend);

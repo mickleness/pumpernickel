@@ -10,27 +10,32 @@
  */
 package com.pump.geom;
 
-
 /** A PathWriter that does not write anything. */
 public class NullPathWriter extends PathWriter {
 
 	@Override
-	public void moveTo(float x, float y) {	}
+	public void moveTo(float x, float y) {
+	}
 
 	@Override
-	public void lineTo(float x, float y) {	}
+	public void lineTo(float x, float y) {
+	}
 
 	@Override
-	public void quadTo(float cx, float cy, float x, float y) {	}
+	public void quadTo(float cx, float cy, float x, float y) {
+	}
 
 	@Override
 	public void curveTo(float cx1, float cy1, float cx2, float cy2, float x,
-			float y) {	}
+			float y) {
+	}
 
 	@Override
-	public void closePath() {	}
+	public void closePath() {
+	}
 
 	@Override
-	public void flush() {	}
+	public void flush() {
+	}
 
 }

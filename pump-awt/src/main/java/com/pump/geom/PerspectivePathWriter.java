@@ -14,12 +14,12 @@ import java.awt.geom.GeneralPath;
 
 import javax.media.jai.PerspectiveTransform;
 
-/** Transform all the points through a perspective transform as they
- * are passed to a path writer. Note this simply transforms bezier control
- * points.
+/**
+ * Transform all the points through a perspective transform as they are passed
+ * to a path writer. Note this simply transforms bezier control points.
  */
 public class PerspectivePathWriter extends PathWriter {
-	
+
 	PathWriter dest;
 	PerspectiveTransform tx;
 	float[] array = new float[6];
@@ -27,14 +27,14 @@ public class PerspectivePathWriter extends PathWriter {
 	public PerspectivePathWriter(GeneralPath dest, PerspectiveTransform tx) {
 		this(new GeneralPathWriter(dest), tx);
 	}
-	
+
 	public PerspectivePathWriter(PathWriter dest, PerspectiveTransform tx) {
 		this.dest = dest;
-		if(tx==null)
+		if (tx == null)
 			tx = new PerspectiveTransform();
 		this.tx = tx;
 	}
-	
+
 	@Override
 	public synchronized void moveTo(float x, float y) {
 		array[0] = x;
@@ -62,8 +62,8 @@ public class PerspectivePathWriter extends PathWriter {
 	}
 
 	@Override
-	public synchronized void curveTo(float cx1, float cy1, float cx2, float cy2, float x,
-			float y) {
+	public synchronized void curveTo(float cx1, float cy1, float cx2,
+			float cy2, float x, float y) {
 		array[0] = cx1;
 		array[1] = cy1;
 		array[2] = cx2;

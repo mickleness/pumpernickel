@@ -21,11 +21,13 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-/** This is a <code>BufferedImage</code> that offers a <code>setProperty()</code> method.
+/**
+ * This is a <code>BufferedImage</code> that offers a <code>setProperty()</code>
+ * method.
  *
  */
 public class MutableBufferedImage extends BufferedImage {
-	
+
 	Map<String, Object> extraProperties = null;
 
 	public MutableBufferedImage(ColorModel cm, WritableRaster r,
@@ -44,9 +46,9 @@ public class MutableBufferedImage extends BufferedImage {
 
 	@Override
 	public synchronized Object getProperty(String name, ImageObserver observer) {
-		if(extraProperties!=null) {
+		if (extraProperties != null) {
 			Object value = extraProperties.get(name);
-			if(value!=null)
+			if (value != null)
 				return value;
 		}
 		return super.getProperty(name, observer);
@@ -54,9 +56,9 @@ public class MutableBufferedImage extends BufferedImage {
 
 	@Override
 	public synchronized Object getProperty(String name) {
-		if(extraProperties!=null) {
+		if (extraProperties != null) {
 			Object value = extraProperties.get(name);
-			if(value!=null)
+			if (value != null)
 				return value;
 		}
 		return super.getProperty(name);
@@ -66,12 +68,12 @@ public class MutableBufferedImage extends BufferedImage {
 	public synchronized String[] getPropertyNames() {
 		ArrayList<String> list = new ArrayList<String>();
 		String[] superNames = super.getPropertyNames();
-		for(int a = 0; a<superNames.length; a++) {
+		for (int a = 0; a < superNames.length; a++) {
 			list.add(superNames[a]);
 		}
-		if(extraProperties!=null) {
+		if (extraProperties != null) {
 			Iterator<String> e = extraProperties.keySet().iterator();
-			while(e.hasNext()) {
+			while (e.hasNext()) {
 				String key = e.next();
 				list.add(key);
 			}
@@ -79,8 +81,8 @@ public class MutableBufferedImage extends BufferedImage {
 		return list.toArray(new String[list.size()]);
 	}
 
-	public synchronized void setProperty(String propertyName,Object value) {
-		if(extraProperties==null)
+	public synchronized void setProperty(String propertyName, Object value) {
+		if (extraProperties == null)
 			extraProperties = new HashMap<String, Object>();
 		extraProperties.put(propertyName, value);
 	}

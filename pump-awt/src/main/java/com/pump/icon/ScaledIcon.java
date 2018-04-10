@@ -47,9 +47,9 @@ public class ScaledIcon implements Icon {
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
 				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		AffineTransform oldTransform = g2.getTransform();
-		g2.transform(TransformUtils.createAffineTransform(x, y, x
-				+ icon.getIconWidth(), y, x, y + icon.getIconHeight(), x, y, x
-				+ w, y, x, y + h));
+		g2.transform(TransformUtils.createAffineTransform(x, y,
+				x + icon.getIconWidth(), y, x, y + icon.getIconHeight(), x, y,
+				x + w, y, x, y + h));
 		icon.paintIcon(c, g2, x, y);
 		g2.setTransform(oldTransform);
 	}

@@ -19,17 +19,20 @@ public class JarSigner {
 	String keystorePassword;
 	String alias, aliasPassword;
 	String tsa;
-	
+
 	/**
 	 * 
 	 * @param keyStore
 	 * @param keystorePassword
 	 * @param alias
 	 * @param aliasPassword
-	 * @param tsa the optional Timestamping Authority argument. If null then this is omitted.
-	 * Recommended value: "http://timestamp.digicert.com"
+	 * @param tsa
+	 *            the optional Timestamping Authority argument. If null then
+	 *            this is omitted. Recommended value:
+	 *            "http://timestamp.digicert.com"
 	 */
-	public JarSigner(File keyStore,String keystorePassword,String alias,String aliasPassword,String tsa) {
+	public JarSigner(File keyStore, String keystorePassword, String alias,
+			String aliasPassword, String tsa) {
 		this.keyStore = keyStore;
 		this.alias = alias;
 		this.keystorePassword = keystorePassword;
@@ -37,20 +40,20 @@ public class JarSigner {
 		this.tsa = tsa;
 	}
 
-	public void sign(File jarFile,boolean blocking) {
+	public void sign(File jarFile, boolean blocking) {
 		ProcessBuilderThread pbt = new ProcessBuilderThread("jarsigner", true);
 		List<String> command = new ArrayList<String>();
 		command.add("jarsigner");
-		
+
 		command.add("-keystore");
 		command.add(keyStore.getAbsolutePath());
-		
-		if(tsa!=null && tsa.length()>0) {
+
+		if (tsa != null && tsa.length() > 0) {
 			command.add("-tsa");
 			command.add(tsa);
 		}
 
-		if(keyStore.getAbsolutePath().toLowerCase().endsWith(".p12")) {
+		if (keyStore.getAbsolutePath().toLowerCase().endsWith(".p12")) {
 			command.add("-storetype");
 			command.add("pkcs12");
 		}
@@ -60,13 +63,13 @@ public class JarSigner {
 
 		command.add("-keypass");
 		command.add(aliasPassword);
-		
+
 		command.add(jarFile.getAbsolutePath());
-		
+
 		command.add(alias);
-		
+
 		pbt.processBuilder.command(command);
-		
+
 		pbt.start(blocking);
 	}
 }

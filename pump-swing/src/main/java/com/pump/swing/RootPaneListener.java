@@ -18,39 +18,45 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JRootPane;
 
-/** This listener will be notified when the <code>JRootPane</code> ancestor
- * of a <code>JComponent</code> changes.
+/**
+ * This listener will be notified when the <code>JRootPane</code> ancestor of a
+ * <code>JComponent</code> changes.
  */
 public abstract class RootPaneListener {
 	private static Object NULL_VALUE = new Object();
 	private Map<JComponent, Object> rootPanes = new HashMap<>();
 	private HierarchyListener hierarchyListener = new HierarchyListener() {
-		
+
 		public void hierarchyChanged(HierarchyEvent e) {
-			JComponent jc = (JComponent)e.getSource();
+			JComponent jc = (JComponent) e.getSource();
 			JRootPane realRootPane = jc.getRootPane();
 			Object recordedRootPane = rootPanes.get(jc);
-			if(recordedRootPane==NULL_VALUE) recordedRootPane = null;
-			if(realRootPane!=recordedRootPane) {
+			if (recordedRootPane == NULL_VALUE)
+				recordedRootPane = null;
+			if (realRootPane != recordedRootPane) {
 				Object value = realRootPane;
-				if(value==null) value = NULL_VALUE;
+				if (value == null)
+					value = NULL_VALUE;
 				rootPanes.put(jc, value);
 				rootPaneChanged(jc, realRootPane);
 			}
 		}
-		
+
 	};
-	
-	/** This adds this listener to the argument <code>JComponent</code>.
-	 * @param jc the component added to this hierarchy tree.
+
+	/**
+	 * This adds this listener to the argument <code>JComponent</code>.
+	 * 
+	 * @param jc
+	 *            the component added to this hierarchy tree.
 	 */
 	public void add(JComponent jc) {
 		jc.addHierarchyListener(hierarchyListener);
 		Object value = jc.getRootPane();
-		if(value==null)
+		if (value == null)
 			value = NULL_VALUE;
 		rootPanes.put(jc, value);
 	}
-	
-	public abstract void rootPaneChanged(JComponent jc,JRootPane rootPane);
+
+	public abstract void rootPaneChanged(JComponent jc, JRootPane rootPane);
 }

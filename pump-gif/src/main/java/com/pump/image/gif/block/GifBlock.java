@@ -61,8 +61,11 @@ public abstract class GifBlock implements GifConstants {
 		return t;
 	}
 
-	/** Writes this GIF block to an output stream. 
-	 * @throws IOException if an IO problem occurs.
+	/**
+	 * Writes this GIF block to an output stream.
+	 * 
+	 * @throws IOException
+	 *             if an IO problem occurs.
 	 */
 	public void write(OutputStream out) throws IOException {
 		byte[] b = getBytes();
@@ -80,23 +83,33 @@ public abstract class GifBlock implements GifConstants {
 	 * <code> &nbsp; 0  | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | Block Size &nbsp; &nbsp; &nbsp; Byte</code>
 	 * <BR>
 	 * <code> &nbsp; &nbsp; +---------------+</code> <BR>
-	 * <code> &nbsp; 1  | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code> <BR>
-	 * <code> &nbsp; &nbsp; +- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -+</code> <BR>
-	 * <code> &nbsp; 2  | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code> <BR>
-	 * <code> &nbsp; &nbsp; +- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -+</code> <BR>
-	 * <code> &nbsp; 3  | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code> <BR>
-	 * <code> &nbsp; &nbsp; +- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -+</code> <BR>
+	 * <code> &nbsp; 1  | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code>
+	 * <BR>
+	 * <code> &nbsp; &nbsp; +- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -+</code>
+	 * <BR>
+	 * <code> &nbsp; 2  | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code>
+	 * <BR>
+	 * <code> &nbsp; &nbsp; +- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -+</code>
+	 * <BR>
+	 * <code> &nbsp; 3  | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code>
+	 * <BR>
+	 * <code> &nbsp; &nbsp; +- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -+</code>
+	 * <BR>
 	 * <code> &nbsp; &nbsp; | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | Data Values &nbsp; &nbsp; Byte</code>
 	 * <BR>
 	 * <code> &nbsp; &nbsp; +- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; +</code>
 	 * <BR>
-	 * <code>up  &nbsp;| &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code> <BR>
+	 * <code>up  &nbsp;| &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code>
+	 * <BR>
 	 * <code> &nbsp; &nbsp; +-   &nbsp;&nbsp;. . . .  &nbsp; -+</code> <BR>
-	 * <code>to  &nbsp;| &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code> <BR>
-	 * <code> &nbsp; &nbsp; +- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -+</code> <BR>
+	 * <code>to  &nbsp;| &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code>
+	 * <BR>
+	 * <code> &nbsp; &nbsp; +- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -+</code>
+	 * <BR>
 	 * <code> &nbsp; &nbsp; | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code>
 	 * <BR>
-	 * <code> &nbsp; &nbsp; +- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -+</code> <BR>
+	 * <code> &nbsp; &nbsp; +- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -+</code>
+	 * <BR>
 	 * <code>255  | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |</code> <BR>
 	 * <code> &nbsp; &nbsp; &nbsp;+---------------+</code> <BR>
 	 * 

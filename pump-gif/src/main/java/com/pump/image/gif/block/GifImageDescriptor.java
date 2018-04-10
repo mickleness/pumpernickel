@@ -12,8 +12,8 @@ package com.pump.image.gif.block;
 
 /**
  * There must be <code>GifImageDescriptor</code> for each
- * {@link com.pump.image.gif.block.GifImageDataBlock}. This block will precede the
- * image data, but there <i>may</i> be a local color table immediately
+ * {@link com.pump.image.gif.block.GifImageDataBlock}. This block will precede
+ * the image data, but there <i>may</i> be a local color table immediately
  * following this block.
  * <P>
  * The GIF file format specification describes this block as follows:
@@ -217,8 +217,8 @@ public class GifImageDescriptor extends GifGraphicRenderingBlock {
 
 	/**
 	 * @return <code>true</code> if there is a
-	 *         {@link com.pump.image.gif.block.GifLocalColorTable} following this
-	 *         block, and that color table is sorted in order of decreasing
+	 *         {@link com.pump.image.gif.block.GifLocalColorTable} following
+	 *         this block, and that color table is sorted in order of decreasing
 	 *         importance.
 	 */
 	public boolean isLocalColorTableSorted() {
@@ -237,11 +237,12 @@ public class GifImageDescriptor extends GifGraphicRenderingBlock {
 	 * Assigns the local color table size for this block. If you pass 0 or -1 to
 	 * this method, this effectively turns off the local color table.
 	 * <P>
-	 * If <code>i</code> is 0 or -1, subsequent calls
-	 * to <code>hasLocalColorTable()</code> will return <code>false</code>.
-	 * @param size must be a power of 2 between 2 and 256,
-	 * or else -1 or 0 to indicate that there is no local
-	 * color table.
+	 * If <code>i</code> is 0 or -1, subsequent calls to
+	 * <code>hasLocalColorTable()</code> will return <code>false</code>.
+	 * 
+	 * @param size
+	 *            must be a power of 2 between 2 and 256, or else -1 or 0 to
+	 *            indicate that there is no local color table.
 	 */
 	public void setLocalColorTableSize(int size) {
 		if (size == 0 || size == -1) {

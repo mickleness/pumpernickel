@@ -13,11 +13,12 @@ package com.pump.image.transition;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-/** A Transition that plays another transition in reverse.
+/**
+ * A Transition that plays another transition in reverse.
  */
 public class ReversedTransition implements Transition {
 	Transition transition;
-	
+
 	public ReversedTransition(Transition t) {
 		transition = t;
 	}
@@ -25,7 +26,7 @@ public class ReversedTransition implements Transition {
 	@Override
 	public void paint(Graphics2D g, BufferedImage frameA, BufferedImage frameB,
 			float progress) {
-		transition.paint(g, frameB, frameA, 1-progress);
+		transition.paint(g, frameB, frameA, 1 - progress);
 	}
-	
+
 }

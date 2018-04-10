@@ -38,46 +38,49 @@ import java.util.Map;
 
 import com.pump.text.ColoredIterator;
 
-
-/** A Graphics2D that only delegates methods that might
- * relate to drawing text.  Other drawing instructions
- * are dropped.
- * <P>Optionally you can also specifically one magic color
- * that all text should be rendered in.  If this is
- * not provided then text will render in its default color.
+/**
+ * A Graphics2D that only delegates methods that might relate to drawing text.
+ * Other drawing instructions are dropped.
+ * <P>
+ * Optionally you can also specifically one magic color that all text should be
+ * rendered in. If this is not provided then text will render in its default
+ * color.
  *
  */
 public class TextOnlyGraphics2D extends Graphics2D {
-	
+
 	public final Graphics2D realGraphics;
 	public final Color textColor;
 
 	/**
 	 * 
-	 * @param g the Graphics2D to filter.
-	 * @param textColor an optional color that can override the
-	 * default color for rendered text.
+	 * @param g
+	 *            the Graphics2D to filter.
+	 * @param textColor
+	 *            an optional color that can override the default color for
+	 *            rendered text.
 	 */
 	public TextOnlyGraphics2D(Graphics2D g, Color textColor) {
-		realGraphics = (Graphics2D)g.create();
+		realGraphics = (Graphics2D) g.create();
 		this.textColor = textColor;
-		if(textColor!=null) {
+		if (textColor != null) {
 			realGraphics.setColor(textColor);
 		}
 	}
 
 	@Override
 	public Graphics create() {
-		return new TextOnlyGraphics2D( (Graphics2D)realGraphics.create(), textColor );
+		return new TextOnlyGraphics2D((Graphics2D) realGraphics.create(),
+				textColor);
 	}
 
 	@Override
 	public void fill(Shape s) {
-		//weeeelll... sometimes text could be rendered
-		//via shapes... but how often, really?
-		//if(RectangleReader.isRectangle(s))
-		//	return;
-		
+		// weeeelll... sometimes text could be rendered
+		// via shapes... but how often, really?
+		// if(RectangleReader.isRectangle(s))
+		// return;
+
 		return;
 	}
 
@@ -253,7 +256,7 @@ public class TextOnlyGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(AttributedCharacterIterator iterator, int x, int y) {
-		if(textColor!=null) {
+		if (textColor != null) {
 			iterator = new ColoredIterator(iterator, textColor);
 		}
 		realGraphics.drawString(iterator, x, y);
@@ -262,7 +265,7 @@ public class TextOnlyGraphics2D extends Graphics2D {
 	@Override
 	public void drawString(AttributedCharacterIterator iterator, float x,
 			float y) {
-		if(textColor!=null) {
+		if (textColor != null) {
 			iterator = new ColoredIterator(iterator, textColor);
 		}
 		realGraphics.drawString(iterator, x, y);
@@ -345,7 +348,7 @@ public class TextOnlyGraphics2D extends Graphics2D {
 
 	@Override
 	public void setPaint(Paint paint) {
-		if(textColor==null)
+		if (textColor == null)
 			realGraphics.setPaint(paint);
 	}
 
@@ -446,7 +449,7 @@ public class TextOnlyGraphics2D extends Graphics2D {
 
 	@Override
 	public void setColor(Color c) {
-		if(textColor==null)
+		if (textColor == null)
 			realGraphics.setColor(c);
 	}
 

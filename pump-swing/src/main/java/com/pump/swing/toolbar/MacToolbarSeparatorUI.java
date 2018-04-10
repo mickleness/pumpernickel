@@ -17,7 +17,8 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.plaf.basic.BasicSeparatorUI;
 
-/** A fine dotted line.
+/**
+ * A fine dotted line.
  */
 class MacToolbarSeparatorUI extends BasicSeparatorUI {
 
@@ -30,23 +31,24 @@ class MacToolbarSeparatorUI extends BasicSeparatorUI {
 
 	@Override
 	public void paint(Graphics g, JComponent c) {
-		if(c.isOpaque()) {
+		if (c.isOpaque()) {
 			g.setColor(c.getBackground());
-			g.fillRect(0,0,c.getWidth(), c.getHeight());
+			g.fillRect(0, 0, c.getWidth(), c.getHeight());
 		}
-		paintSeparator(g,c.getWidth(),c.getHeight());
+		paintSeparator(g, c.getWidth(), c.getHeight());
 	}
-	
-	/** Paints a separator in the dimensions provided.
+
+	/**
+	 * Paints a separator in the dimensions provided.
 	 */
-	protected static void paintSeparator(Graphics g,int w, int h) {
+	protected static void paintSeparator(Graphics g, int w, int h) {
 		int y = 0;
-		g.setColor(new Color(128,128,128));
-		int x = w/2;
-		
-		while(y<h) {
+		g.setColor(new Color(128, 128, 128));
+		int x = w / 2;
+
+		while (y < h) {
 			g.fillRect(x, y, 1, 1);
-			y+=3;
+			y += 3;
 		}
 	}
 }

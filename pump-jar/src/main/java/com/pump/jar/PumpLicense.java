@@ -19,10 +19,12 @@ import java.util.GregorianCalendar;
 
 public class PumpLicense {
 
-
-	/** Creates the html-encoded modified BSD license for pump code
-	 * in this project.
-	 * @throws IOException if an IO problem occurs.
+	/**
+	 * Creates the html-encoded modified BSD license for pump code in this
+	 * project.
+	 * 
+	 * @throws IOException
+	 *             if an IO problem occurs.
 	 */
 	public static File createLicenseFile() throws IOException {
 		int year = ((new GregorianCalendar()).get(Calendar.YEAR));
@@ -33,12 +35,14 @@ public class PumpLicense {
 			out = new FileOutputStream(temp);
 			PrintStream ps = new PrintStream(out);
 			ps.println("<html>");
-			ps.println("Source code, binaries and/or any other resources in the package labeled \"com.pump\" are copyright (c) "+year+" by Jeremy Wood.  They are available under the Modified BSD license (see below).");
+			ps.println("Source code, binaries and/or any other resources in the package labeled \"com.pump\" are copyright (c) "
+					+ year
+					+ " by Jeremy Wood.  They are available under the Modified BSD license (see below).");
 			ps.println("<P>Any resources not in the \"com.pump\" package may be subject to additional license terms and restrictions.");
 			ps.println("<P>If you have any questions about this jar, the relevant licenses, the source code, etc., please contact <A HREF=\"mailto:mickleness+java@gmail.com\">mickleness+java@gmail.com</A>.");
 			ps.println("<P>This jar is part of the \"javagraphics\" project, discussed <A HREF=\"https://javagraphics.java.net/\">here</A>.");
 			ps.println("<h3>Modified BSD License</H3>");
-			ps.println("<P>Copyright (c) "+year+", Jeremy Wood.");
+			ps.println("<P>Copyright (c) " + year + ", Jeremy Wood.");
 			ps.println("<BR>All rights reserved.");
 			ps.println("<P>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:");
 			ps.println();
@@ -50,10 +54,11 @@ public class PumpLicense {
 			ps.flush();
 			return temp;
 		} finally {
-			if(out!=null) {
+			if (out != null) {
 				try {
 					out.close();
-				} catch(Throwable t) {}
+				} catch (Throwable t) {
+				}
 			}
 		}
 	}

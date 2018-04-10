@@ -12,50 +12,50 @@ package com.pump.image.pixel;
 
 import java.awt.image.BufferedImage;
 
-/** This iterator swaps the order of color components.  So
- * if the components are stored in the order {r1, g1, b1, r2, g2, b2, ...}
- * then this will return arrays as {b1, g1, r1, b2, g2, r2, ...}.
+/**
+ * This iterator swaps the order of color components. So if the components are
+ * stored in the order {r1, g1, b1, r2, g2, b2, ...} then this will return
+ * arrays as {b1, g1, r1, b2, g2, r2, ...}.
  */
 public class ReverseBytePixelIterator implements BytePixelIterator {
 
 	BytePixelIterator i;
 	final int bytesPerPixel, len, k;
-	
+
 	public ReverseBytePixelIterator(BytePixelIterator i) {
 		this.i = i;
 
 		bytesPerPixel = i.getPixelSize();
-		len = i.getWidth()*bytesPerPixel;
-		k = bytesPerPixel/2;
+		len = i.getWidth() * bytesPerPixel;
+		k = bytesPerPixel / 2;
 	}
-	
-	
+
 	public void next(byte[] dest) {
 		i.next(dest);
-		if(bytesPerPixel==3) {
-			for(int x = 0; x<len; x+=bytesPerPixel) {
+		if (bytesPerPixel == 3) {
+			for (int x = 0; x < len; x += bytesPerPixel) {
 				byte t = dest[x];
-				dest[x] = dest[x+2];
-				dest[x+2] = t;
+				dest[x] = dest[x + 2];
+				dest[x + 2] = t;
 			}
-		} else if(bytesPerPixel==4) {
-			for(int x = 0; x<len; x+=bytesPerPixel) {
+		} else if (bytesPerPixel == 4) {
+			for (int x = 0; x < len; x += bytesPerPixel) {
 				byte t = dest[x];
-				dest[x] = dest[x+3];
-				dest[x+3] = t;
-				
-				t = dest[x+1];
-				dest[x+1] = dest[x+2];
-				dest[x+2] = t;
+				dest[x] = dest[x + 3];
+				dest[x + 3] = t;
+
+				t = dest[x + 1];
+				dest[x + 1] = dest[x + 2];
+				dest[x + 2] = t;
 			}
-		} else if(bytesPerPixel==1) {
+		} else if (bytesPerPixel == 1) {
 			return;
 		} else {
-			for(int x = 0; x<len; x+=bytesPerPixel) {
-				for(int z = 0; z<k; z++) {
-					byte t = dest[x+z];
-					dest[x+z] = dest[x+bytesPerPixel-1-z];
-					dest[x+bytesPerPixel-1-z] = t;
+			for (int x = 0; x < len; x += bytesPerPixel) {
+				for (int z = 0; z < k; z++) {
+					byte t = dest[x + z];
+					dest[x + z] = dest[x + bytesPerPixel - 1 - z];
+					dest[x + bytesPerPixel - 1 - z] = t;
 				}
 			}
 		}

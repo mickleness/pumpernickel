@@ -14,45 +14,45 @@ import java.util.Iterator;
 
 /** This filters another iterator. */
 public abstract class FilteredIterator<T> implements Iterator<T> {
-	
+
 	private static Object NULL_PLACEHOLDER = new Object();
-	
+
 	protected Iterator<T> iter;
 	protected Object nextElement;
-	
+
 	public FilteredIterator(Iterator<T> iter) {
 		this.iter = iter;
 		queueNext();
 	}
 
 	private void queueNext() {
-		while(true) {
-			if(!iter.hasNext()) {
+		while (true) {
+			if (!iter.hasNext()) {
 				nextElement = null;
 				return;
 			}
 			T e = iter.next();
-			if(accepts(e)) {
+			if (accepts(e)) {
 				nextElement = e;
 				return;
 			}
 		}
 	}
-	
+
 	public abstract boolean accepts(T element);
 
 	@Override
 	public boolean hasNext() {
-		return nextElement!=null;
+		return nextElement != null;
 	}
 
 	@Override
 	public T next() {
 		T returnValue;
-		if(nextElement==NULL_PLACEHOLDER) {
+		if (nextElement == NULL_PLACEHOLDER) {
 			returnValue = null;
 		} else {
-			returnValue = (T)nextElement;
+			returnValue = (T) nextElement;
 		}
 		queueNext();
 		return returnValue;

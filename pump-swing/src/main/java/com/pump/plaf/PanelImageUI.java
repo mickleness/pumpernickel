@@ -22,16 +22,16 @@ import javax.swing.plaf.PanelUI;
 public class PanelImageUI extends PanelUI {
 	BufferedImage img;
 	float opacity;
-	
+
 	public PanelImageUI(BufferedImage img) {
 		this(img, 1);
 	}
 
-	public PanelImageUI(BufferedImage img,float opacity) {
+	public PanelImageUI(BufferedImage img, float opacity) {
 		this.img = img;
 		this.opacity = opacity;
 	}
-	
+
 	@Override
 	public Dimension getPreferredSize(JComponent c) {
 		return new Dimension(img.getWidth(), img.getHeight());
@@ -40,14 +40,13 @@ public class PanelImageUI extends PanelUI {
 	@Override
 	public void paint(Graphics g0, JComponent c) {
 		super.paint(g0, c);
-		
-		Graphics2D g = (Graphics2D)g0;
-		g = (Graphics2D)g.create();
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-		g.drawImage(img, 
-				c.getWidth()/2-img.getWidth()/2, 
-				c.getHeight()/2-img.getHeight()/2, 
-				null);
+
+		Graphics2D g = (Graphics2D) g0;
+		g = (Graphics2D) g.create();
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+				opacity));
+		g.drawImage(img, c.getWidth() / 2 - img.getWidth() / 2, c.getHeight()
+				/ 2 - img.getHeight() / 2, null);
 		g.dispose();
 	}
 }

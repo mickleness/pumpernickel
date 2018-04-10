@@ -18,26 +18,27 @@ import com.pump.io.GuardedOutputStream;
 public class UnknownLeafAtom extends LeafAtom {
 	byte[] data;
 	String id;
-	
-	public UnknownLeafAtom(String id,byte[] data) {
+
+	public UnknownLeafAtom(String id, byte[] data) {
 		super(null);
 		this.id = id;
 		this.data = data;
 	}
-	
-	public UnknownLeafAtom(Atom parent,String id,GuardedInputStream in) throws IOException {
+
+	public UnknownLeafAtom(Atom parent, String id, GuardedInputStream in)
+			throws IOException {
 		super(parent);
 		this.id = id;
-		int size = (int)in.getRemainingLimit();
+		int size = (int) in.getRemainingLimit();
 		try {
 			data = new byte[size];
-		} catch(OutOfMemoryError e) {
-			System.err.println("size: "+size);
+		} catch (OutOfMemoryError e) {
+			System.err.println("size: " + size);
 			throw e;
 		}
-		read(in,data);
+		read(in, data);
 	}
-	
+
 	@Override
 	protected String getIdentifier() {
 		return id;
@@ -45,7 +46,7 @@ public class UnknownLeafAtom extends LeafAtom {
 
 	@Override
 	protected long getSize() {
-		return 8+data.length;
+		return 8 + data.length;
 	}
 
 	@Override
@@ -56,11 +57,11 @@ public class UnknownLeafAtom extends LeafAtom {
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		for(int a = 0; a<Math.min(data.length,64); a++) {
-			sb.append( (char)data[a] );
+		for (int a = 0; a < Math.min(data.length, 64); a++) {
+			sb.append((char) data[a]);
 		}
-		if(data.length>64)
+		if (data.length > 64)
 			sb.append("...");
-		return "UnknownLeafAtom[ \""+sb.toString()+"\" ]";
+		return "UnknownLeafAtom[ \"" + sb.toString() + "\" ]";
 	}
 }

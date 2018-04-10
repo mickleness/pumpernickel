@@ -15,8 +15,8 @@ package com.pump.image.gif.block;
  * {@link com.pump.image.gif.block.GifGraphicRenderingBlock}.
  * <P>
  * The four static disposal modes are described below. The GIF file format
- * describes these, but the following webpage describes them much
- * more thoroughly: <BR>
+ * describes these, but the following webpage describes them much more
+ * thoroughly: <BR>
  * http://www.webreference.com/content/studio/disposal.html
  * <P>
  * This is what the GIF file format says:
@@ -40,46 +40,49 @@ public class GifGraphicControlExtension extends GifExtensionBlock {
 		 * {@code http://www.webreference.com/content/studio/disposal.html })
 		 * <P>
 		 * That site was generally very useful, but when I followed this
-		 * implementation I found at least one GIF that didn't load correctly. This
-		 * is a very cryptic disposal mode. The GIF file format specification
-		 * explains this as: "No disposal specified. The decoder is not required to
-		 * take any action." So it sounds like a wild guess -- at best -- to me. I
-		 * end up treating it mostly like <code>DISPOSAL_MODE_LEAVE</code>, and
-		 * that seems to yield better results.
+		 * implementation I found at least one GIF that didn't load correctly.
+		 * This is a very cryptic disposal mode. The GIF file format
+		 * specification explains this as: "No disposal specified. The decoder
+		 * is not required to take any action." So it sounds like a wild guess
+		 * -- at best -- to me. I end up treating it mostly like
+		 * <code>DISPOSAL_MODE_LEAVE</code>, and that seems to yield better
+		 * results.
 		 */
-		NONE(0), 
-		
+		NONE(0),
+
 		/**
-		 * In this option, any pixels not covered up by the next frame continue to
-		 * display. This is the setting used most often for optimized animations.
+		 * In this option, any pixels not covered up by the next frame continue
+		 * to display. This is the setting used most often for optimized
+		 * animations.
 		 * <P>
 		 * (This description copied from
 		 * {@code http://www.webreference.com/content/studio/disposal.html })
 		 * <P>
-		 * Or the GIF file format specification explains this as: "Do not dispose.
-		 * The graphic is to be left in place."
+		 * Or the GIF file format specification explains this as: "Do not
+		 * dispose. The graphic is to be left in place."
 		 */
-		LEAVE(1), 
-		
+		LEAVE(1),
+
 		/**
-		 * The background color or background tile - rather than a previous frame -
-		 * shows through transparent pixels. In the GIF specification, you can set a
-		 * background color.
+		 * The background color or background tile - rather than a previous
+		 * frame - shows through transparent pixels. In the GIF specification,
+		 * you can set a background color.
 		 * <P>
 		 * (This description copied from {code
 		 * http://www.webreference.com/content/studio/disposal.html })
 		 * <P>
 		 * Or the GIF file format specification explains this as: "Restore to
-		 * background color. The area used by the graphic must be restored to the
-		 * background color."
+		 * background color. The area used by the graphic must be restored to
+		 * the background color."
 		 * <P>
 		 * However of these are misleading/incorrect. There is a very important
-		 * exception: if a transparent pixel is defined, and this is the disposal
-		 * mode, then the image needs to be made transparent. Note this only applies
-		 * to the rectangle a frame defines, so if the gif is 100x100 pixels
-		 * but a frame only spans 20x20 pixels: then only those 20x20 pixels are affected.
+		 * exception: if a transparent pixel is defined, and this is the
+		 * disposal mode, then the image needs to be made transparent. Note this
+		 * only applies to the rectangle a frame defines, so if the gif is
+		 * 100x100 pixels but a frame only spans 20x20 pixels: then only those
+		 * 20x20 pixels are affected.
 		 */
-		RESTORE_BACKGROUND(2), 
+		RESTORE_BACKGROUND(2),
 
 		/**
 		 * Restores to the state of a previous, undisposed frame.
@@ -88,26 +91,27 @@ public class GifGraphicControlExtension extends GifExtensionBlock {
 		 * {@code http://www.webreference.com/content/studio/disposal.html })
 		 * <P>
 		 * Or the GIF file format specification explains this as: "Restore to
-		 * previous. The decoder is required to restore the area overwritten by the
-		 * graphic with what was there prior to rendering the graphic."
+		 * previous. The decoder is required to restore the area overwritten by
+		 * the graphic with what was there prior to rendering the graphic."
 		 */
 		PREVIOUS(3);
-		
+
 		/** The numeric encoded value of this disposal method. */
 		public final int value;
-		
+
 		DisposalMethod(int v) {
 			value = v;
 		}
-		
+
 		/** Return the DisposalMethod that corresponds to a certain constant. */
 		public static DisposalMethod valueOf(int c) {
 			DisposalMethod[] all = DisposalMethod.values();
-			for(DisposalMethod m : all) {
-				if(m.value==c)
+			for (DisposalMethod m : all) {
+				if (m.value == c)
 					return m;
 			}
-			throw new IllegalArgumentException("unrecognized disposal method: "+c);
+			throw new IllegalArgumentException("unrecognized disposal method: "
+					+ c);
 		}
 	}
 
@@ -134,8 +138,8 @@ public class GifGraphicControlExtension extends GifExtensionBlock {
 	 *            the transparent index of the upcoming graphic. A value of -1
 	 *            indicates that there is no transparent index.
 	 */
-	public GifGraphicControlExtension(int delayTime, DisposalMethod disposalMethod,
-			int transparentIndex) {
+	public GifGraphicControlExtension(int delayTime,
+			DisposalMethod disposalMethod, int transparentIndex) {
 		b = new byte[4];
 		setDelayTime(delayTime);
 		setDisposalMethod(disposalMethod);
@@ -185,9 +189,9 @@ public class GifGraphicControlExtension extends GifExtensionBlock {
 	}
 
 	/**
-	 * @return one of the four <code>DISPOSAL_MODE</code> values in this
-	 *         field. This determines what should happen after a graphic has
-	 *         been rendered.
+	 * @return one of the four <code>DISPOSAL_MODE</code> values in this field.
+	 *         This determines what should happen after a graphic has been
+	 *         rendered.
 	 */
 	public DisposalMethod getDisposalMethod() {
 		int i = (b[0] & 0xFF) >> 2;
@@ -197,7 +201,8 @@ public class GifGraphicControlExtension extends GifExtensionBlock {
 	/**
 	 * Sets the disposal method of this graphic.
 	 * 
-	 * @param m the new disposal method for this graphic.
+	 * @param m
+	 *            the new disposal method for this graphic.
 	 */
 	public void setDisposalMethod(DisposalMethod m) {
 		int i = m.value;
@@ -209,8 +214,8 @@ public class GifGraphicControlExtension extends GifExtensionBlock {
 	}
 
 	/**
-	 * @return <code>true</code> if this graphic should not proceed to the
-	 *         next graphic without waiting for user input.
+	 * @return <code>true</code> if this graphic should not proceed to the next
+	 *         graphic without waiting for user input.
 	 *         <P>
 	 *         This is a great idea, but I have never seen this feature
 	 *         supported. Ever. So I wouldn't worry about this too much.
@@ -251,8 +256,8 @@ public class GifGraphicControlExtension extends GifExtensionBlock {
 	 *         pixel should be skipped, and the next pixel should should
 	 *         rendered.
 	 *         <P>
-	 *         This may return <code>-1</code> if no transparent color index
-	 *         is provided.
+	 *         This may return <code>-1</code> if no transparent color index is
+	 *         provided.
 	 */
 	public int getTransparentColorIndex() {
 		if (hasTransparentColorIndex() == false)

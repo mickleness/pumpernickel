@@ -16,22 +16,24 @@ import java.text.AttributedCharacterIterator;
 import java.util.Map;
 import java.util.Set;
 
-/** This filters the <code>AttributedCharacterIterator</code> so all text
- * is rendered in one color only.
+/**
+ * This filters the <code>AttributedCharacterIterator</code> so all text is
+ * rendered in one color only.
  *
  */
 public class ColoredIterator implements AttributedCharacterIterator {
 	AttributedCharacterIterator i;
 	Color textColor;
-	
-	public ColoredIterator(AttributedCharacterIterator aci,Color color) {
+
+	public ColoredIterator(AttributedCharacterIterator aci, Color color) {
 		i = aci;
 		textColor = color;
 	}
 
 	@Override
 	public Object clone() {
-		return new ColoredIterator( (AttributedCharacterIterator)i.clone(), textColor);
+		return new ColoredIterator((AttributedCharacterIterator) i.clone(),
+				textColor);
 	}
 
 	public char current() {
@@ -47,15 +49,16 @@ public class ColoredIterator implements AttributedCharacterIterator {
 	}
 
 	public Object getAttribute(Attribute attribute) {
-		if(attribute.equals(TextAttribute.FOREGROUND)) {
+		if (attribute.equals(TextAttribute.FOREGROUND)) {
 			return textColor;
 		}
 		return i.getAttribute(attribute);
 	}
 
 	public Map<AttributedCharacterIterator.Attribute, Object> getAttributes() {
-		Map<AttributedCharacterIterator.Attribute, Object> map = i.getAttributes();
-		if(map.get(TextAttribute.FOREGROUND)!=null) {
+		Map<AttributedCharacterIterator.Attribute, Object> map = i
+				.getAttributes();
+		if (map.get(TextAttribute.FOREGROUND) != null) {
 			map.put(TextAttribute.FOREGROUND, textColor);
 		}
 		return map;
@@ -81,7 +84,8 @@ public class ColoredIterator implements AttributedCharacterIterator {
 		return i.getRunLimit(attribute);
 	}
 
-	public int getRunLimit(Set<? extends AttributedCharacterIterator.Attribute> attributes) {
+	public int getRunLimit(
+			Set<? extends AttributedCharacterIterator.Attribute> attributes) {
 		return i.getRunLimit(attributes);
 	}
 
@@ -93,7 +97,8 @@ public class ColoredIterator implements AttributedCharacterIterator {
 		return i.getRunStart(attribute);
 	}
 
-	public int getRunStart(Set<? extends AttributedCharacterIterator.Attribute> attributes) {
+	public int getRunStart(
+			Set<? extends AttributedCharacterIterator.Attribute> attributes) {
 		return i.getRunStart(attributes);
 	}
 
@@ -112,6 +117,5 @@ public class ColoredIterator implements AttributedCharacterIterator {
 	public char setIndex(int position) {
 		return i.setIndex(position);
 	}
-	
-	
+
 }

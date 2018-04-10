@@ -14,65 +14,75 @@ import java.awt.Dimension;
 
 public class Dimension2D extends java.awt.geom.Dimension2D {
 
-
-	/** This is a convenience method to calculate how to scale down
-	 * an image proportionally.
+	/**
+	 * This is a convenience method to calculate how to scale down an image
+	 * proportionally.
 	 * 
-	 * @param originalSize the original image dimensions.
-	 * @param maxSize the maximum new dimensions.
+	 * @param originalSize
+	 *            the original image dimensions.
+	 * @param maxSize
+	 *            the maximum new dimensions.
 	 * @return dimensions that are <code>maxSize</code> or smaller.
 	 */
-	public static Dimension scaleProportionally(Dimension originalSize,Dimension maxSize) {
-		float widthRatio = ((float)maxSize.width)/((float)originalSize.width);
-		float heightRatio = ((float)maxSize.height)/((float)originalSize.height);
+	public static Dimension scaleProportionally(Dimension originalSize,
+			Dimension maxSize) {
+		float widthRatio = ((float) maxSize.width)
+				/ ((float) originalSize.width);
+		float heightRatio = ((float) maxSize.height)
+				/ ((float) originalSize.height);
 		int w, h;
-		if(widthRatio<heightRatio) {
+		if (widthRatio < heightRatio) {
 			w = maxSize.width;
-			h = (int)(widthRatio*originalSize.height);
+			h = (int) (widthRatio * originalSize.height);
 		} else {
 			h = maxSize.height;
-			w = (int)(heightRatio*originalSize.width);
+			w = (int) (heightRatio * originalSize.width);
 		}
-		return new Dimension(w,h);
+		return new Dimension(w, h);
 	}
 
-	/** This is a convenience method to calculate how to scale down
-	 * an image proportionally.
+	/**
+	 * This is a convenience method to calculate how to scale down an image
+	 * proportionally.
 	 * 
-	 * @param originalSize the original image dimensions.
-	 * @param maxSize the maximum new dimensions.
+	 * @param originalSize
+	 *            the original image dimensions.
+	 * @param maxSize
+	 *            the maximum new dimensions.
 	 * @return dimensions that are <code>maxSize</code> or smaller.
 	 */
-	public static java.awt.geom.Dimension2D scaleProportionally(java.awt.geom.Dimension2D originalSize,java.awt.geom.Dimension2D maxSize) {
-		double widthRatio = maxSize.getWidth()/originalSize.getWidth();
-		double heightRatio = maxSize.getHeight()/originalSize.getHeight();
+	public static java.awt.geom.Dimension2D scaleProportionally(
+			java.awt.geom.Dimension2D originalSize,
+			java.awt.geom.Dimension2D maxSize) {
+		double widthRatio = maxSize.getWidth() / originalSize.getWidth();
+		double heightRatio = maxSize.getHeight() / originalSize.getHeight();
 		double w, h;
-		if(widthRatio<heightRatio) {
+		if (widthRatio < heightRatio) {
 			w = maxSize.getWidth();
-			h = widthRatio*originalSize.getHeight();
+			h = widthRatio * originalSize.getHeight();
 		} else {
 			h = maxSize.getHeight();
-			w = heightRatio*originalSize.getWidth();
+			w = heightRatio * originalSize.getWidth();
 		}
-		return new Dimension2D(w,h);
+		return new Dimension2D(w, h);
 	}
-	
+
 	double width, height;
 
 	public Dimension2D(Dimension d) {
 		this(d.width, d.height);
 	}
-	
-	public Dimension2D(double width,double height) {
+
+	public Dimension2D(double width, double height) {
 		this.width = width;
 		this.height = height;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Dimension2D[width="+width+" height="+height+"]";
+		return "Dimension2D[width=" + width + " height=" + height + "]";
 	}
-	
+
 	@Override
 	public double getHeight() {
 		return height;

@@ -55,55 +55,58 @@ import com.pump.swing.AudioPlayerComponent;
 public class AudioComponentsDemo extends MultiWindowDemo {
 
 	private static final long serialVersionUID = 1L;
-	
-	public static class AudioPlayerComponentDemo extends JInternalFrame  {
+
+	public static class AudioPlayerComponentDemo extends JInternalFrame {
 		private static final long serialVersionUID = 1L;
 
-		Preferences prefs = Preferences.userNodeForPackage(AudioPlayerComponentDemo.class);
+		Preferences prefs = Preferences
+				.userNodeForPackage(AudioPlayerComponentDemo.class);
 		AudioPlayerComponent apc = new AudioPlayerComponent();
-		
+
 		public AudioPlayerComponentDemo() {
 			super();
-			apc.addPropertyChangeListener(AudioPlayerComponent.SOURCE_KEY, new PropertyChangeListener() {
-				public void propertyChange(PropertyChangeEvent evt) {
-					prefs.put("lastSource", apc.getSource().toString());
-				}
-			});
+			apc.addPropertyChangeListener(AudioPlayerComponent.SOURCE_KEY,
+					new PropertyChangeListener() {
+						public void propertyChange(PropertyChangeEvent evt) {
+							prefs.put("lastSource", apc.getSource().toString());
+						}
+					});
 			String lastSource = prefs.get("lastSource", null);
-			if(lastSource!=null) {
+			if (lastSource != null) {
 				try {
 					apc.setSource(new URL(lastSource));
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				}
 			}
-			
+
 			getContentPane().add(apc);
-			getRootPane().putClientProperty(KEY_DESCRIPTION, "This window demonstrates a minimal audio playback UI.");
+			getRootPane().putClientProperty(KEY_DESCRIPTION,
+					"This window demonstrates a minimal audio playback UI.");
 		}
 	}
-	
-	/** A simple demo for the <code>DecoratedListUI</code>, focusing on 
-	 * emulating Mac's playback controls for sound files.
+
+	/**
+	 * A simple demo for the <code>DecoratedListUI</code>, focusing on emulating
+	 * Mac's playback controls for sound files.
 	 * 
 	 */
 	public static class SoundListDemo extends JInternalFrame {
 		private static final long serialVersionUID = 1L;
-			
+
 		static class SoundSource {
 			String name;
 			URL url;
-			
+
 			SoundSource(String name) {
 				this.name = name;
 				url = SoundListDemo.class.getResource(name);
 			}
 		}
-		
+
 		class SoundUI {
 			SoundSource sound;
 
-			
 			float trackSize = 0;
 			float targetTrackSize = 0;
 			float opacity = 1;
@@ -112,71 +115,73 @@ public class AudioComponentsDemo extends MultiWindowDemo {
 			SourceDataLine line;
 			float completion = 0;
 			long totalFrames = 1;
-			
+
 			List<ChangeListener> completionListeners = new ArrayList<ChangeListener>();
-			
-			
+
 			Timer timer = new Timer(50, new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					boolean active = false;
 
 					float newCompletion = 0;
-					if(line!=null) {
-						newCompletion = ((float)line.getFramePosition())/((float)totalFrames);
+					if (line != null) {
+						newCompletion = ((float) line.getFramePosition())
+								/ ((float) totalFrames);
 					}
-					if(setCompletion(newCompletion))
+					if (setCompletion(newCompletion))
 						active = true;
-					
-					if(trackSize<targetTrackSize) {
-						if(setTrackSize(Math.min(targetTrackSize, trackSize + .25f)))
+
+					if (trackSize < targetTrackSize) {
+						if (setTrackSize(Math.min(targetTrackSize,
+								trackSize + .25f)))
 							active = true;
-					} else if(trackSize>targetTrackSize) {
-						if(setTrackSize(Math.max(targetTrackSize, trackSize - .25f)))
-							active = true;
-					}
-					
-					if(opacity<targetOpacity) {
-						if(setOpacity(Math.min(targetOpacity, opacity + .25f)))
-							active = true;
-					} else if(opacity>targetOpacity) {
-						if(setOpacity(Math.max(targetOpacity, opacity - .25f)))
+					} else if (trackSize > targetTrackSize) {
+						if (setTrackSize(Math.max(targetTrackSize,
+								trackSize - .25f)))
 							active = true;
 					}
-					
-					if(!active) {
+
+					if (opacity < targetOpacity) {
+						if (setOpacity(Math.min(targetOpacity, opacity + .25f)))
+							active = true;
+					} else if (opacity > targetOpacity) {
+						if (setOpacity(Math.max(targetOpacity, opacity - .25f)))
+							active = true;
+					}
+
+					if (!active) {
 						timer.stop();
 					}
 				}
 			});
-			
+
 			SoundUI(SoundSource sound) {
 				this.sound = sound;
 			}
 
-			
 			private boolean setCompletion(float f) {
-				if(completion==f)
+				if (completion == f)
 					return false;
 				completion = f;
 				timer.start();
 				repaintListCell();
 				return true;
 			}
-			
+
 			public float getCompletion() {
 				return completion;
 			}
-			
+
 			public boolean isPlaying() {
-				return line!=null && line.isOpen() && line.isActive();
+				return line != null && line.isOpen() && line.isActive();
 			}
-			
+
 			public void play() {
 				try {
-					if(line!=null && line.isOpen()) {
+					if (line != null && line.isOpen()) {
 						line.start();
 					} else {
-						AudioInputStream audioIn = AudioSystem.getAudioInputStream(sound.url);
+						AudioInputStream audioIn = AudioSystem
+								.getAudioInputStream(sound.url);
 						totalFrames = audioIn.getFrameLength();
 						line = AudioPlayer.playAudioStream(audioIn);
 						line.addLineListener(new LineListener() {
@@ -187,55 +192,57 @@ public class AudioComponentsDemo extends MultiWindowDemo {
 						timer.start();
 						updateTargetTrackSize();
 					}
-				} catch(Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			
+
 			private void updateTargetTrackSize() {
 				setTargetTrackSize(line.isOpen() && line.isActive() ? 1 : 0);
 			}
-			
+
 			public void pause() {
-				if(line!=null) {
+				if (line != null) {
 					line.stop();
 				}
 			}
-			
+
 			protected void setTargetTrackSize(float s) {
-				if(targetTrackSize==s) return;
+				if (targetTrackSize == s)
+					return;
 				targetTrackSize = s;
 				timer.start();
 			}
-			
+
 			protected void setTargetOpacity(float s) {
-				if(targetOpacity==s) return;
+				if (targetOpacity == s)
+					return;
 				targetOpacity = s;
 				timer.start();
 			}
-			
+
 			public float getTrackSize() {
 				return trackSize;
 			}
-			
+
 			public float getOpacity() {
 				return opacity;
 			}
-			
+
 			private void repaintListCell() {
 				int index = -1;
-				for(int a = 0; a<list.getModel().getSize(); a++) {
-					if(list.getModel().getElementAt(a)==sound)
+				for (int a = 0; a < list.getModel().getSize(); a++) {
+					if (list.getModel().getElementAt(a) == sound)
 						index = a;
 				}
-				
+
 				Rectangle cellBounds = list.getCellBounds(index, index);
-				if(cellBounds!=null)
-					list.repaint( cellBounds );
+				if (cellBounds != null)
+					list.repaint(cellBounds);
 			}
 
 			private boolean setTrackSize(float f) {
-				if(trackSize==f)
+				if (trackSize == f)
 					return false;
 				trackSize = f;
 				repaintListCell();
@@ -243,18 +250,18 @@ public class AudioComponentsDemo extends MultiWindowDemo {
 			}
 
 			private boolean setOpacity(float f) {
-				if(opacity==f)
+				if (opacity == f)
 					return false;
 				opacity = f;
 				repaintListCell();
 				return true;
 			}
 		}
-		
+
 		static class SoundCellRenderer implements ListCellRenderer {
 			JLabel label = new JLabel();
-			
-			SoundCellRenderer() { 
+
+			SoundCellRenderer() {
 				label.setIcon(new MusicIcon(128));
 				label.setVerticalTextPosition(SwingConstants.BOTTOM);
 				label.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -262,12 +269,13 @@ public class AudioComponentsDemo extends MultiWindowDemo {
 				label.setOpaque(true);
 			}
 
-			public Component getListCellRendererComponent(JList list, Object soundObject,
-					int row, boolean isSelected, boolean hasFocus) {
-				SoundSource sound = (SoundSource)soundObject;
+			public Component getListCellRendererComponent(JList list,
+					Object soundObject, int row, boolean isSelected,
+					boolean hasFocus) {
+				SoundSource sound = (SoundSource) soundObject;
 				label.setText(sound.name);
-				
-				if(isSelected) {
+
+				if (isSelected) {
 					label.setBackground(SystemColor.textHighlight);
 					label.setForeground(SystemColor.textHighlightText);
 				} else {
@@ -276,40 +284,41 @@ public class AudioComponentsDemo extends MultiWindowDemo {
 				}
 				return label;
 			}
-			
+
 		}
-		
+
 		DefaultListModel listModel = new DefaultListModel();
 		JList list = new JList(listModel);
-		
+
 		ListDecoration playbackDecoration = new ListDecoration() {
-			MusicIcon.PlayToggleIcon icon = new MusicIcon.PlayToggleIcon( MusicIcon.PlayToggleIcon.DEFAULT_WIDTH );
+			MusicIcon.PlayToggleIcon icon = new MusicIcon.PlayToggleIcon(
+					MusicIcon.PlayToggleIcon.DEFAULT_WIDTH);
 
 			WeakHashMap<SoundSource, SoundUI> map = new WeakHashMap<SoundSource, SoundUI>();
-			
+
 			private SoundUI getSoundUI(SoundSource soundSource) {
 				SoundUI soundUI = map.get(soundSource);
-				if(soundUI==null) {
+				if (soundUI == null) {
 					soundUI = new SoundUI(soundSource);
 					map.put(soundSource, soundUI);
 				}
 				return soundUI;
 			}
-			
+
 			@Override
 			public Icon getIcon(JList list, Object value, int row,
-					boolean isSelected, boolean cellHasFocus, boolean isRollover,
-					boolean isPressed) {
-				SoundSource sound = (SoundSource)value;
+					boolean isSelected, boolean cellHasFocus,
+					boolean isRollover, boolean isPressed) {
+				SoundSource sound = (SoundSource) value;
 				SoundUI soundUI = getSoundUI(sound);
-				
+
 				icon.setPressed(isPressed);
-				if(soundUI.isPlaying()) {
-					soundUI.setTargetOpacity( 1 );
+				if (soundUI.isPlaying()) {
+					soundUI.setTargetOpacity(1);
 					icon.setPauseIconVisible(true);
-					icon.setTrackCompletion( soundUI.getCompletion() );
+					icon.setTrackCompletion(soundUI.getCompletion());
 				} else {
-					soundUI.setTargetOpacity( (isRollover || isPressed) ? 1 : 0 );
+					soundUI.setTargetOpacity((isRollover || isPressed) ? 1 : 0);
 					icon.setPauseIconVisible(false);
 				}
 				icon.setTrackSize(soundUI.getTrackSize());
@@ -320,30 +329,32 @@ public class AudioComponentsDemo extends MultiWindowDemo {
 			@Override
 			public boolean isVisible(JList list, Object value, int row,
 					boolean isSelected, boolean cellHasFocus) {
-				SoundSource sound = (SoundSource)value;
+				SoundSource sound = (SoundSource) value;
 				SoundUI ui = getSoundUI(sound);
-				
-				if(!isSelected) {
+
+				if (!isSelected) {
 					SourceDataLine dataLine = ui.line;
-					if(dataLine!=null)
+					if (dataLine != null)
 						dataLine.close();
 				}
-				
+
 				boolean visible = isSelected;
-				if(!visible) {
+				if (!visible) {
 					ui.setTargetOpacity(0);
 				}
-				if(ui.targetOpacity>0) visible = true;
+				if (ui.targetOpacity > 0)
+					visible = true;
 				return visible;
 			}
-			
+
 			ActionListener actionListener = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int i = list.getLeadSelectionIndex();
-					
-					SoundSource sound = (SoundSource)list.getModel().getElementAt(i);
+
+					SoundSource sound = (SoundSource) list.getModel()
+							.getElementAt(i);
 					SoundUI soundUI = getSoundUI(sound);
-					if(soundUI.isPlaying()) {
+					if (soundUI.isPlaying()) {
 						soundUI.pause();
 					} else {
 						soundUI.play();
@@ -361,24 +372,24 @@ public class AudioComponentsDemo extends MultiWindowDemo {
 			public Point getLocation(JList list, Object value, int row,
 					boolean isSelected, boolean cellHasFocus) {
 				Rectangle r = list.getCellBounds(row, row);
-				return new Point(r.width/2 - icon.getIconWidth()/2, 
-						r.height/2 - icon.getIconHeight()/2 - 10);
+				return new Point(r.width / 2 - icon.getIconWidth() / 2,
+						r.height / 2 - icon.getIconHeight() / 2 - 10);
 			}
-			
+
 		};
-		
+
 		class RemoveActionListener implements ActionListener {
 			Object element;
-			
+
 			RemoveActionListener(Object element) {
 				this.element = element;
 			}
-			
+
 			public void actionPerformed(ActionEvent e) {
 				listModel.removeElement(element);
 			}
 		}
-		
+
 		CloseDecoration closeDecoration = new CloseDecoration() {
 
 			@Override
@@ -387,33 +398,37 @@ public class AudioComponentsDemo extends MultiWindowDemo {
 				return new RemoveActionListener(value);
 			}
 		};
-		
+
 		public SoundListDemo() {
 			super();
 			listModel.addElement(new SoundSource("Bugaboo.wav"));
 			listModel.addElement(new SoundSource("Ludic.wav"));
 			listModel.addElement(new SoundSource("Unctuous.wav"));
-		
+
 			list.setCellRenderer(new SoundCellRenderer());
 			list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 			list.setVisibleRowCount(1);
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			list.setPreferredSize(new Dimension(152*3, 172*1));
-			
+			list.setPreferredSize(new Dimension(152 * 3, 172 * 1));
+
 			list.setUI(new DecoratedListUI());
-			list.putClientProperty(DecoratedListUI.KEY_DECORATIONS, new ListDecoration[] { closeDecoration, playbackDecoration });
-			
+			list.putClientProperty(
+					DecoratedListUI.KEY_DECORATIONS,
+					new ListDecoration[] { closeDecoration, playbackDecoration });
+
 			list.setBackground(Color.white);
 			list.setOpaque(true);
-			
-			putClientProperty(MultiWindowDemo.KEY_DESCRIPTION, "This window models UI elements similar to the Finder in Mac OS X sometimes previews sounds.");
+
+			putClientProperty(
+					MultiWindowDemo.KEY_DESCRIPTION,
+					"This window models UI elements similar to the Finder in Mac OS X sometimes previews sounds.");
 			getContentPane().add(list);
 		}
 	}
-	
-	public AudioComponentsDemo()
-	{
-		addPane(new AudioPlayerComponentDemo(), 0, 0, 1, 1, GridBagConstraints.NONE);
+
+	public AudioComponentsDemo() {
+		addPane(new AudioPlayerComponentDemo(), 0, 0, 1, 1,
+				GridBagConstraints.NONE);
 		addPane(new SoundListDemo(), 0, 1, 1, 1, GridBagConstraints.NONE);
 	}
 

@@ -25,7 +25,8 @@ import java.util.Arrays;
 import com.pump.image.ImageLoader;
 import com.pump.image.pixel.Scaling;
 
-/** A demo app that shows off the <code>Scaling</code> class.
+/**
+ * A demo app that shows off the <code>Scaling</code> class.
  *
  */
 public class ImageScalingDemo extends OutputDemo {
@@ -45,108 +46,124 @@ public class ImageScalingDemo extends OutputDemo {
 		out.println("This measures a few different approaches for creating thumbnails by the time each takes.\n");
 		out.println("Starting tests...");
 		out.println("Size (pixels)\tScaling (ms)\tGraphicsUtilities (ms)\tImage.getScaledInstance() (ms)");
-		for(int d = 100; d<=1000; d+=100) {
+		for (int d = 100; d <= 1000; d += 100) {
 			runTests(d, out);
 		}
 		out.println("Finished tests.");
 	}
 
-	protected static void runTests(int d,PrintStream out) {
-		BufferedImage imageSource = new BufferedImage(d, d,BufferedImage.TYPE_INT_ARGB);
+	protected static void runTests(int d, PrintStream out) {
+		BufferedImage imageSource = new BufferedImage(d, d,
+				BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = imageSource.createGraphics();
-		g.scale( ((double)d)/100f, ((double)d)/100f );
-		g.setPaint(new GradientPaint(0,0,Color.yellow,100,100,Color.red));
-		g.fillRect(0,0,100,100);
-		g.setPaint(new GradientPaint(0,100,Color.green,100,0,Color.blue));
-		g.fill(new Ellipse2D.Float(25,25,50,50));
+		g.scale(((double) d) / 100f, ((double) d) / 100f);
+		g.setPaint(new GradientPaint(0, 0, Color.yellow, 100, 100, Color.red));
+		g.fillRect(0, 0, 100, 100);
+		g.setPaint(new GradientPaint(0, 100, Color.green, 100, 0, Color.blue));
+		g.fill(new Ellipse2D.Float(25, 25, 50, 50));
 		g.dispose();
 
-		out.print(d+"\t");
+		out.print(d + "\t");
 
 		long[] time = new long[5];
-		int dstW = (int)(d*.25);
-		int dstH = (int)(d*.25);
+		int dstW = (int) (d * .25);
+		int dstH = (int) (d * .25);
 
-		BufferedImage dest = new BufferedImage( dstW, dstH, BufferedImage.TYPE_INT_ARGB );
+		BufferedImage dest = new BufferedImage(dstW, dstH,
+				BufferedImage.TYPE_INT_ARGB);
 
-		for(int a = 0; a<time.length; a++) {
+		for (int a = 0; a < time.length; a++) {
 			time[a] = System.currentTimeMillis();
-			for(int z = 0; z<10; z++) {
+			for (int z = 0; z < 10; z++) {
 				Scaling.scale(imageSource, dest);
 			}
-			time[a] = System.currentTimeMillis()-time[a];
-			
-			for(int b = 0; b<5; b++) {
+			time[a] = System.currentTimeMillis() - time[a];
+
+			for (int b = 0; b < 5; b++) {
 				try {
 					Thread.sleep(1000);
-				} catch(Exception e) {}
+				} catch (Exception e) {
+				}
 				System.gc();
 				System.runFinalization();
 			}
 		}
 		Arrays.sort(time);
-		out.print(time[time.length/2]+"\t");
+		out.print(time[time.length / 2] + "\t");
 
-		for(int a = 0; a<time.length; a++) {
+		for (int a = 0; a < time.length; a++) {
 			time[a] = System.currentTimeMillis();
-			for(int z = 0; z<10; z++) {
+			for (int z = 0; z < 10; z++) {
 				createThumbnail(imageSource, dstW, dstH);
 			}
-			time[a] = System.currentTimeMillis()-time[a];
+			time[a] = System.currentTimeMillis() - time[a];
 
-			for(int b = 0; b<5; b++) {
+			for (int b = 0; b < 5; b++) {
 				try {
 					Thread.sleep(1000);
-				} catch(Exception e) {}
+				} catch (Exception e) {
+				}
 				System.gc();
 				System.runFinalization();
 			}
 		}
 		Arrays.sort(time);
-		out.print(time[time.length/2]+"\t");
-		
-		for(int a = 0; a<time.length; a++) {
+		out.print(time[time.length / 2] + "\t");
+
+		for (int a = 0; a < time.length; a++) {
 			time[a] = System.currentTimeMillis();
-			for(int z = 0; z<10; z++) {
-				Image img = imageSource.getScaledInstance(dstW, dstH, Image.SCALE_SMOOTH);
+			for (int z = 0; z < 10; z++) {
+				Image img = imageSource.getScaledInstance(dstW, dstH,
+						Image.SCALE_SMOOTH);
 				ImageLoader.createImage(img);
 			}
-			time[a] = System.currentTimeMillis()-time[a];
+			time[a] = System.currentTimeMillis() - time[a];
 
-			for(int b = 0; b<5; b++) {
+			for (int b = 0; b < 5; b++) {
 				try {
 					Thread.sleep(1000);
-				} catch(Exception e) {}
+				} catch (Exception e) {
+				}
 				System.gc();
 				System.runFinalization();
 			}
 		}
 		Arrays.sort(time);
-		out.print(time[time.length/2]+"\t");
-		
+		out.print(time[time.length / 2] + "\t");
+
 		out.println();
 	}
 
-
-	/** <p>Returns a thumbnail of a source image.</p>
-	 * <p>The source and javadoc for this method are
-	 * copied from GraphicsUtilities.java, licensed under LGPL.
-	 * I want to compare this method against other methods in this class.
+	/**
+	 * <p>
+	 * Returns a thumbnail of a source image.
+	 * </p>
+	 * <p>
+	 * The source and javadoc for this method are copied from
+	 * GraphicsUtilities.java, licensed under LGPL. I want to compare this
+	 * method against other methods in this class.
 	 * 
-	 * <p>This method offers a good trade-off between speed and quality.
-	 * The result looks better than
-	 * {@link #createThumbnailFast(java.awt.image.BufferedImage, int)} when
-	 * the new size is less than half the longest dimension of the source
-	 * image, yet the rendering speed is almost similar.</p>
+	 * <p>
+	 * This method offers a good trade-off between speed and quality. The result
+	 * looks better than
+	 * {@link #createThumbnailFast(java.awt.image.BufferedImage, int)} when the
+	 * new size is less than half the longest dimension of the source image, yet
+	 * the rendering speed is almost similar.
+	 * </p>
 	 *
-	 * @param image the source image
-	 * @param newWidth the width of the thumbnail
-	 * @param newHeight the height of the thumbnail
+	 * @param image
+	 *            the source image
+	 * @param newWidth
+	 *            the width of the thumbnail
+	 * @param newHeight
+	 *            the height of the thumbnail
 	 * @return a new compatible <code>BufferedImage</code> containing a
-	 *   thumbnail of <code>image</code>
-	 * @throws IllegalArgumentException if <code>newWidth</code> is larger than
-	 *   the width of <code>image</code> or if code>newHeight</code> is larger
-	 *   than the height of <code>image or if one the dimensions is not &gt; 0</code>
+	 *         thumbnail of <code>image</code>
+	 * @throws IllegalArgumentException
+	 *             if <code>newWidth</code> is larger than the width of
+	 *             <code>image</code> or if code>newHeight</code> is larger than
+	 *             the height of
+	 *             <code>image or if one the dimensions is not &gt; 0</code>
 	 */
 	private static BufferedImage createThumbnail(BufferedImage image,
 			int newWidth, int newHeight) {
@@ -154,13 +171,10 @@ public class ImageScalingDemo extends OutputDemo {
 		int height = image.getHeight();
 
 		if (newWidth >= width || newHeight >= height) {
-			throw new IllegalArgumentException(
-					"newWidth and newHeight cannot"
-					+ " be greater than the image"
-					+ " dimensions");
+			throw new IllegalArgumentException("newWidth and newHeight cannot"
+					+ " be greater than the image" + " dimensions");
 		} else if (newWidth <= 0 || newHeight <= 0) {
-			throw new IllegalArgumentException(
-					"newWidth and newHeight must"
+			throw new IllegalArgumentException("newWidth and newHeight must"
 					+ " be greater than 0");
 		}
 
@@ -180,15 +194,16 @@ public class ImageScalingDemo extends OutputDemo {
 					height = newHeight;
 				}
 			}
-			
-			GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+
+			GraphicsConfiguration gc = GraphicsEnvironment
+					.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+					.getDefaultConfiguration();
 			BufferedImage temp = gc.createCompatibleImage(width, height);
 
 			Graphics2D g2 = temp.createGraphics();
 			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
 					RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-			g2.drawImage(thumb, 0, 0, temp.getWidth(),
-					temp.getHeight(), null);
+			g2.drawImage(thumb, 0, 0, temp.getWidth(), temp.getHeight(), null);
 			g2.dispose();
 
 			thumb = temp;

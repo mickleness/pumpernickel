@@ -13,40 +13,53 @@ package com.pump.image.transition;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
-/** This clips to the shape of a square zooming in/out. Here are playback samples:
- * <p><table summary="Sample Animations of BoxTransition2D" cellspacing="50" border="0"><tr>
+/**
+ * This clips to the shape of a square zooming in/out. Here are playback
+ * samples:
+ * <p>
+ * <table summary="Sample Animations of BoxTransition2D" cellspacing="50" border="0">
+ * <tr>
  * <td align="center">
- * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BoxTransition2D/BoxIn.gif" alt="Box In">
- * <p>Box In
- * </td>
+ * <img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BoxTransition2D/BoxIn.gif"
+ * alt="Box In">
+ * <p>
+ * Box In</td>
  * <td align="center">
- * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BoxTransition2D/BoxOut.gif" alt="Box Out">
- * <p>Box Out
- * </td>
- * </tr></table>
+ * <img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BoxTransition2D/BoxOut.gif"
+ * alt="Box Out">
+ * <p>
+ * Box Out</td>
+ * </tr>
+ * </table>
  */
 public class BoxTransition2D extends AbstractShapeTransition2D {
 
-	/** This public static method is used by the 
-	 * {@link com.bric.image.transition.Transition2DDemoHelper}
-	 * class to create sample animations of this transition.
+	/**
+	 * This public static method is used by the
+	 * {@link com.bric.image.transition.Transition2DDemoHelper} class to create
+	 * sample animations of this transition.
+	 * 
 	 * @return the transitions that should be used to demonstrate this
-	 * transition.
+	 *         transition.
 	 */
 	public static Transition[] getDemoTransitions() {
-		return new Transition[] {
-				new BoxTransition2D(IN),
-				new BoxTransition2D(OUT)
-		};
+		return new Transition[] { new BoxTransition2D(IN),
+				new BoxTransition2D(OUT) };
 	}
 
-	/** Creates a new BoxTransition2D that zooms out
+	/**
+	 * Creates a new BoxTransition2D that zooms out
 	 */
-	public BoxTransition2D() {}
+	public BoxTransition2D() {
+	}
 
-	/** Creates a new BoxTransition2D
+	/**
+	 * Creates a new BoxTransition2D
 	 * 
-	 * @param type must be IN or OUT
+	 * @param type
+	 *            must be IN or OUT
 	 */
 	public BoxTransition2D(int type) {
 		super(type);
@@ -54,7 +67,7 @@ public class BoxTransition2D extends AbstractShapeTransition2D {
 
 	@Override
 	public Shape getShape() {
-		return new Rectangle2D.Float(0,0,100,100);
+		return new Rectangle2D.Float(0, 0, 100, 100);
 	}
 
 	@Override

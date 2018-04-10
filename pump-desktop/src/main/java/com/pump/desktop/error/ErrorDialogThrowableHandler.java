@@ -18,40 +18,43 @@ import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 public class ErrorDialogThrowableHandler implements ThrowableHandler {
-	
+
 	List<ThrowableDescriptor> queue = new LinkedList<>();
 	List<JComponent> leftComponents = new LinkedList<>();
-	
+
 	Runnable processQueue = new Runnable() {
 		public void run() {
 			ThrowableDescriptor[] throwables;
-			synchronized(queue) {
-				throwables = queue.toArray(new ThrowableDescriptor[queue.size()]);
+			synchronized (queue) {
+				throwables = queue
+						.toArray(new ThrowableDescriptor[queue.size()]);
 				queue.clear();
 			}
-			if(throwables.length==0)
+			if (throwables.length == 0)
 				return;
-			
+
 			ErrorDialog errorDialog = ErrorDialog.get();
 			errorDialog.addThrowables(throwables);
-			synchronized(leftComponents) {
-				errorDialog.getFooter().setLeftComponents(leftComponents.toArray(new JComponent[leftComponents.size()]));
+			synchronized (leftComponents) {
+				errorDialog.getFooter().setLeftComponents(
+						leftComponents.toArray(new JComponent[leftComponents
+								.size()]));
 			}
-			if(!errorDialog.isVisible()) {
+			if (!errorDialog.isVisible()) {
 				errorDialog.pack();
 				errorDialog.setLocationRelativeTo(null);
 				errorDialog.setVisible(true);
 			}
 		}
 	};
-	
+
 	@Override
 	public boolean processThrowable(ThrowableDescriptor throwable) {
-		synchronized(queue) {
-			queue.add( throwable );
+		synchronized (queue) {
+			queue.add(throwable);
 		}
 		ErrorManager.println(throwable.throwable);
-		if(SwingUtilities.isEventDispatchThread()) {
+		if (SwingUtilities.isEventDispatchThread()) {
 			processQueue.run();
 		} else {
 			SwingUtilities.invokeLater(processQueue);
@@ -59,12 +62,12 @@ public class ErrorDialogThrowableHandler implements ThrowableHandler {
 		return true;
 	}
 
-	/** Add a component to the left side of the error dialog footer.
+	/**
+	 * Add a component to the left side of the error dialog footer.
 	 * 
 	 */
-	public void addLeftComponent(JComponent component)
-	{
-		synchronized(leftComponents) {
+	public void addLeftComponent(JComponent component) {
+		synchronized (leftComponents) {
 			leftComponents.add(component);
 		}
 	}
@@ -72,7 +75,7 @@ public class ErrorDialogThrowableHandler implements ThrowableHandler {
 	public ThrowableDescriptor[] getThrowables() {
 		ErrorDialog[] errorDialogs = ErrorDialog.getAll();
 		List<ThrowableDescriptor> returnValue = new ArrayList<>();
-		for(ErrorDialog d : errorDialogs) {
+		for (ErrorDialog d : errorDialogs) {
 			returnValue.addAll(d.getThrowables());
 		}
 		return returnValue.toArray(new ThrowableDescriptor[returnValue.size()]);

@@ -20,27 +20,30 @@ import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 import javax.swing.plaf.PanelUI;
 
-/** A <code>PanelUI</code> that paints a <code>TexturePaint</code>
- * in the background.
+/**
+ * A <code>PanelUI</code> that paints a <code>TexturePaint</code> in the
+ * background.
  */
 public class TexturePaintPanelUI extends PanelUI {
 	Paint paint;
-	
+
 	public TexturePaintPanelUI(BufferedImage bi) {
-		this(new TexturePaint(bi, new Rectangle(0,0,bi.getWidth(),bi.getHeight())));
+		this(new TexturePaint(bi, new Rectangle(0, 0, bi.getWidth(),
+				bi.getHeight())));
 	}
-	
+
 	public TexturePaintPanelUI(TexturePaint p) {
-		if(p==null) throw new NullPointerException();
+		if (p == null)
+			throw new NullPointerException();
 		paint = p;
 	}
-	
+
 	@Override
 	public void paint(Graphics g, JComponent c) {
-		Graphics2D g2 = (Graphics2D)g.create();
+		Graphics2D g2 = (Graphics2D) g.create();
 		try {
 			g2.setPaint(paint);
-			g2.fillRect(0,0,c.getWidth(),c.getHeight());
+			g2.fillRect(0, 0, c.getWidth(), c.getHeight());
 		} finally {
 			g2.dispose();
 		}

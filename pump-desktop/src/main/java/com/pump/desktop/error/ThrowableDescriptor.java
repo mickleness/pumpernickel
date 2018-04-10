@@ -13,30 +13,31 @@ package com.pump.desktop.error;
 import com.pump.util.ObservableProperties;
 import com.pump.util.ObservableProperties.Key;
 
-/** This collects meta information about a Throwable to help give the user helpful
- * feedback and/or make informed decisions.
+/**
+ * This collects meta information about a Throwable to help give the user
+ * helpful feedback and/or make informed decisions.
  */
-public class ThrowableDescriptor
-{
-	private final static Key<String> KEY_USER_FRIENDLY_MESSAGE = new Key<String>(ThrowableDescriptor.class+"#USER_FRIENDLY_MESSAGE", String.class);
-	
+public class ThrowableDescriptor {
+	private final static Key<String> KEY_USER_FRIENDLY_MESSAGE = new Key<String>(
+			ThrowableDescriptor.class + "#USER_FRIENDLY_MESSAGE", String.class);
+
 	/** The throwable this incident involves (this cannot be null). */
 	public final Throwable throwable;
 
 	protected ObservableProperties attributes = new ObservableProperties();
 
 	public ThrowableDescriptor(Throwable throwable) {
-		if(throwable==null)
+		if (throwable == null)
 			throw new NullPointerException();
-		
+
 		this.throwable = throwable;
 	}
-	
-	public ThrowableDescriptor(String userFriendlyMessage,Throwable throwable) {
+
+	public ThrowableDescriptor(String userFriendlyMessage, Throwable throwable) {
 		this(throwable);
 		attributes.set(KEY_USER_FRIENDLY_MESSAGE, userFriendlyMessage);
-	}	
-	
+	}
+
 	/**
 	 * 
 	 * @return an optional user-friendly String describing this error.

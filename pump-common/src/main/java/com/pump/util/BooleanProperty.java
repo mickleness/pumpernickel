@@ -10,14 +10,13 @@
  */
 package com.pump.util;
 
-
 public class BooleanProperty extends Property<Boolean> {
-	
+
 	public BooleanProperty(String propertyName) {
 		this(propertyName, false);
 	}
-	
-	public BooleanProperty(String propertyName,boolean defaultValue) {
+
+	public BooleanProperty(String propertyName, boolean defaultValue) {
 		super(propertyName);
 		setValue(defaultValue);
 	}

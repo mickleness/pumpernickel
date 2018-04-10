@@ -26,25 +26,26 @@ import com.pump.geom.TransformUtils;
 public class ZoomIconPaintUIEffect extends PaintUIEffect {
 	public static final ActionListener actionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			AbstractButton button = (AbstractButton)e.getSource();
+			AbstractButton button = (AbstractButton) e.getSource();
 			ButtonUI ui = button.getUI();
-			if(ui instanceof FilledButtonUI) {
-				FilledButtonUI fui = (FilledButtonUI)ui;
+			if (ui instanceof FilledButtonUI) {
+				FilledButtonUI fui = (FilledButtonUI) ui;
 				List<PaintUIEffect> effects = fui.getEffects(button);
 				boolean hasZoom = false;
-				for(int a = 0; a<effects.size(); a++) {
+				for (int a = 0; a < effects.size(); a++) {
 					PaintUIEffect effect = effects.get(a);
-					if(effect instanceof ZoomIconPaintUIEffect && effect.getComponent()==button)
+					if (effect instanceof ZoomIconPaintUIEffect
+							&& effect.getComponent() == button)
 						hasZoom = true;
 				}
-				if(!hasZoom)
+				if (!hasZoom)
 					effects.add(new ZoomIconPaintUIEffect(button));
 			}
 		}
 	};
-	
+
 	final AbstractButton button;
-	
+
 	public ZoomIconPaintUIEffect(AbstractButton b) {
 		super(b, 750, 40);
 		button = b;
@@ -52,12 +53,12 @@ public class ZoomIconPaintUIEffect extends PaintUIEffect {
 
 	@Override
 	public void paint(Graphics2D g) {
-		FilledButtonUI ui = (FilledButtonUI)button.getUI();
-		
+		FilledButtonUI ui = (FilledButtonUI) button.getUI();
+
 		Rectangle r = ui.getIconBounds(button);
-		if(r.width==0 || r.height==0)
+		if (r.width == 0 || r.height == 0)
 			return;
-		
+
 		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
 				progress));
 		float z = (1 - progress) * button.getHeight() / 4;
@@ -68,7 +69,7 @@ public class ZoomIconPaintUIEffect extends PaintUIEffect {
 				RenderingHints.VALUE_RENDER_QUALITY);
 		button.getIcon().paintIcon(button, g, r.x, r.y);
 	}
-	
+
 	@Override
 	public boolean isBackground() {
 		return false;

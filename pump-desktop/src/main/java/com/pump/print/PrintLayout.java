@@ -33,24 +33,26 @@ import com.pump.awt.Paintable;
  * Java's printing conventions.
  * <P>
  * The following are elements in this layout information:
- * <ul><LI>Header/Footer: this is html-formatted text that may appear at the
+ * <ul>
+ * <LI>Header/Footer: this is html-formatted text that may appear at the
  * top/bottom of each page.</li>
  * <LI>Insets: these are margins for this page.</li>
- * <LI>Inner Padding: this is the space that will appear between all
- * components. This includes the space between cells, and the space between
- * cells and headers/footers.</li>
+ * <LI>Inner Padding: this is the space that will appear between all components.
+ * This includes the space between cells, and the space between cells and
+ * headers/footers.</li>
  * <LI>Flip Pattern: an array of flip instructions that will be followed
  * alternatingly. For example, an array of {NONE, NONE, BOTH, BOTH} will flip
  * the last 2 tiles, so if you folder the paper correctly you can make 4 tiles
  * into a greeting card. I know, it's complicated... and if you don't ever want
- * to flip tiles: you never need to use it.</LI></ul>
+ * to flip tiles: you never need to use it.</LI>
+ * </ul>
  * 
  */
 public class PrintLayout {
 
 	/**
-	 * This describes a <code>PageFormat</code> as a String. This is provided
-	 * as a debugging tool, because <code>PageFormat.toString()</code> doesn't
+	 * This describes a <code>PageFormat</code> as a String. This is provided as
+	 * a debugging tool, because <code>PageFormat.toString()</code> doesn't
 	 * support this itself.
 	 */
 	public static String toString(PageFormat f) {
@@ -117,8 +119,8 @@ public class PrintLayout {
 	 */
 	public static final String PROPERTY_COLUMNS = "columns";
 	/**
-	 * This is used to notify <code>PropertyChangeListeners</code> when the
-	 * flip pattern changes.
+	 * This is used to notify <code>PropertyChangeListeners</code> when the flip
+	 * pattern changes.
 	 */
 	public static final String PROPERTY_FLIP_PATTERN = "flip_pattern";
 	/**
@@ -174,9 +176,9 @@ public class PrintLayout {
 
 	/** Returns the imageable bounds of the paper */
 	public Rectangle2D getPaperImageableBounds() {
-		return new Rectangle2D.Double(pageFormat.getImageableX(), pageFormat
-				.getImageableY(), pageFormat.getImageableWidth(), pageFormat
-				.getImageableHeight());
+		return new Rectangle2D.Double(pageFormat.getImageableX(),
+				pageFormat.getImageableY(), pageFormat.getImageableWidth(),
+				pageFormat.getImageableHeight());
 	}
 
 	/**
@@ -196,8 +198,7 @@ public class PrintLayout {
 		Paper paper = pageFormat.getPaper();
 		paper.setImageableArea(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 		pageFormat.setPaper(paper);
-		firePropertyChange(PROPERTY_IMAGEABLE_BOUNDS, oldBounds,
-				r.clone());
+		firePropertyChange(PROPERTY_IMAGEABLE_BOUNDS, oldBounds, r.clone());
 		return true;
 	}
 
@@ -295,8 +296,8 @@ public class PrintLayout {
 	}
 
 	/**
-	 * Returns a newly create <code>PageFormat</code> that includes most of
-	 * the information in this object.
+	 * Returns a newly create <code>PageFormat</code> that includes most of the
+	 * information in this object.
 	 */
 	public PageFormat createPageFormat() {
 		return (PageFormat) pageFormat.clone();
@@ -310,11 +311,14 @@ public class PrintLayout {
 	/**
 	 * Sets the orientation for this page. This also validates the imageable
 	 * bounds of the paper.
-	 * @param orientation must be PageFormat.LANDSCAPE or PageFormat.PORTRAIT
+	 * 
+	 * @param orientation
+	 *            must be PageFormat.LANDSCAPE or PageFormat.PORTRAIT
 	 */
 	public boolean setOrientation(int orientation) {
-		if(!(orientation==PageFormat.LANDSCAPE || orientation==PageFormat.PORTRAIT))
-			throw new IllegalArgumentException("orientation must be PageFormat.LANDSCAPE or PageFormat.PORTRAIT");
+		if (!(orientation == PageFormat.LANDSCAPE || orientation == PageFormat.PORTRAIT))
+			throw new IllegalArgumentException(
+					"orientation must be PageFormat.LANDSCAPE or PageFormat.PORTRAIT");
 		if (orientation == pageFormat.getOrientation())
 			return false;
 		int oldOrientation = pageFormat.getOrientation();
@@ -328,17 +332,19 @@ public class PrintLayout {
 	}
 
 	/** Define a client key. */
-	public boolean setProperty(String key,Object value) {
-		if(properties==null) {
+	public boolean setProperty(String key, Object value) {
+		if (properties == null) {
 			properties = new HashMap<String, Object>();
 			properties.put(key, value);
 			firePropertyChange(key, null, value);
 			return true;
 		} else {
 			Object oldValue = properties.get(key);
-			if(oldValue==null && value==null) return false;
-			if(oldValue!=null && oldValue.equals(value)) return false;
-			if(value==null) {
+			if (oldValue == null && value == null)
+				return false;
+			if (oldValue != null && oldValue.equals(value))
+				return false;
+			if (value == null) {
 				properties.remove(key);
 				firePropertyChange(key, oldValue, null);
 				return true;
@@ -349,10 +355,11 @@ public class PrintLayout {
 			}
 		}
 	}
-	
+
 	/** Retrieves a client key. */
 	public Object getProperty(String key) {
-		if(properties==null) return null;
+		if (properties == null)
+			return null;
 		return properties.get(key);
 	}
 
@@ -518,8 +525,7 @@ public class PrintLayout {
 	protected void firePropertyChange(String name, Object oldValue,
 			Object newValue) {
 		for (int a = 0; a < listeners.size(); a++) {
-			PropertyChangeListener listener = listeners
-					.get(a);
+			PropertyChangeListener listener = listeners.get(a);
 			try {
 				listener.propertyChange(new PropertyChangeEvent(this, name,
 						oldValue, newValue));
@@ -540,7 +546,7 @@ public class PrintLayout {
 	public void removePropertyChangeListener(PropertyChangeListener l) {
 		listeners.remove(l);
 	}
-	
+
 	public PrintLayout() {
 		this(1, 1, new PageFormat());
 	}
@@ -610,8 +616,8 @@ public class PrintLayout {
 	 *            In most cases this should be zero, but for some previews it
 	 *            can be a preset value.
 	 *            <P>
-	 *            This value is used to replace the text "&lt;PageNumber/" in the
-	 *            header/footer text.
+	 *            This value is used to replace the text "&lt;PageNumber/" in
+	 *            the header/footer text.
 	 * @param pgCount
 	 *            the total number of pages.
 	 *            <P>
@@ -647,8 +653,8 @@ public class PrintLayout {
 	 *            In most cases this can be zero, but for some previews it can
 	 *            be a preset value.
 	 *            <P>
-	 *            This value is used to replace the text "&lt;PageNumber/" in the
-	 *            header/footer text.
+	 *            This value is used to replace the text "&lt;PageNumber/" in
+	 *            the header/footer text.
 	 * @param pgCount
 	 *            the total number of pages.
 	 *            <P>
@@ -661,14 +667,14 @@ public class PrintLayout {
 		// we must update the header/footer before calling getCellLayout
 		// in case that changes the height:
 
-		String customHeaderText = header.replace("<PageNumber/>", Integer
-				.toString(1));
+		String customHeaderText = header.replace("<PageNumber/>",
+				Integer.toString(1));
 		customHeaderText = customHeaderText.replace("<PageCount/>",
 				Integer.toString(1));
 		headerPaintable.define(customHeaderText, (int) (getPaperWidth()
 				- insets.left - insets.right));
-		String customFooterText = footer.replace("<PageNumber/>", Integer
-				.toString(1));
+		String customFooterText = footer.replace("<PageNumber/>",
+				Integer.toString(1));
 		customFooterText = customFooterText.replace("<PageCount/>",
 				Integer.toString(1));
 		footerPaintable.define(customFooterText, (int) (getPaperWidth()
@@ -686,10 +692,10 @@ public class PrintLayout {
 
 			offset += pageElements.length;
 
-			String thisHeader = header.replace("<PageNumber/>", Integer
-					.toString(page + pgNumber + 1));
-			thisHeader = thisHeader.replace("<PageCount/>", Integer
-					.toString(pgCount));
+			String thisHeader = header.replace("<PageNumber/>",
+					Integer.toString(page + pgNumber + 1));
+			thisHeader = thisHeader.replace("<PageCount/>",
+					Integer.toString(pgCount));
 			HTMLPaintable customHeader = headerPaintable;
 			headerPaintable.define(thisHeader, (int) (getPaperWidth()
 					- insets.left - insets.right));
@@ -702,16 +708,17 @@ public class PrintLayout {
 			}
 			if (customHeader.getHeight() != 0 && isHeaderActive()) {
 				pageElements = (Paintable[]) add(pageElements, customHeader);
-				cellRects = (Rectangle2D[]) add(cellRects,
+				cellRects = (Rectangle2D[]) add(
+						cellRects,
 						new Rectangle2D.Double(insets.left, insets.top,
 								customHeader.getWidth(), customHeader
 										.getHeight()));
 			}
 
-			String thisFooter = footer.replace("<PageNumber/>", Integer
-					.toString(page + pgNumber + 1));
-			thisFooter = thisFooter.replace("<PageCount/>", Integer
-					.toString(pgCount));
+			String thisFooter = footer.replace("<PageNumber/>",
+					Integer.toString(page + pgNumber + 1));
+			thisFooter = thisFooter.replace("<PageCount/>",
+					Integer.toString(pgCount));
 			HTMLPaintable customFooter = footerPaintable;
 			footerPaintable.define(thisFooter, (int) (getPaperWidth()
 					- insets.left - insets.right));
@@ -722,7 +729,8 @@ public class PrintLayout {
 
 			if (customFooter.getHeight() != 0 && isFooterActive()) {
 				pageElements = (Paintable[]) add(pageElements, customFooter);
-				cellRects = (Rectangle2D[]) add(cellRects,
+				cellRects = (Rectangle2D[]) add(
+						cellRects,
 						new Rectangle2D.Double(insets.left, getPaperHeight()
 								- insets.bottom - footerPaintable.getHeight(),
 								customFooter.getWidth(), customFooter
@@ -793,22 +801,23 @@ public class PrintLayout {
 								cellWidth, cellHeight);
 						int flip = flipPattern[cellCtr % flipPattern.length];
 						if (flip == HORIZONTAL) {
-							cells[page][index].setFrame(cells[page][index]
-									.getX()
-									+ cells[page][index].getWidth(),
+							cells[page][index].setFrame(
+									cells[page][index].getX()
+											+ cells[page][index].getWidth(),
 									cells[page][index].getY(),
 									-cells[page][index].getWidth(),
 									cells[page][index].getHeight());
 						} else if (flip == VERTICAL) {
-							cells[page][index].setFrame(cells[page][index]
-									.getX(), cells[page][index].getY()
-									+ cells[page][index].getHeight(),
+							cells[page][index].setFrame(
+									cells[page][index].getX(),
+									cells[page][index].getY()
+											+ cells[page][index].getHeight(),
 									cells[page][index].getWidth(),
 									-cells[page][index].getHeight());
 						} else if (flip == BOTH) {
-							cells[page][index].setFrame(cells[page][index]
-									.getX()
-									+ cells[page][index].getWidth(),
+							cells[page][index].setFrame(
+									cells[page][index].getX()
+											+ cells[page][index].getWidth(),
 									cells[page][index].getY()
 											+ cells[page][index].getHeight(),
 									-cells[page][index].getWidth(),

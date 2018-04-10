@@ -24,17 +24,19 @@ import com.pump.image.gif.block.GifLocalColorTable;
 
 /**
  * The minimal, bare-bones GIF encoder.
- * <p>I recommend not using this encoder except as a baseline to test against. This
+ * <p>
+ * I recommend not using this encoder except as a baseline to test against. This
  * doesn't optimize anything: so files sizes will be unnecessarily large.
  */
 public class MinimalGifEncoder extends GifEncoder {
-	
+
 	@Override
-	public void writeImage(OutputStream out,BufferedImage image,int frameDurationInCentiseconds, IndexColorModel globalColorModel,
-			boolean writeLocalColorTable)
-			throws IOException {
-		
-		if (frameDurationInCentiseconds >= 0 || globalColorModel.getTransparentPixel() != -1) {
+	public void writeImage(OutputStream out, BufferedImage image,
+			int frameDurationInCentiseconds, IndexColorModel globalColorModel,
+			boolean writeLocalColorTable) throws IOException {
+
+		if (frameDurationInCentiseconds >= 0
+				|| globalColorModel.getTransparentPixel() != -1) {
 			if (frameDurationInCentiseconds < 0)
 				frameDurationInCentiseconds = 0;
 			GifGraphicControlExtension gce = new GifGraphicControlExtension(
@@ -65,11 +67,13 @@ public class MinimalGifEncoder extends GifEncoder {
 			GifLocalColorTable ct = new GifLocalColorTable(globalColorModel);
 			ct.write(out);
 		}
-		GifImageDataBlock dataBlock = new GifImageDataBlock(image, globalColorModel);
+		GifImageDataBlock dataBlock = new GifImageDataBlock(image,
+				globalColorModel);
 		dataBlock.write(out);
 	}
 
 	/** This does nothing for the SimpleGifEncoder */
 	@Override
-	public void flush(OutputStream out) {}
+	public void flush(OutputStream out) {
+	}
 }

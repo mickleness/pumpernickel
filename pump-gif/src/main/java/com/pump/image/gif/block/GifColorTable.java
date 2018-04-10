@@ -148,9 +148,13 @@ public abstract class GifColorTable extends GifBlock {
 		}
 	}
 
-	/** This is equivalent to calling <code>getColor(x).getRGB()</code>.
+	/**
+	 * This is equivalent to calling <code>getColor(x).getRGB()</code>.
+	 * 
 	 * @return the RGB value of the i-th color.
-	 * @param i the color index to retrieve. */
+	 * @param i
+	 *            the color index to retrieve.
+	 */
 	public int getRGB(int i) {
 		if (3 * i + 2 > data.length) {
 			return (255 << 24);
@@ -165,8 +169,10 @@ public abstract class GifColorTable extends GifBlock {
 		}
 	}
 
-	/** @return the a-th color
-	 * @param a the index of the color to retrieve
+	/**
+	 * @return the a-th color
+	 * @param a
+	 *            the index of the color to retrieve
 	 * */
 	public Color getColor(int a) {
 		return new Color(data[3 * a] & 0xFF, data[3 * a + 1] & 0xFF,
@@ -205,8 +211,10 @@ public abstract class GifColorTable extends GifBlock {
 		return getDepth(i);
 	}
 
-	/** @return the log base 2 of <code>i</code> 
-	 * @param i the number of colors.
+	/**
+	 * @return the log base 2 of <code>i</code>
+	 * @param i
+	 *            the number of colors.
 	 */
 	public static int getDepth(int i) {
 		if (i <= 2)

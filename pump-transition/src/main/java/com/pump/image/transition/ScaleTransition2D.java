@@ -17,47 +17,57 @@ import java.awt.geom.Rectangle2D;
 
 import com.pump.geom.RectangularTransform;
 
-/** This zooms one frame in/out from the center. Here are playback samples:
- * <p><table summary="Sample Animations of ScaleTransition2D" cellspacing="50" border="0"><tr>
+/**
+ * This zooms one frame in/out from the center. Here are playback samples:
+ * <p>
+ * <table summary="Sample Animations of ScaleTransition2D" cellspacing="50" border="0">
+ * <tr>
  * <td align="center">
- * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScaleTransition2D/ScaleIn.gif" alt="Scale In">
- * <p>Scale In
- * </td>
+ * <img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScaleTransition2D/ScaleIn.gif"
+ * alt="Scale In">
+ * <p>
+ * Scale In</td>
  * <td align="center">
- * <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScaleTransition2D/ScaleOut.gif" alt="Scale Out">
- * <p>Scale Out
- * </td>
- * </tr></table>
+ * <img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScaleTransition2D/ScaleOut.gif"
+ * alt="Scale Out">
+ * <p>
+ * Scale Out</td>
+ * </tr>
+ * </table>
  *
  */
 public class ScaleTransition2D extends Transition2D {
-	
-	/** This public static method is used by the 
-	 * {@link com.bric.image.transition.Transition2DDemoHelper}
-	 * class to create sample animations of this transition.
+
+	/**
+	 * This public static method is used by the
+	 * {@link com.bric.image.transition.Transition2DDemoHelper} class to create
+	 * sample animations of this transition.
+	 * 
 	 * @return the transitions that should be used to demonstrate this
-	 * transition.
+	 *         transition.
 	 */
 	public static Transition[] getDemoTransitions() {
-		return new Transition[] {
-				new ScaleTransition2D(IN), 
-				new ScaleTransition2D(OUT)
-		};
+		return new Transition[] { new ScaleTransition2D(IN),
+				new ScaleTransition2D(OUT) };
 	}
-	
+
 	int type;
 
 	/** Creates a new ScaleTransition2D that scales out */
 	public ScaleTransition2D() {
 		this(OUT);
 	}
-	
-	/** Creates a new ScaleTransition2D
+
+	/**
+	 * Creates a new ScaleTransition2D
 	 * 
-	 * @param type must be IN or OUT
+	 * @param type
+	 *            must be IN or OUT
 	 */
 	public ScaleTransition2D(int type) {
-		if(!(type==IN || type==OUT))
+		if (!(type == IN || type == OUT))
 			throw new IllegalArgumentException("type must be IN or OUT");
 		this.type = type;
 	}
@@ -65,28 +75,26 @@ public class ScaleTransition2D extends Transition2D {
 	@Override
 	public Transition2DInstruction[] getInstructions(float progress,
 			Dimension size) {
-		Point2D center = new Point2D.Float(size.width/2f, size.height/2f);
-		
-		AffineTransform transform;
-		if(type==OUT) {
-			progress = 1-progress;
-		}
-		
-		float w = size.width*progress;
-		float h = size.height*progress;
-		transform = RectangularTransform.create(
-				new Rectangle2D.Float(0,0,size.width,size.height),
-				new Rectangle2D.Double(center.getX()-w/2,center.getY()-h/2,w,h));
+		Point2D center = new Point2D.Float(size.width / 2f, size.height / 2f);
 
-		return new ImageInstruction[] {
-				new ImageInstruction(type==IN),
-				new ImageInstruction(type!=IN,transform,null)
-		};
+		AffineTransform transform;
+		if (type == OUT) {
+			progress = 1 - progress;
+		}
+
+		float w = size.width * progress;
+		float h = size.height * progress;
+		transform = RectangularTransform.create(new Rectangle2D.Float(0, 0,
+				size.width, size.height), new Rectangle2D.Double(center.getX()
+				- w / 2, center.getY() - h / 2, w, h));
+
+		return new ImageInstruction[] { new ImageInstruction(type == IN),
+				new ImageInstruction(type != IN, transform, null) };
 	}
 
 	@Override
 	public String toString() {
-		if(type==IN) {
+		if (type == IN) {
 			return "Scale In";
 		} else {
 			return "Scale Out";

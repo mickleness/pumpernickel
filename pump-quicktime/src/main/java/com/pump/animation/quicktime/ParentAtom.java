@@ -24,22 +24,23 @@ import com.pump.util.EnumerationIterator;
 public class ParentAtom extends Atom {
 	List<Atom> children = new ArrayList<Atom>();
 	String id;
-	
+
 	public ParentAtom(String id) {
 		super(null);
 		this.id = id;
 	}
-	
+
 	public void add(Atom a) {
 		children.add(a);
 		a.parent = this;
 	}
-	
-	public ParentAtom(Atom parent,String id,GuardedInputStream in) throws IOException {
+
+	public ParentAtom(Atom parent, String id, GuardedInputStream in)
+			throws IOException {
 		super(parent);
 		this.id = id;
-		while(in.isAtLimit()==false) {
-			children.add(AtomFactory.read(this,in));
+		while (in.isAtLimit() == false) {
+			children.add(AtomFactory.read(this, in));
 		}
 	}
 
@@ -64,13 +65,13 @@ public class ParentAtom extends Atom {
 	}
 
 	public boolean isLeaf() {
-		return children.size()==0;
+		return children.size() == 0;
 	}
 
 	@Override
 	protected long getSize() {
 		long sum = 8;
-		for(int a = 0; a<children.size(); a++) {
+		for (int a = 0; a < children.size(); a++) {
 			Atom atom = children.get(a);
 			sum += atom.getSize();
 		}
@@ -84,7 +85,7 @@ public class ParentAtom extends Atom {
 
 	@Override
 	protected void writeContents(GuardedOutputStream out) throws IOException {
-		for(int a = 0; a<children.size(); a++) {
+		for (int a = 0; a < children.size(); a++) {
 			Atom atom = children.get(a);
 			atom.write(out);
 		}

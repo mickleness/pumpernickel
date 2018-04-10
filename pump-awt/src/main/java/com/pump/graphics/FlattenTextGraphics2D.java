@@ -37,19 +37,22 @@ import java.awt.image.renderable.RenderableImage;
 import java.text.AttributedCharacterIterator;
 import java.util.Map;
 
-/** This filter converts all calls to render text into shape-based instructions.
+/**
+ * This filter converts all calls to render text into shape-based instructions.
  * 
  */
 public class FlattenTextGraphics2D extends Graphics2D {
 	final Graphics2D g;
 	final boolean eachCharAsSeparateShape;
-	
+
 	/**
 	 * 
 	 * @param g
-	 * @param eachCharAsSeparateShape if possible: each character will be rendered as a separate shape.
+	 * @param eachCharAsSeparateShape
+	 *            if possible: each character will be rendered as a separate
+	 *            shape.
 	 */
-	public FlattenTextGraphics2D(Graphics2D g,boolean eachCharAsSeparateShape) {
+	public FlattenTextGraphics2D(Graphics2D g, boolean eachCharAsSeparateShape) {
 		this.g = g;
 		this.eachCharAsSeparateShape = eachCharAsSeparateShape;
 	}
@@ -81,12 +84,14 @@ public class FlattenTextGraphics2D extends Graphics2D {
 
 	@Override
 	public Graphics create() {
-		return new FlattenTextGraphics2D((Graphics2D)g.create(), eachCharAsSeparateShape);
+		return new FlattenTextGraphics2D((Graphics2D) g.create(),
+				eachCharAsSeparateShape);
 	}
 
 	@Override
 	public Graphics create(int x, int y, int width, int height) {
-		return new FlattenTextGraphics2D((Graphics2D)g.create(x, y, width, height), eachCharAsSeparateShape );
+		return new FlattenTextGraphics2D((Graphics2D) g.create(x, y, width,
+				height), eachCharAsSeparateShape);
 	}
 
 	@Override
@@ -464,9 +469,9 @@ public class FlattenTextGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawGlyphVector(GlyphVector gv, float x, float y) {
-		if(eachCharAsSeparateShape) {
+		if (eachCharAsSeparateShape) {
 			g.translate(x, y);
-			for(int glyphIndex = 0; glyphIndex<gv.getNumGlyphs(); glyphIndex++) {
+			for (int glyphIndex = 0; glyphIndex < gv.getNumGlyphs(); glyphIndex++) {
 				Shape shape = gv.getGlyphOutline(glyphIndex);
 				fill(shape);
 			}
@@ -477,44 +482,45 @@ public class FlattenTextGraphics2D extends Graphics2D {
 		}
 	}
 
-	/** This will support the  eachCharAsSeparatorShape property. */
+	/** This will support the eachCharAsSeparatorShape property. */
 	@Override
 	public void drawString(String str, int x, int y) {
-		drawString( str, (float)x, (float)y );
+		drawString(str, (float) x, (float) y);
 	}
 
-	/** This will support the  eachCharAsSeparatorShape property. */
+	/** This will support the eachCharAsSeparatorShape property. */
 	@Override
 	public void drawString(String s, float x, float y) {
-		GlyphVector glyphVector = getFont().createGlyphVector(getFontRenderContext(), s);
+		GlyphVector glyphVector = getFont().createGlyphVector(
+				getFontRenderContext(), s);
 		drawGlyphVector(glyphVector, x, y);
 	}
 
 	@Override
 	public void drawString(AttributedCharacterIterator iterator, int x, int y) {
-		drawString( iterator, (float)x, (float)y );
+		drawString(iterator, (float) x, (float) y);
 	}
 
 	@Override
-	public void drawString(AttributedCharacterIterator iterator, float x, float y) {
+	public void drawString(AttributedCharacterIterator iterator, float x,
+			float y) {
 		TextLayout layout = new TextLayout(iterator, getFontRenderContext());
 		layout.draw(this, x, y);
 	}
 
-
-	/** This will support the  eachCharAsSeparatorShape property. */
+	/** This will support the eachCharAsSeparatorShape property. */
 	@Override
 	public void drawBytes(byte[] data, int offset, int length, int x, int y) {
 		char[] chars = new char[length];
-		for(int a = 0; a<data.length; a++) {
-			chars[a] = (char)data[a+offset];
+		for (int a = 0; a < data.length; a++) {
+			chars[a] = (char) data[a + offset];
 		}
 		drawChars(chars, 0, chars.length, x, y);
 	}
 
-	/** This will support the  eachCharAsSeparatorShape property. */
+	/** This will support the eachCharAsSeparatorShape property. */
 	@Override
 	public void drawChars(char[] data, int offset, int length, int x, int y) {
-		drawString(new String(data,offset,length),x,y);
+		drawString(new String(data, offset, length), x, y);
 	}
 }

@@ -15,21 +15,21 @@ import java.awt.Graphics2D;
 import javax.swing.JComponent;
 
 public abstract class PaintUIEffect extends UIEffect {
-	
 
-	public PaintUIEffect(JComponent comp, int totalDuration,
-			int updateInterval) {
+	public PaintUIEffect(JComponent comp, int totalDuration, int updateInterval) {
 		super(comp, totalDuration, updateInterval);
 	}
 
-	/** Paints this effect.
-	 * @param g the graphics to paint to.  This will be
-	 * a copy of the original <code>Graphics2D</code>
-	 * destination, so it is safe to clip, transform, 
-	 * and composite this however you want to without
-	 * restoring its original state.
+	/**
+	 * Paints this effect.
+	 * 
+	 * @param g
+	 *            the graphics to paint to. This will be a copy of the original
+	 *            <code>Graphics2D</code> destination, so it is safe to clip,
+	 *            transform, and composite this however you want to without
+	 *            restoring its original state.
 	 */
 	public abstract void paint(Graphics2D g);
-	
+
 	public abstract boolean isBackground();
 }

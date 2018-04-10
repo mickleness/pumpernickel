@@ -25,14 +25,14 @@ import com.pump.swing.JFancyBox.FancyCloseIcon;
 public abstract class CloseDecoration extends ListDecoration {
 	Icon normalIcon;
 	Icon pressedIcon;
-	
+
 	public CloseDecoration() {
 		normalIcon = new JFancyBox.FancyCloseIcon();
 		pressedIcon = new JFancyBox.FancyCloseIcon();
-		((FancyCloseIcon)pressedIcon).setXColor(Color.gray);
-		((FancyCloseIcon)pressedIcon).setBorderColor(Color.lightGray);
+		((FancyCloseIcon) pressedIcon).setXColor(Color.gray);
+		((FancyCloseIcon) pressedIcon).setBorderColor(Color.lightGray);
 	}
-	
+
 	public CloseDecoration(int size) {
 		normalIcon = new CloseIcon(size);
 		pressedIcon = new CloseIcon(size);
@@ -48,14 +48,13 @@ public abstract class CloseDecoration extends ListDecoration {
 	public Point getLocation(JList list, Object value, int row,
 			boolean isSelected, boolean cellHasFocus) {
 		Rectangle r = list.getCellBounds(row, row);
-		return new Point(r.width - normalIcon.getIconWidth()-2, 2);
+		return new Point(r.width - normalIcon.getIconWidth() - 2, 2);
 	}
 
 	@Override
-	public Icon getIcon(JList list, Object value, int row,
-			boolean isSelected, boolean cellHasFocus, boolean isRollover,
-			boolean isPressed) {
-		if(isPressed) {
+	public Icon getIcon(JList list, Object value, int row, boolean isSelected,
+			boolean cellHasFocus, boolean isRollover, boolean isPressed) {
+		if (isPressed) {
 			return pressedIcon;
 		}
 		return normalIcon;

@@ -14,9 +14,12 @@ import com.pump.desktop.temp.TempFileManager;
 
 /**
  * Instructions:
- * <ol><li>Run this app</li>
- * <li>Right-click pumpernickel/pom.xml and select "Run As...". Select "Maven install"</li>
- * <li>Run "BackupJars" app.</li></ol>
+ * <ol>
+ * <li>Run this app</li>
+ * <li>Right-click pumpernickel/pom.xml and select "Run As...". Select
+ * "Maven install"</li>
+ * <li>Run "BackupJars" app.</li>
+ * </ol>
  */
 public class ReleaseApp {
 	public static void main(String[] args) throws Exception {
@@ -24,7 +27,7 @@ public class ReleaseApp {
 		ReleaseApp release = new ReleaseApp();
 		release.run();
 	}
-	
+
 	public void run() throws Exception {
 		Workspace workspace = new Workspace();
 
@@ -42,10 +45,10 @@ public class ReleaseApp {
 		System.out.println("Running JavadocBuilder:");
 		JavadocBuilder javadocBuilder = new JavadocBuilder();
 		javadocBuilder.run(workspace);
-		
+
 		System.out.println();
 		System.out.println("Done.");
-		
+
 		System.exit(0);
 	}
 }

@@ -15,8 +15,8 @@ import java.io.PrintStream;
 
 import com.pump.util.ThreadedSemaphore;
 
-/** This logs the System.err and System.out streams
- * to a text file.
+/**
+ * This logs the System.err and System.out streams to a text file.
  *
  * @see com.pump.swing.BasicConsole
  */
@@ -25,27 +25,30 @@ public class ConsoleLogger extends FileLogger {
 	boolean logErr = true;
 	int OUT = 1;
 	int ERR = 2;
-	
-	/** Create a ConsoleLogger that writes to a file with the given name.
+
+	/**
+	 * Create a ConsoleLogger that writes to a file with the given name.
 	 * 
-	 * @param logName the name of the file to write.
+	 * @param logName
+	 *            the name of the file to write.
 	 */
 	public ConsoleLogger(String logName) {
 		super(logName);
 		System.setOut(new FilterStream(System.out, OUT));
 		System.setErr(new FilterStream(System.err, ERR));
 	}
-	
-	/** Create a ConsoleLogger that writes to a given file.
+
+	/**
+	 * Create a ConsoleLogger that writes to a given file.
 	 * 
-	 * @param file the file to write to.
+	 * @param file
+	 *            the file to write to.
 	 */
 	public ConsoleLogger(File file) {
 		super(file);
 		System.setOut(new FilterStream(System.out, OUT));
 		System.setErr(new FilterStream(System.err, ERR));
 	}
-
 
 	class FilterStream extends PrintStream {
 		int type;
@@ -59,17 +62,17 @@ public class ConsoleLogger extends FileLogger {
 		private boolean isActive() {
 			return (type == OUT && logOut) || (type == ERR && logErr);
 		}
-		
+
 		@Override
 		public void print(boolean b) {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.print(b);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.print(new Boolean(b));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -79,11 +82,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.print(c);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.print(Character.toString(c));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -93,11 +96,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.print(s);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.print(new String(s));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -107,11 +110,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.print(d);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.print(Double.toString(d));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -121,11 +124,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.print(f2);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.print(Float.toString(f2));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -135,11 +138,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.print(i);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.print(Integer.toString(i));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -149,11 +152,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.print(l);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.print(Long.toString(l));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -163,11 +166,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.println();
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.println("");
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -177,11 +180,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.println(x);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.println(new Boolean(x));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -191,11 +194,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.println(x);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.println(Character.toString(x));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -205,11 +208,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.println(x);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.println(new String(x));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -219,11 +222,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.println(x);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.println(Double.toString(x));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -233,11 +236,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.println(x);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.println(Float.toString(x));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -247,11 +250,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.println(x);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.println(Integer.toString(x));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -261,11 +264,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.println(x);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.println(Long.toString(x));
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -275,11 +278,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.print(x);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.print(x);
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -289,11 +292,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.print(x);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.print(x);
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -303,11 +306,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.println(x);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.println(x);
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}
@@ -317,11 +320,11 @@ public class ConsoleLogger extends FileLogger {
 			boolean acquire = semaphore.tryAcquire();
 			try {
 				super.println(x);
-				if(acquire && isActive()) {
+				if (acquire && isActive()) {
 					ConsoleLogger.this.println(x);
 				}
 			} finally {
-				if(acquire)
+				if (acquire)
 					semaphore.release();
 			}
 		}

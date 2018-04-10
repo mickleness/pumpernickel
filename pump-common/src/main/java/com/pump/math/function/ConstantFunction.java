@@ -10,10 +10,9 @@
  */
 package com.pump.math.function;
 
-
 public class ConstantFunction implements Function {
 	double value;
-	
+
 	public ConstantFunction(double v) {
 		this.value = v;
 	}
@@ -23,7 +22,8 @@ public class ConstantFunction implements Function {
 	}
 
 	public double[] evaluateInverse(double y) {
-		if(y==value) return new double[] { Double.NaN };
+		if (y == value)
+			return new double[] { Double.NaN };
 		return new double[] {};
 	}
 }

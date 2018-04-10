@@ -16,16 +16,16 @@ import java.util.Iterator;
 /** This helper class converts an Iterator into an Enumeration. */
 public class EnumerationIterator<T> implements Enumeration<T> {
 	protected final Iterator<T> iter;
-	
+
 	public EnumerationIterator(Iterator<T> i) {
 		iter = i;
 	}
-	
+
 	@Override
 	public boolean hasMoreElements() {
 		return iter.hasNext();
 	}
-	
+
 	@Override
 	public T nextElement() {
 		return iter.next();

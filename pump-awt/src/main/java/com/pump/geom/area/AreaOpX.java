@@ -87,8 +87,8 @@ public abstract class AreaOpX {
 
 		@Override
 		public int classify(EdgeX e) {
-//			Note: the right curves should be an empty set with this op...
-//			assert(e.getCurveTag() == CTAG_LEFT);
+			// Note: the right curves should be an empty set with this op...
+			// assert(e.getCurveTag() == CTAG_LEFT);
 			int newCount = count;
 			int type = (newCount == 0 ? ETAG_ENTER : ETAG_IGNORE);
 			newCount += e.getCurve().getDirection();
@@ -112,8 +112,8 @@ public abstract class AreaOpX {
 
 		@Override
 		public int classify(EdgeX e) {
-//			Note: the right curves should be an empty set with this op...
-//			assert(e.getCurveTag() == CTAG_LEFT);
+			// Note: the right curves should be an empty set with this op...
+			// assert(e.getCurveTag() == CTAG_LEFT);
 			boolean newInside = !inside;
 			inside = newInside;
 			return (newInside ? ETAG_ENTER : ETAG_EXIT);
@@ -148,20 +148,22 @@ public abstract class AreaOpX {
 	public abstract int getState();
 
 	public AreaXBody calculate(AreaXBody left, AreaXBody right) {
-		if(!(this instanceof EOWindOp || this instanceof NZWindOp)) {
+		if (!(this instanceof EOWindOp || this instanceof NZWindOp)) {
 			left = left.validate();
 			right = right.validate();
 		}
-		
-		RawEdgeArrayList edges = new RawSortedEdgeArrayList(left.size()+right.size(), YXTopComparator);
+
+		RawEdgeArrayList edges = new RawSortedEdgeArrayList(left.size()
+				+ right.size(), YXTopComparator);
 		addEdges(edges, left, AreaOpX.CTAG_LEFT);
 		addEdges(edges, right, AreaOpX.CTAG_RIGHT);
 		AreaXBody newCurves = pruneEdges(edges);
 		return newCurves;
 	}
 
-	private static void addEdges(RawEdgeArrayList edges, AreaXBody curves, int curvetag) {
-		for(int a = 0; a<curves.size(); a++) {
+	private static void addEdges(RawEdgeArrayList edges, AreaXBody curves,
+			int curvetag) {
+		for (int a = 0; a < curves.size(); a++) {
 			CurveX curve = curves.get(a);
 			if (curve.getOrder() > 0) {
 				edges.add(new EdgeX(curve, curvetag));
@@ -201,10 +203,10 @@ public abstract class AreaOpX {
 		RawLinkArrayList subcurves = new RawLinkArrayList(0);
 		RawChainArrayList chains = new RawChainArrayList(0);
 		RawLinkArrayList links = new RawLinkArrayList(0);
-//		Active edges are between left (inclusive) and right (exclusive)
+		// Active edges are between left (inclusive) and right (exclusive)
 		while (left < numedges) {
 			double y = yrange[0];
-//			Prune active edges that fall off the top of the active y range
+			// Prune active edges that fall off the top of the active y range
 			for (cur = next = right - 1; cur >= left; cur--) {
 				e = edgelist[cur];
 				if (e.getCurve().getYBot() > y) {
@@ -215,7 +217,7 @@ public abstract class AreaOpX {
 				}
 			}
 			left = next + 1;
-//			Grab a new "top of Y range" if the active edges are empty
+			// Grab a new "top of Y range" if the active edges are empty
 			if (left >= right) {
 				if (right >= numedges) {
 					break;
@@ -226,7 +228,7 @@ public abstract class AreaOpX {
 				}
 				yrange[0] = y;
 			}
-//			Incorporate new active edges that enter the active y range
+			// Incorporate new active edges that enter the active y range
 			while (right < numedges) {
 				e = edgelist[right];
 				if (e.getCurve().getYTop() > y) {
@@ -234,9 +236,9 @@ public abstract class AreaOpX {
 				}
 				right++;
 			}
-//			Sort the current active edges by their X values and
-//			determine the maximum valid Y range where the X ordering
-//			is correct
+			// Sort the current active edges by their X values and
+			// determine the maximum valid Y range where the X ordering
+			// is correct
 			yrange[1] = edgelist[left].getCurve().getYBot();
 			if (right < numedges) {
 				y = edgelist[right].getCurve().getYTop();
@@ -244,25 +246,25 @@ public abstract class AreaOpX {
 					yrange[1] = y;
 				}
 			}
-//			Note: We could start at left+1, but we need to make
-//			sure that edgelist[left] has its equivalence set to 0.
+			// Note: We could start at left+1, but we need to make
+			// sure that edgelist[left] has its equivalence set to 0.
 			int nexteq = 1;
 			for (cur = left; cur < right; cur++) {
 				e = edgelist[cur];
 				e.setEquivalence(0);
 				for (next = cur; next > left; next--) {
-					EdgeX prevedge = edgelist[next-1];
+					EdgeX prevedge = edgelist[next - 1];
 					int ordering = e.compareTo(prevedge, yrange);
 					if (yrange[1] <= yrange[0]) {
-						throw new InternalError("backstepping to "+yrange[1]+
-								" from "+yrange[0]);
+						throw new InternalError("backstepping to " + yrange[1]
+								+ " from " + yrange[0]);
 					}
 					if (ordering >= 0) {
 						if (ordering == 0) {
-//							If the curves are equal, mark them to be
-//							deleted later if they cancel each other
-//							out so that we avoid having extraneous
-//							curve segments.
+							// If the curves are equal, mark them to be
+							// deleted later if they cancel each other
+							// out so that we avoid having extraneous
+							// curve segments.
 							int eq = prevedge.getEquivalence();
 							if (eq == 0) {
 								eq = nexteq++;
@@ -276,11 +278,11 @@ public abstract class AreaOpX {
 				}
 				edgelist[next] = e;
 			}
-//			Now prune the active edge list.
-//			For each edge in the list, determine its classification
-//			(entering shape, exiting shape, ignore - no change) and
-//			record the current Y range and its classification in the
-//			Edge object for use later in constructing the new outline.
+			// Now prune the active edge list.
+			// For each edge in the list, determine its classification
+			// (entering shape, exiting shape, ignore - no change) and
+			// record the current Y range and its classification in the
+			// Edge object for use later in constructing the new outline.
 			newRow();
 			double ystart = yrange[0];
 			double yend = yrange[1];
@@ -289,25 +291,22 @@ public abstract class AreaOpX {
 				int etag;
 				int eq = e.getEquivalence();
 				if (eq != 0) {
-//					Find one of the segments in the "equal" range
-//					with the right transition state and prefer an
-//					edge that was either active up until ystart
-//					or the edge that extends the furthest downward
-//					(i.e. has the most potential for continuation)
+					// Find one of the segments in the "equal" range
+					// with the right transition state and prefer an
+					// edge that was either active up until ystart
+					// or the edge that extends the furthest downward
+					// (i.e. has the most potential for continuation)
 					int origstate = getState();
-					etag = (origstate == AreaOpX.RSTAG_INSIDE
-							? AreaOpX.ETAG_EXIT
-									: AreaOpX.ETAG_ENTER);
+					etag = (origstate == AreaOpX.RSTAG_INSIDE ? AreaOpX.ETAG_EXIT
+							: AreaOpX.ETAG_ENTER);
 					EdgeX activematch = null;
 					EdgeX longestmatch = e;
 					double furthesty = yend;
 					do {
-//						Note: classify() must be called
-//						on every edge we consume here.
+						// Note: classify() must be called
+						// on every edge we consume here.
 						classify(e);
-						if (activematch == null &&
-								e.isActiveFor(ystart, etag))
-						{
+						if (activematch == null && e.isActiveFor(ystart, etag)) {
 							activematch = e;
 						}
 						y = e.getCurve().getYBot();
@@ -315,8 +314,8 @@ public abstract class AreaOpX {
 							longestmatch = e;
 							furthesty = y;
 						}
-					} while (++cur < right &&
-							(e = edgelist[cur]).getEquivalence() == eq);
+					} while (++cur < right
+							&& (e = edgelist[cur]).getEquivalence() == eq);
 					--cur;
 					if (getState() == origstate) {
 						etag = AreaOpX.ETAG_IGNORE;
@@ -331,15 +330,15 @@ public abstract class AreaOpX {
 					links.add(new CurveLinkX(e.getCurve(), ystart, yend, etag));
 				}
 			}
-//			assert(getState() == AreaOp.RSTAG_OUTSIDE);
+			// assert(getState() == AreaOp.RSTAG_OUTSIDE);
 			if (getState() != AreaOpX.RSTAG_OUTSIDE) {
 				System.out.println("Still inside at end of active edge list!");
-				System.out.println("num curves = "+(right-left));
-				System.out.println("num links = "+links.size());
-				System.out.println("y top = "+yrange[0]);
+				System.out.println("num curves = " + (right - left));
+				System.out.println("num links = " + links.size());
+				System.out.println("y top = " + yrange[0]);
 				if (right < numedges) {
-					System.out.println("y top of next curve = "+
-							edgelist[right].getCurve().getYTop());
+					System.out.println("y top of next curve = "
+							+ edgelist[right].getCurve().getYTop());
 				} else {
 					System.out.println("no more curves");
 				}
@@ -348,21 +347,21 @@ public abstract class AreaOpX {
 					System.out.println(e);
 					int eq = e.getEquivalence();
 					if (eq != 0) {
-						System.out.println("  was equal to "+eq+"...");
+						System.out.println("  was equal to " + eq + "...");
 					}
 				}
 			}
 			chains = resolveLinks(subcurves, chains, links);
 			links.clear();
-//			Finally capture the bottom of the valid Y range as the top
-//			of the next Y range.
+			// Finally capture the bottom of the valid Y range as the top
+			// of the next Y range.
 			yrange[0] = yend;
 		}
 		finalizeSubCurves(subcurves, chains);
 		int numlinks = subcurves.size();
 		AreaXBody ret = new AreaXBody(null, numlinks);
 		CurveLinkX[] linklist = subcurves.getArray();
-		for(int i = 0; i<numlinks; i++) {
+		for (int i = 0; i < numlinks; i++) {
 			CurveLinkX link = linklist[i];
 			ret.add(link.getMoveto());
 			CurveLinkX nextlink = link;
@@ -377,7 +376,8 @@ public abstract class AreaOpX {
 		return ret;
 	}
 
-	public static void finalizeSubCurves(RawLinkArrayList subcurves, RawChainArrayList chains) {
+	public static void finalizeSubCurves(RawLinkArrayList subcurves,
+			RawChainArrayList chains) {
 		int numchains = chains.size();
 		if (numchains == 0) {
 			return;
@@ -398,57 +398,52 @@ public abstract class AreaOpX {
 	}
 
 	private static RawChainArrayList resolveLinks(RawLinkArrayList subcurves,
-			RawChainArrayList chains,
-			RawLinkArrayList links)
-	{
+			RawChainArrayList chains, RawLinkArrayList links) {
 		int curchain = 0;
 		int curlink = 0;
 		int numlinks = links.size();
 		int numchains = chains.size();
-		links.ensureCapacity(numlinks+2);
-		chains.ensureCapacity(numchains+2);
+		links.ensureCapacity(numlinks + 2);
+		chains.ensureCapacity(numchains + 2);
 		CurveLinkX[] linklist = links.getArray();
 		ChainEndX[] endlist = chains.getArray();
 		ChainEndX chain = endlist[0];
 		ChainEndX nextchain = endlist[1];
 		CurveLinkX link = linklist[0];
 		CurveLinkX nextlink = linklist[1];
-		
+
 		RawChainArrayList newChains = new RawChainArrayList(0);
-		
+
 		while (chain != null || link != null) {
 			/*
-			 * Strategy 1:
-			 * Connect chains or links if they are the only things left...
+			 * Strategy 1: Connect chains or links if they are the only things
+			 * left...
 			 */
 			boolean connectchains = (link == null);
 			boolean connectlinks = (chain == null);
 
 			if (!connectchains && !connectlinks) {
-//				assert(link != null && chain != null);
+				// assert(link != null && chain != null);
 				/*
-				 * Strategy 2:
-				 * Connect chains or links if they close off an open area...
+				 * Strategy 2: Connect chains or links if they close off an open
+				 * area...
 				 */
-				connectchains = ((curchain & 1) == 0 &&
-						chain.getX() == nextchain.getX());
-				connectlinks = ((curlink & 1) == 0 &&
-						link.getX() == nextlink.getX());
+				connectchains = ((curchain & 1) == 0 && chain.getX() == nextchain
+						.getX());
+				connectlinks = ((curlink & 1) == 0 && link.getX() == nextlink
+						.getX());
 
 				if (!connectchains && !connectlinks) {
 					/*
-					 * Strategy 3:
-					 * Connect chains or links if their successor is
+					 * Strategy 3: Connect chains or links if their successor is
 					 * between them and their potential connectee...
 					 */
 					double cx = chain.getX();
 					double lx = link.getX();
-					connectchains =
-						(nextchain != null && cx < lx &&
-								obstructs(nextchain.getX(), lx, curchain));
-					connectlinks =
-						(nextlink != null && lx < cx &&
-								obstructs(nextlink.getX(), cx, curlink));
+					connectchains = (nextchain != null && cx < lx && obstructs(
+							nextchain.getX(), lx, curchain));
+					connectlinks = (nextlink != null && lx < cx && obstructs(
+							nextlink.getX(), cx, curlink));
 				}
 			}
 			if (connectchains) {
@@ -458,7 +453,7 @@ public abstract class AreaOpX {
 				}
 				curchain += 2;
 				chain = endlist[curchain];
-				nextchain = endlist[curchain+1];
+				nextchain = endlist[curchain + 1];
 			}
 			if (connectlinks) {
 				ChainEndX openend = new ChainEndX(link, null);
@@ -468,20 +463,20 @@ public abstract class AreaOpX {
 				newChains.add(closeend);
 				curlink += 2;
 				link = linklist[curlink];
-				nextlink = linklist[curlink+1];
+				nextlink = linklist[curlink + 1];
 			}
 			if (!connectchains && !connectlinks) {
-//				assert(link != null);
-//				assert(chain != null);
-//				assert(chain.getEtag() == link.getEtag());
+				// assert(link != null);
+				// assert(chain != null);
+				// assert(chain.getEtag() == link.getEtag());
 				chain.addLink(link);
 				newChains.add(chain);
 				curchain++;
 				chain = nextchain;
-				nextchain = endlist[curchain+1];
+				nextchain = endlist[curchain + 1];
 				curlink++;
 				link = nextlink;
-				nextlink = linklist[curlink+1];
+				nextlink = linklist[curlink + 1];
 			}
 		}
 		if ((newChains.size() & 1) != 0) {
@@ -491,16 +486,16 @@ public abstract class AreaOpX {
 	}
 
 	/*
-	 * Does the position of the next edge at v1 "obstruct" the
-	 * connectivity between current edge and the potential
-	 * partner edge which is positioned at v2?
-	 *
-	 * Phase tells us whether we are testing for a transition
-	 * into or out of the interior part of the resulting area.
-	 *
-	 * Require 4-connected continuity if this edge and the partner
-	 * edge are both "entering into" type edges
-	 * Allow 8-connected continuity for "exiting from" type edges
+	 * Does the position of the next edge at v1 "obstruct" the connectivity
+	 * between current edge and the potential partner edge which is positioned
+	 * at v2?
+	 * 
+	 * Phase tells us whether we are testing for a transition into or out of the
+	 * interior part of the resulting area.
+	 * 
+	 * Require 4-connected continuity if this edge and the partner edge are both
+	 * "entering into" type edges Allow 8-connected continuity for
+	 * "exiting from" type edges
 	 */
 	public static boolean obstructs(double v1, double v2, int phase) {
 		return (((phase & 1) == 0) ? (v1 <= v2) : (v1 < v2));

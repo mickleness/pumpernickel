@@ -23,9 +23,9 @@ public class GifApplicationExtension extends GifExtensionBlock {
 	byte[] data;
 
 	/**
-	 * Creates a <code>GifApplicationExtension</code>. The byte arrays used
-	 * to create this object are NOT cloned, it's assumed they will not be
-	 * changed or reused after this object is constructed.
+	 * Creates a <code>GifApplicationExtension</code>. The byte arrays used to
+	 * create this object are NOT cloned, it's assumed they will not be changed
+	 * or reused after this object is constructed.
 	 * 
 	 * @param header
 	 *            the 11-byte header of this block. This is the 8-byte
@@ -84,8 +84,8 @@ public class GifApplicationExtension extends GifExtensionBlock {
 	}
 
 	/**
-	 * This returns <code>true</code> if this block actually describes how
-	 * this GIF should loop. If this returns <code>true</code>, then
+	 * This returns <code>true</code> if this block actually describes how this
+	 * GIF should loop. If this returns <code>true</code>, then
 	 * <code>convertToLoopingExtension()</code> should not return
 	 * <code>null</code>.
 	 */
@@ -98,12 +98,12 @@ public class GifApplicationExtension extends GifExtensionBlock {
 	}
 
 	/**
-	 * If <code>isLoopingExtension()</code> returns <code>true</code>, then
-	 * this method converts this block to a
+	 * If <code>isLoopingExtension()</code> returns <code>true</code>, then this
+	 * method converts this block to a
 	 * {@link com.pump.image.gif.block.GifLoopingApplicationExtension}.
 	 * <P>
-	 * Otherwise this returns <code>null</code>, and prints an exception to
-	 * the console.
+	 * Otherwise this returns <code>null</code>, and prints an exception to the
+	 * console.
 	 */
 	public GifLoopingApplicationExtension convertToLoopingExtension() {
 		try {
@@ -176,12 +176,12 @@ public class GifApplicationExtension extends GifExtensionBlock {
 	 *         the authenitication code for the popular "NETSCAPE" looping
 	 *         extension.
 	 * 
-	 * <P>
-	 * The GIF file format specification says:
-	 * <P>
-	 * An Application program may use an algorithm to compute a binary code that
-	 * uniquely identifies it as the application owning the Application
-	 * Extension.
+	 *         <P>
+	 *         The GIF file format specification says:
+	 *         <P>
+	 *         An Application program may use an algorithm to compute a binary
+	 *         code that uniquely identifies it as the application owning the
+	 *         Application Extension.
 	 */
 	public byte[] getApplicationAuthenticationCode() {
 		byte[] b2 = new byte[] { b[8], b[9], b[10] };

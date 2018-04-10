@@ -23,6 +23,7 @@ import com.pump.io.SuffixFilenameFilter;
 public class WavCopier extends WavReader {
 	WavFileWriter writer = new WavFileWriter(new File("copyXYZ.wav"));
 	boolean started = false;
+
 	public WavCopier(InputStream in) throws IOException {
 		super(in);
 		read();
@@ -30,17 +31,20 @@ public class WavCopier extends WavReader {
 	}
 
 	@Override
-	protected void processSamples(byte[] sample,int offset,int length, int numberOfSamples) throws IOException {
-		if(started==false) {
-			if(lastFormatChunk==null) throw new NullPointerException();
-			writer.writeFormat( lastFormatChunk );
+	protected void processSamples(byte[] sample, int offset, int length,
+			int numberOfSamples) throws IOException {
+		if (started == false) {
+			if (lastFormatChunk == null)
+				throw new NullPointerException();
+			writer.writeFormat(lastFormatChunk);
 			started = true;
 		}
-		//TODO: use "offset" here? (Not changing because T4L is near release candidate)
+		// TODO: use "offset" here? (Not changing because T4L is near release
+		// candidate)
 		writer.writeSample(sample, 0, length);
 	}
 
-	//made private so BlogUpdater doesn't roll out a jar
+	// made private so BlogUpdater doesn't roll out a jar
 	@SuppressWarnings("unused")
 	private static void main(String[] s) {
 		try {
@@ -49,8 +53,9 @@ public class WavCopier extends WavReader {
 			fd.setFilenameFilter(new SuffixFilenameFilter("wav", "wave"));
 			fd.pack();
 			fd.setVisible(true);
-			if(fd.getFile()==null) return;
-			File wavFile = new File(fd.getDirectory()+fd.getFile());
+			if (fd.getFile() == null)
+				return;
+			File wavFile = new File(fd.getDirectory() + fd.getFile());
 			FileInputStream in = null;
 			try {
 				in = new FileInputStream(wavFile);
@@ -60,7 +65,7 @@ public class WavCopier extends WavReader {
 				in.close();
 			}
 			System.exit(0);
-		} catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}

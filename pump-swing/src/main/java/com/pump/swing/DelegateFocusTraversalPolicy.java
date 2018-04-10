@@ -14,13 +14,14 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 
-/** A simple <code>FocusTraversalPolicy</code> object that delegates to
- * another object.
+/**
+ * A simple <code>FocusTraversalPolicy</code> object that delegates to another
+ * object.
  *
  */
 public class DelegateFocusTraversalPolicy extends FocusTraversalPolicy {
 	FocusTraversalPolicy ftp;
-	
+
 	public DelegateFocusTraversalPolicy(FocusTraversalPolicy policy) {
 		ftp = policy;
 	}

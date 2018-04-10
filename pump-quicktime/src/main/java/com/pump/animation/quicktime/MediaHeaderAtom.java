@@ -25,16 +25,16 @@ public class MediaHeaderAtom extends LeafAtom {
 	long duration;
 	int language = 0;
 	int quality = 0;
-	
-	public MediaHeaderAtom(long timeScale,long duration) {
+
+	public MediaHeaderAtom(long timeScale, long duration) {
 		super(null);
 		creationTime = new Date();
 		modificationTime = creationTime;
 		this.timeScale = timeScale;
 		this.duration = duration;
 	}
-	
-	public MediaHeaderAtom(Atom parent,InputStream in) throws IOException {
+
+	public MediaHeaderAtom(Atom parent, InputStream in) throws IOException {
 		super(parent);
 		version = in.read();
 		flags = read24Int(in);
@@ -45,7 +45,7 @@ public class MediaHeaderAtom extends LeafAtom {
 		language = read16Int(in);
 		quality = read16Int(in);
 	}
-	
+
 	@Override
 	protected String getIdentifier() {
 		return "mdhd";
@@ -59,24 +59,21 @@ public class MediaHeaderAtom extends LeafAtom {
 	@Override
 	protected void writeContents(GuardedOutputStream out) throws IOException {
 		out.write(version);
-		write24Int(out,flags);
-		writeDate(out,creationTime);
-		writeDate(out,modificationTime);
-		write32Int(out,timeScale);
-		write32Int(out,duration);
-		write16Int(out,language);
-		write16Int(out,quality);
+		write24Int(out, flags);
+		writeDate(out, creationTime);
+		writeDate(out, modificationTime);
+		write32Int(out, timeScale);
+		write32Int(out, duration);
+		write16Int(out, language);
+		write16Int(out, quality);
 	}
 
 	@Override
 	public String toString() {
-		return "MediaHeaderAtom[ version="+version+", "+
-		"flags="+flags+", "+
-		"creationTime="+creationTime+", "+
-		"modificationTime="+modificationTime+", "+
-		"timeScale="+timeScale+", "+
-		"duration="+duration+", "+
-		"language="+language+", "+
-		"quality="+quality+" ]";
+		return "MediaHeaderAtom[ version=" + version + ", " + "flags=" + flags
+				+ ", " + "creationTime=" + creationTime + ", "
+				+ "modificationTime=" + modificationTime + ", " + "timeScale="
+				+ timeScale + ", " + "duration=" + duration + ", "
+				+ "language=" + language + ", " + "quality=" + quality + " ]";
 	}
 }

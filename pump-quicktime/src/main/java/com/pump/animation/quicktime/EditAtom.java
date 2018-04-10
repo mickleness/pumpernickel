@@ -16,11 +16,10 @@ import com.pump.io.GuardedInputStream;
 
 public class EditAtom extends ParentAtom {
 
-	public EditAtom(Atom parent, GuardedInputStream in)
-			throws IOException {
+	public EditAtom(Atom parent, GuardedInputStream in) throws IOException {
 		super(parent, "edts", in);
 	}
-	
+
 	public EditAtom() {
 		super("edts");
 	}

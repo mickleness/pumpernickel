@@ -24,12 +24,12 @@ import com.pump.util.ResourcePool;
  * <P>
  * General info about LZW compression: <BR>
  * LZW compression dates back to the 80's. It's surrounded by a lot of
- * controversy because it was published and widely used for many years <i>before</i>
- * Unisys decided to enforce their patent on it... but all such patents --
- * including international ones -- are now expired. Meanwhile, I read once that
- * ZIP compression is generally as good or better than LZW compression, so for
- * my regular compression needs, I'm sticking with Java's built in
- * ZipInputStream and ZipOutputStream classes.
+ * controversy because it was published and widely used for many years
+ * <i>before</i> Unisys decided to enforce their patent on it... but all such
+ * patents -- including international ones -- are now expired. Meanwhile, I read
+ * once that ZIP compression is generally as good or better than LZW
+ * compression, so for my regular compression needs, I'm sticking with Java's
+ * built in ZipInputStream and ZipOutputStream classes.
  * <P>
  * <P>
  * The pseudo-code for basic LZW decompression reads as follows: <BR>
@@ -52,13 +52,15 @@ import com.pump.util.ResourcePool;
  * <P>
  * <P>
  * There are a couple of extra twists to GIF decompression:
- * <ul><LI>There is a <code>clearCode</code>. Any time this is encountered, the
+ * <ul>
+ * <LI>There is a <code>clearCode</code>. Any time this is encountered, the
  * table of keys will be emptied.</li>
  * <LI>The first entry has to be the <code>clearCode</code>.</li>
- * <LI>There are 2 ways to stop reading data. One is a special end-of-file
- * code; when this is encountered, we stop reading. The other is to simply run
- * out of incoming bytes.</li>
- * <LI>Codes can only reach 12 bits at most.</LI></ul>
+ * <LI>There are 2 ways to stop reading data. One is a special end-of-file code;
+ * when this is encountered, we stop reading. The other is to simply run out of
+ * incoming bytes.</li>
+ * <LI>Codes can only reach 12 bits at most.</LI>
+ * </ul>
  * <P>
  * <P>
  * These LZW classes would not be possible without Jef Poskanzer's GIF classes.
@@ -148,7 +150,7 @@ public class LZWInputStream extends InputStream {
 			if (newCode != -1) {
 				lastCode = newCode; // read OLD_CODE
 				outgoingData = new byte[1]; // output
-																// OLD_CODE
+											// OLD_CODE
 				outgoingData[0] = (byte) lastCode;
 				character = lastCode; // CHARACTER = OLD_CODE
 			} else {
@@ -291,7 +293,9 @@ class BitReader {
 	/**
 	 * This is only used if the LZWInputStream gets closed early for some
 	 * reason.
-	 * @throws IOException if an IO problem occurs.
+	 * 
+	 * @throws IOException
+	 *             if an IO problem occurs.
 	 */
 	public void close() throws IOException {
 		finishedReading = true;
@@ -305,15 +309,15 @@ class BitReader {
 	 * @param bitsToRead
 	 *            the number of bits to read.
 	 *            <P>
-	 *            If the <code>InputStream</code> is empty, then
-	 *            <code>-1</code> is returned.
+	 *            If the <code>InputStream</code> is empty, then <code>-1</code>
+	 *            is returned.
 	 *            <P>
 	 *            If this exceeds the number of bits left in the
-	 *            <code>InputStream</code>, then an <code>IOException</code>
-	 *            is thrown.
+	 *            <code>InputStream</code>, then an <code>IOException</code> is
+	 *            thrown.
 	 * @return the value of <code>bitsToRead</code>-many bits from the
-	 *         <code>InputStream</code>, or <code>-1</code> if there is no
-	 *         more data to read.
+	 *         <code>InputStream</code>, or <code>-1</code> if there is no more
+	 *         data to read.
 	 * @throws IOException
 	 *             if an <code>IOException</code> occurred while reading the
 	 *             underlying stream, or if

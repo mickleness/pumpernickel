@@ -20,15 +20,17 @@ public abstract class TestElement {
 	public static final int INTERSECT = 3;
 	public static final int XOR = 4;
 
-	final static BufferedImage image1 = new BufferedImage(400, 400, BufferedImage.TYPE_INT_ARGB);
-	final static BufferedImage image2 = new BufferedImage(image1.getWidth(), image1.getHeight(), BufferedImage.TYPE_INT_ARGB);
-	
+	final static BufferedImage image1 = new BufferedImage(400, 400,
+			BufferedImage.TYPE_INT_ARGB);
+	final static BufferedImage image2 = new BufferedImage(image1.getWidth(),
+			image1.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
 	/** The human-readable name of this test. */
 	public abstract String getName();
-	
+
 	/** The component that appears when this test is selected. */
 	public abstract JComponent getComponent();
-	
+
 	/** This will be called if the user navigates away from this TestElement. */
 	public abstract void cancel();
 }

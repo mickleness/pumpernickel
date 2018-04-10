@@ -17,21 +17,21 @@ import java.util.List;
 
 public abstract class SearchConstraints<T> implements Comparator<T> {
 	public abstract boolean accepts(T obj);
-	
-	public void sort(List<T> unsortedList,List<T> destination) {
+
+	public void sort(List<T> unsortedList, List<T> destination) {
 		List<T> solutions = new ArrayList<T>(unsortedList.size());
-		for(int a = 0; a<unsortedList.size(); a++) {
+		for (int a = 0; a < unsortedList.size(); a++) {
 			T v = unsortedList.get(a);
-			if(accepts(v))
+			if (accepts(v))
 				solutions.add(v);
 		}
 		Collections.sort(solutions, this);
-		
-		if(destination instanceof ObservableList) {
-			((ObservableList<T>)destination).setAll(solutions);
+
+		if (destination instanceof ObservableList) {
+			((ObservableList<T>) destination).setAll(solutions);
 		} else {
 			destination.clear();
-			for(int a = 0; a<solutions.size(); a++) {
+			for (int a = 0; a < solutions.size(); a++) {
 				destination.add(solutions.get(a));
 			}
 		}

@@ -12,7 +12,8 @@ package com.pump.animation;
 
 import com.pump.util.Resettable;
 
-/** A combination of the <code>AnimationReader</code> and <code>Resettable</code>
+/**
+ * A combination of the <code>AnimationReader</code> and <code>Resettable</code>
  * interfaces.
  */
 public interface ResettableAnimationReader extends AnimationReader, Resettable {

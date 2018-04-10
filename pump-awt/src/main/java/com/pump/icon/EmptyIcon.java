@@ -15,18 +15,19 @@ import java.awt.Graphics;
 
 import javax.swing.Icon;
 
-/** An empty icon, used for placeholders or stubs.
+/**
+ * An empty icon, used for placeholders or stubs.
  * 
  */
 public class EmptyIcon implements Icon {
 
 	int w, h;
-	
-	public EmptyIcon(int width,int height) {
+
+	public EmptyIcon(int width, int height) {
 		w = width;
 		h = height;
 	}
-	
+
 	public int getIconHeight() {
 		return h;
 	}
@@ -35,6 +36,7 @@ public class EmptyIcon implements Icon {
 		return w;
 	}
 
-	public void paintIcon(Component c, Graphics g, int x, int y) {}
+	public void paintIcon(Component c, Graphics g, int x, int y) {
+	}
 
 }

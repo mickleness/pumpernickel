@@ -27,37 +27,44 @@ public class MoveUIEffect extends UIEffect {
 			Component comp = getComponent();
 			repaint(comp);
 			float f = getProgress();
-			int x = MathG.roundInt(startingBounds.x*(1-f)+finalBounds.x*f);
-			int y = MathG.roundInt(startingBounds.y*(1-f)+finalBounds.y*f);
-			int width = MathG.roundInt(startingBounds.width*(1-f)+finalBounds.width*f);
-			int height = MathG.roundInt(startingBounds.height*(1-f)+finalBounds.height*f);
+			int x = MathG.roundInt(startingBounds.x * (1 - f) + finalBounds.x
+					* f);
+			int y = MathG.roundInt(startingBounds.y * (1 - f) + finalBounds.y
+					* f);
+			int width = MathG.roundInt(startingBounds.width * (1 - f)
+					+ finalBounds.width * f);
+			int height = MathG.roundInt(startingBounds.height * (1 - f)
+					+ finalBounds.height * f);
 			comp.setBounds(x, y, width, height);
 			repaint(comp);
 		}
-		
-		/** This effect may be applied to invisible components,
-		 * where other special configurations guarantee they
-		 * still get painted (for example: see {@link com.bric.awt.RowLayout}).
-		 * In this case we should manually invoke a repaint.
-		 * <p>(When a component is visible, this will result in redundant
-		 * repaint requests that should eventually be collapsed.)
+
+		/**
+		 * This effect may be applied to invisible components, where other
+		 * special configurations guarantee they still get painted (for example:
+		 * see {@link com.bric.awt.RowLayout}). In this case we should manually
+		 * invoke a repaint.
+		 * <p>
+		 * (When a component is visible, this will result in redundant repaint
+		 * requests that should eventually be collapsed.)
 		 */
 		private void repaint(Component comp) {
 			Container container = comp.getParent();
-			if(container!=null) {
+			if (container != null) {
 				Rectangle r = comp.getBounds();
 				container.repaint(r.x, r.y, r.width, r.height);
 			}
 		}
 	};
-	
+
 	final Rectangle startingBounds, finalBounds;
-	
+
 	public MoveUIEffect(JComponent comp, Rectangle newBounds) {
 		this(comp, comp.getBounds(), newBounds);
 	}
-	
-	public MoveUIEffect(JComponent comp, Rectangle startingBounds, Rectangle finalBounds) {
+
+	public MoveUIEffect(JComponent comp, Rectangle startingBounds,
+			Rectangle finalBounds) {
 		super(comp, 100, 10);
 		this.startingBounds = new Rectangle(startingBounds);
 		this.finalBounds = new Rectangle(finalBounds);

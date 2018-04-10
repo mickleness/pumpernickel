@@ -16,15 +16,18 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 
 import com.pump.swing.MockComponent;
 
-/** A Transferable the encapsulates a MockComponent.
- * <P>This really isn't specifically necessary, but SOME transferable is.
- * And that transferable needs to <i>not</i> be text, or an image,
- * because then other eager apps would try to work with it.
+/**
+ * A Transferable the encapsulates a MockComponent.
+ * <P>
+ * This really isn't specifically necessary, but SOME transferable is. And that
+ * transferable needs to <i>not</i> be text, or an image, because then other
+ * eager apps would try to work with it.
  *
  */
 class MockComponentTransferable implements Transferable {
 	DataFlavor myDataFlavor;
 	MockComponent mockComponent;
+
 	public MockComponentTransferable(MockComponent mc) {
 		try {
 			myDataFlavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType);
@@ -35,16 +38,15 @@ class MockComponentTransferable implements Transferable {
 		}
 		this.mockComponent = mc;
 	}
-	
+
 	public Object getTransferData(DataFlavor flavor)
 			throws UnsupportedFlavorException {
-		if(flavor.equals(myDataFlavor)) {
+		if (flavor.equals(myDataFlavor)) {
 			return mockComponent;
 		} else {
 			throw new UnsupportedFlavorException(flavor);
 		}
 	}
-	
 
 	public DataFlavor[] getTransferDataFlavors() {
 		return new DataFlavor[] { myDataFlavor };
@@ -52,8 +54,8 @@ class MockComponentTransferable implements Transferable {
 
 	public boolean isDataFlavorSupported(DataFlavor flavor) {
 		DataFlavor[] flavors = getTransferDataFlavors();
-		for(int a = 0; a<flavors.length; a++) {
-			if(flavors[a].equals(flavor))
+		for (int a = 0; a < flavors.length; a++) {
+			if (flavors[a].equals(flavor))
 				return true;
 		}
 		return false;

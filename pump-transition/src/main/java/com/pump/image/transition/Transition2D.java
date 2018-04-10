@@ -16,37 +16,40 @@ import java.awt.image.BufferedImage;
 
 import com.pump.blog.Blurb;
 
-
-/** This uses Java2D operations to transition between two images.
- * Each operation is wrapped up in a Transition2DInstruction object.
+/**
+ * This uses Java2D operations to transition between two images. Each operation
+ * is wrapped up in a Transition2DInstruction object.
  * 
  */
-@Blurb (
-title = "Slideshows: Transitions & SWFs",
-releaseDate = "April 2007",
-summary = "A fun set of transitions defined with a simple vector-graphics-ish "+
-"<a href=\"https://javagraphics.java.net/doc/com/bric/image/transition/Transition2D.html\">architecture</a>.\n"+
-"<p>The demo includes a player and minimal Flash export.",
-imageName = "Transition2D.png"
-)
+@Blurb(title = "Slideshows: Transitions & SWFs", releaseDate = "April 2007", summary = "A fun set of transitions defined with a simple vector-graphics-ish "
+		+ "<a href=\"https://javagraphics.java.net/doc/com/bric/image/transition/Transition2D.html\">architecture</a>.\n"
+		+ "<p>The demo includes a player and minimal Flash export.", imageName = "Transition2D.png")
 public abstract class Transition2D extends AbstractTransition {
 
-	/** This determines how to transition from A to B.
-	 * @param progress a float from [0,1].  When this is zero, these instructions should
-	 * render the initial frame.  When this is one, these instructions should render
-	 * the final frame.
+	/**
+	 * This determines how to transition from A to B.
+	 * 
+	 * @param progress
+	 *            a float from [0,1]. When this is zero, these instructions
+	 *            should render the initial frame. When this is one, these
+	 *            instructions should render the final frame.
 	 *
 	 */
-	public abstract Transition2DInstruction[] getInstructions(float progress,Dimension size);
+	public abstract Transition2DInstruction[] getInstructions(float progress,
+			Dimension size);
 
-	/** This calls Transition2DInstruction.paint() for each instruction
-	 * in this transition.
-	 * <P>It is made final to reinforce that the instructions should be
-	 * all that is needed to implement these transitions.
+	/**
+	 * This calls Transition2DInstruction.paint() for each instruction in this
+	 * transition.
+	 * <P>
+	 * It is made final to reinforce that the instructions should be all that is
+	 * needed to implement these transitions.
 	 */
-	protected final void doPaint(Graphics2D g,BufferedImage frameA,BufferedImage frameB,float progress) {
-		Transition2DInstruction[] i = getInstructions(progress,new Dimension(frameA.getWidth(),frameA.getHeight()));
-		for(int a = 0; a<i.length; a++) {
+	protected final void doPaint(Graphics2D g, BufferedImage frameA,
+			BufferedImage frameB, float progress) {
+		Transition2DInstruction[] i = getInstructions(progress, new Dimension(
+				frameA.getWidth(), frameA.getHeight()));
+		for (int a = 0; a < i.length; a++) {
 			i[a].paint(g, frameA, frameB);
 		}
 	}

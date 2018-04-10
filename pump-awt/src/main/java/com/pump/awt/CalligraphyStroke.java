@@ -24,13 +24,7 @@ import com.pump.geom.GeneralPathWriter;
  * 
  * @see CalligraphyPathWriter
  */
-@Blurb (
-title = "Strokes: a Calligraphy Stroke",
-releaseDate = "May 2009",
-summary = "A stroke that resembles a nib at a fixed angle.",
-article = "http://javagraphics.blogspot.com/2009/05/strokes-calligraphy-stroke.html",
-imageName = "CalligraphyStroke.png"
-)
+@Blurb(title = "Strokes: a Calligraphy Stroke", releaseDate = "May 2009", summary = "A stroke that resembles a nib at a fixed angle.", article = "http://javagraphics.blogspot.com/2009/05/strokes-calligraphy-stroke.html", imageName = "CalligraphyStroke.png")
 public class CalligraphyStroke implements Stroke {
 
 	/** The width of this stroke in pixels. */
@@ -38,7 +32,6 @@ public class CalligraphyStroke implements Stroke {
 
 	/** The angle of the pen in radians. */
 	public final float theta;
-	
 
 	/**
 	 * Create a simple CalligraphyStroke with an angle of 3*pi/4.
@@ -88,7 +81,8 @@ public class CalligraphyStroke implements Stroke {
 	public Shape createStrokedShape(Shape p) {
 		GeneralPath dest = new GeneralPath();
 		GeneralPathWriter writer = new GeneralPathWriter(dest);
-		CalligraphyPathWriter cpw = new CalligraphyPathWriter(theta, width/2, -width/2, writer, writer);
+		CalligraphyPathWriter cpw = new CalligraphyPathWriter(theta, width / 2,
+				-width / 2, writer, writer);
 		cpw.write(p);
 		cpw.flush();
 		return dest;

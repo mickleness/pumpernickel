@@ -13,15 +13,15 @@ package com.pump.image.pixel;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 
-/** A <code>PixelConverter</code> that converts all data to BGR-formatted
- * bytes.
+/**
+ * A <code>PixelConverter</code> that converts all data to BGR-formatted bytes.
  */
 public class ByteBGRConverter extends PixelConverter implements
 		BytePixelIterator {
 
 	byte[] rTable, gTable, bTable;
 	int[] intScratch;
-	
+
 	/**
 	 * 
 	 * @param i
@@ -31,7 +31,7 @@ public class ByteBGRConverter extends PixelConverter implements
 	}
 
 	public void skip() {
-		if(byteIterator!=null) {
+		if (byteIterator != null) {
 			byteIterator.skip();
 		} else {
 			intIterator.skip();
@@ -42,21 +42,21 @@ public class ByteBGRConverter extends PixelConverter implements
 		if (byteIterator != null) {
 			byteIterator.next(dest);
 			byte swap;
-			int rowLength = width*byteIterator.getPixelSize();
-			
+			int rowLength = width * byteIterator.getPixelSize();
+
 			switch (originalType) {
 			case PixelIterator.TYPE_3BYTE_RGB:
-				for (int a = 0; a < rowLength; a+=3) {
+				for (int a = 0; a < rowLength; a += 3) {
 					swap = dest[a];
-					dest[a] = dest[a+2];
-					dest[a+2] = swap;
+					dest[a] = dest[a + 2];
+					dest[a + 2] = swap;
 				}
 				break;
 			case BufferedImage.TYPE_3BYTE_BGR:
 				break;
 			case PixelIterator.TYPE_4BYTE_ARGB:
 			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
-				for (int a = 0; a < rowLength; a+=3) {
+				for (int a = 0; a < rowLength; a += 3) {
 					dest[a] = dest[a + 3];
 					swap = dest[a + 1];
 					dest[a + 1] = dest[a + 2];
@@ -65,7 +65,7 @@ public class ByteBGRConverter extends PixelConverter implements
 				break;
 			case BufferedImage.TYPE_4BYTE_ABGR:
 			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-				for (int a = 0; a < rowLength; a+=4) {
+				for (int a = 0; a < rowLength; a += 4) {
 					dest[a] = dest[a + 1];
 					dest[a + 1] = dest[a + 2];
 					dest[a + 2] = dest[a + 3];

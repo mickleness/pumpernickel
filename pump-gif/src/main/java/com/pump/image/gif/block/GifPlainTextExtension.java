@@ -14,9 +14,9 @@ import java.nio.charset.Charset;
 
 /**
  * Rarely used in practice, this is a
- * {@link com.pump.image.gif.block.GifGraphicRenderingBlock} that displays mono-spaced text.
- * Unfortunately, this was designed in 1990, and only appears to support ASCII
- * 7-bit text: so no international characters.
+ * {@link com.pump.image.gif.block.GifGraphicRenderingBlock} that displays
+ * mono-spaced text. Unfortunately, this was designed in 1990, and only appears
+ * to support ASCII 7-bit text: so no international characters.
  * <P>
  * The GIF file format specification describes this block as follows:
  * <P>

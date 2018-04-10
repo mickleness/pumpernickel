@@ -16,12 +16,13 @@ import java.awt.image.BufferedImage;
 /** A Paintable that paints a BufferedImage. */
 public class BufferedImagePaintable implements Paintable {
 	BufferedImage image;
-	
+
 	public BufferedImagePaintable(BufferedImage img) {
-		if(img==null) throw new NullPointerException();
+		if (img == null)
+			throw new NullPointerException();
 		image = img;
 	}
-	
+
 	public BufferedImage getImage() {
 		return image;
 	}

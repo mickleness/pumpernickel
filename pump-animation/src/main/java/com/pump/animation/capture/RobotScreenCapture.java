@@ -19,38 +19,49 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-/** This is an implementation of <code>ScreenCapture</code> that uses
- * the <code>java.awt.Robot</code> class to capture the screen contents.
+/**
+ * This is an implementation of <code>ScreenCapture</code> that uses the
+ * <code>java.awt.Robot</code> class to capture the screen contents.
  *
  */
 public class RobotScreenCapture extends ScreenCapture {
 	Robot robot;
-	
-	/** Creates a new <code>RobotScreenCapture</code> object that will capture
+
+	/**
+	 * Creates a new <code>RobotScreenCapture</code> object that will capture
 	 * the entire screen.
-	 * @throws AWTException if an exception occurs while creating the <code>Robot</code> object.
+	 * 
+	 * @throws AWTException
+	 *             if an exception occurs while creating the <code>Robot</code>
+	 *             object.
 	 */
 	public RobotScreenCapture() throws AWTException {
 		robot = new Robot();
 	}
 
-	/** Creates a new <code>RobotScreenCapture</code> object that will capture
+	/**
+	 * Creates a new <code>RobotScreenCapture</code> object that will capture
 	 * the bounds provided.
-	 * @param screenBounds the bounds to record.
-	 * @throws AWTException if an exception occurs while creating the <code>Robot</code> object.
+	 * 
+	 * @param screenBounds
+	 *            the bounds to record.
+	 * @throws AWTException
+	 *             if an exception occurs while creating the <code>Robot</code>
+	 *             object.
 	 */
 	public RobotScreenCapture(Rectangle screenBounds) throws AWTException {
 		super(screenBounds);
 		robot = new Robot();
 	}
 
-	/** This uses the <code>Robot</code> class and <code>ImageIO</code> to
-	 * record a snapshot of the screen to a PNG file.
+	/**
+	 * This uses the <code>Robot</code> class and <code>ImageIO</code> to record
+	 * a snapshot of the screen to a PNG file.
 	 */
 	@Override
 	protected File capture(Rectangle r) throws IOException {
 		BufferedImage bi = robot.createScreenCapture(r);
-		File file = File.createTempFile("robotCapture",".png", tempDir);
+		File file = File.createTempFile("robotCapture", ".png", tempDir);
 		file.deleteOnExit();
 		file.createNewFile();
 		ImageIO.write(bi, "png", file);

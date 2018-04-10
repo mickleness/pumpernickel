@@ -29,63 +29,73 @@ import javax.imageio.stream.MemoryCacheImageInputStream;
 
 import com.pump.math.MutableInteger;
 
-/** A collection of static methods to fetch the dimensions of an image.
+/**
+ * A collection of static methods to fetch the dimensions of an image.
  */
 public class ImageSize {
 	private static class Observer implements ImageObserver {
 		MutableInteger w, h;
 		boolean error = false;
-		Observer(MutableInteger width,MutableInteger height) {
+
+		Observer(MutableInteger width, MutableInteger height) {
 			w = width;
 			h = height;
 		}
+
 		public boolean imageUpdate(Image img, int infoflags, int x, int y,
 				int width, int height) {
-			synchronized(this) {
-				if( (infoflags & ImageObserver.ERROR)>0) {
+			synchronized (this) {
+				if ((infoflags & ImageObserver.ERROR) > 0) {
 					error = true;
 				}
-				w.value = Math.max(w.value, x+width);
-				h.value = Math.max(h.value, y+height);
+				w.value = Math.max(w.value, x + width);
+				h.value = Math.max(h.value, y + height);
 				notify();
 			}
 			return false;
 		}
-		
+
 		public void load() {
-			while(true) {
-				synchronized(this) {
-					if(error)
-						throw new RuntimeException("an error occurred while retrieving the width and height");
-					if(w.value>0 && h.value>0)
+			while (true) {
+				synchronized (this) {
+					if (error)
+						throw new RuntimeException(
+								"an error occurred while retrieving the width and height");
+					if (w.value > 0 && h.value > 0)
 						return;
 					try {
 						wait();
-					} catch(InterruptedException e) {}
+					} catch (InterruptedException e) {
+					}
 				}
 			}
 		}
-		
+
 	}
 
-	/** Retrieves the dimensions of this image using
-	 * <code>ImageIO</code> classes or an <code>ImageObserver</code>.
+	/**
+	 * Retrieves the dimensions of this image using <code>ImageIO</code> classes
+	 * or an <code>ImageObserver</code>.
 	 */
 	public static Dimension get(File file) {
-		if(file==null) throw new NullPointerException();
+		if (file == null)
+			throw new NullPointerException();
 		try {
 			Dimension size = getSizeUsingImageIO(file);
 			return size;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			try {
-				Image image = Toolkit.getDefaultToolkit().createImage(file.getAbsolutePath());
+				Image image = Toolkit.getDefaultToolkit().createImage(
+						file.getAbsolutePath());
 				try {
 					return get(image);
 				} finally {
 					image.flush();
 				}
-			} catch(Exception e2) {
-				IllegalArgumentException e3 = new IllegalArgumentException("could not fetch dimensions of "+file.getAbsolutePath());
+			} catch (Exception e2) {
+				IllegalArgumentException e3 = new IllegalArgumentException(
+						"could not fetch dimensions of "
+								+ file.getAbsolutePath());
 				e3.initCause(e2);
 				e2.initCause(e);
 				throw e3;
@@ -93,18 +103,20 @@ public class ImageSize {
 		}
 	}
 
-	/** Retrieves the dimensions of this image using
-	 * <code>ImageIO</code> classes or an <code>ImageObserver</code>.
+	/**
+	 * Retrieves the dimensions of this image using <code>ImageIO</code> classes
+	 * or an <code>ImageObserver</code>.
 	 * 
-	 * @throws IllegalArgumentException if the dimensions
-	 * could not be retrieved.
+	 * @throws IllegalArgumentException
+	 *             if the dimensions could not be retrieved.
 	 */
 	public static Dimension get(URL url) throws IllegalArgumentException {
-		if(url==null) throw new NullPointerException();
+		if (url == null)
+			throw new NullPointerException();
 		try {
 			Dimension size = getSizeUsingImageIO(url);
 			return size;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			try {
 				Image image = Toolkit.getDefaultToolkit().createImage(url);
 				try {
@@ -112,35 +124,41 @@ public class ImageSize {
 				} finally {
 					image.flush();
 				}
-			} catch(Exception e2) {
-				IllegalArgumentException e3 = new IllegalArgumentException("could not fetch dimensions of "+url);
+			} catch (Exception e2) {
+				IllegalArgumentException e3 = new IllegalArgumentException(
+						"could not fetch dimensions of " + url);
 				e3.initCause(e2);
 				e2.initCause(e);
 				throw e3;
 			}
 		}
 	}
-	
-	/** Retrieves the dimensions of this image using an <code>ImageObserver</code>.
+
+	/**
+	 * Retrieves the dimensions of this image using an
+	 * <code>ImageObserver</code>.
 	 * 
 	 */
 	public static Dimension get(Image image) {
 		MutableInteger width = new MutableInteger(-1);
 		MutableInteger height = new MutableInteger(-1);
-		
+
 		Observer observer = new Observer(width, height);
-		
+
 		int w = image.getWidth(observer);
-		if(w!=-1) observer.imageUpdate(image, 0, 0, 0, w, 0);
+		if (w != -1)
+			observer.imageUpdate(image, 0, 0, 0, w, 0);
 		int h = image.getHeight(observer);
-		if(h!=-1) observer.imageUpdate(image, 0, 0, 0, 0, h);
-		
+		if (h != -1)
+			observer.imageUpdate(image, 0, 0, 0, 0, h);
+
 		observer.load();
-		
+
 		return new Dimension(observer.w.value, observer.h.value);
 	}
-	
-	private static Dimension getSizeUsingImageIO(File file) throws FileNotFoundException, IOException {
+
+	private static Dimension getSizeUsingImageIO(File file)
+			throws FileNotFoundException, IOException {
 		ImageInputStream iis = null;
 		ImageReader reader = null;
 		try {
@@ -153,8 +171,9 @@ public class ImageSize {
 			reader.setInput(iis, true, true);
 
 			Dimension d = new Dimension(reader.getWidth(0), reader.getHeight(0));
-			if(d.width<=0 || d.height<=0)
-				throw new RuntimeException("invalid dimensions: "+d.width+"x"+d.height);
+			if (d.width <= 0 || d.height <= 0)
+				throw new RuntimeException("invalid dimensions: " + d.width
+						+ "x" + d.height);
 			return d;
 		} finally {
 			try {
@@ -171,7 +190,7 @@ public class ImageSize {
 			}
 		}
 	}
-	
+
 	private static Dimension getSizeUsingImageIO(URL url) throws IOException {
 		InputStream in = null;
 		ImageInputStream iis = null;
@@ -187,8 +206,9 @@ public class ImageSize {
 			reader.setInput(iis, true, true);
 
 			Dimension d = new Dimension(reader.getWidth(0), reader.getHeight(0));
-			if(d.width<=0 || d.height<=0)
-				throw new RuntimeException("invalid dimensions: "+d.width+"x"+d.height);
+			if (d.width <= 0 || d.height <= 0)
+				throw new RuntimeException("invalid dimensions: " + d.width
+						+ "x" + d.height);
 			return d;
 		} finally {
 			try {

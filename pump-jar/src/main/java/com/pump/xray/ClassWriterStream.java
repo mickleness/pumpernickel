@@ -18,18 +18,18 @@ import java.util.Map;
 import com.pump.io.IndentedPrintStream;
 
 /**
- * This is a simple extension of the IndentedPrintStream that stores
- * a map of full classnames to simple classnames.
+ * This is a simple extension of the IndentedPrintStream that stores a map of
+ * full classnames to simple classnames.
  */
 public class ClassWriterStream extends IndentedPrintStream {
 
 	Map<String, String> nameToSimpleNameMap = new HashMap<>();
-	
+
 	public ClassWriterStream(OutputStream out, boolean autoFlush,
 			String encoding) throws UnsupportedEncodingException {
 		super(out, autoFlush, encoding);
 	}
-	
+
 	/**
 	 * Return a name that maps fully qualified classnames to their simple names.
 	 */

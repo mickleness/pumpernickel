@@ -10,7 +10,6 @@
  */
 package com.pump.desktop.error;
 
-
 public interface ThrowableHandler {
 	public boolean processThrowable(ThrowableDescriptor throwable);
 }

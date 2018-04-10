@@ -69,19 +69,16 @@ final class EdgeX {
 			if (yrange[1] > other.lastLimit) {
 				yrange[1] = other.lastLimit;
 			}
-			return 0-other.lastResult;
+			return 0 - other.lastResult;
 		}
-//		long start = System.currentTimeMillis();
+		// long start = System.currentTimeMillis();
 		int ret = curve.compareTo(other.curve, yrange);
-//		long end = System.currentTimeMillis();
+		// long end = System.currentTimeMillis();
 		/*
-System.out.println("compare: "+
-((System.identityHashCode(this) <
-System.identityHashCode(other))
-? this+" to "+other
-: other+" to "+this)+
-" == "+ret+" at "+yrange[1]+
-" in "+(end-start)+"ms");
+		 * System.out.println("compare: "+ ((System.identityHashCode(this) <
+		 * System.identityHashCode(other)) ? this+" to "+other :
+		 * other+" to "+this)+ " == "+ret+" at "+yrange[1]+
+		 * " in "+(end-start)+"ms");
 		 */
 		lastEdge = other;
 		lastLimit = yrange[1];
@@ -100,12 +97,12 @@ System.identityHashCode(other))
 
 	@Override
 	public String toString() {
-		return ("Edge["+curve+
-				", "+
-				(ctag == AreaOpX.CTAG_LEFT ? "L" : "R")+
-				", "+
-				(etag == AreaOpX.ETAG_ENTER ? "I" :
-					(etag == AreaOpX.ETAG_EXIT ? "O" : "N"))+
-		"]");
+		return ("Edge["
+				+ curve
+				+ ", "
+				+ (ctag == AreaOpX.CTAG_LEFT ? "L" : "R")
+				+ ", "
+				+ (etag == AreaOpX.ETAG_ENTER ? "I"
+						: (etag == AreaOpX.ETAG_EXIT ? "O" : "N")) + "]");
 	}
 }

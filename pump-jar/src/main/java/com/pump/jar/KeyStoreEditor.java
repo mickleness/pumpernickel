@@ -45,18 +45,20 @@ public class KeyStoreEditor extends JPanel {
 		KeyStoreEditor editor = new KeyStoreEditor();
 		String dialogTitle = "Create Keystore";
 		Icon icon = QDialog.getIcon(QDialog.PLAIN_MESSAGE);
-		QDialog.showDialog(parentWindow, dialogTitle, icon, editor, editor.footer, true, null, null);
+		QDialog.showDialog(parentWindow, dialogTitle, icon, editor,
+				editor.footer, true, null, null);
 		JComponent button = editor.footer.getLastSelectedComponent();
-		if( button==editor.footer.getButton(DialogFooter.OK_OPTION) ) {
-			FileDialog fd = new FileDialog(parentWindow, "Create Keystore", FileDialog.SAVE);
+		if (button == editor.footer.getButton(DialogFooter.OK_OPTION)) {
+			FileDialog fd = new FileDialog(parentWindow, "Create Keystore",
+					FileDialog.SAVE);
 			fd.setFilenameFilter(new SuffixFilenameFilter("jks"));
 			fd.setFile("keystore.jks");
 			fd.pack();
 			fd.setLocationRelativeTo(null);
 			fd.setVisible(true);
-			if(fd.getFile()==null)
+			if (fd.getFile() == null)
 				return null;
-			editor.jksFile = new File(fd.getDirectory()+fd.getFile());
+			editor.jksFile = new File(fd.getDirectory() + fd.getFile());
 			editor.create(false);
 			return editor;
 		} else {
@@ -79,7 +81,9 @@ public class KeyStoreEditor extends JPanel {
 	JPasswordField aliasPassword1 = new JPasswordField();
 	JPasswordField aliasPassword2 = new JPasswordField();
 	JCheckBox selfsignCheckbox = new JCheckBox("Selfsign Certificate", true);
-	DialogFooter footer = DialogFooter.createDialogFooter(DialogFooter.OK_CANCEL_OPTION, DialogFooter.EscapeKeyBehavior.TRIGGERS_CANCEL);
+	DialogFooter footer = DialogFooter.createDialogFooter(
+			DialogFooter.OK_CANCEL_OPTION,
+			DialogFooter.EscapeKeyBehavior.TRIGGERS_CANCEL);
 	JCheckBox aliasPasswordCheckbox = new JCheckBox("Alias Includes Password");
 
 	Set<JTextField> requiredFields = new HashSet<JTextField>();
@@ -140,14 +144,14 @@ public class KeyStoreEditor extends JPanel {
 		requiredFields.add(keystorePassword2);
 		requiredFields.add(aliasPassword1);
 		requiredFields.add(aliasPassword2);
-		
+
 		aliasPasswordCheckbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				refreshUI();
 			}
 		});
 
-		for(JTextField f : requiredFields) {
+		for (JTextField f : requiredFields) {
 			f.getDocument().addDocumentListener(docListener);
 		}
 		refreshUI();
@@ -155,29 +159,31 @@ public class KeyStoreEditor extends JPanel {
 
 	protected void refreshUI() {
 
-		boolean password1 = new String(keystorePassword1.getPassword()).equals( new String( keystorePassword2.getPassword() ) );
-		keystorePassword2.setForeground( password1 ? Color.black : Color.red);
+		boolean password1 = new String(keystorePassword1.getPassword())
+				.equals(new String(keystorePassword2.getPassword()));
+		keystorePassword2.setForeground(password1 ? Color.black : Color.red);
 
-		boolean password2 = new String(aliasPassword1.getPassword()).equals( new String( aliasPassword2.getPassword() ) );
-		
+		boolean password2 = new String(aliasPassword1.getPassword())
+				.equals(new String(aliasPassword2.getPassword()));
+
 		aliasPassword1.setEnabled(aliasPasswordCheckbox.isSelected());
 		aliasPassword2.setEnabled(aliasPasswordCheckbox.isSelected());
-		if(aliasPasswordCheckbox.isSelected()) {
-			aliasPassword1.setForeground( Color.black );
-			aliasPassword2.setForeground( password2 ? Color.black : Color.red);
+		if (aliasPasswordCheckbox.isSelected()) {
+			aliasPassword1.setForeground(Color.black);
+			aliasPassword2.setForeground(password2 ? Color.black : Color.red);
 			requiredFields.add(aliasPassword1);
 			requiredFields.add(aliasPassword2);
 		} else {
-			aliasPassword1.setForeground( Color.gray );
-			aliasPassword2.setForeground( Color.gray );
+			aliasPassword1.setForeground(Color.gray);
+			aliasPassword2.setForeground(Color.gray);
 			requiredFields.remove(aliasPassword1);
 			requiredFields.remove(aliasPassword2);
 		}
-		
+
 		boolean ok = true;
-		for(JTextField f : requiredFields) {
+		for (JTextField f : requiredFields) {
 			String s = f.getText();
-			if(s.length()==0) {
+			if (s.length() == 0) {
 				ok = false;
 			}
 		}
@@ -186,22 +192,26 @@ public class KeyStoreEditor extends JPanel {
 	}
 
 	public void create(boolean blocking) {
-		ProcessBuilderThread keyGenBuilder = new ProcessBuilderThread("keytool", true);
+		ProcessBuilderThread keyGenBuilder = new ProcessBuilderThread(
+				"keytool", true);
 		List<String> cmd = new ArrayList<String>();
 		cmd.add("keytool");
 		cmd.add("-genkeypair");
 		cmd.add("-storepass");
 		cmd.add(new String(keystorePassword1.getPassword()));
 		cmd.add("-keypass");
-		if(aliasPasswordCheckbox.isSelected()) {
+		if (aliasPasswordCheckbox.isSelected()) {
 			cmd.add(new String(aliasPassword1.getPassword()));
 		} else {
-			//I'm unclear if this is effectively what the keytool command does when you
-			//press the return key to skip this step?
+			// I'm unclear if this is effectively what the keytool command does
+			// when you
+			// press the return key to skip this step?
 			cmd.add(new String(keystorePassword1.getPassword()));
 		}
 		cmd.add("-dname");
-		cmd.add("CN="+commonName.getText()+", O="+orgName.getText()+", L="+city.getText()+", ST="+state.getText()+", C="+country.getText());
+		cmd.add("CN=" + commonName.getText() + ", O=" + orgName.getText()
+				+ ", L=" + city.getText() + ", ST=" + state.getText() + ", C="
+				+ country.getText());
 		cmd.add("-alias");
 		cmd.add(alias.getText());
 		cmd.add("-keyalg");
@@ -210,19 +220,23 @@ public class KeyStoreEditor extends JPanel {
 		cmd.add(keySize.getSelectedItem().toString());
 		cmd.add("-keystore");
 		cmd.add(jksFile.getAbsolutePath());
-		
-		keyGenBuilder.processBuilder.command(cmd.toArray(new String[cmd.size()]));
-		
-		if(selfsignCheckbox.isSelected()) {
+
+		keyGenBuilder.processBuilder
+				.command(cmd.toArray(new String[cmd.size()]));
+
+		if (selfsignCheckbox.isSelected()) {
 			keyGenBuilder.postRunnable = new Runnable() {
-				ProcessBuilderThread selfCertBuilder = new ProcessBuilderThread("keytool", true);
+				ProcessBuilderThread selfCertBuilder = new ProcessBuilderThread(
+						"keytool", true);
+
 				public void run() {
-					selfCertBuilder.processBuilder.command("keytool", 
-							"-selfcert", 
-							"-keystore", jksFile.getAbsolutePath(),
-							"-alias", alias.getText(),
-							"-storepass", new String(keystorePassword1.getPassword()), 
-							"-keypass", new String(aliasPassword1.getPassword()) );
+					selfCertBuilder.processBuilder.command("keytool",
+							"-selfcert", "-keystore",
+							jksFile.getAbsolutePath(), "-alias", alias
+									.getText(), "-storepass", new String(
+									keystorePassword1.getPassword()),
+							"-keypass",
+							new String(aliasPassword1.getPassword()));
 					selfCertBuilder.start(true);
 				}
 			};

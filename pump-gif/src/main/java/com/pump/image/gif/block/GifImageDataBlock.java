@@ -32,14 +32,15 @@ import com.pump.image.pixel.quantize.ImageQuantization;
  * This is not technically a
  * {@link com.pump.image.gif.block.GifGraphicRenderingBlock}, because it is, by
  * itself, meaningless. It must be preceded by a
- * {@link com.pump.image.gif.block.GifImageDescriptor} block; so that is considered
- * the real "graphic rendering block".
+ * {@link com.pump.image.gif.block.GifImageDescriptor} block; so that is
+ * considered the real "graphic rendering block".
  */
 public class GifImageDataBlock extends GifBlock {
 	byte[] encodedData;
 	int minimumLZWCodeSize;
 
-	public GifImageDataBlock(IndexedBytePixelIterator imageData, IndexColorModel colorModel) {
+	public GifImageDataBlock(IndexedBytePixelIterator imageData,
+			IndexColorModel colorModel) {
 		int w = imageData.getWidth();
 		int h = imageData.getHeight();
 
@@ -60,14 +61,15 @@ public class GifImageDataBlock extends GifBlock {
 			throw new RuntimeException();
 		}
 	}
-	
+
 	public GifImageDataBlock(BufferedImage src, IndexColorModel colorModel) {
 		int w = src.getWidth();
 		int h = src.getHeight();
-		
+
 		ColorLUT lut = new ColorLUT(colorModel);
-		IndexedBytePixelIterator iter = ImageQuantization.MOST_DIFFUSION.createImageData(src, lut);
-		
+		IndexedBytePixelIterator iter = ImageQuantization.MOST_DIFFUSION
+				.createImageData(src, lut);
+
 		byte[] block = new byte[w];
 
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();

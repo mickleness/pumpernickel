@@ -26,8 +26,10 @@ public class PaddedIcon implements Icon {
 	}
 
 	public PaddedIcon(Icon orig, Insets i) {
-		if(orig==null) throw new NullPointerException();
-		if(i==null) throw new NullPointerException();
+		if (orig == null)
+			throw new NullPointerException();
+		if (i == null)
+			throw new NullPointerException();
 		this.icon = orig;
 		this.i = i;
 	}
@@ -41,7 +43,7 @@ public class PaddedIcon implements Icon {
 	}
 
 	public void paintIcon(Component c, Graphics g, int x, int y) {
-		icon.paintIcon(c, g, x+i.left, y+i.top);
+		icon.paintIcon(c, g, x + i.left, y + i.top);
 	}
 
 }

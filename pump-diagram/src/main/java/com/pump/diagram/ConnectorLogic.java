@@ -10,7 +10,6 @@
  */
 package com.pump.diagram;
 
-public interface ConnectorLogic
-{
-	public BinaryRelationship getRelationship(Box box1,Box box2);
+public interface ConnectorLogic {
+	public BinaryRelationship getRelationship(Box box1, Box box2);
 }

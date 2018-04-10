@@ -21,16 +21,16 @@ public class BasicCancellable implements Cancellable {
 	private boolean finished = false;
 	List<ActionListener> cancelListeners;
 	List<ActionListener> finishListeners;
-	
+
 	public void cancel() {
-		if(cancelled)
+		if (cancelled)
 			return;
 		cancelled = true;
 		fireCancelListeners();
 	}
 
 	public void finish() {
-		if(finished)
+		if (finished)
 			return;
 		finished = true;
 		fireFinishListeners();
@@ -43,54 +43,58 @@ public class BasicCancellable implements Cancellable {
 	public boolean isFinished() {
 		return finished;
 	}
-	
+
 	protected void fireFinishListeners() {
-		if(finishListeners==null)
+		if (finishListeners == null)
 			return;
-		for(int a = 0; a<finishListeners.size(); a++) {
+		for (int a = 0; a < finishListeners.size(); a++) {
 			ActionListener l = finishListeners.get(a);
 			try {
-				l.actionPerformed(new ActionEvent(this,0,"finish"));
-			} catch(Exception e) {
+				l.actionPerformed(new ActionEvent(this, 0, "finish"));
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	protected void fireCancelListeners() {
-		if(cancelListeners==null)
+		if (cancelListeners == null)
 			return;
-		for(int a = 0; a<cancelListeners.size(); a++) {
+		for (int a = 0; a < cancelListeners.size(); a++) {
 			ActionListener l = cancelListeners.get(a);
 			try {
-				l.actionPerformed(new ActionEvent(this,0,"cancel"));
-			} catch(Exception e) {
+				l.actionPerformed(new ActionEvent(this, 0, "cancel"));
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	public void addFinishListener(ActionListener l) {
-		if(finishListeners==null) finishListeners = new ArrayList<ActionListener>();
-		if(finishListeners.contains(l))
+		if (finishListeners == null)
+			finishListeners = new ArrayList<ActionListener>();
+		if (finishListeners.contains(l))
 			return;
 		finishListeners.add(l);
 	}
-	
+
 	public void addCancelListener(ActionListener l) {
-		if(cancelListeners==null) cancelListeners = new ArrayList<ActionListener>();
-		if(cancelListeners.contains(l))
+		if (cancelListeners == null)
+			cancelListeners = new ArrayList<ActionListener>();
+		if (cancelListeners.contains(l))
 			return;
 		cancelListeners.add(l);
 	}
-	
+
 	public void removeFinishListener(ActionListener l) {
-		if(finishListeners==null) return;
+		if (finishListeners == null)
+			return;
 		finishListeners.remove(l);
 	}
 
 	public void removeCancelListener(ActionListener l) {
-		if(cancelListeners==null) return;
+		if (cancelListeners == null)
+			return;
 		cancelListeners.remove(l);
 	}
 

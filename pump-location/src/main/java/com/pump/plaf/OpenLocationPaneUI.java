@@ -13,8 +13,8 @@ package com.pump.plaf;
 import com.pump.swing.io.LocationPane;
 
 public abstract class OpenLocationPaneUI extends LocationPaneUI {
-	
-	public OpenLocationPaneUI(LocationPane p) {
-		super(p);
-	}
+
+    public OpenLocationPaneUI(LocationPane p) {
+	super(p);
+    }
 }

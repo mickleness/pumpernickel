@@ -10,11 +10,9 @@
  */
 package com.pump.math;
 
-
-
 /**
- * This <code>Number</code> can change value, so for operations that need to
- * be computed millions of times, recycling 1 object will save a lot of memory
+ * This <code>Number</code> can change value, so for operations that need to be
+ * computed millions of times, recycling 1 object will save a lot of memory
  * allocation.
  */
 public class MutableInteger extends Number implements Comparable<Number> {
@@ -31,8 +29,10 @@ public class MutableInteger extends Number implements Comparable<Number> {
 
 	public int compareTo(Number n) {
 		int i = n.intValue();
-		if(value==i) return 0;
-		if(value<i) return -1;
+		if (value == i)
+			return 0;
+		if (value < i)
+			return -1;
 		return 1;
 	}
 

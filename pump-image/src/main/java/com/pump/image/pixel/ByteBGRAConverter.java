@@ -10,30 +10,18 @@
  */
 package com.pump.image.pixel;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
-import java.io.File;
-import java.io.FileInputStream;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
-import com.pump.image.thumbnail.BasicThumbnail;
-
-/** A <code>PixelConverter</code> that converts all data to BGRA-formatted
- * bytes.
+/**
+ * A <code>PixelConverter</code> that converts all data to BGRA-formatted bytes.
  */
 public class ByteBGRAConverter extends PixelConverter implements
 		BytePixelIterator {
-	
 
 	byte[] rTable, gTable, bTable, aTable;
 	int[] intScratch;
-	
+
 	/**
 	 * @param i
 	 */
@@ -42,7 +30,7 @@ public class ByteBGRAConverter extends PixelConverter implements
 	}
 
 	public void skip() {
-		if(byteIterator!=null) {
+		if (byteIterator != null) {
 			byteIterator.skip();
 		} else {
 			intIterator.skip();

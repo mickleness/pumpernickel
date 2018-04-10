@@ -31,7 +31,8 @@ public class GifLoopingApplicationExtension extends GifApplicationExtension {
 	 * 
 	 * @param loopCount
 	 *            the number of times this should loop. If this is greater than
-	 *            65535, then this value is changed to <code>LOOP_FOREVER</code>.
+	 *            65535, then this value is changed to <code>LOOP_FOREVER</code>
+	 *            .
 	 */
 	public GifLoopingApplicationExtension(int loopCount) {
 		this(NETSCAPE_HEADER, writeLoopCount(loopCount));

@@ -12,11 +12,11 @@ package com.pump.image.pixel;
 
 import java.awt.image.BufferedImage;
 
-/** A <code>PixelConverter</code> that converts all data to RGB-formatted
+/**
+ * A <code>PixelConverter</code> that converts all data to RGB-formatted
  * integers.
  */
-public class IntRGBConverter extends PixelConverter implements
-		IntPixelIterator {
+public class IntRGBConverter extends PixelConverter implements IntPixelIterator {
 
 	byte[] rTable, gTable, bTable;
 	byte[] byteScratch;
@@ -28,11 +28,11 @@ public class IntRGBConverter extends PixelConverter implements
 	public void skip() {
 		if (byteIterator != null) {
 			byteIterator.skip();
-		} else if(intIterator!=null) {
+		} else if (intIterator != null) {
 			intIterator.skip();
 		}
 	}
-	
+
 	public void next(int[] dest) {
 		if (byteIterator != null) {
 			if (byteScratch == null) {
@@ -50,9 +50,9 @@ public class IntRGBConverter extends PixelConverter implements
 				break;
 			case TYPE_4BYTE_BGRA:
 				for (int a = 0; a < width; a++) {
-					dest[a] = (( byteScratch[4 * a + 0] & 0xff ) << 16)
-							+ (( byteScratch[4 * a + 1] & 0xff ) << 8)
-							+ (( byteScratch[4 * a + 2] & 0xff ));
+					dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 16)
+							+ ((byteScratch[4 * a + 1] & 0xff) << 8)
+							+ ((byteScratch[4 * a + 2] & 0xff));
 				}
 				break;
 			case BufferedImage.TYPE_4BYTE_ABGR:

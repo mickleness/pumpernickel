@@ -120,10 +120,8 @@ final class Order0X extends CurveX {
 
 	@Override
 	public boolean accumulateCrossings(CrossingsX c) {
-		return (x > c.getXLo() &&
-				x < c.getXHi() &&
-				y > c.getYLo() &&
-				y < c.getYHi());
+		return (x > c.getXLo() && x < c.getXHi() && y > c.getYLo() && y < c
+				.getYHi());
 	}
 
 	@Override

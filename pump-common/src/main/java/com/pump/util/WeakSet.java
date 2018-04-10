@@ -18,34 +18,35 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-/** A Set that only maintains weak references to all its members.
+/**
+ * A Set that only maintains weak references to all its members.
  */
 public class WeakSet<T> implements Set<T> {
-	
+
 	static class WeakSetIterator<T> implements Iterator<T> {
 
 		Iterator<WeakReference<T>> iter;
 		T next;
-		
-		WeakSetIterator( Iterator<WeakReference<T>> iter ) {
+
+		WeakSetIterator(Iterator<WeakReference<T>> iter) {
 			this.iter = iter;
 			queueNext();
 		}
-		
+
 		private void queueNext() {
-			while(iter.hasNext()) {
+			while (iter.hasNext()) {
 				WeakReference<T> ref = iter.next();
 				T v = ref.get();
-				if(v!=null) {
+				if (v != null) {
 					next = v;
 					return;
 				}
 			}
 			next = null;
 		}
-		
+
 		public boolean hasNext() {
-			return next!=null;
+			return next != null;
 		}
 
 		public T next() {
@@ -60,13 +61,13 @@ public class WeakSet<T> implements Set<T> {
 		public void remove() {
 			iter.next();
 		}
-		
+
 	}
-	
+
 	Set<WeakReference<T>> internalSet = new HashSet<WeakReference<T>>();
 
 	public boolean add(T e) {
-		if(contains(e))
+		if (contains(e))
 			return false;
 		internalSet.add(new WeakReference<T>(e));
 		return true;
@@ -74,11 +75,11 @@ public class WeakSet<T> implements Set<T> {
 
 	public boolean addAll(Collection<? extends T> c) {
 		boolean returnValue = false;
-		synchronized(c) {
+		synchronized (c) {
 			Iterator<? extends T> iter = c.iterator();
-			while(iter.hasNext()) {
+			while (iter.hasNext()) {
 				T e = iter.next();
-				if(add(e))
+				if (add(e))
 					returnValue = true;
 			}
 		}
@@ -91,16 +92,17 @@ public class WeakSet<T> implements Set<T> {
 
 	public boolean contains(Object o) {
 		Iterator<T> iter = iterator();
-		while(iter.hasNext()) {
-			if(iter.next()==o) return true;
+		while (iter.hasNext()) {
+			if (iter.next() == o)
+				return true;
 		}
 		return false;
 	}
 
 	public boolean containsAll(Collection<?> c) {
 		Iterator<?> incomingIter = c.iterator();
-		while(incomingIter.hasNext()) {
-			if( contains(incomingIter.next())==false ) {
+		while (incomingIter.hasNext()) {
+			if (contains(incomingIter.next()) == false) {
 				return false;
 			}
 		}
@@ -113,13 +115,13 @@ public class WeakSet<T> implements Set<T> {
 	}
 
 	public Iterator<T> iterator() {
-		return new WeakSetIterator<T>( internalSet.iterator() );
+		return new WeakSetIterator<T>(internalSet.iterator());
 	}
 
 	public boolean remove(Object o) {
 		Iterator<T> iter = iterator();
-		while(iter.hasNext()) {
-			if(iter.next()==o) {
+		while (iter.hasNext()) {
+			if (iter.next() == o) {
 				iter.remove();
 				return true;
 			}
@@ -130,9 +132,9 @@ public class WeakSet<T> implements Set<T> {
 	public boolean removeAll(Collection<?> c) {
 		Iterator<?> iter = c.iterator();
 		boolean returnValue = false;
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			boolean changed = remove(iter.next());
-			if(changed)
+			if (changed)
 				returnValue = true;
 		}
 		return returnValue;
@@ -141,10 +143,10 @@ public class WeakSet<T> implements Set<T> {
 	public boolean retainAll(Collection<?> c) {
 		Iterator<T> iter = iterator();
 		boolean returnValue = false;
-		while(iter.hasNext()) {
-			if( c.contains( iter.next() )==false ) {
+		while (iter.hasNext()) {
+			if (c.contains(iter.next()) == false) {
 				iter.remove();
-				returnValue  = true;
+				returnValue = true;
 			}
 		}
 		return returnValue;
@@ -153,17 +155,17 @@ public class WeakSet<T> implements Set<T> {
 	public int size() {
 		int sum = 0;
 		Iterator<T> iter = iterator();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			sum++;
 		}
 		return sum;
 	}
-	
+
 	private List<T> convertToList() {
 		List<T> list = new ArrayList<T>(internalSet.size());
 		Iterator<T> iter = iterator();
-		while(iter.hasNext()) {
-			list.add( iter.next() );
+		while (iter.hasNext()) {
+			list.add(iter.next());
 		}
 		return list;
 	}

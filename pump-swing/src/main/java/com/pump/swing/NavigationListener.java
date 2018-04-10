@@ -12,12 +12,16 @@ package com.pump.swing;
 
 public interface NavigationListener<T> {
 
-	public enum ListSelectionType { SINGLE_CLICK, DOUBLE_CLICK, KEY };
-	
+	public enum ListSelectionType {
+		SINGLE_CLICK, DOUBLE_CLICK, KEY
+	};
+
 	/**
 	 * 
-	 * @param type the type of selection
-	 * @param elements the newly selected elements
+	 * @param type
+	 *            the type of selection
+	 * @param elements
+	 *            the newly selected elements
 	 * @return true if this listener consumed the event, false otherwise
 	 */
 	public boolean elementsSelected(ListSelectionType type, T... elements);

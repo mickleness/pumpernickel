@@ -30,11 +30,11 @@ import javax.swing.tree.TreeNode;
 import com.pump.geom.ShapeBounds;
 import com.pump.geom.ShapeStringUtils;
 
-/** The default implementation of a {@link DrawInstruction}.
+/**
+ * The default implementation of a {@link DrawInstruction}.
  * 
  */
-public class BasicDrawInstruction implements DrawInstruction, Serializable
-{
+public class BasicDrawInstruction implements DrawInstruction, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	GeneralPath path = new GeneralPath();
@@ -45,94 +45,104 @@ public class BasicDrawInstruction implements DrawInstruction, Serializable
 	float opacity;
 	String source;
 	GraphicsWriter parent;
-	
-	/** Create a new <code>BasicDrawInstruction</code>.
+
+	/**
+	 * Create a new <code>BasicDrawInstruction</code>.
 	 * 
-	 * @param shape the shape to render.
-	 * @param t the transform to render through.
-	 * @param clipping the optional clipping.
-	 * @param p the paint to use.
-	 * @param s the stroke to use.
-	 * @param opacity the opacity [0,1].
+	 * @param shape
+	 *            the shape to render.
+	 * @param t
+	 *            the transform to render through.
+	 * @param clipping
+	 *            the optional clipping.
+	 * @param p
+	 *            the paint to use.
+	 * @param s
+	 *            the stroke to use.
+	 * @param opacity
+	 *            the opacity [0,1].
 	 */
-	public BasicDrawInstruction(Shape shape,AffineTransform t,Shape clipping,Paint p,Stroke s,float opacity) {
-		if(opacity<0 || opacity>1) throw new IllegalArgumentException("The opacity ("+opacity+") must be between [0,1].");
-		path.append(shape.getPathIterator(null),true);
+	public BasicDrawInstruction(Shape shape, AffineTransform t, Shape clipping,
+			Paint p, Stroke s, float opacity) {
+		if (opacity < 0 || opacity > 1)
+			throw new IllegalArgumentException("The opacity (" + opacity
+					+ ") must be between [0,1].");
+		path.append(shape.getPathIterator(null), true);
 		paint = p;
 		stroke = s;
 		transform = new AffineTransform(t);
-		if(clipping!=null) {
+		if (clipping != null) {
 			this.clipping = new Area(clipping);
 		}
 		this.opacity = opacity;
-		
+
 		source = GraphicsWriter.getCaller();
 	}
-	
+
 	/** Returns the opacity [0,1]. */
 	public float getOpacity() {
 		return opacity;
 	}
-	
+
 	/** Converts this to a <code>BasicFillInstruction</code>. */
 	public BasicFillInstruction convertToFillInstruction() {
-		return new BasicFillInstruction(
-				stroke.createStrokedShape(path), 
-				transform, 
-				clipping, 
-				paint,
-				opacity
-		);
+		return new BasicFillInstruction(stroke.createStrokedShape(path),
+				transform, clipping, paint, opacity);
 	}
-	
+
 	/** Returns the stroke. */
 	public Stroke getStroke() {
 		return stroke;
 	}
-	
+
 	/** Returns the stroke paint. */
 	public Paint getStrokePaint() {
 		return paint;
 	}
-	
-	
+
 	private transient Boolean isClipped;
-	/** Return true if this instruction is affected by the current clipping.
+
+	/**
+	 * Return true if this instruction is affected by the current clipping.
 	 * (Returns false if no clipping is present.)
 	 */
 	public boolean isClipped() {
-		if(clipping==null) return false;
-		if(isClipped==null) {
+		if (clipping == null)
+			return false;
+		if (isClipped == null) {
 			Stroke currentStroke = stroke;
-			if(currentStroke instanceof BasicStroke) {
-				BasicStroke bs = (BasicStroke)currentStroke;
+			if (currentStroke instanceof BasicStroke) {
+				BasicStroke bs = (BasicStroke) currentStroke;
 				currentStroke = new BasicStroke(bs.getLineWidth(),
-						BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL);
+						BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
 			}
 			Area strokeArea = new Area(currentStroke.createStrokedShape(path));
 			strokeArea.transform(transform);
 			Area clipArea = new Area(clipping);
-			
+
 			strokeArea.subtract(clipArea);
-			
+
 			Rectangle2D r = strokeArea.getBounds2D();
-			isClipped = new Boolean( r.getWidth()>.00001 && r.getHeight()>.00001 );
+			isClipped = new Boolean(r.getWidth() > .00001
+					&& r.getHeight() > .00001);
 		}
 		return isClipped.booleanValue();
 	}
-	
+
 	/** Returns the untransformed, unclipped shape this instruction uses. */
 	public Shape getShape() {
 		return getShape(false);
 	}
-	
-	/** Returns the unclipped shape this instruction uses.
+
+	/**
+	 * Returns the unclipped shape this instruction uses.
 	 * 
-	 * @param useTransform whether to transform this shape or not.
+	 * @param useTransform
+	 *            whether to transform this shape or not.
 	 * @return the unclipped shape.
 	 */
 	public Shape getShape(boolean useTransform) {
-		if(useTransform) {
+		if (useTransform) {
 			return transform.createTransformedShape(path);
 		}
 		return path;
@@ -140,27 +150,30 @@ public class BasicDrawInstruction implements DrawInstruction, Serializable
 
 	/** Renders this instruction. */
 	public void paint(Graphics2D g) {
-		g = (Graphics2D)g.create();
-		if(clipping!=null)
+		g = (Graphics2D) g.create();
+		if (clipping != null)
 			g.clip(getClipping());
 		g.transform(getTransform());
 		g.setStroke(getStroke());
 		g.setPaint(getStrokePaint());
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,opacity));
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+				opacity));
 		g.draw(getShape());
 	}
-	
+
 	/** Returns the <code>AffineTransform</code> this instruction uses. */
 	public AffineTransform getTransform() {
 		return new AffineTransform(transform);
 	}
-	
-	/** Returns the area affected by this instruction.  This
-	 * takes into account the clipping and transform.
+
+	/**
+	 * Returns the area affected by this instruction. This takes into account
+	 * the clipping and transform.
 	 */
 	public Rectangle2D getBounds() {
-		if(clipping==null) {
-			return ShapeBounds.getBounds(stroke.createStrokedShape(path),transform);
+		if (clipping == null) {
+			return ShapeBounds.getBounds(stroke.createStrokedShape(path),
+					transform);
 		}
 
 		Area clipArea = new Area(clipping);
@@ -169,74 +182,76 @@ public class BasicDrawInstruction implements DrawInstruction, Serializable
 		clipArea.intersect(strokeArea);
 		return clipArea.getBounds2D();
 	}
-	
+
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-		if(clipping==null) {
+		if (clipping == null) {
 			out.writeObject(null);
 		} else {
-			out.writeObject( ShapeStringUtils.toString(clipping) );
+			out.writeObject(ShapeStringUtils.toString(clipping));
 		}
-		out.writeObject( paint );
-		out.writeObject( ShapeStringUtils.toString(path) );
-		if(stroke instanceof BasicStroke) {
-			out.writeObject( toString((BasicStroke)stroke) );
+		out.writeObject(paint);
+		out.writeObject(ShapeStringUtils.toString(path));
+		if (stroke instanceof BasicStroke) {
+			out.writeObject(toString((BasicStroke) stroke));
 		} else {
-			out.writeObject( stroke );
+			out.writeObject(stroke);
 		}
-		out.writeObject( transform );
-		out.writeFloat( opacity );
+		out.writeObject(transform);
+		out.writeFloat(opacity);
 	}
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
 		Object obj = in.readObject();
-		if(obj instanceof String) {
-			String str = (String)obj;
-			clipping = new Area( ShapeStringUtils.createGeneralPath(str) );
+		if (obj instanceof String) {
+			String str = (String) obj;
+			clipping = new Area(ShapeStringUtils.createGeneralPath(str));
 		}
-		paint = (Paint)in.readObject();
-		String str = (String)in.readObject();
-		path = ShapeStringUtils.createGeneralPath( str );
+		paint = (Paint) in.readObject();
+		String str = (String) in.readObject();
+		path = ShapeStringUtils.createGeneralPath(str);
 		Object strokeObject = in.readObject();
-		if(strokeObject instanceof String) {
-			stroke = createBasicStroke( (String)strokeObject );
+		if (strokeObject instanceof String) {
+			stroke = createBasicStroke((String) strokeObject);
 		} else {
-			stroke = (Stroke)strokeObject;
+			stroke = (Stroke) strokeObject;
 		}
-		transform = (AffineTransform)in.readObject();
+		transform = (AffineTransform) in.readObject();
 		opacity = in.readFloat();
 	}
-	
+
 	public static String toString(BasicStroke stroke) {
-		//TODO: fix this method, and createBasicStroke()
-		return "BasicStroke[ width = "+stroke.getLineWidth()+" ]";
+		// TODO: fix this method, and createBasicStroke()
+		return "BasicStroke[ width = " + stroke.getLineWidth() + " ]";
 	}
-	
+
 	public static BasicStroke createBasicStroke(String s) {
 		StringTokenizer st = new StringTokenizer(s);
-		while(st.hasMoreTokens()) {
+		while (st.hasMoreTokens()) {
 			String token = st.nextToken();
 			try {
 				float f = Float.parseFloat(token);
 				return new BasicStroke(f);
-			} catch(NumberFormatException e) {}
+			} catch (NumberFormatException e) {
+			}
 		}
 		return new BasicStroke(1);
 	}
 
-	/** Returns the clipping this instruction uses.  (May be null.)
-	 * This clipping is applied <i>before</i> the <code>AffineTransform</code>.
+	/**
+	 * Returns the clipping this instruction uses. (May be null.) This clipping
+	 * is applied <i>before</i> the <code>AffineTransform</code>.
 	 */
-	public Shape getClipping()
-	{
-		if(clipping==null)
+	public Shape getClipping() {
+		if (clipping == null)
 			return null;
 		return new GeneralPath(clipping);
 	}
 
-
 	public void setParent(GraphicsWriter parent) {
 		this.parent = parent;
 	}
-	
+
 	public Enumeration<?> children() {
 		return GraphicsWriter.EMPTY_ENUMERATION;
 	}

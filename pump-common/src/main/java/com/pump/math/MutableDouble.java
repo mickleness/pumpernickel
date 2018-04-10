@@ -10,15 +10,14 @@
  */
 package com.pump.math;
 
-
 /**
- * This <code>Number</code> can change value, so for operations that need to
- * be computed millions of times, recycling 1 object will save a lot of memory
+ * This <code>Number</code> can change value, so for operations that need to be
+ * computed millions of times, recycling 1 object will save a lot of memory
  * allocation.
  */
 public class MutableDouble extends Number implements Comparable<Number> {
 	private static final long serialVersionUID = 1L;
-	
+
 	public static class ComparisonException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 
@@ -44,10 +43,10 @@ public class MutableDouble extends Number implements Comparable<Number> {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Number) {
-			Number n = (Number)obj;
+			Number n = (Number) obj;
 			try {
-				return compareTo(n)==0;
-			} catch(ComparisonException e) {
+				return compareTo(n) == 0;
+			} catch (ComparisonException e) {
 				return false;
 			}
 		}
@@ -82,17 +81,21 @@ public class MutableDouble extends Number implements Comparable<Number> {
 	public int compareTo(Number n) {
 		double d = n.doubleValue();
 
-		if(Double.isNaN(d) && Double.isNaN(value))
+		if (Double.isNaN(d) && Double.isNaN(value))
 			return 0;
-		if(Double.isInfinite(d) && Double.isInfinite(value))
+		if (Double.isInfinite(d) && Double.isInfinite(value))
 			return 0;
-		if(Double.isNaN(d) || Double.isNaN(value))
-			throw new ComparisonException("internal value = "+value+" incoming value = "+d);
-		if(Double.isInfinite(d) || Double.isInfinite(value))
-			throw new ComparisonException("internal value = "+value+" incoming value = "+d);
-		
-		if(value==d) return 0;
-		if(value<d) return -1;
+		if (Double.isNaN(d) || Double.isNaN(value))
+			throw new ComparisonException("internal value = " + value
+					+ " incoming value = " + d);
+		if (Double.isInfinite(d) || Double.isInfinite(value))
+			throw new ComparisonException("internal value = " + value
+					+ " incoming value = " + d);
+
+		if (value == d)
+			return 0;
+		if (value < d)
+			return -1;
 		return 1;
 	}
 }

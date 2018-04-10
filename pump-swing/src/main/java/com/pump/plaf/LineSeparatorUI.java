@@ -21,23 +21,23 @@ import javax.swing.plaf.SeparatorUI;
 
 public class LineSeparatorUI extends SeparatorUI {
 	Color[] colors;
-	
+
 	public LineSeparatorUI(Color c) {
 		this(new Color[] { c });
 	}
-	
+
 	public LineSeparatorUI(Color[] array) {
 		colors = new Color[array.length];
-		System.arraycopy(array,0,colors,0,array.length);
+		System.arraycopy(array, 0, colors, 0, array.length);
 	}
 
 	@Override
 	public Dimension getMaximumSize(JComponent c) {
-		return getSize((JSeparator)c, Integer.MAX_VALUE);
+		return getSize((JSeparator) c, Integer.MAX_VALUE);
 	}
-	
-	private Dimension getSize(JSeparator separator,int otherDimension) {
-		if(separator.getOrientation()==SwingConstants.VERTICAL) {
+
+	private Dimension getSize(JSeparator separator, int otherDimension) {
+		if (separator.getOrientation() == SwingConstants.VERTICAL) {
 			return new Dimension(colors.length, otherDimension);
 		}
 		return new Dimension(otherDimension, colors.length);
@@ -45,26 +45,26 @@ public class LineSeparatorUI extends SeparatorUI {
 
 	@Override
 	public Dimension getMinimumSize(JComponent c) {
-		return getSize( (JSeparator)c, 1);
+		return getSize((JSeparator) c, 1);
 	}
 
 	@Override
 	public Dimension getPreferredSize(JComponent c) {
-		return getSize( (JSeparator)c, 1);
+		return getSize((JSeparator) c, 1);
 	}
 
 	@Override
 	public void paint(Graphics g, JComponent c) {
-		JSeparator separator = (JSeparator)c;
+		JSeparator separator = (JSeparator) c;
 		int w = separator.getWidth();
 		int h = separator.getHeight();
-		for(int a = 0; a<colors.length; a++) {
-			if(colors[a]!=null) {
+		for (int a = 0; a < colors.length; a++) {
+			if (colors[a] != null) {
 				g.setColor(colors[a]);
-				if(separator.getOrientation()==SwingConstants.VERTICAL) {
-					g.drawLine(a,0,a,h-1);
+				if (separator.getOrientation() == SwingConstants.VERTICAL) {
+					g.drawLine(a, 0, a, h - 1);
 				} else {
-					g.drawLine(0,a,w-1,a);
+					g.drawLine(0, a, w - 1, a);
 				}
 			}
 		}

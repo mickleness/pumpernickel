@@ -14,15 +14,15 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 
 public class FleshColors extends ColorSet {
-	
+
 	public FleshColors(boolean grid) {
 		super(grid);
 	}
-	
-	public FleshColors(boolean grid,int rows,int columns) {
+
+	public FleshColors(boolean grid, int rows, int columns) {
 		super(grid, rows, columns);
 	}
-	
+
 	@Override
 	public int getRGB(float xFraction, float yFraction) {
 		float saturation = (yFraction + .2f - .15f * xFraction) / .75f;
@@ -45,23 +45,23 @@ public class FleshColors extends ColorSet {
 
 		double xFraction, yFraction;
 
-		/*double hue = hsb[0];
-		double brightness = hsb[2];
-		
-		xFraction = (float)Math.pow( hue/.08, 1.0/.4 );
-		
-		if(xFraction>1) xFraction = 1;
-
-		//we can't look at saturation, because it may have a max capped on it
-
-		yFraction = (float)Math.pow( (1.0-brightness)/((1.0 - xFraction) * .2 + .7), 1.0/(xFraction * 2.0 + 1.0));
-		
-		*/
-		
+		/*
+		 * double hue = hsb[0]; double brightness = hsb[2];
+		 * 
+		 * xFraction = (float)Math.pow( hue/.08, 1.0/.4 );
+		 * 
+		 * if(xFraction>1) xFraction = 1;
+		 * 
+		 * //we can't look at saturation, because it may have a max capped on it
+		 * 
+		 * yFraction = (float)Math.pow( (1.0-brightness)/((1.0 - xFraction) * .2
+		 * + .7), 1.0/(xFraction * 2.0 + 1.0));
+		 */
 
 		xFraction = Math.pow(hsb[0] / .08, 2);
 
-		yFraction = Math.pow( (1 - hsb[2])/((1 - xFraction) * .5f + .5f) , 1.0/(xFraction * 2 + 1));
+		yFraction = Math.pow((1 - hsb[2]) / ((1 - xFraction) * .5f + .5f),
+				1.0 / (xFraction * 2 + 1));
 
 		return new Point2D.Double(xFraction, yFraction);
 	}

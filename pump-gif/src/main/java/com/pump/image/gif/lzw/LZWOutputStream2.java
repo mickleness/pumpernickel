@@ -29,8 +29,8 @@ import java.io.OutputStream;
  * Poskanzer and a few others, but here it is nicely wrapped in a well-defined
  * <code>java.io.OutputStream</code> for your convenience.
  * 
- * @deprecated this is a backed up copy of the original. Please see LZWOutputStream
- * instead.
+ * @deprecated this is a backed up copy of the original. Please see
+ *             LZWOutputStream instead.
  * 
  */
 class LZWOutputStream2 extends OutputStream {
@@ -165,7 +165,7 @@ class LZWOutputStream2 extends OutputStream {
 		// OK,
 		// I changed the name of the sole outside method it accesses.) I figure
 		// if I have no idea how something works, I shouldn't play with it :)
-		//		
+		//
 		// Despite its unencapsulated structure, this section is actually highly
 		// self-contained. The calling code merely calls compress(), and the
 		// present
@@ -176,7 +176,7 @@ class LZWOutputStream2 extends OutputStream {
 		// ****************************************************************************
 
 		// GIFCOMPR.C - GIF Image compression routines
-		//		
+		//
 		// Lempel-Ziv compression based on 'compress'. GIF modifications by
 		// David Rowley (mgardi@watdcsu.waterloo.edu)
 
@@ -187,9 +187,9 @@ class LZWOutputStream2 extends OutputStream {
 		static final int HSIZE = 5003; // 80% occupancy
 
 		// GIF Image compression - modified 'compress'
-		//		
+		//
 		// Based on: compress.c - File compression ala IEEE Computer, June 1984.
-		//		
+		//
 		// By Authors: Spencer W. Thomas (decvax!harpo!utah-cs!utah-gr!thomas)
 		// Jim McKie (decvax!mcvax!jim)
 		// Steve Davies (decvax!vax135!petsd!peora!srd)
@@ -307,7 +307,7 @@ class LZWOutputStream2 extends OutputStream {
 		}
 
 		// output
-		//		
+		//
 		// Output the given code.
 		// Inputs:
 		// code: A n_bits-bit integer. If == -1, then EOF. This assumes

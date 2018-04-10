@@ -15,22 +15,17 @@ import java.awt.geom.Point2D;
 import com.pump.blog.Blurb;
 import com.pump.math.function.PolynomialFunction;
 
-/** This provides a few static tools to help make 3D transitions.
+/**
+ * This provides a few static tools to help make 3D transitions.
  */
-@Blurb (
-title = "Images: 3D Transforms and Transitions",
-releaseDate = "April 2014",
-summary = "This explores how to render <code>BufferedImages</code> through <code>PerspectiveTransforms</code>, "+
-"and offers a few new 3D-based transitions.",
-article = "http://javagraphics.blogspot.com/2014/05/images-3d-transitions-and.html",
-imageName = "Transition3D.png")
+@Blurb(title = "Images: 3D Transforms and Transitions", releaseDate = "April 2014", summary = "This explores how to render <code>BufferedImages</code> through <code>PerspectiveTransforms</code>, "
+		+ "and offers a few new 3D-based transitions.", article = "http://javagraphics.blogspot.com/2014/05/images-3d-transitions-and.html", imageName = "Transition3D.png")
 public abstract class Transition3D extends AbstractTransition {
 
-	
 	public abstract static class Point3D {
 		public static class Double extends Point3D {
 			double x, y, z;
-			
+
 			public Double(double x, double y, double z) {
 				this.x = x;
 				this.y = y;
@@ -40,9 +35,11 @@ public abstract class Transition3D extends AbstractTransition {
 			public double getX() {
 				return x;
 			}
+
 			public double getY() {
 				return y;
 			}
+
 			public double getZ() {
 				return z;
 			}
@@ -52,77 +49,82 @@ public abstract class Transition3D extends AbstractTransition {
 				this.y = y;
 				this.z = z;
 			}
-			
+
 		}
-		
+
 		public abstract double getX();
+
 		public abstract double getY();
+
 		public abstract double getZ();
+
 		public abstract void setLocation(double x, double y, double z);
-		
+
 		@Override
 		public String toString() {
-			return "("+getX()+", "+getY()+", "+getZ()+")";
+			return "(" + getX() + ", " + getY() + ", " + getZ() + ")";
 		}
 	}
-	
+
 	public static class BasicProjection {
 		double w, h;
-		PolynomialFunction pf = PolynomialFunction.createFit( new double[] {-500, 1.5}, new double[] {0, 1} );
-		
-		public BasicProjection(double width,double height) {
+		PolynomialFunction pf = PolynomialFunction.createFit(new double[] {
+				-500, 1.5 }, new double[] { 0, 1 });
+
+		public BasicProjection(double width, double height) {
 			w = width;
 			h = height;
 		}
-		
+
 		public Point2D transform(Point3D p) {
 			return transform(p.getX(), p.getY(), p.getZ());
 		}
-		
-		public Point2D transform(double x,double y,double z) {
-			//based on:
+
+		public Point2D transform(double x, double y, double z) {
+			// based on:
 			// http://stackoverflow.com/questions/519106/projecting-a-3d-point-to-a-2d-screen-coordinate
-			
-			x = x-w/2.0;
-			y = y-h/2.0;
-			
-			   double screenX = 0d, screenY = 0d;
 
-			    // Camera is defined in XAML as:
-			    //        <Viewport3D.Camera>
-			    //             <PerspectiveCamera Position="0,0,800" LookDirection="0,0,-1" />
-			    //        </Viewport3D.Camera>
+			x = x - w / 2.0;
+			y = y - h / 2.0;
 
+			double screenX = 0d, screenY = 0d;
 
-			    // Translate input point using camera position
-			    double inputX = x - 0; //cam.Position.X;
-			    double inputY = y - 0; //cam.Position.Y;
-			    double inputZ = z - w; //cam.Position.Z;
+			// Camera is defined in XAML as:
+			// <Viewport3D.Camera>
+			// <PerspectiveCamera Position="0,0,800" LookDirection="0,0,-1" />
+			// </Viewport3D.Camera>
 
-			    double aspectRatio = w / h;
+			// Translate input point using camera position
+			double inputX = x - 0; // cam.Position.X;
+			double inputY = y - 0; // cam.Position.Y;
+			double inputZ = z - w; // cam.Position.Z;
 
-			    // Apply projection to X and Y
-			    screenX = inputX / (-inputZ * Math.tan(Math.PI * 1 / 4));
+			double aspectRatio = w / h;
 
-			    screenY = (inputY * aspectRatio) / (-inputZ * Math.tan(Math.PI * 1 / 4));
+			// Apply projection to X and Y
+			screenX = inputX / (-inputZ * Math.tan(Math.PI * 1 / 4));
 
-			    // Convert to screen coordinates
-			    screenX = screenX * w;
+			screenY = (inputY * aspectRatio)
+					/ (-inputZ * Math.tan(Math.PI * 1 / 4));
 
-			    screenY = screenY * h;
+			// Convert to screen coordinates
+			screenX = screenX * w;
 
-			    return new Point2D.Double(screenX + w/2.0, screenY + h/2.0);
+			screenY = screenY * h;
+
+			return new Point2D.Double(screenX + w / 2.0, screenY + h / 2.0);
 		}
 	}
 
-	/** Flush all z-coordinates with zero.
+	/**
+	 * Flush all z-coordinates with zero.
 	 */
 	protected static void flushZCoordinateWithSurface(Point3D... points) {
 		double maxZ = 0;
-		for(Point3D p : points) {
+		for (Point3D p : points) {
 			maxZ = Math.max(maxZ, p.getZ());
 		}
-		for(Point3D p : points) {
+		for (Point3D p : points) {
 			p.setLocation(p.getX(), p.getY(), p.getZ() - maxZ);
 		}
 	}

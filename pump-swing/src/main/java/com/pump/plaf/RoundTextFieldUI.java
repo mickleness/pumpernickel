@@ -35,73 +35,77 @@ import javax.swing.text.JTextComponent;
 import com.pump.blog.Blurb;
 import com.pump.icon.SearchIcon;
 
-/** A <code>TextFieldUI</code> that features rounded horizontal
- * endpoints.
- * <P>Also if the <code>JTextField</code> has the client property
- * "useSearchIcon" defined, this may place a magnifying glass icon
- * in the left edge of this UI before the text.
+/**
+ * A <code>TextFieldUI</code> that features rounded horizontal endpoints.
+ * <P>
+ * Also if the <code>JTextField</code> has the client property "useSearchIcon"
+ * defined, this may place a magnifying glass icon in the left edge of this UI
+ * before the text.
  *
  */
-@Blurb (
-imageName = "PromptSearch.png",
-title = "Text: Prompts and Search Fields",
-releaseDate = "December 2009",
-summary = "This article has 2 goals:\n"+
-"<br>1. Display a gray prompt over a <code>JTextField</code> if it doesn't have the focus.</br>\n"+
-"<br>2. Implement a <code><a href=\"https://javagraphics.java.net/doc/com/bric/plaf/RoundTextFieldUI.html\">"+
-"RoundTextFieldUI</a></code> (with an optional magnifying glass).</br>",
-article = "http://javagraphics.blogspot.com/2009/12/text-prompts-and-search-fields.html"
-)
+@Blurb(imageName = "PromptSearch.png", title = "Text: Prompts and Search Fields", releaseDate = "December 2009", summary = "This article has 2 goals:\n"
+		+ "<br>1. Display a gray prompt over a <code>JTextField</code> if it doesn't have the focus.</br>\n"
+		+ "<br>2. Implement a <code><a href=\"https://javagraphics.java.net/doc/com/bric/plaf/RoundTextFieldUI.html\">"
+		+ "RoundTextFieldUI</a></code> (with an optional magnifying glass).</br>", article = "http://javagraphics.blogspot.com/2009/12/text-prompts-and-search-fields.html")
 public class RoundTextFieldUI extends BasicTextFieldUI {
-	public final static ButtonShape ROUNDRECT_SHAPE = new ButtonShape(8, Short.MAX_VALUE);
-	static Insets fieldInsets = new Insets(6,6,6,6);
-	
+	public final static ButtonShape ROUNDRECT_SHAPE = new ButtonShape(8,
+			Short.MAX_VALUE);
+	static Insets fieldInsets = new Insets(6, 6, 6, 6);
+
 	JTextComponent editor;
 	int focusPadding = 2;
 
 	@Override
 	public Dimension getMaximumSize(JComponent c) {
-		//don't use the max height ever; it looks bizarre with a round rect text field
+		// don't use the max height ever; it looks bizarre with a round rect
+		// text field
 		Dimension pref = super.getPreferredSize(c);
 		Dimension max = super.getMaximumSize(c);
-		
-		return ROUNDRECT_SHAPE.getPreferredSize(null, max.width, pref.height, fieldInsets, null);
+
+		return ROUNDRECT_SHAPE.getPreferredSize(null, max.width, pref.height,
+				fieldInsets, null);
 	}
 
 	@Override
 	public Dimension getMinimumSize(JComponent c) {
 		Dimension d = super.getMinimumSize(c);
-		return ROUNDRECT_SHAPE.getPreferredSize(null, d.width, d.height, fieldInsets, null);
+		return ROUNDRECT_SHAPE.getPreferredSize(null, d.width, d.height,
+				fieldInsets, null);
 	}
 
 	@Override
 	public Dimension getPreferredSize(JComponent c) {
 		Dimension d = super.getPreferredSize(c);
-		return ROUNDRECT_SHAPE.getPreferredSize(null, d.width, d.height, fieldInsets, null);
+		return ROUNDRECT_SHAPE.getPreferredSize(null, d.width, d.height,
+				fieldInsets, null);
 	}
-	
-	static Color[] gradientColors = new Color[] { new Color(0x666666), new Color(0x999999)};
-	static float[] gradientPositions = new float[] {0, 1};
-	
+
+	static Color[] gradientColors = new Color[] { new Color(0x666666),
+			new Color(0x999999) };
+	static float[] gradientPositions = new float[] { 0, 1 };
+
 	private GeneralPath path = new GeneralPath();
 	private AffineTransform transform = new AffineTransform();
 	private int radius = 0;
 	private static Icon searchIcon = new SearchIcon(12);
+
 	protected void updateGeometry() {
 		Rectangle editorRect = getVisibleEditorRect();
 		int iconExtra = includeSearchIcon() ? searchIcon.getIconWidth() : 0;
-		ROUNDRECT_SHAPE.getShape(path, editorRect.width+2*radius+iconExtra, editorRect.height);
+		ROUNDRECT_SHAPE.getShape(path, editorRect.width + 2 * radius
+				+ iconExtra, editorRect.height);
 		transform.setToTranslation(focusPadding, focusPadding);
 		path.transform(transform);
 	}
-	
+
 	protected boolean includeSearchIcon() {
 		Object obj = editor.getClientProperty("useSearchIcon");
-		if(obj!=null) return obj.toString().equalsIgnoreCase("true");
-		
-		//the apple-tech-note-2196 key:
+		if (obj != null)
+			return obj.toString().equalsIgnoreCase("true");
+
+		// the apple-tech-note-2196 key:
 		obj = editor.getClientProperty("JTextField.variant");
-		if("search".equals(obj))
+		if ("search".equals(obj))
 			return true;
 		return false;
 	}
@@ -109,122 +113,133 @@ public class RoundTextFieldUI extends BasicTextFieldUI {
 	@Override
 	protected void paintSafely(Graphics g) {
 		updateGeometry();
-		
+
 		paintRealBackground(g);
-		
-		/** I really wish we could just completely replace this method,
-		 * but it includes references to fields I don't have access to...
+
+		/**
+		 * I really wish we could just completely replace this method, but it
+		 * includes references to fields I don't have access to...
 		 */
 		super.paintSafely(g);
 	}
 
-	/** Does nothing.  This will be called in super.paintSafely()
-	 * if the text field is set to opaque.  However we paint the
-	 * real background in <code>paintRealBackground()</code>, which
-	 * includes the opaque background, focus ring, and rounded border.
+	/**
+	 * Does nothing. This will be called in super.paintSafely() if the text
+	 * field is set to opaque. However we paint the real background in
+	 * <code>paintRealBackground()</code>, which includes the opaque background,
+	 * focus ring, and rounded border.
 	 */
 	@Override
-	protected void paintBackground(Graphics g) {}
-	
-	protected void paintRealBackground(Graphics g) {
-		if(editor.isOpaque()) {
-			g.setColor(editor.getBackground());
-			g.fillRect(0,0,editor.getWidth(), editor.getHeight());
-		}
-	
-		Graphics2D g2 = (Graphics2D)g;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	protected void paintBackground(Graphics g) {
+	}
 
-		
-		if(editor.hasFocus()) {
+	protected void paintRealBackground(Graphics g) {
+		if (editor.isOpaque()) {
+			g.setColor(editor.getBackground());
+			g.fillRect(0, 0, editor.getWidth(), editor.getHeight());
+		}
+
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+
+		if (editor.hasFocus()) {
 			PlafPaintUtils.paintFocus(g2, path, focusPadding);
 		}
-		
+
 		g2.setColor(editor.getBackground());
 		g2.fill(path);
 
 		Shape oldClip = g2.getClip();
-		g2.clipRect(0,0,editor.getWidth(),editor.getHeight()/2);
-		g2.translate(0,1);
+		g2.clipRect(0, 0, editor.getWidth(), editor.getHeight() / 2);
+		g2.translate(0, 1);
 		g2.setPaint(new Color(0xBBBBBB));
 		g2.draw(path);
-		g2.translate(0,-1);
+		g2.translate(0, -1);
 		g2.setClip(oldClip);
-		if(editor.hasFocus()==false) {
-			g2.clipRect(0,editor.getHeight()/2,editor.getWidth(),editor.getHeight()/2);
-			g2.translate(0,1);
-			g2.setPaint(new Color(0x66FFFFFF,true));
+		if (editor.hasFocus() == false) {
+			g2.clipRect(0, editor.getHeight() / 2, editor.getWidth(),
+					editor.getHeight() / 2);
+			g2.translate(0, 1);
+			g2.setPaint(new Color(0x66FFFFFF, true));
 			g2.draw(path);
-			g2.translate(0,-1);
+			g2.translate(0, -1);
 			g2.setClip(oldClip);
 		}
-		
+
 		Rectangle editorRect = getVisibleEditorRect();
-		g2.setPaint(PlafPaintUtils.getVerticalGradient("roundTextField", editorRect.height, focusPadding, gradientPositions, gradientColors));
+		g2.setPaint(PlafPaintUtils.getVerticalGradient("roundTextField",
+				editorRect.height, focusPadding, gradientPositions,
+				gradientColors));
 		g2.draw(path);
-		
-		if(includeSearchIcon()) {
-			searchIcon.paintIcon(editor, g, editorRect.x-searchIcon.getIconWidth()-4,
-					editorRect.y+1+editorRect.height/2-searchIcon.getIconHeight()/2);
+
+		if (includeSearchIcon()) {
+			searchIcon.paintIcon(
+					editor,
+					g,
+					editorRect.x - searchIcon.getIconWidth() - 4,
+					editorRect.y + 1 + editorRect.height / 2
+							- searchIcon.getIconHeight() / 2);
 		}
 	}
 
 	protected static FocusListener focusListener = new FocusListener() {
 		public void focusGained(FocusEvent e) {
-			((Component)e.getSource()).repaint();
+			((Component) e.getSource()).repaint();
 		}
-		
+
 		public void focusLost(FocusEvent e) {
-			((Component)e.getSource()).repaint();
+			((Component) e.getSource()).repaint();
 		}
 	};
-	
+
 	protected static PropertyChangeListener iconListener = new PropertyChangeListener() {
 
 		public void propertyChange(PropertyChangeEvent evt) {
-			if(evt.getPropertyName().equals("useSearchIcon") || evt.getPropertyName().equals("JTextField.variant")) {
-				JTextField tf = (JTextField)evt.getSource();
+			if (evt.getPropertyName().equals("useSearchIcon")
+					|| evt.getPropertyName().equals("JTextField.variant")) {
+				JTextField tf = (JTextField) evt.getSource();
 				tf.revalidate();
 				tf.repaint();
 			}
 		}
-		
+
 	};
-	
-    @Override
+
+	@Override
 	protected Rectangle getVisibleEditorRect() {
-    	Rectangle r = super.getVisibleEditorRect();
-    	if(r==null)
-    		return null;
-    	int left = r.x;
-    	int right = r.x + r.width;
-		radius = (r.height - 2*focusPadding)/2;
-    	
-    	int dx = includeSearchIcon() ? searchIcon.getIconWidth()/2+6 : 0;
-    	left += focusPadding + this.radius + dx;
-    	right -= focusPadding + this.radius;
-    	r.x = left;
-    	r.width = right-left;
-    	
-    	r.y += focusPadding;
-    	r.height -= 2*focusPadding;
-		
-    	return r;
+		Rectangle r = super.getVisibleEditorRect();
+		if (r == null)
+			return null;
+		int left = r.x;
+		int right = r.x + r.width;
+		radius = (r.height - 2 * focusPadding) / 2;
+
+		int dx = includeSearchIcon() ? searchIcon.getIconWidth() / 2 + 6 : 0;
+		left += focusPadding + this.radius + dx;
+		right -= focusPadding + this.radius;
+		r.x = left;
+		r.width = right - left;
+
+		r.y += focusPadding;
+		r.height -= 2 * focusPadding;
+
+		return r;
 	}
 
 	@Override
 	public void installUI(JComponent c) {
-        editor = (JTextComponent) c;
-        super.installUI(c);
-        c.setBorder(null);
-        c.setOpaque(false);
-        c.addFocusListener(focusListener);
-        editor.addPropertyChangeListener(iconListener);
-    }
-	
+		editor = (JTextComponent) c;
+		super.installUI(c);
+		c.setBorder(null);
+		c.setOpaque(false);
+		c.addFocusListener(focusListener);
+		editor.addPropertyChangeListener(iconListener);
+	}
+
 	@Override
 	public void uninstallUI(JComponent c) {
 		super.uninstallUI(c);
-        c.removeFocusListener(focusListener);
+		c.removeFocusListener(focusListener);
 	}
 }

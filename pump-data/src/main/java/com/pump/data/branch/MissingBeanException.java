@@ -17,7 +17,7 @@ public class MissingBeanException extends BranchException {
 	@SuppressWarnings("rawtypes")
 	Branch branch;
 	Object beanId;
-	
+
 	@SuppressWarnings("rawtypes")
 	public MissingBeanException(Branch branch, Object beanId) {
 		this.branch = branch;

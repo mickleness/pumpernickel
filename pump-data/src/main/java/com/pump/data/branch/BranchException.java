@@ -36,6 +36,6 @@ public abstract class BranchException extends Exception {
 
 	@SuppressWarnings("rawtypes")
 	public abstract Branch getBranch();
-	
+
 	public abstract Object getBeanId();
 }

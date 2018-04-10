@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * This is encoder analogous to the {@link com.pump.image.gif.lzw.LZWInputStream}.
+ * This is encoder analogous to the
+ * {@link com.pump.image.gif.lzw.LZWInputStream}.
  * 
  * <P>
  * This encodes a series of bytes as LZW-compressed data.
@@ -111,8 +112,8 @@ public class LZWOutputStream extends OutputStream {
 	}
 
 	/**
-	 * @return whether or not <code>finish()</code> or <code>close()</code>
-	 *         has been called.
+	 * @return whether or not <code>finish()</code> or <code>close()</code> has
+	 *         been called.
 	 */
 	public boolean isFinished() {
 		return finished;
@@ -134,7 +135,8 @@ public class LZWOutputStream extends OutputStream {
 	 * @param arrayLength
 	 *            the length of values we should read from <code>c</code>
 	 * @return the index that was used
-	 * @throws IOException if an IO problem occurs.
+	 * @throws IOException
+	 *             if an IO problem occurs.
 	 */
 	public int writeFewestBytes(int[] c, int arrayLength) throws IOException {
 		if (finished)
@@ -250,7 +252,7 @@ public class LZWOutputStream extends OutputStream {
 	// (J.E.) I didn't touch Jef Poskanzer's code from this point on. (Well, OK,
 	// I changed the name of the sole outside method it accesses.) I figure
 	// if I have no idea how something works, I shouldn't play with it :)
-	//		
+	//
 	// Despite its unencapsulated structure, this section is actually highly
 	// self-contained. The calling code merely calls compress(), and the present
 	// code calls nextPixel() in the caller. That's the sum total of their
@@ -259,7 +261,7 @@ public class LZWOutputStream extends OutputStream {
 	// ****************************************************************************
 
 	// GIFCOMPR.C - GIF Image compression routines
-	//		
+	//
 	// Lempel-Ziv compression based on 'compress'. GIF modifications by
 	// David Rowley (mgardi@watdcsu.waterloo.edu)
 
@@ -269,9 +271,9 @@ public class LZWOutputStream extends OutputStream {
 	private static final int HSIZE = 5003; // 80% occupancy
 
 	// GIF Image compression - modified 'compress'
-	//		
+	//
 	// Based on: compress.c - File compression ala IEEE Computer, June 1984.
-	//		
+	//
 	// By Authors: Spencer W. Thomas (decvax!harpo!utah-cs!utah-gr!thomas)
 	// Jim McKie (decvax!mcvax!jim)
 	// Steve Davies (decvax!vax135!petsd!peora!srd)
@@ -317,7 +319,7 @@ public class LZWOutputStream extends OutputStream {
 	private int EOFCode;
 
 	// output
-	//		
+	//
 	// Output the given code.
 	// Inputs:
 	// code: A n_bits-bit integer. If == -1, then EOF. This assumes

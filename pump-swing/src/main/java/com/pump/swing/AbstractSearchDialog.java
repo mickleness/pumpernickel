@@ -29,14 +29,17 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-/** A very simple search dialog with a text field and the option to search forward/backward.
+/**
+ * A very simple search dialog with a text field and the option to search
+ * forward/backward.
  * 
  */
 public abstract class AbstractSearchDialog extends QDialog {
 	private static final long serialVersionUID = 1L;
-	
-	protected static ResourceBundle strings = ResourceBundle.getBundle("com.pump.swing.TextSearchDialog");
-	
+
+	protected static ResourceBundle strings = ResourceBundle
+			.getBundle("com.pump.swing.TextSearchDialog");
+
 	private static Frame getFrame(JComponent c) {
 		Window w = SwingUtilities.getWindowAncestor(c);
 		if (w instanceof Frame) {
@@ -51,11 +54,11 @@ public abstract class AbstractSearchDialog extends QDialog {
 	protected JLabel findLabel = new JLabel(strings.getString("find"));
 
 	protected JTextField textField = new JTextField(20);
-	
+
 	protected ActionListener actionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			boolean forward = e.getSource()==nextButton;
-			
+			boolean forward = e.getSource() == nextButton;
+
 			boolean hit = doNextSearch(forward);
 			notFound.setVisible(!hit);
 			if (!hit) {
@@ -66,17 +69,20 @@ public abstract class AbstractSearchDialog extends QDialog {
 		}
 	};
 
-	/** Creates an <code>AbstractSearchDialog</code>.
-	 * @param comp only used to identify the frame to bind this dialog to.
+	/**
+	 * Creates an <code>AbstractSearchDialog</code>.
+	 * 
+	 * @param comp
+	 *            only used to identify the frame to bind this dialog to.
 	 */
 	public AbstractSearchDialog(JComponent comp) {
-		super(getFrame(comp), strings.getString("dialogTitle") );
-		
+		super(getFrame(comp), strings.getString("dialogTitle"));
+
 		Color fg = UIManager.getColor("Label.disabledForeground");
-		if(fg!=null) {
+		if (fg != null) {
 			notFound.setForeground(fg);
 		}
-		
+
 		JPanel notFoundContainer = new JPanel();
 		notFoundContainer.add(notFound);
 		Dimension preferredSize = notFoundContainer.getPreferredSize();
@@ -86,44 +92,46 @@ public abstract class AbstractSearchDialog extends QDialog {
 
 		nextButton.setToolTipText(strings.getString("nextTip"));
 		prevButton.setToolTipText(strings.getString("previousTip"));
-		
-		DialogFooter footer = new DialogFooter(new JComponent[] {notFoundContainer},
-				new JComponent[] {nextButton, prevButton},
-				false,
-				nextButton );
-		
+
+		DialogFooter footer = new DialogFooter(
+				new JComponent[] { notFoundContainer }, new JComponent[] {
+						nextButton, prevButton }, false, nextButton);
+
 		setFooter(footer);
-		
+
 		JPanel content = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0; c.gridy = 0;
+		c.gridx = 0;
+		c.gridy = 0;
 		c.anchor = GridBagConstraints.EAST;
-		c.insets = new Insets(3,3,3,3);
-		c.weightx = 0; c.weighty = 0;
-		content.add(findLabel,c);
+		c.insets = new Insets(3, 3, 3, 3);
+		c.weightx = 0;
+		c.weighty = 0;
+		content.add(findLabel, c);
 		c.anchor = GridBagConstraints.WEST;
 		c.weightx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx++;
-		content.add(textField,c);
-		
+		content.add(textField, c);
+
 		setContent(content);
-		
+
 		nextButton.addActionListener(actionListener);
 		prevButton.addActionListener(actionListener);
-		
+
 		setModal(false);
 		setDocumentModal(false);
 		setCloseable(true);
-		
+
 		pack();
 	}
-	
-	/** This is called when the user initiates a search. The search phrase
-	 * to search for textField.getText()
+
+	/**
+	 * This is called when the user initiates a search. The search phrase to
+	 * search for textField.getText()
 	 * 
-	 * @return true if this search was successful, false if the end of the document was reached
-	 * without identifying the search phrase.
+	 * @return true if this search was successful, false if the end of the
+	 *         document was reached without identifying the search phrase.
 	 */
 	protected abstract boolean doNextSearch(boolean forward);
 }

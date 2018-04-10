@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** This represents an animation that you can append
- * frames to.
+/**
+ * This represents an animation that you can append frames to.
  * 
  * @see #addFrame(BufferedImage, int)
  * @see #createReader()
@@ -26,19 +26,20 @@ public abstract class AbstractAnimation {
 	class MyReader implements ResettableAnimationReader {
 		int ctr = 0;
 		final int frameCount;
-		
+
 		MyReader(int frameCount) {
 			this.frameCount = frameCount;
 		}
-		
+
 		public void reset() {
 			ctr = 0;
 		}
 
 		public BufferedImage getNextFrame(boolean cloneImage)
 				throws IOException {
-			if(ctr==frameCount) return null;
-			
+			if (ctr == frameCount)
+				return null;
+
 			BufferedImage returnValue = frames.get(ctr).getImage();
 			ctr++;
 			return returnValue;
@@ -46,10 +47,10 @@ public abstract class AbstractAnimation {
 
 		public double getDuration() {
 			int sum = 0;
-			for(int a = 0; a<frameCount; a++) {
+			for (int a = 0; a < frameCount; a++) {
 				sum += frames.get(a).duration;
 			}
-			return ((double)sum)/1000.0;
+			return ((double) sum) / 1000.0;
 		}
 
 		public int getFrameCount() {
@@ -61,7 +62,7 @@ public abstract class AbstractAnimation {
 		}
 
 		public double getFrameDuration() {
-			return ((double)frames.get(ctr-1).duration)/1000.0;
+			return ((double) frames.get(ctr - 1).duration) / 1000.0;
 		}
 
 		public int getWidth() {
@@ -72,76 +73,95 @@ public abstract class AbstractAnimation {
 			return height;
 		}
 	}
-	
-	/** An abstract representation of a frame from
-	 * an animation.
+
+	/**
+	 * An abstract representation of a frame from an animation.
 	 *
 	 */
 	protected static abstract class Frame {
 		/** The duration (in ms) of this frame. */
 		int duration;
-		
+
 		/**
 		 * 
-		 * @param duration the duration (in ms) of this frame.
+		 * @param duration
+		 *            the duration (in ms) of this frame.
 		 */
 		Frame(int duration) {
 			this.duration = duration;
 		}
-		
-		/** Return the duration (in ms) of this frame.
+
+		/**
+		 * Return the duration (in ms) of this frame.
 		 */
 		int getDuration() {
 			return duration;
 		}
-		
-		/** Return the image in this frame.
+
+		/**
+		 * Return the image in this frame.
 		 */
 		abstract BufferedImage getImage() throws IOException;
 	}
-	
+
 	List<Frame> frames = new ArrayList<Frame>();
 	final int width, height;
-	
-	/** Create a new AbstractAnimation.
+
+	/**
+	 * Create a new AbstractAnimation.
 	 * 
-	 * @param d the size of this animation.
+	 * @param d
+	 *            the size of this animation.
 	 */
 	public AbstractAnimation(Dimension d) {
 		width = d.width;
 		height = d.height;
 	}
-	
-	/** Add a frame to this animation.
+
+	/**
+	 * Add a frame to this animation.
 	 * 
-	 * @param bi the image to append. This must be the width and height of this
-	 * animation.
-	 * @param duration the duration (in ms) of this frame.
-	 * @throws IOException if a problem occurs writing the image data
+	 * @param bi
+	 *            the image to append. This must be the width and height of this
+	 *            animation.
+	 * @param duration
+	 *            the duration (in ms) of this frame.
+	 * @throws IOException
+	 *             if a problem occurs writing the image data
 	 */
-	public synchronized void addFrame(BufferedImage bi,int duration) throws IOException {
-		if(bi.getWidth()!=width || bi.getHeight()!=height)
-			throw new IllegalArgumentException("The incoming frame's dimensions do not match this animation's dimensions ("+bi.getWidth()+"x"+bi.getHeight()+" vs "+width+"x"+height+")");
+	public synchronized void addFrame(BufferedImage bi, int duration)
+			throws IOException {
+		if (bi.getWidth() != width || bi.getHeight() != height)
+			throw new IllegalArgumentException(
+					"The incoming frame's dimensions do not match this animation's dimensions ("
+							+ bi.getWidth() + "x" + bi.getHeight() + " vs "
+							+ width + "x" + height + ")");
 		frames.add(createFrame(bi, duration));
 	}
-	
-	/** Create a new <code>Frame</code> to append to this animation.
+
+	/**
+	 * Create a new <code>Frame</code> to append to this animation.
 	 * 
-	 * @param bi the image that depicts this frame.
-	 * @param duration the duration (in ms) of this frame.
+	 * @param bi
+	 *            the image that depicts this frame.
+	 * @param duration
+	 *            the duration (in ms) of this frame.
 	 * @return a Frame object.
-	 * @throws IOException if a problem occurs writing the image data.
+	 * @throws IOException
+	 *             if a problem occurs writing the image data.
 	 */
-	protected abstract Frame createFrame(BufferedImage bi,int duration) throws IOException;
-	
-	/** Create a new <code>ResettableAnimationReader</code> that iterates over
-	 * this <code>AbstractAnimation</code>. Note the reader will only
-	 * iterate over frames that exist as of the instant this method is
-	 * invoked -- so if you add another 100 frames after calling this
-	 * method then this reader will not include them.
+	protected abstract Frame createFrame(BufferedImage bi, int duration)
+			throws IOException;
+
+	/**
+	 * Create a new <code>ResettableAnimationReader</code> that iterates over
+	 * this <code>AbstractAnimation</code>. Note the reader will only iterate
+	 * over frames that exist as of the instant this method is invoked -- so if
+	 * you add another 100 frames after calling this method then this reader
+	 * will not include them.
 	 * 
-	 * @return a new ResettableAnimationReader for what currently exists
-	 * in this animation.
+	 * @return a new ResettableAnimationReader for what currently exists in this
+	 *         animation.
 	 */
 	public synchronized ResettableAnimationReader createReader() {
 		return new MyReader(frames.size());
