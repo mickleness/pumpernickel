@@ -10,6 +10,7 @@
  */
 package com.pump.xray;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,6 +19,7 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +100,36 @@ public class JarBuilder {
 	 *            the stream to write the jar file to.
 	 */
 	public void write(OutputStream out) throws Exception {
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
+		if (compiler != null) {
+			writeUsingCompiler(compiler, out);
+		} else {
+			writeSourceCode(out);
+		}
+	}
+
+	private void writeSourceCode(OutputStream out) throws Exception {
+		try (JarOutputStream jarOut = new JarOutputStream(out, manifest)) {
+			Collection<ClassWriter> classWriters = sourceCodeManager.build()
+					.values();
+			for (ClassWriter classWriter : classWriters) {
+				Class z = classWriter.getType();
+				String entryName = z.getName().replace(".", "/") + ".java";
+				JarEntry entry = new JarEntry(entryName);
+				jarOut.putNextEntry(entry);
+				try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
+					ClassWriterStream cws = new ClassWriterStream(byteOut,
+							true, "UTF-8");
+					classWriter.write(cws);
+					jarOut.write(byteOut.toByteArray());
+				}
+			}
+		}
+	}
+
+	private void writeUsingCompiler(JavaCompiler compiler, OutputStream out)
+			throws Exception {
 		class MyJavaFileObject extends SimpleJavaFileObject {
 			File file;
 
@@ -128,11 +159,6 @@ public class JarBuilder {
 		try {
 			Map<Class, ClassWriter> classWriterMap = sourceCodeManager.build();
 			sourceCodeManager.write(tmpDir, classWriterMap.values());
-
-			JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-			if (compiler == null) {
-				throw new RuntimeException("Compiler not found.");
-			}
 
 			StandardJavaFileManager defaultManager = compiler
 					.getStandardFileManager(null, null, null);
