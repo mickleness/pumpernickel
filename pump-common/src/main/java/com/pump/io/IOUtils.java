@@ -26,6 +26,12 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +62,34 @@ import com.pump.util.JVM;
  *
  */
 public class IOUtils {
+
+	/**
+	 * Return a FileLock for a given file, or null if the lock cannot be
+	 * obtained.
+	 * 
+	 * @param file
+	 *            the file to obtain the lock for. It is assumed the file
+	 *            already exists when this is called.
+	 * @param writeData
+	 *            if true then 8 bytes of zeroes will be written to the file.
+	 * @return a FileLock for the given File, or null if the lock couldn't be
+	 *         obtained.
+	 * @throws IOException
+	 */
+	public static FileLock getFileLock(File file, boolean writeData)
+			throws IOException {
+		Path path = Paths.get(file.getAbsolutePath());
+		FileChannel channel = FileChannel.open(path, StandardOpenOption.CREATE,
+				StandardOpenOption.READ, StandardOpenOption.WRITE);
+		FileLock lock = channel.tryLock();
+		if (writeData) {
+			// unfortunately: I forget exactly why this was added...
+			channel.write(ByteBuffer.wrap(new byte[8]));
+			channel.force(false);
+		}
+
+		return lock;
+	}
 
 	static DecimalFormat format = new DecimalFormat("0.0");
 

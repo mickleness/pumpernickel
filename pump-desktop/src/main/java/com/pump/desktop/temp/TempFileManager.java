@@ -12,12 +12,7 @@ package com.pump.desktop.temp;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
 import com.pump.io.IOUtils;
@@ -111,7 +106,7 @@ public class TempFileManager {
 			throw new IOException("File.createNewFile() failed for "
 					+ lockedFile.getAbsolutePath());
 
-		FileLock lock = lock(lockedFile);
+		FileLock lock = IOUtils.getFileLock(lockedFile, true);
 
 		// clean up past sessions, in case they died prematurely
 		new CleanThread(appDir, localDir, null).start();
@@ -129,7 +124,7 @@ public class TempFileManager {
 
 	private static boolean isLocked(File file) {
 		try {
-			FileLock lock = lock(file);
+			FileLock lock = IOUtils.getFileLock(file, true);
 			if (lock == null)
 				return true;
 			lock.close();
@@ -137,17 +132,6 @@ public class TempFileManager {
 		} catch (IOException e) {
 			return true;
 		}
-	}
-
-	private static FileLock lock(File file) throws IOException {
-		Path path = Paths.get(file.getAbsolutePath());
-		FileChannel channel = FileChannel.open(path, StandardOpenOption.CREATE,
-				StandardOpenOption.READ, StandardOpenOption.WRITE);
-		FileLock lock = channel.tryLock();
-		channel.write(ByteBuffer.wrap(new byte[6]));
-		channel.force(false);
-
-		return lock;
 	}
 
 	private static class CleanThread extends Thread {
