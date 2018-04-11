@@ -22,6 +22,7 @@ public class BasicCancellable implements Cancellable {
 	List<ActionListener> cancelListeners;
 	List<ActionListener> finishListeners;
 
+	@Override
 	public void cancel() {
 		if (cancelled)
 			return;
@@ -36,10 +37,12 @@ public class BasicCancellable implements Cancellable {
 		fireFinishListeners();
 	}
 
+	@Override
 	public boolean isCancelled() {
 		return cancelled;
 	}
 
+	@Override
 	public boolean isFinished() {
 		return finished;
 	}
@@ -70,6 +73,7 @@ public class BasicCancellable implements Cancellable {
 		}
 	}
 
+	@Override
 	public void addFinishListener(ActionListener l) {
 		if (finishListeners == null)
 			finishListeners = new ArrayList<ActionListener>();
@@ -78,6 +82,7 @@ public class BasicCancellable implements Cancellable {
 		finishListeners.add(l);
 	}
 
+	@Override
 	public void addCancelListener(ActionListener l) {
 		if (cancelListeners == null)
 			cancelListeners = new ArrayList<ActionListener>();
@@ -86,12 +91,14 @@ public class BasicCancellable implements Cancellable {
 		cancelListeners.add(l);
 	}
 
+	@Override
 	public void removeFinishListener(ActionListener l) {
 		if (finishListeners == null)
 			return;
 		finishListeners.remove(l);
 	}
 
+	@Override
 	public void removeCancelListener(ActionListener l) {
 		if (cancelListeners == null)
 			return;
