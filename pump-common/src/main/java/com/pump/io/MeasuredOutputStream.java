@@ -50,10 +50,30 @@ public class MeasuredOutputStream extends OutputStream {
 	protected long written = 0;
 	OutputStream out;
 	private boolean closed = false;
+	boolean closeable = true;
 	List<ListenerInfo> listeners = new ArrayList<ListenerInfo>();
 
 	public MeasuredOutputStream(OutputStream out) {
 		this.out = out;
+	}
+
+	/**
+	 * Control whether calling <code>{@link #close()}</code> affects the
+	 * underlying OutputStream. This is useful in cases when you pass an
+	 * OutputStream to a 3rd party decoder that helpfully tries to close the
+	 * stream as it wraps up, but there is still data to be read later (such as
+	 * when working with a ZipInputStream).
+	 * 
+	 * @param b
+	 *            whether calling <code>close()</code> will close the underlying
+	 *            OutputStream.
+	 */
+	public void setCloseable(boolean b) {
+		closeable = b;
+	}
+
+	public boolean isCloseable() {
+		return closeable;
 	}
 
 	/**
@@ -132,7 +152,8 @@ public class MeasuredOutputStream extends OutputStream {
 
 	@Override
 	public void close() throws IOException {
-		out.close();
+		if (isCloseable())
+			out.close();
 		closed = true;
 		fireListeners(true);
 	}

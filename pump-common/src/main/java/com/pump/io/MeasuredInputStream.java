@@ -30,11 +30,11 @@ public class MeasuredInputStream extends InputStream {
 	}
 
 	/**
-	 * Control whether calling <code>close()</code> affects the underlying
-	 * InputStream. This is useful in cases when you pass an InputStream to a
-	 * 3rd party decoder that helpfully tries to close the stream as it wraps
-	 * up, but there is still data to be read later (such as when working with a
-	 * ZipInputStream).
+	 * Control whether calling <code>{@link #close()}</code> affects the
+	 * underlying InputStream. This is useful in cases when you pass an
+	 * InputStream to a 3rd party decoder that helpfully tries to close the
+	 * stream as it wraps up, but there is still data to be read later (such as
+	 * when working with a ZipInputStream).
 	 * 
 	 * @param b
 	 *            whether calling <code>close()</code> will close the underlying
@@ -64,7 +64,7 @@ public class MeasuredInputStream extends InputStream {
 
 	@Override
 	public void close() throws IOException {
-		if (closeable)
+		if (isCloseable())
 			in.close();
 	}
 
