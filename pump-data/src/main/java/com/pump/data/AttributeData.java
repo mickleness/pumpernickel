@@ -44,8 +44,12 @@ public interface AttributeData extends Serializable {
 	 * 
 	 * @param incomingData
 	 *            a series of key/value pairs to install in this object.
+	 * @param completeReplace
+	 *            if true then this call also removes other attributes.. If
+	 *            false then this call can only add attributes.
 	 */
-	public void putAllAttributes(Map<String, Object> incomingData);
+	public void putAllAttributes(Map<String, Object> incomingData,
+			boolean completeReplace);
 
 	public void removeAttributePropertyChangeListener(PropertyChangeListener pcl);
 

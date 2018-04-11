@@ -14,7 +14,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,6 +27,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * This is a simple map container with get/set values that use {@link Key}
  * objects.
+ * <p>
+ * TODO: This allows null values, but it doesn't clearly distinguish between a
+ * null value and a key/value pair that has been removed.
  */
 public class AttributeDataImpl implements AttributeData {
 	private static final long serialVersionUID = 1L;
@@ -128,7 +133,8 @@ public class AttributeDataImpl implements AttributeData {
 	}
 
 	@Override
-	public void putAllAttributes(Map<String, Object> incomingData) {
+	public void putAllAttributes(Map<String, Object> incomingData,
+			boolean completeReplace) {
 		getAttributeLock().writeLock().lock();
 		try {
 			for (Entry<String, Object> entry : incomingData.entrySet()) {
@@ -136,6 +142,13 @@ public class AttributeDataImpl implements AttributeData {
 				if (!Objects.equals(oldValue, entry.getValue()))
 					firePropertyChangeListeners(entry.getKey(), oldValue,
 							entry.getValue());
+			}
+			if (completeReplace) {
+				Collection<String> z = new HashSet<>(data.keySet());
+				z.removeAll(incomingData.keySet());
+				for (String unusedKey : z) {
+					setAttribute(new Key<String>(String.class, unusedKey), null);
+				}
 			}
 		} finally {
 			getAttributeLock().writeLock().unlock();
