@@ -80,4 +80,9 @@ public class ErrorDialogThrowableHandler implements ThrowableHandler {
 		}
 		return returnValue.toArray(new ThrowableDescriptor[returnValue.size()]);
 	}
+
+	@Override
+	public boolean processThrowable(Throwable throwable) {
+		return processThrowable(new ThrowableDescriptor(throwable));
+	}
 }

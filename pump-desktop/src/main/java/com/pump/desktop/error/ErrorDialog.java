@@ -162,8 +162,10 @@ public class ErrorDialog extends QDialog {
 			c.weightx = 1;
 			c.weighty = 1;
 			c.fill = GridBagConstraints.BOTH;
-			add(QDialog.createContentPanel(msg, t.throwable.getClass()
-					.getName(), null, true), c);
+			String informativeText = t.getInformativeText();
+			if (informativeText == null)
+				informativeText = t.throwable.getClass().getName();
+			add(QDialog.createContentPanel(msg, informativeText, null, true), c);
 			c.gridx++;
 			c.weightx = 0;
 			c.insets = new Insets(3, 3, 3, 3);
