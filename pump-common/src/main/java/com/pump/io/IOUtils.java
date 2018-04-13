@@ -392,6 +392,22 @@ public class IOUtils {
 	}
 
 	/**
+	 * Returns the text after the last "." in the argument, or null if "." is
+	 * not found or the argument is null.
+	 */
+	public static String getExtension(String filename, boolean forceLowerCase) {
+		if (filename == null)
+			return null;
+		int i = filename.lastIndexOf('.');
+		if (i == -1)
+			return null;
+		String ext = filename.substring(i + 1);
+		if (forceLowerCase)
+			ext = ext.toLowerCase();
+		return ext;
+	}
+
+	/**
 	 * Calculate the CRC32 checksum of all the data in an InputStream.
 	 * 
 	 * @param in
