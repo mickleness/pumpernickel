@@ -21,20 +21,6 @@ import java.util.ResourceBundle;
 public class SuffixFilenameFilter extends javax.swing.filechooser.FileFilter
 		implements FilenameFilter, java.io.FileFilter {
 
-	@SuppressWarnings("unused")
-	private static void main(String[] args) {
-		System.out.println(new SuffixFilenameFilter("*"));
-		System.out.println(new SuffixFilenameFilter(new String[] { "gif" }));
-		System.out.println(new SuffixFilenameFilter(new String[] { "gif",
-				"jpeg" }));
-		System.out.println(new SuffixFilenameFilter(new String[] { "gif",
-				"jpeg", "png" }));
-		System.out.println(new SuffixFilenameFilter(new String[] { "gif",
-				"jpeg", "png", "bmp" }));
-		System.out.println(new SuffixFilenameFilter(new String[] { "gif",
-				"jpeg", "png", "bmp", "tiff" }));
-	}
-
 	/** The localized strings used in the description. */
 	public static ResourceBundle strings = ResourceBundle
 			.getBundle("com.pump.io.SuffixFilenameFilter");
