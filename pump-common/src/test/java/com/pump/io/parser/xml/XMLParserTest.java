@@ -36,6 +36,16 @@ import com.pump.io.parser.xml.XMLParser.WordToken;
 
 public class XMLParserTest extends TestCase {
 
+	/**
+	 * Make sure an unclosed comment doesn't throw a RuntimeException.
+	 */
+	@Test
+	public void testUnclosedComment() throws Exception {
+		String xml = "<!--  \n";
+		getTokens(xml, false);
+
+	}
+
 	@Test
 	public void testDTD() throws Exception {
 		// TODO: implement this tests

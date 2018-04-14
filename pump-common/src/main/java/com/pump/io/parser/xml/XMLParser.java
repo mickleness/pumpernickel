@@ -326,19 +326,31 @@ public class XMLParser extends Parser {
 				ch = l.current();
 
 				StringBuilder sb = new StringBuilder();
-				while (ch != CharacterIterator.DONE
-						&& !(ch == '-' && l.peek(1) == '-' && l.peek(2) == '>')) {
+				readComment: while (true) {
 					sb.append(ch);
 					l.next();
 					ch = l.current();
+
+					if (ch == CharacterIterator.DONE) {
+						if (sb.length() > 0)
+							cltr.add(new CommentToken(sb.toString(), start, 0,
+									start));
+						break readComment;
+					} else if (ch == '-' && l.peek(1) == '-'
+							&& l.peek(2) == '>') {
+						if (sb.length() > 0)
+							cltr.add(new CommentToken(sb.toString(), start, 0,
+									start));
+
+						EndCommentToken endComment = new EndCommentToken(
+								(int) l.getPosition(), 0, (int) l.getPosition());
+						cltr.add(endComment);
+						endComment.setMatch(startComment);
+						startComment.setMatch(endComment);
+						l.next(3);
+						break readComment;
+					}
 				}
-				cltr.add(new CommentToken(sb.toString(), start, 0, start));
-				EndCommentToken endComment = new EndCommentToken(
-						(int) l.getPosition(), 0, (int) l.getPosition());
-				cltr.add(endComment);
-				endComment.setMatch(startComment);
-				startComment.setMatch(endComment);
-				l.next(3);
 			} else if (ch == '<' && next == '?') {
 				cltr.add(new StartPrologToken(start, 0, start));
 				l.next(2);
