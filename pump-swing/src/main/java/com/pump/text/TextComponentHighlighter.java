@@ -56,19 +56,27 @@ public abstract class TextComponentHighlighter {
 
 	};
 
-	protected boolean active = true;
-	private boolean dirty = true;
-	private Runnable rehighlightRunnable = new Runnable() {
+	class RehighlightRunnable implements Runnable {
+		boolean invokeLater;
+
+		RehighlightRunnable(boolean invokeLater) {
+			this.invokeLater = invokeLater;
+		}
+
+		@Override
 		public void run() {
 			synchronized (docListener) {
 				if (dirty == false)
 					return;
 				dirty = false;
 
-				documentTextChanged(false);
+				documentTextChanged(false, invokeLater);
 			}
 		}
-	};
+	}
+
+	protected boolean active = true;
+	private boolean dirty = true;
 
 	/**
 	 * Refresh the formatting and highlights.
@@ -98,10 +106,10 @@ public abstract class TextComponentHighlighter {
 			 */
 			synchronized (docListener) {
 				dirty = true;
-				SwingUtilities.invokeLater(rehighlightRunnable);
+				SwingUtilities.invokeLater(new RehighlightRunnable(true));
 			}
 		} else {
-			rehighlightRunnable.run();
+			new RehighlightRunnable(false).run();
 		}
 	}
 
@@ -114,7 +122,7 @@ public abstract class TextComponentHighlighter {
 						return;
 					dirty = false;
 
-					documentTextChanged(true);
+					documentTextChanged(true, true);
 				}
 			}
 		};
@@ -129,15 +137,6 @@ public abstract class TextComponentHighlighter {
 		}
 	};
 
-	/** Invoke this Runnable on the EDT to call rehighlightText(..). */
-	protected Runnable refreshRunnable = new Runnable() {
-		public void run() {
-			rehighlightText(TextComponentHighlighter.this.jtc.getText(),
-					TextComponentHighlighter.this.jtc.getSelectionStart(),
-					TextComponentHighlighter.this.jtc.getSelectionEnd());
-		}
-	};
-
 	/**
 	 * Create a new TextComponentHighlighter.
 	 * 
@@ -149,7 +148,9 @@ public abstract class TextComponentHighlighter {
 		jtc.addCaretListener(caretListener);
 		addDocumentListeners();
 
-		SwingUtilities.invokeLater(refreshRunnable);
+		rehighlightText(TextComponentHighlighter.this.jtc.getText(),
+				TextComponentHighlighter.this.jtc.getSelectionStart(),
+				TextComponentHighlighter.this.jtc.getSelectionEnd(), true);
 	}
 
 	protected List<Object> allHighlights = new ArrayList<Object>();
@@ -165,11 +166,12 @@ public abstract class TextComponentHighlighter {
 	 * individually). So our listener coalesces these notifications and only
 	 * calls this method once the EDT is responsive again.
 	 */
-	protected void documentTextChanged(boolean onlyCaretChanged) {
+	protected void documentTextChanged(boolean onlyCaretChanged,
+			boolean invokeLater) {
 		if (onlyCaretChanged)
 			return;
 		rehighlightText(jtc.getText(), jtc.getSelectionStart(),
-				jtc.getSelectionEnd());
+				jtc.getSelectionEnd(), invokeLater);
 	}
 
 	/**
@@ -207,7 +209,7 @@ public abstract class TextComponentHighlighter {
 	 *            the current selection end.
 	 */
 	protected void rehighlightText(final String text, final int selectionStart,
-			final int selectionEnd) {
+			final int selectionEnd, boolean invokeLater) {
 		for (Object oldHighlight : allHighlights) {
 			jtc.getHighlighter().removeHighlight(oldHighlight);
 		}
@@ -238,7 +240,11 @@ public abstract class TextComponentHighlighter {
 				}
 			}
 		};
-		SwingUtilities.invokeLater(changeStylesRunnable);
+		if (invokeLater) {
+			SwingUtilities.invokeLater(changeStylesRunnable);
+		} else {
+			changeStylesRunnable.run();
+		}
 	}
 
 	protected abstract void formatTextComponent(String text, StyledDocument d,
