@@ -10,6 +10,7 @@
  */
 package com.pump.data;
 
+import java.beans.PropertyChangeListener;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 
@@ -69,4 +70,13 @@ public class AttributeDataImpl extends AbstractAttributeDataImpl implements
 		return super.getAttributeMap();
 	}
 
+	@Override
+	public void addAttributePropertyChangeListener(PropertyChangeListener pcl) {
+		super.addPropertyChangeListener(pcl);
+	}
+
+	@Override
+	public void removeAttributePropertyChangeListener(PropertyChangeListener pcl) {
+		super.removePropertyChangeListener(pcl);
+	}
 }

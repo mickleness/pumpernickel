@@ -72,13 +72,13 @@ public class AbstractAttributeDataImpl implements Serializable {
 		data = (Map) in.readObject();
 	}
 
-	public void addAttributePropertyChangeListener(PropertyChangeListener pcl) {
+	protected void addPropertyChangeListener(PropertyChangeListener pcl) {
 		synchronized (listeners) {
 			listeners.add(pcl);
 		}
 	}
 
-	public void removeAttributePropertyChangeListener(PropertyChangeListener pcl) {
+	protected void removePropertyChangeListener(PropertyChangeListener pcl) {
 		synchronized (listeners) {
 			listeners.remove(pcl);
 		}
