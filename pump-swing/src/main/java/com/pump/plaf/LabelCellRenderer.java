@@ -11,7 +11,6 @@
 package com.pump.plaf;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.HashSet;
@@ -96,7 +95,7 @@ public class LabelCellRenderer<T> implements ListCellRenderer<T>,
 	}
 
 	@Override
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
+	public JLabel getTreeCellRendererComponent(JTree tree, Object value,
 			boolean isSelected, boolean expanded, boolean leaf, int row,
 			boolean hasFocus) {
 		// TODO: this is missing the key listener
@@ -117,7 +116,7 @@ public class LabelCellRenderer<T> implements ListCellRenderer<T>,
 	}
 
 	@Override
-	public Component getListCellRendererComponent(JList<? extends T> list,
+	public JLabel getListCellRendererComponent(JList<? extends T> list,
 			T value, int index, boolean isSelected, boolean cellHasFocus) {
 		if (addKeyListener && list != null && registerList(list)) {
 			list.addKeyListener(new ListKeyListener(list));
