@@ -13,17 +13,34 @@ package com.pump.swing;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
+import java.io.FilenameFilter;
 
 import com.pump.io.SuffixFilenameFilter;
 
 public class FileDialogUtils {
 
+	/**
+	 * Returns a file the user selected or null if the user cancelled the
+	 * dialog.
+	 */
 	public static File showOpenDialog(Frame f, String title,
 			String... extensions) {
+		FilenameFilter filter = null;
+		if (extensions != null && extensions.length > 0)
+			filter = new SuffixFilenameFilter(extensions);
+		return showOpenDialog(f, title, filter);
+	}
+
+	/**
+	 * Returns a file the user selected or null if the user cancelled the
+	 * dialog.
+	 */
+	public static File showOpenDialog(Frame f, String title,
+			FilenameFilter filter) {
 		FileDialog fd = new FileDialog(f, title);
 		fd.setMode(FileDialog.LOAD);
-		if (extensions != null && extensions.length > 0)
-			fd.setFilenameFilter(new SuffixFilenameFilter(extensions));
+		if (filter != null)
+			fd.setFilenameFilter(filter);
 		fd.pack();
 		fd.setLocationRelativeTo(null);
 		fd.setVisible(true);
