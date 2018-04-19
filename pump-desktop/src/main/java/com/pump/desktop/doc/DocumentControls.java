@@ -312,7 +312,7 @@ public class DocumentControls {
 	public synchronized void setDocuments(Document newSelectedDocument,
 			Document[] newOpenDocuments) {
 		if (newSelectedDocument != null) {
-			if (!Arrays.asList(openDocuments).contains(newSelectedDocument))
+			if (!Arrays.asList(newOpenDocuments).contains(newSelectedDocument))
 				throw new IllegalArgumentException("The selected document \""
 						+ newSelectedDocument.getName()
 						+ "\" is not one of the open documents provided.");
