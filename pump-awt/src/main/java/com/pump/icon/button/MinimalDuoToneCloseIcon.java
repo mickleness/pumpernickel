@@ -86,6 +86,7 @@ public class MinimalDuoToneCloseIcon extends ButtonIcon {
 		super(button, COLORS, new BooleanProperty(PROPERTY_PARENT_ROLLOVER));
 		parentRollover = (BooleanProperty) buttonIconManager
 				.getProperty(PROPERTY_PARENT_ROLLOVER);
+
 		button.addHierarchyListener(new HierarchyListener() {
 
 			Container lastParent;
@@ -110,23 +111,24 @@ public class MinimalDuoToneCloseIcon extends ButtonIcon {
 
 			@Override
 			public void hierarchyChanged(HierarchyEvent e) {
+
 				Container parent = button.getParent();
 				while (parent != null && !(parent instanceof AbstractButton)) {
 					parent = parent.getParent();
 				}
-
-				if (lastParent == parent)
+				if (lastParent == parent) {
 					return;
+				}
 				if (lastParent != null) {
 					lastParent.removeMouseListener(mouseMotionListener);
 					lastParent.removeMouseMotionListener(mouseMotionListener);
 				}
 				if (parent != null) {
-					lastParent = parent;
-					lastParent.addMouseListener(mouseMotionListener);
-					lastParent.addMouseMotionListener(mouseMotionListener);
+					parent.addMouseListener(mouseMotionListener);
+					parent.addMouseMotionListener(mouseMotionListener);
 					parentRollover.setValue(false);
 				}
+				lastParent = parent;
 			}
 
 		});
