@@ -26,7 +26,16 @@ public class PartialLineBorder implements Border {
 	public PartialLineBorder(Paint p, Insets i) {
 		this.p = p;
 		this.i = (Insets) i.clone();
+	}
 
+	public PartialLineBorder(Paint p, int top, int left, int bottom, int right) {
+		this(p, new Insets(top, left, right, bottom));
+	}
+
+	public PartialLineBorder(Paint p, boolean top, boolean left,
+			boolean bottom, boolean right) {
+		this(p, new Insets(top ? 1 : 0, left ? 1 : 0, bottom ? 1 : 0, right ? 1
+				: 0));
 	}
 
 	public Insets getBorderInsets(Component c) {
