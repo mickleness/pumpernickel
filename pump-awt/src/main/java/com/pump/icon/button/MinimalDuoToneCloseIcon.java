@@ -2,17 +2,23 @@ package com.pump.icon.button;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
+import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.AbstractButton;
+import javax.swing.event.MouseInputAdapter;
 
 import com.pump.plaf.PlafPaintUtils;
+import com.pump.util.BooleanProperty;
 
 /**
  * This close icon resembles the close icon in Safari's tabs. It featured a
@@ -45,6 +51,12 @@ public class MinimalDuoToneCloseIcon extends ButtonIcon {
 				returnValue.put(COLOR_FOREGROUND, new Color(0x88000000, true));
 				returnValue.put(COLOR_FOCUS, state.isFocusOwner() ? focusColor
 						: emptyFocusColor);
+			} else if (state.isEnabled()
+					&& Boolean.TRUE.equals(state
+							.getProperty(PROPERTY_PARENT_ROLLOVER))) {
+				returnValue.put(COLOR_BACKGROUND, new Color(0x00000000, true));
+				returnValue.put(COLOR_FOREGROUND, new Color(0x88000000, true));
+				returnValue.put(COLOR_FOCUS, emptyFocusColor);
 			} else {
 				returnValue.put(COLOR_BACKGROUND, new Color(0x00000000, true));
 				returnValue.put(COLOR_FOREGROUND, new Color(0x00000000, true));
@@ -60,15 +72,64 @@ public class MinimalDuoToneCloseIcon extends ButtonIcon {
 	public static final String COLOR_FOCUS = "focus";
 	public static final String COLOR_FOREGROUND = "foreground";
 
+	private static final String PROPERTY_PARENT_ROLLOVER = "parentRollover";
+
 	Insets insets = new Insets(4, 4, 4, 4);
 	int xWidth = 10;
 	int xHeight = 10;
+	BooleanProperty parentRollover;
 
 	public MinimalDuoToneCloseIcon() {
 	}
 
-	public MinimalDuoToneCloseIcon(AbstractButton button) {
-		super(button, COLORS);
+	public MinimalDuoToneCloseIcon(final AbstractButton button) {
+		super(button, COLORS, new BooleanProperty(PROPERTY_PARENT_ROLLOVER));
+		parentRollover = (BooleanProperty) buttonIconManager
+				.getProperty(PROPERTY_PARENT_ROLLOVER);
+		button.addHierarchyListener(new HierarchyListener() {
+
+			Container lastParent;
+			MouseInputAdapter mouseMotionListener = new MouseInputAdapter() {
+
+				@Override
+				public void mouseMoved(MouseEvent e) {
+					parentRollover.setValue(true);
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					parentRollover.setValue(true);
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					parentRollover.setValue(false);
+				}
+
+			};
+
+			@Override
+			public void hierarchyChanged(HierarchyEvent e) {
+				Container parent = button.getParent();
+				while (parent != null && !(parent instanceof AbstractButton)) {
+					parent = parent.getParent();
+				}
+
+				if (lastParent == parent)
+					return;
+				if (lastParent != null) {
+					lastParent.removeMouseListener(mouseMotionListener);
+					lastParent.removeMouseMotionListener(mouseMotionListener);
+				}
+				if (parent != null) {
+					lastParent = parent;
+					lastParent.addMouseListener(mouseMotionListener);
+					lastParent.addMouseMotionListener(mouseMotionListener);
+					parentRollover.setValue(false);
+				}
+			}
+
+		});
 	}
 
 	@Override

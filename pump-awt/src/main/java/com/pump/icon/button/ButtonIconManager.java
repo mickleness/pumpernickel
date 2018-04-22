@@ -17,6 +17,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.plaf.PlafPaintUtils;
+import com.pump.util.Property;
 
 /**
  * This connects an AbstractButton with a ButtonIcon and manages the required
@@ -57,12 +58,12 @@ public class ButtonIconManager {
 
 		@Override
 		public void focusGained(FocusEvent e) {
-			buttonChangeListener.stateChanged(null);
+			refreshState();
 		}
 
 		@Override
 		public void focusLost(FocusEvent e) {
-			buttonChangeListener.stateChanged(null);
+			refreshState();
 		}
 
 	};
@@ -71,27 +72,7 @@ public class ButtonIconManager {
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			ButtonState state = new ButtonState(button);
-			Map<String, Color> colorMap = colors.getColors(state);
-
-			if (animationEndColors == null) {
-				animationEndColors = colorMap;
-				display(animationEndColors);
-				return;
-			}
-
-			// If we're still aiming for the same set of colors, don't change
-			// anything. Either an animation is in progress, we're already
-			// rendering the correct finished product.
-			if (colorMap.equals(animationEndColors)) {
-				return;
-			}
-
-			animationStartColors = getCurrentColors();
-			animationEndColors = colorMap;
-			animationStart = System.currentTimeMillis();
-			display(animationStartColors);
-			timer.restart();
+			refreshState();
 		}
 
 	};
@@ -99,6 +80,7 @@ public class ButtonIconManager {
 	AbstractButton button;
 	ButtonIconColors colors;
 	ButtonIcon icon;
+	Map<String, Property> properties = new HashMap<>();
 
 	/**
 	 * 
@@ -112,15 +94,21 @@ public class ButtonIconManager {
 	 *            needed.
 	 * @param colors
 	 *            this translates button state information into colors.
+	 * @properties an optional set of properties that will be stored in each
+	 *             ButtonState. This lets you add custom attributes that are not
+	 *             already defined a ButtonState.
 	 */
 	public ButtonIconManager(AbstractButton button, ButtonIcon icon,
-			ButtonIconColors colors) {
+			ButtonIconColors colors, Property... properties) {
 		Objects.requireNonNull(button);
 		Objects.requireNonNull(icon);
 		Objects.requireNonNull(colors);
 		this.button = button;
 		this.colors = colors;
 		this.icon = icon;
+		for (Property property : properties) {
+			this.properties.put(property.getName(), property);
+		}
 		button.setIcon(icon);
 		button.addPropertyChangeListener(AbstractButton.ICON_CHANGED_PROPERTY,
 				new PropertyChangeListener() {
@@ -139,10 +127,37 @@ public class ButtonIconManager {
 					}
 
 				});
+
+		PropertyChangeListener pcl = new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				refreshState();
+			}
+
+		};
+		for (Property property : properties) {
+			property.addPropertyChangeListener(pcl);
+		}
+
 		button.setRolloverEnabled(true);
 		button.addFocusListener(buttonFocusListener);
 		button.addChangeListener(buttonChangeListener);
 		buttonChangeListener.stateChanged(null);
+	}
+
+	/**
+	 * Return a set of Properties that may have been supplied at construction.
+	 * <p>
+	 * This may be an empty array.
+	 */
+	public Property[] getProperties() {
+		return properties.values().toArray(new Property[properties.size()]);
+	}
+
+	/** Return a specific supplemental property by name. */
+	public Property getProperty(String propertyName) {
+		return properties.get(propertyName);
 	}
 
 	private Map<String, Color> getCurrentColors() {
@@ -176,5 +191,31 @@ public class ButtonIconManager {
 	private void display(Map<String, Color> current) {
 		icon.setColors(current);
 		button.repaint();
+	}
+
+	private void refreshState() {
+		Property[] p = properties.values().toArray(
+				new Property[properties.size()]);
+		ButtonState state = new ButtonState(button, p);
+		Map<String, Color> colorMap = colors.getColors(state);
+
+		if (animationEndColors == null) {
+			animationEndColors = colorMap;
+			display(animationEndColors);
+			return;
+		}
+
+		// If we're still aiming for the same set of colors, don't change
+		// anything. Either an animation is in progress, we're already
+		// rendering the correct finished product.
+		if (colorMap.equals(animationEndColors)) {
+			return;
+		}
+
+		animationStartColors = getCurrentColors();
+		animationEndColors = colorMap;
+		animationStart = System.currentTimeMillis();
+		display(animationStartColors);
+		timer.restart();
 	}
 }

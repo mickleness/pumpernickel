@@ -14,6 +14,7 @@ import javax.swing.AbstractButton;
 import javax.swing.Icon;
 
 import com.pump.geom.TransformUtils;
+import com.pump.util.Property;
 
 /**
  * This is an icon that can change colors based on a set of input variables
@@ -27,6 +28,11 @@ public abstract class ButtonIcon implements Icon {
 	Dimension transformedSize;
 
 	Map<String, Color> colors;
+	/**
+	 * This may be null, depending on whether this was constructed using an
+	 * AbstractButton or not.
+	 */
+	protected ButtonIconManager buttonIconManager;
 
 	/**
 	 * Create a new ButtonIcon that is not automatically bound to a button.
@@ -46,9 +52,14 @@ public abstract class ButtonIcon implements Icon {
 	 * @param colors
 	 *            this translates the button's state into a set of colors used
 	 *            to render this icon.
+	 * @properties an optional set of properties that will be stored in each
+	 *             ButtonState. This lets you add custom attributes that are not
+	 *             already defined a ButtonState.
 	 */
-	public ButtonIcon(AbstractButton button, ButtonIconColors colors) {
-		new ButtonIconManager(button, this, colors);
+	public ButtonIcon(AbstractButton button, ButtonIconColors colors,
+			Property... properties) {
+		buttonIconManager = new ButtonIconManager(button, this, colors,
+				properties);
 	}
 
 	@Override
