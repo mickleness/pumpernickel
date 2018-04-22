@@ -69,7 +69,7 @@ public class Property<T> {
 				return false;
 			}
 		}
-		Object oldValue = obj;
+		Object oldValue = value;
 		value = obj;
 		firePropertyChangeListeners(name, oldValue, value);
 		return true;
