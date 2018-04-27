@@ -30,6 +30,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,7 @@ import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import com.pump.awt.SplayedLayout;
 import com.pump.icon.button.MinimalDuoToneCloseIcon;
 import com.pump.swing.PartialLineBorder;
 
@@ -431,7 +433,7 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 	/**
 	 * This optional property on JTabbedPane resolves to a Boolean used to
 	 * indicate whether the tab UI controls should be hidden if there is only
-	 * one tab. This value is assuemd to be true by default.
+	 * one tab. This value is assumed to be false by default.
 	 */
 	public static final String PROPERTY_HIDE_SINGLE_TAB = BoxTabbedPaneUI.class
 			.getName() + "#hideSingleTab";
@@ -552,7 +554,7 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 	class Data {
 		JPanel controlRow = new UIResourcePanel(new GridBagLayout());
 		JPanel leadingComponents = new JPanel(new GridBagLayout());
-		JPanel tabsContainer = new JPanel(new GridBagLayout());
+		JPanel tabsContainer = new JPanel();
 		JPanel trailingComponents = new JPanel(new GridBagLayout());
 		JTabbedPane tabs;
 
@@ -826,18 +828,7 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 		}
 
 		protected void refreshTabStates() {
-			// TODO: make custom LayoutManager, don't use GBC here.
-			tabsContainer.removeAll();
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			c.weightx = 1;
-			c.weighty = 1;
-			c.fill = GridBagConstraints.BOTH;
-			c.gridwidth = 1;
-			c.gridheight = 1;
-			boolean isVertical = tabs.getTabPlacement() == SwingConstants.TOP
-					|| tabs.getTabPlacement() == SwingConstants.BOTTOM;
+			List<Component> newTabs = new ArrayList<>();
 			for (int a = 0; a < tabs.getTabCount(); a++) {
 				JComponent tab = (JComponent) tabs.getTabComponentAt(a);
 				if (tab == null)
@@ -850,24 +841,79 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 					tab.putClientProperty(PROPERTY_TAB_CONTAINER, tabContainer);
 				}
 
-				tabsContainer.add(tabContainer, c);
+				newTabs.add(tabContainer);
 				tab.putClientProperty(PROPERTY_TAB_INDEX, a);
-				if (isVertical) {
-					c.gridx++;
-				} else {
-					c.gridy++;
-				}
-
 				getStyle(tabs).formatControlRowButton(tabs, tabContainer, a);
 			}
 
 			Boolean hideSingleTab = (Boolean) tabs
 					.getClientProperty(PROPERTY_HIDE_SINGLE_TAB);
 			if (hideSingleTab == null)
-				hideSingleTab = Boolean.TRUE;
-			controlRow.setVisible(!(tabs.getTabCount() == 1 && hideSingleTab));
+				hideSingleTab = Boolean.FALSE;
+			controlRow.setVisible(!(tabs.getTabCount() <= 1 && hideSingleTab));
+
+			if (!(tabsContainer.getLayout() instanceof SplayedLayout)) {
+				SplayedLayout l = new SplayedLayout(true) {
+
+					@Override
+					protected Collection<JComponent> getEmphasizedComponents(
+							JComponent container) {
+						Collection<JComponent> returnValue = super
+								.getEmphasizedComponents(container);
+
+						for (Component c : container.getComponents()) {
+							if (c instanceof AbstractButton) {
+								AbstractButton ab = (AbstractButton) c;
+								if (ab.isSelected())
+									returnValue.add(ab);
+							}
+						}
+						return returnValue;
+					}
+
+				};
+				tabsContainer.setLayout(l);
+			}
+			int orientation = tabs.getTabPlacement() == SwingConstants.LEFT
+					|| tabs.getTabPlacement() == SwingConstants.RIGHT ? SwingConstants.VERTICAL
+					: SwingConstants.HORIZONTAL;
+			((SplayedLayout) tabsContainer.getLayout()).setOrientation(null,
+					orientation);
+
+			setComponents(tabsContainer, newTabs);
 
 			tabsContainer.revalidate();
+		}
+
+		/**
+		 * This is basically
+		 * <code>java.awt.Container.setComponents(Component[])</code>. This is
+		 * functionally the same as removing all of a container's children and
+		 * then adding them back again, but this method makes individual changes
+		 * to minimize the number of container/hierarchy changes that listeners
+		 * hear.
+		 */
+		private void setComponents(Container container,
+				List<Component> components) {
+			Component[] oldComponents = container.getComponents();
+			for (int a = 0; a < oldComponents.length; a++) {
+				if (!components.contains(oldComponents[a])) {
+					container.remove(oldComponents[a]);
+				}
+			}
+			oldComponents = container.getComponents();
+			int oldCtr = 0;
+			int newCtr = 0;
+			while (newCtr < components.size()) {
+				Component oldComponent = oldCtr < oldComponents.length ? oldComponents[oldCtr]
+						: null;
+				if (oldComponent != components.get(newCtr)) {
+					container.add(components.get(newCtr), oldCtr);
+				} else {
+					oldCtr++;
+				}
+				newCtr++;
+			}
 		}
 
 		Map<Integer, DefaultTab> tabMap = new HashMap<>();
@@ -1052,7 +1098,16 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 					.getClientProperty(PROPERTY_CLOSEABLE_TABS);
 			if (b == null)
 				b = Boolean.FALSE;
-			closeButton.setVisible(b.booleanValue());
+			closeButton.setVisible(b);
+			int i;
+			if (b) {
+				Dimension d = closeButton.getPreferredSize();
+				i = Math.max(d.width, d.height);
+			} else {
+				i = 0;
+			}
+			i += 2;
+			label.setBorder(new EmptyBorder(0, i, 0, i));
 
 			getStyle(tabs).formatCloseButton(tabs, closeButton);
 		}

@@ -35,8 +35,8 @@ public class BoxTabbedPaneUIDemo extends JComponent {
 	JButton addButton = new JButton(new PaddedIcon(
 			new PlusIcon(12, 12, 1, null), new Dimension(22, 22)));
 	JComboBox<String> tabPlacementComboBox = new JComboBox<>();
-	JCheckBox closeableCheckBox = new JCheckBox("Closeable Tabs");
-	JCheckBox hideSingleCheckBox = new JCheckBox("Hide Single Tab", true);
+	JCheckBox closeableCheckBox = new JCheckBox("Closeable Tabs", false);
+	JCheckBox hideSingleCheckBox = new JCheckBox("Hide Single Tab", false);
 
 	public BoxTabbedPaneUIDemo() {
 		setLayout(new GridBagLayout());
@@ -66,6 +66,7 @@ public class BoxTabbedPaneUIDemo extends JComponent {
 			}
 
 		});
+		closeableCheckBox.doClick();
 
 		hideSingleCheckBox.addActionListener(new ActionListener() {
 
