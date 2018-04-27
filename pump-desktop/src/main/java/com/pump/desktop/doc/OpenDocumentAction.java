@@ -77,7 +77,7 @@ public abstract class OpenDocumentAction extends AbstractAction {
 	 */
 	public boolean openFile(File documentFile) {
 		for (Document d : controls.getOpenDocuments()) {
-			if (documentFile.equals(d.getFile())) {
+			if (documentFile != null && documentFile.equals(d.getFile())) {
 				controls.setSelectedDocument(d);
 				return false;
 			}
