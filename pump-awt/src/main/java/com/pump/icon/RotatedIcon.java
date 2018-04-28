@@ -17,8 +17,6 @@ import java.awt.RenderingHints;
 
 import javax.swing.Icon;
 
-import com.pump.math.MathG;
-
 /**
  * A rotated rendering of a given icon.
  * <P>
@@ -43,7 +41,7 @@ public class RotatedIcon implements Icon {
 		int h = icon.getIconHeight();
 		int w = icon.getIconWidth();
 		double k = Math.sqrt(h * h + w * w);
-		size = MathG.ceilInt(k);
+		size = (int) Math.ceil(k);
 	}
 
 	public void paintIcon(Component c, Graphics g0, int x, int y) {

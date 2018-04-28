@@ -48,7 +48,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.math.MathG;
 import com.pump.plaf.MoveUIEffect;
 import com.pump.plaf.UIEffect;
 import com.pump.util.JVM;
@@ -720,9 +719,9 @@ public class RowLayout implements Serializable {
 		}
 
 		/**
-		 * @return true if these two geometries lay out the same objects. (It may
-		 *         be possible for two geometries to layout the same number of
-		 *         objects with the same height but still refer to different
+		 * @return true if these two geometries lay out the same objects. (It
+		 *         may be possible for two geometries to layout the same number
+		 *         of objects with the same height but still refer to different
 		 *         objects.)
 		 * @param other
 		 */
@@ -1435,7 +1434,7 @@ public class RowLayout implements Serializable {
 					int elementCount = list.getModel().getSize();
 					int columns = (columnWidth - scrollPane
 							.getVerticalScrollBar().getWidth()) / cellWidth;
-					int rows = MathG.ceilInt(((double) elementCount)
+					int rows = (int) Math.ceil(((double) elementCount)
 							/ ((double) columns));
 					maxSize = new Dimension(columns * cellWidth, rows
 							* cellHeight);

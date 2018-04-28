@@ -28,8 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.media.jai.PerspectiveTransform;
 
-import com.pump.math.MathG;
-
 /**
  * Spatial-Coherence optimized implementation of ImageContext.
  * <p>
@@ -161,10 +159,10 @@ public class SCImageContext extends ImageContext {
 				bottomRight.getY());
 		float maxY = maxOf(topLeft.getY(), topRight.getY(), bottomLeft.getY(),
 				bottomRight.getY());
-		int minXi = max(0, MathG.floorInt(minX) - 1);
-		int maxXi = min(width, MathG.ceilInt(maxX) + 1);
-		int minYi = max(0, MathG.floorInt(minY) - 1);
-		int maxYi = min(height, MathG.ceilInt(maxY) + 1);
+		int minXi = max(0, (int) Math.floor(minX) - 1);
+		int maxXi = min(width, (int) Math.ceil(maxX) + 1);
+		int minYi = max(0, (int) Math.floor(minY) - 1);
+		int maxYi = min(height, (int) Math.ceil(maxY) + 1);
 		PerspectiveTransform pt = PerspectiveTransform.getQuadToQuad(
 				topLeft.getX(), topLeft.getY(), topRight.getX(),
 				topRight.getY(), bottomLeft.getX(), bottomLeft.getY(),

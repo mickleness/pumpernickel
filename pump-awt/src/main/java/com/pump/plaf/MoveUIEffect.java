@@ -18,8 +18,6 @@ import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.math.MathG;
-
 public class MoveUIEffect extends UIEffect {
 
 	ChangeListener changeListener = new ChangeListener() {
@@ -27,13 +25,11 @@ public class MoveUIEffect extends UIEffect {
 			Component comp = getComponent();
 			repaint(comp);
 			float f = getProgress();
-			int x = MathG.roundInt(startingBounds.x * (1 - f) + finalBounds.x
-					* f);
-			int y = MathG.roundInt(startingBounds.y * (1 - f) + finalBounds.y
-					* f);
-			int width = MathG.roundInt(startingBounds.width * (1 - f)
+			int x = Math.round(startingBounds.x * (1 - f) + finalBounds.x * f);
+			int y = Math.round(startingBounds.y * (1 - f) + finalBounds.y * f);
+			int width = Math.round(startingBounds.width * (1 - f)
 					+ finalBounds.width * f);
-			int height = MathG.roundInt(startingBounds.height * (1 - f)
+			int height = Math.round(startingBounds.height * (1 - f)
 					+ finalBounds.height * f);
 			comp.setBounds(x, y, width, height);
 			repaint(comp);

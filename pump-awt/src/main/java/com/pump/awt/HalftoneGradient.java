@@ -25,7 +25,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 
 import com.pump.blog.Blurb;
-import com.pump.math.MathG;
 
 /**
  * A gradient that resembles halftoning.
@@ -229,7 +228,7 @@ public class HalftoneGradient extends TransformedTexturePaint {
 			float x2, float y2, Color c2, int width, int type, boolean cycle,
 			float offset) {
 
-		int height = MathG.ceilInt(java.awt.geom.Point2D.distance(x1, y1, x2,
+		int height = (int) Math.ceil(java.awt.geom.Point2D.distance(x1, y1, x2,
 				y2));
 
 		BufferedImage image;
@@ -343,7 +342,7 @@ public class HalftoneGradient extends TransformedTexturePaint {
 	/** Creates the rectangle this tile occupies. */
 	private static Rectangle createRectangle(float x1, float y1, float x2,
 			float y2, int width, boolean cycle) {
-		int height = MathG.ceilInt(java.awt.geom.Point2D.distance(x1, y1, x2,
+		int height = (int) Math.ceil(java.awt.geom.Point2D.distance(x1, y1, x2,
 				y2));
 
 		if (cycle) {

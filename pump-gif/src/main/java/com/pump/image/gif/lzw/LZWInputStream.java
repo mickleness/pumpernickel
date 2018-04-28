@@ -13,8 +13,6 @@ package com.pump.image.gif.lzw;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.pump.util.ResourcePool;
-
 /**
  * This is designed to read LZW-compressed GIF image data.
  * <P>
@@ -73,8 +71,6 @@ import com.pump.util.ResourcePool;
 public class LZWInputStream extends InputStream {
 
 	private BitReader reader;
-
-	private boolean outgoingDataCanBeRecycled = false;
 
 	/** The data ready to be read */
 	private byte[] outgoingData = null;
@@ -140,8 +136,6 @@ public class LZWInputStream extends InputStream {
 					"New data should not have be unpacked if there is still some outgoing data that has not yet been read.");
 		}
 		int newCode = reader.read(n_bits); // Read NEW_CODE
-		if (outgoingData != null && outgoingDataCanBeRecycled)
-			ResourcePool.get().put(outgoingData);
 		outgoingData = null;
 		if (newCode == clearCode) {
 			clearTable();
@@ -174,9 +168,6 @@ public class LZWInputStream extends InputStream {
 				string = concatenate(string, (byte) character);// STRING =
 																// STRING +
 																// CHARACTER
-				outgoingDataCanBeRecycled = true;
-			} else {
-				outgoingDataCanBeRecycled = false;
 			}
 			outgoingData = string; // output STRING
 
@@ -248,7 +239,7 @@ public class LZWInputStream extends InputStream {
 
 	/** Just a convenient call to concatenate b1+b2 */
 	private byte[] concatenate(byte[] b1, byte b2) {
-		byte[] t = ResourcePool.get().getByteArray(b1.length + 1);
+		byte[] t = new byte[b1.length + 1];
 		System.arraycopy(b1, 0, t, 0, b1.length);
 		t[b1.length] = b2;
 		return t;

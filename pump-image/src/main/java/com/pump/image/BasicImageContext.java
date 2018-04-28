@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 import javax.media.jai.PerspectiveTransform;
 
 import com.pump.image.BasicImageContext.VariableWidthFunction.LineSegmentIntersectionException;
-import com.pump.math.MathG;
 
 /**
  * This is a simple Java implementation of image transformations.
@@ -364,8 +363,7 @@ public class BasicImageContext extends ImageContext {
 
 		private void addPoint2D(Set<Point> dest, Point2D p, boolean roundUp) {
 			int y = (int) p.getY();
-			int x = roundUp ? MathG.ceilInt(p.getX()) : MathG
-					.floorInt(p.getX());
+			int x = (int) (roundUp ? Math.ceil(p.getX()) : Math.floor(p.getX()));
 			if (y == p.getY()) {
 				dest.add(new Point(x, y));
 			} else {
@@ -464,10 +462,10 @@ public class BasicImageContext extends ImageContext {
 				Math.min(bottomLeft.getY(), bottomRight.getY()));
 		double maxY = Math.max(Math.max(topLeft.getY(), topRight.getY()),
 				Math.max(bottomLeft.getY(), bottomRight.getY()));
-		int minXi = MathG.floorInt(minX) - 1;
-		int maxXi = MathG.ceilInt(maxX) + 1;
-		int minYi = MathG.floorInt(minY) - 1;
-		int maxYi = MathG.ceilInt(maxY) + 1;
+		int minXi = (int) Math.floor(minX) - 1;
+		int maxXi = (int) Math.ceil(maxX) + 1;
+		int minYi = (int) Math.floor(minY) - 1;
+		int maxYi = (int) Math.ceil(maxY) + 1;
 
 		// bound everything from [0,limit)
 		minXi = Math.max(0, Math.min(width - 1, minXi));

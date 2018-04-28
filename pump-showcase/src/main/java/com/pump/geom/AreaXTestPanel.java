@@ -21,7 +21,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.math.MathG;
 import com.pump.swing.BasicConsole;
 
 public class AreaXTestPanel extends JPanel {
@@ -51,8 +50,6 @@ public class AreaXTestPanel extends JPanel {
 	JScrollPane consoleScrollPane = new JScrollPane(console);
 
 	public AreaXTestPanel() {
-		MathG.acos(0); // jog this into existence so it doesn't affect profiles
-
 		addTab(new AccuracyTest(console.createPrintStream(false)), "Accuracy");
 		addTab(new TransformTest(console.createPrintStream(false)), "Transform");
 		// addTab(new IntersectionsTest(console.createPrintStream(false)),

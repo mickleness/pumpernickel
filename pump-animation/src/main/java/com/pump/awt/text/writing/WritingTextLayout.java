@@ -26,7 +26,6 @@ import java.util.List;
 import com.pump.animation.AnimationReader;
 import com.pump.animation.writing.WritingShape;
 import com.pump.animation.writing.WritingStroke;
-import com.pump.math.MathG;
 import com.pump.util.ObservableProperties;
 import com.pump.util.ObservableProperties.Key;
 import com.pump.util.Resettable;
@@ -232,7 +231,7 @@ public class WritingTextLayout {
 			if (height == null) {
 				int h = 0;
 				for (Glyph g : glyphs) {
-					h = Math.max(h, MathG.ceilInt(g.totalHeight));
+					h = Math.max(h, (int) Math.ceil(g.totalHeight));
 				}
 				height = h;
 			}
@@ -471,7 +470,7 @@ public class WritingTextLayout {
 
 		@Override
 		public int getFrameCount() {
-			return MathG.ceilInt(getDuration() * fps);
+			return (int) Math.ceil(getDuration() * fps);
 		}
 
 		@Override

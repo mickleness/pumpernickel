@@ -14,8 +14,6 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 
-import com.pump.math.MathG;
-
 final class Order3X extends CurveX {
 	final private double x0;
 	final private double y0;
@@ -326,7 +324,7 @@ final class Order3X extends CurveX {
 		double a_3 = a / 3.0;
 		double t;
 		if (R2 < Q3) {
-			double theta = MathG.acos(R / Math.sqrt(Q3));
+			double theta = Math.acos(R / Math.sqrt(Q3));
 			Q = -2.0 * Math.sqrt(Q);
 			t = refine(a, b, c, y, Q * Math.cos(theta / 3.0) - a_3);
 			if (t < 0) {

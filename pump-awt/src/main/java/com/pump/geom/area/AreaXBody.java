@@ -22,7 +22,6 @@ import com.pump.geom.AreaX;
 import com.pump.geom.EmptyPathException;
 import com.pump.geom.Intersections;
 import com.pump.geom.ShapeBounds;
-import com.pump.math.MathG;
 
 /**
  * This is a list of <code>CurveX</code> segments that makes up the shape of an
@@ -584,10 +583,10 @@ public class AreaXBody extends CurveList {
 	@Override
 	public int hashCode() {
 		int k = 0;
-		k += MathG.roundInt(bounds.getX());
-		k += MathG.roundInt(bounds.getY());
-		k += MathG.roundInt(bounds.getWidth());
-		k += MathG.roundInt(bounds.getHeight());
+		k += Math.round(bounds.getX());
+		k += Math.round(bounds.getY());
+		k += Math.round(bounds.getWidth());
+		k += Math.round(bounds.getHeight());
 		return k;
 	}
 
@@ -675,10 +674,10 @@ public class AreaXBody extends CurveList {
 	public Rectangle getBounds(Rectangle dest) {
 		if (dest == null)
 			dest = new Rectangle();
-		int x1 = MathG.floorInt(bounds.getMinX());
-		int y1 = MathG.floorInt(bounds.getMinY());
-		int x2 = MathG.ceilInt(bounds.getMaxX());
-		int y2 = MathG.ceilInt(bounds.getMaxY());
+		int x1 = (int) Math.floor(bounds.getMinX());
+		int y1 = (int) Math.floor(bounds.getMinY());
+		int x2 = (int) Math.ceil(bounds.getMaxX());
+		int y2 = (int) Math.ceil(bounds.getMaxY());
 		dest.setBounds(x1, y1, x2 - x1, y2 - y1);
 		return dest;
 	}

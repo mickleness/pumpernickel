@@ -28,7 +28,6 @@ import java.awt.image.BufferedImage;
 
 import com.pump.awt.Dimension2D;
 import com.pump.blog.Blurb;
-import com.pump.math.MathG;
 
 /**
  * This provides a simple thumbnail format offering shadows, borders, and
@@ -610,8 +609,8 @@ public class BasicThumbnail extends Thumbnail {
 			int destHeight = maxSize.height;
 
 			while (maxScale - minScale > .00001) {
-				int scaledWidth = MathG.ceilInt(srcW * scale);
-				int scaledHeight = MathG.ceilInt(srcH * scale);
+				int scaledWidth = (int) Math.ceil(srcW * scale);
+				int scaledHeight = (int) Math.ceil(srcH * scale);
 
 				p1.setLocation(0, 0);
 				p2.setLocation(scaledWidth + totalInsets.left
@@ -635,8 +634,8 @@ public class BasicThumbnail extends Thumbnail {
 				rect.add(p3);
 				rect.add(p4);
 
-				destWidth = MathG.ceilInt(rect.getWidth());
-				destHeight = MathG.ceilInt(rect.getHeight());
+				destWidth = (int) Math.ceil(rect.getWidth());
+				destHeight = (int) Math.ceil(rect.getHeight());
 
 				boolean passed = destWidth <= maxSize.width
 						&& destHeight <= maxSize.height;
@@ -648,8 +647,8 @@ public class BasicThumbnail extends Thumbnail {
 				scale = (minScale + maxScale) / 2;
 			}
 
-			Dimension thumbnailImageSize = new Dimension(MathG.ceilInt(source
-					.getSourceWidth() * scale), MathG.ceilInt(source
+			Dimension thumbnailImageSize = new Dimension((int) Math.ceil(source
+					.getSourceWidth() * scale), (int) Math.ceil(source
 					.getSourceHeight() * scale));
 			scaledSource = source.scale(thumbnailImageSize);
 			destImage = new BufferedImage(destWidth, destHeight,

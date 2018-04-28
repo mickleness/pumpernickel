@@ -16,8 +16,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 
-import com.pump.math.MathG;
-
 /**
  * This can identify if a shape is a Rectangle, Rectangle2D or other.
  * <P>
@@ -277,14 +275,14 @@ public class RectangleReader {
 			h = -h;
 		}
 
-		int iw = MathG.roundInt(w);
-		int ih = MathG.roundInt(h);
+		int iw = (int) Math.round(w);
+		int ih = (int) Math.round(h);
 		if (Math.abs(iw - w) > TOL)
 			return null;
 		if (Math.abs(ih - h) > TOL)
 			return null;
-		int ix = MathG.roundInt(x);
-		int iy = MathG.roundInt(y);
+		int ix = (int) Math.round(x);
+		int iy = (int) Math.round(y);
 		if (Math.abs(ix - x) > TOL)
 			return null;
 		if (Math.abs(iy - y) > TOL)

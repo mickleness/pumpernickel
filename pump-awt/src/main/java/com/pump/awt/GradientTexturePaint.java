@@ -25,7 +25,6 @@ import java.awt.image.ColorModel;
 import java.util.HashMap;
 
 import com.pump.blog.Blurb;
-import com.pump.math.MathG;
 
 /**
  * A linear gradient based on a <code>java.awt.TexturePaint</code>.
@@ -64,7 +63,7 @@ public class GradientTexturePaint implements Paint {
 				argb[a] = colors[a].getRGB();
 			}
 
-			int size = MathG.ceilInt(distance);
+			int size = (int) Math.ceil(distance);
 			boolean hasAlpha = containsAlpha(colors);
 
 			// express all channels as a float, we'll apply diffusion later:
@@ -331,7 +330,7 @@ public class GradientTexturePaint implements Paint {
 				argb[a] = colors[a].getRGB();
 			}
 
-			int size = MathG.ceilInt(distance);
+			int size = (int) Math.ceil(distance);
 			int[] row = new int[size];
 			boolean hasAlpha = containsAlpha(colors);
 			int imageType = hasAlpha ? BufferedImage.TYPE_INT_ARGB

@@ -43,7 +43,6 @@ import javax.swing.JPanel;
 
 import com.pump.awt.Dimension2D;
 import com.pump.image.pixel.GenericImageSinglePassIterator;
-import com.pump.math.MathG;
 import com.pump.swing.BasicConsole;
 import com.pump.util.JVM;
 
@@ -365,9 +364,9 @@ public class ScalingJPEGDemo {
 
 							int sub = 1;
 							if (w > h)
-								sub = MathG.ceilInt(w / maxSize.getWidth());
+								sub = (int) Math.ceil(w / maxSize.getWidth());
 							else
-								sub = MathG.ceilInt(h / maxSize.getHeight());
+								sub = (int) Math.ceil(h / maxSize.getHeight());
 
 							BufferedImage bi = new BufferedImage(newSize.width,
 									newSize.height, BufferedImage.TYPE_INT_RGB);

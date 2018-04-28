@@ -97,11 +97,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 					new ClickSensitivityDemo(), Layout.STRETCH_TO_FIT);
 			addSection("shapeBounds", "Shape Bounds", new ShapeBoundsDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("resourcePool", "Resource Pool", new ResourcePoolDemo(),
-					Layout.STRETCH_TO_FIT);
 			addSection("clipper", "Clipper", new ClipperDemo(),
-					Layout.STRETCH_TO_FIT);
-			addSection("hsbInline", "HSB Inline", new HSBInlineDemo(),
 					Layout.STRETCH_TO_FIT);
 			addSection("angeSliderUI", "AngleSliderUI",
 					new AngleSliderUIDemo(), Layout.SCROLLPANE);
@@ -135,8 +131,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 					new JPEGMetaDataDemo(), Layout.STRETCH_TO_FIT);
 			addSection("audioPlayerComponents", "Audio: Swing Components",
 					new AudioComponentsDemo(), Layout.STRETCH_TO_FIT);
-			addSection("mathGDemo", "Math: MathG Comparison", new MathGDemo(),
-					Layout.STRETCH_TO_FIT);
 			addSection("mathEquations", "Math: Gaussian Elimination",
 					new EquationsDemo(), Layout.STRETCH_TO_FIT);
 			addSection("textSourceCode", "Text: Java Source Code Component",

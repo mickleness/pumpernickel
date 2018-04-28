@@ -35,7 +35,6 @@ import javax.swing.JComponent;
 
 import com.pump.blog.ResourceSample;
 import com.pump.geom.ShapeBounds;
-import com.pump.math.MathG;
 import com.pump.util.ObservableProperties;
 import com.pump.util.ObservableProperties.Key;
 import com.pump.util.ObservableProperties.NonNullBoundsChecker;
@@ -54,9 +53,8 @@ import com.pump.util.ObservableProperties.NonNullBoundsChecker;
  * alt="new&#160;com.pump.awt.TextBlock(0,&#160;&#34;Example&#160;Red&#34;)"></td>
  * <td><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/TextBlock/sample2.png"
- * alt
- * ="new&#160;com.pump.awt.TextBlock(.2,&#160;&#34;Greenish&#160;Example&#34;)">
- * </td>
+ * alt =
+ * "new&#160;com.pump.awt.TextBlock(.2,&#160;&#34;Greenish&#160;Example&#34;)"></td>
  * <td><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/TextBlock/sample3.png"
  * alt="new&#160;com.pump.awt.TextBlock(.5,&#160;&#34;Example&#160;Cyan&#34;)"></td>
@@ -258,9 +256,9 @@ public class TextBlock implements Paintable {
 				curveWidth);
 		body.reset();
 		body.append(roundRect, false);
-		width = MathG
-				.ceilInt(roundRect.getWidth() + insets.left + insets.right);
-		height = MathG.ceilInt(roundRect.getHeight() + insets.top
+		width = (int) Math.ceil(roundRect.getWidth() + insets.left
+				+ insets.right);
+		height = (int) Math.ceil(roundRect.getHeight() + insets.top
 				+ insets.bottom);
 	}
 

@@ -12,8 +12,6 @@ package com.pump.image.pixel;
 
 import java.awt.image.BufferedImage;
 
-import com.pump.math.MathG;
-
 /**
  * This iterator scales another iterator as it is being read.
  * <p>
@@ -1331,8 +1329,8 @@ public abstract class ScalingIterator implements PixelIterator {
 		 * we don't then we'll suffer arithmetic overflows, and the color
 		 * channels will look funky.
 		 */
-		int capacity = MathG.ceilInt(1.0 / scaleX)
-				* MathG.ceilInt(1.0 / scaleY);
+		int capacity = (int) Math.ceil(1.0 / scaleX)
+				* (int) Math.ceil(1.0 / scaleY);
 		if (capacity > 0xff) {
 			row = new IntRow(dstW, isOpaque);
 			if (scaleY > 1) // upsampling requires two Rows
@@ -1437,8 +1435,8 @@ public abstract class ScalingIterator implements PixelIterator {
 		 */
 		double sy = (dstH) / (srcH - 1.0);
 		double srcPosition = (dstY) / sy;
-		int srcY0 = MathG.floorInt(srcPosition);
-		int srcY1 = MathG.ceilInt(srcPosition);
+		int srcY0 = (int) Math.floor(srcPosition);
+		int srcY1 = (int) Math.ceil(srcPosition);
 		double srcFraction = srcPosition - srcY0;
 
 		if (srcY < srcY0) {

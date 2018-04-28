@@ -19,7 +19,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import com.pump.image.ImageContext;
-import com.pump.util.ResourcePool;
 
 /**
  * This transition flips the viewing surface over 180 degrees to reveal the
@@ -83,7 +82,8 @@ import com.pump.util.ResourcePool;
 public class FlipTransition3D extends Transition3D {
 
 	/**
-	 * TODO: remove all getDemoTransitions() methods or create a new tool to invoke them.
+	 * TODO: remove all getDemoTransitions() methods or create a new tool to
+	 * invoke them.
 	 * 
 	 * @return the transitions that should be used to demonstrate this
 	 *         transition.
@@ -229,66 +229,62 @@ public class FlipTransition3D extends Transition3D {
 		bottomLeft = p.transform(bottomLeft3D);
 		bottomRight = p.transform(bottomRight3D);
 
-		BufferedImage scratchImage = ResourcePool.get().getImage(w, h,
-				BufferedImage.TYPE_INT_ARGB, true);
-		try {
-			ImageContext context = ImageContext.create(scratchImage);
-			context.setRenderingHints(g.getRenderingHints());
+		BufferedImage scratchImage = new BufferedImage(w, h,
+				BufferedImage.TYPE_INT_ARGB);
 
-			if (progress > .5) {
-				if (vert) {
-					context.drawImage(frameB, bottomLeft, bottomRight,
-							topRight, topLeft);
-				} else {
-					context.drawImage(frameB, topRight, topLeft, bottomLeft,
-							bottomRight);
-				}
-			} else {
-				context.drawImage(frameA, topLeft, topRight, bottomRight,
-						bottomLeft);
-			}
-			context.dispose();
+		ImageContext context = ImageContext.create(scratchImage);
+		context.setRenderingHints(g.getRenderingHints());
 
-			Graphics2D g3 = scratchImage.createGraphics();
-			g3.setComposite(AlphaComposite.SrcAtop);
-			double maxDarkness = 150;
-			double z = vert ? Math.abs(bottomLeft.getY() - topLeft.getY()) / h
-					: Math.abs(bottomLeft.getX() - bottomRight.getX()) / w;
-			int alpha = (int) (maxDarkness * (1 - z));
-			alpha = Math.min(Math.max(0, alpha), 255);
+		if (progress > .5) {
 			if (vert) {
-				if (direction == UP) {
-					g3.setPaint(new GradientPaint(0, (float) topLeft.getY(),
-							new Color(0, 0, 0, alpha), 0, (float) bottomLeft
-									.getY(), new Color(0, 0, 0, 0)));
-				} else {
-					g3.setPaint(new GradientPaint(0, (float) bottomLeft.getY(),
-							new Color(0, 0, 0, alpha), 0, (float) topLeft
-									.getY(), new Color(0, 0, 0, 0)));
-				}
+				context.drawImage(frameB, bottomLeft, bottomRight, topRight,
+						topLeft);
 			} else {
-				if (direction == LEFT) {
-					g3.setPaint(new GradientPaint((float) topLeft.getX(), 0,
-							new Color(0, 0, 0, alpha), (float) topRight.getX(),
-							0, new Color(0, 0, 0, 0)));
-				} else {
-					g3.setPaint(new GradientPaint((float) topRight.getX(), 0,
-							new Color(0, 0, 0, alpha), (float) topLeft.getX(),
-							0, new Color(0, 0, 0, 0)));
-				}
+				context.drawImage(frameB, topRight, topLeft, bottomLeft,
+						bottomRight);
 			}
-			Rectangle2D r = CubeTransition3D.getBounds(topLeft, topRight,
-					bottomLeft, bottomRight);
-			r.setFrame(r.getX() - 1, r.getY() - 1, r.getWidth() + 2,
-					r.getHeight() + 2);
-			g3.fill(r);
-			g3.dispose();
-
-			g.drawImage(scratchImage, 0, 0, null);
-		} finally {
-			ResourcePool.get().put(scratchImage);
-			;
+		} else {
+			context.drawImage(frameA, topLeft, topRight, bottomRight,
+					bottomLeft);
 		}
+		context.dispose();
+
+		Graphics2D g3 = scratchImage.createGraphics();
+		g3.setComposite(AlphaComposite.SrcAtop);
+		double maxDarkness = 150;
+		double z = vert ? Math.abs(bottomLeft.getY() - topLeft.getY()) / h
+				: Math.abs(bottomLeft.getX() - bottomRight.getX()) / w;
+		int alpha = (int) (maxDarkness * (1 - z));
+		alpha = Math.min(Math.max(0, alpha), 255);
+		if (vert) {
+			if (direction == UP) {
+				g3.setPaint(new GradientPaint(0, (float) topLeft.getY(),
+						new Color(0, 0, 0, alpha), 0,
+						(float) bottomLeft.getY(), new Color(0, 0, 0, 0)));
+			} else {
+				g3.setPaint(new GradientPaint(0, (float) bottomLeft.getY(),
+						new Color(0, 0, 0, alpha), 0, (float) topLeft.getY(),
+						new Color(0, 0, 0, 0)));
+			}
+		} else {
+			if (direction == LEFT) {
+				g3.setPaint(new GradientPaint((float) topLeft.getX(), 0,
+						new Color(0, 0, 0, alpha), (float) topRight.getX(), 0,
+						new Color(0, 0, 0, 0)));
+			} else {
+				g3.setPaint(new GradientPaint((float) topRight.getX(), 0,
+						new Color(0, 0, 0, alpha), (float) topLeft.getX(), 0,
+						new Color(0, 0, 0, 0)));
+			}
+		}
+		Rectangle2D r = CubeTransition3D.getBounds(topLeft, topRight,
+				bottomLeft, bottomRight);
+		r.setFrame(r.getX() - 1, r.getY() - 1, r.getWidth() + 2,
+				r.getHeight() + 2);
+		g3.fill(r);
+		g3.dispose();
+
+		g.drawImage(scratchImage, 0, 0, null);
 	}
 
 	@Override

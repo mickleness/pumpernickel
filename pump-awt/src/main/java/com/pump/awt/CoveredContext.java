@@ -18,8 +18,6 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.lang.ref.SoftReference;
 
-import com.pump.math.MathG;
-
 /**
  * This is a crude way to cover several pixels.
  * <P>
@@ -262,7 +260,7 @@ class CoveredContext implements PaintContext {
 						+ kx2;
 
 				if (xIntersect1 < xIntersect2) {
-					int ceil = MathG.ceilInt(xIntersect1 - x);
+					int ceil = (int) Math.ceil(xIntersect1 - x);
 					for (int col = 0; col < ceil && col < w; col++) {
 						data[col] = color1;
 					}
@@ -270,7 +268,7 @@ class CoveredContext implements PaintContext {
 						data[col] = color2;
 					}
 				} else {
-					int ceil = MathG.ceilInt(xIntersect2 - x);
+					int ceil = (int) Math.ceil(xIntersect2 - x);
 					for (int col = 0; col < ceil && col < w; col++) {
 						data[col] = color2;
 					}

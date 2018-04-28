@@ -46,7 +46,6 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 
 import com.pump.geom.ShapeBounds;
-import com.pump.math.MathG;
 import com.pump.swing.MultiThumbSlider;
 import com.pump.swing.MultiThumbSlider.Collision;
 
@@ -232,8 +231,8 @@ public abstract class MultiThumbSliderUI<T> extends ComponentUI implements
 			if (sliderUI.slider.getOrientation() == SwingConstants.VERTICAL) {
 				path.transform(AffineTransform.getRotateInstance(-Math.PI / 2));
 			}
-			path.transform(AffineTransform.getTranslateInstance(
-					MathG.roundInt(x), MathG.roundInt(y)));
+			path.transform(AffineTransform.getTranslateInstance(Math.round(x),
+					Math.round(y)));
 			return path;
 		}
 

@@ -37,7 +37,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.MouseInputAdapter;
 
-import com.pump.math.MathG;
 import com.pump.plaf.PlafPaintUtils;
 
 /**
@@ -144,9 +143,9 @@ public class MagnificationPanel extends JComponent {
 			public void componentResized(ComponentEvent e) {
 				int componentWidth = getWidth();
 				int componentHeight = getHeight();
-				int imageWidth = MathG.ceilInt(((double) componentWidth)
+				int imageWidth = (int) Math.ceil(((double) componentWidth)
 						/ ((double) MagnificationPanel.this.pixelSize));
-				int imageHeight = MathG.ceilInt(((double) componentHeight)
+				int imageHeight = (int) Math.ceil(((double) componentHeight)
 						/ ((double) MagnificationPanel.this.pixelSize));
 				int oldImageWidth = scratchImage == null ? 0 : scratchImage
 						.getWidth();
