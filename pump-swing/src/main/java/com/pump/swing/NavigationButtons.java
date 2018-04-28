@@ -28,8 +28,6 @@ import com.pump.plaf.TexturedButtonUI;
  * 
  */
 public class NavigationButtons {
-	private static final boolean isMac = System.getProperty("os.name")
-			.toLowerCase().indexOf("mac") != -1;
 
 	public static void formatPrev(AbstractButton button) {
 		button.setIcon(createIcon(false, .75f));

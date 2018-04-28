@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,7 +26,6 @@ import java.util.Set;
 
 import com.pump.io.ByteEncoder;
 import com.pump.io.ChainedByteEncoder;
-import com.pump.math.KeyedRandom;
 
 /**
  * This is a cipher that outputs data where the encoding and decoding algorithm
@@ -626,7 +626,8 @@ public class Scrambler {
 				k.add(new MarkerRule.OneCount(a % 8));
 			}
 		}
-		Random random = key == null ? new Random(0) : new KeyedRandom(key);
+		Random random = key == null ? new Random(0) : new SecureRandom(key
+				.toString().getBytes());
 		Collections.shuffle(k, random);
 
 		char[] charArray = characterSet == null ? null : characterSet
