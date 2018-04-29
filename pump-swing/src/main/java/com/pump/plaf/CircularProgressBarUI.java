@@ -116,6 +116,22 @@ import com.pump.geom.TransformUtils;
  * Because this renders a different progress value than what the JProgressBar
  * actually indicates, this should not be used with a painted String. If
  * undefined this property is assumed to be false.
+ * <p>
+ * <h4>Transitioning Values</h4>
+ * <p>
+ * The {@link #PROPERTY_TRANSITION} client property maps to a boolean. When this
+ * is true every time the progress bar's value increases we'll launch a very
+ * short animation to transition from the current value to the new value. This
+ * is not useful if the progress bar moves in increments of 1, but if it moves
+ * in increments of 5, 10, 20, etc. then this adds a more polished look to the
+ * UI. If undefined this is assumed to be true.
+ * <p>
+ * <h4>Custom Stroke Width</h4>
+ * <p>
+ * The {@link #PROPERTY_STROKE_WIDTH} client property maps to a Number. When
+ * this is not null this is the width of the stroke that is used to render the
+ * arcs. When this is null a default value is calculated based on the size of
+ * the circle/arc.
  */
 public class CircularProgressBarUI extends BasicProgressBarUI {
 
@@ -358,6 +374,21 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	}
 
 	@Override
+	public void uninstallUI(JComponent c) {
+		progressBar.removeChangeListener(pulseChangeListener);
+		progressBar.removeChangeListener(sparkChangeListener);
+		progressBar.removePropertyChangeListener(PROPERTY_STROKE_MULTIPLIER,
+				repaintListener);
+		progressBar.removePropertyChangeListener(PROPERTY_SPARK_ANGLE,
+				repaintListener);
+		progressBar.removePropertyChangeListener(PROPERTY_ACCELERATE,
+				repaintListener);
+		progressBar.removePropertyChangeListener(PROPERTY_STROKE_WIDTH,
+				repaintListener);
+		super.uninstallUI(c);
+	}
+
+	@Override
 	public void paint(Graphics g0, JComponent c) {
 		Graphics2D g = (Graphics2D) g0;
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -383,80 +414,109 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 
 		float strokeWidth = getStrokeWidth(diameter);
 
-		if (!progressBar.isIndeterminate()) {
-			Number multiplier = (Number) progressBar
-					.getClientProperty(PROPERTY_STROKE_MULTIPLIER);
-			if (multiplier != null)
-				strokeWidth = strokeWidth * multiplier.floatValue();
-
-			strokeWidth = Math.min(strokeWidth, radius);
-
-			double v = progressBar.getPercentComplete();
-			if (isActive(PROPERTY_TRANSITION, true)) {
-				Number lastRenderedValue = (Number) progressBar
-						.getClientProperty(PROPERTY_LAST_RENDERED_VALUE);
-				if (lastRenderedValue != null
-						&& v > lastRenderedValue.doubleValue()) {
-					double oldV = v;
-					if (v > lastRenderedValue.doubleValue()) {
-						v = Math.min(lastRenderedValue.doubleValue() + .0025, v);
-					} else if (v < lastRenderedValue.doubleValue()) {
-						v = Math.max(lastRenderedValue.doubleValue() - .0025, v);
-					}
-					if (v != oldV) {
-						SwingUtilities.invokeLater(repaintRunnable);
-					}
-				}
-			}
-			progressBar.putClientProperty(PROPERTY_LAST_RENDERED_VALUE, v);
-			if (isActive(PROPERTY_ACCELERATE, false)) {
-				v = Math.pow(v, 2.5);
-			}
-			double extent = v * 360;
-			paintArc(g, progressBar.getForeground(), centerX, centerY, 0,
-					extent, radius - strokeWidth / 2, strokeWidth);
-			paintArc(g, progressBar.getBackground(), centerX, centerY, extent,
-					360 - extent, radius - strokeWidth / 2, strokeWidth);
-
-			Number sparkAngle = (Number) progressBar
-					.getClientProperty(PROPERTY_SPARK_ANGLE);
-			if (sparkAngle != null) {
-				int a1 = sparkAngle.intValue();
-				int a2 = sparkAngle.intValue() - SPARK_EXTENT;
-				int b1 = (int) Math.max(0, Math.min(extent, a1));
-				int b2 = (int) Math.max(0, Math.min(extent, a2));
-				if (b2 >= 0) {
-					Color sparkColor = new Color(0xddffffff, true);
-					paintArc(g, sparkColor, centerX, centerY, b1, b2 - b1,
-							radius - strokeWidth / 2, strokeWidth);
-				}
-			}
-
-			if (progressBar.isStringPainted()) {
-				Font font = progressBar.getFont();
-				font = font.deriveFont(((float) radius) / 2f);
-				PlafPaintUtils.paintCenteredString(g, progressBar.getString(),
-						font, centerX, centerY);
-			}
+		if (progressBar.isIndeterminate()) {
+			paintIndeterminate(g, radius, strokeWidth, centerX, centerY);
 		} else {
-			for (int degree = 0; degree < 360; degree += 60) {
-				Color color = progressBar.getForeground();
-
-				long period = 500;
-				float k = ((float) (System.currentTimeMillis() % period))
-						/ ((float) period) + ((float) degree) / 360;
-				k = k % 1;
-				int alpha = (int) (255 - 255 * k);
-				color = new Color(color.getRed(), color.getGreen(),
-						color.getBlue(), alpha);
-				int z = degree + (int) ((1 - k) * 30);
-				paintArc(g, color, centerX, centerY, z, 30, radius
-						- strokeWidth * k / 2 - strokeWidth / 2, strokeWidth
-						* ((1 - k) / 4 + .75f));
-			}
+			paintDeterminate(g, radius, strokeWidth, centerX, centerY);
 		}
 	}
 
+	/**
+	 * Paint the indeterminate state of this UI.
+	 * <p>
+	 * This integrates System.currentTimeMillis() into its calculations, so
+	 * every invocation will be slightly different.
+	 */
+	protected void paintIndeterminate(Graphics2D g, int radius,
+			float strokeWidth, int centerX, int centerY) {
+		for (int degree = 0; degree < 360; degree += 60) {
+			Color color = progressBar.getForeground();
+
+			long period = 500;
+			float k = ((float) (System.currentTimeMillis() % period))
+					/ ((float) period) + ((float) degree) / 360;
+			k = k % 1;
+			int alpha = (int) (255 - 255 * k);
+			color = new Color(color.getRed(), color.getGreen(),
+					color.getBlue(), alpha);
+			int z = degree + (int) ((1 - k) * 30);
+			paintArc(g, color, centerX, centerY, z, 30, radius - strokeWidth
+					* k / 2 - strokeWidth / 2, strokeWidth
+					* ((1 - k) / 4 + .75f));
+		}
+	}
+
+	/**
+	 * Paint the determinate state of this UI.
+	 * <p>
+	 * This doesn't rely on System.currentTimeMillis(), but it can invoke
+	 * <code>progressBar.repaint()</code> if the transition property is active,
+	 * so subsequent invocations may produce different results.
+	 */
+	protected void paintDeterminate(Graphics2D g, int radius,
+			float strokeWidth, int centerX, int centerY) {
+		Number multiplier = (Number) progressBar
+				.getClientProperty(PROPERTY_STROKE_MULTIPLIER);
+		if (multiplier != null)
+			strokeWidth = strokeWidth * multiplier.floatValue();
+
+		strokeWidth = Math.min(strokeWidth, radius);
+
+		double v = progressBar.getPercentComplete();
+		if (isActive(PROPERTY_TRANSITION, true)) {
+			Number lastRenderedValue = (Number) progressBar
+					.getClientProperty(PROPERTY_LAST_RENDERED_VALUE);
+			if (lastRenderedValue != null
+					&& v > lastRenderedValue.doubleValue()) {
+				double oldV = v;
+				if (v > lastRenderedValue.doubleValue()) {
+					v = Math.min(lastRenderedValue.doubleValue() + .0025, v);
+				} else if (v < lastRenderedValue.doubleValue()) {
+					v = Math.max(lastRenderedValue.doubleValue() - .0025, v);
+				}
+				if (v != oldV) {
+					SwingUtilities.invokeLater(repaintRunnable);
+				}
+			}
+		}
+		progressBar.putClientProperty(PROPERTY_LAST_RENDERED_VALUE, v);
+		if (isActive(PROPERTY_ACCELERATE, false)) {
+			v = Math.pow(v, 2.5);
+		}
+		double extent = v * 360;
+		paintArc(g, progressBar.getForeground(), centerX, centerY, 0, extent,
+				radius - strokeWidth / 2, strokeWidth);
+		paintArc(g, progressBar.getBackground(), centerX, centerY, extent,
+				360 - extent, radius - strokeWidth / 2, strokeWidth);
+
+		Number sparkAngle = (Number) progressBar
+				.getClientProperty(PROPERTY_SPARK_ANGLE);
+		if (sparkAngle != null) {
+			int a1 = sparkAngle.intValue();
+			int a2 = sparkAngle.intValue() - SPARK_EXTENT;
+			int b1 = (int) Math.max(0, Math.min(extent, a1));
+			int b2 = (int) Math.max(0, Math.min(extent, a2));
+			if (b2 >= 0) {
+				Color sparkColor = new Color(0xddffffff, true);
+				paintArc(g, sparkColor, centerX, centerY, b1, b2 - b1, radius
+						- strokeWidth / 2, strokeWidth);
+			}
+		}
+
+		if (progressBar.isStringPainted()) {
+			Font font = progressBar.getFont();
+			font = font.deriveFont(((float) radius) / 2f);
+			PlafPaintUtils.paintCenteredString(g, progressBar.getString(),
+					font, centerX, centerY);
+		}
+	}
+
+	/**
+	 * Return the stroke width.
+	 * <P>
+	 * This first checks to see if the user has defined a custom width, and if
+	 * not the width is derived based on the diameter.
+	 */
 	protected float getStrokeWidth(int diameter) {
 		Number n = (Number) progressBar
 				.getClientProperty(PROPERTY_STROKE_WIDTH);
@@ -471,6 +531,13 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		return f;
 	}
 
+	/**
+	 * Return true if a property with the given name is active.
+	 * 
+	 * @param defaultValue
+	 *            the default state of this property if the client property is
+	 *            null.
+	 */
 	protected boolean isActive(String propertyName, boolean defaultValue) {
 		Boolean b = (Boolean) progressBar.getClientProperty(propertyName);
 		if (b == null)
