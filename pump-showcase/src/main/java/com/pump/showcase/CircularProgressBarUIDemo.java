@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -27,7 +28,7 @@ public class CircularProgressBarUIDemo extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	JPanel controls = new JPanel();
-	JSlider sizeSlider = new JSlider(10, 120, 20);
+	JSlider sizeSlider = new JSlider(10, 120, 90);
 	JRadioButton indeterminateButton = new JRadioButton("Indeterminate", false);
 	JRadioButton determinateButton = new JRadioButton("Determinate", true);
 	JProgressBar progressBar = new JProgressBar(0, 100);
@@ -42,6 +43,8 @@ public class CircularProgressBarUIDemo extends JPanel {
 			CircularProgressBarUI.COLOR_DEFAULT_BACKGROUND);
 	JRadioButton stringOnButton = new JRadioButton("On", true);
 	JRadioButton stringOffButton = new JRadioButton("Off", false);
+	JCheckBox pulseCheckBox = new JCheckBox("Pulse", true);
+	JCheckBox sparkCheckBox = new JCheckBox("Spark", true);
 
 	ChangeListener sizeListener = new ChangeListener() {
 
@@ -68,6 +71,20 @@ public class CircularProgressBarUIDemo extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			progressBar.setStringPainted(stringOnButton.isSelected());
+		}
+
+	};
+
+	ActionListener effectsListener = new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			progressBar.putClientProperty(
+					CircularProgressBarUI.PROPERTY_PULSE_COMPLETION_ACTIVE,
+					pulseCheckBox.isSelected());
+			progressBar.putClientProperty(
+					CircularProgressBarUI.PROPERTY_SPARK_ACTIVE,
+					sparkCheckBox.isSelected());
 		}
 
 	};
@@ -145,9 +162,11 @@ public class CircularProgressBarUIDemo extends JPanel {
 		layout.addRow(new JLabel("Value:"), progressSpinner, false);
 		layout.addRow(new JLabel("String Painted:"), stringOnButton,
 				stringOffButton);
-		layout.addRow(new JLabel("Animate:"), animateOnButton, animateOffButton);
+		layout.addRow(new JLabel("Animate Value:"), animateOnButton,
+				animateOffButton);
 		layout.addRow(new JLabel("Foreground:"), foregroundColor, false);
 		layout.addRow(new JLabel("Background:"), backgroundColor, false);
+		layout.addRow(new JLabel("Effects:"), pulseCheckBox, sparkCheckBox);
 
 		ButtonGroup g1 = new ButtonGroup();
 		g1.add(indeterminateButton);
@@ -196,6 +215,12 @@ public class CircularProgressBarUIDemo extends JPanel {
 		backgroundColor.addChangeListener(colorListener);
 		foregroundColor.addChangeListener(colorListener);
 		colorListener.stateChanged(null);
+
+		pulseCheckBox.addActionListener(effectsListener);
+		sparkCheckBox.addActionListener(effectsListener);
+		// do NOT call actionPerformed(null) here; prove in the demo that the
+		// defaults are interpreted as true when undefined.
+		// effectsListener.actionPerformed(null);
 
 		progressSpinner.addChangeListener(spinnerListener);
 	}
