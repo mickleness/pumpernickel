@@ -150,6 +150,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 					new WildcardPatternHighlighterDemo(), Layout.STRETCH_TO_FIT);
 			addSection("boxTabbedPaneUI", "Tabs: BoxTabbedPaneUI",
 					new BoxTabbedPaneUIDemo(), Layout.STRETCH_TO_FIT);
+			addSection("circularProgressBarUI", "Swing: CircularProgressBarUI",
+					new CircularProgressBarUIDemo(), Layout.STRETCH_TO_FIT);
 			// TODO: add CubicIntersectionsPanel with 18-degree polynomial?
 
 		} catch (Exception e) {

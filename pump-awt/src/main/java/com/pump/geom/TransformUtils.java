@@ -195,4 +195,26 @@ public class TransformUtils {
 						* progress);
 		return dest;
 	}
+
+	/**
+	 * Create an AffineTransform that flips everything horizontally around a given x-value.
+	 */
+	public static AffineTransform flipHorizontal(double x) {
+		AffineTransform tx = new AffineTransform();
+		tx.translate(x, 0);
+		tx.scale(-1, 1);
+		tx.translate(-x, 0);
+		return tx;
+	}
+
+	/**
+	 * Create an AffineTransform that flips everything vertically around a given y-value.
+	 */
+	public static AffineTransform flipVertical(double y) {
+		AffineTransform tx = new AffineTransform();
+		tx.translate(0, y);
+		tx.scale(1, -1);
+		tx.translate(0, -y);
+		return tx;
+	}
 }

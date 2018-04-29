@@ -12,6 +12,8 @@ package com.pump.plaf;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -19,6 +21,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -289,5 +292,18 @@ public class PlafPaintUtils {
 			checkers.put(key, paint);
 		}
 		return paint;
+	}
+
+	/**
+	 * Paint a String centered at a given (x,y) coordinate.
+	 */
+	public static void paintCenteredString(Graphics2D g, String str, Font font,
+			int centerX, int centerY) {
+		g.setFont(font);
+		FontMetrics fm = g.getFontMetrics();
+		Rectangle2D r = fm.getStringBounds(str, g);
+		float x = (float) (centerX - r.getWidth() / 2);
+		float y = (float) (centerY - r.getHeight() / 2 - r.getY());
+		g.drawString(str, x, y);
 	}
 }
