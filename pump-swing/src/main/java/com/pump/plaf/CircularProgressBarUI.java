@@ -15,6 +15,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
@@ -148,6 +149,26 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	public static final String PROPERTY_ACCELERATE = CircularProgressBarUI.class
 			.getName() + "#accelerate";
 
+	/**
+	 * This client property maps to a Boolean indicating whether this UI should
+	 * animate transitions between different progress bar values. For example,
+	 * if you jump from a progress bar value of 5 to 15, if this is true then
+	 * the UI will animate in-between values. If undefined this is assumed to be
+	 * true.
+	 */
+	public static final String PROPERTY_TRANSITION = CircularProgressBarUI.class
+			.getName() + "#transition";
+	/**
+	 * This client property maps to a Number indicating the stroke width the
+	 * arcs should use. By default this UI calculates a "reasonable" stroke
+	 * width based on the radius of the circle, but this property lets you
+	 * override that default.
+	 */
+	public static final String PROPERTY_STROKE_WIDTH = CircularProgressBarUI.class
+			.getName() + "#strokeWidth";
+
+	private static final String PROPERTY_LAST_RENDERED_VALUE = CircularProgressBarUI.class
+			.getName() + "#lastRenderedValue";
 	private static final String PROPERTY_SPARK_ANGLE = CircularProgressBarUI.class
 			.getName() + "#sparkPosition";
 	private static final String PROPERTY_STROKE_MULTIPLIER = CircularProgressBarUI.class
@@ -304,6 +325,12 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 
 	};
 
+	private Runnable repaintRunnable = new Runnable() {
+		public void run() {
+			progressBar.repaint();
+		}
+	};
+
 	@Override
 	public Dimension getPreferredSize(JComponent c) {
 		Dimension d = super.getPreferredSize(c);
@@ -325,6 +352,8 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		progressBar.addPropertyChangeListener(PROPERTY_SPARK_ANGLE,
 				repaintListener);
 		progressBar.addPropertyChangeListener(PROPERTY_ACCELERATE,
+				repaintListener);
+		progressBar.addPropertyChangeListener(PROPERTY_STROKE_WIDTH,
 				repaintListener);
 	}
 
@@ -352,9 +381,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		int centerX = x + width / 2;
 		int centerY = y + height / 2;
 
-		float strokeWidth = ((float) diameter) / 10f + 1;
-		if (!progressBar.isStringPainted())
-			strokeWidth *= 2;
+		float strokeWidth = getStrokeWidth(diameter);
 
 		if (!progressBar.isIndeterminate()) {
 			Number multiplier = (Number) progressBar
@@ -362,8 +389,27 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 			if (multiplier != null)
 				strokeWidth = strokeWidth * multiplier.floatValue();
 
+			strokeWidth = Math.min(strokeWidth, radius);
+
 			double v = progressBar.getPercentComplete();
-			if (isAccelerate()) {
+			if (isActive(PROPERTY_TRANSITION, true)) {
+				Number lastRenderedValue = (Number) progressBar
+						.getClientProperty(PROPERTY_LAST_RENDERED_VALUE);
+				if (lastRenderedValue != null
+						&& v > lastRenderedValue.doubleValue()) {
+					double oldV = v;
+					if (v > lastRenderedValue.doubleValue()) {
+						v = Math.min(lastRenderedValue.doubleValue() + .0025, v);
+					} else if (v < lastRenderedValue.doubleValue()) {
+						v = Math.max(lastRenderedValue.doubleValue() - .0025, v);
+					}
+					if (v != oldV) {
+						SwingUtilities.invokeLater(repaintRunnable);
+					}
+				}
+			}
+			progressBar.putClientProperty(PROPERTY_LAST_RENDERED_VALUE, v);
+			if (isActive(PROPERTY_ACCELERATE, false)) {
 				v = Math.pow(v, 2.5);
 			}
 			double extent = v * 360;
@@ -411,11 +457,24 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		}
 	}
 
-	private boolean isAccelerate() {
-		Boolean b = (Boolean) progressBar
-				.getClientProperty(PROPERTY_ACCELERATE);
+	protected float getStrokeWidth(int diameter) {
+		Number n = (Number) progressBar
+				.getClientProperty(PROPERTY_STROKE_WIDTH);
+		float f;
+		if (n == null) {
+			f = ((float) diameter) / 10f + 1;
+			if (!progressBar.isStringPainted())
+				f *= 2;
+		} else {
+			f = n.floatValue();
+		}
+		return f;
+	}
+
+	protected boolean isActive(String propertyName, boolean defaultValue) {
+		Boolean b = (Boolean) progressBar.getClientProperty(propertyName);
 		if (b == null)
-			b = false;
+			b = defaultValue;
 		return b;
 	}
 
@@ -450,7 +509,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 * @param strokeWidth
 	 *            the stroke width
 	 */
-	private void paintArc(Graphics2D g, Color color, double centerX,
+	protected void paintArc(Graphics2D g, Color color, double centerX,
 			double centerY, double startAngle, double extent, double radius,
 			float strokeWidth) {
 		g = (Graphics2D) g.create();

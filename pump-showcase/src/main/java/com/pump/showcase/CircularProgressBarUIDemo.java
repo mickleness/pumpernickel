@@ -45,7 +45,10 @@ public class CircularProgressBarUIDemo extends JPanel {
 	JRadioButton stringOffButton = new JRadioButton("Off", false);
 	JCheckBox pulseCheckBox = new JCheckBox("Pulse", true);
 	JCheckBox sparkCheckBox = new JCheckBox("Spark", true);
+	JCheckBox transitionCheckBox = new JCheckBox("Transition", true);
 	JCheckBox accelerateCheckBox = new JCheckBox("Accelerate", false);
+	JSlider strokeSlider = new JSlider(1, 50, 4);
+	JCheckBox strokeCheckBox = new JCheckBox("Custom Stroke Width:");
 
 	ChangeListener sizeListener = new ChangeListener() {
 
@@ -89,6 +92,9 @@ public class CircularProgressBarUIDemo extends JPanel {
 			progressBar.putClientProperty(
 					CircularProgressBarUI.PROPERTY_ACCELERATE,
 					accelerateCheckBox.isSelected());
+			progressBar.putClientProperty(
+					CircularProgressBarUI.PROPERTY_TRANSITION,
+					transitionCheckBox.isSelected());
 		}
 
 	};
@@ -156,6 +162,32 @@ public class CircularProgressBarUIDemo extends JPanel {
 
 	};
 
+	ChangeListener strokeSliderListener = new ChangeListener() {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			Number w;
+			if (strokeCheckBox.isSelected()) {
+				w = strokeSlider.getValue();
+			} else {
+				w = null;
+			}
+			progressBar.putClientProperty(
+					CircularProgressBarUI.PROPERTY_STROKE_WIDTH, w);
+		}
+
+	};
+
+	ActionListener strokeCheckboxListener = new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			strokeSlider.setEnabled(strokeCheckBox.isSelected());
+			strokeSliderListener.stateChanged(null);
+		}
+
+	};
+
 	public CircularProgressBarUIDemo() {
 		super(new GridBagLayout());
 
@@ -170,8 +202,9 @@ public class CircularProgressBarUIDemo extends JPanel {
 				animateOffButton);
 		layout.addRow(new JLabel("Foreground:"), foregroundColor, false);
 		layout.addRow(new JLabel("Background:"), backgroundColor, false);
-		layout.addRow(new JLabel("Effects:"), pulseCheckBox, sparkCheckBox,
-				accelerateCheckBox);
+		layout.addRow(new JLabel("Effects:"), pulseCheckBox, sparkCheckBox);
+		layout.addRow(null, accelerateCheckBox, transitionCheckBox);
+		layout.addRow(strokeCheckBox, strokeSlider, true);
 
 		ButtonGroup g1 = new ButtonGroup();
 		g1.add(indeterminateButton);
@@ -221,9 +254,14 @@ public class CircularProgressBarUIDemo extends JPanel {
 		foregroundColor.addChangeListener(colorListener);
 		colorListener.stateChanged(null);
 
+		strokeSlider.addChangeListener(strokeSliderListener);
+		strokeCheckBox.addActionListener(strokeCheckboxListener);
+		strokeCheckboxListener.actionPerformed(null);
+
 		pulseCheckBox.addActionListener(effectsListener);
 		sparkCheckBox.addActionListener(effectsListener);
 		accelerateCheckBox.addActionListener(effectsListener);
+		transitionCheckBox.addActionListener(effectsListener);
 		// do NOT call actionPerformed(null) here; prove in the demo that the
 		// defaults are interpreted as true when undefined.
 		// effectsListener.actionPerformed(null);
