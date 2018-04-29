@@ -45,6 +45,7 @@ public class CircularProgressBarUIDemo extends JPanel {
 	JRadioButton stringOffButton = new JRadioButton("Off", false);
 	JCheckBox pulseCheckBox = new JCheckBox("Pulse", true);
 	JCheckBox sparkCheckBox = new JCheckBox("Spark", true);
+	JCheckBox accelerateCheckBox = new JCheckBox("Accelerate", false);
 
 	ChangeListener sizeListener = new ChangeListener() {
 
@@ -85,6 +86,9 @@ public class CircularProgressBarUIDemo extends JPanel {
 			progressBar.putClientProperty(
 					CircularProgressBarUI.PROPERTY_SPARK_ACTIVE,
 					sparkCheckBox.isSelected());
+			progressBar.putClientProperty(
+					CircularProgressBarUI.PROPERTY_ACCELERATE,
+					accelerateCheckBox.isSelected());
 		}
 
 	};
@@ -166,7 +170,8 @@ public class CircularProgressBarUIDemo extends JPanel {
 				animateOffButton);
 		layout.addRow(new JLabel("Foreground:"), foregroundColor, false);
 		layout.addRow(new JLabel("Background:"), backgroundColor, false);
-		layout.addRow(new JLabel("Effects:"), pulseCheckBox, sparkCheckBox);
+		layout.addRow(new JLabel("Effects:"), pulseCheckBox, sparkCheckBox,
+				accelerateCheckBox);
 
 		ButtonGroup g1 = new ButtonGroup();
 		g1.add(indeterminateButton);
@@ -218,6 +223,7 @@ public class CircularProgressBarUIDemo extends JPanel {
 
 		pulseCheckBox.addActionListener(effectsListener);
 		sparkCheckBox.addActionListener(effectsListener);
+		accelerateCheckBox.addActionListener(effectsListener);
 		// do NOT call actionPerformed(null) here; prove in the demo that the
 		// defaults are interpreted as true when undefined.
 		// effectsListener.actionPerformed(null);
