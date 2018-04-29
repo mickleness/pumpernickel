@@ -62,6 +62,19 @@ public interface InspectorLayout {
 			boolean stretchControlToFill);
 
 	/**
+	 * Append a row containing these elements to this inspector.
+	 * 
+	 * @param identifier
+	 *            the control on the left. This should usually contain text. A
+	 *            <code>JLabel</code> or a <code>JCheckBox</code> is
+	 *            recommended.
+	 * @param controls
+	 *            a series of controls to group together from left to right. The
+	 *            cluster of components will be anchored on the left.
+	 */
+	public void addRow(JComponent identifier, JComponent... controls);
+
+	/**
 	 * Appends a new row containing 3 objects to this inspector.
 	 * 
 	 * The identifier is right-aligned. The leftControl is right-aligned, and

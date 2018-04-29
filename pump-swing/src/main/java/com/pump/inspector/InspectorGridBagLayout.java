@@ -10,11 +10,13 @@
  */
 package com.pump.inspector;
 
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
@@ -164,6 +166,10 @@ public class InspectorGridBagLayout implements InspectorLayout {
 
 	public void addRow(JComponent identifier, JComponent control,
 			boolean stretchControlToFill) {
+		if (identifier instanceof JLabel && control != null) {
+			((JLabel) identifier).setLabelFor(control);
+		}
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridy = y;
 		c.gridx = 0;
@@ -205,6 +211,10 @@ public class InspectorGridBagLayout implements InspectorLayout {
 
 	public void addRow(JComponent identifier, JComponent leftControl,
 			boolean stretchLeftControl, JComponent rightControl) {
+		if (identifier instanceof JLabel && leftControl != null) {
+			((JLabel) identifier).setLabelFor(leftControl);
+		}
+
 		if (rightControl == null) {
 			// don't wrap this in an extra panel if we don't need to
 			addRow(identifier, leftControl, stretchLeftControl);
@@ -299,5 +309,18 @@ public class InspectorGridBagLayout implements InspectorLayout {
 
 	public void setRowVerticalInset(int i) {
 		rowVerticalInset = i;
+	}
+
+	@Override
+	public void addRow(JComponent identifier, JComponent... controls) {
+		addRow(identifier, group(controls), false);
+	}
+
+	private JComponent group(JComponent... components) {
+		JPanel group = new JPanel(new FlowLayout());
+		for (JComponent c : components) {
+			group.add(c);
+		}
+		return group;
 	}
 }

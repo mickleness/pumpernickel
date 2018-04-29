@@ -1,7 +1,6 @@
 package com.pump.showcase;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -110,8 +108,8 @@ public class WildcardPatternHighlighterDemo extends JPanel {
 		layout.addRow(underlinePatternLabel, underlinePatternField, true);
 		layout.addRow(colorWellLabel, colorWell, false);
 		layout.addRow(thicknessLabel, thicknessSpinner, false);
-		layout.addRow(squiggleLabel,
-				group(squiggleOnRadioButton, squiggleOffRadioButton), false);
+		layout.addRow(squiggleLabel, squiggleOnRadioButton,
+				squiggleOffRadioButton);
 
 		Section blockSection = sectionContainer.addSection("block",
 				"Text Block Highlighter");
@@ -120,9 +118,8 @@ public class WildcardPatternHighlighterDemo extends JPanel {
 		layout = new InspectorGridBagLayout(blockSection.getBody());
 		layout.addRow(blockPatternLabel, blockPatternField, true);
 		layout.addRow(hueLabel, hueSpinner, false);
-		layout.addRow(includeFillLabel,
-				group(includeFillOnRadioButton, includeFillOffRadioButton),
-				false);
+		layout.addRow(includeFillLabel, includeFillOnRadioButton,
+				includeFillOffRadioButton);
 		layout.addRow(alphaLabel, alphaSpinner, false);
 
 		squiggleButtonGroup.add(squiggleOnRadioButton);
@@ -259,13 +256,5 @@ public class WildcardPatternHighlighterDemo extends JPanel {
 		if (sb != null)
 			words.add(new Word(sb.toString(), text.length() - sb.length()));
 		return words;
-	}
-
-	private JComponent group(JComponent... components) {
-		JPanel group = new JPanel(new FlowLayout());
-		for (JComponent c : components) {
-			group.add(c);
-		}
-		return group;
 	}
 }
