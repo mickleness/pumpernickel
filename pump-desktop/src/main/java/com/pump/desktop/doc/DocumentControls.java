@@ -1,3 +1,13 @@
+/**
+ * This software is released as part of the Pumpernickel project.
+ * 
+ * All com.pump resources in the Pumpernickel project are distributed under the
+ * MIT License:
+ * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * 
+ * More information about the Pumpernickel project is available here:
+ * https://mickleness.github.io/pumpernickel/
+ */
 package com.pump.desktop.doc;
 
 import java.awt.Frame;
@@ -307,7 +317,7 @@ public class DocumentControls {
 	 * documents has been updated.
 	 * 
 	 * @param newSelectedDocument
-	 * @param openDocuments
+	 * @param newOpenDocuments
 	 */
 	public synchronized void setDocuments(Document newSelectedDocument,
 			Document[] newOpenDocuments) {

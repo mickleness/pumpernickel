@@ -1,3 +1,13 @@
+/**
+ * This software is released as part of the Pumpernickel project.
+ * 
+ * All com.pump resources in the Pumpernickel project are distributed under the
+ * MIT License:
+ * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * 
+ * More information about the Pumpernickel project is available here:
+ * https://mickleness.github.io/pumpernickel/
+ */
 package com.pump.icon.button;
 
 import java.awt.Color;
@@ -52,9 +62,10 @@ public abstract class ButtonIcon implements Icon {
 	 * @param colors
 	 *            this translates the button's state into a set of colors used
 	 *            to render this icon.
-	 * @properties an optional set of properties that will be stored in each
-	 *             ButtonState. This lets you add custom attributes that are not
-	 *             already defined a ButtonState.
+	 * @param properties
+	 *            an optional set of properties that will be stored in each
+	 *            ButtonState. This lets you add custom attributes that are not
+	 *            already defined a ButtonState.
 	 */
 	public ButtonIcon(AbstractButton button, ButtonIconColors colors,
 			Property... properties) {
