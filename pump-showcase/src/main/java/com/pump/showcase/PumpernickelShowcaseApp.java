@@ -74,6 +74,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 	ListSectionContainer sectionContainer = new ListSectionContainer(true);
 
 	public PumpernickelShowcaseApp() {
+		super("Pumpernickel Showcase");
+
 		getContentPane().setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
