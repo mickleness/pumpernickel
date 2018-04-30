@@ -48,7 +48,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../com/pump/data/AttributeDataConverter.html" title="interface in com.pump.data"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -166,7 +166,8 @@ extends java.io.Serializable</pre>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeData.html#putAllAttributes-java.util.Map-">putAllAttributes</a></span>(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;incomingData)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeData.html#putAllAttributes-java.util.Map-boolean-">putAllAttributes</a></span>(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;incomingData,
+                boolean&nbsp;completeReplace)</code>
 <div class="block">Apply all the values in the incoming map.</div>
 </td>
 </tr>
@@ -258,17 +259,20 @@ extends java.io.Serializable</pre>
 <div class="block">Return a copy of all the key/value pairs in this object.</div>
 </li>
 </ul>
-<a name="putAllAttributes-java.util.Map-">
+<a name="putAllAttributes-java.util.Map-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>putAllAttributes</h4>
-<pre>void&nbsp;putAllAttributes(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;incomingData)</pre>
+<pre>void&nbsp;putAllAttributes(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;incomingData,
+                      boolean&nbsp;completeReplace)</pre>
 <div class="block">Apply all the values in the incoming map.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>incomingData</code> - a series of key/value pairs to install in this object.</dd>
+<dd><code>completeReplace</code> - if true then this call also removes other attributes.. If
+            false then this call can only add attributes.</dd>
 </dl>
 </li>
 </ul>
@@ -337,7 +341,7 @@ extends java.io.Serializable</pre>
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../com/pump/data/AttributeDataConverter.html" title="interface in com.pump.data"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

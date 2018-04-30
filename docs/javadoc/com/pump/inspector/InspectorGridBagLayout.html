@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -202,13 +202,20 @@ implements <a href="../../../com/pump/inspector/InspectorLayout.html" title="int
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/inspector/InspectorGridBagLayout.html#addRow-javax.swing.JComponent-javax.swing.JComponent...-">addRow</a></span>(javax.swing.JComponent&nbsp;identifier,
+      javax.swing.JComponent...&nbsp;controls)</code>
+<div class="block">Append a row containing these elements to this inspector.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/inspector/InspectorGridBagLayout.html#addRow-javax.swing.JComponent-javax.swing.JComponent-boolean-">addRow</a></span>(javax.swing.JComponent&nbsp;identifier,
       javax.swing.JComponent&nbsp;control,
       boolean&nbsp;stretchControlToFill)</code>
 <div class="block">Appends a new row containing 2 objects to this inspector.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/inspector/InspectorGridBagLayout.html#addRow-javax.swing.JComponent-javax.swing.JComponent-boolean-javax.swing.JComponent-">addRow</a></span>(javax.swing.JComponent&nbsp;identifier,
       javax.swing.JComponent&nbsp;leftControl,
@@ -217,24 +224,24 @@ implements <a href="../../../com/pump/inspector/InspectorLayout.html" title="int
 <div class="block">Appends a new row containing 3 objects to this inspector.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>javax.swing.JSeparator</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/inspector/InspectorGridBagLayout.html#addSeparator--">addSeparator</a></span>()</code>
 <div class="block">Appends a new separator to this inspector.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/inspector/InspectorGridBagLayout.html#clear--">clear</a></span>()</code>
 <div class="block">Removes all elements from this inspector, usually so elements can be
  re-added.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/inspector/InspectorGridBagLayout.html#getRowVerticalInset--">getRowVerticalInset</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/inspector/InspectorGridBagLayout.html#setRowVerticalInset-int-">setRowVerticalInset</a></span>(int&nbsp;i)</code>&nbsp;</td>
 </tr>
@@ -478,10 +485,32 @@ implements <a href="../../../com/pump/inspector/InspectorLayout.html" title="int
 <a name="setRowVerticalInset-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setRowVerticalInset</h4>
 <pre>public&nbsp;void&nbsp;setRowVerticalInset(int&nbsp;i)</pre>
+</li>
+</ul>
+<a name="addRow-javax.swing.JComponent-javax.swing.JComponent...-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>addRow</h4>
+<pre>public&nbsp;void&nbsp;addRow(javax.swing.JComponent&nbsp;identifier,
+                   javax.swing.JComponent...&nbsp;controls)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/inspector/InspectorLayout.html#addRow-javax.swing.JComponent-javax.swing.JComponent...-">InspectorLayout</a></code></span></div>
+<div class="block">Append a row containing these elements to this inspector.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../com/pump/inspector/InspectorLayout.html#addRow-javax.swing.JComponent-javax.swing.JComponent...-">addRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/inspector/InspectorLayout.html" title="interface in com.pump.inspector">InspectorLayout</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>identifier</code> - the control on the left. This should usually contain text. A
+            <code>JLabel</code> or a <code>JCheckBox</code> is
+            recommended.</dd>
+<dd><code>controls</code> - a series of controls to group together from left to right. The
+            cluster of components will be anchored on the left.</dd>
+</dl>
 </li>
 </ul>
 </li>

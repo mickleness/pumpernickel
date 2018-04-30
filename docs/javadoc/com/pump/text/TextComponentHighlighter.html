@@ -147,12 +147,6 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>protected javax.swing.text.JTextComponent</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/TextComponentHighlighter.html#jtc">jtc</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected java.lang.Runnable</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/TextComponentHighlighter.html#refreshRunnable">refreshRunnable</a></span></code>
-<div class="block">Invoke this Runnable on the EDT to call rehighlightText(..).</div>
-</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -195,7 +189,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/TextComponentHighlighter.html#documentTextChanged-boolean-">documentTextChanged</a></span>(boolean&nbsp;onlyCaretChanged)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/TextComponentHighlighter.html#documentTextChanged-boolean-boolean-">documentTextChanged</a></span>(boolean&nbsp;onlyCaretChanged,
+                   boolean&nbsp;invokeLater)</code>
 <div class="block">This method is called on the EDT after the text of the document is
  updated.</div>
 </td>
@@ -233,9 +228,10 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/TextComponentHighlighter.html#rehighlightText-java.lang.String-int-int-">rehighlightText</a></span>(java.lang.String&nbsp;text,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/TextComponentHighlighter.html#rehighlightText-java.lang.String-int-int-boolean-">rehighlightText</a></span>(java.lang.String&nbsp;text,
                int&nbsp;selectionStart,
-               int&nbsp;selectionEnd)</code>
+               int&nbsp;selectionEnd,
+               boolean&nbsp;invokeLater)</code>
 <div class="block">This reapplies highlights and AttributeSets to this text component.</div>
 </td>
 </tr>
@@ -289,16 +285,6 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>active</h4>
 <pre>protected&nbsp;boolean active</pre>
-</li>
-</ul>
-<a name="refreshRunnable">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>refreshRunnable</h4>
-<pre>protected&nbsp;java.lang.Runnable refreshRunnable</pre>
-<div class="block">Invoke this Runnable on the EDT to call rehighlightText(..).</div>
 </li>
 </ul>
 <a name="allHighlights">
@@ -365,13 +351,14 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="documentTextChanged-boolean-">
+<a name="documentTextChanged-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>documentTextChanged</h4>
-<pre>protected&nbsp;void&nbsp;documentTextChanged(boolean&nbsp;onlyCaretChanged)</pre>
+<pre>protected&nbsp;void&nbsp;documentTextChanged(boolean&nbsp;onlyCaretChanged,
+                                   boolean&nbsp;invokeLater)</pre>
 <div class="block">This method is called on the EDT after the text of the document is
  updated.
  <p>
@@ -411,7 +398,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="rehighlightText-java.lang.String-int-int-">
+<a name="rehighlightText-java.lang.String-int-int-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -419,7 +406,8 @@ extends java.lang.Object</pre>
 <h4>rehighlightText</h4>
 <pre>protected&nbsp;void&nbsp;rehighlightText(java.lang.String&nbsp;text,
                                int&nbsp;selectionStart,
-                               int&nbsp;selectionEnd)</pre>
+                               int&nbsp;selectionEnd,
+                               boolean&nbsp;invokeLater)</pre>
 <div class="block">This reapplies highlights and AttributeSets to this text component.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

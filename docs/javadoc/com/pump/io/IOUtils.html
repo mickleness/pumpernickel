@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -238,12 +238,28 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#getExtension-java.lang.String-boolean-">getExtension</a></span>(java.lang.String&nbsp;filename,
+            boolean&nbsp;forceLowerCase)</code>
+<div class="block">Returns the text after the last "." in the argument, or null if "." is
+ not found or the argument is null.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>static java.nio.channels.FileLock</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#getFileLock-java.io.File-boolean-">getFileLock</a></span>(java.io.File&nbsp;file,
+           boolean&nbsp;writeData)</code>
+<div class="block">Return a FileLock for a given file, or null if the lock cannot be
+ obtained.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#getLength-java.io.InputStream-">getLength</a></span>(java.io.InputStream&nbsp;in)</code>
 <div class="block">Return the length of an InputStream.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#getUniqueFile-java.io.File-java.lang.String-boolean-boolean-">getUniqueFile</a></span>(java.io.File&nbsp;parentFile,
              java.lang.String&nbsp;name,
@@ -252,102 +268,102 @@ extends java.lang.Object</pre>
 <div class="block">Returns a file that does not yet exist.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#getUniqueTempFile-java.lang.String-">getUniqueTempFile</a></span>(java.lang.String&nbsp;name)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#isAlias-java.io.File-">isAlias</a></span>(java.io.File&nbsp;file)</code>
 <div class="block">Return true if this file is an alias to another file.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#isZip-java.io.File-">isZip</a></span>(java.io.File&nbsp;file)</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#load-java.util.Properties-java.io.File-">load</a></span>(java.util.Properties&nbsp;p,
     java.io.File&nbsp;file)</code>
 <div class="block">Loads properties into a file.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#load-java.util.Properties-java.net.URL-">load</a></span>(java.util.Properties&nbsp;p,
     java.net.URL&nbsp;url)</code>
 <div class="block">Loads properties into a file.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#read-java.io.File-">read</a></span>(java.io.File&nbsp;file)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#read-java.io.InputStream-">read</a></span>(java.io.InputStream&nbsp;in)</code>&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#read-java.io.InputStream-byte:A-">read</a></span>(java.io.InputStream&nbsp;in,
     byte[]&nbsp;dest)</code>
 <div class="block">Read data into the destination array.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#read-java.io.InputStream-java.lang.String-">read</a></span>(java.io.InputStream&nbsp;in,
     java.lang.String&nbsp;charsetName)</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#read-java.io.Reader-">read</a></span>(java.io.Reader&nbsp;r)</code>&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>static java.lang.String[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#readLines-java.io.File-int-">readLines</a></span>(java.io.File&nbsp;file,
          int&nbsp;maxArraySize)</code>&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>static java.lang.String[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#readLines-java.io.InputStream-int-">readLines</a></span>(java.io.InputStream&nbsp;in,
          int&nbsp;maxArraySize)</code>&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>static java.util.Map&lt;java.lang.String,java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#readMap-java.net.URL-">readMap</a></span>(java.net.URL&nbsp;resource)</code>
 <div class="block">Create a simple map based on key/values separated by an "=".</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#reveal-java.io.File-">reveal</a></span>(java.io.File&nbsp;file)</code>
 <div class="block">Reveal (select) a file in the operating system.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#serialize-java.io.Serializable-java.io.File-">serialize</a></span>(java.io.Serializable&nbsp;object,
          java.io.File&nbsp;dest)</code>
 <div class="block">Serialize and compress an object to the file path provided.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#skipFully-java.io.InputStream-long-">skipFully</a></span>(java.io.InputStream&nbsp;in,
          long&nbsp;amount)</code>
 <div class="block">The description of InputStream.skip() is unfulfilling.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#write-java.io.File-java.io.OutputStream-">write</a></span>(java.io.File&nbsp;file,
      java.io.OutputStream&nbsp;out)</code>
 <div class="block">Writes a file to an OutputStream.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#write-java.io.File-java.lang.String-boolean-">write</a></span>(java.io.File&nbsp;file,
      java.lang.String&nbsp;text,
@@ -355,28 +371,28 @@ extends java.lang.Object</pre>
 <div class="block">Write the text provided to a File.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#write-java.io.InputStream-java.io.File-">write</a></span>(java.io.InputStream&nbsp;in,
      java.io.File&nbsp;dest)</code>
 <div class="block">Writes the entire InputStream into the destination file.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#write-java.io.InputStream-java.io.OutputStream-">write</a></span>(java.io.InputStream&nbsp;in,
      java.io.OutputStream&nbsp;out)</code>
 <div class="block">Writes the InputStream into the OutputStream.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#write-java.util.Properties-java.io.File-">write</a></span>(java.util.Properties&nbsp;p,
      java.io.File&nbsp;file)</code>
 <div class="block">Writes a <code>Properties</code> object to a <code>File</code>.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#writeLines-java.io.File-java.lang.String:A-boolean-">writeLines</a></span>(java.io.File&nbsp;file,
           java.lang.String[]&nbsp;lines,
@@ -384,7 +400,7 @@ extends java.lang.Object</pre>
 <div class="block">Rewrite a file using the lines provided.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/IOUtils.html#zipEquals-java.io.File-java.io.File-java.lang.String...-">zipEquals</a></span>(java.io.File&nbsp;zip1,
          java.io.File&nbsp;zip2,
@@ -449,6 +465,30 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getFileLock-java.io.File-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFileLock</h4>
+<pre>public static&nbsp;java.nio.channels.FileLock&nbsp;getFileLock(java.io.File&nbsp;file,
+                                                     boolean&nbsp;writeData)
+                                              throws java.io.IOException</pre>
+<div class="block">Return a FileLock for a given file, or null if the lock cannot be
+ obtained.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>file</code> - the file to obtain the lock for. It is assumed the file
+            already exists when this is called.</dd>
+<dd><code>writeData</code> - if true then 8 bytes of zeroes will be written to the file.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a FileLock for the given File, or null if the lock couldn't be
+         obtained.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd>
+</dl>
+</li>
+</ul>
 <a name="formatFileSize-java.io.File-">
 <!--   -->
 </a>
@@ -604,6 +644,18 @@ extends java.lang.Object</pre>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>
+</li>
+</ul>
+<a name="getExtension-java.lang.String-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getExtension</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;getExtension(java.lang.String&nbsp;filename,
+                                            boolean&nbsp;forceLowerCase)</pre>
+<div class="block">Returns the text after the last "." in the argument, or null if "." is
+ not found or the argument is null.</div>
 </li>
 </ul>
 <a name="getCRC-java.io.InputStream-boolean-">

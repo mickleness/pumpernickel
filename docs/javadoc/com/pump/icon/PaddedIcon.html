@@ -134,10 +134,17 @@ implements javax.swing.Icon</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/icon/PaddedIcon.html#PaddedIcon-javax.swing.Icon-java.awt.Dimension-">PaddedIcon</a></span>(javax.swing.Icon&nbsp;orig,
+          java.awt.Dimension&nbsp;targetSize)</code>
+<div class="block">Create a PaddedIcon that fills extra space to fill the target dimensions
+ provided.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/icon/PaddedIcon.html#PaddedIcon-javax.swing.Icon-java.awt.Insets-">PaddedIcon</a></span>(javax.swing.Icon&nbsp;orig,
           java.awt.Insets&nbsp;i)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/icon/PaddedIcon.html#PaddedIcon-javax.swing.Icon-int-">PaddedIcon</a></span>(javax.swing.Icon&nbsp;orig,
           int&nbsp;padding)</code>&nbsp;</td>
 </tr>
@@ -193,6 +200,26 @@ implements javax.swing.Icon</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a name="PaddedIcon-javax.swing.Icon-java.awt.Dimension-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PaddedIcon</h4>
+<pre>public&nbsp;PaddedIcon(javax.swing.Icon&nbsp;orig,
+                  java.awt.Dimension&nbsp;targetSize)</pre>
+<div class="block">Create a PaddedIcon that fills extra space to fill the target dimensions
+ provided.
+ <p>
+ This throws an exception if the target size is smaller than the Icon
+ provided.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>orig</code> - an optional Icon to pad.</dd>
+<dd><code>targetSize</code> - the dimensions this PaddedIcon.</dd>
+</dl>
+</li>
+</ul>
 <a name="PaddedIcon-javax.swing.Icon-int-">
 <!--   -->
 </a>

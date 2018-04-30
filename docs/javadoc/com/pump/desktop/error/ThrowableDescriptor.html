@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -155,7 +155,8 @@ extends java.lang.Object</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/error/ThrowableDescriptor.html#ThrowableDescriptor-java.lang.String-java.lang.Throwable-">ThrowableDescriptor</a></span>(java.lang.String&nbsp;userFriendlyMessage,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/error/ThrowableDescriptor.html#ThrowableDescriptor-java.lang.String-java.lang.String-java.lang.Throwable-">ThrowableDescriptor</a></span>(java.lang.String&nbsp;userFriendlyMessage,
+                   java.lang.String&nbsp;informativeText,
                    java.lang.Throwable&nbsp;throwable)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -177,6 +178,10 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/error/ThrowableDescriptor.html#getInformativeText--">getInformativeText</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/error/ThrowableDescriptor.html#getUserFriendlyMessage--">getUserFriendlyMessage</a></span>()</code>&nbsp;</td>
 </tr>
@@ -238,13 +243,14 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;ThrowableDescriptor(java.lang.Throwable&nbsp;throwable)</pre>
 </li>
 </ul>
-<a name="ThrowableDescriptor-java.lang.String-java.lang.Throwable-">
+<a name="ThrowableDescriptor-java.lang.String-java.lang.String-java.lang.Throwable-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ThrowableDescriptor</h4>
 <pre>public&nbsp;ThrowableDescriptor(java.lang.String&nbsp;userFriendlyMessage,
+                           java.lang.String&nbsp;informativeText,
                            java.lang.Throwable&nbsp;throwable)</pre>
 </li>
 </ul>
@@ -259,7 +265,7 @@ extends java.lang.Object</pre>
 <a name="getUserFriendlyMessage--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getUserFriendlyMessage</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getUserFriendlyMessage()</pre>
@@ -267,6 +273,15 @@ extends java.lang.Object</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an optional user-friendly String describing this error.</dd>
 </dl>
+</li>
+</ul>
+<a name="getInformativeText--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getInformativeText</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getInformativeText()</pre>
 </li>
 </ul>
 </li>

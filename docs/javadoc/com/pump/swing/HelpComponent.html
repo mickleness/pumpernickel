@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9};
+var methods = {"i0":9,"i1":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -48,8 +48,8 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../com/pump/swing/GridBagDebugPanel.html" title="class in com.pump.swing"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../com/pump/swing/ImageResizerDeleteMe.html" title="class in com.pump.swing"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/swing/GradientSlider.html" title="class in com.pump.swing"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/swing/InspectorLayout.html" title="class in com.pump.swing"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?com/pump/swing/HelpComponent.html" target="_top">Frames</a></li>
@@ -168,6 +168,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static javax.swing.JComponent</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/HelpComponent.html#createHelpComponent-java.awt.event.ActionListener-java.lang.String-java.lang.String-">createHelpComponent</a></span>(java.awt.event.ActionListener&nbsp;actionListener,
+                   java.lang.String&nbsp;helpText,
+                   java.lang.String&nbsp;tooltipText)</code>
+<div class="block">This returns a <code>JComponent</code> that can be used to trigger help.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static javax.swing.JComponent</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/HelpComponent.html#createHelpComponent-java.lang.Object-java.lang.String-">createHelpComponent</a></span>(java.lang.Object&nbsp;helpData,
                    java.lang.String&nbsp;helpText)</code>
 <div class="block">This returns a <code>JComponent</code> that can be used to trigger help.</div>
@@ -247,7 +255,7 @@ extends java.lang.Object</pre>
 <a name="createHelpComponent-java.lang.Object-java.lang.String-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>createHelpComponent</h4>
 <pre>public static&nbsp;javax.swing.JComponent&nbsp;createHelpComponent(java.lang.Object&nbsp;helpData,
@@ -288,6 +296,43 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
+<a name="createHelpComponent-java.awt.event.ActionListener-java.lang.String-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>createHelpComponent</h4>
+<pre>public static&nbsp;javax.swing.JComponent&nbsp;createHelpComponent(java.awt.event.ActionListener&nbsp;actionListener,
+                                                         java.lang.String&nbsp;helpText,
+                                                         java.lang.String&nbsp;tooltipText)</pre>
+<div class="block">This returns a <code>JComponent</code> that can be used to trigger help.
+ <P>
+ On Mac, this will return a <code>JButton</code> that has the correct icon
+ (see Apple Technical Note 2196).
+ <P>
+ On other platforms, this will return a <code>JLink</code> with the text
+ <code>helpText</code>. If <code>helpText</code> is <code>null</code>,
+ then the text "Learn More" is used. This is based on Vista's <A
+ HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx#help"
+ >advice</a>:
+ "Don't use general or vague Help topic links or generic Help buttons. Users often ignore generic Help."
+ The Vista guidelines go on to explicitly discourage using "Learn More"
+ because it comes across as too general/common, so it is encouraged that
+ you provide an accurate string to encourage your users to follow the
+ link. (Also Microsoft <A
+ HREF="http://msdn.microsoft.com/en-us/library/aa511449.aspx">points
+ out</A> you should: "Design your UI so that users don't need Help," and
+ "Understand that you don't have to provide help for every feature in the UI."
+ )</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>actionListener</code> - the listener that is triggered when you either click the help
+            JButton or JLink.</dd>
+<dd><code>helpText</code> - the text that will be used if this creates a JLink.</dd>
+<dd><code>tooltipText</code> - the optional tooltip text for this component.</dd>
+</dl>
+</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -315,8 +360,8 @@ extends java.lang.Object</pre>
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../com/pump/swing/GridBagDebugPanel.html" title="class in com.pump.swing"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../com/pump/swing/ImageResizerDeleteMe.html" title="class in com.pump.swing"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/swing/GradientSlider.html" title="class in com.pump.swing"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/swing/InspectorLayout.html" title="class in com.pump.swing"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?com/pump/swing/HelpComponent.html" target="_top">Frames</a></li>

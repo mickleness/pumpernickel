@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -74,13 +74,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.com.pump.data.AbstractAttributeDataImpl">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -99,7 +99,12 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">com.pump.data.AbstractAttributeDataImpl</a></li>
+<li>
+<ul class="inheritance">
 <li>com.pump.data.AttributeDataImpl</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -117,10 +122,10 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">AttributeDataImpl</span>
-extends java.lang.Object
+extends <a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a>
 implements <a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></pre>
-<div class="block">This is a simple map container with get/set values that use <a href="../../../com/pump/data/Key.html" title="class in com.pump.data"><code>Key</code></a>
- objects.</div>
+<div class="block">This is a minimal implementation of the AttributeData interface that is
+ backed with a HashMap.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#com.pump.data.AttributeDataImpl">Serialized Form</a></dd>
@@ -137,17 +142,13 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#data">data</a></span></code>&nbsp;</td>
-</tr>
-</table>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.com.pump.data.AbstractAttributeDataImpl">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.pump.data.<a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a></h3>
+<code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html#data">data</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -162,14 +163,7 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#AttributeDataImpl--">AttributeDataImpl</a></span>()</code>
-<div class="block">Create an empty AttributeDataImpl.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#AttributeDataImpl-java.util.Map-">AttributeDataImpl</a></span>(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;attributes)</code>
-<div class="block">Create a AttributeDataImpl.</div>
-</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#AttributeDataImpl--">AttributeDataImpl</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -195,61 +189,48 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#clearAttributes--">clearAttributes</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#equals-java.lang.Object-">equals</a></span>(java.lang.Object&nbsp;obj)</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#firePropertyChangeListeners-java.lang.String-java.lang.Object-java.lang.Object-">firePropertyChangeListeners</a></span>(java.lang.String&nbsp;propertyName,
-                           java.lang.Object&nbsp;oldValue,
-                           java.lang.Object&nbsp;newValue)</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#getAttribute-com.pump.data.Key-">getAttribute</a></span>(<a href="../../../com/pump/data/Key.html" title="class in com.pump.data">Key</a>&lt;T&gt;&nbsp;key)</code>
 <div class="block">Return the value associated with a key.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#getAttributeCount--">getAttributeCount</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.util.concurrent.locks.ReadWriteLock</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#getAttributeLock--">getAttributeLock</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#getAttributeMap--">getAttributeMap</a></span>()</code>
 <div class="block">Return a copy of all the key/value pairs in this object.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>java.lang.String[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#getAttributes--">getAttributes</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#handleUncaughtListenerException-java.lang.Exception-java.lang.String-java.lang.Object-java.lang.Object-">handleUncaughtListenerException</a></span>(java.lang.Exception&nbsp;e,
                                java.lang.String&nbsp;propertyName,
                                java.lang.Object&nbsp;oldValue,
                                java.lang.Object&nbsp;newValue)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i11" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#putAllAttributes-java.util.Map-">putAllAttributes</a></span>(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;incomingData)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#putAllAttributes-java.util.Map-boolean-">putAllAttributes</a></span>(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;incomingData,
+                boolean&nbsp;completeReplace)</code>
 <div class="block">Apply all the values in the incoming map.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#removeAttributePropertyChangeListener-java.beans.PropertyChangeListener-">removeAttributePropertyChangeListener</a></span>(java.beans.PropertyChangeListener&nbsp;pcl)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/data/AttributeDataImpl.html#setAttribute-com.pump.data.Key-T-">setAttribute</a></span>(<a href="../../../com/pump/data/Key.html" title="class in com.pump.data">Key</a>&lt;T&gt;&nbsp;key,
             T&nbsp;value)</code>
@@ -257,6 +238,13 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.com.pump.data.AbstractAttributeDataImpl">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.pump.data.<a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a></h3>
+<code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html#addPropertyChangeListener-java.beans.PropertyChangeListener-">addPropertyChangeListener</a>, <a href="../../../com/pump/data/AbstractAttributeDataImpl.html#equals-com.pump.data.AbstractAttributeDataImpl-">equals</a>, <a href="../../../com/pump/data/AbstractAttributeDataImpl.html#equals-com.pump.data.AttributeData-">equals</a>, <a href="../../../com/pump/data/AbstractAttributeDataImpl.html#equals-java.lang.Object-">equals</a>, <a href="../../../com/pump/data/AbstractAttributeDataImpl.html#firePropertyChangeListeners-java.lang.String-java.lang.Object-java.lang.Object-">firePropertyChangeListeners</a>, <a href="../../../com/pump/data/AbstractAttributeDataImpl.html#getAttribute-java.lang.String-">getAttribute</a>, <a href="../../../com/pump/data/AbstractAttributeDataImpl.html#hashCode--">hashCode</a>, <a href="../../../com/pump/data/AbstractAttributeDataImpl.html#removePropertyChangeListener-java.beans.PropertyChangeListener-">removePropertyChangeListener</a>, <a href="../../../com/pump/data/AbstractAttributeDataImpl.html#setAttribute-java.lang.String-java.lang.Object-">setAttribute</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -272,23 +260,6 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field.detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="data">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>data</h4>
-<pre>protected&nbsp;java.util.Map&lt;java.lang.String,java.lang.Object&gt; data</pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
@@ -298,25 +269,10 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <a name="AttributeDataImpl--">
 <!--   -->
 </a>
-<ul class="blockList">
-<li class="blockList">
-<h4>AttributeDataImpl</h4>
-<pre>public&nbsp;AttributeDataImpl()</pre>
-<div class="block">Create an empty AttributeDataImpl.</div>
-</li>
-</ul>
-<a name="AttributeDataImpl-java.util.Map-">
-<!--   -->
-</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AttributeDataImpl</h4>
-<pre>public&nbsp;AttributeDataImpl(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;attributes)</pre>
-<div class="block">Create a AttributeDataImpl.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>attributes</code> - the attributes to copy into this object.</dd>
-</dl>
+<pre>public&nbsp;AttributeDataImpl()</pre>
 </li>
 </ul>
 </li>
@@ -327,32 +283,6 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="addAttributePropertyChangeListener-java.beans.PropertyChangeListener-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>addAttributePropertyChangeListener</h4>
-<pre>public&nbsp;void&nbsp;addAttributePropertyChangeListener(java.beans.PropertyChangeListener&nbsp;pcl)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../com/pump/data/AttributeData.html#addAttributePropertyChangeListener-java.beans.PropertyChangeListener-">addAttributePropertyChangeListener</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="removeAttributePropertyChangeListener-java.beans.PropertyChangeListener-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>removeAttributePropertyChangeListener</h4>
-<pre>public&nbsp;void&nbsp;removeAttributePropertyChangeListener(java.beans.PropertyChangeListener&nbsp;pcl)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../com/pump/data/AttributeData.html#removeAttributePropertyChangeListener-java.beans.PropertyChangeListener-">removeAttributePropertyChangeListener</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
-</dl>
-</li>
-</ul>
 <a name="getAttributeLock--">
 <!--   -->
 </a>
@@ -363,6 +293,8 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/data/AttributeData.html#getAttributeLock--">getAttributeLock</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html#getAttributeLock--">getAttributeLock</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -381,6 +313,8 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/data/AttributeData.html#setAttribute-com.pump.data.Key-T-">setAttribute</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html#setAttribute-com.pump.data.Key-T-">setAttribute</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - the key to retrieve the value of.</dd>
 <dd><code>value</code> - the value to assign to the key.</dd>
@@ -389,43 +323,41 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 </dl>
 </li>
 </ul>
-<a name="firePropertyChangeListeners-java.lang.String-java.lang.Object-java.lang.Object-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>firePropertyChangeListeners</h4>
-<pre>protected&nbsp;void&nbsp;firePropertyChangeListeners(java.lang.String&nbsp;propertyName,
-                                           java.lang.Object&nbsp;oldValue,
-                                           java.lang.Object&nbsp;newValue)</pre>
-</li>
-</ul>
 <a name="handleUncaughtListenerException-java.lang.Exception-java.lang.String-java.lang.Object-java.lang.Object-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>handleUncaughtListenerException</h4>
-<pre>protected&nbsp;void&nbsp;handleUncaughtListenerException(java.lang.Exception&nbsp;e,
-                                               java.lang.String&nbsp;propertyName,
-                                               java.lang.Object&nbsp;oldValue,
-                                               java.lang.Object&nbsp;newValue)</pre>
+<pre>public&nbsp;void&nbsp;handleUncaughtListenerException(java.lang.Exception&nbsp;e,
+                                            java.lang.String&nbsp;propertyName,
+                                            java.lang.Object&nbsp;oldValue,
+                                            java.lang.Object&nbsp;newValue)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html#handleUncaughtListenerException-java.lang.Exception-java.lang.String-java.lang.Object-java.lang.Object-">handleUncaughtListenerException</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a></code></dd>
+</dl>
 </li>
 </ul>
-<a name="putAllAttributes-java.util.Map-">
+<a name="putAllAttributes-java.util.Map-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>putAllAttributes</h4>
-<pre>public&nbsp;void&nbsp;putAllAttributes(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;incomingData)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/data/AttributeData.html#putAllAttributes-java.util.Map-">AttributeData</a></code></span></div>
+<pre>public&nbsp;void&nbsp;putAllAttributes(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;incomingData,
+                             boolean&nbsp;completeReplace)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/data/AttributeData.html#putAllAttributes-java.util.Map-boolean-">AttributeData</a></code></span></div>
 <div class="block">Apply all the values in the incoming map.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../com/pump/data/AttributeData.html#putAllAttributes-java.util.Map-">putAllAttributes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
+<dd><code><a href="../../../com/pump/data/AttributeData.html#putAllAttributes-java.util.Map-boolean-">putAllAttributes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html#putAllAttributes-java.util.Map-boolean-">putAllAttributes</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>incomingData</code> - a series of key/value pairs to install in this object.</dd>
+<dd><code>completeReplace</code> - if true then this call also removes other attributes.. If
+            false then this call can only add attributes.</dd>
 </dl>
 </li>
 </ul>
@@ -441,62 +373,12 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/data/AttributeData.html#getAttribute-com.pump.data.Key-">getAttribute</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html#getAttribute-com.pump.data.Key-">getAttribute</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - the key to retrieve the value for.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the value associated with the provided key.</dd>
-</dl>
-</li>
-</ul>
-<a name="hashCode--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;hashCode()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
-</dl>
-</li>
-</ul>
-<a name="equals-java.lang.Object-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;equals(java.lang.Object&nbsp;obj)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
-</dl>
-</li>
-</ul>
-<a name="getAttributeCount--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getAttributeCount</h4>
-<pre>public&nbsp;int&nbsp;getAttributeCount()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../com/pump/data/AttributeData.html#getAttributeCount--">getAttributeCount</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="getAttributes--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getAttributes</h4>
-<pre>public&nbsp;java.lang.String[]&nbsp;getAttributes()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../com/pump/data/AttributeData.html#getAttributes--">getAttributes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -510,13 +392,45 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/data/AttributeData.html#clearAttributes--">clearAttributes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html#clearAttributes--">clearAttributes</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getAttributeCount--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAttributeCount</h4>
+<pre>public&nbsp;int&nbsp;getAttributeCount()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../com/pump/data/AttributeData.html#getAttributeCount--">getAttributeCount</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html#getAttributeCount--">getAttributeCount</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getAttributes--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAttributes</h4>
+<pre>public&nbsp;java.lang.String[]&nbsp;getAttributes()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../com/pump/data/AttributeData.html#getAttributes--">getAttributes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html#getAttributes--">getAttributes</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a></code></dd>
 </dl>
 </li>
 </ul>
 <a name="getAttributeMap--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getAttributeMap</h4>
 <pre>public&nbsp;java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;getAttributeMap()</pre>
@@ -525,6 +439,34 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/pump/data/AttributeData.html#getAttributeMap--">getAttributeMap</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html#getAttributeMap--">getAttributeMap</a></code>&nbsp;in class&nbsp;<code><a href="../../../com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="addAttributePropertyChangeListener-java.beans.PropertyChangeListener-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addAttributePropertyChangeListener</h4>
+<pre>public&nbsp;void&nbsp;addAttributePropertyChangeListener(java.beans.PropertyChangeListener&nbsp;pcl)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../com/pump/data/AttributeData.html#addAttributePropertyChangeListener-java.beans.PropertyChangeListener-">addAttributePropertyChangeListener</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="removeAttributePropertyChangeListener-java.beans.PropertyChangeListener-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>removeAttributePropertyChangeListener</h4>
+<pre>public&nbsp;void&nbsp;removeAttributePropertyChangeListener(java.beans.PropertyChangeListener&nbsp;pcl)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../com/pump/data/AttributeData.html#removeAttributePropertyChangeListener-java.beans.PropertyChangeListener-">removeAttributePropertyChangeListener</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/data/AttributeData.html" title="interface in com.pump.data">AttributeData</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -581,13 +523,13 @@ implements <a href="../../../com/pump/data/AttributeData.html" title="interface 
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.com.pump.data.AbstractAttributeDataImpl">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

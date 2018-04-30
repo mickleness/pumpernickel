@@ -1,0 +1,790 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+
+<title>CircularProgressBarUI</title>
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+<script type="text/javascript" src="../../../script.js"></script>
+</head>
+<body>
+<script type="text/javascript"><!--
+    try {
+        if (location.href.indexOf('is-external=true') == -1) {
+            parent.document.title="CircularProgressBarUI";
+        }
+    }
+    catch(err) {
+    }
+//-->
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar.top">
+<!--   -->
+</a>
+<div class="skipNav"><a href="#skip.navbar.top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar.top.firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+<li><a href="../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../com/pump/plaf/ChasingArrowsThrobberUI.html" title="class in com.pump.plaf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/plaf/CloseDecoration.html" title="class in com.pump.plaf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../index.html?com/pump/plaf/CircularProgressBarUI.html" target="_top">Frames</a></li>
+<li><a href="CircularProgressBarUI.html" target="_top">No&nbsp;Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../allclasses-noframe.html">All&nbsp;Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested.classes.inherited.from.class.javax.swing.plaf.basic.BasicProgressBarUI">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.detail">Method</a></li>
+</ul>
+</div>
+<a name="skip.navbar.top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.pump.plaf</div>
+<h2 title="Class CircularProgressBarUI" class="title">Class CircularProgressBarUI</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>javax.swing.plaf.ComponentUI</li>
+<li>
+<ul class="inheritance">
+<li>javax.swing.plaf.ProgressBarUI</li>
+<li>
+<ul class="inheritance">
+<li>javax.swing.plaf.basic.BasicProgressBarUI</li>
+<li>
+<ul class="inheritance">
+<li>com.pump.plaf.CircularProgressBarUI</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public class <span class="typeNameLabel">CircularProgressBarUI</span>
+extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
+<div class="block">This ProgressBarUI renders as a circle. The rendering model used will stretch
+ to whatever the largest circle is that can be painted in the bounds provided.
+ You are welcome to call <code>myProgressBar.setPreferredSize(..)</code> to
+ create either a small or large arc. This UI can function at small sizes (like
+ 12x12), but the text become illegible so it shouldn't be used with
+ <code>isStringPainted()</code>.
+ <p>
+ Opinions on progress indicators are wide and varied (try googling
+ "UX progress indicator"). One <a
+ href="https://www.nngroup.com/articles/progress-indicators/">article</a>
+ summed up: <blockquote> The main guideline is to use a looped indicator for
+ delays of 2–9 seconds and a percent-done indicator for delays of 10 seconds
+ or more. </blockquote>
+ 
+ <p>
+ <h3>Determinate Behavior</h3>
+ <p>
+ For a determinate progress bar, this renders two complementary arcs use the
+ JProgressBar's foreground and background colors. For example, if
+ <code>JProgressBar.getPercentComplete()</code> is .25, then this
+ renders an arc from the 12:00 position clockwise to the 3:00 position using
+ the foreground color, and another clockwise arc from the 3:00 back to the
+ 12:00 position using the background color.
+ <p>
+ If <code>isStringPainted()</code>
+ returns true then this renders the percent complete inside the circle/arc.
+ The font is based on <code>Component.getFont()</code>, but the font
+ size will be automatically selected to fit well within the arc. (That is: the
+ font family and style you assign is respected, but the font size is
+ calculated by the UI.)
+ <p>
+ <h3>Indeterminate Behavior</h3>
+ <p>
+ An indeterminate progress bar never renders text, and only renders animated
+ chasing partitioned arc. This is functionally equivalent to a
+ <a href="../../../com/pump/swing/JThrobber.html" title="class in com.pump.swing"><code>JThrobber</code></a>.
+ <p>
+ Although the indeterminate UI doesn't render any text regardless of the
+ <code>isStringPainted()</code>
+ property, the presence of that property does alter the stroke thickness
+ (thick for no text, thin for text).
+ <p>
+ The indeterminate UI loops every 500 ms. <a href=
+ "https://medium.muz.li/how-progress-bars-or-loaders-impacts-the-user-experience-5082370f810b"
+ >This article</a> points out that indeterminate progress bars
+ "are looped so they should be a tad faster in terms of speed, which psychologically makes user think data is getting loaded faster and makes them to have more patience."
+ <p>
+ <h3>Optional Features</h3> This UI offers a few additional features you can
+ configure using client properties.
+ <p>
+ <h4>Pulse On Completion</h4>
+ The <a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_PULSE_COMPLETION_ACTIVE"><code>PROPERTY_PULSE_COMPLETION_ACTIVE</code></a> client property maps to a
+ boolean. When this is true and the progress bar reaches 100%, this UI pulses
+ the thickness of the circle in a half-second animation. This helps to draw
+ attention to the progress bar (since it just changed from "incomplete" to
+ "complete") in a fun/celebratory way. If undefined this is assumed to be
+ true.
+ <h4>Spark Active</h4>
+ The <a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_SPARK_ACTIVE"><code>PROPERTY_SPARK_ACTIVE</code></a> client property maps to a boolean. When
+ this is true and two seconds have passed since the last time the progress bar
+ changed value: s small (20-degree) "spark" runs from the edge of the
+ foreground counter-clockwise to the origin. The intention here is to offer
+ some (any!) animation to reassure the user that the UI is not frozen. In an
+ ideal world all our progress bars will take less than a few seconds, but if
+ they must take a long time then we need to reassure the user that we're still
+ responsive and nothing is wrong. If undefined this is assumed to be true.
+ <h4>Acceleration</h4>
+ The <a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_ACCELERATE"><code>PROPERTY_ACCELERATE</code></a> client property maps to a boolean. When this
+ is true this gives the illusion of slower progress initially that accelerates
+ as it approaches completion. (I recommend watching a demo of this feature,
+ because the text description is hard to explain.) If the actual value of the
+ progress bar is accelerating linearly from v=0 to v=1, this renders the value
+ of the progress bar as (v^2) or (v^3). So at 50% we're rendering the progress
+ bar as closer to 25%.
+ <p>
+ This idea is based on an idea put forward in <a href=
+ "https://www.smashingmagazine.com/2016/12/best-practices-for-animated-progress-indicators/"
+ >this article</a>: <blockquote>Keep in mind that perception can be just as
+ important as raw speed. In order to make a progress bar feel faster to users
+ you can start the progressive animation slower and allow it to move faster as
+ it approaches the end. This way, you give users a rapid sense of completion
+ time.</blockquote>
+ <p>
+ If you are unconvinced: imagine the opposite. Imagine a progress bar that,
+ whether real or imagined, slowed progress as the completion approached 100%.
+ This will frustrate users, but the opposite behavior (acceleration) will
+ pleasantly surprise users.
+ <p>
+ Because this renders a different progress value than what the JProgressBar
+ actually indicates, this should not be used with a painted String. If
+ undefined this property is assumed to be false.
+ <p>
+ <h4>Transitioning Values</h4>
+ <p>
+ The <a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_TRANSITION"><code>PROPERTY_TRANSITION</code></a> client property maps to a boolean. When this
+ is true every time the progress bar's value increases we'll launch a very
+ short animation to transition from the current value to the new value. This
+ is not useful if the progress bar moves in increments of 1, but if it moves
+ in increments of 5, 10, 20, etc. then this adds a more polished look to the
+ UI. If undefined this is assumed to be true.
+ <p>
+ <h4>Custom Stroke Width</h4>
+ <p>
+ The <a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_STROKE_WIDTH"><code>PROPERTY_STROKE_WIDTH</code></a> client property maps to a Number. When
+ this is not null this is the width of the stroke that is used to render the
+ arcs. When this is null a default value is calculated based on the size of
+ the circle/arc.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested.classes.inherited.from.class.javax.swing.plaf.basic.BasicProgressBarUI">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;javax.swing.plaf.basic.BasicProgressBarUI</h3>
+<code>javax.swing.plaf.basic.BasicProgressBarUI.ChangeHandler</code></li>
+</ul>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.awt.Color</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#COLOR_DEFAULT_BACKGROUND">COLOR_DEFAULT_BACKGROUND</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.awt.Color</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#COLOR_DEFAULT_FOREGROUND">COLOR_DEFAULT_FOREGROUND</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_ACCELERATE">PROPERTY_ACCELERATE</a></span></code>
+<div class="block">This client property maps to a Boolean indicating whether this UI should
+ render the progress bar's completion in an accelerated graph.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_PULSE_COMPLETION_ACTIVE">PROPERTY_PULSE_COMPLETION_ACTIVE</a></span></code>
+<div class="block">This client property maps to a Boolean indicating whether this UI should
+ pulse when we reach 100%.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_SPARK_ACTIVE">PROPERTY_SPARK_ACTIVE</a></span></code>
+<div class="block">This client property maps to a Boolean indicating whether this UI should
+ paint a subtle "spark" animation when the JProgressBar doesn't show any
+ activity for 2 seconds.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_STROKE_WIDTH">PROPERTY_STROKE_WIDTH</a></span></code>
+<div class="block">This client property maps to a Number indicating the stroke width the
+ arcs should use.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_TRANSITION">PROPERTY_TRANSITION</a></span></code>
+<div class="block">This client property maps to a Boolean indicating whether this UI should
+ animate transitions between different progress bar values.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.javax.swing.plaf.basic.BasicProgressBarUI">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;javax.swing.plaf.basic.BasicProgressBarUI</h3>
+<code>boxRect, changeListener, progressBar</code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#CircularProgressBarUI--">CircularProgressBarUI</a></span>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>java.awt.Dimension</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#getPreferredSize-javax.swing.JComponent-">getPreferredSize</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#getStrokeWidth-int-">getStrokeWidth</a></span>(int&nbsp;diameter)</code>
+<div class="block">Return the stroke width.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#installUI-javax.swing.JComponent-">installUI</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#isActive-java.lang.String-boolean-">isActive</a></span>(java.lang.String&nbsp;propertyName,
+        boolean&nbsp;defaultValue)</code>
+<div class="block">Return true if a property with the given name is active.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#paint-java.awt.Graphics-javax.swing.JComponent-">paint</a></span>(java.awt.Graphics&nbsp;g0,
+     javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#paintArc-java.awt.Graphics2D-java.awt.Color-double-double-double-double-double-float-">paintArc</a></span>(java.awt.Graphics2D&nbsp;g,
+        java.awt.Color&nbsp;color,
+        double&nbsp;centerX,
+        double&nbsp;centerY,
+        double&nbsp;startAngle,
+        double&nbsp;extent,
+        double&nbsp;radius,
+        float&nbsp;strokeWidth)</code>
+<div class="block">This paints a portion of the edge of the circle.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#paintDeterminate-java.awt.Graphics2D-int-float-int-int-">paintDeterminate</a></span>(java.awt.Graphics2D&nbsp;g,
+                int&nbsp;radius,
+                float&nbsp;strokeWidth,
+                int&nbsp;centerX,
+                int&nbsp;centerY)</code>
+<div class="block">Paint the determinate state of this UI.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#paintIndeterminate-java.awt.Graphics2D-int-float-int-int-">paintIndeterminate</a></span>(java.awt.Graphics2D&nbsp;g,
+                  int&nbsp;radius,
+                  float&nbsp;strokeWidth,
+                  int&nbsp;centerX,
+                  int&nbsp;centerY)</code>
+<div class="block">Paint the indeterminate state of this UI.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#setAnimationIndex-int-">setAnimationIndex</a></span>(int&nbsp;newValue)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#uninstallUI-javax.swing.JComponent-">uninstallUI</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.javax.swing.plaf.basic.BasicProgressBarUI">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;javax.swing.plaf.basic.BasicProgressBarUI</h3>
+<code>createUI, getAmountFull, getAnimationIndex, getBaseline, getBaselineResizeBehavior, getBox, getBoxLength, getCellLength, getCellSpacing, getFrameCount, getMaximumSize, getMinimumSize, getPreferredInnerHorizontal, getPreferredInnerVertical, getSelectionBackground, getSelectionForeground, getStringPlacement, incrementAnimationIndex, installDefaults, installListeners, paintDeterminate, paintIndeterminate, paintString, setCellLength, setCellSpacing, startAnimationTimer, stopAnimationTimer, uninstallDefaults, uninstallListeners</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.javax.swing.plaf.ComponentUI">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;javax.swing.plaf.ComponentUI</h3>
+<code>contains, getAccessibleChild, getAccessibleChildrenCount, update</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="COLOR_DEFAULT_FOREGROUND">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COLOR_DEFAULT_FOREGROUND</h4>
+<pre>public static&nbsp;java.awt.Color COLOR_DEFAULT_FOREGROUND</pre>
+</li>
+</ul>
+<a name="COLOR_DEFAULT_BACKGROUND">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COLOR_DEFAULT_BACKGROUND</h4>
+<pre>public static&nbsp;java.awt.Color COLOR_DEFAULT_BACKGROUND</pre>
+</li>
+</ul>
+<a name="PROPERTY_PULSE_COMPLETION_ACTIVE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PROPERTY_PULSE_COMPLETION_ACTIVE</h4>
+<pre>public static final&nbsp;java.lang.String PROPERTY_PULSE_COMPLETION_ACTIVE</pre>
+<div class="block">This client property maps to a Boolean indicating whether this UI should
+ pulse when we reach 100%. If undefined this is assumed to be true.</div>
+</li>
+</ul>
+<a name="PROPERTY_SPARK_ACTIVE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PROPERTY_SPARK_ACTIVE</h4>
+<pre>public static final&nbsp;java.lang.String PROPERTY_SPARK_ACTIVE</pre>
+<div class="block">This client property maps to a Boolean indicating whether this UI should
+ paint a subtle "spark" animation when the JProgressBar doesn't show any
+ activity for 2 seconds. If undefined this is assumed to be true.</div>
+</li>
+</ul>
+<a name="PROPERTY_ACCELERATE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PROPERTY_ACCELERATE</h4>
+<pre>public static final&nbsp;java.lang.String PROPERTY_ACCELERATE</pre>
+<div class="block">This client property maps to a Boolean indicating whether this UI should
+ render the progress bar's completion in an accelerated graph. If
+ undefined this is assumed to be false.</div>
+</li>
+</ul>
+<a name="PROPERTY_TRANSITION">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PROPERTY_TRANSITION</h4>
+<pre>public static final&nbsp;java.lang.String PROPERTY_TRANSITION</pre>
+<div class="block">This client property maps to a Boolean indicating whether this UI should
+ animate transitions between different progress bar values. For example,
+ if you jump from a progress bar value of 5 to 15, if this is true then
+ the UI will animate in-between values. If undefined this is assumed to be
+ true.</div>
+</li>
+</ul>
+<a name="PROPERTY_STROKE_WIDTH">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>PROPERTY_STROKE_WIDTH</h4>
+<pre>public static final&nbsp;java.lang.String PROPERTY_STROKE_WIDTH</pre>
+<div class="block">This client property maps to a Number indicating the stroke width the
+ arcs should use. By default this UI calculates a "reasonable" stroke
+ width based on the radius of the circle, but this property lets you
+ override that default.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="CircularProgressBarUI--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>CircularProgressBarUI</h4>
+<pre>public&nbsp;CircularProgressBarUI()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getPreferredSize-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPreferredSize</h4>
+<pre>public&nbsp;java.awt.Dimension&nbsp;getPreferredSize(javax.swing.JComponent&nbsp;c)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>getPreferredSize</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.basic.BasicProgressBarUI</code></dd>
+</dl>
+</li>
+</ul>
+<a name="installUI-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>installUI</h4>
+<pre>public&nbsp;void&nbsp;installUI(javax.swing.JComponent&nbsp;c)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>installUI</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.basic.BasicProgressBarUI</code></dd>
+</dl>
+</li>
+</ul>
+<a name="uninstallUI-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>uninstallUI</h4>
+<pre>public&nbsp;void&nbsp;uninstallUI(javax.swing.JComponent&nbsp;c)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>uninstallUI</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.basic.BasicProgressBarUI</code></dd>
+</dl>
+</li>
+</ul>
+<a name="paint-java.awt.Graphics-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>paint</h4>
+<pre>public&nbsp;void&nbsp;paint(java.awt.Graphics&nbsp;g0,
+                  javax.swing.JComponent&nbsp;c)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>paint</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.basic.BasicProgressBarUI</code></dd>
+</dl>
+</li>
+</ul>
+<a name="paintIndeterminate-java.awt.Graphics2D-int-float-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>paintIndeterminate</h4>
+<pre>protected&nbsp;void&nbsp;paintIndeterminate(java.awt.Graphics2D&nbsp;g,
+                                  int&nbsp;radius,
+                                  float&nbsp;strokeWidth,
+                                  int&nbsp;centerX,
+                                  int&nbsp;centerY)</pre>
+<div class="block">Paint the indeterminate state of this UI.
+ <p>
+ This integrates System.currentTimeMillis() into its calculations, so
+ every invocation will be slightly different.</div>
+</li>
+</ul>
+<a name="paintDeterminate-java.awt.Graphics2D-int-float-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>paintDeterminate</h4>
+<pre>protected&nbsp;void&nbsp;paintDeterminate(java.awt.Graphics2D&nbsp;g,
+                                int&nbsp;radius,
+                                float&nbsp;strokeWidth,
+                                int&nbsp;centerX,
+                                int&nbsp;centerY)</pre>
+<div class="block">Paint the determinate state of this UI.
+ <p>
+ This doesn't rely on System.currentTimeMillis(), but it can invoke
+ <code>progressBar.repaint()</code> if the transition property is active,
+ so subsequent invocations may produce different results.</div>
+</li>
+</ul>
+<a name="getStrokeWidth-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStrokeWidth</h4>
+<pre>protected&nbsp;float&nbsp;getStrokeWidth(int&nbsp;diameter)</pre>
+<div class="block">Return the stroke width.
+ <P>
+ This first checks to see if the user has defined a custom width, and if
+ not the width is derived based on the diameter.</div>
+</li>
+</ul>
+<a name="isActive-java.lang.String-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isActive</h4>
+<pre>protected&nbsp;boolean&nbsp;isActive(java.lang.String&nbsp;propertyName,
+                           boolean&nbsp;defaultValue)</pre>
+<div class="block">Return true if a property with the given name is active.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>defaultValue</code> - the default state of this property if the client property is
+            null.</dd>
+</dl>
+</li>
+</ul>
+<a name="setAnimationIndex-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAnimationIndex</h4>
+<pre>protected&nbsp;void&nbsp;setAnimationIndex(int&nbsp;newValue)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>setAnimationIndex</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.basic.BasicProgressBarUI</code></dd>
+</dl>
+</li>
+</ul>
+<a name="paintArc-java.awt.Graphics2D-java.awt.Color-double-double-double-double-double-float-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>paintArc</h4>
+<pre>protected&nbsp;void&nbsp;paintArc(java.awt.Graphics2D&nbsp;g,
+                        java.awt.Color&nbsp;color,
+                        double&nbsp;centerX,
+                        double&nbsp;centerY,
+                        double&nbsp;startAngle,
+                        double&nbsp;extent,
+                        double&nbsp;radius,
+                        float&nbsp;strokeWidth)</pre>
+<div class="block">This paints a portion of the edge of the circle. Degrees are interpreted
+ in a clockwise orientation from the top of the circle. (That is: 0
+ degrees is the 12:00 position, 90 degrees is the 3:00 position, 180
+ degrees is the 6:00 position, 270 degrees is the 9:00 position, and 360
+ degrees is a complete arc back a the 12:00 position.)</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>g</code> - the Graphics2D to paint to.</dd>
+<dd><code>color</code> - the color to paint the arc</dd>
+<dd><code>centerX</code> - the x-coordinate of the center of the circle</dd>
+<dd><code>centerY</code> - the y-coordinate of the center of the circle</dd>
+<dd><code>startAngle</code> - the angle where this arc begins in degrees</dd>
+<dd><code>extent</code> - the number of degrees this arc covers</dd>
+<dd><code>radius</code> - the radius of the circle</dd>
+<dd><code>strokeWidth</code> - the stroke width</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar.bottom">
+<!--   -->
+</a>
+<div class="skipNav"><a href="#skip.navbar.bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar.bottom.firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+<li><a href="../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../com/pump/plaf/ChasingArrowsThrobberUI.html" title="class in com.pump.plaf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/plaf/CloseDecoration.html" title="class in com.pump.plaf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../index.html?com/pump/plaf/CircularProgressBarUI.html" target="_top">Frames</a></li>
+<li><a href="CircularProgressBarUI.html" target="_top">No&nbsp;Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../allclasses-noframe.html">All&nbsp;Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested.classes.inherited.from.class.javax.swing.plaf.basic.BasicProgressBarUI">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.detail">Method</a></li>
+</ul>
+</div>
+<a name="skip.navbar.bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

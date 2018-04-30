@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -171,13 +171,23 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PlafPaintUtils.html#paintCenteredString-java.awt.Graphics2D-java.lang.String-java.awt.Font-int-int-">paintCenteredString</a></span>(java.awt.Graphics2D&nbsp;g,
+                   java.lang.String&nbsp;str,
+                   java.awt.Font&nbsp;font,
+                   int&nbsp;centerX,
+                   int&nbsp;centerY)</code>
+<div class="block">Paint a String centered at a given (x,y) coordinate.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PlafPaintUtils.html#paintFocus-java.awt.Graphics2D-java.awt.Shape-int-">paintFocus</a></span>(java.awt.Graphics2D&nbsp;g,
           java.awt.Shape&nbsp;shape,
           int&nbsp;pixelSize)</code>
 <div class="block">Paints 3 different strokes around a shape to indicate focus.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PlafPaintUtils.html#paintFocus-java.awt.Graphics2D-java.awt.Shape-int-java.awt.Color-boolean-">paintFocus</a></span>(java.awt.Graphics2D&nbsp;g,
           java.awt.Shape&nbsp;shape,
@@ -187,7 +197,7 @@ extends java.lang.Object</pre>
 <div class="block">Paints 3 different strokes around a shape to indicate focus.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static java.awt.Color</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PlafPaintUtils.html#tween-java.awt.Color-java.awt.Color-float-">tween</a></span>(java.awt.Color&nbsp;c1,
      java.awt.Color&nbsp;c2,
@@ -344,12 +354,26 @@ extends java.lang.Object</pre>
 <a name="getCheckerBoard-int-java.awt.Color-java.awt.Color-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getCheckerBoard</h4>
 <pre>public static&nbsp;java.awt.TexturePaint&nbsp;getCheckerBoard(int&nbsp;checkerSize,
                                                     java.awt.Color&nbsp;color1,
                                                     java.awt.Color&nbsp;color2)</pre>
+</li>
+</ul>
+<a name="paintCenteredString-java.awt.Graphics2D-java.lang.String-java.awt.Font-int-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>paintCenteredString</h4>
+<pre>public static&nbsp;void&nbsp;paintCenteredString(java.awt.Graphics2D&nbsp;g,
+                                       java.lang.String&nbsp;str,
+                                       java.awt.Font&nbsp;font,
+                                       int&nbsp;centerX,
+                                       int&nbsp;centerY)</pre>
+<div class="block">Paint a String centered at a given (x,y) coordinate.</div>
 </li>
 </ul>
 </li>

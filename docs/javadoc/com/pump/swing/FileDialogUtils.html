@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9};
+var methods = {"i0":9,"i1":9,"i2":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -147,11 +147,23 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static java.io.File</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/FileDialogUtils.html#showOpenDialog-java.awt.Frame-java.lang.String-java.lang.String...-">showOpenDialog</a></span>(java.awt.Frame&nbsp;f,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/FileDialogUtils.html#showOpenDialog-java.awt.Frame-java.lang.String-java.io.FilenameFilter-">showOpenDialog</a></span>(java.awt.Frame&nbsp;f,
               java.lang.String&nbsp;title,
-              java.lang.String...&nbsp;extensions)</code>&nbsp;</td>
+              java.io.FilenameFilter&nbsp;filter)</code>
+<div class="block">Returns a file the user selected or null if the user cancelled the
+ dialog.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static java.io.File</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/FileDialogUtils.html#showOpenDialog-java.awt.Frame-java.lang.String-java.lang.String...-">showOpenDialog</a></span>(java.awt.Frame&nbsp;f,
+              java.lang.String&nbsp;title,
+              java.lang.String...&nbsp;extensions)</code>
+<div class="block">Returns a file the user selected or null if the user cancelled the
+ dialog.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/FileDialogUtils.html#showSaveDialog-java.awt.Frame-java.lang.String-java.lang.String-">showSaveDialog</a></span>(java.awt.Frame&nbsp;f,
               java.lang.String&nbsp;title,
@@ -205,6 +217,21 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;java.io.File&nbsp;showOpenDialog(java.awt.Frame&nbsp;f,
                                           java.lang.String&nbsp;title,
                                           java.lang.String...&nbsp;extensions)</pre>
+<div class="block">Returns a file the user selected or null if the user cancelled the
+ dialog.</div>
+</li>
+</ul>
+<a name="showOpenDialog-java.awt.Frame-java.lang.String-java.io.FilenameFilter-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>showOpenDialog</h4>
+<pre>public static&nbsp;java.io.File&nbsp;showOpenDialog(java.awt.Frame&nbsp;f,
+                                          java.lang.String&nbsp;title,
+                                          java.io.FilenameFilter&nbsp;filter)</pre>
+<div class="block">Returns a file the user selected or null if the user cancelled the
+ dialog.</div>
 </li>
 </ul>
 <a name="showSaveDialog-java.awt.Frame-java.lang.String-java.lang.String-">

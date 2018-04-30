@@ -99,100 +99,108 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../com/pump/io/AdjacentFileOutputStream.html" title="class in com.pump.io">AdjacentFileOutputStream</a></td>
+<td class="colLast">
+<div class="block">This writes file data to a file <i>next to</i> the file you want ultimately
+ want to replace, and then when you close this stream we swap out the two
+ files (if they are different).</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../com/pump/io/ByteEncoder.html" title="class in com.pump.io">ByteEncoder</a></td>
 <td class="colLast">
 <div class="block">This object encodes a series of bytes (expressed as [0,255] integers).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../com/pump/io/ChainedByteEncoder.html" title="class in com.pump.io">ChainedByteEncoder</a></td>
 <td class="colLast">
 <div class="block">A series of ByteEncoders linked together.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../com/pump/io/CombinedInputStream.html" title="class in com.pump.io">CombinedInputStream</a></td>
 <td class="colLast">
 <div class="block">This is a combination of multiple <code>InputStreams</code>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../com/pump/io/ConsoleLogger.html" title="class in com.pump.io">ConsoleLogger</a></td>
 <td class="colLast">
 <div class="block">This logs the System.err and System.out streams to a text file.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../com/pump/io/CsvParser.html" title="class in com.pump.io">CsvParser</a></td>
 <td class="colLast">
 <div class="block">This is simple parser for CSV files.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../com/pump/io/DuplexWriter.html" title="class in com.pump.io">DuplexWriter</a></td>
 <td class="colLast">
 <div class="block">This Writer channels data to multiple writers.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../com/pump/io/FileLogger.html" title="class in com.pump.io">FileLogger</a></td>
 <td class="colLast">
 <div class="block">This logs text to a file.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../com/pump/io/FileTree.html" title="class in com.pump.io">FileTree</a></td>
 <td class="colLast">
 <div class="block">This is an Iterable wrapper for the <a href="../../../com/pump/io/FileTreeIterator.html" title="class in com.pump.io"><code>FileTreeIterator</code></a> class.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../com/pump/io/FileTreeIterator.html" title="class in com.pump.io">FileTreeIterator</a></td>
 <td class="colLast">
 <div class="block">This iterates through a file tree structure.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../com/pump/io/GuardedInputStream.html" title="class in com.pump.io">GuardedInputStream</a></td>
 <td class="colLast">
 <div class="block">This filtered stream places an initial limit on the number of bytes that can
  be read.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../com/pump/io/GuardedOutputStream.html" title="class in com.pump.io">GuardedOutputStream</a></td>
 <td class="colLast">
 <div class="block">This restricts the amount of data that can be written to an underlying
  <code>OutputStream</code>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../com/pump/io/HTMLEncoding.html" title="class in com.pump.io">HTMLEncoding</a></td>
 <td class="colLast">
 <div class="block">This class can encode and decode over 200 HTML references.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../com/pump/io/IndentedPrintStream.html" title="class in com.pump.io">IndentedPrintStream</a></td>
 <td class="colLast">
 <div class="block">This PrintStream helps manage indentation when you invoke any
  <code>print(x)</code> or <code>println(x)</code> method.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../com/pump/io/IOUtils.html" title="class in com.pump.io">IOUtils</a></td>
 <td class="colLast">
 <div class="block">A collection of static methods relating to Files and IO operations.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../com/pump/io/LookAheadReader.html" title="class in com.pump.io">LookAheadReader</a></td>
 <td class="colLast">
 <div class="block">This reads data but also provides a couple of convenient .peek() methods to
  look ahead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../com/pump/io/MeasuredInputStream.html" title="class in com.pump.io">MeasuredInputStream</a></td>
 <td class="colLast">
 <div class="block">This <code>InputStream</code> relays information from an underlying
@@ -200,26 +208,26 @@
  skipped.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../com/pump/io/MeasuredOutputStream.html" title="class in com.pump.io">MeasuredOutputStream</a></td>
 <td class="colLast">
 <div class="block">This <code>OutputStream</code> passes information along to an underlying
  <code>OutputStream</code> while counting how many bytes are written.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../com/pump/io/NullOutputStream.html" title="class in com.pump.io">NullOutputStream</a></td>
 <td class="colLast">
 <div class="block">This <code>OutputStream</code> does not write any data.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../com/pump/io/SuffixFilenameFilter.html" title="class in com.pump.io">SuffixFilenameFilter</a></td>
 <td class="colLast">
 <div class="block">A file filter that is based on a suffix.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../com/pump/io/ZipIterator.html" title="class in com.pump.io">ZipIterator</a>&lt;T&gt;</td>
 <td class="colLast">
 <div class="block">This iterates over data in a ZipInputStream.</div>

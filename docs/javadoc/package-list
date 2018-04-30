@@ -16,6 +16,7 @@ com.pump.data.encoder
 com.pump.debug
 com.pump.desktop
 com.pump.desktop.cache
+com.pump.desktop.doc
 com.pump.desktop.error
 com.pump.desktop.logging
 com.pump.desktop.temp
@@ -28,6 +29,7 @@ com.pump.geom.intersect
 com.pump.geom.knot
 com.pump.graphics
 com.pump.icon
+com.pump.icon.button
 com.pump.image
 com.pump.image.bmp
 com.pump.image.gif

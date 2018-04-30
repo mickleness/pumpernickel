@@ -1,0 +1,446 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+
+<title>DocumentAutoLoader</title>
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+<script type="text/javascript" src="../../../../script.js"></script>
+</head>
+<body>
+<script type="text/javascript"><!--
+    try {
+        if (location.href.indexOf('is-external=true') == -1) {
+            parent.document.title="DocumentAutoLoader";
+        }
+    }
+    catch(err) {
+    }
+//-->
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar.top">
+<!--   -->
+</a>
+<div class="skipNav"><a href="#skip.navbar.top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar.top.firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../com/pump/desktop/doc/DocumentCommand.html" title="class in com.pump.desktop.doc"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?com/pump/desktop/doc/DocumentAutoLoader.html" target="_top">Frames</a></li>
+<li><a href="DocumentAutoLoader.html" target="_top">No&nbsp;Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All&nbsp;Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.detail">Method</a></li>
+</ul>
+</div>
+<a name="skip.navbar.top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.pump.desktop.doc</div>
+<h2 title="Class DocumentAutoLoader" class="title">Class DocumentAutoLoader</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>com.pump.desktop.doc.DocumentAutoLoader</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public class <span class="typeNameLabel">DocumentAutoLoader</span>
+extends java.lang.Object</pre>
+<div class="block">This saves a list of open documents and re-loads those documents in new
+ sessions.
+ <p>
+ The default implementation relies on a <a href="../../../../com/pump/desktop/doc/OpenDocumentAction.html" title="class in com.pump.desktop.doc"><code>OpenDocumentAction</code></a>, so that
+ needs to be added to a DocumentControls before this object is instantiated.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected javax.swing.event.ChangeListener</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#autoLoadChangeListener">autoLoadChangeListener</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../com/pump/desktop/doc/DocumentControls.html" title="class in com.pump.desktop.doc">DocumentControls</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#controls">controls</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected java.util.prefs.Preferences</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#prefs">prefs</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#DocumentAutoLoader-com.pump.desktop.doc.DocumentControls-">DocumentAutoLoader</a></span>(<a href="../../../../com/pump/desktop/doc/DocumentControls.html" title="class in com.pump.desktop.doc">DocumentControls</a>&nbsp;controls)</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#deserialize-java.lang.String-">deserialize</a></span>(java.lang.String&nbsp;value)</code>
+<div class="block">Convert a String created by <a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#serializeDocument-com.pump.desktop.doc.Document-"><code>serializeDocument(Document)</code></a> back
+ into a Document.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#isActive--">isActive</a></span>()</code>
+<div class="block">Return true if this feature is active.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#loadDocumentsFromPreviousSession--">loadDocumentsFromPreviousSession</a></span>()</code>
+<div class="block">This is called once during the constructor to consult the preferences and
+ load all documents from the previous session.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>protected java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#serializeDocument-com.pump.desktop.doc.Document-">serializeDocument</a></span>(<a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a>&nbsp;doc)</code>
+<div class="block">Convert a Document into a String.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#setActive-boolean-">setActive</a></span>(boolean&nbsp;newActive)</code>
+<div class="block">Toggle the preference controlling whether this feature is active.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#updatePreferences--">updatePreferences</a></span>()</code>
+<div class="block">Save all the current open documents to the preferences and flush the
+ preferences.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="prefs">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>prefs</h4>
+<pre>protected final&nbsp;java.util.prefs.Preferences prefs</pre>
+</li>
+</ul>
+<a name="controls">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>controls</h4>
+<pre>protected final&nbsp;<a href="../../../../com/pump/desktop/doc/DocumentControls.html" title="class in com.pump.desktop.doc">DocumentControls</a> controls</pre>
+</li>
+</ul>
+<a name="autoLoadChangeListener">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>autoLoadChangeListener</h4>
+<pre>protected&nbsp;javax.swing.event.ChangeListener autoLoadChangeListener</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="DocumentAutoLoader-com.pump.desktop.doc.DocumentControls-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>DocumentAutoLoader</h4>
+<pre>public&nbsp;DocumentAutoLoader(<a href="../../../../com/pump/desktop/doc/DocumentControls.html" title="class in com.pump.desktop.doc">DocumentControls</a>&nbsp;controls)</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="loadDocumentsFromPreviousSession--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>loadDocumentsFromPreviousSession</h4>
+<pre>protected&nbsp;void&nbsp;loadDocumentsFromPreviousSession()</pre>
+<div class="block">This is called once during the constructor to consult the preferences and
+ load all documents from the previous session.</div>
+</li>
+</ul>
+<a name="setActive-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setActive</h4>
+<pre>public&nbsp;void&nbsp;setActive(boolean&nbsp;newActive)</pre>
+<div class="block">Toggle the preference controlling whether this feature is active.</div>
+</li>
+</ul>
+<a name="isActive--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isActive</h4>
+<pre>public&nbsp;boolean&nbsp;isActive()</pre>
+<div class="block">Return true if this feature is active. By default this returns true until
+ you've explicitly turned off this feature. (You can also just not
+ construct this object at all if you don't like this feature.)</div>
+</li>
+</ul>
+<a name="serializeDocument-com.pump.desktop.doc.Document-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>serializeDocument</h4>
+<pre>protected&nbsp;java.lang.String&nbsp;serializeDocument(<a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a>&nbsp;doc)</pre>
+<div class="block">Convert a Document into a String. The default implementation just
+ converts the Document's File into a file path.
+ <p>
+ If this returns null (which it will do for Documents that don't have a
+ File) then nothing is saved.</div>
+</li>
+</ul>
+<a name="deserialize-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>deserialize</h4>
+<pre>protected&nbsp;<a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a>&nbsp;deserialize(java.lang.String&nbsp;value)</pre>
+<div class="block">Convert a String created by <a href="../../../../com/pump/desktop/doc/DocumentAutoLoader.html#serializeDocument-com.pump.desktop.doc.Document-"><code>serializeDocument(Document)</code></a> back
+ into a Document.
+ <p>
+ Presumably the original String was created in a previous session/JVM, so
+ this needs to be something that makes sense across sessions.
+ <p>
+ The default implementation assumes the String is a filepath. If that file
+ no longer exists, then this returns null.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Document from the serialized representation, or null if the
+         argument isn't recognizable or usable.</dd>
+</dl>
+</li>
+</ul>
+<a name="updatePreferences--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>updatePreferences</h4>
+<pre>protected&nbsp;boolean&nbsp;updatePreferences()</pre>
+<div class="block">Save all the current open documents to the preferences and flush the
+ preferences.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if flush was needed and called, false otherwise.</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar.bottom">
+<!--   -->
+</a>
+<div class="skipNav"><a href="#skip.navbar.bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar.bottom.firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../com/pump/desktop/doc/DocumentCommand.html" title="class in com.pump.desktop.doc"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?com/pump/desktop/doc/DocumentAutoLoader.html" target="_top">Frames</a></li>
+<li><a href="DocumentAutoLoader.html" target="_top">No&nbsp;Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All&nbsp;Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.detail">Method</a></li>
+</ul>
+</div>
+<a name="skip.navbar.bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

@@ -369,10 +369,10 @@
 <li class="blockList">
 <h2 title="Package">Package&nbsp;com.pump.data</h2>
 <ul class="blockList">
-<li class="blockList"><a name="com.pump.data.AttributeDataImpl">
+<li class="blockList"><a name="com.pump.data.AbstractAttributeDataImpl">
 <!--   -->
 </a>
-<h3>Class <a href="com/pump/data/AttributeDataImpl.html" title="class in com.pump.data">com.pump.data.AttributeDataImpl</a> extends java.lang.Object implements Serializable</h3>
+<h3>Class <a href="com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">com.pump.data.AbstractAttributeDataImpl</a> extends java.lang.Object implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -413,6 +413,15 @@
 </ul>
 </li>
 </ul>
+</li>
+<li class="blockList"><a name="com.pump.data.AttributeDataImpl">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/data/AttributeDataImpl.html" title="class in com.pump.data">com.pump.data.AttributeDataImpl</a> extends <a href="com/pump/data/AbstractAttributeDataImpl.html" title="class in com.pump.data">AbstractAttributeDataImpl</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
 </li>
 <li class="blockList"><a name="com.pump.data.BoundsChecker">
 <!--   -->
@@ -721,30 +730,6 @@
 </li>
 </ul>
 </li>
-<li class="blockList"><a name="com.pump.debug.DebugPanel">
-<!--   -->
-</a>
-<h3>Class <a href="com/pump/debug/DebugPanel.html" title="class in com.pump.debug">com.pump.debug.DebugPanel</a> extends javax.swing.JPanel implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>mouseListener</h4>
-<pre>javax.swing.event.MouseInputAdapter mouseListener</pre>
-</li>
-<li class="blockListLast">
-<h4>mouseLoc</h4>
-<pre>java.awt.Point mouseLoc</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 </li>
 <li class="blockList">
@@ -773,6 +758,155 @@
 <li class="blockListLast">
 <h4>saveBoundsInPrefs</h4>
 <pre>boolean saveBoundsInPrefs</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;com.pump.desktop.doc</h2>
+<ul class="blockList">
+<li class="blockList"><a name="com.pump.desktop.doc.CloseDocumentAction">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/desktop/doc/CloseDocumentAction.html" title="class in com.pump.desktop.doc">com.pump.desktop.doc.CloseDocumentAction</a> extends javax.swing.AbstractAction implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>controls</h4>
+<pre><a href="com/pump/desktop/doc/DocumentControls.html" title="class in com.pump.desktop.doc">DocumentControls</a> controls</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="com.pump.desktop.doc.DocumentLimitException">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/desktop/doc/DocumentLimitException.html" title="class in com.pump.desktop.doc">com.pump.desktop.doc.DocumentLimitException</a> extends java.lang.IllegalStateException implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>documentCount</h4>
+<pre>int documentCount</pre>
+</li>
+<li class="blockList">
+<h4>documentMinimum</h4>
+<pre>int documentMinimum</pre>
+</li>
+<li class="blockListLast">
+<h4>documentMaximum</h4>
+<pre>int documentMaximum</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="com.pump.desktop.doc.MissingSelectedDocumentException">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/desktop/doc/MissingSelectedDocumentException.html" title="class in com.pump.desktop.doc">com.pump.desktop.doc.MissingSelectedDocumentException</a> extends java.lang.IllegalStateException implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>documents</h4>
+<pre><a href="com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a>[] documents</pre>
+</li>
+<li class="blockListLast">
+<h4>selectedDocument</h4>
+<pre><a href="com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a> selectedDocument</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="com.pump.desktop.doc.NewDocumentAction">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/desktop/doc/NewDocumentAction.html" title="class in com.pump.desktop.doc">com.pump.desktop.doc.NewDocumentAction</a> extends javax.swing.AbstractAction implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>controls</h4>
+<pre><a href="com/pump/desktop/doc/DocumentControls.html" title="class in com.pump.desktop.doc">DocumentControls</a> controls</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="com.pump.desktop.doc.OpenDocumentAction">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/desktop/doc/OpenDocumentAction.html" title="class in com.pump.desktop.doc">com.pump.desktop.doc.OpenDocumentAction</a> extends javax.swing.AbstractAction implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>controls</h4>
+<pre><a href="com/pump/desktop/doc/DocumentControls.html" title="class in com.pump.desktop.doc">DocumentControls</a> controls</pre>
+</li>
+<li class="blockListLast">
+<h4>supportedFileExtensions</h4>
+<pre>java.lang.String[] supportedFileExtensions</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="com.pump.desktop.doc.SaveDocumentAction">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/desktop/doc/SaveDocumentAction.html" title="class in com.pump.desktop.doc">com.pump.desktop.doc.SaveDocumentAction</a> extends javax.swing.AbstractAction implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>controls</h4>
+<pre><a href="com/pump/desktop/doc/DocumentControls.html" title="class in com.pump.desktop.doc">DocumentControls</a> controls</pre>
+</li>
+<li class="blockList">
+<h4>fileExtension</h4>
+<pre>java.lang.String fileExtension</pre>
+</li>
+<li class="blockListLast">
+<h4>selectedDocumentChangeListener</h4>
+<pre>javax.swing.event.ChangeListener selectedDocumentChangeListener</pre>
 </li>
 </ul>
 </li>
@@ -1568,6 +1702,55 @@
 </ul>
 </li>
 <li class="blockList">
+<h2 title="Package">Package&nbsp;com.pump.icon.button</h2>
+<ul class="blockList">
+<li class="blockList"><a name="com.pump.icon.button.ButtonState">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/icon/button/ButtonState.html" title="class in com.pump.icon.button">com.pump.icon.button.ButtonState</a> extends java.lang.Object implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>map</h4>
+<pre>java.util.Map&lt;K,V&gt; map</pre>
+</li>
+<li class="blockList">
+<h4>armed</h4>
+<pre>boolean armed</pre>
+</li>
+<li class="blockList">
+<h4>enabled</h4>
+<pre>boolean enabled</pre>
+</li>
+<li class="blockList">
+<h4>focusOwner</h4>
+<pre>boolean focusOwner</pre>
+</li>
+<li class="blockList">
+<h4>pressed</h4>
+<pre>boolean pressed</pre>
+</li>
+<li class="blockList">
+<h4>rollover</h4>
+<pre>boolean rollover</pre>
+</li>
+<li class="blockListLast">
+<h4>selected</h4>
+<pre>boolean selected</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
 <h2 title="Package">Package&nbsp;com.pump.image.bmp</h2>
 <ul class="blockList">
 <li class="blockList"><a name="com.pump.image.bmp.BmpHeaderException">
@@ -2180,30 +2363,6 @@
 <li class="blockList">
 <h2 title="Package">Package&nbsp;com.pump.math</h2>
 <ul class="blockList">
-<li class="blockList"><a name="com.pump.math.KeyedRandom">
-<!--   -->
-</a>
-<h3>Class <a href="com/pump/math/KeyedRandom.html" title="class in com.pump.math">com.pump.math.KeyedRandom</a> extends java.util.Random implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>random</h4>
-<pre>java.util.Random[] random</pre>
-</li>
-<li class="blockListLast">
-<h4>ctr</h4>
-<pre>java.util.concurrent.atomic.AtomicInteger ctr</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="blockList"><a name="com.pump.math.MathException">
 <!--   -->
 </a>
@@ -2410,6 +2569,15 @@
 </ul>
 </li>
 </ul>
+</li>
+<li class="blockList"><a name="com.pump.plaf.RotatedPanel">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/plaf/RotatedPanel.html" title="class in com.pump.plaf">com.pump.plaf.RotatedPanel</a> extends javax.swing.JPanel implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
 </li>
 <li class="blockList"><a name="com.pump.plaf.XPDirectoryControls">
 <!--   -->
@@ -2927,6 +3095,42 @@
 </li>
 </ul>
 </li>
+<li class="blockList"><a name="com.pump.showcase.BoxTabbedPaneUIDemo">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/showcase/BoxTabbedPaneUIDemo.html" title="class in com.pump.showcase">com.pump.showcase.BoxTabbedPaneUIDemo</a> extends javax.swing.JComponent implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>tabs</h4>
+<pre>javax.swing.JTabbedPane tabs</pre>
+</li>
+<li class="blockList">
+<h4>addButton</h4>
+<pre>javax.swing.JButton addButton</pre>
+</li>
+<li class="blockList">
+<h4>tabPlacementComboBox</h4>
+<pre>javax.swing.JComboBox&lt;E&gt; tabPlacementComboBox</pre>
+</li>
+<li class="blockList">
+<h4>closeableCheckBox</h4>
+<pre>javax.swing.JCheckBox closeableCheckBox</pre>
+</li>
+<li class="blockListLast">
+<h4>hideSingleCheckBox</h4>
+<pre>javax.swing.JCheckBox hideSingleCheckBox</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="com.pump.showcase.BristleStrokeDemo">
 <!--   -->
 </a>
@@ -3010,6 +3214,134 @@
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
 </dl>
+</li>
+<li class="blockList"><a name="com.pump.showcase.CircularProgressBarUIDemo">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/showcase/CircularProgressBarUIDemo.html" title="class in com.pump.showcase">com.pump.showcase.CircularProgressBarUIDemo</a> extends javax.swing.JPanel implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>controls</h4>
+<pre>javax.swing.JPanel controls</pre>
+</li>
+<li class="blockList">
+<h4>sizeSlider</h4>
+<pre>javax.swing.JSlider sizeSlider</pre>
+</li>
+<li class="blockList">
+<h4>indeterminateButton</h4>
+<pre>javax.swing.JRadioButton indeterminateButton</pre>
+</li>
+<li class="blockList">
+<h4>determinateButton</h4>
+<pre>javax.swing.JRadioButton determinateButton</pre>
+</li>
+<li class="blockList">
+<h4>progressBar</h4>
+<pre>javax.swing.JProgressBar progressBar</pre>
+</li>
+<li class="blockList">
+<h4>progressSpinner</h4>
+<pre>javax.swing.JSpinner progressSpinner</pre>
+</li>
+<li class="blockList">
+<h4>animateOnButton</h4>
+<pre>javax.swing.JRadioButton animateOnButton</pre>
+</li>
+<li class="blockList">
+<h4>animateOffButton</h4>
+<pre>javax.swing.JRadioButton animateOffButton</pre>
+</li>
+<li class="blockList">
+<h4>progressBarContainer</h4>
+<pre>javax.swing.JPanel progressBarContainer</pre>
+</li>
+<li class="blockList">
+<h4>foregroundColor</h4>
+<pre><a href="com/pump/swing/ColorWell.html" title="class in com.pump.swing">ColorWell</a> foregroundColor</pre>
+</li>
+<li class="blockList">
+<h4>backgroundColor</h4>
+<pre><a href="com/pump/swing/ColorWell.html" title="class in com.pump.swing">ColorWell</a> backgroundColor</pre>
+</li>
+<li class="blockList">
+<h4>stringOnButton</h4>
+<pre>javax.swing.JRadioButton stringOnButton</pre>
+</li>
+<li class="blockList">
+<h4>stringOffButton</h4>
+<pre>javax.swing.JRadioButton stringOffButton</pre>
+</li>
+<li class="blockList">
+<h4>pulseCheckBox</h4>
+<pre>javax.swing.JCheckBox pulseCheckBox</pre>
+</li>
+<li class="blockList">
+<h4>sparkCheckBox</h4>
+<pre>javax.swing.JCheckBox sparkCheckBox</pre>
+</li>
+<li class="blockList">
+<h4>transitionCheckBox</h4>
+<pre>javax.swing.JCheckBox transitionCheckBox</pre>
+</li>
+<li class="blockList">
+<h4>accelerateCheckBox</h4>
+<pre>javax.swing.JCheckBox accelerateCheckBox</pre>
+</li>
+<li class="blockList">
+<h4>strokeSlider</h4>
+<pre>javax.swing.JSlider strokeSlider</pre>
+</li>
+<li class="blockList">
+<h4>strokeCheckBox</h4>
+<pre>javax.swing.JCheckBox strokeCheckBox</pre>
+</li>
+<li class="blockList">
+<h4>sizeListener</h4>
+<pre>javax.swing.event.ChangeListener sizeListener</pre>
+</li>
+<li class="blockList">
+<h4>determinateListener</h4>
+<pre>java.awt.event.ActionListener determinateListener</pre>
+</li>
+<li class="blockList">
+<h4>stringListener</h4>
+<pre>java.awt.event.ActionListener stringListener</pre>
+</li>
+<li class="blockList">
+<h4>effectsListener</h4>
+<pre>java.awt.event.ActionListener effectsListener</pre>
+</li>
+<li class="blockList">
+<h4>animateListener</h4>
+<pre>java.awt.event.ActionListener animateListener</pre>
+</li>
+<li class="blockList">
+<h4>spinnerListener</h4>
+<pre>javax.swing.event.ChangeListener spinnerListener</pre>
+</li>
+<li class="blockList">
+<h4>colorListener</h4>
+<pre>javax.swing.event.ChangeListener colorListener</pre>
+</li>
+<li class="blockList">
+<h4>strokeSliderListener</h4>
+<pre>javax.swing.event.ChangeListener strokeSliderListener</pre>
+</li>
+<li class="blockListLast">
+<h4>strokeCheckboxListener</h4>
+<pre>java.awt.event.ActionListener strokeCheckboxListener</pre>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 <li class="blockList"><a name="com.pump.showcase.ClipperDemo">
 <!--   -->
@@ -3618,15 +3950,6 @@
 </li>
 </ul>
 </li>
-<li class="blockList"><a name="com.pump.showcase.HSBInlineDemo">
-<!--   -->
-</a>
-<h3>Class <a href="com/pump/showcase/HSBInlineDemo.html" title="class in com.pump.showcase">com.pump.showcase.HSBInlineDemo</a> extends <a href="com/pump/showcase/OutputDemo.html" title="class in com.pump.showcase">OutputDemo</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-</li>
 <li class="blockList"><a name="com.pump.showcase.ImageQuantizationDemo">
 <!--   -->
 </a>
@@ -3813,15 +4136,6 @@
 </li>
 </ul>
 </li>
-<li class="blockList"><a name="com.pump.showcase.MathGDemo">
-<!--   -->
-</a>
-<h3>Class <a href="com/pump/showcase/MathGDemo.html" title="class in com.pump.showcase">com.pump.showcase.MathGDemo</a> extends <a href="com/pump/showcase/OutputDemo.html" title="class in com.pump.showcase">OutputDemo</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-</li>
 <li class="blockList"><a name="com.pump.showcase.MovWriterDemo">
 <!--   -->
 </a>
@@ -3966,6 +4280,10 @@
 <li class="blockList">
 <h3>Serialized Fields</h3>
 <ul class="blockList">
+<li class="blockList">
+<h4>searchField</h4>
+<pre>javax.swing.JTextField searchField</pre>
+</li>
 <li class="blockListLast">
 <h4>sectionContainer</h4>
 <pre><a href="com/pump/swing/ListSectionContainer.html" title="class in com.pump.swing">ListSectionContainer</a> sectionContainer</pre>
@@ -3973,15 +4291,6 @@
 </ul>
 </li>
 </ul>
-</li>
-<li class="blockList"><a name="com.pump.showcase.ResourcePoolDemo">
-<!--   -->
-</a>
-<h3>Class <a href="com/pump/showcase/ResourcePoolDemo.html" title="class in com.pump.showcase">com.pump.showcase.ResourcePoolDemo</a> extends <a href="com/pump/showcase/OutputDemo.html" title="class in com.pump.showcase">OutputDemo</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
 </li>
 <li class="blockList"><a name="com.pump.showcase.ScreenCaptureDemo">
 <!--   -->
@@ -4359,6 +4668,130 @@
 </li>
 </ul>
 </li>
+<li class="blockList"><a name="com.pump.showcase.WildcardPatternHighlighterDemo">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/showcase/WildcardPatternHighlighterDemo.html" title="class in com.pump.showcase">com.pump.showcase.WildcardPatternHighlighterDemo</a> extends javax.swing.JPanel implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>sectionContainer</h4>
+<pre><a href="com/pump/swing/CollapsibleContainer.html" title="class in com.pump.swing">CollapsibleContainer</a> sectionContainer</pre>
+</li>
+<li class="blockList">
+<h4>inspector</h4>
+<pre>javax.swing.JPanel inspector</pre>
+</li>
+<li class="blockList">
+<h4>underlinePatternField</h4>
+<pre>javax.swing.JTextField underlinePatternField</pre>
+</li>
+<li class="blockList">
+<h4>underlinePatternLabel</h4>
+<pre>javax.swing.JLabel underlinePatternLabel</pre>
+</li>
+<li class="blockList">
+<h4>colorWellLabel</h4>
+<pre>javax.swing.JLabel colorWellLabel</pre>
+</li>
+<li class="blockList">
+<h4>thicknessLabel</h4>
+<pre>javax.swing.JLabel thicknessLabel</pre>
+</li>
+<li class="blockList">
+<h4>squiggleLabel</h4>
+<pre>javax.swing.JLabel squiggleLabel</pre>
+</li>
+<li class="blockList">
+<h4>colorWell</h4>
+<pre><a href="com/pump/swing/ColorWell.html" title="class in com.pump.swing">ColorWell</a> colorWell</pre>
+</li>
+<li class="blockList">
+<h4>thicknessSpinner</h4>
+<pre>javax.swing.JSpinner thicknessSpinner</pre>
+</li>
+<li class="blockList">
+<h4>squiggleOnRadioButton</h4>
+<pre>javax.swing.JRadioButton squiggleOnRadioButton</pre>
+</li>
+<li class="blockList">
+<h4>squiggleOffRadioButton</h4>
+<pre>javax.swing.JRadioButton squiggleOffRadioButton</pre>
+</li>
+<li class="blockList">
+<h4>squiggleButtonGroup</h4>
+<pre>javax.swing.ButtonGroup squiggleButtonGroup</pre>
+</li>
+<li class="blockList">
+<h4>blockPatternField</h4>
+<pre>javax.swing.JTextField blockPatternField</pre>
+</li>
+<li class="blockList">
+<h4>blockPatternLabel</h4>
+<pre>javax.swing.JLabel blockPatternLabel</pre>
+</li>
+<li class="blockList">
+<h4>textPane</h4>
+<pre>javax.swing.JTextPane textPane</pre>
+</li>
+<li class="blockList">
+<h4>scrollPane</h4>
+<pre>javax.swing.JScrollPane scrollPane</pre>
+</li>
+<li class="blockList">
+<h4>hueLabel</h4>
+<pre>javax.swing.JLabel hueLabel</pre>
+</li>
+<li class="blockList">
+<h4>includeFillLabel</h4>
+<pre>javax.swing.JLabel includeFillLabel</pre>
+</li>
+<li class="blockList">
+<h4>alphaLabel</h4>
+<pre>javax.swing.JLabel alphaLabel</pre>
+</li>
+<li class="blockList">
+<h4>hueSpinner</h4>
+<pre>javax.swing.JSpinner hueSpinner</pre>
+</li>
+<li class="blockList">
+<h4>includeFillOnRadioButton</h4>
+<pre>javax.swing.JRadioButton includeFillOnRadioButton</pre>
+</li>
+<li class="blockList">
+<h4>includeFillOffRadioButton</h4>
+<pre>javax.swing.JRadioButton includeFillOffRadioButton</pre>
+</li>
+<li class="blockList">
+<h4>includeFillButtonGroup</h4>
+<pre>javax.swing.ButtonGroup includeFillButtonGroup</pre>
+</li>
+<li class="blockList">
+<h4>alphaSpinner</h4>
+<pre>javax.swing.JSpinner alphaSpinner</pre>
+</li>
+<li class="blockList">
+<h4>docListener</h4>
+<pre>javax.swing.event.DocumentListener docListener</pre>
+</li>
+<li class="blockList">
+<h4>changeListener</h4>
+<pre>javax.swing.event.ChangeListener changeListener</pre>
+</li>
+<li class="blockListLast">
+<h4>actionListener</h4>
+<pre>java.awt.event.ActionListener actionListener</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="com.pump.showcase.XMLTextComponentHighlighterDemo">
 <!--   -->
 </a>
@@ -4651,6 +5084,54 @@
 <li class="blockListLast">
 <h4>rootPaneInUse</h4>
 <pre>javax.swing.JRootPane rootPaneInUse</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="com.pump.swing.CloseableTab">
+<!--   -->
+</a>
+<h3>Class <a href="com/pump/swing/CloseableTab.html" title="class in com.pump.swing">com.pump.swing.CloseableTab</a> extends javax.swing.AbstractButton implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>label</h4>
+<pre>javax.swing.JLabel label</pre>
+</li>
+<li class="blockList">
+<h4>fileLabel</h4>
+<pre><a href="com/pump/awt/dnd/FileLabel.html" title="class in com.pump.awt.dnd">FileLabel</a> fileLabel</pre>
+</li>
+<li class="blockList">
+<h4>closeButton</h4>
+<pre>javax.swing.JButton closeButton</pre>
+</li>
+<li class="blockList">
+<h4>tabs</h4>
+<pre>javax.swing.JTabbedPane tabs</pre>
+</li>
+<li class="blockList">
+<h4>tabComponent</h4>
+<pre>java.awt.Component tabComponent</pre>
+</li>
+<li class="blockList">
+<h4>changeListener</h4>
+<pre>javax.swing.event.ChangeListener changeListener</pre>
+</li>
+<li class="blockList">
+<h4>activePropertyListener</h4>
+<pre>java.beans.PropertyChangeListener activePropertyListener</pre>
+</li>
+<li class="blockListLast">
+<h4>installed</h4>
+<pre>boolean installed</pre>
 </li>
 </ul>
 </li>
@@ -5289,34 +5770,6 @@
 <h4>popup</h4>
 <pre>javax.swing.JPopupMenu popup</pre>
 <div class="block">The popup for contextual menus.</div>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="com.pump.swing.GridBagDebugPanel">
-<!--   -->
-</a>
-<h3>Class <a href="com/pump/swing/GridBagDebugPanel.html" title="class in com.pump.swing">com.pump.swing.GridBagDebugPanel</a> extends javax.swing.JPanel implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>indicatedComponents</h4>
-<pre>java.util.List&lt;E&gt; indicatedComponents</pre>
-</li>
-<li class="blockList">
-<h4>mouseListener</h4>
-<pre>javax.swing.event.MouseInputAdapter mouseListener</pre>
-</li>
-<li class="blockListLast">
-<h4>containerListener</h4>
-<pre>java.awt.event.ContainerListener containerListener</pre>
 </li>
 </ul>
 </li>

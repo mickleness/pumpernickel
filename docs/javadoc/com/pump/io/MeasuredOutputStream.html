@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -211,23 +211,34 @@ extends java.io.OutputStream</pre>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/MeasuredOutputStream.html#isClosed--">isClosed</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/MeasuredOutputStream.html#isCloseable--">isCloseable</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/MeasuredOutputStream.html#removeChangeListener-javax.swing.event.ChangeListener-">removeChangeListener</a></span>(javax.swing.event.ChangeListener&nbsp;l)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/MeasuredOutputStream.html#isClosed--">isClosed</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/MeasuredOutputStream.html#write-byte:A-">write</a></span>(byte[]&nbsp;b)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/MeasuredOutputStream.html#removeChangeListener-javax.swing.event.ChangeListener-">removeChangeListener</a></span>(javax.swing.event.ChangeListener&nbsp;l)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/MeasuredOutputStream.html#setCloseable-boolean-">setCloseable</a></span>(boolean&nbsp;b)</code>
+<div class="block">Control whether calling <code><a href="../../../com/pump/io/MeasuredOutputStream.html#close--"><code>close()</code></a></code> affects the
+ underlying OutputStream.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/MeasuredOutputStream.html#write-byte:A-">write</a></span>(byte[]&nbsp;b)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/MeasuredOutputStream.html#write-byte:A-int-int-">write</a></span>(byte[]&nbsp;b,
      int&nbsp;off,
      int&nbsp;len)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/io/MeasuredOutputStream.html#write-int-">write</a></span>(int&nbsp;b)</code>&nbsp;</td>
 </tr>
@@ -287,6 +298,34 @@ extends java.io.OutputStream</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="setCloseable-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCloseable</h4>
+<pre>public&nbsp;void&nbsp;setCloseable(boolean&nbsp;b)</pre>
+<div class="block">Control whether calling <code><a href="../../../com/pump/io/MeasuredOutputStream.html#close--"><code>close()</code></a></code> affects the
+ underlying OutputStream. This is useful in cases when you pass an
+ OutputStream to a 3rd party decoder that helpfully tries to close the
+ stream as it wraps up, but there is still data to be read later (such as
+ when working with a ZipInputStream).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>b</code> - whether calling <code>close()</code> will close the underlying
+            OutputStream.</dd>
+</dl>
+</li>
+</ul>
+<a name="isCloseable--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isCloseable</h4>
+<pre>public&nbsp;boolean&nbsp;isCloseable()</pre>
+</li>
+</ul>
 <a name="addChangeListener-javax.swing.event.ChangeListener-long-boolean-">
 <!--   -->
 </a>
