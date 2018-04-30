@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -24,7 +25,7 @@ import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.plaf.CircularProgressBarUI;
 import com.pump.swing.ColorWell;
 
-public class CircularProgressBarUIDemo extends JPanel {
+public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JPanel controls = new JPanel();
@@ -202,8 +203,8 @@ public class CircularProgressBarUIDemo extends JPanel {
 				animateOffButton);
 		layout.addRow(new JLabel("Foreground:"), foregroundColor, false);
 		layout.addRow(new JLabel("Background:"), backgroundColor, false);
-		layout.addRow(new JLabel("Effects:"), pulseCheckBox, sparkCheckBox);
-		layout.addRow(null, accelerateCheckBox, transitionCheckBox);
+		layout.addRow(new JLabel("Effects:"), pulseCheckBox, transitionCheckBox);
+		layout.addRow(null, sparkCheckBox, accelerateCheckBox);
 		layout.addRow(strokeCheckBox, strokeSlider, true);
 
 		ButtonGroup g1 = new ButtonGroup();
@@ -267,5 +268,15 @@ public class CircularProgressBarUIDemo extends JPanel {
 		// effectsListener.actionPerformed(null);
 
 		progressSpinner.addChangeListener(spinnerListener);
+	}
+
+	@Override
+	public String getTitle() {
+		return "CircularProgressBar Demo";
+	}
+
+	@Override
+	public URL getHelpURL() {
+		return getClass().getResource("circularProgressBarUIDemo.html");
 	}
 }

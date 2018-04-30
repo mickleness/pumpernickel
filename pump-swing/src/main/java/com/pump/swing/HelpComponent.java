@@ -110,28 +110,62 @@ public class HelpComponent {
 			System.err
 					.println("The field 'helpListener' is undefined.  This needs to be defined in order for the help button to work.");
 		}
+		JComponent jc = createHelpComponent(helpListener, helpText, null);
+		jc.putClientProperty("helpData", helpData);
+		jc.putClientProperty("help.link", Boolean.TRUE);
+		return jc;
+	}
 
+	/**
+	 * This returns a <code>JComponent</code> that can be used to trigger help.
+	 * <P>
+	 * On Mac, this will return a <code>JButton</code> that has the correct icon
+	 * (see Apple Technical Note 2196).
+	 * <P>
+	 * On other platforms, this will return a <code>JLink</code> with the text
+	 * <code>helpText</code>. If <code>helpText</code> is <code>null</code>,
+	 * then the text "Learn More" is used. This is based on Vista's <A
+	 * HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx#help"
+	 * >advice</a>:
+	 * "Don't use general or vague Help topic links or generic Help buttons. Users often ignore generic Help."
+	 * The Vista guidelines go on to explicitly discourage using "Learn More"
+	 * because it comes across as too general/common, so it is encouraged that
+	 * you provide an accurate string to encourage your users to follow the
+	 * link. (Also Microsoft <A
+	 * HREF="http://msdn.microsoft.com/en-us/library/aa511449.aspx">points
+	 * out</A> you should: "Design your UI so that users don't need Help," and
+	 * "Understand that you don't have to provide help for every feature in the UI."
+	 * )
+	 * 
+	 * @param actionListener
+	 *            the listener that is triggered when you either click the help
+	 *            JButton or JLink.
+	 * @param helpText
+	 *            the text that will be used if this creates a JLink.
+	 * @param tooltipText
+	 *            the optional tooltip text for this component.
+	 */
+	public static JComponent createHelpComponent(ActionListener actionListener,
+			String helpText, String tooltipText) {
+		JComponent returnValue;
 		if (JVM.isMac) {
 			JButton helpButton;
 			helpButton = new JButton("");
 			helpButton.putClientProperty("JButton.buttonType", "help");
-			helpButton.putClientProperty("helpData", helpData);
-			helpButton.addActionListener(helpListener);
-			if (helpText != null) {
-				helpButton.setToolTipText(helpText);
-			}
-			helpButton.putClientProperty("help.link", Boolean.TRUE);
-			return helpButton;
+			helpButton.addActionListener(actionListener);
+			returnValue = helpButton;
 		} else {
 			if (helpText == null)
 				helpText = DialogFooter.strings
 						.getString("dialogHelpLearnMore");
 			JLink helpLink = new JLink(helpText);
-			helpLink.putClientProperty("helpData", helpData);
-			helpLink.addActionListener(helpListener);
-			helpLink.putClientProperty("help.link", Boolean.TRUE);
-			return helpLink;
+			helpLink.addActionListener(actionListener);
+			returnValue = helpLink;
 		}
+		if (tooltipText != null) {
+			returnValue.setToolTipText(tooltipText);
+		}
+		return returnValue;
 	}
 
 }

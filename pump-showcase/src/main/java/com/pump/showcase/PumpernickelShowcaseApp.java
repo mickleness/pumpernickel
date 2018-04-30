@@ -10,22 +10,40 @@
  */
 package com.pump.showcase;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 
 import com.pump.awt.ClickSensitivityDemo;
 import com.pump.debug.AWTMonitorDemo;
 import com.pump.desktop.DesktopApplication;
 import com.pump.geom.AreaXTestPanel;
 import com.pump.geom.knot.KnotDemo;
+import com.pump.swing.HelpComponent;
+import com.pump.swing.JFancyBox;
 import com.pump.swing.ListSectionContainer;
 import com.pump.swing.SectionContainer.Section;
 
@@ -52,6 +70,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		STRETCH_TO_FIT, SCROLLPANE
 	}
 
+	JTextField searchField = new JTextField();
 	ListSectionContainer sectionContainer = new ListSectionContainer(true);
 
 	public PumpernickelShowcaseApp() {
@@ -60,8 +79,12 @@ public class PumpernickelShowcaseApp extends JFrame {
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
-		c.weighty = 1;
+		c.weighty = 0;
 		c.fill = GridBagConstraints.BOTH;
+		// TODO:
+		// getContentPane().add(searchField, c);
+		c.gridy++;
+		c.weighty = 1;
 		getContentPane().add(sectionContainer, c);
 
 		getContentPane().setPreferredSize(new Dimension(800, 600));
@@ -161,6 +184,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 	private void addSection(String id, String text, JComponent component,
 			Layout layout) {
+		if (component instanceof ShowcaseDemo) {
+			ShowcaseDemo d = (ShowcaseDemo) component;
+			component = wrapDemo(component, d.getTitle(), d.getHelpURL());
+		}
 		Section section = sectionContainer.addSection(id, text);
 		JPanel body = section.getBody();
 		if (layout == Layout.STRETCH_TO_FIT) {
@@ -185,5 +212,124 @@ public class PumpernickelShowcaseApp extends JFrame {
 					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			body.add(scrollPane, c);
 		}
+	}
+
+	private JComponent wrapDemo(JComponent component, String title,
+			final URL helpURL) {
+		ActionListener actionListener = new ActionListener() {
+			JScrollPane scrollPane;
+			JFancyBox box;
+			JEditorPane textPane;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (scrollPane == null) {
+					textPane = new JEditorPane();
+					scrollPane = new JScrollPane(textPane);
+					textPane.setEditable(false);
+					HTMLEditorKit kit = new HTMLEditorKit();
+					textPane.setEditorKit(kit);
+					JScrollPane scrollPane = new JScrollPane(textPane);
+					StyleSheet styleSheet = kit.getStyleSheet();
+
+					styleSheet
+							.addRule("body {  padding: 2em 1em 2em 2em;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
+
+					styleSheet
+							.addRule("h1, h2, h3, h4, h5, h6 { text-align: left }");
+					styleSheet.addRule("h1, h2, h3 { color: #005a9c }");
+					styleSheet.addRule("h1 { font: 160% sans-serif }");
+					styleSheet.addRule("h2 { font: 140% sans-serif }");
+					styleSheet.addRule("h3 { font: 120% sans-serif }");
+					styleSheet.addRule("h4 { font: bold 100% sans-serif }");
+					styleSheet.addRule("h5 { font: italic 100% sans-serif }");
+					styleSheet
+							.addRule("h6 { font: small-caps 100% sans-serif }");
+
+					textPane.addHyperlinkListener(new HyperlinkListener() {
+						public void hyperlinkUpdate(HyperlinkEvent e) {
+							if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+								URL url = e.getURL();
+								String str = e.getDescription();
+								if (str != null && str.startsWith("resource:")) {
+									str = str.substring("resource:".length());
+									box.setVisible(false);
+									searchField.setText(str);
+									return;
+								}
+								try {
+									Desktop.getDesktop().browse(url.toURI());
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								} catch (URISyntaxException e1) {
+									e1.printStackTrace();
+								}
+							}
+						}
+					});
+
+					updatePreferredSize();
+					PumpernickelShowcaseApp.this
+							.addComponentListener(new ComponentAdapter() {
+
+								@Override
+								public void componentResized(ComponentEvent e) {
+									updatePreferredSize();
+								}
+
+							});
+
+					try {
+						textPane.setPage(helpURL);
+						box = new JFancyBox(PumpernickelShowcaseApp.this,
+								scrollPane);
+					} catch (IOException e2) {
+						e2.printStackTrace();
+					}
+				}
+				box.setVisible(true);
+			}
+
+			private void updatePreferredSize() {
+				Dimension d = PumpernickelShowcaseApp.this.getSize();
+				d.width = Math.max(200, d.width - 100);
+				d.height = Math.max(200, d.height - 100);
+				scrollPane.setMinimumSize(d);
+				scrollPane.setPreferredSize(d);
+				textPane.setMinimumSize(d);
+				textPane.setPreferredSize(d);
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						box.getParent().revalidate();
+					}
+				});
+			}
+
+		};
+
+		JPanel replacement = new JPanel(new GridBagLayout());
+		JLabel header = new JLabel(title);
+		header.setFont(header.getFont().deriveFont(18f));
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(3, 3, 3, 3);
+		replacement.add(header, c);
+		JComponent jc = HelpComponent.createHelpComponent(actionListener, null,
+				null);
+		c.anchor = GridBagConstraints.EAST;
+		c.fill = GridBagConstraints.NONE;
+		replacement.add(jc, c);
+		c.gridy++;
+		c.fill = GridBagConstraints.BOTH;
+		replacement.add(new JSeparator(), c);
+		c.gridy++;
+		c.weighty = 1;
+		c.insets = new Insets(0, 0, 0, 0);
+		replacement.add(component, c);
+		return replacement;
 	}
 }

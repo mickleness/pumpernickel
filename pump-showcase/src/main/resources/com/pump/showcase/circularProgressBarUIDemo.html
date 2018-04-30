@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CircularProgressBarUI Demo</title>
+</head>
+<body>
+
+The&nbsp;<code>CircularProgressBarUI is a</code>&nbsp;<code>javax.swing.plaf.ProgressBarUI</code> that displays the progress of a <code>JProgressBar</code> as an arc than starts at the top of a circle and progresses clockwise.<br />
+<br />
+Let's assume you know all about <code>JProgressBar</code> methods like <code>getPercentComplete()</code>, <code>isIndeterminate()</code>, <code>isStringPainted()</code>, <code>getString()</code>, <code>getForeground()</code>, <code>getBackground()</code> and <code>getFont()</code>. What else do you need to know about this demo that may not be self-explanatory?<br />
+<ul>
+<li>The stroke width and the font size are automatically calculated based on the size of the JProgressBar. But if you don't like the default stroke width: there is a client property you can set to override it. (See the "Custom Stroke Width" control in this demo.)</li>
+<li>The pulse effect sets off a half-second animation when the progress bar reaches 100%. This helps draw the user's attention to the fact that the progress bar changed from incomplete to complete.</li>
+<li>The transition effect very quickly animates the arc as it increases its value. To see this in action: make sure you've turned off animation in the demo and manually use the "Value" spinner to change the size from 0 to 50.</li>
+<li>The spark effect sets off a small animation every two seconds if the progress bar's value doesn't change. If the user can't see any progress we need to offer them at least a small assurance that the UI isn't frozen.</li>
+<li>The accelerate effect changes the progress that's rendered (so a value of 50 may be rendered as a value of 25) to help give the illusion that the progress bar accelerates towards the end. This is based on a suggestion from <a href="https://www.smashingmagazine.com/2016/12/best-practices-for-animated-progress-indicators/">this article</a>:
+<blockquote>
+Keep in mind that perception can be just as important as raw speed. In order to make a progress bar feel faster to users you can start the progressive animation slower and allow it to move faster as it approaches the end. This way, you give users a rapid sense of completion time.&nbsp;</blockquote>
+</li>
+</ul>
+There are several great articles further discussing the UX implications of progress feedback. For this project I consulted <a href="https://usersnap.com/blog/progress-indicators/">this one</a>, <a href="https://medium.muz.li/how-progress-bars-or-loaders-impacts-the-user-experience-5082370f810b">this one</a>,&nbsp;<a href="https://material.io/guidelines/components/progress-activity.html#">this one</a>&nbsp;and <a href="https://www.nngroup.com/articles/progress-indicators/">this one</a>. (And I don't know what to make of <a href="http://mercury.io/blog/the-psychology-of-waiting-loading-animations-and-facebook">this one</a>, but it's very interesting!)<br />
+<br />
+p.s. An indeterminate circular JProgressBar is effectively a <a href="resource:JThrobber">JThrobber</a>. Also remember on Mac you can <a href="https://developer.apple.com/library/content/technotes/tn2007/tn2196.html#JPROGRESSBAR_STYLE">set the client property "JProgressBar.style" to "circular"</a> on a JProgressBar to get the default Mac throbber.<br />
+
+
+</body>
+</html>
