@@ -12,6 +12,8 @@ package com.pump.util;
 
 import java.security.AccessControlException;
 
+import javax.swing.UIManager;
+
 import com.pump.reflect.Reflection;
 
 /**
@@ -185,5 +187,12 @@ public class JVM {
 			}
 			throw t;
 		}
+	}
+
+	/**
+	 * Return true if the current L&F is Aqua.
+	 */
+	public static boolean isAqua() {
+		return "Aqua".equals(UIManager.getLookAndFeel().getID());
 	}
 }

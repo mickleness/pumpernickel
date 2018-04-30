@@ -33,6 +33,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
 import com.pump.geom.TransformUtils;
+import com.pump.util.JVM;
 
 /**
  * This ProgressBarUI renders as a circle. The rendering model used will stretch
@@ -42,9 +43,9 @@ import com.pump.geom.TransformUtils;
  * 12x12), but the text become illegible so it shouldn't be used with
  * {@link javax.swing.JProgressBar#isStringPainted() isStringPainted()}.
  * <p>
- * Opinions on progress indicators are wide and varied (try googling
- * "UX progress indicator"). One <a
- * href="https://www.nngroup.com/articles/progress-indicators/">article</a>
+ * Opinions on progress indicators are wide and varied (try googling "UX
+ * progress indicator"). One
+ * <a href="https://www.nngroup.com/articles/progress-indicators/">article</a>
  * summed up: <blockquote> The main guideline is to use a looped indicator for
  * delays of 2–9 seconds and a percent-done indicator for delays of 10 seconds
  * or more. </blockquote>
@@ -79,36 +80,36 @@ import com.pump.geom.TransformUtils;
  * <p>
  * The indeterminate UI loops every 500 ms. <a href=
  * "https://medium.muz.li/how-progress-bars-or-loaders-impacts-the-user-experience-5082370f810b"
- * >This article</a> points out that indeterminate progress bars
- * "are looped so they should be a tad faster in terms of speed, which psychologically makes user think data is getting loaded faster and makes them to have more patience."
+ * >This article</a> points out that indeterminate progress bars "are looped so
+ * they should be a tad faster in terms of speed, which psychologically makes
+ * user think data is getting loaded faster and makes them to have more
+ * patience."
  * <p>
  * <h3>Optional Features</h3> This UI offers a few additional features you can
  * configure using client properties.
  * <p>
- * <h4>Pulse On Completion</h4>
- * The {@link #PROPERTY_PULSE_COMPLETION_ACTIVE} client property maps to a
- * boolean. When this is true and the progress bar reaches 100%, this UI pulses
- * the thickness of the circle in a half-second animation. This helps to draw
- * attention to the progress bar (since it just changed from "incomplete" to
- * "complete") in a fun/celebratory way. If undefined this is assumed to be
- * true.
- * <h4>Spark Active</h4>
- * The {@link #PROPERTY_SPARK_ACTIVE} client property maps to a boolean. When
- * this is true and two seconds have passed since the last time the progress bar
- * changed value: s small (20-degree) "spark" runs from the edge of the
- * foreground counter-clockwise to the origin. The intention here is to offer
- * some (any!) animation to reassure the user that the UI is not frozen. In an
- * ideal world all our progress bars will take less than a few seconds, but if
- * they must take a long time then we need to reassure the user that we're still
- * responsive and nothing is wrong. If undefined this is assumed to be true.
- * <h4>Acceleration</h4>
- * The {@link #PROPERTY_ACCELERATE} client property maps to a boolean. When this
- * is true this gives the illusion of slower progress initially that accelerates
- * as it approaches completion. (I recommend watching a demo of this feature,
- * because the text description is hard to explain.) If the actual value of the
- * progress bar is accelerating linearly from v=0 to v=1, this renders the value
- * of the progress bar as (v^2) or (v^3). So at 50% we're rendering the progress
- * bar as closer to 25%.
+ * <h4>Pulse On Completion</h4> The {@link #PROPERTY_PULSE_COMPLETION_ACTIVE}
+ * client property maps to a boolean. When this is true and the progress bar
+ * reaches 100%, this UI pulses the thickness of the circle in a half-second
+ * animation. This helps to draw attention to the progress bar (since it just
+ * changed from "incomplete" to "complete") in a fun/celebratory way. If
+ * undefined this is assumed to be true.
+ * <h4>Spark Active</h4> The {@link #PROPERTY_SPARK_ACTIVE} client property maps
+ * to a boolean. When this is true and two seconds have passed since the last
+ * time the progress bar changed value: s small (20-degree) "spark" runs from
+ * the edge of the foreground counter-clockwise to the origin. The intention
+ * here is to offer some (any!) animation to reassure the user that the UI is
+ * not frozen. In an ideal world all our progress bars will take less than a few
+ * seconds, but if they must take a long time then we need to reassure the user
+ * that we're still responsive and nothing is wrong. If undefined this is
+ * assumed to be true.
+ * <h4>Acceleration</h4> The {@link #PROPERTY_ACCELERATE} client property maps
+ * to a boolean. When this is true this gives the illusion of slower progress
+ * initially that accelerates as it approaches completion. (I recommend watching
+ * a demo of this feature, because the text description is hard to explain.) If
+ * the actual value of the progress bar is accelerating linearly from v=0 to
+ * v=1, this renders the value of the progress bar as (v^2) or (v^3). So at 50%
+ * we're rendering the progress bar as closer to 25%.
  * <p>
  * This idea is based on an idea put forward in <a href=
  * "https://www.smashingmagazine.com/2016/12/best-practices-for-animated-progress-indicators/"
@@ -146,8 +147,7 @@ import com.pump.geom.TransformUtils;
 public class CircularProgressBarUI extends BasicProgressBarUI {
 
 	/*
-	 * Looking for something simpler? Check out:
-	 * https://java-swing-tips.blogspot
+	 * Looking for something simpler? Check out: https://java-swing-tips.blogspot
 	 * .com/2014/06/how-to-create-circular-progress.html
 	 */
 
@@ -158,47 +158,41 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 * This client property maps to a Boolean indicating whether this UI should
 	 * pulse when we reach 100%. If undefined this is assumed to be true.
 	 */
-	public static final String PROPERTY_PULSE_COMPLETION_ACTIVE = CircularProgressBarUI.class
-			.getName() + "#pulseCompletion";
+	public static final String PROPERTY_PULSE_COMPLETION_ACTIVE = CircularProgressBarUI.class.getName()
+			+ "#pulseCompletion";
 	/**
 	 * This client property maps to a Boolean indicating whether this UI should
 	 * paint a subtle "spark" animation when the JProgressBar doesn't show any
 	 * activity for 2 seconds. If undefined this is assumed to be true.
 	 */
-	public static final String PROPERTY_SPARK_ACTIVE = CircularProgressBarUI.class
-			.getName() + "#sparkActive";
+	public static final String PROPERTY_SPARK_ACTIVE = CircularProgressBarUI.class.getName() + "#sparkActive";
 	/**
 	 * This client property maps to a Boolean indicating whether this UI should
-	 * render the progress bar's completion in an accelerated graph. If
-	 * undefined this is assumed to be false.
+	 * render the progress bar's completion in an accelerated graph. If undefined
+	 * this is assumed to be false.
 	 */
-	public static final String PROPERTY_ACCELERATE = CircularProgressBarUI.class
-			.getName() + "#accelerate";
+	public static final String PROPERTY_ACCELERATE = CircularProgressBarUI.class.getName() + "#accelerate";
 
 	/**
 	 * This client property maps to a Boolean indicating whether this UI should
-	 * animate transitions between different progress bar values. For example,
-	 * if you jump from a progress bar value of 5 to 15, if this is true then
-	 * the UI will animate in-between values. If undefined this is assumed to be
-	 * true.
+	 * animate transitions between different progress bar values. For example, if
+	 * you jump from a progress bar value of 5 to 15, if this is true then the UI
+	 * will animate in-between values. If undefined this is assumed to be true.
 	 */
-	public static final String PROPERTY_TRANSITION = CircularProgressBarUI.class
-			.getName() + "#transition";
+	public static final String PROPERTY_TRANSITION = CircularProgressBarUI.class.getName() + "#transition";
 	/**
-	 * This client property maps to a Number indicating the stroke width the
-	 * arcs should use. By default this UI calculates a "reasonable" stroke
-	 * width based on the radius of the circle, but this property lets you
-	 * override that default.
+	 * This client property maps to a Number indicating the stroke width the arcs
+	 * should use. By default this UI calculates a "reasonable" stroke width based
+	 * on the radius of the circle, but this property lets you override that
+	 * default.
 	 */
-	public static final String PROPERTY_STROKE_WIDTH = CircularProgressBarUI.class
-			.getName() + "#strokeWidth";
+	public static final String PROPERTY_STROKE_WIDTH = CircularProgressBarUI.class.getName() + "#strokeWidth";
 
-	private static final String PROPERTY_LAST_RENDERED_VALUE = CircularProgressBarUI.class
-			.getName() + "#lastRenderedValue";
-	private static final String PROPERTY_SPARK_ANGLE = CircularProgressBarUI.class
-			.getName() + "#sparkPosition";
-	private static final String PROPERTY_STROKE_MULTIPLIER = CircularProgressBarUI.class
-			.getName() + "#strokeMultiplier";
+	private static final String PROPERTY_LAST_RENDERED_VALUE = CircularProgressBarUI.class.getName()
+			+ "#lastRenderedValue";
+	private static final String PROPERTY_SPARK_ANGLE = CircularProgressBarUI.class.getName() + "#sparkPosition";
+	private static final String PROPERTY_STROKE_MULTIPLIER = CircularProgressBarUI.class.getName()
+			+ "#strokeMultiplier";
 
 	/**
 	 * The degrees the spark spans.
@@ -206,23 +200,25 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	private static final int SPARK_EXTENT = 20;
 
 	private static Color getDefaultForegroundColor() {
-		Color c = UIManager.getColor("controlHighlight");
+		// weird: why is ProgressBar.foreground in Aqua black? That's no good.
+		String propertyName = JVM.isAqua() ? "controlHighlight" : "ProgressBar.foreground";
+		Color c = UIManager.getColor(propertyName);
 		if (c == null)
 			c = new Color(0x3b5cfc);
 		return c;
 	}
 
 	private static Color getDefaultBackgroundColor() {
-		Color c = UIManager
-				.getColor("TextComponent.selectionBackgroundInactive");
+		String propertyName = JVM.isAqua() ? "TextComponent.selectionBackgroundInactive" : "ProgressBar.shadow";
+		Color c = UIManager.getColor(propertyName);
 		if (c == null)
 			c = new Color(0xdcdcdc);
 		return c;
 	}
 
 	/**
-	 * When we first reach completion this listener initiates a .5 second
-	 * animation to pulse the stroke width.
+	 * When we first reach completion this listener initiates a .5 second animation
+	 * to pulse the stroke width.
 	 */
 	ChangeListener pulseChangeListener = new ChangeListener() {
 		boolean wasComplete = false;
@@ -234,13 +230,11 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 				long elapsed = System.currentTimeMillis() - pulseStartTime;
 				float f = ((float) elapsed) / 500f;
 				if (f >= 1) {
-					progressBar.putClientProperty(PROPERTY_STROKE_MULTIPLIER,
-							null);
+					progressBar.putClientProperty(PROPERTY_STROKE_MULTIPLIER, null);
 					pulseCompletionTimer.stop();
 				} else {
 					double m = (1 + .3 * Math.sin(4 * Math.PI * f) * (1 - f));
-					progressBar
-							.putClientProperty(PROPERTY_STROKE_MULTIPLIER, m);
+					progressBar.putClientProperty(PROPERTY_STROKE_MULTIPLIER, m);
 				}
 			}
 
@@ -262,8 +256,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		}
 
 		private boolean isPulseCompletionActive() {
-			Boolean b = (Boolean) progressBar
-					.getClientProperty(PROPERTY_PULSE_COMPLETION_ACTIVE);
+			Boolean b = (Boolean) progressBar.getClientProperty(PROPERTY_PULSE_COMPLETION_ACTIVE);
 			if (b == null)
 				return true;
 			return b;
@@ -294,27 +287,22 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					long elapsed = System.currentTimeMillis() - sparkStartTime;
-					int r = Math.min(progressBar.getWidth(),
-							progressBar.getHeight()) / 2;
-					float duration = (float) (250 + r * 2 + progressBar
-							.getPercentComplete() * 300);
+					int r = Math.min(progressBar.getWidth(), progressBar.getHeight()) / 2;
+					float duration = (float) (250 + r * 2 + progressBar.getPercentComplete() * 300);
 					float f = ((float) elapsed) / duration;
 					if (f >= 1) {
-						progressBar.putClientProperty(PROPERTY_SPARK_ANGLE,
-								null);
+						progressBar.putClientProperty(PROPERTY_SPARK_ANGLE, null);
 						moveSparkTimer.stop();
 					} else {
 						int newValue = (int) (sparkStartValue * (1 - f));
-						progressBar.putClientProperty(PROPERTY_SPARK_ANGLE,
-								newValue);
+						progressBar.putClientProperty(PROPERTY_SPARK_ANGLE, newValue);
 					}
 				}
 
 			});
 
 			private void initiateSpark() {
-				int angle = sparkStartValue = (int) (progressBar
-						.getPercentComplete() * 360 + SPARK_EXTENT);
+				int angle = sparkStartValue = (int) (progressBar.getPercentComplete() * 360 + SPARK_EXTENT);
 				sparkStartTime = System.currentTimeMillis();
 				progressBar.putClientProperty(PROPERTY_SPARK_ANGLE, angle);
 				moveSparkTimer.restart();
@@ -334,8 +322,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		}
 
 		private boolean isSparkActive() {
-			Boolean b = (Boolean) progressBar
-					.getClientProperty(PROPERTY_SPARK_ACTIVE);
+			Boolean b = (Boolean) progressBar.getClientProperty(PROPERTY_SPARK_ACTIVE);
 			if (b == null)
 				return true;
 			return b;
@@ -373,38 +360,29 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		c.setOpaque(false);
 		progressBar.addChangeListener(pulseChangeListener);
 		progressBar.addChangeListener(sparkChangeListener);
-		progressBar.addPropertyChangeListener(PROPERTY_STROKE_MULTIPLIER,
-				repaintListener);
-		progressBar.addPropertyChangeListener(PROPERTY_SPARK_ANGLE,
-				repaintListener);
-		progressBar.addPropertyChangeListener(PROPERTY_ACCELERATE,
-				repaintListener);
-		progressBar.addPropertyChangeListener(PROPERTY_STROKE_WIDTH,
-				repaintListener);
+		progressBar.addPropertyChangeListener(PROPERTY_STROKE_MULTIPLIER, repaintListener);
+		progressBar.addPropertyChangeListener(PROPERTY_SPARK_ANGLE, repaintListener);
+		progressBar.addPropertyChangeListener(PROPERTY_ACCELERATE, repaintListener);
+		progressBar.addPropertyChangeListener(PROPERTY_STROKE_WIDTH, repaintListener);
+		progressBar.setBorder(null);
 	}
 
 	@Override
 	public void uninstallUI(JComponent c) {
 		progressBar.removeChangeListener(pulseChangeListener);
 		progressBar.removeChangeListener(sparkChangeListener);
-		progressBar.removePropertyChangeListener(PROPERTY_STROKE_MULTIPLIER,
-				repaintListener);
-		progressBar.removePropertyChangeListener(PROPERTY_SPARK_ANGLE,
-				repaintListener);
-		progressBar.removePropertyChangeListener(PROPERTY_ACCELERATE,
-				repaintListener);
-		progressBar.removePropertyChangeListener(PROPERTY_STROKE_WIDTH,
-				repaintListener);
+		progressBar.removePropertyChangeListener(PROPERTY_STROKE_MULTIPLIER, repaintListener);
+		progressBar.removePropertyChangeListener(PROPERTY_SPARK_ANGLE, repaintListener);
+		progressBar.removePropertyChangeListener(PROPERTY_ACCELERATE, repaintListener);
+		progressBar.removePropertyChangeListener(PROPERTY_STROKE_WIDTH, repaintListener);
 		super.uninstallUI(c);
 	}
 
 	@Override
 	public void paint(Graphics g0, JComponent c) {
 		Graphics2D g = (Graphics2D) g0;
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
-				RenderingHints.VALUE_STROKE_PURE);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
 		Insets i = progressBar.getInsets();
 
@@ -434,25 +412,21 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	/**
 	 * Paint the indeterminate state of this UI.
 	 * <p>
-	 * This integrates System.currentTimeMillis() into its calculations, so
-	 * every invocation will be slightly different.
+	 * This integrates System.currentTimeMillis() into its calculations, so every
+	 * invocation will be slightly different.
 	 */
-	protected void paintIndeterminate(Graphics2D g, int radius,
-			float strokeWidth, int centerX, int centerY) {
+	protected void paintIndeterminate(Graphics2D g, int radius, float strokeWidth, int centerX, int centerY) {
 		for (int degree = 0; degree < 360; degree += 60) {
 			Color color = progressBar.getForeground();
 
 			long period = 500;
-			float k = ((float) (System.currentTimeMillis() % period))
-					/ ((float) period) + ((float) degree) / 360;
+			float k = ((float) (System.currentTimeMillis() % period)) / ((float) period) + ((float) degree) / 360;
 			k = k % 1;
 			int alpha = (int) (255 - 255 * k);
-			color = new Color(color.getRed(), color.getGreen(),
-					color.getBlue(), alpha);
+			color = new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
 			int z = degree + (int) ((1 - k) * 30);
-			paintArc(g, color, centerX, centerY, z, 30, radius - strokeWidth
-					* k / 2 - strokeWidth / 2, strokeWidth
-					* ((1 - k) / 4 + .75f));
+			paintArc(g, color, centerX, centerY, z, 30, radius - strokeWidth * k / 2 - strokeWidth / 2,
+					strokeWidth * ((1 - k) / 4 + .75f));
 		}
 	}
 
@@ -460,13 +434,11 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 * Paint the determinate state of this UI.
 	 * <p>
 	 * This doesn't rely on System.currentTimeMillis(), but it can invoke
-	 * <code>progressBar.repaint()</code> if the transition property is active,
-	 * so subsequent invocations may produce different results.
+	 * <code>progressBar.repaint()</code> if the transition property is active, so
+	 * subsequent invocations may produce different results.
 	 */
-	protected void paintDeterminate(Graphics2D g, int radius,
-			float strokeWidth, int centerX, int centerY) {
-		Number multiplier = (Number) progressBar
-				.getClientProperty(PROPERTY_STROKE_MULTIPLIER);
+	protected void paintDeterminate(Graphics2D g, int radius, float strokeWidth, int centerX, int centerY) {
+		Number multiplier = (Number) progressBar.getClientProperty(PROPERTY_STROKE_MULTIPLIER);
 		if (multiplier != null)
 			strokeWidth = strokeWidth * multiplier.floatValue();
 
@@ -474,10 +446,8 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 
 		double v = progressBar.getPercentComplete();
 		if (isActive(PROPERTY_TRANSITION, true)) {
-			Number lastRenderedValue = (Number) progressBar
-					.getClientProperty(PROPERTY_LAST_RENDERED_VALUE);
-			if (lastRenderedValue != null
-					&& v > lastRenderedValue.doubleValue()) {
+			Number lastRenderedValue = (Number) progressBar.getClientProperty(PROPERTY_LAST_RENDERED_VALUE);
+			if (lastRenderedValue != null && v > lastRenderedValue.doubleValue()) {
 				double oldV = v;
 				if (v > lastRenderedValue.doubleValue()) {
 					v = Math.min(lastRenderedValue.doubleValue() + .0025, v);
@@ -494,13 +464,11 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 			v = Math.pow(v, 2.5);
 		}
 		double extent = v * 360;
-		paintArc(g, progressBar.getForeground(), centerX, centerY, 0, extent,
-				radius - strokeWidth / 2, strokeWidth);
-		paintArc(g, progressBar.getBackground(), centerX, centerY, extent,
-				360 - extent, radius - strokeWidth / 2, strokeWidth);
+		paintArc(g, progressBar.getForeground(), centerX, centerY, 0, extent, radius - strokeWidth / 2, strokeWidth);
+		paintArc(g, progressBar.getBackground(), centerX, centerY, extent, 360 - extent, radius - strokeWidth / 2,
+				strokeWidth);
 
-		Number sparkAngle = (Number) progressBar
-				.getClientProperty(PROPERTY_SPARK_ANGLE);
+		Number sparkAngle = (Number) progressBar.getClientProperty(PROPERTY_SPARK_ANGLE);
 		if (sparkAngle != null) {
 			int a1 = sparkAngle.intValue();
 			int a2 = sparkAngle.intValue() - SPARK_EXTENT;
@@ -508,28 +476,25 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 			int b2 = (int) Math.max(0, Math.min(extent, a2));
 			if (b2 >= 0) {
 				Color sparkColor = new Color(0xddffffff, true);
-				paintArc(g, sparkColor, centerX, centerY, b1, b2 - b1, radius
-						- strokeWidth / 2, strokeWidth);
+				paintArc(g, sparkColor, centerX, centerY, b1, b2 - b1, radius - strokeWidth / 2, strokeWidth);
 			}
 		}
 
 		if (progressBar.isStringPainted()) {
 			Font font = progressBar.getFont();
 			font = font.deriveFont(((float) radius) / 2f);
-			PlafPaintUtils.paintCenteredString(g, progressBar.getString(),
-					font, centerX, centerY);
+			PlafPaintUtils.paintCenteredString(g, progressBar.getString(), font, centerX, centerY);
 		}
 	}
 
 	/**
 	 * Return the stroke width.
 	 * <P>
-	 * This first checks to see if the user has defined a custom width, and if
-	 * not the width is derived based on the diameter.
+	 * This first checks to see if the user has defined a custom width, and if not
+	 * the width is derived based on the diameter.
 	 */
 	protected float getStrokeWidth(int diameter) {
-		Number n = (Number) progressBar
-				.getClientProperty(PROPERTY_STROKE_WIDTH);
+		Number n = (Number) progressBar.getClientProperty(PROPERTY_STROKE_WIDTH);
 		float f;
 		if (n == null) {
 			f = ((float) diameter) / 10f + 1;
@@ -545,8 +510,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 * Return true if a property with the given name is active.
 	 * 
 	 * @param defaultValue
-	 *            the default state of this property if the client property is
-	 *            null.
+	 *            the default state of this property if the client property is null.
 	 */
 	protected boolean isActive(String propertyName, boolean defaultValue) {
 		Boolean b = (Boolean) progressBar.getClientProperty(propertyName);
@@ -563,11 +527,11 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	}
 
 	/**
-	 * This paints a portion of the edge of the circle. Degrees are interpreted
-	 * in a clockwise orientation from the top of the circle. (That is: 0
-	 * degrees is the 12:00 position, 90 degrees is the 3:00 position, 180
-	 * degrees is the 6:00 position, 270 degrees is the 9:00 position, and 360
-	 * degrees is a complete arc back a the 12:00 position.)
+	 * This paints a portion of the edge of the circle. Degrees are interpreted in a
+	 * clockwise orientation from the top of the circle. (That is: 0 degrees is the
+	 * 12:00 position, 90 degrees is the 3:00 position, 180 degrees is the 6:00
+	 * position, 270 degrees is the 9:00 position, and 360 degrees is a complete arc
+	 * back a the 12:00 position.)
 	 * 
 	 * @param g
 	 *            the Graphics2D to paint to.
@@ -586,18 +550,15 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 * @param strokeWidth
 	 *            the stroke width
 	 */
-	protected void paintArc(Graphics2D g, Color color, double centerX,
-			double centerY, double startAngle, double extent, double radius,
-			float strokeWidth) {
+	protected void paintArc(Graphics2D g, Color color, double centerX, double centerY, double startAngle, double extent,
+			double radius, float strokeWidth) {
 		g = (Graphics2D) g.create();
 		g.transform(TransformUtils.flipHorizontal(centerX));
 		g.rotate(-Math.PI / 2, centerX, centerY);
 		g.setPaint(color);
-		Arc2D progressArc = new Arc2D.Double(centerX - radius,
-				centerY - radius, radius * 2, radius * 2, startAngle, extent,
-				Arc2D.OPEN);
-		g.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_MITER, 10));
+		Arc2D progressArc = new Arc2D.Double(centerX - radius, centerY - radius, radius * 2, radius * 2, startAngle,
+				extent, Arc2D.OPEN);
+		g.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10));
 		g.draw(progressArc);
 		g.dispose();
 	}
