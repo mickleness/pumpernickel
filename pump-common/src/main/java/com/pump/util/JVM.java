@@ -190,7 +190,7 @@ public class JVM {
 	}
 
 	/**
-	 * Return true if the current L&F is Aqua.
+	 * Return true if the current L&amp;F is Aqua.
 	 */
 	public static boolean isAqua() {
 		return "Aqua".equals(UIManager.getLookAndFeel().getID());
