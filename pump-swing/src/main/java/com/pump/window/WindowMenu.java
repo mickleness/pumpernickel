@@ -14,6 +14,8 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -116,16 +118,23 @@ public class WindowMenu extends JMenu {
 		JMenuBar mb = f.getJMenuBar();
 		if (mb != null) {
 			JMenu[] menus = new JMenu[mb.getMenuCount()];
-			int i = -1;
 			for (int a = 0; a < menus.length; a++) {
 				menus[a] = mb.getMenu(a);
-				if (menus[a] == menu)
-					i = a;
+			}
 
-				if (i != -1) {
-					mb.remove(i);
-					mb.add(menus[a]);
+			boolean found = false;
+			List<JMenu> menusToAdd = new ArrayList<>();
+			for (int a = 0; a < menus.length; a++) {
+				if (menus[a] == menu)
+					found = true;
+
+				if (found) {
+					mb.remove(menus[a]);
+					menusToAdd.add(menus[a]);
 				}
+			}
+			for (JMenu menuToAdd : menusToAdd) {
+				mb.add(menuToAdd);
 			}
 		}
 	}
@@ -177,7 +186,7 @@ public class WindowMenu extends JMenu {
 	 * @param extraItems
 	 *            an optional array of extra items to put in this menu.
 	 * */
-	public WindowMenu(JFrame frame, JMenuItem[] extraItems) {
+	public WindowMenu(JFrame frame, JMenuItem... extraItems) {
 		super("Window");
 		minimizeItem.addActionListener(actionListener);
 		bringItem.addActionListener(actionListener);

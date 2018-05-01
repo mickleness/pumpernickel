@@ -20,6 +20,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.TexturePaint;
 import java.awt.event.ComponentAdapter;
@@ -53,50 +54,40 @@ public class MagnificationPanel extends JComponent {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			repaint(e);
+			refresh();
 		}
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			repaint(e);
+			refresh();
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			repaint(e);
+			refresh();
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			repaint(e);
+			refresh();
 		}
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			repaint(e);
+			refresh();
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			repaint(e);
+			refresh();
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			repaint(e);
-		}
-
-		private void repaint(MouseEvent e) {
-			Point p = SwingUtilities.convertPoint(e.getComponent(),
-					e.getPoint(), zoomedComponent);
-			mouseX = p.x;
-			mouseY = p.y;
 			refresh();
 		}
 	};
 
-	int mouseX = -1;
-	int mouseY = -1;
 	int pixelSize;
 	Component zoomedComponent;
 	BufferedImage scratchImage;
@@ -245,22 +236,29 @@ public class MagnificationPanel extends JComponent {
 		putClientProperty(PIXELATED_KEY, b);
 	}
 
+	protected Point getMouseLoc() {
+		Point p = MouseInfo.getPointerInfo().getLocation();
+		SwingUtilities.convertPointFromScreen(p, zoomedComponent);
+		return p;
+	}
+
 	/** Regenerate the zoomed image data and repaint this panel. */
 	public void refresh() {
 		if (scratchImage == null)
 			return;
+		Point mouseLoc = getMouseLoc();
 
 		Graphics2D g = scratchImage.createGraphics();
 		g.setComposite(AlphaComposite.Clear);
 		g.fillRect(0, 0, scratchImage.getWidth(), scratchImage.getHeight());
 		g.setComposite(AlphaComposite.SrcOver);
-		g.translate(-mouseX + scratchImage.getWidth() / 2, -mouseY
+		g.translate(-mouseLoc.x + scratchImage.getWidth() / 2, -mouseLoc.y
 				+ scratchImage.getHeight() / 2);
 		zoomedComponent.paint(g);
 
-		boolean inside = mouseX >= 0 && mouseY >= 0
-				&& mouseX < zoomedComponent.getWidth()
-				&& mouseY < zoomedComponent.getHeight();
+		boolean inside = mouseLoc.x >= 0 && mouseLoc.y >= 0
+				&& mouseLoc.x < zoomedComponent.getWidth()
+				&& mouseLoc.y < zoomedComponent.getHeight();
 		textArea.setVisible(!inside);
 
 		repaint();
@@ -282,8 +280,9 @@ public class MagnificationPanel extends JComponent {
 							scratchImage.getHeight(), null);
 			} else {
 				g.scale(pixelSize, pixelSize);
-				g.translate(-mouseX + scratchImage.getWidth() / 2, -mouseY
-						+ scratchImage.getHeight() / 2);
+				Point mouseLoc = getMouseLoc();
+				g.translate(-mouseLoc.x + scratchImage.getWidth() / 2,
+						-mouseLoc.y + scratchImage.getHeight() / 2);
 
 				boolean resetToDoubleBuffered = false;
 				if (zoomedComponent instanceof JComponent) {

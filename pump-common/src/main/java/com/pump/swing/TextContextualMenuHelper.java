@@ -17,6 +17,9 @@ import javax.swing.text.JTextComponent;
 
 /**
  * Static methods relating to contextual menu for text components.
+ * 
+ * TODO: integrate with the desktop project's edit menu controls. Functionally
+ * this is easy; the hard part is the accompanying refactors.
  */
 public class TextContextualMenuHelper {
 

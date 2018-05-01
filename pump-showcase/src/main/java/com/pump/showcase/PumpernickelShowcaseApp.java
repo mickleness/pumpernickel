@@ -12,9 +12,12 @@ package com.pump.showcase;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -23,15 +26,22 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
@@ -40,12 +50,18 @@ import javax.swing.text.html.StyleSheet;
 import com.pump.awt.ClickSensitivityDemo;
 import com.pump.debug.AWTMonitorDemo;
 import com.pump.desktop.DesktopApplication;
+import com.pump.desktop.edit.EditCommand;
+import com.pump.desktop.edit.EditMenuControls;
 import com.pump.geom.AreaXTestPanel;
 import com.pump.geom.knot.KnotDemo;
+import com.pump.icon.button.MinimalDuoToneCloseIcon;
 import com.pump.swing.HelpComponent;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.ListSectionContainer;
+import com.pump.swing.MagnificationPanel;
 import com.pump.swing.SectionContainer.Section;
+import com.pump.window.WindowDragger;
+import com.pump.window.WindowMenu;
 
 public class PumpernickelShowcaseApp extends JFrame {
 
@@ -72,9 +88,98 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 	JTextField searchField = new JTextField();
 	ListSectionContainer sectionContainer = new ListSectionContainer(true);
+	JMenuBar menuBar = new JMenuBar();
+	JMenu editMenu = createEditMenu();
+	JMenu helpMenu = new JMenu("Help");
+	JCheckBoxMenuItem magnifierItem = new JCheckBoxMenuItem("Magnifier");
+
+	ActionListener magnifierListener = new ActionListener() {
+
+		JWindow magnifierWindow;
+		JButton closeButton = new JButton();
+		Timer repaintTimer;
+		MagnificationPanel p;
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (magnifierWindow == null) {
+				magnifierWindow = createWindow();
+			}
+			magnifierWindow.setVisible(magnifierItem.isSelected());
+		}
+
+		private JWindow createWindow() {
+			// TODO: this is OK for now, but eventually let's:
+			// 1. Update to a resizable dialog (the MagnificationPanel doesn't
+			// handle resizes yet.)
+			// 2. Support zooming in/out of the MagnificationPanel
+			// 3. Fix MagnificationPanel.setPixelated(false), offer
+			// checkbox/context menu to toggle
+
+			JWindow w = new JWindow(PumpernickelShowcaseApp.this);
+			// on Macs this gives the window a certain look, plus it hides
+			// the window when the app loses focus.
+			w.getRootPane().putClientProperty("Window.style", "small");
+			p = new MagnificationPanel(PumpernickelShowcaseApp.this, 40, 40, 4);
+			w.setLayout(new GridBagLayout());
+			w.setAlwaysOnTop(true);
+			w.setLocationRelativeTo(PumpernickelShowcaseApp.this);
+			new WindowDragger(p).setActive(true);
+			w.setFocusableWindowState(false);
+
+			closeButton.setIcon(new MinimalDuoToneCloseIcon(closeButton));
+			closeButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					magnifierItem.doClick();
+				}
+
+			});
+			closeButton.setContentAreaFilled(false);
+			closeButton.setBorderPainted(false);
+
+			GridBagConstraints c = new GridBagConstraints();
+			c.gridx = 0;
+			c.gridy = 0;
+			c.insets = new Insets(0, 0, 0, 0);
+			c.anchor = GridBagConstraints.NORTHWEST;
+			c.weightx = 0;
+			c.weighty = 0;
+			c.fill = GridBagConstraints.NONE;
+			w.add(closeButton, c);
+
+			c.insets = new Insets(0, 0, 0, 0);
+			c.weightx = 1;
+			c.weighty = 1;
+			c.fill = GridBagConstraints.BOTH;
+			w.add(p, c);
+
+			w.pack();
+
+			repaintTimer = new Timer(25, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					p.refresh();
+				}
+			});
+			repaintTimer.start();
+
+			return w;
+		}
+
+	};
 
 	public PumpernickelShowcaseApp() {
 		super("Pumpernickel Showcase");
+
+		setJMenuBar(menuBar);
+		menuBar.add(editMenu);
+		menuBar.add(new WindowMenu(this, magnifierItem));
+
+		// TODO: add help menu/about menu item
+		// menuBar.add(helpMenu);
+
+		magnifierItem.addActionListener(magnifierListener);
 
 		getContentPane().setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -184,6 +289,34 @@ public class PumpernickelShowcaseApp extends JFrame {
 		}
 	}
 
+	/**
+	 * Create an edit menu.
+	 * 
+	 * Admittedly: this current implementation doesn't actually achieve very
+	 * much. It's just a standard cut/copy/paste that is automatically enabled
+	 * for text components. The real purpose of this menu is to help legitimize
+	 * this window/menubar so this app doesn't feel like it's out of place.
+	 */
+	private JMenu createEditMenu() {
+		JMenu editMenu = new JMenu("Edit");
+		EditMenuControls editControls = new EditMenuControls(true, true, true,
+				true);
+		JMenuItem cutItem = new JMenuItem(
+				editControls.getAction(EditCommand.CUT));
+		JMenuItem copyItem = new JMenuItem(
+				editControls.getAction(EditCommand.COPY));
+		JMenuItem pasteItem = new JMenuItem(
+				editControls.getAction(EditCommand.PASTE));
+		JMenuItem selectAllItem = new JMenuItem(
+				editControls.getAction(EditCommand.SELECT_ALL));
+		editMenu.add(cutItem);
+		editMenu.add(copyItem);
+		editMenu.add(pasteItem);
+		editMenu.add(selectAllItem);
+
+		return editMenu;
+	}
+
 	private void addSection(String id, String text, JComponent component,
 			Layout layout) {
 		if (component instanceof ShowcaseDemo) {
@@ -226,7 +359,14 @@ public class PumpernickelShowcaseApp extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (scrollPane == null) {
-					textPane = new JEditorPane();
+					textPane = new JEditorPane() {
+						public void paint(Graphics g0) {
+							Graphics2D g = (Graphics2D) g0;
+							g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+									RenderingHints.VALUE_ANTIALIAS_ON);
+							super.paint(g);
+						}
+					};
 					scrollPane = new JScrollPane(textPane);
 					textPane.setEditable(false);
 					HTMLEditorKit kit = new HTMLEditorKit();
@@ -235,7 +375,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 					StyleSheet styleSheet = kit.getStyleSheet();
 
 					styleSheet
-							.addRule("body {  padding: 2em 1em 2em 2em;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
+							.addRule("body {  padding: 12em 12em 12em 12em;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
 
 					styleSheet
 							.addRule("h1, h2, h3, h4, h5, h6 { text-align: left }");

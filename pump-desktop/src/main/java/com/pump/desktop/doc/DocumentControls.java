@@ -19,23 +19,21 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
-import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.pump.desktop.GroupedControls;
 import com.pump.swing.RecentMenu;
 import com.pump.swing.RecentMenu.Listener;
 import com.pump.util.ObservableList;
 
-public class DocumentControls {
+public class DocumentControls extends GroupedControls {
 
 	/**
 	 * This client property of the JRootPane should map to a java.io.File. This
@@ -60,7 +58,6 @@ public class DocumentControls {
 
 	protected final ObservableList<Document> openDocuments = new ObservableList<>();
 	Document selectedDocument = null;
-	Map<String, AbstractAction> actionMap = new HashMap<>();
 
 	private ChangeListener validationChangeListener = new ChangeListener() {
 		@Override
@@ -96,15 +93,6 @@ public class DocumentControls {
 			refreshFrameProperties();
 		}
 	};
-
-	public void registerAction(AbstractAction action) {
-		String cmd = (String) action
-				.getValue(AbstractAction.ACTION_COMMAND_KEY);
-		AbstractAction oldValue = actionMap.put(cmd, action);
-		if (oldValue != null)
-			throw new IllegalStateException(
-					"Multiple actions registered for \"" + cmd + "\"");
-	}
 
 	/**
 	 * Refresh the {@link PROPERTY_DOCUMENT_FILE} and
@@ -337,14 +325,6 @@ public class DocumentControls {
 		if (fireChangeListeners) {
 			fireChangeListeners();
 		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T extends AbstractAction> T getAction(DocumentCommand<T> command) {
-		return (T) actionMap.get(command
-				.getValue(AbstractAction.ACTION_COMMAND_KEY));
-
 	}
 
 	/**
