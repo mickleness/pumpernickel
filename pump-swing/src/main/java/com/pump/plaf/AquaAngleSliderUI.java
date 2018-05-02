@@ -172,7 +172,7 @@ public class AquaAngleSliderUI extends AngleSliderUI {
 		g.translate(0, -1);
 
 		if (slider.hasFocus()) {
-			PlafPaintUtils.paintFocus(g, data.dial, 4);
+			PlafPaintUtils.paintFocus(g, data.dial, 3);
 		}
 
 		Paint[] p = (Paint[]) slider.getClientProperty(MY_CACHED_FILLS);
