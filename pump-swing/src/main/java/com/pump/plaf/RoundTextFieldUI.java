@@ -132,7 +132,10 @@ public class RoundTextFieldUI extends BasicTextFieldUI {
 	protected void paintBackground(Graphics g) {
 	}
 
-	protected void paintRealBackground(Graphics g) {
+	protected void paintRealBackground(Graphics g0) {
+		Graphics g = g0.create();
+		Insets i = getComponent().getInsets();
+		g.translate(i.left, i.top);
 		if (editor.isOpaque()) {
 			g.setColor(editor.getBackground());
 			g.fillRect(0, 0, editor.getWidth(), editor.getHeight());
@@ -175,7 +178,7 @@ public class RoundTextFieldUI extends BasicTextFieldUI {
 		if (includeSearchIcon()) {
 			searchIcon.paintIcon(
 					editor,
-					g,
+					g0,
 					editorRect.x - searchIcon.getIconWidth() - 4,
 					editorRect.y + 1 + editorRect.height / 2
 							- searchIcon.getIconHeight() / 2);
