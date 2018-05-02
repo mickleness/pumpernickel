@@ -13,7 +13,9 @@ package com.pump.swing;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
+import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -52,18 +54,51 @@ public class ListSectionContainer extends SectionContainer {
 	protected boolean autoSelectActive = true;
 
 	public ListSectionContainer(boolean alphabetize) {
-		super(alphabetize);
+		this(alphabetize, null, null);
+	}
 
+	/**
+	 * 
+	 * @param alphabetize
+	 * @param aboveList
+	 *            an optional component placed above the JList
+	 * @param belowList
+	 *            an optional component placed below the JList
+	 */
+	public ListSectionContainer(boolean alphabetize, JComponent aboveList,
+			JComponent belowList) {
+		super(alphabetize);
 		list = new JList<Section>(getSections().getListModelEDTMirror());
 		listScrollPane = new JScrollPane(list,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane,
+
+		JPanel leftHandSide = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(0, 0, 0, 0);
+		if (aboveList != null) {
+			leftHandSide.add(aboveList, c);
+		}
+		c.gridy++;
+		c.weighty = 1;
+		leftHandSide.add(listScrollPane, c);
+		c.gridy++;
+		c.weighty = 0;
+		if (belowList != null) {
+			leftHandSide.add(belowList, c);
+		}
+
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftHandSide,
 				content);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
