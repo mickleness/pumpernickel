@@ -36,9 +36,11 @@ import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.SliderUI;
 
 import com.pump.blog.Blurb;
+import com.pump.util.JVM;
 
 /**
  * This UI renders a <code>JSlider</code> as a circular dial, and then value of
@@ -54,6 +56,12 @@ import com.pump.blog.Blurb;
 		+ "Voila!  You have a GUI widget for angles.\n"
 		+ "<P>Comes in Aqua and non-Aqua flavors.", article = "http://javagraphics.blogspot.com/2008/05/angles-need-gui-widget-for-angles.html", imageName = "AngleSliderUI.png")
 public class AngleSliderUI extends SliderUI {
+
+	public static ComponentUI createUI(JComponent c) {
+		if (JVM.isAqua())
+			return new AquaAngleSliderUI();
+		return new AngleSliderUI();
+	}
 
 	/** Mutable data associated with each AngleSliderUI. */
 	protected static class Data {

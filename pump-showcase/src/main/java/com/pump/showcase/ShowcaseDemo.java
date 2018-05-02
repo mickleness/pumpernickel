@@ -19,7 +19,8 @@ public interface ShowcaseDemo {
 	public String getTitle();
 
 	/**
-	 * Return the optional URL of a html resource to display for additional reading.
+	 * Return the optional URL of a html resource to display for additional
+	 * reading.
 	 */
 	public URL getHelpURL();
 }

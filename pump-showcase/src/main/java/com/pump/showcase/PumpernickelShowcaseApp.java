@@ -197,91 +197,81 @@ public class PumpernickelShowcaseApp extends JFrame {
 		getContentPane().setPreferredSize(new Dimension(800, 600));
 
 		try {
-			addSection("transition2d", "Animation: Transitions (2D)",
-					new Transition2DDemo(), Layout.STRETCH_TO_FIT);
-			addSection("transition3d", "Animation: Transitions (3D)",
-					new Transition3DDemo(), Layout.STRETCH_TO_FIT);
-			addSection("brushedMetal", "Brushed Metal", new BrushedMetalDemo(),
+			addSection("Animation: Transitions (2D)", new Transition2DDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("bmpComparison", "BMP ImageIO Comparison",
-					new BmpComparisonDemo(), Layout.STRETCH_TO_FIT);
-			addSection("alphaComposite", "AlphaComposite",
-					new AlphaCompositeDemo(), Layout.STRETCH_TO_FIT);
-			addSection("bristleStroke", "Strokes: Bristle",
-					new BristleStrokeDemo(), Layout.STRETCH_TO_FIT);
-			addSection("brushStroke", "Strokes: Brush", new BrushStrokeDemo(),
+			addSection("Animation: Transitions (3D)", new Transition3DDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("calligraphyStroke", "Strokes: Calligraphy",
-					new CalligraphyStrokeDemo(), Layout.STRETCH_TO_FIT);
-			addSection("charcoalStroke", "Strokes: Charcoal",
-					new CharcoalStrokeDemo(), Layout.STRETCH_TO_FIT);
-			addSection("textEffectAnim", "Animation: Text Effect",
-					new TextEffectDemo(), Layout.STRETCH_TO_FIT);
-			addSection("awtMonitor", "AWT Monitor", new AWTMonitorDemo(),
+			addSection("Brushed Metal", new BrushedMetalDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("halftoneGradient", "Gradient: Halftone",
-					new HalftoneGradientDemo(), Layout.STRETCH_TO_FIT);
-			addSection("colorBandDemo", "Gradient: Color Band",
-					new ColorBandDemo(this), Layout.STRETCH_TO_FIT);
-			addSection("clickSensitivity", "Click Sensitivity",
-					new ClickSensitivityDemo(), Layout.STRETCH_TO_FIT);
-			addSection("shapeBounds", "Shape Bounds", new ShapeBoundsDemo(),
+			addSection("BMP ImageIO Comparison", new BmpComparisonDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("clipper", "Clipper", new ClipperDemo(),
+			addSection("AlphaComposite", new AlphaCompositeDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("angeSliderUI", "AngleSliderUI",
-					new AngleSliderUIDemo(), Layout.SCROLLPANE);
-			addSection("decoratedPanelUI", "DecoratedPanelUI",
-					new DecoratedPanelUIDemo(), Layout.STRETCH_TO_FIT);
-			addSection("spiral2D", "Shapes: Spiral2D", new Spiral2DDemo(),
+			addSection("Animation: Text Effect", new TextEffectDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("swingComponents", "Swing: Components",
-					new SwingComponentsDemo(), Layout.STRETCH_TO_FIT);
-			addSection("screenCapture", "Screen Capture",
-					new ScreenCaptureDemo(this), Layout.SCROLLPANE);
-			addSection("collapsibleContainer", "Swing: CollapsibleContainer",
+			addSection("AWT Monitor", new AWTMonitorDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Gradient: Halftone", new HalftoneGradientDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Gradient: Color Band", new ColorBandDemo(this),
+					Layout.STRETCH_TO_FIT);
+			addSection("Click Sensitivity", new ClickSensitivityDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Shape Bounds", new ShapeBoundsDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Clipper", new ClipperDemo(), Layout.STRETCH_TO_FIT);
+			addSection("AngleSliderUI", new AngleSliderUIDemo(),
+					Layout.SCROLLPANE);
+			addSection("DecoratedPanelUI", new DecoratedPanelUIDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Spiral2D", new Spiral2DDemo(), Layout.STRETCH_TO_FIT);
+			addSection("Swing: Components", new SwingComponentsDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Screen Capture", new ScreenCaptureDemo(this),
+					Layout.SCROLLPANE);
+			addSection("Swing: CollapsibleContainer",
 					new CollapsibleContainerDemo(), Layout.STRETCH_TO_FIT);
-			addSection("customizedToolbar", "Swing: CustomizedToolbar",
-					new CustomizedToolbarDemo(), Layout.STRETCH_TO_FIT);
-			addSection("scaling", "Images: Scaling", new ImageScalingDemo(),
+			addSection("Swing: CustomizedToolbar", new CustomizedToolbarDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("quantization", "Images: Quantization",
-					new ImageQuantizationDemo(), Layout.STRETCH_TO_FIT);
-			addSection("color", "Swing: Color Components", new ColorDemo(),
+			addSection("Images: Scaling", new ImageScalingDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("filledButtons", "Swing: FilledButtonUI",
-					new FilledButtonUIDemo(), Layout.STRETCH_TO_FIT);
-			addSection("areaXTests", "Shapes: AreaX Tests",
-					new AreaXTestPanel(), Layout.STRETCH_TO_FIT);
-			addSection("knots", "Shapes: Knots", new KnotDemo(),
+			addSection("Images: Quantization", new ImageQuantizationDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("graphicsWriterDebugger", "Graphics: Debugger",
-					new GraphicsWriterDemo(), Layout.STRETCH_TO_FIT);
-			addSection("jpegMetaData", "Images: JPEG Metadata",
-					new JPEGMetaDataDemo(), Layout.STRETCH_TO_FIT);
-			addSection("audioPlayerComponents", "Audio: Swing Components",
-					new AudioComponentsDemo(), Layout.STRETCH_TO_FIT);
-			addSection("mathEquations", "Math: Gaussian Elimination",
-					new EquationsDemo(), Layout.STRETCH_TO_FIT);
-			addSection("textSourceCode", "Text: Java Source Code Component",
+			addSection("Swing: Color Components", new ColorDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("FilledButtonUIDemo", new FilledButtonUIDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Shapes: AreaX Tests", new AreaXTestPanel(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Shapes: Knots", new KnotDemo(), Layout.STRETCH_TO_FIT);
+			addSection("Graphics: Debugger", new GraphicsWriterDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Images: JPEG Metadata", new JPEGMetaDataDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Audio: Swing Components", new AudioComponentsDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Math: Gaussian Elimination", new EquationsDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("JavaTextComponentHighlighter",
 					new JavaTextComponentHighlighterDemo(true),
 					Layout.STRETCH_TO_FIT);
-			addSection("textXML", "Text: XML Component",
+			addSection("XMLTextComponentHighlighter",
 					new XMLTextComponentHighlighterDemo(true),
 					Layout.STRETCH_TO_FIT);
-			addSection("textSearchDemo", "Text: Search Controls",
-					new TextSearchDemo(), Layout.STRETCH_TO_FIT);
-			addSection("gifWriter", "Images: Creating Animated Gifs",
-					new GifWriterDemo(), Layout.STRETCH_TO_FIT);
-			addSection("movWriter", "QuickTime: Writing Movies",
-					new MovWriterDemo(), Layout.STRETCH_TO_FIT);
-			addSection("patterHighlighter",
-					"Text: WildcardPattern & Highlighters",
+			addSection("Text: Search Controls", new TextSearchDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Images: Creating Animated Gifs", new GifWriterDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("QuickTime: Writing Movies", new MovWriterDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("Highlighters, WildcardPattern",
 					new WildcardPatternHighlighterDemo(), Layout.STRETCH_TO_FIT);
-			addSection("boxTabbedPaneUI", "Tabs: BoxTabbedPaneUI",
-					new BoxTabbedPaneUIDemo(), Layout.STRETCH_TO_FIT);
-			addSection("circularProgressBarUI", "Swing: CircularProgressBarUI",
+			addSection("BoxTabbedPaneUI", new BoxTabbedPaneUIDemo(),
+					Layout.STRETCH_TO_FIT);
+			addSection("CircularProgressBarUI",
 					new CircularProgressBarUIDemo(), Layout.STRETCH_TO_FIT);
+			addSection("Strokes, MouseSmoothing",
+					new StrokeMouseSmoothingDemo(), Layout.STRETCH_TO_FIT);
 			// TODO: add CubicIntersectionsPanel with 18-degree polynomial?
 
 		} catch (Exception e) {
@@ -317,13 +307,12 @@ public class PumpernickelShowcaseApp extends JFrame {
 		return editMenu;
 	}
 
-	private void addSection(String id, String text, JComponent component,
-			Layout layout) {
+	private void addSection(String text, JComponent component, Layout layout) {
 		if (component instanceof ShowcaseDemo) {
 			ShowcaseDemo d = (ShowcaseDemo) component;
 			component = wrapDemo(component, d.getTitle(), d.getHelpURL());
 		}
-		Section section = sectionContainer.addSection(id, text);
+		Section section = sectionContainer.addSection(text, text);
 		JPanel body = section.getBody();
 		if (layout == Layout.STRETCH_TO_FIT) {
 			body.setLayout(new GridBagLayout());
@@ -458,13 +447,15 @@ public class PumpernickelShowcaseApp extends JFrame {
 		c.weightx = 1;
 		c.weighty = 0;
 		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(3, 3, 3, 3);
+		c.insets = new Insets(10, 3, 3, 3);
 		replacement.add(header, c);
 		JComponent jc = HelpComponent.createHelpComponent(actionListener, null,
 				null);
 		c.anchor = GridBagConstraints.EAST;
 		c.fill = GridBagConstraints.NONE;
+		c.insets = new Insets(3, 3, 3, 3);
 		replacement.add(jc, c);
+		jc.setVisible(helpURL != null);
 		c.gridy++;
 		c.fill = GridBagConstraints.BOTH;
 		replacement.add(new JSeparator(), c);
