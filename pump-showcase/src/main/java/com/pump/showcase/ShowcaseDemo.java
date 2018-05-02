@@ -23,4 +23,14 @@ public interface ShowcaseDemo {
 	 * reading.
 	 */
 	public URL getHelpURL();
+
+	/**
+	 * Return relevant keywords to assist in searches.
+	 */
+	public String[] getKeywords();
+
+	/**
+	 * Return classes that are demonstrated to assist in searches.
+	 */
+	public Class<?>[] getClasses();
 }

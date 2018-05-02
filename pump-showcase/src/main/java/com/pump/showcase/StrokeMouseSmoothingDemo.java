@@ -377,4 +377,17 @@ public class StrokeMouseSmoothingDemo extends JPanel implements ShowcaseDemo {
 				.getResource("strokeMouseSmoothingDemo.html");
 	}
 
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "pencil", "freehand", "mouse", "smooth",
+				"stroke", "render", "draw" };
+	}
+
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { BristleStroke.class, BrushStroke.class,
+				CalligraphyStroke.class, CharcoalStroke.class,
+				BasicMouseSmoothing.class };
+	}
+
 }

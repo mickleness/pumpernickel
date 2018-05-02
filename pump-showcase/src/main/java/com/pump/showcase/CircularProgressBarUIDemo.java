@@ -289,4 +289,15 @@ public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
 	public URL getHelpURL() {
 		return getClass().getResource("circularProgressBarUIDemo.html");
 	}
+
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "ux", "ui", "gui", "progress-bar", "determinate",
+				"indeterminate", "progress", "feedback" };
+	}
+
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { CircularProgressBarUI.class, JProgressBar.class };
+	}
 }

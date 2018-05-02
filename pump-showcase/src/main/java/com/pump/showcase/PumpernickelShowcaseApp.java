@@ -25,6 +25,11 @@ import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.TreeSet;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -42,6 +47,10 @@ import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
@@ -55,11 +64,14 @@ import com.pump.desktop.edit.EditMenuControls;
 import com.pump.geom.AreaXTestPanel;
 import com.pump.geom.knot.KnotDemo;
 import com.pump.icon.button.MinimalDuoToneCloseIcon;
+import com.pump.plaf.RoundTextFieldUI;
 import com.pump.swing.HelpComponent;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.ListSectionContainer;
 import com.pump.swing.MagnificationPanel;
 import com.pump.swing.SectionContainer.Section;
+import com.pump.swing.TextFieldPrompt;
+import com.pump.text.WildcardPattern;
 import com.pump.window.WindowDragger;
 import com.pump.window.WindowMenu;
 
@@ -87,7 +99,9 @@ public class PumpernickelShowcaseApp extends JFrame {
 	}
 
 	JTextField searchField = new JTextField();
-	ListSectionContainer sectionContainer = new ListSectionContainer(true);
+	List<Section> masterSectionList = new ArrayList<>();
+	ListSectionContainer sectionContainer = new ListSectionContainer(true,
+			null, searchField);
 	JMenuBar menuBar = new JMenuBar();
 	JMenu editMenu = createEditMenu();
 	JMenu helpMenu = new JMenu("Help");
@@ -168,6 +182,102 @@ public class PumpernickelShowcaseApp extends JFrame {
 		}
 
 	};
+	private DocumentListener searchDocListener = new DocumentListener() {
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			updateSections();
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			updateSections();
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+		}
+
+		private void updateSections() {
+			String str = searchField.getText();
+
+			Comparator<Section> comparator = new Comparator<Section>() {
+				@Override
+				public int compare(Section o1, Section o2) {
+					return o1.getName().toLowerCase()
+							.compareTo(o2.getName().toLowerCase());
+				}
+			};
+
+			Collection<Section> matches = new TreeSet<>(comparator);
+			for (Section section : masterSectionList) {
+				if (isMatching(section, str))
+					matches.add(section);
+			}
+
+			sectionContainer.getSections().setAll(
+					matches.toArray(new Section[matches.size()]));
+		}
+
+		private boolean isMatching(Section section, String phrase) {
+			if (phrase == null || phrase.trim().length() == 0)
+				return true;
+			phrase = phrase.toLowerCase();
+			String[] terms = phrase.split("\\s");
+			for (String term : terms) {
+				if (section.getName().toLowerCase().contains(term))
+					return true;
+				List<String> keywords = getKeywords(section.getBody());
+				for (String keyword : keywords) {
+					if (keyword.contains(term))
+						return true;
+				}
+
+				if (term.contains("*") || term.contains("?")
+						|| term.contains("[")) {
+					WildcardPattern pattern = new WildcardPattern(term);
+
+					if (pattern.matches(section.getName().toLowerCase()))
+						return true;
+					for (String keyword : keywords) {
+						if (pattern.matches(keyword))
+							return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		private List<String> getKeywords(JComponent jc) {
+			List<String> returnValue = new ArrayList<>();
+			if (jc instanceof ShowcaseDemo) {
+				ShowcaseDemo d = (ShowcaseDemo) jc;
+				for (String keyword : d.getKeywords()) {
+					returnValue.add(keyword.toLowerCase());
+				}
+				for (Class z : d.getClasses()) {
+					int layer = 0;
+					/*
+					 * Include at least 4 layers: CircularProgressBarUI ->
+					 * BasicProgressBarUI -> ProgressBarUI -> ComponentUI
+					 */
+					while (z != null && !z.equals(Object.class) && layer < 4) {
+						returnValue.add(z.getSimpleName().toLowerCase());
+						returnValue.add(z.getName().toLowerCase());
+						z = z.getSuperclass();
+						layer++;
+					}
+				}
+			}
+			for (int a = 0; a < jc.getComponentCount(); a++) {
+				if (jc.getComponent(a) instanceof JComponent)
+					returnValue.addAll(getKeywords((JComponent) jc
+							.getComponent(a)));
+			}
+			return returnValue;
+		}
+
+	};
 
 	public PumpernickelShowcaseApp() {
 		super("Pumpernickel Showcase");
@@ -188,11 +298,17 @@ public class PumpernickelShowcaseApp extends JFrame {
 		c.weightx = 1;
 		c.weighty = 0;
 		c.fill = GridBagConstraints.BOTH;
-		// TODO:
-		// getContentPane().add(searchField, c);
 		c.gridy++;
 		c.weighty = 1;
 		getContentPane().add(sectionContainer, c);
+
+		searchField.setUI(new RoundTextFieldUI());
+		searchField.putClientProperty("JTextField.variant", "search");
+		new TextFieldPrompt(searchField, "Search...");
+		searchField.setBorder(new CompoundBorder(new EmptyBorder(3, 3, 3, 3),
+				searchField.getBorder()));
+
+		searchField.getDocument().addDocumentListener(searchDocListener);
 
 		getContentPane().setPreferredSize(new Dimension(800, 600));
 
@@ -313,6 +429,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			component = wrapDemo(component, d.getTitle(), d.getHelpURL());
 		}
 		Section section = sectionContainer.addSection(text, text);
+		masterSectionList.add(section);
 		JPanel body = section.getBody();
 		if (layout == Layout.STRETCH_TO_FIT) {
 			body.setLayout(new GridBagLayout());
