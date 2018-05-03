@@ -380,7 +380,8 @@ public class StrokeMouseSmoothingDemo extends JPanel implements ShowcaseDemo {
 	@Override
 	public String[] getKeywords() {
 		return new String[] { "pencil", "freehand", "mouse", "smooth",
-				"stroke", "render", "draw" };
+				"stroke", "render", "draw", "calligraphy", "brush", "bristle",
+				"charcoal" };
 	}
 
 	@Override

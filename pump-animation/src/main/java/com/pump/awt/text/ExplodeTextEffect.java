@@ -19,6 +19,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -39,16 +40,22 @@ public class ExplodeTextEffect implements TextEffect {
 	int width, height;
 	Font font;
 	String text;
+	Color foreground;
 
 	List<BlockLetter> blockLetters = new ArrayList<BlockLetter>();
 	float textWidth = 0;
 	float textHeight = 0;
 
-	public ExplodeTextEffect(Font font, String text, int width, int height) {
+	public ExplodeTextEffect(Font font, String text, int width, int height,
+			Color foreground) {
+		Objects.requireNonNull(font);
+		Objects.requireNonNull(text);
+		Objects.requireNonNull(foreground);
 		this.font = font;
 		this.text = text;
 		this.width = width;
 		this.height = height;
+		this.foreground = foreground;
 
 		FontRenderContext frc = new FontRenderContext(new AffineTransform(),
 				true, true);
@@ -56,7 +63,7 @@ public class ExplodeTextEffect implements TextEffect {
 			char c = text.charAt(a);
 			if (Character.isWhitespace(c) == false) {
 				BlockLetter.Simple l = new BlockLetter.Simple(c, font,
-						Color.black);
+						foreground);
 				l.setBlockPaint(createShadow(a));
 				l.put("x", new Float(textWidth));
 				textHeight = Math.max(l.getDepth(), textHeight);

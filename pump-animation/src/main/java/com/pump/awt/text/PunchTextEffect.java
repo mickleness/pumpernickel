@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This begins and ends in an undecorated state, and during the animation the
@@ -32,6 +33,9 @@ import java.util.Map;
  * </p>
  */
 public class PunchTextEffect implements TextEffect {
+	public static final Color DEFAULT_FILL = new Color(220, 0, 130);
+	public static final Color DEFAULT_SHADOW = new Color(80, 0, 15);
+
 	int width, height;
 	Font font;
 	String text;
@@ -43,10 +47,22 @@ public class PunchTextEffect implements TextEffect {
 	Color shadow = new Color(80, 0, 15);
 
 	public PunchTextEffect(Font font, String text, int width, int height) {
+		this(font, text, width, height, DEFAULT_FILL, DEFAULT_SHADOW);
+	}
+
+	public PunchTextEffect(Font font, String text, int width, int height,
+			Color foreground, Color shadow) {
+		Objects.requireNonNull(font);
+		Objects.requireNonNull(text);
+		Objects.requireNonNull(foreground);
+		Objects.requireNonNull(shadow);
+
 		this.font = font;
 		this.text = text;
 		this.width = width;
 		this.height = height;
+		this.foreground = foreground;
+		this.shadow = shadow;
 
 		int wordCount = 0;
 		boolean lastCharWasWhiteSpace = true;

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TextEffect Demo</title>
+</head>
+<body>
+
+This models a few different implementations of the TextEffect class, which is simply:
+<blockquote><pre>/** This is a common interface for visual text effects. */
+public interface TextEffect {
+
+	/**
+	 * Paint this effect.
+	 * 
+	 * @param g
+	 *            the Graphics2D to paint to.
+	 * @param fraction
+	 *            a float from [0, 1] indicating how far along this effect it.
+	 */
+	public void paint(Graphics2D g, float fraction);
+
+	/**
+	 * An optional method to retrieve the preferred size. May return null.
+	 */
+	public Dimension getPreferredSize();
+}</pre></blockquote>
+<p>
+(This is roughly modeled after the <a href="resource:transition">Transition</a> interface.)
+<p>
+These effects started with the <a href="resource:calligraphy">CalligraphyStroke</a>. That stroke helped make easy work of the <code>BlockLetter</code> class, which is used to add a simple 3D-ish depth to letters (as seen in the punch and explode effects).
+<p>
+The outline effect uses the <code>Scribbler</code> class to add a little chaos into the mix.
+<p>
+The writing effect is a complete departure from everything else. This uses a <code>WritingFont</code> object, which is a font rendered with a constant <code>java.awt.Stroke</code> where the order of each stroke is preserved. This has to be input by hand (I wrote a special editor app to design these), so it takes time. So far I've implemented one font based on <a href="http://comicneue.com/">Comic Neue</a>, and another based on some simple calligraphic tutorials.
+<p>
+All of these &#8208; especially the writing fonts &#8208; can be improved. To date I haven't deployed these in a commercial project, though, so they're low on my priority list.
+
+</body>
+</html>

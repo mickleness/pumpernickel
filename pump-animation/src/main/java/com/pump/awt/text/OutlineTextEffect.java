@@ -23,6 +23,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import com.pump.awt.CalligraphyPathWriter;
@@ -40,9 +41,11 @@ import com.pump.geom.MeasuredShape;
  * </p>
  */
 public class OutlineTextEffect implements TextEffect {
-	protected static final Color DEFAULT_FILL = new Color(0, 100, 200);
-	protected static final Color DEFAULT_STROKE = Color.black;
-	Color fill, stroke;
+	public static final Color DEFAULT_FILL = new Color(0, 100, 200);
+	public static final Color DEFAULT_SHADOW = Color.black;
+	public static final Color DEFAULT_STROKE = Color.black;
+
+	Color fill, shadow, stroke;
 	int width, height;
 	Font font;
 	String text;
@@ -53,16 +56,24 @@ public class OutlineTextEffect implements TextEffect {
 	float angle = (float) (Math.PI / 4);
 
 	public OutlineTextEffect(Font font, String text, int width, int height) {
-		this(font, text, width, height, DEFAULT_FILL, DEFAULT_STROKE);
+		this(font, text, width, height, DEFAULT_FILL, DEFAULT_STROKE,
+				DEFAULT_SHADOW);
 	}
 
 	public OutlineTextEffect(Font font, String text, int width, int height,
-			Color fill, Color stroke) {
+			Color fill, Color stroke, Color shadow) {
+		Objects.requireNonNull(font);
+		Objects.requireNonNull(text);
+		Objects.requireNonNull(fill);
+		Objects.requireNonNull(stroke);
+		Objects.requireNonNull(shadow);
+
 		this.font = font;
 		this.text = text;
 		this.width = width;
 		this.height = height;
 		this.fill = fill;
+		this.shadow = shadow;
 		this.stroke = stroke;
 
 		FontRenderContext frc = new FontRenderContext(new AffineTransform(),
@@ -71,7 +82,7 @@ public class OutlineTextEffect implements TextEffect {
 			char c = text.charAt(a);
 			if (Character.isWhitespace(c) == false) {
 				BlockLetter l = new BlockLetter.Simple(c, font,
-						OutlineTextEffect.this.stroke);
+						OutlineTextEffect.this.shadow);
 				l.setDepth(3);
 				l.put("x", new Float(textWidth));
 				textHeight = Math.max(l.getDepth(), textHeight);
@@ -107,7 +118,7 @@ public class OutlineTextEffect implements TextEffect {
 	Random random = new Random();
 
 	public void paint(Graphics2D g0, float fraction) {
-		g0.setPaint(stroke);
+		g0.setPaint(shadow);
 		g0.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		random.setSeed(0);
@@ -150,7 +161,7 @@ public class OutlineTextEffect implements TextEffect {
 			for (int b = 0; b < charSubpaths.length; b++) {
 				Shape shape = charSubpaths[b].getShape(0, mainFraction);
 				Shape border = Scribbler.create(shape, 1, 3, a * 100);
-				g.setColor(Color.black);
+				g.setColor(stroke);
 				g.draw(border);
 			}
 			g.dispose();

@@ -323,7 +323,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 					Layout.STRETCH_TO_FIT);
 			addSection("AlphaComposite", new AlphaCompositeDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("Animation: Text Effect", new TextEffectDemo(),
+			addSection("TextEffect", new TextEffectDemo(),
 					Layout.STRETCH_TO_FIT);
 			addSection("AWT Monitor", new AWTMonitorDemo(),
 					Layout.STRETCH_TO_FIT);

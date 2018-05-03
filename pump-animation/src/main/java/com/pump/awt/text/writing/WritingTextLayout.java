@@ -26,6 +26,7 @@ import java.util.List;
 import com.pump.animation.AnimationReader;
 import com.pump.animation.writing.WritingShape;
 import com.pump.animation.writing.WritingStroke;
+import com.pump.awt.Dimension2D;
 import com.pump.util.ObservableProperties;
 import com.pump.util.ObservableProperties.Key;
 import com.pump.util.Resettable;
@@ -143,7 +144,19 @@ public class WritingTextLayout {
 		properties.removeListener(propertyChangeListener);
 	}
 
-	public void paint(Graphics2D g, Rectangle rectangle, float time) {
+	public Dimension2D getSize(Rectangle rectangle) {
+		Line[] lines = getLines(rectangle.width);
+		float width = 0;
+		float height = 0;
+		for (Line line : lines) {
+			width = Math.max(width, line.width);
+			height += line.getHeight();
+		}
+		return new Dimension2D(width, height);
+	}
+
+	public void paint(Graphics2D g, Rectangle rectangle, float time,
+			Color foreground) {
 		Line[] lines = getLines(rectangle.width);
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
@@ -151,7 +164,7 @@ public class WritingTextLayout {
 			g2.clipRect(rectangle.x, rectangle.y, rectangle.width,
 					rectangle.height);
 			int y = rectangle.y;
-			g2.setColor(Color.black);
+			g2.setColor(foreground);
 			g2.setStroke(getFont().getRecommendedStroke(getFontSize()));
 			for (Line line : lines) {
 				boolean finished = line.paint(g2, rectangle.x, y, time);
@@ -443,7 +456,7 @@ public class WritingTextLayout {
 			g.setColor(Color.black);
 			float time = ((float) frame) / ((float) fps);
 
-			paint(g, new Rectangle(0, 0, width, height), time);
+			paint(g, new Rectangle(0, 0, width, height), time, Color.black);
 			g.dispose();
 
 			frame++;

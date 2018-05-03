@@ -17,14 +17,13 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This ripples across the text (from-left-to-right) using a transparent
@@ -36,6 +35,9 @@ import java.util.List;
  * </p>
  */
 public class WaveTextEffect implements TextEffect {
+	public static final Color DEFAULT_FOREGROUND = new Color(0, 230, 80);
+	public static final Color DEFAULT_SHADOW = new Color(0, 150, 40);
+
 	int width, height;
 	Font font;
 	String text;
@@ -43,14 +45,25 @@ public class WaveTextEffect implements TextEffect {
 	List<BlockLetter.Simple> blockLetters = new ArrayList<BlockLetter.Simple>();
 	float textWidth = 0;
 	float textHeight = 0;
-	Color foreground = new Color(0, 230, 80);
-	Color shadow = new Color(0, 150, 40);
+	Color foreground;
+	Color stroke;
 
 	public WaveTextEffect(Font font, String text, int width, int height) {
+		this(font, text, width, height, DEFAULT_FOREGROUND, DEFAULT_SHADOW);
+	}
+
+	public WaveTextEffect(Font font, String text, int width, int height,
+			Color foreground, Color stroke) {
+		Objects.requireNonNull(font);
+		Objects.requireNonNull(text);
+		Objects.requireNonNull(foreground);
+		Objects.requireNonNull(stroke);
 		this.font = font;
 		this.text = text;
 		this.width = width;
 		this.height = height;
+		this.foreground = foreground;
+		this.stroke = stroke;
 
 		FontRenderContext frc = new FontRenderContext(new AffineTransform(),
 				true, true);
@@ -61,23 +74,17 @@ public class WaveTextEffect implements TextEffect {
 						foreground) {
 					@Override
 					public void paintDepth(Graphics2D g, float x, float y) {
-						Graphics2D g2 = prep(g, x, y);
-
-						Shape[] shapes = getDepthBlocks();
-
-						g2.setPaint(new Color(0, 0, 0, 30));
-						g2.setStroke(new BasicStroke(1f,
-								BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
-						GeneralPath combo = new GeneralPath();
-						combo.append(shapes[0], false);
-						combo.append(shapes[1], false);
-						g2.draw(combo);
 					}
 
 					@Override
 					public void paintForeground(Graphics2D g, float x, float y) {
-						super.paintForeground(g, x, y);
-						paintOutline(g, x, y, new Color(0, 0, 0, 200),
+						Graphics2D g2 = prep(g, x, y);
+						g2.scale(1 + depth / 50f, 1 + depth / 50f);
+						g2.setPaint(foreground);
+						g2.fill(outline);
+						g2.dispose();
+
+						paintOutline(g, x, y, WaveTextEffect.this.stroke,
 								new BasicStroke(1f, BasicStroke.CAP_SQUARE,
 										BasicStroke.JOIN_ROUND));
 					}
@@ -90,12 +97,13 @@ public class WaveTextEffect implements TextEffect {
 						g2.translate(x - depth * Math.cos(angle), y - depth
 								* Math.sin(angle));
 						g2.setStroke(stroke);
+						g2.scale(1 + depth / 50f, 1 + depth / 50f);
 						g2.setPaint(paint);
 						g2.draw(outline);
 						g2.dispose();
 					}
 				};
-				l.setBlockPaint(shadow);
+				l.setBlockPaint(new Color(0, 0, 0, 0));
 				l.put("x", new Float(textWidth));
 				textHeight = Math.max(l.getDepth(), textHeight);
 				blockLetters.add(l);

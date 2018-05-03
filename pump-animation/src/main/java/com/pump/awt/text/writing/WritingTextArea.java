@@ -98,7 +98,8 @@ public class WritingTextArea extends JPanel {
 		public void paint(Graphics g, JComponent c) {
 			super.paint(g, c);
 			layout.paint((Graphics2D) g,
-					new Rectangle(0, 0, c.getWidth(), c.getHeight()), getTime());
+					new Rectangle(0, 0, c.getWidth(), c.getHeight()),
+					getTime(), c.getForeground());
 		}
 
 		@Override

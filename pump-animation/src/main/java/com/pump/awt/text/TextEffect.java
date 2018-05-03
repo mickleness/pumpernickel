@@ -31,7 +31,6 @@ public interface TextEffect {
 
 	/**
 	 * An optional method to retrieve the preferred size. May return null.
-	 * 
 	 */
 	public Dimension getPreferredSize();
 }
