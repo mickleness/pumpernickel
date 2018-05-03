@@ -337,7 +337,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 					Layout.STRETCH_TO_FIT);
 			addSection("Clipper", new ClipperDemo(), Layout.STRETCH_TO_FIT);
 			addSection("AngleSliderUI", new AngleSliderUIDemo(),
-					Layout.SCROLLPANE);
+					Layout.STRETCH_TO_FIT);
 			addSection("DecoratedPanelUI", new DecoratedPanelUIDemo(),
 					Layout.STRETCH_TO_FIT);
 			addSection("Spiral2D", new Spiral2DDemo(), Layout.STRETCH_TO_FIT);

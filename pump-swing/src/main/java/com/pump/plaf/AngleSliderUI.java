@@ -45,8 +45,7 @@ import com.pump.util.JVM;
 /**
  * This UI renders a <code>JSlider</code> as a circular dial, and then value of
  * the slider represents an angle from [0,2*pi).
- * 
- * <P>
+ * <p>
  * This class (and subclasses) can not respond to several slider properties such
  * as orientation, inversion, tickmarks, labels, etc.
  * 
@@ -329,7 +328,7 @@ public class AngleSliderUI extends SliderUI {
 
 		Data data = getData(slider);
 		if (slider.hasFocus()) {
-			PlafPaintUtils.paintFocus(g, data.dial, 4);
+			PlafPaintUtils.paintFocus(g, data.dial, 3);
 		}
 
 		// g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
