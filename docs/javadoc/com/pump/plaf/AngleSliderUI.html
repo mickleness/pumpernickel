@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":9,"i10":10};
+var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":9,"i11":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -126,8 +126,7 @@ var activeTableTab = "activeTableTab";
 extends javax.swing.plaf.SliderUI</pre>
 <div class="block">This UI renders a <code>JSlider</code> as a circular dial, and then value of
  the slider represents an angle from [0,2*pi).
- 
- <P>
+ <p>
  This class (and subclasses) can not respond to several slider properties such
  as orientation, inversion, tickmarks, labels, etc.</div>
 </li>
@@ -237,51 +236,55 @@ extends javax.swing.plaf.SliderUI</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static javax.swing.plaf.ComponentUI</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AngleSliderUI.html#createUI-javax.swing.JComponent-">createUI</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected java.awt.Insets</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AngleSliderUI.html#getBorderInsets-javax.swing.JComponent-">getBorderInsets</a></span>(javax.swing.JComponent&nbsp;c)</code>
 <div class="block">Return the insets for the border, or an empty Insets object.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../com/pump/plaf/AngleSliderUI.Data.html" title="class in com.pump.plaf">AngleSliderUI.Data</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AngleSliderUI.html#getData-javax.swing.JSlider-">getData</a></span>(javax.swing.JSlider&nbsp;slider)</code>
 <div class="block">Return the Data object associated with a slider.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.awt.Dimension</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AngleSliderUI.html#getMaximumSize-javax.swing.JComponent-">getMaximumSize</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.awt.Dimension</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AngleSliderUI.html#getMinimumSize-javax.swing.JComponent-">getMinimumSize</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>protected java.awt.Dimension</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AngleSliderUI.html#getPreferredBaseDimension-javax.swing.JComponent-">getPreferredBaseDimension</a></span>(javax.swing.JComponent&nbsp;c)</code>
 <div class="block">Returns the preferred dimensions for this JSlider without a border.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.awt.Dimension</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AngleSliderUI.html#getPreferredSize-javax.swing.JComponent-">getPreferredSize</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AngleSliderUI.html#installUI-javax.swing.JComponent-">installUI</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AngleSliderUI.html#paint-java.awt.Graphics-javax.swing.JComponent-">paint</a></span>(java.awt.Graphics&nbsp;g0,
      javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static java.awt.Color</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AngleSliderUI.html#tweenColor-java.awt.Color-java.awt.Color-float-">tweenColor</a></span>(java.awt.Color&nbsp;c1,
           java.awt.Color&nbsp;c2,
           float&nbsp;progress)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/AngleSliderUI.html#uninstallUI-javax.swing.JComponent-">uninstallUI</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
 </tr>
@@ -291,7 +294,7 @@ extends javax.swing.plaf.SliderUI</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;javax.swing.plaf.ComponentUI</h3>
-<code>contains, createUI, getAccessibleChild, getAccessibleChildrenCount, getBaseline, getBaselineResizeBehavior, update</code></li>
+<code>contains, getAccessibleChild, getAccessibleChildrenCount, getBaseline, getBaselineResizeBehavior, update</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -388,6 +391,15 @@ extends javax.swing.plaf.SliderUI</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="createUI-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createUI</h4>
+<pre>public static&nbsp;javax.swing.plaf.ComponentUI&nbsp;createUI(javax.swing.JComponent&nbsp;c)</pre>
+</li>
+</ul>
 <a name="getData-javax.swing.JSlider-">
 <!--   -->
 </a>

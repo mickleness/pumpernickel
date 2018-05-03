@@ -17,6 +17,7 @@ com.pump.debug
 com.pump.desktop
 com.pump.desktop.cache
 com.pump.desktop.doc
+com.pump.desktop.edit
 com.pump.desktop.error
 com.pump.desktop.logging
 com.pump.desktop.temp

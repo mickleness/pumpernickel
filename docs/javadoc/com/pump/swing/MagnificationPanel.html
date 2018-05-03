@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -243,28 +243,32 @@ extends javax.swing.JComponent</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>protected java.awt.Point</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MagnificationPanel.html#getMouseLoc--">getMouseLoc</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MagnificationPanel.html#isPixelated--">isPixelated</a></span>()</code>
 <div class="block">Return true if the zoomed view is meant to be pixelated.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MagnificationPanel.html#paintComponent-java.awt.Graphics-">paintComponent</a></span>(java.awt.Graphics&nbsp;g0)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MagnificationPanel.html#refresh--">refresh</a></span>()</code>
 <div class="block">Regenerate the zoomed image data and repaint this panel.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MagnificationPanel.html#setInstruction-java.lang.String-">setInstruction</a></span>(java.lang.String&nbsp;text)</code>
 <div class="block">Set instructional text that is displayed when no image data is in use.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/MagnificationPanel.html#setPixelated-boolean-">setPixelated</a></span>(boolean&nbsp;b)</code>
 <div class="block">Define whether the zoomed view is meant to be pixelated.</div>
@@ -392,6 +396,15 @@ extends javax.swing.JComponent</pre>
  vector graphics, then this panel will demonstrate that. (If the
  underlying component uses pixelated images, then this property will make
  no difference.)</div>
+</li>
+</ul>
+<a name="getMouseLoc--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMouseLoc</h4>
+<pre>protected&nbsp;java.awt.Point&nbsp;getMouseLoc()</pre>
 </li>
 </ul>
 <a name="refresh--">

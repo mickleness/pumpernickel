@@ -132,9 +132,9 @@ extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
  12x12), but the text become illegible so it shouldn't be used with
  <code>isStringPainted()</code>.
  <p>
- Opinions on progress indicators are wide and varied (try googling
- "UX progress indicator"). One <a
- href="https://www.nngroup.com/articles/progress-indicators/">article</a>
+ Opinions on progress indicators are wide and varied (try googling "UX
+ progress indicator"). One
+ <a href="https://www.nngroup.com/articles/progress-indicators/">article</a>
  summed up: <blockquote> The main guideline is to use a looped indicator for
  delays of 2–9 seconds and a percent-done indicator for delays of 10 seconds
  or more. </blockquote>
@@ -169,36 +169,36 @@ extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
  <p>
  The indeterminate UI loops every 500 ms. <a href=
  "https://medium.muz.li/how-progress-bars-or-loaders-impacts-the-user-experience-5082370f810b"
- >This article</a> points out that indeterminate progress bars
- "are looped so they should be a tad faster in terms of speed, which psychologically makes user think data is getting loaded faster and makes them to have more patience."
+ >This article</a> points out that indeterminate progress bars "are looped so
+ they should be a tad faster in terms of speed, which psychologically makes
+ user think data is getting loaded faster and makes them to have more
+ patience."
  <p>
  <h3>Optional Features</h3> This UI offers a few additional features you can
  configure using client properties.
  <p>
- <h4>Pulse On Completion</h4>
- The <a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_PULSE_COMPLETION_ACTIVE"><code>PROPERTY_PULSE_COMPLETION_ACTIVE</code></a> client property maps to a
- boolean. When this is true and the progress bar reaches 100%, this UI pulses
- the thickness of the circle in a half-second animation. This helps to draw
- attention to the progress bar (since it just changed from "incomplete" to
- "complete") in a fun/celebratory way. If undefined this is assumed to be
- true.
- <h4>Spark Active</h4>
- The <a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_SPARK_ACTIVE"><code>PROPERTY_SPARK_ACTIVE</code></a> client property maps to a boolean. When
- this is true and two seconds have passed since the last time the progress bar
- changed value: s small (20-degree) "spark" runs from the edge of the
- foreground counter-clockwise to the origin. The intention here is to offer
- some (any!) animation to reassure the user that the UI is not frozen. In an
- ideal world all our progress bars will take less than a few seconds, but if
- they must take a long time then we need to reassure the user that we're still
- responsive and nothing is wrong. If undefined this is assumed to be true.
- <h4>Acceleration</h4>
- The <a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_ACCELERATE"><code>PROPERTY_ACCELERATE</code></a> client property maps to a boolean. When this
- is true this gives the illusion of slower progress initially that accelerates
- as it approaches completion. (I recommend watching a demo of this feature,
- because the text description is hard to explain.) If the actual value of the
- progress bar is accelerating linearly from v=0 to v=1, this renders the value
- of the progress bar as (v^2) or (v^3). So at 50% we're rendering the progress
- bar as closer to 25%.
+ <h4>Pulse On Completion</h4> The <a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_PULSE_COMPLETION_ACTIVE"><code>PROPERTY_PULSE_COMPLETION_ACTIVE</code></a>
+ client property maps to a boolean. When this is true and the progress bar
+ reaches 100%, this UI pulses the thickness of the circle in a half-second
+ animation. This helps to draw attention to the progress bar (since it just
+ changed from "incomplete" to "complete") in a fun/celebratory way. If
+ undefined this is assumed to be true.
+ <h4>Spark Active</h4> The <a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_SPARK_ACTIVE"><code>PROPERTY_SPARK_ACTIVE</code></a> client property maps
+ to a boolean. When this is true and two seconds have passed since the last
+ time the progress bar changed value: s small (20-degree) "spark" runs from
+ the edge of the foreground counter-clockwise to the origin. The intention
+ here is to offer some (any!) animation to reassure the user that the UI is
+ not frozen. In an ideal world all our progress bars will take less than a few
+ seconds, but if they must take a long time then we need to reassure the user
+ that we're still responsive and nothing is wrong. If undefined this is
+ assumed to be true.
+ <h4>Acceleration</h4> The <a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_ACCELERATE"><code>PROPERTY_ACCELERATE</code></a> client property maps
+ to a boolean. When this is true this gives the illusion of slower progress
+ initially that accelerates as it approaches completion. (I recommend watching
+ a demo of this feature, because the text description is hard to explain.) If
+ the actual value of the progress bar is accelerating linearly from v=0 to
+ v=1, this renders the value of the progress bar as (v^2) or (v^3). So at 50%
+ we're rendering the progress bar as closer to 25%.
  <p>
  This idea is based on an idea put forward in <a href=
  "https://www.smashingmagazine.com/2016/12/best-practices-for-animated-progress-indicators/"
@@ -298,8 +298,8 @@ extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/CircularProgressBarUI.html#PROPERTY_STROKE_WIDTH">PROPERTY_STROKE_WIDTH</a></span></code>
-<div class="block">This client property maps to a Number indicating the stroke width the
- arcs should use.</div>
+<div class="block">This client property maps to a Number indicating the stroke width the arcs
+ should use.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -500,8 +500,8 @@ extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
 <h4>PROPERTY_ACCELERATE</h4>
 <pre>public static final&nbsp;java.lang.String PROPERTY_ACCELERATE</pre>
 <div class="block">This client property maps to a Boolean indicating whether this UI should
- render the progress bar's completion in an accelerated graph. If
- undefined this is assumed to be false.</div>
+ render the progress bar's completion in an accelerated graph. If undefined
+ this is assumed to be false.</div>
 </li>
 </ul>
 <a name="PROPERTY_TRANSITION">
@@ -512,10 +512,9 @@ extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
 <h4>PROPERTY_TRANSITION</h4>
 <pre>public static final&nbsp;java.lang.String PROPERTY_TRANSITION</pre>
 <div class="block">This client property maps to a Boolean indicating whether this UI should
- animate transitions between different progress bar values. For example,
- if you jump from a progress bar value of 5 to 15, if this is true then
- the UI will animate in-between values. If undefined this is assumed to be
- true.</div>
+ animate transitions between different progress bar values. For example, if
+ you jump from a progress bar value of 5 to 15, if this is true then the UI
+ will animate in-between values. If undefined this is assumed to be true.</div>
 </li>
 </ul>
 <a name="PROPERTY_STROKE_WIDTH">
@@ -525,10 +524,10 @@ extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
 <li class="blockList">
 <h4>PROPERTY_STROKE_WIDTH</h4>
 <pre>public static final&nbsp;java.lang.String PROPERTY_STROKE_WIDTH</pre>
-<div class="block">This client property maps to a Number indicating the stroke width the
- arcs should use. By default this UI calculates a "reasonable" stroke
- width based on the radius of the circle, but this property lets you
- override that default.</div>
+<div class="block">This client property maps to a Number indicating the stroke width the arcs
+ should use. By default this UI calculates a "reasonable" stroke width based
+ on the radius of the circle, but this property lets you override that
+ default.</div>
 </li>
 </ul>
 </li>
@@ -622,8 +621,8 @@ extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
                                   int&nbsp;centerY)</pre>
 <div class="block">Paint the indeterminate state of this UI.
  <p>
- This integrates System.currentTimeMillis() into its calculations, so
- every invocation will be slightly different.</div>
+ This integrates System.currentTimeMillis() into its calculations, so every
+ invocation will be slightly different.</div>
 </li>
 </ul>
 <a name="paintDeterminate-java.awt.Graphics2D-int-float-int-int-">
@@ -640,8 +639,8 @@ extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
 <div class="block">Paint the determinate state of this UI.
  <p>
  This doesn't rely on System.currentTimeMillis(), but it can invoke
- <code>progressBar.repaint()</code> if the transition property is active,
- so subsequent invocations may produce different results.</div>
+ <code>progressBar.repaint()</code> if the transition property is active, so
+ subsequent invocations may produce different results.</div>
 </li>
 </ul>
 <a name="getStrokeWidth-int-">
@@ -653,8 +652,8 @@ extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
 <pre>protected&nbsp;float&nbsp;getStrokeWidth(int&nbsp;diameter)</pre>
 <div class="block">Return the stroke width.
  <P>
- This first checks to see if the user has defined a custom width, and if
- not the width is derived based on the diameter.</div>
+ This first checks to see if the user has defined a custom width, and if not
+ the width is derived based on the diameter.</div>
 </li>
 </ul>
 <a name="isActive-java.lang.String-boolean-">
@@ -668,8 +667,7 @@ extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
 <div class="block">Return true if a property with the given name is active.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>defaultValue</code> - the default state of this property if the client property is
-            null.</dd>
+<dd><code>defaultValue</code> - the default state of this property if the client property is null.</dd>
 </dl>
 </li>
 </ul>
@@ -700,11 +698,11 @@ extends javax.swing.plaf.basic.BasicProgressBarUI</pre>
                         double&nbsp;extent,
                         double&nbsp;radius,
                         float&nbsp;strokeWidth)</pre>
-<div class="block">This paints a portion of the edge of the circle. Degrees are interpreted
- in a clockwise orientation from the top of the circle. (That is: 0
- degrees is the 12:00 position, 90 degrees is the 3:00 position, 180
- degrees is the 6:00 position, 270 degrees is the 9:00 position, and 360
- degrees is a complete arc back a the 12:00 position.)</div>
+<div class="block">This paints a portion of the edge of the circle. Degrees are interpreted in a
+ clockwise orientation from the top of the circle. (That is: 0 degrees is the
+ 12:00 position, 90 degrees is the 3:00 position, 180 degrees is the 6:00
+ position, 270 degrees is the 9:00 position, and 360 degrees is a complete arc
+ back a the 12:00 position.)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>g</code> - the Graphics2D to paint to.</dd>

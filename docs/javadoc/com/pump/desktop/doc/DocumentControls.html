@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -99,7 +99,12 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../com/pump/desktop/GroupedControls.html" title="class in com.pump.desktop">com.pump.desktop.GroupedControls</a></li>
+<li>
+<ul class="inheritance">
 <li>com.pump.desktop.doc.DocumentControls</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -109,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">DocumentControls</span>
-extends java.lang.Object</pre>
+extends <a href="../../../../com/pump/desktop/GroupedControls.html" title="class in com.pump.desktop">GroupedControls</a></pre>
 </li>
 </ul>
 </div>
@@ -149,6 +154,13 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#recentMenu">recentMenu</a></span></code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.com.pump.desktop.GroupedControls">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.pump.desktop.<a href="../../../../com/pump/desktop/GroupedControls.html" title="class in com.pump.desktop">GroupedControls</a></h3>
+<code><a href="../../../../com/pump/desktop/GroupedControls.html#actionMap">actionMap</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -192,56 +204,48 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#fireChangeListeners--">fireChangeListeners</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>&lt;T extends javax.swing.AbstractAction&gt;<br>T</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#getAction-com.pump.desktop.doc.DocumentCommand-">getAction</a></span>(<a href="../../../../com/pump/desktop/doc/DocumentCommand.html" title="class in com.pump.desktop.doc">DocumentCommand</a>&lt;T&gt;&nbsp;command)</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.awt.Frame</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#getFrame--">getFrame</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#getMaximumDocumentCount--">getMaximumDocumentCount</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#getMinimumDocumentCount--">getMinimumDocumentCount</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../com/pump/util/ObservableList.html" title="class in com.pump.util">ObservableList</a>&lt;<a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#getOpenDocuments--">getOpenDocuments</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../com/pump/swing/RecentMenu.html" title="class in com.pump.swing">RecentMenu</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#getRecentMenu--">getRecentMenu</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#getSelectedDocument--">getSelectedDocument</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#isSingleDocumentInterface--">isSingleDocumentInterface</a></span>()</code>
 <div class="block">This indicates whether this application allows more than 1 document per
  window.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#refreshFrameProperties--">refreshFrameProperties</a></span>()</code>
 <div class="block">Refresh the <code>PROPERTY_DOCUMENT_FILE</code> and
  <code>PROPERTY_DOCUMENT_MODIFIED</code>.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#registerAction-javax.swing.AbstractAction-">registerAction</a></span>(javax.swing.AbstractAction&nbsp;action)</code>&nbsp;</td>
-</tr>
-<tr id="i12" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#removeChangeListener-javax.swing.event.ChangeListener-">removeChangeListener</a></span>(javax.swing.event.ChangeListener&nbsp;l)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#setDocuments-com.pump.desktop.doc.Document-com.pump.desktop.doc.Document:A-">setDocuments</a></span>(<a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a>&nbsp;newSelectedDocument,
             <a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a>[]&nbsp;newOpenDocuments)</code>
@@ -249,24 +253,31 @@ extends java.lang.Object</pre>
  documents at the same time.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#setSelectedDocument-com.pump.desktop.doc.Document-">setSelectedDocument</a></span>(<a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a>&nbsp;newSelectedDocument)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#tryToCloseWindow--">tryToCloseWindow</a></span>()</code>
 <div class="block">This method is called when the user tries to close the JFrame these
  controls relate to.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/pump/desktop/doc/DocumentControls.html#validate-com.pump.desktop.doc.Document:A-">validate</a></span>(<a href="../../../../com/pump/desktop/doc/Document.html" title="interface in com.pump.desktop.doc">Document</a>[]&nbsp;documents)</code>
 <div class="block">This is consulted every time the list of open Documents is modified.</div>
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.com.pump.desktop.GroupedControls">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.pump.desktop.<a href="../../../../com/pump/desktop/GroupedControls.html" title="class in com.pump.desktop">GroupedControls</a></h3>
+<code><a href="../../../../com/pump/desktop/GroupedControls.html#getAction-com.pump.desktop.PumpCommand-">getAction</a>, <a href="../../../../com/pump/desktop/GroupedControls.html#registerAction-javax.swing.AbstractAction-">registerAction</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -371,15 +382,6 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="registerAction-javax.swing.AbstractAction-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>registerAction</h4>
-<pre>public&nbsp;void&nbsp;registerAction(javax.swing.AbstractAction&nbsp;action)</pre>
-</li>
-</ul>
 <a name="refreshFrameProperties--">
 <!--   -->
 </a>
@@ -516,15 +518,6 @@ extends java.lang.Object</pre>
 <dd><code>newSelectedDocument</code> - </dd>
 <dd><code>newOpenDocuments</code> - </dd>
 </dl>
-</li>
-</ul>
-<a name="getAction-com.pump.desktop.doc.DocumentCommand-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getAction</h4>
-<pre>public&nbsp;&lt;T extends javax.swing.AbstractAction&gt;&nbsp;T&nbsp;getAction(<a href="../../../../com/pump/desktop/doc/DocumentCommand.html" title="class in com.pump.desktop.doc">DocumentCommand</a>&lt;T&gt;&nbsp;command)</pre>
 </li>
 </ul>
 <a name="isSingleDocumentInterface--">
