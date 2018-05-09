@@ -17,7 +17,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
@@ -30,6 +29,10 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -42,7 +45,10 @@ import javax.swing.event.ChangeListener;
 import com.pump.animation.BufferedAnimationPanel;
 import com.pump.image.transition.AbstractTransition;
 import com.pump.image.transition.Transition;
+import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.InspectorLayout;
 import com.pump.swing.AnimationController;
+import com.pump.util.PartitionIterator;
 
 /**
  * An abstract UI to demo a set of transitions.
@@ -52,11 +58,16 @@ public abstract class TransitionDemo extends JPanel {
 
 	BufferedImage img1;
 	BufferedImage img2;
-	JComboBox<Transition> transitionComboBox = new JComboBox<Transition>();
+	Map<String, List<Transition>> transitionsByFamily = new TreeMap<>();
+	JComboBox<String> transitionFamilyComboBox = new JComboBox<>();
+	JComboBox<Transition> transitionComboBox = new JComboBox<>();
 	JComboBox<Object> interpolationComboBox = new JComboBox<Object>();
 	AnimationController controller = new AnimationController();
 	JSpinner duration = new JSpinner(new SpinnerNumberModel(2, .1, 100, .1));
 	JLabel interpolationLabel = new JLabel("Interpolation Hint:");
+
+	JPanel inspectorPanel = new JPanel();
+	TransitionPanel panel;
 
 	/**
 	 * 
@@ -64,7 +75,7 @@ public abstract class TransitionDemo extends JPanel {
 	 *            true if a combobox for the interpolation hint should be
 	 *            visible.
 	 */
-	public TransitionDemo(Transition[] transitions,
+	public TransitionDemo(Transition[][] transitions,
 			boolean includeInterpolationControls) {
 		this(AbstractTransition.createImage("A", true), AbstractTransition
 				.createImage("B", false), transitions,
@@ -78,9 +89,54 @@ public abstract class TransitionDemo extends JPanel {
 	 *            visible.
 	 */
 	public TransitionDemo(BufferedImage bi1, BufferedImage bi2,
-			Transition[] transitions, boolean includeInterpolationControls) {
+			Transition[][] transitions, boolean includeInterpolationControls) {
 		img1 = bi1;
 		img2 = bi2;
+		panel = new TransitionPanel(null);
+
+		transitionFamilyComboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				transitionComboBox.removeAllItems();
+				String familyName = (String) transitionFamilyComboBox
+						.getSelectedItem();
+				if (familyName != null) {
+					List<Transition> t = transitionsByFamily.get(familyName);
+					transitionComboBox.setEnabled(t.size() > 1);
+					for (int a = 0; a < t.size(); a++) {
+						transitionComboBox.addItem(t.get(a));
+						// TODO: add renderer that strips out family name
+					}
+				}
+			}
+		});
+
+		transitionComboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Transition t = (Transition) transitionComboBox
+						.getSelectedItem();
+				panel.setTransition(t);
+			}
+		});
+
+		interpolationComboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				panel.refresh();
+			}
+		});
+
+		for (Transition[] t : transitions) {
+			String familyName = getFamilyName(t);
+			if (transitionsByFamily.put(familyName, Arrays.asList(t)) != null)
+				throw new IllegalArgumentException(
+						"Multiple transitions had the same family name: \""
+								+ familyName + "\"");
+		}
+		for (String familyName : transitionsByFamily.keySet()) {
+			transitionFamilyComboBox.addItem(familyName);
+		}
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -90,10 +146,7 @@ public abstract class TransitionDemo extends JPanel {
 		c.weighty = 0;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.SOUTHWEST;
-		JPanel optionsPanel = new JPanel(new GridBagLayout());
-		add(optionsPanel, c);
-		final TransitionPanel panel = new TransitionPanel(
-				(Transition) transitionComboBox.getItemAt(0));
+		add(inspectorPanel, c);
 		c.weighty = 1;
 		c.gridy++;
 		c.fill = GridBagConstraints.NONE;
@@ -107,32 +160,17 @@ public abstract class TransitionDemo extends JPanel {
 		d.width = panel.getPreferredSize().width;
 		controller.setPreferredSize(d);
 
-		c.gridy++;
-
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 0;
-		c.weighty = 0;
-		c.anchor = GridBagConstraints.EAST;
-		c.insets = new Insets(3, 3, 3, 3);
-		optionsPanel.add(new JLabel("Transition:"), c);
-		c.gridy++;
-		optionsPanel.add(new JLabel("Duration (s):"), c);
-		c.gridy++;
-		optionsPanel.add(interpolationLabel, c);
-		c.gridx++;
-		c.gridy = 0;
-		c.anchor = GridBagConstraints.WEST;
-		optionsPanel.add(transitionComboBox, c);
-		c.gridy++;
-		optionsPanel.add(duration, c);
-		c.gridy++;
-		optionsPanel.add(interpolationComboBox, c);
+		InspectorLayout layout = new InspectorGridBagLayout(inspectorPanel);
+		layout.addRow(new JLabel("Transition Type:"), transitionFamilyComboBox,
+				false);
+		layout.addRow(new JLabel("Transition:"), transitionComboBox, false);
+		layout.addRow(new JLabel("Duration (s):"), duration, false);
+		layout.addRow(interpolationLabel, interpolationComboBox, false);
 
 		interpolationLabel.setVisible(includeInterpolationControls);
 		interpolationComboBox.setVisible(includeInterpolationControls);
 
-		optionsPanel.setOpaque(false);
+		inspectorPanel.setOpaque(false);
 
 		controller.addPropertyChangeListener(AnimationController.TIME_PROPERTY,
 				new PropertyChangeListener() {
@@ -168,43 +206,50 @@ public abstract class TransitionDemo extends JPanel {
 		duration.addChangeListener(durationListener);
 		durationListener.stateChanged(null);
 
-		transitionComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				panel.refresh();
-			}
-		});
-
-		transitionComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Transition t = (Transition) transitionComboBox
-						.getSelectedItem();
-				if (t == null)
-					return;
-
-				panel.setTransition(t);
-			}
-		});
-
-		transitionComboBox.removeAllItems();
-		for (int a = 0; a < transitions.length; a++) {
-			transitionComboBox.addItem(transitions[a]);
-			// make Scribble the default. I like it, and it performs well
-			if (transitions[a].toString().indexOf("Scribble") != -1)
-				transitionComboBox.setSelectedIndex(a);
-		}
-
 		interpolationComboBox
 				.addItem(RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 		interpolationComboBox
 				.addItem(RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		interpolationComboBox
 				.addItem(RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+	}
 
-		interpolationComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				panel.refresh();
+	/**
+	 * Given several Transitions, this identifies the run of words they have in
+	 * common. Sometimes there will only be one word (like "Bars"), but
+	 * sometimes there may be multiple words (like "Funky Wipe")
+	 */
+	private String getFamilyName(Transition[] t) {
+		String name = t[0].toString();
+		String[] words = name.split("\\s");
+		PartitionIterator<String> iter = new PartitionIterator<>(
+				Arrays.asList(words), 3, 0);
+		String bestCandidate = null;
+		scanNames: while (iter.hasNext()) {
+			List<List<String>> n = iter.next();
+			List<String> m = n.get(1);
+			StringBuilder sb = new StringBuilder();
+			for (int a = 0; a < m.size(); a++) {
+				if (a != 0) {
+					sb.append(' ');
+				}
+				sb.append(m.get(a));
 			}
-		});
+			String candidate = sb.toString();
+
+			for (Transition z : t) {
+				name = z.toString();
+				if (!name.contains(candidate))
+					continue scanNames;
+			}
+
+			if (bestCandidate == null
+					|| candidate.length() > bestCandidate.length())
+				bestCandidate = candidate;
+		}
+
+		return bestCandidate;
+
 	}
 
 	public RenderingHints getQualityHints() {
@@ -223,6 +268,8 @@ public abstract class TransitionDemo extends JPanel {
 		// its knees.
 		hints.put(RenderingHints.KEY_RENDERING,
 				RenderingHints.VALUE_RENDER_QUALITY);
+		hints.put(RenderingHints.KEY_INTERPOLATION,
+				RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 		hints.put(RenderingHints.KEY_TEXT_ANTIALIASING,
 				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		hints.put(RenderingHints.KEY_ANTIALIASING,
@@ -243,6 +290,7 @@ public abstract class TransitionDemo extends JPanel {
 
 		public void setTransition(Transition transition) {
 			this.transition = transition;
+			refresh();
 		}
 
 		Font font = new Font("Mono", 0, 12);
@@ -273,17 +321,19 @@ public abstract class TransitionDemo extends JPanel {
 						RenderingHints.KEY_INTERPOLATION,
 						interpolationComboBox.getSelectedItem());
 			}
-			transition.paint((Graphics2D) g, frameA, frameB, t);
-			Graphics2D g2 = (Graphics2D) g;
-			TextLayout tl = new TextLayout(format.format((t * 100)) + "%",
-					font, g2.getFontRenderContext());
-			Shape outline = tl.getOutline(AffineTransform.getTranslateInstance(
-					5, 18));
-			g2.setColor(Color.black);
-			g2.setStroke(new BasicStroke(2));
-			g2.draw(outline);
-			g2.setColor(Color.white);
-			g2.fill(outline);
+			if (transition != null) {
+				transition.paint((Graphics2D) g, frameA, frameB, t);
+				Graphics2D g2 = (Graphics2D) g;
+				TextLayout tl = new TextLayout(format.format((t * 100)) + "%",
+						font, g2.getFontRenderContext());
+				Shape outline = tl.getOutline(AffineTransform
+						.getTranslateInstance(5, 18));
+				g2.setColor(Color.black);
+				g2.setStroke(new BasicStroke(2));
+				g2.draw(outline);
+				g2.setColor(Color.white);
+				g2.fill(outline);
+			}
 		}
 	}
 }

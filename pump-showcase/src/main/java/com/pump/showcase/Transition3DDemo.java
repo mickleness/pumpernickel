@@ -25,23 +25,9 @@ import com.pump.image.transition.Transition3D;
 public class Transition3DDemo extends TransitionDemo {
 	private static final long serialVersionUID = 1L;
 
-	static Transition[] transitions = new Transition[] {
-			new CubeTransition3D(Transition.LEFT, false),
-			new CubeTransition3D(Transition.RIGHT, false),
-			new CubeTransition3D(Transition.UP, false),
-			new CubeTransition3D(Transition.DOWN, false),
-			new CubeTransition3D(Transition.LEFT, true),
-			new CubeTransition3D(Transition.RIGHT, true),
-			new CubeTransition3D(Transition.UP, true),
-			new CubeTransition3D(Transition.DOWN, true),
-			new FlipTransition3D(Transition.LEFT, false),
-			new FlipTransition3D(Transition.RIGHT, false),
-			new FlipTransition3D(Transition.UP, false),
-			new FlipTransition3D(Transition.DOWN, false),
-			new FlipTransition3D(Transition.LEFT, true),
-			new FlipTransition3D(Transition.RIGHT, true),
-			new FlipTransition3D(Transition.UP, true),
-			new FlipTransition3D(Transition.DOWN, true) };
+	static Transition[][] transitions = new Transition[][] {
+			CubeTransition3D.getDemoTransitions(),
+			FlipTransition3D.getDemoTransitions() };
 
 	public Transition3DDemo() {
 		super(transitions, true);

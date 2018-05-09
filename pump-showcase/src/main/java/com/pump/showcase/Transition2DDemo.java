@@ -10,6 +10,8 @@
  */
 package com.pump.showcase;
 
+import java.net.URL;
+
 import com.pump.image.transition.BarsTransition2D;
 import com.pump.image.transition.BlendTransition2D;
 import com.pump.image.transition.BlindsTransition2D;
@@ -51,8 +53,8 @@ import com.pump.image.transition.SwivelTransition2D;
 import com.pump.image.transition.TossTransition2D;
 import com.pump.image.transition.Transition;
 import com.pump.image.transition.Transition2D;
+import com.pump.image.transition.Transition2DInstruction;
 import com.pump.image.transition.WaveTransition2D;
-import com.pump.image.transition.WeaveTransition2D;
 import com.pump.image.transition.WipeTransition2D;
 import com.pump.image.transition.ZoomTransition2D;
 
@@ -62,94 +64,76 @@ import com.pump.image.transition.ZoomTransition2D;
  * @see com.pump.showcase.Transition3DDemo
  *
  */
-public class Transition2DDemo extends TransitionDemo {
+public class Transition2DDemo extends TransitionDemo implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
-	static Transition[] transitions = new Transition[] {
-			new BarsTransition2D(Transition2D.HORIZONTAL, true),
-			new BarsTransition2D(Transition2D.HORIZONTAL, false),
-			new BarsTransition2D(Transition2D.VERTICAL, true),
-			new BarsTransition2D(Transition2D.VERTICAL, false),
-			new BlendTransition2D(), new BlindsTransition2D(Transition2D.LEFT),
-			new BlindsTransition2D(Transition2D.RIGHT),
-			new BlindsTransition2D(Transition2D.UP),
-			new BlindsTransition2D(Transition2D.DOWN),
-			new BoxTransition2D(Transition2D.IN),
-			new BoxTransition2D(Transition2D.OUT),
-			new CheckerboardTransition2D(Transition2D.LEFT),
-			new CheckerboardTransition2D(Transition2D.RIGHT),
-			new CheckerboardTransition2D(Transition2D.UP),
-			new CheckerboardTransition2D(Transition2D.DOWN),
-			new CircleTransition2D(Transition2D.IN),
-			new CircleTransition2D(Transition2D.OUT),
-			new CollapseTransition2D(), new CurtainTransition2D(),
-			new DiamondsTransition2D(55), new DiamondsTransition2D(90),
-			new DiamondsTransition2D(120),
-			new DocumentaryTransition2D(Transition2D.LEFT),
-			new DocumentaryTransition2D(Transition2D.RIGHT),
-			new DocumentaryTransition2D(Transition2D.UP),
-			new DocumentaryTransition2D(Transition2D.DOWN),
-			new DotsTransition2D(), new DropTransition2D(),
-			new FlurryTransition2D(Transition2D.IN),
-			new FlurryTransition2D(Transition2D.OUT),
-			new FunkyWipeTransition2D(true), new FunkyWipeTransition2D(false),
-			new GooTransition2D(), new HalftoneTransition2D(Transition2D.IN),
-			new HalftoneTransition2D(Transition2D.OUT),
-			new KaleidoscopeTransition2D(), new LevitateTransition2D(),
-			new MeshShuffleTransition2D(), new MicroscopeTransition2D(),
-			new MirageTransition2D(), new MotionBlendTransition2D(),
-			new RefractiveTransition2D(),
-			new PivotTransition2D(Transition2D.TOP_LEFT, true),
-			new PivotTransition2D(Transition2D.TOP_RIGHT, true),
-			new PivotTransition2D(Transition2D.BOTTOM_LEFT, true),
-			new PivotTransition2D(Transition2D.BOTTOM_RIGHT, true),
-			new PivotTransition2D(Transition2D.TOP_LEFT, false),
-			new PivotTransition2D(Transition2D.TOP_RIGHT, false),
-			new PivotTransition2D(Transition2D.BOTTOM_LEFT, false),
-			new PivotTransition2D(Transition2D.BOTTOM_RIGHT, false),
-			new PushTransition2D(Transition2D.LEFT),
-			new PushTransition2D(Transition2D.RIGHT),
-			new PushTransition2D(Transition2D.UP),
-			new PushTransition2D(Transition2D.DOWN),
-			new RadialWipeTransition2D(Transition2D.CLOCKWISE),
-			new RadialWipeTransition2D(Transition2D.COUNTER_CLOCKWISE),
-			new RevealTransition2D(Transition2D.LEFT),
-			new RevealTransition2D(Transition2D.RIGHT),
-			new RevealTransition2D(Transition2D.UP),
-			new RevealTransition2D(Transition2D.DOWN),
-			new RotateTransition2D(Transition2D.IN),
-			new RotateTransition2D(Transition2D.OUT),
-			new ScaleTransition2D(Transition2D.IN),
-			new ScaleTransition2D(Transition2D.OUT),
-			new ScribbleTransition2D(false), new ScribbleTransition2D(true),
-			new SlideTransition2D(Transition2D.LEFT),
-			new SlideTransition2D(Transition2D.RIGHT),
-			new SlideTransition2D(Transition2D.UP),
-			new SlideTransition2D(Transition2D.DOWN),
-			new SpiralTransition2D(false), new SpiralTransition2D(true),
-			new SplitTransition2D(Transition2D.HORIZONTAL, false),
-			new SplitTransition2D(Transition2D.VERTICAL, false),
-			new SplitTransition2D(Transition2D.HORIZONTAL, true),
-			new SplitTransition2D(Transition2D.VERTICAL, true),
-			new SquareRainTransition2D(), new SquaresTransition2D(),
-			new StarTransition2D(Transition2D.IN),
-			new StarTransition2D(Transition2D.OUT),
-			new StarsTransition2D(Transition2D.LEFT),
-			new StarsTransition2D(Transition2D.RIGHT),
-			new SwivelTransition2D(Transition2D.CLOCKWISE),
-			new SwivelTransition2D(Transition2D.COUNTER_CLOCKWISE),
-			new TossTransition2D(Transition2D.LEFT),
-			new TossTransition2D(Transition2D.RIGHT),
-			new WaveTransition2D(Transition2D.UP),
-			new WaveTransition2D(Transition2D.RIGHT), new WeaveTransition2D(),
-			new WipeTransition2D(Transition2D.LEFT),
-			new WipeTransition2D(Transition2D.RIGHT),
-			new WipeTransition2D(Transition2D.UP),
-			new WipeTransition2D(Transition2D.DOWN),
-			new ZoomTransition2D(Transition2D.LEFT),
-			new ZoomTransition2D(Transition2D.RIGHT) };
+	static Transition[][] transitions = new Transition[][] {
+			BarsTransition2D.getDemoTransitions(),
+			new Transition[] { new BlendTransition2D() },
+			BlindsTransition2D.getDemoTransitions(),
+			BoxTransition2D.getDemoTransitions(),
+			CheckerboardTransition2D.getDemoTransitions(),
+			CircleTransition2D.getDemoTransitions(),
+			new Transition[] { new CollapseTransition2D() },
+			new Transition[] { new CurtainTransition2D() },
+			DiamondsTransition2D.getDemoTransitions(),
+			DocumentaryTransition2D.getDemoTransitions(),
+			new Transition[] { new DotsTransition2D() },
+			new Transition[] { new DropTransition2D() },
+			FlurryTransition2D.getDemoTransitions(),
+			FunkyWipeTransition2D.getDemoTransitions(),
+			new Transition[] { new GooTransition2D() },
+			HalftoneTransition2D.getDemoTransitions(),
+			new Transition[] { new KaleidoscopeTransition2D() },
+			new Transition[] { new LevitateTransition2D() },
+			new Transition[] { new MeshShuffleTransition2D() },
+			new Transition[] { new MicroscopeTransition2D() },
+			new Transition[] { new MirageTransition2D() },
+			new Transition[] { new MotionBlendTransition2D() },
+			new Transition[] { new RefractiveTransition2D() },
+			PivotTransition2D.getDemoTransitions(),
+			PushTransition2D.getDemoTransitions(),
+			RadialWipeTransition2D.getDemoTransitions(),
+			RevealTransition2D.getDemoTransitions(),
+			RotateTransition2D.getDemoTransitions(),
+			ScaleTransition2D.getDemoTransitions(),
+			ScribbleTransition2D.getDemoTransitions(),
+			SlideTransition2D.getDemoTransitions(),
+			SpiralTransition2D.getDemoTransitions(),
+			SplitTransition2D.getDemoTransitions(),
+			new Transition[] { new SquareRainTransition2D() },
+			new Transition[] { new SquaresTransition2D() },
+			StarTransition2D.getDemoTransitions(),
+			StarsTransition2D.getDemoTransitions(),
+			SwivelTransition2D.getDemoTransitions(),
+			TossTransition2D.getDemoTransitions(),
+			WaveTransition2D.getDemoTransitions(),
+			WipeTransition2D.getDemoTransitions(),
+			ZoomTransition2D.getDemoTransitions() };
 
 	public Transition2DDemo() {
 		super(transitions, false);
+	}
+
+	@Override
+	public String getTitle() {
+		return "Transition2D";
+	}
+
+	@Override
+	public URL getHelpURL() {
+		return Transition2DDemo.class.getResource("transition2Ddemo.html");
+	}
+
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "animation", "slideshow", "transition",
+				"vector-graphics" };
+	}
+
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { Transition2D.class, Transition.class,
+				Transition2DInstruction.class };
 	}
 }

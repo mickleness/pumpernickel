@@ -313,7 +313,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		getContentPane().setPreferredSize(new Dimension(800, 600));
 
 		try {
-			addSection("Animation: Transitions (2D)", new Transition2DDemo(),
+			addSection("Transition2D", new Transition2DDemo(),
 					Layout.STRETCH_TO_FIT);
 			addSection("Animation: Transitions (3D)", new Transition3DDemo(),
 					Layout.STRETCH_TO_FIT);
