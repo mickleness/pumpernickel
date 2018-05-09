@@ -11,17 +11,21 @@
 package com.pump.image.transition;
 
 import java.awt.AlphaComposite;
-import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
+import com.pump.awt.TransformedTexturePaint;
 import com.pump.geom.Clipper;
+import com.pump.geom.EmptyPathException;
 import com.pump.geom.RectangularTransform;
 import com.pump.geom.ShapeStringUtils;
 
@@ -123,28 +127,45 @@ public class ImageInstruction extends Transition2DInstruction {
 
 	@Override
 	public void paint(Graphics2D g, BufferedImage frameA, BufferedImage frameB) {
+		g = (Graphics2D) g.create();
+
 		BufferedImage img = isFirstFrame ? frameA : frameB;
 
-		Composite oldComposite = null;
 		if (opacity != 1) {
-			oldComposite = g.getComposite();
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
 					opacity));
 		}
 
-		Shape oldClipping = null;
-		if (clipping != null) {
-			oldClipping = g.getClip();
-			Clipper.clip(g, clipping);
+		if (RenderingHints.VALUE_ANTIALIAS_ON.equals(g
+				.getRenderingHint(RenderingHints.KEY_ANTIALIASING))) {
+			Rectangle r = new Rectangle(0, 0, img.getWidth(), img.getHeight());
+			Shape s = clipping == null ? r : clipping;
+
+			if (transform != null) {
+				try {
+					AffineTransform i = transform.createInverse();
+					// TODO: if we use AreaX the Swivel transition fails
+					Area z = new Area();
+					z.add(new Area(s));
+					z.transform(i);
+					z.intersect(new Area(r));
+					z.transform(transform);
+					s = z;
+				} catch (EmptyPathException | NoninvertibleTransformException e) {
+					// nothing to render here
+					return;
+				}
+			}
+
+			g.setPaint(new TransformedTexturePaint(img, r, transform));
+			g.fill(s);
+		} else {
+			if (clipping != null) {
+				Clipper.clip(g, clipping);
+			}
+			g.drawImage(img, transform, null);
 		}
 
-		g.drawImage(img, transform, null);
-
-		if (clipping != null)
-			g.setClip(oldClipping);
-
-		if (opacity != 1) {
-			g.setComposite(oldComposite);
-		}
+		g.dispose();
 	}
 }
