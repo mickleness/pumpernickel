@@ -81,9 +81,6 @@ import com.pump.image.ImageContext;
 public class CubeTransition3D extends Transition3D {
 
 	/**
-	 * TODO: remove all getDemoTransitions() methods or create a new tool to
-	 * invoke them.
-	 * 
 	 * @return the transitions that should be used to demonstrate this
 	 * 
 	 */

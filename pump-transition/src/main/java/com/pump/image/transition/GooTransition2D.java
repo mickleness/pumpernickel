@@ -46,8 +46,6 @@ import java.util.Random;
 public class GooTransition2D extends AbstractClippedTransition2D {
 
 	/**
-	 * TODO: remove all getDemoTransitions() methods or create a new tool to invoke them.
-	 * 
 	 * @return the transitions that should be used to demonstrate this
 	 *         transition.
 	 */

@@ -36,8 +36,6 @@ import java.awt.geom.AffineTransform;
 public class RotateTransition2D extends Transition2D {
 
 	/**
-	 * TODO: remove all getDemoTransitions() methods or create a new tool to invoke them.
-	 * 
 	 * @return the transitions that should be used to demonstrate this
 	 *         transition.
 	 */

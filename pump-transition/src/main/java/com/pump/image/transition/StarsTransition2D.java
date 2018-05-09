@@ -51,8 +51,6 @@ import com.pump.geom.TransformUtils;
 public class StarsTransition2D extends AbstractClippedTransition2D {
 
 	/**
-	 * TODO: remove all getDemoTransitions() methods or create a new tool to invoke them.
-	 * 
 	 * @return the transitions that should be used to demonstrate this
 	 *         transition.
 	 */
