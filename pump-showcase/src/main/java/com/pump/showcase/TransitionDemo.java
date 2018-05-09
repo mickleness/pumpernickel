@@ -105,7 +105,6 @@ public abstract class TransitionDemo extends JPanel {
 					transitionComboBox.setEnabled(t.size() > 1);
 					for (int a = 0; a < t.size(); a++) {
 						transitionComboBox.addItem(t.get(a));
-						// TODO: add renderer that strips out family name
 					}
 				}
 			}
