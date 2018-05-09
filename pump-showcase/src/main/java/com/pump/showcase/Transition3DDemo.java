@@ -10,6 +10,9 @@
  */
 package com.pump.showcase;
 
+import java.net.URL;
+
+import com.pump.image.ImageContext;
 import com.pump.image.transition.CubeTransition3D;
 import com.pump.image.transition.FlipTransition3D;
 import com.pump.image.transition.Transition;
@@ -29,5 +32,26 @@ public class Transition3DDemo extends TransitionDemo {
 
 	public Transition3DDemo() {
 		super(transitions);
+	}
+
+	@Override
+	public String getTitle() {
+		return "Transition3D";
+	}
+
+	@Override
+	public URL getHelpURL() {
+		return Transition3DDemo.class.getResource("transition3Ddemo.html");
+	}
+
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "animation", "slideshow", "transition", "3D" };
+	}
+
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { Transition3D.class, Transition.class,
+				ImageContext.class };
 	}
 }

@@ -64,7 +64,7 @@ import com.pump.image.transition.ZoomTransition2D;
  * @see com.pump.showcase.Transition3DDemo
  *
  */
-public class Transition2DDemo extends TransitionDemo implements ShowcaseDemo {
+public class Transition2DDemo extends TransitionDemo {
 	private static final long serialVersionUID = 1L;
 
 	static Transition[][] transitions = new Transition[][] {

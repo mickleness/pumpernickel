@@ -315,7 +315,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		try {
 			addSection("Transition2D", new Transition2DDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("Animation: Transitions (3D)", new Transition3DDemo(),
+			addSection("Transition3D", new Transition3DDemo(),
 					Layout.STRETCH_TO_FIT);
 			addSection("Brushed Metal", new BrushedMetalDemo(),
 					Layout.STRETCH_TO_FIT);
