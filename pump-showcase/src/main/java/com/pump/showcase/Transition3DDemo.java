@@ -10,8 +10,6 @@
  */
 package com.pump.showcase;
 
-import java.awt.RenderingHints;
-
 import com.pump.image.transition.CubeTransition3D;
 import com.pump.image.transition.FlipTransition3D;
 import com.pump.image.transition.Transition;
@@ -30,14 +28,6 @@ public class Transition3DDemo extends TransitionDemo {
 			FlipTransition3D.getDemoTransitions() };
 
 	public Transition3DDemo() {
-		super(transitions, true);
-	}
-
-	@Override
-	public RenderingHints getQualityHints() {
-		RenderingHints rh = super.getQualityHints();
-		rh.put(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-		return rh;
+		super(transitions);
 	}
 }

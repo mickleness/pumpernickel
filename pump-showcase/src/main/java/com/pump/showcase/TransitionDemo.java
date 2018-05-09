@@ -61,7 +61,7 @@ public abstract class TransitionDemo extends JPanel {
 	Map<String, List<Transition>> transitionsByFamily = new TreeMap<>();
 	JComboBox<String> transitionFamilyComboBox = new JComboBox<>();
 	JComboBox<Transition> transitionComboBox = new JComboBox<>();
-	JComboBox<Object> interpolationComboBox = new JComboBox<Object>();
+	JComboBox<Object> renderingHintsComboBox = new JComboBox<Object>();
 	AnimationController controller = new AnimationController();
 	JSpinner duration = new JSpinner(new SpinnerNumberModel(2, .1, 100, .1));
 	JLabel interpolationLabel = new JLabel("Interpolation Hint:");
@@ -69,27 +69,13 @@ public abstract class TransitionDemo extends JPanel {
 	JPanel inspectorPanel = new JPanel();
 	TransitionPanel panel;
 
-	/**
-	 * 
-	 * @param includeInterpolationControls
-	 *            true if a combobox for the interpolation hint should be
-	 *            visible.
-	 */
-	public TransitionDemo(Transition[][] transitions,
-			boolean includeInterpolationControls) {
+	public TransitionDemo(Transition[][] transitions) {
 		this(AbstractTransition.createImage("A", true), AbstractTransition
-				.createImage("B", false), transitions,
-				includeInterpolationControls);
+				.createImage("B", false), transitions);
 	}
 
-	/**
-	 * 
-	 * @param includeInterpolationControls
-	 *            true if a combobox for the interpolation hint should be
-	 *            visible.
-	 */
 	public TransitionDemo(BufferedImage bi1, BufferedImage bi2,
-			Transition[][] transitions, boolean includeInterpolationControls) {
+			Transition[][] transitions) {
 		img1 = bi1;
 		img2 = bi2;
 		panel = new TransitionPanel(null);
@@ -119,7 +105,7 @@ public abstract class TransitionDemo extends JPanel {
 			}
 		});
 
-		interpolationComboBox.addActionListener(new ActionListener() {
+		renderingHintsComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				panel.refresh();
@@ -164,10 +150,8 @@ public abstract class TransitionDemo extends JPanel {
 				false);
 		layout.addRow(new JLabel("Transition:"), transitionComboBox, false);
 		layout.addRow(new JLabel("Duration (s):"), duration, false);
-		layout.addRow(interpolationLabel, interpolationComboBox, false);
-
-		interpolationLabel.setVisible(includeInterpolationControls);
-		interpolationComboBox.setVisible(includeInterpolationControls);
+		layout.addRow(new JLabel("Rendering Hints"), renderingHintsComboBox,
+				false);
 
 		inspectorPanel.setOpaque(false);
 
@@ -205,12 +189,8 @@ public abstract class TransitionDemo extends JPanel {
 		duration.addChangeListener(durationListener);
 		durationListener.stateChanged(null);
 
-		interpolationComboBox
-				.addItem(RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-		interpolationComboBox
-				.addItem(RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		interpolationComboBox
-				.addItem(RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		renderingHintsComboBox.addItem(RenderingHints.VALUE_RENDER_SPEED);
+		renderingHintsComboBox.addItem(RenderingHints.VALUE_RENDER_QUALITY);
 	}
 
 	/**
@@ -251,8 +231,12 @@ public abstract class TransitionDemo extends JPanel {
 
 	}
 
-	public RenderingHints getQualityHints() {
-		return createQualityHints();
+	public RenderingHints getRenderingHints() {
+		if (renderingHintsComboBox.getSelectedIndex() == 0) {
+			return createSpeedHints();
+		} else {
+			return createQualityHints();
+		}
 	}
 
 	public static RenderingHints createQualityHints() {
@@ -277,6 +261,26 @@ public abstract class TransitionDemo extends JPanel {
 		return hints;
 	}
 
+	public static RenderingHints createSpeedHints() {
+		RenderingHints hints = new RenderingHints(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_OFF);
+		hints.put(RenderingHints.KEY_ALPHA_INTERPOLATION,
+				RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
+		hints.put(RenderingHints.KEY_COLOR_RENDERING,
+				RenderingHints.VALUE_COLOR_RENDER_SPEED);
+		hints.put(RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY);
+		hints.put(RenderingHints.KEY_INTERPOLATION,
+				RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+		hints.put(RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+		hints.put(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_OFF);
+
+		return hints;
+	}
+
 	class TransitionPanel extends BufferedAnimationPanel {
 		private static final long serialVersionUID = 1L;
 
@@ -297,6 +301,7 @@ public abstract class TransitionDemo extends JPanel {
 
 		@Override
 		protected void paintAnimation(Graphics2D g, int width, int height) {
+			g = (Graphics2D) g.create();
 			g.setColor(Color.black);
 			g.fillRect(0, 0, width, height);
 			float t = controller.getTime() / controller.getDuration() * 2;
@@ -313,13 +318,7 @@ public abstract class TransitionDemo extends JPanel {
 				frameA = img1;
 				frameB = img2;
 			}
-			((Graphics2D) g).setRenderingHints(getQualityHints());
-			if (interpolationComboBox.isVisible()
-					&& interpolationComboBox.getSelectedItem() != null) {
-				((Graphics2D) g).setRenderingHint(
-						RenderingHints.KEY_INTERPOLATION,
-						interpolationComboBox.getSelectedItem());
-			}
+			g.setRenderingHints(getRenderingHints());
 			if (transition != null) {
 				transition.paint((Graphics2D) g, frameA, frameB, t);
 				Graphics2D g2 = (Graphics2D) g;

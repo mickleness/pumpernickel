@@ -112,7 +112,7 @@ public class Transition2DDemo extends TransitionDemo implements ShowcaseDemo {
 			ZoomTransition2D.getDemoTransitions() };
 
 	public Transition2DDemo() {
-		super(transitions, false);
+		super(transitions);
 	}
 
 	@Override
