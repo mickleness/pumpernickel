@@ -315,6 +315,9 @@ public class WavReader {
 				lastFormatChunk.sigBitsPerSample != 8, false);
 	}
 
+	/**
+	 * Read all the data in this file.
+	 */
 	public void read() throws IOException {
 		while (this.in.getReadBytes() != size) {
 			String chunkID;
@@ -325,11 +328,47 @@ public class WavReader {
 				 * T4L bug 15259: Some encoders must write a byte "0" to signify
 				 * EOF?
 				 */
-				return;
+				break;
 			}
 			long chunkSize = readLong(4);
 			readChunk(chunkID, chunkSize);
 		}
+	}
+
+	/**
+	 * Skips all the data in this file.
+	 * 
+	 * @return the number of bytes that contain audio data. This will be the sum
+	 *         of the length of all the byte arrays passed to
+	 *         {@link #processSamples(byte[], int, int, int)}.
+	 * @throws IOException
+	 */
+	public long skip() throws IOException {
+		long sum = 0;
+		while (this.in.getReadBytes() != size) {
+			String chunkID;
+			try {
+				chunkID = readString(4);
+			} catch (EmptyReadException e) {
+				/**
+				 * T4L bug 15259: Some encoders must write a byte "0" to signify
+				 * EOF?
+				 */
+				break;
+			}
+			long chunkSize = readLong(4);
+			if ("fmt ".equals(chunkID)) {
+				// we may need getAudioFormat to work later, plus this is a
+				// pretty cheap call to make
+				readChunk(chunkID, chunkSize);
+			} else if ("data".equals(chunkID)) {
+				sum += chunkSize;
+				in.skip(chunkSize);
+			} else {
+				in.skip(chunkSize);
+			}
+		}
+		return sum;
 	}
 
 	/**
