@@ -49,6 +49,11 @@ public class AudioPlayer {
 			this.time = time;
 			this.asFraction = asFraction;
 		}
+
+		@Override
+		public String toString() {
+			return asFraction ? time + " s" : time + "";
+		}
 	}
 
 	/**
@@ -73,7 +78,7 @@ public class AudioPlayer {
 		}
 
 		@Override
-		public String toString() {
+		public synchronized String toString() {
 			return "Snapshot[ attempt=" + playAttempt + ", fraction="
 					+ fraction + ", elapsed=" + elapsedTime + ", complete="
 					+ complete + ", active=" + active + ", error=" + error
@@ -81,7 +86,7 @@ public class AudioPlayer {
 		}
 
 		@Override
-		public boolean equals(Object t) {
+		public synchronized boolean equals(Object t) {
 			if (t == this)
 				return true;
 			if (!(t instanceof Snapshot))
@@ -101,7 +106,7 @@ public class AudioPlayer {
 			error = null;
 		}
 
-		public Snapshot clone() {
+		public synchronized Snapshot clone() {
 			return new Snapshot(playAttempt, fraction, elapsedTime, complete,
 					active, error);
 		}
@@ -171,7 +176,6 @@ public class AudioPlayer {
 			try {
 				AudioFormat audioFormat = stream.getFormat();
 				try {
-					long bytesWritten = 0;
 					long totalFrames = stream.getFrameLength();
 					float totalTime = totalFrames / audioFormat.getFrameRate();
 					int frameSize = audioFormat.getFrameSize();
@@ -216,7 +220,6 @@ public class AudioPlayer {
 									int t = dataLine.write(buffer, ptr,
 											Math.min(bytesRead - ptr, 1024));
 									ptr += t;
-									bytesWritten += t;
 
 									float newCompletion = ((float) dataLine
 											.getFramePosition() + framesSkipped)
@@ -350,17 +353,15 @@ public class AudioPlayer {
 	 * @param updateInterval
 	 *            the number of milliseconds between possible events.
 	 */
-	public void addEDTListener(Listener l, int updateInterval) {
-		synchronized (edtListeners) {
-			List<Listener> list = edtListeners.get(updateInterval);
-			if (list == null) {
-				list = new ArrayList<Listener>();
-				list.add(l);
-				edtListeners.put(updateInterval, list);
-				setTimerActive(updateInterval, true);
-			} else {
-				list.add(l);
-			}
+	public synchronized void addEDTListener(Listener l, int updateInterval) {
+		List<Listener> list = edtListeners.get(updateInterval);
+		if (list == null) {
+			list = new ArrayList<Listener>();
+			list.add(l);
+			edtListeners.put(updateInterval, list);
+			setTimerActive(updateInterval, true);
+		} else {
+			list.add(l);
 		}
 	}
 
@@ -369,10 +370,8 @@ public class AudioPlayer {
 	 * processing the audio. If this method is expensive: sound playback will be
 	 * choppy as we wait for this listener to finish.
 	 */
-	public void addListener(Listener l) {
-		synchronized (realTimeListeners) {
-			realTimeListeners.add(l);
-		}
+	public synchronized void addListener(Listener l) {
+		realTimeListeners.add(l);
 	}
 
 	/**
@@ -382,10 +381,8 @@ public class AudioPlayer {
 	 *            the listener to remove.
 	 * @return true if this listener was removed.
 	 */
-	public boolean removeListener(Listener l) {
-		synchronized (realTimeListeners) {
-			return realTimeListeners.remove(l);
-		}
+	public synchronized boolean removeListener(Listener l) {
+		return realTimeListeners.remove(l);
 	}
 
 	/**
@@ -396,22 +393,18 @@ public class AudioPlayer {
 	 *            the listener to remove.
 	 * @return true if this listener was removed.
 	 */
-	public boolean removeEDTListener(Listener l) {
-		synchronized (edtListeners) {
-			boolean returnValue = false;
-			for (Integer updateInterval : edtListeners.keySet()) {
-				List<Listener> list = edtListeners.get(updateInterval);
-				synchronized (list) {
-					if (list.remove(l)) {
-						returnValue = true;
-						if (list.size() == 0) {
-							setTimerActive(updateInterval, false);
-						}
-					}
+	public synchronized boolean removeEDTListener(Listener l) {
+		boolean returnValue = false;
+		for (Integer updateInterval : edtListeners.keySet()) {
+			List<Listener> list = edtListeners.get(updateInterval);
+			if (list.remove(l)) {
+				returnValue = true;
+				if (list.size() == 0) {
+					setTimerActive(updateInterval, false);
 				}
 			}
-			return returnValue;
 		}
+		return returnValue;
 	}
 
 	private class CoalesceUpdateActionListener implements ActionListener {
@@ -423,71 +416,73 @@ public class AudioPlayer {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			List<Listener> listeners;
-			synchronized (edtListeners) {
-				listeners = edtListeners.get(updateInterval);
-			}
-			if (listeners == null)
-				return;
+			Snapshot currentBroadcast;
 
-			Snapshot currentBroadcast = currentSnapshot.clone();
-			if (currentBroadcast.equals(lastBroadcast))
-				return;
+			Listener[] listenerArray;
+			synchronized (AudioPlayer.this) {
+				currentBroadcast = currentSnapshot.clone();
+				if (currentBroadcast.equals(lastBroadcast))
+					return;
+
+				List<Listener> l = edtListeners.get(updateInterval);
+
+				if (l == null)
+					return;
+
+				listenerArray = l.toArray(new Listener[l.size()]);
+			}
 			// TODO: also shutdown timers when appropriate
 
-			synchronized (listeners) {
-				for (Listener listener : listeners) {
-					// if this is a whole new attempt, then notify everyone that
-					// playback stopped:
-					if (lastBroadcast != null
-							&& lastBroadcast.playAttempt != currentBroadcast.playAttempt) {
-						Throwable t = playbackErrors
-								.get(lastBroadcast.playAttempt);
-						listener.playbackStopped(t);
-					}
-				}
-
+			for (Listener listener : listenerArray) {
+				// if this is a whole new attempt, then notify everyone that
+				// playback stopped:
 				if (lastBroadcast != null
 						&& lastBroadcast.playAttempt != currentBroadcast.playAttempt) {
-					// destroy the previous record, we're not comparing against
-					// it anymore
-					lastBroadcast = null;
+					Throwable t = playbackErrors.get(lastBroadcast.playAttempt);
+					listener.playbackStopped(t);
 				}
-
-				Throwable lastError = lastBroadcast == null ? null
-						: lastBroadcast.error;
-				boolean lastActive = lastBroadcast == null ? false
-						: lastBroadcast.active;
-				boolean lastComplete = lastBroadcast == null ? false
-						: lastBroadcast.complete;
-				float lastFraction = lastBroadcast == null ? -1
-						: lastBroadcast.fraction;
-				float lastElapsed = lastBroadcast == null ? -1
-						: lastBroadcast.elapsedTime;
-
-				for (Listener listener : listeners) {
-					// always broadcast this first
-					if (lastActive != currentBroadcast.active) {
-						listener.playbackStarted();
-					}
-
-					// then we might broadcast any of these:
-					if (!Objects.equals(currentBroadcast.error, lastError)) {
-						listener.playbackProgress(currentBroadcast.elapsedTime,
-								currentBroadcast.fraction);
-						listener.playbackStopped(currentBroadcast.error);
-					} else if (lastComplete != currentBroadcast.complete) {
-						listener.playbackProgress(currentBroadcast.elapsedTime,
-								currentBroadcast.fraction);
-						listener.playbackStopped(null);
-					} else if (lastFraction != currentBroadcast.fraction
-							|| lastElapsed != currentBroadcast.elapsedTime) {
-						listener.playbackProgress(currentBroadcast.elapsedTime,
-								currentBroadcast.fraction);
-					}
-				}
-				lastBroadcast = currentBroadcast;
 			}
+
+			if (lastBroadcast != null
+					&& lastBroadcast.playAttempt != currentBroadcast.playAttempt) {
+				// destroy the previous record, we're not comparing against
+				// it anymore
+				lastBroadcast = null;
+			}
+
+			Throwable lastError = lastBroadcast == null ? null
+					: lastBroadcast.error;
+			boolean lastActive = lastBroadcast == null ? false
+					: lastBroadcast.active;
+			boolean lastComplete = lastBroadcast == null ? false
+					: lastBroadcast.complete;
+			float lastFraction = lastBroadcast == null ? -1
+					: lastBroadcast.fraction;
+			float lastElapsed = lastBroadcast == null ? -1
+					: lastBroadcast.elapsedTime;
+
+			for (Listener listener : listenerArray) {
+				// always broadcast this first
+				if (lastActive != currentBroadcast.active) {
+					listener.playbackStarted();
+				}
+
+				// then we might broadcast any of these:
+				if (!Objects.equals(currentBroadcast.error, lastError)) {
+					listener.playbackProgress(currentBroadcast.elapsedTime,
+							currentBroadcast.fraction);
+					listener.playbackStopped(currentBroadcast.error);
+				} else if (lastComplete != currentBroadcast.complete) {
+					listener.playbackProgress(currentBroadcast.elapsedTime,
+							currentBroadcast.fraction);
+					listener.playbackStopped(null);
+				} else if (lastFraction != currentBroadcast.fraction
+						|| lastElapsed != currentBroadcast.elapsedTime) {
+					listener.playbackProgress(currentBroadcast.elapsedTime,
+							currentBroadcast.fraction);
+				}
+			}
+			lastBroadcast = currentBroadcast;
 		}
 	};
 
@@ -515,39 +510,50 @@ public class AudioPlayer {
 	 */
 	Listener masterListener = new Listener() {
 
+		@Override
 		public void playbackStarted() {
-			synchronized (realTimeListeners) {
-				for (int a = 0; a < realTimeListeners.size(); a++) {
-					try {
-						realTimeListeners.get(a).playbackStarted();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+			Listener[] listenerArray;
+			synchronized (AudioPlayer.this) {
+				listenerArray = realTimeListeners
+						.toArray(new Listener[realTimeListeners.size()]);
+			}
+			for (Listener l : listenerArray) {
+				try {
+					l.playbackStarted();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
 
+		@Override
 		public void playbackProgress(float timeElapsed, float timeAsFraction) {
-			synchronized (realTimeListeners) {
-				for (int a = 0; a < realTimeListeners.size(); a++) {
-					try {
-						realTimeListeners.get(a).playbackProgress(timeElapsed,
-								timeAsFraction);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+			Listener[] listenerArray;
+			synchronized (AudioPlayer.this) {
+				listenerArray = realTimeListeners
+						.toArray(new Listener[realTimeListeners.size()]);
+			}
+			for (Listener l : listenerArray) {
+				try {
+					l.playbackProgress(timeElapsed, timeAsFraction);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
 
+		@Override
 		public void playbackStopped(Throwable t) {
-			synchronized (realTimeListeners) {
-				for (int a = 0; a < realTimeListeners.size(); a++) {
-					try {
-						realTimeListeners.get(a).playbackStopped(t);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+			Listener[] listenerArray;
+			synchronized (AudioPlayer.this) {
+				listenerArray = realTimeListeners
+						.toArray(new Listener[realTimeListeners.size()]);
+			}
+			for (Listener l : listenerArray) {
+				try {
+					l.playbackStopped(t);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -565,10 +571,10 @@ public class AudioPlayer {
 	public void play(StartTime startTime) throws UnsupportedAudioFileException,
 			IOException, UnsupportedOperationException,
 			LineUnavailableException {
-		synchronized (this) {
-			if (previousCancellable != null)
-				previousCancellable.cancel();
+		if (isPlaying())
+			pause();
 
+		synchronized (this) {
 			currentSnapshot.resetAndIncrement();
 			Cancellable currentCancellable = new BasicCancellable();
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(source);
@@ -578,40 +584,42 @@ public class AudioPlayer {
 		}
 	}
 
-	public boolean isPlaying() {
-		synchronized (currentSnapshot) {
-			return currentSnapshot.active;
-		}
+	public synchronized boolean isPlaying() {
+		return currentSnapshot.active;
 	}
 
-	public float getElapsedTime() {
-		synchronized (currentSnapshot) {
-			return currentSnapshot.elapsedTime;
-		}
+	public synchronized float getElapsedTime() {
+		return currentSnapshot.elapsedTime;
 	}
 
-	public float getFractionTime() {
-		synchronized (currentSnapshot) {
-			return currentSnapshot.fraction;
-		}
+	public synchronized float getFractionTime() {
+		return currentSnapshot.fraction;
 	}
 
-	public boolean isComplete() {
-		synchronized (currentSnapshot) {
-			return currentSnapshot.complete;
-		}
+	public synchronized boolean isComplete() {
+		return currentSnapshot.complete;
 	}
 
-	public Throwable getError() {
-		synchronized (currentSnapshot) {
-			return currentSnapshot.error;
-		}
+	public synchronized Throwable getError() {
+		return currentSnapshot.error;
 	}
 
 	public void pause() {
 		synchronized (this) {
 			if (previousCancellable != null)
 				previousCancellable.cancel();
+		}
+		while (true) {
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				Thread.yield();
+			}
+			synchronized (this) {
+				if (!currentSnapshot.active) {
+					return;
+				}
+			}
 		}
 	}
 }

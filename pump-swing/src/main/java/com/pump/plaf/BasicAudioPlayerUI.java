@@ -23,6 +23,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
 
+import javax.swing.AbstractButton;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -32,12 +34,17 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.SliderUI;
 
+import com.pump.audio.AudioPlayer;
 import com.pump.audio.AudioPlayer.StartTime;
+import com.pump.icon.DarkenedIcon;
 import com.pump.icon.PauseIcon;
 import com.pump.icon.TriangleIcon;
+import com.pump.swing.AnimationController;
 import com.pump.swing.AudioPlayerComponent;
 
 public class BasicAudioPlayerUI extends AudioPlayerUI {
@@ -53,7 +60,7 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 
 	static class URLPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
-		JTextField field = new JTextField(10);
+		JTextField field = new JTextField(20);
 		JLabel label = new JLabel("URL:");
 
 		public URLPanel(String fieldText) {
@@ -74,25 +81,39 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 		}
 	}
 
+	public static final Icon PLAY_ICON = new TriangleIcon(SwingConstants.EAST,
+			12, 12);
+	public static final Icon PAUSE_ICON = new PauseIcon(12, 12);
+
 	static class Fields {
 		final AudioPlayerComponent apc;
 
-		JButton playButton = new JButton(new TriangleIcon(SwingConstants.EAST,
-				12, 12));
-		JButton pauseButton = new JButton(new PauseIcon(12, 12));
-		// JSlider volumeSlider = new JSlider(0,100,100);
+		JButton playButton = new JButton(PLAY_ICON);
 		JSlider playbackProgress = new JSlider(0, 100, 0);
+		JPanel controller = new JPanel();
 		JButton browseButton = new JButton("Browse...");
 		URLPanel urlPanel = new URLPanel(null);
+		ChangeListener sliderListener = new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if (playbackProgress.getValueIsAdjusting())
+					return;
+
+				AudioPlayer player = apc.getAudioPlayer();
+				if (player != null && player.isPlaying())
+					play();
+			}
+
+		};
 
 		protected Fields(AudioPlayerComponent apc) {
 			this.apc = apc;
+			playbackProgress.addChangeListener(sliderListener);
 		}
 
 		protected void uninstall() {
-			apc.remove(playButton);
-			apc.remove(pauseButton);
-			apc.remove(playbackProgress);
+			apc.remove(controller);
 			apc.remove(browseButton);
 			apc.remove(urlPanel);
 		}
@@ -103,27 +124,26 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			GridBagConstraints gbc = new GridBagConstraints();
 			gbc.gridx = 0;
 			gbc.gridy = 0;
-			gbc.weightx = 1;
+			gbc.weightx = 0;
 			gbc.weighty = 1;
 			gbc.insets = new Insets(3, 3, 3, 3);
-			gbc.fill = GridBagConstraints.NONE;
-			gbc.gridwidth = GridBagConstraints.REMAINDER;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
-			apc.add(urlPanel, gbc);
-			gbc.gridy++;
-			gbc.weightx = 0;
-			gbc.gridwidth = 1;
-			apc.add(playButton, gbc);
-			apc.add(pauseButton, gbc);
-			gbc.gridx++;
 			gbc.weightx = 1;
-			apc.add(playbackProgress, gbc);
+			apc.add(urlPanel, gbc);
 			gbc.gridx++;
 			gbc.weightx = 0;
 			apc.add(browseButton, gbc);
+			gbc.gridy++;
+			gbc.gridx = 0;
+			gbc.weighty = 0;
+			gbc.weightx = 1;
+			gbc.gridwidth = GridBagConstraints.REMAINDER;
+			gbc.fill = GridBagConstraints.BOTH;
 
-			playButton.setBorderPainted(false);
-			pauseButton.setBorderPainted(false);
+			apc.add(controller, gbc);
+
+			AnimationController.format(controller, playButton,
+					new JButton[] {}, playbackProgress);
 
 			browseButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -132,19 +152,12 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			});
 			playButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					float startTime = 0;
-					if (playbackProgress.getValue() < playbackProgress
-							.getMaximum()) {
-						startTime = (((float) (playbackProgress.getValue() - playbackProgress
-								.getMinimum())) / ((float) (playbackProgress
-								.getMaximum() - playbackProgress.getMinimum())));
+					if (apc.getAudioPlayer() == null
+							|| !apc.getAudioPlayer().isPlaying()) {
+						play();
+					} else {
+						apc.getUI().doPause(apc);
 					}
-					apc.getUI().doPlay(apc, new StartTime(startTime, true));
-				}
-			});
-			pauseButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					apc.getUI().doPause(apc);
 				}
 			});
 
@@ -154,6 +167,17 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 					updateUI();
 				}
 			});
+		}
+
+		private void play() {
+			float startTime = 0;
+			if (playbackProgress.getValue() < playbackProgress.getMaximum()) {
+				startTime = (((float) (playbackProgress.getValue() - playbackProgress
+						.getMinimum())) / ((float) (playbackProgress
+						.getMaximum() - playbackProgress.getMinimum())));
+			}
+			StartTime t = new StartTime(startTime, true);
+			apc.getUI().doPlay(apc, t);
 		}
 
 		protected void updateUI() {
@@ -170,8 +194,7 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			String text = source == null ? "" : source.toString();
 			urlPanel.field.setText(text);
 			boolean playing = false;
-			playButton.setVisible(!playing);
-			pauseButton.setVisible(playing);
+			setIcon(playButton, playing ? PAUSE_ICON : PLAY_ICON);
 
 			SliderUI ui = playbackProgress.getUI();
 			boolean assignDefault = false;
@@ -276,8 +299,7 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 	@Override
 	protected void notifyPlaybackStarted(AudioPlayerComponent apc) {
 		Fields fields = getFields(apc);
-		fields.playButton.setVisible(false);
-		fields.pauseButton.setVisible(true);
+		setIcon(fields.playButton, PAUSE_ICON);
 	}
 
 	@Override
@@ -288,13 +310,27 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 				- fields.playbackProgress.getMinimum();
 		int v = (int) (span * timeAsFraction + fields.playbackProgress
 				.getMinimum());
-		fields.playbackProgress.setValue(v);
+		SliderUI ui = fields.playbackProgress.getUI();
+		boolean isDragging = ui instanceof WaveformSliderUI ? ((WaveformSliderUI) ui)
+				.isDragging() : false;
+		if (!isDragging) {
+			fields.playbackProgress.removeChangeListener(fields.sliderListener);
+			fields.playbackProgress.setValue(v);
+			fields.playbackProgress.addChangeListener(fields.sliderListener);
+		}
+		setIcon(fields.playButton, PAUSE_ICON);
 	}
 
 	@Override
 	protected void notifyPlaybackStopped(AudioPlayerComponent apc, Throwable t) {
 		Fields fields = getFields(apc);
-		fields.playButton.setVisible(true);
-		fields.pauseButton.setVisible(false);
+		setIcon(fields.playButton, PLAY_ICON);
+	}
+
+	// TODO: see setIcon(..) in AnimationController
+	protected static void setIcon(AbstractButton button, Icon icon) {
+		button.setIcon(icon);
+		button.setRolloverIcon(new DarkenedIcon(icon, .5f));
+		button.setPressedIcon(new DarkenedIcon(icon, .75f));
 	}
 }

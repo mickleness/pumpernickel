@@ -123,6 +123,8 @@ public class WaveformSliderUI extends BasicSliderUI {
 
 	URL source;
 	Shape waveform;
+	boolean isDragging = false;
+
 	/**
 	 * The BasicSliderUI users a Timer to scroll the thumb to where you clicked.
 	 * But in this UI we just jump straight to where the mouse is. just
@@ -141,6 +143,7 @@ public class WaveformSliderUI extends BasicSliderUI {
 				return;
 
 			calculateGeometry();
+			isDragging = true;
 			slider.setValueIsAdjusting(true);
 			adjustValue(e);
 
@@ -151,6 +154,7 @@ public class WaveformSliderUI extends BasicSliderUI {
 			if (!slider.isEnabled() || !SwingUtilities.isLeftMouseButton(e))
 				return;
 			adjustValue(e);
+			isDragging = false;
 			slider.setValueIsAdjusting(false);
 		}
 
@@ -189,6 +193,17 @@ public class WaveformSliderUI extends BasicSliderUI {
 		super(slider);
 		this.source = source;
 		waveform = createWaveform(source);
+	}
+
+	/**
+	 * Returns true if the user is dragging the slider.
+	 *
+	 * @return true if the user is dragging the slider
+	 * @since 1.5
+	 */
+	@Override
+	public boolean isDragging() {
+		return isDragging;
 	}
 
 	public URL getSource() {
@@ -256,12 +271,17 @@ public class WaveformSliderUI extends BasicSliderUI {
 		g.setColor(slider.getForeground());
 		if (slider.getOrientation() == JSlider.HORIZONTAL) {
 			int x = thumbRect.x + thumbRect.width / 2;
-			g.drawLine(x, 0, x, slider.getHeight());
+			g.drawLine(x, trackRect.y, x, trackRect.height);
 		} else {
 			int y = thumbRect.y + thumbRect.height / 2;
-			g.drawLine(0, y, slider.getWidth(), y);
+			g.drawLine(trackRect.x, y, trackRect.width, y);
 		}
 		g.dispose();
+	}
+
+	@Override
+	public void paintFocus(Graphics g) {
+		// do nothing, we don't paint focus
 	}
 
 	@Override
