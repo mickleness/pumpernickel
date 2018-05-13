@@ -37,15 +37,18 @@ public class AudioPlayerUI extends ComponentUI {
 			this.apc = apc;
 		}
 
+		@Override
 		public void playbackStarted() {
 			apc.getUI().notifyPlaybackStarted(apc);
 		}
 
+		@Override
 		public void playbackProgress(float timeElapsed, float timeAsFraction) {
 			apc.getUI()
 					.notifyPlaybackProgress(apc, timeElapsed, timeAsFraction);
 		}
 
+		@Override
 		public void playbackStopped(Throwable t) {
 			apc.getUI().notifyPlaybackStopped(apc, t);
 		}
