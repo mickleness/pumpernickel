@@ -31,7 +31,9 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.SliderUI;
 
 import com.pump.audio.AudioPlayer.StartTime;
 import com.pump.icon.PauseIcon;
@@ -170,6 +172,29 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			boolean playing = false;
 			playButton.setVisible(!playing);
 			pauseButton.setVisible(playing);
+
+			SliderUI ui = playbackProgress.getUI();
+			boolean assignDefault = false;
+			if (source == null) {
+				assignDefault = true;
+			} else {
+				WaveformSliderUI wsi = null;
+				if (ui instanceof WaveformSliderUI) {
+					wsi = (WaveformSliderUI) ui;
+				}
+				if (wsi == null || !wsi.getSource().equals(source)) {
+					try {
+						playbackProgress.setUI(new WaveformSliderUI(
+								playbackProgress, source));
+					} catch (Throwable t) {
+						assignDefault = true;
+					}
+				}
+			}
+			if (assignDefault) {
+				ui = (SliderUI) UIManager.getUI(playbackProgress);
+				playbackProgress.setUI(ui);
+			}
 
 			Window w = SwingUtilities.getWindowAncestor(apc);
 			browseButton.setEnabled(w != null);
