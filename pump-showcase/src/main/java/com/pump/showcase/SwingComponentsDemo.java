@@ -26,8 +26,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.GeneralPath;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -36,7 +34,6 @@ import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -59,138 +56,15 @@ import com.pump.icon.StarIcon;
 import com.pump.icon.TriangleIcon;
 import com.pump.plaf.AquaThrobberUI;
 import com.pump.plaf.BreadCrumbUI;
-import com.pump.plaf.ChasingArrowsThrobberUI;
 import com.pump.plaf.DecoratedTreeUI;
 import com.pump.plaf.DecoratedTreeUI.BasicTreeDecoration;
 import com.pump.plaf.DecoratedTreeUI.RepaintingTreeDecoration;
 import com.pump.plaf.DecoratedTreeUI.TreeDecoration;
-import com.pump.plaf.DetachingArcThrobberUI;
-import com.pump.plaf.PivotingCirclesThrobberUI;
-import com.pump.plaf.PulsingCirclesThrobberUI;
-import com.pump.plaf.SierpinskiThrobberUI;
-import com.pump.plaf.ThrobberUI;
 import com.pump.swing.JBreadCrumb;
 import com.pump.swing.JBreadCrumb.BreadCrumbFormatter;
-import com.pump.swing.JThrobber;
-import com.pump.util.JVM;
 
 public class SwingComponentsDemo extends MultiWindowDemo {
 	private static final long serialVersionUID = 1L;
-
-	static class ThrobberDemo extends JInternalFrame {
-		private static final long serialVersionUID = 1L;
-
-		/** The optional real aqua UI */
-		protected JProgressBar aquaIndicator = new JProgressBar();
-
-		protected JPanel throbberContainer = new JPanel(new GridBagLayout());
-
-		/** This slows each spinning UI down to help in bug testing. */
-		protected JLabel throbberLabel = new JLabel("ThrobberUIs:");
-		protected JLabel aquaLabel = new JLabel("Aqua Throbber:");
-		protected JCheckBox slowMode = new JCheckBox("Slow Mode", false);
-		protected List<JThrobber> throbbers = new ArrayList<JThrobber>();
-
-		public ThrobberDemo() {
-			super("JThrobber");
-
-			throbberContainer.setOpaque(false);
-			addSampleUI(new ChasingArrowsThrobberUI());
-			addSampleUI(new AquaThrobberUI());
-			addSampleUI(new PulsingCirclesThrobberUI());
-			addSampleUI(new DetachingArcThrobberUI());
-			addSampleUI(new SierpinskiThrobberUI());
-			addSampleUI(new PivotingCirclesThrobberUI());
-
-			getContentPane().setBackground(Color.white);
-			getContentPane().setLayout(new GridBagLayout());
-
-			slowMode.putClientProperty(
-					KEY_DESCRIPTION,
-					"When selected this slows all the ThrobberUIs down so you can better see each frame.");
-
-			getRootPane()
-					.putClientProperty(
-							KEY_DESCRIPTION,
-							"This window demonstrates the JThrobber class and a few sample ThrobberUIs. A \"throbber\" is a (poorly named?) component that is used to indicate that something is happening."
-									+ "\n\nAmong other things, it simply helps reassure the user that the UI/app isn't frozen. Functionally it is similar to an indeterminate JProgressBar, although it is more compact.");
-
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			c.insets = new Insets(5, 5, 5, 5);
-			c.weightx = 1;
-			c.weighty = 1;
-			c.gridwidth = GridBagConstraints.REMAINDER;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			getContentPane().add(throbberLabel, c);
-			c.gridy++;
-			getContentPane().add(slowMode, c);
-			c.gridy++;
-			c.gridwidth = 1;
-			c.fill = GridBagConstraints.NONE;
-			getContentPane().add(throbberContainer, c);
-
-			if (JVM.isMac) {
-				aquaIndicator.putClientProperty("JProgressBar.style",
-						"circular");
-				aquaIndicator.setIndeterminate(true);
-
-				c.gridy++;
-				c.fill = GridBagConstraints.HORIZONTAL;
-				getContentPane().add(aquaLabel, c);
-				c.gridy++;
-				getContentPane().add(aquaIndicator, c);
-				aquaIndicator
-						.putClientProperty(
-								KEY_DESCRIPTION,
-								"On Macs there is built-in support for throbbers. Take a JProgressBar, set it to indeterminate, and set the client property \"JProgressBar.style\" to \"circular\". For more details, google \"Apple Technical Note 2196\".");
-			}
-
-			slowMode.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setSlowFactor(slowMode.isSelected() ? 4 : 1);
-				}
-			});
-		}
-
-		protected void setSlowFactor(int factor) {
-			for (Component c : throbberContainer.getComponents()) {
-				if (c instanceof JThrobber) {
-					((JThrobber) c).putClientProperty(
-							ThrobberUI.PERIOD_MULTIPLIER_KEY, factor);
-				}
-			}
-		}
-
-		/** Add a JThrobber to the throbberContainer. */
-		private void addSampleUI(ThrobberUI ui) {
-			JThrobber throbber = new JThrobber();
-			throbber.setUI(ui);
-			throbbers.add(throbber);
-
-			String name = ui.getClass().getName();
-			name = "This is a sample of the "
-					+ name.substring(name.lastIndexOf('.') + 1) + ".";
-			addSample(throbber, name);
-		}
-
-		/** Add a JComponent to the throbberContainer. */
-		private void addSample(JComponent jc, final String labelText) {
-			int index = throbberContainer.getComponentCount();
-			int row = index / 8;
-			int column = index % 8;
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = column;
-			c.gridy = row;
-			c.weightx = 1;
-			c.weighty = 1;
-			c.insets = new Insets(4, 4, 4, 4);
-			throbberContainer.add(jc, c);
-
-			jc.putClientProperty(KEY_DESCRIPTION, labelText);
-		}
-	}
 
 	static class DecoratedTreeDemo extends JInternalFrame {
 		private static final long serialVersionUID = 1L;
@@ -711,7 +585,6 @@ public class SwingComponentsDemo extends MultiWindowDemo {
 	}
 
 	public SwingComponentsDemo() {
-		addPane(new ThrobberDemo(), 0, 1, 1, 1, GridBagConstraints.NONE);
 		addPane(new BreadCrumbDemo(), 0, 0, 2, 1, GridBagConstraints.NONE);
 		addPane(new DecoratedTreeDemo(), 1, 1, 1, 1, GridBagConstraints.NONE);
 	}
