@@ -323,4 +323,9 @@ public class TextEffectDemo extends JPanel implements ShowcaseDemo {
 				ExplodeTextEffect.class, Scribbler.class, FontComboBox.class,
 				WriteTextEffect.class, WritingFont.class, BlockLetter.class };
 	}
+
+	@Override
+	public boolean isSeparatorVisible() {
+		return true;
+	}
 }

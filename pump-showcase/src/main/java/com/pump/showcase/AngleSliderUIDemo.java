@@ -138,4 +138,9 @@ public class AngleSliderUIDemo extends JPanel implements ShowcaseDemo {
 		return new Class[] { AngleSliderUI.class, AquaAngleSliderUI.class,
 				JSlider.class };
 	}
+
+	@Override
+	public boolean isSeparatorVisible() {
+		return true;
+	}
 }

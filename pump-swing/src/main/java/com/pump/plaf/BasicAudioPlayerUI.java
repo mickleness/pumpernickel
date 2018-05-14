@@ -14,7 +14,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.HierarchyEvent;
@@ -27,10 +26,8 @@ import javax.swing.AbstractButton;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -58,29 +55,6 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 		return new BasicAudioPlayerUI();
 	}
 
-	static class URLPanel extends JPanel {
-		private static final long serialVersionUID = 1L;
-		JTextField field = new JTextField(20);
-		JLabel label = new JLabel("URL:");
-
-		public URLPanel(String fieldText) {
-			super(new GridBagLayout());
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			c.weightx = 0;
-			c.weighty = 1;
-			c.insets = new Insets(3, 3, 3, 3);
-			add(label, c);
-			c.gridx++;
-			c.weightx = 1;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			add(field, c);
-			if (fieldText != null)
-				field.setText(fieldText);
-		}
-	}
-
 	public static final Icon PLAY_ICON = new TriangleIcon(SwingConstants.EAST,
 			12, 12);
 	public static final Icon PAUSE_ICON = new PauseIcon(12, 12);
@@ -91,8 +65,6 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 		JButton playButton = new JButton(PLAY_ICON);
 		JSlider playbackProgress = new JSlider(0, 100, 0);
 		JPanel controller = new JPanel();
-		JButton browseButton = new JButton("Browse...");
-		URLPanel urlPanel = new URLPanel(null);
 		ChangeListener sliderListener = new ChangeListener() {
 
 			@Override
@@ -114,8 +86,6 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 
 		protected void uninstall() {
 			apc.remove(controller);
-			apc.remove(browseButton);
-			apc.remove(urlPanel);
 		}
 
 		protected void install() {
@@ -124,18 +94,8 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			GridBagConstraints gbc = new GridBagConstraints();
 			gbc.gridx = 0;
 			gbc.gridy = 0;
-			gbc.weightx = 0;
-			gbc.weighty = 1;
 			gbc.insets = new Insets(3, 3, 3, 3);
-			gbc.fill = GridBagConstraints.HORIZONTAL;
-			gbc.weightx = 1;
-			apc.add(urlPanel, gbc);
-			gbc.gridx++;
-			gbc.weightx = 0;
-			apc.add(browseButton, gbc);
-			gbc.gridy++;
-			gbc.gridx = 0;
-			gbc.weighty = 0;
+			gbc.weighty = 1;
 			gbc.weightx = 1;
 			gbc.gridwidth = GridBagConstraints.REMAINDER;
 			gbc.fill = GridBagConstraints.BOTH;
@@ -145,11 +105,6 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			AnimationController.format(controller, playButton,
 					new JButton[] {}, playbackProgress);
 
-			browseButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					apc.getUI().doBrowseForFile(apc);
-				}
-			});
 			playButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (apc.getAudioPlayer() == null
@@ -191,8 +146,6 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			}
 
 			URL source = apc.getSource();
-			String text = source == null ? "" : source.toString();
-			urlPanel.field.setText(text);
 			boolean playing = false;
 			setIcon(playButton, playing ? PAUSE_ICON : PLAY_ICON);
 
@@ -217,15 +170,6 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			if (assignDefault) {
 				ui = (SliderUI) UIManager.getUI(playbackProgress);
 				playbackProgress.setUI(ui);
-			}
-
-			Window w = SwingUtilities.getWindowAncestor(apc);
-			browseButton.setEnabled(w != null);
-			if (browseButton.isEnabled()) {
-				browseButton.setToolTipText("Select an audio file to play...");
-			} else {
-				browseButton
-						.setToolTipText("This button is not supported unless this component is in an accessible java.awt.Window.");
 			}
 		}
 	}

@@ -10,6 +10,8 @@
  */
 package com.pump.showcase;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -186,19 +188,20 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			updateSections();
+			change();
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			updateSections();
+			change();
 		}
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 
-		private void updateSections() {
+		private void change() {
+			closeFancyBoxes();
 			String str = searchField.getText();
 
 			Comparator<Section> comparator = new Comparator<Section>() {
@@ -364,7 +367,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 					Layout.STRETCH_TO_FIT);
 			addSection("Images: JPEG Metadata", new JPEGMetaDataDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("Audio: Swing Components", new AudioComponentsDemo(),
+			addSection("AudioPlayer", new AudioPlayerComponentDemo(this),
 					Layout.STRETCH_TO_FIT);
 			addSection("Math: Gaussian Elimination", new EquationsDemo(),
 					Layout.STRETCH_TO_FIT);
@@ -426,7 +429,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 	private void addSection(String text, JComponent component, Layout layout) {
 		if (component instanceof ShowcaseDemo) {
 			ShowcaseDemo d = (ShowcaseDemo) component;
-			component = wrapDemo(component, d.getTitle(), d.getHelpURL());
+			component = wrapDemo(component, d.getTitle(), d.getHelpURL(),
+					d.isSeparatorVisible());
 		}
 		Section section = sectionContainer.addSection(text, text);
 		masterSectionList.add(section);
@@ -455,8 +459,61 @@ public class PumpernickelShowcaseApp extends JFrame {
 		}
 	}
 
+	public JEditorPane createTextPane(URL url) {
+		JEditorPane textPane = new JEditorPane() {
+			private static final long serialVersionUID = 1L;
+
+			public void paint(Graphics g0) {
+				Graphics2D g = (Graphics2D) g0;
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+						RenderingHints.VALUE_ANTIALIAS_ON);
+				super.paint(g);
+			}
+		};
+		textPane.setEditable(false);
+		HTMLEditorKit kit = new HTMLEditorKit();
+		textPane.setEditorKit(kit);
+
+		StyleSheet styleSheet = kit.getStyleSheet();
+
+		styleSheet
+				.addRule("body {  padding: 12em 12em 12em 12em;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
+
+		styleSheet.addRule("h1, h2, h3, h4, h5, h6 { text-align: left }");
+		styleSheet.addRule("h1, h2, h3 { color: #005a9c }");
+		styleSheet.addRule("h1 { font: 160% sans-serif }");
+		styleSheet.addRule("h2 { font: 140% sans-serif }");
+		styleSheet.addRule("h3 { font: 120% sans-serif }");
+		styleSheet.addRule("h4 { font: bold 100% sans-serif }");
+		styleSheet.addRule("h5 { font: italic 100% sans-serif }");
+		styleSheet.addRule("h6 { font: small-caps 100% sans-serif }");
+
+		textPane.addHyperlinkListener(new HyperlinkListener() {
+			public void hyperlinkUpdate(HyperlinkEvent e) {
+				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+					URL url = e.getURL();
+					String str = e.getDescription();
+					if (str != null && str.startsWith("resource:")) {
+						str = str.substring("resource:".length());
+						searchField.setText(str);
+						return;
+					}
+					try {
+						Desktop.getDesktop().browse(url.toURI());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} catch (URISyntaxException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+
+		return textPane;
+	}
+
 	private JComponent wrapDemo(JComponent component, String title,
-			final URL helpURL) {
+			final URL helpURL, boolean includeSeparator) {
 		ActionListener actionListener = new ActionListener() {
 			JScrollPane scrollPane;
 			JFancyBox box;
@@ -465,56 +522,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (scrollPane == null) {
-					textPane = new JEditorPane() {
-						public void paint(Graphics g0) {
-							Graphics2D g = (Graphics2D) g0;
-							g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-									RenderingHints.VALUE_ANTIALIAS_ON);
-							super.paint(g);
-						}
-					};
+					textPane = createTextPane(helpURL);
 					scrollPane = new JScrollPane(textPane);
-					textPane.setEditable(false);
-					HTMLEditorKit kit = new HTMLEditorKit();
-					textPane.setEditorKit(kit);
-					JScrollPane scrollPane = new JScrollPane(textPane);
-					StyleSheet styleSheet = kit.getStyleSheet();
-
-					styleSheet
-							.addRule("body {  padding: 12em 12em 12em 12em;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
-
-					styleSheet
-							.addRule("h1, h2, h3, h4, h5, h6 { text-align: left }");
-					styleSheet.addRule("h1, h2, h3 { color: #005a9c }");
-					styleSheet.addRule("h1 { font: 160% sans-serif }");
-					styleSheet.addRule("h2 { font: 140% sans-serif }");
-					styleSheet.addRule("h3 { font: 120% sans-serif }");
-					styleSheet.addRule("h4 { font: bold 100% sans-serif }");
-					styleSheet.addRule("h5 { font: italic 100% sans-serif }");
-					styleSheet
-							.addRule("h6 { font: small-caps 100% sans-serif }");
-
-					textPane.addHyperlinkListener(new HyperlinkListener() {
-						public void hyperlinkUpdate(HyperlinkEvent e) {
-							if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-								URL url = e.getURL();
-								String str = e.getDescription();
-								if (str != null && str.startsWith("resource:")) {
-									str = str.substring("resource:".length());
-									box.setVisible(false);
-									searchField.setText(str);
-									return;
-								}
-								try {
-									Desktop.getDesktop().browse(url.toURI());
-								} catch (IOException e1) {
-									e1.printStackTrace();
-								} catch (URISyntaxException e1) {
-									e1.printStackTrace();
-								}
-							}
-						}
-					});
 
 					updatePreferredSize();
 					PumpernickelShowcaseApp.this
@@ -548,7 +557,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 				textPane.setPreferredSize(d);
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
-						box.getParent().revalidate();
+						scrollPane.revalidate();
 					}
 				});
 			}
@@ -572,14 +581,31 @@ public class PumpernickelShowcaseApp extends JFrame {
 		c.fill = GridBagConstraints.NONE;
 		c.insets = new Insets(3, 3, 3, 3);
 		replacement.add(jc, c);
-		jc.setVisible(helpURL != null);
-		c.gridy++;
 		c.fill = GridBagConstraints.BOTH;
-		replacement.add(new JSeparator(), c);
+		if (includeSeparator) {
+			jc.setVisible(helpURL != null);
+			c.gridy++;
+			replacement.add(new JSeparator(), c);
+		}
 		c.gridy++;
 		c.weighty = 1;
 		c.insets = new Insets(0, 0, 0, 0);
 		replacement.add(component, c);
 		return replacement;
+	}
+
+	void closeFancyBoxes() {
+		closeFancyBoxes(getLayeredPane());
+	}
+
+	void closeFancyBoxes(Container container) {
+		for (int a = 0; a < container.getComponentCount(); a++) {
+			Component c = container.getComponent(a);
+			if (c instanceof JFancyBox) {
+				c.setVisible(false);
+			} else if (c instanceof Container) {
+				closeFancyBoxes((Container) c);
+			}
+		}
 	}
 }

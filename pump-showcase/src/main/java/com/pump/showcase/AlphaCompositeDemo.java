@@ -313,4 +313,9 @@ public class AlphaCompositeDemo extends JPanel implements ShowcaseDemo {
 	public Class<?>[] getClasses() {
 		return new Class[] { AlphaComposite.class };
 	}
+
+	@Override
+	public boolean isSeparatorVisible() {
+		return true;
+	}
 }

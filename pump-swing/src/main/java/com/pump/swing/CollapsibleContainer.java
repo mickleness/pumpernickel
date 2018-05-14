@@ -142,7 +142,9 @@ public class CollapsibleContainer extends SectionContainer {
 
 		/** Calculate the current layout. */
 		protected void calculate() {
-			int height = getHeight();
+			Insets insets = getInsets();
+			int height = getHeight() - insets.top - insets.bottom;
+
 			int remainingHeight = height;
 
 			float totalVerticalWeight = 0;
@@ -234,14 +236,19 @@ public class CollapsibleContainer extends SectionContainer {
 		}
 
 		protected void install() {
-			int y = 0;
+			Insets insets = getInsets();
+
+			int x = insets.left;
+			int y = insets.top;
+			int width = getWidth() - insets.right - insets.left;
+
 			for (int a = 0; a < components.size(); a++) {
 				JComponent jc = components.get(a);
 				if (visibleComponents.contains(jc)) {
-					int height = heightMap.get(jc);
-					jc.setBounds(0, y, jc.getParent().getWidth(), height);
+					int h = heightMap.get(jc);
+					jc.setBounds(x, y, width, h);
 					jc.validate();
-					y += height;
+					y += h;
 					jc.setVisible(true);
 				} else {
 					jc.setBounds(0, 0, 0, 0);
@@ -256,13 +263,18 @@ public class CollapsibleContainer extends SectionContainer {
 		 *         are appropriate.
 		 */
 		protected boolean incrementalInstall() {
-			int y = 0;
+			Insets insets = getInsets();
+
+			int x = insets.left;
+			int y = insets.top;
+			int width = getWidth() - insets.right - insets.left;
+
 			boolean moreChanges = false;
 			boolean requiresValidation = false;
 			for (JComponent jc : components) {
 				if (visibleComponents.contains(jc)) {
 					if (!jc.isVisible()) {
-						jc.setSize(jc.getWidth(), 0);
+						jc.setSize(width, 0);
 						jc.setVisible(true);
 						requiresValidation = true;
 					}
@@ -283,7 +295,7 @@ public class CollapsibleContainer extends SectionContainer {
 					height = existingHeight;
 				}
 
-				jc.setBounds(0, y, jc.getParent().getWidth(), height);
+				jc.setBounds(x, y, width, height);
 				jc.validate();
 				y += height;
 
@@ -336,6 +348,9 @@ public class CollapsibleContainer extends SectionContainer {
 				size.width = Math.max(size.width, d.width);
 				size.height += d.height;
 			}
+			Insets insets = getInsets();
+			size.width += insets.left + insets.right;
+			size.height += insets.top + insets.bottom;
 			return size;
 		}
 

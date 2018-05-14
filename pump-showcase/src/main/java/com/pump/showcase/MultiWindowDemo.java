@@ -38,7 +38,8 @@ import com.pump.awt.MouseTracker;
 import com.pump.swing.MagnificationPanel;
 
 /**
- * This showcases a few different JComponents in a JDesktopPane.
+ * This showcases a few different JComponents in a JDesktopPane. TODO: remove
+ * this class
  */
 public abstract class MultiWindowDemo extends JPanel {
 	private static final long serialVersionUID = 1L;

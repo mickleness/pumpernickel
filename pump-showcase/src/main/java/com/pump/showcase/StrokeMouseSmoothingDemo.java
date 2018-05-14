@@ -401,4 +401,9 @@ public class StrokeMouseSmoothingDemo extends JPanel implements ShowcaseDemo {
 				BasicMouseSmoothing.class };
 	}
 
+	@Override
+	public boolean isSeparatorVisible() {
+		return true;
+	}
+
 }

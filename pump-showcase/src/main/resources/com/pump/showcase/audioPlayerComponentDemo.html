@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AudioPlayer Demo</title>
+</head>
+<body>
+This demo covers a lot of ground, but all of it relies on WAV files. In theory we can expand this so we can make it work with any <code>javax.sound.sampled.AudioInputStream</code>, but so far I haven't had to do this. The one commercial usage of some of this code (that I'm aware of) was comfortable storing audio as WAV files, adding them to movies, and then using some JNI code to compress the finished product. I know there are some free-ish Java tools to work with MP3 files, but I seem to recall MP3 audio (like MP4 video) is mired in legal murkiness. I don't plan on exploring that further until I have a clear business need to.
+<p>
+Below is a summary of the different classes used in this demo and what they do.
+
+<h4>AudioPlayer</h4>
+The <code>AudioPlayer</code> is a helper class that lets you start/pause audio playback of any <code>AudioInputStream</code>.
+<p>
+It manages the threads for you; you can call things in such a way that your thread blocks until playback is complete, or in a multi-threaded environment. It updates specialized listeners regarding progress, including errors. Listeners can be notified in real-time on the thread that is playing back the audio, or they can be notified separately on the event dispatch thread. Notifications on the EDT may be coalesced together.
+
+<h4>AudioPlayerComponent, AudioPlayerUI, BasicAudioPlayerUI</h4>
+The <code>AudioPlayerComponent</code> as a <code>JComponent</code> that relies on a URL pointing to an audio file. (For now only WAV files are well supported.) It also keeps an internal <code>AudioPlayer</code> object to help with playback. It is expected to use an <code>AudioPlayerUI</code>, but that class is abstract.
+<p>
+The <code>BasicAudioPlayerUI</code> is the <code>ComponentUI</code> you see in the top half of this demo. It includes the playback button and the waveform slider.
+
+<h4>WaveformSliderUI</h4>
+Nestled inside the <code>BasicAudioPlayerUI</code> is a <code>JSlider</code> that uses the <code>WaveformSliderUI</code>. This generates a simple waveform rendered as a shape with a hairline cursor to indicate the thumb.
+
+<h4>AquaAudioListUI</h4>
+The lower half of the demo features the <code>AquaAudioListUI</code>. This is modeled after a similar UI observed on Mac. When an audio is selected you can either play it back or delete it.
+<p>
+This component is not well tested and to my knowledge it's not deployed in any real-world projects, but it's a very promising proof of concept.
+
+<h4>Attributions</h4>
+All the sounds used here are available <a href="https://freesound.org/people/mickleness/">here</a>.
+</body>
+</html>

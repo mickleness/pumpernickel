@@ -300,4 +300,9 @@ public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
 	public Class<?>[] getClasses() {
 		return new Class[] { CircularProgressBarUI.class, JProgressBar.class };
 	}
+
+	@Override
+	public boolean isSeparatorVisible() {
+		return true;
+	}
 }

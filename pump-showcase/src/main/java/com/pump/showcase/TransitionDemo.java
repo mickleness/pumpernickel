@@ -334,4 +334,9 @@ public abstract class TransitionDemo extends JPanel implements ShowcaseDemo {
 			}
 		}
 	}
+
+	@Override
+	public boolean isSeparatorVisible() {
+		return true;
+	}
 }

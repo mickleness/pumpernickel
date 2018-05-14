@@ -96,7 +96,7 @@ public class AudioPlayerUI extends ComponentUI {
 		apc.play(startTime);
 	}
 
-	protected void doBrowseForFile(AudioPlayerComponent apc) {
+	public void doBrowseForFile(AudioPlayerComponent apc) {
 		Window w = SwingUtilities.getWindowAncestor(apc);
 		if (!(w instanceof Frame))
 			throw new RuntimeException(
