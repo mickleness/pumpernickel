@@ -40,7 +40,7 @@ import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.PartialLineBorder;
 import com.pump.swing.SectionContainer.Section;
 
-public class AudioPlayerComponentDemo extends JPanel implements ShowcaseDemo {
+public class AudioPlayerDemo extends JPanel implements ShowcaseDemo {
 
 	private static final long serialVersionUID = 1L;
 
@@ -48,9 +48,9 @@ public class AudioPlayerComponentDemo extends JPanel implements ShowcaseDemo {
 	AudioPlayerComponent audioPlayerComponent = new AudioPlayerComponent();
 
 	public static final URL[] urls = new URL[] {
-			AudioPlayerComponentDemo.class.getResource("Bugaboo.wav"),
-			AudioPlayerComponentDemo.class.getResource("Ludic.wav"),
-			AudioPlayerComponentDemo.class.getResource("Unctuous.wav")
+			AudioPlayerDemo.class.getResource("Bugaboo.wav"),
+			AudioPlayerDemo.class.getResource("Ludic.wav"),
+			AudioPlayerDemo.class.getResource("Unctuous.wav")
 
 	};
 
@@ -59,7 +59,7 @@ public class AudioPlayerComponentDemo extends JPanel implements ShowcaseDemo {
 			"AudioPlayerUI, WaveformSliderUI");
 	Section listSection = container.addSection("aqua-list", "AquaAudioListUI");
 
-	public AudioPlayerComponentDemo(PumpernickelShowcaseApp psa) {
+	public AudioPlayerDemo(PumpernickelShowcaseApp psa) {
 		super(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -159,7 +159,7 @@ public class AudioPlayerComponentDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public URL getHelpURL() {
-		return AudioPlayerComponentDemo.class
+		return AudioPlayerDemo.class
 				.getResource("audioPlayerComponentDemo.html");
 	}
 

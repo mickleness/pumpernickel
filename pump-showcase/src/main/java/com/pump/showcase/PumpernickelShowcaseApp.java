@@ -367,7 +367,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 					Layout.STRETCH_TO_FIT);
 			addSection("Images: JPEG Metadata", new JPEGMetaDataDemo(),
 					Layout.STRETCH_TO_FIT);
-			addSection("AudioPlayer", new AudioPlayerComponentDemo(this),
+			addSection("AudioPlayer", new AudioPlayerDemo(this),
 					Layout.STRETCH_TO_FIT);
 			addSection("Math: Gaussian Elimination", new EquationsDemo(),
 					Layout.STRETCH_TO_FIT);
