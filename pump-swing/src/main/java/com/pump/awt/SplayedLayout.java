@@ -16,8 +16,6 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.LayoutManager;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,6 +32,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -61,6 +60,8 @@ public class SplayedLayout implements LayoutManager {
 			.getName() + "#lastPlanInfo";
 	private static final String PROPERTY_IS_KNOWN = SplayedLayout.class
 			.getName() + "#isKnown";
+	private static final String PROPERTY_ROLLOVER_CHILD = SplayedLayout.class
+			.getName() + "#rolloverChild";
 
 	private static class RemoveKnownAttributeListener implements
 			ComponentListener, ContainerListener {
@@ -121,28 +122,35 @@ public class SplayedLayout implements LayoutManager {
 		}
 
 		@Override
-		public synchronized void actionPerformed(ActionEvent e) {
-			long elapsedTime = System.currentTimeMillis() - startTime;
-			float f = ((float) elapsedTime) / ANIMATION_DURATION;
-			if (f >= 1)
-				f = 1;
-			for (Entry<JComponent, Rectangle> entry : endingPositions
-					.entrySet()) {
-				Rectangle oldBounds = startingPositions.get(entry.getKey());
-				Rectangle tweenBounds = tween(oldBounds, entry.getValue(), f);
-				JComponent jc = entry.getKey();
-				if (!jc.getBounds().equals(tweenBounds)) {
-					jc.setBounds(tweenBounds);
-					if (f == 1) {
-						jc.invalidate();
-						jc.revalidate();
+		public void actionPerformed(ActionEvent e) {
+			synchronized (container.getTreeLock()) {
+				long elapsedTime = System.currentTimeMillis() - startTime;
+				float f = ((float) elapsedTime) / ANIMATION_DURATION;
+				if (f >= 1)
+					f = 1;
+				boolean containerDirty = false;
+				for (Entry<JComponent, Rectangle> entry : endingPositions
+						.entrySet()) {
+					Rectangle oldBounds = startingPositions.get(entry.getKey());
+					Rectangle tweenBounds = tween(oldBounds, entry.getValue(),
+							f);
+					JComponent jc = entry.getKey();
+					if (!jc.getBounds().equals(tweenBounds)) {
+						jc.setBounds(tweenBounds);
+						if (f == 1) {
+							jc.invalidate();
+							jc.revalidate();
+						}
+						containerDirty = true;
 					}
 				}
-			}
-			if (f == 1 && e != null) {
-				((Timer) e.getSource()).stop();
-				container.putClientProperty(PROPERTY_TIMER, null);
-				container.putClientProperty(PROPERTY_TIMER_LISTENER, null);
+				if (containerDirty)
+					container.repaint();
+				if (f == 1 && e != null) {
+					((Timer) e.getSource()).stop();
+					container.putClientProperty(PROPERTY_TIMER, null);
+					container.putClientProperty(PROPERTY_TIMER_LISTENER, null);
+				}
 			}
 		}
 
@@ -157,53 +165,57 @@ public class SplayedLayout implements LayoutManager {
 		 * Return true if the timer should restart because an animation is
 		 * appropriate.
 		 */
-		synchronized boolean install(Plan plan, boolean installImmediately) {
-			startTime = System.currentTimeMillis();
-			startingPositions.clear();
-			Component[] components = container.getComponents();
-			boolean newComponent = false;
-			for (int a = 0; a < components.length; a++) {
-				Component component = components[a];
-				if (component instanceof JComponent) {
-					JComponent jc = (JComponent) component;
-					Boolean isKnown = (Boolean) jc
-							.getClientProperty(PROPERTY_IS_KNOWN);
-					if (isKnown == null) {
-						// completely new components just snap into place
-						// (to tween them we'd need a starting and ending
-						// position: where would they start from?)
-						Rectangle newBounds = plan.map.get(jc);
-						startingPositions.put(jc, newBounds);
-						jc.putClientProperty(PROPERTY_IS_KNOWN, Boolean.TRUE);
-						RemoveKnownAttributeListener z = new RemoveKnownAttributeListener(
-								jc);
-						jc.addComponentListener(z);
-						container.addContainerListener(z);
-						newComponent = true;
-					} else {
-						startingPositions.put(jc, component.getBounds());
+		boolean install(Plan plan, boolean installImmediately) {
+			synchronized (container.getTreeLock()) {
+				startTime = System.currentTimeMillis();
+				startingPositions.clear();
+				Component[] components = container.getComponents();
+				boolean newComponent = false;
+				for (int a = 0; a < components.length; a++) {
+					Component component = components[a];
+					if (component instanceof JComponent) {
+						JComponent jc = (JComponent) component;
+						Boolean isKnown = (Boolean) jc
+								.getClientProperty(PROPERTY_IS_KNOWN);
+						if (isKnown == null) {
+							// completely new components just snap into place
+							// (to tween them we'd need a starting and ending
+							// position: where would they start from?)
+							Rectangle newBounds = plan.map.get(jc);
+							startingPositions.put(jc, newBounds);
+							jc.putClientProperty(PROPERTY_IS_KNOWN,
+									Boolean.TRUE);
+							RemoveKnownAttributeListener z = new RemoveKnownAttributeListener(
+									jc);
+							jc.addComponentListener(z);
+							container.addContainerListener(z);
+							newComponent = true;
+						} else {
+							startingPositions.put(jc, component.getBounds());
+						}
 					}
 				}
-			}
 
-			if (installImmediately) {
-				for (Entry<JComponent, Rectangle> entry : plan.map.entrySet()) {
-					JComponent jc = entry.getKey();
-					jc.setBounds(entry.getValue());
+				if (installImmediately) {
+					for (Entry<JComponent, Rectangle> entry : plan.map
+							.entrySet()) {
+						JComponent jc = entry.getKey();
+						jc.setBounds(entry.getValue());
+					}
+					return false;
 				}
-				return false;
-			}
 
-			endingPositions.clear();
-			endingPositions.putAll(plan.map);
+				endingPositions.clear();
+				endingPositions.putAll(plan.map);
 
-			boolean noChange = startingPositions.equals(endingPositions);
-			if (newComponent || !noChange) {
-				// give it one iteration, especially for new components to jump
-				// into place
-				actionPerformed(null);
+				boolean noChange = startingPositions.equals(endingPositions);
+				if (newComponent || !noChange) {
+					// give it one iteration, especially for new components to
+					// jump into place
+					actionPerformed(null);
+				}
+				return !noChange;
 			}
-			return !noChange;
 		}
 
 	}
@@ -459,7 +471,7 @@ public class SplayedLayout implements LayoutManager {
 			plan = layoutContainerWithExtra((JComponent) parent, preferredSize,
 					requestedSize, x, y, width, height);
 		} else {
-			plan = layoutContainerAtFixedSize((JComponent) parent,
+			plan = layoutContainerWithConstrainedSize((JComponent) parent,
 					preferredSize, x, y, width, height);
 		}
 		plan.install();
@@ -469,68 +481,82 @@ public class SplayedLayout implements LayoutManager {
 	 * This method is called when we don't have enough space to fit all our
 	 * components and we have to try to arrange them in a fixed width.
 	 */
-	protected Plan layoutContainerAtFixedSize(JComponent parent,
+	protected Plan layoutContainerWithConstrainedSize(JComponent parent,
 			LinkedHashMap<JComponent, Dimension> preferredSize, int x, int y,
 			int width, int height) {
 		Collection<JComponent> emphasizedComponents = getEmphasizedComponents(parent);
-		int separators = preferredSize.size() - 1;
-		int emphasizedTotal = horizontal ? separators * separatorSize.width
-				: separators * separatorSize.height;
-		for (JComponent e : emphasizedComponents) {
-			Dimension d = preferredSize.get(e);
-			emphasizedTotal += horizontal ? d.width : d.height;
-		}
-		int leftover = Math.max(0, horizontal ? width - emphasizedTotal
-				: height - emphasizedTotal);
-
-		int minimumSum = 0;
-		Map<JComponent, Dimension> minimumSize = new HashMap<>(
-				preferredSize.size() - emphasizedComponents.size());
-		for (JComponent jc : preferredSize.keySet()) {
-			if (!emphasizedComponents.contains(jc)) {
-				Dimension m = jc.getMinimumSize();
-				minimumSize.put(jc, m);
-				minimumSum += horizontal ? m.width : m.height;
-			}
-		}
+		int separatorCount = preferredSize.size() - 1;
+		int remainingSpace = horizontal ? width - separatorCount
+				* separatorSize.width : height - separatorCount
+				* separatorSize.height;
 
 		Plan plan = new Plan(parent, horizontal);
 
-		// ideally we'll be have enough space to make sure every component gets
-		// its minimum size
-		boolean useMinimum = minimumSum < leftover;
-		if (useMinimum)
-			leftover = leftover - minimumSum;
+		Map<JComponent, Dimension> finalSize = new HashMap<>(
+				preferredSize.size());
+		Collection<JComponent> remainingComponents = new HashSet<>(
+				preferredSize.keySet());
 
-		int ctr = 0;
-		for (Entry<JComponent, Dimension> entry : preferredSize.entrySet()) {
-			JComponent jc = entry.getKey();
-			if (emphasizedComponents.contains(jc)) {
-				if (horizontal) {
-					int x2 = x + entry.getValue().width;
-					plan.add(jc, x, y, x2, y + height);
-					x = x2 + separatorSize.width;
-				} else {
-					int y2 = y + entry.getValue().height;
-					plan.add(jc, x, y, x + width, y2);
-					y = y2 + separatorSize.height;
+		// these chosen few get their requested size
+		for (JComponent jc : emphasizedComponents) {
+			Dimension d = preferredSize.get(jc);
+			remainingSpace -= horizontal ? d.width : d.height;
+			finalSize.put(jc, d);
+			remainingComponents.remove(jc);
+		}
+
+		// now see which other components are conveniently small enough to
+		// get by on their own:
+		boolean repeat;
+		do {
+			int maxSpace = remainingSpace / remainingComponents.size();
+			repeat = false;
+
+			Iterator<JComponent> iter = remainingComponents.iterator();
+			while (iter.hasNext()) {
+				JComponent jc = iter.next();
+				Dimension d = preferredSize.get(jc);
+				int requestedSpace = horizontal ? d.width : d.height;
+				if (requestedSpace < maxSpace) {
+					remainingSpace -= horizontal ? d.width : d.height;
+					finalSize.put(jc, d);
+					iter.remove();
+					repeat = true;
 				}
+			}
+		} while (repeat);
+
+		// and lastly: some components may just not get all the size they want.
+		Iterator<JComponent> iter = remainingComponents.iterator();
+		while (iter.hasNext()) {
+			JComponent jc = iter.next();
+			int maxSpace = remainingSpace / remainingComponents.size();
+			Dimension d = preferredSize.get(jc);
+			int requestedSpace = horizontal ? d.width : d.height;
+			int componentSpace = Math.min(requestedSpace, maxSpace);
+
+			Dimension d2 = horizontal ? new Dimension(componentSpace, d.height)
+					: new Dimension(d.width, componentSpace);
+
+			remainingSpace -= componentSpace;
+			finalSize.put(jc, d2);
+			iter.remove();
+		}
+
+		// now finalSize covers everything, we just have to lay them out
+		// consecutively:
+
+		// remember preferredSize is ordered, so that helps:
+		for (JComponent jc : preferredSize.keySet()) {
+			Dimension d = finalSize.get(jc);
+			if (horizontal) {
+				int x2 = x + d.width;
+				plan.add(jc, x, y, x2, y + height);
+				x = x2 + separatorSize.width;
 			} else {
-				int z = leftover
-						/ (preferredSize.size() - emphasizedComponents.size() - ctr);
-				if (horizontal) {
-					int x2 = x + z
-							+ (useMinimum ? minimumSize.get(jc).width : 0);
-					plan.add(jc, x, y, x2, y + height);
-					x = x2 + separatorSize.width;
-				} else {
-					int y2 = y + z
-							+ (useMinimum ? minimumSize.get(jc).height : 0);
-					plan.add(jc, x, y, x + width, y2);
-					y = y2 + separatorSize.height;
-				}
-				leftover -= z;
-				ctr++;
+				int y2 = y + d.height;
+				plan.add(jc, x, y, x + width, y2);
+				y = y2 + separatorSize.height;
 			}
 		}
 
@@ -552,16 +578,20 @@ public class SplayedLayout implements LayoutManager {
 			}
 		}
 		if (prioritizeRollover) {
-			Point p = MouseInfo.getPointerInfo().getLocation();
-			SwingUtilities.convertPointFromScreen(p, container);
-			if (container.contains(p)) {
-				Component child = container.getComponentAt(p);
-				while (child != null) {
-					if (child.getParent() == container) {
-						returnValue.add((JComponent) child);
-						break;
+			JComponent child = (JComponent) container
+					.getClientProperty(PROPERTY_ROLLOVER_CHILD);
+			if (child != null) {
+				if (SwingUtilities.isDescendingFrom(child, container)) {
+					while (child != null) {
+						if (child.getParent() == container) {
+							returnValue.add((JComponent) child);
+							break;
+						}
+						child = (JComponent) child.getParent();
 					}
-					child = child.getParent();
+				} else {
+					// I haven't seen this happen, but just in case:
+					container.putClientProperty(PROPERTY_ROLLOVER_CHILD, null);
 				}
 			}
 		}
@@ -663,18 +693,34 @@ public class SplayedLayout implements LayoutManager {
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			Component c = e.getComponent();
-			if (c.getParent() == null
-					|| c.getParent().getLayout() != SplayedLayout.this) {
-				c.removeMouseListener(this);
-			} else if (prioritizeRollover) {
-				c.getParent().revalidate();
-			}
+			process(e);
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			mouseEntered(e);
+			process(e);
+		}
+
+		private void process(MouseEvent e) {
+			Component c = e.getComponent();
+			JComponent splayedAncestor = (JComponent) getSplayedAncestor(c);
+			if (splayedAncestor == null) {
+				c.removeMouseListener(this);
+			} else if (prioritizeRollover) {
+				if (e.getID() == MouseEvent.MOUSE_ENTERED
+						&& splayedAncestor
+								.getClientProperty(PROPERTY_ROLLOVER_CHILD) != c) {
+					splayedAncestor.putClientProperty(PROPERTY_ROLLOVER_CHILD,
+							c);
+					splayedAncestor.revalidate();
+				} else if (e.getID() == MouseEvent.MOUSE_EXITED
+						&& splayedAncestor
+								.getClientProperty(PROPERTY_ROLLOVER_CHILD) == c) {
+					splayedAncestor.putClientProperty(PROPERTY_ROLLOVER_CHILD,
+							null);
+					splayedAncestor.revalidate();
+				}
+			}
 		}
 
 	};
@@ -684,11 +730,11 @@ public class SplayedLayout implements LayoutManager {
 		@Override
 		public void focusGained(FocusEvent e) {
 			Component c = e.getComponent();
-			if (c.getParent() == null
-					|| c.getParent().getLayout() != SplayedLayout.this) {
+			Container splayedAncestor = getSplayedAncestor(c);
+			if (splayedAncestor == null) {
 				c.removeFocusListener(this);
 			} else if (prioritizeFocus) {
-				c.getParent().revalidate();
+				splayedAncestor.revalidate();
 			}
 		}
 
@@ -703,18 +749,35 @@ public class SplayedLayout implements LayoutManager {
 		JComponent[] children = new JComponent[container.getComponentCount()];
 		for (int a = 0; a < children.length; a++) {
 			children[a] = (JComponent) container.getComponent(a);
+			addListeners(children[a]);
 		}
-
-		for (JComponent child : children) {
-			if (!Arrays.asList(child.getMouseListeners()).contains(
-					mouseListener))
-				child.addMouseListener(mouseListener);
-			if (!Arrays.asList(child.getFocusListeners()).contains(
-					focusListener))
-				child.addFocusListener(focusListener);
-		}
-
 		return children;
 	}
 
+	private void addListeners(Component c) {
+		if (!Arrays.asList(c.getMouseListeners()).contains(mouseListener))
+			c.addMouseListener(mouseListener);
+		if (!Arrays.asList(c.getFocusListeners()).contains(focusListener))
+			c.addFocusListener(focusListener);
+
+		if (c instanceof Container) {
+			Container c2 = (Container) c;
+			for (int a = 0; a < c2.getComponentCount(); a++) {
+				addListeners(c2.getComponent(a));
+			}
+		}
+	}
+
+	/**
+	 * Return the ancestor of the argument that uses this SplayedLayout.
+	 */
+	protected Container getSplayedAncestor(Component c) {
+		while (c != null) {
+			if (c.getParent() != null
+					&& c.getParent().getLayout() == SplayedLayout.this)
+				return c.getParent();
+			c = c.getParent();
+		}
+		return null;
+	}
 }

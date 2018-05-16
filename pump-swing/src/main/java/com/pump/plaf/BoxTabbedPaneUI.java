@@ -1223,8 +1223,8 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 					return;
 				} else {
 					removeAll();
-					add(getLabel(), createLabelConstraints());
 					add(getCloseButton(), createCloseButtonConstraints());
+					add(getLabel(), createLabelConstraints());
 					revalidate();
 				}
 			} else {
@@ -1233,9 +1233,9 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 					rc.setRotation(rotation);
 				} else {
 					removeAll();
+					add(getCloseButton(), createCloseButtonConstraints());
 					add(new RotatedPanel(getLabel(), rotation),
 							createLabelConstraints());
-					add(getCloseButton(), createCloseButtonConstraints());
 					revalidate();
 				}
 			}

@@ -10,25 +10,20 @@
  */
 package com.pump.plaf;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,8 +36,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.LabelUI;
-import javax.swing.plaf.basic.BasicLabelUI;
 
 import com.pump.awt.SplayedLayout;
 import com.pump.icon.PaddedIcon;
@@ -185,7 +178,21 @@ public class BreadCrumbUI extends ComponentUI {
 		Dimension iconSize = new Dimension(separatorIcon.getIconWidth(),
 				separatorIcon.getIconHeight());
 		comp.setLayout(new SplayedLayout(SwingConstants.HORIZONTAL, iconSize,
-				true, true, false));
+				true, true, false) {
+
+			@Override
+			protected Collection<JComponent> getEmphasizedComponents(
+					JComponent container) {
+				Collection<JComponent> returnValue = super
+						.getEmphasizedComponents(container);
+				if (returnValue.isEmpty() && container.getComponentCount() > 0) {
+					returnValue = Arrays.asList((JComponent) container
+							.getComponent(container.getComponentCount() - 1));
+				}
+				return returnValue;
+			}
+
+		});
 
 		BreadCrumbFormatter<E> formatter = comp.getFormatter();
 
@@ -213,9 +220,6 @@ public class BreadCrumbUI extends ComponentUI {
 		}
 		while (path != null && ctr < path.length) {
 			JLabel newLabel = new JLabel();
-			LabelUI ui = getLabelUI();
-			if (ui != null)
-				newLabel.setUI(ui);
 			newLabel.putClientProperty(PATH_NODE_KEY, path[ctr]);
 			newLabel.putClientProperty(PATH_NODE_INDEX_KEY, ctr);
 			formatter.format(comp, newLabel, path[ctr], ctr);
@@ -232,60 +236,6 @@ public class BreadCrumbUI extends ComponentUI {
 				comp.repaint();
 			}
 		});
-	}
-
-	static class FadingLabelUI extends BasicLabelUI {
-		protected static final String FADE_OUT = FadingLabelUI.class.getName()
-				+ ".fade-out";
-
-		@Override
-		public void paint(Graphics g0, JComponent c) {
-			Boolean b = (Boolean) c.getClientProperty(FADE_OUT);
-			if (b == null)
-				b = Boolean.FALSE;
-
-			BufferedImage bi = new BufferedImage(c.getWidth(), c.getHeight(),
-					BufferedImage.TYPE_INT_ARGB_PRE);
-			Graphics2D g2 = bi.createGraphics();
-			g2.setRenderingHints(((Graphics2D) g0).getRenderingHints());
-			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-					RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-					RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-			g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
-					RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-			g2.setRenderingHint(RenderingHints.KEY_RENDERING,
-					RenderingHints.VALUE_RENDER_QUALITY);
-			super.paint(g2, c);
-			if (b) {
-				g2.setComposite(AlphaComposite.DstOut);
-				g2.setPaint(new GradientPaint(Math.max(0, c.getWidth() - 10),
-						0, new Color(0, 0, 0, 0), c.getWidth(), 0, new Color(0,
-								0, 0)));
-				g2.fillRect(0, 0, c.getWidth(), c.getHeight());
-			}
-			g2.dispose();
-
-			g0.drawImage(bi, 0, 0, null);
-		}
-
-		protected String layoutCL(JLabel label, FontMetrics fontMetrics,
-				String text, Icon icon, Rectangle viewR, Rectangle iconR,
-				Rectangle textR) {
-			String returnValue = super.layoutCL(label, fontMetrics, text, icon,
-					viewR, iconR, textR);
-			// disregard "returnValue" and just return the text:
-			// this avoids forcing ellipses
-			label.putClientProperty(FADE_OUT, !returnValue.equals(text));
-
-			return text;
-		}
-
-	}
-
-	/** Return the LabelUI each crumb should use. */
-	protected LabelUI getLabelUI() {
-		return null; // return new FadingLabelUI();
 	}
 
 	public static ComponentUI createUI(JComponent c) {
@@ -331,10 +281,12 @@ public class BreadCrumbUI extends ComponentUI {
 			insets = b.getBorderInsets(c);
 		for (int a = 0; a < crumbs.length - 1; a++) {
 			Rectangle r = crumbs[a].getBounds();
+
 			int x = r.x + r.width;
 			int y = (c.getHeight() - insets.bottom - insets.top) / 2
 					+ insets.top - separatorIcon.getIconHeight() / 2;
-			separatorIcon.paintIcon(c, g, x, y);
+
+			separatorIcon.paintIcon(c, g.create(), x, y);
 		}
 	}
 }
