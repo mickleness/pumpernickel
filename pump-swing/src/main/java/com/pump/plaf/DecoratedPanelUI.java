@@ -22,11 +22,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.TexturePaint;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -44,7 +42,6 @@ import com.pump.awt.GradientTexturePaint.Cycle;
 import com.pump.awt.Scribbler;
 import com.pump.blog.Blurb;
 import com.pump.geom.GeneralPathWriter;
-import com.pump.image.BrushedMetalLook;
 import com.pump.util.ObservableProperties;
 import com.pump.util.ObservableProperties.Key;
 
@@ -223,50 +220,6 @@ public class DecoratedPanelUI extends PanelUI {
 		ui.getBorder().setStrokeWidth(.5f);
 		ui.getBorder().setCurvature(1);
 		ui.getBorder().setCornerSize(20);
-		ui.getBorder().setDropShadowLayerCount(0);
-		return ui;
-	}
-
-	/**
-	 * Create a <code>DecoratedPanelUI</code> that uses a special
-	 * <code>Renderer</code> to simulate a brushed metal look with small but
-	 * rounded corners.
-	 * <p>
-	 * <img src=
-	 * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/decorated-panel/createBrushedMetalUI.png"
-	 * alt="Brushed Metal Demo">
-	 */
-	public static DecoratedPanelUI createBrushedMetalUI() {
-		Renderer brushedMetalRenderer = new Renderer() {
-			BufferedImage bi = null;
-
-			@Override
-			protected void paintBody(Graphics2D g, Component c,
-					Map<String, Object> attributes) {
-				if (bi == null || bi.getWidth() != c.getWidth()
-						|| bi.getHeight() != c.getHeight()) {
-					bi = BrushedMetalLook.paint(
-							new Line2D.Float(0, c.getHeight() / 2,
-									c.getWidth(), c.getHeight() / 2), c
-									.getHeight(),
-							new Rectangle(0, 0, c.getWidth(), c.getHeight()),
-							new Color(0xBBBBBB), false);
-				}
-				TexturePaint p = new TexturePaint(bi, new Rectangle(0, 0,
-						c.getWidth(), c.getHeight()));
-				g.setPaint(p);
-				g.fill(body);
-			}
-		};
-
-		DecoratedPanelUI ui = new DecoratedPanelUI(brushedMetalRenderer);
-		ui.setGlazeOpacity(0);
-		ui.getBorder().setBevelHighlightLayerCount(0);
-		ui.getBorder().setBevelShadowLayerCount(0);
-		ui.getBorder().setBorderPaint(Color.black);
-		ui.getBorder().setStrokeWidth(0);
-		ui.getBorder().setCurvature(1);
-		ui.getBorder().setCornerSize(5);
 		ui.getBorder().setDropShadowLayerCount(0);
 		return ui;
 	}

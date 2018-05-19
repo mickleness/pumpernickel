@@ -65,7 +65,6 @@ import com.pump.desktop.DesktopApplication;
 import com.pump.desktop.edit.EditCommand;
 import com.pump.desktop.edit.EditMenuControls;
 import com.pump.geom.AreaXTestPanel;
-import com.pump.geom.knot.KnotDemo;
 import com.pump.icon.button.MinimalDuoToneCloseIcon;
 import com.pump.plaf.RoundTextFieldUI;
 import com.pump.swing.CollapsibleContainer;
@@ -317,7 +316,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 		try {
 			addSection("Transition2D", new Transition2DDemo());
 			addSection("Transition3D", new Transition3DDemo());
-			addSection("Brushed Metal", new BrushedMetalDemo());
 			addSection("BMP ImageIO Comparison", new BmpComparisonDemo());
 			addSection("AlphaComposite", new AlphaCompositeDemo());
 			addSection("TextEffect", new TextEffectDemo());
@@ -342,7 +340,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Swing: Color Components", new ColorDemo());
 			addSection("FilledButtonUIDemo", new FilledButtonUIDemo());
 			addSection("Shapes: AreaX Tests", new AreaXTestPanel());
-			addSection("Shapes: Knots", new KnotDemo());
 			addSection("Graphics: Debugger", new GraphicsWriterDemo());
 			addSection("Images: JPEG Metadata", new JPEGMetaDataDemo());
 			addSection("AudioPlayer", new AudioPlayerDemo(this));
