@@ -206,9 +206,9 @@ public class DecoratedListUI extends BasicListUI {
 								armedDecoration.decoration, 0,
 								"decoration click"));
 						// this isn't really our responsibility, but a sloppy
-						// decoration may forget to
-						// repaint if something changed... (and a one-time
-						// repaint won't hurt, right?)
+						// decoration may forget to repaint if something
+						// changed... (and a one-time repaint won't hurt,
+						// right?)
 						list.repaint(armedDecoration.row);
 					}
 				}
@@ -317,22 +317,24 @@ public class DecoratedListUI extends BasicListUI {
 					cellHasFocus)) {
 				Point p = decorations[a].getLocation(list, value, row,
 						isSelected, cellHasFocus);
-				Icon icon;
+				Icon icon = decorations[a].getIcon(list, value, row,
+						isSelected, cellHasFocus, false, false);
+				// we assume rollover/pressed icons are same dimensions as
+				// default icon
+				Rectangle iconBounds = new Rectangle(rowBounds.x + p.x,
+						rowBounds.y + p.y, icon.getIconWidth(),
+						icon.getIconHeight());
 				if (armedDecoration != null && armedDecoration.value == value
 						&& armedDecoration.decoration == decorations[a]) {
 					icon = decorations[a].getIcon(list, value, row, isSelected,
 							cellHasFocus, false, true);
-				} else if (rowBounds.contains(mouseX, mouseY)) {
+				} else if (iconBounds.contains(mouseX, mouseY)) {
 					icon = decorations[a].getIcon(list, value, row, isSelected,
 							cellHasFocus, true, false);
-				} else {
-					icon = decorations[a].getIcon(list, value, row, isSelected,
-							cellHasFocus, false, false);
 				}
 				Graphics g2 = g.create();
 				try {
-					icon.paintIcon(list, g2, rowBounds.x + p.x, rowBounds.y
-							+ p.y);
+					icon.paintIcon(list, g2, iconBounds.x, iconBounds.y);
 				} finally {
 					g2.dispose();
 				}
