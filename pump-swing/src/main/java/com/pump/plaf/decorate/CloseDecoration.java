@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.plaf;
+package com.pump.plaf.decorate;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -18,11 +18,11 @@ import javax.swing.Icon;
 import javax.swing.JList;
 
 import com.pump.icon.CloseIcon;
-import com.pump.plaf.DecoratedListUI.ListDecoration;
+import com.pump.plaf.decorate.DecoratedListUI.ListDecoration;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.JFancyBox.FancyCloseIcon;
 
-public abstract class CloseDecoration extends ListDecoration {
+public abstract class CloseDecoration implements ListDecoration {
 	Icon normalIcon;
 	Icon pressedIcon;
 

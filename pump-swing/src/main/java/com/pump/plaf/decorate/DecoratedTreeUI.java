@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.plaf;
+package com.pump.plaf.decorate;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -32,9 +32,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -42,7 +40,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.JViewport;
-import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.AbstractLayoutCache.NodeDimensions;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -94,7 +91,7 @@ public class DecoratedTreeUI extends BasicTreeUI {
 	 * <code>JComponent</code>, but the <code>DecoratedTreeUI</code> will
 	 * trigger ActionEvents when the icon is pressed.
 	 */
-	public abstract static class TreeDecoration {
+	public interface TreeDecoration {
 		/**
 		 * Returns the icon this decoration should currently render.
 		 * <p>
@@ -167,202 +164,6 @@ public class DecoratedTreeUI extends BasicTreeUI {
 		public abstract ActionListener getActionListener(JTree tree,
 				Object value, boolean selected, boolean expanded, boolean leaf,
 				int row, boolean hasFocus);
-	}
-
-	/**
-	 * This is a simple 3-state <code>TreeDecoration</code> that stores a fixed
-	 * "normal", "rollover" and "pressed" icon state.
-	 * <p>
-	 * The default implementation of <code>isVisible(..)</code> will only render
-	 * this decoration when a tree node is selected. This is just an aesthetic
-	 * choice you are free to override. (The original motivation for this
-	 * decision was: too many decorations might become visual clutter.)
-	 * <p>
-	 * It is assumed that if a rollover or pressed icon is provided that it will
-	 * be the same size as the normal icon.
-	 */
-	public static class BasicTreeDecoration extends TreeDecoration {
-
-		Icon normalIcon, rolloverIcon, pressedIcon;
-		ActionListener actionListener;
-
-		/**
-		 * Create a decoration with only one icon and no ActionListener.
-		 * 
-		 * @param normalIcon
-		 */
-		public BasicTreeDecoration(Icon normalIcon) {
-			if (normalIcon == null)
-				throw new NullPointerException();
-			this.normalIcon = normalIcon;
-		}
-
-		/**
-		 * Create a clickable decoration with 3 states and an ActionListener.
-		 * 
-		 * @param normalIcon
-		 *            the default icon. This may not be null.
-		 * @param rolloverIcon
-		 *            an optional icon to display when the mouse hovers over
-		 *            this decoration.
-		 * @param pressedIcon
-		 *            an optional icon to display when the mouse clicks this
-		 *            decoration.
-		 * @param actionListener
-		 *            an optional ActionListener to receive events when this
-		 *            decoration is clicked.
-		 */
-		public BasicTreeDecoration(Icon normalIcon, Icon rolloverIcon,
-				Icon pressedIcon, ActionListener actionListener) {
-			this(normalIcon);
-			this.rolloverIcon = rolloverIcon;
-			this.pressedIcon = pressedIcon;
-			this.actionListener = actionListener;
-		}
-
-		@Override
-		public Icon getIcon(JTree tree, Object value, boolean selected,
-				boolean expanded, boolean leaf, int row, boolean isRollover,
-				boolean isPressed) {
-			if (isPressed && pressedIcon != null)
-				return pressedIcon;
-			if (isRollover && rolloverIcon != null)
-				return rolloverIcon;
-			return normalIcon;
-
-		}
-
-		/** Returns true if the node is selected. */
-		@Override
-		public boolean isVisible(JTree tree, Object value, boolean selected,
-				boolean expanded, boolean leaf, int row, boolean hasFocus) {
-			return selected;
-		}
-
-		@Override
-		public ActionListener getActionListener(JTree tree, Object value,
-				boolean selected, boolean expanded, boolean leaf, int row,
-				boolean hasFocus) {
-			return actionListener;
-		}
-	}
-
-	private static class RowInfo {
-		int rowIndex;
-		JTree tree;
-
-		RowInfo(JTree tree, int rowIndex) {
-			this.tree = tree;
-			this.rowIndex = rowIndex;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof RowInfo))
-				return false;
-			RowInfo i = (RowInfo) obj;
-			if (i.rowIndex != rowIndex)
-				return false;
-			if (i.tree != tree)
-				return false;
-			return true;
-		}
-
-		@Override
-		public int hashCode() {
-			return rowIndex;
-		}
-	}
-
-	/**
-	 * A TreeDecoration that continually repaints itself as long as it is
-	 * visible. This is used for animating decorations.
-	 */
-	public static class RepaintingTreeDecoration extends TreeDecoration {
-		Timer repaintTimer;
-		ActionListener repaintListener = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				RowInfo[] rows;
-				synchronized (repaintingRows) {
-					rows = repaintingRows.toArray(new RowInfo[repaintingRows
-							.size()]);
-					if (rows.length == 0) {
-						repaintTimer.stop();
-					}
-				}
-				for (int a = 0; a < rows.length; a++) {
-					Rectangle rowBounds = rows[a].tree
-							.getRowBounds(rows[a].rowIndex);
-					rows[a].tree.repaint(rowBounds);
-				}
-			}
-		};
-		Set<RowInfo> repaintingRows = new HashSet<RowInfo>();
-		protected final TreeDecoration decoration;
-
-		public RepaintingTreeDecoration(Icon normalIcon, int repaintInterval) {
-			this(new BasicTreeDecoration(normalIcon), repaintInterval);
-		}
-
-		public RepaintingTreeDecoration(TreeDecoration treeDecoration,
-				int repaintInterval) {
-			if (treeDecoration == null)
-				throw new NullPointerException();
-			this.decoration = treeDecoration;
-			repaintTimer = new Timer(repaintInterval, repaintListener);
-		}
-
-		/**
-		 * Returns whether this decoration should be visible.
-		 * <p>
-		 * Do not override this method. To customize the visibility of this
-		 * object, change the <code>TreeDecoration</code> this decoration
-		 * delegates to.
-		 */
-		@Override
-		public final boolean isVisible(JTree tree, Object value,
-				boolean selected, boolean expanded, boolean leaf, int row,
-				boolean hasFocus) {
-			/*
-			 * This method is final because this implementation is what
-			 * guarantees this decoration will continually repeat. I overrode
-			 * this by mistake when I wrote the PulsingTreeDecoration, and ended
-			 * up with a timer that continually repainted even when the
-			 * decoration was not actually visible. Instead the correct behavior
-			 * is for the decoration field to have specialized visibility
-			 * instructions.
-			 */
-			boolean returnValue = decoration.isVisible(tree, value, selected,
-					expanded, leaf, row, hasFocus);
-			synchronized (repaintingRows) {
-				RowInfo rowInfo = new RowInfo(tree, row);
-				if (returnValue) {
-					if (repaintingRows.add(rowInfo)
-							&& (!repaintTimer.isRunning())) {
-						repaintTimer.start();
-					}
-				} else {
-					repaintingRows.remove(rowInfo);
-				}
-			}
-			return returnValue;
-		}
-
-		@Override
-		public Icon getIcon(JTree tree, Object value, boolean selected,
-				boolean expanded, boolean leaf, int row, boolean isRollover,
-				boolean isPressed) {
-			return decoration.getIcon(tree, value, selected, expanded, leaf,
-					row, isRollover, isPressed);
-		}
-
-		@Override
-		public ActionListener getActionListener(JTree tree, Object value,
-				boolean selected, boolean expanded, boolean leaf, int row,
-				boolean hasFocus) {
-			return decoration.getActionListener(tree, value, selected,
-					expanded, leaf, row, hasFocus);
-		}
 	}
 
 	protected class ExtendedNodeDimensions extends NodeDimensions {

@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.plaf;
+package com.pump.plaf.decorate;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -16,15 +16,12 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.swing.Icon;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.basic.BasicListUI;
 
@@ -45,7 +42,7 @@ public class DecoratedListUI extends BasicListUI {
 	/**
 	 * This decorates a row of a list.
 	 */
-	public abstract static class ListDecoration {
+	public interface ListDecoration {
 
 		/**
 		 * Returns the icon this decoration should currently render.
@@ -107,9 +104,7 @@ public class DecoratedListUI extends BasicListUI {
 		 *            whether the list cell has focus
 		 */
 		public ActionListener getActionListener(JList list, Object value,
-				int row, boolean isSelected, boolean cellHasFocus) {
-			return null;
-		}
+				int row, boolean isSelected, boolean cellHasFocus);
 
 		/**
 		 * Returns the position this decoration be painted at.
@@ -127,122 +122,6 @@ public class DecoratedListUI extends BasicListUI {
 		 */
 		public abstract Point getLocation(JList list, Object value, int row,
 				boolean isSelected, boolean cellHasFocus);
-	}
-
-	private static class CellInfo {
-		int cellIndex;
-		JList list;
-
-		CellInfo(JList list, int cellIndex) {
-			this.list = list;
-			this.cellIndex = cellIndex;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof CellInfo))
-				return false;
-			CellInfo i = (CellInfo) obj;
-			if (i.cellIndex != cellIndex)
-				return false;
-			if (i.list != list)
-				return false;
-			return true;
-		}
-
-		@Override
-		public int hashCode() {
-			return cellIndex;
-		}
-	}
-
-	/**
-	 * A ListDecoration that continually repaints itself as long as it is
-	 * visible. This is used for animating decorations.
-	 */
-	public static class RepaintingListDecoration extends ListDecoration {
-		Timer repaintTimer;
-		ActionListener repaintListener = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CellInfo[] cells;
-				synchronized (repaintingCells) {
-					cells = repaintingCells
-							.toArray(new CellInfo[repaintingCells.size()]);
-					if (cells.length == 0) {
-						repaintTimer.stop();
-					}
-				}
-				for (int a = 0; a < cells.length; a++) {
-					Rectangle rowBounds = cells[a].list.getCellBounds(
-							cells[a].cellIndex, cells[a].cellIndex);
-					cells[a].list.repaint(rowBounds);
-				}
-			}
-		};
-		Set<CellInfo> repaintingCells = new HashSet<CellInfo>();
-		protected final ListDecoration decoration;
-
-		// TODO: uncomment this method when the BasicListDecoration exists
-		// public RepaintingListDecoration(Icon normalIcon,int repaintInterval)
-		// {
-		// this(new BasicListDecoration(normalIcon), repaintInterval);
-		// }
-
-		public RepaintingListDecoration(ListDecoration listDecoration,
-				int repaintInterval) {
-			if (listDecoration == null)
-				throw new NullPointerException();
-			this.decoration = listDecoration;
-			repaintTimer = new Timer(repaintInterval, repaintListener);
-		}
-
-		@Override
-		public Icon getIcon(JList list, Object value, int row,
-				boolean isSelected, boolean cellHasFocus, boolean isRollover,
-				boolean isPressed) {
-			return decoration.getIcon(list, value, row, isSelected,
-					cellHasFocus, isRollover, isPressed);
-		}
-
-		/**
-		 * Returns whether this decoration should be visible.
-		 * <p>
-		 * Do not override this method. To customize the visibility of this
-		 * object, change the <code>ListDecoration</code> this decoration
-		 * delegates to.
-		 */
-		@Override
-		public final boolean isVisible(JList list, Object value, int row,
-				boolean isSelected, boolean cellHasFocus) {
-			boolean returnValue = decoration.isVisible(list, value, row,
-					isSelected, cellHasFocus);
-			synchronized (repaintingCells) {
-				CellInfo cellInfo = new CellInfo(list, row);
-				if (returnValue) {
-					if (repaintingCells.add(cellInfo)
-							&& (!repaintTimer.isRunning())) {
-						repaintTimer.start();
-					}
-				} else {
-					repaintingCells.remove(cellInfo);
-				}
-			}
-			return returnValue;
-		}
-
-		@Override
-		public ActionListener getActionListener(JList list, Object value,
-				int row, boolean isSelected, boolean cellHasFocus) {
-			return decoration.getActionListener(list, value, row, isSelected,
-					cellHasFocus);
-		}
-
-		@Override
-		public Point getLocation(JList list, Object value, int row,
-				boolean isSelected, boolean cellHasFocus) {
-			return decoration.getLocation(list, value, row, isSelected,
-					cellHasFocus);
-		}
 	}
 
 	/**

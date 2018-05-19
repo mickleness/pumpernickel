@@ -1,4 +1,4 @@
-package com.pump.plaf;
+package com.pump.plaf.decorate;
 
 import java.awt.Component;
 import java.awt.Dimension;
