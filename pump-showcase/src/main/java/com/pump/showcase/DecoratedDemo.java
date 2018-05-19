@@ -730,13 +730,13 @@ public class DecoratedDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return DecoratedDemo.class.getResource("decoratedDemo.html");
 	}
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "decoration", "list", "tree" };
+		return new String[] { "decoration", "decorate", "icon", "button",
+				"list", "tree", "ux" };
 	}
 
 	@Override
