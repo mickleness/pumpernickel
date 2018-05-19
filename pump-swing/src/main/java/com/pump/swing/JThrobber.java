@@ -10,6 +10,8 @@
  */
 package com.pump.swing;
 
+import javax.accessibility.AccessibleContext;
+import javax.accessibility.AccessibleRole;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
@@ -143,4 +145,19 @@ public class JThrobber extends JComponent {
 		putClientProperty(KEY_ACTIVE, new Boolean(b));
 	}
 
+	class AccessibleThrobber extends AccessibleJComponent {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public AccessibleRole getAccessibleRole() {
+			return AccessibleRole.PROGRESS_MONITOR;
+		}
+
+	}
+
+	public AccessibleContext getAccessibleContext() {
+		if (accessibleContext == null)
+			accessibleContext = new AccessibleThrobber();
+		return accessibleContext;
+	}
 }
