@@ -10,38 +10,23 @@
  */
 package com.pump.showcase;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.RenderingHints;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.GeneralPath;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.plaf.LabelUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -55,13 +40,10 @@ import com.pump.icon.RefreshIcon;
 import com.pump.icon.StarIcon;
 import com.pump.icon.TriangleIcon;
 import com.pump.plaf.AquaThrobberUI;
-import com.pump.plaf.BreadCrumbUI;
 import com.pump.plaf.DecoratedTreeUI;
 import com.pump.plaf.DecoratedTreeUI.BasicTreeDecoration;
 import com.pump.plaf.DecoratedTreeUI.RepaintingTreeDecoration;
 import com.pump.plaf.DecoratedTreeUI.TreeDecoration;
-import com.pump.swing.JBreadCrumb;
-import com.pump.swing.JBreadCrumb.BreadCrumbFormatter;
 
 public class SwingComponentsDemo extends MultiWindowDemo {
 	private static final long serialVersionUID = 1L;
@@ -436,156 +418,5 @@ public class SwingComponentsDemo extends MultiWindowDemo {
 			loadingThread = new LoadingThread();
 			loadingThread.start();
 		}
-	}
-
-	static class BreadCrumbDemo extends JInternalFrame {
-		private static final long serialVersionUID = 1L;
-
-		JBreadCrumb<String> crumbs1 = new JBreadCrumb<String>();
-		JBreadCrumb<String> crumbs2 = new JBreadCrumb<String>();
-		JPanel crumbs2Container = new JPanel(new GridBagLayout());
-
-		/**
-		 * Create a default BreadCrumbDemo with generous insets, a small width
-		 * (to demonstrate collapsing) and a simple file path.
-		 */
-		public BreadCrumbDemo() {
-			this(15, true, "Macintosh HD", "Users", "Hercules", "Pictures",
-					"Labour Selfies", "Cerberus");
-		}
-
-		/**
-		 * Create a BreadCrumbDemo
-		 * 
-		 * @param insets
-		 *            the insets to apply to the content area
-		 * @param collapse
-		 *            if true the then the width of this panel is reduced so
-		 *            collapsing is necessary.
-		 * @param strings
-		 *            a demo path of bread crumbs
-		 */
-		public BreadCrumbDemo(int insets, boolean collapse, String... strings) {
-			super("JBreadCrumb");
-
-			getRootPane()
-					.putClientProperty(
-							KEY_DESCRIPTION,
-							"A breadcrumb component is often used to depict a path in a tree (such as a file path). This component has a variety of listeners, and a collapsing UI that helps squeeze long paths into compact spaces. (Try shrinking the width of the window!)");
-			setResizable(true);
-
-			// set up crumbs1:
-			crumbs1.setPath(strings);
-			crumbs1.setFormatter(new BreadCrumbFormatter<String>() {
-
-				public void format(JBreadCrumb<String> container, JLabel label,
-						String pathNode, int index) {
-					label.setText(pathNode);
-					label.setIcon(UIManager.getIcon("Tree.openIcon"));
-				}
-
-			});
-			crumbs1.setBorder(new EmptyBorder(insets, insets, insets, insets));
-			crumbs1.setOpaque(true);
-			crumbs1.setBackground(Color.white);
-			if (collapse) {
-				Dimension d = crumbs1.getPreferredSize();
-				d.width -= 100;
-				crumbs1.setPreferredSize(d);
-			}
-
-			// set up crumbs2:
-			Icon lankySeparator = new Icon() {
-
-				int separatorWidth = 5;
-				int leftPadding = 3;
-				int rightPadding = 5;
-
-				public void paintIcon(Component c, Graphics g, int x, int y) {
-					Graphics2D g2 = (Graphics2D) g.create();
-					g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-							RenderingHints.VALUE_ANTIALIAS_ON);
-					int h = getIconHeight() - 1;
-					GeneralPath arrow = new GeneralPath();
-					arrow.moveTo(x + leftPadding, y);
-					arrow.lineTo(x + leftPadding + separatorWidth, y + h / 2);
-					arrow.lineTo(x + leftPadding, y + h);
-					g2.setStroke(new BasicStroke(2));
-					g2.setColor(new Color(0, 0, 0, 10));
-					g2.draw(arrow);
-					g2.setStroke(new BasicStroke(1));
-					g2.setColor(new Color(0, 0, 0, 40));
-					g2.draw(arrow);
-					g2.dispose();
-				}
-
-				public int getIconWidth() {
-					return separatorWidth + leftPadding + rightPadding;
-				}
-
-				public int getIconHeight() {
-					return 22;
-				}
-
-			};
-
-			crumbs2.setUI(new BreadCrumbUI() {
-				@Override
-				public void paint(Graphics g, JComponent c) {
-					Graphics2D g2 = (Graphics2D) g.create();
-					GradientPaint paint = new GradientPaint(0, 0, new Color(
-							0xFFFFFF), 0, c.getHeight(), new Color(0xDDDDDD));
-					g2.setPaint(paint);
-					g2.fillRect(0, 0, c.getWidth(), c.getHeight());
-					super.paint(g2, c);
-					g2.dispose();
-				}
-
-				@Override
-				protected LabelUI getLabelUI() {
-					return null; // new EmphasizedLabelUI();
-				}
-			});
-			crumbs2.setPath(strings);
-			crumbs2.setFormatter(new BreadCrumbFormatter<String>() {
-
-				public void format(JBreadCrumb<String> container, JLabel label,
-						String pathNode, int index) {
-					label.setText(pathNode);
-				}
-
-			});
-			crumbs2.putClientProperty(BreadCrumbUI.SEPARATOR_ICON_KEY,
-					lankySeparator);
-			crumbs2.setBorder(new EmptyBorder(0, 5, 0, 0));
-			crumbs2.setOpaque(true);
-			crumbs2.setBackground(Color.white);
-			if (collapse) {
-				Dimension d = crumbs2.getPreferredSize();
-				d.width -= 100;
-				crumbs2.setPreferredSize(d);
-			}
-			crumbs2Container
-					.setBorder(new CompoundBorder(new EmptyBorder(insets,
-							insets, insets, insets), new LineBorder(Color.gray)));
-			crumbs2Container.setBackground(Color.white);
-
-			getContentPane().setLayout(new GridBagLayout());
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			c.weightx = 1;
-			c.weighty = 1;
-			c.fill = GridBagConstraints.BOTH;
-			crumbs2Container.add(crumbs2, c);
-			getContentPane().add(crumbs1, c);
-			c.gridy++;
-			getContentPane().add(crumbs2Container, c);
-		}
-	}
-
-	public SwingComponentsDemo() {
-		addPane(new BreadCrumbDemo(), 0, 0, 2, 1, GridBagConstraints.NONE);
-		addPane(new DecoratedTreeDemo(), 1, 1, 1, 1, GridBagConstraints.NONE);
 	}
 }

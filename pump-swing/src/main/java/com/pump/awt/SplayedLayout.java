@@ -350,13 +350,31 @@ public class SplayedLayout implements LayoutManager {
 		this.prioritizeRollover = prioritizeRollover;
 		this.prioritizeFocus = prioritizeFocus;
 		this.stretchToFill = stretchToFill;
-		this.separatorSize = separatorSize == null ? new Dimension(0, 0)
-				: new Dimension(separatorSize);
+		setSeparatorSize(separatorSize);
 	}
 
+	/**
+	 * @param separatorSize
+	 *            an optional padding to insert between all splayed elements.
+	 *            This may be used in JBreadCrumbs to paint a separator arrow or
+	 *            pipe.
+	 * @return true if this changed the separator size, false otherwise.
+	 */
+	public boolean setSeparatorSize(Dimension newSeparatorSize) {
+		if (newSeparatorSize == null)
+			newSeparatorSize = new Dimension(0, 0);
+		if (newSeparatorSize.equals(separatorSize))
+			return false;
+
+		separatorSize = new Dimension(newSeparatorSize);
+		return true;
+	}
+
+	@Override
 	public void addLayoutComponent(String name, Component comp) {
 	}
 
+	@Override
 	public void removeLayoutComponent(Component comp) {
 	}
 
@@ -722,7 +740,6 @@ public class SplayedLayout implements LayoutManager {
 				}
 			}
 		}
-
 	};
 
 	private FocusListener focusListener = new FocusListener() {

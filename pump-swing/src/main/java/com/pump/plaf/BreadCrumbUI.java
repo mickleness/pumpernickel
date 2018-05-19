@@ -22,6 +22,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -33,7 +34,6 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 
@@ -49,6 +49,67 @@ import com.pump.swing.NavigationListener.ListSelectionType;
  * The ComponentUI for {@link com.pump.swing.JBreadCrumb}.
  */
 public class BreadCrumbUI extends ComponentUI {
+
+	private static class BreadCrumbLayout extends SplayedLayout {
+		BreadCrumbLayout(Dimension iconSize) {
+			super(SwingConstants.HORIZONTAL, iconSize, true, true, false);
+		}
+
+		@Override
+		public Dimension preferredLayoutSize(Container parent) {
+			JBreadCrumb<?> jbc = (JBreadCrumb<?>) parent;
+			Icon icon = jbc.getUI().getSeparatorIcon(jbc);
+			Dimension d = super.preferredLayoutSize(parent);
+			d.height = Math.max(d.height, icon.getIconHeight());
+			return d;
+		}
+
+		@Override
+		public Dimension minimumLayoutSize(Container parent) {
+			JBreadCrumb<?> jbc = (JBreadCrumb<?>) parent;
+			Icon icon = jbc.getUI().getSeparatorIcon(jbc);
+			Dimension d = super.minimumLayoutSize(parent);
+			d.height = Math.max(d.height, icon.getIconHeight());
+			return d;
+		}
+
+		@Override
+		protected Collection<JComponent> getEmphasizedComponents(
+				JComponent container) {
+			Collection<JComponent> returnValue = super
+					.getEmphasizedComponents(container);
+			if (returnValue.isEmpty()) {
+				// when the super has nothing to emphasize, try to emphasize
+				// the last thing the user touched. For ex: if they rolled
+				// the mouse over a label and then left the container, keep
+				// the last thing they rolled over emphasized, just for
+				// continuity.
+				List<JComponent> lastEmphasized = (List<JComponent>) container
+						.getClientProperty(PROPERTY_LAST_EMPHASIZED);
+				if (lastEmphasized != null) {
+					returnValue = new ArrayList<>();
+					List children = Arrays.asList(container.getComponents());
+					for (JComponent jc : lastEmphasized) {
+						if (children.contains(jc)) {
+							returnValue.add(jc);
+						}
+					}
+				}
+
+				// if that failed, grab the last node in the path.
+				if (returnValue.isEmpty() && container.getComponentCount() > 0) {
+					JComponent last = (JComponent) container
+							.getComponent(container.getComponentCount() - 1);
+					returnValue = Arrays.asList(last);
+				}
+			}
+			container.putClientProperty(PROPERTY_LAST_EMPHASIZED,
+					new ArrayList<>(returnValue));
+			return returnValue;
+		}
+
+	};
+
 	protected static final String PATH_NODE_KEY = BreadCrumbUI.class.getName()
 			+ ".pathNode";
 	protected static final String PATH_NODE_INDEX_KEY = BreadCrumbUI.class
@@ -58,11 +119,17 @@ public class BreadCrumbUI extends ComponentUI {
 	 * This client property of a <code>JBreadCrumb</code> defines the icon used
 	 * as a separator.
 	 */
-	public static final String SEPARATOR_ICON_KEY = BreadCrumbUI.class
+	public static final String PROPERTY_SEPARATOR_ICON = BreadCrumbUI.class
 			.getName() + ".separatorIcon";
 
-	protected Icon defaultSeparatorIcon = new PaddedIcon(new TriangleIcon(
-			SwingConstants.EAST, 6, 6), new Insets(2, 4, 2, 6));
+	private static final String PROPERTY_LAST_EMPHASIZED = BreadCrumbUI.class
+			.getName() + ".lastEmphasized";
+
+	public static final Icon DEFAULT_SEPARATOR_ICON = new PaddedIcon(
+			new TriangleIcon(SwingConstants.EAST, 6, 6), new Insets(2, 4, 2, 6));
+
+	protected Icon defaultSeparatorIcon = DEFAULT_SEPARATOR_ICON;
+	ContainerMouseListener mouseListener = new ContainerMouseListener();
 
 	/** Create a new BreadCrumbUI. */
 	public BreadCrumbUI() {
@@ -100,7 +167,7 @@ public class BreadCrumbUI extends ComponentUI {
 		}
 	};
 
-	class LabelMouseListener<T> extends MouseAdapter {
+	class ContainerMouseListener<T> extends MouseAdapter {
 
 		private JLabel getLabel(Container parent, Point p) {
 			for (int a = 0; a < parent.getComponentCount(); a++) {
@@ -109,6 +176,13 @@ public class BreadCrumbUI extends ComponentUI {
 					return (JLabel) comp;
 			}
 			return null;
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			JBreadCrumb jbc = (JBreadCrumb) e.getComponent();
+			jbc.putClientProperty(PROPERTY_LAST_EMPHASIZED, null);
+			refreshUI(jbc);
 		}
 
 		@Override
@@ -145,7 +219,7 @@ public class BreadCrumbUI extends ComponentUI {
 
 	/** Return the icon the argument wants to use for separators. */
 	protected Icon getSeparatorIcon(JBreadCrumb<?> comp) {
-		Icon icon = (Icon) comp.getClientProperty(SEPARATOR_ICON_KEY);
+		Icon icon = (Icon) comp.getClientProperty(PROPERTY_SEPARATOR_ICON);
 		if (icon == null)
 			return defaultSeparatorIcon;
 		return icon;
@@ -177,22 +251,14 @@ public class BreadCrumbUI extends ComponentUI {
 		Icon separatorIcon = getSeparatorIcon(comp);
 		Dimension iconSize = new Dimension(separatorIcon.getIconWidth(),
 				separatorIcon.getIconHeight());
-		comp.setLayout(new SplayedLayout(SwingConstants.HORIZONTAL, iconSize,
-				true, true, false) {
-
-			@Override
-			protected Collection<JComponent> getEmphasizedComponents(
-					JComponent container) {
-				Collection<JComponent> returnValue = super
-						.getEmphasizedComponents(container);
-				if (returnValue.isEmpty() && container.getComponentCount() > 0) {
-					returnValue = Arrays.asList((JComponent) container
-							.getComponent(container.getComponentCount() - 1));
-				}
-				return returnValue;
-			}
-
-		});
+		BreadCrumbLayout bcl;
+		if (comp.getLayout() instanceof BreadCrumbLayout) {
+			bcl = (BreadCrumbLayout) comp.getLayout();
+			bcl.setSeparatorSize(iconSize);
+		} else {
+			bcl = new BreadCrumbLayout(iconSize);
+			comp.setLayout(bcl);
+		}
 
 		BreadCrumbFormatter<E> formatter = comp.getFormatter();
 
@@ -229,13 +295,16 @@ public class BreadCrumbUI extends ComponentUI {
 		}
 
 		comp.invalidate();
+		comp.revalidate();
+		comp.repaint();
+	}
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				comp.revalidate();
-				comp.repaint();
-			}
-		});
+	@Override
+	public Dimension getPreferredSize(JComponent c) {
+		Dimension d = super.getPreferredSize(c);
+		if (d != null)
+			d.height = Math.max(d.height, defaultSeparatorIcon.getIconHeight());
+		return d;
 	}
 
 	public static ComponentUI createUI(JComponent c) {
@@ -246,12 +315,11 @@ public class BreadCrumbUI extends ComponentUI {
 	public void installUI(JComponent c) {
 		super.installUI(c);
 
-		c.addMouseListener(new LabelMouseListener());
-
+		c.addMouseListener(mouseListener);
 		c.addPropertyChangeListener(JBreadCrumb.PATH_KEY, refreshUIListener);
 		c.addPropertyChangeListener(JBreadCrumb.FORMATTER_KEY,
 				refreshUIListener);
-		c.addPropertyChangeListener(SEPARATOR_ICON_KEY, refreshUIListener);
+		c.addPropertyChangeListener(PROPERTY_SEPARATOR_ICON, refreshUIListener);
 		refreshUI((JBreadCrumb<?>) c);
 	}
 
@@ -259,10 +327,12 @@ public class BreadCrumbUI extends ComponentUI {
 	public void uninstallUI(JComponent c) {
 		super.uninstallUI(c);
 
+		c.removeMouseListener(mouseListener);
 		c.removePropertyChangeListener(JBreadCrumb.PATH_KEY, refreshUIListener);
 		c.removePropertyChangeListener(JBreadCrumb.FORMATTER_KEY,
 				refreshUIListener);
-		c.removePropertyChangeListener(SEPARATOR_ICON_KEY, refreshUIListener);
+		c.removePropertyChangeListener(PROPERTY_SEPARATOR_ICON,
+				refreshUIListener);
 	}
 
 	/**

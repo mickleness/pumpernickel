@@ -16,7 +16,6 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
-import javax.swing.tree.TreePath;
 
 import com.pump.blog.Blurb;
 import com.pump.plaf.BreadCrumbUI;
@@ -124,24 +123,6 @@ public class JBreadCrumb<T> extends JComponent {
 				throw new NullPointerException();
 		}
 		putClientProperty(PATH_KEY, path);
-	}
-
-	/**
-	 * Set the path this component displays.
-	 * 
-	 * @param path
-	 *            the path to display. This should not be null, or contain any
-	 *            null elements.
-	 */
-	public void setPath(TreePath path) {
-		if (path == null)
-			throw new NullPointerException();
-		Object[] z = path.getPath();
-		for (Object t : z) {
-			if (t == null)
-				throw new NullPointerException();
-		}
-		putClientProperty(PATH_KEY, z);
 	}
 
 	/**

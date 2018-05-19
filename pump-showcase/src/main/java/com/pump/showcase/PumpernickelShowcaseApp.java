@@ -329,6 +329,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Spiral2D", new Spiral2DDemo());
 			addSection("Swing: Components", new SwingComponentsDemo());
 			addSection("JThrobber", new ThrobberDemo());
+			addSection("JBreadCrumb", new BreadCrumbDemo());
 			addSection("Screen Capture", new ScreenCaptureDemo(this));
 			addSection("Swing: CollapsibleContainer",
 					new CollapsibleContainerDemo());
