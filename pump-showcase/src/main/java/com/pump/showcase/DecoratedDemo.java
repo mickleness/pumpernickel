@@ -1,13 +1,3 @@
-/**
- * This software is released as part of the Pumpernickel project.
- * 
- * All com.pump resources in the Pumpernickel project are distributed under the
- * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
- * 
- * More information about the Pumpernickel project is available here:
- * https://mickleness.github.io/pumpernickel/
- */
 package com.pump.showcase;
 
 import java.awt.Color;
@@ -19,11 +9,13 @@ import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
-import javax.swing.JInternalFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -40,15 +32,25 @@ import com.pump.icon.RefreshIcon;
 import com.pump.icon.StarIcon;
 import com.pump.icon.TriangleIcon;
 import com.pump.plaf.AquaThrobberUI;
+import com.pump.plaf.DecoratedListUI;
 import com.pump.plaf.DecoratedTreeUI;
 import com.pump.plaf.DecoratedTreeUI.BasicTreeDecoration;
 import com.pump.plaf.DecoratedTreeUI.RepaintingTreeDecoration;
 import com.pump.plaf.DecoratedTreeUI.TreeDecoration;
+import com.pump.swing.CollapsibleContainer;
+import com.pump.swing.SectionContainer.Section;
 
-public class SwingComponentsDemo extends MultiWindowDemo {
+public class DecoratedDemo extends JPanel implements ShowcaseDemo {
+
 	private static final long serialVersionUID = 1L;
 
-	static class DecoratedTreeDemo extends JInternalFrame {
+	CollapsibleContainer container = new CollapsibleContainer();
+	Section listSection = container.addSection("DecoratedListUI",
+			"DecoratedListUI");
+	Section treeSection = container.addSection("DecoratedTreeUI",
+			"DecoratedTreeUI");
+
+	static class TreeDemo extends JPanel {
 		private static final long serialVersionUID = 1L;
 
 		/**
@@ -351,14 +353,7 @@ public class SwingComponentsDemo extends MultiWindowDemo {
 
 		JCheckBox stretchHighlight = new JCheckBox("Stretch Highlight", true);
 
-		public DecoratedTreeDemo() {
-			super("DecoratedTree");
-
-			getRootPane()
-					.putClientProperty(
-							KEY_DESCRIPTION,
-							"The DecoratedTreeUI adds clickable decorations on the right side of a JTree. This is a handy way to provide shortcuts to functions, but because these are \"stamped\" components: they don't really exist in the tree hierarchy. Because of this they are not keyboard accessible, and therefore you need redundant ways to access these features for special needs users (probably keyboard shortcuts).");
-
+		public TreeDemo() {
 			closeable = new DefaultMutableTreeNode("Deletable");
 			playable = new DefaultMutableTreeNode("Playable");
 			warning = new DefaultMutableTreeNode("Warning");
@@ -388,17 +383,17 @@ public class SwingComponentsDemo extends MultiWindowDemo {
 			loadChildNodes();
 			tree.setPreferredSize(new Dimension(200, 150));
 
-			getContentPane().setLayout(new GridBagLayout());
+			setLayout(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
 			c.gridy = 0;
 			c.weightx = 1;
 			c.weighty = 1;
 			c.fill = GridBagConstraints.BOTH;
-			getContentPane().add(tree, c);
+			add(tree, c);
 			c.weighty = 0;
 			c.gridy++;
-			getContentPane().add(stretchHighlight, c);
+			add(stretchHighlight, c);
 
 			stretchHighlight.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -419,4 +414,48 @@ public class SwingComponentsDemo extends MultiWindowDemo {
 			loadingThread.start();
 		}
 	}
+
+	public DecoratedDemo() {
+		PumpernickelShowcaseApp.installSections(this, container, listSection,
+				treeSection);
+
+		treeSection.getBody().setLayout(new GridBagLayout());
+		listSection.getBody().setLayout(new GridBagLayout());
+
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		treeSection.getBody().add(new TreeDemo(), c);
+	}
+
+	@Override
+	public String getTitle() {
+		return "DecoratedListUI, DecoratedTreeUI Demo";
+	}
+
+	@Override
+	public URL getHelpURL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "decoration", "list", "tree" };
+	}
+
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { DecoratedListUI.class, DecoratedTreeUI.class,
+				JTree.class, JList.class };
+	}
+
+	@Override
+	public boolean isSeparatorVisible() {
+		return false;
+	}
+
 }

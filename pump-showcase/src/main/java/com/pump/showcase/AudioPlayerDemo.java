@@ -10,11 +10,9 @@
  */
 package com.pump.showcase;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -37,7 +35,6 @@ import com.pump.plaf.LabelCellRenderer;
 import com.pump.plaf.WaveformSliderUI;
 import com.pump.swing.AudioPlayerComponent;
 import com.pump.swing.CollapsibleContainer;
-import com.pump.swing.PartialLineBorder;
 import com.pump.swing.SectionContainer.Section;
 
 public class AudioPlayerDemo extends JPanel implements ShowcaseDemo {
@@ -60,25 +57,8 @@ public class AudioPlayerDemo extends JPanel implements ShowcaseDemo {
 	Section listSection = container.addSection("aqua-list", "AquaAudioListUI");
 
 	public AudioPlayerDemo(PumpernickelShowcaseApp psa) {
-		super(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(3, 3, 3, 3);
-		add(container, c);
-		container.setBorder(new PartialLineBorder(Color.gray, false, true,
-				true, true));
-
-		playerSection.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);
-		listSection.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);
-
-		container.getHeader(playerSection).putClientProperty(
-				CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
-		container.getHeader(listSection).putClientProperty(
-				CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
+		PumpernickelShowcaseApp.installSections(this, container, playerSection,
+				listSection);
 
 		setupPlayerComponent();
 		setupAquaList();

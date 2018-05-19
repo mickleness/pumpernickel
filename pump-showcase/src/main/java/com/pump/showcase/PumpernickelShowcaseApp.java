@@ -10,6 +10,7 @@
  */
 package com.pump.showcase;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Desktop;
@@ -67,10 +68,12 @@ import com.pump.geom.AreaXTestPanel;
 import com.pump.geom.knot.KnotDemo;
 import com.pump.icon.button.MinimalDuoToneCloseIcon;
 import com.pump.plaf.RoundTextFieldUI;
+import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.HelpComponent;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.ListSectionContainer;
 import com.pump.swing.MagnificationPanel;
+import com.pump.swing.PartialLineBorder;
 import com.pump.swing.SectionContainer.Section;
 import com.pump.swing.TextFieldPrompt;
 import com.pump.text.WildcardPattern;
@@ -327,7 +330,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("AngleSliderUI", new AngleSliderUIDemo());
 			addSection("DecoratedPanelUI", new DecoratedPanelUIDemo());
 			addSection("Spiral2D", new Spiral2DDemo());
-			addSection("Swing: Components", new SwingComponentsDemo());
+			addSection("DecoratedListUI, DecoratedTreeUI", new DecoratedDemo());
 			addSection("JThrobber", new ThrobberDemo());
 			addSection("JBreadCrumb", new BreadCrumbDemo());
 			addSection("Screen Capture", new ScreenCaptureDemo(this));
@@ -558,6 +561,35 @@ public class PumpernickelShowcaseApp extends JFrame {
 			} else if (c instanceof Container) {
 				closeFancyBoxes((Container) c);
 			}
+		}
+	}
+
+	/**
+	 * Add a CollapsibleContainer to a panel so it fills the space and gives
+	 * equal vertical weight to non-closable sections.
+	 * 
+	 * @param panel
+	 * @param collapsibleContainer
+	 * @param sections
+	 */
+	public static void installSections(JPanel panel,
+			CollapsibleContainer collapsibleContainer, Section... sections) {
+		panel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(3, 3, 3, 3);
+		panel.add(collapsibleContainer, c);
+		collapsibleContainer.setBorder(new PartialLineBorder(Color.gray, false,
+				true, true, true));
+
+		for (Section section : sections) {
+			section.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);
+			collapsibleContainer.getHeader(section).putClientProperty(
+					CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
 		}
 	}
 }
