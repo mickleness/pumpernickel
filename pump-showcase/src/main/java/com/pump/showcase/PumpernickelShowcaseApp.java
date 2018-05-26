@@ -60,7 +60,6 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 
 import com.pump.awt.ClickSensitivityDemo;
-import com.pump.debug.AWTMonitorDemo;
 import com.pump.desktop.DesktopApplication;
 import com.pump.desktop.edit.EditCommand;
 import com.pump.desktop.edit.EditMenuControls;
@@ -319,7 +318,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("BMP ImageIO Comparison", new BmpComparisonDemo());
 			addSection("AlphaComposite", new AlphaCompositeDemo());
 			addSection("TextEffect", new TextEffectDemo());
-			addSection("AWT Monitor", new AWTMonitorDemo());
+			addSection("AWTMonitor", new AWTMonitorDemo());
 			addSection("Gradient: Halftone", new HalftoneGradientDemo());
 			addSection("Gradient: Color Band", new ColorBandDemo(this));
 			addSection("Click Sensitivity", new ClickSensitivityDemo());

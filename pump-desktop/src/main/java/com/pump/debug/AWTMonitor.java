@@ -125,10 +125,10 @@ public class AWTMonitor {
 	/**
 	 * Create a Thread that monitors the AWT thread.
 	 * <p>
-	 * This is intended for internal use, but is given package-level access here
-	 * for the AWTMonitorDemo panel.
+	 * Generally this method is not recommended for external invocation, but the
+	 * PumpernickelShowcaseApp's demo calls this.
 	 */
-	static Thread createAWTMonitorThread(final String applicationName,
+	public static Thread createAWTMonitorThread(final String applicationName,
 			final long stackTraceDelay, final long panicListenerDelay,
 			final String threadName, final PrintStream dest) {
 		return new Thread(threadName) {

@@ -31,6 +31,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -64,6 +66,13 @@ import com.pump.blog.ResourceSample;
 @ResourceSample(sample = { "new com.pump.swing.JFancyBox( new javax.swing.JInternalFrame(), \"Sample JFancyBox containing text\")" })
 public class JFancyBox extends JComponent {
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * This client property relates to a boolean indicating whether the user
+	 * should be able to dismiss this fancy box.
+	 */
+	public static final String PROPERTY_CLOSEABLE = JFancyBox.class.getName()
+			+ "#closeable";
 
 	/**
 	 * A close icon with a border and a light shadow. This is meant to be
@@ -214,7 +223,8 @@ public class JFancyBox extends JComponent {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			close();
+			if (isCloseable())
+				close();
 			super.mouseClicked(e);
 		}
 
@@ -278,6 +288,16 @@ public class JFancyBox extends JComponent {
 		closeButton.setBorderPainted(false);
 		closeButton.setContentAreaFilled(false);
 
+		addPropertyChangeListener(PROPERTY_CLOSEABLE,
+				new PropertyChangeListener() {
+
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						closeButton.setVisible(isCloseable());
+					}
+
+				});
+
 		add(closeButton);
 		add(contentContainer);
 		add(background);
@@ -315,7 +335,7 @@ public class JFancyBox extends JComponent {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
-				if (isShowing()) {
+				if (isShowing() && isCloseable()) {
 					close();
 				}
 			}
@@ -338,7 +358,31 @@ public class JFancyBox extends JComponent {
 				.getHeight());
 	}
 
+	/**
+	 * This method closes this fancy box. The user should only be able to
+	 * trigger events that invoke this if {@link #isCloseable()} returns true.
+	 */
 	protected void close() {
 		setVisible(false);
+	}
+
+	/**
+	 * @return true if the user should be able to close this box. The user's
+	 *         options to close this box include: using the mouse to click the
+	 *         gray area outside the box, triggering the close button, or
+	 *         pressing the escape key.
+	 */
+	public boolean isCloseable() {
+		Boolean b = (Boolean) getClientProperty(PROPERTY_CLOSEABLE);
+		if (b == null)
+			b = true;
+		return b;
+	}
+
+	/**
+	 * This controls whether the user should be able to close this box.
+	 */
+	public void setCloseable(boolean b) {
+		putClientProperty(PROPERTY_CLOSEABLE, b);
 	}
 }
