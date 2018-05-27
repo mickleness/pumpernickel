@@ -58,6 +58,7 @@ public abstract class ShowcaseChartDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	protected JPanel upperControls = new JPanel();
+	protected JPanel lowerControls = new JPanel();
 	JProgressBar progressBar = new JProgressBar();
 	JPanel results = new JPanel();
 	boolean isShowing = false;
@@ -79,6 +80,11 @@ public abstract class ShowcaseChartDemo extends JPanel implements ShowcaseDemo {
 		add(progressBar, c);
 		c.insets = new Insets(3, 3, 3, 3);
 		add(results, c);
+		c.gridy++;
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0;
+		add(lowerControls, c);
+
 		results.setVisible(false);
 		progressBar.setPreferredSize(new Dimension(70, 70));
 		progressBar.setIndeterminate(true);

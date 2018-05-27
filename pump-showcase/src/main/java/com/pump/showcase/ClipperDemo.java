@@ -11,7 +11,6 @@
 package com.pump.showcase;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -31,11 +30,25 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextPane;
+import javax.swing.RootPaneContainer;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.JTextComponent;
 
 import com.pump.blog.ResourceSample;
 import com.pump.geom.Clipper;
+import com.pump.geom.TransformUtils;
+import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.InspectorLayout;
+import com.pump.swing.JFancyBox;
 
 /**
  * A simple demo program for the Clipper class.
@@ -85,19 +98,29 @@ public class ClipperDemo extends ShowcaseChartDemo {
 		}
 	}
 
-	JComboBox<String> comboBox = new JComboBox<>();
-	JPanel panel = new JPanel() {
+	JPanel previewPanel = new JPanel() {
 		private static final long serialVersionUID = 1L;
 
 		Rectangle2D r = new Rectangle2D.Float(100, 100, 100, 100);
 
+		{
+			setOpaque(false);
+		}
+
 		@Override
 		protected void paintComponent(Graphics g) {
+			int min = Math.min(getWidth(), getHeight());
+
 			super.paintComponent(g);
-			Graphics2D g2 = (Graphics2D) g;
+			Graphics2D g2 = (Graphics2D) g.create();
+			g2.transform(TransformUtils.createAffineTransform(new Rectangle(0,
+					0, 300, 300), new Rectangle(getWidth() / 2 - min / 2,
+					getHeight() / 2 - min / 2, min, min)));
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
-			GeneralPath s = p[2][comboBox.getSelectedIndex()];
+			int shapeIndex = ((Number) shapeIndexSpinner.getValue()).intValue() - 1;
+			int type = typeComboBox.getSelectedIndex();
+			GeneralPath s = p[type][shapeIndex];
 			g2.setColor(Color.white);
 			g2.fillRect(0, 0, 300, 300);
 			g2.setColor(Color.blue);
@@ -126,27 +149,83 @@ public class ClipperDemo extends ShowcaseChartDemo {
 		}
 	};
 
-	public ClipperDemo() {
-		super();
+	JTextComponent textBox = new JTextPane();
+	JButton showSample = new JButton("Show Sample");
+	JComboBox<String> typeComboBox = new JComboBox<>();
+	JSpinner shapeIndexSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 100,
+			1));
+	JPanel inspector = new JPanel();
+	JPanel demoPanel = new JPanel(new GridBagLayout());
 
-		for (int a = 0; a < p.length; a++) {
-			comboBox.addItem("Shape #" + (a + 1));
-		}
+	public ClipperDemo() {
+		textBox.setText("This demo compares this codebase's Clipper class with the java.awt.geom.Area class for use in clipping complex shapes to a rectangle.\n\nAs of this writing the Clipper class outperforms the Area class in every scenario/measurement.");
+		textBox.setEditable(false);
+		textBox.setOpaque(false);
 		upperControls.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
-		c.weighty = 0;
-		upperControls.add(comboBox, c);
-		c.gridy++;
-		comboBox.addActionListener(new ActionListener() {
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		upperControls.add(textBox, c);
+
+		lowerControls.setLayout(new GridBagLayout());
+		c.fill = GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.CENTER;
+		lowerControls.add(showSample, c);
+
+		typeComboBox.addItem("Linear");
+		typeComboBox.addItem("Quadratic");
+		typeComboBox.addItem("Cubic");
+
+		InspectorLayout layout = new InspectorGridBagLayout(inspector);
+
+		layout.addRow(new JLabel("Segment Type:"), typeComboBox, false);
+		layout.addRow(new JLabel("Shape:"), shapeIndexSpinner, false);
+
+		typeComboBox.addActionListener(new ActionListener() {
+
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				panel.repaint();
+				previewPanel.repaint();
+			}
+
+		});
+
+		shapeIndexSpinner.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				previewPanel.repaint();
 			}
 		});
-		panel.setPreferredSize(new Dimension(300, 300));
-		upperControls.add(panel, c);
+
+		c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.fill = GridBagConstraints.BOTH;
+		demoPanel.add(inspector, c);
+		c.gridy++;
+		c.anchor = GridBagConstraints.NORTH;
+		c.weighty = 1;
+		demoPanel.add(previewPanel, c);
+
+		inspector.setOpaque(false);
+		demoPanel.setOpaque(false);
+
+		showSample.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				RootPaneContainer rpc = (RootPaneContainer) SwingUtilities
+						.getWindowAncestor(showSample);
+				JFancyBox b = new JFancyBox(rpc, demoPanel);
+				b.setVisible(true);
+			}
+
+		});
 	}
 
 	@Override
