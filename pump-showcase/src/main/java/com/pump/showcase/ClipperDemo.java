@@ -27,7 +27,6 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -53,35 +52,36 @@ import com.pump.geom.Clipper;
  */
 @ResourceSample(sample = "new com.pump.geom.ClipperDemo()")
 public class ClipperDemo extends ShowcaseChartDemo {
-	static final GeneralPath[] p = new GeneralPath[5];
+	static final GeneralPath[][] p = new GeneralPath[3][100];
 	private static final long serialVersionUID = 1L;
 	static {
 		Random r = new Random(0);
-		for (int a = 0; a < p.length; a++) {
-			p[a] = new GeneralPath();
-			p[a].moveTo((int) (300 * r.nextDouble()),
-					(int) (300 * r.nextDouble()));
-			int size = 20;
-			for (int b = 0; b < size; b++) {
-				int t = (int) (3 * r.nextDouble());
-				if (t == 0) {
-					p[a].lineTo((int) (300 * r.nextDouble()),
-							(int) (300 * r.nextDouble()));
-				} else if (t == 1) {
-					p[a].quadTo((int) (300 * r.nextDouble()),
-							(int) (300 * r.nextDouble()),
-							(int) (300 * r.nextDouble()),
-							(int) (300 * r.nextDouble()));
-				} else {
-					p[a].curveTo((int) (300 * r.nextDouble()),
-							(int) (300 * r.nextDouble()),
-							(int) (300 * r.nextDouble()),
-							(int) (300 * r.nextDouble()),
-							(int) (300 * r.nextDouble()),
-							(int) (300 * r.nextDouble()));
+		for (int degree = 0; degree < 3; degree++) {
+			for (int a = 0; a < p[degree].length; a++) {
+				p[degree][a] = new GeneralPath();
+				p[degree][a].moveTo((int) (300 * r.nextDouble()),
+						(int) (300 * r.nextDouble()));
+				int size = 20;
+				for (int b = 0; b < size; b++) {
+					if (degree == 0) {
+						p[degree][a].lineTo((int) (300 * r.nextDouble()),
+								(int) (300 * r.nextDouble()));
+					} else if (degree == 1) {
+						p[degree][a].quadTo((int) (300 * r.nextDouble()),
+								(int) (300 * r.nextDouble()),
+								(int) (300 * r.nextDouble()),
+								(int) (300 * r.nextDouble()));
+					} else {
+						p[degree][a].curveTo((int) (300 * r.nextDouble()),
+								(int) (300 * r.nextDouble()),
+								(int) (300 * r.nextDouble()),
+								(int) (300 * r.nextDouble()),
+								(int) (300 * r.nextDouble()),
+								(int) (300 * r.nextDouble()));
+					}
 				}
+				p[degree][a].closePath();
 			}
-			p[a].closePath();
 		}
 	}
 
@@ -97,7 +97,7 @@ public class ClipperDemo extends ShowcaseChartDemo {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
-			GeneralPath s = p[comboBox.getSelectedIndex()];
+			GeneralPath s = p[2][comboBox.getSelectedIndex()];
 			g2.setColor(Color.white);
 			g2.fillRect(0, 0, 300, 300);
 			g2.setColor(Color.blue);
@@ -170,8 +170,12 @@ public class ClipperDemo extends ShowcaseChartDemo {
 		return new Class[] { Clipper.class };
 	}
 
-	private static final String CLIP_TIME = "Clip (Time)";
-	private static final String CLIP_MEMORY = "Clip (Memory)";
+	private static final String CLIP_TIME_LINEAR = "Clip Linear (Time)";
+	private static final String CLIP_MEMORY_LINEAR = "Clip Linear (Memory)";
+	private static final String CLIP_TIME_QUADRATIC = "Clip Quadratic (Time)";
+	private static final String CLIP_MEMORY_QUADRATIC = "Clip Quadratic (Memory)";
+	private static final String CLIP_TIME_CUBIC = "Clip Cubic (Time)";
+	private static final String CLIP_MEMORY_CUBIC = "Clip Cubic (Memory)";
 	private static final String LABEL_AREA = "java.awt.geom.Area class";
 	private static final String LABEL_CLIPPER = "com.pump.geom.Clipper class";
 	private static final int SAMPLE_COUNT = 10;
@@ -185,13 +189,19 @@ public class ClipperDemo extends ShowcaseChartDemo {
 	protected Map<String, Map<String, Long>> collectData(int... params)
 			throws Exception {
 		if (data == null) {
-			data = new HashMap<>();
-			data.put(CLIP_TIME, new LinkedHashMap<String, Long>());
-			data.put(CLIP_MEMORY, new LinkedHashMap<String, Long>());
+			data = new LinkedHashMap<>();
+			data.put(CLIP_TIME_LINEAR, new LinkedHashMap<String, Long>());
+			data.put(CLIP_MEMORY_LINEAR, new LinkedHashMap<String, Long>());
+			data.put(CLIP_TIME_QUADRATIC, new LinkedHashMap<String, Long>());
+			data.put(CLIP_MEMORY_QUADRATIC, new LinkedHashMap<String, Long>());
+			data.put(CLIP_TIME_CUBIC, new LinkedHashMap<String, Long>());
+			data.put(CLIP_MEMORY_CUBIC, new LinkedHashMap<String, Long>());
 		}
 
 		int sampleIndex = params[0];
-		boolean useArea = params[1] == 0;
+		// invert so we go from slowest to fastest
+		int degree = 2 - params[1];
+		boolean useArea = params[2] == 0;
 
 		Rectangle2D rect = new Rectangle(100, 100, 100, 100);
 		Area rArea = new Area(rect);
@@ -202,14 +212,12 @@ public class ClipperDemo extends ShowcaseChartDemo {
 		System.gc();
 		long time = System.currentTimeMillis();
 		long memory = Runtime.getRuntime().freeMemory();
-		for (int a = 0; a < p.length; a++) {
-			for (int z = 0; z < 50; z++) {
-				if (useArea) {
-					Area area = new Area(p[a]);
-					area.intersect(rArea);
-				} else {
-					Clipper.clipToRect(p[a], rect);
-				}
+		for (int a = 0; a < p[degree].length; a++) {
+			if (useArea) {
+				Area area = new Area(p[degree][a]);
+				area.intersect(rArea);
+			} else {
+				Clipper.clipToRect(p[degree][a], rect);
 			}
 		}
 		time = System.currentTimeMillis() - time;
@@ -222,11 +230,25 @@ public class ClipperDemo extends ShowcaseChartDemo {
 			Arrays.sort(timeSamples);
 			Arrays.sort(memorySamples);
 			String label = useArea ? LABEL_AREA : LABEL_CLIPPER;
-			data.get(CLIP_TIME).put(label, timeSamples[timeSamples.length / 2]);
-			data.get(CLIP_MEMORY).put(label,
+			String timeGroup, memoryGroup;
+			switch (degree) {
+			case 1:
+				timeGroup = CLIP_TIME_QUADRATIC;
+				memoryGroup = CLIP_MEMORY_QUADRATIC;
+				break;
+			case 2:
+				timeGroup = CLIP_TIME_CUBIC;
+				memoryGroup = CLIP_MEMORY_CUBIC;
+				break;
+			default:
+				timeGroup = CLIP_TIME_LINEAR;
+				memoryGroup = CLIP_MEMORY_LINEAR;
+			}
+			data.get(timeGroup).put(label, timeSamples[timeSamples.length / 2]);
+			data.get(memoryGroup).put(label,
 					memorySamples[memorySamples.length / 2]);
 
-			if (!useArea)
+			if (!useArea && degree == 0)
 				return data;
 		}
 
@@ -235,7 +257,7 @@ public class ClipperDemo extends ShowcaseChartDemo {
 
 	@Override
 	protected int[] getCollectDataParamLimits() {
-		return new int[] { SAMPLE_COUNT, 2 };
+		return new int[] { SAMPLE_COUNT, 3, 2 };
 	}
 
 }
