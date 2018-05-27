@@ -315,7 +315,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		try {
 			addSection("Transition2D", new Transition2DDemo());
 			addSection("Transition3D", new Transition3DDemo());
-			addSection("BMP ImageIO Comparison", new BmpComparisonDemo());
+			addSection("BmpEncoder, BmpDecoder", new BmpComparisonDemo());
 			addSection("AlphaComposite", new AlphaCompositeDemo());
 			addSection("TextEffect", new TextEffectDemo());
 			addSection("AWTMonitor", new AWTMonitorDemo());

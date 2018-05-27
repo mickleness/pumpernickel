@@ -70,6 +70,21 @@ public class DemoPaintable implements Paintable {
 		paint(g, width, height, colors, id);
 	}
 
+	/**
+	 * Paint a demo paintable.
+	 * 
+	 * @param g
+	 *            the Graphics2D to paint to.
+	 * @param width
+	 *            the width of the painted area
+	 * @param height
+	 *            the height of the painted area
+	 * @param colors
+	 *            two colors to paint in a checkerboard pattern on the
+	 *            background
+	 * @param id
+	 *            text to paint in dark gray in the center
+	 */
 	public static void paint(Graphics2D g, int width, int height,
 			Color[] colors, String id) {
 		if (colors == null)

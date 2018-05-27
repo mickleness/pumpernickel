@@ -52,15 +52,8 @@ public class BmpDecoderIterator implements BytePixelIterator {
 	 *             if an IO problem occurs.
 	 */
 	public static BmpDecoderIterator get(File file) throws IOException {
-		FileInputStream in = null;
-		try {
-			in = new FileInputStream(file);
+		try (InputStream in = new FileInputStream(file)) {
 			return get(in);
-		} catch (IOException e) {
-			if (in != null) {
-				in.close();
-			}
-			throw e;
 		}
 	}
 
