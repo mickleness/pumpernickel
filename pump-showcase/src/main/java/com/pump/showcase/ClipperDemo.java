@@ -170,14 +170,14 @@ public class ClipperDemo extends ShowcaseChartDemo {
 		return new Class[] { Clipper.class };
 	}
 
-	private static final String CLIP_TIME_LINEAR = "Clip Linear (Time)";
-	private static final String CLIP_MEMORY_LINEAR = "Clip Linear (Memory)";
-	private static final String CLIP_TIME_QUADRATIC = "Clip Quadratic (Time)";
-	private static final String CLIP_MEMORY_QUADRATIC = "Clip Quadratic (Memory)";
-	private static final String CLIP_TIME_CUBIC = "Clip Cubic (Time)";
-	private static final String CLIP_MEMORY_CUBIC = "Clip Cubic (Memory)";
-	private static final String LABEL_AREA = "java.awt.geom.Area class";
-	private static final String LABEL_CLIPPER = "com.pump.geom.Clipper class";
+	private static final String CLIP_TIME = "Clip (Time)";
+	private static final String CLIP_MEMORY = "Clip (Memory)";
+	private static final String LABEL_AREA_LINEAR = "java.awt.geom.Area class (Linear)";
+	private static final String LABEL_CLIPPER_LINEAR = "com.pump.geom.Clipper class (Linear)";
+	private static final String LABEL_AREA_QUADRATIC = "java.awt.geom.Area class (Quadratic)";
+	private static final String LABEL_CLIPPER_QUADRATIC = "com.pump.geom.Clipper class (Quadratic)";
+	private static final String LABEL_AREA_CUBIC = "java.awt.geom.Area class (Cubic)";
+	private static final String LABEL_CLIPPER_CUBIC = "com.pump.geom.Clipper class (Cubic)";
 	private static final int SAMPLE_COUNT = 10;
 
 	Map<String, Map<String, Long>> data;
@@ -190,12 +190,8 @@ public class ClipperDemo extends ShowcaseChartDemo {
 			throws Exception {
 		if (data == null) {
 			data = new LinkedHashMap<>();
-			data.put(CLIP_TIME_LINEAR, new LinkedHashMap<String, Long>());
-			data.put(CLIP_MEMORY_LINEAR, new LinkedHashMap<String, Long>());
-			data.put(CLIP_TIME_QUADRATIC, new LinkedHashMap<String, Long>());
-			data.put(CLIP_MEMORY_QUADRATIC, new LinkedHashMap<String, Long>());
-			data.put(CLIP_TIME_CUBIC, new LinkedHashMap<String, Long>());
-			data.put(CLIP_MEMORY_CUBIC, new LinkedHashMap<String, Long>());
+			data.put(CLIP_TIME, new LinkedHashMap<String, Long>());
+			data.put(CLIP_MEMORY, new LinkedHashMap<String, Long>());
 		}
 
 		int sampleIndex = params[0];
@@ -229,23 +225,22 @@ public class ClipperDemo extends ShowcaseChartDemo {
 		if (sampleIndex == timeSamples.length - 1) {
 			Arrays.sort(timeSamples);
 			Arrays.sort(memorySamples);
-			String label = useArea ? LABEL_AREA : LABEL_CLIPPER;
-			String timeGroup, memoryGroup;
+			String label;
+
 			switch (degree) {
 			case 1:
-				timeGroup = CLIP_TIME_QUADRATIC;
-				memoryGroup = CLIP_MEMORY_QUADRATIC;
+				label = useArea ? LABEL_AREA_QUADRATIC
+						: LABEL_CLIPPER_QUADRATIC;
 				break;
 			case 2:
-				timeGroup = CLIP_TIME_CUBIC;
-				memoryGroup = CLIP_MEMORY_CUBIC;
+				label = useArea ? LABEL_AREA_CUBIC : LABEL_CLIPPER_CUBIC;
 				break;
 			default:
-				timeGroup = CLIP_TIME_LINEAR;
-				memoryGroup = CLIP_MEMORY_LINEAR;
+				label = useArea ? LABEL_AREA_LINEAR : LABEL_CLIPPER_LINEAR;
+				break;
 			}
-			data.get(timeGroup).put(label, timeSamples[timeSamples.length / 2]);
-			data.get(memoryGroup).put(label,
+			data.get(CLIP_TIME).put(label, timeSamples[timeSamples.length / 2]);
+			data.get(CLIP_MEMORY).put(label,
 					memorySamples[memorySamples.length / 2]);
 
 			if (!useArea && degree == 0)

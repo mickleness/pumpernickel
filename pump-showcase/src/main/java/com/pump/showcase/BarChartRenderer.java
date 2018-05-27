@@ -162,8 +162,8 @@ public class BarChartRenderer {
 
 		// some colors from https://flatuicolors.com/palette/ru
 		Color[] colors = new Color[] { new Color(0x574b90),
-				new Color(0xe77f67), new Color(0x3dc1d3), new Color(0x596275),
-				new Color(0xf7d794) };
+				new Color(0xe77f67), new Color(0x3dc1d3), new Color(0xCAD3C8),
+				new Color(0xf7d794), new Color(0xD6A2E8) };
 		return colors[i];
 	}
 
