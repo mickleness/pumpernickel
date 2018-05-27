@@ -104,18 +104,8 @@ public class BmpComparisonDemo extends ShowcaseChartDemo {
 			}
 		}
 
-		private void dispose() {
-			bOut = null;
-			sampleImage = null;
-			bmpFile.delete();
-		}
-
 		public Map<String, Map<String, Long>> iterate(int[] params)
 				throws Exception {
-			if (params == null) {
-				dispose();
-				return data;
-			}
 			int sampleIndex = params[0];
 			int testType = params[1];
 			int implementationType = params[2];
@@ -154,7 +144,7 @@ public class BmpComparisonDemo extends ShowcaseChartDemo {
 				data.get(groupLabelTime).put(dataType, medianSampleTime);
 				data.get(groupLabelMemory).put(dataType, medianSampleMemory);
 			}
-			return null;
+			return data;
 		}
 
 		ByteArrayOutputStream bOut = new ByteArrayOutputStream();

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Clipper Demo</title>
+</head>
+<body>
+How do you clip a shape to a Rectangle? The canonical Java approach is:
+<p>
+<pre>Area area = new Area(myArbitraryShape);
+Rectangle2D rect = new Rectangle2D.Float(x,y,w,h);
+area.intersect(new Area(rect));</pre>
+<p>
+There's just one problem: if your shape is not linear, the <code>java.awt.geom.Area</code> class a horrible, rotten no-good class to resort to.
+<p>
+I wasn't aware of the <a href="http://en.wikipedia.org/wiki/Sutherland-Hodgman_clipping_algorithm">Sutherland-Hodgman clipping algorithm</a> or the <a href="http://en.wikipedia.org/wiki/Weiler-Atherton_clipping_algorithm">Weiler-Atherton clipping algorithm</a> when I set out to tackle this problem, and I ended up creating a different model that doesn't necessarily match either of those. (Does that mean I created the "Wood Clipping Algorithm"? Ugh. That sounds terrible. Makes me think of wood chipping.)
+<p>
+In my new <code>Clipper</code> class, the <code>PathIterator</code> from the source shape is traced exactly once. As it is traced it is constrained by the clipping shape. If a curve/segment lies outside the clipping rectangle (or intersects it), then it is flattened against the rectangle. For example:
+<br />
+<img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/clipping.gif" /> &nbsp; <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/clipping2.gif" />
+<br />
+This can lead to redundant lines with no depth, but this data is passed through another filter that collapses redundant points outside the clipping bounds.
+<p>
+<h4>Results</h4>
+<p>
+As of this writing when I run this locally my results resemble:
+<p>
+Time:
+<table>
+	<tr>
+			<td>java.awt.geom.Area class (Cubic)</td>
+			<td>2,374 ms</td>
+	</tr>
+	<tr>
+			<td>java.awt.geom.Area class (Quadratic)</td>
+			<td>246 ms</td>
+	</tr>
+	<tr>
+			<td>java.awt.geom.Area class (Linear)</td>
+			<td>26 ms</td>
+	</tr>
+	<tr>
+			<td>com.pump.geom.Clipper class (Cubic)</td>
+			<td>9 ms</td>
+	</tr>
+	<tr>
+			<td>com.pump.geom.Clipper class (Quadratic)</td>
+			<td>3 ms</td>
+	</tr>
+	<tr>
+			<td>com.pump.geom.Clipper class (Linear)</td>
+			<td>2 ms</td>
+	</tr>
+</table>
+Memory:
+<table>
+	<tr>
+			<td>java.awt.geom.Area class (Cubic)</td>
+			<td>92.71 MB</td>
+	</tr>
+	<tr>
+			<td>java.awt.geom.Area class (Quadratic)</td>
+			<td>30.03 MB</td>
+	</tr>
+	<tr>
+			<td>java.awt.geom.Area class (Linear)</td>
+			<td>7.58 MB</td>
+	</tr>
+	<tr>
+			<td>com.pump.geom.Clipper class (Cubic)</td>
+			<td>2.55 MB</td>
+	</tr>
+	<tr>
+			<td>com.pump.geom.Clipper class (Quadratic)</td>
+			<td>2.55 MB</td>
+	</tr>
+	<tr>
+			<td>com.pump.geom.Clipper class (Linear)</td>
+			<td>2.55 MB</td>
+	</tr>
+</table>
+<p>
+I was surprised to see the <code>Clipper</code> for cubic shapes outperformed the <code>Area</code> for linear shapes. That suggests even if you're only dealing with polygons: the <code>Clipper</code> class is still worth considering.
+<p>
+<h4>Process</h4>
+<p>
+What exactly do those numbers mean? For each data sample we measure the time/memory required to clip 100 shapes with 20 random segments. Each shape fits within a 300x300 rectangle, and we're clipping it to a centered 100x100 rectangle. We run each test 10 times and only keep the median time/memory measurement.
+<p>
+As the number of path segments increases, the cost of the <code>Area</code> class does not scale linearly. (And when I reached 35 segments: I started getting OutOfMemoryErrors.) But 20 random segments is a <em>lot</em> of complex data. Most shapes (such as glyphs in a font) do not self-intersect nearly as often as random shapes, so we might see less terrible numbers if we used more predictable shapes.
+</body>
+</html>

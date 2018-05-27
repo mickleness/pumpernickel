@@ -156,8 +156,7 @@ public class ClipperDemo extends ShowcaseChartDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return ClipperDemo.class.getResource("clipperDemo.html");
 	}
 
 	@Override
@@ -170,8 +169,8 @@ public class ClipperDemo extends ShowcaseChartDemo {
 		return new Class[] { Clipper.class };
 	}
 
-	private static final String CLIP_TIME = "Clip (Time)";
-	private static final String CLIP_MEMORY = "Clip (Memory)";
+	private static final String CLIP_TIME = "Time";
+	private static final String CLIP_MEMORY = "Memory";
 	private static final String LABEL_AREA_LINEAR = "java.awt.geom.Area class (Linear)";
 	private static final String LABEL_CLIPPER_LINEAR = "com.pump.geom.Clipper class (Linear)";
 	private static final String LABEL_AREA_QUADRATIC = "java.awt.geom.Area class (Quadratic)";
@@ -223,6 +222,8 @@ public class ClipperDemo extends ShowcaseChartDemo {
 		memorySamples[sampleIndex] = memory;
 
 		if (sampleIndex == timeSamples.length - 1) {
+			// we just populated all our samples, so let's record the latest
+			// figures:
 			Arrays.sort(timeSamples);
 			Arrays.sort(memorySamples);
 			String label;
@@ -242,12 +243,9 @@ public class ClipperDemo extends ShowcaseChartDemo {
 			data.get(CLIP_TIME).put(label, timeSamples[timeSamples.length / 2]);
 			data.get(CLIP_MEMORY).put(label,
 					memorySamples[memorySamples.length / 2]);
-
-			if (!useArea && degree == 0)
-				return data;
 		}
 
-		return null;
+		return data;
 	}
 
 	@Override

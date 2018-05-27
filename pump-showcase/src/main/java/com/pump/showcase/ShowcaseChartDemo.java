@@ -104,33 +104,29 @@ public abstract class ShowcaseChartDemo extends JPanel implements ShowcaseDemo {
 				for (int a = 0; a < limits.length; a++) {
 					iterationMax *= limits[a];
 				}
-				while (true) {
+				Map<String, Map<String, Long>> data = null;
+				while (i < iterationMax) {
 					if (!isShowing) {
 						sleep();
 					} else {
 						try {
-							SwingUtilities
-									.invokeLater(new UpdateProgressRunnable(i,
-											iterationMax));
-							int[] params = split(i++, limits);
-							Map<String, Map<String, Long>> data = collectData(params);
-							if (data != null) {
-								System.out.println(ShowcaseChartDemo.this
-										.getClass().getSimpleName()
-										+ ":\n"
-										+ toHtml(data));
-								Runnable installResults = new InstallResults(
-										data);
-								SwingUtilities.invokeLater(installResults);
-								return;
-							}
+							int[] params = split(i, limits);
+							data = collectData(params);
 						} catch (Exception e) {
 							// TODO: process error
 							e.printStackTrace();
 							return;
 						}
+						SwingUtilities.invokeLater(new UpdateProgressRunnable(
+								i, iterationMax));
+						i++;
 					}
 				}
+
+				System.out.println(ShowcaseChartDemo.this.getClass()
+						.getSimpleName() + ":\n" + toHtml(data));
+				Runnable installResults = new InstallResults(data);
+				SwingUtilities.invokeLater(installResults);
 			}
 
 			private void sleep() {
@@ -164,12 +160,8 @@ public abstract class ShowcaseChartDemo extends JPanel implements ShowcaseDemo {
 	/**
 	 * Calculate the data to show in charts for this demo.
 	 * <p>
-	 * This method will be repeatedly called until it returns a non-null value.
-	 * Subclasses are encouraged to build up their data in small increments. The
-	 * parent class will automatically stop calling this method if the
-	 * containing panel isn't visible. This means if this method is only called
-	 * while the containing panel is visible, so only one chart demo at a time
-	 * will be dominating the CPU.
+	 * This method will be repeatedly called until all possible combinations of
+	 * parameters have been passed in.
 	 * 
 	 * @throws Exception
 	 */
