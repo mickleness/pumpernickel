@@ -11,8 +11,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -21,38 +19,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.UIManager;
 
 import com.pump.math.function.Function;
 import com.pump.math.function.PolynomialFunction;
 
 public class BarChartRenderer {
-
-	public static void main(String[] args) {
-		Map<String, Map<String, Long>> m = new LinkedHashMap<>();
-		Map<String, Long> groupA = new HashMap<>();
-		groupA.put("Dogs", 100L);
-		groupA.put("Cats", 50L);
-
-		Map<String, Long> groupB = new HashMap<>();
-		groupB.put("Turtles", 999L);
-		groupB.put("Dogs", 100L);
-		groupB.put("Snails", 50L);
-
-		m.put("Group A", groupA);
-		m.put("Group B", groupB);
-
-		BarChartRenderer r = new BarChartRenderer(m);
-		BufferedImage bi = r.render(new Dimension(500, 500));
-		JLabel label = new JLabel(new ImageIcon(bi));
-		JFrame f = new JFrame();
-		f.add(label);
-		f.pack();
-		f.setVisible(true);
-	}
 
 	interface Row {
 		public int getHeight();
@@ -67,7 +39,7 @@ public class BarChartRenderer {
 
 		@Override
 		public int getHeight() {
-			return barLabelsSet.size() * h;
+			return barLabelsList.size() * h;
 		}
 
 		@Override
@@ -77,7 +49,7 @@ public class BarChartRenderer {
 
 		@Override
 		public void paint(Graphics2D g, int xMin, int y, int xMax) {
-			for (String str : barLabelsSet) {
+			for (String str : barLabelsList) {
 				Rectangle2D r = getTextSize(str);
 				g.setColor(Color.black);
 				g.drawString(str, 30,
@@ -158,7 +130,7 @@ public class BarChartRenderer {
 	}
 
 	private Color getColor(String key) {
-		int i = Collections.binarySearch(barLabelsSet, key);
+		int i = barLabelsList.indexOf(key);
 
 		// some colors from https://flatuicolors.com/palette/ru
 		Color[] colors = new Color[] { new Color(0x574b90),
@@ -169,7 +141,7 @@ public class BarChartRenderer {
 
 	Map<String, Map<String, Long>> data;
 	Map<String, Long> maxMap;
-	List<String> barLabelsSet;
+	List<String> barLabelsList;
 	Map<String, Rectangle2D> textSizeMap = new HashMap<>();
 	List<Row> rows = new ArrayList<>();
 	int groupGap = 5;
@@ -183,12 +155,18 @@ public class BarChartRenderer {
 	public BarChartRenderer(Map<String, Map<String, Long>> data) {
 		this.data = data;
 		maxMap = createMaxMap();
-		barLabelsSet = createBarLabels();
 
 		rows.add(new KeyRow());
+		barLabelsList = new ArrayList<>();
 		for (Entry<String, Map<String, Long>> entry : data.entrySet()) {
-			Row row = new DataRow(entry.getKey(), entry.getValue());
+			DataRow row = new DataRow(entry.getKey(), entry.getValue());
 			rows.add(row);
+
+			// populate barLabelsList in the order rows will be seen
+			for (String str : row.data.keySet()) {
+				if (!barLabelsList.contains(str))
+					barLabelsList.add(str);
+			}
 		}
 	}
 
@@ -232,16 +210,6 @@ public class BarChartRenderer {
 		g.dispose();
 
 		return bi;
-	}
-
-	private List<String> createBarLabels() {
-		Collection<String> l = new TreeSet<>();
-		for (Map<String, Long> entry : data.values()) {
-			l.addAll(entry.keySet());
-		}
-		ArrayList<String> z = new ArrayList<>();
-		z.addAll(l);
-		return z;
 	}
 
 	private Map<String, Long> createMaxMap() {
