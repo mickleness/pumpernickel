@@ -49,6 +49,14 @@ public class BarChartRenderer {
 
 		@Override
 		public void paint(Graphics2D g, int xMin, int y, int xMax) {
+
+			float width = 0;
+			for (String str : barLabelsList) {
+				Rectangle2D r = getTextSize(str);
+				width = (float) Math.max(width, r.getWidth() + 30);
+			}
+			g = (Graphics2D) g.create();
+			g.translate(xMax - width - 5, 0);
 			for (String str : barLabelsList) {
 				Rectangle2D r = getTextSize(str);
 				g.setColor(Color.black);
@@ -63,6 +71,7 @@ public class BarChartRenderer {
 				g.draw(r2);
 				y += 20;
 			}
+			g.dispose();
 		}
 
 	}
@@ -156,7 +165,6 @@ public class BarChartRenderer {
 		this.data = data;
 		maxMap = createMaxMap();
 
-		rows.add(new KeyRow());
 		barLabelsList = new ArrayList<>();
 		for (Entry<String, Map<String, Long>> entry : data.entrySet()) {
 			DataRow row = new DataRow(entry.getKey(), entry.getValue());
@@ -168,6 +176,7 @@ public class BarChartRenderer {
 					barLabelsList.add(str);
 			}
 		}
+		rows.add(new KeyRow());
 	}
 
 	private Rectangle2D getTextSize(String str) {
