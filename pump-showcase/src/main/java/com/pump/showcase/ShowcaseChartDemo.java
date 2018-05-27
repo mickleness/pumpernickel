@@ -117,9 +117,9 @@ public abstract class ShowcaseChartDemo extends JPanel implements ShowcaseDemo {
 							e.printStackTrace();
 							return;
 						}
+						i++;
 						SwingUtilities.invokeLater(new UpdateProgressRunnable(
 								i, iterationMax));
-						i++;
 					}
 				}
 
