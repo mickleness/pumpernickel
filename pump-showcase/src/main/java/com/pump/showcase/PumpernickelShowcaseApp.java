@@ -83,7 +83,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	public static void main(String[] args) throws IOException {
-		DesktopApplication.initialize("com.pump.showcase", "Showcase", "1.0",
+		DesktopApplication.initialize("com.pump.showcase", "Showcase", "1.01",
 				"jeremy.wood@mac.com", PumpernickelShowcaseApp.class);
 
 		SwingUtilities.invokeLater(new Runnable() {
