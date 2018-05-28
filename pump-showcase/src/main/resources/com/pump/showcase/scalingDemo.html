@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scaling Demo</title>
+</head>
+<body>
+This demo explores a few different models to scaling. The measurements collected show the time/memory required to scale a 2750x2063 image to a 80x60 thumbnail three times. (Ten sample measurements are collected, and only the median is reported.) 
+<p>
+The clear winner performance-wise here is simply to use an AffineTransform. It's fast. It uses very little memory. There's just one problem: it's ugly. Look at the thumbnails on the bottom of the demo: the transform-based thumbnail looks pixelated -- like it's un-antialiased.
+<p>
+Romain Guy described the problem: bilinear interpolation starts to fall apart when the scaling factor is less than 50%. (Which is often the case when you're creating thumbnails.) But at 50% it still looks good. In this example we're scaling to about 3%, so it looks pretty ragged.
+<p>
+Guy also proposed a solution: repeatedly scale the image by up to 50% until we reach our target size. So in this case where we're targeting 3%: we'd scale it once to 50%, then take 50% of that (25%), then 50% again (12.5%), etc. This was written up in his <code>GraphicsUtilities</code> class, which was released under a LGPL license as part of his <a href="http://filthyrichclients.org/">Filthy Rich Clients</a> book. The downside to this approach is: it's the most expensive memory-wise.
+<p>
+Another possible approach is to use <code>java.awt.Image.getScaledInstance(..)</code>. This is built-in to all <code>Images</code>. The downside to this approach is: it's several times slower than all other options.
+<p>
+The <code>com.pump.image.pixel.Scaling</code> class is my proposed alternative. This uses the <code>PixelIterator</code> architecture. This may also be the only solution here that can scale an image as it is initially being read. (So we'd never load the megapixel image into memory at all: we only ever load the thumbnail.)
+<p>
+As of this writing the results this demo produces resemble:
+<br>
+Time:
+<table>
+	<tr>
+			<td>Image.getScaledInstance()</td>
+			<td>676 ms</td>
+	</tr>
+	<tr>
+			<td>GraphicsUtilities</td>
+			<td>138 ms</td>
+	</tr>
+	<tr>
+			<td>Transform</td>
+			<td>4 ms</td>
+	</tr>
+	<tr>
+			<td>Scaling</td>
+			<td>49 ms</td>
+	</tr>
+</table>
+Memory:
+<table>
+	<tr>
+			<td>Image.getScaledInstance()</td>
+			<td>135.9 KB</td>
+	</tr>
+	<tr>
+			<td>GraphicsUtilities</td>
+			<td>21.7 MB</td>
+	</tr>
+	<tr>
+			<td>Transform</td>
+			<td>114.2 KB</td>
+	</tr>
+	<tr>
+			<td>Scaling</td>
+			<td>205.5 KB</td>
+	</tr>
+</table>
+
+</body>
+</html>

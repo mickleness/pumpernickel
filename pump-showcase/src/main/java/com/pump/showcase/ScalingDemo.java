@@ -10,11 +10,12 @@
  */
 package com.pump.showcase;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -22,8 +23,15 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
-import com.pump.awt.DemoPaintable;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+import javax.swing.text.JTextComponent;
+
+import com.pump.geom.TransformUtils;
 import com.pump.image.ImageLoader;
 import com.pump.image.pixel.PixelIterator;
 import com.pump.image.pixel.Scaling;
@@ -44,13 +52,6 @@ public class ScalingDemo extends ShowcaseChartDemo {
 	 * The source and javadoc for this method are copied from
 	 * GraphicsUtilities.java, licensed under LGPL. I want to compare this
 	 * method against other methods in this class.
-	 * 
-	 * <p>
-	 * This method offers a good trade-off between speed and quality. The result
-	 * looks better than
-	 * {@link #createThumbnailFast(java.awt.image.BufferedImage, int)} when the
-	 * new size is less than half the longest dimension of the source image, yet
-	 * the rendering speed is almost similar.
 	 * </p>
 	 *
 	 * @param image
@@ -114,6 +115,111 @@ public class ScalingDemo extends ShowcaseChartDemo {
 		return thumb;
 	}
 
+	Callable<BufferedImage> SCALED_INSTANCE_ICON = new Callable<BufferedImage>() {
+		@Override
+		public BufferedImage call() throws Exception {
+			Image img = sampleImage.getScaledInstance(80, 60,
+					Image.SCALE_SMOOTH);
+			return ImageLoader.createImage(img);
+		}
+	};
+
+	Callable<BufferedImage> GRAPHICS_UTILITIES_ICON = new Callable<BufferedImage>() {
+		@Override
+		public BufferedImage call() throws Exception {
+			return createThumbnail(sampleImage, 80, 60);
+		}
+	};
+
+	Callable<BufferedImage> TRANSFORM_ICON = new Callable<BufferedImage>() {
+		@Override
+		public BufferedImage call() throws Exception {
+			BufferedImage bi = new BufferedImage(80, 60,
+					BufferedImage.TYPE_INT_RGB);
+			Graphics2D g = bi.createGraphics();
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+			g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
+					RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+					RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+			g.setRenderingHint(RenderingHints.KEY_RENDERING,
+					RenderingHints.VALUE_RENDER_QUALITY);
+			g.transform(TransformUtils.createAffineTransform(new Dimension(
+					sampleImage.getWidth(), sampleImage.getHeight()),
+					new Dimension(bi.getWidth(), bi.getHeight())));
+			g.drawImage(sampleImage, 0, 0, null);
+			g.dispose();
+			return bi;
+		}
+	};
+
+	Callable<BufferedImage> SCALING_ICON = new Callable<BufferedImage>() {
+		@Override
+		public BufferedImage call() throws Exception {
+			return Scaling.scale(sampleImage, new Dimension(80, 60));
+		}
+	};
+
+	JTextComponent textBox = new JTextPane();
+
+	public ScalingDemo() {
+		textBox.setText("This demo compares the time and memory required by different scaling implementations.");
+		textBox.setEditable(false);
+		textBox.setOpaque(false);
+		upperControls.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		upperControls.add(textBox, c);
+
+		sampleImage = ImageLoader.createImage(ImageLoader.class
+				.getResource("bridge3.jpg"));
+
+		try {
+			JLabel graphicsUilitiesLabel = new JLabel("GraphicsUtilities",
+					new ImageIcon(GRAPHICS_UTILITIES_ICON.call()),
+					SwingConstants.CENTER);
+			JLabel scaledInstanceLabel = new JLabel("Image.getScaledInstance",
+					new ImageIcon(SCALED_INSTANCE_ICON.call()),
+					SwingConstants.CENTER);
+			JLabel scalingLabel = new JLabel("Scaling", new ImageIcon(
+					SCALING_ICON.call()), SwingConstants.CENTER);
+			JLabel transformLabel = new JLabel("Transform", new ImageIcon(
+					TRANSFORM_ICON.call()), SwingConstants.CENTER);
+
+			transformLabel
+					.setToolTipText("<html>This uses a scaling AffineTransform to render the original image at a smaller size.</html>");
+			graphicsUilitiesLabel
+					.setToolTipText("<html>This approach repeatedly renders the image up to 50% smaller until the target size is reached.<p>This resolves the pixelated appearance that you see when you use a plain<br>AffineTransform.<p>This uses Romain Guy's GraphicsUtilities class.</html>");
+			scaledInstanceLabel
+					.setToolTipText("<html>This uses <code>Image.getScaledInstance(...)</code> to created a scaled image, and then<br>uses the <code>ImageLoader</code> to make sure the image data is available.</html>");
+			scalingLabel
+					.setToolTipText("<html>This uses the Pumpernickel <code>com.pump.image.pixel.Scaling</code> class<br>to iterate over the source image and produce a scaled image.</html>");
+
+			lowerControls.setLayout(new GridBagLayout());
+			c = new GridBagConstraints();
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weightx = 1;
+			c.weighty = 1;
+			c.fill = GridBagConstraints.NONE;
+
+			for (JLabel label : new JLabel[] { transformLabel,
+					graphicsUilitiesLabel, scaledInstanceLabel, scalingLabel }) {
+				lowerControls.add(label, c);
+				label.setHorizontalTextPosition(JLabel.CENTER);
+				label.setVerticalTextPosition(JLabel.BOTTOM);
+				c.gridx++;
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	@Override
 	public String getTitle() {
 		return "Scaling Demo";
@@ -121,8 +227,7 @@ public class ScalingDemo extends ShowcaseChartDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return ScalingDemo.class.getResource("scalingDemo.html");
 	}
 
 	@Override
@@ -138,6 +243,7 @@ public class ScalingDemo extends ShowcaseChartDemo {
 	private static final String LABEL_SCALED_INSTANCE = "Image.getScaledInstance()";
 	private static final String LABEL_GRAPHICS_UTILITIES = "GraphicsUtilities";
 	private static final String LABEL_SCALING = "Scaling";
+	private static final String LABEL_TRANSFORM = "Transform";
 	private static final String GROUP_TIME = "Time";
 	private static final String GROUP_MEMORY = "Memory";
 	private static final int SAMPLE_COUNT = 10;
@@ -155,55 +261,32 @@ public class ScalingDemo extends ShowcaseChartDemo {
 			data.put(GROUP_TIME, new LinkedHashMap<String, Long>());
 			data.put(GROUP_MEMORY, new LinkedHashMap<String, Long>());
 		}
-		if (sampleImage == null) {
-			sampleImage = new BufferedImage(800, 600,
-					BufferedImage.TYPE_INT_RGB);
-			Graphics2D g = sampleImage.createGraphics();
-			Color[] colors = new Color[] { new Color(0xffeaa7),
-					new Color(0x55efc4) };
-			DemoPaintable.paint(g, sampleImage.getWidth(),
-					sampleImage.getHeight(), colors, "BMP");
-			g.dispose();
-		}
 		int sampleIndex = params[0];
 		String label;
-		Runnable runnable;
+		Callable<BufferedImage> callable;
 		switch (params[1]) {
 		case 0:
 			label = LABEL_SCALED_INSTANCE;
-			runnable = new Runnable() {
-				@Override
-				public void run() {
-					Image img = sampleImage.getScaledInstance(60, 80,
-							Image.SCALE_SMOOTH);
-					ImageLoader.createImage(img);
-				}
-			};
+			callable = SCALED_INSTANCE_ICON;
 			break;
 		case 1:
 			label = LABEL_GRAPHICS_UTILITIES;
-			runnable = new Runnable() {
-				@Override
-				public void run() {
-					createThumbnail(sampleImage, 60, 80);
-				}
-			};
+			callable = GRAPHICS_UTILITIES_ICON;
+			break;
+		case 2:
+			label = LABEL_TRANSFORM;
+			callable = TRANSFORM_ICON;
 			break;
 		default:
 			label = LABEL_SCALING;
-			runnable = new Runnable() {
-				@Override
-				public void run() {
-					Scaling.scale(sampleImage, new Dimension(60, 80));
-				}
-			};
+			callable = SCALING_ICON;
 		}
 
 		timeSamples[sampleIndex] = System.currentTimeMillis();
 		memorySamples[sampleIndex] = Runtime.getRuntime().freeMemory();
 
-		for (int z = 0; z < 10; z++) {
-			runnable.run();
+		for (int z = 0; z < 3; z++) {
+			callable.call();
 		}
 
 		timeSamples[sampleIndex] = System.currentTimeMillis()
@@ -225,7 +308,7 @@ public class ScalingDemo extends ShowcaseChartDemo {
 
 	@Override
 	protected int[] getCollectDataParamLimits() {
-		return new int[] { SAMPLE_COUNT, 3 };
+		return new int[] { SAMPLE_COUNT, 4 };
 	}
 
 }

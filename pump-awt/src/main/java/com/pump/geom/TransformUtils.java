@@ -11,6 +11,7 @@
 package com.pump.geom;
 
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -197,7 +198,8 @@ public class TransformUtils {
 	}
 
 	/**
-	 * Create an AffineTransform that flips everything horizontally around a given x-value.
+	 * Create an AffineTransform that flips everything horizontally around a
+	 * given x-value.
 	 */
 	public static AffineTransform flipHorizontal(double x) {
 		AffineTransform tx = new AffineTransform();
@@ -208,7 +210,8 @@ public class TransformUtils {
 	}
 
 	/**
-	 * Create an AffineTransform that flips everything vertically around a given y-value.
+	 * Create an AffineTransform that flips everything vertically around a given
+	 * y-value.
 	 */
 	public static AffineTransform flipVertical(double y) {
 		AffineTransform tx = new AffineTransform();
@@ -216,5 +219,16 @@ public class TransformUtils {
 		tx.scale(1, -1);
 		tx.translate(0, -y);
 		return tx;
+	}
+
+	/**
+	 * Create a simple scaling AffineTransform that transforms a rectangle
+	 * bounded by (0,0,d1.widthd,d2.height) to (0,0,d2.width,d2.height)
+	 */
+	public static AffineTransform createAffineTransform(Dimension2D d1,
+			Dimension2D d2) {
+		return createAffineTransform(new Rectangle2D.Double(0, 0,
+				d1.getWidth(), d1.getHeight()),
+				new Rectangle2D.Double(0, 0, d2.getWidth(), d2.getHeight()));
 	}
 }
