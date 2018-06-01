@@ -264,6 +264,14 @@ public class PlafPaintUtils {
 				(int) (a1 * (1 - p) + a2 * p));
 	}
 
+	/** Tweens between the two arguments. */
+	public static Rectangle2D tween(Rectangle2D r1, Rectangle2D r2, float p) {
+		return new Rectangle2D.Double(r1.getX() * (1 - p) + r2.getX() * p,
+				r1.getY() * (1 - p) + r2.getY() * p, r1.getWidth() * (1 - p)
+						+ r2.getWidth() * p, r1.getHeight() * (1 - p)
+						+ r2.getHeight() * p);
+	}
+
 	private static Map<String, TexturePaint> checkers;
 
 	public static TexturePaint getCheckerBoard(int checkerSize) {
