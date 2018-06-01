@@ -16,12 +16,15 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -206,6 +209,33 @@ public class ObservableProperties implements Serializable {
 				throw new NullPointerException(key.getKeyName()
 						+ " cannot be null");
 		}
+	}
+
+	/**
+	 * This makes sure a value is within a set of candidates.
+	 */
+	public static class SetBoundsChecker<T> extends BoundsChecker<T> {
+		private static final long serialVersionUID = 1L;
+
+		Collection<T> candidates;
+
+		public SetBoundsChecker(T... candidates) {
+			this(Arrays.asList(candidates));
+		}
+
+		public SetBoundsChecker(Collection<T> candidates) {
+			Objects.requireNonNull(candidates);
+			this.candidates = candidates;
+		}
+
+		@Override
+		public void check(T t, Key<T> key) throws IllegalArgumentException {
+			if (!candidates.contains(t))
+				throw new IllegalArgumentException("The value \"" + t
+						+ "\" is not allowed. Only these values are allowed: "
+						+ candidates);
+		}
+
 	}
 
 	/**
