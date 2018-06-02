@@ -1140,4 +1140,18 @@ public class ObservableProperties implements Serializable {
 		}
 		return returnValue;
 	}
+
+	@Override
+	public int hashCode() {
+		return getMap().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ObservableProperties))
+			return false;
+		ObservableProperties p = (ObservableProperties) obj;
+		return p.getMap().equals(getMap());
+	}
+
 }
