@@ -325,7 +325,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Shape Bounds", new ShapeBoundsDemo());
 			addSection("Clipper", new ClipperDemo());
 			addSection("AngleSliderUI", new AngleSliderUIDemo());
-			addSection("DecoratedPanelUI", new DecoratedPanelUIDemo());
 			addSection("Spiral2D", new Spiral2DDemo());
 			addSection("DecoratedListUI, DecoratedTreeUI", new DecoratedDemo());
 			addSection("JThrobber", new ThrobberDemo());
@@ -341,6 +340,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Shapes: AreaX Tests", new AreaXTestPanel());
 			addSection("Graphics: Debugger", new GraphicsWriterDemo());
 			addSection("Images: JPEG Metadata", new JPEGMetaDataDemo());
+			addSection("QPanelUI", new QPanelUIDemo());
 			addSection("AudioPlayer", new AudioPlayerDemo(this));
 			addSection("Math: Gaussian Elimination", new EquationsDemo());
 			addSection("JavaTextComponentHighlighter",

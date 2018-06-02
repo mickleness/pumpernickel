@@ -302,6 +302,7 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 				border = new PartialLineBorder(paint, tabs.getTabCount() == 0,
 						true, true, true);
 			}
+
 			tabsContainer.setUI(new GradientPanelUI(createContentGradient(tabs,
 					false)));
 			tabsContainer.setBorder(border);

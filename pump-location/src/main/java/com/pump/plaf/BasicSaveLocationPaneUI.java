@@ -77,7 +77,7 @@ public abstract class BasicSaveLocationPaneUI extends SaveLocationPaneUI {
 		setExpanded(!isExpanded());
 	    }
 	});
-	accessoryDecoration.setUI(DecoratedPanelUI.createDarkRecessedUI());
+	accessoryDecoration.setUI(QPanelUI.createBoxUI());
 	commitButton.setText("Save");
 	cancelButton.setText("Cancel");
 	newFolderButton.setText("New Folder");

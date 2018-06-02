@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>QPanelUI Demo</title>
+</head>
+<body>
+
+The <code>QPanelUI</code> is a <code>PanelUI</code> that supports:
+<ul><li>Rounded corners
+<li>A one-pixel border
+<li>Gradients (both for the body and border)
+<li>Simple shadows
+<li>Callouts</ul>
+<p>
+This is the third rewrite of a recurring pet project of mine: a simple, configurable good-looking panel L&F. The <a href="https://javagraphics.blogspot.com/2014/03/panels-improved-panelui.html">previous iteration</a> included more stylized bells and whistles, but this implementation tries to lean towards aesthetics that better fit <a href="https://www.uxpin.com/studio/blog/the-7-minute-guide-to-flat-design-2-0/">Flat 2.0</a> UIs. The callouts were added so this can accommodate <a href="resource:popovers">popover</a> and <a href="resource:tooltip">stylized tooltips</a>.
+<p>
+In this demo if you mouse over the preview some markings appear to show the total width/height of the panel, and where the border starts/stops.
+<p>
+<h3>Implementation</h3>
+<p>
+There are two related criteria that shaped implementation:
+<ol><li>Using this PanelUI should not interfere with LayoutManagers. That is: how LayoutManagers place children shouldn't affect or be affected by this UI.
+<li>Children of this panel shouldn't overlap the borders/shadows/callouts of this UI. That is: children shouldn't require any extra padding to accommodate this UI. If someday you switch this UI out (or in): the children should mostly be unaffected.</ol>
+<p>
+So to achieve this: when you install this PanelUI your panel also has a custom <code>javax.swing.Border</code> installed. (If you replace that border later: bad undefined things will probably happen.) The border and the QPanelUI share the same renderer. When the border is rendered clipping is used to punch a hole in the middle of the Graphics, and when the QPanelUI is rendered clipping is used to strip away the border. So the panel and its border render the same elements twice with complementary clipping.
+</body>
+</html>
