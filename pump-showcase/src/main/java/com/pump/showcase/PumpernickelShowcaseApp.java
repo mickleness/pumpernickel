@@ -333,6 +333,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Swing: CollapsibleContainer",
 					new CollapsibleContainerDemo());
 			addSection("Swing: CustomizedToolbar", new CustomizedToolbarDemo());
+			addSection("JToolTip", new JToolTipDemo());
 			addSection("Scaling", new ScalingDemo());
 			addSection("Images: Quantization", new ImageQuantizationDemo());
 			addSection("Swing: Color Components", new ColorDemo());

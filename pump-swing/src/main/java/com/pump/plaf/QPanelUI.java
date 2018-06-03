@@ -41,10 +41,13 @@ import com.pump.util.ObservableProperties.Key;
 public class QPanelUI extends GradientPanelUI {
 
 	/**
-	 * https://developer.apple.com/macos/human-interface-guidelines/windows-and-
-	 * views/boxes/
-	 * 
-	 * @return
+	 * This returns a subtly off-white UI with rounded corners and a (even more
+	 * subtle) one-pixel gray border.
+	 * <p>
+	 * This replicates Apple's <a href=
+	 * "https://developer.apple.com/macos/human-interface-guidelines/windows-and-views/boxes/"
+	 * >box</a> UI. Their documentation describes a box as
+	 * "a type of view that’s used to create distinct, logical groupings of controls, text fields, and other interface elements."
 	 */
 	public static QPanelUI createBoxUI() {
 		QPanelUI ui = new QPanelUI();
@@ -55,6 +58,10 @@ public class QPanelUI extends GradientPanelUI {
 		return ui;
 	}
 
+	/**
+	 * This returns a white UI with rounded corners, a small callout, and
+	 * shadow.
+	 */
 	public static QPanelUI createToolTipUI() {
 		QPanelUI ui = new QPanelUI(Color.white);
 		ui.setStrokeColor(new Color(0, 0, 0, 40));
