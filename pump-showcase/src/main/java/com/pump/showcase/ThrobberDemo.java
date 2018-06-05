@@ -139,7 +139,7 @@ public class ThrobberDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public String getTitle() {
-		return "Throbber Demo";
+		return "JThrobber Demo";
 	}
 
 	@Override

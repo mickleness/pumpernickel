@@ -120,7 +120,7 @@ public class AngleSliderUIDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public String getTitle() {
-		return "AngleSliderUI";
+		return "AngleSliderUI Demo";
 	}
 
 	@Override

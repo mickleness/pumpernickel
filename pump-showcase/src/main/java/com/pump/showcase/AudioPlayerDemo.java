@@ -134,7 +134,7 @@ public class AudioPlayerDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public String getTitle() {
-		return "AudioPlayer";
+		return "AudioPlayer Demo";
 	}
 
 	@Override

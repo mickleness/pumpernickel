@@ -282,7 +282,7 @@ public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public String getTitle() {
-		return "CircularProgressBar Demo";
+		return "CircularProgressBarUI Demo";
 	}
 
 	@Override
