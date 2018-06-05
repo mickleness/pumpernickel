@@ -5,8 +5,12 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +22,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToolTip;
+import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
@@ -31,6 +36,7 @@ import com.pump.swing.FontComboBox;
 import com.pump.swing.JPopover;
 import com.pump.swing.QPopup;
 import com.pump.swing.QPopupFactory;
+import com.pump.util.BooleanProperty;
 
 public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
@@ -44,6 +50,8 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 	JPopover<JToolTip> passwordPopover;
 	JPopover<JToolTip> fontPopover;
 
+	BooleanProperty capsLock = new BooleanProperty("caps-lock");
+
 	public JPopoverDemo() {
 
 		samples.setUI(QPanelUI.createBoxUI());
@@ -52,16 +60,40 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 		layout.addRow(new JLabel("Font:"), fontComboBox, false);
 		layout.addRow(new JLabel("Currency Input:"), currencyField, false);
 
+		Timer timer = new Timer(100, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				boolean b = Toolkit.getDefaultToolkit().getLockingKeyState(
+						KeyEvent.VK_CAPS_LOCK);
+				boolean wasVisible = passwordPopover.isVisible();
+				if (capsLock.setValue(b)) {
+					passwordPopover.setVisible(false);
+					passwordPopover.setVisible(wasVisible);
+				}
+			}
+
+		});
+		timer.start();
+		capsLock.addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updatePasswordFieldToolTip();
+			}
+
+		});
+
 		passwordField.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				updatePasswordTooltip();
+				updatePasswordFieldToolTip();
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				updatePasswordTooltip();
+				updatePasswordFieldToolTip();
 
 			}
 
@@ -101,7 +133,7 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 
 			@Override
 			protected void refreshPopup() {
-				updatePasswordTooltip();
+				updatePasswordFieldToolTip();
 			}
 
 		};
@@ -157,7 +189,30 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 
 	}
 
-	private void updatePasswordTooltip() {
+	private void updatePasswordFieldToolTip() {
+		if (capsLock.getValue()) {
+			updateCapsLockWarningToolTip();
+		} else {
+			updatePasswordStrengthMeterToolTip();
+		}
+	}
+
+	private void updateCapsLockWarningToolTip() {
+		passwordField.putClientProperty(QPopup.PROPERTY_CALLOUT_TYPE,
+				CalloutType.TOP_LEFT);
+		passwordPopover
+				.getContents()
+				.setTipText(
+						"<html>"
+								+ "<font size=\"4\" color=\"#000099\">Caps Lock is on</font><br>"
+								+ "Having Caps Lock on may cause you to enter your password incorrectly.<br><br>"
+								+ "Press Caps Lock to turn it off before entering your password.</html");
+	}
+
+	private void updatePasswordStrengthMeterToolTip() {
+		passwordField.putClientProperty(QPopup.PROPERTY_CALLOUT_TYPE,
+				CalloutType.LEFT_CENTER);
+
 		// disclaimer: this is just meant to show off what tooltips/popovers can
 		// do, this is a flimsy strength meter
 		String password = new String(passwordField.getPassword());
