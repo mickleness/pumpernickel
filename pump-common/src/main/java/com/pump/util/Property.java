@@ -111,4 +111,11 @@ public class Property<T> {
 			}
 		}
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getName() + "[" + name + "=" + value + " (enabled="
+				+ isEnabled + ", " + isUserAdjustable + "=" + isUserAdjustable
+				+ ")]";
+	}
 }
