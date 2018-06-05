@@ -7,6 +7,8 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -160,6 +162,22 @@ public class JPopover<T extends JComponent> {
 		});
 
 		installOwnerTriggers();
+		getOwner().addComponentListener(new ComponentAdapter() {
+
+			@Override
+			public void componentResized(ComponentEvent e) {
+				if (visible.getValue()) {
+					refreshPopup();
+					popup.show();
+				}
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				visible.setValue(false);
+			}
+
+		});
 
 	}
 
