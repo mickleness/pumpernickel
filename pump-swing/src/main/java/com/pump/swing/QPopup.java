@@ -84,11 +84,12 @@ public class QPopup extends Popup {
 
 	@Override
 	public void show() {
-		if (screenLoc != null) {
+		Point z = getScreenLocation();
+		if (z != null) {
 			ui.setCalloutSize(0);
-			if (showUsingRootPaneContainer(screenLoc, null))
+			if (showUsingRootPaneContainer(z, null))
 				return;
-			showUsingWindow(screenLoc, null, true);
+			showUsingWindow(z, null, true);
 		} else {
 			CalloutType[] calloutTypes = getCalloutTypes();
 			for (CalloutType type : calloutTypes) {
@@ -103,7 +104,8 @@ public class QPopup extends Popup {
 				if (showUsingWindow(p, type, false))
 					return;
 			}
-			showUsingWindow(screenLoc, calloutTypes[0], true);
+			Point p = getScreenLoc(calloutTypes[0]);
+			showUsingWindow(p, calloutTypes[0], true);
 		}
 	}
 
@@ -434,5 +436,19 @@ public class QPopup extends Popup {
 				w.dispose();
 			}
 		}
+	}
+
+	public Component getOwner() {
+		return owner;
+	}
+
+	public JPanel getContents() {
+		return contents;
+	}
+
+	public Point getScreenLocation() {
+		if (screenLoc == null)
+			return null;
+		return new Point(screenLoc);
 	}
 }

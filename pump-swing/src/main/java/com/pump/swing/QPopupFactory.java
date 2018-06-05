@@ -50,8 +50,8 @@ public class QPopupFactory extends PopupFactory {
 			throws IllegalArgumentException {
 		Popup p;
 		if (contents instanceof JToolTip) {
-			JToolTip tooltip = (JToolTip) contents;
-			return getToolTipPopup(owner, tooltip, x, y);
+			JComponent c = (JComponent) contents;
+			return getQPopup(owner, c, x, y);
 		} else {
 			p = delegate.getPopup(owner, contents, x, y);
 		}
@@ -61,14 +61,14 @@ public class QPopupFactory extends PopupFactory {
 	/**
 	 * Create a QPopup that is guaranteed to have a callout.
 	 */
-	public QPopup getToolTipPopup(JComponent jc, JToolTip tooltip) {
-		return getToolTipPopup(jc, tooltip, UNDEFINED, UNDEFINED);
+	public QPopup getQPopup(JComponent jc, JComponent contents) {
+		return getQPopup(jc, contents, UNDEFINED, UNDEFINED);
 	}
 
 	/**
 	 * 
 	 * @param owner
-	 * @param tooltip
+	 * @param content
 	 * @param x
 	 *            if isToolTipCallout is false, then this is the x-coordinate of
 	 *            where the tooltip will be placed.
@@ -77,15 +77,14 @@ public class QPopupFactory extends PopupFactory {
 	 *            where the tooltip will be placed.
 	 * @return
 	 */
-	public QPopup getToolTipPopup(Component owner, JToolTip tooltip, int x,
-			int y) {
-		tooltip.setOpaque(false);
+	public QPopup getQPopup(Component owner, JComponent content, int x, int y) {
+		content.setOpaque(false);
 		JPanel container = new JPanel();
 		container.setOpaque(false);
-		container.add(tooltip);
+		container.add(content);
 		QPanelUI ui = QPanelUI.createToolTipUI();
 		container.setUI(ui);
-		ui.setFillColor(tooltip.getBackground());
+		ui.setFillColor(content.getBackground());
 		boolean useCallout = isToolTipCallout() || x == UNDEFINED
 				|| y == UNDEFINED;
 
@@ -96,8 +95,8 @@ public class QPopupFactory extends PopupFactory {
 		x -= i.left;
 		y -= i.top;
 
-		tooltip.setSize(tooltip.getPreferredSize());
-		tooltip.validate();
+		content.setSize(content.getPreferredSize());
+		content.validate();
 
 		QPopup p = useCallout ? new QPopup(owner, container) : new QPopup(
 				owner, container, new Point(x, y));

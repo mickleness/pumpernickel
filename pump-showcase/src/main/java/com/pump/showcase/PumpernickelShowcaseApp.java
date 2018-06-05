@@ -252,6 +252,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 			List<String> returnValue = new ArrayList<>();
 			if (jc instanceof ShowcaseDemo) {
 				ShowcaseDemo d = (ShowcaseDemo) jc;
+				if (d.getKeywords() == null)
+					throw new NullPointerException(jc.getClass().getName());
 				for (String keyword : d.getKeywords()) {
 					returnValue.add(keyword.toLowerCase());
 				}
@@ -334,6 +336,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 					new CollapsibleContainerDemo());
 			addSection("Swing: CustomizedToolbar", new CustomizedToolbarDemo());
 			addSection("JToolTip", new JToolTipDemo());
+			addSection("JPopover", new JPopoverDemo());
 			addSection("Scaling", new ScalingDemo());
 			addSection("Images: Quantization", new ImageQuantizationDemo());
 			addSection("Swing: Color Components", new ColorDemo());
