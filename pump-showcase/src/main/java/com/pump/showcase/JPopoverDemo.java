@@ -290,8 +290,7 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return JPopoverDemo.class.getResource("jpopoverDemo.html");
 	}
 
 	@Override
