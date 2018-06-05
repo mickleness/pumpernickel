@@ -9,6 +9,8 @@ import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.awt.event.MouseListener;
 
+import javax.swing.AbstractButton;
+
 import com.pump.util.WeakSet;
 
 /**
@@ -39,12 +41,14 @@ public abstract class DescendantListener {
 
 			@Override
 			public void register(Component c) {
-				c.addMouseListener(mouseListener);
+				if (!(c instanceof AbstractButton))
+					c.addMouseListener(mouseListener);
 			}
 
 			@Override
 			public void unregister(Component c) {
-				c.removeMouseListener(mouseListener);
+				if (!(c instanceof AbstractButton))
+					c.removeMouseListener(mouseListener);
 			}
 
 		};
@@ -56,12 +60,12 @@ public abstract class DescendantListener {
 
 		@Override
 		public void componentAdded(ContainerEvent e) {
-			processRemoval(e.getChild());
+			processAddition(e.getChild());
 		}
 
 		@Override
 		public void componentRemoved(ContainerEvent e) {
-			processAddition(e.getChild());
+			processRemoval(e.getChild());
 		}
 
 	};

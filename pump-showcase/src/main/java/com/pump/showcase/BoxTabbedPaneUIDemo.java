@@ -17,27 +17,27 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.util.Arrays;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
+import com.pump.awt.SplayedLayout;
 import com.pump.icon.PaddedIcon;
 import com.pump.icon.PlusIcon;
+import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.InspectorLayout;
 import com.pump.plaf.BoxTabbedPaneUI;
 import com.pump.swing.PartialLineBorder;
 
-/**
- * TODO: include controls to manipulate UI: change L&amp;F entirely, change tab
- * placement
- */
-public class BoxTabbedPaneUIDemo extends JComponent {
+public class BoxTabbedPaneUIDemo extends JPanel implements ShowcaseDemo {
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,49 +45,78 @@ public class BoxTabbedPaneUIDemo extends JComponent {
 	JButton addButton = new JButton(new PaddedIcon(
 			new PlusIcon(12, 12, 1, null), new Dimension(22, 22)));
 	JComboBox<String> tabPlacementComboBox = new JComboBox<>();
-	JCheckBox closeableCheckBox = new JCheckBox("Closeable Tabs", false);
-	JCheckBox hideSingleCheckBox = new JCheckBox("Hide Single Tab", false);
+	JRadioButton closeableActive = new JRadioButton("Active");
+	JRadioButton closeableInactive = new JRadioButton("Inactive");
+	JRadioButton hideSingleActive = new JRadioButton("Active");
+	JRadioButton hideSingleInactive = new JRadioButton("Inactive");
+
+	JPanel controls = new JPanel();
 
 	public BoxTabbedPaneUIDemo() {
+		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		layout.addRow(new JLabel("Tab Placement:"), tabPlacementComboBox);
+		layout.addRow(new JLabel("Closeable Tabs:"), closeableActive,
+				closeableInactive);
+		layout.addRow(new JLabel("Hide Single Tab:"), hideSingleActive,
+				hideSingleInactive);
+
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-		add(tabs, c);
-		c.gridy++;
 		c.weighty = 0;
-		c.fill = GridBagConstraints.NONE;
-		c.insets = new Insets(3, 3, 3, 3);
-		add(tabPlacementComboBox, c);
+		c.fill = GridBagConstraints.BOTH;
+		add(controls, c);
 		c.gridy++;
-		add(closeableCheckBox, c);
-		c.gridy++;
-		add(hideSingleCheckBox, c);
+		c.weightx = 0;
+		c.weighty = 1;
+		add(tabs, c);
 
-		closeableCheckBox.addActionListener(new ActionListener() {
+		// let it fill the space available, but never demand more space from its
+		// parents
+		tabs.setPreferredSize(new Dimension(20, 20));
+
+		ButtonGroup g1 = new ButtonGroup();
+		g1.add(hideSingleActive);
+		g1.add(hideSingleInactive);
+
+		hideSingleActive
+				.setToolTipText("Hide row of tabs when there is only one tab showing.");
+
+		closeableActive
+				.setToolTipText("Include a button to close tabs (visible only on rollover).");
+
+		ButtonGroup g2 = new ButtonGroup();
+		g2.add(closeableActive);
+		g2.add(closeableInactive);
+
+		ActionListener closeableListener = new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				tabs.putClientProperty(BoxTabbedPaneUI.PROPERTY_CLOSEABLE_TABS,
-						closeableCheckBox.isSelected());
+						closeableActive.isSelected());
 			}
 
-		});
-		closeableCheckBox.doClick();
+		};
+		closeableInactive.addActionListener(closeableListener);
+		closeableActive.addActionListener(closeableListener);
+		closeableActive.doClick();
 
-		hideSingleCheckBox.addActionListener(new ActionListener() {
+		ActionListener hideSingleListener = new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				tabs.putClientProperty(
 						BoxTabbedPaneUI.PROPERTY_HIDE_SINGLE_TAB,
-						hideSingleCheckBox.isSelected());
+						hideSingleActive.isSelected());
 			}
 
-		});
+		};
+		hideSingleActive.addActionListener(hideSingleListener);
+		hideSingleInactive.addActionListener(hideSingleListener);
+		hideSingleInactive.doClick();
 
 		tabPlacementComboBox.addItem("Top");
 		tabPlacementComboBox.addItem("Left");
@@ -143,5 +172,32 @@ public class BoxTabbedPaneUIDemo extends JComponent {
 			}
 
 		});
+	}
+
+	@Override
+	public String getTitle() {
+		return "BoxTabbedPaneUI Demo";
+	}
+
+	@Override
+	public URL getHelpURL() {
+		return BoxTabbedPaneUIDemo.class
+				.getResource("boxTabbedPaneUIDemo.html");
+	}
+
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "tabs", "document", "MDI", "ui", "Swing" };
+	}
+
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { BoxTabbedPaneUIDemo.class, JTabbedPane.class,
+				SplayedLayout.class };
+	}
+
+	@Override
+	public boolean isSeparatorVisible() {
+		return true;
 	}
 }

@@ -32,9 +32,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -63,8 +60,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import com.pump.awt.DescendantListener;
 import com.pump.awt.SplayedLayout;
 import com.pump.icon.button.MinimalDuoToneCloseIcon;
 import com.pump.swing.PartialLineBorder;
@@ -106,7 +105,7 @@ import com.pump.swing.PartialLineBorder;
  * UX scrutiny, recently added tabs to Finder windows. But my favorite example
  * is Notepad vs Notepad++. Notepad is a fine tool, and maybe it's the go-to
  * choice for many users, but Notepad++ (or a similar TDI tool like Atom) is
- * where power-users gravitate towards.
+ * where power-users gravitate to.
  * </ul>
  * <p>
  * If you're interested in displaying a fixed set of tabs (such as in a complex
@@ -1009,20 +1008,11 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 				}
 			});
 
-			addKeyListener(new KeyAdapter() {
+			BasicButtonListener buttonListener = new MyBasicButtonListener(this);
+			buttonListener.installKeyboardActions(this);
+			addFocusListener(buttonListener);
+			DescendantListener.addMouseListener(this, buttonListener, false);
 
-				@Override
-				public void keyPressed(KeyEvent e) {
-					doClick();
-				}
-
-			});
-			addMouseListener(new MouseAdapter() {
-				@Override
-				public void mousePressed(MouseEvent e) {
-					doClick();
-				}
-			});
 			addActionListener(new ActionListener() {
 
 				@Override
@@ -1032,6 +1022,9 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 				}
 
 			});
+
+			setFocusable(true);
+			setRequestFocusEnabled(false);
 		}
 
 		private void refreshSelectedState() {
@@ -1298,4 +1291,55 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 		return getData(pane).getTabRunCount();
 	}
 
+}
+
+class MyBasicButtonListener extends BasicButtonListener {
+
+	AbstractButton button;
+
+	public MyBasicButtonListener(AbstractButton b) {
+		super(b);
+		button = b;
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		super.mouseMoved(convert(e));
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		super.mouseDragged(convert(e));
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		super.mouseClicked(convert(e));
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		super.mousePressed(convert(e));
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		super.mouseReleased(convert(e));
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		super.mouseEntered(convert(e));
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		super.mouseExited(convert(e));
+	}
+
+	private MouseEvent convert(MouseEvent e) {
+		if (e.getSource() == button)
+			return e;
+		return SwingUtilities.convertMouseEvent(e.getComponent(), e, button);
+	}
 }
