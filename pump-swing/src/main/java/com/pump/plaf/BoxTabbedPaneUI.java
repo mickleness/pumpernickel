@@ -32,6 +32,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -555,6 +556,12 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 
 	}
 
+	private static final String[] REFRESH_PROPERTIES = new String[] {
+			"mnemonicAt", "displayedMnemonicIndexAt", "indexForTitle",
+			"tabLayoutPolicy", "opaque", "background", "indexForTabComponent",
+			"indexForNullComponent", "font", PROPERTY_HIDE_SINGLE_TAB,
+			PROPERTY_CLOSEABLE_TABS };
+
 	/**
 	 * This is a cluster of data related to a specific JTabbedPane.
 	 * <p>
@@ -562,6 +569,7 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 	 * happens each pane gets its own Data object to control it.
 	 */
 	class Data {
+
 		JPanel controlRow = new UIResourcePanel(new GridBagLayout());
 		JPanel leadingComponents = new JPanel(new GridBagLayout());
 		JPanel tabsContainer = new JPanel();
@@ -626,6 +634,24 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 
 		};
 
+		ContainerListener containerListener = new ContainerAdapter() {
+
+			@Override
+			public void componentAdded(ContainerEvent e) {
+				refreshTabStates();
+				refreshContentBorder();
+				refreshStyle();
+			}
+
+			@Override
+			public void componentRemoved(ContainerEvent e) {
+				refreshTabStates();
+				refreshContentBorder();
+				refreshStyle();
+			}
+
+		};
+
 		public Data(JTabbedPane tabs) {
 			this.tabs = tabs;
 			controlRow.setOpaque(false);
@@ -654,31 +680,11 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 			tabs.addPropertyChangeListener("tabPlacement",
 					tabPlacementPropertyListener);
 
-			for (String property : new String[] { "mnemonicAt",
-					"displayedMnemonicIndexAt", "indexForTitle",
-					"tabLayoutPolicy", "opaque", "background",
-					"indexForTabComponent", "indexForNullComponent", "font",
-					PROPERTY_HIDE_SINGLE_TAB, PROPERTY_CLOSEABLE_TABS }) {
+			for (String property : REFRESH_PROPERTIES) {
 				tabs.addPropertyChangeListener(property,
 						refreshPropertyListener);
 			}
-			tabs.addContainerListener(new ContainerAdapter() {
-
-				@Override
-				public void componentAdded(ContainerEvent e) {
-					refreshTabStates();
-					refreshContentBorder();
-					refreshStyle();
-				}
-
-				@Override
-				public void componentRemoved(ContainerEvent e) {
-					refreshTabStates();
-					refreshContentBorder();
-					refreshStyle();
-				}
-
-			});
+			tabs.addContainerListener(containerListener);
 			tabs.getModel().addChangeListener(refreshChangeListener);
 
 			refreshExtraComponents();
@@ -825,8 +831,28 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 		}
 
 		public void uninstall() {
-			// TODO: revisit
-			removeNonUIResources(tabs);
+			tabs.remove(controlRow);
+
+			for (String property : new String[] { PROPERTY_STYLE }) {
+				tabs.removePropertyChangeListener(property,
+						refreshStyleListener);
+			}
+
+			for (String property : new String[] { PROPERTY_TRAILING_COMPONENTS,
+					PROPERTY_LEADING_COMPONENTS }) {
+				tabs.removePropertyChangeListener(property,
+						refreshExtraComponentsListener);
+			}
+
+			tabs.removePropertyChangeListener("tabPlacement",
+					tabPlacementPropertyListener);
+
+			for (String property : REFRESH_PROPERTIES) {
+				tabs.removePropertyChangeListener(property,
+						refreshPropertyListener);
+			}
+			tabs.removeContainerListener(containerListener);
+			tabs.getModel().removeChangeListener(refreshChangeListener);
 		}
 
 		private void removeNonUIResources(Container c) {
@@ -975,6 +1001,61 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 	}
 
 	static class TabContainer extends AbstractButton {
+		/**
+		 * This converts MouseEvent sources to an AbstractButton.
+		 */
+		private static class MyBasicButtonListener extends BasicButtonListener {
+
+			AbstractButton button;
+
+			public MyBasicButtonListener(AbstractButton b) {
+				super(b);
+				button = b;
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				super.mouseMoved(convert(e));
+			}
+
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				super.mouseDragged(convert(e));
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(convert(e));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				super.mousePressed(convert(e));
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				super.mouseReleased(convert(e));
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				super.mouseEntered(convert(e));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				super.mouseExited(convert(e));
+			}
+
+			private MouseEvent convert(MouseEvent e) {
+				if (e.getSource() == button)
+					return e;
+				return SwingUtilities.convertMouseEvent(e.getComponent(), e,
+						button);
+			}
+		}
+
 		JTabbedPane tabs;
 		int tabIndex;
 
@@ -1291,55 +1372,4 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 		return getData(pane).getTabRunCount();
 	}
 
-}
-
-class MyBasicButtonListener extends BasicButtonListener {
-
-	AbstractButton button;
-
-	public MyBasicButtonListener(AbstractButton b) {
-		super(b);
-		button = b;
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		super.mouseMoved(convert(e));
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		super.mouseDragged(convert(e));
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		super.mouseClicked(convert(e));
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		super.mousePressed(convert(e));
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		super.mouseReleased(convert(e));
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		super.mouseEntered(convert(e));
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		super.mouseExited(convert(e));
-	}
-
-	private MouseEvent convert(MouseEvent e) {
-		if (e.getSource() == button)
-			return e;
-		return SwingUtilities.convertMouseEvent(e.getComponent(), e, button);
-	}
 }
