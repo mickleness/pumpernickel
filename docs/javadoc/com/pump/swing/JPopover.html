@@ -1,0 +1,559 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+
+<title>JPopover</title>
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+<script type="text/javascript" src="../../../script.js"></script>
+</head>
+<body>
+<script type="text/javascript"><!--
+    try {
+        if (location.href.indexOf('is-external=true') == -1) {
+            parent.document.title="JPopover";
+        }
+    }
+    catch(err) {
+    }
+//-->
+var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar.top">
+<!--   -->
+</a>
+<div class="skipNav"><a href="#skip.navbar.top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar.top.firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+<li><a href="../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../com/pump/swing/JobStatusBar.html" title="class in com.pump.swing"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/swing/JThrobber.html" title="class in com.pump.swing"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../index.html?com/pump/swing/JPopover.html" target="_top">Frames</a></li>
+<li><a href="JPopover.html" target="_top">No&nbsp;Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../allclasses-noframe.html">All&nbsp;Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.detail">Method</a></li>
+</ul>
+</div>
+<a name="skip.navbar.top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.pump.swing</div>
+<h2 title="Class JPopover" class="title">Class JPopover&lt;T extends javax.swing.JComponent&gt;</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>com.pump.swing.JPopover&lt;T&gt;</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - </dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="typeNameLabel">JPopover&lt;T extends javax.swing.JComponent&gt;</span>
+extends java.lang.Object</pre>
+<div class="block">This is similar to a tooltip, except each JPopover is responsible for its own
+ visibility rules. Since tooltips have such a well-defined meaning in Swing
+ this class branches out with a new name for a similar feature.
+ <p>
+ This class is inspired by Apple's <a href=
+ "https://developer.apple.com/macos/human-interface-guidelines/windows-and-views/popovers/"
+ >popover</a> and Microsoft's <a href=
+ "https://msdn.microsoft.com/en-us/library/windows/desktop/dn742400(v=vs.85).aspx"
+ >balloon</a> components.
+ <p>
+ By default a JPopover will appear when the mouse hovers over or transfers
+ keyboard focus to the owner component. You can override this behavior by
+ overriding the <a href="../../../com/pump/swing/JPopover.html#isStayVisible--"><code>isStayVisible()</code></a> method. There can be only one
+ JPopover visible at any time, so when one opens the previous one will close.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../com/pump/swing/JPopover.html" title="type parameter in JPopover">T</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#contents">contents</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected javax.swing.JComponent</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#owner">owner</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../com/pump/swing/QPopup.html" title="class in com.pump.swing">QPopup</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#popup">popup</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../com/pump/util/BooleanProperty.html" title="class in com.pump.util">BooleanProperty</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#visible">visible</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#JPopover-javax.swing.JComponent-T-boolean-">JPopover</a></span>(javax.swing.JComponent&nbsp;owner,
+        <a href="../../../com/pump/swing/JPopover.html" title="type parameter in JPopover">T</a>&nbsp;contents,
+        boolean&nbsp;rolloverContents)</code>
+<div class="block">Create a new JPopover.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>protected <a href="../../../com/pump/swing/QPopup.html" title="class in com.pump.swing">QPopup</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#createPopup--">createPopup</a></span>()</code>
+<div class="block">Create a new QPopup to display this popover's <a href="../../../com/pump/swing/JPopover.html#getContents--"><code>getContents()</code></a>.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../com/pump/swing/JPopover.html" title="class in com.pump.swing">JPopover</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#getActivePopover--">getActivePopover</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../com/pump/swing/JPopover.html" title="type parameter in JPopover">T</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#getContents--">getContents</a></span>()</code>
+<div class="block">Return the contents of this JPopover.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>javax.swing.JComponent</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#getOwner--">getOwner</a></span>()</code>
+<div class="block">Return the owner/trigger of this JPopover.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#installOwnerFocusTrigger--">installOwnerFocusTrigger</a></span>()</code>
+<div class="block">Install a FocusListener on the owner (and its descendants) to show this
+ popover when they have the keyboard focus.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#installOwnerMouseTrigger--">installOwnerMouseTrigger</a></span>()</code>
+<div class="block">Install a MouseListener on the owner (and its descendants) to show this
+ popover when the mouse hovers over the owner.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#installOwnerTriggers--">installOwnerTriggers</a></span>()</code>
+<div class="block">Install the listeners on the owner that make this popover visible.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#isStayVisible--">isStayVisible</a></span>()</code>
+<div class="block">This is constantly called on a repeating timer while this JPopover is
+ visible.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#isVisible--">isVisible</a></span>()</code>
+<div class="block">Return true if the popover is showing.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#refreshPopup--">refreshPopup</a></span>()</code>
+<div class="block">Refresh the contents and position of the Popup.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/swing/JPopover.html#setVisible-boolean-">setVisible</a></span>(boolean&nbsp;popoverVisible)</code>
+<div class="block">Toggle the visibility of this popover.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="owner">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>owner</h4>
+<pre>protected final&nbsp;javax.swing.JComponent owner</pre>
+</li>
+</ul>
+<a name="popup">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>popup</h4>
+<pre>protected&nbsp;<a href="../../../com/pump/swing/QPopup.html" title="class in com.pump.swing">QPopup</a> popup</pre>
+</li>
+</ul>
+<a name="contents">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>contents</h4>
+<pre>protected final&nbsp;<a href="../../../com/pump/swing/JPopover.html" title="type parameter in JPopover">T</a> extends javax.swing.JComponent contents</pre>
+</li>
+</ul>
+<a name="visible">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>visible</h4>
+<pre>protected final&nbsp;<a href="../../../com/pump/util/BooleanProperty.html" title="class in com.pump.util">BooleanProperty</a> visible</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="JPopover-javax.swing.JComponent-javax.swing.JComponent-boolean-">
+<!--   -->
+</a><a name="JPopover-javax.swing.JComponent-T-boolean-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>JPopover</h4>
+<pre>public&nbsp;JPopover(javax.swing.JComponent&nbsp;owner,
+                <a href="../../../com/pump/swing/JPopover.html" title="type parameter in JPopover">T</a>&nbsp;contents,
+                boolean&nbsp;rolloverContents)</pre>
+<div class="block">Create a new JPopover.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>owner</code> - the owner/trigger of this JPopover.</dd>
+<dd><code>contents</code> - the contents of this JPopover.</dd>
+<dd><code>rolloverContents</code> - if true then this popover stays visible when the mouse moves
+            the mouse over it. If your popover contains components like
+            buttons or textfields that the user needs to interact with
+            then this should be true. If the contents are not interactive
+            (like a label or tooltip) then this should be false.</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getActivePopover--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getActivePopover</h4>
+<pre>public static&nbsp;<a href="../../../com/pump/swing/JPopover.html" title="class in com.pump.swing">JPopover</a>&lt;?&gt;&nbsp;getActivePopover()</pre>
+</li>
+</ul>
+<a name="installOwnerTriggers--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>installOwnerTriggers</h4>
+<pre>protected&nbsp;void&nbsp;installOwnerTriggers()</pre>
+<div class="block">Install the listeners on the owner that make this popover visible. By
+ default this method calls <a href="../../../com/pump/swing/JPopover.html#installOwnerFocusTrigger--"><code>installOwnerFocusTrigger()</code></a> and
+ <a href="../../../com/pump/swing/JPopover.html#installOwnerMouseTrigger--"><code>installOwnerMouseTrigger()</code></a>.</div>
+</li>
+</ul>
+<a name="installOwnerFocusTrigger--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>installOwnerFocusTrigger</h4>
+<pre>protected&nbsp;void&nbsp;installOwnerFocusTrigger()</pre>
+<div class="block">Install a FocusListener on the owner (and its descendants) to show this
+ popover when they have the keyboard focus.</div>
+</li>
+</ul>
+<a name="installOwnerMouseTrigger--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>installOwnerMouseTrigger</h4>
+<pre>protected&nbsp;void&nbsp;installOwnerMouseTrigger()</pre>
+<div class="block">Install a MouseListener on the owner (and its descendants) to show this
+ popover when the mouse hovers over the owner.</div>
+</li>
+</ul>
+<a name="getContents--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getContents</h4>
+<pre>public&nbsp;<a href="../../../com/pump/swing/JPopover.html" title="type parameter in JPopover">T</a>&nbsp;getContents()</pre>
+<div class="block">Return the contents of this JPopover.</div>
+</li>
+</ul>
+<a name="getOwner--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOwner</h4>
+<pre>public&nbsp;javax.swing.JComponent&nbsp;getOwner()</pre>
+<div class="block">Return the owner/trigger of this JPopover.</div>
+</li>
+</ul>
+<a name="isStayVisible--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isStayVisible</h4>
+<pre>protected&nbsp;boolean&nbsp;isStayVisible()</pre>
+<div class="block">This is constantly called on a repeating timer while this JPopover is
+ visible. If this returns false for over 50 ms then this popover is
+ hidden.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the popover should stay visible, false if it should be
+         hidden.</dd>
+</dl>
+</li>
+</ul>
+<a name="refreshPopup--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>refreshPopup</h4>
+<pre>protected&nbsp;void&nbsp;refreshPopup()</pre>
+<div class="block">Refresh the contents and position of the Popup. This is automatically
+ called when the owner is updated and the popup is visible. For example:
+ if a JSlider is modified, this will be called so you can update the
+ contents of this popover based on the new slider value.</div>
+</li>
+</ul>
+<a name="setVisible-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setVisible</h4>
+<pre>public&nbsp;void&nbsp;setVisible(boolean&nbsp;popoverVisible)</pre>
+<div class="block">Toggle the visibility of this popover.</div>
+</li>
+</ul>
+<a name="isVisible--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isVisible</h4>
+<pre>public&nbsp;boolean&nbsp;isVisible()</pre>
+<div class="block">Return true if the popover is showing. This is mostly equivalent to
+ calling <code>getContents().isShowing()</code>.</div>
+</li>
+</ul>
+<a name="createPopup--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>createPopup</h4>
+<pre>protected&nbsp;<a href="../../../com/pump/swing/QPopup.html" title="class in com.pump.swing">QPopup</a>&nbsp;createPopup()</pre>
+<div class="block">Create a new QPopup to display this popover's <a href="../../../com/pump/swing/JPopover.html#getContents--"><code>getContents()</code></a>.</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar.bottom">
+<!--   -->
+</a>
+<div class="skipNav"><a href="#skip.navbar.bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar.bottom.firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+<li><a href="../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../com/pump/swing/JobStatusBar.html" title="class in com.pump.swing"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/swing/JThrobber.html" title="class in com.pump.swing"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../index.html?com/pump/swing/JPopover.html" target="_top">Frames</a></li>
+<li><a href="JPopover.html" target="_top">No&nbsp;Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../allclasses-noframe.html">All&nbsp;Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.detail">Method</a></li>
+</ul>
+</div>
+<a name="skip.navbar.bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

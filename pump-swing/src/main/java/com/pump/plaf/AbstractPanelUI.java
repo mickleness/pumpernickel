@@ -1,3 +1,13 @@
+/**
+ * This software is released as part of the Pumpernickel project.
+ * 
+ * All com.pump resources in the Pumpernickel project are distributed under the
+ * MIT License:
+ * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * 
+ * More information about the Pumpernickel project is available here:
+ * https://mickleness.github.io/pumpernickel/
+ */
 package com.pump.plaf;
 
 import java.beans.PropertyChangeEvent;
@@ -103,11 +113,10 @@ public abstract class AbstractPanelUI extends BasicPanelUI {
 		properties.removeListener(pcl);
 	}
 
-/**
-	 * This is invoked by {@link BasicPanelUI#installUI(javax.swing.JComponent)}
-	 * , and this in turn invokes {@link #installColorsAndFont(JPanel),
-	 * 
-	 * @link #installBorder(JPanel)}, and {@link #installOpacity(JPanel)}.
+	/**
+	 * This is invoked by {@link BasicPanelUI#installUI(JComponent)} , and this
+	 * in turn invokes {@link #installColorsAndFont(JPanel)},
+	 * {@link #installBorder(JPanel)}, and {@link #installOpacity(JPanel)}.
 	 */
 	protected void installDefaults(JPanel p) {
 		installColorsAndFont(p);

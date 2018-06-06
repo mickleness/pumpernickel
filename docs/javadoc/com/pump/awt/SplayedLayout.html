@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -183,22 +183,28 @@ implements java.awt.LayoutManager</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/SplayedLayout.html#getOrientation--">getOrientation</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>protected java.awt.Container</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/SplayedLayout.html#getSplayedAncestor-java.awt.Component-">getSplayedAncestor</a></span>(java.awt.Component&nbsp;c)</code>
+<div class="block">Return the ancestor of the argument that uses this SplayedLayout.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/SplayedLayout.html#layoutContainer-java.awt.Container-">layoutContainer</a></span>(java.awt.Container&nbsp;parent)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>protected com.pump.awt.SplayedLayout.Plan</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/SplayedLayout.html#layoutContainerAtFixedSize-javax.swing.JComponent-java.util.LinkedHashMap-int-int-int-int-">layoutContainerAtFixedSize</a></span>(javax.swing.JComponent&nbsp;parent,
-                          java.util.LinkedHashMap&lt;javax.swing.JComponent,java.awt.Dimension&gt;&nbsp;preferredSize,
-                          int&nbsp;x,
-                          int&nbsp;y,
-                          int&nbsp;width,
-                          int&nbsp;height)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/SplayedLayout.html#layoutContainerWithConstrainedSize-javax.swing.JComponent-java.util.LinkedHashMap-int-int-int-int-">layoutContainerWithConstrainedSize</a></span>(javax.swing.JComponent&nbsp;parent,
+                                  java.util.LinkedHashMap&lt;javax.swing.JComponent,java.awt.Dimension&gt;&nbsp;preferredSize,
+                                  int&nbsp;x,
+                                  int&nbsp;y,
+                                  int&nbsp;width,
+                                  int&nbsp;height)</code>
 <div class="block">This method is called when we don't have enough space to fit all our
  components and we have to try to arrange them in a fixed width.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected com.pump.awt.SplayedLayout.Plan</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/SplayedLayout.html#layoutContainerWithExtra-javax.swing.JComponent-java.util.LinkedHashMap-int-int-int-int-int-">layoutContainerWithExtra</a></span>(javax.swing.JComponent&nbsp;parent,
                         java.util.LinkedHashMap&lt;javax.swing.JComponent,java.awt.Dimension&gt;&nbsp;preferredSize,
@@ -211,24 +217,28 @@ implements java.awt.LayoutManager</pre>
  among components.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>java.awt.Dimension</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/SplayedLayout.html#minimumLayoutSize-java.awt.Container-">minimumLayoutSize</a></span>(java.awt.Container&nbsp;parent)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.awt.Dimension</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/SplayedLayout.html#preferredLayoutSize-java.awt.Container-">preferredLayoutSize</a></span>(java.awt.Container&nbsp;parent)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/SplayedLayout.html#removeLayoutComponent-java.awt.Component-">removeLayoutComponent</a></span>(java.awt.Component&nbsp;comp)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/SplayedLayout.html#setOrientation-java.awt.Container-int-">setOrientation</a></span>(java.awt.Container&nbsp;container,
               int&nbsp;orientation)</code>
 <div class="block">Set the orientation of this layout.</div>
 </td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/SplayedLayout.html#setSeparatorSize-java.awt.Dimension-">setSeparatorSize</a></span>(java.awt.Dimension&nbsp;newSeparatorSize)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -308,6 +318,23 @@ implements java.awt.LayoutManager</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="setSeparatorSize-java.awt.Dimension-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSeparatorSize</h4>
+<pre>public&nbsp;boolean&nbsp;setSeparatorSize(java.awt.Dimension&nbsp;newSeparatorSize)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>newSeparatorSize</code> - an optional padding to insert between all splayed elements.
+            This may be used in JBreadCrumbs to paint a separator arrow or
+            pipe.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if this changed the separator size, false otherwise.</dd>
+</dl>
+</li>
+</ul>
 <a name="addLayoutComponent-java.lang.String-java.awt.Component-">
 <!--   -->
 </a>
@@ -400,18 +427,18 @@ implements java.awt.LayoutManager</pre>
 </dl>
 </li>
 </ul>
-<a name="layoutContainerAtFixedSize-javax.swing.JComponent-java.util.LinkedHashMap-int-int-int-int-">
+<a name="layoutContainerWithConstrainedSize-javax.swing.JComponent-java.util.LinkedHashMap-int-int-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>layoutContainerAtFixedSize</h4>
-<pre>protected&nbsp;com.pump.awt.SplayedLayout.Plan&nbsp;layoutContainerAtFixedSize(javax.swing.JComponent&nbsp;parent,
-                                                                     java.util.LinkedHashMap&lt;javax.swing.JComponent,java.awt.Dimension&gt;&nbsp;preferredSize,
-                                                                     int&nbsp;x,
-                                                                     int&nbsp;y,
-                                                                     int&nbsp;width,
-                                                                     int&nbsp;height)</pre>
+<h4>layoutContainerWithConstrainedSize</h4>
+<pre>protected&nbsp;com.pump.awt.SplayedLayout.Plan&nbsp;layoutContainerWithConstrainedSize(javax.swing.JComponent&nbsp;parent,
+                                                                             java.util.LinkedHashMap&lt;javax.swing.JComponent,java.awt.Dimension&gt;&nbsp;preferredSize,
+                                                                             int&nbsp;x,
+                                                                             int&nbsp;y,
+                                                                             int&nbsp;width,
+                                                                             int&nbsp;height)</pre>
 <div class="block">This method is called when we don't have enough space to fit all our
  components and we have to try to arrange them in a fixed width.</div>
 </li>
@@ -445,10 +472,20 @@ implements java.awt.LayoutManager</pre>
 <a name="getComponents-java.awt.Container-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getComponents</h4>
 <pre>protected&nbsp;javax.swing.JComponent[]&nbsp;getComponents(java.awt.Container&nbsp;container)</pre>
+</li>
+</ul>
+<a name="getSplayedAncestor-java.awt.Component-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getSplayedAncestor</h4>
+<pre>protected&nbsp;java.awt.Container&nbsp;getSplayedAncestor(java.awt.Component&nbsp;c)</pre>
+<div class="block">Return the ancestor of the argument that uses this SplayedLayout.</div>
 </li>
 </ul>
 </li>

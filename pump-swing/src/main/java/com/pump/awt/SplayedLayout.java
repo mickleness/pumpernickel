@@ -354,7 +354,7 @@ public class SplayedLayout implements LayoutManager {
 	}
 
 	/**
-	 * @param separatorSize
+	 * @param newSeparatorSize
 	 *            an optional padding to insert between all splayed elements.
 	 *            This may be used in JBreadCrumbs to paint a separator arrow or
 	 *            pipe.

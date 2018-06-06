@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10};
+var methods = {"i0":9,"i1":9,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -128,7 +128,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd>java.awt.image.ImageObserver, java.awt.MenuContainer, java.io.Serializable, javax.accessibility.Accessible</dd>
+<dd><a href="../../../com/pump/showcase/ShowcaseDemo.html" title="interface in com.pump.showcase">ShowcaseDemo</a>, java.awt.image.ImageObserver, java.awt.MenuContainer, java.io.Serializable, javax.accessibility.Accessible</dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -137,7 +137,8 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public abstract class <span class="typeNameLabel">TransitionDemo</span>
-extends javax.swing.JPanel</pre>
+extends javax.swing.JPanel
+implements <a href="../../../com/pump/showcase/ShowcaseDemo.html" title="interface in com.pump.showcase">ShowcaseDemo</a></pre>
 <div class="block">An abstract UI to demo a set of transitions.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -226,14 +227,12 @@ extends javax.swing.JPanel</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/TransitionDemo.html#TransitionDemo-java.awt.image.BufferedImage-java.awt.image.BufferedImage-com.pump.image.transition.Transition:A-boolean-">TransitionDemo</a></span>(java.awt.image.BufferedImage&nbsp;bi1,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/TransitionDemo.html#TransitionDemo-java.awt.image.BufferedImage-java.awt.image.BufferedImage-com.pump.image.transition.Transition:A:A-">TransitionDemo</a></span>(java.awt.image.BufferedImage&nbsp;bi1,
               java.awt.image.BufferedImage&nbsp;bi2,
-              <a href="../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[]&nbsp;transitions,
-              boolean&nbsp;includeInterpolationControls)</code>&nbsp;</td>
+              <a href="../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[][]&nbsp;transitions)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/TransitionDemo.html#TransitionDemo-com.pump.image.transition.Transition:A-boolean-">TransitionDemo</a></span>(<a href="../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[]&nbsp;transitions,
-              boolean&nbsp;includeInterpolationControls)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/TransitionDemo.html#TransitionDemo-com.pump.image.transition.Transition:A:A-">TransitionDemo</a></span>(<a href="../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[][]&nbsp;transitions)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -255,8 +254,18 @@ extends javax.swing.JPanel</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/TransitionDemo.html#createQualityHints--">createQualityHints</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static java.awt.RenderingHints</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/TransitionDemo.html#createSpeedHints--">createSpeedHints</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>java.awt.RenderingHints</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/TransitionDemo.html#getQualityHints--">getQualityHints</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/TransitionDemo.html#getRenderingHints--">getRenderingHints</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/TransitionDemo.html#isSeparatorVisible--">isSeparatorVisible</a></span>()</code>
+<div class="block">Return true if a horizontal separator should be shown below the header.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -294,6 +303,13 @@ extends javax.swing.JPanel</pre>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, wait, wait, wait</code></li>
 </ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.com.pump.showcase.ShowcaseDemo">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;com.pump.showcase.<a href="../../../com/pump/showcase/ShowcaseDemo.html" title="interface in com.pump.showcase">ShowcaseDemo</a></h3>
+<code><a href="../../../com/pump/showcase/ShowcaseDemo.html#getClasses--">getClasses</a>, <a href="../../../com/pump/showcase/ShowcaseDemo.html#getHelpURL--">getHelpURL</a>, <a href="../../../com/pump/showcase/ShowcaseDemo.html#getKeywords--">getKeywords</a>, <a href="../../../com/pump/showcase/ShowcaseDemo.html#getTitle--">getTitle</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -308,22 +324,16 @@ extends javax.swing.JPanel</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="TransitionDemo-com.pump.image.transition.Transition:A-boolean-">
+<a name="TransitionDemo-com.pump.image.transition.Transition:A:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>TransitionDemo</h4>
-<pre>public&nbsp;TransitionDemo(<a href="../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[]&nbsp;transitions,
-                      boolean&nbsp;includeInterpolationControls)</pre>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>includeInterpolationControls</code> - true if a combobox for the interpolation hint should be
-            visible.</dd>
-</dl>
+<pre>public&nbsp;TransitionDemo(<a href="../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[][]&nbsp;transitions)</pre>
 </li>
 </ul>
-<a name="TransitionDemo-java.awt.image.BufferedImage-java.awt.image.BufferedImage-com.pump.image.transition.Transition:A-boolean-">
+<a name="TransitionDemo-java.awt.image.BufferedImage-java.awt.image.BufferedImage-com.pump.image.transition.Transition:A:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -331,13 +341,7 @@ extends javax.swing.JPanel</pre>
 <h4>TransitionDemo</h4>
 <pre>public&nbsp;TransitionDemo(java.awt.image.BufferedImage&nbsp;bi1,
                       java.awt.image.BufferedImage&nbsp;bi2,
-                      <a href="../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[]&nbsp;transitions,
-                      boolean&nbsp;includeInterpolationControls)</pre>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>includeInterpolationControls</code> - true if a combobox for the interpolation hint should be
-            visible.</dd>
-</dl>
+                      <a href="../../../com/pump/image/transition/Transition.html" title="interface in com.pump.image.transition">Transition</a>[][]&nbsp;transitions)</pre>
 </li>
 </ul>
 </li>
@@ -348,22 +352,48 @@ extends javax.swing.JPanel</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getQualityHints--">
+<a name="getRenderingHints--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getQualityHints</h4>
-<pre>public&nbsp;java.awt.RenderingHints&nbsp;getQualityHints()</pre>
+<h4>getRenderingHints</h4>
+<pre>public&nbsp;java.awt.RenderingHints&nbsp;getRenderingHints()</pre>
 </li>
 </ul>
 <a name="createQualityHints--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>createQualityHints</h4>
 <pre>public static&nbsp;java.awt.RenderingHints&nbsp;createQualityHints()</pre>
+</li>
+</ul>
+<a name="createSpeedHints--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createSpeedHints</h4>
+<pre>public static&nbsp;java.awt.RenderingHints&nbsp;createSpeedHints()</pre>
+</li>
+</ul>
+<a name="isSeparatorVisible--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isSeparatorVisible</h4>
+<pre>public&nbsp;boolean&nbsp;isSeparatorVisible()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/pump/showcase/ShowcaseDemo.html#isSeparatorVisible--">ShowcaseDemo</a></code></span></div>
+<div class="block">Return true if a horizontal separator should be shown below the header.
+ <p>
+ Some demos that include a CollapsibleContainer may not need separators.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../com/pump/showcase/ShowcaseDemo.html#isSeparatorVisible--">isSeparatorVisible</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/pump/showcase/ShowcaseDemo.html" title="interface in com.pump.showcase">ShowcaseDemo</a></code></dd>
+</dl>
 </li>
 </ul>
 </li>

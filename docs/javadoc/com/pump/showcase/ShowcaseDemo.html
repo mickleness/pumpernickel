@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -48,7 +48,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../com/pump/showcase/ShapeBoundsDemo.html" title="class in com.pump.showcase"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/showcase/ShowcaseChartDemo.html" title="class in com.pump.showcase"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../com/pump/showcase/Spiral2DDemo.html" title="class in com.pump.showcase"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../com/pump/showcase/AlphaCompositeDemo.html" title="class in com.pump.showcase">AlphaCompositeDemo</a>, <a href="../../../com/pump/showcase/AngleSliderUIDemo.html" title="class in com.pump.showcase">AngleSliderUIDemo</a>, <a href="../../../com/pump/showcase/CircularProgressBarUIDemo.html" title="class in com.pump.showcase">CircularProgressBarUIDemo</a>, <a href="../../../com/pump/showcase/StrokeMouseSmoothingDemo.html" title="class in com.pump.showcase">StrokeMouseSmoothingDemo</a>, <a href="../../../com/pump/showcase/TextEffectDemo.html" title="class in com.pump.showcase">TextEffectDemo</a></dd>
+<dd><a href="../../../com/pump/showcase/AlphaCompositeDemo.html" title="class in com.pump.showcase">AlphaCompositeDemo</a>, <a href="../../../com/pump/showcase/AngleSliderUIDemo.html" title="class in com.pump.showcase">AngleSliderUIDemo</a>, <a href="../../../com/pump/showcase/AudioPlayerDemo.html" title="class in com.pump.showcase">AudioPlayerDemo</a>, <a href="../../../com/pump/showcase/AWTMonitorDemo.html" title="class in com.pump.showcase">AWTMonitorDemo</a>, <a href="../../../com/pump/showcase/BmpComparisonDemo.html" title="class in com.pump.showcase">BmpComparisonDemo</a>, <a href="../../../com/pump/showcase/BoxTabbedPaneUIDemo.html" title="class in com.pump.showcase">BoxTabbedPaneUIDemo</a>, <a href="../../../com/pump/showcase/BreadCrumbDemo.html" title="class in com.pump.showcase">BreadCrumbDemo</a>, <a href="../../../com/pump/showcase/CircularProgressBarUIDemo.html" title="class in com.pump.showcase">CircularProgressBarUIDemo</a>, <a href="../../../com/pump/showcase/ClickSensitivityControlDemo.html" title="class in com.pump.showcase">ClickSensitivityControlDemo</a>, <a href="../../../com/pump/showcase/ClipperDemo.html" title="class in com.pump.showcase">ClipperDemo</a>, <a href="../../../com/pump/showcase/DecoratedDemo.html" title="class in com.pump.showcase">DecoratedDemo</a>, <a href="../../../com/pump/showcase/JPopoverDemo.html" title="class in com.pump.showcase">JPopoverDemo</a>, <a href="../../../com/pump/showcase/JToolTipDemo.html" title="class in com.pump.showcase">JToolTipDemo</a>, <a href="../../../com/pump/showcase/QButtonUIDemo.html" title="class in com.pump.showcase">QButtonUIDemo</a>, <a href="../../../com/pump/showcase/QPanelUIDemo.html" title="class in com.pump.showcase">QPanelUIDemo</a>, <a href="../../../com/pump/showcase/ScalingDemo.html" title="class in com.pump.showcase">ScalingDemo</a>, <a href="../../../com/pump/showcase/ShowcaseChartDemo.html" title="class in com.pump.showcase">ShowcaseChartDemo</a>, <a href="../../../com/pump/showcase/StrokeMouseSmoothingDemo.html" title="class in com.pump.showcase">StrokeMouseSmoothingDemo</a>, <a href="../../../com/pump/showcase/TextEffectDemo.html" title="class in com.pump.showcase">TextEffectDemo</a>, <a href="../../../com/pump/showcase/ThrobberDemo.html" title="class in com.pump.showcase">ThrobberDemo</a>, <a href="../../../com/pump/showcase/Transition2DDemo.html" title="class in com.pump.showcase">Transition2DDemo</a>, <a href="../../../com/pump/showcase/Transition3DDemo.html" title="class in com.pump.showcase">Transition3DDemo</a>, <a href="../../../com/pump/showcase/TransitionDemo.html" title="class in com.pump.showcase">TransitionDemo</a></dd>
 </dl>
 <hr>
 <br>
@@ -146,6 +146,12 @@ var activeTableTab = "activeTableTab";
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/ShowcaseDemo.html#getTitle--">getTitle</a></span>()</code>
 <div class="block">This is the title of the demo panel.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/showcase/ShowcaseDemo.html#isSeparatorVisible--">isSeparatorVisible</a></span>()</code>
+<div class="block">Return true if a horizontal separator should be shown below the header.</div>
 </td>
 </tr>
 </table>
@@ -197,11 +203,23 @@ var activeTableTab = "activeTableTab";
 <a name="getClasses--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getClasses</h4>
 <pre>java.lang.Class&lt;?&gt;[]&nbsp;getClasses()</pre>
 <div class="block">Return classes that are demonstrated to assist in searches.</div>
+</li>
+</ul>
+<a name="isSeparatorVisible--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isSeparatorVisible</h4>
+<pre>boolean&nbsp;isSeparatorVisible()</pre>
+<div class="block">Return true if a horizontal separator should be shown below the header.
+ <p>
+ Some demos that include a CollapsibleContainer may not need separators.</div>
 </li>
 </ul>
 </li>
@@ -231,7 +249,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../com/pump/showcase/ShapeBoundsDemo.html" title="class in com.pump.showcase"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/showcase/ShowcaseChartDemo.html" title="class in com.pump.showcase"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../com/pump/showcase/Spiral2DDemo.html" title="class in com.pump.showcase"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -173,6 +173,12 @@ implements java.io.Serializable</pre>
 <div class="block">This applies bound checking for numeric values.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.SetBoundsChecker.html" title="class in com.pump.util">ObservableProperties.SetBoundsChecker</a>&lt;<a href="../../../com/pump/util/ObservableProperties.SetBoundsChecker.html" title="type parameter in ObservableProperties.SetBoundsChecker">T</a>&gt;</span></code>
+<div class="block">This makes sure a value is within a set of candidates.</div>
+</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -315,64 +321,72 @@ implements java.io.Serializable</pre>
 </td>
 </tr>
 <tr id="i10" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#equals-java.lang.Object-">equals</a></span>(java.lang.Object&nbsp;obj)</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#get-com.pump.util.ObservableProperties.Key-">get</a></span>(<a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;T&gt;&nbsp;key)</code>
 <div class="block">Retrieve a property in the DEFAULT property group.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#get-java.lang.String-com.pump.util.ObservableProperties.Key-">get</a></span>(java.lang.String&nbsp;propertyGroup,
    <a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;T&gt;&nbsp;key)</code>
 <div class="block">Return a property from a given property group.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>java.util.SortedSet&lt;java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#getGroupNames--">getGroupNames</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#getMap--">getMap</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#getMap-boolean-boolean-java.lang.String...-">getMap</a></span>(boolean&nbsp;prependGroupID,
       boolean&nbsp;identifyClassNames,
       java.lang.String...&nbsp;groupIDs)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>java.util.Map&lt;<a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;?&gt;,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#getMap-java.lang.String-">getMap</a></span>(java.lang.String&nbsp;groupName)</code>
 <div class="block">Return all the properties in a particular category of this
  ObservableProperties.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>java.beans.PropertyChangeListener[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#getPropertyListeners--">getPropertyListeners</a></span>()</code>
 <div class="block">Return all the PropertyChangeListeners that listen for changes to DEFAULT
  properties.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>java.beans.PropertyChangeListener[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#getPropertyListeners-java.lang.String-">getPropertyListeners</a></span>(java.lang.String&nbsp;propertyGroup)</code>
 <div class="block">Return all the PropertyChangeListeners that listen for changes to a given
  group of properties.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>java.util.Set&lt;<a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;?&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#keys-java.lang.String-">keys</a></span>(java.lang.String&nbsp;propertyGroup)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#removeListener-java.beans.PropertyChangeListener-">removeListener</a></span>(java.beans.PropertyChangeListener&nbsp;pcl)</code>
 <div class="block">Remove a PropertyChangeListener for <a href="../../../com/pump/util/ObservableProperties.html#DEFAULT"><code>DEFAULT</code></a> properties.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#removeListener-java.lang.String-com.pump.util.ObservableProperties.Key-java.awt.event.ActionListener-">removeListener</a></span>(java.lang.String&nbsp;propertyGroup,
               <a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;?&gt;&nbsp;key,
@@ -380,7 +394,7 @@ implements java.io.Serializable</pre>
 <div class="block">Remove an ActionListener for a given group of properties.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#removeListener-java.lang.String-com.pump.util.ObservableProperties.Key-javax.swing.event.ChangeListener-">removeListener</a></span>(java.lang.String&nbsp;propertyGroup,
               <a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;?&gt;&nbsp;key,
@@ -388,7 +402,7 @@ implements java.io.Serializable</pre>
 <div class="block">Remove a ChangeListener for a given group of properties.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#removeListener-java.lang.String-com.pump.util.ObservableProperties.Key-java.beans.PropertyChangeListener-">removeListener</a></span>(java.lang.String&nbsp;propertyGroup,
               <a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;?&gt;&nbsp;key,
@@ -396,21 +410,21 @@ implements java.io.Serializable</pre>
 <div class="block">Remove a PropertyChangeListener for a given group of properties.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#removeListener-java.lang.String-java.beans.PropertyChangeListener-">removeListener</a></span>(java.lang.String&nbsp;propertyGroup,
               java.beans.PropertyChangeListener&nbsp;pcl)</code>
 <div class="block">Remove a PropertyChangeListener for a given group of properties.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#set-com.pump.util.ObservableProperties.Key-T-">set</a></span>(<a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;T&gt;&nbsp;key,
    T&nbsp;value)</code>
 <div class="block">Assign a property to the DEFAULT property group.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#set-java.lang.String-com.pump.util.ObservableProperties.Key-T-">set</a></span>(java.lang.String&nbsp;propertyGroup,
    <a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;T&gt;&nbsp;key,
@@ -418,7 +432,7 @@ implements java.io.Serializable</pre>
 <div class="block">Set a property in a given property group.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/ObservableProperties.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -428,7 +442,7 @@ implements java.io.Serializable</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, wait, wait, wait</code></li>
+<code>clone, finalize, getClass, notify, notifyAll, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -977,7 +991,7 @@ implements java.io.Serializable</pre>
 <a name="getMap-java.lang.String-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getMap</h4>
 <pre>public&nbsp;java.util.Map&lt;<a href="../../../com/pump/util/ObservableProperties.Key.html" title="class in com.pump.util">ObservableProperties.Key</a>&lt;?&gt;,java.lang.Object&gt;&nbsp;getMap(java.lang.String&nbsp;groupName)</pre>
@@ -989,6 +1003,32 @@ implements java.io.Serializable</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all the properties in the group provided. This will be an empty
          map if the group name is unused.</dd>
+</dl>
+</li>
+</ul>
+<a name="hashCode--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;hashCode()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a name="equals-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;equals(java.lang.Object&nbsp;obj)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
 </dl>
 </li>
 </ul>

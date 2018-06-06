@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -147,16 +147,28 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/Warnings.html#getStackTrace-java.lang.Throwable-">getStackTrace</a></span>(java.lang.Throwable&nbsp;t)</code>
+<div class="block">Return Thread.dumpStack() as a String.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/Warnings.html#println-java.lang.String-long-">println</a></span>(java.lang.String&nbsp;text,
        long&nbsp;delay)</code>
 <div class="block">Prints this message to the console, but only once every so often.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/Warnings.html#printOnce-java.lang.String-">printOnce</a></span>(java.lang.String&nbsp;message)</code>
 <div class="block">Prints a message once to System.err.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/util/Warnings.html#printOnce-java.lang.Throwable-">printOnce</a></span>(java.lang.Throwable&nbsp;t)</code>
+<div class="block">Prints a stacktrace once to System.err.</div>
 </td>
 </tr>
 </table>
@@ -215,7 +227,7 @@ extends java.lang.Object</pre>
 <a name="println-java.lang.String-long-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>println</h4>
 <pre>public static&nbsp;void&nbsp;println(java.lang.String&nbsp;text,
@@ -230,6 +242,30 @@ extends java.lang.Object</pre>
 <dd><code>delay</code> - the number of milliseconds to wait before another message may
             be printed.</dd>
 </dl>
+</li>
+</ul>
+<a name="printOnce-java.lang.Throwable-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>printOnce</h4>
+<pre>public static&nbsp;void&nbsp;printOnce(java.lang.Throwable&nbsp;t)</pre>
+<div class="block">Prints a stacktrace once to System.err. A unique string will only be
+ printed once per session. This is intended for cases where a developer
+ should be alerted to a possible problem, but the console should not be
+ flooded with messages. Also the "problem" is one that only deserves a
+ warning -- not an exception.</div>
+</li>
+</ul>
+<a name="getStackTrace-java.lang.Throwable-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getStackTrace</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;getStackTrace(java.lang.Throwable&nbsp;t)</pre>
+<div class="block">Return Thread.dumpStack() as a String.</div>
 </li>
 </ul>
 </li>

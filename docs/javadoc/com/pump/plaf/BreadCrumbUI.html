@@ -135,20 +135,24 @@ extends javax.swing.plaf.ComponentUI</pre>
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static javax.swing.Icon</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/BreadCrumbUI.html#DEFAULT_SEPARATOR_ICON">DEFAULT_SEPARATOR_ICON</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected javax.swing.Icon</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/BreadCrumbUI.html#defaultSeparatorIcon">defaultSeparatorIcon</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/BreadCrumbUI.html#PATH_NODE_INDEX_KEY">PATH_NODE_INDEX_KEY</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/BreadCrumbUI.html#PATH_NODE_KEY">PATH_NODE_KEY</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/BreadCrumbUI.html#SEPARATOR_ICON_KEY">SEPARATOR_ICON_KEY</a></span></code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/BreadCrumbUI.html#PROPERTY_SEPARATOR_ICON">PROPERTY_SEPARATOR_ICON</a></span></code>
 <div class="block">This client property of a <code>JBreadCrumb</code> defines the icon used
  as a separator.</div>
 </td>
@@ -206,10 +210,8 @@ extends javax.swing.plaf.ComponentUI</pre>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>protected javax.swing.plaf.LabelUI</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/BreadCrumbUI.html#getLabelUI--">getLabelUI</a></span>()</code>
-<div class="block">Return the LabelUI each crumb should use.</div>
-</td>
+<td class="colFirst"><code>java.awt.Dimension</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/BreadCrumbUI.html#getPreferredSize-javax.swing.JComponent-">getPreferredSize</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>protected javax.swing.Icon</code></td>
@@ -246,7 +248,7 @@ extends javax.swing.plaf.ComponentUI</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;javax.swing.plaf.ComponentUI</h3>
-<code>contains, getAccessibleChild, getAccessibleChildrenCount, getBaseline, getBaselineResizeBehavior, getMaximumSize, getMinimumSize, getPreferredSize, update</code></li>
+<code>contains, getAccessibleChild, getAccessibleChildrenCount, getBaseline, getBaselineResizeBehavior, getMaximumSize, getMinimumSize, update</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -287,15 +289,24 @@ extends javax.swing.plaf.ComponentUI</pre>
 <pre>protected static final&nbsp;java.lang.String PATH_NODE_INDEX_KEY</pre>
 </li>
 </ul>
-<a name="SEPARATOR_ICON_KEY">
+<a name="PROPERTY_SEPARATOR_ICON">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>SEPARATOR_ICON_KEY</h4>
-<pre>public static final&nbsp;java.lang.String SEPARATOR_ICON_KEY</pre>
+<h4>PROPERTY_SEPARATOR_ICON</h4>
+<pre>public static final&nbsp;java.lang.String PROPERTY_SEPARATOR_ICON</pre>
 <div class="block">This client property of a <code>JBreadCrumb</code> defines the icon used
  as a separator.</div>
+</li>
+</ul>
+<a name="DEFAULT_SEPARATOR_ICON">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_SEPARATOR_ICON</h4>
+<pre>public static final&nbsp;javax.swing.Icon DEFAULT_SEPARATOR_ICON</pre>
 </li>
 </ul>
 <a name="defaultSeparatorIcon">
@@ -390,14 +401,17 @@ extends javax.swing.plaf.ComponentUI</pre>
 <pre>protected&nbsp;&lt;E&gt;&nbsp;void&nbsp;refreshUI(<a href="../../../com/pump/swing/JBreadCrumb.html" title="class in com.pump.swing">JBreadCrumb</a>&lt;E&gt;&nbsp;comp)</pre>
 </li>
 </ul>
-<a name="getLabelUI--">
+<a name="getPreferredSize-javax.swing.JComponent-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getLabelUI</h4>
-<pre>protected&nbsp;javax.swing.plaf.LabelUI&nbsp;getLabelUI()</pre>
-<div class="block">Return the LabelUI each crumb should use.</div>
+<h4>getPreferredSize</h4>
+<pre>public&nbsp;java.awt.Dimension&nbsp;getPreferredSize(javax.swing.JComponent&nbsp;c)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>getPreferredSize</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.ComponentUI</code></dd>
+</dl>
 </li>
 </ul>
 <a name="createUI-javax.swing.JComponent-">

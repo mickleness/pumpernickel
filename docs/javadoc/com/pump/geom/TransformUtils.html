@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -150,6 +150,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static java.awt.geom.AffineTransform</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/TransformUtils.html#createAffineTransform-java.awt.geom.Dimension2D-java.awt.geom.Dimension2D-">createAffineTransform</a></span>(java.awt.geom.Dimension2D&nbsp;d1,
+                     java.awt.geom.Dimension2D&nbsp;d2)</code>
+<div class="block">Create a simple scaling AffineTransform that transforms a rectangle
+ bounded by (0,0,d1.widthd,d2.height) to (0,0,d2.width,d2.height)</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static java.awt.geom.AffineTransform</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/TransformUtils.html#createAffineTransform-double-double-double-double-double-double-double-double-double-double-double-double-">createAffineTransform</a></span>(double&nbsp;oldX1,
                      double&nbsp;oldY1,
                      double&nbsp;oldX2,
@@ -166,7 +174,7 @@ extends java.lang.Object</pre>
  links each <code>initial</code> to <code>final</code> point.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static java.awt.geom.AffineTransform</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/TransformUtils.html#createAffineTransform-java.awt.geom.Point2D-java.awt.geom.Point2D-java.awt.geom.Point2D-java.awt.geom.Point2D-java.awt.geom.Point2D-java.awt.geom.Point2D-">createAffineTransform</a></span>(java.awt.geom.Point2D&nbsp;initialP1,
                      java.awt.geom.Point2D&nbsp;initialP2,
@@ -178,7 +186,7 @@ extends java.lang.Object</pre>
  links each <code>initial</code> to <code>final</code> point.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static java.awt.geom.AffineTransform</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/TransformUtils.html#createAffineTransform-java.awt.geom.Rectangle2D-java.awt.geom.Rectangle2D-">createAffineTransform</a></span>(java.awt.geom.Rectangle2D&nbsp;r1,
                      java.awt.geom.Rectangle2D&nbsp;r2)</code>
@@ -186,25 +194,27 @@ extends java.lang.Object</pre>
  onto another.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>static java.awt.geom.AffineTransform</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/TransformUtils.html#flipHorizontal-double-">flipHorizontal</a></span>(double&nbsp;x)</code>
-<div class="block">Create an AffineTransform that flips everything horizontally around a given x-value.</div>
-</td>
-</tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static java.awt.geom.AffineTransform</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/TransformUtils.html#flipVertical-double-">flipVertical</a></span>(double&nbsp;y)</code>
-<div class="block">Create an AffineTransform that flips everything vertically around a given y-value.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/TransformUtils.html#flipHorizontal-double-">flipHorizontal</a></span>(double&nbsp;x)</code>
+<div class="block">Create an AffineTransform that flips everything horizontally around a
+ given x-value.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>static java.awt.geom.AffineTransform</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/TransformUtils.html#flipVertical-double-">flipVertical</a></span>(double&nbsp;y)</code>
+<div class="block">Create an AffineTransform that flips everything vertically around a given
+ y-value.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/TransformUtils.html#getRotationAngle-java.awt.geom.AffineTransform-">getRotationAngle</a></span>(java.awt.geom.AffineTransform&nbsp;transform)</code>
 <div class="block">Compute the rotation angle of an affine transformation.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static java.awt.geom.AffineTransform</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/geom/TransformUtils.html#tween-java.awt.geom.AffineTransform-java.awt.geom.AffineTransform-float-boolean-">tween</a></span>(java.awt.geom.AffineTransform&nbsp;a,
      java.awt.geom.AffineTransform&nbsp;b,
@@ -398,17 +408,31 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>flipHorizontal</h4>
 <pre>public static&nbsp;java.awt.geom.AffineTransform&nbsp;flipHorizontal(double&nbsp;x)</pre>
-<div class="block">Create an AffineTransform that flips everything horizontally around a given x-value.</div>
+<div class="block">Create an AffineTransform that flips everything horizontally around a
+ given x-value.</div>
 </li>
 </ul>
 <a name="flipVertical-double-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>flipVertical</h4>
 <pre>public static&nbsp;java.awt.geom.AffineTransform&nbsp;flipVertical(double&nbsp;y)</pre>
-<div class="block">Create an AffineTransform that flips everything vertically around a given y-value.</div>
+<div class="block">Create an AffineTransform that flips everything vertically around a given
+ y-value.</div>
+</li>
+</ul>
+<a name="createAffineTransform-java.awt.geom.Dimension2D-java.awt.geom.Dimension2D-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>createAffineTransform</h4>
+<pre>public static&nbsp;java.awt.geom.AffineTransform&nbsp;createAffineTransform(java.awt.geom.Dimension2D&nbsp;d1,
+                                                                  java.awt.geom.Dimension2D&nbsp;d2)</pre>
+<div class="block">Create a simple scaling AffineTransform that transforms a rectangle
+ bounded by (0,0,d1.widthd,d2.height) to (0,0,d2.width,d2.height)</div>
 </li>
 </ul>
 </li>

@@ -27,7 +27,6 @@ com.pump.diagram.swing
 com.pump.geom
 com.pump.geom.area
 com.pump.geom.intersect
-com.pump.geom.knot
 com.pump.graphics
 com.pump.icon
 com.pump.icon.button
@@ -53,6 +52,7 @@ com.pump.mac
 com.pump.math
 com.pump.math.function
 com.pump.plaf
+com.pump.plaf.decorate
 com.pump.print
 com.pump.print.swing
 com.pump.reflect

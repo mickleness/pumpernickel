@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":9,"i10":9,"i11":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":9,"i10":9,"i11":9,"i12":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -214,7 +214,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/audio/WavReader.html#read--">read</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/audio/WavReader.html#read--">read</a></span>()</code>
+<div class="block">Read all the data in this file.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -243,6 +245,12 @@ extends java.lang.Object</pre>
           int&nbsp;offset,
           int&nbsp;len)</code>
 <div class="block">Reads a string.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/audio/WavReader.html#skip--">skip</a></span>()</code>
+<div class="block">Skips all the data in this file.</div>
 </td>
 </tr>
 </table>
@@ -409,7 +417,27 @@ extends java.lang.Object</pre>
 <h4>read</h4>
 <pre>public&nbsp;void&nbsp;read()
           throws java.io.IOException</pre>
+<div class="block">Read all the data in this file.</div>
 <dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd>
+</dl>
+</li>
+</ul>
+<a name="skip--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>skip</h4>
+<pre>public&nbsp;long&nbsp;skip()
+          throws java.io.IOException</pre>
+<div class="block">Skips all the data in this file.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the number of bytes that contain audio data. This will be the sum
+         of the length of all the byte arrays passed to
+         <a href="../../../com/pump/audio/WavReader.html#processSamples-byte:A-int-int-int-"><code>processSamples(byte[], int, int, int)</code></a>.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 </dl>

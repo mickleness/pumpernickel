@@ -149,7 +149,7 @@ public class GradientPanelUI extends AbstractPanelUI {
 	/**
 	 * Return the bottom color of the vertical gradient.
 	 * 
-	 * @see #KEY_COLOR_BOTTOM
+	 * @see #KEY_FILL_COLOR_2
 	 */
 	public Color getFillColor2() {
 		return getProperty(KEY_FILL_COLOR_2);
@@ -158,7 +158,7 @@ public class GradientPanelUI extends AbstractPanelUI {
 	/**
 	 * Set the bottom color of the vertical gradient.
 	 * 
-	 * @see #KEY_COLOR_BOTTOM
+	 * @see #KEY_FILL_COLOR_2
 	 */
 	public void setFillColor2(Color c) {
 		setProperty(KEY_FILL_COLOR_2, c);

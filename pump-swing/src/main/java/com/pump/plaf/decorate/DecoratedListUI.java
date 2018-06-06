@@ -32,8 +32,6 @@ import com.pump.blog.Blurb;
  * property {@link #KEY_DECORATIONS} on a JList to a series of
  * {@link ListDecoration} objects, those decorations are constantly consulted to
  * add clickable icons overlaying rows.
- * 
- * @see com.pump.showcase.AudioComponentsDemo
  */
 @Blurb(imageName = "SoundList.png", title = "ListUIs: Adding decorations to cells", releaseDate = "June 2012", summary = "This demonstrates a new ListUI to add decorations to JList cells. "
 		+ "The demo emulates Apple's music file icons.", article = "http://javagraphics.blogspot.com/2012/06/listuis-adding-decorations-to-cells.html")

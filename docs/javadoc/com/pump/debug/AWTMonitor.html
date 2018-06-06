@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../com/pump/debug/AWTMonitorDemo.html" title="class in com.pump.debug"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/debug/AWTPanicListener.html" title="interface in com.pump.debug"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?com/pump/debug/AWTMonitor.html" target="_top">Frames</a></li>
@@ -163,20 +163,30 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static java.lang.Thread</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/debug/AWTMonitor.html#createAWTMonitorThread-java.lang.String-long-long-java.lang.String-java.io.PrintStream-">createAWTMonitorThread</a></span>(java.lang.String&nbsp;applicationName,
+                      long&nbsp;stackTraceDelay,
+                      long&nbsp;panicListenerDelay,
+                      java.lang.String&nbsp;threadName,
+                      java.io.PrintStream&nbsp;dest)</code>
+<div class="block">Create a Thread that monitors the AWT thread.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/debug/AWTMonitor.html#dumpThreads-java.lang.String-java.io.PrintStream-">dumpThreads</a></span>(java.lang.String&nbsp;headerText,
            java.io.PrintStream&nbsp;dest)</code>
 <div class="block">This effectively calls Thread.dumpStack() for every available thread.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/debug/AWTMonitor.html#installAWTListener-java.lang.String-boolean-">installAWTListener</a></span>(java.lang.String&nbsp;applicationName,
                   boolean&nbsp;addPanicDialogPrompt)</code>
 <div class="block">This installs a thread that monitors the AWT thread.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/debug/AWTMonitor.html#installAWTListener-java.lang.String-long-long-boolean-">installAWTListener</a></span>(java.lang.String&nbsp;applicationName,
                   long&nbsp;stackTraceDelay,
@@ -185,7 +195,7 @@ extends java.lang.Object</pre>
 <div class="block">Installs a thread that monitors the AWT thread.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/debug/AWTMonitor.html#removePanicListener-com.pump.debug.AWTPanicListener-">removePanicListener</a></span>(<a href="../../../com/pump/debug/AWTPanicListener.html" title="interface in com.pump.debug">AWTPanicListener</a>&nbsp;l)</code>
 <div class="block">Removes a <code>AWTPanicListener</code>.</div>
@@ -300,6 +310,23 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
+<a name="createAWTMonitorThread-java.lang.String-long-long-java.lang.String-java.io.PrintStream-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createAWTMonitorThread</h4>
+<pre>public static&nbsp;java.lang.Thread&nbsp;createAWTMonitorThread(java.lang.String&nbsp;applicationName,
+                                                      long&nbsp;stackTraceDelay,
+                                                      long&nbsp;panicListenerDelay,
+                                                      java.lang.String&nbsp;threadName,
+                                                      java.io.PrintStream&nbsp;dest)</pre>
+<div class="block">Create a Thread that monitors the AWT thread.
+ <p>
+ Generally this method is not recommended for external invocation, but the
+ PumpernickelShowcaseApp's demo calls this.</div>
+</li>
+</ul>
 <a name="dumpThreads-java.lang.String-java.io.PrintStream-">
 <!--   -->
 </a>
@@ -344,7 +371,7 @@ extends java.lang.Object</pre>
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../com/pump/debug/AWTMonitorDemo.html" title="class in com.pump.debug"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/debug/AWTPanicListener.html" title="interface in com.pump.debug"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?com/pump/debug/AWTMonitor.html" target="_top">Frames</a></li>
