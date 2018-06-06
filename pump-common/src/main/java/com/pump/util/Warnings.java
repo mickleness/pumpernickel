@@ -10,6 +10,9 @@
  */
 package com.pump.util;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,6 +65,32 @@ public class Warnings {
 		if (l == null || currentTime > l.longValue()) {
 			textToTime.put(text, new Long(currentTime + delay));
 			System.err.println(text);
+		}
+	}
+
+	/**
+	 * Prints a stacktrace once to System.err. A unique string will only be
+	 * printed once per session. This is intended for cases where a developer
+	 * should be alerted to a possible problem, but the console should not be
+	 * flooded with messages. Also the "problem" is one that only deserves a
+	 * warning -- not an exception.
+	 */
+	public static void printOnce(Throwable t) {
+		printOnce(getStackTrace(t));
+	}
+
+	/**
+	 * Return Thread.dumpStack() as a String.
+	 */
+	public static String getStackTrace(Throwable t) {
+		try (StringWriter w = new StringWriter()) {
+			try (PrintWriter pw = new PrintWriter(w)) {
+				t.printStackTrace(pw);
+				return w.toString();
+			}
+		} catch (IOException e) {
+			// this won't happen
+			throw new RuntimeException(e);
 		}
 	}
 }
