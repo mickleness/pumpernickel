@@ -351,13 +351,11 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 
 			if (!(tabContainer.getUI() instanceof TabButtonUI)) {
 				tabContainer.setUI(new TabButtonUI());
-				tabContainer.putClientProperty(
-						FilledButtonUI.HORIZONTAL_POSITION,
-						FilledButtonUI.MIDDLE);
-				tabContainer
-						.putClientProperty(FilledButtonUI.VERTICAL_POSITION,
-								FilledButtonUI.MIDDLE);
-				tabContainer.putClientProperty(FilledButtonUI.STROKE_PAINTED,
+				tabContainer.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
+						QButtonUI.MIDDLE);
+				tabContainer.putClientProperty(QButtonUI.VERTICAL_POSITION,
+						QButtonUI.MIDDLE);
+				tabContainer.putClientProperty(QButtonUI.STROKE_PAINTED,
 						Boolean.FALSE);
 			}
 		}

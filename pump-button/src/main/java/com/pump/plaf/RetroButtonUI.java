@@ -25,10 +25,8 @@ import javax.swing.plaf.ComponentUI;
  * <img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/RetroButtonUI.png"
  * alt="RetroButtonUI Screenshot">
- * 
- * @see com.pump.showcase.FilledButtonUIDemo
  */
-public class RetroButtonUI extends FilledButtonUI {
+public class RetroButtonUI extends QButtonUI {
 
 	public static ButtonShape RETRO_SHAPE = new ButtonShape(3, 10, 3, 10, 3,
 			Short.MAX_VALUE, 3, Short.MAX_VALUE);

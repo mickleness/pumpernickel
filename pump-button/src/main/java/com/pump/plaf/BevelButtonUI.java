@@ -34,10 +34,8 @@ import javax.swing.plaf.ComponentUI;
  * According to <a href="http://nadeausoftware.com/node/87">this</a> article,
  * the "bevel" look is often used for: <BR>
  * "Buttons with icons, or buttons sized larger than a standard Mac button".
- * 
- * @see com.pump.showcase.FilledButtonUIDemo
  */
-public class BevelButtonUI extends FilledButtonUI {
+public class BevelButtonUI extends QButtonUI {
 	public static final ButtonShape BEVEL_SHAPE = new ButtonShape(4, 4);
 
 	/**

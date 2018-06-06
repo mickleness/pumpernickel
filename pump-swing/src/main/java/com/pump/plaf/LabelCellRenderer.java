@@ -206,7 +206,7 @@ public class LabelCellRenderer<T> implements ListCellRenderer<T>,
 	 *         UI actually renders the focus through the border.
 	 */
 	protected boolean isFocusBorderActive() {
-		if (comboBox != null && comboBox.getUI() instanceof FilledComboBoxUI)
+		if (comboBox != null && comboBox.getUI() instanceof QComboBoxUI)
 			return false;
 		return !JVM.isMac;
 	}

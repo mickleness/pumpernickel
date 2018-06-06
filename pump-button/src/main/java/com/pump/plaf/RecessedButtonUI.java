@@ -35,7 +35,7 @@ import javax.swing.plaf.ComponentUI;
  * 
  * @see com.pump.showcase.FilledButtonUIDemo
  */
-public class RecessedButtonUI extends FilledButtonUI {
+public class RecessedButtonUI extends QButtonUI {
 
 	public static final ButtonShape RECESSED_SHAPE = new ButtonShape(8, 12);
 

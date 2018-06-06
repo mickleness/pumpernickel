@@ -52,6 +52,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicGraphicsUtils;
@@ -86,7 +88,7 @@ import com.pump.plaf.UIEffect.State;
  * <P>
  * This layout is not tested with HTML-rendered text.
  * 
- * @see com.pump.showcase.FilledButtonUIDemo
+ * @see com.pump.showcase.QButtonUIDemo
  * @see <a
  *      href="http://javagraphics.blogspot.com/2009/08/buttons-new-uis.html">Buttons:
  *      New UIs</a>
@@ -97,8 +99,7 @@ import com.pump.plaf.UIEffect.State;
 		+ "<p>This article sets up a new framework for "
 		+ "<code>ButtonUIs</code>, and provides around 10 UI's to choose from. "
 		+ "(But you can make more if you want to...) Also each <code>ButtonUI</code> can be turned into a <code>ComboBoxUI</code>.", article = "http://javagraphics.blogspot.com/2009/08/buttons-new-uis.html", imageName = "FilledButtonUI.png")
-public abstract class FilledButtonUI extends ButtonUI implements
-		PositionConstants {
+public abstract class QButtonUI extends ButtonUI implements PositionConstants {
 
 	/**
 	 * Assign this client property to control whether the path stroke should be
@@ -117,6 +118,97 @@ public abstract class FilledButtonUI extends ButtonUI implements
 	public static final String ENABLED_STATE = "enabled-rendering";
 
 	/**
+	 * This client property resolves to a ButtonState (or null).
+	 */
+	public static final String PROPERTY_BUTTON_STATE = QButtonUI.class
+			.getName() + "#buttonState";
+
+	protected static class ButtonState {
+
+		float rollover, selected, armed, spacebarPressed;
+
+		public ButtonState(AbstractButton button) {
+			rollover = QButtonUI.isRollover(button) ? 1 : 0;
+			selected = button.getModel().isSelected() ? 1 : 0;
+			armed = button.getModel().isArmed() ? 1 : 0;
+			spacebarPressed = QButtonUI.isSpacebarPressed(button) ? 1 : 0;
+		}
+
+		public ButtonState(float armed, float rollover, float selected,
+				float spacebarPressed) {
+			this.armed = armed;
+			this.rollover = rollover;
+			this.selected = selected;
+			this.spacebarPressed = spacebarPressed;
+		}
+
+		@Override
+		public int hashCode() {
+			return (int) (rollover + selected + armed + spacebarPressed);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof ButtonState))
+				return false;
+			ButtonState other = (ButtonState) obj;
+			if (other.getArmed() != getArmed())
+				return false;
+			if (other.getRollover() != getRollover())
+				return false;
+			if (other.getSelected() != getSelected())
+				return false;
+			if (other.getSpacebarPressed() != getSpacebarPressed())
+				return false;
+			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "ButtonState[ armed=" + getArmed() + ", rollover="
+					+ getRollover() + ", selected=" + getSelected()
+					+ " spacebarPressed=" + getSpacebarPressed() + "]";
+		}
+
+		public float getRollover() {
+			return rollover;
+		}
+
+		public float getSelected() {
+			return selected;
+		}
+
+		public float getArmed() {
+			return armed;
+		}
+
+		public float getSpacebarPressed() {
+			return spacebarPressed;
+		}
+
+		public ButtonState iterate(ButtonState targetState) {
+			// rollover has a slower increment, it's a more casual change
+			float newRollover = iterate(getRollover(),
+					targetState.getRollover(), .1f);
+			float newArmed = iterate(getArmed(), targetState.getArmed(), .2f);
+			float newSelected = iterate(getSelected(),
+					targetState.getSelected(), .2f);
+			float newSpacebarPressed = iterate(getSpacebarPressed(),
+					targetState.getSpacebarPressed(), .2f);
+			return new ButtonState(newArmed, newRollover, newSelected,
+					newSpacebarPressed);
+		}
+
+		private float iterate(float startingValue, float targetValue, float incr) {
+			if (startingValue == targetValue)
+				return targetValue;
+			if (startingValue < targetValue)
+				return Math.min(targetValue, startingValue + incr);
+			return Math.max(targetValue, startingValue - incr);
+		}
+	}
+
+	/**
 	 * Basic information about the geometry/layout of buttons. The members are
 	 * final, and should be redefined instead of replaced.
 	 */
@@ -130,6 +222,42 @@ public abstract class FilledButtonUI extends ButtonUI implements
 
 		/** The button this information relates to. */
 		final AbstractButton button;
+
+		Timer buttonStateTimer = new Timer(20, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ButtonState oldState = (ButtonState) button
+						.getClientProperty(PROPERTY_BUTTON_STATE);
+				ButtonState targetState = new ButtonState(button);
+				ButtonState newState = oldState.iterate(targetState);
+				button.putClientProperty(PROPERTY_BUTTON_STATE, newState);
+				button.repaint();
+				if (targetState.equals(newState)) {
+					buttonStateTimer.stop();
+				}
+			}
+
+		});
+
+		ChangeListener buttonStateListener = new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				refreshButtonState();
+			}
+		};
+
+		private void refreshButtonState() {
+			ButtonState newState = new ButtonState(button);
+			ButtonState oldState = (ButtonState) button
+					.getClientProperty(PROPERTY_BUTTON_STATE);
+			if (oldState == null) {
+				button.putClientProperty(PROPERTY_BUTTON_STATE, newState);
+			} else if (!newState.equals(oldState)) {
+				buttonStateTimer.start();
+			}
+		}
 
 		/**
 		 * A list of <code>PaintUIEffect</code>, in the order they should be
@@ -146,7 +274,7 @@ public abstract class FilledButtonUI extends ButtonUI implements
 		final protected Rectangle textRect = new Rectangle();
 
 		/** The UI that relates to this ButtonInfo object. */
-		final FilledButtonUI ui;
+		final QButtonUI ui;
 
 		/** Completely untested. */
 		final protected Rectangle viewRect = new Rectangle();
@@ -161,14 +289,14 @@ public abstract class FilledButtonUI extends ButtonUI implements
 		 */
 		final protected GeneralPath stroke = new GeneralPath();
 
-		public ButtonInfo(AbstractButton b, FilledButtonUI filledButtonUI) {
+		public ButtonInfo(AbstractButton b, QButtonUI buttonUI) {
 			button = b;
-			ui = filledButtonUI;
+			ui = buttonUI;
 
 			basicListener = new BasicButtonListener(button) {
 				Timer focusBlinker;
 
-				String BLINK_STATE_KEY = "FilledButtonUI.blinkState";
+				String BLINK_STATE_KEY = "QButtonUI.blinkState";
 
 				@Override
 				public void focusGained(FocusEvent e) {
@@ -221,8 +349,9 @@ public abstract class FilledButtonUI extends ButtonUI implements
 							// we want to reverse that here:
 							button.setOpaque(false);
 						}
-					} else if (evt.getPropertyName().equals(SPACEBAR_PRESSED)) {
-						button.repaint();
+					} else if (evt.getPropertyName().equals(SPACEBAR_PRESSED)
+							|| evt.getPropertyName().equals(ROLLOVER)) {
+						refreshButtonState();
 					} else if (evt.getPropertyName().equals(HAS_FOCUS)) {
 						button.repaint();
 					} else if (evt.getPropertyName().equals("text")
@@ -244,7 +373,7 @@ public abstract class FilledButtonUI extends ButtonUI implements
 	/** A possible value for the VERTICAL_POSITION client property. */
 	public static final String BOTTOM = "bottom";
 
-	private static final String BUTTON_INFO_KEY = "com.pump.plaf.FilledButtonUI.ButtonInfo";
+	private static final String BUTTON_INFO_KEY = "com.pump.plaf.QButtonUI.ButtonInfo";
 
 	/** When a component is resized, <code>updateLayout</code> is called. */
 	protected static final ComponentListener componentListener = new ComponentListener() {
@@ -272,7 +401,7 @@ public abstract class FilledButtonUI extends ButtonUI implements
 	 * If this client-property is non-null: then it overrides whether focus is
 	 * actually present when deciding to render the focus.
 	 */
-	protected static final String HAS_FOCUS = "FilledButtonUI.focusPainted";
+	protected static final String HAS_FOCUS = "QButtonUI.focusPainted";
 
 	/** A static KeyListener for using focus arrow keys. */
 	protected static KeyListener focusArrowListener = new FocusArrowListener();
@@ -333,7 +462,7 @@ public abstract class FilledButtonUI extends ButtonUI implements
 	 * An optional client property that map to a {@link PaintFocus} constant to
 	 * control how to paint the focus of a button.
 	 */
-	public static final String PAINT_FOCUS_BEHAVIOR_KEY = "FilledButtonUI.PaintFocusBehavior";
+	public static final String PAINT_FOCUS_BEHAVIOR_KEY = "QButtonUI.PaintFocusBehavior";
 
 	/**
 	 * Different behaviors to paint the keyboard focus.
@@ -381,8 +510,8 @@ public abstract class FilledButtonUI extends ButtonUI implements
 																	// 2196
 				AbstractButton button = (AbstractButton) evt.getSource();
 				ButtonUI ui = button.getUI();
-				if (ui instanceof FilledButtonUI) {
-					FilledButtonUI s = (FilledButtonUI) ui;
+				if (ui instanceof QButtonUI) {
+					QButtonUI s = (QButtonUI) ui;
 					s.updateLayout(button, getButtonInfo(button));
 					button.invalidate();
 					button.repaint();
@@ -398,13 +527,13 @@ public abstract class FilledButtonUI extends ButtonUI implements
 	 * This client property is set to a Boolean indicating whether the spacebar
 	 * is currently pressed or not.
 	 */
-	protected static final String SPACEBAR_PRESSED = "FilledButtonUI.spacebarPressed";
+	protected static final String SPACEBAR_PRESSED = "QButtonUI.spacebarPressed";
 
 	/**
 	 * This client property is set to a Boolean indicating whether to render a
 	 * button as if the mouse is rolled over it or not.
 	 */
-	protected static final String ROLLOVER = "FilledButtonUI.rollover";
+	protected static final String ROLLOVER = "QButtonUI.rollover";
 
 	/**
 	 * A translucent composite used to render parts the UI when a button is
@@ -435,7 +564,7 @@ public abstract class FilledButtonUI extends ButtonUI implements
 	 * buttons should show a partition or not. The default value is assumed to
 	 * be true.
 	 */
-	public static final String SHOW_SEPARATORS = "FilledButtonUI.showSeparators";
+	public static final String SHOW_SEPARATORS = "QButtonUI.showSeparators";
 
 	protected boolean isShowingSeparators(AbstractButton button) {
 		Boolean showSeparators = (Boolean) button
@@ -454,7 +583,7 @@ public abstract class FilledButtonUI extends ButtonUI implements
 
 		String key = width + " " + height + " " + horizontalPosition + " "
 				+ verticalPosition;
-		button.putClientProperty("FilledButtonUI.validationKey", key);
+		button.putClientProperty("QButtonUI.validationKey", key);
 
 		int dx = 0;
 		int dy = 0;
@@ -673,8 +802,8 @@ public abstract class FilledButtonUI extends ButtonUI implements
 
 	/**
 	 * Return true if the spacebar is pressed. This consults the
-	 * SPACEBAR_PRESSED property, which is correctly controlled if a
-	 * FilledButtonUI is installed in a given button.
+	 * SPACEBAR_PRESSED property, which is correctly controlled if a QButtonUI
+	 * is installed in a given button.
 	 * <P>
 	 * This is visually the same as setting the ButtonModel's pressed state to
 	 * true. However if that property were used and the mouse was interacting
@@ -714,14 +843,14 @@ public abstract class FilledButtonUI extends ButtonUI implements
 	protected final ButtonShape shape;
 
 	/**
-	 * Creates a new <code>FilledButtonUI</code>.
+	 * Creates a new <code>QButtonUI</code>.
 	 * 
 	 * @param buttonFill
 	 *            the <code>ButtonFill</code> this UI uses.
 	 * @param buttonShape
 	 *            the <code>ButtonShape</code> this UI uses.
 	 */
-	public FilledButtonUI(ButtonFill buttonFill, ButtonShape buttonShape) {
+	public QButtonUI(ButtonFill buttonFill, ButtonShape buttonShape) {
 		shape = buttonShape;
 		fill = buttonFill;
 	}
@@ -908,9 +1037,9 @@ public abstract class FilledButtonUI extends ButtonUI implements
 			AbstractButton[] buttons = cluster.getButtons();
 			for (int a = 0; a < buttons.length; a++) {
 				ButtonUI ui = buttons[a].getUI();
-				if (ui instanceof FilledButtonUI) {
-					FilledButtonUI fui = (FilledButtonUI) ui;
-					Dimension contentSize = fui.getContentSize(buttons[a]);
+				if (ui instanceof QButtonUI) {
+					QButtonUI qui = (QButtonUI) ui;
+					Dimension contentSize = qui.getContentSize(buttons[a]);
 					sum.width = Math.max(sum.width, contentSize.width);
 					sum.height = Math.max(sum.height, contentSize.height);
 				}
@@ -1030,6 +1159,7 @@ public abstract class FilledButtonUI extends ButtonUI implements
 		button.addPropertyChangeListener(positionAndShapeListener);
 		button.setOpaque(false);
 		button.setRolloverEnabled(true);
+		button.getModel().addChangeListener(info.buttonStateListener);
 
 		if (button.getIcon() != null) {
 			Font font = UIManager.getFont("IconButton.font");
@@ -1073,7 +1203,7 @@ public abstract class FilledButtonUI extends ButtonUI implements
 				+ verticalPosition;
 
 		String oldKey = (String) button
-				.getClientProperty("FilledButtonUI.validationKey");
+				.getClientProperty("QButtonUI.validationKey");
 		if (oldKey == null)
 			return false;
 
@@ -1352,17 +1482,18 @@ public abstract class FilledButtonUI extends ButtonUI implements
 		button.removeComponentListener(componentListener);
 		button.removeKeyListener(keyArmingListener);
 		button.removePropertyChangeListener(positionAndShapeListener);
+		button.getModel().addChangeListener(info.buttonStateListener);
 
 		super.uninstallUI(c);
 	}
 
-	/** Return the {@link com.pump.plaf.ButtonFill} used by this FilledButtonUI. */
+	/** Return the {@link com.pump.plaf.ButtonFill} used by this QButtonUI. */
 	public ButtonFill getButtonFill() {
 		return fill;
 	}
 
 	/**
-	 * Return the {@link com.pump.plaf.ButtonShape} used by this FilledButtonUI.
+	 * Return the {@link com.pump.plaf.ButtonShape} used by this QButtonUI.
 	 */
 	public ButtonShape getButtonShape() {
 		return shape;
@@ -1385,10 +1516,10 @@ public abstract class FilledButtonUI extends ButtonUI implements
 	}
 
 	/**
-	 * Create a {@link com.pump.plaf.FilledComboBoxUI} modeled after this
-	 * <code>FilledButtonUI</code>.
+	 * Create a {@link com.pump.plaf.QComboBoxUI} modeled after this
+	 * <code>QButtonUI</code>.
 	 */
-	public FilledComboBoxUI createComboBoxUI() {
-		return new FilledComboBoxUI(this);
+	public QComboBoxUI createComboBoxUI() {
+		return new QComboBoxUI(this);
 	}
 }

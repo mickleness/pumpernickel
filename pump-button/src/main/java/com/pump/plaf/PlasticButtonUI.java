@@ -35,11 +35,8 @@ import javax.swing.plaf.ComponentUI;
  * sides for a nice curved effect.
  * <P>
  * When pressed or armed a thick ring appears inside the button.
- *
- * 
- * @see com.pump.showcase.FilledButtonUIDemo
  */
-public class PlasticButtonUI extends FilledButtonUI {
+public class PlasticButtonUI extends QButtonUI {
 
 	public static final SimpleButtonFill PLASTIC_FILL = new SimpleButtonFill() {
 		private Color strokeColor = new Color(0xff333333);

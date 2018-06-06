@@ -33,10 +33,8 @@ import javax.swing.plaf.ComponentUI;
  * According to <a href="http://nadeausoftware.com/node/87">this</a> article,
  * the "square" look is often used for: <BR>
  * "Buttons on a tool bar, or buttons smaller than a standard button".
- * 
- * @see com.pump.showcase.FilledButtonUIDemo
  */
-public class SquareButtonUI extends FilledButtonUI {
+public class SquareButtonUI extends QButtonUI {
 
 	public static final ButtonShape SQUARE_SHAPE = new ButtonShape(0, 0);
 

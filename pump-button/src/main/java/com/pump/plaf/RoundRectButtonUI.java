@@ -30,10 +30,8 @@ import javax.swing.plaf.ComponentUI;
  * According to <a href="http://nadeausoftware.com/node/87">this</a> article,
  * the "recessed" and "roundRect" look is originally intended to indicate: <br>
  * "a choice in limiting the scope of an operation, such as the buttons at the top of a Finder when searching."
- * 
- * @see com.pump.showcase.FilledButtonUIDemo
  */
-public class RoundRectButtonUI extends FilledButtonUI {
+public class RoundRectButtonUI extends QButtonUI {
 	public final static ButtonShape ROUNDRECT_SHAPE = new ButtonShape(8,
 			Short.MAX_VALUE);
 

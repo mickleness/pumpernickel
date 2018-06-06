@@ -30,10 +30,8 @@ import javax.swing.plaf.ComponentUI;
  * alt="TexturedButtonUI Screenshot">
  * <p>
  * It is not intended to be an exact replica, but it is very similar.
- * 
- * @see com.pump.showcase.FilledButtonUIDemo
  */
-public class TexturedButtonUI extends FilledButtonUI {
+public class TexturedButtonUI extends QButtonUI {
 
 	public static final ButtonShape TEXTURED_SHAPE = new ButtonShape(3, 3);
 

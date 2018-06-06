@@ -340,7 +340,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Scaling", new ScalingDemo());
 			addSection("Images: Quantization", new ImageQuantizationDemo());
 			addSection("Swing: Color Components", new ColorDemo());
-			addSection("FilledButtonUIDemo", new FilledButtonUIDemo());
+			addSection("QButtonUI", new QButtonUIDemo());
 			addSection("Shapes: AreaX Tests", new AreaXTestPanel());
 			addSection("Graphics: Debugger", new GraphicsWriterDemo());
 			addSection("Images: JPEG Metadata", new JPEGMetaDataDemo());

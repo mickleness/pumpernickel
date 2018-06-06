@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>QButtonUI Demo</title>
+</head>
+<body>
+
+This demo features several extensions of the <code>QButtonUI</code>.
+<p>
+<h3>Context</h3>
+Over a decade ago Apple released some customized button UI's <a href="http://developer.apple.com/technotes/tn2007/tn2196.html#BUTTONS">in this article</a>. These included different button styles, sizes and segments. But of course this was Mac-specific. (And Aqua-specific at that.) I decided to make my own implementation that would be completely cross-platform.
+<h3>Samples</h3>
+<table style="border: 0px black;"><tbody>
+<tr><td align="right">BevelButtonUI:
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/BevelButtonUI.png" />
+</td></tr>
+<tr><td align="right">CapsuleButtonUI:
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/CapsuleButtonUI.png" />
+</td></tr>
+<tr><td align="right">GradientButtonUI:
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/GradientButtonUI.png" />
+</td></tr>
+<tr><td align="right">PlasticButtonUI:
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/PlasticButtonUI.png" />
+</td></tr>
+<tr><td align="right">RecessedButtonUI:
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/RecessedButtonUI.png" />
+</td></tr>
+<tr><td align="right">RetroButtonUI:
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/RetroButtonUI.png" />
+</td></tr>
+<tr><td align="right">RoundRectButtonUI:
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/RoundRectButtonUI.png" />
+</td></tr>
+<tr><td align="right">SquareButtonUI:
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/SquareButtonUI.png" />
+</td></tr>
+<tr><td align="right">TexturedButtonUI:
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/TexturedButtonUI.png" />
+</td></tr>
+<tr><td align="right">VistaButtonUI:
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/VistaButtonUI.png" />
+</td></tr>
+<tr><td align="right">XPButtonUI:
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/XPButtonUI.png" />
+</td></tr>
+<tr><td>XPSubtleButtonUI
+</td><td align="left"><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/XPSubtleButtonUI.png" />
+</td></tr>
+</tbody></table>
+<p>
+Why so many options? Believe it or not: there used to be a reason. You should use bevel "with icons, or buttons sized larger than a standard Mac button." Use gradient to "select among options, such as different ways of viewing something." The recessed look was "to indicate a choice in limiting the scope of an operation, such as the buttons at the top of a Finder when searching." The recessed one actually persists (as of 2018) as a <a href="https://developer.apple.com/design/human-interface-guidelines/macos/buttons/scope-buttons/">Scope Button</a>, but most of the other distinctions have faded away with time. Now gradients in buttons are much less popular. Someday I might redo these (or introduce new ones) to account for this.
+<p>
+But while UI guidelines are trending in a simpler/more flat direction, it's also important to note that the rise of diverse HTML UI's have conditioned users to happily accept variation in their UIs. As long as your UI is well thought-out and relatively uniform: users will generally be OK with it.
+<p>
+<h3>Customization / Client Properties</h3>
+In the demo app all the buttons in a pane share the same instance of one <code>ButtonUI</code> object.  The ButtonUI looks at client properties in the button to distinguish the shape, segment position, and other attributes.  To set up a button on the bottom-left corner of a grid of buttons, you can call:
+<p>
+<blockquote>
+<pre>myButton.putClientProperty( HORIZONTAL_POSITION, LEFT );
+myButton.putClientProperty( VERTICAL_POSITION, BOTTOM );</pre>
+</blockquote>
+(It is assumed if one of these properties is missing that the intended value is <code>ONLY</code>.)
+<p>
+Also check out the <code>ButtonCluster</code> class to help set up your segment client properties automatically.
+<p>
+There is also a client property to define a custom shape:
+<p>
+<pre>myButton.putClientProperty(SHAPE, new Ellipse2D.Float(0,0,100,100));</pre>
+<p>
+Apple's original implementation forced buttons to be specific sizes. (This is a very typical Apple thing to do.) The <code>QButtonUI</code> can stretch and fill whatever size you request as you resize the demo window.
+<p>
+<h3>ComboBoxUIs</h3>
+The <code>QButtonUI</code> includes a method to create a matching <code>QComboBoxUI</code>.
+<p>
+Once you get a good-looking toolbar with a specific look and feel: you probably want other components to generally match in colors and size. This helps keep the toolbar/inspector looking unified and professional.
+</body>
+</html>

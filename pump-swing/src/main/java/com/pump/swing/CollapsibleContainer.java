@@ -45,8 +45,8 @@ import com.pump.blog.Blurb;
 import com.pump.icon.EmptyIcon;
 import com.pump.icon.RotatedIcon;
 import com.pump.icon.TriangleIcon;
-import com.pump.plaf.FilledButtonUI;
 import com.pump.plaf.GradientButtonUI;
+import com.pump.plaf.QButtonUI;
 import com.pump.plaf.UIEffect;
 
 /**
@@ -490,9 +490,9 @@ public class CollapsibleContainer extends SectionContainer {
 	 * @return a button that can toggle the property <code>COLLAPSED</code> if
 	 *         the property <code>COLLAPSIBLE</code> is <code>true</code>.
 	 *         <p>
-	 *         This button (by default) uses a <code>FilledButtonUI</code>, so
-	 *         if you configure it's position then you can toggle off certain
-	 *         parts of the border.
+	 *         This button (by default) uses a <code>QButtonUI</code>, so if you
+	 *         configure it's position then you can toggle off certain parts of
+	 *         the border.
 	 *         <p>
 	 *         The following property of this button are automatically
 	 *         maintained through a set of listeners:
@@ -519,9 +519,9 @@ public class CollapsibleContainer extends SectionContainer {
 	 * @return a button that can toggle the property <code>COLLAPSED</code> if
 	 *         the property <code>COLLAPSIBLE</code> is <code>true</code>.
 	 *         <p>
-	 *         This button (by default) uses a <code>FilledButtonUI</code>, so
-	 *         if you configure it's position then you can toggle off certain
-	 *         parts of the border.
+	 *         This button (by default) uses a <code>QButtonUI</code>, so if you
+	 *         configure it's position then you can toggle off certain parts of
+	 *         the border.
 	 *         <p>
 	 *         The following property of this button are automatically
 	 *         maintained through a set of listeners:
@@ -543,37 +543,36 @@ public class CollapsibleContainer extends SectionContainer {
 			boolean includeLeftAndRightEdges, boolean collapsible,
 			int slowDownFactor) {
 		final JButton button = new JButton();
-		FilledButtonUI ui = new GradientButtonUI() {
+		QButtonUI ui = new GradientButtonUI() {
 			@Override
 			protected Insets getTextPadding() {
-				// TODO: make a customizable client property in FilledButtonUI
+				// TODO: make a customizable client property in QButtonUI
 				return new Insets(4, 4, 4, 4);
 			}
 
 			@Override
 			protected Insets getIconPadding() {
-				// TODO: make a customizable client property in FilledButtonUI
+				// TODO: make a customizable client property in QButtonUI
 				return new Insets(4, 7, 4, 6);
 			}
 		};
 		button.setUI(ui);
-		button.putClientProperty(FilledButtonUI.STROKE_PAINTED, Boolean.FALSE);
+		button.putClientProperty(QButtonUI.STROKE_PAINTED, Boolean.FALSE);
 		button.setBorder(new PartialLineBorder(Color.gray,
 				includeLeftAndRightEdges ? new Insets(1, 1, 1, 1) : new Insets(
 						1, 0, 1, 0)));
 		button.setFont(UIManager.getFont("Label.font"));
 		button.setText(text);
-		button.putClientProperty(FilledButtonUI.HORIZONTAL_POSITION,
-				FilledButtonUI.MIDDLE);
+		button.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
+				QButtonUI.MIDDLE);
 
 		// TODO: the focus ring is 1 pixel off when the stroke is not painted.
 		// Setting the vertical position to middle helps hide this a little, but
 		// it's still a bug.
-		button.putClientProperty(FilledButtonUI.VERTICAL_POSITION,
-				FilledButtonUI.MIDDLE);
+		button.putClientProperty(QButtonUI.VERTICAL_POSITION, QButtonUI.MIDDLE);
 
-		button.putClientProperty(FilledButtonUI.PAINT_FOCUS_BEHAVIOR_KEY,
-				FilledButtonUI.PaintFocus.INSIDE);
+		button.putClientProperty(QButtonUI.PAINT_FOCUS_BEHAVIOR_KEY,
+				QButtonUI.PaintFocus.INSIDE);
 		button.setHorizontalAlignment(SwingConstants.LEFT);
 		button.setIconTextGap(2);
 		button.addKeyListener(new KeyAdapter() {
@@ -603,7 +602,7 @@ public class CollapsibleContainer extends SectionContainer {
 		});
 
 		// this is always rendered as enabled, whether it is or not
-		button.putClientProperty(FilledButtonUI.ENABLED_STATE, Boolean.TRUE);
+		button.putClientProperty(QButtonUI.ENABLED_STATE, Boolean.TRUE);
 
 		button.addPropertyChangeListener(new PropertyChangeListener() {
 

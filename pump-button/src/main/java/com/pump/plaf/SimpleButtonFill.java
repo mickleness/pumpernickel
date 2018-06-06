@@ -10,13 +10,19 @@
  */
 package com.pump.plaf;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 import javax.swing.AbstractButton;
-import javax.swing.ButtonModel;
 import javax.swing.JToggleButton;
+
+import com.pump.awt.TransformedTexturePaint;
+import com.pump.plaf.QButtonUI.ButtonState;
 
 public abstract class SimpleButtonFill extends ButtonFill {
 
@@ -74,53 +80,73 @@ public abstract class SimpleButtonFill extends ButtonFill {
 
 	@Override
 	public Paint getFill(AbstractButton button, Rectangle fillRect) {
-		ButtonModel model = button.getModel();
-		if (button instanceof JToggleButton) {
-			if (model.isArmed() || FilledButtonUI.isSpacebarPressed(button)) {
-				Paint darkestFill = getDarkestFill(fillRect);
-				if (darkestFill != null)
-					return darkestFill;
-
-				Paint darkerFill = getDarkerFill(fillRect);
-				if (darkerFill != null)
-					return darkerFill;
-			}
-			if (model.isSelected()) {
-				Paint darkerFill = getDarkerFill(fillRect);
-				if (darkerFill != null)
-					return darkerFill;
-
-				Paint darkestFill = getDarkestFill(fillRect);
-				if (darkestFill != null)
-					return darkestFill;
-			}
-			if (FilledButtonUI.isRollover(button)) {
-				Paint rolloverFill = getRolloverFill(fillRect);
-				if (rolloverFill != null)
-					return rolloverFill;
-			}
-		} else {
-			if (model.isSelected() || model.isArmed()
-					|| FilledButtonUI.isSpacebarPressed(button)) {
-				Paint darkerFill = getDarkerFill(fillRect);
-				if (darkerFill != null)
-					return darkerFill;
-
-				Paint darkestFill = getDarkestFill(fillRect);
-				if (darkestFill != null)
-					return darkestFill;
-			}
-			if (FilledButtonUI.isRollover(button)) {
-				Paint rolloverFill = getRolloverFill(fillRect);
-				if (rolloverFill != null)
-					return rolloverFill;
-			}
+		ButtonState partialState = (ButtonState) button
+				.getClientProperty(QButtonUI.PROPERTY_BUTTON_STATE);
+		if (partialState == null) {
+			partialState = new ButtonState(button);
 		}
+
+		BufferedImage bi = new BufferedImage(fillRect.width, fillRect.height,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bi.createGraphics();
+		g.translate(-fillRect.x, -fillRect.y);
+
+		Paint darkestFill = getDarkestFill(fillRect);
+		Paint darkerFill = getDarkerFill(fillRect);
+		Paint rolloverFill = getRolloverFill(fillRect);
 		Paint normalFill = getNormalFill(fillRect);
 		if (normalFill == null)
 			throw new NullPointerException(
 					"The getNormalFill() method cannot return null.");
-		return normalFill;
+
+		paint(g, normalFill, 1, fillRect);
+
+		if (partialState.getRollover() > 0 && rolloverFill != null) {
+			paint(g, rolloverFill, partialState.getRollover(), fillRect);
+		}
+
+		if (button instanceof JToggleButton) {
+			if (partialState.getSelected() > 0) {
+				if (darkerFill != null) {
+					paint(g, darkerFill, partialState.getSelected(), fillRect);
+				} else if (darkestFill != null) {
+					paint(g, darkestFill, partialState.getSelected(), fillRect);
+				}
+			}
+
+			float armed = Math.max(partialState.getArmed(),
+					partialState.getSpacebarPressed());
+			if (armed > 0) {
+				if (darkestFill != null) {
+					paint(g, darkestFill, armed, fillRect);
+				} else if (darkerFill != null) {
+					paint(g, darkerFill, armed, fillRect);
+				}
+			}
+		} else {
+			float armed = Math.max(
+					Math.max(partialState.getSelected(),
+							partialState.getArmed()),
+					partialState.getSpacebarPressed());
+			if (armed > 0) {
+				if (darkerFill != null) {
+					paint(g, darkerFill, armed, fillRect);
+				} else if (darkestFill != null) {
+					paint(g, darkestFill, armed, fillRect);
+				}
+			}
+		}
+		return new TransformedTexturePaint(bi, new Rectangle(0, 0,
+				fillRect.width, fillRect.height),
+				AffineTransform.getTranslateInstance(fillRect.x, fillRect.y));
+	}
+
+	private void paint(Graphics2D g, Paint paint, float alpha,
+			Rectangle fillRect) {
+		g.setPaint(paint);
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+				alpha));
+		g.fillRect(fillRect.x, fillRect.y, fillRect.width, fillRect.height);
 	}
 
 }

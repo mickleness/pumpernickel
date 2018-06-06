@@ -28,8 +28,8 @@ public class ShimmerPaintUIEffect extends PaintUIEffect {
 		public void mouseEntered(MouseEvent e) {
 			AbstractButton button = (AbstractButton) e.getSource();
 			ButtonUI ui = button.getUI();
-			if (ui instanceof FilledButtonUI) {
-				FilledButtonUI fui = (FilledButtonUI) ui;
+			if (ui instanceof QButtonUI) {
+				QButtonUI fui = (QButtonUI) ui;
 				fui.getEffects(button).add(new ShimmerPaintUIEffect(button));
 			}
 		}
@@ -42,9 +42,9 @@ public class ShimmerPaintUIEffect extends PaintUIEffect {
 		public void mouseExited(MouseEvent e) {
 			AbstractButton button = (AbstractButton) e.getSource();
 			ButtonUI ui = button.getUI();
-			if (ui instanceof FilledButtonUI) {
-				FilledButtonUI fui = (FilledButtonUI) ui;
-				List<PaintUIEffect> list = fui.getEffects(button);
+			if (ui instanceof QButtonUI) {
+				QButtonUI qui = (QButtonUI) ui;
+				List<PaintUIEffect> list = qui.getEffects(button);
 				int ctr = 0;
 				while (ctr < list.size()) {
 					PaintUIEffect effect = list.get(ctr);
@@ -74,7 +74,7 @@ public class ShimmerPaintUIEffect extends PaintUIEffect {
 	@Override
 	public void paint(Graphics2D g) {
 		float p2 = (progress - .2f) / .8f;
-		FilledButtonUI ui = (FilledButtonUI) button.getUI();
+		QButtonUI ui = (QButtonUI) button.getUI();
 		float dx = p2 * (button.getWidth() + slantWidth + shimmerWidth);
 		p.reset();
 		p.moveTo(dx, 0);

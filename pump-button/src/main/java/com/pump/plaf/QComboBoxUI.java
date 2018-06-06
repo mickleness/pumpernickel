@@ -54,24 +54,24 @@ import com.pump.icon.UpDownIcon;
 
 /**
  * A <code>BasicComboBoxUI</code> that models its appearance after a
- * {@link com.pump.plaf.FilledButtonUI}.
+ * {@link com.pump.plaf.QButtonUI}.
  */
-public class FilledComboBoxUI extends BasicComboBoxUI {
+public class QComboBoxUI extends BasicComboBoxUI {
 
 	/**
-	 * Create a new instance of the FilledComboBoxUI.
+	 * Create a new instance of the QComboBoxUI.
 	 * <p>
-	 * Note this leaves which <code>FilledButtonUI</code> you want ambiguous.
-	 * First this will check against the UIManager's <code>ButtonUI</code>
-	 * property, and if that is not a <code>FilledButtonUI</code> then the
+	 * Note this leaves which <code>QButtonUI</code> you want ambiguous. First
+	 * this will check against the UIManager's <code>ButtonUI</code> property,
+	 * and if that is not a <code>QButtonUI</code> then the
 	 * {@link com.pump.plaf.RoundRectButtonUI} will be used.
 	 * <p>
 	 * This method is required if you want to make this ComboBoxUI the default
 	 * UI by invoking: <br>
-	 * <code>UIManager.getDefaults().put("ComboBoxUI", "com.pump.plaf.FilledComboBoxUI");</code>
+	 * <code>UIManager.getDefaults().put("ComboBoxUI", "com.pump.plaf.QComboBoxUI");</code>
 	 */
 	public static ComponentUI createUI(JComponent c) {
-		return new FilledComboBoxUI();
+		return new QComboBoxUI();
 	}
 
 	/** A small triangle pointing down. */
@@ -127,7 +127,7 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 				Math.max(i1.bottom, i2.bottom), Math.max(i1.right, i2.right));
 	}
 
-	final FilledButtonUI buttonUI;
+	final QButtonUI buttonUI;
 
 	protected Rectangle currentValueBounds;
 
@@ -141,11 +141,10 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			if (!Boolean.TRUE.equals(rendererPanel
-					.getClientProperty(FilledButtonUI.ROLLOVER))) {
-				rendererPanel.putClientProperty(FilledButtonUI.ROLLOVER,
+					.getClientProperty(QButtonUI.ROLLOVER))) {
+				rendererPanel.putClientProperty(QButtonUI.ROLLOVER,
 						Boolean.TRUE);
-				arrowButton.putClientProperty(FilledButtonUI.ROLLOVER,
-						Boolean.TRUE);
+				arrowButton.putClientProperty(QButtonUI.ROLLOVER, Boolean.TRUE);
 				comboBox.repaint();
 			}
 		}
@@ -153,9 +152,9 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		@Override
 		public void mouseExited(MouseEvent e) {
 			if (Boolean.TRUE.equals(rendererPanel
-					.getClientProperty(FilledButtonUI.ROLLOVER))) {
-				rendererPanel.putClientProperty(FilledButtonUI.ROLLOVER, null);
-				arrowButton.putClientProperty(FilledButtonUI.ROLLOVER, null);
+					.getClientProperty(QButtonUI.ROLLOVER))) {
+				rendererPanel.putClientProperty(QButtonUI.ROLLOVER, null);
+				arrowButton.putClientProperty(QButtonUI.ROLLOVER, null);
 				comboBox.repaint();
 			}
 		}
@@ -163,13 +162,12 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 
 	FocusListener focusRenderListener = new FocusListener() {
 		public void focusGained(FocusEvent e) {
-			arrowButton.putClientProperty(FilledButtonUI.HAS_FOCUS,
-					Boolean.TRUE);
+			arrowButton.putClientProperty(QButtonUI.HAS_FOCUS, Boolean.TRUE);
 			comboBox.repaint();
 		}
 
 		public void focusLost(FocusEvent e) {
-			arrowButton.putClientProperty(FilledButtonUI.HAS_FOCUS, null);
+			arrowButton.putClientProperty(QButtonUI.HAS_FOCUS, null);
 			comboBox.repaint();
 		}
 	};
@@ -177,11 +175,11 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 	PropertyChangeListener showSeparatorsPropertyListener = new PropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent e) {
 			Boolean v = (Boolean) comboBox
-					.getClientProperty(FilledButtonUI.SHOW_SEPARATORS);
+					.getClientProperty(QButtonUI.SHOW_SEPARATORS);
 			if (v == null)
 				v = Boolean.FALSE;
-			arrowButton.putClientProperty(FilledButtonUI.SHOW_SEPARATORS, v);
-			rendererPanel.putClientProperty(FilledButtonUI.SHOW_SEPARATORS, v);
+			arrowButton.putClientProperty(QButtonUI.SHOW_SEPARATORS, v);
+			rendererPanel.putClientProperty(QButtonUI.SHOW_SEPARATORS, v);
 		}
 	};
 
@@ -213,8 +211,8 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		WindowListener windowListener = new WindowAdapter() {
 			@Override
 			public void windowDeactivated(WindowEvent e) {
-				if (FilledComboBoxUI.this.popup != null)
-					FilledComboBoxUI.this.setPopupVisible(comboBox, false);
+				if (QComboBoxUI.this.popup != null)
+					QComboBoxUI.this.setPopupVisible(comboBox, false);
 			}
 		};
 
@@ -232,13 +230,13 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		}
 	};
 
-	protected FilledComboBoxUI() {
-		FilledButtonUI k = null;
+	protected QComboBoxUI() {
+		QButtonUI k = null;
 		try {
 			String ui = (String) UIManager.getDefaults().get("ButtonUI");
 			Class<?> t = Class.forName(ui);
-			if (FilledButtonUI.class.isAssignableFrom(t)) {
-				k = (FilledButtonUI) t.newInstance();
+			if (QButtonUI.class.isAssignableFrom(t)) {
+				k = (QButtonUI) t.newInstance();
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -249,14 +247,14 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		this.buttonUI = initialize(k);
 	}
 
-	public FilledComboBoxUI(FilledButtonUI buttonUI) {
+	public QComboBoxUI(QButtonUI buttonUI) {
 		this.buttonUI = initialize(buttonUI);
 	}
 
-	private FilledButtonUI initialize(FilledButtonUI buttonUI) {
+	private QButtonUI initialize(QButtonUI buttonUI) {
 		rendererPanel.setUI(buttonUI);
-		rendererPanel.putClientProperty(FilledButtonUI.HORIZONTAL_POSITION,
-				FilledButtonUI.LEFT);
+		rendererPanel.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
+				QButtonUI.LEFT);
 		return buttonUI;
 	}
 
@@ -266,8 +264,8 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		arrowButton.setUI(buttonUI);
 		Icon icon = isPopDown() ? downIcon : upAndDownIcon;
 		arrowButton.setIcon(icon);
-		arrowButton.putClientProperty(FilledButtonUI.HORIZONTAL_POSITION,
-				FilledButtonUI.RIGHT);
+		arrowButton.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
+				QButtonUI.RIGHT);
 	}
 
 	@Override
@@ -342,16 +340,14 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 	}
 
 	/**
-	 * @return the {@link com.pump.plaf.ButtonFill} used by this
-	 *         FilledComboBoxUI.
+	 * @return the {@link com.pump.plaf.ButtonFill} used by this QComboBoxUI.
 	 */
 	public ButtonFill getButtonFill() {
 		return buttonUI.getButtonFill();
 	}
 
 	/**
-	 * @return the {@link com.pump.plaf.ButtonShape} used by this
-	 *         FilledComboBoxUI.
+	 * @return the {@link com.pump.plaf.ButtonShape} used by this QComboBoxUI.
 	 */
 	public ButtonShape getButtonShape() {
 		return buttonUI.getButtonShape();
@@ -362,11 +358,11 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		Dimension d = super.getDisplaySize();
 		GeneralPath path = new GeneralPath();
 		getButtonShape().getShape(path, null, d.width, d.height,
-				FilledButtonUI.POS_LEFT, FilledButtonUI.POS_ONLY, true, null);
+				QButtonUI.POS_LEFT, QButtonUI.POS_ONLY, true, null);
 		int arcLeft = getXArc(path);
 		path.reset();
 		getButtonShape().getShape(path, null, d.width, d.height,
-				FilledButtonUI.POS_RIGHT, FilledButtonUI.POS_ONLY, true, null);
+				QButtonUI.POS_RIGHT, QButtonUI.POS_ONLY, true, null);
 
 		d.width += arcLeft;
 
@@ -414,7 +410,7 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		comboBox.addMouseListener(mouseListener);
 		comboBox.addPropertyChangeListener(IS_POP_DOWN_KEY,
 				popDownPropertyListener);
-		comboBox.addPropertyChangeListener(FilledButtonUI.SHOW_SEPARATORS,
+		comboBox.addPropertyChangeListener(QButtonUI.SHOW_SEPARATORS,
 				showSeparatorsPropertyListener);
 		comboBox.addHierarchyListener(hierarchyListener);
 		comboBox.addPropertyChangeListener(new PropertyChangeListener() {
@@ -487,7 +483,7 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		ButtonShape shape = getButtonShape();
 		GeneralPath path = new GeneralPath();
 		shape.getShape(path, null, bounds.width, bounds.height,
-				FilledButtonUI.POS_LEFT, FilledButtonUI.POS_ONLY, true, null);
+				QButtonUI.POS_LEFT, QButtonUI.POS_ONLY, true, null);
 
 		int arc = getXArc(path);
 		bounds = new Rectangle(bounds);
@@ -524,7 +520,7 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		if (arrowButton.hasFocus() || comboBox.hasFocus()) {
 			hasFocus = true;
 		}
-		rendererPanel.putClientProperty(FilledButtonUI.HAS_FOCUS, hasFocus);
+		rendererPanel.putClientProperty(QButtonUI.HAS_FOCUS, hasFocus);
 		rendererPanel.paint(currentG);
 
 		currentG.dispose();
@@ -536,7 +532,7 @@ public class FilledComboBoxUI extends BasicComboBoxUI {
 		comboBox.removeFocusListener(focusRenderListener);
 		comboBox.removeMouseMotionListener(mouseListener);
 		comboBox.removeMouseListener(mouseListener);
-		comboBox.removePropertyChangeListener(FilledButtonUI.SHOW_SEPARATORS,
+		comboBox.removePropertyChangeListener(QButtonUI.SHOW_SEPARATORS,
 				showSeparatorsPropertyListener);
 		comboBox.removePropertyChangeListener(IS_POP_DOWN_KEY,
 				popDownPropertyListener);

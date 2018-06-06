@@ -29,10 +29,8 @@ import javax.swing.plaf.ComponentUI;
  * <P>
  * This relies on careful borders and highlights more than most other ButtonUIs
  * in this package.
- * 
- * @see com.pump.showcase.FilledButtonUIDemo
  **/
-public class XPButtonUI extends FilledButtonUI {
+public class XPButtonUI extends QButtonUI {
 	private static final Color strokeColor = new Color(0, 60, 116);
 	private static final Color shadowHighlight = new Color(255, 255, 255, 120);
 	private static final Color[] normalColors = new Color[] {
@@ -127,7 +125,7 @@ public class XPButtonUI extends FilledButtonUI {
 		if (info.button.getModel().isPressed()
 				|| info.button.getModel().isArmed()
 				|| info.button.getModel().isSelected()
-				|| FilledButtonUI.isSpacebarPressed(info.button)) {
+				|| QButtonUI.isSpacebarPressed(info.button)) {
 			if (info.button.isContentAreaFilled()) {
 				g.setPaint(PlafPaintUtils.getVerticalGradient("xp.pressed",
 						info.fillBounds.height, info.fillBounds.y, weights,

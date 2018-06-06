@@ -26,13 +26,8 @@ import javax.swing.plaf.ComponentUI;
  * <img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/VistaButtonUI.png"
  * alt="VistaButtonUI Screenshot">
- * <P>
- * As of this writing this UI does not perform animated fades, but is otherwise
- * a reasonable replica.
- * 
- * @see com.pump.showcase.FilledButtonUIDemo
  */
-public class VistaButtonUI extends FilledButtonUI {
+public class VistaButtonUI extends QButtonUI {
 
 	private static final SimpleButtonFill VISTA_FILL = new SimpleButtonFill() {
 		final float[] weights = new float[] { 0, .35f, .49999f, .5f, 1 };

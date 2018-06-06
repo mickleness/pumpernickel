@@ -34,10 +34,8 @@ import javax.swing.plaf.ComponentUI;
  * <img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/XPSubtleButtonUI.png"
  * alt="XPSubtleButtonUI Screenshot">
- * 
- * @see com.pump.showcase.FilledButtonUIDemo
  **/
-public class XPSubtleButtonUI extends FilledButtonUI {
+public class XPSubtleButtonUI extends QButtonUI {
 	private static final Color strokeColor = new Color(0xCECDC3);
 	private static final Color shadowHighlight = new Color(255, 255, 255, 120);
 	private static final Color[] normalColors = new Color[] {
@@ -109,7 +107,7 @@ public class XPSubtleButtonUI extends FilledButtonUI {
 		if (info.button.getModel().isPressed()
 				|| info.button.getModel().isArmed()
 				|| info.button.getModel().isSelected()
-				|| FilledButtonUI.isSpacebarPressed(info.button)) {
+				|| QButtonUI.isSpacebarPressed(info.button)) {
 			if (info.button.isContentAreaFilled()) {
 				g.setPaint(PlafPaintUtils.getVerticalGradient(
 						"xp.subtle.pressed", info.fillBounds.height,
@@ -201,8 +199,7 @@ public class XPSubtleButtonUI extends FilledButtonUI {
 		c.addMouseListener(rolloverListener);
 		c.addPropertyChangeListener("enabled", enabledListener);
 		c.addFocusListener(focusListener);
-		c.addPropertyChangeListener(FilledButtonUI.ROLLOVER,
-				updatePropertyListener);
+		c.addPropertyChangeListener(QButtonUI.ROLLOVER, updatePropertyListener);
 		updateContentAndBorder((AbstractButton) c);
 	}
 
@@ -212,7 +209,7 @@ public class XPSubtleButtonUI extends FilledButtonUI {
 		c.removeMouseListener(rolloverListener);
 		c.removeFocusListener(focusListener);
 		c.removePropertyChangeListener("enabled", enabledListener);
-		c.removePropertyChangeListener(FilledButtonUI.ROLLOVER,
+		c.removePropertyChangeListener(QButtonUI.ROLLOVER,
 				updatePropertyListener);
 	}
 }

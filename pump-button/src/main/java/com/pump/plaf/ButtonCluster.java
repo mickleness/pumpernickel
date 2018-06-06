@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
  * <P>
  * When this object is given a list of buttons, it will update the button
  * position property so all the buttons will render correctly. (This assumes the
- * buttons use a FilledButtonUI.).
+ * buttons use a QButtonUI.).
  * <P>
  * If buttons in this cluster are made invisible: the position key for each
  * button may change (so the button that used to be a "middle" button is now a
@@ -38,8 +38,8 @@ import javax.swing.SwingConstants;
  * without your intervention.
  * <P>
  * Also this optionally includes a <code>standardized</code> field. If this is
- * <code>true</code>, then the <code>FilledButtonUI</code> will make all the
- * buttons in a cluster the same approximate size.
+ * <code>true</code>, then the <code>QButtonUI</code> will make all the buttons
+ * in a cluster the same approximate size.
  *
  */
 public class ButtonCluster {
@@ -74,12 +74,12 @@ public class ButtonCluster {
 	 *            buttons. If this is not the case then no exceptions will be
 	 *            thrown, but your UI will appear incorrect.
 	 * @param ui
-	 *            the <code>FilledButtonUI</code> to install on each button.
+	 *            the <code>QButtonUI</code> to install on each button.
 	 * @param standardize
 	 *            when <code>true</code> then the buttons in the resulting
 	 *            clusters should be made the same approximate size.
 	 */
-	public static void install(JComponent parent, FilledButtonUI ui,
+	public static void install(JComponent parent, QButtonUI ui,
 			boolean standardize) {
 		install(parent, HORIZONTAL, ui, standardize);
 	}
@@ -97,13 +97,13 @@ public class ButtonCluster {
 	 * @param orientation
 	 *            either HORIZONTAL or VERTICAL
 	 * @param ui
-	 *            the <code>FilledButtonUI</code> to install on each button.
+	 *            the <code>QButtonUI</code> to install on each button.
 	 * @param standardize
 	 *            when <code>true</code> then the buttons in the resulting
 	 *            clusters should be made the same approximate size.
 	 */
 	public static void install(JComponent parent, int orientation,
-			FilledButtonUI ui, boolean standardize) {
+			QButtonUI ui, boolean standardize) {
 		List<AbstractButton> buttons = new ArrayList<AbstractButton>();
 		for (int a = 0; a < parent.getComponentCount(); a++) {
 			if (parent.getComponent(a) instanceof AbstractButton) {
@@ -131,12 +131,12 @@ public class ButtonCluster {
 	 * @param buttons
 	 *            an array of horizontally adjacent buttons
 	 * @param ui
-	 *            the <code>FilledButtonUI</code> to install on each button.
+	 *            the <code>QButtonUI</code> to install on each button.
 	 * @param standardize
 	 *            when <code>true</code> then the buttons in the resulting
 	 *            clusters should be made the same approximate size.
 	 */
-	public static void install(AbstractButton[] buttons, FilledButtonUI ui,
+	public static void install(AbstractButton[] buttons, QButtonUI ui,
 			boolean standardize) {
 		install(buttons, HORIZONTAL, ui, standardize);
 	}
@@ -151,13 +151,13 @@ public class ButtonCluster {
 	 * @param orientation
 	 *            either HORIZONTAL or VERTICAL
 	 * @param ui
-	 *            the <code>FilledButtonUI</code> to install on each button.
+	 *            the <code>QButtonUI</code> to install on each button.
 	 * @param standardize
 	 *            when <code>true</code> then the buttons in the resulting
 	 *            clusters should be made the same approximate size.
 	 */
 	public static void install(AbstractButton[] buttons, int orientation,
-			FilledButtonUI ui, boolean standardize) {
+			QButtonUI ui, boolean standardize) {
 		for (int a = 0; a < buttons.length; a++) {
 			buttons[a].setUI(ui);
 		}
@@ -198,9 +198,9 @@ public class ButtonCluster {
 
 	/**
 	 * @return whether buttons in this cluster are supposed to be standardized.
-	 *         The <code>FilledButtonUI</code> consults this property to
-	 *         determine the size of buttons. If this is <code>true</code>, then
-	 *         all buttons in a cluster will be approximately the same size.
+	 *         The <code>QButtonUI</code> consults this property to determine
+	 *         the size of buttons. If this is <code>true</code>, then all
+	 *         buttons in a cluster will be approximately the same size.
 	 */
 	public boolean isStandardized() {
 		return standardized;
@@ -215,15 +215,15 @@ public class ButtonCluster {
 	}
 
 	protected void updateSegmentPositions() {
-		String MID = FilledButtonUI.MIDDLE;
-		String ONLY = FilledButtonUI.ONLY;
+		String MID = QButtonUI.MIDDLE;
+		String ONLY = QButtonUI.ONLY;
 		String FIRST, LAST;
 		if (orientation == SwingConstants.VERTICAL) {
-			FIRST = FilledButtonUI.TOP;
-			LAST = FilledButtonUI.BOTTOM;
+			FIRST = QButtonUI.TOP;
+			LAST = QButtonUI.BOTTOM;
 		} else {
-			FIRST = FilledButtonUI.LEFT;
-			LAST = FilledButtonUI.RIGHT;
+			FIRST = QButtonUI.LEFT;
+			LAST = QButtonUI.RIGHT;
 		}
 
 		int visibleCtr = 0;
@@ -266,15 +266,14 @@ public class ButtonCluster {
 				}
 
 				if (orientation == SwingConstants.HORIZONTAL) {
-					button.putClientProperty(
-							FilledButtonUI.HORIZONTAL_POSITION, position);
-					button.putClientProperty(FilledButtonUI.VERTICAL_POSITION,
-							ONLY);
-				} else {
-					button.putClientProperty(FilledButtonUI.VERTICAL_POSITION,
+					button.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
 							position);
-					button.putClientProperty(
-							FilledButtonUI.HORIZONTAL_POSITION, ONLY);
+					button.putClientProperty(QButtonUI.VERTICAL_POSITION, ONLY);
+				} else {
+					button.putClientProperty(QButtonUI.VERTICAL_POSITION,
+							position);
+					button.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
+							ONLY);
 				}
 
 				// update for next iteration:

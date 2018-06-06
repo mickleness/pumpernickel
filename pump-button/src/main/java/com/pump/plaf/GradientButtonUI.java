@@ -30,10 +30,8 @@ import javax.swing.plaf.ComponentUI;
  * According to <a href="http://nadeausoftware.com/node/87">this</a> article,
  * the "gradient" look is originally intended to: <br>
  * "select among options, such as different ways of viewing something".
- * 
- * @see com.pump.showcase.FilledButtonUIDemo
  */
-public class GradientButtonUI extends FilledButtonUI {
+public class GradientButtonUI extends QButtonUI {
 	public static final ButtonShape GRADIENT_SHAPE = new ButtonShape(0, 0);
 
 	/**

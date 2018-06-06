@@ -28,9 +28,9 @@ public class ZoomIconPaintUIEffect extends PaintUIEffect {
 		public void actionPerformed(ActionEvent e) {
 			AbstractButton button = (AbstractButton) e.getSource();
 			ButtonUI ui = button.getUI();
-			if (ui instanceof FilledButtonUI) {
-				FilledButtonUI fui = (FilledButtonUI) ui;
-				List<PaintUIEffect> effects = fui.getEffects(button);
+			if (ui instanceof QButtonUI) {
+				QButtonUI qui = (QButtonUI) ui;
+				List<PaintUIEffect> effects = qui.getEffects(button);
 				boolean hasZoom = false;
 				for (int a = 0; a < effects.size(); a++) {
 					PaintUIEffect effect = effects.get(a);
@@ -53,7 +53,7 @@ public class ZoomIconPaintUIEffect extends PaintUIEffect {
 
 	@Override
 	public void paint(Graphics2D g) {
-		FilledButtonUI ui = (FilledButtonUI) button.getUI();
+		QButtonUI ui = (QButtonUI) button.getUI();
 
 		Rectangle r = ui.getIconBounds(button);
 		if (r.width == 0 || r.height == 0)
