@@ -11,6 +11,7 @@
 package com.pump.awt;
 
 import java.awt.Color;
+import java.awt.MultipleGradientPaint.CycleMethod;
 import java.awt.Paint;
 import java.awt.PaintContext;
 import java.awt.Rectangle;
@@ -23,6 +24,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.util.HashMap;
+import java.util.Objects;
 
 import com.pump.blog.Blurb;
 
@@ -31,6 +33,9 @@ import com.pump.blog.Blurb;
  * <p>
  * This goes to extra lengths to reduce color banding more than Java's default
  * gradient implementation, and is generally comparable in performance.
+ * <p>
+ * To activate: make sure the RenderingHints for VALUE_COLOR_RENDER_QUALITY,
+ * VALUE_RENDER_QUALITY, or VALUE_DITHER_ENABLE is used.
  * 
  * @see <a
  *      href="http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients:
@@ -47,10 +52,6 @@ public class GradientTexturePaint implements Paint {
 	 * 
 	 */
 	protected static boolean seedingEnabled = true;
-
-	public static enum Cycle {
-		LOOP, NONE, TILE
-	};
 
 	/** This applies error diffusion to a gradient. */
 	static class DiffusedTextureSource extends TextureSource {
@@ -492,7 +493,7 @@ public class GradientTexturePaint implements Paint {
 
 	protected Color[] colors;
 
-	protected Cycle cycle;
+	protected CycleMethod cycle;
 
 	protected float[] fractions;
 
@@ -508,7 +509,7 @@ public class GradientTexturePaint implements Paint {
 	transient DiffusedTextureSource diffusedSource;
 
 	/**
-	 * Create a 2-color gradient using <code>Cycle.NONE</code>.
+	 * Create a 2-color gradient using <code>CycleMethod.NO_CYCLE</code>.
 	 * 
 	 * @param x1
 	 *            the x-coordinate of first point
@@ -526,11 +527,11 @@ public class GradientTexturePaint implements Paint {
 	public GradientTexturePaint(float x1, float y1, Color c1, float x2,
 			float y2, Color c2) {
 		this(new Color[] { c1, c2 }, new float[] { 0, 1 }, x1, y1, x2, y2,
-				Cycle.NONE);
+				CycleMethod.NO_CYCLE);
 	}
 
 	/**
-	 * Create a 2-color gradient using <code>Cycle.NONE</code>.
+	 * Create a 2-color gradient using <code>CycleMethod.NO_CYCLE</code>.
 	 * 
 	 * @param p1
 	 *            the first point
@@ -544,7 +545,7 @@ public class GradientTexturePaint implements Paint {
 	public GradientTexturePaint(Point2D p1, Color c1, Point2D p2, Color c2) {
 		this(new Color[] { c1, c2 }, new float[] { 0, 1 }, (float) p1.getX(),
 				(float) p1.getY(), (float) p2.getX(), (float) p2.getY(),
-				Cycle.NONE);
+				CycleMethod.NO_CYCLE);
 	}
 
 	/**
@@ -564,11 +565,12 @@ public class GradientTexturePaint implements Paint {
 	 * @param y2
 	 *            the y-value of the second coordinate.
 	 * @param cycle
-	 *            TILE is recommended for best performance.
+	 *            CycleMethod.REPEAT is recommended for best performance.
 	 */
 	public GradientTexturePaint(Color[] colors, float[] fractions, float x1,
-			float y1, float x2, float y2, Cycle cycle) {
+			float y1, float x2, float y2, CycleMethod cycle) {
 		boundsCheck(colors, fractions);
+		Objects.requireNonNull(cycle);
 
 		this.cycle = cycle;
 		this.x1 = x1;
@@ -586,10 +588,10 @@ public class GradientTexturePaint implements Paint {
 
 		// handle looping:
 
-		if (cycle == Cycle.LOOP) {
+		if (cycle == CycleMethod.REFLECT) {
 			distance = 2 * distance;
-			x2 = (float) (x1 + distance * Math.cos(angle));
-			y2 = (float) (y1 + distance * Math.sin(angle));
+			this.x2 = (float) (x1 + distance * Math.cos(angle));
+			this.y2 = (float) (y1 + distance * Math.sin(angle));
 			int newArraySize = colors.length * 2
 					- (fractions[fractions.length - 1] < 1 ? 0 : 1);
 			Color[] cycledColors = new Color[newArraySize];
@@ -625,10 +627,10 @@ public class GradientTexturePaint implements Paint {
 	 * @param p2
 	 *            the second point.
 	 * @param cycle
-	 *            TILE is recommended for best performance.
+	 *            CycleMethod.REPEAT is recommended for best performance.
 	 */
 	public GradientTexturePaint(Color[] colors, float[] fractions, Point2D p1,
-			Point2D p2, Cycle cycle) {
+			Point2D p2, CycleMethod cycle) {
 		this(colors, fractions, (float) p1.getX(), (float) p1.getY(),
 				(float) p2.getX(), (float) p2.getY(), cycle);
 	}
@@ -690,7 +692,7 @@ public class GradientTexturePaint implements Paint {
 
 		PaintContext context = source.texturePaint.createContext(cm,
 				deviceBounds, userBounds, newTransform, hints);
-		if (cycle == Cycle.NONE) {
+		if (cycle == CycleMethod.NO_CYCLE) {
 			context = new CoveredContext(context, x1, y1, colors[0].getRGB(),
 					x2, y2, colors[colors.length - 1].getRGB(), xform);
 		}

@@ -321,7 +321,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("TextEffect", new TextEffectDemo());
 			addSection("AWTMonitor", new AWTMonitorDemo());
 			addSection("Gradient: Halftone", new HalftoneGradientDemo());
-			addSection("Gradient: Color Band", new ColorBandDemo(this));
+			addSection("GradientTexturePaint", new GradientTexturePaintDemo());
 			addSection("ClickSensitivityControl",
 					new ClickSensitivityControlDemo());
 			addSection("Shape Bounds", new ShapeBoundsDemo());

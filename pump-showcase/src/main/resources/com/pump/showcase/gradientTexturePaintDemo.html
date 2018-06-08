@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>GradientTexturePaint Demo</title>
+</head>
+<body>
+<p>
+This demo features the <code>GradientTexturePaint</code>, which is a <code>java.awt.Paint</code> that uses a <code>TexturePaint</code> to render a gradient. (You may want to turn on the "Magnifier" under the "Window" menu for this one.)
+<p>
+<h3>Context</h3>
+<p>
+The original motivation for the <code>GradientTexturePaint</code> may be irrelevant now. Here's what I can scrap together from my notes:
+<ul><li>Back in 2006, Romain Guy noticed that you could improve performance for horizontal/vertical gradients if you relied on a <code>TexturePaint</code> instead of a <code>GradientPaint</code>. (But links to that decades-old article may be lost?)
+<li>Now Java includes the <code>java.awt.LinearGradientPaint</code>, which can include more than two colors. But back in Java 1.4: all we had was the <code>java.awt.GradientPaint</code>, which only offered two colors. When we supported a product that had to be backwards-compatible to Java 1.4, we needed another option.
+<li>Vincent Hardy (who later contributed to the <code>LinearGradientPaint</code>) first helped develop the same concept in the <a href="https://xmlgraphics.apache.org/batik/">Batik</a> project. This was available as a jar before the <code>LinearGradientPaint</code> became part of the standard JRE.</ul>
+<p>
+<h3>Current Implementation</h3>
+<p>
+But now it's about a decade later. The <code>LinearGradientPaint</code> is available to everyone, and last I checked nobody is worried about squeezing every drop of performance out of gradients.
+<p>
+The only reason I keep the <code>GradientTexturePaint</code> around is because of a completely new factor that wasn't part of the original discussion: this gradient helps address <a href="http://en.wikipedia.org/wiki/Colour_banding">color banding</a>.
+<p>
+This demo renders two gradients side-by-side, the left with high-quality rendering hints enabled and the right with speed-oriented hints enabled. The <code>GradientTexturePaint</code> is the only paint that tries to use some basic diffusion to smooth the gradient.
+<p>
+Note the demo artificially constrains the available colors to help showcase this feature. As you drag the slider controlling the number of colors to the right: it gets harder and harder to perceive the difference. (That is: this demo intentionally exaggerates the color banding effect to show off the diffusion.)
+<p>
+The color banding can become so subtle that I've wondered whether I should simply purge this class. But so far I've kept it because of usages like the <code><a href="resource:QPanelUI">QPanelUI</a></code>. Here your gradients (if you use them) are probably going to be subtle. Maybe something like <code>0xFFFFFF</code> (white) to <code>0xF9F9F9</code> (very nearly white). In this case: a user can perceive the color banding if they try.
+</body>
+</html>
