@@ -99,7 +99,7 @@ public class QPanelUIDemo extends JPanel implements ShowcaseDemo {
 	JLabel fillColor1Label = new JLabel();
 	JLabel fillColor2Label = new JLabel("Fill Color 2:");
 	JLabel strokeColor1Label = new JLabel();
-	JLabel strokeColor2Label = new JLabel("Fill Color 2:");
+	JLabel strokeColor2Label = new JLabel("Stroke Color 2:");
 
 	public QPanelUIDemo() {
 		InspectorLayout layout = new InspectorGridBagLayout(controls);
