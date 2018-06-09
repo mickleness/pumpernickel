@@ -320,7 +320,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("AlphaComposite", new AlphaCompositeDemo());
 			addSection("TextEffect", new TextEffectDemo());
 			addSection("AWTMonitor", new AWTMonitorDemo());
-			addSection("Gradient: Halftone", new HalftoneGradientDemo());
 			addSection("GradientTexturePaint", new GradientTexturePaintDemo());
 			addSection("ClickSensitivityControl",
 					new ClickSensitivityControlDemo());
