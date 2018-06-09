@@ -11,6 +11,7 @@
 package com.pump.graphics;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.tree.TreeNode;
@@ -28,6 +29,16 @@ public interface GraphicInstruction extends TreeNode {
 	 * Returns the rectangle that is affected by this instruction.
 	 */
 	public Rectangle2D getBounds();
+
+	/**
+	 * Return true if a Point2D is rendered in this instruction.
+	 * <p>
+	 * By default this may return getBounds().contains(p), but shapes may
+	 * override this to give more specific details. For example: if a circle is
+	 * being rendered, then this method may return false for the corners of
+	 * getBounds() but not the center.
+	 */
+	public boolean contains(Point2D p);
 
 	/**
 	 * Sets the parent of this tree node. This method

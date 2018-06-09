@@ -17,6 +17,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -174,6 +175,11 @@ public class ImageInstruction implements GraphicInstruction, Serializable {
 		imageArea.transform(transform);
 		clipArea.intersect(imageArea);
 		return clipArea.getBounds2D();
+	}
+
+	@Override
+	public boolean contains(Point2D p) {
+		return getBounds().contains(p);
 	}
 
 	/** Renders this instruction. */

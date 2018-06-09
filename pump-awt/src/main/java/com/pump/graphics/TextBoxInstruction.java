@@ -23,6 +23,7 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.Serializable;
@@ -253,6 +254,11 @@ public class TextBoxInstruction implements GraphicInstruction, Serializable {
 					r.getHeight() + 2 * k);
 		}
 		return ShapeBounds.getBounds(r, transform);
+	}
+
+	@Override
+	public boolean contains(Point2D p) {
+		return getBounds().contains(p);
 	}
 
 	/** Renders this text box. */

@@ -27,8 +27,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.text.DecimalFormat;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -116,11 +119,36 @@ public class GraphicsWriterDebugger extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				Point2D.Double p = getAbstractPoint(e.getPoint());
+				GraphicInstruction leaf = getLeafInstruction(writer, p);
+				if (leaf != null) {
+					List<GraphicInstruction> z = new LinkedList<>();
+					GraphicInstruction j = leaf;
+					while (j != null) {
+						z.add(0, j);
+						j = (GraphicInstruction) j.getParent();
+					}
+					TreePath path = new TreePath(z.toArray());
+					tree.getSelectionModel().setSelectionPath(path);
+				}
 				if (e.getClickCount() > 1) {
 					clippedRect = null;
 					repaint();
 				}
-				clickLoc = getAbstractPoint(e.getPoint());
+				clickLoc = p;
+			}
+
+			private GraphicInstruction getLeafInstruction(GraphicInstruction i,
+					Double p) {
+				if (i.contains(p)) {
+					for (int a = i.getChildCount() - 1; a >= 0; a--) {
+						GraphicInstruction child = i.getChildAt(a);
+						if (child.contains(p))
+							return getLeafInstruction(child, p);
+					}
+					return i;
+				}
+				return null;
 			}
 
 			@Override

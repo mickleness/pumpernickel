@@ -25,6 +25,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -355,6 +356,16 @@ public class GraphicsWriter extends AbstractGraphics2D implements
 			}
 		}
 		return r;
+	}
+
+	@Override
+	public boolean contains(Point2D p) {
+		for (int a = 0; a < elements.size(); a++) {
+			GraphicInstruction i = elements.get(a);
+			if (i.contains(p))
+				return true;
+		}
+		return false;
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

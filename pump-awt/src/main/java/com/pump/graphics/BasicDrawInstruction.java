@@ -19,6 +19,7 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.Serializable;
@@ -171,16 +172,31 @@ public class BasicDrawInstruction implements DrawInstruction, Serializable {
 	 * the clipping and transform.
 	 */
 	public Rectangle2D getBounds() {
+		Shape s = stroke.createStrokedShape(path);
 		if (clipping == null) {
-			return ShapeBounds.getBounds(stroke.createStrokedShape(path),
-					transform);
+			return ShapeBounds.getBounds(s, transform);
 		}
 
 		Area clipArea = new Area(clipping);
-		Area strokeArea = new Area(stroke.createStrokedShape(path));
+		Area strokeArea = new Area(s);
 		strokeArea.transform(transform);
 		clipArea.intersect(strokeArea);
 		return clipArea.getBounds2D();
+	}
+
+	@Override
+	public boolean contains(Point2D p) {
+		Shape s = stroke.createStrokedShape(path);
+		if (clipping == null) {
+			return new GeneralPath(s).createTransformedShape(transform)
+					.contains(p);
+		}
+
+		Area clipArea = new Area(clipping);
+		Area strokeArea = new Area(s);
+		strokeArea.transform(transform);
+		clipArea.intersect(strokeArea);
+		return clipArea.contains(p);
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

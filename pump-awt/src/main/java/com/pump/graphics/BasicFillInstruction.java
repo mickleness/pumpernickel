@@ -19,6 +19,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.Serializable;
@@ -163,6 +164,19 @@ public class BasicFillInstruction implements FillInstruction, Serializable {
 		shapeArea.transform(transform);
 		clipArea.intersect(shapeArea);
 		return clipArea.getBounds2D();
+	}
+
+	@Override
+	public boolean contains(Point2D p) {
+		if (clipping == null) {
+			return path.createTransformedShape(transform).contains(p);
+		}
+
+		Area clipArea = new Area(clipping);
+		Area shapeArea = new Area(path);
+		shapeArea.transform(transform);
+		clipArea.intersect(shapeArea);
+		return clipArea.contains(p);
 	}
 
 	/** Renders this instruction. */
