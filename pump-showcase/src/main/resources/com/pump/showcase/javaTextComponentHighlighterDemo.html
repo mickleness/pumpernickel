@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JavaTextComponentHighlighter Demo</title>
+</head>
+<body>
+The <code>com.pump.swing.JavaTextComponentHighlighter</code> applies stylistic formatting to render Java source code.
+<p>
+The class that does the real heavy-lifting here is the <code>com.pump.io.java.JavaParser</code>. This parser breaks up a block of text into individual tokens. (It has no analytic understanding of what those tokens mean, though.) It is capable of parsing primitives, Strings, comments, and has lists of predefined keywords. I've used this class to collect/analyze all the Strings or javadoc in source code, or to flesh out a basic outline of all the classes/methods in a file.
+<p>
+And lastly the <code>com.pump.swing.LineNumberBorder</code> is a <code>javax.swing.Border</code> that paints the line number to the left of a text box. (Obviously this is very different from the similar-sounding <code>javax.swing.LineBorder</code>).
+<p>
+Be sure to check out the <a href="resource:XMLTextComponentHighlighter">XMLTextComponentHighlighter</a> too!
+
+</body>
+</html>

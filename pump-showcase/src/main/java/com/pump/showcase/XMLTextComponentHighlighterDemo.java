@@ -14,37 +14,27 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URL;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Highlighter.HighlightPainter;
 
-import com.pump.io.parser.Token;
+import com.pump.io.parser.xml.XMLParser;
 import com.pump.swing.LineNumberBorder;
 import com.pump.swing.XMLTextComponentHighlighter;
-import com.pump.text.TextBoxHighlightPainter;
 
 /**
  * This little demo app combines the
  * {@link com.pump.swing.XMLTextComponentHighlighter} with a
- * {@link com.pump.swing.LineNumberBorder} and demos a
- * {@link TextBoxHighlightPainter}.
+ * {@link com.pump.swing.LineNumberBorder}.
  */
-public class XMLTextComponentHighlighterDemo extends JPanel {
+public class XMLTextComponentHighlighterDemo extends JPanel implements
+		ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JTextPane textPane = new JTextPane();
 	JScrollPane scrollPane = new JScrollPane(textPane);
-	Map<String, Float> boxHues = new HashMap<String, Float>();
-	JLabel highlightLabel = new JLabel("Highlight:");
-	JTextField highlightTextField = new JTextField("class");
 	XMLTextComponentHighlighter highlighter;
 
 	public XMLTextComponentHighlighterDemo(boolean includeHighlightControls) {
@@ -55,56 +45,40 @@ public class XMLTextComponentHighlighterDemo extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weightx = 0;
-		c.weighty = 0;
-		c.insets = new Insets(4, 4, 4, 4);
-		c.fill = GridBagConstraints.BOTH;
-		add(highlightLabel, c);
-		c.gridx++;
 		c.weightx = 1;
-		add(highlightTextField, c);
-		c.gridx = 0;
-		c.gridy++;
 		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(0, 0, 0, 0);
-		c.gridwidth = GridBagConstraints.REMAINDER;
 		add(scrollPane, c);
 		scrollPane.setPreferredSize(new Dimension(400, 200));
 
-		highlightLabel.setVisible(includeHighlightControls);
-		highlightTextField.setVisible(includeHighlightControls);
+		highlighter = new XMLTextComponentHighlighter(textPane);
+	}
 
-		highlightTextField.getDocument().addDocumentListener(
-				new DocumentListener() {
+	@Override
+	public String getTitle() {
+		return "XMLTextComponentHighlighter Demo";
+	}
 
-					@Override
-					public void insertUpdate(DocumentEvent e) {
-						highlighter.refresh(true);
-					}
+	@Override
+	public URL getHelpURL() {
+		return XMLTextComponentHighlighterDemo.class
+				.getResource("xmlTextComponentHighlighterDemo.html");
+	}
 
-					@Override
-					public void removeUpdate(DocumentEvent e) {
-						highlighter.refresh(true);
-					}
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "xml", "text", "editor", "Swing", "ui" };
+	}
 
-					@Override
-					public void changedUpdate(DocumentEvent e) {
-					}
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { XMLTextComponentHighlighterDemo.class,
+				LineNumberBorder.class, XMLParser.class };
+	}
 
-				});
-
-		highlighter = new XMLTextComponentHighlighter(textPane) {
-
-			@Override
-			protected HighlightPainter getHighlightPainter(Token[] allTokens,
-					int tokenIndex, int selectionStart, int selectionEnd) {
-				if (allTokens[tokenIndex].getText().equalsIgnoreCase(
-						highlightTextField.getText())) {
-					return new TextBoxHighlightPainter(.2f, true);
-				}
-
-				return null;
-			}
-		};
+	@Override
+	public boolean isSeparatorVisible() {
+		return true;
 	}
 }
