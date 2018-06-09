@@ -13,6 +13,7 @@ package com.pump.showcase;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -56,8 +57,8 @@ public class WildcardPatternHighlighterDemo extends JPanel {
 	JLabel squiggleLabel = new JLabel("Squiggle:");
 	ColorWell colorWell = new ColorWell(true, Color.red);
 	JSpinner thicknessSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 3, 1));
-	JRadioButton squiggleOnRadioButton = new JRadioButton("On", false);
-	JRadioButton squiggleOffRadioButton = new JRadioButton("Off", true);
+	JRadioButton squiggleOnRadioButton = new JRadioButton("On", true);
+	JRadioButton squiggleOffRadioButton = new JRadioButton("Off", false);
 	ButtonGroup squiggleButtonGroup = new ButtonGroup();
 
 	JTextField blockPatternField = new JTextField("????ing");
@@ -68,8 +69,8 @@ public class WildcardPatternHighlighterDemo extends JPanel {
 	JLabel includeFillLabel = new JLabel("Fill:");
 	JLabel alphaLabel = new JLabel("Alpha:");
 	JSpinner hueSpinner = new JSpinner(new SpinnerNumberModel(180, 1, 360, 5));
-	JRadioButton includeFillOnRadioButton = new JRadioButton("On", false);
-	JRadioButton includeFillOffRadioButton = new JRadioButton("Off", true);
+	JRadioButton includeFillOnRadioButton = new JRadioButton("On", true);
+	JRadioButton includeFillOffRadioButton = new JRadioButton("Off", false);
 	ButtonGroup includeFillButtonGroup = new ButtonGroup();
 	JSpinner alphaSpinner = new JSpinner(new SpinnerNumberModel(100, 1, 100, 1));
 
@@ -151,6 +152,7 @@ public class WildcardPatternHighlighterDemo extends JPanel {
 		c.fill = GridBagConstraints.BOTH;
 		textSection.getBody().add(scrollPane, c);
 
+		c.insets = new Insets(0, 0, 0, 5);
 		add(sectionContainer, c);
 
 		textPane.setText("Once upon a midnight dreary, while I pondered, weak and weary,\n"

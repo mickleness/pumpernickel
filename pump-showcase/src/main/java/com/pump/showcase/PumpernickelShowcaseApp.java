@@ -10,7 +10,6 @@
  */
 package com.pump.showcase;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Desktop;
@@ -70,7 +69,6 @@ import com.pump.swing.HelpComponent;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.ListSectionContainer;
 import com.pump.swing.MagnificationPanel;
-import com.pump.swing.PartialLineBorder;
 import com.pump.swing.SectionContainer.Section;
 import com.pump.swing.TextFieldPrompt;
 import com.pump.text.WildcardPattern;
@@ -583,8 +581,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(3, 3, 3, 3);
 		panel.add(collapsibleContainer, c);
-		collapsibleContainer.setBorder(new PartialLineBorder(Color.gray, false,
-				true, true, true));
 
 		for (Section section : sections) {
 			section.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);

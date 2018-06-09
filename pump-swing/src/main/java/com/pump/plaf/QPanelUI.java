@@ -34,6 +34,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import com.pump.geom.ShapeStringUtils;
+import com.pump.util.ObservableProperties.Edit;
 import com.pump.util.ObservableProperties.Key;
 
 /**
@@ -306,7 +307,11 @@ public class QPanelUI extends GradientPanelUI {
 				if (KEY_CALLOUT_TYPE.getKeyName().equals(evt.getPropertyName())) {
 					CalloutType t1 = (CalloutType) evt.getOldValue();
 					CalloutType t2 = (CalloutType) evt.getNewValue();
-					geometryDirty = t1.getEdge() != t2.getEdge();
+					if (t1 == null || t2 == null) {
+						geometryDirty = true;
+					} else {
+						geometryDirty = t1.getEdge() != t2.getEdge();
+					}
 				} else if (KEY_CALLOUT_SIZE.getKeyName().equals(
 						evt.getPropertyName())
 						|| KEY_CORNER_SIZE.getKeyName().equals(
@@ -633,5 +638,22 @@ public class QPanelUI extends GradientPanelUI {
 		return super.isSupported(key) || KEY_CORNER_SIZE.equals(key)
 				|| KEY_CALLOUT_TYPE.equals(key) || KEY_CALLOUT_SIZE.equals(key)
 				|| KEY_SHADOW_SIZE.equals(key);
+	}
+
+	/**
+	 * Copy all the attributes from the argument and apply them to this object.
+	 * After calling this method the method {@link #equals(Object)} should
+	 * return true for the argument and this object.
+	 */
+	public void assign(QPanelUI ui) {
+		Edit edit = properties.beginEdit();
+		try {
+			properties.clear();
+			for (Key key : ui.properties.keys()) {
+				properties.set(key, ui.properties.get(key));
+			}
+		} finally {
+			properties.endEdit(edit);
+		}
 	}
 }

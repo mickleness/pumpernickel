@@ -516,14 +516,14 @@ public class JarWriterApp extends JFrame {
 		c.weighty = 0;
 		c.fill = GridBagConstraints.BOTH;
 		panel.add(CollapsibleContainer.createCollapsibleButton(
-				"Classes with a main() method:", true, false), c);
+				"Classes with a main() method:", false), c);
 		c.gridy++;
 		c.weighty = 1;
 		panel.add(mainClassScrollPane, c);
 		c.gridy++;
 		c.weighty = 0;
 		panel.add(CollapsibleContainer.createCollapsibleButton(
-				"Classes without a main() method:", true, false), c);
+				"Classes without a main() method:", false), c);
 		c.gridy++;
 		c.weighty = 1;
 		panel.add(otherClassScrollPane, c);

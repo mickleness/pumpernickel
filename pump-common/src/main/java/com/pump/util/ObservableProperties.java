@@ -980,6 +980,17 @@ public class ObservableProperties implements Serializable {
 	}
 
 	/**
+	 * Return all keys
+	 */
+	public synchronized Set<Key<?>> keys() {
+		Set<Key<?>> keys = new HashSet<>();
+		for (PropertyGroup g : groupMap.values()) {
+			keys.addAll(g.map.keySet());
+		}
+		return keys;
+	}
+
+	/**
 	 * @return a condensed map of all group IDs.
 	 * @param prependGroupID
 	 *            if true, then the groupID will be prepended to all keys. It is

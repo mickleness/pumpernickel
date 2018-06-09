@@ -318,6 +318,7 @@ public class InspectorGridBagLayout implements InspectorLayout {
 
 	private JComponent group(JComponent... components) {
 		JPanel group = new JPanel(new FlowLayout());
+		group.setOpaque(false);
 		for (JComponent c : components) {
 			group.add(c);
 		}

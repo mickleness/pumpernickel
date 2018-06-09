@@ -34,20 +34,26 @@ import java.util.concurrent.Semaphore;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.pump.awt.DescendantListener;
 import com.pump.blog.Blurb;
-import com.pump.icon.EmptyIcon;
 import com.pump.icon.RotatedIcon;
 import com.pump.icon.TriangleIcon;
 import com.pump.plaf.GradientButtonUI;
 import com.pump.plaf.QButtonUI;
+import com.pump.plaf.QPanelUI;
 import com.pump.plaf.UIEffect;
+import com.pump.util.WeakSet;
 
 /**
  * A vertical series of collapsible, labeled <Code>Sections</code>.
@@ -434,10 +440,74 @@ public class CollapsibleContainer extends SectionContainer {
 		});
 		setLayout(new CollapsibleLayout());
 		sections.addSynchronizedChangeListener(sectionListener);
+
+		sections.addSynchronizedChangeListener(new ChangeListener() {
+			Set<Section> mySections = new WeakSet<>();
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				for (Section s : sections) {
+					if (mySections.add(s)) {
+						final JPanel body = s.getBody();
+						new DescendantListener(s.getBody(), false) {
+
+							@Override
+							public void register(Component c) {
+								refreshSectionBody(body);
+							}
+
+							@Override
+							public void unregister(Component c) {
+								refreshSectionBody(body);
+							}
+
+						};
+					}
+				}
+			}
+
+			private void refreshSectionBody(JPanel container) {
+				JPanel p = container;
+				QPanelUI ui;
+				if (!(p.getUI() instanceof QPanelUI)) {
+					ui = new QPanelUI();
+					p.setUI(ui);
+				} else {
+					ui = (QPanelUI) p.getUI();
+				}
+				ui.assign(QPanelUI.createBoxUI());
+
+				if (p.getComponentCount() == 1) {
+					Component child = p.getComponent(0);
+					if (child instanceof JList || child instanceof JTree) {
+						JComponent jc = (JComponent) child;
+						Border b = jc.getBorder();
+						Insets i = b == null ? null : b.getBorderInsets(jc);
+						boolean hasBorder = i != null && i.left > 0
+								&& i.right > 0 && i.top > 0 && i.bottom > 0;
+						ui.setFillColor(child.getBackground());
+						ui.setCornerSize(0);
+						ui.setShadowSize(0);
+						if (!hasBorder) {
+							ui.setStrokeColor(Color.gray);
+						}
+
+					} else if (child instanceof JScrollPane) {
+						ui.setFillColor(child.getBackground());
+						ui.setCornerSize(0);
+						ui.setShadowSize(0);
+						ui.setStrokeColor(new Color(0, 0, 0, 0));
+					} else if (child.isOpaque()
+							&& child.getBackground().getAlpha() > 0) {
+						ui.setCornerSize(1);
+					}
+				}
+			}
+		});
 	}
 
 	protected JButton createHeader(Section s) {
-		return createCollapsibleButton("", false, true, slowDownFactor);
+		return createCollapsibleButton("", true, slowDownFactor);
 	}
 
 	LayoutBlueprint animatingBlueprint;
@@ -505,7 +575,7 @@ public class CollapsibleContainer extends SectionContainer {
 	 *         </ul>
 	 */
 	public static JButton createCollapsibleButton() {
-		return createCollapsibleButton("", false, true);
+		return createCollapsibleButton("", true);
 	}
 
 	/**
@@ -534,14 +604,12 @@ public class CollapsibleContainer extends SectionContainer {
 	 *         </ul>
 	 */
 	public static JButton createCollapsibleButton(String text,
-			boolean includeLeftAndRightEdges, boolean collapsible) {
-		return createCollapsibleButton(text, includeLeftAndRightEdges,
-				collapsible, 1);
+			boolean collapsible) {
+		return createCollapsibleButton(text, collapsible, 1);
 	}
 
 	protected static JButton createCollapsibleButton(String text,
-			boolean includeLeftAndRightEdges, boolean collapsible,
-			int slowDownFactor) {
+			boolean collapsible, int slowDownFactor) {
 		final JButton button = new JButton();
 		QButtonUI ui = new GradientButtonUI() {
 			@Override
@@ -556,11 +624,10 @@ public class CollapsibleContainer extends SectionContainer {
 				return new Insets(4, 7, 4, 6);
 			}
 		};
+		button.setContentAreaFilled(false);
 		button.setUI(ui);
 		button.putClientProperty(QButtonUI.STROKE_PAINTED, Boolean.FALSE);
-		button.setBorder(new PartialLineBorder(Color.gray,
-				includeLeftAndRightEdges ? new Insets(1, 1, 1, 1) : new Insets(
-						1, 0, 1, 0)));
+
 		button.setFont(UIManager.getFont("Label.font"));
 		button.setText(text);
 		button.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
@@ -626,7 +693,6 @@ public class CollapsibleContainer extends SectionContainer {
 
 			private Icon triangleIcon = new TriangleIcon(SwingConstants.EAST,
 					10, 10);
-			private Icon unusedIcon = new RotatedIcon(triangleIcon, 0);
 
 			private void updateIcon() {
 				if ((Boolean) button.getClientProperty(COLLAPSIBLE)) {
@@ -636,8 +702,7 @@ public class CollapsibleContainer extends SectionContainer {
 					float rotation = n.floatValue();
 					button.setIcon(new RotatedIcon(triangleIcon, rotation));
 				} else {
-					button.setIcon(new EmptyIcon(unusedIcon.getIconHeight(),
-							unusedIcon.getIconHeight()));
+					button.setIcon(null);
 				}
 			}
 

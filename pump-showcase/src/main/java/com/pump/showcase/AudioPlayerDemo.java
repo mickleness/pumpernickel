@@ -66,6 +66,7 @@ public class AudioPlayerDemo extends JPanel implements ShowcaseDemo {
 
 	private void setupPlayerComponent() {
 		JPanel controls = new JPanel();
+		controls.setOpaque(false);
 		InspectorLayout layout = new InspectorGridBagLayout(controls);
 		layout.addRow(new JLabel("WAV File:"), comboBox, false);
 		layout.addRow(audioPlayerComponent, SwingConstants.CENTER, true);
