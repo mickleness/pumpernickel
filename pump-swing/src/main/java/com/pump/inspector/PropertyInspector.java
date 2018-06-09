@@ -33,7 +33,7 @@ import javax.swing.event.ChangeListener;
 import com.pump.util.BooleanProperty;
 import com.pump.util.EnumProperty;
 import com.pump.util.FloatProperty;
-import com.pump.util.IntProperty;
+import com.pump.util.IntegerProperty;
 import com.pump.util.Property;
 
 public class PropertyInspector extends JPanel {
@@ -65,9 +65,9 @@ public class PropertyInspector extends JPanel {
 			if (properties[a] instanceof BooleanProperty) {
 				BooleanProperty bp = (BooleanProperty) properties[a];
 				editor = new BooleanPropertyEditor(bp);
-			} else if (properties[a] instanceof IntProperty) {
-				IntProperty ip = (IntProperty) properties[a];
-				editor = new IntPropertyEditor(ip);
+			} else if (properties[a] instanceof IntegerProperty) {
+				IntegerProperty ip = (IntegerProperty) properties[a];
+				editor = new IntegerPropertyEditor(ip);
 			} else if (properties[a] instanceof FloatProperty) {
 				FloatProperty fp = (FloatProperty) properties[a];
 				editor = new FloatPropertyEditor(fp);
@@ -184,7 +184,7 @@ class BooleanPropertyEditor extends PropertyEditor {
 	}
 }
 
-class IntPropertyEditor extends PropertyEditor {
+class IntegerPropertyEditor extends PropertyEditor {
 	JSpinner spinner;
 	JLabel label = new JLabel();
 	JPanel valueContainer = new JPanel(new GridBagLayout());
@@ -192,7 +192,7 @@ class IntPropertyEditor extends PropertyEditor {
 
 	private int adjusting = 0;
 
-	public IntPropertyEditor(IntProperty p) {
+	public IntegerPropertyEditor(IntegerProperty p) {
 		super(p);
 		SpinnerNumberModel model = new SpinnerNumberModel(p.getValue()
 				.intValue(), p.getMin(), p.getMax(), 1);
@@ -203,7 +203,7 @@ class IntPropertyEditor extends PropertyEditor {
 					return;
 				adjusting++;
 				try {
-					IntPropertyEditor.this.p.setValue(spinner.getValue());
+					IntegerPropertyEditor.this.p.setValue(spinner.getValue());
 				} finally {
 					adjusting--;
 				}

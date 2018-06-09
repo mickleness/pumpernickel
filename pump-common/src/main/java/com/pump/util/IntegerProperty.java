@@ -10,10 +10,18 @@
  */
 package com.pump.util;
 
-public class IntProperty extends Property<Integer> {
+public class IntegerProperty extends Property<Integer> {
 	final int min, max;
 
-	public IntProperty(String name, int minValue, int maxValue, int defaultValue) {
+	/**
+	 * Create a new IntegerProperty with no min or max value.
+	 */
+	public IntegerProperty(String name, int defaultValue) {
+		this(name, Integer.MIN_VALUE, Integer.MAX_VALUE, defaultValue);
+	}
+
+	public IntegerProperty(String name, int minValue, int maxValue,
+			int defaultValue) {
 		super(name);
 		min = minValue;
 		max = maxValue;

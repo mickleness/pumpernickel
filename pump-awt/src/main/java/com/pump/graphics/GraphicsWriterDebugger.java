@@ -44,6 +44,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import com.pump.util.IntegerProperty;
+
 /**
  * A simple debugger tool for graphics.
  */
@@ -59,17 +61,36 @@ public class GraphicsWriterDebugger extends JFrame {
 	 *            a component to debug. The <code>paint()</code> method of this
 	 *            argument will be used.
 	 * @param keyCode
-	 *            a <code>KeyEven.VK_X</code> key code. When this key is
+	 *            a <code>KeyEvent.VK_X</code> key code. When this key is
 	 *            pressed, the <code>GraphicsWriterDebugger</code> frame will be
 	 *            created.
 	 */
 	public static void installDebugHotkey(final Component component,
 			final int keyCode) {
+		installDebugHotkey(component, new IntegerProperty(
+				"graphics-writer-hotkey", keyCode));
+	}
+
+	/**
+	 * Install a debugging hotkey. When that key is pressed: a new
+	 * <code>GraphicsWriterDebugger</code> frame will appear that paints the
+	 * argument.
+	 * 
+	 * @param component
+	 *            a component to debug. The <code>paint()</code> method of this
+	 *            argument will be used.
+	 * @param keyCode
+	 *            a <code>KeyEvent.VK_X</code> key code. When this key is
+	 *            pressed, the <code>GraphicsWriterDebugger</code> frame will be
+	 *            created.
+	 */
+	public static void installDebugHotkey(final Component component,
+			final IntegerProperty keyCode) {
 		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
 
 			public void eventDispatched(AWTEvent event) {
 				KeyEvent e = (KeyEvent) event;
-				if (e.getKeyCode() == keyCode
+				if (e.getKeyCode() == keyCode.getValue()
 						&& e.getID() == KeyEvent.KEY_PRESSED) {
 					GraphicsWriter writer = new GraphicsWriter(true);
 					component.paint(writer);
