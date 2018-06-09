@@ -16,6 +16,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Highlighter;
 
+import com.pump.awt.TextBlock;
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.ColorWell;
@@ -43,7 +45,8 @@ import com.pump.text.TextBoxHighlightPainter;
 import com.pump.text.UnderlineHighlightPainter;
 import com.pump.text.WildcardPattern;
 
-public class WildcardPatternHighlighterDemo extends JPanel {
+public class WildcardPatternHighlighterDemo extends JPanel implements
+		ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	CollapsibleContainer sectionContainer = new CollapsibleContainer();
@@ -268,5 +271,33 @@ public class WildcardPatternHighlighterDemo extends JPanel {
 		if (sb != null)
 			words.add(new Word(sb.toString(), text.length() - sb.length()));
 		return words;
+	}
+
+	@Override
+	public String getTitle() {
+		return "Highlighters, WildcardPattern Demo";
+	}
+
+	@Override
+	public URL getHelpURL() {
+		return WildcardPatternHighlighterDemo.class
+				.getResource("wildcardPatternHighlighterDemo.html");
+	}
+
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "swing", "text", "pattern" };
+	}
+
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { WildcardPattern.class,
+				UnderlineHighlightPainter.class, TextBoxHighlightPainter.class,
+				TextBlock.class };
+	}
+
+	@Override
+	public boolean isSeparatorVisible() {
+		return true;
 	}
 }
