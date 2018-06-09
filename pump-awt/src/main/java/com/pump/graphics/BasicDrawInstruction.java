@@ -260,7 +260,7 @@ public class BasicDrawInstruction implements DrawInstruction, Serializable {
 		return false;
 	}
 
-	public TreeNode getChildAt(int childIndex) {
+	public GraphicInstruction getChildAt(int childIndex) {
 		return null;
 	}
 

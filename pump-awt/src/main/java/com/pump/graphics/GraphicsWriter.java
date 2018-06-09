@@ -427,7 +427,7 @@ public class GraphicsWriter extends AbstractGraphics2D implements
 		return true;
 	}
 
-	public TreeNode getChildAt(int childIndex) {
+	public GraphicInstruction getChildAt(int childIndex) {
 		return elements.get(childIndex);
 	}
 

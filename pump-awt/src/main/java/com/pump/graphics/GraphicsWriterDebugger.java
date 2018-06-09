@@ -215,6 +215,9 @@ public class GraphicsWriterDebugger extends JFrame {
 
 	public GraphicsWriterDebugger(GraphicsWriter root) {
 		this.writer = root;
+
+		collapse(root);
+
 		tree = new JTree(root);
 		tree.getSelectionModel().addTreeSelectionListener(
 				new TreeSelectionListener() {
@@ -305,5 +308,31 @@ public class GraphicsWriterDebugger extends JFrame {
 		text.setEditable(false);
 
 		pack();
+	}
+
+	/**
+	 * There will be a lot of 1-element groups by default (that is: a lot of
+	 * entities call Graphics.create() without actually painting anything). This
+	 * flattens the tree a little bit to make it more navigable.
+	 */
+	private void collapse(GraphicsWriter w) {
+		if (w.getChildCount() == 1 && w.getChildAt(0) instanceof GraphicsWriter) {
+			GraphicsWriter child = (GraphicsWriter) w.getChildAt(0);
+			w.remove(child);
+			GraphicInstruction[] i = new GraphicInstruction[child
+					.getChildCount()];
+			for (int a = 0; a < i.length; a++) {
+				i[a] = child.getChildAt(a);
+			}
+			for (GraphicInstruction z : i) {
+				w.add(z);
+			}
+			collapse(w);
+		}
+		for (int a = 0; a < w.getChildCount(); a++) {
+			if (w.getChildAt(a) instanceof GraphicsWriter) {
+				collapse((GraphicsWriter) w.getChildAt(a));
+			}
+		}
 	}
 }

@@ -40,4 +40,6 @@ public interface GraphicInstruction extends TreeNode {
 	 * "Unknown" if the <code>GraphicsWriter</code> debugging flag is false.
 	 */
 	public String getSource();
+
+	GraphicInstruction getChildAt(int childIndex);
 }

@@ -237,7 +237,7 @@ public class BasicFillInstruction implements FillInstruction, Serializable {
 		return false;
 	}
 
-	public TreeNode getChildAt(int childIndex) {
+	public GraphicInstruction getChildAt(int childIndex) {
 		return null;
 	}
 
