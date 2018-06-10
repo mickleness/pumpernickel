@@ -314,10 +314,4 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 		return new Class[] { QPopup.class, QPopupFactory.class, JPopover.class,
 				QPanelUI.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
-
 }

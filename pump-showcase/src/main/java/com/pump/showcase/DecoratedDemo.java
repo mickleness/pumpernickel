@@ -754,10 +754,4 @@ public class DecoratedDemo extends JPanel implements ShowcaseDemo {
 		return new Class[] { DecoratedListUI.class, DecoratedTreeUI.class,
 				JTree.class, JList.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return false;
-	}
-
 }

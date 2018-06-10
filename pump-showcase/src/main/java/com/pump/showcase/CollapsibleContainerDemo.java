@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -35,8 +36,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 
+import com.pump.plaf.QPanelUI;
 import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.SectionContainer.Section;
 
@@ -48,7 +49,7 @@ import com.pump.swing.SectionContainer.Section;
  * style="border:1px solid gray" alt="CollapsibleContainer Animation">
  * 
  */
-public class CollapsibleContainerDemo extends JPanel {
+public class CollapsibleContainerDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	class PopupListener extends MouseAdapter {
@@ -163,9 +164,7 @@ public class CollapsibleContainerDemo extends JPanel {
 		c.weightx = 1;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
-		if (comp instanceof JScrollPane) {
-			comp.setBorder(new EmptyBorder(2, 2, 2, 2));
-		} else {
+		if (!(comp instanceof JScrollPane)) {
 			c.insets = new Insets(4, 4, 4, 4);
 		}
 		container.add(comp, c);
@@ -188,5 +187,26 @@ public class CollapsibleContainerDemo extends JPanel {
 		}
 		g.dispose();
 		return bi;
+	}
+
+	@Override
+	public String getTitle() {
+		return "CollapsibleContainer Demo";
+	}
+
+	@Override
+	public URL getHelpURL() {
+		return CollapsibleContainerDemo.class
+				.getResource("collapsibleContainerDemo.html");
+	}
+
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "Swing", "ui", "sections" };
+	}
+
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { CollapsibleContainer.class, QPanelUI.class };
 	}
 }

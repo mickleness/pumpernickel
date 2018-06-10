@@ -76,9 +76,4 @@ public class XMLTextComponentHighlighterDemo extends JPanel implements
 		return new Class[] { XMLTextComponentHighlighterDemo.class,
 				LineNumberBorder.class, XMLParser.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
 }

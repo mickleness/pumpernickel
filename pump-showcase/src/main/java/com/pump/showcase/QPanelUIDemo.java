@@ -311,10 +311,4 @@ public class QPanelUIDemo extends JPanel implements ShowcaseDemo {
 	public Class<?>[] getClasses() {
 		return new Class[] { QPanelUI.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
-
 }

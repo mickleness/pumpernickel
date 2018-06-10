@@ -219,9 +219,4 @@ public class AWTMonitorDemo extends JPanel implements ShowcaseDemo {
 	public Class<?>[] getClasses() {
 		return new Class[] { AWTMonitor.class, AWTPanicListener.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
 }

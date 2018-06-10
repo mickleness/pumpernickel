@@ -195,9 +195,4 @@ public class BoxTabbedPaneUIDemo extends JPanel implements ShowcaseDemo {
 		return new Class[] { BoxTabbedPaneUIDemo.class, JTabbedPane.class,
 				SplayedLayout.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
 }

@@ -148,11 +148,6 @@ public class JToolTipDemo extends JPanel implements ShowcaseDemo {
 		return new Class[] { JToolTip.class, PopupFactory.class, Popup.class };
 	}
 
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
-
 	protected void refreshUI() {
 		if (qPopupFactory == null) {
 			qPopupFactory = new QPopupFactory(PopupFactory.getSharedInstance());

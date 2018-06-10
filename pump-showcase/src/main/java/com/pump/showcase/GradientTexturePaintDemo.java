@@ -241,9 +241,4 @@ public class GradientTexturePaintDemo extends JPanel implements ShowcaseDemo {
 		return new Class[] { GradientTexturePaintDemo.class,
 				TexturePaint.class, GradientPaint.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
 }

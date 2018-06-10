@@ -156,10 +156,4 @@ public class AudioPlayerDemo extends JPanel implements ShowcaseDemo {
 				AudioPlayerUI.class, BasicAudioPlayerUI.class,
 				WaveformSliderUI.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return false;
-	}
-
 }

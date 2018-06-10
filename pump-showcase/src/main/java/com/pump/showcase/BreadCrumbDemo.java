@@ -340,10 +340,4 @@ public class BreadCrumbDemo extends JPanel implements ShowcaseDemo {
 		return new Class[] { JBreadCrumb.class, SplayedLayout.class,
 				BreadCrumbUI.class, JLabel.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
-
 }

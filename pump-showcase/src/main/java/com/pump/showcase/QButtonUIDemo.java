@@ -588,9 +588,4 @@ public class QButtonUIDemo extends JPanel implements ShowcaseDemo {
 				TexturedButtonUI.class, VistaButtonUI.class, XPButtonUI.class,
 				XPSubtleButtonUI.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
 }

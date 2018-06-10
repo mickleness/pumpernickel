@@ -33,11 +33,4 @@ public interface ShowcaseDemo {
 	 * Return classes that are demonstrated to assist in searches.
 	 */
 	public Class<?>[] getClasses();
-
-	/**
-	 * Return true if a horizontal separator should be shown below the header.
-	 * <p>
-	 * Some demos that include a CollapsibleContainer may not need separators.
-	 */
-	public boolean isSeparatorVisible();
 }

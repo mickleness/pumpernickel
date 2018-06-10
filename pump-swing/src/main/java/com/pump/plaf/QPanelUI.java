@@ -33,7 +33,6 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 
-import com.pump.geom.ShapeStringUtils;
 import com.pump.util.ObservableProperties.Edit;
 import com.pump.util.ObservableProperties.Key;
 
@@ -216,8 +215,12 @@ public class QPanelUI extends GradientPanelUI {
 				if (p.contains(r))
 					return r;
 			}
-			throw new IllegalStateException(x + ", " + y + ", " + w + ", " + h
-					+ ", " + ShapeStringUtils.toString(p));
+			// we should only reach this in fringe cases, like when the
+			// CollapsibleContainer is animating a panel down to a height of
+			// zero.
+			if (w > 2 && h > 2)
+				return new Rectangle(x + 1, y + 1, w - 2, h - 2);
+			return new Rectangle(x, y, w, h);
 		}
 
 		public Point getCalloutTip() {

@@ -126,9 +126,4 @@ public class GraphicsWriterDebuggerDemo extends JPanel implements ShowcaseDemo {
 				ImageInstruction.class, TextBoxInstruction.class,
 				DrawInstruction.class, FillInstruction.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
 }

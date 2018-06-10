@@ -295,9 +295,4 @@ public class WildcardPatternHighlighterDemo extends JPanel implements
 				UnderlineHighlightPainter.class, TextBoxHighlightPainter.class,
 				TextBlock.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
 }

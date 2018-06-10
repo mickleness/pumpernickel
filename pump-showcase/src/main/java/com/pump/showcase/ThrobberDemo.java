@@ -168,10 +168,4 @@ public class ThrobberDemo extends JPanel implements ShowcaseDemo {
 		return new Class[] { JThrobber.class, AquaThrobberUI.class,
 				ChasingArrowsThrobberUI.class, PulsingCirclesThrobberUI.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
-
 }

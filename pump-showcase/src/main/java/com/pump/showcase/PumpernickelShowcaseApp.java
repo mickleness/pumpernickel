@@ -328,9 +328,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("DecoratedListUI, DecoratedTreeUI", new DecoratedDemo());
 			addSection("JThrobber", new ThrobberDemo());
 			addSection("JBreadCrumb", new BreadCrumbDemo());
-			addSection("Screen Capture", new ScreenCaptureDemo(this));
-			addSection("Swing: CollapsibleContainer",
-					new CollapsibleContainerDemo());
+			addSection("CollapsibleContainer", new CollapsibleContainerDemo());
 			addSection("Swing: CustomizedToolbar", new CustomizedToolbarDemo());
 			addSection("JToolTip", new JToolTipDemo());
 			addSection("JPopover", new JPopoverDemo());
@@ -344,13 +342,11 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Images: JPEG Metadata", new JPEGMetaDataDemo());
 			addSection("QPanelUI", new QPanelUIDemo());
 			addSection("AudioPlayer", new AudioPlayerDemo(this));
-			addSection("Math: Gaussian Elimination", new EquationsDemo());
 			addSection("JavaTextComponentHighlighter",
 					new JavaTextComponentHighlighterDemo(true));
 			addSection("XMLTextComponentHighlighter",
 					new XMLTextComponentHighlighterDemo(true));
 			addSection("Text: Search Controls", new TextSearchDemo());
-			addSection("Images: Creating Animated Gifs", new GifWriterDemo());
 			addSection("QuickTime: Writing Movies", new MovWriterDemo());
 			addSection("Highlighters, WildcardPattern",
 					new WildcardPatternHighlighterDemo());
@@ -396,8 +392,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 	private void addSection(String text, JComponent component) {
 		if (component instanceof ShowcaseDemo) {
 			ShowcaseDemo d = (ShowcaseDemo) component;
-			component = wrapDemo(component, d.getTitle(), d.getHelpURL(),
-					d.isSeparatorVisible());
+			component = wrapDemo(component, d.getTitle(), d.getHelpURL());
 		}
 		Section section = sectionContainer.addSection(text, text);
 		masterSectionList.add(section);
@@ -466,7 +461,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 	}
 
 	private JComponent wrapDemo(JComponent component, String title,
-			final URL helpURL, boolean includeSeparator) {
+			final URL helpURL) {
 		ActionListener actionListener = new ActionListener() {
 			JScrollPane scrollPane;
 			JFancyBox box;
@@ -535,11 +530,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 		c.insets = new Insets(3, 3, 3, 3);
 		replacement.add(jc, c);
 		c.fill = GridBagConstraints.BOTH;
-		if (includeSeparator) {
-			jc.setVisible(helpURL != null);
-			c.gridy++;
-			replacement.add(new JSeparator(), c);
-		}
+		jc.setVisible(helpURL != null);
+		c.gridy++;
+		replacement.add(new JSeparator(), c);
+
 		c.gridy++;
 		c.weighty = 1;
 		c.insets = new Insets(0, 0, 0, 0);

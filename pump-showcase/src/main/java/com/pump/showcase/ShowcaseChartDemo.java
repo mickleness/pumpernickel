@@ -226,10 +226,4 @@ public abstract class ShowcaseChartDemo extends JPanel implements ShowcaseDemo {
 
 		return returnValue;
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
-
 }

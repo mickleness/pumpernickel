@@ -257,9 +257,4 @@ public class ClickSensitivityControlDemo extends JPanel implements ShowcaseDemo 
 	public Class<?>[] getClasses() {
 		return new Class[] { ClickSensitivityControl.class, MouseEvent.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
 }

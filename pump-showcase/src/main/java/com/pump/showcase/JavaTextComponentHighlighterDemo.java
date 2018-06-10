@@ -90,9 +90,4 @@ public class JavaTextComponentHighlighterDemo extends JPanel implements
 		return new Class[] { JavaTextComponentHighlighterDemo.class,
 				LineNumberBorder.class, JavaParser.class };
 	}
-
-	@Override
-	public boolean isSeparatorVisible() {
-		return true;
-	}
 }
