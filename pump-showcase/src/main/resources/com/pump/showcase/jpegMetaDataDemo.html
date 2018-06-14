@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JPEGMetaData Demo</title>
+</head>
+<body>
+
+The request was simple enough: the user needs to be able to browser a folder of images. Most of the time these images would be JPEGs from a high-resolution camera, so they would be over a thousand pixels in each dimension.
+<p>
+The first implementation we drafted was as straight-forward as possible: render the image, then scale it to a thumbnail. But as you can imagine this was painfully slow for users with thousands of photos. And users knew to expect better; they could easily point to other apps that breezed through thumbnails in seconds. So we were shamed into figuring out a better solution.
+<p>
+<h3>Context</h3>
+<p>... but: surprise! Getting those thumbnails wasn't so easy. I tried googling how to use ImageIO to read thumbnails. The <a href="http://java.sun.com/j2se/1.5.0/docs/guide/imageio/spec/apps.fm3.html">first link</a> I found was from Sun, and it said:<br />
+<blockquote>
+<b>3.3.4  Reading "Thumbnail" Images</b><br />
+<br />
+Some image formats allow a small preview image (or multiple previews) to be stored alongside the main image. These "thumbnail" images are useful for identifying image files quickly, without the need to decode the entire image.<br />
+<br />
+Applications can determine how many thumbnail images associated with a particular image are available by calling:<br />
+<br />
+<pre>reader.getNumThumbnails(imageIndex);</pre>
+<br />
+<br />
+If a thumbnail image is present, it can be retrieved by calling:<br />
+<br />
+<pre>int thumbailIndex = 0;
+BufferedImage bi;
+bi = reader.readThumbnail(imageIndex, thumbnailIndex);</pre>
+<br /></blockquote>
+
+This makes sense. The problem is: it doesn't actually work.
+<p>
+A little more digging led me to <a href="http://forums.java.net/jive/thread.jspa?messageID=373652">another link</a> where a developer wrote:<br />
+<blockquote>
+I should have remarked that the JAI Image I/O Tools JPEG reader supports via the thumbnail method calls all thumbnails embedded in the JFIF APP0, JFXX APP0, and EXIF APP1 marker segments. Please see this javadoc for more information:<br />
+<br />
+<a href="http://download.java.net/media/jai-imageio/javadoc/1.1/overview-summary.html#JPEG%3Cbr%20/%3E">http://download.java.net/media/jai-imageio/javadoc/1.1/overview-summary.html#JPEG</a><br />
+<br />
+I think that the only thumbnails supported by the Java SE Image I/O JPEG reader via the thumbnail method calls are those in the JFIF and JFXX marker segments. If you are unable to use JAI Image I/O Tools for some reason you could however derive the EXIF thumbnail by parsing the contents of the "unknown" node in the image metadata corresponding to the EXIF APP1 marker segment.</blockquote>
+<br />
+I think he just summed up the problem I was seeing.  If I ran the following code (without JAI installed), I get an exception:<br />
+<blockquote>
+<pre>Iterator iterator = ImageIO.getImageReadersBySuffix("jpeg");
+while(iterator.hasNext()) {
+ ImageReader reader = (ImageReader)iterator.next();
+ try {
+  reader.setInput( ImageIO.createImageInputStream(jpeg) );
+  BufferedImage thumbnail = reader.readThumbnail(0, 0);
+ } catch(Exception e) {
+  e.printStackTrace();
+ }
+}</pre>
+</blockquote>
+<br />
+(The exception I get is: <code>java.lang.IndexOutOfBoundsException: No such thumbnail at com.sun.imageio.plugins.jpeg.JPEGImageReader.readThumbnail(JPEGImageReader.java:1354)</code>.)
+<p>
+<h3>Implementation</h3>
+<p>
+A little more exploration quickly confirmed that JPEG image data is not a trivial thing to write a decoder for. But like most media formats: it is composed of discrete blocks.
+<p>
+It wasn't too hard to tease out the blocks used for thumbnails. Like the developer suggested above: APP0 and APP1 blocks were easily identifiable. (They contained mini stand-alone JPEGs. ImageIO is perfectly capable of reading them, you just have to present the data as its own ByteArrayInputStream.)
+<p>
+A little more detective work also revealed a 3rd block: <a href="http://www.ozhiker.com/electronics/pjmt/jpeg_info/app_segments.html">APP13</a>. This is apparently Adobe's invention; it's also known as an Image Resource Block (IRB). I iterated over thousands of images (from various sources) and found that about 1/3 of them <em>only</em> used an IRB block for a thumbnail. Like the Netscape block for GIFs: this may have started with Adobe, but it looks like other folks are using it just because it's popular.
+<p>
+While I was there I harvested comments and properties. (You know all those tech-y articles advising you how to turn off geolocation tags in your phone's camera? Those tags and more are listed in a raw table of properties. Including exposure time, camera manufacturer, resolution, etc.) This all resulted in the new <code>JPEGMetaData</code> class. This is a (relatively) lightweight class that can parse an InputStream and harvest thumbnails, comments, and other properties. Is it better than JAI? Of course not. But if all you want is JPEG thumbnails: it's a big improvement over ImageIO.
+
+</body>
+</html>

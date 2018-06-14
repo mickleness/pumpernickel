@@ -10,14 +10,17 @@
  */
 package com.pump.showcase;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -35,6 +38,11 @@ import com.pump.math.function.Function;
 import com.pump.math.function.PolynomialFunction;
 
 public class BarChartRenderer {
+	/**
+	 * Use this value in your data to indicate an error occurred during
+	 * calculations.
+	 */
+	public static final Long ERROR_CODE = Long.MIN_VALUE + 1;
 
 	interface Row {
 		public int getHeight();
@@ -122,6 +130,7 @@ public class BarChartRenderer {
 
 		@Override
 		public void paint(Graphics2D g, int xMin, int y, int xMax) {
+			g = (Graphics2D) g.create();
 			int h = getHeight();
 			float labelX = (float) (xMin - groupLabelRightGap - groupLabelRect
 					.getWidth());
@@ -131,21 +140,49 @@ public class BarChartRenderer {
 			g.drawString(groupLabel, labelX, labelY);
 			Function xFunction = PolynomialFunction.createFit(0, xMin,
 					maxValue, xMax);
+			Font font = g.getFont();
 
 			int j = y;
 			for (Entry<String, Long> e : data.entrySet()) {
-				int k = (int) (xFunction.evaluate(e.getValue()) + .5);
-				Rectangle2D r = new Rectangle(xMin, j, k - xMin, barHeight);
-				Color fill = getColor(e.getKey());
-				g.setColor(fill);
-				g.fill(r);
-				g.setColor(Color.black);
-				g.draw(r);
+				Long v = e.getValue();
+				Color barColor = getColor(e.getKey());
+				if (ERROR_CODE.equals(v)) {
+					int r = 3;
+					String str = "Error";
+					double w = g.getFontMetrics().getStringBounds(str, g)
+							.getWidth();
+					Shape[] bullets = new Shape[] {
+							new Ellipse2D.Double(xMin + 6 - r, j + barHeight
+									/ 2 - r + 1, 2 * r, 2 * r),
+							new Ellipse2D.Double(xMin + 15 - r, j + barHeight
+									/ 2 - r + 1, 2 * r, 2 * r),
+							new Ellipse2D.Double(xMin + w + 18 + 5 - r, j
+									+ barHeight / 2 - r + 1, 2 * r, 2 * r),
+							new Ellipse2D.Double(xMin + w + 18 + 14 - r, j
+									+ barHeight / 2 - r + 1, 2 * r, 2 * r) };
+					for (Shape bullet : bullets) {
+						g.setColor(barColor);
+						g.fill(bullet);
+						g.setColor(Color.black);
+						g.draw(bullet);
+					}
+
+					g.setColor(Color.black);
+					g.setFont(font.deriveFont(font.getSize2D() - 2));
+					g.drawString(str, xMin + 20, j + barHeight - 3);
+				} else {
+					int k = (int) (xFunction.evaluate(v) + .5);
+					Rectangle2D r = new Rectangle(xMin, j, k - xMin, barHeight);
+					g.setColor(barColor);
+					g.fill(r);
+					g.setStroke(new BasicStroke(1));
+					g.setColor(Color.black);
+					g.draw(r);
+				}
 				j += barHeight;
-
 			}
+			g.dispose();
 		}
-
 	}
 
 	private Color getColor(String key) {

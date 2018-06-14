@@ -339,7 +339,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Shapes: AreaX Tests", new AreaXTestPanel());
 			addSection("GraphicsWriterDebugger",
 					new GraphicsWriterDebuggerDemo());
-			addSection("Images: JPEG Metadata", new JPEGMetaDataDemo());
+			addSection("JPEGMetaData", new JPEGMetaDataDemo());
 			addSection("QPanelUI", new QPanelUIDemo());
 			addSection("AudioPlayer", new AudioPlayerDemo(this));
 			addSection("JavaTextComponentHighlighter",
@@ -354,7 +354,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("CircularProgressBarUI", new CircularProgressBarUIDemo());
 			addSection("Strokes, MouseSmoothing",
 					new StrokeMouseSmoothingDemo());
-			// TODO: add CubicIntersectionsPanel with 18-degree polynomial?
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -129,7 +129,11 @@ public abstract class ShowcaseChartDemo extends JPanel implements ShowcaseDemo {
 							int[] params = split(i, limits);
 							data = collectData(params);
 						} catch (Exception e) {
-							// TODO: process error
+							/*
+							 * If you find collectData is throwing an exception,
+							 * instead catch that exception and store the value
+							 * as BarChartRenderer.ERROR_CODE
+							 */
 							e.printStackTrace();
 							return;
 						}
