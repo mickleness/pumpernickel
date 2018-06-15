@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ShapeBounds Demo</title>
+</head>
+<body>
+<p>
+Did you know that if you look up the API for the <code>java.awt.Shape#getBounds()</code> method it mentions:
+<blockquote>Note that there is no guarantee that the returned Rectangle2D is the smallest bounding box that encloses the Shape, only that the Shape lies entirely within the indicated Rectangle2D.</blockquote>
+<p>
+That is: it's telling you it can be wrong. As long as it errs on the side of rounding up (so the bounding box is generously too large) it fulfills the contract of the method.
+<p>
+So what options do you have if you want the actual bounds of a shape? If you're familiar with Java2D, the go-to answer is the <code>java.awt.geom.Area</code> class. It's amazingly powerful but painfully slow.
+<p>
+But calculating the bounds of a shape is not hard. A shape is a series of bezier curve segments. These segments can be linear, quadratic, or cubic. The bounds of the shape are going to be the bounds of all the segments. All you have to do is look at the starting position, the end position, and the position of all the inflection points.
+<p>
+The <code>com.pump.geom.ShapeBounds</code> iterates over all the path segments and computes the sum bounds. With javadoc the class is about 370 lines. It's easy, safe, and if all you want is the bounds: it's an amazing improvement over the Area class.
+<p>
+<h3>Comparison</h3>
+<p>
+This test creates a shape using 20 random cubic segments. It measures the time/memory used to calculate the bounds of that shape 20 times.
+<p>
+The "Area" test creates a new <code>java.awt.geom.Area</code> class that wraps the path each time. In this test I assume the bottleneck is in the actual construction, and once we have the constructed <code>Area</code> it's pretty easy/efficient to calculate the bounds.
+<p>
+The "Area (flattened)" test creates an <code>Area</code> but instead of wrapping the actual cubic path segments it wraps a flattened copy of the shape. The question this answers is, "Is it the cubic data (for which the Area class is notoriously slow) that is a significant obstacle?" By flattening the path it should be reduced to linear segments. What impact did this make? Well, it did significantly reduce the time, but it increased the memory consumption.
+<p>
+The "ShapeBounds" test uses the new class described above. It's as lean as possible, and it outperforms the other approaches.
+<p>
+(The "Path2D" test just calls <code>Path2D.getBounds()</code>. This returns the wrong value, though. The actual bounds should be about 928x971, but this returns a rectangle this is about 988x983. This is about 7% larger than necessary.)
+<p>
+Each test is repeated 10 times and the median time/memory is recorded.
+<h3>Results</h3>
+<p>
+As of this writing the results I see when I run this comparison are:
+<p>
+Memory:
+<table>
+	<tr>
+			<td>Path2D</td>
+			<td>Error</td>
+	</tr>
+	<tr>
+			<td>Area</td>
+			<td>20.46 MB</td>
+	</tr>
+	<tr>
+			<td>Area (flattened)</td>
+			<td>32.8 MB</td>
+	</tr>
+	<tr>
+			<td>ShapeBounds</td>
+			<td>3.72 MB</td>
+	</tr>
+</table>
+Time:
+<table>
+	<tr>
+			<td>Path2D</td>
+			<td>Error</td>
+	</tr>
+	<tr>
+			<td>Area</td>
+			<td>287 ms</td>
+	</tr>
+	<tr>
+			<td>Area (flattened)</td>
+			<td>119 ms</td>
+	</tr>
+	<tr>
+			<td>ShapeBounds</td>
+			<td>18 ms</td>
+	</tr>
+</table>
+<h3>Conclusion</h3>
+<p>
+If all you're doing is calculating the bounds of some simple shapes/icons (such as glyphs in a font): you probably won't notice a problem. But if you're calculating the bounds of, say, complex SVG clip art: you'll see a strong improvement using ShapeBounds.
+<p>
+Also see the <a href="resource:clipper">Clipper</a> class for an alternative to calculating rectangular clippings.
+</body>
+</html>

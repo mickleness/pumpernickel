@@ -167,7 +167,8 @@ public abstract class ShowcaseChartDemo extends JPanel implements ShowcaseDemo {
 			for (Entry<String, Long> entry2 : entry.getValue().entrySet()) {
 				sb.append("\t<tr>\n");
 				sb.append("\t\t\t<td>" + entry2.getKey() + "</td>\n");
-				String v = entry2.getValue() == BarChartRenderer.ERROR_CODE ? "Error"
+				String v = entry2.getValue()
+						.equals(BarChartRenderer.ERROR_CODE) ? "Error"
 						: NumberFormat.getInstance().format(entry2.getValue());
 				sb.append("\t\t\t<td>" + v + "</td>\n");
 				sb.append("\t</tr>\n");

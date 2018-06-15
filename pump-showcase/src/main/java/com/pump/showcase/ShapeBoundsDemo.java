@@ -10,169 +10,164 @@
  */
 package com.pump.showcase;
 
-import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Shape;
 import java.awt.geom.Area;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
-import java.io.PrintStream;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
-import com.pump.geom.AreaX;
+import javax.swing.JTextPane;
+import javax.swing.text.JTextComponent;
+
 import com.pump.geom.ShapeBounds;
-import com.pump.util.JVM;
 
 /**
  * A simple test showing off the efficiency of {@link ShapeBounds}.
  *
  **/
-public class ShapeBoundsDemo extends OutputDemo {
+public class ShapeBoundsDemo extends ShowcaseChartDemo {
 	private static final long serialVersionUID = 1L;
+	int SAMPLE_COUNT = 10;
+
+	JTextComponent textBox = new JTextPane();
 
 	public ShapeBoundsDemo() {
-		super("Run Tests...", true);
+		textBox.setText("This demos the com.pump.geom.ShapeBounds's ability to calculate a shape's bounds against the java.awt.geom.Area.\n\n(This also considers the return value of Path2D#getBounds(), but that's inaccurate so it doesn't really count...)");
+		textBox.setEditable(false);
+		textBox.setOpaque(false);
+		upperControls.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		upperControls.add(textBox, c);
 	}
 
 	@Override
-	public void run() {
-
-		PrintStream out = console.createPrintStream(false);
-		PrintStream blue = console
-				.createPrintStream(new Color(0x550000ff, true));
-		PrintStream err = console.createPrintStream(true);
-
-		try {
-			out.println(JVM.getProfile());
-			out.println("\nThis application demonstrates the performance of the ShapeBounds class, which"
-					+ " are highlighted in blue.");
-			out.println("\nIf a table entry reads \"NA\" that means the bounds it returned were "
-					+ "incorrect (therefore: clocking its performance is irrelevant).\n");
-
-			out.print("# of Shape Segments\tGeneralPath\tPath2D.Double\tArea\t");
-			blue.print("ShapeBounds");
-			out.print("\tAreaX\t");
-			out.println();
-
-			for (int a = 5; a < 70; a += 10) {
-				runTest(a, out, err, blue);
-			}
-		} catch (Throwable t) {
-			t.printStackTrace(err);
-		} finally {
-			out.println("\nFinished.");
-		}
+	public String getTitle() {
+		return "ShapeBounds Demo";
 	}
 
-	static abstract class Test {
-		PrintStream stream;
-
-		GeneralPath createGeneralPath(Random r, int numberOfSegments) {
-			GeneralPath p = new GeneralPath();
-			p.moveTo(1000 * r.nextFloat(), 1000 * r.nextFloat());
-			for (int b = 0; b < numberOfSegments; b++) {
-				p.curveTo(1000 * r.nextFloat(), 1000 * r.nextFloat(),
-						1000 * r.nextFloat(), 1000 * r.nextFloat(),
-						1000 * r.nextFloat(), 1000 * r.nextFloat());
-			}
-			p.closePath();
-			return p;
-		}
-
-		Path2D.Double createPath2D(Random r, int numberOfSegments) {
-			Path2D.Double p = new Path2D.Double();
-			p.moveTo(1000 * r.nextFloat(), 1000 * r.nextFloat());
-			for (int b = 0; b < numberOfSegments; b++) {
-				p.curveTo(1000 * r.nextFloat(), 1000 * r.nextFloat(),
-						1000 * r.nextFloat(), 1000 * r.nextFloat(),
-						1000 * r.nextFloat(), 1000 * r.nextFloat());
-			}
-			p.closePath();
-			return p;
-		}
-
-		public abstract Rectangle2D run(Random random, int numberOfSegments);
+	@Override
+	public URL getHelpURL() {
+		return ShapeBoundsDemo.class.getResource("shapeBoundsDemo.html");
 	}
 
-	private static void runTest(int numberOfSegments, PrintStream out,
-			PrintStream err, PrintStream blue) {
-		out.print(numberOfSegments + "\t");
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "performance", "boundary", "rectangle" };
+	}
 
-		Test[] tests = new Test[5];
-		tests[0] = new Test() {
-			public Rectangle2D run(Random random, int numberOfSegments) {
-				return createGeneralPath(random, numberOfSegments)
-						.getBounds2D();
-			}
-		};
-		tests[1] = new Test() {
-			public Rectangle2D run(Random random, int numberOfSegments) {
-				return createPath2D(random, numberOfSegments).getBounds2D();
-			}
-		};
-		tests[2] = new Test() {
-			public Rectangle2D run(Random random, int numberOfSegments) {
-				return new Area(createGeneralPath(random, numberOfSegments))
-						.getBounds2D();
-			}
-		};
-		tests[3] = new Test() {
-			public Rectangle2D run(Random random, int numberOfSegments) {
-				return ShapeBounds.getBounds(createGeneralPath(random,
-						numberOfSegments));
-			}
-		};
-		tests[0].stream = out;
-		tests[1].stream = out;
-		tests[2].stream = out;
-		tests[3].stream = blue;
-		tests[4] = new Test() {
-			public Rectangle2D run(Random random, int numberOfSegments) {
-				try {
-					Shape gp = createGeneralPath(random, numberOfSegments);
-					Shape areax = new AreaX(gp);
-					return areax.getBounds2D();
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			}
-		};
-		tests[4].stream = out;
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { ShapeBounds.class, Area.class, Shape.class,
+				PathIterator.class };
+	}
 
-		Random random = new Random();
+	String GROUP_TIME = "Time";
+	String GROUP_MEMORY = "Memory";
+	long[] sampleTimes = new long[SAMPLE_COUNT];
+	long[] sampleMemory = new long[SAMPLE_COUNT];
+	Map<String, Map<String, Long>> data;
 
-		long[] rowData = new long[tests.length];
-		Rectangle2D[] rectData = new Rectangle2D[tests.length];
-		for (int a = 0; a < tests.length; a++) {
-			long[] t = new long[10];
-			for (int b = 0; b < t.length; b++) {
-				random.setSeed(b * 100);
-				t[b] = System.currentTimeMillis();
-				rectData[a] = tests[a].run(random, numberOfSegments);
-				t[b] = System.currentTimeMillis() - t[b];
-			}
-			Arrays.sort(t);
-			long median = t[t.length / 2];
-			rowData[a] = median;
+	@Override
+	protected Map<String, Map<String, Long>> collectData(int... params)
+			throws Exception {
+		if (data == null) {
+			data = new HashMap<>();
+			data.put(GROUP_MEMORY, new HashMap<String, Long>());
+			data.put(GROUP_TIME, new HashMap<String, Long>());
 		}
 
-		if (!equivalent(rectData[2], rectData[3])) {
-			System.err.println(rectData[2] + " vs " + rectData[3]);
-			throw new RuntimeException(
-					"When assessing the accuracy of these approaches, I assumed Area and ShapeBounds would be equivalent.");
-		}
+		int sampleIndex = params[0];
+		int testType = params[1];
 
-		for (int a = 0; a < rowData.length; a++) {
-			if (equivalent(rectData[a], rectData[3])) {
-				tests[a].stream.print(rowData[a]);
-			} else {
-				err.print("NA");
+		System.runFinalization();
+		System.gc();
+		System.runFinalization();
+		System.gc();
+		sampleTimes[sampleIndex] = System.currentTimeMillis();
+		sampleMemory[sampleIndex] = Runtime.getRuntime().freeMemory();
+
+		Path2D path = createPath();
+		Path2D flattenedShape = new Path2D.Float();
+		flattenedShape.append(path.getPathIterator(null, .1f), false);
+		Area area = new Area(path);
+		// this is our gold standard we compare against:
+		Rectangle2D expectedBounds = area.getBounds2D();
+		Rectangle2D actualBounds = null;
+		String typeName = null;
+		for (int a = 0; a < 20; a++) {
+			switch (testType) {
+			case 0:
+				typeName = "Area";
+				actualBounds = new Area(path).getBounds2D();
+				break;
+			case 1:
+				typeName = "Area (flattened)";
+				actualBounds = new Area(flattenedShape).getBounds2D();
+				break;
+			case 2:
+				typeName = "ShapeBounds";
+				actualBounds = ShapeBounds.getBounds(path);
+				break;
+			case 3:
+				typeName = "Path2D";
+				actualBounds = new Path2D.Float(path).getBounds2D();
+				break;
+			default:
+				throw new IllegalStateException("unexpected type: " + testType);
 			}
-			out.print("\t");
 		}
 
-		out.println();
+		if (!equivalent(actualBounds, expectedBounds)) {
+			sampleTimes[sampleIndex] = BarChartRenderer.ERROR_CODE;
+			sampleMemory[sampleIndex] = BarChartRenderer.ERROR_CODE;
+		} else {
+			sampleTimes[sampleIndex] = System.currentTimeMillis()
+					- sampleTimes[sampleIndex];
+			sampleMemory[sampleIndex] = sampleMemory[sampleIndex]
+					- Runtime.getRuntime().freeMemory();
+		}
+
+		if (sampleIndex == sampleTimes.length - 1) {
+			Arrays.sort(sampleTimes);
+			Arrays.sort(sampleMemory);
+
+			data.get(GROUP_TIME).put(typeName,
+					sampleTimes[sampleTimes.length / 2]);
+			data.get(GROUP_MEMORY).put(typeName,
+					sampleMemory[sampleMemory.length / 2]);
+		}
+		return data;
+	}
+
+	@Override
+	protected int[] getCollectDataParamLimits() {
+		return new int[] { SAMPLE_COUNT, 4 };
+	}
+
+	private Path2D.Double createPath() {
+		Random r = new Random(0);
+		int numberOfSegments = 20;
+		Path2D.Double p = new Path2D.Double();
+		p.moveTo(1000 * r.nextFloat(), 1000 * r.nextFloat());
+		for (int b = 0; b < numberOfSegments; b++) {
+			p.curveTo(1000 * r.nextFloat(), 1000 * r.nextFloat(),
+					1000 * r.nextFloat(), 1000 * r.nextFloat(),
+					1000 * r.nextFloat(), 1000 * r.nextFloat());
+		}
+		p.closePath();
+		return p;
 	}
 
 	private static boolean equivalent(Rectangle2D r1, Rectangle2D r2) {

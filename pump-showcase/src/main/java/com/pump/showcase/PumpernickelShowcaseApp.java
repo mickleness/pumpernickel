@@ -321,7 +321,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("GradientTexturePaint", new GradientTexturePaintDemo());
 			addSection("ClickSensitivityControl",
 					new ClickSensitivityControlDemo());
-			addSection("Shape Bounds", new ShapeBoundsDemo());
+			addSection("ShapeBounds", new ShapeBoundsDemo());
 			addSection("Clipper", new ClipperDemo());
 			addSection("AngleSliderUI", new AngleSliderUIDemo());
 			addSection("Spiral2D", new Spiral2DDemo());
