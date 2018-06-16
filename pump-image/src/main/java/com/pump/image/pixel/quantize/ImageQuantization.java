@@ -96,12 +96,12 @@ public abstract class ImageQuantization {
 	/**
 	 * This simply identifies the closest approximation of every color. No
 	 * dithering or diffusion here. The diffusion algorithms will offer much
-	 * better results.
+	 * better results, but this should be faster.
 	 */
 	public static ImageQuantization NEAREST_NEIGHBOR = new NearestNeighborImageQuantization() {
 		@Override
 		public String toString() {
-			return "NEAREST_NEIGBHOR";
+			return "NEAREST_NEIGHBOR";
 		}
 	};
 
