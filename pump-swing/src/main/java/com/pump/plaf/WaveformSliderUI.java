@@ -11,7 +11,6 @@
 package com.pump.plaf;
 
 import java.awt.AlphaComposite;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -31,8 +30,6 @@ import javax.sound.sampled.AudioFormat.Encoding;
 import javax.swing.JComponent;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.basic.BasicSliderUI;
 
@@ -189,13 +186,6 @@ public class WaveformSliderUI extends BasicSliderUI {
 			if (value > slider.getMaximum())
 				value = slider.getMaximum();
 			slider.setValue(value);
-		}
-	};
-
-	ChangeListener changeListener = new ChangeListener() {
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			((Component) e.getSource()).repaint();
 		}
 	};
 
