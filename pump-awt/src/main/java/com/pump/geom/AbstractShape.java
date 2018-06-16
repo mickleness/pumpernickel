@@ -29,10 +29,12 @@ import java.util.Arrays;
  */
 public abstract class AbstractShape implements Shape {
 
+	@Override
 	public boolean contains(Point2D p) {
 		return contains(p.getX(), p.getY());
 	}
 
+	@Override
 	public boolean contains(Rectangle2D r) {
 		return contains(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 	}
@@ -48,6 +50,7 @@ public abstract class AbstractShape implements Shape {
 
 	public abstract int getWindingRule();
 
+	@Override
 	public boolean contains(double x, double y) {
 		return contains(x, y, null);
 	}
@@ -592,6 +595,7 @@ public abstract class AbstractShape implements Shape {
 		return false;
 	}
 
+	@Override
 	public boolean intersects(double x, double y, double w, double h) {
 		return intersects(x, y, w, h, null);
 	}
@@ -612,6 +616,7 @@ public abstract class AbstractShape implements Shape {
 		return false;
 	}
 
+	@Override
 	public boolean contains(double x, double y, double w, double h) {
 		return contains(x, y, w, h, null);
 	}
@@ -636,12 +641,14 @@ public abstract class AbstractShape implements Shape {
 		return true;
 	}
 
+	@Override
 	public Rectangle getBounds() {
 		Rectangle r = new Rectangle();
 		getBounds(null, r);
 		return r;
 	}
 
+	@Override
 	public Rectangle2D getBounds2D() {
 		Rectangle2D r = new Rectangle2D.Double();
 		getBounds(null, r);
@@ -665,12 +672,13 @@ public abstract class AbstractShape implements Shape {
 		return ShapeBounds.getBounds(iterator, r);
 	}
 
+	@Override
 	public PathIterator getPathIterator(AffineTransform at, double flatness) {
 		return new FlatteningPathIterator(getPathIterator(at), flatness);
 	}
 
+	@Override
 	public boolean intersects(Rectangle2D r) {
 		return intersects(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 	}
-
 }

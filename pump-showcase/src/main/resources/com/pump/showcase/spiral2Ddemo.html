@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Spiral2D Demo</title>
+</head>
+<body>
+<p>
+This showcases a spiral expressed as a <code>com.pump.geom.Spiral2D</code> object. On the surface this is a pretty straight-forward class (and maybe it doesn't have a broad appeal), but it's worth pointing out a couple of the helper classes that make this possible:
+<p>
+<ul><li><code>AbstractShape</code>: The devil is in the details, and this class takes care of a lot of the details of implementing a <code>java.awt.Shape</code> object. Do you know off the top of your head how to implement <code>Shape#contains(Rectangle2D)</code> or <code>Shape#intersects(Rectangle2D)</code>? As long as you provide the <code>PathIterator</code> this class will take care of those for you.</li>
+<p><li><code>ParametricPathIterator</code>: If you supply the x and y function, a function for dx/dt and dy/dt, and a model for how to increment t, then this class can convert your parametric graph to a <code>java.awt.geom.PathIterator</code>. For example a spiral can be expressed as:
+<p><blockquote><pre>x(t) = centerX+coilGap*(t + coilOffset)*cos(2*pi*t + angularOffset)
+y(t) = centerY+coilGap*(t + coilOffset)*sin(2*pi*t + angularOffset)</pre></blockquote><p>The value <code>t</code> increments by 1.0/8.0 (so there are eight bezier segments per coil), and never exceeds <code>Spiral2D#getCoils()</code>.
+<p>It may be possible to further improve this class by automating the calculation the derivative and scanning for changes to the control points, but for the time being this implementation meets the original demands of this project.</li></ul>
+</body>
+</html>
