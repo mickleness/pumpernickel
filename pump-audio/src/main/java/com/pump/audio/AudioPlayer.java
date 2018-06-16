@@ -327,19 +327,55 @@ public class AudioPlayer {
 		 */
 		addListener(new Listener() {
 			public void playbackProgress(float timeElapsed, float timeAsFraction) {
-				currentSnapshot.elapsedTime = timeElapsed;
-				currentSnapshot.fraction = timeAsFraction;
+				boolean dirty = false;
+				if (currentSnapshot.elapsedTime != timeElapsed) {
+					currentSnapshot.elapsedTime = timeElapsed;
+					dirty = true;
+				}
+				if (currentSnapshot.fraction != timeAsFraction) {
+					currentSnapshot.fraction = timeAsFraction;
+					dirty = true;
+				}
+				if (dirty) {
+					activateTimers();
+				}
 			}
 
 			public void playbackStarted() {
-				currentSnapshot.active = true;
+				if (!currentSnapshot.active) {
+					currentSnapshot.active = true;
+					activateTimers();
+				}
 			}
 
 			public void playbackStopped(Throwable t) {
-				playbackErrors.put(currentSnapshot.playAttempt, t);
-				currentSnapshot.active = false;
-				currentSnapshot.complete = true;
-				currentSnapshot.error = t;
+				boolean dirty = false;
+				if (t != playbackErrors.put(currentSnapshot.playAttempt, t))
+					dirty = true;
+				if (currentSnapshot.active) {
+					currentSnapshot.active = false;
+					dirty = true;
+				}
+				if (!currentSnapshot.complete) {
+					currentSnapshot.complete = true;
+					dirty = true;
+				}
+				if (currentSnapshot.error != t) {
+					currentSnapshot.error = t;
+					dirty = true;
+				}
+				if (dirty) {
+					activateTimers();
+				}
+			}
+
+			private void activateTimers() {
+				synchronized (timers) {
+					for (Timer timer : timers.values()) {
+						if (!timer.isRunning())
+							timer.start();
+					}
+				}
 			}
 		});
 	}
@@ -421,17 +457,9 @@ public class AudioPlayer {
 			Listener[] listenerArray;
 			synchronized (AudioPlayer.this) {
 				currentBroadcast = currentSnapshot.clone();
-				if (currentBroadcast.equals(lastBroadcast))
-					return;
-
 				List<Listener> l = edtListeners.get(updateInterval);
-
-				if (l == null)
-					return;
-
 				listenerArray = l.toArray(new Listener[l.size()]);
 			}
-			// TODO: also shutdown timers when appropriate
 
 			for (Listener listener : listenerArray) {
 				// if this is a whole new attempt, then notify everyone that
@@ -461,9 +489,10 @@ public class AudioPlayer {
 			float lastElapsed = lastBroadcast == null ? -1
 					: lastBroadcast.elapsedTime;
 
+			boolean stopped = false;
 			for (Listener listener : listenerArray) {
 				// always broadcast this first
-				if (lastActive != currentBroadcast.active) {
+				if (lastActive == false && currentBroadcast.active) {
 					listener.playbackStarted();
 				}
 
@@ -472,26 +501,35 @@ public class AudioPlayer {
 					listener.playbackProgress(currentBroadcast.elapsedTime,
 							currentBroadcast.fraction);
 					listener.playbackStopped(currentBroadcast.error);
+					stopped = true;
 				} else if (lastComplete != currentBroadcast.complete) {
 					listener.playbackProgress(currentBroadcast.elapsedTime,
 							currentBroadcast.fraction);
 					listener.playbackStopped(null);
+					stopped = true;
 				} else if (lastFraction != currentBroadcast.fraction
 						|| lastElapsed != currentBroadcast.elapsedTime) {
 					listener.playbackProgress(currentBroadcast.elapsedTime,
 							currentBroadcast.fraction);
 				}
 			}
+
 			lastBroadcast = currentBroadcast;
+			if (stopped) {
+				((Timer) e.getSource()).stop();
+			}
 		}
 	};
 
 	private void setTimerActive(int updateInterval, boolean activeState) {
-		Timer timer = timers.get(updateInterval);
-		if (timer == null) {
-			timer = new Timer(updateInterval, new CoalesceUpdateActionListener(
-					updateInterval));
-			timers.put(updateInterval, timer);
+		Timer timer;
+		synchronized (timers) {
+			timer = timers.get(updateInterval);
+			if (timer == null) {
+				timer = new Timer(updateInterval,
+						new CoalesceUpdateActionListener(updateInterval));
+				timers.put(updateInterval, timer);
+			}
 		}
 		if (activeState) {
 			timer.start();
