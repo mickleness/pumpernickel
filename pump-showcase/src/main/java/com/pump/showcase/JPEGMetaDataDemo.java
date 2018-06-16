@@ -41,6 +41,8 @@ import com.pump.util.Warnings;
 public class JPEGMetaDataDemo extends ShowcaseChartDemo {
 	private static final long serialVersionUID = 1L;
 
+	private static final int SAMPLE_COUNT = 10;
+
 	JTextComponent textBox = new JTextPane();
 
 	public JPEGMetaDataDemo() {
@@ -78,7 +80,6 @@ public class JPEGMetaDataDemo extends ShowcaseChartDemo {
 		return new Class[] { JPEGMetaData.class };
 	}
 
-	int SAMPLE_COUNT = 10;
 	String GROUP_TIME = "Time";
 	String GROUP_MEMORY = "Memory";
 	long[] sampleTimes = new long[SAMPLE_COUNT];
@@ -86,17 +87,17 @@ public class JPEGMetaDataDemo extends ShowcaseChartDemo {
 	Map<String, Map<String, Long>> data;
 	List<ImageReader> readers;
 
-	{
-		data = new LinkedHashMap<>();
-		data.put(GROUP_TIME, new HashMap<String, Long>());
-		data.put(GROUP_MEMORY, new HashMap<String, Long>());
-
-	}
 	URL url = ImageLoader.class.getResource("bridge3.jpg");
 
 	@Override
 	protected Map<String, Map<String, Long>> collectData(int... params)
 			throws Exception {
+		if (data == null) {
+			data = new LinkedHashMap<>();
+			data.put(GROUP_TIME, new HashMap<String, Long>());
+			data.put(GROUP_MEMORY, new HashMap<String, Long>());
+		}
+
 		int testType = params[1];
 		int sampleIndex = params[0];
 
