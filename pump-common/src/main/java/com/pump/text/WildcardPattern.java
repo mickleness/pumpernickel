@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -305,6 +306,11 @@ public class WildcardPattern {
 		for (int i = 0; i < s.length(); i++) {
 			char ch = s.charAt(i);
 			if (ch == '*') {
+				// two consecutive wildcards are meaningless, and screw up the
+				// unit tests
+				if (list.size() > 0
+						&& list.get(list.size() - 1) instanceof StarWildcard)
+					continue;
 				list.add(new StarWildcard());
 			} else if (ch == '?') {
 				list.add(new QuestionMarkWildcard());
@@ -382,62 +388,128 @@ public class WildcardPattern {
 	 * @return true if the argument complies with this pattern.
 	 */
 	public boolean matches(CharSequence string) {
-		// for the special case of "*" don't work too hard:
-		if (placeholders.length == 1 && placeholders[0] instanceof StarWildcard) {
-			return true;
-		} else if (containsStarWildcard() == false
-				&& string.length() != placeholders.length) {
+		Objects.requireNonNull(string);
+		return matches(string, 0, string.length() - 1, placeholders, 0,
+				placeholders.length - 1);
+	}
+
+	boolean matches(CharSequence string, int stringMinIndex,
+			int stringMaxIndex, Placeholder[] placeholders,
+			int placeholderMinIndex, int placeholderMaxIndex) {
+
+		// this can happen if we're matching against an empty String
+		if (stringMaxIndex < stringMinIndex) {
+			if (placeholders.length == 1
+					&& placeholders[0] instanceof StarWildcard)
+				return true;
+
+			// empty string + empty WildcardPattern? I guess that passes...
+			if (placeholderMaxIndex < placeholderMinIndex)
+				return true;
+
 			return false;
 		}
 
-		if (string.length() > getMaximumLength())
+		if (placeholderMaxIndex < placeholderMinIndex)
 			return false;
-		return matches(string, 0, placeholders, 0);
-	}
 
-	private boolean matches(CharSequence string, int stringIndex,
-			Placeholder[] placeholders, int placeholderIndex) {
-		while (placeholderIndex < placeholders.length) {
-			Placeholder p = placeholders[placeholderIndex];
+		// iterate forward, consume everything except stars:
+		for (; stringMinIndex <= stringMaxIndex; stringMinIndex++) {
+			if (placeholderMinIndex > placeholderMaxIndex) {
+				// we have a character and we've exhausted the pattern:
+				return false;
+			}
+
+			Placeholder p = placeholders[placeholderMinIndex];
 			if (p instanceof FixedCharacter) {
 				FixedCharacter fc = (FixedCharacter) p;
-				if (stringIndex >= string.length())
-					return false;
-				char ch = string.charAt(stringIndex);
+				char ch = string.charAt(stringMinIndex);
 				ch = Character.toLowerCase(ch);
 				if (ch != fc.ch)
 					return false;
-				stringIndex++;
-				placeholderIndex++;
+				placeholderMinIndex++;
 			} else if (p instanceof QuestionMarkWildcard) {
-				if (stringIndex >= string.length())
-					return false;
-				stringIndex++;
-				placeholderIndex++;
+				placeholderMinIndex++;
 			} else if (p instanceof SquareBracketsWildcard) {
 				SquareBracketsWildcard sbw = (SquareBracketsWildcard) p;
-				if (stringIndex >= string.length())
-					return false;
-				char ch = string.charAt(stringIndex);
+				char ch = string.charAt(stringMinIndex);
 				ch = Character.toLowerCase(ch);
 				if (sbw.contains(ch) == false)
 					return false;
-				stringIndex++;
-				placeholderIndex++;
-			} else if (p instanceof StarWildcard) {
-				int maxLength = string.length() - stringIndex;
-				for (int wildcardLength = 0; wildcardLength <= maxLength; wildcardLength++) {
-					if (matches(string, stringIndex + wildcardLength,
-							placeholders, placeholderIndex + 1)) {
-						return true;
-					}
-				}
-				return false;
+				placeholderMinIndex++;
 			} else {
-				throw new RuntimeException("unexpected condition");
+				break;
+			}
+
+			if (stringMinIndex == stringMaxIndex) {
+				if (placeholderMinIndex > placeholderMaxIndex) {
+					// we exhausted the string and pattern together:
+					return true;
+				} else if (placeholderMinIndex == placeholderMaxIndex
+						&& placeholders[placeholderMinIndex] instanceof StarWildcard) {
+					// we exhausted the strig and the only remaining pattern is
+					// a star
+					return true;
+				} else {
+					// we exhausted the String, but there's still pattern
+					// leftover (that isn't a star)
+					return false;
+				}
 			}
 		}
-		return stringIndex == string.length();
+
+		// if we reached this point: that means we hit an asterisk scanning from
+		// left-to-right. Now we'll scan from right-to-left:
+
+		for (; stringMaxIndex >= stringMinIndex; stringMaxIndex--) {
+			if (placeholderMaxIndex < placeholderMinIndex) {
+				// we have a character and we've exhausted the pattern:
+				return false;
+			}
+
+			Placeholder p = placeholders[placeholderMaxIndex];
+			if (p instanceof FixedCharacter) {
+				FixedCharacter fc = (FixedCharacter) p;
+				char ch = string.charAt(stringMaxIndex);
+				ch = Character.toLowerCase(ch);
+				if (ch != fc.ch)
+					return false;
+				placeholderMaxIndex--;
+			} else if (p instanceof QuestionMarkWildcard) {
+				placeholderMaxIndex--;
+			} else if (p instanceof SquareBracketsWildcard) {
+				SquareBracketsWildcard sbw = (SquareBracketsWildcard) p;
+				char ch = string.charAt(stringMaxIndex);
+				ch = Character.toLowerCase(ch);
+				if (sbw.contains(ch) == false)
+					return false;
+				placeholderMaxIndex--;
+			} else {
+				break;
+			}
+
+			if (placeholderMaxIndex < placeholderMinIndex
+					&& stringMinIndex == stringMaxIndex) {
+				// exact match, both the string and pattern are exhausted
+				return true;
+			}
+		}
+
+		// now we've hit an asterisk scanning from right-to-left.
+
+		if (placeholderMaxIndex == placeholderMinIndex) {
+			// there's only one asterisk, so that means anything/everything
+			// passes.
+			return true;
+		}
+
+		for (; stringMinIndex <= stringMaxIndex; stringMinIndex++) {
+			if (matches(string, stringMinIndex, stringMaxIndex, placeholders,
+					placeholderMinIndex + 1, placeholderMaxIndex))
+				return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -482,5 +554,54 @@ public class WildcardPattern {
 		}
 		sb.append("\" ]");
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return patternText.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof WildcardPattern))
+			return false;
+		WildcardPattern p = (WildcardPattern) obj;
+		return p.getPatternText().equals(getPatternText());
+	}
+
+	/**
+	 * Return all the elements of the argument that comply with this pattern.
+	 * <p>
+	 * This should be functionally equivalent to iterating over every element of
+	 * the set and checking its compliance, but depending on the composition of
+	 * this pattern: this method may be faster than if you iterate over all
+	 * elements directly.
+	 * 
+	 * @param set
+	 * @param string
+	 * @return
+	 */
+	public SortedSet<String> getMatches(TreeSet<String> set) {
+		SortedSet<String> returnValue = new TreeSet<>();
+		Placeholder[] phs = getPlaceholders();
+
+		StringBuilder constantPrefixBuilder = new StringBuilder();
+		for (int a = 0; a < phs.length; a++) {
+			if (phs[a] instanceof FixedCharacter) {
+				constantPrefixBuilder.append(phs[a].toString());
+			} else {
+				break;
+			}
+		}
+		String constantPrefix = constantPrefixBuilder.toString();
+
+		for (String s : set.tailSet(constantPrefix, true)) {
+			if (matches(s))
+				returnValue.add(s);
+			if (!s.startsWith(constantPrefix))
+				break;
+		}
+
+		return returnValue;
 	}
 }
