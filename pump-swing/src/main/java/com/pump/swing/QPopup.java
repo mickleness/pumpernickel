@@ -383,6 +383,7 @@ public class QPopup extends Popup {
 			window.setFocusable(false);
 		window.setBounds(windowBounds);
 		window.setVisible(true);
+		window.setAlwaysOnTop(true);
 		window.toFront();
 		return true;
 	}
