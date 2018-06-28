@@ -39,7 +39,7 @@ import javax.swing.text.Highlighter;
 import com.pump.awt.TextBlock;
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.swing.CollapsibleContainer;
-import com.pump.swing.ColorWell;
+import com.pump.swing.JColorWell;
 import com.pump.swing.SectionContainer.Section;
 import com.pump.text.TextBoxHighlightPainter;
 import com.pump.text.UnderlineHighlightPainter;
@@ -58,7 +58,7 @@ public class WildcardPatternHighlighterDemo extends JPanel implements
 	JLabel colorWellLabel = new JLabel("Color:");
 	JLabel thicknessLabel = new JLabel("Thickness:");
 	JLabel squiggleLabel = new JLabel("Squiggle:");
-	ColorWell colorWell = new ColorWell(true, Color.red);
+	JColorWell colorWell = new JColorWell(Color.red);
 	JSpinner thicknessSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 3, 1));
 	JRadioButton squiggleOnRadioButton = new JRadioButton("On", true);
 	JRadioButton squiggleOffRadioButton = new JRadioButton("Off", false);
@@ -167,7 +167,7 @@ public class WildcardPatternHighlighterDemo extends JPanel implements
 
 		underlinePatternField.getDocument().addDocumentListener(docListener);
 		blockPatternField.getDocument().addDocumentListener(docListener);
-		colorWell.addChangeListener(changeListener);
+		colorWell.getColorSelectionModel().addChangeListener(changeListener);
 		thicknessSpinner.addChangeListener(changeListener);
 		squiggleOnRadioButton.addActionListener(actionListener);
 		squiggleOffRadioButton.addActionListener(actionListener);
@@ -224,7 +224,7 @@ public class WildcardPatternHighlighterDemo extends JPanel implements
 			WildcardPattern underlinePattern = new WildcardPattern(
 					underlinePatternField.getText());
 			UnderlineHighlightPainter underlinePainter = new UnderlineHighlightPainter(
-					colorWell.getColor(),
+					colorWell.getColorSelectionModel().getSelectedColor(),
 					((Integer) thicknessSpinner.getValue()).intValue(),
 					squiggleOnRadioButton.isSelected());
 			highlight(words, underlinePattern, underlinePainter);
