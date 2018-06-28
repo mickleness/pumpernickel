@@ -28,7 +28,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
 
-import com.pump.swing.GradientSlider;
+import com.pump.swing.JGradientSlider;
 import com.pump.swing.MultiThumbSlider;
 
 /**
@@ -68,8 +68,8 @@ import com.pump.swing.MultiThumbSlider;
  * <TR>
  * <TD>GradientSlider.colorPickerIncludesOpacity</TD>
  * <TD>"true"</TD>
- * <TD>This is used when the user double-clicks a color and a ColorPicker dialog
- * is invoked. (So this value may not have any meaning if you override
+ * <TD>This is used when the user double-clicks a color and a JColorPicker
+ * dialog is invoked. (So this value may not have any meaning if you override
  * <code>GradientSlider.doDoubleClick()</code>.) This controls whether the
  * opacity/alpha controls are available in that dialog. This does <i>not</i>
  * control whether translucent colors can be used in this slider: translucent
@@ -101,7 +101,7 @@ public class GradientSliderUI extends MultiThumbSliderUI<Color> {
 	/** A temporary array used for the buffered image */
 	int[] array = new int[img.getWidth()];
 
-	public GradientSliderUI(GradientSlider slider) {
+	public GradientSliderUI(JGradientSlider slider) {
 		super(slider);
 	}
 

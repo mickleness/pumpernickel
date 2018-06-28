@@ -11,9 +11,11 @@
 package com.pump.plaf;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.TexturePaint;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -27,10 +29,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollBar;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.UIManager;
@@ -40,9 +43,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.ComponentUI;
 
-import com.pump.swing.ColorPalette;
-import com.pump.swing.ColorPicker;
-import com.pump.swing.ColorWell;
+import com.pump.swing.JColorPicker;
+import com.pump.swing.JColorWell;
+import com.pump.swing.JPalette;
 
 public class ColorWellUI extends ComponentUI {
 
@@ -79,81 +82,78 @@ public class ColorWellUI extends ComponentUI {
 
 	static ActionListener colorPickerActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			Window owner = SwingUtilities.getWindowAncestor(well);
-			Color newValue = ColorPicker.showDialog(owner, well.getColor());
+			Color newValue = JColorPicker.showDialog(owner, well
+					.getColorSelectionModel().getSelectedColor());
 			if (newValue != null) {
-				well.setColor(newValue);
+				well.getColorSelectionModel().setSelectedColor(newValue);
 			}
 		}
 	};
 
-	static ActionListener colorPaletteActionListener = new ActionListener() {
+	public static class ShowColorPaletteActionListener implements
+			ActionListener {
+
+		JColorWell colorWell;
+		JPalette colorPalette;
+		JPopupMenu popup;
+		
 		KeyListener popupKeyListener = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE
 						|| e.getKeyCode() == KeyEvent.VK_ENTER
 						|| e.getKeyCode() == KeyEvent.VK_TAB) {
-					ColorPalette palette = (ColorPalette) e.getSource();
-					JPopupMenu popup = (JPopupMenu) palette.getParent();
 					popup.setVisible(false);
 				}
 			}
 		};
 
+		Color[][] colorGrid;
+
+		public ShowColorPaletteActionListener() {
+			this(JPalette.getFlatUIColors());
+		}
+
+		public ShowColorPaletteActionListener(Color[][] colorGrid) {
+			this.colorGrid = colorGrid;
+
+			colorPalette = new JPalette(colorGrid);
+			colorPalette.putClientProperty(PaletteUI.PROPERTY_HIGHLIGHT,
+					PaletteUI.VALUE_HIGHLIGHT_BEVEL);
+			colorPalette.setCellSize(20);
+		}
+
+		@Override
 		public void actionPerformed(ActionEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
-			JPopupMenu popup = (JPopupMenu) well
-					.getClientProperty(POPUP_PALETTE_PROPERTY);
-			ColorPalette colorPalette;
+			if (popup != null && popup.isVisible()) {
+				popup.setVisible(false);
+			}
+
+			colorWell = (JColorWell) e.getSource();
+			colorPalette.setColorSelectionModel(colorWell
+					.getColorSelectionModel());
+			Point p = new Point(0, colorWell.getHeight());
+			SwingUtilities.convertPointToScreen(p, colorWell);
+
 			if (popup == null) {
 				popup = new JPopupMenu();
-				colorPalette = new ColorPalette();
-				colorPalette.addKeyListener(popupKeyListener);
-				colorPalette.setBorder(null);
-				colorPalette.putClientProperty(ColorSet.PALETTE_STYLE_PROPERTY,
-						ColorSet.PALETTE_STYLE_GRADIENT);
-				colorPalette.putClientProperty(
-						ColorSet.PALETTE_CELL_STYLE_PROPERTY,
-						ColorSet.PALETTE_CELL_STYLE_SHADOW);
-				colorPalette.putClientProperty(
-						HSBColorPaletteUI.PALETTE_PADDING_PROPERTY,
-						"nonsaturated");
-				colorPalette.putClientProperty(
-						ColorPaletteUI.PREFERRED_CELL_WIDTH_PROPERTY,
-						new Integer(20));
-				colorPalette.putClientProperty(
-						ColorPaletteUI.PREFERRED_CELL_HEIGHT_PROPERTY,
-						new Integer(20));
 				popup.add(colorPalette);
-				well.putClientProperty(POPUP_PALETTE_PROPERTY, popup);
-				well.bind(colorPalette);
-
-				ColorPaletteUI ui = colorPalette.getUI();
-				if (ui instanceof ScrollableColorPaletteUI) {
-					ScrollableColorPaletteUI sui = (ScrollableColorPaletteUI) ui;
-					JScrollBar scrollBar = sui
-							.getHorizontalScrollBar(colorPalette);
-					scrollBar.setEnabled(!well.isOpaqueColors());
-				}
-
-				final JPopupMenu popupRef = popup;
-				well.addPropertyChangeListener("Frame.active",
+				colorWell.addPropertyChangeListener("Frame.active",
 						new PropertyChangeListener() {
 							public void propertyChange(PropertyChangeEvent evt) {
-								popupRef.setVisible(false);
+								popup.setVisible(false);
 							}
 						});
-			} else {
-				colorPalette = (ColorPalette) popup.getComponent(0);
+				colorWell.putClientProperty(POPUP_PALETTE_PROPERTY, popup);
+				colorPalette.addKeyListener(popupKeyListener);
 			}
-			popup.show(well, 1, well.getHeight() - 1);
+			popup.show(colorWell, 1, colorWell.getHeight() - 1);
 
-			final ColorPalette colorPaletteRef = colorPalette;
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					colorPaletteRef.requestFocus();
+					colorPalette.requestFocus();
 				}
 			});
 		}
@@ -165,12 +165,18 @@ public class ColorWellUI extends ComponentUI {
 			DOUBLE_CLICK_THRESHOLD = uiThreshold;
 	}
 
-	protected static final ChangeListener colorChangeListener = new ChangeListener() {
+	static class ColorChangeListener implements ChangeListener {
+		Component c;
+
+		ColorChangeListener(Component c) {
+			this.c = c;
+		}
+
 		public void stateChanged(ChangeEvent e) {
-			JComponent jc = (JComponent) e.getSource();
-			jc.repaint();
+			c.repaint();
 		}
 	};
+
 	protected static final FocusListener repaintFocusListener = new FocusListener() {
 		public void focusGained(FocusEvent e) {
 			JComponent jc = (JComponent) e.getSource();
@@ -187,73 +193,73 @@ public class ColorWellUI extends ComponentUI {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			well.getUI().processMouseEvent(e);
 		}
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			well.getUI().processMouseEvent(e);
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			well.getUI().processMouseEvent(e);
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			well.getUI().processMouseEvent(e);
 		}
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			well.getUI().processMouseEvent(e);
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			well.getUI().processMouseEvent(e);
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			well.getUI().processMouseEvent(e);
 		}
 
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			well.getUI().processMouseEvent(e);
 		}
 	};
 	protected static final KeyListener keyListener = new KeyListener() {
 
 		public void keyPressed(KeyEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			well.getUI().processKeyEvent(e);
 		}
 
 		public void keyReleased(KeyEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			well.getUI().processKeyEvent(e);
 		}
 
 		public void keyTyped(KeyEvent e) {
-			ColorWell well = (ColorWell) e.getSource();
+			JColorWell well = (JColorWell) e.getSource();
 			well.getUI().processKeyEvent(e);
 		}
 	};
 
 	protected void processKeyEvent(KeyEvent e) {
 		int code = e.getKeyCode();
-		ColorWell well = (ColorWell) e.getSource();
+		JColorWell well = (JColorWell) e.getSource();
 		if (code == KeyEvent.VK_SPACE) {
 			ActionListener actionListener = (ActionListener) well
 					.getClientProperty(SPACE_KEY_ACTION_PROPERTY);
@@ -270,7 +276,7 @@ public class ColorWellUI extends ComponentUI {
 	}
 
 	protected void processMouseEvent(MouseEvent e) {
-		ColorWell well = (ColorWell) e.getSource();
+		JColorWell well = (JColorWell) e.getSource();
 
 		ActionListener singleClickListener = (ActionListener) well
 				.getClientProperty(SINGLE_CLICK_ACTION_PROPERTY);
@@ -320,12 +326,12 @@ public class ColorWellUI extends ComponentUI {
 	static class SingleClickTimer extends Timer {
 		private static final long serialVersionUID = 1L;
 
-		ColorWell well;
+		JColorWell well;
 		Long timeStamp;
 		MouseEvent trigger;
 		ActionListener actionListener;
 
-		public SingleClickTimer(ColorWell well, int doubleClickThreshold,
+		public SingleClickTimer(JColorWell well, int doubleClickThreshold,
 				Long timeStamp, ActionListener actionListener,
 				MouseEvent trigger) {
 			super(doubleClickThreshold, timerListener);
@@ -350,8 +356,8 @@ public class ColorWellUI extends ComponentUI {
 	@Override
 	public void paint(Graphics g0, JComponent c) {
 		Graphics2D g = (Graphics2D) g0;
-		ColorWell well = (ColorWell) c;
-		Color color = well.getColor();
+		JColorWell well = (JColorWell) c;
+		Color color = well.getColorSelectionModel().getSelectedColor();
 		Border border = c.getBorder();
 		Insets borderInsets = border.getBorderInsets(c);
 		if (color.getAlpha() < 255) {
@@ -367,6 +373,8 @@ public class ColorWellUI extends ComponentUI {
 				- borderInsets.top - borderInsets.bottom);
 	}
 
+	Map<Component, ColorChangeListener> listenerMap = new HashMap<>();
+
 	@Override
 	public void installUI(JComponent c) {
 		c.addFocusListener(repaintFocusListener);
@@ -374,9 +382,12 @@ public class ColorWellUI extends ComponentUI {
 		c.addMouseMotionListener(mouseListener);
 		c.addKeyListener(keyListener);
 
-		ColorWell well = (ColorWell) c;
-		well.addChangeListener(colorChangeListener);
+		JColorWell well = (JColorWell) c;
+		ColorChangeListener ccl = new ColorChangeListener(c);
+		listenerMap.put(well, ccl);
+		well.getColorSelectionModel().addChangeListener(ccl);
 
+		ShowColorPaletteActionListener colorPaletteActionListener = new ShowColorPaletteActionListener();
 		c.putClientProperty(DOUBLE_CLICK_ACTION_PROPERTY,
 				colorPickerActionListener);
 		c.putClientProperty(SPACE_KEY_ACTION_PROPERTY,
@@ -394,7 +405,9 @@ public class ColorWellUI extends ComponentUI {
 		c.removeMouseMotionListener(mouseListener);
 		c.removeKeyListener(keyListener);
 
-		ColorWell well = (ColorWell) c;
-		well.removeChangeListener(colorChangeListener);
+		JColorWell well = (JColorWell) c;
+		ColorChangeListener ccl = listenerMap.remove(well);
+		if (ccl != null)
+			well.getColorSelectionModel().removeChangeListener(ccl);
 	}
 }

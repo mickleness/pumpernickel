@@ -11,8 +11,12 @@
 package com.pump.swing;
 
 import java.awt.Color;
+import java.util.Objects;
 
+import javax.swing.JComponent;
 import javax.swing.UIManager;
+import javax.swing.colorchooser.ColorSelectionModel;
+import javax.swing.colorchooser.DefaultColorSelectionModel;
 
 import com.pump.blog.Blurb;
 import com.pump.blog.ResourceSample;
@@ -39,34 +43,23 @@ import com.pump.plaf.ColorWellUI;
 		+ "<p>I'm not going to argue that this will meet your needs and save the world; but it includes a lot of useful tools "
 		+ "and it might help (save the world).", article = "http://javagraphics.blogspot.com/2010/01/colors-good-gui-for-selecting-colors.html")
 @ResourceSample(sample = { "new com.pump.swing.ColorWell( java.awt.Color.blue )" })
-public class ColorWell extends ColorComponent {
+public class JColorWell extends JComponent {
 	private static final long serialVersionUID = 1L;
 	private static final String uiClassID = "ColorWellUI";
 
-	public static final String KEY_OPAQUE_COLORS = ColorWell.class.getName()
-			+ "#opaqueColor";
+	public static final String KEY_COLOR_SELECTION_MODEL = JColorWell.class
+			.getName() + "#colorSelectionModel";
 
-	public ColorWell(boolean isOpaque) {
+	public JColorWell() {
+		setColorSelectionModel(new DefaultColorSelectionModel());
 		updateUI();
-		setOpaqueColors(isOpaque);
 		setRequestFocusEnabled(true);
 		setFocusable(true);
 	}
 
-	public boolean isOpaqueColors() {
-		Boolean b = (Boolean) getClientProperty(KEY_OPAQUE_COLORS);
-		if (b == null)
-			return false;
-		return b.booleanValue();
-	}
-
-	public void setOpaqueColors(boolean isOpaque) {
-		putClientProperty(KEY_OPAQUE_COLORS, isOpaque);
-	}
-
-	public ColorWell(boolean isOpaque, Color initialColor) {
-		this(isOpaque);
-		setColor(initialColor);
+	public JColorWell(Color initialColor) {
+		this();
+		getColorSelectionModel().setSelectedColor(initialColor);
 	}
 
 	@Override
@@ -89,5 +82,14 @@ public class ColorWell extends ColorComponent {
 
 	public ColorWellUI getUI() {
 		return (ColorWellUI) ui;
+	}
+
+	public void setColorSelectionModel(ColorSelectionModel colorSelectionModel) {
+		Objects.requireNonNull(colorSelectionModel);
+		putClientProperty(KEY_COLOR_SELECTION_MODEL, colorSelectionModel);
+	}
+
+	public ColorSelectionModel getColorSelectionModel() {
+		return (ColorSelectionModel) getClientProperty(KEY_COLOR_SELECTION_MODEL);
 	}
 }

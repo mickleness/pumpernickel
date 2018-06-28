@@ -57,7 +57,7 @@ import com.pump.plaf.MultiThumbSliderUI;
 		+ "multiple thumbs and maps each thumb to a <code>Color</code>.\n"
 		+ "<p>(By default it also leans heavily on some existing color GUI "
 		+ "widgets I wrote, but you can replace those with your own components if you want to.)", article = "http://javagraphics.blogspot.com/2008/05/gradients-gui-widget-to-design-them.html")
-public class GradientSlider extends MultiThumbSlider<Color> {
+public class JGradientSlider extends MultiThumbSlider<Color> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -70,7 +70,7 @@ public class GradientSlider extends MultiThumbSlider<Color> {
 	 * Create a horizontal <code>GradientSlider</code> that represents a
 	 * gradient from white to black.
 	 */
-	public GradientSlider() {
+	public JGradientSlider() {
 		this(HORIZONTAL);
 	}
 
@@ -81,7 +81,7 @@ public class GradientSlider extends MultiThumbSlider<Color> {
 	 * @param orientation
 	 *            HORIZONTAL or VERTICAL
 	 */
-	public GradientSlider(int orientation) {
+	public JGradientSlider(int orientation) {
 		this(orientation, new float[] { 0f, 1f }, new Color[] { Color.white,
 				Color.black });
 	}
@@ -100,7 +100,7 @@ public class GradientSlider extends MultiThumbSlider<Color> {
 	 *             not equal the number of elements in <code>values</code>.
 	 * 
 	 */
-	public GradientSlider(int orientation, float[] thumbPositions,
+	public JGradientSlider(int orientation, float[] thumbPositions,
 			Color[] values) {
 		super(orientation, thumbPositions, values);
 	}
@@ -139,7 +139,7 @@ public class GradientSlider extends MultiThumbSlider<Color> {
 	}
 
 	/**
-	 * This invokes a <code>ColorPicker</code> dialog to edit the thumb at the
+	 * This invokes a <code>JColorPicker</code> dialog to edit the thumb at the
 	 * selected index.
 	 * 
 	 */
@@ -225,7 +225,7 @@ public class GradientSlider extends MultiThumbSlider<Color> {
 	class ColorPickerPopup extends AbstractPopup {
 		private static final long serialVersionUID = 1L;
 
-		ColorPicker mini;
+		JColorPicker mini;
 		KeyListener commitListener = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -239,23 +239,23 @@ public class GradientSlider extends MultiThumbSlider<Color> {
 		public ColorPickerPopup() {
 			super();
 			boolean includeOpacity = MultiThumbSliderUI.getProperty(
-					GradientSlider.this, "GradientSlider.includeOpacity",
+					JGradientSlider.this, "GradientSlider.includeOpacity",
 					"true").equals("true");
 
-			mini = new ColorPicker(false, includeOpacity);
-			mini.setMode(ColorPicker.HUE);
+			mini = new JColorPicker(false, includeOpacity);
+			mini.setMode(JColorPicker.HUE);
 			mini.setPreferredSize(new Dimension(220, 200));
 			PropertyChangeListener p = new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent evt) {
-					ColorPicker p = (ColorPicker) evt.getSource();
+					JColorPicker p = (JColorPicker) evt.getSource();
 					Color[] colors = getValues();
 					colors[lastSelectedThumb] = p.getColor();
 					setValues(getThumbPositions(), colors);
 				}
 			};
-			mini.addPropertyChangeListener(ColorPicker.SELECTED_COLOR_PROPERTY,
-					p);
-			mini.addPropertyChangeListener(ColorPicker.OPACITY_PROPERTY, p);
+			mini.addPropertyChangeListener(
+					JColorPicker.SELECTED_COLOR_PROPERTY, p);
+			mini.addPropertyChangeListener(JColorPicker.OPACITY_PROPERTY, p);
 			for (int a = 0; a < mini.getComponentCount(); a++) {
 				Component c = mini.getComponent(a);
 				c.addKeyListener(commitListener);
@@ -276,7 +276,7 @@ public class GradientSlider extends MultiThumbSlider<Color> {
 	}
 
 	/**
-	 * This shows a mini ColorPicker panel to let the user change the selected
+	 * This shows a mini JColorPicker panel to let the user change the selected
 	 * color.
 	 */
 	@Override
@@ -304,14 +304,14 @@ public class GradientSlider extends MultiThumbSlider<Color> {
 		boolean includeOpacity = MultiThumbSliderUI.getProperty(this,
 				"GradientSlider.colorPickerIncludesOpacity", "true").equals(
 				"true");
-		colors[i] = ColorPicker.showDialog(frame, colors[i], includeOpacity);
+		colors[i] = JColorPicker.showDialog(frame, colors[i], includeOpacity);
 		if (colors[i] != null)
 			setValues(getThumbPositions(), colors);
 		return true;
 	}
 
 	/**
-	 * TODO: If developers don't want to bundle the ColorPicker with their
+	 * TODO: If developers don't want to bundle the JColorPicker with their
 	 * programs, they can use this method instead of
 	 * <code>showColorPicker()</code>.
 	 */
@@ -337,7 +337,7 @@ public class GradientSlider extends MultiThumbSlider<Color> {
 			Constructor<?>[] constructors = c.getConstructors();
 			for (int a = 0; a < constructors.length; a++) {
 				Class<?>[] types = constructors[a].getParameterTypes();
-				if (types.length == 1 && types[0].equals(GradientSlider.class)) {
+				if (types.length == 1 && types[0].equals(JGradientSlider.class)) {
 					ComponentUI ui = (ComponentUI) constructors[a]
 							.newInstance(new Object[] { this });
 					setUI(ui);

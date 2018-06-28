@@ -14,10 +14,15 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.JPanel;
@@ -55,6 +60,66 @@ public class FocusArrowListener extends KeyAdapter {
 	}
 
 	/**
+	 * Return the first component available from a collection of candidates that
+	 * is generally in the direction provided.
+	 */
+	public static Component getComponent(int dx, int dy, Component src,
+			Collection<Component> candidates) {
+		if (dx == 0 && dy == 0) // this would result in an infinite loop
+			throw new IllegalArgumentException("dx (" + dx + ") and (" + dy
+					+ ") cannot both be zero");
+
+		int x = src.getWidth() / 2;
+		int y = src.getHeight() / 2;
+		Window window = SwingUtilities.getWindowAncestor(src);
+		if (window == null)
+			return null;
+		Point p = SwingUtilities.convertPoint(src, x, y, window);
+
+		Component comp = null;
+		int windowWidth = window.getWidth();
+		int windowHeight = window.getHeight();
+
+		Map<Component, Rectangle> candidateWindowBounds = new HashMap<>();
+		for (Component candidate : candidates) {
+			Point z = SwingUtilities.convertPoint(candidate, new Point(0, 0),
+					window);
+			Rectangle r = new Rectangle(z.x, z.y, candidate.getWidth(),
+					candidate.getHeight());
+			candidateWindowBounds.put(candidate, r);
+		}
+
+		while (p.x > 0 && p.x < windowWidth && p.y > 0 && p.y < windowHeight
+				&& (comp == null || comp == src || (comp instanceof JPanel))) {
+			p.x += dx;
+			p.y += dy;
+
+			// this mostly works, but it fails when, say, an overlay tooltip is
+			// covering up what we want to select:
+			// comp = SwingUtilities.getDeepestComponentAt(window, p.x, p.y);
+
+			comp = null;
+			for (Entry<Component, Rectangle> entry : candidateWindowBounds
+					.entrySet()) {
+				if (entry.getValue().contains(p)) {
+					comp = entry.getKey();
+					break;
+				}
+			}
+			boolean canAcceptFocus = candidates.contains(comp);
+			if (comp != null && canAcceptFocus == false)
+				comp = null;
+		}
+
+		// TODO: implement a more robust searching mechanism instead of the
+		// above. If a component is below the src, but to the left or right of
+		// the center: it should still be detected when you press the down arrow
+		// key.
+
+		return comp;
+	}
+
+	/**
 	 * Shifts the focus in a certain direction.
 	 * 
 	 * @param dx
@@ -69,40 +134,12 @@ public class FocusArrowListener extends KeyAdapter {
 	 *         right-most component, for example.)
 	 */
 	public static boolean shiftFocus(int dx, int dy, Component src) {
-		if (dx == 0 && dy == 0) // this would result in an infinite loop
-			throw new IllegalArgumentException("dx (" + dx + ") and (" + dy
-					+ ") cannot both be zero");
 
 		Set<Component> focusableComponents = getFocusableComponents(src);
 
-		int x = src.getWidth() / 2;
-		int y = src.getHeight() / 2;
-		Window window = SwingUtilities.getWindowAncestor(src);
-		if (window == null)
-			return false;
-		Point p = SwingUtilities.convertPoint(src, x, y, window);
+		Component comp = getComponent(dx, dy, src, focusableComponents);
 
-		Component comp = null;
-		int windowWidth = window.getWidth();
-		int windowHeight = window.getHeight();
-
-		while (p.x > 0 && p.x < windowWidth && p.y > 0 && p.y < windowHeight
-				&& (comp == null || comp == src || (comp instanceof JPanel))) {
-			p.x += dx;
-			p.y += dy;
-			comp = SwingUtilities.getDeepestComponentAt(window, p.x, p.y);
-			boolean canAcceptFocus = focusableComponents.contains(comp);
-			if (comp != null && canAcceptFocus == false)
-				comp = null;
-		}
-
-		// TODO: implement a more robust searching mechanism instead of the
-		// above
-		// If a component is below the src, but to the left or right of the
-		// center:
-		// it should still be detected when you press the down arrow key.
-
-		if (comp != null && comp != src && comp != window
+		if (comp != null && comp != src && !(comp instanceof Window)
 				&& (!(comp instanceof JPanel))) {
 			comp.requestFocus();
 			return true;

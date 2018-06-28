@@ -36,8 +36,8 @@ import com.pump.awt.HSLColor;
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.inspector.InspectorLayout;
 import com.pump.plaf.QPanelUI.CalloutType;
-import com.pump.swing.ColorWell;
 import com.pump.swing.FontComboBox;
+import com.pump.swing.JColorWell;
 import com.pump.swing.QPopup;
 import com.pump.swing.QPopupFactory;
 
@@ -57,7 +57,7 @@ public class JToolTipDemo extends JPanel implements ShowcaseDemo {
 	FontComboBox fontComboBox = new FontComboBox();
 	JSlider fontSizeSlider = new JSlider(10, 20, 12);
 	JLabel colorLabel = new JLabel("Color:");
-	ColorWell color = new ColorWell(true, Color.white);
+	JColorWell color = new JColorWell(Color.white);
 	JLabel calloutTypeLabel = new JLabel("Callout:");
 	JButton sampleButton = new JButton("Sample Button");
 	JComboBox<String> calloutTypeComboBox = new JComboBox<>();
@@ -103,7 +103,7 @@ public class JToolTipDemo extends JPanel implements ShowcaseDemo {
 		};
 
 		calloutTypeComboBox.addActionListener(actionListener);
-		color.addChangeListener(changeListener);
+		color.getColorSelectionModel().addChangeListener(changeListener);
 		fontSizeSlider.addChangeListener(changeListener);
 		fontComboBox.addActionListener(actionListener);
 		toolTipTypeComboBox.addActionListener(actionListener);
@@ -167,7 +167,8 @@ public class JToolTipDemo extends JPanel implements ShowcaseDemo {
 			font = font.deriveFont(size);
 			UIManager.getDefaults().put("ToolTip.font", font);
 
-			Color background = color.getColor();
+			Color background = color.getColorSelectionModel()
+					.getSelectedColor();
 			Color foreground;
 			float[] hsl = HSLColor.fromRGB(background, null);
 			if (hsl[2] < .5) {

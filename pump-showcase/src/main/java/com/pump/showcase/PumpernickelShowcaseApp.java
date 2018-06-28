@@ -333,8 +333,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("JToolTip", new JToolTipDemo());
 			addSection("JPopover", new JPopoverDemo());
 			addSection("Scaling", new ScalingDemo());
-			addSection("Images: Quantization", new ImageQuantizationDemo());
-			addSection("Swing: Color Components", new ColorDemo());
+			addSection("ImageQuantization", new ImageQuantizationDemo());
+			addSection("JColorPicker", new JColorPickerDemo());
 			addSection("QButtonUI", new QButtonUIDemo());
 			addSection("Shapes: AreaX Tests", new AreaXTestPanel());
 			addSection("GraphicsWriterDebugger",
@@ -354,6 +354,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("CircularProgressBarUI", new CircularProgressBarUIDemo());
 			addSection("Strokes, MouseSmoothing",
 					new StrokeMouseSmoothingDemo());
+			addSection("JColorWell, JPalette", new JColorWellPaletteDemo());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -412,6 +413,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 			public void paint(Graphics g0) {
 				Graphics2D g = (Graphics2D) g0;
+				// for text bullets:
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 						RenderingHints.VALUE_ANTIALIAS_ON);
 				super.paint(g);

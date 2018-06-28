@@ -29,15 +29,15 @@ import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.basic.BasicSliderUI;
 
-import com.pump.swing.ColorPicker;
-import com.pump.swing.ColorPickerPanel;
+import com.pump.swing.JColorPicker;
+import com.pump.swing.JColorPickerPanel;
 
 /**
- * This is a SliderUI designed specifically for the <code>ColorPicker</code>.
+ * This is a SliderUI designed specifically for the <code>JColorPicker</code>.
  * 
  */
 public class ColorPickerSliderUI extends BasicSliderUI {
-	ColorPicker colorPicker;
+	JColorPicker colorPicker;
 
 	/** Half of the height of the arrow */
 	int ARROW_HALF = 8;
@@ -47,7 +47,7 @@ public class ColorPickerSliderUI extends BasicSliderUI {
 			BufferedImage.TYPE_INT_RGB);
 	int lastMode = -1;
 
-	public ColorPickerSliderUI(JSlider b, ColorPicker cp) {
+	public ColorPickerSliderUI(JSlider b, JColorPicker cp) {
 		super(b);
 		colorPicker = cp;
 		cp.getColorPanel().addComponentListener(new ComponentAdapter() {
@@ -87,8 +87,8 @@ public class ColorPickerSliderUI extends BasicSliderUI {
 	@Override
 	protected void calculateTrackRect() {
 		super.calculateTrackRect();
-		ColorPickerPanel cp = colorPicker.getColorPanel();
-		int size = Math.min(ColorPickerPanel.MAX_SIZE,
+		JColorPickerPanel cp = colorPicker.getColorPanel();
+		int size = Math.min(JColorPickerPanel.MAX_SIZE,
 				Math.min(cp.getWidth(), cp.getHeight()));
 		int max = slider.getHeight() - ARROW_HALF * 2 - 2;
 		if (size > max) {
@@ -101,15 +101,15 @@ public class ColorPickerSliderUI extends BasicSliderUI {
 	@Override
 	public synchronized void paintTrack(Graphics g) {
 		int mode = colorPicker.getMode();
-		if (mode == ColorPicker.HUE || mode == ColorPicker.BRI
-				|| mode == ColorPicker.SAT) {
+		if (mode == JColorPicker.HUE || mode == JColorPicker.BRI
+				|| mode == JColorPicker.SAT) {
 			float[] hsb = colorPicker.getHSB();
-			if (mode == ColorPicker.HUE) {
+			if (mode == JColorPicker.HUE) {
 				for (int y = 0; y < trackRect.height; y++) {
 					float hue = ((float) y) / ((float) trackRect.height);
 					intArray[y] = Color.HSBtoRGB(hue, 1, 1);
 				}
-			} else if (mode == ColorPicker.SAT) {
+			} else if (mode == JColorPicker.SAT) {
 				for (int y = 0; y < trackRect.height; y++) {
 					float sat = 1 - ((float) y) / ((float) trackRect.height);
 					intArray[y] = Color.HSBtoRGB(hsb[0], sat, hsb[2]);
@@ -122,17 +122,17 @@ public class ColorPickerSliderUI extends BasicSliderUI {
 			}
 		} else {
 			int[] rgb = colorPicker.getRGB();
-			if (mode == ColorPicker.RED) {
+			if (mode == JColorPicker.RED) {
 				for (int y = 0; y < trackRect.height; y++) {
 					int red = 255 - (int) (y * 255 / trackRect.height + .49);
 					intArray[y] = (red << 16) + (rgb[1] << 8) + (rgb[2]);
 				}
-			} else if (mode == ColorPicker.GREEN) {
+			} else if (mode == JColorPicker.GREEN) {
 				for (int y = 0; y < trackRect.height; y++) {
 					int green = 255 - (int) (y * 255 / trackRect.height + .49);
 					intArray[y] = (rgb[0] << 16) + (green << 8) + (rgb[2]);
 				}
-			} else if (mode == ColorPicker.BLUE) {
+			} else if (mode == JColorPicker.BLUE) {
 				for (int y = 0; y < trackRect.height; y++) {
 					int blue = 255 - (int) (y * 255 / trackRect.height + .49);
 					intArray[y] = (rgb[0] << 16) + (rgb[1] << 8) + (blue);

@@ -33,7 +33,7 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.plaf.CircularProgressBarUI;
-import com.pump.swing.ColorWell;
+import com.pump.swing.JColorWell;
 
 public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
@@ -48,9 +48,9 @@ public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
 	JRadioButton animateOnButton = new JRadioButton("On");
 	JRadioButton animateOffButton = new JRadioButton("Off", true);
 	JPanel progressBarContainer = new JPanel();
-	ColorWell foregroundColor = new ColorWell(true,
+	JColorWell foregroundColor = new JColorWell(
 			CircularProgressBarUI.COLOR_DEFAULT_FOREGROUND);
-	ColorWell backgroundColor = new ColorWell(true,
+	JColorWell backgroundColor = new JColorWell(
 			CircularProgressBarUI.COLOR_DEFAULT_BACKGROUND);
 	JRadioButton stringOnButton = new JRadioButton("On", true);
 	JRadioButton stringOffButton = new JRadioButton("Off", false);
@@ -167,8 +167,10 @@ public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			progressBar.setForeground(foregroundColor.getColor());
-			progressBar.setBackground(backgroundColor.getColor());
+			progressBar.setForeground(foregroundColor.getColorSelectionModel()
+					.getSelectedColor());
+			progressBar.setBackground(backgroundColor.getColorSelectionModel()
+					.getSelectedColor());
 		}
 
 	};
@@ -261,8 +263,10 @@ public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
 		stringOffButton.addActionListener(stringListener);
 		stringListener.actionPerformed(null);
 
-		backgroundColor.addChangeListener(colorListener);
-		foregroundColor.addChangeListener(colorListener);
+		backgroundColor.getColorSelectionModel().addChangeListener(
+				colorListener);
+		foregroundColor.getColorSelectionModel().addChangeListener(
+				colorListener);
 		colorListener.stateChanged(null);
 
 		strokeSlider.addChangeListener(strokeSliderListener);

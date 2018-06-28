@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JColorPicker Demo</title>
+</head>
+<body>
+
+The <code>com.pump.swing.JColorPicker</code> and the <code>com.pump.swing.JColorPickerDialog</code> are an alternative to Swing's default <code>javax.swing.JColorChooser</code>.
+<p>
+As a reminder, the <code>JColorChooser</code> resembles:
+<br /><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/jcolorchooser-600.jpg"/>
+<p>
+Technically you could convert the <code>JColorPicker</code> to a <code>AbstractColorChooserPanel</code> so it can live inside a <code>JColorChooser</code>, but to date nobody has suggested/requested that.
+<p>
+The key differences between this new <code>JColorPicker</code> and the old-school <code>JColorChooser</code> are probably:
+<ul><li>The <code>JColorPicker</code> uses a wheel to display a range of hues, not a square. A square obviously maximizes your pixel real estate better, but I still prefer a circle. I like how it looks, and it's generally how children are introduced to hues in school.
+<li>The dialog footer uses a <a href="resource:DialogFooter">DialogFooter</a>, which (among other things) means the buttons are right-aligned like most other dialogs.
+<li>As the demo shows the <code>JColorPicker</code> scales in complexity well.</ul>
+<p>
+That being said: the <code>JColorChooser</code> offers something this panel doesn't: its default view is a palette of swatches. I'd suggest this should be the go-to approach most of the time (depending on your audience). The <a href="resource:JColorWell">JColorWell</a> is a component that offers both a palette and a dialog.
+
+</body>
+</html>

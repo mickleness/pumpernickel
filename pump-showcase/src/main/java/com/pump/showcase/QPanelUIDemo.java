@@ -40,17 +40,17 @@ import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.inspector.InspectorLayout;
 import com.pump.plaf.QPanelUI;
 import com.pump.plaf.QPanelUI.CalloutType;
-import com.pump.swing.ColorWell;
+import com.pump.swing.JColorWell;
 
 public class QPanelUIDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JToggleButton presetBox = new JToggleButton("Box");
 	JToggleButton presetToolTip = new JToggleButton("ToolTip");
-	ColorWell fillColor1 = new ColorWell(false, new Color(0xffffff));
-	ColorWell fillColor2 = new ColorWell(false, new Color(0xf9f9f9));
-	ColorWell strokeColor1 = new ColorWell(false, new Color(0xffffff));
-	ColorWell strokeColor2 = new ColorWell(false, new Color(0xf3f3f3));
+	JColorWell fillColor1 = new JColorWell(new Color(0xffffff));
+	JColorWell fillColor2 = new JColorWell(new Color(0xf9f9f9));
+	JColorWell strokeColor1 = new JColorWell(new Color(0xffffff));
+	JColorWell strokeColor2 = new JColorWell(new Color(0xf3f3f3));
 	JRadioButton orientationNone = new JRadioButton("None", true);
 	JRadioButton orientationVertical = new JRadioButton("Vertical", false);
 	JRadioButton orientationHorizontal = new JRadioButton("Horizontal", false);
@@ -151,10 +151,10 @@ public class QPanelUIDemo extends JPanel implements ShowcaseDemo {
 		orientationNone.addActionListener(actionListener);
 		orientationHorizontal.addActionListener(actionListener);
 		orientationVertical.addActionListener(actionListener);
-		fillColor1.addChangeListener(changeListener);
-		fillColor2.addChangeListener(changeListener);
-		strokeColor1.addChangeListener(changeListener);
-		strokeColor2.addChangeListener(changeListener);
+		fillColor1.getColorSelectionModel().addChangeListener(changeListener);
+		fillColor2.getColorSelectionModel().addChangeListener(changeListener);
+		strokeColor1.getColorSelectionModel().addChangeListener(changeListener);
+		strokeColor2.getColorSelectionModel().addChangeListener(changeListener);
 		cornerSize.addChangeListener(changeListener);
 		calloutSize.addChangeListener(changeListener);
 		shadowSize.addChangeListener(changeListener);
@@ -213,10 +213,14 @@ public class QPanelUIDemo extends JPanel implements ShowcaseDemo {
 	 * Update all GUI controls to describe a given QPanelUI.
 	 */
 	protected void updateControlsForUI(QPanelUI ui) {
-		fillColor1.setColor(ui.getFillColor1());
-		fillColor2.setColor(ui.getFillColor2());
-		strokeColor1.setColor(ui.getStrokeColor1());
-		strokeColor2.setColor(ui.getStrokeColor2());
+		fillColor1.getColorSelectionModel()
+				.setSelectedColor(ui.getFillColor1());
+		fillColor2.getColorSelectionModel()
+				.setSelectedColor(ui.getFillColor2());
+		strokeColor1.getColorSelectionModel().setSelectedColor(
+				ui.getStrokeColor1());
+		strokeColor2.getColorSelectionModel().setSelectedColor(
+				ui.getStrokeColor2());
 		if (Objects.equals(ui.getFillColor1(), ui.getFillColor2())
 				&& Objects.equals(ui.getStrokeColor1(), ui.getStrokeColor2())) {
 			orientationNone.setSelected(true);
@@ -246,9 +250,9 @@ public class QPanelUIDemo extends JPanel implements ShowcaseDemo {
 	 * demo.
 	 */
 	protected void updateUIFromControls(QPanelUI ui) {
-		Color f1 = fillColor1.getColor();
+		Color f1 = fillColor1.getColorSelectionModel().getSelectedColor();
 		Color f2;
-		Color s1 = strokeColor1.getColor();
+		Color s1 = strokeColor1.getColorSelectionModel().getSelectedColor();
 		Color s2;
 		if (orientationNone.isSelected()) {
 			fillColor2.setVisible(false);
@@ -264,8 +268,8 @@ public class QPanelUIDemo extends JPanel implements ShowcaseDemo {
 			strokeColor2.setVisible(true);
 			fillColor2Label.setVisible(true);
 			strokeColor2Label.setVisible(true);
-			f2 = fillColor2.getColor();
-			s2 = strokeColor2.getColor();
+			f2 = fillColor2.getColorSelectionModel().getSelectedColor();
+			s2 = strokeColor2.getColorSelectionModel().getSelectedColor();
 			fillColor1Label.setText("Fill Color 1:");
 			strokeColor1Label.setText("Stroke Color 2:");
 		}

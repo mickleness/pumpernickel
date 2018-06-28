@@ -39,7 +39,7 @@ import javax.swing.event.ChangeListener;
 import com.pump.awt.GradientTexturePaint;
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.plaf.PlafPaintUtils;
-import com.pump.swing.ColorWell;
+import com.pump.swing.JColorWell;
 import com.pump.swing.JPopover;
 
 /**
@@ -109,8 +109,9 @@ public class GradientTexturePaintDemo extends JPanel implements ShowcaseDemo {
 					// [0,1]?
 					f = Math.min(1, Math.max(0, f));
 
-					Color c = PlafPaintUtils.tween(well1.getColor(),
-							well2.getColor(), f);
+					Color c = PlafPaintUtils.tween(well1
+							.getColorSelectionModel().getSelectedColor(), well2
+							.getColorSelectionModel().getSelectedColor(), f);
 					d[x] = c.getRGB();
 				}
 				bi.getRaster().setDataElements(0, y, d.length, 1, d);
@@ -120,8 +121,8 @@ public class GradientTexturePaintDemo extends JPanel implements ShowcaseDemo {
 		}
 	}
 
-	ColorWell well1 = new ColorWell(true, new Color(0xffffdf));
-	ColorWell well2 = new ColorWell(true, new Color(0x4f009f));
+	JColorWell well1 = new JColorWell(new Color(0xffffdf));
+	JColorWell well2 = new JColorWell(new Color(0x4f009f));
 	JPanel controls = new JPanel();
 
 	GradientPanel panel = new GradientPanel();
@@ -216,8 +217,8 @@ public class GradientTexturePaintDemo extends JPanel implements ShowcaseDemo {
 		};
 
 		numberOfColorsSlider.addChangeListener(repaintListener);
-		well1.addChangeListener(repaintListener);
-		well2.addChangeListener(repaintListener);
+		well1.getColorSelectionModel().addChangeListener(repaintListener);
+		well2.getColorSelectionModel().addChangeListener(repaintListener);
 	}
 
 	@Override

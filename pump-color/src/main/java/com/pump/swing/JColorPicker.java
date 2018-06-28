@@ -47,7 +47,7 @@ import com.pump.plaf.ColorPickerSliderUI;
  * <P>
  * This was originally intended to replace the <code>JColorChooser</code>. To
  * use this class to create a color choosing dialog, simply call: <BR>
- * <code>ColorPicker.showDialog(frame, originalColor);</code>
+ * <code>JColorPicker.showDialog(frame, originalColor);</code>
  * <P>
  * Here is a screenshot of the dialog that call will invoke: <br>
  * <IMG SRC=
@@ -59,9 +59,9 @@ import com.pump.plaf.ColorPickerSliderUI;
  * example, you might try the following panel:
  * </p>
  * <BR>
- * <code>ColorPicker picker = new ColorPicker(false, false);</code> <BR>
+ * <code>JColorPicker picker = new JColorPicker(false, false);</code> <BR>
  * <code>picker.setPreferredSize(new Dimension(200,160));</code> <BR>
- * <code>picker.setMode(ColorPicker.HUE);</code> <br>
+ * <code>picker.setMode(JColorPicker.HUE);</code> <br>
  * <IMG SRC=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker3.png"
  * alt="ColorPicker Small Screenshot">
@@ -81,15 +81,15 @@ import com.pump.plaf.ColorPickerSliderUI;
  * <code>PropertyChangeListener</code> listening for changes to the
  * <code>OPACITY_PROPERTY</code>.
  * 
- * @see com.pump.swing.ColorPickerDialog
- * @see com.pump.swing.ColorPickerPanel
+ * @see com.pump.swing.JColorPickerDialog
+ * @see com.pump.swing.JColorPickerPanel
  * 
  */
 @Blurb(imageName = "ColorPicker.png", title = "Colors: a Color Dialog", releaseDate = "April 2007", summary = "This is a Photoshop-style color choosing dialog.\n"
 		+ "<p>You can pull some parts of it apart for customization, but out-of-the-box it "
 		+ "offers a great interface if you're dealing with a power user.\n"
 		+ "<p>Of course: all dialogs are at least slightly evil, and they should be used with care...", article = "http://javagraphics.blogspot.com/2007/04/jcolorchooser-making-alternative.html")
-public class ColorPicker extends JPanel {
+public class JColorPicker extends JPanel {
 	private static final long serialVersionUID = 3L;
 
 	/** The localized strings used in this (and related) panel(s). */
@@ -109,7 +109,7 @@ public class ColorPicker extends JPanel {
 	 *            <code>IllegalArgumentException</code> will be thrown if this
 	 *            component is a <code>Window</code>.
 	 * @param originalColor
-	 *            the color the <code>ColorPicker</code> initially points to.
+	 *            the color the <code>JColorPicker</code> initially points to.
 	 * @return the <code>Color</code> the user chooses, or <code>null</code> if
 	 *         the user cancels the dialog.
 	 */
@@ -129,7 +129,7 @@ public class ColorPicker extends JPanel {
 	 *            <code>IllegalArgumentException</code> will be thrown if this
 	 *            component is a <code>Window</code>.
 	 * @param originalColor
-	 *            the color the <code>ColorPicker</code> initially points to.
+	 *            the color the <code>JColorPicker</code> initially points to.
 	 * @param includeOpacity
 	 *            whether to add a control for the opacity of the color.
 	 * @return the <code>Color</code> the user chooses, or <code>null</code> if
@@ -152,7 +152,7 @@ public class ColorPicker extends JPanel {
 	 * @param title
 	 *            the title for the dialog.
 	 * @param originalColor
-	 *            the color the <code>ColorPicker</code> initially points to.
+	 *            the color the <code>JColorPicker</code> initially points to.
 	 * @param includeOpacity
 	 *            whether to add a control for the opacity of the color.
 	 * @return the <code>Color</code> the user chooses, or <code>null</code> if
@@ -160,12 +160,12 @@ public class ColorPicker extends JPanel {
 	 */
 	public static Color showDialog(Window owner, String title,
 			Color originalColor, boolean includeOpacity) {
-		ColorPickerDialog d;
+		JColorPickerDialog d;
 		if (owner instanceof Frame || owner == null) {
-			d = new ColorPickerDialog((Frame) owner, originalColor,
+			d = new JColorPickerDialog((Frame) owner, originalColor,
 					includeOpacity);
 		} else if (owner instanceof Dialog) {
-			d = new ColorPickerDialog((Dialog) owner, originalColor,
+			d = new JColorPickerDialog((Dialog) owner, originalColor,
 					includeOpacity);
 		} else {
 			throw new IllegalArgumentException("the owner ("
@@ -181,8 +181,8 @@ public class ColorPicker extends JPanel {
 	}
 
 	/**
-	 * <code>PropertyChangeEvents</code> will be triggered for this property when
-	 * the selected color changes.
+	 * <code>PropertyChangeEvents</code> will be triggered for this property
+	 * when the selected color changes.
 	 * <P>
 	 * (Events are only created when then RGB values of the color change. This
 	 * means, for example, that the change from HSB(0,0,0) to HSB(.4,0,0) will
@@ -194,21 +194,21 @@ public class ColorPicker extends JPanel {
 	public static final String SELECTED_COLOR_PROPERTY = "selected color";
 
 	/**
-	 * <code>PropertyChangeEvents</code> will be triggered for this property when
-	 * <code>setModeControlsVisible()</code> is called.
+	 * <code>PropertyChangeEvents</code> will be triggered for this property
+	 * when <code>setModeControlsVisible()</code> is called.
 	 */
 	public static final String MODE_CONTROLS_VISIBLE_PROPERTY = "mode controls visible";
 
 	/**
-	 * <code>PropertyChangeEvents</code> will be triggered when the opacity value
-	 * is adjusted.
+	 * <code>PropertyChangeEvents</code> will be triggered when the opacity
+	 * value is adjusted.
 	 */
 	public static final String OPACITY_PROPERTY = "opacity";
 
 	/**
-	 * <code>PropertyChangeEvents</code> will be triggered when the mode changes.
-	 * (That is, when the wheel switches from HUE, SAT, BRI, RED, GREEN, or BLUE
-	 * modes.)
+	 * <code>PropertyChangeEvents</code> will be triggered when the mode
+	 * changes. (That is, when the wheel switches from HUE, SAT, BRI, RED,
+	 * GREEN, or BLUE modes.)
 	 */
 	public static final String MODE_PROPERTY = "mode";
 
@@ -455,7 +455,7 @@ public class ColorPicker extends JPanel {
 			.toString(), 255);
 	private Option blue = new Option(strings.getObject("blueLabel").toString(),
 			255);
-	private ColorSwatch preview = new ColorSwatch(50);
+	private JColorSwatch preview = new JColorSwatch(50);
 	private JLabel hexLabel = new JLabel(strings.getObject("hexLabel")
 			.toString());
 	private JTextField hexField = new JTextField("000000");
@@ -511,17 +511,17 @@ public class ColorPicker extends JPanel {
 	 */
 	private JPanel expertControls = new JPanel(new GridBagLayout());
 
-	private ColorPickerPanel colorPanel = new ColorPickerPanel();
+	private JColorPickerPanel colorPanel = new JColorPickerPanel();
 
 	private JSlider opacitySlider = new JSlider(0, 255, 255);
 	private JLabel opacityLabel = new JLabel(strings.getObject("opacityLabel")
 			.toString());
 
 	/**
-	 * Create a new <code>ColorPicker</code> with all controls visible except
+	 * Create a new <code>JColorPicker</code> with all controls visible except
 	 * opacity.
 	 */
-	public ColorPicker() {
+	public JColorPicker() {
 		this(true, false);
 	}
 
@@ -530,7 +530,7 @@ public class ColorPicker extends JPanel {
 	 * 
 	 * @param showExpertControls
 	 *            the labels/spinners/buttons on the right side of a
-	 *            <code>ColorPicker</code> are optional. This boolean will
+	 *            <code>JColorPicker</code> are optional. This boolean will
 	 *            control whether they are shown or not.
 	 *            <P>
 	 *            It may be that your users will never need or want numeric
@@ -539,7 +539,7 @@ public class ColorPicker extends JPanel {
 	 * @param includeOpacity
 	 *            whether the opacity controls will be shown
 	 */
-	public ColorPicker(boolean showExpertControls, boolean includeOpacity) {
+	public JColorPicker(boolean showExpertControls, boolean includeOpacity) {
 		super(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
@@ -720,7 +720,7 @@ public class ColorPicker extends JPanel {
 
 	/**
 	 * The labels/spinners/buttons on the right side of a
-	 * <code>ColorPicker</code> are optional. This method will control whether
+	 * <code>JColorPicker</code> are optional. This method will control whether
 	 * they are shown or not.
 	 * <P>
 	 * It may be that your users will never need or want numeric control when
@@ -734,8 +734,8 @@ public class ColorPicker extends JPanel {
 	}
 
 	/**
-	 * @return the current HSB coordinates of this <code>ColorPicker</code>. Each
-	 *         value is between [0,1].
+	 * @return the current HSB coordinates of this <code>JColorPicker</code>.
+	 *         Each value is between [0,1].
 	 * 
 	 */
 	public float[] getHSB() {
@@ -744,8 +744,8 @@ public class ColorPicker extends JPanel {
 	}
 
 	/**
-	 * @return the current RGB coordinates of this <code>ColorPicker</code>. Each
-	 *         value is between [0,255].
+	 * @return the current RGB coordinates of this <code>JColorPicker</code>.
+	 *         Each value is between [0,255].
 	 * 
 	 */
 	public int[] getRGB() {
@@ -791,8 +791,8 @@ public class ColorPicker extends JPanel {
 	}
 
 	/**
-	 * Sets the mode of this <code>ColorPicker</code>. This is especially useful
-	 * if this picker is in non-expert mode, so the radio buttons are not
+	 * Sets the mode of this <code>JColorPicker</code>. This is especially
+	 * useful if this picker is in non-expert mode, so the radio buttons are not
 	 * visible for the user to directly select.
 	 * 
 	 * @param mode
@@ -857,7 +857,7 @@ public class ColorPicker extends JPanel {
 	}
 
 	/**
-	 * @return the current mode of this <code>ColorPicker</code>. <BR>
+	 * @return the current mode of this <code>JColorPicker</code>. <BR>
 	 *         This will return <code>HUE</code>, <code>SAT</code>,
 	 *         <code>BRI</code>, <code>RED</code>, <code>GREEN</code>, or
 	 *         <code>BLUE</code>.
@@ -873,7 +873,7 @@ public class ColorPicker extends JPanel {
 	}
 
 	/**
-	 * Sets the current color of this <code>ColorPicker</code>. This method
+	 * Sets the current color of this <code>JColorPicker</code>. This method
 	 * simply calls <code>setRGB()</code> and <code>setOpacity()</code>.
 	 * 
 	 * @param c
@@ -885,7 +885,7 @@ public class ColorPicker extends JPanel {
 	}
 
 	/**
-	 * Sets the current color of this <code>ColorPicker</code>
+	 * Sets the current color of this <code>JColorPicker</code>
 	 * 
 	 * @param r
 	 *            the red value. Must be between [0,255].
@@ -940,7 +940,7 @@ public class ColorPicker extends JPanel {
 	}
 
 	/**
-	 * @return the current <code>Color</code> this <code>ColorPicker</code> has
+	 * @return the current <code>Color</code> this <code>JColorPicker</code> has
 	 *         selected.
 	 *         <P>
 	 *         This is equivalent to: <BR>
@@ -982,9 +982,9 @@ public class ColorPicker extends JPanel {
 	 * <code>setRGBControlsVisible()</code> to adjust which controls are
 	 * showing.
 	 * <P>
-	 * (This returns the panel this <code>ColorPicker</code> uses, so if you put
-	 * it in another container, it will be removed from this
-	 * <code>ColorPicker</code>.)
+	 * (This returns the panel this <code>JColorPicker</code> uses, so if you
+	 * put it in another container, it will be removed from this
+	 * <code>JColorPicker</code>.)
 	 * 
 	 * @return the panel with several rows of spinner controls.
 	 */
@@ -1042,15 +1042,15 @@ public class ColorPicker extends JPanel {
 	}
 
 	/**
-	 * @return the <code>ColorPickerPanel</code> this <code>ColorPicker</code>
+	 * @return the <code>JColorPickerPanel</code> this <code>JColorPicker</code>
 	 *         displays.
 	 */
-	public ColorPickerPanel getColorPanel() {
+	public JColorPickerPanel getColorPanel() {
 		return colorPanel;
 	}
 
 	/**
-	 * Sets the current color of this <code>ColorPicker</code>
+	 * Sets the current color of this <code>JColorPicker</code>
 	 * 
 	 * @param h
 	 *            the hue value.
@@ -1141,11 +1141,11 @@ public class ColorPicker extends JPanel {
 
 			/*
 			 * this tries out Tim Boudreaux's new slider UI. It's a good UI, but
-			 * I think for the ColorPicker the numeric controls are more useful.
-			 * That is: users who want click-and-drag control to choose their
-			 * colors don't need any of these Option objects at all; only power
-			 * users who may have specific RGB values in mind will use these
-			 * controls: and when they do limiting them to a slider is
+			 * I think for the JColorPicker the numeric controls are more
+			 * useful. That is: users who want click-and-drag control to choose
+			 * their colors don't need any of these Option objects at all; only
+			 * power users who may have specific RGB values in mind will use
+			 * these controls: and when they do limiting them to a slider is
 			 * unnecessary. That's my current position... of course it may not
 			 * be true in the real world... :)
 			 */

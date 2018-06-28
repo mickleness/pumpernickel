@@ -36,7 +36,7 @@ import com.pump.plaf.ChasingArrowsThrobberUI;
 import com.pump.plaf.LabelCellRenderer;
 import com.pump.plaf.PulsingCirclesThrobberUI;
 import com.pump.plaf.ThrobberUI;
-import com.pump.swing.ColorWell;
+import com.pump.swing.JColorWell;
 import com.pump.swing.JThrobber;
 
 public class ThrobberDemo extends JPanel implements ShowcaseDemo {
@@ -47,7 +47,7 @@ public class ThrobberDemo extends JPanel implements ShowcaseDemo {
 	JSlider sizeSlider = new JSlider(8, 100, 16);
 	JSlider rateSlider = new JSlider(50, 200, 100);
 	JThrobber throbber = new JThrobber();
-	ColorWell color = new ColorWell(false, new Color(100, 0, 120));
+	JColorWell color = new JColorWell(new Color(100, 0, 120));
 	JCheckBox colorCheckBox = new JCheckBox("Custom Foreground:");
 
 	public ThrobberDemo() {
@@ -93,7 +93,7 @@ public class ThrobberDemo extends JPanel implements ShowcaseDemo {
 		};
 		rateSlider.addChangeListener(changeListener);
 		sizeSlider.addChangeListener(changeListener);
-		color.addChangeListener(changeListener);
+		color.getColorSelectionModel().addChangeListener(changeListener);
 
 		ActionListener actionListener = new ActionListener() {
 
@@ -136,7 +136,7 @@ public class ThrobberDemo extends JPanel implements ShowcaseDemo {
 
 			color.setEnabled(colorCheckBox.isSelected());
 			if (colorCheckBox.isSelected()) {
-				Color f = color.getColor();
+				Color f = color.getColorSelectionModel().getSelectedColor();
 				throbber.setForeground(f);
 			} else {
 				// installing a new UI will automatically change the foreground,

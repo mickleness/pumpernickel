@@ -53,8 +53,8 @@ import com.pump.awt.text.writing.WritingFont;
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.inspector.InspectorLayout;
 import com.pump.swing.AnimationController;
-import com.pump.swing.ColorWell;
 import com.pump.swing.FontComboBox;
+import com.pump.swing.JColorWell;
 import com.pump.swing.PartialLineBorder;
 
 public class TextEffectDemo extends JPanel implements ShowcaseDemo {
@@ -93,10 +93,9 @@ public class TextEffectDemo extends JPanel implements ShowcaseDemo {
 	JLabel fillLabel = new JLabel("Color:");
 	JLabel strokeLabel = new JLabel("Border:");
 	JLabel shadowLabel = new JLabel("Shadow:");
-	ColorWell fill = new ColorWell(true, OutlineTextEffect.DEFAULT_FILL);
-	ColorWell shadow = new ColorWell(true,
-			OutlineTextEffect.DEFAULT_FILL.darker());
-	ColorWell stroke = new ColorWell(true, OutlineTextEffect.DEFAULT_STROKE);
+	JColorWell fill = new JColorWell(OutlineTextEffect.DEFAULT_FILL);
+	JColorWell shadow = new JColorWell(OutlineTextEffect.DEFAULT_FILL.darker());
+	JColorWell stroke = new JColorWell(OutlineTextEffect.DEFAULT_STROKE);
 
 	JTextField textField = new JTextField("Type Text Here!");
 
@@ -201,9 +200,9 @@ public class TextEffectDemo extends JPanel implements ShowcaseDemo {
 		fontComicNeue.addActionListener(actionListener);
 		fontCalligraphy.addActionListener(actionListener);
 		fontSize.addChangeListener(changeListener);
-		shadow.addChangeListener(changeListener);
-		fill.addChangeListener(changeListener);
-		stroke.addChangeListener(changeListener);
+		shadow.getColorSelectionModel().addChangeListener(changeListener);
+		fill.getColorSelectionModel().addChangeListener(changeListener);
+		stroke.getColorSelectionModel().addChangeListener(changeListener);
 
 		fontComboBox.selectFont("Impact");
 
@@ -228,31 +227,36 @@ public class TextEffectDemo extends JPanel implements ShowcaseDemo {
 		String text = textField.getText();
 		if ("Outline".equals(effectName)) {
 			effect = new OutlineTextEffect(getEffectFont(), text,
-					preview.getWidth(), preview.getHeight(), fill.getColor(),
-					stroke.getColor(), shadow.getColor());
+					preview.getWidth(), preview.getHeight(), fill
+							.getColorSelectionModel().getSelectedColor(),
+					stroke.getColorSelectionModel().getSelectedColor(), shadow
+							.getColorSelectionModel().getSelectedColor());
 			stroke.setVisible(true);
 			strokeLabel.setVisible(true);
 			shadowLabel.setVisible(true);
 			shadow.setVisible(true);
 		} else if ("Punch".equals(effectName)) {
 			effect = new PunchTextEffect(getEffectFont(), text,
-					preview.getWidth(), preview.getHeight(), fill.getColor(),
-					shadow.getColor());
+					preview.getWidth(), preview.getHeight(), fill
+							.getColorSelectionModel().getSelectedColor(),
+					shadow.getColorSelectionModel().getSelectedColor());
 			stroke.setVisible(false);
 			strokeLabel.setVisible(false);
 			shadowLabel.setVisible(true);
 			shadow.setVisible(true);
 		} else if ("Wave".equals(effectName)) {
 			effect = new WaveTextEffect(getEffectFont(), text,
-					preview.getWidth(), preview.getHeight(), fill.getColor(),
-					stroke.getColor());
+					preview.getWidth(), preview.getHeight(), fill
+							.getColorSelectionModel().getSelectedColor(),
+					stroke.getColorSelectionModel().getSelectedColor());
 			stroke.setVisible(true);
 			strokeLabel.setVisible(true);
 			shadowLabel.setVisible(false);
 			shadow.setVisible(false);
 		} else if ("Explode".equals(effectName)) {
 			effect = new ExplodeTextEffect(getEffectFont(), text,
-					preview.getWidth(), preview.getHeight(), fill.getColor());
+					preview.getWidth(), preview.getHeight(), fill
+							.getColorSelectionModel().getSelectedColor());
 			stroke.setVisible(false);
 			strokeLabel.setVisible(false);
 			shadowLabel.setVisible(false);
@@ -264,7 +268,8 @@ public class TextEffectDemo extends JPanel implements ShowcaseDemo {
 			if (!fontComicNeue.isSelected())
 				text = text.toLowerCase();
 			effect = new WriteTextEffect(font, getEffectFont().getSize(), text,
-					preview.getWidth(), preview.getHeight(), fill.getColor());
+					preview.getWidth(), preview.getHeight(), fill
+							.getColorSelectionModel().getSelectedColor());
 			stroke.setVisible(false);
 			strokeLabel.setVisible(false);
 			shadowLabel.setVisible(false);

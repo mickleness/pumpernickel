@@ -26,24 +26,24 @@ import javax.swing.JDialog;
 import com.pump.swing.DialogFooter.EscapeKeyBehavior;
 
 /**
- * This wraps a <code>ColorPicker</code> in a simple dialog with "OK" and
+ * This wraps a <code>JColorPicker</code> in a simple dialog with "OK" and
  * "Cancel" options.
  * <P>
- * (This object is used by the static calls in <code>ColorPicker</code> to show
+ * (This object is used by the static calls in <code>JColorPicker</code> to show
  * a dialog.) <br>
  * <IMG SRC=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker.png"
  * alt="Screenshot of ColorPickerDialog">
  * 
- * @see ColorPicker
- * @see ColorPickerPanel
+ * @see JColorPicker
+ * @see JColorPickerPanel
  *
  */
-class ColorPickerDialog extends JDialog {
+class JColorPickerDialog extends JDialog {
 
 	private static final long serialVersionUID = 2L;
 
-	ColorPicker cp;
+	JColorPicker cp;
 	int alpha;
 	Color returnValue = null;
 	ActionListener okListener = new ActionListener() {
@@ -53,18 +53,18 @@ class ColorPickerDialog extends JDialog {
 	};
 	DialogFooter footer;
 
-	public ColorPickerDialog(Frame owner, Color color, boolean includeOpacity) {
+	public JColorPickerDialog(Frame owner, Color color, boolean includeOpacity) {
 		super(owner);
 		initialize(owner, color, includeOpacity);
 	}
 
-	public ColorPickerDialog(Dialog owner, Color color, boolean includeOpacity) {
+	public JColorPickerDialog(Dialog owner, Color color, boolean includeOpacity) {
 		super(owner);
 		initialize(owner, color, includeOpacity);
 	}
 
 	private void initialize(Component owner, Color color, boolean includeOpacity) {
-		cp = new ColorPicker(true, includeOpacity);
+		cp = new JColorPicker(true, includeOpacity);
 		setModal(true);
 		setResizable(false);
 		getContentPane().setLayout(new GridBagLayout());
