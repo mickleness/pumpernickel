@@ -142,6 +142,9 @@ public abstract class ShowcaseChartDemo extends JPanel implements ShowcaseDemo {
 								i, iterationMax));
 					}
 				}
+				if (data == null)
+					throw new NullPointerException("null data for "
+							+ ShowcaseChartDemo.this.getClass().getName());
 
 				System.out.println(ShowcaseChartDemo.this.getClass()
 						.getSimpleName() + ":\n" + toHtml(data));
