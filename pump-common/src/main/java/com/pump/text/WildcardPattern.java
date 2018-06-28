@@ -503,6 +503,12 @@ public class WildcardPattern {
 			return true;
 		}
 
+		// TODO: another trick we can explore here is to scan the remaining
+		// placeholders for runs of continuous text. For example in the pattern
+		// "*abc?xyz*", the string "abc" and "xyz" are two runs of text. Each
+		// run of text has to appear in the remaining String, so if that doesn't
+		// happen we can immediately abort.
+
 		for (; stringMinIndex <= stringMaxIndex; stringMinIndex++) {
 			if (matches(string, stringMinIndex, stringMaxIndex, placeholders,
 					placeholderMinIndex + 1, placeholderMaxIndex))
