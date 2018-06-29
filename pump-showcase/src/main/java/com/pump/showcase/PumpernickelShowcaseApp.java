@@ -330,7 +330,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("JBreadCrumb", new BreadCrumbDemo());
 			addSection("CollapsibleContainer", new CollapsibleContainerDemo());
 			addSection("Swing: CustomizedToolbar", new CustomizedToolbarDemo());
-			addSection("JToolTip", new JToolTipDemo());
+			addSection("JToolTip, QPopupFactory", new JToolTipDemo());
 			addSection("JPopover", new JPopoverDemo());
 			addSection("Scaling", new ScalingDemo());
 			addSection("ImageQuantization", new ImageQuantizationDemo());

@@ -130,7 +130,7 @@ public class JToolTipDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public String getTitle() {
-		return "JToolTip Demo";
+		return "JToolTip, QPopupFactory Demo";
 	}
 
 	@Override
