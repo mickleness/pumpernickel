@@ -67,27 +67,18 @@ public class AquaColorWellUI extends ColorWellUI {
 			return true;
 		}
 
-		static Color[] colors = new Color[] { new Color(0xF1F1F1), // fill
-				new Color(0x8A8A8A), // border
-				new Color(0x08000000, true), // bottom shade #1
-				new Color(0x5FFFFFFF, true), // bottom shade #2
-				new Color(0x8FFFFFFF, true), // top shade #1
-				new Color(0x0D000000, true), // top shade #2
-				new Color(0x575757), // border (selected)
-				new Color(0x1FFFFFFF, true), // bottom shade #2 (selected)
-				new Color(0x2FFFFFFF, true) // top shade #1 (selected)
-		};
+		static Color fill = new Color(0xF3F3F3);
+		static Color border = new Color(0xB0B0B0);
+		static Color borderSelected = new Color(0x575757);
 
 		static Color[] normalGradient = new Color[] {
-				new Color(0x00000000, true), new Color(0x0A000000, true),
-				new Color(0x00000000, true) };
+				new Color(0x00000000, true), new Color(0x03000000, true) };
 
 		static Color[] selectedGradient = new Color[] {
-				new Color(0x20000000, true), new Color(0x4A000000, true),
-				new Color(0x1A000000, true) };
+				new Color(0x00000000, true), new Color(0x00000000, true) };
 
 		static Color[] selectedFillGradient = new Color[] {
-				new Color(0x7F7F7F), new Color(0x616161), new Color(0xA5A5A5) };
+				new Color(0xB0B0B0), new Color(0xC4C4C4) };
 
 		public void paintBorder(Component c, Graphics g0, int x, int y,
 				int width, int height) {
@@ -118,19 +109,19 @@ public class AquaColorWellUI extends ColorWellUI {
 			body.closePath();
 
 			if (!selected) {
-				g.setColor(colors[0]);
+				g.setColor(fill);
 			} else {
 				Paint paint = PlafPaintUtils.getVerticalGradient(
 						"aquaSelectedColorWellFill", height, y, new float[] {
-								0, .1f, 1 }, selectedFillGradient);
+								0, 1 }, selectedFillGradient);
 				g.setPaint(paint);
 			}
 			g.fill(body);
 
 			if (!selected) {
-				g.setColor(colors[1]);
+				g.setColor(border);
 			} else {
-				g.setColor(colors[6]);
+				g.setColor(borderSelected);
 			}
 			g.drawLine(x, y, x + width - 1, y);
 			g.drawLine(x, y + height - 1, x + width - 1, y + height - 1);
@@ -144,34 +135,14 @@ public class AquaColorWellUI extends ColorWellUI {
 			g.drawLine(x + width - 1 - 5, y + 5, x + width - 1 - 5, y + height
 					- 1 - 5);
 
-			// bottom shade:
-			g.setColor(colors[2]);
-			g.drawLine(x + 1, y + height - 2, x + width - 2, y + height - 2);
-			if (!selected) {
-				g.setColor(colors[3]);
-			} else {
-				g.setColor(colors[8]);
-			}
-			g.drawLine(x + 1, y + height - 3, x + width - 2, y + height - 3);
-
-			// top shade:
-			if (!selected) {
-				g.setColor(colors[4]);
-			} else {
-				g.setColor(colors[8]);
-			}
-			g.drawLine(x + 1, y + 1, x + width - 2, y + 1);
-			g.setColor(colors[5]);
-			g.drawLine(x + 1, y + 3, x + width - 2, y + 3);
-
 			// side shades:
 			if (!selected) {
 				g.setPaint(PlafPaintUtils.getVerticalGradient("aquaColorWell",
-						height, y, new float[] { 0, .1f, 1 }, normalGradient));
+						height, y, new float[] { 0, 1 }, normalGradient));
 			} else {
 				g.setPaint(PlafPaintUtils.getVerticalGradient(
-						"aquaSelectedColorWell", height, y, new float[] { 0,
-								.1f, 1 }, selectedGradient));
+						"aquaSelectedColorWell", height, y,
+						new float[] { 0, 1 }, selectedGradient));
 			}
 			g.drawLine(x + 1, y + 1, x + 1, y + height - 2);
 			g.drawLine(x + width - 2, y + 1, x + width - 2, y + height - 2);
