@@ -270,7 +270,7 @@ public class CustomizedToolbar extends JPanel {
 			if (draggingComponent != null) {
 				JComponent theComponent = getComponent(draggingComponent);
 				Rectangle r = (Rectangle) theComponent
-						.getClientProperty(AnimatedLayout.DESTINATION);
+						.getClientProperty(AnimatedLayout.ClientProperty.PROPERTY_DESTINATION);
 				if (r != null) {
 					theComponent.setBounds(r);
 				}
@@ -311,7 +311,7 @@ public class CustomizedToolbar extends JPanel {
 					dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 					JComponent theComponent = getComponent(draggingComponent);
 					Rectangle r = (Rectangle) theComponent
-							.getClientProperty(AnimatedLayout.DESTINATION);
+							.getClientProperty(AnimatedLayout.ClientProperty.PROPERTY_DESTINATION);
 					if (r != null) {
 						theComponent.setBounds(r);
 					}
@@ -440,15 +440,6 @@ public class CustomizedToolbar extends JPanel {
 	}
 
 	/**
-	 * This hard-to-describe variable has to do with when things are
-	 * initialized, and laying out this toolbar.
-	 * <P>
-	 * If things are set up incorrectly: all the components slide into place in
-	 * an animation. :) This is "neat", but gratuitous eye-candy.
-	 */
-	private boolean updatedWhileShowing = false;
-
-	/**
 	 * Creates a new CustomizedToolbar.
 	 * 
 	 * @param components
@@ -480,10 +471,11 @@ public class CustomizedToolbar extends JPanel {
 	 *            customized toolbar. Apple's Mail application has at least 2
 	 *            toolbars: one in the main window, and one when you compose a
 	 *            new message. So each type of window should use a unique name.
+	 *            If this is null then no preferences will be consulted.
 	 */
 	public CustomizedToolbar(JComponent[] components, String[] defaults,
 			String toolbarName) {
-		super(new AnimatedLayout(false));
+		super(new AnimatedLayout.ClientProperty());
 
 		int separatorCtr = 0;
 		int spaceCtr = 0;
@@ -542,8 +534,6 @@ public class CustomizedToolbar extends JPanel {
 		addHierarchyListener(new HierarchyListener() {
 
 			public void hierarchyChanged(HierarchyEvent e) {
-				if (updatedWhileShowing)
-					return;
 				updateContents();
 			}
 
@@ -649,25 +639,7 @@ public class CustomizedToolbar extends JPanel {
 	 * immediately updated.
 	 */
 	private void updateContents(String[] contents) {
-		if (isShowing() == false) {
-			// never run this method before this component is
-			// layed out in a parent: if this component calculates
-			// its layout with a width of zero (which it will have
-			// before a parent lays it out first): this will
-			// make screwey flexible spaces.
-
-			// A special HierarchyListener was added so
-			// as soon as this component IS set up in a parent,
-			// we calculate the layout.
-			return;
-		}
-
-		updatedWhileShowing = true;
-
-		int x = 0;
-
-		Component[] components = this.getComponents();
-
+		Component[] components = getComponents();
 		for (int a = 0; a < components.length; a++) {
 			JComponent jc = (JComponent) components[a];
 			jc.putClientProperty("legitimate", Boolean.FALSE);
@@ -689,6 +661,7 @@ public class CustomizedToolbar extends JPanel {
 			}
 		}
 
+		int x = 0;
 		int extraSpace = getWidth()
 				- (componentInsets.left + componentInsets.right)
 				* contents.length - minPreferredWidth;
@@ -730,11 +703,13 @@ public class CustomizedToolbar extends JPanel {
 				Rectangle bounds = new Rectangle(x + componentInsets.left,
 						componentInsets.top + minimumHeight / 2 - d.height / 2,
 						d.width, d.height);
-				if (comp.getClientProperty(AnimatedLayout.DESTINATION) == null
+				if (comp.getClientProperty(AnimatedLayout.ClientProperty.PROPERTY_DESTINATION) == null
 						|| (!contains)) {
 					comp.setBounds(bounds);
 				}
-				comp.putClientProperty(AnimatedLayout.DESTINATION, bounds);
+				comp.putClientProperty(
+						AnimatedLayout.ClientProperty.PROPERTY_DESTINATION,
+						bounds);
 				x += d.width + componentInsets.left + componentInsets.right;
 				comp.putClientProperty("legitimate", Boolean.TRUE);
 			} catch (NullPointerException e) {

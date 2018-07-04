@@ -16,6 +16,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -24,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
+import com.pump.awt.AnimatedLayout;
 import com.pump.plaf.PlafPaintUtils;
 import com.pump.plaf.TexturePaintPanelUI;
 import com.pump.swing.PartialLineBorder;
@@ -34,8 +36,14 @@ import com.pump.util.JVM;
  * A demo app for the {@link CustomizedToolbar}.
  *
  */
-public class CustomizedToolbarDemo extends JPanel {
+public class CustomizedToolbarDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
+
+	private static final String TOOLBAR_NAME = "toolbar demo";
+
+	static {
+		CustomizedToolbar.resetPreferences(TOOLBAR_NAME);
+	}
 
 	JButton customize = new JButton("Customize...");
 	// these are the components we [may] display in the toolbar:
@@ -43,7 +51,7 @@ public class CustomizedToolbarDemo extends JPanel {
 			new JCheckBox("Check box"), new JLabel("Label"),
 			new JButton("Button"), new JSlider() };
 	CustomizedToolbar toolbar = new CustomizedToolbar(list, new String[] { "0",
-			"\t", "1" }, "toolbar demo");
+			"\t", "1" }, TOOLBAR_NAME);
 
 	public CustomizedToolbarDemo() {
 
@@ -76,5 +84,26 @@ public class CustomizedToolbarDemo extends JPanel {
 		fluff.setUI(new TexturePaintPanelUI(PlafPaintUtils.getCheckerBoard(3)));
 		fluff.setOpaque(false);
 		add(fluff, c);
+	}
+
+	@Override
+	public String getTitle() {
+		return "CustomizedToolbar";
+	}
+
+	@Override
+	public URL getHelpURL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "ux", "toolbar" };
+	}
+
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { CustomizedToolbar.class, AnimatedLayout.class };
 	}
 }
