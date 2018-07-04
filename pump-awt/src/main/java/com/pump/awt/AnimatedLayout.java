@@ -18,6 +18,9 @@ import java.awt.LayoutManager2;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
@@ -161,16 +164,30 @@ public abstract class AnimatedLayout implements LayoutManager2 {
 
 	/**
 	 * This client property for the parent maps to a Boolean indicating whether
-	 * the layout has ever actually been applied. When false: we have to use the
-	 * timer to update the layout incrementally. When true (or null) we can
-	 * immediately layout all components at their target locations.
+	 * the layout should immediately (without animation) layout the container.
 	 */
-	private static final String PROPERTY_NEW = "AnimatedLayout#new";
+	private static final String PROPERTY_LAYOUT_IMMEDIATELY = "AnimatedLayout#layoutImmediately";
 
 	/**
 	 * This is the delay, in milliseconds, between adjustments.
 	 */
-	public static int DELAY = 35;
+	public static int DELAY = 25;
+
+	ComponentListener componentListener = new ComponentAdapter() {
+
+		@Override
+		public void componentResized(ComponentEvent e) {
+			JComponent jc = ((JComponent) e.getComponent());
+			layoutContainerImmediately(jc);
+		}
+
+		@Override
+		public void componentShown(ComponentEvent e) {
+			JComponent jc = ((JComponent) e.getComponent());
+			layoutContainerImmediately(jc);
+		}
+
+	};
 
 	@Override
 	public void addLayoutComponent(String name, Component comp) {
@@ -256,10 +273,10 @@ public abstract class AnimatedLayout implements LayoutManager2 {
 		double dw = dest.width - bounds.width;
 		double dh = dest.height - bounds.height;
 
-		dx = limit(.5 * sign(dx) * Math.sqrt(Math.abs(dx)) + .5 * lastDX, dx);
-		dy = limit(.5 * sign(dy) * Math.sqrt(Math.abs(dy)) + .5 * lastDY, dy);
-		dw = limit(.5 * sign(dw) * Math.sqrt(Math.abs(dw)) + .5 * lastDW, dw);
-		dh = limit(.5 * sign(dh) * Math.sqrt(Math.abs(dh)) + .5 * lastDH, dh);
+		dx = limit(.5 * sign(dx) * Math.pow(Math.abs(dx), .7) + .5 * lastDX, dx);
+		dy = limit(.5 * sign(dy) * Math.pow(Math.abs(dy), .7) + .5 * lastDY, dy);
+		dw = limit(.5 * sign(dw) * Math.pow(Math.abs(dw), .7) + .5 * lastDW, dw);
+		dh = limit(.5 * sign(dh) * Math.pow(Math.abs(dh), .7) + .5 * lastDH, dh);
 
 		c.putClientProperty(PROPERTY_LAST_DX, new Double(dx));
 		c.putClientProperty(PROPERTY_LAST_DY, new Double(dy));
@@ -287,11 +304,14 @@ public abstract class AnimatedLayout implements LayoutManager2 {
 		JComponent jc = (JComponent) parent;
 		install(jc);
 		Timer timer = (Timer) jc.getClientProperty(PROPERTY_TIMER);
-		Boolean isNew = (Boolean) jc.getClientProperty(PROPERTY_NEW);
-		if (isNew == null || isNew) {
+		Boolean layoutImmediately = (Boolean) jc
+				.getClientProperty(PROPERTY_LAYOUT_IMMEDIATELY);
+		if (layoutImmediately == null)
+			layoutImmediately = false;
+		if (layoutImmediately) {
 			layoutContainerImmediately(jc);
 			if (parent.isShowing())
-				jc.putClientProperty(PROPERTY_NEW, Boolean.FALSE);
+				jc.putClientProperty(PROPERTY_LAYOUT_IMMEDIATELY, false);
 		} else {
 			if (!timer.isRunning())
 				timer.start();
@@ -317,6 +337,7 @@ public abstract class AnimatedLayout implements LayoutManager2 {
 			Timer timer = new Timer(DELAY, new AdjustListener(parent));
 			parent.putClientProperty(PROPERTY_TIMER, timer);
 			parent.putClientProperty(PROPERTY_INITIALIZED, true);
+			parent.addComponentListener(componentListener);
 			parent.addHierarchyListener(new HierarchyListener() {
 
 				@Override
@@ -332,12 +353,15 @@ public abstract class AnimatedLayout implements LayoutManager2 {
 									// "new" untouched state,
 									// so the next time we're shown we don't
 									// animate.
-									parent.putClientProperty(PROPERTY_NEW,
+									parent.putClientProperty(
+											PROPERTY_LAYOUT_IMMEDIATELY,
 											Boolean.TRUE);
 								}
 							}
 						});
 					} else {
+						// TODO: this isn't universally guaranteed to call
+						// uninstall at the right time.
 						uninstall(parent);
 						parent.removeHierarchyListener(this);
 					}
@@ -349,6 +373,7 @@ public abstract class AnimatedLayout implements LayoutManager2 {
 	}
 
 	protected void uninstall(JComponent parent) {
+		parent.removeComponentListener(componentListener);
 		parent.putClientProperty(PROPERTY_INITIALIZED, null);
 	}
 
