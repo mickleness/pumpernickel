@@ -40,7 +40,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
@@ -97,6 +101,9 @@ import com.pump.util.JVM;
 public class CustomizedToolbar extends JPanel {
 	private static final long serialVersionUID = 1L;
 	protected static final String DIALOG_ACTIVE = "customizeDialogActive";
+
+	private static final String PROPERTY_TEMPORARY_CONTENTS = CustomizedToolbar.class
+			.getName() + "#contents";
 
 	/** This is where the order of components is stored. */
 	static final Preferences prefs = Preferences
@@ -166,6 +173,103 @@ public class CustomizedToolbar extends JPanel {
 			SwingUtilities.invokeLater(updateContentsRunnable);
 		}
 	};
+
+	class CustomizedToolbarLayout extends AnimatedLayout {
+
+		@Override
+		protected Map<JComponent, Rectangle> getDestinationMap(
+				JComponent container) {
+			Map<JComponent, Rectangle> returnValue = new HashMap<>();
+
+			String[] contents = (String[]) getClientProperty(PROPERTY_TEMPORARY_CONTENTS);
+			if (contents == null)
+				contents = getContents();
+			int w = getWidth();
+
+			Component[] components = getComponents();
+			Collection<Component> processed = new HashSet<>();
+
+			int totalFlexGaps = 0;
+			int minPreferredWidth = 0;
+			for (int a = 0; a < contents.length; a++) {
+				try {
+					if (contents[a].length() > 0
+							&& contents[a].charAt(0) == '\t') {
+						// this is a flexible gap
+						totalFlexGaps++;
+					} else {
+						JComponent comp = getComponent(contents[a]);
+						Dimension d = comp.getPreferredSize();
+						minPreferredWidth += d.width;
+					}
+				} catch (Exception e) {
+				}
+			}
+
+			int x = 0;
+			int extraSpace = w - (componentInsets.left + componentInsets.right)
+					* contents.length - minPreferredWidth;
+			if (extraSpace < 0)
+				extraSpace = 0;
+
+			for (int a = 0; a < contents.length; a++) {
+				try {
+					JComponent comp = getComponent(contents[a]);
+					Dimension d;
+
+					if (contents[a].length() > 0
+							&& contents[a].charAt(0) == '\t') {
+						// flexible gap:
+						int width = extraSpace / totalFlexGaps;
+						extraSpace = extraSpace - width;
+						totalFlexGaps--;
+
+						d = new Dimension(width, minimumHeight);
+					} else {
+						d = comp.getPreferredSize();
+					}
+					if (comp instanceof JSeparator)
+						d.height = minimumHeight;
+
+					boolean contains = false;
+					for (int b = 0; b < components.length && contains == false; b++) {
+						if (components[b] == comp)
+							contains = true;
+					}
+					if (!contains) {
+						if (draggingComponent != null && hideActiveComponents) {
+							boolean show = !comp.getName().equals(
+									draggingComponent);
+							comp.setVisible(show);
+						}
+						add(comp);
+					}
+
+					Rectangle bounds = new Rectangle(x + componentInsets.left,
+							componentInsets.top + minimumHeight / 2 - d.height
+									/ 2, d.width, d.height);
+					returnValue.put(comp, bounds);
+					x += d.width + componentInsets.left + componentInsets.right;
+					processed.add(comp);
+				} catch (NullPointerException e) {
+					// this may get thrown if getComponent(name) yields no
+					// component
+					// this may happen if a component's name changes, or a
+					// component
+					// is removed.
+				}
+			}
+
+			for (Component c : getComponents()) {
+				if (!processed.contains(c)) {
+					remove(c);
+					repaint(); // related Ladislav's bug
+				}
+			}
+
+			return returnValue;
+		}
+	}
 
 	/** The components this toolbar may display. */
 	JComponent[] componentList;
@@ -269,8 +373,8 @@ public class CustomizedToolbar extends JPanel {
 			updateContents(getContents(new Point(-1000, -1000)));
 			if (draggingComponent != null) {
 				JComponent theComponent = getComponent(draggingComponent);
-				Rectangle r = (Rectangle) theComponent
-						.getClientProperty(AnimatedLayout.ClientProperty.PROPERTY_DESTINATION);
+				Rectangle r = getLayout().getDestinationMap(
+						CustomizedToolbar.this).get(theComponent);
 				if (r != null) {
 					theComponent.setBounds(r);
 				}
@@ -310,8 +414,8 @@ public class CustomizedToolbar extends JPanel {
 					setContents(contents);
 					dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 					JComponent theComponent = getComponent(draggingComponent);
-					Rectangle r = (Rectangle) theComponent
-							.getClientProperty(AnimatedLayout.ClientProperty.PROPERTY_DESTINATION);
+					Rectangle r = getLayout().getDestinationMap(
+							CustomizedToolbar.this).get(theComponent);
 					if (r != null) {
 						theComponent.setBounds(r);
 					}
@@ -475,7 +579,8 @@ public class CustomizedToolbar extends JPanel {
 	 */
 	public CustomizedToolbar(JComponent[] components, String[] defaults,
 			String toolbarName) {
-		super(new AnimatedLayout.ClientProperty());
+		super();
+		setLayout(new CustomizedToolbarLayout());
 
 		int separatorCtr = 0;
 		int spaceCtr = 0;
@@ -563,6 +668,11 @@ public class CustomizedToolbar extends JPanel {
 		return array;
 	}
 
+	@Override
+	public CustomizedToolbarLayout getLayout() {
+		return (CustomizedToolbarLayout) super.getLayout();
+	}
+
 	protected void endDrag(DragSourceDropEvent e) {
 		if (draggingComponent != null) {
 			Point p = e.getLocation();
@@ -597,6 +707,11 @@ public class CustomizedToolbar extends JPanel {
 		updateContents(getContents());
 	}
 
+	private void updateContents(String[] contents) {
+		putClientProperty(PROPERTY_TEMPORARY_CONTENTS, contents);
+		getLayout().layoutContainer(this);
+	}
+
 	/**
 	 * Returns the component names (in order of appearance) that this toolbar
 	 * should display from the preferences.
@@ -628,103 +743,6 @@ public class CustomizedToolbar extends JPanel {
 		while (prefs.get(base + ctr, null) != null) {
 			prefs.remove(base + ctr);
 			ctr++;
-		}
-	}
-
-	/**
-	 * Updates the bounds of each component so this toolbar shows the components
-	 * listed in the <code>contents</code> argument.
-	 * <P>
-	 * Note this uses the <code>AnimatedLayout</code>, so components are not
-	 * immediately updated.
-	 */
-	private void updateContents(String[] contents) {
-		Component[] components = getComponents();
-		for (int a = 0; a < components.length; a++) {
-			JComponent jc = (JComponent) components[a];
-			jc.putClientProperty("legitimate", Boolean.FALSE);
-		}
-
-		int totalFlexGaps = 0;
-		int minPreferredWidth = 0;
-		for (int a = 0; a < contents.length; a++) {
-			try {
-				if (contents[a].length() > 0 && contents[a].charAt(0) == '\t') {
-					// this is a flexible gap
-					totalFlexGaps++;
-				} else {
-					JComponent comp = getComponent(contents[a]);
-					Dimension d = comp.getPreferredSize();
-					minPreferredWidth += d.width;
-				}
-			} catch (Exception e) {
-			}
-		}
-
-		int x = 0;
-		int extraSpace = getWidth()
-				- (componentInsets.left + componentInsets.right)
-				* contents.length - minPreferredWidth;
-		if (extraSpace < 0)
-			extraSpace = 0;
-
-		for (int a = 0; a < contents.length; a++) {
-			try {
-				JComponent comp = getComponent(contents[a]);
-				Dimension d;
-
-				if (contents[a].length() > 0 && contents[a].charAt(0) == '\t') {
-					// flexible gap:
-					int width = extraSpace / totalFlexGaps;
-					extraSpace = extraSpace - width;
-					totalFlexGaps--;
-
-					d = new Dimension(width, minimumHeight);
-				} else {
-					d = comp.getPreferredSize();
-				}
-				if (comp instanceof JSeparator)
-					d.height = minimumHeight;
-
-				boolean contains = false;
-				for (int b = 0; b < components.length && contains == false; b++) {
-					if (components[b] == comp)
-						contains = true;
-				}
-				if (!contains) {
-					if (draggingComponent != null && hideActiveComponents) {
-						boolean show = !comp.getName()
-								.equals(draggingComponent);
-						comp.setVisible(show);
-					}
-					add(comp);
-				}
-
-				Rectangle bounds = new Rectangle(x + componentInsets.left,
-						componentInsets.top + minimumHeight / 2 - d.height / 2,
-						d.width, d.height);
-				if (comp.getClientProperty(AnimatedLayout.ClientProperty.PROPERTY_DESTINATION) == null
-						|| (!contains)) {
-					comp.setBounds(bounds);
-				}
-				comp.putClientProperty(
-						AnimatedLayout.ClientProperty.PROPERTY_DESTINATION,
-						bounds);
-				x += d.width + componentInsets.left + componentInsets.right;
-				comp.putClientProperty("legitimate", Boolean.TRUE);
-			} catch (NullPointerException e) {
-				// this may get thrown if getComponent(name) yields no component
-				// this may happen if a component's name changes, or a component
-				// is removed.
-			}
-		}
-
-		for (int a = 0; a < components.length; a++) {
-			JComponent jc = (JComponent) components[a];
-			if (jc.getClientProperty("legitimate").equals(Boolean.FALSE)) {
-				remove(jc);
-				repaint(); // related Ladislav's bug
-			}
 		}
 	}
 
