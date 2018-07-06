@@ -79,7 +79,7 @@ public class CustomizedToolbarDemo extends JPanel implements ShowcaseDemo {
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		JPanel fluff = new JPanel();
-		fluff.setBorder(new PartialLineBorder(Color.DARK_GRAY, new Insets(1, 0,
+		fluff.setBorder(new PartialLineBorder(Color.lightGray, new Insets(1, 0,
 				0, 0)));
 		fluff.setUI(new TexturePaintPanelUI(PlafPaintUtils.getCheckerBoard(3)));
 		fluff.setOpaque(false);
