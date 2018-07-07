@@ -898,20 +898,6 @@ public class CustomizedToolbar extends JPanel {
 		};
 		windowListener.repositionDialog();
 		options.done.addActionListener(dialogCloseAction);
-		/**
-		 * TODO: I'm uncomfortable making this window unfocusable. Is there a
-		 * way to keep it focusable and NOT let the parent JFrame -- that
-		 * implements a brushed metal look -- paint itself in shades of light
-		 * gray?
-		 * 
-		 * Apple's existing implementation does not use the keyboard focus,
-		 * true, so one could argue it will not be missed. However, I'm
-		 * wondering if this dialog needs to support keyboard actions to make it
-		 * more accessible.
-		 * 
-		 */
-		dialog.setFocusableWindowState(false);
-		// dialog.setAlwaysOnTop(true);
 		dialog.setVisible(true);
 		dialog.addComponentListener(new ComponentAdapter() {
 			@Override

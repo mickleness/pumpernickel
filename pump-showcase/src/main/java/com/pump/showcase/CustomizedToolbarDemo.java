@@ -42,6 +42,8 @@ public class CustomizedToolbarDemo extends JPanel implements ShowcaseDemo {
 	private static final String TOOLBAR_NAME = "toolbar demo";
 
 	static {
+		// normally you want your toolbar to be the same across multiple
+		// sessions, but we want our demo to reset:
 		CustomizedToolbar.resetPreferences(TOOLBAR_NAME);
 	}
 
@@ -93,8 +95,8 @@ public class CustomizedToolbarDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return CustomizedToolbarDemo.class
+				.getResource("customizedToolbarDemo.html");
 	}
 
 	@Override
