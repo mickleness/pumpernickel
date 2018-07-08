@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -363,32 +363,46 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.html#containsStarWildcard--">containsStarWildcard</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.html#equals-java.lang.Object-">equals</a></span>(java.lang.Object&nbsp;obj)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>java.util.SortedSet&lt;java.lang.String&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.html#getMatches-java.util.TreeSet-">getMatches</a></span>(java.util.TreeSet&lt;java.lang.String&gt;&nbsp;set)</code>
+<div class="block">Return all the elements of the argument that comply with this pattern.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.html#getMaximumLength--">getMaximumLength</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.html#getPatternText--">getPatternText</a></span>()</code>
 <div class="block">Return the original pattern text used to construct this WildcardPattern.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../com/pump/text/WildcardPattern.Placeholder.html" title="class in com.pump.text">WildcardPattern.Placeholder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.html#getPlaceholder-int-">getPlaceholder</a></span>(int&nbsp;index)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.html#getPlaceholderCount--">getPlaceholderCount</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../com/pump/text/WildcardPattern.Placeholder.html" title="class in com.pump.text">WildcardPattern.Placeholder</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.html#getPlaceholders--">getPlaceholders</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.html#matches-java.lang.CharSequence-">matches</a></span>(java.lang.CharSequence&nbsp;string)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/text/WildcardPattern.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -398,7 +412,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, wait, wait, wait</code></li>
+<code>clone, finalize, getClass, notify, notifyAll, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -540,13 +554,60 @@ extends java.lang.Object</pre>
 <a name="toString--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
 <pre>public&nbsp;java.lang.String&nbsp;toString()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a name="hashCode--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;hashCode()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a name="equals-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;equals(java.lang.Object&nbsp;obj)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getMatches-java.util.TreeSet-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getMatches</h4>
+<pre>public&nbsp;java.util.SortedSet&lt;java.lang.String&gt;&nbsp;getMatches(java.util.TreeSet&lt;java.lang.String&gt;&nbsp;set)</pre>
+<div class="block">Return all the elements of the argument that comply with this pattern.
+ <p>
+ This should be functionally equivalent to iterating over every element of
+ the set and checking its compliance, but depending on the composition of
+ this pattern: this method may be faster than if you iterate over all
+ elements directly.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>set</code> - </dd>
+<dd><code>string</code> - </dd>
+<dt><span class="returnLabel">Returns:</span></dt>
 </dl>
 </li>
 </ul>

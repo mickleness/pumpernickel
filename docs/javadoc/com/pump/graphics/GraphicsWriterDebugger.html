@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9};
+var methods = {"i0":9,"i1":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -272,6 +272,13 @@ extends javax.swing.JFrame</pre>
 <div class="block">Install a debugging hotkey.</div>
 </td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicsWriterDebugger.html#installDebugHotkey-java.awt.Component-com.pump.util.IntegerProperty-">installDebugHotkey</a></span>(java.awt.Component&nbsp;component,
+                  <a href="../../../com/pump/util/IntegerProperty.html" title="class in com.pump.util">IntegerProperty</a>&nbsp;keyCode)</code>
+<div class="block">Install a debugging hotkey.</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.javax.swing.JFrame">
@@ -356,7 +363,7 @@ extends javax.swing.JFrame</pre>
 <a name="installDebugHotkey-java.awt.Component-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>installDebugHotkey</h4>
 <pre>public static&nbsp;void&nbsp;installDebugHotkey(java.awt.Component&nbsp;component,
@@ -368,7 +375,28 @@ extends javax.swing.JFrame</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>component</code> - a component to debug. The <code>paint()</code> method of this
             argument will be used.</dd>
-<dd><code>keyCode</code> - a <code>KeyEven.VK_X</code> key code. When this key is
+<dd><code>keyCode</code> - a <code>KeyEvent.VK_X</code> key code. When this key is
+            pressed, the <code>GraphicsWriterDebugger</code> frame will be
+            created.</dd>
+</dl>
+</li>
+</ul>
+<a name="installDebugHotkey-java.awt.Component-com.pump.util.IntegerProperty-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>installDebugHotkey</h4>
+<pre>public static&nbsp;void&nbsp;installDebugHotkey(java.awt.Component&nbsp;component,
+                                      <a href="../../../com/pump/util/IntegerProperty.html" title="class in com.pump.util">IntegerProperty</a>&nbsp;keyCode)</pre>
+<div class="block">Install a debugging hotkey. When that key is pressed: a new
+ <code>GraphicsWriterDebugger</code> frame will appear that paints the
+ argument.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>component</code> - a component to debug. The <code>paint()</code> method of this
+            argument will be used.</dd>
+<dd><code>keyCode</code> - a <code>KeyEvent.VK_X</code> key code. When this key is
             pressed, the <code>GraphicsWriterDebugger</code> frame will be
             created.</dd>
 </dl>

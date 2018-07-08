@@ -1,3 +1,13 @@
+/**
+ * This software is released as part of the Pumpernickel project.
+ * 
+ * All com.pump resources in the Pumpernickel project are distributed under the
+ * MIT License:
+ * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * 
+ * More information about the Pumpernickel project is available here:
+ * https://mickleness.github.io/pumpernickel/
+ */
 package com.pump.swing;
 
 import java.awt.Color;
@@ -248,7 +258,7 @@ public class JPalette extends JComponent {
 	 * be finished within the timeframe of Fall Creators Update.
 	 * 
 	 * Microsoft announced Fluent Design on 11 May 2017, at the Build conference
-	 * for developers.<blockquote>
+	 * for developers.</blockquote>
 	 */
 	public static Color[][] getFluentColors() {
 		return new Color[][] {
@@ -354,14 +364,14 @@ public class JPalette extends JComponent {
 	}
 
 	/**
-	 * Returns a string that specifies the name of the L&F class that renders
-	 * this component.
+	 * Returns a string that specifies the name of the L&amp;F class that
+	 * renders this component.
 	 *
 	 * @return "PanelUI"
 	 * @see JComponent#getUIClassID
 	 * @see UIDefaults#getUI
 	 * @beaninfo expert: true description: A string that specifies the name of
-	 *           the L&F class.
+	 *           the L&amp;F class.
 	 */
 	public String getUIClassID() {
 		return uiClassID;

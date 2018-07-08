@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../com/pump/awt/FilteredStroke.html" title="interface in com.pump.awt"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../com/pump/awt/GradientTexturePaint.Cycle.html" title="enum in com.pump.awt"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/awt/HSLColor.html" title="class in com.pump.awt"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?com/pump/awt/GradientTexturePaint.html" target="_top">Frames</a></li>
@@ -73,7 +73,7 @@ var activeTableTab = "activeTableTab";
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -118,7 +118,10 @@ implements java.awt.Paint</pre>
 <div class="block">A linear gradient based on a <code>java.awt.TexturePaint</code>.
  <p>
  This goes to extra lengths to reduce color banding more than Java's default
- gradient implementation, and is generally comparable in performance.</div>
+ gradient implementation, and is generally comparable in performance.
+ <p>
+ To activate: make sure the RenderingHints for VALUE_COLOR_RENDER_QUALITY,
+ VALUE_RENDER_QUALITY, or VALUE_DITHER_ENABLE is used.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a
@@ -134,25 +137,6 @@ implements java.awt.Paint</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<ul class="blockList">
-<li class="blockList"><a name="nested.class.summary">
-<!--   -->
-</a>
-<h3>Nested Class Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
-<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/GradientTexturePaint.Cycle.html" title="enum in com.pump.awt">GradientTexturePaint.Cycle</a></span></code>&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
 <!-- =========== FIELD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="field.summary">
@@ -170,7 +154,7 @@ implements java.awt.Paint</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/GradientTexturePaint.html#colors">colors</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../com/pump/awt/GradientTexturePaint.Cycle.html" title="enum in com.pump.awt">GradientTexturePaint.Cycle</a></code></td>
+<td class="colFirst"><code>protected java.awt.MultipleGradientPaint.CycleMethod</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/awt/GradientTexturePaint.html#cycle">cycle</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -233,22 +217,22 @@ implements java.awt.Paint</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/awt/GradientTexturePaint.html#GradientTexturePaint-java.awt.Color:A-float:A-float-float-float-float-com.pump.awt.GradientTexturePaint.Cycle-">GradientTexturePaint</a></span>(java.awt.Color[]&nbsp;colors,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/awt/GradientTexturePaint.html#GradientTexturePaint-java.awt.Color:A-float:A-float-float-float-float-java.awt.MultipleGradientPaint.CycleMethod-">GradientTexturePaint</a></span>(java.awt.Color[]&nbsp;colors,
                     float[]&nbsp;fractions,
                     float&nbsp;x1,
                     float&nbsp;y1,
                     float&nbsp;x2,
                     float&nbsp;y2,
-                    <a href="../../../com/pump/awt/GradientTexturePaint.Cycle.html" title="enum in com.pump.awt">GradientTexturePaint.Cycle</a>&nbsp;cycle)</code>
+                    java.awt.MultipleGradientPaint.CycleMethod&nbsp;cycle)</code>
 <div class="block">Creates a new <code>GradientTexturePaint</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/awt/GradientTexturePaint.html#GradientTexturePaint-java.awt.Color:A-float:A-java.awt.geom.Point2D-java.awt.geom.Point2D-com.pump.awt.GradientTexturePaint.Cycle-">GradientTexturePaint</a></span>(java.awt.Color[]&nbsp;colors,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/awt/GradientTexturePaint.html#GradientTexturePaint-java.awt.Color:A-float:A-java.awt.geom.Point2D-java.awt.geom.Point2D-java.awt.MultipleGradientPaint.CycleMethod-">GradientTexturePaint</a></span>(java.awt.Color[]&nbsp;colors,
                     float[]&nbsp;fractions,
                     java.awt.geom.Point2D&nbsp;p1,
                     java.awt.geom.Point2D&nbsp;p2,
-                    <a href="../../../com/pump/awt/GradientTexturePaint.Cycle.html" title="enum in com.pump.awt">GradientTexturePaint.Cycle</a>&nbsp;cycle)</code>
+                    java.awt.MultipleGradientPaint.CycleMethod&nbsp;cycle)</code>
 <div class="block">Creates a new <code>GradientTexturePaint</code>.</div>
 </td>
 </tr>
@@ -259,7 +243,7 @@ implements java.awt.Paint</pre>
                     float&nbsp;x2,
                     float&nbsp;y2,
                     java.awt.Color&nbsp;c2)</code>
-<div class="block">Create a 2-color gradient using <code>Cycle.NONE</code>.</div>
+<div class="block">Create a 2-color gradient using <code>CycleMethod.NO_CYCLE</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -267,7 +251,7 @@ implements java.awt.Paint</pre>
                     java.awt.Color&nbsp;c1,
                     java.awt.geom.Point2D&nbsp;p2,
                     java.awt.Color&nbsp;c2)</code>
-<div class="block">Create a 2-color gradient using <code>Cycle.NONE</code>.</div>
+<div class="block">Create a 2-color gradient using <code>CycleMethod.NO_CYCLE</code>.</div>
 </td>
 </tr>
 </table>
@@ -379,7 +363,7 @@ implements java.awt.Paint</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>cycle</h4>
-<pre>protected&nbsp;<a href="../../../com/pump/awt/GradientTexturePaint.Cycle.html" title="enum in com.pump.awt">GradientTexturePaint.Cycle</a> cycle</pre>
+<pre>protected&nbsp;java.awt.MultipleGradientPaint.CycleMethod cycle</pre>
 </li>
 </ul>
 <a name="fractions">
@@ -474,7 +458,7 @@ implements java.awt.Paint</pre>
                             float&nbsp;x2,
                             float&nbsp;y2,
                             java.awt.Color&nbsp;c2)</pre>
-<div class="block">Create a 2-color gradient using <code>Cycle.NONE</code>.</div>
+<div class="block">Create a 2-color gradient using <code>CycleMethod.NO_CYCLE</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x1</code> - the x-coordinate of first point</dd>
@@ -496,7 +480,7 @@ implements java.awt.Paint</pre>
                             java.awt.Color&nbsp;c1,
                             java.awt.geom.Point2D&nbsp;p2,
                             java.awt.Color&nbsp;c2)</pre>
-<div class="block">Create a 2-color gradient using <code>Cycle.NONE</code>.</div>
+<div class="block">Create a 2-color gradient using <code>CycleMethod.NO_CYCLE</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>p1</code> - the first point</dd>
@@ -506,7 +490,7 @@ implements java.awt.Paint</pre>
 </dl>
 </li>
 </ul>
-<a name="GradientTexturePaint-java.awt.Color:A-float:A-float-float-float-float-com.pump.awt.GradientTexturePaint.Cycle-">
+<a name="GradientTexturePaint-java.awt.Color:A-float:A-float-float-float-float-java.awt.MultipleGradientPaint.CycleMethod-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -518,7 +502,7 @@ implements java.awt.Paint</pre>
                             float&nbsp;y1,
                             float&nbsp;x2,
                             float&nbsp;y2,
-                            <a href="../../../com/pump/awt/GradientTexturePaint.Cycle.html" title="enum in com.pump.awt">GradientTexturePaint.Cycle</a>&nbsp;cycle)</pre>
+                            java.awt.MultipleGradientPaint.CycleMethod&nbsp;cycle)</pre>
 <div class="block">Creates a new <code>GradientTexturePaint</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -529,11 +513,11 @@ implements java.awt.Paint</pre>
 <dd><code>y1</code> - the y-value of the first coordinate.</dd>
 <dd><code>x2</code> - the x-value of the second coordinate.</dd>
 <dd><code>y2</code> - the y-value of the second coordinate.</dd>
-<dd><code>cycle</code> - TILE is recommended for best performance.</dd>
+<dd><code>cycle</code> - CycleMethod.REPEAT is recommended for best performance.</dd>
 </dl>
 </li>
 </ul>
-<a name="GradientTexturePaint-java.awt.Color:A-float:A-java.awt.geom.Point2D-java.awt.geom.Point2D-com.pump.awt.GradientTexturePaint.Cycle-">
+<a name="GradientTexturePaint-java.awt.Color:A-float:A-java.awt.geom.Point2D-java.awt.geom.Point2D-java.awt.MultipleGradientPaint.CycleMethod-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -543,7 +527,7 @@ implements java.awt.Paint</pre>
                             float[]&nbsp;fractions,
                             java.awt.geom.Point2D&nbsp;p1,
                             java.awt.geom.Point2D&nbsp;p2,
-                            <a href="../../../com/pump/awt/GradientTexturePaint.Cycle.html" title="enum in com.pump.awt">GradientTexturePaint.Cycle</a>&nbsp;cycle)</pre>
+                            java.awt.MultipleGradientPaint.CycleMethod&nbsp;cycle)</pre>
 <div class="block">Creates a new <code>GradientTexturePaint</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -552,7 +536,7 @@ implements java.awt.Paint</pre>
             fractions from [0,1]. Each fraction corresponds to a color.</dd>
 <dd><code>p1</code> - the first point.</dd>
 <dd><code>p2</code> - the second point.</dd>
-<dd><code>cycle</code> - TILE is recommended for best performance.</dd>
+<dd><code>cycle</code> - CycleMethod.REPEAT is recommended for best performance.</dd>
 </dl>
 </li>
 </ul>
@@ -707,7 +691,7 @@ implements java.awt.Paint</pre>
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../com/pump/awt/FilteredStroke.html" title="interface in com.pump.awt"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../com/pump/awt/GradientTexturePaint.Cycle.html" title="enum in com.pump.awt"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/awt/HSLColor.html" title="class in com.pump.awt"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?com/pump/awt/GradientTexturePaint.html" target="_top">Frames</a></li>
@@ -731,7 +715,7 @@ implements java.awt.Paint</pre>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

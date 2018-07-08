@@ -47,7 +47,8 @@ import javax.swing.Timer;
  */
 public abstract class AnimatedLayout implements LayoutManager2 {
 	/**
-	 * This AnimatedLayout relies on a client property {@link #DESTINATION}
+	 * This AnimatedLayout relies on a client property
+	 * {@link #PROPERTY_DESTINATION}
 	 */
 	public static class ClientProperty extends AnimatedLayout {
 		/**

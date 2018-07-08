@@ -61,7 +61,6 @@ import javax.swing.text.html.StyleSheet;
 import com.pump.desktop.DesktopApplication;
 import com.pump.desktop.edit.EditCommand;
 import com.pump.desktop.edit.EditMenuControls;
-import com.pump.geom.AreaXTestPanel;
 import com.pump.icon.button.MinimalDuoToneCloseIcon;
 import com.pump.plaf.RoundTextFieldUI;
 import com.pump.swing.CollapsibleContainer;
@@ -333,10 +332,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("JToolTip, QPopupFactory", new JToolTipDemo());
 			addSection("JPopover", new JPopoverDemo());
 			addSection("Scaling", new ScalingDemo());
-			addSection("ImageQuantization", new ImageQuantizationDemo());
+			// addSection("ImageQuantization", new ImageQuantizationDemo());
 			addSection("JColorPicker", new JColorPickerDemo());
 			addSection("QButtonUI", new QButtonUIDemo());
-			addSection("Shapes: AreaX Tests", new AreaXTestPanel());
+			// addSection("Shapes: AreaX Tests", new AreaXTestPanel());
 			addSection("GraphicsWriterDebugger",
 					new GraphicsWriterDebuggerDemo());
 			addSection("JPEGMetaData", new JPEGMetaDataDemo());
@@ -346,8 +345,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 					new JavaTextComponentHighlighterDemo(true));
 			addSection("XMLTextComponentHighlighter",
 					new XMLTextComponentHighlighterDemo(true));
-			addSection("Text: Search Controls", new TextSearchDemo());
-			addSection("QuickTime: Writing Movies", new MovWriterDemo());
+			// addSection("Text: Search Controls", new TextSearchDemo());
+			// addSection("QuickTime: Writing Movies", new MovWriterDemo());
 			addSection("Highlighters, WildcardPattern",
 					new WildcardPatternHighlighterDemo());
 			addSection("BoxTabbedPaneUI", new BoxTabbedPaneUIDemo());

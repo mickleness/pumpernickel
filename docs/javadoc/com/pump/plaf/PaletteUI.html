@@ -1,0 +1,582 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+
+<title>PaletteUI</title>
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+<script type="text/javascript" src="../../../script.js"></script>
+</head>
+<body>
+<script type="text/javascript"><!--
+    try {
+        if (location.href.indexOf('is-external=true') == -1) {
+            parent.document.title="PaletteUI";
+        }
+    }
+    catch(err) {
+    }
+//-->
+var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar.top">
+<!--   -->
+</a>
+<div class="skipNav"><a href="#skip.navbar.top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar.top.firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+<li><a href="../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../com/pump/plaf/PaintUIEffect.html" title="class in com.pump.plaf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/plaf/PanelCellRenderer.html" title="class in com.pump.plaf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../index.html?com/pump/plaf/PaletteUI.html" target="_top">Frames</a></li>
+<li><a href="PaletteUI.html" target="_top">No&nbsp;Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../allclasses-noframe.html">All&nbsp;Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.detail">Method</a></li>
+</ul>
+</div>
+<a name="skip.navbar.top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.pump.plaf</div>
+<h2 title="Class PaletteUI" class="title">Class PaletteUI</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>javax.swing.plaf.ComponentUI</li>
+<li>
+<ul class="inheritance">
+<li>com.pump.plaf.PaletteUI</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public class <span class="typeNameLabel">PaletteUI</span>
+extends javax.swing.plaf.ComponentUI</pre>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#PROPERTY_HIGHLIGHT">PROPERTY_HIGHLIGHT</a></span></code>
+<div class="block">This JPalette client property can resolve to
+ <code>#PROPERTY_HIGHLIGHT_GRID</code> or <a href="../../../com/pump/plaf/PaletteUI.html#VALUE_HIGHLIGHT_SCRIBBLE"><code>VALUE_HIGHLIGHT_SCRIBBLE</code></a></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.Object</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#VALUE_HIGHLIGHT_BEVEL">VALUE_HIGHLIGHT_BEVEL</a></span></code>
+<div class="block">This value for the <a href="../../../com/pump/plaf/PaletteUI.html#PROPERTY_HIGHLIGHT"><code>PROPERTY_HIGHLIGHT</code></a> key indicates a light
+ beveled highlight/shadow should be painted on all colored cells.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.Object</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#VALUE_HIGHLIGHT_SCRIBBLE">VALUE_HIGHLIGHT_SCRIBBLE</a></span></code>
+<div class="block">This value for the <a href="../../../com/pump/plaf/PaletteUI.html#PROPERTY_HIGHLIGHT"><code>PROPERTY_HIGHLIGHT</code></a> key indicates a light
+ scribbled border should be sketched between all the colored cells.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#PaletteUI--">PaletteUI</a></span>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>static javax.swing.plaf.ComponentUI</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#createUI-javax.swing.JComponent-">createUI</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected javax.swing.border.Border</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#getDefaultBorder--">getDefaultBorder</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>java.awt.Dimension</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#getMaximumSize-javax.swing.JComponent-">getMaximumSize</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>java.awt.Dimension</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#getMinimumSize-javax.swing.JComponent-">getMinimumSize</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>java.awt.Dimension</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#getPreferredSize-javax.swing.JComponent-">getPreferredSize</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>protected javax.swing.JToggleButton</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#getSelectedButton-com.pump.swing.JPalette-">getSelectedButton</a></span>(<a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;palette)</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#installUI-javax.swing.JComponent-">installUI</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#nudge-com.pump.swing.JPalette-int-int-">nudge</a></span>(<a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;palette,
+     int&nbsp;dx,
+     int&nbsp;dy)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#paint-java.awt.Graphics-javax.swing.JComponent-">paint</a></span>(java.awt.Graphics&nbsp;g,
+     javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#paintBackground-java.awt.Graphics2D-com.pump.swing.JPalette-">paintBackground</a></span>(java.awt.Graphics2D&nbsp;g,
+               <a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;p)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#paintGrid-java.awt.Graphics2D-com.pump.swing.JPalette-">paintGrid</a></span>(java.awt.Graphics2D&nbsp;g,
+         <a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;p)</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#paintHighlights-java.awt.Graphics2D-com.pump.swing.JPalette-">paintHighlights</a></span>(java.awt.Graphics2D&nbsp;g,
+               <a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;p)</code>&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#paintSelectedIndicator-java.awt.Graphics2D-com.pump.swing.JPalette-javax.swing.JToggleButton-java.awt.Rectangle-">paintSelectedIndicator</a></span>(java.awt.Graphics2D&nbsp;g,
+                      <a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;p,
+                      javax.swing.JToggleButton&nbsp;b,
+                      java.awt.Rectangle&nbsp;r)</code>&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#relayoutCells-com.pump.swing.JPalette-">relayoutCells</a></span>(<a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/plaf/PaletteUI.html#uninstallUI-javax.swing.JComponent-">uninstallUI</a></span>(javax.swing.JComponent&nbsp;c)</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.javax.swing.plaf.ComponentUI">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;javax.swing.plaf.ComponentUI</h3>
+<code>contains, getAccessibleChild, getAccessibleChildrenCount, getBaseline, getBaselineResizeBehavior, update</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="PROPERTY_HIGHLIGHT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PROPERTY_HIGHLIGHT</h4>
+<pre>public static final&nbsp;java.lang.String PROPERTY_HIGHLIGHT</pre>
+<div class="block">This JPalette client property can resolve to
+ <code>#PROPERTY_HIGHLIGHT_GRID</code> or <a href="../../../com/pump/plaf/PaletteUI.html#VALUE_HIGHLIGHT_SCRIBBLE"><code>VALUE_HIGHLIGHT_SCRIBBLE</code></a></div>
+</li>
+</ul>
+<a name="VALUE_HIGHLIGHT_SCRIBBLE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>VALUE_HIGHLIGHT_SCRIBBLE</h4>
+<pre>public static final&nbsp;java.lang.Object VALUE_HIGHLIGHT_SCRIBBLE</pre>
+<div class="block">This value for the <a href="../../../com/pump/plaf/PaletteUI.html#PROPERTY_HIGHLIGHT"><code>PROPERTY_HIGHLIGHT</code></a> key indicates a light
+ scribbled border should be sketched between all the colored cells.</div>
+</li>
+</ul>
+<a name="VALUE_HIGHLIGHT_BEVEL">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>VALUE_HIGHLIGHT_BEVEL</h4>
+<pre>public static final&nbsp;java.lang.Object VALUE_HIGHLIGHT_BEVEL</pre>
+<div class="block">This value for the <a href="../../../com/pump/plaf/PaletteUI.html#PROPERTY_HIGHLIGHT"><code>PROPERTY_HIGHLIGHT</code></a> key indicates a light
+ beveled highlight/shadow should be painted on all colored cells.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="PaletteUI--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>PaletteUI</h4>
+<pre>public&nbsp;PaletteUI()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="createUI-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createUI</h4>
+<pre>public static&nbsp;javax.swing.plaf.ComponentUI&nbsp;createUI(javax.swing.JComponent&nbsp;c)</pre>
+</li>
+</ul>
+<a name="getDefaultBorder--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDefaultBorder</h4>
+<pre>protected&nbsp;javax.swing.border.Border&nbsp;getDefaultBorder()</pre>
+</li>
+</ul>
+<a name="installUI-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>installUI</h4>
+<pre>public&nbsp;void&nbsp;installUI(javax.swing.JComponent&nbsp;c)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>installUI</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.ComponentUI</code></dd>
+</dl>
+</li>
+</ul>
+<a name="relayoutCells-com.pump.swing.JPalette-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>relayoutCells</h4>
+<pre>protected&nbsp;void&nbsp;relayoutCells(<a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;c)</pre>
+</li>
+</ul>
+<a name="uninstallUI-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>uninstallUI</h4>
+<pre>public&nbsp;void&nbsp;uninstallUI(javax.swing.JComponent&nbsp;c)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>uninstallUI</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.ComponentUI</code></dd>
+</dl>
+</li>
+</ul>
+<a name="paint-java.awt.Graphics-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>paint</h4>
+<pre>public&nbsp;void&nbsp;paint(java.awt.Graphics&nbsp;g,
+                  javax.swing.JComponent&nbsp;c)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>paint</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.ComponentUI</code></dd>
+</dl>
+</li>
+</ul>
+<a name="paintBackground-java.awt.Graphics2D-com.pump.swing.JPalette-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>paintBackground</h4>
+<pre>protected&nbsp;void&nbsp;paintBackground(java.awt.Graphics2D&nbsp;g,
+                               <a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;p)</pre>
+</li>
+</ul>
+<a name="paintGrid-java.awt.Graphics2D-com.pump.swing.JPalette-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>paintGrid</h4>
+<pre>protected&nbsp;void&nbsp;paintGrid(java.awt.Graphics2D&nbsp;g,
+                         <a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;p)</pre>
+</li>
+</ul>
+<a name="paintSelectedIndicator-java.awt.Graphics2D-com.pump.swing.JPalette-javax.swing.JToggleButton-java.awt.Rectangle-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>paintSelectedIndicator</h4>
+<pre>protected&nbsp;void&nbsp;paintSelectedIndicator(java.awt.Graphics2D&nbsp;g,
+                                      <a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;p,
+                                      javax.swing.JToggleButton&nbsp;b,
+                                      java.awt.Rectangle&nbsp;r)</pre>
+</li>
+</ul>
+<a name="paintHighlights-java.awt.Graphics2D-com.pump.swing.JPalette-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>paintHighlights</h4>
+<pre>protected&nbsp;void&nbsp;paintHighlights(java.awt.Graphics2D&nbsp;g,
+                               <a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;p)</pre>
+</li>
+</ul>
+<a name="getPreferredSize-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPreferredSize</h4>
+<pre>public&nbsp;java.awt.Dimension&nbsp;getPreferredSize(javax.swing.JComponent&nbsp;c)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>getPreferredSize</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.ComponentUI</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getMinimumSize-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMinimumSize</h4>
+<pre>public&nbsp;java.awt.Dimension&nbsp;getMinimumSize(javax.swing.JComponent&nbsp;c)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>getMinimumSize</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.ComponentUI</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getMaximumSize-javax.swing.JComponent-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMaximumSize</h4>
+<pre>public&nbsp;java.awt.Dimension&nbsp;getMaximumSize(javax.swing.JComponent&nbsp;c)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>getMaximumSize</code>&nbsp;in class&nbsp;<code>javax.swing.plaf.ComponentUI</code></dd>
+</dl>
+</li>
+</ul>
+<a name="nudge-com.pump.swing.JPalette-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nudge</h4>
+<pre>public&nbsp;void&nbsp;nudge(<a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;palette,
+                  int&nbsp;dx,
+                  int&nbsp;dy)</pre>
+</li>
+</ul>
+<a name="getSelectedButton-com.pump.swing.JPalette-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getSelectedButton</h4>
+<pre>protected&nbsp;javax.swing.JToggleButton&nbsp;getSelectedButton(<a href="../../../com/pump/swing/JPalette.html" title="class in com.pump.swing">JPalette</a>&nbsp;palette)</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar.bottom">
+<!--   -->
+</a>
+<div class="skipNav"><a href="#skip.navbar.bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar.bottom.firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+<li><a href="../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../com/pump/plaf/PaintUIEffect.html" title="class in com.pump.plaf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../com/pump/plaf/PanelCellRenderer.html" title="class in com.pump.plaf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../index.html?com/pump/plaf/PaletteUI.html" target="_top">Frames</a></li>
+<li><a href="PaletteUI.html" target="_top">No&nbsp;Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../allclasses-noframe.html">All&nbsp;Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method.detail">Method</a></li>
+</ul>
+</div>
+<a name="skip.navbar.bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

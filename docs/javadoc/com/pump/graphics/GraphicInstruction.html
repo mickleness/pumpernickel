@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -135,25 +135,35 @@ extends javax.swing.tree.TreeNode</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicInstruction.html#contains-java.awt.geom.Point2D-">contains</a></span>(java.awt.geom.Point2D&nbsp;p)</code>
+<div class="block">Return true if a Point2D is rendered in this instruction.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.awt.geom.Rectangle2D</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicInstruction.html#getBounds--">getBounds</a></span>()</code>
 <div class="block">Returns the rectangle that is affected by this instruction.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicInstruction.html#getChildAt-int-">getChildAt</a></span>(int&nbsp;childIndex)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicInstruction.html#getSource--">getSource</a></span>()</code>
 <div class="block">Returns a string for developers to recognize the source of this
  instruction.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicInstruction.html#paint-java.awt.Graphics2D-">paint</a></span>(java.awt.Graphics2D&nbsp;g)</code>
 <div class="block">Renders this instruction.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/pump/graphics/GraphicInstruction.html#setParent-com.pump.graphics.GraphicsWriter-">setParent</a></span>(<a href="../../../com/pump/graphics/GraphicsWriter.html" title="class in com.pump.graphics">GraphicsWriter</a>&nbsp;parent)</code>
 <div class="block">Sets the parent of this tree node.</div>
@@ -165,7 +175,7 @@ extends javax.swing.tree.TreeNode</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;javax.swing.tree.TreeNode</h3>
-<code>children, getAllowsChildren, getChildAt, getChildCount, getIndex, getParent, isLeaf</code></li>
+<code>children, getAllowsChildren, getChildCount, getIndex, getParent, isLeaf</code></li>
 </ul>
 </li>
 </ul>
@@ -201,6 +211,21 @@ extends javax.swing.tree.TreeNode</pre>
 <div class="block">Returns the rectangle that is affected by this instruction.</div>
 </li>
 </ul>
+<a name="contains-java.awt.geom.Point2D-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>contains</h4>
+<pre>boolean&nbsp;contains(java.awt.geom.Point2D&nbsp;p)</pre>
+<div class="block">Return true if a Point2D is rendered in this instruction.
+ <p>
+ By default this may return getBounds().contains(p), but shapes may
+ override this to give more specific details. For example: if a circle is
+ being rendered, then this method may return false for the corners of
+ getBounds() but not the center.</div>
+</li>
+</ul>
 <a name="setParent-com.pump.graphics.GraphicsWriter-">
 <!--   -->
 </a>
@@ -214,13 +239,26 @@ extends javax.swing.tree.TreeNode</pre>
 <a name="getSource--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getSource</h4>
 <pre>java.lang.String&nbsp;getSource()</pre>
 <div class="block">Returns a string for developers to recognize the source of this
  instruction. By default this returns a stack trace, but it may return
  "Unknown" if the <code>GraphicsWriter</code> debugging flag is false.</div>
+</li>
+</ul>
+<a name="getChildAt-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getChildAt</h4>
+<pre><a href="../../../com/pump/graphics/GraphicInstruction.html" title="interface in com.pump.graphics">GraphicInstruction</a>&nbsp;getChildAt(int&nbsp;childIndex)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code>getChildAt</code>&nbsp;in interface&nbsp;<code>javax.swing.tree.TreeNode</code></dd>
+</dl>
 </li>
 </ul>
 </li>
