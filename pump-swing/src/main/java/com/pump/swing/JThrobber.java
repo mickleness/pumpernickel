@@ -10,6 +10,7 @@
  */
 package com.pump.swing;
 
+import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleRole;
 import javax.swing.JComponent;
@@ -95,7 +96,7 @@ import com.pump.plaf.ThrobberUI;
 		+ "<p>They're vector-based, so while they're originally designed to be less than 20x20 pixels: "
 		+ "they scale well if you need them to. The article/demo app also include some fun non-standard "
 		+ "alternative UIs (that were fun to design, but I don't necessarily recommend).", article = "http://javagraphics.blogspot.com/2014/03/implementing-jthrobber.html")
-public class JThrobber extends JComponent {
+public class JThrobber extends JComponent implements Accessible {
 	private static final long serialVersionUID = 1L;
 
 	private static final String uiClassID = "ThrobberUI";
@@ -155,6 +156,7 @@ public class JThrobber extends JComponent {
 
 	}
 
+	@Override
 	public AccessibleContext getAccessibleContext() {
 		if (accessibleContext == null)
 			accessibleContext = new AccessibleThrobber();

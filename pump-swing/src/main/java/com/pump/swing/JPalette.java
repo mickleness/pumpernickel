@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.util.Locale;
 import java.util.Objects;
 
+import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleRole;
 import javax.swing.JComponent;
@@ -24,7 +25,7 @@ import javax.swing.colorchooser.DefaultColorSelectionModel;
 
 import com.pump.plaf.PaletteUI;
 
-public class JPalette extends JComponent {
+public class JPalette extends JComponent implements Accessible {
 	private static final long serialVersionUID = 1L;
 
 	public static class AccessibleColor extends Color {
