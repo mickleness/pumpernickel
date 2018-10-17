@@ -70,7 +70,7 @@ public class AlphaCompositeDemo extends JPanel implements ShowcaseDemo {
 
 	BufferedImage backgroundImage = ImageLoader
 			.createImage(AlphaCompositeDemo.class
-					.getResource("balloon-photo.jpg"));
+					.getResource("balloon-background.png"));
 	BufferedImage foregroundImage = ImageLoader
 			.createImage(AlphaCompositeDemo.class.getResource("balloon.png"));
 
@@ -85,7 +85,6 @@ public class AlphaCompositeDemo extends JPanel implements ShowcaseDemo {
 	CompositePreview preview = new CompositePreview();
 
 	public AlphaCompositeDemo() {
-
 		for (JSlider slider : new JSlider[] { alpha, srcAlpha, dstAlpha }) {
 			final JSlider js = slider;
 			new JPopover<JToolTip>(js, new JToolTip(), false) {
@@ -251,10 +250,12 @@ public class AlphaCompositeDemo extends JPanel implements ShowcaseDemo {
 					srcAlphaValue);
 
 			g.drawImage(myBackground, getWidth() / 2 - myBackground.getWidth()
-					/ 2, getHeight() / 2 - myBackground.getHeight() / 2, null);
+					/ 2 - myBackground.getWidth() / 4, getHeight() / 2
+					- myBackground.getHeight() / 2, null);
 			g.setComposite(getComposite());
 			g.drawImage(myForeground, getWidth() / 2 - myForeground.getWidth()
-					/ 2, getHeight() / 2 - myForeground.getHeight() / 2, null);
+					/ 2 + myForeground.getWidth() / 4, getHeight() / 2
+					- myForeground.getHeight() / 2, null);
 
 			return bi;
 		}
