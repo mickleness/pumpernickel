@@ -1,0 +1,121 @@
+package com.pump.showcase;
+
+import java.awt.AWTException;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.net.URL;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.InspectorLayout;
+import com.pump.swing.JEyeDropper;
+
+public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
+	private static final long serialVersionUID = 1L;
+
+	JButton showEyeDropper = new JButton("Show Eyedropper");
+	JSpinner diameterSpinner = new JSpinner(new SpinnerNumberModel(120, 20,
+			400, 10));
+	JSpinner magSpinner = new JSpinner(new SpinnerNumberModel(10,
+			JEyeDropper.MAGNIFICATION_MIN, JEyeDropper.MAGNIFICATION_MAX, 1));
+	JLabel colorLabel = new JLabel();
+	JPanel controls = new JPanel();
+
+	public JEyeDropperDemo() {
+
+		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		layout.addRow(new JLabel("Diameter:"), diameterSpinner);
+		layout.addRow(new JLabel("Magnification:"), magSpinner);
+		layout.addRow(new JLabel("Color:"), colorLabel);
+		layout.addRow(showEyeDropper, SwingConstants.CENTER, false);
+
+		showEyeDropper.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						showEyeDropper();
+					}
+				});
+			}
+		});
+		add(controls);
+		reset();
+	}
+
+	protected void showEyeDropper() {
+		try {
+			JFrame owner = (JFrame) SwingUtilities
+					.getWindowAncestor(showEyeDropper);
+			int diameter = (int) diameterSpinner.getValue();
+			final JEyeDropper d = new JEyeDropper(owner, diameter);
+			d.getButton().putClientProperty(JEyeDropper.PROPERTY_PIXEL_SIZE,
+					magSpinner.getValue());
+			d.getButton().addPropertyChangeListener(
+					JEyeDropper.PROPERTY_PIXEL_SIZE,
+					new PropertyChangeListener() {
+
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							magSpinner.setValue(evt.getNewValue());
+						}
+
+					});
+			ChangeListener changeListener = new ChangeListener() {
+
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					Color color = d.getModel().getSelectedColor();
+					String hexString = Integer.toHexString(color.getRGB());
+					hexString = hexString.substring(2);
+					colorLabel.setText("#" + hexString.toUpperCase());
+				}
+
+			};
+			d.getModel().addChangeListener(changeListener);
+			d.setVisible(true);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		} finally {
+			reset();
+		}
+	}
+
+	protected void reset() {
+		colorLabel.setText("NA");
+	}
+
+	@Override
+	public String getTitle() {
+		return "JEyeDropper Demo";
+	}
+
+	@Override
+	public URL getHelpURL() {
+		return JEyeDropperDemo.class.getResource("jeyeDropperDemo.html");
+	}
+
+	@Override
+	public String[] getKeywords() {
+		return new String[] { "color", "ux", "gui", "dialog", "eyedropper" };
+	}
+
+	@Override
+	public Class<?>[] getClasses() {
+		return new Class[] { JEyeDropperDemo.class };
+	}
+
+}

@@ -354,6 +354,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Strokes, MouseSmoothing",
 					new StrokeMouseSmoothingDemo());
 			addSection("JColorWell, JPalette", new JColorWellPaletteDemo());
+			addSection("JEyeDropper", new JEyeDropperDemo());
 
 		} catch (Exception e) {
 			e.printStackTrace();
