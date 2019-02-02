@@ -2,6 +2,7 @@ package com.pump.showcase;
 
 import java.awt.AWTException;
 import java.awt.Color;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -21,6 +22,7 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.inspector.InspectorLayout;
+import com.pump.swing.JColorWell;
 import com.pump.swing.JEyeDropper;
 
 public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
@@ -31,22 +33,36 @@ public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
 			400, 10));
 	JSpinner magSpinner = new JSpinner(new SpinnerNumberModel(10,
 			JEyeDropper.MAGNIFICATION_MIN, JEyeDropper.MAGNIFICATION_MAX, 1));
-	JLabel colorLabel = new JLabel();
 	JPanel controls = new JPanel();
+	JColorWell colorWell = new JColorWell();
 
 	public JEyeDropperDemo() {
 
 		InspectorLayout layout = new InspectorGridBagLayout(controls);
 		layout.addRow(new JLabel("Diameter:"), diameterSpinner);
 		layout.addRow(new JLabel("Magnification:"), magSpinner);
-		layout.addRow(new JLabel("Color:"), colorLabel);
+		layout.addRow(new JLabel("Color:"), colorWell);
 		layout.addRow(showEyeDropper, SwingConstants.CENTER, false);
 
 		showEyeDropper.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// wait for the button to fully
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
+
+						// we need the eyedropper to capture the correct image,
+						// so we need to:
+
+						// step 1: remove the focus ring
+						KeyboardFocusManager.getCurrentKeyboardFocusManager()
+								.clearGlobalFocusOwner();
+
+						// step 2: repaint immediatelys
+						showEyeDropper.paintImmediately(0, 0,
+								showEyeDropper.getWidth(),
+								showEyeDropper.getHeight());
+
 						showEyeDropper();
 					}
 				});
@@ -54,6 +70,7 @@ public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
 		});
 		add(controls);
 		reset();
+		colorWell.setEnabled(false);
 	}
 
 	protected void showEyeDropper() {
@@ -79,9 +96,7 @@ public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					Color color = d.getModel().getSelectedColor();
-					String hexString = Integer.toHexString(color.getRGB());
-					hexString = hexString.substring(2);
-					colorLabel.setText("#" + hexString.toUpperCase());
+					colorWell.getColorSelectionModel().setSelectedColor(color);
 				}
 
 			};
@@ -95,7 +110,7 @@ public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	protected void reset() {
-		colorLabel.setText("NA");
+		colorWell.getColorSelectionModel().setSelectedColor(Color.black);
 	}
 
 	@Override
