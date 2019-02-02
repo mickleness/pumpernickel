@@ -390,9 +390,13 @@ public class JEyeDropper extends JDialog {
 
 					@Override
 					public AccessibleRole getAccessibleRole() {
-						// I mean... yes... we're also a push button...
-						// but we can only return 1 role...
-						return AccessibleRole.COLOR_CHOOSER;
+						// is this a COLOR_CHOOSER or a PUSH_BUTTON? I could go
+						// either way.
+
+						// if we call this a COLOR_CHOOSER then VoiceOver on Mac
+						// won't let cmd+opt+space click, so... why not let that
+						// be the deciding factor?
+						return AccessibleRole.PUSH_BUTTON;
 					}
 
 					@Override
