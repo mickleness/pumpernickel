@@ -98,7 +98,7 @@ public class ColorWellUI extends ComponentUI {
 		JColorWell colorWell;
 		JPalette colorPalette;
 		JPopupMenu popup;
-		
+
 		KeyListener popupKeyListener = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -260,6 +260,9 @@ public class ColorWellUI extends ComponentUI {
 	protected void processKeyEvent(KeyEvent e) {
 		int code = e.getKeyCode();
 		JColorWell well = (JColorWell) e.getSource();
+		if (!well.isEnabled())
+			return;
+
 		if (code == KeyEvent.VK_SPACE) {
 			ActionListener actionListener = (ActionListener) well
 					.getClientProperty(SPACE_KEY_ACTION_PROPERTY);
@@ -277,6 +280,8 @@ public class ColorWellUI extends ComponentUI {
 
 	protected void processMouseEvent(MouseEvent e) {
 		JColorWell well = (JColorWell) e.getSource();
+		if (!well.isEnabled())
+			return;
 
 		ActionListener singleClickListener = (ActionListener) well
 				.getClientProperty(SINGLE_CLICK_ACTION_PROPERTY);
