@@ -60,7 +60,20 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 	JPopover<JToolTip> passwordPopover;
 	JPopover<JToolTip> fontPopover;
 
-	BooleanProperty capsLock = new BooleanProperty("caps-lock");
+	static BooleanProperty capsLock = new BooleanProperty("capsLock");
+	static {
+		Timer timer = new Timer(100, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				boolean b = Toolkit.getDefaultToolkit().getLockingKeyState(
+						KeyEvent.VK_CAPS_LOCK);
+				capsLock.setValue(b);
+			}
+
+		});
+		timer.start();
+	}
 
 	public JPopoverDemo() {
 
@@ -70,21 +83,6 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 		layout.addRow(new JLabel("Font:"), fontComboBox, false);
 		layout.addRow(new JLabel("Currency Input:"), currencyField, false);
 
-		Timer timer = new Timer(100, new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				boolean b = Toolkit.getDefaultToolkit().getLockingKeyState(
-						KeyEvent.VK_CAPS_LOCK);
-				boolean wasVisible = passwordPopover.isVisible();
-				if (capsLock.setValue(b)) {
-					passwordPopover.setVisible(false);
-					passwordPopover.setVisible(wasVisible);
-				}
-			}
-
-		});
-		timer.start();
 		capsLock.addPropertyChangeListener(new PropertyChangeListener() {
 
 			@Override
@@ -153,12 +151,12 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 
 			@Override
 			protected void refreshPopup() {
-				getContents().setTipText(
-						"The quick brown fox jumps over the lazy dog.");
 				getContents().setFont((Font) fontComboBox.getSelectedItem());
 			}
 
 		};
+		fontPopover.getContents().setTipText(
+				"The quick brown fox jumps over the lazy dog.");
 
 		JPanel currencyButtonGrid = new JPanel(new GridBagLayout());
 		currencyButtonGrid.setBackground(Color.white);

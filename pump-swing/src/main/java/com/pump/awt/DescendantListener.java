@@ -18,6 +18,9 @@ import java.awt.event.FocusListener;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+
+import javax.swing.event.MouseInputAdapter;
 
 import com.pump.util.WeakSet;
 
@@ -46,12 +49,49 @@ public abstract class DescendantListener {
 	/**
 	 * Add MouseListener to a component and all of its descendants.
 	 * 
-	 * @param classesToIgnore an optional set of Component classes for which
-	 * 		  we will NOT add the mouse listener.
+	 * @param classesToIgnore
+	 *            an optional set of Component classes for which we will NOT add
+	 *            the mouse listener.
 	 */
 	public static DescendantListener addMouseListener(Component c,
 			final MouseListener mouseListener, boolean includeParent,
 			final Class... classesToIgnore) {
+		return addMouseListener(c, mouseListener, null, includeParent,
+				classesToIgnore);
+	}
+
+	/**
+	 * Add MouseInputAdapter to a component and all of its descendants.
+	 * 
+	 * @param classesToIgnore
+	 *            an optional set of Component classes for which we will NOT add
+	 *            the mouse listener.
+	 */
+	public static DescendantListener addMouseListener(Component c,
+			final MouseInputAdapter mouseListener, boolean includeParent,
+			final Class... classesToIgnore) {
+		return addMouseListener(c, mouseListener, mouseListener, includeParent,
+				classesToIgnore);
+	}
+
+	/**
+	 * Add MouseMotionListener to a component and all of its descendants.
+	 * 
+	 * @param classesToIgnore
+	 *            an optional set of Component classes for which we will NOT add
+	 *            the mouse listener.
+	 */
+	public static DescendantListener addMouseListener(Component c,
+			final MouseMotionListener mouseListener, boolean includeParent,
+			final Class... classesToIgnore) {
+		return addMouseListener(c, null, mouseListener, includeParent,
+				classesToIgnore);
+	}
+
+	private static DescendantListener addMouseListener(Component c,
+			final MouseListener mouseListener,
+			final MouseMotionListener mouseMotionListener,
+			boolean includeParent, final Class... classesToIgnore) {
 		return new DescendantListener(c, includeParent) {
 
 			@Override
@@ -60,7 +100,10 @@ public abstract class DescendantListener {
 					if (classToIgnore.isInstance(c))
 						return;
 				}
-				c.addMouseListener(mouseListener);
+				if (mouseListener != null)
+					c.addMouseListener(mouseListener);
+				if (mouseMotionListener != null)
+					c.addMouseMotionListener(mouseMotionListener);
 			}
 
 			@Override
@@ -69,7 +112,10 @@ public abstract class DescendantListener {
 					if (classToIgnore.isInstance(c))
 						return;
 				}
-				c.removeMouseListener(mouseListener);
+				if (mouseListener != null)
+					c.removeMouseListener(mouseListener);
+				if (mouseMotionListener != null)
+					c.removeMouseMotionListener(mouseMotionListener);
 			}
 
 		};
