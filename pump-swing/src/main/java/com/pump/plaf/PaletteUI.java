@@ -256,6 +256,10 @@ public class PaletteUI extends ComponentUI {
 			} else {
 				palette = (JPalette) c;
 			}
+
+			if (!palette.isEnabled())
+				return;
+
 			if (palette.isRequestFocusEnabled())
 				palette.requestFocus();
 
