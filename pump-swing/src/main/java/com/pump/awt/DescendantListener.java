@@ -19,8 +19,6 @@ import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.awt.event.MouseListener;
 
-import javax.swing.AbstractButton;
-
 import com.pump.util.WeakSet;
 
 /**
@@ -45,20 +43,33 @@ public abstract class DescendantListener {
 		};
 	}
 
+	/**
+	 * Add MouseListener to a component and all of its descendants.
+	 * 
+	 * @param classesToIgnore an optional set of Component classes for which
+	 * 		  we will NOT add the mouse listener.
+	 */
 	public static DescendantListener addMouseListener(Component c,
-			final MouseListener mouseListener, boolean includeParent) {
+			final MouseListener mouseListener, boolean includeParent,
+			final Class... classesToIgnore) {
 		return new DescendantListener(c, includeParent) {
 
 			@Override
 			public void register(Component c) {
-				if (!(c instanceof AbstractButton))
-					c.addMouseListener(mouseListener);
+				for (Class classToIgnore : classesToIgnore) {
+					if (classToIgnore.isInstance(c))
+						return;
+				}
+				c.addMouseListener(mouseListener);
 			}
 
 			@Override
 			public void unregister(Component c) {
-				if (!(c instanceof AbstractButton))
-					c.removeMouseListener(mouseListener);
+				for (Class classToIgnore : classesToIgnore) {
+					if (classToIgnore.isInstance(c))
+						return;
+				}
+				c.removeMouseListener(mouseListener);
 			}
 
 		};

@@ -1090,7 +1090,8 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 			BasicButtonListener buttonListener = new MyBasicButtonListener(this);
 			buttonListener.installKeyboardActions(this);
 			addFocusListener(buttonListener);
-			DescendantListener.addMouseListener(this, buttonListener, false);
+			DescendantListener.addMouseListener(this, buttonListener, false,
+					AbstractButton.class);
 
 			addActionListener(new ActionListener() {
 
