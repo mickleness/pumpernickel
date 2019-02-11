@@ -150,26 +150,42 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			setIcon(playButton, playing ? PAUSE_ICON : PLAY_ICON);
 
 			SliderUI ui = playbackProgress.getUI();
-			boolean assignDefault = false;
-			if (source == null) {
-				assignDefault = true;
-			} else {
-				WaveformSliderUI wsi = null;
-				if (ui instanceof WaveformSliderUI) {
-					wsi = (WaveformSliderUI) ui;
-				}
-				if (wsi == null || !wsi.getSource().equals(source)) {
-					try {
-						playbackProgress.setUI(new WaveformSliderUI(
-								playbackProgress, source));
-					} catch (Throwable t) {
-						assignDefault = true;
-					}
+
+			if (ui instanceof WaveformSliderUI) {
+				WaveformSliderUI wsui = (WaveformSliderUI) ui;
+				if (!wsui.getSource().equals(source)) {
+					return;
 				}
 			}
-			if (assignDefault) {
-				ui = (SliderUI) UIManager.getUI(playbackProgress);
-				playbackProgress.setUI(ui);
+
+			// immediately use a default UI:
+			ui = (SliderUI) UIManager.getUI(playbackProgress);
+			playbackProgress.setUI(ui);
+
+			// ... set up a new thread to prepare the waveform UI.
+			// This is especially important for URLs over a slow connection.
+			if (source != null) {
+				Thread prepareWaveformThread = new Thread() {
+					WaveformSliderUI wsui;
+
+					@Override
+					public void run() {
+						URL source = apc.getSource();
+						try {
+							wsui = new WaveformSliderUI(playbackProgress,
+									source);
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									playbackProgress.setUI(wsui);
+								}
+							});
+						} catch (Throwable t) {
+							t.printStackTrace();
+						}
+					}
+				};
+				prepareWaveformThread.start();
 			}
 		}
 	}
