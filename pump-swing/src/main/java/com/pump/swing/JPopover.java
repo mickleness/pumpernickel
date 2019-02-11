@@ -11,6 +11,7 @@
 package com.pump.swing;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -495,12 +496,26 @@ public class JPopover<T extends JComponent> {
 	}
 
 	/**
-	 * Refresh the contents and position of the Popup. This is automatically
+	 * This calls {@link #doRefreshPopup()} and automatically repositions the
+	 * popover if needed.
+	 */
+	public final void refreshPopup() {
+		Dimension d = getContents().getPreferredSize();
+		doRefreshPopup();
+		Dimension d2 = getContents().getPreferredSize();
+		if (!d.equals(d2) && popup != null) {
+			popup.show();
+		}
+	}
+
+	/**
+	 * This refreshes the content of this popup. This is automatically
 	 * called when the owner is updated and the popup is visible. For example:
 	 * if a JSlider is modified, this will be called so you can update the
 	 * contents of this popover based on the new slider value.
 	 */
-	protected void refreshPopup() {
+	protected void doRefreshPopup() {
+
 	}
 
 	/**

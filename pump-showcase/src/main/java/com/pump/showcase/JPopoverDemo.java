@@ -87,7 +87,7 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				updatePasswordFieldToolTip();
+				passwordPopover.refreshPopup();
 			}
 
 		});
@@ -96,12 +96,12 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				updatePasswordFieldToolTip();
+				passwordPopover.refreshPopup();
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				updatePasswordFieldToolTip();
+				passwordPopover.refreshPopup();
 
 			}
 
@@ -140,8 +140,12 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 				false) {
 
 			@Override
-			protected void refreshPopup() {
-				updatePasswordFieldToolTip();
+			protected void doRefreshPopup() {
+				if (capsLock.getValue()) {
+					updateCapsLockWarningToolTip();
+				} else {
+					updatePasswordStrengthMeterToolTip();
+				}
 			}
 
 		};
@@ -150,7 +154,7 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 				false) {
 
 			@Override
-			protected void refreshPopup() {
+			protected void doRefreshPopup() {
 				getContents().setFont((Font) fontComboBox.getSelectedItem());
 			}
 
@@ -195,14 +199,6 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 		textBox.setEditable(false);
 		textBox.setOpaque(false);
 
-	}
-
-	private void updatePasswordFieldToolTip() {
-		if (capsLock.getValue()) {
-			updateCapsLockWarningToolTip();
-		} else {
-			updatePasswordStrengthMeterToolTip();
-		}
 	}
 
 	private void updateCapsLockWarningToolTip() {
