@@ -1,1 +1,0 @@
-The "quicktime" project contains a minimal set of classes required to write (and to a lesser degree parse) QuickTime movie files.

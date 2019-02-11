@@ -1,1 +1,0 @@
-The "showcase" project contains the PumpernickelShowcaseApp to demo most of the features in this repository.

@@ -1,1 +1,0 @@
-The "transition" project contains a series of transitions intended for slideshows.

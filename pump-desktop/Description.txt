@@ -1,1 +1,0 @@
-The "desktop" project contains classes related to desktop applications.

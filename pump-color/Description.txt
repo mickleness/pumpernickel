@@ -1,1 +1,0 @@
-The "color" project includes several Swing components/dialogs related to choosing or displaying colors.

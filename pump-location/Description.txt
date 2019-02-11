@@ -1,1 +1,0 @@
-The "location" project contains classes related to the IOLocation architecture and its GUI.

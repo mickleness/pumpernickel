@@ -1,1 +1,0 @@
-The "buttons" project contains classes related to ButtonUI's, especially focused on the FilledButtonUI.

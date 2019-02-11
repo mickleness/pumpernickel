@@ -1,1 +1,0 @@
-The "image" project relates to reading/writing a variety of image file formats, or processing/rendering images.

@@ -1,1 +1,0 @@
-The data project contains data structures that are more complex than the util project. These data structures may be used in applications to represent documents.

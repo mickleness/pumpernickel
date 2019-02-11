@@ -1,1 +1,0 @@
-The "audio" project contains classes related to audio, especially PCM-related/wav-encoded audio data.

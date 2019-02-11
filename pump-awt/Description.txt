@@ -1,1 +1,0 @@
-The "awt" project includes classes related icons, graphics, and abstract rendering operations.
