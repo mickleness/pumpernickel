@@ -16,6 +16,8 @@ import java.awt.Container;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -426,7 +428,14 @@ public class QPopup extends Popup {
 		window.getRootPane().putClientProperty("Window.opacity", k);
 		window.setOpacity(k);
 		window.setBackground(new Color(0, 0, 0, 0));
-		window.getRootPane().add(contents);
+		window.getRootPane().setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		window.getRootPane().add(contents, c);
 		return window;
 	}
 
