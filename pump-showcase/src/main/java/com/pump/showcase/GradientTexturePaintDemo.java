@@ -207,7 +207,7 @@ public class GradientTexturePaintDemo extends JPanel implements ShowcaseDemo {
 		new JPopover<JToolTip>(numberOfColorsSlider, new JToolTip(), false) {
 
 			@Override
-			protected void refreshPopup() {
+			protected void doRefreshPopup() {
 				getContents().setTipText(
 						numberOfColorsSlider.getValue() + " Colors");
 				// this is only because we have the JToolTipDemo so colors

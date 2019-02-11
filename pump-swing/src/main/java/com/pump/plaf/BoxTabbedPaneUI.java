@@ -34,6 +34,8 @@ import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -1090,7 +1092,11 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 			BasicButtonListener buttonListener = new MyBasicButtonListener(this);
 			buttonListener.installKeyboardActions(this);
 			addFocusListener(buttonListener);
-			DescendantListener.addMouseListener(this, buttonListener, false,
+			DescendantListener
+					.addMouseListener(this, (MouseListener) buttonListener,
+							false, AbstractButton.class);
+			DescendantListener.addMouseListener(this,
+					(MouseMotionListener) buttonListener, false,
 					AbstractButton.class);
 
 			addActionListener(new ActionListener() {

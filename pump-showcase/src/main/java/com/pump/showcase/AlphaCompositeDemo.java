@@ -90,7 +90,7 @@ public class AlphaCompositeDemo extends JPanel implements ShowcaseDemo {
 			new JPopover<JToolTip>(js, new JToolTip(), false) {
 
 				@Override
-				protected void refreshPopup() {
+				protected void doRefreshPopup() {
 					getContents().setTipText(js.getValue() + "%");
 					// this is only because we have the JToolTipDemo so colors
 					// might change:
