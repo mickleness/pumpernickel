@@ -16,16 +16,15 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
-import com.pump.blog.Blurb;
 import com.pump.geom.MeasuredShape;
 
 /**
- * This <code>Stroke</code> that resembles a bristle.
- * <P>
- * More specifically: this stroke splatters tiny triangles and dots over a path.
+ * This <code>Stroke</code> that resembles a bristle by splattering tiny triangles and dots over a path.
  * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2008/05/strokes-bristle-stroke.html">Strokes:
+ *      a Bristle Stroke</a>
  */
-@Blurb(title = "Strokes: a Bristle Stroke", releaseDate = "May 2008", summary = "A stroke based on splattering lots of tiny shapes along a path.", article = "http://javagraphics.blogspot.com/2008/05/strokes-bristle-stroke.html", imageName = "BristleStroke.png")
 public class BristleStroke implements Stroke {
 	private static final int SHAPE_TRIANGLE = 0;
 	private static final int SHAPE_SQUARE = 1;

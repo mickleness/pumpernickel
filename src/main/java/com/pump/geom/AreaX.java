@@ -25,7 +25,6 @@ import java.util.Map;
 
 import javax.swing.UIManager;
 
-import com.pump.blog.Blurb;
 import com.pump.geom.area.AreaXBody;
 import com.pump.geom.area.CrossingsX;
 import com.pump.geom.area.CurveX;

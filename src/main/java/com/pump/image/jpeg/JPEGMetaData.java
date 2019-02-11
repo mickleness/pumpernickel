@@ -19,16 +19,14 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pump.blog.Blurb;
-
 /**
  * This class parses JPEG metadata to retrieve properties or thumbnails.
  * 
  * @see com.pump.showcase.JPEGMetaDataDemo
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2010/03/images-reading-jpeg-thumbnails.html">Images:
+ *      Reading JPEG Thumbnails</a>
  */
-@Blurb(title = "Images: Reading JPEG Thumbnails", releaseDate = "March 2010", summary = "Most JPEG files have embedded thumbnails.  This features a light parser that fetches "
-		+ "these thumbnails -- including some thumbnails <code>JAI</code> might miss -- and this new code is "
-		+ "a fraction of the install size of JAI.", article = "http://javagraphics.blogspot.com/2010/03/images-reading-jpeg-thumbnails.html")
 public class JPEGMetaData {
 
 	/**

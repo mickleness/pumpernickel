@@ -22,7 +22,6 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
-import com.pump.blog.Blurb;
 import com.pump.geom.ShapeStringUtils;
 import com.pump.geom.ShapeUtils;
 import com.pump.plaf.ShapeCreationUI;
@@ -37,10 +36,11 @@ import com.pump.plaf.ShapeCreationUI;
  * <p>
  * You may want to override the UI to paint additional components or to better
  * control the stroke/paints used.
+ * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2014/03/shapes-modeling-cubic-shapes-without.html">Shapes:
+ *      A ComponentUI to Create and Edit Shapes</a>
  */
-@Blurb(title = "Shapes: A ComponentUI to Create and Edit Shapes", releaseDate = "March 2014", summary = "This is a UI component that lets the user define shapes. There are currently 3 unique UIs "
-		+ "to define shapes (each with its own strengths and weaknesses). "
-		+ "There are a couple of different UIs that can be applied to this, and I haven't yet written up a blog article on the subject.", article = "http://javagraphics.blogspot.com/2014/03/shapes-modeling-cubic-shapes-without.html")
 public class ShapeCreationPanel extends JComponent {
 	private static final long serialVersionUID = 1L;
 
@@ -237,8 +237,8 @@ public class ShapeCreationPanel extends JComponent {
 		}
 
 		/**
-		 * @return the node index (relative to the shape index, which is relative
-		 *         to the {@link DataModel}).
+		 * @return the node index (relative to the shape index, which is
+		 *         relative to the {@link DataModel}).
 		 */
 		public int getNodeIndex() {
 			return nodeIndex;

@@ -68,7 +68,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import com.pump.UserCancelledException;
-import com.pump.blog.Blurb;
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.io.ConsoleLogger;
 import com.pump.io.IOUtils;
@@ -89,9 +88,6 @@ import com.pump.swing.TextFieldPrompt;
  * A simple app that writes jars from a large codebase, adding only the class
  * files that are necessary for a particular main method.
  */
-@Blurb(title = "Jars: Building Concise Jars", releaseDate = "January 2009", summary = "If I used an ant script or Eclipse's built-in jar-exporting widget: I'd need to "
-		+ "specify up front the classes I want to put into a jar.\n"
-		+ "<p>This class uses the <code>javac</code> command to figure that out for me.")
 public class JarWriterApp extends JFrame {
 	private static final long serialVersionUID = 1L;
 

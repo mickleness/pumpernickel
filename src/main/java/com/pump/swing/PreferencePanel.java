@@ -55,7 +55,6 @@ import javax.swing.WindowConstants;
 import javax.swing.plaf.PanelUI;
 import javax.swing.plaf.SeparatorUI;
 
-import com.pump.blog.Blurb;
 import com.pump.plaf.TexturedButtonUI;
 import com.pump.window.WindowDragger;
 
@@ -88,9 +87,10 @@ import com.pump.window.WindowDragger;
  * to say. But I left the option in this class for you to create with a dialog
  * or frame for it.
  * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2008/11/preferences-aqua-like-preferences.html">Preferences:
+ *      Aqua-Like Preferences</a>
  */
-@Blurb(title = "Preferences: Aqua-Like Preferences", releaseDate = "November 2008", summary = "This emulates two types of preferences on Mac: several rows of preferences (like the System "
-		+ "Preferences) or one row of preferences (like Mail, Safari, etc.).", article = "http://javagraphics.blogspot.com/2008/11/preferences-aqua-like-preferences.html")
 public class PreferencePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 

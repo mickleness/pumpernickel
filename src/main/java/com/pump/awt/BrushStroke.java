@@ -17,19 +17,18 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import java.util.Random;
 
-import com.pump.blog.Blurb;
 import com.pump.geom.GeneralPathWriter;
 import com.pump.geom.InsetPathWriter;
 import com.pump.geom.MeasuredShape;
 
 /**
- * This <code>Stroke</code> that resembles a brush.
- * <P>
- * It's still a work in progress, but I'm distributing it for public use in
- * hopes I can get some useful feedback; maybe even some improvements?
+ * * This <code>Stroke</code> that resembles a brush by rendering several
+ * smaller strokes in parallel along a path.
  * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2007/04/strokes-brush-stroke.html">Strokes:
+ *      a Brush Stroke</a>
  */
-@Blurb(title = "Strokes: a Brush Stroke", releaseDate = "April 2007", summary = "A stroke based on rendering several smaller strokes in parallel along a path.", article = "http://javagraphics.blogspot.com/2007/04/strokes-brush-stroke.html", imageName = "BrushStroke.png")
 public class BrushStroke implements Stroke {
 	private static BasicStroke[] thinStrokes = null;
 	float width;

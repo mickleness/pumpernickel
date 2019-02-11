@@ -27,7 +27,6 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 
 import com.pump.awt.Dimension2D;
-import com.pump.blog.Blurb;
 
 /**
  * This provides a simple thumbnail format offering shadows, borders, and
@@ -42,11 +41,11 @@ import com.pump.blog.Blurb;
  * image has to be scaled to. (For example: if the maximum thumbnail size is
  * 64x64, but each side of this thumbnail has 5 pixels of padding, then the
  * image will be scaled to fit within a 54x54 area.)
+ * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2012/08/thumbnails-formatting-thumbnails.html">Thumbnails:
+ *      Formatting Thumbnails</a>
  */
-@Blurb(imageName = "BasicThumbnail.png", title = "Thumbnails: Formatting Thumbnails", releaseDate = "August 2012", summary = "This presents a simple model to decorate thumbnails.\n"
-		+ "<p>Each thumbnail is rendered as a series of consecutive layers, including shadows "
-		+ " and borders. The thumbnail is created by passing a source image (as a File, URL, or Image) "
-		+ "and a maximum dimension size for the formatted thumbnail.", article = "http://javagraphics.blogspot.com/2012/08/thumbnails-formatting-thumbnails.html")
 public class BasicThumbnail extends Thumbnail {
 
 	/**

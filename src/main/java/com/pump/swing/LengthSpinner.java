@@ -51,7 +51,7 @@ import com.pump.math.Length;
  * the <code>Length.Unit</code> that is in use.
  * 
  * @see <a
- *      href="http://javagraphics.blogspot.com/2008/11/internationalization-measuring-lengths.html">Internationalization:
+ *      href="https://javagraphics.blogspot.com/2008/11/internationalization-measuring-lengths.html">Internationalization:
  *      Measuring Lengths</a>
  */
 public class LengthSpinner extends JSpinner {

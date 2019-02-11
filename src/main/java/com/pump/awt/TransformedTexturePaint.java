@@ -20,8 +20,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 
-import com.pump.blog.Blurb;
-
 /**
  * This effectively extends <code>TexturePaint</code> to support arbitrary
  * <code>AffineTransforms</code> inside this paint object.
@@ -32,8 +30,10 @@ import com.pump.blog.Blurb;
  * to work the paint context correctly if this class officially extends
  * <code>TexturePaint</code>.
  *
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2008/06/texturepaints-and-affinetransforms.html">TexturePaints
+ *      and AffineTransforms</a>
  */
-@Blurb(title = "TexturePaints and AffineTransforms", releaseDate = "June 2008", summary = "This discusses/demos a class that combines these two elements.", article = "http://javagraphics.blogspot.com/2008/06/texturepaints-and-affinetransforms.html")
 public class TransformedTexturePaint implements Paint {
 	TexturePaint texturePaint;
 	AffineTransform transform;

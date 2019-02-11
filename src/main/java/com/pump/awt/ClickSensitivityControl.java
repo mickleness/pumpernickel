@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
-import com.pump.blog.Blurb;
 import com.pump.util.Warnings;
 
 /**
@@ -33,8 +32,11 @@ import com.pump.util.Warnings;
  * move between mousePressed and mouseReleased. Trackpads and touchpads,
  * however, are less precise: as they grow in numbers, we need to allow a few
  * extra pixels to trigger a mouseClicked event.
+ * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2011/02/mouse-click-events-adding-wiggle-room.html">Mouse
+ *      Click Events: Adding Wiggle Room</a>
  */
-@Blurb(title = "Mouse Click Events: Adding Wiggle Room", releaseDate = "February 2011", summary = "This triggers mouseClicked events even if the mouse moves a few pixels between click and release.", article = "http://javagraphics.blogspot.com/2011/02/mouse-click-events-adding-wiggle-room.html")
 public class ClickSensitivityControl implements AWTEventListener {
 	/**
 	 * The distance between the point where the mouse is pressed and where it is

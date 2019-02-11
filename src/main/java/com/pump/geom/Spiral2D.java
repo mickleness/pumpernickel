@@ -14,8 +14,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 
-import com.pump.blog.Blurb;
-
 /**
  * The <code>Spiral2D</code> class defines a spiral shape.
  * <p>
@@ -24,10 +22,10 @@ import com.pump.blog.Blurb;
  * <code><br> &nbsp; centerY+coilGap*(t+coilOffset)*Math.sin(2*Math.PI*t*m+angularOffset);</code>
  * 
  * @see com.pump.geom.Spiral2DPathIterator
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2010/03/shapes-parametric-equations-and-spirals.html">Shapes:
+ *      Parametric Equations (and Spirals!)</a>
  */
-@Blurb(title = "Shapes: Parametric Equations (and Spirals!)", releaseDate = "March 2010", summary = "This is a two-fold article:\n"
-		+ "<br>1. This presents the <code>ParametricPathIterator</code> to convert parametric equations into <code>java.awt.Shapes</code>.\n"
-		+ "<br>2. As a proof of concept: this presents the <code>Spiral2D</code>.</br>", article = "http://javagraphics.blogspot.com/2010/03/shapes-parametric-equations-and-spirals.html", imageName = "Spiral2D.png")
 public class Spiral2D extends AbstractShape {
 
 	/**

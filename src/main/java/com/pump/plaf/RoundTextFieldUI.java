@@ -32,7 +32,6 @@ import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
 
-import com.pump.blog.Blurb;
 import com.pump.icon.SearchIcon;
 
 /**
@@ -42,10 +41,10 @@ import com.pump.icon.SearchIcon;
  * defined, this may place a magnifying glass icon in the left edge of this UI
  * before the text.
  *
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2009/12/text-prompts-and-search-fields.html">Text:
+ *      Prompts and Search Fields</a>
  */
-@Blurb(imageName = "PromptSearch.png", title = "Text: Prompts and Search Fields", releaseDate = "December 2009", summary = "This article has 2 goals:\n"
-		+ "<br>1. Display a gray prompt over a <code>JTextField</code> if it doesn't have the focus.</br>\n"
-		+ "<br>2. Implement a <code>RoundTextFieldUI</code> (with an optional magnifying glass).</br>", article = "http://javagraphics.blogspot.com/2009/12/text-prompts-and-search-fields.html")
 public class RoundTextFieldUI extends BasicTextFieldUI {
 	public final static ButtonShape ROUNDRECT_SHAPE = new ButtonShape(8,
 			Short.MAX_VALUE);

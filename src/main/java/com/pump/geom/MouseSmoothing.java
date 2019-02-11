@@ -12,17 +12,15 @@ package com.pump.geom;
 
 import java.awt.geom.GeneralPath;
 
-import com.pump.blog.Blurb;
-
 /**
  * This collects a series of points that would otherwise be a jagged polyline
  * and smooths out the data into an attractive curved shape.
  * 
  * @see <a href="http://en.wikipedia.org/wiki/Smoothing">Smoothing</a>
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2010/06/shapes-implementing-freehand-pencil.html">Shapes:
+ *      Implementing a Freehand Pencil Tool</a>
  */
-@Blurb(title = "Shapes: Implementing a Freehand Pencil Tool", releaseDate = "June 2010", summary = "If the user drags the mouse over a <code>JComponent</code>, then you can collect a series of points. "
-		+ "This project takes those points and replaces the line segments with attractive bezier curves.\n"
-		+ "<p>This is one of three ShapeCreationPanelUIs.", article = "http://javagraphics.blogspot.com/2010/06/shapes-implementing-freehand-pencil.html")
 public interface MouseSmoothing {
 
 	/**

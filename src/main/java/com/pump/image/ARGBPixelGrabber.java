@@ -20,8 +20,6 @@ import java.awt.image.Raster;
 import java.util.Arrays;
 import java.util.Random;
 
-import com.pump.blog.Blurb;
-
 /**
  * This is based conceptually on the <code>java.awt.image.PixelGrabber</code>
  * class, except this is designed to be optimized for several types of
@@ -34,10 +32,10 @@ import com.pump.blog.Blurb;
  * You'll get the best performance out of this class if you iterate over 1 row
  * of data at a time and recycle the array you're using.
  * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2007/04/pixelgrabber-studying-performance.html">PixelGrabber:
+ *      Studying Performance</a>
  */
-@Blurb(title = "Performance: Studying the PixelGrabber", releaseDate = "April 2007", summary = "Can we improve on the <a href=\"http://java.sun.com/javase/6/docs/api/index.html?java/awt/image/PixelGrabber.html\"><code>java.awt.PixelGrabber</code></a>?\n"
-		+ "<p>If you're only working with a <code>BufferedImage</code> and not an abstract <code>Image</code>: "
-		+ "you might be able to really improve performance with the <code>ARGBPixelGrabber</code>.", article = "http://javagraphics.blogspot.com/2007/04/pixelgrabber-studying-performance.html")
 public class ARGBPixelGrabber {
 
 	public static void main(String[] args) {

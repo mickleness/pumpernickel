@@ -27,17 +27,17 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
-import com.pump.blog.Blurb;
-
 /**
  * This is a JTextArea with a fixed width. Its preferred height will adjust
  * depending on the text inside it.
  *
  * @deprecated see com.pump.awt.TextSize
+ * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2008/06/text-height-gui-layout-and-text-boxes.html">Text:
+ *      Text Height and GUI Layout</a>
  */
 @Deprecated
-@Blurb(title = "Text: Text Height and GUI Layout", releaseDate = "June 2008", summary = "This walks through how to find the preferred height of a block of text, "
-		+ "and provides a GUI component to display text with a fixed width.", article = "http://javagraphics.blogspot.com/2008/06/text-height-gui-layout-and-text-boxes.html")
 public class FixedWidthTextArea extends JTextArea {
 	private static final long serialVersionUID = 1L;
 

@@ -47,8 +47,6 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import com.pump.blog.Blurb;
-
 /**
  * This <code>TreeUI</code> adds an arbitrary number of decorations on the right
  * side of the tree. These decorations are rendered with the
@@ -72,10 +70,10 @@ import com.pump.blog.Blurb;
  * cell should have the keyboard focus, so that boolean is always relayed as
  * <code>false</code>.
  * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2012/05/treeuis-adding-decorations-to-cells.html">TreeUIs:
+ *      Adding Decorations to Cells</a>
  */
-@Blurb(imageName = "DecoratedTreeUI.png", title = "TreeUIs: Adding Decorations to Cells", releaseDate = "May 2012", summary = "This new TreeUI adds icons on the right side of a tree that can serve as indicators or buttons. "
-		+ "This uses a combination of advanced TreeCellRenderers and MouseListeners, so these decorations do not actually "
-		+ "exist in the Swing hierarchy.", article = "http://javagraphics.blogspot.com/2012/05/treeuis-adding-decorations-to-cells.html")
 public class DecoratedTreeUI extends BasicTreeUI {
 
 	/**

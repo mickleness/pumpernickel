@@ -41,7 +41,7 @@ import javax.imageio.ImageIO;
  * classes to work.
  * 
  * @see <a
- *      href="http://javagraphics.blogspot.com/2007/06/dock-icon-setting-dock-icon.html">Dock
+ *      href="https://javagraphics.blogspot.com/2007/06/dock-icon-setting-dock-icon.html">Dock
  *      Icon: Setting the Dock Icon</a>
  */
 public class DockIcon {

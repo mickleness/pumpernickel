@@ -13,17 +13,16 @@ package com.pump.image.pixel.quantize;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 
-import com.pump.blog.Blurb;
 import com.pump.image.pixel.IndexedBytePixelIterator;
 
 /**
  * This is an algorithm that converts an image with thousands or millions of
  * colors into a simpler image with a fixed color palette.
+ * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2014/02/images-color-palette-reduction.html">Images:
+ *      Color Palette Reduction</a>
  */
-@Blurb(imageName = "QuantizationDemo.png", title = "Images: Color Palette Reduction", releaseDate = "February 2014", summary = "This is a crash course in a pure-Java implementation of color reduction for images "
-		+ "(aka \"image quantization\"). This provides a median cut color reduction algorithm and a few different "
-		+ "levels of error diffusion to help reduce images from millions of colors to a few hundred.\n"
-		+ "<p>(This is a prerequisite for writing a gif encoder.)", article = "http://javagraphics.blogspot.com/2014/02/images-color-palette-reduction.html")
 public abstract class ImageQuantization {
 
 	protected abstract static class AbstractIndexedBytePixelIterator implements

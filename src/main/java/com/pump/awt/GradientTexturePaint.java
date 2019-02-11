@@ -26,8 +26,6 @@ import java.awt.image.ColorModel;
 import java.util.HashMap;
 import java.util.Objects;
 
-import com.pump.blog.Blurb;
-
 /**
  * A linear gradient based on a <code>java.awt.TexturePaint</code>.
  * <p>
@@ -38,13 +36,12 @@ import com.pump.blog.Blurb;
  * VALUE_RENDER_QUALITY, or VALUE_DITHER_ENABLE is used.
  * 
  * @see <a
- *      href="http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients:
+ *      href="https://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients:
  *      Avoiding Color Banding</a>
  * @see <a
- *      href="http://javagraphics.blogspot.com/2009/11/gradients-boring-discussion.html">Gradients:
+ *      href="https://javagraphics.blogspot.com/2009/11/gradients-boring-discussion.html">Gradients:
  *      a Boring Discussion</a>
  */
-@Blurb(title = "Gradients: Avoiding Color Banding", releaseDate = "March 2014", summary = "This article explores the problem of color banding in linear gradients and presents a partial solution.", article = "http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html")
 public class GradientTexturePaint implements Paint {
 
 	/**
@@ -463,7 +460,7 @@ public class GradientTexturePaint implements Paint {
 	 *         diffusion to prevent color banding.
 	 * 
 	 * @see <a
-	 *      href="http://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients:
+	 *      href="https://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients:
 	 *      Avoiding Color Banding</a>
 	 */
 	public static boolean needsDiffusion(Color[] colors, float[] fractions,

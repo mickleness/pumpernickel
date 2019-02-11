@@ -29,7 +29,7 @@ import com.pump.image.thumbnail.BasicThumbnail.Layer;
  * {@link com.pump.image.pixel.Scaling} class to implement the actual scaling.
  * (If all you're interested in in scaling a large image, then please refer to
  * that class, at the <a
- * href="http://javagraphics.blogspot.com/2010/06/images-scaling-down.html">
+ * href="https://javagraphics.blogspot.com/2010/06/images-scaling-down.html">
  * accompanying discussion</a>.)
  */
 public abstract class Thumbnail {

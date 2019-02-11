@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import com.pump.blog.Blurb;
 import com.pump.image.ImageSize;
 import com.pump.image.bmp.BmpDecoderIterator;
 
@@ -29,9 +28,9 @@ import com.pump.image.bmp.BmpDecoderIterator;
  * 
  * @see com.pump.awt.Dimension2D#scaleProportionally(Dimension, Dimension)
  * @see <a
- *      href="http://javagraphics.blogspot.com/2010/06/images-scaling-down.html">http://javagraphics.blogspot.com/2010/06/images-scaling-down.html</a>
+ *      href="https://javagraphics.blogspot.com/2010/06/images-scaling-down.html">Images:
+ *      Scaling Down</a>
  */
-@Blurb(title = "Images: Scaling Down", releaseDate = "June 2010", summary = "This improves the image quality and memory allocation when scaling large <code>BufferedImages</code> to thumbnails.", article = "http://javagraphics.blogspot.com/2010/06/images-scaling-down.html", imageName = "Scaling.png")
 public class Scaling {
 
 	/**

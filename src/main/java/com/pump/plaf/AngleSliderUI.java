@@ -39,7 +39,6 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.SliderUI;
 
-import com.pump.blog.Blurb;
 import com.pump.util.JVM;
 
 /**
@@ -49,11 +48,10 @@ import com.pump.util.JVM;
  * This class (and subclasses) can not respond to several slider properties such
  * as orientation, inversion, tickmarks, labels, etc.
  * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2008/05/angles-need-gui-widget-for-angles.html">Angles:
+ *      need GUI widget for angles?</a>
  */
-@Blurb(title = "Angles: need GUI widget for angles?", releaseDate = "May 2008", summary = "Take a <a href=\"http://java.sun.com/javase/6/docs/api/index.html?javax/swing/JSlider.html\"><code>JSlider</code></a>. "
-		+ "Add a <code>AngleSliderUI</code>. "
-		+ "Voila!  You have a GUI widget for angles.\n"
-		+ "<P>Comes in Aqua and non-Aqua flavors.", article = "http://javagraphics.blogspot.com/2008/05/angles-need-gui-widget-for-angles.html", imageName = "AngleSliderUI.png")
 public class AngleSliderUI extends SliderUI {
 
 	public static ComponentUI createUI(JComponent c) {

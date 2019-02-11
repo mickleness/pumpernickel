@@ -37,7 +37,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
-import com.pump.blog.Blurb;
 import com.pump.util.ThreadedSemaphore;
 
 /**
@@ -51,13 +50,10 @@ import com.pump.util.ThreadedSemaphore;
  * alt="Screenshot of ShapeBoundsDemo">
  * 
  * @see <a
- *      href="http://javagraphics.blogspot.com/2015/03/text-managing-console-in-swing.html">Text:
+ *      href="https://javagraphics.blogspot.com/2015/03/text-managing-console-in-swing.html">Text:
  *      Managing a Console in Swing</a>
  * @see com.pump.io.ConsoleLogger
  */
-@Blurb(title = "Text: Managing a Console in Swing", releaseDate = "March 2015", summary = "This discusses options for presenting a console-like Swing component."
-		+ "<p>The class I end up developing is the BasicConsole: "
-		+ "a thread-safe JTextArea that highlights multiple PrintStreams in different colors and offers modest support for tab-formatted tables.", article = "http://javagraphics.blogspot.com/2015/03/text-managing-console-in-swing.html")
 public class BasicConsole extends JTextArea {
 	private static final long serialVersionUID = 1L;
 

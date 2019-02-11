@@ -65,9 +65,9 @@ import javax.swing.Timer;
  * animation: sometimes on XP some components would insist on repainting
  * themselves, which can lead to really awkward flickering.
  * <P>
- * It is very strongly recommended that this component be opaque. See <A HREF=
- * "http://javagraphics.blogspot.com/2008/06/crossfades-what-is-and-isnt-possible.html"
- * >this link</A> for a discussion of why.
+ * It is very strongly recommended that this component be opaque. See <a href=
+ * "https://javagraphics.blogspot.com/2008/06/crossfades-what-is-and-isnt-possible.html"
+ * >this link</a> for a discussion of why.
  */
 class FadingPanel extends JPanel {
 
@@ -165,9 +165,9 @@ class FadingPanel extends JPanel {
 
 	/**
 	 * This paints a combination of bi1 and bi2 fading as f ranges from [0,1].
-	 * See <A HREF=
-	 * "http://javagraphics.blogspot.com/2008/06/crossfades-what-is-and-isnt-possible.html"
-	 * >this link</A> for more details.
+	 * See <a href=
+	 * "https://javagraphics.blogspot.com/2008/06/crossfades-what-is-and-isnt-possible.html"
+	 * >this link</a> for more details.
 	 * 
 	 * @param g
 	 * @param bi1

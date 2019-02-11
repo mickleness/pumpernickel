@@ -18,7 +18,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
-import com.pump.blog.Blurb;
 import com.pump.util.JVM;
 
 /**
@@ -32,8 +31,11 @@ import com.pump.util.JVM;
  * HREF="http://developer.apple.com/technotes/tn2007/tn2196.html">here</A> that
  * achieves about the same goal. To my knowledge they are the same in function,
  * but I haven't explored the subject in depth.
+ * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2007/04/windows-dragging-made-easy.html">Windows:
+ *      Dragging Made Easy</a>
  */
-@Blurb(title = "Windows: Dragging Made Easy", releaseDate = "April 2007", summary = "Sometimes you want to be able to click and drag a window, palette, dialog etc.", article = "http://javagraphics.blogspot.com/2007/04/windows-dragging-made-easy.html")
 public class WindowDragger extends MouseInputAdapter {
 	Point mouseLoc;
 	boolean dragging;

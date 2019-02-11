@@ -21,15 +21,19 @@ import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.Stack;
 
-import com.pump.blog.Blurb;
-
 /**
  * This class lets you clip/intersect an arbitrary shape to a Rectangle2D.
+ * <p>
+ * This demonstrates a simple model that iterates over a path exactly once to
+ * get the clipped shape.
+ * <p>
+ * (This does not use Sutherland-Hodgman clipping algorithm, the Weiler-Atherton
+ * clipping algorithm, or the <code>Area<code> class.)
  *
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2007/04/shapes-clipping-to-rectangle.html">Shapes:
+ *      Clipping to a Rectangle</a>
  */
-@Blurb(title = "Shapes: Clipping to a Rectangle", releaseDate = "April 2007", summary = "What's the most common shape we need to clip to?  A <code>Rectangle</code>.\n"
-		+ "<p>But if we use <code>Areas</code> our performance will tank.  This demonstrates a simple model that iterates over a path exactly once to get the clipped shape.\n"
-		+ "<p>(This does not use Sutherland-Hodgman clipping algorithm or the Weiler-Atherton clipping algorithm.)", article = "http://javagraphics.blogspot.com/2007/04/shapes-clipping-to-rectangle.html")
 public abstract class Clipper {
 
 	/**

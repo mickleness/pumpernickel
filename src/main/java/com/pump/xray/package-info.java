@@ -28,8 +28,5 @@
  * labeled: x, y, width, and height. But x-ray version 1.0 will only ever identify these
  * parameters as: arg0, arg1, arg2, and arg3.
  */
-@Blurb(title = "Jars: Autogenerating Java Source Code From Class Objects", releaseDate = "January 2017", summary = "The x-ray project creates source code that matches the method and field signatures of existing <code>java.lang.Class</code> objects. The methods are all empty, and most of the fields are null, but the resulting jar is something that 3rd parties can at least compile against.")
 package com.pump.xray;
-
-import com.pump.blog.Blurb;
 

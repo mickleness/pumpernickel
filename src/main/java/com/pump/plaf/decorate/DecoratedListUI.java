@@ -25,16 +25,16 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.basic.BasicListUI;
 
-import com.pump.blog.Blurb;
-
 /**
  * This list UI adds decorations to specific rows. By defining the client
  * property {@link #KEY_DECORATIONS} on a JList to a series of
  * {@link ListDecoration} objects, those decorations are constantly consulted to
  * add clickable icons overlaying rows.
+ * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2012/06/listuis-adding-decorations-to-cells.html">ListUIs:
+ *      Adding decorations to cells</a>
  */
-@Blurb(imageName = "SoundList.png", title = "ListUIs: Adding decorations to cells", releaseDate = "June 2012", summary = "This demonstrates a new ListUI to add decorations to JList cells. "
-		+ "The demo emulates Apple's music file icons.", article = "http://javagraphics.blogspot.com/2012/06/listuis-adding-decorations-to-cells.html")
 public class DecoratedListUI extends BasicListUI {
 
 	/**

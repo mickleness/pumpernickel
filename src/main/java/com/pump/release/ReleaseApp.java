@@ -37,11 +37,6 @@ public class ReleaseApp {
 		headerUpdater.run(workspace.getDirectory());
 
 		System.out.println();
-		System.out.println("Running BlurbIndexBuilder:");
-		BlurbIndexBuilder blurbIndexBuilder = new BlurbIndexBuilder();
-		blurbIndexBuilder.run(workspace);
-
-		System.out.println();
 		System.out.println("Running JavadocBuilder:");
 		JavadocBuilder javadocBuilder = new JavadocBuilder();
 		javadocBuilder.run(workspace);

@@ -44,7 +44,6 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
-import com.pump.blog.Blurb;
 import com.pump.plaf.FocusArrowListener;
 import com.pump.swing.DialogFooter.EscapeKeyBehavior;
 import com.pump.util.JVM;
@@ -248,11 +247,10 @@ import com.pump.window.WindowDragger;
  * non-null.</LI>
  * </ul>
  * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2008/06/joptionpane-making-alternative.html">JOptionPane:
+ *      Making an Alternative</a>
  */
-@Blurb(imageName = "QDialog.png", title = "JOptionPane: Making an Alternative", releaseDate = "June 2008", summary = "I find the <code>JOptionPane</code> hard to work with sometimes.  If you want "
-		+ "a really polished dialog -- with a help button, the right spacing, the right controls to "
-		+ "escape, etc. -- you might just want to make a QDialog instead.\n"
-		+ "<p>Really: check out the javadocs for this one.  There's a lot of research/explanation in there.", article = "http://javagraphics.blogspot.com/2008/06/joptionpane-making-alternative.html")
 public class QDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 

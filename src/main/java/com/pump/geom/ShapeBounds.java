@@ -15,8 +15,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 
-import com.pump.blog.Blurb;
-
 /**
  * This class features an efficient and accurate <code>getBounds()</code>
  * method. The <code>java.awt.Shape</code> API clearly states that the
@@ -26,10 +24,10 @@ import com.pump.blog.Blurb;
  * <code>java.awt.geom.Area</code> class.
  * 
  * @see com.pump.showcase.ShapeBoundsDemo
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2007/05/shapes-calculating-bounds.html">Shapes:
+ *      Calculating Bounds</a>
  */
-@Blurb(title = "Shapes: Calculating Bounds", releaseDate = "May 2007", summary = "How do you get the bounds of a shape? A <code>GeneralPath</code> or <code>Path2D</code> may return a larger rectangle than necessary. "
-		+ "The Area class is accurate, but painfully slow. This demonstrates the "
-		+ "ShapeBounds class, which is accurate and near instant.", article = "http://javagraphics.blogspot.com/2007/05/shapes-calculating-bounds.html")
 public class ShapeBounds {
 	/**
 	 * This calculates the precise bounds of a shape.

@@ -38,7 +38,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.pump.blog.Blurb;
 import com.pump.plaf.ColorPickerSliderUI;
 
 /**
@@ -84,11 +83,10 @@ import com.pump.plaf.ColorPickerSliderUI;
  * @see com.pump.swing.JColorPickerDialog
  * @see com.pump.swing.JColorPickerPanel
  * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2007/04/jcolorchooser-making-alternative.html">Colors:
+ *      a Color Dialog</a>
  */
-@Blurb(imageName = "ColorPicker.png", title = "Colors: a Color Dialog", releaseDate = "April 2007", summary = "This is a Photoshop-style color choosing dialog.\n"
-		+ "<p>You can pull some parts of it apart for customization, but out-of-the-box it "
-		+ "offers a great interface if you're dealing with a power user.\n"
-		+ "<p>Of course: all dialogs are at least slightly evil, and they should be used with care...", article = "http://javagraphics.blogspot.com/2007/04/jcolorchooser-making-alternative.html")
 public class JColorPicker extends JPanel {
 	private static final long serialVersionUID = 3L;
 

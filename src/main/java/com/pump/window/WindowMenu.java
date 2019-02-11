@@ -27,8 +27,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.blog.Blurb;
-
 /**
  * This is a Window menu resembling <A HREF=
  * "http://developer.apple.com/documentation/UserExperience/Conceptual/AppleHIGuidelines/XHIGMenus/chapter_17_section_4.html#//apple_ref/doc/uid/TP30000356-TPXREF106"
@@ -66,8 +64,10 @@ import com.pump.blog.Blurb;
  * which invokes
  * <code>Toolkit.getDefaultToolkit().addAWTEventListener(..)</code>.
  *
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2008/11/windows-adding-window-menu.html">Windows:
+ *      Adding a Window Menu</a>
  */
-@Blurb(imageName = "WindowMenu.png", title = "Windows: Adding a Window Menu", releaseDate = "November 2008", summary = "This article discusses and emulates the \"Window\" menu found on Macs.", article = "http://javagraphics.blogspot.com/2008/11/windows-adding-window-menu.html")
 public class WindowMenu extends JMenu {
 	private static final long serialVersionUID = 1L;
 

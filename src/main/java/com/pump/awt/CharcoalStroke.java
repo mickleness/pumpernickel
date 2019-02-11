@@ -15,12 +15,12 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 
-import com.pump.blog.Blurb;
 import com.pump.geom.GeneralPathWriter;
 
 /**
- * This applies the {@link CharcoalEffect} to another <code>Stroke</code>.
- * 
+ * This applies cracks using the {@link CharcoalEffect} to another
+ * <code>Stroke</code>.
+ * <p>
  * By default this is built on top of a <code>BasicStroke</code>, but you can
  * use any other relatively simple stroke. The nature of the charcoal effect
  * requires continuous areas of at least 2 pixels to really be visible.
@@ -28,10 +28,10 @@ import com.pump.geom.GeneralPathWriter;
  * It is not recommended to layer a <code>CharcoalStroke</code> on top of
  * another <code>CharcoalStroke</code>, because they are very complex.
  * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2008/12/strokes-charcoal-stroke.html">Strokes:
+ *      a Charcoal Stroke</a>
  */
-@Blurb(title = "Strokes: a Charcoal Stroke", releaseDate = "December 2008", summary = "A stroke with grooves in the edges that resembles charcoal on pavement.\n"
-		+ "<P>This stroke is actually a filter than can modify any shape, but the only "
-		+ "current suitable examples are <code>BasicStrokes</code> and <code>CalligraphyStrokes</code>.", article = "http://javagraphics.blogspot.com/2008/12/strokes-charcoal-stroke.html", imageName = "CharcoalStroke.png")
 public class CharcoalStroke implements FilteredStroke {
 	Stroke stroke;
 	float crackSize, angle;

@@ -27,7 +27,6 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import com.pump.awt.Dimension2D;
-import com.pump.blog.Blurb;
 import com.pump.reflect.Reflection;
 import com.pump.util.PushPullQueue;
 
@@ -66,8 +65,11 @@ import com.pump.util.PushPullQueue;
  * safety nets. In many cases the AWT toolkit will only launch 4 "Image Fetcher"
  * threads at a time: if all 4 are hung for a minimum of 5 seconds, then <i>no
  * other images</i> can be processed through the AWT toolkit during that time.
+ * 
+ * <a href=
+ * "https://javagraphics.blogspot.com/2011/05/images-scaling-jpegs-and-pngs.html"
+ * >Images: Scaling JPEGs and PNGs</a>
  */
-@Blurb(title = "Images: Scaling JPEGs and PNGs", releaseDate = "May 2011", summary = "Need to scale megapixel JPEGs on-the-fly without loading them entirely into memory? This might just do the trick.", article = "http://javagraphics.blogspot.com/2011/05/images-scaling-jpegs-and-pngs.html")
 public abstract class GenericImageSinglePassIterator implements PixelIterator {
 
 	/**

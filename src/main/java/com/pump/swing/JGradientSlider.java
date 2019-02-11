@@ -30,7 +30,6 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.ComponentUI;
 
-import com.pump.blog.Blurb;
 import com.pump.plaf.MultiThumbSliderUI;
 
 /**
@@ -49,14 +48,12 @@ import com.pump.plaf.MultiThumbSliderUI;
  * <img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/gradientslider.jpg"
  * alt="Screenshot of the GradientSlider">
+ * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2008/05/gradients-gui-widget-to-design-them.html">Gradients:
+ *      a GUI Widget to Design Them</a>
  *
  */
-@Blurb(imageName = "GradientSlider.png", title = "Gradients: a GUI Widget to Design Them", releaseDate = "May 2008", summary = "This is a GUI component to arrange the "
-		+ "distribution of colors for multicolor gradients. It is "
-		+ "similar to a <code>JSlider</code>, but it supports "
-		+ "multiple thumbs and maps each thumb to a <code>Color</code>.\n"
-		+ "<p>(By default it also leans heavily on some existing color GUI "
-		+ "widgets I wrote, but you can replace those with your own components if you want to.)", article = "http://javagraphics.blogspot.com/2008/05/gradients-gui-widget-to-design-them.html")
 public class JGradientSlider extends MultiThumbSlider<Color> {
 
 	private static final long serialVersionUID = 1L;

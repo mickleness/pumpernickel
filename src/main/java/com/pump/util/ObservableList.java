@@ -30,8 +30,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
-import com.pump.blog.Blurb;
-
 /**
  * This wraps an existing <code>java.util.List</code> in an observable
  * structure.
@@ -115,9 +113,11 @@ import com.pump.blog.Blurb;
  * <code>ArrayList</code> is the default list model inside this list.) In the
  * future if this becomes a questionable assumption we might introduce factory
  * methods to create the appropriate <code>ObservableList</code> subclass.
+ * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2012/07/lists-observable-list-for-uis.html">Lists:
+ *      An Observable List for UIs</a>
  */
-@Blurb(title = "Lists: An Observable List for UIs", releaseDate = "July 2012", summary = "This article presents a <code>java.util.List</code> implementation designed with "
-		+ "UI interaction in mind. This includes thread safety, efficiency, and listeners.", article = "http://javagraphics.blogspot.com/2012/07/lists-observable-list-for-uis.html")
 public class ObservableList<T> extends AbstractList<T> implements RandomAccess {
 
 	public abstract static class Filter<T> {

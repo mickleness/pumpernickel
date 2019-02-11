@@ -33,15 +33,23 @@ import java.util.TreeSet;
 
 import com.pump.animation.writing.WritingShape;
 import com.pump.awt.CalligraphyStroke;
-import com.pump.blog.Blurb;
 import com.pump.geom.MeasuredShape;
 import com.pump.util.ObservableProperties;
 import com.pump.util.ObservableProperties.Key;
 
 /**
  * A font that can be slowly rendered stroke by stroke.
+ * <p>
+ * Unlike a simple wipe-right transition (which would work with any font), this
+ * requires specially formatted font-like shape data. The current implementation
+ * is modeled after the public domain font <a
+ * href=\"http://comicneue.com/\">Comic Neue</a>, and some primitive
+ * calligraphy.
+ * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2014/11/text-handwriting-text-effect.html">Text:
+ *      Handwriting Text Effect</a>
  */
-@Blurb(title = "Text: Handwriting Text Effect", releaseDate = "Nov 2014", summary = "This visual effect draws text over time similar to how a human would. Unlike a simple wipe-right transition (which would work with any font), this requires specially formatted font-like shape data. The current implementation is modeled after the public domain font <a href=\"http://comicneue.com/\">Comic Neue</a>.", article = "http://javagraphics.blogspot.com/2014/11/text-handwriting-text-effect.html")
 public class WritingFont {
 
 	public static final String FILE_EXTENSION = "writtenfont";

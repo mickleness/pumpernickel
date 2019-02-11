@@ -14,16 +14,11 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import com.pump.blog.Blurb;
-
 /**
  * This uses Java2D operations to transition between two images. Each operation
  * is wrapped up in a Transition2DInstruction object.
  * 
  */
-@Blurb(title = "Slideshows: Transitions & SWFs", releaseDate = "April 2007", summary = "A fun set of transitions defined with a simple vector-graphics-ish "
-		+ "Transition2Ds.\n"
-		+ "<p>The demo includes a player and minimal Flash export.", imageName = "Transition2D.png")
 public abstract class Transition2D extends AbstractTransition {
 
 	/**

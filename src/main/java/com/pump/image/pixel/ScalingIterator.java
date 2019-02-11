@@ -19,7 +19,9 @@ import java.awt.image.BufferedImage;
  * <code>get()</code> methods or instantiate the two subclasses:
  * <code>IntScalingIterator</code> or <code>ByteScalingIterator</code>.
  * 
- * @see "http://javagraphics.blogspot.com/2010/06/images-scaling-down.html"
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2010/06/images-scaling-down.html">Images:
+ *      Scaling Down</a>
  */
 public abstract class ScalingIterator implements PixelIterator {
 

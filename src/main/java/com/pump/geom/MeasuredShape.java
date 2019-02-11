@@ -19,16 +19,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pump.blog.Blurb;
-
 /**
  * This represents a single closed path.
  * <P>
  * This object can trace arbitrary amounts of itself using the
  * <code>writeShape()</code> methods.
  * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2009/02/shapes-measuring-length.html">Shapes:
+ *      Measuring Length</a>
  */
-@Blurb(title = "Shapes: Measuring Length", releaseDate = "February 2009", summary = "An uninteresting but very useful class that deals with measuring shapes.", article = "http://javagraphics.blogspot.com/2009/02/shapes-measuring-length.html")
 public class MeasuredShape implements Serializable {
 	private static final long serialVersionUID = 1L;
 

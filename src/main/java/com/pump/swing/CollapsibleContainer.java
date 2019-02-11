@@ -46,7 +46,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.awt.DescendantListener;
-import com.pump.blog.Blurb;
 import com.pump.icon.RotatedIcon;
 import com.pump.icon.TriangleIcon;
 import com.pump.plaf.GradientButtonUI;
@@ -78,10 +77,11 @@ import com.pump.util.WeakSet;
  * TODO: in addition to a weight-based model, we also need an alternative
  * priority-based model. As a use case: consider a gap that has a priority of 1,
  * and a scrollpane that has a priority of 2.
+ * 
+ * @see <a
+ *      href="https://javagraphics.blogspot.com/2014/03/panels-collapsible-sections.html">Panels:
+ *      Collapsible Sections</a>
  */
-@Blurb(title = "Panels: Collapsible Sections", releaseDate = "March 2014", summary = "A Swing implementation of a vertical series of collapsible panels. "
-		+ "Panel heights are determined with vertical weights, and as the user toggles the "
-		+ "visibility of panels: the UI is animated.", article = "http://javagraphics.blogspot.com/2014/03/panels-collapsible-sections.html")
 public class CollapsibleContainer extends SectionContainer {
 	private static final long serialVersionUID = 1L;
 
