@@ -10,6 +10,8 @@
  */
 package com.pump.release;
 
+import java.io.File;
+
 import com.pump.desktop.temp.TempFileManager;
 
 /**
@@ -29,16 +31,10 @@ public class ReleaseApp {
 	}
 
 	public void run() throws Exception {
-		Workspace workspace = new Workspace();
-
-		System.out.println();
 		System.out.println("Running UpdateSourceCodeHeader:");
 		UpdateSourceCodeHeader headerUpdater = new UpdateSourceCodeHeader();
-		headerUpdater.run(workspace.getDirectory());
-
-		System.out.println();
-		System.out.println("Done.");
-
+		File dir = new File(System.getProperty("user.dir"));
+		headerUpdater.run(dir);
 		System.exit(0);
 	}
 }
