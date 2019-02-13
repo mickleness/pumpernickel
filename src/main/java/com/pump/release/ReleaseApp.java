@@ -37,11 +37,6 @@ public class ReleaseApp {
 		headerUpdater.run(workspace.getDirectory());
 
 		System.out.println();
-		System.out.println("Running JavadocBuilder:");
-		JavadocBuilder javadocBuilder = new JavadocBuilder();
-		javadocBuilder.run(workspace);
-
-		System.out.println();
 		System.out.println("Done.");
 
 		System.exit(0);
