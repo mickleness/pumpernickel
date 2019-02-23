@@ -13,6 +13,7 @@ package com.pump.release;
 import java.io.File;
 
 import com.pump.desktop.temp.TempFileManager;
+import com.pump.showcase.PumpernickelShowcaseApp;
 
 /**
  * Instructions:
@@ -35,6 +36,12 @@ public class ReleaseApp {
 		UpdateSourceCodeHeader headerUpdater = new UpdateSourceCodeHeader();
 		File dir = new File(System.getProperty("user.dir"));
 		headerUpdater.run(dir);
+
+		Project project = new Project(dir, PumpernickelShowcaseApp.class,
+				"Pumpernickel.jar");
+		File jar = project.buildJar();
+		System.out.println("Created/updated " + jar.getAbsolutePath());
+
 		System.exit(0);
 	}
 }
