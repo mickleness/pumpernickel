@@ -68,7 +68,7 @@ public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
 						KeyboardFocusManager.getCurrentKeyboardFocusManager()
 								.clearGlobalFocusOwner();
 
-						// step 2: repaint immediatelys
+						// step 2: repaint immediately
 						showEyeDropper.paintImmediately(0, 0,
 								showEyeDropper.getWidth(),
 								showEyeDropper.getHeight());
@@ -79,7 +79,7 @@ public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
 			}
 		});
 		add(controls);
-		reset();
+		colorWell.getColorSelectionModel().setSelectedColor(Color.black);
 		colorWell.setEnabled(false);
 	}
 
@@ -114,13 +114,7 @@ public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
 			d.setVisible(true);
 		} catch (AWTException e) {
 			e.printStackTrace();
-		} finally {
-			reset();
 		}
-	}
-
-	protected void reset() {
-		colorWell.getColorSelectionModel().setSelectedColor(Color.black);
 	}
 
 	@Override
