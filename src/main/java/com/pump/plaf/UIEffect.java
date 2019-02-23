@@ -112,8 +112,7 @@ public class UIEffect {
 		NOT_STARTED, ACTIVE, FINISHED
 	};
 
-	final long startTime = System.currentTimeMillis();
-	final protected Timer timer;
+	private Timer timer;
 	final protected JComponent component;
 	/** The time (in ms) since this effect was created. */
 	protected long elapsedTime;
@@ -122,42 +121,33 @@ public class UIEffect {
 	private boolean changeListenersUsed = false;
 
 	protected final long duration;
+	protected final int updateInterval;
 	List<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 
 	State state = State.NOT_STARTED;
 
+	/**
+	 * Create a UIEffect that operates a timer but does not repaint a component.
+	 *
+	 * @param totalDuration the duration (in ms) of the effect.
+	 * @param updateInterval the number of ms between update events.
+	 */
+	public UIEffect(int totalDuration, int updateInterval) {
+		this(null, totalDuration, updateInterval);
+	}
+
+	/**
+	 * Create a UIEffect.
+	 * 
+	 * @param comp the component to continually repaint.
+	 * @param totalDuration the duration (in ms) of the effect.
+	 * @param updateInterval the number of ms between update events.
+	 */
 	public UIEffect(JComponent comp, int totalDuration, int updateInterval) {
+		this.updateInterval = updateInterval;
 		component = comp;
 		duration = totalDuration;
-		timer = new Timer(updateInterval, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				elapsedTime = System.currentTimeMillis() - startTime;
-				float fraction = ((float) elapsedTime)
-						/ ((float) getDuration());
-				if (fraction < 1) {
-					setState(State.ACTIVE);
-					setProgress(fraction);
-				} else {
-					timer.stop();
-					setState(State.FINISHED);
-					if (!setProgress(1)) { // still fire listeners because the
-											// state changed:
-						fireChangeListeners();
-					}
-				}
-				if (component != null)
-					component.repaint();
-			}
-		});
-
-		// invoke later so the subclass can regain
-		// control of this thread and add listeners
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				setProgress(0);
-				timer.start();
-			}
-		});
+		reset();
 	}
 
 	public float getProgress() {
@@ -223,5 +213,53 @@ public class UIEffect {
 	/** Returns the duration (in ms) of this effect. */
 	public final long getDuration() {
 		return duration;
+	}
+
+	/**
+	 * Restart this effect from t = 0;
+	 */
+	public void reset() {
+		if (timer != null) {
+			if (timer.isRunning()) {
+				timer.stop();
+				// we'll fire listeners soon when the new timer starters
+				setState(State.FINISHED);
+			}
+			timer = null;
+		}
+
+		timer = new Timer(updateInterval, new ActionListener() {
+			long startTime = System.currentTimeMillis();
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				elapsedTime = System.currentTimeMillis() - startTime;
+				float fraction = ((float) elapsedTime)
+						/ ((float) getDuration());
+				if (fraction < 1) {
+					setState(State.ACTIVE);
+					setProgress(fraction);
+				} else {
+					timer.stop();
+					setState(State.FINISHED);
+					if (!setProgress(1)) { // still fire listeners because the
+											// state changed:
+						fireChangeListeners();
+					}
+				}
+				if (component != null)
+					component.repaint();
+			}
+		});
+
+		// invoke later so the subclass can regain
+		// control of this thread and add listeners
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				setProgress(0);
+				timer.start();
+				fireChangeListeners();
+			}
+		});
 	}
 }
