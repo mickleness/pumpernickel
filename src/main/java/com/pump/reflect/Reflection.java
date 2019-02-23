@@ -407,22 +407,30 @@ public class Reflection {
 
 	/**
 	 * This uses reflection to call a method that may not exist in the compiling
-	 * JVM.
+	 * JVM, or is otherwise inaccessible.
 	 * 
 	 * @return INVOCATION_ERROR if an error occurs (details are printed to the
 	 *         console), or the return value of the invocation.
 	 */
 	public static Object invokeMethod(Class<?> c, Object obj,
-			String methodName, Object[] arguments) {
+			String methodName, Object... arguments) {
+		if(c==null && obj!=null)
+			c = obj.getClass();
+		
 		try {
-			Method[] methods = c.getMethods();
-			for (int a = 0; a < methods.length; a++) {
-				if (methods[a].getName().equals(methodName)) {
-					try {
-						return methods[a].invoke(obj, arguments);
-					} catch (Throwable t) {
+			while (c != null) {
+				Method[] methods = c.getDeclaredMethods();
+				for (int a = 0; a < methods.length; a++) {
+					if (methods[a].getName().equals(methodName)) {
+						methods[a].setAccessible(true);
+						try {
+							return methods[a].invoke(obj, arguments);
+						} catch (Throwable t) {
+							t.printStackTrace();
+						}
 					}
 				}
+				c = c.getSuperclass();
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
