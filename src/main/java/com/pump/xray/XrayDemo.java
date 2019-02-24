@@ -41,7 +41,7 @@ public class XrayDemo {
 		SourceCodeManager sourceCodeManager = new SourceCodeManager();
 		while (iter.hasNext()) {
 			File javaFile = iter.next();
-			if (javaFile.getAbsolutePath().contains("pump-release")
+			if (javaFile.getAbsolutePath().contains("pump")
 					|| javaFile.getName().endsWith("package-info.java"))
 				continue;
 

@@ -30,19 +30,19 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SquareRainTransition2D/SquareRain(6).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SquareRainTransition2D/SquareRain(6).gif"
  * alt="Square Rain (6)">
  * <p>
  * Square Rain (6)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SquareRainTransition2D/SquareRain(12).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SquareRainTransition2D/SquareRain(12).gif"
  * alt="Square Rain (12)">
  * <p>
  * Square Rain (12)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SquareRainTransition2D/SquareRain(24).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SquareRainTransition2D/SquareRain(24).gif"
  * alt="Square Rain (24)">
  * <p>
  * Square Rain (24)</td>

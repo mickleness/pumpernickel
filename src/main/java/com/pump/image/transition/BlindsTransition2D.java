@@ -24,19 +24,19 @@ import java.util.List;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsLeft(4).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BlindsTransition2D/BlindsLeft(4).gif"
  * alt="Blinds Left (4)">
  * <p>
  * Blinds Left (4)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsLeft(10).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BlindsTransition2D/BlindsLeft(10).gif"
  * alt="Blinds Left (10)">
  * <p>
  * Blinds Left (10)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsLeft(20).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BlindsTransition2D/BlindsLeft(20).gif"
  * alt="Blinds Left (20)">
  * <p>
  * Blinds Left (20)</td>
@@ -44,19 +44,19 @@ import java.util.List;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsRight(10).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BlindsTransition2D/BlindsRight(10).gif"
  * alt="Blinds Right (10)">
  * <p>
  * Blinds Right (10)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsUp(10).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BlindsTransition2D/BlindsUp(10).gif"
  * alt="Blinds Up (10)">
  * <p>
  * Blinds Up (10)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BlindsTransition2D/BlindsDown(10).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BlindsTransition2D/BlindsDown(10).gif"
  * alt="Blinds Down (10)">
  * <p>
  * Blinds Down (10)</td>

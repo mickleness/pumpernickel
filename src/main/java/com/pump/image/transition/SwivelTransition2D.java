@@ -22,13 +22,13 @@ import java.awt.geom.Point2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SwivelTransition2D/SwivelCounterclockwise.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SwivelTransition2D/SwivelCounterclockwise.gif"
  * alt="Swivel Counterclockwise">
  * <p>
  * Swivel Counterclockwise</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SwivelTransition2D/SwivelClockwise.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SwivelTransition2D/SwivelClockwise.gif"
  * alt="Swivel Clockwise">
  * <p>
  * Swivel Clockwise</td>

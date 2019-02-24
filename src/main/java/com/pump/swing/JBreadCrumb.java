@@ -26,7 +26,7 @@ import com.pump.plaf.BreadCrumbUI;
  * Here are two possible UI's depicting the same basic data:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/screenshot_breadcrumb_demo.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/screenshot_breadcrumb_demo.png"
  * alt="Sample Screenshots of JBreadCrumb">
  *
  * @param <T>

@@ -32,7 +32,7 @@ import com.pump.swing.DialogFooter.EscapeKeyBehavior;
  * (This object is used by the static calls in <code>JColorPicker</code> to show
  * a dialog.) <br>
  * <IMG SRC=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/colorpicker.png"
  * alt="Screenshot of ColorPickerDialog">
  * 
  * @see JColorPicker

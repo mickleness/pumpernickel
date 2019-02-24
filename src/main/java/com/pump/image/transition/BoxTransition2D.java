@@ -21,13 +21,13 @@ import java.awt.geom.Rectangle2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BoxTransition2D/BoxIn.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BoxTransition2D/BoxIn.gif"
  * alt="Box In">
  * <p>
  * Box In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BoxTransition2D/BoxOut.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BoxTransition2D/BoxOut.gif"
  * alt="Box Out">
  * <p>
  * Box Out</td>

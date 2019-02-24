@@ -22,7 +22,7 @@ import javax.swing.plaf.ComponentUI;
  * This resembles the "roundRect" button UI as seen in Mac OS 10.5.
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/RoundRectButtonUI.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/RoundRectButtonUI.png"
  * alt="RoundRectButtonUI Screenshot">
  * <P>
  * It is not intended to be an exact replica, but it is very similar.

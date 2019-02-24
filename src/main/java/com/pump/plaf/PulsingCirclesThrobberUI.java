@@ -24,13 +24,13 @@ import javax.swing.JComponent;
  * <table summary="Sample Animations of PulsingCirclesThrobberUI" cellpadding="10">
  * <tr>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/PulsingCirclesThrobberUI.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/PulsingCirclesThrobberUI.gif"
  * alt="PulsingCirclesThrobberUI"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/PulsingCirclesThrobberUIx2.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/PulsingCirclesThrobberUIx2.gif"
  * alt="PulsingCirclesThrobberUI, Magnified 2x"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/PulsingCirclesThrobberUIx4.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/PulsingCirclesThrobberUIx4.gif"
  * alt="PulsingCirclesThrobberUI, Magnified 4x"></td>
  * </tr>
  * </table>

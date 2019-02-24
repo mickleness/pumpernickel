@@ -21,7 +21,7 @@ import java.util.List;
  * This resembles looking through a kaleidoscope. Here is a playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/KaleidoscopeTransition2D/Kaleidoscope.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/KaleidoscopeTransition2D/Kaleidoscope.gif"
  * alt="KaleidoscopeTransition2D Demo">
  */
 public class KaleidoscopeTransition2D extends Transition2D {

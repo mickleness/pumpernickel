@@ -21,7 +21,7 @@ import java.util.List;
  * place. Here is a playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WeaveTransition2D/Weave.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WeaveTransition2D/Weave.gif"
  * alt="WeaveTransition2D Demo">
  * 
  */

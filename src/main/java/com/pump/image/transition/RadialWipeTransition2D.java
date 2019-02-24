@@ -24,13 +24,13 @@ import java.awt.geom.Rectangle2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RadialWipeTransition2D/RadialWipeClockwise.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RadialWipeTransition2D/RadialWipeClockwise.gif"
  * alt="Radial Wipe Clockwise">
  * <p>
  * Radial Wipe Clockwise</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RadialWipeTransition2D/RadialWipeCounterclockwise.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RadialWipeTransition2D/RadialWipeCounterclockwise.gif"
  * alt="Radial Wipe Counterclockwise">
  * <p>
  * Radial Wipe Counterclockwise</td>

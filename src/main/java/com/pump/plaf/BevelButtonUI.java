@@ -26,7 +26,7 @@ import javax.swing.plaf.ComponentUI;
  * This resembles the "bevel" button UI as seen in Mac OS 10.5.
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/BevelButtonUI.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/BevelButtonUI.png"
  * alt="BevelButtonUI Screenshot">
  * <P>
  * It is not intended to be an exact replica, but it is very similar.

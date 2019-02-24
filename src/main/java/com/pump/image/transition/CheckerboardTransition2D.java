@@ -24,25 +24,25 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CheckerboardTransition2D/CheckerboardLeft.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CheckerboardTransition2D/CheckerboardLeft.gif"
  * alt="Checkerboard Left">
  * <p>
  * Checkerboard Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CheckerboardTransition2D/CheckerboardRight.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CheckerboardTransition2D/CheckerboardRight.gif"
  * alt="Checkerboard Right">
  * <p>
  * Checkerboard Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CheckerboardTransition2D/CheckerboardUp.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CheckerboardTransition2D/CheckerboardUp.gif"
  * alt="Checkerboard Up">
  * <p>
  * Checkerboard Up</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CheckerboardTransition2D/CheckerboardDown.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CheckerboardTransition2D/CheckerboardDown.gif"
  * alt="Checkerboard Down">
  * <p>
  * Checkerboard Down</td>

@@ -34,12 +34,12 @@ import com.pump.blog.ResourceSample;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GearIcon/12x12.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GearIcon/12x12.png"
  * alt=
  * "new&#160;com.pump.swing.resources.GearIcon(&#160;12,&#160;java.awt.Color.darkGray)"
  * ></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GearIcon/24x24.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GearIcon/24x24.png"
  * alt=
  * "new&#160;com.pump.swing.resources.GearIcon(&#160;24,&#160;java.awt.Color.darkGray)"
  * ></td>

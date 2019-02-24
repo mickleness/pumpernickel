@@ -70,7 +70,7 @@ import com.pump.util.WeakSet;
  * programmatically alter it.)
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/collapsiblecontainer.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/collapsiblecontainer.gif"
  * style="border:1px solid gray" alt="CollapsibleContainer Animation">
  * 
  * <p>

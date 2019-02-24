@@ -46,7 +46,7 @@ import com.pump.plaf.MultiThumbSliderUI;
  * "GradientSliderUI". By default this is "com.pump.plaf.GradientSliderUI".
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/gradientslider.jpg"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/gradientslider.jpg"
  * alt="Screenshot of the GradientSlider">
  * 
  * @see <a

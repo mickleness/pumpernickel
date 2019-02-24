@@ -23,7 +23,7 @@ import com.pump.geom.RectangularTransform;
  * playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/MotionBlendTransition2D/MotionBlend.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/MotionBlendTransition2D/MotionBlend.gif"
  * alt="MotionBlendTransition2D Demo">
  */
 public class MotionBlendTransition2D extends Transition2D {

@@ -34,12 +34,11 @@ import com.pump.blog.ResourceSample;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/StarIcon/Filled.png"
- * alt
- * ="new&#160;com.pump.swing.resources.StarIcon(&#160;16,&#160;16,&#160;false)">
- * </td>
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/StarIcon/Filled.png"
+ * alt =
+ * "new&#160;com.pump.swing.resources.StarIcon(&#160;16,&#160;16,&#160;false)"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/StarIcon/Empty.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/StarIcon/Empty.png"
  * alt
  * ="new&#160;com.pump.swing.resources.StarIcon(&#160;16,&#160;16,&#160;true)"></td>
  * </tr>

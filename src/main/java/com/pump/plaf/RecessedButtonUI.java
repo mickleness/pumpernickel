@@ -23,7 +23,7 @@ import javax.swing.plaf.ComponentUI;
  * This resembles the "recessed" button UI as seen in Mac OS 10.5.
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/RecessedButtonUI.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/RecessedButtonUI.png"
  * alt="RecessedButtonUI Screenshot">
  * <P>
  * It is not intended to be an exact replica, but it is very similar.

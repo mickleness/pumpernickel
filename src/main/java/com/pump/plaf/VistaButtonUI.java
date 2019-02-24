@@ -24,7 +24,7 @@ import javax.swing.plaf.ComponentUI;
  * A <code>ButtonUI</code> that resembles buttons in Vista.
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/VistaButtonUI.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/VistaButtonUI.png"
  * alt="VistaButtonUI Screenshot">
  */
 public class VistaButtonUI extends QButtonUI {

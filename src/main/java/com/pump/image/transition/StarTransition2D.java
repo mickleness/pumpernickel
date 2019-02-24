@@ -20,13 +20,13 @@ import java.awt.geom.GeneralPath;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/StarTransition2D/StarIn.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/StarTransition2D/StarIn.gif"
  * alt="Star In">
  * <p>
  * Star In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/StarTransition2D/StarOut.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/StarTransition2D/StarOut.gif"
  * alt="Star Out">
  * <p>
  * Star Out</td>

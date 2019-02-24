@@ -34,13 +34,13 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/StarsTransition2D/StarsLeft.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/StarsTransition2D/StarsLeft.gif"
  * alt="Stars Left">
  * <p>
  * Stars Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/StarsTransition2D/StarsRight.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/StarsTransition2D/StarsRight.gif"
  * alt="Stars Right">
  * <p>
  * Stars Right</td>

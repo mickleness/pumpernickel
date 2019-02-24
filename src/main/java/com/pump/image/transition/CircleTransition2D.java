@@ -21,13 +21,13 @@ import java.awt.geom.Ellipse2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CircleTransition2D/CircleIn.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CircleTransition2D/CircleIn.gif"
  * alt="Circle In">
  * <p>
  * Circle In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CircleTransition2D/CircleOut.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CircleTransition2D/CircleOut.gif"
  * alt="Circle Out">
  * <p>
  * Circle Out</td>

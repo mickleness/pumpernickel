@@ -22,7 +22,7 @@ import java.util.Random;
  * incoming image. Here is a playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DotsTransition2D/Dots.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/DotsTransition2D/Dots.gif"
  * alt="DotsTransition2D Demo">
  * 
  */

@@ -27,7 +27,7 @@ import javax.swing.plaf.ComponentUI;
  * This is ButtonUI is very loosely based on the buttons in GarageBand.
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/PlasticButtonUI.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/PlasticButtonUI.png"
  * alt="PlasticButtonUI Screenshot">
  * <p>
  * They are translucent, with a simple gradient from top to bottom. The bottom

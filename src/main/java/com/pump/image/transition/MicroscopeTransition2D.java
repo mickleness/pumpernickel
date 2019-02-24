@@ -22,7 +22,7 @@ import java.util.List;
  * original image with increasing opacity.) Here is a playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/MicroscopeTransition2D/Microscope.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/MicroscopeTransition2D/Microscope.gif"
  * alt="MicroscopeTransition2D Demo">
  * 
  */

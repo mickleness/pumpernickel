@@ -26,13 +26,13 @@ import javax.swing.JComponent;
  * <table summary="Sample Animations of ChasingArrowsThrobberUI" cellpadding="10">
  * <tr>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/ChasingArrowsThrobberUI.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/ChasingArrowsThrobberUI.gif"
  * alt="ChassingArrowsThrobberUI"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/ChasingArrowsThrobberUIx2.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/ChasingArrowsThrobberUIx2.gif"
  * alt="ChassingArrowsThrobberUI Magnified 2x"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/ChasingArrowsThrobberUIx4.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/ChasingArrowsThrobberUIx4.gif"
  * alt="ChassingArrowsThrobberUI Magnified 4x"></td>
  * </tr>
  * </table>

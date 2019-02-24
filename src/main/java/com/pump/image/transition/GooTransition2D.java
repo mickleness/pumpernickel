@@ -23,19 +23,19 @@ import java.util.Random;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/GooTransition2D/Goo(10).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/GooTransition2D/Goo(10).gif"
  * alt="Goo (10)">
  * <p>
  * Goo (10)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/GooTransition2D/Goo(20).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/GooTransition2D/Goo(20).gif"
  * alt="Goo (10)">
  * <p>
  * Goo (20)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/GooTransition2D/Goo(50).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/GooTransition2D/Goo(50).gif"
  * alt="Goo (10)">
  * <p>
  * Goo (50)</td>

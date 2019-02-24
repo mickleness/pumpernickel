@@ -24,25 +24,25 @@ import java.util.Random;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BarsTransition2D/BarsHorizontalRandom.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BarsTransition2D/BarsHorizontalRandom.gif"
  * alt="Bars Horizontal Random">
  * <p>
  * Bars Horizontal Random</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BarsTransition2D/BarsHorizontal.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BarsTransition2D/BarsHorizontal.gif"
  * alt="Bars Horizontal">
  * <p>
  * Bars Horizontal</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BarsTransition2D/BarsVerticalRandom.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BarsTransition2D/BarsVerticalRandom.gif"
  * alt="Bars Vertical Random">
  * <p>
  * Bars Vertical Random</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/BarsTransition2D/BarsVertical.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BarsTransition2D/BarsVertical.gif"
  * alt="Bars Vertical">
  * <p>
  * Bars Vertical</td>

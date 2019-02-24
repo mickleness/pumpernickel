@@ -61,12 +61,12 @@ import com.pump.plaf.RoundTextFieldUI;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/TextSearchBar/Safari.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/TextSearchBar/Safari.png"
  * alt=
  * "com.pump.swing.TextSearchBar.createSafariStyleBar(new&#160;javax.swing.JTextArea())"
  * ></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/TextSearchBar/Firefox.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/TextSearchBar/Firefox.png"
  * alt=
  * "com.pump.swing.TextSearchBar.createFirefoxStyleBar(new&#160;javax.swing.JTextArea())"
  * ></td>

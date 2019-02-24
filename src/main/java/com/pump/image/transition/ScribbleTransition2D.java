@@ -30,13 +30,13 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScribbleTransition2D/Scribble.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/ScribbleTransition2D/Scribble.gif"
  * alt="Scribble">
  * <p>
  * Scribble</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScribbleTransition2D/ScribbleTwice.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/ScribbleTransition2D/ScribbleTwice.gif"
  * alt="Scribble Twice">
  * <p>
  * Scribble Twice</td>

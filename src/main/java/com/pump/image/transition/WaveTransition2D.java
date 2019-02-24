@@ -24,25 +24,25 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WaveTransition2D/WaveLeft.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WaveTransition2D/WaveLeft.gif"
  * alt="Wave Left">
  * <p>
  * Wave Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WaveTransition2D/WaveRight.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WaveTransition2D/WaveRight.gif"
  * alt="Wave Right">
  * <p>
  * Wave Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WaveTransition2D/WaveUp.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WaveTransition2D/WaveUp.gif"
  * alt="Wave Up">
  * <p>
  * Wave Up</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WaveTransition2D/WaveDown.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WaveTransition2D/WaveDown.gif"
  * alt="Wave Down">
  * <p>
  * Wave Down</td>

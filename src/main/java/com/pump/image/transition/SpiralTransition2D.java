@@ -28,13 +28,13 @@ import com.pump.geom.ShapeUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SpiralTransition2D/SpiralSprawl.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SpiralTransition2D/SpiralSprawl.gif"
  * alt="Spiral Sprawl">
  * <p>
  * Spiral Sprawl</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SpiralTransition2D/Spiral.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SpiralTransition2D/Spiral.gif"
  * alt="Spiral">
  * <p>
  * Spiral</td>

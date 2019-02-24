@@ -22,7 +22,7 @@ import java.util.List;
  * revealing the next image. Here is a playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/LevitateTransition2D/Levitate.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/LevitateTransition2D/Levitate.gif"
  * alt="LevitateTransition2D Demo">
  * 
  */

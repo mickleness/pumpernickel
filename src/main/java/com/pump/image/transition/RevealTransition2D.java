@@ -21,25 +21,25 @@ import java.awt.geom.AffineTransform;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RevealTransition2D/RevealLeft.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RevealTransition2D/RevealLeft.gif"
  * alt="Reveal Left">
  * <p>
  * Reveal Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RevealTransition2D/RevealRight.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RevealTransition2D/RevealRight.gif"
  * alt="Reveal Right">
  * <p>
  * Reveal Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RevealTransition2D/RevealUp.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RevealTransition2D/RevealUp.gif"
  * alt="Reveal Up">
  * <p>
  * Reveal Up</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RevealTransition2D/RevealDown.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RevealTransition2D/RevealDown.gif"
  * alt="Reveal Down">
  * <p>
  * Reveal Down</td>

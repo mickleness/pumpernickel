@@ -176,7 +176,7 @@ public class ClassWriter extends StreamWriter {
 				cws.println("  * but you can't actually execute anything of interest against this code.");
 				cws.println("  * <p>");
 				cws.println("  * The tools that created this class are available here:");
-				cws.println("  * <br> <a href=\"https://github.com/mickleness/pumpernickel/tree/master/pump-jar/src/main/java/com/pump/xray\">https://github.com/mickleness/pumpernickel/tree/master/pump-jar/src/main/java/com/pump/xray</a>");
+				cws.println("  * <br> <a href=\"https://github.com/mickleness/pumpernickel/tree/master/src/main/java/com/pump/xray\">https://github.com/mickleness/pumpernickel/tree/master/src/main/java/com/pump/xray</a>");
 				cws.println("  */");
 			}
 		}

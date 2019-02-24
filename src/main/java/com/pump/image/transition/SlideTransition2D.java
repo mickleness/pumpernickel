@@ -20,25 +20,25 @@ import java.awt.geom.AffineTransform;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SlideTransition2D/SlideLeft.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SlideTransition2D/SlideLeft.gif"
  * alt="Slide Left">
  * <p>
  * Slide Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SlideTransition2D/SlideRight.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SlideTransition2D/SlideRight.gif"
  * alt="Slide Right">
  * <p>
  * Slide Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SlideTransition2D/SlideUp.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SlideTransition2D/SlideUp.gif"
  * alt="Slide Up">
  * <p>
  * Slide Up</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SlideTransition2D/SlideDown.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SlideTransition2D/SlideDown.gif"
  * alt="Slide Down">
  * <p>
  * Slide Down</td>

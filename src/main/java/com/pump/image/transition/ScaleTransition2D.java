@@ -24,13 +24,13 @@ import com.pump.geom.RectangularTransform;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScaleTransition2D/ScaleIn.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/ScaleTransition2D/ScaleIn.gif"
  * alt="Scale In">
  * <p>
  * Scale In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/ScaleTransition2D/ScaleOut.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/ScaleTransition2D/ScaleOut.gif"
  * alt="Scale Out">
  * <p>
  * Scale Out</td>

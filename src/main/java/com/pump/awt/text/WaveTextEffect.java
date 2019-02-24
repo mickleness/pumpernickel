@@ -30,7 +30,7 @@ import java.util.Objects;
  * stencil-like appearance:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/wave-text-effect.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/wave-text-effect.gif"
  * alt="demo of the WaveTextEffect" >
  * </p>
  */

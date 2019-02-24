@@ -35,13 +35,13 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlurryTransition2D/FlurryIn.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlurryTransition2D/FlurryIn.gif"
  * alt="Flurry In">
  * <p>
  * Flurry In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FlurryTransition2D/FlurryOut.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlurryTransition2D/FlurryOut.gif"
  * alt="Flurry Out">
  * <p>
  * Flurry Out</td>

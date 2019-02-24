@@ -39,13 +39,13 @@ import com.pump.geom.ShapeBounds;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GlyphIcon/Note.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GlyphIcon/Note.png"
  * alt="com.pump.swing.resources.GlyphIcon.NOTE"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GlyphIcon/Recycle.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GlyphIcon/Recycle.png"
  * alt="com.pump.swing.resources.GlyphIcon.RECYCLE"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GlyphIcon/Writing Hand.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GlyphIcon/Writing Hand.png"
  * alt="com.pump.swing.resources.GlyphIcon.WRITING_HAND"></td>
  * </tr>
  * <tr>
@@ -57,10 +57,10 @@ import com.pump.geom.ShapeBounds;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GlyphIcon/Flower.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GlyphIcon/Flower.png"
  * alt="com.pump.swing.resources.GlyphIcon.FLOWER"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/GlyphIcon/Warning.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GlyphIcon/Warning.png"
  * alt="com.pump.swing.resources.GlyphIcon.WARNING"></td>
  * </tr>
  * <tr>

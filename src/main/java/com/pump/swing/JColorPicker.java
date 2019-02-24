@@ -50,7 +50,7 @@ import com.pump.plaf.ColorPickerSliderUI;
  * <P>
  * Here is a screenshot of the dialog that call will invoke: <br>
  * <IMG SRC=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/colorpicker.png"
  * alt="ColorPicker Screenshot">
  * <p>
  * However this does not have to invoked as a black-box color dialog. This class
@@ -62,7 +62,7 @@ import com.pump.plaf.ColorPickerSliderUI;
  * <code>picker.setPreferredSize(new Dimension(200,160));</code> <BR>
  * <code>picker.setMode(JColorPicker.HUE);</code> <br>
  * <IMG SRC=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/colorpicker3.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/colorpicker3.png"
  * alt="ColorPicker Small Screenshot">
  * <P>
  * This will create a miniature color picker that still lets the user choose

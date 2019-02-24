@@ -30,13 +30,13 @@ import java.util.List;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/HalftoneTransition2D/HalftoneIn.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/HalftoneTransition2D/HalftoneIn.gif"
  * alt="Halftone In">
  * <p>
  * Halftone In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/HalftoneTransition2D/HalftoneOut.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/HalftoneTransition2D/HalftoneOut.gif"
  * alt="Halftone Out">
  * <p>
  * Halftone Out</td>

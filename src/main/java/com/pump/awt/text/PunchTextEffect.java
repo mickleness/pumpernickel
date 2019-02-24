@@ -28,7 +28,7 @@ import java.util.Objects;
  * letters are punched for emphasis:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/punch-text-effect.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/punch-text-effect.gif"
  * alt="punch text effect demo">
  * </p>
  */

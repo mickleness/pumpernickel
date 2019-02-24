@@ -34,13 +34,13 @@ import com.pump.geom.RectangularTransform;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FunkyWipeTransition2D/FunkyWipeCircular.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FunkyWipeTransition2D/FunkyWipeCircular.gif"
  * alt="Funky Wipe Circular">
  * <p>
  * Funky Wipe Circular</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/FunkyWipeTransition2D/FunkyWipeAcross.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FunkyWipeTransition2D/FunkyWipeAcross.gif"
  * alt="Funky Wipe Across">
  * <p>
  * Funky Wipe Across</td>

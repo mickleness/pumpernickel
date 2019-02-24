@@ -23,7 +23,7 @@ import java.util.List;
  * focused and opaque. Here is a playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RefractiveTransition2D/Refractive.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RefractiveTransition2D/Refractive.gif"
  * alt="RefractiveTransition2D Demo">
  *
  */

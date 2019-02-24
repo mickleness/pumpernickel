@@ -27,25 +27,25 @@ import com.pump.geom.RectangularTransform;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DocumentaryTransition2D/DocumentaryLeft.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/DocumentaryTransition2D/DocumentaryLeft.gif"
  * alt="Documentary Left">
  * <p>
  * Documentary Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DocumentaryTransition2D/DocumentaryRight.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/DocumentaryTransition2D/DocumentaryRight.gif"
  * alt="Documentary Right">
  * <p>
  * Documentary Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DocumentaryTransition2D/DocumentaryUp.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/DocumentaryTransition2D/DocumentaryUp.gif"
  * alt="Documentary Up">
  * <p>
  * Documentary Up</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DocumentaryTransition2D/DocumentaryDown.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/DocumentaryTransition2D/DocumentaryDown.gif"
  * alt="Documentary Down">
  * <p>
  * Documentary Down</td>

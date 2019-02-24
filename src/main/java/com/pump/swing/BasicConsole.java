@@ -46,7 +46,7 @@ import com.pump.util.ThreadedSemaphore;
  * Here is a screenshot illustrating the expected usage of this class:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/ShapeBoundsDemo.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/ShapeBoundsDemo.png"
  * alt="Screenshot of ShapeBoundsDemo">
  * 
  * @see <a

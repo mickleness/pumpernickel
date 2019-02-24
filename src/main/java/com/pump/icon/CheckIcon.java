@@ -36,16 +36,16 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/CheckIcon/12x12.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/CheckIcon/12x12.png"
  * alt="new&#160;com.pump.swing.resources.CheckIcon(12,&#160;12)"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/CheckIcon/24x24.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/CheckIcon/24x24.png"
  * alt="new&#160;com.pump.swing.resources.CheckIcon(24,&#160;24)"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/CheckIcon/36x36.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/CheckIcon/36x36.png"
  * alt="new&#160;com.pump.swing.resources.CheckIcon(36,&#160;36)"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/samples/CheckIcon/48x48.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/CheckIcon/48x48.png"
  * alt="new&#160;com.pump.swing.resources.CheckIcon(48,&#160;48)"></td>
  * </tr>
  * <tr>

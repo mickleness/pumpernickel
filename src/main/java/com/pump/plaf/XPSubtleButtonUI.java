@@ -32,7 +32,7 @@ import javax.swing.plaf.ComponentUI;
  * L&amp;F until they are rolled over.
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/XPSubtleButtonUI.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/XPSubtleButtonUI.png"
  * alt="XPSubtleButtonUI Screenshot">
  **/
 public class XPSubtleButtonUI extends QButtonUI {

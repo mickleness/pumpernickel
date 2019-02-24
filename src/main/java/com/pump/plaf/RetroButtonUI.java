@@ -23,7 +23,7 @@ import javax.swing.plaf.ComponentUI;
 
 /**
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/RetroButtonUI.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/RetroButtonUI.png"
  * alt="RetroButtonUI Screenshot">
  */
 public class RetroButtonUI extends QButtonUI {

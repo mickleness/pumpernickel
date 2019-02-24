@@ -27,13 +27,13 @@ import com.pump.plaf.ThrobberUI;
  * <table summary="Sample ThrobberUIs" cellpadding="10">
  * <tr>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUIx2.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/AquaThrobberUIx2.gif"
  * alt="Sample of AquaThrobberUI"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/ChasingArrowsThrobberUIx2.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/ChasingArrowsThrobberUIx2.gif"
  * alt="Sample of ChasingArrowsThrobberUI"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/PulsingCirclesThrobberUIx2.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/PulsingCirclesThrobberUIx2.gif"
  * alt="Sample of PulsingCirclesThrobberUI"></td>
  * </tr>
  * </table>

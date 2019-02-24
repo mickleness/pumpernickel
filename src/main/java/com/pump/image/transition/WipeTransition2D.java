@@ -20,25 +20,25 @@ import java.awt.geom.Rectangle2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WipeTransition2D/WipeLeft.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WipeTransition2D/WipeLeft.gif"
  * alt="Wipe Left">
  * <p>
  * Wipe Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WipeTransition2D/WipeRight.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WipeTransition2D/WipeRight.gif"
  * alt="Wipe Right">
  * <p>
  * Wipe Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WipeTransition2D/WipeUp.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WipeTransition2D/WipeUp.gif"
  * alt="Wipe Up">
  * <p>
  * Wipe Up</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/WipeTransition2D/WipeDown.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WipeTransition2D/WipeDown.gif"
  * alt="Wipe Down">
  * <p>
  * Wipe Down</td>

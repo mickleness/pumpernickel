@@ -22,7 +22,7 @@ import java.util.List;
  * playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CollapseTransition2D/Collapse.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CollapseTransition2D/Collapse.gif"
  * alt="CollapseTransition2D Demo">
  *
  */

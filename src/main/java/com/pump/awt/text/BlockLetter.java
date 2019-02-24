@@ -50,7 +50,7 @@ public abstract class BlockLetter {
 	 * (unnuanced) Paint:
 	 * <p>
 	 * <img src=
-	 * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/simple-block-text.png"
+	 * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/simple-block-text.png"
 	 * alt="simple block text">
 	 * <p>
 	 * This will be slightly faster than the <code>Gradient</code>
@@ -120,7 +120,7 @@ public abstract class BlockLetter {
 	 * Here is a sample:
 	 * <p>
 	 * <img src=
-	 * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/gradient-block-text.png"
+	 * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/gradient-block-text.png"
 	 * alt="gradient block text demo">
 	 */
 	public static class Gradient extends BlockLetter {

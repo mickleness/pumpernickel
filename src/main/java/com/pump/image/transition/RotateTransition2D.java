@@ -20,13 +20,13 @@ import java.awt.geom.AffineTransform;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RotateTransition2D/RotateIn.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RotateTransition2D/RotateIn.gif"
  * alt="Rotate In">
  * <p>
  * Rotate In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/RotateTransition2D/RotateOut.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RotateTransition2D/RotateOut.gif"
  * alt="Rotate Out">
  * <p>
  * Rotate Out</td>

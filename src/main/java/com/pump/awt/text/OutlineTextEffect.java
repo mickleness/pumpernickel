@@ -36,7 +36,7 @@ import com.pump.geom.MeasuredShape;
  * look:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/outline-text-effect.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/outline-text-effect.gif"
  * alt="outline text effect demo">
  * </p>
  */

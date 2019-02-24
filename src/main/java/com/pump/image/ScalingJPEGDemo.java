@@ -289,7 +289,7 @@ public class ScalingJPEGDemo {
 			};
 			out.println(JVM.getProfile());
 			out.println("\nThis takes an image that is 2750x2063 and uses a variety of methods to scale it:");
-			out.println("\nhttps://github.com/mickleness/pumpernickel/blob/master/pump-image/src/main/resources/com/pump/image/bridge3.jpg");
+			out.println("\nhttps://github.com/mickleness/pumpernickel/blob/master/src/main/resources/com/pump/image/bridge3.jpg");
 			out.println("\nThe \"singlePassReader\" is highlighted in blue, and represents the summary findings of ");
 			out.println("this project by using the GenericImageSinglePassIterator.\n");
 			out.println("These tests include several 2-second gaps to help the MediaTracker's threads finish, so they");

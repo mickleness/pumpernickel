@@ -28,7 +28,7 @@ import java.util.Random;
  * original state:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/explode-text-effect.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/explode-text-effect.gif"
  * alt="explode text effect demo">
  * </p>
  * <p>

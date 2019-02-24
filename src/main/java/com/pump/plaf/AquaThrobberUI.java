@@ -29,13 +29,13 @@ import javax.swing.JComponent;
  * <table summary="Sample Animations of AquaThrobberUI" cellpadding="10">
  * <tr>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUI.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/AquaThrobberUI.gif"
  * alt="AquaThrobberUI"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUIx2.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/AquaThrobberUIx2.gif"
  * alt="AquaThrobberUI Magnified 2x"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/throbber/AquaThrobberUIx4.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/AquaThrobberUIx4.gif"
  * alt="AquaThrobberUI Magnified 4x"></td>
  * </tr>
  * </table>

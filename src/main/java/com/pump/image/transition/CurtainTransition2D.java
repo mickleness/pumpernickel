@@ -25,7 +25,7 @@ import com.pump.geom.RectangularTransform;
  * Here is a playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/CurtainTransition2D/Curtain.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CurtainTransition2D/Curtain.gif"
  * alt="CurtainTransition2D Demo">
  *
  */

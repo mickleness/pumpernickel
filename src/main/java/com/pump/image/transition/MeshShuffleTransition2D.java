@@ -21,7 +21,7 @@ import java.util.List;
  * playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/MeshShuffleTransition2D/MeshShuffle.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/MeshShuffleTransition2D/MeshShuffle.gif"
  * alt="MeshShuffleTransition2D Demo">
  *
  */

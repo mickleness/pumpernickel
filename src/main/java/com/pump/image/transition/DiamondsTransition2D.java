@@ -22,19 +22,19 @@ import java.awt.geom.Path2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DiamondsTransition2D/Diamonds(10).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/DiamondsTransition2D/Diamonds(10).gif"
  * alt="Diamonds (10)">
  * <p>
  * Diamonds (10)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DiamondsTransition2D/Diamonds(20).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/DiamondsTransition2D/Diamonds(20).gif"
  * alt="Diamonds (20)">
  * <p>
  * Diamonds (20)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/DiamondsTransition2D/Diamonds(40).gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/DiamondsTransition2D/Diamonds(40).gif"
  * alt="Diamonds (40)">
  * <p>
  * Diamonds (40)</td>

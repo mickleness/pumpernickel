@@ -21,25 +21,25 @@ import java.awt.geom.Rectangle2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SplitTransition2D/SplitHorizontalIn.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SplitTransition2D/SplitHorizontalIn.gif"
  * alt="Split Horizontal In">
  * <p>
  * Split Horizontal In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SplitTransition2D/SplitHorizontalOut.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SplitTransition2D/SplitHorizontalOut.gif"
  * alt="Split Horizontal Out">
  * <p>
  * Split Horizontal Out</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SplitTransition2D/SplitVerticalIn.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SplitTransition2D/SplitVerticalIn.gif"
  * alt="Split Vertical In">
  * <p>
  * Split Vertical In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/SplitTransition2D/SplitVerticalOut.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SplitTransition2D/SplitVerticalOut.gif"
  * alt="Split Vertical Out">
  * <p>
  * Split Vertical Out</td>

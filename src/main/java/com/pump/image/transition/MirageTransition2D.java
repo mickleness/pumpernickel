@@ -24,7 +24,7 @@ import java.util.Random;
  * in a desert. Here is a playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/transition/MirageTransition2D/Mirage.gif"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/MirageTransition2D/Mirage.gif"
  * alt="MirageTransition2D Demo">
  * 
  */

@@ -24,7 +24,7 @@ import javax.swing.plaf.ComponentUI;
  * This resembles the L&amp;F used on XP.
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/pump-release/resources/filledbuttonui/XPButtonUI.png"
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/XPButtonUI.png"
  * alt="XPButtonUI Screenshot">
  * <P>
  * This relies on careful borders and highlights more than most other ButtonUIs
