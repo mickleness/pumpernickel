@@ -19,11 +19,17 @@ import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -33,6 +39,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
@@ -48,6 +55,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.CompoundBorder;
@@ -65,6 +73,7 @@ import com.pump.desktop.edit.EditMenuControls;
 import com.pump.icon.button.MinimalDuoToneCloseIcon;
 import com.pump.plaf.RoundTextFieldUI;
 import com.pump.swing.CollapsibleContainer;
+import com.pump.swing.FileDialogUtils;
 import com.pump.swing.HelpComponent;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.ListSectionContainer;
@@ -74,6 +83,7 @@ import com.pump.swing.TextFieldPrompt;
 import com.pump.text.WildcardPattern;
 import com.pump.window.WindowDragger;
 import com.pump.window.WindowMenu;
+import com.sun.glass.events.KeyEvent;
 
 public class PumpernickelShowcaseApp extends JFrame {
 
@@ -102,6 +112,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 	JMenu editMenu = createEditMenu();
 	JMenu helpMenu = new JMenu("Help");
 	JCheckBoxMenuItem magnifierItem = new JCheckBoxMenuItem("Magnifier");
+	JMenuItem saveScreenshotItem = new JMenuItem("Save Screenshot...");
 
 	ActionListener magnifierListener = new ActionListener() {
 
@@ -275,6 +286,50 @@ public class PumpernickelShowcaseApp extends JFrame {
 			}
 			return returnValue;
 		}
+	};
+
+	ActionListener saveScreenshotActionListener = new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				Section section = sectionContainer.getSelectedSection();
+				if (section == null)
+					throw new RuntimeException(
+							"Please select a topic in the list on the left to capture a screenshot.");
+				BufferedImage bi = getScreenshot(section.getBody());
+				String defaultName = getDemoName(section.getBody());
+				File pngFile = FileDialogUtils.showSaveDialog(
+						PumpernickelShowcaseApp.this, "Export as...",
+						defaultName + ".png", "png");
+				ImageIO.write(bi, "png", pngFile);
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+
+		private String getDemoName(Component c) {
+			Class z = c.getClass();
+			if (z.getName().contains("pump.showcase."))
+				return z.getSimpleName();
+			if (c instanceof Container) {
+				Container c2 = (Container) c;
+				for (Component child : c2.getComponents()) {
+					String n = getDemoName(child);
+					if (n != null)
+						return n;
+				}
+			}
+			return null;
+		}
+
+		private BufferedImage getScreenshot(JPanel panel) throws Exception {
+			Robot robot = new Robot();
+			Point p = panel.getLocationOnScreen();
+			Rectangle screenRect = new Rectangle(p.x, p.y, panel.getWidth(),
+					panel.getHeight());
+			return robot.createScreenCapture(screenRect);
+		}
 
 	};
 
@@ -283,7 +338,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 		setJMenuBar(menuBar);
 		menuBar.add(editMenu);
-		menuBar.add(new WindowMenu(this, magnifierItem));
+		menuBar.add(new WindowMenu(this, magnifierItem, saveScreenshotItem));
+		saveScreenshotItem.addActionListener(saveScreenshotActionListener);
+		saveScreenshotItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
 		// TODO: add help menu/about menu item
 		// menuBar.add(helpMenu);

@@ -49,12 +49,43 @@ public class FileDialogUtils {
 		return new File(fd.getDirectory() + fd.getFile());
 	}
 
+	/**
+	 * Show a save FileDialog.
+	 * 
+	 * @param f
+	 *            the frame that owns the FileDialog.
+	 * @param title
+	 *            the dialog title
+	 * @param extension
+	 *            the file extension ("xml", "png", etc.)
+	 * @return a File the user chose.
+	 */
 	public static File showSaveDialog(Frame f, String title, String extension) {
+		return showSaveDialog(f, title, null, extension);
+	}
+
+	/**
+	 * Show a save FileDialog.
+	 * 
+	 * @param f
+	 *            the frame that owns the FileDialog.
+	 * @param title
+	 *            the dialog title
+	 * @param filename
+	 *            the optional default filename shown in the file dialog.
+	 * @param extension
+	 *            the file extension ("xml", "png", etc.)
+	 * @return a File the user chose.
+	 */
+	public static File showSaveDialog(Frame f, String title, String filename,
+			String extension) {
 		if (extension.startsWith("."))
 			extension = extension.substring(1);
 
 		FileDialog fd = new FileDialog(f, title);
 		fd.setMode(FileDialog.SAVE);
+		if (filename != null)
+			fd.setFile(filename);
 		fd.setFilenameFilter(new SuffixFilenameFilter(extension));
 		fd.pack();
 		fd.setLocationRelativeTo(null);
@@ -67,6 +98,12 @@ public class FileDialogUtils {
 		if (s.toLowerCase().endsWith("." + extension)) {
 			return new File(fd.getDirectory() + s);
 		}
+
+		// TODO: show a 'are you sure you want to replace' dialog here, if we
+		// change the filename
+		// native FileDialogs don't always show the right warning dialog IF the
+		// file extension
+		// isn't present
 
 		return new File(fd.getDirectory() + fd.getFile() + "." + extension);
 	}

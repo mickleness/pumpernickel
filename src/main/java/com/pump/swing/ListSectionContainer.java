@@ -156,6 +156,13 @@ public class ListSectionContainer extends SectionContainer {
 		updateContentPanel();
 	}
 
+	/**
+	 * Return the currently selected Section.
+	 */
+	public Section getSelectedSection() {
+		return list.getSelectedValue();
+	}
+
 	protected void updateContentPanel() {
 		Section section = list.getSelectedValue();
 		JPanel child;
