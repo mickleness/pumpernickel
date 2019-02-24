@@ -32,7 +32,12 @@ import javax.swing.JSlider;
  * This <code>AngleSliderUI</code> is designed to resemble the similar control
  * in Aqua. This is not a pixel-perfect emulation; feel free to adjust it as
  * needed.
+ * <p>
+ * This is deprecated because it resembles Apple's Aqua look-and-feel of the
+ * mid-2000's. Now everything is much flatter/simpler, so this look has fallen
+ * out of favor.
  */
+@Deprecated
 public class AquaAngleSliderUI extends AngleSliderUI {
 
 	private static final String MY_CACHED_FILLS = "com.pump.plaf.AquaSliderUI.fills";

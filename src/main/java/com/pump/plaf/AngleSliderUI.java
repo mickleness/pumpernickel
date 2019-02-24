@@ -39,8 +39,6 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.SliderUI;
 
-import com.pump.util.JVM;
-
 /**
  * This UI renders a <code>JSlider</code> as a circular dial, and then value of
  * the slider represents an angle from [0,2*pi).
@@ -55,8 +53,8 @@ import com.pump.util.JVM;
 public class AngleSliderUI extends SliderUI {
 
 	public static ComponentUI createUI(JComponent c) {
-		if (JVM.isAqua())
-			return new AquaAngleSliderUI();
+		// this used to create an AquaSliderUI on Mac, but now everyone
+		// (including Apple) is trending towards a flat UI.
 		return new AngleSliderUI();
 	}
 
