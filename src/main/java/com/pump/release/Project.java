@@ -43,12 +43,12 @@ public class Project {
 		// true to the intention of the dependency version, and it will
 		// let us abort if we know there are compiler errors.
 
-		File targetDir = new File(projectDir, "target");
-		if (!targetDir.exists())
-			throw new RuntimeException("\"target\" did not exist in "
-					+ projectDir.getAbsolutePath());
+		File releaseDir = new File(projectDir, "release");
+		if (!releaseDir.exists() && !releaseDir.mkdirs())
+			throw new IOException("mkdirs failed for "
+					+ releaseDir.getAbsolutePath());
 
-		File jarsDir = new File(targetDir, "jars");
+		File jarsDir = new File(releaseDir, "jars");
 		if (!jarsDir.exists() && !jarsDir.mkdirs())
 			throw new IOException("mkdirs failed for "
 					+ jarsDir.getAbsolutePath());
@@ -59,6 +59,7 @@ public class Project {
 		}
 		jarFile.createNewFile();
 
+		File targetDir = new File(projectDir, "target");
 		File classesDir = new File(targetDir, "classes");
 		if (!classesDir.exists())
 			throw new RuntimeException("\"target\\classes\" did not exist in "
