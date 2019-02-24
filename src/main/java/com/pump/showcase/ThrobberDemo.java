@@ -153,6 +153,11 @@ public class ThrobberDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new Swing component that is more compact than an indeterminate JProgressBar.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return ThrobberDemo.class.getResource("throbberDemo.html");
 	}

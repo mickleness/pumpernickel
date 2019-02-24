@@ -382,6 +382,11 @@ public class StrokeMouseSmoothingDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a set new strokes and a freehand pencil drawing tool.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return StrokeMouseSmoothingDemo.class
 				.getResource("strokeMouseSmoothingDemo.html");

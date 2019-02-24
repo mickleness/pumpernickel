@@ -27,7 +27,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import com.pump.plaf.QPanelUI;
@@ -43,17 +42,10 @@ public class JColorPickerDemo extends JPanel implements ShowcaseDemo {
 	JCheckBox rgbCheckbox = new JCheckBox("Include RGB Values");
 	JCheckBox modeCheckbox = new JCheckBox("Include Mode Controls", true);
 	JButton button = new JButton("Show Dialog");
-	JTextArea description = new JTextArea(
-			"The ColorPicker started out as a color dialog (an alternative to the JColorChooser), but can also be reduced to a few JComponents if you'd rather place it in your UI directly.");
 	JPanel controls = new JPanel(new GridBagLayout());
 	JPanel pickerContainer = new JPanel(new GridBagLayout());
 
 	public JColorPickerDemo() {
-		description.setEditable(false);
-		description.setOpaque(false);
-		description.setLineWrap(true);
-		description.setWrapStyleWord(true);
-
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -77,17 +69,11 @@ public class JColorPickerDemo extends JPanel implements ShowcaseDemo {
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
 		c.insets = new Insets(3, 3, 3, 3);
 		c.fill = GridBagConstraints.BOTH;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		add(description, c);
 		c.gridwidth = 1;
 		c.weightx = 0;
 		c.weighty = 0;
-		c.gridy++;
-		c.gridx = 0;
 		add(controls, c);
 		c.gridy++;
 		c.anchor = GridBagConstraints.NORTH;
@@ -196,6 +182,11 @@ public class JColorPickerDemo extends JPanel implements ShowcaseDemo {
 	@Override
 	public String getTitle() {
 		return "ColorPicker Demo";
+	}
+
+	@Override
+	public String getSummary() {
+		return "This demonstrates a new Swing color-choosing widget that can be packaged either as a large dialog or a compact panel.";
 	}
 
 	@Override

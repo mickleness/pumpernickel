@@ -109,6 +109,11 @@ public class GraphicsWriterDebuggerDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new tool to identify the stacktraces of each rendered artifact in a window.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return null;
 	}

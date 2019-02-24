@@ -279,6 +279,11 @@ public class WildcardPatternHighlighterDemo extends JPanel implements
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates two new Highlighters and a simpler regex alternative.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return WildcardPatternHighlighterDemo.class
 				.getResource("wildcardPatternHighlighterDemo.html");

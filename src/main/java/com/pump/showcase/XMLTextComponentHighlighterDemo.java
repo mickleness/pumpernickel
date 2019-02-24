@@ -61,6 +61,11 @@ public class XMLTextComponentHighlighterDemo extends JPanel implements
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a model to render XML in JTextPanes.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return XMLTextComponentHighlighterDemo.class
 				.getResource("xmlTextComponentHighlighterDemo.html");

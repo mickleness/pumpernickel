@@ -739,6 +739,11 @@ public class DecoratedDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a list and tree UI that support decorative action buttons.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return DecoratedDemo.class.getResource("decoratedDemo.html");
 	}

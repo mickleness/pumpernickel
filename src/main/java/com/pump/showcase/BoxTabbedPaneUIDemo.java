@@ -180,6 +180,11 @@ public class BoxTabbedPaneUIDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new TabbedPaneUI that resembles modern (closeable) browser tabs.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return BoxTabbedPaneUIDemo.class
 				.getResource("boxTabbedPaneUIDemo.html");

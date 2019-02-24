@@ -45,6 +45,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
@@ -392,7 +393,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 	private void addSection(String text, JComponent component) {
 		if (component instanceof ShowcaseDemo) {
 			ShowcaseDemo d = (ShowcaseDemo) component;
-			component = wrapDemo(component, d.getTitle(), d.getHelpURL());
+			component = wrapDemo(component, d.getTitle(), d.getSummary(),
+					d.getHelpURL());
 		}
 		Section section = sectionContainer.addSection(text, text);
 		masterSectionList.add(section);
@@ -462,7 +464,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 	}
 
 	private JComponent wrapDemo(JComponent component, String title,
-			final URL helpURL) {
+			String description, final URL helpURL) {
 		ActionListener actionListener = new ActionListener() {
 			JScrollPane scrollPane;
 			JFancyBox box;
@@ -515,6 +517,11 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 		JPanel replacement = new JPanel(new GridBagLayout());
 		JLabel header = new JLabel(title);
+		JTextArea descriptionTextArea = new JTextArea(description);
+		descriptionTextArea.setEditable(false);
+		descriptionTextArea.setOpaque(false);
+		descriptionTextArea.setLineWrap(true);
+		descriptionTextArea.setWrapStyleWord(true);
 		header.setFont(header.getFont().deriveFont(18f));
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -532,6 +539,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 		replacement.add(jc, c);
 		c.fill = GridBagConstraints.BOTH;
 		jc.setVisible(helpURL != null);
+		c.gridy++;
+		replacement.add(descriptionTextArea, c);
 		c.gridy++;
 		replacement.add(new JSeparator(), c);
 

@@ -27,9 +27,7 @@ import java.util.concurrent.Callable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.text.JTextComponent;
 
 import com.pump.geom.TransformUtils;
 import com.pump.image.ImageLoader;
@@ -161,12 +159,7 @@ public class ScalingDemo extends ShowcaseChartDemo {
 		}
 	};
 
-	JTextComponent textBox = new JTextPane();
-
 	public ScalingDemo() {
-		textBox.setText("This demo compares the time and memory required by different scaling implementations.");
-		textBox.setEditable(false);
-		textBox.setOpaque(false);
 		upperControls.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -174,7 +167,6 @@ public class ScalingDemo extends ShowcaseChartDemo {
 		c.weightx = 1;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
-		upperControls.add(textBox, c);
 
 		sampleImage = ImageLoader.createImage(ImageLoader.class
 				.getResource("bridge3.jpg"));
@@ -223,6 +215,11 @@ public class ScalingDemo extends ShowcaseChartDemo {
 	@Override
 	public String getTitle() {
 		return "Scaling Demo";
+	}
+
+	@Override
+	public String getSummary() {
+		return "This compares the time and memory required by different scaling implementations.";
 	}
 
 	@Override

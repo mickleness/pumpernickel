@@ -569,6 +569,11 @@ public class QButtonUIDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new set of ButtonUIs.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return QButtonUIDemo.class.getResource("qButtonUIDemo.html");
 	}

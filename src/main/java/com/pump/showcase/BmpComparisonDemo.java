@@ -12,8 +12,6 @@ package com.pump.showcase;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,8 +26,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.JTextPane;
-import javax.swing.text.JTextComponent;
 
 import com.pump.awt.DemoPaintable;
 import com.pump.image.bmp.BmpDecoder;
@@ -51,22 +47,6 @@ public class BmpComparisonDemo extends ShowcaseChartDemo {
 	private static final long serialVersionUID = 1L;
 
 	static final int SAMPLE_COUNT = 10;
-
-	JTextComponent textBox = new JTextPane();
-
-	public BmpComparisonDemo() {
-		textBox.setText("This demo compares this codebase's BmpEncoder and BmpDecoder with the equivalent ImageIO encoder and decoder.\n\nAs of this writing the pump classes significantly outperform ImageIO classes in speed. Regarding memory usage: encoding shows a significant improvement, but decoding is nearly identical.");
-		textBox.setEditable(false);
-		textBox.setOpaque(false);
-		upperControls.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-		upperControls.add(textBox, c);
-	}
 
 	class DataGenerator {
 		Map<String, Map<String, Long>> data;
@@ -187,6 +167,11 @@ public class BmpComparisonDemo extends ShowcaseChartDemo {
 	@Override
 	public String getTitle() {
 		return "BmpEncoder, BmpDecoder Demo";
+	}
+
+	@Override
+	public String getSummary() {
+		return "This compares the performance of a new BmpEncoder and BmpDecoder class with the analogous ImageIO encoder and decoder.\n\nAs of this writing the pump classes significantly outperform ImageIO classes in speed. Regarding memory usage: encoding shows a significant improvement, but decoding is nearly identical.";
 	}
 
 	@Override

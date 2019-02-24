@@ -90,7 +90,12 @@ public class CustomizedToolbarDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public String getTitle() {
-		return "CustomizedToolbar";
+		return "CustomizedToolbar Demo";
+	}
+
+	@Override
+	public String getSummary() {
+		return "This demonstrates a model for managing/editing a toolbar based on Apple's editable toolbars.";
 	}
 
 	@Override

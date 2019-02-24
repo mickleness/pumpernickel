@@ -35,10 +35,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JTextPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.text.JTextComponent;
 
 import com.pump.awt.ClickSensitivityControl;
 import com.pump.awt.TextBlock;
@@ -162,7 +160,6 @@ public class ClickSensitivityControlDemo extends JPanel implements ShowcaseDemo 
 	JComponent widgetA = new Widget(new Color(0xfad390), "Widget A");
 	JComponent widgetB = new Widget(new Color(0x82ccdd), "Widget B");
 
-	JTextComponent textBox = new JTextPane();
 	BasicConsole console = new BasicConsole(false, false);
 	JScrollPane scrollPane = new JScrollPane(console);
 
@@ -183,17 +180,11 @@ public class ClickSensitivityControlDemo extends JPanel implements ShowcaseDemo 
 
 		c.gridy++;
 		c.gridx = 0;
-		c.weightx = 1;
+		c.weightx = 0;
 		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(6, 6, 6, 6);
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		add(textBox, c);
-
-		c.gridy++;
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0;
 		c.insets = new Insets(3, 3, 3, 3);
 		add(new JLabel("Tolerance:"), c);
 		c.gridx++;
@@ -223,10 +214,6 @@ public class ClickSensitivityControlDemo extends JPanel implements ShowcaseDemo 
 		targetRow.add(widgetA);
 		targetRow.add(widgetB);
 
-		textBox.setOpaque(false);
-		textBox.setEditable(false);
-		textBox.setText("This demos a feature that allows MOUSE_CLICKED events even if the cursor moves a few pixels between MOUSE_PRESSED and MOUSE_RELEASED events.\n\nTry clicking each widget below and move the mouse a few pixels before releasing it. Widget A only generates a MOUSE_CLICKED event if the mouse doesn't move. (This is what Java does by default.) Widget B allows a few pixels of wiggle room.");
-
 		// Normally you'd just call ClickSensitivityControl#install(), but since
 		// this demo includes code to disable this feature for widget A we're on
 		// our own.
@@ -240,6 +227,11 @@ public class ClickSensitivityControlDemo extends JPanel implements ShowcaseDemo 
 	@Override
 	public String getTitle() {
 		return "ClickSensitivityControl Demo";
+	}
+
+	@Override
+	public String getSummary() {
+		return "This demonstrates a mechanism to alter how MOUSE_CLICKED events are generated.\n\nBy default a MOUSE_CLICKED event is only generated if the mouse doesn't move between the MOUSE_PRESSED and MOUSE_RELEASED events. The ClickSensitivityControl generates MOUSE_CLICKED events even if the mouse moves a few pixels.\n\nTry clicking each widget below and move the mouse a few pixels before releasing it. Widget A only generates a MOUSE_CLICKED event if the mouse doesn't move. (This is what Java does by default.) Widget B allows a few pixels of wiggle room.";
 	}
 
 	@Override

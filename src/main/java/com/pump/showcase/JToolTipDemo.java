@@ -134,6 +134,11 @@ public class JToolTipDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new alternative tooltip implementation.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return JToolTipDemo.class.getResource("jtooltipDemo.html");
 	}

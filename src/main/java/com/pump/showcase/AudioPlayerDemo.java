@@ -139,6 +139,11 @@ public class AudioPlayerDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a few Swing components for audio playback.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return AudioPlayerDemo.class
 				.getResource("audioPlayerComponentDemo.html");

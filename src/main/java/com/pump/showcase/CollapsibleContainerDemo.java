@@ -195,6 +195,11 @@ public class CollapsibleContainerDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new Swing component that manages collapsible labeled panels.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return CollapsibleContainerDemo.class
 				.getResource("collapsibleContainerDemo.html");

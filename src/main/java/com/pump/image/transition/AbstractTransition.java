@@ -36,7 +36,7 @@ public abstract class AbstractTransition implements Transition {
 	 * @return an image to test transitions with.
 	 */
 	public static BufferedImage createImage(String text, boolean light) {
-		return createImage(400, text, light, true);
+		return createImage(300, text, light, true);
 	}
 
 	/**

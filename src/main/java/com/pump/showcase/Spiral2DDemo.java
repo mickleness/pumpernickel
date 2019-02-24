@@ -338,6 +338,11 @@ public class Spiral2DDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new Shape class that represents a spiral.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return Spiral2DDemo.class.getResource("spiral2Ddemo.html");
 	}

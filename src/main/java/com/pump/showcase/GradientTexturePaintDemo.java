@@ -227,6 +227,11 @@ public class GradientTexturePaintDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new alternative gradient paint that uses diffusion to reduce color banding.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return GradientTexturePaintDemo.class
 				.getResource("gradientTexturePaintDemo.html");

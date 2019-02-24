@@ -123,6 +123,11 @@ public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new Swing component that lets you select a color from the current screen.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return JEyeDropperDemo.class.getResource("jeyeDropperDemo.html");
 	}

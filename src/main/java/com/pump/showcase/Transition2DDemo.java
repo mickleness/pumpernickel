@@ -121,6 +121,11 @@ public class Transition2DDemo extends TransitionDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a set new transitions based on 2D rendering operations.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return Transition2DDemo.class.getResource("transition2Ddemo.html");
 	}

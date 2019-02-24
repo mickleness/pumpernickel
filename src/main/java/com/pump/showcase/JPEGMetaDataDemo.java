@@ -11,8 +11,6 @@
 package com.pump.showcase;
 
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.net.URL;
@@ -26,8 +24,6 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
-import javax.swing.JTextPane;
-import javax.swing.text.JTextComponent;
 
 import com.pump.image.ImageLoader;
 import com.pump.image.jpeg.JPEGMetaData;
@@ -43,25 +39,14 @@ public class JPEGMetaDataDemo extends ShowcaseChartDemo {
 
 	private static final int SAMPLE_COUNT = 10;
 
-	JTextComponent textBox = new JTextPane();
-
-	public JPEGMetaDataDemo() {
-		textBox.setText("This demos the com.pump.image.jpeg.JPEGMetaData's ability to parse a thumbnail against ImageIO.\n\nNote by default this trial is rigged, because the default installation of ImageIO does not support parsing JPEG thumbnails unless you have JAI also installed. (In this demo: we use ImageIO to load the full image and then scale it down to a thumbnail.)\n\nThe option to request a thumbnail fails with an exception.\n\nSo ... the broad point still stands that this class helps read thumbnails better than Java's default ImageIO classes alone, but these charts are also unfair and biased.");
-		textBox.setEditable(false);
-		textBox.setOpaque(false);
-		upperControls.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-		upperControls.add(textBox, c);
-	}
-
 	@Override
 	public String getTitle() {
 		return "JPEGMetaData Demo";
+	}
+
+	@Override
+	public String getSummary() {
+		return "This compares the new JPEGMetaData with ImageIO when reading JPG thumbnails.\n\nNote by default this trial is rigged, because the default installation of ImageIO does not support parsing JPEG thumbnails unless you have JAI also installed. (In this demo: we use ImageIO to load the full image and then scale it down to a thumbnail.)\n\nThe option to request a thumbnail fails with an exception.\n\nSo ... the broad point still stands that this class helps read thumbnails better than Java's default ImageIO classes alone, but these charts are also unfair and biased.";
 	}
 
 	@Override

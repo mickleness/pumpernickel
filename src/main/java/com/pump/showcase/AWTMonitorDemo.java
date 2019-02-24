@@ -205,6 +205,11 @@ public class AWTMonitorDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a class to log or respond to a locked event dispatch thread.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return AWTMonitorDemo.class.getResource("awtMonitorDemo.html");
 	}

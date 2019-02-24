@@ -293,6 +293,11 @@ public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new Swing component that resembles an enhanced tooltip.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return JPopoverDemo.class.getResource("jpopoverDemo.html");
 	}

@@ -140,6 +140,11 @@ public class JColorWellPaletteDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates two new compact Swing components to select a color.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return JColorWellPaletteDemo.class
 				.getResource("jcolorWellPaletteDemo.html");

@@ -40,6 +40,11 @@ public class Transition3DDemo extends TransitionDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a set new transitions based on 3D rendering operations.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return Transition3DDemo.class.getResource("transition3Ddemo.html");
 	}

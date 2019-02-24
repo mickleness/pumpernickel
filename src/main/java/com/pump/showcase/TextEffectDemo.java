@@ -311,6 +311,11 @@ public class TextEffectDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a few new animations to render text.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return TextEffectDemo.class.getResource("textEffectDemo.html");
 	}

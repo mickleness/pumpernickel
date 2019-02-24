@@ -124,6 +124,11 @@ public class AngleSliderUIDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new SliderUI to represent an angle.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return AngleSliderUIDemo.class.getResource("angleSliderUIDemo.html");
 	}

@@ -10,8 +10,6 @@
  */
 package com.pump.showcase;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
@@ -23,9 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import javax.swing.JTextPane;
-import javax.swing.text.JTextComponent;
-
 import com.pump.geom.ShapeBounds;
 
 /**
@@ -36,25 +31,14 @@ public class ShapeBoundsDemo extends ShowcaseChartDemo {
 	private static final long serialVersionUID = 1L;
 	int SAMPLE_COUNT = 10;
 
-	JTextComponent textBox = new JTextPane();
-
-	public ShapeBoundsDemo() {
-		textBox.setText("This demos the com.pump.geom.ShapeBounds's ability to calculate a shape's bounds against the java.awt.geom.Area.\n\n(This also considers the return value of Path2D#getBounds(), but that's inaccurate so it doesn't really count...)");
-		textBox.setEditable(false);
-		textBox.setOpaque(false);
-		upperControls.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-		upperControls.add(textBox, c);
-	}
-
 	@Override
 	public String getTitle() {
 		return "ShapeBounds Demo";
+	}
+
+	@Override
+	public String getSummary() {
+		return "This compares the time and memory required to calculate a shape's bounds using the com.pump.geom.ShapeBounds class and the Area class.\n\nThis demos the com.pump.geom.ShapeBounds's ability to calculate a shape's bounds against the java.awt.geom.Area.\n\n(This also considers the return value of Path2D#getBounds(), but that's inaccurate so it doesn't really count...)";
 	}
 
 	@Override

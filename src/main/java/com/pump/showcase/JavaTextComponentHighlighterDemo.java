@@ -74,6 +74,11 @@ public class JavaTextComponentHighlighterDemo extends JPanel implements
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a model to render Java source code in JTextPanes.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return XMLTextComponentHighlighterDemo.class
 				.getResource("javaTextComponentHighlighterDemo.html");

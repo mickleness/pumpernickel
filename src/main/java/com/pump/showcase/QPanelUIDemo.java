@@ -301,6 +301,11 @@ public class QPanelUIDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new PanelUI supporting optional gradients and a callout.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return QPanelUIDemo.class.getResource("qpanelUIDemo.html");
 	}

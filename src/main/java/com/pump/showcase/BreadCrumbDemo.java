@@ -326,6 +326,11 @@ public class BreadCrumbDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new Swing component for rendering/selecting navigation nodes.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return BreadCrumbDemo.class.getResource("breadCrumbDemo.html");
 	}

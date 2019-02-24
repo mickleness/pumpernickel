@@ -35,13 +35,11 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JTextPane;
 import javax.swing.RootPaneContainer;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.text.JTextComponent;
 
 import com.pump.blog.ResourceSample;
 import com.pump.geom.Clipper;
@@ -149,7 +147,6 @@ public class ClipperDemo extends ShowcaseChartDemo {
 		}
 	};
 
-	JTextComponent textBox = new JTextPane();
 	JButton showSample = new JButton("Show Sample");
 	JComboBox<String> typeComboBox = new JComboBox<>();
 	JSpinner shapeIndexSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 100,
@@ -158,19 +155,12 @@ public class ClipperDemo extends ShowcaseChartDemo {
 	JPanel demoPanel = new JPanel(new GridBagLayout());
 
 	public ClipperDemo() {
-		textBox.setText("This demo compares this codebase's Clipper class with the java.awt.geom.Area class for use in clipping complex shapes to a rectangle.\n\nAs of this writing the Clipper class outperforms the Area class in every scenario/measurement.");
-		textBox.setEditable(false);
-		textBox.setOpaque(false);
-		upperControls.setLayout(new GridBagLayout());
+		lowerControls.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
 		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-		upperControls.add(textBox, c);
-
-		lowerControls.setLayout(new GridBagLayout());
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.CENTER;
 		lowerControls.add(showSample, c);
@@ -231,6 +221,11 @@ public class ClipperDemo extends ShowcaseChartDemo {
 	@Override
 	public String getTitle() {
 		return "Clipper Demo";
+	}
+
+	@Override
+	public String getSummary() {
+		return "This demonstrates a new class that outperforms the Area class when clipping a shape to a rectangle.\n\nAs of this writing the Clipper class outperforms the Area class in every scenario/measurement.";
 	}
 
 	@Override

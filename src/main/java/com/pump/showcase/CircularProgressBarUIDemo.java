@@ -290,6 +290,11 @@ public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates a new ProgressBarUI that renders circular arcs.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return getClass().getResource("circularProgressBarUIDemo.html");
 	}

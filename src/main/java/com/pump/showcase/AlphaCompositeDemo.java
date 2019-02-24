@@ -318,6 +318,11 @@ public class AlphaCompositeDemo extends JPanel implements ShowcaseDemo {
 	}
 
 	@Override
+	public String getSummary() {
+		return "This demonstrates how each AlphaComposite renders.";
+	}
+
+	@Override
 	public URL getHelpURL() {
 		return AlphaCompositeDemo.class.getResource("alphaCompositeDemo.html");
 	}
