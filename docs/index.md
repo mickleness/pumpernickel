@@ -4,15 +4,17 @@ Try downloading the [demo app](https://github.com/mickleness/pumpernickel/raw/ma
 
 ## Description ##
 
-The topics addressed here vary (greatly), but common themes include:
+Here are screenshots of the demo app:
+
+<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRPaDLRJgAQ7Rex0q0uMlrh8V2njg5JM8-UjFJFQvu2yQWBiQAX6PA56hYkxe1zkztUb5qZZGNb7fl4/embed?start=true&loop=true&delayms=5000" frameborder="0" width="250" height="298" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+The topics addressed in this codebase vary (greatly), but common themes include:
 *   Desktop Applications
 *   User Experience
 *   Swing Components
 *   Image Processing
 *   Performance Optimizations
 *   Data Structures
-
-Also it will probably quickly become apparent from the look-and-feel work I do that Mac is my primary development environment. I do (try to) test most of what I put out there on Windows, too, but I don't currently have a Linux machine.
 
 The topics I tackle generally complement either work-related projects or personal (unpublished) projects.
 
