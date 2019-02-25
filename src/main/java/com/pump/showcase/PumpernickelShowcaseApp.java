@@ -10,6 +10,7 @@
  */
 package com.pump.showcase;
 
+import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Desktop;
@@ -24,10 +25,12 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +39,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -71,6 +75,7 @@ import com.pump.desktop.DesktopApplication;
 import com.pump.desktop.edit.EditCommand;
 import com.pump.desktop.edit.EditMenuControls;
 import com.pump.icon.button.MinimalDuoToneCloseIcon;
+import com.pump.io.FileTreeIterator;
 import com.pump.plaf.RoundTextFieldUI;
 import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.FileDialogUtils;
@@ -83,7 +88,6 @@ import com.pump.swing.TextFieldPrompt;
 import com.pump.text.WildcardPattern;
 import com.pump.window.WindowDragger;
 import com.pump.window.WindowMenu;
-import com.sun.glass.events.KeyEvent;
 
 public class PumpernickelShowcaseApp extends JFrame {
 
@@ -293,42 +297,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				Section section = sectionContainer.getSelectedSection();
-				if (section == null)
-					throw new RuntimeException(
-							"Please select a topic in the list on the left to capture a screenshot.");
-				BufferedImage bi = getScreenshot(section.getBody());
-				String defaultName = getDemoName(section.getBody());
-				File pngFile = FileDialogUtils.showSaveDialog(
-						PumpernickelShowcaseApp.this, "Export as...",
-						defaultName + ".png", "png");
-				ImageIO.write(bi, "png", pngFile);
+				createScreenshot(null);
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
-		}
-
-		private String getDemoName(Component c) {
-			Class z = c.getClass();
-			if (z.getName().contains("pump.showcase."))
-				return z.getSimpleName();
-			if (c instanceof Container) {
-				Container c2 = (Container) c;
-				for (Component child : c2.getComponents()) {
-					String n = getDemoName(child);
-					if (n != null)
-						return n;
-				}
-			}
-			return null;
-		}
-
-		private BufferedImage getScreenshot(JPanel panel) throws Exception {
-			Robot robot = new Robot();
-			Point p = panel.getLocationOnScreen();
-			Rectangle screenRect = new Rectangle(p.x, p.y, panel.getWidth(),
-					panel.getHeight());
-			return robot.createScreenCapture(screenRect);
 		}
 
 	};
@@ -418,6 +390,123 @@ public class PumpernickelShowcaseApp extends JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		// Type the F1 key to take a screenshot that is automatically
+		// file away in the resources/showcase directory.
+		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+
+			File showcaseScreenshotDir;
+
+			@Override
+			public void eventDispatched(AWTEvent event) {
+				KeyEvent k = (KeyEvent) event;
+				if (k.getID() == KeyEvent.KEY_RELEASED
+						&& k.getKeyCode() == KeyEvent.VK_F1) {
+					try {
+						File dir = getShowcaseScreenshotDirectory();
+						Section section = getSelectedSection();
+						String defaultName = getDemoName(section.getBody());
+						createScreenshot(new File(dir, defaultName + ".png"));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					k.consume();
+				}
+			}
+
+			private File getShowcaseScreenshotDirectory() throws Exception {
+				if (showcaseScreenshotDir == null) {
+					Collection<File> candidates = new LinkedHashSet<>();
+					File dir = new File(System.getProperty("user.dir"));
+					File[] resourceDirs = FileTreeIterator.findAll(
+							new File[] { dir }, "resources");
+					for (File resourceDir : resourceDirs) {
+						File showcaseDir = new File(resourceDir, "showcase");
+						if (showcaseDir.exists()) {
+							candidates.add(showcaseDir);
+						}
+					}
+					if (candidates.size() == 1) {
+						showcaseScreenshotDir = candidates.iterator().next();
+					} else if (candidates.size() == 0) {
+						throw new IOException(
+								"The directory \"resources/showcase\" was not found in "
+										+ dir.getAbsolutePath());
+					} else {
+						throw new IOException(
+								"Multiple candidate target directories were found: "
+										+ candidates);
+					}
+				}
+				return showcaseScreenshotDir;
+			}
+
+		}, AWTEvent.KEY_EVENT_MASK);
+	}
+
+	/**
+	 * Take a screenshot of the currently selected demo panel.
+	 * 
+	 * @param destFile
+	 *            an optional target PNG file to write to. If null then the user
+	 *            is prompted with a file dialog to choose the file destination.
+	 */
+	protected File createScreenshot(File destFile) throws Exception {
+		Section section = getSelectedSection();
+		BufferedImage bi = getScreenshot(section.getBody());
+		if (destFile == null) {
+			String defaultName = getDemoName(section.getBody());
+			destFile = FileDialogUtils.showSaveDialog(
+					PumpernickelShowcaseApp.this, "Export as...", defaultName
+							+ ".png", "png");
+		}
+		ImageIO.write(bi, "png", destFile);
+		System.out.println("Saved screenshot as " + destFile.getAbsolutePath());
+		return destFile;
+	}
+
+	/**
+	 * Return the name of the showcase demo panel in the given component.
+	 */
+	private String getDemoName(Component c) {
+		Class z = c.getClass();
+		if (z.getName().contains("pump.showcase."))
+			return z.getSimpleName();
+		if (c instanceof Container) {
+			Container c2 = (Container) c;
+			for (Component child : c2.getComponents()) {
+				String n = getDemoName(child);
+				if (n != null)
+					return n;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Capture a screenshot based on the position of the given panel.
+	 * <p>
+	 * This uses a Robot to actually capture the real screenshot in case other
+	 * floating layers/windows are meant to be captured.
+	 */
+	private BufferedImage getScreenshot(JPanel panel) throws Exception {
+		Robot robot = new Robot();
+		Point p = panel.getLocationOnScreen();
+		Rectangle screenRect = new Rectangle(p.x, p.y, panel.getWidth(),
+				panel.getHeight());
+		return robot.createScreenCapture(screenRect);
+	}
+
+	/**
+	 * Return the selected Section, or throw a NullPointerException if no
+	 * selection exists.
+	 */
+	protected Section getSelectedSection() {
+		Section section = sectionContainer.getSelectedSection();
+		if (section == null)
+			throw new NullPointerException(
+					"Please select a topic in the list on the left to capture a screenshot.");
+		return section;
 	}
 
 	/**

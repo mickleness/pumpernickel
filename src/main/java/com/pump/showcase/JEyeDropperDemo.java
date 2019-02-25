@@ -35,6 +35,15 @@ import com.pump.inspector.InspectorLayout;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JEyeDropper;
 
+/**
+ * This demos the JEyeDropper.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JEyeDropperDemo.png"
+ * alt="A screenshot of the JEyeDropperDemo.">
+ */
 public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
