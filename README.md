@@ -1,6 +1,6 @@
-# pumpernickel
-This Java project includes classes related to desktop applications, Swing, performance, image processing, data structures, and other misc topics.
+If this project seems a little hard to explain: that's because it is. It's my spare workshop full of odd bits I've code I've written over the last decade or two.
 
-Here are screenshots of the demo app:
+I try to package most of it up in the PumpernickelShowcaseApp. A few screenshots are below, but be sure to check out the [project page](https://mickleness.github.io/pumpernickel/) for more.
 
-<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRPaDLRJgAQ7Rex0q0uMlrh8V2njg5JM8-UjFJFQvu2yQWBiQAX6PA56hYkxe1zkztUb5qZZGNb7fl4/embed?start=true&loop=true&delayms=5000" frameborder="0" width="554" height="625" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+![Transition3DDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/Transition3DDemo.png) | ![XMLTextComponentHighlighterDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/XMLTextComponentHighlighterDemo.png) | ![WildcardPatternHighlighterDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/WildcardPatternHighlighterDemo.png)
+![JPopoverDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JPopoverDemo.png) | ![JColorPickerDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JColorPickerDemo.png) | ![JPEGMetaDataDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JPEGMetaDataDemo.png)
