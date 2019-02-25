@@ -1,6 +1,1 @@
-If this project seems a little hard to explain: that's because it is. It's my spare workshop full of odd bits I've code I've written over the last decade or two.
-
-I try to package most of it up in the PumpernickelShowcaseApp. A few screenshots are below, but be sure to check out the [project page](https://mickleness.github.io/pumpernickel/) for more.
-
-![Transition3DDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/Transition3DDemo.png) | ![XMLTextComponentHighlighterDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/XMLTextComponentHighlighterDemo.png) | ![WildcardPatternHighlighterDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/WildcardPatternHighlighterDemo.png)
-![JPopoverDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JPopoverDemo.png) | ![JColorPickerDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JColorPickerDemo.png) | ![JPEGMetaDataDemo Screenshot](https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JPEGMetaDataDemo.png)
+Check out the [project page](https://mickleness.github.io/pumpernickel/) for a slideshow of screenshots. That's probably the best way to get a feel for what topics are covered here.
