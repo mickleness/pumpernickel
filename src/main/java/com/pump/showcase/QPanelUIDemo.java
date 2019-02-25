@@ -297,7 +297,7 @@ public class QPanelUIDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public String getTitle() {
-		return "QPanelUI";
+		return "QPanelUI Demo";
 	}
 
 	@Override
