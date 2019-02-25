@@ -35,6 +35,15 @@ import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.plaf.CircularProgressBarUI;
 import com.pump.swing.JColorWell;
 
+/**
+ * This demos the CircularProgressBarUI.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/CircularProgressBarUIDemo.png"
+ * alt="A screenshot of the CircularProgressBarUIDemo.">
+ */
 public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 

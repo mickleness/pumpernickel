@@ -42,6 +42,15 @@ import com.pump.plaf.QPanelUI;
 import com.pump.plaf.QPanelUI.CalloutType;
 import com.pump.swing.JColorWell;
 
+/**
+ * This demonstrates the QPanelUI.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/QPanelUIDemo.png"
+ * alt="A screenshot of the QPanelUIDemo.">
+ */
 public class QPanelUIDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 

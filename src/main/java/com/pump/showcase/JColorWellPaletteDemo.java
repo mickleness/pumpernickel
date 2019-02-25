@@ -33,6 +33,15 @@ import com.pump.plaf.PaletteUI;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JPalette;
 
+/**
+ * This demos the JColorWell and JPalette.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JColorWellPaletteDemo.png"
+ * alt="A screenshot of the JColorWellPaletteDemo.">
+ */
 public class JColorWellPaletteDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 

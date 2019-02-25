@@ -41,6 +41,16 @@ import com.pump.swing.JColorWell;
 import com.pump.swing.QPopup;
 import com.pump.swing.QPopupFactory;
 
+/**
+ * This demo shows how to integrate the QPopupFactory with Swing's default
+ * ToolTipManager.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JToolTipDemo.png"
+ * alt="A screenshot of the JToolTipDemo.">
+ */
 public class JToolTipDemo extends JPanel implements ShowcaseDemo {
 
 	private static final long serialVersionUID = 1L;

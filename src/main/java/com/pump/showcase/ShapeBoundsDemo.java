@@ -25,7 +25,12 @@ import com.pump.geom.ShapeBounds;
 
 /**
  * A simple test showing off the efficiency of {@link ShapeBounds}.
- *
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/ShapeBoundsDemo.png"
+ * alt="A screenshot of the ShapeBoundsDemo.">
  **/
 public class ShapeBoundsDemo extends ShowcaseChartDemo {
 	private static final long serialVersionUID = 1L;

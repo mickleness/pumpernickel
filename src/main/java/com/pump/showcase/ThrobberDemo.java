@@ -39,6 +39,15 @@ import com.pump.plaf.ThrobberUI;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JThrobber;
 
+/**
+ * This panel shows three simple JThrobber implementations.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/ThrobberDemo.png"
+ * alt="A screenshot of the ThrobberDemo.">
+ */
 public class ThrobberDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 

@@ -28,6 +28,12 @@ import com.pump.swing.XMLTextComponentHighlighter;
  * This little demo app combines the
  * {@link com.pump.swing.XMLTextComponentHighlighter} with a
  * {@link com.pump.swing.LineNumberBorder}.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/XMLTextComponentHighlighterDemo.png"
+ * alt="A screenshot of the XMLTextComponentHighlighterDemo.">
  */
 public class XMLTextComponentHighlighterDemo extends JPanel implements
 		ShowcaseDemo {

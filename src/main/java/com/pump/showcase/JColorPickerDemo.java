@@ -32,6 +32,16 @@ import javax.swing.SwingUtilities;
 import com.pump.plaf.QPanelUI;
 import com.pump.swing.JColorPicker;
 
+/**
+ * This demos the JColorPicker.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JColorPickerDemo.png"
+ * alt="A screenshot of the JColorPickerDemo.">
+ *
+ */
 public class JColorPickerDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
@@ -181,7 +191,7 @@ public class JColorPickerDemo extends JPanel implements ShowcaseDemo {
 
 	@Override
 	public String getTitle() {
-		return "ColorPicker Demo";
+		return "JColorPicker Demo";
 	}
 
 	@Override

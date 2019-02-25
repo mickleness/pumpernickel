@@ -33,15 +33,13 @@ import com.pump.image.bmp.BmpEncoder;
 import com.pump.image.pixel.PixelIterator;
 
 /**
- * This application prompts you for a BMP file and then executes a few tests.
- * <P>
- * The first test measures the time and memory used to create a thumbnail, and
- * the second test measures the time and memory used to write a file.
+ * This demos the BmpEncoder and BmpDecoder.
  * <p>
- * The console is printed to the screen using a BasicConsole to see the results.
+ * Here is a sample screenshot of this showcase demo:
  * <p>
- * Also the BMP image itself is displayed in a separate window so you can
- * visually confirm that the results are what you expect.
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/BmpComparisonDemo.png"
+ * alt="A screenshot of the BmpComparisonDemo.">
  */
 public class BmpComparisonDemo extends ShowcaseChartDemo {
 	private static final long serialVersionUID = 1L;

@@ -20,6 +20,12 @@ import com.pump.image.transition.Transition3D;
 
 /**
  * A demo of the {@link Transition3D} classes.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/Transition3DDemo.png"
+ * alt="A screenshot of the Transition3DDemo.">
  * 
  * @see com.pump.showcase.Transition2DDemo
  */

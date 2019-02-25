@@ -45,6 +45,12 @@ import com.pump.swing.JPopover;
 /**
  * This small demo app features two horizontal gradients, and each shows below
  * it a zoomed-in image highlighting where pixels change.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/GradientTexturePaintDemo.png"
+ * alt="A screenshot of the GradientTexturePaintDemo.">
  */
 public class GradientTexturePaintDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;

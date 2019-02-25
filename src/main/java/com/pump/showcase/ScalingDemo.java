@@ -35,8 +35,13 @@ import com.pump.image.pixel.PixelIterator;
 import com.pump.image.pixel.Scaling;
 
 /**
- * A demo app that shows off the <code>Scaling</code> class.
- *
+ * This demonstrates the efficiency of the <code>Scaling</code> class.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/ScalingDemo.png"
+ * alt="A screenshot of the ScalingDemo.">
  */
 public class ScalingDemo extends ShowcaseChartDemo {
 

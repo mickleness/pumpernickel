@@ -32,7 +32,12 @@ import com.pump.util.Warnings;
 
 /**
  * A simple demo for the {@link JPEGMetaData} class.
- * 
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JPEGMetaDataDemo.png"
+ * alt="A screenshot of the JPEGMetaDataDemo.">
  */
 public class JPEGMetaDataDemo extends ShowcaseChartDemo {
 	private static final long serialVersionUID = 1L;

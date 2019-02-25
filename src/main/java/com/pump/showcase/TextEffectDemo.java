@@ -57,6 +57,16 @@ import com.pump.swing.FontComboBox;
 import com.pump.swing.JColorWell;
 import com.pump.swing.PartialLineBorder;
 
+/**
+ * This demo showcases a few different TextEffects.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/TextEffectDemo.png"
+ * alt="A screenshot of the TextEffectDemo.">
+ *
+ */
 public class TextEffectDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 

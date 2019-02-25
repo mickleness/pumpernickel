@@ -44,7 +44,12 @@ import com.pump.swing.BasicConsole;
 
 /**
  * A simple demo program showing off the {@link ClickSensitivityControl}.
- *
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/ClickSensitivityControlDemo.png"
+ * alt="A screenshot of the ClickSensitivityControlDemo.">
  **/
 public class ClickSensitivityControlDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;

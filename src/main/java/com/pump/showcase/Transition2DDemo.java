@@ -60,6 +60,12 @@ import com.pump.image.transition.ZoomTransition2D;
 
 /**
  * A demo of the {@link Transition2D} architecture.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/Transition2DDemo.png"
+ * alt="A screenshot of the Transition2DDemo.">
  * 
  * @see com.pump.showcase.Transition3DDemo
  *

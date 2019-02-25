@@ -48,6 +48,15 @@ import com.pump.swing.QPopup;
 import com.pump.swing.QPopupFactory;
 import com.pump.util.BooleanProperty;
 
+/**
+ * This demos JPopover objects.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JPopoverDemo.png"
+ * alt="A screenshot of the JPopoverDemo.">
+ */
 public class JPopoverDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 

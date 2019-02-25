@@ -57,6 +57,15 @@ import com.pump.plaf.BreadCrumbUI;
 import com.pump.swing.JBreadCrumb;
 import com.pump.swing.JBreadCrumb.BreadCrumbFormatter;
 
+/**
+ * This demos the JBreadCrumb.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/BreadCrumbDemo.png"
+ * alt="A screenshot of the BreadCrumbDemo.">
+ */
 public class BreadCrumbDemo extends JPanel implements ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 

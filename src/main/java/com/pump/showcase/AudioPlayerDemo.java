@@ -37,6 +37,15 @@ import com.pump.swing.AudioPlayerComponent;
 import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.SectionContainer.Section;
 
+/**
+ * This demos a couple of AudioPlayer UIs.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/AudioPlayerDemo.png"
+ * alt="A screenshot of the AudioPlayerDemo.">
+ */
 public class AudioPlayerDemo extends JPanel implements ShowcaseDemo {
 
 	private static final long serialVersionUID = 1L;

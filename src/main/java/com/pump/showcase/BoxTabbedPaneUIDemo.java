@@ -37,6 +37,16 @@ import com.pump.inspector.InspectorLayout;
 import com.pump.plaf.BoxTabbedPaneUI;
 import com.pump.swing.PartialLineBorder;
 
+/**
+ * This demos the BoxTabbedPaneUI.
+ * <p>
+ * Here is a sample screenshot of this showcase demo:
+ * <p>
+ * <img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/BoxTabbedPaneUIDemo.png"
+ * alt="A screenshot of the BoxTabbedPaneUIDemo.">
+ *
+ */
 public class BoxTabbedPaneUIDemo extends JPanel implements ShowcaseDemo {
 
 	private static final long serialVersionUID = 1L;
