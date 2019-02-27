@@ -106,7 +106,7 @@ public class QButtonUIDemo extends JPanel implements ShowcaseDemo {
 
 	JCheckBox enabledCheckBox = new JCheckBox("Enabled", true);
 
-	JComboBox componentTypes = new JComboBox();
+	JComboBox<Class> componentTypes = new JComboBox<>();
 
 	Map<QButtonUI, JInternalFrame> uiFrameMap = new LinkedHashMap<>();
 
@@ -280,19 +280,12 @@ public class QButtonUIDemo extends JPanel implements ShowcaseDemo {
 			}
 		});
 
-		componentTypes.setRenderer(new DefaultListCellRenderer() {
+		componentTypes.setRenderer(new LabelCellRenderer<Class>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Component getListCellRendererComponent(JList list,
-					Object value, int index, boolean isSelected,
-					boolean cellHasFocus) {
-				Class<?> type = (Class<?>) value;
-				String name = type.getName();
-				name = name.substring(name.lastIndexOf('.') + 1);
-
-				return super.getListCellRendererComponent(list, name, index,
-						isSelected, cellHasFocus);
+			protected void formatLabel(Class value) {
+				label.setText(value.getSimpleName());
 			}
 		});
 
