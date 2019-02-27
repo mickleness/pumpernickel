@@ -272,16 +272,15 @@ public class JLink extends JLabel {
 		super.paint(g);
 
 		if (drawLine) {
-			LineMetrics m = getFont().getLineMetrics(getText(), frc);
+			int baseline = getBaseline(getWidth(), getHeight());
 			Insets i = getInsets();
-			int descent = (int) m.getDescent() - 4;
 			if (isEnabled()) {
 				g.setColor(getForeground());
 			} else {
 				g.setColor(SystemColor.textInactiveText);
 			}
-			g.drawLine(i.left, getHeight() - i.bottom - descent, getWidth()
-					- i.right - 1, getHeight() - i.bottom - descent);
+			g.drawLine(i.left - 1, baseline + 1, getWidth()
+					- i.right - 1, baseline + 1);
 		}
 	}
 
