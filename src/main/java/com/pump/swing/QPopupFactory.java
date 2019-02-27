@@ -88,6 +88,7 @@ public class QPopupFactory extends PopupFactory {
 	 * @return
 	 */
 	public QPopup getQPopup(Component owner, JComponent content, int x, int y) {
+		content.setBorder(null);
 		content.setOpaque(false);
 		JPanel container = new JPanel();
 		container.setOpaque(false);
