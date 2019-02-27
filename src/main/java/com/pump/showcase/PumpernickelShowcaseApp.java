@@ -665,6 +665,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		JPanel replacement = new JPanel(new GridBagLayout());
 		JLabel header = new JLabel(title);
 		JTextArea descriptionTextArea = new JTextArea(description);
+		descriptionTextArea.setFont(header.getFont().deriveFont(14f));
 		descriptionTextArea.setEditable(false);
 		descriptionTextArea.setOpaque(false);
 		descriptionTextArea.setLineWrap(true);
