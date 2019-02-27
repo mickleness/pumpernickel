@@ -11,6 +11,7 @@
 package com.pump.showcase;
 
 import java.awt.AWTEvent;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Desktop;
@@ -64,6 +65,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
@@ -86,6 +88,7 @@ import com.pump.swing.MagnificationPanel;
 import com.pump.swing.SectionContainer.Section;
 import com.pump.swing.TextFieldPrompt;
 import com.pump.text.WildcardPattern;
+import com.pump.util.JVM;
 import com.pump.window.WindowDragger;
 import com.pump.window.WindowMenu;
 
@@ -146,6 +149,9 @@ public class PumpernickelShowcaseApp extends JFrame {
 			// the window when the app loses focus.
 			w.getRootPane().putClientProperty("Window.style", "small");
 			p = new MagnificationPanel(PumpernickelShowcaseApp.this, 40, 40, 4);
+			//on Mac the window shadows show the boundaries well enough. Otherwise let's paint it clearly:
+			if(!JVM.isMac)
+				p.setBorder(new LineBorder(Color.gray));
 			w.setLayout(new GridBagLayout());
 			w.setAlwaysOnTop(true);
 			w.setLocationRelativeTo(PumpernickelShowcaseApp.this);
