@@ -11,6 +11,7 @@
 package com.pump.plaf;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -306,6 +307,7 @@ public class WaveformSliderUI extends BasicSliderUI {
 		slider.removeMouseMotionListener(trackListener);
 		slider.addMouseListener(mouseListener);
 		slider.addMouseMotionListener(mouseListener);
+		slider.setForeground(Color.darkGray);
 	}
 
 	@Override
