@@ -160,7 +160,7 @@ public class BreadCrumbDemo extends JPanel implements ShowcaseDemo {
 
 		DefaultMutableTreeNode hitchhikersSeries = add(douglasAdams,
 				"Hitchhiker’s Series");
-		add(hitchhikersSeries, "The Hitchhiker’s Guide to the Galaxy");
+		add(hitchhikersSeries, "The Hitchhiker's Guide to the Galaxy");
 		add(hitchhikersSeries, "The Restaurant at the End of the Universe");
 		add(hitchhikersSeries, "Life, the Universe and Everything");
 		add(hitchhikersSeries, "So Long, and Thanks for All the Fish");
