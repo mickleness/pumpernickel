@@ -677,7 +677,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		c.weightx = 1;
 		c.weighty = 0;
 		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(10, 3, 3, 3);
+		c.insets = new Insets(10, 10, 3, 3);
 		replacement.add(header, c);
 		JComponent jc = HelpComponent.createHelpComponent(actionListener, null,
 				null);
@@ -694,7 +694,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 		c.gridy++;
 		c.weighty = 1;
-		c.insets = new Insets(0, 0, 0, 0);
+		c.insets = new Insets(3,3,3,3);
 		replacement.add(component, c);
 		return replacement;
 	}
