@@ -194,6 +194,9 @@ public class StrokeMouseSmoothingDemo extends JPanel implements ShowcaseDemo {
 		@Override
 		protected void paintComponent(Graphics g0) {
 			Graphics2D g = (Graphics2D) g0;
+			g0.setColor(Color.white);
+			g0.fillRect(0, 0, getWidth(), getHeight());
+			g0.setColor(Color.black);
 
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
