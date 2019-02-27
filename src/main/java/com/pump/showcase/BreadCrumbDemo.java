@@ -168,7 +168,7 @@ public class BreadCrumbDemo extends JPanel implements ShowcaseDemo {
 
 		DefaultMutableTreeNode dirkGentlySeries = add(douglasAdams,
 				"Dirk Gently Series");
-		add(dirkGentlySeries, "Dirk Gently’s Holistic Detective Agency");
+		add(dirkGentlySeries, "Dirk Gently's Holistic Detective Agency");
 		add(dirkGentlySeries, "The Long Dark Tea-Time of the Soul");
 		add(dirkGentlySeries, "The Salmon of Doubt");
 
