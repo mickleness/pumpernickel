@@ -28,6 +28,7 @@ import java.util.concurrent.Callable;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import com.pump.geom.TransformUtils;
 import com.pump.image.ImageLoader;
@@ -164,6 +165,9 @@ public class ScalingDemo extends ShowcaseChartDemo {
 		}
 	};
 
+	JLabel graphicsUilitiesLabel, scaledInstanceLabel, scalingLabel,
+			transformLabel;
+
 	public ScalingDemo() {
 		upperControls.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -173,20 +177,14 @@ public class ScalingDemo extends ShowcaseChartDemo {
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 
-		sampleImage = ImageLoader.createImage(ImageLoader.class
-				.getResource("bridge3.jpg"));
-
 		try {
-			JLabel graphicsUilitiesLabel = new JLabel("GraphicsUtilities",
-					new ImageIcon(GRAPHICS_UTILITIES_ICON.call()),
+			graphicsUilitiesLabel = new JLabel("GraphicsUtilities", null,
 					SwingConstants.CENTER);
-			JLabel scaledInstanceLabel = new JLabel("Image.getScaledInstance",
-					new ImageIcon(SCALED_INSTANCE_ICON.call()),
+			scaledInstanceLabel = new JLabel("Image.getScaledInstance", null,
 					SwingConstants.CENTER);
-			JLabel scalingLabel = new JLabel("Scaling", new ImageIcon(
-					SCALING_ICON.call()), SwingConstants.CENTER);
-			JLabel transformLabel = new JLabel("Transform", new ImageIcon(
-					TRANSFORM_ICON.call()), SwingConstants.CENTER);
+			scalingLabel = new JLabel("Scaling", null, SwingConstants.CENTER);
+			transformLabel = new JLabel("Transform", null,
+					SwingConstants.CENTER);
 
 			transformLabel
 					.setToolTipText("<html>This uses a scaling AffineTransform to render the original image at a smaller size.</html>");
@@ -215,6 +213,68 @@ public class ScalingDemo extends ShowcaseChartDemo {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+
+		Thread loadThread = new Thread() {
+			Image graphicsUtilitiesImage, scaledInstanceImage, scalingImage,
+					transformImage;
+
+			@Override
+			public void run() {
+				sampleImage = ImageLoader.createImage(ImageLoader.class
+						.getResource("bridge3.jpg"));
+				try {
+					graphicsUtilitiesImage = GRAPHICS_UTILITIES_ICON.call();
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							graphicsUilitiesLabel.setIcon(new ImageIcon(
+									graphicsUtilitiesImage));
+						}
+					});
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				try {
+					scaledInstanceImage = SCALED_INSTANCE_ICON.call();
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							scaledInstanceLabel.setIcon(new ImageIcon(
+									scaledInstanceImage));
+						}
+					});
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				try {
+					scalingImage = SCALING_ICON.call();
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							scalingLabel.setIcon(new ImageIcon(scalingImage));
+						}
+					});
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				try {
+					transformImage = TRANSFORM_ICON.call();
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							transformLabel
+									.setIcon(new ImageIcon(transformImage));
+						}
+					});
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		loadThread.start();
 	}
 
 	@Override
