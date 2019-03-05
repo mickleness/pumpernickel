@@ -33,7 +33,6 @@ import com.pump.geom.ShapeBounds;
  * alt="A screenshot of the ShapeBoundsDemo.">
  **/
 public class ShapeBoundsDemo extends ShowcaseChartDemo {
-	private static final long serialVersionUID = 1L;
 	int SAMPLE_COUNT = 10;
 
 	@Override

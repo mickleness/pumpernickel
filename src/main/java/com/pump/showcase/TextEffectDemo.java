@@ -67,252 +67,262 @@ import com.pump.swing.PartialLineBorder;
  * alt="A screenshot of the TextEffectDemo.">
  *
  */
-public class TextEffectDemo extends JPanel implements ShowcaseDemo {
-	private static final long serialVersionUID = 1L;
+public class TextEffectDemo implements ShowcaseDemo {
 
-	class PreviewPanel extends JPanel {
+	static class TextEffectDemoPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
-		PreviewPanel() {
-			setPreferredSize(new Dimension(300, 150));
-		}
+		class PreviewPanel extends JPanel {
+			private static final long serialVersionUID = 1L;
 
-		@Override
-		protected void paintComponent(Graphics g0) {
-			super.paintComponent(g0);
-			if (effect != null) {
-				Graphics2D g = (Graphics2D) g0;
-				float fraction = (float) (controller.getTime() / controller
-						.getDuration());
-				if (fraction > 1)
-					fraction = 1;
-				g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
-						RenderingHints.VALUE_STROKE_PURE);
-				effect.paint(g, fraction);
+			PreviewPanel() {
+				setPreferredSize(new Dimension(300, 150));
+			}
+
+			@Override
+			protected void paintComponent(Graphics g0) {
+				super.paintComponent(g0);
+				if (effect != null) {
+					Graphics2D g = (Graphics2D) g0;
+					float fraction = (float) (controller.getTime() / controller
+							.getDuration());
+					if (fraction > 1)
+						fraction = 1;
+					g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
+							RenderingHints.VALUE_STROKE_PURE);
+					effect.paint(g, fraction);
+				}
 			}
 		}
-	}
 
-	AnimationController controller = new AnimationController();
+		AnimationController controller = new AnimationController();
 
-	FontComboBox fontComboBox = new FontComboBox();
-	JSpinner fontSize = new JSpinner(new SpinnerNumberModel(55, 20, 100, 5));
-	JComboBox<String> effectType = new JComboBox<>();
-	JLabel duration = new JLabel();
-	JLabel durationLabel = new JLabel("Duration:");
-	JLabel fillLabel = new JLabel("Color:");
-	JLabel strokeLabel = new JLabel("Border:");
-	JLabel shadowLabel = new JLabel("Shadow:");
-	JColorWell fill = new JColorWell(OutlineTextEffect.DEFAULT_FILL);
-	JColorWell shadow = new JColorWell(OutlineTextEffect.DEFAULT_FILL.darker());
-	JColorWell stroke = new JColorWell(OutlineTextEffect.DEFAULT_STROKE);
+		FontComboBox fontComboBox = new FontComboBox();
+		JSpinner fontSize = new JSpinner(new SpinnerNumberModel(55, 20, 100, 5));
+		JComboBox<String> effectType = new JComboBox<>();
+		JLabel duration = new JLabel();
+		JLabel durationLabel = new JLabel("Duration:");
+		JLabel fillLabel = new JLabel("Color:");
+		JLabel strokeLabel = new JLabel("Border:");
+		JLabel shadowLabel = new JLabel("Shadow:");
+		JColorWell fill = new JColorWell(OutlineTextEffect.DEFAULT_FILL);
+		JColorWell shadow = new JColorWell(
+				OutlineTextEffect.DEFAULT_FILL.darker());
+		JColorWell stroke = new JColorWell(OutlineTextEffect.DEFAULT_STROKE);
 
-	JTextField textField = new JTextField("Type Text Here!");
+		JTextField textField = new JTextField("Type Text Here!");
 
-	TextEffect effect;
-	float fraction;
+		TextEffect effect;
+		float fraction;
 
-	ChangeListener changeListener = new ChangeListener() {
-		public void stateChanged(ChangeEvent e) {
+		ChangeListener changeListener = new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				refreshControls();
+			}
+		};
+
+		ActionListener actionListener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				refreshControls();
+			}
+		};
+
+		PreviewPanel preview = new PreviewPanel();
+		JPanel controls = new JPanel();
+		JLabel fontLabel1 = new JLabel("Font:");
+		JLabel fontSizeLabel = new JLabel("Size:");
+		JLabel fontLabel2 = new JLabel("Font:");
+		JRadioButton fontComicNeue = new JRadioButton("Comic Neue", true);
+		JRadioButton fontCalligraphy = new JRadioButton("Calligraphy", false);
+
+		public TextEffectDemoPanel() {
+			setLayout(new GridBagLayout());
+
+			InspectorLayout layout = new InspectorGridBagLayout(controls);
+			layout.addRow(new JLabel("Text:"), textField, true);
+			layout.addRow(new JLabel("Type:"), effectType, false);
+			layout.addRow(fontLabel1, fontComboBox, false);
+			layout.addRow(fontLabel2, fontComicNeue, fontCalligraphy);
+			layout.addRow(fontSizeLabel, fontSize, false);
+			layout.addRow(fillLabel, fill, false);
+			layout.addRow(strokeLabel, stroke, false);
+			layout.addRow(shadowLabel, shadow, false);
+
+			ButtonGroup g = new ButtonGroup();
+			g.add(fontComicNeue);
+			g.add(fontCalligraphy);
+
+			// always last, since it's uneditable
+			layout.addRow(durationLabel, duration, false);
+
+			GridBagConstraints c = new GridBagConstraints();
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weightx = 1;
+			c.weighty = 0;
+			c.fill = GridBagConstraints.BOTH;
+			add(controls, c);
+			c.gridy++;
+			c.weighty = 1;
+			c.insets = new Insets(20, 20, 0, 20);
+			add(preview, c);
+			c.gridy++;
+			c.weighty = 0;
+			c.insets = new Insets(0, 20, 20, 20);
+			add(controller, c);
+			preview.setBorder(new PartialLineBorder(Color.gray, true, true,
+					false, true));
+
+			controller.addPropertyChangeListener(
+					AnimationController.TIME_PROPERTY,
+					new PropertyChangeListener() {
+
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							preview.repaint();
+						}
+
+					});
+
+			effectType.addItem("Outline");
+			effectType.addItem("Punch");
+			effectType.addItem("Wave");
+			effectType.addItem("Explode");
+			effectType.addItem("Write");
+
+			textField.getDocument().addDocumentListener(new DocumentListener() {
+
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					refreshControls();
+				}
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					refreshControls();
+				}
+
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					refreshControls();
+				}
+
+			});
+
+			effectType.addActionListener(actionListener);
+			fontComboBox.addActionListener(actionListener);
+			fontComicNeue.addActionListener(actionListener);
+			fontCalligraphy.addActionListener(actionListener);
+			fontSize.addChangeListener(changeListener);
+			shadow.getColorSelectionModel().addChangeListener(changeListener);
+			fill.getColorSelectionModel().addChangeListener(changeListener);
+			stroke.getColorSelectionModel().addChangeListener(changeListener);
+
+			fontComboBox.selectFont("Impact");
+
+			fontCalligraphy
+					.setToolTipText("This doesn't support capital letters yet, sorry.");
+
+			preview.addComponentListener(new ComponentAdapter() {
+
+				@Override
+				public void componentResized(ComponentEvent e) {
+					refreshControls();
+				}
+
+			});
+
 			refreshControls();
 		}
-	};
 
-	ActionListener actionListener = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			refreshControls();
+		private void refreshControls() {
+			String effectName = (String) effectType.getSelectedItem();
+
+			String text = textField.getText();
+			if ("Outline".equals(effectName)) {
+				effect = new OutlineTextEffect(getEffectFont(), text,
+						preview.getWidth(), preview.getHeight(), fill
+								.getColorSelectionModel().getSelectedColor(),
+						stroke.getColorSelectionModel().getSelectedColor(),
+						shadow.getColorSelectionModel().getSelectedColor());
+				stroke.setVisible(true);
+				strokeLabel.setVisible(true);
+				shadowLabel.setVisible(true);
+				shadow.setVisible(true);
+			} else if ("Punch".equals(effectName)) {
+				effect = new PunchTextEffect(getEffectFont(), text,
+						preview.getWidth(), preview.getHeight(), fill
+								.getColorSelectionModel().getSelectedColor(),
+						shadow.getColorSelectionModel().getSelectedColor());
+				stroke.setVisible(false);
+				strokeLabel.setVisible(false);
+				shadowLabel.setVisible(true);
+				shadow.setVisible(true);
+			} else if ("Wave".equals(effectName)) {
+				effect = new WaveTextEffect(getEffectFont(), text,
+						preview.getWidth(), preview.getHeight(), fill
+								.getColorSelectionModel().getSelectedColor(),
+						stroke.getColorSelectionModel().getSelectedColor());
+				stroke.setVisible(true);
+				strokeLabel.setVisible(true);
+				shadowLabel.setVisible(false);
+				shadow.setVisible(false);
+			} else if ("Explode".equals(effectName)) {
+				effect = new ExplodeTextEffect(getEffectFont(), text,
+						preview.getWidth(), preview.getHeight(), fill
+								.getColorSelectionModel().getSelectedColor());
+				stroke.setVisible(false);
+				strokeLabel.setVisible(false);
+				shadowLabel.setVisible(false);
+				shadow.setVisible(false);
+			} else {
+				WritingFont font = fontComicNeue.isSelected() ? WritingFont.COMIC_NEUE
+						: WritingFont.CALLIGRAPHY;
+				// TODO: calligraphy doesn't support uppercase yet
+				if (!fontComicNeue.isSelected())
+					text = text.toLowerCase();
+				effect = new WriteTextEffect(font, getEffectFont().getSize(),
+						text, preview.getWidth(), preview.getHeight(), fill
+								.getColorSelectionModel().getSelectedColor());
+				stroke.setVisible(false);
+				strokeLabel.setVisible(false);
+				shadowLabel.setVisible(false);
+				shadow.setVisible(false);
+			}
+			boolean writing = effect instanceof WriteTextEffect;
+
+			fontLabel1.setVisible(!writing);
+			fontComboBox.setVisible(!writing);
+			fontLabel2.setVisible(writing);
+			fontComicNeue.setVisible(writing);
+			fontCalligraphy.setVisible(writing);
+
+			int d;
+			if (effect instanceof PunchTextEffect
+					|| effect instanceof ExplodeTextEffect
+					|| effect instanceof WriteTextEffect) {
+				d = textField.getText().length() * 90;
+			} else {
+				d = textField.getText().length() * 50;
+			}
+			float seconds = ((float) d) / 1000f;
+			duration.setText(NumberFormat.getInstance().format(seconds) + " s");
+			controller.setDuration(seconds);
+
+			preview.repaint();
 		}
-	};
 
-	PreviewPanel preview = new PreviewPanel();
-	JPanel controls = new JPanel();
-	JLabel fontLabel1 = new JLabel("Font:");
-	JLabel fontSizeLabel = new JLabel("Size:");
-	JLabel fontLabel2 = new JLabel("Font:");
-	JRadioButton fontComicNeue = new JRadioButton("Comic Neue", true);
-	JRadioButton fontCalligraphy = new JRadioButton("Calligraphy", false);
-
-	public TextEffectDemo() {
-		setLayout(new GridBagLayout());
-
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
-		layout.addRow(new JLabel("Text:"), textField, true);
-		layout.addRow(new JLabel("Type:"), effectType, false);
-		layout.addRow(fontLabel1, fontComboBox, false);
-		layout.addRow(fontLabel2, fontComicNeue, fontCalligraphy);
-		layout.addRow(fontSizeLabel, fontSize, false);
-		layout.addRow(fillLabel, fill, false);
-		layout.addRow(strokeLabel, stroke, false);
-		layout.addRow(shadowLabel, shadow, false);
-
-		ButtonGroup g = new ButtonGroup();
-		g.add(fontComicNeue);
-		g.add(fontCalligraphy);
-
-		// always last, since it's uneditable
-		layout.addRow(durationLabel, duration, false);
-
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(controls, c);
-		c.gridy++;
-		c.weighty = 1;
-		c.insets = new Insets(20, 20, 0, 20);
-		add(preview, c);
-		c.gridy++;
-		c.weighty = 0;
-		c.insets = new Insets(0, 20, 20, 20);
-		add(controller, c);
-		preview.setBorder(new PartialLineBorder(Color.gray, true, true, false,
-				true));
-
-		controller.addPropertyChangeListener(AnimationController.TIME_PROPERTY,
-				new PropertyChangeListener() {
-
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						preview.repaint();
-					}
-
-				});
-
-		effectType.addItem("Outline");
-		effectType.addItem("Punch");
-		effectType.addItem("Wave");
-		effectType.addItem("Explode");
-		effectType.addItem("Write");
-
-		textField.getDocument().addDocumentListener(new DocumentListener() {
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				refreshControls();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				refreshControls();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				refreshControls();
-			}
-
-		});
-
-		effectType.addActionListener(actionListener);
-		fontComboBox.addActionListener(actionListener);
-		fontComicNeue.addActionListener(actionListener);
-		fontCalligraphy.addActionListener(actionListener);
-		fontSize.addChangeListener(changeListener);
-		shadow.getColorSelectionModel().addChangeListener(changeListener);
-		fill.getColorSelectionModel().addChangeListener(changeListener);
-		stroke.getColorSelectionModel().addChangeListener(changeListener);
-
-		fontComboBox.selectFont("Impact");
-
-		fontCalligraphy
-				.setToolTipText("This doesn't support capital letters yet, sorry.");
-
-		preview.addComponentListener(new ComponentAdapter() {
-
-			@Override
-			public void componentResized(ComponentEvent e) {
-				refreshControls();
-			}
-
-		});
-
-		refreshControls();
+		private Font getEffectFont() {
+			Font font = (Font) fontComboBox.getSelectedItem();
+			float size = ((Number) fontSize.getValue()).floatValue();
+			font = font.deriveFont(size);
+			return font;
+		}
 	}
 
-	private void refreshControls() {
-		String effectName = (String) effectType.getSelectedItem();
-
-		String text = textField.getText();
-		if ("Outline".equals(effectName)) {
-			effect = new OutlineTextEffect(getEffectFont(), text,
-					preview.getWidth(), preview.getHeight(), fill
-							.getColorSelectionModel().getSelectedColor(),
-					stroke.getColorSelectionModel().getSelectedColor(), shadow
-							.getColorSelectionModel().getSelectedColor());
-			stroke.setVisible(true);
-			strokeLabel.setVisible(true);
-			shadowLabel.setVisible(true);
-			shadow.setVisible(true);
-		} else if ("Punch".equals(effectName)) {
-			effect = new PunchTextEffect(getEffectFont(), text,
-					preview.getWidth(), preview.getHeight(), fill
-							.getColorSelectionModel().getSelectedColor(),
-					shadow.getColorSelectionModel().getSelectedColor());
-			stroke.setVisible(false);
-			strokeLabel.setVisible(false);
-			shadowLabel.setVisible(true);
-			shadow.setVisible(true);
-		} else if ("Wave".equals(effectName)) {
-			effect = new WaveTextEffect(getEffectFont(), text,
-					preview.getWidth(), preview.getHeight(), fill
-							.getColorSelectionModel().getSelectedColor(),
-					stroke.getColorSelectionModel().getSelectedColor());
-			stroke.setVisible(true);
-			strokeLabel.setVisible(true);
-			shadowLabel.setVisible(false);
-			shadow.setVisible(false);
-		} else if ("Explode".equals(effectName)) {
-			effect = new ExplodeTextEffect(getEffectFont(), text,
-					preview.getWidth(), preview.getHeight(), fill
-							.getColorSelectionModel().getSelectedColor());
-			stroke.setVisible(false);
-			strokeLabel.setVisible(false);
-			shadowLabel.setVisible(false);
-			shadow.setVisible(false);
-		} else {
-			WritingFont font = fontComicNeue.isSelected() ? WritingFont.COMIC_NEUE
-					: WritingFont.CALLIGRAPHY;
-			// TODO: calligraphy doesn't support uppercase yet
-			if (!fontComicNeue.isSelected())
-				text = text.toLowerCase();
-			effect = new WriteTextEffect(font, getEffectFont().getSize(), text,
-					preview.getWidth(), preview.getHeight(), fill
-							.getColorSelectionModel().getSelectedColor());
-			stroke.setVisible(false);
-			strokeLabel.setVisible(false);
-			shadowLabel.setVisible(false);
-			shadow.setVisible(false);
-		}
-		boolean writing = effect instanceof WriteTextEffect;
-
-		fontLabel1.setVisible(!writing);
-		fontComboBox.setVisible(!writing);
-		fontLabel2.setVisible(writing);
-		fontComicNeue.setVisible(writing);
-		fontCalligraphy.setVisible(writing);
-
-		int d;
-		if (effect instanceof PunchTextEffect
-				|| effect instanceof ExplodeTextEffect
-				|| effect instanceof WriteTextEffect) {
-			d = textField.getText().length() * 90;
-		} else {
-			d = textField.getText().length() * 50;
-		}
-		float seconds = ((float) d) / 1000f;
-		duration.setText(NumberFormat.getInstance().format(seconds) + " s");
-		controller.setDuration(seconds);
-
-		preview.repaint();
-	}
-
-	private Font getEffectFont() {
-		Font font = (Font) fontComboBox.getSelectedItem();
-		float size = ((Number) fontSize.getValue()).floatValue();
-		font = font.deriveFont(size);
-		return font;
+	@Override
+	public JPanel createPanel(PumpernickelShowcaseApp psa) {
+		return new TextEffectDemoPanel();
 	}
 
 	@Override

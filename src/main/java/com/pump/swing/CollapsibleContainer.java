@@ -409,22 +409,9 @@ public class CollapsibleContainer extends SectionContainer {
 			revalidate();
 		}
 	};
-	int slowDownFactor;
 
 	public CollapsibleContainer() {
-		this(1);
-	}
-
-	/**
-	 * 
-	 * @param slowDownFactor
-	 *            the factor animation is slowed down by. This is intended for
-	 *            debugging or demonstrations.
-	 */
-	protected CollapsibleContainer(int slowDownFactor) {
-		super();
-		this.slowDownFactor = slowDownFactor;
-		animatingTimer = new Timer(5 * slowDownFactor, new ActionListener() {
+		animatingTimer = new Timer(5, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				synchronized (animatingTimer) {
 					midanimation.acquireUninterruptibly();
@@ -507,7 +494,7 @@ public class CollapsibleContainer extends SectionContainer {
 	}
 
 	protected JButton createHeader(Section s) {
-		return createCollapsibleButton("", true, slowDownFactor);
+		return createCollapsibleButton("", true);
 	}
 
 	LayoutBlueprint animatingBlueprint;
@@ -605,11 +592,6 @@ public class CollapsibleContainer extends SectionContainer {
 	 */
 	public static JButton createCollapsibleButton(String text,
 			boolean collapsible) {
-		return createCollapsibleButton(text, collapsible, 1);
-	}
-
-	protected static JButton createCollapsibleButton(String text,
-			boolean collapsible, int slowDownFactor) {
 		final JButton button = new JButton();
 		QButtonUI ui = new GradientButtonUI() {
 			@Override
@@ -711,8 +693,7 @@ public class CollapsibleContainer extends SectionContainer {
 		button.putClientProperty(COLLAPSIBLE, collapsible);
 		button.putClientProperty(COLLAPSED, false);
 
-		UIEffect.installTweenEffect(button, TARGET_ROTATION, ROTATION, .15f,
-				20 * slowDownFactor);
+		UIEffect.installTweenEffect(button, TARGET_ROTATION, ROTATION, .15f, 20);
 
 		return button;
 	}

@@ -11,6 +11,7 @@
 package com.pump.showcase;
 
 import java.awt.AWTEvent;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -31,6 +32,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -149,8 +152,9 @@ public class PumpernickelShowcaseApp extends JFrame {
 			// the window when the app loses focus.
 			w.getRootPane().putClientProperty("Window.style", "small");
 			p = new MagnificationPanel(PumpernickelShowcaseApp.this, 40, 40, 4);
-			//on Mac the window shadows show the boundaries well enough. Otherwise let's paint it clearly:
-			if(!JVM.isMac)
+			// on Mac the window shadows show the boundaries well enough.
+			// Otherwise let's paint it clearly:
+			if (!JVM.isMac)
 				p.setBorder(new LineBorder(Color.gray));
 			w.setLayout(new GridBagLayout());
 			w.setAlwaysOnTop(true);
@@ -377,11 +381,11 @@ public class PumpernickelShowcaseApp extends JFrame {
 					new GraphicsWriterDebuggerDemo());
 			addSection("JPEGMetaData", new JPEGMetaDataDemo());
 			addSection("QPanelUI", new QPanelUIDemo());
-			addSection("AudioPlayer", new AudioPlayerDemo(this));
+			addSection("AudioPlayer", new AudioPlayerDemo());
 			addSection("JavaTextComponentHighlighter",
-					new JavaTextComponentHighlighterDemo(true));
+					new JavaTextComponentHighlighterDemo());
 			addSection("XMLTextComponentHighlighter",
-					new XMLTextComponentHighlighterDemo(true));
+					new XMLTextComponentHighlighterDemo());
 			// addSection("Text: Search Controls", new TextSearchDemo());
 			// addSection("QuickTime: Writing Movies", new MovWriterDemo());
 			addSection("Highlighters, WildcardPattern",
@@ -543,12 +547,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		return editMenu;
 	}
 
-	private void addSection(String text, JComponent component) {
-		if (component instanceof ShowcaseDemo) {
-			ShowcaseDemo d = (ShowcaseDemo) component;
-			component = wrapDemo(component, d.getTitle(), d.getSummary(),
-					d.getHelpURL());
-		}
+	private void addSection(String text, ShowcaseDemo demo) {
 		Section section = sectionContainer.addSection(text, text);
 		masterSectionList.add(section);
 		JPanel body = section.getBody();
@@ -559,7 +558,129 @@ public class PumpernickelShowcaseApp extends JFrame {
 		c.weightx = 1;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
-		body.add(component, c);
+		body.add(new LazyDemoPanel(demo), c);
+	}
+
+	class LazyDemoPanel extends JPanel {
+		private static final long serialVersionUID = 1L;
+
+		CardLayout cardLayout = new CardLayout();
+		JPanel loadingPanel = new JPanel();
+		ShowcaseDemo showcaseDemo;
+
+		public LazyDemoPanel(ShowcaseDemo demo) {
+			super();
+			showcaseDemo = demo;
+			setLayout(cardLayout);
+			add(loadingPanel, "loading");
+			cardLayout.show(this, "loading");
+
+			// loadingPanel is never really shown to the user,
+			// so there's no point in putting a throbber or other content in it
+			addHierarchyListener(new HierarchyListener() {
+
+				@Override
+				public void hierarchyChanged(HierarchyEvent e) {
+					if (loadingPanel.isShowing()) {
+						add(createDemoPanel(), "demo");
+						cardLayout.show(LazyDemoPanel.this, "demo");
+						removeHierarchyListener(this);
+					}
+				}
+
+			});
+		}
+
+		private JComponent createDemoPanel() {
+			ActionListener actionListener = new ActionListener() {
+				JScrollPane scrollPane;
+				JFancyBox box;
+				JEditorPane textPane;
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (scrollPane == null) {
+						textPane = createTextPane(showcaseDemo.getHelpURL());
+						scrollPane = new JScrollPane(textPane);
+
+						updatePreferredSize();
+						PumpernickelShowcaseApp.this
+								.addComponentListener(new ComponentAdapter() {
+
+									@Override
+									public void componentResized(
+											ComponentEvent e) {
+										updatePreferredSize();
+									}
+
+								});
+
+						try {
+							textPane.setPage(showcaseDemo.getHelpURL());
+							box = new JFancyBox(PumpernickelShowcaseApp.this,
+									scrollPane);
+						} catch (IOException e2) {
+							e2.printStackTrace();
+						}
+					}
+					box.setVisible(true);
+				}
+
+				private void updatePreferredSize() {
+					Dimension d = PumpernickelShowcaseApp.this.getSize();
+					d.width = Math.max(200, d.width - 100);
+					d.height = Math.max(200, d.height - 100);
+					scrollPane.setMinimumSize(d);
+					scrollPane.setPreferredSize(d);
+					textPane.setMinimumSize(d);
+					textPane.setPreferredSize(d);
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							scrollPane.revalidate();
+						}
+					});
+				}
+
+			};
+
+			JPanel replacement = new JPanel(new GridBagLayout());
+			JLabel header = new JLabel(showcaseDemo.getTitle());
+			JTextArea descriptionTextArea = new JTextArea(
+					showcaseDemo.getSummary());
+			descriptionTextArea.setFont(header.getFont().deriveFont(14f));
+			descriptionTextArea.setEditable(false);
+			descriptionTextArea.setOpaque(false);
+			descriptionTextArea.setLineWrap(true);
+			descriptionTextArea.setWrapStyleWord(true);
+			header.setFont(header.getFont().deriveFont(18f));
+			GridBagConstraints c = new GridBagConstraints();
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weightx = 1;
+			c.weighty = 0;
+			c.fill = GridBagConstraints.BOTH;
+			c.insets = new Insets(10, 10, 3, 3);
+			replacement.add(header, c);
+			JComponent jc = HelpComponent.createHelpComponent(actionListener,
+					null, null);
+			c.anchor = GridBagConstraints.EAST;
+			c.fill = GridBagConstraints.NONE;
+			c.insets = new Insets(3, 3, 3, 3);
+			replacement.add(jc, c);
+			c.fill = GridBagConstraints.BOTH;
+			jc.setVisible(showcaseDemo.getHelpURL() != null);
+			c.gridy++;
+			replacement.add(descriptionTextArea, c);
+			c.gridy++;
+			replacement.add(new JSeparator(), c);
+
+			c.gridy++;
+			c.weighty = 1;
+			c.insets = new Insets(3, 3, 3, 3);
+			replacement.add(
+					showcaseDemo.createPanel(PumpernickelShowcaseApp.this), c);
+			return replacement;
+		}
 	}
 
 	public JEditorPane createTextPane(URL url) {
@@ -614,95 +735,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 		});
 
 		return textPane;
-	}
-
-	private JComponent wrapDemo(JComponent component, String title,
-			String description, final URL helpURL) {
-		ActionListener actionListener = new ActionListener() {
-			JScrollPane scrollPane;
-			JFancyBox box;
-			JEditorPane textPane;
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (scrollPane == null) {
-					textPane = createTextPane(helpURL);
-					scrollPane = new JScrollPane(textPane);
-
-					updatePreferredSize();
-					PumpernickelShowcaseApp.this
-							.addComponentListener(new ComponentAdapter() {
-
-								@Override
-								public void componentResized(ComponentEvent e) {
-									updatePreferredSize();
-								}
-
-							});
-
-					try {
-						textPane.setPage(helpURL);
-						box = new JFancyBox(PumpernickelShowcaseApp.this,
-								scrollPane);
-					} catch (IOException e2) {
-						e2.printStackTrace();
-					}
-				}
-				box.setVisible(true);
-			}
-
-			private void updatePreferredSize() {
-				Dimension d = PumpernickelShowcaseApp.this.getSize();
-				d.width = Math.max(200, d.width - 100);
-				d.height = Math.max(200, d.height - 100);
-				scrollPane.setMinimumSize(d);
-				scrollPane.setPreferredSize(d);
-				textPane.setMinimumSize(d);
-				textPane.setPreferredSize(d);
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						scrollPane.revalidate();
-					}
-				});
-			}
-
-		};
-
-		JPanel replacement = new JPanel(new GridBagLayout());
-		JLabel header = new JLabel(title);
-		JTextArea descriptionTextArea = new JTextArea(description);
-		descriptionTextArea.setFont(header.getFont().deriveFont(14f));
-		descriptionTextArea.setEditable(false);
-		descriptionTextArea.setOpaque(false);
-		descriptionTextArea.setLineWrap(true);
-		descriptionTextArea.setWrapStyleWord(true);
-		header.setFont(header.getFont().deriveFont(18f));
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(10, 10, 3, 3);
-		replacement.add(header, c);
-		JComponent jc = HelpComponent.createHelpComponent(actionListener, null,
-				null);
-		c.anchor = GridBagConstraints.EAST;
-		c.fill = GridBagConstraints.NONE;
-		c.insets = new Insets(3, 3, 3, 3);
-		replacement.add(jc, c);
-		c.fill = GridBagConstraints.BOTH;
-		jc.setVisible(helpURL != null);
-		c.gridy++;
-		replacement.add(descriptionTextArea, c);
-		c.gridy++;
-		replacement.add(new JSeparator(), c);
-
-		c.gridy++;
-		c.weighty = 1;
-		c.insets = new Insets(3,3,3,3);
-		replacement.add(component, c);
-		return replacement;
 	}
 
 	void closeFancyBoxes() {

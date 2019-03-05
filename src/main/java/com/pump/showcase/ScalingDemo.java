@@ -27,6 +27,7 @@ import java.util.concurrent.Callable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -45,8 +46,6 @@ import com.pump.image.pixel.Scaling;
  * alt="A screenshot of the ScalingDemo.">
  */
 public class ScalingDemo extends ShowcaseChartDemo {
-
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * <p>
@@ -168,7 +167,8 @@ public class ScalingDemo extends ShowcaseChartDemo {
 	JLabel graphicsUilitiesLabel, scaledInstanceLabel, scalingLabel,
 			transformLabel;
 
-	public ScalingDemo() {
+	@Override
+	public JPanel createPanel(PumpernickelShowcaseApp psa) {
 		upperControls.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -275,6 +275,8 @@ public class ScalingDemo extends ShowcaseChartDemo {
 			}
 		};
 		loadThread.start();
+
+		return super.createPanel(psa);
 	}
 
 	@Override

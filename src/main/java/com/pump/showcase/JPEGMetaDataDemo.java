@@ -40,7 +40,6 @@ import com.pump.util.Warnings;
  * alt="A screenshot of the JPEGMetaDataDemo.">
  */
 public class JPEGMetaDataDemo extends ShowcaseChartDemo {
-	private static final long serialVersionUID = 1L;
 
 	private static final int SAMPLE_COUNT = 10;
 

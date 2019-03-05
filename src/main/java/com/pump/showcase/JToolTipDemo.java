@@ -51,91 +51,158 @@ import com.pump.swing.QPopupFactory;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JToolTipDemo.png"
  * alt="A screenshot of the JToolTipDemo.">
  */
-public class JToolTipDemo extends JPanel implements ShowcaseDemo {
+public class JToolTipDemo implements ShowcaseDemo {
 
-	private static final long serialVersionUID = 1L;
+	static class JToolTipDemoPanel extends JPanel {
+		private static final long serialVersionUID = 1L;
 
-	private static final String ANY = "Any";
-	private static final String NONE = "None";
+		private static final String ANY = "Any";
+		private static final String NONE = "None";
 
-	QPopupFactory qPopupFactory;
+		QPopupFactory qPopupFactory;
 
-	JPanel controls = new JPanel();
-	JComboBox<String> toolTipTypeComboBox = new JComboBox<>();
-	JLabel fontLabel = new JLabel("Font:");
-	JLabel fontSizeLabel = new JLabel("Font Size:");
-	FontComboBox fontComboBox = new FontComboBox();
-	JSlider fontSizeSlider = new JSlider(10, 20, 12);
-	JLabel colorLabel = new JLabel("Color:");
-	JColorWell color = new JColorWell(Color.white);
-	JLabel calloutTypeLabel = new JLabel("Callout:");
-	JButton sampleButton = new JButton("Sample Button");
-	JComboBox<String> calloutTypeComboBox = new JComboBox<>();
+		JPanel controls = new JPanel();
+		JComboBox<String> toolTipTypeComboBox = new JComboBox<>();
+		JLabel fontLabel = new JLabel("Font:");
+		JLabel fontSizeLabel = new JLabel("Font Size:");
+		FontComboBox fontComboBox = new FontComboBox();
+		JSlider fontSizeSlider = new JSlider(10, 20, 12);
+		JLabel colorLabel = new JLabel("Color:");
+		JColorWell color = new JColorWell(Color.white);
+		JLabel calloutTypeLabel = new JLabel("Callout:");
+		JButton sampleButton = new JButton("Sample Button");
+		JComboBox<String> calloutTypeComboBox = new JComboBox<>();
 
-	public JToolTipDemo() {
+		public JToolTipDemoPanel() {
 
-		toolTipTypeComboBox.addItem("Use QPopupFactory");
-		toolTipTypeComboBox.addItem("Use Default PopupFactory");
-		toolTipTypeComboBox.addItem("Off");
+			toolTipTypeComboBox.addItem("Use QPopupFactory");
+			toolTipTypeComboBox.addItem("Use Default PopupFactory");
+			toolTipTypeComboBox.addItem("Off");
 
-		calloutTypeComboBox.addItem(ANY);
-		calloutTypeComboBox.addItem(NONE);
-		for (CalloutType t : CalloutType.values()) {
-			calloutTypeComboBox.addItem(t.name());
+			calloutTypeComboBox.addItem(ANY);
+			calloutTypeComboBox.addItem(NONE);
+			for (CalloutType t : CalloutType.values()) {
+				calloutTypeComboBox.addItem(t.name());
+			}
+
+			InspectorLayout layout = new InspectorGridBagLayout(controls);
+			layout.addRow(new JLabel("Tooltip Type:"), toolTipTypeComboBox,
+					false);
+			layout.addRow(fontLabel, fontComboBox, false);
+			layout.addRow(fontSizeLabel, fontSizeSlider, false);
+			layout.addRow(colorLabel, color, false);
+			layout.addRow(calloutTypeLabel, calloutTypeComboBox);
+
+			Font font = UIManager.getFont("ToolTip.font");
+			fontComboBox.selectFont(font.getName());
+			fontSizeSlider.setValue(font.getSize());
+
+			ActionListener actionListener = new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					refreshUI();
+				}
+
+			};
+			ChangeListener changeListener = new ChangeListener() {
+
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					refreshUI();
+				}
+
+			};
+
+			calloutTypeComboBox.addActionListener(actionListener);
+			color.getColorSelectionModel().addChangeListener(changeListener);
+			fontSizeSlider.addChangeListener(changeListener);
+			fontComboBox.addActionListener(actionListener);
+			toolTipTypeComboBox.addActionListener(actionListener);
+
+			sampleButton.setToolTipText("Sample ToolTip");
+
+			setLayout(new GridBagLayout());
+			GridBagConstraints c = new GridBagConstraints();
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weightx = 1;
+			c.weighty = 0;
+			c.fill = GridBagConstraints.BOTH;
+			c.anchor = GridBagConstraints.NORTH;
+			add(controls, c);
+			c.gridy++;
+			c.weighty = 1;
+			c.fill = GridBagConstraints.NONE;
+			c.insets = new Insets(10, 10, 10, 10);
+			add(sampleButton, c);
+
+			refreshUI();
 		}
 
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
-		layout.addRow(new JLabel("Tooltip Type:"), toolTipTypeComboBox, false);
-		layout.addRow(fontLabel, fontComboBox, false);
-		layout.addRow(fontSizeLabel, fontSizeSlider, false);
-		layout.addRow(colorLabel, color, false);
-		layout.addRow(calloutTypeLabel, calloutTypeComboBox);
-
-		Font font = UIManager.getFont("ToolTip.font");
-		fontComboBox.selectFont(font.getName());
-		fontSizeSlider.setValue(font.getSize());
-
-		ActionListener actionListener = new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				refreshUI();
+		protected void refreshUI() {
+			if (qPopupFactory == null) {
+				qPopupFactory = new QPopupFactory(
+						PopupFactory.getSharedInstance());
+			}
+			if (toolTipTypeComboBox.getSelectedIndex() == 1) {
+				PopupFactory.setSharedInstance(qPopupFactory
+						.getParentDelegate());
+			} else {
+				qPopupFactory.setToolTipCallout(!NONE
+						.equals(calloutTypeComboBox.getSelectedItem()));
+				PopupFactory.setSharedInstance(qPopupFactory);
 			}
 
-		};
-		ChangeListener changeListener = new ChangeListener() {
+			boolean tooltipsActive = toolTipTypeComboBox.getSelectedIndex() != 2;
+			if (tooltipsActive) {
+				Font font = (Font) fontComboBox.getSelectedItem();
+				float size = fontSizeSlider.getValue();
+				font = font.deriveFont(size);
+				UIManager.getDefaults().put("ToolTip.font", font);
 
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				refreshUI();
+				Color background = color.getColorSelectionModel()
+						.getSelectedColor();
+				Color foreground;
+				float[] hsl = HSLColor.fromRGB(background, null);
+				if (hsl[2] < .5) {
+					foreground = Color.white;
+				} else {
+					foreground = Color.black;
+				}
+
+				UIManager.getDefaults().put("ToolTip.background", background);
+				UIManager.getDefaults().put("ToolTip.foreground", foreground);
 			}
 
-		};
+			ToolTipManager.sharedInstance().setEnabled(
+					toolTipTypeComboBox.getSelectedIndex() != 2);
 
-		calloutTypeComboBox.addActionListener(actionListener);
-		color.getColorSelectionModel().addChangeListener(changeListener);
-		fontSizeSlider.addChangeListener(changeListener);
-		fontComboBox.addActionListener(actionListener);
-		toolTipTypeComboBox.addActionListener(actionListener);
+			colorLabel.setVisible(tooltipsActive);
+			color.setVisible(tooltipsActive);
+			fontSizeLabel.setVisible(tooltipsActive);
+			fontSizeSlider.setVisible(tooltipsActive);
+			fontLabel.setVisible(tooltipsActive);
+			fontComboBox.setVisible(tooltipsActive);
 
-		sampleButton.setToolTipText("Sample ToolTip");
+			calloutTypeLabel
+					.setVisible(toolTipTypeComboBox.getSelectedIndex() == 0);
+			calloutTypeComboBox.setVisible(toolTipTypeComboBox
+					.getSelectedIndex() == 0);
 
-		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		c.anchor = GridBagConstraints.NORTH;
-		add(controls, c);
-		c.gridy++;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.NONE;
-		c.insets = new Insets(10, 10, 10, 10);
-		add(sampleButton, c);
+			CalloutType type = null;
+			try {
+				type = CalloutType.valueOf((String) calloutTypeComboBox
+						.getSelectedItem());
+			} catch (Exception e) {
+			}
+			sampleButton.putClientProperty(QPopup.PROPERTY_CALLOUT_TYPE, type);
+		}
+	}
 
-		refreshUI();
+	@Override
+	public JPanel createPanel(PumpernickelShowcaseApp psa) {
+		return new JToolTipDemoPanel();
 	}
 
 	@Override
@@ -161,63 +228,6 @@ public class JToolTipDemo extends JPanel implements ShowcaseDemo {
 	@Override
 	public Class<?>[] getClasses() {
 		return new Class[] { JToolTip.class, PopupFactory.class, Popup.class };
-	}
-
-	protected void refreshUI() {
-		if (qPopupFactory == null) {
-			qPopupFactory = new QPopupFactory(PopupFactory.getSharedInstance());
-		}
-		if (toolTipTypeComboBox.getSelectedIndex() == 1) {
-			PopupFactory.setSharedInstance(qPopupFactory.getParentDelegate());
-		} else {
-			qPopupFactory.setToolTipCallout(!NONE.equals(calloutTypeComboBox
-					.getSelectedItem()));
-			PopupFactory.setSharedInstance(qPopupFactory);
-		}
-
-		boolean tooltipsActive = toolTipTypeComboBox.getSelectedIndex() != 2;
-		if (tooltipsActive) {
-			Font font = (Font) fontComboBox.getSelectedItem();
-			float size = fontSizeSlider.getValue();
-			font = font.deriveFont(size);
-			UIManager.getDefaults().put("ToolTip.font", font);
-
-			Color background = color.getColorSelectionModel()
-					.getSelectedColor();
-			Color foreground;
-			float[] hsl = HSLColor.fromRGB(background, null);
-			if (hsl[2] < .5) {
-				foreground = Color.white;
-			} else {
-				foreground = Color.black;
-			}
-
-			UIManager.getDefaults().put("ToolTip.background", background);
-			UIManager.getDefaults().put("ToolTip.foreground", foreground);
-		}
-
-		ToolTipManager.sharedInstance().setEnabled(
-				toolTipTypeComboBox.getSelectedIndex() != 2);
-
-		colorLabel.setVisible(tooltipsActive);
-		color.setVisible(tooltipsActive);
-		fontSizeLabel.setVisible(tooltipsActive);
-		fontSizeSlider.setVisible(tooltipsActive);
-		fontLabel.setVisible(tooltipsActive);
-		fontComboBox.setVisible(tooltipsActive);
-
-		calloutTypeLabel
-				.setVisible(toolTipTypeComboBox.getSelectedIndex() == 0);
-		calloutTypeComboBox
-				.setVisible(toolTipTypeComboBox.getSelectedIndex() == 0);
-
-		CalloutType type = null;
-		try {
-			type = CalloutType.valueOf((String) calloutTypeComboBox
-					.getSelectedItem());
-		} catch (Exception e) {
-		}
-		sampleButton.putClientProperty(QPopup.PROPERTY_CALLOUT_TYPE, type);
 	}
 
 }

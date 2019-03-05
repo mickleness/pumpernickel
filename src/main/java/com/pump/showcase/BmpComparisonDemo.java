@@ -42,7 +42,6 @@ import com.pump.image.pixel.PixelIterator;
  * alt="A screenshot of the BmpComparisonDemo.">
  */
 public class BmpComparisonDemo extends ShowcaseChartDemo {
-	private static final long serialVersionUID = 1L;
 
 	static final int SAMPLE_COUNT = 10;
 

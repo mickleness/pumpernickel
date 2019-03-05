@@ -61,7 +61,7 @@ import com.pump.swing.JFancyBox;
  */
 public class ClipperDemo extends ShowcaseChartDemo {
 	static final GeneralPath[][] p = new GeneralPath[3][100];
-	private static final long serialVersionUID = 1L;
+
 	static {
 		Random r = new Random(0);
 		for (int degree = 0; degree < 3; degree++) {

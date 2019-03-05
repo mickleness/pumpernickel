@@ -42,105 +42,114 @@ import com.pump.swing.JPalette;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JColorWellPaletteDemo.png"
  * alt="A screenshot of the JColorWellPaletteDemo.">
  */
-public class JColorWellPaletteDemo extends JPanel implements ShowcaseDemo {
-	private static final long serialVersionUID = 1L;
+public class JColorWellPaletteDemo implements ShowcaseDemo {
 
-	JPalette palette = new JPalette();
-	JPanel controls = new JPanel();
-	JComboBox<String> typeComboBox = new JComboBox<>();
-	JSlider cellSizeSlider = new JSlider(10, 50, 20);
-	JComboBox<String> highlightComboBox = new JComboBox<>();
-	JColorWell colorWell = new JColorWell();
+	static class JColorWellPaletteDemoPanel extends JPanel {
+		private static final long serialVersionUID = 1L;
 
-	public JColorWellPaletteDemo() {
-		super(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(controls, c);
-		c.gridy++;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.NORTH;
-		add(palette, c);
+		JPalette palette = new JPalette();
+		JPanel controls = new JPanel();
+		JComboBox<String> typeComboBox = new JComboBox<>();
+		JSlider cellSizeSlider = new JSlider(10, 50, 20);
+		JComboBox<String> highlightComboBox = new JComboBox<>();
+		JColorWell colorWell = new JColorWell();
 
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
-		layout.addRow(new JLabel("Type:"), typeComboBox);
-		layout.addRow(new JLabel("Size:"), cellSizeSlider);
-		layout.addRow(new JLabel("Highlight:"), highlightComboBox);
-		layout.addRow(new JLabel("Color:"), colorWell);
+		public JColorWellPaletteDemoPanel() {
+			super(new GridBagLayout());
+			GridBagConstraints c = new GridBagConstraints();
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weightx = 1;
+			c.weighty = 0;
+			c.fill = GridBagConstraints.BOTH;
+			add(controls, c);
+			c.gridy++;
+			c.weighty = 1;
+			c.fill = GridBagConstraints.NONE;
+			c.anchor = GridBagConstraints.NORTH;
+			add(palette, c);
 
-		palette.setColorSelectionModel(colorWell.getColorSelectionModel());
+			InspectorLayout layout = new InspectorGridBagLayout(controls);
+			layout.addRow(new JLabel("Type:"), typeComboBox);
+			layout.addRow(new JLabel("Size:"), cellSizeSlider);
+			layout.addRow(new JLabel("Highlight:"), highlightComboBox);
+			layout.addRow(new JLabel("Color:"), colorWell);
 
-		ActionListener actionListener = new ActionListener() {
+			palette.setColorSelectionModel(colorWell.getColorSelectionModel());
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				refreshPalette();
+			ActionListener actionListener = new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					refreshPalette();
+				}
+			};
+			ChangeListener changeListener = new ChangeListener() {
+
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					refreshPalette();
+				}
+
+			};
+			highlightComboBox.addActionListener(actionListener);
+			cellSizeSlider.addChangeListener(changeListener);
+			typeComboBox.addActionListener(actionListener);
+
+			typeComboBox.addItem("Flat UI");
+			typeComboBox.addItem("Small");
+			typeComboBox.addItem("Large");
+			typeComboBox.addItem("Fluent");
+			typeComboBox.addItem("Metro");
+
+			highlightComboBox.addItem("None");
+			highlightComboBox.addItem("Scribble");
+			highlightComboBox.addItem("Bevel");
+
+			palette.getColorSelectionModel().addChangeListener(changeListener);
+			changeListener.stateChanged(null);
+		}
+
+		protected void refreshPalette() {
+			palette.setUI(new PaletteUI());
+			Color[][] colors;
+			if (typeComboBox.getSelectedIndex() == 2) {
+				colors = JPalette.get150Colors();
+			} else if (typeComboBox.getSelectedIndex() == 1) {
+				colors = JPalette.get54Colors();
+			} else if (typeComboBox.getSelectedIndex() == 3) {
+				colors = JPalette.getFluentColors();
+			} else if (typeComboBox.getSelectedIndex() == 4) {
+				colors = JPalette.getMetroColors();
+			} else {
+				colors = JPalette.getFlatUIColors();
 			}
-		};
-		ChangeListener changeListener = new ChangeListener() {
+			palette.setColors(colors);
 
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				refreshPalette();
+			if (highlightComboBox.getSelectedIndex() == 0) {
+				palette.putClientProperty(PaletteUI.PROPERTY_HIGHLIGHT, null);
+			} else if (highlightComboBox.getSelectedIndex() == 1) {
+				palette.putClientProperty(PaletteUI.PROPERTY_HIGHLIGHT,
+						PaletteUI.VALUE_HIGHLIGHT_SCRIBBLE);
+			} else {
+				palette.putClientProperty(PaletteUI.PROPERTY_HIGHLIGHT,
+						PaletteUI.VALUE_HIGHLIGHT_BEVEL);
 			}
 
-		};
-		highlightComboBox.addActionListener(actionListener);
-		cellSizeSlider.addChangeListener(changeListener);
-		typeComboBox.addActionListener(actionListener);
+			palette.setCellSize(cellSizeSlider.getValue());
+			palette.setPreferredSize(palette.getUI().getPreferredSize(palette));
 
-		typeComboBox.addItem("Flat UI");
-		typeComboBox.addItem("Small");
-		typeComboBox.addItem("Large");
-		typeComboBox.addItem("Fluent");
-		typeComboBox.addItem("Metro");
-
-		highlightComboBox.addItem("None");
-		highlightComboBox.addItem("Scribble");
-		highlightComboBox.addItem("Bevel");
-
-		palette.getColorSelectionModel().addChangeListener(changeListener);
-		changeListener.stateChanged(null);
+			colorWell.putClientProperty(ColorWellUI.DOWN_KEY_ACTION_PROPERTY,
+					new ShowColorPaletteActionListener(colors));
+			colorWell.putClientProperty(
+					ColorWellUI.SINGLE_CLICK_ACTION_PROPERTY,
+					new ShowColorPaletteActionListener(colors));
+		}
 	}
 
-	protected void refreshPalette() {
-		palette.setUI(new PaletteUI());
-		Color[][] colors;
-		if (typeComboBox.getSelectedIndex() == 2) {
-			colors = JPalette.get150Colors();
-		} else if (typeComboBox.getSelectedIndex() == 1) {
-			colors = JPalette.get54Colors();
-		} else if (typeComboBox.getSelectedIndex() == 3) {
-			colors = JPalette.getFluentColors();
-		} else if (typeComboBox.getSelectedIndex() == 4) {
-			colors = JPalette.getMetroColors();
-		} else {
-			colors = JPalette.getFlatUIColors();
-		}
-		palette.setColors(colors);
-
-		if (highlightComboBox.getSelectedIndex() == 0) {
-			palette.putClientProperty(PaletteUI.PROPERTY_HIGHLIGHT, null);
-		} else if (highlightComboBox.getSelectedIndex() == 1) {
-			palette.putClientProperty(PaletteUI.PROPERTY_HIGHLIGHT,
-					PaletteUI.VALUE_HIGHLIGHT_SCRIBBLE);
-		} else {
-			palette.putClientProperty(PaletteUI.PROPERTY_HIGHLIGHT,
-					PaletteUI.VALUE_HIGHLIGHT_BEVEL);
-		}
-
-		palette.setCellSize(cellSizeSlider.getValue());
-		palette.setPreferredSize(palette.getUI().getPreferredSize(palette));
-
-		colorWell.putClientProperty(ColorWellUI.DOWN_KEY_ACTION_PROPERTY,
-				new ShowColorPaletteActionListener(colors));
-		colorWell.putClientProperty(ColorWellUI.SINGLE_CLICK_ACTION_PROPERTY,
-				new ShowColorPaletteActionListener(colors));
+	@Override
+	public JPanel createPanel(PumpernickelShowcaseApp psa) {
+		return new JColorWellPaletteDemoPanel();
 	}
 
 	@Override

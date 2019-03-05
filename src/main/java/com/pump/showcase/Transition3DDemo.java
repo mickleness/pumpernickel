@@ -30,14 +30,11 @@ import com.pump.image.transition.Transition3D;
  * @see com.pump.showcase.Transition2DDemo
  */
 public class Transition3DDemo extends TransitionDemo {
-	private static final long serialVersionUID = 1L;
 
-	static Transition[][] transitions = new Transition[][] {
-			CubeTransition3D.getDemoTransitions(),
-			FlipTransition3D.getDemoTransitions() };
-
-	public Transition3DDemo() {
-		super(transitions);
+	@Override
+	protected Transition[][] getTransitions() {
+		return new Transition[][] { CubeTransition3D.getDemoTransitions(),
+				FlipTransition3D.getDemoTransitions() };
 	}
 
 	@Override
