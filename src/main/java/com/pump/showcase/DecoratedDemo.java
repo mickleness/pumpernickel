@@ -634,6 +634,9 @@ public class DecoratedDemo extends JPanel implements ShowcaseDemo {
 							playPauseDecoration, warningDecoration,
 							refreshDecoration });
 
+			// give the aqua progress indicator just a little bit more vertical
+			// space, and do it before setting UI for efficiency
+			getDecoratedComponent().setRowHeight(24);
 			getDecoratedComponent().setUI(new DecoratedTreeUI());
 			DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
 			renderer.setBackgroundSelectionColor(SystemColor.textHighlight);
@@ -644,9 +647,6 @@ public class DecoratedDemo extends JPanel implements ShowcaseDemo {
 			 * demo app just to verify that they can work in this order...
 			 */
 			getDecoratedComponent().setCellRenderer(renderer);
-			// give the aqua progress indicator just a little bit more vertical
-			// space
-			getDecoratedComponent().setRowHeight(24);
 			getDecoratedComponent().setPreferredSize(new Dimension(200, 150));
 
 			setLayout(new GridBagLayout());
