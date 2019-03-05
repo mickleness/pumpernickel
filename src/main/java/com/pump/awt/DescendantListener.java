@@ -20,6 +20,7 @@ import java.awt.event.HierarchyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.CellRendererPane;
 import javax.swing.event.MouseInputAdapter;
 
 import com.pump.util.WeakSet;
@@ -127,7 +128,8 @@ public abstract class DescendantListener {
 
 		@Override
 		public void componentAdded(ContainerEvent e) {
-			processAddition(e.getChild());
+			if (!(e.getContainer() instanceof CellRendererPane))
+				processAddition(e.getChild());
 		}
 
 		@Override
