@@ -317,6 +317,10 @@ public class ScalingDemo extends ShowcaseChartDemo {
 	@Override
 	protected Map<String, Map<String, Long>> collectData(int... params)
 			throws Exception {
+		while (sampleImage == null) {
+			Thread.sleep(50);
+		}
+
 		if (data == null) {
 			data = new LinkedHashMap<>();
 			data.put(GROUP_TIME, new LinkedHashMap<String, Long>());
