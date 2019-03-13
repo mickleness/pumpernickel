@@ -12,42 +12,23 @@ package com.pump.image;
 
 import java.awt.image.BufferedImage;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Executors;
 
 /**
  * A factory for {@link ImageContext} objects to render images.
  */
 public abstract class ImageContextFactory {
 	private static ImageContextFactory factory = new ImageContextFactory() {
-		boolean isJFXInstalled = isJFXInstalled();
 
 		ExecutorService staticService;
 
 		public ImageContext create(BufferedImage bi) {
-			try {
-				// if(isJFXInstalled)
-				// return new JFXImageContext(bi);
-			} catch (Error e) {
-				// eat this
-			}
-			if (staticService == null) {
-				staticService = new ForkJoinPool(8);
+			synchronized (this) {
+				if (staticService == null) {
+					staticService = Executors.newFixedThreadPool(8);
+				}
 			}
 			return new BasicImageContext(bi, staticService);
-		}
-
-		private boolean isJFXInstalled() {
-			try {
-				Class<?> k = Class.forName("javafx.embed.swing.JFXPanel");
-				k.newInstance();
-				return true;
-			} catch (Throwable t) {
-				System.err
-						.println("ImageContextFactory: JFX is not available.");
-				if (!(t instanceof ClassNotFoundException))
-					t.printStackTrace();
-				return false;
-			}
 		}
 	};
 
