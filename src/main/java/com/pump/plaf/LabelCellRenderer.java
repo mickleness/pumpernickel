@@ -167,10 +167,17 @@ public class LabelCellRenderer<T> implements ListCellRenderer<T>,
 			}
 		} else {
 			if (isSelected) {
-				label.setBackground(UIManager
-						.getColor("Menu.selectionBackground"));
-				label.setForeground(UIManager
-						.getColor("Menu.selectionForeground"));
+				if (jc instanceof JList) {
+					label.setBackground(UIManager
+							.getColor("List.selectionBackground"));
+					label.setForeground(UIManager
+							.getColor("List.selectionForeground"));
+				} else {
+					label.setBackground(UIManager
+							.getColor("Menu.selectionBackground"));
+					label.setForeground(UIManager
+							.getColor("Menu.selectionForeground"));
+				}
 			} else {
 				Color background = jc.getBackground();
 				if (rowNumber % 2 == 1 && isAlternatingBackround(jc)) {
