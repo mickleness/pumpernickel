@@ -44,7 +44,7 @@ import com.pump.swing.JColorWell;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/CircularProgressBarUIDemo.png"
  * alt="A screenshot of the CircularProgressBarUIDemo.">
  */
-public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
+public class CircularProgressBarUIDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JPanel controls = new JPanel();
@@ -211,7 +211,7 @@ public class CircularProgressBarUIDemo extends JPanel implements ShowcaseDemo {
 	};
 
 	public CircularProgressBarUIDemo() {
-		super(new GridBagLayout());
+		setLayout(new GridBagLayout());
 
 		InspectorGridBagLayout layout = new InspectorGridBagLayout(controls);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);

@@ -53,7 +53,7 @@ import com.pump.util.PartitionIterator;
 /**
  * An abstract UI to demo a set of transitions.
  */
-public abstract class TransitionDemo extends JPanel implements ShowcaseDemo {
+public abstract class TransitionDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	BufferedImage img1;

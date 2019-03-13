@@ -66,7 +66,7 @@ import com.pump.swing.SectionContainer.Section;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/DecoratedDemo.png"
  * alt="A screenshot of the DecoratedDemo.">
  */
-public class DecoratedDemo extends JPanel implements ShowcaseDemo {
+public class DecoratedDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	static final String NAME_PLAYABLE = "Playable";

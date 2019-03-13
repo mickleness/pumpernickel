@@ -69,7 +69,7 @@ import com.pump.plaf.ZoomIconPaintUIEffect;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/QButtonUIDemo.png"
  * alt="A screenshot of the QButtonUIDemo.">
  */
-public class QButtonUIDemo extends JPanel implements ShowcaseDemo {
+public class QButtonUIDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 	private static Icon DEMO_ICON = new GearIcon(14, Color.darkGray);
 

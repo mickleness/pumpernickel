@@ -25,7 +25,6 @@ import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
@@ -44,7 +43,7 @@ import com.pump.swing.QDialog;
  * This is a simple app demoing the {@link AWTMonitor}
  * 
  */
-public class AWTMonitorDemo extends JPanel implements ShowcaseDemo {
+public class AWTMonitorDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JButton lockButton = new JButton("Lock for 5 seconds");

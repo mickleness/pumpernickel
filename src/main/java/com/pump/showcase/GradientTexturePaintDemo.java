@@ -52,7 +52,7 @@ import com.pump.swing.JPopover;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/GradientTexturePaintDemo.png"
  * alt="A screenshot of the GradientTexturePaintDemo.">
  */
-public class GradientTexturePaintDemo extends JPanel implements ShowcaseDemo {
+public class GradientTexturePaintDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	class GradientPanel extends JPanel {

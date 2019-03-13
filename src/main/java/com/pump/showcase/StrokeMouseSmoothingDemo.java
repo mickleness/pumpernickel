@@ -66,7 +66,7 @@ import com.pump.plaf.PlafPaintUtils;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/StrokeMouseSmoothingDemo.png"
  * alt="A screenshot of the StrokeMouseSmoothingDemo.">
  */
-public class StrokeMouseSmoothingDemo extends JPanel implements ShowcaseDemo {
+public class StrokeMouseSmoothingDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	/**

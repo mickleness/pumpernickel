@@ -39,7 +39,7 @@ import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.inspector.InspectorLayout;
 import com.pump.util.IntegerProperty;
 
-public class GraphicsWriterDebuggerDemo extends JPanel implements ShowcaseDemo {
+public class GraphicsWriterDebuggerDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JTextComponent textBox = new JTextPane();

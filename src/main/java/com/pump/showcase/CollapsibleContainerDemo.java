@@ -50,7 +50,7 @@ import com.pump.swing.SectionContainer.Section;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/CollapsibleContainerDemo.png"
  * alt="A screenshot of the CollapsibleContainerDemo.">
  */
-public class CollapsibleContainerDemo extends JPanel implements ShowcaseDemo {
+public class CollapsibleContainerDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	class PopupListener extends MouseAdapter {

@@ -41,7 +41,7 @@ import com.pump.plaf.AquaAngleSliderUI;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/AngleSliderUIDemo.png"
  * alt="A screenshot of the AngleSliderUIDemo.">
  */
-public class AngleSliderUIDemo extends JPanel implements ShowcaseDemo {
+public class AngleSliderUIDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JPanel controls = new JPanel(new GridBagLayout());
@@ -70,7 +70,7 @@ public class AngleSliderUIDemo extends JPanel implements ShowcaseDemo {
 	};
 
 	public AngleSliderUIDemo() {
-		super(new GridBagLayout());
+		setLayout(new GridBagLayout());
 		InspectorLayout layout = new InspectorGridBagLayout(controls);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);
 		layout.addRow(new JLabel("Style:"), uiTypeComboBox, false);

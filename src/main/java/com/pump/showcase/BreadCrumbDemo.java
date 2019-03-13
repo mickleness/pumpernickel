@@ -66,7 +66,7 @@ import com.pump.swing.JBreadCrumb.BreadCrumbFormatter;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/BreadCrumbDemo.png"
  * alt="A screenshot of the BreadCrumbDemo.">
  */
-public class BreadCrumbDemo extends JPanel implements ShowcaseDemo {
+public class BreadCrumbDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	static class DoubleSlashIcon implements Icon {

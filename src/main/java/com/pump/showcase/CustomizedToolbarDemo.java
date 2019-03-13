@@ -41,7 +41,7 @@ import com.pump.util.JVM;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/CustomizedToolbarDemo.png"
  * alt="A screenshot of the CustomizedToolbarDemo.">
  */
-public class CustomizedToolbarDemo extends JPanel implements ShowcaseDemo {
+public class CustomizedToolbarDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	private static final String TOOLBAR_NAME = "toolbar demo";

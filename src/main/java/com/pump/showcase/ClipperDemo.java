@@ -60,6 +60,8 @@ import com.pump.swing.JFancyBox;
  * alt="A screenshot of the ClipperDemo.">
  */
 public class ClipperDemo extends ShowcaseChartDemo {
+	private static final long serialVersionUID = 1L;
+
 	static final GeneralPath[][] p = new GeneralPath[3][100];
 
 	static {

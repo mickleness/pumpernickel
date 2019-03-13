@@ -42,7 +42,7 @@ import com.pump.swing.JPalette;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JColorWellPaletteDemo.png"
  * alt="A screenshot of the JColorWellPaletteDemo.">
  */
-public class JColorWellPaletteDemo extends JPanel implements ShowcaseDemo {
+public class JColorWellPaletteDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JPalette palette = new JPalette();
@@ -53,7 +53,7 @@ public class JColorWellPaletteDemo extends JPanel implements ShowcaseDemo {
 	JColorWell colorWell = new JColorWell();
 
 	public JColorWellPaletteDemo() {
-		super(new GridBagLayout());
+		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;

@@ -51,7 +51,7 @@ import com.pump.swing.QPopupFactory;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JToolTipDemo.png"
  * alt="A screenshot of the JToolTipDemo.">
  */
-public class JToolTipDemo extends JPanel implements ShowcaseDemo {
+public class JToolTipDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	private static final String ANY = "Any";

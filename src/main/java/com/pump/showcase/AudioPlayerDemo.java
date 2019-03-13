@@ -46,7 +46,7 @@ import com.pump.swing.SectionContainer.Section;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/AudioPlayerDemo.png"
  * alt="A screenshot of the AudioPlayerDemo.">
  */
-public class AudioPlayerDemo extends JPanel implements ShowcaseDemo {
+public class AudioPlayerDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JComboBox<URL> comboBox = new JComboBox<>();

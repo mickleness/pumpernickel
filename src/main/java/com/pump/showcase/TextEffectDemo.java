@@ -67,7 +67,7 @@ import com.pump.swing.PartialLineBorder;
  * alt="A screenshot of the TextEffectDemo.">
  *
  */
-public class TextEffectDemo extends JPanel implements ShowcaseDemo {
+public class TextEffectDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	class PreviewPanel extends JPanel {

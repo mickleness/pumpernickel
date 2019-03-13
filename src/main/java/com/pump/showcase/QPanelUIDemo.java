@@ -51,7 +51,7 @@ import com.pump.swing.JColorWell;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/QPanelUIDemo.png"
  * alt="A screenshot of the QPanelUIDemo.">
  */
-public class QPanelUIDemo extends JPanel implements ShowcaseDemo {
+public class QPanelUIDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JToggleButton presetBox = new JToggleButton("Box");

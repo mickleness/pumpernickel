@@ -12,12 +12,15 @@ package com.pump.showcase;
 
 import java.net.URL;
 
-public interface ShowcaseDemo {
+import javax.swing.JPanel;
+
+public abstract class ShowcaseDemo extends JPanel {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * This is the title of the demo panel.
 	 */
-	public String getTitle();
+	public abstract String getTitle();
 
 	/**
 	 * Return text explaining this demo that appears immediately below the
@@ -27,21 +30,21 @@ public interface ShowcaseDemo {
 	 * "This compares". It is OK to include paragraphs of text, but preferably
 	 * the first paragraph should be a very short/simple 1-2 sentence summary.
 	 */
-	public String getSummary();
+	public abstract String getSummary();
 
 	/**
 	 * Return the optional URL of a html resource to display for additional
 	 * reading.
 	 */
-	public URL getHelpURL();
+	public abstract URL getHelpURL();
 
 	/**
 	 * Return relevant keywords to assist in searches.
 	 */
-	public String[] getKeywords();
+	public abstract String[] getKeywords();
 
 	/**
 	 * Return classes that are demonstrated to assist in searches.
 	 */
-	public Class<?>[] getClasses();
+	public abstract Class<?>[] getClasses();
 }

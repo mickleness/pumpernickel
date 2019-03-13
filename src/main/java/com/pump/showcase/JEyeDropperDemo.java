@@ -44,7 +44,7 @@ import com.pump.swing.JEyeDropper;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JEyeDropperDemo.png"
  * alt="A screenshot of the JEyeDropperDemo.">
  */
-public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
+public class JEyeDropperDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JButton showEyeDropper = new JButton("Show Eyedropper");

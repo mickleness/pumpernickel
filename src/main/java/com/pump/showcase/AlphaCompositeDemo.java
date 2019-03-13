@@ -64,7 +64,7 @@ import com.pump.swing.JPopover;
  *      href="https://javagraphics.blogspot.com/2009/10/alphacomposites-which-does-what.html">AlphaComposites:
  *      Which Does What?</a>
  */
-public class AlphaCompositeDemo extends JPanel implements ShowcaseDemo {
+public class AlphaCompositeDemo extends ShowcaseDemo {
 
 	private static final long serialVersionUID = 1L;
 

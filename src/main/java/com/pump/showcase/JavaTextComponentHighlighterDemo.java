@@ -16,7 +16,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.net.URL;
 
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
@@ -37,8 +36,7 @@ import com.pump.text.TextBoxHighlightPainter;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JavaTextComponentHighlighterDemo.png"
  * alt="A screenshot of the JavaTextComponentHighlighterDemo.">
  */
-public class JavaTextComponentHighlighterDemo extends JPanel implements
-		ShowcaseDemo {
+public class JavaTextComponentHighlighterDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JTextPane textPane = new JTextPane();

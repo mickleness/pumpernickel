@@ -57,7 +57,7 @@ import com.pump.util.BooleanProperty;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JPopoverDemo.png"
  * alt="A screenshot of the JPopoverDemo.">
  */
-public class JPopoverDemo extends JPanel implements ShowcaseDemo {
+public class JPopoverDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JTextComponent textBox = new JTextPane();

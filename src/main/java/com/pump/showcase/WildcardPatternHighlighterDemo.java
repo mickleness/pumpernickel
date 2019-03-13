@@ -55,8 +55,7 @@ import com.pump.text.WildcardPattern;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/WildcardPatternHighlighterDemo.png"
  * alt="A screenshot of the WildcardPatternHighlighterDemo.">
  */
-public class WildcardPatternHighlighterDemo extends JPanel implements
-		ShowcaseDemo {
+public class WildcardPatternHighlighterDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	CollapsibleContainer sectionContainer = new CollapsibleContainer();
@@ -121,7 +120,7 @@ public class WildcardPatternHighlighterDemo extends JPanel implements
 	};
 
 	public WildcardPatternHighlighterDemo() {
-		super(new GridBagLayout());
+		setLayout(new GridBagLayout());
 
 		Section underlineSection = sectionContainer.addSection("underline",
 				"Underline Highlighter");

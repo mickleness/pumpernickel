@@ -45,6 +45,7 @@ import com.pump.image.pixel.Scaling;
  * alt="A screenshot of the ScalingDemo.">
  */
 public class ScalingDemo extends ShowcaseChartDemo {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * <p>

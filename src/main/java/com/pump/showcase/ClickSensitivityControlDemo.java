@@ -51,7 +51,7 @@ import com.pump.swing.BasicConsole;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/ClickSensitivityControlDemo.png"
  * alt="A screenshot of the ClickSensitivityControlDemo.">
  **/
-public class ClickSensitivityControlDemo extends JPanel implements ShowcaseDemo {
+public class ClickSensitivityControlDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	class Widget extends JComponent {

@@ -47,7 +47,7 @@ import com.pump.swing.PartialLineBorder;
  * alt="A screenshot of the BoxTabbedPaneUIDemo.">
  *
  */
-public class BoxTabbedPaneUIDemo extends JPanel implements ShowcaseDemo {
+public class BoxTabbedPaneUIDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JTabbedPane tabs = new JTabbedPane();

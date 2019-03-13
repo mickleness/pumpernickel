@@ -42,7 +42,7 @@ import com.pump.swing.JColorPicker;
  * alt="A screenshot of the JColorPickerDemo.">
  *
  */
-public class JColorPickerDemo extends JPanel implements ShowcaseDemo {
+public class JColorPickerDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JColorPicker picker = new JColorPicker(true, false);

@@ -48,7 +48,7 @@ import com.pump.swing.JThrobber;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/ThrobberDemo.png"
  * alt="A screenshot of the ThrobberDemo.">
  */
-public class ThrobberDemo extends JPanel implements ShowcaseDemo {
+public class ThrobberDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JPanel controls = new JPanel();

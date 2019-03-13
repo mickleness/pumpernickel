@@ -51,7 +51,7 @@ import com.pump.geom.Spiral2D;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/Spiral2DDemo.png"
  * alt="A screenshot of the Spiral2DDemo.">
  */
-public class Spiral2DDemo extends JPanel implements ShowcaseDemo {
+public class Spiral2DDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JLabel coilGapLabel = new JLabel("Coil Gap:");

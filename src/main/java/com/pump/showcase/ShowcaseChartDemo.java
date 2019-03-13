@@ -29,7 +29,7 @@ import javax.swing.SwingUtilities;
 
 import com.pump.plaf.CircularProgressBarUI;
 
-public abstract class ShowcaseChartDemo extends JPanel implements ShowcaseDemo {
+public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 
 	private static final long serialVersionUID = 1L;
 
@@ -73,7 +73,7 @@ public abstract class ShowcaseChartDemo extends JPanel implements ShowcaseDemo {
 	boolean isShowing = false;
 
 	public ShowcaseChartDemo() {
-		super(new GridBagLayout());
+		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
