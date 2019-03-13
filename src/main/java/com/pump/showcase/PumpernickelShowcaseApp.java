@@ -352,50 +352,47 @@ public class PumpernickelShowcaseApp extends JFrame {
 		getContentPane().setPreferredSize(new Dimension(800, 600));
 
 		try {
-			addSection("Transition2D", new Transition2DDemo());
-			addSection("Transition3D", new Transition3DDemo());
-			addSection("BmpEncoder, BmpDecoder", new BmpComparisonDemo());
-			addSection("AlphaComposite", new AlphaCompositeDemo());
-			addSection("TextEffect", new TextEffectDemo());
-			addSection("AWTMonitor", new AWTMonitorDemo());
-			addSection("GradientTexturePaint", new GradientTexturePaintDemo());
-			addSection("ClickSensitivityControl",
-					new ClickSensitivityControlDemo());
-			addSection("ShapeBounds", new ShapeBoundsDemo());
-			addSection("Clipper", new ClipperDemo());
-			addSection("AngleSliderUI", new AngleSliderUIDemo());
-			addSection("Spiral2D", new Spiral2DDemo());
-			addSection("DecoratedListUI, DecoratedTreeUI", new DecoratedDemo());
-			addSection("JThrobber", new ThrobberDemo());
-			addSection("JBreadCrumb", new BreadCrumbDemo());
-			addSection("CollapsibleContainer", new CollapsibleContainerDemo());
-			addSection("CustomizedToolbar", new CustomizedToolbarDemo());
-			addSection("JToolTip, QPopupFactory", new JToolTipDemo());
-			addSection("JPopover", new JPopoverDemo());
-			addSection("Scaling", new ScalingDemo());
+			addSection("Transition2D", "Transition2DDemo");
+			addSection("Transition3D", "Transition3DDemo");
+			addSection("BmpEncoder, BmpDecoder", "BmpComparisonDemo");
+			addSection("AlphaComposite", "AlphaCompositeDemo");
+			addSection("TextEffect", "TextEffectDemo");
+			addSection("AWTMonitor", "AWTMonitorDemo");
+			addSection("GradientTexturePaint", "GradientTexturePaintDemo");
+			addSection("ClickSensitivityControl", "ClickSensitivityControlDemo");
+			addSection("ShapeBounds", "ShapeBoundsDemo");
+			addSection("Clipper", "ClipperDemo");
+			addSection("AngleSliderUI", "AngleSliderUIDemo");
+			addSection("Spiral2D", "Spiral2DDemo");
+			addSection("DecoratedListUI, DecoratedTreeUI", "DecoratedDemo");
+			addSection("JThrobber", "ThrobberDemo");
+			addSection("JBreadCrumb", "BreadCrumbDemo");
+			addSection("CollapsibleContainer", "CollapsibleContainerDemo");
+			addSection("CustomizedToolbar", "CustomizedToolbarDemo");
+			addSection("JToolTip, QPopupFactory", "JToolTipDemo");
+			addSection("JPopover", "JPopoverDemo");
+			addSection("Scaling", "ScalingDemo");
 			// addSection("ImageQuantization", new ImageQuantizationDemo());
-			addSection("JColorPicker", new JColorPickerDemo());
-			addSection("QButtonUI", new QButtonUIDemo());
+			addSection("JColorPicker", "JColorPickerDemo");
+			addSection("QButtonUI", "QButtonUIDemo");
 			// addSection("Shapes: AreaX Tests", new AreaXTestPanel());
-			addSection("GraphicsWriterDebugger",
-					new GraphicsWriterDebuggerDemo());
-			addSection("JPEGMetaData", new JPEGMetaDataDemo());
-			addSection("QPanelUI", new QPanelUIDemo());
-			addSection("AudioPlayer", new AudioPlayerDemo());
+			addSection("GraphicsWriterDebugger", "GraphicsWriterDebuggerDemo");
+			addSection("JPEGMetaData", "JPEGMetaDataDemo");
+			addSection("QPanelUI", "QPanelUIDemo");
+			addSection("AudioPlayer", "AudioPlayerDemo");
 			addSection("JavaTextComponentHighlighter",
-					new JavaTextComponentHighlighterDemo());
+					"JavaTextComponentHighlighterDemo");
 			addSection("XMLTextComponentHighlighter",
-					new XMLTextComponentHighlighterDemo());
+					"XMLTextComponentHighlighterDemo");
 			// addSection("Text: Search Controls", new TextSearchDemo());
 			// addSection("QuickTime: Writing Movies", new MovWriterDemo());
 			addSection("Highlighters, WildcardPattern",
-					new WildcardPatternHighlighterDemo());
-			addSection("BoxTabbedPaneUI", new BoxTabbedPaneUIDemo());
-			addSection("CircularProgressBarUI", new CircularProgressBarUIDemo());
-			addSection("Strokes, MouseSmoothing",
-					new StrokeMouseSmoothingDemo());
-			addSection("JColorWell, JPalette", new JColorWellPaletteDemo());
-			addSection("JEyeDropper", new JEyeDropperDemo());
+					"WildcardPatternHighlighterDemo");
+			addSection("BoxTabbedPaneUI", "BoxTabbedPaneUIDemo");
+			addSection("CircularProgressBarUI", "CircularProgressBarUIDemo");
+			addSection("Strokes, MouseSmoothing", "StrokeMouseSmoothingDemo");
+			addSection("JColorWell, JPalette", "JColorWellPaletteDemo");
+			addSection("JEyeDropper", "JEyeDropperDemo");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -547,7 +544,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		return editMenu;
 	}
 
-	private void addSection(String text, ShowcaseDemo demo) {
+	private void addSection(String text, String demoClassName) {
 		Section section = sectionContainer.addSection(text, text);
 		masterSectionList.add(section);
 		JPanel body = section.getBody();
@@ -558,7 +555,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		c.weightx = 1;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
-		body.add(new LazyDemoPanel(demo), c);
+		body.add(new LazyDemoPanel(demoClassName), c);
 	}
 
 	class LazyDemoPanel extends JPanel {
@@ -566,11 +563,12 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 		CardLayout cardLayout = new CardLayout();
 		JPanel loadingPanel = new JPanel();
+		String demoClassName;
 		ShowcaseDemo showcaseDemo;
 
-		public LazyDemoPanel(ShowcaseDemo demo) {
+		public LazyDemoPanel(String demoClassName) {
 			super();
-			showcaseDemo = demo;
+			this.demoClassName = "com.pump.showcase." + demoClassName;
 			setLayout(cardLayout);
 			add(loadingPanel, "loading");
 			cardLayout.show(this, "loading");
@@ -592,6 +590,12 @@ public class PumpernickelShowcaseApp extends JFrame {
 		}
 
 		private JComponent createDemoPanel() {
+			try {
+				Class demoClass = Class.forName(demoClassName);
+				showcaseDemo = (ShowcaseDemo) demoClass.newInstance();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 			ActionListener actionListener = new ActionListener() {
 				JScrollPane scrollPane;
 				JFancyBox box;
@@ -677,8 +681,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			c.gridy++;
 			c.weighty = 1;
 			c.insets = new Insets(3, 3, 3, 3);
-			replacement.add(
-					showcaseDemo.createPanel(PumpernickelShowcaseApp.this), c);
+			replacement.add((JPanel) showcaseDemo, c);
 			return replacement;
 		}
 	}

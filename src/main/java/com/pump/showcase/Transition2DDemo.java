@@ -71,23 +71,23 @@ import com.pump.image.transition.ZoomTransition2D;
  *
  */
 public class Transition2DDemo extends TransitionDemo {
+	private static final long serialVersionUID = 1L;
 
-	@Override
-	protected Transition[][] getTransitions() {
-		return new Transition[][] { BarsTransition2D.getDemoTransitions(),
+	public Transition2DDemo() {
+		super(BarsTransition2D.getDemoTransitions(),
 				new Transition[] { new BlendTransition2D() },
-				BlindsTransition2D.getDemoTransitions(),
-				BoxTransition2D.getDemoTransitions(),
-				CheckerboardTransition2D.getDemoTransitions(),
-				CircleTransition2D.getDemoTransitions(),
+				BlindsTransition2D.getDemoTransitions(), BoxTransition2D
+						.getDemoTransitions(), CheckerboardTransition2D
+						.getDemoTransitions(), CircleTransition2D
+						.getDemoTransitions(),
 				new Transition[] { new CollapseTransition2D() },
 				new Transition[] { new CurtainTransition2D() },
 				DiamondsTransition2D.getDemoTransitions(),
 				DocumentaryTransition2D.getDemoTransitions(),
 				new Transition[] { new DotsTransition2D() },
-				new Transition[] { new DropTransition2D() },
-				FlurryTransition2D.getDemoTransitions(),
-				FunkyWipeTransition2D.getDemoTransitions(),
+				new Transition[] { new DropTransition2D() }, FlurryTransition2D
+						.getDemoTransitions(), FunkyWipeTransition2D
+						.getDemoTransitions(),
 				new Transition[] { new GooTransition2D() },
 				HalftoneTransition2D.getDemoTransitions(),
 				new Transition[] { new KaleidoscopeTransition2D() },
@@ -97,25 +97,25 @@ public class Transition2DDemo extends TransitionDemo {
 				new Transition[] { new MirageTransition2D() },
 				new Transition[] { new MotionBlendTransition2D() },
 				new Transition[] { new RefractiveTransition2D() },
-				PivotTransition2D.getDemoTransitions(),
-				PushTransition2D.getDemoTransitions(),
-				RadialWipeTransition2D.getDemoTransitions(),
-				RevealTransition2D.getDemoTransitions(),
-				RotateTransition2D.getDemoTransitions(),
-				ScaleTransition2D.getDemoTransitions(),
-				ScribbleTransition2D.getDemoTransitions(),
-				SlideTransition2D.getDemoTransitions(),
-				SpiralTransition2D.getDemoTransitions(),
-				SplitTransition2D.getDemoTransitions(),
+				PivotTransition2D.getDemoTransitions(), PushTransition2D
+						.getDemoTransitions(), RadialWipeTransition2D
+						.getDemoTransitions(), RevealTransition2D
+						.getDemoTransitions(), RotateTransition2D
+						.getDemoTransitions(), ScaleTransition2D
+						.getDemoTransitions(), ScribbleTransition2D
+						.getDemoTransitions(), SlideTransition2D
+						.getDemoTransitions(), SpiralTransition2D
+						.getDemoTransitions(), SplitTransition2D
+						.getDemoTransitions(),
 				new Transition[] { new SquareRainTransition2D() },
 				new Transition[] { new SquaresTransition2D() },
-				StarTransition2D.getDemoTransitions(),
-				StarsTransition2D.getDemoTransitions(),
-				SwivelTransition2D.getDemoTransitions(),
-				TossTransition2D.getDemoTransitions(),
-				WaveTransition2D.getDemoTransitions(),
-				WipeTransition2D.getDemoTransitions(),
-				ZoomTransition2D.getDemoTransitions() };
+				StarTransition2D.getDemoTransitions(), StarsTransition2D
+						.getDemoTransitions(), SwivelTransition2D
+						.getDemoTransitions(), TossTransition2D
+						.getDemoTransitions(), WaveTransition2D
+						.getDemoTransitions(), WipeTransition2D
+						.getDemoTransitions(), ZoomTransition2D
+						.getDemoTransitions());
 	}
 
 	@Override

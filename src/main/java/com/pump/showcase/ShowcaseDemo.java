@@ -12,16 +12,7 @@ package com.pump.showcase;
 
 import java.net.URL;
 
-import javax.swing.JPanel;
-
 public interface ShowcaseDemo {
-
-	/**
-	 * Create the panel to show in the showcase demo app.
-	 * <p>
-	 * The panels are loaded lazily to improve app startup time.
-	 */
-	public JPanel createPanel(PumpernickelShowcaseApp psa);
 
 	/**
 	 * This is the title of the demo panel.

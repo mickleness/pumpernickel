@@ -46,108 +46,99 @@ import com.pump.swing.SectionContainer.Section;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/AudioPlayerDemo.png"
  * alt="A screenshot of the AudioPlayerDemo.">
  */
-public class AudioPlayerDemo implements ShowcaseDemo {
+public class AudioPlayerDemo extends JPanel implements ShowcaseDemo {
+	private static final long serialVersionUID = 1L;
 
-	static class AudioPlayerDemoPanel extends JPanel {
-		private static final long serialVersionUID = 1L;
+	JComboBox<URL> comboBox = new JComboBox<>();
+	AudioPlayerComponent audioPlayerComponent = new AudioPlayerComponent();
 
-		JComboBox<URL> comboBox = new JComboBox<>();
-		AudioPlayerComponent audioPlayerComponent = new AudioPlayerComponent();
+	public static final URL[] urls = new URL[] {
+			AudioPlayerDemo.class.getResource("Bugaboo.wav"),
+			AudioPlayerDemo.class.getResource("Ludic.wav"),
+			AudioPlayerDemo.class.getResource("Unctuous.wav")
 
-		public static final URL[] urls = new URL[] {
-				AudioPlayerDemo.class.getResource("Bugaboo.wav"),
-				AudioPlayerDemo.class.getResource("Ludic.wav"),
-				AudioPlayerDemo.class.getResource("Unctuous.wav")
+	};
 
-		};
+	CollapsibleContainer container = new CollapsibleContainer();
+	Section playerSection = container.addSection("player",
+			"AudioPlayerUI, WaveformSliderUI");
+	Section listSection = container.addSection("aqua-list", "AquaAudioListUI");
 
-		CollapsibleContainer container = new CollapsibleContainer();
-		Section playerSection = container.addSection("player",
-				"AudioPlayerUI, WaveformSliderUI");
-		Section listSection = container.addSection("aqua-list",
-				"AquaAudioListUI");
+	public AudioPlayerDemo() {
+		PumpernickelShowcaseApp.installSections(this, container, playerSection,
+				listSection);
 
-		public AudioPlayerDemoPanel() {
-			PumpernickelShowcaseApp.installSections(this, container,
-					playerSection, listSection);
-
-			setupPlayerComponent();
-			setupAquaList();
-		}
-
-		private void setupPlayerComponent() {
-			JPanel controls = new JPanel();
-			controls.setOpaque(false);
-			InspectorLayout layout = new InspectorGridBagLayout(controls);
-			layout.addRow(new JLabel("WAV File:"), comboBox, false);
-			layout.addRow(audioPlayerComponent, SwingConstants.CENTER, true);
-
-			playerSection.getBody().setLayout(new GridBagLayout());
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			c.weightx = 1;
-			c.weighty = 1;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.anchor = GridBagConstraints.NORTH;
-			playerSection.getBody().add(controls, c);
-
-			comboBox.setRenderer(new LabelCellRenderer<URL>(comboBox, true) {
-
-				@Override
-				protected void formatLabel(URL value) {
-					if (value == null) {
-						label.setText("Custom...");
-						label.setFont(label.getFont().deriveFont(Font.ITALIC));
-					} else {
-						String s = value.toString();
-						int i = s.lastIndexOf('/');
-						s = s.substring(i + 1);
-						label.setText(s);
-						label.setFont(label.getFont().deriveFont(0));
-					}
-				}
-
-			});
-			comboBox.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					URL url = (URL) comboBox.getSelectedItem();
-					if (url == null) {
-						try {
-							audioPlayerComponent.getUI().doBrowseForFile(
-									audioPlayerComponent);
-						} catch (UserCancelledException u) {
-							// do nothing
-						}
-					} else {
-						audioPlayerComponent.setSource(url);
-					}
-				}
-			});
-
-			for (URL url : urls) {
-				comboBox.addItem(url);
-			}
-			// the null URL is used to open a FileDialog
-			comboBox.addItem(null);
-		}
-
-		private void setupAquaList() {
-			DefaultListModel<URL> listModel = new DefaultListModel<>();
-			JList<URL> list = new JList<>(listModel);
-			for (URL url : urls) {
-				listModel.addElement(url);
-			}
-			list.setUI(new AquaAudioListUI());
-			listSection.getBody().add(list);
-			list.setOpaque(false);
-		}
+		setupPlayerComponent();
+		setupAquaList();
 	}
 
-	@Override
-	public JPanel createPanel(PumpernickelShowcaseApp psa) {
-		return new AudioPlayerDemoPanel();
+	private void setupPlayerComponent() {
+		JPanel controls = new JPanel();
+		controls.setOpaque(false);
+		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		layout.addRow(new JLabel("WAV File:"), comboBox, false);
+		layout.addRow(audioPlayerComponent, SwingConstants.CENTER, true);
+
+		playerSection.getBody().setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.anchor = GridBagConstraints.NORTH;
+		playerSection.getBody().add(controls, c);
+
+		comboBox.setRenderer(new LabelCellRenderer<URL>(comboBox, true) {
+
+			@Override
+			protected void formatLabel(URL value) {
+				if (value == null) {
+					label.setText("Custom...");
+					label.setFont(label.getFont().deriveFont(Font.ITALIC));
+				} else {
+					String s = value.toString();
+					int i = s.lastIndexOf('/');
+					s = s.substring(i + 1);
+					label.setText(s);
+					label.setFont(label.getFont().deriveFont(0));
+				}
+			}
+
+		});
+		comboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				URL url = (URL) comboBox.getSelectedItem();
+				if (url == null) {
+					try {
+						audioPlayerComponent.getUI().doBrowseForFile(
+								audioPlayerComponent);
+					} catch (UserCancelledException u) {
+						// do nothing
+					}
+				} else {
+					audioPlayerComponent.setSource(url);
+				}
+			}
+		});
+
+		for (URL url : urls) {
+			comboBox.addItem(url);
+		}
+		// the null URL is used to open a FileDialog
+		comboBox.addItem(null);
+	}
+
+	private void setupAquaList() {
+		DefaultListModel<URL> listModel = new DefaultListModel<>();
+		JList<URL> list = new JList<>(listModel);
+		for (URL url : urls) {
+			listModel.addElement(url);
+		}
+		list.setUI(new AquaAudioListUI());
+		listSection.getBody().add(list);
+		list.setOpaque(false);
 	}
 
 	@Override

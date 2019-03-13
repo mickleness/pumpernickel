@@ -41,64 +41,56 @@ import com.pump.util.JVM;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/CustomizedToolbarDemo.png"
  * alt="A screenshot of the CustomizedToolbarDemo.">
  */
-public class CustomizedToolbarDemo implements ShowcaseDemo {
-	static class CustomizedToolbarDemoPanel extends JPanel {
-		private static final long serialVersionUID = 1L;
+public class CustomizedToolbarDemo extends JPanel implements ShowcaseDemo {
+	private static final long serialVersionUID = 1L;
 
-		private static final String TOOLBAR_NAME = "toolbar demo";
+	private static final String TOOLBAR_NAME = "toolbar demo";
 
-		static {
-			// normally you want your toolbar to be the same across multiple
-			// sessions, but we want our demo to reset:
-			CustomizedToolbar.resetPreferences(TOOLBAR_NAME);
-		}
-
-		JButton customize = new JButton("Customize...");
-		// these are the components we [may] display in the toolbar:
-		JComponent[] list = new JComponent[] { customize,
-				new JCheckBox("Check box"), new JLabel("Label"),
-				new JButton("Button"), new JSlider() };
-		CustomizedToolbar toolbar = new CustomizedToolbar(list, new String[] {
-				"0", "\t", "1" }, TOOLBAR_NAME);
-
-		public CustomizedToolbarDemoPanel() {
-
-			for (int a = 0; a < list.length; a++) {
-				list[a].setName("" + a); // give every component a unique name
-				list[a].setOpaque(false);
-			}
-
-			ActionListener showCustomizeAction = new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					toolbar.displayDialog(JVM.isMac ? 350 : 280);
-				}
-			};
-			customize.addActionListener(showCustomizeAction);
-
-			setLayout(new GridBagLayout());
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			c.weightx = 1;
-			c.weighty = 0;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			add(toolbar, c);
-			c.gridy++;
-			c.weighty = 1;
-			c.fill = GridBagConstraints.BOTH;
-			JPanel fluff = new JPanel();
-			fluff.setBorder(new PartialLineBorder(Color.lightGray, new Insets(
-					1, 0, 0, 0)));
-			fluff.setUI(new TexturePaintPanelUI(PlafPaintUtils
-					.getCheckerBoard(3)));
-			fluff.setOpaque(false);
-			add(fluff, c);
-		}
+	static {
+		// normally you want your toolbar to be the same across multiple
+		// sessions, but we want our demo to reset:
+		CustomizedToolbar.resetPreferences(TOOLBAR_NAME);
 	}
 
-	@Override
-	public JPanel createPanel(PumpernickelShowcaseApp psa) {
-		return new CustomizedToolbarDemoPanel();
+	JButton customize = new JButton("Customize...");
+	// these are the components we [may] display in the toolbar:
+	JComponent[] list = new JComponent[] { customize,
+			new JCheckBox("Check box"), new JLabel("Label"),
+			new JButton("Button"), new JSlider() };
+	CustomizedToolbar toolbar = new CustomizedToolbar(list, new String[] { "0",
+			"\t", "1" }, TOOLBAR_NAME);
+
+	public CustomizedToolbarDemo() {
+
+		for (int a = 0; a < list.length; a++) {
+			list[a].setName("" + a); // give every component a unique name
+			list[a].setOpaque(false);
+		}
+
+		ActionListener showCustomizeAction = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				toolbar.displayDialog(JVM.isMac ? 350 : 280);
+			}
+		};
+		customize.addActionListener(showCustomizeAction);
+
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		add(toolbar, c);
+		c.gridy++;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		JPanel fluff = new JPanel();
+		fluff.setBorder(new PartialLineBorder(Color.lightGray, new Insets(1, 0,
+				0, 0)));
+		fluff.setUI(new TexturePaintPanelUI(PlafPaintUtils.getCheckerBoard(3)));
+		fluff.setOpaque(false);
+		add(fluff, c);
 	}
 
 	@Override

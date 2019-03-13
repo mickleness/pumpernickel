@@ -44,97 +44,87 @@ import com.pump.swing.JEyeDropper;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JEyeDropperDemo.png"
  * alt="A screenshot of the JEyeDropperDemo.">
  */
-public class JEyeDropperDemo implements ShowcaseDemo {
-	static class JEyeDropperDemoPanel extends JPanel {
-		private static final long serialVersionUID = 1L;
+public class JEyeDropperDemo extends JPanel implements ShowcaseDemo {
+	private static final long serialVersionUID = 1L;
 
-		JButton showEyeDropper = new JButton("Show Eyedropper");
-		JSpinner diameterSpinner = new JSpinner(new SpinnerNumberModel(120, 20,
-				400, 10));
-		JSpinner magSpinner = new JSpinner(
-				new SpinnerNumberModel(10, JEyeDropper.MAGNIFICATION_MIN,
-						JEyeDropper.MAGNIFICATION_MAX, 1));
-		JPanel controls = new JPanel();
-		JColorWell colorWell = new JColorWell();
+	JButton showEyeDropper = new JButton("Show Eyedropper");
+	JSpinner diameterSpinner = new JSpinner(new SpinnerNumberModel(120, 20,
+			400, 10));
+	JSpinner magSpinner = new JSpinner(new SpinnerNumberModel(10,
+			JEyeDropper.MAGNIFICATION_MIN, JEyeDropper.MAGNIFICATION_MAX, 1));
+	JPanel controls = new JPanel();
+	JColorWell colorWell = new JColorWell();
 
-		public JEyeDropperDemoPanel() {
+	public JEyeDropperDemo() {
 
-			InspectorLayout layout = new InspectorGridBagLayout(controls);
-			layout.addRow(new JLabel("Diameter:"), diameterSpinner);
-			layout.addRow(new JLabel("Magnification:"), magSpinner);
-			layout.addRow(new JLabel("Color:"), colorWell);
-			layout.addRow(showEyeDropper, SwingConstants.CENTER, false);
+		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		layout.addRow(new JLabel("Diameter:"), diameterSpinner);
+		layout.addRow(new JLabel("Magnification:"), magSpinner);
+		layout.addRow(new JLabel("Color:"), colorWell);
+		layout.addRow(showEyeDropper, SwingConstants.CENTER, false);
 
-			showEyeDropper.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// wait for the button to fully
-					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
+		showEyeDropper.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// wait for the button to fully
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
 
-							// we need the eyedropper to capture the correct
-							// image,
-							// so we need to:
+						// we need the eyedropper to capture the correct
+						// image,
+						// so we need to:
 
-							// step 1: remove the focus ring
-							KeyboardFocusManager
-									.getCurrentKeyboardFocusManager()
-									.clearGlobalFocusOwner();
+						// step 1: remove the focus ring
+						KeyboardFocusManager.getCurrentKeyboardFocusManager()
+								.clearGlobalFocusOwner();
 
-							// step 2: repaint immediately
-							showEyeDropper.paintImmediately(0, 0,
-									showEyeDropper.getWidth(),
-									showEyeDropper.getHeight());
+						// step 2: repaint immediately
+						showEyeDropper.paintImmediately(0, 0,
+								showEyeDropper.getWidth(),
+								showEyeDropper.getHeight());
 
-							showEyeDropper();
-						}
-					});
-				}
-			});
-			add(controls);
-			colorWell.getColorSelectionModel().setSelectedColor(Color.black);
-			colorWell.setEnabled(false);
-		}
-
-		protected void showEyeDropper() {
-			try {
-				JFrame owner = (JFrame) SwingUtilities
-						.getWindowAncestor(showEyeDropper);
-				int diameter = (int) diameterSpinner.getValue();
-				final JEyeDropper d = new JEyeDropper(owner, diameter);
-				d.getButton().putClientProperty(
-						JEyeDropper.PROPERTY_PIXEL_SIZE, magSpinner.getValue());
-				d.getButton().addPropertyChangeListener(
-						JEyeDropper.PROPERTY_PIXEL_SIZE,
-						new PropertyChangeListener() {
-
-							@Override
-							public void propertyChange(PropertyChangeEvent evt) {
-								magSpinner.setValue(evt.getNewValue());
-							}
-
-						});
-				ChangeListener changeListener = new ChangeListener() {
-
-					@Override
-					public void stateChanged(ChangeEvent e) {
-						Color color = d.getModel().getSelectedColor();
-						colorWell.getColorSelectionModel().setSelectedColor(
-								color);
+						showEyeDropper();
 					}
-
-				};
-				d.getModel().addChangeListener(changeListener);
-				d.setVisible(true);
-			} catch (AWTException e) {
-				e.printStackTrace();
+				});
 			}
-		}
+		});
+		add(controls);
+		colorWell.getColorSelectionModel().setSelectedColor(Color.black);
+		colorWell.setEnabled(false);
 	}
 
-	@Override
-	public JPanel createPanel(PumpernickelShowcaseApp psa) {
-		return new JEyeDropperDemoPanel();
+	protected void showEyeDropper() {
+		try {
+			JFrame owner = (JFrame) SwingUtilities
+					.getWindowAncestor(showEyeDropper);
+			int diameter = (int) diameterSpinner.getValue();
+			final JEyeDropper d = new JEyeDropper(owner, diameter);
+			d.getButton().putClientProperty(JEyeDropper.PROPERTY_PIXEL_SIZE,
+					magSpinner.getValue());
+			d.getButton().addPropertyChangeListener(
+					JEyeDropper.PROPERTY_PIXEL_SIZE,
+					new PropertyChangeListener() {
+
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							magSpinner.setValue(evt.getNewValue());
+						}
+
+					});
+			ChangeListener changeListener = new ChangeListener() {
+
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					Color color = d.getModel().getSelectedColor();
+					colorWell.getColorSelectionModel().setSelectedColor(color);
+				}
+
+			};
+			d.getModel().addChangeListener(changeListener);
+			d.setVisible(true);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -12,6 +12,7 @@ package com.pump.desktop;
 
 import java.awt.Frame;
 import java.io.IOException;
+import java.text.NumberFormat;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -57,6 +58,7 @@ public class DesktopApplication {
 			final String simpleAppName, final String version,
 			final String supportEmail, final Class<?> frameClass)
 			throws IOException {
+		final long startTime = System.currentTimeMillis();
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 
 		SessionLog.initialize(qualifiedAppName, 5);
@@ -121,5 +123,29 @@ public class DesktopApplication {
 
 			});
 		}
+		SwingUtilities.invokeLater(new Runnable() {
+			long lastInvocation = -1;
+			int invocationCtr = 0;
+
+			public void run() {
+				long currentTime = System.currentTimeMillis();
+				if (currentTime - lastInvocation < 100) {
+					invocationCtr++;
+				} else {
+					invocationCtr = 0;
+				}
+				lastInvocation = currentTime;
+
+				if (invocationCtr == 5) {
+					long millis = currentTime - startTime;
+					System.out
+							.println("Startup took "
+									+ NumberFormat.getInstance().format(millis)
+									+ " ms");
+				} else {
+					SwingUtilities.invokeLater(this);
+				}
+			}
+		});
 	}
 }

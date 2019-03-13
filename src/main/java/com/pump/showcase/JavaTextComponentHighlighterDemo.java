@@ -37,38 +37,31 @@ import com.pump.text.TextBoxHighlightPainter;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JavaTextComponentHighlighterDemo.png"
  * alt="A screenshot of the JavaTextComponentHighlighterDemo.">
  */
-public class JavaTextComponentHighlighterDemo implements ShowcaseDemo {
+public class JavaTextComponentHighlighterDemo extends JPanel implements
+		ShowcaseDemo {
+	private static final long serialVersionUID = 1L;
 
-	static class JavaTextComponentHighlighterDemoPanel extends JPanel {
-		private static final long serialVersionUID = 1L;
+	JTextPane textPane = new JTextPane();
+	JScrollPane scrollPane = new JScrollPane(textPane);
+	JavaTextComponentHighlighter highlighter;
 
-		JTextPane textPane = new JTextPane();
-		JScrollPane scrollPane = new JScrollPane(textPane);
-		JavaTextComponentHighlighter highlighter;
+	public JavaTextComponentHighlighterDemo() {
+		LineNumberBorder.install(scrollPane, textPane);
 
-		public JavaTextComponentHighlighterDemoPanel() {
-			LineNumberBorder.install(scrollPane, textPane);
+		textPane.setText("package com.org.net;\n\nimport java.util.*;\n\npublic class Foo {\n\n\tFoo() {\n\t\tSystem.out.println(\"Foo\");\n\t}\n}");
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(0, 0, 0, 0);
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		add(scrollPane, c);
+		scrollPane.setPreferredSize(new Dimension(400, 200));
 
-			textPane.setText("package com.org.net;\n\nimport java.util.*;\n\npublic class Foo {\n\n\tFoo() {\n\t\tSystem.out.println(\"Foo\");\n\t}\n}");
-			setLayout(new GridBagLayout());
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			c.weightx = 1;
-			c.weighty = 1;
-			c.fill = GridBagConstraints.BOTH;
-			c.insets = new Insets(0, 0, 0, 0);
-			c.gridwidth = GridBagConstraints.REMAINDER;
-			add(scrollPane, c);
-			scrollPane.setPreferredSize(new Dimension(400, 200));
-
-			highlighter = new JavaTextComponentHighlighter(textPane);
-		}
-	}
-
-	@Override
-	public JPanel createPanel(PumpernickelShowcaseApp psa) {
-		return new JavaTextComponentHighlighterDemoPanel();
+		highlighter = new JavaTextComponentHighlighter(textPane);
 	}
 
 	@Override
