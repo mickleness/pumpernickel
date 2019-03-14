@@ -18,8 +18,6 @@ import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
-import com.pump.util.JVM;
-
 /**
  * This class monitors the event dispatch thread.
  * <P>
@@ -263,12 +261,7 @@ public class AWTMonitor {
 				}
 			}
 		} catch (Throwable e1) {
-			if (JVM.getMajorJavaVersion() >= 1.5) {
-				e1.printStackTrace();
-			} else {
-				dest.println("Stack traces were requested, but this feature is not supported in this Java version ("
-						+ JVM.getMajorJavaVersion() + ").");
-			}
+			e1.printStackTrace();
 		}
 	}
 }

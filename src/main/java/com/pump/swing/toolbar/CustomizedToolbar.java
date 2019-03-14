@@ -66,7 +66,6 @@ import javax.swing.border.LineBorder;
 
 import com.pump.awt.AnimatedLayout;
 import com.pump.swing.MockComponent;
-import com.pump.util.JVM;
 
 /**
  * This toolbar mimick's Apple's standard toolbars and their drag-and-drop
@@ -137,9 +136,6 @@ public class CustomizedToolbar extends JPanel {
 	 */
 	protected static boolean isDarkBackground(Window w) {
 		if (!isMac)
-			return false;
-
-		if (JVM.getMajorJavaVersion() < 1.5)
 			return false;
 
 		while (w != null) {
