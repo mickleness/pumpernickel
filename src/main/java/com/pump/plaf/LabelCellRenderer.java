@@ -179,9 +179,14 @@ public class LabelCellRenderer<T> implements ListCellRenderer<T>,
 							.getColor("Menu.selectionForeground"));
 				}
 			} else {
-				Color background = jc.getBackground();
-				if (rowNumber % 2 == 1 && isAlternatingBackround(jc)) {
-					background = darken(background);
+				Color background;
+				if (jc != null) {
+					background = jc.getBackground();
+					if (rowNumber % 2 == 1 && isAlternatingBackround(jc)) {
+						background = darken(background);
+					}
+				} else {
+					background = UIManager.getColor("Menu.background");
 				}
 				label.setBackground(background);
 				label.setForeground(UIManager.getColor("Menu.foreground"));
