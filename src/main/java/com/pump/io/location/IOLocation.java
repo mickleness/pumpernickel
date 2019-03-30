@@ -45,8 +45,8 @@ import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
 import com.pump.util.BasicReceiver;
 import com.pump.util.JVM;
-import com.pump.util.ObservableList;
 import com.pump.util.Receiver;
+import com.pump.util.list.ObservableList;
 
 /**
  * An abstract representation for file systems, URLs, archives, search results,
@@ -494,14 +494,13 @@ public abstract class IOLocation {
 			final IOLocation base = this;
 
 			// when 3 thumbnails are collected, we cancel the local Cancellable
-			// and
-			// everything stops.
-			thumbnails.addSynchronizedChangeListener(new ChangeListener() {
+			// and everything stops.
+			thumbnails.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
 					if (thumbnails.size() >= 3)
 						retrievalCancellable.cancel();
 				}
-			});
+			}, false);
 
 			// as files are added, try to get thumbnails.
 			files.addListDataListener(new ListDataListener() {
@@ -544,52 +543,50 @@ public abstract class IOLocation {
 			});
 
 			// as directories are added: expand the files we're searching.
-			pendingDirectories.addUnsynchronizedChangeListener(
-					new ChangeListener() {
-						int inside = 0; // so we don't redundantly listen to the
+			pendingDirectories.addChangeListener(new ChangeListener() {
+				int inside = 0; // so we don't redundantly listen to the
 
-						// events this listener triggers
+				// events this listener triggers
 
-						public void stateChanged(ChangeEvent e) {
-							if (inside > 0)
-								return;
+				public void stateChanged(ChangeEvent e) {
+					if (inside > 0)
+						return;
 
-							while (pendingDirectories.size() > 0) {
-								if (retrievalCancellable.isCancelled())
-									return;
+					while (pendingDirectories.size() > 0) {
+						if (retrievalCancellable.isCancelled())
+							return;
 
-								inside++;
-								IOLocation directory = pendingDirectories
-										.remove(0);
+						inside++;
+						IOLocation directory = pendingDirectories.remove(0);
+						inside--;
+
+						// only comb through directories if they're
+						// actually near this one
+						boolean closeBy = false;
+						int ctr = 0;
+						IOLocation t = directory;
+						while (closeBy == false && ctr < 2 && t != null) {
+							if (t.equals(base)) {
+								closeBy = true;
+							}
+							t = t.getParent();
+							ctr++;
+						}
+						if (closeBy) {
+							inside++;
+							try {
+								directory.listChildren(files,
+										retrievalCancellable);
+							} catch (Throwable throwable) {
+								throwable.printStackTrace();
+								retrievalCancellable.cancel();
+							} finally {
 								inside--;
-
-								// only comb through directories if they're
-								// actually near this one
-								boolean closeBy = false;
-								int ctr = 0;
-								IOLocation t = directory;
-								while (closeBy == false && ctr < 2 && t != null) {
-									if (t.equals(base)) {
-										closeBy = true;
-									}
-									t = t.getParent();
-									ctr++;
-								}
-								if (closeBy) {
-									inside++;
-									try {
-										directory.listChildren(files,
-												retrievalCancellable);
-									} catch (Throwable throwable) {
-										throwable.printStackTrace();
-										retrievalCancellable.cancel();
-									} finally {
-										inside--;
-									}
-								}
 							}
 						}
-					}, true);
+					}
+				}
+			}, true);
 
 			// this is the little domino that sets everything else off.
 			// remember this is a blocking call:

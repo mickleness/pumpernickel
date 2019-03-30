@@ -21,7 +21,7 @@ import java.util.Set;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.util.ObservableList;
+import com.pump.util.list.ObservableList;
 
 /**
  * This contains a series of boxes, connectors, and logic information. When
@@ -164,7 +164,7 @@ public class BoxContainer implements Serializable {
 	}
 
 	private void initializeListeners() {
-		getBoxes().addSynchronizedChangeListener(createBoxListener());
+		getBoxes().addChangeListener(createBoxListener(), false);
 	}
 
 	public ObservableList<Box> getBoxes() {
@@ -193,12 +193,9 @@ public class BoxContainer implements Serializable {
 	 */
 	public void addChangeListener(ChangeListener changeListener,
 			boolean allowsModification) {
-		boxes.addUnsynchronizedChangeListener(changeListener,
-				allowsModification);
-		connectors.addUnsynchronizedChangeListener(changeListener,
-				allowsModification);
-		logics.addUnsynchronizedChangeListener(changeListener,
-				allowsModification);
+		boxes.addChangeListener(changeListener, allowsModification);
+		connectors.addChangeListener(changeListener, allowsModification);
+		logics.addChangeListener(changeListener, allowsModification);
 	}
 
 	public void refreshConnectors() {

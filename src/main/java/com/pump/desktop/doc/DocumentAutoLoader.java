@@ -56,8 +56,8 @@ public class DocumentAutoLoader {
 		if (!isActive())
 			return;
 
-		controls.getOpenDocuments().removeSynchronizedChangeListener(
-				autoLoadChangeListener);
+		controls.getOpenDocuments()
+				.removeChangeListener(autoLoadChangeListener);
 		try {
 			int ctr = 0;
 			List<Document> runningList = new ArrayList<>(
@@ -75,8 +75,8 @@ public class DocumentAutoLoader {
 				}
 			}
 		} finally {
-			controls.getOpenDocuments().addSynchronizedChangeListener(
-					autoLoadChangeListener);
+			controls.getOpenDocuments().addChangeListener(
+					autoLoadChangeListener, true);
 		}
 	}
 

@@ -47,13 +47,12 @@ public abstract class OpenDocumentAction extends AbstractAction {
 		DocumentCommand.OPEN.install(this);
 		controls.registerAction(this);
 
-		controls.getOpenDocuments().addSynchronizedChangeListener(
-				new ChangeListener() {
-					@Override
-					public void stateChanged(ChangeEvent e) {
-						refresh();
-					}
-				});
+		controls.getOpenDocuments().addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				refresh();
+			}
+		}, true);
 		refresh();
 	}
 

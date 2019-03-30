@@ -68,7 +68,7 @@ public class ListSectionContainer extends SectionContainer {
 	public ListSectionContainer(boolean alphabetize, JComponent aboveList,
 			JComponent belowList) {
 		super(alphabetize);
-		list = new JList<Section>(getSections().getListModelEDTMirror());
+		list = new JList<Section>(getSections().createUIMirror(null));
 		listScrollPane = new JScrollPane(list,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -106,7 +106,7 @@ public class ListSectionContainer extends SectionContainer {
 		c.fill = GridBagConstraints.BOTH;
 		add(splitPane, c);
 
-		getSections().addUnsynchronizedChangeListener(new ChangeListener() {
+		getSections().addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {

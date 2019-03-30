@@ -63,7 +63,7 @@ import com.pump.icon.FileIcon;
 import com.pump.swing.AnimationController;
 import com.pump.swing.FileDialogUtils;
 import com.pump.swing.PartialLineBorder;
-import com.pump.util.ObservableList;
+import com.pump.util.list.ObservableList;
 
 /**
  * A minimal UI that creates .mov files using the MovWriter classes.
@@ -182,7 +182,7 @@ public class MovWriterDemo extends JPanel {
 
 	JPanel audioPanel = new JPanel(new GridBagLayout());
 	ObservableList<File> audioFileList = new ObservableList<File>();
-	JList audioFiles = new JList(audioFileList.getListModelEDTMirror());
+	JList audioFiles = new JList(audioFileList.createUIMirror(null));
 	JButton addButton = new JButton("Add");
 	AnimationController animationController = new AnimationController();
 	JPanel animationPreview = new JPanel() {

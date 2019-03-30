@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
@@ -34,10 +35,10 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import com.pump.io.FileTreeIterator;
-import com.pump.util.ObservableList;
-import com.pump.util.ObservableList.EDTMirror;
-import com.pump.util.ObservableList.Filter;
 import com.pump.util.SearchConstraints;
+import com.pump.util.list.AbstractListFilter;
+import com.pump.util.list.ObservableList;
+import com.pump.util.list.ObservableList.UIMirror;
 
 /**
  * This is a list of files in a certain directory. Each file is listed as one
@@ -58,18 +59,30 @@ public abstract class FileList extends JPanel {
 		}
 	};
 
+	static class SearchConstraintsListFilter extends AbstractListFilter<File> {
+		SearchConstraints<File> searchConstraints;
+
+		@Override
+		public boolean accept(File t) {
+			SearchConstraints<File> c = searchConstraints;
+			return c == null ? true : c.accepts(t);
+		}
+
+		public boolean setSearchConstraints(
+				SearchConstraints<File> newSearchConstraints) {
+			if (Objects.equals(searchConstraints, newSearchConstraints))
+				return false;
+			searchConstraints = newSearchConstraints;
+			fireChangeListeners();
+			return true;
+		}
+	}
+
 	private File[] currentDirectories = null;
 	private ObservableList<File> fileList = new ObservableList<File>();
-	private EDTMirror<File> constrainedList = fileList
-			.getListModelEDTMirror(new Filter<File>() {
-
-				@Override
-				public boolean accept(File t) {
-					SearchConstraints<File> c = searchConstraints;
-					return c == null ? true : c.accepts(t);
-				}
-
-			});
+	private SearchConstraintsListFilter searchConstraintsFilter = new SearchConstraintsListFilter();
+	private UIMirror<File> constrainedList = fileList
+			.createUIMirror(searchConstraintsFilter);
 	private final FileFilter fileFilter;
 
 	Runnable updateContentsRunnable = new Runnable() {
@@ -192,14 +205,7 @@ public abstract class FileList extends JPanel {
 
 	public synchronized boolean setSearchConstraints(
 			SearchConstraints<File> constraints) {
-		if (this.searchConstraints == null && constraints == null)
-			return false;
-		if (this.searchConstraints != null && constraints != null
-				&& this.searchConstraints.equals(constraints))
-			return false;
-		this.searchConstraints = constraints;
-		constrainedList.refresh(false);
-		return true;
+		return searchConstraintsFilter.setSearchConstraints(constraints);
 	}
 
 	protected JThrobber throbber = new JThrobber();

@@ -22,7 +22,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import com.pump.util.ObservableList;
+import com.pump.util.list.ObservableList;
 
 /**
  * This <code>JPanel</code> presents a series of <code>Sections</code>. The key

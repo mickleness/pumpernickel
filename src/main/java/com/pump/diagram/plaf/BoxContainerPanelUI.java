@@ -53,8 +53,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.ComponentUI;
 
@@ -648,23 +646,13 @@ public class BoxContainerPanelUI extends ComponentUI {
 			}
 		};
 
-		ListDataListener boxContainerListener = new ListDataListener() {
+		ChangeListener boxContainerListener = new ChangeListener() {
 
 			Set<Box> allBoxes = new HashSet<>();
 			Set<Connector> allConnectors = new HashSet<>();
 
 			@Override
-			public void intervalAdded(ListDataEvent e) {
-				contentsChanged(e);
-			}
-
-			@Override
-			public void intervalRemoved(ListDataEvent e) {
-				contentsChanged(e);
-			}
-
-			@Override
-			public void contentsChanged(ListDataEvent e) {
+			public void stateChanged(ChangeEvent e) {
 				BoxContainer bc = bcp.getBoxContainer();
 				boolean dirty = false;
 				if (bc != null) {
@@ -760,7 +748,6 @@ public class BoxContainerPanelUI extends ComponentUI {
 				});
 				bcp.revalidate();
 			}
-
 		};
 
 		/**
@@ -774,16 +761,14 @@ public class BoxContainerPanelUI extends ComponentUI {
 				BoxContainer c1 = (BoxContainer) evt.getOldValue();
 				BoxContainer c2 = (BoxContainer) evt.getNewValue();
 				if (c1 != null) {
-					c1.getBoxes().removeSynchronizedListener(
-							boxContainerListener);
-					c1.getConnectors().removeSynchronizedListener(
+					c1.getBoxes().removeChangeListener(boxContainerListener);
+					c1.getConnectors().removeChangeListener(
 							boxContainerListener);
 				}
 				if (c2 != null) {
-					c2.getBoxes().addSynchronizedListener(boxContainerListener,
+					c2.getBoxes().addChangeListener(boxContainerListener, true);
+					c2.getConnectors().addChangeListener(boxContainerListener,
 							true);
-					c2.getConnectors().addSynchronizedListener(
-							boxContainerListener, true);
 				}
 			}
 		};
@@ -866,10 +851,9 @@ public class BoxContainerPanelUI extends ComponentUI {
 			refreshConnectors(bcp);
 			BoxContainer bc = bcp.getBoxContainer();
 			if (bc != null) {
-				bc.getBoxes().addSynchronizedListener(boxContainerListener,
-						true);
-				bc.getConnectors().addSynchronizedListener(
-						boxContainerListener, true);
+				bc.getBoxes().addChangeListener(boxContainerListener, true);
+				bc.getConnectors()
+						.addChangeListener(boxContainerListener, true);
 			}
 		}
 
@@ -882,9 +866,8 @@ public class BoxContainerPanelUI extends ComponentUI {
 					componentBoxContainerListener);
 			BoxContainer bc = bcp.getBoxContainer();
 			if (bc != null) {
-				bc.getBoxes().removeSynchronizedListener(boxContainerListener);
-				bc.getConnectors().removeSynchronizedListener(
-						boxContainerListener);
+				bc.getBoxes().removeChangeListener(boxContainerListener);
+				bc.getConnectors().removeChangeListener(boxContainerListener);
 			}
 		}
 

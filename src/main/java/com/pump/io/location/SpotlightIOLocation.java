@@ -22,8 +22,8 @@ import java.net.URL;
 
 import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
-import com.pump.util.ObservableList;
 import com.pump.util.Receiver;
+import com.pump.util.list.ObservableList;
 
 public class SpotlightIOLocation extends CachedLocation implements
 		SearchResults {

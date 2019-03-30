@@ -25,8 +25,8 @@ import com.pump.image.ImageLoader;
 import com.pump.image.thumbnail.BasicThumbnail;
 import com.pump.swing.Cancellable;
 import com.pump.swing.io.DefaultSearchResults;
-import com.pump.util.ObservableList;
 import com.pump.util.Receiver;
+import com.pump.util.list.ObservableList;
 
 public class Pics4LearningLocation extends CachedLocation {
 

@@ -51,12 +51,11 @@ import com.pump.swing.io.LocationBrowser;
 import com.pump.swing.io.LocationPane;
 import com.pump.swing.io.OpenLocationPane;
 import com.pump.util.JVM;
-import com.pump.util.ObservableList;
+import com.pump.util.list.ObservableList;
 
 public abstract class TileLocationBrowserUI extends LocationBrowserUI {
 	protected ObservableList<IOLocation> threadsafeListModel = new ObservableList<IOLocation>();
-	protected ListModel listUIModel = threadsafeListModel
-			.getListModelEDTMirror();
+	protected ListModel listUIModel = threadsafeListModel.createUIMirror(null);
 	protected IOLocationTileList list = new IOLocationTileList(listUIModel);
 	protected JScrollPane scrollPane;
 	protected JLabel thumbnail = new JLabel();

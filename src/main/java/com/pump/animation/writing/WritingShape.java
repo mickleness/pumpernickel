@@ -18,9 +18,9 @@ import java.beans.PropertyChangeListener;
 import java.util.StringTokenizer;
 
 import com.pump.geom.TransformUtils;
-import com.pump.util.ObservableList;
 import com.pump.util.ObservableProperties;
 import com.pump.util.ObservableProperties.Key;
+import com.pump.util.list.ObservableList;
 
 /**
  * A series of related {@link WritingStroke} objects to paint sequentially.

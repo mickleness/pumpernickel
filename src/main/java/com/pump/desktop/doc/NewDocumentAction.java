@@ -41,13 +41,12 @@ public abstract class NewDocumentAction extends AbstractAction {
 		if (text != null)
 			putValue(AbstractAction.NAME, text);
 
-		controls.getOpenDocuments().addSynchronizedChangeListener(
-				new ChangeListener() {
-					@Override
-					public void stateChanged(ChangeEvent e) {
-						refresh();
-					}
-				});
+		controls.getOpenDocuments().addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				refresh();
+			}
+		}, false);
 		refresh();
 	}
 

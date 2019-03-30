@@ -31,8 +31,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.icon.TriangleIcon;
-import com.pump.util.ObservableList;
 import com.pump.util.WeakSet;
+import com.pump.util.list.ObservableList;
 
 /**
  * This takes a collection of menu items and makes a scrolling menu.
@@ -193,7 +193,7 @@ public class ScrollingMenu {
 		this.menuName = menuName;
 		this.menu = new JMenu(menuName);
 
-		menuItems.addUnsynchronizedChangeListener(new ChangeListener() {
+		menuItems.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				invalidateMenu();
 			}

@@ -426,9 +426,9 @@ public class CollapsibleContainer extends SectionContainer {
 			}
 		});
 		setLayout(new CollapsibleLayout());
-		sections.addSynchronizedChangeListener(sectionListener);
+		sections.addChangeListener(sectionListener, false);
 
-		sections.addSynchronizedChangeListener(new ChangeListener() {
+		sections.addChangeListener(new ChangeListener() {
 			Set<Section> mySections = new WeakSet<>();
 
 			@Override
@@ -490,7 +490,7 @@ public class CollapsibleContainer extends SectionContainer {
 					}
 				}
 			}
-		});
+		}, false);
 	}
 
 	protected JButton createHeader(Section s) {

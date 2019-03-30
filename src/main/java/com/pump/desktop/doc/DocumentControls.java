@@ -31,7 +31,7 @@ import javax.swing.event.ChangeListener;
 import com.pump.desktop.GroupedControls;
 import com.pump.swing.RecentMenu;
 import com.pump.swing.RecentMenu.Listener;
-import com.pump.util.ObservableList;
+import com.pump.util.list.ObservableList;
 
 public class DocumentControls extends GroupedControls {
 
@@ -144,7 +144,7 @@ public class DocumentControls extends GroupedControls {
 		setDocuments(newSelectedDocument, documents);
 
 		addChangeListener(validationChangeListener);
-		openDocuments.addSynchronizedChangeListener(validationChangeListener);
+		openDocuments.addChangeListener(validationChangeListener, true);
 		addChangeListener(updateSelectedDocumentChangeListener);
 
 		validate(openDocuments.toArray(new Document[openDocuments.size()]));
@@ -171,7 +171,7 @@ public class DocumentControls extends GroupedControls {
 		});
 
 		// constantly update the RecentMenu as new files are opened/resaved
-		getOpenDocuments().addSynchronizedChangeListener(new ChangeListener() {
+		getOpenDocuments().addChangeListener(new ChangeListener() {
 			PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
 
 				@Override
@@ -206,7 +206,7 @@ public class DocumentControls extends GroupedControls {
 				}
 			}
 
-		});
+		}, true);
 
 		refreshFrameProperties();
 	}

@@ -37,8 +37,8 @@ import com.pump.io.location.IOLocationFilter;
 import com.pump.plaf.LocationBrowserUI;
 import com.pump.swing.BasicCancellable;
 import com.pump.util.BasicReceiver;
-import com.pump.util.ObservableList;
 import com.pump.util.Receiver;
+import com.pump.util.list.ObservableList;
 
 public class LocationBrowser extends JComponent {
 	public static class MissingDirectoryException extends RuntimeException {
@@ -64,7 +64,7 @@ public class LocationBrowser extends JComponent {
 
 	final GraphicCache graphicCache;
 	final ObservableList<IOLocation> directoryContents = new ObservableList<IOLocation>();
-	ListModel unmutableListModel = directoryContents.getListModelView(true);
+	ListModel unmutableListModel = directoryContents.createUIView();
 	final List<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	final LocationHistory directoryStack;
 	final IOSelectionModel selectionModel;
@@ -295,7 +295,7 @@ public class LocationBrowser extends JComponent {
 			}
 
 			myLocation = loc;
-			myList.addUnsynchronizedChangeListener(new ChangeListener() {
+			myList.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
 					syncLists();
 				}

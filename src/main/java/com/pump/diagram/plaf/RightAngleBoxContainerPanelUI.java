@@ -52,8 +52,8 @@ import com.pump.geom.ShapeUtils;
 import com.pump.math.MutableInteger;
 import com.pump.swing.JThrobber;
 import com.pump.util.CombinationIterator;
-import com.pump.util.ObservableList;
 import com.pump.util.ObservableProperties.Key;
+import com.pump.util.list.ObservableList;
 
 public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 	public static final Key<Point> KEY_JOIN1_CONTROL_POINT = new Key<>(

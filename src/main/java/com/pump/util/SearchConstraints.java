@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.pump.util.list.ObservableList;
+
 public abstract class SearchConstraints<T> implements Comparator<T> {
 	public abstract boolean accepts(T obj);
 
