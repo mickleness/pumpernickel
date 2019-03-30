@@ -175,7 +175,8 @@ public class AbstractAttributeDataImpl implements Serializable {
 		for (PropertyChangeListenerDescriptor pcld : listenerArray) {
 			try {
 				if (pcld.accepts(propertyName)) {
-					pcld.listener.propertyChange(new PropertyChangeEvent(this, propertyName, oldValue, newValue));
+					pcld.listener.propertyChange(new PropertyChangeEvent(this,
+							propertyName, oldValue, newValue));
 				}
 			} catch (Exception e) {
 				handleUncaughtListenerException(e, propertyName, oldValue,

@@ -12,9 +12,9 @@ package com.pump.io.location;
 
 public interface SearchResults {
 
-    /** This may return null. */
-    public IOLocation getSearchDirectory();
+	/** This may return null. */
+	public IOLocation getSearchDirectory();
 
-    /** Return the text the user is searching by. */
-    public String getSearchText();
+	/** Return the text the user is searching by. */
+	public String getSearchText();
 }

@@ -29,7 +29,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.FontRenderContext;
-import java.awt.font.LineMetrics;
 import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.net.URI;
@@ -279,8 +278,8 @@ public class JLink extends JLabel {
 			} else {
 				g.setColor(SystemColor.textInactiveText);
 			}
-			g.drawLine(i.left - 1, baseline + 1, getWidth()
-					- i.right - 1, baseline + 1);
+			g.drawLine(i.left - 1, baseline + 1, getWidth() - i.right - 1,
+					baseline + 1);
 		}
 	}
 

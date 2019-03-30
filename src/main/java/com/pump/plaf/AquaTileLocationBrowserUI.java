@@ -16,13 +16,13 @@ import com.pump.swing.io.LocationBrowser;
 
 public class AquaTileLocationBrowserUI extends TileLocationBrowserUI {
 
-    public AquaTileLocationBrowserUI(LocationBrowser b) {
-	super(b);
-    }
+	public AquaTileLocationBrowserUI(LocationBrowser b) {
+		super(b);
+	}
 
-    @Override
-    public void installUI(JComponent c) {
-	super.installUI(c);
-	thumbnail.setUI(new AquaThumbnailLabelUI());
-    }
+	@Override
+	public void installUI(JComponent c) {
+		super.installUI(c);
+		thumbnail.setUI(new AquaThumbnailLabelUI());
+	}
 }

@@ -19,7 +19,8 @@ import java.util.Random;
 import com.pump.geom.MeasuredShape;
 
 /**
- * This <code>Stroke</code> that resembles a bristle by splattering tiny triangles and dots over a path.
+ * This <code>Stroke</code> that resembles a bristle by splattering tiny
+ * triangles and dots over a path.
  * 
  * @see <a
  *      href="https://javagraphics.blogspot.com/2008/05/strokes-bristle-stroke.html">Strokes:

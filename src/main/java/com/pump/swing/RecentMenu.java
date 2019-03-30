@@ -177,7 +177,8 @@ public abstract class RecentMenu extends JMenu {
 	}
 
 	/**
-	 * @return a list of files in the order they should be displayed to the user.
+	 * @return a list of files in the order they should be displayed to the
+	 *         user.
 	 */
 	public abstract File[] getFiles();
 

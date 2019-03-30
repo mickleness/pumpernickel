@@ -16,8 +16,8 @@ import java.io.IOException;
  * A series of ByteEncoders linked together.
  * <p>
  * As an abstract example: consider a series of translators. [ German to French,
- * French to English, English to Chinese]. By inputting German into this model, you
- * would eventually receive Chinese.
+ * French to English, English to Chinese]. By inputting German into this model,
+ * you would eventually receive Chinese.
  */
 public class ChainedByteEncoder extends ByteEncoder {
 

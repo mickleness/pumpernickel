@@ -67,8 +67,8 @@ public abstract class PathWriter {
 	/**
 	 * Adds a curved segment, defined by three new points, to the path by
 	 * drawing a Bezier curve that intersects both the current coordinates and
-	 * the coordinates (x3, y3), using the specified points (x1, y1) and (x2, y2)
-	 * as Bezier control points.
+	 * the coordinates (x3, y3), using the specified points (x1, y1) and (x2,
+	 * y2) as Bezier control points.
 	 * 
 	 * @param cx1
 	 *            the x-coordinate of the first control point.

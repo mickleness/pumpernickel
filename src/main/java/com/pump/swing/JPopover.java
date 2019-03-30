@@ -509,10 +509,10 @@ public class JPopover<T extends JComponent> {
 	}
 
 	/**
-	 * This refreshes the content of this popup. This is automatically
-	 * called when the owner is updated and the popup is visible. For example:
-	 * if a JSlider is modified, this will be called so you can update the
-	 * contents of this popover based on the new slider value.
+	 * This refreshes the content of this popup. This is automatically called
+	 * when the owner is updated and the popup is visible. For example: if a
+	 * JSlider is modified, this will be called so you can update the contents
+	 * of this popover based on the new slider value.
 	 */
 	protected void doRefreshPopup() {
 

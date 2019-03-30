@@ -129,8 +129,10 @@ public class UIEffect {
 	/**
 	 * Create a UIEffect that operates a timer but does not repaint a component.
 	 *
-	 * @param totalDuration the duration (in ms) of the effect.
-	 * @param updateInterval the number of ms between update events.
+	 * @param totalDuration
+	 *            the duration (in ms) of the effect.
+	 * @param updateInterval
+	 *            the number of ms between update events.
 	 */
 	public UIEffect(int totalDuration, int updateInterval) {
 		this(null, totalDuration, updateInterval);
@@ -139,9 +141,12 @@ public class UIEffect {
 	/**
 	 * Create a UIEffect.
 	 * 
-	 * @param comp the component to continually repaint.
-	 * @param totalDuration the duration (in ms) of the effect.
-	 * @param updateInterval the number of ms between update events.
+	 * @param comp
+	 *            the component to continually repaint.
+	 * @param totalDuration
+	 *            the duration (in ms) of the effect.
+	 * @param updateInterval
+	 *            the number of ms between update events.
 	 */
 	public UIEffect(JComponent comp, int totalDuration, int updateInterval) {
 		this.updateInterval = updateInterval;

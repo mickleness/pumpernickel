@@ -414,9 +414,9 @@ public class Reflection {
 	 */
 	public static Object invokeMethod(Class<?> c, Object obj,
 			String methodName, Object... arguments) {
-		if(c==null && obj!=null)
+		if (c == null && obj != null)
 			c = obj.getClass();
-		
+
 		try {
 			while (c != null) {
 				Method[] methods = c.getDeclaredMethods();
