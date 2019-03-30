@@ -230,6 +230,9 @@ public class GradientPanelUI extends AbstractPanelUI {
 
 	protected void paintGradient(Graphics2D g0, int x, int y, int w, int h,
 			Shape fillShape) {
+		if (w <= 0 || h <= 0)
+			return;
+
 		Graphics2D g = (Graphics2D) g0.create();
 		g.setRenderingHint(RenderingHints.KEY_RENDERING,
 				RenderingHints.VALUE_RENDER_QUALITY);
