@@ -71,6 +71,12 @@ public class AttributeDataImpl extends AbstractAttributeDataImpl implements
 	}
 
 	@Override
+	public void addAttributePropertyChangeListener(String propertyName,
+			PropertyChangeListener pcl) {
+		super.addPropertyChangeListener(propertyName, pcl);
+	}
+
+	@Override
 	public void addAttributePropertyChangeListener(PropertyChangeListener pcl) {
 		super.addPropertyChangeListener(pcl);
 	}

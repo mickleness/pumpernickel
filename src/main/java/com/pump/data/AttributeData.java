@@ -16,6 +16,9 @@ import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 
 public interface AttributeData extends Serializable {
+	public void addAttributePropertyChangeListener(String propertyName,
+			PropertyChangeListener pcl);
+
 	public void addAttributePropertyChangeListener(PropertyChangeListener pcl);
 
 	public void clearAttributes();

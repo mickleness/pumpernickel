@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,8 +39,24 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class AbstractAttributeDataImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static class PropertyChangeListenerDescriptor {
+		PropertyChangeListener listener;
+		String propertyName;
+
+		PropertyChangeListenerDescriptor(PropertyChangeListener listener,
+				String propertyName) {
+			this.listener = listener;
+			this.propertyName = propertyName;
+		}
+
+		boolean accepts(String propertyName) {
+			return this.propertyName == null
+					|| this.propertyName.equals(propertyName);
+		}
+	}
+
 	protected Map<String, Object> data = new HashMap<>();
-	private transient List<PropertyChangeListener> listeners;
+	private transient List<PropertyChangeListenerDescriptor> listeners;
 	private transient ReadWriteLock lock;
 
 	/**
@@ -82,15 +99,31 @@ public class AbstractAttributeDataImpl implements Serializable {
 		data = (Map) in.readObject();
 	}
 
+	protected void addPropertyChangeListener(String propertyName,
+			PropertyChangeListener pcl) {
+		synchronized (listeners) {
+			listeners.add(new PropertyChangeListenerDescriptor(pcl,
+					propertyName));
+		}
+	}
+
 	protected void addPropertyChangeListener(PropertyChangeListener pcl) {
 		synchronized (listeners) {
-			listeners.add(pcl);
+			listeners.add(new PropertyChangeListenerDescriptor(pcl, null));
 		}
 	}
 
 	protected void removePropertyChangeListener(PropertyChangeListener pcl) {
 		synchronized (listeners) {
-			listeners.remove(pcl);
+			Iterator<PropertyChangeListenerDescriptor> iter = listeners
+					.iterator();
+			while (iter.hasNext()) {
+				PropertyChangeListenerDescriptor d = iter.next();
+				if (d.listener == pcl) {
+					iter.remove();
+					return;
+				}
+			}
 		}
 	}
 
@@ -133,15 +166,17 @@ public class AbstractAttributeDataImpl implements Serializable {
 
 	protected void firePropertyChangeListeners(String propertyName,
 			Object oldValue, Object newValue) {
-		PropertyChangeListener[] listenerArray;
+		PropertyChangeListenerDescriptor[] listenerArray;
 		synchronized (listeners) {
 			listenerArray = listeners
-					.toArray(new PropertyChangeListener[listeners.size()]);
+					.toArray(new PropertyChangeListenerDescriptor[listeners
+							.size()]);
 		}
-		for (PropertyChangeListener pcl : listenerArray) {
+		for (PropertyChangeListenerDescriptor pcld : listenerArray) {
 			try {
-				pcl.propertyChange(new PropertyChangeEvent(this, propertyName,
-						oldValue, newValue));
+				if (pcld.accepts(propertyName)) {
+					pcld.listener.propertyChange(new PropertyChangeEvent(this, propertyName, oldValue, newValue));
+				}
 			} catch (Exception e) {
 				handleUncaughtListenerException(e, propertyName, oldValue,
 						newValue);
