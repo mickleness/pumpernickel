@@ -29,6 +29,11 @@ public class MeasuredInputStream extends InputStream {
 		this.in = i;
 	}
 
+	public MeasuredInputStream(InputStream i, boolean closeable) {
+		this(i);
+		setCloseable(closeable);
+	}
+
 	/**
 	 * Control whether calling <code>{@link #close()}</code> affects the
 	 * underlying InputStream. This is useful in cases when you pass an
