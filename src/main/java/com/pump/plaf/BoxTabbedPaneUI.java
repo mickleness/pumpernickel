@@ -957,7 +957,7 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 		private DefaultTab getDefaultTab(int a) {
 			DefaultTab returnValue = tabMap.get(a);
 			if (returnValue == null) {
-				returnValue = new DefaultTab(tabs, a);
+				returnValue = createDefaultTab(tabs, a);
 				tabMap.put(a, returnValue);
 			} else {
 				returnValue.decorateLabel(a);
@@ -1121,7 +1121,7 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 
 	}
 
-	static class DefaultTab extends JPanel {
+	public static class DefaultTab extends JPanel {
 		private static final long serialVersionUID = 1L;
 
 		protected final JTabbedPane tabs;
@@ -1171,7 +1171,7 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 		/**
 		 * Remove a tab at a given index.
 		 * <p>
-		 * The default implementationy simple calls
+		 * The default implementation simply calls
 		 * <code>tabs.removeTabAt(tabIndex)</code>, but subclasses can override
 		 * this as needed. For example, you may need to prompt the user to
 		 * confirm discarding unsaved changes.
@@ -1330,6 +1330,10 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 			tabs.putClientProperty(PROPERTY_DATA, d);
 		}
 		return d;
+	}
+
+	public DefaultTab createDefaultTab(JTabbedPane tabs, int a) {
+		return new DefaultTab(tabs, a);
 	}
 
 	@Override
