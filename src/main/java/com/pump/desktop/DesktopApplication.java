@@ -26,6 +26,7 @@ import com.pump.desktop.error.ErrorDialogThrowableHandler;
 import com.pump.desktop.error.ErrorManager;
 import com.pump.desktop.logging.SessionLog;
 import com.pump.desktop.temp.TempFileManager;
+import com.pump.reflect.Reflection;
 import com.pump.util.JVM;
 import com.pump.window.WindowList;
 
@@ -147,5 +148,29 @@ public class DesktopApplication {
 				}
 			}
 		});
+
+		initializeMac();
+	}
+
+	private static void initializeMac() {
+		if (JVM.isMac) {
+			// TODO: add support for about dialog, preference dialog, maybe
+			try {
+				Class applicationClass = Class
+						.forName("com.apple.eawt.Application");
+				Class quitStrategyEnum = Class
+						.forName("com.apple.eawt.QuitStrategy");
+				Object[] enumConstants = quitStrategyEnum.getEnumConstants();
+
+				Object application = Reflection.invokeMethod(applicationClass,
+						null, "getApplication");
+				Reflection.invokeMethod(applicationClass, application,
+						"setQuitStrategy", enumConstants[1]);
+				System.out.println("Set Application quitStrategy to "
+						+ enumConstants[1]);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 }
