@@ -35,7 +35,7 @@ public class RemoveElementsEvent<T> extends ListEvent<T> {
 	@Override
 	public void execute(List<T> list) {
 		Iterator<Integer> iter = removedElements.descendingKeySet()
-				.descendingIterator();
+				.iterator();
 		while (iter.hasNext()) {
 			int index = iter.next();
 			list.remove(index);
