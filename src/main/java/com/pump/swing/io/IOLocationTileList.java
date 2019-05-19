@@ -28,7 +28,6 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -45,7 +44,7 @@ import com.pump.io.location.IOLocationFilter;
 import com.pump.plaf.ThumbnailLabelUI;
 import com.pump.swing.NavigationListener;
 
-public class IOLocationTileList extends JList {
+public class IOLocationTileList extends JList<IOLocation> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -167,31 +166,8 @@ public class IOLocationTileList extends JList {
 					mouseEvent = e;
 				}
 
-				private boolean contains(int[] array, int element) {
-					for (int a = 0; array != null && a < array.length; a++) {
-						if (array[a] == element)
-							return true;
-					}
-					return false;
-				}
-
 				public void run() {
-					int[] indices = IOLocationTileList.this
-							.getSelectedIndices();
-
-					int index = getUI().locationToIndex(
-							IOLocationTileList.this, mouseEvent.getPoint());
-					if (index == -1)
-						return;
-					if (!contains(indices, index)) {
-						// I'm not sure why this happens
-						// (shouldn't another listener be
-						// keeping track of the selection?)
-						// but this is the root cause of
-						// T4L bug 22081, and here's
-						// how to fix it:
-						setSelectedIndex(index);
-					}
+					setSelectedIndex(-1);
 					if (mouseEvent.getClickCount() == 1) {
 						fireIOLocationListListeners(
 								NavigationListener.ListSelectionType.SINGLE_CLICK,
@@ -213,17 +189,12 @@ public class IOLocationTileList extends JList {
 		initialize();
 	}
 
-	public IOLocationTileList(ListModel dataModel) {
+	public IOLocationTileList(ListModel<IOLocation> dataModel) {
 		super(dataModel);
 		initialize();
 	}
 
-	public IOLocationTileList(Object[] listData) {
-		super(listData);
-		initialize();
-	}
-
-	public IOLocationTileList(Vector<?> listData) {
+	public IOLocationTileList(IOLocation[] listData) {
 		super(listData);
 		initialize();
 	}
@@ -304,15 +275,16 @@ public class IOLocationTileList extends JList {
 	}
 
 	public IOLocation[] getSelectedLocations() {
-		Object[] obj = getSelectedValues();
-		IOLocation[] selection = new IOLocation[obj.length];
-		for (int a = 0; a < obj.length; a++) {
-			selection[a] = (IOLocation) obj[a];
+		List<IOLocation> obj = getSelectedValuesList();
+		IOLocation[] selection = new IOLocation[obj.size()];
+		for (int a = 0; a < obj.size(); a++) {
+			selection[a] = (IOLocation) obj.get(a);
 		}
 		return selection;
 	}
 
-	public static class BasicTileCellRenderer implements ListCellRenderer {
+	public static class BasicTileCellRenderer implements
+			ListCellRenderer<IOLocation> {
 		protected GraphicCache graphicCache;
 		protected IOLocationFilter filter;
 		protected JLabel thumbnail;
@@ -332,12 +304,11 @@ public class IOLocationTileList extends JList {
 			return thumbnail;
 		}
 
-		public Component getListCellRendererComponent(JList list, Object value,
+		public Component getListCellRendererComponent(JList list, IOLocation l,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			String text = "";
 			BufferedImage image;
 
-			IOLocation l = (IOLocation) value;
 			text = l.getName();
 			image = getGraphicCache().requestThumbnail(l);
 			if (image == null) {
