@@ -45,11 +45,11 @@ public class ConstructorWriter extends ConstructorOrMethodWriter {
 				constructor.getGenericExceptionTypes(), constructor.isVarArgs());
 		this.constructor = constructor;
 
+		boolean isStaticClass = (constructor.getDeclaringClass().getModifiers() & Modifier.STATIC) > 0;
 		// for inner classes where the first parameter is the declaring class,
-		// trim
-		// that
-		if (isNestedClassWithArtificialFirstArgument(constructor)) {
-
+		// trim that
+		if (!isStaticClass
+				&& isNestedClassWithArtificialFirstArgument(constructor)) {
 			paramTypes = removeFirstElement(Type.class, paramTypes);
 		}
 	}

@@ -113,20 +113,20 @@ public class ClassWriter extends StreamWriter {
 		Constructor[] constructors = type.getDeclaredConstructors();
 		for (Constructor constructor : constructors) {
 			int m = constructor.getModifiers();
-			if (!Modifier.isPrivate(m))
+			if (!constructor.isSynthetic() && !Modifier.isPrivate(m))
 				this.constructors.add(new ConstructorWriter(sourceCodeManager,
 						constructor));
 		}
 
 		// well... if we couldn't get any public/protected/package level
-		// constructors
-		// to make visible, then we may HAVE to include private constructors to
-		// avoid compiler
-		// errors:
+		// constructors to make visible, then we may HAVE to include private
+		// constructors to avoid compiler errors:
 		if (this.constructors.size() == 0) {
 			for (Constructor constructor : constructors) {
-				this.constructors.add(new ConstructorWriter(sourceCodeManager,
-						constructor));
+				if (!constructor.isSynthetic()) {
+					this.constructors.add(new ConstructorWriter(
+							sourceCodeManager, constructor));
+				}
 			}
 		}
 
@@ -176,7 +176,7 @@ public class ClassWriter extends StreamWriter {
 				cws.println("  * but you can't actually execute anything of interest against this code.");
 				cws.println("  * <p>");
 				cws.println("  * The tools that created this class are available here:");
-				cws.println("  * <br> <a href=\"https://github.com/mickleness/pumpernickel/tree/master/src/main/java/com/pump/xray\">https://github.com/mickleness/pumpernickel/tree/master/src/main/java/com/pump/xray</a>");
+				cws.println("  * <br> <a href=\"https://github.com/mickleness/pumpernickel/tree/master/pump-jar/src/main/java/com/pump/xray\">https://github.com/mickleness/pumpernickel/tree/master/pump-jar/src/main/java/com/pump/xray</a>");
 				cws.println("  */");
 			}
 		}
