@@ -150,6 +150,11 @@ public class WildcardPatternHighlighterDemo extends ShowcaseDemo {
 
 		includeFillButtonGroup.add(includeFillOnRadioButton);
 		includeFillButtonGroup.add(includeFillOffRadioButton);
+		
+		squiggleOnRadioButton.setOpaque(false);
+		squiggleOffRadioButton.setOpaque(false);
+		includeFillOnRadioButton.setOpaque(false);
+		includeFillOffRadioButton.setOpaque(false);
 
 		Section textSection = sectionContainer.addSection("text", "Text");
 		sectionContainer.getHeader(textSection).putClientProperty(
@@ -168,11 +173,11 @@ public class WildcardPatternHighlighterDemo extends ShowcaseDemo {
 		add(sectionContainer, c);
 
 		textPane.setText("Once upon a midnight dreary, while I pondered, weak and weary,\n"
-				+ "Over many a quaint and curious volume of forgotten lore—\n"
+				+ "Over many a quaint and curious volume of forgotten lore\n"
 				+ "    While I nodded, nearly napping, suddenly there came a tapping,\n"
 				+ "As of some one gently rapping, rapping at my chamber door.\n"
-				+ "“’Tis some visitor,” I muttered, “tapping at my chamber door—\n"
-				+ "            Only this and nothing more.”");
+				+ "Tis some visitor,\" I muttered, \"tapping at my chamber door �\n"
+				+ "Only this, and nothing more.\"");
 
 		underlinePatternField.getDocument().addDocumentListener(docListener);
 		blockPatternField.getDocument().addDocumentListener(docListener);
