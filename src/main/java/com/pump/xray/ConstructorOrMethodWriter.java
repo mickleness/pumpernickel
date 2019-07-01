@@ -13,6 +13,8 @@ package com.pump.xray;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -85,12 +87,22 @@ public class ConstructorOrMethodWriter extends StreamWriter {
 			cws.print(" " + toString(nameToSimpleName, returnType, false));
 		}
 		cws.print(" " + name + "(");
+
+		List<Type> paramTypesToDisplay = new ArrayList<>();
 		for (int a = 0; a < paramTypes.length; a++) {
+			String s = toString(nameToSimpleName, paramTypes[a], false);
+			if (s.trim().length() > 0) {
+				paramTypesToDisplay.add(paramTypes[a]);
+			}
+		}
+
+		for (int a = 0; a < paramTypesToDisplay.size(); a++) {
 			if (a > 0)
 				cws.print(", ");
-			String s = toString(nameToSimpleName, paramTypes[a], false)
-					+ " arg" + a;
-			if (isVarArgs && a == paramTypes.length - 1) {
+			String s = toString(nameToSimpleName, paramTypesToDisplay.get(a),
+					false);
+			s += " arg" + a;
+			if (isVarArgs && a == paramTypesToDisplay.size() - 1) {
 				int i = s.lastIndexOf("[]");
 				s = s.substring(0, i) + "..." + s.substring(i + 2);
 			}

@@ -130,7 +130,13 @@ public class ClassWriter extends StreamWriter {
 			}
 		}
 
-		Method[] methods = type.getDeclaredMethods();
+		Method[] methods;
+		try {
+			methods = type.getDeclaredMethods();
+		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
+			return;
+		}
 		for (Method method : methods) {
 			int m = method.getModifiers();
 			boolean include = true;
@@ -153,6 +159,11 @@ public class ClassWriter extends StreamWriter {
 
 	@Override
 	public void write(ClassWriterStream cws) throws Exception {
+		// I'm not sure what this means, but these have come up a couple of
+		// times:
+		if (type.getSimpleName().trim().length() == 0)
+			return;
+
 		Map<String, String> nameToSimpleName = cws.getNameMap();
 
 		// this is a tricky way of asking if we're the topmost ClassWriter in
