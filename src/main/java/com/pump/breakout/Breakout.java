@@ -10,11 +10,16 @@
  */
 package com.pump.breakout;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 import com.pump.io.IOUtils;
 import com.pump.io.parser.Parser.CommentToken;
@@ -40,6 +47,92 @@ import com.pump.io.parser.java.JavaParser.WordToken;
  * dependent java files as it can find in a given workspace.
  */
 public class Breakout {
+
+	private abstract static class InputStreamFactory {
+		public abstract InputStream getInputStream() throws IOException;
+
+		public abstract String getFilename();
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof InputStreamFactory))
+				return false;
+			InputStreamFactory other = (InputStreamFactory) obj;
+			try {
+				return IOUtils.equals(getInputStream(), other.getInputStream());
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
+	private static class ByteInputStreamFactory extends InputStreamFactory {
+		byte[] data;
+		String filename;
+		String src;
+
+		ByteInputStreamFactory(String src, byte[] data, String filename) {
+			this.data = data;
+			this.src = src;
+			this.filename = filename;
+		}
+
+		@Override
+		public InputStream getInputStream() throws IOException {
+			return new ByteArrayInputStream(data);
+		}
+
+		@Override
+		public String getFilename() {
+			return filename;
+		}
+
+		@Override
+		public int hashCode() {
+			return 0;
+		}
+
+		@Override
+		public String toString() {
+			return src;
+		}
+	}
+
+	private static class FileInputStreamFactory extends InputStreamFactory {
+		File file;
+
+		FileInputStreamFactory(File file) {
+			this.file = file;
+		}
+
+		@Override
+		public InputStream getInputStream() throws IOException {
+			return new FileInputStream(file);
+		}
+
+		@Override
+		public String getFilename() {
+			return file.getName();
+		}
+
+		@Override
+		public int hashCode() {
+			return 0;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof FileInputStreamFactory))
+				return false;
+			FileInputStreamFactory other = (FileInputStreamFactory) obj;
+			return file.equals(other.file);
+		}
+
+		@Override
+		public String toString() {
+			return file.getAbsolutePath();
+		}
+	}
 
 	/**
 	 * This simply refers to the name that is being imported.
@@ -131,7 +224,7 @@ public class Breakout {
 	/**
 	 * This represents a single java source code file.
 	 */
-	class FileEntry {
+	class JavaSourceEntry {
 
 		/**
 		 * This represents a single top-level declaration inside a source code
@@ -243,12 +336,13 @@ public class Breakout {
 			 */
 			public void replace(String searchPhrase, String replacementPhrase) {
 				List<Token> searchTokens, replacementTokens;
+				JavaParser javaParser = new JavaParser();
 				try {
-					searchTokens = Arrays.asList(new JavaParser().parse(
-							searchPhrase, true));
-					replacementTokens = Arrays.asList(new JavaParser().parse(
+					searchTokens = Arrays.asList(javaParser.parse(searchPhrase,
+							true));
+					replacementTokens = Arrays.asList(javaParser.parse(
 							replacementPhrase, true));
-				} catch (Exception e) {
+				} catch(Exception e) {
 					throw new RuntimeException(e);
 				}
 
@@ -277,7 +371,7 @@ public class Breakout {
 		}
 
 		/** The file this FileEntry is based on. */
-		File javaFile;
+		InputStreamFactory javaFile;
 		/**
 		 * The class summary for the file provided. This will include the
 		 * package and imports.
@@ -306,9 +400,11 @@ public class Breakout {
 		 *            true if this should be considered the primary FileEntry
 		 *            for this Breakout writer.
 		 */
-		protected FileEntry(File javaFile, boolean primary) throws Exception {
+		protected JavaSourceEntry(InputStreamFactory javaFile, boolean primary)
+				throws IOException {
 			this.javaFile = javaFile;
-			this.summary = new JavaClassSummary(javaFile);
+			this.summary = new JavaClassSummary(javaFile.getInputStream(),
+					Charset.forName("UTF-8"));
 			this.primary = primary;
 
 			for (String i : summary.getImportClassnames()) {
@@ -316,8 +412,12 @@ public class Breakout {
 			}
 
 			Token[] tokens;
-			try (FileInputStream fileIn = new FileInputStream(javaFile)) {
-				tokens = new JavaParser().parse(fileIn, true);
+			try (InputStream fileIn = javaFile.getInputStream()) {
+				try {
+					tokens = new JavaParser().parse(fileIn, true);
+				} catch(Exception e) {
+					throw new IOException("Error parsing "+javaFile.getFilename(), e);
+				}
 			}
 
 			StringBuilder sb = new StringBuilder();
@@ -367,9 +467,17 @@ public class Breakout {
 						String str = summary.getPackageName() + "."
 								+ word.getText();
 						if (!classNameToFileEntryMap.containsKey(str)) {
+							InputStreamFactory javaSource;
+
 							File otherJavaFile = context.getJavaFile(str);
 							if (otherJavaFile != null) {
-								addJavaFile(otherJavaFile, false);
+								javaSource = new FileInputStreamFactory(
+										otherJavaFile);
+							} else {
+								javaSource = getJavaSourceFromJar(str);
+							}
+							if (javaSource != null) {
+								addJavaFile(javaSource, false);
 							}
 						}
 					}
@@ -391,7 +499,7 @@ public class Breakout {
 			List<Token> myTokens = new ArrayList<>();
 			int level = 0;
 			while (index < tokens.length) {
-				if ("{".equals(tokens[index].getText())) {
+				if ("{".equals(tokens[index].getText()) && level == 0) {
 					do {
 						myTokens.add(tokens[index]);
 						if ("{".equals(tokens[index].getText())) {
@@ -418,7 +526,6 @@ public class Breakout {
 						level--;
 					}
 				}
-
 				index++;
 			}
 			return index;
@@ -472,12 +579,12 @@ public class Breakout {
 	/** The context we use to lookup classnames to java source code. */
 	protected WorkspaceContext context;
 	/** A map of classnames to the FileEntry that represents them. */
-	protected Map<String, FileEntry> classNameToFileEntryMap = new TreeMap<>();
+	protected Map<String, JavaSourceEntry> classNameToFileEntryMap = new TreeMap<>();
 	/**
 	 * A map of ImportStatements to the java source code files that included
 	 * those imports.
 	 */
-	protected Map<ImportStatement, Collection<File>> importStatements = new TreeMap<>();
+	protected Map<ImportStatement, Collection<InputStreamFactory>> importStatements = new TreeMap<>();
 
 	/**
 	 * Create a new Breakout object.
@@ -489,11 +596,11 @@ public class Breakout {
 	 *            top-level declarations in this file will not be modified.
 	 */
 	public Breakout(WorkspaceContext context, File primaryJavaFile)
-			throws Exception {
+			throws IOException {
 		if (context == null)
 			throw new NullPointerException();
 		this.context = context;
-		addJavaFile(primaryJavaFile, true);
+		addJavaFile(new FileInputStreamFactory(primaryJavaFile), true);
 	}
 
 	/**
@@ -505,9 +612,10 @@ public class Breakout {
 	 * @param source
 	 *            the file this import originated in.
 	 */
-	protected synchronized void addImportStatement(String str, File source) {
+	protected synchronized void addImportStatement(String str,
+			InputStreamFactory source) {
 		ImportStatement is = new ImportStatement(str);
-		Collection<File> c = importStatements.get(is);
+		Collection<InputStreamFactory> c = importStatements.get(is);
 		if (c == null) {
 			c = new HashSet<>();
 			importStatements.put(is, c);
@@ -515,7 +623,7 @@ public class Breakout {
 		c.add(source);
 	}
 
-	private Collection<File> consideredFiles = new HashSet<>();
+	private Collection<InputStreamFactory> consideredFiles = new HashSet<>();
 
 	/**
 	 * Add a java source code file to the master file we're composing.
@@ -528,19 +636,19 @@ public class Breakout {
 	 * 
 	 * @throws IOException
 	 */
-	private synchronized void addJavaFile(File javaFile, boolean primary)
-			throws Exception {
+	private synchronized void addJavaFile(InputStreamFactory javaFile,
+			boolean primary) throws IOException {
 		if (consideredFiles.add(javaFile)) {
-			FileEntry entry = new FileEntry(javaFile, primary);
-			FileEntry oldEntry = classNameToFileEntryMap.put(
+			JavaSourceEntry entry = new JavaSourceEntry(javaFile, primary);
+			JavaSourceEntry oldEntry = classNameToFileEntryMap.put(
 					entry.summary.getCanonicalName(), entry);
 			if (oldEntry != null
-					&& (!IOUtils.equals(oldEntry.javaFile, entry.javaFile))) {
+					&& (!IOUtils.equals(oldEntry.javaFile.getInputStream(),
+							entry.javaFile.getInputStream()))) {
 				throw new IllegalArgumentException("The classname "
 						+ entry.summary.getCanonicalName()
 						+ " is defined at least twice, once as "
-						+ oldEntry.javaFile.getAbsolutePath() + " and once as "
-						+ entry.javaFile.getAbsolutePath());
+						+ oldEntry.javaFile + " and once as " + entry.javaFile);
 			}
 		}
 	}
@@ -550,14 +658,14 @@ public class Breakout {
 	 * as it can find in this context in our new autogenerated java file.
 	 */
 	protected synchronized void resolveExplicitImportStatements()
-			throws Exception {
+			throws IOException {
 		boolean dirty = true;
 		do {
 			dirty = false;
-			Iterator<Entry<ImportStatement, Collection<File>>> statementIter = importStatements
+			Iterator<Entry<ImportStatement, Collection<InputStreamFactory>>> statementIter = importStatements
 					.entrySet().iterator();
 			scanImports: while (statementIter.hasNext()) {
-				Entry<ImportStatement, Collection<File>> entry = statementIter
+				Entry<ImportStatement, Collection<InputStreamFactory>> entry = statementIter
 						.next();
 				ImportStatement statement = entry.getKey();
 				if (!statement.isWildcard()) {
@@ -565,19 +673,26 @@ public class Breakout {
 					String lhs = name;
 					String rhs = "";
 					while (lhs != null) {
+						InputStreamFactory javaSource;
 						File otherJava = context.getJavaFile(lhs);
 						if (otherJava != null) {
+							javaSource = new FileInputStreamFactory(otherJava);
+						} else {
+							javaSource = getJavaSourceFromJar(lhs);
+						}
+
+						if (javaSource != null) {
 							if (rhs.length() > 0) {
 								int i = lhs.lastIndexOf('.');
 								String q = i >= 0 ? lhs.substring(i + 1) + "."
 										+ rhs : lhs + "." + rhs;
-								for (File file : entry.getValue()) {
+								for (InputStreamFactory file : entry.getValue()) {
 									replace(file, rhs, q);
 								}
 							}
 
 							statementIter.remove();
-							addJavaFile(otherJava, false);
+							addJavaFile(javaSource, false);
 							dirty = true;
 
 							// we can't do more than 1 per pass or we'll get
@@ -600,6 +715,68 @@ public class Breakout {
 		} while (dirty);
 	}
 
+	private Map<String, InputStreamFactory> javaSourceFromJars;
+
+	private InputStreamFactory getJavaSourceFromJar(String classname)
+			throws IOException {
+		if (javaSourceFromJars == null) {
+			javaSourceFromJars = new HashMap<>();
+			for (File jarFile : context.getJars().values()) {
+				if (isJarSearchable(jarFile)) {
+					try (FileInputStream fileIn = new FileInputStream(jarFile)) {
+						try (JarInputStream jarIn = new JarInputStream(fileIn)) {
+							JarEntry entry = jarIn.getNextJarEntry();
+							while (entry != null) {
+								String name = entry.getName();
+								if (name.endsWith(".java")) {
+									name = name.substring(0, name.length()
+											- ".java".length());
+									name = name.replace('/', '.');
+
+									byte[] bytes = read(jarIn);
+
+									String filename = entry.getName();
+									filename = filename.substring(filename
+											.lastIndexOf('/') + 1);
+
+									javaSourceFromJars.put(
+											name,
+											new ByteInputStreamFactory(jarFile
+													.getAbsolutePath()
+													+ ":"
+													+ entry.getName(), bytes,
+													filename));
+								}
+								entry = jarIn.getNextJarEntry();
+							}
+						}
+					}
+				}
+			}
+		}
+		return javaSourceFromJars.get(classname);
+	}
+
+	/**
+	 * Return true if this jar file is a potential resource we should consider
+	 * for java files.
+	 */
+	protected boolean isJarSearchable(File jarFile) {
+		return true;
+	}
+
+	private byte[] read(InputStream in) throws IOException {
+		try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
+			byte[] block = new byte[4096];
+			int t = in.read(block);
+			while (t != -1) {
+				byteOut.write(block, 0, t);
+				t = in.read(block);
+			}
+			return byteOut.toByteArray();
+		}
+	}
+
 	/**
 	 * Replace a phrase in a File with another phrase.
 	 * <p>
@@ -617,12 +794,17 @@ public class Breakout {
 	 * @param replacementPhrase
 	 *            the phrase to replace the search phrase with.
 	 */
-	private synchronized void replace(File javaSourceCode, String searchPhrase,
-			String replacementPhrase) throws IOException {
-		String classname = JavaClassSummary.getClassName(javaSourceCode);
-		FileEntry entry = classNameToFileEntryMap.get(classname);
+	private synchronized void replace(InputStreamFactory javaSourceCode,
+			String searchPhrase, String replacementPhrase) throws IOException {
+		JavaClassSummary summary = new JavaClassSummary(
+				javaSourceCode.getInputStream(), Charset.forName("UTF-8"));
+		String filename = javaSourceCode.getFilename();
+		filename = filename.substring(0, filename.length() - ".java".length());
+		String classname = summary.getPackageName() + "." + filename;
+		JavaSourceEntry entry = classNameToFileEntryMap.get(classname);
 		if (entry == null)
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("failed to find source for \""
+					+ classname + "\"");
 
 		entry.replace(searchPhrase, replacementPhrase);
 	}
@@ -640,18 +822,18 @@ public class Breakout {
 
 			if (classNameToFileEntryMap.size() == 1) {
 				return IOUtils.read(classNameToFileEntryMap.values().iterator()
-						.next().javaFile);
+						.next().javaFile.getInputStream());
 			}
 
 			try (StringWriter writer = new StringWriter()) {
-				FileEntry primary = getPrimaryEntry();
+				JavaSourceEntry primary = getPrimaryEntry();
 				writer.append(getMasterFileHeader() + "\n\n");
 				if (primary.getFileHeader().trim().length() > 0)
 					writer.append(primary.getFileHeader() + "\n\n");
 				writer.append("package " + primary.summary.getPackageName()
 						+ ";\n\n");
 
-				for (Entry<ImportStatement, Collection<File>> importStatement : importStatements
+				for (Entry<ImportStatement, Collection<InputStreamFactory>> importStatement : importStatements
 						.entrySet()) {
 					writer.append("import "
 							+ importStatement.getKey().getName() + ";");
@@ -660,14 +842,14 @@ public class Breakout {
 
 				primary.writeBody(writer, true);
 
-				for (FileEntry entry : classNameToFileEntryMap.values()) {
+				for (JavaSourceEntry entry : classNameToFileEntryMap.values()) {
 					if (entry != primary)
 						entry.writeBody(writer, false);
 				}
 
 				return writer.toString();
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -677,16 +859,16 @@ public class Breakout {
 	 */
 	protected synchronized String getMasterFileHeader() {
 		String str = "/**\n"
-				+ " * This file was auto-generated by the Breakout class available here: https://github.com/mickleness/pumpernickel/tree/master/src/main/java/com/pump/breakout\n";
+				+ " * This file was auto-generated by the Breakout class available here: https://github.com/mickleness/pumpernickel/tree/master/pump-jar/src/main/java/com/pump/breakout\n";
 
-		FileEntry primary = getPrimaryEntry();
+		JavaSourceEntry primary = getPrimaryEntry();
 		str = str + " *\n";
 		str = str
 				+ " * This file is modeled after "
 				+ primary.summary.getCanonicalName()
 				+ ", but it is bundled to include the following additional files:\n *\n";
 
-		for (FileEntry entry : classNameToFileEntryMap.values()) {
+		for (JavaSourceEntry entry : classNameToFileEntryMap.values()) {
 			if (!entry.primary)
 				str = str + " * " + entry.summary.getCanonicalName() + "\n";
 		}
@@ -698,8 +880,8 @@ public class Breakout {
 	 * Return the FileEntry associated with the one primary entry in this
 	 * autogenerated file.
 	 */
-	protected FileEntry getPrimaryEntry() {
-		for (FileEntry entry : classNameToFileEntryMap.values()) {
+	protected JavaSourceEntry getPrimaryEntry() {
+		for (JavaSourceEntry entry : classNameToFileEntryMap.values()) {
 			if (entry.primary)
 				return entry;
 		}

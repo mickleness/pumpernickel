@@ -22,6 +22,7 @@ import java.util.jar.Manifest;
 
 import com.pump.io.FileTreeIterator;
 import com.pump.io.IOUtils;
+import com.pump.io.parser.java.JavaClassSummary;
 
 public class Project {
 	File projectDir;
@@ -35,7 +36,7 @@ public class Project {
 
 	}
 
-	public File buildJar() throws IOException {
+	public File buildJar(boolean includeJavaSource) throws IOException {
 
 		// TODO: this just dumps the existing compiled code in a jar
 		// we need to replace this with logic that actually compiles
@@ -81,10 +82,46 @@ public class Project {
 						IOUtils.write(f, jarOut);
 					}
 				}
+
+				if(includeJavaSource) {
+					for(File javaSourceDir : getJavaSourceDirs()) {
+						iter = new FileTreeIterator(javaSourceDir);
+						while (iter.hasNext()) {
+							File f = iter.next();
+							if ((!f.isDirectory()) && (!f.isHidden())) {
+								String path = f.getAbsolutePath().substring(
+										javaSourceDir.getAbsolutePath().length() + 1);
+								path = path.replace(File.separatorChar, '/');
+								entries.add(path);
+								jarOut.putNextEntry(new JarEntry(path));
+								IOUtils.write(f, jarOut);
+							}
+						}
+					}
+				}
 			}
 		}
 
 		return jarFile;
+	}
+
+	private Collection<File> getJavaSourceDirs() {
+		Collection<File> returnValue = new HashSet<>();
+		FileTreeIterator iter = new FileTreeIterator(projectDir, "java");
+		while(iter.hasNext()) {
+			File javaFile = iter.next();
+			try {
+				String z = JavaClassSummary.getClassName(javaFile) + ".java";
+				String x = javaFile.getAbsolutePath();
+				x = x.substring(0, x.length() - z.length());
+				if(!x.contains("/test/"))
+					returnValue.add(new File(x));
+			} catch(Exception e) {
+				throw new RuntimeException("Error processing "+javaFile.getAbsolutePath(), e);
+			}
+		}
+		System.out.println("Identified java source directories: "+returnValue);
+		return returnValue;
 	}
 
 	private Manifest createManifest() {

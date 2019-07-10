@@ -123,18 +123,22 @@ public class SourceCodeManager {
 	 */
 	protected void catalogClass(Class z) {
 		if (!classMap.containsKey(z)) {
-			classMap.put(z, new HashSet<Class>());
-			Class child = z;
-			Class parent = child.getDeclaringClass();
-			while (parent != null) {
-				Collection<Class> t = classMap.get(parent);
-				if (t == null) {
-					t = new HashSet<>();
-					classMap.put(parent, t);
+			if (isSupported(z)) {
+				classMap.put(z, new HashSet<Class>());
+				Class child = z;
+				Class parent = child.getDeclaringClass();
+				while (parent != null) {
+					Collection<Class> t = classMap.get(parent);
+					if (isSupported(parent)) {
+						if (t == null) {
+							t = new HashSet<>();
+							classMap.put(parent, t);
+						}
+						t.add(child);
+					}
+					child = parent;
+					parent = parent.getDeclaringClass();
 				}
-				t.add(child);
-				child = parent;
-				parent = parent.getDeclaringClass();
 			}
 		}
 	}
