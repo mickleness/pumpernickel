@@ -10,6 +10,8 @@
  */
 package com.pump.text;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -184,10 +186,127 @@ import java.util.TreeSet;
  * <p>
  * <code>ls jones[0-9][0-9][0-9]</code>
  */
-public class WildcardPattern {
+public class WildcardPattern implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * This defines the characters used to identify star, question mark, or
+	 * brackets.
+	 * <p>
+	 * If any of these attributes are null then those elements are not
+	 * supported. For example: you could make a Format that supports "star" and
+	 * "question mark" elements, but not bracketed elements or escape
+	 * characters.
+	 */
+	public static class Format implements Serializable {
+
+		private static final long serialVersionUID = 1L;
+		
+		/**
+		 * The character used to accept any run of characters. By default this
+		 * is '*'.
+		 */
+		public Character starWildcard = Character.valueOf('*');
+		/**
+		 * The character used to accept any one character. By default this is
+		 * '?'.
+		 */
+		public Character questionMarkWildcard = Character.valueOf('?');
+		/**
+		 * The character used to open a run of potential characters. By default
+		 * this is '['. It is assumed if this is non-null the close bracket
+		 * character must also be non-null.
+		 */
+		public Character openBracketCharacter = Character.valueOf('[');
+		/**
+		 * The character used to close a run of potential characters. By default
+		 * this is ']'
+		 */
+		public Character closeBracketCharacter = Character.valueOf(']');
+
+		/**
+		 * Any character that follows this character is interpreted literally.
+		 * By default this null (unused).
+		 * <p>
+		 * For example if the escape character is
+		 * "\", the star wildcard character is "*", and your pattern is
+		 * "\*important
+		 * .*", then the WildcardPattern will identify files like "*important
+		 * .jpg" and "*important.xml"
+		 */
+		public Character escapeCharacter = null;
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(closeBracketCharacter, openBracketCharacter,
+					escapeCharacter, questionMarkWildcard, starWildcard);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Format))
+				return false;
+			Format other = (Format) obj;
+			return Objects.equals(closeBracketCharacter,
+					other.closeBracketCharacter)
+					&& Objects.equals(openBracketCharacter,
+							other.openBracketCharacter)
+					&& Objects.equals(escapeCharacter, other.escapeCharacter)
+					&& Objects.equals(questionMarkWildcard,
+							other.questionMarkWildcard)
+					&& Objects.equals(starWildcard, other.starWildcard);
+		}
+
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Format[");
+			if (starWildcard != null)
+				sb.append(" starWildcard='" + starWildcard + "'");
+			if (questionMarkWildcard != null)
+				sb.append(" questionMarkWildcard='" + questionMarkWildcard
+						+ "'");
+			if (escapeCharacter != null)
+				sb.append(" escapeCharacter='" + escapeCharacter + "'");
+			if (openBracketCharacter != null)
+				sb.append(" openBracketCharacter='" + openBracketCharacter
+						+ "'");
+			if (closeBracketCharacter != null)
+				sb.append(" closeBracketCharacter='" + closeBracketCharacter
+						+ "'");
+			sb.append("]");
+			return sb.toString();
+		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+			out.writeObject(closeBracketCharacter);
+			out.writeObject(escapeCharacter);
+			out.writeObject(openBracketCharacter);
+			out.writeObject(questionMarkWildcard);
+			out.writeObject(starWildcard);
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+				closeBracketCharacter = (Character) in.readObject();
+				escapeCharacter = (Character) in.readObject();
+				openBracketCharacter = (Character) in.readObject();
+				questionMarkWildcard = (Character) in.readObject();
+				starWildcard = (Character) in.readObject();
+			} else {
+				throw new IOException("Unsupported internal version " + version);
+			}
+		}
+	}
 
 	/** An element of a WildcardPattern. */
 	public static abstract class Placeholder {
+
+		protected abstract String toString(Format format);
 	}
 
 	/**
@@ -202,7 +321,29 @@ public class WildcardPattern {
 		}
 
 		@Override
-		public String toString() {
+		protected String toString(Format format) {
+			if (format.escapeCharacter != null) {
+				if (format.closeBracketCharacter != null
+						&& format.closeBracketCharacter.equals(ch))
+					return Character.toString(format.escapeCharacter)
+							+ Character.toString(ch);
+				if (format.escapeCharacter != null
+						&& format.escapeCharacter.equals(ch))
+					return Character.toString(format.escapeCharacter)
+							+ Character.toString(ch);
+				if (format.openBracketCharacter != null
+						&& format.openBracketCharacter.equals(ch))
+					return Character.toString(format.escapeCharacter)
+							+ Character.toString(ch);
+				if (format.questionMarkWildcard != null
+						&& format.questionMarkWildcard.equals(ch))
+					return Character.toString(format.escapeCharacter)
+							+ Character.toString(ch);
+				if (format.starWildcard != null
+						&& format.starWildcard.equals(ch))
+					return Character.toString(format.escapeCharacter)
+							+ Character.toString(ch);
+			}
 			return Character.toString(ch);
 		}
 	}
@@ -213,8 +354,8 @@ public class WildcardPattern {
 	 */
 	public final static class StarWildcard extends Placeholder {
 		@Override
-		public String toString() {
-			return "*";
+		protected String toString(Format format) {
+			return Character.toString(format.starWildcard);
 		}
 	}
 
@@ -257,8 +398,9 @@ public class WildcardPattern {
 		}
 
 		@Override
-		public String toString() {
-			return "[" + (new String(ch)) + "]";
+		protected String toString(Format format) {
+			return format.openBracketCharacter + (new String(ch))
+					+ format.closeBracketCharacter;
 		}
 	}
 
@@ -267,13 +409,14 @@ public class WildcardPattern {
 	 */
 	public final static class QuestionMarkWildcard extends Placeholder {
 		@Override
-		public String toString() {
-			return "?";
+		protected String toString(Format format) {
+			return Character.toString(format.questionMarkWildcard);
 		}
 	}
 
-	final Placeholder[] placeholders;
-	final String patternText;
+	Placeholder[] placeholders;
+	String patternText;
+	Format format;
 
 	/**
 	 * Create a WildcardPattern.
@@ -282,9 +425,18 @@ public class WildcardPattern {
 	 *            the text this pattern is created from.
 	 */
 	public WildcardPattern(CharSequence patternText) {
+		this(patternText, new Format());
+	}
+
+	public WildcardPattern(CharSequence patternText, Format format) {
+		this.format = format;
 		this.patternText = patternText.toString();
+		initialize();
+	}
+
+	protected void initialize() {
 		try {
-			placeholders = parse(patternText);
+			placeholders = parse(patternText, format);
 		} catch (RuntimeException e) {
 			System.err.println("constructor failed: WildcardPattern(\""
 					+ patternText + "\")");
@@ -301,29 +453,36 @@ public class WildcardPattern {
 		return patternText;
 	}
 
-	private Placeholder[] parse(CharSequence s) {
+	private Placeholder[] parse(CharSequence s, Format format) {
 		List<Placeholder> list = new ArrayList<>(s.length());
 		for (int i = 0; i < s.length(); i++) {
 			char ch = s.charAt(i);
-			if (ch == '*') {
+			if (format.starWildcard != null && format.starWildcard.equals(ch)) {
 				// two consecutive wildcards are meaningless, and screw up the
 				// unit tests
 				if (list.size() > 0
 						&& list.get(list.size() - 1) instanceof StarWildcard)
 					continue;
 				list.add(new StarWildcard());
-			} else if (ch == '?') {
+			} else if (format.questionMarkWildcard != null
+					&& format.questionMarkWildcard.equals(ch)) {
 				list.add(new QuestionMarkWildcard());
-			} else if (ch == '[') {
+			} else if (format.openBracketCharacter != null
+					&& format.openBracketCharacter.equals(ch)) {
 				i++;
 				ch = s.charAt(i);
 				StringBuffer sb = new StringBuffer();
-				while (ch != ']') {
+				while (!format.closeBracketCharacter.equals(ch)) {
 					sb.append(ch);
 					i++;
 					ch = s.charAt(i);
 				}
 				list.add(parseSquareBracketWildcard(sb));
+			} else if (format.escapeCharacter != null
+					&& format.escapeCharacter.equals(ch)) {
+				i++;
+				ch = s.charAt(i);
+				list.add(new FixedCharacter(ch));
 			} else {
 				list.add(new FixedCharacter(ch));
 			}
@@ -528,7 +687,7 @@ public class WildcardPattern {
 		return placeholders.length;
 	}
 
-	private Boolean containsStarWildcard;
+	private transient Boolean containsStarWildcard;
 
 	/**
 	 * @return whether this pattern contains a StarWildcard.
@@ -556,7 +715,7 @@ public class WildcardPattern {
 		StringBuffer sb = new StringBuffer(placeholders.length);
 		sb.append("WildcardPattern[ \"");
 		for (int a = 0; a < placeholders.length; a++) {
-			sb.append(placeholders[a]);
+			sb.append(placeholders[a].toString(getFormat()));
 		}
 		sb.append("\" ]");
 		return sb.toString();
@@ -572,7 +731,15 @@ public class WildcardPattern {
 		if (!(obj instanceof WildcardPattern))
 			return false;
 		WildcardPattern p = (WildcardPattern) obj;
-		return p.getPatternText().equals(getPatternText());
+		return p.getPatternText().equals(getPatternText())
+				&& p.getFormat().equals(getFormat());
+	}
+
+	/**
+	 * Return the Format this pattern used when parsing the input text.
+	 */
+	public Format getFormat() {
+		return format;
 	}
 
 	/**
@@ -609,5 +776,24 @@ public class WildcardPattern {
 		}
 
 		return returnValue;
+	}
+
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeInt(0);
+		out.writeObject(getFormat());
+		out.writeObject(getPatternText());
+
+	}
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
+		int version = in.read();
+		if (version == 0) {
+			format = (Format) in.readObject();
+			patternText = (String) in.readObject();
+		} else {
+			throw new IOException("Unsupported internal version " + version);
+		}
+		initialize();
 	}
 }
