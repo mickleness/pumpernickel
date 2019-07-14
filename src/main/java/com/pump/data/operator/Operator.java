@@ -2,19 +2,28 @@ package com.pump.data.operator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.TreeSet;
 
 import com.pump.text.WildcardPattern;
 import com.pump.util.CombinationIterator;
 
 public abstract class Operator implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	private static Comparator<Operator> toStringComparator = new Comparator<Operator>() {
+
+		@Override
+		public int compare(Operator o1, Operator o2) {
+			return o1.toString().compareTo(o2.toString());
+		}
+
+	};
 
 	public interface Context {
 		public Object getValue(Object bean, String attributeName);
@@ -105,32 +114,6 @@ public abstract class Operator implements Serializable {
 				sb.append(")");
 			return sb.toString();
 		}
-
-		protected Collection<Operator> getFlattenedCanonicalOperands() {
-			Comparator<Operator> comparator = new Comparator<Operator>() {
-
-				@Override
-				public int compare(Operator o1, Operator o2) {
-					return o1.toString().compareTo(o2.toString());
-				}
-
-			};
-			Collection<Operator> flattenedOperands = new TreeSet<>(comparator);
-			loadFlattenedOperands(this, flattenedOperands);
-			return flattenedOperands;
-		}
-
-		private void loadFlattenedOperands(AbstractCompoundOperator compoundOp,
-				Collection<Operator> dest) {
-			for (int a = 0; a < compoundOp.getOperandCount(); a++) {
-				Operator op = compoundOp.getOperand(a).getCanonicalOperator();
-				if (op.getClass() == compoundOp.getClass()) {
-					loadFlattenedOperands((AbstractCompoundOperator) op, dest);
-				} else {
-					dest.add(op);
-				}
-			}
-		}
 	}
 
 	/**
@@ -220,7 +203,7 @@ public abstract class Operator implements Serializable {
 		protected Operator createCanonicalOperator() {
 			if (operand instanceof Not) {
 				Not n = (Not) operand;
-				return n.operand.createCanonicalOperator();
+				return n.operand.getCanonicalOperator();
 			} else if (operand instanceof AbstractCompoundOperator) {
 				AbstractCompoundOperator compoundOp = (AbstractCompoundOperator) operand;
 				Collection<Operator> c = new ArrayList<>(
@@ -228,12 +211,11 @@ public abstract class Operator implements Serializable {
 				for (int i = 0; i < compoundOp.getOperandCount(); i++) {
 					c.add(new Not(compoundOp.getOperand(i)));
 				}
+				Operator[] c2 = c.toArray(new Operator[c.size()]);
 				if (operand instanceof And) {
-					return new Or(c.toArray(new Operator[c.size()]))
-							.createCanonicalOperator();
+					return new Or(c2).getCanonicalOperator();
 				} else if (operand instanceof Or) {
-					return new And(c.toArray(new Operator[c.size()]))
-							.createCanonicalOperator();
+					return new And(c2).getCanonicalOperator();
 				}
 				throw new IllegalStateException("Unsupported operator "
 						+ operand.toString() + " ("
@@ -287,10 +269,53 @@ public abstract class Operator implements Serializable {
 			return true;
 		}
 
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		protected Operator createCanonicalOperator() {
-			Collection<Operator> c = getFlattenedCanonicalOperands();
-			return new And(c.toArray(new Operator[c.size()]));
+			Collection andTerms = new ArrayList();
+			List<Operator[]> orGroups = new ArrayList();
+			for (int a = 0; a < getOperandCount(); a++) {
+				Operator op = getOperand(a).getCanonicalOperator();
+				if (op instanceof And) {
+					And and = (And) op;
+					andTerms.addAll(and.getOperands());
+				} else if (op instanceof Or) {
+					Or or = (Or) op;
+					Collection z = or.getOperands();
+					Operator[] y = new Operator[z.size()];
+					z.toArray(y);
+					orGroups.add(y);
+				} else {
+					andTerms.add(op);
+				}
+			}
+			Operator[] c2 = new Operator[andTerms.size()];
+			andTerms.toArray(c2);
+			if (orGroups.isEmpty()) {
+				Arrays.sort(c2, toStringComparator);
+				return new And(c2);
+			}
+
+			for (Operator andTerm : c2) {
+				orGroups.add(new Operator[] { andTerm });
+			}
+
+			Collection z = new ArrayList();
+			CombinationIterator<Operator> iter = new CombinationIterator(
+					orGroups);
+			while (iter.hasNext()) {
+				List<Operator> newAndTerms = iter.next();
+				Operator[] newAndTerms2 = new Operator[newAndTerms.size()];
+				newAndTerms.toArray(newAndTerms2);
+				Arrays.sort(newAndTerms2, toStringComparator);
+				And newAnd = new And(newAndTerms2);
+				z.add(newAnd);
+			}
+
+			Operator[] z2 = new Operator[z.size()];
+			z.toArray(z2);
+			Arrays.sort(z2, toStringComparator);
+			return new Or(z2);
 		}
 
 		@Override
@@ -335,10 +360,24 @@ public abstract class Operator implements Serializable {
 			return false;
 		}
 
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		@Override
 		protected Operator createCanonicalOperator() {
-			Collection<Operator> c = getFlattenedCanonicalOperands();
-			return new Or(c.toArray(new Operator[c.size()]));
+			Collection c = new ArrayList(getOperandCount());
+			for (int a = 0; a < getOperandCount(); a++) {
+				Operator op = getOperand(a).getCanonicalOperator();
+				if (op instanceof Or) {
+					Or or = (Or) op;
+					c.addAll(or.getOperands());
+				} else {
+					c.add(op);
+				}
+			}
+
+			Operator[] c2 = new Operator[c.size()];
+			c.toArray(c2);
+			Arrays.sort(c2, toStringComparator);
+			return new Or(c2);
 		}
 
 		@Override
@@ -463,10 +502,10 @@ public abstract class Operator implements Serializable {
 			// we can't support "lesserThan" and "greaterThan" at the same time
 			// in an unambiguous canonical representation.
 			// so instead we'll convert an expression like "a < 50" to
-			// "!(a > 50 || a==50)"
-			return new Not(new Or(new EqualTo(getAttribute(), getValue()),
-					new GreaterThan(getAttribute(), getValue())))
-					.createCanonicalOperator();
+			// "!(a > 50) && a!=50)"
+			return new And(
+					new Not(new GreaterThan(getAttribute(), getValue())),
+					new Not(new EqualTo(getAttribute(), getValue())));
 		}
 
 		@Override
@@ -599,6 +638,14 @@ public abstract class Operator implements Serializable {
 		return getCanonicalOperator().doEquals(canonicalOther);
 	}
 
+	public List<Object> getOperands() {
+		List<Object> returnValue = new ArrayList<>(getOperandCount());
+		for (int a = 0; a < getOperandCount(); a++) {
+			returnValue.add(getOperand(a));
+		}
+		return Collections.unmodifiableList(returnValue);
+	}
+
 	public Operator getCanonicalOperator() {
 		if (canonicalOperator == null)
 			canonicalOperator = createCanonicalOperator();
@@ -627,6 +674,13 @@ public abstract class Operator implements Serializable {
 
 	}
 
+	/**
+	 * Create an Operator that is functionally equivalent to this Operator that
+	 * is structured using OR, AND, and NOT nodes in that order. All
+	 * ValueOperators are sorted alphabetically.
+	 * <p>
+	 * This method is used to compare equivalence or hash codes.
+	 */
 	protected abstract Operator createCanonicalOperator();
 
 	public abstract Collection<Operator> split();
