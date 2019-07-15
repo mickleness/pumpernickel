@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,6 +30,68 @@ public abstract class Operator implements Serializable {
 		public Object getValue(Object bean, String attributeName);
 	}
 
+	private static class ConstantOperator extends Operator {
+		private static final long serialVersionUID = 1L;
+
+		private final boolean value;
+
+		private ConstantOperator(boolean value) {
+			this.value = value;
+		}
+
+		@Override
+		public int getOperandCount() {
+			return 0;
+		}
+
+		@Override
+		public Object getOperand(int index) {
+			return null;
+		}
+
+		@Override
+		public boolean evaluate(Context context, Object bean) throws Exception {
+			return value;
+		}
+
+		@Override
+		protected String toString(boolean negated) {
+			boolean v = negated ? !value : value;
+			return Boolean.valueOf(v).toString();
+		}
+
+		@Override
+		protected Operator createCanonicalOperator() {
+			return this;
+		}
+
+		@Override
+		protected boolean canonicalEquals(Operator canonicalOther) {
+			if (!(canonicalOther instanceof ConstantOperator))
+				return false;
+			ConstantOperator other = (ConstantOperator) canonicalOther;
+			return value == other.value;
+		}
+
+		@Override
+		public Collection<Operator> split() {
+			return Collections.singleton(this);
+		}
+
+		@Override
+		public int hashCode() {
+			return Boolean.valueOf(value).hashCode();
+		}
+
+		@Override
+		public Operator getCanonicalOperator() {
+			return this;
+		}
+	}
+
+	public static final Operator TRUE = new ConstantOperator(true);
+	public static final Operator FALSE = new ConstantOperator(false);
+
 	/**
 	 * This accepts an arbitrary number of operands. This is intended for AND
 	 * and OR operators.
@@ -36,7 +99,26 @@ public abstract class Operator implements Serializable {
 	public static abstract class AbstractCompoundOperator extends Operator {
 		private static final long serialVersionUID = 1L;
 
-		private final Operator[] operands;
+		protected static void validateOperands(List<Operator> operands,
+				String operationName) {
+			Objects.requireNonNull(operands);
+			Iterator<Operator> iter = operands.iterator();
+			int index = 0;
+			while (iter.hasNext()) {
+				Operator op = iter.next();
+				if (op == null)
+					throw new NullPointerException("index = " + index);
+				index++;
+			}
+			if (operands.size() == 0)
+				throw new IllegalArgumentException();
+			if (operands.size() == 1)
+				throw new IllegalArgumentException(
+						"2 or more operands are required for a "
+								+ operationName + " operator");
+		}
+
+		private final List<Operator> operands;
 		private final String operatorString;
 
 		/**
@@ -47,31 +129,21 @@ public abstract class Operator implements Serializable {
 		 * @param operands
 		 */
 		protected AbstractCompoundOperator(String operatorString,
-				Operator... operands) {
-			Objects.requireNonNull(operands);
+				List<Operator> operands) {
 			Objects.requireNonNull(operatorString);
 			this.operatorString = operatorString;
-			for (int a = 0; a < operands.length; a++) {
-				if (operands[a] == null)
-					throw new NullPointerException("a = " + a);
-			}
-			if (operands.length == 0)
-				throw new IllegalArgumentException();
-			if (operands.length == 1)
-				throw new IllegalArgumentException(
-						"2 or more operands are required for a "
-								+ getClass().getSimpleName() + " operator");
-			this.operands = operands;
+			validateOperands(operands, getClass().getSimpleName());
+			this.operands = Collections.unmodifiableList(operands);
 		}
 
 		@Override
 		public int getOperandCount() {
-			return operands.length;
+			return operands.size();
 		}
 
 		@Override
 		public Operator getOperand(int index) {
-			return operands[index];
+			return operands.get(index);
 		}
 
 		@Override
@@ -128,8 +200,6 @@ public abstract class Operator implements Serializable {
 		protected final String attributeName;
 		protected final DataType fixedValue;
 
-		private transient Collection<Class<?>> validatedClasses;
-
 		/**
 		 * @param valueName
 		 *            the value to inspect in incoming beans. This may not be
@@ -170,9 +240,20 @@ public abstract class Operator implements Serializable {
 	public static class Not extends Operator {
 		private static final long serialVersionUID = 1L;
 
+		public static Operator create(Operator op) {
+			if (op == TRUE)
+				return FALSE;
+			if (op == FALSE)
+				return TRUE;
+			if (op instanceof Not) {
+				return ((Not) op).getOperand(0);
+			}
+			return new Not(op);
+		}
+
 		Operator operand;
 
-		public Not(Operator operand) {
+		private Not(Operator operand) {
 			Objects.requireNonNull(operand);
 			this.operand = operand;
 		}
@@ -199,23 +280,22 @@ public abstract class Operator implements Serializable {
 			throw new IllegalArgumentException("index = " + index);
 		}
 
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		@Override
 		protected Operator createCanonicalOperator() {
-			if (operand instanceof Not) {
-				Not n = (Not) operand;
-				return n.operand.getCanonicalOperator();
-			} else if (operand instanceof AbstractCompoundOperator) {
+			if (operand instanceof AbstractCompoundOperator) {
 				AbstractCompoundOperator compoundOp = (AbstractCompoundOperator) operand;
-				Collection<Operator> c = new ArrayList<>(
+				List<Operator> negatedTerms = new ArrayList<>(
 						compoundOp.getOperandCount());
-				for (int i = 0; i < compoundOp.getOperandCount(); i++) {
-					c.add(new Not(compoundOp.getOperand(i)));
+				List operands = (List) compoundOp.getOperands();
+				for (Operator member : (List<Operator>) operands) {
+					negatedTerms.add(Not.create(member));
 				}
-				Operator[] c2 = c.toArray(new Operator[c.size()]);
+
 				if (operand instanceof And) {
-					return new Or(c2).getCanonicalOperator();
+					return Or.create(negatedTerms).getCanonicalOperator();
 				} else if (operand instanceof Or) {
-					return new And(c2).getCanonicalOperator();
+					return And.create(negatedTerms).getCanonicalOperator();
 				}
 				throw new IllegalStateException("Unsupported operator "
 						+ operand.toString() + " ("
@@ -236,7 +316,7 @@ public abstract class Operator implements Serializable {
 				for (int a = 0; a < and.getOperandCount(); a++) {
 					Collection<Operator> c = and.getOperand(a).split();
 					for (Operator op : c) {
-						returnValue.add(new Not(op));
+						returnValue.add(Not.create(op));
 					}
 				}
 				return returnValue;
@@ -246,7 +326,7 @@ public abstract class Operator implements Serializable {
 
 			Collection<Operator> returnValue = new ArrayList<Operator>(z.size());
 			for (Operator op : z) {
-				returnValue.add(new Not(op));
+				returnValue.add(Not.create(op));
 			}
 
 			return returnValue;
@@ -256,7 +336,32 @@ public abstract class Operator implements Serializable {
 	public static class And extends AbstractCompoundOperator {
 		private static final long serialVersionUID = 1L;
 
-		public And(Operator... operands) {
+		public static Operator create(Operator... operands) {
+			return create(Arrays.asList(operands));
+		}
+
+		public static Operator create(List<Operator> operands) {
+			validateOperands(operands, "And");
+
+			List<Operator> newOperands = new ArrayList<>(operands.size());
+			for (Operator op : operands) {
+				if (TRUE.equals(op)) {
+					// skip this operator
+				} else if (FALSE.equals(op)) {
+					return FALSE;
+				} else if (!newOperands.contains(op)) {
+					newOperands.add(op);
+				}
+			}
+			if (newOperands.size() == 0) {
+				newOperands.add(TRUE);
+			}
+			if (newOperands.size() == 1)
+				return newOperands.get(0);
+			return new And(newOperands);
+		}
+
+		public And(List<Operator> operands) {
 			super(" && ", operands);
 		}
 
@@ -272,7 +377,7 @@ public abstract class Operator implements Serializable {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		protected Operator createCanonicalOperator() {
-			Collection andTerms = new ArrayList();
+			List andTerms = new ArrayList();
 			List<Operator[]> orGroups = new ArrayList();
 			for (int a = 0; a < getOperandCount(); a++) {
 				Operator op = getOperand(a).getCanonicalOperator();
@@ -289,33 +394,25 @@ public abstract class Operator implements Serializable {
 					andTerms.add(op);
 				}
 			}
-			Operator[] c2 = new Operator[andTerms.size()];
-			andTerms.toArray(c2);
 			if (orGroups.isEmpty()) {
-				Arrays.sort(c2, toStringComparator);
-				return new And(c2);
+				Collections.sort(andTerms, toStringComparator);
+				return And.create(andTerms);
 			}
 
-			for (Operator andTerm : c2) {
-				orGroups.add(new Operator[] { andTerm });
+			for (Object andTerm : andTerms) {
+				orGroups.add(new Operator[] { (Operator) andTerm });
 			}
 
-			Collection z = new ArrayList();
+			List newOrTerms = new ArrayList();
 			CombinationIterator<Operator> iter = new CombinationIterator(
 					orGroups);
 			while (iter.hasNext()) {
 				List<Operator> newAndTerms = iter.next();
-				Operator[] newAndTerms2 = new Operator[newAndTerms.size()];
-				newAndTerms.toArray(newAndTerms2);
-				Arrays.sort(newAndTerms2, toStringComparator);
-				And newAnd = new And(newAndTerms2);
-				z.add(newAnd);
+				Collections.sort(newAndTerms, toStringComparator);
+				newOrTerms.add(And.create(newAndTerms).getCanonicalOperator());
 			}
 
-			Operator[] z2 = new Operator[z.size()];
-			z.toArray(z2);
-			Arrays.sort(z2, toStringComparator);
-			return new Or(z2);
+			return Or.create(newOrTerms).getCanonicalOperator();
 		}
 
 		@Override
@@ -336,8 +433,7 @@ public abstract class Operator implements Serializable {
 			List<Operator> returnValue = new ArrayList<>(z);
 			while (iter.hasNext()) {
 				List<Operator> w = iter.next();
-				Operator[] w2 = w.toArray(new Operator[w.size()]);
-				returnValue.add(new And(w2));
+				returnValue.add(And.create(w));
 			}
 
 			return returnValue;
@@ -347,7 +443,32 @@ public abstract class Operator implements Serializable {
 	public static class Or extends AbstractCompoundOperator {
 		private static final long serialVersionUID = 1L;
 
-		public Or(Operator... operands) {
+		public static Operator create(Operator... operands) {
+			return create(Arrays.asList(operands));
+		}
+
+		public static Operator create(List<Operator> operands) {
+			validateOperands(operands, "Or");
+
+			List<Operator> newOperands = new ArrayList<>(operands.size());
+			for (Operator op : operands) {
+				if (TRUE.equals(op)) {
+					return TRUE;
+				} else if (FALSE.equals(op)) {
+					// skip this operator
+				} else if (!newOperands.contains(op)) {
+					newOperands.add(op);
+				}
+			}
+			if (newOperands.size() == 0) {
+				newOperands.add(FALSE);
+			}
+			if (newOperands.size() == 1)
+				return newOperands.get(0);
+			return new Or(newOperands);
+		}
+
+		public Or(List<Operator> operands) {
 			super(" || ", operands);
 		}
 
@@ -363,21 +484,19 @@ public abstract class Operator implements Serializable {
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		@Override
 		protected Operator createCanonicalOperator() {
-			Collection c = new ArrayList(getOperandCount());
+			List orTerms = new ArrayList(getOperandCount());
 			for (int a = 0; a < getOperandCount(); a++) {
 				Operator op = getOperand(a).getCanonicalOperator();
 				if (op instanceof Or) {
 					Or or = (Or) op;
-					c.addAll(or.getOperands());
+					orTerms.addAll(or.getOperands());
 				} else {
-					c.add(op);
+					orTerms.add(op);
 				}
 			}
 
-			Operator[] c2 = new Operator[c.size()];
-			c.toArray(c2);
-			Arrays.sort(c2, toStringComparator);
-			return new Or(c2);
+			Collections.sort(orTerms, toStringComparator);
+			return Or.create(orTerms);
 		}
 
 		@Override
@@ -503,9 +622,9 @@ public abstract class Operator implements Serializable {
 			// in an unambiguous canonical representation.
 			// so instead we'll convert an expression like "a < 50" to
 			// "!(a > 50) && a!=50)"
-			return new And(
-					new Not(new GreaterThan(getAttribute(), getValue())),
-					new Not(new EqualTo(getAttribute(), getValue())));
+			return And.create(
+					Not.create(new GreaterThan(getAttribute(), getValue())),
+					Not.create(new EqualTo(getAttribute(), getValue())));
 		}
 
 		@Override
@@ -599,7 +718,6 @@ public abstract class Operator implements Serializable {
 		}
 
 		@Override
-		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public Collection<Operator> split() {
 			Collection<Operator> returnValue = new HashSet<>();
 			for (Object e : getValue()) {
@@ -627,7 +745,7 @@ public abstract class Operator implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return getCanonicalOperator().doHashCode();
+		return getCanonicalOperator().canonicalHashCode();
 	}
 
 	@Override
@@ -635,7 +753,7 @@ public abstract class Operator implements Serializable {
 		if (!(obj instanceof Operator))
 			return false;
 		Operator canonicalOther = ((Operator) obj).getCanonicalOperator();
-		return getCanonicalOperator().doEquals(canonicalOther);
+		return getCanonicalOperator().canonicalEquals(canonicalOther);
 	}
 
 	public List<Object> getOperands() {
@@ -646,13 +764,183 @@ public abstract class Operator implements Serializable {
 		return Collections.unmodifiableList(returnValue);
 	}
 
+	/**
+	 * Return an Operator that is functionally equivalent to this Operator that
+	 * is structured using OR, AND, and NOT nodes in that order (a specific type
+	 * of "sum of products"). All ValueOperators are sorted alphabetically.
+	 * <p>
+	 * The canonical operator is used to compare equivalence or hash codes.
+	 */
 	public Operator getCanonicalOperator() {
-		if (canonicalOperator == null)
-			canonicalOperator = createCanonicalOperator();
+		if (canonicalOperator == null) {
+			Operator op = createCanonicalOperator();
+			op = simplifyCanonicalOperator(op);
+			op.canonicalOperator = op;
+			canonicalOperator = op;
+		}
 		return canonicalOperator;
 	}
 
-	protected int doHashCode() {
+	/**
+	 * This simplifies an expression (if possible) and returns an equivalent
+	 * canonical (SOP) expression.
+	 * 
+	 * @param op
+	 *            the incoming canonical SOP expression
+	 * @return an equivalent canonical SOP expression that may be simpler
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected static Operator simplifyCanonicalOperator(Operator op) {
+		// step 1: abort for negations like (a && !a), (a || !a)
+		if (op instanceof AbstractCompoundOperator) {
+			AbstractCompoundOperator c = (AbstractCompoundOperator) op;
+			for (int a = 0; a < op.getOperandCount(); a++) {
+				Operator opA = simplifyCanonicalOperator(c.getOperand(a));
+				for (int b = a + 1; b < c.getOperandCount(); b++) {
+					Operator opB = simplifyCanonicalOperator(c.getOperand(b));
+					if (opA.equals(Not.create(opB))) {
+						if (op instanceof And) {
+							return FALSE;
+						} else if (op instanceof Or) {
+							return TRUE;
+						}
+					}
+				}
+			}
+		}
+
+		// apply redundancy laws to reduced the number/complexity of or terms
+		//
+		// 1. "A + (A * B) -> A"
+		// 2. "(A * B) + (A * ~B) -> A"
+		// 3. "A + (~A * B) -> A + B"
+
+		boolean runAgain;
+		if (op instanceof Or) {
+			List orTerms = new ArrayList(op.getOperands());
+			boolean modified = false;
+			do {
+				runAgain = false;
+				for (int a = 0; a < orTerms.size(); a++) {
+					for (int b = a + 1; b < orTerms.size(); b++) {
+						Operator opA = (Operator) orTerms.get(a);
+						Operator opB = (Operator) orTerms.get(b);
+						if (opA != null && opB != null) {
+							List aOperands = new ArrayList(
+									opA instanceof And ? ((And) opA)
+											.getOperands() : Arrays.asList(opA));
+							List bOperands = new ArrayList(
+									opB instanceof And ? ((And) opB)
+											.getOperands() : Arrays.asList(opB));
+
+							List commonOperands = new ArrayList<>();
+							for (Object aElement : aOperands) {
+								if (bOperands.contains(aElement)) {
+									commonOperands.add(aElement);
+								}
+							}
+
+							// rule #1: "A + (A * B) -> A"
+
+							if (aOperands.size() > commonOperands.size()
+									&& bOperands.size() == commonOperands
+											.size()) {
+								// opB is a subset of opA, so opA can be purged
+								orTerms.set(a, null);
+								runAgain = true;
+								modified = true;
+								continue;
+							} else if (bOperands.size() > commonOperands.size()
+									&& aOperands.size() == commonOperands
+											.size()) {
+								// opA is a subset of opB, so opB can be purged
+								orTerms.set(b, null);
+								runAgain = true;
+								modified = true;
+								continue;
+							}
+
+							// rule #2: apply "AB + A(!B) -> A"
+							aOperands.removeAll(commonOperands);
+							bOperands.removeAll(commonOperands);
+
+							if (!(commonOperands.isEmpty()
+									|| aOperands.isEmpty() || bOperands
+										.isEmpty())) {
+								Operator aLeftover = aOperands.size() == 1 ? (Operator) aOperands
+										.get(0) : And.create(aOperands);
+								Operator bLeftover = bOperands.size() == 1 ? (Operator) bOperands
+										.get(0) : And.create(bOperands);
+								if (aLeftover.equals(Not.create(bLeftover))) {
+									Operator shared = commonOperands.size() == 1 ? (Operator) commonOperands
+											.get(0) : And
+											.create(commonOperands);
+									orTerms.set(a, null);
+									orTerms.set(b, shared);
+									runAgain = true;
+									modified = true;
+									continue;
+								}
+							}
+
+							// rule #3: "AZ + (!A)BZ -> AZ + BZ"
+
+							if (commonOperands.size() > 0) {
+								// remember at this point aOperands and
+								// bOperands already have stripped away
+								// commonOperands
+								if (aOperands.size() == 1
+										&& bOperands.size() == 2) {
+									if (bOperands
+											.remove(Not
+													.create((Operator) aOperands
+															.get(0)))) {
+										bOperands.addAll(commonOperands);
+										orTerms.set(b, And.create(bOperands));
+										runAgain = true;
+										modified = true;
+									}
+								} else if (aOperands.size() == 2
+										&& bOperands.size() == 1) {
+									if (aOperands
+											.remove(Not
+													.create((Operator) bOperands
+															.get(0)))) {
+										aOperands.addAll(commonOperands);
+										orTerms.set(a, And.create(aOperands));
+										runAgain = true;
+										modified = true;
+									}
+								}
+							}
+						}
+					}
+				}
+			} while (runAgain);
+
+			if (modified) {
+				Iterator iter = orTerms.iterator();
+				while (iter.hasNext()) {
+					Object element = iter.next();
+					if (element == null)
+						iter.remove();
+				}
+
+				Collections.sort(orTerms, toStringComparator);
+				op = orTerms.size() == 1 ? (Operator) orTerms.get(0) : Or
+						.create(orTerms);
+			}
+		}
+
+		return op;
+	}
+
+	/**
+	 * This method should only be called on a canonical Operator.
+	 * 
+	 * @return
+	 */
+	protected int canonicalHashCode() {
 		int z = 0;
 		for (int a = 0; a < getOperandCount(); a++) {
 			z += Objects.hashCode(getOperand(a));
@@ -660,7 +948,14 @@ public abstract class Operator implements Serializable {
 		return z;
 	}
 
-	protected boolean doEquals(Operator canonicalOther) {
+	/**
+	 * This method should only be called on a canonical Operator
+	 * 
+	 * @param canonicalOther
+	 *            the other Operator to compare this to.
+	 * @return
+	 */
+	protected boolean canonicalEquals(Operator canonicalOther) {
 		if (!canonicalOther.getClass().equals(getClass()))
 			return false;
 		if (getOperandCount() != canonicalOther.getOperandCount())
@@ -676,8 +971,8 @@ public abstract class Operator implements Serializable {
 
 	/**
 	 * Create an Operator that is functionally equivalent to this Operator that
-	 * is structured using OR, AND, and NOT nodes in that order. All
-	 * ValueOperators are sorted alphabetically.
+	 * is structured using OR, AND, and NOT nodes in that order (a specific type
+	 * of "sum of products"). All ValueOperators are sorted alphabetically.
 	 * <p>
 	 * This method is used to compare equivalence or hash codes.
 	 */

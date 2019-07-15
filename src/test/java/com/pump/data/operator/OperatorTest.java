@@ -162,14 +162,14 @@ public class OperatorTest extends TestCase {
 		//
 		// // ANDs and ORs require at least 2 arguments:
 		// try {
-		// new And(new LesserThan(StudentBean.class, "birthYear", 1980));
+		// And.create(new LesserThan(StudentBean.class, "birthYear", 1980));
 		// fail();
 		// } catch (Exception e) {
 		// // success
 		// }
 		//
 		// try {
-		// new Or(new LesserThan(StudentBean.class, "birthYear", 1980));
+		// Or.create(new LesserThan(StudentBean.class, "birthYear", 1980));
 		// fail();
 		// } catch (Exception e) {
 		// // success
@@ -211,20 +211,20 @@ public class OperatorTest extends TestCase {
 
 	@Test
 	public void testNot() throws Exception {
-		Operator lastNameNotWeasley = new Not(
-				new EqualTo("lastName", "Weasley"));
+		Operator lastNameNotWeasley = Not.create(new EqualTo("lastName",
+				"Weasley"));
 		assertFalse(lastNameNotWeasley.evaluate(context, ginnyWeasley));
 		assertFalse(lastNameNotWeasley.evaluate(context, ronWeasley));
 		assertTrue(lastNameNotWeasley.evaluate(context, pavartiPatil));
 		assertTrue(lastNameNotWeasley.evaluate(context, harryPotter));
 
-		Operator lastNameNotNull = new Not(new EqualTo("lastName", null));
+		Operator lastNameNotNull = Not.create(new EqualTo("lastName", null));
 		assertTrue(lastNameNotNull.evaluate(context, hermioneGranger));
 		assertFalse(lastNameNotNull.evaluate(context, nullStudent));
 
 		// nulls aren't allowed
 		try {
-			new Not(null);
+			Not.create(null);
 			fail();
 		} catch (Exception e) {
 			// success
@@ -273,11 +273,11 @@ public class OperatorTest extends TestCase {
 		Operator ravenclaw = new In("house",
 				Arrays.asList(StudentBean.House.Ravenclaw));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
-		Operator lastNameNotWeasley = new Not(
-				new EqualTo("lastName", "Weasley"));
+		Operator lastNameNotWeasley = Not.create(new EqualTo("lastName",
+				"Weasley"));
 
-		Operator or = new Or(ravenclaw, above1980);
-		Operator and = new And(lastNameNotWeasley, or);
+		Operator or = Or.create(ravenclaw, above1980);
+		Operator and = And.create(lastNameNotWeasley, or);
 		assertEquals(
 				"lastName != 'Weasley' && (contains(house, {'Ravenclaw'}) || birthYear > '1980')",
 				and.toString());
@@ -288,11 +288,11 @@ public class OperatorTest extends TestCase {
 		Operator ravenclaw = new In("house",
 				Arrays.asList(StudentBean.House.Ravenclaw));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
-		Operator lastNameNotWeasley = new Not(
-				new EqualTo("lastName", "Weasley"));
+		Operator lastNameNotWeasley = Not.create(new EqualTo("lastName",
+				"Weasley"));
 
-		Operator notOr = new Not(new Or(ravenclaw, above1980));
-		Operator and = new And(lastNameNotWeasley, notOr);
+		Operator notOr = Not.create(Or.create(ravenclaw, above1980));
+		Operator and = And.create(lastNameNotWeasley, notOr);
 		assertEquals(
 				"lastName != 'Weasley' && !(contains(house, {'Ravenclaw'}) || birthYear > '1980')",
 				and.toString());
@@ -305,8 +305,8 @@ public class OperatorTest extends TestCase {
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
-		Operator notOr = new Not(new Or(ravenclaw, above1980));
-		Operator notAnd = new Not(new And(notOr, lastNameWeasley));
+		Operator notOr = Not.create(Or.create(ravenclaw, above1980));
+		Operator notAnd = Not.create(And.create(notOr, lastNameWeasley));
 		assertEquals(
 				"!(!(contains(house, {'Ravenclaw'}) || birthYear > '1980') && lastName == 'Weasley')",
 				notAnd.toString());
@@ -318,11 +318,12 @@ public class OperatorTest extends TestCase {
 		Operator lastNameP = new Like("lastName", pStar);
 
 		assertEquals("matches(lastName, 'P*')", lastNameP.toString());
-		assertEquals("!matches(lastName, 'P*')", new Not(lastNameP).toString());
+		assertEquals("!matches(lastName, 'P*')", Not.create(lastNameP)
+				.toString());
 		assertEquals("matches(lastName, 'P*')",
-				new Not(new Not(lastNameP)).toString());
-		assertEquals("!matches(lastName, 'P*')", new Not(new Not(new Not(
-				lastNameP))).toString());
+				Not.create(Not.create(lastNameP)).toString());
+		assertEquals("!matches(lastName, 'P*')",
+				Not.create(Not.create(Not.create(lastNameP))).toString());
 	}
 
 	@Test
@@ -334,9 +335,9 @@ public class OperatorTest extends TestCase {
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
-		Operator and1 = new And(firstNameL, ravenclaw);
-		Operator and2 = new And(above1980, lastNameWeasley);
-		Operator or = new Or(and1, and2);
+		Operator and1 = And.create(firstNameL, ravenclaw);
+		Operator and2 = And.create(above1980, lastNameWeasley);
+		Operator or = Or.create(and1, and2);
 		assertEquals(
 				"(matches(firstName, 'L*') && contains(house, {'Ravenclaw'})) || (birthYear > '1980' && lastName == 'Weasley')",
 				or.toString());
@@ -351,21 +352,21 @@ public class OperatorTest extends TestCase {
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
-		Operator a_and1 = new And(firstNameL, ravenclaw);
-		Operator a_and2 = new And(above1980, lastNameWeasley);
-		Operator a_masterAnd = new And(a_and1, a_and2);
+		Operator a_and1 = And.create(firstNameL, ravenclaw);
+		Operator a_and2 = And.create(above1980, lastNameWeasley);
+		Operator a_masterAnd = And.create(a_and1, a_and2);
 
-		Operator b_and1 = new And(firstNameL, lastNameWeasley);
-		Operator b_and2 = new And(above1980, ravenclaw);
-		Operator b_masterAnd = new And(b_and1, b_and2);
+		Operator b_and1 = And.create(firstNameL, lastNameWeasley);
+		Operator b_and2 = And.create(above1980, ravenclaw);
+		Operator b_masterAnd = And.create(b_and1, b_and2);
 
 		assertTrue(a_masterAnd.equals(b_masterAnd));
 		assertTrue(b_masterAnd.equals(a_masterAnd));
 
 		Operator lastNameGranger = new EqualTo("lastName", "Granger");
-		Operator c_and1 = new And(firstNameL, lastNameGranger);
-		Operator c_and2 = new And(above1980, ravenclaw);
-		Operator c_masterAnd = new And(c_and1, c_and2);
+		Operator c_and1 = And.create(firstNameL, lastNameGranger);
+		Operator c_and2 = And.create(above1980, ravenclaw);
+		Operator c_masterAnd = And.create(c_and1, c_and2);
 		assertFalse(a_masterAnd.equals(c_masterAnd));
 		assertFalse(b_masterAnd.equals(c_masterAnd));
 		assertFalse(c_masterAnd.equals(a_masterAnd));
@@ -381,38 +382,39 @@ public class OperatorTest extends TestCase {
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
-		Operator a1 = new And(firstNameL, ravenclaw);
-		Operator a2 = new Or(new Not(a1), above1980, lastNameWeasley);
+		Operator a1 = And.create(firstNameL, ravenclaw);
+		Operator a2 = Or.create(Not.create(a1), above1980, lastNameWeasley);
 
-		Operator b1 = new Or(new Not(firstNameL), new Not(ravenclaw));
-		Operator b2 = new Or(b1, above1980, lastNameWeasley);
+		Operator b1 = Or.create(Not.create(firstNameL), Not.create(ravenclaw));
+		Operator b2 = Or.create(b1, above1980, lastNameWeasley);
 
 		assertTrue(a2.equals(b2));
 		assertTrue(b2.equals(a2));
 
-		Operator c1 = new Or(lastNameWeasley, new Not(firstNameL), new Not(
-				ravenclaw));
-		Operator c2 = new Or(c1, above1980);
+		Operator c1 = Or.create(lastNameWeasley, Not.create(firstNameL),
+				Not.create(ravenclaw));
+		Operator c2 = Or.create(c1, above1980);
 
 		assertTrue(a2.equals(c2));
 		assertTrue(c2.equals(a2));
 
-		Operator d = new Or(above1980, lastNameWeasley, new Not(firstNameL),
-				new Not(ravenclaw));
+		Operator d = Or.create(above1980, lastNameWeasley,
+				Not.create(firstNameL), Not.create(ravenclaw));
 		assertTrue(a2.equals(d));
 		assertTrue(d.equals(a2));
 
-		Operator e = new Or(above1980, lastNameWeasley, firstNameL, new Not(
-				ravenclaw));
+		Operator e = Or.create(above1980, lastNameWeasley, firstNameL,
+				Not.create(ravenclaw));
 		assertFalse(a2.equals(e));
 		assertFalse(e.equals(a2));
 
-		Operator f = new Or(above1980, new Not(firstNameL), new Not(ravenclaw));
+		Operator f = Or.create(above1980, Not.create(firstNameL),
+				Not.create(ravenclaw));
 		assertFalse(a2.equals(f));
 		assertFalse(f.equals(a2));
 
-		Operator g = new And(above1980, lastNameWeasley, new Not(firstNameL),
-				new Not(ravenclaw));
+		Operator g = And.create(above1980, lastNameWeasley,
+				Not.create(firstNameL), Not.create(ravenclaw));
 		assertFalse(a2.equals(g));
 		assertFalse(g.equals(a2));
 	}
@@ -438,17 +440,17 @@ public class OperatorTest extends TestCase {
 		assertFalse(a_firstNameL.equals(d_firstNameL));
 		assertFalse(d_firstNameL.equals(a_firstNameL));
 
-		Operator e = new Not(a_firstNameL);
+		Operator e = Not.create(a_firstNameL);
 
 		assertFalse(a_firstNameL.equals(e));
 		assertFalse(e.equals(a_firstNameL));
 
-		Operator f = new Not(a_firstNameL);
+		Operator f = Not.create(a_firstNameL);
 
 		assertTrue(f.equals(e));
 		assertTrue(e.equals(f));
 
-		Operator g = new Not(new Not(a_firstNameL));
+		Operator g = Not.create(Not.create(a_firstNameL));
 
 		assertTrue(a_firstNameL.equals(g));
 		assertTrue(g.equals(a_firstNameL));
@@ -474,7 +476,7 @@ public class OperatorTest extends TestCase {
 				StudentBean.House.Hufflepuff)));
 
 		// Operator[] n2 = n1.toArray(new Operator[n1.size()]);
-		// Operator joined = new Or(n2);
+		// Operator joined = Or.create(n2);
 		// assertTrue(joined.simplify().equals(houseIn));
 	}
 
@@ -486,16 +488,16 @@ public class OperatorTest extends TestCase {
 		Operator houseIn = new In("house", Arrays.asList(
 				StudentBean.House.Ravenclaw, StudentBean.House.Hufflepuff));
 
-		Operator op = new Not(houseIn);
+		Operator op = Not.create(houseIn);
 		Collection<Operator> n1 = op.split();
 		assertEquals(2, n1.size());
-		assertTrue(n1.contains(new Not(new EqualTo("house",
+		assertTrue(n1.contains(Not.create(new EqualTo("house",
 				StudentBean.House.Ravenclaw))));
-		assertTrue(n1.contains(new Not(new EqualTo("house",
+		assertTrue(n1.contains(Not.create(new EqualTo("house",
 				StudentBean.House.Hufflepuff))));
 
 		// Operator[] n2 = n1.toArray(new Operator[n1.size()]);
-		// Operator joined = new Or(n2);
+		// Operator joined = Or.create(n2);
 		// assertTrue(joined.simplify().equals(op));
 	}
 
@@ -513,16 +515,16 @@ public class OperatorTest extends TestCase {
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
-		Operator or1 = new Or(new Not(firstNameL), ravenclawIn);
-		Operator or2 = new Not(new Or(above1980, lastNameWeasley));
-		Operator or3 = new Or(or1, or2);
+		Operator or1 = Or.create(Not.create(firstNameL), ravenclawIn);
+		Operator or2 = Not.create(Or.create(above1980, lastNameWeasley));
+		Operator or3 = Or.create(or1, or2);
 
 		Collection<Operator> n1 = or3.split();
 		assertEquals(4, n1.size());
-		assertTrue(n1.contains(new Not(firstNameL)));
+		assertTrue(n1.contains(Not.create(firstNameL)));
 		assertTrue(n1.contains(ravenclawEqual));
-		assertTrue(n1.contains(new Not(above1980)));
-		assertTrue(n1.contains(new Not(lastNameWeasley)));
+		assertTrue(n1.contains(Not.create(above1980)));
+		assertTrue(n1.contains(Not.create(lastNameWeasley)));
 	}
 
 	/**
@@ -539,14 +541,14 @@ public class OperatorTest extends TestCase {
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
-		Operator and1 = new And(new Not(firstNameL), ravenclawIn);
-		Operator and2 = new And(above1980, lastNameWeasley);
-		Operator and3 = new And(and1, and2);
+		Operator and1 = And.create(Not.create(firstNameL), ravenclawIn);
+		Operator and2 = And.create(above1980, lastNameWeasley);
+		Operator and3 = And.create(and1, and2);
 
 		Collection<Operator> n1 = and3.split();
 		assertEquals(1, n1.size());
-		assertTrue(n1.contains(new And(new Not(firstNameL), ravenclawEqual,
-				above1980, lastNameWeasley)));
+		assertTrue(n1.contains(And.create(Not.create(firstNameL),
+				ravenclawEqual, above1980, lastNameWeasley)));
 	}
 
 	/**
@@ -562,9 +564,10 @@ public class OperatorTest extends TestCase {
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
-		Operator and1 = new And(new Not(firstNameL), ravenclawSlytherinIn);
-		Operator and2 = new Not(new And(above1980, lastNameWeasley));
-		Operator and3 = new And(and1, and2);
+		Operator and1 = And
+				.create(Not.create(firstNameL), ravenclawSlytherinIn);
+		Operator and2 = Not.create(And.create(above1980, lastNameWeasley));
+		Operator and3 = And.create(and1, and2);
 
 		Operator ravenclawEqual = new EqualTo("house",
 				StudentBean.House.Ravenclaw);
@@ -573,14 +576,14 @@ public class OperatorTest extends TestCase {
 
 		Collection<Operator> n1 = and3.split();
 		assertEquals(4, n1.size());
-		assertTrue(n1.contains(new And(new Not(firstNameL), ravenclawEqual,
-				new Not(above1980))));
-		assertTrue(n1.contains(new And(new Not(firstNameL), ravenclawEqual,
-				new Not(lastNameWeasley))));
-		assertTrue(n1.contains(new And(new Not(firstNameL), slytherinEqual,
-				new Not(above1980))));
-		assertTrue(n1.contains(new And(new Not(firstNameL), slytherinEqual,
-				new Not(lastNameWeasley))));
+		assertTrue(n1.contains(And.create(Not.create(firstNameL),
+				ravenclawEqual, Not.create(above1980))));
+		assertTrue(n1.contains(And.create(Not.create(firstNameL),
+				ravenclawEqual, Not.create(lastNameWeasley))));
+		assertTrue(n1.contains(And.create(Not.create(firstNameL),
+				slytherinEqual, Not.create(above1980))));
+		assertTrue(n1.contains(And.create(Not.create(firstNameL),
+				slytherinEqual, Not.create(lastNameWeasley))));
 	}
 
 	@Test
@@ -592,9 +595,9 @@ public class OperatorTest extends TestCase {
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
-		Operator x = new Or(firstNameL, ravenclawSlytherinIn);
-		Operator y = new And(above1980, lastNameWeasley);
-		Operator z = new Or(x, y);
+		Operator x = Or.create(firstNameL, ravenclawSlytherinIn);
+		Operator y = And.create(above1980, lastNameWeasley);
+		Operator z = Or.create(x, y);
 
 		Operator ravenclawEqual = new EqualTo("house",
 				StudentBean.House.Ravenclaw);
@@ -606,7 +609,7 @@ public class OperatorTest extends TestCase {
 		assertTrue(n1.contains(firstNameL));
 		assertTrue(n1.contains(ravenclawEqual));
 		assertTrue(n1.contains(slytherinEqual));
-		assertTrue(n1.contains(new And(above1980, lastNameWeasley)));
+		assertTrue(n1.contains(And.create(above1980, lastNameWeasley)));
 	}
 
 	@Test
@@ -618,9 +621,9 @@ public class OperatorTest extends TestCase {
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
-		Operator x = new And(firstNameL, ravenclawSlytherinIn);
-		Operator y = new And(above1980, lastNameWeasley);
-		Operator z = new Or(x, y);
+		Operator x = And.create(firstNameL, ravenclawSlytherinIn);
+		Operator y = And.create(above1980, lastNameWeasley);
+		Operator z = Or.create(x, y);
 
 		Operator ravenclawEqual = new EqualTo("house",
 				StudentBean.House.Ravenclaw);
@@ -629,9 +632,9 @@ public class OperatorTest extends TestCase {
 
 		Collection<Operator> n1 = z.split();
 		assertEquals(3, n1.size());
-		assertTrue(n1.contains(new And(firstNameL, ravenclawEqual)));
-		assertTrue(n1.contains(new And(firstNameL, slytherinEqual)));
-		assertTrue(n1.contains(new And(above1980, lastNameWeasley)));
+		assertTrue(n1.contains(And.create(firstNameL, ravenclawEqual)));
+		assertTrue(n1.contains(And.create(firstNameL, slytherinEqual)));
+		assertTrue(n1.contains(And.create(above1980, lastNameWeasley)));
 	}
 
 	@Test
@@ -643,9 +646,9 @@ public class OperatorTest extends TestCase {
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
-		Operator x = new Or(firstNameL, ravenclawSlytherinIn);
-		Operator y = new Or(above1980, lastNameWeasley);
-		Operator z = new And(x, y);
+		Operator x = Or.create(firstNameL, ravenclawSlytherinIn);
+		Operator y = Or.create(above1980, lastNameWeasley);
+		Operator z = And.create(x, y);
 
 		Operator ravenclawEqual = new EqualTo("house",
 				StudentBean.House.Ravenclaw);
@@ -654,11 +657,98 @@ public class OperatorTest extends TestCase {
 
 		Collection<Operator> n1 = z.split();
 		assertEquals(6, n1.size());
-		assertTrue(n1.contains(new And(firstNameL, above1980)));
-		assertTrue(n1.contains(new And(firstNameL, lastNameWeasley)));
-		assertTrue(n1.contains(new And(ravenclawEqual, above1980)));
-		assertTrue(n1.contains(new And(ravenclawEqual, lastNameWeasley)));
-		assertTrue(n1.contains(new And(slytherinEqual, above1980)));
-		assertTrue(n1.contains(new And(slytherinEqual, lastNameWeasley)));
+		assertTrue(n1.contains(And.create(firstNameL, above1980)));
+		assertTrue(n1.contains(And.create(firstNameL, lastNameWeasley)));
+		assertTrue(n1.contains(And.create(ravenclawEqual, above1980)));
+		assertTrue(n1.contains(And.create(ravenclawEqual, lastNameWeasley)));
+		assertTrue(n1.contains(And.create(slytherinEqual, above1980)));
+		assertTrue(n1.contains(And.create(slytherinEqual, lastNameWeasley)));
+	}
+
+	/**
+	 * This tests how expressions are simplified.
+	 * <p>
+	 * The specific examples used here are based on
+	 * http://electronics-course.com/boolean-algebra
+	 */
+	@Test
+	public void testSimplify() {
+		Operator a = new EqualTo("a", 0);
+		Operator b = new EqualTo("b", 0);
+		Operator c = new EqualTo("c", 0);
+		Operator d = new EqualTo("d", 0);
+		Operator e = new EqualTo("e", 0);
+		Operator f = new EqualTo("f", 0);
+
+		// first the basic stuff:
+		{
+			Operator x = Or.create(a, b, a, b, a);
+			assertTrue(Or.create(a, b).equals(x));
+		}
+
+		{
+			Operator x = And.create(a, b, a, b, a);
+			assertTrue(And.create(a, b).equals(x));
+		}
+
+		{
+			Operator x = And.create(a, Not.create(a));
+			assertTrue(Operator.FALSE.equals(x));
+		}
+
+		{
+			Operator x = And.create(b, a, Not.create(a));
+			assertTrue(Operator.FALSE.equals(x));
+		}
+
+		{
+			Operator x = Or.create(a, Not.create(a));
+			assertTrue(Operator.TRUE.equals(x));
+		}
+
+		{
+			Operator x = Or.create(b, a, Not.create(a));
+			assertTrue(Operator.TRUE.equals(x));
+		}
+
+		{
+			Operator x = Or.create(b, And.create(a, Not.create(a)));
+			assertTrue(b.equals(x));
+		}
+
+		{
+			Operator x = Or.create(b, c, And.create(a, Not.create(a)));
+			assertTrue(Or.create(b, c).equals(x));
+		}
+
+		{
+			Operator x = Or.create(b, And.create(c, a, Not.create(a)));
+			assertTrue(b.equals(x));
+		}
+
+		// from the exercises in the boolean logic tutorial:
+		{
+			Operator x = Or.create(And.create(a, b),
+					And.create(a, Or.create(b, c)),
+					And.create(b, Or.create(b, c)));
+			Operator simplified = Or.create(b, And.create(a, c));
+			assertTrue(x.equals(simplified));
+		}
+
+		{
+			Operator x = Or.create(
+					And.create(Not.create(a), Not.create(b), Not.create(c)),
+					And.create(Not.create(a), b, c),
+					And.create(a, Not.create(b), Not.create(c)),
+					And.create(a, Not.create(b), c), And.create(a, b, c));
+			Operator simplified = Or.create(And.create(a, Not.create(b)),
+					And.create(Not.create(b), Not.create(c)), And.create(b, c));
+			assertTrue(x.equals(simplified));
+		}
+
+		// Operator w = Or.create(And.create(b, c), And.create(Not.create(b),
+		// c));
+		// assertEquals(w.simplify(), c);
+
 	}
 }
