@@ -739,6 +739,7 @@ public class OperatorTest extends TestCase {
 		}
 
 		// from the exercises in the boolean logic tutorial:
+
 		{
 			Operator x = Or.create(And.create(a, b),
 					And.create(a, Or.create(b, c)),
@@ -758,9 +759,43 @@ public class OperatorTest extends TestCase {
 			assertTrue(x.equals(simplified));
 		}
 
-		// Operator w = Or.create(And.create(b, c), And.create(Not.create(b),
-		// c));
-		// assertEquals(w.simplify(), c);
+		{
+			Operator x = And.create(Or.create(a, Not.create(a)), Or.create(
+					And.create(a, b), And.create(a, b, Not.create(c))));
+			Operator simplified = And.create(a, b);
+			assertTrue(x.equals(simplified));
+		}
+
+		// expression #5:
+		{
+			Operator x = Or.create(And.create(b, c),
+					And.create(Not.create(b), c));
+			assertTrue(x.equals(c));
+		}
+
+		// expression #6:
+		{
+			Operator x = Or.create(
+					And.create(Not.create(a), b),
+					And.create(b, Not.create(a), Not.create(c)),
+					And.create(b, c, d, Not.create(a)),
+					And.create(b, e, Not.create(a), Not.create(c),
+							Not.create(d)));
+			Operator simplified = And.create(Not.create(a), b);
+			assertTrue(x.equals(simplified));
+		}
+
+		// I couldn't follow expression #7 (off-balance parentheses?)
+
+		// expression #8:
+		{
+			Operator x = Or.create(And.create(a, Not.create(b), c),
+					And.create(Not.create(a), b, c),
+					And.create(Not.create(a), Not.create(b), c));
+			Operator simplified = Or.create(And.create(Not.create(a), c),
+					And.create(Not.create(b), c));
+			assertTrue(x.equals(simplified));
+		}
 
 	}
 }
