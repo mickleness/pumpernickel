@@ -726,6 +726,18 @@ public class OperatorTest extends TestCase {
 			assertTrue(b.equals(x));
 		}
 
+		{
+			Operator x = Or.create(And.create(a, b),
+					Not.create(And.create(a, b)));
+			assertTrue(Operator.TRUE.equals(x));
+		}
+
+		{
+			Operator x = And.create(Or.create(a, b),
+					Not.create(Or.create(a, b)));
+			assertTrue(Operator.FALSE.equals(x));
+		}
+
 		// from the exercises in the boolean logic tutorial:
 		{
 			Operator x = Or.create(And.create(a, b),

@@ -353,6 +353,18 @@ public abstract class Operator implements Serializable {
 					newOperands.add(op);
 				}
 			}
+
+			// if we have (A * !A), condense to FALSE
+			for (int a = 0; a < newOperands.size(); a++) {
+				Operator op = newOperands.get(a);
+				if (op instanceof Not) {
+					Not n = (Not) op;
+					Operator inner = n.getOperand(0);
+					if (newOperands.contains(inner))
+						return FALSE;
+				}
+			}
+
 			if (newOperands.size() == 0) {
 				newOperands.add(TRUE);
 			}
@@ -460,6 +472,18 @@ public abstract class Operator implements Serializable {
 					newOperands.add(op);
 				}
 			}
+
+			// if we have (A + !A), condense to TRUE
+			for (int a = 0; a < newOperands.size(); a++) {
+				Operator op = newOperands.get(a);
+				if (op instanceof Not) {
+					Not n = (Not) op;
+					Operator inner = n.getOperand(0);
+					if (newOperands.contains(inner))
+						return TRUE;
+				}
+			}
+
 			if (newOperands.size() == 0) {
 				newOperands.add(FALSE);
 			}
@@ -791,23 +815,6 @@ public abstract class Operator implements Serializable {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected static Operator simplifyCanonicalOperator(Operator op) {
-		// step 1: abort for negations like (a && !a), (a || !a)
-		if (op instanceof AbstractCompoundOperator) {
-			AbstractCompoundOperator c = (AbstractCompoundOperator) op;
-			for (int a = 0; a < op.getOperandCount(); a++) {
-				Operator opA = simplifyCanonicalOperator(c.getOperand(a));
-				for (int b = a + 1; b < c.getOperandCount(); b++) {
-					Operator opB = simplifyCanonicalOperator(c.getOperand(b));
-					if (opA.equals(Not.create(opB))) {
-						if (op instanceof And) {
-							return FALSE;
-						} else if (op instanceof Or) {
-							return TRUE;
-						}
-					}
-				}
-			}
-		}
 
 		// apply redundancy laws to reduced the number/complexity of or terms
 		//
