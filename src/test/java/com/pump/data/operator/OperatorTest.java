@@ -261,7 +261,7 @@ public class OperatorTest extends TestCase {
 
 	@Test
 	public void testIn() throws Exception {
-		Operator ravenclaw = new In("house",
+		Operator ravenclaw = In.create("house",
 				Arrays.asList(StudentBean.House.Ravenclaw));
 		assertTrue(ravenclaw.evaluate(context, padmaPatil));
 		assertFalse(ravenclaw.evaluate(context, pavartiPatil));
@@ -270,7 +270,7 @@ public class OperatorTest extends TestCase {
 
 	@Test
 	public void testToString_scenario1() throws Exception {
-		Operator ravenclaw = new In("house",
+		Operator ravenclaw = In.create("house",
 				Arrays.asList(StudentBean.House.Ravenclaw));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameNotWeasley = Not.create(new EqualTo("lastName",
@@ -279,13 +279,13 @@ public class OperatorTest extends TestCase {
 		Operator or = Or.create(ravenclaw, above1980);
 		Operator and = And.create(lastNameNotWeasley, or);
 		assertEquals(
-				"lastName != 'Weasley' && (contains(house, {'Ravenclaw'}) || birthYear > '1980')",
+				"lastName != 'Weasley' && (house == 'Ravenclaw' || birthYear > '1980')",
 				and.toString());
 	}
 
 	@Test
 	public void testToString_scenario2() throws Exception {
-		Operator ravenclaw = new In("house",
+		Operator ravenclaw = In.create("house",
 				Arrays.asList(StudentBean.House.Ravenclaw));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameNotWeasley = Not.create(new EqualTo("lastName",
@@ -294,13 +294,13 @@ public class OperatorTest extends TestCase {
 		Operator notOr = Not.create(Or.create(ravenclaw, above1980));
 		Operator and = And.create(lastNameNotWeasley, notOr);
 		assertEquals(
-				"lastName != 'Weasley' && !(contains(house, {'Ravenclaw'}) || birthYear > '1980')",
+				"lastName != 'Weasley' && !(house == 'Ravenclaw' || birthYear > '1980')",
 				and.toString());
 	}
 
 	@Test
 	public void testToString_scenario3() throws Exception {
-		Operator ravenclaw = new In("house",
+		Operator ravenclaw = In.create("house",
 				Arrays.asList(StudentBean.House.Ravenclaw));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
@@ -308,7 +308,7 @@ public class OperatorTest extends TestCase {
 		Operator notOr = Not.create(Or.create(ravenclaw, above1980));
 		Operator notAnd = Not.create(And.create(notOr, lastNameWeasley));
 		assertEquals(
-				"!(!(contains(house, {'Ravenclaw'}) || birthYear > '1980') && lastName == 'Weasley')",
+				"!(!(house == 'Ravenclaw' || birthYear > '1980') && lastName == 'Weasley')",
 				notAnd.toString());
 	}
 
@@ -330,7 +330,7 @@ public class OperatorTest extends TestCase {
 	public void testToString_scenario5() throws Exception {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclaw = new In("house",
+		Operator ravenclaw = In.create("house",
 				Arrays.asList(StudentBean.House.Ravenclaw));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
@@ -339,7 +339,7 @@ public class OperatorTest extends TestCase {
 		Operator and2 = And.create(above1980, lastNameWeasley);
 		Operator or = Or.create(and1, and2);
 		assertEquals(
-				"(matches(firstName, 'L*') && contains(house, {'Ravenclaw'})) || (birthYear > '1980' && lastName == 'Weasley')",
+				"(matches(firstName, 'L*') && house == 'Ravenclaw') || (birthYear > '1980' && lastName == 'Weasley')",
 				or.toString());
 	}
 
@@ -347,7 +347,7 @@ public class OperatorTest extends TestCase {
 	public void testEquals_scenario1() throws Exception {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclaw = new In("house",
+		Operator ravenclaw = In.create("house",
 				Arrays.asList(StudentBean.House.Ravenclaw));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
@@ -360,8 +360,8 @@ public class OperatorTest extends TestCase {
 		Operator b_and2 = And.create(above1980, ravenclaw);
 		Operator b_masterAnd = And.create(b_and1, b_and2);
 
-		assertTrue(a_masterAnd.equals(b_masterAnd));
-		assertTrue(b_masterAnd.equals(a_masterAnd));
+		assertEquals(a_masterAnd, b_masterAnd);
+		assertEquals(b_masterAnd, a_masterAnd);
 
 		Operator lastNameGranger = new EqualTo("lastName", "Granger");
 		Operator c_and1 = And.create(firstNameL, lastNameGranger);
@@ -377,7 +377,7 @@ public class OperatorTest extends TestCase {
 	public void testEquals_scenario2() throws Exception {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclaw = new In("house",
+		Operator ravenclaw = In.create("house",
 				Arrays.asList(StudentBean.House.Ravenclaw));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
@@ -388,20 +388,20 @@ public class OperatorTest extends TestCase {
 		Operator b1 = Or.create(Not.create(firstNameL), Not.create(ravenclaw));
 		Operator b2 = Or.create(b1, above1980, lastNameWeasley);
 
-		assertTrue(a2.equals(b2));
-		assertTrue(b2.equals(a2));
+		assertEquals(a2, b2);
+		assertEquals(b2, a2);
 
 		Operator c1 = Or.create(lastNameWeasley, Not.create(firstNameL),
 				Not.create(ravenclaw));
 		Operator c2 = Or.create(c1, above1980);
 
-		assertTrue(a2.equals(c2));
-		assertTrue(c2.equals(a2));
+		assertEquals(a2, c2);
+		assertEquals(c2, a2);
 
 		Operator d = Or.create(above1980, lastNameWeasley,
 				Not.create(firstNameL), Not.create(ravenclaw));
-		assertTrue(a2.equals(d));
-		assertTrue(d.equals(a2));
+		assertEquals(a2, d);
+		assertEquals(d, a2);
 
 		Operator e = Or.create(above1980, lastNameWeasley, firstNameL,
 				Not.create(ravenclaw));
@@ -427,8 +427,8 @@ public class OperatorTest extends TestCase {
 		Operator a_firstNameL = new Like("firstName", lStar);
 		Operator b_firstNameL = new Like("firstName", lStar);
 
-		assertTrue(a_firstNameL.equals(b_firstNameL));
-		assertTrue(b_firstNameL.equals(a_firstNameL));
+		assertEquals(a_firstNameL, b_firstNameL);
+		assertEquals(b_firstNameL, a_firstNameL);
 
 		Operator c_firstNameL = new Like("lastName", lStar);
 
@@ -447,16 +447,755 @@ public class OperatorTest extends TestCase {
 
 		Operator f = Not.create(a_firstNameL);
 
-		assertTrue(f.equals(e));
-		assertTrue(e.equals(f));
+		assertEquals(f, e);
+		assertEquals(e, f);
 
 		Operator g = Not.create(Not.create(a_firstNameL));
 
-		assertTrue(a_firstNameL.equals(g));
-		assertTrue(g.equals(a_firstNameL));
+		assertEquals(a_firstNameL, g);
+		assertEquals(g, a_firstNameL);
 
 		assertFalse(a_firstNameL.equals(f));
 		assertFalse(f.equals(a_firstNameL));
+	}
+
+	@Test
+	public void testEquals_scenario4() {
+
+		// TODO: implement text parser, and when testing two operators
+		// also test (j && op1) and (j && op2) to make sure AND terms are being
+		// factored correctly.
+
+		{
+			// x < 10
+			Operator z = new LesserThan("x", 10);
+			// !(x>10) && !(x==10)
+			Operator y = And.create(Not.create(new GreaterThan("x", 10)),
+					Not.create(new EqualTo("x", 10)));
+			assertEquals(z, y);
+		}
+
+		{
+			// x > 10
+			Operator z = new GreaterThan("x", 10);
+			// !(x < 10 || x==10)
+			Operator y = Not.create(Or.create(new LesserThan("x", 10),
+					new EqualTo("x", 10)));
+			assertEquals(z, y);
+		}
+
+		{
+			// (x==10) || (x>10)
+			Operator z = Or.create(new EqualTo("x", 10), new GreaterThan("x",
+					10));
+			// !(x < 10)
+			Operator y = Not.create(new LesserThan("x", 10));
+			assertEquals(y, z);
+		}
+
+		{
+			// (x == 10) || (x < 10)
+			Operator z = Or.create(new EqualTo("x", 10),
+					new LesserThan("x", 10));
+			// !(x > 10)
+			Operator y = Not.create(new GreaterThan("x", 10));
+			assertEquals(z, y);
+		}
+
+		{
+			// x > 10 && x < 10
+			Operator z = And.create(new GreaterThan("x", 10), new LesserThan(
+					"x", 10));
+			assertEquals(z, Operator.FALSE);
+		}
+
+		{
+			// !(x > 10) && !(x < 10)
+			Operator z = And.create(Not.create(new GreaterThan("x", 10)),
+					Not.create(new LesserThan("x", 10)));
+			// x == 10
+			Operator y = new EqualTo("x", 10);
+			assertEquals(y, z);
+		}
+
+		{
+			// x > 10 || x < 10
+			Operator z = Or.create(new GreaterThan("x", 10), new LesserThan(
+					"x", 10));
+			// x != 10
+			Operator y = Not.create(new EqualTo("x", 10));
+			assertEquals(z, y);
+		}
+
+		{
+			// x > 10 && x > 20
+			Operator z = And.create(new GreaterThan("x", 10), new GreaterThan(
+					"x", 20));
+			// x > 20
+			Operator y = new GreaterThan("x", 20);
+			assertEquals(z, y);
+		}
+
+		{
+			// x > 10 || !(x > 10)
+			Operator z = Or.create(new GreaterThan("x", 10),
+					Not.create(new GreaterThan("x", 10)));
+			assertEquals(Operator.TRUE, z);
+		}
+
+		{
+			// x != 0 && x > 10
+			Operator z = And.create(Not.create(new EqualTo("x", 0)),
+					new GreaterThan("x", 10));
+			// x > 10
+			Operator y = new GreaterThan("x", 10);
+			assertEquals(y, z);
+		}
+
+		{
+			// x == 0 && x > 10
+			Operator z = And.create(new EqualTo("x", 0), new GreaterThan("x",
+					10));
+			assertEquals(Operator.FALSE, z);
+		}
+
+		{
+			// x == 20 && x > 10
+			Operator z = And.create(new EqualTo("x", 20), new GreaterThan("x",
+					10));
+			Operator y = new EqualTo("x", 20);
+			assertEquals(y, z);
+		}
+
+		{
+			// x == 20 && x < 10
+			Operator z = And.create(new EqualTo("x", 20), new LesserThan("x",
+					10));
+			assertEquals(Operator.FALSE, z);
+		}
+
+		{
+			// x != 20 && x < 10
+			Operator z = And.create(Not.create(new EqualTo("x", 20)),
+					new LesserThan("x", 10));
+			// x < 10
+			Operator y = new LesserThan("x", 10);
+			assertEquals(z, y);
+		}
+
+		{
+			// x < 10 && x < 20
+			Operator z = And.create(new LesserThan("x", 10), new LesserThan(
+					"x", 20));
+			// x < 10
+			Operator y = new LesserThan("x", 10);
+			assertEquals(z, y);
+		}
+
+		{
+			// x < 10 && x == 10
+			Operator z = And.create(new LesserThan("x", 10), new EqualTo("x",
+					10));
+			assertEquals(Operator.FALSE, z);
+		}
+
+		{
+			// x > 10 && x == 10
+			Operator z = And.create(new GreaterThan("x", 10), new EqualTo("x",
+					10));
+			assertEquals(Operator.FALSE, z);
+		}
+
+		{
+			// x > 10 && x != 10
+			Operator z = And.create(new GreaterThan("x", 10),
+					Not.create(new EqualTo("x", 10)));
+			Operator y = new GreaterThan("x", 10);
+
+			assertEquals(y, z);
+		}
+
+		{
+			Operator a = new EqualTo("a", 0);
+			Operator b = new EqualTo("b", 0);
+			Operator c = new EqualTo("c", 0);
+			Operator d = new EqualTo("d", 0);
+			Operator ab = And.create(a, b);
+			Operator cd = And.create(c, d);
+			Operator abcd = Or.create(ab, cd);
+
+			Operator not = Not.create(abcd).getCanonicalOperator();
+			Operator notNot = Not.create(not);
+
+			assertEquals(abcd, notNot);
+		}
+
+		{
+			// x < 10 || x < 20
+			Operator z = Or.create(new LesserThan("x", 10), new LesserThan("x",
+					20));
+			// x < 20
+			Operator y = new LesserThan("x", 20);
+			assertEquals(y, z);
+		}
+
+		{
+			// x > 10 || x > 20
+			Operator z = Or.create(new GreaterThan("x", 10), new GreaterThan(
+					"x", 20));
+			// x > 10
+			Operator y = new GreaterThan("x", 10);
+			assertEquals(z, y);
+		}
+
+		{
+			// x > 10 && x < -10
+			Operator z = And.create(new GreaterThan("x", 10), new LesserThan(
+					"x", -10));
+			assertEquals(Operator.FALSE, z);
+		}
+
+		// // mutually exclusive INs result in a constant FALSE
+		// {
+		// Operator z = In.create("x", Arrays.asList(
+		// StudentBean.House.Gryffindor, StudentBean.House.Slytherin));
+		// Operator y = In.create("x", Arrays.asList(
+		// StudentBean.House.Ravenclaw, StudentBean.House.Hufflepuff));
+		// Operator w = And.create(z, y);
+		// assertEquals(Operator.FALSE, w);
+		// }
+		//
+		// // overlapping INs result in the smallest possible subset
+		// {
+		// Operator z = In.create("x", Arrays.asList(
+		// StudentBean.House.Gryffindor, StudentBean.House.Slytherin));
+		// Operator y = In
+		// .create("x", Arrays.asList(StudentBean.House.Gryffindor,
+		// StudentBean.House.Hufflepuff));
+		// Operator w = And.create(z, y);
+		// assertEquals(new EqualTo("x", StudentBean.House.Gryffindor), w);
+		// }
+	}
+
+	@Test
+	public void testEquals_scenario6_overlappingRanges() {
+
+		// FFFF
+		{
+			// x > 0 && x < 3
+			Operator z = And.create(new GreaterThan("x", 0), new LesserThan(
+					"x", 3));
+			// x > 2 && x < 5
+			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
+					"x", 5));
+
+			// x > 2 && x < 3
+			assertEquals(
+					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
+					And.create(z, y));
+
+			// x > 0 && x < 5
+			Operator e = And.create(new GreaterThan("x", 0), new LesserThan(
+					"x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// FFFT
+		{
+			// x > 0 && x < 3
+			Operator z = And.create(new GreaterThan("x", 0), new LesserThan(
+					"x", 3));
+			// x > 2 && x <= 5
+			Operator y = And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x > 2 && x < 3
+			assertEquals(
+					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
+					And.create(z, y));
+
+			// x > 0 && x <= 5
+			Operator e = And.create(new GreaterThan("x", 0),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// FFTF
+		{
+			// x > 0 && x < 3
+			Operator z = And.create(new GreaterThan("x", 0), new LesserThan(
+					"x", 3));
+			// x >= 2 && x < 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 5));
+
+			// x >= 2 && x < 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 3)), And.create(z, y));
+
+			// x > 0 && x < 5
+			Operator e = And.create(new GreaterThan("x", 0), new LesserThan(
+					"x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// FFTT
+		{
+			// x > 0 && x < 3
+			Operator z = And.create(new GreaterThan("x", 0), new LesserThan(
+					"x", 3));
+			// x >= 2 && x <= 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x >= 2 && x < 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 3)), And.create(z, y));
+
+			// x > 0 && x <= 5
+			Operator e = And.create(new GreaterThan("x", 0),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// FTFF
+		{
+			// x > 0 && x <= 3
+			Operator z = And.create(new GreaterThan("x", 0),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
+			// x > 2 && x < 5
+			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
+					"x", 5));
+
+			// x > 2 && x <= 3
+			assertEquals(And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x > 0 && x < 5
+			Operator e = And.create(new GreaterThan("x", 0), new LesserThan(
+					"x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// FTFT
+		{
+			// x > 0 && x <= 3
+			Operator z = And.create(new GreaterThan("x", 0),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
+			// x > 2 && x <= 5
+			Operator y = And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x > 2 && x <= 3
+			assertEquals(And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x > 0 && x <= 5
+			Operator e = And.create(new GreaterThan("x", 0),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// FTTF
+		{
+			// x > 0 && x <= 3
+			Operator z = And.create(new GreaterThan("x", 0),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
+			// x >= 2 && x < 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 5));
+
+			// x >= 2 && x <= 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x > 0 && x < 5
+			Operator e = And.create(new GreaterThan("x", 0), new LesserThan(
+					"x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// FTTT
+		{
+			// x > 0 && x <= 3
+			Operator z = And.create(new GreaterThan("x", 0),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
+			// x >= 2 && x <= 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x >= 2 && x <= 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x > 0 && x <= 5
+			Operator e = And.create(new GreaterThan("x", 0),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// TFFF
+		{
+			// x >= 0 && x < 3
+			Operator z = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					new LesserThan("x", 3));
+			// x > 2 && x < 5
+			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
+					"x", 5));
+
+			// x > 2 && x < 3
+			assertEquals(
+					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
+					And.create(z, y));
+
+			// x >= 0 && x < 5
+			Operator e = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					new LesserThan("x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// TFFT
+		{
+			// x >= 0 && x < 3
+			Operator z = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					new LesserThan("x", 3));
+			// x > 2 && x <= 5
+			Operator y = And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x > 2 && x < 3
+			assertEquals(
+					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
+					And.create(z, y));
+
+			// x >= 0 && x <= 5
+			Operator e = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// TFTF
+		{
+			// x >= 0 && x < 3
+			Operator z = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					new LesserThan("x", 3));
+			// x >= 2 && x < 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 5));
+
+			// x >= 2 && x < 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 3)), And.create(z, y));
+
+			// x >= 0 && x < 5
+			Operator e = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					new LesserThan("x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// TFTT
+		{
+			// x >= 0 && x < 3
+			Operator z = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					new LesserThan("x", 3));
+			// x >= 2 && x <= 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x >= 2 && x < 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 3)), And.create(z, y));
+
+			// x >= 0 && x <= 5
+			Operator e = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// TTFF
+		{
+			// x >= 0 && x <= 3
+			Operator z = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
+			// x > 2 && x < 5
+			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
+					"x", 5));
+
+			// x > 2 && x <= 3
+			assertEquals(And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x >= 0 && x < 5
+			Operator e = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					new LesserThan("x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// TTFT
+		{
+			// x >= 0 && x <= 3
+			Operator z = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
+			// x > 2 && x <= 5
+			Operator y = And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x > 2 && x <= 3
+			assertEquals(And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x >= 0 && x <= 5
+			Operator e = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// TTTF
+		{
+			// x >= 0 && x <= 3
+			Operator z = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
+			// x >= 2 && x < 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 5));
+
+			// x >= 2 && x <= 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x >= 0 && x < 5
+			Operator e = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					new LesserThan("x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// TTTT
+		{
+			// x >= 0 && x <= 3
+			Operator z = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
+			// x >= 2 && x <= 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x >= 2 && x <= 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x >= 0 && x <= 5
+			Operator e = And.create(
+					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+			assertEquals(e, Or.create(z, y));
+		}
+	}
+
+	@Test
+	public void testEquals_scenario7_overlappingInfiniteRanges() {
+
+		// test the left interval spanning to -inf
+
+		{
+			// x < 3
+			Operator z = new LesserThan("x", 3);
+			// x > 2 && x < 5
+			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
+					"x", 5));
+
+			// x > 2 && x < 3
+			assertEquals(
+					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
+					And.create(z, y));
+
+			// x < 5
+			Operator e = new LesserThan("x", 5);
+			assertEquals(e, Or.create(z, y));
+		}
+
+		{
+			// x <= 3
+			Operator z = Or.create(new LesserThan("x", 3), new EqualTo("x", 3));
+			// x > 2 && x < 5
+			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
+					"x", 5));
+
+			// x > 2 && x < 3
+			assertEquals(And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x < 5
+			Operator e = new LesserThan("x", 5);
+			assertEquals(e, Or.create(z, y));
+		}
+
+		{
+			// x < 3
+			Operator z = new LesserThan("x", 3);
+			// x >= 2 && x < 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 5));
+
+			// x >= 2 && x < 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 3)), And.create(z, y));
+
+			// x < 5
+			Operator e = new LesserThan("x", 5);
+			assertEquals(e, Or.create(z, y));
+		}
+
+		{
+			// x < 3
+			Operator z = new LesserThan("x", 3);
+			// x > 2 && x <= 5
+			Operator y = And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x > 2 && x < 3
+			assertEquals(
+					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
+					And.create(z, y));
+
+			// x <= 5
+			Operator e = Or.create(new LesserThan("x", 5), new EqualTo("x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		{
+			// x <= 3
+			Operator z = Or.create(new LesserThan("x", 3), new EqualTo("x", 3));
+			// x >= 2 && x < 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 5));
+
+			// x >= 2 && x < 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x < 5
+			Operator e = new LesserThan("x", 5);
+			assertEquals(e, Or.create(z, y));
+		}
+
+		{
+			// x <= 3
+			Operator z = Or.create(new LesserThan("x", 3), new EqualTo("x", 3));
+			// x > 2 && x <= 5
+			Operator y = And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x > 2 && x < 3
+			assertEquals(And.create(new GreaterThan("x", 2),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x <= 5
+			Operator e = Or.create(new LesserThan("x", 5), new EqualTo("x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		{
+			// x < 3
+			Operator z = new LesserThan("x", 3);
+			// x >= 2 && x <= 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x >= 2 && x < 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					new LesserThan("x", 3)), And.create(z, y));
+
+			// x <= 5
+			Operator e = Or.create(new LesserThan("x", 5), new EqualTo("x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		{
+			// x <= 3
+			Operator z = Or.create(new LesserThan("x", 3), new EqualTo("x", 3));
+			// x >= 2 && x <= 5
+			Operator y = And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+
+			// x >= 2 && x <= 3
+			assertEquals(And.create(
+					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
+					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
+					And.create(z, y));
+
+			// x <= 5
+			Operator e = Or.create(new LesserThan("x", 5), new EqualTo("x", 5));
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// now test the right interval spanning to +inf
+
+		{
+			// x > 0 && x < 3
+			Operator z = And.create(new GreaterThan("x", 0), new LesserThan(
+					"x", 3));
+			// x > 2
+			Operator y = new GreaterThan("x", 2);
+
+			// x > 2 && x < 3
+			assertEquals(
+					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
+					And.create(z, y));
+
+			// x > 0
+			Operator e = new GreaterThan("x", 0);
+			assertEquals(e, Or.create(z, y));
+		}
+
+		// TODO: iterate over other combos
 	}
 
 	/**
@@ -465,7 +1204,7 @@ public class OperatorTest extends TestCase {
 	 */
 	@Test
 	public void testSplit_scenario1() {
-		Operator houseIn = new In("house", Arrays.asList(
+		Operator houseIn = In.create("house", Arrays.asList(
 				StudentBean.House.Ravenclaw, StudentBean.House.Hufflepuff));
 
 		Collection<Operator> n1 = houseIn.split();
@@ -475,9 +1214,9 @@ public class OperatorTest extends TestCase {
 		assertTrue(n1.contains(new EqualTo("house",
 				StudentBean.House.Hufflepuff)));
 
-		// Operator[] n2 = n1.toArray(new Operator[n1.size()]);
-		// Operator joined = Or.create(n2);
-		// assertTrue(joined.simplify().equals(houseIn));
+		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
+		Operator joined = Operator.join(n2);
+		assertEquals(joined, houseIn);
 	}
 
 	/**
@@ -485,7 +1224,7 @@ public class OperatorTest extends TestCase {
 	 */
 	@Test
 	public void testSplit_scenario2() {
-		Operator houseIn = new In("house", Arrays.asList(
+		Operator houseIn = In.create("house", Arrays.asList(
 				StudentBean.House.Ravenclaw, StudentBean.House.Hufflepuff));
 
 		Operator op = Not.create(houseIn);
@@ -496,9 +1235,9 @@ public class OperatorTest extends TestCase {
 		assertTrue(n1.contains(Not.create(new EqualTo("house",
 				StudentBean.House.Hufflepuff))));
 
-		// Operator[] n2 = n1.toArray(new Operator[n1.size()]);
-		// Operator joined = Or.create(n2);
-		// assertTrue(joined.simplify().equals(op));
+		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
+		Operator joined = Operator.join(n2);
+		assertEquals(joined, op);
 	}
 
 	/**
@@ -508,7 +1247,7 @@ public class OperatorTest extends TestCase {
 	public void testSplit_scenario3() {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclawIn = new In("house",
+		Operator ravenclawIn = In.create("house",
 				Arrays.asList(StudentBean.House.Ravenclaw));
 		Operator ravenclawEqual = new EqualTo("house",
 				StudentBean.House.Ravenclaw);
@@ -520,11 +1259,15 @@ public class OperatorTest extends TestCase {
 		Operator or3 = Or.create(or1, or2);
 
 		Collection<Operator> n1 = or3.split();
-		assertEquals(4, n1.size());
+		assertEquals(3, n1.size());
 		assertTrue(n1.contains(Not.create(firstNameL)));
 		assertTrue(n1.contains(ravenclawEqual));
-		assertTrue(n1.contains(Not.create(above1980)));
-		assertTrue(n1.contains(Not.create(lastNameWeasley)));
+		assertTrue(n1.contains(And.create(Not.create(above1980),
+				Not.create(lastNameWeasley))));
+
+		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
+		Operator joined = Operator.join(n2);
+		assertEquals(joined, or3);
 	}
 
 	/**
@@ -534,7 +1277,7 @@ public class OperatorTest extends TestCase {
 	public void testSplit_scenario4() {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclawIn = new In("house",
+		Operator ravenclawIn = In.create("house",
 				Arrays.asList(StudentBean.House.Ravenclaw));
 		Operator ravenclawEqual = new EqualTo("house",
 				StudentBean.House.Ravenclaw);
@@ -549,6 +1292,10 @@ public class OperatorTest extends TestCase {
 		assertEquals(1, n1.size());
 		assertTrue(n1.contains(And.create(Not.create(firstNameL),
 				ravenclawEqual, above1980, lastNameWeasley)));
+
+		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
+		Operator joined = Operator.join(n2);
+		assertEquals(joined, and3);
 	}
 
 	/**
@@ -559,7 +1306,7 @@ public class OperatorTest extends TestCase {
 	public void testSplit_scenario5() {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclawSlytherinIn = new In("house", Arrays.asList(
+		Operator ravenclawSlytherinIn = In.create("house", Arrays.asList(
 				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
@@ -584,13 +1331,17 @@ public class OperatorTest extends TestCase {
 				slytherinEqual, Not.create(above1980))));
 		assertTrue(n1.contains(And.create(Not.create(firstNameL),
 				slytherinEqual, Not.create(lastNameWeasley))));
+
+		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
+		Operator joined = Operator.join(n2);
+		assertEquals(and3, joined);
 	}
 
 	@Test
 	public void testSplit_scenario6() {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclawSlytherinIn = new In("house", Arrays.asList(
+		Operator ravenclawSlytherinIn = In.create("house", Arrays.asList(
 				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
@@ -610,13 +1361,17 @@ public class OperatorTest extends TestCase {
 		assertTrue(n1.contains(ravenclawEqual));
 		assertTrue(n1.contains(slytherinEqual));
 		assertTrue(n1.contains(And.create(above1980, lastNameWeasley)));
+
+		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
+		Operator joined = Operator.join(n2);
+		assertEquals(joined, z);
 	}
 
 	@Test
 	public void testSplit_scenario7() {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclawSlytherinIn = new In("house", Arrays.asList(
+		Operator ravenclawSlytherinIn = In.create("house", Arrays.asList(
 				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
@@ -635,13 +1390,17 @@ public class OperatorTest extends TestCase {
 		assertTrue(n1.contains(And.create(firstNameL, ravenclawEqual)));
 		assertTrue(n1.contains(And.create(firstNameL, slytherinEqual)));
 		assertTrue(n1.contains(And.create(above1980, lastNameWeasley)));
+
+		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
+		Operator joined = Operator.join(n2);
+		assertEquals(z, joined);
 	}
 
 	@Test
 	public void testSplit_scenario8() {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclawSlytherinIn = new In("house", Arrays.asList(
+		Operator ravenclawSlytherinIn = In.create("house", Arrays.asList(
 				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
@@ -663,13 +1422,82 @@ public class OperatorTest extends TestCase {
 		assertTrue(n1.contains(And.create(ravenclawEqual, lastNameWeasley)));
 		assertTrue(n1.contains(And.create(slytherinEqual, above1980)));
 		assertTrue(n1.contains(And.create(slytherinEqual, lastNameWeasley)));
+
+		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
+		Operator joined = Operator.join(n2);
+		assertEquals(z, joined);
+	}
+
+	/**
+	 * This confirms that Ins are joined together correctly.
+	 */
+	@Test
+	public void testSplit_scenario9() {
+		Operator ravenclawSlytherinIn = In.create("house", Arrays.asList(
+				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin));
+		Operator hufflepuffIn = In.create("house",
+				Arrays.asList(StudentBean.House.Hufflepuff));
+
+		Operator or = Or.create(ravenclawSlytherinIn, hufflepuffIn);
+		Collection<Operator> n1 = or.split();
+		assertEquals(3, n1.size());
+		assertTrue(n1
+				.contains(new EqualTo("house", StudentBean.House.Ravenclaw)));
+		assertTrue(n1.contains(new EqualTo("house",
+				StudentBean.House.Hufflepuff)));
+		assertTrue(n1
+				.contains(new EqualTo("house", StudentBean.House.Slytherin)));
+
+		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
+		Operator joined = Operator.join(n2);
+		assertEquals(joined, In.create("house", Arrays.asList(
+				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin,
+				StudentBean.House.Hufflepuff)));
+	}
+
+	@Test
+	public void testSplit_scenario10() {
+		Operator notRavenclawSlytherinIn = Not.create(In.create("house", Arrays
+				.asList(StudentBean.House.Ravenclaw,
+						StudentBean.House.Slytherin)));
+		Operator hufflepuffGryffindorIn = In.create("house", Arrays.asList(
+				StudentBean.House.Hufflepuff, StudentBean.House.Gryffindor));
+
+		Operator above1980 = new GreaterThan("birthYear", 1980);
+		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
+
+		Operator c = And.create(above1980, notRavenclawSlytherinIn);
+		Operator d = And.create(lastNameWeasley, hufflepuffGryffindorIn);
+
+		Operator notRavenclawEqual = Not.create(new EqualTo("house",
+				StudentBean.House.Ravenclaw));
+		Operator notSlytherinEqual = Not.create(new EqualTo("house",
+				StudentBean.House.Slytherin));
+
+		Operator hufflepuffEqual = new EqualTo("house",
+				StudentBean.House.Hufflepuff);
+		Operator gryffindorEqual = new EqualTo("house",
+				StudentBean.House.Gryffindor);
+
+		Operator or = Or.create(c, d);
+		Collection<Operator> n1 = or.split();
+		assertEquals(4, n1.size());
+		assertTrue(n1.contains(And.create(above1980, notSlytherinEqual)));
+		assertTrue(n1.contains(And.create(above1980, notRavenclawEqual)));
+		assertTrue(n1.contains(And.create(lastNameWeasley, hufflepuffEqual)));
+		assertTrue(n1.contains(And.create(lastNameWeasley, gryffindorEqual)));
+
+		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
+		Operator joined = Operator.join(n2);
+		assertEquals(or, joined);
 	}
 
 	/**
 	 * This tests how expressions are simplified.
 	 * <p>
-	 * The specific examples used here are based on
-	 * http://electronics-course.com/boolean-algebra
+	 * Some specific examples used here are from
+	 * http://electronics-course.com/boolean-algebra /
+	 * https://www.youtube.com/watch?v=59BbncMjL8I
 	 */
 	@Test
 	public void testSimplify() {
@@ -678,64 +1506,63 @@ public class OperatorTest extends TestCase {
 		Operator c = new EqualTo("c", 0);
 		Operator d = new EqualTo("d", 0);
 		Operator e = new EqualTo("e", 0);
-		Operator f = new EqualTo("f", 0);
 
 		// first the basic stuff:
 		{
 			Operator x = Or.create(a, b, a, b, a);
-			assertTrue(Or.create(a, b).equals(x));
+			assertEquals(Or.create(a, b), x);
 		}
 
 		{
 			Operator x = And.create(a, b, a, b, a);
-			assertTrue(And.create(a, b).equals(x));
+			assertEquals(And.create(a, b), x);
 		}
 
 		{
 			Operator x = And.create(a, Not.create(a));
-			assertTrue(Operator.FALSE.equals(x));
+			assertEquals(Operator.FALSE, x);
 		}
 
 		{
 			Operator x = And.create(b, a, Not.create(a));
-			assertTrue(Operator.FALSE.equals(x));
+			assertEquals(Operator.FALSE, x);
 		}
 
 		{
 			Operator x = Or.create(a, Not.create(a));
-			assertTrue(Operator.TRUE.equals(x));
+			assertEquals(Operator.TRUE, x);
 		}
 
 		{
 			Operator x = Or.create(b, a, Not.create(a));
-			assertTrue(Operator.TRUE.equals(x));
+			assertEquals(Operator.TRUE, x);
 		}
 
 		{
 			Operator x = Or.create(b, And.create(a, Not.create(a)));
-			assertTrue(b.equals(x));
+			assertEquals(b, x);
 		}
 
 		{
 			Operator x = Or.create(b, c, And.create(a, Not.create(a)));
-			assertTrue(Or.create(b, c).equals(x));
+			assertEquals(Or.create(b, c), x);
 		}
 
 		{
 			Operator x = Or.create(b, And.create(c, a, Not.create(a)));
-			assertTrue(b.equals(x));
+			assertEquals(b, x);
 		}
 
 		{
 			Operator x = Or.create(And.create(a, b),
 					Not.create(And.create(a, b)));
-			assertTrue(Operator.TRUE.equals(x));
+			assertEquals(Operator.TRUE, x);
 		}
 
 		{
 			Operator x = And.create(Or.create(a, b),
 					Not.create(Or.create(a, b)));
-			assertTrue(Operator.FALSE.equals(x));
+			assertEquals(Operator.FALSE, x);
 		}
 
 		// from the exercises in the boolean logic tutorial:
@@ -745,7 +1572,7 @@ public class OperatorTest extends TestCase {
 					And.create(a, Or.create(b, c)),
 					And.create(b, Or.create(b, c)));
 			Operator simplified = Or.create(b, And.create(a, c));
-			assertTrue(x.equals(simplified));
+			assertEquals(x, simplified);
 		}
 
 		{
@@ -756,21 +1583,21 @@ public class OperatorTest extends TestCase {
 					And.create(a, Not.create(b), c), And.create(a, b, c));
 			Operator simplified = Or.create(And.create(a, Not.create(b)),
 					And.create(Not.create(b), Not.create(c)), And.create(b, c));
-			assertTrue(x.equals(simplified));
+			assertEquals(x, simplified);
 		}
 
 		{
 			Operator x = And.create(Or.create(a, Not.create(a)), Or.create(
 					And.create(a, b), And.create(a, b, Not.create(c))));
 			Operator simplified = And.create(a, b);
-			assertTrue(x.equals(simplified));
+			assertEquals(x, simplified);
 		}
 
 		// expression #5:
 		{
 			Operator x = Or.create(And.create(b, c),
 					And.create(Not.create(b), c));
-			assertTrue(x.equals(c));
+			assertEquals(x, c);
 		}
 
 		// expression #6:
@@ -782,7 +1609,7 @@ public class OperatorTest extends TestCase {
 					And.create(b, e, Not.create(a), Not.create(c),
 							Not.create(d)));
 			Operator simplified = And.create(Not.create(a), b);
-			assertTrue(x.equals(simplified));
+			assertEquals(x, simplified);
 		}
 
 		// I couldn't follow expression #7 (off-balance parentheses?)
@@ -794,7 +1621,7 @@ public class OperatorTest extends TestCase {
 					And.create(Not.create(a), Not.create(b), c));
 			Operator simplified = Or.create(And.create(Not.create(a), c),
 					And.create(Not.create(b), c));
-			assertTrue(x.equals(simplified));
+			assertEquals(x, simplified);
 		}
 
 	}

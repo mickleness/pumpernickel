@@ -6,11 +6,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+import com.pump.math.Range;
 import com.pump.text.WildcardPattern;
 import com.pump.util.CombinationIterator;
 
@@ -87,6 +93,11 @@ public abstract class Operator implements Serializable {
 		public Operator getCanonicalOperator() {
 			return this;
 		}
+
+		@Override
+		public Collection<String> getAttributes() {
+			return Collections.emptySet();
+		}
 	}
 
 	public static final Operator TRUE = new ConstantOperator(true);
@@ -129,10 +140,10 @@ public abstract class Operator implements Serializable {
 		 * @param operands
 		 */
 		protected AbstractCompoundOperator(String operatorString,
-				List<Operator> operands) {
+				List<Operator> operands, String name) {
 			Objects.requireNonNull(operatorString);
 			this.operatorString = operatorString;
-			validateOperands(operands, getClass().getSimpleName());
+			validateOperands(operands, name);
 			this.operands = Collections.unmodifiableList(operands);
 		}
 
@@ -186,6 +197,16 @@ public abstract class Operator implements Serializable {
 				sb.append(")");
 			return sb.toString();
 		}
+
+		@Override
+		public Collection<String> getAttributes() {
+			Collection<String> returnValue = new HashSet<>();
+			for (int a = 0; a < getOperandCount(); a++) {
+				Operator op = getOperand(a);
+				returnValue.addAll(op.getAttributes());
+			}
+			return returnValue;
+		}
 	}
 
 	/**
@@ -235,6 +256,11 @@ public abstract class Operator implements Serializable {
 			throw new IllegalArgumentException("illegal operand index: "
 					+ index);
 		}
+
+		@Override
+		public Collection<String> getAttributes() {
+			return Collections.singleton(getAttribute());
+		}
 	}
 
 	public static class Not extends Operator {
@@ -280,46 +306,61 @@ public abstract class Operator implements Serializable {
 			throw new IllegalArgumentException("index = " + index);
 		}
 
-		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@Override
+		public Collection<String> getAttributes() {
+			return getOperand(0).getAttributes();
+		}
+
 		@Override
 		protected Operator createCanonicalOperator() {
-			if (operand instanceof AbstractCompoundOperator) {
-				AbstractCompoundOperator compoundOp = (AbstractCompoundOperator) operand;
+			Operator op = getOperand(0).getCanonicalOperator();
+
+			if (op instanceof AbstractCompoundOperator) {
+				AbstractCompoundOperator compoundOp = (AbstractCompoundOperator) op;
 				List<Operator> negatedTerms = new ArrayList<>(
 						compoundOp.getOperandCount());
 				List operands = (List) compoundOp.getOperands();
 				for (Operator member : (List<Operator>) operands) {
-					negatedTerms.add(Not.create(member));
+					negatedTerms.add(Not.create(member).getCanonicalOperator());
 				}
 
-				if (operand instanceof And) {
-					return Or.create(negatedTerms).getCanonicalOperator();
-				} else if (operand instanceof Or) {
-					return And.create(negatedTerms).getCanonicalOperator();
+				if (op instanceof And) {
+					op = Or.create(negatedTerms);
+				} else if (op instanceof Or) {
+					op = And.create(negatedTerms);
+				} else {
+					throw new IllegalStateException("Unsupported operator "
+							+ op.toString() + " (" + op.getClass().getName()
+							+ ")");
 				}
-				throw new IllegalStateException("Unsupported operator "
-						+ operand.toString() + " ("
-						+ operand.getClass().getName() + ")");
+			} else {
+				op = Not.create(op);
 			}
-			return this;
+
+			if (op instanceof AbstractCompoundOperator)
+				op = op.getCanonicalOperator();
+			return op;
 		}
 
 		@Override
 		public Collection<Operator> split() {
-			if (getOperand(0) instanceof Not) {
-				Not n = ((Not) getOperand(0));
-				return n.getOperand(0).split();
-			} else if (getOperand(0) instanceof And) {
-				And and = (And) getOperand(0);
-				// we can convert an And to an Or to get more narrowed options:
-				Collection<Operator> returnValue = new ArrayList<>();
-				for (int a = 0; a < and.getOperandCount(); a++) {
-					Collection<Operator> c = and.getOperand(a).split();
+			if (getOperand(0) instanceof AbstractCompoundOperator) {
+				AbstractCompoundOperator aco = (AbstractCompoundOperator) getOperand(0);
+				List<Operator> returnValue = new ArrayList<>();
+				for (int a = 0; a < aco.getOperandCount(); a++) {
+					Collection<Operator> c = aco.getOperand(a).split();
 					for (Operator op : c) {
 						returnValue.add(Not.create(op));
 					}
 				}
-				return returnValue;
+				if (getOperand(0) instanceof And)
+					return returnValue;
+				if (getOperand(0) instanceof Or)
+					return Collections.singleton(And.create(returnValue));
+
+				throw new IllegalStateException("Unsupported operator "
+						+ operand.toString() + " ("
+						+ operand.getClass().getName() + ")");
 			}
 
 			Collection<Operator> z = getOperand(0).split();
@@ -354,17 +395,6 @@ public abstract class Operator implements Serializable {
 				}
 			}
 
-			// if we have (A * !A), condense to FALSE
-			for (int a = 0; a < newOperands.size(); a++) {
-				Operator op = newOperands.get(a);
-				if (op instanceof Not) {
-					Not n = (Not) op;
-					Operator inner = n.getOperand(0);
-					if (newOperands.contains(inner))
-						return FALSE;
-				}
-			}
-
 			if (newOperands.size() == 0) {
 				newOperands.add(TRUE);
 			}
@@ -374,7 +404,7 @@ public abstract class Operator implements Serializable {
 		}
 
 		public And(List<Operator> operands) {
-			super(" && ", operands);
+			super(" && ", operands, "And");
 		}
 
 		@Override
@@ -473,17 +503,6 @@ public abstract class Operator implements Serializable {
 				}
 			}
 
-			// if we have (A + !A), condense to TRUE
-			for (int a = 0; a < newOperands.size(); a++) {
-				Operator op = newOperands.get(a);
-				if (op instanceof Not) {
-					Not n = (Not) op;
-					Operator inner = n.getOperand(0);
-					if (newOperands.contains(inner))
-						return TRUE;
-				}
-			}
-
 			if (newOperands.size() == 0) {
 				newOperands.add(FALSE);
 			}
@@ -493,7 +512,7 @@ public abstract class Operator implements Serializable {
 		}
 
 		public Or(List<Operator> operands) {
-			super(" || ", operands);
+			super(" || ", operands, "Or");
 		}
 
 		@Override
@@ -646,9 +665,11 @@ public abstract class Operator implements Serializable {
 			// in an unambiguous canonical representation.
 			// so instead we'll convert an expression like "a < 50" to
 			// "!(a > 50) && a!=50)"
-			return And.create(
-					Not.create(new GreaterThan(getAttribute(), getValue())),
-					Not.create(new EqualTo(getAttribute(), getValue())));
+			List<Operator> k = new ArrayList<>(2);
+			k.add(Not.create(new GreaterThan(getAttribute(), getValue())));
+			k.add(Not.create(new EqualTo(getAttribute(), getValue())));
+			Collections.sort(k, toStringComparator);
+			return And.create(k);
 		}
 
 		@Override
@@ -703,8 +724,17 @@ public abstract class Operator implements Serializable {
 	public static class In extends ValueOperator<Collection<?>> {
 		private static final long serialVersionUID = 1L;
 
-		public In(String attribute, Collection<?> value) {
-			super(attribute, value);
+		public static Operator create(String attribute, Collection<?> values) {
+			Objects.requireNonNull(values);
+			if (values.size() == 0)
+				return FALSE;
+			if (values.size() == 1)
+				return new EqualTo(attribute, values.iterator().next());
+			return new In(attribute, values);
+		}
+
+		private In(String attribute, Collection<?> value) {
+			super(attribute, new HashSet<>(value));
 		}
 
 		@Override
@@ -716,6 +746,8 @@ public abstract class Operator implements Serializable {
 		@Override
 		protected String toString(boolean negated) {
 			StringBuilder sb = new StringBuilder();
+			if (negated)
+				sb.append("!");
 			sb.append("contains(");
 			sb.append(attributeName);
 			sb.append(", {");
@@ -795,11 +827,10 @@ public abstract class Operator implements Serializable {
 	 * <p>
 	 * The canonical operator is used to compare equivalence or hash codes.
 	 */
-	public Operator getCanonicalOperator() {
+	public synchronized Operator getCanonicalOperator() {
 		if (canonicalOperator == null) {
 			Operator op = createCanonicalOperator();
 			op = simplifyCanonicalOperator(op);
-			op.canonicalOperator = op;
 			canonicalOperator = op;
 		}
 		return canonicalOperator;
@@ -813,133 +844,499 @@ public abstract class Operator implements Serializable {
 	 *            the incoming canonical SOP expression
 	 * @return an equivalent canonical SOP expression that may be simpler
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected static Operator simplifyCanonicalOperator(Operator op) {
 
-		// apply redundancy laws to reduced the number/complexity of or terms
-		//
-		// 1. "A + (A * B) -> A"
-		// 2. "(A * B) + (A * ~B) -> A"
-		// 3. "A + (~A * B) -> A + B"
-
 		boolean runAgain;
-		if (op instanceof Or) {
-			List orTerms = new ArrayList(op.getOperands());
-			boolean modified = false;
-			do {
-				runAgain = false;
-				for (int a = 0; a < orTerms.size(); a++) {
-					for (int b = a + 1; b < orTerms.size(); b++) {
-						Operator opA = (Operator) orTerms.get(a);
-						Operator opB = (Operator) orTerms.get(b);
-						if (opA != null && opB != null) {
-							List aOperands = new ArrayList(
-									opA instanceof And ? ((And) opA)
-											.getOperands() : Arrays.asList(opA));
-							List bOperands = new ArrayList(
-									opB instanceof And ? ((And) opB)
-											.getOperands() : Arrays.asList(opB));
+		do {
+			Operator original = op;
+			if (op instanceof Or) {
+				op = simplifyCanonicalOr((Or) op);
+			} else if (op instanceof And) {
+				op = simplifyCanonicalAnd((And) op);
+			}
+			runAgain = original != op;
+		} while (runAgain);
 
-							List commonOperands = new ArrayList<>();
-							for (Object aElement : aOperands) {
-								if (bOperands.contains(aElement)) {
-									commonOperands.add(aElement);
-								}
-							}
+		return op;
+	}
 
-							// rule #1: "A + (A * B) -> A"
+	private static void separateAttributeTerms(String attr, Operator op,
+			List<Operator> attrTerms, List<Operator> otherTerms) {
+		if (op instanceof And) {
+			And and = (And) op;
+			for (int a = 0; a < and.getOperandCount(); a++) {
+				separateAttributeTerms(attr, and.getOperand(a), attrTerms,
+						otherTerms);
+			}
+		} else if (op instanceof Not) {
+			Not not = (Not) op;
+			ValueOperator v = (ValueOperator) not.getOperand(0);
+			if (v.getAttribute().equals(attr)) {
+				attrTerms.add(not);
+			} else {
+				otherTerms.add(not);
+			}
+		} else if (op instanceof ValueOperator) {
+			ValueOperator v = (ValueOperator) op;
+			if (v.getAttribute().equals(attr)) {
+				attrTerms.add(v);
+			} else {
+				otherTerms.add(v);
+			}
+		} else {
+			// this shouldn't happen if our input was canonical
+			throw new IllegalStateException(op.toString());
+		}
+	}
 
-							if (aOperands.size() > commonOperands.size()
-									&& bOperands.size() == commonOperands
-											.size()) {
-								// opB is a subset of opA, so opA can be purged
-								orTerms.set(a, null);
-								runAgain = true;
-								modified = true;
-								continue;
-							} else if (bOperands.size() > commonOperands.size()
-									&& aOperands.size() == commonOperands
-											.size()) {
-								// opA is a subset of opB, so opB can be purged
-								orTerms.set(b, null);
-								runAgain = true;
-								modified = true;
-								continue;
-							}
+	protected static Operator simplifyCanonicalOr(final Or or) {
+		Or orOp = or;
 
-							// rule #2: apply "AB + A(!B) -> A"
-							aOperands.removeAll(commonOperands);
-							bOperands.removeAll(commonOperands);
+		class Term {
+			String attr;
+			List<Operator> andTerms;
+			AndProfile andProfile;
 
-							if (!(commonOperands.isEmpty()
-									|| aOperands.isEmpty() || bOperands
-										.isEmpty())) {
-								Operator aLeftover = aOperands.size() == 1 ? (Operator) aOperands
-										.get(0) : And.create(aOperands);
-								Operator bLeftover = bOperands.size() == 1 ? (Operator) bOperands
-										.get(0) : And.create(bOperands);
-								if (aLeftover.equals(Not.create(bLeftover))) {
-									Operator shared = commonOperands.size() == 1 ? (Operator) commonOperands
-											.get(0) : And
-											.create(commonOperands);
-									orTerms.set(a, null);
-									orTerms.set(b, shared);
-									runAgain = true;
-									modified = true;
-									continue;
-								}
-							}
+			Term(String attr, List<Operator> andTerms) {
+				this.attr = attr;
+				this.andTerms = andTerms;
+				andProfile = new AndProfile(andTerms);
+			}
 
-							// rule #3: "AZ + (!A)BZ -> AZ + BZ"
+			Term(String attr, Range range) {
+				this.attr = attr;
+				andProfile = new AndProfile(new ArrayList());
+				andProfile.variableRanges.put(attr, range);
+				andTerms = andProfile.createAndOperators();
+			}
 
-							if (commonOperands.size() > 0) {
-								// remember at this point aOperands and
-								// bOperands already have stripped away
-								// commonOperands
-								if (aOperands.size() == 1
-										&& bOperands.size() == 2) {
-									if (bOperands
-											.remove(Not
-													.create((Operator) aOperands
-															.get(0)))) {
-										bOperands.addAll(commonOperands);
-										orTerms.set(b, And.create(bOperands));
-										runAgain = true;
-										modified = true;
-									}
-								} else if (aOperands.size() == 2
-										&& bOperands.size() == 1) {
-									if (aOperands
-											.remove(Not
-													.create((Operator) bOperands
-															.get(0)))) {
-										aOperands.addAll(commonOperands);
-										orTerms.set(a, And.create(aOperands));
-										runAgain = true;
-										modified = true;
-									}
+			public String toString() {
+				return "Term[attr=" + attr + ", terms=\"" + andTerms
+						+ "\", profile=" + andProfile.variableRanges.values()
+						+ "]";
+			}
+		}
+
+		for (String attr : or.getAttributes().toArray(
+				new String[or.getAttributes().size()])) {
+			// step 1: catalog everything into "factored":
+			Map<List<Operator>, List<Term>> factored = new HashMap<>();
+
+			for (int a = 0; a < orOp.getOperandCount(); a++) {
+				// z must be AND, NOT, or a ValueOperator
+				Operator z = orOp.getOperand(a);
+				List<Operator> attrTerms = new ArrayList<>();
+				List<Operator> nonAttrTerms = new ArrayList<>();
+				separateAttributeTerms(attr, z, attrTerms, nonAttrTerms);
+
+				List<Term> attrTermList = factored.get(nonAttrTerms);
+				if (attrTermList == null) {
+					attrTermList = new ArrayList<>();
+					factored.put(nonAttrTerms, attrTermList);
+				}
+				attrTermList.add(new Term(attr, attrTerms));
+			}
+
+			// step 2: now that we've factored everything, purge any redundant
+			// Terms
+			Iterator<Entry<List<Operator>, List<Term>>> iter = factored
+					.entrySet().iterator();
+			while (iter.hasNext()) {
+				Entry<List<Operator>, List<Term>> entry = iter.next();
+				List<Term> attrTermList = entry.getValue();
+
+				for (int a = 0; a < attrTermList.size(); a++) {
+					for (int b = a + 1; b < attrTermList.size(); b++) {
+						Term termA = attrTermList.get(a);
+						Term termB = attrTermList.get(b);
+						Range rangeA = termA == null
+								|| termA.andProfile.variableRanges.isEmpty() ? null
+								: termA.andProfile.variableRanges.values()
+										.iterator().next();
+						Range rangeB = termB == null
+								|| termB.andProfile.variableRanges.isEmpty() ? null
+								: termB.andProfile.variableRanges.values()
+										.iterator().next();
+
+						if (rangeA != null && rangeB != null) {
+							Range newRange = rangeA.or(rangeB);
+							if (newRange != null) {
+								try {
+									Term newTerm = new Term(attr, newRange);
+									attrTermList.set(a, null);
+									attrTermList.set(b, newTerm);
+								} catch (Exception e) {
+									// this range can't be converted to a
+									// canonical operator
 								}
 							}
 						}
 					}
 				}
-			} while (runAgain);
 
-			if (modified) {
-				Iterator iter = orTerms.iterator();
-				while (iter.hasNext()) {
-					Object element = iter.next();
-					if (element == null)
-						iter.remove();
+				// actually flatten the data structure now that we finished
+				// swapping elements:
+				Iterator<Term> iter2 = attrTermList.iterator();
+				while (iter2.hasNext()) {
+					Term t = iter2.next();
+					if (t == null)
+						iter2.remove();
 				}
+			}
 
-				Collections.sort(orTerms, toStringComparator);
-				op = orTerms.size() == 1 ? (Operator) orTerms.get(0) : Or
-						.create(orTerms);
+			// step 3: recreate all the OR terms
+			List<Operator> newOrTerms = new ArrayList<>();
+
+			iter = factored.entrySet().iterator();
+			while (iter.hasNext()) {
+				Entry<List<Operator>, List<Term>> entry = iter.next();
+				List<Operator> nonAttrTerms = entry.getKey();
+				List<Term> attrTermList = entry.getValue();
+				for (Term term : attrTermList) {
+					List<Operator> z = new ArrayList<>(nonAttrTerms.size()
+							+ term.andTerms.size());
+					z.addAll(nonAttrTerms);
+					z.addAll(term.andTerms);
+					Collections.sort(z, toStringComparator);
+					if (z.size() > 0) {
+						Operator t = z.size() == 1 ? z.get(0) : And.create(z);
+						newOrTerms.add(t);
+					}
+				}
+			}
+
+			Collections.sort(newOrTerms, toStringComparator);
+
+			if (newOrTerms.size() == 0)
+				return TRUE;
+
+			Operator z = newOrTerms.size() == 1 ? newOrTerms.get(0) : Or
+					.create(newOrTerms);
+			if (z instanceof Or) {
+				orOp = (Or) z;
+			} else {
+				return z;
 			}
 		}
 
-		return op;
+		List orTerms = new ArrayList(orOp.getOperands());
+
+		scanOrTerms: for (int a = 0; a < orTerms.size(); a++) {
+
+			Operator opA = (Operator) orTerms.get(a);
+			if (opA instanceof Not) {
+				// if we have (A || !A), condense to TRUE
+
+				Not n = (Not) opA;
+				Operator notOp = n.getOperand(0);
+				if (orTerms.contains(notOp))
+					return TRUE;
+			}
+
+			// apply redundancy laws to reduced the number/complexity of
+			// or terms
+			//
+			// 1. "A + (A * B) -> A"
+			// 2. "(A * B) + (A * ~B) -> A"
+			// 3. "A + (~A * B) -> A + B"
+			for (int b = a + 1; b < orTerms.size(); b++) {
+				Operator opB = (Operator) orTerms.get(b);
+				if (opA != null && opB != null) {
+					List aOperands = new ArrayList(
+							opA instanceof And ? ((And) opA).getOperands()
+									: Arrays.asList(opA));
+					List bOperands = new ArrayList(
+							opB instanceof And ? ((And) opB).getOperands()
+									: Arrays.asList(opB));
+
+					// if we know "x > y", then we can AND that with
+					// "x != y". This extra info will get purged
+					// soon if it's not necessary, but it helps us
+					// identify certain patterns in the redundancy
+					// rules. (If you comment out this code: unit tests
+					// will fail.)
+					for (int c = 0; c < bOperands.size(); c++) {
+						if (bOperands.get(c) instanceof GreaterThan) {
+							GreaterThan g = (GreaterThan) bOperands.get(c);
+							Operator notEqualTo = Not.create(new EqualTo(g
+									.getAttribute(), g.getValue()));
+							if (aOperands.contains(notEqualTo))
+								bOperands.add(notEqualTo);
+						}
+					}
+					for (int c = 0; c < aOperands.size(); c++) {
+						if (aOperands.get(c) instanceof GreaterThan) {
+							GreaterThan g = (GreaterThan) aOperands.get(c);
+							Operator notEqualTo = Not.create(new EqualTo(g
+									.getAttribute(), g.getValue()));
+							if (bOperands.contains(notEqualTo))
+								aOperands.add(notEqualTo);
+						}
+					}
+
+					List commonOperands = new ArrayList<>();
+					for (Object aElement : aOperands) {
+						if (bOperands.contains(aElement)) {
+							commonOperands.add(aElement);
+						}
+					}
+
+					// rule #1: "A + (A * B) -> A"
+
+					if (aOperands.size() > commonOperands.size()
+							&& bOperands.size() == commonOperands.size()) {
+						// opB is a subset of opA, so opA can be purged
+						orTerms.set(a, null);
+						break scanOrTerms;
+					} else if (bOperands.size() > commonOperands.size()
+							&& aOperands.size() == commonOperands.size()) {
+						// opA is a subset of opB, so opB can be purged
+						orTerms.set(b, null);
+						break scanOrTerms;
+					}
+
+					// rule #2: apply "AB + A(!B) -> A"
+					aOperands.removeAll(commonOperands);
+					bOperands.removeAll(commonOperands);
+
+					if (!(commonOperands.isEmpty() || aOperands.isEmpty() || bOperands
+							.isEmpty())) {
+						Operator aLeftover = aOperands.size() == 1 ? (Operator) aOperands
+								.get(0) : And.create(aOperands);
+						Operator bLeftover = bOperands.size() == 1 ? (Operator) bOperands
+								.get(0) : And.create(bOperands);
+						if (aLeftover.equals(Not.create(bLeftover))) {
+							Operator shared = commonOperands.size() == 1 ? (Operator) commonOperands
+									.get(0) : And.create(commonOperands);
+							orTerms.set(a, null);
+							orTerms.set(b, shared);
+							break scanOrTerms;
+						}
+					}
+
+					// rule #3: "AZ + (!A)BZ -> AZ + BZ"
+
+					// remember at this point aOperands and
+					// bOperands already have stripped away
+					// commonOperands
+					if (aOperands.size() == 1 && bOperands.size() == 2) {
+						if (bOperands.remove(Not.create((Operator) aOperands
+								.get(0)))) {
+							bOperands.addAll(commonOperands);
+							orTerms.set(b,
+									bOperands.size() == 1 ? bOperands.get(0)
+											: And.create(bOperands));
+							break scanOrTerms;
+						}
+					} else if (aOperands.size() == 2 && bOperands.size() == 1) {
+						if (aOperands.remove(Not.create((Operator) bOperands
+								.get(0)))) {
+							aOperands.addAll(commonOperands);
+							orTerms.set(a,
+									aOperands.size() == 1 ? aOperands.get(0)
+											: And.create(aOperands));
+							break scanOrTerms;
+						}
+					}
+				}
+			}
+		}
+
+		Iterator iter = orTerms.iterator();
+		while (iter.hasNext()) {
+			Object element = iter.next();
+			if (element == null)
+				iter.remove();
+		}
+
+		if (or.getOperands().equals(orTerms))
+			return or;
+
+		Collections.sort(orTerms, toStringComparator);
+		return orTerms.size() == 1 ? (Operator) orTerms.get(0) : Or
+				.create(orTerms);
+	}
+
+	static class AndProfile {
+		Map<String, Range> variableRanges = new HashMap<>();
+		Collection<Operator> andElementsProfiled = new HashSet<>();
+		boolean negated = false;
+
+		AndProfile(And and) {
+			this(and.getOperands());
+		}
+
+		AndProfile(List andOperands) {
+			// we'll revisit not equal to statements in a second pass:
+			Map<String, List<Not>> notEqualTos = new HashMap<>();
+
+			for (int a = 0; a < andOperands.size(); a++) {
+				Operator andOp = (Operator) andOperands.get(a);
+
+				Range newRange = null;
+				String attr = null;
+
+				if (andOp instanceof EqualTo
+						&& andOp.getOperand(1) instanceof Comparable) {
+					EqualTo et = (EqualTo) andOp;
+					attr = et.getAttribute();
+					Comparable value = (Comparable) et.getValue();
+					newRange = new Range(value, value, true, true);
+					andElementsProfiled.add(andOp);
+				} else if (andOp instanceof GreaterThan) {
+					GreaterThan gt = (GreaterThan) andOp;
+					attr = gt.getAttribute();
+					Comparable value = gt.getValue();
+					newRange = new Range(value, null, false, false);
+					andElementsProfiled.add(andOp);
+				} else if (andOp instanceof Not) {
+					Not not = (Not) andOp;
+					Operator notOp = not.getOperand(0);
+					if (notOp instanceof GreaterThan) {
+						GreaterThan gt = (GreaterThan) notOp;
+						attr = gt.getAttribute();
+						Comparable value = gt.getValue();
+						newRange = new Range(null, value, false, true);
+						andElementsProfiled.add(andOp);
+					} else if (notOp instanceof EqualTo
+							&& ((EqualTo) notOp).getValue() instanceof Comparable) {
+						EqualTo et = (EqualTo) notOp;
+						attr = et.getAttribute();
+						List<Not> nots = notEqualTos.get(attr);
+						if (nots == null) {
+							nots = new ArrayList<>();
+							notEqualTos.put(attr, nots);
+						}
+						nots.add(not);
+					}
+				}
+
+				if (newRange != null) {
+					Range oldRange = variableRanges.get(attr);
+					if (oldRange == null) {
+						variableRanges.put(attr, newRange);
+					} else {
+						Range andedRange = oldRange.and(newRange);
+						if (andedRange == null) {
+							negated = true;
+						} else {
+							variableRanges.put(attr, andedRange);
+						}
+					}
+				}
+			}
+
+			for (Entry<String, Range> rangeEntry : variableRanges.entrySet()) {
+				List<Not> l = notEqualTos.get(rangeEntry.getKey());
+				if (l != null) {
+					Iterator<Not> iter = l.iterator();
+					while (iter.hasNext()) {
+						Not not = iter.next();
+						EqualTo et = (EqualTo) not.getOperand(0);
+						Comparable v = (Comparable) et.getValue();
+
+						if (et.getAttribute().equals(rangeEntry.getKey())
+								&& !rangeEntry.getValue().contains(v)) {
+							// c isn't close to our range so we can ignore it.
+							// if "0 <= x <= 10" and "x != 20", the not-equal-to
+							// statement is irrelevant.
+							iter.remove();
+							andElementsProfiled.add(not);
+						} else {
+							Range r = rangeEntry.getValue();
+							if (v.equals(r.getMax()) && r.isIncludeMax()) {
+								r = new Range(r.getMin(), r.getMax(),
+										r.isIncludeMin(), false);
+								andElementsProfiled.add(not);
+							}
+							if (v.equals(r.getMin()) && r.isIncludeMin()) {
+								r = new Range(r.getMin(), r.getMax(), false,
+										r.isIncludeMin());
+								andElementsProfiled.add(not);
+							}
+							rangeEntry.setValue(r);
+						}
+					}
+				}
+			}
+		}
+
+		public List<Operator> createAndOperators() {
+			List<Operator> returnValue = new ArrayList<>();
+			for (Entry<String, Range> entry : this.variableRanges.entrySet()) {
+				String attr = entry.getKey();
+				Range r = entry.getValue();
+				if (r.getMin() == null && r.getMax() == null) {
+					// useless range
+				}
+
+				if (r.getMax() != null && r.getMin() != null
+						&& r.getMax() == r.getMin()) {
+					if (r.isIncludeMax() && r.isIncludeMin()) {
+						returnValue.add(new EqualTo(attr, r.getMin()));
+						continue;
+					} else {
+						throw new IllegalStateException(r.toString(attr));
+					}
+				}
+
+				if (r.getMax() != null) {
+					if (!r.isIncludeMax()) {
+						// something like "x < max"
+						returnValue.add(Not.create(new GreaterThan(attr, r
+								.getMax())));
+						returnValue
+								.add(Not.create(new EqualTo(attr, r.getMax())));
+					} else {
+						// something like "x <= max"
+						returnValue.add(Not.create(new GreaterThan(attr, r
+								.getMax())));
+					}
+				}
+				if (r.getMin() != null) {
+					if (r.isIncludeMin()) {
+						// something like "min <= x"
+						throw new IllegalStateException(r.toString(attr));
+					}
+					// something like "min < x"
+					returnValue.add(new GreaterThan(attr, r.getMin()));
+				}
+			}
+			return returnValue;
+		}
+	}
+
+	protected static Operator simplifyCanonicalAnd(final And and) {
+		List andTerms = new ArrayList(and.getOperands());
+
+		Iterator andTermsIter = andTerms.iterator();
+		while (andTermsIter.hasNext()) {
+			Operator andOp = (Operator) andTermsIter.next();
+
+			// if we have (A * !A), condense to FALSE
+			if (andOp instanceof Not) {
+				Not n = (Not) andOp;
+				Operator inner = n.getOperand(0);
+				if (andTerms.contains(inner))
+					return FALSE;
+			}
+		}
+
+		AndProfile profile = new AndProfile(and);
+		if (profile.negated)
+			return FALSE;
+		andTerms.removeAll(profile.andElementsProfiled);
+
+		andTerms.addAll(profile.createAndOperators());
+
+		if (and.getOperands().size() == andTerms.size()
+				&& and.getOperands().containsAll(andTerms))
+			return and;
+
+		Collections.sort(andTerms, toStringComparator);
+
+		return andTerms.size() == 1 ? (Operator) andTerms.get(0) : And
+				.create(andTerms);
 	}
 
 	/**
@@ -969,7 +1366,9 @@ public abstract class Operator implements Serializable {
 			return false;
 
 		for (int a = 0; a < getOperandCount(); a++) {
-			if (!Objects.equals(getOperand(a), canonicalOther.getOperand(a)))
+			Object operand1 = getOperand(a);
+			Object operand2 = canonicalOther.getOperand(a);
+			if (!Objects.equals(operand1, operand2))
 				return false;
 		}
 		return true;
@@ -986,4 +1385,223 @@ public abstract class Operator implements Serializable {
 	protected abstract Operator createCanonicalOperator();
 
 	public abstract Collection<Operator> split();
+
+	public abstract Collection<String> getAttributes();
+
+	public static Operator join(Operator... operators) {
+		Operator op = operators.length == 1 ? operators[0] : Or
+				.create(operators);
+		op = op.getCanonicalOperator();
+		if (!(op instanceof Or))
+			return op;
+		Or or = (Or) op;
+
+		// let's guarantee consistency regarding the order in which we try
+		// to factor out terms by sorting our attributes:
+		SortedSet<String> sortedAttributes = new TreeSet<>();
+		sortedAttributes.addAll(or.getAttributes());
+
+		// step 1: convert plain EqualTo statements to In statements:
+
+		for (String attr : sortedAttributes) {
+			Collection<EqualTo> plainEquals = new HashSet<>();
+
+			for (int a = 0; a < or.getOperandCount(); a++) {
+				Operator orOp = or.getOperand(a);
+				if (orOp instanceof EqualTo
+						&& attr.equals(((EqualTo) orOp).getAttribute())) {
+					plainEquals.add((EqualTo) orOp);
+				}
+			}
+
+			if (plainEquals.size() > 1) {
+				List<Operator> newOperands = new ArrayList<>(
+						(List) or.getOperands());
+				Collection<Object> values = getValues(plainEquals);
+				newOperands.removeAll(plainEquals);
+				newOperands.add(In.create(attr, values));
+				op = newOperands.size() == 1 ? (Operator) newOperands.get(0)
+						: Or.create(newOperands);
+				if (op instanceof Or) {
+					or = (Or) op;
+				} else {
+					return op;
+				}
+			}
+		}
+
+		// step 2: convert plain negated EqualTo statements to In statements:
+
+		for (String attr : sortedAttributes) {
+			Collection<EqualTo> notPlainEquals = new HashSet<>();
+
+			for (int a = 0; a < or.getOperandCount(); a++) {
+				Operator orOp = or.getOperand(a);
+				if (orOp instanceof Not) {
+					Not not = (Not) orOp;
+					Operator notOp = not.getOperand(0);
+					if (notOp instanceof EqualTo
+							&& attr.equals(((EqualTo) notOp).getAttribute())) {
+						notPlainEquals.add((EqualTo) notOp);
+					}
+				}
+			}
+
+			if (notPlainEquals.size() > 1) {
+				List<Operator> newOperands = new ArrayList<>(
+						(List) or.getOperands());
+				Collection<Object> values = getValues(notPlainEquals);
+				for (EqualTo et : notPlainEquals) {
+					newOperands.remove(new Not(et));
+				}
+				newOperands.add(Not.create(In.create(attr, values)));
+				op = newOperands.size() == 1 ? (Operator) newOperands.get(0)
+						: Or.create(newOperands);
+				if (op instanceof Or) {
+					or = (Or) op;
+				} else {
+					return op;
+				}
+			}
+		}
+
+		// step 3: reach inside ANDed statements and search for equal-tos and
+		// not-equal-tos to similarly rewrite as IN statements. This is much
+		// more complex and involves trying to find common factors for clusters
+		// of operands.
+
+		boolean continueScanning;
+		do {
+			continueScanning = false;
+
+			scanAttributes: for (String attr : sortedAttributes) {
+
+				Map<List<Operator>, Map<EqualTo, And>> andEqualTos = new HashMap<>();
+				Map<List<Operator>, Map<EqualTo, And>> andNotEqualTos = new HashMap<>();
+
+				List<Operator> biggestKey = null;
+				int biggestKeySize = -1;
+				boolean biggestKeyEqualTo = false;
+
+				for (int a = 0; a < or.getOperandCount(); a++) {
+					Operator orOp = or.getOperand(a);
+					if (orOp instanceof And) {
+						And and = (And) orOp;
+						for (int b = 0; b < and.getOperandCount(); b++) {
+							Operator andOp = and.getOperand(b);
+							if (andOp instanceof EqualTo
+									&& attr.equals(((EqualTo) andOp)
+											.getAttribute())) {
+								List<Operator> andOperandsWithoutEqualTo = new ArrayList<>();
+								andOperandsWithoutEqualTo
+										.addAll((Collection) and.getOperands());
+								andOperandsWithoutEqualTo.remove(andOp);
+
+								Map<EqualTo, And> map = andEqualTos
+										.get(andOperandsWithoutEqualTo);
+								if (map == null) {
+									map = new HashMap<>();
+									andEqualTos.put(andOperandsWithoutEqualTo,
+											map);
+								}
+
+								map.put((EqualTo) andOp, and);
+
+								if (map.size() > biggestKeySize) {
+									biggestKeySize = map.size();
+									biggestKey = andOperandsWithoutEqualTo;
+									biggestKeyEqualTo = true;
+								}
+							} else if (andOp instanceof Not) {
+								Not not = (Not) andOp;
+								Operator notOp = not.getOperand(0);
+								if (notOp instanceof EqualTo
+										&& attr.equals(((EqualTo) notOp)
+												.getAttribute())) {
+
+									List<Operator> andOperandsWithoutNotEqualTo = new ArrayList<>();
+									andOperandsWithoutNotEqualTo
+											.addAll((Collection) and
+													.getOperands());
+									andOperandsWithoutNotEqualTo.remove(andOp);
+
+									Map<EqualTo, And> map = andNotEqualTos
+											.get(andOperandsWithoutNotEqualTo);
+									if (map == null) {
+										map = new HashMap<>();
+										andNotEqualTos.put(
+												andOperandsWithoutNotEqualTo,
+												map);
+									}
+
+									map.put((EqualTo) notOp, and);
+
+									if (map.size() > biggestKeySize) {
+										biggestKeySize = map.size();
+										biggestKey = andOperandsWithoutNotEqualTo;
+										biggestKeyEqualTo = false;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				if (biggestKeySize > 1) {
+					List<Operator> newOrTerms = new ArrayList<>();
+					if (biggestKeyEqualTo) {
+						Map<EqualTo, And> equalTos = andEqualTos
+								.get(biggestKey);
+						Collection<Object> values = getValues(equalTos.keySet());
+						List<Operator> newAndTerms = new ArrayList<Operator>();
+						newAndTerms.addAll(biggestKey);
+						newAndTerms.add(In.create(attr, values));
+
+						Operator newAndOp = And.create(newAndTerms);
+
+						newOrTerms.addAll((List) or.getOperands());
+						newOrTerms.removeAll(equalTos.values());
+						newOrTerms.add(newAndOp);
+					} else {
+						Map<EqualTo, And> notEqualTos = andNotEqualTos
+								.get(biggestKey);
+						Collection<Object> values = getValues(notEqualTos
+								.keySet());
+						List<Operator> newAndTerms = new ArrayList<Operator>();
+						newAndTerms.addAll(biggestKey);
+						newAndTerms.add(Not.create(In.create(attr, values)));
+
+						Operator newAndOp = And.create(newAndTerms);
+
+						newOrTerms.addAll((List) or.getOperands());
+						newOrTerms.removeAll(notEqualTos.values());
+						newOrTerms.add(newAndOp);
+					}
+
+					op = newOrTerms.size() == 1 ? (Operator) newOrTerms.get(0)
+							: Or.create(newOrTerms);
+					if (op instanceof Or) {
+						or = (Or) op;
+						continueScanning = true;
+						break scanAttributes;
+					} else {
+						return op;
+					}
+				}
+
+			}
+		} while (continueScanning);
+
+		return op;
+	}
+
+	private static Collection<Object> getValues(
+			Collection<EqualTo> valueOperators) {
+		Collection returnValue = new HashSet();
+		for (ValueOperator op : valueOperators) {
+			returnValue.add(op.getValue());
+		}
+		return returnValue;
+	}
+
 }
