@@ -459,203 +459,92 @@ public class OperatorTest extends TestCase {
 		assertFalse(f.equals(a_firstNameL));
 	}
 
+	protected void testEquals(String expected, String value) throws Exception {
+		{
+			Operator op1 = new OperatorParser().parse(expected);
+			Operator op2 = new OperatorParser().parse(value);
+			assertEquals(op1, op2);
+
+			testDoubleNegation(op1);
+			testDoubleNegation(op2);
+		}
+
+		// complicate operators by wrapping them in and/or/not expressions:
+
+		{
+			Operator op1 = new OperatorParser()
+					.parse("j && (" + expected + ")");
+			Operator op2 = new OperatorParser().parse("j && (" + value + ")");
+			assertEquals(op1, op2);
+
+			testDoubleNegation(op1);
+			testDoubleNegation(op2);
+		}
+
+		{
+			Operator op1 = new OperatorParser()
+					.parse("j || (" + expected + ")");
+			Operator op2 = new OperatorParser().parse("j || (" + value + ")");
+			assertEquals(op1, op2);
+
+			testDoubleNegation(op1);
+			testDoubleNegation(op2);
+		}
+
+		{
+			Operator op1 = new OperatorParser().parse("j && !(" + expected
+					+ ")");
+			Operator op2 = new OperatorParser().parse("j && !(" + value + ")");
+			assertEquals(op1, op2);
+
+			testDoubleNegation(op1);
+			testDoubleNegation(op2);
+		}
+
+		{
+			Operator op1 = new OperatorParser().parse("j || !(" + expected
+					+ ")");
+			Operator op2 = new OperatorParser().parse("j || !(" + value + ")");
+			assertEquals(op1, op2);
+
+			testDoubleNegation(op1);
+			testDoubleNegation(op2);
+		}
+	}
+
+	protected void testDoubleNegation(Operator op) {
+		Operator not = Not.create(op).getCanonicalOperator();
+		Operator notNot = Not.create(not).getCanonicalOperator();
+		assertEquals(op, notNot);
+	}
+
 	@Test
-	public void testEquals_scenario4() {
+	public void testEquals_scenario4() throws Exception {
+		testEquals("x < 10", "!(x>10) && !(x==10)");
+		testEquals("x > 10", "!(x < 10 || x==10)");
+		testEquals("(x==10) || (x>10)", "!(x < 10)");
+		testEquals("(x == 10) || (x < 10)", "!(x > 10)");
+		testEquals("false", "x > 10 && x < 10");
+		testEquals("x == 10", "!(x > 10) && !(x < 10)");
+		testEquals("x != 10", "x > 10 || x < 10");
+		testEquals("x > 20", "x > 10 && x > 20");
+		testEquals("x > 10", "x > 10 || x > 20");
+		testEquals("true", "x > 10 || !(x > 10)");
+		testEquals("x > 10", "x != 0 && x > 10");
+		testEquals("false", "x == 0 && x > 10");
+		testEquals("x == 20", "x == 20 && x > 10");
+		testEquals("false", "x == 20 && x < 10");
+		testEquals("x < 10", "x != 20 && x < 10");
+		testEquals("x < 10", "x < 10 && x < 20");
+		testEquals("false", "x < 10 && x == 10");
+		testEquals("false", "x > 10 && x == 10");
+		testEquals("x > 10", "x > 10 && x != 10");
+		testEquals("x < 20", "x < 10 || x < 20");
+		testEquals("x > 10", "x > 10 || x > 20");
+		testEquals("false", "x > 10 && x < -10");
+		testEquals("!(!((a && b) || (c && d)))", "(a && b) || (c && d)");
 
-		// TODO: implement text parser, and when testing two operators
-		// also test (j && op1) and (j && op2) to make sure AND terms are being
-		// factored correctly.
-
-		{
-			// x < 10
-			Operator z = new LesserThan("x", 10);
-			// !(x>10) && !(x==10)
-			Operator y = And.create(Not.create(new GreaterThan("x", 10)),
-					Not.create(new EqualTo("x", 10)));
-			assertEquals(z, y);
-		}
-
-		{
-			// x > 10
-			Operator z = new GreaterThan("x", 10);
-			// !(x < 10 || x==10)
-			Operator y = Not.create(Or.create(new LesserThan("x", 10),
-					new EqualTo("x", 10)));
-			assertEquals(z, y);
-		}
-
-		{
-			// (x==10) || (x>10)
-			Operator z = Or.create(new EqualTo("x", 10), new GreaterThan("x",
-					10));
-			// !(x < 10)
-			Operator y = Not.create(new LesserThan("x", 10));
-			assertEquals(y, z);
-		}
-
-		{
-			// (x == 10) || (x < 10)
-			Operator z = Or.create(new EqualTo("x", 10),
-					new LesserThan("x", 10));
-			// !(x > 10)
-			Operator y = Not.create(new GreaterThan("x", 10));
-			assertEquals(z, y);
-		}
-
-		{
-			// x > 10 && x < 10
-			Operator z = And.create(new GreaterThan("x", 10), new LesserThan(
-					"x", 10));
-			assertEquals(z, Operator.FALSE);
-		}
-
-		{
-			// !(x > 10) && !(x < 10)
-			Operator z = And.create(Not.create(new GreaterThan("x", 10)),
-					Not.create(new LesserThan("x", 10)));
-			// x == 10
-			Operator y = new EqualTo("x", 10);
-			assertEquals(y, z);
-		}
-
-		{
-			// x > 10 || x < 10
-			Operator z = Or.create(new GreaterThan("x", 10), new LesserThan(
-					"x", 10));
-			// x != 10
-			Operator y = Not.create(new EqualTo("x", 10));
-			assertEquals(z, y);
-		}
-
-		{
-			// x > 10 && x > 20
-			Operator z = And.create(new GreaterThan("x", 10), new GreaterThan(
-					"x", 20));
-			// x > 20
-			Operator y = new GreaterThan("x", 20);
-			assertEquals(z, y);
-		}
-
-		{
-			// x > 10 || !(x > 10)
-			Operator z = Or.create(new GreaterThan("x", 10),
-					Not.create(new GreaterThan("x", 10)));
-			assertEquals(Operator.TRUE, z);
-		}
-
-		{
-			// x != 0 && x > 10
-			Operator z = And.create(Not.create(new EqualTo("x", 0)),
-					new GreaterThan("x", 10));
-			// x > 10
-			Operator y = new GreaterThan("x", 10);
-			assertEquals(y, z);
-		}
-
-		{
-			// x == 0 && x > 10
-			Operator z = And.create(new EqualTo("x", 0), new GreaterThan("x",
-					10));
-			assertEquals(Operator.FALSE, z);
-		}
-
-		{
-			// x == 20 && x > 10
-			Operator z = And.create(new EqualTo("x", 20), new GreaterThan("x",
-					10));
-			Operator y = new EqualTo("x", 20);
-			assertEquals(y, z);
-		}
-
-		{
-			// x == 20 && x < 10
-			Operator z = And.create(new EqualTo("x", 20), new LesserThan("x",
-					10));
-			assertEquals(Operator.FALSE, z);
-		}
-
-		{
-			// x != 20 && x < 10
-			Operator z = And.create(Not.create(new EqualTo("x", 20)),
-					new LesserThan("x", 10));
-			// x < 10
-			Operator y = new LesserThan("x", 10);
-			assertEquals(z, y);
-		}
-
-		{
-			// x < 10 && x < 20
-			Operator z = And.create(new LesserThan("x", 10), new LesserThan(
-					"x", 20));
-			// x < 10
-			Operator y = new LesserThan("x", 10);
-			assertEquals(z, y);
-		}
-
-		{
-			// x < 10 && x == 10
-			Operator z = And.create(new LesserThan("x", 10), new EqualTo("x",
-					10));
-			assertEquals(Operator.FALSE, z);
-		}
-
-		{
-			// x > 10 && x == 10
-			Operator z = And.create(new GreaterThan("x", 10), new EqualTo("x",
-					10));
-			assertEquals(Operator.FALSE, z);
-		}
-
-		{
-			// x > 10 && x != 10
-			Operator z = And.create(new GreaterThan("x", 10),
-					Not.create(new EqualTo("x", 10)));
-			Operator y = new GreaterThan("x", 10);
-
-			assertEquals(y, z);
-		}
-
-		{
-			Operator a = new EqualTo("a", 0);
-			Operator b = new EqualTo("b", 0);
-			Operator c = new EqualTo("c", 0);
-			Operator d = new EqualTo("d", 0);
-			Operator ab = And.create(a, b);
-			Operator cd = And.create(c, d);
-			Operator abcd = Or.create(ab, cd);
-
-			Operator not = Not.create(abcd).getCanonicalOperator();
-			Operator notNot = Not.create(not);
-
-			assertEquals(abcd, notNot);
-		}
-
-		{
-			// x < 10 || x < 20
-			Operator z = Or.create(new LesserThan("x", 10), new LesserThan("x",
-					20));
-			// x < 20
-			Operator y = new LesserThan("x", 20);
-			assertEquals(y, z);
-		}
-
-		{
-			// x > 10 || x > 20
-			Operator z = Or.create(new GreaterThan("x", 10), new GreaterThan(
-					"x", 20));
-			// x > 10
-			Operator y = new GreaterThan("x", 10);
-			assertEquals(z, y);
-		}
-
-		{
-			// x > 10 && x < -10
-			Operator z = And.create(new GreaterThan("x", 10), new LesserThan(
-					"x", -10));
-			assertEquals(Operator.FALSE, z);
-		}
-
-		// // mutually exclusive INs result in a constant FALSE
+		// // TODO: mutually exclusive INs result in a constant FALSE
 		// {
 		// Operator z = In.create("x", Arrays.asList(
 		// StudentBean.House.Gryffindor, StudentBean.House.Slytherin));

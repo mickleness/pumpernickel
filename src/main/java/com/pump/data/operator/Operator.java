@@ -598,13 +598,29 @@ public abstract class Operator implements Serializable {
 
 		@Override
 		protected String toString(boolean negated) {
+			String attr = getAttribute();
+
+			Object v = getValue();
+			if (Boolean.TRUE.equals(v)) {
+				if (negated) {
+					return "!" + attr;
+				}
+				return attr;
+			} else if (Boolean.FALSE) {
+				if (negated) {
+					return attr;
+				}
+				return "!" + attr;
+			}
+
 			StringBuilder sb = new StringBuilder();
-			sb.append(getAttribute());
+			sb.append(attr);
+
 			sb.append(negated ? " != " : " == ");
-			if (fixedValue == null) {
+			if (v == null) {
 				sb.append("null");
 			} else {
-				sb.append(toString(getValue()));
+				sb.append(toString(v));
 			}
 			return sb.toString();
 		}
