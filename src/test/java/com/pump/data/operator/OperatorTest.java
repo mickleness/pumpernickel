@@ -279,7 +279,7 @@ public class OperatorTest extends TestCase {
 		Operator or = Or.create(ravenclaw, above1980);
 		Operator and = And.create(lastNameNotWeasley, or);
 		assertEquals(
-				"lastName != 'Weasley' && (house == 'Ravenclaw' || birthYear > '1980')",
+				"lastName != \"Weasley\" && (house == \"Ravenclaw\" || birthYear > 1980)",
 				and.toString());
 	}
 
@@ -294,7 +294,7 @@ public class OperatorTest extends TestCase {
 		Operator notOr = Not.create(Or.create(ravenclaw, above1980));
 		Operator and = And.create(lastNameNotWeasley, notOr);
 		assertEquals(
-				"lastName != 'Weasley' && !(house == 'Ravenclaw' || birthYear > '1980')",
+				"lastName != \"Weasley\" && !(house == \"Ravenclaw\" || birthYear > 1980)",
 				and.toString());
 	}
 
@@ -308,7 +308,7 @@ public class OperatorTest extends TestCase {
 		Operator notOr = Not.create(Or.create(ravenclaw, above1980));
 		Operator notAnd = Not.create(And.create(notOr, lastNameWeasley));
 		assertEquals(
-				"!(!(house == 'Ravenclaw' || birthYear > '1980') && lastName == 'Weasley')",
+				"!(!(house == \"Ravenclaw\" || birthYear > 1980) && lastName == \"Weasley\")",
 				notAnd.toString());
 	}
 
@@ -317,12 +317,12 @@ public class OperatorTest extends TestCase {
 		WildcardPattern pStar = new WildcardPattern("P*");
 		Operator lastNameP = new Like("lastName", pStar);
 
-		assertEquals("matches(lastName, 'P*')", lastNameP.toString());
-		assertEquals("!matches(lastName, 'P*')", Not.create(lastNameP)
+		assertEquals("matches(lastName, \"P*\")", lastNameP.toString());
+		assertEquals("!matches(lastName, \"P*\")", Not.create(lastNameP)
 				.toString());
-		assertEquals("matches(lastName, 'P*')",
+		assertEquals("matches(lastName, \"P*\")",
 				Not.create(Not.create(lastNameP)).toString());
-		assertEquals("!matches(lastName, 'P*')",
+		assertEquals("!matches(lastName, \"P*\")",
 				Not.create(Not.create(Not.create(lastNameP))).toString());
 	}
 
@@ -339,7 +339,7 @@ public class OperatorTest extends TestCase {
 		Operator and2 = And.create(above1980, lastNameWeasley);
 		Operator or = Or.create(and1, and2);
 		assertEquals(
-				"(matches(firstName, 'L*') && house == 'Ravenclaw') || (birthYear > '1980' && lastName == 'Weasley')",
+				"(matches(firstName, \"L*\") && house == \"Ravenclaw\") || (birthYear > 1980 && lastName == \"Weasley\")",
 				or.toString());
 	}
 

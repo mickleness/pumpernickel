@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.pump.io.parser.java.JavaEncoding;
 import com.pump.math.Range;
 import com.pump.text.WildcardPattern;
 import com.pump.util.CombinationIterator;
@@ -260,6 +261,35 @@ public abstract class Operator implements Serializable {
 		@Override
 		public Collection<String> getAttributes() {
 			return Collections.singleton(getAttribute());
+		}
+
+		protected String toString(Object value) {
+			StringBuilder sb = new StringBuilder();
+			if (value instanceof Integer) {
+				sb.append(value.toString());
+			} else if (value instanceof Float) {
+				sb.append(value.toString());
+				sb.append('f');
+			} else if (value instanceof Double) {
+				sb.append(value.toString());
+				if (sb.indexOf(".") == -1) {
+					sb.append(".0");
+				}
+			} else if (value instanceof Long) {
+				sb.append(value.toString());
+				sb.append('L');
+			} else if (value instanceof Character) {
+				sb.append('\'');
+				sb.append(JavaEncoding.encode(fixedValue.toString()));
+				sb.append('\'');
+			} else if (value == null) {
+				sb.append("null");
+			} else {
+				sb.append('\"');
+				sb.append(JavaEncoding.encode(fixedValue.toString()));
+				sb.append('\"');
+			}
+			return sb.toString();
 		}
 	}
 
@@ -569,14 +599,12 @@ public abstract class Operator implements Serializable {
 		@Override
 		protected String toString(boolean negated) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(attributeName);
+			sb.append(getAttribute());
 			sb.append(negated ? " != " : " == ");
 			if (fixedValue == null) {
 				sb.append("null");
 			} else {
-				sb.append('\'');
-				sb.append(fixedValue);
-				sb.append('\'');
+				sb.append(toString(getValue()));
 			}
 			return sb.toString();
 		}
@@ -612,11 +640,9 @@ public abstract class Operator implements Serializable {
 		@Override
 		protected String toString(boolean negated) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(attributeName);
+			sb.append(getAttribute());
 			sb.append(negated ? " <= " : " > ");
-			sb.append('\'');
-			sb.append(fixedValue);
-			sb.append('\'');
+			sb.append(toString(getValue()));
 			return sb.toString();
 		}
 
@@ -651,11 +677,9 @@ public abstract class Operator implements Serializable {
 		@Override
 		protected String toString(boolean negated) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(attributeName);
+			sb.append(getAttribute());
 			sb.append(negated ? " >= " : " < ");
-			sb.append('\'');
-			sb.append(fixedValue);
-			sb.append('\'');
+			sb.append(getValue());
 			return sb.toString();
 		}
 
@@ -703,9 +727,9 @@ public abstract class Operator implements Serializable {
 				sb.append("!");
 			sb.append("matches(");
 			sb.append(attributeName);
-			sb.append(", '");
+			sb.append(", \"");
 			sb.append(fixedValue.getPatternText());
-			sb.append("')");
+			sb.append("\")");
 			return sb.toString();
 		}
 
@@ -759,9 +783,7 @@ public abstract class Operator implements Serializable {
 				if (e == null) {
 					sb.append("null");
 				} else {
-					sb.append('\'');
-					sb.append(e);
-					sb.append('\'');
+					sb.append(toString(e));
 				}
 			}
 			sb.append("})");
