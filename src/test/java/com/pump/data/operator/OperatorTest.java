@@ -270,10 +270,7 @@ public class OperatorTest extends TestCase {
 		Operator or = Or.create(ravenclaw, above1980);
 		Operator and = And.create(lastNameNotWeasley, or);
 		String str = "lastName != \"Weasley\" && (house == \"Ravenclaw\" || birthYear > 1980)";
-		assertEquals(str, and.toString());
-
-		Operator parsed = new OperatorParser().parse(str);
-		assertEquals(and, parsed);
+		testToString(and, str);
 	}
 
 	@Test
@@ -286,10 +283,7 @@ public class OperatorTest extends TestCase {
 		Operator notOr = Not.create(Or.create(ravenclaw, above1980));
 		Operator and = And.create(lastNameNotWeasley, notOr);
 		String str = "lastName != \"Weasley\" && !(house == \"Ravenclaw\" || birthYear > 1980)";
-		assertEquals(str, and.toString());
-
-		Operator parsed = new OperatorParser().parse(str);
-		assertEquals(and, parsed);
+		testToString(and, str);
 	}
 
 	@Test
@@ -301,10 +295,7 @@ public class OperatorTest extends TestCase {
 		Operator notOr = Not.create(Or.create(ravenclaw, above1980));
 		Operator notAnd = Not.create(And.create(notOr, lastNameWeasley));
 		String str = "!(!(house == \"Ravenclaw\" || birthYear > 1980) && lastName == \"Weasley\")";
-		assertEquals(str, notAnd.toString());
-
-		Operator parsed = new OperatorParser().parse(str);
-		assertEquals(notAnd, parsed);
+		testToString(notAnd, str);
 	}
 
 	@Test
@@ -312,13 +303,12 @@ public class OperatorTest extends TestCase {
 		WildcardPattern pStar = new WildcardPattern("P*");
 		Operator lastNameP = new Like("lastName", pStar);
 
-		assertEquals("matches(lastName, \"P*\")", lastNameP.toString());
-		assertEquals("!matches(lastName, \"P*\")", Not.create(lastNameP)
-				.toString());
-		assertEquals("matches(lastName, \"P*\")",
-				Not.create(Not.create(lastNameP)).toString());
-		assertEquals("!matches(lastName, \"P*\")",
-				Not.create(Not.create(Not.create(lastNameP))).toString());
+		testToString(lastNameP, "matches(lastName, \"P*\")");
+		testToString(Not.create(lastNameP), "!matches(lastName, \"P*\")");
+		testToString(Not.create(Not.create(lastNameP)),
+				"matches(lastName, \"P*\")");
+		testToString(Not.create(Not.create(Not.create(lastNameP))),
+				"!matches(lastName, \"P*\")");
 	}
 
 	@Test
@@ -333,10 +323,7 @@ public class OperatorTest extends TestCase {
 		Operator and2 = And.create(above1980, lastNameWeasley);
 		Operator or = Or.create(and1, and2);
 		String str = "(matches(firstName, \"L*\") && house == \"Ravenclaw\") || (birthYear > 1980 && lastName == \"Weasley\")";
-		assertEquals(str, or.toString());
-
-		Operator parsed = new OperatorParser().parse(str);
-		assertEquals(or, parsed);
+		testToString(or, str);
 	}
 
 	@Test
