@@ -1,5 +1,6 @@
 package com.pump.data.operator;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,9 @@ import com.pump.math.Range;
 import com.pump.text.WildcardPattern;
 import com.pump.util.CombinationIterator;
 
+/**
+ * All Operators are immutable.
+ */
 public abstract class Operator implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -40,7 +44,7 @@ public abstract class Operator implements Serializable {
 	private static class ConstantOperator extends Operator {
 		private static final long serialVersionUID = 1L;
 
-		private final boolean value;
+		private boolean value;
 
 		private ConstantOperator(boolean value) {
 			this.value = value;
@@ -99,6 +103,23 @@ public abstract class Operator implements Serializable {
 		public Collection<String> getAttributes() {
 			return Collections.emptySet();
 		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+			out.writeBoolean(value);
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+				value = in.readBoolean();
+			} else {
+				throw new IOException("Unsupported internal version: "
+						+ version);
+			}
+		}
 	}
 
 	public static final Operator TRUE = new ConstantOperator(true);
@@ -130,20 +151,13 @@ public abstract class Operator implements Serializable {
 								+ operationName + " operator");
 		}
 
-		private final List<Operator> operands;
-		private final String operatorString;
+		private List<Operator> operands;
 
 		/**
 		 * 
-		 * @param operatorString
-		 *            this is placed between operands when converting this to a
-		 *            String. This should be " && " or " || ".
 		 * @param operands
 		 */
-		protected AbstractCompoundOperator(String operatorString,
-				List<Operator> operands, String name) {
-			Objects.requireNonNull(operatorString);
-			this.operatorString = operatorString;
+		protected AbstractCompoundOperator(List<Operator> operands, String name) {
 			validateOperands(operands, name);
 			this.operands = Collections.unmodifiableList(operands);
 		}
@@ -181,9 +195,20 @@ public abstract class Operator implements Serializable {
 
 			if (encloseWithParentheses)
 				sb.append("(");
+
+			String opStr;
+			if (this instanceof And) {
+				opStr = " && ";
+			} else if (this instanceof Or) {
+				opStr = " || ";
+			} else {
+				throw new RuntimeException("Unsupported operator: "
+						+ getClass().getName());
+			}
+
 			for (int a = 0; a < getOperandCount(); a++) {
 				if (a != 0)
-					sb.append(operatorString);
+					sb.append(opStr);
 				Operator op = getOperand(a);
 				String z;
 				if (op instanceof AbstractCompoundOperator) {
@@ -208,6 +233,23 @@ public abstract class Operator implements Serializable {
 			}
 			return returnValue;
 		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+			out.writeObject(operands);
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+				operands = (List<Operator>) in.readObject();
+			} else {
+				throw new IOException("Unsupported internal version: "
+						+ version);
+			}
+		}
 	}
 
 	/**
@@ -219,8 +261,8 @@ public abstract class Operator implements Serializable {
 	public abstract static class ValueOperator<DataType> extends Operator {
 		private static final long serialVersionUID = 1L;
 
-		protected final String attributeName;
-		protected final DataType fixedValue;
+		private String attributeName;
+		private DataType fixedValue;
 
 		/**
 		 * @param valueName
@@ -290,6 +332,25 @@ public abstract class Operator implements Serializable {
 				sb.append('\"');
 			}
 			return sb.toString();
+		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+			out.writeObject(getAttribute());
+			out.writeObject(getValue());
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+				attributeName = (String) in.readObject();
+				fixedValue = (DataType) in.readObject();
+			} else {
+				throw new IOException("Unsupported internal version: "
+						+ version);
+			}
 		}
 	}
 
@@ -402,6 +463,23 @@ public abstract class Operator implements Serializable {
 
 			return returnValue;
 		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+			out.writeObject(getOperand(0));
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+				operand = (Operator) in.readObject();
+			} else {
+				throw new IOException("Unsupported internal version: "
+						+ version);
+			}
+		}
 	}
 
 	public static class And extends AbstractCompoundOperator {
@@ -434,7 +512,7 @@ public abstract class Operator implements Serializable {
 		}
 
 		public And(List<Operator> operands) {
-			super(" && ", operands, "And");
+			super(operands, "And");
 		}
 
 		@Override
@@ -510,6 +588,22 @@ public abstract class Operator implements Serializable {
 
 			return returnValue;
 		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+
+			} else {
+				throw new IOException("Unsupported internal version: "
+						+ version);
+			}
+		}
 	}
 
 	public static class Or extends AbstractCompoundOperator {
@@ -542,7 +636,7 @@ public abstract class Operator implements Serializable {
 		}
 
 		public Or(List<Operator> operands) {
-			super(" || ", operands, "Or");
+			super(operands, "Or");
 		}
 
 		@Override
@@ -580,6 +674,22 @@ public abstract class Operator implements Serializable {
 				returnValue.addAll(getOperand(a).split());
 			}
 			return returnValue;
+		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+
+			} else {
+				throw new IOException("Unsupported internal version: "
+						+ version);
+			}
 		}
 	}
 
@@ -635,6 +745,21 @@ public abstract class Operator implements Serializable {
 		public Collection<Operator> split() {
 			return (Collection) Collections.singleton(this);
 		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+			} else {
+				throw new IOException("Unsupported internal version: "
+						+ version);
+			}
+		}
 	}
 
 	public static class GreaterThan extends ValueOperator<Comparable<?>> {
@@ -671,6 +796,21 @@ public abstract class Operator implements Serializable {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public Collection<Operator> split() {
 			return (Collection) Collections.singleton(this);
+		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+			} else {
+				throw new IOException("Unsupported internal version: "
+						+ version);
+			}
 		}
 	}
 
@@ -717,6 +857,21 @@ public abstract class Operator implements Serializable {
 		public Collection<Operator> split() {
 			return (Collection) Collections.singleton(this);
 		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+			} else {
+				throw new IOException("Unsupported internal version: "
+						+ version);
+			}
+		}
 	}
 
 	public static class Like extends ValueOperator<WildcardPattern> {
@@ -742,9 +897,9 @@ public abstract class Operator implements Serializable {
 			if (negated)
 				sb.append("!");
 			sb.append("matches(");
-			sb.append(attributeName);
+			sb.append(getAttribute());
 			sb.append(", \"");
-			sb.append(fixedValue.getPatternText());
+			sb.append(getValue().getPatternText());
 			sb.append("\")");
 			return sb.toString();
 		}
@@ -758,6 +913,21 @@ public abstract class Operator implements Serializable {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public Collection<Operator> split() {
 			return (Collection) Collections.singleton(this);
+		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+			} else {
+				throw new IOException("Unsupported internal version: "
+						+ version);
+			}
 		}
 	}
 
@@ -789,10 +959,10 @@ public abstract class Operator implements Serializable {
 			if (negated)
 				sb.append("!");
 			sb.append("contains(");
-			sb.append(attributeName);
+			sb.append(getAttribute());
 			sb.append(", {");
 			boolean first = true;
-			for (Object e : fixedValue) {
+			for (Object e : getValue()) {
 				if (!first)
 					sb.append(", ");
 				first = false;
@@ -818,6 +988,21 @@ public abstract class Operator implements Serializable {
 				returnValue.add(new EqualTo(getAttribute(), e));
 			}
 			return returnValue;
+		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+		}
+
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+			} else {
+				throw new IOException("Unsupported internal version: "
+						+ version);
+			}
 		}
 	}
 
@@ -924,6 +1109,20 @@ public abstract class Operator implements Serializable {
 		} else {
 			// this shouldn't happen if our input was canonical
 			throw new IllegalStateException(op.toString());
+		}
+	}
+
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeInt(0);
+	}
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
+		int version = in.readInt();
+		if (version == 0) {
+
+		} else {
+			throw new IOException("Unsupported internal version: " + version);
 		}
 	}
 
