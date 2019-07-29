@@ -7,15 +7,6 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import com.pump.data.operator.Operator.And;
-import com.pump.data.operator.Operator.Context;
-import com.pump.data.operator.Operator.EqualTo;
-import com.pump.data.operator.Operator.GreaterThan;
-import com.pump.data.operator.Operator.In;
-import com.pump.data.operator.Operator.LesserThan;
-import com.pump.data.operator.Operator.Like;
-import com.pump.data.operator.Operator.Not;
-import com.pump.data.operator.Operator.Or;
 import com.pump.text.WildcardPattern;
 
 public class OperatorTest extends TestCase {
@@ -58,7 +49,7 @@ public class OperatorTest extends TestCase {
 			StudentBean.House.Ravenclaw, 1981);
 	static StudentBean nullStudent = new StudentBean(null, null, null, -1);
 
-	static Context context = new Context() {
+	static OperatorContext context = new OperatorContext() {
 
 		@Override
 		public Object getValue(Object bean, String attributeName) {

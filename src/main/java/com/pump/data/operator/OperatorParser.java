@@ -6,12 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.pump.data.operator.Operator.And;
-import com.pump.data.operator.Operator.EqualTo;
-import com.pump.data.operator.Operator.GreaterThan;
-import com.pump.data.operator.Operator.LesserThan;
-import com.pump.data.operator.Operator.Not;
-import com.pump.data.operator.Operator.Or;
 import com.pump.io.parser.Parser.BracketCharToken;
 import com.pump.io.parser.Parser.StringToken;
 import com.pump.io.parser.Parser.SymbolCharToken;
