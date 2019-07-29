@@ -460,62 +460,53 @@ public class OperatorTest extends TestCase {
 	}
 
 	protected void testEquals(String expected, String value) throws Exception {
-		{
-			Operator op1 = new OperatorParser().parse(expected);
-			Operator op2 = new OperatorParser().parse(value);
+		// adding an AND or NOT-AND to the system may change a lot of
+		// under-the-hood mechanics when we factor and simplify expressions to
+		// determine equivalency, so we'll add a little variation here:
+		String[][] dressings = new String[][] { { "", "" }, { "j && (", ")" },
+				{ "j || (", ")" }, { "j && !(", ")" }, { "j || !(", ")" } };
+
+		for (String[] dressing : dressings) {
+			String expected_revised = dressing[0] + expected + dressing[1];
+			String value_revised = dressing[0] + value + dressing[1];
+
+			testOperatorString(expected_revised);
+			testOperatorString(value_revised);
+
+			Operator op1 = new OperatorParser().parse(expected_revised);
+			Operator op2 = new OperatorParser().parse(value_revised);
 			assertEquals(op1, op2);
-
-			testDoubleNegation(op1);
-			testDoubleNegation(op2);
-		}
-
-		// complicate operators by wrapping them in and/or/not expressions:
-
-		{
-			Operator op1 = new OperatorParser()
-					.parse("j && (" + expected + ")");
-			Operator op2 = new OperatorParser().parse("j && (" + value + ")");
-			assertEquals(op1, op2);
-
-			testDoubleNegation(op1);
-			testDoubleNegation(op2);
-		}
-
-		{
-			Operator op1 = new OperatorParser()
-					.parse("j || (" + expected + ")");
-			Operator op2 = new OperatorParser().parse("j || (" + value + ")");
-			assertEquals(op1, op2);
-
-			testDoubleNegation(op1);
-			testDoubleNegation(op2);
-		}
-
-		{
-			Operator op1 = new OperatorParser().parse("j && !(" + expected
-					+ ")");
-			Operator op2 = new OperatorParser().parse("j && !(" + value + ")");
-			assertEquals(op1, op2);
-
-			testDoubleNegation(op1);
-			testDoubleNegation(op2);
-		}
-
-		{
-			Operator op1 = new OperatorParser().parse("j || !(" + expected
-					+ ")");
-			Operator op2 = new OperatorParser().parse("j || !(" + value + ")");
-			assertEquals(op1, op2);
-
-			testDoubleNegation(op1);
-			testDoubleNegation(op2);
 		}
 	}
 
-	protected void testDoubleNegation(Operator op) {
-		Operator not = Not.create(op).getCanonicalOperator();
-		Operator notNot = Not.create(not).getCanonicalOperator();
-		assertEquals(op, notNot);
+	/**
+	 * This tests some basic identity properties of an expression. For ex:
+	 * "A && !A" should equal "false". Also "!(!(A))" should equal A.
+	 * 
+	 * @param str
+	 * @throws Exception
+	 */
+	protected void testOperatorString(String str) throws Exception {
+		{
+			Operator op = new OperatorParser().parse(str + "&& !(" + str + ")");
+			assertEquals(Operator.FALSE, op);
+		}
+
+		{
+			Operator op = new OperatorParser().parse(str);
+			Operator not = Not.create(op).getCanonicalOperator();
+			Operator notNot = Not.create(not).getCanonicalOperator();
+			assertEquals(op, notNot);
+		}
+
+		// TODO this currently fails for one expression:
+		// Operator op5 = new OperatorParser().parse(expected + " || !("
+		// + expected + ")");
+		// assertEquals(Operator.TRUE, op5);
+		// Operator op6 = new OperatorParser().parse(value + " || !(" +
+		// value
+		// + ")");
+		// assertEquals(Operator.TRUE, op6);
 	}
 
 	@Test
