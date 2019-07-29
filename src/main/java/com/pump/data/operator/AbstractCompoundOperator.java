@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This accepts an arbitrary number of operands. This is intended for AND
- * and OR operators.
+ * This accepts an arbitrary number of operands. This is intended for AND and OR
+ * operators.
  */
 public abstract class AbstractCompoundOperator extends Operator {
 	private static final long serialVersionUID = 1L;
@@ -30,8 +30,8 @@ public abstract class AbstractCompoundOperator extends Operator {
 			throw new IllegalArgumentException();
 		if (operands.size() == 1)
 			throw new IllegalArgumentException(
-					"2 or more operands are required for a "
-							+ operationName + " operator");
+					"2 or more operands are required for a " + operationName
+							+ " operator");
 	}
 
 	private List<Operator> operands;
@@ -117,20 +117,19 @@ public abstract class AbstractCompoundOperator extends Operator {
 		return returnValue;
 	}
 
-	private void writeObject(java.io.ObjectOutputStream out)
-			throws IOException {
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
 		out.writeInt(0);
 		out.writeObject(operands);
 	}
 
-	private void readObject(java.io.ObjectInputStream in)
-			throws IOException, ClassNotFoundException {
+	@SuppressWarnings("unchecked")
+	private void readObject(java.io.ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
 		int version = in.readInt();
 		if (version == 0) {
 			operands = (List<Operator>) in.readObject();
 		} else {
-			throw new IOException("Unsupported internal version: "
-					+ version);
+			throw new IOException("Unsupported internal version: " + version);
 		}
 	}
 }

@@ -114,6 +114,7 @@ public abstract class Operator implements Serializable {
 		return op;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static void separateAttributeTerms(String attr, Operator op,
 			List<Operator> attrTerms, List<Operator> otherTerms) {
 		if (op instanceof And) {
@@ -157,6 +158,7 @@ public abstract class Operator implements Serializable {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected static Operator simplifyCanonicalOr(final Or or) {
 		Or orOp = or;
 
@@ -426,6 +428,7 @@ public abstract class Operator implements Serializable {
 	}
 
 	static class AndProfile {
+		@SuppressWarnings("rawtypes")
 		Map<String, Range> variableRanges = new HashMap<>();
 		Collection<Operator> andElementsProfiled = new HashSet<>();
 		boolean negated = false;
@@ -434,6 +437,7 @@ public abstract class Operator implements Serializable {
 			this(and.getOperands());
 		}
 
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		AndProfile(List andOperands) {
 			// we'll revisit not equal to statements in a second pass:
 			Map<String, List<Not>> notEqualTos = new HashMap<>();
@@ -529,6 +533,7 @@ public abstract class Operator implements Serializable {
 			}
 		}
 
+		@SuppressWarnings("rawtypes")
 		public List<Operator> createAndOperators() {
 			List<Operator> returnValue = new ArrayList<>();
 			for (Entry<String, Range> entry : this.variableRanges.entrySet()) {
@@ -574,6 +579,7 @@ public abstract class Operator implements Serializable {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected static Operator simplifyCanonicalAnd(final And and) {
 		List andTerms = new ArrayList(and.getOperands());
 
@@ -656,6 +662,7 @@ public abstract class Operator implements Serializable {
 
 	public abstract Collection<String> getAttributes();
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Operator join(Operator... operators) {
 		Operator op = operators.length == 1 ? operators[0] : Or
 				.create(operators);

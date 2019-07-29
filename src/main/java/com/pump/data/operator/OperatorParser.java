@@ -18,6 +18,8 @@ import com.pump.io.parser.java.JavaParser.WordToken;
 
 public class OperatorParser {
 
+	// TODO: add support for IN and LIKE operators
+
 	/**
 	 * This consolidates several consecutive SymbolCharToken into one word.
 	 * <p>
@@ -116,6 +118,7 @@ public class OperatorParser {
 		return returnValue.toArray(new Token[returnValue.size()]);
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Operator readOneToken(Token[] tokens, AtomicInteger tokensPtr) {
 		Token t = tokens[tokensPtr.intValue()];
 		if (t.getText().equals("!")) {
@@ -193,7 +196,6 @@ public class OperatorParser {
 							"Unsupported operator \"" + s + "\""));
 				}
 			}
-
 		}
 
 		return null;

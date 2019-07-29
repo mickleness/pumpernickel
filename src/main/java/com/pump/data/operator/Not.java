@@ -56,6 +56,7 @@ public class Not extends Operator {
 		return getOperand(0).getAttributes();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected Operator createCanonicalOperator() {
 		Operator op = getOperand(0).getCanonicalOperator();
