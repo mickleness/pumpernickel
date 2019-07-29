@@ -10,6 +10,8 @@ import com.pump.text.WildcardPattern;
 public class Like extends AbstractValueOperator<WildcardPattern> {
 	private static final long serialVersionUID = 1L;
 
+	public static String FUNCTION_NAME = "matches";
+
 	public Like(String attribute, WildcardPattern pattern) {
 		super(attribute, pattern);
 		Objects.requireNonNull(pattern);
@@ -30,7 +32,8 @@ public class Like extends AbstractValueOperator<WildcardPattern> {
 		StringBuilder sb = new StringBuilder();
 		if (negated)
 			sb.append("!");
-		sb.append("matches(");
+		sb.append(FUNCTION_NAME);
+		sb.append("(");
 		sb.append(getAttribute());
 		sb.append(", \"");
 		sb.append(getValue().getPatternText());

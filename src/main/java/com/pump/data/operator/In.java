@@ -8,6 +8,8 @@ import java.util.Objects;
 public class In extends AbstractValueOperator<Collection<?>> {
 	private static final long serialVersionUID = 1L;
 
+	public static String FUNCTION_NAME = "contains";
+
 	public static Operator create(String attribute, Collection<?> values) {
 		Objects.requireNonNull(values);
 		if (values.size() == 0)
@@ -33,7 +35,8 @@ public class In extends AbstractValueOperator<Collection<?>> {
 		StringBuilder sb = new StringBuilder();
 		if (negated)
 			sb.append("!");
-		sb.append("contains(");
+		sb.append(FUNCTION_NAME);
+		sb.append("(");
 		sb.append(getAttribute());
 		sb.append(", {");
 		boolean first = true;

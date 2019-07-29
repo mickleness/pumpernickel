@@ -3,6 +3,7 @@ package com.pump.data.operator;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -15,15 +16,14 @@ import com.pump.io.parser.java.JavaParser;
 import com.pump.io.parser.java.JavaParser.CharToken;
 import com.pump.io.parser.java.JavaParser.NumberToken;
 import com.pump.io.parser.java.JavaParser.WordToken;
+import com.pump.text.WildcardPattern;
 
 public class OperatorParser {
-
-	// TODO: add support for IN and LIKE operators
 
 	/**
 	 * This consolidates several consecutive SymbolCharToken into one word.
 	 * <p>
-	 * For example: we don't want to see separate tokesn for "<=" or "!=" or
+	 * For example: we don't want to see separate tokens for "<=" or "!=" or
 	 * "&&".
 	 */
 	private static class SymbolWordToken extends Token {
@@ -156,21 +156,30 @@ public class OperatorParser {
 				return new EqualTo(w.getText(), Boolean.TRUE);
 			}
 
-			Comparable value = null;
-			if (t3 instanceof NumberToken) {
-				NumberToken nt = (NumberToken) t3;
-				value = (Comparable) nt.getNumber();
-			} else if (t3 instanceof StringToken) {
-				StringToken st = (StringToken) t3;
-				value = st.getDecodedString();
-			} else if (t3 instanceof CharToken) {
-				CharToken ct = (CharToken) t3;
-				value = ct.getDecodedChar();
-			} else if (t3.getText().equals("true")) {
-				value = Boolean.TRUE;
-			} else if (t3.getText().equals("false")) {
-				value = Boolean.FALSE;
+			if (w.getText().equals(Like.FUNCTION_NAME)
+					&& t2.getText().equals("(")) {
+				WordToken w2 = (WordToken) t3;
+
+				Token t5 = tokensPtr.intValue() + 4 < tokens.length ? tokens[tokensPtr
+						.intValue() + 4] : null;
+				String value = (String) getValue(t5);
+
+				tokensPtr.addAndGet(5);
+
+				return new Like(w2.getText(), new WildcardPattern(value));
+			} else if (w.getText().equals(In.FUNCTION_NAME)
+					&& t2.getText().equals("(")) {
+				WordToken w2 = (WordToken) t3;
+
+				tokensPtr.addAndGet(4);
+
+				Collection<Object> values = readList(tokens, tokensPtr);
+
+				tokensPtr.incrementAndGet();
+				return In.create(w2.getText(), values);
 			}
+
+			Comparable value = getValue(t3);
 
 			if (value != null) {
 				String s = t2.getText();
@@ -198,6 +207,46 @@ public class OperatorParser {
 			}
 		}
 
+		return null;
+	}
+
+	/**
+	 * Initially tokensPtr should point to a "{" char, and on exit it should
+	 * point to a "}" char.
+	 * 
+	 * @param tokens
+	 * @param tokensPtr
+	 * @return
+	 */
+	private Collection<Object> readList(Token[] tokens, AtomicInteger tokensPtr) {
+		List<Object> returnValue = new ArrayList<>();
+		BracketCharToken b = (BracketCharToken) tokens[tokensPtr.get()];
+		BracketCharToken opp = b.getMatch();
+		int oppIndex = Arrays.asList(tokens).indexOf(opp);
+		for (int a = tokensPtr.get() + 1; a < oppIndex; a++) {
+			if (tokens[a].getText().equals(","))
+				continue;
+			returnValue.add(getValue(tokens[a]));
+		}
+		tokensPtr.set(oppIndex);
+		return returnValue;
+	}
+
+	private Comparable getValue(Token t) {
+		if (t instanceof NumberToken) {
+			NumberToken nt = (NumberToken) t;
+			return (Comparable) nt.getNumber();
+		} else if (t instanceof StringToken) {
+			StringToken st = (StringToken) t;
+			return st.getDecodedString();
+		} else if (t instanceof CharToken) {
+			CharToken ct = (CharToken) t;
+			return ct.getDecodedChar();
+		} else if (t.getText().equals("true")) {
+			return Boolean.TRUE;
+		} else if (t.getText().equals("false")) {
+			return Boolean.FALSE;
+		}
 		return null;
 	}
 

@@ -11,16 +11,18 @@ import com.pump.text.WildcardPattern;
 
 public class OperatorTest extends TestCase {
 
+	static final String HOUSE_GRYFFINDOR = "Gryffindor";
+	static final String HOUSE_HUFFLEPUFF = "Hufflepuff";
+	static final String HOUSE_RAVENCLAW = "Ravenclaw";
+	static final String HOUSE_SLYTHERIN = "Slytherin";
+
 	public static class StudentBean {
-		enum House {
-			Gryffindor, Hufflepuff, Ravenclaw, Slytherin
-		}
 
 		String firstName, lastName;
 		int birthYear;
-		House house;
+		String house;
 
-		public StudentBean(String firstName, String lastName, House house,
+		public StudentBean(String firstName, String lastName, String house,
 				int birthYear) {
 			this.firstName = firstName;
 			this.lastName = lastName;
@@ -30,23 +32,23 @@ public class OperatorTest extends TestCase {
 	}
 
 	static StudentBean harryPotter = new StudentBean("Harry", "Potter",
-			StudentBean.House.Gryffindor, 1980);
+			HOUSE_GRYFFINDOR, 1980);
 	static StudentBean ronWeasley = new StudentBean("Ron", "Weasley",
-			StudentBean.House.Gryffindor, 1980);
+			HOUSE_GRYFFINDOR, 1980);
 	static StudentBean hermioneGranger = new StudentBean("Hermione", "Granger",
-			StudentBean.House.Gryffindor, 1980);
+			HOUSE_GRYFFINDOR, 1980);
 	static StudentBean lavenderBrown = new StudentBean("Lavender", "Brown",
-			StudentBean.House.Gryffindor, 1979);
+			HOUSE_GRYFFINDOR, 1979);
 	static StudentBean pavartiPatil = new StudentBean("Pavarti", "Patil",
-			StudentBean.House.Gryffindor, 1980);
+			HOUSE_GRYFFINDOR, 1980);
 	static StudentBean padmaPatil = new StudentBean("Padma", "Patil",
-			StudentBean.House.Ravenclaw, 1980);
+			HOUSE_RAVENCLAW, 1980);
 	static StudentBean ginnyWeasley = new StudentBean("Ginny", "Weasley",
-			StudentBean.House.Gryffindor, 1981);
+			HOUSE_GRYFFINDOR, 1981);
 	static StudentBean choChang = new StudentBean("Cho", "Chang",
-			StudentBean.House.Ravenclaw, 1979);
+			HOUSE_RAVENCLAW, 1979);
 	static StudentBean lunaLovegood = new StudentBean("Luna", "Lovegood",
-			StudentBean.House.Ravenclaw, 1981);
+			HOUSE_RAVENCLAW, 1981);
 	static StudentBean nullStudent = new StudentBean(null, null, null, -1);
 
 	static OperatorContext context = new OperatorContext() {
@@ -252,8 +254,7 @@ public class OperatorTest extends TestCase {
 
 	@Test
 	public void testIn() throws Exception {
-		Operator ravenclaw = In.create("house",
-				Arrays.asList(StudentBean.House.Ravenclaw));
+		Operator ravenclaw = In.create("house", Arrays.asList(HOUSE_RAVENCLAW));
 		assertTrue(ravenclaw.evaluate(context, padmaPatil));
 		assertFalse(ravenclaw.evaluate(context, pavartiPatil));
 		assertFalse(ravenclaw.evaluate(context, nullStudent));
@@ -261,46 +262,49 @@ public class OperatorTest extends TestCase {
 
 	@Test
 	public void testToString_scenario1() throws Exception {
-		Operator ravenclaw = In.create("house",
-				Arrays.asList(StudentBean.House.Ravenclaw));
+		Operator ravenclaw = In.create("house", Arrays.asList(HOUSE_RAVENCLAW));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameNotWeasley = Not.create(new EqualTo("lastName",
 				"Weasley"));
 
 		Operator or = Or.create(ravenclaw, above1980);
 		Operator and = And.create(lastNameNotWeasley, or);
-		assertEquals(
-				"lastName != \"Weasley\" && (house == \"Ravenclaw\" || birthYear > 1980)",
-				and.toString());
+		String str = "lastName != \"Weasley\" && (house == \"Ravenclaw\" || birthYear > 1980)";
+		assertEquals(str, and.toString());
+
+		Operator parsed = new OperatorParser().parse(str);
+		assertEquals(and, parsed);
 	}
 
 	@Test
 	public void testToString_scenario2() throws Exception {
-		Operator ravenclaw = In.create("house",
-				Arrays.asList(StudentBean.House.Ravenclaw));
+		Operator ravenclaw = In.create("house", Arrays.asList(HOUSE_RAVENCLAW));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameNotWeasley = Not.create(new EqualTo("lastName",
 				"Weasley"));
 
 		Operator notOr = Not.create(Or.create(ravenclaw, above1980));
 		Operator and = And.create(lastNameNotWeasley, notOr);
-		assertEquals(
-				"lastName != \"Weasley\" && !(house == \"Ravenclaw\" || birthYear > 1980)",
-				and.toString());
+		String str = "lastName != \"Weasley\" && !(house == \"Ravenclaw\" || birthYear > 1980)";
+		assertEquals(str, and.toString());
+
+		Operator parsed = new OperatorParser().parse(str);
+		assertEquals(and, parsed);
 	}
 
 	@Test
 	public void testToString_scenario3() throws Exception {
-		Operator ravenclaw = In.create("house",
-				Arrays.asList(StudentBean.House.Ravenclaw));
+		Operator ravenclaw = In.create("house", Arrays.asList(HOUSE_RAVENCLAW));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
 		Operator notOr = Not.create(Or.create(ravenclaw, above1980));
 		Operator notAnd = Not.create(And.create(notOr, lastNameWeasley));
-		assertEquals(
-				"!(!(house == \"Ravenclaw\" || birthYear > 1980) && lastName == \"Weasley\")",
-				notAnd.toString());
+		String str = "!(!(house == \"Ravenclaw\" || birthYear > 1980) && lastName == \"Weasley\")";
+		assertEquals(str, notAnd.toString());
+
+		Operator parsed = new OperatorParser().parse(str);
+		assertEquals(notAnd, parsed);
 	}
 
 	@Test
@@ -321,25 +325,47 @@ public class OperatorTest extends TestCase {
 	public void testToString_scenario5() throws Exception {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclaw = In.create("house",
-				Arrays.asList(StudentBean.House.Ravenclaw));
+		Operator ravenclaw = In.create("house", Arrays.asList(HOUSE_RAVENCLAW));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
 		Operator and1 = And.create(firstNameL, ravenclaw);
 		Operator and2 = And.create(above1980, lastNameWeasley);
 		Operator or = Or.create(and1, and2);
-		assertEquals(
-				"(matches(firstName, \"L*\") && house == \"Ravenclaw\") || (birthYear > 1980 && lastName == \"Weasley\")",
-				or.toString());
+		String str = "(matches(firstName, \"L*\") && house == \"Ravenclaw\") || (birthYear > 1980 && lastName == \"Weasley\")";
+		assertEquals(str, or.toString());
+
+		Operator parsed = new OperatorParser().parse(str);
+		assertEquals(or, parsed);
+	}
+
+	@Test
+	public void testToString_scenario6() throws Exception {
+		Operator op = In.create("house",
+				Arrays.asList(HOUSE_HUFFLEPUFF, HOUSE_SLYTHERIN));
+		testToString(op, "contains(house, {\"Hufflepuff\", \"Slytherin\"})");
+
+		Operator op2 = new EqualTo("birthYear", 1980);
+		Operator and = And.create(op, op2);
+		testToString(and,
+				"contains(house, {\"Hufflepuff\", \"Slytherin\"}) && birthYear == 1980");
+
+		Operator or = Or.create(op2, op);
+		testToString(or,
+				"birthYear == 1980 || contains(house, {\"Hufflepuff\", \"Slytherin\"})");
+	}
+
+	private void testToString(Operator op, String str) throws Exception {
+		String z = op.toString();
+		assertEquals(str, z);
+		assertEquals(op, new OperatorParser().parse(str));
 	}
 
 	@Test
 	public void testEquals_scenario1() throws Exception {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclaw = In.create("house",
-				Arrays.asList(StudentBean.House.Ravenclaw));
+		Operator ravenclaw = In.create("house", Arrays.asList(HOUSE_RAVENCLAW));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
@@ -368,8 +394,7 @@ public class OperatorTest extends TestCase {
 	public void testEquals_scenario2() throws Exception {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclaw = In.create("house",
-				Arrays.asList(StudentBean.House.Ravenclaw));
+		Operator ravenclaw = In.create("house", Arrays.asList(HOUSE_RAVENCLAW));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
@@ -529,9 +554,9 @@ public class OperatorTest extends TestCase {
 		// // TODO: mutually exclusive INs result in a constant FALSE
 		// {
 		// Operator z = In.create("x", Arrays.asList(
-		// StudentBean.House.Gryffindor, StudentBean.House.Slytherin));
+		// HOUSE_GRYFFINDOR, HOUSE_SLYTHERIN));
 		// Operator y = In.create("x", Arrays.asList(
-		// StudentBean.House.Ravenclaw, StudentBean.House.Hufflepuff));
+		// HOUSE_RAVENCLAW, HOUSE_HUFFLEPUFF));
 		// Operator w = And.create(z, y);
 		// assertEquals(Operator.FALSE, w);
 		// }
@@ -539,12 +564,12 @@ public class OperatorTest extends TestCase {
 		// // overlapping INs result in the smallest possible subset
 		// {
 		// Operator z = In.create("x", Arrays.asList(
-		// StudentBean.House.Gryffindor, StudentBean.House.Slytherin));
+		// HOUSE_GRYFFINDOR, HOUSE_SLYTHERIN));
 		// Operator y = In
-		// .create("x", Arrays.asList(StudentBean.House.Gryffindor,
-		// StudentBean.House.Hufflepuff));
+		// .create("x", Arrays.asList(HOUSE_GRYFFINDOR,
+		// HOUSE_HUFFLEPUFF));
 		// Operator w = And.create(z, y);
-		// assertEquals(new EqualTo("x", StudentBean.House.Gryffindor), w);
+		// assertEquals(new EqualTo("x", HOUSE_GRYFFINDOR), w);
 		// }
 	}
 
@@ -1075,15 +1100,13 @@ public class OperatorTest extends TestCase {
 	 */
 	@Test
 	public void testSplit_scenario1() {
-		Operator houseIn = In.create("house", Arrays.asList(
-				StudentBean.House.Ravenclaw, StudentBean.House.Hufflepuff));
+		Operator houseIn = In.create("house",
+				Arrays.asList(HOUSE_RAVENCLAW, HOUSE_HUFFLEPUFF));
 
 		Collection<Operator> n1 = houseIn.split();
 		assertEquals(2, n1.size());
-		assertTrue(n1
-				.contains(new EqualTo("house", StudentBean.House.Ravenclaw)));
-		assertTrue(n1.contains(new EqualTo("house",
-				StudentBean.House.Hufflepuff)));
+		assertTrue(n1.contains(new EqualTo("house", HOUSE_RAVENCLAW)));
+		assertTrue(n1.contains(new EqualTo("house", HOUSE_HUFFLEPUFF)));
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
@@ -1095,16 +1118,16 @@ public class OperatorTest extends TestCase {
 	 */
 	@Test
 	public void testSplit_scenario2() {
-		Operator houseIn = In.create("house", Arrays.asList(
-				StudentBean.House.Ravenclaw, StudentBean.House.Hufflepuff));
+		Operator houseIn = In.create("house",
+				Arrays.asList(HOUSE_RAVENCLAW, HOUSE_HUFFLEPUFF));
 
 		Operator op = Not.create(houseIn);
 		Collection<Operator> n1 = op.split();
 		assertEquals(2, n1.size());
-		assertTrue(n1.contains(Not.create(new EqualTo("house",
-				StudentBean.House.Ravenclaw))));
-		assertTrue(n1.contains(Not.create(new EqualTo("house",
-				StudentBean.House.Hufflepuff))));
+		assertTrue(n1.contains(Not
+				.create(new EqualTo("house", HOUSE_RAVENCLAW))));
+		assertTrue(n1.contains(Not
+				.create(new EqualTo("house", HOUSE_HUFFLEPUFF))));
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
@@ -1119,9 +1142,8 @@ public class OperatorTest extends TestCase {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
 		Operator ravenclawIn = In.create("house",
-				Arrays.asList(StudentBean.House.Ravenclaw));
-		Operator ravenclawEqual = new EqualTo("house",
-				StudentBean.House.Ravenclaw);
+				Arrays.asList(HOUSE_RAVENCLAW));
+		Operator ravenclawEqual = new EqualTo("house", HOUSE_RAVENCLAW);
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
@@ -1149,9 +1171,8 @@ public class OperatorTest extends TestCase {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
 		Operator ravenclawIn = In.create("house",
-				Arrays.asList(StudentBean.House.Ravenclaw));
-		Operator ravenclawEqual = new EqualTo("house",
-				StudentBean.House.Ravenclaw);
+				Arrays.asList(HOUSE_RAVENCLAW));
+		Operator ravenclawEqual = new EqualTo("house", HOUSE_RAVENCLAW);
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
@@ -1177,8 +1198,8 @@ public class OperatorTest extends TestCase {
 	public void testSplit_scenario5() {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclawSlytherinIn = In.create("house", Arrays.asList(
-				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin));
+		Operator ravenclawSlytherinIn = In.create("house",
+				Arrays.asList(HOUSE_RAVENCLAW, HOUSE_SLYTHERIN));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
@@ -1187,10 +1208,8 @@ public class OperatorTest extends TestCase {
 		Operator and2 = Not.create(And.create(above1980, lastNameWeasley));
 		Operator and3 = And.create(and1, and2);
 
-		Operator ravenclawEqual = new EqualTo("house",
-				StudentBean.House.Ravenclaw);
-		Operator slytherinEqual = new EqualTo("house",
-				StudentBean.House.Slytherin);
+		Operator ravenclawEqual = new EqualTo("house", HOUSE_RAVENCLAW);
+		Operator slytherinEqual = new EqualTo("house", HOUSE_SLYTHERIN);
 
 		Collection<Operator> n1 = and3.split();
 		assertEquals(4, n1.size());
@@ -1212,8 +1231,8 @@ public class OperatorTest extends TestCase {
 	public void testSplit_scenario6() {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclawSlytherinIn = In.create("house", Arrays.asList(
-				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin));
+		Operator ravenclawSlytherinIn = In.create("house",
+				Arrays.asList(HOUSE_RAVENCLAW, HOUSE_SLYTHERIN));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
@@ -1221,10 +1240,8 @@ public class OperatorTest extends TestCase {
 		Operator y = And.create(above1980, lastNameWeasley);
 		Operator z = Or.create(x, y);
 
-		Operator ravenclawEqual = new EqualTo("house",
-				StudentBean.House.Ravenclaw);
-		Operator slytherinEqual = new EqualTo("house",
-				StudentBean.House.Slytherin);
+		Operator ravenclawEqual = new EqualTo("house", HOUSE_RAVENCLAW);
+		Operator slytherinEqual = new EqualTo("house", HOUSE_SLYTHERIN);
 
 		Collection<Operator> n1 = z.split();
 		assertEquals(4, n1.size());
@@ -1242,8 +1259,8 @@ public class OperatorTest extends TestCase {
 	public void testSplit_scenario7() {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclawSlytherinIn = In.create("house", Arrays.asList(
-				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin));
+		Operator ravenclawSlytherinIn = In.create("house",
+				Arrays.asList(HOUSE_RAVENCLAW, HOUSE_SLYTHERIN));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
@@ -1251,10 +1268,8 @@ public class OperatorTest extends TestCase {
 		Operator y = And.create(above1980, lastNameWeasley);
 		Operator z = Or.create(x, y);
 
-		Operator ravenclawEqual = new EqualTo("house",
-				StudentBean.House.Ravenclaw);
-		Operator slytherinEqual = new EqualTo("house",
-				StudentBean.House.Slytherin);
+		Operator ravenclawEqual = new EqualTo("house", HOUSE_RAVENCLAW);
+		Operator slytherinEqual = new EqualTo("house", HOUSE_SLYTHERIN);
 
 		Collection<Operator> n1 = z.split();
 		assertEquals(3, n1.size());
@@ -1271,8 +1286,8 @@ public class OperatorTest extends TestCase {
 	public void testSplit_scenario8() {
 		WildcardPattern lStar = new WildcardPattern("L*");
 		Operator firstNameL = new Like("firstName", lStar);
-		Operator ravenclawSlytherinIn = In.create("house", Arrays.asList(
-				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin));
+		Operator ravenclawSlytherinIn = In.create("house",
+				Arrays.asList(HOUSE_RAVENCLAW, HOUSE_SLYTHERIN));
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
 
@@ -1280,10 +1295,8 @@ public class OperatorTest extends TestCase {
 		Operator y = Or.create(above1980, lastNameWeasley);
 		Operator z = And.create(x, y);
 
-		Operator ravenclawEqual = new EqualTo("house",
-				StudentBean.House.Ravenclaw);
-		Operator slytherinEqual = new EqualTo("house",
-				StudentBean.House.Slytherin);
+		Operator ravenclawEqual = new EqualTo("house", HOUSE_RAVENCLAW);
+		Operator slytherinEqual = new EqualTo("house", HOUSE_SLYTHERIN);
 
 		Collection<Operator> n1 = z.split();
 		assertEquals(6, n1.size());
@@ -1304,35 +1317,30 @@ public class OperatorTest extends TestCase {
 	 */
 	@Test
 	public void testSplit_scenario9() {
-		Operator ravenclawSlytherinIn = In.create("house", Arrays.asList(
-				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin));
+		Operator ravenclawSlytherinIn = In.create("house",
+				Arrays.asList(HOUSE_RAVENCLAW, HOUSE_SLYTHERIN));
 		Operator hufflepuffIn = In.create("house",
-				Arrays.asList(StudentBean.House.Hufflepuff));
+				Arrays.asList(HOUSE_HUFFLEPUFF));
 
 		Operator or = Or.create(ravenclawSlytherinIn, hufflepuffIn);
 		Collection<Operator> n1 = or.split();
 		assertEquals(3, n1.size());
-		assertTrue(n1
-				.contains(new EqualTo("house", StudentBean.House.Ravenclaw)));
-		assertTrue(n1.contains(new EqualTo("house",
-				StudentBean.House.Hufflepuff)));
-		assertTrue(n1
-				.contains(new EqualTo("house", StudentBean.House.Slytherin)));
+		assertTrue(n1.contains(new EqualTo("house", HOUSE_RAVENCLAW)));
+		assertTrue(n1.contains(new EqualTo("house", HOUSE_HUFFLEPUFF)));
+		assertTrue(n1.contains(new EqualTo("house", HOUSE_SLYTHERIN)));
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
-		assertEquals(joined, In.create("house", Arrays.asList(
-				StudentBean.House.Ravenclaw, StudentBean.House.Slytherin,
-				StudentBean.House.Hufflepuff)));
+		assertEquals(joined, In.create("house", Arrays.asList(HOUSE_RAVENCLAW,
+				HOUSE_SLYTHERIN, HOUSE_HUFFLEPUFF)));
 	}
 
 	@Test
 	public void testSplit_scenario10() {
-		Operator notRavenclawSlytherinIn = Not.create(In.create("house", Arrays
-				.asList(StudentBean.House.Ravenclaw,
-						StudentBean.House.Slytherin)));
-		Operator hufflepuffGryffindorIn = In.create("house", Arrays.asList(
-				StudentBean.House.Hufflepuff, StudentBean.House.Gryffindor));
+		Operator notRavenclawSlytherinIn = Not.create(In.create("house",
+				Arrays.asList(HOUSE_RAVENCLAW, HOUSE_SLYTHERIN)));
+		Operator hufflepuffGryffindorIn = In.create("house",
+				Arrays.asList(HOUSE_HUFFLEPUFF, HOUSE_GRYFFINDOR));
 
 		Operator above1980 = new GreaterThan("birthYear", 1980);
 		Operator lastNameWeasley = new EqualTo("lastName", "Weasley");
@@ -1341,14 +1349,12 @@ public class OperatorTest extends TestCase {
 		Operator d = And.create(lastNameWeasley, hufflepuffGryffindorIn);
 
 		Operator notRavenclawEqual = Not.create(new EqualTo("house",
-				StudentBean.House.Ravenclaw));
+				HOUSE_RAVENCLAW));
 		Operator notSlytherinEqual = Not.create(new EqualTo("house",
-				StudentBean.House.Slytherin));
+				HOUSE_SLYTHERIN));
 
-		Operator hufflepuffEqual = new EqualTo("house",
-				StudentBean.House.Hufflepuff);
-		Operator gryffindorEqual = new EqualTo("house",
-				StudentBean.House.Gryffindor);
+		Operator hufflepuffEqual = new EqualTo("house", HOUSE_HUFFLEPUFF);
+		Operator gryffindorEqual = new EqualTo("house", HOUSE_GRYFFINDOR);
 
 		Operator or = Or.create(c, d);
 		Collection<Operator> n1 = or.split();

@@ -81,7 +81,7 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 			sb.append("null");
 		} else {
 			sb.append('\"');
-			sb.append(JavaEncoding.encode(fixedValue.toString()));
+			sb.append(JavaEncoding.encode(value.toString()));
 			sb.append('\"');
 		}
 		return sb.toString();
