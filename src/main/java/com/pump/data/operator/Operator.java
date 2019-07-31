@@ -606,6 +606,54 @@ public abstract class Operator implements Serializable {
 			}
 		}
 
+		for (int a = 0; a < andTerms.size(); a++) {
+			for (int b = 0; b < andTerms.size(); b++) {
+				if (a != b) {
+					Operator termA = (Operator) andTerms.get(a);
+					Operator termB = (Operator) andTerms.get(b);
+					if (termA instanceof In && termB instanceof In) {
+						In inA = (In) termA;
+						In inB = (In) termB;
+						if (inA.getAttribute().equals(inB.getAttribute())) {
+							Collection valuesA = inA.getValue();
+							Collection valuesB = inB.getValue();
+							Collection newValues = new ArrayList<>();
+							newValues.addAll(valuesA);
+							newValues.retainAll(valuesB);
+							if (newValues.isEmpty())
+								return FALSE;
+							andTerms.set(a, null);
+							andTerms.set(b,
+									In.create(inA.getAttribute(), newValues));
+						}
+					} else if (termA instanceof In && termB instanceof Not
+							&& termB.getOperand(0) instanceof In) {
+						In inA = (In) termA;
+						In notInB = (In) termB.getOperand(0);
+						if (inA.getAttribute().equals(notInB.getAttribute())) {
+							Collection valuesA = inA.getValue();
+							Collection valuesB = notInB.getValue();
+							Collection newValues = new ArrayList<>();
+							newValues.addAll(valuesA);
+							newValues.removeAll(valuesB);
+							if (newValues.isEmpty())
+								return FALSE;
+							andTerms.set(a, null);
+							andTerms.set(b,
+									In.create(inA.getAttribute(), newValues));
+						}
+					}
+				}
+			}
+		}
+
+		andTermsIter = andTerms.iterator();
+		while (andTermsIter.hasNext()) {
+			Operator andOp = (Operator) andTermsIter.next();
+			if (andOp == null)
+				andTermsIter.remove();
+		}
+
 		AndProfile profile = new AndProfile(and);
 		if (profile.negated)
 			return FALSE;

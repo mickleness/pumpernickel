@@ -503,13 +503,9 @@ public class OperatorTest extends TestCase {
 		}
 
 		// TODO this currently fails for one expression:
-		// Operator op5 = new OperatorParser().parse(expected + " || !("
-		// + expected + ")");
+		// Operator op5 = new OperatorParser().parse(str + " || !("
+		// + str + ")");
 		// assertEquals(Operator.TRUE, op5);
-		// Operator op6 = new OperatorParser().parse(value + " || !(" +
-		// value
-		// + ")");
-		// assertEquals(Operator.TRUE, op6);
 	}
 
 	@Test
@@ -537,27 +533,6 @@ public class OperatorTest extends TestCase {
 		testEquals("x > 10", "x > 10 || x > 20");
 		testEquals("false", "x > 10 && x < -10");
 		testEquals("!(!((a && b) || (c && d)))", "(a && b) || (c && d)");
-
-		// // TODO: mutually exclusive INs result in a constant FALSE
-		// {
-		// Operator z = In.create("x", Arrays.asList(
-		// HOUSE_GRYFFINDOR, HOUSE_SLYTHERIN));
-		// Operator y = In.create("x", Arrays.asList(
-		// HOUSE_RAVENCLAW, HOUSE_HUFFLEPUFF));
-		// Operator w = And.create(z, y);
-		// assertEquals(Operator.FALSE, w);
-		// }
-		//
-		// // overlapping INs result in the smallest possible subset
-		// {
-		// Operator z = In.create("x", Arrays.asList(
-		// HOUSE_GRYFFINDOR, HOUSE_SLYTHERIN));
-		// Operator y = In
-		// .create("x", Arrays.asList(HOUSE_GRYFFINDOR,
-		// HOUSE_HUFFLEPUFF));
-		// Operator w = And.create(z, y);
-		// assertEquals(new EqualTo("x", HOUSE_GRYFFINDOR), w);
-		// }
 	}
 
 	@Test
@@ -1079,6 +1054,31 @@ public class OperatorTest extends TestCase {
 		}
 
 		// TODO: iterate over other combos
+	}
+
+	@Test
+	public void testEquals_scenario8_contains() throws Exception {
+		testEquals(
+				"contains(x, {\"Slytherin\", \"Gryffindor\", \"Ravenclaw\"})",
+				"contains(x, {\"Ravenclaw\", \"Gryffindor\", \"Slytherin\"})");
+		testEquals(
+				"false",
+				"contains(x, {\"Gryffindor\", \"Slytherin\"}) && contains(x, {\"Ravenclaw\", \"Hufflepuff\"})");
+		testEquals(
+				"x == \"Ravenclaw\"",
+				"contains(x, {\"Gryffindor\", \"Ravenclaw\"}) && contains(x, {\"Ravenclaw\", \"Hufflepuff\"})");
+		testEquals(
+				"false",
+				"contains(x, {\"Gryffindor\", \"Ravenclaw\"}) && !contains(x, {\"Ravenclaw\", \"Gryffindor\"})");
+		testEquals(
+				"x == \"Hufflepuff\"",
+				"contains(x, {\"Gryffindor\", \"Ravenclaw\", \"Hufflepuff\"}) && !contains(x, {\"Ravenclaw\", \"Gryffindor\"})");
+
+		// TODO: support OR comparisons
+
+		// testEquals(
+		// "contains(x, {\"Gryffindor\", \"Slytherin\", \"Hufflepuff\", \"Ravenclaw\"})",
+		// "contains(x, {\"Gryffindor\", \"Slytherin\"}) || contains(x, {\"Ravenclaw\", \"Hufflepuff\"})");
 	}
 
 	/**
