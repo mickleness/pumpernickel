@@ -536,355 +536,61 @@ public class OperatorTest extends TestCase {
 	}
 
 	@Test
-	public void testEquals_scenario6_overlappingRanges() {
+	public void testEquals_scenario5_overlappingRanges() throws Exception {
 
-		// FFFF
-		{
-			// x > 0 && x < 3
-			Operator z = And.create(new GreaterThan("x", 0), new LesserThan(
-					"x", 3));
-			// x > 2 && x < 5
-			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
-					"x", 5));
+		testEquals("x > 2 && x < 3", "(x > 0 && x < 3) && (x > 2 && x < 5)");
+		testEquals("x > 0 && x < 5", "(x > 0 && x < 3) || (x > 2 && x < 5)");
 
-			// x > 2 && x < 3
-			assertEquals(
-					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
-					And.create(z, y));
+		testEquals("x > 2 && x < 3", "(x > 0 && x < 3) && (x > 2 && x <= 5)");
+		testEquals("x > 0 && x <= 5", "(x > 0 && x < 3) || (x > 2 && x <= 5)");
 
-			// x > 0 && x < 5
-			Operator e = And.create(new GreaterThan("x", 0), new LesserThan(
-					"x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
+		testEquals("x >= 2 && x < 3", "(x > 0 && x < 3) && (x >= 2 && x < 5)");
+		testEquals("x > 0 && x < 5", "(x > 0 && x < 3) || (x >= 2 && x < 5)");
 
-		// FFFT
-		{
-			// x > 0 && x < 3
-			Operator z = And.create(new GreaterThan("x", 0), new LesserThan(
-					"x", 3));
-			// x > 2 && x <= 5
-			Operator y = And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+		testEquals("x >= 2 && x < 3", "(x > 0 && x < 3) && (x >= 2 && x <= 5)");
+		testEquals("x > 0 && x <= 5", "(x > 0 && x < 3) || (x >= 2 && x <= 5)");
 
-			// x > 2 && x < 3
-			assertEquals(
-					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
-					And.create(z, y));
+		testEquals("x > 2 && x <= 3", "(x > 0 && x <= 3) && (x > 2 && x < 5)");
+		testEquals("x > 0 && x < 5", "(x > 0 && x <= 3) || (x > 2 && x < 5)");
 
-			// x > 0 && x <= 5
-			Operator e = And.create(new GreaterThan("x", 0),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-			assertEquals(e, Or.create(z, y));
-		}
+		testEquals("x > 2 && x <= 3", "(x > 0 && x <= 3) && (x > 2 && x <= 5)");
+		testEquals("x > 0 && x <= 5", "(x > 0 && x <= 3) || (x > 2 && x <= 5)");
 
-		// FFTF
-		{
-			// x > 0 && x < 3
-			Operator z = And.create(new GreaterThan("x", 0), new LesserThan(
-					"x", 3));
-			// x >= 2 && x < 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 5));
+		testEquals("x >= 2 && x <= 3", "(x > 0 && x <= 3) && (x >= 2 && x < 5)");
+		testEquals("x > 0 && x < 5", "(x > 0 && x <= 3) || (x >= 2 && x < 5)");
 
-			// x >= 2 && x < 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 3)), And.create(z, y));
+		testEquals("x >= 2 && x <= 3",
+				"(x > 0 && x <= 3) && (x >= 2 && x <= 5)");
+		testEquals("x > 0 && x <= 5", "(x > 0 && x <= 3) || (x >= 2 && x <= 5)");
 
-			// x > 0 && x < 5
-			Operator e = And.create(new GreaterThan("x", 0), new LesserThan(
-					"x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
+		testEquals("x > 2 && x < 3", "(x >= 0 && x < 3) && (x > 2 && x < 5)");
+		testEquals("x >= 0 && x < 5", "(x >= 0 && x < 3) || (x > 2 && x < 5)");
 
-		// FFTT
-		{
-			// x > 0 && x < 3
-			Operator z = And.create(new GreaterThan("x", 0), new LesserThan(
-					"x", 3));
-			// x >= 2 && x <= 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
+		testEquals("x > 2 && x < 3", "(x >= 0 && x < 3) && (x > 2 && x <= 5)");
+		testEquals("x >= 0 && x <= 5", "(x >= 0 && x < 3) || (x > 2 && x <= 5)");
 
-			// x >= 2 && x < 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 3)), And.create(z, y));
+		testEquals("x >= 2 && x < 3", "(x >= 0 && x < 3) && (x >= 2 && x < 5)");
+		testEquals("x >= 0 && x < 5", "(x >= 0 && x < 3) || (x >= 2 && x < 5)");
 
-			// x > 0 && x <= 5
-			Operator e = And.create(new GreaterThan("x", 0),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-			assertEquals(e, Or.create(z, y));
-		}
+		testEquals("x >= 2 && x < 3", "(x >= 0 && x < 3) && (x >= 2 && x <= 5)");
+		testEquals("x >= 0 && x <= 5",
+				"(x >= 0 && x < 3) || (x >= 2 && x <= 5)");
 
-		// FTFF
-		{
-			// x > 0 && x <= 3
-			Operator z = And.create(new GreaterThan("x", 0),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
-			// x > 2 && x < 5
-			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
-					"x", 5));
+		testEquals("x > 2 && x <= 3", "(x >= 0 && x <= 3) && (x > 2 && x < 5)");
+		testEquals("x >= 0 && x < 5", "(x >= 0 && x <= 3) || (x > 2 && x < 5)");
 
-			// x > 2 && x <= 3
-			assertEquals(And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
+		testEquals("x > 2 && x <= 3", "(x >= 0 && x <= 3) && (x > 2 && x <= 5)");
+		testEquals("x >= 0 && x <= 5",
+				"(x >= 0 && x <= 3) || (x > 2 && x <= 5)");
 
-			// x > 0 && x < 5
-			Operator e = And.create(new GreaterThan("x", 0), new LesserThan(
-					"x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
+		testEquals("x >= 2 && x <= 3",
+				"(x >= 0 && x <= 3) && (x >= 2 && x < 5)");
+		testEquals("x >= 0 && x < 5", "(x >= 0 && x <= 3) || (x >= 2 && x < 5)");
 
-		// FTFT
-		{
-			// x > 0 && x <= 3
-			Operator z = And.create(new GreaterThan("x", 0),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
-			// x > 2 && x <= 5
-			Operator y = And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-
-			// x > 2 && x <= 3
-			assertEquals(And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
-
-			// x > 0 && x <= 5
-			Operator e = And.create(new GreaterThan("x", 0),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		// FTTF
-		{
-			// x > 0 && x <= 3
-			Operator z = And.create(new GreaterThan("x", 0),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
-			// x >= 2 && x < 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 5));
-
-			// x >= 2 && x <= 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
-
-			// x > 0 && x < 5
-			Operator e = And.create(new GreaterThan("x", 0), new LesserThan(
-					"x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		// FTTT
-		{
-			// x > 0 && x <= 3
-			Operator z = And.create(new GreaterThan("x", 0),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
-			// x >= 2 && x <= 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-
-			// x >= 2 && x <= 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
-
-			// x > 0 && x <= 5
-			Operator e = And.create(new GreaterThan("x", 0),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		// TFFF
-		{
-			// x >= 0 && x < 3
-			Operator z = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					new LesserThan("x", 3));
-			// x > 2 && x < 5
-			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
-					"x", 5));
-
-			// x > 2 && x < 3
-			assertEquals(
-					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
-					And.create(z, y));
-
-			// x >= 0 && x < 5
-			Operator e = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					new LesserThan("x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		// TFFT
-		{
-			// x >= 0 && x < 3
-			Operator z = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					new LesserThan("x", 3));
-			// x > 2 && x <= 5
-			Operator y = And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-
-			// x > 2 && x < 3
-			assertEquals(
-					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
-					And.create(z, y));
-
-			// x >= 0 && x <= 5
-			Operator e = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		// TFTF
-		{
-			// x >= 0 && x < 3
-			Operator z = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					new LesserThan("x", 3));
-			// x >= 2 && x < 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 5));
-
-			// x >= 2 && x < 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 3)), And.create(z, y));
-
-			// x >= 0 && x < 5
-			Operator e = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					new LesserThan("x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		// TFTT
-		{
-			// x >= 0 && x < 3
-			Operator z = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					new LesserThan("x", 3));
-			// x >= 2 && x <= 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-
-			// x >= 2 && x < 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 3)), And.create(z, y));
-
-			// x >= 0 && x <= 5
-			Operator e = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		// TTFF
-		{
-			// x >= 0 && x <= 3
-			Operator z = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
-			// x > 2 && x < 5
-			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
-					"x", 5));
-
-			// x > 2 && x <= 3
-			assertEquals(And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
-
-			// x >= 0 && x < 5
-			Operator e = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					new LesserThan("x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		// TTFT
-		{
-			// x >= 0 && x <= 3
-			Operator z = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
-			// x > 2 && x <= 5
-			Operator y = And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-
-			// x > 2 && x <= 3
-			assertEquals(And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
-
-			// x >= 0 && x <= 5
-			Operator e = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		// TTTF
-		{
-			// x >= 0 && x <= 3
-			Operator z = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
-			// x >= 2 && x < 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 5));
-
-			// x >= 2 && x <= 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
-
-			// x >= 0 && x < 5
-			Operator e = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					new LesserThan("x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		// TTTT
-		{
-			// x >= 0 && x <= 3
-			Operator z = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3)));
-			// x >= 2 && x <= 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-
-			// x >= 2 && x <= 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
-
-			// x >= 0 && x <= 5
-			Operator e = And.create(
-					Or.create(new GreaterThan("x", 0), new EqualTo("x", 0)),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-			assertEquals(e, Or.create(z, y));
-		}
+		testEquals("x >= 2 && x <= 3",
+				"(x >= 0 && x <= 3) && (x >= 2 && x <= 5)");
+		testEquals("x >= 0 && x <= 5",
+				"(x >= 0 && x <= 3) || (x >= 2 && x <= 5)");
 	}
 
 	@Test
