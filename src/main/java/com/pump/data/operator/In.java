@@ -1,6 +1,7 @@
 package com.pump.data.operator;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -56,7 +57,13 @@ public class In extends AbstractValueOperator<Collection<?>> {
 
 	@Override
 	protected Operator createCanonicalOperator() {
-		return this;
+		Collection<?> values = getValue();
+		Operator[] operators = new Operator[values.size()];
+		int ctr = 0;
+		for (Object e : values) {
+			operators[ctr++] = new EqualTo(getAttribute(), e);
+		}
+		return Or.create(operators);
 	}
 
 	@Override
