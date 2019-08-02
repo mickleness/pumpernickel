@@ -192,29 +192,26 @@ public class OperatorParser {
 
 			Comparable value = getValue(t3);
 
-			if (value != null) {
-				String s = t2.getText();
-				tokensPtr.addAndGet(2);
-				if (s.equals("==")) {
-					return new EqualTo(w.getText(), value);
-				} else if (s.equals("!=")) {
-					return Not.create(new EqualTo(w.getText(), value));
-				} else if (s.equals(">=")) {
-					return Or.create(new GreaterThan(w.getText(),
-							(Comparable) value),
-							new EqualTo(w.getText(), value));
-				} else if (s.equals("<=")) {
-					return Or.create(new LesserThan(w.getText(),
-							(Comparable) value),
-							new EqualTo(w.getText(), value));
-				} else if (s.equals(">")) {
-					return new GreaterThan(w.getText(), (Comparable) value);
-				} else if (s.equals("<")) {
-					return new LesserThan(w.getText(), (Comparable) value);
-				} else {
-					throw new ParserException(t2, new Exception(
-							"Unsupported operator \"" + s + "\""));
-				}
+			String s = t2.getText();
+			tokensPtr.addAndGet(2);
+			if (s.equals("==")) {
+				return new EqualTo(w.getText(), value);
+			} else if (s.equals("!=")) {
+				return Not.create(new EqualTo(w.getText(), value));
+			} else if (s.equals(">=")) {
+				return Or.create(new GreaterThan(w.getText(),
+						(Comparable) value), new EqualTo(w.getText(), value));
+			} else if (s.equals("<=")) {
+				return Or.create(
+						new LesserThan(w.getText(), (Comparable) value),
+						new EqualTo(w.getText(), value));
+			} else if (s.equals(">")) {
+				return new GreaterThan(w.getText(), (Comparable) value);
+			} else if (s.equals("<")) {
+				return new LesserThan(w.getText(), (Comparable) value);
+			} else {
+				throw new ParserException(t2, new Exception(
+						"Unsupported operator \"" + s + "\""));
 			}
 		}
 
@@ -257,8 +254,10 @@ public class OperatorParser {
 			return Boolean.TRUE;
 		} else if (t.getText().equals("false")) {
 			return Boolean.FALSE;
+		} else if (t.getText().equals("null")) {
+			return null;
 		}
-		return null;
+		throw new IllegalArgumentException("Unsupported token: " + t);
 	}
 
 	private synchronized JavaParser getJavaParser() {

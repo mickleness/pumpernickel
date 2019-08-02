@@ -1108,6 +1108,11 @@ public class OperatorTest extends TestCase {
 		format.caseSensitive = false;
 		testEquals(false, "matches(x, \"HELLO\")", "x == \"HELLO\"", format);
 
+		testEquals("x != null", "matches(x, \"*\")");
+		testEquals(false, "x != null", "matches(x, \"*A\")", format);
+		testEquals(false, "x != null", "matches(x, \"A*\")", format);
+		testEquals(false, "x != null", "matches(x, \"?\")", format);
+
 		// TODO:
 		// Like startsWithJ = new Like("x", new WildcardPattern("J*"));
 		// Like endsWithB = new Like("x", new WildcardPattern("*AB"));
