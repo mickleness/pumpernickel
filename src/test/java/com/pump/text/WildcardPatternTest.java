@@ -222,14 +222,51 @@ public class WildcardPatternTest extends TestCase {
 			@Override
 			boolean matches(CharSequence string, int stringMinIndex,
 					int stringMaxIndex, Placeholder[] placeholders,
-					int placeholderMinIndex, int placeholderMaxIndex) {
+					int placeholderMinIndex, int placeholderMaxIndex,
+					boolean caseSensitive) {
 				actualMatchesInvocationCount.incrementAndGet();
 				return super.matches(string, stringMinIndex, stringMaxIndex,
-						placeholders, placeholderMinIndex, placeholderMaxIndex);
+						placeholders, placeholderMinIndex, placeholderMaxIndex,
+						caseSensitive);
 			}
 
 		};
 		p.matches(phrase);
 		return actualMatchesInvocationCount.intValue();
+	}
+
+	/**
+	 * This confirms patterns that are case sensitive fail.
+	 */
+	public void testCaseSensitivity() {
+		WildcardPattern.Format format = new WildcardPattern.Format();
+		format.caseSensitive = true;
+
+		WildcardPattern p = new WildcardPattern("car*", format);
+		assertTrue(p.matches("cargo"));
+		assertFalse(p.matches("Cart"));
+		assertFalse(p.matches("CARWASH"));
+		assertFalse(p.matches("cAR57"));
+
+		p = new WildcardPattern("car[PT]*", format);
+		assertTrue(p.matches("carPet"));
+		assertTrue(p.matches("carT"));
+		assertFalse(p.matches("Carpet"));
+		assertFalse(p.matches("CARPET"));
+		assertFalse(p.matches("cart"));
+
+		// the default format is NOT case sensitive:
+		p = new WildcardPattern("car*");
+		assertTrue(p.matches("cargo"));
+		assertTrue(p.matches("Cart"));
+		assertTrue(p.matches("CARWASH"));
+		assertTrue(p.matches("cAR57"));
+
+		p = new WildcardPattern("car[pt]*");
+		assertTrue(p.matches("carPet"));
+		assertTrue(p.matches("carT"));
+		assertTrue(p.matches("Carpet"));
+		assertTrue(p.matches("CARPET"));
+		assertTrue(p.matches("cart"));
 	}
 }

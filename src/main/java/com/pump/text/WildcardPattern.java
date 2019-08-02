@@ -238,10 +238,17 @@ public class WildcardPattern implements Serializable {
 		 */
 		public Character escapeCharacter = null;
 
+		/**
+		 * If true then all characters must match in case. By default this is
+		 * false so WildcardPatterns are case insensitive.
+		 */
+		public boolean caseSensitive = false;
+
 		@Override
 		public int hashCode() {
 			return Objects.hash(closeBracketCharacter, openBracketCharacter,
-					escapeCharacter, questionMarkWildcard, starWildcard);
+					escapeCharacter, questionMarkWildcard, starWildcard,
+					caseSensitive);
 		}
 
 		@Override
@@ -256,7 +263,8 @@ public class WildcardPattern implements Serializable {
 					&& Objects.equals(escapeCharacter, other.escapeCharacter)
 					&& Objects.equals(questionMarkWildcard,
 							other.questionMarkWildcard)
-					&& Objects.equals(starWildcard, other.starWildcard);
+					&& Objects.equals(starWildcard, other.starWildcard)
+					&& caseSensitive == other.caseSensitive;
 		}
 
 		@Override
@@ -276,6 +284,7 @@ public class WildcardPattern implements Serializable {
 			if (closeBracketCharacter != null)
 				sb.append(" closeBracketCharacter='" + closeBracketCharacter
 						+ "'");
+			sb.append(" caseSensitive=" + caseSensitive);
 			sb.append("]");
 			return sb.toString();
 		}
@@ -288,6 +297,7 @@ public class WildcardPattern implements Serializable {
 			out.writeObject(openBracketCharacter);
 			out.writeObject(questionMarkWildcard);
 			out.writeObject(starWildcard);
+			out.writeBoolean(caseSensitive);
 		}
 
 		private void readObject(java.io.ObjectInputStream in)
@@ -299,6 +309,7 @@ public class WildcardPattern implements Serializable {
 				openBracketCharacter = (Character) in.readObject();
 				questionMarkWildcard = (Character) in.readObject();
 				starWildcard = (Character) in.readObject();
+				caseSensitive = in.readBoolean();
 			} else {
 				throw new IOException("Unsupported internal version " + version);
 			}
@@ -317,9 +328,11 @@ public class WildcardPattern implements Serializable {
 	public final static class FixedCharacter extends Placeholder {
 		/** The character this placeholder represents. */
 		public final char ch;
+		private char lowerCaseChar;
 
 		FixedCharacter(char ch) {
-			this.ch = Character.toLowerCase(ch);
+			this.ch = ch;
+			lowerCaseChar = Character.toLowerCase(ch);
 		}
 
 		@Override
@@ -371,6 +384,12 @@ public class WildcardPattern implements Serializable {
 			}
 			return Character.toString(ch);
 		}
+
+		public boolean matches(char c, boolean caseSensitive) {
+			if (caseSensitive)
+				return c == ch;
+			return lowerCaseChar == Character.toLowerCase(c);
+		}
 	}
 
 	/**
@@ -415,11 +434,15 @@ public class WildcardPattern implements Serializable {
 		 */
 		private char[] ch;
 
+		private char[] lowerCaseChars;
+
 		SquareBracketsWildcard(char[] ch) {
+			lowerCaseChars = new char[ch.length];
 			for (int a = 0; a < ch.length; a++) {
-				ch[a] = Character.toLowerCase(ch[a]);
+				lowerCaseChars[a] = Character.toLowerCase(ch[a]);
 			}
 			Arrays.sort(ch);
+			Arrays.sort(lowerCaseChars);
 			this.ch = ch;
 		}
 
@@ -465,9 +488,14 @@ public class WildcardPattern implements Serializable {
 		 *            the character to search for
 		 * @return true if this wildcard can be used to represent the argument.
 		 */
-		public boolean contains(char ch) {
-			int i = Arrays.binarySearch(this.ch, ch);
-			return (i >= 0 && i < this.ch.length);
+		public boolean contains(char ch, boolean caseSensitive) {
+			if (caseSensitive) {
+				int i = Arrays.binarySearch(this.ch, ch);
+				return (i >= 0 && i < this.ch.length);
+			}
+			ch = Character.toLowerCase(ch);
+			int i = Arrays.binarySearch(lowerCaseChars, ch);
+			return (i >= 0 && i < lowerCaseChars.length);
 		}
 
 		/**
@@ -652,12 +680,13 @@ public class WildcardPattern implements Serializable {
 	public boolean matches(CharSequence string) {
 		Objects.requireNonNull(string);
 		return matches(string, 0, string.length() - 1, placeholders, 0,
-				placeholders.length - 1);
+				placeholders.length - 1, getFormat().caseSensitive);
 	}
 
 	boolean matches(CharSequence string, int stringMinIndex,
 			int stringMaxIndex, Placeholder[] placeholders,
-			int placeholderMinIndex, int placeholderMaxIndex) {
+			int placeholderMinIndex, int placeholderMaxIndex,
+			boolean caseSensitive) {
 
 		// this can happen if we're matching against an empty String
 		if (stringMaxIndex < stringMinIndex) {
@@ -686,8 +715,7 @@ public class WildcardPattern implements Serializable {
 			if (p instanceof FixedCharacter) {
 				FixedCharacter fc = (FixedCharacter) p;
 				char ch = string.charAt(stringMinIndex);
-				ch = Character.toLowerCase(ch);
-				if (ch != fc.ch)
+				if (!fc.matches(ch, caseSensitive))
 					return false;
 				placeholderMinIndex++;
 			} else if (p instanceof QuestionMarkWildcard) {
@@ -695,9 +723,10 @@ public class WildcardPattern implements Serializable {
 			} else if (p instanceof SquareBracketsWildcard) {
 				SquareBracketsWildcard sbw = (SquareBracketsWildcard) p;
 				char ch = string.charAt(stringMinIndex);
-				ch = Character.toLowerCase(ch);
-				if (sbw.contains(ch) == false)
+
+				if (!sbw.contains(ch, caseSensitive))
 					return false;
+
 				placeholderMinIndex++;
 			} else {
 				break;
@@ -733,8 +762,7 @@ public class WildcardPattern implements Serializable {
 			if (p instanceof FixedCharacter) {
 				FixedCharacter fc = (FixedCharacter) p;
 				char ch = string.charAt(stringMaxIndex);
-				ch = Character.toLowerCase(ch);
-				if (ch != fc.ch)
+				if (!fc.matches(ch, caseSensitive))
 					return false;
 				placeholderMaxIndex--;
 			} else if (p instanceof QuestionMarkWildcard) {
@@ -742,8 +770,7 @@ public class WildcardPattern implements Serializable {
 			} else if (p instanceof SquareBracketsWildcard) {
 				SquareBracketsWildcard sbw = (SquareBracketsWildcard) p;
 				char ch = string.charAt(stringMaxIndex);
-				ch = Character.toLowerCase(ch);
-				if (sbw.contains(ch) == false)
+				if (!sbw.contains(ch, caseSensitive))
 					return false;
 				placeholderMaxIndex--;
 			} else {
@@ -773,7 +800,7 @@ public class WildcardPattern implements Serializable {
 
 		for (; stringMinIndex <= stringMaxIndex; stringMinIndex++) {
 			if (matches(string, stringMinIndex, stringMaxIndex, placeholders,
-					placeholderMinIndex + 1, placeholderMaxIndex))
+					placeholderMinIndex + 1, placeholderMaxIndex, caseSensitive))
 				return true;
 		}
 
