@@ -201,7 +201,7 @@ public class WildcardPattern implements Serializable {
 	public static class Format implements Serializable {
 
 		private static final long serialVersionUID = 1L;
-		
+
 		/**
 		 * The character used to accept any run of characters. By default this
 		 * is '*'.
@@ -761,7 +761,8 @@ public class WildcardPattern implements Serializable {
 		StringBuilder constantPrefixBuilder = new StringBuilder();
 		for (int a = 0; a < phs.length; a++) {
 			if (phs[a] instanceof FixedCharacter) {
-				constantPrefixBuilder.append(phs[a].toString());
+				FixedCharacter fc = (FixedCharacter) phs[a];
+				constantPrefixBuilder.append(fc.ch);
 			} else {
 				break;
 			}
