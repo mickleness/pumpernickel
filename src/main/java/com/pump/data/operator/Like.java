@@ -43,6 +43,26 @@ public class Like extends AbstractValueOperator<WildcardPattern> {
 
 	@Override
 	protected Operator createCanonicalOperator() {
+		WildcardPattern p = getValue();
+
+		if (p.getFormat().caseSensitive) {
+			StringBuilder fixedString = new StringBuilder();
+			for (WildcardPattern.Placeholder placeholder : p.getPlaceholders()) {
+				if (placeholder instanceof WildcardPattern.FixedCharacter) {
+					if (fixedString != null) {
+						WildcardPattern.FixedCharacter f = (WildcardPattern.FixedCharacter) placeholder;
+						fixedString.append(f.ch);
+					}
+				} else {
+					fixedString = null;
+				}
+			}
+
+			if (fixedString != null && fixedString.length() > 0) {
+				return new EqualTo(getAttribute(), fixedString.toString());
+			}
+		}
+
 		return this;
 	}
 

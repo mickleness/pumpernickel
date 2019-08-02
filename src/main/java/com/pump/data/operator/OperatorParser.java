@@ -44,6 +44,16 @@ public class OperatorParser {
 	}
 
 	JavaParser javaParser;
+	WildcardPattern.Format wildcardFormat;
+
+	public OperatorParser() {
+		this(null);
+	}
+
+	public OperatorParser(WildcardPattern.Format format) {
+		this.wildcardFormat = format == null ? new WildcardPattern.Format()
+				: format;
+	}
 
 	public Operator parse(String str) throws Exception {
 		JavaParser p = getJavaParser();
@@ -166,7 +176,8 @@ public class OperatorParser {
 
 				tokensPtr.addAndGet(5);
 
-				return new Like(w2.getText(), new WildcardPattern(value));
+				return new Like(w2.getText(), new WildcardPattern(value,
+						wildcardFormat));
 			} else if (w.getText().equals(In.FUNCTION_NAME)
 					&& t2.getText().equals("(")) {
 				WordToken w2 = (WordToken) t3;

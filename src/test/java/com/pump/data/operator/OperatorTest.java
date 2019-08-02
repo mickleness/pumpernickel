@@ -463,6 +463,14 @@ public class OperatorTest extends TestCase {
 	}
 
 	protected void testEquals(String expected, String value) throws Exception {
+		testEquals(true, expected, value, null);
+	}
+
+	protected void testEquals(boolean equals, String expected, String value,
+			WildcardPattern.Format format) throws Exception {
+		if (format == null)
+			format = new WildcardPattern.Format();
+
 		// adding an AND or NOT-AND to the system may change a lot of
 		// under-the-hood mechanics when we factor and simplify expressions to
 		// determine equivalency, so we'll add a little variation here:
@@ -476,9 +484,13 @@ public class OperatorTest extends TestCase {
 			testOperatorString(expected_revised);
 			testOperatorString(value_revised);
 
-			Operator op1 = new OperatorParser().parse(expected_revised);
-			Operator op2 = new OperatorParser().parse(value_revised);
-			assertEquals(op1, op2);
+			Operator op1 = new OperatorParser(format).parse(expected_revised);
+			Operator op2 = new OperatorParser(format).parse(value_revised);
+			if (equals) {
+				assertEquals(op1, op2);
+			} else {
+				assertFalse(op1.equals(op2));
+			}
 		}
 	}
 
@@ -594,172 +606,60 @@ public class OperatorTest extends TestCase {
 	}
 
 	@Test
-	public void testEquals_scenario7_overlappingInfiniteRanges() {
+	public void testEquals_scenario7_overlappingInfiniteRanges()
+			throws Exception {
 
 		// test the left interval spanning to -inf
 
-		{
-			// x < 3
-			Operator z = new LesserThan("x", 3);
-			// x > 2 && x < 5
-			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
-					"x", 5));
+		testEquals("x > 2 && x < 3", "(x < 3) && (x > 2 && x < 5)");
+		testEquals("x < 5", "(x < 3) || (x > 2 && x < 5)");
 
-			// x > 2 && x < 3
-			assertEquals(
-					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
-					And.create(z, y));
+		testEquals("x > 2 && x <= 3", "(x <= 3) && (x > 2 && x < 5)");
+		testEquals("x < 5", "(x <= 3) || (x > 2 && x < 5)");
 
-			// x < 5
-			Operator e = new LesserThan("x", 5);
-			assertEquals(e, Or.create(z, y));
-		}
+		testEquals("x >= 2 && x < 3", "(x < 3) && (x >= 2 && x < 5)");
+		testEquals("x < 5", "(x < 3) || (x >= 2 && x < 5)");
 
-		{
-			// x <= 3
-			Operator z = Or.create(new LesserThan("x", 3), new EqualTo("x", 3));
-			// x > 2 && x < 5
-			Operator y = And.create(new GreaterThan("x", 2), new LesserThan(
-					"x", 5));
+		testEquals("x > 2 && x < 3", "(x < 3) && (x > 2 && x <= 5)");
+		testEquals("x <= 5", "(x < 3) || (x > 2 && x <= 5)");
 
-			// x > 2 && x < 3
-			assertEquals(And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
+		testEquals("x >= 2 && x <= 3", "(x <= 3) && (x >= 2 && x < 5)");
+		testEquals("x < 5", "(x <= 3) || (x >= 2 && x < 5)");
 
-			// x < 5
-			Operator e = new LesserThan("x", 5);
-			assertEquals(e, Or.create(z, y));
-		}
+		testEquals("x > 2 && x <= 3", "(x <= 3) && (x > 2 && x <= 5)");
+		testEquals("x <= 5", "(x <= 3) || (x > 2 && x <= 5)");
 
-		{
-			// x < 3
-			Operator z = new LesserThan("x", 3);
-			// x >= 2 && x < 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 5));
+		testEquals("x >= 2 && x < 3", "(x < 3) && (x >= 2 && x <= 5)");
+		testEquals("x <= 5", "(x < 3) || (x >= 2 && x <= 5)");
 
-			// x >= 2 && x < 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 3)), And.create(z, y));
-
-			// x < 5
-			Operator e = new LesserThan("x", 5);
-			assertEquals(e, Or.create(z, y));
-		}
-
-		{
-			// x < 3
-			Operator z = new LesserThan("x", 3);
-			// x > 2 && x <= 5
-			Operator y = And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-
-			// x > 2 && x < 3
-			assertEquals(
-					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
-					And.create(z, y));
-
-			// x <= 5
-			Operator e = Or.create(new LesserThan("x", 5), new EqualTo("x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		{
-			// x <= 3
-			Operator z = Or.create(new LesserThan("x", 3), new EqualTo("x", 3));
-			// x >= 2 && x < 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 5));
-
-			// x >= 2 && x < 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
-
-			// x < 5
-			Operator e = new LesserThan("x", 5);
-			assertEquals(e, Or.create(z, y));
-		}
-
-		{
-			// x <= 3
-			Operator z = Or.create(new LesserThan("x", 3), new EqualTo("x", 3));
-			// x > 2 && x <= 5
-			Operator y = And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-
-			// x > 2 && x < 3
-			assertEquals(And.create(new GreaterThan("x", 2),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
-
-			// x <= 5
-			Operator e = Or.create(new LesserThan("x", 5), new EqualTo("x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		{
-			// x < 3
-			Operator z = new LesserThan("x", 3);
-			// x >= 2 && x <= 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-
-			// x >= 2 && x < 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					new LesserThan("x", 3)), And.create(z, y));
-
-			// x <= 5
-			Operator e = Or.create(new LesserThan("x", 5), new EqualTo("x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
-
-		{
-			// x <= 3
-			Operator z = Or.create(new LesserThan("x", 3), new EqualTo("x", 3));
-			// x >= 2 && x <= 5
-			Operator y = And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 5), new EqualTo("x", 5)));
-
-			// x >= 2 && x <= 3
-			assertEquals(And.create(
-					Or.create(new GreaterThan("x", 2), new EqualTo("x", 2)),
-					Or.create(new LesserThan("x", 3), new EqualTo("x", 3))),
-					And.create(z, y));
-
-			// x <= 5
-			Operator e = Or.create(new LesserThan("x", 5), new EqualTo("x", 5));
-			assertEquals(e, Or.create(z, y));
-		}
+		testEquals("x >= 2 && x <= 3", "(x <= 3) && (x >= 2 && x <= 5)");
+		testEquals("x <= 5", "(x <= 3) || (x >= 2 && x <= 5)");
 
 		// now test the right interval spanning to +inf
 
-		{
-			// x > 0 && x < 3
-			Operator z = And.create(new GreaterThan("x", 0), new LesserThan(
-					"x", 3));
-			// x > 2
-			Operator y = new GreaterThan("x", 2);
+		testEquals("x > 2 && x < 3", "(x > 0 && x < 3) && (x > 2)");
+		testEquals("x > 0", "(x > 0 && x < 3) || (x > 2)");
 
-			// x > 2 && x < 3
-			assertEquals(
-					And.create(new GreaterThan("x", 2), new LesserThan("x", 3)),
-					And.create(z, y));
+		testEquals("x >= 2 && x < 3", "(x > 0 && x < 3) && (x >= 2)");
+		testEquals("x > 0", "(x > 0 && x < 3) || (x >= 2)");
 
-			// x > 0
-			Operator e = new GreaterThan("x", 0);
-			assertEquals(e, Or.create(z, y));
-		}
+		testEquals("x > 2 && x <= 3", "(x > 0 && x <= 3) && (x > 2)");
+		testEquals("x > 0", "(x > 0 && x <= 3) || (x > 2)");
 
-		// TODO: iterate over other combos
+		testEquals("x >= 2 && x <= 3", "(x > 0 && x <= 3) && (x >= 2)");
+		testEquals("x > 0", "(x > 0 && x <= 3) || (x >= 2)");
+
+		testEquals("x > 2 && x < 3", "(x >= 0 && x < 3) && (x > 2)");
+		testEquals("x >= 0", "(x >= 0 && x < 3) || (x > 2)");
+
+		testEquals("x >= 2 && x < 3", "(x >= 0 && x < 3) && (x >= 2)");
+		testEquals("x >= 0", "(x >= 0 && x < 3) || (x >= 2)");
+
+		testEquals("x > 2 && x <= 3", "(x >= 0 && x <= 3) && (x > 2)");
+		testEquals("x >= 0", "(x >= 0 && x <= 3) || (x > 2)");
+
+		testEquals("x >= 2 && x <= 3", "(x >= 0 && x <= 3) && (x >= 2)");
+		testEquals("x >= 0", "(x >= 0 && x <= 3) || (x >= 2)");
 	}
 
 	@Test
@@ -1194,5 +1094,27 @@ public class OperatorTest extends TestCase {
 			assertEquals(x, simplified);
 		}
 
+	}
+
+	@Test
+	public void testEquals_like() throws Exception {
+		WildcardPattern.Format format = new WildcardPattern.Format();
+		format.caseSensitive = true;
+		testEquals(true, "matches(x, \"HELLO\")", "x == \"HELLO\"", format);
+		testEquals(true, "matches(x, \"hello\")", "x == \"hello\"", format);
+		testEquals(false, "matches(x, \"HELLO\")", "x == \"hello\"", format);
+		testEquals(false, "matches(x, \"hello\")", "x == \"HELLO\"", format);
+
+		format.caseSensitive = false;
+		testEquals(false, "matches(x, \"HELLO\")", "x == \"HELLO\"", format);
+
+		// TODO:
+		// Like startsWithJ = new Like("x", new WildcardPattern("J*"));
+		// Like endsWithB = new Like("x", new WildcardPattern("*AB"));
+		//
+		// Operator and = And.create(startsWithJ, endsWithB);
+		// Like mergedLike = new Like("x", new WildcardPattern("J*AB"));
+		//
+		// assertEquals(and, mergedLike);
 	}
 }
