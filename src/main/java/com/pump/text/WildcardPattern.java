@@ -14,9 +14,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -321,6 +323,29 @@ public class WildcardPattern implements Serializable {
 		}
 
 		@Override
+		public int hashCode() {
+			return Character.hashCode(ch);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof FixedCharacter))
+				return false;
+			FixedCharacter other = (FixedCharacter) obj;
+			return ch == other.ch;
+		}
+
+		@Override
+		protected FixedCharacter clone() {
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "FixedCharacter[" + ch + "]";
+		}
+
+		@Override
 		protected String toString(Format format) {
 			if (format.escapeCharacter != null) {
 				if (format.closeBracketCharacter != null
@@ -357,6 +382,26 @@ public class WildcardPattern implements Serializable {
 		protected String toString(Format format) {
 			return Character.toString(format.starWildcard);
 		}
+
+		@Override
+		public int hashCode() {
+			return 55;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return obj instanceof StarWildcard;
+		}
+
+		@Override
+		protected StarWildcard clone() {
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "StarWildcard[]";
+		}
 	}
 
 	/**
@@ -376,6 +421,43 @@ public class WildcardPattern implements Serializable {
 			}
 			Arrays.sort(ch);
 			this.ch = ch;
+		}
+
+		@Override
+		public int hashCode() {
+			int z = 0;
+			for (char c : ch) {
+				z += c;
+			}
+			return z;
+		}
+
+		private Set<Character> getCharSet() {
+			Set<Character> returnValue = new HashSet<>();
+			for (char c : ch) {
+				returnValue.add(c);
+			}
+			return returnValue;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof SquareBracketsWildcard))
+				return false;
+			SquareBracketsWildcard other = (SquareBracketsWildcard) obj;
+			Set<Character> set1 = getCharSet();
+			Set<Character> set2 = other.getCharSet();
+			return set1.equals(set2);
+		}
+
+		@Override
+		protected SquareBracketsWildcard clone() {
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "SquareBracketsWildcard[" + getCharSet() + "]";
 		}
 
 		/**
@@ -408,6 +490,27 @@ public class WildcardPattern implements Serializable {
 	 * The QuestionMarkWildcard is used to represent exactly one character.
 	 */
 	public final static class QuestionMarkWildcard extends Placeholder {
+
+		@Override
+		public int hashCode() {
+			return 991;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return obj instanceof QuestionMarkWildcard;
+		}
+
+		@Override
+		protected QuestionMarkWildcard clone() {
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "QuestionMarkWildcard[]";
+		}
+
 		@Override
 		protected String toString(Format format) {
 			return Character.toString(format.questionMarkWildcard);
