@@ -314,12 +314,31 @@ public class WildcardPattern implements Serializable {
 				throw new IOException("Unsupported internal version " + version);
 			}
 		}
+
+		public boolean isEscapedChar(char c) {
+			if (closeBracketCharacter != null
+					&& closeBracketCharacter.charValue() == c)
+				return true;
+			if (openBracketCharacter != null
+					&& openBracketCharacter.charValue() == c)
+				return true;
+			if (escapeCharacter != null && escapeCharacter.charValue() == c)
+				return true;
+			if (questionMarkWildcard != null
+					&& questionMarkWildcard.charValue() == c)
+				return true;
+			if (starWildcard != null && starWildcard.charValue() == c)
+				return true;
+			return false;
+		}
 	}
 
 	/** An element of a WildcardPattern. */
 	public static abstract class Placeholder {
 
 		protected abstract String toString(Format format);
+
+		protected abstract boolean isSingleCharacter();
 	}
 
 	/**
@@ -360,27 +379,10 @@ public class WildcardPattern implements Serializable {
 
 		@Override
 		protected String toString(Format format) {
-			if (format.escapeCharacter != null) {
-				if (format.closeBracketCharacter != null
-						&& format.closeBracketCharacter.equals(ch))
-					return Character.toString(format.escapeCharacter)
-							+ Character.toString(ch);
-				if (format.escapeCharacter != null
-						&& format.escapeCharacter.equals(ch))
-					return Character.toString(format.escapeCharacter)
-							+ Character.toString(ch);
-				if (format.openBracketCharacter != null
-						&& format.openBracketCharacter.equals(ch))
-					return Character.toString(format.escapeCharacter)
-							+ Character.toString(ch);
-				if (format.questionMarkWildcard != null
-						&& format.questionMarkWildcard.equals(ch))
-					return Character.toString(format.escapeCharacter)
-							+ Character.toString(ch);
-				if (format.starWildcard != null
-						&& format.starWildcard.equals(ch))
-					return Character.toString(format.escapeCharacter)
-							+ Character.toString(ch);
+			if (format.escapeCharacter != null && format.isEscapedChar(ch)) {
+				if (format.escapeCharacter == null)
+					throw new IllegalStateException(format.toString());
+				return format.escapeCharacter + Character.toString(ch);
 			}
 			return Character.toString(ch);
 		}
@@ -389,6 +391,11 @@ public class WildcardPattern implements Serializable {
 			if (caseSensitive)
 				return c == ch;
 			return lowerCaseChar == Character.toLowerCase(c);
+		}
+
+		@Override
+		protected boolean isSingleCharacter() {
+			return true;
 		}
 	}
 
@@ -420,6 +427,11 @@ public class WildcardPattern implements Serializable {
 		@Override
 		public String toString() {
 			return "StarWildcard[]";
+		}
+
+		@Override
+		protected boolean isSingleCharacter() {
+			return false;
 		}
 	}
 
@@ -509,8 +521,27 @@ public class WildcardPattern implements Serializable {
 
 		@Override
 		protected String toString(Format format) {
-			return format.openBracketCharacter + (new String(ch))
-					+ format.closeBracketCharacter;
+			StringBuilder sb = new StringBuilder();
+			if (format.openBracketCharacter == null
+					|| format.closeBracketCharacter == null)
+				throw new IllegalStateException(format.toString());
+
+			sb.append(format.openBracketCharacter);
+			for (char c : ch) {
+				if (format.isEscapedChar(c)) {
+					if (format.escapeCharacter == null)
+						throw new IllegalStateException(format.toString());
+					sb.append(format.escapeCharacter);
+				}
+				sb.append(c);
+			}
+			sb.append(format.closeBracketCharacter);
+			return sb.toString();
+		}
+
+		@Override
+		protected boolean isSingleCharacter() {
+			return true;
 		}
 	}
 
@@ -543,6 +574,11 @@ public class WildcardPattern implements Serializable {
 		protected String toString(Format format) {
 			return Character.toString(format.questionMarkWildcard);
 		}
+
+		@Override
+		protected boolean isSingleCharacter() {
+			return true;
+		}
 	}
 
 	Placeholder[] placeholders;
@@ -560,6 +596,7 @@ public class WildcardPattern implements Serializable {
 	}
 
 	public WildcardPattern(CharSequence patternText, Format format) {
+		Objects.requireNonNull(format);
 		this.format = format;
 		this.patternText = patternText.toString();
 		initialize();
@@ -604,6 +641,11 @@ public class WildcardPattern implements Serializable {
 				ch = s.charAt(i);
 				StringBuffer sb = new StringBuffer();
 				while (!format.closeBracketCharacter.equals(ch)) {
+					if (format.escapeCharacter != null
+							&& format.escapeCharacter.charValue() == ch) {
+						i++;
+						ch = s.charAt(i);
+					}
 					sb.append(ch);
 					i++;
 					ch = s.charAt(i);
@@ -817,7 +859,7 @@ public class WildcardPattern implements Serializable {
 		return placeholders.length;
 	}
 
-	private transient Boolean containsStarWildcard;
+	private transient Integer starWildcardCount;
 
 	/**
 	 * @return whether this pattern contains a StarWildcard.
@@ -827,17 +869,23 @@ public class WildcardPattern implements Serializable {
 	 *         interested in knowing this.
 	 */
 	public boolean containsStarWildcard() {
-		if (containsStarWildcard == null) {
-			for (int a = 0; a < placeholders.length
-					&& (containsStarWildcard == null); a++) {
+		return getStarWildcardCount() > 0;
+	}
+
+	/**
+	 * @return the number of StarWildcards in this pattern.
+	 */
+	public int getStarWildcardCount() {
+		if (starWildcardCount == null) {
+			int sum = 0;
+			for (int a = 0; a < placeholders.length; a++) {
 				if (placeholders[a] instanceof StarWildcard) {
-					containsStarWildcard = Boolean.TRUE;
+					sum++;
 				}
 			}
-			if (containsStarWildcard == null)
-				containsStarWildcard = Boolean.FALSE;
+			starWildcardCount = sum;
 		}
-		return containsStarWildcard;
+		return starWildcardCount;
 	}
 
 	@Override
@@ -861,8 +909,15 @@ public class WildcardPattern implements Serializable {
 		if (!(obj instanceof WildcardPattern))
 			return false;
 		WildcardPattern p = (WildcardPattern) obj;
-		return p.getPatternText().equals(getPatternText())
-				&& p.getFormat().equals(getFormat());
+		if (!getFormat().equals(p.getFormat()))
+			return false;
+		if (placeholders.length != p.placeholders.length)
+			return false;
+		for (int a = 0; a < placeholders.length; a++) {
+			if (!placeholders[a].equals(p.placeholders[a]))
+				return false;
+		}
+		return true;
 	}
 
 	/**

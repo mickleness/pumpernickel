@@ -218,6 +218,7 @@ public class WildcardPatternTest extends TestCase {
 	private int getMatchInvocationCount(String pattern, String phrase) {
 		final AtomicInteger actualMatchesInvocationCount = new AtomicInteger(0);
 		WildcardPattern p = new WildcardPattern(pattern) {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			boolean matches(CharSequence string, int stringMinIndex,
@@ -268,5 +269,21 @@ public class WildcardPatternTest extends TestCase {
 		assertTrue(p.matches("Carpet"));
 		assertTrue(p.matches("CARPET"));
 		assertTrue(p.matches("cart"));
+	}
+
+	public void testEscapeChar() {
+		WildcardPattern.Format format = new WildcardPattern.Format();
+		format.escapeCharacter = '\\';
+
+		WildcardPattern p = new WildcardPattern("*[\\[\\]]*", format);
+		assertTrue(p.matches("bracket=["));
+		assertTrue(p.matches("bracket=]"));
+
+		p = new WildcardPattern("\\[ab\\]", format);
+		assertTrue(p.matches("[ab]"));
+
+		p = new WildcardPattern("\\*a", format);
+		assertTrue(p.matches("*a"));
+
 	}
 }
