@@ -680,11 +680,9 @@ public class OperatorTest extends TestCase {
 				"x == \"Hufflepuff\"",
 				"contains(x, {\"Gryffindor\", \"Ravenclaw\", \"Hufflepuff\"}) && !contains(x, {\"Ravenclaw\", \"Gryffindor\"})");
 
-		// TODO: support OR comparisons
-
-		// testEquals(
-		// "contains(x, {\"Gryffindor\", \"Slytherin\", \"Hufflepuff\", \"Ravenclaw\"})",
-		// "contains(x, {\"Gryffindor\", \"Slytherin\"}) || contains(x, {\"Ravenclaw\", \"Hufflepuff\"})");
+		testEquals(
+				"contains(x, {\"Gryffindor\", \"Slytherin\", \"Hufflepuff\", \"Ravenclaw\"})",
+				"contains(x, {\"Gryffindor\", \"Slytherin\"}) || contains(x, {\"Ravenclaw\", \"Hufflepuff\"})");
 	}
 
 	/**
