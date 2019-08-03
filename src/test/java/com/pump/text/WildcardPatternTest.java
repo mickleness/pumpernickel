@@ -244,6 +244,7 @@ public class WildcardPatternTest extends TestCase {
 		format.caseSensitive = true;
 
 		WildcardPattern p = new WildcardPattern("car*", format);
+		p.toString();
 		assertTrue(p.matches("cargo"));
 		assertFalse(p.matches("Cart"));
 		assertFalse(p.matches("CARWASH"));
