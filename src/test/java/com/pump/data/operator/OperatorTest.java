@@ -1112,13 +1112,5 @@ public class OperatorTest extends TestCase {
 		testEquals(false, "x != null", "matches(x, \"*A\")", format);
 		testEquals(false, "x != null", "matches(x, \"A*\")", format);
 		testEquals(false, "x != null", "matches(x, \"?\")", format);
-
-		Like startsWithJ = new Like("x", new WildcardPattern("J*"));
-		Like endsWithB = new Like("x", new WildcardPattern("*AB"));
-
-		Operator and = And.create(startsWithJ, endsWithB);
-		Like mergedLike = new Like("x", new WildcardPattern("J*AB"));
-
-		assertEquals(and, mergedLike);
 	}
 }
