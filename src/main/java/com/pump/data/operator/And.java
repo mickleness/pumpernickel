@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import com.pump.util.CombinationIterator;
@@ -12,34 +13,13 @@ import com.pump.util.CombinationIterator;
 public class And extends AbstractCompoundOperator {
 	private static final long serialVersionUID = 1L;
 
-	public static Operator create(Operator... operands) {
-		return create(Arrays.asList(operands));
-	}
-
-	public static Operator create(List<Operator> operands) {
-		validateOperands(operands, "And");
-
-		List<Operator> newOperands = new ArrayList<>(operands.size());
-		for (Operator op : operands) {
-			if (TRUE.equals(op)) {
-				// skip this operator
-			} else if (FALSE.equals(op)) {
-				return FALSE;
-			} else if (!newOperands.contains(op)) {
-				newOperands.add(op);
-			}
-		}
-
-		if (newOperands.size() == 0) {
-			newOperands.add(TRUE);
-		}
-		if (newOperands.size() == 1)
-			return newOperands.get(0);
-		return new And(newOperands);
+	public And(Operator... operands) {
+		this(Arrays.asList(operands));
 	}
 
 	public And(List<Operator> operands) {
 		super(operands, "And");
+		validateOperands(operands, "And");
 	}
 
 	@Override
@@ -55,13 +35,26 @@ public class And extends AbstractCompoundOperator {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected Operator createCanonicalOperator() {
-		List andTerms = new ArrayList();
+		Collection<Operator> andTerms = new LinkedHashSet<>();
 		List<Operator[]> orGroups = new ArrayList();
 		for (int a = 0; a < getOperandCount(); a++) {
 			Operator op = getOperand(a).getCanonicalOperator();
-			if (op instanceof And) {
+			if (Operator.FALSE.equals(op)) {
+				return Operator.FALSE;
+			} else if (Operator.TRUE.equals(op)) {
+				// skip this term
+			} else if (op instanceof And) {
 				And and = (And) op;
-				andTerms.addAll(and.getOperands());
+				for (int b = 0; b < and.getOperandCount(); b++) {
+					Operator innerOp = and.getOperand(b);
+					if (Operator.FALSE.equals(innerOp)) {
+						return Operator.FALSE;
+					} else if (Operator.TRUE.equals(innerOp)) {
+						// skip this term
+					} else {
+						andTerms.add(innerOp);
+					}
+				}
 			} else if (op instanceof Or) {
 				Or or = (Or) op;
 				Collection z = or.getOperands();
@@ -73,12 +66,19 @@ public class And extends AbstractCompoundOperator {
 			}
 		}
 		if (orGroups.isEmpty()) {
-			Collections.sort(andTerms, toStringComparator);
-			return And.create(andTerms);
+			if (andTerms.isEmpty())
+				return Operator.TRUE;
+			if (andTerms.size() == 1)
+				return (Operator) andTerms.iterator().next();
+
+			Operator[] array = new Operator[andTerms.size()];
+			andTerms.toArray(array);
+			Arrays.sort(array, toStringComparator);
+			return new And(array);
 		}
 
-		for (Object andTerm : andTerms) {
-			orGroups.add(new Operator[] { (Operator) andTerm });
+		for (Operator andTerm : andTerms) {
+			orGroups.add(new Operator[] { andTerm });
 		}
 
 		List newOrTerms = new ArrayList();
@@ -86,10 +86,10 @@ public class And extends AbstractCompoundOperator {
 		while (iter.hasNext()) {
 			List<Operator> newAndTerms = iter.next();
 			Collections.sort(newAndTerms, toStringComparator);
-			newOrTerms.add(And.create(newAndTerms).getCanonicalOperator());
+			newOrTerms.add(new And(newAndTerms).getCanonicalOperator());
 		}
 
-		return Or.create(newOrTerms).getCanonicalOperator();
+		return new Or(newOrTerms).getCanonicalOperator();
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class And extends AbstractCompoundOperator {
 		List<Operator> returnValue = new ArrayList<>(z);
 		while (iter.hasNext()) {
 			List<Operator> w = iter.next();
-			returnValue.add(And.create(w));
+			returnValue.add(new And(w));
 		}
 
 		return returnValue;

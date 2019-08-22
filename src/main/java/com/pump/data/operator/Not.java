@@ -10,20 +10,9 @@ import java.util.Objects;
 public class Not extends Operator {
 	private static final long serialVersionUID = 1L;
 
-	public static Operator create(Operator op) {
-		if (op == TRUE)
-			return FALSE;
-		if (op == FALSE)
-			return TRUE;
-		if (op instanceof Not) {
-			return ((Not) op).getOperand(0);
-		}
-		return new Not(op);
-	}
-
 	Operator operand;
 
-	Not(Operator operand) {
+	public Not(Operator operand) {
 		Objects.requireNonNull(operand);
 		this.operand = operand;
 	}
@@ -41,6 +30,9 @@ public class Not extends Operator {
 
 	@Override
 	protected String toString(boolean negated) {
+		if (operand instanceof Not) {
+			return "!(" + operand.toString(false) + ")";
+		}
 		return operand.toString(!negated);
 	}
 
@@ -59,32 +51,52 @@ public class Not extends Operator {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected Operator createCanonicalOperator() {
-		Operator op = getOperand(0).getCanonicalOperator();
+		Operator op = getOperand(0);
 
-		if (op instanceof AbstractCompoundOperator) {
-			AbstractCompoundOperator compoundOp = (AbstractCompoundOperator) op;
+		if (op instanceof Not) {
+			Not n = (Not) op;
+			return n.getOperand(0).createCanonicalOperator();
+		} else if (op.equals(TRUE, true)) {
+			return FALSE;
+		} else if (op.equals(FALSE, true)) {
+			return TRUE;
+		}
+
+		Operator opC = op.getCanonicalOperator();
+		Operator returnValue;
+
+		if (opC instanceof AbstractCompoundOperator) {
+			AbstractCompoundOperator compoundOp = (AbstractCompoundOperator) opC;
 			List<Operator> negatedTerms = new ArrayList<>(
 					compoundOp.getOperandCount());
 			List operands = (List) compoundOp.getOperands();
 			for (Operator member : (List<Operator>) operands) {
-				negatedTerms.add(Not.create(member).getCanonicalOperator());
+				negatedTerms.add(new Not(member).getCanonicalOperator());
 			}
 
-			if (op instanceof And) {
-				op = Or.create(negatedTerms);
-			} else if (op instanceof Or) {
-				op = And.create(negatedTerms);
+			if (opC instanceof And) {
+				returnValue = new Or(negatedTerms);
+			} else if (opC instanceof Or) {
+				returnValue = new And(negatedTerms);
 			} else {
 				throw new IllegalStateException("Unsupported operator "
-						+ op.toString() + " (" + op.getClass().getName() + ")");
+						+ opC.toString() + " (" + opC.getClass().getName()
+						+ ")");
 			}
 		} else {
-			op = Not.create(op);
+			if (opC == op) {
+				returnValue = this;
+			} else if (opC instanceof Not) {
+				Not n = (Not) opC;
+				returnValue = n.getOperand(0).getCanonicalOperator();
+			} else {
+				returnValue = new Not(opC);
+			}
 		}
 
-		if (op instanceof AbstractCompoundOperator)
-			op = op.getCanonicalOperator();
-		return op;
+		if (returnValue instanceof AbstractCompoundOperator)
+			returnValue = returnValue.getCanonicalOperator();
+		return returnValue;
 	}
 
 	@Override
@@ -95,13 +107,13 @@ public class Not extends Operator {
 			for (int a = 0; a < aco.getOperandCount(); a++) {
 				Collection<Operator> c = aco.getOperand(a).split();
 				for (Operator op : c) {
-					returnValue.add(Not.create(op));
+					returnValue.add(new Not(op));
 				}
 			}
 			if (getOperand(0) instanceof And)
 				return returnValue;
 			if (getOperand(0) instanceof Or)
-				return Collections.singleton(And.create(returnValue));
+				return Collections.singleton(new And(returnValue));
 
 			throw new IllegalStateException("Unsupported operator "
 					+ operand.toString() + " (" + operand.getClass().getName()
@@ -112,7 +124,7 @@ public class Not extends Operator {
 
 		Collection<Operator> returnValue = new ArrayList<Operator>(z.size());
 		for (Operator op : z) {
-			returnValue.add(Not.create(op));
+			returnValue.add(new Not(op));
 		}
 
 		return returnValue;

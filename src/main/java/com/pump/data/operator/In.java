@@ -1,9 +1,10 @@
 package com.pump.data.operator;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 
 public class In extends AbstractValueOperator<Collection<?>> {
@@ -21,7 +22,7 @@ public class In extends AbstractValueOperator<Collection<?>> {
 	}
 
 	private In(String attribute, Collection<?> value) {
-		super(attribute, new HashSet<>(value));
+		super(attribute, new LinkedHashSet<>(value));
 	}
 
 	@Override
@@ -63,7 +64,7 @@ public class In extends AbstractValueOperator<Collection<?>> {
 		for (Object e : values) {
 			operators[ctr++] = new EqualTo(getAttribute(), e);
 		}
-		return Or.create(operators);
+		return new Or(operators);
 	}
 
 	@Override
@@ -73,6 +74,27 @@ public class In extends AbstractValueOperator<Collection<?>> {
 			returnValue.add(new EqualTo(getAttribute(), e));
 		}
 		return returnValue;
+	}
+
+	@Override
+	public boolean equals(Operator operator, boolean strictEquivalency) {
+		if (operator instanceof In && strictEquivalency) {
+			// the order of both collections matters (at least for unit tests)
+			Collection<?> myC = (Collection<?>) getOperand(1);
+			Collection<?> otherC = (Collection<?>) operator.getOperand(1);
+			if (myC.size() != otherC.size())
+				return false;
+			Iterator<?> i1 = myC.iterator();
+			Iterator<?> i2 = otherC.iterator();
+			while (i1.hasNext()) {
+				Object k1 = i1.next();
+				Object k2 = i2.next();
+				if (!Objects.equals(k1, k2))
+					return false;
+			}
+			return true;
+		}
+		return super.equals(operator, strictEquivalency);
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

@@ -4,40 +4,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public class Or extends AbstractCompoundOperator {
 	private static final long serialVersionUID = 1L;
 
-	public static Operator create(Operator... operands) {
-		return create(Arrays.asList(operands));
-	}
-
-	public static Operator create(List<Operator> operands) {
-		validateOperands(operands, "Or");
-
-		List<Operator> newOperands = new ArrayList<>(operands.size());
-		for (Operator op : operands) {
-			if (TRUE.equals(op)) {
-				return TRUE;
-			} else if (FALSE.equals(op)) {
-				// skip this operator
-			} else if (!newOperands.contains(op)) {
-				newOperands.add(op);
-			}
-		}
-
-		if (newOperands.size() == 0) {
-			newOperands.add(FALSE);
-		}
-		if (newOperands.size() == 1)
-			return newOperands.get(0);
-		return new Or(newOperands);
-	}
-
 	public Or(List<Operator> operands) {
 		super(operands, "Or");
+		validateOperands(operands, "Or");
+	}
+
+	public Or(Operator... operands) {
+		this(Arrays.asList(operands));
 	}
 
 	@Override
@@ -53,19 +32,40 @@ public class Or extends AbstractCompoundOperator {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected Operator createCanonicalOperator() {
-		List orTerms = new ArrayList(getOperandCount());
+		Collection<Operator> orTerms = new LinkedHashSet(getOperandCount());
 		for (int a = 0; a < getOperandCount(); a++) {
 			Operator op = getOperand(a).getCanonicalOperator();
-			if (op instanceof Or) {
+			if (Operator.TRUE.equals(op)) {
+				return Operator.TRUE;
+			} else if (Operator.FALSE.equals(op)) {
+				// skip this term
+			} else if (op instanceof Or) {
 				Or or = (Or) op;
-				orTerms.addAll(or.getOperands());
+				for (int b = 0; b < or.getOperandCount(); b++) {
+					Operator innerOp = or.getOperand(b);
+					if (Operator.TRUE.equals(innerOp)) {
+						return Operator.TRUE;
+					} else if (Operator.FALSE.equals(innerOp)) {
+						// skip this term
+					} else {
+						orTerms.add(innerOp);
+					}
+				}
 			} else {
 				orTerms.add(op);
 			}
 		}
 
-		Collections.sort(orTerms, toStringComparator);
-		return Or.create(orTerms);
+		if (orTerms.size() == 0) {
+			orTerms.add(FALSE);
+		}
+		if (orTerms.size() == 1)
+			return orTerms.iterator().next();
+
+		Operator[] array = new Operator[orTerms.size()];
+		orTerms.toArray(array);
+		Arrays.sort(array, toStringComparator);
+		return new Or(array);
 	}
 
 	@Override

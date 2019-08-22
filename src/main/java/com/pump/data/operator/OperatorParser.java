@@ -79,11 +79,11 @@ public class OperatorParser {
 				if (tokens[i].getText().equals("&&")) {
 					tokensPtr.incrementAndGet();
 					Operator op2 = readOneToken(tokens, tokensPtr);
-					op = And.create(op, op2);
+					op = new And(op, op2);
 				} else if (tokens[i].getText().equals("||")) {
 					tokensPtr.incrementAndGet();
 					Operator op2 = readOneToken(tokens, tokensPtr);
-					op = Or.create(op, op2);
+					op = new Or(op, op2);
 				} else {
 					throw new ParserException(tokens[i], new Exception(
 							"Unsupported operator \"" + tokens[i].getText()
@@ -133,7 +133,7 @@ public class OperatorParser {
 		Token t = tokens[tokensPtr.intValue()];
 		if (t.getText().equals("!")) {
 			tokensPtr.incrementAndGet();
-			return Not.create(readOneToken(tokens, tokensPtr));
+			return new Not(readOneToken(tokens, tokensPtr));
 		}
 
 		if (t instanceof BracketCharToken) {
@@ -150,9 +150,9 @@ public class OperatorParser {
 		if (t instanceof WordToken) {
 			WordToken w = (WordToken) t;
 
-			if (w.getText().equals("true")) {
+			if (w.getText().equalsIgnoreCase("true")) {
 				return Operator.TRUE;
-			} else if (w.getText().equals("false")) {
+			} else if (w.getText().equalsIgnoreCase("false")) {
 				return Operator.FALSE;
 			}
 
@@ -197,13 +197,12 @@ public class OperatorParser {
 			if (s.equals("==")) {
 				return new EqualTo(w.getText(), value);
 			} else if (s.equals("!=")) {
-				return Not.create(new EqualTo(w.getText(), value));
+				return new Not(new EqualTo(w.getText(), value));
 			} else if (s.equals(">=")) {
-				return Or.create(new GreaterThan(w.getText(),
-						(Comparable) value), new EqualTo(w.getText(), value));
+				return new Or(new GreaterThan(w.getText(), (Comparable) value),
+						new EqualTo(w.getText(), value));
 			} else if (s.equals("<=")) {
-				return Or.create(
-						new LesserThan(w.getText(), (Comparable) value),
+				return new Or(new LesserThan(w.getText(), (Comparable) value),
 						new EqualTo(w.getText(), value));
 			} else if (s.equals(">")) {
 				return new GreaterThan(w.getText(), (Comparable) value);

@@ -58,12 +58,63 @@ public abstract class Operator implements Serializable {
 		return getCanonicalOperator().canonicalHashCode();
 	}
 
+	/**
+	 * Return true if the argument is Operator that is functionally equivalent
+	 * to this operator.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Operator))
 			return false;
-		Operator canonicalOther = ((Operator) obj).getCanonicalOperator();
-		return getCanonicalOperator().canonicalEquals(canonicalOther);
+		return equals((Operator) obj, false);
+	}
+
+	/**
+	 * Evaluate whether two Operators are equal.
+	 * 
+	 * @param operator
+	 *            the operator to compare this object against.
+	 * @param strictEquivalency
+	 *            if true the the Operator argument must be exactly like this
+	 *            Operator in its order of operations. (Another way to think of
+	 *            this is: the toString() method of each operator should return
+	 *            exactly the same thing.) If false then two operators are
+	 *            considered equal if they are functionally the same.
+	 *            <p>
+	 *            For example "a || b" and "b || a" are functionally equal, but
+	 *            are not equivalent from an order-of-operations point of view.
+	 * 
+	 * @return
+	 */
+	public boolean equals(Operator operator, boolean strictEquivalency) {
+		Objects.requireNonNull(operator);
+		if (strictEquivalency) {
+			if (!operator.getClass().equals(getClass()))
+				return false;
+			int c1 = getOperandCount();
+			int c2 = operator.getOperandCount();
+			if (c1 != c2)
+				return false;
+			for (int a = 0; a < c1; a++) {
+				Object operand1 = getOperand(a);
+				Object operand2 = operator.getOperand(a);
+				if (operand1 instanceof Operator
+						&& operand2 instanceof Operator) {
+					Operator z1 = (Operator) operand1;
+					Operator z2 = (Operator) operand2;
+					if (!z1.equals(z2, true))
+						return false;
+				} else {
+					if (!Objects.equals(operand1, operand2))
+						return false;
+				}
+			}
+			return true;
+		} else {
+			Operator otherCanonical = operator.getCanonicalOperator();
+			Operator thisCanonical = getCanonicalOperator();
+			return otherCanonical.canonicalEquals(thisCanonical);
+		}
 	}
 
 	public List<Object> getOperands() {
@@ -279,7 +330,7 @@ public abstract class Operator implements Serializable {
 					z.addAll(term.andTerms);
 					Collections.sort(z, toStringComparator);
 					if (z.size() > 0) {
-						Operator t = z.size() == 1 ? z.get(0) : And.create(z);
+						Operator t = z.size() == 1 ? z.get(0) : new And(z);
 						newOrTerms.add(t);
 					}
 				}
@@ -290,8 +341,8 @@ public abstract class Operator implements Serializable {
 			if (newOrTerms.size() == 0)
 				return TRUE;
 
-			Operator z = newOrTerms.size() == 1 ? newOrTerms.get(0) : Or
-					.create(newOrTerms);
+			Operator z = newOrTerms.size() == 1 ? newOrTerms.get(0) : new Or(
+					newOrTerms);
 			if (z instanceof Or) {
 				orOp = (Or) z;
 			} else {
@@ -338,8 +389,8 @@ public abstract class Operator implements Serializable {
 					for (int c = 0; c < bOperands.size(); c++) {
 						if (bOperands.get(c) instanceof GreaterThan) {
 							GreaterThan g = (GreaterThan) bOperands.get(c);
-							Operator notEqualTo = Not.create(new EqualTo(g
-									.getAttribute(), g.getValue()));
+							Operator notEqualTo = new Not(new EqualTo(
+									g.getAttribute(), g.getValue()));
 							if (aOperands.contains(notEqualTo))
 								bOperands.add(notEqualTo);
 						}
@@ -347,8 +398,8 @@ public abstract class Operator implements Serializable {
 					for (int c = 0; c < aOperands.size(); c++) {
 						if (aOperands.get(c) instanceof GreaterThan) {
 							GreaterThan g = (GreaterThan) aOperands.get(c);
-							Operator notEqualTo = Not.create(new EqualTo(g
-									.getAttribute(), g.getValue()));
+							Operator notEqualTo = new Not(new EqualTo(
+									g.getAttribute(), g.getValue()));
 							if (bOperands.contains(notEqualTo))
 								aOperands.add(notEqualTo);
 						}
@@ -382,12 +433,12 @@ public abstract class Operator implements Serializable {
 					if (!(commonOperands.isEmpty() || aOperands.isEmpty() || bOperands
 							.isEmpty())) {
 						Operator aLeftover = aOperands.size() == 1 ? (Operator) aOperands
-								.get(0) : And.create(aOperands);
+								.get(0) : new And(aOperands);
 						Operator bLeftover = bOperands.size() == 1 ? (Operator) bOperands
-								.get(0) : And.create(bOperands);
-						if (aLeftover.equals(Not.create(bLeftover))) {
+								.get(0) : new And(bOperands);
+						if (aLeftover.equals(new Not(bLeftover))) {
 							Operator shared = commonOperands.size() == 1 ? (Operator) commonOperands
-									.get(0) : And.create(commonOperands);
+									.get(0) : new And(commonOperands);
 							orTerms.set(a, null);
 							orTerms.set(b, shared);
 							break scanOrTerms;
@@ -400,21 +451,21 @@ public abstract class Operator implements Serializable {
 					// bOperands already have stripped away
 					// commonOperands
 					if (aOperands.size() == 1 && bOperands.size() == 2) {
-						if (bOperands.remove(Not.create((Operator) aOperands
+						if (bOperands.remove(new Not((Operator) aOperands
 								.get(0)))) {
 							bOperands.addAll(commonOperands);
 							orTerms.set(b,
 									bOperands.size() == 1 ? bOperands.get(0)
-											: And.create(bOperands));
+											: new And(bOperands));
 							break scanOrTerms;
 						}
 					} else if (aOperands.size() == 2 && bOperands.size() == 1) {
-						if (aOperands.remove(Not.create((Operator) bOperands
+						if (aOperands.remove(new Not((Operator) bOperands
 								.get(0)))) {
 							aOperands.addAll(commonOperands);
 							orTerms.set(a,
 									aOperands.size() == 1 ? aOperands.get(0)
-											: And.create(aOperands));
+											: new And(aOperands));
 							break scanOrTerms;
 						}
 					}
@@ -433,8 +484,8 @@ public abstract class Operator implements Serializable {
 			return or;
 
 		Collections.sort(orTerms, toStringComparator);
-		return orTerms.size() == 1 ? (Operator) orTerms.get(0) : Or
-				.create(orTerms);
+		return orTerms.size() == 1 ? (Operator) orTerms.get(0)
+				: new Or(orTerms);
 	}
 
 	static class AndProfile {
@@ -566,13 +617,12 @@ public abstract class Operator implements Serializable {
 				if (r.getMax() != null) {
 					if (!r.isIncludeMax()) {
 						// something like "x < max"
-						returnValue.add(Not.create(new GreaterThan(attr, r
+						returnValue.add(new Not(new GreaterThan(attr, r
 								.getMax())));
-						returnValue
-								.add(Not.create(new EqualTo(attr, r.getMax())));
+						returnValue.add(new Not(new EqualTo(attr, r.getMax())));
 					} else {
 						// something like "x <= max"
-						returnValue.add(Not.create(new GreaterThan(attr, r
+						returnValue.add(new Not(new GreaterThan(attr, r
 								.getMax())));
 					}
 				}
@@ -619,8 +669,8 @@ public abstract class Operator implements Serializable {
 
 		Collections.sort(andTerms, toStringComparator);
 
-		return andTerms.size() == 1 ? (Operator) andTerms.get(0) : And
-				.create(andTerms);
+		return andTerms.size() == 1 ? (Operator) andTerms.get(0) : new And(
+				andTerms);
 	}
 
 	/**
@@ -674,8 +724,7 @@ public abstract class Operator implements Serializable {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Operator join(Operator... operators) {
-		Operator op = operators.length == 1 ? operators[0] : Or
-				.create(operators);
+		Operator op = operators.length == 1 ? operators[0] : new Or(operators);
 		op = op.getCanonicalOperator();
 		if (!(op instanceof Or))
 			return op;
@@ -706,7 +755,7 @@ public abstract class Operator implements Serializable {
 				newOperands.removeAll(plainEquals);
 				newOperands.add(In.create(attr, values));
 				op = newOperands.size() == 1 ? (Operator) newOperands.get(0)
-						: Or.create(newOperands);
+						: new Or(newOperands);
 				if (op instanceof Or) {
 					or = (Or) op;
 				} else {
@@ -739,9 +788,9 @@ public abstract class Operator implements Serializable {
 				for (EqualTo et : notPlainEquals) {
 					newOperands.remove(new Not(et));
 				}
-				newOperands.add(Not.create(In.create(attr, values)));
+				newOperands.add(new Not(In.create(attr, values)));
 				op = newOperands.size() == 1 ? (Operator) newOperands.get(0)
-						: Or.create(newOperands);
+						: new Or(newOperands);
 				if (op instanceof Or) {
 					or = (Or) op;
 				} else {
@@ -842,7 +891,7 @@ public abstract class Operator implements Serializable {
 						newAndTerms.addAll(biggestKey);
 						newAndTerms.add(In.create(attr, values));
 
-						Operator newAndOp = And.create(newAndTerms);
+						Operator newAndOp = new And(newAndTerms);
 
 						newOrTerms.addAll((List) or.getOperands());
 						newOrTerms.removeAll(equalTos.values());
@@ -854,9 +903,9 @@ public abstract class Operator implements Serializable {
 								.keySet());
 						List<Operator> newAndTerms = new ArrayList<Operator>();
 						newAndTerms.addAll(biggestKey);
-						newAndTerms.add(Not.create(In.create(attr, values)));
+						newAndTerms.add(new Not(In.create(attr, values)));
 
-						Operator newAndOp = And.create(newAndTerms);
+						Operator newAndOp = new And(newAndTerms);
 
 						newOrTerms.addAll((List) or.getOperands());
 						newOrTerms.removeAll(notEqualTos.values());
@@ -864,7 +913,7 @@ public abstract class Operator implements Serializable {
 					}
 
 					op = newOrTerms.size() == 1 ? (Operator) newOrTerms.get(0)
-							: Or.create(newOrTerms);
+							: new Or(newOrTerms);
 					if (op instanceof Or) {
 						or = (Or) op;
 						continueScanning = true;

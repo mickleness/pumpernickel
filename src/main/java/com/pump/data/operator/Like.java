@@ -65,7 +65,7 @@ public class Like extends AbstractValueOperator<WildcardPattern> {
 
 		if (p.getPlaceholderCount() == 1
 				&& p.getPlaceholders()[0] instanceof WildcardPattern.StarWildcard)
-			return Not.create(new EqualTo(getAttribute(), null));
+			return new Not(new EqualTo(getAttribute(), null));
 
 		return this;
 	}

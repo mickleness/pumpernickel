@@ -68,6 +68,16 @@ class ConstantOperator extends Operator {
 		return Collections.emptySet();
 	}
 
+	@Override
+	public boolean equals(Operator operator, boolean strictEquivalency) {
+		if (strictEquivalency && operator instanceof ConstantOperator) {
+			ConstantOperator other = (ConstantOperator) operator;
+			return value == other.value;
+
+		}
+		return super.equals(operator, strictEquivalency);
+	}
+
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
 		out.writeInt(0);
 		out.writeBoolean(value);

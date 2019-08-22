@@ -39,10 +39,10 @@ public class LesserThan extends AbstractValueOperator<Comparable<?>> {
 		// so instead we'll convert an expression like "a < 50" to
 		// "!(a > 50) && a!=50)"
 		List<Operator> k = new ArrayList<>(2);
-		k.add(Not.create(new GreaterThan(getAttribute(), getValue())));
-		k.add(Not.create(new EqualTo(getAttribute(), getValue())));
+		k.add(new Not(new GreaterThan(getAttribute(), getValue())));
+		k.add(new Not(new EqualTo(getAttribute(), getValue())));
 		Collections.sort(k, toStringComparator);
-		return And.create(k);
+		return new And(k);
 	}
 
 	@Override
