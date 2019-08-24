@@ -3,6 +3,9 @@ package com.pump.data.operator;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 
 public class EqualTo extends AbstractValueOperator<Object> {
@@ -49,8 +52,28 @@ public class EqualTo extends AbstractValueOperator<Object> {
 	}
 
 	@Override
-	protected Operator createCanonicalOperator() {
-		return this;
+	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+		Map<String, Collection<TestAtom>> map = new HashMap<>();
+		Collection<TestAtom> atoms = new HashSet<>(3);
+		Object v = getValue();
+		atoms.add(new TestAtom(TestAtom.Type.EQUAL_TO, v));
+		if (v instanceof Boolean) {
+			Boolean b = (Boolean) v;
+			atoms.add(new TestAtom(TestAtom.Type.EQUAL_TO, !b.booleanValue()));
+		} else if (v != null) {
+			atoms.add(new TestAtom(TestAtom.Type.LESSER_THAN, v));
+			atoms.add(new TestAtom(TestAtom.Type.GREATER_THAN, v));
+		}
+		map.put(getAttribute(), atoms);
+		return map;
+	}
+
+	@Override
+	protected boolean evaluateTestAtom(TestAtom atom) {
+		if (atom.getType() == TestAtom.Type.EQUAL_TO) {
+			return Objects.equals(getValue(), atom.getValue());
+		}
+		return false;
 	}
 
 	@Override

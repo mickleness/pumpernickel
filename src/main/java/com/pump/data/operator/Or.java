@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.Map;
 
 public class Or extends AbstractCompoundOperator {
 	private static final long serialVersionUID = 1L;
 
-	public Or(List<Operator> operands) {
+	public Or(Collection<Operator> operands) {
 		super(operands, "Or");
-		validateOperands(operands, "Or");
 	}
 
 	public Or(Operator... operands) {
@@ -31,13 +30,13 @@ public class Or extends AbstractCompoundOperator {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	protected Operator createCanonicalOperator() {
+	protected Operator createSumOfProducts() {
 		Collection<Operator> orTerms = new LinkedHashSet(getOperandCount());
 		for (int a = 0; a < getOperandCount(); a++) {
-			Operator op = getOperand(a).getCanonicalOperator();
-			if (Operator.TRUE.equals(op)) {
+			Operator op = getOperand(a).getSumOfProducts();
+			if (Operator.TRUE.equals(op, true)) {
 				return Operator.TRUE;
-			} else if (Operator.FALSE.equals(op)) {
+			} else if (Operator.FALSE.equals(op, true)) {
 				// skip this term
 			} else if (op instanceof Or) {
 				Or or = (Or) op;
@@ -75,6 +74,17 @@ public class Or extends AbstractCompoundOperator {
 			returnValue.addAll(getOperand(a).split());
 		}
 		return returnValue;
+	}
+
+	@Override
+	protected boolean evaluateTestAtoms(Map<String, TestAtom> values) {
+		for (int a = 0; a < getOperandCount(); a++) {
+			Operator op = getOperand(a);
+			boolean b = op.evaluateTestAtoms(values);
+			if (b)
+				return true;
+		}
+		return false;
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

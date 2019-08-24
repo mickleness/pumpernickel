@@ -3,6 +3,9 @@ package com.pump.data.operator;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 
 public class GreaterThan extends AbstractValueOperator<Comparable<?>> {
@@ -31,8 +34,31 @@ public class GreaterThan extends AbstractValueOperator<Comparable<?>> {
 	}
 
 	@Override
-	protected Operator createCanonicalOperator() {
-		return this;
+	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+		Map<String, Collection<TestAtom>> map = new HashMap<>();
+		TestAtom greaterThan = new TestAtom(TestAtom.Type.GREATER_THAN,
+				getValue());
+		TestAtom equalTo = new TestAtom(TestAtom.Type.EQUAL_TO, getValue());
+
+		Collection<TestAtom> t = new HashSet<>(2);
+		t.add(greaterThan);
+		t.add(equalTo);
+		map.put(getAttribute(), t);
+		return map;
+	}
+
+	@Override
+	protected boolean evaluateTestAtom(TestAtom atom) {
+		Object atomValue = atom.getValue();
+
+		if (atomValue == null || atom.getType() == TestAtom.Type.LIKE)
+			return false;
+
+		Comparable k = getValue();
+		int z = k.compareTo(atomValue);
+		if (z == 0)
+			return atom.getType() == TestAtom.Type.GREATER_THAN;
+		return z < 0;
 	}
 
 	@Override

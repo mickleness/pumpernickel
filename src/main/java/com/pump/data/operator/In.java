@@ -2,9 +2,11 @@ package com.pump.data.operator;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Objects;
 
 public class In extends AbstractValueOperator<Collection<?>> {
@@ -57,14 +59,23 @@ public class In extends AbstractValueOperator<Collection<?>> {
 	}
 
 	@Override
-	protected Operator createCanonicalOperator() {
-		Collection<?> values = getValue();
-		Operator[] operators = new Operator[values.size()];
-		int ctr = 0;
-		for (Object e : values) {
-			operators[ctr++] = new EqualTo(getAttribute(), e);
+	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+		Collection<TestAtom> c = new HashSet<>(getValue().size());
+		for (Object e : getValue()) {
+			c.add(new TestAtom(TestAtom.Type.EQUAL_TO, e));
 		}
-		return new Or(operators);
+
+		Map<String, Collection<TestAtom>> map = new HashMap<>();
+		map.put(getAttribute(), c);
+		return map;
+	}
+
+	@Override
+	protected boolean evaluateTestAtom(TestAtom atom) {
+		if (atom.getType() != TestAtom.Type.EQUAL_TO)
+			return false;
+		Object atomValue = atom.getValue();
+		return getValue().contains(atomValue);
 	}
 
 	@Override

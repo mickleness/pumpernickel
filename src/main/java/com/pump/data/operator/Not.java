@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Not extends Operator {
@@ -48,21 +49,31 @@ public class Not extends Operator {
 		return getOperand(0).getAttributes();
 	}
 
+	@Override
+	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+		return getOperand(0).createTestAtoms();
+	}
+
+	@Override
+	protected boolean evaluateTestAtoms(Map<String, TestAtom> values) {
+		return !getOperand(0).evaluateTestAtoms(values);
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	protected Operator createCanonicalOperator() {
+	protected Operator createSumOfProducts() {
 		Operator op = getOperand(0);
 
 		if (op instanceof Not) {
 			Not n = (Not) op;
-			return n.getOperand(0).createCanonicalOperator();
+			return n.getOperand(0).getSumOfProducts();
 		} else if (op.equals(TRUE, true)) {
 			return FALSE;
 		} else if (op.equals(FALSE, true)) {
 			return TRUE;
 		}
 
-		Operator opC = op.getCanonicalOperator();
+		Operator opC = op.getSumOfProducts();
 		Operator returnValue;
 
 		if (opC instanceof AbstractCompoundOperator) {
@@ -71,7 +82,7 @@ public class Not extends Operator {
 					compoundOp.getOperandCount());
 			List operands = (List) compoundOp.getOperands();
 			for (Operator member : (List<Operator>) operands) {
-				negatedTerms.add(new Not(member).getCanonicalOperator());
+				negatedTerms.add(new Not(member).getSumOfProducts());
 			}
 
 			if (opC instanceof And) {
@@ -88,31 +99,40 @@ public class Not extends Operator {
 				returnValue = this;
 			} else if (opC instanceof Not) {
 				Not n = (Not) opC;
-				returnValue = n.getOperand(0).getCanonicalOperator();
+				returnValue = n.getOperand(0).getSumOfProducts();
 			} else {
 				returnValue = new Not(opC);
 			}
 		}
 
 		if (returnValue instanceof AbstractCompoundOperator)
-			returnValue = returnValue.getCanonicalOperator();
+			returnValue = returnValue.getSumOfProducts();
 		return returnValue;
 	}
 
 	@Override
 	public Collection<Operator> split() {
-		if (getOperand(0) instanceof AbstractCompoundOperator) {
-			AbstractCompoundOperator aco = (AbstractCompoundOperator) getOperand(0);
+		Operator op = getOperand(0);
+
+		{
+			Collection<Operator> k = op.split();
+			if (k.size() > 1) {
+				op = new Or(k);
+			}
+		}
+
+		if (op instanceof AbstractCompoundOperator) {
+			AbstractCompoundOperator aco = (AbstractCompoundOperator) op;
 			List<Operator> returnValue = new ArrayList<>();
 			for (int a = 0; a < aco.getOperandCount(); a++) {
 				Collection<Operator> c = aco.getOperand(a).split();
-				for (Operator op : c) {
-					returnValue.add(new Not(op));
+				for (Operator z : c) {
+					returnValue.add(new Not(z));
 				}
 			}
-			if (getOperand(0) instanceof And)
+			if (op instanceof And)
 				return returnValue;
-			if (getOperand(0) instanceof Or)
+			if (op instanceof Or)
 				return Collections.singleton(new And(returnValue));
 
 			throw new IllegalStateException("Unsupported operator "
@@ -120,14 +140,7 @@ public class Not extends Operator {
 					+ ")");
 		}
 
-		Collection<Operator> z = getOperand(0).split();
-
-		Collection<Operator> returnValue = new ArrayList<Operator>(z.size());
-		for (Operator op : z) {
-			returnValue.add(new Not(op));
-		}
-
-		return returnValue;
+		return Collections.singleton(this);
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

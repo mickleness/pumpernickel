@@ -3,9 +3,13 @@ package com.pump.data.operator;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 
 import com.pump.text.WildcardPattern;
+import com.pump.text.WildcardPattern.FixedCharacter;
 
 public class Like extends AbstractValueOperator<WildcardPattern> {
 	private static final long serialVersionUID = 1L;
@@ -42,32 +46,53 @@ public class Like extends AbstractValueOperator<WildcardPattern> {
 	}
 
 	@Override
-	protected Operator createCanonicalOperator() {
-		WildcardPattern p = getValue();
+	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+		Collection<TestAtom> c = new HashSet<>();
+		String exactMatch = getExactStringMatch();
+		if (exactMatch == null) {
+			c.add(new TestAtom(TestAtom.Type.LIKE, getValue()));
+		} else {
+			c.add(new TestAtom(TestAtom.Type.EQUAL_TO, exactMatch));
+		}
+		c.add(new TestAtom(TestAtom.Type.EQUAL_TO, null));
 
-		if (p.getFormat().caseSensitive) {
-			StringBuilder fixedString = new StringBuilder();
-			for (WildcardPattern.Placeholder placeholder : p.getPlaceholders()) {
-				if (placeholder instanceof WildcardPattern.FixedCharacter) {
-					if (fixedString != null) {
-						WildcardPattern.FixedCharacter f = (WildcardPattern.FixedCharacter) placeholder;
-						fixedString.append(f.ch);
-					}
-				} else {
-					fixedString = null;
-				}
-			}
+		Map<String, Collection<TestAtom>> map = new HashMap<>(1);
+		map.put(getAttribute(), c);
+		return map;
+	}
 
-			if (fixedString != null && fixedString.length() > 0) {
-				return new EqualTo(getAttribute(), fixedString.toString());
+	/**
+	 * If this Like operator is used to match to exactly one String, then this
+	 * returns that String. Otherwise this returns null.
+	 */
+	private String getExactStringMatch() {
+		if (!getValue().getFormat().caseSensitive)
+			return null;
+
+		StringBuilder sb = new StringBuilder();
+		for (int a = 0; a < getValue().getPlaceholderCount(); a++) {
+			WildcardPattern.Placeholder p = getValue().getPlaceholder(a);
+			if (p instanceof FixedCharacter) {
+				FixedCharacter fc = (FixedCharacter) p;
+				sb.append(fc.ch);
+			} else {
+				return null;
 			}
 		}
+		return sb.toString();
+	}
 
-		if (p.getPlaceholderCount() == 1
-				&& p.getPlaceholders()[0] instanceof WildcardPattern.StarWildcard)
-			return new Not(new EqualTo(getAttribute(), null));
-
-		return this;
+	@Override
+	protected boolean evaluateTestAtom(TestAtom atom) {
+		if (atom.getType() == TestAtom.Type.EQUAL_TO) {
+			if (atom.getValue() instanceof CharSequence) {
+				CharSequence s = (CharSequence) atom.getValue();
+				return getValue().matches(s);
+			}
+		}
+		if (atom.getType() != TestAtom.Type.LIKE)
+			return false;
+		return getValue().equals(atom.getValue());
 	}
 
 	@Override

@@ -3,6 +3,8 @@ package com.pump.data.operator;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 class ConstantOperator extends Operator {
 	private static final long serialVersionUID = 1L;
@@ -36,16 +38,8 @@ class ConstantOperator extends Operator {
 	}
 
 	@Override
-	protected Operator createCanonicalOperator() {
+	protected Operator createSumOfProducts() {
 		return this;
-	}
-
-	@Override
-	protected boolean canonicalEquals(Operator canonicalOther) {
-		if (!(canonicalOther instanceof ConstantOperator))
-			return false;
-		ConstantOperator other = (ConstantOperator) canonicalOther;
-		return value == other.value;
 	}
 
 	@Override
@@ -56,11 +50,6 @@ class ConstantOperator extends Operator {
 	@Override
 	public int hashCode() {
 		return Boolean.valueOf(value).hashCode();
-	}
-
-	@Override
-	public Operator getCanonicalOperator() {
-		return this;
 	}
 
 	@Override
@@ -91,5 +80,15 @@ class ConstantOperator extends Operator {
 		} else {
 			throw new IOException("Unsupported internal version: " + version);
 		}
+	}
+
+	@Override
+	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+		return new HashMap<>();
+	}
+
+	@Override
+	protected boolean evaluateTestAtoms(Map<String, TestAtom> values) {
+		return value;
 	}
 }

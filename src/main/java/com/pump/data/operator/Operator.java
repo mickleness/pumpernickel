@@ -18,6 +18,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.pump.math.Range;
+import com.pump.util.CombinationIterator;
 
 /**
  * All Operators are immutable.
@@ -37,8 +38,6 @@ public abstract class Operator implements Serializable {
 	public static final Operator TRUE = new ConstantOperator(true);
 	public static final Operator FALSE = new ConstantOperator(false);
 
-	private transient Operator canonicalOperator;
-
 	public abstract int getOperandCount();
 
 	public abstract Object getOperand(int index);
@@ -55,7 +54,7 @@ public abstract class Operator implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return getCanonicalOperator().canonicalHashCode();
+		return getTestAtoms().hashCode();
 	}
 
 	/**
@@ -111,10 +110,130 @@ public abstract class Operator implements Serializable {
 			}
 			return true;
 		} else {
-			Operator otherCanonical = operator.getCanonicalOperator();
-			Operator thisCanonical = getCanonicalOperator();
-			return otherCanonical.canonicalEquals(thisCanonical);
+			Map<String, Collection<TestAtom>> testAtoms = new HashMap<>();
+			for (Entry<String, Collection<TestAtom>> entry : operator
+					.getTestAtoms().entrySet()) {
+				Collection<TestAtom> c = new HashSet<>();
+				testAtoms.put(entry.getKey(), c);
+				c.addAll(entry.getValue());
+			}
+			for (Entry<String, Collection<TestAtom>> entry : getTestAtoms()
+					.entrySet()) {
+				Collection<TestAtom> c = testAtoms.get(entry.getKey());
+				if (c == null) {
+					c = new HashSet<>();
+					testAtoms.put(entry.getKey(), c);
+				}
+				c.addAll(entry.getValue());
+			}
+
+			List<String> keyList = new ArrayList<>(testAtoms.size());
+			List<TestAtom[]> testAtomList = new ArrayList<>(testAtoms.size());
+			for (Entry<String, Collection<TestAtom>> entry : testAtoms
+					.entrySet()) {
+				keyList.add(entry.getKey());
+				testAtomList.add(entry.getValue().toArray(
+						new TestAtom[entry.getValue().size()]));
+			}
+
+			Iterator<List<TestAtom>> iter = new CombinationIterator<>(
+					testAtomList);
+			Map<String, TestAtom> values = new HashMap<>();
+			while (iter.hasNext()) {
+				List<TestAtom> l = iter.next();
+				values.clear();
+				for (int a = 0; a < keyList.size(); a++) {
+					values.put(keyList.get(a), l.get(a));
+				}
+				boolean myValue = evaluateTestAtoms(values);
+				boolean otherValue = operator.evaluateTestAtoms(values);
+				if (myValue != otherValue)
+					return false;
+			}
+			return true;
 		}
+	}
+
+	private transient Map<String, Collection<TestAtom>> testAtoms;
+
+	protected Map<String, Collection<TestAtom>> getTestAtoms() {
+		if (testAtoms == null) {
+			testAtoms = createTestAtoms();
+		}
+		return testAtoms;
+	}
+
+	private transient Operator sumOfProducts = null;
+
+	public Operator getSumOfProducts() {
+		if (sumOfProducts == null) {
+			sumOfProducts = createSumOfProducts();
+		}
+		return sumOfProducts;
+	}
+
+	protected abstract Operator createSumOfProducts();
+
+	protected abstract Map<String, Collection<TestAtom>> createTestAtoms();
+
+	protected abstract boolean evaluateTestAtoms(Map<String, TestAtom> values);
+
+	protected static class TestAtom {
+		enum Type {
+			EQUAL_TO("="), LESSER_THAN("<"), GREATER_THAN(">"), LIKE("~");
+
+			String shorthand;
+
+			Type(String shorthand) {
+				this.shorthand = shorthand;
+			}
+
+			@Override
+			public String toString() {
+				return shorthand;
+			}
+		};
+
+		Object type;
+		Object value;
+
+		public TestAtom(Object type, Object value) {
+			Objects.requireNonNull(type);
+			this.type = type;
+			this.value = value;
+		}
+
+		@Override
+		public int hashCode() {
+			int i = type.hashCode();
+			if (value != null)
+				i += value.hashCode();
+			return i;
+
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof TestAtom))
+				return false;
+			TestAtom other = (TestAtom) obj;
+			return Objects.equals(type, other.type)
+					&& Objects.equals(value, other.value);
+		}
+
+		@Override
+		public String toString() {
+			return type.toString() + " " + value;
+		}
+
+		public Object getType() {
+			return type;
+		}
+
+		public Object getValue() {
+			return value;
+		}
+
 	}
 
 	public List<Object> getOperands() {
@@ -123,56 +242,6 @@ public abstract class Operator implements Serializable {
 			returnValue.add(getOperand(a));
 		}
 		return Collections.unmodifiableList(returnValue);
-	}
-
-	/**
-	 * Return an Operator that is functionally equivalent to this Operator that
-	 * is structured using OR, AND, and NOT nodes in that order (a specific type
-	 * of "sum of products"). All ValueOperators are sorted alphabetically.
-	 * <p>
-	 * The canonical operator is used to compare equivalence or hash codes.
-	 */
-	public synchronized Operator getCanonicalOperator() {
-		if (canonicalOperator == null) {
-			Operator op = createCanonicalOperator();
-			op = standardizeCanonicalOperator(op);
-			canonicalOperator = op;
-		}
-		return canonicalOperator;
-	}
-
-	/**
-	 * This standardizes the operator and returns an equivalent operator (or the
-	 * original argument).
-	 * <p>
-	 * To evaluate equivalency and hashcodes: it's important that two operators
-	 * can recognize each other as equal. For example "x < 10" and "!(x >= 10)"
-	 * should convert to a standard form.
-	 * <p>
-	 * Sometimes what this method does may be considered "simplifying" (it may
-	 * remove redundancies, consolidate certain terms, etc.), but sometimes it
-	 * may make an operator more verbose/complex.
-	 * 
-	 * @param op
-	 *            the incoming canonical sum of products expression. If this is
-	 *            a tree structure of operands, the nodes should be in this
-	 *            order: OR, AND, NOT, AbstractValueOperators.
-	 * @return an equivalent operator, or the original argument if no change was
-	 *         necessary.
-	 */
-	protected static Operator standardizeCanonicalOperator(Operator op) {
-		boolean runAgain;
-		do {
-			Operator original = op;
-			if (op instanceof Or) {
-				op = standardizeCanonicalOr((Or) op);
-			} else if (op instanceof And) {
-				op = standardizeCanonicalAnd((And) op);
-			}
-			runAgain = original != op;
-		} while (runAgain);
-
-		return op;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -213,7 +282,7 @@ public abstract class Operator implements Serializable {
 			ClassNotFoundException {
 		int version = in.readInt();
 		if (version == 0) {
-
+			// subclasses write data; we don't write data here
 		} else {
 			throw new IOException("Unsupported internal version: " + version);
 		}
@@ -639,85 +708,6 @@ public abstract class Operator implements Serializable {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected static Operator standardizeCanonicalAnd(final And and) {
-		List andTerms = new ArrayList(and.getOperands());
-
-		Iterator andTermsIter = andTerms.iterator();
-		while (andTermsIter.hasNext()) {
-			Operator andOp = (Operator) andTermsIter.next();
-
-			// if we have (A * !A), condense to FALSE
-			if (andOp instanceof Not) {
-				Not n = (Not) andOp;
-				Operator inner = n.getOperand(0);
-				if (andTerms.contains(inner))
-					return FALSE;
-			}
-		}
-
-		AndProfile profile = new AndProfile(and);
-		if (profile.negated)
-			return FALSE;
-		andTerms.removeAll(profile.andElementsProfiled);
-
-		andTerms.addAll(profile.createAndOperators());
-
-		if (and.getOperands().size() == andTerms.size()
-				&& and.getOperands().containsAll(andTerms))
-			return and;
-
-		Collections.sort(andTerms, toStringComparator);
-
-		return andTerms.size() == 1 ? (Operator) andTerms.get(0) : new And(
-				andTerms);
-	}
-
-	/**
-	 * This method should only be called on a canonical Operator.
-	 * 
-	 * @return
-	 */
-	protected int canonicalHashCode() {
-		int z = 0;
-		for (int a = 0; a < getOperandCount(); a++) {
-			z += Objects.hashCode(getOperand(a));
-		}
-		return z;
-	}
-
-	/**
-	 * This method should only be called on a canonical Operator
-	 * 
-	 * @param canonicalOther
-	 *            the other Operator to compare this to.
-	 * @return
-	 */
-	protected boolean canonicalEquals(Operator canonicalOther) {
-		if (!canonicalOther.getClass().equals(getClass()))
-			return false;
-		if (getOperandCount() != canonicalOther.getOperandCount())
-			return false;
-
-		for (int a = 0; a < getOperandCount(); a++) {
-			Object operand1 = getOperand(a);
-			Object operand2 = canonicalOther.getOperand(a);
-			if (!Objects.equals(operand1, operand2))
-				return false;
-		}
-		return true;
-
-	}
-
-	/**
-	 * Create an Operator that is functionally equivalent to this Operator that
-	 * is structured using OR, AND, and NOT nodes in that order (a specific type
-	 * of "sum of products"). All ValueOperators are sorted alphabetically.
-	 * <p>
-	 * This method is used to compare equivalence or hash codes.
-	 */
-	protected abstract Operator createCanonicalOperator();
-
 	public abstract Collection<Operator> split();
 
 	public abstract Collection<String> getAttributes();
@@ -725,7 +715,7 @@ public abstract class Operator implements Serializable {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Operator join(Operator... operators) {
 		Operator op = operators.length == 1 ? operators[0] : new Or(operators);
-		op = op.getCanonicalOperator();
+		op = op.getSumOfProducts();
 		if (!(op instanceof Or))
 			return op;
 		Or or = (Or) op;
@@ -801,8 +791,8 @@ public abstract class Operator implements Serializable {
 
 		// step 3: reach inside ANDed statements and search for equal-tos and
 		// not-equal-tos to similarly rewrite as IN statements. This is much
-		// more complex and involves trying to find common factors for clusters
-		// of operands.
+		// more complex and involves trying to find common factors for
+		// clusters of operands.
 
 		boolean continueScanning;
 		do {

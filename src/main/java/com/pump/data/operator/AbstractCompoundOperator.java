@@ -1,11 +1,15 @@
 package com.pump.data.operator;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 /**
@@ -15,7 +19,7 @@ import java.util.Objects;
 public abstract class AbstractCompoundOperator extends Operator {
 	private static final long serialVersionUID = 1L;
 
-	protected static void validateOperands(List<Operator> operands,
+	protected static void validateOperands(Collection<Operator> operands,
 			String operationName) {
 		Objects.requireNonNull(operands);
 		Iterator<Operator> iter = operands.iterator();
@@ -40,9 +44,11 @@ public abstract class AbstractCompoundOperator extends Operator {
 	 * 
 	 * @param operands
 	 */
-	protected AbstractCompoundOperator(List<Operator> operands, String name) {
+	protected AbstractCompoundOperator(Collection<Operator> operands,
+			String name) {
 		validateOperands(operands, name);
-		this.operands = Collections.unmodifiableList(operands);
+		this.operands = Collections.unmodifiableList(new ArrayList<Operator>(
+				operands));
 	}
 
 	@Override
@@ -115,6 +121,24 @@ public abstract class AbstractCompoundOperator extends Operator {
 			returnValue.addAll(op.getAttributes());
 		}
 		return returnValue;
+	}
+
+	@Override
+	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+		Map<String, Collection<TestAtom>> map = new HashMap<>();
+		for (int a = 0; a < getOperandCount(); a++) {
+			Operator op = getOperand(a);
+			for (Entry<String, Collection<TestAtom>> entry : op.getTestAtoms()
+					.entrySet()) {
+				Collection<TestAtom> c = map.get(entry.getKey());
+				if (c == null) {
+					c = new HashSet<>();
+					map.put(entry.getKey(), c);
+				}
+				c.addAll(entry.getValue());
+			}
+		}
+		return map;
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

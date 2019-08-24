@@ -3,6 +3,7 @@ package com.pump.data.operator;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 import com.pump.io.parser.java.JavaEncoding;
@@ -29,6 +30,11 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 		Objects.requireNonNull(attributeName);
 		this.attributeName = attributeName;
 		this.fixedValue = fixedValue;
+	}
+
+	@Override
+	protected Operator createSumOfProducts() {
+		return this;
 	}
 
 	@Override
@@ -103,4 +109,16 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 			throw new IOException("Unsupported internal version: " + version);
 		}
 	}
+
+	@Override
+	protected final boolean evaluateTestAtoms(Map<String, TestAtom> values) {
+		TestAtom atom = values.get(getAttribute());
+		if (atom == null)
+			throw new IllegalArgumentException("Missing TestAtom for \""
+					+ getAttribute() + "\"");
+		return evaluateTestAtom(atom);
+	}
+
+	protected abstract boolean evaluateTestAtom(TestAtom atom);
+
 }

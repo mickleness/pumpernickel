@@ -495,7 +495,8 @@ public class OperatorTest extends TestCase {
 				assertEquals(op1, op2);
 				assertEquals(op2, op1);
 			} else {
-				assertFalse(op1.equals(op2));
+				assertFalse("\"" + op1.toString() + "\" should not equal \""
+						+ op2.toString() + "\"", op1.equals(op2));
 			}
 
 			// test strict equivalency
@@ -522,15 +523,15 @@ public class OperatorTest extends TestCase {
 
 		{
 			Operator op = new OperatorParser().parse(str);
-			Operator not = new Not(op).getCanonicalOperator();
-			Operator notNot = new Not(not).getCanonicalOperator();
+			Operator not = new Not(op);
+			Operator notNot = new Not(not);
 			assertEquals(op, notNot);
 		}
 
-		// TODO this currently fails for one expression:
-		// Operator op5 = new OperatorParser().parse(str + " || !("
-		// + str + ")");
-		// assertEquals(Operator.TRUE, op5);
+		Operator op5 = new OperatorParser().parse(str + " || !(" + str + ")");
+		if (!Operator.TRUE.equals(op5))
+			System.currentTimeMillis();
+		assertEquals(Operator.TRUE, op5);
 	}
 
 	@Test
@@ -727,9 +728,10 @@ public class OperatorTest extends TestCase {
 
 		Operator op = new Not(houseIn);
 		Collection<Operator> n1 = op.split();
-		assertEquals(2, n1.size());
-		assertTrue(n1.contains(new Not(new EqualTo("house", HOUSE_RAVENCLAW))));
-		assertTrue(n1.contains(new Not(new EqualTo("house", HOUSE_HUFFLEPUFF))));
+		assertEquals(1, n1.size());
+		assertTrue(n1.contains(new And(new Not(new EqualTo("house",
+				HOUSE_RAVENCLAW)), new Not(new EqualTo("house",
+				HOUSE_HUFFLEPUFF)))));
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
@@ -959,9 +961,9 @@ public class OperatorTest extends TestCase {
 
 		Operator or = new Or(c, d);
 		Collection<Operator> n1 = or.split();
-		assertEquals(4, n1.size());
-		assertTrue(n1.contains(new And(above1980, notSlytherinEqual)));
-		assertTrue(n1.contains(new And(above1980, notRavenclawEqual)));
+		assertEquals(3, n1.size());
+		assertTrue(n1.contains(new And(above1980, notSlytherinEqual,
+				notRavenclawEqual)));
 		assertTrue(n1.contains(new And(lastNameWeasley, hufflepuffEqual)));
 		assertTrue(n1.contains(new And(lastNameWeasley, gryffindorEqual)));
 
@@ -1107,9 +1109,9 @@ public class OperatorTest extends TestCase {
 		format.caseSensitive = false;
 		testEquals(false, "matches(x, \"HELLO\")", "x == \"HELLO\"", format);
 
-		testEquals("x != null", "matches(x, \"*\")");
-		testEquals(false, "x != null", "matches(x, \"*A\")", format);
-		testEquals(false, "x != null", "matches(x, \"A*\")", format);
-		testEquals(false, "x != null", "matches(x, \"?\")", format);
+		testEquals(true, "x != null", "matches(x, \"*\")", format);
+		testEquals(true, "x != null", "matches(x, \"*A\")", format);
+		testEquals(true, "x != null", "matches(x, \"A*\")", format);
+		testEquals(true, "x != null", "matches(x, \"?\")", format);
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 import com.pump.util.CombinationIterator;
 
@@ -19,7 +20,6 @@ public class And extends AbstractCompoundOperator {
 
 	public And(List<Operator> operands) {
 		super(operands, "And");
-		validateOperands(operands, "And");
 	}
 
 	@Override
@@ -34,22 +34,22 @@ public class And extends AbstractCompoundOperator {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	protected Operator createCanonicalOperator() {
+	protected Operator createSumOfProducts() {
 		Collection<Operator> andTerms = new LinkedHashSet<>();
 		List<Operator[]> orGroups = new ArrayList();
 		for (int a = 0; a < getOperandCount(); a++) {
-			Operator op = getOperand(a).getCanonicalOperator();
-			if (Operator.FALSE.equals(op)) {
+			Operator op = getOperand(a).createSumOfProducts();
+			if (Operator.FALSE.equals(op, true)) {
 				return Operator.FALSE;
-			} else if (Operator.TRUE.equals(op)) {
+			} else if (Operator.TRUE.equals(op, true)) {
 				// skip this term
 			} else if (op instanceof And) {
 				And and = (And) op;
 				for (int b = 0; b < and.getOperandCount(); b++) {
 					Operator innerOp = and.getOperand(b);
-					if (Operator.FALSE.equals(innerOp)) {
+					if (Operator.FALSE.equals(innerOp, true)) {
 						return Operator.FALSE;
-					} else if (Operator.TRUE.equals(innerOp)) {
+					} else if (Operator.TRUE.equals(innerOp, true)) {
 						// skip this term
 					} else {
 						andTerms.add(innerOp);
@@ -86,10 +86,10 @@ public class And extends AbstractCompoundOperator {
 		while (iter.hasNext()) {
 			List<Operator> newAndTerms = iter.next();
 			Collections.sort(newAndTerms, toStringComparator);
-			newOrTerms.add(new And(newAndTerms).getCanonicalOperator());
+			newOrTerms.add(new And(newAndTerms).getSumOfProducts());
 		}
 
-		return new Or(newOrTerms).getCanonicalOperator();
+		return new Or(newOrTerms).getSumOfProducts();
 	}
 
 	@Override
@@ -127,5 +127,16 @@ public class And extends AbstractCompoundOperator {
 		} else {
 			throw new IOException("Unsupported internal version: " + version);
 		}
+	}
+
+	@Override
+	protected boolean evaluateTestAtoms(Map<String, TestAtom> values) {
+		for (int a = 0; a < getOperandCount(); a++) {
+			Operator op = getOperand(a);
+			boolean b = op.evaluateTestAtoms(values);
+			if (!b)
+				return false;
+		}
+		return true;
 	}
 }
