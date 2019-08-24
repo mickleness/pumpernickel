@@ -38,13 +38,8 @@ class ConstantOperator extends Operator {
 	}
 
 	@Override
-	protected Operator createSumOfProducts() {
+	protected Operator createCanonicalOperator() {
 		return this;
-	}
-
-	@Override
-	public Collection<Operator> split() {
-		return Collections.singleton(this);
 	}
 
 	@Override

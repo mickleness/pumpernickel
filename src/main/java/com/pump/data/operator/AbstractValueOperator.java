@@ -33,7 +33,7 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 	}
 
 	@Override
-	protected Operator createSumOfProducts() {
+	protected Operator createCanonicalOperator() {
 		return this;
 	}
 

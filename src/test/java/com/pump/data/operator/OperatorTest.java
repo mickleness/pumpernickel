@@ -516,22 +516,35 @@ public class OperatorTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void testOperatorString(String str) throws Exception {
+		Operator op = new OperatorParser().parse(str);
 		{
-			Operator op = new OperatorParser().parse(str + "&& !(" + str + ")");
-			assertEquals(Operator.FALSE, op);
+			Operator canonicalOp = op.getCanonicalOperator();
+			assertEquals(op, canonicalOp);
 		}
 
 		{
-			Operator op = new OperatorParser().parse(str);
-			Operator not = new Not(op);
-			Operator notNot = new Not(not);
+			Operator op2 = new And(op, new Not(op));
+			assertEquals(Operator.FALSE, op2);
+		}
+
+		{
+			Operator op2 = new Or(op, new Not(op));
+			assertEquals(Operator.TRUE, op2);
+		}
+
+		{
+			Operator not = new Not(op).getCanonicalOperator();
+			Operator notNot = new Not(not).getCanonicalOperator();
 			assertEquals(op, notNot);
 		}
 
-		Operator op5 = new OperatorParser().parse(str + " || !(" + str + ")");
-		if (!Operator.TRUE.equals(op5))
-			System.currentTimeMillis();
-		assertEquals(Operator.TRUE, op5);
+		{
+			Collection<Operator> split = op.split();
+			Operator join = Operator.join(split.toArray(new Operator[split
+					.size()]));
+			assertEquals(op, join);
+		}
+
 	}
 
 	@Test

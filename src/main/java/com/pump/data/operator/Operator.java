@@ -163,16 +163,52 @@ public abstract class Operator implements Serializable {
 		return testAtoms;
 	}
 
-	private transient Operator sumOfProducts = null;
+	private transient Operator canonicalOperator = null;
 
-	public Operator getSumOfProducts() {
-		if (sumOfProducts == null) {
-			sumOfProducts = createSumOfProducts();
+	public Operator getCanonicalOperator() {
+		if (canonicalOperator == null) {
+			Operator op = createCanonicalOperator();
+			op = standardizeCanonicalOperator(op);
+			canonicalOperator = op;
 		}
-		return sumOfProducts;
+		return canonicalOperator;
 	}
 
-	protected abstract Operator createSumOfProducts();
+	/**
+	 * This standardizes the operator and returns an equivalent operator (or the
+	 * original argument).
+	 * <p>
+	 * To evaluate equivalency and hashcodes: it's important that two operators
+	 * can recognize each other as equal. For example "x < 10" and "!(x >= 10)"
+	 * should convert to a standard form.
+	 * <p>
+	 * Sometimes what this method does may be considered "simplifying" (it may
+	 * remove redundancies, consolidate certain terms, etc.), but sometimes it
+	 * may make an operator more verbose/complex.
+	 * 
+	 * @param op
+	 *            the incoming canonical sum of products expression. If this is
+	 *            a tree structure of operands, the nodes should be in this
+	 *            order: OR, AND, NOT, AbstractValueOperators.
+	 * @return an equivalent operator, or the original argument if no change was
+	 *         necessary.
+	 */
+	protected static Operator standardizeCanonicalOperator(Operator op) {
+		boolean runAgain;
+		do {
+			Operator original = op;
+			if (op instanceof Or) {
+				op = standardizeCanonicalOr((Or) op);
+			} else if (op instanceof And) {
+				op = standardizeCanonicalAnd((And) op);
+			}
+			runAgain = original != op;
+		} while (runAgain);
+
+		return op;
+	}
+
+	protected abstract Operator createCanonicalOperator();
 
 	protected abstract Map<String, Collection<TestAtom>> createTestAtoms();
 
@@ -557,6 +593,40 @@ public abstract class Operator implements Serializable {
 				: new Or(orTerms);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected static Operator standardizeCanonicalAnd(final And and) {
+		List andTerms = new ArrayList(and.getOperands());
+
+		Iterator andTermsIter = andTerms.iterator();
+		while (andTermsIter.hasNext()) {
+			Operator andOp = (Operator) andTermsIter.next();
+
+			// if we have (A * !A), condense to FALSE
+			if (andOp instanceof Not) {
+				Not n = (Not) andOp;
+				Operator inner = n.getOperand(0);
+				if (andTerms.contains(inner))
+					return FALSE;
+			}
+		}
+
+		AndProfile profile = new AndProfile(and);
+		if (profile.negated)
+			return FALSE;
+		andTerms.removeAll(profile.andElementsProfiled);
+
+		andTerms.addAll(profile.createAndOperators());
+
+		if (and.getOperands().size() == andTerms.size()
+				&& and.getOperands().containsAll(andTerms))
+			return and;
+
+		Collections.sort(andTerms, toStringComparator);
+
+		return andTerms.size() == 1 ? (Operator) andTerms.get(0) : new And(
+				andTerms);
+	}
+
 	static class AndProfile {
 		@SuppressWarnings("rawtypes")
 		Map<String, Range> variableRanges = new HashMap<>();
@@ -708,14 +778,21 @@ public abstract class Operator implements Serializable {
 		}
 	}
 
-	public abstract Collection<Operator> split();
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public final Collection<Operator> split() {
+		Operator c = getCanonicalOperator();
+		if (c instanceof Or) {
+			return new ArrayList<Operator>((List) c.getOperands());
+		}
+		return Collections.singleton(c);
+	}
 
 	public abstract Collection<String> getAttributes();
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Operator join(Operator... operators) {
 		Operator op = operators.length == 1 ? operators[0] : new Or(operators);
-		op = op.getSumOfProducts();
+		op = op.getCanonicalOperator();
 		if (!(op instanceof Or))
 			return op;
 		Or or = (Or) op;

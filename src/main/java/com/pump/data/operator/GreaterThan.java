@@ -2,7 +2,6 @@ package com.pump.data.operator;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -59,12 +58,6 @@ public class GreaterThan extends AbstractValueOperator<Comparable<?>> {
 		if (z == 0)
 			return atom.getType() == TestAtom.Type.GREATER_THAN;
 		return z < 0;
-	}
-
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Collection<Operator> split() {
-		return (Collection) Collections.singleton(this);
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

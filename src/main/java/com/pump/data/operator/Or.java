@@ -1,7 +1,6 @@
 package com.pump.data.operator;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -30,10 +29,10 @@ public class Or extends AbstractCompoundOperator {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	protected Operator createSumOfProducts() {
+	protected Operator createCanonicalOperator() {
 		Collection<Operator> orTerms = new LinkedHashSet(getOperandCount());
 		for (int a = 0; a < getOperandCount(); a++) {
-			Operator op = getOperand(a).getSumOfProducts();
+			Operator op = getOperand(a).getCanonicalOperator();
 			if (Operator.TRUE.equals(op, true)) {
 				return Operator.TRUE;
 			} else if (Operator.FALSE.equals(op, true)) {
@@ -42,9 +41,9 @@ public class Or extends AbstractCompoundOperator {
 				Or or = (Or) op;
 				for (int b = 0; b < or.getOperandCount(); b++) {
 					Operator innerOp = or.getOperand(b);
-					if (Operator.TRUE.equals(innerOp)) {
+					if (Operator.TRUE.equals(innerOp, true)) {
 						return Operator.TRUE;
-					} else if (Operator.FALSE.equals(innerOp)) {
+					} else if (Operator.FALSE.equals(innerOp, true)) {
 						// skip this term
 					} else {
 						orTerms.add(innerOp);
@@ -65,15 +64,6 @@ public class Or extends AbstractCompoundOperator {
 		orTerms.toArray(array);
 		Arrays.sort(array, toStringComparator);
 		return new Or(array);
-	}
-
-	@Override
-	public Collection<Operator> split() {
-		Collection<Operator> returnValue = new ArrayList<>(getOperandCount());
-		for (int a = 0; a < getOperandCount(); a++) {
-			returnValue.addAll(getOperand(a).split());
-		}
-		return returnValue;
 	}
 
 	@Override

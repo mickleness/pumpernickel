@@ -2,7 +2,6 @@ package com.pump.data.operator;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -74,12 +73,6 @@ public class EqualTo extends AbstractValueOperator<Object> {
 			return Objects.equals(getValue(), atom.getValue());
 		}
 		return false;
-	}
-
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Collection<Operator> split() {
-		return (Collection) Collections.singleton(this);
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

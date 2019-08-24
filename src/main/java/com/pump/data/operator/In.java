@@ -35,6 +35,21 @@ public class In extends AbstractValueOperator<Collection<?>> {
 	}
 
 	@Override
+	protected Operator createCanonicalOperator() {
+		Collection<?> values = getValue();
+		Operator[] operators = new Operator[values.size()];
+		int ctr = 0;
+		for (Object e : values) {
+			operators[ctr++] = new EqualTo(getAttribute(), e);
+		}
+		if (operators.length == 1)
+			return operators[0];
+		if (operators.length == 0)
+			return Operator.FALSE;
+		return new Or(operators);
+	}
+
+	@Override
 	protected String toString(boolean negated) {
 		StringBuilder sb = new StringBuilder();
 		if (negated)
@@ -76,15 +91,6 @@ public class In extends AbstractValueOperator<Collection<?>> {
 			return false;
 		Object atomValue = atom.getValue();
 		return getValue().contains(atomValue);
-	}
-
-	@Override
-	public Collection<Operator> split() {
-		Collection<Operator> returnValue = new HashSet<>();
-		for (Object e : getValue()) {
-			returnValue.add(new EqualTo(getAttribute(), e));
-		}
-		return returnValue;
 	}
 
 	@Override

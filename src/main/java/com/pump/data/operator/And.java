@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class And extends AbstractCompoundOperator {
 		this(Arrays.asList(operands));
 	}
 
-	public And(List<Operator> operands) {
+	public And(Collection<Operator> operands) {
 		super(operands, "And");
 	}
 
@@ -34,11 +35,11 @@ public class And extends AbstractCompoundOperator {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	protected Operator createSumOfProducts() {
+	protected Operator createCanonicalOperator() {
 		Collection<Operator> andTerms = new LinkedHashSet<>();
 		List<Operator[]> orGroups = new ArrayList();
 		for (int a = 0; a < getOperandCount(); a++) {
-			Operator op = getOperand(a).createSumOfProducts();
+			Operator op = getOperand(a).getCanonicalOperator();
 			if (Operator.FALSE.equals(op, true)) {
 				return Operator.FALSE;
 			} else if (Operator.TRUE.equals(op, true)) {
@@ -81,38 +82,18 @@ public class And extends AbstractCompoundOperator {
 			orGroups.add(new Operator[] { andTerm });
 		}
 
-		List newOrTerms = new ArrayList();
+		Collection<Operator> newOrTerms = new HashSet<>();
 		CombinationIterator<Operator> iter = new CombinationIterator(orGroups);
 		while (iter.hasNext()) {
 			List<Operator> newAndTerms = iter.next();
 			Collections.sort(newAndTerms, toStringComparator);
-			newOrTerms.add(new And(newAndTerms).getSumOfProducts());
+			newOrTerms.add(new And(newAndTerms).getCanonicalOperator());
 		}
 
-		return new Or(newOrTerms).getSumOfProducts();
-	}
+		if (newOrTerms.size() == 1)
+			return newOrTerms.iterator().next().getCanonicalOperator();
 
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Collection<Operator> split() {
-		List<Operator[]> operandVariations = new ArrayList<>(getOperandCount());
-		int z = 1;
-		for (int a = 0; a < getOperandCount(); a++) {
-			Collection<Operator> e = getOperand(a).split();
-			Operator[] e2 = e.toArray(new Operator[e.size()]);
-			operandVariations.add(e2);
-			z *= e2.length;
-		}
-
-		CombinationIterator<Operator> iter = new CombinationIterator(
-				operandVariations);
-		List<Operator> returnValue = new ArrayList<>(z);
-		while (iter.hasNext()) {
-			List<Operator> w = iter.next();
-			returnValue.add(new And(w));
-		}
-
-		return returnValue;
+		return new Or(newOrTerms).getCanonicalOperator();
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
