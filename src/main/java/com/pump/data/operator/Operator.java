@@ -291,6 +291,8 @@ public abstract class Operator implements Serializable {
 			}
 		} else if (op instanceof Not) {
 			Not not = (Not) op;
+			if (not.getOperand(0) instanceof ConstantOperator)
+				System.currentTimeMillis();
 			AbstractValueOperator v = (AbstractValueOperator) not.getOperand(0);
 			if (v.getAttribute().equals(attr)) {
 				attrTerms.add(not);
