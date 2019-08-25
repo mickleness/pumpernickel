@@ -121,4 +121,8 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 
 	protected abstract boolean evaluateTestAtom(TestAtom atom);
 
+	@Override
+	protected int getCanonicalOrder() {
+		return 3;
+	}
 }

@@ -170,10 +170,42 @@ public abstract class Operator implements Serializable {
 
 	private transient Operator canonicalOperator = null;
 
+	private transient Boolean isCanonical = null;
+
+	public boolean isCanonical() {
+		if (isCanonical == null) {
+			isCanonical = calculateIsCanonical();
+		}
+		return isCanonical;
+	}
+
+	private boolean calculateIsCanonical() {
+		int myOrder = getCanonicalOrder();
+		for (int a = 0; a < getOperandCount(); a++) {
+			Object operand = getOperand(a);
+			if (operand instanceof Operator) {
+				Operator z = (Operator) operand;
+				int zOrder = z.getCanonicalOrder();
+				if (zOrder <= myOrder) {
+					return false;
+				}
+				if (!z.isCanonical())
+					return false;
+			}
+		}
+		return true;
+	}
+
+	protected abstract int getCanonicalOrder();
+
 	public Operator getCanonicalOperator() {
 		if (canonicalOperator == null) {
 			Operator op = createCanonicalOperator();
 			op = CanonicalSimplifier.simplify(op);
+
+			// just to avoid any extra calculations:
+			op.canonicalOperator = op.canonicalOperator;
+
 			canonicalOperator = op;
 		}
 		return canonicalOperator;

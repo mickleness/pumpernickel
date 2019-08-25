@@ -127,4 +127,9 @@ public class Not extends Operator {
 			throw new IOException("Unsupported internal version: " + version);
 		}
 	}
+
+	@Override
+	protected int getCanonicalOrder() {
+		return 2;
+	}
 }

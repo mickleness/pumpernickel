@@ -90,4 +90,9 @@ public class Or extends AbstractCompoundOperator {
 			throw new IOException("Unsupported internal version: " + version);
 		}
 	}
+
+	@Override
+	protected int getCanonicalOrder() {
+		return 0;
+	}
 }

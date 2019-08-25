@@ -35,6 +35,9 @@ class CanonicalSimplifier {
 	 *         necessary.
 	 */
 	static Operator simplify(Operator op) {
+		if (!op.isCanonical())
+			throw new IllegalArgumentException(
+					"The argument must be canonical: " + op);
 		boolean runAgain;
 		do {
 			Operator original = op;

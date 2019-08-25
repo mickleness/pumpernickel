@@ -120,4 +120,9 @@ public class And extends AbstractCompoundOperator {
 		}
 		return true;
 	}
+
+	@Override
+	protected int getCanonicalOrder() {
+		return 1;
+	}
 }

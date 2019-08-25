@@ -86,4 +86,9 @@ class ConstantOperator extends Operator {
 	protected boolean evaluateTestAtoms(Map<String, TestAtom> values) {
 		return value;
 	}
+
+	@Override
+	protected int getCanonicalOrder() {
+		return 3;
+	}
 }
