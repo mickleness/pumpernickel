@@ -1,6 +1,7 @@
 package com.pump.data.operator;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,6 +43,7 @@ public class In extends AbstractValueOperator<Collection<?>> {
 		for (Object e : values) {
 			operators[ctr++] = new EqualTo(getAttribute(), e);
 		}
+		Arrays.sort(operators, toStringComparator);
 		if (operators.length == 1)
 			return operators[0];
 		if (operators.length == 0)

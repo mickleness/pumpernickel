@@ -181,6 +181,7 @@ public abstract class Operator implements Serializable {
 
 	private boolean calculateIsCanonical() {
 		int myOrder = getCanonicalOrder();
+		Operator lastOperator = null;
 		for (int a = 0; a < getOperandCount(); a++) {
 			Object operand = getOperand(a);
 			if (operand instanceof Operator) {
@@ -191,6 +192,11 @@ public abstract class Operator implements Serializable {
 				}
 				if (!z.isCanonical())
 					return false;
+
+				if (lastOperator != null
+						&& toStringComparator.compare(lastOperator, z) > 0)
+					return false;
+				lastOperator = z;
 			}
 		}
 		return true;
