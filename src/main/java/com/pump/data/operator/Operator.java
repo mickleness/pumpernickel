@@ -22,6 +22,13 @@ import com.pump.util.CombinationIterator;
 
 /**
  * All Operators are immutable.
+ * 
+ * TODO: Implement a validation model. For example: if I set up an Operator that
+ * compares "gradeLevel" against the integer 3 and during runtime we observe
+ * that the actual attribute is a String, then we should throw a
+ * RuntimeException pointing out the discrepancy. (Instead of simply saying,
+ * 'the grade level of the String "3" is not equal to the integer 3, so this
+ * evaluates to false.
  */
 public abstract class Operator implements Serializable {
 	private static final long serialVersionUID = 1L;
