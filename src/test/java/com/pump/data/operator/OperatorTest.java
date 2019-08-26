@@ -1,7 +1,10 @@
 package com.pump.data.operator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -386,9 +389,6 @@ public class OperatorTest extends TestCase {
 			// test strict equivalency
 			assertTrue(op1.equals(op1_copy, true));
 			assertTrue(op2.equals(op2_copy, true));
-
-			assertFalse(op1.equals(op2, true));
-			assertFalse(op2.equals(op1, true));
 		}
 	}
 
@@ -628,9 +628,7 @@ public class OperatorTest extends TestCase {
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
-		// TODO: use assertEquals
-		testEquals(op.toString(), joined.toString());
-		// assertEquals(op, joined);
+		assertEquals(op, joined);
 	}
 
 	/**
@@ -638,9 +636,9 @@ public class OperatorTest extends TestCase {
 	 */
 	@Test
 	public void testSplit_scenario3() throws Exception {
-		Operator or3 = parse("(!matches(firstName, \"L*\") || house == \"Ravenclaw\") || !(birthYear > 1980 || lastName == \"Weasley\")");
+		Operator or = parse("!matches(firstName, \"L*\") || house == \"Ravenclaw\" || !(birthYear > 1980 || lastName == \"Weasley\")");
 
-		Collection<Operator> n1 = or3.split();
+		Collection<Operator> n1 = or.split();
 		assertEquals(3, n1.size());
 
 		testContains(n1, "!matches(firstName, \"L*\")");
@@ -649,9 +647,27 @@ public class OperatorTest extends TestCase {
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
-		// TODO:
-		testEquals(or3.toString(), joined.toString());
-		// assertEquals(or3, joined);
+		testEquals(or.toString(), joined.toString());
+		assertEquals(Collections.emptyList(), getIns(or));
+	}
+
+	/**
+	 * Return all the Ins that are a descendant of the argument (including the
+	 * argument itself)
+	 * 
+	 * @param op
+	 * @return
+	 */
+	private List<In> getIns(Operator op) {
+		if (op instanceof In)
+			return Arrays.asList((In) op);
+		List<In> returnValue = new ArrayList<>();
+		for (int a = 0; a < op.getOperandCount(); a++) {
+			if (op.getOperand(a) instanceof Operator) {
+				returnValue.addAll(getIns((Operator) op.getOperand(a)));
+			}
+		}
+		return returnValue;
 	}
 
 	/**
@@ -668,9 +684,8 @@ public class OperatorTest extends TestCase {
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
-		// TODO
 		testEquals(op.toString(), joined.toString());
-		// assertEquals(op, joined);
+		assertEquals(getIns(op), getIns(joined));
 	}
 
 	private boolean testContains(Collection<Operator> c, String str)
@@ -689,9 +704,9 @@ public class OperatorTest extends TestCase {
 	 */
 	@Test
 	public void testSplit_scenario5() throws Exception {
-		Operator and3 = parse("(!matches(firstName, \"L*\") && contains(house, {\"Ravenclaw\", \"Slytherin\"})) && !(birthYear > 1980 && lastName == \"Weasley\")");
+		Operator op = parse("(!matches(firstName, \"L*\") && contains(house, {\"Ravenclaw\", \"Slytherin\"})) && !(birthYear > 1980 && lastName == \"Weasley\")");
 
-		Collection<Operator> n1 = and3.split();
+		Collection<Operator> n1 = op.split();
 		assertEquals(4, n1.size());
 
 		testContains(n1,
@@ -707,16 +722,16 @@ public class OperatorTest extends TestCase {
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
-		// TODO
-		testEquals(joined.toString(), and3.toString());
-		// assertEquals(joined, and3);
+		testEquals(op.toString(), joined.toString());
+		// TODO: this would be nice to support one day
+		// assertEquals(getIns(op), getIns(joined));
 	}
 
 	@Test
 	public void testSplit_scenario6() throws Exception {
-		Operator z = parse("(matches(firstName, \"L*\") || contains(house, {\"Ravenclaw\", \"Slytherin\"})) || (birthYear > 1980 && lastName == \"Weasley\")");
+		Operator op = parse("(matches(firstName, \"L*\") || contains(house, {\"Ravenclaw\", \"Slytherin\"})) || (birthYear > 1980 && lastName == \"Weasley\")");
 
-		Collection<Operator> n1 = z.split();
+		Collection<Operator> n1 = op.split();
 		assertEquals(4, n1.size());
 
 		testContains(n1, "matches(firstName, \"L*\")");
@@ -726,16 +741,15 @@ public class OperatorTest extends TestCase {
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
-		// TODO:
-		testEquals(joined.toString(), z.toString());
-		// assertEquals(z, joined);
+		testEquals(op.toString(), joined.toString());
+		assertEquals(getIns(op), getIns(joined));
 	}
 
 	@Test
 	public void testSplit_scenario7() throws Exception {
-		Operator z = parse("(matches(firstName, \"L*\") && contains(house, {\"Ravenclaw\", \"Slytherin\"})) || (birthYear > 1980 && lastName == \"Weasley\")");
+		Operator op = parse("(matches(firstName, \"L*\") && contains(house, {\"Ravenclaw\", \"Slytherin\"})) || (birthYear > 1980 && lastName == \"Weasley\")");
 
-		Collection<Operator> n1 = z.split();
+		Collection<Operator> n1 = op.split();
 		assertEquals(3, n1.size());
 
 		testContains(n1, "matches(firstName, \"L*\") && house == \"Ravenclaw\"");
@@ -744,16 +758,16 @@ public class OperatorTest extends TestCase {
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
-		// TODO:
-		testEquals(joined.toString(), z.toString());
-		// assertEquals(z, joined);
+		testEquals(op.toString(), joined.toString());
+		// TODO: this would be nice to support one day
+		// assertEquals(getIns(op), getIns(joined));
 	}
 
 	@Test
 	public void testSplit_scenario8() throws Exception {
-		Operator z = parse("(matches(firstName, \"L*\") || contains(house, {\"Ravenclaw\", \"Slytherin\"})) && (birthYear > 1980 || lastName == \"Weasley\")");
+		Operator op = parse("(matches(firstName, \"L*\") || contains(house, {\"Ravenclaw\", \"Slytherin\"})) && (birthYear > 1980 || lastName == \"Weasley\")");
 
-		Collection<Operator> n1 = z.split();
+		Collection<Operator> n1 = op.split();
 		assertEquals(6, n1.size());
 
 		testContains(n1, "matches(firstName, \"L*\") && birthYear > 1980");
@@ -766,9 +780,9 @@ public class OperatorTest extends TestCase {
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
-		// TODO:
-		testEquals(joined.toString(), z.toString());
-		// assertEquals(z, joined);
+		testEquals(op.toString(), joined.toString());
+		// TODO: this would be nice to support one day
+		// assertEquals(getIns(op), getIns(joined));
 	}
 
 	/**
@@ -776,9 +790,9 @@ public class OperatorTest extends TestCase {
 	 */
 	@Test
 	public void testSplit_scenario9() throws Exception {
-		Operator or = parse("contains(house, {\"Ravenclaw\", \"Slytherin\"}) || house == \"Hufflepuff\"");
+		Operator op = parse("contains(house, {\"Ravenclaw\", \"Slytherin\"}) || house == \"Hufflepuff\"");
 
-		Collection<Operator> n1 = or.split();
+		Collection<Operator> n1 = op.split();
 		assertEquals(3, n1.size());
 
 		testContains(n1, "house == \"Ravenclaw\"");
@@ -787,23 +801,16 @@ public class OperatorTest extends TestCase {
 
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
-		// TODO
-		testEquals(
-				joined.toString(),
-				In.create(
-						"house",
-						Arrays.asList(HOUSE_RAVENCLAW, HOUSE_SLYTHERIN,
-								HOUSE_HUFFLEPUFF)).toString());
-		// assertEquals(joined, In.create("house",
-		// Arrays.asList(HOUSE_RAVENCLAW,
-		// HOUSE_SLYTHERIN, HOUSE_HUFFLEPUFF)));
+		testEquals(op.toString(), joined.toString());
+
+		assertTrue(getIns(joined).size() > 0);
 	}
 
 	@Test
 	public void testSplit_scenario10() throws Exception {
-		Operator or = parse("(birthYear > 1980 && !contains(house, {\"Ravenclaw\", \"Slytherin\"})) || (lastName == \"Weasley\" && contains(house, {\"Hufflepuff\", \"Gryffindor\"}))");
+		Operator op = parse("(birthYear > 1980 && !contains(house, {\"Ravenclaw\", \"Slytherin\"})) || (lastName == \"Weasley\" && contains(house, {\"Hufflepuff\", \"Gryffindor\"}))");
 
-		Collection<Operator> n1 = or.split();
+		Collection<Operator> n1 = op.split();
 		assertEquals(3, n1.size());
 
 		testContains(n1,
@@ -814,9 +821,9 @@ public class OperatorTest extends TestCase {
 		Operator[] n2 = n1.toArray(new Operator[n1.size()]);
 		Operator joined = Operator.join(n2);
 
-		// TODO:
-		testEquals(joined.toString(), or.toString());
-		// assertEquals(or, joined);
+		testEquals(op.toString(), joined.toString());
+		// TODO: this would be nice to support one day
+		// assertEquals(getIns(op), getIns(joined));
 	}
 
 	/**

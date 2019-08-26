@@ -3,6 +3,7 @@ package com.pump.data.operator;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -351,233 +352,101 @@ public abstract class Operator implements Serializable {
 
 	public abstract Collection<String> getAttributes();
 
+	private static Comparator NULL_SAFE_COMPARATOR = new Comparator() {
+
+		@Override
+		public int compare(Object o1, Object o2) {
+			if (o1 == null && o2 == null)
+				return 0;
+			if (o1 == null)
+				return -1;
+			if (o2 == null)
+				return 1;
+			return ((Comparable) o1).compareTo(o2);
+		}
+
+	};
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Operator join(Operator... operators) {
-		Operator op = operators.length == 1 ? operators[0] : new Or(operators);
-		op = op.getCanonicalOperator();
-		if (!(op instanceof Or))
-			op = new Or(TRUE, op);
-		Or or = (Or) op;
+		for (int a = 0; a < operators.length; a++) {
+			operators[a] = operators[a].getCanonicalOperator();
+		}
 
-		// let's guarantee consistency regarding the order in which we try
-		// to factor out terms by sorting our attributes:
-		SortedSet<String> sortedAttributes = new TreeSet<>();
-		sortedAttributes.addAll(or.getAttributes());
+		// step 1: identify plain equal-tos, and consolidate them
 
-		// step 1: convert plain EqualTo statements to In statements:
-
-		for (String attr : sortedAttributes) {
-			Collection<EqualTo> plainEquals = new HashSet<>();
-
-			for (int a = 0; a < or.getOperandCount(); a++) {
-				Operator orOp = or.getOperand(a);
-				if (orOp instanceof EqualTo
-						&& attr.equals(((EqualTo) orOp).getAttribute())) {
-					plainEquals.add((EqualTo) orOp);
+		Map<String, SortedSet<Object>> equalTos = new HashMap<>();
+		List<Operator> orOperands = new ArrayList<>(Arrays.asList(operators));
+		Iterator<Operator> iter = orOperands.iterator();
+		while (iter.hasNext()) {
+			Operator z = iter.next();
+			if (z instanceof EqualTo) {
+				EqualTo equalTo = (EqualTo) z;
+				SortedSet<Object> c = equalTos.get(equalTo.getAttribute());
+				if (c == null) {
+					c = new TreeSet<>(NULL_SAFE_COMPARATOR);
+					equalTos.put(equalTo.getAttribute(), c);
 				}
-			}
-
-			if (plainEquals.size() > 1) {
-				List<Operator> newOperands = new ArrayList<>(
-						(List) or.getOperands());
-				Collection<Object> values = getValues(plainEquals);
-				newOperands.removeAll(plainEquals);
-				newOperands.add(In.create(attr, values));
-				op = newOperands.size() == 1 ? (Operator) newOperands.get(0)
-						: new Or(newOperands);
-				if (op instanceof Or) {
-					or = (Or) op;
-				} else {
-					return op;
-				}
+				c.add(equalTo.getValue());
+				iter.remove();
 			}
 		}
 
-		// step 2: convert plain negated EqualTo statements to In statements:
+		for (Entry<String, SortedSet<Object>> entry : equalTos.entrySet()) {
+			orOperands.add(In.create(entry.getKey(), entry.getValue()));
+		}
 
-		for (String attr : sortedAttributes) {
-			Collection<EqualTo> notPlainEquals = new HashSet<>();
+		// step 2: identify anded not-equal-tos, which can be the result of a
+		// not-in
 
-			for (int a = 0; a < or.getOperandCount(); a++) {
-				Operator orOp = or.getOperand(a);
-				if (orOp instanceof Not) {
-					Not not = (Not) orOp;
-					Operator notOp = not.getOperand(0);
-					if (notOp instanceof EqualTo
-							&& attr.equals(((EqualTo) notOp).getAttribute())) {
-						notPlainEquals.add((EqualTo) notOp);
-					}
-				}
-			}
-
-			if (notPlainEquals.size() > 1) {
-				List<Operator> newOperands = new ArrayList<>(
-						(List) or.getOperands());
-				Collection<Object> values = getValues(notPlainEquals);
-				for (EqualTo et : notPlainEquals) {
-					newOperands.remove(new Not(et));
-				}
-				newOperands.add(new Not(In.create(attr, values)));
-				op = newOperands.size() == 1 ? (Operator) newOperands.get(0)
-						: new Or(newOperands);
-				if (op instanceof Or) {
-					or = (Or) op;
-				} else {
-					return op;
+		iter = orOperands.iterator();
+		List<Operator> newElements = new ArrayList<>();
+		while (iter.hasNext()) {
+			Operator z = iter.next();
+			if (z instanceof And) {
+				Operator z2 = convertJoinedAnd((And) z);
+				if (z2 != null) {
+					iter.remove();
+					newElements.add(z2);
 				}
 			}
 		}
+		orOperands.addAll(newElements);
 
-		// step 3: reach inside ANDed statements and search for equal-tos and
-		// not-equal-tos to similarly rewrite as IN statements. This is much
-		// more complex and involves trying to find common factors for
-		// clusters of operands.
+		// process results:
 
-		boolean continueScanning;
-		do {
-			continueScanning = false;
+		if (orOperands.size() == 1)
+			return orOperands.iterator().next();
 
-			scanAttributes: for (String attr : sortedAttributes) {
-
-				Map<List<Operator>, Map<EqualTo, And>> andEqualTos = new HashMap<>();
-				Map<List<Operator>, Map<EqualTo, And>> andNotEqualTos = new HashMap<>();
-
-				List<Operator> biggestKey = null;
-				int biggestKeySize = -1;
-				boolean biggestKeyEqualTo = false;
-
-				for (int a = 0; a < or.getOperandCount(); a++) {
-					Operator orOp = or.getOperand(a);
-					if (orOp instanceof And) {
-						And and = (And) orOp;
-						for (int b = 0; b < and.getOperandCount(); b++) {
-							Operator andOp = and.getOperand(b);
-							if (andOp instanceof EqualTo
-									&& attr.equals(((EqualTo) andOp)
-											.getAttribute())) {
-								List<Operator> andOperandsWithoutEqualTo = new ArrayList<>();
-								andOperandsWithoutEqualTo
-										.addAll((Collection) and.getOperands());
-								andOperandsWithoutEqualTo.remove(andOp);
-
-								Map<EqualTo, And> map = andEqualTos
-										.get(andOperandsWithoutEqualTo);
-								if (map == null) {
-									map = new HashMap<>();
-									andEqualTos.put(andOperandsWithoutEqualTo,
-											map);
-								}
-
-								map.put((EqualTo) andOp, and);
-
-								if (map.size() > biggestKeySize) {
-									biggestKeySize = map.size();
-									biggestKey = andOperandsWithoutEqualTo;
-									biggestKeyEqualTo = true;
-								}
-							} else if (andOp instanceof Not) {
-								Not not = (Not) andOp;
-								Operator notOp = not.getOperand(0);
-								if (notOp instanceof EqualTo
-										&& attr.equals(((EqualTo) notOp)
-												.getAttribute())) {
-
-									List<Operator> andOperandsWithoutNotEqualTo = new ArrayList<>();
-									andOperandsWithoutNotEqualTo
-											.addAll((Collection) and
-													.getOperands());
-									andOperandsWithoutNotEqualTo.remove(andOp);
-
-									Map<EqualTo, And> map = andNotEqualTos
-											.get(andOperandsWithoutNotEqualTo);
-									if (map == null) {
-										map = new HashMap<>();
-										andNotEqualTos.put(
-												andOperandsWithoutNotEqualTo,
-												map);
-									}
-
-									map.put((EqualTo) notOp, and);
-
-									if (map.size() > biggestKeySize) {
-										biggestKeySize = map.size();
-										biggestKey = andOperandsWithoutNotEqualTo;
-										biggestKeyEqualTo = false;
-									}
-								}
-							}
-						}
-					}
-				}
-
-				if (biggestKeySize > 1) {
-					List<Operator> newOrTerms = new ArrayList<>();
-					if (biggestKeyEqualTo) {
-						Map<EqualTo, And> equalTos = andEqualTos
-								.get(biggestKey);
-						Collection<Object> values = getValues(equalTos.keySet());
-						List<Operator> newAndTerms = new ArrayList<Operator>();
-						newAndTerms.addAll(biggestKey);
-						newAndTerms.add(In.create(attr, values));
-
-						Operator newAndOp = new And(newAndTerms);
-
-						newOrTerms.addAll((List) or.getOperands());
-						newOrTerms.removeAll(equalTos.values());
-						newOrTerms.add(newAndOp);
-					} else {
-						Map<EqualTo, And> notEqualTos = andNotEqualTos
-								.get(biggestKey);
-						Collection<Object> values = getValues(notEqualTos
-								.keySet());
-						List<Operator> newAndTerms = new ArrayList<Operator>();
-						newAndTerms.addAll(biggestKey);
-						newAndTerms.add(new Not(In.create(attr, values)));
-
-						Operator newAndOp = new And(newAndTerms);
-
-						newOrTerms.addAll((List) or.getOperands());
-						newOrTerms.removeAll(notEqualTos.values());
-						newOrTerms.add(newAndOp);
-					}
-
-					op = newOrTerms.size() == 1 ? (Operator) newOrTerms.get(0)
-							: new Or(newOrTerms);
-					if (op instanceof Or) {
-						or = (Or) op;
-						continueScanning = true;
-						break scanAttributes;
-					} else {
-						return op;
-					}
-				}
-
-			}
-		} while (continueScanning);
-
-		// if we use "true || ..." to make our OR statement at the top of this
-		// method, strip that "true" out.
-		if (op instanceof Or) {
-			Or z = (Or) op;
-			Collection y = new ArrayList(z.getOperands());
-			if (y.remove(TRUE)) {
-				if (y.size() == 1) {
-					op = (Operator) y.iterator().next();
-				} else if (y.size() > 1) {
-					op = new Or(y);
-				}
-			}
-		}
-
-		return op;
+		return new Or(orOperands);
 	}
 
-	private static Collection<Object> getValues(
-			Collection<EqualTo> valueOperators) {
-		Collection<Object> returnValue = new HashSet<>();
-		for (EqualTo op : valueOperators) {
-			returnValue.add(op.getValue());
+	private static Operator convertJoinedAnd(And and) {
+		List<Operator> andOperands = new ArrayList(and.getOperands());
+		Map<String, SortedSet<Object>> notEqualTos = new HashMap<>();
+		Iterator<Operator> iter = andOperands.iterator();
+		while (iter.hasNext()) {
+			Operator andOperand = iter.next();
+			if (andOperand instanceof Not
+					&& andOperand.getOperand(0) instanceof EqualTo) {
+				iter.remove();
+				EqualTo equalTo = (EqualTo) andOperand.getOperand(0);
+				SortedSet<Object> c = notEqualTos.get(equalTo.getAttribute());
+				if (c == null) {
+					c = new TreeSet<>(NULL_SAFE_COMPARATOR);
+					notEqualTos.put(equalTo.getAttribute(), c);
+				}
+				c.add(equalTo.getValue());
+			}
 		}
-		return returnValue;
+
+		for (Entry<String, SortedSet<Object>> entry : notEqualTos.entrySet()) {
+			andOperands
+					.add(new Not(In.create(entry.getKey(), entry.getValue())));
+		}
+
+		if (andOperands.size() == 1)
+			return andOperands.iterator().next();
+		return new And(andOperands);
 	}
 }
