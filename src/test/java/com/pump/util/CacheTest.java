@@ -201,27 +201,35 @@ public class CacheTest extends TestCase {
 	 * This confirms that our timer will automatically purge older elements
 	 */
 	@Test
-	public void testTimer() throws Exception {
-		Cache<Integer, String> cache = new Cache<>(1000, 100, 50);
+	public synchronized void testTimer() throws Exception {
+		Cache<Integer, String> cache = new Cache<>(1000, 150, -1);
 		cache.put(1, "A");
 		cache.put(2, "B");
-		assertEquals(2, cache.size());
-		assertTrue(cache.contains(1));
-		assertTrue(cache.contains(2));
-		assertFalse(cache.contains(3));
-		assertFalse(cache.contains(4));
-		assertFalse(cache.contains(5));
 
-		Thread.sleep(200);
+		wait(100); // t = 100
 
 		cache.put(3, "C");
 		cache.put(4, "D");
 		cache.put(5, "E");
-		assertEquals(3, cache.size());
-		assertFalse(cache.contains(1));
-		assertFalse(cache.contains(2));
-		assertTrue(cache.contains(3));
-		assertTrue(cache.contains(4));
-		assertTrue(cache.contains(5));
+
+		// cache should be A, B, C, D, E
+		assertEquals(5, cache.size());
+
+		wait(100); // t = 200
+
+		cache.put(6, "F");
+
+		// A, B should have dropped off
+		assertEquals(4, cache.size());
+
+		wait(100); // t = 300
+
+		// C, D, E should have dropped off
+		assertEquals(1, cache.size());
+
+		wait(100); // t = 400
+
+		// F should have dropped off
+		assertEquals(0, cache.size());
 	}
 }

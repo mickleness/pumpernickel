@@ -195,19 +195,16 @@ public class Cache<K, V> {
 	 * Purge old records from this Cache, if possible.
 	 */
 	synchronized void purge() {
-		long t = System.currentTimeMillis();
-		long minTime = t - maxTime;
-		if (minTime > t) {
-			// if you specified something like maxTime = Long.MAX_VALUE or
-			// maxTime = -1 then we can exit now:
+		if (maxTime < 0) {
 			return;
 		}
+		long t = System.currentTimeMillis();
 
-		Iterator<CacheTicket<K, V>> iter = orderedByActivityTickets
-				.descendingIterator();
+		Iterator<CacheTicket<K, V>> iter = orderedByActivityTickets.iterator();
 		while (iter.hasNext()) {
 			CacheTicket<K, V> e = iter.next();
-			if (e.timestamp < minTime) {
+			long elapsed = t - e.timestamp;
+			if (elapsed > maxTime) {
 				iter.remove();
 				keyToTickets.remove(e.key);
 			} else {
