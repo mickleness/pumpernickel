@@ -218,18 +218,73 @@ public class WildcardPatternTest extends TestCase {
 	private int getMatchInvocationCount(String pattern, String phrase) {
 		final AtomicInteger actualMatchesInvocationCount = new AtomicInteger(0);
 		WildcardPattern p = new WildcardPattern(pattern) {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			boolean matches(CharSequence string, int stringMinIndex,
 					int stringMaxIndex, Placeholder[] placeholders,
-					int placeholderMinIndex, int placeholderMaxIndex) {
+					int placeholderMinIndex, int placeholderMaxIndex,
+					boolean caseSensitive) {
 				actualMatchesInvocationCount.incrementAndGet();
 				return super.matches(string, stringMinIndex, stringMaxIndex,
-						placeholders, placeholderMinIndex, placeholderMaxIndex);
+						placeholders, placeholderMinIndex, placeholderMaxIndex,
+						caseSensitive);
 			}
 
 		};
 		p.matches(phrase);
 		return actualMatchesInvocationCount.intValue();
+	}
+
+	/**
+	 * This confirms patterns that are case sensitive fail.
+	 */
+	public void testCaseSensitivity() {
+		WildcardPattern.Format format = new WildcardPattern.Format();
+		format.caseSensitive = true;
+
+		WildcardPattern p = new WildcardPattern("car*", format);
+		p.toString();
+		assertTrue(p.matches("cargo"));
+		assertFalse(p.matches("Cart"));
+		assertFalse(p.matches("CARWASH"));
+		assertFalse(p.matches("cAR57"));
+
+		p = new WildcardPattern("car[PT]*", format);
+		assertTrue(p.matches("carPet"));
+		assertTrue(p.matches("carT"));
+		assertFalse(p.matches("Carpet"));
+		assertFalse(p.matches("CARPET"));
+		assertFalse(p.matches("cart"));
+
+		// the default format is NOT case sensitive:
+		p = new WildcardPattern("car*");
+		assertTrue(p.matches("cargo"));
+		assertTrue(p.matches("Cart"));
+		assertTrue(p.matches("CARWASH"));
+		assertTrue(p.matches("cAR57"));
+
+		p = new WildcardPattern("car[pt]*");
+		assertTrue(p.matches("carPet"));
+		assertTrue(p.matches("carT"));
+		assertTrue(p.matches("Carpet"));
+		assertTrue(p.matches("CARPET"));
+		assertTrue(p.matches("cart"));
+	}
+
+	public void testEscapeChar() {
+		WildcardPattern.Format format = new WildcardPattern.Format();
+		format.escapeCharacter = '\\';
+
+		WildcardPattern p = new WildcardPattern("*[\\[\\]]*", format);
+		assertTrue(p.matches("bracket=["));
+		assertTrue(p.matches("bracket=]"));
+
+		p = new WildcardPattern("\\[ab\\]", format);
+		assertTrue(p.matches("[ab]"));
+
+		p = new WildcardPattern("\\*a", format);
+		assertTrue(p.matches("*a"));
+
 	}
 }

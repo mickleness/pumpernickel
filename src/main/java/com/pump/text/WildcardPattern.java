@@ -14,9 +14,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -201,7 +203,7 @@ public class WildcardPattern implements Serializable {
 	public static class Format implements Serializable {
 
 		private static final long serialVersionUID = 1L;
-		
+
 		/**
 		 * The character used to accept any run of characters. By default this
 		 * is '*'.
@@ -236,10 +238,17 @@ public class WildcardPattern implements Serializable {
 		 */
 		public Character escapeCharacter = null;
 
+		/**
+		 * If true then all characters must match in case. By default this is
+		 * false so WildcardPatterns are case insensitive.
+		 */
+		public boolean caseSensitive = false;
+
 		@Override
 		public int hashCode() {
 			return Objects.hash(closeBracketCharacter, openBracketCharacter,
-					escapeCharacter, questionMarkWildcard, starWildcard);
+					escapeCharacter, questionMarkWildcard, starWildcard,
+					caseSensitive);
 		}
 
 		@Override
@@ -254,7 +263,8 @@ public class WildcardPattern implements Serializable {
 					&& Objects.equals(escapeCharacter, other.escapeCharacter)
 					&& Objects.equals(questionMarkWildcard,
 							other.questionMarkWildcard)
-					&& Objects.equals(starWildcard, other.starWildcard);
+					&& Objects.equals(starWildcard, other.starWildcard)
+					&& caseSensitive == other.caseSensitive;
 		}
 
 		@Override
@@ -274,6 +284,7 @@ public class WildcardPattern implements Serializable {
 			if (closeBracketCharacter != null)
 				sb.append(" closeBracketCharacter='" + closeBracketCharacter
 						+ "'");
+			sb.append(" caseSensitive=" + caseSensitive);
 			sb.append("]");
 			return sb.toString();
 		}
@@ -286,6 +297,7 @@ public class WildcardPattern implements Serializable {
 			out.writeObject(openBracketCharacter);
 			out.writeObject(questionMarkWildcard);
 			out.writeObject(starWildcard);
+			out.writeBoolean(caseSensitive);
 		}
 
 		private void readObject(java.io.ObjectInputStream in)
@@ -297,9 +309,27 @@ public class WildcardPattern implements Serializable {
 				openBracketCharacter = (Character) in.readObject();
 				questionMarkWildcard = (Character) in.readObject();
 				starWildcard = (Character) in.readObject();
+				caseSensitive = in.readBoolean();
 			} else {
 				throw new IOException("Unsupported internal version " + version);
 			}
+		}
+
+		public boolean isEscapedChar(char c) {
+			if (closeBracketCharacter != null
+					&& closeBracketCharacter.charValue() == c)
+				return true;
+			if (openBracketCharacter != null
+					&& openBracketCharacter.charValue() == c)
+				return true;
+			if (escapeCharacter != null && escapeCharacter.charValue() == c)
+				return true;
+			if (questionMarkWildcard != null
+					&& questionMarkWildcard.charValue() == c)
+				return true;
+			if (starWildcard != null && starWildcard.charValue() == c)
+				return true;
+			return false;
 		}
 	}
 
@@ -307,6 +337,8 @@ public class WildcardPattern implements Serializable {
 	public static abstract class Placeholder {
 
 		protected abstract String toString(Format format);
+
+		protected abstract boolean isSingleCharacter();
 	}
 
 	/**
@@ -315,36 +347,55 @@ public class WildcardPattern implements Serializable {
 	public final static class FixedCharacter extends Placeholder {
 		/** The character this placeholder represents. */
 		public final char ch;
+		private char lowerCaseChar;
 
 		FixedCharacter(char ch) {
-			this.ch = Character.toLowerCase(ch);
+			this.ch = ch;
+			lowerCaseChar = Character.toLowerCase(ch);
+		}
+
+		@Override
+		public int hashCode() {
+			return Character.hashCode(ch);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof FixedCharacter))
+				return false;
+			FixedCharacter other = (FixedCharacter) obj;
+			return ch == other.ch;
+		}
+
+		@Override
+		protected FixedCharacter clone() {
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "FixedCharacter[" + ch + "]";
 		}
 
 		@Override
 		protected String toString(Format format) {
-			if (format.escapeCharacter != null) {
-				if (format.closeBracketCharacter != null
-						&& format.closeBracketCharacter.equals(ch))
-					return Character.toString(format.escapeCharacter)
-							+ Character.toString(ch);
-				if (format.escapeCharacter != null
-						&& format.escapeCharacter.equals(ch))
-					return Character.toString(format.escapeCharacter)
-							+ Character.toString(ch);
-				if (format.openBracketCharacter != null
-						&& format.openBracketCharacter.equals(ch))
-					return Character.toString(format.escapeCharacter)
-							+ Character.toString(ch);
-				if (format.questionMarkWildcard != null
-						&& format.questionMarkWildcard.equals(ch))
-					return Character.toString(format.escapeCharacter)
-							+ Character.toString(ch);
-				if (format.starWildcard != null
-						&& format.starWildcard.equals(ch))
-					return Character.toString(format.escapeCharacter)
-							+ Character.toString(ch);
+			if (format.escapeCharacter != null && format.isEscapedChar(ch)) {
+				if (format.escapeCharacter == null)
+					throw new IllegalStateException(format.toString());
+				return format.escapeCharacter + Character.toString(ch);
 			}
 			return Character.toString(ch);
+		}
+
+		public boolean matches(char c, boolean caseSensitive) {
+			if (caseSensitive)
+				return c == ch;
+			return lowerCaseChar == Character.toLowerCase(c);
+		}
+
+		@Override
+		protected boolean isSingleCharacter() {
+			return true;
 		}
 	}
 
@@ -356,6 +407,31 @@ public class WildcardPattern implements Serializable {
 		@Override
 		protected String toString(Format format) {
 			return Character.toString(format.starWildcard);
+		}
+
+		@Override
+		public int hashCode() {
+			return 55;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return obj instanceof StarWildcard;
+		}
+
+		@Override
+		protected StarWildcard clone() {
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "StarWildcard[]";
+		}
+
+		@Override
+		protected boolean isSingleCharacter() {
+			return false;
 		}
 	}
 
@@ -370,12 +446,53 @@ public class WildcardPattern implements Serializable {
 		 */
 		private char[] ch;
 
+		private char[] lowerCaseChars;
+
 		SquareBracketsWildcard(char[] ch) {
+			lowerCaseChars = new char[ch.length];
 			for (int a = 0; a < ch.length; a++) {
-				ch[a] = Character.toLowerCase(ch[a]);
+				lowerCaseChars[a] = Character.toLowerCase(ch[a]);
 			}
 			Arrays.sort(ch);
+			Arrays.sort(lowerCaseChars);
 			this.ch = ch;
+		}
+
+		@Override
+		public int hashCode() {
+			int z = 0;
+			for (char c : ch) {
+				z += c;
+			}
+			return z;
+		}
+
+		private Set<Character> getCharSet() {
+			Set<Character> returnValue = new HashSet<>();
+			for (char c : ch) {
+				returnValue.add(c);
+			}
+			return returnValue;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof SquareBracketsWildcard))
+				return false;
+			SquareBracketsWildcard other = (SquareBracketsWildcard) obj;
+			Set<Character> set1 = getCharSet();
+			Set<Character> set2 = other.getCharSet();
+			return set1.equals(set2);
+		}
+
+		@Override
+		protected SquareBracketsWildcard clone() {
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "SquareBracketsWildcard[" + getCharSet() + "]";
 		}
 
 		/**
@@ -383,9 +500,14 @@ public class WildcardPattern implements Serializable {
 		 *            the character to search for
 		 * @return true if this wildcard can be used to represent the argument.
 		 */
-		public boolean contains(char ch) {
-			int i = Arrays.binarySearch(this.ch, ch);
-			return (i >= 0 && i < this.ch.length);
+		public boolean contains(char ch, boolean caseSensitive) {
+			if (caseSensitive) {
+				int i = Arrays.binarySearch(this.ch, ch);
+				return (i >= 0 && i < this.ch.length);
+			}
+			ch = Character.toLowerCase(ch);
+			int i = Arrays.binarySearch(lowerCaseChars, ch);
+			return (i >= 0 && i < lowerCaseChars.length);
 		}
 
 		/**
@@ -399,8 +521,27 @@ public class WildcardPattern implements Serializable {
 
 		@Override
 		protected String toString(Format format) {
-			return format.openBracketCharacter + (new String(ch))
-					+ format.closeBracketCharacter;
+			StringBuilder sb = new StringBuilder();
+			if (format.openBracketCharacter == null
+					|| format.closeBracketCharacter == null)
+				throw new IllegalStateException(format.toString());
+
+			sb.append(format.openBracketCharacter);
+			for (char c : ch) {
+				if (format.isEscapedChar(c)) {
+					if (format.escapeCharacter == null)
+						throw new IllegalStateException(format.toString());
+					sb.append(format.escapeCharacter);
+				}
+				sb.append(c);
+			}
+			sb.append(format.closeBracketCharacter);
+			return sb.toString();
+		}
+
+		@Override
+		protected boolean isSingleCharacter() {
+			return true;
 		}
 	}
 
@@ -408,9 +549,35 @@ public class WildcardPattern implements Serializable {
 	 * The QuestionMarkWildcard is used to represent exactly one character.
 	 */
 	public final static class QuestionMarkWildcard extends Placeholder {
+
+		@Override
+		public int hashCode() {
+			return 991;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return obj instanceof QuestionMarkWildcard;
+		}
+
+		@Override
+		protected QuestionMarkWildcard clone() {
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "QuestionMarkWildcard[]";
+		}
+
 		@Override
 		protected String toString(Format format) {
 			return Character.toString(format.questionMarkWildcard);
+		}
+
+		@Override
+		protected boolean isSingleCharacter() {
+			return true;
 		}
 	}
 
@@ -429,6 +596,7 @@ public class WildcardPattern implements Serializable {
 	}
 
 	public WildcardPattern(CharSequence patternText, Format format) {
+		Objects.requireNonNull(format);
 		this.format = format;
 		this.patternText = patternText.toString();
 		initialize();
@@ -473,6 +641,11 @@ public class WildcardPattern implements Serializable {
 				ch = s.charAt(i);
 				StringBuffer sb = new StringBuffer();
 				while (!format.closeBracketCharacter.equals(ch)) {
+					if (format.escapeCharacter != null
+							&& format.escapeCharacter.charValue() == ch) {
+						i++;
+						ch = s.charAt(i);
+					}
 					sb.append(ch);
 					i++;
 					ch = s.charAt(i);
@@ -549,12 +722,13 @@ public class WildcardPattern implements Serializable {
 	public boolean matches(CharSequence string) {
 		Objects.requireNonNull(string);
 		return matches(string, 0, string.length() - 1, placeholders, 0,
-				placeholders.length - 1);
+				placeholders.length - 1, getFormat().caseSensitive);
 	}
 
 	boolean matches(CharSequence string, int stringMinIndex,
 			int stringMaxIndex, Placeholder[] placeholders,
-			int placeholderMinIndex, int placeholderMaxIndex) {
+			int placeholderMinIndex, int placeholderMaxIndex,
+			boolean caseSensitive) {
 
 		// this can happen if we're matching against an empty String
 		if (stringMaxIndex < stringMinIndex) {
@@ -583,8 +757,7 @@ public class WildcardPattern implements Serializable {
 			if (p instanceof FixedCharacter) {
 				FixedCharacter fc = (FixedCharacter) p;
 				char ch = string.charAt(stringMinIndex);
-				ch = Character.toLowerCase(ch);
-				if (ch != fc.ch)
+				if (!fc.matches(ch, caseSensitive))
 					return false;
 				placeholderMinIndex++;
 			} else if (p instanceof QuestionMarkWildcard) {
@@ -592,9 +765,10 @@ public class WildcardPattern implements Serializable {
 			} else if (p instanceof SquareBracketsWildcard) {
 				SquareBracketsWildcard sbw = (SquareBracketsWildcard) p;
 				char ch = string.charAt(stringMinIndex);
-				ch = Character.toLowerCase(ch);
-				if (sbw.contains(ch) == false)
+
+				if (!sbw.contains(ch, caseSensitive))
 					return false;
+
 				placeholderMinIndex++;
 			} else {
 				break;
@@ -630,8 +804,7 @@ public class WildcardPattern implements Serializable {
 			if (p instanceof FixedCharacter) {
 				FixedCharacter fc = (FixedCharacter) p;
 				char ch = string.charAt(stringMaxIndex);
-				ch = Character.toLowerCase(ch);
-				if (ch != fc.ch)
+				if (!fc.matches(ch, caseSensitive))
 					return false;
 				placeholderMaxIndex--;
 			} else if (p instanceof QuestionMarkWildcard) {
@@ -639,8 +812,7 @@ public class WildcardPattern implements Serializable {
 			} else if (p instanceof SquareBracketsWildcard) {
 				SquareBracketsWildcard sbw = (SquareBracketsWildcard) p;
 				char ch = string.charAt(stringMaxIndex);
-				ch = Character.toLowerCase(ch);
-				if (sbw.contains(ch) == false)
+				if (!sbw.contains(ch, caseSensitive))
 					return false;
 				placeholderMaxIndex--;
 			} else {
@@ -670,7 +842,7 @@ public class WildcardPattern implements Serializable {
 
 		for (; stringMinIndex <= stringMaxIndex; stringMinIndex++) {
 			if (matches(string, stringMinIndex, stringMaxIndex, placeholders,
-					placeholderMinIndex + 1, placeholderMaxIndex))
+					placeholderMinIndex + 1, placeholderMaxIndex, caseSensitive))
 				return true;
 		}
 
@@ -687,7 +859,7 @@ public class WildcardPattern implements Serializable {
 		return placeholders.length;
 	}
 
-	private transient Boolean containsStarWildcard;
+	private transient Integer starWildcardCount;
 
 	/**
 	 * @return whether this pattern contains a StarWildcard.
@@ -697,17 +869,23 @@ public class WildcardPattern implements Serializable {
 	 *         interested in knowing this.
 	 */
 	public boolean containsStarWildcard() {
-		if (containsStarWildcard == null) {
-			for (int a = 0; a < placeholders.length
-					&& (containsStarWildcard == null); a++) {
+		return getStarWildcardCount() > 0;
+	}
+
+	/**
+	 * @return the number of StarWildcards in this pattern.
+	 */
+	public int getStarWildcardCount() {
+		if (starWildcardCount == null) {
+			int sum = 0;
+			for (int a = 0; a < placeholders.length; a++) {
 				if (placeholders[a] instanceof StarWildcard) {
-					containsStarWildcard = Boolean.TRUE;
+					sum++;
 				}
 			}
-			if (containsStarWildcard == null)
-				containsStarWildcard = Boolean.FALSE;
+			starWildcardCount = sum;
 		}
-		return containsStarWildcard;
+		return starWildcardCount;
 	}
 
 	@Override
@@ -731,8 +909,15 @@ public class WildcardPattern implements Serializable {
 		if (!(obj instanceof WildcardPattern))
 			return false;
 		WildcardPattern p = (WildcardPattern) obj;
-		return p.getPatternText().equals(getPatternText())
-				&& p.getFormat().equals(getFormat());
+		if (!getFormat().equals(p.getFormat()))
+			return false;
+		if (placeholders.length != p.placeholders.length)
+			return false;
+		for (int a = 0; a < placeholders.length; a++) {
+			if (!placeholders[a].equals(p.placeholders[a]))
+				return false;
+		}
+		return true;
 	}
 
 	/**
@@ -761,7 +946,8 @@ public class WildcardPattern implements Serializable {
 		StringBuilder constantPrefixBuilder = new StringBuilder();
 		for (int a = 0; a < phs.length; a++) {
 			if (phs[a] instanceof FixedCharacter) {
-				constantPrefixBuilder.append(phs[a].toString());
+				FixedCharacter fc = (FixedCharacter) phs[a];
+				constantPrefixBuilder.append(fc.ch);
 			} else {
 				break;
 			}

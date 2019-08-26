@@ -186,6 +186,8 @@ public class JavaParser extends Parser {
 				int documentStart) {
 			super(tokenText, tokenStart, lineNumber, documentStart);
 		}
+
+		public abstract Number getNumber();
 	}
 
 	/** This NumberToken represents a double value. */
@@ -209,6 +211,11 @@ public class JavaParser extends Parser {
 		public double doubleValue() {
 			return doubleValue;
 		}
+
+		@Override
+		public Number getNumber() {
+			return Double.valueOf(doubleValue());
+		}
 	}
 
 	/** This NumberToken represents a float value. */
@@ -231,6 +238,11 @@ public class JavaParser extends Parser {
 
 		public float floatValue() {
 			return floatValue;
+		}
+
+		@Override
+		public Number getNumber() {
+			return Float.valueOf(floatValue());
 		}
 	}
 
@@ -258,6 +270,11 @@ public class JavaParser extends Parser {
 		public long longValue() {
 			return longValue;
 		}
+
+		@Override
+		public Number getNumber() {
+			return Long.valueOf(longValue());
+		}
 	}
 
 	/** This NumberToken represents an integer value. */
@@ -280,6 +297,11 @@ public class JavaParser extends Parser {
 
 		public int intValue() {
 			return intValue;
+		}
+
+		@Override
+		public Number getNumber() {
+			return Integer.valueOf(intValue());
 		}
 	}
 
@@ -661,7 +683,7 @@ public class JavaParser extends Parser {
 				if (bct != null) {
 					if (brackets != null) {
 						if (bct.isOpen()) {
-							brackets.addFirst(bct);
+							brackets.add(bct);
 						} else {
 							BracketCharToken last = (brackets.size() == 0) ? null
 									: brackets.removeLast();
