@@ -838,42 +838,45 @@ public class OperatorTest extends TestCase {
 
 		// first the basic stuff:
 		{
-			testSimplifyEquals("a || b", "a || b || a || b || a");
-			testSimplifyEquals("a && b", "a && b && a && b && a");
-			testSimplifyEquals("false", "a && !a");
-			testSimplifyEquals("false", "b && a && !a");
-			testSimplifyEquals("true", "a || !a");
-			testSimplifyEquals("true", "b || a || !a");
-			testSimplifyEquals("b", "b || (a && !a)");
-			testSimplifyEquals("b || c", "b || c || (a && !a)");
-			testSimplifyEquals("b", "b || (c && a && !a)");
-			testSimplifyEquals("true", "(a && b) || !(a && b)");
-			testSimplifyEquals("false", "(a || b) && !(a || b)");
+			testSimplifyEquals("a || b", "a || b || a || b || a", true);
+			testSimplifyEquals("a && b", "a && b && a && b && a", true);
+			testSimplifyEquals("false", "a && !a", true);
+			testSimplifyEquals("false", "b && a && !a", true);
+			testSimplifyEquals("true", "a || !a", true);
+			testSimplifyEquals("true", "b || a || !a", true);
+			testSimplifyEquals("b", "b || (a && !a)", true);
+			testSimplifyEquals("b || c", "b || c || (a && !a)", true);
+			testSimplifyEquals("b", "b || (c && a && !a)", true);
+			testSimplifyEquals("true", "(a && b) || !(a && b)", false);
+			testSimplifyEquals("false", "(a || b) && !(a || b)", true);
 		}
 
 		// from the exercises in the boolean logic tutorial:
 		{
-			testSimplifyEquals("b || (a && c)",
-					"(a && b) || (a && (b || c)) || (b && (b || c))");
+			testSimplifyEquals("(a && c) || b",
+					"(a && b) || (a && (b || c)) || (b && (b || c))", true);
 			testSimplifyEquals(
 					"(a && !b) || (!b && !c) || (b && c)",
-					"(!a && !b && !c) || (!a && b && c) || (a && !b && !c) || (a && !b && c) || (a && b && c)");
+					"(!a && !b && !c) || (!a && b && c) || (a && !b && !c) || (a && !b && c) || (a && b && c)",
+					false);
 			testSimplifyEquals("a && b",
-					"(a || !a) && ((a && b) || (a && b && !c))");
+					"(a || !a) && ((a && b) || (a && b && !c))", true);
 
 			// expression #5:
-			testSimplifyEquals("c", "(b && c) || (!b && c)");
+			testSimplifyEquals("c", "(b && c) || (!b && c)", true);
 
 			// expression #6:
 			testSimplifyEquals(
 					"!a && b",
-					"(!a && b) || (b && !a && !c) || (b && c && d && !a) || (b && e && !a && !c && !d)");
+					"(!a && b) || (b && !a && !c) || (b && c && d && !a) || (b && e && !a && !c && !d)",
+					true);
 
 			// I couldn't follow expression #7 (off-balance parentheses?)
 
 			// expression #8:
 			testSimplifyEquals("(!a && c) || (!b && c)",
-					"(a && !b && c) || (!a && b && c) || (!a && !b && c)");
+					"(a && !b && c) || (!a && b && c) || (!a && !b && c)",
+					false);
 
 		}
 	}
@@ -888,16 +891,23 @@ public class OperatorTest extends TestCase {
 	 * @param complexStr
 	 *            a more complex expression that can be simplified to the first
 	 *            argument, like "a || !a"
+	 * @param testCanonicalSimplification
+	 *            if true then we confirm that the canonical representation
+	 *            simplified away the more complex String. TODO: ideally we
+	 *            should remove this argument and always treat it as "true", but
+	 *            for now a few expressions don't pass this test.
 	 * @throws Exception
 	 */
-	private void testSimplifyEquals(String simpleStr, String complexStr)
-			throws Exception {
+	private void testSimplifyEquals(String simpleStr, String complexStr,
+			boolean testCanonicalSimplification) throws Exception {
 		testEquals(simpleStr, complexStr);
-		// TODO:
-		// Operator simpleOp = parse(simpleStr);
-		// Operator complexOp = parse(complexStr);
-		// Operator reducedComplexOp = complexOp.getCanonicalOperator();
-		// assertEquals(simpleOp, reducedComplexOp);
+
+		if (testCanonicalSimplification) {
+			Operator simpleOp = parse(simpleStr);
+			Operator complexOp = parse(complexStr);
+			Operator reducedComplexOp = complexOp.getCanonicalOperator();
+			assertEquals(simpleOp, reducedComplexOp);
+		}
 	}
 
 	@Test
