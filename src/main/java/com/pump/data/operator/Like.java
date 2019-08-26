@@ -51,9 +51,9 @@ public class Like extends AbstractValueOperator<WildcardPattern> {
 		if (exactMatch == null) {
 			c.add(new TestAtom(TestAtom.Type.LIKE, getValue()));
 		} else {
-			c.add(new TestAtom(TestAtom.Type.EQUAL_TO, exactMatch));
+			c.add(new TestAtom(TestAtom.Type.EXACTLY, exactMatch));
 		}
-		c.add(new TestAtom(TestAtom.Type.EQUAL_TO, null));
+		c.add(new TestAtom(TestAtom.Type.EXACTLY, null));
 
 		Map<String, Collection<TestAtom>> map = new HashMap<>(1);
 		map.put(getAttribute(), c);
@@ -83,7 +83,7 @@ public class Like extends AbstractValueOperator<WildcardPattern> {
 
 	@Override
 	protected boolean evaluateTestAtom(TestAtom atom) {
-		if (atom.getType() == TestAtom.Type.EQUAL_TO) {
+		if (atom.getType() == TestAtom.Type.EXACTLY) {
 			if (atom.getValue() instanceof CharSequence) {
 				CharSequence s = (CharSequence) atom.getValue();
 				return getValue().matches(s);

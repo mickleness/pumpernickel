@@ -38,8 +38,9 @@ public class LesserThan extends AbstractValueOperator<Comparable<?>> {
 	@Override
 	protected Map<String, Collection<TestAtom>> createTestAtoms() {
 		Map<String, Collection<TestAtom>> map = new HashMap<>();
-		TestAtom lessThan = new TestAtom(TestAtom.Type.LESSER_THAN, getValue());
-		TestAtom equalTo = new TestAtom(TestAtom.Type.EQUAL_TO, getValue());
+		TestAtom lessThan = new TestAtom(TestAtom.Type.BARELY_SMALLER_THAN,
+				getValue());
+		TestAtom equalTo = new TestAtom(TestAtom.Type.EXACTLY, getValue());
 
 		Collection<TestAtom> t = new HashSet<>(2);
 		t.add(lessThan);
@@ -71,7 +72,7 @@ public class LesserThan extends AbstractValueOperator<Comparable<?>> {
 		Comparable k = getValue();
 		int z = k.compareTo(atomValue);
 		if (z == 0)
-			return atom.getType() == TestAtom.Type.LESSER_THAN;
+			return atom.getType() == TestAtom.Type.BARELY_SMALLER_THAN;
 		return z > 0;
 	}
 

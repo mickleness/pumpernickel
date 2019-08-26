@@ -19,8 +19,44 @@ import java.util.TreeSet;
 import com.pump.util.CombinationIterator;
 
 /**
+ * An Operator is something that can be evaluated as true or false.
+ * <p>
+ * Nearly all Operators are composed of operands. Sometimes these operands are
+ * other Operators. For example: the {@link And}, {@link Or} and {@link Not}
+ * operators are all composed of other simpler operators like {@link EqualTo},
+ * {@link GreaterThan}, {@link LesserThan}, {@link In} and {@link Like}.
+ * <p>
+ * (The {@link Operator#TRUE} and {@link Operator#FALSE} are special operators
+ * that are constant and do not require any input, so they have zero operands.)
+ * <p>
+ * The core function of an Operator is its
+ * {@link #evaluate(OperatorContext, Object)} method.
+ * <p>
+ * For example: suppose set up a hundred beans that represent different people.
+ * You can set up Operators to identify whether a person bean is an adult, or
+ * whether their last name starts with "S", etc. Then you can call
+ * {@link #evaluate(OperatorContext, Object)} on each of the hundred beans to
+ * identify which person beans match your requirements.
+ * <p>
+ * You can compose any layered Operators however you want to. But each Operator
+ * can also be converted to a standardized canonical form to help certain
+ * comparison calculations. In this architecture a "canonical" operator is one
+ * that meets the following criteria:
+ * <ul>
+ * <li>A tree representation of an Operator must present nodes in this order:
+ * Or, And, Not, other. (This is a slightly specialized "sum of products"
+ * expression.)</li>
+ * <li>Within Or and And operators: operands must be sorted in alphabetical
+ * order.</li>
+ * </ul>
+ * <p>
+ * Any Operator that meets those criteria will return true when you consult
+ * {@link #isCanonical()}, but the method {@link #getCanonicalOperator()} goes
+ * one step further and also applies a few optional boolean algebra approaches
+ * to try to simplify an Operation.
+ * <p>
  * All Operators are immutable.
- * 
+ * <p>
  * TODO: Implement a validation model. For example: if I set up an Operator that
  * compares "gradeLevel" against the integer 3 and during runtime we observe
  * that the actual attribute is a String, then we should throw a
@@ -70,7 +106,7 @@ public abstract class Operator implements Serializable {
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Operator))
 			return false;
-		return equals((Operator) obj, false);
+		return equals((Operator) obj, true);
 	}
 
 	/**
@@ -225,7 +261,8 @@ public abstract class Operator implements Serializable {
 
 	protected static class TestAtom {
 		enum Type {
-			EQUAL_TO("="), LESSER_THAN("<"), GREATER_THAN(">"), LIKE("~");
+			EXACTLY("="), BARELY_SMALLER_THAN("<"), BARELY_BIGGER_THAN(">"), LIKE(
+					"~");
 
 			String shorthand;
 
@@ -319,7 +356,7 @@ public abstract class Operator implements Serializable {
 		Operator op = operators.length == 1 ? operators[0] : new Or(operators);
 		op = op.getCanonicalOperator();
 		if (!(op instanceof Or))
-			return op;
+			op = new Or(TRUE, op);
 		Or or = (Or) op;
 
 		// let's guarantee consistency regarding the order in which we try
@@ -517,6 +554,20 @@ public abstract class Operator implements Serializable {
 
 			}
 		} while (continueScanning);
+
+		// if we use "true || ..." to make our OR statement at the top of this
+		// method, strip that "true" out.
+		if (op instanceof Or) {
+			Or z = (Or) op;
+			Collection y = new ArrayList(z.getOperands());
+			if (y.remove(TRUE)) {
+				if (y.size() == 1) {
+					op = (Operator) y.iterator().next();
+				} else if (y.size() > 1) {
+					op = new Or(y);
+				}
+			}
+		}
 
 		return op;
 	}

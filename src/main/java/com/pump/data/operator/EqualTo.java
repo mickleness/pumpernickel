@@ -55,13 +55,13 @@ public class EqualTo extends AbstractValueOperator<Object> {
 		Map<String, Collection<TestAtom>> map = new HashMap<>();
 		Collection<TestAtom> atoms = new HashSet<>(3);
 		Object v = getValue();
-		atoms.add(new TestAtom(TestAtom.Type.EQUAL_TO, v));
+		atoms.add(new TestAtom(TestAtom.Type.EXACTLY, v));
 		if (v instanceof Boolean) {
 			Boolean b = (Boolean) v;
-			atoms.add(new TestAtom(TestAtom.Type.EQUAL_TO, !b.booleanValue()));
+			atoms.add(new TestAtom(TestAtom.Type.EXACTLY, !b.booleanValue()));
 		} else if (v != null) {
-			atoms.add(new TestAtom(TestAtom.Type.LESSER_THAN, v));
-			atoms.add(new TestAtom(TestAtom.Type.GREATER_THAN, v));
+			atoms.add(new TestAtom(TestAtom.Type.BARELY_SMALLER_THAN, v));
+			atoms.add(new TestAtom(TestAtom.Type.BARELY_BIGGER_THAN, v));
 		}
 		map.put(getAttribute(), atoms);
 		return map;
@@ -69,7 +69,7 @@ public class EqualTo extends AbstractValueOperator<Object> {
 
 	@Override
 	protected boolean evaluateTestAtom(TestAtom atom) {
-		if (atom.getType() == TestAtom.Type.EQUAL_TO) {
+		if (atom.getType() == TestAtom.Type.EXACTLY) {
 			return Objects.equals(getValue(), atom.getValue());
 		}
 		return false;

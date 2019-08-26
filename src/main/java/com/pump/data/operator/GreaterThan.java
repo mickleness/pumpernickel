@@ -35,9 +35,9 @@ public class GreaterThan extends AbstractValueOperator<Comparable<?>> {
 	@Override
 	protected Map<String, Collection<TestAtom>> createTestAtoms() {
 		Map<String, Collection<TestAtom>> map = new HashMap<>();
-		TestAtom greaterThan = new TestAtom(TestAtom.Type.GREATER_THAN,
+		TestAtom greaterThan = new TestAtom(TestAtom.Type.BARELY_BIGGER_THAN,
 				getValue());
-		TestAtom equalTo = new TestAtom(TestAtom.Type.EQUAL_TO, getValue());
+		TestAtom equalTo = new TestAtom(TestAtom.Type.EXACTLY, getValue());
 
 		Collection<TestAtom> t = new HashSet<>(2);
 		t.add(greaterThan);
@@ -56,7 +56,7 @@ public class GreaterThan extends AbstractValueOperator<Comparable<?>> {
 		Comparable k = getValue();
 		int z = k.compareTo(atomValue);
 		if (z == 0)
-			return atom.getType() == TestAtom.Type.GREATER_THAN;
+			return atom.getType() == TestAtom.Type.BARELY_BIGGER_THAN;
 		return z < 0;
 	}
 

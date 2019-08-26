@@ -79,7 +79,7 @@ public class In extends AbstractValueOperator<Collection<?>> {
 	protected Map<String, Collection<TestAtom>> createTestAtoms() {
 		Collection<TestAtom> c = new HashSet<>(getValue().size());
 		for (Object e : getValue()) {
-			c.add(new TestAtom(TestAtom.Type.EQUAL_TO, e));
+			c.add(new TestAtom(TestAtom.Type.EXACTLY, e));
 		}
 
 		Map<String, Collection<TestAtom>> map = new HashMap<>();
@@ -89,7 +89,7 @@ public class In extends AbstractValueOperator<Collection<?>> {
 
 	@Override
 	protected boolean evaluateTestAtom(TestAtom atom) {
-		if (atom.getType() != TestAtom.Type.EQUAL_TO)
+		if (atom.getType() != TestAtom.Type.EXACTLY)
 			return false;
 		Object atomValue = atom.getValue();
 		return getValue().contains(atomValue);
