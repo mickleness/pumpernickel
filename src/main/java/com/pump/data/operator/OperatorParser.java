@@ -18,6 +18,10 @@ import com.pump.io.parser.java.JavaParser.NumberToken;
 import com.pump.io.parser.java.JavaParser.WordToken;
 import com.pump.text.WildcardPattern;
 
+/**
+ * This parses a Java-like string into an Operator, if possible. For example
+ * this can parse "a || b" or "x == 3" or "(y >= 2 && z) || (x<0)".
+ */
 public class OperatorParser {
 
 	/**

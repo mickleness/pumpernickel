@@ -61,13 +61,16 @@ import com.pump.util.CombinationIterator;
  * TODO: Implement a validation model. For example: if I set up an Operator that
  * compares "gradeLevel" against the integer 3 and during runtime we observe
  * that the actual attribute is a String, then we should throw a
- * RuntimeException pointing out the discrepancy. (Instead of simply saying,
- * 'the grade level of the String "3" is not equal to the integer 3, so this
- * evaluates to false.
+ * RuntimeException pointing out the discrepancy. (If we don't check this: then
+ * when we ask "is the number 3 equal to the String '3'?" the answer will come
+ * back no/false, which may be very misleading.)
  */
 public abstract class Operator implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * This sorts Operators according to their toString output.
+	 */
 	static Comparator<Operator> toStringComparator = new Comparator<Operator>() {
 
 		@Override
@@ -77,16 +80,50 @@ public abstract class Operator implements Serializable {
 
 	};
 
+	/**
+	 * This operator always evaluates to TRUE and has no input operands.
+	 */
 	public static final Operator TRUE = new ConstantOperator(true);
+
+	/**
+	 * This operator always evaluates to FALSE and has no input operands.
+	 */
 	public static final Operator FALSE = new ConstantOperator(false);
 
+	/**
+	 * Return the number of operands this Operator uses.
+	 */
 	public abstract int getOperandCount();
 
+	/**
+	 * Returns a specific operand.
+	 * 
+	 * @param index
+	 *            an integer between 0 and {@link #getOperandCount()}.
+	 */
 	public abstract Object getOperand(int index);
 
-	public abstract boolean evaluate(OperatorContext context, Object bean)
+	/**
+	 * Evaluate whether this operator is true of false for a given context.
+	 * 
+	 * @param context
+	 *            the context used to extract fields from data sources.
+	 * @param dataSource
+	 *            the data source (such as a bean) to extract data from.
+	 * @return whether this operator evaluated as true or false.
+	 * 
+	 * @throws Exception
+	 */
+	public abstract boolean evaluate(OperatorContext context, Object dataSource)
 			throws Exception;
 
+	/**
+	 * @param negated
+	 *            if true then the String representation should represent a
+	 *            negated operation. For example an EqualTo operator may
+	 *            normally return "x == 5", but if negated is true it will
+	 *            return "x != 5".
+	 */
 	protected abstract String toString(boolean negated);
 
 	@Override
@@ -100,8 +137,7 @@ public abstract class Operator implements Serializable {
 	}
 
 	/**
-	 * Return true if the argument is Operator that is functionally equivalent
-	 * to this operator.
+	 * Return true if the argument is identical to this Operator.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -111,21 +147,25 @@ public abstract class Operator implements Serializable {
 	}
 
 	/**
-	 * Evaluate whether two Operators are equal.
+	 * Evaluate whether two Operators are equivalent.
 	 * 
 	 * @param operator
 	 *            the operator to compare this object against.
 	 * @param strictEquivalency
 	 *            if true the the Operator argument must be exactly like this
-	 *            Operator in its order of operations. (Another way to think of
-	 *            this is: the toString() method of each operator should return
-	 *            exactly the same thing.) If false then two operators are
-	 *            considered equal if they are functionally the same.
+	 *            Operator. (Another way to think of this is: the toString()
+	 *            method of each operator should return exactly the same thing.)
+	 *            If false then two operators are considered equal if they are
+	 *            functionally the same.
 	 *            <p>
 	 *            For example "a || b" and "b || a" are functionally equal, but
-	 *            are not equivalent from an order-of-operations point of view.
-	 * 
-	 * @return
+	 *            not identical.
+	 *            <p>
+	 *            When determining "functional equivalency" we use TestAtoms to
+	 *            evaluate whether two Operators would produce the same output
+	 *            given the same input. This is basically the same as generating
+	 *            a truth table for the two Operators, except TestAtoms support
+	 *            a couple of additional states beyond true/false.
 	 */
 	public boolean equals(Operator operator, boolean strictEquivalency) {
 		Objects.requireNonNull(operator);
@@ -198,6 +238,14 @@ public abstract class Operator implements Serializable {
 
 	private transient Map<String, Collection<TestAtom>> testAtoms;
 
+	/**
+	 * Return all the configurations we should test a field against to evaluate
+	 * whether two Operators are equivalent.
+	 * <p>
+	 * This value is lazily cached.
+	 * 
+	 * @return a map of field names to their TestAtoms.
+	 */
 	protected Map<String, Collection<TestAtom>> getTestAtoms() {
 		if (testAtoms == null) {
 			testAtoms = createTestAtoms();
@@ -205,61 +253,26 @@ public abstract class Operator implements Serializable {
 		return testAtoms;
 	}
 
-	private transient Operator canonicalOperator = null;
-
-	private transient Boolean isCanonical = null;
-
-	public boolean isCanonical() {
-		if (isCanonical == null) {
-			isCanonical = calculateIsCanonical();
-		}
-		return isCanonical;
-	}
-
-	private boolean calculateIsCanonical() {
-		int myOrder = getCanonicalOrder();
-		Operator lastOperator = null;
-		for (int a = 0; a < getOperandCount(); a++) {
-			Object operand = getOperand(a);
-			if (operand instanceof Operator) {
-				Operator z = (Operator) operand;
-				int zOrder = z.getCanonicalOrder();
-				if (zOrder <= myOrder) {
-					return false;
-				}
-				if (!z.isCanonical())
-					return false;
-
-				if (lastOperator != null
-						&& toStringComparator.compare(lastOperator, z) > 0)
-					return false;
-				lastOperator = z;
-			}
-		}
-		return true;
-	}
-
-	protected abstract int getCanonicalOrder();
-
-	public Operator getCanonicalOperator() {
-		if (canonicalOperator == null) {
-			Operator op = createCanonicalOperator();
-			op = CanonicalSimplifier.simplify(op);
-
-			// just to avoid any extra calculations:
-			op.canonicalOperator = op.canonicalOperator;
-
-			canonicalOperator = op;
-		}
-		return canonicalOperator;
-	}
-
-	protected abstract Operator createCanonicalOperator();
-
+	/**
+	 * Return all the configurations we should test a field against to evaluate
+	 * whether two Operators are equivalent.
+	 */
 	protected abstract Map<String, Collection<TestAtom>> createTestAtoms();
 
+	/**
+	 * Evaluate whether this Operator should pass or fail given a set of input
+	 * TestAtoms.
+	 */
 	protected abstract boolean evaluateTestAtoms(Map<String, TestAtom> values);
 
+	/**
+	 * This represents a small testable unit of information, such as "x is 3" or
+	 * "x is just under 3". (I considered naming this a "TestUnit", but that
+	 * sounds confusingly similar to "unit test")
+	 * <p>
+	 * Each operation can identify the TestAtoms that it would need to evaluate
+	 * an input.
+	 */
 	protected static class TestAtom {
 		enum Type {
 			EXACTLY("="), BARELY_SMALLER_THAN("<"), BARELY_BIGGER_THAN(">"), LIKE(
@@ -319,6 +332,90 @@ public abstract class Operator implements Serializable {
 
 	}
 
+	private transient Operator canonicalOperator = null;
+
+	private transient Boolean isCanonical = null;
+
+	/**
+	 * Return true if this Operator is canonical.
+	 * <p>
+	 * In this architecture a "canonical" expression is one that meets these
+	 * critiera:
+	 * <ul>
+	 * <li>A tree representation of an Operator must present nodes in this
+	 * order: Or, And, Not, other.</li>
+	 * <li>Within Or and And operators: operands must be sorted in alphabetical
+	 * order.</li>
+	 * </ul>
+	 */
+	public boolean isCanonical() {
+		if (isCanonical == null) {
+			isCanonical = calculateIsCanonical();
+		}
+		return isCanonical;
+	}
+
+	private boolean calculateIsCanonical() {
+		int myOrder = getCanonicalOrder();
+		Operator lastOperator = null;
+		for (int a = 0; a < getOperandCount(); a++) {
+			Object operand = getOperand(a);
+			if (operand instanceof Operator) {
+				Operator z = (Operator) operand;
+				int zOrder = z.getCanonicalOrder();
+				if (zOrder <= myOrder) {
+					return false;
+				}
+				if (!z.isCanonical())
+					return false;
+
+				if (lastOperator != null
+						&& toStringComparator.compare(lastOperator, z) > 0)
+					return false;
+				lastOperator = z;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * This helps validate whether operations are nested in a canonical
+	 * structure.
+	 * <p>
+	 * ORs return 0, AND returns 1, NOT returns 2, and everything else returns
+	 * 3.
+	 * <p>
+	 * An operator with an order of N can only contain operands that are of
+	 * order (N+1) or higher.
+	 */
+	protected abstract int getCanonicalOrder();
+
+	/**
+	 * Return an operator that is functionally equivalent to this Operator, but
+	 * it may be restructured and simplified.
+	 */
+	public Operator getCanonicalOperator() {
+		if (canonicalOperator == null) {
+			Operator op = createCanonicalOperator();
+
+			// this is necessary to allow the unit tests to complete in a few
+			// seconds:
+			op = CanonicalSimplifier.simplify(op);
+
+			// just to avoid any extra calculations:
+			op.canonicalOperator = op.canonicalOperator;
+
+			canonicalOperator = op;
+		}
+		return canonicalOperator;
+	}
+
+	/**
+	 * Create a canonical Operator based on this Operator. In simple cases this
+	 * may return this object.
+	 */
+	protected abstract Operator createCanonicalOperator();
+
 	public List<Object> getOperands() {
 		List<Object> returnValue = new ArrayList<>(getOperandCount());
 		for (int a = 0; a < getOperandCount(); a++) {
@@ -341,6 +438,9 @@ public abstract class Operator implements Serializable {
 		}
 	}
 
+	/**
+	 * Conver this Operator into a new expression that does not include any Ors.
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public final Collection<Operator> split() {
 		Operator c = getCanonicalOperator();
@@ -350,6 +450,10 @@ public abstract class Operator implements Serializable {
 		return Collections.singleton(c);
 	}
 
+	/**
+	 * Return all the attributes/fields this Operator (and its descendants)
+	 * consult during evaluation.
+	 */
 	public abstract Collection<String> getAttributes();
 
 	private static Comparator NULL_SAFE_COMPARATOR = new Comparator() {
@@ -367,7 +471,19 @@ public abstract class Operator implements Serializable {
 
 	};
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	/**
+	 * Join operators together in an Or.
+	 * <p>
+	 * This also analyzes the expression to convert a series of EqualTo
+	 * operators to In operators.
+	 * 
+	 * @param operators
+	 *            a series of Operators, probably previously generated by
+	 *            calling {@link #split()}.
+	 * @return an Operator that is functionally equivalent to OR'ing all the
+	 *         input Operators.
+	 */
+	@SuppressWarnings({ "unchecked" })
 	public static Operator join(Operator... operators) {
 		for (int a = 0; a < operators.length; a++) {
 			operators[a] = operators[a].getCanonicalOperator();

@@ -13,12 +13,21 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 /**
- * This accepts an arbitrary number of operands. This is intended for AND and OR
- * operators.
+ * This accepts an arbitrary number of operands which are all Operators. This is
+ * intended for AND and OR operators.
  */
 public abstract class AbstractCompoundOperator extends Operator {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Throw an exception if any operand is null, or if the list of operands is
+	 * less than 2.
+	 * 
+	 * @param operands
+	 *            t he operands to evaluate
+	 * @param operationName
+	 *            this is used when formatting the exception message.
+	 */
 	protected static void validateOperands(Collection<Operator> operands,
 			String operationName) {
 		Objects.requireNonNull(operands);
@@ -41,8 +50,10 @@ public abstract class AbstractCompoundOperator extends Operator {
 	private List<Operator> operands;
 
 	/**
+	 * Create a new AbstractCompoundOperator.
 	 * 
 	 * @param operands
+	 *            the operators that act as operands.
 	 */
 	protected AbstractCompoundOperator(Collection<Operator> operands,
 			String name) {

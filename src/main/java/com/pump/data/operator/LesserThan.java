@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This operator evaluates whether a field is smaller than a given value.
+ */
 public class LesserThan extends AbstractValueOperator<Comparable<?>> {
 	private static final long serialVersionUID = 1L;
 
@@ -84,6 +87,7 @@ public class LesserThan extends AbstractValueOperator<Comparable<?>> {
 			ClassNotFoundException {
 		int version = in.readInt();
 		if (version == 0) {
+			// the class AbstractValueOperator writes our data
 		} else {
 			throw new IOException("Unsupported internal version: " + version);
 		}

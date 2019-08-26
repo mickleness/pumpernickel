@@ -6,6 +6,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This is a package-level class intended to represent TRUE and FALSE.
+ * <p>
+ * These constants are available as fields in the Operator class, and are
+ * otherwise not something other developers should need access to.
+ */
 class ConstantOperator extends Operator {
 	private static final long serialVersionUID = 1L;
 

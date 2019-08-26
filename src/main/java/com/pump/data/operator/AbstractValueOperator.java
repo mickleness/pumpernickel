@@ -9,10 +9,7 @@ import java.util.Objects;
 import com.pump.io.parser.java.JavaEncoding;
 
 /**
- * This evaluates an attribute from a bean.
- *
- * @param <String>
- * @param <DataType>
+ * This evaluates an attribute from a bean / data source.
  */
 public abstract class AbstractValueOperator<DataType> extends Operator {
 	private static final long serialVersionUID = 1L;
@@ -42,15 +39,22 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 		return 2;
 	}
 
+	/**
+	 * Return the attribute name, which is the first operand.
+	 */
 	public String getAttribute() {
 		return (String) getOperand(0);
 	}
 
+	/**
+	 * Return the value the attribute must match, which is the second operand.
+	 */
 	@SuppressWarnings("unchecked")
 	public DataType getValue() {
 		return (DataType) getOperand(1);
 	}
 
+	@Override
 	public Object getOperand(int index) {
 		if (index == 0)
 			return attributeName;
@@ -64,6 +68,16 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 		return Collections.singleton(getAttribute());
 	}
 
+	/**
+	 * Convert a value to a String.
+	 * <p>
+	 * This helps format objects in a Java-friendly format. For example the
+	 * float 1 will be converted to "1f". The double 4 will be "4.0". Strings
+	 * and characters will be encoded using Java's escape character conventions.
+	 * <p>
+	 * This formatting is important because the {@link OperationParser} uses a
+	 * parser designed to pick up on these differences.
+	 */
 	protected String toString(Object value) {
 		StringBuilder sb = new StringBuilder();
 		if (value instanceof Integer) {
@@ -119,6 +133,9 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 		return evaluateTestAtom(atom);
 	}
 
+	/**
+	 * Evaluate the one TestAtom associated with {@link #getAttribute()}.
+	 */
 	protected abstract boolean evaluateTestAtom(TestAtom atom);
 
 	@Override

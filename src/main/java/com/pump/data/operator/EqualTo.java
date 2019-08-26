@@ -7,9 +7,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This operator evaluates whether a field is equal to a fixed value, including
+ * null.
+ */
 public class EqualTo extends AbstractValueOperator<Object> {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Create a new EqualTo.
+	 * 
+	 * @param attribute
+	 *            the name of the attribute to consult.
+	 * @param value
+	 *            the expected value. This can be null.
+	 */
 	public EqualTo(String attribute, Object value) {
 		super(attribute, value);
 	}
@@ -83,6 +95,7 @@ public class EqualTo extends AbstractValueOperator<Object> {
 			ClassNotFoundException {
 		int version = in.readInt();
 		if (version == 0) {
+			// the class AbstractValueOperator writes our data
 		} else {
 			throw new IOException("Unsupported internal version: " + version);
 		}

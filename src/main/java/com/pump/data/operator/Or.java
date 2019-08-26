@@ -6,13 +6,30 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
+/**
+ * This ORs a series of other operators together.
+ */
 public class Or extends AbstractCompoundOperator {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Create an Or operator.
+	 * 
+	 * @param operands
+	 *            the operands (which are all Operators) this Or object
+	 *            consults.
+	 */
 	public Or(Collection<Operator> operands) {
 		super(operands, "Or");
 	}
 
+	/**
+	 * Create an Or operator.
+	 * 
+	 * @param operands
+	 *            the operands (which are all Operators) this Or object
+	 *            consults.
+	 */
 	public Or(Operator... operands) {
 		this(Arrays.asList(operands));
 	}
@@ -85,7 +102,7 @@ public class Or extends AbstractCompoundOperator {
 			ClassNotFoundException {
 		int version = in.readInt();
 		if (version == 0) {
-
+			// the AbstractCompoundOperator class writes all our data
 		} else {
 			throw new IOException("Unsupported internal version: " + version);
 		}

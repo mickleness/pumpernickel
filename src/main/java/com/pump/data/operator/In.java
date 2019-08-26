@@ -10,6 +10,11 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This operator evaluates whether a field is one of multiple possible values.
+ * <p>
+ * This is functionally equivalent to an Or of several EqualTo statements.
+ */
 public class In extends AbstractValueOperator<Collection<?>> {
 	private static final long serialVersionUID = 1L;
 
@@ -124,6 +129,7 @@ public class In extends AbstractValueOperator<Collection<?>> {
 			ClassNotFoundException {
 		int version = in.readInt();
 		if (version == 0) {
+			// the class AbstractValueOperator writes our data
 		} else {
 			throw new IOException("Unsupported internal version: " + version);
 		}

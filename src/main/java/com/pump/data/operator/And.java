@@ -12,13 +12,30 @@ import java.util.Map;
 
 import com.pump.util.CombinationIterator;
 
+/**
+ * This ANDs a series of other operators together.
+ */
 public class And extends AbstractCompoundOperator {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Create an And operator.
+	 * 
+	 * @param operands
+	 *            the operands (which are all Operators) this And object
+	 *            consults.
+	 */
 	public And(Operator... operands) {
 		this(Arrays.asList(operands));
 	}
 
+	/**
+	 * Create an And operator.
+	 * 
+	 * @param operands
+	 *            the operands (which are all Operators) this And object
+	 *            consults.
+	 */
 	public And(Collection<Operator> operands) {
 		super(operands, "And");
 	}
@@ -104,7 +121,7 @@ public class And extends AbstractCompoundOperator {
 			ClassNotFoundException {
 		int version = in.readInt();
 		if (version == 0) {
-
+			// the AbstractCompoundOperator class writes all our data
 		} else {
 			throw new IOException("Unsupported internal version: " + version);
 		}

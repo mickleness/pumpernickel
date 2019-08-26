@@ -7,10 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This operator negates its one and only operand, which must be another
+ * Operator.
+ */
 public class Not extends Operator {
 	private static final long serialVersionUID = 1L;
 
-	Operator operand;
+	private Operator operand;
 
 	public Not(Operator operand) {
 		Objects.requireNonNull(operand);

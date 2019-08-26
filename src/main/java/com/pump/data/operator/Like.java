@@ -10,6 +10,12 @@ import java.util.Objects;
 import com.pump.text.WildcardPattern;
 import com.pump.text.WildcardPattern.FixedCharacter;
 
+/**
+ * This operator evaluates whether a String field matches a WildcardPattern.
+ * <p>
+ * Among other things: this can be used to see if a String starts or ends with
+ * certain characters, or to ignore case sensitivity when checking equality.
+ */
 public class Like extends AbstractValueOperator<WildcardPattern> {
 	private static final long serialVersionUID = 1L;
 
@@ -102,6 +108,7 @@ public class Like extends AbstractValueOperator<WildcardPattern> {
 			ClassNotFoundException {
 		int version = in.readInt();
 		if (version == 0) {
+			// the class AbstractValueOperator writes our data
 		} else {
 			throw new IOException("Unsupported internal version: " + version);
 		}

@@ -13,6 +13,10 @@ import java.util.Map.Entry;
 
 import com.pump.math.Range;
 
+/**
+ * This consolidates logic related to simplifying Operators. This includes some
+ * common-sense simplification strategies and some simple boolean algebra.
+ */
 class CanonicalSimplifier {
 
 	/**
