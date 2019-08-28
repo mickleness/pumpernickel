@@ -1,3 +1,13 @@
+/**
+ * This software is released as part of the Pumpernickel project.
+ * 
+ * All com.pump resources in the Pumpernickel project are distributed under the
+ * MIT License:
+ * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * 
+ * More information about the Pumpernickel project is available here:
+ * https://mickleness.github.io/pumpernickel/
+ */
 package com.pump.util;
 
 import java.lang.ref.WeakReference;
@@ -71,8 +81,9 @@ public class Cache<K, V> {
 	static class PurgeTimerTask extends TimerTask {
 		WeakReference<Cache<?, ?>> cacheRef;
 
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public PurgeTimerTask(Cache<?, ?> cache) {
-			cacheRef = new WeakReference<>(cache);
+			cacheRef = new WeakReference(cache);
 		}
 
 		@Override
@@ -334,6 +345,7 @@ public class Cache<K, V> {
 		return toMap().hashCode();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Cache) {
