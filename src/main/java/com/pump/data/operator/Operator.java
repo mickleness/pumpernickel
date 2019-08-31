@@ -439,15 +439,21 @@ public abstract class Operator implements Serializable {
 	}
 
 	/**
-	 * Conver this Operator into a new expression that does not include any Ors.
+	 * Convert this Operator into a new expression that does not include any
+	 * Ors.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public final Collection<Operator> split() {
+		// this should return something that's mutable
+
 		Operator c = getCanonicalOperator();
 		if (c instanceof Or) {
 			return new ArrayList<Operator>((List) c.getOperands());
 		}
-		return Collections.singleton(c);
+
+		List<Operator> l = new ArrayList<>(1);
+		l.add(c);
+		return l;
 	}
 
 	/**
