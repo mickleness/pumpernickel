@@ -205,7 +205,7 @@ public class Cache<K, V> {
 	/**
 	 * Purge old records from this Cache, if possible.
 	 */
-	synchronized void purge() {
+	public synchronized void purge() {
 		if (maxTime < 0) {
 			return;
 		}
@@ -222,6 +222,32 @@ public class Cache<K, V> {
 				return;
 			}
 		}
+	}
+
+	/**
+	 * Remove a key from this cache.
+	 * 
+	 * @param key
+	 *            the key to remove
+	 * @return the value this key was previously mapped to, or null if this key
+	 *         was undefined.
+	 */
+	public synchronized V remove(K key) {
+		Objects.requireNonNull(key);
+		purge();
+
+		if (orderedByActivityTickets.isEmpty())
+			return null;
+
+		CacheTicket<K, V> oldTicket = keyToTickets.get(key);
+		if (oldTicket == null) {
+			return null;
+		}
+
+		keyToTickets.remove(key);
+
+		orderedByActivityTickets.remove(oldTicket);
+		return oldTicket.value;
 	}
 
 	/**
