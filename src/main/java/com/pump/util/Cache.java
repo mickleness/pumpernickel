@@ -192,7 +192,7 @@ public class Cache<K, V> {
 		 * Purge old records from this Cache, if possible.
 		 */
 		@SuppressWarnings("rawtypes")
-		synchronized void purge() {
+		public synchronized void purge() {
 			if (maxTime < 0) {
 				return;
 			}
@@ -494,5 +494,31 @@ public class Cache<K, V> {
 	 */
 	public boolean contains(K key) {
 		return get(key) != null;
+	}
+
+	/**
+	 * Remove a key from this cache.
+	 * 
+	 * @param key
+	 *            the key to remove
+	 * @return the value this key was previously mapped to, or null if this key
+	 *         was undefined.
+	 */
+	public V remove(K key) {
+		Objects.requireNonNull(key);
+		synchronized (cachePool) {
+			cachePool.purge();
+
+			if (keyToTickets.isEmpty())
+				return null;
+
+			CacheTicket<K, V> oldTicket = keyToTickets.remove(key);
+			if (oldTicket == null) {
+				return null;
+			}
+
+			cachePool.allTickets.remove(oldTicket);
+			return oldTicket.value;
+		}
 	}
 }
