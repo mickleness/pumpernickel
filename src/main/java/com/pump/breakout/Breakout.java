@@ -466,7 +466,7 @@ public class Breakout {
 							|| word.isLiteral || word.isModifier || word.isPrimitive)) {
 						String str = summary.getPackageName() + "."
 								+ word.getText();
-						if (!classNameToFileEntryMap.containsKey(str)) {
+						if (isClassNameSupported(str) && !classNameToFileEntryMap.containsKey(str)) {
 							InputStreamFactory javaSource;
 
 							File otherJavaFile = context.getJavaFile(str);
@@ -673,31 +673,33 @@ public class Breakout {
 					String lhs = name;
 					String rhs = "";
 					while (lhs != null) {
-						InputStreamFactory javaSource;
-						File otherJava = context.getJavaFile(lhs);
-						if (otherJava != null) {
-							javaSource = new FileInputStreamFactory(otherJava);
-						} else {
-							javaSource = getJavaSourceFromJar(lhs);
-						}
-
-						if (javaSource != null) {
-							if (rhs.length() > 0) {
-								int i = lhs.lastIndexOf('.');
-								String q = i >= 0 ? lhs.substring(i + 1) + "."
-										+ rhs : lhs + "." + rhs;
-								for (InputStreamFactory file : entry.getValue()) {
-									replace(file, rhs, q);
-								}
+						if(isClassNameSupported(lhs)) {
+							InputStreamFactory javaSource;
+							File otherJava = context.getJavaFile(lhs);
+							if (otherJava != null) {
+								javaSource = new FileInputStreamFactory(otherJava);
+							} else {
+								javaSource = getJavaSourceFromJar(lhs);
 							}
-
-							statementIter.remove();
-							addJavaFile(javaSource, false);
-							dirty = true;
-
-							// we can't do more than 1 per pass or we'll get
-							// concurrent modification problems:
-							break scanImports;
+	
+							if (javaSource != null) {
+								if (rhs.length() > 0) {
+									int i = lhs.lastIndexOf('.');
+									String q = i >= 0 ? lhs.substring(i + 1) + "."
+											+ rhs : lhs + "." + rhs;
+									for (InputStreamFactory file : entry.getValue()) {
+										replace(file, rhs, q);
+									}
+								}
+	
+								statementIter.remove();
+								addJavaFile(javaSource, false);
+								dirty = true;
+	
+								// we can't do more than 1 per pass or we'll get
+								// concurrent modification problems:
+								break scanImports;
+							}
 						}
 
 						int i = lhs.lastIndexOf('.');
@@ -887,5 +889,19 @@ public class Breakout {
 		}
 		// this shouldn't happen
 		return null;
+	}
+
+	/**
+	 * Return true if a classname should be eligible for extraction. By default this returns true.
+	 * <p>
+	 * Subclasses may override this to return false for certain naming conventions, such as "org.foo."
+	 * <p>
+	 * (Just because a a class is eligible for extraction doesn't guarantee we have access to the source code and can actually extract it, though.)
+	 *
+	 * @param str the name of a class, such as "java.awt.Point"
+	 * @return true if that class is eligible to be extracted. 9
+	 */
+	protected boolean isClassNameSupported(String str) {
+		return true;
 	}
 }
