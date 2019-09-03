@@ -338,7 +338,9 @@ public class Cache<K, V> {
 	public Cache(CachePool cachePool) {
 		Objects.requireNonNull(cachePool);
 		this.cachePool = cachePool;
-		cachePool.cacheReferences.add(new WeakReference<Cache>(this));
+		synchronized (cachePool) {
+			cachePool.cacheReferences.add(new WeakReference<Cache>(this));
+		}
 
 		keyToTickets = new HashMap<>(Integer.min(1000, cachePool.maxSize));
 	}
