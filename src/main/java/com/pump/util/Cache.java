@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -98,6 +100,8 @@ public class Cache<K, V> {
 		 */
 		long maxTime;
 
+		List<WeakReference<Cache>> cacheReferences = new LinkedList<>();
+
 		/**
 		 * Create a new CachePool.
 		 * 
@@ -147,13 +151,30 @@ public class Cache<K, V> {
 		 */
 		@SuppressWarnings("rawtypes")
 		public synchronized void clear() {
-			Iterator<CacheTicket> iter = allTickets.iterator();
-			while (iter.hasNext()) {
-				CacheTicket t = iter.next();
-				t.cache.keyToTickets.clear();
+			Collection<Cache> caches = getCaches();
+			for (Cache cache : caches) {
+				cache.keyToTickets.clear();
 			}
 			allTickets.clear();
-			idCtr = Long.MIN_VALUE;
+		}
+
+		/**
+		 * Return all the Caches that share this pool.
+		 */
+		@SuppressWarnings("rawtypes")
+		public synchronized Collection<Cache> getCaches() {
+			List<Cache> returnValue = new LinkedList<>();
+			Iterator<WeakReference<Cache>> refIter = cacheReferences.iterator();
+			while (refIter.hasNext()) {
+				WeakReference<Cache> ref = refIter.next();
+				Cache cache = ref.get();
+				if (cache == null) {
+					refIter.remove();
+				} else {
+					returnValue.add(cache);
+				}
+			}
+			return returnValue;
 		}
 
 		/**
@@ -313,9 +334,11 @@ public class Cache<K, V> {
 	 *            the CachePool that regulates how many elements to store and
 	 *            how long to store them.
 	 */
+	@SuppressWarnings("rawtypes")
 	public Cache(CachePool cachePool) {
 		Objects.requireNonNull(cachePool);
 		this.cachePool = cachePool;
+		cachePool.cacheReferences.add(new WeakReference<Cache>(this));
 
 		keyToTickets = new HashMap<>(Integer.min(1000, cachePool.maxSize));
 	}
