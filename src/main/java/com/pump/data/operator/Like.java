@@ -123,4 +123,12 @@ public class Like extends AbstractValueOperator<WildcardPattern> {
 			throw new IOException("Unsupported internal version: " + version);
 		}
 	}
+
+	private static WildcardPattern TEMPLATE_WILDCARD_PATTERN = new WildcardPattern(
+			"*");
+
+	@Override
+	protected Operator createTemplateOperator() {
+		return new Like(getAttribute(), TEMPLATE_WILDCARD_PATTERN);
+	}
 }

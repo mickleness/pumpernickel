@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -121,5 +123,19 @@ public class Or extends AbstractCompoundOperator {
 	@Override
 	protected int getCanonicalOrder() {
 		return 0;
+	}
+
+	@Override
+	protected Operator createTemplateOperator() {
+		List<Operator> orTerms = new LinkedList<>();
+		// simplify a little, so if this term is "a==1 || a==2" we won't
+		// return "a==? || a==?", we'll just return "a==?"
+		for (int a = 0; a < getOperandCount(); a++) {
+			Operator op = getOperand(a);
+			op = op.getTemplateOperator();
+			if (!orTerms.contains(op))
+				orTerms.add(op);
+		}
+		return new Or(orTerms);
 	}
 }

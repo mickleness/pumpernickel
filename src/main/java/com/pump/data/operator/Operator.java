@@ -101,6 +101,11 @@ public abstract class Operator implements Serializable {
 	public static final Operator FALSE = new ConstantOperator(false);
 
 	/**
+	 * This is the value used in templates.
+	 */
+	static final Comparable<String> TEMPLATE_VALUE = "?";
+
+	/**
 	 * Return the number of operands this Operator uses.
 	 */
 	public abstract int getOperandCount();
@@ -343,7 +348,7 @@ public abstract class Operator implements Serializable {
 	}
 
 	private transient Operator canonicalOperator = null;
-
+	private transient Operator templateOperator = null;
 	private transient Boolean isCanonical = null;
 
 	/**
@@ -425,6 +430,29 @@ public abstract class Operator implements Serializable {
 	 * may return this object.
 	 */
 	protected abstract Operator createCanonicalOperator();
+
+	/**
+	 * Return an Operator that is similar to this object, but it replaces fixed
+	 * values with a constant value.
+	 * <p>
+	 * For example if the original Operator was "a==3 || b==true", then the
+	 * template operator would resemble "a==? || b==?". If two operators use the
+	 * same template then they consult the same properties in similar ways, but
+	 * they may be different queries.
+	 */
+	public Operator getTemplateOperator() {
+		if (templateOperator == null) {
+			templateOperator = createTemplateOperator();
+			templateOperator.templateOperator = templateOperator;
+		}
+		return templateOperator;
+	}
+
+	/**
+	 * Create an Operator that is similar to this object, but it replaces fixed
+	 * values with a constant value.
+	 */
+	protected abstract Operator createTemplateOperator();
 
 	public List<Object> getOperands() {
 		List<Object> returnValue = new ArrayList<>(getOperandCount());

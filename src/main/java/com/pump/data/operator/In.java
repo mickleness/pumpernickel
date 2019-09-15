@@ -144,4 +144,10 @@ public class In extends AbstractValueOperator<Collection<?>> {
 			throw new IOException("Unsupported internal version: " + version);
 		}
 	}
+
+	@Override
+	protected Operator createTemplateOperator() {
+		return new In(getAttribute(), Arrays.asList(Operator.TEMPLATE_VALUE,
+				Operator.TEMPLATE_VALUE, Operator.TEMPLATE_VALUE));
+	}
 }

@@ -110,4 +110,9 @@ public class EqualTo extends AbstractValueOperator<Object> {
 			throw new IOException("Unsupported internal version: " + version);
 		}
 	}
+
+	@Override
+	protected Operator createTemplateOperator() {
+		return new EqualTo(getAttribute(), Operator.TEMPLATE_VALUE);
+	}
 }

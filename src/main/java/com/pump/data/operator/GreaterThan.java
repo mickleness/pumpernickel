@@ -86,4 +86,9 @@ public class GreaterThan extends AbstractValueOperator<Comparable<?>> {
 			throw new IOException("Unsupported internal version: " + version);
 		}
 	}
+
+	@Override
+	protected Operator createTemplateOperator() {
+		return new GreaterThan(getAttribute(), Operator.TEMPLATE_VALUE);
+	}
 }

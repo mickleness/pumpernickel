@@ -146,4 +146,9 @@ public class Not extends Operator {
 	protected int getCanonicalOrder() {
 		return 2;
 	}
+
+	@Override
+	protected Operator createTemplateOperator() {
+		return new Not(operand.getTemplateOperator());
+	}
 }

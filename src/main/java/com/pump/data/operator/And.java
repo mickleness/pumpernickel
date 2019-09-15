@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -151,5 +152,19 @@ public class And extends AbstractCompoundOperator {
 	@Override
 	protected int getCanonicalOrder() {
 		return 1;
+	}
+
+	@Override
+	protected Operator createTemplateOperator() {
+		List<Operator> andTerms = new LinkedList<>();
+		// simplify a little, so if this term is "a==1 && a==2" we won't
+		// return "a==? && a==?", we'll just return "a==?"
+		for (int a = 0; a < getOperandCount(); a++) {
+			Operator op = getOperand(a);
+			op = op.getTemplateOperator();
+			if (!andTerms.contains(op))
+				andTerms.add(op);
+		}
+		return new And(andTerms);
 	}
 }

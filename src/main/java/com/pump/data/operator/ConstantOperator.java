@@ -107,4 +107,9 @@ class ConstantOperator extends Operator {
 	protected int getCanonicalOrder() {
 		return 3;
 	}
+
+	@Override
+	protected Operator createTemplateOperator() {
+		return this;
+	}
 }

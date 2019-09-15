@@ -102,4 +102,9 @@ public class LesserThan extends AbstractValueOperator<Comparable<?>> {
 			throw new IOException("Unsupported internal version: " + version);
 		}
 	}
+
+	@Override
+	protected Operator createTemplateOperator() {
+		return new LesserThan(getAttribute(), Operator.TEMPLATE_VALUE);
+	}
 }
