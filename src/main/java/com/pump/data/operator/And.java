@@ -165,6 +165,8 @@ public class And extends AbstractCompoundOperator {
 			if (!andTerms.contains(op))
 				andTerms.add(op);
 		}
+		if (andTerms.size() == 1)
+			return andTerms.get(0);
 		return new And(andTerms);
 	}
 }

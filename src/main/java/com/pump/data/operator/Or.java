@@ -136,6 +136,8 @@ public class Or extends AbstractCompoundOperator {
 			if (!orTerms.contains(op))
 				orTerms.add(op);
 		}
+		if (orTerms.size() == 1)
+			return orTerms.get(0);
 		return new Or(orTerms);
 	}
 }
