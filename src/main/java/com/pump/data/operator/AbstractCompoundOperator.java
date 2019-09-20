@@ -177,4 +177,17 @@ public abstract class AbstractCompoundOperator extends Operator {
 			throw new IOException("Unsupported internal version: " + version);
 		}
 	}
+
+	/**
+	 * Return all the operands that refer to the given attribute.
+	 */
+	public List<Operator> getOperandsFor(String attr) {
+		List<Operator> returnValue = new ArrayList<>();
+		for (int a = 0; a < getOperandCount(); a++) {
+			Operator op = getOperand(a);
+			if (op.getAttributes().contains(attr))
+				returnValue.add(op);
+		}
+		return returnValue;
+	}
 }

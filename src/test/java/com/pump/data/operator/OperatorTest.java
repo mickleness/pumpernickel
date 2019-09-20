@@ -937,4 +937,29 @@ public class OperatorTest extends TestCase {
 		testEquals(true, "x != null", "matches(x, \"A*\")", format);
 		testEquals(true, "x != null", "matches(x, \"?\")", format);
 	}
+
+	/**
+	 * This tests splitting, removing an element, and rejoining the remaining
+	 * elements
+	 * <p>
+	 * This is based on an observed real-world failure.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testSplitScenario_11() throws Exception {
+		String str = "contains(courseOid, {\"crs01000107826\", \"crs01000107947\", \"crs01000121691\", \"crs01000124242\", \"crs01000130966\", \"crs01000130967\"}) && programStudiesOid == \"GPR0000001e0Cp\"";
+		Operator op = new OperatorParser().parse(str);
+		Collection<Operator> split = op.createCanonicalOperator().split();
+		assertEquals(6, split.size());
+
+		split.remove(new OperatorParser()
+				.parse("courseOid == \"crs01000107826\" && programStudiesOid == \"GPR0000001e0Cp\""));
+		assertEquals(5, split.size());
+
+		String str2 = "contains(courseOid, {\"crs01000107947\", \"crs01000121691\", \"crs01000124242\", \"crs01000130966\", \"crs01000130967\"}) && programStudiesOid == \"GPR0000001e0Cp\"";
+		Operator op2 = new OperatorParser().parse(str2);
+		Operator joined = Operator.join(split);
+		assertEquals(op2, joined);
+	}
 }
