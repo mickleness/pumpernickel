@@ -96,14 +96,20 @@ public class Or extends AbstractCompoundOperator {
 	}
 
 	@Override
-	protected boolean evaluateTestAtoms(Map<String, TestAtom> values) {
+	protected TestAtom.AtomEvaluation evaluateTestAtoms(
+			Map<String, TestAtom> values) {
+		boolean foundTrue = false;
 		for (int a = 0; a < getOperandCount(); a++) {
 			Operator op = getOperand(a);
-			boolean b = op.evaluateTestAtoms(values);
-			if (b)
-				return true;
+			TestAtom.AtomEvaluation b = op.evaluateTestAtoms(values);
+			if (b == TestAtom.AtomEvaluation.UNKNOWN)
+				return b;
+			if (b == TestAtom.AtomEvaluation.TRUE)
+				foundTrue = true;
 		}
-		return false;
+		if (foundTrue)
+			return TestAtom.AtomEvaluation.TRUE;
+		return TestAtom.AtomEvaluation.FALSE;
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

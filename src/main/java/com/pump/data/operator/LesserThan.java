@@ -76,17 +76,19 @@ public class LesserThan extends AbstractValueOperator<Comparable<?>> {
 	}
 
 	@Override
-	protected boolean evaluateTestAtom(TestAtom atom) {
+	protected TestAtom.AtomEvaluation evaluateTestAtom(TestAtom atom) {
 		Object atomValue = atom.getValue();
 
-		if (atomValue == null || atom.getType() == TestAtom.Type.LIKE)
-			return false;
+		if (atomValue == null || atom.getType() == TestAtom.Type.LIKE
+				|| atom.getValue() == TestAtom.NOT_NULL)
+			return TestAtom.AtomEvaluation.FALSE;
 
 		Comparable k = getValue();
 		int z = k.compareTo(atomValue);
 		if (z == 0)
-			return atom.getType() == TestAtom.Type.BARELY_SMALLER_THAN;
-		return z > 0;
+			return TestAtom.AtomEvaluation
+					.get(atom.getType() == TestAtom.Type.BARELY_SMALLER_THAN);
+		return TestAtom.AtomEvaluation.get(z > 0);
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

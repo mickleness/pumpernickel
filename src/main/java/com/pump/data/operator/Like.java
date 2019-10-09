@@ -98,16 +98,19 @@ public class Like extends AbstractValueOperator<WildcardPattern> {
 	}
 
 	@Override
-	protected boolean evaluateTestAtom(TestAtom atom) {
+	protected TestAtom.AtomEvaluation evaluateTestAtom(TestAtom atom) {
 		if (atom.getType() == TestAtom.Type.EXACTLY) {
+			if (atom.getValue() == TestAtom.NOT_NULL)
+				return TestAtom.AtomEvaluation.UNKNOWN;
+
 			if (atom.getValue() instanceof CharSequence) {
 				CharSequence s = (CharSequence) atom.getValue();
-				return getValue().matches(s);
+				return TestAtom.AtomEvaluation.get(getValue().matches(s));
 			}
 		}
 		if (atom.getType() != TestAtom.Type.LIKE)
-			return false;
-		return getValue().equals(atom.getValue());
+			return TestAtom.AtomEvaluation.FALSE;
+		return TestAtom.AtomEvaluation.get(getValue().equals(atom.getValue()));
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

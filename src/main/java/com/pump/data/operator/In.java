@@ -103,11 +103,14 @@ public class In extends AbstractValueOperator<Collection<?>> {
 	}
 
 	@Override
-	protected boolean evaluateTestAtom(TestAtom atom) {
+	protected TestAtom.AtomEvaluation evaluateTestAtom(TestAtom atom) {
 		if (atom.getType() != TestAtom.Type.EXACTLY)
-			return false;
+			return TestAtom.AtomEvaluation.FALSE;
 		Object atomValue = atom.getValue();
-		return getValue().contains(atomValue);
+		if (atomValue == TestAtom.NOT_NULL)
+			return TestAtom.AtomEvaluation.UNKNOWN;
+
+		return TestAtom.AtomEvaluation.get(getValue().contains(atomValue));
 	}
 
 	@Override

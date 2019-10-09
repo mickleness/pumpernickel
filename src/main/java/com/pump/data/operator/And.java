@@ -139,14 +139,20 @@ public class And extends AbstractCompoundOperator {
 	}
 
 	@Override
-	protected boolean evaluateTestAtoms(Map<String, TestAtom> values) {
+	protected TestAtom.AtomEvaluation evaluateTestAtoms(
+			Map<String, TestAtom> values) {
+		boolean foundFalse = false;
 		for (int a = 0; a < getOperandCount(); a++) {
 			Operator op = getOperand(a);
-			boolean b = op.evaluateTestAtoms(values);
-			if (!b)
-				return false;
+			TestAtom.AtomEvaluation b = op.evaluateTestAtoms(values);
+			if (b == TestAtom.AtomEvaluation.UNKNOWN)
+				return b;
+			if (b == TestAtom.AtomEvaluation.FALSE)
+				foundFalse = true;
 		}
-		return true;
+		if (foundFalse)
+			return TestAtom.AtomEvaluation.FALSE;
+		return TestAtom.AtomEvaluation.TRUE;
 	}
 
 	@Override

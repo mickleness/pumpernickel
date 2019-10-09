@@ -135,7 +135,8 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 	}
 
 	@Override
-	protected final boolean evaluateTestAtoms(Map<String, TestAtom> values) {
+	protected final TestAtom.AtomEvaluation evaluateTestAtoms(
+			Map<String, TestAtom> values) {
 		TestAtom atom = values.get(getAttribute());
 		if (atom == null)
 			throw new IllegalArgumentException("Missing TestAtom for \""
@@ -146,7 +147,7 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 	/**
 	 * Evaluate the one TestAtom associated with {@link #getAttribute()}.
 	 */
-	protected abstract boolean evaluateTestAtom(TestAtom atom);
+	protected abstract TestAtom.AtomEvaluation evaluateTestAtom(TestAtom atom);
 
 	@Override
 	protected int getCanonicalOrder() {

@@ -387,8 +387,10 @@ public class OperatorTest extends TestCase {
 			Operator op2_copy = parse(value_revised, format);
 
 			if (equals) {
-				assertTrue(op1.equals(op2, false));
-				assertTrue(op2.equals(op1, false));
+				assertTrue("\"" + op1 + "\" should equal \"" + op2 + "\"",
+						op1.equals(op2, false));
+				assertTrue("\"" + op2 + "\" should equal \"" + op1 + "\"",
+						op2.equals(op1, false));
 			} else {
 				assertFalse("\"" + op1.toString() + "\" should not equal \""
 						+ op2.toString() + "\"", op1.equals(op2, false));
@@ -961,5 +963,18 @@ public class OperatorTest extends TestCase {
 		Operator op2 = new OperatorParser().parse(str2);
 		Operator joined = Operator.join(split);
 		assertEquals(op2, joined);
+	}
+
+	@Test
+	public void testJoin_scenario1() throws Exception {
+		Operator op1 = new OperatorParser()
+				.parse("programStudiesOid == \"GPR0000001g0WC\" && requirementWaiver != null && studentOid == \"std01000022755\"");
+		Operator op2 = new OperatorParser()
+				.parse("programStudiesOid == \"GPR0000001e0Cp\" && requirementWaiver != null && studentOid == \"std01000022962\"");
+		Operator op3 = new OperatorParser()
+				.parse("programStudiesOid == \"GPR0000001e0Cp\" && requirementWaiver != null && studentOid == \"std01000022786\"");
+		Operator op4 = new OperatorParser()
+				.parse("programStudiesOid == \"GPR0000001y06U\" && requirementWaiver != null && studentOid == \"std01000023037\"");
+		assertEquals(3, Operator.join(op1, op2, op3, op4).getOperandCount());
 	}
 }
