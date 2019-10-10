@@ -61,7 +61,17 @@ public class Like extends AbstractValueOperator<WildcardPattern> {
 	}
 
 	@Override
-	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+	protected Map<String, Collection<Class>> getAttributeTypes() {
+		Map<String, Collection<Class>> returnValue = new HashMap<>(1);
+		Collection<Class> c = new HashSet<>();
+		c.add(String.class);
+		returnValue.put(getAttribute(), c);
+		return returnValue;
+	}
+
+	@Override
+	protected Map<String, Collection<TestAtom>> createTestAtoms(
+			Map<String, Collection<Class>> attributeTypes) {
 		Collection<TestAtom> c = new HashSet<>();
 		String exactMatch = getExactStringMatch();
 		if (exactMatch == null) {

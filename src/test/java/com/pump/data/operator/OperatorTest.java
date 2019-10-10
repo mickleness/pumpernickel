@@ -977,4 +977,14 @@ public class OperatorTest extends TestCase {
 				.parse("programStudiesOid == \"GPR0000001y06U\" && requirementWaiver != null && studentOid == \"std01000023037\"");
 		assertEquals(3, Operator.join(op1, op2, op3, op4).getOperandCount());
 	}
+
+	@Test
+	public void testJoin_scenario2() throws Exception {
+		Operator op1 = new OperatorParser()
+				.parse("schoolCourseOid != \"\" && schoolCourseOid != null && studentOid == \"std01000023042\" && totalCredit > \"0\"");
+		Operator op2 = new OperatorParser()
+				.parse("schoolCourseOid != \"\" && schoolCourseOid != null && studentOid == \"std01000023037\" && totalCredit > \"0\"");
+
+		assertEquals(3, Operator.join(op1, op2).getOperandCount());
+	}
 }

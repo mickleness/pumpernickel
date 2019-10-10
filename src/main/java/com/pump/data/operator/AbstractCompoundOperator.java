@@ -134,23 +134,26 @@ public abstract class AbstractCompoundOperator extends Operator {
 		return sb.toString();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public Collection<String> getAttributes() {
-		Collection<String> returnValue = new HashSet<>();
+	public Map<String, Collection<Class>> getAttributeTypes() {
+		Map<String, Collection<Class>> returnValue = new HashMap<>();
 		for (int a = 0; a < getOperandCount(); a++) {
 			Operator op = getOperand(a);
-			returnValue.addAll(op.getAttributes());
+			addAttributeTypes(returnValue, op.getAttributeTypes());
 		}
 		return returnValue;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+	protected Map<String, Collection<TestAtom>> createTestAtoms(
+			Map<String, Collection<Class>> attributeTypes) {
 		Map<String, Collection<TestAtom>> map = new HashMap<>();
 		for (int a = 0; a < getOperandCount(); a++) {
 			Operator op = getOperand(a);
-			for (Entry<String, Collection<TestAtom>> entry : op.getTestAtoms()
-					.entrySet()) {
+			for (Entry<String, Collection<TestAtom>> entry : op
+					.createTestAtoms(attributeTypes).entrySet()) {
 				Collection<TestAtom> c = map.get(entry.getKey());
 				if (c == null) {
 					c = new HashSet<>();

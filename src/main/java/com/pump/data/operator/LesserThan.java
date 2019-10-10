@@ -49,7 +49,8 @@ public class LesserThan extends AbstractValueOperator<Comparable<?>> {
 	}
 
 	@Override
-	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+	protected Map<String, Collection<TestAtom>> createTestAtoms(
+			Map<String, Collection<Class>> attributeTypes) {
 		Map<String, Collection<TestAtom>> map = new HashMap<>();
 		TestAtom lessThan = new TestAtom(TestAtom.Type.BARELY_SMALLER_THAN,
 				getValue());

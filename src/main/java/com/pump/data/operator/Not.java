@@ -58,13 +58,14 @@ public class Not extends Operator {
 	}
 
 	@Override
-	public Collection<String> getAttributes() {
-		return getOperand(0).getAttributes();
+	protected Map<String, Collection<Class>> getAttributeTypes() {
+		return getOperand(0).getAttributeTypes();
 	}
 
 	@Override
-	protected Map<String, Collection<TestAtom>> createTestAtoms() {
-		return getOperand(0).createTestAtoms();
+	protected Map<String, Collection<TestAtom>> createTestAtoms(
+			Map<String, Collection<Class>> attributeTypes) {
+		return getOperand(0).createTestAtoms(attributeTypes);
 	}
 
 	@Override

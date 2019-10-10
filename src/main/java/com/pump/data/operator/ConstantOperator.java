@@ -12,7 +12,6 @@ package com.pump.data.operator;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,11 +63,6 @@ class ConstantOperator extends Operator {
 	}
 
 	@Override
-	public Collection<String> getAttributes() {
-		return Collections.emptySet();
-	}
-
-	@Override
 	public boolean equals(Operator operator, boolean strictEquivalency) {
 		if (strictEquivalency && operator instanceof ConstantOperator) {
 			ConstantOperator other = (ConstantOperator) operator;
@@ -94,7 +88,8 @@ class ConstantOperator extends Operator {
 	}
 
 	@Override
-	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+	protected Map<String, Collection<TestAtom>> createTestAtoms(
+			Map<String, Collection<Class>> attributeTypes) {
 		return new HashMap<>();
 	}
 
@@ -111,5 +106,10 @@ class ConstantOperator extends Operator {
 	@Override
 	protected Operator createTemplateOperator() {
 		return this;
+	}
+
+	@Override
+	protected Map<String, Collection<Class>> getAttributeTypes() {
+		return new HashMap<>(1);
 	}
 }

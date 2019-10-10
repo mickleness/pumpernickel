@@ -90,16 +90,38 @@ public class In extends AbstractValueOperator<Collection<?>> {
 		return sb.toString();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+	protected Map<String, Collection<TestAtom>> createTestAtoms(
+			Map<String, Collection<Class>> attributeTypes) {
 		Collection<TestAtom> c = new HashSet<>(getValue().size());
 		for (Object e : getValue()) {
 			c.add(new TestAtom(TestAtom.Type.EXACTLY, e));
+			if (e != null) {
+				//offer an element that won't be in this IN statement
+				c.add(new TestAtom(TestAtom.Type.BARELY_BIGGER_THAN, e));
+			}
 		}
 
 		Map<String, Collection<TestAtom>> map = new HashMap<>();
 		map.put(getAttribute(), c);
 		return map;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	protected Map<String, Collection<Class>> getAttributeTypes() {
+		Collection<Class> types = new HashSet<>();
+		for (Object element : getValue()) {
+			if (element == null) {
+				types.add(null);
+			} else {
+				types.add(element.getClass());
+			}
+		}
+		Map<String, Collection<Class>> returnValue = new HashMap<>();
+		returnValue.put(getAttribute(), types);
+		return returnValue;
 	}
 
 	@Override

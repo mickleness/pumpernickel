@@ -12,7 +12,8 @@ package com.pump.data.operator;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 
@@ -73,9 +74,19 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 		throw new IllegalArgumentException("illegal operand index: " + index);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public Collection<String> getAttributes() {
-		return Collections.singleton(getAttribute());
+	protected Map<String, Collection<Class>> getAttributeTypes() {
+		Map<String, Collection<Class>> returnValue = new HashMap<>(1);
+		Collection<Class> c = new HashSet<>();
+		Object value = getValue();
+		if (value == null) {
+			c.add(null);
+		} else {
+			c.add(value.getClass());
+		}
+		returnValue.put(getAttribute(), c);
+		return returnValue;
 	}
 
 	/**
@@ -123,6 +134,7 @@ public abstract class AbstractValueOperator<DataType> extends Operator {
 		out.writeObject(getValue());
 	}
 
+	@SuppressWarnings("unchecked")
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
 		int version = in.readInt();

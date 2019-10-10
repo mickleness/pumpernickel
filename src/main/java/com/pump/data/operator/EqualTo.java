@@ -73,7 +73,8 @@ public class EqualTo extends AbstractValueOperator<Object> {
 	}
 
 	@Override
-	protected Map<String, Collection<TestAtom>> createTestAtoms() {
+	protected Map<String, Collection<TestAtom>> createTestAtoms(
+			Map<String, Collection<Class>> attributeTypes) {
 		Map<String, Collection<TestAtom>> map = new HashMap<>();
 		Collection<TestAtom> atoms = new HashSet<>(3);
 		Object v = getValue();
@@ -84,6 +85,29 @@ public class EqualTo extends AbstractValueOperator<Object> {
 		} else if (v != null) {
 			atoms.add(new TestAtom(TestAtom.Type.BARELY_SMALLER_THAN, v));
 			atoms.add(new TestAtom(TestAtom.Type.BARELY_BIGGER_THAN, v));
+		} else if (v == null) {
+			Collection<Class> sampleTypes = attributeTypes.get(getAttribute());
+			boolean foundNonNullSample = false;
+			if (sampleTypes != null) {
+				for (Class sampleType : sampleTypes) {
+					if (sampleType != null) {
+						// great: it has a known non-null value.
+						// some other entity will add a TestAtom for that value,
+						// we don't have to do that here.
+						foundNonNullSample = true;
+						break;
+					}
+				}
+			}
+
+			if (!foundNonNullSample) {
+				// we can't add this String ALL the time, because it we end up
+				// comparing a Number or a Boolean to a String we'll have
+				// problems. But since we already established *nobody* else
+				// has a clearly defined type for our attribute: it should
+				// be safe to check to see if it's a String:
+				atoms.add(new TestAtom(TestAtom.Type.EXACTLY, "?"));
+			}
 		}
 		map.put(getAttribute(), atoms);
 		return map;

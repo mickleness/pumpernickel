@@ -147,9 +147,14 @@ public abstract class Operator implements Serializable {
 		return toString(false);
 	}
 
+	private transient int hashCode = Integer.MIN_VALUE;
+
 	@Override
 	public int hashCode() {
-		return getTestAtoms().hashCode();
+		if (hashCode == Integer.MIN_VALUE) {
+			hashCode = createTestAtoms(getAttributeTypes()).hashCode();
+		}
+		return hashCode;
 	}
 
 	/**
@@ -183,6 +188,7 @@ public abstract class Operator implements Serializable {
 	 *            a truth table for the two Operators, except TestAtoms support
 	 *            a couple of additional states beyond true/false.
 	 */
+	@SuppressWarnings("rawtypes")
 	public boolean equals(Operator operator, boolean strictEquivalency) {
 		Objects.requireNonNull(operator);
 		if (strictEquivalency) {
@@ -208,15 +214,17 @@ public abstract class Operator implements Serializable {
 			}
 			return true;
 		} else {
+			Map<String, Collection<Class>> attributeTypes = getAttributeTypes();
+			addAttributeTypes(attributeTypes, operator.getAttributeTypes());
 			Map<String, Collection<TestAtom>> testAtoms = new HashMap<>();
 			for (Entry<String, Collection<TestAtom>> entry : operator
-					.getTestAtoms().entrySet()) {
+					.createTestAtoms(attributeTypes).entrySet()) {
 				Collection<TestAtom> c = new HashSet<>();
 				testAtoms.put(entry.getKey(), c);
 				c.addAll(entry.getValue());
 			}
-			for (Entry<String, Collection<TestAtom>> entry : getTestAtoms()
-					.entrySet()) {
+			for (Entry<String, Collection<TestAtom>> entry : createTestAtoms(
+					attributeTypes).entrySet()) {
 				Collection<TestAtom> c = testAtoms.get(entry.getKey());
 				if (c == null) {
 					c = new HashSet<>();
@@ -252,28 +260,38 @@ public abstract class Operator implements Serializable {
 		}
 	}
 
-	private transient Map<String, Collection<TestAtom>> testAtoms;
-
 	/**
-	 * Return all the configurations we should test a field against to evaluate
-	 * whether two Operators are equivalent.
-	 * <p>
-	 * This value is lazily cached.
-	 * 
-	 * @return a map of field names to their TestAtoms.
+	 * Merge two attribute type maps together into the first argument.
 	 */
-	protected Map<String, Collection<TestAtom>> getTestAtoms() {
-		if (testAtoms == null) {
-			testAtoms = createTestAtoms();
+	@SuppressWarnings("rawtypes")
+	protected static void addAttributeTypes(
+			Map<String, Collection<Class>> primaryMap,
+			Map<String, Collection<Class>> incomingMap) {
+		for (Entry<String, Collection<Class>> entry : incomingMap.entrySet()) {
+			Collection<Class> w = primaryMap.get(entry.getKey());
+			if (w == null) {
+				w = new HashSet<>();
+				primaryMap.put(entry.getKey(), w);
+			}
+			w.addAll(entry.getValue());
 		}
-		return testAtoms;
 	}
 
 	/**
 	 * Return all the configurations we should test a field against to evaluate
 	 * whether two Operators are equivalent.
+	 * 
+	 * @param attributeTypes the {@link #getAttributeTypes()} of the root
+	 * 			Operator. This will map an attribute to possible Classes
+	 * 			it is known to use in this tree. (Each collection may also
+	 * 			use null to indicate the value may be null at some point.)
+	 * 			<p>
+	 * 			Generally this will be 1 or 2 elements, such as
+	 * 		    {String.class, null} or {Integer.class}.
 	 */
-	protected abstract Map<String, Collection<TestAtom>> createTestAtoms();
+	@SuppressWarnings("rawtypes")
+	protected abstract Map<String, Collection<TestAtom>> createTestAtoms(
+			Map<String, Collection<Class>> attributeTypes);
 
 	/**
 	 * Evaluate whether this Operator should pass or fail given a set of input
@@ -499,10 +517,25 @@ public abstract class Operator implements Serializable {
 	 * Return all the attributes/fields this Operator (and its descendants)
 	 * consult during evaluation.
 	 */
-	public abstract Collection<String> getAttributes();
+	public final Collection<String> getAttributes() {
+		return new HashSet<String>(getAttributeTypes().keySet());
+	}
 
+	/**
+	 * Return a map of all the attributes this Operator (and its descendants)
+	 * use and their possible values. The collection may contain null,
+	 * which is used to indicate a null value may be used.
+	 * <p>
+	 * Generally each collection will be 1 or 2 elements, such as
+	 * {String.class, null} or {Integer.class}.
+	 */
+	@SuppressWarnings("rawtypes")
+	protected abstract Map<String, Collection<Class>> getAttributeTypes();
+
+	@SuppressWarnings("rawtypes")
 	private static Comparator NULL_SAFE_COMPARATOR = new Comparator() {
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public int compare(Object o1, Object o2) {
 			if (o1 == null && o2 == null)
@@ -544,7 +577,7 @@ public abstract class Operator implements Serializable {
 	 * @return an Operator that is functionally equivalent to OR'ing all the
 	 *         input Operators.
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Operator join(Operator... operators) {
 		for (int a = 0; a < operators.length; a++) {
 			operators[a] = operators[a].getCanonicalOperator();
@@ -669,6 +702,7 @@ public abstract class Operator implements Serializable {
 		return new Or(orOperands);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Operator convertJoinedAnd(And and) {
 		List<Operator> andOperands = new ArrayList(and.getOperands());
 		Map<String, SortedSet<Object>> notEqualTos = new HashMap<>();
