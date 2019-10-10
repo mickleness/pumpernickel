@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 
 /**
@@ -65,27 +64,12 @@ public class Not extends Operator {
 
 	@Override
 	protected Map<String, Collection<TestAtom>> createTestAtoms() {
-		Map<String, Collection<TestAtom>> map = getOperand(0).createTestAtoms();
-		for (Entry<String, Collection<TestAtom>> entry : map.entrySet()) {
-			for (TestAtom a : entry.getValue().toArray(
-					new TestAtom[entry.getValue().size()])) {
-				if (a.getType() == TestAtom.Type.EXACTLY
-						&& a.getValue() == null) {
-					TestAtom notNull = new TestAtom(TestAtom.Type.EXACTLY,
-							TestAtom.NOT_NULL);
-					if (!entry.getValue().contains(notNull)) {
-						entry.getValue().add(notNull);
-					}
-				}
-			}
-		}
-		return map;
+		return getOperand(0).createTestAtoms();
 	}
 
 	@Override
-	protected TestAtom.AtomEvaluation evaluateTestAtoms(
-			Map<String, TestAtom> values) {
-		return getOperand(0).evaluateTestAtoms(values).negate();
+	protected boolean evaluateTestAtoms(Map<String, TestAtom> values) {
+		return !getOperand(0).evaluateTestAtoms(values);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

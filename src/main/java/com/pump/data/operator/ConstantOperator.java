@@ -99,9 +99,8 @@ class ConstantOperator extends Operator {
 	}
 
 	@Override
-	protected TestAtom.AtomEvaluation evaluateTestAtoms(
-			Map<String, TestAtom> values) {
-		return TestAtom.AtomEvaluation.get(value);
+	protected boolean evaluateTestAtoms(Map<String, TestAtom> values) {
+		return value;
 	}
 
 	@Override

@@ -60,19 +60,17 @@ public class GreaterThan extends AbstractValueOperator<Comparable<?>> {
 	}
 
 	@Override
-	protected TestAtom.AtomEvaluation evaluateTestAtom(TestAtom atom) {
+	protected boolean evaluateTestAtom(TestAtom atom) {
 		Object atomValue = atom.getValue();
 
-		if (atomValue == null || atom.getType() == TestAtom.Type.LIKE
-				|| atomValue == TestAtom.NOT_NULL)
-			return TestAtom.AtomEvaluation.FALSE;
+		if (atomValue == null || atom.getType() == TestAtom.Type.LIKE)
+			return false;
 
 		Comparable k = getValue();
 		int z = k.compareTo(atomValue);
 		if (z == 0)
-			return TestAtom.AtomEvaluation
-					.get(atom.getType() == TestAtom.Type.BARELY_BIGGER_THAN);
-		return TestAtom.AtomEvaluation.get(z < 0);
+			return atom.getType() == TestAtom.Type.BARELY_BIGGER_THAN;
+		return z < 0;
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

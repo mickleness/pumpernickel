@@ -90,18 +90,11 @@ public class EqualTo extends AbstractValueOperator<Object> {
 	}
 
 	@Override
-	protected TestAtom.AtomEvaluation evaluateTestAtom(TestAtom atom) {
+	protected boolean evaluateTestAtom(TestAtom atom) {
 		if (atom.getType() == TestAtom.Type.EXACTLY) {
-			Object value = atom.getValue();
-			if (TestAtom.NOT_NULL == value) {
-				if (getValue() == null)
-					return TestAtom.AtomEvaluation.FALSE;
-				return TestAtom.AtomEvaluation.UNKNOWN;
-			}
-			return TestAtom.AtomEvaluation.get(Objects.equals(getValue(),
-					atom.getValue()));
+			return Objects.equals(getValue(), atom.getValue());
 		}
-		return TestAtom.AtomEvaluation.FALSE;
+		return false;
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

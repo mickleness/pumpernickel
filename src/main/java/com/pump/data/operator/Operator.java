@@ -28,7 +28,6 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.pump.data.operator.Operator.TestAtom.AtomEvaluation;
 import com.pump.util.CombinationIterator;
 
 /**
@@ -244,12 +243,8 @@ public abstract class Operator implements Serializable {
 				for (int a = 0; a < keyList.size(); a++) {
 					values.put(keyList.get(a), l.get(a));
 				}
-				AtomEvaluation myValue = evaluateTestAtoms(values);
-				AtomEvaluation otherValue = operator.evaluateTestAtoms(values);
-				if (AtomEvaluation.UNKNOWN == myValue
-						|| AtomEvaluation.UNKNOWN == otherValue)
-					continue;
-
+				boolean myValue = evaluateTestAtoms(values);
+				boolean otherValue = operator.evaluateTestAtoms(values);
 				if (myValue != otherValue)
 					return false;
 			}
@@ -284,8 +279,7 @@ public abstract class Operator implements Serializable {
 	 * Evaluate whether this Operator should pass or fail given a set of input
 	 * TestAtoms.
 	 */
-	protected abstract AtomEvaluation evaluateTestAtoms(
-			Map<String, TestAtom> values);
+	protected abstract boolean evaluateTestAtoms(Map<String, TestAtom> values);
 
 	/**
 	 * This represents a small testable unit of information, such as "x is 3" or
@@ -296,26 +290,6 @@ public abstract class Operator implements Serializable {
 	 * an input.
 	 */
 	protected static class TestAtom {
-		enum AtomEvaluation {
-			TRUE, FALSE, UNKNOWN;
-
-			public AtomEvaluation negate() {
-				if (this == TRUE)
-					return FALSE;
-				if (this == FALSE)
-					return TRUE;
-				return UNKNOWN;
-			}
-
-			public static AtomEvaluation get(boolean b) {
-				if (b)
-					return TRUE;
-				return FALSE;
-			}
-		}
-
-		protected static Object NOT_NULL = new Object();
-
 		enum Type {
 			EXACTLY("="), BARELY_SMALLER_THAN("<"), BARELY_BIGGER_THAN(">"), LIKE(
 					"~");
