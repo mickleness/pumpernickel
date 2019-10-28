@@ -22,6 +22,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.PointerInfo;
 import java.awt.TexturePaint;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -237,7 +238,11 @@ public class MagnificationPanel extends JComponent {
 	}
 
 	protected Point getMouseLoc() {
-		Point p = MouseInfo.getPointerInfo().getLocation();
+		// I observed a null PointerInfo after unplugging a second monitor
+		PointerInfo pointerInfo = MouseInfo.getPointerInfo();
+		if (pointerInfo == null)
+			return null;
+		Point p = pointerInfo.getLocation();
 		SwingUtilities.convertPointFromScreen(p, zoomedComponent);
 		return p;
 	}
@@ -247,6 +252,8 @@ public class MagnificationPanel extends JComponent {
 		if (scratchImage == null)
 			return;
 		Point mouseLoc = getMouseLoc();
+		if (mouseLoc == null)
+			return;
 
 		Graphics2D g = scratchImage.createGraphics();
 		g.setComposite(AlphaComposite.Clear);
@@ -281,6 +288,9 @@ public class MagnificationPanel extends JComponent {
 			} else {
 				g.scale(pixelSize, pixelSize);
 				Point mouseLoc = getMouseLoc();
+				if (mouseLoc == null)
+					return;
+
 				g.translate(-mouseLoc.x + scratchImage.getWidth() / 2,
 						-mouseLoc.y + scratchImage.getHeight() / 2);
 
