@@ -175,16 +175,16 @@ public class VistaMultiThumbSliderUI<T> extends DefaultMultiThumbSliderUI<T> {
 					thumbBounds.getMinY()), new Point2D.Double(0,
 					thumbBounds.getMaxY()), new float[] { 0, .55f, .5501f, 1 },
 					new Color[] {
-							tween(new Color(0xf2f2f2), new Color(0xe9f6fd),
-									selected),
-							tween(new Color(0xebebeb), new Color(0xd8effc),
-									selected),
-							tween(new Color(0xdbdbdb), new Color(0xbde6fd),
-									selected),
-							tween(new Color(0xd7d7d7), new Color(0xaedef8),
-									selected) });
-			strokePaint = tween(new Color(0x707070), new Color(0x3c7fb1),
-					selected);
+							AnimationManager.tween(new Color(0xf2f2f2),
+									new Color(0xe9f6fd), selected),
+							AnimationManager.tween(new Color(0xebebeb),
+									new Color(0xd8effc), selected),
+							AnimationManager.tween(new Color(0xdbdbdb),
+									new Color(0xbde6fd), selected),
+							AnimationManager.tween(new Color(0xd7d7d7),
+									new Color(0xaedef8), selected) });
+			strokePaint = AnimationManager.tween(new Color(0x707070),
+					new Color(0x3c7fb1), selected);
 		}
 		g.setPaint(fill);
 		g.fill(outline);
@@ -203,17 +203,5 @@ public class VistaMultiThumbSliderUI<T> extends DefaultMultiThumbSliderUI<T> {
 		g.setStroke(new BasicStroke(1f));
 		g.setPaint(strokePaint);
 		g.draw(outline);
-	}
-
-	private static final Color tween(Color c1, Color c2, float f) {
-		if (f < 0)
-			f = 0;
-		if (f > 1)
-			f = 1;
-		int r = (int) (c1.getRed() * (1 - f) + f * c2.getRed());
-		int g = (int) (c1.getGreen() * (1 - f) + f * c2.getGreen());
-		int b = (int) (c1.getBlue() * (1 - f) + f * c2.getBlue());
-		int a = (int) (c1.getAlpha() * (1 - f) + f * c2.getAlpha());
-		return new Color(r, g, b, a);
 	}
 }

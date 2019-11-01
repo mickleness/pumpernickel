@@ -232,7 +232,8 @@ public class PlafPaintUtils {
 					if (f >= positions[b - 1] && f < positions[b]) {
 						float p = (f - positions[b - 1])
 								/ (positions[b] - positions[b - 1]);
-						array[a] = tween(colors[b - 1], colors[b], p).getRGB();
+						array[a] = AnimationManager.tween(colors[b - 1],
+								colors[b], p).getRGB();
 						hit = true;
 						break findMatch;
 					}
@@ -245,31 +246,6 @@ public class PlafPaintUtils {
 			verticalGradients.put(key, paint);
 		}
 		return paint;
-	}
-
-	/** Tweens between the two arguments. */
-	public static Color tween(Color c1, Color c2, float p) {
-		int r1 = c1.getRed();
-		int g1 = c1.getGreen();
-		int b1 = c1.getBlue();
-		int a1 = c1.getAlpha();
-
-		int r2 = c2.getRed();
-		int g2 = c2.getGreen();
-		int b2 = c2.getBlue();
-		int a2 = c2.getAlpha();
-
-		return new Color((int) (r1 * (1 - p) + r2 * p),
-				(int) (g1 * (1 - p) + g2 * p), (int) (b1 * (1 - p) + b2 * p),
-				(int) (a1 * (1 - p) + a2 * p));
-	}
-
-	/** Tweens between the two arguments. */
-	public static Rectangle2D tween(Rectangle2D r1, Rectangle2D r2, float p) {
-		return new Rectangle2D.Double(r1.getX() * (1 - p) + r2.getX() * p,
-				r1.getY() * (1 - p) + r2.getY() * p, r1.getWidth() * (1 - p)
-						+ r2.getWidth() * p, r1.getHeight() * (1 - p)
-						+ r2.getHeight() * p);
 	}
 
 	private static Map<String, TexturePaint> checkers;

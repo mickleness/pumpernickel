@@ -214,12 +214,12 @@ public class MetalMultiThumbSliderUI<T> extends DefaultMultiThumbSliderUI<T> {
 					thumbBounds.getMinY()), new Point2D.Double(0,
 					thumbBounds.getMaxY()), new float[] { 0, .5f, 1 },
 					new Color[] {
-							tween(new Color(0xc8ddf2), new Color(0x000000),
-									.16f),
-							tween(new Color(0xffffff), new Color(0x000000),
-									.16f),
-							tween(new Color(0xbcd2e8), new Color(0x000000),
-									.16f) });
+							AnimationManager.tween(new Color(0xc8ddf2),
+									new Color(0x000000), .16f),
+							AnimationManager.tween(new Color(0xffffff),
+									new Color(0x000000), .16f),
+							AnimationManager.tween(new Color(0xbcd2e8),
+									new Color(0x000000), .16f) });
 		} else {
 			fill = new LinearGradientPaint(new Point2D.Double(0,
 					thumbBounds.getMinY()), new Point2D.Double(0,
@@ -239,17 +239,5 @@ public class MetalMultiThumbSliderUI<T> extends DefaultMultiThumbSliderUI<T> {
 		g.setStroke(new BasicStroke(1f));
 		g.setPaint(strokePaint);
 		g.draw(outline);
-	}
-
-	private static final Color tween(Color c1, Color c2, float f) {
-		if (f < 0)
-			f = 0;
-		if (f > 1)
-			f = 1;
-		int r = (int) (c1.getRed() * (1 - f) + f * c2.getRed());
-		int g = (int) (c1.getGreen() * (1 - f) + f * c2.getGreen());
-		int b = (int) (c1.getBlue() * (1 - f) + f * c2.getBlue());
-		int a = (int) (c1.getAlpha() * (1 - f) + f * c2.getAlpha());
-		return new Color(r, g, b, a);
 	}
 }

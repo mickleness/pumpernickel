@@ -38,7 +38,7 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.awt.GradientTexturePaint;
 import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.plaf.PlafPaintUtils;
+import com.pump.plaf.AnimationManager;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JPopover;
 
@@ -115,7 +115,7 @@ public class GradientTexturePaintDemo extends ShowcaseDemo {
 					// [0,1]?
 					f = Math.min(1, Math.max(0, f));
 
-					Color c = PlafPaintUtils.tween(well1
+					Color c = AnimationManager.tween(well1
 							.getColorSelectionModel().getSelectedColor(), well2
 							.getColorSelectionModel().getSelectedColor(), f);
 					d[x] = c.getRGB();

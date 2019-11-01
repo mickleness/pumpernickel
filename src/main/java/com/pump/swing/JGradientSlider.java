@@ -30,6 +30,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.ComponentUI;
 
+import com.pump.plaf.AnimationManager;
 import com.pump.plaf.MultiThumbSliderUI;
 
 /**
@@ -111,7 +112,8 @@ public class JGradientSlider extends MultiThumbSlider<Color> {
 			if (thumbPositions[a] <= pos && pos <= thumbPositions[a + 1]) {
 				float v = (pos - thumbPositions[a])
 						/ (thumbPositions[a + 1] - thumbPositions[a]);
-				return tween((Color) values[a], (Color) values[a + 1], v);
+				return AnimationManager.tween((Color) values[a],
+						(Color) values[a + 1], v);
 			}
 		}
 		if (pos < thumbPositions[0]) {
@@ -121,18 +123,6 @@ public class JGradientSlider extends MultiThumbSlider<Color> {
 			return values[values.length - 1];
 		}
 		return null;
-	}
-
-	private static Color tween(Color c1, Color c2, float p) {
-		if (p == 0)
-			return c1;
-		if (p == 1)
-			return c2;
-
-		return new Color((int) (c1.getRed() * (1 - p) + c2.getRed() * (p)),
-				(int) (c1.getGreen() * (1 - p) + c2.getGreen() * (p)),
-				(int) (c1.getBlue() * (1 - p) + c2.getBlue() * (p)),
-				(int) (c1.getAlpha() * (1 - p) + c2.getAlpha() * (p)));
 	}
 
 	/**
