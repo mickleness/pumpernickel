@@ -20,7 +20,6 @@ import java.net.URL;
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
@@ -41,10 +40,9 @@ import com.pump.plaf.AquaAngleSliderUI;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/AngleSliderUIDemo.png"
  * alt="A screenshot of the AngleSliderUIDemo.">
  */
-public class AngleSliderUIDemo extends ShowcaseDemo {
+public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	JPanel controls = new JPanel(new GridBagLayout());
 	JComboBox<String> uiTypeComboBox = new JComboBox<>();
 	JSlider angleSlider = new JSlider();
 	JRadioButton stateEnabled = new JRadioButton("Enabled", true);
@@ -70,24 +68,18 @@ public class AngleSliderUIDemo extends ShowcaseDemo {
 	};
 
 	public AngleSliderUIDemo() {
-		setLayout(new GridBagLayout());
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);
 		layout.addRow(new JLabel("Style:"), uiTypeComboBox, false);
 		layout.addRow(new JLabel("State:"), stateEnabled, stateDisabled);
 
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(controls, c);
 		c.gridy++;
 		c.fill = GridBagConstraints.NONE;
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.NORTH;
-		add(angleSlider, c);
+		examplePanel.add(angleSlider, c);
 
 		ButtonGroup g1 = new ButtonGroup();
 		g1.add(stateEnabled);
