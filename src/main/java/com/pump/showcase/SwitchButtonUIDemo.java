@@ -2,18 +2,18 @@ package com.pump.showcase;
 
 import java.net.URL;
 
-import javax.swing.JToggleButton;
-
 import com.pump.plaf.SwitchButtonUI;
+import com.pump.swing.SwitchButton;
 
 public class SwitchButtonUIDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
-	JToggleButton button = new JToggleButton("Hello");
+	SwitchButton buttonA = new SwitchButton("Option A");
+	SwitchButton buttonB = new SwitchButton("Option B");
 
 	public SwitchButtonUIDemo() {
-		button.setUI(new SwitchButtonUI());
-		add(button);
+		add(buttonA);
+		add(buttonB);
 	}
 
 	@Override
