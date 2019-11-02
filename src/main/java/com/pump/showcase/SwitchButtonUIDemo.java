@@ -4,25 +4,40 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
 
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 
+import com.pump.icon.AndroidSwitchButtonIcon;
+import com.pump.icon.AquaSwitchButtonIcon;
+import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.plaf.QPanelUI;
 import com.pump.plaf.SwitchButtonUI;
 import com.pump.swing.SwitchButton;
 
-public class SwitchButtonUIDemo extends ShowcaseDemo {
+public class SwitchButtonUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	SwitchButton buttonA = new SwitchButton("NIGHT SHIFT");
 	SwitchButton buttonB = new SwitchButton("DO NOT DISTURB");
 
+	JComboBox<String> iconType = new JComboBox<String>(new String[] { "Aqua",
+			"Android" });
+	JRadioButton enabledOn = new JRadioButton("On", true);
+	JRadioButton enabledOff = new JRadioButton("Off", false);
+
 	public SwitchButtonUIDemo() {
-		JPanel panel = new JPanel(new GridBagLayout());
+		JPanel example = new JPanel(new GridBagLayout());
 		QPanelUI panelUI = new QPanelUI();
-		panel.setUI(panelUI);
+		example.setUI(panelUI);
 		panelUI.setCornerSize(10);
 		panelUI.setFillColor(Color.white);
 		GridBagConstraints c = new GridBagConstraints();
@@ -31,9 +46,9 @@ public class SwitchButtonUIDemo extends ShowcaseDemo {
 		c.weightx = 1;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
-		panel.add(buttonA, c);
+		example.add(buttonA, c);
 		c.gridy++;
-		panel.add(buttonB, c);
+		example.add(buttonB, c);
 
 		buttonA.setIconTextGap(15);
 		buttonB.setIconTextGap(15);
@@ -49,7 +64,47 @@ public class SwitchButtonUIDemo extends ShowcaseDemo {
 		buttonA.setForeground(new Color(90, 90, 90));
 		buttonB.setForeground(new Color(90, 90, 90));
 
-		add(panel);
+		examplePanel.setLayout(new GridBagLayout());
+		c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.NORTHWEST;
+		examplePanel.add(example, c);
+
+		InspectorGridBagLayout i = new InspectorGridBagLayout(
+				configurationPanel);
+		i.addRow(new JLabel("Type:"), iconType);
+		i.addRow(new JLabel("Enabled:"), enabledOn, enabledOff);
+
+		ActionListener actionListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				refreshExample();
+			}
+
+		};
+
+		enabledOn.addActionListener(actionListener);
+		enabledOff.addActionListener(actionListener);
+		iconType.addActionListener(actionListener);
+
+		ButtonGroup g = new ButtonGroup();
+		g.add(enabledOn);
+		g.add(enabledOff);
+
+		refreshExample();
+	}
+
+	protected void refreshExample() {
+		Icon icon = iconType.getSelectedIndex() == 0 ? new AquaSwitchButtonIcon()
+				: new AndroidSwitchButtonIcon();
+		for (SwitchButton b : new SwitchButton[] { buttonA, buttonB }) {
+			b.setIcon(icon);
+			b.setEnabled(enabledOn.isSelected());
+		}
 	}
 
 	@Override

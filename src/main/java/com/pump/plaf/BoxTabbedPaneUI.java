@@ -214,7 +214,7 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 					}
 					Rectangle r = new Rectangle(x, y, w, h);
 					PlafPaintUtils.paintFocus(g, r, 1,
-							PlafPaintUtils.getFocusRingColor(), true);
+							PlafPaintUtils.getFocusRingColor());
 				}
 				g.dispose();
 				super.paint(g0, c);

@@ -162,7 +162,7 @@ public class MinimalDuoToneCloseIcon extends ButtonIcon {
 
 		Shape body1 = new RoundRectangle2D.Float(0, 0, getIconWidth() - 1,
 				getIconHeight() - 1, 5, 5);
-		PlafPaintUtils.paintFocus(g, body1, 1, focus, true);
+		PlafPaintUtils.paintFocus(g, body1, 1, focus);
 
 		Shape body2 = new RoundRectangle2D.Float(0, 0, getIconWidth(),
 				getIconHeight(), 5, 5);

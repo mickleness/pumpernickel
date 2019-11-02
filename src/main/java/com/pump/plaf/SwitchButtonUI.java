@@ -13,7 +13,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
 
-import com.pump.icon.SwitchButtonIcon;
+import com.pump.icon.AquaSwitchButtonIcon;
 import com.pump.util.JVM;
 
 public class SwitchButtonUI extends BasicRadioButtonUI {
@@ -72,9 +72,9 @@ public class SwitchButtonUI extends BasicRadioButtonUI {
 		Icon icon = UIManager.getIcon(iconKey);
 		if (icon == null) {
 			if (JVM.isMac) {
-				icon = new SwitchButtonIcon();
+				icon = new AquaSwitchButtonIcon();
 			} else {
-				icon = new SwitchButtonIcon();
+				icon = new AquaSwitchButtonIcon();
 			}
 			UIManager.put(iconKey, icon);
 		}
@@ -94,7 +94,7 @@ public class SwitchButtonUI extends BasicRadioButtonUI {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				Rectangle r = getIconRect(b);
-				if (r != null && r.contains(e.getPoint())) {
+				if (b.isEnabled() && r != null && r.contains(e.getPoint())) {
 					clickedIcon = true;
 					b.getModel().setArmed(true);
 					b.getModel().setPressed(true);

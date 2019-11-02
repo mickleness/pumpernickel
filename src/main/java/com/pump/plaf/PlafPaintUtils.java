@@ -18,7 +18,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.TexturePaint;
 import java.awt.geom.Rectangle2D;
@@ -28,8 +27,6 @@ import java.util.Map;
 
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-
-import com.pump.util.JVM;
 
 /**
  * Some static methods for some common painting functions.
@@ -75,7 +72,7 @@ public class PlafPaintUtils {
 	 *            the number of pixels the outline should cover.
 	 */
 	public static void paintFocus(Graphics2D g, Shape shape, int pixelSize) {
-		paintFocus(g, shape, pixelSize, getFocusRingColor(), true);
+		paintFocus(g, shape, pixelSize, getFocusRingColor());
 	}
 
 	/**
@@ -98,7 +95,7 @@ public class PlafPaintUtils {
 	 *            they will be left in tact
 	 */
 	public static void paintFocus(Graphics2D g, Shape shape, int pixelSize,
-			Color focusColor, boolean changeRenderingHints) {
+			Color focusColor) {
 		g = (Graphics2D) g.create();
 		try {
 			Color[] focusArray = new Color[] {
@@ -111,19 +108,6 @@ public class PlafPaintUtils {
 					new Color(focusColor.getRed(), focusColor.getGreen(),
 							focusColor.getBlue(),
 							80 * focusColor.getAlpha() / 255) };
-			if (changeRenderingHints) {
-				if (JVM.usingQuartz) {
-					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-							RenderingHints.VALUE_ANTIALIAS_ON);
-					g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
-							RenderingHints.VALUE_STROKE_PURE);
-				} else {
-					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-							RenderingHints.VALUE_ANTIALIAS_ON);
-					g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
-							RenderingHints.VALUE_STROKE_NORMALIZE);
-				}
-			}
 
 			g.setStroke(new BasicStroke(2 * pixelSize + 1,
 					BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
