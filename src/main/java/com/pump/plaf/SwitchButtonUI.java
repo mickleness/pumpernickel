@@ -30,6 +30,7 @@ public class SwitchButtonUI extends BasicRadioButtonUI {
 	public void installUI(JComponent c) {
 		initializeUIManager();
 		super.installUI(c);
+		c.setOpaque(false);
 	}
 
 	/**
@@ -46,6 +47,7 @@ public class SwitchButtonUI extends BasicRadioButtonUI {
 	protected Rectangle getIconRect(JComponent c) {
 		BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = bi.createGraphics();
+		g.setClip(new Rectangle(0, 0, c.getWidth(), c.getHeight()));
 		paint(g, c);
 		Rectangle iconRect = (Rectangle) c
 				.getClientProperty(PROPERTY_ICON_RECT);
