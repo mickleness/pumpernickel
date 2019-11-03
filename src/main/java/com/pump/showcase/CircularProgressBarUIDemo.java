@@ -11,9 +11,6 @@
 package com.pump.showcase;
 
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -21,7 +18,6 @@ import java.net.URL;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
@@ -44,10 +40,9 @@ import com.pump.swing.JColorWell;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/CircularProgressBarUIDemo.png"
  * alt="A screenshot of the CircularProgressBarUIDemo.">
  */
-public class CircularProgressBarUIDemo extends ShowcaseDemo {
+public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	JPanel controls = new JPanel();
 	JSlider sizeSlider = new JSlider(10, 120, 90);
 	JRadioButton indeterminateButton = new JRadioButton("Indeterminate", false);
 	JRadioButton determinateButton = new JRadioButton("Determinate", true);
@@ -56,7 +51,6 @@ public class CircularProgressBarUIDemo extends ShowcaseDemo {
 			new SpinnerNumberModel(0, 0, 100, 5));
 	JRadioButton animateOnButton = new JRadioButton("On");
 	JRadioButton animateOffButton = new JRadioButton("Off", true);
-	JPanel progressBarContainer = new JPanel();
 	JColorWell foregroundColor = new JColorWell(
 			CircularProgressBarUI.COLOR_DEFAULT_FOREGROUND);
 	JColorWell backgroundColor = new JColorWell(
@@ -211,9 +205,8 @@ public class CircularProgressBarUIDemo extends ShowcaseDemo {
 	};
 
 	public CircularProgressBarUIDemo() {
-		setLayout(new GridBagLayout());
-
-		InspectorGridBagLayout layout = new InspectorGridBagLayout(controls);
+		InspectorGridBagLayout layout = new InspectorGridBagLayout(
+				configurationPanel);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);
 		layout.addRow(new JLabel("Style:"), indeterminateButton,
 				determinateButton);
@@ -240,19 +233,7 @@ public class CircularProgressBarUIDemo extends ShowcaseDemo {
 		g3.add(stringOnButton);
 		g3.add(stringOffButton);
 
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(controls, c);
-		c.insets = new Insets(5, 5, 5, 5);
-		c.gridy++;
-		c.weighty++;
-		add(progressBarContainer, c);
-
-		progressBarContainer.add(progressBar);
+		examplePanel.add(progressBar);
 
 		progressBar.setUI(new CircularProgressBarUI());
 		progressBar.setValue(33);

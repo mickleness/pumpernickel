@@ -14,6 +14,9 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -316,12 +319,32 @@ public class InspectorGridBagLayout implements InspectorLayout {
 		addRow(identifier, group(controls), false);
 	}
 
-	private JComponent group(JComponent... components) {
-		JPanel group = new JPanel(new FlowLayout());
+	private JComponent group(final JComponent... components) {
+		final JPanel group = new JPanel(new FlowLayout());
+		ComponentListener hiddenComponentListener = new ComponentAdapter() {
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+				componentHidden(null);
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				boolean anyVisible = false;
+				for (JComponent c : components) {
+					if (c.isVisible())
+						anyVisible = true;
+				}
+				group.setVisible(anyVisible);
+			}
+
+		};
 		group.setOpaque(false);
 		for (JComponent c : components) {
 			group.add(c);
+			c.addComponentListener(hiddenComponentListener);
 		}
+		hiddenComponentListener.componentHidden(null);
 		return group;
 	}
 }

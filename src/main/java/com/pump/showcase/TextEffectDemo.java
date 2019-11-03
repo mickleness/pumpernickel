@@ -67,7 +67,7 @@ import com.pump.swing.PartialLineBorder;
  * alt="A screenshot of the TextEffectDemo.">
  *
  */
-public class TextEffectDemo extends ShowcaseDemo {
+public class TextEffectDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	class PreviewPanel extends JPanel {
@@ -125,7 +125,6 @@ public class TextEffectDemo extends ShowcaseDemo {
 	};
 
 	PreviewPanel preview = new PreviewPanel();
-	JPanel controls = new JPanel();
 	JLabel fontLabel1 = new JLabel("Font:");
 	JLabel fontSizeLabel = new JLabel("Size:");
 	JLabel fontLabel2 = new JLabel("Font:");
@@ -133,9 +132,9 @@ public class TextEffectDemo extends ShowcaseDemo {
 	JRadioButton fontCalligraphy = new JRadioButton("Calligraphy", false);
 
 	public TextEffectDemo() {
-		setLayout(new GridBagLayout());
+		super(true, true, false);
 
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
 		layout.addRow(new JLabel("Text:"), textField, true);
 		layout.addRow(new JLabel("Type:"), effectType, false);
 		layout.addRow(fontLabel1, fontComboBox, false);
@@ -152,21 +151,19 @@ public class TextEffectDemo extends ShowcaseDemo {
 		// always last, since it's uneditable
 		layout.addRow(durationLabel, duration, false);
 
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(controls, c);
-		c.gridy++;
 		c.weighty = 1;
-		c.insets = new Insets(20, 20, 0, 20);
-		add(preview, c);
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(0, 0, 0, 0);
+		examplePanel.add(preview, c);
 		c.gridy++;
 		c.weighty = 0;
-		c.insets = new Insets(0, 20, 20, 20);
-		add(controller, c);
+		c.insets = new Insets(0, 0, 20, 0);
+		examplePanel.add(controller, c);
 		preview.setBorder(new PartialLineBorder(Color.gray, true, true, false,
 				true));
 

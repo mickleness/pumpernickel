@@ -38,7 +38,7 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.awt.GradientTexturePaint;
 import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.plaf.PlafPaintUtils;
+import com.pump.plaf.AnimationManager;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JPopover;
 
@@ -52,7 +52,7 @@ import com.pump.swing.JPopover;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/GradientTexturePaintDemo.png"
  * alt="A screenshot of the GradientTexturePaintDemo.">
  */
-public class GradientTexturePaintDemo extends ShowcaseDemo {
+public class GradientTexturePaintDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	class GradientPanel extends JPanel {
@@ -115,7 +115,7 @@ public class GradientTexturePaintDemo extends ShowcaseDemo {
 					// [0,1]?
 					f = Math.min(1, Math.max(0, f));
 
-					Color c = PlafPaintUtils.tween(well1
+					Color c = AnimationManager.tween(well1
 							.getColorSelectionModel().getSelectedColor(), well2
 							.getColorSelectionModel().getSelectedColor(), f);
 					d[x] = c.getRGB();
@@ -129,7 +129,6 @@ public class GradientTexturePaintDemo extends ShowcaseDemo {
 
 	JColorWell well1 = new JColorWell(new Color(0xffffdf));
 	JColorWell well2 = new JColorWell(new Color(0x4f009f));
-	JPanel controls = new JPanel();
 
 	GradientPanel panel = new GradientPanel();
 	JSlider numberOfColorsSlider = new JSlider(2, 100, 10);
@@ -143,7 +142,7 @@ public class GradientTexturePaintDemo extends ShowcaseDemo {
 	JLabel unsupportedLabel = new JLabel("(Unsupported!)");
 
 	public GradientTexturePaintDemo() {
-		setLayout(new GridBagLayout());
+		super(true, true, false);
 		for (GradientType t : GradientType.values()) {
 			typeComboBox.addItem(t);
 		}
@@ -151,44 +150,30 @@ public class GradientTexturePaintDemo extends ShowcaseDemo {
 			cycleComboBox.addItem(t);
 		}
 
-		InspectorGridBagLayout layout = new InspectorGridBagLayout(controls);
+		InspectorGridBagLayout layout = new InspectorGridBagLayout(
+				configurationPanel);
 		layout.addRow(new JLabel("Color 1:"), well1, false, null);
 		layout.addRow(new JLabel("Color 2:"), well2, false, null);
 		layout.addRow(new JLabel("Colors:"), numberOfColorsSlider, false, null);
 		layout.addRow(new JLabel("Gradient Type:"), typeComboBox, false, null);
 		layout.addRow(new JLabel("Cycle:"), cycleComboBox, unsupportedLabel);
 
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(controls, c);
-
-		JPanel graphicPanel = new JPanel(new GridBagLayout());
-		c.gridx = 0;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		c.weighty = 1;
-		c.weightx = 1;
-		c.gridy++;
-		add(graphicPanel, c);
-
-		c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
 		c.weighty = 1;
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.fill = GridBagConstraints.BOTH;
-		graphicPanel.add(panel, c);
+		examplePanel.add(panel, c);
 		c.gridy++;
 		c.weighty = 0;
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.NONE;
-		graphicPanel.add(new JLabel("Quality Hints"), c);
+		examplePanel.add(new JLabel("Quality Hints"), c);
 		c.gridx++;
-		graphicPanel.add(new JLabel("Speed Hints"), c);
+		examplePanel.add(new JLabel("Speed Hints"), c);
 
 		ChangeListener repaintListener = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {

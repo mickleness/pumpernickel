@@ -26,7 +26,7 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.plaf.PlafPaintUtils;
+import com.pump.plaf.AnimationManager;
 import com.pump.util.Property;
 
 /**
@@ -193,7 +193,7 @@ public class ButtonIconManager {
 		for (String key : animationStartColors.keySet()) {
 			Color c1 = animationStartColors.get(key);
 			Color c2 = animationEndColors.get(key);
-			Color c = PlafPaintUtils.tween(c1, c2, f);
+			Color c = AnimationManager.tween(c1, c2, f);
 			returnValue.put(key, c);
 		}
 		return returnValue;

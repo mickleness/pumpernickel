@@ -66,7 +66,7 @@ import com.pump.plaf.PlafPaintUtils;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/StrokeMouseSmoothingDemo.png"
  * alt="A screenshot of the StrokeMouseSmoothingDemo.">
  */
-public class StrokeMouseSmoothingDemo extends ShowcaseDemo {
+public class StrokeMouseSmoothingDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -232,7 +232,6 @@ public class StrokeMouseSmoothingDemo extends ShowcaseDemo {
 		}
 	}
 
-	JPanel controls = new JPanel();
 	DrawingPanel drawingPanel = new DrawingPanel();
 
 	JLabel thicknessLabel = new JLabel("Thickness:");
@@ -247,7 +246,8 @@ public class StrokeMouseSmoothingDemo extends ShowcaseDemo {
 	JRadioButton smoothingOffButton = new JRadioButton("Off", false);
 
 	public StrokeMouseSmoothingDemo() {
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		super(true, true, false);
+		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
 		layout.addRow(new JLabel("Smoothing:"), smoothingOnButton,
 				smoothingOffButton);
 		layout.addRow(new JLabel("Stroke Type:"), strokeTypeComboBox);
@@ -304,18 +304,14 @@ public class StrokeMouseSmoothingDemo extends ShowcaseDemo {
 		smoothingOnButton.addActionListener(smoothingListener);
 		smoothingOffButton.addActionListener(smoothingListener);
 
-		setLayout(new GridBagLayout());
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(controls, c);
-		c.gridy++;
 		c.weighty = 1;
-		c.insets = new Insets(20, 20, 20, 20);
-		add(drawingPanel, c);
+		c.fill = GridBagConstraints.BOTH;
+		examplePanel.add(drawingPanel, c);
 
 		drawingPanel.setBorder(new LineBorder(Color.gray));
 

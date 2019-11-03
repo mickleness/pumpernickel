@@ -13,6 +13,7 @@ package com.pump.showcase;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
+import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -64,7 +65,7 @@ import com.pump.swing.JPopover;
  *      href="https://javagraphics.blogspot.com/2009/10/alphacomposites-which-does-what.html">AlphaComposites:
  *      Which Does What?</a>
  */
-public class AlphaCompositeDemo extends ShowcaseDemo {
+public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 
 	private static final long serialVersionUID = 1L;
 
@@ -100,7 +101,7 @@ public class AlphaCompositeDemo extends ShowcaseDemo {
 			};
 		}
 
-		setLayout(new GridBagLayout());
+		configurationPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -108,36 +109,37 @@ public class AlphaCompositeDemo extends ShowcaseDemo {
 		c.weighty = 0;
 		c.insets = new Insets(3, 3, 3, 3);
 		c.anchor = GridBagConstraints.EAST;
-		add(new JLabel("Composite:"), c);
+		configurationPanel.add(new JLabel("Composite:"), c);
 		c.gridy++;
-		add(new JLabel("Alpha:"), c);
+		configurationPanel.add(new JLabel("Alpha:"), c);
 		c.gridy++;
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		add(useShapes, c);
+		configurationPanel.add(useShapes, c);
 		c.gridy++;
-		add(useImages, c);
+		configurationPanel.add(useImages, c);
 		c.gridy++;
-		add(new JSeparator(), c);
+		configurationPanel.add(new JSeparator(), c);
 		c.gridy++;
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.NONE;
-		add(new JLabel("Dest Alpha:"), c);
+		configurationPanel.add(new JLabel("Dest Alpha:"), c);
 		c.gridy++;
-		add(new JLabel("Source Alpha:"), c);
+		configurationPanel.add(new JLabel("Source Alpha:"), c);
 		c.gridx++;
 		c.gridy = 0;
 		c.weightx = 1;
 		c.anchor = GridBagConstraints.WEST;
-		add(composites, c);
+		configurationPanel.add(composites, c);
 		c.gridy++;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		add(alpha, c);
+		configurationPanel.add(alpha, c);
 		c.gridy += 4;
-		add(dstAlpha, c);
+		configurationPanel.add(dstAlpha, c);
 		c.gridy++;
-		add(srcAlpha, c);
+		configurationPanel.add(srcAlpha, c);
 
+		examplePanel.setLayout(new GridBagLayout());
 		c.gridy++;
 		c.gridx = 0;
 		c.weightx = 1;
@@ -145,7 +147,8 @@ public class AlphaCompositeDemo extends ShowcaseDemo {
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.insets = new Insets(18, 18, 18, 18);
-		add(preview, c);
+		preview.setPreferredSize(new Dimension(200, 100));
+		examplePanel.add(preview, c);
 
 		Field[] fields = AlphaComposite.class.getFields();
 		for (int a = 0; a < fields.length; a++) {
@@ -250,13 +253,17 @@ public class AlphaCompositeDemo extends ShowcaseDemo {
 			BufferedImage myForeground = applyAlpha(foregroundImage,
 					srcAlphaValue);
 
-			g.drawImage(myBackground, getWidth() / 2 - myBackground.getWidth()
-					/ 2 - myBackground.getWidth() / 4, getHeight() / 2
-					- myBackground.getHeight() / 2, null);
+			g.drawImage(myBackground,
+					getWidth() * 2 / 3 - myForeground.getWidth() / 4,
+					getHeight() / 2 - myBackground.getHeight() / 4,
+					myBackground.getWidth() / 2, myBackground.getHeight() / 2,
+					null);
 			g.setComposite(getComposite());
-			g.drawImage(myForeground, getWidth() / 2 - myForeground.getWidth()
-					/ 2 + myForeground.getWidth() / 4, getHeight() / 2
-					- myForeground.getHeight() / 2, null);
+			g.drawImage(myForeground,
+					getWidth() * 1 / 3 - myForeground.getWidth() / 4,
+					getHeight() / 2 - myForeground.getHeight() / 4,
+					myForeground.getWidth() / 2, myForeground.getHeight() / 2,
+					null);
 
 			return bi;
 		}
@@ -287,10 +294,8 @@ public class AlphaCompositeDemo extends ShowcaseDemo {
 			g.fillRect(0, 0, getWidth(), getHeight());
 			g.setComposite(AlphaComposite.SrcOver);
 
-			Ellipse2D destShape = new Ellipse2D.Float(0, 0, 200, 200);
-			Ellipse2D srcShape = new Ellipse2D.Float(100, 0, 200, 200);
-
-			g.translate(getWidth() / 2 - 300 / 2, getHeight() / 2 - 200 / 2);
+			Ellipse2D destShape = new Ellipse2D.Float(25, 0, 100, 100);
+			Ellipse2D srcShape = new Ellipse2D.Float(75, 0, 100, 100);
 
 			Paint destPaint = new GradientPaint(0, 0, new Color(255, 100, 100,
 					0), 0, 200, new Color(255, 100, 100, destAlphaValue));
@@ -305,8 +310,8 @@ public class AlphaCompositeDemo extends ShowcaseDemo {
 
 			g.setComposite(AlphaComposite.SrcOver);
 			g.setColor(Color.black);
-			drawString(g, "DST", 100 - 30, 100);
-			drawString(g, "SRC", 200 + 30, 100);
+			drawString(g, "DST", 85 - 30, 50);
+			drawString(g, "SRC", 115 + 30, 50);
 
 			return bi;
 		}

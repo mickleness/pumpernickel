@@ -34,10 +34,10 @@ import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -66,7 +66,7 @@ import com.pump.swing.JBreadCrumb.BreadCrumbFormatter;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/BreadCrumbDemo.png"
  * alt="A screenshot of the BreadCrumbDemo.">
  */
-public class BreadCrumbDemo extends ShowcaseDemo {
+public class BreadCrumbDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	static class DoubleSlashIcon implements Icon {
@@ -186,16 +186,13 @@ public class BreadCrumbDemo extends ShowcaseDemo {
 	JTree tree;
 	JScrollPane treeScrollPane;
 	JBreadCrumb<String> breadCrumb = new JBreadCrumb<>();
-	JPanel controls = new JPanel();
 	JRadioButton fileIconOff = new JRadioButton("Off", false);
 	JRadioButton fileIconOn = new JRadioButton("On", true);
 	JComboBox<String> separatorComboBox = new JComboBox<>();
 
 	public BreadCrumbDemo() {
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
-		// layout.addRow(new JLabel("Style:"), defaultStyle, customStyle);
-		layout.addRow(new JLabel("File Icons:"), fileIconOff, fileIconOn);
-		layout.addRow(new JLabel("Separator:"), separatorComboBox);
+		super(true, false, false);
+		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
 
 		ButtonGroup g1 = new ButtonGroup();
 		g1.add(fileIconOff);
@@ -223,31 +220,27 @@ public class BreadCrumbDemo extends ShowcaseDemo {
 			tree.expandRow(a);
 		}
 
-		treeScrollPane.setPreferredSize(new Dimension(100, 100));
+		// layout.addRow(new JLabel("Style:"), defaultStyle, customStyle);
+		layout.addRow(new JLabel("File Icons:"), fileIconOff, fileIconOn);
+		layout.addRow(new JLabel("Separator:"), separatorComboBox);
+		layout.addRow(treeScrollPane, SwingConstants.CENTER, true);
 
-		setLayout(new GridBagLayout());
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(3, 3, 3, 3);
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(controls, c);
-		c.gridy++;
-		add(treeScrollPane, c);
-		c.insets = new Insets(3, 3, 3, 3);
-		c.gridy++;
 		c.weighty = 1;
 		c.weightx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		add(breadCrumb, c);
+		examplePanel.add(breadCrumb, c);
 
 		breadCrumb.setBorder(new CompoundBorder(
 				new LineBorder(Color.lightGray), new EmptyBorder(0, 4, 0, 4)));
 
 		// don't let the scrollpane hog all the space, it's not our primary
 		// focus
-		treeScrollPane.setPreferredSize(new Dimension(200, 200));
+		treeScrollPane.setPreferredSize(new Dimension(400, 200));
 
 		tree.getSelectionModel().addTreeSelectionListener(
 				new TreeSelectionListener() {

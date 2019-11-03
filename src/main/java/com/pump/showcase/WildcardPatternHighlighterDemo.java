@@ -13,16 +13,19 @@ package com.pump.showcase;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -38,9 +41,7 @@ import javax.swing.text.Highlighter;
 
 import com.pump.awt.TextBlock;
 import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.JColorWell;
-import com.pump.swing.SectionContainer.Section;
 import com.pump.text.TextBoxHighlightPainter;
 import com.pump.text.UnderlineHighlightPainter;
 import com.pump.text.WildcardPattern;
@@ -55,12 +56,8 @@ import com.pump.text.WildcardPattern;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/WildcardPatternHighlighterDemo.png"
  * alt="A screenshot of the WildcardPatternHighlighterDemo.">
  */
-public class WildcardPatternHighlighterDemo extends ShowcaseDemo {
+public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
-
-	CollapsibleContainer sectionContainer = new CollapsibleContainer();
-
-	JPanel inspector = new JPanel();
 
 	JTextField underlinePatternField = new JTextField("*pon*");
 	JLabel underlinePatternLabel = new JLabel("Underline Pattern:");
@@ -119,64 +116,65 @@ public class WildcardPatternHighlighterDemo extends ShowcaseDemo {
 		}
 	};
 
-	public WildcardPatternHighlighterDemo() {
-		setLayout(new GridBagLayout());
+	JComboBox<String> typeComboBox = new JComboBox<>(new String[] {
+			"UnderlineHighlightPainter", "TextBoxHighlightPainter" });
+	Collection<JComponent> underlineControls = new HashSet<>();
+	Collection<JComponent> textBoxControls = new HashSet<>();
 
-		Section underlineSection = sectionContainer.addSection("underline",
-				"Underline Highlighter");
-		sectionContainer.getHeader(underlineSection).putClientProperty(
-				CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
+	public WildcardPatternHighlighterDemo() {
+		super(true, true, false);
+
 		InspectorGridBagLayout layout = new InspectorGridBagLayout(
-				underlineSection.getBody());
+				configurationPanel);
+		layout.addRow(new JLabel("Type:"), typeComboBox);
+
 		layout.addRow(underlinePatternLabel, underlinePatternField, true);
 		layout.addRow(colorWellLabel, colorWell, false);
 		layout.addRow(thicknessLabel, thicknessSpinner, false);
 		layout.addRow(squiggleLabel, squiggleOnRadioButton,
 				squiggleOffRadioButton);
 
-		Section blockSection = sectionContainer.addSection("block",
-				"Text Block Highlighter");
-		sectionContainer.getHeader(blockSection).putClientProperty(
-				CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
-		layout = new InspectorGridBagLayout(blockSection.getBody());
+		underlineControls.addAll(Arrays.asList(underlinePatternLabel,
+				underlinePatternField, colorWellLabel, colorWell,
+				thicknessLabel, thicknessSpinner, squiggleLabel,
+				squiggleOnRadioButton, squiggleOffRadioButton));
+
 		layout.addRow(blockPatternLabel, blockPatternField, true);
 		layout.addRow(hueLabel, hueSpinner, false);
 		layout.addRow(includeFillLabel, includeFillOnRadioButton,
 				includeFillOffRadioButton);
 		layout.addRow(alphaLabel, alphaSpinner, false);
 
+		textBoxControls.addAll(Arrays.asList(blockPatternLabel,
+				blockPatternField, hueLabel, hueSpinner, includeFillLabel,
+				includeFillOnRadioButton, includeFillOffRadioButton,
+				alphaLabel, alphaSpinner));
+
 		squiggleButtonGroup.add(squiggleOnRadioButton);
 		squiggleButtonGroup.add(squiggleOffRadioButton);
 
 		includeFillButtonGroup.add(includeFillOnRadioButton);
 		includeFillButtonGroup.add(includeFillOffRadioButton);
-		
+
 		squiggleOnRadioButton.setOpaque(false);
 		squiggleOffRadioButton.setOpaque(false);
 		includeFillOnRadioButton.setOpaque(false);
 		includeFillOffRadioButton.setOpaque(false);
 
-		Section textSection = sectionContainer.addSection("text", "Text");
-		sectionContainer.getHeader(textSection).putClientProperty(
-				CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
-		textSection.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1.0);
-		textSection.getBody().setLayout(new GridBagLayout());
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
-		textSection.getBody().add(scrollPane, c);
-
-		c.insets = new Insets(0, 0, 0, 5);
-		add(sectionContainer, c);
+		examplePanel.add(scrollPane, c);
 
 		textPane.setText("Once upon a midnight dreary, while I pondered, weak and weary,\n"
 				+ "Over many a quaint and curious volume of forgotten lore\n"
 				+ "    While I nodded, nearly napping, suddenly there came a tapping,\n"
 				+ "As of some one gently rapping, rapping at my chamber door.\n"
-				+ "Tis some visitor,\" I muttered, \"tapping at my chamber door —\n"
+				+ "Tis some visitor,\" I muttered, \"tapping at my chamber door ï¿½\n"
 				+ "Only this, and nothing more.\"");
 
 		underlinePatternField.getDocument().addDocumentListener(docListener);
@@ -190,6 +188,29 @@ public class WildcardPatternHighlighterDemo extends ShowcaseDemo {
 		includeFillOffRadioButton.addActionListener(actionListener);
 		alphaSpinner.addChangeListener(changeListener);
 
+		typeComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				refreshControls();
+			}
+		});
+		refreshControls();
+	}
+
+	protected void refreshControls() {
+		Collection<JComponent> visibleComponents, hiddenComponents;
+		if (typeComboBox.getSelectedIndex() == 0) {
+			visibleComponents = underlineControls;
+			hiddenComponents = textBoxControls;
+		} else {
+			visibleComponents = textBoxControls;
+			hiddenComponents = underlineControls;
+		}
+		for (JComponent c : visibleComponents) {
+			c.setVisible(true);
+		}
+		for (JComponent c : hiddenComponents) {
+			c.setVisible(false);
+		}
 		refreshHighlights();
 	}
 
@@ -235,21 +256,23 @@ public class WildcardPatternHighlighterDemo extends ShowcaseDemo {
 		textPane.getHighlighter().removeAllHighlights();
 		List<Word> words = getWords(textPane.getText());
 		try {
-			WildcardPattern underlinePattern = new WildcardPattern(
-					underlinePatternField.getText());
-			UnderlineHighlightPainter underlinePainter = new UnderlineHighlightPainter(
-					colorWell.getColorSelectionModel().getSelectedColor(),
-					((Integer) thicknessSpinner.getValue()).intValue(),
-					squiggleOnRadioButton.isSelected());
-			highlight(words, underlinePattern, underlinePainter);
-
-			WildcardPattern blockPattern = new WildcardPattern(
-					blockPatternField.getText());
-			float hue = ((Number) hueSpinner.getValue()).floatValue() / 360f;
-			float alpha = ((Number) alphaSpinner.getValue()).floatValue() / 100f;
-			TextBoxHighlightPainter blockPainter = new TextBoxHighlightPainter(
-					hue, includeFillOnRadioButton.isSelected(), alpha);
-			highlight(words, blockPattern, blockPainter);
+			if (typeComboBox.getSelectedIndex() == 0) {
+				WildcardPattern underlinePattern = new WildcardPattern(
+						underlinePatternField.getText());
+				UnderlineHighlightPainter underlinePainter = new UnderlineHighlightPainter(
+						colorWell.getColorSelectionModel().getSelectedColor(),
+						((Integer) thicknessSpinner.getValue()).intValue(),
+						squiggleOnRadioButton.isSelected());
+				highlight(words, underlinePattern, underlinePainter);
+			} else {
+				WildcardPattern blockPattern = new WildcardPattern(
+						blockPatternField.getText());
+				float hue = ((Number) hueSpinner.getValue()).floatValue() / 360f;
+				float alpha = ((Number) alphaSpinner.getValue()).floatValue() / 100f;
+				TextBoxHighlightPainter blockPainter = new TextBoxHighlightPainter(
+						hue, includeFillOnRadioButton.isSelected(), alpha);
+				highlight(words, blockPattern, blockPainter);
+			}
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}

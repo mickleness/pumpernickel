@@ -24,7 +24,6 @@ import java.util.Hashtable;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -48,10 +47,9 @@ import com.pump.swing.JThrobber;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/ThrobberDemo.png"
  * alt="A screenshot of the ThrobberDemo.">
  */
-public class ThrobberDemo extends ShowcaseDemo {
+public class ThrobberDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	JPanel controls = new JPanel();
 	JComboBox<Class<? extends ThrobberUI>> typeComboBox = new JComboBox<>();
 	JSlider sizeSlider = new JSlider(8, 100, 16);
 	JSlider rateSlider = new JSlider(50, 200, 100);
@@ -60,7 +58,7 @@ public class ThrobberDemo extends ShowcaseDemo {
 	JCheckBox colorCheckBox = new JCheckBox("Custom Foreground:");
 
 	public ThrobberDemo() {
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
 		layout.addRow(new JLabel("Type:"), typeComboBox);
 		layout.addRow(new JLabel("Size:"), sizeSlider);
 		layout.addRow(new JLabel("Rate:"), rateSlider);
@@ -77,20 +75,15 @@ public class ThrobberDemo extends ShowcaseDemo {
 		rateSlider.setMinorTickSpacing(10);
 		rateSlider.setLabelTable(dictionary);
 
-		setLayout(new GridBagLayout());
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		add(controls, c);
-		c.gridy++;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.NORTH;
-		add(throbber, c);
+		c.insets = new Insets(10, 10, 10, 10);
+		examplePanel.add(throbber, c);
 
 		ChangeListener changeListener = new ChangeListener() {
 

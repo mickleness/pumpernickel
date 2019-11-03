@@ -22,9 +22,6 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.PathIterator;
 import java.net.URL;
 
 import javax.swing.JCheckBox;
@@ -33,7 +30,6 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
@@ -51,7 +47,7 @@ import com.pump.geom.Spiral2D;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/Spiral2DDemo.png"
  * alt="A screenshot of the Spiral2DDemo.">
  */
-public class Spiral2DDemo extends ShowcaseDemo {
+public class Spiral2DDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	JLabel coilGapLabel = new JLabel("Coil Gap:");
@@ -66,10 +62,7 @@ public class Spiral2DDemo extends ShowcaseDemo {
 	JSpinner coilOffset = new JSpinner(new SpinnerNumberModel(0, 0, 10, .01));
 
 	JCheckBox outward = new JCheckBox("Outward");
-	JCheckBox animate = new JCheckBox("Animate");
 	JCheckBox clockwise = new JCheckBox("Clockwise");
-	JCheckBox showFlattenedSpiral = new JCheckBox("Show Flattened Spiral");
-	JCheckBox showControlPoints = new JCheckBox("Show Control Points");
 
 	PreviewPanel preview = new PreviewPanel();
 
@@ -116,11 +109,11 @@ public class Spiral2DDemo extends ShowcaseDemo {
 		}
 	};
 	int timerChange = 0;
-	Timer animateTimer = new Timer(50, animateListener);
 
 	public Spiral2DDemo() {
-		super();
-		setLayout(new GridBagLayout());
+		super(true, true, true);
+
+		configurationPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -128,72 +121,49 @@ public class Spiral2DDemo extends ShowcaseDemo {
 		c.weighty = 0;
 		c.anchor = GridBagConstraints.EAST;
 		c.insets = new Insets(3, 3, 3, 3);
-		add(coilGapLabel, c);
+		configurationPanel.add(coilGapLabel, c);
 		c.gridy++;
-		add(coilsLabel, c);
+		configurationPanel.add(coilsLabel, c);
 		c.gridy++;
-		add(angleOffsetLabel, c);
+		configurationPanel.add(angleOffsetLabel, c);
 		c.gridy++;
-		add(coilOffsetLabel, c);
+		configurationPanel.add(coilOffsetLabel, c);
 		c.gridx++;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.WEST;
 		c.fill = GridBagConstraints.NONE;
-		add(coilGap, c);
+		configurationPanel.add(coilGap, c);
 		c.gridy++;
-		add(coils, c);
+		configurationPanel.add(coils, c);
 		c.gridy++;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		add(angleOffset, c);
+		configurationPanel.add(angleOffset, c);
 		c.gridy++;
 		c.fill = GridBagConstraints.NONE;
-		add(coilOffset, c);
+		configurationPanel.add(coilOffset, c);
 		c.gridy++;
-		add(clockwise, c);
+		configurationPanel.add(clockwise, c);
 		c.gridy++;
-		add(outward, c);
+		configurationPanel.add(outward, c);
 		outward.setToolTipText("This should produce no visual difference.");
 
+		examplePanel.setLayout(new GridBagLayout());
 		c.gridx = 0;
 		c.gridy++;
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
 		c.weighty = 1;
-		add(preview, c);
-
-		c.gridy++;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		add(showFlattenedSpiral, c);
-		c.gridy++;
-		add(showControlPoints, c);
-		c.gridy++;
-		add(animate, c);
+		examplePanel.add(preview, c);
 
 		ChangeListener changeListener = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				preview.repaint();
-				if (timerChange == 0) {
-					if (e.getSource() == animate) {
-						if (animate.isSelected()) {
-							animateTimer.start();
-						} else {
-							animateTimer.stop();
-						}
-					} else if (animate.isSelected()) {
-						animate.setSelected(false);
-						animateTimer.stop();
-					}
-				}
 			}
 		};
 		outward.addChangeListener(changeListener);
-		animate.addChangeListener(changeListener);
 		angleOffset.addChangeListener(changeListener);
 		coilOffset.addChangeListener(changeListener);
-		showFlattenedSpiral.addChangeListener(changeListener);
-		showControlPoints.addChangeListener(changeListener);
 		coilGap.addChangeListener(changeListener);
 		coils.addChangeListener(changeListener);
 		clockwise.addChangeListener(changeListener);
@@ -241,7 +211,6 @@ public class Spiral2DDemo extends ShowcaseDemo {
 		}
 
 		protected void setSpiral(Spiral2D spiral) {
-			animate.setSelected(false);
 			double fraction = ((spiral.getAngularOffset() + 4 * Math.PI) / (2 * Math.PI)) % 1.0;
 			angleOffset.setValue((int) (fraction * 100));
 			coilOffset.setValue(spiral.getCoilOffset());
@@ -272,59 +241,8 @@ public class Spiral2DDemo extends ShowcaseDemo {
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 
-			if (showFlattenedSpiral.isSelected()) {
-				g.setColor(Color.red);
-				double r = (coilGapValue * coilOffsetValue);
-				double lastX = spiral.getCenterX() + r
-						* Math.cos(angleOffsetValue);
-				double lastY = spiral.getCenterY() + r
-						* Math.sin(angleOffsetValue);
-				Line2D l = new Line2D.Double();
-				double m = clockwise.isSelected() ? 1 : -1;
-				for (double t = 0; t < coilsValue; t += .01) {
-					r = (coilGapValue * (t + coilOffsetValue));
-					double x = spiral.getCenterX() + r
-							* Math.cos(m * t * Math.PI * 2 + angleOffsetValue);
-					double y = spiral.getCenterY() + r
-							* Math.sin(m * t * Math.PI * 2 + angleOffsetValue);
-					l.setLine(lastX, lastY, x, y);
-					g2.draw(l);
-					lastX = x;
-					lastY = y;
-				}
-				r = (coilGapValue * (coilsValue + coilOffsetValue));
-				double x = spiral.getCenterX()
-						+ r
-						* Math.cos(m * coilsValue * Math.PI * 2
-								+ angleOffsetValue);
-				double y = spiral.getCenterY()
-						+ r
-						* Math.sin(m * coilsValue * Math.PI * 2
-								+ angleOffsetValue);
-				l.setLine(lastX, lastY, x, y);
-				g2.draw(l);
-			}
-
 			g2.setColor(Color.blue);
 			g2.draw(spiral);
-
-			if (showControlPoints.isSelected()) {
-				Ellipse2D ellipse = new Ellipse2D.Float();
-				PathIterator i = spiral.getPathIterator(null);
-				float[] coords = new float[6];
-				while (i.isDone() == false) {
-					int type = i.currentSegment(coords);
-					if (type == PathIterator.SEG_CUBICTO) {
-						g2.setColor(Color.green.darker());
-						ellipse.setFrame(coords[0] - 2, coords[1] - 2, 4, 4);
-						g2.draw(ellipse);
-						g2.setColor(Color.orange.darker());
-						ellipse.setFrame(coords[2] - 2, coords[3] - 2, 4, 4);
-						g2.draw(ellipse);
-					}
-					i.next();
-				}
-			}
 		}
 	}
 

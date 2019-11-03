@@ -12,7 +12,6 @@ package com.pump.showcase;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -69,7 +68,7 @@ import com.pump.plaf.ZoomIconPaintUIEffect;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/QButtonUIDemo.png"
  * alt="A screenshot of the QButtonUIDemo.">
  */
-public class QButtonUIDemo extends ShowcaseDemo {
+public class QButtonUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 	private static Icon DEMO_ICON = new GearIcon(14, Color.darkGray);
 
@@ -114,11 +113,10 @@ public class QButtonUIDemo extends ShowcaseDemo {
 
 	JComboBox<QButtonUI> uiComboBox = new JComboBox<>();
 
-	JPanel controlPanel = new JPanel(new GridBagLayout());
-
 	List<JComponent> controls = new ArrayList<JComponent>();
 
 	public QButtonUIDemo() {
+		super(true, true, false);
 		prepareInternalFrames(new BevelButtonUI(), new CapsuleButtonUI(),
 				new GradientButtonUI(), new PlasticButtonUI(),
 				new RecessedButtonUI(), new RetroButtonUI(),
@@ -147,26 +145,11 @@ public class QButtonUIDemo extends ShowcaseDemo {
 			controls.add(handlerControls[b]);
 		}
 
-		setLayout(new GridBagLayout());
 		uiComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				updateDemo();
 			}
 		});
-
-		GridBagConstraints c = new GridBagConstraints();
-		c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.fill = GridBagConstraints.BOTH;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		add(controlPanel, c);
-		c.gridy++;
-		c.weighty = 1;
-		add(desktop, c);
 
 		uiComboBox.setRenderer(new LabelCellRenderer<QButtonUI>() {
 
@@ -175,11 +158,6 @@ public class QButtonUIDemo extends ShowcaseDemo {
 				label.setText(value.getClass().getSimpleName());
 			}
 		});
-
-		setOpaque(controlPanel, false);
-		setFocusable(controlPanel, false);
-
-		desktop.setPreferredSize(new Dimension(300, 300));
 
 		iconCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -290,6 +268,15 @@ public class QButtonUIDemo extends ShowcaseDemo {
 		updateVisibility();
 
 		updateDemo();
+
+		examplePanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		examplePanel.add(desktop, c);
 	}
 
 	protected JComboBox createComboBox(QButtonUI fui, String name,
@@ -518,6 +505,8 @@ public class QButtonUIDemo extends ShowcaseDemo {
 		c.insets = new Insets(3, 3, 3, 3);
 		c.anchor = GridBagConstraints.WEST;
 		int width = 0;
+		configurationPanel.setLayout(new GridBagLayout());
+		configurationPanel.removeAll();
 		for (int a = 0; a < controls.size(); a++) {
 			JComponent control = controls.get(a);
 			int thisWidth = control.getPreferredSize().width + 4;
@@ -527,7 +516,7 @@ public class QButtonUIDemo extends ShowcaseDemo {
 					c.gridx = 0;
 					c.gridy++;
 				}
-				controlPanel.add(control, c);
+				configurationPanel.add(control, c);
 				width += thisWidth;
 				c.gridx++;
 				if (c.gridx == 4) {
@@ -537,7 +526,6 @@ public class QButtonUIDemo extends ShowcaseDemo {
 				}
 			}
 		}
-		setOpaque(controlPanel, false);
 	}
 
 	protected void updateVisibility() {

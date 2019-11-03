@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,12 +29,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.JToolTip;
 import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.JTextComponent;
 
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.inspector.InspectorLayout;
@@ -57,12 +54,9 @@ import com.pump.util.BooleanProperty;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JPopoverDemo.png"
  * alt="A screenshot of the JPopoverDemo.">
  */
-public class JPopoverDemo extends ShowcaseDemo {
+public class JPopoverDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	JTextComponent textBox = new JTextPane();
-
-	JPanel samples = new JPanel();
 	JPasswordField passwordField = new JPasswordField(15);
 	FontComboBox fontComboBox = new FontComboBox();
 	JTextField currencyField = new JTextField(15);
@@ -85,9 +79,10 @@ public class JPopoverDemo extends ShowcaseDemo {
 	}
 
 	public JPopoverDemo() {
+		configurationLabel.setVisible(false);
+		configurationPanel.setVisible(false);
 
-		samples.setUI(QPanelUI.createBoxUI());
-		InspectorLayout layout = new InspectorGridBagLayout(samples);
+		InspectorLayout layout = new InspectorGridBagLayout(examplePanel);
 		layout.addRow(new JLabel("Password:"), passwordField, false);
 		layout.addRow(new JLabel("Font:"), fontComboBox, false);
 		layout.addRow(new JLabel("Currency Input:"), currencyField, false);
@@ -119,28 +114,6 @@ public class JPopoverDemo extends ShowcaseDemo {
 			}
 
 		});
-
-		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(textBox, c);
-		c.gridy++;
-
-		JLabel sampleLabel = new JLabel("Samples:");
-		sampleLabel.setFont(sampleLabel.getFont().deriveFont(
-				sampleLabel.getFont().getSize2D() - 2));
-		c.insets = new Insets(15, 4, 0, 4);
-		add(sampleLabel, c);
-		c.gridy++;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.anchor = GridBagConstraints.NORTH;
-		c.insets = new Insets(0, 4, 4, 4);
-		add(samples, c);
 
 		passwordField.putClientProperty(QPopup.PROPERTY_CALLOUT_TYPE,
 				new CalloutType[] { CalloutType.LEFT_CENTER });
@@ -203,10 +176,6 @@ public class JPopoverDemo extends ShowcaseDemo {
 		}
 
 		new JPopover<JPanel>(currencyField, currencyButtonGrid, true);
-
-		textBox.setText("Below are some examples of components that use JPopovers. Move the mouse over a component or press the tab key to focus on a component to interact with the popover.");
-		textBox.setEditable(false);
-		textBox.setOpaque(false);
 
 	}
 
@@ -287,11 +256,11 @@ public class JPopoverDemo extends ShowcaseDemo {
 		}
 
 		if (!recommendations.isEmpty()) {
-			tooltip += "<p>We recommend:\n<ul>";
+			tooltip += "<p>We recommend:\n<ol>";
 			for (String r : recommendations) {
 				tooltip += "<li>" + r + "\n";
 			}
-			tooltip += "</ul>";
+			tooltip += "</ol>";
 		}
 		tooltip += "</html>";
 
@@ -305,7 +274,7 @@ public class JPopoverDemo extends ShowcaseDemo {
 
 	@Override
 	public String getSummary() {
-		return "This demonstrates a new Swing component that resembles an enhanced tooltip.";
+		return "This demonstrates a new Swing component that resembles an enhanced tooltip.\n\nBelow are some examples of components that use JPopovers. Move the mouse over a component or press the tab key to focus on a component to interact with the popover.";
 	}
 
 	@Override

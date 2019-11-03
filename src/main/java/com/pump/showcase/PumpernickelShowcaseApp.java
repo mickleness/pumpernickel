@@ -53,7 +53,6 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -393,6 +392,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Strokes, MouseSmoothing", "StrokeMouseSmoothingDemo");
 			addSection("JColorWell, JPalette", "JColorWellPaletteDemo");
 			addSection("JEyeDropper", "JEyeDropperDemo");
+			addSection("JSwitchButton", "JSwitchButtonDemo");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -648,31 +648,32 @@ public class PumpernickelShowcaseApp extends JFrame {
 			};
 
 			JPanel replacement = new JPanel(new GridBagLayout());
-			JLabel header = new JLabel(showcaseDemo.getTitle());
-			JTextArea descriptionTextArea = new JTextArea(
-					showcaseDemo.getSummary());
-			descriptionTextArea.setFont(header.getFont().deriveFont(14f));
-			descriptionTextArea.setEditable(false);
-			descriptionTextArea.setOpaque(false);
-			descriptionTextArea.setLineWrap(true);
-			descriptionTextArea.setWrapStyleWord(true);
-			header.setFont(header.getFont().deriveFont(18f));
+
+			JTextArea headerTextArea = createTextArea(showcaseDemo.getTitle(),
+					18);
+			JTextArea descriptionTextArea = createTextArea(
+					showcaseDemo.getSummary(), 14);
+
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
 			c.gridy = 0;
 			c.weightx = 1;
 			c.weighty = 0;
 			c.fill = GridBagConstraints.BOTH;
-			c.insets = new Insets(10, 10, 3, 3);
-			replacement.add(header, c);
+			c.insets = new Insets(10, 3, 3, 3);
+			replacement.add(headerTextArea, c);
+			c.gridx++;
+			c.weightx = 0;
 			JComponent jc = HelpComponent.createHelpComponent(actionListener,
 					null, null);
 			c.anchor = GridBagConstraints.EAST;
 			c.fill = GridBagConstraints.NONE;
-			c.insets = new Insets(3, 3, 3, 3);
+			c.insets = new Insets(6, 3, 3, 3);
 			replacement.add(jc, c);
-			c.fill = GridBagConstraints.BOTH;
 			jc.setVisible(showcaseDemo.getHelpURL() != null);
+			c.gridx = 0;
+			c.gridwidth = GridBagConstraints.REMAINDER;
+			c.fill = GridBagConstraints.BOTH;
 			c.gridy++;
 			replacement.add(descriptionTextArea, c);
 			c.gridy++;
@@ -684,6 +685,16 @@ public class PumpernickelShowcaseApp extends JFrame {
 			replacement.add((JPanel) showcaseDemo, c);
 			return replacement;
 		}
+	}
+
+	private JTextArea createTextArea(String str, float fontSize) {
+		JTextArea t = new JTextArea(str);
+		t.setFont(t.getFont().deriveFont(fontSize));
+		t.setEditable(false);
+		t.setOpaque(false);
+		t.setLineWrap(true);
+		t.setWrapStyleWord(true);
+		return t;
 	}
 
 	public JEditorPane createTextPane(URL url) {

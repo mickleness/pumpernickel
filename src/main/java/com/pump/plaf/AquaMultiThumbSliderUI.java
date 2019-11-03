@@ -236,8 +236,7 @@ public class AquaMultiThumbSliderUI<T> extends DefaultMultiThumbSliderUI<T> {
 
 		if (thumbIndex == slider.getSelectedThumb()) {
 			Color focusColor = new Color(0xa7, 0xd5, 0xff, 240);
-			PlafPaintUtils.paintFocus(g, outline, FOCUS_PADDING, focusColor,
-					false);
+			PlafPaintUtils.paintFocus(g, outline, FOCUS_PADDING, focusColor);
 			g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
 					RenderingHints.VALUE_STROKE_PURE);
 			g.setStroke(new BasicStroke(1f));

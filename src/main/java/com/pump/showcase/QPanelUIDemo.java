@@ -51,7 +51,7 @@ import com.pump.swing.JColorWell;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/QPanelUIDemo.png"
  * alt="A screenshot of the QPanelUIDemo.">
  */
-public class QPanelUIDemo extends ShowcaseDemo {
+public class QPanelUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	JToggleButton presetBox = new JToggleButton("Box");
@@ -66,7 +66,6 @@ public class QPanelUIDemo extends ShowcaseDemo {
 	JSlider cornerSize = new JSlider(0, 100, 10);
 	JSlider calloutSize = new JSlider(0, 20, 10);
 	JSlider shadowSize = new JSlider(0, 20, 5);
-	JPanel controls = new JPanel();
 	JComboBox<CalloutType> calloutTypeComboBox = new JComboBox<>();
 	boolean rolloverPreview = false;
 
@@ -111,7 +110,9 @@ public class QPanelUIDemo extends ShowcaseDemo {
 	JLabel strokeColor2Label = new JLabel("Stroke Color 2:");
 
 	public QPanelUIDemo() {
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		super(false, false, false);
+
+		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
 		layout.addRow(new JLabel("Preset:"), presetBox, presetToolTip);
 		layout.addRow(fillColor1Label, fillColor1, false);
 		layout.addRow(fillColor2Label, fillColor2, false);
@@ -168,18 +169,14 @@ public class QPanelUIDemo extends ShowcaseDemo {
 		calloutSize.addChangeListener(changeListener);
 		shadowSize.addChangeListener(changeListener);
 
-		setLayout(new GridBagLayout());
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(controls, c);
-		c.gridy++;
 		c.weighty = 1;
-		c.fill = GridBagConstraints.NONE;
-		add(preview, c);
+		c.fill = GridBagConstraints.BOTH;
+		examplePanel.add(preview, c);
 
 		ButtonGroup g = new ButtonGroup();
 		g.add(orientationNone);

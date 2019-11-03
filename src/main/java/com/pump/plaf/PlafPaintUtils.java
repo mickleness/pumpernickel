@@ -18,7 +18,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.TexturePaint;
 import java.awt.geom.Rectangle2D;
@@ -28,8 +27,6 @@ import java.util.Map;
 
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-
-import com.pump.util.JVM;
 
 /**
  * Some static methods for some common painting functions.
@@ -75,7 +72,7 @@ public class PlafPaintUtils {
 	 *            the number of pixels the outline should cover.
 	 */
 	public static void paintFocus(Graphics2D g, Shape shape, int pixelSize) {
-		paintFocus(g, shape, pixelSize, getFocusRingColor(), true);
+		paintFocus(g, shape, pixelSize, getFocusRingColor());
 	}
 
 	/**
@@ -98,7 +95,7 @@ public class PlafPaintUtils {
 	 *            they will be left in tact
 	 */
 	public static void paintFocus(Graphics2D g, Shape shape, int pixelSize,
-			Color focusColor, boolean changeRenderingHints) {
+			Color focusColor) {
 		g = (Graphics2D) g.create();
 		try {
 			Color[] focusArray = new Color[] {
@@ -111,19 +108,6 @@ public class PlafPaintUtils {
 					new Color(focusColor.getRed(), focusColor.getGreen(),
 							focusColor.getBlue(),
 							80 * focusColor.getAlpha() / 255) };
-			if (changeRenderingHints) {
-				if (JVM.usingQuartz) {
-					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-							RenderingHints.VALUE_ANTIALIAS_ON);
-					g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
-							RenderingHints.VALUE_STROKE_PURE);
-				} else {
-					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-							RenderingHints.VALUE_ANTIALIAS_ON);
-					g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
-							RenderingHints.VALUE_STROKE_NORMALIZE);
-				}
-			}
 
 			g.setStroke(new BasicStroke(2 * pixelSize + 1,
 					BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
@@ -232,7 +216,8 @@ public class PlafPaintUtils {
 					if (f >= positions[b - 1] && f < positions[b]) {
 						float p = (f - positions[b - 1])
 								/ (positions[b] - positions[b - 1]);
-						array[a] = tween(colors[b - 1], colors[b], p).getRGB();
+						array[a] = AnimationManager.tween(colors[b - 1],
+								colors[b], p).getRGB();
 						hit = true;
 						break findMatch;
 					}
@@ -245,31 +230,6 @@ public class PlafPaintUtils {
 			verticalGradients.put(key, paint);
 		}
 		return paint;
-	}
-
-	/** Tweens between the two arguments. */
-	public static Color tween(Color c1, Color c2, float p) {
-		int r1 = c1.getRed();
-		int g1 = c1.getGreen();
-		int b1 = c1.getBlue();
-		int a1 = c1.getAlpha();
-
-		int r2 = c2.getRed();
-		int g2 = c2.getGreen();
-		int b2 = c2.getBlue();
-		int a2 = c2.getAlpha();
-
-		return new Color((int) (r1 * (1 - p) + r2 * p),
-				(int) (g1 * (1 - p) + g2 * p), (int) (b1 * (1 - p) + b2 * p),
-				(int) (a1 * (1 - p) + a2 * p));
-	}
-
-	/** Tweens between the two arguments. */
-	public static Rectangle2D tween(Rectangle2D r1, Rectangle2D r2, float p) {
-		return new Rectangle2D.Double(r1.getX() * (1 - p) + r2.getX() * p,
-				r1.getY() * (1 - p) + r2.getY() * p, r1.getWidth() * (1 - p)
-						+ r2.getWidth() * p, r1.getHeight() * (1 - p)
-						+ r2.getHeight() * p);
 	}
 
 	private static Map<String, TexturePaint> checkers;

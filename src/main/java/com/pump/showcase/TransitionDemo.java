@@ -36,7 +36,6 @@ import java.util.TreeMap;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
@@ -53,7 +52,7 @@ import com.pump.util.PartitionIterator;
 /**
  * An abstract UI to demo a set of transitions.
  */
-public abstract class TransitionDemo extends ShowcaseDemo {
+public abstract class TransitionDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	BufferedImage img1;
@@ -66,12 +65,12 @@ public abstract class TransitionDemo extends ShowcaseDemo {
 	JSpinner duration = new JSpinner(new SpinnerNumberModel(2, .1, 100, .1));
 	JLabel interpolationLabel = new JLabel("Interpolation Hint:");
 
-	JPanel inspectorPanel = new JPanel();
 	TransitionPanel panel;
 
 	public TransitionDemo(Transition[]... transitions) {
-		this(AbstractTransition.createImage("A", true), AbstractTransition
-				.createImage("B", false), transitions);
+		this(AbstractTransition.createImage(200, "A", true, true),
+				AbstractTransition.createImage(200, "B", false, true),
+				transitions);
 	}
 
 	public TransitionDemo(BufferedImage bi1, BufferedImage bi2,
@@ -123,7 +122,7 @@ public abstract class TransitionDemo extends ShowcaseDemo {
 			transitionFamilyComboBox.addItem(familyName);
 		}
 
-		setLayout(new GridBagLayout());
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -131,29 +130,26 @@ public abstract class TransitionDemo extends ShowcaseDemo {
 		c.weighty = 0;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.SOUTHWEST;
-		add(inspectorPanel, c);
 		c.weighty = 1;
 		c.gridy++;
 		c.fill = GridBagConstraints.NONE;
-		add(panel, c);
+		examplePanel.add(panel, c);
 		c.weightx = 0;
 		c.gridy++;
 		c.anchor = GridBagConstraints.NORTHWEST;
-		add(controller, c);
+		examplePanel.add(controller, c);
 
 		Dimension d = controller.getPreferredSize();
 		d.width = panel.getPreferredSize().width;
 		controller.setPreferredSize(d);
 
-		InspectorLayout layout = new InspectorGridBagLayout(inspectorPanel);
+		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
 		layout.addRow(new JLabel("Transition Type:"), transitionFamilyComboBox,
 				false);
 		layout.addRow(new JLabel("Transition:"), transitionComboBox, false);
 		layout.addRow(new JLabel("Duration (s):"), duration, false);
 		layout.addRow(new JLabel("Rendering Hints"), renderingHintsComboBox,
 				false);
-
-		inspectorPanel.setOpaque(false);
 
 		controller.addPropertyChangeListener(AnimationController.TIME_PROPERTY,
 				new PropertyChangeListener() {
