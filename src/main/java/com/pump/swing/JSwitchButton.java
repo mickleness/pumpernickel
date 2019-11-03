@@ -8,12 +8,12 @@ import javax.swing.plaf.basic.BasicButtonUI;
  * Similar to a JCheckBox, except this renders as a switch that toggles from
  * left to right.
  */
-public class SwitchButton extends JToggleButton {
+public class JSwitchButton extends JToggleButton {
 	private static final long serialVersionUID = 1L;
 
 	private static final String uiClassID = "SwitchButton";
 
-	public SwitchButton(String text) {
+	public JSwitchButton(String text) {
 		super(text);
 	}
 

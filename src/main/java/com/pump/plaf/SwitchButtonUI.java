@@ -99,6 +99,9 @@ public class SwitchButtonUI extends BasicRadioButtonUI {
 					b.getModel().setArmed(true);
 					b.getModel().setPressed(true);
 					b.repaint();
+
+					if (b.isRequestFocusEnabled())
+						b.requestFocus();
 					return;
 				}
 				super.mousePressed(e);

@@ -19,20 +19,20 @@ import com.pump.icon.AndroidSwitchButtonIcon;
 import com.pump.icon.AquaSwitchButtonIcon;
 import com.pump.inspector.InspectorGridBagLayout;
 import com.pump.plaf.SwitchButtonUI;
-import com.pump.swing.SwitchButton;
+import com.pump.swing.JSwitchButton;
 
-public class SwitchButtonUIDemo extends ShowcaseExampleDemo {
+public class JSwitchButtonDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	SwitchButton buttonA = new SwitchButton("NIGHT SHIFT");
-	SwitchButton buttonB = new SwitchButton("DO NOT DISTURB");
+	JSwitchButton buttonA = new JSwitchButton("NIGHT SHIFT");
+	JSwitchButton buttonB = new JSwitchButton("DO NOT DISTURB");
 
 	JComboBox<String> iconType = new JComboBox<String>(new String[] { "Aqua",
 			"Android" });
 	JRadioButton enabledOn = new JRadioButton("Enabled", true);
 	JRadioButton enabledOff = new JRadioButton("Disabled", false);
 
-	public SwitchButtonUIDemo() {
+	public JSwitchButtonDemo() {
 		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -86,7 +86,7 @@ public class SwitchButtonUIDemo extends ShowcaseExampleDemo {
 	protected void refreshExample() {
 		Icon icon = iconType.getSelectedIndex() == 0 ? new AquaSwitchButtonIcon()
 				: new AndroidSwitchButtonIcon();
-		for (SwitchButton b : new SwitchButton[] { buttonA, buttonB }) {
+		for (JSwitchButton b : new JSwitchButton[] { buttonA, buttonB }) {
 			b.setIcon(icon);
 			b.setEnabled(enabledOn.isSelected());
 		}
