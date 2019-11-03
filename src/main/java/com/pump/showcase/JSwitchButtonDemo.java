@@ -104,13 +104,13 @@ public class JSwitchButtonDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return JSwitchButtonDemo.class.getResource("switchButtonDEmo.html");
 	}
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "button", "ux", "switch", "checkbox", "toggle" };
+		return new String[] { "button", "ux", "switch", "checkbox", "toggle",
+				"swing" };
 	}
 
 	@Override
