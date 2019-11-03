@@ -22,7 +22,6 @@ import java.net.URL;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToolTip;
 import javax.swing.Popup;
@@ -51,7 +50,7 @@ import com.pump.swing.QPopupFactory;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JToolTipDemo.png"
  * alt="A screenshot of the JToolTipDemo.">
  */
-public class JToolTipDemo extends ShowcaseDemo {
+public class JToolTipDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	private static final String ANY = "Any";
@@ -59,7 +58,6 @@ public class JToolTipDemo extends ShowcaseDemo {
 
 	QPopupFactory qPopupFactory;
 
-	JPanel controls = new JPanel();
 	JComboBox<String> toolTipTypeComboBox = new JComboBox<>();
 	JLabel fontLabel = new JLabel("Font:");
 	JLabel fontSizeLabel = new JLabel("Font Size:");
@@ -83,7 +81,7 @@ public class JToolTipDemo extends ShowcaseDemo {
 			calloutTypeComboBox.addItem(t.name());
 		}
 
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
 		layout.addRow(new JLabel("Tooltip Type:"), toolTipTypeComboBox, false);
 		layout.addRow(fontLabel, fontComboBox, false);
 		layout.addRow(fontSizeLabel, fontSizeSlider, false);
@@ -119,20 +117,16 @@ public class JToolTipDemo extends ShowcaseDemo {
 
 		sampleButton.setToolTipText("Sample ToolTip");
 
-		setLayout(new GridBagLayout());
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		c.anchor = GridBagConstraints.NORTH;
-		add(controls, c);
-		c.gridy++;
 		c.weighty = 1;
+		c.anchor = GridBagConstraints.NORTH;
 		c.fill = GridBagConstraints.NONE;
 		c.insets = new Insets(10, 10, 10, 10);
-		add(sampleButton, c);
+		examplePanel.add(sampleButton, c);
 
 		refreshUI();
 	}
