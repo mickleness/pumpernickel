@@ -22,7 +22,6 @@ import java.net.URL;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -44,7 +43,7 @@ import com.pump.swing.JEyeDropper;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JEyeDropperDemo.png"
  * alt="A screenshot of the JEyeDropperDemo.">
  */
-public class JEyeDropperDemo extends ShowcaseDemo {
+public class JEyeDropperDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	JButton showEyeDropper = new JButton("Show Eyedropper");
@@ -52,12 +51,13 @@ public class JEyeDropperDemo extends ShowcaseDemo {
 			400, 10));
 	JSpinner magSpinner = new JSpinner(new SpinnerNumberModel(10,
 			JEyeDropper.MAGNIFICATION_MIN, JEyeDropper.MAGNIFICATION_MAX, 1));
-	JPanel controls = new JPanel();
 	JColorWell colorWell = new JColorWell();
 
 	public JEyeDropperDemo() {
+		super(true, true, false);
+		exampleLabel.setVisible(false);
 
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
 		layout.addRow(new JLabel("Diameter:"), diameterSpinner);
 		layout.addRow(new JLabel("Magnification:"), magSpinner);
 		layout.addRow(new JLabel("Color:"), colorWell);
@@ -88,7 +88,6 @@ public class JEyeDropperDemo extends ShowcaseDemo {
 				});
 			}
 		});
-		add(controls);
 		colorWell.getColorSelectionModel().setSelectedColor(Color.black);
 		colorWell.setEnabled(false);
 	}

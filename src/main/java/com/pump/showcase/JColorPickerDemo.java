@@ -26,10 +26,8 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import com.pump.plaf.QPanelUI;
 import com.pump.swing.JColorPicker;
 
 /**
@@ -42,7 +40,7 @@ import com.pump.swing.JColorPicker;
  * alt="A screenshot of the JColorPickerDemo.">
  *
  */
-public class JColorPickerDemo extends ShowcaseDemo {
+public class JColorPickerDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	JColorPicker picker = new JColorPicker(true, false);
@@ -52,10 +50,9 @@ public class JColorPickerDemo extends ShowcaseDemo {
 	JCheckBox rgbCheckbox = new JCheckBox("Include RGB Values");
 	JCheckBox modeCheckbox = new JCheckBox("Include Mode Controls", true);
 	JButton button = new JButton("Show Dialog");
-	JPanel controls = new JPanel(new GridBagLayout());
-	JPanel pickerContainer = new JPanel(new GridBagLayout());
 
 	public JColorPickerDemo() {
+		configurationPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -63,45 +60,29 @@ public class JColorPickerDemo extends ShowcaseDemo {
 		c.weighty = 0;
 		c.insets = new Insets(5, 5, 5, 5);
 		c.anchor = GridBagConstraints.WEST;
-		controls.add(comboBox, c);
+		configurationPanel.add(comboBox, c);
 		c.gridy++;
-		controls.add(alphaCheckbox, c);
+		configurationPanel.add(alphaCheckbox, c);
 		c.gridy++;
-		controls.add(hsbCheckbox, c);
+		configurationPanel.add(hsbCheckbox, c);
 		c.gridy++;
-		controls.add(rgbCheckbox, c);
+		configurationPanel.add(rgbCheckbox, c);
 		c.gridy++;
-		controls.add(modeCheckbox, c);
+		configurationPanel.add(modeCheckbox, c);
 		c.gridy++;
-		controls.add(button, c);
+		configurationPanel.add(button, c);
 
-		setLayout(new GridBagLayout());
-		c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.insets = new Insets(3, 3, 3, 3);
-		c.fill = GridBagConstraints.BOTH;
-		c.gridwidth = 1;
-		c.weightx = 0;
-		c.weighty = 0;
-		add(controls, c);
-		c.gridy++;
-		c.anchor = GridBagConstraints.NORTH;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.NONE;
-		add(pickerContainer, c);
-
+		examplePanel.setLayout(new GridBagLayout());
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 0;
 		c.weighty = 0;
-		pickerContainer.add(picker, c);
+		examplePanel.add(picker, c);
 		c.gridx++;
 		c.anchor = GridBagConstraints.WEST;
 		c.weightx = 1;
-		pickerContainer.add(picker.getExpertControls(), c);
-		pickerContainer.setUI(QPanelUI.createBoxUI());
+		examplePanel.add(picker.getExpertControls(), c);
 
 		picker.setPreferredSize(new Dimension(220, 200));
 

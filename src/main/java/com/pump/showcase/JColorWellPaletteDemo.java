@@ -20,7 +20,6 @@ import java.net.URL;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -42,32 +41,28 @@ import com.pump.swing.JPalette;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JColorWellPaletteDemo.png"
  * alt="A screenshot of the JColorWellPaletteDemo.">
  */
-public class JColorWellPaletteDemo extends ShowcaseDemo {
+public class JColorWellPaletteDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	JPalette palette = new JPalette();
-	JPanel controls = new JPanel();
 	JComboBox<String> typeComboBox = new JComboBox<>();
 	JSlider cellSizeSlider = new JSlider(10, 50, 20);
 	JComboBox<String> highlightComboBox = new JComboBox<>();
 	JColorWell colorWell = new JColorWell();
 
 	public JColorWellPaletteDemo() {
-		setLayout(new GridBagLayout());
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(controls, c);
-		c.gridy++;
 		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.NORTH;
-		add(palette, c);
+		examplePanel.add(palette, c);
 
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
 		layout.addRow(new JLabel("Type:"), typeComboBox);
 		layout.addRow(new JLabel("Size:"), cellSizeSlider);
 		layout.addRow(new JLabel("Highlight:"), highlightComboBox);
