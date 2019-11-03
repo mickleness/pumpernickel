@@ -1,6 +1,5 @@
 package com.pump.showcase;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,6 +19,11 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 	protected JPanel examplePanel = new JPanel();
 
 	public ShowcaseExampleDemo() {
+		this(false, false, true);
+	}
+
+	public ShowcaseExampleDemo(boolean stretchExampleToFillHoriz,
+			boolean stretchExampleToFillVert, boolean useRoundedCorners) {
 		super();
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -41,6 +45,13 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 		c.weighty = 1;
 		c.weightx = 1;
 		c.insets = new Insets(3, 3, 3, 3);
+		if (stretchExampleToFillHoriz && stretchExampleToFillVert) {
+			c.fill = GridBagConstraints.BOTH;
+		} else if (stretchExampleToFillVert) {
+			c.fill = GridBagConstraints.VERTICAL;
+		} else if (stretchExampleToFillHoriz) {
+			c.fill = GridBagConstraints.HORIZONTAL;
+		}
 		add(examplePanel, c);
 
 		Font font = exampleLabel.getFont();
@@ -48,10 +59,18 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 		exampleLabel.setFont(font);
 		configurationLabel.setFont(font);
 
-		QPanelUI panelUI = new QPanelUI();
+		QPanelUI panelUI = QPanelUI.createBoxUI();
 		configurationPanel.setUI(panelUI);
-		examplePanel.setUI(panelUI);
-		panelUI.setCornerSize(10);
-		panelUI.setFillColor(Color.white);
+
+		if (useRoundedCorners) {
+			examplePanel.setUI(panelUI);
+		} else {
+			panelUI = QPanelUI.createBoxUI();
+			panelUI.setCornerSize(0);
+			configurationPanel.setUI(panelUI);
+		}
+
+		exampleLabel.setLabelFor(examplePanel);
+		configurationLabel.setLabelFor(configurationPanel);
 	}
 }

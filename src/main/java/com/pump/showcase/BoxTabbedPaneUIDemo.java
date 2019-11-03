@@ -47,7 +47,7 @@ import com.pump.swing.PartialLineBorder;
  * alt="A screenshot of the BoxTabbedPaneUIDemo.">
  *
  */
-public class BoxTabbedPaneUIDemo extends ShowcaseDemo {
+public class BoxTabbedPaneUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	JTabbedPane tabs = new JTabbedPane();
@@ -59,33 +59,25 @@ public class BoxTabbedPaneUIDemo extends ShowcaseDemo {
 	JRadioButton hideSingleActive = new JRadioButton("Active");
 	JRadioButton hideSingleInactive = new JRadioButton("Inactive");
 
-	JPanel controls = new JPanel();
-
 	public BoxTabbedPaneUIDemo() {
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		super(true, true, false);
+		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
 		layout.addRow(new JLabel("Tab Placement:"), tabPlacementComboBox);
 		layout.addRow(new JLabel("Closeable Tabs:"), closeableActive,
 				closeableInactive);
 		layout.addRow(new JLabel("Hide Single Tab:"), hideSingleActive,
 				hideSingleInactive);
 
-		setLayout(new GridBagLayout());
+		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
 		c.fill = GridBagConstraints.BOTH;
-		add(controls, c);
-		c.gridy++;
-		c.weightx = 0;
+		c.weightx = 1;
 		c.weighty = 1;
-		add(tabs, c);
+		examplePanel.add(tabs, c);
 
-		// let it fill the space available, but never demand more space from
-		// its
-		// parents
-		tabs.setPreferredSize(new Dimension(20, 20));
+		tabs.setPreferredSize(new Dimension(500, 250));
 
 		ButtonGroup g1 = new ButtonGroup();
 		g1.add(hideSingleActive);
