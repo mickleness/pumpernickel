@@ -368,8 +368,13 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 
 		@Override
 		public void formatCloseButton(JTabbedPane tabs, JButton closeButton) {
-			if (!(closeButton.getIcon() instanceof MinimalDuoToneCloseIcon))
-				closeButton.setIcon(new MinimalDuoToneCloseIcon(closeButton));
+			if (!(closeButton.getIcon() instanceof MinimalDuoToneCloseIcon)) {
+				MinimalDuoToneCloseIcon icon = new MinimalDuoToneCloseIcon(
+						closeButton);
+				closeButton.setIcon(icon);
+				DescendantMouseListener.installForParentOf(closeButton,
+						icon.getParentRollover());
+			}
 			closeButton.setMargin(new Insets(0, 0, 0, 0));
 			closeButton.setBorder(new EmptyBorder(0, 0, 0, 0));
 		}

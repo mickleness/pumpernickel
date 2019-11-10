@@ -12,20 +12,15 @@ package com.pump.icon.button;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
-import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.AbstractButton;
-import javax.swing.event.MouseInputAdapter;
 
 import com.pump.plaf.PlafPaintUtils;
 import com.pump.util.BooleanProperty;
@@ -96,52 +91,19 @@ public class MinimalDuoToneCloseIcon extends ButtonIcon {
 		super(button, COLORS, new BooleanProperty(PROPERTY_PARENT_ROLLOVER));
 		parentRollover = (BooleanProperty) buttonIconManager
 				.getProperty(PROPERTY_PARENT_ROLLOVER);
+	}
 
-		button.addHierarchyListener(new HierarchyListener() {
-
-			Container lastParent;
-			MouseInputAdapter mouseMotionListener = new MouseInputAdapter() {
-
-				@Override
-				public void mouseMoved(MouseEvent e) {
-					parentRollover.setValue(true);
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					parentRollover.setValue(true);
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					parentRollover.setValue(false);
-				}
-
-			};
-
-			@Override
-			public void hierarchyChanged(HierarchyEvent e) {
-
-				Container parent = button.getParent();
-				while (parent != null && !(parent instanceof AbstractButton)) {
-					parent = parent.getParent();
-				}
-				if (lastParent == parent) {
-					return;
-				}
-				if (lastParent != null) {
-					lastParent.removeMouseListener(mouseMotionListener);
-					lastParent.removeMouseMotionListener(mouseMotionListener);
-				}
-				if (parent != null) {
-					parent.addMouseListener(mouseMotionListener);
-					parent.addMouseMotionListener(mouseMotionListener);
-					parentRollover.setValue(false);
-				}
-				lastParent = parent;
-			}
-
-		});
+	/**
+	 * Return an optional property that is used to render this icon with a
+	 * half-indicated (rollover) look.
+	 * <p>
+	 * When this property is true it indicates the mouse is nearby (in a parent
+	 * panel), but it may-or-may-not be directly over this button.
+	 * <p>
+	 * This property is null if construct this icon using the empty constructor.
+	 */
+	public BooleanProperty getParentRollover() {
+		return parentRollover;
 	}
 
 	@Override
