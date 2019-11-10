@@ -156,7 +156,7 @@ public class JColorWellPaletteDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "palette", "color" };
+		return new String[] { "palette", "color", "Swing" };
 	}
 
 	@Override

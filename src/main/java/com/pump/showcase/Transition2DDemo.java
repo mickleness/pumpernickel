@@ -135,8 +135,8 @@ public class Transition2DDemo extends TransitionDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "animation", "slideshow", "transition",
-				"vector-graphics" };
+		return new String[] { "animation", "slideshow", "transition", "vector",
+				"graphics" };
 	}
 
 	@Override

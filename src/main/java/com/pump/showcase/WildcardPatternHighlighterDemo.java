@@ -328,7 +328,7 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "swing", "text", "pattern" };
+		return new String[] { "Swing", "text", "pattern" };
 	}
 
 	@Override

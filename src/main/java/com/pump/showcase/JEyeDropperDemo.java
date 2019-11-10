@@ -143,7 +143,8 @@ public class JEyeDropperDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "color", "ux", "gui", "dialog", "eyedropper" };
+		return new String[] { "color", "ux", "gui", "dialog", "eyedropper",
+				"Swing" };
 	}
 
 	@Override

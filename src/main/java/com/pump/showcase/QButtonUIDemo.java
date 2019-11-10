@@ -555,7 +555,7 @@ public class QButtonUIDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "button", "ux", "ui", "swing" };
+		return new String[] { "button", "ux", "ui", "Swing" };
 	}
 
 	@Override

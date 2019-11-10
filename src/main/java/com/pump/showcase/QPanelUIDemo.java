@@ -319,7 +319,7 @@ public class QPanelUIDemo extends ShowcaseExampleDemo {
 	@Override
 	public String[] getKeywords() {
 		return new String[] { "panel", "ui", "ux", "flat", "gradient",
-				"callout", "border", "swing" };
+				"callout", "border", "Swing" };
 	}
 
 	@Override

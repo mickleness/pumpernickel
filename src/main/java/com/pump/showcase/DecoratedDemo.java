@@ -760,7 +760,7 @@ public class DecoratedDemo extends ShowcaseDemo {
 	@Override
 	public String[] getKeywords() {
 		return new String[] { "decoration", "decorate", "icon", "button",
-				"list", "tree", "ux" };
+				"list", "tree", "ux", "Swing" };
 	}
 
 	@Override

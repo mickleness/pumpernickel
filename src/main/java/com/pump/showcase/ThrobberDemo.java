@@ -169,7 +169,7 @@ public class ThrobberDemo extends ShowcaseExampleDemo {
 	@Override
 	public String[] getKeywords() {
 		return new String[] { "throbber", "indicator", "feedback", "progress",
-				"waiting" };
+				"waiting", "Swing", "indeterminate" };
 	}
 
 	@Override

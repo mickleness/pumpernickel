@@ -187,7 +187,7 @@ public class JColorPickerDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "color", "ux", "gui", "dialog" };
+		return new String[] { "color", "ux", "gui", "dialog", "Swing" };
 	}
 
 	@Override

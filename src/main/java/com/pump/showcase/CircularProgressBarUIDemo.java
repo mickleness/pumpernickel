@@ -292,8 +292,8 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "ux", "ui", "gui", "progress-bar", "determinate",
-				"indeterminate", "progress", "feedback" };
+		return new String[] { "ux", "ui", "gui", "progress", "bar",
+				"determinate", "indeterminate", "progress", "feedback", "Swing" };
 	}
 
 	@Override

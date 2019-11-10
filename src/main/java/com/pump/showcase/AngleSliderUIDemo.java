@@ -124,7 +124,7 @@ public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "angle", "degree", "paint", "slider" };
+		return new String[] { "angle", "degree", "paint", "slider", "Swing" };
 	}
 
 	@Override

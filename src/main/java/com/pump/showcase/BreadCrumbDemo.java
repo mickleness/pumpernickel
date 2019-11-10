@@ -338,7 +338,7 @@ public class BreadCrumbDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "breadcrumb", "navigation", "ux" };
+		return new String[] { "breadcrumb", "navigation", "ux", "Swing" };
 	}
 
 	@Override

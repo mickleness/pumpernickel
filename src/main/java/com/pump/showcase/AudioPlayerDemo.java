@@ -160,7 +160,7 @@ public class AudioPlayerDemo extends ShowcaseDemo {
 	@Override
 	public String[] getKeywords() {
 		return new String[] { "wave", "audio", "sound", "playback", "pcm",
-				"waveform" };
+				"waveform", "Swing" };
 	}
 
 	@Override

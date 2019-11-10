@@ -110,7 +110,7 @@ public class JSwitchButtonDemo extends ShowcaseExampleDemo {
 	@Override
 	public String[] getKeywords() {
 		return new String[] { "button", "ux", "switch", "checkbox", "toggle",
-				"swing" };
+				"Swing" };
 	}
 
 	@Override

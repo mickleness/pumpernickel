@@ -111,7 +111,7 @@ public class CustomizedToolbarDemo extends ShowcaseDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "ux", "toolbar" };
+		return new String[] { "ux", "toolbar", "Swing" };
 	}
 
 	@Override

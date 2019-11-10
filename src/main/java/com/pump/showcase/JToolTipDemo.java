@@ -205,7 +205,8 @@ public class JToolTipDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "tooltip", "popup", "callout", "gui", "ui", "ux" };
+		return new String[] { "tooltip", "popup", "callout", "gui", "ui", "ux",
+				"Swing" };
 	}
 
 	@Override
