@@ -63,14 +63,10 @@ public class DescendantMouseListener {
 				Container parent = component.getParent();
 				if (lastListener == null || parent != lastListener.container) {
 					if (lastListener != null) {
-						System.err.println("% uninstalled "
-								+ System.identityHashCode(component));
 						lastListener.uninstall();
 						lastListener = null;
 					}
 					if (parent != null) {
-						System.err.println("% installed "
-								+ System.identityHashCode(component));
 						lastListener = new DescendantMouseListener(parent,
 								parentRollover);
 					}
