@@ -107,10 +107,12 @@ public class ListSectionContainer extends SectionContainer {
 		add(splitPane, c);
 
 		getSections().addChangeListener(new ChangeListener() {
+			Section lastSelectedSection;
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				if (list.getSelectedIndex() == -1 && isAutoSelectActive()) {
+				int i = list.getSelectedIndex();
+				if (i == -1 && isAutoSelectActive()) {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							if (list.getModel().getSize() > 0
@@ -119,7 +121,37 @@ public class ListSectionContainer extends SectionContainer {
 							}
 						}
 					});
+				} else if (i >= 0) {
+					int listSize = list.getModel().getSize();
+					if (listSize == 0) {
+						list.setSelectedIndex(-1);
+					} else {
+						if (i >= listSize) {
+							list.setSelectedIndex(0);
+						}
+
+						int z = list.getSelectedIndex();
+						if (z != -1
+								&& list.getModel().getElementAt(z) != lastSelectedSection) {
+							list.getSelectionModel().clearSelection();
+							int newIndex = getIndexOf(lastSelectedSection);
+							if (newIndex == -1) {
+								newIndex = z;
+							}
+							list.setSelectedIndex(newIndex);
+						}
+					}
 				}
+				lastSelectedSection = getSelectedSection();
+
+			}
+
+			private int getIndexOf(Section section) {
+				for (int a = 0; a < list.getModel().getSize(); a++) {
+					if (list.getModel().getElementAt(a) == section)
+						return a;
+				}
+				return -1;
 			}
 
 		}, false);
