@@ -11,8 +11,6 @@
 package com.pump.showcase;
 
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -51,22 +49,14 @@ public class JColorWellPaletteDemo extends ShowcaseExampleDemo {
 	JColorWell colorWell = new JColorWell();
 
 	public JColorWellPaletteDemo() {
-		examplePanel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.NORTH;
-		examplePanel.add(palette, c);
+		InspectorLayout layout1 = new InspectorGridBagLayout(configurationPanel);
+		layout1.addRow(new JLabel("Type:"), typeComboBox);
+		layout1.addRow(new JLabel("Size:"), cellSizeSlider);
+		layout1.addRow(new JLabel("Highlight:"), highlightComboBox);
 
-		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
-		layout.addRow(new JLabel("Type:"), typeComboBox);
-		layout.addRow(new JLabel("Size:"), cellSizeSlider);
-		layout.addRow(new JLabel("Highlight:"), highlightComboBox);
-		layout.addRow(new JLabel("Color:"), colorWell);
+		InspectorLayout layout2 = new InspectorGridBagLayout(examplePanel);
+		layout2.addRow(new JLabel("Color Well:"), colorWell);
+		layout2.addRow(new JLabel("Color Palette:"), palette);
 
 		palette.setColorSelectionModel(colorWell.getColorSelectionModel());
 
