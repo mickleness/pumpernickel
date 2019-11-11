@@ -513,12 +513,17 @@ public abstract class Operator implements Serializable {
 		return l;
 	}
 
+	private transient Collection<String> attributes;
+	
 	/**
 	 * Return all the attributes/fields this Operator (and its descendants)
 	 * consult during evaluation.
 	 */
 	public final Collection<String> getAttributes() {
-		return new HashSet<String>(getAttributeTypes().keySet());
+		if(attributes==null) {
+			attributes = getAttributeTypes().keySet();
+		}
+		return new HashSet<String>(attributes);
 	}
 
 	/**
