@@ -46,6 +46,7 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -89,6 +90,7 @@ import com.pump.swing.ListSectionContainer;
 import com.pump.swing.MagnificationPanel;
 import com.pump.swing.SectionContainer.Section;
 import com.pump.swing.TextFieldPrompt;
+import com.pump.swing.ThrobberManager;
 import com.pump.text.WildcardPattern;
 import com.pump.util.JVM;
 import com.pump.window.WindowDragger;
@@ -109,19 +111,24 @@ public class PumpernickelShowcaseApp extends JFrame {
 				p.setLocationRelativeTo(null);
 				p.setVisible(true);
 				p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+				p.loadDemos();
 			}
 		});
 	}
 
 	JTextField searchField = new JTextField();
+	JPanel searchFieldPanel = new JPanel(new GridBagLayout());
+	TextFieldPrompt searchPrompt;
 	List<Section> masterSectionList = new ArrayList<>();
 	ListSectionContainer sectionContainer = new ListSectionContainer(true,
-			null, searchField);
+			null, searchFieldPanel);
 	JMenuBar menuBar = new JMenuBar();
 	JMenu editMenu = createEditMenu();
 	JMenu helpMenu = new JMenu("Help");
 	JCheckBoxMenuItem magnifierItem = new JCheckBoxMenuItem("Magnifier");
 	JMenuItem saveScreenshotItem = new JMenuItem("Save Screenshot...");
+	ThrobberManager loadingThrobberManager = new ThrobberManager();
 
 	ActionListener magnifierListener = new ActionListener() {
 
@@ -271,8 +278,9 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 		private List<String> getKeywords(JComponent jc) {
 			List<String> returnValue = new ArrayList<>();
-			if (jc instanceof ShowcaseDemo) {
-				ShowcaseDemo d = (ShowcaseDemo) jc;
+			if (jc instanceof LazyDemoPanel) {
+				LazyDemoPanel ldp = (LazyDemoPanel) jc;
+				ShowcaseDemo d = ldp.getShowcaseDemo();
 				if (d.getKeywords() == null)
 					throw new NullPointerException(jc.getClass().getName());
 				for (String keyword : d.getKeywords()) {
@@ -342,11 +350,24 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 		searchField.setUI(new RoundTextFieldUI());
 		searchField.putClientProperty("JTextField.variant", "search");
-		new TextFieldPrompt(searchField, "Search...");
+		searchPrompt = new TextFieldPrompt(searchField, "Loading...");
 		searchField.setBorder(new CompoundBorder(new EmptyBorder(3, 3, 3, 3),
 				searchField.getBorder()));
 
 		searchField.getDocument().addDocumentListener(searchDocListener);
+
+		c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.insets = new Insets(2, 2, 2, 2);
+		c.fill = GridBagConstraints.BOTH;
+		searchFieldPanel.add(searchField, c);
+		c.gridx++;
+		c.weightx = 0;
+		c.fill = GridBagConstraints.NONE;
+		searchFieldPanel.add(loadingThrobberManager.createThrobber(), c);
 
 		getContentPane().setPreferredSize(new Dimension(800, 600));
 
@@ -449,6 +470,63 @@ public class PumpernickelShowcaseApp extends JFrame {
 			}
 
 		}, AWTEvent.KEY_EVENT_MASK);
+	}
+
+	/**
+	 * Create a worker thread that loads all the demos. The search field is
+	 * disabled until this thread completes.
+	 */
+	public void loadDemos() {
+		searchField.setEnabled(false);
+		Thread thread = new Thread("Loading demos") {
+			@Override
+			public void run() {
+				ThrobberManager.Token token = loadingThrobberManager
+						.createToken();
+				try {
+					loadSections();
+				} finally {
+					loadingThrobberManager.returnToken(token);
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							searchField.setEnabled(true);
+							searchPrompt.setText("Search...");
+						}
+					});
+				}
+			}
+
+			private void loadSections() {
+				for (Section section : sectionContainer.getSections()) {
+					try {
+						final LazyDemoPanel p = (LazyDemoPanel) section
+								.getBody().getComponent(0);
+						final AtomicBoolean loaded = new AtomicBoolean(false);
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									p.getShowcaseDemo();
+								} finally {
+									loaded.set(true);
+								}
+							}
+						});
+						while (!loaded.get()) {
+							try {
+								Thread.sleep(10);
+							} catch (InterruptedException e) {
+								Thread.yield();
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		thread.start();
 	}
 
 	/**
@@ -589,13 +667,19 @@ public class PumpernickelShowcaseApp extends JFrame {
 			});
 		}
 
-		private JComponent createDemoPanel() {
-			try {
-				Class demoClass = Class.forName(demoClassName);
-				showcaseDemo = (ShowcaseDemo) demoClass.newInstance();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
+		ShowcaseDemo getShowcaseDemo() {
+			if (showcaseDemo == null) {
+				try {
+					Class demoClass = Class.forName(demoClassName);
+					showcaseDemo = (ShowcaseDemo) demoClass.newInstance();
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
 			}
+			return showcaseDemo;
+		}
+
+		private JComponent createDemoPanel() {
 			ActionListener actionListener = new ActionListener() {
 				JScrollPane scrollPane;
 				JFancyBox box;
@@ -604,7 +688,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (scrollPane == null) {
-						textPane = createTextPane(showcaseDemo.getHelpURL());
+						textPane = createTextPane(getShowcaseDemo()
+								.getHelpURL());
 						scrollPane = new JScrollPane(textPane);
 
 						updatePreferredSize();
@@ -620,7 +705,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 								});
 
 						try {
-							textPane.setPage(showcaseDemo.getHelpURL());
+							textPane.setPage(getShowcaseDemo().getHelpURL());
 							box = new JFancyBox(PumpernickelShowcaseApp.this,
 									scrollPane);
 						} catch (IOException e2) {
@@ -649,10 +734,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 			JPanel replacement = new JPanel(new GridBagLayout());
 
-			JTextArea headerTextArea = createTextArea(showcaseDemo.getTitle(),
-					18);
-			JTextArea descriptionTextArea = createTextArea(
-					showcaseDemo.getSummary(), 14);
+			JTextArea headerTextArea = createTextArea(getShowcaseDemo()
+					.getTitle(), 18);
+			JTextArea descriptionTextArea = createTextArea(getShowcaseDemo()
+					.getSummary(), 14);
 
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
@@ -670,7 +755,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			c.fill = GridBagConstraints.NONE;
 			c.insets = new Insets(6, 3, 3, 3);
 			replacement.add(jc, c);
-			jc.setVisible(showcaseDemo.getHelpURL() != null);
+			jc.setVisible(getShowcaseDemo().getHelpURL() != null);
 			c.gridx = 0;
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			c.fill = GridBagConstraints.BOTH;
@@ -682,7 +767,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			c.gridy++;
 			c.weighty = 1;
 			c.insets = new Insets(3, 3, 3, 3);
-			replacement.add((JPanel) showcaseDemo, c);
+			replacement.add((JPanel) getShowcaseDemo(), c);
 			return replacement;
 		}
 	}
