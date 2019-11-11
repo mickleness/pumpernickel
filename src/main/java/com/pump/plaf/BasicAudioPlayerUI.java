@@ -153,7 +153,7 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 
 			if (ui instanceof WaveformSliderUI) {
 				WaveformSliderUI wsui = (WaveformSliderUI) ui;
-				if (!wsui.getSource().equals(source)) {
+				if (wsui.getSource().equals(source)) {
 					return;
 				}
 			}
