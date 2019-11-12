@@ -17,6 +17,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -66,6 +67,7 @@ import javax.swing.JWindow;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -774,7 +776,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 	private JTextArea createTextArea(String str, float fontSize) {
 		JTextArea t = new JTextArea(str);
-		t.setFont(t.getFont().deriveFont(fontSize));
+		Font font = UIManager.getFont("Label.font");
+		if(font==null)
+			font = t.getFont();
+		t.setFont(font.deriveFont(fontSize));
 		t.setEditable(false);
 		t.setOpaque(false);
 		t.setLineWrap(true);
