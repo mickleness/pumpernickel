@@ -136,6 +136,8 @@ public class MinimalDuoToneCloseIcon extends ButtonIcon {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_OFF);
 		g.setColor(foreground);
+		g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
+				RenderingHints.VALUE_STROKE_PURE);
 		g.drawLine(insets.left, insets.top, insets.left + xWidth - 1,
 				insets.top + xHeight - 1);
 		g.drawLine(insets.left, insets.top + xHeight - 1, insets.left + xWidth
