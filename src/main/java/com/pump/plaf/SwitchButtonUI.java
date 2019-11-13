@@ -10,6 +10,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicBorders;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
 
@@ -31,6 +32,7 @@ public class SwitchButtonUI extends BasicRadioButtonUI {
 		initializeUIManager();
 		super.installUI(c);
 		c.setOpaque(false);
+		c.setBorder(new BasicBorders.MarginBorder());
 	}
 
 	/**
