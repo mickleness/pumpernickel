@@ -50,8 +50,7 @@ import com.pump.awt.text.TextEffect;
 import com.pump.awt.text.WaveTextEffect;
 import com.pump.awt.text.WriteTextEffect;
 import com.pump.awt.text.writing.WritingFont;
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.swing.AnimationController;
 import com.pump.swing.FontComboBox;
 import com.pump.swing.JColorWell;
@@ -134,7 +133,7 @@ public class TextEffectDemo extends ShowcaseExampleDemo {
 	public TextEffectDemo() {
 		super(true, true, false);
 
-		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
+		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Text:"), textField, true);
 		layout.addRow(new JLabel("Type:"), effectType, false);
 		layout.addRow(fontLabel1, fontComboBox, false);

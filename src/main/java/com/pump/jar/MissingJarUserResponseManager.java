@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import com.pump.UserCancelledException;
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 import com.pump.swing.DialogFooter;
 import com.pump.swing.QDialog;
 import com.pump.window.WindowList;
@@ -100,7 +100,7 @@ public class MissingJarUserResponseManager extends
 			this.choiceModel = choiceModel;
 
 			JPanel panel = new JPanel(new GridBagLayout());
-			InspectorGridBagLayout layout = new InspectorGridBagLayout(panel);
+			Inspector layout = new Inspector(panel);
 			for (File jarFile : jarFiles) {
 				MissingJarResponse b = jarBehaviors.get(jarFile);
 				if (b == null)

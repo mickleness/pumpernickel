@@ -35,8 +35,7 @@ import com.pump.graphics.GraphicsWriter;
 import com.pump.graphics.GraphicsWriterDebugger;
 import com.pump.graphics.ImageInstruction;
 import com.pump.graphics.TextBoxInstruction;
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.util.IntegerProperty;
 
 public class GraphicsWriterDebuggerDemo extends ShowcaseDemo {
@@ -70,7 +69,7 @@ public class GraphicsWriterDebuggerDemo extends ShowcaseDemo {
 
 		setLayout(new GridBagLayout());
 		JPanel controls = new JPanel(new GridBagLayout());
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		Inspector layout = new Inspector(controls);
 		layout.addRow(new JLabel("Shortcut:"), keyCodeComboBox);
 
 		GridBagConstraints c = new GridBagConstraints();

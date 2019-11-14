@@ -40,7 +40,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Highlighter;
 
 import com.pump.awt.TextBlock;
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
+import com.pump.inspector.InspectorRowPanel;
 import com.pump.swing.JColorWell;
 import com.pump.text.TextBoxHighlightPainter;
 import com.pump.text.UnderlineHighlightPainter;
@@ -82,6 +83,9 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 	JRadioButton includeFillOffRadioButton = new JRadioButton("Off", false);
 	ButtonGroup includeFillButtonGroup = new ButtonGroup();
 	JSpinner alphaSpinner = new JSpinner(new SpinnerNumberModel(100, 1, 100, 1));
+	
+	Collection<InspectorRowPanel> underlineControls = new ArrayList<>();
+	Collection<InspectorRowPanel> blockControls = new ArrayList<>();
 
 	DocumentListener docListener = new DocumentListener() {
 
@@ -118,37 +122,24 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 
 	JComboBox<String> typeComboBox = new JComboBox<>(new String[] {
 			"UnderlineHighlightPainter", "TextBoxHighlightPainter" });
-	Collection<JComponent> underlineControls = new HashSet<>();
-	Collection<JComponent> textBoxControls = new HashSet<>();
 
 	public WildcardPatternHighlighterDemo() {
 		super(true, true, false);
 
-		InspectorGridBagLayout layout = new InspectorGridBagLayout(
-				configurationPanel);
+		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Type:"), typeComboBox);
 
-		layout.addRow(underlinePatternLabel, underlinePatternField, true);
-		layout.addRow(colorWellLabel, colorWell, false);
-		layout.addRow(thicknessLabel, thicknessSpinner, false);
-		layout.addRow(squiggleLabel, squiggleOnRadioButton,
-				squiggleOffRadioButton);
+		underlineControls.add(layout.addRow(underlinePatternLabel, underlinePatternField, true));
+		underlineControls.add(layout.addRow(colorWellLabel, colorWell, false));
+		underlineControls.add(layout.addRow(thicknessLabel, thicknessSpinner, false));
+		underlineControls.add(layout.addRow(squiggleLabel, squiggleOnRadioButton,
+				squiggleOffRadioButton));
 
-		underlineControls.addAll(Arrays.asList(underlinePatternLabel,
-				underlinePatternField, colorWellLabel, colorWell,
-				thicknessLabel, thicknessSpinner, squiggleLabel,
-				squiggleOnRadioButton, squiggleOffRadioButton));
-
-		layout.addRow(blockPatternLabel, blockPatternField, true);
-		layout.addRow(hueLabel, hueSpinner, false);
-		layout.addRow(includeFillLabel, includeFillOnRadioButton,
-				includeFillOffRadioButton);
-		layout.addRow(alphaLabel, alphaSpinner, false);
-
-		textBoxControls.addAll(Arrays.asList(blockPatternLabel,
-				blockPatternField, hueLabel, hueSpinner, includeFillLabel,
-				includeFillOnRadioButton, includeFillOffRadioButton,
-				alphaLabel, alphaSpinner));
+		blockControls.add(layout.addRow(blockPatternLabel, blockPatternField, true));
+		blockControls.add(layout.addRow(hueLabel, hueSpinner, false));
+		blockControls.add(layout.addRow(includeFillLabel, includeFillOnRadioButton,
+				includeFillOffRadioButton));
+		blockControls.add(layout.addRow(alphaLabel, alphaSpinner, false));
 
 		squiggleButtonGroup.add(squiggleOnRadioButton);
 		squiggleButtonGroup.add(squiggleOffRadioButton);
@@ -197,12 +188,12 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 	}
 
 	protected void refreshControls() {
-		Collection<JComponent> visibleComponents, hiddenComponents;
+		Collection<InspectorRowPanel> visibleComponents, hiddenComponents;
 		if (typeComboBox.getSelectedIndex() == 0) {
 			visibleComponents = underlineControls;
-			hiddenComponents = textBoxControls;
+			hiddenComponents = blockControls;
 		} else {
-			visibleComponents = textBoxControls;
+			visibleComponents = blockControls;
 			hiddenComponents = underlineControls;
 		}
 		for (JComponent c : visibleComponents) {

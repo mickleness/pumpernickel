@@ -59,8 +59,7 @@ import com.pump.image.pixel.quantize.ColorQuantization;
 import com.pump.image.pixel.quantize.ColorSet;
 import com.pump.image.pixel.quantize.ImageQuantization;
 import com.pump.image.pixel.quantize.MedianCutColorQuantization;
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.io.SuffixFilenameFilter;
 import com.pump.job.Job;
 import com.pump.job.JobManager;
@@ -165,7 +164,7 @@ public class ImageQuantizationDemo extends JPanel {
 		c.weightx = 0;
 		add(pixelPanel, c);
 
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		Inspector layout = new Inspector(controls);
 		layout.addRow(fileLabel, filePath, true, browseButton);
 		layout.addRow(colorCountLabel, reductionSlider, true, reductionType);
 		layout.addRow(quantizationLabel, quantizationType, false,

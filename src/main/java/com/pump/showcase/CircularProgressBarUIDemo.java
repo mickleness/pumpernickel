@@ -27,7 +27,7 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.CircularProgressBarUI;
 import com.pump.swing.JColorWell;
 
@@ -205,7 +205,7 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 	};
 
 	public CircularProgressBarUIDemo() {
-		InspectorGridBagLayout layout = new InspectorGridBagLayout(
+		Inspector layout = new Inspector(
 				configurationPanel);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);
 		layout.addRow(new JLabel("Style:"), indeterminateButton,
@@ -217,8 +217,7 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 				animateOffButton);
 		layout.addRow(new JLabel("Foreground:"), foregroundColor, false);
 		layout.addRow(new JLabel("Background:"), backgroundColor, false);
-		layout.addRow(new JLabel("Effects:"), pulseCheckBox, transitionCheckBox);
-		layout.addRow(null, sparkCheckBox, accelerateCheckBox);
+		layout.addRow(new JLabel("Effects:"), pulseCheckBox, transitionCheckBox, sparkCheckBox, accelerateCheckBox);
 		layout.addRow(strokeCheckBox, strokeSlider, true);
 
 		ButtonGroup g1 = new ButtonGroup();

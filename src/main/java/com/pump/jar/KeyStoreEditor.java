@@ -32,7 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 import com.pump.io.SuffixFilenameFilter;
 import com.pump.swing.DialogFooter;
 import com.pump.swing.QDialog;
@@ -67,7 +67,7 @@ public class KeyStoreEditor extends JPanel {
 	}
 
 	File jksFile = null;
-	InspectorGridBagLayout layout = new InspectorGridBagLayout(this);
+	Inspector layout = new Inspector(this);
 	JTextField alias = new JTextField(28);
 	JTextField commonName = new JTextField(28);
 	JTextField orgName = new JTextField(28);

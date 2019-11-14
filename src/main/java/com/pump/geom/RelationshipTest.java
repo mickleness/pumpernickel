@@ -38,7 +38,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 import com.pump.geom.IntersectionsTest.MachineErrorException;
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 
 public class RelationshipTest extends BasicTestElement {
 
@@ -127,7 +127,7 @@ public class RelationshipTest extends BasicTestElement {
 	}
 
 	@Override
-	public void addControls(InspectorGridBagLayout layout) {
+	public void addControls(Inspector layout) {
 		layout.addRow(shapeLabel, shape, false);
 	}
 

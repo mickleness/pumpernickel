@@ -29,7 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 
 public class AccuracyTest extends BasicTestElement {
 
@@ -113,7 +113,7 @@ public class AccuracyTest extends BasicTestElement {
 	}
 
 	@Override
-	public void addControls(InspectorGridBagLayout layout) {
+	public void addControls(Inspector layout) {
 		layout.addRow(shapeLabel, shape, false);
 		layout.addRow(typeLabel, type, false);
 		layout.addRow(operationLabel, operation, false);

@@ -44,8 +44,8 @@ import javax.swing.event.ChangeListener;
 import com.pump.animation.BufferedAnimationPanel;
 import com.pump.image.transition.AbstractTransition;
 import com.pump.image.transition.Transition;
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
+import com.pump.plaf.QPanelUI;
 import com.pump.swing.AnimationController;
 import com.pump.util.PartitionIterator;
 
@@ -143,7 +143,7 @@ public abstract class TransitionDemo extends ShowcaseExampleDemo {
 		d.width = panel.getPreferredSize().width;
 		controller.setPreferredSize(d);
 
-		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
+		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Transition Type:"), transitionFamilyComboBox,
 				false);
 		layout.addRow(new JLabel("Transition:"), transitionComboBox, false);
@@ -188,6 +188,9 @@ public abstract class TransitionDemo extends ShowcaseExampleDemo {
 
 		renderingHintsComboBox.addItem(RenderingHints.VALUE_RENDER_SPEED);
 		renderingHintsComboBox.addItem(RenderingHints.VALUE_RENDER_QUALITY);
+		
+		//no rounded corners
+		examplePanel.setUI(new QPanelUI());
 	}
 
 	/**

@@ -43,8 +43,7 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.geom.Clipper;
 import com.pump.geom.TransformUtils;
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.swing.JFancyBox;
 
 /**
@@ -168,7 +167,7 @@ public class ClipperDemo extends ShowcaseChartDemo {
 		typeComboBox.addItem("Quadratic");
 		typeComboBox.addItem("Cubic");
 
-		InspectorLayout layout = new InspectorGridBagLayout(inspector);
+		Inspector layout = new Inspector(inspector);
 
 		layout.addRow(new JLabel("Segment Type:"), typeComboBox, false);
 		layout.addRow(new JLabel("Shape:"), shapeIndexSpinner, false);

@@ -34,8 +34,7 @@ import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.BevelButtonUI;
 import com.pump.plaf.QPanelUI;
 import com.pump.plaf.QPanelUI.CalloutType;
@@ -82,7 +81,7 @@ public class JPopoverDemo extends ShowcaseExampleDemo {
 		configurationLabel.setVisible(false);
 		configurationPanel.setVisible(false);
 
-		InspectorLayout layout = new InspectorGridBagLayout(examplePanel);
+		Inspector layout = new Inspector(examplePanel);
 		layout.addRow(new JLabel("Password:"), passwordField, false);
 		layout.addRow(new JLabel("Font:"), fontComboBox, false);
 		layout.addRow(new JLabel("Currency Input:"), currencyField, false);

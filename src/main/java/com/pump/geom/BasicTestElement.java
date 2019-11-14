@@ -40,7 +40,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 
 public abstract class BasicTestElement extends TestElement {
 	JTextArea description = new JTextArea(getDescription());
@@ -76,7 +76,7 @@ public abstract class BasicTestElement extends TestElement {
 		cancel.addActionListener(buttonListener);
 	}
 
-	public abstract void addControls(InspectorGridBagLayout layout);
+	public abstract void addControls(Inspector layout);
 
 	public abstract String getDescription();
 
@@ -85,12 +85,12 @@ public abstract class BasicTestElement extends TestElement {
 		if (panel == null) {
 			panel = new JPanel();
 
-			InspectorGridBagLayout layout = new InspectorGridBagLayout(panel);
-			layout.addRow(description, SwingConstants.CENTER, true);
+			Inspector layout = new Inspector(panel);
+			layout.addRow(description, true);
 			addControls(layout);
 			layout.addRow(null, progress, false);
-			layout.addRow(start, SwingConstants.LEFT, false);
-			layout.addRow(cancel, SwingConstants.LEFT, false);
+			layout.addRow(start, false);
+			layout.addRow(cancel, false);
 		}
 		return panel;
 	}

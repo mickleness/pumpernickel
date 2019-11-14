@@ -25,7 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 
 public class TransformTest extends BasicTestElement {
 
@@ -46,7 +46,7 @@ public class TransformTest extends BasicTestElement {
 	}
 
 	@Override
-	public void addControls(InspectorGridBagLayout layout) {
+	public void addControls(Inspector layout) {
 		layout.addRow(typeLabel, type, false);
 		layout.addRow(additionsLabel, additions, false);
 		layout.addRow(repeatLabel, repeat, false);

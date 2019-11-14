@@ -21,9 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 import com.pump.swing.DialogFooter;
 import com.pump.swing.QDialog;
 import com.pump.swing.TextFieldPrompt;
@@ -37,7 +36,7 @@ public class ManifestEditor extends JPanel {
 
 	Manifest currentManifest;
 
-	InspectorGridBagLayout layout = new InspectorGridBagLayout(this);
+	Inspector layout = new Inspector(this);
 	JComboBox<String> permissionsComboBox = new JComboBox<String>(new String[] {
 			"Undefined", "Sandbox", "All-Permissions" });
 	JTextField codebaseField = new JTextField();
@@ -63,18 +62,18 @@ public class ManifestEditor extends JPanel {
 				"jar1-name directory-name/jar2-name");
 		addManifestAttribute(layout, "SplashScreen-Image", splashField,
 				"splashdemo/splash.png");
-		layout.addRow(
+		layout.addRow(null, 
 				JarWriterApp
 						.createHeader("Security Manifest Attributes for Applets / Web Start"),
-				SwingConstants.CENTER, true);
-		layout.addRow(
+				true);
+		layout.addRow(null, 
 				new JLabel(
 						"These attributes apply to signed applets and Java Web Start applications."),
-				SwingConstants.CENTER, true);
-		layout.addRow(
+				 true);
+		layout.addRow(null, 
 				new JLabel(
 						"These attributes are ignored for stand-alone Java applications."),
-				SwingConstants.CENTER, true);
+				true);
 		addManifestAttribute(layout, "Permissions", permissionsComboBox);
 		addManifestAttribute(layout, "Codebase", codebaseField,
 				"https://*.example.com");
@@ -86,14 +85,14 @@ public class ManifestEditor extends JPanel {
 		addManifestAttribute(layout, "Trusted-Library", trustedLibraryComboBox);
 
 		JPanel miniPanel = new JPanel();
-		InspectorGridBagLayout miniLayout = new InspectorGridBagLayout(
+		Inspector miniLayout = new Inspector(
 				miniPanel);
 		addManifestAttribute(miniLayout,
 				"Application-Library-Allowable-Codebase",
 				appLibAllowCodebaseField, "https://*.example.com");
 		addManifestAttribute(miniLayout, "Caller-Allowable-Codebase",
 				callerAllowCodebaseField, "https://*.example.com");
-		layout.addRow(miniPanel, SwingConstants.CENTER, true);
+		layout.addRow(miniPanel, true);
 	}
 
 	abstract class Attribute {
@@ -166,14 +165,14 @@ public class ManifestEditor extends JPanel {
 
 	Set<Attribute> attributes = new HashSet<Attribute>();
 
-	private void addManifestAttribute(InspectorGridBagLayout layout,
+	private void addManifestAttribute(Inspector layout,
 			String attrName, JTextField field, String prompt) {
 		attributes.add(new FieldAttribute(field, attrName));
 		layout.addRow(new JLabel(attrName + ":"), field, true);
 		new TextFieldPrompt(field, prompt);
 	}
 
-	private void addManifestAttribute(InspectorGridBagLayout layout,
+	private void addManifestAttribute(Inspector layout,
 			String attrName, JComboBox<String> comboBox) {
 		attributes.add(new ComboBoxAttribute(comboBox, attrName));
 		layout.addRow(new JLabel(attrName + ":"), comboBox, false);

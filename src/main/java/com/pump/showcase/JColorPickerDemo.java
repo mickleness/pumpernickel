@@ -28,6 +28,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
 
+import com.pump.inspector.Inspector;
 import com.pump.swing.JColorPicker;
 
 /**
@@ -52,28 +53,16 @@ public class JColorPickerDemo extends ShowcaseExampleDemo {
 	JButton button = new JButton("Show Dialog");
 
 	public JColorPickerDemo() {
-		configurationPanel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.anchor = GridBagConstraints.WEST;
-		configurationPanel.add(comboBox, c);
-		c.gridy++;
-		configurationPanel.add(alphaCheckbox, c);
-		c.gridy++;
-		configurationPanel.add(hsbCheckbox, c);
-		c.gridy++;
-		configurationPanel.add(rgbCheckbox, c);
-		c.gridy++;
-		configurationPanel.add(modeCheckbox, c);
-		c.gridy++;
-		configurationPanel.add(button, c);
+		Inspector inspector = new Inspector(configurationPanel);
+		inspector.addRow(null, comboBox, false);
+		inspector.addRow(null, alphaCheckbox, false);
+		inspector.addRow(null, hsbCheckbox, false);
+		inspector.addRow(null, rgbCheckbox, false);
+		inspector.addRow(null, modeCheckbox, false);
+		inspector.addRow(null, button, false);
 
 		examplePanel.setLayout(new GridBagLayout());
-		c = new GridBagConstraints();
+		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 0;

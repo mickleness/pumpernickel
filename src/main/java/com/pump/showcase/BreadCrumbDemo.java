@@ -51,8 +51,7 @@ import javax.swing.tree.TreePath;
 
 import com.pump.awt.SplayedLayout;
 import com.pump.icon.EmptyIcon;
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.BreadCrumbUI;
 import com.pump.swing.JBreadCrumb;
 import com.pump.swing.JBreadCrumb.BreadCrumbFormatter;
@@ -192,7 +191,7 @@ public class BreadCrumbDemo extends ShowcaseExampleDemo {
 
 	public BreadCrumbDemo() {
 		super(true, false, false);
-		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
+		Inspector layout = new Inspector(configurationPanel);
 
 		ButtonGroup g1 = new ButtonGroup();
 		g1.add(fileIconOff);
@@ -223,7 +222,7 @@ public class BreadCrumbDemo extends ShowcaseExampleDemo {
 		// layout.addRow(new JLabel("Style:"), defaultStyle, customStyle);
 		layout.addRow(new JLabel("File Icons:"), fileIconOff, fileIconOn);
 		layout.addRow(new JLabel("Separator:"), separatorComboBox);
-		layout.addRow(treeScrollPane, SwingConstants.CENTER, true);
+		layout.addRow(treeScrollPane, true);
 
 		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();

@@ -45,7 +45,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 
 public class AddRulesTest extends BasicTestElement {
 	static class Case {
@@ -366,17 +366,17 @@ public class AddRulesTest extends BasicTestElement {
 			c.gridx++;
 			panel.add(iconLabel, c);
 
-			InspectorGridBagLayout layout = new InspectorGridBagLayout(controls);
+			Inspector layout = new Inspector(controls);
 			addControls(layout);
 			layout.addRow(null, progress, false);
-			layout.addRow(start, SwingConstants.LEFT, false);
-			layout.addRow(cancel, SwingConstants.LEFT, false);
+			layout.addRow(start, false);
+			layout.addRow(cancel, false);
 		}
 		return panel;
 	}
 
 	@Override
-	public void addControls(InspectorGridBagLayout layout) {
+	public void addControls(Inspector layout) {
 		layout.addRow(caseLabel, comboBox, false);
 	}
 

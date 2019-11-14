@@ -28,8 +28,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.AquaThrobberUI;
 import com.pump.plaf.ChasingArrowsThrobberUI;
 import com.pump.plaf.LabelCellRenderer;
@@ -58,7 +57,7 @@ public class ThrobberDemo extends ShowcaseExampleDemo {
 	JCheckBox colorCheckBox = new JCheckBox("Custom Foreground:");
 
 	public ThrobberDemo() {
-		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
+		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Type:"), typeComboBox);
 		layout.addRow(new JLabel("Size:"), sizeSlider);
 		layout.addRow(new JLabel("Rate:"), rateSlider);

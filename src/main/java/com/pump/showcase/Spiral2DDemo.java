@@ -37,6 +37,7 @@ import javax.swing.event.MouseInputAdapter;
 import com.pump.geom.AbstractShape;
 import com.pump.geom.ParametricPathIterator;
 import com.pump.geom.Spiral2D;
+import com.pump.inspector.Inspector;
 
 /**
  * This demos the {@link Spiral2D} class
@@ -113,43 +114,19 @@ public class Spiral2DDemo extends ShowcaseExampleDemo {
 	public Spiral2DDemo() {
 		super(true, true, true);
 
-		configurationPanel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 0;
-		c.weighty = 0;
-		c.anchor = GridBagConstraints.EAST;
-		c.insets = new Insets(3, 3, 3, 3);
-		configurationPanel.add(coilGapLabel, c);
-		c.gridy++;
-		configurationPanel.add(coilsLabel, c);
-		c.gridy++;
-		configurationPanel.add(angleOffsetLabel, c);
-		c.gridy++;
-		configurationPanel.add(coilOffsetLabel, c);
-		c.gridx++;
-		c.gridy = 0;
-		c.anchor = GridBagConstraints.WEST;
-		c.fill = GridBagConstraints.NONE;
-		configurationPanel.add(coilGap, c);
-		c.gridy++;
-		configurationPanel.add(coils, c);
-		c.gridy++;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		configurationPanel.add(angleOffset, c);
-		c.gridy++;
-		c.fill = GridBagConstraints.NONE;
-		configurationPanel.add(coilOffset, c);
-		c.gridy++;
-		configurationPanel.add(clockwise, c);
-		c.gridy++;
-		configurationPanel.add(outward, c);
+		Inspector inspector = new Inspector(configurationPanel);
+		inspector.addRow(coilGapLabel, coilGap);
+		inspector.addRow(coilsLabel, coils);
+		inspector.addRow(angleOffsetLabel, angleOffset);
+		inspector.addRow(coilOffsetLabel, coilOffset);
+		inspector.addRow(null, clockwise);
+		inspector.addRow(null, outward);
 		outward.setToolTipText("This should produce no visual difference.");
 
 		examplePanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
-		c.gridy++;
+		c.gridy = 0;
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;

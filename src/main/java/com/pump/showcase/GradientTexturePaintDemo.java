@@ -37,7 +37,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.awt.GradientTexturePaint;
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.AnimationManager;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JPopover;
@@ -150,12 +150,11 @@ public class GradientTexturePaintDemo extends ShowcaseExampleDemo {
 			cycleComboBox.addItem(t);
 		}
 
-		InspectorGridBagLayout layout = new InspectorGridBagLayout(
-				configurationPanel);
-		layout.addRow(new JLabel("Color 1:"), well1, false, null);
-		layout.addRow(new JLabel("Color 2:"), well2, false, null);
-		layout.addRow(new JLabel("Colors:"), numberOfColorsSlider, false, null);
-		layout.addRow(new JLabel("Gradient Type:"), typeComboBox, false, null);
+		Inspector layout = new Inspector(configurationPanel);
+		layout.addRow(new JLabel("Color 1:"), well1, false);
+		layout.addRow(new JLabel("Color 2:"), well2, false);
+		layout.addRow(new JLabel("Colors:"), numberOfColorsSlider, false);
+		layout.addRow(new JLabel("Gradient Type:"), typeComboBox, false);
 		layout.addRow(new JLabel("Cycle:"), cycleComboBox, unsupportedLabel);
 
 		examplePanel.setLayout(new GridBagLayout());

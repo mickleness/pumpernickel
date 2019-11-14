@@ -26,8 +26,7 @@ import javax.swing.SwingConstants;
 
 import com.pump.UserCancelledException;
 import com.pump.audio.AudioPlayer;
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.AudioPlayerUI;
 import com.pump.plaf.BasicAudioPlayerUI;
 import com.pump.plaf.LabelCellRenderer;
@@ -75,9 +74,9 @@ public class AudioPlayerDemo extends ShowcaseDemo {
 	private void setupPlayerComponent() {
 		JPanel controls = new JPanel();
 		controls.setOpaque(false);
-		InspectorLayout layout = new InspectorGridBagLayout(controls);
+		Inspector layout = new Inspector(controls);
 		layout.addRow(new JLabel("WAV File:"), comboBox, false);
-		layout.addRow(audioPlayerComponent, SwingConstants.CENTER, true);
+		layout.addRow(audioPlayerComponent, true);
 
 		playerSection.getBody().setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();

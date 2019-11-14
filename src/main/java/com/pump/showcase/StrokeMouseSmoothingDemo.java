@@ -51,8 +51,7 @@ import com.pump.awt.CalligraphyStroke;
 import com.pump.awt.CharcoalStroke;
 import com.pump.geom.BasicMouseSmoothing;
 import com.pump.geom.MouseSmoothing;
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.AngleSliderUI;
 import com.pump.plaf.PlafPaintUtils;
 
@@ -247,7 +246,7 @@ public class StrokeMouseSmoothingDemo extends ShowcaseExampleDemo {
 
 	public StrokeMouseSmoothingDemo() {
 		super(true, true, false);
-		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
+		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Smoothing:"), smoothingOnButton,
 				smoothingOffButton);
 		layout.addRow(new JLabel("Stroke Type:"), strokeTypeComboBox);

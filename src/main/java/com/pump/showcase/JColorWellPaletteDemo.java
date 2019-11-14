@@ -22,8 +22,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.ColorWellUI;
 import com.pump.plaf.ColorWellUI.ShowColorPaletteActionListener;
 import com.pump.plaf.PaletteUI;
@@ -49,12 +48,12 @@ public class JColorWellPaletteDemo extends ShowcaseExampleDemo {
 	JColorWell colorWell = new JColorWell();
 
 	public JColorWellPaletteDemo() {
-		InspectorLayout layout1 = new InspectorGridBagLayout(configurationPanel);
+		Inspector layout1 = new Inspector(configurationPanel);
 		layout1.addRow(new JLabel("Type:"), typeComboBox);
 		layout1.addRow(new JLabel("Size:"), cellSizeSlider);
 		layout1.addRow(new JLabel("Highlight:"), highlightComboBox);
 
-		InspectorLayout layout2 = new InspectorGridBagLayout(examplePanel);
+		Inspector layout2 = new Inspector(examplePanel);
 		layout2.addRow(new JLabel("Color Well:"), colorWell);
 		layout2.addRow(new JLabel("Color Palette:"), palette);
 

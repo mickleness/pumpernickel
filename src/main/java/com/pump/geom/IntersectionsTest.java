@@ -35,7 +35,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 
 public class IntersectionsTest extends BasicTestElement {
 
@@ -87,7 +87,7 @@ public class IntersectionsTest extends BasicTestElement {
 	}
 
 	@Override
-	public void addControls(InspectorGridBagLayout layout) {
+	public void addControls(Inspector layout) {
 		layout.addRow(shapeLabel, shape, false);
 	}
 

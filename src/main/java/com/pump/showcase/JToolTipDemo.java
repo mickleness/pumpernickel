@@ -32,8 +32,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.awt.HSLColor;
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.QPanelUI.CalloutType;
 import com.pump.swing.FontComboBox;
 import com.pump.swing.JColorWell;
@@ -81,7 +80,7 @@ public class JToolTipDemo extends ShowcaseExampleDemo {
 			calloutTypeComboBox.addItem(t.name());
 		}
 
-		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
+		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Tooltip Type:"), toolTipTypeComboBox, false);
 		layout.addRow(fontLabel, fontComboBox, false);
 		layout.addRow(fontSizeLabel, fontSizeSlider, false);

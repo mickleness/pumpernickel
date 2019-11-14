@@ -68,7 +68,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import com.pump.UserCancelledException;
-import com.pump.inspector.InspectorGridBagLayout;
+import com.pump.inspector.Inspector;
 import com.pump.io.ConsoleLogger;
 import com.pump.io.IOUtils;
 import com.pump.io.SuffixFilenameFilter;
@@ -128,8 +128,8 @@ public class JarWriterApp extends JFrame {
 	JPasswordField aliasPassword = new JPasswordField(20);
 	JPanel setupPanel = new JPanel();
 	JPanel signPanel = new JPanel();
-	InspectorGridBagLayout signLayout = new InspectorGridBagLayout(signPanel);
-	InspectorGridBagLayout setupLayout = new InspectorGridBagLayout(setupPanel);
+	Inspector signLayout = new Inspector(signPanel);
+	Inspector setupLayout = new Inspector(setupPanel);
 	JCheckBox sealed = new JCheckBox("Seal JAR");
 	JCheckBox includeJava = new JCheckBox(".java Files", true);
 	JCheckBox includeClass = new JCheckBox(".class Files", true);

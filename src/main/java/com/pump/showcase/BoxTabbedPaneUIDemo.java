@@ -32,8 +32,7 @@ import javax.swing.SwingConstants;
 import com.pump.awt.SplayedLayout;
 import com.pump.icon.PaddedIcon;
 import com.pump.icon.PlusIcon;
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.BoxTabbedPaneUI;
 import com.pump.swing.PartialLineBorder;
 
@@ -61,7 +60,7 @@ public class BoxTabbedPaneUIDemo extends ShowcaseExampleDemo {
 
 	public BoxTabbedPaneUIDemo() {
 		super(true, true, false);
-		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
+		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Tab Placement:"), tabPlacementComboBox);
 		layout.addRow(new JLabel("Closeable Tabs:"), closeableActive,
 				closeableInactive);

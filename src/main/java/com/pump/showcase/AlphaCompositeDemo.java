@@ -47,6 +47,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.image.ImageLoader;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.PlafPaintUtils;
 import com.pump.swing.JPopover;
 
@@ -101,46 +102,18 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 			};
 		}
 
-		configurationPanel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 0;
-		c.weighty = 0;
-		c.insets = new Insets(3, 3, 3, 3);
-		c.anchor = GridBagConstraints.EAST;
-		configurationPanel.add(new JLabel("Composite:"), c);
-		c.gridy++;
-		configurationPanel.add(new JLabel("Alpha:"), c);
-		c.gridy++;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		configurationPanel.add(useShapes, c);
-		c.gridy++;
-		configurationPanel.add(useImages, c);
-		c.gridy++;
-		configurationPanel.add(new JSeparator(), c);
-		c.gridy++;
-		c.gridwidth = 1;
-		c.fill = GridBagConstraints.NONE;
-		configurationPanel.add(new JLabel("Dest Alpha:"), c);
-		c.gridy++;
-		configurationPanel.add(new JLabel("Source Alpha:"), c);
-		c.gridx++;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.anchor = GridBagConstraints.WEST;
-		configurationPanel.add(composites, c);
-		c.gridy++;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		configurationPanel.add(alpha, c);
-		c.gridy += 4;
-		configurationPanel.add(dstAlpha, c);
-		c.gridy++;
-		configurationPanel.add(srcAlpha, c);
+		Inspector inspector = new Inspector(configurationPanel);
+		inspector.addRow(new JLabel("Composite:"), composites, false);
+		inspector.addRow(new JLabel("Alpha:"), alpha, false);
+		inspector.addRow(null, useShapes, false);
+		inspector.addRow(null, useImages, false);
+		inspector.addSeparator();
+		inspector.addRow(new JLabel("Dest Alpha:"), dstAlpha, false);
+		inspector.addRow(new JLabel("Source Alpha:"), srcAlpha, false);
 
 		examplePanel.setLayout(new GridBagLayout());
-		c.gridy++;
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridy = 0;
 		c.gridx = 0;
 		c.weightx = 1;
 		c.weighty = 1;

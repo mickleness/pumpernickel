@@ -29,8 +29,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JEyeDropper;
 
@@ -57,11 +56,11 @@ public class JEyeDropperDemo extends ShowcaseExampleDemo {
 		super(true, true, false);
 		exampleLabel.setVisible(false);
 
-		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
+		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Diameter:"), diameterSpinner);
 		layout.addRow(new JLabel("Magnification:"), magSpinner);
 		layout.addRow(new JLabel("Color:"), colorWell);
-		layout.addRow(showEyeDropper, SwingConstants.CENTER, false);
+		layout.addRow(showEyeDropper, false);
 
 		showEyeDropper.addActionListener(new ActionListener() {
 			@Override

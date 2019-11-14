@@ -26,8 +26,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.SliderUI;
 
-import com.pump.inspector.InspectorGridBagLayout;
-import com.pump.inspector.InspectorLayout;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.AngleSliderUI;
 import com.pump.plaf.AquaAngleSliderUI;
 
@@ -68,7 +67,7 @@ public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 	};
 
 	public AngleSliderUIDemo() {
-		InspectorLayout layout = new InspectorGridBagLayout(configurationPanel);
+		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);
 		layout.addRow(new JLabel("Style:"), uiTypeComboBox, false);
 		layout.addRow(new JLabel("State:"), stateEnabled, stateDisabled);
@@ -80,6 +79,7 @@ public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.NORTH;
 		examplePanel.add(angleSlider, c);
+		angleSlider.setOpaque(false);
 
 		ButtonGroup g1 = new ButtonGroup();
 		g1.add(stateEnabled);
