@@ -74,22 +74,6 @@ public class QButtonUIDemo extends ShowcaseExampleDemo {
 
 	private static final String BUTTON_TEXT = "XYZ";
 
-	private static void setFocusable(JComponent c, boolean b) {
-		c.setFocusable(b);
-		for (int a = 0; a < c.getComponentCount(); a++) {
-			if (c.getComponent(a) instanceof JComponent)
-				setFocusable((JComponent) c.getComponent(a), b);
-		}
-	}
-
-	private static void setOpaque(JComponent c, boolean b) {
-		c.setOpaque(b);
-		for (int a = 0; a < c.getComponentCount(); a++) {
-			if (c.getComponent(a) instanceof JComponent)
-				setOpaque((JComponent) c.getComponent(a), b);
-		}
-	}
-
 	List<AbstractButton> buttons = new ArrayList<AbstractButton>();
 	JCheckBox iconCheckBox = new JCheckBox("Show Icons", true);
 	JCheckBox contentCheckBox = new JCheckBox("Paint Content", true);
@@ -142,6 +126,7 @@ public class QButtonUIDemo extends ShowcaseExampleDemo {
 		controls.add(uiComboBox);
 		for (int b = 0; b < handlerControls.length; b++) {
 			handlerControls[b].setFocusable(false);
+			handlerControls[b].setOpaque(false);
 			controls.add(handlerControls[b]);
 		}
 
