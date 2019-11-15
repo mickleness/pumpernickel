@@ -48,6 +48,8 @@ public class JColorWellPaletteDemo extends ShowcaseExampleDemo {
 	JColorWell colorWell = new JColorWell();
 
 	public JColorWellPaletteDemo() {
+		addSliderPopover(cellSizeSlider, " pixels");
+		
 		Inspector layout1 = new Inspector(configurationPanel);
 		layout1.addRow(new JLabel("Type:"), typeComboBox);
 		layout1.addRow(new JLabel("Size:"), cellSizeSlider);

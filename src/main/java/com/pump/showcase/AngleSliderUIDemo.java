@@ -67,6 +67,8 @@ public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 	};
 
 	public AngleSliderUIDemo() {
+		addSliderPopover(sizeSlider, " pixels");
+		
 		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);
 		layout.addRow(new JLabel("Style:"), uiTypeComboBox, false);
@@ -101,10 +103,15 @@ public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 				: new AquaAngleSliderUI();
 		angleSlider.setUI(ui);
 		angleSlider.setEnabled(stateEnabled.isSelected());
-
+		
 		Dimension d = ui.getPreferredSize(angleSlider);
-		int i = sizeSlider.getValue() + Math.max(d.width, d.height);
-		angleSlider.setPreferredSize(new Dimension(i, i));
+		int z = Math.max(d.width, d.height);
+		
+		int relativeValue = sizeSlider.getValue() - sizeSlider.getMinimum();
+		int newValue = z + relativeValue;
+		sizeSlider.getModel().setRangeProperties(newValue, sizeSlider.getModel().getExtent(), z, z + 100, sizeSlider.getModel().getValueIsAdjusting());
+		
+		angleSlider.setPreferredSize(new Dimension(newValue, newValue));
 	}
 
 	@Override

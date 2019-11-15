@@ -246,6 +246,11 @@ public class StrokeMouseSmoothingDemo extends ShowcaseExampleDemo {
 
 	public StrokeMouseSmoothingDemo() {
 		super(true, true, false);
+		
+
+		addSliderPopover(crackSizeSlider, "%");
+		addSliderPopover(thicknessSlider, "%");
+		
 		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Smoothing:"), smoothingOnButton,
 				smoothingOffButton);

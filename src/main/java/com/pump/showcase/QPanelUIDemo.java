@@ -111,6 +111,10 @@ public class QPanelUIDemo extends ShowcaseExampleDemo {
 	public QPanelUIDemo() {
 		super(false, false, false);
 
+		addSliderPopover(cornerSize, " pixels");
+		addSliderPopover(calloutSize, " pixels");
+		addSliderPopover(shadowSize, " pixels");
+
 		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Preset:"), presetBox, presetToolTip);
 		layout.addRow(fillColor1Label, fillColor1, false);

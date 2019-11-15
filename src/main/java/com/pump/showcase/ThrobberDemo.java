@@ -57,6 +57,9 @@ public class ThrobberDemo extends ShowcaseExampleDemo {
 	JCheckBox colorCheckBox = new JCheckBox("Custom Foreground:");
 
 	public ThrobberDemo() {
+		addSliderPopover(sizeSlider, " pixels");
+		addSliderPopover(rateSlider, "%");
+		
 		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Type:"), typeComboBox);
 		layout.addRow(new JLabel("Size:"), sizeSlider);
