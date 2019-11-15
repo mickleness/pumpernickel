@@ -100,6 +100,7 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 				// this is only because we have the JToolTipDemo so
 				// colors might change:
 				getContents().updateUI();
+				getContents().setBorder(null);
 			}
 		};
 	}
