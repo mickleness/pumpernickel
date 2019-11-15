@@ -85,6 +85,7 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 
 	public AlphaCompositeDemo() {
 		addSliderPopover(alpha, "%");
+		addSliderPopover(dstAlpha, "%");
 		addSliderPopover(srcAlpha, "%");
 
 		Inspector inspector = new Inspector(configurationPanel);
