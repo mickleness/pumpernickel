@@ -18,31 +18,32 @@ import com.pump.inspector.InspectorLayoutManager.NullLayoutManager;
 /**
  * This is a JPanel that contains an InspectorRow.
  * <p>
- * You should use the InspectorRow object to manipulate the contents/layout of this panel.
- * But you can add listeners, toggle the visibility, or manipulate the Border of an InspectorRowPanel.
+ * You should use the InspectorRow object to manipulate the contents/layout of
+ * this panel. But you can add listeners, toggle the visibility, or manipulate
+ * the Border of an InspectorRowPanel.
  */
 public class InspectorRowPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private static Collection<String> COMPONENT_PROPERTIES = new HashSet<String>(Arrays.asList(
-			InspectorRow.PROPERTY_LEAD_COMPONENT.getName(), InspectorRow.PROPERTY_MAIN_COMPONENT.getName()));
-	
-	
+	private static Collection<String> COMPONENT_PROPERTIES = new HashSet<String>(
+			Arrays.asList(InspectorRow.PROPERTY_LEAD_COMPONENT.getName(),
+					InspectorRow.PROPERTY_MAIN_COMPONENT.getName()));
+
 	protected final InspectorRow row;
-	
+
 	protected PropertyChangeListener propertyListener = new PropertyChangeListener() {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if(COMPONENT_PROPERTIES.contains(evt.getPropertyName())) {
+			if (COMPONENT_PROPERTIES.contains(evt.getPropertyName())) {
 				refreshChildren();
 			} else {
 				invalidateInspectorParent();
 			}
 		}
-		
+
 	};
-	
+
 	public InspectorRowPanel(InspectorRow row) {
 		super(new NullLayoutManager());
 		Objects.requireNonNull(row);
@@ -51,38 +52,38 @@ public class InspectorRowPanel extends JPanel {
 		row.addPropertyChangeListener(propertyListener);
 		refreshChildren();
 	}
-	
+
 	/**
 	 * Return the InspectorRow this panel represents.
 	 */
 	public InspectorRow getInspectorRow() {
 		return row;
 	}
-	
+
 	/**
-	 * This method adds/removes child components. The InspectorLayoutManager
-	 * is responsible to laying out these children appropriately.
+	 * This method adds/removes child components. The InspectorLayoutManager is
+	 * responsible to laying out these children appropriately.
 	 */
 	protected void refreshChildren() {
 		List<JComponent> newChildren = getInspectorRow().getComponents();
 		List<Component> oldChildren = Arrays.asList(getComponents());
-		if(newChildren.equals(oldChildren))
+		if (newChildren.equals(oldChildren))
 			return;
-		for(Component newChild : newChildren) {
-			if(!oldChildren.contains(newChild))
+		for (Component newChild : newChildren) {
+			if (!oldChildren.contains(newChild))
 				add(newChild);
 		}
-		for(Component oldChild : oldChildren) {
-			if(!newChildren.contains(oldChild))
+		for (Component oldChild : oldChildren) {
+			if (!newChildren.contains(oldChild))
 				remove(oldChild);
 		}
 		invalidateInspectorParent();
 	}
-	
+
 	private void invalidateInspectorParent() {
 		Container parent = getParent();
-		if(parent!=null)
+		if (parent != null)
 			parent.invalidate();
 	}
-	
+
 }

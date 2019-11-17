@@ -14,33 +14,36 @@ import javax.swing.JSlider;
 /**
  * This manages a set of controls arranged as a series of rows.
  * <p>
- * There are two columns: the smaller "lead" (or "ID") column on the left
- * which takes up only as much width as it has to, and the "main" column
- * which takes up the remaining width on the right.
+ * There are two columns: the smaller "lead" (or "ID") column on the left which
+ * takes up only as much width as it has to, and the "main" column which takes
+ * up the remaining width on the right.
  * <p>
- * All lead controls are right-aligned. All main controls should generally
- * be right-aligned.
+ * All lead controls are right-aligned. All main controls should generally be
+ * right-aligned.
  * 
  * @see <a
  *      href="https://javagraphics.blogspot.com/2009/06/layouts-designing-inspector.html">Layouts:
  *      Designing an Inspector</a>
  */
 public class Inspector {
-	private static final String PROPERTY_WRAPPED = Inspector.class.getName()+"#wrapped";
-	
+	private static final String PROPERTY_WRAPPED = Inspector.class.getName()
+			+ "#wrapped";
+
 	JPanel panel;
 	InspectorLayoutManager layout;
-	
+
 	/**
 	 * Create a new Inspector.
 	 */
 	public Inspector() {
 		this(new JPanel());
 	}
-	
+
 	/**
 	 * Create a new Inspector that populates a specific panel.
-	 * @param panel the panel to populate.
+	 * 
+	 * @param panel
+	 *            the panel to populate.
 	 */
 	public Inspector(JPanel panel) {
 		this.panel = panel;
@@ -48,14 +51,14 @@ public class Inspector {
 		panel.setLayout(layout);
 		clear();
 	}
-	
+
 	/**
 	 * Return the panel this Inspector populates.
 	 */
 	public JPanel getPanel() {
 		return panel;
 	}
-	
+
 	/**
 	 * Add a new InspectorRow.
 	 */
@@ -76,17 +79,20 @@ public class Inspector {
 	 *            whether to stretch this component to fill the space
 	 *            horizontally or not.
 	 */
-	public InspectorRowPanel addRow(JComponent component,boolean stretchToFill) {
+	public InspectorRowPanel addRow(JComponent component, boolean stretchToFill) {
 		prepare(component);
-		return addRow(new InspectorRow(null, component, stretchToFill ? 1 : 0, 0));
+		return addRow(new InspectorRow(null, component, stretchToFill ? 1 : 0,
+				0));
 	}
 
 	/**
-	 * Process new components. This may change opacity, borders, or other properties.
+	 * Process new components. This may change opacity, borders, or other
+	 * properties.
 	 */
 	protected void prepare(JComponent... components) {
-		for(JComponent c : components) {
-			if(c instanceof JSlider || c instanceof JRadioButton || c instanceof JCheckBox)
+		for (JComponent c : components) {
+			if (c instanceof JSlider || c instanceof JRadioButton
+					|| c instanceof JCheckBox)
 				c.setOpaque(false);
 		}
 	}
@@ -109,7 +115,8 @@ public class Inspector {
 	public InspectorRowPanel addRow(JComponent identifier, JComponent control,
 			boolean stretchControlToFill) {
 		prepare(identifier, control);
-		return addRow(new InspectorRow(identifier, control, stretchControlToFill ? 1 : 0, 0));
+		return addRow(new InspectorRow(identifier, control,
+				stretchControlToFill ? 1 : 0, 0));
 	}
 
 	/**
@@ -123,20 +130,24 @@ public class Inspector {
 	 *            a series of controls to group together from left to right. The
 	 *            cluster of components will be anchored on the left.
 	 */
-	public InspectorRowPanel addRow(JComponent identifier, JComponent... controls) {
+	public InspectorRowPanel addRow(JComponent identifier,
+			JComponent... controls) {
 		prepare(controls);
 		prepare(identifier);
 		JPanel controlPanel = new JPanel(new GridBagLayout());
 		controlPanel.setOpaque(false);
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0; c.gridy = 0; c.weightx = 1; c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
 		c.anchor = GridBagConstraints.BASELINE;
-		for(int a = 0; a<controls.length; a++) {
-			if(a==0 && a==controls.length-1) {
+		for (int a = 0; a < controls.length; a++) {
+			if (a == 0 && a == controls.length - 1) {
 				c.insets = getInsets(controls[a], Position.MAIN_ONLY);
-			} else if(a==0) {
+			} else if (a == 0) {
 				c.insets = getInsets(controls[a], Position.MAIN_FIRST);
-			} else if(a==controls.length-1) {
+			} else if (a == controls.length - 1) {
 				c.insets = getInsets(controls[a], Position.MAIN_LAST);
 			} else {
 				c.insets = getInsets(controls[a], Position.MAIN_MIDDLE);
@@ -146,7 +157,7 @@ public class Inspector {
 		}
 		controlPanel.putClientProperty(PROPERTY_WRAPPED, Boolean.TRUE);
 		return addRow(new InspectorRow(identifier, controlPanel, 0, 0));
-	} 
+	}
 
 	/**
 	 * Appends a new row containing 3 objects to this inspector.
@@ -167,15 +178,20 @@ public class Inspector {
 	 * @param rightControl
 	 *            the element to add on the right.
 	 */
-	public InspectorRowPanel addRow(JComponent identifier, JComponent leftControl,
-			boolean stretchToFill, JComponent rightControl) {
+	public InspectorRowPanel addRow(JComponent identifier,
+			JComponent leftControl, boolean stretchToFill,
+			JComponent rightControl) {
 		prepare(identifier, leftControl, rightControl);
 		JPanel controlPanel = new JPanel(new GridBagLayout());
 		controlPanel.setOpaque(false);
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0; c.gridy = 0; c.weightx = 1; c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
 		c.anchor = GridBagConstraints.BASELINE_LEADING;
-		c.fill = stretchToFill ? GridBagConstraints.BOTH : GridBagConstraints.NONE;
+		c.fill = stretchToFill ? GridBagConstraints.BOTH
+				: GridBagConstraints.NONE;
 		c.insets = getInsets(leftControl, Position.MAIN_ONLY);
 		controlPanel.add(leftControl, c);
 		c.gridx++;
@@ -203,9 +219,10 @@ public class Inspector {
 	public void clear() {
 		panel.removeAll();
 	}
-	
+
 	/**
-	 * These describe the possible position of of a component when insets are applied.
+	 * These describe the possible position of of a component when insets are
+	 * applied.
 	 */
 	public enum Position {
 		LEAD, MAIN_ONLY, MAIN_FIRST, MAIN_MIDDLE, MAIN_LAST, TRAIL
@@ -213,35 +230,39 @@ public class Inspector {
 
 	/**
 	 * Return the insets a given component should use.
+	 * 
 	 * @param c
 	 * @param position
 	 * @return
 	 */
 	public Insets getInsets(JComponent c, Position position) {
 		Boolean wrapped = (Boolean) c.getClientProperty(PROPERTY_WRAPPED);
-		if(wrapped!=null && wrapped.booleanValue())
-			return new Insets(0,0,0,0);
-		
-		Insets i = new Insets(2,2,2,2);
-		if(position==Position.LEAD) {
+		if (wrapped != null && wrapped.booleanValue())
+			return new Insets(0, 0, 0, 0);
+
+		Insets i = new Insets(2, 2, 2, 2);
+		if (position == Position.LEAD) {
 			i.left = 5;
 		}
-		if(position==Position.TRAIL || position==Position.MAIN_ONLY || position==Position.MAIN_LAST)
+		if (position == Position.TRAIL || position == Position.MAIN_ONLY
+				|| position == Position.MAIN_LAST)
 			i.right = 5;
 		return i;
 	}
 
 	/**
-	 * If true then hidden components in a row do not affect the widths of the columns.
+	 * If true then hidden components in a row do not affect the widths of the
+	 * columns.
 	 * <p>
-	 * If you think rows will frequently change and a constantly changing column width will
-	 * be disorienting for the user: you can set this value to false. The downside is: sometimes
-	 * that may make certain columns wider than they need to be to fir the current visible
-	 * components.
+	 * If you think rows will frequently change and a constantly changing column
+	 * width will be disorienting for the user: you can set this value to false.
+	 * The downside is: sometimes that may make certain columns wider than they
+	 * need to be to fir the current visible components.
 	 * <p>
-	 * But if you always want to only accommodate the controls that are showing (and nothing
-	 * else), then you can leave this value as true. The downside is: if the inspector
-	 * changes as new components are made visible, the columns may grow/shrink frequently.
+	 * But if you always want to only accommodate the controls that are showing
+	 * (and nothing else), then you can leave this value as true. The downside
+	 * is: if the inspector changes as new components are made visible, the
+	 * columns may grow/shrink frequently.
 	 */
 	public boolean isIgnoreHiddenComponents() {
 		return true;

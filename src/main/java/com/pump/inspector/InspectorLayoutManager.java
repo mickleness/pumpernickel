@@ -14,11 +14,10 @@ import javax.swing.JPanel;
 class InspectorLayoutManager implements LayoutManager {
 
 	/**
-	 * This is a no-op LayoutManager used for InspectorRowPanels.
-	 * The InspectorRowPanels are also managed by the parent
-	 * InspectorLayoutManager. So as far as Swing is concerned:
-	 * the NullLayoutManager is their LayoutManager. But in
-	 * reality: their parent container (which uses a
+	 * This is a no-op LayoutManager used for InspectorRowPanels. The
+	 * InspectorRowPanels are also managed by the parent InspectorLayoutManager.
+	 * So as far as Swing is concerned: the NullLayoutManager is their
+	 * LayoutManager. But in reality: their parent container (which uses a
 	 * InspectorLayoutManager) is managing their layout.
 	 */
 	static class NullLayoutManager implements LayoutManager {
@@ -33,21 +32,21 @@ class InspectorLayoutManager implements LayoutManager {
 
 		@Override
 		public Dimension preferredLayoutSize(Container parent) {
-			return new Dimension(0,0);
+			return new Dimension(0, 0);
 		}
 
 		@Override
 		public Dimension minimumLayoutSize(Container parent) {
-			return new Dimension(0,0);
+			return new Dimension(0, 0);
 		}
 
 		@Override
 		public void layoutContainer(Container parent) {
 		}
 	}
-	
+
 	Inspector inspector;
-	
+
 	InspectorLayoutManager(Inspector inspector) {
 		Objects.requireNonNull(inspector);
 		this.inspector = inspector;
@@ -63,19 +62,22 @@ class InspectorLayoutManager implements LayoutManager {
 
 	@Override
 	public Dimension preferredLayoutSize(Container parent) {
-		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector, (JPanel)parent);
+		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector,
+				(JPanel) parent);
 		return p.getPreferredSize();
 	}
 
 	@Override
 	public Dimension minimumLayoutSize(Container parent) {
-		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector, (JPanel)parent);
+		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector,
+				(JPanel) parent);
 		return p.getMinimumSize();
 	}
 
 	@Override
 	public void layoutContainer(Container parent) {
-		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector, (JPanel)parent);
+		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector,
+				(JPanel) parent);
 		p.install();
 	}
 }
