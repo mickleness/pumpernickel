@@ -1,9 +1,11 @@
 package com.pump.inspector;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.AbstractButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -36,8 +38,23 @@ public class Inspector {
 		LEAD, MAIN_ONLY_STRETCH_TO_FILL, MAIN_ONLY_NO_STRETCH, MAIN_WITH_LEAD_STRETCH_TO_FILL, MAIN_WITH_LEAD_NO_STRETCH, MAIN_WITH_LEAD_FIRST_IN_SERIES, MAIN_WITH_LEAD_MIDDLE_IN_SERIES, MAIN_WITH_LEAD_LAST_IN_SERIES, TRAIL
 	}
 
+	/**
+	 * This client property on JPanels resolves a Boolean indicating whether this panel
+	 * is a custom panel we created just to wrap other inspector elements. If this is true
+	 * then our custom panel should have already taken insets into account inside the
+	 * wrapped panel, and all future calls to getInsets(..) on the panel itself can return
+	 * an empty Insts.
+	 */
 	private static final String PROPERTY_WRAPPED = Inspector.class.getName()
 			+ "#wrapped";
+	
+	/**
+	 * This client property on JComponents resolves to negative (or zeroed) insets
+	 * used to help align text.
+	 */
+	private static final String PROPERTY_NEGATIVE_INSETS = Inspector.class.getName()
+			+ "#negativeInsets";
+
 
 	JPanel panel;
 	InspectorLayoutManager layout;
@@ -259,12 +276,22 @@ public class Inspector {
 				|| position == Position.MAIN_WITH_LEAD_LAST_IN_SERIES) {
 			i.right = 5;
 		}
+		
+		Insets negativeInsets = (Insets) c.getClientProperty(PROPERTY_NEGATIVE_INSETS);
+		if(negativeInsets!=null) {
+			i.left += negativeInsets.left;
+			i.right += negativeInsets.right;
+			i.top += negativeInsets.top;
+			i.bottom += negativeInsets.bottom;
+		}
+		
 		return i;
 	}
 
 	/**
 	 * Process new components. This may change opacity, borders, or other
-	 * properties. This method should only be called once per component.
+	 * properties. This method should only be called once per component,
+	 * and it should be called before {@link #getInsets(Position, JComponent)}.
 	 * 
 	 * @param position
 	 *            the position of this JComponent.
@@ -280,6 +307,21 @@ public class Inspector {
 				|| component instanceof JRadioButton
 				|| component instanceof JSlider) {
 			component.setBorder(null);
+		}
+		
+		if(component instanceof JCheckBox || component instanceof JRadioButton) {
+			AbstractButton b = (AbstractButton) component;
+			if(b.isFocusPainted()) {
+				// if painting the focus makes a button larger: then we need
+				// to acknowledge that so the getInsets method still 
+				// right-aligns our labels and checkboxes correctly.
+				Dimension d1 = component.getPreferredSize();
+				b.setFocusPainted(false);
+				Dimension d2 = component.getPreferredSize();
+				b.setFocusPainted(true);
+				Insets negativeInsets = new Insets(0,0,d2.width-d1.width,d2.height-d1.height);
+				b.putClientProperty(PROPERTY_NEGATIVE_INSETS, negativeInsets);
+			}
 		}
 	}
 
