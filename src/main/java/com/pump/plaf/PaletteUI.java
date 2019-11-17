@@ -44,7 +44,9 @@ import javax.swing.JComponent;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.colorchooser.ColorSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -323,8 +325,6 @@ public class PaletteUI extends ComponentUI {
 
 	protected Border getDefaultBorder() {
 		return new EmptyBorder(2, 2, 2, 2);
-		// return new BevelBorder(BevelBorder.LOWERED, Color.lightGray,
-		// Color.darkGray);
 	}
 
 	static class Fields {
@@ -406,7 +406,8 @@ public class PaletteUI extends ComponentUI {
 		c.setFocusable(true);
 		Fields fields = getFields((JPalette) c, true);
 		fields.install();
-		c.setBorder(new FocusedBorder(getDefaultBorder()));
+		c.setBorder(new CompoundBorder(new LineBorder(new Color(0xB0B0B0)),
+				new FocusedBorder(getDefaultBorder())));
 		relayoutCells((JPalette) c);
 	}
 
