@@ -69,6 +69,7 @@ public class JToolTipDemo extends ShowcaseExampleDemo {
 	JComboBox<String> calloutTypeComboBox = new JComboBox<>();
 
 	public JToolTipDemo() {
+		addSliderPopover(fontSizeSlider, " pts");
 
 		toolTipTypeComboBox.addItem("Use QPopupFactory");
 		toolTipTypeComboBox.addItem("Use Default PopupFactory");

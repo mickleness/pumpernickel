@@ -194,17 +194,7 @@ public class GradientTexturePaintDemo extends ShowcaseExampleDemo {
 
 		actionListener.actionPerformed(null);
 
-		new JPopover<JToolTip>(numberOfColorsSlider, new JToolTip(), false) {
-
-			@Override
-			protected void doRefreshPopup() {
-				getContents().setTipText(
-						numberOfColorsSlider.getValue() + " Colors");
-				// this is only because we have the JToolTipDemo so colors
-				// might change:
-				getContents().updateUI();
-			}
-		};
+		addSliderPopover(numberOfColorsSlider, " colors");
 
 		numberOfColorsSlider.addChangeListener(repaintListener);
 		well1.getColorSelectionModel().addChangeListener(repaintListener);

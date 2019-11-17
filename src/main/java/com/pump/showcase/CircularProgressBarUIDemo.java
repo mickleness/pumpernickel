@@ -205,6 +205,9 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 	};
 
 	public CircularProgressBarUIDemo() {
+		addSliderPopover(sizeSlider, " pixels");
+		addSliderPopover(strokeSlider, " pixels");
+		
 		Inspector layout = new Inspector(
 				configurationPanel);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);

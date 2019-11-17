@@ -7,8 +7,11 @@ import java.awt.Insets;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JToolTip;
 
 import com.pump.plaf.QPanelUI;
+import com.pump.swing.JPopover;
 
 public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
@@ -72,5 +75,33 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 
 		exampleLabel.setLabelFor(examplePanel);
 		configurationLabel.setLabelFor(configurationPanel);
+	}
+	
+	/**
+	 * Add a popover labeling a slider.
+	 * 
+	 * @param suffix the text to append after the numeric value, such as "%" or " pixels".
+	 */
+	protected void addSliderPopover(JSlider slider, final String suffix) {
+		new JPopover<JToolTip>(slider, new JToolTip(), false) {
+
+			@Override
+			protected void doRefreshPopup() {
+				JSlider js = (JSlider) getOwner();
+				int v = js.getValue();
+				String newText;
+				if(v==1 && suffix.startsWith(" ") && suffix.endsWith("s")) {
+					newText = v + suffix.substring(0, suffix.length()-1);
+				} else {
+					newText = v + suffix;
+				}
+				getContents().setTipText(newText);
+				
+				// this is only because we have the JToolTipDemo so
+				// colors might change:
+				getContents().updateUI();
+				getContents().setBorder(null);
+			}
+		};
 	}
 }

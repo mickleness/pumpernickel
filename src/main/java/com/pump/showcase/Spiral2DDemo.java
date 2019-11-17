@@ -59,61 +59,20 @@ public class Spiral2DDemo extends ShowcaseExampleDemo {
 
 	JLabel angleOffsetLabel = new JLabel("Angle Offset:");
 	JLabel coilOffsetLabel = new JLabel("Coil Offset:");
-	JSlider angleOffset = new JSlider();
+	JSlider angleOffset = new JSlider(0, 359);
 	JSpinner coilOffset = new JSpinner(new SpinnerNumberModel(0, 0, 10, .01));
 
 	JCheckBox outward = new JCheckBox("Outward");
 	JCheckBox clockwise = new JCheckBox("Clockwise");
 
 	PreviewPanel preview = new PreviewPanel();
-
-	ActionListener animateListener = new ActionListener() {
-		private boolean increasingCoilOffset = true;
-		private boolean decreasingCoilOffset = false;
-		double coilIncr = .05;
-
-		public void actionPerformed(ActionEvent e) {
-			timerChange++;
-			try {
-				int angleValue = angleOffset.getValue();
-				angleValue++;
-				if (angleValue > angleOffset.getMaximum())
-					angleValue = angleOffset.getMinimum();
-				angleOffset.setValue(angleValue);
-
-				if (increasingCoilOffset) {
-					double coilValue = ((Number) coilOffset.getValue())
-							.doubleValue();
-					if (coilValue + coilIncr > 3) {
-						decreasingCoilOffset = true;
-						increasingCoilOffset = false;
-						coilValue -= coilIncr;
-					} else {
-						coilValue += coilIncr;
-					}
-					coilOffset.setValue(coilValue);
-				} else if (decreasingCoilOffset) {
-					double coilValue = ((Number) coilOffset.getValue())
-							.doubleValue();
-					if (coilValue - coilIncr < 0) {
-						increasingCoilOffset = true;
-						decreasingCoilOffset = false;
-						coilValue += coilIncr;
-					} else {
-						coilValue -= coilIncr;
-					}
-					coilOffset.setValue(coilValue);
-				}
-			} finally {
-				timerChange--;
-			}
-		}
-	};
 	int timerChange = 0;
 
 	public Spiral2DDemo() {
 		super(true, true, true);
 
+		addSliderPopover(angleOffset, "°");
+		
 		Inspector inspector = new Inspector(configurationPanel);
 		inspector.addRow(coilGapLabel, coilGap);
 		inspector.addRow(coilsLabel, coils);
@@ -189,7 +148,7 @@ public class Spiral2DDemo extends ShowcaseExampleDemo {
 
 		protected void setSpiral(Spiral2D spiral) {
 			double fraction = ((spiral.getAngularOffset() + 4 * Math.PI) / (2 * Math.PI)) % 1.0;
-			angleOffset.setValue((int) (fraction * 100));
+			angleOffset.setValue((int) (fraction * 360));
 			coilOffset.setValue(spiral.getCoilOffset());
 			coilGap.setValue(new Double(spiral.getCoilGap()));
 			coils.setValue(new Double(spiral.getCoils()));

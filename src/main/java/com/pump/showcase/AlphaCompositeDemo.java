@@ -39,9 +39,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JSeparator;
 import javax.swing.JSlider;
-import javax.swing.JToolTip;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -49,7 +47,6 @@ import javax.swing.event.ChangeListener;
 import com.pump.image.ImageLoader;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.PlafPaintUtils;
-import com.pump.swing.JPopover;
 
 /**
  * This is a simple demo exploring the different types of
@@ -87,20 +84,9 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 	CompositePreview preview = new CompositePreview();
 
 	public AlphaCompositeDemo() {
-		for (JSlider slider : new JSlider[] { alpha, srcAlpha, dstAlpha }) {
-			final JSlider js = slider;
-			new JPopover<JToolTip>(js, new JToolTip(), false) {
-
-				@Override
-				protected void doRefreshPopup() {
-					getContents().setTipText(js.getValue() + "%");
-					// this is only because we have the JToolTipDemo so
-					// colors
-					// might change:
-					getContents().updateUI();
-				}
-			};
-		}
+		addSliderPopover(alpha, "%");
+		addSliderPopover(dstAlpha, "%");
+		addSliderPopover(srcAlpha, "%");
 
 		Inspector inspector = new Inspector(configurationPanel);
 		inspector.addRow(new JLabel("Composite:"), composites, false);
