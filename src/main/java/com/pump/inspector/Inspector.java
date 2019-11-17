@@ -116,7 +116,7 @@ public class Inspector {
 		prepare(Position.LEAD, identifier);
 		Position pos = stretchControlToFill ? Position.MAIN_ONLY_STRETCH_TO_FILL
 				: Position.MAIN_ONLY_NO_STRETCH;
-		prepare(pos, identifier);
+		prepare(pos, control);
 		return addRow(new InspectorRow(identifier, control,
 				stretchControlToFill, 0));
 	}
