@@ -115,7 +115,7 @@ public class JPopover<T extends JComponent> {
 
 			boolean newVisible;
 
-			if (owner.isShowing()) {
+			if (owner.isShowing() && owner.isEnabled()) {
 				newVisible = isFocusOwnerOrAncestor(owner) || isRollover(owner);
 				if (!newVisible && popover.isRolloverContents()) {
 					newVisible = isFocusOwnerOrAncestor(contents)
