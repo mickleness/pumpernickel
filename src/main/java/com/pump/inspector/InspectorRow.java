@@ -29,17 +29,17 @@ public class InspectorRow extends AbstractAttributeDataImpl {
 			JComponent.class, InspectorRow.class.getName() + "#leadComponent");
 	public static final Key<JComponent> PROPERTY_MAIN_COMPONENT = new Key<>(
 			JComponent.class, InspectorRow.class.getName() + "#mainComponent");
-	public static final Key<Float> PROPERTY_MAIN_COMPONENT_HORIZONTAL_WEIGHT = new Key<>(
-			Float.class, InspectorRow.class.getName()
-					+ "#mainComponentHorizontalWeight");
+	public static final Key<Boolean> PROPERTY_MAIN_COMPONENT_STRETCH_TO_FILL = new Key<>(
+			Boolean.class, InspectorRow.class.getName()
+					+ "#mainComponentStretchToFill");
 	public static final Key<Float> PROPERTY_ROW_VERTICAL_WEIGHT = new Key<>(
 			Float.class, InspectorRow.class.getName() + "#rowVerticalWeight");
 
 	public InspectorRow(JComponent leadComponent, JComponent mainComponent,
-			float mainComponentHorizontalWeight, float rowVerticalWeight) {
+			boolean mainComponentStretchToFill, float rowVerticalWeight) {
 		setLeadComponent(leadComponent);
 		setMainComponent(mainComponent);
-		setMainComponentHorizontalWeight(mainComponentHorizontalWeight);
+		setMainComponentStretchToFill(mainComponentStretchToFill);
 		setRowVerticalWeight(rowVerticalWeight);
 		if (leadComponent instanceof JLabel && mainComponent != null) {
 			JLabel l = (JLabel) leadComponent;
@@ -83,13 +83,11 @@ public class InspectorRow extends AbstractAttributeDataImpl {
 	}
 
 	/**
-	 * Return a float from [0,1] indicating how to distribute extra width for
-	 * the main component. Usually this is either zero (indicating the main
-	 * component gets its preferred width) or one (indicating the main component
-	 * gets the remaining width).
+	 * Return true if the main component should stretch to fill the available
+	 * width, or false if it should only occupy its preferred width.
 	 */
-	public float getMainComponentHorizontalWeight() {
-		return getAttribute(PROPERTY_MAIN_COMPONENT_HORIZONTAL_WEIGHT);
+	public boolean getMainComponentStretchToFill() {
+		return getAttribute(PROPERTY_MAIN_COMPONENT_STRETCH_TO_FILL);
 	}
 
 	/**
@@ -111,10 +109,10 @@ public class InspectorRow extends AbstractAttributeDataImpl {
 		return setAttribute(PROPERTY_MAIN_COMPONENT, mainComponent);
 	}
 
-	public Float setMainComponentHorizontalWeight(
-			float mainComponentHorizontalWeight) {
-		return setAttribute(PROPERTY_MAIN_COMPONENT_HORIZONTAL_WEIGHT,
-				mainComponentHorizontalWeight);
+	public Boolean setMainComponentStretchToFill(
+			boolean mainComponentStretchToFill) {
+		return setAttribute(PROPERTY_MAIN_COMPONENT_STRETCH_TO_FILL,
+				mainComponentStretchToFill);
 	}
 
 	public Float setRowVerticalWeight(float rowVerticalWeight) {

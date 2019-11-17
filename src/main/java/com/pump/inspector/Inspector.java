@@ -6,6 +6,7 @@ import java.awt.Insets;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
@@ -26,6 +27,15 @@ import javax.swing.JSlider;
  *      Designing an Inspector</a>
  */
 public class Inspector {
+
+	/**
+	 * These describe the possible position of of a component when insets are
+	 * applied.
+	 */
+	public enum Position {
+		LEAD, MAIN_ONLY_STRETCH_TO_FILL, MAIN_ONLY_NO_STRETCH, MAIN_WITH_LEAD_STRETCH_TO_FILL, MAIN_WITH_LEAD_NO_STRETCH, MAIN_WITH_LEAD_FIRST_IN_SERIES, MAIN_WITH_LEAD_MIDDLE_IN_SERIES, MAIN_WITH_LEAD_LAST_IN_SERIES, TRAIL
+	}
+
 	private static final String PROPERTY_WRAPPED = Inspector.class.getName()
 			+ "#wrapped";
 
@@ -80,21 +90,10 @@ public class Inspector {
 	 *            horizontally or not.
 	 */
 	public InspectorRowPanel addRow(JComponent component, boolean stretchToFill) {
-		prepare(component);
-		return addRow(new InspectorRow(null, component, stretchToFill ? 1 : 0,
-				0));
-	}
-
-	/**
-	 * Process new components. This may change opacity, borders, or other
-	 * properties.
-	 */
-	protected void prepare(JComponent... components) {
-		for (JComponent c : components) {
-			if (c instanceof JSlider || c instanceof JRadioButton
-					|| c instanceof JCheckBox)
-				c.setOpaque(false);
-		}
+		Position pos = stretchToFill ? Position.MAIN_ONLY_STRETCH_TO_FILL
+				: Position.MAIN_ONLY_NO_STRETCH;
+		prepare(pos, component);
+		return addRow(new InspectorRow(null, component, stretchToFill, 0));
 	}
 
 	/**
@@ -114,9 +113,12 @@ public class Inspector {
 	 */
 	public InspectorRowPanel addRow(JComponent identifier, JComponent control,
 			boolean stretchControlToFill) {
-		prepare(identifier, control);
+		prepare(Position.LEAD, identifier);
+		Position pos = stretchControlToFill ? Position.MAIN_ONLY_STRETCH_TO_FILL
+				: Position.MAIN_ONLY_NO_STRETCH;
+		prepare(pos, identifier);
 		return addRow(new InspectorRow(identifier, control,
-				stretchControlToFill ? 1 : 0, 0));
+				stretchControlToFill, 0));
 	}
 
 	/**
@@ -132,8 +134,7 @@ public class Inspector {
 	 */
 	public InspectorRowPanel addRow(JComponent identifier,
 			JComponent... controls) {
-		prepare(controls);
-		prepare(identifier);
+		prepare(Position.LEAD, identifier);
 		JPanel controlPanel = new JPanel(new GridBagLayout());
 		controlPanel.setOpaque(false);
 		GridBagConstraints c = new GridBagConstraints();
@@ -143,20 +144,25 @@ public class Inspector {
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.BASELINE;
 		for (int a = 0; a < controls.length; a++) {
+			Position pos;
+
 			if (a == 0 && a == controls.length - 1) {
-				c.insets = getInsets(controls[a], Position.MAIN_ONLY);
+				pos = Position.MAIN_WITH_LEAD_NO_STRETCH;
 			} else if (a == 0) {
-				c.insets = getInsets(controls[a], Position.MAIN_FIRST);
+				pos = Position.MAIN_WITH_LEAD_FIRST_IN_SERIES;
 			} else if (a == controls.length - 1) {
-				c.insets = getInsets(controls[a], Position.MAIN_LAST);
+				pos = Position.MAIN_WITH_LEAD_LAST_IN_SERIES;
 			} else {
-				c.insets = getInsets(controls[a], Position.MAIN_MIDDLE);
+				pos = Position.MAIN_WITH_LEAD_MIDDLE_IN_SERIES;
 			}
+			prepare(pos, controls[a]);
+
+			c.insets = getInsets(pos, controls[a]);
 			controlPanel.add(controls[a], c);
 			c.gridx++;
 		}
 		controlPanel.putClientProperty(PROPERTY_WRAPPED, Boolean.TRUE);
-		return addRow(new InspectorRow(identifier, controlPanel, 0, 0));
+		return addRow(new InspectorRow(identifier, controlPanel, false, 0));
 	}
 
 	/**
@@ -181,7 +187,12 @@ public class Inspector {
 	public InspectorRowPanel addRow(JComponent identifier,
 			JComponent leftControl, boolean stretchToFill,
 			JComponent rightControl) {
-		prepare(identifier, leftControl, rightControl);
+		prepare(Position.LEAD, identifier);
+		Position pos = stretchToFill ? Position.MAIN_WITH_LEAD_STRETCH_TO_FILL
+				: Position.MAIN_WITH_LEAD_NO_STRETCH;
+		prepare(pos, leftControl);
+		prepare(Position.TRAIL, rightControl);
+
 		JPanel controlPanel = new JPanel(new GridBagLayout());
 		controlPanel.setOpaque(false);
 		GridBagConstraints c = new GridBagConstraints();
@@ -192,16 +203,16 @@ public class Inspector {
 		c.anchor = GridBagConstraints.BASELINE_LEADING;
 		c.fill = stretchToFill ? GridBagConstraints.BOTH
 				: GridBagConstraints.NONE;
-		c.insets = getInsets(leftControl, Position.MAIN_ONLY);
+		c.insets = getInsets(pos, leftControl);
 		controlPanel.add(leftControl, c);
 		c.gridx++;
 		c.weightx = 0;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.BASELINE_TRAILING;
-		c.insets = getInsets(rightControl, Position.TRAIL);
+		c.insets = getInsets(Position.TRAIL, rightControl);
 		controlPanel.add(rightControl, c);
 		controlPanel.putClientProperty(PROPERTY_WRAPPED, Boolean.TRUE);
-		return addRow(new InspectorRow(identifier, controlPanel, 0, 0));
+		return addRow(new InspectorRow(identifier, controlPanel, false, 0));
 	}
 
 	/**
@@ -209,7 +220,7 @@ public class Inspector {
 	 * 
 	 */
 	public InspectorRowPanel addSeparator() {
-		return addRow(new InspectorRow(null, new JSeparator(), 1, 0));
+		return addRow(new InspectorRow(null, new JSeparator(), true, 0));
 	}
 
 	/**
@@ -221,33 +232,55 @@ public class Inspector {
 	}
 
 	/**
-	 * These describe the possible position of of a component when insets are
-	 * applied.
-	 */
-	public enum Position {
-		LEAD, MAIN_ONLY, MAIN_FIRST, MAIN_MIDDLE, MAIN_LAST, TRAIL
-	}
-
-	/**
-	 * Return the insets a given component should use.
+	 * Return the insets a given component should use. This method may be called
+	 * every time the inspector panel is revalidated/resized.
 	 * 
-	 * @param c
 	 * @param position
+	 *            the position of this JComponent.
+	 * @param c
+	 *            the component to identify the insets for.
 	 * @return
 	 */
-	public Insets getInsets(JComponent c, Position position) {
+	public Insets getInsets(Position position, JComponent c) {
 		Boolean wrapped = (Boolean) c.getClientProperty(PROPERTY_WRAPPED);
 		if (wrapped != null && wrapped.booleanValue())
 			return new Insets(0, 0, 0, 0);
 
-		Insets i = new Insets(2, 2, 2, 2);
+		Insets i = new Insets(3, 3, 3, 3);
 		if (position == Position.LEAD) {
 			i.left = 5;
+			i.right = 6;
 		}
-		if (position == Position.TRAIL || position == Position.MAIN_ONLY
-				|| position == Position.MAIN_LAST)
+		if (position == Position.TRAIL
+				|| position == Position.MAIN_ONLY_NO_STRETCH
+				|| position == Position.MAIN_ONLY_STRETCH_TO_FILL
+				|| position == Position.MAIN_WITH_LEAD_NO_STRETCH
+				|| position == Position.MAIN_WITH_LEAD_STRETCH_TO_FILL
+				|| position == Position.MAIN_WITH_LEAD_LAST_IN_SERIES) {
 			i.right = 5;
+		}
 		return i;
+	}
+
+	/**
+	 * Process new components. This may change opacity, borders, or other
+	 * properties. This method should only be called once per component.
+	 * 
+	 * @param position
+	 *            the position of this JComponent.
+	 * @param component
+	 *            the component to prepare for installation.
+	 */
+	protected void prepare(Position position, JComponent component) {
+		if (component instanceof JSlider || component instanceof JRadioButton
+				|| component instanceof JCheckBox)
+			component.setOpaque(false);
+
+		if (component instanceof JCheckBox || component instanceof JLabel
+				|| component instanceof JRadioButton
+				|| component instanceof JSlider) {
+			component.setBorder(null);
+		}
 	}
 
 	/**

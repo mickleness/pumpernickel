@@ -87,9 +87,18 @@ class InspectorLayoutPlacement {
 			}
 
 			Insets leadInsets = lead == null ? new Insets(0, 0, 0, 0)
-					: inspector.getInsets(lead, Position.LEAD);
+					: inspector.getInsets(Position.LEAD, lead);
+
+			Position mainPos;
+			if (lead == null) {
+				mainPos = row.getInspectorRow().getMainComponentStretchToFill() ? Position.MAIN_ONLY_STRETCH_TO_FILL
+						: Position.MAIN_ONLY_NO_STRETCH;
+			} else {
+				mainPos = row.getInspectorRow().getMainComponentStretchToFill() ? Position.MAIN_WITH_LEAD_STRETCH_TO_FILL
+						: Position.MAIN_WITH_LEAD_NO_STRETCH;
+			}
 			Insets mainInsets = main == null ? new Insets(0, 0, 0, 0)
-					: inspector.getInsets(main, Position.MAIN_ONLY);
+					: inspector.getInsets(mainPos, main);
 
 			if (lead != null)
 				insets.put(lead, leadInsets);
@@ -256,13 +265,12 @@ class InspectorLayoutPlacement {
 				int width;
 				int extraWidth = mainWidth - d.width - mainInsets.left
 						- mainInsets.right - i.borderInsets.right;
-				float horizWeight = row.getInspectorRow()
-						.getMainComponentHorizontalWeight();
-				if (extraWidth < 0 || horizWeight == 0) {
-					width = d.width;
+				if (row.getInspectorRow().getMainComponentStretchToFill()) {
+					width = d.width + extraWidth;
 				} else {
-					width = d.width + (int) (horizWeight * extraWidth);
+					width = d.width;
 				}
+
 				if (i.sharedBaseline > 0) {
 					y = i.mainVerticalPadding > 0 ? i.mainVerticalPadding : 0;
 				} else {
@@ -276,15 +284,13 @@ class InspectorLayoutPlacement {
 		} else if (main != null) {
 			Dimension d = main.getPreferredSize();
 			int width;
-			float horizWeight = row.getInspectorRow()
-					.getMainComponentHorizontalWeight();
 			int extraWidth = row.getWidth() - i.borderInsets.left
 					- i.borderInsets.right - d.width - mainInsets.left
 					- mainInsets.right;
-			if (extraWidth < 0 || horizWeight == 0) {
-				width = d.width;
+			if (row.getInspectorRow().getMainComponentStretchToFill()) {
+				width = d.width + extraWidth;
 			} else {
-				width = d.width + (int) (horizWeight * extraWidth);
+				width = d.width;
 			}
 
 			main.setBounds(mainInsets.left + i.borderInsets.left,
