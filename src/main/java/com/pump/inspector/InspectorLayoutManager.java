@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.util.Objects;
 
-import javax.swing.JPanel;
-
 /**
  * This is the LayoutManager used by the Inspector class.
  */
@@ -62,22 +60,25 @@ class InspectorLayoutManager implements LayoutManager {
 
 	@Override
 	public Dimension preferredLayoutSize(Container parent) {
-		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector,
-				(JPanel) parent);
+		if (parent != inspector.getPanel())
+			throw new IllegalArgumentException();
+		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector);
 		return p.getPreferredSize();
 	}
 
 	@Override
 	public Dimension minimumLayoutSize(Container parent) {
-		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector,
-				(JPanel) parent);
+		if (parent != inspector.getPanel())
+			throw new IllegalArgumentException();
+		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector);
 		return p.getMinimumSize();
 	}
 
 	@Override
 	public void layoutContainer(Container parent) {
-		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector,
-				(JPanel) parent);
+		if (parent != inspector.getPanel())
+			throw new IllegalArgumentException();
+		InspectorLayoutPlacement p = new InspectorLayoutPlacement(inspector);
 		p.install();
 	}
 }

@@ -1,11 +1,8 @@
 package com.pump.inspector;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComponent;
@@ -53,9 +50,9 @@ class InspectorLayoutPlacement {
 	protected Map<JComponent, Insets> insets = new HashMap<>();
 	protected Insets borderInsets;
 
-	public InspectorLayoutPlacement(Inspector inspector, JPanel parent) {
-		this.parent = parent;
-		rows = getRows(parent);
+	public InspectorLayoutPlacement(Inspector inspector) {
+		this.parent = inspector.getPanel();
+		rows = inspector.getRows();
 		rowInfos = new RowInfo[rows.length];
 		boolean ignoreHiddenComponents = inspector.isIgnoreHiddenComponents();
 		Border border = parent.getBorder();
@@ -182,16 +179,6 @@ class InspectorLayoutPlacement {
 			}
 		}
 		return -1;
-	}
-
-	private InspectorRowPanel[] getRows(JPanel parent) {
-		List<InspectorRowPanel> rows = new ArrayList<>(
-				parent.getComponentCount());
-		for (Component child : parent.getComponents()) {
-			if (child instanceof InspectorRowPanel)
-				rows.add((InspectorRowPanel) child);
-		}
-		return rows.toArray(new InspectorRowPanel[rows.size()]);
 	}
 
 	public Dimension getPreferredSize() {
