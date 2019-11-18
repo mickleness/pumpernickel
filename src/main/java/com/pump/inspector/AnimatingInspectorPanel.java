@@ -14,6 +14,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import com.pump.plaf.AnimationManager;
+import com.pump.util.JVM;
 
 /**
  * This panel animates changes to InspectorRowPanels' visibility.
@@ -74,10 +75,8 @@ public class AnimatingInspectorPanel extends JPanel {
 		}
 
 		// I don't understand exactly why, but when any descendant of these
-		// RowPanels
-		// has double-buffering enabled it can screw up other (unrelated)
-		// repaints in
-		// the UI.
+		// RowPanels has double-buffering enabled it can screw up other 
+		// (unrelated) repaints in the UI.
 
 		setDoubleBuffered(this, false);
 
@@ -100,8 +99,17 @@ public class AnimatingInspectorPanel extends JPanel {
 					PROPERTY_ANIMATING_OPACITY, targetOpacity, 20, .1);
 			g2.translate(rect.x, y);
 			g2.clipRect(0, 0, getWidth(), (int) h);
-			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-					(float) opacity));
+			if(JVM.isMac) {
+				
+				// on Windows: changing the opacity results in a tiny subtle flicker when we
+				// transition to fully opaque. It's as if a rendering hint is changing. Text
+				// in a text field (including spinners) shifts a little bit.
+				// I couldn't figure out how to prevent this, so for now I'll just turn it off.
+				// (I tried changing the RenderingHints and using my own buffer, but no luck.)
+				
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+						(float) opacity));
+			}
 			p.setShowing(true);
 			p.paintComponent(g2);
 			p.paintComponents(g2);
