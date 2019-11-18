@@ -52,6 +52,7 @@ import com.pump.awt.CharcoalStroke;
 import com.pump.geom.BasicMouseSmoothing;
 import com.pump.geom.MouseSmoothing;
 import com.pump.inspector.Inspector;
+import com.pump.inspector.InspectorRowPanel;
 import com.pump.plaf.AngleSliderUI;
 import com.pump.plaf.PlafPaintUtils;
 
@@ -243,22 +244,22 @@ public class StrokeMouseSmoothingDemo extends ShowcaseExampleDemo {
 	JComboBox<String> strokeTypeComboBox = new JComboBox<>();
 	JRadioButton smoothingOnButton = new JRadioButton("On", true);
 	JRadioButton smoothingOffButton = new JRadioButton("Off", false);
+	InspectorRowPanel thicknessRow, crackSizeRow, angleRow;
 
 	public StrokeMouseSmoothingDemo() {
 		super(true, true, false);
-		
 
 		addSliderPopover(crackSizeSlider, "%");
 		addSliderPopover(thicknessSlider, "%");
-		
+
 		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Smoothing:"), smoothingOnButton,
 				smoothingOffButton);
 		layout.addRow(new JLabel("Stroke Type:"), strokeTypeComboBox);
 		layout.addRow(new JLabel("Width:"), widthSpinner, false);
-		layout.addRow(thicknessLabel, thicknessSlider, false);
-		layout.addRow(crackSizeLabel, crackSizeSlider, false);
-		layout.addRow(angleLabel, angleSlider, false);
+		thicknessRow = layout.addRow(thicknessLabel, thicknessSlider, false);
+		crackSizeRow = layout.addRow(crackSizeLabel, crackSizeSlider, false);
+		angleRow = layout.addRow(angleLabel, angleSlider, false);
 
 		ButtonGroup g = new ButtonGroup();
 		g.add(smoothingOnButton);
@@ -325,35 +326,23 @@ public class StrokeMouseSmoothingDemo extends ShowcaseExampleDemo {
 	private void refresh() {
 		if ("BristleStroke".equals(strokeTypeComboBox.getSelectedItem())
 				|| "BrushStroke".equals(strokeTypeComboBox.getSelectedItem())) {
-			angleLabel.setEnabled(false);
-			angleSlider.setEnabled(false);
-			crackSizeLabel.setEnabled(false);
-			crackSizeSlider.setEnabled(false);
-			thicknessLabel.setEnabled(true);
-			thicknessSlider.setEnabled(true);
+			angleRow.setVisible(false);
+			crackSizeRow.setVisible(false);
+			thicknessRow.setVisible(true);
 		} else if ("CalligraphyStroke".equals(strokeTypeComboBox
 				.getSelectedItem())) {
-			angleLabel.setEnabled(true);
-			angleSlider.setEnabled(true);
-			crackSizeLabel.setEnabled(false);
-			crackSizeSlider.setEnabled(false);
-			thicknessLabel.setEnabled(false);
-			thicknessSlider.setEnabled(false);
+			angleRow.setVisible(true);
+			crackSizeRow.setVisible(false);
+			thicknessRow.setVisible(false);
 		} else if ("CharcoalStroke"
 				.equals(strokeTypeComboBox.getSelectedItem())) {
-			angleLabel.setEnabled(true);
-			angleSlider.setEnabled(true);
-			crackSizeLabel.setEnabled(true);
-			crackSizeSlider.setEnabled(true);
-			thicknessLabel.setEnabled(false);
-			thicknessSlider.setEnabled(false);
+			angleRow.setVisible(true);
+			crackSizeRow.setVisible(true);
+			thicknessRow.setVisible(false);
 		} else if ("BasicStroke".equals(strokeTypeComboBox.getSelectedItem())) {
-			angleLabel.setEnabled(false);
-			angleSlider.setEnabled(false);
-			crackSizeLabel.setEnabled(false);
-			crackSizeSlider.setEnabled(false);
-			thicknessLabel.setEnabled(false);
-			thicknessSlider.setEnabled(false);
+			angleRow.setVisible(false);
+			crackSizeRow.setVisible(false);
+			thicknessRow.setVisible(false);
 		}
 		drawingPanel.repaint();
 	}
