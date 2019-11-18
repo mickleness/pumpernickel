@@ -113,8 +113,7 @@ public class AnimationManager {
 	 *            the property to set.
 	 * @param targetValue
 	 *            the target value to eventually set. We immediately switch to
-	 *            the target value if the component is not showing or no
-	 *            preexisting value is found.
+	 *            the target value if no preexisting value is found.
 	 * @param stepInterval
 	 *            the number of milliseconds between each animation iteration.
 	 * @param stepSize
@@ -134,7 +133,7 @@ public class AnimationManager {
 		Number currentValue;
 		synchronized (AnimationManager.class) {
 			currentValue = (Number) component.getClientProperty(propertyName);
-			if (currentValue == null || !component.isShowing()
+			if (currentValue == null
 					|| currentValue.doubleValue() == targetValue) {
 				component.putClientProperty(propertyName, targetValue);
 				return targetValue;

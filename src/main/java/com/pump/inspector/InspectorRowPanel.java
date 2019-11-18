@@ -2,6 +2,7 @@ package com.pump.inspector;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
@@ -86,4 +87,31 @@ public class InspectorRowPanel extends JPanel {
 			parent.invalidate();
 	}
 
+	/**
+	 * Adding package-level access to the AnimatingInspectorPanel can call this.
+	 */
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+	}
+
+	private transient Boolean isShowing;
+
+	/**
+	 * This hack (used only by the AnimatingInspectorPanel) lets you define
+	 * an override for the {@link #isShowing()} method.
+	 * <p>
+	 * This isn't pretty, but it works. (If anyone has any better ideas I'd
+	 * to hear them.)
+	 */
+	void setShowing(Boolean b) {
+		isShowing = b;
+	}
+
+	@Override
+	public boolean isShowing() {
+		if (isShowing != null)
+			return isShowing;
+		return super.isShowing();
+	}
 }

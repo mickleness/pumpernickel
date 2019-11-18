@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.AbstractButton;
 import javax.swing.JCheckBox;
@@ -42,6 +43,13 @@ public class Inspector {
 	}
 
 	/**
+	 * This client property on a parent panel resolves to the Inspector (if any)
+	 * that is associated with it.
+	 */
+	public static final String PROPERTY_INSPECTOR = Inspector.class.getName()
+			+ "#inspector";
+
+	/**
 	 * This client property on JPanels resolves a Boolean indicating whether
 	 * this panel is a custom panel we created just to wrap other inspector
 	 * elements. If this is true then our custom panel should have already taken
@@ -60,6 +68,8 @@ public class Inspector {
 
 	JPanel panel;
 	InspectorLayoutManager layout;
+	boolean isConstantVerticalSize = false;
+	boolean isConstantHorizontalAlignment = false;
 
 	/**
 	 * Create a new Inspector.
@@ -75,7 +85,9 @@ public class Inspector {
 	 *            the panel to populate.
 	 */
 	public Inspector(JPanel panel) {
+		Objects.requireNonNull(panel);
 		this.panel = panel;
+		panel.putClientProperty(PROPERTY_INSPECTOR, this);
 		layout = new InspectorLayoutManager(this);
 		panel.setLayout(layout);
 		clear();
@@ -330,21 +342,25 @@ public class Inspector {
 	}
 
 	/**
-	 * If true then hidden components in a row do not affect the widths of the
-	 * columns.
+	 * If true then the columns should occupy a fixed width regardless of which
+	 * rows are visible.
 	 * <p>
-	 * If you think rows will frequently change and a constantly changing column
-	 * width will be disorienting for the user: you can set this value to false.
-	 * The downside is: sometimes that may make certain columns wider than they
-	 * need to be to fir the current visible components.
+	 * If false then the columns may change width depending on which rows are
+	 * visible.
 	 * <p>
-	 * But if you always want to only accommodate the controls that are showing
-	 * (and nothing else), then you can leave this value as true. The downside
-	 * is: if the inspector changes as new components are made visible, the
-	 * columns may grow/shrink frequently.
+	 * (This assumes the InspectorRows/InspectorRowPanels in this Inspector are
+	 * constant but their visibility may be toggled over time. This property may
+	 * not achieve the desired affect if you're frequently adding new rows.)
 	 */
-	public boolean isIgnoreHiddenComponents() {
-		return true;
+	public boolean isConstantHorizontalAlignment() {
+		return isConstantHorizontalAlignment;
+	}
+
+	public void setConstantHorizontalAlignment(boolean b) {
+		if (isConstantHorizontalAlignment == b)
+			return;
+		isConstantHorizontalAlignment = b;
+		panel.invalidate();
 	}
 
 	/**
@@ -358,5 +374,27 @@ public class Inspector {
 				rows.add((InspectorRowPanel) child);
 		}
 		return rows.toArray(new InspectorRowPanel[rows.size()]);
+	}
+
+	/**
+	 * If true then the height of this inspector should stay constant regardless
+	 * of which rows are visible.
+	 * <p>
+	 * If false then the height of this inspector may change when rows are
+	 * hidden.
+	 * <p>
+	 * (This assumes the InspectorRows/InspectorRowPanels in this Inspector are
+	 * constant but their visibility may be toggled over time. This property may
+	 * not achieve the desired affect if you're frequently adding new rows.)
+	 */
+	public boolean isConstantVerticalSize() {
+		return isConstantVerticalSize;
+	}
+
+	public void setConstantVerticalSize(boolean b) {
+		if (b == isConstantVerticalSize)
+			return;
+		isConstantVerticalSize = b;
+		panel.invalidate();
 	}
 }

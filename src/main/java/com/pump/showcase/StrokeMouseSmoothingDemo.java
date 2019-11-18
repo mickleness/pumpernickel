@@ -51,6 +51,7 @@ import com.pump.awt.CalligraphyStroke;
 import com.pump.awt.CharcoalStroke;
 import com.pump.geom.BasicMouseSmoothing;
 import com.pump.geom.MouseSmoothing;
+import com.pump.inspector.AnimatingInspectorPanel;
 import com.pump.inspector.Inspector;
 import com.pump.inspector.InspectorRowPanel;
 import com.pump.plaf.AngleSliderUI;
@@ -252,7 +253,12 @@ public class StrokeMouseSmoothingDemo extends ShowcaseExampleDemo {
 		addSliderPopover(crackSizeSlider, "%");
 		addSliderPopover(thicknessSlider, "%");
 
-		Inspector layout = new Inspector(configurationPanel);
+		JPanel animatingInspectorPanel = new AnimatingInspectorPanel();
+		configurationPanel.add(animatingInspectorPanel);
+
+		Inspector layout = new Inspector(animatingInspectorPanel);
+		layout.setConstantHorizontalAlignment(true);
+		layout.setConstantVerticalSize(true);
 		layout.addRow(new JLabel("Smoothing:"), smoothingOnButton,
 				smoothingOffButton);
 		layout.addRow(new JLabel("Stroke Type:"), strokeTypeComboBox);

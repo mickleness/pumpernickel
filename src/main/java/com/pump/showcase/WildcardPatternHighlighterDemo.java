@@ -17,15 +17,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -40,6 +39,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Highlighter;
 
 import com.pump.awt.TextBlock;
+import com.pump.inspector.AnimatingInspectorPanel;
 import com.pump.inspector.Inspector;
 import com.pump.inspector.InspectorRowPanel;
 import com.pump.swing.JColorWell;
@@ -83,7 +83,7 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 	JRadioButton includeFillOffRadioButton = new JRadioButton("Off", false);
 	ButtonGroup includeFillButtonGroup = new ButtonGroup();
 	JSpinner alphaSpinner = new JSpinner(new SpinnerNumberModel(100, 1, 100, 1));
-	
+
 	Collection<InspectorRowPanel> underlineControls = new ArrayList<>();
 	Collection<InspectorRowPanel> blockControls = new ArrayList<>();
 
@@ -126,19 +126,26 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 	public WildcardPatternHighlighterDemo() {
 		super(true, true, false);
 
-		Inspector layout = new Inspector(configurationPanel);
+		JPanel animatingInspectorPanel = new AnimatingInspectorPanel();
+		configurationPanel.add(animatingInspectorPanel);
+
+		Inspector layout = new Inspector(animatingInspectorPanel);
+		layout.setConstantHorizontalAlignment(true);
 		layout.addRow(new JLabel("Type:"), typeComboBox);
 
-		underlineControls.add(layout.addRow(underlinePatternLabel, underlinePatternField, true));
+		underlineControls.add(layout.addRow(underlinePatternLabel,
+				underlinePatternField, true));
 		underlineControls.add(layout.addRow(colorWellLabel, colorWell, false));
-		underlineControls.add(layout.addRow(thicknessLabel, thicknessSpinner, false));
-		underlineControls.add(layout.addRow(squiggleLabel, squiggleOnRadioButton,
-				squiggleOffRadioButton));
+		underlineControls.add(layout.addRow(thicknessLabel, thicknessSpinner,
+				false));
+		underlineControls.add(layout.addRow(squiggleLabel,
+				squiggleOnRadioButton, squiggleOffRadioButton));
 
-		blockControls.add(layout.addRow(blockPatternLabel, blockPatternField, true));
+		blockControls.add(layout.addRow(blockPatternLabel, blockPatternField,
+				true));
 		blockControls.add(layout.addRow(hueLabel, hueSpinner, false));
-		blockControls.add(layout.addRow(includeFillLabel, includeFillOnRadioButton,
-				includeFillOffRadioButton));
+		blockControls.add(layout.addRow(includeFillLabel,
+				includeFillOnRadioButton, includeFillOffRadioButton));
 		blockControls.add(layout.addRow(alphaLabel, alphaSpinner, false));
 
 		squiggleButtonGroup.add(squiggleOnRadioButton);

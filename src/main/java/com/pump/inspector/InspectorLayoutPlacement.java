@@ -54,7 +54,9 @@ class InspectorLayoutPlacement {
 		this.parent = inspector.getPanel();
 		rows = inspector.getRows();
 		rowInfos = new RowInfo[rows.length];
-		boolean ignoreHiddenComponents = inspector.isIgnoreHiddenComponents();
+		boolean constantHorizontalAlignment = inspector
+				.isConstantHorizontalAlignment();
+		boolean constantVerticalSize = inspector.isConstantVerticalSize();
 		Border border = parent.getBorder();
 		borderInsets = border == null ? new Insets(0, 0, 0, 0) : border
 				.getBorderInsets(parent);
@@ -70,18 +72,6 @@ class InspectorLayoutPlacement {
 			totalVerticalWeight += row.getInspectorRow().getRowVerticalWeight();
 			JComponent lead = row.getInspectorRow().getLeadComponent();
 			JComponent main = row.getInspectorRow().getMainComponent();
-
-			if (ignoreHiddenComponents) {
-				if (!row.isVisible()) {
-					lead = null;
-					main = null;
-				} else {
-					if (lead != null && !lead.isVisible())
-						lead = null;
-					if (main != null && !main.isVisible())
-						main = null;
-				}
-			}
 
 			Insets leadInsets = lead == null ? new Insets(0, 0, 0, 0)
 					: inspector.getInsets(Position.LEAD, lead);
@@ -122,6 +112,11 @@ class InspectorLayoutPlacement {
 			Dimension leadSize = lead == null ? null : lead.getPreferredSize();
 			Dimension mainSize = main == null ? null : main.getPreferredSize();
 
+			boolean isLeadShowing = lead != null && lead.isVisible()
+					&& row.isVisible();
+			boolean isMainShowing = main != null && main.isVisible()
+					&& row.isVisible();
+
 			if (leadSize != null && mainSize != null) {
 				rowInfos[a].minimumRowHeight = Math.max(leadSize.height
 						+ rowInfos[a].leadVerticalPadding + leadInsets.top
@@ -130,43 +125,60 @@ class InspectorLayoutPlacement {
 						+ mainInsets.bottom)
 						+ rowInfos[a].borderInsets.top
 						+ rowInfos[a].borderInsets.bottom;
-				leadWidth = Math.max(leadWidth, leadSize.width
-						+ leadInsets.left + leadInsets.right
-						+ rowInfos[a].borderInsets.left);
-				mainWidth = Math.max(mainWidth, mainSize.width
-						+ mainInsets.left + mainInsets.right
-						+ rowInfos[a].borderInsets.right);
+				if (isLeadShowing || constantHorizontalAlignment) {
+					leadWidth = Math.max(leadWidth, leadSize.width
+							+ leadInsets.left + leadInsets.right
+							+ rowInfos[a].borderInsets.left);
+				}
+				if (isMainShowing || constantHorizontalAlignment) {
+					mainWidth = Math.max(mainWidth, mainSize.width
+							+ mainInsets.left + mainInsets.right
+							+ rowInfos[a].borderInsets.right);
+				}
 			} else if (leadSize != null) {
 				rowInfos[a].minimumRowHeight = leadSize.height
 						+ rowInfos[a].leadVerticalPadding + leadInsets.top
 						+ leadInsets.bottom + rowInfos[a].borderInsets.top
 						+ rowInfos[a].borderInsets.bottom;
-				leadWidth = Math.max(leadWidth, leadSize.width
-						+ leadInsets.left + leadInsets.right
-						+ rowInfos[a].borderInsets.left);
+				if (isLeadShowing || constantHorizontalAlignment) {
+					leadWidth = Math.max(leadWidth, leadSize.width
+							+ leadInsets.left + leadInsets.right
+							+ rowInfos[a].borderInsets.left);
+				}
 			} else if (mainSize != null) {
 				rowInfos[a].minimumRowHeight = mainSize.height
 						+ rowInfos[a].mainVerticalPadding + mainInsets.top
 						+ mainInsets.bottom + rowInfos[a].borderInsets.top
 						+ rowInfos[a].borderInsets.bottom;
-				// if the lead is null the main component gets the full width:
-				totalWidth = Math.max(totalWidth, mainSize.width
-						+ mainInsets.left + mainInsets.right
-						+ borderInsets.left + borderInsets.right
-						+ rowInfos[a].borderInsets.left
-						+ rowInfos[a].borderInsets.right);
+				if (isMainShowing || constantHorizontalAlignment) {
+					// if the lead is null the main component gets the full
+					// width:
+					totalWidth = Math.max(totalWidth, mainSize.width
+							+ mainInsets.left + mainInsets.right
+							+ borderInsets.left + borderInsets.right
+							+ rowInfos[a].borderInsets.left
+							+ rowInfos[a].borderInsets.right);
+				}
 			} else {
-				// this might happen if the row is not visible
 				rowInfos[a].minimumRowHeight = 0;
 			}
 
-			if (!row.isVisible()) {
-				rowInfos[a].minimumRowHeight = 0;
+			if (constantVerticalSize) {
+				totalHeight += rowInfos[a].minimumRowHeight;
+				if (!row.isVisible()
+						|| (isMainShowing == false && isLeadShowing == false)) {
+					rowInfos[a].minimumRowHeight = 0;
+				}
+			} else {
+				if (!row.isVisible()
+						|| (isMainShowing == false && isLeadShowing == false)) {
+					rowInfos[a].minimumRowHeight = 0;
+				}
+				totalHeight += rowInfos[a].minimumRowHeight;
 			}
 
 			totalWidth = Math.max(totalWidth, leadWidth + mainWidth
 					+ borderInsets.left + borderInsets.right);
-			totalHeight += rowInfos[a].minimumRowHeight;
 		}
 	}
 
