@@ -33,6 +33,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.io.HTMLEncoding;
+import com.pump.util.JVM;
 
 /**
  * This button resembles a hyperlink.
@@ -127,7 +128,9 @@ public class JLink extends JButton {
 		setRequestFocusEnabled(false);
 		addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent e) {
-				setBorder(focusedBorder);
+				//TODO: explore borders a little bit more. Why does a dotted border
+				//automatically appear on Windows but not on Mac?
+				setBorder(JVM.isMac ? focusedBorder : unfocusedBorder);
 			}
 
 			public void focusLost(FocusEvent e) {
@@ -137,6 +140,7 @@ public class JLink extends JButton {
 		setFocusable(true);
 		setBorder(unfocusedBorder);
 		setForeground(defaultColor);
+		setContentAreaFilled(false);
 
 		getModel().addChangeListener(new ChangeListener() {
 
