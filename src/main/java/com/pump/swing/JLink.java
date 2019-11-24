@@ -17,55 +17,37 @@ import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.JLabel;
-import javax.swing.Timer;
+import javax.swing.JButton;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import com.pump.io.HTMLEncoding;
 
 /**
- * This JLabel resembles a hyperlink, and ActionListeners can be attached so it
- * acts like a button.
- * <P>
- * This has 3 colors:
- * <ul>
- * <LI>Default</li>
- * <LI>Indicated: used when the mouse is over this component</li>
- * <LI>Selected: used when the mouse is pressed over this component, or when the
- * space bar is pressed when this link has the keyboard focus.</LI>
- * </ul>
- * <P>
- * You can configure these colors yourself, but by default they come in
- * "standard" blue-ish shades. (On Vista the default color is designed to match
- * existing screenshots I found in the Vista interface guidelines, but otherwise
- * the default color is <code>Color.blue</code>.)
+ * This button resembles a hyperlink.
  * <P>
  * A dotted border is displayed around this component when it has the keyboard
  * focus.
  *
  */
-public class JLink extends JLabel {
+public class JLink extends JButton {
 	private static final long serialVersionUID = 1L;
+
+	private static String formatHtmlUnderline(String text) {
+		return "<html><p style=\"text-decoration: underline\">"
+				+ HTMLEncoding.encode(text) + "</p></html>";
+	}
 
 	/**
 	 * This is a 1-pixel dotted border.
@@ -93,111 +75,9 @@ public class JLink extends JLabel {
 		}
 	}
 
-	public static ActionListener defaultActionListener = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			Object src = e.getSource();
-			if (src instanceof JLink) {
-				JLink link = (JLink) src;
-				String text = link.getText();
-				try {
-					Desktop.getDesktop().browse(new URI(text));
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-			}
-		}
-	};
-
-	boolean drawLine = true;
 	static Border unfocusedBorder = new EmptyBorder(3, 3, 3, 3);
 	static Border focusedBorder = new CompoundBorder(new DottedLineBorder(
 			new Color(0, 0, 150)), new EmptyBorder(2, 2, 2, 2));
-
-	MouseListener mouseListener = new MouseAdapter() {
-		@Override
-		public void mousePressed(MouseEvent e) {
-			if (isEnabled()) {
-				setForeground(selectedColor);
-				requestFocus();
-			}
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			if (isEnabled()) {
-				fireActionListeners();
-				if (contains(e.getPoint())) {
-					setForeground(indicatedColor);
-				} else {
-					setForeground(defaultColor);
-				}
-			}
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			if (isEnabled()) {
-				setForeground(indicatedColor);
-			}
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			setForeground(defaultColor);
-		}
-	};
-
-	ActionListener resetColor = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			setForeground(defaultColor);
-		}
-	};
-
-	KeyListener keyListener = new KeyAdapter() {
-		@Override
-		public void keyPressed(KeyEvent e) {
-			int i = e.getKeyCode();
-			if (i == KeyEvent.VK_SPACE) {
-				setForeground(selectedColor);
-				fireActionListeners();
-				Timer timer = new Timer(500, resetColor);
-				timer.setRepeats(false);
-				timer.start();
-			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-			int i = e.getKeyCode();
-			if (i == KeyEvent.VK_SPACE) {
-				setForeground(defaultColor);
-			}
-		}
-	};
-
-	List<ActionListener> listeners = new ArrayList<ActionListener>();
-
-	/** This listener will be notifier when the user activates this link. */
-	public void addActionListener(ActionListener l) {
-		if (listeners.contains(l))
-			return;
-		listeners.add(l);
-	}
-
-	public void removeActionListener(ActionListener l) {
-		listeners.remove(l);
-	}
-
-	protected void fireActionListeners() {
-		for (int a = 0; a < listeners.size(); a++) {
-			ActionListener l = listeners.get(a);
-			try {
-				l.actionPerformed(new ActionEvent(this, 0, getText()));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	private static boolean isVista() {
 		String osName = System.getProperty("os.name").toLowerCase();
@@ -217,30 +97,34 @@ public class JLink extends JLabel {
 
 	/** Create a JLink presenting the text provided. */
 	public JLink(String text) {
-		super(text);
-		initialize();
+		this(text, null);
 	}
 
 	/** Create a JLink presenting the text provided. */
 	public JLink(String text, final URL url) {
-		super(text);
+		super(formatHtmlUnderline(text));
+		getAccessibleContext().setAccessibleName(text);
 		initialize();
-		addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					Desktop.getDesktop().browse(url.toURI());
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				} catch (URISyntaxException e1) {
-					e1.printStackTrace();
+		if (url != null) {
+			setToolTipText(url.toString());
+			getAccessibleContext().setAccessibleDescription(url.toString());
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						Desktop.getDesktop().browse(url.toURI());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} catch (URISyntaxException e1) {
+						e1.printStackTrace();
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	/** Adds the necessary properties/listeners. */
 	private void initialize() {
-		setRequestFocusEnabled(true);
+		setRequestFocusEnabled(false);
 		addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent e) {
 				setBorder(focusedBorder);
@@ -254,33 +138,20 @@ public class JLink extends JLabel {
 		setBorder(unfocusedBorder);
 		setForeground(defaultColor);
 
-		addMouseListener(mouseListener);
-		addKeyListener(keyListener);
-	}
+		getModel().addChangeListener(new ChangeListener() {
 
-	/** Controls whether the line is painted under the link text. */
-	public void setDrawLine(boolean b) {
-		drawLine = b;
-	}
-
-	FontRenderContext frc = new FontRenderContext(new AffineTransform(), true,
-			true);
-
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-
-		if (drawLine) {
-			int baseline = getBaseline(getWidth(), getHeight());
-			Insets i = getInsets();
-			if (isEnabled()) {
-				g.setColor(getForeground());
-			} else {
-				g.setColor(SystemColor.textInactiveText);
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Color currentColor = getDefaultColor();
+				if (getModel().isPressed() || getModel().isSelected()) {
+					currentColor = getSelectedColor();
+				} else if (getModel().isArmed() || getModel().isRollover()) {
+					currentColor = getIndicatedColor();
+				}
+				setForeground(currentColor);
 			}
-			g.drawLine(i.left - 1, baseline + 1, getWidth() - i.right - 1,
-					baseline + 1);
-		}
+
+		});
 	}
 
 	public void setDefaultColor(Color c) {
