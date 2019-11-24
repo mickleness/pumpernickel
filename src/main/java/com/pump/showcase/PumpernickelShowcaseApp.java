@@ -78,6 +78,7 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 
+import com.pump.desktop.AboutControl;
 import com.pump.desktop.DesktopApplication;
 import com.pump.desktop.edit.EditCommand;
 import com.pump.desktop.edit.EditMenuControls;
@@ -386,7 +387,9 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 		setJMenuBar(menuBar);
 		menuBar.add(editMenu);
-		menuBar.add(new WindowMenu(this, magnifierItem, saveScreenshotItem));
+		AboutControl aboutControl = new AboutControl();
+		JMenuItem aboutItem = JVM.isMac ? null : aboutControl.getMenuItem();
+		menuBar.add(new WindowMenu(this, aboutItem, magnifierItem, saveScreenshotItem));
 		saveScreenshotItem.addActionListener(saveScreenshotActionListener);
 		saveScreenshotItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));

@@ -88,7 +88,8 @@ public class WindowMenu extends JMenu {
 			if (customItems.length != 0) {
 				addSeparator();
 				for (int a = 0; a < customItems.length; a++) {
-					add(customItems[a]);
+					if(customItems[a]!=null)
+						add(customItems[a]);
 				}
 			}
 			addSeparator();
