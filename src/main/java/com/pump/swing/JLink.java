@@ -128,8 +128,8 @@ public class JLink extends JButton {
 		setRequestFocusEnabled(false);
 		addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent e) {
-				//TODO: explore borders a little bit more. Why does a dotted border
-				//automatically appear on Windows but not on Mac?
+				// TODO: explore borders a little bit more. Why does a dotted
+				// border automatically appear on Windows but not on Mac?
 				setBorder(JVM.isMac ? focusedBorder : unfocusedBorder);
 			}
 
@@ -141,6 +141,7 @@ public class JLink extends JButton {
 		setBorder(unfocusedBorder);
 		setForeground(defaultColor);
 		setContentAreaFilled(false);
+		setOpaque(false);
 
 		getModel().addChangeListener(new ChangeListener() {
 
