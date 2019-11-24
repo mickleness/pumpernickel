@@ -83,11 +83,14 @@ import com.pump.desktop.edit.EditCommand;
 import com.pump.desktop.edit.EditMenuControls;
 import com.pump.icon.button.MinimalDuoToneCloseIcon;
 import com.pump.io.FileTreeIterator;
+import com.pump.plaf.QPanelUI;
+import com.pump.plaf.QPanelUI.CalloutType;
 import com.pump.plaf.RoundTextFieldUI;
 import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.FileDialogUtils;
 import com.pump.swing.HelpComponent;
 import com.pump.swing.JFancyBox;
+import com.pump.swing.JSwitchButton;
 import com.pump.swing.ListSectionContainer;
 import com.pump.swing.MagnificationPanel;
 import com.pump.swing.SectionContainer.Section;
@@ -103,8 +106,18 @@ public class PumpernickelShowcaseApp extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	public static void main(String[] args) throws IOException {
-		DesktopApplication.initialize("com.pump.showcase", "Showcase", "1.01",
-				"jeremy.wood@mac.com", PumpernickelShowcaseApp.class);
+		DesktopApplication app = new DesktopApplication("com.pump.showcase",
+				"Pumpernickel Showcase", "1.01", "jeremy.wood@mac.com");
+		app.setFrameClass(PumpernickelShowcaseApp.class);
+		app.setCopyright(2018, "Jeremy Wood");
+		app.setURL(new URL("https://mickleness.github.io/pumpernickel/"));
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				BufferedImage bi = createAppImage();
+				DesktopApplication.get().setImage(bi);
+			}
+		});
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -117,6 +130,50 @@ public class PumpernickelShowcaseApp extends JFrame {
 				p.loadDemos();
 			}
 		});
+	}
+
+	/**
+	 * Create the application icon.
+	 * 
+	 * This should be called on the EDT, because it creates/renders JComponents.
+	 */
+	private static BufferedImage createAppImage() {
+		BufferedImage bi = new BufferedImage(100, 100,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bi.createGraphics();
+
+		JPanel p = new JPanel();
+		p.setOpaque(false);
+		QPanelUI qui = new QPanelUI();
+		qui.setCalloutSize(10);
+		qui.setCornerSize(10);
+		qui.setCalloutType(CalloutType.BOTTOM_CENTER);
+		qui.setFillColor1(Color.white);
+		qui.setFillColor2(new Color(0xececec));
+		qui.setShadowSize(5);
+		qui.setStrokeColor(new Color(0x787878));
+		p.setUI(qui);
+		JSwitchButton switchButton1 = new JSwitchButton(true);
+		JSwitchButton switchButton2 = new JSwitchButton(false);
+		p.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(4, 4, 4, 4);
+		p.add(switchButton1, c);
+		c.gridy++;
+		p.add(switchButton2, c);
+		Dimension d = p.getPreferredSize();
+		d.width = Math.max(d.width, d.height);
+		d.height = Math.max(d.width, d.height);
+		p.setSize(d);
+		p.getLayout().layoutContainer(p);
+		p.paint(g);
+		g.dispose();
+		return bi;
 	}
 
 	JTextField searchField = new JTextField();
@@ -777,7 +834,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 	private JTextArea createTextArea(String str, float fontSize) {
 		JTextArea t = new JTextArea(str);
 		Font font = UIManager.getFont("Label.font");
-		if(font==null)
+		if (font == null)
 			font = t.getFont();
 		t.setFont(font.deriveFont(fontSize));
 		t.setEditable(false);

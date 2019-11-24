@@ -23,8 +23,20 @@ public class JSwitchButton extends JToggleButton {
 
 	private static final String uiClassID = "SwitchButton";
 
+	public JSwitchButton() {
+		super();
+	}
+
 	public JSwitchButton(String text) {
 		super(text);
+	}
+
+	public JSwitchButton(String text, boolean selected) {
+		super(text, selected);
+	}
+
+	public JSwitchButton(boolean selected) {
+		this("", selected);
 	}
 
 	@Override
