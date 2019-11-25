@@ -392,8 +392,7 @@ public class JColorPicker extends JPanel {
 
 					/*
 					 * Be sure to invoke this separately, otherwise we'll risk
-					 * getting a "attempt to mutate in notification". (
-					 * https://java.net/jira/browse/JAVAGRAPHICS-19 )
+					 * getting a "attempt to mutate in notification".
 					 */
 					SwingUtilities.invokeLater(new SetRGBRunnable(red, green,
 							blue));
