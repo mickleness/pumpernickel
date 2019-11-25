@@ -389,7 +389,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 		menuBar.add(editMenu);
 		AboutControl aboutControl = new AboutControl();
 		JMenuItem aboutItem = JVM.isMac ? null : aboutControl.getMenuItem();
-		menuBar.add(new WindowMenu(this, aboutItem, magnifierItem, saveScreenshotItem));
+		menuBar.add(new WindowMenu(this, aboutItem, magnifierItem,
+				saveScreenshotItem));
 		saveScreenshotItem.addActionListener(saveScreenshotActionListener);
 		saveScreenshotItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -684,8 +685,18 @@ public class PumpernickelShowcaseApp extends JFrame {
 		return editMenu;
 	}
 
-	private void addSection(String text, String demoClassName) {
-		Section section = sectionContainer.addSection(text, text);
+	/**
+	 * Add a new section to this demo.
+	 * 
+	 * @param title
+	 *            the title that appears in the index of topics on the left
+	 * @param demoClassName
+	 *            the name of the class. This is passed as a String to improve
+	 *            application startup time. (The cost of loading every class was
+	 *            causing a noticeable delay in startup.)
+	 */
+	private void addSection(String title, String demoClassName) {
+		Section section = sectionContainer.addSection(title, title);
 		masterSectionList.add(section);
 		JPanel body = section.getBody();
 		body.setLayout(new GridBagLayout());
@@ -806,24 +817,27 @@ public class PumpernickelShowcaseApp extends JFrame {
 			c.gridy = 0;
 			c.weightx = 1;
 			c.weighty = 0;
-			c.fill = GridBagConstraints.BOTH;
-			c.insets = new Insets(10, 3, 3, 3);
-			replacement.add(headerTextArea, c);
-			c.gridx++;
 			c.weightx = 0;
 			JComponent jc = HelpComponent.createHelpComponent(actionListener,
 					null, null);
 			c.anchor = GridBagConstraints.EAST;
 			c.fill = GridBagConstraints.NONE;
 			c.insets = new Insets(6, 3, 3, 3);
+			c.weightx = 0;
 			replacement.add(jc, c);
-			jc.setVisible(getShowcaseDemo().getHelpURL() != null);
+
+			c.anchor = GridBagConstraints.WEST;
+			c.fill = GridBagConstraints.BOTH;
+			c.insets = new Insets(10, 3, 3, 3);
+			replacement.add(headerTextArea, c);
+			 jc.setVisible(getShowcaseDemo().getHelpURL() != null);
 			c.gridx = 0;
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			c.fill = GridBagConstraints.BOTH;
 			c.gridy++;
 			replacement.add(descriptionTextArea, c);
 			c.gridy++;
+			c.weightx = 1;
 			replacement.add(new JSeparator(), c);
 
 			c.gridy++;
