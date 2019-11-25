@@ -19,7 +19,6 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -42,7 +41,6 @@ public class ListSectionContainer extends SectionContainer {
 		}
 	}
 
-	protected JSplitPane splitPane;
 	protected JList<Section> list;
 	protected JPanel content = new JPanel(new GridBagLayout());
 	protected JScrollPane listScrollPane;
@@ -93,18 +91,20 @@ public class ListSectionContainer extends SectionContainer {
 			leftHandSide.add(belowList, c);
 		}
 
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftHandSide,
-				content);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		setLayout(new GridBagLayout());
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weightx = 1;
+		c.weightx = 0;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
-		add(splitPane, c);
+		add(leftHandSide, c);
+		c.insets = new Insets(0, 6, 0, 6);
+		c.gridx++;
+		c.weightx = 1;
+		add(content, c);
 
 		getSections().addChangeListener(new ChangeListener() {
 			Section lastSelectedSection;
