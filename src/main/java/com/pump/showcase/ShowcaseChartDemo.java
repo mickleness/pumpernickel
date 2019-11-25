@@ -118,6 +118,11 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 				long iterationMax = 1;
 				for (int a = 0; a < limits.length; a++) {
 					iterationMax *= limits[a];
+					// this will throw a "null data" exception below, but this
+					// helps
+					// us pinpoint the core problem better
+					if (limits[a] == 0)
+						throw new RuntimeException("limits[" + a + "] = 0");
 				}
 				Map<String, Map<String, Long>> data = null;
 				while (i < iterationMax) {

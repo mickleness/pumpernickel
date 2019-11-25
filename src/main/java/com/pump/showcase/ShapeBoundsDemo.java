@@ -35,7 +35,7 @@ import com.pump.geom.ShapeBounds;
 public class ShapeBoundsDemo extends ShowcaseChartDemo {
 	private static final long serialVersionUID = 1L;
 
-	int SAMPLE_COUNT = 10;
+	private static final int SAMPLE_COUNT = 10;
 
 	@Override
 	public String getTitle() {
