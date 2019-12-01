@@ -103,7 +103,7 @@ public class JLink extends JButton {
 
 	/** Create a JLink presenting the text provided. */
 	public JLink(String text, final URL url) {
-		super(formatHtmlUnderline(text));
+		super(text);
 		getAccessibleContext().setAccessibleName(text);
 		initialize();
 		if (url != null) {
@@ -184,5 +184,12 @@ public class JLink extends JButton {
 
 	public Color getSelectedColor() {
 		return selectedColor;
+	}
+
+	@Override
+	public void setText(String text) {
+		if (!text.toLowerCase().contains("<html>"))
+			text = formatHtmlUnderline(text);
+		super.setText(text);
 	}
 }
