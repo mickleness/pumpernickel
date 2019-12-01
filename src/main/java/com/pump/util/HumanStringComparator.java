@@ -10,6 +10,22 @@ import java.util.List;
  * For example: "9" should come before "10", because they are read as integers.
  * {@link String#compareTo(String)} does not sort them in that order, though
  * (unless you rename the strings as "09" and "10".)
+ * <h3>Homoglyphs</h3>
+ * <p>
+ * Also this attempts to undo features like "smart dashes" or "smart quotations"
+ * (for the sake of sorting). Some applications (like Apple's Mail or Pages)
+ * will automatically take a traditional ASCII single quote, double quote or
+ * hyphen and convert it to the more typographically appropriate counterpart.
+ * These distinctions may be nearly invisible at certain screen resolutions/font
+ * sizes, but (without this comparator's intervention) they can affect the
+ * String's sort order.
+ * <p>
+ * The goal of this class is just to compensate for what an average
+ * non-tech-savvy user may get confused about. Homoglyphs is its own fascinating
+ * subject (especially as it relates to security), and this class only scratches
+ * the surface of this topic. (For further reading see: <a
+ * href="www.unicode.org/Public/security/8.0.0/confusables.txt"
+ * >confusables.txt</a>
  */
 public class HumanStringComparator implements Comparator<String> {
 
@@ -229,6 +245,8 @@ public class HumanStringComparator implements Comparator<String> {
 	 * human reader's perspective.
 	 */
 	public int humanCompare(String str1, String str2) {
+		str1 = applySubstitutions(str1);
+		str2 = applySubstitutions(str2);
 		ComparatorToken[] tokens1 = getTokens(str1);
 		ComparatorToken[] tokens2 = getTokens(str2);
 
@@ -248,5 +266,39 @@ public class HumanStringComparator implements Comparator<String> {
 			}
 		}
 		return 0;
+	}
+
+	String applySubstitutions(String str) {
+		StringBuilder returnValue = new StringBuilder(str.length());
+		for (int a = 0; a < str.length(); a++) {
+			char ch = str.charAt(a);
+			switch (ch) {
+			case 0x0060: // GRAVE ACCENT (aka "backtick")
+			case 0xFF07: // FULLWIDTH APOSTROPHE
+			case 0x2018: // LEFT SINGLE QUOTATION MARK
+			case 0x2019: // RIGHT SINGLE QUOTATION MARK
+				returnValue.append('\'');
+				break;
+			case 0x201C: // LEFT DOUBLE QUOTATION MARK
+			case 0x201D: // RIGHT DOUBLE QUOTATION MARK
+				returnValue.append('"');
+				break;
+			case 0x00AD: // SOFT HYPHEN
+			case 0x2010: // HYPHEN
+			case 0x2011: // NON-BREAKING HYPHEN
+			case 0x2012: // MINUS SIGN
+			case 0x2013: // EN-DASH
+			case 0x2014: // EM-DASH
+			case 0x2043: // HYPHEN BULLET
+				returnValue.append('-');
+				break;
+			case 0x2026: // HORIZONTAL ELLIPSIS
+				returnValue.append("...");
+				break;
+			default:
+				returnValue.append(ch);
+			}
+		}
+		return returnValue.toString();
 	}
 }

@@ -107,4 +107,14 @@ public class HumanStringComparatorTest extends TestCase {
 		// test that our comparator sees them "correctly":
 		assertTrue(c.humanCompare("8/1/15", "08/02/15") < 0);
 	}
+
+	@Test
+	public void testSingleQuotes() {
+		HumanStringComparator c = new HumanStringComparator();
+		// this is how a String comparator would normally see these dates:
+		assertTrue("'cat'".compareTo("‘cat’") < 0);
+
+		// test that our comparator sees them "correctly":
+		assertTrue(c.humanCompare("'cat'", "‘cat’") == 0);
+	}
 }
