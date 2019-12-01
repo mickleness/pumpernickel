@@ -141,7 +141,8 @@ public class Cache<K, V> {
 					}
 				}
 				TimerTask task = new PurgeTimerTask(this);
-				timer.schedule(task, maxTimePurgeInterval);
+				timer.scheduleAtFixedRate(task, maxTimePurgeInterval,
+						maxTimePurgeInterval);
 			}
 		}
 
@@ -213,9 +214,10 @@ public class Cache<K, V> {
 		 * Purge old records from this Cache, if possible.
 		 */
 		@SuppressWarnings("rawtypes")
-		public synchronized void purge() {
+		public synchronized int purge() {
+			int ctr = 0;
 			if (maxTime < 0) {
-				return;
+				return ctr;
 			}
 			long t = System.currentTimeMillis();
 
@@ -226,10 +228,12 @@ public class Cache<K, V> {
 				if (elapsed > maxTime) {
 					iter.remove();
 					e.cache.keyToTickets.remove(e.key);
+					ctr++;
 				} else {
-					return;
+					return ctr;
 				}
 			}
+			return ctr;
 		}
 
 		/**
