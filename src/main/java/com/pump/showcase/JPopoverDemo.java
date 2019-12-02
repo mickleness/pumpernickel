@@ -11,7 +11,6 @@
 package com.pump.showcase;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -136,7 +135,7 @@ public class JPopoverDemo extends ShowcaseExampleDemo {
 
 			@Override
 			protected void doRefreshPopup() {
-				getContents().setFont((Font) fontComboBox.getSelectedItem());
+				getContents().setFont(fontComboBox.getSelectedFont());
 			}
 
 		};

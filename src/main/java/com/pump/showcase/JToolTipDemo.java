@@ -145,7 +145,7 @@ public class JToolTipDemo extends ShowcaseExampleDemo {
 
 		boolean tooltipsActive = toolTipTypeComboBox.getSelectedIndex() != 2;
 		if (tooltipsActive) {
-			Font font = (Font) fontComboBox.getSelectedItem();
+			Font font = fontComboBox.getSelectedFont();
 			float size = fontSizeSlider.getValue();
 			font = font.deriveFont(size);
 			UIManager.getDefaults().put("ToolTip.font", font);

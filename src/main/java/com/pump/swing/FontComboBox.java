@@ -10,27 +10,25 @@
  */
 package com.pump.swing;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.awt.SystemColor;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
+
+import com.pump.plaf.LabelCellRenderer;
+import com.pump.util.HumanStringComparator;
 
 /**
  * A JComboBox for selecting Fonts that includes a renderer to preview the
  * fonts.
  *
  */
-public class FontComboBox extends JComboBox<Font> {
+public class FontComboBox extends JComboBox<Map.Entry<String, Font>> {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -47,40 +45,23 @@ public class FontComboBox extends JComboBox<Font> {
 		 * be listed. Subclasses may override this to provide their own special
 		 * set of Fonts.
 		 */
-		protected List<Font> createFonts() {
-			List<Font> fonts = new ArrayList<Font>();
+		protected SortedMap<String, Font> createFonts() {
+			Comparator<String> comparator = new HumanStringComparator();
+			SortedMap<String, Font> returnValue = new TreeMap<>(comparator);
 
 			// first, populate the fonts on this computer:
 			GraphicsEnvironment ge = GraphicsEnvironment
 					.getLocalGraphicsEnvironment();
 			String[] s = ge.getAvailableFontFamilyNames();
 			for (String fontName : s) {
-				fonts.add(new Font(fontName, 0, 16));
+				returnValue.put(fontName, new Font(fontName, 0, 16));
 			}
 
-			Collections.sort(fonts, new Comparator<Font>() {
-
-				@Override
-				public int compare(Font o1, Font o2) {
-					String n1 = o1.getName();
-					String n2 = o2.getName();
-					int i = n1.compareTo(n2);
-					if (i != 0)
-						return i;
-					int style1 = o1.getStyle();
-					int style2 = o2.getStyle();
-					if (style1 - style2 != 0)
-						return style1 - style2;
-					int size1 = (int) (o1.getSize2D() * 100);
-					int size2 = (int) (o2.getSize2D() * 100);
-					if (size1 - size2 != 0)
-						return size1 - size2;
-					return 0;
-				}
-			});
-			return fonts;
+			return returnValue;
 		}
 	}
+
+	Map<String, Font> fontMap;
 
 	/**
 	 * Create a FontComboBox that uses the default FontFactory.
@@ -90,40 +71,24 @@ public class FontComboBox extends JComboBox<Font> {
 	}
 
 	public FontComboBox(FontFactory fontFactory) {
-		setRenderer(new ListCellRenderer<Font>() {
-			JLabel label = new JLabel();
+		setRenderer(new LabelCellRenderer<Map.Entry<String, Font>>() {
 
 			@Override
-			public Component getListCellRendererComponent(
-					JList<? extends Font> list, Font font, int row,
-					boolean isSelected, boolean hasFocus) {
+			protected void formatLabel(Entry<String, Font> value) {
+				Font font = value.getValue();
+				String text = value.getKey();
 				if (font != null) {
-					label.setText(font.getName());
+					label.setText(text);
 					label.setFont(font);
 				} else {
 					label.setText(" ");
 				}
-				if (isSelected) {
-					label.setBackground(SystemColor.textHighlight);
-					label.setForeground(SystemColor.textHighlightText);
-				} else {
-					label.setBackground(SystemColor.text);
-					label.setForeground(SystemColor.textText);
-				}
-				if (row < 0) {
-					label.setBackground(new Color(255, 255, 255, 0));
-					label.setOpaque(false);
-				} else {
-					label.setOpaque(list != null);
-				}
-				return label;
 			}
-
 		});
 
-		List<Font> fonts = fontFactory.createFonts();
-		for (Font font : fonts) {
-			addItem(font);
+		fontMap = fontFactory.createFonts();
+		for (Map.Entry<String, Font> fontEntry : fontMap.entrySet()) {
+			addItem(fontEntry);
 		}
 	}
 
@@ -138,8 +103,8 @@ public class FontComboBox extends JComboBox<Font> {
 	public boolean selectFont(String fontName) {
 		int fontComboBoxIndex = -1;
 		for (int a = 0; a < getItemCount() && fontComboBoxIndex == -1; a++) {
-			Font f = (Font) getItemAt(a);
-			if (f.getName().equals(fontName)) {
+			Entry<String, Font> entry = getItemAt(a);
+			if (entry.getKey().equals(fontName)) {
 				fontComboBoxIndex = a;
 				break;
 			}
@@ -147,5 +112,12 @@ public class FontComboBox extends JComboBox<Font> {
 		setSelectedIndex(fontComboBoxIndex);
 
 		return fontComboBoxIndex != -1;
+	}
+
+	public Font getSelectedFont() {
+		Entry<String, Font> entry = (Entry<String, Font>) getSelectedItem();
+		if (entry == null)
+			return null;
+		return entry.getValue();
 	}
 }
