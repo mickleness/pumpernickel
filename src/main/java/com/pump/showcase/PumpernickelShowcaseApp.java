@@ -477,6 +477,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("JColorWell, JPalette", "JColorWellPaletteDemo");
 			addSection("JEyeDropper", "JEyeDropperDemo");
 			addSection("JSwitchButton", "JSwitchButtonDemo");
+			addSection("JButton", "JButtonDemo");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -830,7 +831,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			c.fill = GridBagConstraints.BOTH;
 			c.insets = new Insets(10, 3, 3, 3);
 			replacement.add(headerTextArea, c);
-			 jc.setVisible(getShowcaseDemo().getHelpURL() != null);
+			jc.setVisible(getShowcaseDemo().getHelpURL() != null);
 			c.gridx = 0;
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			c.fill = GridBagConstraints.BOTH;
