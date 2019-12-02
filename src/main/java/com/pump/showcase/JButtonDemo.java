@@ -16,7 +16,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -27,21 +29,34 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.ButtonUI;
 
 import com.pump.icon.RefreshIcon;
 import com.pump.image.ImageLoader;
 import com.pump.image.pixel.Scaling;
 import com.pump.inspector.Inspector;
+import com.pump.plaf.BevelButtonUI;
+import com.pump.plaf.CapsuleButtonUI;
+import com.pump.plaf.GradientButtonUI;
+import com.pump.plaf.PlasticButtonUI;
+import com.pump.plaf.RecessedButtonUI;
+import com.pump.plaf.RetroButtonUI;
+import com.pump.plaf.RoundRectButtonUI;
+import com.pump.plaf.SquareButtonUI;
+import com.pump.plaf.TexturedButtonUI;
+import com.pump.plaf.VistaButtonUI;
+import com.pump.plaf.XPButtonUI;
+import com.pump.plaf.XPSubtleButtonUI;
 import com.pump.reflect.Reflection;
 import com.pump.swing.FontComboBox;
-import com.pump.swing.JLink;
-import com.pump.swing.JSwitchButton;
 import com.pump.util.JVM;
 
 public class JButtonDemo extends ShowcaseExampleDemo {
@@ -88,8 +103,8 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		}
 	}
 
-	Map<String, Class> buttonTypeMap = new HashMap<>();
-	JComboBox<String> buttonClassComboBox = new JComboBox<>();
+	Map<String, Class> buttonUITypeMap = new HashMap<>();
+	JComboBox<String> buttonUIClassComboBox = new JComboBox<>();
 	FontComboBox fontComboBox;
 	JLabel fontDescriptor = new JLabel("");
 	JComboBox<String> iconComboBox = new JComboBox<>();
@@ -114,13 +129,46 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 	public JButtonDemo() {
 		super(false, false, true);
 		fontComboBox = new FontComboBox(new UIManagerFontFactory());
-		Class[] buttonTypes = new Class[] { JButton.class, JToggleButton.class,
-				JRadioButton.class, JCheckBox.class, JSwitchButton.class,
-				JLink.class };
-		for (Class buttonType : buttonTypes) {
-			buttonTypeMap.put(buttonType.getSimpleName(), buttonType);
-			buttonClassComboBox.addItem(buttonType.getSimpleName());
+		JButton dummyButton = new JButton();
+
+		List<Class> buttonUITypes = new ArrayList<>();
+
+		LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
+		for (LookAndFeelInfo lafInfo : lafs) {
+			try {
+				LookAndFeel laf = (LookAndFeel) Class.forName(
+						lafInfo.getClassName()).newInstance();
+				UIDefaults defaults = laf.getDefaults();
+				Class z = Class.forName((String) defaults.get("ButtonUI"));
+				if (ButtonUI.class.isAssignableFrom(z)) {
+					buttonUITypes.add(z);
+				} else {
+					// TODO: support Nimbus
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
+
+		buttonUITypes.add(BevelButtonUI.class);
+		buttonUITypes.add(CapsuleButtonUI.class);
+		buttonUITypes.add(GradientButtonUI.class);
+		buttonUITypes.add(PlasticButtonUI.class);
+		buttonUITypes.add(RecessedButtonUI.class);
+		buttonUITypes.add(RetroButtonUI.class);
+		buttonUITypes.add(RoundRectButtonUI.class);
+		buttonUITypes.add(SquareButtonUI.class);
+		buttonUITypes.add(TexturedButtonUI.class);
+		buttonUITypes.add(VistaButtonUI.class);
+		buttonUITypes.add(XPButtonUI.class);
+		buttonUITypes.add(XPSubtleButtonUI.class);
+
+		for (Class buttonUIType : buttonUITypes) {
+			buttonUITypeMap.put(buttonUIType.getSimpleName(), buttonUIType);
+			buttonUIClassComboBox.addItem(buttonUIType.getSimpleName());
+		}
+		buttonUIClassComboBox.setSelectedItem(dummyButton.getUI().getClass()
+				.getSimpleName());
 
 		ActionListener actionRefreshListener = new ActionListener() {
 
@@ -132,7 +180,7 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		};
 
 		Inspector inspector = createConfigurationInspector(300);
-		inspector.addRow(new JLabel("Button Class:"), buttonClassComboBox);
+		inspector.addRow(new JLabel("ButtonUI:"), buttonUIClassComboBox);
 		inspector.addRow(new JLabel("Font:"), fontComboBox);
 		inspector.addRow(new JLabel(""), fontDescriptor);
 		inspector.addRow(new JLabel("Icon:"), iconComboBox);
@@ -148,7 +196,6 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		inspector.addRow(new JLabel("Paint:"), paintBorderCheckbox,
 				paintContentCheckbox, paintFocusCheckbox);
 
-		JButton dummyButton = new JButton();
 		horizontalAlignmentComboBox.setSelectedItem(Horizontal
 				.valueOf(dummyButton.getHorizontalAlignment()));
 		horizontalTextPositionComboBox.setSelectedItem(Horizontal
@@ -184,7 +231,7 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		iconComboBox.addItem("Thumbnail");
 		iconComboBox.addItem("Refresh");
 
-		buttonClassComboBox.addActionListener(actionRefreshListener);
+		buttonUIClassComboBox.addActionListener(actionRefreshListener);
 		fontComboBox.addActionListener(actionRefreshListener);
 		iconComboBox.addActionListener(actionRefreshListener);
 		paintBorderCheckbox.addActionListener(actionRefreshListener);
@@ -256,9 +303,14 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 			Font font = fontComboBox.getSelectedFont();
 			fontDescriptor.setText(" " + font.getName() + " "
 					+ font.getSize2D());
-			String buttonClass = (String) buttonClassComboBox.getSelectedItem();
-			AbstractButton button = (AbstractButton) buttonTypeMap.get(
-					buttonClass).newInstance();
+			AbstractButton button = new JButton();
+
+			String buttonUIClass = (String) buttonUIClassComboBox
+					.getSelectedItem();
+			ButtonUI buttonUI = (ButtonUI) buttonUITypeMap.get(buttonUIClass)
+					.newInstance();
+			button.setUI(buttonUI);
+
 			if (lastButton != null)
 				button.setSelected(lastButton.isSelected());
 			button.setFont(font);
