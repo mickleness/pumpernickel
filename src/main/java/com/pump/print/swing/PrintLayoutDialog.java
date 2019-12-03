@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -30,7 +31,7 @@ import javax.swing.SpinnerNumberModel;
 import com.pump.awt.Paintable;
 import com.pump.print.PrintLayout;
 import com.pump.swing.DialogFooter;
-import com.pump.swing.HelpComponent;
+import com.pump.swing.HelpButton;
 
 /**
  * This dialog prompts the user to design a PrintLayout object.
@@ -96,7 +97,7 @@ public class PrintLayoutDialog extends JDialog {
 	 *            the lower-left corner of the dialog. This may be null.
 	 */
 	public PrintLayoutDialog(Frame parent, String title,
-			PrintLayout printLayout, Paintable[] tiles, String helpURL) {
+			PrintLayout printLayout, Paintable[] tiles, URL helpURL) {
 		this(parent, title, printLayout, helpURL);
 		paintables = new Paintable[tiles.length];
 		System.arraycopy(tiles, 0, paintables, 0, tiles.length);
@@ -128,7 +129,7 @@ public class PrintLayoutDialog extends JDialog {
 	 *             if this is invoked in a headless environment.
 	 */
 	public PrintLayoutDialog(Frame parent, String title, PrintLayout layout,
-			String helpURL) throws HeadlessException {
+			URL helpURL) throws HeadlessException {
 		super(parent, title, true);
 		originalPrintLayout = layout;
 		printLayout = new PrintLayout(layout);
@@ -140,11 +141,10 @@ public class PrintLayoutDialog extends JDialog {
 				cancelButton };
 
 		JComponent[] leftControls;
-		if (helpURL == null || helpURL.length() == 0) {
+		if (helpURL == null) {
 			leftControls = new JComponent[] {};
 		} else {
-			leftControls = new JComponent[] { HelpComponent
-					.createHelpComponent(helpURL, null) };
+			leftControls = new JComponent[] { HelpButton.create(helpURL) };
 		}
 
 		footer = new DialogFooter(leftControls, dismissButtons, true,

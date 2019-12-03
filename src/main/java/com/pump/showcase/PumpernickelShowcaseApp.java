@@ -89,7 +89,7 @@ import com.pump.plaf.QPanelUI.CalloutType;
 import com.pump.plaf.RoundTextFieldUI;
 import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.FileDialogUtils;
-import com.pump.swing.HelpComponent;
+import com.pump.swing.HelpButton;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.JSwitchButton;
 import com.pump.swing.ListSectionContainer;
@@ -819,8 +819,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			c.weightx = 1;
 			c.weighty = 0;
 			c.weightx = 0;
-			JComponent jc = HelpComponent.createHelpComponent(actionListener,
-					null, null);
+			JButton jc = HelpButton.create(actionListener, null);
 			c.anchor = GridBagConstraints.EAST;
 			c.fill = GridBagConstraints.NONE;
 			c.insets = new Insets(6, 3, 3, 3);
