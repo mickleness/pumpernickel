@@ -200,7 +200,8 @@ public class TextFieldPrompt extends JTextField {
 		adjustingBounds++;
 		try {
 			JTextField parent = (JTextField) getParent();
-			setBounds(0, 0, parent.getWidth(), parent.getHeight());
+			if (parent != null)
+				setBounds(0, 0, parent.getWidth(), parent.getHeight());
 			updateVisibility();
 		} finally {
 			adjustingBounds--;
@@ -219,8 +220,8 @@ public class TextFieldPrompt extends JTextField {
 			return;
 		}
 		JTextField parent = (JTextField) getParent();
-		boolean focused = parent.hasFocus();
-		boolean empty = parent.getText().length() == 0;
+		boolean focused = parent != null && parent.hasFocus();
+		boolean empty = parent == null || parent.getText().length() == 0;
 		setVisible((!focused) && empty);
 		if (isVisible())
 			updateBounds();
