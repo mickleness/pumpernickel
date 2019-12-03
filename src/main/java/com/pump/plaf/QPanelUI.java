@@ -52,9 +52,9 @@ public class QPanelUI extends GradientPanelUI {
 	public static QPanelUI createBoxUI() {
 		QPanelUI ui = new QPanelUI();
 		ui.setCornerSize(5);
-		ui.setStrokeColor1(new Color(0xd3d3d3));
-		ui.setStrokeColor2(new Color(0xdfdfdf));
-		ui.setFillColor(new Color(0xe2e2e2));
+		ui.setStrokeColor1(new Color(0, 0, 0, 30));
+		ui.setStrokeColor2(new Color(0, 0, 0, 22));
+		ui.setFillColor(new Color(0, 0, 0, 16));
 		return ui;
 	}
 
