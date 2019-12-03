@@ -51,13 +51,11 @@ import com.pump.plaf.QComboBoxUI;
 import com.pump.plaf.RecessedButtonUI;
 import com.pump.plaf.RetroButtonUI;
 import com.pump.plaf.RoundRectButtonUI;
-import com.pump.plaf.ShimmerPaintUIEffect;
 import com.pump.plaf.SquareButtonUI;
 import com.pump.plaf.TexturedButtonUI;
 import com.pump.plaf.VistaButtonUI;
 import com.pump.plaf.XPButtonUI;
 import com.pump.plaf.XPSubtleButtonUI;
-import com.pump.plaf.ZoomIconPaintUIEffect;
 
 /**
  * A simple demo of different {@link QButtonUI} samples.
@@ -80,10 +78,6 @@ public class QButtonUIDemo extends ShowcaseExampleDemo {
 	JCheckBox borderCheckBox = new JCheckBox("Paint Border", true);
 	JCheckBox focusCheckBox = new JCheckBox("Paint Focus", true);
 	JCheckBox textCheckBox = new JCheckBox("Show Text", true);
-	JCheckBox blinkCheckBox = new JCheckBox("Blink Focus", false);
-	JCheckBox shimmerCheckBox = new JCheckBox("Shimmer Effect", false);
-
-	JCheckBox zoomCheckBox = new JCheckBox("Zoom Icon Effect", false);
 
 	JCheckBox enabledCheckBox = new JCheckBox("Enabled", true);
 
@@ -163,29 +157,6 @@ public class QButtonUIDemo extends ShowcaseExampleDemo {
 			}
 		});
 
-		blinkCheckBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				boolean blinking = blinkCheckBox.isSelected();
-				for (int a = 0; a < buttons.size(); a++) {
-					(buttons.get(a)).putClientProperty("Focus.blink",
-							new Boolean(blinking));
-				}
-			}
-		});
-
-		shimmerCheckBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				for (int a = 0; a < buttons.size(); a++) {
-					AbstractButton button = (buttons.get(a));
-					if (shimmerCheckBox.isSelected()) {
-						button.addMouseListener(ShimmerPaintUIEffect.mouseListener);
-					} else {
-						button.removeMouseListener(ShimmerPaintUIEffect.mouseListener);
-					}
-				}
-			}
-		});
-
 		focusCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (int a = 0; a < buttons.size(); a++) {
@@ -207,19 +178,6 @@ public class QButtonUIDemo extends ShowcaseExampleDemo {
 				for (int a = 0; a < buttons.size(); a++) {
 					AbstractButton button = (buttons.get(a));
 					button.setContentAreaFilled(contentCheckBox.isSelected());
-				}
-			}
-		});
-
-		zoomCheckBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				for (int a = 0; a < buttons.size(); a++) {
-					AbstractButton button = (buttons.get(a));
-					if (zoomCheckBox.isSelected()) {
-						button.addActionListener(ZoomIconPaintUIEffect.actionListener);
-					} else {
-						button.removeActionListener(ZoomIconPaintUIEffect.actionListener);
-					}
 				}
 			}
 		});
@@ -291,8 +249,8 @@ public class QButtonUIDemo extends ShowcaseExampleDemo {
 
 	public JComponent[] getControls() {
 		return new JComponent[] { iconCheckBox, contentCheckBox,
-				borderCheckBox, focusCheckBox, textCheckBox, blinkCheckBox,
-				shimmerCheckBox, zoomCheckBox, enabledCheckBox, componentTypes };
+				borderCheckBox, focusCheckBox, textCheckBox, enabledCheckBox,
+				componentTypes };
 	}
 
 	public JPanel makeDemoPanel(QButtonUI fui) {

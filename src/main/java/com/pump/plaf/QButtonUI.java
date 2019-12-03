@@ -288,36 +288,10 @@ public abstract class QButtonUI extends ButtonUI implements PositionConstants {
 			ui = buttonUI;
 
 			basicListener = new BasicButtonListener(button) {
-				Timer focusBlinker;
-
-				String BLINK_STATE_KEY = "QButtonUI.blinkState";
 
 				@Override
 				public void focusGained(FocusEvent e) {
 					super.focusGained(e);
-					if (focusBlinker == null) {
-						int rate = UIManager.getInt("TextField.caretBlinkRate");
-						if (rate < 100)
-							rate = 500;
-
-						focusBlinker = new Timer(rate, new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								Boolean blinkState = (Boolean) button
-										.getClientProperty(BLINK_STATE_KEY);
-								if (blinkState == null)
-									blinkState = Boolean.TRUE;
-								button.putClientProperty(HAS_FOCUS, blinkState
-										&& button.hasFocus());
-								button.putClientProperty(BLINK_STATE_KEY,
-										!blinkState);
-							}
-						});
-					}
-					button.putClientProperty(BLINK_STATE_KEY, null);
-					Boolean blinkActive = (Boolean) button
-							.getClientProperty("Focus.blink");
-					if (blinkActive != null && blinkActive)
-						focusBlinker.start();
 				}
 
 				@Override
@@ -325,8 +299,6 @@ public abstract class QButtonUI extends ButtonUI implements PositionConstants {
 					super.focusLost(e);
 					button.putClientProperty(SPACEBAR_PRESSED, Boolean.FALSE);
 					button.putClientProperty(HAS_FOCUS, null);
-					if (focusBlinker != null)
-						focusBlinker.stop();
 					button.repaint();
 				}
 

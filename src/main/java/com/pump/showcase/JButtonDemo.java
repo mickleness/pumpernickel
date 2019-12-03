@@ -11,24 +11,30 @@
 package com.pump.showcase;
 
 import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
@@ -43,21 +49,24 @@ import com.pump.icon.RefreshIcon;
 import com.pump.image.ImageLoader;
 import com.pump.image.pixel.Scaling;
 import com.pump.inspector.Inspector;
+import com.pump.inspector.InspectorRowPanel;
 import com.pump.plaf.BevelButtonUI;
 import com.pump.plaf.CapsuleButtonUI;
 import com.pump.plaf.GradientButtonUI;
 import com.pump.plaf.PlasticButtonUI;
 import com.pump.plaf.QButtonUI;
+import com.pump.plaf.QComboBoxUI;
 import com.pump.plaf.RecessedButtonUI;
 import com.pump.plaf.RetroButtonUI;
 import com.pump.plaf.RoundRectButtonUI;
+import com.pump.plaf.ShimmerPaintUIEffect;
 import com.pump.plaf.SquareButtonUI;
 import com.pump.plaf.TexturedButtonUI;
 import com.pump.plaf.VistaButtonUI;
 import com.pump.plaf.XPButtonUI;
 import com.pump.plaf.XPSubtleButtonUI;
+import com.pump.plaf.ZoomIconPaintUIEffect;
 import com.pump.reflect.Reflection;
-import com.pump.swing.FontComboBox;
 import com.pump.util.JVM;
 
 public class JButtonDemo extends ShowcaseExampleDemo {
@@ -106,8 +115,6 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 
 	Map<String, Class> buttonUITypeMap = new HashMap<>();
 	JComboBox<String> buttonUIClassComboBox = new JComboBox<>();
-	FontComboBox fontComboBox;
-	JLabel fontDescriptor = new JLabel("");
 	JComboBox<String> iconComboBox = new JComboBox<>();
 	JTextField text = new JTextField("Name");
 	JCheckBox paintBorderCheckbox = new JCheckBox("Border", true);
@@ -126,10 +133,20 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 			"regular", "small", "mini" });
 	JComboBox<String> segmentPositionComboBox = new JComboBox<String>(
 			new String[] { "only", "first", "middle", "last" });
+	JCheckBox shimmerCheckBox = new JCheckBox("Shimmer", false);
+	JCheckBox zoomCheckBox = new JCheckBox("Zoom Icon", false);
+	JCheckBox comboBoxCheckBox = new JCheckBox("JComboBox:", false);
+	JCheckBox comboBoxSeparatorCheckBox = new JCheckBox("Separator", false);
+	JCheckBox comboBoxPopDownCheckBox = new JCheckBox("Pop Down", false);
+	JCheckBox customShapeCheckBox = new JCheckBox("Custom Shape:", false);
+	JRadioButton customShapeCircleButton = new JRadioButton("Circle", true);
+	JRadioButton customShapeDiamondButton = new JRadioButton("Diamond", false);
+	Collection<InspectorRowPanel> aquaRows = new HashSet<>();
+	Collection<InspectorRowPanel> qbuttonRows = new HashSet<>();
+	InspectorRowPanel segmentPositionRow;
 
 	public JButtonDemo() {
 		super(false, false, true);
-		fontComboBox = new FontComboBox(new UIManagerFontFactory());
 		JButton dummyButton = new JButton();
 
 		List<Class> buttonUITypes = new ArrayList<>();
@@ -198,10 +215,12 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 
 		};
 
+		ButtonGroup g = new ButtonGroup();
+		g.add(customShapeCircleButton);
+		g.add(customShapeDiamondButton);
+
 		Inspector inspector = createConfigurationInspector(300);
 		inspector.addRow(new JLabel("ButtonUI:"), buttonUIClassComboBox);
-		inspector.addRow(new JLabel("Font:"), fontComboBox);
-		inspector.addRow(new JLabel(""), fontDescriptor);
 		inspector.addRow(new JLabel("Icon:"), iconComboBox);
 		inspector.addRow(new JLabel("Text:"), text, true);
 		inspector.addRow(new JLabel("Horizontal Alignment:"),
@@ -224,34 +243,43 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		verticalTextPositionComboBox.setSelectedItem(Vertical
 				.valueOf(dummyButton.getVerticalTextPosition()));
 
-		if (JVM.isMac) {
-			inspector.addSeparator();
-			// String[] aquaTypes = getAquaTypes();
-			String[] aquaTypes = new String[] { NONE, "bevel", "capsule",
-					"combobox", "comboboxEndCap", "comboboxInternal",
-					"disclosure", "gradient", "help", "icon", "recessed",
-					"round", "roundRect", "scrollColumnSizer", "segmented",
-					"segmentedCapsule", "segmentedGradient",
-					"segmentedRoundRect", "segmentedTextured",
-					"segmentedTexturedRounded", "square", "text", "textured",
-					"texturedRound", "toggle", "toolbar", "well" };
-			aquaTypeComboBox = new JComboBox<String>(aquaTypes);
-			inspector.addRow(new JLabel("Button Type:"), aquaTypeComboBox);
-			inspector.addRow(new JLabel("Segment Position:"),
-					segmentPositionComboBox);
-			inspector.addRow(new JLabel("Size Variant:"), sizeVariantComboBox);
+		// String[] aquaTypes = getAquaTypes();
+		String[] aquaTypes = new String[] { NONE, "bevel", "capsule",
+				"combobox", "comboboxEndCap", "comboboxInternal", "disclosure",
+				"gradient", "help", "icon", "recessed", "round", "roundRect",
+				"scrollColumnSizer", "segmented", "segmentedCapsule",
+				"segmentedGradient", "segmentedRoundRect", "segmentedTextured",
+				"segmentedTexturedRounded", "square", "text", "textured",
+				"texturedRound", "toggle", "toolbar", "well" };
+		aquaTypeComboBox = new JComboBox<String>(aquaTypes);
+		aquaRows.add(inspector.addRow(new JLabel("Button Type:"),
+				aquaTypeComboBox));
+		segmentPositionRow = inspector.addRow(new JLabel("Segment Position:"),
+				segmentPositionComboBox);
+		aquaRows.add(inspector.addRow(new JLabel("Size Variant:"),
+				sizeVariantComboBox));
+		qbuttonRows.add(inspector.addRow(new JLabel("Effects:"),
+				shimmerCheckBox, zoomCheckBox));
+		qbuttonRows.add(inspector.addRow(customShapeCheckBox,
+				customShapeCircleButton, customShapeDiamondButton));
+		qbuttonRows.add(inspector.addRow(comboBoxCheckBox,
+				comboBoxPopDownCheckBox, comboBoxSeparatorCheckBox));
 
-			aquaTypeComboBox.addActionListener(actionRefreshListener);
-			sizeVariantComboBox.addActionListener(actionRefreshListener);
-			segmentPositionComboBox.addActionListener(actionRefreshListener);
-		}
+		customShapeCheckBox.addActionListener(actionRefreshListener);
+		customShapeCircleButton.addActionListener(actionRefreshListener);
+		customShapeDiamondButton.addActionListener(actionRefreshListener);
+		comboBoxCheckBox.addActionListener(actionRefreshListener);
+		comboBoxSeparatorCheckBox.addActionListener(actionRefreshListener);
+		comboBoxPopDownCheckBox.addActionListener(actionRefreshListener);
+		aquaTypeComboBox.addActionListener(actionRefreshListener);
+		sizeVariantComboBox.addActionListener(actionRefreshListener);
+		segmentPositionComboBox.addActionListener(actionRefreshListener);
 
 		iconComboBox.addItem("None");
 		iconComboBox.addItem("Thumbnail");
 		iconComboBox.addItem("Refresh");
 
 		buttonUIClassComboBox.addActionListener(actionRefreshListener);
-		fontComboBox.addActionListener(actionRefreshListener);
 		iconComboBox.addActionListener(actionRefreshListener);
 		paintBorderCheckbox.addActionListener(actionRefreshListener);
 		paintContentCheckbox.addActionListener(actionRefreshListener);
@@ -260,6 +288,8 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		horizontalTextPositionComboBox.addActionListener(actionRefreshListener);
 		verticalAlignmentComboBox.addActionListener(actionRefreshListener);
 		verticalTextPositionComboBox.addActionListener(actionRefreshListener);
+		shimmerCheckBox.addActionListener(actionRefreshListener);
+		zoomCheckBox.addActionListener(actionRefreshListener);
 
 		text.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -291,6 +321,9 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		paintFocusCheckbox
 				.setToolTipText("This controls AbstractButton#setFocusPainted(boolean)");
 
+		zoomCheckBox.setToolTipText("Zoom the icon when clicked.");
+		shimmerCheckBox.setToolTipText("Shimmer the button on mouseover.");
+
 		refreshButton();
 	}
 
@@ -319,9 +352,7 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 
 	private void refreshButton() {
 		try {
-			Font font = fontComboBox.getSelectedFont();
-			fontDescriptor.setText(" " + font.getName() + " "
-					+ font.getSize2D());
+			JComboBox comboBox = null;
 			AbstractButton button = new JButton();
 
 			String buttonUIClass = (String) buttonUIClassComboBox
@@ -332,7 +363,6 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 
 			if (lastButton != null)
 				button.setSelected(lastButton.isSelected());
-			button.setFont(font);
 			button.setText(text.getText());
 			lastButton = button;
 
@@ -362,7 +392,16 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 			button.setContentAreaFilled(paintContentCheckbox.isSelected());
 			button.setFocusPainted(paintFocusCheckbox.isSelected());
 
-			if (aquaTypeComboBox != null) {
+			boolean isAqua = buttonUIClass.toLowerCase().contains("aqua");
+			boolean isQButton = QButtonUI.class.isInstance(button.getUI());
+			for (InspectorRowPanel p : aquaRows) {
+				p.setVisible(isAqua);
+			}
+			for (InspectorRowPanel p : qbuttonRows) {
+				p.setVisible(isQButton);
+			}
+			segmentPositionRow.setVisible(isAqua || isQButton);
+			if (isAqua) {
 				String buttonType = (String) aquaTypeComboBox.getSelectedItem();
 				if (!NONE.equalsIgnoreCase(buttonType)) {
 					button.putClientProperty("JButton.buttonType", buttonType);
@@ -377,10 +416,54 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 				}
 				button.putClientProperty("JComponent.sizeVariant",
 						(String) sizeVariantComboBox.getSelectedItem());
+			} else if (isQButton) {
+				if (shimmerCheckBox.isSelected())
+					button.addMouseListener(ShimmerPaintUIEffect.mouseListener);
+				if (zoomCheckBox.isSelected())
+					button.addActionListener(ZoomIconPaintUIEffect.actionListener);
+				zoomCheckBox.setEnabled(button.getIcon() != null);
+
+				segmentPositionComboBox.setEnabled(true);
+				button.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
+						(String) segmentPositionComboBox.getSelectedItem());
+
+				if (comboBoxCheckBox.isSelected()) {
+					comboBox = new JComboBox<String>(new String[] { "Item 1",
+							"Item 2", "Item 3" });
+					comboBox.setUI(((QButtonUI) button.getUI())
+							.createComboBoxUI());
+
+					comboBox.putClientProperty(QButtonUI.SHOW_SEPARATORS,
+							comboBoxSeparatorCheckBox.isSelected());
+					comboBox.putClientProperty(QComboBoxUI.IS_POP_DOWN_KEY,
+							comboBoxPopDownCheckBox.isSelected());
+				}
+
+				customShapeCircleButton.setEnabled(customShapeCheckBox
+						.isSelected());
+				customShapeDiamondButton.setEnabled(customShapeCheckBox
+						.isSelected());
+				if (customShapeCheckBox.isSelected()) {
+					Shape shape;
+					if (customShapeCircleButton.isSelected()) {
+						shape = new Ellipse2D.Float(0, 0, 20, 20);
+					} else {
+						GeneralPath diamond = new GeneralPath();
+						diamond.moveTo(0, 0);
+						diamond.lineTo(10, 10);
+						diamond.lineTo(0, 20);
+						diamond.lineTo(-10, 10);
+						diamond.closePath();
+						shape = diamond;
+					}
+					button.putClientProperty(QButtonUI.SHAPE, shape);
+				}
 			}
 
 			examplePanel.removeAll();
 			examplePanel.add(button);
+			if (comboBox != null)
+				examplePanel.add(comboBox);
 		} catch (Exception e) {
 			e.printStackTrace();
 			examplePanel.removeAll();
