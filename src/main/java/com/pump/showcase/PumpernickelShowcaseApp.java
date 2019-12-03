@@ -342,7 +342,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 				LazyDemoPanel ldp = (LazyDemoPanel) jc;
 				ShowcaseDemo d = ldp.getShowcaseDemo();
 				if (d.getKeywords() == null)
-					throw new NullPointerException(jc.getClass().getName());
+					throw new NullPointerException(ldp.demoClassName);
 				for (String keyword : d.getKeywords()) {
 					returnValue.add(keyword.toLowerCase());
 				}
@@ -571,7 +571,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 							@Override
 							public void run() {
 								try {
-									p.getShowcaseDemo();
+									p.loadPanel();
 								} finally {
 									loaded.set(true);
 								}
@@ -732,13 +732,19 @@ public class PumpernickelShowcaseApp extends JFrame {
 				@Override
 				public void hierarchyChanged(HierarchyEvent e) {
 					if (loadingPanel.isShowing()) {
-						add(createDemoPanel(), "demo");
-						cardLayout.show(LazyDemoPanel.this, "demo");
+						loadPanel();
 						removeHierarchyListener(this);
 					}
 				}
 
 			});
+		}
+
+		void loadPanel() {
+			if (loadingPanel.isShowing()) {
+				add(createDemoPanel(), "demo");
+				cardLayout.show(LazyDemoPanel.this, "demo");
+			}
 		}
 
 		ShowcaseDemo getShowcaseDemo() {
