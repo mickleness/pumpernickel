@@ -47,6 +47,7 @@ import com.pump.plaf.BevelButtonUI;
 import com.pump.plaf.CapsuleButtonUI;
 import com.pump.plaf.GradientButtonUI;
 import com.pump.plaf.PlasticButtonUI;
+import com.pump.plaf.QButtonUI;
 import com.pump.plaf.RecessedButtonUI;
 import com.pump.plaf.RetroButtonUI;
 import com.pump.plaf.RoundRectButtonUI;
@@ -138,12 +139,30 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 			try {
 				LookAndFeel laf = (LookAndFeel) Class.forName(
 						lafInfo.getClassName()).newInstance();
+				laf.initialize();
 				UIDefaults defaults = laf.getDefaults();
-				Class z = Class.forName((String) defaults.get("ButtonUI"));
-				if (ButtonUI.class.isAssignableFrom(z)) {
-					buttonUITypes.add(z);
-				} else {
-					// TODO: support Nimbus
+				JButton testButton = new JButton("test");
+				ButtonUI ui = (ButtonUI) defaults.getUI(testButton);
+				try {
+					testButton.setUI(ui);
+					// only keep the UI if the call to setUI didn't throw an
+					// exception:
+					buttonUITypes.add(ui.getClass());
+				} catch (Exception e) {
+					// Nimbus throws an exception resembling:
+
+					// @formatter:off
+					// java.lang.ClassCastException: com.apple.laf.AquaLookAndFeel cannot be cast to javax.swing.plaf.nimbus.NimbusLookAndFeel
+					// at javax.swing.plaf.nimbus.NimbusStyle.validate(NimbusStyle.java:250)
+					// at javax.swing.plaf.nimbus.NimbusStyle.getValues(NimbusStyle.java:806)
+					// at javax.swing.plaf.nimbus.NimbusStyle.getInsets(NimbusStyle.java:485)
+					// at javax.swing.plaf.synth.SynthStyle.installDefaults(SynthStyle.java:913)
+					// at javax.swing.plaf.synth.SynthLookAndFeel.updateStyle(SynthLookAndFeel.java:265)
+					// at javax.swing.plaf.synth.SynthButtonUI.updateStyle(SynthButtonUI.java:79)
+					// at javax.swing.plaf.synth.SynthButtonUI.installDefaults(SynthButtonUI.java:62)
+					// at javax.swing.plaf.basic.BasicButtonUI.installUI(BasicButtonUI.java:88)
+					// at javax.swing.JComponent.setUI(JComponent.java:666)
+					// @formatter:on
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -400,14 +419,12 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[] { "button", "ux", "ui", "Swing" };
 	}
 
 	@Override
 	public Class<?>[] getClasses() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Class[] { JButton.class, QButtonUI.class };
 	}
 
 }
