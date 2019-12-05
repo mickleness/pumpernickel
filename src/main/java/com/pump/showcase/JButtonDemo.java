@@ -51,9 +51,7 @@ import com.pump.image.pixel.Scaling;
 import com.pump.inspector.Inspector;
 import com.pump.inspector.InspectorRowPanel;
 import com.pump.plaf.BevelButtonUI;
-import com.pump.plaf.CapsuleButtonUI;
 import com.pump.plaf.GradientButtonUI;
-import com.pump.plaf.PlasticButtonUI;
 import com.pump.plaf.QButtonUI;
 import com.pump.plaf.QComboBoxUI;
 import com.pump.plaf.RecessedButtonUI;
@@ -61,10 +59,6 @@ import com.pump.plaf.RetroButtonUI;
 import com.pump.plaf.RoundRectButtonUI;
 import com.pump.plaf.ShimmerPaintUIEffect;
 import com.pump.plaf.SquareButtonUI;
-import com.pump.plaf.TexturedButtonUI;
-import com.pump.plaf.VistaButtonUI;
-import com.pump.plaf.XPButtonUI;
-import com.pump.plaf.XPSubtleButtonUI;
 import com.pump.plaf.ZoomIconPaintUIEffect;
 import com.pump.reflect.Reflection;
 import com.pump.util.JVM;
@@ -187,17 +181,11 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		}
 
 		buttonUITypes.add(BevelButtonUI.class);
-		buttonUITypes.add(CapsuleButtonUI.class);
 		buttonUITypes.add(GradientButtonUI.class);
-		buttonUITypes.add(PlasticButtonUI.class);
 		buttonUITypes.add(RecessedButtonUI.class);
 		buttonUITypes.add(RetroButtonUI.class);
 		buttonUITypes.add(RoundRectButtonUI.class);
 		buttonUITypes.add(SquareButtonUI.class);
-		buttonUITypes.add(TexturedButtonUI.class);
-		buttonUITypes.add(VistaButtonUI.class);
-		buttonUITypes.add(XPButtonUI.class);
-		buttonUITypes.add(XPSubtleButtonUI.class);
 
 		for (Class buttonUIType : buttonUITypes) {
 			buttonUITypeMap.put(buttonUIType.getSimpleName(), buttonUIType);

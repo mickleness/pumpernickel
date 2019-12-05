@@ -20,7 +20,7 @@ import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import com.pump.plaf.TexturedButtonUI;
+import com.pump.plaf.BevelButtonUI;
 
 /**
  * Static methods to create navigation buttons. It is assumed these buttons will
@@ -34,7 +34,7 @@ public class NavigationButtons {
 		button.setRolloverIcon(createIcon(false, .85f));
 		button.setSelectedIcon(createIcon(false, 1f));
 		button.setDisabledIcon(createIcon(false, .3f));
-		button.setUI(new TexturedButtonUI());
+		button.setUI(new BevelButtonUI());
 		button.setContentAreaFilled(true);
 		button.putClientProperty("JButton.segmentPosition", "first");
 		button.setBorderPainted(true);
@@ -45,7 +45,7 @@ public class NavigationButtons {
 		button.setRolloverIcon(createIcon(true, .85f));
 		button.setSelectedIcon(createIcon(true, 1f));
 		button.setDisabledIcon(createIcon(true, .3f));
-		button.setUI(new TexturedButtonUI());
+		button.setUI(new BevelButtonUI());
 		button.setContentAreaFilled(true);
 		button.putClientProperty("JButton.segmentPosition", "last");
 		button.setBorderPainted(true);

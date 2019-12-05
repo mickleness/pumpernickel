@@ -42,20 +42,14 @@ import javax.swing.UIManager;
 
 import com.pump.icon.GearIcon;
 import com.pump.plaf.BevelButtonUI;
-import com.pump.plaf.CapsuleButtonUI;
 import com.pump.plaf.GradientButtonUI;
 import com.pump.plaf.LabelCellRenderer;
-import com.pump.plaf.PlasticButtonUI;
 import com.pump.plaf.QButtonUI;
 import com.pump.plaf.QComboBoxUI;
 import com.pump.plaf.RecessedButtonUI;
 import com.pump.plaf.RetroButtonUI;
 import com.pump.plaf.RoundRectButtonUI;
 import com.pump.plaf.SquareButtonUI;
-import com.pump.plaf.TexturedButtonUI;
-import com.pump.plaf.VistaButtonUI;
-import com.pump.plaf.XPButtonUI;
-import com.pump.plaf.XPSubtleButtonUI;
 
 /**
  * A simple demo of different {@link QButtonUI} samples.
@@ -95,12 +89,9 @@ public class QButtonUIDemo extends ShowcaseExampleDemo {
 
 	public QButtonUIDemo() {
 		super(true, true, false);
-		prepareInternalFrames(new BevelButtonUI(), new CapsuleButtonUI(),
-				new GradientButtonUI(), new PlasticButtonUI(),
+		prepareInternalFrames(new BevelButtonUI(), new GradientButtonUI(),
 				new RecessedButtonUI(), new RetroButtonUI(),
-				new RoundRectButtonUI(), new SquareButtonUI(),
-				new TexturedButtonUI(), new VistaButtonUI(), new XPButtonUI(),
-				new XPSubtleButtonUI());
+				new RoundRectButtonUI(), new SquareButtonUI());
 
 		for (QButtonUI ui : uiFrameMap.keySet()) {
 			uiComboBox.addItem(ui);
@@ -504,11 +495,8 @@ public class QButtonUIDemo extends ShowcaseExampleDemo {
 	@Override
 	public Class<?>[] getClasses() {
 		return new Class[] { QButtonUI.class, QComboBoxUI.class,
-				BevelButtonUI.class, CapsuleButtonUI.class,
-				GradientButtonUI.class, PlasticButtonUI.class,
+				BevelButtonUI.class, GradientButtonUI.class,
 				RecessedButtonUI.class, RoundRectButtonUI.class,
-				RetroButtonUI.class, SquareButtonUI.class,
-				TexturedButtonUI.class, VistaButtonUI.class, XPButtonUI.class,
-				XPSubtleButtonUI.class };
+				RetroButtonUI.class, SquareButtonUI.class };
 	}
 }

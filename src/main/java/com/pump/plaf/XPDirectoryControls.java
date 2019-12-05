@@ -17,7 +17,6 @@ import java.awt.GridBagLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.plaf.ButtonUI;
 
 public class XPDirectoryControls extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -68,11 +67,5 @@ public class XPDirectoryControls extends JPanel {
 		paneUI.upButton.setText("");
 		paneUI.newFolderButton.setText("");
 		listButton.setText("");
-
-		ButtonUI ui = new XPSubtleButtonUI();
-		paneUI.backButton.setUI(ui);
-		paneUI.upButton.setUI(ui);
-		paneUI.newFolderButton.setUI(ui);
-		listButton.setUI(ui);
 	}
 }

@@ -19,7 +19,9 @@ import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
 /**
- * This resembles the "roundRect" button UI as seen in Mac OS 10.5.
+ * This resembles the "roundRect" button UI as originally seen in Mac OS 10.5, but the colors
+ * are more subtle now to reflect the modern transition to more subtle UI's.
+ * Apple no longer encourages the use of most custom button looks.
  * <p>
  * <img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/RoundRectButtonUI.png"
@@ -43,10 +45,10 @@ public class RoundRectButtonUI extends QButtonUI {
 		protected Color strokeColor = new Color(0xff989898);
 
 		private Color[] normalColors = new Color[] { new Color(0xffFCFCFC),
-				new Color(0xffDFDFDF) };
+				new Color(0xffE7E7E7) };
 
 		private Color[] darkerColors = new Color[] { new Color(0xffC0C0C0),
-				new Color(0xffFCFCFC) };
+				new Color(0xffCaCaCa) };
 
 		@Override
 		public Paint getDarkerFill(Rectangle fillRect) {

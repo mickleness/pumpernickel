@@ -23,7 +23,9 @@ import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
 /**
- * This resembles the "bevel" button UI as seen in Mac OS 10.5.
+ * This was originally based on the "bevel" button in Mac OS 10.5, but the colors
+ * are more subtle now to reflect the modern transition to more subtle UI's.
+ * Apple no longer encourages the use of most custom button looks.
  * <p>
  * <img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/BevelButtonUI.png"
@@ -32,7 +34,7 @@ import javax.swing.plaf.ComponentUI;
  * It is not intended to be an exact replica, but it is very similar.
  * <P>
  * According to <a href="http://nadeausoftware.com/node/87">this</a> article,
- * the "bevel" look is often used for: <BR>
+ * the "bevel" look was often used for: <BR>
  * "Buttons with icons, or buttons sized larger than a standard Mac button".
  */
 public class BevelButtonUI extends QButtonUI {
@@ -45,17 +47,17 @@ public class BevelButtonUI extends QButtonUI {
 		private float[] fillWeights = new float[] { 0, .15f, .151f, .8f, 1 };
 		private float[] borderWeights = new float[] { 0, .2f, .8f, 1 };
 		private Color[] darkerColors = new Color[] { new Color(0xffDCDCDC),
-				new Color(0xffDCDCDC), new Color(0xffD0D0D0),
-				new Color(0xffD0D0D0), new Color(0xffE4E4E4) };
+				new Color(0xffDCDCDC), new Color(0xffD6D6D6),
+				new Color(0xffD8D8D8), new Color(0xffDCDCDC) };
 		private Color[] strokeColors = new Color[] { new Color(0xffAFAFAF),
 				new Color(0xff838383), new Color(0xff838383),
 				new Color(0xff6C6C6C) };
-		private Color[] normalColors = new Color[] { new Color(0xffFFFFFF),
-				new Color(0xffFAFAFA), new Color(0xffEEEEEE),
-				new Color(0xffEEEEEE), new Color(0xffFFFFFF) };
+		private Color[] normalColors = new Color[] { new Color(0xffFCFCFC),
+				new Color(0xffFAFAFA), new Color(0xffF6F6F6),
+				new Color(0xffF9F9F9), new Color(0xffFCFCFC) };
 		private Color[] darkestColors = new Color[] { new Color(0xffCFCFCF),
-				new Color(0xffCFCFCF), new Color(0xffBABABA),
-				new Color(0xffBABABA), new Color(0xffCDCDCD) };
+				new Color(0xffCFCFCF), new Color(0xffC8C8C8),
+				new Color(0xffCBCBCB), new Color(0xffCDCDCD) };
 
 		@Override
 		public Paint getDarkerFill(Rectangle fillRect) {

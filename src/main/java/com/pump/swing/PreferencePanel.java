@@ -55,7 +55,7 @@ import javax.swing.WindowConstants;
 import javax.swing.plaf.PanelUI;
 import javax.swing.plaf.SeparatorUI;
 
-import com.pump.plaf.TexturedButtonUI;
+import com.pump.plaf.BevelButtonUI;
 import com.pump.window.WindowDragger;
 
 /**
@@ -297,7 +297,7 @@ public class PreferencePanel extends JPanel {
 			homeButton.putClientProperty("JButton.buttonType",
 					"segmentedTextured");
 		} else {
-			homeButton.setUI(new TexturedButtonUI());
+			homeButton.setUI(new BevelButtonUI());
 		}
 
 		prevButton.putClientProperty("JButton.segmentPosition", "first");

@@ -19,17 +19,22 @@ import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
 /**
- * This resembles the "gradient" button UI as seen in Mac OS 10.5.
+ * This resembles the "gradient" button UI as seen in Mac OS 10.15.
+ * <p>
+ * This is one of the very few specialized button UI's that <a href=
+ * "https://developer.apple.com/design/human-interface-guidelines/macos/buttons/gradient-buttons/"
+ * >Apple's guidelines still encourage using</a>: <blockquote> A gradient button
+ * initiates an immediate action related to a view, like adding or removing
+ * table rows. Gradient buttons contain icons—not text—and can be configured to
+ * behave as push buttons, toggles, or pop-up buttons. They usually reside in
+ * close proximity to (either within or beneath) their associated view.
+ * </blockquote>
  * <p>
  * <img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/GradientButtonUI.png"
  * alt="GradientButtonUI Screenshot">
  * <P>
  * It is not intended to be an exact replica, but it is very similar.
- * <P>
- * According to <a href="http://nadeausoftware.com/node/87">this</a> article,
- * the "gradient" look is originally intended to: <br>
- * "select among options, such as different ways of viewing something".
  */
 public class GradientButtonUI extends QButtonUI {
 	public static final ButtonShape GRADIENT_SHAPE = new ButtonShape(0, 0);
@@ -38,18 +43,15 @@ public class GradientButtonUI extends QButtonUI {
 	 * The <code>SimpleButtonFill</code> used to achieve the "gradient" look.
 	 */
 	public static final SimpleButtonFill GRADIENT_FILL = new SimpleButtonFill() {
-		private float[] fillWeights = new float[] { 0, .4999f, .5f, 1 };
+		private float[] fillWeights = new float[] { 0, 1 };
 		private Color strokeColor = new Color(0xff979797);
 
-		private Color[] darkerColors = new Color[] { new Color(0xffC8C8C8),
-				new Color(0xffCFCFCF), new Color(0xffBABABA),
-				new Color(0xffC7C7C7) };
-		private Color[] normalColors = new Color[] { new Color(0xffFEFEFE),
-				new Color(0xffFEFEFE), new Color(0xffEDEDED),
-				new Color(0xffF7F7F7) };
-		private Color[] darkestColors = new Color[] { new Color(0xffB2B2B2),
-				new Color(0xffBCBCBC), new Color(0xffAFAFAF),
-				new Color(0xffB9B9B9) };
+		private Color[] darkerColors = new Color[] { new Color(0xffBBBBBB),
+				new Color(0xB4B4B4) };
+		private Color[] normalColors = new Color[] { new Color(0xffFAFAFA),
+				new Color(0xffFEFEFE) };
+		private Color[] darkestColors = new Color[] { new Color(0xffc1c1c1),
+				new Color(0xffb5b5b5) };
 
 		@Override
 		public Paint getDarkerFill(Rectangle fillRect) {
