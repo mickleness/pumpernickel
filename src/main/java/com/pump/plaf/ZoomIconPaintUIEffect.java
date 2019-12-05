@@ -47,7 +47,7 @@ public class ZoomIconPaintUIEffect extends PaintUIEffect {
 	final AbstractButton button;
 
 	public ZoomIconPaintUIEffect(AbstractButton b) {
-		super(b, 750, 40);
+		super(b, 300, 20);
 		button = b;
 	}
 
