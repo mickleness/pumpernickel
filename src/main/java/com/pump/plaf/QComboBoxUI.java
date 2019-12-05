@@ -185,7 +185,7 @@ public class QComboBoxUI extends BasicComboBoxUI {
 
 	PropertyChangeListener popDownPropertyListener = new PropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent e) {
-			configureArrowButton();
+			updateArrowButton();
 		}
 	};
 
@@ -258,10 +258,20 @@ public class QComboBoxUI extends BasicComboBoxUI {
 		return buttonUI;
 	}
 
+	/**
+	 * This method should only be called once.
+	 */
 	@Override
 	public void configureArrowButton() {
 		super.configureArrowButton();
 		arrowButton.setUI(buttonUI);
+		updateArrowButton();
+	}
+	
+	/**
+	 * This method may be called multiple times.
+	 */
+	protected void updateArrowButton() {
 		Icon icon = isPopDown() ? downIcon : upAndDownIcon;
 		arrowButton.setIcon(icon);
 		arrowButton.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
