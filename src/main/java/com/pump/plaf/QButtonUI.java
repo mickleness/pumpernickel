@@ -65,8 +65,8 @@ import com.pump.plaf.UIEffect.State;
  * A ButtonUI that includes an enclosed filled shape.
  * <P>
  * This <code>ButtonUI</code> supports several options for controlling the shape
- * of separate buttons. (Note one instance of each UI can be assigned to several
- * buttons, and each button can be configured differently).
+ * of separate buttons. (Note one instance of each QButtonUI object can be
+ * assigned to several buttons, and each button can be configured differently).
  * <P>
  * Each button can have a horizontal and vertical position, allowing grids of
  * buttons to be seamlessly connected. Horizontal positions can be LEFT, MIDDLE,
@@ -74,16 +74,17 @@ import com.pump.plaf.UIEffect.State;
  * You can set these positions by called:
  * <P>
  * <code>myButton.putClientProperty(HORIZONTAL_POSITION, LEFT)</code>
+ * <code>myButton.putClientProperty(VERTICAL_POSITION, ONLY)</code>
  * <P>
- * Also you can define an arbitrary shape for each button. If this is defined,
+ * Also you can define an arbitrary shape for each button. If this is defined
  * that shape takes priority over all other curvature/segment information. You
  * can define this by calling something like:
  * <P>
  * <code>myButton.putClientProperty(SHAPE, new Ellipse2D.Float(0,0,100,100));</code>
  * <P>
- * The size of the shape is not important: it will be scaled as necessary to fit
- * the icon and text of each button. It is essential that the center of this
- * shape be inside the shape. (That is, a 'C' or 'O' shape is not valid.)
+ * The shape will be scaled as necessary to fit the icon and text of each
+ * button. It is essential that the center of this shape be inside the shape.
+ * (That is, a 'C' or 'O' shape is not valid.)
  * <P>
  * This layout is not tested with HTML-rendered text.
  * 
@@ -649,6 +650,7 @@ public abstract class QButtonUI extends ButtonUI implements PositionConstants {
 		if (customShape == null) {
 			if (button.getVerticalAlignment() == SwingConstants.CENTER
 					&& button.getVerticalTextPosition() == SwingConstants.CENTER
+					&& tempIconRect.height < tempTextRect.height
 					&& info.textRect.width > 0) {
 				int unusedAscent = getUnusedAscent(fm, font);
 				int ascent = fm.getAscent() - unusedAscent;
