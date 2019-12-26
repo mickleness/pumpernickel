@@ -8,15 +8,16 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.plaf;
+package com.pump.plaf.button;
 
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Rectangle;
 
-import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
+
+import com.pump.plaf.PlafPaintUtils;
 
 /**
  * This resembles the "gradient" button UI as seen in Mac OS 10.15.
@@ -37,7 +38,6 @@ import javax.swing.plaf.ComponentUI;
  * It is not intended to be an exact replica, but it is very similar.
  */
 public class GradientButtonUI extends QButtonUI {
-	public static final ButtonShape GRADIENT_SHAPE = new ButtonShape(0, 0);
 
 	/**
 	 * The <code>SimpleButtonFill</code> used to achieve the "gradient" look.
@@ -46,18 +46,10 @@ public class GradientButtonUI extends QButtonUI {
 		private float[] fillWeights = new float[] { 0, 1 };
 		private Color strokeColor = new Color(0xff979797);
 
-		private Color[] darkerColors = new Color[] { new Color(0xffBBBBBB),
-				new Color(0xB4B4B4) };
 		private Color[] normalColors = new Color[] { new Color(0xffFAFAFA),
 				new Color(0xffFEFEFE) };
 		private Color[] darkestColors = new Color[] { new Color(0xffc1c1c1),
 				new Color(0xffb5b5b5) };
-
-		@Override
-		public Paint getDarkerFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("gradientUI.darker",
-					fillRect.height, fillRect.y, fillWeights, darkerColors);
-		}
 
 		@Override
 		public Paint getDarkestFill(Rectangle fillRect) {
@@ -72,12 +64,7 @@ public class GradientButtonUI extends QButtonUI {
 		}
 
 		@Override
-		public Paint getRolloverFill(Rectangle fillRect) {
-			return null;
-		}
-
-		@Override
-		public Paint getStroke(AbstractButton button, Rectangle fillRect) {
+		public Paint getStroke(ButtonState.Float state, Rectangle fillRect) {
 			return strokeColor;
 		}
 	};
@@ -96,16 +83,7 @@ public class GradientButtonUI extends QButtonUI {
 	}
 
 	public GradientButtonUI() {
-		super(GRADIENT_FILL, GRADIENT_SHAPE);
-	}
-
-	@Override
-	protected int getPreferredHeight() {
-		return 18;
-	}
-
-	@Override
-	public boolean isFillOpaque() {
-		return true;
+		setCornerRadius(0);
+		setButtonFill(GRADIENT_FILL);
 	}
 }

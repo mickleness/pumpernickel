@@ -346,7 +346,7 @@ public class Cache<K, V> {
 			cachePool.cacheReferences.add(new WeakReference<Cache>(this));
 		}
 
-		keyToTickets = new HashMap<>(Integer.min(1000, cachePool.maxSize));
+		keyToTickets = new HashMap<>(Math.min(1000, cachePool.maxSize));
 	}
 
 	/**

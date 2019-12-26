@@ -85,7 +85,7 @@ public class AnimatingInspectorPanel extends JPanel {
 		}
 
 		// I don't understand exactly why, but when any descendant of these
-		// RowPanels has double-buffering enabled it can screw up other 
+		// RowPanels has double-buffering enabled it can screw up other
 		// (unrelated) repaints in the UI.
 
 		setDoubleBuffered(this, false);
@@ -103,22 +103,26 @@ public class AnimatingInspectorPanel extends JPanel {
 			Rectangle rect = p.getBounds();
 			Graphics2D g2 = (Graphics2D) g.create();
 			double h = AnimationManager.setTargetProperty(p,
-					PROPERTY_ANIMATING_HEIGHT, rect.height, 20, 6);
+					PROPERTY_ANIMATING_HEIGHT, rect.height, .15f);
 			double targetOpacity = p.isVisible() ? 1 : 0;
 			double opacity = AnimationManager.setTargetProperty(p,
-					PROPERTY_ANIMATING_OPACITY, targetOpacity, 20, .1);
+					PROPERTY_ANIMATING_OPACITY, targetOpacity, .15f);
 			g2.translate(rect.x, y);
 			g2.clipRect(0, 0, getWidth(), (int) h);
-			if(JVM.isMac) {
-				
-				// on Windows: changing the opacity results in a tiny subtle flicker when we
-				// transition to fully opaque. It's as if a rendering hint is changing. Text
+			if (JVM.isMac) {
+
+				// on Windows: changing the opacity results in a tiny subtle
+				// flicker when we
+				// transition to fully opaque. It's as if a rendering hint is
+				// changing. Text
 				// in a text field (including spinners) shifts a little bit.
-				// I couldn't figure out how to prevent this, so for now I'll just turn it off.
-				// (I tried changing the RenderingHints and using my own buffer, but no luck.)
-				
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-						(float) opacity));
+				// I couldn't figure out how to prevent this, so for now I'll
+				// just turn it off.
+				// (I tried changing the RenderingHints and using my own buffer,
+				// but no luck.)
+
+				g2.setComposite(AlphaComposite.getInstance(
+						AlphaComposite.SRC_OVER, (float) opacity));
 			}
 			p.setShowing(true);
 			p.paintComponent(g2);

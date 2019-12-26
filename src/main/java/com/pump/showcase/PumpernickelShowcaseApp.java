@@ -457,7 +457,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Scaling", "ScalingDemo");
 			// addSection("ImageQuantization", new ImageQuantizationDemo());
 			addSection("JColorPicker", "JColorPickerDemo");
-			addSection("QButtonUI", "QButtonUIDemo");
 			// addSection("Shapes: AreaX Tests", new AreaXTestPanel());
 			addSection("GraphicsWriterDebugger", "GraphicsWriterDebuggerDemo");
 			addSection("JPEGMetaData", "JPEGMetaDataDemo");
@@ -477,7 +476,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("JColorWell, JPalette", "JColorWellPaletteDemo");
 			addSection("JEyeDropper", "JEyeDropperDemo");
 			addSection("JSwitchButton", "JSwitchButtonDemo");
-			addSection("JButton", "JButtonDemo");
+			addSection("JButton, QButtonUI", "JButtonDemo");
 
 		} catch (Exception e) {
 			e.printStackTrace();

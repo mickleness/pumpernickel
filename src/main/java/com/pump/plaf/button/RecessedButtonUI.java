@@ -8,15 +8,16 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.plaf;
+package com.pump.plaf.button;
 
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Rectangle;
 
-import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
+
+import com.pump.plaf.PlafPaintUtils;
 
 /**
  * This resembles the "recessed" button UI seen in Mac OS 10.15.
@@ -33,8 +34,6 @@ import javax.swing.plaf.ComponentUI;
  */
 public class RecessedButtonUI extends QButtonUI {
 
-	public static final ButtonShape RECESSED_SHAPE = new ButtonShape(3, 4);
-
 	/**
 	 * The <code>SimpleButtonFill</code> used to achieve the "recessed" look.
 	 */
@@ -43,17 +42,13 @@ public class RecessedButtonUI extends QButtonUI {
 		private Color strokeColor = new Color(0xff6F6F6F);
 
 		private Color[] normalColors = new Color[] { new Color(0x3B000000, true) };
-		private Color[] darkerColors = new Color[] { new Color(0x4F000000, true) };
-
-		@Override
-		public Paint getDarkerFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("recessedUI.darker",
-					fillRect.height, fillRect.y, fillWeights, darkerColors);
-		}
+		private Color[] darkestColors = new Color[] { new Color(0x4F000000,
+				true) };
 
 		@Override
 		public Paint getDarkestFill(Rectangle fillRect) {
-			return null;
+			return PlafPaintUtils.getVerticalGradient("recessedUI.darker",
+					fillRect.height, fillRect.y, fillWeights, darkestColors);
 		}
 
 		@Override
@@ -63,12 +58,7 @@ public class RecessedButtonUI extends QButtonUI {
 		}
 
 		@Override
-		public Paint getRolloverFill(Rectangle fillRect) {
-			return null;
-		}
-
-		@Override
-		public Paint getStroke(AbstractButton button, Rectangle fillRect) {
+		public Paint getStroke(ButtonState.Float state, Rectangle fillRect) {
 			return strokeColor;
 		}
 	};
@@ -87,12 +77,7 @@ public class RecessedButtonUI extends QButtonUI {
 	}
 
 	public RecessedButtonUI() {
-		super(RECESSED_FILL, RECESSED_SHAPE);
-	}
-
-	/** Returns false. This button is designed to be translucent. */
-	@Override
-	public boolean isFillOpaque() {
-		return false;
+		setCornerRadius(3);
+		setButtonFill(RECESSED_FILL);
 	}
 };

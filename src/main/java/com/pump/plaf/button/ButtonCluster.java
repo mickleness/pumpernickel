@@ -8,9 +8,12 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.plaf;
+package com.pump.plaf.button;
 
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -19,7 +22,12 @@ import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicPanelUI;
+
+import com.pump.plaf.button.QButtonUI.HorizontalPosition;
+import com.pump.plaf.button.QButtonUI.VerticalPosition;
 
 /**
  * This is a list of buttons that are physically clustered side-by-side (either
@@ -113,14 +121,14 @@ public class ButtonCluster {
 				// everything we found thus far a cluster, and clear the buffer.
 				AbstractButton[] array = buttons
 						.toArray(new AbstractButton[buttons.size()]);
-				install(array, orientation, ui, standardize);
+				install(orientation, ui, standardize, array);
 				buttons.clear();
 			}
 		}
 		// clear the buffer, make what's left a cluster.
 		AbstractButton[] array = buttons.toArray(new AbstractButton[buttons
 				.size()]);
-		install(array, orientation, ui, standardize);
+		install(orientation, ui, standardize, array);
 	}
 
 	/**
@@ -128,17 +136,17 @@ public class ButtonCluster {
 	 * the same UI. The button positions are automatically kept up-to-date with
 	 * a <code>ButtonCluster</code> object.
 	 * 
-	 * @param buttons
-	 *            an array of horizontally adjacent buttons
 	 * @param ui
 	 *            the <code>QButtonUI</code> to install on each button.
 	 * @param standardize
 	 *            when <code>true</code> then the buttons in the resulting
 	 *            clusters should be made the same approximate size.
+	 * @param buttons
+	 *            an array of horizontally adjacent buttons
 	 */
-	public static void install(AbstractButton[] buttons, QButtonUI ui,
-			boolean standardize) {
-		install(buttons, HORIZONTAL, ui, standardize);
+	public static void install(QButtonUI ui, boolean standardize,
+			AbstractButton... buttons) {
+		install(HORIZONTAL, ui, standardize, buttons);
 	}
 
 	/**
@@ -146,8 +154,6 @@ public class ButtonCluster {
 	 * buttons share the same UI. The button positions are automatically kept
 	 * up-to-date with a <code>ButtonCluster</code> object.
 	 * 
-	 * @param buttons
-	 *            an array of adjacent buttons
 	 * @param orientation
 	 *            either HORIZONTAL or VERTICAL
 	 * @param ui
@@ -155,15 +161,17 @@ public class ButtonCluster {
 	 * @param standardize
 	 *            when <code>true</code> then the buttons in the resulting
 	 *            clusters should be made the same approximate size.
+	 * @param buttons
+	 *            an array of adjacent buttons
 	 */
-	public static void install(AbstractButton[] buttons, int orientation,
-			QButtonUI ui, boolean standardize) {
+	public static void install(int orientation, QButtonUI ui,
+			boolean standardize, AbstractButton... buttons) {
 		for (int a = 0; a < buttons.length; a++) {
 			buttons[a].setUI(ui);
 		}
 		@SuppressWarnings("unused")
-		ButtonCluster cluster = new ButtonCluster(buttons, orientation,
-				standardize);
+		ButtonCluster cluster = new ButtonCluster(orientation, standardize,
+				buttons);
 	}
 
 	final int orientation;
@@ -172,8 +180,12 @@ public class ButtonCluster {
 	public static final int HORIZONTAL = SwingConstants.HORIZONTAL;
 	public static final int VERTICAL = SwingConstants.VERTICAL;
 
-	public ButtonCluster(AbstractButton[] buttons, int orientation,
-			boolean standardized) {
+	public ButtonCluster(AbstractButton... buttons) {
+		this(SwingConstants.HORIZONTAL, false, buttons);
+	}
+
+	public ButtonCluster(int orientation, boolean standardized,
+			AbstractButton... buttons) {
 		if (!(orientation == HORIZONTAL || orientation == VERTICAL))
 			throw new IllegalArgumentException(
 					"orientation must be HORIZONTAL or VERTICAL");
@@ -215,15 +227,17 @@ public class ButtonCluster {
 	}
 
 	protected void updateSegmentPositions() {
-		String MID = QButtonUI.MIDDLE;
-		String ONLY = QButtonUI.ONLY;
-		String FIRST, LAST;
+		Object FIRST, LAST, MID, ONLY;
 		if (orientation == SwingConstants.VERTICAL) {
-			FIRST = QButtonUI.TOP;
-			LAST = QButtonUI.BOTTOM;
+			FIRST = VerticalPosition.TOP;
+			LAST = VerticalPosition.BOTTOM;
+			MID = VerticalPosition.MIDDLE;
+			ONLY = VerticalPosition.ONLY;
 		} else {
-			FIRST = QButtonUI.LEFT;
-			LAST = QButtonUI.RIGHT;
+			FIRST = HorizontalPosition.LEFT;
+			LAST = HorizontalPosition.RIGHT;
+			MID = HorizontalPosition.MIDDLE;
+			ONLY = HorizontalPosition.ONLY;
 		}
 
 		int visibleCtr = 0;
@@ -248,7 +262,7 @@ public class ButtonCluster {
 				AbstractButton button = (AbstractButton) comp;
 
 				// now, get the position:
-				String position;
+				Object position;
 				if (a + 1 < visibleButtons.length) {
 					// if there's something after this button
 					if (prevComponentWasButton) {
@@ -266,14 +280,17 @@ public class ButtonCluster {
 				}
 
 				if (orientation == SwingConstants.HORIZONTAL) {
-					button.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
-							position);
-					button.putClientProperty(QButtonUI.VERTICAL_POSITION, ONLY);
+					button.putClientProperty(
+							QButtonUI.PROPERTY_HORIZONTAL_POSITION, position);
+					button.putClientProperty(
+							QButtonUI.PROPERTY_VERTICAL_POSITION,
+							VerticalPosition.ONLY);
 				} else {
-					button.putClientProperty(QButtonUI.VERTICAL_POSITION,
-							position);
-					button.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
-							ONLY);
+					button.putClientProperty(
+							QButtonUI.PROPERTY_VERTICAL_POSITION, position);
+					button.putClientProperty(
+							QButtonUI.PROPERTY_HORIZONTAL_POSITION,
+							HorizontalPosition.ONLY);
 				}
 
 				// update for next iteration:
@@ -282,6 +299,63 @@ public class ButtonCluster {
 				prevComponentWasButton = false;
 			}
 		}
+	}
+
+	/**
+	 * Create a panel containing all the buttons in this ButtonCluster.
+	 * <p>
+	 * This reassigns the parents of all the buttons to the returned panel, so
+	 * this should only be called once.
+	 * 
+	 * @return a new panel that contains all the buttons in this cluster.
+	 */
+	public JPanel createContainer() {
+		JPanel panel = new JPanel();
+		panel.setOpaque(false);
+		panel.setLayout(new GridBagLayout());
+
+		// I'm not intimately familiar with how baselines in Swing components
+		// are used, and I'm surprised that this doesn't work automatically
+		// (and maybe I'm doing something wrong?)... but the following
+		// custom BasicPanelUI helps guarantee the baselines are consistent
+		// for a row of horizontal buttons:
+		if (orientation == SwingConstants.HORIZONTAL) {
+			panel.setUI(new BasicPanelUI() {
+
+				@Override
+				public int getBaseline(JComponent c, int width, int height) {
+					Integer baseline = null;
+					for (AbstractButton button : buttons) {
+						if (button.isVisible()) {
+							Dimension d = button.getPreferredSize();
+							int b = button.getBaseline(d.width, d.height);
+							if (baseline == null) {
+								baseline = Integer.valueOf(b);
+							} else if (baseline.intValue() != b) {
+								return -1;
+							}
+						}
+					}
+					return baseline == null ? -1 : baseline.intValue();
+				}
+
+			});
+		}
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.BASELINE;
+		for (AbstractButton b : getButtons()) {
+			panel.add(b, c);
+			if (orientation == SwingConstants.HORIZONTAL) {
+				c.gridx++;
+			} else {
+				c.gridy++;
+			}
+		}
+		return panel;
 	}
 
 }

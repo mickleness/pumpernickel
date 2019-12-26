@@ -8,24 +8,21 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.plaf;
+package com.pump.plaf.button;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 
-import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
+import com.pump.plaf.PlafPaintUtils;
+
 /**
- * This was originally based on the "bevel" button in Mac OS 10.5, but the colors
- * are more subtle now to reflect the modern transition to more subtle UI's.
- * Apple no longer encourages the use of most custom button looks.
+ * This was originally based on the "bevel" button in Mac OS 10.5, but the
+ * colors are more subtle now to reflect the modern transition to more subtle
+ * UI's. Apple no longer encourages the use of most custom button looks.
  * <p>
  * <img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/BevelButtonUI.png"
@@ -38,7 +35,6 @@ import javax.swing.plaf.ComponentUI;
  * "Buttons with icons, or buttons sized larger than a standard Mac button".
  */
 public class BevelButtonUI extends QButtonUI {
-	public static final ButtonShape BEVEL_SHAPE = new ButtonShape(4, 4);
 
 	/**
 	 * The <code>SimpleButtonFill</code> used to achieve the "bevel" look.
@@ -46,9 +42,6 @@ public class BevelButtonUI extends QButtonUI {
 	public static final SimpleButtonFill BEVEL_FILL = new SimpleButtonFill() {
 		private float[] fillWeights = new float[] { 0, .15f, .151f, .8f, 1 };
 		private float[] borderWeights = new float[] { 0, .2f, .8f, 1 };
-		private Color[] darkerColors = new Color[] { new Color(0xffDCDCDC),
-				new Color(0xffDCDCDC), new Color(0xffD6D6D6),
-				new Color(0xffD8D8D8), new Color(0xffDCDCDC) };
 		private Color[] strokeColors = new Color[] { new Color(0xffAFAFAF),
 				new Color(0xff838383), new Color(0xff838383),
 				new Color(0xff6C6C6C) };
@@ -58,12 +51,6 @@ public class BevelButtonUI extends QButtonUI {
 		private Color[] darkestColors = new Color[] { new Color(0xffCFCFCF),
 				new Color(0xffCFCFCF), new Color(0xffC8C8C8),
 				new Color(0xffCBCBCB), new Color(0xffCDCDCD) };
-
-		@Override
-		public Paint getDarkerFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("bevelUI.darker",
-					fillRect.height, fillRect.y, fillWeights, darkerColors);
-		}
 
 		@Override
 		public Paint getDarkestFill(Rectangle fillRect) {
@@ -78,12 +65,7 @@ public class BevelButtonUI extends QButtonUI {
 		}
 
 		@Override
-		public Paint getRolloverFill(Rectangle fillRect) {
-			return null;
-		}
-
-		@Override
-		public Paint getStroke(AbstractButton button, Rectangle fillRect) {
+		public Paint getStroke(ButtonState.Float state, Rectangle fillRect) {
 			if (fillRect == null)
 				return strokeColors[1];
 			return PlafPaintUtils.getVerticalGradient("bevelUI.border",
@@ -92,7 +74,7 @@ public class BevelButtonUI extends QButtonUI {
 		}
 
 		@Override
-		public Color getShadowHighlight(AbstractButton button) {
+		public Color getShadowHighlight(ButtonState.Float state) {
 			return null;
 		}
 	};
@@ -109,39 +91,7 @@ public class BevelButtonUI extends QButtonUI {
 	}
 
 	public BevelButtonUI() {
-		super(BEVEL_FILL, BEVEL_SHAPE);
-	}
-
-	@Override
-	public void paintBackground(Graphics2D g, ButtonInfo info) {
-		if (info.button.isBorderPainted()) {
-			int verticalPosition = getVerticalPosition(info.button);
-			// this little clause gives a much-needed boost to the aqua "bevel"
-			// look:
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
-			if (verticalPosition == POS_ONLY) {
-				g.setPaint(new GradientPaint(0, 0, new Color(0, 0, 0, 25), 0,
-						info.fillBounds.height, new Color(0, 0, 0, 80)));
-			} else {
-				g.setPaint(new Color(0, 0, 0, 35));
-			}
-			BasicStroke stroke = new BasicStroke(2.5f);
-			g.translate(0, 1);
-			// yeah, strangely necessary
-			g.fill(stroke.createStrokedShape(info.fill));
-			g.translate(0, -1);
-		}
-		super.paintBackground(g, info);
-	}
-
-	@Override
-	protected int getPreferredHeight() {
-		return 18;
-	}
-
-	@Override
-	public boolean isFillOpaque() {
-		return true;
+		setCornerRadius(4);
+		setButtonFill(BEVEL_FILL);
 	}
 }

@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.plaf;
+package com.pump.plaf.button;
 
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -23,6 +23,7 @@ import com.pump.geom.NullPathWriter;
 import com.pump.geom.PathWriter;
 import com.pump.geom.RectangularTransform;
 import com.pump.geom.ShapeBounds;
+import com.pump.plaf.PositionConstants;
 
 /** A mechanism to control the shape of buttons with rounded edges. */
 public class ButtonShape implements PositionConstants {

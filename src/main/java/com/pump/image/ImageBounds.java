@@ -17,6 +17,8 @@ import com.pump.reflect.Reflection;
 
 public class ImageBounds {
 
+	static int DEFAULT_THRESHOLD = 125;
+
 	/**
 	 * Returns the smallest rectangle enclosing the pixels in this image that
 	 * are non-translucent.
@@ -28,18 +30,34 @@ public class ImageBounds {
 	 *         are non-translucent.
 	 */
 	public static Rectangle getBounds(BufferedImage bi) {
+		return getBounds(bi, DEFAULT_THRESHOLD);
+	}
+
+	/**
+	 * Returns the smallest rectangle enclosing the pixels in this image that
+	 * are non-translucent.
+	 * 
+	 * 
+	 * @param bi
+	 *            a TYPE_INT_ARGB image.
+	 * @param alphaThreshold
+	 *            the alpha channel threshold for a pixel that is included in
+	 *            the rectangle. For example: if the alpha component of a pixel
+	 *            is 50 and the threshold is 60 then that pixel is ignored.
+	 * @return the smallest rectangle enclosing the pixels in this image that
+	 *         are non-translucent.
+	 */
+	public static Rectangle getBounds(BufferedImage bi, int alphaThreshold) {
 		int type = bi.getType();
 		if (type == BufferedImage.TYPE_INT_ARGB) {
-			return getARGBBounds(bi);
+			return getARGBBounds(bi, alphaThreshold);
 		}
 		throw new IllegalArgumentException("Illegal image type ("
 				+ Reflection.nameStaticField(BufferedImage.class, new Integer(
 						type)));
 	}
 
-	static int THRESHOLD = 125;
-
-	private static Rectangle getARGBBounds(BufferedImage bi) {
+	private static Rectangle getARGBBounds(BufferedImage bi, int alphaThreshold) {
 		int[] array = new int[bi.getWidth()];
 
 		int h = bi.getHeight();
@@ -53,7 +71,7 @@ public class ImageBounds {
 			bi.getRaster().getDataElements(0, y, w, 1, array);
 			for (int x = 0; x < w; x++) {
 				int alpha = (array[x] >> 24) & 0xff;
-				if (alpha > THRESHOLD) {
+				if (alpha > alphaThreshold) {
 					minX = x;
 					maxX = x;
 					minY = y;
@@ -69,7 +87,7 @@ public class ImageBounds {
 			bi.getRaster().getDataElements(0, y, w, 1, array);
 			for (int x = 0; x < w; x++) {
 				int alpha = (array[x] >> 24) & 0xff;
-				if (alpha > THRESHOLD) {
+				if (alpha > alphaThreshold) {
 					minX = (x < minX) ? x : minX;
 					maxX = (x > maxX) ? x : maxX;
 					maxY = y;
@@ -82,14 +100,14 @@ public class ImageBounds {
 			bi.getRaster().getDataElements(0, y, w, 1, array);
 			minSearch: for (int x = 0; x < minX; x++) {
 				int alpha = (array[x] >> 24) & 0xff;
-				if (alpha > THRESHOLD) {
+				if (alpha > alphaThreshold) {
 					minX = x;
 					break minSearch;
 				}
 			}
 			maxSearch: for (int x = w - 1; x > maxX; x--) {
 				int alpha = (array[x] >> 24) & 0xff;
-				if (alpha > THRESHOLD) {
+				if (alpha > alphaThreshold) {
 					maxX = x;
 					break maxSearch;
 				}

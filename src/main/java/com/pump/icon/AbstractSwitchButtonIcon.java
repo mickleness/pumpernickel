@@ -35,7 +35,7 @@ import javax.swing.JComponent;
 
 import com.pump.plaf.AnimationManager;
 import com.pump.plaf.PlafPaintUtils;
-import com.pump.plaf.SwitchButtonUI;
+import com.pump.plaf.button.SwitchButtonUI;
 
 /**
  * This is the icon used by SwitchButtonUIs.
@@ -144,9 +144,9 @@ public abstract class AbstractSwitchButtonIcon implements Icon {
 		boolean isSelected = isSelected(c);
 		boolean isArmed = isArmed(c);
 		double selectedState = AnimationManager.setTargetProperty(c,
-				PROPERTY_SELECTED_STATE, isSelected ? 1 : 0, 20, .2);
+				PROPERTY_SELECTED_STATE, isSelected ? 1 : 0, .1f);
 		double armedState = AnimationManager.setTargetProperty(c,
-				PROPERTY_ARMED_STATE, isArmed ? 1 : 0, 20, .2);
+				PROPERTY_ARMED_STATE, isArmed ? 1 : 0, .1f);
 
 		ButtonTheme colors = unselectedColors.tween(selectedColors,
 				selectedState);

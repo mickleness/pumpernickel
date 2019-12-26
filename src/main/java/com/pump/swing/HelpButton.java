@@ -10,19 +10,21 @@
  */
 package com.pump.swing;
 
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Ellipse2D;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 
-import com.pump.plaf.QButtonUI;
-import com.pump.plaf.RoundRectButtonUI;
+import com.pump.icon.GlyphIcon;
+import com.pump.plaf.button.QButtonUI;
+import com.pump.plaf.button.RoundRectButtonUI;
 
 /**
  * This contains static methods to help initialize a help button.
@@ -51,11 +53,13 @@ public class HelpButton {
 	 */
 	public static JButton create(ActionListener actionListener,
 			String tooltipText) {
-		JButton helpButton = new JButton("?");
+		JButton helpButton = new JButton();
 		QButtonUI ui = new RoundRectButtonUI();
-		helpButton.putClientProperty(QButtonUI.SHAPE, new Ellipse2D.Float(0, 0,
-				10, 10));
-		helpButton.setFont(helpButton.getFont().deriveFont(Font.BOLD));
+		helpButton
+				.putClientProperty(QButtonUI.PROPERTY_IS_CIRCLE, Boolean.TRUE);
+		Font font = helpButton.getFont().deriveFont(Font.BOLD);
+		Icon glyphIcon = new GlyphIcon(font, '?', 14, Color.black);
+		helpButton.setIcon(glyphIcon);
 		helpButton.setUI(ui);
 		helpButton.addActionListener(actionListener);
 		helpButton.setToolTipText(tooltipText);

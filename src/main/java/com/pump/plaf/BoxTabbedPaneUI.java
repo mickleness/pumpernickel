@@ -69,6 +69,9 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import com.pump.awt.DescendantListener;
 import com.pump.awt.SplayedLayout;
 import com.pump.icon.button.MinimalDuoToneCloseIcon;
+import com.pump.plaf.button.QButtonUI;
+import com.pump.plaf.button.QButtonUI.HorizontalPosition;
+import com.pump.plaf.button.QButtonUI.VerticalPosition;
 import com.pump.swing.PartialLineBorder;
 
 /**
@@ -353,12 +356,14 @@ public class BoxTabbedPaneUI extends TabbedPaneUI {
 
 			if (!(tabContainer.getUI() instanceof TabButtonUI)) {
 				tabContainer.setUI(new TabButtonUI());
-				tabContainer.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
-						QButtonUI.MIDDLE);
-				tabContainer.putClientProperty(QButtonUI.VERTICAL_POSITION,
-						QButtonUI.MIDDLE);
-				tabContainer.putClientProperty(QButtonUI.STROKE_PAINTED,
-						Boolean.FALSE);
+				tabContainer.putClientProperty(
+						QButtonUI.PROPERTY_HORIZONTAL_POSITION,
+						HorizontalPosition.MIDDLE);
+				tabContainer.putClientProperty(
+						QButtonUI.PROPERTY_VERTICAL_POSITION,
+						VerticalPosition.MIDDLE);
+				tabContainer.putClientProperty(
+						QButtonUI.PROPERTY_STROKE_PAINTED, Boolean.FALSE);
 			}
 		}
 

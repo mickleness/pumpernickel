@@ -8,20 +8,21 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.plaf;
+package com.pump.plaf.button;
 
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Rectangle;
 
-import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
+import com.pump.plaf.PlafPaintUtils;
+
 /**
- * This resembles the "roundRect" button UI as originally seen in Mac OS 10.5, but the colors
- * are more subtle now to reflect the modern transition to more subtle UI's.
- * Apple no longer encourages the use of most custom button looks.
+ * This resembles the "roundRect" button UI as originally seen in Mac OS 10.5,
+ * but the colors are more subtle now to reflect the modern transition to more
+ * subtle UI's. Apple no longer encourages the use of most custom button looks.
  * <p>
  * <img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/RoundRectButtonUI.png"
@@ -34,8 +35,6 @@ import javax.swing.plaf.ComponentUI;
  * "a choice in limiting the scope of an operation, such as the buttons at the top of a Finder when searching."
  */
 public class RoundRectButtonUI extends QButtonUI {
-	public final static ButtonShape ROUNDRECT_SHAPE = new ButtonShape(8,
-			Short.MAX_VALUE);
 
 	/**
 	 * The <code>SimpleButtonFill</code> used to achieve the "RoundRect" look.
@@ -47,18 +46,13 @@ public class RoundRectButtonUI extends QButtonUI {
 		private Color[] normalColors = new Color[] { new Color(0xffFCFCFC),
 				new Color(0xffE7E7E7) };
 
-		private Color[] darkerColors = new Color[] { new Color(0xffC0C0C0),
+		private Color[] darkestColors = new Color[] { new Color(0xffC0C0C0),
 				new Color(0xffCaCaCa) };
 
 		@Override
-		public Paint getDarkerFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("roundRect.darker",
-					fillRect.height, fillRect.y, fillWeights, darkerColors);
-		}
-
-		@Override
 		public Paint getDarkestFill(Rectangle fillRect) {
-			return null;
+			return PlafPaintUtils.getVerticalGradient("roundRect.darker",
+					fillRect.height, fillRect.y, fillWeights, darkestColors);
 		}
 
 		@Override
@@ -68,12 +62,7 @@ public class RoundRectButtonUI extends QButtonUI {
 		}
 
 		@Override
-		public Paint getRolloverFill(Rectangle fillRect) {
-			return null;
-		}
-
-		@Override
-		public Paint getStroke(AbstractButton button, Rectangle fillRect) {
+		public Paint getStroke(ButtonState.Float state, Rectangle fillRect) {
 			return strokeColor;
 		}
 	};
@@ -93,21 +82,12 @@ public class RoundRectButtonUI extends QButtonUI {
 
 	/** Creates a RoundRectButtonUI with the preferred radius of 8 pixels. */
 	public RoundRectButtonUI() {
-		super(ROUNDRECT_FILL, ROUNDRECT_SHAPE);
+		this(8);
 	}
 
-	/**
-	 * Creates a RoundRectButtonUI.
-	 * 
-	 * @param preferredRadius
-	 *            the preferred radius (in pixels).
-	 */
-	public RoundRectButtonUI(int preferredRadius) {
-		super(ROUNDRECT_FILL, new ButtonShape(preferredRadius, Short.MAX_VALUE));
-	}
-
-	@Override
-	public boolean isFillOpaque() {
-		return true;
+	/** Creates a RoundRectButtonUI. */
+	public RoundRectButtonUI(int cornerRadius) {
+		setButtonFill(ROUNDRECT_FILL);
+		setCornerRadius(cornerRadius);
 	}
 };

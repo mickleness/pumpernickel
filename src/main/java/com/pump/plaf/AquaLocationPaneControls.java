@@ -26,6 +26,8 @@ import javax.swing.border.EmptyBorder;
 import com.pump.icon.ColumnIcon;
 import com.pump.icon.ListIcon;
 import com.pump.icon.TileIcon;
+import com.pump.plaf.button.BevelButtonUI;
+import com.pump.plaf.button.ButtonCluster;
 import com.pump.swing.TextFieldPrompt;
 import com.pump.swing.io.LocationBrowser;
 import com.pump.swing.io.LocationPane;
@@ -115,15 +117,10 @@ public class AquaLocationPaneControls extends JPanel {
 				.setVisible(LocationPane.getBoolean(paneUI.getLocationPane(),
 						KEY_SHOW_VIEW_CONTROLS, Boolean.TRUE));
 
-		BevelButtonUI shortBevel = new BevelButtonUI() {
-			@Override
-			protected int getPreferredHeight() {
-				return 0;
-			}
-		};
-		paneUI.upButton.setUI(shortBevel);
-		ButtonCluster.install(layoutButtons, shortBevel, true);
-		ButtonCluster.install(paneUI.navigationButtons, shortBevel, true);
+		BevelButtonUI buttonUI = new BevelButtonUI();
+		paneUI.upButton.setUI(buttonUI);
+		ButtonCluster.install(layoutButtons, buttonUI, true);
+		ButtonCluster.install(paneUI.navigationButtons, buttonUI, true);
 
 		paneUI.navigationButtons.setVisible(LocationPane.getBoolean(
 				paneUI.getLocationPane(), KEY_SHOW_FORWARD_BACKWARD_BUTTONS,

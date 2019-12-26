@@ -20,7 +20,7 @@ import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import com.pump.plaf.BevelButtonUI;
+import com.pump.plaf.button.BevelButtonUI;
 
 /**
  * Static methods to create navigation buttons. It is assumed these buttons will

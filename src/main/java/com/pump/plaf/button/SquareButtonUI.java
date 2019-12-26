@@ -8,20 +8,21 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.plaf;
+package com.pump.plaf.button;
 
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Rectangle;
 
-import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
+import com.pump.plaf.PlafPaintUtils;
+
 /**
- * This resembles the "square" button UI as originally seen in Mac OS 10.5, but the colors
- * are more subtle now to reflect the modern transition to more subtle UI's.
- * Apple no longer encourages the use of most custom button looks.
+ * This resembles the "square" button UI as originally seen in Mac OS 10.5, but
+ * the colors are more subtle now to reflect the modern transition to more
+ * subtle UI's. Apple no longer encourages the use of most custom button looks.
  * <p>
  * <img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/SquareButtonUI.png"
@@ -34,8 +35,6 @@ import javax.swing.plaf.ComponentUI;
  * "Buttons on a tool bar, or buttons smaller than a standard button".
  */
 public class SquareButtonUI extends QButtonUI {
-
-	public static final ButtonShape SQUARE_SHAPE = new ButtonShape(0, 0);
 
 	/**
 	 * The <code>SimpleButtonFill</code> used to achieve the "Square" look.
@@ -50,15 +49,6 @@ public class SquareButtonUI extends QButtonUI {
 		private Color[] darkestColors = new Color[] { new Color(0xFFB0B0B0),
 				new Color(0xFFB2B2B2), new Color(0xFFCBCBCB) };
 
-		private Color[] darkerColors = new Color[] { new Color(0xFFCACACA),
-				new Color(0xFFCCCCCC), new Color(0xFFDCDCDC) };
-
-		@Override
-		public Paint getDarkerFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("square.darker",
-					fillRect.height, fillRect.y, fillWeights, darkerColors);
-		}
-
 		@Override
 		public Paint getDarkestFill(Rectangle fillRect) {
 			return PlafPaintUtils.getVerticalGradient("square.darkest",
@@ -72,12 +62,7 @@ public class SquareButtonUI extends QButtonUI {
 		}
 
 		@Override
-		public Paint getRolloverFill(Rectangle fillRect) {
-			return null;
-		}
-
-		@Override
-		public Paint getStroke(AbstractButton button, Rectangle fillRect) {
+		public Paint getStroke(ButtonState.Float state, Rectangle fillRect) {
 			return strokeColor;
 		}
 	};
@@ -96,11 +81,7 @@ public class SquareButtonUI extends QButtonUI {
 	}
 
 	public SquareButtonUI() {
-		super(SQUARE_FILL, SQUARE_SHAPE);
-	}
-
-	@Override
-	public boolean isFillOpaque() {
-		return true;
+		setButtonFill(SQUARE_FILL);
+		setCornerRadius(0);
 	}
 };

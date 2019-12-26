@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JButton, QButtonUI Demo</title>
+</head>
+<body>
+
+This demo features JButton configuration options and new QButtonUI implementations.
+
+<h3>JButton Configuration</h3>
+
+If I want to make a traditional thumbnail button (with the text below the icon): how do I configure that button? This only comes up once every 2-3 years, which is just often enough for me to forget every time.
+<p>
+This demo lets me walk through how the key attributes JButtons alter its appearance so I can more easily identify which properties I need to change.
+
+<h3>Aqua Implementation</h3>
+
+If you're viewing this on Mac: the default ButtonUI is the AquaButtonUI. This demo shows off 3 special features of the AquaButtonUI:
+<ol><li>Button Type: Apple offers a few specific button types to choose from. There <a href="http://developer.apple.com/technotes/tn2007/tn2196.html#BUTTONS">used to be</a> more, and they used to have specific roles/usages. But now Apple has simpler guidelines, and for the most part they encourage you to just the default <a href="https://developer.apple.com/design/human-interface-guidelines/macos/buttons/push-buttons/">push button</a>.
+<li>Segment Position: If a button type supports segmented positions: then the demo includes three consecutive buttons "Left", "Middle", "Right". Segmented buttons are still often used in toolbars in Mac applications.
+<li>Size Variant: these help shrink buttons ("regular", "small", "mini"). I don't have any examples handy that demonstrate that Apple still encourages using this practice, though.</ol>
+
+<h3>QButtonUI</h3>
+
+This demo also includes five new UIs: BevelButtonUI, GradientButtonUI, RecessedButtonUI, RoundRectButtonUI, SquareButtonUI. These are all subclasses of the abstract QButtonUI class.
+<p>
+QButtonUI subclasses include the following options:
+<ol><li>Segment Positions: these are similar to Apple's implementation. QButtonUIs also include vertical segment positions, although this is not included in the demo. (Because, really, who needs vertically segmented buttons?)</li>
+<li>Paint Stroke: these buttons are mostly rendered using a call to <code>Graphics2D.fill(shape)</code> and a separate call to <code>Graphics2D.draw(shape)</code>. This client property toggles off the <code>Graphics2D.draw(..)</code> instruction. (The <code>AbstractButton.isContentAreaFilled()</code> method is used to toggle the <code>Graphics2D.fill(..)</code> instruction.)
+<li>Paint Focus: focus can be painted outside the button shape or inside the button shape. (And <code>AbstractButton.setFocusPainted(..) toggles the presence of a painted focus entirely.</code>)
+<li>Buttons can also be rendered as a circle. This option is intended to only be used for buttons with an icon and no text. For example: a help button or a play/pause button.
+<li>QButtonUIs can be converted to QComboBoxUIs so your JComboBoxes can match your JButtons in appearance. QComboBoxes include Apple's concept of being a "Pop-Up" button vs being a "Pull-Down" button.
+</ol>
+<p>
+There is no "size variant" option, but you can manually change the corner radius size and font size of buttons tweak the size.
+<p>
+QButtonUIs are vector-based, so they will change size to accommodate your UI.
+</body>
+</html>

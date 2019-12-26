@@ -8,13 +8,11 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.plaf;
+package com.pump.plaf.button;
 
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Rectangle;
-
-import javax.swing.AbstractButton;
 
 /**
  * Information for rendering a button's background and border.
@@ -30,11 +28,13 @@ public abstract class ButtonFill {
 	 * return a transparent color to "trick" the UI into giving an extra pixel
 	 * here, if desired.
 	 */
-	public abstract Color getShadowHighlight(AbstractButton button);
+	public abstract Color getShadowHighlight(ButtonState.Float buttonState);
 
 	/** Returns the current border for a button. */
-	public abstract Paint getStroke(AbstractButton button, Rectangle fillRect);
+	public abstract Paint getStroke(ButtonState.Float buttonState,
+			Rectangle fillRect);
 
 	/** Returns the current fill for a button. */
-	public abstract Paint getFill(AbstractButton button, Rectangle fillRect);
+	public abstract Paint getFill(ButtonState.Float buttonState,
+			Rectangle fillRect);
 }

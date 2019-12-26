@@ -28,7 +28,7 @@ import javax.swing.SwingConstants;
 import com.pump.icon.AndroidSwitchButtonIcon;
 import com.pump.icon.AquaSwitchButtonIcon;
 import com.pump.inspector.Inspector;
-import com.pump.plaf.SwitchButtonUI;
+import com.pump.plaf.button.SwitchButtonUI;
 import com.pump.swing.JSwitchButton;
 
 public class JSwitchButtonDemo extends ShowcaseExampleDemo {
@@ -68,8 +68,7 @@ public class JSwitchButtonDemo extends ShowcaseExampleDemo {
 		buttonA.setForeground(new Color(90, 90, 90));
 		buttonB.setForeground(new Color(90, 90, 90));
 
-		Inspector i = new Inspector(
-				configurationPanel);
+		Inspector i = new Inspector(configurationPanel);
 		i.addRow(new JLabel("Type:"), iconType);
 		i.addRow(new JLabel("State:"), enabledOn, enabledOff);
 

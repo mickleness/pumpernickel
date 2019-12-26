@@ -48,10 +48,14 @@ import javax.swing.event.ChangeListener;
 import com.pump.awt.DescendantListener;
 import com.pump.icon.RotatedIcon;
 import com.pump.icon.TriangleIcon;
-import com.pump.plaf.GradientButtonUI;
-import com.pump.plaf.QButtonUI;
 import com.pump.plaf.QPanelUI;
 import com.pump.plaf.UIEffect;
+import com.pump.plaf.button.ButtonState;
+import com.pump.plaf.button.GradientButtonUI;
+import com.pump.plaf.button.QButtonUI;
+import com.pump.plaf.button.QButtonUI.HorizontalPosition;
+import com.pump.plaf.button.QButtonUI.PaintFocus;
+import com.pump.plaf.button.QButtonUI.VerticalPosition;
 import com.pump.util.WeakSet;
 
 /**
@@ -593,35 +597,24 @@ public class CollapsibleContainer extends SectionContainer {
 	public static JButton createCollapsibleButton(String text,
 			boolean collapsible) {
 		final JButton button = new JButton();
-		QButtonUI ui = new GradientButtonUI() {
-			@Override
-			protected Insets getTextPadding() {
-				// TODO: make a customizable client property in QButtonUI
-				return new Insets(4, 4, 4, 4);
-			}
-
-			@Override
-			protected Insets getIconPadding() {
-				// TODO: make a customizable client property in QButtonUI
-				return new Insets(4, 7, 4, 6);
-			}
-		};
+		QButtonUI ui = new GradientButtonUI();
 		button.setContentAreaFilled(false);
 		button.setUI(ui);
-		button.putClientProperty(QButtonUI.STROKE_PAINTED, Boolean.FALSE);
+		button.putClientProperty(QButtonUI.PROPERTY_STROKE_PAINTED,
+				Boolean.FALSE);
 
 		button.setFont(UIManager.getFont("Label.font"));
 		button.setText(text);
-		button.putClientProperty(QButtonUI.HORIZONTAL_POSITION,
-				QButtonUI.MIDDLE);
+		button.putClientProperty(QButtonUI.PROPERTY_HORIZONTAL_POSITION,
+				HorizontalPosition.MIDDLE);
 
 		// TODO: the focus ring is 1 pixel off when the stroke is not painted.
 		// Setting the vertical position to middle helps hide this a little, but
 		// it's still a bug.
-		button.putClientProperty(QButtonUI.VERTICAL_POSITION, QButtonUI.MIDDLE);
+		button.putClientProperty(QButtonUI.PROPERTY_VERTICAL_POSITION,
+				VerticalPosition.MIDDLE);
 
-		button.putClientProperty(QButtonUI.PAINT_FOCUS_BEHAVIOR_KEY,
-				QButtonUI.PaintFocus.INSIDE);
+		ui.setPaintFocus(PaintFocus.INSIDE);
 		button.setHorizontalAlignment(SwingConstants.LEFT);
 		button.setIconTextGap(2);
 		button.addKeyListener(new KeyAdapter() {
@@ -651,7 +644,8 @@ public class CollapsibleContainer extends SectionContainer {
 		});
 
 		// this is always rendered as enabled, whether it is or not
-		button.putClientProperty(QButtonUI.ENABLED_STATE, Boolean.TRUE);
+		button.putClientProperty(QButtonUI.PROPERTY_BOOLEAN_BUTTON_STATE,
+				new ButtonState.Boolean(true, false, false, false, false));
 
 		button.addPropertyChangeListener(new PropertyChangeListener() {
 

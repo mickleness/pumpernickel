@@ -441,4 +441,12 @@ public class ShapeUtils {
 			return false;
 		return ctr > 0;
 	}
+
+	/**
+	 * Return true if a shape has no path data.
+	 */
+	public static boolean isEmpty(Shape shape) {
+		PathIterator i = shape.getPathIterator(null);
+		return i.isDone();
+	}
 }

@@ -46,8 +46,8 @@ import javax.swing.text.JTextComponent;
 import com.pump.blog.ResourceSample;
 import com.pump.icon.CloseIcon;
 import com.pump.icon.TriangleIcon;
-import com.pump.plaf.RoundRectButtonUI;
 import com.pump.plaf.RoundTextFieldUI;
+import com.pump.plaf.button.RoundRectButtonUI;
 
 /**
  * A row of controls similar to the search features in Safari and Firefox. By
@@ -265,13 +265,7 @@ public class TextSearchBar extends JPanel {
 
 		updateLayout();
 
-		setButtonUI(new RoundRectButtonUI(5) {
-			@Override
-			protected Insets getTextPadding() {
-				return new Insets(0, 0, 0, 0);
-			}
-		});
-
+		setButtonUI(new RoundRectButtonUI(5));
 		Font preferredFont = UIManager.getFont("ToolTip.font");
 		if (preferredFont != null)
 			setFont(preferredFont);

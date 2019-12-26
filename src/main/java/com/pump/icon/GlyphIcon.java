@@ -21,6 +21,7 @@ import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.util.Objects;
 
 import javax.swing.Icon;
 
@@ -145,7 +146,7 @@ public class GlyphIcon implements Icon {
 	}
 
 	int w, h;
-	final Color color;
+	Color color;
 	final Shape untransformedShape;
 
 	/**
@@ -170,7 +171,7 @@ public class GlyphIcon implements Icon {
 		Dimension d = getPreferredSize(maxSize, maxSize);
 		this.w = d.width;
 		this.h = d.height;
-		this.color = color;
+		setColor(color);
 	}
 
 	/**
@@ -230,6 +231,11 @@ public class GlyphIcon implements Icon {
 
 	public int getIconHeight() {
 		return h;
+	}
+
+	public void setColor(Color color) {
+		Objects.requireNonNull(color);
+		this.color = color;
 	}
 
 }

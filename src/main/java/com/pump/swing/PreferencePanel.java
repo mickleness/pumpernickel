@@ -55,7 +55,7 @@ import javax.swing.WindowConstants;
 import javax.swing.plaf.PanelUI;
 import javax.swing.plaf.SeparatorUI;
 
-import com.pump.plaf.BevelButtonUI;
+import com.pump.plaf.button.BevelButtonUI;
 import com.pump.window.WindowDragger;
 
 /**

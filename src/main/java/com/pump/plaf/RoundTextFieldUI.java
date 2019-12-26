@@ -33,6 +33,7 @@ import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
 
 import com.pump.icon.SearchIcon;
+import com.pump.plaf.button.ButtonShape;
 
 /**
  * A <code>TextFieldUI</code> that features rounded horizontal endpoints.
