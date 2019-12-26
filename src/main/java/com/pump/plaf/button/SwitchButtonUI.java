@@ -25,6 +25,7 @@ import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
 
 import com.pump.icon.AquaSwitchButtonIcon;
+import com.pump.icon.WindowsSwitchButtonIcon;
 import com.pump.util.JVM;
 
 public class SwitchButtonUI extends BasicRadioButtonUI {
@@ -83,7 +84,9 @@ public class SwitchButtonUI extends BasicRadioButtonUI {
 		String iconKey = getPropertyPrefix() + "icon";
 		Icon icon = UIManager.getIcon(iconKey);
 		if (icon == null) {
-			if (JVM.isMac) {
+			if (JVM.isWindows) {
+				icon = new WindowsSwitchButtonIcon();
+			} else if (JVM.isMac) {
 				icon = new AquaSwitchButtonIcon();
 			} else {
 				icon = new AquaSwitchButtonIcon();

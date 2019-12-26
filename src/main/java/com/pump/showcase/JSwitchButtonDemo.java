@@ -25,20 +25,21 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 
-import com.pump.icon.AndroidSwitchButtonIcon;
 import com.pump.icon.AquaSwitchButtonIcon;
+import com.pump.icon.WindowsSwitchButtonIcon;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.button.SwitchButtonUI;
 import com.pump.swing.JSwitchButton;
+import com.pump.util.JVM;
 
 public class JSwitchButtonDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	JSwitchButton buttonA = new JSwitchButton("NIGHT SHIFT");
+	JSwitchButton buttonA = new JSwitchButton("NIGHT SHIFT", true);
 	JSwitchButton buttonB = new JSwitchButton("DO NOT DISTURB");
 
 	JComboBox<String> iconType = new JComboBox<String>(new String[] { "Aqua",
-			"Android" });
+			"Windows" });
 	JRadioButton enabledOn = new JRadioButton("Enabled", true);
 	JRadioButton enabledOff = new JRadioButton("Disabled", false);
 
@@ -89,12 +90,22 @@ public class JSwitchButtonDemo extends ShowcaseExampleDemo {
 		g.add(enabledOn);
 		g.add(enabledOff);
 
+		if (JVM.isWindows)
+			iconType.setSelectedIndex(1);
+
 		refreshExample();
 	}
 
 	protected void refreshExample() {
-		Icon icon = iconType.getSelectedIndex() == 0 ? new AquaSwitchButtonIcon()
-				: new AndroidSwitchButtonIcon();
+		Icon icon;
+		switch (iconType.getSelectedIndex()) {
+		case 0:
+			icon = new AquaSwitchButtonIcon();
+			break;
+		default:
+			icon = new WindowsSwitchButtonIcon();
+			break;
+		}
 		for (JSwitchButton b : new JSwitchButton[] { buttonA, buttonB }) {
 			b.setIcon(icon);
 			b.setEnabled(enabledOn.isSelected());
