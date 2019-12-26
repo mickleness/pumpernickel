@@ -165,7 +165,7 @@ public class SubtleScrollBarUI extends BasicScrollBarUI {
 		boolean isActive = isRollover || isDragging || scrollbar.hasFocus();
 		int activeValue = isActive ? 1 : 0;
 		AnimationManager.setTargetProperty(scrollbar, PROPERTY_ACTIVE_NUMBER,
-				activeValue, 20, .2);
+				activeValue, .1f);
 	}
 
 	protected void refreshBorder() {
