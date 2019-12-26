@@ -477,6 +477,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("JEyeDropper", "JEyeDropperDemo");
 			addSection("JSwitchButton", "JSwitchButtonDemo");
 			addSection("JButton, QButtonUI", "JButtonDemo");
+			addSection("MixedCheckBoxState", "MixedCheckBoxStateDemo");
 
 		} catch (Exception e) {
 			e.printStackTrace();
