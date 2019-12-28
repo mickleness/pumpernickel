@@ -71,6 +71,11 @@ public class MixedCheckBoxStateDemo extends ShowcaseExampleDemo {
 	};
 
 	public MixedCheckBoxStateDemo() {
+		
+		lettuceCheckBox.setOpaque(false);
+		tomatoCheckBox.setOpaque(false);
+		mustardCheckBox.setOpaque(false);
+		allCheckBox.setOpaque(false);
 
 		configurationPanel.setVisible(false);
 		configurationLabel.setVisible(false);

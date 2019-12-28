@@ -44,6 +44,8 @@ public class MixedCheckBoxState {
 				return true;
 			}
 		};
+		normalCheckBox.setOpaque(false);
+		focusedCheckBox.setOpaque(false);
 		boolean[] booleanStates = new boolean[] { false, true };
 		int xMin = Integer.MAX_VALUE;
 		int yMin = Integer.MAX_VALUE;
