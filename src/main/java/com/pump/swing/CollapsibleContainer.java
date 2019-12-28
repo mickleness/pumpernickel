@@ -39,7 +39,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
-import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
@@ -48,6 +47,8 @@ import javax.swing.event.ChangeListener;
 import com.pump.awt.DescendantListener;
 import com.pump.icon.RotatedIcon;
 import com.pump.icon.TriangleIcon;
+import com.pump.plaf.AnimationManager;
+import com.pump.plaf.AnimationManager.Ticket;
 import com.pump.plaf.QPanelUI;
 import com.pump.plaf.UIEffect;
 import com.pump.plaf.button.ButtonState;
@@ -141,17 +142,26 @@ public class CollapsibleContainer extends SectionContainer {
 			.getName() + ".section";
 
 	/**
+	 * The duration in seconds for animating section heights
+	 */
+	private static float ANIMATION_DURATION = .2f;
+
+	/**
 	 * This contains the preferred layout of this container at a given instant.
 	 * This layout can be installed in one instant or incrementally (for
 	 * animation)
 	 */
-	class LayoutBlueprint {
+	class LayoutBlueprint extends AnimationManager.Adjuster<Float> {
+
 		List<JComponent> components = new ArrayList<JComponent>();
 		Map<JComponent, Integer> heightMap = new HashMap<JComponent, Integer>();
+		Map<JComponent, Integer> originalHeightMap = new HashMap<JComponent, Integer>();
 		Set<JComponent> visibleComponents = new HashSet<JComponent>();
+		boolean initialPermitLocked;
 
-		/** Calculate the current layout. */
-		protected void calculate() {
+		protected LayoutBlueprint(boolean initialPermitLocked) {
+			super(ANIMATION_DURATION, 1F);
+			this.initialPermitLocked = initialPermitLocked;
 			Insets insets = getInsets();
 			int height = getHeight() - insets.top - insets.bottom;
 
@@ -196,6 +206,7 @@ public class CollapsibleContainer extends SectionContainer {
 				} else {
 					heightMap.put(header, 0);
 				}
+				originalHeightMap.put(header, header.getHeight());
 
 				if (visibleComponents.contains(body) && n.floatValue() == 0) {
 					Dimension bodySize = body.getPreferredSize();
@@ -204,6 +215,7 @@ public class CollapsibleContainer extends SectionContainer {
 				} else {
 					heightMap.put(body, 0);
 				}
+				originalHeightMap.put(body, body.getHeight());
 			}
 
 			if (remainingHeight > 0 && totalVerticalWeight > 0) {
@@ -246,89 +258,89 @@ public class CollapsibleContainer extends SectionContainer {
 		}
 
 		protected void install() {
-			Insets insets = getInsets();
+			midanimation.acquireUninterruptibly();
+			try {
+				Insets insets = getInsets();
 
-			int x = insets.left;
-			int y = insets.top;
-			int width = getWidth() - insets.right - insets.left;
+				int x = insets.left;
+				int y = insets.top;
+				int width = getWidth() - insets.right - insets.left;
 
-			for (int a = 0; a < components.size(); a++) {
-				JComponent jc = components.get(a);
-				if (visibleComponents.contains(jc)) {
-					int h = heightMap.get(jc);
-					jc.setBounds(x, y, width, h);
-					jc.validate();
-					y += h;
-					jc.setVisible(true);
-				} else {
-					jc.setBounds(0, 0, 0, 0);
-					jc.setVisible(false);
+				for (int a = 0; a < components.size(); a++) {
+					JComponent jc = components.get(a);
+					if (visibleComponents.contains(jc)) {
+						int h = heightMap.get(jc);
+						jc.setBounds(x, y, width, h);
+						jc.validate();
+						y += h;
+						jc.setVisible(true);
+					} else {
+						jc.setBounds(0, 0, 0, 0);
+						jc.setVisible(false);
+					}
 				}
+			} finally {
+				midanimation.release();
 			}
 		}
 
-		/**
-		 * 
-		 * @return true if this is completely finished, false if more iterations
-		 *         are appropriate.
-		 */
-		protected boolean incrementalInstall() {
-			Insets insets = getInsets();
+		@Override
+		public void increment(Ticket ticket, double fraction) {
+			try {
+				Insets insets = getInsets();
 
-			int x = insets.left;
-			int y = insets.top;
-			int width = getWidth() - insets.right - insets.left;
+				int x = insets.left;
+				int y = insets.top;
+				int width = getWidth() - insets.right - insets.left;
 
-			boolean moreChanges = false;
-			boolean requiresValidation = false;
-			for (JComponent jc : components) {
-				if (visibleComponents.contains(jc)) {
-					if (!jc.isVisible()) {
-						jc.setSize(width, 0);
-						jc.setVisible(true);
-						requiresValidation = true;
-					}
-				}
-			}
-
-			for (int a = 0; a < components.size(); a++) {
-				JComponent jc = components.get(a);
-				int existingHeight = jc.getHeight();
-				int targetHeight = heightMap.get(jc);
-
-				int height;
-				if (existingHeight < targetHeight) {
-					height = Math.min(existingHeight + 5, targetHeight);
-				} else if (existingHeight > targetHeight) {
-					height = Math.max(existingHeight - 5, targetHeight);
-				} else {
-					height = existingHeight;
-				}
-
-				jc.setBounds(x, y, width, height);
-				jc.validate();
-				y += height;
-
-				if (height != targetHeight)
-					moreChanges = true;
-			}
-
-			if (!moreChanges) {
+				boolean moreChanges = false;
+				boolean requiresValidation = false;
 				for (JComponent jc : components) {
-					if (!visibleComponents.contains(jc)) {
-						if (jc.isVisible()) {
-							jc.setVisible(false);
+					if (visibleComponents.contains(jc)) {
+						if (!jc.isVisible()) {
+							jc.setSize(width, 0);
+							jc.setVisible(true);
 							requiresValidation = true;
 						}
 					}
 				}
-			}
 
-			if (requiresValidation) {
-				CollapsibleContainer.this.invalidate();
-				CollapsibleContainer.this.validate();
+				for (int a = 0; a < components.size(); a++) {
+					JComponent jc = components.get(a);
+					int originalHeight = originalHeightMap.get(jc);
+					int targetHeight = heightMap.get(jc);
+					int newHeight = (int) (targetHeight * (fraction)
+							+ originalHeight * (1 - fraction) + .5);
+					if (Math.abs(targetHeight - newHeight) <= 1)
+						newHeight = targetHeight;
+
+					jc.setBounds(x, y, width, newHeight);
+					jc.validate();
+					y += newHeight;
+
+					if (newHeight != targetHeight)
+						moreChanges = true;
+				}
+
+				if (!moreChanges) {
+					for (JComponent jc : components) {
+						if (!visibleComponents.contains(jc)) {
+							if (jc.isVisible()) {
+								jc.setVisible(false);
+								requiresValidation = true;
+							}
+						}
+					}
+				}
+
+				if (requiresValidation) {
+					CollapsibleContainer.this.invalidate();
+					CollapsibleContainer.this.validate();
+				}
+			} finally {
+				if (fraction >= 1 && initialPermitLocked)
+					midanimation.release();
 			}
-			return !moreChanges;
 		}
 	}
 
@@ -369,18 +381,10 @@ public class CollapsibleContainer extends SectionContainer {
 		}
 
 		public void layoutContainer(Container parent) {
+			if (midanimation.availablePermits() == 0)
+				return;
 
-			synchronized (animatingTimer) {
-				if (midanimation.availablePermits() == 0)
-					return;
-
-				if (animatingTimer.isRunning()) {
-					stopAnimation();
-				}
-			}
-
-			LayoutBlueprint blueprint = new LayoutBlueprint();
-			blueprint.calculate();
+			LayoutBlueprint blueprint = new LayoutBlueprint(false);
 			blueprint.install();
 		}
 	}
@@ -415,20 +419,6 @@ public class CollapsibleContainer extends SectionContainer {
 	};
 
 	public CollapsibleContainer() {
-		animatingTimer = new Timer(5, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				synchronized (animatingTimer) {
-					midanimation.acquireUninterruptibly();
-					try {
-						if (animatingBlueprint.incrementalInstall()) {
-							stopAnimation();
-						}
-					} finally {
-						midanimation.release();
-					}
-				}
-			}
-		});
 		setLayout(new CollapsibleLayout());
 		sections.addChangeListener(sectionListener, false);
 
@@ -502,14 +492,7 @@ public class CollapsibleContainer extends SectionContainer {
 	}
 
 	LayoutBlueprint animatingBlueprint;
-
 	protected Semaphore midanimation = new Semaphore(1);
-	Timer animatingTimer;
-
-	private void stopAnimation() {
-		animatingBlueprint = null;
-		animatingTimer.stop();
-	}
 
 	/** Return the header button associated with a Section. */
 	public JButton getHeader(final Section section) {
@@ -531,11 +514,14 @@ public class CollapsibleContainer extends SectionContainer {
 			header.addPropertyChangeListener(COLLAPSED,
 					new PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent evt) {
-							synchronized (animatingTimer) {
-								animatingBlueprint = new LayoutBlueprint();
-								animatingBlueprint.calculate();
-								animatingTimer.start();
-							}
+							midanimation.acquireUninterruptibly();
+							animatingBlueprint = new LayoutBlueprint(true);
+							String p = CollapsibleContainer.class.getName()
+									+ "#temp";
+							putClientProperty(p, 0f);
+							AnimationManager.setTargetProperty(
+									CollapsibleContainer.this, p,
+									animatingBlueprint);
 						}
 					});
 
