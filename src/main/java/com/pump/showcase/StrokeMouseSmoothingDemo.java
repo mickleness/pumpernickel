@@ -239,8 +239,8 @@ public class StrokeMouseSmoothingDemo extends ShowcaseExampleDemo {
 	JLabel crackSizeLabel = new JLabel("Crack Size:");
 	JLabel angleLabel = new JLabel("Angle:");
 	JSpinner widthSpinner = new JSpinner(new SpinnerNumberModel(5, .05, 20, 1));
-	JSlider crackSizeSlider = new JSlider(0, 100, 45);
-	JSlider thicknessSlider = new JSlider(0, 100, 45);
+	JSlider crackSizeSlider = new ShowcaseSlider(0, 100, 45);
+	JSlider thicknessSlider = new ShowcaseSlider(0, 100, 45);
 	JSlider angleSlider = new JSlider();
 	JComboBox<String> strokeTypeComboBox = new JComboBox<>();
 	JRadioButton smoothingOnButton = new JRadioButton("On", true);

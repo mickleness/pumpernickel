@@ -61,7 +61,7 @@ public class JToolTipDemo extends ShowcaseExampleDemo {
 	JLabel fontLabel = new JLabel("Font:");
 	JLabel fontSizeLabel = new JLabel("Font Size:");
 	FontComboBox fontComboBox = new FontComboBox();
-	JSlider fontSizeSlider = new JSlider(10, 20, 12);
+	JSlider fontSizeSlider = new ShowcaseSlider(10, 20, 12);
 	JLabel colorLabel = new JLabel("Color:");
 	JColorWell color = new JColorWell(Color.white);
 	JLabel calloutTypeLabel = new JLabel("Callout:");

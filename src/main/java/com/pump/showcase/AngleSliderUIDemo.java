@@ -43,10 +43,10 @@ public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	JComboBox<String> uiTypeComboBox = new JComboBox<>();
-	JSlider angleSlider = new JSlider();
+	JSlider angleSlider = new ShowcaseSlider();
 	JRadioButton stateEnabled = new JRadioButton("Enabled", true);
 	JRadioButton stateDisabled = new JRadioButton("Disabled", false);
-	JSlider sizeSlider = new JSlider(0, 100, 0);
+	JSlider sizeSlider = new ShowcaseSlider(0, 100, 0);
 
 	ActionListener actionListener = new ActionListener() {
 

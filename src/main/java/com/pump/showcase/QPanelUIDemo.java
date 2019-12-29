@@ -62,9 +62,9 @@ public class QPanelUIDemo extends ShowcaseExampleDemo {
 	JRadioButton orientationNone = new JRadioButton("None", true);
 	JRadioButton orientationVertical = new JRadioButton("Vertical", false);
 	JRadioButton orientationHorizontal = new JRadioButton("Horizontal", false);
-	JSlider cornerSize = new JSlider(0, 100, 10);
-	JSlider calloutSize = new JSlider(0, 20, 10);
-	JSlider shadowSize = new JSlider(0, 20, 5);
+	JSlider cornerSize = new ShowcaseSlider(0, 100, 10);
+	JSlider calloutSize = new ShowcaseSlider(0, 20, 10);
+	JSlider shadowSize = new ShowcaseSlider(0, 20, 5);
 	JComboBox<CalloutType> calloutTypeComboBox = new JComboBox<>();
 	boolean rolloverPreview = false;
 

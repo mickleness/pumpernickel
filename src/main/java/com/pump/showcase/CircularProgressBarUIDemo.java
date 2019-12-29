@@ -43,7 +43,7 @@ import com.pump.swing.JColorWell;
 public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	JSlider sizeSlider = new JSlider(10, 120, 90);
+	JSlider sizeSlider = new ShowcaseSlider(10, 120, 90);
 	JRadioButton indeterminateButton = new JRadioButton("Indeterminate", false);
 	JRadioButton determinateButton = new JRadioButton("Determinate", true);
 	JProgressBar progressBar = new JProgressBar(0, 100);
@@ -61,7 +61,7 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 	JCheckBox sparkCheckBox = new JCheckBox("Spark", true);
 	JCheckBox transitionCheckBox = new JCheckBox("Transition", true);
 	JCheckBox accelerateCheckBox = new JCheckBox("Accelerate", false);
-	JSlider strokeSlider = new JSlider(1, 50, 4);
+	JSlider strokeSlider = new ShowcaseSlider(1, 50, 4);
 	JCheckBox strokeCheckBox = new JCheckBox("Custom Stroke Width:");
 
 	ChangeListener sizeListener = new ChangeListener() {

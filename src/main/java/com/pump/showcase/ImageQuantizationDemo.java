@@ -63,6 +63,7 @@ import com.pump.inspector.Inspector;
 import com.pump.io.SuffixFilenameFilter;
 import com.pump.job.Job;
 import com.pump.job.JobManager;
+import com.pump.showcase.ShowcaseExampleDemo.ShowcaseSlider;
 import com.pump.swing.ThrobberManager;
 
 /**
@@ -139,7 +140,7 @@ public class ImageQuantizationDemo extends JPanel {
 			}
 		}
 	};
-	JSlider reductionSlider = new JSlider(2, 256);
+	JSlider reductionSlider = new ShowcaseSlider(2, 256);
 	JComboBox<String> reductionType = new JComboBox<String>();
 	JComboBox<ImageQuantization> quantizationType = new JComboBox<ImageQuantization>();
 	JLabel quantizationLabel = new JLabel("Quantization:");
