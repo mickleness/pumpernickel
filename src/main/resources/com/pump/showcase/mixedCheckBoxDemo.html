@@ -19,11 +19,9 @@ Personally I found this feature useful a while ago when working on a document ed
 <p>
 <h3>Implementation</h3>
 
-This implementation assigns a custom icon when the checkbox is in a mixed state. This custom icon is rendered on top of a snapshot of the original L&F's icon.
+This implementation assigns a custom icon that renders a tick on top of the original icon. This is simple enough for a BasicCheckBoxUI (which is what Windows uses), but it required some awkward hacks (reflection) to implement in Aqua on Macs.
 <p>
-This is a little crude. It doesn't currently show a rollover/armed state correctly. If you animate a rollover fill: this won't show that animation.
-<p>
-The advantage of this implementation is: it should work pretty well with your existing L&F. Another solution might be to use a new custom L&F that guarantees support for mixed states, but then your checkbox might not look as native as you'd like.
+(If anyone has any suggestions for an improved Aqua implementation: I'd love to hear them. Another solution might just be to force your JCheckBoxes to use a particular UI that you know is always a BasicCheckBoxUI. This is a less fragile/brittle approach, but your checkboxes may not look as native.
 
 <p>
 </body>
