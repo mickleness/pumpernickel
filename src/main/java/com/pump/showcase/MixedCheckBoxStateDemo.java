@@ -6,75 +6,18 @@ import java.awt.Insets;
 import java.net.URL;
 
 import javax.swing.JCheckBox;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
+import com.pump.plaf.button.MixedCheckBoxButtonGroup;
 import com.pump.plaf.button.MixedCheckBoxState;
 
 public class MixedCheckBoxStateDemo extends ShowcaseExampleDemo {
-
+	private static final long serialVersionUID = 1L;
+	
+	
 	JCheckBox allCheckBox = new JCheckBox("All condiments");
 	JCheckBox lettuceCheckBox = new JCheckBox("Lettuce");
 	JCheckBox tomatoCheckBox = new JCheckBox("Tomato", true);
 	JCheckBox mustardCheckBox = new JCheckBox("Mustard", true);
-
-	ChangeListener allListener = new ChangeListener() {
-		boolean wasSelected = allCheckBox.isSelected();
-
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			boolean isSelected = allCheckBox.isSelected();
-			if(wasSelected != isSelected) {
-				isSelected = wasSelected;
-				
-				lettuceCheckBox.removeChangeListener(individualListener);
-				tomatoCheckBox.removeChangeListener(individualListener);
-				mustardCheckBox.removeChangeListener(individualListener);
-				try {
-					if (allCheckBox.isSelected()) {
-						lettuceCheckBox.setSelected(true);
-						tomatoCheckBox.setSelected(true);
-						mustardCheckBox.setSelected(true);
-					} else {
-						lettuceCheckBox.setSelected(false);
-						tomatoCheckBox.setSelected(false);
-						mustardCheckBox.setSelected(false);
-						MixedCheckBoxState.setMixed(allCheckBox, false);
-					}
-				} finally {
-					lettuceCheckBox.addChangeListener(individualListener);
-					tomatoCheckBox.addChangeListener(individualListener);
-					mustardCheckBox.addChangeListener(individualListener);
-				}
-			}
-		}
-	};
-
-	ChangeListener individualListener = new ChangeListener() {
-
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			allCheckBox.removeChangeListener(allListener);
-			try {
-				int selected = 0;
-				if (lettuceCheckBox.isSelected())
-					selected++;
-				if (tomatoCheckBox.isSelected())
-					selected++;
-				if (mustardCheckBox.isSelected())
-					selected++;
-				if (selected == 3) {
-					allCheckBox.setSelected(true);
-				} else {
-					allCheckBox.setSelected(false);
-					MixedCheckBoxState.setMixed(allCheckBox, selected > 0);
-				}
-			} finally {
-				allCheckBox.addChangeListener(allListener);
-			}
-		}
-
-	};
 
 	public MixedCheckBoxStateDemo() {
 		
@@ -103,13 +46,9 @@ public class MixedCheckBoxStateDemo extends ShowcaseExampleDemo {
 		c.gridy++;
 		examplePanel.add(mustardCheckBox, c);
 
-		lettuceCheckBox.addChangeListener(individualListener);
-		tomatoCheckBox.addChangeListener(individualListener);
-		mustardCheckBox.addChangeListener(individualListener);
-
-		individualListener.stateChanged(null);
+		new MixedCheckBoxButtonGroup(allCheckBox, lettuceCheckBox, tomatoCheckBox, mustardCheckBox);
 	}
-
+	
 	@Override
 	public String getTitle() {
 		return "MixedCheckBoxState Demo";

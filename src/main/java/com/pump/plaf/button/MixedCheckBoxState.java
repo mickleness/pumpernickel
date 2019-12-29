@@ -1,160 +1,107 @@
 package com.pump.plaf.button;
 
 import java.awt.BasicStroke;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.SystemColor;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.geom.Line2D;
-import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import javax.swing.ImageIcon;
+import javax.swing.AbstractButton;
+import javax.swing.Icon;
 import javax.swing.JCheckBox;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.JComponent;
+import javax.swing.plaf.basic.BasicRadioButtonUI;
 
-import com.pump.image.ImageBounds;
-
+/**
+ * This controls the mixed state appearance of a JCheckBox.
+ */
 public class MixedCheckBoxState {
 	private static final String PROPERTY_MIXED = MixedCheckBoxState.class
 			.getName() + "#mixedActive";
 	private static final String PROPERTY_REGISTERED = MixedCheckBoxState.class
 			.getName() + "#registered";
-	private static Map<Object, BufferedImage> mixedStateIcons = new HashMap<>();
-	static {
-		JCheckBox normalCheckBox = new JCheckBox();
-		JCheckBox focusedCheckBox = new JCheckBox() {
-			@Override
-			public boolean hasFocus() {
-				return true;
-			}
 
-			@Override
-			public boolean isFocusOwner() {
-				return true;
-			}
-		};
-		normalCheckBox.setOpaque(false);
-		focusedCheckBox.setOpaque(false);
-		boolean[] booleanStates = new boolean[] { false, true };
-		int xMin = Integer.MAX_VALUE;
-		int yMin = Integer.MAX_VALUE;
-		int xMax = -1;
-		int yMax = -1;
-		for (boolean armed : booleanStates) {
-			for (boolean rollover : booleanStates) {
-				for (boolean pressed : booleanStates) {
-					for (boolean enabled : booleanStates) {
-						for (boolean focused : booleanStates) {
-							JCheckBox b = focused ? focusedCheckBox
-									: normalCheckBox;
-							b.getModel().setArmed(armed);
-							b.getModel().setRollover(rollover);
-							b.getModel().setPressed(pressed);
-							b.setEnabled(enabled);
-							Dimension d = b.getPreferredSize();
-							BufferedImage bi = new BufferedImage(d.width,
-									d.height, BufferedImage.TYPE_INT_ARGB);
-							b.setSize(d);
-							Graphics2D g = bi.createGraphics();
-							b.paint(g);
-							g.dispose();
-							Rectangle r = ImageBounds.getBounds(bi, 10);
-							xMin = Math.min(xMin, r.x);
-							yMin = Math.min(yMin, r.y);
-							xMax = Math.max(xMax, r.x + r.width);
-							yMax = Math.max(yMax, r.y + r.height);
-							ButtonState.Boolean state = new ButtonState.Boolean(
-									enabled, false, pressed, armed, rollover);
-							Object key = Arrays.asList(state, focused);
-							mixedStateIcons.put(key, bi);
-						}
-					}
+	/**
+	 * This renders a diagonal tick on an existing icon.
+	 */
+	static class TickIcon implements Icon {
+		Icon parentIcon;
+
+		TickIcon(Icon parentIcon) {
+			this.parentIcon = parentIcon;
+		}
+		
+		@Override
+		public void paintIcon(Component c, Graphics g, int x, int y) {
+			Graphics g2 = g.create();
+			parentIcon.paintIcon(c, g2, x, y);
+			g2.dispose();
+			
+			if(c instanceof JComponent) {
+				JComponent jc = (JComponent) c;
+				boolean paintTick = Boolean.TRUE.equals(jc.getClientProperty(PROPERTY_MIXED));
+				if(jc instanceof AbstractButton && ((AbstractButton)jc).isSelected())
+					paintTick = false;
+				if(paintTick) {
+					paintTick(g, x, y, getIconWidth(), getIconHeight());
 				}
 			}
 		}
-		for (Entry<Object, BufferedImage> entry : mixedStateIcons.entrySet()) {
-			BufferedImage bi = entry.getValue();
-			bi = bi.getSubimage(xMin, yMin, xMax - xMin, yMax - yMin);
-			Graphics2D g = bi.createGraphics();
-			g.setColor(SystemColor.controlHighlight);
-			g.setStroke(new BasicStroke(2.1f));
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
-			g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
-					RenderingHints.VALUE_STROKE_PURE);
-			int w = bi.getWidth();
-			int h = bi.getHeight();
-			int k = Math.min(w, h) / 5;
-			g.draw(new Line2D.Float(w / 2 - k, h / 2 - k, w / 2 + k, h / 2 + k));
-			g.dispose();
-			entry.setValue(bi);
+
+		@Override
+		public int getIconWidth() {
+			return parentIcon.getIconWidth();
 		}
-	}
+
+		@Override
+		public int getIconHeight() {
+			return parentIcon.getIconHeight();
+		}
+		
+	};
+	
 
 	private static void register(final JCheckBox checkBox) {
 		if (checkBox.getClientProperty(PROPERTY_REGISTERED) == null) {
 			checkBox.putClientProperty(PROPERTY_REGISTERED, true);
-			checkBox.addPropertyChangeListener(PROPERTY_MIXED,
-					new PropertyChangeListener() {
-						@Override
-						public void propertyChange(PropertyChangeEvent evt) {
-							refreshMixedStateIcon(checkBox);
-						}
-					});
-			checkBox.getModel().addChangeListener(new ChangeListener() {
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					refreshMixedStateIcon(checkBox);
-				}
-			});
-			checkBox.addFocusListener(new FocusListener() {
-				@Override
-				public void focusGained(FocusEvent e) {
-					refreshMixedStateIcon(checkBox);
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					refreshMixedStateIcon(checkBox);
-				}
-			});
-		}
-	}
-
-	private static void refreshMixedStateIcon(JCheckBox b) {
-		Font oldFont = b.getFont();
-		try {
-			if (isMixedState(b)) {
-				ButtonState.Boolean state = new ButtonState.Boolean(
-						b.getModel());
-				Object key = Arrays.asList(state, b.isFocusOwner());
-				BufferedImage bi = mixedStateIcons.get(key);
-				b.setIcon(new ImageIcon(bi));
-			} else {
-				b.setIcon(null);
+			if(checkBox.getUI() instanceof BasicRadioButtonUI) {
+				BasicRadioButtonUI ui = (BasicRadioButtonUI) checkBox.getUI();
+				Icon defaultIcon = ui.getDefaultIcon();
+				TickIcon tickIcon = new TickIcon(defaultIcon);
+				checkBox.setIcon(tickIcon);
 			}
-		} finally {
-			b.setFont(oldFont);
 		}
 	}
 
+	protected static void paintTick(Graphics g, int x, int y, int w, int h) {
+		Graphics2D g2 = (Graphics2D) g.create();
+		g2.setColor(SystemColor.controlDkShadow);
+		g2.setStroke(new BasicStroke(2.1f));
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
+				RenderingHints.VALUE_STROKE_PURE);
+		int k = Math.min(w, h) / 5;
+		int cx = x + w / 2;
+		int cy = y + h / 2;
+		g2.draw(new Line2D.Float(cx - k, cy - k, cx + k + 1, cy + k + 1));
+		g2.dispose();
+	}
+
+	/**
+	 * Return true if a checkbox has a mixed state value assigned.
+	 */
 	public static boolean isMixedState(JCheckBox checkBox) {
-		if (checkBox.isSelected())
-			return false;
+		register(checkBox);
 		return Boolean.TRUE.equals(checkBox.getClientProperty(PROPERTY_MIXED));
 	}
 
+	/**
+	 * Assign a mixed state icon to a JCheckBox. This icon is rendered on top of an unselected checkbox icon.
+	 * @return true if a change occurred, false otherwise.
+	 */
 	public static boolean setMixed(JCheckBox checkBox, boolean mixedState) {
 		register(checkBox);
 		if (mixedState) {
@@ -174,6 +121,7 @@ public class MixedCheckBoxState {
 				checkBox.putClientProperty(PROPERTY_MIXED, null);
 			}
 		}
+		checkBox.repaint();
 		return true;
 	}
 }
