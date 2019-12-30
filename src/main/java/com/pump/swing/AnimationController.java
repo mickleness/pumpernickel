@@ -103,6 +103,7 @@ public class AnimationController extends JPanel {
 			c.gridx++;
 			container.add(buttons[a], c);
 			buttons[a].setOpaque(false);
+			buttons[a].setContentAreaFilled(false);
 			buttons[a].setRolloverIcon(new DarkenedIcon(buttons[a], .5f));
 			buttons[a].setPressedIcon(new DarkenedIcon(buttons[a], .75f));
 			buttons[a].setBorder(new PartialLineBorder(Color.gray, new Insets(
@@ -114,6 +115,7 @@ public class AnimationController extends JPanel {
 		container.add(slider, c);
 
 		togglePlayButton.setOpaque(false);
+		togglePlayButton.setContentAreaFilled(false);
 		togglePlayButton.setBorder(new LineBorder(Color.gray));
 		slider.setOpaque(false);
 		slider.setBorder(new PartialLineBorder(Color.gray, new Insets(1, 0, 1,
