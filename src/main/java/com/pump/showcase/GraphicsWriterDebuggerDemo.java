@@ -73,7 +73,7 @@ public class GraphicsWriterDebuggerDemo extends ShowcaseDemo {
 		layout.addRow(new JLabel("Shortcut:"), keyCodeComboBox);
 
 		GridBagConstraints c = new GridBagConstraints();
-		c.insets = new Insets(10, 10, 10, 10);
+		c.insets = new Insets(0,0,0,0);
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weighty = 0;
