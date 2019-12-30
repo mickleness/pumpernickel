@@ -466,6 +466,8 @@ public abstract class QButtonUI extends BasicButtonUI implements
 				i.bottom += interior;
 			}
 
+			// TODO: maybe rethink how we suport margins? Instead of setting it once
+			// in installUI, we could update it with the "interior" calculations above
 			Insets margin = button == null ? null : button.getMargin();
 			if (margin != null) {
 				i.top += margin.top;
@@ -635,6 +637,7 @@ public abstract class QButtonUI extends BasicButtonUI implements
 		button.setRolloverEnabled(true);
 		buttons.add(button);
 		button.setOpaque(false);
+		button.setMargin(new Insets(0,4,0,4));
 	}
 
 	@Override
