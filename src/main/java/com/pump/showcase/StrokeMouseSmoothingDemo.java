@@ -179,6 +179,7 @@ public class StrokeMouseSmoothingDemo extends ShowcaseExampleDemo {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					shapes.clear();
+					inputs.clear();
 					refreshDrawingPanel();
 				}
 
