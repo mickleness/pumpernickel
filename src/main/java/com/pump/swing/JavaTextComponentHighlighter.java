@@ -83,7 +83,7 @@ public class JavaTextComponentHighlighter extends TokenTextComponentHighlighter 
 			Color errorColor = new Color(200, 0, 25);
 
 			defaultAttributes = new SimpleAttributeSet();
-			StyleConstants.setFontFamily(defaultAttributes, "Courier");
+			StyleConstants.setFontFamily(defaultAttributes, "Monospaced");
 			StyleConstants.setFontSize(defaultAttributes, 14);
 
 			keywordAttributes = new SimpleAttributeSet(defaultAttributes);
