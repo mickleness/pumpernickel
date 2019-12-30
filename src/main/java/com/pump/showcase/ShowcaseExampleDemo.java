@@ -23,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToolTip;
+import javax.swing.UIManager;
 
 import com.pump.graphics.GraphicInstruction;
 import com.pump.graphics.GraphicsWriter;
@@ -105,8 +106,7 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 
 		layoutComponents();
 
-		Font font = exampleLabel.getFont();
-		font = font.deriveFont(font.getSize2D() * 6 / 5);
+		Font font = getHeaderLabelFont();
 		exampleLabel.setFont(font);
 		configurationLabel.setFont(font);
 
@@ -123,6 +123,12 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 
 		exampleLabel.setLabelFor(examplePanel);
 		configurationLabel.setLabelFor(configurationPanel);
+	}
+
+	static Font getHeaderLabelFont() {
+		Font font = UIManager.getFont("Label.font");
+		font = font.deriveFont(font.getSize2D() * 6 / 5);
+		return font;
 	}
 
 	private void layoutComponents() {

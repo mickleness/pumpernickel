@@ -960,6 +960,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 			section.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);
 			collapsibleContainer.getHeader(section).putClientProperty(
 					CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
+			collapsibleContainer.getHeader(section).setBorder(new EmptyBorder(3,2,3,2));
+			collapsibleContainer.getHeader(section).setFont(ShowcaseExampleDemo.getHeaderLabelFont());
 		}
 	}
 }
