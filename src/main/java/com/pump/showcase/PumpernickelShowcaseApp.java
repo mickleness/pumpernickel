@@ -102,13 +102,19 @@ import com.pump.util.JVM;
 import com.pump.window.WindowDragger;
 import com.pump.window.WindowMenu;
 
+/**
+ * This app shows off some (but by no means all) of the neat stuff in the
+ * Pumpernickel codebase.
+ */
 public class PumpernickelShowcaseApp extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final String VERSION = "1.02";
+
 	public static void main(String[] args) throws IOException {
 		DesktopApplication app = new DesktopApplication("com.pump.showcase",
-				"Pumpernickel Showcase", "1.02", "jeremy.wood@mac.com");
+				"Pumpernickel Showcase", VERSION, "jeremy.wood@mac.com");
 		app.setFrameClass(PumpernickelShowcaseApp.class);
 		app.setCopyright(2018, "Jeremy Wood");
 		app.setURL(new URL("https://mickleness.github.io/pumpernickel/"));
