@@ -147,6 +147,12 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 		group.add(useShapes);
 
 		preview.setBorder(new LineBorder(Color.gray));
+		
+		alpha.setToolTipText("The alpha of the operation.");
+		srcAlpha.setToolTipText("The alpha of the source shape/image.");
+		dstAlpha.setToolTipText("The alpha of the dest shape/image.");
+		useShapes.setToolTipText("Draw one shape on top of another.");
+		useShapes.setToolTipText("Draw one image on top of another.");
 	}
 
 	class CompositePreview extends JPanel {

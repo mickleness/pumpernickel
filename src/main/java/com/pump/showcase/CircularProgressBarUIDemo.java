@@ -275,6 +275,11 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 		// effectsListener.actionPerformed(null);
 
 		progressSpinner.addChangeListener(spinnerListener);
+		
+		pulseCheckBox.setToolTipText("Pulse the width of the arc on completion.");
+		sparkCheckBox.setToolTipText("Trace a a small highlight after a few seconds of inactivity.");
+		accelerateCheckBox.setToolTipText("Render an arc that appears to accelerate.");
+		transitionCheckBox.setToolTipText("Always animate to new values.");
 	}
 
 	@Override
