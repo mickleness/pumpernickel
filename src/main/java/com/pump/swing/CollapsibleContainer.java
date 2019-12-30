@@ -586,6 +586,8 @@ public class CollapsibleContainer extends SectionContainer {
 		QButtonUI ui = new GradientButtonUI();
 		button.setContentAreaFilled(false);
 		button.setUI(ui);
+		button.setRequestFocusEnabled(false);
+		button.setMargin(new Insets(0,0,0,0));
 		button.putClientProperty(QButtonUI.PROPERTY_STROKE_PAINTED,
 				Boolean.FALSE);
 
