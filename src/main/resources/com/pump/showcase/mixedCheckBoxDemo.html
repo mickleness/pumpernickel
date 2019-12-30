@@ -4,7 +4,7 @@
 <title>Mixed CheckBox State Demo</title>
 </head>
 <body>
-This features a simple demo a mixed-state indicator for JCheckBoxes.
+This demos a mixed-state indicator for JCheckBoxes.
 <h3>Context</h3>
 <p>
 Checkboxes traditionally have two states. But sometimes you need a mixed state (or tri-state) option when multiple elements are being represented.
@@ -15,13 +15,13 @@ This example is from a <a href="https://w3c.github.io/aria-practices/examples/ch
 Apple's <a href="https://developer.apple.com/design/human-interface-guidelines/macos/buttons/checkboxes/">guidelines</a> similarly say:
 <blockquote>Use a mixed state when it makes sense. A checkbox should accurately reflect its state. If a checkbox is used to globally enable and disable multiple child checkboxes, it should show a mixed state—reflected by a dash—when those children are not all in the same state.</blockquote>
 <p>
-Personally I found this feature useful a while ago when working on a document editor that supported selecting multiple objects at once. Imagine an inspector with a checkbox to toggle a shadow on/off. What should happen when you have two images selected -- one with a checkbox and one without? For this use case I'd also argue that we should include mixed states in nearly all controls. (How do we communicate with a radio button, spinner or combobox that multiple values are represented?)
+Personally I found this feature useful a while ago when working on a document editor that supported selecting multiple objects at once. Imagine an inspector with a checkbox to toggle a shadow on/off. What should happen when you have two images selected -- one with a shadow and one without? For this use case I'd also argue that we should include mixed states in nearly all controls. (How do we communicate with a radio button, spinner or combobox that multiple values are represented?)
 <p>
 <h3>Implementation</h3>
 
 This implementation assigns a custom icon that renders a tick on top of the original icon. This is simple enough for a BasicCheckBoxUI (which is what Windows uses), but it required some awkward hacks (reflection) to implement in Aqua on Macs.
 <p>
-(If anyone has any suggestions for an improved Aqua implementation: I'd love to hear them. Another solution might just be to force your JCheckBoxes to use a particular UI that you know is always a BasicCheckBoxUI. This is a less fragile/brittle approach, but your checkboxes may not look as native.
+(If anyone has any suggestions for an improved Aqua implementation: I'd love to hear them. Another solution might just be to force your JCheckBoxes to use a particular UI that you know is always a BasicCheckBoxUI. This is a less fragile/brittle approach, but your checkboxes may not look as native...)
 
 <p>
 </body>

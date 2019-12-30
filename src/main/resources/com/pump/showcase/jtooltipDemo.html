@@ -11,27 +11,27 @@ From a usability standpoint, Swing tooltips have always irked me. They seemed fi
 <p>
 Another recent annoyance has come up through some other work: on Mac the VoiceOver feature likes <a href="https://www.applevis.com/comment/85369">to announce every new window</a> that's shown. (It chants, "java has new window, java has new window, java has new window". Does it actually read the text in the new window? No. Not unless you mouse over it, and of course you can't mouse over a tooltip or it will disappear...)
 <p>
-<h4>Implementation</h4>
+<h3>Implementation</h3>
 <p>
 Surprisingly the new tooltips presented here don't involve changing/extending the <code>JToolTip</code> or the <code>ToolTipUI</code> at all. We just need a new <code>javax.swing.PopupFactory</code>. The <code>QPopupFactory</code> offers two perks over the original model:
 <ul><li>It uses a <code><a href="resource:QPanelUI">QPanelUI</a></code> with a callout when possible. This means the tooltips appear in a (mostly) consistent position all the time, and that position won't overlap the component itself.
 <li>When possible it places tooltips in a <code>JLayeredPane</code> and avoids creating a new window. This quells the VoiceOver chatter. (And although that's the only known side-effect I want to avoid right now: I like the idea of keeping my window creation low.)</ul>
 <p>
-There are some caveats, though. By default we will try all possible callout positions and we will prefer to use a callout that lets us keep the tooltip in the <code>JLayeredPane</code> instead of in a new <code>Window</code>. So by default if you don't customize anything: the majority of your tooltips will be centered below the component they describe, but when that would spill out over the <code>JFrame</code> edge: a different callout position is used if possible. (Windows are used as a last resort.) If the idea of having different tooltips positioned differently feels off to you: remember every webpage that implements custom tooltips either does this (so their tooltips stay in the page), or they layout their page in a way that it's impossible to run out of space in certain dimensions. In my experience how a tooltip is oriented is a pretty trivial detail that users adjust to very quickly.
+There are some caveats, though. By default we will try all possible callout positions and we will prefer to use a callout that lets us keep the tooltip in the <code>JLayeredPane</code> instead of in a new <code>Window</code>. So by default if you don't customize anything: the majority of your tooltips will be centered below the component they describe, but when that would spill out over the <code>JFrame</code> edge: a different callout position is used if possible. (New windows are used only as a last resort.) If the idea of having different tooltips positioned differently feels off to you: remember every webpage that implements custom tooltips either does this (so their tooltips stay in the page), or they layout their page in a way that it's impossible to run out of space in certain dimensions. In my experience how a tooltip is oriented is a pretty trivial detail that users adjust to very quickly.
 <p>
 You can override this behavior by setting the client property <code>QPopup.PROPERTY_CALLOUT_TYPE</code> to your preferred CalloutType(s). This limits the callouts that are consulted.
 <p>
 At the end of the day, though, these are still <code>JToolTips</code>. They appear and disappear based on the logic of your local <code>ToolTipManager</code>. If you want more granular control over how tips are used, consider using a <a href="resource:jpopover">JPopover</a>.
-<h4>Context</h4>
+<h3>Context</h3>
 <p>
 Where to begin. Checkboxes, windows, tabs and other UI components have (by luck) mostly standardized over the years. Tooltips are much less uniform. If you google "tooltips ux" or "tooltips guidelines" you'll get dozens of insightful articles (like <a href="https://uxplanet.org/tooltips-in-ui-design-f63e117aa3d1">this one</a>), but I didn't find one that did a really thorough contemporary inventory of what different guidelines are saying. Here's my attempt to summarize different sources:
-<h5>Microsoft</h5>
+<h4>Microsoft</h4>
 <p>
 <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dn742443(v=vs.85).aspx">Microsoft says</a> that a <em>tooltip</em> is "a small pop-up window that labels the unlabeled control", but an <em>infotip</em> can apply to a labeled control. Collectively these are both "tips". So in Swing parlance: the <code>javax.swing.JToolTip</code> is technically an "infotip", or simply a "tip", because it can be applied to labeled and unlabeled components alike. (Fun historical note: Microsoft also pushed the concept of a "<a href="https://support.office.com/en-us/article/show-or-hide-screentips-72d92d6a-6d2a-40fd-9ac2-fb9413ffce18">screentip</a>" for a while.)
 <p>
 But there's also a <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dn742400(v=vs.85).aspx">balloon</a>. A balloon "informs users of a non-critical problem or special condition in a control." It should generally include some or all of the following components: a warning icon, a title, and a descriptive body. (This looks very similar to the <a href="resource:QDialog">QDialog</a>.)
 <p>
-<h5>Google Material</h5>
+<h4>Google Material</h4>
 <p>
 <a href="https://material.io/design/components/tooltips.html#">Google</a> says simply, "Tooltips display informative text when users hover over, focus on, or tap an element."
 <p>
@@ -39,7 +39,7 @@ Right away we see a problem: Swing tooltips only cover the first of those three 
 <p>
 Here Google outlines a much narrower interpretation of a tooltip (with very specific/helpful examples!). Mostly they want to use tooltips to label icon buttons, or provide very succinct contextual labels for other components.
 <p>
-<h5>Apple</h5>
+<h4>Apple</h4>
 <p>
 <a href="https://developer.apple.com/macos/human-interface-guidelines/user-interaction/help/">Apple</a> wants to identify "tooltips" as "help tags". Their interpretation also appears a little more reserved than Microsoft's, but they talk about sentence fragments and their chosen examples seem a little more wordy than Google's.
 <p>
@@ -47,16 +47,16 @@ But they offer something else, too: a <a href="https://developer.apple.com/macos
 <p>
 (I'm tempted to say Apple's use of <a href="https://en.wikipedia.org/wiki/Balloon_help">balloon help</a> back in 1991 helped inform what we now think of as "tooltips"? I could be mistaken, though.)
 <p>
-<h5>Webpages</h5>
+<h4>Webpages</h4>
 <p>
 HTML now has <a href="https://www.w3schools.com/css/css_tooltip.asp">tooltips built-in to CSS</a>, but there's also the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title">"title" attribute</a> (not tag) which often functions as a tooltip too.
 <p>
 But of course web developers have been liberally reinventing metaphors for years now. <a href="https://www.appcues.com/blog/tooltips">Here</a> is a page about tooltips that features examples of tooltips that include close buttons. (I guess the idea being the tooltip stays visible until you close it? I think this is mostly championed as a subtle way to point out new features or on-boarding.) Similar to Apple's popovers: this is a tooltip you're supposed to interact with.
-<h5>Accessibility</h5>
+<h3>Accessibility</h3>
 <p>
 Many links referenced above have specific discussions about accessibility. As far as Swing's <code>JToolTips</code> are concerned: remember you cannot mouse over a tooltip, so that means assistive technologies (like screen readers) won't detect it. As a rule of thumb: tooltips should be non-essential text. If text becomes essential (such as a description of a button that has an icon but no text), then you may also want to call <code>myComponent.getAccessibleContext().setDescription(str)</code> to make sure the user can access that text.
 <p>
-<h5>Conclusion</h5>
+<h3>Conclusion</h3>
 <p>
 My goal here is just to communicate how many different interpretations there are of the word "tip". Having such mixed/varied usages may actually serve to your advantage: users are used to a wide variety of tooltips. Facebook and Pinterest and Youtube all have subtly different designs. As long as what you do is non-intrusive, helpful and consistent: users probably will only find your tooltips helpful.
 

@@ -4,13 +4,13 @@
 <title>JPEGMetaData Demo</title>
 </head>
 <body>
-
-The request was simple enough: the user needs to be able to browser a folder of images. Most of the time these images would be JPEGs from a high-resolution camera, so they would be over a thousand pixels in each dimension.
+This demos the JPEGMetaData class, which is more efficient at producing thumbnails from JPEGs than some other approaches.
+<h3>First Draft</h3>
+The original customer request was simple enough: the user wanted to be able to browse a folder of images. Most of the time these images would be JPEGs from a high-resolution camera, so they would be over a thousand pixels in each dimension.
 <p>
-The first implementation we drafted was as straight-forward as possible: render the image, then scale it to a thumbnail. But as you can imagine this was painfully slow for users with thousands of photos. And users knew to expect better; they could easily point to other apps that breezed through thumbnails in seconds. So we were shamed into figuring out a better solution.
-<p>
-<h3>Context</h3>
-<p>... but: surprise! Getting those thumbnails wasn't so easy. I tried googling how to use ImageIO to read thumbnails. The <a href="http://java.sun.com/j2se/1.5.0/docs/guide/imageio/spec/apps.fm3.html">first link</a> I found was from Sun, and it said:<br />
+Our first implementation was as straight-forward as possible: render the image, then scale it to a thumbnail. But as you can imagine this was painfully slow for users with thousands of photos. When the customer compared this implementation to other apps: we were quickly shamed into figuring out a better solution.
+<h3>Second Draft</h3>
+We knew those file included an embedded thumbnail for just this purpose. But ... surprise! Getting those thumbnails wasn't easy. I tried googling how to use ImageIO to read thumbnails. The <a href="http://java.sun.com/j2se/1.5.0/docs/guide/imageio/spec/apps.fm3.html">first link</a> I found was from Sun, and it said:<br />
 <blockquote>
 <b>3.3.4  Reading "Thumbnail" Images</b><br />
 <br />

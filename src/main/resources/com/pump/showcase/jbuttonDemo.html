@@ -27,13 +27,13 @@ This demo also includes five new UIs: BevelButtonUI, GradientButtonUI, RecessedB
 QButtonUI subclasses include the following options:
 <ol><li>Segment Positions: these are similar to Apple's implementation. QButtonUIs also include vertical segment positions, although this is not included in the demo. (Because, really, who needs vertically segmented buttons?)</li>
 <li>Paint Stroke: these buttons are mostly rendered using a call to <code>Graphics2D.fill(shape)</code> and a separate call to <code>Graphics2D.draw(shape)</code>. This client property toggles off the <code>Graphics2D.draw(..)</code> instruction. (The <code>AbstractButton.isContentAreaFilled()</code> method is used to toggle the <code>Graphics2D.fill(..)</code> instruction.)
-<li>Paint Focus: focus can be painted outside the button shape or inside the button shape. (And <code>AbstractButton.setFocusPainted(..) toggles the presence of a painted focus entirely.</code>)
+<li>Paint Focus: focus can be painted outside the button shape or inside the button shape. (And <code>AbstractButton.setFocusPainted(..)</code> toggles the presence of a painted focus entirely.)
 <li>Buttons can also be rendered as a circle. This option is intended to only be used for buttons with an icon and no text. For example: a help button or a play/pause button.
 <li>QButtonUIs can be converted to QComboBoxUIs so your JComboBoxes can match your JButtons in appearance. QComboBoxes include Apple's concept of being a "Pop-Up" button vs being a "Pull-Down" button.
 </ol>
 <p>
 There is no "size variant" option, but you can manually change the corner radius size and font size of buttons tweak the size.
 <p>
-QButtonUIs are vector-based, so they will change size to accommodate your UI.
+QButtonUIs are vector-based, so if you change their size manually they will adapt reasonably well.
 </body>
 </html>

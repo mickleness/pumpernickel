@@ -25,7 +25,7 @@ public interface NavigationListener<T> {
 	public boolean elementsSelected(ListSelectionType type, T... elements);
 }</pre>
 <p>
-This is not currently designed to interact with <code>AccessibleContexts</code>. So although the labels will be picked up naturally by any assistive technology, if you've added <code>NavigationListeneres</code> to interact with those labels those won't interface with assistive technology.
+This is not currently designed to interact with <code>AccessibleContexts</code>. So although the labels will be picked up naturally by any assistive technology, if you've added <code>NavigationListeners</code> to interact with those labels those won't interface with assistive technology.
 <p>
 Between each label an icon is rendered, although this icon isn't attached to any <code>JComponent</code>.
 <p>

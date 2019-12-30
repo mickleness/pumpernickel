@@ -4,11 +4,12 @@
 <title>BmpEncode, BmpDecoder Demo</title>
 </head>
 <body>
+This compares the performance of the Pumpernickel BMP encoder/decoder with ImageIO classes.
+<h3>Context</h3>
 Look, I know. BMP's are lame and horrible because they're uncompressed. If your app writes images and you default to BMP: shame on you. (Even if you don't want to write a <a href="https://en.wikipedia.org/wiki/Lossless_JPEG">lossless jpeg</a>, a PNG at least offers zip-style compression!)
 <p>
-But if your app claims to support most modern image formats and you don't support BMP, shame on you. And if you're going to support it: why not support it well?
-<p>
-<h4>Results</h4>
+But if your app claims to support most modern image formats and you don't support BMP, shame on you too. And if you're going to support it: why not support it well?
+<h3>Results</h3>
 <p>
 The <code>BmpEncoder</code> and <code>BmpDecoder</code> classes are designed with performance in mind. As of this writing this demo generates these results on my Mac laptop:
 <p>
@@ -58,20 +59,20 @@ Encode BMP (Memory):
 	</tr>
 </table>
 <p>
-<h4>What This Demo Compares</h4>
+<h3>What This Demo Compares</h3>
 <p>
-This demo prepares an 800x600 image. Then it conducts two tests. Each sample of the test contains a loop that runs 30 times. The time it takes for that loop to execute and the memory allocated during that loop are recorded as one sample. We collect 10 samples, sort them, and only report the median. (Garbage collection only can introduce significant variability, but hopefully taking the median of 10 samples is sufficient to get a "typical" reading.")
+This demo prepares an 800x600 image. Then it conducts two tests. Each sample of the test contains a loop that runs 30 times. The time it takes for that loop to execute and the memory allocated during that loop are recorded as one sample. We collect 10 samples and only report the median. (Garbage collection alone can introduce significant variability, but hopefully taking the median of 10 samples is sufficient to get a "typical" reading.)
 <p>
 <ul><li>One test focuses on decoding BMPs. Here <code>BmpDecoder.readImage(InputStream)</code> or <code>ImageIO.read(InputStream)</code> is used. (The resulting BufferedImage is immediately discarded.)
 <li>The other test focuses on encoding BMPs to a ByteArrayOutputStream that is reset before each use. This test calls <code>BmpEncoder.write(BufferedImage, OutputStream)</code> or <code>ImageIO.write(BufferedImage, "bmp", OutputStream)</code></ul>.
 <p>
-<h4>Scaling Images</h4>
+<h3>Scaling Images</h3>
 <p>
 This is implemented using the <code>com.pump.image.pixel.PixelIterator</code> architecture. One slick advantage this offers is: it can automagically scale incoming pixel data into a thumbnail really efficiently. This demo doesn't showcase that aspect, but all you have to do to activate this feature is call <code>BmpDecoder.createThumbnail(InputStream, Dimension)</code>, where the Dimension is the maximum size of the thumbnail (for ex: 128x128).
 <p>
 By contrast the <a href="https://download.java.net/media/jai-imageio/javadoc/1.1/overview-summary.html">ImageIO documentation</a> says its BMP support doesn't include thumbnails. (Search for "ImageReader.readerSupportsThumbnails()"). This means if you want to read a 1024x768 image into a a 100x75 pixel thumbnail: ImageIO will allocate at least 2.27 MB of RAM, and the BmpDecoder will allocate about 22 KB. And I can't quantify exactly how much faster the BmpDecoder will be, but if the current patterns hold you'll see a speed benefit too.
 <p>
-<h4>In Defense of BMPs</h4>
+<h3>In Defense of BMPs</h3>
 <p>
 To be fair: we did rely on BMPs for one product. We found that file IO was fastest for BMPs, so we wrote cached images to the tmp folder as uncompressed BMPs. They read back so well we can read and render them on-the-fly without the user noticing. If the real litmus test of a decision is whether you'd repeat that decision: I'd definitely consider it if a future project presents a similar need. File IO isn't free (performance-wise), but it was faster than the compression overhead of JPGs or PNGs last we checked.
 
