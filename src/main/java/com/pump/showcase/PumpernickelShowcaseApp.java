@@ -108,7 +108,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 	public static void main(String[] args) throws IOException {
 		DesktopApplication app = new DesktopApplication("com.pump.showcase",
-				"Pumpernickel Showcase", "1.01", "jeremy.wood@mac.com");
+				"Pumpernickel Showcase", "1.02", "jeremy.wood@mac.com");
 		app.setFrameClass(PumpernickelShowcaseApp.class);
 		app.setCopyright(2018, "Jeremy Wood");
 		app.setURL(new URL("https://mickleness.github.io/pumpernickel/"));
@@ -960,8 +960,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 			section.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);
 			collapsibleContainer.getHeader(section).putClientProperty(
 					CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
-			collapsibleContainer.getHeader(section).setBorder(new EmptyBorder(3,2,3,2));
-			collapsibleContainer.getHeader(section).setFont(ShowcaseExampleDemo.getHeaderLabelFont());
+			collapsibleContainer.getHeader(section).setBorder(
+					new EmptyBorder(3, 2, 3, 2));
+			collapsibleContainer.getHeader(section).setFont(
+					ShowcaseExampleDemo.getHeaderLabelFont());
 		}
 	}
 }
