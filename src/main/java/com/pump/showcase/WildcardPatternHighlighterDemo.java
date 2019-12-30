@@ -172,7 +172,7 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 				+ "Over many a quaint and curious volume of forgotten lore\n"
 				+ "    While I nodded, nearly napping, suddenly there came a tapping,\n"
 				+ "As of some one gently rapping, rapping at my chamber door.\n"
-				+ "Tis some visitor,\" I muttered, \"tapping at my chamber door �\n"
+				+ "\"Tis some visitor,\" I muttered, \"tapping at my chamber door -\n"
 				+ "Only this, and nothing more.\"");
 
 		underlinePatternField.getDocument().addDocumentListener(docListener);
