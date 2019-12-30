@@ -4,12 +4,12 @@
 <title>AngleSliderUI Demo</title>
 </head>
 <body>
-
-Once upon a time we needed a widget to edit angles. Technically the <code>javax.swing.JSlider</code> had all the data we needed (a value that had a minimum and maximum), but using a traditional slider to manage an angle was unintuitive.
+The <code>AngleSliderUI</code> is a <code>SliderUI</code> that renders the value of a slider as degrees on a circular dial.
+<h3>Context</h3>
+This was inspired by a widget we saw in <a href="https://en.wikipedia.org/wiki/IWeb">iWeb</a>. (Although I forget exactly what it was used for; I'm sure whatever it was was highly graphical.)
 <p>
-The <code>AngleSliderUI</code> is a new <code>SliderUI</code> that renders the value of slider degrees on a circular dial. This was inspired by a widget we saw in <a href="https://en.wikipedia.org/wiki/IWeb">iWeb</a> Back in those days Aqua <a href="https://512pixels.net/2014/04/aqua-past-future/">still had elements that appeared to resemble candy</a> (bubbly, plastic, shiny). Nowadays both Apple and Microsoft are trending more towards a minimalist design, though.
-<p>
-In this app you can see an example of this UI in the <a href="resource:Strokes">Strokes, MouseSmoothing</a> demo. Originally we used it to edit drop shadows in an image editor.
-
+In the last decade I've used it as an editor for shadow angles and rotation. In this app you can see an example of this UI in the <a href="resource:Strokes">Strokes, MouseSmoothing</a> demo.
+<h3>History</h3>
+Previous I included an AquaAngleSliderUI. This dated back to ... maybe 2010? Back in those days Aqua <a href="https://512pixels.net/2014/04/aqua-past-future/">still had elements that appeared to resemble candy</a> (bubbly, plastic, shiny). Nowadays both Apple and Microsoft are trending more towards a minimalist design, though, so I think the current UI is a sufficient one-size-fits-all implementation for Mac and Windows.
 </body>
 </html>
