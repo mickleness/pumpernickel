@@ -51,7 +51,7 @@ public class JPEGMetaDataDemo extends ShowcaseChartDemo {
 
 	@Override
 	public String getSummary() {
-		return "This compares the new JPEGMetaData with ImageIO when reading JPG thumbnails.\n\nNote by default this trial is rigged, because the default installation of ImageIO does not support parsing JPEG thumbnails unless you have JAI also installed. (In this demo: we use ImageIO to load the full image and then scale it down to a thumbnail.)\n\nThe option to request a thumbnail fails with an exception.\n\nSo ... the broad point still stands that this class helps read thumbnails better than Java's default ImageIO classes alone, but these charts are also unfair and biased.";
+		return "This compares the new JPEGMetaData with ImageIO when reading JPG thumbnails.";
 	}
 
 	@Override
