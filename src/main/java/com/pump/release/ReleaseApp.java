@@ -39,7 +39,7 @@ public class ReleaseApp {
 
 		Project project = new Project(dir, PumpernickelShowcaseApp.class,
 				"Pumpernickel.jar");
-		File jar = project.buildJar(false);
+		File jar = project.buildJar(true);
 		System.out.println("Created/updated " + jar.getAbsolutePath());
 
 		System.exit(0);
