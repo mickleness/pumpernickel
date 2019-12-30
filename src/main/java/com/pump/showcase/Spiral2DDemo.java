@@ -71,7 +71,7 @@ public class Spiral2DDemo extends ShowcaseExampleDemo {
 	public Spiral2DDemo() {
 		super(true, true, true);
 
-		addSliderPopover(angleOffset, "�");
+		addSliderPopover(angleOffset, "\u00B0");
 		
 		Inspector inspector = new Inspector(configurationPanel);
 		inspector.addRow(coilGapLabel, coilGap);
