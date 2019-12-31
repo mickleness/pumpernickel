@@ -166,6 +166,7 @@ public class BugReporter {
 			add(errorLabel, c);
 			c.gridx++;
 			add(fileLabel, c);
+			setOpaque(false);
 
 			addAncestorListener(new AncestorListener() {
 

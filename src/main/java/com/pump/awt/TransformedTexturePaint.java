@@ -55,7 +55,7 @@ public class TransformedTexturePaint implements Paint {
 			Rectangle2D userBounds, AffineTransform xform, RenderingHints hints) {
 		AffineTransform newTransform = new AffineTransform(xform);
 		newTransform.concatenate(transform);
-		// this is necessary on Java 1.4 toa void a NullPointerException
+		// this is necessary on Java 1.4 to avoid a NullPointerException
 		// from:
 		// java.awt.TexturePaintContext.getContext(TexturePaintContext.java:57)
 		if (hints == null)

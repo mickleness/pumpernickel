@@ -89,7 +89,7 @@ import com.pump.plaf.QPanelUI.CalloutType;
 import com.pump.plaf.RoundTextFieldUI;
 import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.FileDialogUtils;
-import com.pump.swing.HelpComponent;
+import com.pump.swing.HelpButton;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.JSwitchButton;
 import com.pump.swing.ListSectionContainer;
@@ -102,13 +102,19 @@ import com.pump.util.JVM;
 import com.pump.window.WindowDragger;
 import com.pump.window.WindowMenu;
 
+/**
+ * This app shows off some (but by no means all) of the neat stuff in the
+ * Pumpernickel codebase.
+ */
 public class PumpernickelShowcaseApp extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final String VERSION = "1.02";
+
 	public static void main(String[] args) throws IOException {
 		DesktopApplication app = new DesktopApplication("com.pump.showcase",
-				"Pumpernickel Showcase", "1.01", "jeremy.wood@mac.com");
+				"Pumpernickel Showcase", VERSION, "jeremy.wood@mac.com");
 		app.setFrameClass(PumpernickelShowcaseApp.class);
 		app.setCopyright(2018, "Jeremy Wood");
 		app.setURL(new URL("https://mickleness.github.io/pumpernickel/"));
@@ -342,7 +348,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 				LazyDemoPanel ldp = (LazyDemoPanel) jc;
 				ShowcaseDemo d = ldp.getShowcaseDemo();
 				if (d.getKeywords() == null)
-					throw new NullPointerException(jc.getClass().getName());
+					throw new NullPointerException(ldp.demoClassName);
 				for (String keyword : d.getKeywords()) {
 					returnValue.add(keyword.toLowerCase());
 				}
@@ -389,10 +395,29 @@ public class PumpernickelShowcaseApp extends JFrame {
 		menuBar.add(editMenu);
 		AboutControl aboutControl = new AboutControl();
 		JMenuItem aboutItem = JVM.isMac ? null : aboutControl.getMenuItem();
-		menuBar.add(new WindowMenu(this, aboutItem, magnifierItem, saveScreenshotItem));
+		menuBar.add(new WindowMenu(this, aboutItem, magnifierItem,
+				saveScreenshotItem));
 		saveScreenshotItem.addActionListener(saveScreenshotActionListener);
 		saveScreenshotItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
+		// add this awkward universal listener to also help capture screenshots
+		// of the eyedropper when it is showing a modal dialog
+		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+
+			public void eventDispatched(AWTEvent event) {
+				KeyEvent e = (KeyEvent) event;
+				if (e.getKeyCode() == saveScreenshotItem.getAccelerator()
+						.getKeyCode()
+						&& e.getModifiers() == Toolkit.getDefaultToolkit()
+								.getMenuShortcutKeyMask()
+						&& e.getID() == KeyEvent.KEY_PRESSED) {
+					saveScreenshotActionListener.actionPerformed(null);
+					e.consume();
+				}
+			}
+
+		}, AWTEvent.KEY_EVENT_MASK);
 
 		// TODO: add help menu/about menu item
 		// menuBar.add(helpMenu);
@@ -456,7 +481,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("Scaling", "ScalingDemo");
 			// addSection("ImageQuantization", new ImageQuantizationDemo());
 			addSection("JColorPicker", "JColorPickerDemo");
-			addSection("QButtonUI", "QButtonUIDemo");
 			// addSection("Shapes: AreaX Tests", new AreaXTestPanel());
 			addSection("GraphicsWriterDebugger", "GraphicsWriterDebuggerDemo");
 			addSection("JPEGMetaData", "JPEGMetaDataDemo");
@@ -476,6 +500,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("JColorWell, JPalette", "JColorWellPaletteDemo");
 			addSection("JEyeDropper", "JEyeDropperDemo");
 			addSection("JSwitchButton", "JSwitchButtonDemo");
+			addSection("JButton, QButtonUI", "JButtonDemo");
+			addSection("MixedCheckBoxState", "MixedCheckBoxStateDemo");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -569,7 +595,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 							@Override
 							public void run() {
 								try {
-									p.getShowcaseDemo();
+									p.loadPanel();
 								} finally {
 									loaded.set(true);
 								}
@@ -616,6 +642,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 	 * Return the name of the showcase demo panel in the given component.
 	 */
 	private String getDemoName(Component c) {
+		if (c instanceof LazyDemoPanel)
+			c = ((LazyDemoPanel) c).showcaseDemo;
 		Class z = c.getClass();
 		if (z.getName().contains("pump.showcase."))
 			return z.getSimpleName();
@@ -684,8 +712,18 @@ public class PumpernickelShowcaseApp extends JFrame {
 		return editMenu;
 	}
 
-	private void addSection(String text, String demoClassName) {
-		Section section = sectionContainer.addSection(text, text);
+	/**
+	 * Add a new section to this demo.
+	 * 
+	 * @param title
+	 *            the title that appears in the index of topics on the left
+	 * @param demoClassName
+	 *            the name of the class. This is passed as a String to improve
+	 *            application startup time. (The cost of loading every class was
+	 *            causing a noticeable delay in startup.)
+	 */
+	private void addSection(String title, String demoClassName) {
+		Section section = sectionContainer.addSection(title, title);
 		masterSectionList.add(section);
 		JPanel body = section.getBody();
 		body.setLayout(new GridBagLayout());
@@ -720,13 +758,19 @@ public class PumpernickelShowcaseApp extends JFrame {
 				@Override
 				public void hierarchyChanged(HierarchyEvent e) {
 					if (loadingPanel.isShowing()) {
-						add(createDemoPanel(), "demo");
-						cardLayout.show(LazyDemoPanel.this, "demo");
+						loadPanel();
 						removeHierarchyListener(this);
 					}
 				}
 
 			});
+		}
+
+		void loadPanel() {
+			if (loadingPanel.isShowing()) {
+				add(createDemoPanel(), "demo");
+				cardLayout.show(LazyDemoPanel.this, "demo");
+			}
 		}
 
 		ShowcaseDemo getShowcaseDemo() {
@@ -806,17 +850,18 @@ public class PumpernickelShowcaseApp extends JFrame {
 			c.gridy = 0;
 			c.weightx = 1;
 			c.weighty = 0;
-			c.fill = GridBagConstraints.BOTH;
-			c.insets = new Insets(10, 3, 3, 3);
-			replacement.add(headerTextArea, c);
-			c.gridx++;
 			c.weightx = 0;
-			JComponent jc = HelpComponent.createHelpComponent(actionListener,
-					null, null);
+			JButton jc = HelpButton.create(actionListener, null);
 			c.anchor = GridBagConstraints.EAST;
 			c.fill = GridBagConstraints.NONE;
 			c.insets = new Insets(6, 3, 3, 3);
+			c.weightx = 0;
 			replacement.add(jc, c);
+
+			c.anchor = GridBagConstraints.WEST;
+			c.fill = GridBagConstraints.BOTH;
+			c.insets = new Insets(10, 3, 3, 3);
+			replacement.add(headerTextArea, c);
 			jc.setVisible(getShowcaseDemo().getHelpURL() != null);
 			c.gridx = 0;
 			c.gridwidth = GridBagConstraints.REMAINDER;
@@ -824,6 +869,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			c.gridy++;
 			replacement.add(descriptionTextArea, c);
 			c.gridy++;
+			c.weightx = 1;
 			replacement.add(new JSeparator(), c);
 
 			c.gridy++;
@@ -940,6 +986,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 			section.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);
 			collapsibleContainer.getHeader(section).putClientProperty(
 					CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
+			collapsibleContainer.getHeader(section).setBorder(
+					new EmptyBorder(3, 2, 3, 2));
+			collapsibleContainer.getHeader(section).setFont(
+					ShowcaseExampleDemo.getHeaderLabelFont());
 		}
 	}
 }

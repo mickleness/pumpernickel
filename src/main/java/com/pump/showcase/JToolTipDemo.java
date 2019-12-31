@@ -61,7 +61,7 @@ public class JToolTipDemo extends ShowcaseExampleDemo {
 	JLabel fontLabel = new JLabel("Font:");
 	JLabel fontSizeLabel = new JLabel("Font Size:");
 	FontComboBox fontComboBox = new FontComboBox();
-	JSlider fontSizeSlider = new JSlider(10, 20, 12);
+	JSlider fontSizeSlider = new ShowcaseSlider(10, 20, 12);
 	JLabel colorLabel = new JLabel("Color:");
 	JColorWell color = new JColorWell(Color.white);
 	JLabel calloutTypeLabel = new JLabel("Callout:");
@@ -145,7 +145,7 @@ public class JToolTipDemo extends ShowcaseExampleDemo {
 
 		boolean tooltipsActive = toolTipTypeComboBox.getSelectedIndex() != 2;
 		if (tooltipsActive) {
-			Font font = (Font) fontComboBox.getSelectedItem();
+			Font font = fontComboBox.getSelectedFont();
 			float size = fontSizeSlider.getValue();
 			font = font.deriveFont(size);
 			UIManager.getDefaults().put("ToolTip.font", font);

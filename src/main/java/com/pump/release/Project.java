@@ -36,7 +36,8 @@ public class Project {
 
 	}
 
-	public File buildJar(boolean includeJavaSource) throws IOException {
+	public File buildJar(boolean includeJavaSource, String... subdirectories)
+			throws IOException {
 
 		// TODO: this just dumps the existing compiled code in a jar
 		// we need to replace this with logic that actually compiles
@@ -44,17 +45,16 @@ public class Project {
 		// true to the intention of the dependency version, and it will
 		// let us abort if we know there are compiler errors.
 
-		File releaseDir = new File(projectDir, "release");
-		if (!releaseDir.exists() && !releaseDir.mkdirs())
-			throw new IOException("mkdirs failed for "
-					+ releaseDir.getAbsolutePath());
+		File currentDir = projectDir;
+		for (int a = 0; a < subdirectories.length; a++) {
+			File newDir = new File(currentDir, subdirectories[a]);
+			if (!newDir.exists() && !newDir.mkdirs())
+				throw new IOException("mkdirs failed for "
+						+ newDir.getAbsolutePath());
+			currentDir = newDir;
+		}
 
-		File jarsDir = new File(releaseDir, "jars");
-		if (!jarsDir.exists() && !jarsDir.mkdirs())
-			throw new IOException("mkdirs failed for "
-					+ jarsDir.getAbsolutePath());
-
-		File jarFile = new File(jarsDir, jarFileName);
+		File jarFile = new File(currentDir, jarFileName);
 		if (jarFile.exists()) {
 			jarFile.delete();
 		}
@@ -83,14 +83,15 @@ public class Project {
 					}
 				}
 
-				if(includeJavaSource) {
-					for(File javaSourceDir : getJavaSourceDirs()) {
+				if (includeJavaSource) {
+					for (File javaSourceDir : getJavaSourceDirs()) {
 						iter = new FileTreeIterator(javaSourceDir);
 						while (iter.hasNext()) {
 							File f = iter.next();
 							if ((!f.isDirectory()) && (!f.isHidden())) {
 								String path = f.getAbsolutePath().substring(
-										javaSourceDir.getAbsolutePath().length() + 1);
+										javaSourceDir.getAbsolutePath()
+												.length() + 1);
 								path = path.replace(File.separatorChar, '/');
 								entries.add(path);
 								jarOut.putNextEntry(new JarEntry(path));
@@ -108,19 +109,21 @@ public class Project {
 	private Collection<File> getJavaSourceDirs() {
 		Collection<File> returnValue = new HashSet<>();
 		FileTreeIterator iter = new FileTreeIterator(projectDir, "java");
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			File javaFile = iter.next();
 			try {
 				String z = JavaClassSummary.getClassName(javaFile) + ".java";
 				String x = javaFile.getAbsolutePath();
 				x = x.substring(0, x.length() - z.length());
-				if(!x.contains("/test/"))
+				if (!x.contains("/test/"))
 					returnValue.add(new File(x));
-			} catch(Exception e) {
-				throw new RuntimeException("Error processing "+javaFile.getAbsolutePath(), e);
+			} catch (Exception e) {
+				throw new RuntimeException("Error processing "
+						+ javaFile.getAbsolutePath(), e);
 			}
 		}
-		System.out.println("Identified java source directories: "+returnValue);
+		System.out
+				.println("Identified java source directories: " + returnValue);
 		return returnValue;
 	}
 

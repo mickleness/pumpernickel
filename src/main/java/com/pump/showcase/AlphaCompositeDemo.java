@@ -59,8 +59,8 @@ import com.pump.plaf.PlafPaintUtils;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/AlphaCompositeDemo.png"
  * alt="A screenshot of the AlphaCompositeDemo.">
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2009/10/alphacomposites-which-does-what.html">AlphaComposites:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2009/10/alphacomposites-which-does-what.html">AlphaComposites:
  *      Which Does What?</a>
  */
 public class AlphaCompositeDemo extends ShowcaseExampleDemo {
@@ -74,9 +74,9 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 			.createImage(AlphaCompositeDemo.class.getResource("balloon.png"));
 
 	JComboBox composites = new JComboBox();
-	JSlider alpha = new JSlider(0, 100, 100);
-	JSlider srcAlpha = new JSlider(0, 100, 100);
-	JSlider dstAlpha = new JSlider(0, 100, 100);
+	JSlider alpha = new ShowcaseSlider(0, 100, 100);
+	JSlider srcAlpha = new ShowcaseSlider(0, 100, 100);
+	JSlider dstAlpha = new ShowcaseSlider(0, 100, 100);
 	Map<String, Field> fieldsTable = new HashMap<String, Field>();
 	JRadioButton useShapes = new JRadioButton("Use Shapes", true);
 	JRadioButton useImages = new JRadioButton("Use Images");
@@ -145,6 +145,9 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 		group.add(useShapes);
 
 		preview.setBorder(new LineBorder(Color.gray));
+
+		useShapes.setToolTipText("Draw one shape on top of another.");
+		useImages.setToolTipText("Draw one image on top of another.");
 	}
 
 	class CompositePreview extends JPanel {

@@ -158,7 +158,7 @@ public class BreadCrumbDemo extends ShowcaseExampleDemo {
 		DefaultMutableTreeNode douglasAdams = add(fictionBooks, "Douglas Adams");
 
 		DefaultMutableTreeNode hitchhikersSeries = add(douglasAdams,
-				"Hitchhiker’s Series");
+				"Hitchhiker's Series");
 		add(hitchhikersSeries, "The Hitchhiker's Guide to the Galaxy");
 		add(hitchhikersSeries, "The Restaurant at the End of the Universe");
 		add(hitchhikersSeries, "Life, the Universe and Everything");

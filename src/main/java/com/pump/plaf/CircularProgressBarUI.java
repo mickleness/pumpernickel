@@ -17,6 +17,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -567,11 +568,15 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	}
 
 	@Override
-	protected void setAnimationIndex(int newValue) {
-		super.setAnimationIndex(newValue);
-		// this is a hackish way to get constant repaints, but it works:
-		progressBar.repaint();
-	}
+    protected Rectangle getBox(Rectangle r) {
+    	if(r==null)
+    		r = new Rectangle();
+    	r.x = 0;
+    	r.y = 0;
+    	r.width = progressBar.getWidth();
+    	r.height = progressBar.getHeight();
+    	return r;
+    }
 
 	/**
 	 * This paints a portion of the edge of the circle. Degrees are interpreted

@@ -18,7 +18,6 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
@@ -28,7 +27,6 @@ import javax.swing.plaf.SliderUI;
 
 import com.pump.inspector.Inspector;
 import com.pump.plaf.AngleSliderUI;
-import com.pump.plaf.AquaAngleSliderUI;
 
 /**
  * This demos the <code>AngleSliderUI</code> class.
@@ -42,11 +40,10 @@ import com.pump.plaf.AquaAngleSliderUI;
 public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	JComboBox<String> uiTypeComboBox = new JComboBox<>();
-	JSlider angleSlider = new JSlider();
+	JSlider angleSlider = new ShowcaseSlider();
 	JRadioButton stateEnabled = new JRadioButton("Enabled", true);
 	JRadioButton stateDisabled = new JRadioButton("Disabled", false);
-	JSlider sizeSlider = new JSlider(0, 100, 0);
+	JSlider sizeSlider = new ShowcaseSlider(0, 100, 0);
 
 	ActionListener actionListener = new ActionListener() {
 
@@ -68,10 +65,9 @@ public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 
 	public AngleSliderUIDemo() {
 		addSliderPopover(sizeSlider, " pixels");
-		
+
 		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);
-		layout.addRow(new JLabel("Style:"), uiTypeComboBox, false);
 		layout.addRow(new JLabel("State:"), stateEnabled, stateDisabled);
 
 		examplePanel.setLayout(new GridBagLayout());
@@ -90,27 +86,24 @@ public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 		stateEnabled.addActionListener(actionListener);
 		stateDisabled.addActionListener(actionListener);
 		sizeSlider.addChangeListener(changeListener);
-		uiTypeComboBox.addActionListener(actionListener);
-
-		uiTypeComboBox.addItem(AngleSliderUI.class.getSimpleName());
-		uiTypeComboBox.addItem(AquaAngleSliderUI.class.getSimpleName());
 
 		refreshAngleSlider();
 	}
 
 	private void refreshAngleSlider() {
-		SliderUI ui = uiTypeComboBox.getSelectedIndex() == 0 ? new AngleSliderUI()
-				: new AquaAngleSliderUI();
+		SliderUI ui = new AngleSliderUI();
 		angleSlider.setUI(ui);
 		angleSlider.setEnabled(stateEnabled.isSelected());
-		
+
 		Dimension d = ui.getPreferredSize(angleSlider);
 		int z = Math.max(d.width, d.height);
-		
+
 		int relativeValue = sizeSlider.getValue() - sizeSlider.getMinimum();
 		int newValue = z + relativeValue;
-		sizeSlider.getModel().setRangeProperties(newValue, sizeSlider.getModel().getExtent(), z, z + 100, sizeSlider.getModel().getValueIsAdjusting());
-		
+		sizeSlider.getModel().setRangeProperties(newValue,
+				sizeSlider.getModel().getExtent(), z, z + 100,
+				sizeSlider.getModel().getValueIsAdjusting());
+
 		angleSlider.setPreferredSize(new Dimension(newValue, newValue));
 	}
 
@@ -136,7 +129,6 @@ public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { AngleSliderUI.class, AquaAngleSliderUI.class,
-				JSlider.class };
+		return new Class[] { AngleSliderUI.class, JSlider.class };
 	}
 }

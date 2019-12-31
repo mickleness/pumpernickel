@@ -286,19 +286,20 @@ public abstract class TransitionDemo extends ShowcaseExampleDemo {
 		private static final long serialVersionUID = 1L;
 
 		Transition transition;
+		Font font = new Font("Mono", 0, 12);
+		DecimalFormat format = new DecimalFormat("#.##");
 
 		public TransitionPanel(Transition transition) {
+			Dimension d = new Dimension(img1.getWidth(), img1.getHeight());
+			setPreferredSize(d);
+			setSize(d);
 			setTransition(transition);
-			setPreferredSize(new Dimension(img1.getWidth(), img1.getHeight()));
 		}
 
 		public void setTransition(Transition transition) {
 			this.transition = transition;
 			refresh();
 		}
-
-		Font font = new Font("Mono", 0, 12);
-		DecimalFormat format = new DecimalFormat("#.##");
 
 		@Override
 		protected void paintAnimation(Graphics2D g, int width, int height) {

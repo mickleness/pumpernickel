@@ -305,7 +305,7 @@ public class TextEffectDemo extends ShowcaseExampleDemo {
 	}
 
 	private Font getEffectFont() {
-		Font font = (Font) fontComboBox.getSelectedItem();
+		Font font = fontComboBox.getSelectedFont();
 		float size = ((Number) fontSize.getValue()).floatValue();
 		font = font.deriveFont(size);
 		return font;

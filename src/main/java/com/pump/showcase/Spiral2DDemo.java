@@ -59,7 +59,7 @@ public class Spiral2DDemo extends ShowcaseExampleDemo {
 
 	JLabel angleOffsetLabel = new JLabel("Angle Offset:");
 	JLabel coilOffsetLabel = new JLabel("Coil Offset:");
-	JSlider angleOffset = new JSlider(0, 359);
+	JSlider angleOffset = new ShowcaseSlider(0, 359);
 	JSpinner coilOffset = new JSpinner(new SpinnerNumberModel(0, 0, 10, .01));
 
 	JCheckBox outward = new JCheckBox("Outward");
@@ -71,7 +71,7 @@ public class Spiral2DDemo extends ShowcaseExampleDemo {
 	public Spiral2DDemo() {
 		super(true, true, true);
 
-		addSliderPopover(angleOffset, "°");
+		addSliderPopover(angleOffset, "\u00B0");
 		
 		Inspector inspector = new Inspector(configurationPanel);
 		inspector.addRow(coilGapLabel, coilGap);

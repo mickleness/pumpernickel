@@ -11,7 +11,6 @@
 package com.pump.showcase;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -35,9 +34,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.pump.inspector.Inspector;
-import com.pump.plaf.BevelButtonUI;
 import com.pump.plaf.QPanelUI;
 import com.pump.plaf.QPanelUI.CalloutType;
+import com.pump.plaf.button.BevelButtonUI;
 import com.pump.swing.FontComboBox;
 import com.pump.swing.JPopover;
 import com.pump.swing.QPopup;
@@ -136,7 +135,7 @@ public class JPopoverDemo extends ShowcaseExampleDemo {
 
 			@Override
 			protected void doRefreshPopup() {
-				getContents().setFont((Font) fontComboBox.getSelectedItem());
+				getContents().setFont(fontComboBox.getSelectedFont());
 			}
 
 		};

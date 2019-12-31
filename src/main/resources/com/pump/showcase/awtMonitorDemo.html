@@ -5,7 +5,7 @@
 </head>
 <body>
 
-In Swing all user and UI activity (from mouse clicks to repaints) is handled on the event dispatch thread. What happens when that thread is locked?
+In Swing all user and UI activity from mouse clicks to repaints is handled on the event dispatch thread. What happens when that thread is locked?
 <p>
 The simple answer is: your session is toast. Your user is screwed. After a few seconds of unresponsiveness (maybe 5?) they'll probably kill the application. Or if they wait long enough: the OS may helpfully <a href="https://www.reddit.com/r/funny/comments/6f7fqc/windows_being_windows/">prompt them to kill it</a>.
 <p>

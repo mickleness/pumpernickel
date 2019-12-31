@@ -50,8 +50,8 @@ public class ThrobberDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	JComboBox<Class<? extends ThrobberUI>> typeComboBox = new JComboBox<>();
-	JSlider sizeSlider = new JSlider(8, 100, 16);
-	JSlider rateSlider = new JSlider(50, 200, 100);
+	JSlider sizeSlider = new ShowcaseSlider(8, 100, 16);
+	JSlider rateSlider = new ShowcaseSlider(50, 200, 100);
 	JThrobber throbber = new JThrobber();
 	JColorWell color = new JColorWell(new Color(100, 0, 120));
 	JCheckBox colorCheckBox = new JCheckBox("Custom Foreground:");

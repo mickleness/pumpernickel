@@ -48,7 +48,7 @@ public class JSwitchButton extends JToggleButton {
 	public void updateUI() {
 		if (UIManager.getDefaults().get(uiClassID) == null) {
 			UIManager.getDefaults().put(uiClassID,
-					"com.pump.plaf.SwitchButtonUI");
+					"com.pump.plaf.button.SwitchButtonUI");
 		}
 		BasicButtonUI sui = (BasicButtonUI) UIManager.getUI(this);
 		super.setUI(sui);

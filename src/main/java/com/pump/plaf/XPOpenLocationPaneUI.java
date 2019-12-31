@@ -140,10 +140,6 @@ public class XPOpenLocationPaneUI extends OpenLocationPaneUI {
 
 			fileName.setEditable(true);
 
-			XPButtonUI buttonUI = new XPButtonUI();
-			commitButton.setUI(buttonUI);
-			cancelButton.setUI(buttonUI);
-
 			locationPane.getSelectionModel().addChangeListener(
 					new ChangeListener() {
 						public void stateChanged(ChangeEvent e) {

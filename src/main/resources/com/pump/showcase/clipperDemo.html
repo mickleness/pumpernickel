@@ -10,7 +10,7 @@ How do you clip a shape to a Rectangle? The canonical Java approach is:
 Rectangle2D rect = new Rectangle2D.Float(x,y,w,h);
 area.intersect(new Area(rect));</pre>
 <p>
-There's just one problem: if your shape is not linear, the <code>java.awt.geom.Area</code> class a horrible, rotten no-good class to resort to.
+There's just one problem: if your shape is not linear, the <code>java.awt.geom.Area</code> class is a horrible, rotten no-good class to resort to.
 <p>
 I wasn't aware of the <a href="http://en.wikipedia.org/wiki/Sutherland-Hodgman_clipping_algorithm">Sutherland-Hodgman clipping algorithm</a> or the <a href="http://en.wikipedia.org/wiki/Weiler-Atherton_clipping_algorithm">Weiler-Atherton clipping algorithm</a> when I set out to tackle this problem, and I ended up creating a different model that doesn't necessarily match either of those. (Does that mean I created the "Wood Clipping Algorithm"? Ugh. That sounds terrible. Makes me think of wood chipping.)
 <p>
@@ -20,7 +20,7 @@ In my new <code>Clipper</code> class, the <code>PathIterator</code> from the sou
 <br />
 This can lead to redundant lines with no depth, but this data is passed through another filter that collapses redundant points outside the clipping bounds.
 <p>
-<h4>Results</h4>
+<h3>Results</h3>
 <p>
 As of this writing when I run this locally my results resemble:
 <p>
@@ -81,7 +81,7 @@ Memory:
 <p>
 I was surprised to see the <code>Clipper</code> for cubic shapes outperformed the <code>Area</code> for linear shapes. That suggests even if you're only dealing with polygons: the <code>Clipper</code> class is still worth considering.
 <p>
-<h4>Process</h4>
+<h3>Process</h3>
 <p>
 What exactly do those numbers mean? For each data sample we measure the time/memory required to clip 100 shapes with 20 random segments. Each shape fits within a 300x300 rectangle, and we're clipping it to a centered 100x100 rectangle. We run each test 10 times and only keep the median time/memory measurement.
 <p>

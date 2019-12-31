@@ -74,7 +74,7 @@ public class XMLTextComponentHighlighter extends TokenTextComponentHighlighter {
 			Color errorColor = new Color(200, 0, 25);
 
 			defaultAttributes = new SimpleAttributeSet();
-			StyleConstants.setFontFamily(defaultAttributes, "Courier");
+			StyleConstants.setFontFamily(defaultAttributes, "Monospaced");
 			StyleConstants.setFontSize(defaultAttributes, 14);
 
 			elementNameAttributes = new SimpleAttributeSet(defaultAttributes);

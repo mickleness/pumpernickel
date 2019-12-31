@@ -35,7 +35,7 @@ import javax.swing.JComponent;
 
 import com.pump.plaf.AnimationManager;
 import com.pump.plaf.PlafPaintUtils;
-import com.pump.plaf.SwitchButtonUI;
+import com.pump.plaf.button.SwitchButtonUI;
 
 /**
  * This is the icon used by SwitchButtonUIs.
@@ -43,25 +43,33 @@ import com.pump.plaf.SwitchButtonUI;
 public abstract class AbstractSwitchButtonIcon implements Icon {
 
 	static class ButtonTheme {
-		public Color outlineTop, outlineBottom, backgroundTop,
-				backgroundBottom, backgroundTopArmed, backgroundBottomArmed,
-				handleFill, handleFillArmed;
+		public Color trackOutlineTop, trackOutlineBottom, handleOutlineTop,
+				handleOutlineBottom, backgroundTop, backgroundBottom,
+				backgroundTopArmed, backgroundBottomArmed, handleFill,
+				handleFillArmed;
 
-		ButtonTheme(int outlineTop, int outlineBottom, int backgroundTop,
-				int backgroundBottom, int backgroundTopArmed,
-				int backgroundBottomArmed, int handleFill, int handleFillArmed) {
-			this(new Color(outlineTop), new Color(outlineBottom), new Color(
-					backgroundTop), new Color(backgroundBottom), new Color(
-					backgroundTopArmed), new Color(backgroundBottomArmed),
-					new Color(handleFill), new Color(handleFillArmed));
+		ButtonTheme(int trackOutlineTop, int trackOutlineBottom,
+				int handleOutlineTop, int handleOutlineBottom,
+				int backgroundTop, int backgroundBottom,
+				int backgroundTopArmed, int backgroundBottomArmed,
+				int handleFill, int handleFillArmed) {
+			this(new Color(trackOutlineTop), new Color(trackOutlineBottom),
+					new Color(handleOutlineTop),
+					new Color(handleOutlineBottom), new Color(backgroundTop),
+					new Color(backgroundBottom), new Color(backgroundTopArmed),
+					new Color(backgroundBottomArmed), new Color(handleFill),
+					new Color(handleFillArmed));
 		}
 
-		ButtonTheme(Color outlineTop, Color outlineBottom, Color backgroundTop,
-				Color backgroundBottom, Color backgroundTopArmed,
-				Color backgroundBottomArmed, Color handleFill,
-				Color handleFillArmed) {
-			this.outlineTop = outlineTop;
-			this.outlineBottom = outlineTop;
+		ButtonTheme(Color trackOutlineTop, Color trackOutlineBottom,
+				Color handleOutlineTop, Color handleOutlineBottom,
+				Color backgroundTop, Color backgroundBottom,
+				Color backgroundTopArmed, Color backgroundBottomArmed,
+				Color handleFill, Color handleFillArmed) {
+			this.trackOutlineTop = trackOutlineTop;
+			this.trackOutlineBottom = trackOutlineBottom;
+			this.handleOutlineTop = handleOutlineTop;
+			this.handleOutlineBottom = handleOutlineBottom;
 			this.backgroundTop = backgroundTop;
 			this.backgroundBottom = backgroundBottom;
 			this.backgroundTopArmed = backgroundTopArmed;
@@ -72,9 +80,13 @@ public abstract class AbstractSwitchButtonIcon implements Icon {
 
 		ButtonTheme tween(ButtonTheme other, double fraction) {
 			fraction = Math.max(0, Math.min(1, fraction));
-			return new ButtonTheme(AnimationManager.tween(outlineTop,
-					other.outlineTop, fraction), AnimationManager.tween(
-					outlineBottom, other.outlineBottom, fraction),
+			return new ButtonTheme(AnimationManager.tween(trackOutlineTop,
+					other.trackOutlineTop, fraction), AnimationManager.tween(
+					trackOutlineBottom, other.trackOutlineBottom, fraction),
+					AnimationManager.tween(handleOutlineTop,
+							other.handleOutlineTop, fraction),
+					AnimationManager.tween(handleOutlineBottom,
+							other.handleOutlineBottom, fraction),
 					AnimationManager.tween(backgroundTop, other.backgroundTop,
 							fraction), AnimationManager.tween(backgroundBottom,
 							other.backgroundBottom, fraction),
@@ -96,6 +108,8 @@ public abstract class AbstractSwitchButtonIcon implements Icon {
 	ButtonTheme selectedColors, unselectedColors;
 	int focusOffset = 3;
 	int handleWidth, trackWidth, trackHeight;
+	float strokeWidth = 1;
+	int handlePadding = 0;
 
 	public AbstractSwitchButtonIcon(int trackWidth, int trackHeight,
 			int handleWidth, ButtonTheme unselectedColors,
@@ -144,23 +158,24 @@ public abstract class AbstractSwitchButtonIcon implements Icon {
 		boolean isSelected = isSelected(c);
 		boolean isArmed = isArmed(c);
 		double selectedState = AnimationManager.setTargetProperty(c,
-				PROPERTY_SELECTED_STATE, isSelected ? 1 : 0, 20, .2);
+				PROPERTY_SELECTED_STATE, isSelected ? 1 : 0, .1f);
 		double armedState = AnimationManager.setTargetProperty(c,
-				PROPERTY_ARMED_STATE, isArmed ? 1 : 0, 20, .2);
+				PROPERTY_ARMED_STATE, isArmed ? 1 : 0, .1f);
 
 		ButtonTheme colors = unselectedColors.tween(selectedColors,
 				selectedState);
 		Color handleColor = AnimationManager.tween(colors.handleFill,
 				colors.handleFillArmed, armedState);
 
-		Shape handle = new Ellipse2D.Float(x, y + h / 2 - handleWidth / 2,
-				handleWidth, handleWidth);
+		Shape handle = new Ellipse2D.Float(x + handlePadding, y + h / 2
+				- handleWidth / 2, handleWidth, handleWidth);
 
-		double dx = selectedState * (r.getWidth() - (h - 1));
+		double dx = selectedState
+				* (r.getWidth() - handleWidth - 2 * handlePadding);
 		AffineTransform tx = AffineTransform.getTranslateInstance(dx, 0);
 		handle = tx.createTransformedShape(handle);
 
-		g.setStroke(new BasicStroke(1));
+		g.setStroke(new BasicStroke(strokeWidth));
 
 		if (c.isFocusOwner()) {
 			Area area = new Area();
@@ -181,15 +196,17 @@ public abstract class AbstractSwitchButtonIcon implements Icon {
 				trackFillBottom));
 		g.fill(r);
 
-		Paint outlinePaint = new GradientPaint(x, y, colors.outlineTop, x, y
-				+ h, colors.outlineBottom);
-		g.setPaint(outlinePaint);
+		Paint trackOutlinePaint = new GradientPaint(x, y,
+				colors.trackOutlineTop, x, y + h, colors.trackOutlineBottom);
+		g.setPaint(trackOutlinePaint);
 		g.draw(r);
 
 		g.setPaint(handleColor);
 		g.fill(handle);
 
-		g.setPaint(outlinePaint);
+		Paint handleOutlinePaint = new GradientPaint(x, y,
+				colors.handleOutlineTop, x, y + h, colors.handleOutlineBottom);
+		g.setPaint(handleOutlinePaint);
 		g.draw(handle);
 
 		g.dispose();
@@ -225,7 +242,15 @@ public abstract class AbstractSwitchButtonIcon implements Icon {
 
 	@Override
 	public int getIconHeight() {
-		return handleWidth + 2 * focusOffset;
+		return Math.max(trackHeight, handleWidth) + 2 * focusOffset;
+	}
+
+	public void setStrokeWidth(float strokeWidth) {
+		this.strokeWidth = strokeWidth;
+	}
+
+	public void setHandlePadding(int handlePadding) {
+		this.handlePadding = handlePadding;
 	}
 
 }

@@ -14,15 +14,16 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
-import java.util.AbstractMap;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import javax.swing.JComponent;
 import javax.swing.Timer;
+
+import com.pump.plaf.button.ButtonState;
 
 /**
  * This helps with animations.
@@ -61,55 +62,162 @@ public class AnimationManager {
 						+ r2.getHeight() * f);
 	}
 
-	private static class Ticket extends
-			AbstractMap.SimpleEntry<JComponent, String> {
-		private static final long serialVersionUID = 1L;
+	public static class Ticket {
+		JComponent component;
+		String propertyName;
+		Adjuster<?> adjuster;
 
-		Ticket(JComponent jc, String propertyName) {
-			super(jc, propertyName);
+		Ticket(JComponent component, String propertyName, Adjuster<?> adjuster) {
+			this.component = component;	
+			this.propertyName = propertyName;
+			this.adjuster = adjuster;
 		}
 
-		String getTargetProperty() {
-			return getValue() + "-target";
-		}
-
-		String getStepSizeProperty() {
-			return getValue() + "-stepSize";
+		public JComponent getComponent() {
+			return component;
 		}
 
 		/**
-		 * Return true if a change occurred; false if no change was made.
-		 * 
-		 * @return
+		 * Return the property name used to store/retrieve the current value.
+		 * This value will change during the animation.
 		 */
-		boolean increment() {
-			Number currentValue = (Number) getKey().getClientProperty(
-					getValue());
-			Number targetValue = (Number) getKey().getClientProperty(
-					getTargetProperty());
+		public String getPropertyName() {
+			return propertyName;
+		}
 
-			double c1 = currentValue.doubleValue();
-			double t1 = targetValue.doubleValue();
-
-			if (c1 == t1)
-				return false;
-
-			Number stepSize = (Number) getKey().getClientProperty(
-					getStepSizeProperty());
-			double s1 = stepSize.doubleValue();
-			if (c1 < t1) {
-				c1 = Math.min(c1 + s1, t1);
-			} else if (c1 > t1) {
-				c1 = Math.max(c1 - s1, t1);
-			}
-
-			getKey().putClientProperty(getValue(), c1);
-			return true;
+		public Adjuster<?> getAdjuster() {
+			return adjuster;
 		}
 	}
 
-	static Map<Ticket, AnimationManager> managerByTicketMap = new HashMap<>();
-	static Map<Integer, AnimationManager> managerByIntervalMap = new HashMap<>();
+	/**
+	 * This adjusts (increments) a property until it reaches its target.
+	 */
+	public static abstract class Adjuster<T> {
+		final long startTime, endTime, duration;
+		T targetValue, initialValue;
+
+		protected Adjuster(float duration, T targetValue) {
+			startTime = System.currentTimeMillis();
+			this.duration = (long) (1000 * duration);
+			endTime = (long) (startTime + this.duration);
+			this.targetValue = targetValue;
+		}
+
+		public void setInitialValue(T initialValue) {
+			this.initialValue = initialValue;
+		}
+
+		public T getTargetValue() {
+			return targetValue;
+		}
+
+		public boolean increment(Ticket ticket) {
+			double elapsed = System.currentTimeMillis() - startTime;
+			double fraction = elapsed / duration;
+			increment(ticket, Math.min(1, fraction));
+			return fraction < 1;
+		}
+
+		/**
+		 * @param ticket the Ticket that includes the JComponent and client
+		 * property that needs incrementing.
+		 * @param fraction a value from [0, 1]
+		 */
+		public abstract void increment(Ticket ticket, double fraction);
+	}
+
+	/** 
+	 * This animates towards a target ButtonState.Float value.
+	 */
+	public static class ButtonStateAdjuster extends Adjuster<ButtonState.Float> {
+
+		public ButtonStateAdjuster(float targetTime,
+				ButtonState.Float finalState) {
+			super(targetTime, finalState);
+		}
+
+		@Override
+		public void increment(Ticket ticket, double fraction) {
+			ButtonState.Float s = new ButtonState.Float(
+					(float) (initialValue.isEnabled() * (1 - fraction) + this.targetValue.isEnabled()
+							* fraction), (float) (initialValue.isSelected()
+							* (1 - fraction) + this.targetValue.isSelected()
+							* fraction), (float) (initialValue.isPressed()
+							* (1 - fraction) + this.targetValue.isPressed()
+							* fraction), (float) (initialValue.isArmed()
+							* (1 - fraction) + this.targetValue.isArmed()
+							* fraction), (float) (initialValue.isRollover()
+							* (1 - fraction) + this.targetValue.isRollover()
+							* fraction));
+			ticket.getComponent()
+					.putClientProperty(ticket.getPropertyName(), s);
+		}
+
+	}
+
+	/** 
+	 * This animates towards a target Double value.
+	 */
+	public static class DoubleAdjuster extends Adjuster<Number> {
+
+		public DoubleAdjuster(float targetTime, Number finalValue) {
+			super(targetTime, finalValue);
+		}
+
+		@Override
+		public void increment(Ticket ticket, double fraction) {
+			double v = initialValue.doubleValue() * (1 - fraction)
+					+ targetValue.doubleValue() * fraction;
+			ticket.getComponent().putClientProperty(ticket.getPropertyName(),
+					Double.valueOf(v));
+		}
+
+	}
+
+	public static ButtonState.Float setTargetProperty(JComponent component,
+			String propertyName, ButtonState.Float finalState, float duration) {
+		return setTargetProperty(component, propertyName,
+				new ButtonStateAdjuster(duration, finalState));
+	}
+
+	public static <T> T setTargetProperty(JComponent component,
+			String propertyName, Adjuster<T> adjuster) {
+		Objects.requireNonNull(component);
+		Objects.requireNonNull(propertyName);
+		Objects.requireNonNull(adjuster);
+
+		T targetValue = adjuster.getTargetValue();
+		AnimationManager animationManager = get();
+		synchronized (animationManager) {
+			T currentValue = (T) component.getClientProperty(propertyName);
+			if (currentValue == null || currentValue.equals(targetValue)) {
+				component.putClientProperty(propertyName, targetValue);
+				return targetValue;
+			}
+
+			Ticket oldTicket = animationManager.getTicket(component,
+					propertyName);
+			if (oldTicket != null) {
+				if (oldTicket.getAdjuster().targetValue
+						.equals(adjuster.targetValue))
+					return currentValue;
+
+				animationManager.remove(oldTicket);
+			}
+
+			Ticket ticket = new Ticket(component, propertyName, adjuster);
+			adjuster.setInitialValue(currentValue);
+			animationManager.add(ticket);
+			return currentValue;
+		}
+	}
+
+	static AnimationManager singleton = new AnimationManager();
+
+	public static AnimationManager get() {
+		return singleton;
+	}
 
 	/**
 	 * Set a target client property, and if necessary initiate a looping timer
@@ -124,110 +232,84 @@ public class AnimationManager {
 	 * @param targetValue
 	 *            the target value to eventually set. We immediately switch to
 	 *            the target value if no preexisting value is found.
-	 * @param stepInterval
-	 *            the number of milliseconds between each animation iteration.
-	 * @param stepSize
-	 *            the amount to change the value by with each iteration. For
-	 *            example: if you're changing the target from zero to one, you
-	 *            may want to set the stepSize to something like .2 so you'll
-	 *            see 5 frames of animation.
 	 * 
 	 * @return the current value of the property.
 	 */
 	public static double setTargetProperty(JComponent component,
-			String propertyName, double targetValue, int stepInterval,
-			double stepSize) {
-		Objects.requireNonNull(component);
-		Objects.requireNonNull(propertyName);
-
-		Number currentValue;
-		synchronized (AnimationManager.class) {
-			currentValue = (Number) component.getClientProperty(propertyName);
-			if (currentValue == null
-					|| currentValue.doubleValue() == targetValue) {
-				component.putClientProperty(propertyName, targetValue);
-				return targetValue;
-			}
-
-			Ticket ticket = new Ticket(component, propertyName);
-			component
-					.putClientProperty(ticket.getTargetProperty(), targetValue);
-			component.putClientProperty(ticket.getStepSizeProperty(), stepSize);
-			AnimationManager manager = managerByTicketMap.get(ticket);
-			if (manager == null || manager.timerInterval != stepInterval) {
-				if (manager != null)
-					manager.remove(ticket);
-				manager = getAnimationManager(stepInterval);
-				manager.add(ticket);
-			} else {
-				// there's already an active AnimationManager working on this
-				// transition, so there's nothing we need to do here.
-			}
-		}
-
-		return currentValue.doubleValue();
+			String propertyName, double targetValue, float duration) {
+		return setTargetProperty(component, propertyName,
+				new DoubleAdjuster(duration, Double.valueOf(targetValue)))
+				.doubleValue();
 	}
 
-	static AnimationManager getAnimationManager(int stepInterval) {
-		synchronized (AnimationManager.class) {
-			AnimationManager m = managerByIntervalMap.get(stepInterval);
-			if (m == null) {
-				m = new AnimationManager(stepInterval);
-				managerByIntervalMap.put(stepInterval, m);
-			}
-			return m;
-		}
-	}
-
-	int timerInterval;
 	Timer timer;
-	Collection<Ticket> tickets = new HashSet<>();
+	Map<JComponent, Map<String, Ticket>> ticketsByComponentAndProperty = new HashMap<>();
+	int ticketCount = 0;
 	ActionListener actionListener = new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			synchronized (AnimationManager.class) {
+			synchronized (AnimationManager.this) {
 				for (Ticket ticket : getTickets()) {
-					if (!ticket.increment()) {
+					if (!ticket.getAdjuster().increment(ticket)) {
 						remove(ticket);
 					}
-					ticket.getKey().repaint();
+					ticket.getComponent().repaint();
 				}
 			}
 		}
 
 	};
 
-	/**
-	 * Use the static
-	 * {@link #setTargetProperty(JComponent, String, double, int, double)}
-	 * method to initiate AnimationManagers.
-	 */
-	private AnimationManager(int timerInterval) {
-		this.timerInterval = timerInterval;
-		timer = new Timer(timerInterval, actionListener);
+	private AnimationManager() {
+		// 1000 / 25 = 40 fps
+		timer = new Timer(25, actionListener);
 	}
 
-	void remove(Ticket ticket) {
-		synchronized (AnimationManager.class) {
-			tickets.remove(ticket);
-			managerByTicketMap.remove(ticket);
-			if (tickets.size() == 0)
-				timer.stop();
+	synchronized Ticket getTicket(JComponent component, String propertyName) {
+		Map<String, Ticket> ticketsByProperty = ticketsByComponentAndProperty
+				.get(component);
+		if (ticketsByProperty == null)
+			return null;
+		return ticketsByProperty.get(propertyName);
+	}
+
+	synchronized void remove(Ticket ticket) {
+		Map<String, Ticket> ticketsByProperty = ticketsByComponentAndProperty
+				.get(ticket.getComponent());
+		if (ticketsByProperty != null) {
+			if (ticketsByProperty.remove(ticket.getPropertyName()) != null) {
+				ticketCount--;
+				if (getTicketCount() == 0)
+					timer.stop();
+			}
 		}
 	}
 
-	Ticket[] getTickets() {
-		synchronized (AnimationManager.class) {
-			return tickets.toArray(new Ticket[tickets.size()]);
-		}
+	synchronized int getTicketCount() {
+		return ticketCount;
 	}
 
-	void add(Ticket ticket) {
-		synchronized (AnimationManager.class) {
-			tickets.add(ticket);
-			managerByTicketMap.put(ticket, this);
-			if (!timer.isRunning())
+	synchronized List<Ticket> getTickets() {
+		List<Ticket> tickets = new LinkedList<>();
+		for (Map<String, Ticket> c : ticketsByComponentAndProperty.values()) {
+			tickets.addAll(c.values());
+		}
+		return tickets;
+	}
+
+	synchronized void add(Ticket ticket) {
+		Map<String, Ticket> ticketsByProperty = ticketsByComponentAndProperty
+				.get(ticket.getComponent());
+		if (ticketsByProperty == null) {
+			ticketsByProperty = new HashMap<>();
+			ticketsByComponentAndProperty.put(ticket.getComponent(),
+					ticketsByProperty);
+		}
+
+		if (ticketsByProperty.put(ticket.getPropertyName(), ticket) == null) {
+			ticketCount++;
+			if (ticketCount == 1)
 				timer.start();
 		}
 	}

@@ -194,8 +194,8 @@ public class PlafPaintUtils {
 	 *            one color for each position.
 	 * @return the vertical gradient.
 	 */
-	synchronized static Paint getVerticalGradient(String name, int height,
-			int y, float[] positions, Color[] colors) {
+	public synchronized static Paint getVerticalGradient(String name,
+			int height, int y, float[] positions, Color[] colors) {
 		if (verticalGradients == null) {
 			verticalGradients = new HashMap<String, TexturePaint>();
 		}
@@ -205,8 +205,13 @@ public class PlafPaintUtils {
 		if (paint == null) {
 			height = Math.max(height, 1); // before a component is laid out, it
 											// may be 0x0
-			BufferedImage bi = new BufferedImage(1, height,
-					BufferedImage.TYPE_INT_ARGB);
+			int imageType = BufferedImage.TYPE_INT_RGB;
+			for (Color c : colors) {
+				if (c.getAlpha() < 255)
+					imageType = BufferedImage.TYPE_INT_ARGB;
+			}
+
+			BufferedImage bi = new BufferedImage(1, height, imageType);
 			int[] array = new int[height];
 			for (int a = 0; a < array.length; a++) {
 				float f = a;

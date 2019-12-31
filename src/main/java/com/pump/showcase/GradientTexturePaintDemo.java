@@ -131,7 +131,7 @@ public class GradientTexturePaintDemo extends ShowcaseExampleDemo {
 	JColorWell well2 = new JColorWell(new Color(0x4f009f));
 
 	GradientPanel panel = new GradientPanel();
-	JSlider numberOfColorsSlider = new JSlider(2, 100, 10);
+	JSlider numberOfColorsSlider = new ShowcaseSlider(2, 100, 10);
 
 	enum GradientType {
 		GRADIENT_TEXTURE_PAINT, GRADIENT_PAINT, LINEAR_GRADIENT_PAINT

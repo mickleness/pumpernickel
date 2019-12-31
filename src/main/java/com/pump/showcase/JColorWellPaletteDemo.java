@@ -43,7 +43,7 @@ public class JColorWellPaletteDemo extends ShowcaseExampleDemo {
 
 	JPalette palette = new JPalette();
 	JComboBox<String> typeComboBox = new JComboBox<>();
-	JSlider cellSizeSlider = new JSlider(10, 50, 20);
+	JSlider cellSizeSlider = new ShowcaseSlider(10, 50, 20);
 	JComboBox<String> highlightComboBox = new JComboBox<>();
 	JColorWell colorWell = new JColorWell();
 
