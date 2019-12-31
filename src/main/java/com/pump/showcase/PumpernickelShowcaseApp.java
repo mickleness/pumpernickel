@@ -401,6 +401,24 @@ public class PumpernickelShowcaseApp extends JFrame {
 		saveScreenshotItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
+		// add this awkward universal listener to also help capture screenshots
+		// of the eyedropper when it is showing a modal dialog
+		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+
+			public void eventDispatched(AWTEvent event) {
+				KeyEvent e = (KeyEvent) event;
+				if (e.getKeyCode() == saveScreenshotItem.getAccelerator()
+						.getKeyCode()
+						&& e.getModifiers() == Toolkit.getDefaultToolkit()
+								.getMenuShortcutKeyMask()
+						&& e.getID() == KeyEvent.KEY_PRESSED) {
+					saveScreenshotActionListener.actionPerformed(null);
+					e.consume();
+				}
+			}
+
+		}, AWTEvent.KEY_EVENT_MASK);
+
 		// TODO: add help menu/about menu item
 		// menuBar.add(helpMenu);
 
