@@ -21,7 +21,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Paint;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
@@ -45,9 +44,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.graphics.GraphicInstruction;
-import com.pump.graphics.GraphicsWriter;
-import com.pump.graphics.ImageInstruction;
 import com.pump.image.ImageLoader;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.PlafPaintUtils;
@@ -72,8 +68,10 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	BufferedImage backgroundImage = ImageLoader
-			.createImage(AlphaCompositeDemo.class.getResource("balloon-background.png"));
-	BufferedImage foregroundImage = ImageLoader.createImage(AlphaCompositeDemo.class.getResource("balloon.png"));
+			.createImage(AlphaCompositeDemo.class
+					.getResource("balloon-background.png"));
+	BufferedImage foregroundImage = ImageLoader
+			.createImage(AlphaCompositeDemo.class.getResource("balloon.png"));
 
 	JComboBox composites = new JComboBox();
 	JSlider alpha = new ShowcaseSlider(0, 100, 100);
@@ -147,18 +145,16 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 		group.add(useShapes);
 
 		preview.setBorder(new LineBorder(Color.gray));
-		
-		alpha.setToolTipText("The alpha of the operation.");
-		srcAlpha.setToolTipText("The alpha of the source shape/image.");
-		dstAlpha.setToolTipText("The alpha of the dest shape/image.");
+
 		useShapes.setToolTipText("Draw one shape on top of another.");
-		useShapes.setToolTipText("Draw one image on top of another.");
+		useImages.setToolTipText("Draw one image on top of another.");
 	}
 
 	class CompositePreview extends JPanel {
 		private static final long serialVersionUID = 1L;
 
-		TexturePaint checkerboard = PlafPaintUtils.getCheckerBoard(16, Color.white, Color.lightGray);
+		TexturePaint checkerboard = PlafPaintUtils.getCheckerBoard(16,
+				Color.white, Color.lightGray);
 
 		public Composite getComposite() {
 			try {
@@ -190,12 +186,14 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 			} else {
 				img = createShapeSample(destAlphaValue, srcAlphaValue);
 			}
-			g.drawImage(img, getWidth() / 2 - img.getWidth() / 2, getHeight() / 2 - img.getHeight() / 2, null);
+			g.drawImage(img, getWidth() / 2 - img.getWidth() / 2, getHeight()
+					/ 2 - img.getHeight() / 2, null);
 
 			g.dispose();
 		}
 
-		private void drawString(Graphics2D g, String s, float centerX, float centerY) {
+		private void drawString(Graphics2D g, String s, float centerX,
+				float centerY) {
 			Rectangle2D r = g.getFontMetrics().getStringBounds(s, g);
 			g.setColor(Color.white);
 			g.drawString(s, (float) (centerX - r.getWidth() / 2), centerY + 1f);
@@ -203,44 +201,57 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 			g.drawString(s, (float) (centerX - r.getWidth() / 2), centerY);
 		}
 
-		private BufferedImage createImageSample(int destAlphaValue, int srcAlphaValue) {
-			BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+		private BufferedImage createImageSample(int destAlphaValue,
+				int srcAlphaValue) {
+			BufferedImage bi = new BufferedImage(getWidth(), getHeight(),
+					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = bi.createGraphics();
 			g.setComposite(AlphaComposite.Clear);
 			g.fillRect(0, 0, getWidth(), getHeight());
 			g.setComposite(AlphaComposite.SrcOver);
 
-			BufferedImage myBackground = applyAlpha(backgroundImage, destAlphaValue);
-			BufferedImage myForeground = applyAlpha(foregroundImage, srcAlphaValue);
+			BufferedImage myBackground = applyAlpha(backgroundImage,
+					destAlphaValue);
+			BufferedImage myForeground = applyAlpha(foregroundImage,
+					srcAlphaValue);
 
-			g.drawImage(myBackground, getWidth() * 2 / 3 - myForeground.getWidth() / 4,
-					getHeight() / 2 - myBackground.getHeight() / 4, myBackground.getWidth() / 2,
-					myBackground.getHeight() / 2, null);
+			g.drawImage(myBackground,
+					getWidth() * 2 / 3 - myForeground.getWidth() / 4,
+					getHeight() / 2 - myBackground.getHeight() / 4,
+					myBackground.getWidth() / 2, myBackground.getHeight() / 2,
+					null);
 			g.setComposite(getComposite());
-			g.drawImage(myForeground, getWidth() * 1 / 3 - myForeground.getWidth() / 4,
-					getHeight() / 2 - myForeground.getHeight() / 4, myForeground.getWidth() / 2,
-					myForeground.getHeight() / 2, null);
+			g.drawImage(myForeground,
+					getWidth() * 1 / 3 - myForeground.getWidth() / 4,
+					getHeight() / 2 - myForeground.getHeight() / 4,
+					myForeground.getWidth() / 2, myForeground.getHeight() / 2,
+					null);
 
 			return bi;
 		}
 
 		private BufferedImage applyAlpha(BufferedImage img, int alpha) {
-			BufferedImage bi = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage bi = new BufferedImage(img.getWidth(),
+					img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = bi.createGraphics();
 			g.setComposite(AlphaComposite.Clear);
 			g.fillRect(0, 0, getWidth(), getHeight());
 			float f = alpha;
 			f /= 255f;
-			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, f));
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+					f));
 			g.drawImage(img, 0, 0, null);
 			g.dispose();
 			return bi;
 		}
 
-		private BufferedImage createShapeSample(int destAlphaValue, int srcAlphaValue) {
-			BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+		private BufferedImage createShapeSample(int destAlphaValue,
+				int srcAlphaValue) {
+			BufferedImage bi = new BufferedImage(getWidth(), getHeight(),
+					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = bi.createGraphics();
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
 			g.setComposite(AlphaComposite.Clear);
 			g.fillRect(0, 0, getWidth(), getHeight());
 			g.setComposite(AlphaComposite.SrcOver);
@@ -248,13 +259,13 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 			Ellipse2D destShape = new Ellipse2D.Float(25, 0, 100, 100);
 			Ellipse2D srcShape = new Ellipse2D.Float(75, 0, 100, 100);
 
-			Paint destPaint = new GradientPaint(0, 0, new Color(255, 100, 100, 0), 0, 200,
-					new Color(255, 100, 100, destAlphaValue));
+			Paint destPaint = new GradientPaint(0, 0, new Color(255, 100, 100,
+					0), 0, 200, new Color(255, 100, 100, destAlphaValue));
 			g.setPaint(destPaint);
 			g.fill(destShape);
 
-			Paint srcPaint = new GradientPaint(0, 200, new Color(100, 100, 255, 0), 0, 0,
-					new Color(100, 100, 255, srcAlphaValue));
+			Paint srcPaint = new GradientPaint(0, 200, new Color(100, 100, 255,
+					0), 0, 0, new Color(100, 100, 255, srcAlphaValue));
 			g.setComposite(getComposite());
 			g.setPaint(srcPaint);
 			g.fill(srcShape);
@@ -285,7 +296,8 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "AlphaComposite", "Graphics2D", "Graphics", "painting" };
+		return new String[] { "AlphaComposite", "Graphics2D", "Graphics",
+				"painting" };
 	}
 
 	@Override
