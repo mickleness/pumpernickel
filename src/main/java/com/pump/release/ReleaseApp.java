@@ -13,6 +13,7 @@ package com.pump.release;
 import java.io.File;
 
 import com.pump.desktop.temp.TempFileManager;
+import com.pump.io.IOUtils;
 import com.pump.showcase.PumpernickelShowcaseApp;
 
 /**
@@ -37,11 +38,17 @@ public class ReleaseApp {
 		File dir = new File(System.getProperty("user.dir"));
 		headerUpdater.run(dir);
 
+		String filename = "Pumpernickel.jar";
 		Project project = new Project(dir, PumpernickelShowcaseApp.class,
-				"Pumpernickel.jar");
-		File jar = project.buildJar(true, "release", "jars",
+				filename);
+		File versionedJar = project.buildJar(true, "release", "jars",
 				PumpernickelShowcaseApp.VERSION);
-		System.out.println("Created/updated " + jar.getAbsolutePath());
+		File currentJar = new File(
+				versionedJar.getParentFile().getParentFile(), filename);
+		IOUtils.copy(versionedJar, currentJar, true);
+
+		System.out.println("Created/updated " + versionedJar.getAbsolutePath());
+		System.out.println("Created/updated " + currentJar.getAbsolutePath());
 
 		System.exit(0);
 	}
