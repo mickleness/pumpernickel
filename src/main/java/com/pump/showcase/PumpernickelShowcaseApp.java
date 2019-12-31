@@ -624,6 +624,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 	 * Return the name of the showcase demo panel in the given component.
 	 */
 	private String getDemoName(Component c) {
+		if (c instanceof LazyDemoPanel)
+			c = ((LazyDemoPanel) c).showcaseDemo;
 		Class z = c.getClass();
 		if (z.getName().contains("pump.showcase."))
 			return z.getSimpleName();
