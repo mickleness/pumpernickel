@@ -51,7 +51,14 @@ public abstract class AbstractListFilter<T> implements ListFilter<T> {
 		fireChangeListeners();
 	}
 
-	protected void fireChangeListeners() {
+	/**
+	 * Fire all ChangeListeners.
+	 * <p>
+	 * This should be called when the filter has fundamentally changed what
+	 * it may accept. For example: if this filter is based on text in a text field,
+	 * then every time that text field is changed we should call this method
+	 */
+	public void fireChangeListeners() {
 		for (ChangeListener changeListener : changeListeners
 				.toArray(new ChangeListener[changeListeners.size()])) {
 			try {
