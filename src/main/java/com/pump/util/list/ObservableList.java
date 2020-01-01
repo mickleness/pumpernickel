@@ -305,6 +305,17 @@ public class ObservableList<T> implements List<T>, Serializable {
 		public T getElementAt(int index) {
 			return mirrorList.get(index);
 		}
+
+		/**
+		 * Return the index of an element, or -1 if that element isn't found.
+		 */
+		public int indexOf(T element) {
+			for (int a = 0; a < getSize(); a++) {
+				if (Objects.equals(element, getElementAt(a)))
+					return a;
+			}
+			return -1;
+		}
 	}
 
 	/**
