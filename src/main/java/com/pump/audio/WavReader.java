@@ -10,7 +10,6 @@
  */
 package com.pump.audio;
 
-import java.awt.FileDialog;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,56 +21,13 @@ import java.io.RandomAccessFile;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
-import javax.swing.JFrame;
 
 import com.pump.io.MeasuredInputStream;
-import com.pump.io.SuffixFilenameFilter;
 
 /**
  * Reads uncompressed waves.
  */
 public class WavReader {
-
-	// made private so BlogUpdater doesn't roll out a jar
-	@SuppressWarnings("unused")
-	private static void main(String[] s) {
-		try {
-			JFrame frame = new JFrame();
-			FileDialog fd = new FileDialog(frame);
-			fd.setFilenameFilter(new SuffixFilenameFilter("wav", "wave"));
-			fd.pack();
-			fd.setVisible(true);
-			if (fd.getFile() == null)
-				return;
-			File wavFile = new File(fd.getDirectory() + fd.getFile());
-
-			if (!isValidSizeHeader(wavFile)) {
-				System.out.println("identified corrupt size headers: "
-						+ wavFile.getAbsolutePath());
-				fixCorruptSizeFields(wavFile);
-				if (isValidSizeHeader(wavFile)) {
-					System.out.println("\t... fixed!");
-				} else {
-					System.out.println("\t... fixCorruptSizeFields() failed");
-				}
-			}
-
-			FileInputStream in = null;
-			try {
-				in = new FileInputStream(wavFile);
-				System.out.println("length: " + wavFile.length());
-				WavReader r = new WavReader(in);
-				r.read();
-			} finally {
-				in.close();
-			}
-			System.out.println("finished fine");
-			System.exit(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
 
 	/**
 	 * This method fixes a file with corrupt size fields.

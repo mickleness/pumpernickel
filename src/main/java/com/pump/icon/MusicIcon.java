@@ -17,14 +17,9 @@ import java.awt.Component;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
@@ -33,13 +28,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.Icon;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JSlider;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import com.pump.blog.ResourceSample;
 import com.pump.geom.ShapeStringUtils;
@@ -370,96 +359,6 @@ public class MusicIcon implements Icon {
 			g.draw(ellipse);
 		}
 
-	}
-
-	/**
-	 * A simple minimal app to demo the <code>MusicIcon</code>, and the
-	 * <code>PlayToggleIcon</code>.
-	 * 
-	 * @param args
-	 *            the application's arguments. (This is unused.)
-	 */
-	public static void main(String[] args) {
-		JFrame f = new JFrame();
-		final MusicIcon musicIcon = new MusicIcon(64);
-		final JLabel label = new JLabel(musicIcon);
-		final JCheckBox pauseCheckbox = new JCheckBox("Pause");
-		pauseCheckbox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				musicIcon.getPlayToggleIcon().setPauseIconVisible(
-						pauseCheckbox.isSelected());
-				label.repaint();
-			}
-		});
-		final JCheckBox pressedCheckbox = new JCheckBox("Pressed");
-		pressedCheckbox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				musicIcon.getPlayToggleIcon().setPressed(
-						pressedCheckbox.isSelected());
-				label.repaint();
-			}
-		});
-		final JSlider completionSlider = new JSlider(0, 100, 0);
-		completionSlider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				float i = completionSlider.getValue();
-				i = i / 100f;
-				musicIcon.getPlayToggleIcon().setTrackCompletion(i);
-				label.repaint();
-			}
-		});
-		final JSlider trackSizeSlider = new JSlider(0, 100, 0);
-		trackSizeSlider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				float i = trackSizeSlider.getValue();
-				i = i / 100f;
-				musicIcon.getPlayToggleIcon().setTrackSize(i);
-				label.repaint();
-			}
-		});
-		final JSlider opacitySlider = new JSlider(0, 100, 0);
-		opacitySlider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				float i = opacitySlider.getValue();
-				i = i / 100f;
-				musicIcon.getPlayToggleIcon().setOpacity(i);
-				label.repaint();
-			}
-		});
-		f.getContentPane().setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.insets = new Insets(3, 3, 3, 3);
-		f.getContentPane().add(label, c);
-		c.gridy++;
-		f.getContentPane().add(pauseCheckbox, c);
-		c.gridy++;
-		f.getContentPane().add(pressedCheckbox, c);
-		c.gridy++;
-		f.getContentPane().add(completionSlider, c);
-		c.gridy++;
-		f.getContentPane().add(trackSizeSlider, c);
-		c.gridy++;
-		f.getContentPane().add(opacitySlider, c);
-
-		opacitySlider.setValue(100);
-		trackSizeSlider.setValue(100);
-		completionSlider.setValue(50);
-
-		pauseCheckbox
-				.setToolTipText("Toggle the icon between \"play\" and \"pause\".");
-		pressedCheckbox
-				.setToolTipText("Toggle the state between pressed and default.");
-		completionSlider
-				.setToolTipText("Adjust the fraction of track completion shown.");
-		trackSizeSlider.setToolTipText("Adjust the size of the track.");
-		opacitySlider.setToolTipText("Adjust the opacity if the control.");
-
-		f.pack();
-		f.setVisible(true);
 	}
 
 	protected static Shape createEighthNotesShape() {
