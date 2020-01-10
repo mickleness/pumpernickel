@@ -43,10 +43,8 @@ public class WindowDragger extends MouseInputAdapter {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		mouseLoc = e.getPoint();
+		mouseLoc = e.getLocationOnScreen();
 		dragging = true;
-		SwingUtilities
-				.convertPointToScreen(mouseLoc, (Component) e.getSource());
 	}
 
 	@Override
@@ -61,8 +59,7 @@ public class WindowDragger extends MouseInputAdapter {
 			return;
 		}
 		synchronized (mouseLoc) {
-			Point p = e.getPoint();
-			SwingUtilities.convertPointToScreen(p, (Component) e.getSource());
+			Point p = e.getLocationOnScreen();
 			if (JVM.isMac)
 				p.y = Math.max(0, p.y);
 			if (active) {
