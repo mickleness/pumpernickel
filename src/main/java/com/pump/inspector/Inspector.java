@@ -66,7 +66,7 @@ public class Inspector {
 	 * insets into account inside the wrapped panel, and all future calls to
 	 * getInsets(..) on the panel itself can return an empty Insets.
 	 */
-	private static final String PROPERTY_WRAPPED = Inspector.class.getName()
+	static final String PROPERTY_WRAPPED = Inspector.class.getName()
 			+ "#wrapped";
 
 	/**
@@ -175,6 +175,9 @@ public class Inspector {
 	 */
 	public InspectorRowPanel addRow(JComponent identifier,
 			JComponent... controls) {
+		if (controls.length == 1) {
+			return addRow(identifier, controls[0], false);
+		}
 		prepare(Position.LEAD, identifier);
 		JPanel controlPanel = new JPanel(new GridBagLayout());
 		controlPanel.setOpaque(false);
@@ -336,19 +339,25 @@ public class Inspector {
 
 		if (component instanceof JCheckBox || component instanceof JRadioButton) {
 			AbstractButton b = (AbstractButton) component;
-			if (b.isFocusPainted()) {
-				// if painting the focus makes a button larger: then we need
-				// to acknowledge that so the getInsets method still
-				// right-aligns our labels and checkboxes correctly.
-				Dimension d1 = component.getPreferredSize();
-				b.setFocusPainted(false);
-				Dimension d2 = component.getPreferredSize();
-				b.setFocusPainted(true);
-				Insets negativeInsets = new Insets(0, 0, d2.width - d1.width,
-						d2.height - d1.height);
-				b.putClientProperty(PROPERTY_NEGATIVE_INSETS, negativeInsets);
-			}
+			prepareButton(b);
 		}
+	}
+
+	protected Insets prepareButton(AbstractButton b) {
+		if (b.isFocusPainted()) {
+			// if painting the focus makes a button larger: then we need
+			// to acknowledge that so the getInsets method still
+			// right-aligns our labels and checkboxes correctly.
+			Dimension d1 = b.getPreferredSize();
+			b.setFocusPainted(false);
+			Dimension d2 = b.getPreferredSize();
+			b.setFocusPainted(true);
+			Insets negativeInsets = new Insets(0, 0, d2.width - d1.width,
+					d2.height - d1.height);
+			b.putClientProperty(PROPERTY_NEGATIVE_INSETS, negativeInsets);
+			return negativeInsets;
+		}
+		return null;
 	}
 
 	/**
