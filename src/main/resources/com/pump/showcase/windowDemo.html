@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Window Demo</title>
+</head>
+<body>
+This demo lets you see how different configuration options affect new window/dialogs/frames.
+<p>
+This demo does not feature any custom code from the Pumpernickel codebase. It's just here to help sample existing window options.
+<h3>Swing Attributes</h3>
+Most of these attributes are pretty self-explanatory. (Or maybe I'm inclined to think so after working with them for so long?)
+<p>
+The "Transparent" checkbox makes the background of the window a fully transparent color and applies a rounded white background so the window contents can still be seen.
+<p>
+Some of these attributes are incompatible and you may see an exception when you try to generate the window. I think most (all?) of the incompatibilities involve certain properties that don't work on decorated frames/dialogs. (For ex: you can't apply a transparent background to a decorated frame.)
+<p>
+The one attribute I don't appreciate much is the window type (normal, utility, popup). The <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/Window.Type.html">javadoc</a> says:
+<blockquote><ul><li>A utility window is usually a small window such as a toolbar or a palette. The native system may render the window with smaller title-bar if the window is either a Frame or a Dialog object, and if it has its decorations enabled.</li>
+<li>A popup window is a temporary window such as a drop-down menu or a tooltip. On some platforms, windows of that type may be forcibly made undecorated even if they are instances of the Frame or Dialog class, and have decorations enabled.</li></ul></blockquote>
+<p>
+Personally I haven't observed a difference in behavior on Mac or Windows when I change the window type. (Except on Mac with VoiceOver turned on: it may say "system dialog" instead of "java has new window"?)
+
+<h3>Mac Attributes</h3>
+The lower half of controls (starting with "Window Style") are all attributes supported on Mac.
+<p>
+Most of these were reverse-engineered from studying the <a href="https://github.com/frohoff/jdk8u-dev-jdk/blob/master/src/macosx/classes/sun/lwawt/macosx/CPlatformWindow.java">sun.lwawt.macosx.CPlatformWindow</a> class. There are a few attributes (such as "apple.awt.windowShadow.revalidateNow" and "apple.awt.delayWindowOrdering") I intentionally left out because I found them too obscure.
+<p>
+As far as I can tell the modal sheet property doesn't work anymore. (I included it here just in case it starts working or someone can point out a magical combination of properties that make it work.) I know it requires a dialog that uses modality type DOCUMENT_MODAL, but if it is still supported there must be another additional requirement I don't know about. It looks like Apple still <a href="https://developer.apple.com/design/human-interface-guidelines/macos/windows-and-views/sheets/">supports them</a> in native apps, though.
+<p>
+The "unified" window style also doesn't appear to work. (I'm not sure if it ever did?) I saw one throw-away line in Apple's documentation mentioning, "unifiedTitleAndToolbar: This constant has no effect, because all windows that include a toolbar use the unified style." Or perhaps more importantly: the Aqua L&F in Swing is a lightweight replica of Aqua, but it doesn't actually use the same components. While it may be possible to emulate many things, it may be impossible to create a real native window with certain attributes that works well with Swing components.
+<p>
+The "HUD" window style has the unique distinction of a quick fade out when dismissed. Also using it produces a warning in System.err: "NSPanel requires NSWindowStyleMaskUtilityWindow for a HUD window". I'm not sure what implications that has.
+<p>
+The shadow toggle is invaluable if you ever want a custom/subtle window. The document attributes (modified and file) are great if you want to make a document editor that includes subtle Mac behaviors.
+<p>
+The closeable/minimizable/zoomable attributes are actually the original motivation for this demo. I knew it was possible to disable these controls, but I forgot where to look so I decided to make this demo so (hopefully) I'll never forget again. On Windows if I need to make a decorated dialog uncloseable I call:
+<br><code>setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);</code>
+<p>
+This awkward hack leaves the close decoration visible, but it does nothing.
+<p>
+All of these custom Mac properties are configured using client properties, so they should have no effect on other platforms that do not support them. I looked around for a similar suite of properties for Windows, but so far I haven't found them. (If anyone has any leads: let me know and I'll see if I can add them here.)
+
+</body>
+</html>
