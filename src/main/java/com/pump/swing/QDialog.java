@@ -1161,16 +1161,15 @@ public class QDialog extends JDialog {
 		if (closeable) {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		} else {
-			// this dialog should not be closeable,
-			// but in a Java dialog the user can (unfortunately)
-			// always use the red close decoration.
+			// Mac-specific option:
+			getRootPane().putClientProperty("Window.closeable", Boolean.FALSE);
+
+			// otherwise: this dialog should not be closeable,
+			// but there isn't a way to configure this in Java.
 
 			// not the best solution, but we just
 			// ignore it when the user clicks the close decoration
 			setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-
-			// on Mac we *could* simply make the dialog undecorated, but
-			// Werner convinced me this is too non-standard.
 		}
 	}
 
