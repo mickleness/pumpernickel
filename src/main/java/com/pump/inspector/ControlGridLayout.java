@@ -84,6 +84,7 @@ public class ControlGridLayout implements LayoutManager {
 		panel.setOpaque(false);
 		panel.setLayout(this);
 		for (JComponent c : components) {
+			c.setOpaque(false);
 			panel.add(c);
 		}
 		return panel;

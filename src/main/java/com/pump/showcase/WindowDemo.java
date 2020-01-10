@@ -67,7 +67,7 @@ public class WindowDemo extends ShowcaseExampleDemo {
 	JCheckBox modalSheetCheckbox = new JCheckBox("Modal Sheet", false);
 	JCheckBox hideOnDeactivateCheckbox = new JCheckBox("Auto Hide");
 
-	JSlider windowAlpha = new JSlider(0, 100, 100);
+	JSlider windowAlpha = new ShowcaseSlider(0, 100, 100);
 
 	JButton showWindowButton = new JButton("Show Window");
 	JLabel optionsLabel = new JLabel("");
