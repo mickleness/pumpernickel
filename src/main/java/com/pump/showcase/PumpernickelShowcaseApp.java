@@ -503,6 +503,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("JButton, QButtonUI", "JButtonDemo");
 			addSection("MixedCheckBoxState", "MixedCheckBoxStateDemo");
 			addSection("JFrame, JDialog, JWindow", "WindowDemo");
+			addSection("System Properties", "SystemPropertiesDemo");
 
 		} catch (Exception e) {
 			e.printStackTrace();
