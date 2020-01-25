@@ -28,7 +28,7 @@ import javax.swing.JComponent;
 import javax.swing.UIManager;
 
 import com.pump.icon.ScaledIcon;
-import com.pump.icon.file.FileIcon;
+import com.pump.io.icon.FileIcon;
 import com.pump.util.JVM;
 
 /**

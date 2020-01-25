@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.icon.file;
+package com.pump.io.icon;
 
 import java.io.File;
 

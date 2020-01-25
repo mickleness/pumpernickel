@@ -27,11 +27,11 @@ import javax.swing.event.DocumentListener;
 import com.pump.awt.Dimension2D;
 import com.pump.icon.ScaledIcon;
 import com.pump.icon.StrikeThroughIcon;
-import com.pump.icon.file.AquaFileIcon;
-import com.pump.icon.file.FileIcon;
-import com.pump.icon.file.FileSystemViewFileIcon;
-import com.pump.icon.file.FileViewFileIcon;
 import com.pump.inspector.Inspector;
+import com.pump.io.icon.AquaFileIcon;
+import com.pump.io.icon.FileIcon;
+import com.pump.io.icon.FileSystemViewFileIcon;
+import com.pump.io.icon.FileViewFileIcon;
 import com.pump.swing.FileDialogUtils;
 import com.pump.util.JVM;
 

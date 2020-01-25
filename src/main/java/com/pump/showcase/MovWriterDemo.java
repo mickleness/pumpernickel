@@ -59,7 +59,7 @@ import javax.swing.event.ChangeListener;
 import com.pump.animation.quicktime.JPEGMovWriter;
 import com.pump.animation.quicktime.MovWriter;
 import com.pump.animation.quicktime.PNGMovWriter;
-import com.pump.icon.file.FileIcon;
+import com.pump.io.icon.FileIcon;
 import com.pump.swing.AnimationController;
 import com.pump.swing.FileDialogUtils;
 import com.pump.swing.PartialLineBorder;

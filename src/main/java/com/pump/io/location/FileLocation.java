@@ -22,8 +22,8 @@ import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 
-import com.pump.icon.file.FileIcon;
 import com.pump.io.IOUtils;
+import com.pump.io.icon.FileIcon;
 import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
 import com.pump.util.Receiver;

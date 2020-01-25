@@ -1,4 +1,4 @@
-package com.pump.icon.file;
+package com.pump.io.icon;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
