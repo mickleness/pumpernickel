@@ -87,8 +87,9 @@ public class WindowDemo extends ShowcaseExampleDemo {
 				isTransparentCheckbox, undecoratedCheckbox);
 		inspector.addRow(optionsLabel, swingOptions);
 
-		inspector.addRow(new JLabel("Window Style:"), styleComboBox, false);
-		inspector.addRow(new JLabel("Alpha:"), windowAlpha, false);
+		inspector.addSeparator();
+		inspector.addRow(new JLabel("Mac Window Style:"), styleComboBox, false);
+		inspector.addRow(new JLabel("Mac Alpha:"), windowAlpha, false);
 
 		JPanel macControls = gridLayout.createGrid(hideOnDeactivateCheckbox,
 				closeableCheckbox, draggableBackgroundCheckbox,
