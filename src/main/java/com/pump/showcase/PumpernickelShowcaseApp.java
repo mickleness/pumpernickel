@@ -504,6 +504,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("MixedCheckBoxState", "MixedCheckBoxStateDemo");
 			addSection("JFrame, JDialog, JWindow", "WindowDemo");
 			addSection("System Properties", "SystemPropertiesDemo");
+			addSection("FileIcon", "FileIconDemo");
 
 		} catch (Exception e) {
 			e.printStackTrace();

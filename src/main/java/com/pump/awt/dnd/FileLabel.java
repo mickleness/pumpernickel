@@ -16,7 +16,7 @@ import java.io.File;
 
 import javax.swing.JLabel;
 
-import com.pump.icon.FileIcon;
+import com.pump.icon.file.FileIcon;
 
 public class FileLabel extends JLabel {
 	private static final long serialVersionUID = 1L;
@@ -49,7 +49,7 @@ public class FileLabel extends JLabel {
 							setIcon(null);
 							setText("");
 						} else {
-							setIcon(FileIcon.getIcon(file));
+							setIcon(FileIcon.get().getIcon(file));
 							setText(file.getName());
 						}
 					}

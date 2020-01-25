@@ -27,8 +27,8 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
-import com.pump.icon.FileIcon;
 import com.pump.icon.ScaledIcon;
+import com.pump.icon.file.FileIcon;
 import com.pump.util.JVM;
 
 /**
@@ -101,7 +101,7 @@ public class DnDUtils {
 
 						File file = (File) component
 								.getClientProperty(KEY_FILE);
-						i = FileIcon.getIcon(file);
+						i = FileIcon.get().getIcon(file);
 
 						if (i == null) {
 							i = UIManager.getIcon("FileView.fileIcon");

@@ -22,7 +22,7 @@ import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 
-import com.pump.icon.FileIcon;
+import com.pump.icon.file.FileIcon;
 import com.pump.io.IOUtils;
 import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
@@ -261,7 +261,7 @@ public class FileLocation extends CachedLocation {
 		Runnable runnable = new Runnable() {
 			public void run() {
 				try {
-					iconWrapper[0] = FileIcon.getIcon(file);
+					iconWrapper[0] = FileIcon.get().getIcon(file);
 				} catch (Throwable t) {
 					errorWrapper[0] = t;
 				} finally {

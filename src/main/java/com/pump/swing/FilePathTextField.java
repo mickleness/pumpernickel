@@ -19,7 +19,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.pump.icon.FileIcon;
+import com.pump.icon.file.FileIcon;
 import com.pump.plaf.LabelCellRenderer;
 
 /**
@@ -118,7 +118,7 @@ public class FilePathTextField extends AutocompleteTextField<File> {
 			@Override
 			protected void formatLabel(File file) {
 				label.setText(file.getAbsolutePath());
-				label.setIcon(FileIcon.getIcon(file));
+				label.setIcon(FileIcon.get().getIcon(file));
 			}
 
 		});

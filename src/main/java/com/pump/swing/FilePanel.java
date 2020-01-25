@@ -33,7 +33,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import com.pump.icon.FileIcon;
+import com.pump.icon.file.FileIcon;
 import com.pump.io.SuffixFilenameFilter;
 
 /**
@@ -114,7 +114,7 @@ public class FilePanel extends JPanel {
 
 		@Override
 		public Icon getIcon() {
-			return FileIcon.getIcon(file);
+			return FileIcon.get().getIcon(file);
 		}
 
 		/**
