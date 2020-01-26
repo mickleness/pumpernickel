@@ -50,6 +50,7 @@ public class AquaSystemIconDemo extends ShowcaseDemo {
 				Icon icon = AquaIcon.getAquaIcon(value, maxConstrainingSize);
 				label.setIcon(icon);
 				label.setText("");
+				label.setToolTipText(value);
 			}
 
 		});
