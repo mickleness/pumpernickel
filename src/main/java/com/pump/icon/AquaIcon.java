@@ -1,213 +1,293 @@
 package com.pump.icon;
 
-import java.awt.Dimension;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Icon;
 
-import com.pump.awt.Dimension2D;
-
 public class AquaIcon {
-	public static final String SELECTOR_abdg = "abdg";
-	public static final String SELECTOR_acct = "acct";
-	public static final String SELECTOR_acts = "acts";
-	public static final String SELECTOR_afps = "afps";
-	public static final String SELECTOR_aird = "aird";
-	public static final String SELECTOR_amnu = "amnu";
-	public static final String SELECTOR_appe = "appe";
-	public static final String SELECTOR_appr = "appr";
-	public static final String SELECTOR_apps = "apps";
-	public static final String SELECTOR_arng = "arng";
-	public static final String SELECTOR_asnd = "asnd";
-	public static final String SELECTOR_asup = "asup";
-	public static final String SELECTOR_atlk = "atlk";
-	public static final String SELECTOR_atzn = "atzn";
-	public static final String SELECTOR_baro = "baro";
-	public static final String SELECTOR_bfld = "bfld";
-	public static final String SELECTOR_bmrk = "bmrk";
-	public static final String SELECTOR_bonj = "bonj";
-	public static final String SELECTOR_burn = "burn";
-	public static final String SELECTOR_caff = "caff";
-	public static final String SELECTOR_capl = "capl";
-	public static final String SELECTOR_caut = "caut";
-	public static final String SELECTOR_cbdg = "cddr";
-	public static final String SELECTOR_cddr = "cdev";
-	public static final String SELECTOR_clck = "clck";
-	public static final String SELECTOR_clpp = "clps";
-	public static final String SELECTOR_clpt = "clpt";
-	public static final String SELECTOR_clpu = "clpu";
-	public static final String SELECTOR_clsp = "clsp";
-	public static final String SELECTOR_cmnu = "cmnu";
-	public static final String SELECTOR_cnct = "cnct";
-	public static final String SELECTOR_cshm = "cshm";
-	public static final String SELECTOR_ctrl = "ctrl";
-	public static final String SELECTOR_dali = "dali";
-	public static final String SELECTOR_desk = "desk";
-	public static final String SELECTOR_devf = "devf";
-	public static final String SELECTOR_dfil = "dfil";
-	public static final String SELECTOR_dict = "dict";
-	public static final String SELECTOR_disk = "disk";
-	public static final String SELECTOR_dist = "dist";
-	public static final String SELECTOR_docs = "docs";
-	public static final String SELECTOR_drfb = "drfb";
-	public static final String SELECTOR_dsnd = "dsnd";
-	public static final String SELECTOR_dsrv = "dsrv";
-	public static final String SELECTOR_dvdr = "dvdr";
-	public static final String SELECTOR_dvdw = "dvdw";
-	public static final String SELECTOR_dwnf = "dwnf";
-	public static final String SELECTOR_edsk = "edsk";
-	public static final String SELECTOR_edtf = "edtf";
-	public static final String SELECTOR_ejec = "ejec";
-	public static final String SELECTOR_eras = "eras";
-	public static final String SELECTOR_evry = "evry";
-	public static final String SELECTOR_extn = "extn";
-	public static final String SELECTOR_faro = "faro";
-	public static final String SELECTOR_favr = "favr";
-	public static final String SELECTOR_favs = "favs";
-	public static final String SELECTOR_fldr = "fldr";
-	public static final String SELECTOR_flpy = "flpy";
-	public static final String SELECTOR_fold = "fold";
-	public static final String SELECTOR_font = "font";
-	public static final String SELECTOR_fslb = "fslb";
-	public static final String SELECTOR_ftps = "ftps";
-	public static final String SELECTOR_ftrh = "ftrh";
-	public static final String SELECTOR_fvoc = "fvoc";
-	public static final String SELECTOR_gfld = "gfld";
-	public static final String SELECTOR_glas = "glas";
-	public static final String SELECTOR_gmac = "gmac";
-	public static final String SELECTOR_gnet = "gnet";
-	public static final String SELECTOR_gnpc = "gnpc";
-	public static final String SELECTOR_gnrl = "gnrl";
-	public static final String SELECTOR_grid = "grid";
-	public static final String SELECTOR_grup = "grup";
-	public static final String SELECTOR_gtmi = "gtmi";
-	public static final String SELECTOR_gurl = "gurl";
-	public static final String SELECTOR_gusr = "gusr";
-	public static final String SELECTOR_gwin = "gwin";
-	public static final String SELECTOR_hdsk = "hdsk";
-	public static final String SELECTOR_help = "help";
-	public static final String SELECTOR_htgf = "htgf";
-	public static final String SELECTOR_htps = "htps";
-	public static final String SELECTOR_idsk = "idsk";
-	public static final String SELECTOR_ilvn = "ilvn";
-	public static final String SELECTOR_immp = "immp";
-	public static final String SELECTOR_ipdt = "ipdt";
-	public static final String SELECTOR_iphn = "iphn";
-	public static final String SELECTOR_isrv = "isrv";
-	public static final String SELECTOR_issf = "issf";
-	public static final String SELECTOR_itun = "itun";
-	public static final String SELECTOR_jipd = "jipd";
-	public static final String SELECTOR_jxjt = "jxjt";
-	public static final String SELECTOR_kmej = "kmej";
-	public static final String SELECTOR_layz = "layz";
-	public static final String SELECTOR_lbdg = "lbdg";
-	public static final String SELECTOR_lock = "lock";
-	public static final String SELECTOR_macn = "macn";
-	public static final String SELECTOR_macs = "macs";
-	public static final String SELECTOR_mbdg = "mbdg";
-	public static final String SELECTOR_mitm = "mitm";
-	public static final String SELECTOR_mntd = "mntd";
-	public static final String SELECTOR_mpkg = "mpkg";
-	public static final String SELECTOR_mymc = "mymc";
-	public static final String SELECTOR_nfbg = "nfbg";
-	public static final String SELECTOR_nfil = "nfil";
-	public static final String SELECTOR_nfld = "nfld";
-	public static final String SELECTOR_nldd = "nldd";
-	public static final String SELECTOR_note = "note";
-	public static final String SELECTOR_nwrt = "nwrt";
-	public static final String SELECTOR_nyrc = "nyrc";
-	public static final String SELECTOR_ofld = "ofld";
-	public static final String SELECTOR_osas = "osas";
-	public static final String SELECTOR_osax = "osax";
-	public static final String SELECTOR_ownd = "ownd";
-	public static final String SELECTOR_papp = "papp";
-	public static final String SELECTOR_pbcl = "pbcl";
-	public static final String SELECTOR_pfcl = "pfcl";
-	public static final String SELECTOR_pfnt = "pfnt";
-	public static final String SELECTOR_plug = "plug";
-	public static final String SELECTOR_ppdf = "ppdf";
-	public static final String SELECTOR_pref = "pref";
-	public static final String SELECTOR_prfb = "prfb";
-	public static final String SELECTOR_prnt = "prnt";
-	public static final String SELECTOR_prof = "prof";
-	public static final String SELECTOR_psys = "psys";
-	public static final String SELECTOR_pubf = "pubf";
-	public static final String SELECTOR_qivv = "qivv";
-	public static final String SELECTOR_ques = "ques";
-	public static final String SELECTOR_ramd = "ramd";
-	public static final String SELECTOR_rapp = "rapp";
-	public static final String SELECTOR_rcar = "rcar";
-	public static final String SELECTOR_rcnt = "rcnt";
-	public static final String SELECTOR_rdoc = "cdoc";
-	public static final String SELECTOR_rmov = "rmov";
-	public static final String SELECTOR_rofb = "rofb";
-	public static final String SELECTOR_root = "root";
-	public static final String SELECTOR_rsrv = "rsrv";
-	public static final String SELECTOR_sapl = "sapl";
-	public static final String SELECTOR_sapp = "sapp";
-	public static final String SELECTOR_sbar = "sbar";
-	public static final String SELECTOR_sbdg = "sbdg";
-	public static final String SELECTOR_scmp = "scmp";
-	public static final String SELECTOR_scrp = "scrp";
-	public static final String SELECTOR_scsh = "scsh";
-	public static final String SELECTOR_sdbp = "sdbp";
-	public static final String SELECTOR_sdoc = "sdoc";
-	public static final String SELECTOR_sfar = "sfar";
-	public static final String SELECTOR_sfld = "sfld";
-	public static final String SELECTOR_shdf = "shdf";
-	public static final String SELECTOR_shfl = "shfl";
-	public static final String SELECTOR_shlb = "shlb";
-	public static final String SELECTOR_shna = "shna";
-	public static final String SELECTOR_shpt = "shpt";
-	public static final String SELECTOR_shro = "shro";
-	public static final String SELECTOR_shrt = "shrt";
-	public static final String SELECTOR_shrw = "shrw";
-	public static final String SELECTOR_shuk = "shuk";
-	public static final String SELECTOR_spki = "spki";
-	public static final String SELECTOR_srvr = "srvr";
-	public static final String SELECTOR_stop = "stop";
-	public static final String SELECTOR_strt = "strt";
-	public static final String SELECTOR_susr = "susr";
-	public static final String SELECTOR_svgz = "svgz";
-	public static final String SELECTOR_sync = "sync";
-	public static final String SELECTOR_tbav = "tbav";
-	public static final String SELECTOR_tbin = "tbin";
-	public static final String SELECTOR_tblb = "tblb";
-	public static final String SELECTOR_tcus = "tcus";
-	public static final String SELECTOR_tdel = "tdel";
-	public static final String SELECTOR_tfav = "tfav";
-	public static final String SELECTOR_thom = "thom";
-	public static final String SELECTOR_trsh = "trsh";
-	public static final String SELECTOR_ttro = "ttro";
-	public static final String SELECTOR_ubdg = "ubdg";
-	public static final String SELECTOR_udsk = "udsk";
-	public static final String SELECTOR_ufld = "ufld";
-	public static final String SELECTOR_ulck = "ulck";
-	public static final String SELECTOR_unfs = "unfs";
-	public static final String SELECTOR_unus = "unus";
-	public static final String SELECTOR_user = "user";
-	public static final String SELECTOR_utxt = "utxt";
-	public static final String SELECTOR_visj = "visj";
-	public static final String SELECTOR_vxmz = "vxmz";
-	public static final String SELECTOR_wfld = "wfld";
-	public static final String SELECTOR_writ = "writ";
-	public static final String SELECTOR_ABGR = "ABGR";
-	public static final String SELECTOR_ABPR = "ABPR";
-	public static final String SELECTOR_ACMS = "ACMS";
-	public static final String SELECTOR_ACRO = "ACRO";
-	public static final String SELECTOR_AIFC = "AIFC";
-	public static final String SELECTOR_AIFF = "AIFF";
-	public static final String SELECTOR_APIX = "APIX";
-	public static final String SELECTOR_APPC = "APPC";
-	public static final String SELECTOR_APPD = "APPD";
-	public static final String SELECTOR_APPE = "APPE";
-	public static final String SELECTOR_APPL = "APPL";
-	public static final String SELECTOR_AUDB = "AUDB";
-	public static final String SELECTOR_AUDX = "AUDX";
-	public static final String SELECTOR_BNDL = "BNDL";
-	public static final String SELECTOR_CDEV = "CDEV";
-	public static final String SELECTOR_FNDR = "FNDR";
+	private static Map<String, Icon> iconMap = new HashMap<>();
+	private static Map<String, String> descriptionMap = new HashMap<>();
+
+	public static final Icon AliasBadge = initialize("abdg", "aliasBadge");
+	public static final Icon AFPServer = initialize("afps", "AFPServer");
+	public static final Icon AppleMenuFolder = initialize("amnu",
+			"AppleMenuFolder");
+	public static final Icon AppearanceFolder = initialize("appr",
+			"AppearanceFolder");
+	public static final Icon ApplicationsFolder = initialize("apps",
+			"ApplicationsFolder");
+	public static final Icon KeepArranged = initialize("arng", "KeepArranged");
+	public static final Icon SortAscending = initialize("asnd", "SortAscending");
+	public static final Icon ApplicationSupportFolder = initialize("asup",
+			"ApplicationSupportFolder");
+	public static final Icon AppleTalk = initialize("atlk", "AppleTalk");
+	public static final Icon AppleTalkZone = initialize("atzn", "AppleTalkZone");
+	public static final Icon BackwardArrow = initialize("baro", "BackwardArrow");
+	public static final Icon Burning = initialize("burn", "Burning");
+	public static final Icon AppleLogo = initialize("capl", "AppleLogo");
+	public static final Icon AlertCaution = initialize("caut", "AlertCaution");
+	public static final Icon AlertCautionBadge = initialize("cbdg",
+			"AlertCautionBadge");
+	public static final Icon GenericCDROM = initialize("cddr", "GenericCDROM");
+	public static final Icon ClippingPictureType = initialize("clpp",
+			"ClippingPictureType");
+	public static final Icon ClippingSoundType = initialize("clps",
+			"ClippingSoundType");
+	public static final Icon ClippingTextType = initialize("clpt",
+			"ClippingTextType");
+	public static final Icon ClippingUnknownType = initialize("clpu",
+			"ClippingUnknownType");
+	public static final Icon ContextualMenuItemsFolder = initialize("cmnu",
+			"ContextualMenuItemsFolder");
+	public static final Icon ConnectTo = initialize("cnct", "ConnectTo");
+	public static final Icon ControlPanelFolder = initialize("ctrl",
+			"ControlPanelFolder");
+	public static final Icon DeleteAlias = initialize("dali", "DeleteAlias");
+	public static final Icon Desktop = initialize("desk", "Desktop");
+	public static final Icon DocumentsFolder = initialize("docs",
+			"DocumentsFolder");
+	public static final Icon SortDescending = initialize("dsnd",
+			"SortDescending");
+	public static final Icon GenericEditionFile = initialize("edtf",
+			"GenericEditionFile");
+	public static final Icon EjectMedia = initialize("ejec", "EjectMedia");
+	public static final Icon ExtensionsFolder = initialize("extn",
+			"ExtensionsFolder");
+	public static final Icon ForwardArrow = initialize("faro", "ForwardArrow");
+	public static final Icon FavoriteItems = initialize("favr", "FavoriteItems");
+	public static final Icon FavoritesFolder = initialize("favs",
+			"FavoritesFolder");
+	public static final Icon GenericFolder = initialize("fldr", "GenericFolder");
+	public static final Icon GenericFloppy = initialize("flpy", "GenericFloppy");
+	public static final Icon FontsFolder = initialize("font", "FontsFolder");
+	public static final Icon FTPServer = initialize("ftps", "FTPServer");
+	public static final Icon FullTrash = initialize("ftrh", "FullTrash");
+	public static final Icon VoicesFolder = initialize("fvoc", "VoicesFolder");
+	public static final Icon GenericNetwork = initialize("gnet",
+			"GenericNetwork");
+	public static final Icon Grid = initialize("grid", "Grid");
+	public static final Icon Group = initialize("grup", "Group");
+	public static final Icon GenericURL = initialize("gurl", "GenericURL");
+	public static final Icon GuestUser = initialize("gusr", "GuestUser");
+	public static final Icon GenericWindow = initialize("gwin", "GenericWindow");
+	public static final Icon GenericHardDisk = initialize("hdsk",
+			"GenericHardDisk");
+	public static final Icon Help = initialize("help", "Help");
+	public static final Icon HTTPServer = initialize("htps", "HTTPServer");
+	public static final Icon GenericIDisk = initialize("idsk", "GenericIDisk");
+	public static final Icon IPFileServer = initialize("isrv", "IPFileServer");
+	public static final Icon InternetSearchSitesFolder = initialize("issf",
+			"InternetSearchSitesFolder");
+	public static final Icon LockedBadge = initialize("lbdg", "LockedBadge");
+	public static final Icon Locked = initialize("lock", "Locked");
+	public static final Icon SystemFolder = initialize("macs", "SystemFolder");
+	public static final Icon Clipboard = initialize("CLIP", "Clipboard");
+	public static final Icon MountedBadge = initialize("mbdg", "MountedBadge");
+	public static final Icon MountedFolder = initialize("mntd", "MountedFolder");
+	public static final Icon NoFiles = initialize("nfil", "NoFiles");
+	public static final Icon NoFolder = initialize("nfld", "NoFolder");
+	public static final Icon AlertNote = initialize("note", "AlertNote");
+	public static final Icon NoWrite = initialize("nwrt", "NoWrite");
+	public static final Icon OpenFolder = initialize("ofld", "OpenFolder");
+	public static final Icon OwnedFolder = initialize("ownd", "OwnedFolder");
+	public static final Icon ProtectedApplicationFolder = initialize("papp",
+			"ProtectedApplicationFolder");
+	public static final Icon PrinterDescriptionFolder = initialize("ppdf",
+			"PrinterDescriptionFolder");
+	public static final Icon GenericPreferences = initialize("pref",
+			"GenericPreferences");
+	public static final Icon PrintMonitorFolder = initialize("prnt",
+			"PrintMonitorFolder");
+	public static final Icon ColorSyncFolder = initialize("prof",
+			"ColorSyncFolder");
+	public static final Icon ProtectedSystemFolder = initialize("psys",
+			"ProtectedSystemFolder");
+	public static final Icon PublicFolder = initialize("pubf", "PublicFolder");
+	public static final Icon QuestionMark = initialize("ques", "QuestionMark");
+	public static final Icon GenericRAMDisk = initialize("ramd",
+			"GenericRAMDisk");
+	public static final Icon RecentApplicationsFolder = initialize("rapp",
+			"RecentApplicationsFolder");
+	public static final Icon RightContainerArrow = initialize("rcar",
+			"RightContainerArrow");
+	public static final Icon RecentItems = initialize("rcnt", "RecentItems");
+	public static final Icon RecentDocumentsFolder = initialize("rdoc",
+			"RecentDocumentsFolder");
+	public static final Icon GenericRemovableMedia = initialize("rmov",
+			"GenericRemovableMedia");
+	public static final Icon Computer = initialize("root", "Computer");
+	public static final Icon RecentServersFolder = initialize("rsrv",
+			"RecentServersFolder");
+	public static final Icon AppleMenu = initialize("sapl", "AppleMenu");
+	public static final Icon SharedBadge = initialize("sbdg", "SharedBadge");
+	public static final Icon AppleScriptBadge = initialize("scrp",
+			"AppleScriptBadge");
+	public static final Icon GenericStationery = initialize("sdoc",
+			"GenericStationery");
+	public static final Icon ShutdownItemsFolder = initialize("shdf",
+			"ShutdownItemsFolder");
+	public static final Icon SharedFolder = initialize("shfl", "SharedFolder");
+	public static final Icon GenericSharedLibary = initialize("shlb",
+			"GenericSharedLibary");
+	public static final Icon SharingPrivsNotApplicable = initialize("shna",
+			"SharingPrivsNotApplicable");
+	public static final Icon SharingPrivsReadOnly = initialize("shro",
+			"SharingPrivsReadOnly");
+	public static final Icon Shortcut = initialize("shrt", "Shortcut");
+	public static final Icon SharingPrivsReadWrite = initialize("shrw",
+			"SharingPrivsReadWrite");
+	public static final Icon SharingPrivsUnknown = initialize("shuk",
+			"SharingPrivsUnknown");
+	public static final Icon SpeakableItemsFolder = initialize("spki",
+			"SpeakableItemsFolder");
+	public static final Icon GenericFileServer = initialize("srvr",
+			"GenericFileServer");
+	public static final Icon AlertStop = initialize("stop", "AlertStop");
+	public static final Icon StartupItemsFolder = initialize("strt",
+			"StartupItemsFolder");
+	public static final Icon Owner = initialize("susr", "Owner");
+	public static final Icon ToolbarAdvanced = initialize("tbav",
+			"ToolbarAdvanced");
+	public static final Icon ToolbarInfo = initialize("tbin", "ToolbarInfo");
+	public static final Icon ToolbarLabels = initialize("tblb", "ToolbarLabels");
+	public static final Icon ToolbarCustomize = initialize("tcus",
+			"ToolbarCustomize");
+	public static final Icon ToolbarDelete = initialize("tdel", "ToolbarDelete");
+	public static final Icon ToolbarFavorites = initialize("tfav",
+			"ToolbarFavorites");
+	public static final Icon ToolbarHome = initialize("thom", "ToolbarHome");
+	public static final Icon Trash = initialize("trsh", "Trash");
+	public static final Icon UserIDisk = initialize("udsk", "UserIDisk");
+	public static final Icon UserFolder = initialize("ufld", "UserFolder");
+	public static final Icon Unlocked = initialize("ulck", "Unlocked");
+	public static final Icon UnknownFSObject = initialize("unfs",
+			"UnknownFSObject");
+	public static final Icon User = initialize("user", "User");
+	public static final Icon WorkgroupFolder = initialize("wfld",
+			"WorkgroupFolder");
+	public static final Icon SharingPrivsWritable = initialize("writ",
+			"SharingPrivsWritable");
+	public static final Icon GenericControlPanel = initialize("APPC",
+			"GenericControlPanel");
+	public static final Icon GenericDeskAccessory = initialize("APPD",
+			"GenericDeskAccessory");
+	public static final Icon GenericApplication = initialize("APPL",
+			"GenericApplication");
+	public static final Icon Finder = initialize("FNDR", "Finder");
+	public static final Icon FontSuitcase = initialize("FFIL", "FontSuitcase");
+	public static final Icon GenericFont = initialize("ffil", "GenericFont");
+	public static final Icon GenericControlStripModule = initialize("sdev",
+			"GenericControlStripModule");
+	public static final Icon GenericComponent = initialize("thng",
+			"GenericComponent");
+	public static final Icon GenericDocument = initialize("docu",
+			"GenericDocument");
+	public static final Icon GenericExtension = initialize("INIT",
+			"GenericExtension");
+	public static final Icon GenericFontScaler = initialize("sclr",
+			"GenericFontScaler");
+	public static final Icon GenericMoverObject = initialize("movr",
+			"GenericMoverObject");
+	public static final Icon GenericPCCard = initialize("pcmc", "GenericPCCard");
+	public static final Icon GenericQueryDocument = initialize("qery",
+			"GenericQueryDocument");
+	public static final Icon GenericSuitcase = initialize("suit",
+			"GenericSuitcase");
+	public static final Icon GenericWORM = initialize("worm", "GenericWORM");
+	public static final Icon InternationalResources = initialize("ifil",
+			"InternationalResources");
+	public static final Icon KeyboardLayout = initialize("kfil",
+			"KeyboardLayout");
+	public static final Icon SoundFile = initialize("sfil", "SoundFile");
+	public static final Icon SystemSuitcase = initialize("zsys",
+			"SystemSuitcase");
+	public static final Icon TrueTypeFont = initialize("tfil", "TrueTypeFont");
+	public static final Icon TrueTypeFlatFont = initialize("sfnt",
+			"TrueTypeFlatFont");
+	public static final Icon TrueTypeMultiFlatFont = initialize("ttcf",
+			"TrueTypeMultiFlatFont");
+	public static final Icon InternetLocationHTTP = initialize("ilht",
+			"InternetLocationHTTP");
+	public static final Icon InternetLocationFTP = initialize("ilft",
+			"InternetLocationFTP");
+	public static final Icon InternetLocationAppleShare = initialize("ilaf",
+			"InternetLocationAppleShare");
+	public static final Icon InternetLocationAppleTalkZone = initialize("ilat",
+			"InternetLocationAppleTalkZone");
+	public static final Icon InternetLocationFile = initialize("ilfi",
+			"InternetLocationFile");
+	public static final Icon InternetLocationMail = initialize("ilma",
+			"InternetLocationMail");
+	public static final Icon InternetLocationNews = initialize("ilnw",
+			"InternetLocationNews");
+	public static final Icon InternetLocationNSLNeighborhood = initialize(
+			"ilns", "InternetLocationNSLNeighborhood");
+	public static final Icon InternetLocationGeneric = initialize("ilge",
+			"InternetLocationGeneric");
+	public static final Icon DropFolder = initialize("dbox", "DropFolder");
+	public static final Icon PrivateFolder = initialize("prvf", "PrivateFolder");
+	public static final Icon ControlPanelDisabledFolder = initialize("ctrD",
+			"ControlPanelDisabledFolder");
+	public static final Icon ExtensionsDisabledFolder = initialize("extD",
+			"ExtensionsDisabledFolder");
+	public static final Icon ShutdownItemsDisabledFolder = initialize("shdD",
+			"ShutdownItemsDisabledFolder");
+	public static final Icon StartupItemsDisabledFolder = initialize("strD",
+			"StartupItemsDisabledFolder");
+	public static final Icon SystemExtensionDisabledFolder = initialize("macD",
+			"SystemExtensionDisabledFolder");
+	public static final Icon ToolbarApplicationsFolder = initialize("tAps",
+			"ToolbarApplicationsFolder");
+	public static final Icon ToolbarDocumentsFolder = initialize("tDoc",
+			"ToolbarDocumentsFolder");
+	public static final Icon ToolbarMovieFolder = initialize("tMov",
+			"ToolbarMovieFolder");
+	public static final Icon ToolbarMusicFolder = initialize("tMus",
+			"ToolbarMusicFolder");
+	public static final Icon ToolbarPicturesFolder = initialize("tPic",
+			"ToolbarPicturesFolder");
+	public static final Icon ToolbarPublicFolder = initialize("tPub",
+			"ToolbarPublicFolder");
+	public static final Icon ToolbarDesktopFolder = initialize("tDsk",
+			"ToolbarDesktopFolder");
+	public static final Icon ToolbarDownloadsFolder = initialize("tDwn",
+			"ToolbarDownloadsFolder");
+	public static final Icon ToolbarLibraryFolder = initialize("tLib",
+			"ToolbarLibraryFolder");
+	public static final Icon ToolbarUtilitiesFolder = initialize("tUtl",
+			"ToolbarUtilitiesFolder");
+	public static final Icon ToolbarSitesFolder = initialize("tSts",
+			"ToolbarSitesFolder");
+	public static final Icon AppleExtrasFolder = initialize("aex ",
+			"AppleExtrasFolder");
+	public static final Icon AssistantsFolder = initialize("ast ",
+			"AssistantsFolder");
+	public static final Icon ControlStripModulesFolderIcon = initialize("sdv ",
+			"ControlStripModulesFolderIcon");
+	public static final Icon HelpFolder = initialize("hlp ", "HelpFolder");
+	public static final Icon InternetFolder = initialize("int ",
+			"InternetFolder");
+	public static final Icon InternetPlugInFolder = initialize("net ",
+			"InternetPlugInFolder");
+	public static final Icon LocalesFolder = initialize("loc", "LocalesFolder");
+	public static final Icon MacOSReadMeFolder = initialize("mor ",
+			"MacOSReadMeFolder");
+	public static final Icon PreferencesFolder = initialize("prf ",
+			"PreferencesFolder");
+	public static final Icon PrinterDriverFolder = initialize("prd ",
+			"PrinterDriverFolder");
+	public static final Icon ScriptingAdditionsFolder = initialize("scr ",
+			"ScriptingAdditionsFolder");
+	public static final Icon TextEncodingsFolder = initialize("tex ",
+			"TextEncodingsFolder");
+	public static final Icon UsersFolder = initialize("usr ", "UsersFolder");
+	public static final Icon UtilitiesFolder = initialize("uti ",
+			"UtilitiesFolder");
 
 	private static Constructor systemIconConstructor;
 
@@ -226,22 +306,40 @@ public class AquaIcon {
 		}
 	}
 
-	public static Icon getAquaIcon(String selector,
-			Dimension maxConstrainingSize) {
-		initialize();
+	public static Collection<String> getIDs() {
+		return Collections.unmodifiableSet(iconMap.keySet());
+	}
 
+	private synchronized static final Icon initialize(String selectorID,
+			String description) {
+		descriptionMap.put(selectorID, description);
+		return get(selectorID);
+	}
+
+	public static String getDescription(String selectorID) {
+		return descriptionMap.get(selectorID);
+	}
+
+	public synchronized static final Icon get(String selectorID) {
 		try {
-			Icon icon = (Icon) systemIconConstructor.newInstance(selector);
-			if (maxConstrainingSize != null) {
-				Dimension d = new Dimension(icon.getIconWidth(),
-						icon.getIconHeight());
-				Dimension newSize = Dimension2D.scaleProportionally(d,
-						maxConstrainingSize);
-				icon = new ScaledIcon(icon, newSize.width, newSize.height);
+			initialize();
+			Icon icon = iconMap.get(selectorID);
+			if (icon == null) {
+				icon = (Icon) systemIconConstructor.newInstance(selectorID);
+				iconMap.put(selectorID, icon);
 			}
+
+			// if (maxConstrainingSize != null) {
+			// Dimension d = new Dimension(icon.getIconWidth(),
+			// icon.getIconHeight());
+			// Dimension newSize = Dimension2D.scaleProportionally(d,
+			// maxConstrainingSize);
+			// icon = new ScaledIcon(icon, newSize.width, newSize.height);
+			// }
+
 			return icon;
 		} catch (InstantiationException | IllegalAccessException
-				| IllegalArgumentException | InvocationTargetException e) {
+				| InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
 	}
