@@ -25,10 +25,10 @@ public class FileDialogUtils {
 	 */
 	public static File showOpenDialog(Frame f, String title,
 			String... extensions) {
-		FilenameFilter filter = null;
-		if (extensions != null && extensions.length > 0)
-			filter = new SuffixFilenameFilter(extensions);
-		return showOpenDialog(f, title, filter);
+		File[] files = showOpenDialog(f, title, false, extensions);
+		if (files.length == 0)
+			return null;
+		return files[0];
 	}
 
 	/**
@@ -37,16 +37,41 @@ public class FileDialogUtils {
 	 */
 	public static File showOpenDialog(Frame f, String title,
 			FilenameFilter filter) {
+		File[] files = showOpenDialog(f, title, false, filter);
+		if (files.length == 0)
+			return null;
+		return files[0];
+	}
+
+	/**
+	 * Returns files the user selected or an empty array if the user cancelled
+	 * the dialog.
+	 */
+	public static File[] showOpenDialog(Frame f, String title,
+			boolean allowMultipleSelection, String... extensions) {
+		FilenameFilter filter = null;
+		if (extensions != null && extensions.length > 0)
+			filter = new SuffixFilenameFilter(extensions);
+		return showOpenDialog(f, title, allowMultipleSelection, filter);
+	}
+
+	/**
+	 * Returns files the user selected or an empty array if the user cancelled
+	 * the dialog.
+	 */
+	public static File[] showOpenDialog(Frame f, String title,
+			boolean allowMultipleSelection, FilenameFilter filter) {
 		FileDialog fd = new FileDialog(f, title);
 		fd.setMode(FileDialog.LOAD);
 		if (filter != null)
 			fd.setFilenameFilter(filter);
 		fd.pack();
+		fd.setMultipleMode(allowMultipleSelection);
 		fd.setLocationRelativeTo(null);
 		fd.setVisible(true);
 		if (fd.getFile() == null)
-			return null;
-		return new File(fd.getDirectory() + fd.getFile());
+			return new File[] {};
+		return fd.getFiles();
 	}
 
 	/**
