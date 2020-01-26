@@ -192,6 +192,22 @@ public class AquaIcon {
 	public static final String SELECTOR_vxmz = "vxmz";
 	public static final String SELECTOR_wfld = "wfld";
 	public static final String SELECTOR_writ = "writ";
+	public static final String SELECTOR_ABGR = "ABGR";
+	public static final String SELECTOR_ABPR = "ABPR";
+	public static final String SELECTOR_ACMS = "ACMS";
+	public static final String SELECTOR_ACRO = "ACRO";
+	public static final String SELECTOR_AIFC = "AIFC";
+	public static final String SELECTOR_AIFF = "AIFF";
+	public static final String SELECTOR_APIX = "APIX";
+	public static final String SELECTOR_APPC = "APPC";
+	public static final String SELECTOR_APPD = "APPD";
+	public static final String SELECTOR_APPE = "APPE";
+	public static final String SELECTOR_APPL = "APPL";
+	public static final String SELECTOR_AUDB = "AUDB";
+	public static final String SELECTOR_AUDX = "AUDX";
+	public static final String SELECTOR_BNDL = "BNDL";
+	public static final String SELECTOR_CDEV = "CDEV";
+	public static final String SELECTOR_FNDR = "FNDR";
 
 	private static Constructor systemIconConstructor;
 
