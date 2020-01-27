@@ -1,5 +1,6 @@
 package com.pump.icon;
 
+import java.awt.Dimension;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -9,285 +10,304 @@ import java.util.Map;
 
 import javax.swing.Icon;
 
+import com.pump.awt.Dimension2D;
+
 public class AquaIcon {
+	// TODO: we could localize these descriptions
+
 	private static Map<String, Icon> iconMap = new HashMap<>();
 	private static Map<String, String> descriptionMap = new HashMap<>();
 
-	public static final Icon AliasBadge = initialize("abdg", "aliasBadge");
-	public static final Icon AFPServer = initialize("afps", "AFPServer");
-	public static final Icon AppleMenuFolder = initialize("amnu",
-			"AppleMenuFolder");
-	public static final Icon AppearanceFolder = initialize("appr",
-			"AppearanceFolder");
-	public static final Icon ApplicationsFolder = initialize("apps",
-			"ApplicationsFolder");
-	public static final Icon KeepArranged = initialize("arng", "KeepArranged");
-	public static final Icon SortAscending = initialize("asnd", "SortAscending");
-	public static final Icon ApplicationSupportFolder = initialize("asup",
-			"ApplicationSupportFolder");
-	public static final Icon AppleTalk = initialize("atlk", "AppleTalk");
-	public static final Icon AppleTalkZone = initialize("atzn", "AppleTalkZone");
-	public static final Icon BackwardArrow = initialize("baro", "BackwardArrow");
-	public static final Icon Burning = initialize("burn", "Burning");
-	public static final Icon AppleLogo = initialize("capl", "AppleLogo");
-	public static final Icon AlertCaution = initialize("caut", "AlertCaution");
-	public static final Icon AlertCautionBadge = initialize("cbdg",
-			"AlertCautionBadge");
-	public static final Icon GenericCDROM = initialize("cddr", "GenericCDROM");
-	public static final Icon ClippingPictureType = initialize("clpp",
-			"ClippingPictureType");
-	public static final Icon ClippingSoundType = initialize("clps",
-			"ClippingSoundType");
-	public static final Icon ClippingTextType = initialize("clpt",
-			"ClippingTextType");
-	public static final Icon ClippingUnknownType = initialize("clpu",
-			"ClippingUnknownType");
-	public static final Icon ContextualMenuItemsFolder = initialize("cmnu",
-			"ContextualMenuItemsFolder");
-	public static final Icon ConnectTo = initialize("cnct", "ConnectTo");
-	public static final Icon ControlPanelFolder = initialize("ctrl",
-			"ControlPanelFolder");
-	public static final Icon DeleteAlias = initialize("dali", "DeleteAlias");
-	public static final Icon Desktop = initialize("desk", "Desktop");
-	public static final Icon DocumentsFolder = initialize("docs",
-			"DocumentsFolder");
-	public static final Icon SortDescending = initialize("dsnd",
-			"SortDescending");
-	public static final Icon GenericEditionFile = initialize("edtf",
-			"GenericEditionFile");
-	public static final Icon EjectMedia = initialize("ejec", "EjectMedia");
-	public static final Icon ExtensionsFolder = initialize("extn",
-			"ExtensionsFolder");
-	public static final Icon ForwardArrow = initialize("faro", "ForwardArrow");
-	public static final Icon FavoriteItems = initialize("favr", "FavoriteItems");
-	public static final Icon FavoritesFolder = initialize("favs",
-			"FavoritesFolder");
-	public static final Icon GenericFolder = initialize("fldr", "GenericFolder");
-	public static final Icon GenericFloppy = initialize("flpy", "GenericFloppy");
-	public static final Icon FontsFolder = initialize("font", "FontsFolder");
-	public static final Icon FTPServer = initialize("ftps", "FTPServer");
-	public static final Icon FullTrash = initialize("ftrh", "FullTrash");
-	public static final Icon VoicesFolder = initialize("fvoc", "VoicesFolder");
-	public static final Icon GenericNetwork = initialize("gnet",
-			"GenericNetwork");
-	public static final Icon Grid = initialize("grid", "Grid");
-	public static final Icon Group = initialize("grup", "Group");
-	public static final Icon GenericURL = initialize("gurl", "GenericURL");
-	public static final Icon GuestUser = initialize("gusr", "GuestUser");
-	public static final Icon GenericWindow = initialize("gwin", "GenericWindow");
-	public static final Icon GenericHardDisk = initialize("hdsk",
-			"GenericHardDisk");
-	public static final Icon Help = initialize("help", "Help");
-	public static final Icon HTTPServer = initialize("htps", "HTTPServer");
-	public static final Icon GenericIDisk = initialize("idsk", "GenericIDisk");
-	public static final Icon IPFileServer = initialize("isrv", "IPFileServer");
-	public static final Icon InternetSearchSitesFolder = initialize("issf",
-			"InternetSearchSitesFolder");
-	public static final Icon LockedBadge = initialize("lbdg", "LockedBadge");
-	public static final Icon Locked = initialize("lock", "Locked");
-	public static final Icon SystemFolder = initialize("macs", "SystemFolder");
-	public static final Icon Clipboard = initialize("CLIP", "Clipboard");
-	public static final Icon MountedBadge = initialize("mbdg", "MountedBadge");
-	public static final Icon MountedFolder = initialize("mntd", "MountedFolder");
-	public static final Icon NoFiles = initialize("nfil", "NoFiles");
-	public static final Icon NoFolder = initialize("nfld", "NoFolder");
-	public static final Icon AlertNote = initialize("note", "AlertNote");
-	public static final Icon NoWrite = initialize("nwrt", "NoWrite");
-	public static final Icon OpenFolder = initialize("ofld", "OpenFolder");
-	public static final Icon OwnedFolder = initialize("ownd", "OwnedFolder");
-	public static final Icon ProtectedApplicationFolder = initialize("papp",
-			"ProtectedApplicationFolder");
-	public static final Icon PrinterDescriptionFolder = initialize("ppdf",
-			"PrinterDescriptionFolder");
-	public static final Icon GenericPreferences = initialize("pref",
-			"GenericPreferences");
-	public static final Icon PrintMonitorFolder = initialize("prnt",
-			"PrintMonitorFolder");
-	public static final Icon ColorSyncFolder = initialize("prof",
-			"ColorSyncFolder");
-	public static final Icon ProtectedSystemFolder = initialize("psys",
-			"ProtectedSystemFolder");
-	public static final Icon PublicFolder = initialize("pubf", "PublicFolder");
-	public static final Icon QuestionMark = initialize("ques", "QuestionMark");
-	public static final Icon GenericRAMDisk = initialize("ramd",
-			"GenericRAMDisk");
-	public static final Icon RecentApplicationsFolder = initialize("rapp",
-			"RecentApplicationsFolder");
-	public static final Icon RightContainerArrow = initialize("rcar",
-			"RightContainerArrow");
-	public static final Icon RecentItems = initialize("rcnt", "RecentItems");
-	public static final Icon RecentDocumentsFolder = initialize("rdoc",
-			"RecentDocumentsFolder");
-	public static final Icon GenericRemovableMedia = initialize("rmov",
-			"GenericRemovableMedia");
-	public static final Icon Computer = initialize("root", "Computer");
-	public static final Icon RecentServersFolder = initialize("rsrv",
-			"RecentServersFolder");
-	public static final Icon AppleMenu = initialize("sapl", "AppleMenu");
-	public static final Icon SharedBadge = initialize("sbdg", "SharedBadge");
-	public static final Icon AppleScriptBadge = initialize("scrp",
-			"AppleScriptBadge");
-	public static final Icon GenericStationery = initialize("sdoc",
-			"GenericStationery");
-	public static final Icon ShutdownItemsFolder = initialize("shdf",
-			"ShutdownItemsFolder");
-	public static final Icon SharedFolder = initialize("shfl", "SharedFolder");
-	public static final Icon GenericSharedLibary = initialize("shlb",
-			"GenericSharedLibary");
-	public static final Icon SharingPrivsNotApplicable = initialize("shna",
-			"SharingPrivsNotApplicable");
-	public static final Icon SharingPrivsReadOnly = initialize("shro",
-			"SharingPrivsReadOnly");
-	public static final Icon Shortcut = initialize("shrt", "Shortcut");
-	public static final Icon SharingPrivsReadWrite = initialize("shrw",
-			"SharingPrivsReadWrite");
-	public static final Icon SharingPrivsUnknown = initialize("shuk",
-			"SharingPrivsUnknown");
-	public static final Icon SpeakableItemsFolder = initialize("spki",
-			"SpeakableItemsFolder");
-	public static final Icon GenericFileServer = initialize("srvr",
-			"GenericFileServer");
-	public static final Icon AlertStop = initialize("stop", "AlertStop");
-	public static final Icon StartupItemsFolder = initialize("strt",
-			"StartupItemsFolder");
-	public static final Icon Owner = initialize("susr", "Owner");
-	public static final Icon ToolbarAdvanced = initialize("tbav",
-			"ToolbarAdvanced");
-	public static final Icon ToolbarInfo = initialize("tbin", "ToolbarInfo");
-	public static final Icon ToolbarLabels = initialize("tblb", "ToolbarLabels");
-	public static final Icon ToolbarCustomize = initialize("tcus",
-			"ToolbarCustomize");
-	public static final Icon ToolbarDelete = initialize("tdel", "ToolbarDelete");
-	public static final Icon ToolbarFavorites = initialize("tfav",
-			"ToolbarFavorites");
-	public static final Icon ToolbarHome = initialize("thom", "ToolbarHome");
-	public static final Icon Trash = initialize("trsh", "Trash");
-	public static final Icon UserIDisk = initialize("udsk", "UserIDisk");
-	public static final Icon UserFolder = initialize("ufld", "UserFolder");
-	public static final Icon Unlocked = initialize("ulck", "Unlocked");
-	public static final Icon UnknownFSObject = initialize("unfs",
-			"UnknownFSObject");
-	public static final Icon User = initialize("user", "User");
-	public static final Icon WorkgroupFolder = initialize("wfld",
-			"WorkgroupFolder");
-	public static final Icon SharingPrivsWritable = initialize("writ",
-			"SharingPrivsWritable");
-	public static final Icon GenericControlPanel = initialize("APPC",
-			"GenericControlPanel");
-	public static final Icon GenericDeskAccessory = initialize("APPD",
-			"GenericDeskAccessory");
-	public static final Icon GenericApplication = initialize("APPL",
-			"GenericApplication");
-	public static final Icon Finder = initialize("FNDR", "Finder");
-	public static final Icon FontSuitcase = initialize("FFIL", "FontSuitcase");
-	public static final Icon GenericFont = initialize("ffil", "GenericFont");
-	public static final Icon GenericControlStripModule = initialize("sdev",
-			"GenericControlStripModule");
-	public static final Icon GenericComponent = initialize("thng",
-			"GenericComponent");
-	public static final Icon GenericDocument = initialize("docu",
-			"GenericDocument");
-	public static final Icon GenericExtension = initialize("INIT",
-			"GenericExtension");
-	public static final Icon GenericFontScaler = initialize("sclr",
-			"GenericFontScaler");
-	public static final Icon GenericMoverObject = initialize("movr",
-			"GenericMoverObject");
-	public static final Icon GenericPCCard = initialize("pcmc", "GenericPCCard");
-	public static final Icon GenericQueryDocument = initialize("qery",
-			"GenericQueryDocument");
-	public static final Icon GenericSuitcase = initialize("suit",
-			"GenericSuitcase");
-	public static final Icon GenericWORM = initialize("worm", "GenericWORM");
-	public static final Icon InternationalResources = initialize("ifil",
-			"InternationalResources");
-	public static final Icon KeyboardLayout = initialize("kfil",
-			"KeyboardLayout");
-	public static final Icon SoundFile = initialize("sfil", "SoundFile");
-	public static final Icon SystemSuitcase = initialize("zsys",
-			"SystemSuitcase");
-	public static final Icon TrueTypeFont = initialize("tfil", "TrueTypeFont");
-	public static final Icon TrueTypeFlatFont = initialize("sfnt",
-			"TrueTypeFlatFont");
-	public static final Icon TrueTypeMultiFlatFont = initialize("ttcf",
-			"TrueTypeMultiFlatFont");
-	public static final Icon InternetLocationHTTP = initialize("ilht",
-			"InternetLocationHTTP");
-	public static final Icon InternetLocationFTP = initialize("ilft",
-			"InternetLocationFTP");
-	public static final Icon InternetLocationAppleShare = initialize("ilaf",
-			"InternetLocationAppleShare");
-	public static final Icon InternetLocationAppleTalkZone = initialize("ilat",
-			"InternetLocationAppleTalkZone");
-	public static final Icon InternetLocationFile = initialize("ilfi",
-			"InternetLocationFile");
-	public static final Icon InternetLocationMail = initialize("ilma",
-			"InternetLocationMail");
-	public static final Icon InternetLocationNews = initialize("ilnw",
-			"InternetLocationNews");
-	public static final Icon InternetLocationNSLNeighborhood = initialize(
-			"ilns", "InternetLocationNSLNeighborhood");
-	public static final Icon InternetLocationGeneric = initialize("ilge",
-			"InternetLocationGeneric");
-	public static final Icon DropFolder = initialize("dbox", "DropFolder");
-	public static final Icon PrivateFolder = initialize("prvf", "PrivateFolder");
-	public static final Icon ControlPanelDisabledFolder = initialize("ctrD",
-			"ControlPanelDisabledFolder");
-	public static final Icon ExtensionsDisabledFolder = initialize("extD",
-			"ExtensionsDisabledFolder");
-	public static final Icon ShutdownItemsDisabledFolder = initialize("shdD",
-			"ShutdownItemsDisabledFolder");
-	public static final Icon StartupItemsDisabledFolder = initialize("strD",
-			"StartupItemsDisabledFolder");
-	public static final Icon SystemExtensionDisabledFolder = initialize("macD",
-			"SystemExtensionDisabledFolder");
-	public static final Icon ToolbarApplicationsFolder = initialize("tAps",
-			"ToolbarApplicationsFolder");
-	public static final Icon ToolbarDocumentsFolder = initialize("tDoc",
-			"ToolbarDocumentsFolder");
-	public static final Icon ToolbarMovieFolder = initialize("tMov",
-			"ToolbarMovieFolder");
-	public static final Icon ToolbarMusicFolder = initialize("tMus",
-			"ToolbarMusicFolder");
-	public static final Icon ToolbarPicturesFolder = initialize("tPic",
-			"ToolbarPicturesFolder");
-	public static final Icon ToolbarPublicFolder = initialize("tPub",
-			"ToolbarPublicFolder");
-	public static final Icon ToolbarDesktopFolder = initialize("tDsk",
-			"ToolbarDesktopFolder");
-	public static final Icon ToolbarDownloadsFolder = initialize("tDwn",
-			"ToolbarDownloadsFolder");
-	public static final Icon ToolbarLibraryFolder = initialize("tLib",
-			"ToolbarLibraryFolder");
-	public static final Icon ToolbarUtilitiesFolder = initialize("tUtl",
-			"ToolbarUtilitiesFolder");
-	public static final Icon ToolbarSitesFolder = initialize("tSts",
-			"ToolbarSitesFolder");
-	public static final Icon AppleExtrasFolder = initialize("aex ",
-			"AppleExtrasFolder");
-	public static final Icon AssistantsFolder = initialize("ast ",
-			"AssistantsFolder");
-	public static final Icon ControlStripModulesFolderIcon = initialize("sdv ",
-			"ControlStripModulesFolderIcon");
-	public static final Icon HelpFolder = initialize("hlp ", "HelpFolder");
-	public static final Icon InternetFolder = initialize("int ",
-			"InternetFolder");
-	public static final Icon InternetPlugInFolder = initialize("net ",
-			"InternetPlugInFolder");
-	public static final Icon LocalesFolder = initialize("loc", "LocalesFolder");
-	public static final Icon MacOSReadMeFolder = initialize("mor ",
-			"MacOSReadMeFolder");
-	public static final Icon PreferencesFolder = initialize("prf ",
-			"PreferencesFolder");
-	public static final Icon PrinterDriverFolder = initialize("prd ",
-			"PrinterDriverFolder");
-	public static final Icon ScriptingAdditionsFolder = initialize("scr ",
-			"ScriptingAdditionsFolder");
-	public static final Icon TextEncodingsFolder = initialize("tex ",
-			"TextEncodingsFolder");
-	public static final Icon UsersFolder = initialize("usr ", "UsersFolder");
-	public static final Icon UtilitiesFolder = initialize("uti ",
-			"UtilitiesFolder");
+	public static final Icon ALIAS_BADGE = initialize("abdg", "alias badge");
+	public static final Icon AFP_SERVER = initialize("afps", "AFP server");
+	public static final Icon APPLE_MENU_FOLDER = initialize("amnu",
+			"Apple menu folder");
+	public static final Icon APPEARANCE_FOLDER = initialize("appr",
+			"appearance folder");
+	public static final Icon APPLICATIONS_FOLDER = initialize("apps",
+			"applications older");
+	public static final Icon KEEP_ARRANGED = initialize("arng", "keep arranged");
+	public static final Icon SORT_ASCENDING = initialize("asnd",
+			"sort ascending");
+	public static final Icon APPLICATION_SUPPORT_FOLDER = initialize("asup",
+			"application support folder");
+	public static final Icon APPLETALK = initialize("atlk", "AppleTalk");
+	public static final Icon APPLETALK_ZONE = initialize("atzn",
+			"AppleTalk Zone");
+	public static final Icon BACKWARD_ARROW = initialize("baro",
+			"backward arrow");
+	public static final Icon BURNING = initialize("burn", "burning");
+	public static final Icon APPLE_LOGO = initialize("capl", "Apple logo");
+	public static final Icon ALERT_CAUTION = initialize("caut", "alert caution");
+	public static final Icon ALERT_CAUTION_BADGE = initialize("cbdg",
+			"alert caution badge");
+	public static final Icon GENERIC_CD_ROM = initialize("cddr",
+			"generic CD ROM");
+	public static final Icon CLIPPING_PICTURE_TYPE = initialize("clpp",
+			"clipping picture type");
+	public static final Icon CLIPPING_SOUND_TYPE = initialize("clps",
+			"clipping sound type");
+	public static final Icon CLIPPING_TEXT_TYPE = initialize("clpt",
+			"clipping text type");
+	public static final Icon CLIPPING_UNKNOWN_TYPE = initialize("clpu",
+			"clipping unknown type");
+	public static final Icon CONTEXTUAL_MENU_ITEMS_FOLDER = initialize("cmnu",
+			"contextual menu items folder");
+	public static final Icon CONNECT_TO = initialize("cnct", "connect to");
+	public static final Icon CONTROL_PANEL_FOLDER = initialize("ctrl",
+			"control panel folder");
+	public static final Icon DELETE_ALIAS = initialize("dali", "delete alias");
+	public static final Icon DESKTOP = initialize("desk", "desktop");
+	public static final Icon DOCUMENTS_FOLDER = initialize("docs",
+			"documents folder");
+	public static final Icon SORT_DESCENDING = initialize("dsnd",
+			"sort descending");
+	public static final Icon GENERIC_EDITION_FILE = initialize("edtf",
+			"generic edition file");
+	public static final Icon EJECT_MEDIA = initialize("ejec", "eject media");
+	public static final Icon EXTENSIONS_FOLDER = initialize("extn",
+			"extensions folder");
+	public static final Icon FORWARD_ARROW = initialize("faro", "forward arrow");
+	public static final Icon FAVORITE_ITEMS = initialize("favr",
+			"favorite items");
+	public static final Icon FAVORITES_FOLDER = initialize("favs",
+			"favorites folder");
+	public static final Icon GENERIC_FOLDER = initialize("fldr",
+			"generic folder");
+	public static final Icon GENERIC_FLOPPY = initialize("flpy",
+			"generic floppy");
+	public static final Icon FONT_FOLDER = initialize("font", "fonts folder");
+	public static final Icon FTP_SERVER = initialize("ftps", "FTP server");
+	public static final Icon FULL_TRASH = initialize("ftrh", "full trash");
+	public static final Icon VOICES_FOLDER = initialize("fvoc", "voices folder");
+	public static final Icon GENERIC_NETWORK = initialize("gnet",
+			"generic network");
+	public static final Icon GRID = initialize("grid", "grid");
+	public static final Icon GROUP = initialize("grup", "group");
+	public static final Icon GENERIC_URL = initialize("gurl", "generic URL");
+	public static final Icon GUEST_USER = initialize("gusr", "guest user");
+	public static final Icon GENERIC_WINDOW = initialize("gwin",
+			"generic window");
+	public static final Icon GENERIC_HARD_DISK = initialize("hdsk",
+			"generic hard disk");
+	public static final Icon HELP = initialize("help", "help");
+	public static final Icon HTTP_SERVER = initialize("htps", "HTTP server");
+	public static final Icon GENERIC_IDISK = initialize("idsk", "generic iDisk");
+	public static final Icon IP_FILE_SERVER = initialize("isrv",
+			"IP file server");
+	public static final Icon INTERNET_SEARCH_SITES_FOLDER = initialize("issf",
+			"internet search sites folder");
+	public static final Icon LOCKED_BADGE = initialize("lbdg", "locked badge");
+	public static final Icon LOCKED = initialize("lock", "locked");
+	public static final Icon SYSTEM_FOLDER = initialize("macs", "system folder");
+	public static final Icon CLIPBOARD = initialize("CLIP", "clipboard");
+	public static final Icon MOUNTED_BADGE = initialize("mbdg", "mounted badge");
+	public static final Icon MOUNTED_FOLDER = initialize("mntd",
+			"mounted folder");
+	public static final Icon NO_FILES = initialize("nfil", "no files");
+	public static final Icon NO_FOLDER = initialize("nfld", "no folder");
+	public static final Icon ALERT_NOTE = initialize("note", "alert note");
+	public static final Icon NO_WRITE = initialize("nwrt", "no write");
+	public static final Icon OPEN_FOLDER = initialize("ofld", "open folder");
+	public static final Icon OWNED_FOLDER = initialize("ownd", "owned folder");
+	public static final Icon PROTECTED_APPLICATION_FOLDER = initialize("papp",
+			"protected application folder");
+	public static final Icon PRINTER_DESCRIPTION_FOLDER = initialize("ppdf",
+			"printer description folder");
+	public static final Icon GENERIC_PREFERENCES = initialize("pref",
+			"generic preferences");
+	public static final Icon PRINT_MONITOR_FOLDER = initialize("prnt",
+			"print monitor folder");
+	public static final Icon COLOR_SYNC_FOLDER = initialize("prof",
+			"color sync folder");
+	public static final Icon PROTECTED_SYSTEM_FOLDER = initialize("psys",
+			"protected system folder");
+	public static final Icon PUBLIC_FOLDER = initialize("pubf", "public folder");
+	public static final Icon QUESTION_MARK = initialize("ques", "question mark");
+	public static final Icon GENERIC_RAM_DISK = initialize("ramd",
+			"generic RAM disk");
+	public static final Icon RECENT_APPLICATIONS_FOLDER = initialize("rapp",
+			"recent applications folder");
+	public static final Icon RIGHT_CONTAINER_ARROW = initialize("rcar",
+			"right container arrow");
+	public static final Icon RECENT_ITEMS = initialize("rcnt", "recent items");
+	public static final Icon RECENT_DOCUMENTS_FOLDER = initialize("rdoc",
+			"recent documents folder");
+	public static final Icon GENERIC_REMOVABLE_MEDIA = initialize("rmov",
+			"generic removable media");
+	public static final Icon COMPUTER = initialize("root", "computer");
+	public static final Icon RECENT_SERVERS_FOLDER = initialize("rsrv",
+			"recent servers folder");
+	public static final Icon APPLE_MENU = initialize("sapl", "Apple menu");
+	public static final Icon SHARED_BADGE = initialize("sbdg", "shared badge");
+	public static final Icon APPLESCRIPT_BADGE = initialize("scrp",
+			"AppleScript badge");
+	public static final Icon GENERIC_STATIONARY = initialize("sdoc",
+			"generic stationary");
+	public static final Icon SHUTDOWN_ITEMS_FOLDER = initialize("shdf",
+			"shutdown items folder");
+	public static final Icon SHARED_FOLDER = initialize("shfl", "shared folder");
+	public static final Icon GENERIC_SHARED_LIBRARY = initialize("shlb",
+			"generic shared library");
+	public static final Icon SHARING_PRIVS_NOT_APPLICABLE = initialize("shna",
+			"sharing privileges not applicable");
+	public static final Icon SHARING_PRIVS_READ_ONLY = initialize("shro",
+			"sharing privileges read only");
+	public static final Icon SHORTCUT = initialize("shrt", "shortcut");
+	public static final Icon SHARING_PRIVS_READ_WRITE = initialize("shrw",
+			"sharing privileges read write");
+	public static final Icon SHARING_PRIVS_UNKNOWN = initialize("shuk",
+			"sharing privileges unknown");
+	public static final Icon SPEAKING_ITEMS_FOLDER = initialize("spki",
+			"speaking items folder");
+	public static final Icon GENERIC_FILE_SERVER = initialize("srvr",
+			"generic file server");
+	public static final Icon ALERT_STOP = initialize("stop", "alert stop");
+	public static final Icon STARTUP_ITEMS_FOLDER = initialize("strt",
+			"startup items folder");
+	public static final Icon OWNER = initialize("susr", "owner");
+	public static final Icon TOOLBAR_ADVANCED = initialize("tbav",
+			"toolbar advancted");
+	public static final Icon TOOLBAR_INFO = initialize("tbin", "toolbar info");
+	public static final Icon TOOLBAR_LABELS = initialize("tblb",
+			"toolbar labels");
+	public static final Icon TOOLBAR_CUSTOMIZE = initialize("tcus",
+			"toolbar customize");
+	public static final Icon TOOLBAR_DELETE = initialize("tdel",
+			"toolbar delete");
+	public static final Icon TOOLBAR_FAVORITES = initialize("tfav",
+			"toolbar favorites");
+	public static final Icon TOOLBAR_HOME = initialize("thom", "toolbar home");
+	public static final Icon TRASH = initialize("trsh", "trash");
+	public static final Icon USER_IDISK = initialize("udsk", "user iDisk");
+	public static final Icon USER_FOLDER = initialize("ufld", "user folder");
+	public static final Icon UNLOCKED = initialize("ulck", "unlocked");
+	public static final Icon UNKNOWN_FS_OBJECT = initialize("unfs",
+			"unknown FS object");
+	public static final Icon USER = initialize("user", "user");
+	public static final Icon WORKGROUP_FOLDER = initialize("wfld",
+			"workgroup folder");
+	public static final Icon SHARING_PRIVS_WRITABLE = initialize("writ",
+			"sharing privileges writable");
+	public static final Icon GENERIC_CONTROL_PANEL = initialize("APPC",
+			"generic control panel");
+	public static final Icon GENERIC_DESK_ACCESSORY = initialize("APPD",
+			"generic desk accessory");
+	public static final Icon GENERIC_APPLICATION = initialize("APPL",
+			"generic application");
+	public static final Icon FINDER = initialize("FNDR", "Finder");
+	public static final Icon FONT_SUITCASE = initialize("FFIL", "font suitcase");
+	public static final Icon GENERIC_FONT = initialize("ffil", "generic font");
+	public static final Icon CONTROL_CONTROL_STRIP_MODULE = initialize("sdev",
+			"generic control strip module");
+	public static final Icon GENERIC_COMPONENT = initialize("thng",
+			"generic component");
+	public static final Icon GENERIC_DOCUMENT = initialize("docu",
+			"generic document");
+	public static final Icon GENERIC_EXTENSION = initialize("INIT",
+			"generic extension");
+	public static final Icon GENERIC_FONT_SCALE = initialize("sclr",
+			"generic font scaler");
+	public static final Icon GENERIC_MOVER_OBJECT = initialize("movr",
+			"generic mover object");
+	public static final Icon GENERIC_PC_CARD = initialize("pcmc",
+			"generic PC card");
+	public static final Icon GENERIC_QUERY_DOCUMENT = initialize("qery",
+			"generic query document");
+	public static final Icon GENERIC_SUITCASE = initialize("suit",
+			"generic suitcase");
+	public static final Icon GENERIC_WORM = initialize("worm", "generic WORM");
+	public static final Icon INTERNATIONAL_RESOURCES = initialize("ifil",
+			"international resources");
+	public static final Icon KEYBOARD_LAYOUT = initialize("kfil",
+			"keyboard layout");
+	public static final Icon SOUND_FILE = initialize("sfil", "sound file");
+	public static final Icon SYSTEM_SUITCASE = initialize("zsys",
+			"system suitcsae");
+	public static final Icon TRUETYPE_FONT = initialize("tfil", "TrueType font");
+	public static final Icon TRUETYPE_FLAT_FONT = initialize("sfnt",
+			"TrueType flat font");
+	public static final Icon TRUETYPE_MULTI_FLAT_FONT = initialize("ttcf",
+			"TrueType multi flat font");
+	public static final Icon INTERNET_LOCATION_HTTP = initialize("ilht",
+			"internet location HTTP");
+	public static final Icon INTERNET_LOCATION_FTP = initialize("ilft",
+			"internet location FTP");
+	public static final Icon INTERNET_LOCATION_APPLESHARE = initialize("ilaf",
+			"internet location AppleShare");
+	public static final Icon INTERNET_LOCATION_APPLETALK_ZONE = initialize(
+			"ilat", "internet location AppleTalk zone");
+	public static final Icon INTERNET_LOCATION_FILE = initialize("ilfi",
+			"internet location file");
+	public static final Icon INTERNET_LOCATION_MAIL = initialize("ilma",
+			"internet location mail");
+	public static final Icon INTERNET_LOCATION_NEWS = initialize("ilnw",
+			"internet location news");
+	public static final Icon INTERNET_LOCATION_NLS_NEIGHBORHOOD = initialize(
+			"ilns", "internet location NLS neighborhood");
+	public static final Icon INTERNET_LOCATION_GENERIC = initialize("ilge",
+			"internet location generic");
+	public static final Icon DROP_FOLDER = initialize("dbox", "drop folder");
+	public static final Icon PRIVATE_FOLDER = initialize("prvf",
+			"private folder");
+	public static final Icon CONTROL_PANEL_DISABLED_FOLDER = initialize("ctrD",
+			"control panel disabled folder");
+	public static final Icon EXTENSIONS_DISABLED_FOLDER = initialize("extD",
+			"extensions disabled folder");
+	public static final Icon SHUTDOWN_ITEMS_DISABLED_FOLDER = initialize(
+			"shdD", "shutdown items disabled folder");
+	public static final Icon STARTUP_ITEMS_DISABLED_FOLDER = initialize("strD",
+			"startup items disabled folder");
+	public static final Icon SYSTEM_EXTENSIONS_DISABLED_FOLDER = initialize(
+			"macD", "system extensions disabled folder");
+	public static final Icon TOOLBAR_APPLICATIONS_FOLDER = initialize("tAps",
+			"toolbar applications folder");
+	public static final Icon TOOLBAR_DOCUMENTS_FOLDER = initialize("tDoc",
+			"toolbar documents folder");
+	public static final Icon TOOLBAR_MOVIE_FOLDER = initialize("tMov",
+			"toolbar movie folder");
+	public static final Icon TOOLBAR_MUSIC_FOLDER = initialize("tMus",
+			"toolbar music folder");
+	public static final Icon TOOLBAR_PICTURES_FOLDER = initialize("tPic",
+			"toolbar pictures folder");
+	public static final Icon TOOLBAR_PUBLIC_FOLDER = initialize("tPub",
+			"toolbar public folder");
+	public static final Icon TOOLBAR_DESKTOP_FOLDER = initialize("tDsk",
+			"toolbar desktop folder");
+	public static final Icon TOOLBAR_DOWNLOADS_FOLDER = initialize("tDwn",
+			"toolbar downloads folder");
+	public static final Icon TOOLBAR_LIBRARY_FOLDER = initialize("tLib",
+			"toolbar library folder");
+	public static final Icon TOOLBAR_UTILITIES_FOLDER = initialize("tUtl",
+			"toolbar utilities folder");
+	public static final Icon TOOLBAR_SITES_FOLDER = initialize("tSts",
+			"toolbar sites folder");
+	public static final Icon APPLE_EXTRAS_FOLDER = initialize("aex ",
+			"Apple extras folder");
+	public static final Icon ASSISTANTS_FOLDER = initialize("ast ",
+			"assistants folder");
+	public static final Icon CONTROL_STRIP_MODULES_FOLDER_ICON = initialize(
+			"sdv ", "control strip modules folder icon");
+	public static final Icon HELP_FOLDER = initialize("hlp ", "help folder");
+	public static final Icon INTERNET_FOLDER = initialize("int ",
+			"internet folder");
+	public static final Icon INTERNET_PLUGIN_FOLDER = initialize("net ",
+			"internet plugin folder");
+	public static final Icon LOCALES_FOLDER = initialize("loc",
+			"locales folder");
+	public static final Icon MAC_OS_README_FOLDER = initialize("mor ",
+			"Mac OS readme folder");
+	public static final Icon PREFERENCES_FOLDER = initialize("prf ",
+			"preferences folder");
+	public static final Icon PRINTER_DRIVER_FOLDER = initialize("prd ",
+			"printer driver folder");
+	public static final Icon SCRIPTING_ADDITIONS_FOLDER = initialize("scr ",
+			"scripting additions folder");
+	public static final Icon TEXT_ENCODINGS_FOLDER = initialize("tex ",
+			"text encodings folder");
+	public static final Icon USERS_FOLDER = initialize("usr ", "users folder");
+	public static final Icon UTILITIES_FOLDER = initialize("uti ",
+			"utilities folder");
 
 	private static Constructor systemIconConstructor;
 
@@ -313,7 +333,12 @@ public class AquaIcon {
 	private synchronized static final Icon initialize(String selectorID,
 			String description) {
 		descriptionMap.put(selectorID, description);
-		return get(selectorID);
+		try {
+			return get(selectorID);
+		} catch (Throwable t) {
+			// TODO return some sort of error icon
+			return null;
+		}
 	}
 
 	public static String getDescription(String selectorID) {
@@ -328,19 +353,23 @@ public class AquaIcon {
 				icon = (Icon) systemIconConstructor.newInstance(selectorID);
 				iconMap.put(selectorID, icon);
 			}
-
-			// if (maxConstrainingSize != null) {
-			// Dimension d = new Dimension(icon.getIconWidth(),
-			// icon.getIconHeight());
-			// Dimension newSize = Dimension2D.scaleProportionally(d,
-			// maxConstrainingSize);
-			// icon = new ScaledIcon(icon, newSize.width, newSize.height);
-			// }
-
 			return icon;
 		} catch (InstantiationException | IllegalAccessException
 				| InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static Icon get(String selectorID, Dimension maxConstrainingSize) {
+		Icon icon = get(selectorID);
+
+		if (maxConstrainingSize != null) {
+			Dimension d = new Dimension(icon.getIconWidth(),
+					icon.getIconHeight());
+			Dimension newSize = Dimension2D.scaleProportionally(d,
+					maxConstrainingSize);
+			icon = new ScaledIcon(icon, newSize.width, newSize.height);
+		}
+		return icon;
 	}
 }
