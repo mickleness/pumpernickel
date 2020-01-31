@@ -16,8 +16,10 @@ import java.awt.Point;
 import java.util.Objects;
 
 import javax.swing.JComponent;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JToolTip;
+import javax.swing.JTree;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 
@@ -98,6 +100,11 @@ public class QPopupFactory extends PopupFactory {
 		ui.setFillColor(content.getBackground());
 		boolean useCallout = isToolTipCallout() || x == UNDEFINED
 				|| y == UNDEFINED;
+
+		// if you want a tooltip to point to a tree or list cell you
+		// need some external help
+		if (owner instanceof JList || owner instanceof JTree)
+			useCallout = false;
 
 		if (!useCallout)
 			ui.setCalloutSize(0);
