@@ -353,6 +353,9 @@ public class AquaIcon {
 				icon = (Icon) systemIconConstructor.newInstance(selectorID);
 				iconMap.put(selectorID, icon);
 			}
+
+			// TODO: embed description by making an accessible icon
+
 			return icon;
 		} catch (InstantiationException | IllegalAccessException
 				| InvocationTargetException e) {
@@ -368,6 +371,10 @@ public class AquaIcon {
 					icon.getIconHeight());
 			Dimension newSize = Dimension2D.scaleProportionally(d,
 					maxConstrainingSize);
+
+			// TODO: when get() returns accessible icon, make sure
+			// ScaledIcon creates an accessible icon.
+
 			icon = new ScaledIcon(icon, newSize.width, newSize.height);
 		}
 		return icon;
