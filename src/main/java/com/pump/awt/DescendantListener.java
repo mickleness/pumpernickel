@@ -190,4 +190,18 @@ public abstract class DescendantListener {
 	public abstract void register(Component c);
 
 	public abstract void unregister(Component c);
+
+	/**
+	 * Uninstall this listener from all Components.
+	 * <p>
+	 * This calls {@link #unregister(Component)} for every component
+	 * that is currently registered.
+	 */
+	public void uninstall() {
+		Component[] array = components
+				.toArray(new Component[components.size()]);
+		for (Component c : array) {
+			processRemoval(c);
+		}
+	}
 }
