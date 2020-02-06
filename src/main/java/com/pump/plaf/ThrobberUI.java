@@ -18,8 +18,11 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Objects;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -33,7 +36,82 @@ import com.pump.swing.JThrobber;
  */
 public abstract class ThrobberUI extends ComponentUI {
 
-	protected static String TIMER_KEY = ThrobberUI.class.getName() + "Timer";
+	/**
+	 * The ThrobberUI may be applied to multiple JThrobbers, but the
+	 * ThrobberData is associated with a unique JThrobber/ThrobberUI pair.
+	 */
+	protected static class ThrobberData {
+		JThrobber throbber;
+		Color originalForeground = null;
+		Timer timer;
+		HierarchyListener hierarchyListener = new HierarchyListener() {
+
+			@Override
+			public void hierarchyChanged(HierarchyEvent e) {
+				reevaluateTimer();
+			}
+
+		};
+
+		ActionListener repaintActionListener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				throbber.repaint();
+				reevaluateTimer();
+			}
+		};
+
+		PropertyChangeListener activeListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				reevaluateTimer();
+			}
+		};
+
+		public ThrobberData(JThrobber throbber) {
+			Objects.requireNonNull(throbber);
+			this.throbber = throbber;
+		}
+
+		protected void install() {
+			Color foreground = throbber.getUI().getDefaultForeground();
+			if (foreground != null) {
+				originalForeground = throbber.getForeground();
+				throbber.setForeground(foreground);
+			}
+			throbber.addPropertyChangeListener(JThrobber.KEY_ACTIVE,
+					activeListener);
+			timer = new Timer(throbber.getUI().repaintInterval,
+					repaintActionListener);
+			reevaluateTimer();
+			throbber.addHierarchyListener(hierarchyListener);
+		}
+
+		protected void uninstall() {
+			throbber.removePropertyChangeListener(JThrobber.KEY_ACTIVE,
+					activeListener);
+			throbber.removeHierarchyListener(hierarchyListener);
+			timer.stop();
+			timer = null;
+
+			if (originalForeground != null)
+				throbber.setForeground(originalForeground);
+		}
+
+		protected void reevaluateTimer() {
+			if (timer != null) {
+				if (throbber.isActive() && throbber.isShowing()) {
+					if (!timer.isRunning())
+						timer.start();
+				} else {
+					if (timer.isRunning())
+						timer.stop();
+				}
+			}
+		}
+	}
+
+	protected static String PROPERTY_THROBBER_DATA = ThrobberUI.class.getName()
+			+ "#data";
 
 	/**
 	 * An optional client property to define the period of this animation (if
@@ -167,26 +245,18 @@ public abstract class ThrobberUI extends ComponentUI {
 	@Override
 	public void installUI(final JComponent c) {
 		super.installUI(c);
-		ActionListener repaintActionListener = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (((JThrobber) c).isActive())
-					c.repaint();
-			}
-		};
-		Color foreground = getDefaultForeground();
-		if (foreground != null) {
-			c.setForeground(foreground);
+		ThrobberData data = getThrobberData((JThrobber) c);
+		data.install();
+	}
+
+	protected ThrobberData getThrobberData(JThrobber throbber) {
+		ThrobberData data = (ThrobberData) throbber
+				.getClientProperty(PROPERTY_THROBBER_DATA);
+		if (data == null) {
+			data = new ThrobberData(throbber);
+			throbber.putClientProperty(PROPERTY_THROBBER_DATA, data);
 		}
-		c.addPropertyChangeListener(JThrobber.KEY_ACTIVE,
-				new PropertyChangeListener() {
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						c.repaint();
-					}
-				});
-		Timer timer = new Timer(repaintInterval, repaintActionListener);
-		timer.start();
-		c.putClientProperty(TIMER_KEY, timer);
+		return data;
 	}
 
 	@Override
@@ -206,9 +276,9 @@ public abstract class ThrobberUI extends ComponentUI {
 	@Override
 	public void uninstallUI(JComponent c) {
 		super.uninstallUI(c);
-		Timer timer = (Timer) c.getClientProperty(TIMER_KEY);
-		if (timer != null)
-			timer.stop();
+		ThrobberData data = getThrobberData((JThrobber) c);
+		data.uninstall();
+		c.putClientProperty(PROPERTY_THROBBER_DATA, null);
 	}
 
 	/**
@@ -260,14 +330,17 @@ public abstract class ThrobberUI extends ComponentUI {
 			height = size.height;
 		}
 
+		@Override
 		public int getIconHeight() {
 			return height;
 		}
 
+		@Override
 		public int getIconWidth() {
 			return width;
 		}
 
+		@Override
 		public void paintIcon(Component c, Graphics g0, int x, int y) {
 			Graphics2D g = (Graphics2D) g0.create();
 			try {
