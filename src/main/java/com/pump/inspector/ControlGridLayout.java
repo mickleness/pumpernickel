@@ -25,7 +25,7 @@ import javax.swing.plaf.basic.BasicPanelUI;
  * columns. If a component is invisible: it is skipped and its allocated cell is
  * given to the next component.
  * <p>
- * This layout had a notion of container groups. All the groups that share this
+ * This layout has a notion of container groups. All the groups that share this
  * layout will be consulted together to allocate the width/height of each
  * column/row.
  * <p>
