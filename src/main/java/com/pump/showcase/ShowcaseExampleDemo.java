@@ -30,6 +30,7 @@ import com.pump.graphics.GraphicsWriter;
 import com.pump.graphics.ImageInstruction;
 import com.pump.plaf.QPanelUI;
 import com.pump.swing.popover.JPopover;
+import com.pump.swing.popup.SliderThumbPopupTarget;
 
 /**
  * This is a ShowcaseDemo that includes a "Configuration" and "Example" panel.
@@ -177,7 +178,7 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 	 *            " pixels".
 	 */
 	protected void addSliderPopover(JSlider slider, final String suffix) {
-		new JPopover<JToolTip>(slider, new JToolTip(), false) {
+		JPopover p = new JPopover<JToolTip>(slider, new JToolTip(), false) {
 
 			@Override
 			protected void doRefreshPopup() {
@@ -197,5 +198,6 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 				getContents().setBorder(null);
 			}
 		};
+		p.setTarget(new SliderThumbPopupTarget(slider));
 	}
 }
