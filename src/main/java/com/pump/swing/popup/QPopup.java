@@ -139,7 +139,6 @@ public class QPopup extends Popup {
 
 	private Point getScreenLoc(CalloutType type) {
 		Rectangle r = getTarget().getScreenBounds();
-		System.err.println("## " + r + " " + getTarget().getClass());
 
 		int minX = r.x;
 		int minY = r.y;

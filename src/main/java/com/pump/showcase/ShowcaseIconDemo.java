@@ -243,6 +243,9 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 
 					@Override
 					public void valueChanged(ListSelectionEvent e) {
+						if (popover != null)
+							popover.dispose();
+
 						int i = list.getSelectedIndex();
 						ShowcaseIcon icon = list.getSelectedValue();
 						if (icon != null) {

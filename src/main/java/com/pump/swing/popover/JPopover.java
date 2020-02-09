@@ -17,6 +17,8 @@ import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.swing.JComponent;
@@ -52,6 +54,40 @@ import com.pump.util.BooleanProperty;
  * @param <T>
  */
 public class JPopover<T extends JComponent> {
+
+	/**
+	 * This is the property that indicates this JPopover is actively showing.
+	 * Only one JPopover is active at a time.
+	 */
+	public static final String PROPERTY_ACTIVE = "active";
+
+	/**
+	 * This is the property that indicates {@link JPopover#dispose()} has been
+	 * called and this popover should permanently closed.
+	 */
+	public static final String PROPERTY_DISPOSED = "disposed";
+
+	/**
+	 * This PopoverVisibility always returns false. Also assigning it
+	 * automatically uninstalls any previous PopoverVisibility.
+	 */
+	@SuppressWarnings("rawtypes")
+	private static PopoverVisibility DISPOSED_VISIBILITY = new PopoverVisibility() {
+
+		@Override
+		public boolean isVisible(JPopover popover) {
+			return false;
+		}
+
+		@Override
+		public void install(JPopover popover) {
+		}
+
+		@Override
+		public void uninstall(JPopover popover) {
+		}
+
+	};
 
 	/**
 	 * This listener will call {@link JPopover#refreshVisibility()} when
@@ -110,18 +146,20 @@ public class JPopover<T extends JComponent> {
 	protected final JComponent owner;
 	protected QPopup popup;
 	protected final T contents;
+	private List<PropertyChangeListener> propertyListeners = new ArrayList<>();
 	private final BooleanProperty visible = new BooleanProperty("visible",
 			false);
 	private PopoverVisibility<T> popoverVisibility;
 	private PopupTarget popupTarget;
 	private boolean rolloverContents;
+	private boolean disposed = false;
 	private long lastKeepVisible = System.currentTimeMillis();
 	private Timer timer = new Timer(100, new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			boolean isKeepActive = getVisibility().isVisible(JPopover.this)
-					&& JPopover.this == getActivePopover();
+			boolean isKeepActive = !isDisposed()
+					&& getVisibility().isVisible(JPopover.this) && isActive();
 
 			if (!isKeepActive) {
 				if (System.currentTimeMillis() - lastKeepVisible > 50) {
@@ -133,7 +171,7 @@ public class JPopover<T extends JComponent> {
 		}
 	});
 
-	private PropertyChangeListener pcl = new PropertyChangeListener() {
+	private PropertyChangeListener accessibleContextListener = new PropertyChangeListener() {
 		boolean dirty = false;
 		Runnable refreshRunnable = new Runnable() {
 			public void run() {
@@ -154,7 +192,6 @@ public class JPopover<T extends JComponent> {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			System.err.println(evt);
 			dirty = true;
 			SwingUtilities.invokeLater(refreshRunnable);
 		}
@@ -185,18 +222,36 @@ public class JPopover<T extends JComponent> {
 			((JToolTip) contents).setComponent(owner);
 		}
 
-		owner.getAccessibleContext().addPropertyChangeListener(pcl);
+		addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (PROPERTY_ACTIVE.equals(evt.getPropertyName())) {
+					if (isActive()) {
+						getOwner().getAccessibleContext()
+								.addPropertyChangeListener(
+										accessibleContextListener);
+					} else {
+						getOwner().getAccessibleContext()
+								.removePropertyChangeListener(
+										accessibleContextListener);
+					}
+				}
+			}
+
+		});
+
 		visible.addPropertyChangeListener(new PropertyChangeListener() {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (visible.getValue()) {
+				if (visible.getValue() && !isDisposed()) {
 					refreshPopup();
 					if (popup == null) {
 						popup = createPopup();
 					}
 					if (visible.getValue()) {
-						activePopover = JPopover.this;
+						setActive(true);
 						popup.show();
 						lastKeepVisible = System.currentTimeMillis();
 						timer.start();
@@ -204,10 +259,10 @@ public class JPopover<T extends JComponent> {
 					}
 				}
 
-				popup.hide();
+				if (popup != null)
+					popup.hide();
 				timer.stop();
-				if (getActivePopover() == JPopover.this)
-					activePopover = null;
+				setActive(false);
 				popup = null;
 			}
 
@@ -220,7 +275,6 @@ public class JPopover<T extends JComponent> {
 				@Override
 				public void run() {
 					refreshPopup();
-					popup.show();
 				}
 			};
 
@@ -243,8 +297,10 @@ public class JPopover<T extends JComponent> {
 
 	/**
 	 * This reevaluates whether the popover should be visible.
-	 * @param refreshNow if true then this executes immediately,
-	 * if false then this executes in the EDT using "invokeLater"
+	 * 
+	 * @param refreshNow
+	 *            if true then this executes immediately, if false then this
+	 *            executes in the EDT using "invokeLater"
 	 */
 	public void refreshVisibility(boolean refreshNow) {
 		Runnable runnable = new Runnable() {
@@ -271,7 +327,7 @@ public class JPopover<T extends JComponent> {
 	 */
 	public void refreshVisibility(Runnable runIfVisible) {
 		boolean v = getVisibility().isVisible(this);
-		if (v) {
+		if (v && !isDisposed()) {
 			visible.setValue(true);
 			if (runIfVisible != null)
 				runIfVisible.run();
@@ -291,7 +347,15 @@ public class JPopover<T extends JComponent> {
 	 * visible.
 	 */
 	public void setVisibility(PopoverVisibility<T> pv) {
-		Objects.requireNonNull(pv);
+		setVisibility(pv, true);
+	}
+
+	private void setVisibility(PopoverVisibility<T> pv, boolean boundsCheck) {
+		if (boundsCheck) {
+			if (isDisposed())
+				throw new IllegalStateException();
+			Objects.requireNonNull(pv);
+		}
 		if (pv == popoverVisibility)
 			return;
 
@@ -326,6 +390,19 @@ public class JPopover<T extends JComponent> {
 		if (popup != null) {
 			popup.show();
 		}
+	}
+
+	public void dispose() {
+		if (!isDisposed()) {
+			disposed = true;
+			firePropertyChangeListeners(PROPERTY_DISPOSED, false, true);
+			visible.setValue(false);
+			setVisibility(DISPOSED_VISIBILITY, false);
+		}
+	}
+
+	public boolean isDisposed() {
+		return disposed;
 	}
 
 	/**
@@ -377,5 +454,50 @@ public class JPopover<T extends JComponent> {
 	public void setTarget(PopupTarget popupTarget) {
 		this.popupTarget = popupTarget;
 		refreshPopup();
+	}
+
+	public boolean isActive() {
+		synchronized (JPopover.class) {
+			return activePopover == this;
+		}
+	}
+
+	private void setActive(boolean active) {
+		synchronized (JPopover.class) {
+			if (active == isActive())
+				return;
+
+			if (active) {
+				if (activePopover != null)
+					activePopover.setActive(false);
+
+				activePopover = JPopover.this;
+				active = true;
+			} else {
+				active = false;
+				if (activePopover == this)
+					activePopover = null;
+			}
+			firePropertyChangeListeners(PROPERTY_ACTIVE, !active, active);
+		}
+	}
+
+	protected void firePropertyChangeListeners(String propertyName,
+			Object oldValue, Object newValue) {
+		PropertyChangeListener[] array = propertyListeners
+				.toArray(new PropertyChangeListener[propertyListeners.size()]);
+		for (PropertyChangeListener pcl : array) {
+			pcl.propertyChange(new PropertyChangeEvent(this, propertyName,
+					oldValue, newValue));
+		}
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener pcl) {
+		propertyListeners.remove(pcl);
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener pcl) {
+		Objects.requireNonNull(pcl);
+		propertyListeners.add(pcl);
 	}
 }
