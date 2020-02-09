@@ -33,6 +33,7 @@ import com.pump.plaf.CircularProgressBarUI;
 import com.pump.plaf.LabelCellRenderer;
 import com.pump.swing.popover.JPopover;
 import com.pump.swing.popover.ListSelectionVisibility;
+import com.pump.swing.popup.ListCellPopupTarget;
 import com.pump.util.list.ObservableList;
 
 public abstract class ShowcaseIconDemo extends ShowcaseDemo {
@@ -242,11 +243,12 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 
 					@Override
 					public void valueChanged(ListSelectionEvent e) {
+						int i = list.getSelectedIndex();
 						ShowcaseIcon icon = list.getSelectedValue();
 						if (icon != null) {
 							popover = new JPopover(list,
 									createPopupContents(icon), true);
-							// TODO: set target to cell bounds
+							popover.setTarget(new ListCellPopupTarget(list, i));
 							popover.setVisibility(new ListSelectionVisibility(
 									list, icon));
 						}

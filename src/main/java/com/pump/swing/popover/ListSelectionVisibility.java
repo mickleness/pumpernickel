@@ -22,7 +22,7 @@ public class ListSelectionVisibility<T extends JComponent> implements
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			popover.refreshVisibility();
+			popover.refreshVisibility(false);
 		}
 
 	};

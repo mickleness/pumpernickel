@@ -62,7 +62,7 @@ public class QPopupFactory extends PopupFactory {
 		Popup p;
 		if (contents instanceof JToolTip) {
 			JComponent c = (JComponent) contents;
-			return getQPopup(owner, c, new Point(x, y));
+			return getQPopup(owner, null, c, new Point(x, y));
 		} else {
 			p = delegate.getPopup(owner, contents, x, y);
 		}
@@ -72,8 +72,9 @@ public class QPopupFactory extends PopupFactory {
 	/**
 	 * Create a QPopup that is guaranteed to have a callout.
 	 */
-	public QPopup getQPopup(JComponent jc, JComponent contents) {
-		return getQPopup(jc, contents, null);
+	public QPopup getQPopup(JComponent jc, PopupTarget target,
+			JComponent contents) {
+		return getQPopup(jc, target, contents, null);
 	}
 
 	/**
@@ -85,7 +86,8 @@ public class QPopupFactory extends PopupFactory {
 	 *            then the QPopup is rendered using a callout.
 	 * @return
 	 */
-	public QPopup getQPopup(Component owner, JComponent content, Point screenLoc) {
+	public QPopup getQPopup(Component owner, PopupTarget target,
+			JComponent content, Point screenLoc) {
 		content.setBorder(null);
 		content.setOpaque(false);
 		JPanel container = new JPanel();
@@ -116,9 +118,9 @@ public class QPopupFactory extends PopupFactory {
 
 		QPopup p;
 		if (useCallout) {
-			p = new QPopup(owner, container);
+			p = new QPopup(owner, target, container);
 		} else {
-			p = new QPopup(owner, container, screenLoc);
+			p = new QPopup(owner, target, container, screenLoc);
 		}
 
 		return p;

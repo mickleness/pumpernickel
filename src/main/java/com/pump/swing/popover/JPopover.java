@@ -28,6 +28,7 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.pump.swing.popup.PopupTarget;
 import com.pump.swing.popup.QPopup;
 import com.pump.swing.popup.QPopupFactory;
 import com.pump.util.BooleanProperty;
@@ -89,7 +90,7 @@ public class JPopover<T extends JComponent> {
 				public void run() {
 					JPopover<?> p = ref.get();
 					if (p != null) {
-						p.refreshVisibility();
+						p.refreshVisibility(false);
 					} else {
 						MenuSelectionManager.defaultManager()
 								.removeChangeListener(
@@ -112,7 +113,7 @@ public class JPopover<T extends JComponent> {
 	private final BooleanProperty visible = new BooleanProperty("visible",
 			false);
 	private PopoverVisibility<T> popoverVisibility;
-
+	private PopupTarget popupTarget;
 	private boolean rolloverContents;
 	private long lastKeepVisible = System.currentTimeMillis();
 	private Timer timer = new Timer(100, new ActionListener() {
@@ -230,7 +231,7 @@ public class JPopover<T extends JComponent> {
 
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				refreshVisibility();
+				refreshVisibility(false);
 			}
 
 		});
@@ -242,11 +243,20 @@ public class JPopover<T extends JComponent> {
 
 	/**
 	 * This reevaluates whether the popover should be visible.
-	 * <p>
-	 * This is shorthand for <code>refreshVisibility(this, null)</code>.
+	 * @param refreshNow if true then this executes immediately,
+	 * if false then this executes in the EDT using "invokeLater"
 	 */
-	public void refreshVisibility() {
-		refreshVisibility(null);
+	public void refreshVisibility(boolean refreshNow) {
+		Runnable runnable = new Runnable() {
+			public void run() {
+				refreshVisibility(null);
+			}
+		};
+		if (refreshNow) {
+			runnable.run();
+		} else {
+			SwingUtilities.invokeLater(runnable);
+		}
 	}
 
 	/**
@@ -290,7 +300,7 @@ public class JPopover<T extends JComponent> {
 
 		popoverVisibility = pv;
 		popoverVisibility.install(this);
-		refreshVisibility();
+		refreshVisibility(false);
 	}
 
 	/**
@@ -361,6 +371,11 @@ public class JPopover<T extends JComponent> {
 		} else {
 			qpf = new QPopupFactory(pf);
 		}
-		return qpf.getQPopup(getOwner(), getContents());
+		return qpf.getQPopup(getOwner(), popupTarget, getContents());
+	}
+
+	public void setTarget(PopupTarget popupTarget) {
+		this.popupTarget = popupTarget;
+		refreshPopup();
 	}
 }

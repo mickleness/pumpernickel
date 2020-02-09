@@ -43,7 +43,7 @@ public class BasicPopoverVisibility<T extends JComponent> implements
 
 		@Override
 		public void focusGained(FocusEvent e) {
-			popover.refreshVisibility();
+			popover.refreshVisibility(false);
 		}
 
 		public void uninstall() {
@@ -64,12 +64,12 @@ public class BasicPopoverVisibility<T extends JComponent> implements
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			popover.refreshVisibility();
+			popover.refreshVisibility(false);
 		}
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			popover.refreshVisibility();
+			popover.refreshVisibility(false);
 		}
 
 		public void uninstall() {
