@@ -13,18 +13,26 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.BytePixelIterator;
 import com.pump.image.pixel.IntPixelIterator;
 import com.pump.plaf.CircularProgressBarUI;
 import com.pump.plaf.LabelCellRenderer;
+import com.pump.swing.popover.JPopover;
+import com.pump.swing.popover.ListSelectionVisibility;
 import com.pump.util.list.ObservableList;
 
 public abstract class ShowcaseIconDemo extends ShowcaseDemo {
@@ -72,6 +80,14 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 				}
 			}
 			return true;
+		}
+
+		ImageIcon imgIcon;
+
+		public Icon getImageIcon() {
+			if (imgIcon == null)
+				imgIcon = new ImageIcon(img);
+			return imgIcon;
 		}
 	}
 
@@ -214,11 +230,33 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 
 			@Override
 			protected void formatLabel(ShowcaseIcon icon) {
-				label.setIcon(new ImageIcon(icon.img));
-				label.setToolTipText(icon.ids.toString());
+				label.setIcon(icon.getImageIcon());
 			}
 
 		});
+
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.getSelectionModel().addListSelectionListener(
+				new ListSelectionListener() {
+					JPopover popover;
+
+					@Override
+					public void valueChanged(ListSelectionEvent e) {
+						ShowcaseIcon icon = list.getSelectedValue();
+						if (icon != null) {
+							popover = new JPopover(list,
+									createPopupContents(icon), true);
+							// TODO: set target to cell bounds
+							popover.setVisibility(new ListSelectionVisibility(
+									list, icon));
+						}
+					}
+
+					private JComponent createPopupContents(ShowcaseIcon icon) {
+						return new JLabel(icon.ids.toString());
+					}
+
+				});
 	}
 
 	protected abstract BufferedImage getImage(String string);

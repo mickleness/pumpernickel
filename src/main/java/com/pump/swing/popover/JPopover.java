@@ -8,29 +8,17 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.swing;
+package com.pump.swing.popover;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.KeyboardFocusManager;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.Objects;
 
-import javax.accessibility.Accessible;
-import javax.accessibility.AccessibleContext;
-import javax.accessibility.AccessibleState;
-import javax.accessibility.AccessibleStateSet;
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
 import javax.swing.MenuSelectionManager;
@@ -39,9 +27,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.MouseInputAdapter;
 
-import com.pump.awt.DescendantListener;
+import com.pump.swing.QPopup;
+import com.pump.swing.QPopupFactory;
 import com.pump.util.BooleanProperty;
 
 /**
@@ -63,123 +51,6 @@ import com.pump.util.BooleanProperty;
  * @param <T>
  */
 public class JPopover<T extends JComponent> {
-
-	/**
-	 * This calculates whether a popover should be visible.
-	 * <p>
-	 * The default implementation takes into account whether the owner or the
-	 * content has the keyboard focus or mouse rollover.
-	 * <p>
-	 * Also for JComboBoxes we restrict visibility when a component is expanded.
-	 */
-	public static class VisibleCalculator {
-
-		/**
-		 * This calls {@link #calculateVisible(JPopover)} and may make the
-		 * popover visible.
-		 * <p>
-		 * A separate timer is responsible for making the popover hidden.
-		 * 
-		 * @param popover
-		 *            the popover to evaluate
-		 * @param runIfVisible
-		 *            an optional runnable to immediately invoke if
-		 *            {@link #calculateVisible(JPopover)} returns true.
-		 */
-		public final void run(JPopover<?> popover, Runnable runIfVisible) {
-			boolean visible = calculateVisible(popover);
-			if (visible)
-				popover.visible.setValue(visible);
-
-			// there's a separate timer that will set visible to false if needed
-
-			if (visible && runIfVisible != null) {
-				runIfVisible.run();
-			}
-		}
-
-		/**
-		 * Calculate whether a popover should be visible or not.
-		 * <p>
-		 * The default implementation takes into account the keybord focus,
-		 * mouse position, and expanded state.
-		 * 
-		 * @param popover
-		 *            the JPopover to evaluate
-		 * @return true if the popover should be visible.
-		 */
-		protected boolean calculateVisible(
-				JPopover<? extends JComponent> popover) {
-			JComponent owner = popover.getOwner();
-			JComponent contents = popover.getContents();
-
-			boolean newVisible;
-
-			if (owner.isShowing() && owner.isEnabled()) {
-				newVisible = isFocusOwnerOrAncestor(owner) || isRollover(owner);
-				if (!newVisible && popover.isRolloverContents()) {
-					newVisible = isFocusOwnerOrAncestor(contents)
-							|| (isRollover(contents));
-				}
-			} else {
-				newVisible = false;
-			}
-
-			if (isExpanded(owner)) {
-				newVisible = false;
-			}
-
-			return newVisible;
-		}
-
-		/**
-		 * Return true if the argument is the focus owner or is an ancestor of
-		 * the focus owner.
-		 */
-		protected boolean isFocusOwnerOrAncestor(JComponent jc) {
-			Component focusOwner = KeyboardFocusManager
-					.getCurrentKeyboardFocusManager().getFocusOwner();
-			if (focusOwner == null)
-				return false;
-			return jc == focusOwner
-					|| SwingUtilities.isDescendingFrom(focusOwner, jc);
-		}
-
-		/**
-		 * Return true if the mouse is currently over the argument.
-		 */
-		protected boolean isRollover(JComponent jc) {
-			if (!jc.isShowing())
-				return false;
-			Point p = jc.getLocationOnScreen();
-			int w = jc.getWidth();
-			int h = jc.getHeight();
-
-			Point mouse = MouseInfo.getPointerInfo().getLocation();
-
-			return mouse.x >= p.x && mouse.y >= p.y && mouse.x < p.x + w
-					&& mouse.y < p.y + h;
-		}
-
-		/**
-		 * Return true if the component is expanded, such as when you open a
-		 * JComboBox.
-		 */
-		protected boolean isExpanded(JComponent jc) {
-			boolean expanded = false;
-			AccessibleContext c = jc.getAccessibleContext();
-			if (c != null) {
-				AccessibleStateSet axSet = c.getAccessibleStateSet();
-				if (axSet.contains(AccessibleState.EXPANDED)) {
-					expanded = true;
-				}
-			}
-			return expanded;
-
-		}
-	}
-
-	private static VisibleCalculator DEFAULT_VISIBLE_CALCULATOR = new VisibleCalculator();
 
 	/**
 	 * This listener will call {@link JPopover#refreshVisibility()} when
@@ -240,7 +111,7 @@ public class JPopover<T extends JComponent> {
 	protected final T contents;
 	private final BooleanProperty visible = new BooleanProperty("visible",
 			false);
-	private VisibleCalculator visibleCalculator;
+	private PopoverVisibility<T> popoverVisibility;
 
 	private boolean rolloverContents;
 	private long lastKeepVisible = System.currentTimeMillis();
@@ -248,8 +119,7 @@ public class JPopover<T extends JComponent> {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			boolean isKeepActive = getVisibleCalculator().calculateVisible(
-					JPopover.this)
+			boolean isKeepActive = getVisibility().isVisible(JPopover.this)
 					&& JPopover.this == getActivePopover();
 
 			if (!isKeepActive) {
@@ -273,9 +143,6 @@ public class JPopover<T extends JComponent> {
 					if (popup != null) {
 						if (popup.getOwner().isShowing()) {
 							refreshPopup();
-							popup.show();
-						} else {
-							popup.hide();
 						}
 					}
 				} finally {
@@ -286,6 +153,7 @@ public class JPopover<T extends JComponent> {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
+			System.err.println(evt);
 			dirty = true;
 			SwingUtilities.invokeLater(refreshRunnable);
 		}
@@ -316,7 +184,7 @@ public class JPopover<T extends JComponent> {
 			((JToolTip) contents).setComponent(owner);
 		}
 
-		addPropertyChangeListeners(owner.getAccessibleContext());
+		owner.getAccessibleContext().addPropertyChangeListener(pcl);
 		visible.addPropertyChangeListener(new PropertyChangeListener() {
 
 			@Override
@@ -344,7 +212,6 @@ public class JPopover<T extends JComponent> {
 
 		});
 
-		installOwnerTriggers();
 		getOwner().addComponentListener(new ComponentAdapter() {
 
 			Runnable successRunnable = new Runnable() {
@@ -369,6 +236,8 @@ public class JPopover<T extends JComponent> {
 		});
 
 		MenuSelectionManagerListener.install(this);
+
+		setVisibility(new BasicPopoverVisibility<T>());
 	}
 
 	/**
@@ -391,76 +260,37 @@ public class JPopover<T extends JComponent> {
 	 *            not the popover is already visible.)
 	 */
 	public void refreshVisibility(Runnable runIfVisible) {
-		getVisibleCalculator().run(this, runIfVisible);
+		boolean v = getVisibility().isVisible(this);
+		if (v) {
+			visible.setValue(true);
+			if (runIfVisible != null)
+				runIfVisible.run();
+		}
 	}
 
 	/**
-	 * Return the VisibleCalculator used to determine if this popover should be
+	 * Return the PopoverVisibility used to determine if this popover should be
 	 * visible.
 	 */
-	public VisibleCalculator getVisibleCalculator() {
-		VisibleCalculator c = visibleCalculator;
-		if (c == null)
-			c = DEFAULT_VISIBLE_CALCULATOR;
-		return c;
+	public PopoverVisibility<T> getVisibility() {
+		return popoverVisibility;
 	}
 
 	/**
-	 * Set the VisibleCalculator used to determine if this popover should be
+	 * Set the PopoverVisibility used to determine if this popover should be
 	 * visible.
 	 */
-	public void setVisibleCalculator(VisibleCalculator vc) {
-		if (vc == visibleCalculator)
+	public void setVisibility(PopoverVisibility<T> pv) {
+		Objects.requireNonNull(pv);
+		if (pv == popoverVisibility)
 			return;
 
-		visibleCalculator = vc;
+		if (popoverVisibility != null)
+			popoverVisibility.uninstall(this);
+
+		popoverVisibility = pv;
+		popoverVisibility.install(this);
 		refreshVisibility();
-	}
-
-	/**
-	 * Install the listeners on the owner that make this popover visible. By
-	 * default this method calls {@link #installOwnerFocusTrigger()} and
-	 * {@link #installOwnerMouseTrigger()}.
-	 */
-	protected void installOwnerTriggers() {
-		installOwnerFocusTrigger();
-		installOwnerMouseTrigger();
-	}
-
-	/**
-	 * Install a FocusListener on the owner (and its descendants) to show this
-	 * popover when they have the keyboard focus.
-	 */
-	protected void installOwnerFocusTrigger() {
-		DescendantListener.addFocusListener(owner, new FocusAdapter() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				refreshVisibility();
-			}
-
-		}, false);
-	}
-
-	/**
-	 * Install a MouseListener on the owner (and its descendants) to show this
-	 * popover when the mouse hovers over the owner.
-	 */
-	protected void installOwnerMouseTrigger() {
-		MouseInputAdapter ml = new MouseInputAdapter() {
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				refreshVisibility();
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				refreshVisibility();
-			}
-
-		};
-		DescendantListener.addMouseListener(owner, ml, false);
 	}
 
 	/**
@@ -478,32 +308,12 @@ public class JPopover<T extends JComponent> {
 	}
 
 	/**
-	 * Attach listeners to a context and its descendants so we'll refresh the
-	 * popup when interesting events happen. This is a generic way to listen to
-	 * any interesting event in a JComponent subclass without knowing what that
-	 * subclass is. (For example: if you drag a JSlider around, this generates
-	 * accessible changes we listen to.)
-	 */
-	private void addPropertyChangeListeners(AccessibleContext accessibleContext) {
-		accessibleContext.addPropertyChangeListener(pcl);
-		for (int a = 0; a < accessibleContext.getAccessibleChildrenCount(); a++) {
-			Accessible z = accessibleContext.getAccessibleChild(a);
-			AccessibleContext ax = z.getAccessibleContext();
-			if (ax != null) {
-				addPropertyChangeListeners(ax);
-			}
-		}
-	}
-
-	/**
 	 * This calls {@link #doRefreshPopup()} and automatically repositions the
 	 * popover if needed.
 	 */
 	public final void refreshPopup() {
-		Dimension d = getContents().getPreferredSize();
 		doRefreshPopup();
-		Dimension d2 = getContents().getPreferredSize();
-		if (!d.equals(d2) && popup != null) {
+		if (popup != null) {
 			popup.show();
 		}
 	}
