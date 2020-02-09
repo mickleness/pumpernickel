@@ -5,14 +5,17 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 
+import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -21,6 +24,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -38,6 +42,19 @@ import com.pump.util.list.ObservableList;
 
 public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
+
+	private static final String ACTION_CLEAR_SELECTION = "clear-selection";
+
+	static class ClearSelectionAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JList<?> list = (JList<?>) e.getSource();
+			list.setSelectedIndices(new int[] {});
+		}
+
+	}
 
 	protected static class ShowcaseIcon {
 		BufferedImage img;
@@ -267,6 +284,11 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 					}
 
 				});
+
+		KeyStroke escapeKey = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+		list.getInputMap().put(escapeKey, ACTION_CLEAR_SELECTION);
+		list.getActionMap().put(ACTION_CLEAR_SELECTION,
+				new ClearSelectionAction());
 	}
 
 	protected abstract BufferedImage getImage(String string);
