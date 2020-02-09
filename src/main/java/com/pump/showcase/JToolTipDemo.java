@@ -36,8 +36,8 @@ import com.pump.inspector.Inspector;
 import com.pump.plaf.QPanelUI.CalloutType;
 import com.pump.swing.FontComboBox;
 import com.pump.swing.JColorWell;
-import com.pump.swing.QPopup;
-import com.pump.swing.QPopupFactory;
+import com.pump.swing.popup.QPopup;
+import com.pump.swing.popup.QPopupFactory;
 
 /**
  * This demo shows how to integrate the QPopupFactory with Swing's default

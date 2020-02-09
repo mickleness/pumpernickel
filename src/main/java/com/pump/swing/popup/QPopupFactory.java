@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.swing;
+package com.pump.swing.popup;
 
 import java.awt.Component;
 import java.awt.Insets;

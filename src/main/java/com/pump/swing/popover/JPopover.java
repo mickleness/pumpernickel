@@ -28,8 +28,8 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.swing.QPopup;
-import com.pump.swing.QPopupFactory;
+import com.pump.swing.popup.QPopup;
+import com.pump.swing.popup.QPopupFactory;
 import com.pump.util.BooleanProperty;
 
 /**
