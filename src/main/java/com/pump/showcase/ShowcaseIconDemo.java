@@ -240,13 +240,18 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		list.getSelectionModel().addListSelectionListener(
 				new ListSelectionListener() {
 					JPopover popover;
+					int currentIndex = -1;
 
 					@Override
 					public void valueChanged(ListSelectionEvent e) {
+						int i = list.getSelectedIndex();
+						if (i == currentIndex)
+							return;
+
+						currentIndex = i;
 						if (popover != null)
 							popover.dispose();
 
-						int i = list.getSelectedIndex();
 						ShowcaseIcon icon = list.getSelectedValue();
 						if (icon != null) {
 							popover = new JPopover(list,
