@@ -19,7 +19,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -279,10 +278,6 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 						}
 					}
 
-					private JComponent createPopupContents(ShowcaseIcon icon) {
-						return new JLabel(icon.ids.toString());
-					}
-
 				});
 
 		KeyStroke escapeKey = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
@@ -290,6 +285,8 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		list.getActionMap().put(ACTION_CLEAR_SELECTION,
 				new ClearSelectionAction());
 	}
+
+	protected abstract JComponent createPopupContents(ShowcaseIcon icon);
 
 	protected abstract BufferedImage getImage(String string);
 

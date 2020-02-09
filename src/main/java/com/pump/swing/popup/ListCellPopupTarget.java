@@ -32,6 +32,20 @@ public class ListCellPopupTarget implements PopupTarget {
 		SwingUtilities.convertPointToScreen(p, list);
 		r.x += p.x;
 		r.y += p.y;
+
+		int z = 0;
+		if (r.width > 30) {
+			z = 10;
+		} else if (r.width > 15) {
+			z = 4;
+		} else if (r.width > 8) {
+			z = 1;
+		}
+		r.x += z;
+		r.y += z;
+		r.width -= 2 * z;
+		r.height -= 2 * z;
+
 		return r;
 	}
 }

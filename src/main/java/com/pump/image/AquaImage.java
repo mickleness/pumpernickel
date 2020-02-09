@@ -24,56 +24,63 @@ public class AquaImage implements Serializable {
 
 	/** A Quick Look template image. Available in OS X v10.5 and later. */
 	public static final AquaImage QuickLookTemplate = get("QuickLookTemplate",
-			"A Quick Look template image. Available in OS X v10.5 and later.");
+			"A Quick Look template image.",
+			"Available in OS X v10.5 and later.");
 
 	/** A Bluetooth template image. Available in OS X v10.5 and later. */
 	public static final AquaImage BluetoothTemplate = get("BluetoothTemplate",
-			"A Bluetooth template image. Available in OS X v10.5 and later.");
+			"A Bluetooth template image.", "Available in OS X v10.5 and later.");
 
 	/** An iChat Theater template image. Available in OS X v10.5 and later. */
 	public static final AquaImage IChatTheaterTemplate = get(
-			"IChatTheaterTemplate",
-			"An iChat Theater template image. Available in OS X v10.5 and later.");
+			"IChatTheaterTemplate", "An iChat Theater template image.",
+			"Available in OS X v10.5 and later.");
 
 	/** A slideshow template image. Available in OS X v10.5 and later. */
 	public static final AquaImage SlideshowTemplate = get("SlideshowTemplate",
-			"A slideshow template image. Available in OS X v10.5 and later.");
+			"A slideshow template image.", "Available in OS X v10.5 and later.");
 
 	/** An action menu template image. Available in OS X v10.5 and later. */
 	public static final AquaImage ActionTemplate = get("ActionTemplate",
-			"An action menu template image. Available in OS X v10.5 and later.");
+			"An action menu template image.",
+			"Available in OS X v10.5 and later.");
 
 	/** A badge for a "smart" item. Available in OS X v10.5 and later. */
 	public static final AquaImage SmartBadgeTemplate = get(
-			"SmartBadgeTemplate",
-			"A badge for a \"smart\" item. Available in OS X v10.5 and later.");
+			"SmartBadgeTemplate", "A badge for a \"smart\" item.",
+			"Available in OS X v10.5 and later.");
 
 	/** An icon view mode template image. Available in OS X v10.5 and later. */
 	public static final AquaImage IconViewTemplate = get("IconViewTemplate",
-			"An icon view mode template image. Available in OS X v10.5 and later.");
+			"An icon view mode template image.",
+			"Available in OS X v10.5 and later.");
 
 	/** A list view mode template image. Available in OS X v10.5 and later. */
 	public static final AquaImage ListViewTemplate = get("ListViewTemplate",
-			"A list view mode template image. Available in OS X v10.5 and later.");
+			"A list view mode template image.",
+			"Available in OS X v10.5 and later.");
 
 	/** A column view mode template image. Available in OS X v10.5 and later. */
 	public static final AquaImage ColumnViewTemplate = get(
-			"ColumnViewTemplate",
-			"A column view mode template image. Available in OS X v10.5 and later.");
+			"ColumnViewTemplate", "A column view mode template image.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * A cover flow view mode template image. Available in OS X v10.5 and later.
 	 */
 	public static final AquaImage FlowViewTemplate = get("FlowViewTemplate",
-			"A cover flow view mode template image. Available in OS X v10.5 and later.");
+			"A cover flow view mode template image.",
+			"Available in OS X v10.5 and later.");
 
 	/** A share view template image. Available in OS X v10.8 and later. */
 	public static final AquaImage ShareTemplate = get("ShareTemplate",
-			"A share view template image. Available in OS X v10.8 and later.");
+			"A share view template image.",
+			"Available in OS X v10.8 and later.");
 
 	/** A path button template image. Available in OS X v10.5 and later. */
 	public static final AquaImage PathTemplate = get("PathTemplate",
-			"A path button template image. Available in OS X v10.5 and later.");
+			"A path button template image.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * An invalid data template image. Place this icon to the right of any
@@ -82,7 +89,8 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage InvalidDataFreestandingTemplate = get(
 			"InvalidDataFreestandingTemplate",
-			"An invalid data template image. Place this icon to the right of any fields containing invalid data. You can use this image to implement a borderless button. Available in OS X v10.5 and later.");
+			"An invalid data template image. Place this icon to the right of any fields containing invalid data. You can use this image to implement a borderless button.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * A locked lock template image. Use to indicate locked content. Available
@@ -90,7 +98,8 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage LockLockedTemplate = get(
 			"LockLockedTemplate",
-			"A locked lock template image. Use to indicate locked content. Available in OS X v10.5 and later.");
+			"A locked lock template image. Use to indicate locked content.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * An unlocked lock template image. Use to indicate modifiable content that
@@ -98,15 +107,18 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage LockUnlockedTemplate = get(
 			"LockUnlockedTemplate",
-			"An unlocked lock template image. Use to indicate modifiable content that can be locked. Available in OS X v10.5 and later.");
+			"An unlocked lock template image. Use to indicate modifiable content that can be locked.",
+			"Available in OS X v10.5 and later.");
 
 	/** A \"go forward\" template image. Available in OS X v10.5 and later. */
 	public static final AquaImage GoRightTemplate = get("GoRightTemplate",
-			"A \"go forward\" template image. Available in OS X v10.5 and later.");
+			"A \"go forward\" template image.",
+			"Available in OS X v10.5 and later.");
 
 	/** A \"go back\" template image. Available in OS X v10.5 and later. */
 	public static final AquaImage GoLeftTemplate = get("GoLeftTemplate",
-			"A \"go back\" template image. Available in OS X v10.5 and later.");
+			"A \"go back\" template image.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * A generic right-facing triangle template image. Available in OS X v10.5
@@ -114,7 +126,8 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage RightFacingTriangleTemplate = get(
 			"RightFacingTriangleTemplate",
-			"A generic right-facing triangle template image. Available in OS X v10.5 and later.");
+			"A generic right-facing triangle template image.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * A generic left-facing triangle template image. Available in OS X v10.5
@@ -122,15 +135,17 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage LeftFacingTriangleTemplate = get(
 			"LeftFacingTriangleTemplate",
-			"A generic left-facing triangle template image. Available in OS X v10.5 and later.");
+			"A generic left-facing triangle template image.",
+			"Available in OS X v10.5 and later.");
 
 	/** An add item template image. Available in OS X v10.5 and later. */
 	public static final AquaImage AddTemplate = get("AddTemplate",
-			"An add item template image. Available in OS X v10.5 and later.");
+			"An add item template image.", "Available in OS X v10.5 and later.");
 
 	/** A remove item template image. Available in OS X v10.5 and later. */
 	public static final AquaImage RemoveTemplate = get("RemoveTemplate",
-			"A remove item template image. Available in OS X v10.5 and later.");
+			"A remove item template image.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * A reveal contents template image. You can use this image to implement a
@@ -138,7 +153,8 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage RevealFreestandingTemplate = get(
 			"RevealFreestandingTemplate",
-			"A reveal contents template image. You can use this image to implement a borderless button. Available in OS X v10.5 and later.");
+			"A reveal contents template image. You can use this image to implement a borderless button.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * A link template image. You can use this image to implement a borderless
@@ -146,7 +162,8 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage FollowLinkFreestandingTemplate = get(
 			"FollowLinkFreestandingTemplate",
-			"A link template image. You can use this image to implement a borderless button. Available in OS X v10.5 and later.");
+			"A link template image. You can use this image to implement a borderless button.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * An enter full-screen mode template image. Available in OS X v10.5 and
@@ -154,7 +171,8 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage EnterFullScreenTemplate = get(
 			"EnterFullScreenTemplate",
-			"An enter full-screen mode template image. Available in OS X v10.5 and later.");
+			"An enter full-screen mode template image.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * An exit full-screen mode template image. Available in OS X v10.5 and
@@ -162,14 +180,15 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage ExitFullScreenTemplate = get(
 			"ExitFullScreenTemplate",
-			"An exit full-screen mode template image. Available in OS X v10.5 and later.");
+			"An exit full-screen mode template image.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * A stop progress button template image. Available in OS X v10.5 and later.
 	 */
 	public static final AquaImage StopProgressTemplate = get(
-			"StopProgressTemplate",
-			"A stop progress button template image. Available in OS X v10.5 and later.");
+			"StopProgressTemplate", "A stop progress button template image.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * A stop progress template image. You can use this image to implement a
@@ -177,11 +196,12 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage StopProgressFreestandingTemplate = get(
 			"StopProgressFreestandingTemplate",
-			"A stop progress template image. You can use this image to implement a borderless button. Available in OS X v10.5 and later.");
+			"A stop progress template image. You can use this image to implement a borderless button.",
+			"Available in OS X v10.5 and later.");
 
 	/** A refresh template image. Available in OS X v10.5 and later. */
 	public static final AquaImage RefreshTemplate = get("RefreshTemplate",
-			"A refresh template image. Available in OS X v10.5 and later.");
+			"A refresh template image.", "Available in OS X v10.5 and later.");
 
 	/**
 	 * A refresh template image. You can use this image to implement a
@@ -189,31 +209,32 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage RefreshFreestandingTemplate = get(
 			"RefreshFreestandingTemplate",
-			"A refresh template image. You can use this image to implement a borderless button. Available in OS X v10.5 and later.");
+			"A refresh template image. You can use this image to implement a borderless button.",
+			"Available in OS X v10.5 and later.");
 
 	/** A Bonjour icon. Available in OS X v10.5 and later. */
-	public static final AquaImage Bonjour = get("Bonjour",
-			"A Bonjour icon. Available in OS X v10.5 and later.");
+	public static final AquaImage Bonjour = get("Bonjour", "A Bonjour icon.",
+			"Available in OS X v10.5 and later.");
 
 	/** A Dot Mac icon. Available in OS X v10.5 and later. */
-	public static final AquaImage DotMac = get("DotMac",
-			"A Dot Mac icon. Available in OS X v10.5 and later.");
+	public static final AquaImage DotMac = get("DotMac", "A Dot Mac icon.",
+			"Available in OS X v10.5 and later.");
 
 	/** A computer icon. Available in OS X v10.5 and later. */
 	public static final AquaImage Computer = get("Computer",
-			"A computer icon. Available in OS X v10.5 and later.");
+			"A computer icon.", "Available in OS X v10.5 and later.");
 
 	/** A burnable folder icon. Available in OS X v10.5 and later. */
 	public static final AquaImage FolderBurnable = get("FolderBurnable",
-			"A burnable folder icon. Available in OS X v10.5 and later.");
+			"A burnable folder icon.", "Available in OS X v10.5 and later.");
 
 	/** A smart folder icon. Available in OS X v10.5 and later. */
 	public static final AquaImage FolderSmart = get("FolderSmart",
-			"A smart folder icon. Available in OS X v10.5 and later.");
+			"A smart folder icon.", "Available in OS X v10.5 and later.");
 
 	/** A network icon. Available in OS X v10.5 and later. */
-	public static final AquaImage Network = get("Network",
-			"A network icon. Available in OS X v10.5 and later.");
+	public static final AquaImage Network = get("Network", "A network icon.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * A drag image for multiple items. Available in OS X v10.5 and later. *?
@@ -224,7 +245,8 @@ public class AquaImage implements Serializable {
 	 * /** User account toolbar icon. Use in a preferences window only.
 	 */
 	public static final AquaImage UserAccounts = get("UserAccounts",
-			"User account toolbar icon. Use in a preferences window only.");
+			"User account toolbar icon. Use in a preferences window only.",
+			null);
 
 	/**
 	 * General preferences toolbar icon. Use in a preferences window only.
@@ -232,91 +254,101 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage PreferencesGeneral = get(
 			"PreferencesGeneral",
-			"General preferences toolbar icon. Use in a preferences window only. Available in OS X v10.5 and later.");
+			"General preferences toolbar icon. Use in a preferences window only.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * Advanced preferences toolbar icon. Use in a preferences window only.
 	 * Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage Advanced = get(
-			"Advanced",
-			"Advanced preferences toolbar icon for the preferences window. Available in OS X v10.5 and later.");
+	public static final AquaImage Advanced = get("Advanced",
+			"Advanced preferences toolbar icon for the preferences window.",
+			"Available in OS X v10.5 and later.");
 
 	/**
 	 * Advanced preferences toolbar icon. Use in a preferences window only.
 	 * Available in OS X v10.5 and later.
 	 */
 	public static final AquaImage ApplicationIcon = get("ApplicationIcon",
-			"The app's icon. Available in OS X v10.6 and later.");
+			"The app's icon.", "Available in OS X v10.6 and later.");
 
 	/** An information toolbar icon. Available in OS X v10.5 and later. */
 	public static final AquaImage Info = get("Info",
-			"An information toolbar icon. Available in OS X v10.5 and later.");
+			"An information toolbar icon.",
+			"Available in OS X v10.5 and later.");
 
 	/** A font panel toolbar icon. Available in OS X v10.5 and later. */
 	public static final AquaImage FontPanel = get("FontPanel",
-			"A font panel toolbar icon. Available in OS X v10.5 and later.");
+			"A font panel toolbar icon.", "Available in OS X v10.5 and later.");
 
 	public static final AquaImage GoBackTemplate = get("GoBackTemplate",
-			"A \"Go Back\" template image. Available in OS X v10.12 and later.");
+			"A \"Go Back\" template image.",
+			"Available in OS X v10.12 and later.");
 
 	public static final AquaImage GoForwardTemplate = get("GoForwardTemplate",
-			"A \"Go Forward\" template image. Available in OS X v10.12 and later.");
+			"A \"Go Forward\" template image.",
+			"Available in OS X v10.12 and later.");
 
 	/** A color panel toolbar icon. Available in OS X v10.5 and later. */
 	public static final AquaImage ColorPanel = get("ColorPanel",
-			"A color panel toolbar icon. Available in OS X v10.5 and later.");
+			"A color panel toolbar icon.", "Available in OS X v10.5 and later.");
 
 	/** Permissions for a single user. Available in OS X v10.5 and later. */
 	public static final AquaImage User = get("User",
-			"Permissions for a single user. Available in OS X v10.5 and later.");
+			"Permissions for a single user.",
+			"Available in OS X v10.5 and later.");
 
 	/** Permissions for a group of users. Available in OS X v10.5 and later. */
 	public static final AquaImage UserGroup = get("UserGroup",
-			"Permissions for a group of users. Available in OS X v10.5 and later.");
+			"Permissions for a group of users.",
+			"Available in OS X v10.5 and later.");
 
 	/** Permissions for all users. Available in OS X v10.5 and later. */
 	public static final AquaImage Everyone = get("Everyone",
-			"Permissions for all users. Available in OS X v10.5 and later.");
+			"Permissions for all users.", "Available in OS X v10.5 and later.");
 
 	/** Permissions for guests. Available in OS X v10.6 and later. */
 	public static final AquaImage UserGuest = get("UserGuest",
-			"Permissions for guests. Available in OS X v10.6 and later.");
+			"Permissions for guests.", "Available in OS X v10.6 and later.");
 
 	/** A folder image. Available in OS X v10.6 and later. */
-	public static final AquaImage Folder = get("Folder",
-			"A folder image. Available in OS X v10.6 and later.");
+	public static final AquaImage Folder = get("Folder", "A folder image.",
+			"Available in OS X v10.6 and later.");
 
 	/** An image of the empty trash can. Available in OS X v10.6 and later. */
 	public static final AquaImage TrashEmpty = get("TrashEmpty",
-			"An image of the empty trash can. Available in OS X v10.6 and later.");
+			"An image of the empty trash can.",
+			"Available in OS X v10.6 and later.");
 
 	/** An image of the full trash can. Available in OS X v10.6 and later. */
 	public static final AquaImage TrashFull = get("TrashFull",
-			"An image of the full trash can. Available in OS X v10.6 and later.");
+			"An image of the full trash can.",
+			"Available in OS X v10.6 and later.");
 
 	/** Home image suitable for a template. Available in OS X v10.6 and later. */
 	public static final AquaImage HomeTemplate = get("HomeTemplate",
-			"Home image suitable for a template. Available in OS X v10.6 and later.");
+			"Home image suitable for a template.",
+			"Available in OS X v10.6 and later.");
 
 	/**
 	 * Bookmarks image suitable for a template. Available in OS X v10.6 and
 	 * later.
 	 */
 	public static final AquaImage BookmarksTemplate = get("BookmarksTemplate",
-			"Bookmarks image suitable for a template. Available in OS X v10.6 and later.");
+			"Bookmarks image suitable for a template.",
+			"Available in OS X v10.6 and later.");
 
 	/** Caution Image. Available in OS X v10.6 and later. */
-	public static final AquaImage Caution = get("Caution",
-			"A caution image. Available in OS X v10.6 and later.");
+	public static final AquaImage Caution = get("Caution", "A caution image.",
+			"Available in OS X v10.6 and later.");
 
 	/**
 	 * Small green indicator, similar to iChat's available image. Available in
 	 * OS X v10.6 and later.
 	 */
-	public static final AquaImage StatusAvailable = get(
-			"StatusAvailable",
-			"Small green indicator, similar to iChat's available image. Available in OS X v10.6 and later.");
+	public static final AquaImage StatusAvailable = get("StatusAvailable",
+			"Small green indicator, similar to iChat's available image.",
+			"Available in OS X v10.6 and later.");
 
 	/**
 	 * Small yellow indicator, similar to iChat's idle image. Available in OS X
@@ -324,19 +356,20 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage StatusPartiallyAvailable = get(
 			"StatusPartiallyAvailable",
-			"Small yellow indicator, similar to iChat's idle image. Available in OS X v10.6 and later.");
+			"Small yellow indicator, similar to iChat's idle image.",
+			"Available in OS X v10.6 and later.");
 
 	/**
 	 * Small red indicator, similar to iChat's unavailable image. Available in
 	 * OS X v10.6 and later.
 	 */
-	public static final AquaImage StatusUnavailable = get(
-			"StatusUnavailable",
-			"Small red indicator, similar to iChat's unavailable image. Available in OS X v10.6 and later.");
+	public static final AquaImage StatusUnavailable = get("StatusUnavailable",
+			"Small red indicator, similar to iChat's unavailable image.",
+			"Available in OS X v10.6 and later.");
 
 	/** Small clear indicator. Available in OS X v10.6 and later. */
 	public static final AquaImage StatusNone = get("StatusNone",
-			"Small clear indicator. Available in OS X v10.6 and later.");
+			"Small clear indicator.", "Available in OS X v10.6 and later.");
 
 	/**
 	 * A check mark. Drawing these outside of menus is discouraged. Available in
@@ -344,7 +377,8 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage MenuOnStateTemplate = get(
 			"MenuOnStateTemplate",
-			"A check mark. Drawing these outside of menus is discouraged. Available in OS X v10.6 and later.");
+			"A check mark. Drawing these outside of menus is discouraged.",
+			"Available in OS X v10.6 and later.");
 
 	/**
 	 * A horizontal dash. Drawing these outside of menus is discouraged.
@@ -352,7 +386,8 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage MenuMixedStateTemplate = get(
 			"MenuMixedStateTemplate",
-			"A horizontal dash. Drawing these outside of menus is discouraged. Available in OS X v10.6 and later.");
+			"A horizontal dash. Drawing these outside of menus is discouraged.",
+			"Available in OS X v10.6 and later.");
 
 	/**
 	 * MobileMe logo. Note that this is preferred to using the NSImageNameDotMac
@@ -361,11 +396,13 @@ public class AquaImage implements Serializable {
 	 */
 	public static final AquaImage MobileMe = get(
 			"MobileMe",
-			"MobileMe logo. Use of this image is discouraged; instead, use networkName. Available in OS X v10.6 and later.");
+			"MobileMe logo. Use of this image is discouraged; instead, use networkName.",
+			"Available in OS X v10.6 and later.");
 
 	public static final AquaImage MultipleDocuments = get(
 			"MultipleDocuments",
-			"A drag image for multiple items. You can use this icon as the drag image when dragging multiple items. You should not use this image for any other intended purpose. Available in OS X v10.5 and later.");
+			"A drag image for multiple items. You can use this icon as the drag image when dragging multiple items. You should not use this image for any other intended purpose.",
+			"Available in OS X v10.5 and later.");
 
 	// these were all identified programmatically in AquaImageDemo:
 
@@ -488,27 +525,29 @@ public class AquaImage implements Serializable {
 	public static final AquaImage ViewIcons = get("ViewIcons");
 	public static final AquaImage KEXT = get("KEXT");
 
-	private static AquaImage get(String name, String description) {
+	private static AquaImage get(String name, String description,
+			String availability) {
 		AquaImage img = knownImages.get(name);
 		if (img == null) {
-			img = new AquaImage(name, description);
+			img = new AquaImage(name, description, availability);
 			knownImages.put(name, img);
 		}
 		return img;
 	}
 
 	public static AquaImage get(String name) {
-		return get(name, null);
+		return get(name, null, null);
 	}
 
-	String name, description;
+	String name, description, availability;
 	transient Image image;
 	transient BufferedImage bufferedImage;
 
-	private AquaImage(String name, String description) {
+	private AquaImage(String name, String description, String availability) {
 		Objects.requireNonNull(name);
 		this.name = name;
 		this.description = description;
+		this.availability = availability;
 	}
 
 	@Override
@@ -529,7 +568,8 @@ public class AquaImage implements Serializable {
 		if (description == null) {
 			return "AquaImage[ \"" + name + "\"]";
 		}
-		return "AquaImage[ \"" + name + "\", \"" + description + "\"]";
+		return "AquaImage[ \"" + name + "\", \"" + description + "\", \""
+				+ availability + "\"]";
 	}
 
 	public synchronized Image getImage() {
@@ -549,6 +589,10 @@ public class AquaImage implements Serializable {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getAvailability() {
+		return availability;
 	}
 
 	public String getDescription() {

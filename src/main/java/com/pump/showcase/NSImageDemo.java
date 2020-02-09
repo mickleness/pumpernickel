@@ -1,15 +1,20 @@
 package com.pump.showcase;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+
 import com.pump.awt.Dimension2D;
 import com.pump.image.AquaImage;
 import com.pump.image.pixel.Scaling;
+import com.pump.inspector.Inspector;
 
 public class NSImageDemo extends ShowcaseIconDemo {
 
@@ -70,6 +75,33 @@ public class NSImageDemo extends ShowcaseIconDemo {
 			}
 		}
 		return ids.toArray(new String[ids.size()]);
+	}
+
+	@Override
+	protected JComponent createPopupContents(ShowcaseIcon icon) {
+		// TODO: configure animating inspector to animate on first reveal
+		Inspector inspector = new Inspector();
+		for (String id : icon.ids) {
+			String desc = AquaImage.get(id).getDescription();
+			JLabel nameLabel = new JLabel(id + ":");
+			JLabel descLabel = new JLabel();
+			if (desc != null && !desc.trim().isEmpty()) {
+				descLabel.setText(desc);
+			} else {
+				descLabel.setText("(No description)");
+				descLabel.setFont(nameLabel.getFont().deriveFont(Font.ITALIC));
+			}
+			nameLabel.setFont(nameLabel.getFont().deriveFont(Font.BOLD));
+			nameLabel.setLabelFor(descLabel);
+			inspector.addRow(nameLabel, descLabel, false);
+
+			String availability = AquaImage.get(id).getAvailability();
+			if (availability != null && !availability.trim().isEmpty()) {
+				inspector.addRow(new JLabel(""), new JLabel(availability),
+						false);
+			}
+		}
+		return inspector.getPanel();
 	}
 
 }

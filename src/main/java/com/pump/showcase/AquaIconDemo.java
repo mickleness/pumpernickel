@@ -7,10 +7,13 @@ import java.net.URL;
 import java.util.Collection;
 
 import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 import com.pump.awt.Dimension2D;
 import com.pump.icon.AquaIcon;
 import com.pump.icon.ScaledIcon;
+import com.pump.inspector.Inspector;
 
 public class AquaIconDemo extends ShowcaseIconDemo {
 
@@ -67,6 +70,16 @@ public class AquaIconDemo extends ShowcaseIconDemo {
 	protected String[] getImageIDs() {
 		Collection<String> ids = AquaIcon.getIDs();
 		return ids.toArray(new String[ids.size()]);
+	}
+
+	@Override
+	protected JComponent createPopupContents(ShowcaseIcon icon) {
+		Inspector inspector = new Inspector();
+		for (String id : icon.ids) {
+			inspector.addRow(new JLabel("Alias:"),
+					new JLabel(AquaIcon.getDescription(id)), false);
+		}
+		return inspector.getPanel();
 	}
 
 }
