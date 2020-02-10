@@ -184,7 +184,13 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		iconPanel.add(inspector.getPanel(), c);
 		c.gridy++;
 		c.weighty = 1;
-		iconPanel.add(new JScrollPane(list), c);
+		JScrollPane scrollPane = new JScrollPane(list);
+		iconPanel.add(scrollPane, c);
+
+		// use a small preferred size so the separate at the top
+		// of the header is never pushed aside. The GridBagLayout
+		// will make sure this scrollpane is alway stretched-to-fit
+		scrollPane.setPreferredSize(new Dimension(10, 10));
 
 		inspector.addRow(new JLabel("Max Icon Size:"), sizeSlider);
 
