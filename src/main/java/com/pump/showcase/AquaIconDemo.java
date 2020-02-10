@@ -7,7 +7,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -43,14 +47,28 @@ public class AquaIconDemo extends ShowcaseIconDemo {
 
 	@Override
 	public String[] getKeywords() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> words = new ArrayList<>();
+		words.add("Aqua");
+		words.add("icon");
+		for (String id : AquaIcon.getIDs()) {
+			String desc = AquaIcon.getDescription(id);
+			if (desc != null && desc.trim().length() > 0) {
+				words.addAll(Arrays.asList(desc.split(" ")));
+			}
+		}
+		return words.toArray(new String[words.size()]);
 	}
 
 	@Override
 	public Class<?>[] getClasses() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Class<?>> classes = new LinkedList<>();
+		classes.add(AquaIcon.class);
+		try {
+			classes.add(Class.forName("com.apple.laf.AquaIcon"));
+		} catch (ClassNotFoundException e) {
+			// do nothing
+		}
+		return classes.toArray(new Class[classes.size()]);
 	}
 
 	@Override

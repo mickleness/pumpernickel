@@ -237,14 +237,12 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[] { "File", "icon", "filesystem", "filepath" };
 	}
 
 	@Override
 	public Class<?>[] getClasses() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Class[] { FileIcon.class };
 	}
 
 }

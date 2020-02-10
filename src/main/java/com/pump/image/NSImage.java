@@ -21,69 +21,69 @@ import com.pump.awt.Dimension2D;
  * template images are exclusively for use in NSTouchBarItem objects and not in
  * onscreen windows.</blockquote>
  */
-public class AquaImage implements Serializable {
+public class NSImage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	/** All known AquaImages. */
-	private static final Map<String, AquaImage> knownImages = new HashMap<String, AquaImage>();
+	/** All known NSImages. */
+	private static final Map<String, NSImage> knownImages = new HashMap<String, NSImage>();
 
 	/** A Quick Look template image. Available in OS X v10.5 and later. */
-	public static final AquaImage QuickLookTemplate = get("QuickLookTemplate",
+	public static final NSImage QuickLookTemplate = get("QuickLookTemplate",
 			"A Quick Look template image.",
 			"Available in OS X v10.5 and later.");
 
 	/** A Bluetooth template image. Available in OS X v10.5 and later. */
-	public static final AquaImage BluetoothTemplate = get("BluetoothTemplate",
+	public static final NSImage BluetoothTemplate = get("BluetoothTemplate",
 			"A Bluetooth template image.", "Available in OS X v10.5 and later.");
 
 	/** An iChat Theater template image. Available in OS X v10.5 and later. */
-	public static final AquaImage IChatTheaterTemplate = get(
+	public static final NSImage IChatTheaterTemplate = get(
 			"IChatTheaterTemplate", "An iChat Theater template image.",
 			"Available in OS X v10.5 and later.");
 
 	/** A slideshow template image. Available in OS X v10.5 and later. */
-	public static final AquaImage SlideshowTemplate = get("SlideshowTemplate",
+	public static final NSImage SlideshowTemplate = get("SlideshowTemplate",
 			"A slideshow template image.", "Available in OS X v10.5 and later.");
 
 	/** An action menu template image. Available in OS X v10.5 and later. */
-	public static final AquaImage ActionTemplate = get("ActionTemplate",
+	public static final NSImage ActionTemplate = get("ActionTemplate",
 			"An action menu template image.",
 			"Available in OS X v10.5 and later.");
 
 	/** A badge for a "smart" item. Available in OS X v10.5 and later. */
-	public static final AquaImage SmartBadgeTemplate = get(
-			"SmartBadgeTemplate", "A badge for a \"smart\" item.",
+	public static final NSImage SmartBadgeTemplate = get("SmartBadgeTemplate",
+			"A badge for a \"smart\" item.",
 			"Available in OS X v10.5 and later.");
 
 	/** An icon view mode template image. Available in OS X v10.5 and later. */
-	public static final AquaImage IconViewTemplate = get("IconViewTemplate",
+	public static final NSImage IconViewTemplate = get("IconViewTemplate",
 			"An icon view mode template image.",
 			"Available in OS X v10.5 and later.");
 
 	/** A list view mode template image. Available in OS X v10.5 and later. */
-	public static final AquaImage ListViewTemplate = get("ListViewTemplate",
+	public static final NSImage ListViewTemplate = get("ListViewTemplate",
 			"A list view mode template image.",
 			"Available in OS X v10.5 and later.");
 
 	/** A column view mode template image. Available in OS X v10.5 and later. */
-	public static final AquaImage ColumnViewTemplate = get(
-			"ColumnViewTemplate", "A column view mode template image.",
+	public static final NSImage ColumnViewTemplate = get("ColumnViewTemplate",
+			"A column view mode template image.",
 			"Available in OS X v10.5 and later.");
 
 	/**
 	 * A cover flow view mode template image. Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage FlowViewTemplate = get("FlowViewTemplate",
+	public static final NSImage FlowViewTemplate = get("FlowViewTemplate",
 			"A cover flow view mode template image.",
 			"Available in OS X v10.5 and later.");
 
 	/** A share view template image. Available in OS X v10.8 and later. */
-	public static final AquaImage ShareTemplate = get("ShareTemplate",
+	public static final NSImage ShareTemplate = get("ShareTemplate",
 			"A share view template image.",
 			"Available in OS X v10.8 and later.");
 
 	/** A path button template image. Available in OS X v10.5 and later. */
-	public static final AquaImage PathTemplate = get("PathTemplate",
+	public static final NSImage PathTemplate = get("PathTemplate",
 			"A path button template image.",
 			"Available in OS X v10.5 and later.");
 
@@ -92,7 +92,7 @@ public class AquaImage implements Serializable {
 	 * fields containing invalid data. You can use this image to implement a
 	 * borderless button. Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage InvalidDataFreestandingTemplate = get(
+	public static final NSImage InvalidDataFreestandingTemplate = get(
 			"InvalidDataFreestandingTemplate",
 			"An invalid data template image. Place this icon to the right of any fields containing invalid data. You can use this image to implement a borderless button.",
 			"Available in OS X v10.5 and later.");
@@ -101,8 +101,7 @@ public class AquaImage implements Serializable {
 	 * A locked lock template image. Use to indicate locked content. Available
 	 * in OS X v10.5 and later.
 	 */
-	public static final AquaImage LockLockedTemplate = get(
-			"LockLockedTemplate",
+	public static final NSImage LockLockedTemplate = get("LockLockedTemplate",
 			"A locked lock template image. Use to indicate locked content.",
 			"Available in OS X v10.5 and later.");
 
@@ -110,18 +109,18 @@ public class AquaImage implements Serializable {
 	 * An unlocked lock template image. Use to indicate modifiable content that
 	 * can be locked. Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage LockUnlockedTemplate = get(
+	public static final NSImage LockUnlockedTemplate = get(
 			"LockUnlockedTemplate",
 			"An unlocked lock template image. Use to indicate modifiable content that can be locked.",
 			"Available in OS X v10.5 and later.");
 
 	/** A \"go forward\" template image. Available in OS X v10.5 and later. */
-	public static final AquaImage GoRightTemplate = get("GoRightTemplate",
+	public static final NSImage GoRightTemplate = get("GoRightTemplate",
 			"A \"go forward\" template image.",
 			"Available in OS X v10.5 and later.");
 
 	/** A \"go back\" template image. Available in OS X v10.5 and later. */
-	public static final AquaImage GoLeftTemplate = get("GoLeftTemplate",
+	public static final NSImage GoLeftTemplate = get("GoLeftTemplate",
 			"A \"go back\" template image.",
 			"Available in OS X v10.5 and later.");
 
@@ -129,7 +128,7 @@ public class AquaImage implements Serializable {
 	 * A generic right-facing triangle template image. Available in OS X v10.5
 	 * and later.
 	 */
-	public static final AquaImage RightFacingTriangleTemplate = get(
+	public static final NSImage RightFacingTriangleTemplate = get(
 			"RightFacingTriangleTemplate",
 			"A generic right-facing triangle template image.",
 			"Available in OS X v10.5 and later.");
@@ -138,17 +137,17 @@ public class AquaImage implements Serializable {
 	 * A generic left-facing triangle template image. Available in OS X v10.5
 	 * and later.
 	 */
-	public static final AquaImage LeftFacingTriangleTemplate = get(
+	public static final NSImage LeftFacingTriangleTemplate = get(
 			"LeftFacingTriangleTemplate",
 			"A generic left-facing triangle template image.",
 			"Available in OS X v10.5 and later.");
 
 	/** An add item template image. Available in OS X v10.5 and later. */
-	public static final AquaImage AddTemplate = get("AddTemplate",
+	public static final NSImage AddTemplate = get("AddTemplate",
 			"An add item template image.", "Available in OS X v10.5 and later.");
 
 	/** A remove item template image. Available in OS X v10.5 and later. */
-	public static final AquaImage RemoveTemplate = get("RemoveTemplate",
+	public static final NSImage RemoveTemplate = get("RemoveTemplate",
 			"A remove item template image.",
 			"Available in OS X v10.5 and later.");
 
@@ -156,7 +155,7 @@ public class AquaImage implements Serializable {
 	 * A reveal contents template image. You can use this image to implement a
 	 * borderless button. Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage RevealFreestandingTemplate = get(
+	public static final NSImage RevealFreestandingTemplate = get(
 			"RevealFreestandingTemplate",
 			"A reveal contents template image. You can use this image to implement a borderless button.",
 			"Available in OS X v10.5 and later.");
@@ -165,7 +164,7 @@ public class AquaImage implements Serializable {
 	 * A link template image. You can use this image to implement a borderless
 	 * button. Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage FollowLinkFreestandingTemplate = get(
+	public static final NSImage FollowLinkFreestandingTemplate = get(
 			"FollowLinkFreestandingTemplate",
 			"A link template image. You can use this image to implement a borderless button.",
 			"Available in OS X v10.5 and later.");
@@ -174,7 +173,7 @@ public class AquaImage implements Serializable {
 	 * An enter full-screen mode template image. Available in OS X v10.5 and
 	 * later.
 	 */
-	public static final AquaImage EnterFullScreenTemplate = get(
+	public static final NSImage EnterFullScreenTemplate = get(
 			"EnterFullScreenTemplate",
 			"An enter full-screen mode template image.",
 			"Available in OS X v10.5 and later.");
@@ -183,7 +182,7 @@ public class AquaImage implements Serializable {
 	 * An exit full-screen mode template image. Available in OS X v10.5 and
 	 * later.
 	 */
-	public static final AquaImage ExitFullScreenTemplate = get(
+	public static final NSImage ExitFullScreenTemplate = get(
 			"ExitFullScreenTemplate",
 			"An exit full-screen mode template image.",
 			"Available in OS X v10.5 and later.");
@@ -191,7 +190,7 @@ public class AquaImage implements Serializable {
 	/**
 	 * A stop progress button template image. Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage StopProgressTemplate = get(
+	public static final NSImage StopProgressTemplate = get(
 			"StopProgressTemplate", "A stop progress button template image.",
 			"Available in OS X v10.5 and later.");
 
@@ -199,57 +198,52 @@ public class AquaImage implements Serializable {
 	 * A stop progress template image. You can use this image to implement a
 	 * borderless button. Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage StopProgressFreestandingTemplate = get(
+	public static final NSImage StopProgressFreestandingTemplate = get(
 			"StopProgressFreestandingTemplate",
 			"A stop progress template image. You can use this image to implement a borderless button.",
 			"Available in OS X v10.5 and later.");
 
 	/** A refresh template image. Available in OS X v10.5 and later. */
-	public static final AquaImage RefreshTemplate = get("RefreshTemplate",
+	public static final NSImage RefreshTemplate = get("RefreshTemplate",
 			"A refresh template image.", "Available in OS X v10.5 and later.");
 
 	/**
 	 * A refresh template image. You can use this image to implement a
 	 * borderless button. Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage RefreshFreestandingTemplate = get(
+	public static final NSImage RefreshFreestandingTemplate = get(
 			"RefreshFreestandingTemplate",
 			"A refresh template image. You can use this image to implement a borderless button.",
 			"Available in OS X v10.5 and later.");
 
 	/** A Bonjour icon. Available in OS X v10.5 and later. */
-	public static final AquaImage Bonjour = get("Bonjour", "A Bonjour icon.",
+	public static final NSImage Bonjour = get("Bonjour", "A Bonjour icon.",
 			"Available in OS X v10.5 and later.");
 
 	/** A Dot Mac icon. Available in OS X v10.5 and later. */
-	public static final AquaImage DotMac = get("DotMac", "A Dot Mac icon.",
+	public static final NSImage DotMac = get("DotMac", "A Dot Mac icon.",
 			"Available in OS X v10.5 and later.");
 
 	/** A computer icon. Available in OS X v10.5 and later. */
-	public static final AquaImage Computer = get("Computer",
-			"A computer icon.", "Available in OS X v10.5 and later.");
+	public static final NSImage Computer = get("Computer", "A computer icon.",
+			"Available in OS X v10.5 and later.");
 
 	/** A burnable folder icon. Available in OS X v10.5 and later. */
-	public static final AquaImage FolderBurnable = get("FolderBurnable",
+	public static final NSImage FolderBurnable = get("FolderBurnable",
 			"A burnable folder icon.", "Available in OS X v10.5 and later.");
 
 	/** A smart folder icon. Available in OS X v10.5 and later. */
-	public static final AquaImage FolderSmart = get("FolderSmart",
+	public static final NSImage FolderSmart = get("FolderSmart",
 			"A smart folder icon.", "Available in OS X v10.5 and later.");
 
 	/** A network icon. Available in OS X v10.5 and later. */
-	public static final AquaImage Network = get("Network", "A network icon.",
+	public static final NSImage Network = get("Network", "A network icon.",
 			"Available in OS X v10.5 and later.");
 
 	/**
-	 * A drag image for multiple items. Available in OS X v10.5 and later. *?
-	 * public static final AquaImage MultipleDocuments =
-	 * get("MultipleDocuments",
-	 * "A drag image for multiple items. Available in OS X v10.5 and later.");
-	 * 
-	 * /** User account toolbar icon. Use in a preferences window only.
+	 * User account toolbar icon. Use in a preferences window only.
 	 */
-	public static final AquaImage UserAccounts = get("UserAccounts",
+	public static final NSImage UserAccounts = get("UserAccounts",
 			"User account toolbar icon. Use in a preferences window only.",
 			null);
 
@@ -257,7 +251,7 @@ public class AquaImage implements Serializable {
 	 * General preferences toolbar icon. Use in a preferences window only.
 	 * Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage PreferencesGeneral = get(
+	public static final NSImage PreferencesGeneral = get(
 			"PreferencesGeneral",
 			"General preferences toolbar icon. Use in a preferences window only.",
 			"Available in OS X v10.5 and later.");
@@ -266,7 +260,7 @@ public class AquaImage implements Serializable {
 	 * Advanced preferences toolbar icon. Use in a preferences window only.
 	 * Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage Advanced = get("Advanced",
+	public static final NSImage Advanced = get("Advanced",
 			"Advanced preferences toolbar icon for the preferences window.",
 			"Available in OS X v10.5 and later.");
 
@@ -274,64 +268,64 @@ public class AquaImage implements Serializable {
 	 * Advanced preferences toolbar icon. Use in a preferences window only.
 	 * Available in OS X v10.5 and later.
 	 */
-	public static final AquaImage ApplicationIcon = get("ApplicationIcon",
+	public static final NSImage ApplicationIcon = get("ApplicationIcon",
 			"The app's icon.", "Available in OS X v10.6 and later.");
 
 	/** An information toolbar icon. Available in OS X v10.5 and later. */
-	public static final AquaImage Info = get("Info",
+	public static final NSImage Info = get("Info",
 			"An information toolbar icon.",
 			"Available in OS X v10.5 and later.");
 
 	/** A font panel toolbar icon. Available in OS X v10.5 and later. */
-	public static final AquaImage FontPanel = get("FontPanel",
+	public static final NSImage FontPanel = get("FontPanel",
 			"A font panel toolbar icon.", "Available in OS X v10.5 and later.");
 
-	public static final AquaImage GoBackTemplate = get("GoBackTemplate",
+	public static final NSImage GoBackTemplate = get("GoBackTemplate",
 			"A \"Go Back\" template image.",
 			"Available in OS X v10.12 and later.");
 
-	public static final AquaImage GoForwardTemplate = get("GoForwardTemplate",
+	public static final NSImage GoForwardTemplate = get("GoForwardTemplate",
 			"A \"Go Forward\" template image.",
 			"Available in OS X v10.12 and later.");
 
 	/** A color panel toolbar icon. Available in OS X v10.5 and later. */
-	public static final AquaImage ColorPanel = get("ColorPanel",
+	public static final NSImage ColorPanel = get("ColorPanel",
 			"A color panel toolbar icon.", "Available in OS X v10.5 and later.");
 
 	/** Permissions for a single user. Available in OS X v10.5 and later. */
-	public static final AquaImage User = get("User",
+	public static final NSImage User = get("User",
 			"Permissions for a single user.",
 			"Available in OS X v10.5 and later.");
 
 	/** Permissions for a group of users. Available in OS X v10.5 and later. */
-	public static final AquaImage UserGroup = get("UserGroup",
+	public static final NSImage UserGroup = get("UserGroup",
 			"Permissions for a group of users.",
 			"Available in OS X v10.5 and later.");
 
 	/** Permissions for all users. Available in OS X v10.5 and later. */
-	public static final AquaImage Everyone = get("Everyone",
+	public static final NSImage Everyone = get("Everyone",
 			"Permissions for all users.", "Available in OS X v10.5 and later.");
 
 	/** Permissions for guests. Available in OS X v10.6 and later. */
-	public static final AquaImage UserGuest = get("UserGuest",
+	public static final NSImage UserGuest = get("UserGuest",
 			"Permissions for guests.", "Available in OS X v10.6 and later.");
 
 	/** A folder image. Available in OS X v10.6 and later. */
-	public static final AquaImage Folder = get("Folder", "A folder image.",
+	public static final NSImage Folder = get("Folder", "A folder image.",
 			"Available in OS X v10.6 and later.");
 
 	/** An image of the empty trash can. Available in OS X v10.6 and later. */
-	public static final AquaImage TrashEmpty = get("TrashEmpty",
+	public static final NSImage TrashEmpty = get("TrashEmpty",
 			"An image of the empty trash can.",
 			"Available in OS X v10.6 and later.");
 
 	/** An image of the full trash can. Available in OS X v10.6 and later. */
-	public static final AquaImage TrashFull = get("TrashFull",
+	public static final NSImage TrashFull = get("TrashFull",
 			"An image of the full trash can.",
 			"Available in OS X v10.6 and later.");
 
 	/** Home image suitable for a template. Available in OS X v10.6 and later. */
-	public static final AquaImage HomeTemplate = get("HomeTemplate",
+	public static final NSImage HomeTemplate = get("HomeTemplate",
 			"Home image suitable for a template.",
 			"Available in OS X v10.6 and later.");
 
@@ -339,19 +333,19 @@ public class AquaImage implements Serializable {
 	 * Bookmarks image suitable for a template. Available in OS X v10.6 and
 	 * later.
 	 */
-	public static final AquaImage BookmarksTemplate = get("BookmarksTemplate",
+	public static final NSImage BookmarksTemplate = get("BookmarksTemplate",
 			"Bookmarks image suitable for a template.",
 			"Available in OS X v10.6 and later.");
 
 	/** Caution Image. Available in OS X v10.6 and later. */
-	public static final AquaImage Caution = get("Caution", "A caution image.",
+	public static final NSImage Caution = get("Caution", "A caution image.",
 			"Available in OS X v10.6 and later.");
 
 	/**
 	 * Small green indicator, similar to iChat's available image. Available in
 	 * OS X v10.6 and later.
 	 */
-	public static final AquaImage StatusAvailable = get("StatusAvailable",
+	public static final NSImage StatusAvailable = get("StatusAvailable",
 			"Small green indicator, similar to iChat's available image.",
 			"Available in OS X v10.6 and later.");
 
@@ -359,7 +353,7 @@ public class AquaImage implements Serializable {
 	 * Small yellow indicator, similar to iChat's idle image. Available in OS X
 	 * v10.6 and later.
 	 */
-	public static final AquaImage StatusPartiallyAvailable = get(
+	public static final NSImage StatusPartiallyAvailable = get(
 			"StatusPartiallyAvailable",
 			"Small yellow indicator, similar to iChat's idle image.",
 			"Available in OS X v10.6 and later.");
@@ -368,19 +362,19 @@ public class AquaImage implements Serializable {
 	 * Small red indicator, similar to iChat's unavailable image. Available in
 	 * OS X v10.6 and later.
 	 */
-	public static final AquaImage StatusUnavailable = get("StatusUnavailable",
+	public static final NSImage StatusUnavailable = get("StatusUnavailable",
 			"Small red indicator, similar to iChat's unavailable image.",
 			"Available in OS X v10.6 and later.");
 
 	/** Small clear indicator. Available in OS X v10.6 and later. */
-	public static final AquaImage StatusNone = get("StatusNone",
+	public static final NSImage StatusNone = get("StatusNone",
 			"Small clear indicator.", "Available in OS X v10.6 and later.");
 
 	/**
 	 * A check mark. Drawing these outside of menus is discouraged. Available in
 	 * OS X v10.6 and later.
 	 */
-	public static final AquaImage MenuOnStateTemplate = get(
+	public static final NSImage MenuOnStateTemplate = get(
 			"MenuOnStateTemplate",
 			"A check mark. Drawing these outside of menus is discouraged.",
 			"Available in OS X v10.6 and later.");
@@ -389,7 +383,7 @@ public class AquaImage implements Serializable {
 	 * A horizontal dash. Drawing these outside of menus is discouraged.
 	 * Available in OS X v10.6 and later.
 	 */
-	public static final AquaImage MenuMixedStateTemplate = get(
+	public static final NSImage MenuMixedStateTemplate = get(
 			"MenuMixedStateTemplate",
 			"A horizontal dash. Drawing these outside of menus is discouraged.",
 			"Available in OS X v10.6 and later.");
@@ -399,148 +393,148 @@ public class AquaImage implements Serializable {
 	 * image, although that image is not expected to be deprecated. Available in
 	 * OS X v10.6 and later.
 	 */
-	public static final AquaImage MobileMe = get(
+	public static final NSImage MobileMe = get(
 			"MobileMe",
 			"MobileMe logo. Use of this image is discouraged; instead, use networkName.",
 			"Available in OS X v10.6 and later.");
 
-	public static final AquaImage MultipleDocuments = get(
+	public static final NSImage MultipleDocuments = get(
 			"MultipleDocuments",
 			"A drag image for multiple items. You can use this icon as the drag image when dragging multiple items. You should not use this image for any other intended purpose.",
 			"Available in OS X v10.5 and later.");
 
-	// these were all identified programmatically in AquaImageDemo:
+	// these were all identified programmatically in NSImageDemo:
 
-	public static final AquaImage Accounts = get("Accounts");
-	public static final AquaImage Action = get("Action");
-	public static final AquaImage Add = get("Add");
-	public static final AquaImage Bluetooth = get("Bluetooth");
-	public static final AquaImage Color = get("Color");
-	public static final AquaImage Font = get("Font");
-	public static final AquaImage Group = get("Group");
-	public static final AquaImage Link = get("Link");
-	public static final AquaImage Path = get("Path");
-	public static final AquaImage Refresh = get("Refresh");
-	public static final AquaImage Remove = get("Remove");
-	public static final AquaImage Slideshow = get("Slideshow");
-	public static final AquaImage Stop = get("Stop");
-	public static final AquaImage Actions = get("Actions");
-	public static final AquaImage Bookmark = get("Bookmark");
-	public static final AquaImage Bookmarks = get("Bookmarks");
-	public static final AquaImage Bug = get("Bug");
-	public static final AquaImage Burning = get("Burning");
-	public static final AquaImage Cancel = get("Cancel");
-	public static final AquaImage Disclosed = get("Disclosed");
-	public static final AquaImage Effect = get("Effect");
-	public static final AquaImage Erase = get("Erase");
-	public static final AquaImage Home = get("Home");
-	public static final AquaImage Pause = get("Pause");
-	public static final AquaImage Person = get("Person");
-	public static final AquaImage Photograph = get("Photograph");
-	public static final AquaImage Play = get("Play");
-	public static final AquaImage Print = get("Print");
-	public static final AquaImage Reload = get("Reload");
-	public static final AquaImage Rewind = get("Rewind");
-	public static final AquaImage Script = get("Script");
-	public static final AquaImage Security = get("Security");
-	public static final AquaImage Share = get("Share");
-	public static final AquaImage Snapback = get("Snapback");
-	public static final AquaImage Switch = get("Switch");
-	public static final AquaImage AccountsTemplate = get("AccountsTemplate");
-	public static final AquaImage ActionsTemplate = get("ActionsTemplate");
-	public static final AquaImage AddBoomark = get("AddBookmark");
-	public static final AquaImage AdvancedPreferences = get("AdvancedPreferences");
-	public static final AquaImage AdvancedTemplate = get("AdvancedTemplate");
-	public static final AquaImage BonjourTemplate = get("BonjourTemplate");
-	public static final AquaImage BookmarkLock = get("BookmarkLock");
-	public static final AquaImage BookmarkTemplate = get("BookmarkTemplate");
-	public static final AquaImage BugTemplate = get("BugTemplate");
-	public static final AquaImage BurningTemplate = get("BurningTemplate");
-	public static final AquaImage CancelTemplate = get("CancelTemplate");
-	public static final AquaImage CautionTemplate = get("CautionTemplate");
-	public static final AquaImage ColorTemplate = get("ColorTemplate");
-	public static final AquaImage ColumnView = get("ColumnView");
-	public static final AquaImage ComputerTemplate = get("ComputerTemplate");
-	public static final AquaImage DisclosedTemplate = get("DisclosedTemplate");
-	public static final AquaImage DisclosedAlternate = get("DisclosedAlternate");
-	public static final AquaImage EffectTemplate = get("EffectTemplate");
-	public static final AquaImage EraseTemplate = get("EraseTemplate");
-	public static final AquaImage EveryoneTemplate = get("EveryoneTemplate");
-	public static final AquaImage FlowView = get("FlowView");
-	public static final AquaImage FolderTemplate = get("FolderTemplate");
-	public static final AquaImage FontTemplate = get("FontTemplate");
-	public static final AquaImage GeneralPreferences = get("GeneralPreferences");
-	public static final AquaImage GoLeft = get("GoLeft");
-	public static final AquaImage GoRight = get("GoRight");
-	public static final AquaImage GoBack = get("GoBack");
-	public static final AquaImage GoForward = get("GoForward");
-	public static final AquaImage GroupTemplate = get("GroupTemplate");
-	public static final AquaImage IconBurning = get("IconBurning");
-	public static final AquaImage IconComputer = get("IconComputer");
-	public static final AquaImage IconGroup = get("IconGroup");
-	public static final AquaImage IconLocked = get("IconLocked");
-	public static final AquaImage IconUnlocked = get("IconUnlocked");
-	public static final AquaImage IconUser = get("IconUser");
-	public static final AquaImage IconView = get("IconView");
-	public static final AquaImage IconClipboard = get("IconClipboard");
-	public static final AquaImage IconDesktop = get("IconDesktop");
-	public static final AquaImage IconFinder = get("IconFinder");
-	public static final AquaImage IconGrid = get("IconGrid");
-	public static final AquaImage IconHelp = get("IconHelp");
-	public static final AquaImage IconOwner = get("IconOwner");
-	public static final AquaImage IconShortcut = get("IconShortcut");
-	public static final AquaImage IconTrash = get("IconTrash");
-	public static final AquaImage InfoTemplate = get("InfoTemplate");
-	public static final AquaImage InvalidData = get("InvalidData");
-	public static final AquaImage LinkTemplate = get("LinkTemplate");
-	public static final AquaImage LinkButton = get("LinkButton");
-	public static final AquaImage ListView = get("ListView");
-	public static final AquaImage LockLocked = get("LockLocked");
-	public static final AquaImage LockUnlocked = get("LockUnlocked");
-	public static final AquaImage MultipleItems = get("MultipleItems");
-	public static final AquaImage NetworkTemplate = get("NetworkTemplate");
-	public static final AquaImage PathIndicator = get("PathIndicator");
-	public static final AquaImage PauseTemplate = get("PauseTemplate");
-	public static final AquaImage PersonTemplate = get("PersonTemplate");
-	public static final AquaImage PersonAnonymous = get("PersonAnonymous");
-	public static final AquaImage PersonUnknown = get("PersonUnknown");
-	public static final AquaImage PhotographTemplate = get("PhotographTemplate");
-	public static final AquaImage PlayTemplate = get("PlayTemplate");
-	public static final AquaImage PrintTemplate = get("PrintTemplate");
-	public static final AquaImage QuickLook = get("QuickLook");
-	public static final AquaImage RefreshFreestanding = get("RefreshFreestanding");
-	public static final AquaImage ReloadTemplate = get("ReloadTemplate");
-	public static final AquaImage RevealFreestanding = get("RevealFreestanding");
-	public static final AquaImage RewindTemplate = get("RewindTemplate");
-	public static final AquaImage ScriptTemplate = get("ScriptTemplate");
-	public static final AquaImage SecurityTemplate = get("SecurityTemplate");
-	public static final AquaImage SmartBadge = get("SmartBadge");
-	public static final AquaImage SnapbackTemplate = get("SnapbackTemplate");
-	public static final AquaImage StopProgress = get("StopProgress");
-	public static final AquaImage StopTemplate = get("StopTemplate");
-	public static final AquaImage SynchronizeTemplate = get("SynchronizeTemplate");
-	public static final AquaImage SynchronizeConflict = get("SynchronizeConflict");
-	public static final AquaImage SynchronizeStart = get("SynchronizeStart");
-	public static final AquaImage Synchronize = get("Synchronize");
-	public static final AquaImage TheaterStart = get("TheaterStart");
-	public static final AquaImage UserTemplate = get("UserTemplate");
-	public static final AquaImage ViewList = get("ViewList");
-	public static final AquaImage ViewColumns = get("ViewColumns");
-	public static final AquaImage ViewGroups = get("ViewGroups");
-	public static final AquaImage ViewIcons = get("ViewIcons");
-	public static final AquaImage KEXT = get("KEXT");
+	public static final NSImage Accounts = get("Accounts");
+	public static final NSImage Action = get("Action");
+	public static final NSImage Add = get("Add");
+	public static final NSImage Bluetooth = get("Bluetooth");
+	public static final NSImage Color = get("Color");
+	public static final NSImage Font = get("Font");
+	public static final NSImage Group = get("Group");
+	public static final NSImage Link = get("Link");
+	public static final NSImage Path = get("Path");
+	public static final NSImage Refresh = get("Refresh");
+	public static final NSImage Remove = get("Remove");
+	public static final NSImage Slideshow = get("Slideshow");
+	public static final NSImage Stop = get("Stop");
+	public static final NSImage Actions = get("Actions");
+	public static final NSImage Bookmark = get("Bookmark");
+	public static final NSImage Bookmarks = get("Bookmarks");
+	public static final NSImage Bug = get("Bug");
+	public static final NSImage Burning = get("Burning");
+	public static final NSImage Cancel = get("Cancel");
+	public static final NSImage Disclosed = get("Disclosed");
+	public static final NSImage Effect = get("Effect");
+	public static final NSImage Erase = get("Erase");
+	public static final NSImage Home = get("Home");
+	public static final NSImage Pause = get("Pause");
+	public static final NSImage Person = get("Person");
+	public static final NSImage Photograph = get("Photograph");
+	public static final NSImage Play = get("Play");
+	public static final NSImage Print = get("Print");
+	public static final NSImage Reload = get("Reload");
+	public static final NSImage Rewind = get("Rewind");
+	public static final NSImage Script = get("Script");
+	public static final NSImage Security = get("Security");
+	public static final NSImage Share = get("Share");
+	public static final NSImage Snapback = get("Snapback");
+	public static final NSImage Switch = get("Switch");
+	public static final NSImage AccountsTemplate = get("AccountsTemplate");
+	public static final NSImage ActionsTemplate = get("ActionsTemplate");
+	public static final NSImage AddBoomark = get("AddBookmark");
+	public static final NSImage AdvancedPreferences = get("AdvancedPreferences");
+	public static final NSImage AdvancedTemplate = get("AdvancedTemplate");
+	public static final NSImage BonjourTemplate = get("BonjourTemplate");
+	public static final NSImage BookmarkLock = get("BookmarkLock");
+	public static final NSImage BookmarkTemplate = get("BookmarkTemplate");
+	public static final NSImage BugTemplate = get("BugTemplate");
+	public static final NSImage BurningTemplate = get("BurningTemplate");
+	public static final NSImage CancelTemplate = get("CancelTemplate");
+	public static final NSImage CautionTemplate = get("CautionTemplate");
+	public static final NSImage ColorTemplate = get("ColorTemplate");
+	public static final NSImage ColumnView = get("ColumnView");
+	public static final NSImage ComputerTemplate = get("ComputerTemplate");
+	public static final NSImage DisclosedTemplate = get("DisclosedTemplate");
+	public static final NSImage DisclosedAlternate = get("DisclosedAlternate");
+	public static final NSImage EffectTemplate = get("EffectTemplate");
+	public static final NSImage EraseTemplate = get("EraseTemplate");
+	public static final NSImage EveryoneTemplate = get("EveryoneTemplate");
+	public static final NSImage FlowView = get("FlowView");
+	public static final NSImage FolderTemplate = get("FolderTemplate");
+	public static final NSImage FontTemplate = get("FontTemplate");
+	public static final NSImage GeneralPreferences = get("GeneralPreferences");
+	public static final NSImage GoLeft = get("GoLeft");
+	public static final NSImage GoRight = get("GoRight");
+	public static final NSImage GoBack = get("GoBack");
+	public static final NSImage GoForward = get("GoForward");
+	public static final NSImage GroupTemplate = get("GroupTemplate");
+	public static final NSImage IconBurning = get("IconBurning");
+	public static final NSImage IconComputer = get("IconComputer");
+	public static final NSImage IconGroup = get("IconGroup");
+	public static final NSImage IconLocked = get("IconLocked");
+	public static final NSImage IconUnlocked = get("IconUnlocked");
+	public static final NSImage IconUser = get("IconUser");
+	public static final NSImage IconView = get("IconView");
+	public static final NSImage IconClipboard = get("IconClipboard");
+	public static final NSImage IconDesktop = get("IconDesktop");
+	public static final NSImage IconFinder = get("IconFinder");
+	public static final NSImage IconGrid = get("IconGrid");
+	public static final NSImage IconHelp = get("IconHelp");
+	public static final NSImage IconOwner = get("IconOwner");
+	public static final NSImage IconShortcut = get("IconShortcut");
+	public static final NSImage IconTrash = get("IconTrash");
+	public static final NSImage InfoTemplate = get("InfoTemplate");
+	public static final NSImage InvalidData = get("InvalidData");
+	public static final NSImage LinkTemplate = get("LinkTemplate");
+	public static final NSImage LinkButton = get("LinkButton");
+	public static final NSImage ListView = get("ListView");
+	public static final NSImage LockLocked = get("LockLocked");
+	public static final NSImage LockUnlocked = get("LockUnlocked");
+	public static final NSImage MultipleItems = get("MultipleItems");
+	public static final NSImage NetworkTemplate = get("NetworkTemplate");
+	public static final NSImage PathIndicator = get("PathIndicator");
+	public static final NSImage PauseTemplate = get("PauseTemplate");
+	public static final NSImage PersonTemplate = get("PersonTemplate");
+	public static final NSImage PersonAnonymous = get("PersonAnonymous");
+	public static final NSImage PersonUnknown = get("PersonUnknown");
+	public static final NSImage PhotographTemplate = get("PhotographTemplate");
+	public static final NSImage PlayTemplate = get("PlayTemplate");
+	public static final NSImage PrintTemplate = get("PrintTemplate");
+	public static final NSImage QuickLook = get("QuickLook");
+	public static final NSImage RefreshFreestanding = get("RefreshFreestanding");
+	public static final NSImage ReloadTemplate = get("ReloadTemplate");
+	public static final NSImage RevealFreestanding = get("RevealFreestanding");
+	public static final NSImage RewindTemplate = get("RewindTemplate");
+	public static final NSImage ScriptTemplate = get("ScriptTemplate");
+	public static final NSImage SecurityTemplate = get("SecurityTemplate");
+	public static final NSImage SmartBadge = get("SmartBadge");
+	public static final NSImage SnapbackTemplate = get("SnapbackTemplate");
+	public static final NSImage StopProgress = get("StopProgress");
+	public static final NSImage StopTemplate = get("StopTemplate");
+	public static final NSImage SynchronizeTemplate = get("SynchronizeTemplate");
+	public static final NSImage SynchronizeConflict = get("SynchronizeConflict");
+	public static final NSImage SynchronizeStart = get("SynchronizeStart");
+	public static final NSImage Synchronize = get("Synchronize");
+	public static final NSImage TheaterStart = get("TheaterStart");
+	public static final NSImage UserTemplate = get("UserTemplate");
+	public static final NSImage ViewList = get("ViewList");
+	public static final NSImage ViewColumns = get("ViewColumns");
+	public static final NSImage ViewGroups = get("ViewGroups");
+	public static final NSImage ViewIcons = get("ViewIcons");
+	public static final NSImage KEXT = get("KEXT");
 
-	private static AquaImage get(String name, String description,
+	private static NSImage get(String name, String description,
 			String availability) {
-		AquaImage img = knownImages.get(name);
+		NSImage img = knownImages.get(name);
 		if (img == null) {
-			img = new AquaImage(name, description, availability);
+			img = new NSImage(name, description, availability);
 			knownImages.put(name, img);
 		}
 		return img;
 	}
 
-	public static AquaImage get(String name) {
+	public static NSImage get(String name) {
 		return get(name, null, null);
 	}
 
@@ -548,7 +542,7 @@ public class AquaImage implements Serializable {
 	transient Image image;
 	transient BufferedImage bufferedImage;
 
-	private AquaImage(String name, String description, String availability) {
+	private NSImage(String name, String description, String availability) {
 		Objects.requireNonNull(name);
 		this.name = name;
 		this.description = description;
@@ -562,18 +556,18 @@ public class AquaImage implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof AquaImage))
+		if (!(obj instanceof NSImage))
 			return false;
-		AquaImage t = (AquaImage) obj;
+		NSImage t = (NSImage) obj;
 		return t.name.equals(name);
 	}
 
 	@Override
 	public String toString() {
 		if (description == null) {
-			return "AquaImage[ \"" + name + "\"]";
+			return "NSImage[ \"" + name + "\"]";
 		}
-		return "AquaImage[ \"" + name + "\", \"" + description + "\", \""
+		return "NSImage[ \"" + name + "\", \"" + description + "\", \""
 				+ availability + "\"]";
 	}
 

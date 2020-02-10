@@ -2,23 +2,28 @@ package com.pump.showcase;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import com.pump.awt.Dimension2D;
-import com.pump.image.AquaImage;
+import com.pump.image.NSImage;
 import com.pump.image.pixel.Scaling;
 import com.pump.inspector.Inspector;
 
 public class NSImageDemo extends ShowcaseIconDemo {
+	private static final long serialVersionUID = 1L;
 
 	public NSImageDemo() {
 	}
@@ -41,20 +46,44 @@ public class NSImageDemo extends ShowcaseIconDemo {
 
 	@Override
 	public String[] getKeywords() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> words = new ArrayList<>();
+		words.add("NSImage");
+		words.add("Image");
+		for (String id : getImageIDs()) {
+			String name = NSImage.get(id).getName();
+			words.addAll(splitCamelCase(name));
+		}
+		return words.toArray(new String[words.size()]);
+	}
+
+	private static List<String> splitCamelCase(String word) {
+		List<String> words = new LinkedList<>();
+		StringBuilder sb = new StringBuilder();
+		for (int a = 0; a < word.length(); a++) {
+			char ch = word.charAt(a);
+			if (Character.isUpperCase(ch)) {
+				if (sb.length() > 0) {
+					words.add(sb.toString());
+					sb.delete(0, sb.length());
+				}
+			}
+			sb.append(ch);
+		}
+		if (sb.length() > 0) {
+			words.add(sb.toString());
+		}
+		return words;
 	}
 
 	@Override
 	public Class<?>[] getClasses() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Class[] { Image.class };
 	}
 
 	@Override
 	protected BufferedImage getImage(String id, Dimension maxConstrainingSize) {
-		BufferedImage bi = AquaImage.get(id).getBufferedImage(
-				maxConstrainingSize);
+		BufferedImage bi = NSImage.get(id)
+				.getBufferedImage(maxConstrainingSize);
 		Dimension d = new Dimension(bi.getWidth(), bi.getHeight());
 		Dimension d2 = Dimension2D.scaleProportionally(d, maxConstrainingSize);
 		if (d2.width < d.width || d2.height < d.height) {
@@ -66,10 +95,10 @@ public class NSImageDemo extends ShowcaseIconDemo {
 	@Override
 	protected String[] getImageIDs() {
 		Collection<String> ids = new HashSet<>();
-		for (Field field : AquaImage.class.getFields()) {
-			if (AquaImage.class.isAssignableFrom(field.getType())) {
+		for (Field field : NSImage.class.getFields()) {
+			if (NSImage.class.isAssignableFrom(field.getType())) {
 				try {
-					AquaImage i = (AquaImage) field.get(null);
+					NSImage i = (NSImage) field.get(null);
 					ids.add(i.getName());
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					// TODO Auto-generated catch block
@@ -87,7 +116,7 @@ public class NSImageDemo extends ShowcaseIconDemo {
 		Collection<Dimension> sizes = new HashSet<>();
 		Map<String, Dimension> sizeMap = new HashMap<>();
 		for (String id : icon.ids) {
-			AquaImage img = AquaImage.get(id);
+			NSImage img = NSImage.get(id);
 			BufferedImage bi = img.getBufferedImage();
 			Dimension size = new Dimension(bi.getWidth(), bi.getHeight());
 			sizes.add(size);
@@ -104,7 +133,7 @@ public class NSImageDemo extends ShowcaseIconDemo {
 		}
 
 		for (String id : icon.ids) {
-			String desc = AquaImage.get(id).getDescription();
+			String desc = NSImage.get(id).getDescription();
 			JLabel nameLabel = new JLabel(id + ":");
 			JLabel descLabel = new JLabel();
 			if (desc != null && !desc.trim().isEmpty()) {
@@ -116,7 +145,7 @@ public class NSImageDemo extends ShowcaseIconDemo {
 			nameLabel.setFont(nameLabel.getFont().deriveFont(Font.BOLD));
 			inspector.addRow(nameLabel, descLabel, false);
 
-			String availability = AquaImage.get(id).getAvailability();
+			String availability = NSImage.get(id).getAvailability();
 			if (availability != null && !availability.trim().isEmpty()) {
 				inspector.addRow(new JLabel(""), new JLabel(availability),
 						false);
