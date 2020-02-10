@@ -37,6 +37,10 @@ import com.pump.plaf.QPanelUI.CalloutType;
 
 public class QPopup extends Popup {
 
+	static class HiddenTargetBoundsException extends Exception {
+		private static final long serialVersionUID = 1L;
+	}
+
 	/**
 	 * This client property on owners resolves to a CalloutType or an array of
 	 * CalloutType that should be used for that particular owner. If this is
@@ -102,21 +106,25 @@ public class QPopup extends Popup {
 				return;
 			showUsingWindow(z, null, true);
 		} else {
-			CalloutType[] calloutTypes = getCalloutTypes();
-			for (CalloutType type : calloutTypes) {
-				Point p = getScreenLoc(type);
-				if (showUsingRootPaneContainer(p, type)) {
-					return;
+			try {
+				CalloutType[] calloutTypes = getCalloutTypes();
+				for (CalloutType type : calloutTypes) {
+					Point p = getScreenLoc(type);
+					if (showUsingRootPaneContainer(p, type)) {
+						return;
+					}
 				}
-			}
 
-			for (CalloutType type : calloutTypes) {
-				Point p = getScreenLoc(type);
-				if (showUsingWindow(p, type, false))
-					return;
+				for (CalloutType type : calloutTypes) {
+					Point p = getScreenLoc(type);
+					if (showUsingWindow(p, type, false))
+						return;
+				}
+				Point p = getScreenLoc(calloutTypes[0]);
+				showUsingWindow(p, calloutTypes[0], true);
+			} catch (HiddenTargetBoundsException htbe) {
+				hide();
 			}
-			Point p = getScreenLoc(calloutTypes[0]);
-			showUsingWindow(p, calloutTypes[0], true);
 		}
 	}
 
@@ -137,8 +145,38 @@ public class QPopup extends Popup {
 		return ORDERED_CALLOUT_TYPES;
 	}
 
-	private Point getScreenLoc(CalloutType type) {
+	/**
+	 * Return the screen bounds of the argument that is actually
+	 * showing once you consider the owner's parents. For example:
+	 * If the screenBounds are referring to a portion component that is inside a
+	 * scroll pane: this method will clip the screenBounds to the visible
+	 * portion of the scroll pane viewport. This method will return
+	 * null if no portion of the argument is actually visible.
+	 */
+	private Rectangle getShowingTargetBounds(Rectangle screenBounds) {
+		Component c = getOwner();
+		while (c != null) {
+
+			Point cScreenLoc = new Point(0, 0);
+			SwingUtilities.convertPointToScreen(cScreenLoc, c);
+			Rectangle cScreenBounds = new Rectangle(cScreenLoc, c.getSize());
+
+			screenBounds = cScreenBounds.intersection(screenBounds);
+
+			c = c.getParent();
+		}
+
+		if (screenBounds.width <= 0 || screenBounds.height <= 0)
+			return null;
+		return screenBounds;
+	}
+
+	private Point getScreenLoc(CalloutType type)
+			throws HiddenTargetBoundsException {
 		Rectangle r = getTarget().getScreenBounds();
+		r = getShowingTargetBounds(r);
+		if (r == null)
+			throw new HiddenTargetBoundsException();
 
 		int minX = r.x;
 		int minY = r.y;
