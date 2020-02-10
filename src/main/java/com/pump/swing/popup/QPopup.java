@@ -145,14 +145,6 @@ public class QPopup extends Popup {
 		return ORDERED_CALLOUT_TYPES;
 	}
 
-	/**
-	 * Return the screen bounds of the argument that is actually
-	 * showing once you consider the owner's parents. For example:
-	 * If the screenBounds are referring to a portion component that is inside a
-	 * scroll pane: this method will clip the screenBounds to the visible
-	 * portion of the scroll pane viewport. This method will return
-	 * null if no portion of the argument is actually visible.
-	 */
 	private Rectangle getShowingTargetBounds(Rectangle screenBounds) {
 		Component c = getOwner();
 		while (c != null) {
