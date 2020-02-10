@@ -2,6 +2,9 @@ package com.pump.showcase;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Collection;
@@ -9,11 +12,11 @@ import java.util.Collection;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import com.pump.awt.Dimension2D;
 import com.pump.icon.AquaIcon;
 import com.pump.icon.ScaledIcon;
-import com.pump.inspector.Inspector;
 
 public class AquaIconDemo extends ShowcaseIconDemo {
 
@@ -74,12 +77,25 @@ public class AquaIconDemo extends ShowcaseIconDemo {
 
 	@Override
 	protected JComponent createPopupContents(ShowcaseIcon icon) {
-		Inspector inspector = new Inspector();
+		JPanel p = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.insets = new Insets(3, 3, 3, 3);
 		for (String id : icon.ids) {
-			inspector.addRow(new JLabel("Alias:"),
-					new JLabel(AquaIcon.getDescription(id)), false);
+			String desc = AquaIcon.getDescription(id);
+			StringBuilder sb = new StringBuilder();
+			if (desc == null || desc.trim().isEmpty()) {
+				sb.append(id);
+			} else {
+				sb.append(desc + " (" + id + ")");
+			}
+			p.add(new JLabel(sb.toString()), c);
+			c.gridy++;
 		}
-		return inspector.getPanel();
+		return p;
 	}
 
 }

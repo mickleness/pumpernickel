@@ -6,7 +6,9 @@ import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -80,7 +82,25 @@ public class NSImageDemo extends ShowcaseIconDemo {
 	@Override
 	protected JComponent createPopupContents(ShowcaseIcon icon) {
 		// TODO: configure animating inspector to animate on first reveal
+
+		Collection<Dimension> sizes = new HashSet<>();
+		Map<String, Dimension> sizeMap = new HashMap<>();
+		for (String id : icon.ids) {
+			AquaImage img = AquaImage.get(id);
+			BufferedImage bi = img.getBufferedImage();
+			Dimension size = new Dimension(bi.getWidth(), bi.getHeight());
+			sizes.add(size);
+			sizeMap.put(id, size);
+		}
+
 		Inspector inspector = new Inspector();
+		boolean printSeparateSizes = sizes.size() > 1;
+
+		if (!printSeparateSizes) {
+			Dimension size = sizes.iterator().next();
+			inspector.addRow(new JLabel("Size:"), new JLabel(toString(size)));
+		}
+
 		for (String id : icon.ids) {
 			String desc = AquaImage.get(id).getDescription();
 			JLabel nameLabel = new JLabel(id + ":");
@@ -92,7 +112,6 @@ public class NSImageDemo extends ShowcaseIconDemo {
 				descLabel.setFont(nameLabel.getFont().deriveFont(Font.ITALIC));
 			}
 			nameLabel.setFont(nameLabel.getFont().deriveFont(Font.BOLD));
-			nameLabel.setLabelFor(descLabel);
 			inspector.addRow(nameLabel, descLabel, false);
 
 			String availability = AquaImage.get(id).getAvailability();
@@ -100,8 +119,18 @@ public class NSImageDemo extends ShowcaseIconDemo {
 				inspector.addRow(new JLabel(""), new JLabel(availability),
 						false);
 			}
+
+			if (printSeparateSizes) {
+				Dimension size = sizeMap.get(id);
+				inspector.addRow(new JLabel("Size:"),
+						new JLabel(toString(size)));
+			}
 		}
 		return inspector.getPanel();
+	}
+
+	private String toString(Dimension size) {
+		return size.width + "x" + size.height;
 	}
 
 }
