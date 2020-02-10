@@ -99,7 +99,8 @@ public class NSImageDemo extends ShowcaseIconDemo {
 
 		if (!printSeparateSizes) {
 			Dimension size = sizes.iterator().next();
-			inspector.addRow(new JLabel("Size:"), new JLabel(toString(size)));
+			inspector.addRow(new JLabel("Default Size:"), new JLabel(
+					toString(size)));
 		}
 
 		for (String id : icon.ids) {

@@ -1,10 +1,14 @@
 package com.pump.showcase;
 
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
@@ -40,6 +44,8 @@ import com.pump.image.pixel.IntPixelIterator;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.CircularProgressBarUI;
 import com.pump.plaf.LabelCellRenderer;
+import com.pump.swing.ContextualMenuHelper;
+import com.pump.swing.ImageTransferable;
 import com.pump.swing.popover.JPopover;
 import com.pump.swing.popover.ListSelectionVisibility;
 import com.pump.swing.popup.ListCellPopupTarget;
@@ -57,6 +63,26 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		public void actionPerformed(ActionEvent e) {
 			JList<?> list = (JList<?>) e.getSource();
 			list.setSelectedIndices(new int[] {});
+		}
+
+	}
+
+	static class CopyIconRunnable implements Runnable {
+		BufferedImage img;
+
+		public CopyIconRunnable(Icon icon) {
+			img = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
+					BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g = img.createGraphics();
+			icon.paintIcon(null, g, 0, 0);
+			g.dispose();
+		}
+
+		@Override
+		public void run() {
+			Transferable contents = new ImageTransferable(img);
+			Toolkit.getDefaultToolkit().getSystemClipboard()
+					.setContents(contents, null);
 		}
 
 	}
@@ -311,6 +337,23 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		list.getInputMap().put(escapeKey, ACTION_CLEAR_SELECTION);
 		list.getActionMap().put(ACTION_CLEAR_SELECTION,
 				new ClearSelectionAction());
+
+		new ContextualMenuHelper(list) {
+
+			@Override
+			protected void showPopup(Component c, int x, int y) {
+				clear();
+				int index = list.getUI().locationToIndex(list, new Point(x, y));
+				if (index == -1)
+					return;
+				ShowcaseIcon si = icons.get(index);
+				int z = sizeSlider.getValue();
+				Icon icon = si.getImageIcon(new Dimension(z, z));
+				add("Copy Image", new CopyIconRunnable(icon));
+				super.showPopup(c, x, y);
+			}
+
+		};
 
 		addSliderPopover(sizeSlider, " pixels");
 
