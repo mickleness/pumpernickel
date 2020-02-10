@@ -57,6 +57,11 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 
 	private static final String ACTION_CLEAR_SELECTION = "clear-selection";
 
+	/**
+	 * The number of pixels around each icon in the list.
+	 */
+	private int ICON_PADDING = 3;
+
 	static class ClearSelectionAction extends AbstractAction {
 		private static final long serialVersionUID = 1L;
 
@@ -304,10 +309,13 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		list.setCellRenderer(new LabelCellRenderer<ShowcaseIcon>() {
 
 			@Override
-			protected void formatLabel(ShowcaseIcon icon) {
+			protected void formatLabel(ShowcaseIcon showcaseIcon) {
 				int z = sizeSlider.getValue();
 				Dimension maxConstrainingSize = new Dimension(z, z);
-				label.setIcon(icon.getImageIcon(maxConstrainingSize));
+				Icon icon = showcaseIcon.getImageIcon(maxConstrainingSize);
+				icon = new PaddedIcon(icon, new Dimension(z + ICON_PADDING * 2,
+						z + ICON_PADDING * 2));
+				label.setIcon(icon);
 			}
 
 		});
@@ -381,8 +389,8 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 
 	private void refreshCellSize() {
 		int z = sizeSlider.getValue();
-		list.setFixedCellHeight(z);
-		list.setFixedCellWidth(z);
+		list.setFixedCellHeight(z + ICON_PADDING * 2);
+		list.setFixedCellWidth(z + ICON_PADDING * 2);
 		for (ShowcaseIcon i : icons) {
 			i.img = null;
 		}
