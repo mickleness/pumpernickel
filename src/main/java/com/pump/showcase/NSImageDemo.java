@@ -52,7 +52,7 @@ public class NSImageDemo extends ShowcaseIconDemo {
 	}
 
 	@Override
-	protected BufferedImage getImage(String id) {
+	protected BufferedImage getImage(String id, Dimension maxConstrainingSize) {
 		BufferedImage bi = AquaImage.get(id).getBufferedImage();
 		Dimension d = new Dimension(bi.getWidth(), bi.getHeight());
 		Dimension d2 = Dimension2D.scaleProportionally(d, maxConstrainingSize);

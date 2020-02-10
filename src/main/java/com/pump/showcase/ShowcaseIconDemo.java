@@ -19,19 +19,25 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.pump.icon.PaddedIcon;
 import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.BytePixelIterator;
 import com.pump.image.pixel.IntPixelIterator;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.CircularProgressBarUI;
 import com.pump.plaf.LabelCellRenderer;
 import com.pump.swing.popover.JPopover;
@@ -55,9 +61,10 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 
 	}
 
-	protected static class ShowcaseIcon {
+	protected class ShowcaseIcon {
 		BufferedImage img;
 		Collection<String> ids = new HashSet<>();
+		Icon imgIcon;
 
 		public ShowcaseIcon(BufferedImage img, String id) {
 			Objects.requireNonNull(img);
@@ -99,22 +106,30 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 			return true;
 		}
 
-		ImageIcon imgIcon;
-
-		public Icon getImageIcon() {
-			if (imgIcon == null)
+		public Icon getImageIcon(Dimension maxConstrainingSize) {
+			if (imgIcon == null || img == null) {
+				if (img == null)
+					img = getImage(ids.iterator().next(), maxConstrainingSize);
 				imgIcon = new ImageIcon(img);
+				int j = maxConstrainingSize.width - imgIcon.getIconWidth();
+				int k = maxConstrainingSize.height - imgIcon.getIconHeight();
+				if (j >= 0 && k >= 0 && (j + k) > 0) {
+					imgIcon = new PaddedIcon(imgIcon, maxConstrainingSize);
+				}
+			}
 			return imgIcon;
 		}
 	}
 
 	protected ObservableList<ShowcaseIcon> icons = new ObservableList<>();
 	protected JList<ShowcaseIcon> list = new JList<>(icons.createUIMirror(null));
-	protected Dimension maxConstrainingSize = new Dimension(48, 48);
 	CardLayout cardLayout = new CardLayout();
 	JPanel cardPanel = new JPanel(cardLayout);
 	JProgressBar progressBar = new JProgressBar();
 	boolean isShowing = false;
+	JPanel iconPanel = new JPanel(new GridBagLayout());
+	Inspector inspector = new Inspector();
+	JSlider sizeSlider = new JSlider(16, 200, 48);
 
 	public ShowcaseIconDemo() {
 		progressBar.setUI(new CircularProgressBarUI());
@@ -122,7 +137,7 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		JPanel progressBarPanel = new JPanel();
 		progressBarPanel.add(progressBar);
 		cardPanel.add(progressBarPanel, "loading");
-		cardPanel.add(new JScrollPane(list), "icons");
+		cardPanel.add(iconPanel, "icons");
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -132,6 +147,19 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		c.fill = GridBagConstraints.BOTH;
 		add(cardPanel, c);
 		progressBar.setIndeterminate(true);
+
+		c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.fill = GridBagConstraints.BOTH;
+		iconPanel.add(inspector.getPanel(), c);
+		c.gridy++;
+		c.weighty = 1;
+		iconPanel.add(new JScrollPane(list), c);
+
+		inspector.addRow(new JLabel("Max Icon Size:"), sizeSlider);
 
 		Thread thread = new Thread("loading " + getClass().getSimpleName()) {
 
@@ -162,7 +190,8 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 						if (i == ids.length)
 							return;
 
-						BufferedImage img = getImage(ids[i]);
+						BufferedImage img = getImage(ids[i], new Dimension(48,
+								48));
 						img = padImage(img);
 						add(ids[i], img);
 						i++;
@@ -180,11 +209,9 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 			}
 
 			private BufferedImage padImage(BufferedImage img) {
-				if (img.getWidth() < maxConstrainingSize.width
-						|| img.getHeight() < maxConstrainingSize.height) {
-					BufferedImage bi = new BufferedImage(
-							maxConstrainingSize.width,
-							maxConstrainingSize.height,
+				int z = sizeSlider.getValue();
+				if (img.getWidth() < z || img.getHeight() < z) {
+					BufferedImage bi = new BufferedImage(z, z,
 							BufferedImage.TYPE_INT_ARGB);
 					Graphics2D g = bi.createGraphics();
 					g.drawImage(img, bi.getWidth() / 2 - img.getWidth() / 2,
@@ -238,8 +265,6 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 			}
 
 		});
-		list.setFixedCellHeight(maxConstrainingSize.width);
-		list.setFixedCellHeight(maxConstrainingSize.height);
 		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		list.setVisibleRowCount(0);
 
@@ -247,7 +272,9 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 
 			@Override
 			protected void formatLabel(ShowcaseIcon icon) {
-				label.setIcon(icon.getImageIcon());
+				int z = sizeSlider.getValue();
+				Dimension maxConstrainingSize = new Dimension(z, z);
+				label.setIcon(icon.getImageIcon(maxConstrainingSize));
 			}
 
 		});
@@ -284,11 +311,33 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		list.getInputMap().put(escapeKey, ACTION_CLEAR_SELECTION);
 		list.getActionMap().put(ACTION_CLEAR_SELECTION,
 				new ClearSelectionAction());
+
+		addSliderPopover(sizeSlider, " pixels");
+
+		sizeSlider.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				refreshCellSize();
+			}
+		});
+		refreshCellSize();
+	}
+
+	private void refreshCellSize() {
+		int z = sizeSlider.getValue();
+		list.setFixedCellHeight(z);
+		list.setFixedCellWidth(z);
+		for (ShowcaseIcon i : icons) {
+			i.img = null;
+		}
+		list.repaint();
 	}
 
 	protected abstract JComponent createPopupContents(ShowcaseIcon icon);
 
-	protected abstract BufferedImage getImage(String string);
+	protected abstract BufferedImage getImage(String id,
+			Dimension maxConstrainingSize);
 
 	protected abstract String[] getImageIDs();
 }

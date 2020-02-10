@@ -54,7 +54,7 @@ public class AquaIconDemo extends ShowcaseIconDemo {
 	}
 
 	@Override
-	protected BufferedImage getImage(String id) {
+	protected BufferedImage getImage(String id, Dimension maxConstrainingSize) {
 		Icon icon = AquaIcon.get(id);
 		Dimension d = new Dimension(icon.getIconWidth(), icon.getIconHeight());
 		Dimension d2 = Dimension2D.scaleProportionally(d, maxConstrainingSize);
