@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
@@ -346,6 +347,11 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 				int index = list.getUI().locationToIndex(list, new Point(x, y));
 				if (index == -1)
 					return;
+
+				Rectangle r = list.getUI().getCellBounds(list, index, index);
+				if (!r.contains(new Point(x, y)))
+					return;
+
 				ShowcaseIcon si = icons.get(index);
 				int z = sizeSlider.getValue();
 				Icon icon = si.getImageIcon(new Dimension(z, z));
