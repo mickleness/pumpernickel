@@ -1,7 +1,5 @@
 package com.pump.swing.popover;
 
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,8 +11,8 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class ListSelectionVisibility<T extends JComponent> implements
-		PopoverVisibility<T> {
+public class ListSelectionVisibility<T extends JComponent> extends
+		AbstractComponentVisibility<T> {
 	static class PopoverListSelectionListener implements ListSelectionListener {
 		JPopover<?> popover;
 
@@ -29,24 +27,9 @@ public class ListSelectionVisibility<T extends JComponent> implements
 
 	};
 
-	static class PopoverHierarchyListener implements HierarchyListener {
-		JPopover<?> popover;
-
-		PopoverHierarchyListener(JPopover<?> popover) {
-			this.popover = popover;
-		}
-
-		@Override
-		public void hierarchyChanged(HierarchyEvent e) {
-			popover.refreshVisibility(false);
-		}
-
-	}
-
 	JList<?> list;
 	Collection<Object> expectedSelection;
 	Map<JPopover<T>, PopoverListSelectionListener> selectionListenerMap = new HashMap<>();
-	Map<JPopover<T>, PopoverHierarchyListener> hierarchyListenerMap = new HashMap<>();
 
 	public ListSelectionVisibility(JList<?> list, Object... expectedSelection) {
 		this.list = list;
@@ -63,32 +46,22 @@ public class ListSelectionVisibility<T extends JComponent> implements
 
 	@Override
 	public void install(JPopover<T> popover) {
+		super.install(popover);
 		PopoverListSelectionListener l1 = selectionListenerMap.get(popover);
 		if (l1 == null) {
 			l1 = new PopoverListSelectionListener(popover);
 			selectionListenerMap.put(popover, l1);
 			list.getSelectionModel().addListSelectionListener(l1);
 		}
-
-		PopoverHierarchyListener l2 = hierarchyListenerMap.get(popover);
-		if (l2 == null) {
-			l2 = new PopoverHierarchyListener(popover);
-			hierarchyListenerMap.put(popover, l2);
-			list.addHierarchyListener(l2);
-		}
 	}
 
 	@Override
 	public void uninstall(JPopover<T> popover) {
 		PopoverListSelectionListener l1 = selectionListenerMap.remove(popover);
-		if (l1 == null) {
+		if (l1 != null) {
 			list.getSelectionModel().removeListSelectionListener(l1);
 		}
-
-		PopoverHierarchyListener l2 = hierarchyListenerMap.remove(popover);
-		if (l2 == null) {
-			list.removeHierarchyListener(l2);
-		}
+		super.uninstall(popover);
 	}
 
 }
