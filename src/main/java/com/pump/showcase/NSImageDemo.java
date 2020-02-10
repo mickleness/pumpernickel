@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -94,18 +93,7 @@ public class NSImageDemo extends ShowcaseIconDemo {
 
 	@Override
 	protected String[] getImageIDs() {
-		Collection<String> ids = new HashSet<>();
-		for (Field field : NSImage.class.getFields()) {
-			if (NSImage.class.isAssignableFrom(field.getType())) {
-				try {
-					NSImage i = (NSImage) field.get(null);
-					ids.add(i.getName());
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
+		Collection<String> ids = NSImage.getIDs();
 		return ids.toArray(new String[ids.size()]);
 	}
 

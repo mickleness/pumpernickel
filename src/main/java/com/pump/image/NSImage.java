@@ -7,7 +7,9 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -25,7 +27,15 @@ public class NSImage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** All known NSImages. */
-	private static final Map<String, NSImage> knownImages = new HashMap<String, NSImage>();
+	private static final Map<String, NSImage> knownImages = new LinkedHashMap<String, NSImage>();
+
+	public static Collection<String> getIDs() {
+		return Collections.unmodifiableSet(knownImages.keySet());
+	}
+
+	// folders:
+
+	// other:
 
 	/** A Quick Look template image. Available in OS X v10.5 and later. */
 	public static final NSImage QuickLookTemplate = get("QuickLookTemplate",
