@@ -1,12 +1,17 @@
 package com.pump.image;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import com.pump.awt.Dimension2D;
 
 /**
  * https://developer.apple.com/documentation/appkit/nsimage/
@@ -580,11 +585,47 @@ public class AquaImage implements Serializable {
 		return image;
 	}
 
+	private static Class cImageClass;
+	private static Field creatorField;
+	private static Object creator;
+	private static Method createImageFromNameMethod;
+
+	public Image getImage(Dimension maxConstrainingSize) {
+		Image img = getImage();
+		Dimension originalSize = ImageSize.get(img);
+		Dimension newSize = Dimension2D.scaleProportionally(originalSize,
+				maxConstrainingSize);
+
+		String nsName = "NS" + name;
+
+		try {
+			if (cImageClass == null) {
+				cImageClass = Class.forName("sun.lwawt.macosx.CImage");
+				creatorField = cImageClass.getDeclaredField("creator");
+				creatorField.setAccessible(true);
+				creator = creatorField.get(null);
+				createImageFromNameMethod = creator.getClass().getMethod(
+						"createImageFromName", String.class, Integer.TYPE,
+						Integer.TYPE);
+			}
+
+			return (Image) createImageFromNameMethod.invoke(creator, nsName,
+					newSize.width, newSize.height);
+		} catch (Throwable t) {
+			throw new RuntimeException(t);
+		}
+	}
+
 	public synchronized BufferedImage getBufferedImage() {
 		if (bufferedImage == null) {
 			bufferedImage = ImageLoader.createImage(getImage());
 		}
 		return bufferedImage;
+	}
+
+	public synchronized BufferedImage getBufferedImage(
+			Dimension maxConstrainingSize) {
+		return ImageLoader.createImage(getImage(maxConstrainingSize));
 	}
 
 	public String getName() {
