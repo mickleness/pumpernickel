@@ -25,7 +25,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.pump.awt.Dimension2D;
-import com.pump.icon.ScaledIcon;
+import com.pump.icon.IconUtils;
 import com.pump.icon.StrikeThroughIcon;
 import com.pump.inspector.Inspector;
 import com.pump.io.icon.AquaFileIcon;
@@ -206,7 +206,7 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 			Dimension d = Dimension2D.scaleProportionally(new Dimension(w, h),
 					new Dimension(m, m));
 			if (d.width != w || d.height != h) {
-				icon = new ScaledIcon(icon, d.width, d.height);
+				icon = IconUtils.createScaledIcon(icon, d.width, d.height);
 				if (fileLabel.getText().length() == 0) {
 					fileLabel.setText("Scaled");
 				} else {

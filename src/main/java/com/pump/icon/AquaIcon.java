@@ -428,10 +428,8 @@ public class AquaIcon {
 			Dimension newSize = Dimension2D.scaleProportionally(d,
 					maxConstrainingSize);
 
-			// TODO: when get() returns accessible icon, make sure
-			// ScaledIcon creates an accessible icon.
-
-			icon = new ScaledIcon(icon, newSize.width, newSize.height);
+			icon = IconUtils.createScaledIcon(icon, newSize.width,
+					newSize.height);
 		}
 		return icon;
 	}

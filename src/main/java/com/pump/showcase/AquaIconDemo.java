@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 
 import com.pump.awt.Dimension2D;
 import com.pump.icon.AquaIcon;
-import com.pump.icon.ScaledIcon;
+import com.pump.icon.IconUtils;
 
 public class AquaIconDemo extends ShowcaseIconDemo {
 
@@ -77,7 +77,7 @@ public class AquaIconDemo extends ShowcaseIconDemo {
 		Dimension d = new Dimension(icon.getIconWidth(), icon.getIconHeight());
 		Dimension d2 = Dimension2D.scaleProportionally(d, maxConstrainingSize);
 		if (d2.width != d.width || d2.height != d.height) {
-			icon = new ScaledIcon(icon, d2.width, d2.height);
+			icon = IconUtils.createScaledIcon(icon, d2.width, d2.height);
 		}
 		BufferedImage bi = new BufferedImage(icon.getIconWidth(),
 				icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);

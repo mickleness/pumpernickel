@@ -3,7 +3,9 @@ package com.pump.icon;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -11,6 +13,8 @@ import java.lang.reflect.Proxy;
 import java.util.Objects;
 
 import javax.swing.Icon;
+
+import com.pump.geom.TransformUtils;
 
 public class IconUtils {
 
@@ -23,7 +27,8 @@ public class IconUtils {
 			Objects.requireNonNull(icon);
 			Objects.requireNonNull(insets);
 			this.icon = icon;
-			this.insets = insets;
+			this.insets = new Insets(insets.top, insets.left, insets.bottom,
+					insets.right);
 		}
 
 		@Override
@@ -68,6 +73,75 @@ public class IconUtils {
 				if (!p.getIconInsets().equals(insets))
 					return false;
 				return p.getPaddedIcon().equals(icon);
+			} else {
+				return method.invoke(icon, args);
+			}
+		}
+	}
+
+	private static class ScaledIconInvocationHandler implements
+			InvocationHandler {
+		Icon icon;
+		Dimension size;
+
+		public ScaledIconInvocationHandler(Icon icon, Dimension size) {
+			Objects.requireNonNull(icon);
+			Objects.requireNonNull(size);
+			this.icon = icon;
+			this.size = new Dimension(size.width, size.height);
+		}
+
+		@Override
+		public Object invoke(Object proxy, Method method, Object[] args)
+				throws Throwable {
+			Parameter[] params = method.getParameters();
+			if ("getScaledIcon".equals(method.getName()) && params.length == 0) {
+				return icon;
+			} else if ("getIconHeight".equals(method.getName())
+					&& params.length == 0) {
+				return size.height;
+			} else if ("getIconWidth".equals(method.getName())
+					&& params.length == 0) {
+				return size.width;
+			} else if ("paintIcon".equals(method.getName())
+					&& params.length == 4
+					&& params[0].getType().equals(Component.class)
+					&& params[1].getType().equals(Graphics.class)
+					&& params[2].getType().equals(Integer.TYPE)
+					&& params[3].getType().equals(Integer.TYPE)) {
+				Component c = (Component) args[0];
+				Graphics g = (Graphics) args[1];
+				int x = (Integer) args[2];
+				int y = (Integer) args[3];
+
+				Graphics2D g2 = (Graphics2D) g.create();
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+						RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+						RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+				g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+						RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+				g2.transform(TransformUtils.createAffineTransform(x, y, x
+						+ icon.getIconWidth(), y, x, y + icon.getIconHeight(),
+						x, y, x + size.width, y, x, y + size.height));
+				icon.paintIcon(c, g2, x, y);
+				g2.dispose();
+
+				return Void.TYPE;
+			} else if ("hashCode".equals(method.getName())
+					&& params.length == 0) {
+				return size.hashCode() + icon.hashCode();
+			} else if ("equals".equals(method.getName()) && params.length == 1
+					&& params[0].getType().equals(Object.class)) {
+				Object obj = (Object) args[0];
+				if (!(obj instanceof ScaledIcon))
+					return false;
+				ScaledIcon s = (ScaledIcon) obj;
+				if (size.width != s.getIconWidth())
+					return false;
+				if (size.height != s.getIconHeight())
+					return false;
+				return icon.equals(s.getScaledIcon());
 			} else {
 				return method.invoke(icon, args);
 			}
@@ -120,6 +194,24 @@ public class IconUtils {
 				insets);
 		return (PaddedIcon) Proxy.newProxyInstance(
 				IconUtils.class.getClassLoader(), interfaces, handler);
+	}
+
+	public static ScaledIcon createScaledIcon(Icon icon, int width, int height) {
+		return createScaledIcon(icon, new Dimension(width, height));
+	}
+
+	public static ScaledIcon createScaledIcon(Icon icon, Dimension iconSize) {
+		if (icon instanceof ScaledIcon) {
+			ScaledIcon s = (ScaledIcon) icon;
+			Icon originalIcon = s.getScaledIcon();
+			return createScaledIcon(originalIcon, iconSize);
+		}
+		Class<?>[] interfaces = getInterfaces(icon, ScaledIcon.class);
+		InvocationHandler handler = new ScaledIconInvocationHandler(icon,
+				iconSize);
+		return (ScaledIcon) Proxy.newProxyInstance(
+				IconUtils.class.getClassLoader(), interfaces, handler);
+
 	}
 
 	/**
