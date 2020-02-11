@@ -38,7 +38,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.pump.icon.PaddedIcon;
+import com.pump.icon.IconUtils;
 import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.BytePixelIterator;
 import com.pump.image.pixel.IntPixelIterator;
@@ -146,7 +146,8 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 				int j = maxConstrainingSize.width - imgIcon.getIconWidth();
 				int k = maxConstrainingSize.height - imgIcon.getIconHeight();
 				if (j >= 0 && k >= 0 && (j + k) > 0) {
-					imgIcon = new PaddedIcon(imgIcon, maxConstrainingSize);
+					imgIcon = IconUtils.createPaddedIcon(imgIcon,
+							maxConstrainingSize);
 				}
 			}
 			return imgIcon;
@@ -313,8 +314,8 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 				int z = sizeSlider.getValue();
 				Dimension maxConstrainingSize = new Dimension(z, z);
 				Icon icon = showcaseIcon.getImageIcon(maxConstrainingSize);
-				icon = new PaddedIcon(icon, new Dimension(z + ICON_PADDING * 2,
-						z + ICON_PADDING * 2));
+				icon = IconUtils.createPaddedIcon(icon, new Dimension(z
+						+ ICON_PADDING * 2, z + ICON_PADDING * 2));
 				label.setIcon(icon);
 			}
 

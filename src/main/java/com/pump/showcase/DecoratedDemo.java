@@ -40,6 +40,7 @@ import javax.swing.tree.MutableTreeNode;
 
 import com.pump.icon.CloseIcon;
 import com.pump.icon.FadedIcon;
+import com.pump.icon.IconUtils;
 import com.pump.icon.PaddedIcon;
 import com.pump.icon.PauseIcon;
 import com.pump.icon.RefreshIcon;
@@ -131,19 +132,19 @@ public class DecoratedDemo extends ShowcaseDemo {
 
 		Insets myIconInsets = new Insets(ICON_INSETS.top, ICON_INSETS.left,
 				ICON_INSETS.bottom, ICON_INSETS.right + 4);
-		Icon pauseNormalIcon = new PaddedIcon(
-				new PauseIcon(10, 10, Color.gray), myIconInsets);
-		Icon pausePressedIcon = new PaddedIcon(new PauseIcon(10, 10,
-				Color.white), myIconInsets);
-		Icon pauseRolloverIcon = new PaddedIcon(new PauseIcon(10, 10,
-				Color.darkGray), myIconInsets);
+		Icon pauseNormalIcon = IconUtils.createPaddedIcon(new PauseIcon(10, 10,
+				Color.gray), myIconInsets);
+		Icon pausePressedIcon = IconUtils.createPaddedIcon(new PauseIcon(10,
+				10, Color.white), myIconInsets);
+		Icon pauseRolloverIcon = IconUtils.createPaddedIcon(new PauseIcon(10,
+				10, Color.darkGray), myIconInsets);
 		boolean play = true;
-		Icon playNormalIcon = new PaddedIcon(new TriangleIcon(
+		Icon playNormalIcon = IconUtils.createPaddedIcon(new TriangleIcon(
 				SwingConstants.EAST, 10, 10, Color.gray), myIconInsets);
-		Icon playPressedIcon = new PaddedIcon(new TriangleIcon(
+		Icon playPressedIcon = IconUtils.createPaddedIcon(new TriangleIcon(
 				SwingConstants.EAST, 10, 10, Color.white), myIconInsets);
 
-		Icon playRolloverIcon = new PaddedIcon(new TriangleIcon(
+		Icon playRolloverIcon = IconUtils.createPaddedIcon(new TriangleIcon(
 				SwingConstants.EAST, 10, 10, Color.darkGray), myIconInsets);
 
 		@Override
@@ -386,10 +387,12 @@ public class DecoratedDemo extends ShowcaseDemo {
 		 * This decoration is a close icon that removes a tree node when
 		 * pressed.
 		 */
-		BasicDecoration closeDecoration = new BasicDecoration(new PaddedIcon(
-				new CloseIcon(12), ICON_INSETS), new PaddedIcon(new CloseIcon(
-				12, CloseIcon.State.ROLLOVER), ICON_INSETS), new PaddedIcon(
-				new CloseIcon(12, CloseIcon.State.PRESSED), ICON_INSETS),
+		BasicDecoration closeDecoration = new BasicDecoration(
+				IconUtils.createPaddedIcon(new CloseIcon(12), ICON_INSETS),
+				IconUtils.createPaddedIcon(new CloseIcon(12,
+						CloseIcon.State.ROLLOVER), ICON_INSETS),
+				IconUtils.createPaddedIcon(new CloseIcon(12,
+						CloseIcon.State.PRESSED), ICON_INSETS),
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						removeElements(NAME_DELETABLE);
@@ -425,7 +428,8 @@ public class DecoratedDemo extends ShowcaseDemo {
 
 		/** This decoration pulses a warning icon. */
 		PulsingDecoration warningDecoration = new PulsingDecoration(
-				new BasicDecoration(new PaddedIcon(WARNING_ICON, ICON_INSETS)) {
+				new BasicDecoration(IconUtils.createPaddedIcon(WARNING_ICON,
+						ICON_INSETS)) {
 					@Override
 					public boolean isVisible(JTree tree, Object value,
 							boolean selected, boolean expanded, boolean leaf,
@@ -449,7 +453,7 @@ public class DecoratedDemo extends ShowcaseDemo {
 		 * there is a thread loading the contents of the root node.
 		 */
 		RepaintingDecoration progressDecoration = new RepaintingDecoration(
-				new BasicDecoration(new PaddedIcon(
+				new BasicDecoration(IconUtils.createPaddedIcon(
 						(new AquaThrobberUI().createIcon(null, null)),
 						ICON_INSETS)) {
 					@Override
@@ -478,11 +482,12 @@ public class DecoratedDemo extends ShowcaseDemo {
 		 * decoration to appear again. (While the thread is loading, this
 		 * decoration is not available.)
 		 */
-		BasicDecoration refreshDecoration = new BasicDecoration(new PaddedIcon(
-				new RefreshIcon(14, Color.gray), ICON_INSETS), new PaddedIcon(
-				new RefreshIcon(14, Color.darkGray), ICON_INSETS),
-				new PaddedIcon(new RefreshIcon(14, Color.white), ICON_INSETS),
-				new ActionListener() {
+		BasicDecoration refreshDecoration = new BasicDecoration(
+				IconUtils.createPaddedIcon(new RefreshIcon(14, Color.gray),
+						ICON_INSETS), IconUtils.createPaddedIcon(
+						new RefreshIcon(14, Color.darkGray), ICON_INSETS),
+				IconUtils.createPaddedIcon(new RefreshIcon(14, Color.white),
+						ICON_INSETS), new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						loadChildNodes(false);
 					}

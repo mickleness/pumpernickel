@@ -38,7 +38,7 @@ import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 
 import com.pump.awt.SplayedLayout;
-import com.pump.icon.PaddedIcon;
+import com.pump.icon.IconUtils;
 import com.pump.icon.TriangleIcon;
 import com.pump.swing.JBreadCrumb;
 import com.pump.swing.JBreadCrumb.BreadCrumbFormatter;
@@ -125,8 +125,9 @@ public class BreadCrumbUI extends ComponentUI {
 	private static final String PROPERTY_LAST_EMPHASIZED = BreadCrumbUI.class
 			.getName() + ".lastEmphasized";
 
-	public static final Icon DEFAULT_SEPARATOR_ICON = new PaddedIcon(
-			new TriangleIcon(SwingConstants.EAST, 6, 6), new Insets(2, 4, 2, 6));
+	public static final Icon DEFAULT_SEPARATOR_ICON = IconUtils
+			.createPaddedIcon(new TriangleIcon(SwingConstants.EAST, 6, 6),
+					new Insets(2, 4, 2, 6));
 
 	protected Icon defaultSeparatorIcon = DEFAULT_SEPARATOR_ICON;
 	ContainerMouseListener mouseListener = new ContainerMouseListener();

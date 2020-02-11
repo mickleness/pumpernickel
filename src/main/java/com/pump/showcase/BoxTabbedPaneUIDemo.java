@@ -30,7 +30,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import com.pump.awt.SplayedLayout;
-import com.pump.icon.PaddedIcon;
+import com.pump.icon.IconUtils;
 import com.pump.icon.PlusIcon;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.BoxTabbedPaneUI;
@@ -50,8 +50,8 @@ public class BoxTabbedPaneUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	JTabbedPane tabs = new JTabbedPane();
-	JButton addButton = new JButton(new PaddedIcon(
-			new PlusIcon(12, 12, 1, null), new Dimension(22, 22)));
+	JButton addButton = new JButton(IconUtils.createPaddedIcon(new PlusIcon(12,
+			12, 1, null), new Dimension(22, 22)));
 	JComboBox<String> tabPlacementComboBox = new JComboBox<>();
 	JRadioButton closeableActive = new JRadioButton("Active");
 	JRadioButton closeableInactive = new JRadioButton("Inactive");
