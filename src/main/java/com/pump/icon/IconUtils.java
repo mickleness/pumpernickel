@@ -10,9 +10,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 
 import javax.accessibility.AccessibleIcon;
@@ -20,6 +20,17 @@ import javax.swing.Icon;
 
 import com.pump.geom.TransformUtils;
 
+/**
+ * This is a set of static methods related to help with
+ * <code>javax.swing.Icons</code>.
+ * <p>
+ * Many of these methods focus on creating new Icon objects that extend the
+ * functionality of an Icon but still support all the original interfaces that
+ * Icon supported. (This is implemented using the Proxy reflection class.) For
+ * example if you want to scale or pad an Icon that is also a UIResource: the
+ * helper method will create a new PaddedIcon or ScaledIcon that also identifies
+ * as a UIResource.
+ */
 public class IconUtils {
 
 	private static class PaddedIconInvocationHandler implements
@@ -183,9 +194,21 @@ public class IconUtils {
 			}
 			return method.invoke(icon, args);
 		}
-
 	}
 
+	/**
+	 * Create a new PaddedIcon.
+	 * 
+	 * @param icon
+	 *            the icon to pad. If this is already a PaddedIcon then a new
+	 *            PaddedIcon is created that adds additional padding as
+	 *            necessary.
+	 * @param targetSize
+	 *            the size to stretch the icon to fill. The new PaddedIcon will
+	 *            be centered within this space. This method throws an exception
+	 *            if the targetSize is smaller than the original icon.
+	 * @return a new PaddedIcon.
+	 */
 	public static PaddedIcon createPaddedIcon(Icon icon, Dimension targetSize) {
 		if (icon == null)
 			icon = new EmptyIcon(0, 0);
@@ -211,11 +234,31 @@ public class IconUtils {
 		return createPaddedIcon(icon, insets);
 	}
 
+	/**
+	 * Create a new PaddedIcon.
+	 * 
+	 * @param icon
+	 *            the icon to pad. If this is already a PaddedIcon then a new
+	 *            PaddedIcon is created that adds additional padding.
+	 * @param padding
+	 *            the padding to uniformly apply to all sides of the icon.
+	 * @return a new PaddedIcon.
+	 */
 	public static PaddedIcon createPaddedIcon(Icon icon, int padding) {
 		Insets insets = new Insets(padding, padding, padding, padding);
 		return createPaddedIcon(icon, insets);
 	}
 
+	/**
+	 * Create a new PaddedIcon.
+	 * 
+	 * @param icon
+	 *            the icon to pad. If this is already a PaddedIcon then a new
+	 *            PaddedIcon is created that adds additional padding.
+	 * @param insets
+	 *            the padding to apply to the icon.
+	 * @return a new PaddedIcon.
+	 */
 	public static PaddedIcon createPaddedIcon(Icon icon, Insets insets) {
 		if (icon instanceof PaddedIcon) {
 			PaddedIcon p = (PaddedIcon) icon;
@@ -234,10 +277,32 @@ public class IconUtils {
 				IconUtils.class.getClassLoader(), interfaces, handler);
 	}
 
+	/**
+	 * Create a new ScaledIcon.
+	 * 
+	 * @param icon
+	 *            the icon to scale. If this is already a ScaledIcon then a new
+	 *            ScaledIcon is created that references the underlying icon.
+	 * @param width
+	 *            the width of the new icon.
+	 * @param height
+	 *            the height of the new icon.
+	 * @return a new ScaledIcon.
+	 */
 	public static ScaledIcon createScaledIcon(Icon icon, int width, int height) {
 		return createScaledIcon(icon, new Dimension(width, height));
 	}
 
+	/**
+	 * Create a new ScaledIcon.
+	 * 
+	 * @param icon
+	 *            the icon to scale. If this is already a ScaledIcon then a new
+	 *            ScaledIcon is created that references the underlying icon.
+	 * @param iconSize
+	 *            the dimensions of the new icon.
+	 * @return a new ScaledIcon.
+	 */
 	public static ScaledIcon createScaledIcon(Icon icon, Dimension iconSize) {
 		if (icon instanceof ScaledIcon) {
 			ScaledIcon s = (ScaledIcon) icon;
@@ -251,11 +316,31 @@ public class IconUtils {
 				IconUtils.class.getClassLoader(), interfaces, handler);
 	}
 
+	/**
+	 * Create an AccessibleIcon that is also an Icon.
+	 * 
+	 * @param icon
+	 *            the icon to convert to an AccessibleIcon. If this is already
+	 *            an AccessibleIcon then a new AccessibleIcon is still created
+	 *            that will store a unique description. (So if you change one
+	 *            AccessibleIcon's description, the other AccessibleIcon will be
+	 *            unaffected.)
+	 * @return
+	 */
 	public static AccessibleIcon createAccessibleIcon(Icon icon) {
 		Class<?>[] interfaces = getInterfaces(icon, AccessibleIcon.class);
 		InvocationHandler handler = new AccessibleIconInvocationHandler(icon);
-		return (AccessibleIcon) Proxy.newProxyInstance(
+		AccessibleIcon returnValue = (AccessibleIcon) Proxy.newProxyInstance(
 				IconUtils.class.getClassLoader(), interfaces, handler);
+
+		if (icon instanceof AccessibleIcon) {
+			// initialize our new AccessibleIcon's description if possible:
+			AccessibleIcon original = (AccessibleIcon) icon;
+			returnValue.setAccessibleIconDescription(original
+					.getAccessibleIconDescription());
+		}
+
+		return returnValue;
 	}
 
 	/**
@@ -264,7 +349,7 @@ public class IconUtils {
 	 */
 	private static Class<?>[] getInterfaces(Object obj,
 			Class<?> additionalInterface) {
-		List<Class<?>> interfaces = new ArrayList<>();
+		Collection<Class<?>> interfaces = new HashSet<>();
 		Class<?> z = obj.getClass();
 		while (z != null) {
 			interfaces.addAll(Arrays.asList(z.getInterfaces()));

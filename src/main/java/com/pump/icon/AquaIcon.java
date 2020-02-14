@@ -14,11 +14,39 @@ import javax.swing.Icon;
 
 import com.pump.awt.Dimension2D;
 
+/**
+ * This class uses reflection to access <code>com.apple.laf.AquaIcons</code> on
+ * Macs. If you try to use this class on another platform (or in a radically
+ * different JVM that discontinued support for
+ * <code>com.apple.laf.AquaIcons</code>): then calling one of the
+ * <code>get</code> methods will throw an exception.
+ * <p>
+ * I'm not an expert on Mac's icons, but my understanding is every icon has a
+ * unique 4-letter identifier. (Like "fldr" for "folder".) This class also
+ * includes a human-readable name as an optional "description" attribute.
+ * <p>
+ * Most (but not all) of these icons are scalable to very large (and small)
+ * dimensions. However requesting any icon at any size appears to incur a
+ * significant one-time performance cost.
+ * <p>
+ * This class includes a set of predefined icons. (I forget the origins of this
+ * list.) Apple appears to unofficially "support" deprecated IDs by redirecting
+ * those IDs to generic icons. For example "shdf" appears to refer to
+ * "shutdown items folder", which was introduced 1991 in system 7.5. I tried to
+ * comment out several of these obsolete icons and only include relevant/modern
+ * icons.
+ * 
+ * @see com.pump.image.NSImage
+ */
 public class AquaIcon {
 	// TODO: we could localize these descriptions
 
 	private static Map<String, Icon> iconMap = new LinkedHashMap<>();
 	private static Map<String, String> descriptionMap = new HashMap<>();
+
+	// The following constants are loosely organized into what I thought would
+	// be a presentable grouping in the AquaIconDemo. There is not strict
+	// rule/logic behind this order, other than "I thought it looked good"
 
 	// I commented out many icons that resolve to the "FNDR" or "docu" icons.
 
@@ -366,8 +394,14 @@ public class AquaIcon {
 	public static final Icon CONTROL_STRIP_MODULES_FOLDER_ICON = initialize(
 			"sdv ", "control strip modules folder icon");
 
+	@SuppressWarnings("rawtypes")
 	private static Constructor systemIconConstructor;
 
+	/**
+	 * Initialize the reflection objects needed to instantiate
+	 * com.apple.laf.AquaIcons
+	 */
+	@SuppressWarnings({ "rawtypes", "unused", "unchecked" })
 	private static void initialize() {
 		try {
 			if (systemIconConstructor == null) {
@@ -383,10 +417,23 @@ public class AquaIcon {
 		}
 	}
 
+	/**
+	 * Return all the IDs this runtime session has referred to, including all
+	 * the static fields listed in this class.
+	 */
 	public static Collection<String> getIDs() {
 		return Collections.unmodifiableSet(iconMap.keySet());
 	}
 
+	/**
+	 * Initialize a com.apple.laf.AquaIcon
+	 * 
+	 * @param selectorID
+	 *            the 4-letter identifier, such as "fldr"
+	 * @param description
+	 *            an optional human-readable description
+	 * @return a newly instantiated com.apple.laf.AquaIcon
+	 */
 	private synchronized static final Icon initialize(String selectorID,
 			String description) {
 		descriptionMap.put(selectorID, description);
@@ -394,10 +441,32 @@ public class AquaIcon {
 		return icon;
 	}
 
+	/**
+	 * Return the description associated with a 4-letter icon identifier.
+	 * 
+	 * @param selectorID
+	 *            the 4-letter identifier, such as "fldr"
+	 * @return the human-readable description, such as "generic folder". This
+	 *         description may be more "developer-friendly" than
+	 *         "user-friendly", but it will always be more readable than the
+	 *         4-letter identifier.
+	 */
 	public static String getDescription(String selectorID) {
 		return descriptionMap.get(selectorID);
 	}
 
+	/**
+	 * Return a cached Icon based on an identifier.
+	 * 
+	 * @param selectorID
+	 *            selectorID the 4-letter identifier, such as "fldr". This class
+	 *            lists dozens of fields that include supported IDs, but you can
+	 *            pass any value here. If you know of a special ID (or if one
+	 *            becomes available in future Mac OS releases) you can request
+	 *            it here.
+	 * 
+	 * @return a cached Icon based on that identifier.
+	 */
 	public synchronized static final Icon get(String selectorID) {
 		try {
 			initialize();
@@ -420,18 +489,40 @@ public class AquaIcon {
 		}
 	}
 
-	public static Icon get(String selectorID, Dimension maxConstrainingSize) {
+	/**
+	 * Return a ScaledIcon based on an identifier.
+	 * 
+	 * @param selectorID
+	 *            selectorID the 4-letter identifier, such as "fldr". This class
+	 *            lists dozens of fields that include supported IDs, but you can
+	 *            pass any value here. If you know of a special ID (or if one
+	 *            becomes available in future Mac OS releases) you can request
+	 *            it here.
+	 * @param iconSize
+	 *            a Dimension specifying the maximum size the returned icon
+	 *            should be. If this is non-null then this method returns a new
+	 *            ScaledIcon that refers to the cached Icon returned by
+	 *            {@link #get(String)}.
+	 *            <p>
+	 *            Note not all AquaIcons are guaranteed to scale gracefully.
+	 *            Some may only be supported at small resolutions, so requesting
+	 *            them at 64x64 may return a large icon that is technically
+	 *            64x64 but is pixelated and ugly.
+	 *            <p>
+	 *            This method will proportionally constrain the scale if needed.
+	 *            So if you ask for a 100x75 icon and the original icon has a
+	 *            1:1 width/height ratio: this will return an icon that is
+	 *            75x75.
+	 * 
+	 * @return a ScaledIcon based on that identifier that matches the required
+	 *         size.
+	 */
+	public static ScaledIcon get(String selectorID, Dimension iconSize) {
 		Icon icon = get(selectorID);
 
-		if (maxConstrainingSize != null) {
-			Dimension d = new Dimension(icon.getIconWidth(),
-					icon.getIconHeight());
-			Dimension newSize = Dimension2D.scaleProportionally(d,
-					maxConstrainingSize);
+		Dimension d = new Dimension(icon.getIconWidth(), icon.getIconHeight());
+		Dimension newSize = Dimension2D.scaleProportionally(d, iconSize);
 
-			icon = IconUtils.createScaledIcon(icon, newSize.width,
-					newSize.height);
-		}
-		return icon;
+		return IconUtils.createScaledIcon(icon, newSize.width, newSize.height);
 	}
 }

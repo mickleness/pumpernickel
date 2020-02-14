@@ -16,12 +16,24 @@ import java.util.Objects;
 import com.pump.awt.Dimension2D;
 
 /**
- * https://developer.apple.com/documentation/appkit/nsimage/
+ * This class catalogs a set of images available only on Mac.
  * <p>
- * The built-in constants below exclude the 78ish images that begin with
- * "touchBar", because Apple's documentation mentions: <blockquote>Touch Bar
- * template images are exclusively for use in NSTouchBarItem objects and not in
- * onscreen windows.</blockquote>
+ * If you are not scaling these images: these are already accessible on Mac by
+ * calling:
+ * <code>Toolkit.getDefaultToolkit().getImage("NSImage://NSComputer")</code>
+ * <p>
+ * The scaling logic uses reflection to help guarantee a high-resolution image.
+ * <p>
+ * The list of constants is based on Apple's documentation here: <br>
+ * <a href="https://developer.apple.com/documentation/appkit/nsimage/">https://
+ * developer.apple.com/documentation/appkit/nsimage/</a>
+ * <p>
+ * (The built-in constants below exclude the 78ish images that begin with
+ * "touchBar", because Apple's documentation mentions: "Touch Bar template
+ * images are exclusively for use in NSTouchBarItem objects and not in onscreen
+ * windows.")
+ * 
+ * @see com.pump.icon.AquaIcon
  */
 public class NSImage implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -29,6 +41,10 @@ public class NSImage implements Serializable {
 	/** All known NSImages. */
 	private static final Map<String, NSImage> knownImages = new LinkedHashMap<String, NSImage>();
 
+	/**
+	 * Return all the IDs this runtime session has referred to, including all
+	 * the static fields listed in this class.
+	 */
 	public static Collection<String> getIDs() {
 		return Collections.unmodifiableSet(knownImages.keySet());
 	}
@@ -544,6 +560,18 @@ public class NSImage implements Serializable {
 		return img;
 	}
 
+	/**
+	 * Return a cached NSImage based on the name.
+	 * 
+	 * @param the
+	 *            unique NSImage name, such as "Computer" or "TrashFull". This
+	 *            class lists dozens of fields that include supported names, but
+	 *            you can pass any value here. If you know of a special name (or
+	 *            if one becomes available in future Mac OS releases) you can
+	 *            request it here.
+	 * 
+	 * @return a cached NSImage based on the name.
+	 */
 	public static NSImage get(String name) {
 		return get(name, null, null);
 	}
@@ -581,9 +609,15 @@ public class NSImage implements Serializable {
 				+ availability + "\"]";
 	}
 
+	/**
+	 * Return a cached Image from the Toolkit.
+	 * <p>
+	 * This is equivalent to calling: <br>
+	 * <code>Toolkit.getDefaultToolkit().getImage("NSImage://NS" + getName())</code>
+	 */
 	public synchronized Image getImage() {
 		if (image == null) {
-			String n = "NSImage://NS" + name;
+			String n = "NSImage://NS" + getName();
 			image = Toolkit.getDefaultToolkit().getImage(n);
 		}
 		return image;
@@ -594,6 +628,15 @@ public class NSImage implements Serializable {
 	private static Object creator;
 	private static Method createImageFromNameMethod;
 
+	/**
+	 * This returns an Image that is scaled to a given size.
+	 * <p>
+	 * This uses reflection, so it may be more brittle in future JDKs.
+	 * 
+	 * @param maxConstrainingSize
+	 *            the maximum image size to return. The image will be scaled
+	 *            (proportionally) to fit inside these bounds.
+	 */
 	public Image getImage(Dimension maxConstrainingSize) {
 		Image img = getImage();
 		Dimension originalSize = ImageSize.get(img);
@@ -620,6 +663,9 @@ public class NSImage implements Serializable {
 		}
 	}
 
+	/**
+	 * Return a cached BufferedImage based on {@link #getImage()}.
+	 */
 	public synchronized BufferedImage getBufferedImage() {
 		if (bufferedImage == null) {
 			bufferedImage = ImageLoader.createImage(getImage());
@@ -627,19 +673,37 @@ public class NSImage implements Serializable {
 		return bufferedImage;
 	}
 
+	/**
+	 * Return a new BufferedImage based on {@link #getImage(Dimension)}
+	 * 
+	 * @param maxConstrainingSize
+	 *            the maximum image size to return. The image will be scaled
+	 *            (proportionally) to fit inside these bounds.
+	 */
 	public synchronized BufferedImage getBufferedImage(
 			Dimension maxConstrainingSize) {
 		return ImageLoader.createImage(getImage(maxConstrainingSize));
 	}
 
+	/**
+	 * Return the unique name of this image, such as "Computer" or "TrashFull"
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Return an optional String describing when this icon was first released,
+	 * such as "Available in OS X v10.5 and later."
+	 */
 	public String getAvailability() {
 		return availability;
 	}
 
+	/**
+	 * Return an optional String describing this icon, such as
+	 * "A Bluetooth template image."
+	 */
 	public String getDescription() {
 		return description;
 	}

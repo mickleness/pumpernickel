@@ -18,6 +18,16 @@ import javax.swing.Icon;
 
 import com.pump.geom.TransformUtils;
 
+/**
+ * This icon is a circle with a diagonal line from the top-left to the
+ * bottom-right.
+ * <p>
+ * This is typically superimposed on another icon to indicate something is
+ * banned. For example: a "no smoking" icon might consist of a cigarette icon
+ * with this icon layered above it. This is also culturally identifiable via the
+ * "ghostbusters" logo, although in that icon the opposite diagonal line is
+ * used.
+ */
 public class StrikeThroughIcon implements Icon {
 	Shape outline;
 	{
@@ -30,10 +40,24 @@ public class StrikeThroughIcon implements Icon {
 	int size;
 	Color color;
 
+	/**
+	 * Create a 30x30 strikethrough icon with a given color.
+	 * 
+	 * @param color
+	 *            the color to render this icon with.
+	 */
 	public StrikeThroughIcon(Color color) {
 		this(color, 30);
 	}
 
+	/**
+	 * Create a strikethrough icon.
+	 * 
+	 * @param color
+	 *            the color to render this icon with.
+	 * @param size
+	 *            the width and height of this icon.
+	 */
 	public StrikeThroughIcon(Color color, int size) {
 		Objects.requireNonNull(color);
 		this.color = color;
