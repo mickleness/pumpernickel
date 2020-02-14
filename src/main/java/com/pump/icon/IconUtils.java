@@ -10,8 +10,12 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
+import javax.accessibility.AccessibleIcon;
 import javax.swing.Icon;
 
 import com.pump.geom.TransformUtils;
@@ -148,6 +152,40 @@ public class IconUtils {
 		}
 	}
 
+	private static class AccessibleIconInvocationHandler implements
+			InvocationHandler {
+
+		Icon icon;
+		String description;
+
+		public AccessibleIconInvocationHandler(Icon icon) {
+			Objects.requireNonNull(icon);
+			this.icon = icon;
+		}
+
+		@Override
+		public Object invoke(Object proxy, Method method, Object[] args)
+				throws Throwable {
+			Parameter[] params = method.getParameters();
+			if ("getAccessibleIconDescription".equals(method.getName())
+					&& params.length == 0) {
+				return description;
+			} else if ("setAccessibleIconDescription".equals(method.getName())
+					&& String.class.equals(params[0].getType())) {
+				description = (String) args[0];
+				return Void.TYPE;
+			} else if ("getAccessibleIconWidth".equals(method.getName())
+					&& params.length == 0) {
+				return icon.getIconWidth();
+			} else if ("getAccessibleIconHeight".equals(method.getName())
+					&& params.length == 0) {
+				return icon.getIconHeight();
+			}
+			return method.invoke(icon, args);
+		}
+
+	}
+
 	public static PaddedIcon createPaddedIcon(Icon icon, Dimension targetSize) {
 		if (icon == null)
 			icon = new EmptyIcon(0, 0);
@@ -211,18 +249,28 @@ public class IconUtils {
 				iconSize);
 		return (ScaledIcon) Proxy.newProxyInstance(
 				IconUtils.class.getClassLoader(), interfaces, handler);
+	}
 
+	public static AccessibleIcon createAccessibleIcon(Icon icon) {
+		Class<?>[] interfaces = getInterfaces(icon, AccessibleIcon.class);
+		InvocationHandler handler = new AccessibleIconInvocationHandler(icon);
+		return (AccessibleIcon) Proxy.newProxyInstance(
+				IconUtils.class.getClassLoader(), interfaces, handler);
 	}
 
 	/**
 	 * Return an array of all the interfaces an object current implements plus
 	 * the additional class.
 	 */
-	private static Class<?>[] getInterfaces(Object obj, Class<?> additionalClass) {
-		Class<?>[] interfaces = obj.getClass().getInterfaces();
-		Class<?>[] returnValue = new Class[interfaces.length + 1];
-		System.arraycopy(interfaces, 0, returnValue, 0, interfaces.length);
-		returnValue[returnValue.length - 1] = additionalClass;
-		return returnValue;
+	private static Class<?>[] getInterfaces(Object obj,
+			Class<?> additionalInterface) {
+		List<Class<?>> interfaces = new ArrayList<>();
+		Class<?> z = obj.getClass();
+		while (z != null) {
+			interfaces.addAll(Arrays.asList(z.getInterfaces()));
+			z = z.getSuperclass();
+		}
+		interfaces.add(additionalInterface);
+		return interfaces.toArray(new Class[interfaces.size()]);
 	}
 }
