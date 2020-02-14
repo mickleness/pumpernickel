@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.accessibility.AccessibleIcon;
 import javax.swing.Icon;
 
 import com.pump.awt.Dimension2D;
@@ -389,12 +390,8 @@ public class AquaIcon {
 	private synchronized static final Icon initialize(String selectorID,
 			String description) {
 		descriptionMap.put(selectorID, description);
-		try {
-			return get(selectorID);
-		} catch (Throwable t) {
-			// TODO return some sort of error icon
-			return null;
-		}
+		Icon icon = get(selectorID);
+		return icon;
 	}
 
 	public static String getDescription(String selectorID) {
@@ -407,10 +404,14 @@ public class AquaIcon {
 			Icon icon = iconMap.get(selectorID);
 			if (icon == null) {
 				icon = (Icon) systemIconConstructor.newInstance(selectorID);
+				String description = descriptionMap.get(selectorID);
+				if (description != null && description.trim().length() > 0) {
+					AccessibleIcon icon2 = IconUtils.createAccessibleIcon(icon);
+					icon2.setAccessibleIconDescription(description);
+					icon = (Icon) icon2;
+				}
 				iconMap.put(selectorID, icon);
 			}
-
-			// TODO: embed description by making an accessible icon
 
 			return icon;
 		} catch (InstantiationException | IllegalAccessException
