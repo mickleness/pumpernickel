@@ -44,8 +44,7 @@ public class AquaIconDemo extends ShowcaseIconDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return AquaIconDemo.class.getResource("aquaIconDemo.html");
 	}
 
 	@Override

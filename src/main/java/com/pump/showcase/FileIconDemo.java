@@ -233,8 +233,7 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return FileIconDemo.class.getResource("fileIconDemo.html");
 	}
 
 	@Override

@@ -9,6 +9,9 @@ import javax.swing.Icon;
 /**
  * This {@link FileIcon} uses the <code>com.apple.laf.AquaIcon$FileIcon</code>
  * class to render scalable icons from the OS.
+ * <p>
+ * This is constructed using reflection to access a public com.apple class. If
+ * this ever fails the {@link FileViewFileIcon} also works on Mac.
  */
 public class AquaFileIcon extends FileIcon {
 

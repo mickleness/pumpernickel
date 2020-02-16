@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AquaIcon Demo</title>
+</head>
+<body>
+The <code>com.pump.icon.AquaIcon</code> class is a wrapper for the <code>com.apple.laf.AquaIcon</code> available on Mac. If you try to call any method on an AquaIcon and you're not on a Mac (or if the Apple JDK significantly changes) then this class will throw an exception. You should only rely on this class if you control the JDK you ship/launch with, or if you're careful to structure your invocation in try/catch blocks.
+<p>
+On Mac there are dozens (hundreds?) of special icons available for the UI. These are identified by a special 4-letter code. For example "fldr" refers to a generic folder, or "gusr" refers to "guest user". (I'm not an expert on this topic, but I'm assuming the 4-letter convention dates back to Classic Mac OS use of a 4-letter file type code?)
+<p>
+Many (but not all) of these icons are scalable to very high resolutions.  The exact icons may change from one OS release to another, so it's important that you choose them for their intended usage and not for their actual image.
+<p>
+The list of icons provided here is something I put together from various scraps of information. There may be many more icons that I'm not familiar with, or it's possible I listed some here that are deprecated or not recommended.
+</body>
+</html>

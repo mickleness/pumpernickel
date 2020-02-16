@@ -42,8 +42,7 @@ public class NSImageDemo extends ShowcaseIconDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return NSImageDemo.class.getResource("nsImageDemo.html");
 	}
 
 	@Override
