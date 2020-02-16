@@ -405,9 +405,7 @@ public class AquaIcon {
 	private static void initialize() {
 		try {
 			if (systemIconConstructor == null) {
-				Class j1 = com.apple.laf.AquaIcon.class;
-				Class j2;
-				j2 = Class.forName("com.apple.laf.AquaIcon$SystemIcon");
+				Class j2 = Class.forName("com.apple.laf.AquaIcon$SystemIcon");
 				systemIconConstructor = j2.getDeclaredConstructor(String.class);
 				systemIconConstructor.setAccessible(true);
 			}

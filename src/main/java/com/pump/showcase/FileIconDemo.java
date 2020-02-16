@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -77,8 +78,13 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 		}
 		fileViewFileIcon = new FileViewFileIcon();
 		fileSystemViewFileIcon = new FileSystemViewFileIcon();
-		fileIcons = Arrays.asList(aquaFileIcon, fileViewFileIcon,
-				fileSystemViewFileIcon);
+		fileIcons = new ArrayList<>();
+		if(aquaFileIcon!=null)
+			fileIcons.add(aquaFileIcon);
+		if(fileViewFileIcon!=null)
+			fileIcons.add(fileViewFileIcon);
+		if(fileSystemViewFileIcon!=null)
+			fileIcons.add(fileSystemViewFileIcon);
 
 		filePathField.setText(System.getProperty("user.home"));
 
@@ -91,10 +97,10 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 			selectedIndex = 0;
 		} else if (FileIcon.get() instanceof FileViewFileIcon) {
 			fvName += " (Default)";
-			selectedIndex = 1;
+			selectedIndex = aquaFileIcon==null ? 0 : 1;
 		} else if (FileIcon.get() instanceof FileSystemViewFileIcon) {
 			sfvName += " (Default)";
-			selectedIndex = 2;
+			selectedIndex = aquaFileIcon==null ? 1 : 2;
 		}
 
 		fileIconComboBox = new JComboBox<String>();
@@ -196,10 +202,10 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 			icon = new StrikeThroughIcon(Color.gray, 20);
 			fileLabel.setText("File Missing");
 		} else if (fileIcon != null) {
-			icon = fileIcon.getIcon(file);
+			icon = fileIcon.getIcon(file, false);
 		} else {
-			icon = UIManager.getIcon("Tree.leafIcon");
-			fileLabel.setText("Tree.leafIcon");
+			icon = UIManager.getIcon("FileView.fileIcon");
+			fileLabel.setText("FileView.fileIcon");
 		}
 		int w = icon.getIconWidth();
 		int h = icon.getIconHeight();
