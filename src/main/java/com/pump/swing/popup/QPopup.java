@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.swing;
+package com.pump.swing.popup;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -18,28 +18,28 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.Window.Type;
-import java.lang.reflect.Field;
 
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.JToolTip;
 import javax.swing.JWindow;
 import javax.swing.Popup;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
-import javax.swing.plaf.basic.BasicSliderUI;
 
 import com.pump.plaf.QPanelUI;
 import com.pump.plaf.QPanelUI.CalloutType;
 
 public class QPopup extends Popup {
+
+	static class HiddenTargetBoundsException extends Exception {
+		private static final long serialVersionUID = 1L;
+	}
 
 	/**
 	 * This client property on owners resolves to a CalloutType or an array of
@@ -63,6 +63,7 @@ public class QPopup extends Popup {
 	private static final int CALLOUT_SIZE = 5;
 
 	protected JPanel contents;
+	protected PopupTarget target;
 	protected Component owner;
 	protected QPanelUI ui;
 	protected Point screenLoc;
@@ -73,8 +74,8 @@ public class QPopup extends Popup {
 	 * @param owner
 	 * @param contents
 	 */
-	public QPopup(Component owner, JPanel contents) {
-		this(owner, contents, null);
+	public QPopup(Component owner, PopupTarget target, JPanel contents) {
+		this(owner, target, contents, null);
 	}
 
 	/**
@@ -87,8 +88,10 @@ public class QPopup extends Popup {
 	 *            screen coordinates. If this is null, then callouts will be
 	 *            used to align the popup with the owner.
 	 */
-	public QPopup(Component owner, JPanel contents, Point screenLoc) {
+	public QPopup(Component owner, PopupTarget target, JPanel contents,
+			Point screenLoc) {
 		this.owner = owner;
+		setTarget(target);
 		this.contents = contents;
 		this.screenLoc = screenLoc == null ? null : new Point(screenLoc);
 		ui = (QPanelUI) contents.getUI();
@@ -103,21 +106,25 @@ public class QPopup extends Popup {
 				return;
 			showUsingWindow(z, null, true);
 		} else {
-			CalloutType[] calloutTypes = getCalloutTypes();
-			for (CalloutType type : calloutTypes) {
-				Point p = getScreenLoc(type);
-				if (showUsingRootPaneContainer(p, type)) {
-					return;
+			try {
+				CalloutType[] calloutTypes = getCalloutTypes();
+				for (CalloutType type : calloutTypes) {
+					Point p = getScreenLoc(type);
+					if (showUsingRootPaneContainer(p, type)) {
+						return;
+					}
 				}
-			}
 
-			for (CalloutType type : calloutTypes) {
-				Point p = getScreenLoc(type);
-				if (showUsingWindow(p, type, false))
-					return;
+				for (CalloutType type : calloutTypes) {
+					Point p = getScreenLoc(type);
+					if (showUsingWindow(p, type, false))
+						return;
+				}
+				Point p = getScreenLoc(calloutTypes[0]);
+				showUsingWindow(p, calloutTypes[0], true);
+			} catch (HiddenTargetBoundsException htbe) {
+				hide();
 			}
-			Point p = getScreenLoc(calloutTypes[0]);
-			showUsingWindow(p, calloutTypes[0], true);
 		}
 	}
 
@@ -138,107 +145,35 @@ public class QPopup extends Popup {
 		return ORDERED_CALLOUT_TYPES;
 	}
 
-	protected Point getScreenLoc(CalloutType type) {
-		if (owner instanceof JSlider) {
-			return getScreenLocForSliderOwner((JSlider) owner, type);
-		}
-		return getScreenLocForGenericOwner(owner, type);
-	}
+	private Rectangle getShowingTargetBounds(Rectangle screenBounds) {
+		Component c = getOwner();
+		while (c != null) {
 
-	protected Point getScreenLocForGenericOwner(Component owner,
-			CalloutType type) {
-		int minX = 0;
-		int maxX = owner.getWidth();
-		int minY = 0;
-		int maxY = owner.getHeight();
-		if (owner instanceof JComponent) {
-			Insets insets = ((JComponent) owner).getInsets();
+			Point cScreenLoc = new Point(0, 0);
+			SwingUtilities.convertPointToScreen(cScreenLoc, c);
+			Rectangle cScreenBounds = new Rectangle(cScreenLoc, c.getSize());
 
-			minX += Math.min(10, insets.left);
-			maxX -= Math.min(10, insets.right);
-			minY += Math.min(10, insets.top);
-			maxY -= Math.min(10, insets.bottom);
+			screenBounds = cScreenBounds.intersection(screenBounds);
+
+			c = c.getParent();
 		}
 
-		return getScreenLocForGenericOwner(owner, minX, minY, maxX - minX, maxY
-				- minY, type);
-	}
-
-	protected Point getScreenLocForSliderOwner(JSlider slider, CalloutType type) {
-		Rectangle thumb = getSliderThumbRect(slider);
-		if (thumb == null)
-			return getScreenLocForGenericOwner(slider, type);
-
-		return getScreenLocForGenericOwner(slider, thumb.x, thumb.y,
-				thumb.width, thumb.height, type);
-	}
-
-	protected Rectangle getSliderThumbRect(JSlider slider) {
-		BasicSliderUI sliderUI = slider.getUI() instanceof BasicSliderUI ? (BasicSliderUI) slider
-				.getUI() : null;
-		if (ui == null)
+		if (screenBounds.width <= 0 || screenBounds.height <= 0)
 			return null;
-
-		try {
-			Field f = BasicSliderUI.class.getDeclaredField("thumbRect");
-			f.setAccessible(true);
-			Rectangle thumbRect = (Rectangle) f.get(sliderUI);
-			if (thumbRect != null && !thumbRect.isEmpty())
-				return new Rectangle(thumbRect);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-
-		// this... kinda worked. It derives the thumb location.
-		// But it was still a little imprecise, and just
-		// grabbing the thumbRect is simplest.
-
-		// int value = slider.getValue();
-		// if (slider.getOrientation() == JSlider.HORIZONTAL) {
-		// float bestX = slider.getWidth() / 2;
-		// int span = 0;
-		// int bestDiff = Integer.MAX_VALUE;
-		// for (int x = 0; x < slider.getWidth(); x++) {
-		// int v = sliderUI.valueForXPosition(x);
-		// int diff = (Math.abs(value - v));
-		// if (diff < bestDiff) {
-		// bestX = x;
-		// span = 1;
-		// bestDiff = diff;
-		// } else if (diff == bestDiff) {
-		// bestX = (bestX * span + x) / (++span);
-		// }
-		// }
-		// return new Point((int) Math.round(bestX), slider.getHeight());
-		// } else if (slider.getOrientation() == JSlider.VERTICAL) {
-		// float bestY = slider.getHeight() / 2;
-		// int span = 0;
-		// int bestDiff = Integer.MAX_VALUE;
-		// for (int y = 0; y < slider.getHeight(); y++) {
-		// int v = ui.valueForYPosition(y);
-		// int diff = (Math.abs(value - v));
-		// if (diff < bestDiff) {
-		// bestY = y;
-		// span = 1;
-		// bestDiff = diff;
-		// } else if (diff == bestDiff) {
-		// bestY = (bestY * span + y) / (++span);
-		// }
-		// }
-		// return new Point(slider.getWidth(), (int) Math.round(bestY));
-		// }
-		// throw new RuntimeException("Unexpected orientation: "
-		// + slider.getOrientation());
-
+		return screenBounds;
 	}
 
-	protected Point getScreenLocForGenericOwner(Component owner, int x, int y,
-			int w, int h, CalloutType type) {
-		int minX = x;
-		int minY = y;
-		int maxX = x + w;
-		int maxY = y + h;
+	private Point getScreenLoc(CalloutType type)
+			throws HiddenTargetBoundsException {
+		Rectangle r = getTarget().getScreenBounds();
+		r = getShowingTargetBounds(r);
+		if (r == null)
+			throw new HiddenTargetBoundsException();
+
+		int minX = r.x;
+		int minY = r.y;
+		int maxX = r.x + r.width;
+		int maxY = r.y + r.height;
 		int midX = (minX + maxX) / 2;
 		int midY = (minY + maxY) / 2;
 
@@ -268,7 +203,6 @@ public class QPopup extends Popup {
 		} else { // TOP_CENTER:
 			p = new Point(midX, maxY);
 		}
-		SwingUtilities.convertPointToScreen(p, owner);
 		return p;
 	}
 
@@ -461,6 +395,16 @@ public class QPopup extends Popup {
 
 	public Component getOwner() {
 		return owner;
+	}
+
+	public PopupTarget getTarget() {
+		return target;
+	}
+
+	public void setTarget(PopupTarget target) {
+		if (target == null)
+			target = new BasicPopupTarget(owner);
+		this.target = target;
 	}
 
 	public JPanel getContents() {

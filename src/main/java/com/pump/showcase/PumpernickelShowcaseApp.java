@@ -352,7 +352,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 				for (String keyword : d.getKeywords()) {
 					returnValue.add(keyword.toLowerCase());
 				}
-				for (Class z : d.getClasses()) {
+				Class[] classes = d.getClasses();
+				if (classes == null)
+					throw new NullPointerException(d.getClass().getSimpleName());
+				for (Class z : classes) {
 					int layer = 0;
 					/*
 					 * Include at least 4 layers: CircularProgressBarUI ->
@@ -504,6 +507,11 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("MixedCheckBoxState", "MixedCheckBoxStateDemo");
 			addSection("JFrame, JDialog, JWindow", "WindowDemo");
 			addSection("System Properties", "SystemPropertiesDemo");
+			addSection("FileIcon", "FileIconDemo");
+			if (JVM.isMac) {
+				addSection("AquaIcon", "AquaIconDemo");
+				addSection("NSImage", "NSImageDemo");
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

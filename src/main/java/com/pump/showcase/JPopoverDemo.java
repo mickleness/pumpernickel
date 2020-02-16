@@ -38,9 +38,9 @@ import com.pump.plaf.QPanelUI;
 import com.pump.plaf.QPanelUI.CalloutType;
 import com.pump.plaf.button.BevelButtonUI;
 import com.pump.swing.FontComboBox;
-import com.pump.swing.JPopover;
-import com.pump.swing.QPopup;
-import com.pump.swing.QPopupFactory;
+import com.pump.swing.popover.JPopover;
+import com.pump.swing.popup.QPopup;
+import com.pump.swing.popup.QPopupFactory;
 import com.pump.util.BooleanProperty;
 
 /**

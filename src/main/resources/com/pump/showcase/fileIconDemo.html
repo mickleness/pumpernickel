@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FileIcon Demo</title>
+</head>
+<body>
+The abstract <code>FileIcon</code> class returns a <code>javax.swing.Icon</code> for a file.
+<p>
+This demo includes 2-3 implementations depending on your OS.
+
+<h3>AquaFileIcon</h3>
+This implementation is the default on Mac, and it is only available on Mac.
+<p>
+This uses reflection to invoke the <code>com.apple.laf.AquaIcon.FileIcon</code> class.
+<h3>FileViewFileIcon</h3>
+This implementation creates a new JFileChooser and uses its FileView.
+<p>
+This also works on Mac, but it requires the overhead of setting up a new JFileChooser.
+<h3>FileSystemViewFileIcon</h3>
+This implementation uses <code>FileSystemView.getFileSystemView()</code> to identify icons.
+<p>
+This does not work on Mac. (It only returns two icons: one for documents and one for folders.)
+
+</body>
+</html>

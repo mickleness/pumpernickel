@@ -59,7 +59,7 @@ import javax.swing.event.ChangeListener;
 import com.pump.animation.quicktime.JPEGMovWriter;
 import com.pump.animation.quicktime.MovWriter;
 import com.pump.animation.quicktime.PNGMovWriter;
-import com.pump.icon.FileIcon;
+import com.pump.io.icon.FileIcon;
 import com.pump.swing.AnimationController;
 import com.pump.swing.FileDialogUtils;
 import com.pump.swing.PartialLineBorder;
@@ -350,7 +350,7 @@ public class MovWriterDemo extends JPanel {
 					File file = (File) value;
 					JLabel label = (JLabel) c;
 					label.setText(file.getName());
-					Icon icon = FileIcon.getIcon(file);
+					Icon icon = FileIcon.get().getIcon(file);
 					if (icon == null)
 						icon = UIManager.getIcon("FileView.fileIcon");
 					label.setIcon(icon);

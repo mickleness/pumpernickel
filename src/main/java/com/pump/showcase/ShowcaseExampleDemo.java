@@ -22,14 +22,12 @@ import java.awt.Rectangle;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.JToolTip;
 import javax.swing.UIManager;
 
 import com.pump.graphics.GraphicInstruction;
 import com.pump.graphics.GraphicsWriter;
 import com.pump.graphics.ImageInstruction;
 import com.pump.plaf.QPanelUI;
-import com.pump.swing.JPopover;
 
 /**
  * This is a ShowcaseDemo that includes a "Configuration" and "Example" panel.
@@ -53,16 +51,18 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 
 		@Override
 		protected void paintComponent(Graphics g) {
-			if(getUI().getClass().getName().endsWith("plaf.windows.WindowsSliderUI")) {
+			if (getUI().getClass().getName()
+					.endsWith("plaf.windows.WindowsSliderUI")) {
 				paintDarkTrack(g);
 			} else {
 				super.paintComponent(g);
 			}
 		}
-		
+
 		/**
-		 * Paint an extra shadow on top of the track. I wish there were an easier way to do this,
-		 * but I looked through the WindowsSliderUI and didn't see a way to customize the track color.
+		 * Paint an extra shadow on top of the track. I wish there were an
+		 * easier way to do this, but I looked through the WindowsSliderUI and
+		 * didn't see a way to customize the track color.
 		 */
 		protected void paintDarkTrack(Graphics g0) {
 			Graphics2D g = (Graphics2D) g0;
@@ -71,14 +71,14 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 			w.clipRect(0, 0, getWidth(), getHeight());
 			super.paintComponent(w);
 			GraphicInstruction[] instructions = w.getInstructions(true);
-			for(int a = 0; a<instructions.length; a++) {
+			for (int a = 0; a < instructions.length; a++) {
 				GraphicInstruction i = instructions[a];
-				i.paint( (Graphics2D) g);
-				if(i instanceof ImageInstruction) {
+				i.paint((Graphics2D) g);
+				if (i instanceof ImageInstruction) {
 					Rectangle r = i.getBounds().getBounds();
-					if(r.width > getWidth() * .8) {
-						g.setColor(new Color(0,0,0,40));
-						((Graphics2D)g).fill(i.getBounds());
+					if (r.width > getWidth() * .8) {
+						g.setColor(new Color(0, 0, 0, 40));
+						((Graphics2D) g).fill(i.getBounds());
 					}
 				}
 			}
@@ -165,35 +165,5 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 			c.fill = GridBagConstraints.HORIZONTAL;
 		}
 		add(examplePanel, c);
-	}
-
-	/**
-	 * Add a popover labeling a slider.
-	 * 
-	 * @param suffix
-	 *            the text to append after the numeric value, such as "%" or
-	 *            " pixels".
-	 */
-	protected void addSliderPopover(JSlider slider, final String suffix) {
-		new JPopover<JToolTip>(slider, new JToolTip(), false) {
-
-			@Override
-			protected void doRefreshPopup() {
-				JSlider js = (JSlider) getOwner();
-				int v = js.getValue();
-				String newText;
-				if (v == 1 && suffix.startsWith(" ") && suffix.endsWith("s")) {
-					newText = v + suffix.substring(0, suffix.length() - 1);
-				} else {
-					newText = v + suffix;
-				}
-				getContents().setTipText(newText);
-
-				// this is only because we have the JToolTipDemo so
-				// colors might change:
-				getContents().updateUI();
-				getContents().setBorder(null);
-			}
-		};
 	}
 }

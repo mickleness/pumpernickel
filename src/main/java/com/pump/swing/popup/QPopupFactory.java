@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.swing;
+package com.pump.swing.popup;
 
 import java.awt.Component;
 import java.awt.Insets;
@@ -16,8 +16,10 @@ import java.awt.Point;
 import java.util.Objects;
 
 import javax.swing.JComponent;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JToolTip;
+import javax.swing.JTree;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 
@@ -28,7 +30,6 @@ import com.pump.plaf.QPanelUI;
  * some controls to format all JToolTip UI's that pass through it.
  */
 public class QPopupFactory extends PopupFactory {
-	private static final int UNDEFINED = -99999;
 
 	private PopupFactory delegate;
 	private boolean tooltipCallout;
@@ -61,7 +62,7 @@ public class QPopupFactory extends PopupFactory {
 		Popup p;
 		if (contents instanceof JToolTip) {
 			JComponent c = (JComponent) contents;
-			return getQPopup(owner, c, x, y);
+			return getQPopup(owner, null, c, new Point(x, y));
 		} else {
 			p = delegate.getPopup(owner, contents, x, y);
 		}
@@ -71,23 +72,22 @@ public class QPopupFactory extends PopupFactory {
 	/**
 	 * Create a QPopup that is guaranteed to have a callout.
 	 */
-	public QPopup getQPopup(JComponent jc, JComponent contents) {
-		return getQPopup(jc, contents, UNDEFINED, UNDEFINED);
+	public QPopup getQPopup(JComponent jc, PopupTarget target,
+			JComponent contents) {
+		return getQPopup(jc, target, contents, null);
 	}
 
 	/**
 	 * 
 	 * @param owner
 	 * @param content
-	 * @param x
-	 *            if isToolTipCallout is false, then this is the x-coordinate of
-	 *            where the tooltip will be placed.
-	 * @param y
-	 *            if isToolTipCallout is false, then this is the y-coordinate of
-	 *            where the tooltip will be placed.
+	 * @param screenLoc
+	 *            if this is null or if {@link #isToolTipCallout()} returns true
+	 *            then the QPopup is rendered using a callout.
 	 * @return
 	 */
-	public QPopup getQPopup(Component owner, JComponent content, int x, int y) {
+	public QPopup getQPopup(Component owner, PopupTarget target,
+			JComponent content, Point screenLoc) {
 		content.setBorder(null);
 		content.setOpaque(false);
 		JPanel container = new JPanel();
@@ -96,21 +96,33 @@ public class QPopupFactory extends PopupFactory {
 		QPanelUI ui = QPanelUI.createToolTipUI();
 		container.setUI(ui);
 		ui.setFillColor(content.getBackground());
-		boolean useCallout = isToolTipCallout() || x == UNDEFINED
-				|| y == UNDEFINED;
+		boolean useCallout = isToolTipCallout() || screenLoc == null;
+
+		// if you want a tooltip to point to a tree or list cell you
+		// need some external help
+		if (owner instanceof JList || owner instanceof JTree)
+			useCallout = false;
 
 		if (!useCallout)
 			ui.setCalloutSize(0);
 
-		Insets i = container.getBorder().getBorderInsets(container);
-		x -= i.left;
-		y -= i.top;
+		if (screenLoc != null) {
+			screenLoc = new Point(screenLoc.x, screenLoc.y);
+			Insets i = container.getBorder().getBorderInsets(container);
+			screenLoc.x -= i.left;
+			screenLoc.y -= i.top;
+		}
 
 		content.setSize(content.getPreferredSize());
 		content.validate();
 
-		QPopup p = useCallout ? new QPopup(owner, container) : new QPopup(
-				owner, container, new Point(x, y));
+		QPopup p;
+		if (useCallout) {
+			p = new QPopup(owner, target, container);
+		} else {
+			p = new QPopup(owner, target, container, screenLoc);
+		}
+
 		return p;
 	}
 

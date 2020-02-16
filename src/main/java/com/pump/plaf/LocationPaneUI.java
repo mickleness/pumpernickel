@@ -42,7 +42,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.ComponentUI;
 
 import com.pump.icon.ArrowIcon;
-import com.pump.icon.PaddedIcon;
+import com.pump.icon.IconUtils;
 import com.pump.icon.TriangleIcon;
 import com.pump.io.location.FileLocation;
 import com.pump.io.location.IOLocation;
@@ -66,11 +66,11 @@ public abstract class LocationPaneUI extends ComponentUI {
 	protected final JButton commitButton = new JButton();
 	protected final JButton cancelButton = new JButton();
 	protected final JButton backButton = new JButton(
-			new PaddedIcon(new TriangleIcon(SwingConstants.WEST, 8, 8),
-					new Insets(1, 1, 1, 1)));
+			IconUtils.createPaddedIcon(new TriangleIcon(SwingConstants.WEST, 8,
+					8), new Insets(1, 1, 1, 1)));
 	protected final JButton nextButton = new JButton(
-			new PaddedIcon(new TriangleIcon(SwingConstants.EAST, 8, 8),
-					new Insets(1, 1, 1, 1)));
+			IconUtils.createPaddedIcon(new TriangleIcon(SwingConstants.EAST, 8,
+					8), new Insets(1, 1, 1, 1)));
 	protected final JTextField searchField = new JTextField();
 	protected final JButton newFolderButton = new JButton();
 	protected final JButton upButton = new JButton(new ArrowIcon(

@@ -32,7 +32,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.JToolTip;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -40,7 +39,6 @@ import com.pump.awt.GradientTexturePaint;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.AnimationManager;
 import com.pump.swing.JColorWell;
-import com.pump.swing.JPopover;
 
 /**
  * This small demo app features two horizontal gradients, and each shows below

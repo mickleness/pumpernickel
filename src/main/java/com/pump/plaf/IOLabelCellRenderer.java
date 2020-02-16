@@ -17,7 +17,7 @@ import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
 
-import com.pump.icon.PaddedIcon;
+import com.pump.icon.IconUtils;
 import com.pump.io.location.IOLocation;
 import com.pump.swing.io.GraphicCache;
 
@@ -74,7 +74,7 @@ public class IOLabelCellRenderer extends LabelCellRenderer {
 			icon = IOLocation.FOLDER_ICON;
 		}
 
-		icon = new PaddedIcon(icon, iconPadding);
+		icon = IconUtils.createPaddedIcon(icon, iconPadding);
 
 		label.setIcon(icon);
 		label.setText(text);

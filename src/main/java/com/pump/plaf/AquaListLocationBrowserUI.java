@@ -20,7 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import com.pump.icon.PaddedIcon;
+import com.pump.icon.IconUtils;
 import com.pump.io.location.IOLocation;
 import com.pump.swing.io.GraphicCache;
 import com.pump.swing.io.LocationBrowser;
@@ -66,7 +66,7 @@ class AquaTableCellRenderer implements TableCellRenderer {
 					icon = IOLocation.FILE_ICON;
 				}
 			}
-			icon = new PaddedIcon(icon, iconPadding);
+			icon = IconUtils.createPaddedIcon(icon, iconPadding);
 		} else {
 			text = value.toString();
 		}

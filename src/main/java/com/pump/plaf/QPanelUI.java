@@ -77,18 +77,20 @@ public class QPanelUI extends GradientPanelUI {
 	 * TOP_CENTER) and set the callout size to zero.
 	 */
 	public enum CalloutType {
-		TOP_CENTER(SwingConstants.TOP, SwingConstants.CENTER), TOP_RIGHT(
-				SwingConstants.TOP, SwingConstants.RIGHT), RIGHT_TOP(
-				SwingConstants.RIGHT, SwingConstants.TOP), RIGHT_CENTER(
-				SwingConstants.RIGHT, SwingConstants.CENTER), RIGHT_BOTTOM(
-				SwingConstants.RIGHT, SwingConstants.BOTTOM), BOTTOM_RIGHT(
-				SwingConstants.BOTTOM, SwingConstants.RIGHT), BOTTOM_CENTER(
-				SwingConstants.BOTTOM, SwingConstants.CENTER), BOTTOM_LEFT(
-				SwingConstants.BOTTOM, SwingConstants.LEFT), LEFT_BOTTOM(
-				SwingConstants.LEFT, SwingConstants.BOTTOM), LEFT_CENTER(
-				SwingConstants.LEFT, SwingConstants.CENTER), LEFT_TOP(
-				SwingConstants.LEFT, SwingConstants.TOP), TOP_LEFT(
-				SwingConstants.TOP, SwingConstants.LEFT);
+		// @formatter:off
+		TOP_CENTER(SwingConstants.TOP, SwingConstants.CENTER), 
+		TOP_RIGHT(SwingConstants.TOP, SwingConstants.RIGHT), 
+		RIGHT_TOP(SwingConstants.RIGHT, SwingConstants.TOP), 
+		RIGHT_CENTER(SwingConstants.RIGHT, SwingConstants.CENTER), 
+		RIGHT_BOTTOM(SwingConstants.RIGHT, SwingConstants.BOTTOM), 
+		BOTTOM_RIGHT(SwingConstants.BOTTOM, SwingConstants.RIGHT), 
+		BOTTOM_CENTER(SwingConstants.BOTTOM, SwingConstants.CENTER), 
+		BOTTOM_LEFT(SwingConstants.BOTTOM, SwingConstants.LEFT), 
+		LEFT_BOTTOM(SwingConstants.LEFT, SwingConstants.BOTTOM), 
+		LEFT_CENTER(SwingConstants.LEFT, SwingConstants.CENTER), 
+		LEFT_TOP(SwingConstants.LEFT, SwingConstants.TOP), 
+		TOP_LEFT(SwingConstants.TOP, SwingConstants.LEFT);
+		// @formatter:on
 
 		int edge, orientation;
 
