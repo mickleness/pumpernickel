@@ -21,6 +21,9 @@ import com.pump.image.NSImage;
 import com.pump.image.pixel.Scaling;
 import com.pump.inspector.Inspector;
 
+/**
+ * This demonstrates the NSImage class
+ */
 public class NSImageDemo extends ShowcaseIconDemo {
 	private static final long serialVersionUID = 1L;
 

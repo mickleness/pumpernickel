@@ -20,10 +20,8 @@ import javax.swing.event.MouseInputAdapter;
 import com.pump.awt.DescendantListener;
 
 /**
- * This calculates whether a popover should be visible.
- * <p>
- * The default implementation takes into account whether the owner or the
- * content has the keyboard focus or mouse rollover.
+ * This PopoverVisibility shows a popover when the owner has keyboard focus or
+ * mouse rollover.
  * <p>
  * Also for JComboBoxes we restrict visibility when a component is expanded.
  */

@@ -392,6 +392,10 @@ public class JPopover<T extends JComponent> {
 		}
 	}
 
+	/**
+	 * Permanently dispose this JPopover so it will hide, release all its
+	 * listeners, and never show again.
+	 */
 	public void dispose() {
 		if (!isDisposed()) {
 			disposed = true;
@@ -401,6 +405,9 @@ public class JPopover<T extends JComponent> {
 		}
 	}
 
+	/**
+	 * Return true if {@link #dispose()} has been called.
+	 */
 	public boolean isDisposed() {
 		return disposed;
 	}
@@ -451,11 +458,24 @@ public class JPopover<T extends JComponent> {
 		return qpf.getQPopup(getOwner(), popupTarget, getContents());
 	}
 
+	/**
+	 * Assign the optional PopupTarget for this popover.
+	 * <p>
+	 * If this is left null then the owner's bounds are assumed to be the
+	 * default target.
+	 * 
+	 * @param popupTarget
+	 *            the new popup target.
+	 */
 	public void setTarget(PopupTarget popupTarget) {
 		this.popupTarget = popupTarget;
 		refreshPopup();
 	}
 
+	/**
+	 * Return true if this is the active JPopover. Only one JPopover is active
+	 * (showing) at a time.
+	 */
 	public boolean isActive() {
 		synchronized (JPopover.class) {
 			return activePopover == this;
@@ -492,10 +512,18 @@ public class JPopover<T extends JComponent> {
 		}
 	}
 
+	/**
+	 * Remove a PropertyChangeListener previously added via
+	 * {@link #addPropertyChangeListener(PropertyChangeListener)}.
+	 */
 	public void removePropertyChangeListener(PropertyChangeListener pcl) {
 		propertyListeners.remove(pcl);
 	}
 
+	/**
+	 * Add a PropertyChangeListener that is notified when one of the PROPERTY_
+	 * constants in this class changes.
+	 */
 	public void addPropertyChangeListener(PropertyChangeListener pcl) {
 		Objects.requireNonNull(pcl);
 		propertyListeners.add(pcl);

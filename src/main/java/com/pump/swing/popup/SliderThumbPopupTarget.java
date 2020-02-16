@@ -9,6 +9,9 @@ import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicSliderUI;
 
+/**
+ * This PopupTarget points to the thumb of a JSlider.
+ */
 public class SliderThumbPopupTarget implements PopupTarget {
 	JSlider slider;
 

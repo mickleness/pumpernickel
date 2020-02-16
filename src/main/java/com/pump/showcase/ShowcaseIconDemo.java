@@ -52,6 +52,15 @@ import com.pump.swing.popover.ListSelectionVisibility;
 import com.pump.swing.popup.ListCellPopupTarget;
 import com.pump.util.list.ObservableList;
 
+/**
+ * This shows a scrolling JList of icons. This includes a slider to resize the
+ * icons.
+ * <p>
+ * Subclasses are responsible for generating a list of image IDs, and can
+ * convert each image ID into a BufferedImage. This class will automatically
+ * consolidate IDs that share identical BufferedImages into a single
+ * ShowcaseIcon instance.
+ */
 public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
@@ -90,9 +99,11 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 			Toolkit.getDefaultToolkit().getSystemClipboard()
 					.setContents(contents, null);
 		}
-
 	}
 
+	/**
+	 * One image and all the IDs that produce that image.
+	 */
 	protected class ShowcaseIcon {
 		BufferedImage img;
 		Collection<String> ids = new HashSet<>();
@@ -398,10 +409,30 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		list.repaint();
 	}
 
+	/**
+	 * Create the JComponent that describes an icon. This will appear when the
+	 * user clicks an icon in the JList. This is similar to a tooltip, but it
+	 * will not disappear until the selection changes.
+	 */
 	protected abstract JComponent createPopupContents(ShowcaseIcon icon);
 
+	/**
+	 * Convert an ID into a BufferedImage.
+	 * <p>
+	 * It's OK if this method is expensive; the user will see a loading
+	 * indicator until all images and loaded.
+	 * 
+	 * @param id
+	 *            the ID of the image to produce.
+	 * @param maxConstrainingSize
+	 *            the maximum dimensions. Ideally the image should be scaled
+	 *            proportionally to fit inside these dimensions.
+	 */
 	protected abstract BufferedImage getImage(String id,
 			Dimension maxConstrainingSize);
 
+	/**
+	 * Return all the supported image IDs.
+	 */
 	protected abstract String[] getImageIDs();
 }

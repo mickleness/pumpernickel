@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -35,6 +37,9 @@ import com.pump.io.icon.FileViewFileIcon;
 import com.pump.swing.FileDialogUtils;
 import com.pump.util.JVM;
 
+/**
+ * This demonstrates the FileIcon class
+ */
 public class FileIconDemo extends ShowcaseExampleDemo {
 
 	private static final long serialVersionUID = 1L;
@@ -57,7 +62,24 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 	JComboBox<String> fileIconComboBox;
 	boolean sizeSliderUsed = false;
 
+	AquaFileIcon aquaFileIcon;
+	FileViewFileIcon fileViewFileIcon;
+	FileSystemViewFileIcon fileSystemViewFileIcon;
+	List<FileIcon> fileIcons;
+
 	public FileIconDemo() {
+		if (JVM.isMac) {
+			try {
+				aquaFileIcon = new AquaFileIcon();
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
+		}
+		fileViewFileIcon = new FileViewFileIcon();
+		fileSystemViewFileIcon = new FileSystemViewFileIcon();
+		fileIcons = Arrays.asList(aquaFileIcon, fileViewFileIcon,
+				fileSystemViewFileIcon);
+
 		filePathField.setText(System.getProperty("user.home"));
 
 		int selectedIndex = -1;
@@ -74,15 +96,15 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 			sfvName += " (Default)";
 			selectedIndex = 2;
 		}
+
 		fileIconComboBox = new JComboBox<String>();
-
-		if (JVM.isMac) {
+		if (aquaFileIcon != null)
 			fileIconComboBox.addItem(aquaName);
-		} else if (selectedIndex > 0)
-			selectedIndex--;
+		if (fileViewFileIcon != null)
+			fileIconComboBox.addItem(fvName);
+		if (fileSystemViewFileIcon != null)
+			fileIconComboBox.addItem(sfvName);
 
-		fileIconComboBox.addItem(fvName);
-		fileIconComboBox.addItem(sfvName);
 		fileIconComboBox.setSelectedIndex(selectedIndex);
 
 		Inspector inspector = new Inspector(configurationPanel);
@@ -158,30 +180,10 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 		refreshFile();
 	}
 
-	AquaFileIcon aquaFileIcon;
-	FileViewFileIcon fileViewFileIcon;
-	FileSystemViewFileIcon fileSystemViewFileIcon;
-
 	protected FileIcon getFileIcon() {
 		int i = fileIconComboBox.getSelectedIndex();
-		if (JVM.isMac) {
-			if (i == 0) {
-				if (aquaFileIcon == null)
-					aquaFileIcon = new AquaFileIcon();
-				return aquaFileIcon;
-			}
-		}
-		i--;
-		if (i == 0) {
-			if (fileViewFileIcon == null)
-				fileViewFileIcon = new FileViewFileIcon();
-		}
-
-		if (i == 1) {
-			if (fileSystemViewFileIcon == null)
-				fileSystemViewFileIcon = new FileSystemViewFileIcon();
-		}
-
+		if (i >= 0)
+			return fileIcons.get(i);
 		return null;
 	}
 

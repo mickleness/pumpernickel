@@ -10,6 +10,10 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 
+/**
+ * This PopoverVisibility will refresh the popover and/or its visibility when
+ * the owner's hierarchy or bounds change.
+ */
 public abstract class AbstractComponentVisibility<T extends JComponent>
 		implements PopoverVisibility<T> {
 

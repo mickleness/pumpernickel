@@ -6,6 +6,10 @@ import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileView;
 
+/**
+ * This FileIcon creates a new JFileChooser and uses its
+ * <code>javax.swing.filechooser.FileView</code> to generate icons.
+ */
 public class FileViewFileIcon extends FileIcon {
 	FileView fileView;
 

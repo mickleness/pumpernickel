@@ -22,6 +22,9 @@ import com.pump.awt.Dimension2D;
 import com.pump.icon.AquaIcon;
 import com.pump.icon.IconUtils;
 
+/**
+ * This demonstrates the AquaIcon class and its built-in examples.
+ */
 public class AquaIconDemo extends ShowcaseIconDemo {
 
 	private static final long serialVersionUID = 1L;

@@ -6,19 +6,23 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.Icon;
 
+/**
+ * This {@link FileIcon} uses the <code>com.apple.laf.AquaIcon$FileIcon</code>
+ * class to render scalable icons from the OS.
+ */
 public class AquaFileIcon extends FileIcon {
 
 	Constructor constructor;
 
-	public AquaFileIcon() {
-		try {
-			Class<?> z = Class.forName("com.apple.laf.AquaIcon$FileIcon");
-			constructor = z.getConstructor(new Class[] { File.class });
-			constructor.setAccessible(true);
-		} catch (ClassNotFoundException | NoSuchMethodException
-				| SecurityException e) {
-			throw new RuntimeException(e);
-		}
+	/**
+	 * This constructor throws an exception if we can't access the
+	 * <code>com.apple.laf.AquaIcon$FileIcon</code> using reflection.
+	 */
+	public AquaFileIcon() throws ClassNotFoundException, NoSuchMethodException,
+			SecurityException {
+		Class<?> z = Class.forName("com.apple.laf.AquaIcon$FileIcon");
+		constructor = z.getConstructor(new Class[] { File.class });
+		constructor.setAccessible(true);
 	}
 
 	@Override
