@@ -17,6 +17,9 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.pump.awt.Dimension2D;
 import com.pump.icon.AquaIcon;
@@ -28,6 +31,8 @@ import com.pump.icon.IconUtils;
 public class AquaIconDemo extends ShowcaseIconDemo {
 
 	private static final long serialVersionUID = 1L;
+
+	JSlider sizeSlider;
 
 	public AquaIconDemo() {
 	}
@@ -118,4 +123,25 @@ public class AquaIconDemo extends ShowcaseIconDemo {
 		return p;
 	}
 
+	@Override
+	protected JSlider getSizeControl() {
+		if(sizeSlider==null) {
+			sizeSlider = new JSlider(16, 200, 48);
+		
+			addSliderPopover(sizeSlider, " pixels");
+			sizeSlider.addChangeListener(new ChangeListener() {
+	
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					refreshCellSize();
+				}
+			});
+		}
+		return sizeSlider;
+	}
+
+	@Override
+	protected int getCellSize() {
+		return getSizeControl().getValue();
+	}
 }

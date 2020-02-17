@@ -173,7 +173,6 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 	boolean isShowing = false;
 	JPanel iconPanel = new JPanel(new GridBagLayout());
 	Inspector inspector = new Inspector();
-	JSlider sizeSlider = new JSlider(16, 200, 48);
 
 	public ShowcaseIconDemo() {
 		progressBar.setUI(new CircularProgressBarUI());
@@ -209,10 +208,17 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		// will make sure this scrollpane is alway stretched-to-fit
 		scrollPane.setPreferredSize(new Dimension(10, 10));
 
-		inspector.addRow(new JLabel("Max Icon Size:"), sizeSlider);
+		inspector.addRow(new JLabel("Icon Size:"), getSizeControl());
 
 		Thread thread = new Thread("loading " + getClass().getSimpleName()) {
 
+			Dimension defaultImageSize;
+			
+			{
+				int k = getCellSize();
+				defaultImageSize = new Dimension(k, k);
+			}
+			
 			class UpdateProgressRunnable implements Runnable {
 				int value, max;
 
@@ -240,8 +246,7 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 						if (i == ids.length)
 							return;
 
-						BufferedImage img = getImage(ids[i], new Dimension(48,
-								48));
+						BufferedImage img = getImage(ids[i], defaultImageSize);
 						img = padImage(img);
 						add(ids[i], img);
 						i++;
@@ -259,7 +264,7 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 			}
 
 			private BufferedImage padImage(BufferedImage img) {
-				int z = sizeSlider.getValue();
+				int z = getCellSize();
 				if (img.getWidth() < z || img.getHeight() < z) {
 					BufferedImage bi = new BufferedImage(z, z,
 							BufferedImage.TYPE_INT_ARGB);
@@ -322,7 +327,7 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 
 			@Override
 			protected void formatLabel(ShowcaseIcon showcaseIcon) {
-				int z = sizeSlider.getValue();
+				int z = getCellSize();
 				Dimension maxConstrainingSize = new Dimension(z, z);
 				Icon icon = showcaseIcon.getImageIcon(maxConstrainingSize);
 				icon = IconUtils.createPaddedIcon(icon, new Dimension(z
@@ -379,7 +384,7 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 					return;
 
 				ShowcaseIcon si = icons.get(index);
-				int z = sizeSlider.getValue();
+				int z = getCellSize();
 				Icon icon = si.getImageIcon(new Dimension(z, z));
 				add("Copy Image", new CopyIconRunnable(icon));
 				super.showPopup(c, x, y);
@@ -387,20 +392,16 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 
 		};
 
-		addSliderPopover(sizeSlider, " pixels");
-
-		sizeSlider.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				refreshCellSize();
-			}
-		});
 		refreshCellSize();
 	}
 
-	private void refreshCellSize() {
-		int z = sizeSlider.getValue();
+	/**
+	 * The JComponent that controls {@link #getCellSize()}.
+	 */
+	protected abstract JComponent getSizeControl();
+
+	protected void refreshCellSize() {
+		int z = getCellSize();
 		list.setFixedCellHeight(z + ICON_PADDING * 2);
 		list.setFixedCellWidth(z + ICON_PADDING * 2);
 		for (ShowcaseIcon i : icons) {
@@ -408,6 +409,11 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		}
 		list.repaint();
 	}
+
+	/**
+	 * Return the current dimensions of the icons in this demo.
+	 */
+	protected abstract int getCellSize();
 
 	/**
 	 * Create the JComponent that describes an icon. This will appear when the
