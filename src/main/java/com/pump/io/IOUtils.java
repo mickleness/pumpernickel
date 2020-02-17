@@ -435,15 +435,10 @@ public class IOUtils {
 		}
 	}
 
-	static private byte[] b1;
-	static private byte[] b2;
-
-	public synchronized static boolean equals(InputStream in1, InputStream in2)
+	public static boolean equals(InputStream in1, InputStream in2)
 			throws IOException {
-		if (b1 == null)
-			b1 = new byte[4096];
-		if (b2 == null)
-			b2 = new byte[4096];
+		byte[] b1 = new byte[4096];
+		byte[] b2 = new byte[4096];
 
 		int k1 = read(in1, b1);
 		int k2 = read(in2, b2);
@@ -595,8 +590,8 @@ public class IOUtils {
 	 * @return false if we aborted without writing anything, true if the
 	 *         operation wrote/copied the file.
 	 */
-	public synchronized static boolean copy(File src, File dst,
-			boolean abortIfIdentical) throws IOException {
+	public static boolean copy(File src, File dst, boolean abortIfIdentical)
+			throws IOException {
 		if (!dst.getParentFile().exists())
 			if (!dst.getParentFile().mkdirs())
 				throw new IOException("mkdirs failed for "
@@ -623,8 +618,7 @@ public class IOUtils {
 				}
 			}
 		}
-		if (b1 == null)
-			b1 = new byte[4096];
+		byte[] b1 = new byte[4096];
 
 		if (!dst.exists())
 			if (!dst.createNewFile())
@@ -972,10 +966,9 @@ public class IOUtils {
 	 * @throws IOException
 	 *             if an IO problem occurs.
 	 */
-	public synchronized static void write(InputStream in, OutputStream out)
+	public static void write(InputStream in, OutputStream out)
 			throws IOException {
-		if (b1 == null)
-			b1 = new byte[4096];
+		byte[] b1 = new byte[4096];
 
 		int t = in.read(b1);
 		while (t != -1) {
