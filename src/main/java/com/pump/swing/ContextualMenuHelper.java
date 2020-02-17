@@ -11,10 +11,12 @@
 package com.pump.swing;
 
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -27,6 +29,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
 
+import com.pump.awt.DescendantListener;
 import com.pump.util.BooleanProperty;
 import com.pump.util.EnumProperty;
 
@@ -111,9 +114,8 @@ public class ContextualMenuHelper {
 		addComponent(jc);
 	}
 
-	/** Install this contextual menu on the component provided. */
-	public void addComponent(JComponent jc) {
-		jc.addMouseListener(new MouseAdapter() {
+	public void addComponent(final JComponent jc, boolean addToDescendants) {
+		MouseListener mouseListener = new MouseAdapter() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -130,19 +132,32 @@ public class ContextualMenuHelper {
 				showPopupMenu(e);
 			}
 
-			private void showPopupMenu(final MouseEvent e) {
+			private void showPopupMenu(MouseEvent e) {
 				if (!e.isPopupTrigger())
 					return;
 				e.consume();
+				final Point loc = e.getLocationOnScreen();
+				SwingUtilities.convertPointFromScreen(loc, jc);
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
-						showPopup(e.getComponent(), e.getX(), e.getY());
+						showPopup(jc, loc.x, loc.y);
 					}
 				});
 			}
-		});
-
+		};
 		jc.putClientProperty(MENU_KEY, this);
+
+		if (!addToDescendants) {
+			jc.addMouseListener(mouseListener);
+			return;
+		}
+
+		DescendantListener.addMouseListener(jc, mouseListener, false);
+	}
+
+	/** Install this contextual menu on the component provided. */
+	public void addComponent(JComponent jc) {
+		addComponent(jc, false);
 	}
 
 	protected JPopupMenu popup = new JPopupMenu();
