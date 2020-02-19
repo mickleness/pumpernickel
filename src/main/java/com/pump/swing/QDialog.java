@@ -71,11 +71,7 @@ import com.pump.window.WindowDragger;
  * QDialog. Here is a thorough discussion of what the main parameters mean, and
  * how to use each:
  * <ul>
- * <LI><b><code>frame</code></b> the optional component to host this dialog.
- * <P>
- * On Mac in Java 1.6+, if this is non-null then the dialog will be presented as
- * a sheet to this frame, unless <code>setDocumentModal(false)</code> has been
- * called.</li>
+ * <LI><b><code>frame</code></b> the optional component to host this dialog.</li>
  * <LI><b><code>icon</code></b> the optional icon/image to present on the left
  * side of this dialog.
  * <P>
@@ -1019,7 +1015,6 @@ public class QDialog extends JDialog {
 	// end of the static stuff
 
 	protected boolean closeable;
-	protected boolean documentModal;
 	protected DialogFooter footer;
 	protected JCheckBox dontShowCheckbox = new JCheckBox();
 	protected JCheckBox alwaysApplyCheckbox = new JCheckBox();
@@ -1171,67 +1166,6 @@ public class QDialog extends JDialog {
 			// ignore it when the user clicks the close decoration
 			setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		}
-	}
-
-	@Override
-	public void setModal(boolean b) {
-		super.setModal(b);
-	}
-
-	/**
-	 * In Java 1.6 this calls <code>setModalityType(DOCUMENT_MODAL)</code>. Also
-	 * on Macs this will use sheets.
-	 * 
-	 * @param b
-	 *            whether this dialog is document modal.
-	 */
-	public void setDocumentModal(boolean b) {
-		documentModal = b;
-
-		// do NOT combine a WindowDragger with a modal sheet.
-		dragger.setActive(!b);
-
-		try {
-			if (b) {
-				if (JVM.isMac && JVM.getMajorJavaVersion() >= 1.6) {
-					// note there is extra code below to handle sheets well.
-
-					invoke(Dialog.class,
-							QDialog.this,
-							"setModalityType",
-							new Object[] { get("java.awt.Dialog$ModalityType",
-									"DOCUMENT_MODAL") });
-
-					getRootPane().putClientProperty(
-							"apple.awt.documentModalSheet", Boolean.TRUE);
-				}
-			} else {
-				if (JVM.isMac && JVM.getMajorJavaVersion() >= 1.6) {
-					// note there is extra code below to handle sheets well.
-
-					invoke(Dialog.class,
-							QDialog.this,
-							"setModalityType",
-							new Object[] { get("java.awt.Dialog$ModalityType",
-									"APPLICATION_MODAL") });
-
-					getRootPane().putClientProperty(
-							"apple.awt.documentModalSheet", Boolean.FALSE);
-				}
-			}
-		} catch (SecurityException e) {
-			System.err
-					.println("this exception was ignored, but prevented this dialog from setting modality properties:");
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Returns whether this dialog is document modal.
-	 * 
-	 */
-	public boolean isDocumentModal() {
-		return documentModal;
 	}
 
 	protected void updateLayout() {
