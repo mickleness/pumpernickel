@@ -508,10 +508,11 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("JFrame, JDialog, JWindow", "WindowDemo");
 			addSection("System Properties", "SystemPropertiesDemo");
 			addSection("FileIcon", "FileIconDemo");
+			addSection("DesktopHelper", "DesktopHelperDemo");
 			if (JVM.isMac) {
 				addSection("AquaIcon", "AquaIconDemo");
 				addSection("NSImage", "NSImageDemo");
-			} else if(JVM.isWindows) {
+			} else if (JVM.isWindows) {
 				addSection("WindowsIcon", "WindowsIconDemo");
 			}
 

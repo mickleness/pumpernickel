@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DesktopHelper Demo</title>
+</head>
+<body>
+This demo shows two File-related actions and the accompanying UI support.
+<h3>Actions</h3>
+Currently the DesktopHelper supports two action types:
+<ul><li><b>Reveal</b>: points to a file in the file system.</b></li>
+<li><b>Move to Trash</b>: moves a file to the trash/recycle bin.</b></li></ul>
+<p>
+These actions have unique platform-specific implementations for Mac and Windows. When you request either action you'll receive a <code>FileOperation</code> if they are supported on the current platform, or <code>null</code> if they are not.
+<p>
+The <a href="https://docs.oracle.com/javase/9/docs/api/java/awt/Desktop.html">Desktop</a> class will support these features in Java 1.9, but this is currently being written for Java 1.8 compliance.
+<h3>Dialog Support</h3>
+The DesktopHelper includes some complex support for dialogs.
+<h4>Context</h4>
+I wrote a small app that uses both of these actions. It also does a deep scan of hundreds of files on a networked drive, which may make these simple actions block for an indeterminate amount of time. (The app was never frozen for more than 20 seconds, but I'm sure it was frozen for over 5 seconds at a time.)
+<p>
+With that painful experience in mind I built some indeterminate dialog feedback for these actions. The dialogs didn't need a functioning "Cancel" button because once we issue the command we can't abort. But the dialogs should be able to transition to error/feedback dialogs if necessary.
+<h4>Dialog Support</h4>
+You can invoke either action on or off the event dispatch thread. If the action completes successfully in a short amount of time (less than a quarter of a second): then no dialog is ever introduced.
+<p>
+If the action takes longer than that threshold: an indeterminate (uncloseable) dialog is shown until the action completes. (If you called the action on the event dispatch thread: a new thread is created to execute the action and we set up a secondary event loop on the EDT until the action can complete.)
+<p>
+Both actions return a boolean indicating "success" or "failure". If they return "failure" or throw an exception: then we'll show an error dialog indicating what went wrong.
+<p>
+Design-wise you may argue that the "reveal" action showing an error dialog is redundant feedback. (Because the user can see it failed.) But the "move to trash" action definitely needs a layer of feedback because if we say nothing: the user will assume it was successful. In fact you probably want to go a step further and add some sort of notification in your app that the deletion was a success.
+</body>
+</html>

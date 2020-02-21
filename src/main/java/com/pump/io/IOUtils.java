@@ -47,10 +47,6 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
 import com.pump.util.JVM;
 
 /**
@@ -1079,37 +1075,6 @@ public class IOUtils {
 				return file;
 			}
 		}
-	}
-
-	/**
-	 * Reveal (select) a file in the operating system. This will be
-	 * platform-specific, and for now is only supported on Mac.
-	 * 
-	 * @param file
-	 *            the file to reveal.
-	 * @return true if this method is reasonably confident the request was
-	 *         successful. False otherwise.
-	 */
-	public static boolean reveal(File file) {
-		try {
-			if (JVM.isMac) {
-				String script = "tell application \"Finder\""
-						+ "\nset thePath to POSIX file \""
-						+ file.getAbsolutePath() + "\""
-						+ "\ntell application \"Finder\" to reveal thePath"
-						+ "\ntell application \"Finder\" to activate"
-						+ "\nend tell";
-
-				ScriptEngineManager mgr = new ScriptEngineManager();
-				ScriptEngine engine = mgr.getEngineByName("AppleScript");
-
-				engine.eval(script);
-				return true;
-			}
-		} catch (ScriptException e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 
 	/**
