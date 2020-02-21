@@ -36,6 +36,14 @@ public class TempFileManager {
 	private static final String LOCK_FILE_NAME = "lock";
 
 	/**
+	 * Return true if {@link #initialize(String)} has been called and it is safe
+	 * to call {@link #get()}.
+	 */
+	public static boolean isInitialized() {
+		return manager != null;
+	}
+
+	/**
 	 * Get the current TempFileManager. {@link #initialize(String)} must be
 	 * called before this method or an exception is thrown.
 	 * 
