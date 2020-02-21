@@ -120,7 +120,6 @@ public abstract class AbstractSearchDialog extends QDialog {
 		prevButton.addActionListener(actionListener);
 
 		setModal(false);
-		setDocumentModal(false);
 		setCloseable(true);
 
 		pack();
