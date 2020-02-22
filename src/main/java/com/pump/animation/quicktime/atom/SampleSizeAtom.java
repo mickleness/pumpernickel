@@ -8,19 +8,32 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
 
 import com.pump.io.GuardedInputStream;
 import com.pump.io.GuardedOutputStream;
 
+/**
+ * You use sample size atoms to specify the size of each sample in the media.
+ * Sample size atoms have an atom type of 'stsz'.
+ * <p>
+ * The sample size atom contains the sample count and a table giving the size of
+ * each sample. This allows the media data itself to be unframed. The total
+ * number of samples in the media is always indicated in the sample count. If
+ * the default size is indicated, then no table follows.
+ */
 public class SampleSizeAtom extends LeafAtom {
-	int version = 0;
-	int flags = 0;
-	long sampleSize = 0;
-	long sampleCount;
-	long[] sizeTable;
+
+	/** "stsz" */
+	public static final String ATOM_TYPE = "stsz";
+
+	protected int version = 0;
+	protected int flags = 0;
+	protected long sampleSize = 0;
+	protected long sampleCount;
+	protected long[] sizeTable;
 
 	public SampleSizeAtom(int version, int flags, long sampleSize,
 			int sampleCount, long[] table) {
@@ -73,7 +86,7 @@ public class SampleSizeAtom extends LeafAtom {
 
 	@Override
 	protected String getIdentifier() {
-		return "stsz";
+		return ATOM_TYPE;
 	}
 
 	@Override
@@ -123,5 +136,49 @@ public class SampleSizeAtom extends LeafAtom {
 		return "SampleSizeAtom[ version=" + version + ", " + "flags=" + flags
 				+ ", " + "sampleSize=" + sampleSize + ", sampleCount = "
 				+ sampleCount + ", " + "sizeTable=" + entriesString + "]";
+	}
+
+	/**
+	 * Return a 1-byte specification of the version of this sample size atom.
+	 */
+	public int getVersion() {
+		return version;
+	}
+
+	/**
+	 * Return a 3-byte space for sample size flags. Set this field to 0.
+	 */
+	public int getFlags() {
+		return flags;
+	}
+
+	/**
+	 * Return a 32-bit integer specifying the sample size.
+	 */
+	public long getSampleSize() {
+		return sampleSize;
+	}
+
+	/**
+	 * Return a 32-bit integer containing the count of entries in the sample
+	 * size table.
+	 * <p>
+	 * Note {@link #getSizeTable()} may return null when this value is well
+	 * defined.
+	 */
+	public long getSampleCount() {
+		return sampleCount;
+	}
+
+	/**
+	 * Return a table containing the sample size information.
+	 */
+	public long[] getSizeTable() {
+		if (sizeTable == null)
+			return null;
+
+		long[] copy = new long[sizeTable.length];
+		System.arraycopy(sizeTable, 0, copy, 0, sizeTable.length);
+		return copy;
 	}
 }

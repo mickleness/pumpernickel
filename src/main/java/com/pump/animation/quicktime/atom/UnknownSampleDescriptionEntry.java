@@ -8,15 +8,19 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * This is a SampleDescriptionEntry that is not a VideoSampleDescriptionEntry or
+ * a SoundSampleDescriptionEntry.
+ */
 public class UnknownSampleDescriptionEntry extends SampleDescriptionEntry {
 
-	byte[] data = new byte[0];
+	protected byte[] data = new byte[0];
 
 	public UnknownSampleDescriptionEntry(InputStream in) throws IOException {
 		super(in);
@@ -45,7 +49,7 @@ public class UnknownSampleDescriptionEntry extends SampleDescriptionEntry {
 	 */
 	public SampleDescriptionEntry convert() {
 		if (data.length == 20 && type.equals("sowt")) {
-			return new SoundSampleDescriptionEntry0(type, dataReference, data);
+			return new SoundSampleDescriptionEntry(type, dataReference, data);
 		}
 		return this;
 	}
@@ -78,5 +82,14 @@ public class UnknownSampleDescriptionEntry extends SampleDescriptionEntry {
 		return "UnknownSampleDescriptionEntry[ type=\"" + type + "\", "
 				+ "dataReference=" + dataReference + ", " + "data=\""
 				+ (new String(data)) + "\" " + extra + "]";
+	}
+
+	/**
+	 * Return the byte data in this description entry.
+	 */
+	public byte[] getData() {
+		byte[] copy = new byte[data.length];
+		System.arraycopy(data, 0, copy, 0, data.length);
+		return copy;
 	}
 }

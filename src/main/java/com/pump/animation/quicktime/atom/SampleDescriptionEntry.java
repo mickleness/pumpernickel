@@ -8,13 +8,17 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * This is the parent class for SampleDescriptionEntries.
+ */
 public abstract class SampleDescriptionEntry {
+
 	/**
 	 * If this entry is read from an <code>InputStream</code>, then this is the
 	 * size that this entry should be.
@@ -24,9 +28,9 @@ public abstract class SampleDescriptionEntry {
 	 * <P>
 	 * Otherwise this field is unused.
 	 */
-	long inputSize;
-	String type;
-	int dataReference;
+	protected long inputSize;
+	protected String type;
+	protected int dataReference;
 
 	public SampleDescriptionEntry(String type, int dataReference) {
 		this.type = type;
@@ -43,4 +47,16 @@ public abstract class SampleDescriptionEntry {
 	protected abstract long getSize();
 
 	protected abstract void write(OutputStream out) throws IOException;
+
+	public String getType() {
+		return type;
+	}
+
+	public long getInputSize() {
+		return inputSize;
+	}
+
+	public int getDataReference() {
+		return dataReference;
+	}
 }

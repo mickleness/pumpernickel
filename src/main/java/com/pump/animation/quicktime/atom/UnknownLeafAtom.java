@@ -8,16 +8,19 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
 
 import com.pump.io.GuardedInputStream;
 import com.pump.io.GuardedOutputStream;
 
+/**
+ * This is a LeafAtom this particular architecture doesn't (yet) support.
+ */
 public class UnknownLeafAtom extends LeafAtom {
-	byte[] data;
-	String id;
+	protected byte[] data;
+	protected String id;
 
 	public UnknownLeafAtom(String id, byte[] data) {
 		super(null);
@@ -63,5 +66,15 @@ public class UnknownLeafAtom extends LeafAtom {
 		if (data.length > 64)
 			sb.append("...");
 		return "UnknownLeafAtom[ \"" + sb.toString() + "\" ]";
+	}
+
+	/**
+	 * Return the byte data of this atom. (This is the data excluding the atom
+	 * type and size.)
+	 */
+	public byte[] getData() {
+		byte[] copy = new byte[data.length];
+		System.arraycopy(data, 0, copy, 0, data.length);
+		return copy;
 	}
 }

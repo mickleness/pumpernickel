@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -29,15 +29,15 @@ import com.pump.io.GuardedOutputStream;
 import com.pump.io.NullOutputStream;
 
 /**
- * This is not a public class because I expect to make some significant changes
- * to this project in the next year.
- * <P>
- * Use at your own risk. This class (and its package) may change in future
- * releases.
- * <P>
- * Not that I'm promising there will be future releases. There may not be. :)
+ * An Atom in a QuickTime file.
+ * <p>
+ * All classes in this package are modeled after the QuickTime file format
+ * specification. See <a href=
+ * "https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-25538"
+ * ><https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/
+ * QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-25538</a>
  */
-abstract class Atom implements TreeNode {
+public abstract class Atom implements TreeNode {
 	/**
 	 * This limits the output toString() will produce. This is true by default.
 	 * Very useful for debugging so your console isn't flooded with information.
@@ -104,9 +104,11 @@ abstract class Atom implements TreeNode {
 				totalRead += lastRead;
 		}
 		if (lastRead == -1) {
-			System.err.println("read " + totalRead + " bytes, although "
-					+ length + " were requested");
-			throw new EOFException();
+			if (totalRead == 0)
+				throw new EOFException();
+
+			// System.err.println("read " + totalRead + " bytes, although "
+			// + length + " were requested");
 		}
 	}
 
@@ -143,7 +145,7 @@ abstract class Atom implements TreeNode {
 		write2_30Float(out, (float) matrix[2][2]);
 	}
 
-	protected static void skip(InputStream in, long skip) throws IOException {
+	public static void skip(InputStream in, long skip) throws IOException {
 		long totalSkipped = in.skip(skip);
 		long lastSkipped = totalSkipped;
 		while (totalSkipped < skip && lastSkipped != -1) {
@@ -199,7 +201,7 @@ abstract class Atom implements TreeNode {
 		out.write(array3);
 	}
 
-	protected synchronized static final void write32Int(OutputStream out, long i)
+	public synchronized static final void write32Int(OutputStream out, long i)
 			throws IOException {
 		array4[0] = (byte) ((i >> 24) & 0xff);
 		array4[1] = (byte) ((i >> 16) & 0xff);
@@ -208,7 +210,7 @@ abstract class Atom implements TreeNode {
 		out.write(array4);
 	}
 
-	protected synchronized static final void write32String(OutputStream out,
+	public synchronized static final void write32String(OutputStream out,
 			String s) throws IOException {
 		if (s.length() == 0) {
 			array4[0] = 0;
@@ -501,6 +503,9 @@ abstract class Atom implements TreeNode {
 
 	/**
 	 * Write this atom to an OutputStream.
+	 * <p>
+	 * This includes the 8-byte header (the size and type) and a call to
+	 * {@link #writeContents(GuardedOutputStream)} to any remaining data.
 	 * 
 	 * @throws IOException
 	 *             if an IO problem occurs.
@@ -518,7 +523,7 @@ abstract class Atom implements TreeNode {
 		GuardedOutputStream out2 = new GuardedOutputStream(out, size - 8);
 		writeContents(out2);
 		if (out2.getLimit() != 0) {
-			System.err.println(this);
+			// System.err.println(this);
 			throw new IOException("This atom is " + out2.getLimit()
 					+ " byte(s) too small.");
 		}

@@ -8,18 +8,12 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 /**
- * This is not a public class because I expect to make some significant changes
- * to this project in the next year.
- * <P>
- * Use at your own risk. This class (and its package) may change in future
- * releases.
- * <P>
- * Not that I'm promising there will be future releases. There may not be. :)
+ * Graphics mode constants for the VideoMediaInformationHeaderAtom.
  */
-class GraphicsModeConstants {
+public class GraphicsModeConstants {
 	public static final int COPY = 0x00;
 	public static final int DITHER_COPY = 0x40;
 	public static final int BLEND = 0x20;

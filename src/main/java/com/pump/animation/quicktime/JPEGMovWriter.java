@@ -26,6 +26,7 @@ import javax.swing.ProgressMonitor;
 
 import com.pump.UserCancelledException;
 import com.pump.animation.AnimationReader;
+import com.pump.animation.quicktime.atom.VideoSampleDescriptionEntry;
 
 /**
  * A MovWriter that encodes frames as a series of JPEG images.

@@ -8,12 +8,15 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-class SoundSampleDescriptionAtom extends SampleDescriptionAtom {
+/**
+ * This is a SampleDescriptionAtom for sounds.
+ */
+public class SoundSampleDescriptionAtom extends SampleDescriptionAtom {
 
 	public SoundSampleDescriptionAtom() {
 		super();

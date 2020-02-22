@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +16,12 @@ import java.io.OutputStream;
 
 import com.pump.io.GuardedOutputStream;
 
+/**
+ * You use the edit list atom to map from a time in a movie to a time in a
+ * media, and ultimately to media data. This information is in the form of
+ * entries in an edit list table. Edit list atoms have an atom type value of
+ * 'elst'.
+ */
 public class EditListAtom extends LeafAtom {
 
 	static class EditListTableEntry {
@@ -67,12 +73,15 @@ public class EditListAtom extends LeafAtom {
 		}
 	}
 
-	/** A 1-byte specification of the version of this edit list atom. */
-	int version = 0;
-	/** Three bytes of space for flags. Set this field to 0. */
-	int flags = 0;
+	public static final String ATOM_TYPE = "elst";
 
-	EditListTableEntry[] table = new EditListTableEntry[] {};
+	/** A 1-byte specification of the version of this edit list atom. */
+	protected int version = 0;
+
+	/** Three bytes of space for flags. Set this field to 0. */
+	protected int flags = 0;
+
+	protected EditListTableEntry[] table = new EditListTableEntry[] {};
 
 	protected EditListAtom(Atom parent, InputStream in) throws IOException {
 		super(parent);
@@ -112,7 +121,7 @@ public class EditListAtom extends LeafAtom {
 
 	@Override
 	protected String getIdentifier() {
-		return "elst";
+		return ATOM_TYPE;
 	}
 
 	@Override
@@ -134,5 +143,33 @@ public class EditListAtom extends LeafAtom {
 		}
 		sb.append("]]");
 		return sb.toString();
+	}
+
+	/**
+	 * Return a 1-byte specification of the version of this edit list atom.
+	 */
+	public int getVersion() {
+		return version;
+	}
+
+	/**
+	 * Return three bytes of space for flags. Set this field to 0.
+	 */
+	public int getFlags() {
+		return flags;
+	}
+
+	/**
+	 * Return the size of the edit list table.
+	 */
+	public int getEditListTableEntryCount() {
+		return table.length;
+	}
+
+	/**
+	 * Return an element of the edit list table.
+	 */
+	public EditListTableEntry getEditListTableEntry(int index) {
+		return table[index];
 	}
 }

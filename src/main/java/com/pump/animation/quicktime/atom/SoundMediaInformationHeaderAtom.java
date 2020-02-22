@@ -8,28 +8,37 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import com.pump.io.GuardedOutputStream;
 
+/**
+ * The sound media information header atom stores the sound media’s control
+ * information, such as balance.
+ */
 public class SoundMediaInformationHeaderAtom extends LeafAtom {
+
+	/** "smhd" */
+	public static final String ATOM_TYPE = "smhd";
 
 	/**
 	 * A 1-byte specification of the version of this sound media information
 	 * header atom.
 	 */
-	int version = 0;
+	protected int version = 0;
+
 	/** A 3-byte space for sound media information flags. Set this field to 0. */
-	int flags = 0;
+	protected int flags = 0;
+
 	/**
 	 * A 16-bit integer that specifies the sound balance of this sound media.
 	 * Sound balance is the setting that controls the mix of sound between the
 	 * two speakers of a computer. This field is normally set to 0.
 	 */
-	int balance = 0;
+	protected int balance = 0;
 
 	public SoundMediaInformationHeaderAtom() {
 		super(null);
@@ -46,7 +55,7 @@ public class SoundMediaInformationHeaderAtom extends LeafAtom {
 
 	@Override
 	protected String getIdentifier() {
-		return "smhd";
+		return ATOM_TYPE;
 	}
 
 	@Override
@@ -68,4 +77,28 @@ public class SoundMediaInformationHeaderAtom extends LeafAtom {
 		Atom.write16Int(out, 0);
 	}
 
+	/**
+	 * Return a 1-byte specification of the version of this sound media
+	 * information header atom.
+	 */
+	public int getVersion() {
+		return version;
+	}
+
+	/**
+	 * Return a 3-byte space for sound media information flags. Set this field
+	 * to 0.
+	 */
+	public int getFlags() {
+		return flags;
+	}
+
+	/**
+	 * Return a 16-bit integer that specifies the sound balance of this sound
+	 * media. Sound balance is the setting that controls the mix of sound
+	 * between the two speakers of a computer. This field is normally set to 0.
+	 */
+	public int getBalance() {
+		return balance;
+	}
 }

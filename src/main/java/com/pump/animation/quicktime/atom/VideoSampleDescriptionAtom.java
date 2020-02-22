@@ -8,21 +8,15 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * This is not a public class because I expect to make some significant changes
- * to this project in the next year.
- * <P>
- * Use at your own risk. This class (and its package) may change in future
- * releases.
- * <P>
- * Not that I'm promising there will be future releases. There may not be. :)
+ * This is a SampleDescriptionAtom for video data.
  */
-class VideoSampleDescriptionAtom extends SampleDescriptionAtom {
+public class VideoSampleDescriptionAtom extends SampleDescriptionAtom {
 
 	public VideoSampleDescriptionAtom() {
 		super();

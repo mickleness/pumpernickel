@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,17 +22,49 @@ import com.pump.io.GuardedOutputStream;
  * media may have different sizes, and the samples within a chunk may have
  * different sizes. The sample-to-chunk atom stores chunk information for the
  * samples in a media.
- * 
+ * <p>
  * Sample-to-chunk atoms have an atom type of 'stsc'. The sample-to-chunk atom
  * contains a table that maps samples to chunks in the media data stream. By
  * examining the sample-to-chunk atom, you can determine the chunk that contains
  * a specific sample.
- *
  */
 public class SampleToChunkAtom extends LeafAtom {
-	int version = 0;
-	int flags = 0;
-	SampleToChunkEntry[] entries = new SampleToChunkEntry[0];
+
+	public static class SampleToChunkEntry {
+		long firstChunk, samplesPerChunk, sampleDescriptionID;
+
+		public SampleToChunkEntry(long firstChunk, long samplesPerChunk,
+				long sampleDescriptionID) {
+			this.firstChunk = firstChunk;
+			this.samplesPerChunk = samplesPerChunk;
+			this.sampleDescriptionID = sampleDescriptionID;
+		}
+
+		public SampleToChunkEntry(InputStream in) throws IOException {
+			firstChunk = Atom.read32Int(in);
+			samplesPerChunk = Atom.read32Int(in);
+			sampleDescriptionID = Atom.read32Int(in);
+		}
+
+		@Override
+		public String toString() {
+			return "[ " + firstChunk + ", " + samplesPerChunk + ", "
+					+ sampleDescriptionID + "]";
+		}
+
+		protected void write(OutputStream out) throws IOException {
+			Atom.write32Int(out, firstChunk);
+			Atom.write32Int(out, samplesPerChunk);
+			Atom.write32Int(out, sampleDescriptionID);
+		}
+	}
+
+	/** "stsc" */
+	public static final String ATOM_TYPE = "stsc";
+
+	protected int version = 0;
+	protected int flags = 0;
+	protected SampleToChunkEntry[] entries = new SampleToChunkEntry[0];
 
 	public SampleToChunkAtom(int version, int flags) {
 		super(null);
@@ -57,8 +89,6 @@ public class SampleToChunkAtom extends LeafAtom {
 
 	public void addChunk(long chunkIndex, long samplesPerChunk,
 			long sampleDescriptionID) {
-		// TODO: this probably could use rewriting, but I'm not sure exactly how
-		// much of this object is supposed to be black-box implementation...
 		if (entries.length == 0) {
 			SampleToChunkEntry[] newArray = new SampleToChunkEntry[] { new SampleToChunkEntry(
 					chunkIndex, samplesPerChunk, sampleDescriptionID) };
@@ -89,7 +119,7 @@ public class SampleToChunkAtom extends LeafAtom {
 
 	@Override
 	protected String getIdentifier() {
-		return "stsc";
+		return ATOM_TYPE;
 	}
 
 	@Override
@@ -156,32 +186,27 @@ public class SampleToChunkAtom extends LeafAtom {
 		return getSampleToChunkEntry(chunkIndex).samplesPerChunk;
 	}
 
-	public static class SampleToChunkEntry {
-		long firstChunk, samplesPerChunk, sampleDescriptionID;
+	/**
+	 * Return a 1-byte specification of the version of this sample-to-chunk
+	 * atom.
+	 */
+	public int getVersion() {
+		return version;
+	}
 
-		public SampleToChunkEntry(long firstChunk, long samplesPerChunk,
-				long sampleDescriptionID) {
-			this.firstChunk = firstChunk;
-			this.samplesPerChunk = samplesPerChunk;
-			this.sampleDescriptionID = sampleDescriptionID;
-		}
+	/**
+	 * Return a 3-byte space for sample-to-chunk flags. Set this field to 0.
+	 */
+	public int getFlags() {
+		return flags;
+	}
 
-		public SampleToChunkEntry(InputStream in) throws IOException {
-			firstChunk = Atom.read32Int(in);
-			samplesPerChunk = Atom.read32Int(in);
-			sampleDescriptionID = Atom.read32Int(in);
-		}
-
-		@Override
-		public String toString() {
-			return "[ " + firstChunk + ", " + samplesPerChunk + ", "
-					+ sampleDescriptionID + "]";
-		}
-
-		protected void write(OutputStream out) throws IOException {
-			Atom.write32Int(out, firstChunk);
-			Atom.write32Int(out, samplesPerChunk);
-			Atom.write32Int(out, sampleDescriptionID);
-		}
+	/**
+	 * Return a table that maps samples to chunks.
+	 */
+	public SampleToChunkEntry[] getEntries() {
+		SampleToChunkEntry[] copy = new SampleToChunkEntry[entries.length];
+		System.arraycopy(entries, 0, copy, 0, entries.length);
+		return copy;
 	}
 }

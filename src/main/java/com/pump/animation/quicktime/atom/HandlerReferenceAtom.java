@@ -8,22 +8,37 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
 
 import com.pump.io.GuardedInputStream;
 import com.pump.io.GuardedOutputStream;
 
+/**
+ * The handler reference atom specifies the media handler component that is to
+ * be used to interpret the media’s data. The handler reference atom has an atom
+ * type value of 'hdlr'.
+ * <p>
+ * Historically, the handler reference atom was also used for data references.
+ * However, this use is no longer current and may now be safely ignored.
+ * <p>
+ * The handler atom within a media atom declares the process by which the media
+ * data in the stream may be presented, and thus, the nature of the media in a
+ * stream. For example, a video handler would handle a video track.
+ */
 public class HandlerReferenceAtom extends LeafAtom {
-	int version = 0;
-	int flags = 0;
-	String componentType;
-	String componentSubtype;
-	String componentManufacturer;
-	long componentFlags = 0;
-	long componentFlagsMask = 0;
-	String componentName = "";
+
+	public static final String ATOM_TYPE = "hdlr";
+
+	protected int version = 0;
+	protected int flags = 0;
+	protected String componentType;
+	protected String componentSubtype;
+	protected String componentManufacturer;
+	protected long componentFlags = 0;
+	protected long componentFlagsMask = 0;
+	protected String componentName = "";
 
 	public HandlerReferenceAtom(String componentType, String componentSubtype,
 			String componentManufacturer) {
@@ -88,7 +103,7 @@ public class HandlerReferenceAtom extends LeafAtom {
 
 	@Override
 	protected String getIdentifier() {
-		return "hdlr";
+		return ATOM_TYPE;
 	}
 
 	@Override
@@ -120,5 +135,48 @@ public class HandlerReferenceAtom extends LeafAtom {
 				+ "componentFlags=" + componentFlags + ", "
 				+ "componentFlagsMask=" + componentFlagsMask + ", "
 				+ "componentName=\"" + componentName + "\" ]";
+	}
+
+	/**
+	 * Return a 1-byte specification of the version of this handler information.
+	 */
+	public int getVersion() {
+		return version;
+	}
+
+	/**
+	 * Return a 3-byte space for handler information flags. Set this field to 0.
+	 */
+	public int getFlags() {
+		return flags;
+	}
+
+	/**
+	 * Return a four-character code that identifies the type of the handler.
+	 * Only two values are valid for this field: 'mhlr' for media handlers and
+	 * 'dhlr' for data handlers.
+	 */
+	public String getComponentType() {
+		return componentType;
+	}
+
+	/**
+	 * Return a four-character code that identifies the type of the media
+	 * handler or data handler. For media handlers, this field defines the type
+	 * of data—for example, 'vide' for video data, 'soun' for sound data or
+	 * ‘subt’ for subtitles.
+	 * <p>
+	 * For data handlers, this field defines the data reference type; for
+	 * example, a component subtype value of 'alis' identifies a file alias.
+	 */
+	public String getComponentSubtype() {
+		return componentSubtype;
+	}
+
+	/**
+	 * Reserved. Set to 0.
+	 */
+	public String getComponentManufacturer() {
+		return componentManufacturer;
 	}
 }

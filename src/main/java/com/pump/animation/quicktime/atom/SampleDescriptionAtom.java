@@ -8,17 +8,37 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.animation.quicktime;
+package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import com.pump.io.GuardedOutputStream;
 
+/**
+ * The sample description atom stores information that allows you to decode
+ * samples in the media. The data stored in the sample description varies,
+ * depending on the media type. For example, in the case of video media, the
+ * sample descriptions are image description structures. See subclasses
+ * {@link SoundSampleDescriptionAtom} and {@link VideoSampleDescriptionAtom}
+ * <p>
+ * The sample description atom has an atom type of 'stsd'. The sample
+ * description atom contains a table of sample descriptions. A media may have
+ * one or more sample descriptions, depending upon the number of different
+ * encoding schemes used in the media and on the number of files used to store
+ * the data. The sample-to-chunk atom identifies the sample description for each
+ * sample in the media by specifying the index into this table for the
+ * appropriate description (see {@link SampleToChunkAtom}).
+ */
 public class SampleDescriptionAtom extends LeafAtom {
-	int version = 0;
-	int flags = 0;
-	SampleDescriptionEntry[] entries = new SampleDescriptionEntry[0];
+
+	/** "stsd" */
+	public static final String ATOM_TYPE = "stsd";
+
+	protected int version = 0;
+	protected int flags = 0;
+	protected SampleDescriptionEntry[] entries = new SampleDescriptionEntry[0];
 
 	public SampleDescriptionAtom(int version, int flags) {
 		super(null);
@@ -58,7 +78,7 @@ public class SampleDescriptionAtom extends LeafAtom {
 
 	@Override
 	protected String getIdentifier() {
-		return "stsd";
+		return ATOM_TYPE;
 	}
 
 	@Override
@@ -102,5 +122,27 @@ public class SampleDescriptionAtom extends LeafAtom {
 		if (s.indexOf('.') != -1)
 			s = s.substring(s.lastIndexOf('.') + 1);
 		return s;
+	}
+
+	/**
+	 * Return a 1-byte specification of the version of this sample description
+	 * atom.
+	 */
+	public int getVersion() {
+		return version;
+	}
+
+	/**
+	 * Return a 3-byte space for sample description flags. Set this field to 0.
+	 */
+	public int getFlags() {
+		return flags;
+	}
+
+	/**
+	 * Return an array of sample descriptions.
+	 */
+	public SampleDescriptionEntry[] getSampleDescriptionEntries() {
+		return Arrays.copyOf(entries, entries.length);
 	}
 }

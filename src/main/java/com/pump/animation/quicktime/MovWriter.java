@@ -27,6 +27,23 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import com.pump.animation.quicktime.atom.Atom;
+import com.pump.animation.quicktime.atom.ChunkOffsetAtom;
+import com.pump.animation.quicktime.atom.DataReferenceAtom;
+import com.pump.animation.quicktime.atom.HandlerReferenceAtom;
+import com.pump.animation.quicktime.atom.MediaHeaderAtom;
+import com.pump.animation.quicktime.atom.MovieHeaderAtom;
+import com.pump.animation.quicktime.atom.ParentAtom;
+import com.pump.animation.quicktime.atom.SampleDescriptionAtom;
+import com.pump.animation.quicktime.atom.SampleSizeAtom;
+import com.pump.animation.quicktime.atom.SampleToChunkAtom;
+import com.pump.animation.quicktime.atom.SoundMediaInformationHeaderAtom;
+import com.pump.animation.quicktime.atom.SoundSampleDescriptionAtom;
+import com.pump.animation.quicktime.atom.SoundSampleDescriptionEntry;
+import com.pump.animation.quicktime.atom.TimeToSampleAtom;
+import com.pump.animation.quicktime.atom.TrackHeaderAtom;
+import com.pump.animation.quicktime.atom.VideoMediaInformationHeaderAtom;
+import com.pump.animation.quicktime.atom.VideoSampleDescriptionEntry;
 import com.pump.audio.CombinedAudioInputStream;
 import com.pump.audio.SilentAudioInputStream;
 import com.pump.image.ImageSize;
@@ -116,7 +133,7 @@ public abstract class MovWriter {
 			moovRoot.add(trakAtom);
 			TrackHeaderAtom trackHeader = new TrackHeaderAtom(1, totalDuration,
 					w, h);
-			trackHeader.volume = 0;
+			trackHeader.setVolume(0);
 			trakAtom.add(trackHeader);
 			ParentAtom mdiaAtom = new ParentAtom("mdia");
 			trakAtom.add(mdiaAtom);
