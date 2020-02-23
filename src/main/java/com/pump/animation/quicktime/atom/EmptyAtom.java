@@ -39,26 +39,32 @@ public class EmptyAtom extends Atom {
 	protected void writeContents(GuardedOutputStream out) {
 	}
 
+	@Override
 	public Enumeration<Object> children() {
 		return EMPTY_ENUMERATION;
 	}
 
+	@Override
 	public boolean getAllowsChildren() {
 		return false;
 	}
 
-	public TreeNode getChildAt(int childIndex) {
+	@Override
+	public Atom getChildAt(int childIndex) {
 		return null;
 	}
 
+	@Override
 	public int getChildCount() {
 		return 0;
 	}
 
+	@Override
 	public int getIndex(TreeNode node) {
 		return -1;
 	}
 
+	@Override
 	public boolean isLeaf() {
 		return true;
 	}

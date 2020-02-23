@@ -65,7 +65,8 @@ public class UnknownLeafAtom extends LeafAtom {
 		}
 		if (data.length > 64)
 			sb.append("...");
-		return "UnknownLeafAtom[ \"" + sb.toString() + "\" ]";
+		return "UnknownLeafAtom[ \"" + getIdentifier() + "\", \""
+				+ sb.toString() + "\" ]";
 	}
 
 	/**

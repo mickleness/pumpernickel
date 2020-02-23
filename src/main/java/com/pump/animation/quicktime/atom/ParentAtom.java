@@ -303,40 +303,47 @@ public class ParentAtom extends Atom {
 		this.id = id;
 	}
 
-	public void add(Atom a) {
-		children.add(a);
-		a.parent = this;
-	}
-
 	public ParentAtom(AtomReader reader, Atom parent, String id,
 			GuardedInputStream in) throws IOException {
 		super(parent);
 		this.id = id;
 		while (in.isAtLimit() == false) {
-			children.add(reader.read(this, in));
+			Atom next = reader.read(this, in);
+			children.add(next);
 		}
 	}
 
+	public void add(Atom a) {
+		children.add(a);
+		a.parent = this;
+	}
+
+	@Override
 	public Enumeration<Atom> children() {
 		return new EnumerationIterator<Atom>(children.iterator());
 	}
 
+	@Override
 	public boolean getAllowsChildren() {
 		return true;
 	}
 
-	public TreeNode getChildAt(int childIndex) {
+	@Override
+	public Atom getChildAt(int childIndex) {
 		return children.get(childIndex);
 	}
 
+	@Override
 	public int getChildCount() {
 		return children.size();
 	}
 
+	@Override
 	public int getIndex(TreeNode node) {
 		return children.indexOf(node);
 	}
 
+	@Override
 	public boolean isLeaf() {
 		return children.size() == 0;
 	}

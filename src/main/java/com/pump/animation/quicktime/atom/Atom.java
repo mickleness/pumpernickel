@@ -568,4 +568,13 @@ public abstract class Atom implements TreeNode {
 		}
 		return maxID;
 	}
+
+	@Override
+	public abstract Atom getChildAt(int index);
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[ identifier=\"" + getIdentifier()
+				+ "\", size=" + getSize() + "]";
+	}
 }

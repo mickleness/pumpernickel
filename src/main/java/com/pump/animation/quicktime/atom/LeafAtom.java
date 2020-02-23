@@ -23,26 +23,32 @@ public abstract class LeafAtom extends Atom {
 		super(parent);
 	}
 
+	@Override
 	public Enumeration<?> children() {
 		return EMPTY_ENUMERATION;
 	}
 
+	@Override
 	public boolean getAllowsChildren() {
 		return false;
 	}
 
-	public TreeNode getChildAt(int childIndex) {
+	@Override
+	public Atom getChildAt(int childIndex) {
 		return null;
 	}
 
+	@Override
 	public int getChildCount() {
 		return 0;
 	}
 
+	@Override
 	public int getIndex(TreeNode node) {
 		return -1;
 	}
 
+	@Override
 	public boolean isLeaf() {
 		return true;
 	}
