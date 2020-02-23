@@ -114,13 +114,22 @@ public class AtomReader {
 		long size;
 		String type;
 		try {
-			try {
-				size = Atom.read32Int(in);
-			} catch (EOFException e) {
-				if (readAtomTypes.isEmpty())
-					throw new UnsupportedFileException(e);
-				return null;
+			// the normal pattern is: [4-byte size] [4 byte identifier]
+
+			// ... but if the size is 0: we have a weird invalid atom that
+			// we should just skip. (At atom has to *always* be at least 8
+			// bytes, because the size includes those 8 bytes of header...)
+			size = 0;
+			while (size == 0) {
+				try {
+					size = Atom.read32Int(in);
+				} catch (EOFException e) {
+					if (readAtomTypes.isEmpty())
+						throw new UnsupportedFileException(e);
+					return null;
+				}
 			}
+
 			if (in instanceof GuardedInputStream) {
 				GuardedInputStream gis = (GuardedInputStream) in;
 				long inputLimit = gis.getRemainingLimit() + 4;
@@ -192,9 +201,7 @@ public class AtomReader {
 	protected Atom read(Atom parent, GuardedInputStream in, String atomType)
 			throws IOException {
 		try {
-			if (readAtomTypes.size() < 3) {
-				validateAtomType(atomType);
-			}
+			validateAtomType(atomType);
 
 			switch (atomType) {
 			case MovieHeaderAtom.ATOM_TYPE:
@@ -259,10 +266,11 @@ public class AtomReader {
 		}
 	}
 
-	private void validateAtomType(String atomType) throws IOException {
+	protected void validateAtomType(String atomType) throws IOException {
 		if (SUPPORTED_LEADING_ATOMS.contains(atomType))
 			return;
-		throw new UnsupportedFileException("The atom type \"" + atomType
-				+ "\" is not supported.");
+		if (readAtomTypes.size() < 3)
+			throw new UnsupportedFileException("The atom type \"" + atomType
+					+ "\" is not supported.");
 	}
 }
