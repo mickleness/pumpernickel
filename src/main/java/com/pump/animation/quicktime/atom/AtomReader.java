@@ -247,7 +247,7 @@ public class AtomReader {
 			case WindowLocationAtom.ATOM_TYPE:
 				return new WindowLocationAtom(parent, in);
 			}
-			if (atomType.charAt(0) == 65449)
+			if (atomType.charAt(0) == '©')
 				return new UserDataTextAtom(parent, atomType, in);
 			if (ParentAtom.PARENT_ATOM_TYPES.contains(atomType))
 				return new ParentAtom(this, parent, atomType, in);

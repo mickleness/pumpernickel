@@ -260,10 +260,10 @@ public abstract class Atom implements TreeNode {
 			throws IOException {
 		read(in, array4);
 		StringBuffer sb = new StringBuffer(4);
-		sb.append(((char) array4[0]));
-		sb.append(((char) array4[1]));
-		sb.append(((char) array4[2]));
-		sb.append(((char) array4[3]));
+		sb.append(((char) (array4[0] & 0xff)));
+		sb.append(((char) (array4[1] & 0xff)));
+		sb.append(((char) (array4[2] & 0xff)));
+		sb.append(((char) (array4[3] & 0xff)));
 		return sb.toString();
 	}
 
@@ -273,7 +273,7 @@ public abstract class Atom implements TreeNode {
 		int size = array32[0] & 0xff;
 		StringBuffer sb = new StringBuffer();
 		for (int a = 0; a < size; a++) {
-			sb.append((char) array32[a + 1]);
+			sb.append((char) (array32[a + 1] & 0xff));
 		}
 		return sb.toString();
 	}
