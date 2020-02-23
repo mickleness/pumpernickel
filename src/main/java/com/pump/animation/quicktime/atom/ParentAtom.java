@@ -263,19 +263,17 @@ public class ParentAtom extends Atom {
 	 */
 	public static final String ATOM_TYPE_REFERENCE_MOVIE_DESCRIPTOR = "rmda";
 
-	// /**
-	// * This does not appear in the QuickTime specs, but this is used as a
-	// parent
-	// * atom in related files like "m4a" audio files.
-	// */
-	// private static final String ATOM_TYPE_META = "meta";
-	//
-	// /**
-	// * This does not appear in the QuickTime specs, but this is used as a
-	// parent
-	// * atom in related files like "m4a" audio files.
-	// */
-	// private static final String ATOM_TYPE_ILST = "ilst";
+	/**
+	 * This does not appear in the QuickTime specs, but this is used as a parent
+	 * atom in related files like "m4a" audio files.
+	 */
+	private static final String ATOM_TYPE_META = "meta";
+
+	/**
+	 * This does not appear in the QuickTime specs, but this is used as a parent
+	 * atom in related files like "m4a" audio files.
+	 */
+	private static final String ATOM_TYPE_ILST = "ilst";
 
 	/**
 	 * A collection of all the ATOM TYPE constants in this class.
@@ -290,10 +288,8 @@ public class ParentAtom extends Atom {
 					ATOM_TYPE_TRACK_REFERENCE, ATOM_TYPE_MOVIE_CLIPPING_ATOM,
 					ATOM_TYPE_TRACK_INPUT_MAP,
 					ATOM_TYPE_REFERENCE_MOVIE_DESCRIPTOR,
-					ATOM_TYPE_TRACK_APERTURE_MODE_DIMENSIONS
-			// ATOM_TYPE_META,
-			// ATOM_TYPE_ILST
-					)));
+					ATOM_TYPE_TRACK_APERTURE_MODE_DIMENSIONS, ATOM_TYPE_META,
+					ATOM_TYPE_ILST)));
 
 	protected List<Atom> children = new ArrayList<Atom>();
 	protected String id;
