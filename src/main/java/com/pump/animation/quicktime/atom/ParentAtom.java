@@ -355,7 +355,7 @@ public class ParentAtom extends Atom {
 	}
 
 	@Override
-	protected String getIdentifier() {
+	public String getIdentifier() {
 		return id;
 	}
 

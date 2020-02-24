@@ -26,7 +26,7 @@ public class EmptyAtom extends Atom {
 	}
 
 	@Override
-	protected String getIdentifier() {
+	public String getIdentifier() {
 		return null;
 	}
 

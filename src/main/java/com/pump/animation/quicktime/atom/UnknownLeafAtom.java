@@ -43,7 +43,7 @@ public class UnknownLeafAtom extends LeafAtom {
 	}
 
 	@Override
-	protected String getIdentifier() {
+	public String getIdentifier() {
 		return id;
 	}
 

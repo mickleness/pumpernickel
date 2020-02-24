@@ -484,7 +484,7 @@ public abstract class Atom implements TreeNode {
 	 * @return the 4-byte identifier this atom uses (such as "moov", "trak",
 	 *         etc.)
 	 */
-	protected abstract String getIdentifier();
+	public abstract String getIdentifier();
 
 	/**
 	 * Writes the contents of this atom, minus the first 8 bytes. This is called

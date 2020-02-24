@@ -101,7 +101,7 @@ public class TimeToSampleAtom extends LeafAtom {
 	}
 
 	@Override
-	protected String getIdentifier() {
+	public String getIdentifier() {
 		return ATOM_TYPE;
 	}
 
