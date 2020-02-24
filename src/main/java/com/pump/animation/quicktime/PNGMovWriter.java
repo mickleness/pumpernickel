@@ -18,7 +18,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import com.pump.animation.quicktime.atom.VideoSampleDescriptionEntry;
+import com.pump.animation.quicktime.block.VideoSampleDescriptionEntry;
 
 /**
  * A MovWriter that encodes frames as a series of PNG images.
