@@ -47,139 +47,13 @@ import com.pump.io.GuardedOutputStream;
  * Language code values greater than or equal to 0x400 are ISO language codes.
  * The exception to this rule is language code 0x7FFF, which indicates an
  * unspecified Macintosh language.
- * 
+ * <p>
  * ISO language codes are three-character codes. In order to fit inside a 16-bit
  * field, the characters must be packed into three 5-bit subfields. This packing
  * is described in “ISO Language Codes”.
+ * <p>
  * 
- * 
- * <table>
- * <tr>
- * <th>Atom ID</th>
- * <th>Description</th>
- * </tr>
- * <tr>
- * <td>©arg</td>
- * <td>Name of arranger</td>
- * </tr>
- * <tr>
- * <td>©ark</td>
- * <td>Keywords for arranger</td>
- * </tr>
- * <tr>
- * <td>©cok</td>
- * <td>Keywords for composer</td>
- * </tr>
- * <tr>
- * <td>©cpy</td>
- * <td>Copyright statement</td>
- * </tr>
- * <tr>
- * <td>©day</td>
- * <td>Date the movie content was created</td>
- * </tr>
- * <tr>
- * <td>©dir</td>
- * <td>Name of movie’s director</td>
- * </tr>
- * <tr>
- * <td>©ed1-©ed9</td>
- * <td>Edit dates and descriptions</td>
- * </tr>
- * <tr>
- * <td>©fmt</td>
- * <td>Indication of movie format (computer-generated, digitized, and so on)</td>
- * </tr>
- * <tr>
- * <td>©inf</td>
- * <td>Information about the movie</td>
- * </tr>
- * <tr>
- * <td>©isr</td>
- * <td>ISRC code</td>
- * </tr>
- * <tr>
- * <td>©lab</td>
- * <td>Name of record label</td>
- * </tr>
- * <tr>
- * <td>©lal</td>
- * <td>URL of record label</td>
- * </tr>
- * <tr>
- * <td>©mak</td>
- * <td>Name of file creator or maker</td>
- * </tr>
- * <tr>
- * <td>©mal</td>
- * <td>URL of file creator or maker</td>
- * </tr>
- * <tr>
- * <td>©nak</td>
- * <td>Title keywords of the content</td>
- * </tr>
- * <tr>
- * <td>©nam</td>
- * <td>Title of the content</td>
- * </tr>
- * <tr>
- * <td>©pdk</td>
- * <td>Keywords for producer</td>
- * </tr>
- * <tr>
- * <td>©phg</td>
- * <td>Recording copyright statement, normally preceded by the copyright symbol</td>
- * </tr>
- * <tr>
- * <td>©prd</td>
- * <td>Name of producer</td>
- * </tr>
- * <tr>
- * <td>©prf</td>
- * <td>Names of performers</td>
- * </tr>
- * <tr>
- * <td>©prk</td>
- * <td>Keywords of main artist and performer</td>
- * </tr>
- * <tr>
- * <td>©prl</td>
- * <td>URL of main artist and performer</td>
- * </tr>
- * <tr>
- * <td>©req</td>
- * <td>Special hardware and software requirements</td>
- * </tr>
- * <tr>
- * <td>©snk</td>
- * <td>Subtitle keywords of the content</td>
- * </tr>
- * <tr>
- * <td>©snm</td>
- * <td>Subtitle of content</td>
- * </tr>
- * <tr>
- * <td>©src</td>
- * <td>Credits for those who provided movie source content</td>
- * </tr>
- * <tr>
- * <td>©swf</td>
- * <td>Name of songwriter</td>
- * </tr>
- * <tr>
- * <td>©swk</td>
- * <td>Keywords for songwriter</td>
- * </tr>
- * <tr>
- * <td>©swr</td>
- * <td>Name and version number of the software (or hardware) that generated this
- * movie</td>
- * </tr>
- * <tr>
- * <td>©wrt</td>
- * <td>Name of movie’s writer</td>
- * </tr>
- * </table>
+ * @see TextTypes
  */
 public class UserDataTextAtom extends LeafAtom {
 
@@ -215,7 +89,7 @@ public class UserDataTextAtom extends LeafAtom {
 	}
 
 	@Override
-	protected String getIdentifier() {
+	public String getIdentifier() {
 		return id;
 	}
 
@@ -231,7 +105,8 @@ public class UserDataTextAtom extends LeafAtom {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("UserDataTextAtom[ ");
+		StringBuffer sb = new StringBuffer("UserDataTextAtom[ \""
+				+ getIdentifier() + "\" ");
 		for (int a = 0; a < entries.size(); a++) {
 			TextEntry e = entries.get(a);
 			sb.append("\"" + (new String(e.data)) + "\" ");

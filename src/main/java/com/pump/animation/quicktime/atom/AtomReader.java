@@ -68,6 +68,7 @@ public class AtomReader {
 	byte[] sizeArray = new byte[4];
 	byte[] bigSizeArray = new byte[8];
 	List<String> readAtomTypes = new ArrayList<>();
+	FileType fileType = null;
 
 	/**
 	 * Return all the Atoms in a File.
@@ -247,8 +248,17 @@ public class AtomReader {
 			case WindowLocationAtom.ATOM_TYPE:
 				return new WindowLocationAtom(parent, in);
 			}
-			if (atomType.charAt(0) == '©')
-				return new UserDataTextAtom(parent, atomType, in);
+			if (getFileType() == FileType.QUICKTIME) {
+				if (atomType.charAt(0) == '©')
+					return new UserDataTextAtom(parent, atomType, in);
+			} else {
+				if (DataAtom.ATOM_TYPE.equals(atomType)) {
+					return new DataAtom(parent, in);
+				}
+				if (atomType.charAt(0) == '©' && parent != null
+						&& "ilst".equals(parent.getIdentifier()))
+					return new ParentAtom(this, parent, atomType, in);
+			}
 			if (ParentAtom.PARENT_ATOM_TYPES.contains(atomType))
 				return new ParentAtom(this, parent, atomType, in);
 
@@ -272,5 +282,9 @@ public class AtomReader {
 		if (readAtomTypes.size() < 3)
 			throw new UnsupportedFileException("The atom type \"" + atomType
 					+ "\" is not supported.");
+	}
+
+	public FileType getFileType() {
+		return fileType;
 	}
 }
