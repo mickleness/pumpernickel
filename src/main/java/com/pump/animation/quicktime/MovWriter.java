@@ -27,23 +27,23 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
-import com.pump.animation.quicktime.block.Block;
-import com.pump.animation.quicktime.block.ChunkOffsetBlock;
-import com.pump.animation.quicktime.block.DataReferenceBlock;
-import com.pump.animation.quicktime.block.HandlerReferenceBlock;
-import com.pump.animation.quicktime.block.MediaHeaderBlock;
-import com.pump.animation.quicktime.block.MovieHeaderBlock;
-import com.pump.animation.quicktime.block.ParentBlock;
-import com.pump.animation.quicktime.block.SampleDescriptionBlock;
-import com.pump.animation.quicktime.block.SampleSizeBlock;
-import com.pump.animation.quicktime.block.SampleToChunkBlock;
-import com.pump.animation.quicktime.block.SoundMediaInformationHeaderBlock;
-import com.pump.animation.quicktime.block.SoundSampleDescriptionBlock;
-import com.pump.animation.quicktime.block.SoundSampleDescriptionEntry;
-import com.pump.animation.quicktime.block.TimeToSampleBlock;
-import com.pump.animation.quicktime.block.TrackHeaderBlock;
-import com.pump.animation.quicktime.block.VideoMediaInformationHeaderBlock;
-import com.pump.animation.quicktime.block.VideoSampleDescriptionEntry;
+import com.pump.animation.quicktime.atom.Atom;
+import com.pump.animation.quicktime.atom.ChunkOffsetAtom;
+import com.pump.animation.quicktime.atom.DataReferenceAtom;
+import com.pump.animation.quicktime.atom.HandlerReferenceAtom;
+import com.pump.animation.quicktime.atom.MediaHeaderAtom;
+import com.pump.animation.quicktime.atom.MovieHeaderAtom;
+import com.pump.animation.quicktime.atom.ParentAtom;
+import com.pump.animation.quicktime.atom.SampleDescriptionAtom;
+import com.pump.animation.quicktime.atom.SampleSizeAtom;
+import com.pump.animation.quicktime.atom.SampleToChunkAtom;
+import com.pump.animation.quicktime.atom.SoundMediaInformationHeaderAtom;
+import com.pump.animation.quicktime.atom.SoundSampleDescriptionAtom;
+import com.pump.animation.quicktime.atom.SoundSampleDescriptionEntry;
+import com.pump.animation.quicktime.atom.TimeToSampleAtom;
+import com.pump.animation.quicktime.atom.TrackHeaderAtom;
+import com.pump.animation.quicktime.atom.VideoMediaInformationHeaderAtom;
+import com.pump.animation.quicktime.atom.VideoSampleDescriptionEntry;
 import com.pump.audio.CombinedAudioInputStream;
 import com.pump.audio.SilentAudioInputStream;
 import com.pump.image.ImageSize;
@@ -123,44 +123,44 @@ public abstract class MovWriter {
 		List<VideoSample> samples = new ArrayList<VideoSample>();
 		protected int w = -1, h = -1;
 		long totalDuration;
-		TimeToSampleBlock stts = new TimeToSampleBlock();
-		SampleSizeBlock stsz = new SampleSizeBlock();
-		SampleToChunkBlock stsc = new SampleToChunkBlock();
-		ChunkOffsetBlock stco = new ChunkOffsetBlock();
+		TimeToSampleAtom stts = new TimeToSampleAtom();
+		SampleSizeAtom stsz = new SampleSizeAtom();
+		SampleToChunkAtom stsc = new SampleToChunkAtom();
+		ChunkOffsetAtom stco = new ChunkOffsetAtom();
 
-		void writeToMoovRoot(ParentBlock moovRoot) {
-			ParentBlock trakBlock = new ParentBlock("trak");
-			moovRoot.add(trakBlock);
-			TrackHeaderBlock trackHeader = new TrackHeaderBlock(1,
-					totalDuration, w, h);
+		void writeToMoovRoot(ParentAtom moovRoot) {
+			ParentAtom trakAtom = new ParentAtom("trak");
+			moovRoot.add(trakAtom);
+			TrackHeaderAtom trackHeader = new TrackHeaderAtom(1, totalDuration,
+					w, h);
 			trackHeader.setVolume(0);
-			trakBlock.add(trackHeader);
-			ParentBlock mdiaBlock = new ParentBlock("mdia");
-			trakBlock.add(mdiaBlock);
-			MediaHeaderBlock mediaHeader = new MediaHeaderBlock(
+			trakAtom.add(trackHeader);
+			ParentAtom mdiaAtom = new ParentAtom("mdia");
+			trakAtom.add(mdiaAtom);
+			MediaHeaderAtom mediaHeader = new MediaHeaderAtom(
 					DEFAULT_TIME_SCALE, totalDuration);
-			mdiaBlock.add(mediaHeader);
-			HandlerReferenceBlock handlerRef1 = new HandlerReferenceBlock(
-					"mhlr", "vide", "java");
-			mdiaBlock.add(handlerRef1);
-			ParentBlock minf = new ParentBlock("minf");
-			mdiaBlock.add(minf);
-			VideoMediaInformationHeaderBlock vmhd = new VideoMediaInformationHeaderBlock();
+			mdiaAtom.add(mediaHeader);
+			HandlerReferenceAtom handlerRef1 = new HandlerReferenceAtom("mhlr",
+					"vide", "java");
+			mdiaAtom.add(handlerRef1);
+			ParentAtom minf = new ParentAtom("minf");
+			mdiaAtom.add(minf);
+			VideoMediaInformationHeaderAtom vmhd = new VideoMediaInformationHeaderAtom();
 			minf.add(vmhd);
-			HandlerReferenceBlock handlerRef2 = new HandlerReferenceBlock(
-					"dhlr", "alis", "java");
+			HandlerReferenceAtom handlerRef2 = new HandlerReferenceAtom("dhlr",
+					"alis", "java");
 			minf.add(handlerRef2);
 
-			ParentBlock dinf = new ParentBlock("dinf");
+			ParentAtom dinf = new ParentAtom("dinf");
 			minf.add(dinf);
-			DataReferenceBlock dref = new DataReferenceBlock();
+			DataReferenceAtom dref = new DataReferenceAtom();
 			dref.addEntry("alis", 0, 1, new byte[] {});
 			dinf.add(dref);
 
-			ParentBlock stbl = new ParentBlock("stbl");
+			ParentAtom stbl = new ParentAtom("stbl");
 			minf.add(stbl);
 
-			SampleDescriptionBlock stsd = new SampleDescriptionBlock();
+			SampleDescriptionAtom stsd = new SampleDescriptionAtom();
 			stsd.addEntry(getVideoSampleDescriptionEntry());
 			stbl.add(stsd);
 
@@ -264,10 +264,10 @@ public abstract class MovWriter {
 		boolean reverseBytePairs = false;
 
 		long myTimeScale;
-		TimeToSampleBlock stts = new TimeToSampleBlock();
-		SampleSizeBlock stsz = new SampleSizeBlock();
-		SampleToChunkBlock stsc = new SampleToChunkBlock();
-		ChunkOffsetBlock stco = new ChunkOffsetBlock();
+		TimeToSampleAtom stts = new TimeToSampleAtom();
+		SampleSizeAtom stsz = new SampleSizeAtom();
+		SampleToChunkAtom stsc = new SampleToChunkAtom();
+		ChunkOffsetAtom stco = new ChunkOffsetAtom();
 		int sampleMultiplier;
 
 		AudioTrack(AudioInputStream audio, float audioOffset)
@@ -306,7 +306,7 @@ public abstract class MovWriter {
 
 			if (audioOffset > 0) {
 				/**
-				 * Previously I tried using an EditBlock to change when an audio
+				 * Previously I tried using an EditAtom to change when an audio
 				 * track began playing, but that only worked for about 1 audio
 				 * track (when other audio tracks were added to the test: QT
 				 * Player could play the movie back fine but a MovieExporter
@@ -331,41 +331,41 @@ public abstract class MovWriter {
 			}
 		}
 
-		void writeToMoovRoot(ParentBlock moovRoot, int trackIndex) {
-			ParentBlock trakBlock = new ParentBlock("trak");
-			moovRoot.add(trakBlock);
-			TrackHeaderBlock trackHeader = new TrackHeaderBlock(trackIndex,
+		void writeToMoovRoot(ParentAtom moovRoot, int trackIndex) {
+			ParentAtom trakAtom = new ParentAtom("trak");
+			moovRoot.add(trakAtom);
+			TrackHeaderAtom trackHeader = new TrackHeaderAtom(trackIndex,
 					totalDurationInMovieTimeScale, 0, 0);
-			trakBlock.add(trackHeader);
-			ParentBlock mdiaBlock = new ParentBlock("mdia");
-			trakBlock.add(mdiaBlock);
-			MediaHeaderBlock mediaHeader = new MediaHeaderBlock(myTimeScale,
+			trakAtom.add(trackHeader);
+			ParentAtom mdiaAtom = new ParentAtom("mdia");
+			trakAtom.add(mdiaAtom);
+			MediaHeaderAtom mediaHeader = new MediaHeaderAtom(myTimeScale,
 					totalSamples);
-			mdiaBlock.add(mediaHeader);
-			HandlerReferenceBlock handlerRef1 = new HandlerReferenceBlock(
-					"mhlr", "soun", "pump");
-			mdiaBlock.add(handlerRef1);
-			ParentBlock minf = new ParentBlock("minf");
-			mdiaBlock.add(minf);
-			SoundMediaInformationHeaderBlock smhd = new SoundMediaInformationHeaderBlock();
+			mdiaAtom.add(mediaHeader);
+			HandlerReferenceAtom handlerRef1 = new HandlerReferenceAtom("mhlr",
+					"soun", "pump");
+			mdiaAtom.add(handlerRef1);
+			ParentAtom minf = new ParentAtom("minf");
+			mdiaAtom.add(minf);
+			SoundMediaInformationHeaderAtom smhd = new SoundMediaInformationHeaderAtom();
 			minf.add(smhd);
-			HandlerReferenceBlock handlerRef2 = new HandlerReferenceBlock(
-					"dhlr", "alis", "pump");
+			HandlerReferenceAtom handlerRef2 = new HandlerReferenceAtom("dhlr",
+					"alis", "pump");
 			minf.add(handlerRef2);
-			ParentBlock dinf = new ParentBlock("dinf");
+			ParentAtom dinf = new ParentAtom("dinf");
 			minf.add(dinf);
-			DataReferenceBlock dref = new DataReferenceBlock();
+			DataReferenceAtom dref = new DataReferenceAtom();
 			dref.addEntry("alis", 0, 1, new byte[] {});
 			dinf.add(dref);
 
-			ParentBlock stbl = new ParentBlock("stbl");
+			ParentAtom stbl = new ParentAtom("stbl");
 			minf.add(stbl);
 
 			int numberOfChannels = audioIn.getFormat().getChannels();
 			int bitsPerSample = audioIn.getFormat().getSampleSizeInBits();
 			float sampleRate = audioIn.getFormat().getSampleRate();
 
-			SoundSampleDescriptionBlock stsd = new SoundSampleDescriptionBlock();
+			SoundSampleDescriptionAtom stsd = new SoundSampleDescriptionAtom();
 			stsd.addEntry(new SoundSampleDescriptionEntry(1, numberOfChannels,
 					bitsPerSample, sampleRate));
 			stbl.add(stsd);
@@ -464,15 +464,15 @@ public abstract class MovWriter {
 		file.createNewFile();
 		out = new MeasuredOutputStream(new FileOutputStream(file));
 
-		Block.write32Int(out, 1); // an extended size field
-		Block.write32String(out, "mdat");
+		Atom.write32Int(out, 1); // an extended size field
+		Atom.write32String(out, "mdat");
 
 		// the extended size field: an 8-byte long that will eventually
-		// reflect the size of the data block. We don't know this in the
+		// reflect the size of the data atom. We don't know this in the
 		// first pass, so write 8 zeroes, and we'll fill this gap in
 		// when .close() is called:
-		Block.write32Int(out, 0);
-		Block.write32Int(out, 0);
+		Atom.write32Int(out, 0);
+		Atom.write32Int(out, 0);
 	}
 
 	/**
@@ -676,14 +676,14 @@ public abstract class MovWriter {
 
 			mdatSize = out.getBytesWritten();
 
-			ParentBlock moovRoot = new ParentBlock("moov");
+			ParentAtom moovRoot = new ParentAtom("moov");
 
 			long totalDuration = videoTrack.totalDuration;
 			for (AudioTrack audio : audioTracks) {
 				totalDuration = Math.max(totalDuration,
 						audio.totalDurationInMovieTimeScale);
 			}
-			MovieHeaderBlock movieHeader = new MovieHeaderBlock(
+			MovieHeaderAtom movieHeader = new MovieHeaderAtom(
 					DEFAULT_TIME_SCALE, totalDuration);
 			moovRoot.add(movieHeader);
 
@@ -698,7 +698,7 @@ public abstract class MovWriter {
 
 		// very last step: we have to rewrite the first
 		// 4 bytes of this file now that we can conclusively say
-		// how big the "mdat" block is:
+		// how big the "mdat" atom is:
 
 		RandomAccessFile raf = null;
 		try {
