@@ -158,14 +158,16 @@ public class AtomReader {
 			if (size == 1) { // this is a special code indicating the size won't
 								// fit in 4 bytes
 				Atom.read(in, bigSizeArray);
-				size = ((sizeArray[0] & 0xff) << 56)
-						+ ((sizeArray[1] & 0xff) << 48)
-						+ ((sizeArray[2] & 0xff) << 40)
-						+ ((sizeArray[3] & 0xff) << 32)
-						+ ((sizeArray[4] & 0xff) << 24)
-						+ ((sizeArray[5] & 0xff) << 16)
-						+ ((sizeArray[6] & 0xff) << 8)
-						+ ((sizeArray[7] & 0xff) << 0);
+				long j0 = (bigSizeArray[0] & 0xff);
+				long j1 = (bigSizeArray[1] & 0xff);
+				long j2 = (bigSizeArray[2] & 0xff);
+				long j3 = (bigSizeArray[3] & 0xff);
+				long j4 = (bigSizeArray[4] & 0xff);
+				long j5 = (bigSizeArray[5] & 0xff);
+				long j6 = (bigSizeArray[6] & 0xff);
+				long j7 = (bigSizeArray[7] & 0xff);
+				size = (j0 << 56L) + (j1 << 48L) + (j2 << 40L) + (j3 << 32L)
+						+ (j4 << 24L) + (j5 << 16L) + (j6 << 8L) + (j7 << 0L);
 			}
 		} catch (IOException e) {
 			if (readAtomTypes.size() < 3)
