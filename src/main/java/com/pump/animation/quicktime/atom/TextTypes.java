@@ -13,6 +13,7 @@ package com.pump.animation.quicktime.atom;
  */
 public enum TextTypes {
 	// @formatter:off
+	DESCRIPTION("des", false, false),
 	GROUPING("grp", false, false),
 	GENRE("gen", false, false),
 	LYRICS("lyr", false, false),
