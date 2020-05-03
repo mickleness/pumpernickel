@@ -17,7 +17,10 @@ import java.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.io.Serializable;
 
+import com.pump.awt.serialization.AWTSerializationUtils;
 import com.pump.geom.GeneralPathWriter;
+import com.pump.io.serialization.FilteredObjectInputStream;
+import com.pump.io.serialization.FilteredObjectOutputStream;
 
 /**
  * This applies cracks using the {@link CharcoalEffect} to another
@@ -167,22 +170,25 @@ public class CharcoalStroke implements FilteredStroke, Serializable {
 
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
-		out.writeInt(0);
-		out.writeFloat(crackSize);
-		out.writeFloat(angle);
-		out.writeInt(randomSeed);
-		out.writeObject(stroke);
+		FilteredObjectOutputStream fout = AWTSerializationUtils
+				.createFilteredObjectOutputStream(out);
+		fout.writeInt(0);
+		fout.writeFloat(crackSize);
+		fout.writeFloat(angle);
+		fout.writeInt(randomSeed);
+		fout.writeObject(stroke);
 
 	}
 
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
-		int internalVersion = in.readInt();
+		FilteredObjectInputStream fin = new FilteredObjectInputStream(in);
+		int internalVersion = fin.readInt();
 		if (internalVersion == 0) {
-			crackSize = in.readFloat();
-			angle = in.readFloat();
-			randomSeed = in.readInt();
-			stroke = (Stroke) in.readObject();
+			crackSize = fin.readFloat();
+			angle = fin.readFloat();
+			randomSeed = fin.readInt();
+			stroke = (Stroke) fin.readObject();
 		} else {
 			throw new IOException(
 					"Unsupported internal version: " + internalVersion);
