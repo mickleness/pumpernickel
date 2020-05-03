@@ -24,7 +24,7 @@ import com.pump.io.GuardedOutputStream;
  */
 public class EditListAtom extends LeafAtom {
 
-	static class EditListTableEntry {
+	public static class EditListTableEntry {
 		/**
 		 * A 32-bit integer that specifies the duration of this edit segment in
 		 * units of the movie's time scale.
@@ -53,10 +53,23 @@ public class EditListAtom extends LeafAtom {
 			mediaRate = Atom.read16_16Float(in);
 		}
 
-		EditListTableEntry(long trackDuration, long mediaTime, float mediaRate) {
+		EditListTableEntry(long trackDuration, long mediaTime,
+				float mediaRate) {
 			this.trackDuration = trackDuration;
 			this.mediaTime = mediaTime;
 			this.mediaRate = mediaRate;
+		}
+
+		public long getTrackDuration() {
+			return trackDuration;
+		}
+
+		public long getMediaTime() {
+			return mediaTime;
+		}
+
+		public float getMediaRate() {
+			return mediaRate;
 		}
 
 		void write(OutputStream out) throws IOException {
@@ -106,7 +119,8 @@ public class EditListAtom extends LeafAtom {
 
 	public void addEditListTableEntry(long trackDuration, long mediaTime,
 			float mediaRate) {
-		EditListTableEntry[] newTable = new EditListTableEntry[table.length + 1];
+		EditListTableEntry[] newTable = new EditListTableEntry[table.length
+				+ 1];
 		System.arraycopy(table, 0, newTable, 0, table.length);
 		newTable[newTable.length - 1] = new EditListTableEntry(trackDuration,
 				mediaTime, mediaRate);

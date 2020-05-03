@@ -60,8 +60,13 @@ public class AtomReader {
 		c.add(MediaHeaderAtom.ATOM_TYPE);
 		c.add(TrackHeaderAtom.ATOM_TYPE);
 		c.add(DataReferenceAtom.ATOM_TYPE);
+		c.add("mdat");
 		c.add("ftyp");
 		c.add("free");
+		c.add("wide");
+		c.add("pnot");
+		c.add("skip");
+		c.add("PICT");
 		return c;
 	}
 
@@ -114,6 +119,8 @@ public class AtomReader {
 			throws IOException {
 		long size;
 		String type;
+		int readSoFar;
+
 		try {
 			// the normal pattern is: [4-byte size] [4 byte identifier]
 
@@ -135,8 +142,10 @@ public class AtomReader {
 				GuardedInputStream gis = (GuardedInputStream) in;
 				long inputLimit = gis.getRemainingLimit() + 4;
 				if (size > inputLimit) {
-					throw new IOException("expected size is too large (" + size
-							+ ">" + inputLimit + ")");
+					size = inputLimit;
+					// throw new IOException("expected size is too large (" +
+					// size
+					// + ">" + inputLimit + ")");
 				}
 			}
 
@@ -154,6 +163,7 @@ public class AtomReader {
 							"An empty leading atom is not allowed.");
 				return new EmptyAtom(parent);
 			}
+			readSoFar = 8;
 
 			if (size == 1) { // this is a special code indicating the size won't
 								// fit in 4 bytes
@@ -168,6 +178,7 @@ public class AtomReader {
 				long j7 = (bigSizeArray[7] & 0xff);
 				size = (j0 << 56L) + (j1 << 48L) + (j2 << 40L) + (j3 << 32L)
 						+ (j4 << 24L) + (j5 << 16L) + (j6 << 8L) + (j7 << 0L);
+				readSoFar += 8;
 			}
 		} catch (IOException e) {
 			if (readAtomTypes.size() < 3)
@@ -179,7 +190,8 @@ public class AtomReader {
 			throw e;
 		}
 
-		GuardedInputStream atomIn = new GuardedInputStream(in, size - 8, false);
+		GuardedInputStream atomIn = new GuardedInputStream(in, size - readSoFar,
+				false);
 
 		return read(parent, atomIn, type);
 	}
@@ -229,12 +241,12 @@ public class AtomReader {
 							"sample description atoms must have a parent");
 
 				if (parent.getParent() != null
-						&& ((Atom) parent.getParent())
-								.getChild(VideoMediaInformationHeaderAtom.class) != null) {
+						&& ((Atom) parent.getParent()).getChild(
+								VideoMediaInformationHeaderAtom.class) != null) {
 					return new VideoSampleDescriptionAtom(parent, in);
 				} else if (parent.getParent() != null
-						&& ((Atom) parent.getParent())
-								.getChild(SoundMediaInformationHeaderAtom.class) != null) {
+						&& ((Atom) parent.getParent()).getChild(
+								SoundMediaInformationHeaderAtom.class) != null) {
 					return new SoundSampleDescriptionAtom(parent, in);
 				} else {
 					return new SampleDescriptionAtom(parent, in);
@@ -275,15 +287,18 @@ public class AtomReader {
 			return new UnknownLeafAtom(parent, atomType, in);
 		} finally {
 			readAtomTypes.add(atomType);
+			if (in.getRemainingLimit() > 0) {
+				Atom.skip(in, in.getRemainingLimit());
+			}
 		}
 	}
 
 	protected void validateAtomType(String atomType) throws IOException {
 		if (SUPPORTED_LEADING_ATOMS.contains(atomType))
 			return;
-		if (readAtomTypes.size() < 3)
-			throw new UnsupportedFileException("The atom type \"" + atomType
-					+ "\" is not supported.");
+		if (readAtomTypes.size() < 2)
+			throw new UnsupportedFileException(
+					"The atom type \"" + atomType + "\" is not supported.");
 	}
 
 	public FileType getFileType() {

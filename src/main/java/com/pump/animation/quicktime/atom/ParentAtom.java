@@ -119,7 +119,8 @@ public class ParentAtom extends Atom {
 	 * <li>The media data references, which typically specify the file where the
 	 * sample data is stored</li>
 	 * <li>The sample table atoms, which, for each media sample, specify the
-	 * sample description, duration, and byte offset from the data reference</li>
+	 * sample description, duration, and byte offset from the data
+	 * reference</li>
 	 * </ul>
 	 * <p>
 	 * The media atom has an atom type of 'mdia'. It must contain a media header
@@ -279,9 +280,9 @@ public class ParentAtom extends Atom {
 	 * A collection of all the ATOM TYPE constants in this class.
 	 */
 	public static final Collection<String> PARENT_ATOM_TYPES = Collections
-			.unmodifiableCollection(new HashSet<>(Arrays.asList(
-					ATOM_TYPE_MOVIE, ATOM_TYPE_USER_DATA, ATOM_TYPE_TRACK,
-					ATOM_TYPE_EDITS, ATOM_TYPE_MEDIA, ATOM_TYPE_TRACK_MATTE,
+			.unmodifiableCollection(new HashSet<>(Arrays.asList(ATOM_TYPE_MOVIE,
+					ATOM_TYPE_USER_DATA, ATOM_TYPE_TRACK, ATOM_TYPE_EDITS,
+					ATOM_TYPE_MEDIA, ATOM_TYPE_TRACK_MATTE,
 					ATOM_TYPE_MEDIA_INFORMATION, ATOM_TYPE_DATA_INFORMATION,
 					ATOM_TYPE_BASE_MEDIA_INFORMATION_HEADER,
 					ATOM_TYPE_REFERENCE_MOVIE, ATOM_TYPE_SAMPLE_TABLE,
@@ -349,7 +350,8 @@ public class ParentAtom extends Atom {
 		long sum = 8;
 		for (int a = 0; a < children.size(); a++) {
 			Atom atom = children.get(a);
-			sum += atom.getSize();
+			if (atom != null)
+				sum += atom.getSize();
 		}
 		return sum;
 	}

@@ -45,6 +45,18 @@ public class DataReferenceAtom extends LeafAtom {
 			Atom.read(in, data);
 		}
 
+		public String getType() {
+			return type;
+		}
+
+		public int getVersion() {
+			return version;
+		}
+
+		public int getFlags() {
+			return flags;
+		}
+
 		protected long getSize() {
 			return 12 + data.length;
 		}
@@ -85,7 +97,8 @@ public class DataReferenceAtom extends LeafAtom {
 	public void addEntry(String type, int version, int flags, byte[] data) {
 		DataReferenceEntry e = new DataReferenceEntry(type, version, flags,
 				data);
-		DataReferenceEntry[] newArray = new DataReferenceEntry[entries.length + 1];
+		DataReferenceEntry[] newArray = new DataReferenceEntry[entries.length
+				+ 1];
 		System.arraycopy(entries, 0, newArray, 0, entries.length);
 		newArray[newArray.length - 1] = e;
 		entries = newArray;
@@ -140,8 +153,8 @@ public class DataReferenceAtom extends LeafAtom {
 		sb.append(" ]");
 		String entriesString = sb.toString();
 
-		return "DataReferenceAtom[ version=" + version + ", " + "flags="
-				+ flags + ", " + "entries=" + entriesString + "]";
+		return "DataReferenceAtom[ version=" + version + ", " + "flags=" + flags
+				+ ", " + "entries=" + entriesString + "]";
 	}
 
 	/**

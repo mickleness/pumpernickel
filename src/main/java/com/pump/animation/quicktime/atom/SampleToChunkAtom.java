@@ -46,6 +46,18 @@ public class SampleToChunkAtom extends LeafAtom {
 			sampleDescriptionID = Atom.read32Int(in);
 		}
 
+		public long getFirstChunk() {
+			return firstChunk;
+		}
+
+		public long getSamplesPerChunk() {
+			return samplesPerChunk;
+		}
+
+		public long getSampleDescriptionID() {
+			return sampleDescriptionID;
+		}
+
 		@Override
 		public String toString() {
 			return "[ " + firstChunk + ", " + samplesPerChunk + ", "
@@ -90,13 +102,15 @@ public class SampleToChunkAtom extends LeafAtom {
 	public void addChunk(long chunkIndex, long samplesPerChunk,
 			long sampleDescriptionID) {
 		if (entries.length == 0) {
-			SampleToChunkEntry[] newArray = new SampleToChunkEntry[] { new SampleToChunkEntry(
-					chunkIndex, samplesPerChunk, sampleDescriptionID) };
+			SampleToChunkEntry[] newArray = new SampleToChunkEntry[] {
+					new SampleToChunkEntry(chunkIndex, samplesPerChunk,
+							sampleDescriptionID) };
 			entries = newArray;
 		} else {
 			for (int a = 0; a < entries.length; a++) {
 				if (entries[a].firstChunk <= chunkIndex
-						&& (a == entries.length - 1 || entries[a + 1].firstChunk > chunkIndex)) {
+						&& (a == entries.length - 1
+								|| entries[a + 1].firstChunk > chunkIndex)) {
 					// this is where this chunk belongs:
 					if (entries[a].samplesPerChunk == samplesPerChunk
 							&& entries[a].sampleDescriptionID == sampleDescriptionID) {
@@ -104,7 +118,8 @@ public class SampleToChunkAtom extends LeafAtom {
 						// written.
 						return;
 					} else {
-						SampleToChunkEntry[] newTable = new SampleToChunkEntry[entries.length + 1];
+						SampleToChunkEntry[] newTable = new SampleToChunkEntry[entries.length
+								+ 1];
 						System.arraycopy(entries, 0, newTable, 0,
 								entries.length);
 						newTable[newTable.length - 1] = new SampleToChunkEntry(
@@ -150,8 +165,8 @@ public class SampleToChunkAtom extends LeafAtom {
 		sb.append(" ]");
 		String entriesString = sb.toString();
 
-		return "SampleToChunkAtom[ version=" + version + ", " + "flags="
-				+ flags + ", " + "entries=" + entriesString + "]";
+		return "SampleToChunkAtom[ version=" + version + ", " + "flags=" + flags
+				+ ", " + "entries=" + entriesString + "]";
 	}
 
 	private SampleToChunkEntry getSampleToChunkEntry(int chunkIndex) {
@@ -204,7 +219,7 @@ public class SampleToChunkAtom extends LeafAtom {
 	/**
 	 * Return a table that maps samples to chunks.
 	 */
-	public SampleToChunkEntry[] getEntries() {
+	public SampleToChunkEntry[] getTable() {
 		SampleToChunkEntry[] copy = new SampleToChunkEntry[entries.length];
 		System.arraycopy(entries, 0, copy, 0, entries.length);
 		return copy;

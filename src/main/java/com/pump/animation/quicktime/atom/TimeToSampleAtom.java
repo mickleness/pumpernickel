@@ -61,6 +61,14 @@ public class TimeToSampleAtom extends LeafAtom {
 			sampleDuration = Atom.read32Int(in);
 		}
 
+		public long getSampleCount() {
+			return sampleCount;
+		}
+
+		public long getSampleDuration() {
+			return sampleDuration;
+		}
+
 		@Override
 		public String toString() {
 			return "[" + sampleCount + ", " + sampleDuration + "]";
@@ -158,7 +166,8 @@ public class TimeToSampleAtom extends LeafAtom {
 	public void addSampleTime(long sampleCount, long duration) {
 		if (table.length == 0
 				|| table[table.length - 1].sampleDuration != duration) {
-			TimeToSampleEntry[] newTable = new TimeToSampleEntry[table.length + 1];
+			TimeToSampleEntry[] newTable = new TimeToSampleEntry[table.length
+					+ 1];
 			System.arraycopy(table, 0, newTable, 0, table.length);
 			newTable[newTable.length - 1] = new TimeToSampleEntry(sampleCount,
 					duration);
@@ -175,8 +184,8 @@ public class TimeToSampleAtom extends LeafAtom {
 			}
 			sampleIndex = sampleIndex - table[a].sampleCount;
 		}
-		throw new RuntimeException("Could not find a sample at index "
-				+ sampleIndex);
+		throw new RuntimeException(
+				"Could not find a sample at index " + sampleIndex);
 	}
 
 	/**

@@ -54,7 +54,8 @@ public abstract class Atom implements TreeNode {
 		}
 	};
 
-	protected static void read(InputStream in, byte[] array) throws IOException {
+	protected static void read(InputStream in, byte[] array)
+			throws IOException {
 		read(in, array, 0, array.length);
 	}
 
@@ -63,7 +64,8 @@ public abstract class Atom implements TreeNode {
 		Field[] f = c.getFields();
 		for (int a = 0; a < f.length; a++) {
 			if (((f[a].getModifiers() & Modifier.STATIC) > 0)
-					&& (f[a].getType() == Integer.TYPE || f[a].getType() == Integer.class)) {
+					&& (f[a].getType() == Integer.TYPE
+							|| f[a].getType() == Integer.class)) {
 				try {
 					int k = ((Number) f[a].get(null)).intValue();
 					if (k == i)
@@ -169,15 +171,15 @@ public abstract class Atom implements TreeNode {
 		return ((array2[0] & 0xff) << 8) + (array2[1] & 0xff);
 	}
 
-	protected synchronized static final void write16Int(OutputStream out, long i)
-			throws IOException {
+	protected synchronized static final void write16Int(OutputStream out,
+			long i) throws IOException {
 		array2[0] = (byte) ((i >> 8) & 0xff);
 		array2[1] = (byte) (i & 0xff);
 		out.write(array2);
 	}
 
-	protected synchronized static final void write48Int(OutputStream out, long i)
-			throws IOException {
+	protected synchronized static final void write48Int(OutputStream out,
+			long i) throws IOException {
 		array6[0] = (byte) ((i >> 40) & 0xff);
 		array6[1] = (byte) ((i >> 32) & 0xff);
 		array6[2] = (byte) ((i >> 24) & 0xff);
@@ -271,6 +273,10 @@ public abstract class Atom implements TreeNode {
 			InputStream in) throws IOException {
 		read(in, array32);
 		int size = array32[0] & 0xff;
+
+		// just in case
+		size = Math.min(size, 31);
+
 		StringBuffer sb = new StringBuffer();
 		for (int a = 0; a < size; a++) {
 			sb.append((char) (array32[a + 1] & 0xff));
@@ -470,7 +476,8 @@ public abstract class Atom implements TreeNode {
 		this.parent = parent;
 	}
 
-	public TreeNode getParent() {
+	@Override
+	public Atom getParent() {
 		return parent;
 	}
 
@@ -524,8 +531,8 @@ public abstract class Atom implements TreeNode {
 		writeContents(out2);
 		if (out2.getLimit() != 0) {
 			// System.err.println(this);
-			throw new IOException("This atom is " + out2.getLimit()
-					+ " byte(s) too small.");
+			throw new IOException(
+					"This atom is " + out2.getLimit() + " byte(s) too small.");
 		}
 	}
 

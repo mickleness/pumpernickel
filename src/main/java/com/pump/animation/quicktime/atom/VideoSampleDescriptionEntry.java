@@ -77,7 +77,9 @@ public class VideoSampleDescriptionEntry extends SampleDescriptionEntry {
 	 */
 	protected long spatialQuality = 512;
 
-	/** A 16-bit integer that specifies the width of the source image in pixels. */
+	/**
+	 * A 16-bit integer that specifies the width of the source image in pixels.
+	 */
 	protected int width;
 
 	/**
@@ -186,9 +188,9 @@ public class VideoSampleDescriptionEntry extends SampleDescriptionEntry {
 	@Override
 	public String toString() {
 		return "VideoSampleDescriptionEntry[ type=\"" + type + "\", "
-				+ "dataReference=" + dataReference + ", " + "version="
-				+ version + ", " + "revision=" + revision + ", " + "vendor=\""
-				+ vendor + "\", " + "temporalQuality=" + temporalQuality + ", "
+				+ "dataReference=" + dataReference + ", " + "version=" + version
+				+ ", " + "revision=" + revision + ", " + "vendor=\"" + vendor
+				+ "\", " + "temporalQuality=" + temporalQuality + ", "
 				+ "spatialQuality=" + spatialQuality + ", " + "width=" + width
 				+ ", " + "height=" + height + ", " + "horizontalResolution="
 				+ horizontalResolution + ", " + "verticalResolution="
@@ -301,7 +303,7 @@ public class VideoSampleDescriptionEntry extends SampleDescriptionEntry {
 	}
 
 	/**
-	 * Return a 16-bit integer that identifies which color table ot use. If this
+	 * Return a 16-bit integer that identifies which color table to use. If this
 	 * field is set to -1, the default color table should be used for the
 	 * specified depth. For all depths below 16 bits per pixels, this indicates
 	 * a standard macintosh color table for the specified depth. Depths of 16,
