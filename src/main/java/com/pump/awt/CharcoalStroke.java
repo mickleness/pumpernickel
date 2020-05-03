@@ -14,6 +14,8 @@ import java.awt.BasicStroke;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
+import java.io.IOException;
+import java.io.Serializable;
 
 import com.pump.geom.GeneralPathWriter;
 
@@ -28,11 +30,13 @@ import com.pump.geom.GeneralPathWriter;
  * It is not recommended to layer a <code>CharcoalStroke</code> on top of
  * another <code>CharcoalStroke</code>, because they are very complex.
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2008/12/strokes-charcoal-stroke.html">Strokes:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2008/12/strokes-charcoal-stroke.html">Strokes:
  *      a Charcoal Stroke</a>
  */
-public class CharcoalStroke implements FilteredStroke {
+public class CharcoalStroke implements FilteredStroke, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	Stroke stroke;
 	float crackSize, angle;
 	int randomSeed;
@@ -65,7 +69,8 @@ public class CharcoalStroke implements FilteredStroke {
 	 * @param randomSeed
 	 *            the random seed to use.
 	 */
-	public CharcoalStroke(Stroke s, float crackSize, float angle, int randomSeed) {
+	public CharcoalStroke(Stroke s, float crackSize, float angle,
+			int randomSeed) {
 		this.stroke = s;
 		this.crackSize = crackSize;
 		this.angle = angle;
@@ -125,8 +130,8 @@ public class CharcoalStroke implements FilteredStroke {
 		if (crackSize == 0)
 			return shape;
 
-		GeneralPath newShape = new GeneralPath(shape.getPathIterator(null)
-				.getWindingRule());
+		GeneralPath newShape = new GeneralPath(
+				shape.getPathIterator(null).getWindingRule());
 		GeneralPathWriter writer = new GeneralPathWriter(newShape);
 
 		float maxDepth = Float.MAX_VALUE;
@@ -158,5 +163,29 @@ public class CharcoalStroke implements FilteredStroke {
 	 */
 	public float getCrackSize() {
 		return crackSize;
+	}
+
+	private void writeObject(java.io.ObjectOutputStream out)
+			throws IOException {
+		out.writeInt(0);
+		out.writeFloat(crackSize);
+		out.writeFloat(angle);
+		out.writeInt(randomSeed);
+		out.writeObject(stroke);
+
+	}
+
+	private void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		int internalVersion = in.readInt();
+		if (internalVersion == 0) {
+			crackSize = in.readFloat();
+			angle = in.readFloat();
+			randomSeed = in.readInt();
+			stroke = (Stroke) in.readObject();
+		} else {
+			throw new IOException(
+					"Unsupported internal version: " + internalVersion);
+		}
 	}
 }

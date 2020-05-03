@@ -19,6 +19,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Objects;
+
+import com.pump.awt.serialization.AWTSerializationUtils;
+import com.pump.io.serialization.FilteredObjectInputStream;
+import com.pump.io.serialization.FilteredObjectOutputStream;
 
 /**
  * This effectively extends <code>TexturePaint</code> to support arbitrary
@@ -30,21 +37,30 @@ import java.awt.image.ColorModel;
  * to work the paint context correctly if this class officially extends
  * <code>TexturePaint</code>.
  *
- * @see <a
- *      href="https://javagraphics.blogspot.com/2008/06/texturepaints-and-affinetransforms.html">TexturePaints
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2008/06/texturepaints-and-affinetransforms.html">TexturePaints
  *      and AffineTransforms</a>
  */
-public class TransformedTexturePaint implements Paint {
+public class TransformedTexturePaint implements Paint, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	TexturePaint texturePaint;
 	AffineTransform transform;
 
-	public TransformedTexturePaint(BufferedImage txtr, Rectangle2D anchor,
+	public TransformedTexturePaint(TexturePaint texturePaint,
 			AffineTransform transform) {
-		texturePaint = new TexturePaint(txtr, anchor);
+		Objects.requireNonNull(texturePaint);
+		this.texturePaint = texturePaint;
+
 		if (transform == null)
 			transform = new AffineTransform();
 
 		this.transform = new AffineTransform(transform);
+	}
+
+	public TransformedTexturePaint(BufferedImage txtr, Rectangle2D anchor,
+			AffineTransform transform) {
+		this(new TexturePaint(txtr, anchor), transform);
 	}
 
 	public AffineTransform getTransform() {
@@ -52,7 +68,8 @@ public class TransformedTexturePaint implements Paint {
 	}
 
 	public PaintContext createContext(ColorModel cm, Rectangle deviceBounds,
-			Rectangle2D userBounds, AffineTransform xform, RenderingHints hints) {
+			Rectangle2D userBounds, AffineTransform xform,
+			RenderingHints hints) {
 		AffineTransform newTransform = new AffineTransform(xform);
 		newTransform.concatenate(transform);
 		// this is necessary on Java 1.4 to avoid a NullPointerException
@@ -75,5 +92,29 @@ public class TransformedTexturePaint implements Paint {
 
 	public int getTransparency() {
 		return texturePaint.getTransparency();
+	}
+
+	private void writeObject(java.io.ObjectOutputStream out)
+			throws IOException {
+		FilteredObjectOutputStream fout = AWTSerializationUtils
+				.createFilteredObjectOutputStream(out);
+		fout.writeInt(0);
+		fout.writeObject(transform);
+		fout.writeObject(texturePaint);
+
+	}
+
+	private void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		FilteredObjectInputStream fin = new FilteredObjectInputStream(in);
+
+		int internalVersion = fin.readInt();
+		if (internalVersion == 0) {
+			transform = (AffineTransform) fin.readObject();
+			texturePaint = (TexturePaint) fin.readObject();
+		} else {
+			throw new IOException(
+					"Unsupported internal version: " + internalVersion);
+		}
 	}
 }

@@ -14,6 +14,8 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Random;
 
 import com.pump.geom.MeasuredShape;
@@ -22,28 +24,19 @@ import com.pump.geom.MeasuredShape;
  * This <code>Stroke</code> that resembles a bristle by splattering tiny
  * triangles and dots over a path.
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2008/05/strokes-bristle-stroke.html">Strokes:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2008/05/strokes-bristle-stroke.html">Strokes:
  *      a Bristle Stroke</a>
  */
-public class BristleStroke implements Stroke {
-	private static final int SHAPE_TRIANGLE = 0;
-	private static final int SHAPE_SQUARE = 1;
-	private static final int SHAPE_STAR = 2;
-	private static final int SHAPE_TRIANGLE_OR_SQUARE = 3;
+public class BristleStroke implements Stroke, Serializable {
+	private static final long serialVersionUID = 1L;
 
-	/**
-	 * (I experimented with a few different shapes, but decided in the end that
-	 * a simple mix of squares and triangles is sufficient.)
-	 */
-	private final int shape = SHAPE_TRIANGLE_OR_SQUARE;
-
-	public final float width;
-	public final float thickness;
-	private final int layers;
-	private final long randomSeed;
-	private final float grain;
-	private final float spacing;
+	private float width;
+	private float thickness;
+	private int layers;
+	private long randomSeed;
+	private float grain;
+	private float spacing;
 
 	/**
 	 * Creates a new BristleStroke.
@@ -73,11 +66,11 @@ public class BristleStroke implements Stroke {
 	 */
 	public BristleStroke(float width, float thickness, long randomSeed) {
 		if (width <= 0)
-			throw new IllegalArgumentException("the width (" + width
-					+ ") must be positive");
+			throw new IllegalArgumentException(
+					"the width (" + width + ") must be positive");
 		if (thickness < 0)
-			throw new IllegalArgumentException("the thickness (" + thickness
-					+ ") must be greater than 0");
+			throw new IllegalArgumentException(
+					"the thickness (" + thickness + ") must be greater than 0");
 		this.width = width;
 		this.thickness = thickness;
 		this.grain = getGrain(width, thickness);
@@ -143,13 +136,13 @@ public class BristleStroke implements Stroke {
 				r.setSeed(randomSeed + 1000 * a + 10000 * b);
 
 				float d = r.nextFloat() * (maxGapDistance - minGapDistance)
-						+ minGapDistance
-						* (1 + 20 * (1 - thickness) * Math.abs(k2 * k2));
+						+ minGapDistance * (1
+								+ 20 * (1 - thickness) * Math.abs(k2 * k2));
 				while (d < paths[b].getOriginalDistance()) {
 					float gapDistance = r.nextFloat()
 							* (maxGapDistance - minGapDistance)
-							+ minGapDistance
-							* (1 + 20 * (1 - thickness) * Math.abs(k2 * k2));
+							+ minGapDistance * (1
+									+ 20 * (1 - thickness) * Math.abs(k2 * k2));
 
 					paths[b].getPoint(d, p2);
 					float angle = paths[b].getTangentSlope(d);
@@ -165,104 +158,43 @@ public class BristleStroke implements Stroke {
 
 					float rotation = r.nextFloat() * 2 * 3.145f;
 
-					int thisShape = shape;
-					if (thisShape == SHAPE_TRIANGLE_OR_SQUARE) {
-						thisShape = r.nextInt(2);
-					}
+					boolean isTriangle = r.nextBoolean();
 
-					if (thisShape == SHAPE_TRIANGLE) {
+					if (isTriangle) {
 						path.moveTo(
 								(float) (x + grain / 2.0
 										* Math.cos(rotation + 2 * Math.PI / 3)),
-								(float) (y + grain / 2.0
-										* Math.sin(rotation + 2 * Math.PI / 3)));
+								(float) (y + grain / 2.0 * Math
+										.sin(rotation + 2 * Math.PI / 3)));
 						path.lineTo(
 								(float) (x + grain / 2.0
 										* Math.cos(rotation + 4 * Math.PI / 3)),
-								(float) (y + grain / 2.0
-										* Math.sin(rotation + 4 * Math.PI / 3)));
+								(float) (y + grain / 2.0 * Math
+										.sin(rotation + 4 * Math.PI / 3)));
 						path.lineTo(
 								(float) (x + grain / 2.0 * Math.cos(rotation)),
 								(float) (y + grain / 2.0 * Math.sin(rotation)));
 						path.closePath();
-					} else if (thisShape == SHAPE_SQUARE) {
+					} else {
 						path.moveTo(
 								(float) (x + grain / 2.0
 										* Math.cos(rotation + 2 * Math.PI / 4)),
-								(float) (y + grain / 2.0
-										* Math.sin(rotation + 2 * Math.PI / 4)));
+								(float) (y + grain / 2.0 * Math
+										.sin(rotation + 2 * Math.PI / 4)));
 						path.lineTo(
 								(float) (x + grain / 2.0
 										* Math.cos(rotation + 4 * Math.PI / 4)),
-								(float) (y + grain / 2.0
-										* Math.sin(rotation + 4 * Math.PI / 4)));
+								(float) (y + grain / 2.0 * Math
+										.sin(rotation + 4 * Math.PI / 4)));
 						path.lineTo(
 								(float) (x + grain / 2.0
 										* Math.cos(rotation + 6 * Math.PI / 4)),
-								(float) (y + grain / 2.0
-										* Math.sin(rotation + 6 * Math.PI / 4)));
+								(float) (y + grain / 2.0 * Math
+										.sin(rotation + 6 * Math.PI / 4)));
 						path.lineTo(
 								(float) (x + grain / 2.0 * Math.cos(rotation)),
 								(float) (y + grain / 2.0 * Math.sin(rotation)));
 						path.closePath();
-					} else if (thisShape == SHAPE_STAR) {
-						path.moveTo(
-								(float) (x + grain / (6.0 + 2 - 2 * thickness)
-										* Math.cos(rotation)),
-								(float) (y + grain / (6.0 + 2 - 2 * thickness)
-										* Math.sin(rotation)));
-						path.lineTo(
-								(float) (x + grain
-										/ 2.0
-										* Math.cos(rotation + 2 * Math.PI / 8.0)),
-								(float) (y + grain
-										/ 2.0
-										* Math.sin(rotation + 2 * Math.PI / 8.0)));
-
-						path.lineTo(
-								(float) (x + grain / (6.0 + 2 - 2 * thickness)
-										* Math.cos(rotation + Math.PI / 2)),
-								(float) (y + grain / (6.0 + 2 - 2 * thickness)
-										* Math.sin(rotation + Math.PI / 2)));
-						path.lineTo(
-								(float) (x + grain
-										/ 2.0
-										* Math.cos(rotation + Math.PI / 2 + 2
-												* Math.PI / 8.0)),
-								(float) (y + grain
-										/ 2.0
-										* Math.sin(rotation + Math.PI / 2 + 2
-												* Math.PI / 8.0)));
-
-						path.lineTo(
-								(float) (x + grain / (6.0 + 2 - 2 * thickness)
-										* Math.cos(rotation + Math.PI)),
-								(float) (y + grain / (6.0 + 2 - 2 * thickness)
-										* Math.sin(rotation + Math.PI)));
-						path.lineTo(
-								(float) (x + grain
-										/ 2.0
-										* Math.cos(rotation + Math.PI + 2
-												* Math.PI / 8.0)),
-								(float) (y + grain
-										/ 2.0
-										* Math.sin(rotation + Math.PI + 2
-												* Math.PI / 8.0)));
-
-						path.lineTo(
-								(float) (x + grain / (6.0 + 2 - 2 * thickness)
-										* Math.cos(rotation + 3 * Math.PI / 2)),
-								(float) (y + grain / (6.0 + 2 - 2 * thickness)
-										* Math.sin(rotation + 3 * Math.PI / 2)));
-						path.lineTo(
-								(float) (x + grain
-										/ 2.0
-										* Math.cos(rotation + 3 * Math.PI / 2
-												+ 2 * Math.PI / 8.0)),
-								(float) (y + grain
-										/ 2.0
-										* Math.sin(rotation + 3 * Math.PI / 2
-												+ 2 * Math.PI / 8.0)));
 					}
 
 					d = d + gapDistance;
@@ -270,5 +202,32 @@ public class BristleStroke implements Stroke {
 			}
 		}
 		return path;
+	}
+
+	private void writeObject(java.io.ObjectOutputStream out)
+			throws IOException {
+		out.writeInt(0);
+		out.writeFloat(width);
+		out.writeFloat(thickness);
+		out.writeInt(layers);
+		out.writeLong(randomSeed);
+		out.writeFloat(grain);
+		out.writeFloat(spacing);
+	}
+
+	private void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		int internalVersion = in.readInt();
+		if (internalVersion == 0) {
+			width = in.readFloat();
+			thickness = in.readFloat();
+			layers = in.readInt();
+			randomSeed = in.readLong();
+			grain = in.readFloat();
+			spacing = in.readFloat();
+		} else {
+			throw new IOException(
+					"Unsupported internal version: " + internalVersion);
+		}
 	}
 }

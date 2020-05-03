@@ -13,6 +13,8 @@ package com.pump.awt;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
+import java.io.IOException;
+import java.io.Serializable;
 
 import com.pump.geom.GeneralPathWriter;
 
@@ -23,17 +25,17 @@ import com.pump.geom.GeneralPathWriter;
  * 
  * @see CalligraphyPathWriter
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2009/05/strokes-calligraphy-stroke.html">Strokes:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2009/05/strokes-calligraphy-stroke.html">Strokes:
  *      a Calligraphy Stroke</a>
  */
-public class CalligraphyStroke implements Stroke {
+public class CalligraphyStroke implements Stroke, Serializable {
 
 	/** The width of this stroke in pixels. */
-	public final float width;
+	private float width;
 
 	/** The angle of the pen in radians. */
-	public final float theta;
+	private float theta;
 
 	/**
 	 * Create a simple CalligraphyStroke with an angle of 3*pi/4.
@@ -88,5 +90,25 @@ public class CalligraphyStroke implements Stroke {
 		cpw.write(p);
 		cpw.flush();
 		return dest;
+	}
+
+	private void writeObject(java.io.ObjectOutputStream out)
+			throws IOException {
+		out.writeInt(0);
+		out.writeFloat(width);
+		out.writeFloat(theta);
+
+	}
+
+	private void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		int internalVersion = in.readInt();
+		if (internalVersion == 0) {
+			width = in.readFloat();
+			theta = in.readFloat();
+		} else {
+			throw new IOException(
+					"Unsupported internal version: " + internalVersion);
+		}
 	}
 }

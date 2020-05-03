@@ -23,6 +23,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -35,14 +37,15 @@ import java.util.Objects;
  * To activate: make sure the RenderingHints for VALUE_COLOR_RENDER_QUALITY,
  * VALUE_RENDER_QUALITY, or VALUE_DITHER_ENABLE is used.
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients:
  *      Avoiding Color Banding</a>
- * @see <a
- *      href="https://javagraphics.blogspot.com/2009/11/gradients-boring-discussion.html">Gradients:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2009/11/gradients-boring-discussion.html">Gradients:
  *      a Boring Discussion</a>
  */
-public class GradientTexturePaint implements Paint {
+public class GradientTexturePaint implements Paint, Serializable {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * This is an advanced option only used for testing/debugging.
@@ -52,7 +55,8 @@ public class GradientTexturePaint implements Paint {
 
 	/** This applies error diffusion to a gradient. */
 	static class DiffusedTextureSource extends TextureSource {
-		DiffusedTextureSource(Color[] colors, float[] fractions, double distance) {
+		DiffusedTextureSource(Color[] colors, float[] fractions,
+				double distance) {
 			boundsCheck(colors, fractions);
 
 			int[] argb = new int[colors.length];
@@ -150,9 +154,8 @@ public class GradientTexturePaint implements Paint {
 			int[][] argbQ = new int[size][depth];
 
 			// seed the array:
-			int[][] kernel = new int[][] { { 1, 3, 5, 3, 1 },
-					{ 3, 5, 7, 5, 3 }, { 5, 7, 0, 7, 5 }, { 3, 5, 7, 5, 3 },
-					{ 1, 3, 5, 3, 1 } };
+			int[][] kernel = new int[][] { { 1, 3, 5, 3, 1 }, { 3, 5, 7, 5, 3 },
+					{ 5, 7, 0, 7, 5 }, { 3, 5, 7, 5, 3 }, { 1, 3, 5, 3, 1 } };
 			double redCarryover = 0;
 			double greenCarryover = 0;
 			double blueCarryover = 0;
@@ -213,8 +216,8 @@ public class GradientTexturePaint implements Paint {
 											/ localSum;
 									greenE[y2][x2] -= newGreenError
 											* kernel[i][j] / localSum;
-									blueE[y2][x2] -= newBlueError
-											* kernel[i][j] / localSum;
+									blueE[y2][x2] -= newBlueError * kernel[i][j]
+											/ localSum;
 									alphaE[y2][x2] -= newAlphaError
 											* kernel[i][j] / localSum;
 								}
@@ -268,22 +271,22 @@ public class GradientTexturePaint implements Paint {
 						float newAlphaError = a - alpha[y];
 						for (int i = 0; i < kernel.length; i++) {
 							for (int j = 0; j < kernel[i].length; j++) {
-								redE[(y + i) % size][(x + j - kernel[0].length
-										/ 2 + depth)
+								redE[(y + i) % size][(x + j
+										- kernel[0].length / 2 + depth)
 										% depth] -= newRedError * kernel[i][j]
-										/ kernelSum;
+												/ kernelSum;
 								greenE[(y + i) % size][(x + j
 										- kernel[0].length / 2 + depth)
-										% depth] -= newGreenError
-										* kernel[i][j] / kernelSum;
-								blueE[(y + i) % size][(x + j - kernel[0].length
-										/ 2 + depth)
+										% depth] -= newGreenError * kernel[i][j]
+												/ kernelSum;
+								blueE[(y + i) % size][(x + j
+										- kernel[0].length / 2 + depth)
 										% depth] -= newBlueError * kernel[i][j]
-										/ kernelSum;
+												/ kernelSum;
 								alphaE[(y + i) % size][(x + j
 										- kernel[0].length / 2 + depth)
-										% depth] -= newAlphaError
-										* kernel[i][j] / kernelSum;
+										% depth] -= newAlphaError * kernel[i][j]
+												/ kernelSum;
 							}
 						}
 					}
@@ -295,8 +298,8 @@ public class GradientTexturePaint implements Paint {
 			for (int x = 0; x < size; x++) {
 				image.getRaster().setDataElements(x, 0, 1, depth, argbQ[x]);
 			}
-			texturePaint = new TexturePaint(image, new Rectangle(0, 0, size,
-					depth));
+			texturePaint = new TexturePaint(image,
+					new Rectangle(0, 0, size, depth));
 		}
 
 		private static boolean isSeed(int x, int y) {
@@ -321,7 +324,8 @@ public class GradientTexturePaint implements Paint {
 	 * if similar colors are stretched over a long distance.
 	 */
 	static class SimpleTextureSource extends TextureSource {
-		SimpleTextureSource(Color[] colors, float[] fractions, double distance) {
+		SimpleTextureSource(Color[] colors, float[] fractions,
+				double distance) {
 			int[] argb = new int[colors.length];
 
 			for (int a = 0; a < argb.length; a++) {
@@ -354,9 +358,12 @@ public class GradientTexturePaint implements Paint {
 							if (f >= fractions[a] && f <= fractions[a + 1]) {
 								float rel = (f - fractions[a])
 										/ (fractions[a + 1] - fractions[a]);
-								row[x] = ((int) (a1 * (1 - rel) + a2 * rel) << 24)
-										+ ((int) (r1 * (1 - rel) + r2 * rel) << 16)
-										+ ((int) (g1 * (1 - rel) + g2 * rel) << 8)
+								row[x] = ((int) (a1 * (1 - rel)
+										+ a2 * rel) << 24)
+										+ ((int) (r1 * (1 - rel)
+												+ r2 * rel) << 16)
+										+ ((int) (g1 * (1 - rel)
+												+ g2 * rel) << 8)
 										+ ((int) (b1 * (1 - rel) + b2 * rel));
 								break search;
 							}
@@ -366,7 +373,8 @@ public class GradientTexturePaint implements Paint {
 				}
 			}
 			image.getRaster().setDataElements(0, 0, size, 1, row);
-			texturePaint = new TexturePaint(image, new Rectangle(0, 0, size, 1));
+			texturePaint = new TexturePaint(image,
+					new Rectangle(0, 0, size, 1));
 		}
 	}
 
@@ -386,10 +394,10 @@ public class GradientTexturePaint implements Paint {
 	 */
 	private static void boundsCheck(Color[] colors, float[] fractions) {
 		if (colors.length != fractions.length)
-			throw new IllegalArgumentException("The size of the colors array ("
-					+ colors.length
-					+ ") must equal the size of the fractions array ("
-					+ fractions.length + ")");
+			throw new IllegalArgumentException(
+					"The size of the colors array (" + colors.length
+							+ ") must equal the size of the fractions array ("
+							+ fractions.length + ")");
 		for (int a = 0; a < fractions.length; a++) {
 			if (fractions[a] < 0 || fractions[a] > 1)
 				throw new IllegalArgumentException(
@@ -440,8 +448,8 @@ public class GradientTexturePaint implements Paint {
 
 	/**
 	 * Return true if this combination of colors and fractions should apply
-	 * error diffusion prevent <a
-	 * href="http://en.wikipedia.org/wiki/Colour_banding">color banding</a>.
+	 * error diffusion prevent
+	 * <a href="http://en.wikipedia.org/wiki/Colour_banding">color banding</a>.
 	 * 
 	 * @param colors
 	 *            the colors to use in this gradient.
@@ -459,8 +467,8 @@ public class GradientTexturePaint implements Paint {
 	 * @return true if the gradient the arguments described should apply error
 	 *         diffusion to prevent color banding.
 	 * 
-	 * @see <a
-	 *      href="https://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients:
+	 * @see <a href=
+	 *      "https://javagraphics.blogspot.com/2014/03/gradients-avoiding-color-banding.html">Gradients:
 	 *      Avoiding Color Banding</a>
 	 */
 	public static boolean needsDiffusion(Color[] colors, float[] fractions,
@@ -597,7 +605,8 @@ public class GradientTexturePaint implements Paint {
 				cycledColors[a] = colors[a];
 				cycledColors[cycledColors.length - 1 - a] = colors[a];
 				cycledFractions[a] = fractions[a] * .5f;
-				cycledFractions[cycledFractions.length - 1 - a] = (.5f - fractions[a] * .5f) + .5f;
+				cycledFractions[cycledFractions.length - 1
+						- a] = (.5f - fractions[a] * .5f) + .5f;
 			}
 			colors = cycledColors;
 			fractions = cycledFractions;
@@ -633,7 +642,8 @@ public class GradientTexturePaint implements Paint {
 	}
 
 	public PaintContext createContext(ColorModel cm, Rectangle deviceBounds,
-			Rectangle2D userBounds, AffineTransform xform, RenderingHints hints) {
+			Rectangle2D userBounds, AffineTransform xform,
+			RenderingHints hints) {
 
 		// this is necessary on Java 1.4 to avoid a NullPointerException
 		// from:
@@ -642,14 +652,14 @@ public class GradientTexturePaint implements Paint {
 			hints = new RenderingHints(
 					new HashMap<RenderingHints.Key, Object>());
 
-		boolean useDiffusion = RenderingHints.VALUE_DITHER_ENABLE.equals(hints
-				.get(RenderingHints.KEY_DITHERING))
-				|| RenderingHints.VALUE_DITHER_DEFAULT.equals(hints
-						.get(RenderingHints.KEY_DITHERING))
-				|| RenderingHints.VALUE_COLOR_RENDER_QUALITY.equals(hints
-						.get(RenderingHints.KEY_COLOR_RENDERING))
-				|| RenderingHints.VALUE_RENDER_QUALITY.equals(hints
-						.get(RenderingHints.KEY_RENDERING));
+		boolean useDiffusion = RenderingHints.VALUE_DITHER_ENABLE
+				.equals(hints.get(RenderingHints.KEY_DITHERING))
+				|| RenderingHints.VALUE_DITHER_DEFAULT
+						.equals(hints.get(RenderingHints.KEY_DITHERING))
+				|| RenderingHints.VALUE_COLOR_RENDER_QUALITY
+						.equals(hints.get(RenderingHints.KEY_COLOR_RENDERING))
+				|| RenderingHints.VALUE_RENDER_QUALITY
+						.equals(hints.get(RenderingHints.KEY_RENDERING));
 
 		TextureSource source;
 		if (useDiffusion && needsDiffusion) {
@@ -673,8 +683,8 @@ public class GradientTexturePaint implements Paint {
 		 * probably what the developer has in mind when (s)he turns on
 		 * antialiasing, we'll make that switch here for them.
 		 */
-		if (RenderingHints.VALUE_ANTIALIAS_ON.equals(hints
-				.get(RenderingHints.KEY_ANTIALIASING))) {
+		if (RenderingHints.VALUE_ANTIALIAS_ON
+				.equals(hints.get(RenderingHints.KEY_ANTIALIASING))) {
 			// I'm not sure if "hints" is a shared object or if we should make a
 			// clone.
 			// To be safe, clone it:
@@ -725,5 +735,41 @@ public class GradientTexturePaint implements Paint {
 	 */
 	public int getTransparency() {
 		return hasAlpha ? Transparency.TRANSLUCENT : Transparency.OPAQUE;
+	}
+
+	private void writeObject(java.io.ObjectOutputStream out)
+			throws IOException {
+		out.writeInt(0);
+		out.writeFloat(x1);
+		out.writeFloat(y1);
+		out.writeFloat(x2);
+		out.writeFloat(y2);
+		out.writeObject(transform);
+		out.writeBoolean(needsDiffusion);
+		out.writeBoolean(hasAlpha);
+		out.writeObject(fractions);
+		out.writeObject(cycle);
+		out.writeObject(colors);
+
+	}
+
+	private void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		int internalVersion = in.readInt();
+		if (internalVersion == 0) {
+			x1 = in.readFloat();
+			y1 = in.readFloat();
+			x2 = in.readFloat();
+			y2 = in.readFloat();
+			transform = (AffineTransform) in.readObject();
+			needsDiffusion = in.readBoolean();
+			hasAlpha = in.readBoolean();
+			fractions = (float[]) in.readObject();
+			cycle = (CycleMethod) in.readObject();
+			colors = (Color[]) in.readObject();
+		} else {
+			throw new IOException(
+					"Unsupported internal version: " + internalVersion);
+		}
 	}
 }

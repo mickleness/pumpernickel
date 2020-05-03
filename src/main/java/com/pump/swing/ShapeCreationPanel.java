@@ -10,18 +10,15 @@
  */
 package com.pump.swing;
 
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
+import com.pump.geom.ImmutableShape;
 import com.pump.geom.ShapeStringUtils;
 import com.pump.geom.ShapeUtils;
 import com.pump.plaf.ShapeCreationUI;
@@ -37,8 +34,8 @@ import com.pump.plaf.ShapeCreationUI;
  * You may want to override the UI to paint additional components or to better
  * control the stroke/paints used.
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2014/03/shapes-modeling-cubic-shapes-without.html">Shapes:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2014/03/shapes-modeling-cubic-shapes-without.html">Shapes:
  *      A ComponentUI to Create and Edit Shapes</a>
  */
 public class ShapeCreationPanel extends JComponent {
@@ -426,63 +423,6 @@ public class ShapeCreationPanel extends JComponent {
 			Selection newIndication = new Selection(shapeIndex, nodeIndex,
 					handle);
 			indicate(newIndication);
-		}
-	}
-
-	/**
-	 * A simple wrapper for a shape that makes it immutable.
-	 * <p>
-	 * (That is: if we simply stored data as a GeneralPath then other entities
-	 * may invoke <code>gpath.reset()</code>, or other methods to modify the
-	 * shape data.)
-	 */
-	protected static class ImmutableShape implements Shape {
-		Shape shape;
-
-		public ImmutableShape(Shape shape) {
-			if (shape == null)
-				throw new NullPointerException();
-			this.shape = shape;
-		}
-
-		public Rectangle getBounds() {
-			return shape.getBounds();
-		}
-
-		public Rectangle2D getBounds2D() {
-			return shape.getBounds2D();
-		}
-
-		public boolean contains(double x, double y) {
-			return shape.contains(x, y);
-		}
-
-		public boolean contains(Point2D p) {
-			return shape.contains(p);
-		}
-
-		public boolean intersects(double x, double y, double w, double h) {
-			return shape.intersects(x, y, w, h);
-		}
-
-		public boolean intersects(Rectangle2D r) {
-			return shape.intersects(r);
-		}
-
-		public boolean contains(double x, double y, double w, double h) {
-			return shape.contains(x, y, w, h);
-		}
-
-		public boolean contains(Rectangle2D r) {
-			return shape.contains(r);
-		}
-
-		public PathIterator getPathIterator(AffineTransform at) {
-			return shape.getPathIterator(at);
-		}
-
-		public PathIterator getPathIterator(AffineTransform at, double flatness) {
-			return shape.getPathIterator(at, flatness);
 		}
 	}
 
