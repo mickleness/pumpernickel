@@ -10,10 +10,16 @@
  */
 package com.pump.geom;
 
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RectangularShape;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is a collection of static methods relating to java.awt.Shapes.
@@ -106,8 +112,8 @@ public class ShapeUtils {
 			if (k == PathIterator.SEG_MOVETO) {
 				path.moveTo(f[0], f[1]);
 			} else if (k == PathIterator.SEG_LINETO) {
-				path.lineTo(lastX * (1 - t) + t * f[0], lastY * (1 - t) + t
-						* f[1]);
+				path.lineTo(lastX * (1 - t) + t * f[0],
+						lastY * (1 - t) + t * f[1]);
 			} else if (k == PathIterator.SEG_QUADTO) {
 				if (t > .999999) {
 					path.quadTo(f[0], f[1], f[2], f[3]);
@@ -383,7 +389,8 @@ public class ShapeUtils {
 			int k2 = iter2.currentSegment(coords2);
 			if (k1 != k2)
 				return false;
-			if (k1 == PathIterator.SEG_MOVETO || k1 == PathIterator.SEG_LINETO) {
+			if (k1 == PathIterator.SEG_MOVETO
+					|| k1 == PathIterator.SEG_LINETO) {
 				if (!equals(coords1, coords2, 2))
 					return false;
 			} else if (k1 == PathIterator.SEG_QUADTO) {
@@ -404,7 +411,8 @@ public class ShapeUtils {
 		return iter1.isDone() && iter2.isDone();
 	}
 
-	private static boolean equals(double[] array1, double[] array2, int length) {
+	private static boolean equals(double[] array1, double[] array2,
+			int length) {
 		for (int a = 0; a < length; a++) {
 			if (array1[a] != array2[a])
 				return false;
@@ -448,5 +456,147 @@ public class ShapeUtils {
 	public static boolean isEmpty(Shape shape) {
 		PathIterator i = shape.getPathIterator(null);
 		return i.isDone();
+	}
+
+	public static Shape clone(Shape shape) {
+		if (shape == null)
+			return null;
+
+		if (shape instanceof RectangularShape)
+			return (Shape) ((RectangularShape) shape).clone();
+
+		PathIterator pi = shape.getPathIterator(null);
+		Path2D p = new Path2D.Float(pi.getWindingRule());
+		p.append(pi, false);
+		return p;
+	}
+
+	/**
+	 * Convert the argument to an int-based Rectangle, if possible.
+	 * 
+	 * @param shape
+	 * @return a Rectangle that exactly matches the argument provided, or null
+	 *         if the argument is not an int-based Rectangle.
+	 */
+	public static Rectangle getRectangle(Shape shape) {
+		if (shape instanceof Rectangle)
+			return (Rectangle) shape;
+
+		Rectangle2D r2 = getRectangle2D(shape);
+		if (r2 == null)
+			return null;
+
+		int xi = (int) (r2.getX() + .5);
+		int wi = (int) (r2.getWidth() + .5);
+		int yi = (int) (r2.getY() + .5);
+		int hi = (int) (r2.getHeight() + .5);
+		if (Math.abs(xi - r2.getX()) < .00001
+				&& Math.abs(yi - r2.getY()) < .00001
+				&& Math.abs(wi - r2.getWidth()) < .00001
+				&& Math.abs(hi - r2.getHeight()) < .00001)
+			return new Rectangle(xi, yi, wi, hi);
+		return null;
+	}
+
+	/**
+	 * Convert the argument to a double-based Rectangle2D, if possible.
+	 * 
+	 * @param shape
+	 * @return a Rectangle2D that exactly matches the argument provided, or null
+	 *         if the argument is not an int-based Rectangle.
+	 */
+	public static Rectangle2D getRectangle2D(Shape shape) {
+		if (shape instanceof Rectangle2D)
+			return (Rectangle2D) shape;
+
+		if (shape == null)
+			return null;
+
+		List<Point2D> points = new ArrayList<>(4);
+		Rectangle2D returnValue = null;
+		PathIterator iter = shape.getPathIterator(null);
+		double[] coords = new double[6];
+		while (!iter.isDone()) {
+			int k = iter.currentSegment(coords);
+			if (k == PathIterator.SEG_MOVETO && points.isEmpty()) {
+				points.add(new Point2D.Double(coords[0], coords[1]));
+				returnValue = new Rectangle2D.Double(coords[0], coords[1], 0,
+						0);
+			} else if (k == PathIterator.SEG_LINETO && !points.isEmpty()) {
+				if (points.size() > 4)
+					return null;
+				Point2D pt = new Point2D.Double(coords[0], coords[1]);
+				points.add(pt);
+				returnValue.add(pt);
+			} else if (k == PathIterator.SEG_CLOSE) {
+				// do nothing
+			} else {
+				return null;
+			}
+			iter.next();
+		}
+
+		// if the last point is the same as the first point: remove the last
+		// point
+		if (!points.isEmpty()
+				&& points.get(points.size() - 1).equals(points.get(0)))
+			points.remove(points.size() - 1);
+
+		if (points.size() != 4)
+			return null;
+
+		Point2D topLeft = new Point2D.Double(returnValue.getMinX(),
+				returnValue.getMinY());
+		Point2D topRight = new Point2D.Double(returnValue.getMaxX(),
+				returnValue.getMinY());
+		Point2D bottomLeft = new Point2D.Double(returnValue.getMinX(),
+				returnValue.getMaxY());
+		Point2D bottomRight = new Point2D.Double(returnValue.getMaxX(),
+				returnValue.getMaxY());
+
+		// there's a more elegant way to do this, but we only have 8
+		// combinations so let's just enumerate them:
+
+		// If the points are ordered clockwise:
+
+		if (points.get(0).equals(topLeft) && points.get(1).equals(topRight)
+				&& points.get(2).equals(bottomRight)
+				&& points.get(3).equals(bottomLeft))
+			return returnValue;
+		if (points.get(0).equals(topRight) && points.get(1).equals(bottomRight)
+				&& points.get(2).equals(bottomLeft)
+				&& points.get(3).equals(topLeft))
+			return returnValue;
+		if (points.get(0).equals(bottomRight)
+				&& points.get(1).equals(bottomLeft)
+				&& points.get(2).equals(topLeft)
+				&& points.get(3).equals(topRight))
+			return returnValue;
+		if (points.get(0).equals(bottomLeft) && points.get(1).equals(topLeft)
+				&& points.get(2).equals(topRight)
+				&& points.get(3).equals(bottomRight))
+			return returnValue;
+
+		// If they're counter-clockwise:
+
+		if (points.get(0).equals(topLeft) && points.get(1).equals(bottomLeft)
+				&& points.get(2).equals(bottomRight)
+				&& points.get(3).equals(topRight))
+			return returnValue;
+		if (points.get(0).equals(topRight) && points.get(1).equals(topLeft)
+				&& points.get(2).equals(bottomLeft)
+				&& points.get(3).equals(bottomRight))
+			return returnValue;
+		if (points.get(0).equals(bottomRight) && points.get(1).equals(topRight)
+				&& points.get(2).equals(topLeft)
+				&& points.get(3).equals(bottomLeft))
+			return returnValue;
+		if (points.get(0).equals(bottomLeft)
+				&& points.get(1).equals(bottomRight)
+				&& points.get(2).equals(topRight)
+				&& points.get(3).equals(topLeft))
+			return returnValue;
+
+		return null;
 	}
 }
