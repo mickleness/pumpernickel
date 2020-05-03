@@ -18,8 +18,8 @@ public class ListCellPopupTarget implements PopupTarget {
 	public ListCellPopupTarget(JList<?> list, int selectedIndex) {
 		Objects.requireNonNull(list);
 		if (selectedIndex < 0 || selectedIndex >= list.getModel().getSize())
-			throw new IllegalArgumentException("selectedIndex ("
-					+ selectedIndex + ") should an index with this list");
+			throw new IllegalArgumentException("selectedIndex (" + selectedIndex
+					+ ") should an index with this list");
 		this.list = list;
 		this.selectedIndex = selectedIndex;
 	}
@@ -33,18 +33,27 @@ public class ListCellPopupTarget implements PopupTarget {
 		r.x += p.x;
 		r.y += p.y;
 
-		int z = 0;
+		int insetX = 0;
 		if (r.width > 30) {
-			z = 10;
+			insetX = 10;
 		} else if (r.width > 15) {
-			z = 4;
+			insetX = 4;
 		} else if (r.width > 8) {
-			z = 1;
+			insetX = 1;
 		}
-		r.x += z;
-		r.y += z;
-		r.width -= 2 * z;
-		r.height -= 2 * z;
+		r.x += insetX;
+		r.width -= 2 * insetX;
+
+		int insetY = 0;
+		if (r.height > 30) {
+			insetY = 10;
+		} else if (r.height > 15) {
+			insetY = 4;
+		} else if (r.height > 8) {
+			insetY = 1;
+		}
+		r.y += insetY;
+		r.height -= 2 * insetY;
 
 		return r;
 	}
