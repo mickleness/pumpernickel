@@ -1,14 +1,20 @@
 package com.pump.swing.popover;
 
+import java.awt.Component;
+import java.awt.KeyboardFocusManager;
+import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 
 /**
  * This PopoverVisibility will refresh the popover and/or its visibility when
@@ -17,8 +23,39 @@ import javax.swing.JComponent;
 public abstract class AbstractComponentVisibility<T extends JComponent>
 		implements PopoverVisibility<T> {
 
-	static class PopoverHierarchyBoundsListener implements
-			HierarchyBoundsListener {
+	/**
+	 * Return true if the popover owner or contents are inside the current
+	 * active window.
+	 * <p>
+	 * If this returns false most popovers should immediately hide. This will
+	 * return false when another window or application comes to the foreground.
+	 */
+	public static boolean isActiveWindow(JPopover<?> popover) {
+		return isInsideActiveWindow(popover.getOwner())
+				|| isInsideActiveWindow(popover.getContents());
+	}
+	
+	/**
+	 * Return true if the argument is inside the current active window.
+	 * (Or if it is the active window itself.)
+	 */
+	public static boolean isInsideActiveWindow(Component comp) {
+		Window activeWindow = KeyboardFocusManager
+				.getCurrentKeyboardFocusManager().getActiveWindow();
+		if (activeWindow == null)
+			return false;
+		return activeWindow == comp
+				|| SwingUtilities.isDescendingFrom(comp, activeWindow);
+	}
+
+	/**
+	 * The KeyboardFocusManager fires a PropertyChangeEvent with this property
+	 * when the active window changes.
+	 */
+	private static final String PROPERTY_ACTIVE_WINDOW = "activeWindow";
+
+	static class PopoverHierarchyBoundsListener
+			implements HierarchyBoundsListener {
 		JPopover<?> popover;
 
 		PopoverHierarchyBoundsListener(JPopover<?> popover) {
@@ -78,9 +115,30 @@ public abstract class AbstractComponentVisibility<T extends JComponent>
 		}
 	}
 
+	/**
+	 * This listener is notified when the KeyboardFocusManager changes the
+	 * "activeWindow" property.
+	 */
+	static class PopoverPropertyChangeListener
+			implements PropertyChangeListener {
+		JPopover<?> popover;
+
+		public PopoverPropertyChangeListener(JPopover<?> popover) {
+			this.popover = popover;
+		}
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			popover.refreshVisibility(false);
+
+		}
+
+	}
+
 	Map<JPopover<T>, PopoverHierarchyListener> hierarchyListenerMap = new HashMap<>();
 	Map<JPopover<T>, PopoverHierarchyBoundsListener> hierarchyBoundsListenerMap = new HashMap<>();
 	Map<JPopover<T>, PopoverComponentListener> componentListenerMap = new HashMap<>();
+	Map<JPopover<T>, PopoverPropertyChangeListener> propertyListenerMap = new HashMap<>();
 
 	@Override
 	public void install(JPopover<T> popover) {
@@ -105,6 +163,14 @@ public abstract class AbstractComponentVisibility<T extends JComponent>
 			componentListenerMap.put(popover, l3);
 			popover.getOwner().addComponentListener(l3);
 		}
+
+		PopoverPropertyChangeListener l4 = propertyListenerMap.get(popover);
+		if (l4 == null) {
+			l4 = new PopoverPropertyChangeListener(popover);
+			propertyListenerMap.put(popover, l4);
+			KeyboardFocusManager.getCurrentKeyboardFocusManager()
+					.addPropertyChangeListener(PROPERTY_ACTIVE_WINDOW, l4);
+		}
 	}
 
 	@Override
@@ -124,6 +190,11 @@ public abstract class AbstractComponentVisibility<T extends JComponent>
 		if (l3 != null) {
 			popover.getOwner().removeComponentListener(l3);
 		}
-	}
 
+		PopoverPropertyChangeListener l4 = propertyListenerMap.remove(popover);
+		if (l4 != null) {
+			KeyboardFocusManager.getCurrentKeyboardFocusManager()
+					.removePropertyChangeListener(PROPERTY_ACTIVE_WINDOW, l4);
+		}
+	}
 }

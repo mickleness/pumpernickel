@@ -25,8 +25,8 @@ import com.pump.awt.DescendantListener;
  * <p>
  * Also for JComboBoxes we restrict visibility when a component is expanded.
  */
-public class BasicPopoverVisibility<T extends JComponent> extends
-		AbstractComponentVisibility<T> {
+public class BasicPopoverVisibility<T extends JComponent>
+		extends AbstractComponentVisibility<T> {
 
 	static class PopoverFocusListener extends FocusAdapter {
 		JPopover<?> popover;
@@ -35,8 +35,8 @@ public class BasicPopoverVisibility<T extends JComponent> extends
 		PopoverFocusListener(JPopover<?> popover) {
 			this.popover = popover;
 
-			descendantListener = DescendantListener.addFocusListener(
-					popover.getOwner(), this, false);
+			descendantListener = DescendantListener
+					.addFocusListener(popover.getOwner(), this, false);
 		}
 
 		@Override
@@ -56,8 +56,8 @@ public class BasicPopoverVisibility<T extends JComponent> extends
 		PopoverMouseListener(JPopover<?> popover) {
 			this.popover = popover;
 
-			descendantListener = DescendantListener.addMouseListener(
-					popover.getOwner(), this, false);
+			descendantListener = DescendantListener
+					.addMouseListener(popover.getOwner(), this, false);
 		}
 
 		@Override
@@ -105,6 +105,10 @@ public class BasicPopoverVisibility<T extends JComponent> extends
 		if (isExpanded(owner)) {
 			newVisible = false;
 		}
+
+		if (isInsideActiveWindow(owner) == false
+				&& isInsideActiveWindow(contents) == false)
+			newVisible = false;
 
 		return newVisible;
 	}

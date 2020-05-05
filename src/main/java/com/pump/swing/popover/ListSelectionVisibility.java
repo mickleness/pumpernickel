@@ -14,8 +14,8 @@ import javax.swing.event.ListSelectionListener;
 /**
  * This PopoverVisibility shows a popover for a specific JList selection.
  */
-public class ListSelectionVisibility<T extends JComponent> extends
-		AbstractComponentVisibility<T> {
+public class ListSelectionVisibility<T extends JComponent>
+		extends AbstractComponentVisibility<T> {
 	static class PopoverListSelectionListener implements ListSelectionListener {
 		JPopover<?> popover;
 
@@ -44,7 +44,8 @@ public class ListSelectionVisibility<T extends JComponent> extends
 	 */
 	public ListSelectionVisibility(JList<?> list, Object... expectedSelection) {
 		this.list = list;
-		this.expectedSelection = new HashSet<>(Arrays.asList(expectedSelection));
+		this.expectedSelection = new HashSet<>(
+				Arrays.asList(expectedSelection));
 	}
 
 	@Override
@@ -52,7 +53,7 @@ public class ListSelectionVisibility<T extends JComponent> extends
 		Collection<Object> currentSelection2 = new HashSet<>(
 				list.getSelectedValuesList());
 		return currentSelection2.equals(expectedSelection)
-				&& popover.getOwner().isShowing();
+				&& popover.getOwner().isShowing() && isActiveWindow(popover);
 	}
 
 	@Override
