@@ -13,6 +13,8 @@ public class AWTSerializationUtils {
 	public static final Collection<SerializationFilter> FILTERS = new LinkedList<>();
 	static {
 		FILTERS.add(AlphaCompositeSerializationWrapper.FILTER);
+		FILTERS.add(AttributedCharacterIteratorSerializationWrapper.FILTER);
+		FILTERS.add(AttributedStringSerializationWrapper.FILTER);
 		FILTERS.add(BasicStrokeSerializationWrapper.FILTER);
 		FILTERS.add(FontRenderContextSerializationWrapper.FILTER);
 		FILTERS.add(GlyphJustificationInfoSerializationWrapper.FILTER);
