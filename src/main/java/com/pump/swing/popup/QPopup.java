@@ -53,12 +53,12 @@ public class QPopup extends Popup {
 			+ "#isQPopup";
 
 	private static final CalloutType[] ORDERED_CALLOUT_TYPES = new CalloutType[] {
-			CalloutType.TOP_CENTER, CalloutType.TOP_RIGHT,
-			CalloutType.TOP_LEFT, CalloutType.BOTTOM_CENTER,
-			CalloutType.BOTTOM_RIGHT, CalloutType.BOTTOM_LEFT,
-			CalloutType.LEFT_CENTER, CalloutType.LEFT_TOP,
-			CalloutType.LEFT_BOTTOM, CalloutType.RIGHT_CENTER,
-			CalloutType.RIGHT_TOP, CalloutType.RIGHT_BOTTOM };
+			CalloutType.TOP_CENTER, CalloutType.TOP_RIGHT, CalloutType.TOP_LEFT,
+			CalloutType.BOTTOM_CENTER, CalloutType.BOTTOM_RIGHT,
+			CalloutType.BOTTOM_LEFT, CalloutType.LEFT_CENTER,
+			CalloutType.LEFT_TOP, CalloutType.LEFT_BOTTOM,
+			CalloutType.RIGHT_CENTER, CalloutType.RIGHT_TOP,
+			CalloutType.RIGHT_BOTTOM };
 
 	private static final int CALLOUT_SIZE = 5;
 
@@ -135,10 +135,8 @@ public class QPopup extends Popup {
 			if (v instanceof CalloutType) {
 				return new CalloutType[] { (CalloutType) v };
 			}
-			if (v != null
-					&& v.getClass().isArray()
-					&& v.getClass().getComponentType()
-							.equals(CalloutType.class))
+			if (v != null && v.getClass().isArray() && v.getClass()
+					.getComponentType().equals(CalloutType.class))
 				return ((CalloutType[]) v);
 		}
 
@@ -146,6 +144,9 @@ public class QPopup extends Popup {
 	}
 
 	private Rectangle getShowingTargetBounds(Rectangle screenBounds) {
+		if (screenBounds == null)
+			return null;
+
 		Component c = getOwner();
 		while (c != null) {
 
@@ -210,7 +211,8 @@ public class QPopup extends Popup {
 			CalloutType calloutType) {
 		Window ownerWindow = owner instanceof Window ? (Window) owner
 				: SwingUtilities.getWindowAncestor(owner);
-		RootPaneContainer rpc = ownerWindow instanceof RootPaneContainer ? (RootPaneContainer) ownerWindow
+		RootPaneContainer rpc = ownerWindow instanceof RootPaneContainer
+				? (RootPaneContainer) ownerWindow
 				: null;
 
 		if (rpc == null)
@@ -300,8 +302,8 @@ public class QPopup extends Popup {
 			Window w = SwingUtilities.getWindowAncestor(contents);
 			if (w instanceof JWindow) {
 				JWindow jw = (JWindow) w;
-				Boolean b = (Boolean) jw.getRootPane().getClientProperty(
-						PROPERTY_IS_QPOPUP);
+				Boolean b = (Boolean) jw.getRootPane()
+						.getClientProperty(PROPERTY_IS_QPOPUP);
 				if (Boolean.TRUE.equals(b)) {
 					window = jw;
 				}
@@ -384,8 +386,8 @@ public class QPopup extends Popup {
 		}
 		if (w instanceof RootPaneContainer) {
 			RootPaneContainer rpc = (RootPaneContainer) w;
-			Boolean b = (Boolean) rpc.getRootPane().getClientProperty(
-					PROPERTY_IS_QPOPUP);
+			Boolean b = (Boolean) rpc.getRootPane()
+					.getClientProperty(PROPERTY_IS_QPOPUP);
 			if (Boolean.TRUE.equals(b)) {
 				w.setVisible(false);
 				w.dispose();

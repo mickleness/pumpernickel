@@ -9,5 +9,10 @@ import java.awt.Rectangle;
  * arrow should point to this portion of the screen.
  */
 public interface PopupTarget {
+	/**
+	 * 
+	 * @return where a popup should point to, or null if the popup shouldn't be
+	 *         visible
+	 */
 	public Rectangle getScreenBounds();
 }

@@ -23,35 +23,6 @@ import javax.swing.SwingUtilities;
 public abstract class AbstractComponentVisibility<T extends JComponent>
 		implements PopoverVisibility<T> {
 
-	/**
-	 * Return true if the popover owner or contents are inside the current
-	 * active window.
-	 * <p>
-	 * If this returns false most popovers should immediately hide. This will
-	 * return false when another window or application comes to the foreground.
-	 */
-	public static boolean isActiveWindow(JPopover<?> popover) {
-		return isInsideActiveWindow(popover.getOwner())
-				|| isInsideActiveWindow(popover.getContents());
-	}
-	
-	/**
-	 * Return true if the argument is inside the current active window.
-	 * (Or if it is the active window itself.)
-	 */
-	public static boolean isInsideActiveWindow(Component comp) {
-		Window activeWindow = KeyboardFocusManager
-				.getCurrentKeyboardFocusManager().getActiveWindow();
-		if (activeWindow == null)
-			return false;
-		return activeWindow == comp
-				|| SwingUtilities.isDescendingFrom(comp, activeWindow);
-	}
-
-	/**
-	 * The KeyboardFocusManager fires a PropertyChangeEvent with this property
-	 * when the active window changes.
-	 */
 	private static final String PROPERTY_ACTIVE_WINDOW = "activeWindow";
 
 	static class PopoverHierarchyBoundsListener
@@ -115,10 +86,6 @@ public abstract class AbstractComponentVisibility<T extends JComponent>
 		}
 	}
 
-	/**
-	 * This listener is notified when the KeyboardFocusManager changes the
-	 * "activeWindow" property.
-	 */
 	static class PopoverPropertyChangeListener
 			implements PropertyChangeListener {
 		JPopover<?> popover;
@@ -196,5 +163,19 @@ public abstract class AbstractComponentVisibility<T extends JComponent>
 			KeyboardFocusManager.getCurrentKeyboardFocusManager()
 					.removePropertyChangeListener(PROPERTY_ACTIVE_WINDOW, l4);
 		}
+	}
+
+	public static boolean isActiveWindow(JPopover<?> popover) {
+		return isInsideActiveWindow(popover.getOwner())
+				|| isInsideActiveWindow(popover.getContents());
+	}
+
+	public static boolean isInsideActiveWindow(Component comp) {
+		Window activeWindow = KeyboardFocusManager
+				.getCurrentKeyboardFocusManager().getActiveWindow();
+		if (activeWindow == null)
+			return false;
+		return activeWindow == comp
+				|| SwingUtilities.isDescendingFrom(comp, activeWindow);
 	}
 }

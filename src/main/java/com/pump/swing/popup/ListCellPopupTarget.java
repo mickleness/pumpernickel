@@ -26,6 +26,9 @@ public class ListCellPopupTarget implements PopupTarget {
 
 	@Override
 	public Rectangle getScreenBounds() {
+		if (!list.isShowing())
+			return null;
+
 		Rectangle r = list.getUI().getCellBounds(list, selectedIndex,
 				selectedIndex);
 		Point p = new Point(0, 0);
