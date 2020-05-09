@@ -73,8 +73,6 @@ public class AttributedStringSerializationWrapper
 	protected static final String KEY_STRING = "string";
 	protected static final String KEY_RUN_MAP = "runMap";
 
-	private static final Object UNSTARTED = new Object();
-
 	public AttributedStringSerializationWrapper(AttributedString as) {
 		AttributedCharacterIterator iter = as.getIterator();
 		Set<Attribute> allAttributes = iter.getAllAttributeKeys();
@@ -91,25 +89,26 @@ public class AttributedStringSerializationWrapper
 		for (Attribute attribute : allAttributes) {
 			AttributedCharacterIterator iter2 = as
 					.getIterator(new Attribute[] { attribute });
-			Object lastValue = UNSTARTED;
+
 			List<Run> runs = new ArrayList<>();
 			int index = 0;
 			while (true) {
 				if (iter2.current() == CharacterIterator.DONE)
 					break;
+
+				Run lastRun = runs.isEmpty() ? null : runs.get(runs.size() - 1);
 				Object value = iter2.getAttribute(attribute);
-				if (Objects.equals(value, lastValue)) {
-					// do nothing
-				} else if (lastValue != UNSTARTED) {
-					runs.add(new Run(lastValue, index - 1));
+
+				if (lastRun != null && Objects.equals(lastRun.value, value)) {
+					lastRun.endIndex++;
+				} else {
+					Run newRun = new Run(value, index);
+					runs.add(newRun);
 				}
-				lastValue = value;
 
 				index++;
 				iter2.next();
 			}
-			if (index > 0)
-				runs.add(new Run(lastValue, index - 1));
 
 			for (Run run : runs) {
 				for (SerializationFilter filter : AWTSerializationUtils.FILTERS) {
