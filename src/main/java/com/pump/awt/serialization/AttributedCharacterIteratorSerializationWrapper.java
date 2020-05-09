@@ -7,11 +7,18 @@ import com.pump.io.serialization.AbstractSerializationWrapper;
 import com.pump.io.serialization.SerializationFilter;
 import com.pump.io.serialization.SerializationWrapper;
 
+/**
+ * This is a SerializationWrapper for AttributedCharacterIterators.
+ */
 public class AttributedCharacterIteratorSerializationWrapper
 		extends AbstractSerializationWrapper<AttributedCharacterIterator> {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * This filter converts an AttributedCharacterIterator into a
+	 * AttributedCharacterIteratorSerializationWrapper.
+	 */
 	public static SerializationFilter FILTER = new SerializationFilter() {
 		@Override
 		public SerializationWrapper<?> filter(Object object) {

@@ -7,10 +7,16 @@ import com.pump.io.serialization.AbstractSerializationWrapper;
 import com.pump.io.serialization.SerializationFilter;
 import com.pump.io.serialization.SerializationWrapper;
 
+/**
+ * This is a SerializationWrapper for Point2Ds.
+ */
 public class Point2DSerializationWrapper
 		extends AbstractSerializationWrapper<Point2D> {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * This filter converts a Point2D into a Point2DSerializationWrapper.
+	 */
 	public static SerializationFilter FILTER = new SerializationFilter() {
 		@Override
 		public SerializationWrapper<?> filter(Object object) {

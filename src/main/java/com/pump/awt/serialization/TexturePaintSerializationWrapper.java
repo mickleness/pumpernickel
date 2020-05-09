@@ -9,11 +9,18 @@ import com.pump.io.serialization.AbstractSerializationWrapper;
 import com.pump.io.serialization.SerializationFilter;
 import com.pump.io.serialization.SerializationWrapper;
 
+/**
+ * This is a SerializationWrapper for TexturePaints.
+ */
 public class TexturePaintSerializationWrapper
 		extends AbstractSerializationWrapper<TexturePaint> {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * This filter converts a TexturePaint into a
+	 * TexturePaintSerializationWrapper.
+	 */
 	public static SerializationFilter FILTER = new SerializationFilter() {
 		@Override
 		public SerializationWrapper<?> filter(Object object) {

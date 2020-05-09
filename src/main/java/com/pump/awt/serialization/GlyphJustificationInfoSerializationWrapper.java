@@ -13,6 +13,10 @@ public class GlyphJustificationInfoSerializationWrapper
 		extends AbstractSerializationWrapper<GlyphJustificationInfo> {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * This filter converts a GlyphJustificationInfo into a
+	 * GlyphJustificationInfoSerializationWrapper.
+	 */
 	public static SerializationFilter FILTER = new SerializationFilter() {
 		@Override
 		public SerializationWrapper<?> filter(Object object) {

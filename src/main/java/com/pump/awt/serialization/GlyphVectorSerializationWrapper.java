@@ -18,6 +18,9 @@ import com.pump.io.serialization.AbstractSerializationWrapper;
 import com.pump.io.serialization.SerializationFilter;
 import com.pump.io.serialization.SerializationWrapper;
 
+/**
+ * This is a SerializationWrapper for GlyphVectors.
+ */
 public class GlyphVectorSerializationWrapper
 		extends AbstractSerializationWrapper<GlyphVector> {
 
@@ -293,6 +296,10 @@ public class GlyphVectorSerializationWrapper
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * This filter converts a GlyphVector into a
+	 * GlyphVectorSerializationWrapper.
+	 */
 	public static SerializationFilter FILTER = new SerializationFilter() {
 		@Override
 		public SerializationWrapper<?> filter(Object object) {

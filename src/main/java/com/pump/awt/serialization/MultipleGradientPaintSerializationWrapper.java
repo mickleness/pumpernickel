@@ -8,6 +8,9 @@ import java.awt.geom.AffineTransform;
 
 import com.pump.io.serialization.AbstractSerializationWrapper;
 
+/**
+ * This is a SerializationWrapper for MultipleGradientPaints.
+ */
 public abstract class MultipleGradientPaintSerializationWrapper<T extends MultipleGradientPaint>
 		extends AbstractSerializationWrapper<T> {
 	private static final long serialVersionUID = 1L;

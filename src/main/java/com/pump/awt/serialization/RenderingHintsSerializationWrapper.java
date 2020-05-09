@@ -12,11 +12,22 @@ import com.pump.io.serialization.AbstractSerializationWrapper;
 import com.pump.io.serialization.SerializationFilter;
 import com.pump.io.serialization.SerializationWrapper;
 
+/**
+ * This is a SerializationWrapper for RenderingHints.
+ * <p>
+ * This only addresses Java's default RenderingHints. If you add define custom
+ * keys/values then you need to modify {@link #ALL_RENDERING_HINT_KEYS} and
+ * {@link #ALL_RENDERING_HINT_VALUES}.
+ */
 public class RenderingHintsSerializationWrapper
 		extends AbstractSerializationWrapper<RenderingHints> {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * This filter converts a RenderingHints into a
+	 * RenderingHintsSerializationWrapper.
+	 */
 	public static SerializationFilter FILTER = new SerializationFilter() {
 		@Override
 		public SerializationWrapper<?> filter(Object object) {
@@ -28,6 +39,11 @@ public class RenderingHintsSerializationWrapper
 		}
 	};
 
+	/**
+	 * This is a collection of all known rendering hints. Each hint should have
+	 * a unique toString() output. This is mutable so you can add custom keys to
+	 * it if needed.
+	 */
 	public static final Collection<RenderingHints.Key> ALL_RENDERING_HINT_KEYS = new HashSet<>(
 			Arrays.asList(RenderingHints.KEY_ALPHA_INTERPOLATION,
 					RenderingHints.KEY_ANTIALIASING,
@@ -40,6 +56,11 @@ public class RenderingHintsSerializationWrapper
 					RenderingHints.KEY_TEXT_ANTIALIASING,
 					RenderingHints.KEY_TEXT_LCD_CONTRAST));
 
+	/**
+	 * This is a collection of all known rendering hint values. Each value
+	 * should have a unique toString() output. This is mutable so you can add
+	 * custom values to it if needed.
+	 */
 	public static final Collection<Object> ALL_RENDERING_HINT_VALUES = new HashSet<>(
 			Arrays.asList(RenderingHints.VALUE_ALPHA_INTERPOLATION_DEFAULT,
 					RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY,

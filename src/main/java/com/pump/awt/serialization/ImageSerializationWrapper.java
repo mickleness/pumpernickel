@@ -14,10 +14,22 @@ import com.pump.io.serialization.AbstractSerializationWrapper;
 import com.pump.io.serialization.SerializationFilter;
 import com.pump.io.serialization.SerializationWrapper;
 
+/**
+ * This is a SerializationWrapper for Images and RenderedImages.
+ * <p>
+ * This simply encodes images as a PNG file. If an image is dynamic/animated,
+ * then this will result in an arbitrary snapshot being serialized/deserialized.
+ * <p>
+ * All deserialized images are BufferedImages.
+ */
 public class ImageSerializationWrapper
 		extends AbstractSerializationWrapper<BufferedImage> {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * This filter converts an Image or a RenderedImage into a
+	 * ImageSerializationWrapper.
+	 */
 	public static SerializationFilter FILTER = new SerializationFilter() {
 		@Override
 		public SerializationWrapper<?> filter(Object object) {
