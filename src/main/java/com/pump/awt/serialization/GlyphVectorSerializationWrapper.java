@@ -29,6 +29,9 @@ public class GlyphVectorSerializationWrapper
 
 		protected int glyphCode;
 
+		/**
+		 * May be null
+		 */
 		protected AffineTransform transform;
 
 		protected ShapeSerializationWrapper outline;
@@ -207,12 +210,15 @@ public class GlyphVectorSerializationWrapper
 
 		@Override
 		public AffineTransform getGlyphTransform(int glyphIndex) {
+			if (glyphs[glyphIndex].transform == null)
+				return null;
 			return new AffineTransform(glyphs[glyphIndex].transform);
 		}
 
 		@Override
 		public void setGlyphTransform(int glyphIndex, AffineTransform newTX) {
-			glyphs[glyphIndex].transform = new AffineTransform(newTX);
+			glyphs[glyphIndex].transform = newTX == null ? null
+					: new AffineTransform(newTX);
 		}
 
 		@Override
