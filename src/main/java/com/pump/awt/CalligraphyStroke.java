@@ -30,6 +30,7 @@ import com.pump.geom.GeneralPathWriter;
  *      a Calligraphy Stroke</a>
  */
 public class CalligraphyStroke implements Stroke, Serializable {
+	private static final long serialVersionUID = 1L;
 
 	/** The width of this stroke in pixels. */
 	private float width;
