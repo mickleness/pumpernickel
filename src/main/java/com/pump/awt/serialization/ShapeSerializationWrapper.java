@@ -38,6 +38,15 @@ public class ShapeSerializationWrapper
 	public ShapeSerializationWrapper(Shape shape) {
 		map.put(KEY_PATH, ShapeStringUtils.toString(shape));
 		map.put(KEY_WINDING_RULE, shape.getPathIterator(null).getWindingRule());
+
+		// the create() method may convert a shape to a Rectangle/Rectangle2D,
+		// which can change the order the PathIterators walks over points.
+		// To serialize/deserialize the exact same order with no discrepancy:
+		// we'll call create() and then save THAT shape. (This is required to
+		// pass a VectorGraphics2DTest.)
+		shape = create();
+		map.put(KEY_PATH, ShapeStringUtils.toString(shape));
+		map.put(KEY_WINDING_RULE, shape.getPathIterator(null).getWindingRule());
 	}
 
 	@Override
