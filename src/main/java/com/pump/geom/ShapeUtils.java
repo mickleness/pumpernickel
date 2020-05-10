@@ -13,6 +13,7 @@ package com.pump.geom;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
@@ -464,6 +465,8 @@ public class ShapeUtils {
 
 		if (shape instanceof RectangularShape)
 			return (Shape) ((RectangularShape) shape).clone();
+		if (shape instanceof Line2D)
+			return (Shape) ((Line2D) shape).clone();
 
 		PathIterator pi = shape.getPathIterator(null);
 		Path2D p = new Path2D.Float(pi.getWindingRule());

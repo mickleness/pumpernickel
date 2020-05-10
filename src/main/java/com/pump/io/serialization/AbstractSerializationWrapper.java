@@ -3,6 +3,8 @@ package com.pump.io.serialization;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public abstract class AbstractSerializationWrapper<T>
 		implements SerializationWrapper<T> {
@@ -14,8 +16,13 @@ public abstract class AbstractSerializationWrapper<T>
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
 		out.writeInt(0);
-		out.writeObject(map);
-		;
+
+		out.writeInt(map.size());
+		SortedSet<String> sortedKeys = new TreeSet<>(map.keySet());
+		for (String key : sortedKeys) {
+			out.writeObject(key);
+			out.writeObject(map.get(key));
+		}
 	}
 
 	private void readObject(java.io.ObjectInputStream in)
@@ -23,7 +30,14 @@ public abstract class AbstractSerializationWrapper<T>
 
 		int version = in.readInt();
 		if (version == 0) {
-			map = (Map<String, Object>) in.readObject();
+			int size = in.readInt();
+			map = new HashMap<>(size);
+			while (size > 0) {
+				String key = (String) in.readObject();
+				Object value = in.readObject();
+				map.put(key, value);
+				size--;
+			}
 		} else {
 			throw new IOException("unsupported internal version " + version);
 		}

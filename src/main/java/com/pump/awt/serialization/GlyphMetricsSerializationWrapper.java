@@ -1,6 +1,7 @@
 package com.pump.awt.serialization;
 
 import java.awt.font.GlyphMetrics;
+import java.awt.geom.Rectangle2D;
 
 import com.pump.io.serialization.AbstractSerializationWrapper;
 import com.pump.io.serialization.SerializationFilter;
@@ -53,11 +54,12 @@ public class GlyphMetricsSerializationWrapper
 		boolean horizontal = (Boolean) map.get(KEY_HORIZONTAL);
 		float advanceX = ((Number) map.get(KEY_ADVANCE_X)).floatValue();
 		float advanceY = ((Number) map.get(KEY_ADVANCE_Y)).floatValue();
-		Rectangle2DSerializationWrapper bounds = (Rectangle2DSerializationWrapper) map
+		Rectangle2DSerializationWrapper boundsWrapper = (Rectangle2DSerializationWrapper) map
 				.get(KEY_BOUNDS);
+		Rectangle2D boundsRect = boundsWrapper.create();
 		byte glyphType = ((Number) map.get(KEY_GLYPH_TYPE)).byteValue();
 
-		return new GlyphMetrics(horizontal, advanceX, advanceY, bounds.create(),
+		return new GlyphMetrics(horizontal, advanceX, advanceY, boundsRect,
 				glyphType);
 	}
 
