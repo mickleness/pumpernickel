@@ -24,9 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.UIManager;
 
-import com.pump.graphics.GraphicInstruction;
-import com.pump.graphics.GraphicsWriter;
-import com.pump.graphics.ImageInstruction;
+import com.pump.graphics.vector.ImageOperation;
+import com.pump.graphics.vector.Operation;
+import com.pump.graphics.vector.VectorImage;
 import com.pump.plaf.QPanelUI;
 
 /**
@@ -66,19 +66,18 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 		 */
 		protected void paintDarkTrack(Graphics g0) {
 			Graphics2D g = (Graphics2D) g0;
-			GraphicsWriter w = new GraphicsWriter(false, Integer.MAX_VALUE);
+			VectorImage img = new VectorImage();
+			Graphics2D w = img.createGraphics();
 			w.setRenderingHints(g.getRenderingHints());
 			w.clipRect(0, 0, getWidth(), getHeight());
 			super.paintComponent(w);
-			GraphicInstruction[] instructions = w.getInstructions(true);
-			for (int a = 0; a < instructions.length; a++) {
-				GraphicInstruction i = instructions[a];
-				i.paint((Graphics2D) g);
-				if (i instanceof ImageInstruction) {
-					Rectangle r = i.getBounds().getBounds();
+			for (Operation op : img.getOperations()) {
+				op.paint((Graphics2D) g);
+				if (op instanceof ImageOperation) {
+					Rectangle r = op.getBounds().getBounds();
 					if (r.width > getWidth() * .8) {
 						g.setColor(new Color(0, 0, 0, 40));
-						((Graphics2D) g).fill(i.getBounds());
+						((Graphics2D) g).fill(op.getBounds());
 					}
 				}
 			}
