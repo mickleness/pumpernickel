@@ -490,6 +490,11 @@ public class VectorGraphics2D extends Graphics2D {
 	@Override
 	public void drawString(String str, float x, float y) {
 		addOperation(new StringOperation(getContext(), str, x, y));
+
+		// this is equivalent to:
+		// GlyphVector glyphVector = getFont().createGlyphVector(
+		// getFontRenderContext(), str);
+		// drawGlyphVector(glyphVector, x, y);
 	}
 
 	@Override
@@ -502,6 +507,10 @@ public class VectorGraphics2D extends Graphics2D {
 			float y) {
 		addOperation(new AttributedCharacterIteratorOperation(getContext(),
 				iterator, x, y));
+
+		// this is equivalent to:
+		// TextLayout layout = new TextLayout(iterator, getFontRenderContext());
+		// layout.draw(this, x, y);
 	}
 
 	@Override
