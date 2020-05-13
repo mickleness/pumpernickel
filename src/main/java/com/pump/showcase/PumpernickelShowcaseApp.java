@@ -44,8 +44,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -112,7 +115,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 	public static final String VERSION = "1.02";
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		DesktopApplication app = new DesktopApplication("com.pump.showcase",
 				"Pumpernickel Showcase", VERSION, "jeremy.wood@mac.com");
 		app.setFrameClass(PumpernickelShowcaseApp.class);
@@ -187,8 +190,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 	JPanel searchFieldPanel = new JPanel(new GridBagLayout());
 	TextFieldPrompt searchPrompt;
 	List<Section> masterSectionList = new ArrayList<>();
-	ListSectionContainer sectionContainer = new ListSectionContainer(true,
-			null, searchFieldPanel);
+	ListSectionContainer sectionContainer = new ListSectionContainer(true, null,
+			searchFieldPanel);
 	JMenuBar menuBar = new JMenuBar();
 	JMenu editMenu = createEditMenu();
 	JMenu helpMenu = new JMenu("Help");
@@ -309,8 +312,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 					matches.add(section);
 			}
 
-			sectionContainer.getSections().setAll(
-					matches.toArray(new Section[matches.size()]));
+			sectionContainer.getSections()
+					.setAll(matches.toArray(new Section[matches.size()]));
 		}
 
 		private boolean isMatching(Section section, String phrase) {
@@ -354,7 +357,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 				}
 				Class[] classes = d.getClasses();
 				if (classes == null)
-					throw new NullPointerException(d.getClass().getSimpleName());
+					throw new NullPointerException(
+							d.getClass().getSimpleName());
 				for (Class z : classes) {
 					int layer = 0;
 					/*
@@ -371,8 +375,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 			}
 			for (int a = 0; a < jc.getComponentCount(); a++) {
 				if (jc.getComponent(a) instanceof JComponent)
-					returnValue.addAll(getKeywords((JComponent) jc
-							.getComponent(a)));
+					returnValue.addAll(
+							getKeywords((JComponent) jc.getComponent(a)));
 			}
 			return returnValue;
 		}
@@ -469,7 +473,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("TextEffect", "TextEffectDemo");
 			addSection("AWTMonitor", "AWTMonitorDemo");
 			addSection("GradientTexturePaint", "GradientTexturePaintDemo");
-			addSection("ClickSensitivityControl", "ClickSensitivityControlDemo");
+			addSection("ClickSensitivityControl",
+					"ClickSensitivityControlDemo");
 			addSection("ShapeBounds", "ShapeBoundsDemo");
 			addSection("Clipper", "ClipperDemo");
 			addSection("AngleSliderUI", "AngleSliderUIDemo");
@@ -509,6 +514,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("System Properties", "SystemPropertiesDemo");
 			addSection("FileIcon", "FileIconDemo");
 			addSection("DesktopHelper", "DesktopHelperDemo");
+			addSection("VectorImage", "VectorImageDemo");
 			if (JVM.isMac) {
 				addSection("AquaIcon", "AquaIconDemo");
 				addSection("NSImage", "NSImageDemo");
@@ -547,8 +553,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 				if (showcaseScreenshotDir == null) {
 					Collection<File> candidates = new LinkedHashSet<>();
 					File dir = new File(System.getProperty("user.dir"));
-					File[] resourceDirs = FileTreeIterator.findAll(
-							new File[] { dir }, "resources");
+					File[] resourceDirs = FileTreeIterator
+							.findAll(new File[] { dir }, "resources");
 					for (File resourceDir : resourceDirs) {
 						File showcaseDir = new File(resourceDir, "showcase");
 						if (showcaseDir.exists()) {
@@ -643,8 +649,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 		if (destFile == null) {
 			String defaultName = getDemoName(section.getBody());
 			destFile = FileDialogUtils.showSaveDialog(
-					PumpernickelShowcaseApp.this, "Export as...", defaultName
-							+ ".png", "png");
+					PumpernickelShowcaseApp.this, "Export as...",
+					defaultName + ".png", "png");
 		}
 		ImageIO.write(bi, "png", destFile);
 		System.out.println("Saved screenshot as " + destFile.getAbsolutePath());
@@ -807,8 +813,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (scrollPane == null) {
-						textPane = createTextPane(getShowcaseDemo()
-								.getHelpURL());
+						textPane = createTextPane(
+								getShowcaseDemo().getHelpURL());
 						scrollPane = new JScrollPane(textPane);
 
 						updatePreferredSize();
@@ -853,10 +859,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 			JPanel replacement = new JPanel(new GridBagLayout());
 
-			JTextArea headerTextArea = createTextArea(getShowcaseDemo()
-					.getTitle(), 18);
-			JTextArea descriptionTextArea = createTextArea(getShowcaseDemo()
-					.getSummary(), 14);
+			JTextArea headerTextArea = createTextArea(
+					getShowcaseDemo().getTitle(), 18);
+			JTextArea descriptionTextArea = createTextArea(
+					getShowcaseDemo().getSummary(), 14);
 
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
@@ -924,8 +930,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 		StyleSheet styleSheet = kit.getStyleSheet();
 
-		styleSheet
-				.addRule("body {  padding: 12em 12em 12em 12em;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
+		styleSheet.addRule(
+				"body {  padding: 12em 12em 12em 12em;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
 
 		styleSheet.addRule("h1, h2, h3, h4, h5, h6 { text-align: left }");
 		styleSheet.addRule("h1, h2, h3 { color: #005a9c }");
@@ -999,10 +1005,38 @@ public class PumpernickelShowcaseApp extends JFrame {
 			section.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);
 			collapsibleContainer.getHeader(section).putClientProperty(
 					CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
-			collapsibleContainer.getHeader(section).setBorder(
-					new EmptyBorder(3, 2, 3, 2));
-			collapsibleContainer.getHeader(section).setFont(
-					ShowcaseExampleDemo.getHeaderLabelFont());
+			collapsibleContainer.getHeader(section)
+					.setBorder(new EmptyBorder(3, 2, 3, 2));
+			collapsibleContainer.getHeader(section)
+					.setFont(ShowcaseExampleDemo.getHeaderLabelFont());
+		}
+	}
+
+	public void showDemo(ShowcaseDemo demo) {
+		searchField.setText("");
+		Map<Section, LazyDemoPanel> c = new HashMap<>();
+		for (Section section : sectionContainer.getSections()) {
+			if (section.getBody().getComponent(0) instanceof LazyDemoPanel) {
+				LazyDemoPanel ldp = (LazyDemoPanel) section.getBody()
+						.getComponent(0);
+				c.put(section, ldp);
+			}
+		}
+
+		// first see if it's already loaded/ready:
+		for (Entry<Section, LazyDemoPanel> entry : c.entrySet()) {
+			if (entry.getValue().showcaseDemo == demo) {
+				sectionContainer.setSelectedSection(entry.getKey());
+				return;
+			}
+		}
+
+		// same thing, but invoke getShowcaseDemo() to lazily load the demo
+		for (Entry<Section, LazyDemoPanel> entry : c.entrySet()) {
+			if (entry.getValue().getShowcaseDemo() == demo) {
+				sectionContainer.setSelectedSection(entry.getKey());
+				return;
+			}
 		}
 	}
 }
