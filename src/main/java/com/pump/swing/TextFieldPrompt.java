@@ -29,7 +29,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.TextUI;
 
-import com.pump.graphics.TextOnlyGraphics2D;
+import com.pump.graphics.vector.FilteredGraphics2D;
+import com.pump.graphics.vector.StringOperation;
 
 /**
  * This is an untouchable text field that sits on top of a parent
@@ -144,8 +145,8 @@ public class TextFieldPrompt extends JTextField {
 		try {
 			try {
 				TextUI ui = parent.getUI();
-				Constructor<?> noArgConstructor = ui.getClass().getConstructor(
-						new Class[] {});
+				Constructor<?> noArgConstructor = ui.getClass()
+						.getConstructor(new Class[] {});
 				TextUI newUI = (TextUI) noArgConstructor
 						.newInstance(new Object[] {});
 				setUI(newUI);
@@ -155,8 +156,8 @@ public class TextFieldPrompt extends JTextField {
 
 			try {
 				TextUI ui = parent.getUI();
-				Constructor<?> noArgConstructor = ui.getClass().getConstructor(
-						new Class[] { JTextField.class });
+				Constructor<?> noArgConstructor = ui.getClass()
+						.getConstructor(new Class[] { JTextField.class });
 				TextUI newUI = (TextUI) noArgConstructor
 						.newInstance(new Object[] { this });
 				setUI(newUI);
@@ -172,9 +173,11 @@ public class TextFieldPrompt extends JTextField {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void paint(Graphics g) {
-		super.paint(new TextOnlyGraphics2D((Graphics2D) g, null));
+		Graphics2D g2 = (Graphics2D) g;
+		super.paint(new FilteredGraphics2D(g2, StringOperation.class));
 	}
 
 	@Override

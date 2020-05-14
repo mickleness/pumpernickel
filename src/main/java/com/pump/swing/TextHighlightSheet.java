@@ -34,7 +34,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
-import com.pump.graphics.TextOnlyGraphics2D;
+import com.pump.graphics.vector.FilteredGraphics2D;
 import com.pump.plaf.AbstractSearchHighlight;
 
 /**
@@ -249,8 +249,8 @@ public class TextHighlightSheet extends JComponent {
 			int startIndex = jtc.viewToModel(upperLeft);
 			int endIndex = jtc.viewToModel(lowerRight);
 			startIndex = Math.max(0, startIndex - searchPhrase.length());
-			endIndex = Math.min(jtc.getDocument().getLength(), endIndex
-					+ searchPhrase.length());
+			endIndex = Math.min(jtc.getDocument().getLength(),
+					endIndex + searchPhrase.length());
 
 			int index = startIndex;
 			int[] array = new int[2];
@@ -365,8 +365,8 @@ public class TextHighlightSheet extends JComponent {
 		lastTopleft.setLocation(topLeft);
 
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-				opacity));
+		g2.setComposite(
+				AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 		Color background = getBackground();
 		if (background != null) {
 			g2.setColor(background);
@@ -400,7 +400,8 @@ public class TextHighlightSheet extends JComponent {
 		g2.clip(clippingShape);
 		g2.translate(0, -topLeft.y);
 
-		TextOnlyGraphics2D g3 = new TextOnlyGraphics2D(g2, getForeground());
+		Graphics2D g3 = FilteredGraphics2D.createTextFilter(g2,
+				getForeground());
 		jtc.paint(g3);
 		g3.dispose();
 	}

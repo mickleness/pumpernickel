@@ -112,6 +112,26 @@ public class Graphics2DContext implements Serializable {
 		isDisposed = original.isDisposed;
 	}
 
+	/**
+	 * Create a Graphics2DContext based on the settings of a Graphics2D.
+	 * <p>
+	 * This assumes the incoming Graphics2D is in paint mode. (Because there
+	 * isn't a getter for that property.)
+	 */
+	public Graphics2DContext(Graphics2D g) {
+		composite = g.getComposite();
+		transform = g.getTransform();
+		backgroundColor = g.getBackground();
+		font = g.getFont();
+		stroke = g.getStroke();
+		color = g.getColor();
+		paint = g.getPaint();
+		renderingHints = (RenderingHints) g.getRenderingHints().clone();
+		Shape s = g.getClip();
+		if (s != null)
+			clip = transform.createTransformedShape(s);
+	}
+
 	@Override
 	public Graphics2DContext clone() {
 		return new Graphics2DContext(this);

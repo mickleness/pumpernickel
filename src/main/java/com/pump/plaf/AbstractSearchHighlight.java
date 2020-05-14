@@ -43,7 +43,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
 
-import com.pump.graphics.TextOnlyGraphics2D;
+import com.pump.graphics.vector.FilteredGraphics2D;
 
 /**
  * This renders a temporary effect somehow animating a selection in a
@@ -80,8 +80,8 @@ public abstract class AbstractSearchHighlight {
 			for (int a = 0; a < rects.length; a++) {
 				int imageWidth = rects[a].width + insets.left + insets.right;
 				int imageHeight = rects[a].height + insets.top + insets.bottom;
-				BufferedImage image = new BufferedImage(imageWidth,
-						imageHeight, BufferedImage.TYPE_INT_ARGB);
+				BufferedImage image = new BufferedImage(imageWidth, imageHeight,
+						BufferedImage.TYPE_INT_ARGB);
 
 				Graphics2D g = image.createGraphics();
 				Rectangle highlightBounds = new Rectangle(insets.left,
@@ -237,7 +237,8 @@ public abstract class AbstractSearchHighlight {
 	 * @param columnIndex
 	 *            the columnIndex of the cell to highlight.
 	 */
-	public AbstractSearchHighlight(JTable table, int rowIndex, int columnIndex) {
+	public AbstractSearchHighlight(JTable table, int rowIndex,
+			int columnIndex) {
 		initialize(new TableHighlightInfo(rowIndex, columnIndex, table));
 	}
 
@@ -321,7 +322,8 @@ public abstract class AbstractSearchHighlight {
 	 * though.
 	 */
 	protected void paintOnlyText(Graphics2D g) {
-		TextOnlyGraphics2D textOnlyG = new TextOnlyGraphics2D(g, Color.black);
+		Graphics2D textOnlyG = FilteredGraphics2D.createTextFilter(g,
+				Color.black);
 		highlightInfo.jc.paint(textOnlyG);
 		textOnlyG.dispose();
 	}
@@ -337,8 +339,9 @@ public abstract class AbstractSearchHighlight {
 
 			Rectangle nextRect = null;
 			for (int a = startIndex; a < endIndex; a++) {
-				Rectangle newRect = (nextRect == null) ? jtc.getUI()
-						.modelToView(jtc, a, Position.Bias.Forward) : nextRect;
+				Rectangle newRect = (nextRect == null)
+						? jtc.getUI().modelToView(jtc, a, Position.Bias.Forward)
+						: nextRect;
 				nextRect = jtc.getUI().modelToView(jtc, a + 1,
 						Position.Bias.Backward);
 				if (nextRect.x > newRect.x) {
@@ -415,16 +418,15 @@ public abstract class AbstractSearchHighlight {
 		// might be nestled in
 		JComponent jc = component;
 		Rectangle clipping = new Rectangle();
-		Rectangle result = SwingUtilities
-				.convertRectangle(
-						component,
-						new Rectangle(0, 0, component.getWidth(), component
-								.getHeight()), reference);
+		Rectangle result = SwingUtilities.convertRectangle(component,
+				new Rectangle(0, 0, component.getWidth(),
+						component.getHeight()),
+				reference);
 
 		while (jc != null) {
 			if (jc instanceof JViewport) {
-				Point topLeft = SwingUtilities
-						.convertPoint(jc, 0, 0, reference);
+				Point topLeft = SwingUtilities.convertPoint(jc, 0, 0,
+						reference);
 				Point bottomRight = SwingUtilities.convertPoint(jc,
 						jc.getWidth(), jc.getHeight(), reference);
 
@@ -485,7 +487,8 @@ public abstract class AbstractSearchHighlight {
 			Point2D absCenter = SwingUtilities.convertPoint(highlightInfo.jc,
 					center.x, center.y, this);
 			g2.translate(absCenter.getX(), absCenter.getY());
-			AffineTransform transform = (AffineTransform) getClientProperty("transform");
+			AffineTransform transform = (AffineTransform) getClientProperty(
+					"transform");
 			if (transform != null)
 				g2.transform(transform);
 			g2.translate(-imageCenter.x, -imageCenter.y);
@@ -517,16 +520,17 @@ public abstract class AbstractSearchHighlight {
 			path.lineTo(0, image.getHeight());
 			path.closePath();
 
-			AffineTransform transform = AffineTransform.getTranslateInstance(
-					-imageCenter.x, -imageCenter.y);
-			AffineTransform hTransform = (AffineTransform) getClientProperty("transform");
+			AffineTransform transform = AffineTransform
+					.getTranslateInstance(-imageCenter.x, -imageCenter.y);
+			AffineTransform hTransform = (AffineTransform) getClientProperty(
+					"transform");
 			if (hTransform != null) {
 				transform.concatenate(hTransform);
 			}
 			path.transform(transform);
 			Rectangle bounds = path.getBounds();
-			setBounds(center.x + topLeft.x - bounds.width / 2, center.y
-					+ topLeft.y - bounds.height / 2, bounds.width,
+			setBounds(center.x + topLeft.x - bounds.width / 2,
+					center.y + topLeft.y - bounds.height / 2, bounds.width,
 					bounds.height);
 		}
 	}
