@@ -17,6 +17,8 @@ import java.util.Objects;
  * If we simply stored data as a Path2D or GeneralPath then other entities may
  * invoke <code>reset()</code>, <code>transform(..)</code> or other methods to
  * modify the shape data.
+ * <p>
+ * This is similar (or identical?) to <code>sun.font.DelegateShape</code>.
  */
 public class ImmutableShape implements Shape, Serializable {
 	private static final long serialVersionUID = 1L;
