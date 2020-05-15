@@ -32,8 +32,8 @@ public class ListSectionContainer extends SectionContainer {
 
 	private static final long serialVersionUID = 1L;
 
-	public static class SectionListCellRenderer extends
-			LabelCellRenderer<Section> {
+	public static class SectionListCellRenderer
+			extends LabelCellRenderer<Section> {
 
 		@Override
 		protected void formatLabel(Section value) {
@@ -131,8 +131,8 @@ public class ListSectionContainer extends SectionContainer {
 						}
 
 						int z = list.getSelectedIndex();
-						if (z != -1
-								&& list.getModel().getElementAt(z) != lastSelectedSection) {
+						if (z != -1 && list.getModel()
+								.getElementAt(z) != lastSelectedSection) {
 							list.getSelectionModel().clearSelection();
 							int newIndex = getIndexOf(lastSelectedSection);
 							if (newIndex == -1) {
@@ -156,8 +156,8 @@ public class ListSectionContainer extends SectionContainer {
 
 		}, false);
 
-		list.getSelectionModel().addListSelectionListener(
-				new ListSelectionListener() {
+		list.getSelectionModel()
+				.addListSelectionListener(new ListSelectionListener() {
 
 					int lastSelectedIndex = -1;
 
@@ -193,6 +193,19 @@ public class ListSectionContainer extends SectionContainer {
 	 */
 	public Section getSelectedSection() {
 		return list.getSelectedValue();
+	}
+
+	/**
+	 * Set the currently selected Section.
+	 * 
+	 * @param section
+	 */
+	public void setSelectedSection(Section section) {
+		if (section == null) {
+			list.clearSelection();
+		} else {
+			list.setSelectedValue(section, true);
+		}
 	}
 
 	protected void updateContentPanel() {
