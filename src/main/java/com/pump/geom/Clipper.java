@@ -30,8 +30,8 @@ import java.util.Stack;
  * (This does not use Sutherland-Hodgman clipping algorithm, the Weiler-Atherton
  * clipping algorithm, or the <code>Area<code> class.)
  *
- * @see <a
- *      href="https://javagraphics.blogspot.com/2007/04/shapes-clipping-to-rectangle.html">Shapes:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2007/04/shapes-clipping-to-rectangle.html">Shapes:
  *      Clipping to a Rectangle</a>
  */
 public abstract class Clipper {
@@ -513,8 +513,8 @@ public abstract class Clipper {
 				lastValueWasCapped = !contains(lastX, lastY);
 
 				for (int a = 0; a < tCtr; a++) {
-					if (a > 0
-							&& intersectionTimes[a] == intersectionTimes[a - 1]) {
+					if (a > 0 && intersectionTimes[a] == intersectionTimes[a
+							- 1]) {
 						// do nothing
 					} else if (intersectionTimes[a] > 0
 							&& intersectionTimes[a] <= 1) {
@@ -530,13 +530,13 @@ public abstract class Clipper {
 						point.setLocation(x, y);
 						cap(point);
 
-						thisValueIsCapped = !(Math.abs(x - point.x) < TOLERANCE && Math
-								.abs(y - point.y) < TOLERANCE);
+						thisValueIsCapped = !(Math.abs(x - point.x) < TOLERANCE
+								&& Math.abs(y - point.y) < TOLERANCE);
 
-						x2 = (float) xf
-								.evaluate((intersectionTimes[a] + intersectionTimes[a - 1]) / 2);
-						y2 = (float) yf
-								.evaluate((intersectionTimes[a] + intersectionTimes[a - 1]) / 2);
+						x2 = (float) xf.evaluate((intersectionTimes[a]
+								+ intersectionTimes[a - 1]) / 2);
+						y2 = (float) yf.evaluate((intersectionTimes[a]
+								+ intersectionTimes[a - 1]) / 2);
 						midValueInvalid = !contains(x2, y2);
 
 						if ((xf instanceof LFunction) || thisValueIsCapped
@@ -590,8 +590,8 @@ public abstract class Clipper {
 			g.setClip(newClip);
 			return;
 		}
-		Rectangle2D oldRect = RectangleReader.convert(oldClip);
-		Rectangle2D newRect = RectangleReader.convert(newClip);
+		Rectangle2D oldRect = ShapeUtils.getRectangle2D(oldClip);
+		Rectangle2D newRect = ShapeUtils.getRectangle2D(newClip);
 
 		if (oldRect != null && newRect != null) {
 			Rectangle2D intersectedClip = oldRect.createIntersection(newRect);
