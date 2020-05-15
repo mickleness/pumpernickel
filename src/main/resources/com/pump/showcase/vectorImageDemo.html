@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>VectorImage Demo</title>
+</head>
+<body>
+The VectorImage is a collection of painting operations that can be replayed, isolated, analyzed, serialized, etc.
+<p>
+To understand the VectorImage we need to take a step back and understand a couple of key helper classes.
+
+<h4>VectorGraphics2D</h4>
+A VectorGraphics2D is a Graphics2D implementation that writes painting instructions as a series of Operation objects. (There is a separate Operation subclass for each type of operation: one for filling a Shape, one for drawing a Shape, one for drawing an Image, one for drawing a String, etc.)
+
+<h4>Graphics2DContext</h4> 
+Several Graphics2D methods don't actually render anything. (Like setComposite(..), setColor(..), setTransform(..).) These help configure the context for future rendering operations. The Graphics2DContext class helps keep track of all of these properties. The methods in this class exactly match the configuration methods in Graphics2D.
+<p>
+This class is independent of the VectorGraphics2D and VectorImage; it may be useful in other custom Graphics2D implementations too.
+<p>
+In the case of the VectorGraphics2D and Operations: each Operation takes a snapshot of the current Graphics2DContext when it is constructed.
+<h3>VectorImage Usage</h3>
+Currently the VectorImage has two specific applications:
+<ol><li>
+In this demo if you press the F6 key we paint the current Frame to a VectorImage. (That is: we call myFrame.paint(myVectorGraphics)).
+<p>
+Then we present this image in a VectorImageInspector panel. As you iterate through the list of Operations on the left the preview shows each operation as it is rendered. This lets you see the exact order of all the rendering instructions.
+<p>
+If you right-click any Operation in the list on the left then you'll see a stacktrace of that Graphics2D call.
+<p>
+The intention here is to help debug GUIs. A VectorImage is Serializable. So in addition to attaching screenshots to bug reports: you can add a serialized VectorImage. This would help developers identify exactly what code is painting a stray line or pixel, or what the clipping/transform is, etc.
+</li>
+<li>
+The FilteredGraphics2D is a VectorGraphics2D subclass that passes each Operation through a filter. That filter can reject or modify each Operation as it comes in.
+<p>
+The only current implementation of this is a FilteredGraphics2D that exclusively renders text (StringOperations). So you can paint a JComponent and only paint the text.
+</li></ol>
+<p>
+Other potential future applications might include:
+<ol><li>
+A filtered Graphics2D that identifies the exact baseline of text as it is rendered.
+</li>
+<li>
+A Graphics2D that converts all Operations to solid-color masks.
+</li>
+<li>
+A Graphics2D that collects a series of instructions and then renders a blurred shadow underneath them.
+</li>
+<li>
+A Graphics2D that isolates text instructions as glyphs and then applies complex transforms to them as animated text effects. (Flip, bounce, etc.). I've done this in another application using a cruder/simpler mechanism.
+</li>
+<li>
+A Graphics2D that isolates Operations so you can convert them to another file format. For example: once years ago I wrote a Graphics2D that helped convert renderings to PPTX images. The (wonderful) Batik toolkit probably does something similar when it uses a custom Graphics2D to help write SVG files. Likewise if iText ever lets you down you could make your own Graphics2D to export to PDF. Or Encapsulated PostScript. Etc.
+</li></ol>
+
+<h3>Serialization</h3>
+Making the VectorImage serializable was a lot more work than expected.
+<p>
+Many java.awt classes are not Serializable: java.awt.BasicStroke, java.awt.AlphaComposite, java.awt.Shape, java.awt.RenderingHints, etc.
+<p>
+The AWTSerializationUtils class includes 17 targeted filters that will convert these unserializable classes to a Serializable wrapper. In theory you should never have to worry about these details, but if you've created custom Paints/Strokes/Shapes then it may come up. (Also it may just be nice to keep in mind for other future projects.)
+</body>
+</html>
