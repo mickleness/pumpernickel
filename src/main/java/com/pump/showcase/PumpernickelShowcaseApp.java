@@ -514,6 +514,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("FileIcon", "FileIconDemo");
 			addSection("DesktopHelper", "DesktopHelperDemo");
 			addSection("VectorImage", "VectorImageDemo");
+			addSection("StarPolygon", "StarPolygonDemo");
 			if (JVM.isMac) {
 				addSection("AquaIcon", "AquaIconDemo");
 				addSection("NSImage", "NSImageDemo");
