@@ -12,16 +12,12 @@ package com.pump.plaf;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -29,6 +25,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
+import java.util.Objects;
 
 import javax.swing.JComponent;
 import javax.swing.JSlider;
@@ -46,8 +43,8 @@ import javax.swing.plaf.SliderUI;
  * This class (and subclasses) can not respond to several slider properties such
  * as orientation, inversion, tickmarks, labels, etc.
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2008/05/angles-need-gui-widget-for-angles.html">Angles:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2008/05/angles-need-gui-widget-for-angles.html">Angles:
  *      need GUI widget for angles?</a>
  */
 public class AngleSliderUI extends SliderUI {
@@ -79,6 +76,8 @@ public class AngleSliderUI extends SliderUI {
 		 * 
 		 */
 		protected boolean mousePressed = false;
+
+		protected Dimension lastSize = null;
 	}
 
 	protected static String DATA_KEY = AngleSliderUI.class.getName() + ".data";
@@ -92,18 +91,15 @@ public class AngleSliderUI extends SliderUI {
 			data = new Data();
 			slider.putClientProperty(DATA_KEY, data);
 		}
+
+		Dimension size = new Dimension(slider.getWidth(), slider.getHeight());
+		if (!Objects.equals(size, data.lastSize)) {
+			data.lastSize = size;
+			calculateGeometry(slider);
+		}
+
 		return data;
 	}
-
-	/**
-	 * Calls <code>calculateGeometry()</code> when the slider is resized.
-	 */
-	protected ComponentListener componentListener = new ComponentAdapter() {
-		@Override
-		public void componentResized(ComponentEvent e) {
-			calculateGeometry((JSlider) e.getComponent());
-		}
-	};
 
 	/**
 	 * Responds to arrow keys.
@@ -151,8 +147,8 @@ public class AngleSliderUI extends SliderUI {
 			angle = angle / (2 * Math.PI);
 			if (angle < 0)
 				angle += 1;
-			int v = (int) (angle * (slider.getMaximum() - slider.getMinimum()) + slider
-					.getMinimum());
+			int v = (int) (angle * (slider.getMaximum() - slider.getMinimum())
+					+ slider.getMinimum());
 			slider.setValue(v);
 			data.mousePressed = true;
 			e.consume();
@@ -202,9 +198,12 @@ public class AngleSliderUI extends SliderUI {
 		Dimension size = slider.getSize();
 		Insets i = getBorderInsets(slider);
 
-		float r = Math.min(size.width - data.insets.left - data.insets.right
-				- i.left - i.right, size.height - data.insets.top
-				- data.insets.bottom - i.top - i.bottom) / 2f;
+		float r = Math.min(
+				size.width - data.insets.left - data.insets.right - i.left
+						- i.right,
+				size.height - data.insets.top - data.insets.bottom - i.top
+						- i.bottom)
+				/ 2f;
 		float centerX = size.width / 2f;
 		float centerY = size.height / 2f;
 		data.dial.setFrame(centerX - r, centerY - r, 2 * r, 2 * r);
@@ -267,7 +266,6 @@ public class AngleSliderUI extends SliderUI {
 		slider.addFocusListener(focusListener);
 		slider.addMouseListener(mouseListener);
 		slider.addMouseMotionListener(mouseListener);
-		slider.addComponentListener(componentListener);
 		RepaintChangeListener rcl = new RepaintChangeListener(c);
 		slider.getModel().addChangeListener(rcl);
 		slider.putClientProperty(REPAINT_CHANGE_LISTENER_KEY, rcl);
@@ -280,29 +278,29 @@ public class AngleSliderUI extends SliderUI {
 	public static Color tweenColor(Color c1, Color c2, float progress) {
 		if (c1.equals(c2))
 			return c1;
-		int r = (int) (c1.getRed() * (1 - progress) + c2.getRed() * progress + .5f);
-		int g = (int) (c1.getGreen() * (1 - progress) + c2.getGreen()
-				* progress + .5f);
-		int b = (int) (c1.getBlue() * (1 - progress) + c2.getBlue() * progress + .5f);
-		int a = (int) (c1.getAlpha() * (1 - progress) + c2.getAlpha()
-				* progress + .5f);
+		int r = (int) (c1.getRed() * (1 - progress) + c2.getRed() * progress
+				+ .5f);
+		int g = (int) (c1.getGreen() * (1 - progress) + c2.getGreen() * progress
+				+ .5f);
+		int b = (int) (c1.getBlue() * (1 - progress) + c2.getBlue() * progress
+				+ .5f);
+		int a = (int) (c1.getAlpha() * (1 - progress) + c2.getAlpha() * progress
+				+ .5f);
 		return new Color(r, g, b, a);
 	}
 
 	@Override
 	public void paint(Graphics g0, JComponent c) {
-		Graphics2D g = (Graphics2D) g0;
+		Graphics2D g = (Graphics2D) g0.create();
 		JSlider slider = (JSlider) c;
 		if (slider.isOpaque()) {
 			g.setColor(slider.getBackground());
 			g.fillRect(0, 0, slider.getWidth(), slider.getHeight());
 		}
 
-		Composite oldComposite = null;
 		if (slider.isEnabled() == false) {
-			oldComposite = g.getComposite();
-			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-					.5f));
+			g.setComposite(
+					AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .5f));
 		}
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -352,8 +350,8 @@ public class AngleSliderUI extends SliderUI {
 
 		float centerX = (float) data.dial.getCenterX();
 		float centerY = (float) data.dial.getCenterY();
-		float radius = (float) Math.min(centerX - data.dial.getX(), centerY
-				- data.dial.getY()) - 6;
+		float radius = (float) Math.min(centerX - data.dial.getX(),
+				centerY - data.dial.getY()) - 6;
 		float x = (float) (centerX + radius * Math.cos(angle));
 		float y = (float) (centerY + radius * Math.sin(angle));
 		Ellipse2D knob = new Ellipse2D.Float(x - 2, y - 2, 4, 4);
@@ -369,10 +367,7 @@ public class AngleSliderUI extends SliderUI {
 			g.draw(knob);
 		}
 
-		if (oldComposite != null) {
-			g.setComposite(oldComposite);
-		}
-
+		g.dispose();
 	}
 
 	private static final Color border = new Color(100, 100, 100);
@@ -383,7 +378,6 @@ public class AngleSliderUI extends SliderUI {
 		slider.removeFocusListener(focusListener);
 		slider.removeMouseListener(mouseListener);
 		slider.removeMouseMotionListener(mouseListener);
-		slider.removeComponentListener(componentListener);
 		RepaintChangeListener rcl = (RepaintChangeListener) slider
 				.getClientProperty(REPAINT_CHANGE_LISTENER_KEY);
 		slider.getModel().removeChangeListener(rcl);
