@@ -28,6 +28,7 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
 import com.pump.plaf.CircularProgressBarUI;
+import com.pump.showcase.chart.BarChartRenderer;
 
 public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 
@@ -99,8 +100,8 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 		progressBar.setIndeterminate(true);
 		progressBar.setUI(new CircularProgressBarUI());
 		progressBar.setStringPainted(true);
-		progressBar.putClientProperty(
-				CircularProgressBarUI.PROPERTY_TRANSITION, Boolean.TRUE);
+		progressBar.putClientProperty(CircularProgressBarUI.PROPERTY_TRANSITION,
+				Boolean.TRUE);
 		progressBar.putClientProperty(
 				CircularProgressBarUI.PROPERTY_SPARK_ACTIVE, Boolean.TRUE);
 
@@ -142,16 +143,17 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 							return;
 						}
 						i++;
-						SwingUtilities.invokeLater(new UpdateProgressRunnable(
-								i, iterationMax));
+						SwingUtilities.invokeLater(
+								new UpdateProgressRunnable(i, iterationMax));
 					}
 				}
 				if (data == null)
 					throw new NullPointerException("null data for "
 							+ ShowcaseChartDemo.this.getClass().getName());
 
-				System.out.println(ShowcaseChartDemo.this.getClass()
-						.getSimpleName() + ":\n" + toHtml(data));
+				System.out.println(
+						ShowcaseChartDemo.this.getClass().getSimpleName()
+								+ ":\n" + toHtml(data));
 				Runnable installResults = new InstallResults(data);
 				SwingUtilities.invokeLater(installResults);
 			}
@@ -174,8 +176,8 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 			for (Entry<String, Long> entry2 : entry.getValue().entrySet()) {
 				sb.append("\t<tr>\n");
 				sb.append("\t\t\t<td>" + entry2.getKey() + "</td>\n");
-				String v = entry2.getValue()
-						.equals(BarChartRenderer.ERROR_CODE) ? "Error"
+				String v = entry2.getValue().equals(BarChartRenderer.ERROR_CODE)
+						? "Error"
 						: NumberFormat.getInstance().format(entry2.getValue());
 				sb.append("\t\t\t<td>" + v + "</td>\n");
 				sb.append("\t</tr>\n");

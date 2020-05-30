@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.pump.geom.ShapeBounds;
+import com.pump.showcase.chart.BarChartRenderer;
 
 /**
  * A simple test showing off the efficiency of {@link ShapeBounds}.

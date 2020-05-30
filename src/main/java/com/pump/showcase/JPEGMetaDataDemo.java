@@ -28,6 +28,7 @@ import javax.imageio.ImageReader;
 import com.pump.image.ImageLoader;
 import com.pump.image.jpeg.JPEGMetaData;
 import com.pump.image.thumbnail.Thumbnail;
+import com.pump.showcase.chart.BarChartRenderer;
 import com.pump.util.Warnings;
 
 /**
