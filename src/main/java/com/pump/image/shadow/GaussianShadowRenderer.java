@@ -1,5 +1,11 @@
 package com.pump.image.shadow;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * This renderer uses a Gaussian kernel to blur a shadow.
  */
@@ -26,85 +32,141 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 		}
 	}
 
+	static class Renderer {
+		class VerticalPass implements Callable<Void> {
+			int passX1, passX2;
+
+			public VerticalPass(int passX1, int passX2) {
+				this.passX1 = passX1;
+				this.passX2 = passX2;
+			}
+
+			@Override
+			public Void call() {
+				int y1 = k;
+				int y2 = k + srcHeight;
+
+				for (int dstX = passX1; dstX < passX2; dstX++) {
+					int srcX = dstX - k;
+					for (int dstY = y1; dstY < y2; dstY++) {
+						int srcY = dstY - k;
+						int g = srcY - k;
+						int w = 0;
+						for (int j = 0; j < kernel.data.length; j++) {
+							int kernelY = g + j;
+							if (kernelY >= 0 && kernelY < srcHeight) {
+								int argb = srcBuffer[srcX + kernelY * srcWidth];
+								int alpha = argb >>> 24;
+								w += alpha * kernel.data[j];
+							}
+						}
+						w = w / kernel.sum;
+						dstBuffer[dstY * dstWidth + dstX] = w;
+					}
+				}
+				return null;
+			}
+		}
+
+		class HorizontalPass implements Callable<Void> {
+			int passY1, passY2;
+
+			public HorizontalPass(int passY1, int passY2) {
+				this.passY1 = passY1;
+				this.passY2 = passY2;
+			}
+
+			@Override
+			public Void call() {
+				int[] row = new int[dstWidth];
+				for (int dstY = passY1; dstY < passY2; dstY++) {
+					System.arraycopy(dstBuffer, dstY * dstWidth, row, 0,
+							row.length);
+					for (int dstX = 0; dstX < dstWidth; dstX++) {
+						int w = 0;
+						for (int j = 0; j < kernel.data.length; j++) {
+							int kernelX = dstX - k + j;
+							if (kernelX >= 0 && kernelX < dstWidth) {
+								w += row[kernelX] * kernel.data[j];
+							}
+						}
+						w = w / kernel.sum;
+						dstBuffer[dstY * dstWidth + dstX] = opacityLookup[w] << 24;
+					}
+				}
+				return null;
+			}
+		}
+
+		static ExecutorService executor = Executors.newCachedThreadPool();
+
+		final int k;
+		final int srcWidth, srcHeight, dstWidth, dstHeight;
+		volatile int[] dstBuffer;
+		final int[] srcBuffer;
+		final Kernel kernel;
+		int[] opacityLookup = new int[256];
+
+		public Renderer(ARGBPixels srcPixels, ARGBPixels dstPixels,
+				ShadowAttributes attr) {
+			k = attr.getShadowKernelSize();
+			int shadowSize = k * 2;
+
+			srcWidth = srcPixels.getWidth();
+			srcHeight = srcPixels.getHeight();
+
+			dstWidth = srcWidth + shadowSize;
+			dstHeight = srcHeight + shadowSize;
+
+			dstBuffer = dstPixels.getPixels();
+			srcBuffer = srcPixels.getPixels();
+
+			kernel = new Kernel(k);
+
+			float opacity = attr.getShadowOpacity();
+			for (int a = 0; a < opacityLookup.length; a++) {
+				opacityLookup[a] = (int) (a * opacity);
+			}
+		}
+
+		public void run() throws InterruptedException {
+			int x1 = k;
+			int x2 = k + srcWidth;
+
+			int clusterSize = 16;
+			List<VerticalPass> verticalPasses = new ArrayList<>(
+					(x2 - x1) / clusterSize + 1);
+			for (int x = x1; x < x2; x += clusterSize) {
+				int myClusterSize = Math.min(clusterSize, x2 - x);
+				verticalPasses.add(new VerticalPass(x, x + myClusterSize));
+			}
+
+			executor.invokeAll(verticalPasses);
+
+			List<HorizontalPass> horizontalPasses = new ArrayList<>(
+					dstHeight / clusterSize + 1);
+			for (int y = 0; y < dstHeight; y += clusterSize) {
+				int myClusterSize = Math.min(clusterSize, dstHeight - y);
+				horizontalPasses.add(new HorizontalPass(y, y + myClusterSize));
+			}
+
+			executor.invokeAll(horizontalPasses);
+		}
+	}
+
 	@Override
 	public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
 			ShadowAttributes attr) {
 		int k = attr.getShadowKernelSize();
-		int shadowSize = k * 2;
-
-		int srcWidth = src.getWidth();
-		int srcHeight = src.getHeight();
-
-		int dstWidth = srcWidth + shadowSize;
-		int dstHeight = srcHeight + shadowSize;
-
 		if (dst == null)
-			dst = new ARGBPixels(dstWidth, dstHeight);
-
-		// TODO: as long as dest.getWidth() is >=, we should be able to
-		// accommodate this:
-		if (dst.getWidth() != dstWidth)
-			throw new IllegalArgumentException(
-					dst.getWidth() + " != " + dstWidth);
-		if (dst.getHeight() != dstHeight)
-			throw new IllegalArgumentException(
-					dst.getWidth() + " != " + dstWidth);
-
-		int[] dstBuffer = dst.getPixels();
-		int[] srcBuffer = src.getPixels();
-
-		int[] opacityLookup = new int[256];
-		float opacity = attr.getShadowOpacity();
-		for (int a = 0; a < opacityLookup.length; a++) {
-			opacityLookup[a] = (int) (a * opacity);
+			dst = new ARGBPixels(src.getWidth() + 2 * k,
+					src.getHeight() + 2 * k);
+		Renderer r = new Renderer(src, dst, attr);
+		try {
+			r.run();
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
 		}
-
-		Kernel kernel = new Kernel(k);
-
-		int y1 = k;
-		int y2 = k + srcHeight;
-		int x1 = k;
-		int x2 = k + srcWidth;
-
-		// vertical pass:
-		for (int dstX = x1; dstX < x2; dstX++) {
-			int srcX = dstX - k;
-			for (int dstY = y1; dstY < y2; dstY++) {
-				int srcY = dstY - k;
-				int g = srcY - k;
-				int w = 0;
-				for (int j = 0; j < kernel.data.length; j++) {
-					int kernelY = g + j;
-					if (kernelY >= 0 && kernelY < srcHeight) {
-						int argb = srcBuffer[srcX + kernelY * srcWidth];
-						int alpha = argb >>> 24;
-						w += alpha * kernel.data[j];
-					}
-				}
-				w = w / kernel.sum;
-				dstBuffer[dstY * dstWidth + dstX] = w;
-			}
-		}
-
-		// horizontal pass:
-		int[] row = new int[dstWidth];
-		for (int dstY = 0; dstY < dstHeight; dstY++) {
-			System.arraycopy(dstBuffer, dstY * dstWidth, row, 0, row.length);
-			for (int dstX = 0; dstX < dstWidth; dstX++) {
-				int w = 0;
-				for (int j = 0; j < kernel.data.length; j++) {
-					int kernelX = dstX - k + j;
-					if (kernelX >= 0 && kernelX < dstWidth) {
-						w += row[kernelX] * kernel.data[j];
-					}
-				}
-				w = w / kernel.sum;
-				dstBuffer[dstY * dstWidth + dstX] = opacityLookup[w] << 24;
-			}
-		}
-
 		return dst;
-
 	}
-
 }
