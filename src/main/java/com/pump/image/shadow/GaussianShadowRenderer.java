@@ -48,17 +48,48 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 
 				for (int dstX = passX1; dstX < passX2; dstX++) {
 					int srcX = dstX - k;
-					for (int dstY = y1; dstY < y2; dstY++) {
+
+					int y1k = y1 + k;
+					int y2k = y2 - k;
+
+					for (int dstY = y1; dstY < y1k; dstY++) {
 						int srcY = dstY - k;
-						int g = srcY - k;
+						int kernelYStart = srcY - k;
+						int w = 0;
+						for (int j = k + 1; j < kernel.data.length; j++) {
+							int kernelY = kernelYStart + j;
+
+							int argb = srcBuffer[srcX + kernelY * srcWidth];
+							int alpha = argb >>> 24;
+							w += alpha * kernel.data[j];
+						}
+						w = w / kernel.sum;
+						dstBuffer[dstY * dstWidth + dstX] = w;
+					}
+
+					for (int dstY = y1k; dstY < y2k; dstY++) {
+						int srcY = dstY - k;
+						int kernelYStart = srcY - k;
 						int w = 0;
 						for (int j = 0; j < kernel.data.length; j++) {
-							int kernelY = g + j;
-							if (kernelY >= 0 && kernelY < srcHeight) {
-								int argb = srcBuffer[srcX + kernelY * srcWidth];
-								int alpha = argb >>> 24;
-								w += alpha * kernel.data[j];
-							}
+							int kernelY = kernelYStart + j;
+							int argb = srcBuffer[srcX + kernelY * srcWidth];
+							int alpha = argb >>> 24;
+							w += alpha * kernel.data[j];
+						}
+						w = w / kernel.sum;
+						dstBuffer[dstY * dstWidth + dstX] = w;
+					}
+
+					for (int dstY = y2k; dstY < y2; dstY++) {
+						int srcY = dstY - k;
+						int kernelYStart = srcY - k;
+						int w = 0;
+						for (int j = 0; j < k + 1; j++) {
+							int kernelY = kernelYStart + j;
+							int argb = srcBuffer[srcX + kernelY * srcWidth];
+							int alpha = argb >>> 24;
+							w += alpha * kernel.data[j];
 						}
 						w = w / kernel.sum;
 						dstBuffer[dstY * dstWidth + dstX] = w;
@@ -82,13 +113,35 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 				for (int dstY = passY1; dstY < passY2; dstY++) {
 					System.arraycopy(dstBuffer, dstY * dstWidth, row, 0,
 							row.length);
-					for (int dstX = 0; dstX < dstWidth; dstX++) {
+
+					int x1k = k;
+					int x2k = dstWidth - k;
+
+					for (int dstX = 0; dstX < x1k; dstX++) {
+						int w = 0;
+						for (int j = k + 1; j < kernel.data.length; j++) {
+							int kernelX = dstX - k + j;
+							w += row[kernelX] * kernel.data[j];
+						}
+						w = w / kernel.sum;
+						dstBuffer[dstY * dstWidth + dstX] = w << 24;
+					}
+
+					for (int dstX = x1k; dstX < x2k; dstX++) {
 						int w = 0;
 						for (int j = 0; j < kernel.data.length; j++) {
 							int kernelX = dstX - k + j;
-							if (kernelX >= 0 && kernelX < dstWidth) {
-								w += row[kernelX] * kernel.data[j];
-							}
+							w += row[kernelX] * kernel.data[j];
+						}
+						w = w / kernel.sum;
+						dstBuffer[dstY * dstWidth + dstX] = w << 24;
+					}
+
+					for (int dstX = x2k; dstX < dstWidth; dstX++) {
+						int w = 0;
+						for (int j = 0; j < k + 1; j++) {
+							int kernelX = dstX - k + j;
+							w += row[kernelX] * kernel.data[j];
 						}
 						w = w / kernel.sum;
 						dstBuffer[dstY * dstWidth + dstX] = opacityLookup[w] << 24;
