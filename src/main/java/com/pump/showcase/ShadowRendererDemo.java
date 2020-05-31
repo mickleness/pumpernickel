@@ -19,7 +19,9 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -63,6 +65,31 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				results.put(renderer.getClass().getSimpleName(), m);
 			}
 			m.put((double) kernelSize, (double) time);
+		}
+
+		public void printTable() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Kernel\t");
+			for (String name : results.keySet()) {
+				sb.append(name);
+				sb.append("\t");
+			}
+			System.out.println(sb.toString().trim());
+
+			SortedSet<Double> allKeys = new TreeSet<>();
+			for (SortedMap<Double, Double> m : results.values()) {
+				allKeys.addAll(m.keySet());
+			}
+			for (Double key : allKeys) {
+				sb.delete(0, sb.length());
+				sb.append(key.toString());
+				sb.append("\t");
+				for (String name : results.keySet()) {
+					sb.append(results.get(name).get(key));
+					sb.append("\t");
+				}
+				System.out.println(sb.toString().trim());
+			}
 		}
 	}
 
@@ -167,7 +194,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 				}
 			}
-			System.out.println(profileResults.results);
+			profileResults.printTable();
 		} finally {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
