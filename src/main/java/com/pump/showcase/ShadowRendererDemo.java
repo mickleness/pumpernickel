@@ -37,6 +37,7 @@ import javax.swing.plaf.SliderUI;
 
 import com.pump.geom.Spiral2D;
 import com.pump.geom.StarPolygon;
+import com.pump.image.shadow.ARGBPixels;
 import com.pump.image.shadow.FastShadowRenderer;
 import com.pump.image.shadow.GaussianShadowRenderer;
 import com.pump.image.shadow.ShadowAttributes;
@@ -123,26 +124,32 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			final QDialog dialog, final JProgressBar progressBar) {
 		int progress = 0;
 		try {
+			ARGBPixels srcPixels = new ARGBPixels(srcImage);
+
 			for (ShadowRenderer renderer : new ShadowRenderer[] {
 					new GaussianShadowRenderer(), new FastShadowRenderer() }) {
 				for (int kernelSize = kernelSizeSlider
 						.getMinimum(); kernelSize <= kernelSizeSlider
 								.getMaximum(); kernelSize++) {
+
+					ARGBPixels dstPixels = new ARGBPixels(
+							srcImage.getWidth() + 2 * kernelSize,
+							srcImage.getHeight() + 2 * kernelSize);
+
 					ShadowAttributes attr = new ShadowAttributes(kernelSize,
 							.5f);
 
-					System.gc();
-					System.runFinalization();
-					System.gc();
-					System.runFinalization();
-
-					Thread.sleep(50);
-
 					long[] times = new long[10];
 					for (int a = 0; a < times.length; a++) {
+
 						times[a] = System.currentTimeMillis();
-						for (int b = 0; b < 10; b++) {
-							renderer.createShadow(srcImage, attr);
+						for (int b = 0; b < 100; b++) {
+							srcImage.getRaster().getDataElements(0, 0,
+									srcPixels.getWidth(), srcPixels.getHeight(),
+									srcPixels.getPixels());
+							Arrays.fill(dstPixels.getPixels(), 0);
+
+							renderer.createShadow(srcPixels, dstPixels, attr);
 						}
 						times[a] = System.currentTimeMillis() - times[a];
 					}
@@ -161,8 +168,6 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				}
 			}
 			System.out.println(profileResults.results);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
 		} finally {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override

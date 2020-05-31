@@ -1,7 +1,5 @@
 package com.pump.image.shadow;
 
-import java.awt.image.BufferedImage;
-
 /**
  * This renderer uses a Gaussian kernel to blur a shadow.
  */
@@ -29,27 +27,31 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 	}
 
 	@Override
-	public BufferedImage createShadow(BufferedImage image,
+	public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
 			ShadowAttributes attr) {
-
-		if (image.getType() != BufferedImage.TYPE_INT_ARGB)
-			throw new IllegalArgumentException(
-					"only ARGB images are currently supported");
-
 		int k = attr.getShadowKernelSize();
 		int shadowSize = k * 2;
 
-		int srcWidth = image.getWidth();
-		int srcHeight = image.getHeight();
+		int srcWidth = src.getWidth();
+		int srcHeight = src.getHeight();
 
 		int dstWidth = srcWidth + shadowSize;
 		int dstHeight = srcHeight + shadowSize;
 
-		BufferedImage dst = new BufferedImage(dstWidth, dstHeight,
-				BufferedImage.TYPE_INT_ARGB);
+		if (dst == null)
+			dst = new ARGBPixels(dstWidth, dstHeight);
 
-		int[] dstBuffer = new int[dstWidth * dstHeight];
-		int[] srcBuffer = new int[srcWidth * srcHeight];
+		// TODO: as long as dest.getWidth() is >=, we should be able to
+		// accommodate this:
+		if (dst.getWidth() != dstWidth)
+			throw new IllegalArgumentException(
+					dst.getWidth() + " != " + dstWidth);
+		if (dst.getHeight() != dstHeight)
+			throw new IllegalArgumentException(
+					dst.getWidth() + " != " + dstWidth);
+
+		int[] dstBuffer = dst.getPixels();
+		int[] srcBuffer = src.getPixels();
 
 		int[] opacityLookup = new int[256];
 		float opacity = attr.getShadowOpacity();
@@ -58,8 +60,6 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 		}
 
 		Kernel kernel = new Kernel(k);
-
-		image.getRaster().getDataElements(0, 0, srcWidth, srcHeight, srcBuffer);
 
 		int y1 = k;
 		int y2 = k + srcHeight;
@@ -102,8 +102,6 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 				dstBuffer[dstY * dstWidth + dstX] = opacityLookup[w] << 24;
 			}
 		}
-
-		dst.getRaster().setDataElements(0, 0, dstWidth, dstHeight, dstBuffer);
 
 		return dst;
 

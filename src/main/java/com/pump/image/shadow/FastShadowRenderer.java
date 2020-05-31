@@ -1,7 +1,5 @@
 package com.pump.image.shadow;
 
-import java.awt.image.BufferedImage;
-
 /**
  * This is adapted from JDesktop's ShadowRenderer class by Sebastien Petrucci
  * and Romain Guy. This is a very fast renderer, but it uses a uniform kernel
@@ -14,20 +12,28 @@ import java.awt.image.BufferedImage;
 public class FastShadowRenderer implements ShadowRenderer {
 
 	@Override
-	public BufferedImage createShadow(final BufferedImage image,
+	public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
 			ShadowAttributes attr) {
-		if (image.getType() != BufferedImage.TYPE_INT_ARGB)
-			throw new IllegalArgumentException(
-					"only ARGB images are currently supported");
-
 		// Written by Sebastien Petrucci
 		int shadowSize = attr.getShadowKernelSize() * 2;
 
-		int srcWidth = image.getWidth();
-		int srcHeight = image.getHeight();
+		int srcWidth = src.getWidth();
+		int srcHeight = src.getHeight();
 
 		int dstWidth = srcWidth + shadowSize;
 		int dstHeight = srcHeight + shadowSize;
+
+		if (dst == null)
+			dst = new ARGBPixels(dstWidth, dstHeight);
+
+		// TODO: as long as dest.getWidth() is >=, we should be able to
+		// accommodate this:
+		if (dst.getWidth() != dstWidth)
+			throw new IllegalArgumentException(
+					dst.getWidth() + " != " + dstWidth);
+		if (dst.getHeight() != dstHeight)
+			throw new IllegalArgumentException(
+					dst.getWidth() + " != " + dstWidth);
 
 		int left = attr.getShadowKernelSize();
 		int right = shadowSize - left;
@@ -39,13 +45,8 @@ public class FastShadowRenderer implements ShadowRenderer {
 
 		int aSum;
 
-		BufferedImage dst = new BufferedImage(dstWidth, dstHeight,
-				BufferedImage.TYPE_INT_ARGB);
-
-		int[] dstBuffer = new int[dstWidth * dstHeight];
-		int[] srcBuffer = new int[srcWidth * srcHeight];
-
-		image.getRaster().getDataElements(0, 0, srcWidth, srcHeight, srcBuffer);
+		int[] dstBuffer = dst.getPixels();
+		int[] srcBuffer = src.getPixels();
 
 		int lastPixelOffset = right * dstWidth;
 		float hSumDivider = 1.0f / shadowSize;
@@ -174,8 +175,6 @@ public class FastShadowRenderer implements ShadowRenderer {
 				}
 			}
 		}
-
-		dst.getRaster().setDataElements(0, 0, dstWidth, dstHeight, dstBuffer);
 		return dst;
 	}
 }

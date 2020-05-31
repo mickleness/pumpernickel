@@ -19,6 +19,23 @@ public interface ShadowRenderer {
 	 *            a description of the shadow attributes.
 	 * @return a new BufferedImage that contains the blurred shadow image.
 	 */
-	public BufferedImage createShadow(BufferedImage srcImage,
+	public default BufferedImage createShadow(BufferedImage srcImage,
+			ShadowAttributes attr) {
+		int k = attr.getShadowKernelSize();
+
+		int destW = srcImage.getWidth() + 2 * k;
+		int destH = srcImage.getHeight() + 2 * k;
+		ARGBPixels destPixels = new ARGBPixels(destW, destH);
+		ARGBPixels srcPixels = new ARGBPixels(srcImage);
+		createShadow(srcPixels, destPixels, attr);
+
+		BufferedImage dest = new BufferedImage(destW, destH,
+				BufferedImage.TYPE_INT_ARGB);
+		dest.getRaster().setDataElements(0, 0, destPixels.getWidth(),
+				destPixels.getHeight(), destPixels.getPixels());
+		return dest;
+	}
+
+	public ARGBPixels createShadow(ARGBPixels srcImage, ARGBPixels destImage,
 			ShadowAttributes attr);
 }
