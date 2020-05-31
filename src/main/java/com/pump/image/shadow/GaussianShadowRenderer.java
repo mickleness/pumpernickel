@@ -57,27 +57,35 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 						int kernelYStart = srcY - k;
 						int w = 0;
 						for (int j = k + 1; j < kernel.data.length; j++) {
-							int kernelY = kernelYStart + j;
-
-							int argb = srcBuffer[srcX + kernelY * srcWidth];
-							int alpha = argb >>> 24;
-							w += alpha * kernel.data[j];
+							w += (srcBuffer[srcX + kernelYStart
+									+ j * srcWidth] >>> 24) * kernel.data[j];
 						}
 						w = w / kernel.sum;
 						dstBuffer[dstY * dstWidth + dstX] = w;
 					}
 
+					int prevAlpha = -1;
 					for (int dstY = y1k; dstY < y2k; dstY++) {
-						int srcY = dstY - k;
-						int kernelYStart = srcY - k;
-						int w = 0;
-						for (int j = 0; j < kernel.data.length; j++) {
-							int kernelY = kernelYStart + j;
-							int argb = srcBuffer[srcX + kernelY * srcWidth];
-							int alpha = argb >>> 24;
-							w += alpha * kernel.data[j];
+						int w = (srcBuffer[srcX
+								+ (dstY - k - k + kernel.data.length - 1)
+										* srcWidth] >>> 24);
+
+						if (prevAlpha == 0 && w == 0) {
+							w = 0;
+						} else if (prevAlpha == 255 && w == 255) {
+							w = 255;
+						} else {
+							w = w * kernel.data[kernel.data.length - 1];
+							int srcY = dstY - k;
+							int kernelYStart = srcY - k;
+							for (int j = 0; j < kernel.data.length - 1; j++) {
+								w += (srcBuffer[srcX
+										+ (kernelYStart + j) * srcWidth] >>> 24)
+										* kernel.data[j];
+							}
+							w = w / kernel.sum;
+							prevAlpha = w;
 						}
-						w = w / kernel.sum;
 						dstBuffer[dstY * dstWidth + dstX] = w;
 					}
 
@@ -86,10 +94,9 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 						int kernelYStart = srcY - k;
 						int w = 0;
 						for (int j = 0; j < k + 1; j++) {
-							int kernelY = kernelYStart + j;
-							int argb = srcBuffer[srcX + kernelY * srcWidth];
-							int alpha = argb >>> 24;
-							w += alpha * kernel.data[j];
+							w += (srcBuffer[srcX
+									+ (kernelYStart + j) * srcWidth] >>> 24)
+									* kernel.data[j];
 						}
 						w = w / kernel.sum;
 						dstBuffer[dstY * dstWidth + dstX] = w;
@@ -128,13 +135,24 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 								+ dstX] = opacityLookup[w] << 24;
 					}
 
+					int prevAlpha = -1;
 					for (int dstX = x1k; dstX < x2k; dstX++) {
-						int w = 0;
-						for (int j = 0; j < kernel.data.length; j++) {
-							int kernelX = dstX - k + j;
-							w += row[kernelX] * kernel.data[j];
+						int w = row[dstX - k + kernel.data.length - 1];
+
+						if (prevAlpha == 0 && w == 0) {
+							w = 0;
+						} else if (prevAlpha == 255 && w == 255) {
+							w = 255;
+						} else {
+							w = w * kernel.data[kernel.data.length - 1];
+
+							for (int j = 0; j < kernel.data.length - 1; j++) {
+								int kernelX = dstX - k + j;
+								w += row[kernelX] * kernel.data[j];
+							}
+							w = w / kernel.sum;
+							prevAlpha = w;
 						}
-						w = w / kernel.sum;
 						dstBuffer[dstY * dstWidth
 								+ dstX] = opacityLookup[w] << 24;
 					}
