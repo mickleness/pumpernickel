@@ -22,14 +22,11 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 
 			@Override
 			public Void call() {
-				int y1 = k;
-				int y2 = k + srcHeight;
-
 				int maxSum = kernelSum * 255;
 				for (int dstX = passX1; dstX < passX2; dstX++) {
 					int srcX = dstX - k;
 					int prevSum = -1;
-					for (int dstY = y1; dstY < y2; dstY++) {
+					for (int dstY = 0; dstY < dstHeight; dstY++) {
 						int srcY = dstY - k;
 						int g = srcY - k;
 

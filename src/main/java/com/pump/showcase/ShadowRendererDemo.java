@@ -13,6 +13,7 @@ import java.awt.Shape;
 import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -105,7 +106,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			// vertical pass:
 			for (int dstX = x1; dstX < x2; dstX++) {
 				int srcX = dstX - k;
-				for (int dstY = y1; dstY < y2; dstY++) {
+				for (int dstY = 0; dstY < dstHeight; dstY++) {
 					int srcY = dstY - k;
 					int g = srcY - k;
 					int w = 0;
@@ -151,6 +152,15 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		Graphics2D g = bi.createGraphics();
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
+
+		g.setColor(Color.white);
+		g.setStroke(new BasicStroke(4));
+		g.draw(new Ellipse2D.Float(-10, -10, 20, 20));
+		g.draw(new Ellipse2D.Float(bi.getWidth() - 10, bi.getHeight() - 10, 20,
+				20));
+		g.draw(new Ellipse2D.Float(bi.getWidth() - 10, -10, 20, 20));
+		g.draw(new Ellipse2D.Float(-10, bi.getHeight() - 10, 20, 20));
+
 		StarPolygon star = new StarPolygon(40);
 		star.setCenter(50, 50);
 		g.setColor(new Color(0x1BE7FF));
