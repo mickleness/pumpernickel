@@ -25,7 +25,7 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 				int y1 = k;
 				int y2 = k + srcHeight;
 
-				int maxSum = kernel.sum * 255;
+				int maxSum = kernelSum * 255;
 				for (int dstX = passX1; dstX < passX2; dstX++) {
 					int srcX = dstX - k;
 					int prevSum = -1;
@@ -33,7 +33,7 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 						int srcY = dstY - k;
 						int g = srcY - k;
 
-						int z = srcX + (g + kernel.data.length - 1) * srcWidth;
+						int z = srcX + (g + kernel.length - 1) * srcWidth;
 						int w;
 						if (z >= 0 && z < srcBuffer.length) {
 							w = (srcBuffer[z] >>> 24);
@@ -45,17 +45,17 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 						} else if (prevSum == maxSum && w == 255) {
 							// leave w as 255
 						} else {
-							w = w * kernel.data[kernel.data.length - 1];
-							for (int j = 0; j < kernel.data.length - 1; j++) {
+							w = w * kernel[kernel.length - 1];
+							for (int j = 0; j < kernel.length - 1; j++) {
 								int kernelY = g + j;
 								if (kernelY >= 0 && kernelY < srcHeight) {
 									w += (srcBuffer[srcX
 											+ kernelY * srcWidth] >>> 24)
-											* kernel.data[j];
+											* kernel[j];
 								}
 							}
 							prevSum = w;
-							w = w / kernel.sum;
+							w = w / kernelSum;
 						}
 						dstBuffer[dstY * dstWidth + dstX] = w;
 					}
@@ -75,14 +75,14 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			@Override
 			public Void call() {
 				int[] row = new int[dstWidth];
-				int maxSum = kernel.sum * 255;
+				int maxSum = kernelSum * 255;
 
 				for (int dstY = passY1; dstY < passY2; dstY++) {
 					System.arraycopy(dstBuffer, dstY * dstWidth, row, 0,
 							row.length);
 					int prevSum = -1;
 					for (int dstX = 0; dstX < dstWidth; dstX++) {
-						int z = dstX - k + kernel.data.length - 1;
+						int z = dstX - k + kernel.length - 1;
 						int w;
 						if (z >= 0 && z < row.length) {
 							w = row[z];
@@ -94,15 +94,15 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 						} else if (prevSum == maxSum && w == 255) {
 							// leave w as 255
 						} else {
-							w = w * kernel.data[kernel.data.length - 1];
-							for (int j = 0; j < kernel.data.length - 1; j++) {
+							w = w * kernel[kernel.length - 1];
+							for (int j = 0; j < kernel.length - 1; j++) {
 								int kernelX = dstX - k + j;
 								if (kernelX >= 0 && kernelX < dstWidth) {
-									w += row[kernelX] * kernel.data[j];
+									w += row[kernelX] * kernel[j];
 								}
 							}
 							prevSum = w;
-							w = w / kernel.sum;
+							w = w / kernelSum;
 						}
 						dstBuffer[dstY * dstWidth
 								+ dstX] = opacityLookup[w] << 24;
@@ -118,7 +118,8 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 		final int srcWidth, srcHeight, dstWidth, dstHeight;
 		volatile int[] dstBuffer;
 		final int[] srcBuffer;
-		final GaussianKernel kernel;
+		final int[] kernel;
+		final int kernelSum;
 		int[] opacityLookup = new int[256];
 
 		public Renderer(ARGBPixels srcPixels, ARGBPixels dstPixels,
@@ -135,7 +136,9 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			dstBuffer = dstPixels.getPixels();
 			srcBuffer = srcPixels.getPixels();
 
-			kernel = new GaussianKernel(k);
+			GaussianKernel kernel = new GaussianKernel(k);
+			this.kernel = kernel.getArray();
+			kernelSum = kernel.getArraySum();
 
 			float opacity = attr.getShadowOpacity();
 			for (int a = 0; a < opacityLookup.length; a++) {

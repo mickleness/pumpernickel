@@ -99,6 +99,9 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			int x1 = k;
 			int x2 = k + srcWidth;
 
+			int[] kernelArray = kernel.getArray();
+			int kernelSum = kernel.getArraySum();
+
 			// vertical pass:
 			for (int dstX = x1; dstX < x2; dstX++) {
 				int srcX = dstX - k;
@@ -106,15 +109,15 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 					int srcY = dstY - k;
 					int g = srcY - k;
 					int w = 0;
-					for (int j = 0; j < kernel.data.length; j++) {
+					for (int j = 0; j < kernelArray.length; j++) {
 						int kernelY = g + j;
 						if (kernelY >= 0 && kernelY < srcHeight) {
 							int argb = srcBuffer[srcX + kernelY * srcWidth];
 							int alpha = argb >>> 24;
-							w += alpha * kernel.data[j];
+							w += alpha * kernelArray[j];
 						}
 					}
-					w = w / kernel.sum;
+					w = w / kernelSum;
 					dstBuffer[dstY * dstWidth + dstX] = w;
 				}
 			}
@@ -126,13 +129,13 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 						row.length);
 				for (int dstX = 0; dstX < dstWidth; dstX++) {
 					int w = 0;
-					for (int j = 0; j < kernel.data.length; j++) {
+					for (int j = 0; j < kernelArray.length; j++) {
 						int kernelX = dstX - k + j;
 						if (kernelX >= 0 && kernelX < dstWidth) {
-							w += row[kernelX] * kernel.data[j];
+							w += row[kernelX] * kernelArray[j];
 						}
 					}
-					w = w / kernel.sum;
+					w = w / kernelSum;
 					dstBuffer[dstY * dstWidth + dstX] = opacityLookup[w] << 24;
 				}
 			}
