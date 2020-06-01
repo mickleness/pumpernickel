@@ -41,6 +41,7 @@ import com.pump.geom.Spiral2D;
 import com.pump.geom.StarPolygon;
 import com.pump.image.shadow.ARGBPixels;
 import com.pump.image.shadow.FastShadowRenderer;
+import com.pump.image.shadow.GaussianKernel;
 import com.pump.image.shadow.GaussianShadowRenderer;
 import com.pump.image.shadow.ShadowAttributes;
 import com.pump.image.shadow.ShadowRenderer;
@@ -51,6 +52,133 @@ import com.pump.swing.JFancyBox;
 import com.pump.swing.QDialog;
 
 public class ShadowRendererDemo extends ShowcaseExampleDemo {
+
+	/**
+	 * For testing and comparison purposes: this is the original unoptimized
+	 * Gaussian shadow renderer.
+	 *
+	 */
+	public static class OriginalGaussianShadowRenderer
+			implements ShadowRenderer {
+
+		@Override
+		public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
+				ShadowAttributes attr) {
+			int k = attr.getShadowKernelSize();
+			int shadowSize = k * 2;
+
+			int srcWidth = src.getWidth();
+			int srcHeight = src.getHeight();
+
+			int dstWidth = srcWidth + shadowSize;
+			int dstHeight = srcHeight + shadowSize;
+
+			if (dst == null)
+				dst = new ARGBPixels(dstWidth, dstHeight);
+
+			if (dst.getWidth() != dstWidth)
+				throw new IllegalArgumentException(
+						dst.getWidth() + " != " + dstWidth);
+			if (dst.getHeight() != dstHeight)
+				throw new IllegalArgumentException(
+						dst.getWidth() + " != " + dstWidth);
+
+			int[] dstBuffer = dst.getPixels();
+			int[] srcBuffer = src.getPixels();
+
+			int[] opacityLookup = new int[256];
+			float opacity = attr.getShadowOpacity();
+			for (int a = 0; a < opacityLookup.length; a++) {
+				opacityLookup[a] = (int) (a * opacity);
+			}
+
+			GaussianKernel kernel = new GaussianKernel(k);
+
+			int y1 = k;
+			int y2 = k + srcHeight;
+			int x1 = k;
+			int x2 = k + srcWidth;
+
+			// vertical pass:
+			for (int dstX = x1; dstX < x2; dstX++) {
+				int srcX = dstX - k;
+				for (int dstY = y1; dstY < y2; dstY++) {
+					int srcY = dstY - k;
+					int g = srcY - k;
+					int w = 0;
+					for (int j = 0; j < kernel.data.length; j++) {
+						int kernelY = g + j;
+						if (kernelY >= 0 && kernelY < srcHeight) {
+							int argb = srcBuffer[srcX + kernelY * srcWidth];
+							int alpha = argb >>> 24;
+							w += alpha * kernel.data[j];
+						}
+					}
+					w = w / kernel.sum;
+					dstBuffer[dstY * dstWidth + dstX] = w;
+				}
+			}
+
+			// horizontal pass:
+			int[] row = new int[dstWidth];
+			for (int dstY = 0; dstY < dstHeight; dstY++) {
+				System.arraycopy(dstBuffer, dstY * dstWidth, row, 0,
+						row.length);
+				for (int dstX = 0; dstX < dstWidth; dstX++) {
+					int w = 0;
+					for (int j = 0; j < kernel.data.length; j++) {
+						int kernelX = dstX - k + j;
+						if (kernelX >= 0 && kernelX < dstWidth) {
+							w += row[kernelX] * kernel.data[j];
+						}
+					}
+					w = w / kernel.sum;
+					dstBuffer[dstY * dstWidth + dstX] = opacityLookup[w] << 24;
+				}
+			}
+
+			return dst;
+
+		}
+	}
+
+	public static BufferedImage createTestImage() {
+		BufferedImage bi = new BufferedImage(300, 100,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bi.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		StarPolygon star = new StarPolygon(40);
+		star.setCenter(50, 50);
+		g.setColor(new Color(0x1BE7FF));
+		g.fill(star);
+
+		BufferedImage textureBI = new BufferedImage(20, 60,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = textureBI.createGraphics();
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		for (int z = 0; z < 500; z++) {
+			g2.setStroke(new BasicStroke(8));
+			g2.setColor(new Color(0xFF5714));
+			g2.drawLine(-100 + z * 20, 100, 100 + z * 20, -100);
+			g2.setStroke(new BasicStroke(10));
+			g2.setColor(new Color(0x6EEB83));
+			g2.drawLine(200 - z * 20, 100, 0 - z * 20, -100);
+		}
+		g2.dispose();
+		Rectangle r = new Rectangle(0, 0, textureBI.getWidth(),
+				textureBI.getHeight());
+		g.setPaint(new TexturePaint(textureBI, r));
+		Shape roundRect = new RoundRectangle2D.Float(110, 10, 80, 80, 40, 40);
+		g.fill(roundRect);
+
+		Spiral2D spiral = new Spiral2D(250, 50, 20, 2, 0, 0, true);
+		g.setStroke(new BasicStroke(10));
+		g.setColor(new Color(0xE8AA14));
+		g.draw(spiral);
+		return bi;
+	}
 
 	private static final long serialVersionUID = 1L;
 
@@ -154,6 +282,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			ARGBPixels srcPixels = new ARGBPixels(srcImage);
 
 			for (ShadowRenderer renderer : new ShadowRenderer[] {
+					new OriginalGaussianShadowRenderer(),
 					new GaussianShadowRenderer(), new FastShadowRenderer() }) {
 				for (int kernelSize = kernelSizeSlider
 						.getMinimum(); kernelSize <= kernelSizeSlider
@@ -268,16 +397,16 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		c.weightx = 1;
 		c.weighty = 1;
 		c.insets = new Insets(3, 3, 3, 3);
-		examplePanel.add(new JLabel(new ImageIcon(createExampleImage())), c);
+		examplePanel.add(new JLabel(new ImageIcon(createShadowedImage())), c);
 		c.gridy++;
 		c.anchor = GridBagConstraints.WEST;
 		examplePanel.revalidate();
 		examplePanel.repaint();
 	}
 
-	private BufferedImage createExampleImage() {
+	private BufferedImage createShadowedImage() {
 		if (srcImage == null)
-			srcImage = createSourceImage();
+			srcImage = createTestImage();
 
 		Dimension size = new Dimension(srcImage.getWidth(),
 				srcImage.getHeight());
@@ -310,45 +439,6 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		g.dispose();
 
 		return returnValue;
-	}
-
-	private BufferedImage createSourceImage() {
-		BufferedImage bi = new BufferedImage(300, 100,
-				BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = bi.createGraphics();
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		StarPolygon star = new StarPolygon(40);
-		star.setCenter(50, 50);
-		g.setColor(new Color(0x1BE7FF));
-		g.fill(star);
-
-		BufferedImage textureBI = new BufferedImage(20, 60,
-				BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2 = textureBI.createGraphics();
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		for (int z = 0; z < 500; z++) {
-			g2.setStroke(new BasicStroke(8));
-			g2.setColor(new Color(0xFF5714));
-			g2.drawLine(-100 + z * 20, 100, 100 + z * 20, -100);
-			g2.setStroke(new BasicStroke(10));
-			g2.setColor(new Color(0x6EEB83));
-			g2.drawLine(200 - z * 20, 100, 0 - z * 20, -100);
-		}
-		g2.dispose();
-		Rectangle r = new Rectangle(0, 0, textureBI.getWidth(),
-				textureBI.getHeight());
-		g.setPaint(new TexturePaint(textureBI, r));
-		Shape roundRect = new RoundRectangle2D.Float(110, 10, 80, 80, 40, 40);
-		g.fill(roundRect);
-
-		Spiral2D spiral = new Spiral2D(250, 50, 20, 2, 0, 0, true);
-		g.setStroke(new BasicStroke(10));
-		g.setColor(new Color(0xE8AA14));
-		g.draw(spiral);
-		return bi;
-
 	}
 
 	@Override
