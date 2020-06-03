@@ -29,11 +29,7 @@ public interface ShadowRenderer {
 		ARGBPixels srcPixels = new ARGBPixels(srcImage);
 		createShadow(srcPixels, destPixels, attr);
 
-		BufferedImage dest = new BufferedImage(destW, destH,
-				BufferedImage.TYPE_INT_ARGB);
-		dest.getRaster().setDataElements(0, 0, destPixels.getWidth(),
-				destPixels.getHeight(), destPixels.getPixels());
-		return dest;
+		return destPixels.createBufferedImage();
 	}
 
 	public ARGBPixels createShadow(ARGBPixels srcImage, ARGBPixels destImage,
