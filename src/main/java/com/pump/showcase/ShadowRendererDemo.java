@@ -18,6 +18,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -95,8 +96,6 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 			GaussianKernel kernel = new GaussianKernel(k);
 
-			int y1 = k;
-			int y2 = k + srcHeight;
 			int x1 = k;
 			int x2 = k + srcWidth;
 
@@ -289,14 +288,15 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 	}
 
 	private void profileRenderers(ProfileResults profileResults,
-			final QDialog dialog, final JProgressBar progressBar) {
+			final QDialog dialog, final JProgressBar progressBar,
+			Collection<ShadowRenderer> renderers) {
 		int progress = 0;
 		try {
 			ARGBPixels srcPixels = new ARGBPixels(srcImage);
+			srcImage.getRaster().getDataElements(0, 0, srcPixels.getWidth(),
+					srcPixels.getHeight(), srcPixels.getPixels());
 
-			for (ShadowRenderer renderer : new ShadowRenderer[] {
-					new OriginalGaussianShadowRenderer(),
-					new GaussianShadowRenderer(), new FastShadowRenderer() }) {
+			for (ShadowRenderer renderer : renderers) {
 				for (int kernelSize = kernelSizeSlider
 						.getMinimum(); kernelSize <= kernelSizeSlider
 								.getMaximum(); kernelSize++) {
@@ -313,11 +313,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 						times[a] = System.currentTimeMillis();
 						for (int b = 0; b < 100; b++) {
-							srcImage.getRaster().getDataElements(0, 0,
-									srcPixels.getWidth(), srcPixels.getHeight(),
-									srcPixels.getPixels());
 							Arrays.fill(dstPixels.getPixels(), 0);
-
 							renderer.createShadow(srcPixels, dstPixels, attr);
 						}
 						times[a] = System.currentTimeMillis() - times[a];
@@ -337,6 +333,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				}
 			}
 			profileResults.printTable();
+		} catch (Throwable t) {
+			t.printStackTrace();
 		} finally {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -356,10 +354,13 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			QDialog dialog;
 			JProgressBar progressBar;
 
+			Collection<ShadowRenderer> renderers = Arrays.asList(
+					new OriginalGaussianShadowRenderer(),
+					new GaussianShadowRenderer(), new FastShadowRenderer());
+
 			public void actionPerformed(ActionEvent e) {
 				progressBar = new JProgressBar(SwingConstants.HORIZONTAL, 0,
-						rendererComboBox.getItemCount()
-								* kernelSizeSlider.getMaximum());
+						renderers.size() * kernelSizeSlider.getMaximum());
 
 				JFrame frame = (JFrame) SwingUtilities
 						.getWindowAncestor(ShadowRendererDemo.this);
@@ -378,7 +379,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 						@Override
 						public void run() {
 							profileRenderers(profileResults, dialog,
-									progressBar);
+									progressBar, renderers);
 						}
 					};
 					profileThread.start();

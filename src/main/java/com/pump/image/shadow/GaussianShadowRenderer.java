@@ -101,8 +101,7 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 							prevSum = w;
 							w = w / kernelSum;
 						}
-						dstBuffer[dstY * dstWidth
-								+ dstX] = opacityLookup[w] << 24;
+						dstBuffer[dstY * dstWidth + dstX] = opacityLookup[w];
 					}
 				}
 				return null;
@@ -139,7 +138,7 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 
 			float opacity = attr.getShadowOpacity();
 			for (int a = 0; a < opacityLookup.length; a++) {
-				opacityLookup[a] = (int) (a * opacity);
+				opacityLookup[a] = ((int) (a * opacity)) << 24;
 			}
 		}
 
