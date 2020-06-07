@@ -5,15 +5,40 @@ import java.awt.image.ColorModel;
 import java.awt.image.DataBufferInt;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.IntARGBConverter;
 
-public class ARGBPixels {
-	int width, height;
-	int[] pixels;
+/**
+ * This represents ARGB-encoded pixel data for an image.
+ * <p>
+ * Some methods include the option to directly reference or assign the int
+ * arrays used by BufferedImages. The DataBuffer documentation cautions against
+ * this and says it makes those images "untracked". There may be
+ * platform-specific optimizations we'll miss out on when a buffer becomes
+ * untracked. I definitely saw this a decade ago when Mac used the Quartz
+ * rendering system, but I checked just now and didn't observe a performance
+ * difference when I tried painting to an untracked DataBuffer.
+ * <p>
+ * However: it's also worth noting I didn't see a significant improvement in
+ * performance either. So I'm not convinced it matters one way or the other.
+ */
+public class ARGBPixels implements Serializable {
+	private static final long serialVersionUID = 1L;
 
+	private int width, height;
+	private int[] pixels;
+
+	/**
+	 * Create a blank ARGBPixels.
+	 * 
+	 * @param width
+	 * @param height
+	 */
 	public ARGBPixels(int width, int height) {
 		if (width <= 0)
 			throw new IllegalArgumentException(
@@ -26,33 +51,46 @@ public class ARGBPixels {
 		pixels = new int[width * height];
 	}
 
+	/**
+	 * Create a ARGBPixels that copies all the pixel data from the source image.
+	 * 
+	 * @param srcImage
+	 *            the image to copy data from.
+	 */
 	public ARGBPixels(BufferedImage srcImage) {
 		this(srcImage, false);
 	}
 
 	/**
-	 * This constructor is private because I don't want to let you pass in true
-	 * for referencePixels yet. I'm seeing a pronounced (but unexplained) impact
-	 * on some performance tests. Since I don't understand what's happening, I
-	 * don't want to meddle with it right now.
+	 * Create a ARGBPixels based on an image.
 	 * 
 	 * @param srcImage
+	 *            the image used to copy or reference the pixel data.
 	 * @param referencePixels
 	 *            if true then (if possible) we'll reach inside and grab the
 	 *            reference to the int[] array used to store the ARGB pixel
 	 *            data. This can untrack/unmanage the image, which may adversely
-	 *            effect platform-specific optimizations.
+	 *            effect platform-specific optimizations. If false -- or if the
+	 *            pixels can't be easily grabbed -- then this ARGBPixels object
+	 *            creates a new int array to store the data.
 	 */
-	private ARGBPixels(BufferedImage srcImage, boolean referencePixels) {
+	public ARGBPixels(BufferedImage srcImage, boolean referencePixels) {
 		this.width = srcImage.getWidth();
 		this.height = srcImage.getHeight();
 
-		if (referencePixels
-				&& srcImage.getType() == BufferedImage.TYPE_INT_ARGB) {
-			DataBufferInt dbi = (DataBufferInt) srcImage.getRaster()
-					.getDataBuffer();
-			if (dbi.getNumBanks() == 1 && dbi.getOffset() == 0) {
-				pixels = dbi.getData();
+		if (srcImage.getType() == BufferedImage.TYPE_INT_ARGB) {
+			if (referencePixels) {
+				DataBufferInt dbi = (DataBufferInt) srcImage.getRaster()
+						.getDataBuffer();
+				if (dbi.getNumBanks() == 1 && dbi.getOffset() == 0) {
+					pixels = dbi.getData();
+				}
+			}
+
+			if (pixels == null) {
+				pixels = new int[width * height];
+				srcImage.getRaster().getDataElements(0, 0, srcImage.getWidth(),
+						srcImage.getHeight(), pixels);
 			}
 		}
 
@@ -70,18 +108,32 @@ public class ARGBPixels {
 		}
 	}
 
+	/**
+	 * Return the width of this pixel data.
+	 */
 	public int getWidth() {
 		return width;
 	}
 
+	/**
+	 * Return the height of this pixel data.
+	 */
 	public int getHeight() {
 		return height;
 	}
 
+	/**
+	 * Return the pixel data in this object.
+	 * <p>
+	 * This returns the actually pixel data (not a copy of the array).
+	 */
 	public int[] getPixels() {
 		return pixels;
 	}
 
+	/**
+	 * Create a new BufferedImage that copies the pixel data in this object.
+	 */
 	public BufferedImage createBufferedImage() {
 		return createBufferedImage(false);
 	}
@@ -105,7 +157,7 @@ public class ARGBPixels {
 	 * 
 	 * @return an ARGB BufferedImage that displays {@link #getPixels()}.
 	 */
-	private BufferedImage createBufferedImage(boolean createUntrackable) {
+	public BufferedImage createBufferedImage(boolean createUntrackable) {
 		BufferedImage returnValue;
 		if (createUntrackable) {
 			ColorModel colorModel = ColorModel.getRGBdefault();
@@ -125,4 +177,54 @@ public class ARGBPixels {
 		}
 		return returnValue;
 	}
+
+	@Override
+	public int hashCode() {
+		int k = getWidth() * getHeight();
+		k ^= pixels[getHeight() * getWidth() / 2];
+		return k;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof ARGBPixels))
+			return false;
+		ARGBPixels other = (ARGBPixels) obj;
+		if (other.getWidth() != getWidth())
+			return false;
+		if (other.getHeight() != getHeight())
+			return false;
+		if (!Arrays.equals(getPixels(), other.getPixels()))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[ width=" + getWidth()
+				+ ", height=" + getHeight() + "]";
+	}
+
+	private void writeObject(java.io.ObjectOutputStream out)
+			throws IOException {
+		out.writeInt(0);
+		out.writeInt(getWidth());
+		out.writeInt(getHeight());
+		out.writeObject(getPixels());
+	}
+
+	private void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		int version = in.readInt();
+		if (version == 0) {
+			width = in.readInt();
+			height = in.readInt();
+			pixels = (int[]) in.readObject();
+		} else {
+			throw new IOException("unsupported internal version: " + version);
+		}
+	}
+
 }
