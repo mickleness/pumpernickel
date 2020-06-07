@@ -13,24 +13,22 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 
 	static class Renderer {
 		class VerticalPass implements Callable<Void> {
-			int passX1, passX2;
+			int minX, maxX;
 
-			public VerticalPass(int passX1, int passX2) {
-				this.passX1 = passX1;
-				this.passX2 = passX2;
+			public VerticalPass(int minX, int maxX) {
+				this.minX = minX;
+				this.maxX = maxX;
 			}
 
 			@Override
 			public Void call() {
 				int maxSum = kernelSum * 255;
-				for (int dstX = passX1; dstX < passX2; dstX++) {
-					int srcX = dstX - k;
+				for (int dstX = minX, srcX = minX
+						- k; dstX < maxX; dstX++, srcX++) {
 					int prevSum = -1;
-					for (int dstY = 0; dstY < dstHeight; dstY++) {
-						int srcY = dstY - k;
-						int g = srcY - k;
-
-						int z = srcX + (g + kernel.length - 1) * srcWidth;
+					for (int dstY = 0, g = dstY - 2 * k, z = srcX + (g
+							+ kernel.length - 1)
+							* srcWidth; dstY < dstHeight; dstY++, g++, z += srcWidth) {
 						int w;
 						if (z >= 0 && z < srcBuffer.length) {
 							w = (srcBuffer[z] >>> 24);
@@ -43,8 +41,8 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 							// leave w as 255
 						} else {
 							w = w * kernel[kernel.length - 1];
-							for (int j = 0; j < kernel.length - 1; j++) {
-								int kernelY = g + j;
+							for (int j = 0, kernelY = g + j; j < kernel.length
+									- 1; j++, kernelY++) {
 								if (kernelY >= 0 && kernelY < srcHeight) {
 									w += (srcBuffer[srcX
 											+ kernelY * srcWidth] >>> 24)
@@ -62,11 +60,11 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 		}
 
 		class HorizontalPass implements Callable<Void> {
-			int passY1, passY2;
+			int minY, maxY;
 
-			public HorizontalPass(int passY1, int passY2) {
-				this.passY1 = passY1;
-				this.passY2 = passY2;
+			public HorizontalPass(int minY, int maxY) {
+				this.minY = minY;
+				this.maxY = maxY;
 			}
 
 			@Override
@@ -74,12 +72,12 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 				int[] row = new int[dstWidth];
 				int maxSum = kernelSum * 255;
 
-				for (int dstY = passY1; dstY < passY2; dstY++) {
+				for (int dstY = minY; dstY < maxY; dstY++) {
 					System.arraycopy(dstBuffer, dstY * dstWidth, row, 0,
 							row.length);
 					int prevSum = -1;
-					for (int dstX = 0; dstX < dstWidth; dstX++) {
-						int z = dstX - k + kernel.length - 1;
+					for (int dstX = 0, z = dstX - k + kernel.length
+							- 1; dstX < dstWidth; dstX++, z++) {
 						int w;
 						if (z >= 0 && z < row.length) {
 							w = row[z];
@@ -92,8 +90,9 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 							// leave w as 255
 						} else {
 							w = w * kernel[kernel.length - 1];
-							for (int j = 0; j < kernel.length - 1; j++) {
-								int kernelX = dstX - k + j;
+							for (int j = 0, kernelX = dstX - k
+									+ j; j < kernel.length
+											- 1; j++, kernelX++) {
 								if (kernelX >= 0 && kernelX < dstWidth) {
 									w += row[kernelX] * kernel[j];
 								}
