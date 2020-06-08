@@ -19,6 +19,8 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -295,10 +297,62 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		refreshExample();
 	}
 
+	static class RunSample implements Runnable {
+		ShadowRenderer renderer;
+		ShadowAttributes attr;
+		ARGBPixels srcPixels, dstPixels;
+		ProfileResults profileResults;
+
+		public RunSample(ProfileResults profileResults, ShadowRenderer renderer,
+				ShadowAttributes attr, ARGBPixels srcPixels,
+				ARGBPixels dstPixels) {
+			this.renderer = renderer;
+			this.attr = attr;
+			this.dstPixels = dstPixels;
+			this.srcPixels = srcPixels;
+			this.profileResults = profileResults;
+		}
+
+		public void run() {
+			long[] times = new long[10];
+			for (int a = 0; a < times.length; a++) {
+
+				times[a] = System.currentTimeMillis();
+				for (int b = 0; b < 100; b++) {
+					Arrays.fill(dstPixels.getPixels(), 0);
+					renderer.createShadow(srcPixels, dstPixels, attr);
+				}
+				times[a] = System.currentTimeMillis() - times[a];
+			}
+			Arrays.sort(times);
+			profileResults.store(renderer, attr.getShadowKernelRadius(),
+					times[times.length / 2]);
+		}
+	}
+
+	static class UpdateProgressBar implements Runnable {
+		JProgressBar progressBar;
+		int min, max, value;
+
+		UpdateProgressBar(JProgressBar progressBar, int min, int max,
+				int value) {
+			this.progressBar = progressBar;
+			this.min = min;
+			this.max = max;
+			this.value = value;
+		}
+
+		@Override
+		public void run() {
+			progressBar.getModel().setRangeProperties(value, 1, min, max,
+					false);
+			progressBar.setIndeterminate(false);
+		}
+	}
+
 	private void profileRenderers(ProfileResults profileResults,
 			final QDialog dialog, final JProgressBar progressBar,
 			Collection<ShadowRenderer> renderers) {
-		int progress = 0;
 		try {
 			ARGBPixels srcPixels = new ARGBPixels(srcImage);
 			srcImage.getRaster().getDataElements(0, 0, srcPixels.getWidth(),
@@ -307,42 +361,32 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			SpinnerNumberModel model = (SpinnerNumberModel) kernelSizeSpinner
 					.getModel();
 
+			List<Runnable> runnables = new LinkedList<>();
 			for (ShadowRenderer renderer : renderers) {
 				float min = ((Number) model.getMinimum()).floatValue();
 				float max = ((Number) model.getMaximum()).floatValue();
 				for (float kernelSize = min; kernelSize <= max; kernelSize += .5f) {
-
 					ShadowAttributes attr = new ShadowAttributes(kernelSize,
 							.5f);
 					int k = renderer.getKernel(attr).getKernelRadius();
 					ARGBPixels dstPixels = new ARGBPixels(
 							srcImage.getWidth() + 2 * k,
 							srcImage.getHeight() + 2 * k);
-
-					long[] times = new long[10];
-					for (int a = 0; a < times.length; a++) {
-
-						times[a] = System.currentTimeMillis();
-						for (int b = 0; b < 100; b++) {
-							Arrays.fill(dstPixels.getPixels(), 0);
-							renderer.createShadow(srcPixels, dstPixels, attr);
-						}
-						times[a] = System.currentTimeMillis() - times[a];
-					}
-					Arrays.sort(times);
-					profileResults.store(renderer, kernelSize,
-							times[times.length / 2]);
+					runnables.add(new RunSample(profileResults, renderer, attr,
+							srcPixels, dstPixels));
 				}
-
-				final int newProgressValue = ++progress;
-
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						progressBar.setValue(newProgressValue);
-					}
-				});
 			}
+
+			SwingUtilities.invokeLater(
+					new UpdateProgressBar(progressBar, 0, runnables.size(), 0));
+			int ctr = 0;
+			while (!runnables.isEmpty()) {
+				Runnable runnable = runnables.remove(0);
+				runnable.run();
+				SwingUtilities.invokeLater(new UpdateProgressBar(progressBar, 0,
+						runnables.size(), ctr++));
+			}
+
 			profileResults.printTable();
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -371,7 +415,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 			public void actionPerformed(ActionEvent e) {
 				progressBar = new JProgressBar(SwingConstants.HORIZONTAL, 0,
-						renderers.size());
+						100);
+				progressBar.setIndeterminate(true);
 
 				JFrame frame = (JFrame) SwingUtilities
 						.getWindowAncestor(ShadowRendererDemo.this);
