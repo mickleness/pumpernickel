@@ -33,6 +33,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -66,7 +68,9 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		@Override
 		public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
 				ShadowAttributes attr) {
-			int k = attr.getShadowKernelSize();
+			GaussianKernel kernel = getKernel(attr);
+			int k = kernel.getKernelRadius();
+
 			int shadowSize = k * 2;
 
 			int srcWidth = src.getWidth();
@@ -93,8 +97,6 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			for (int a = 0; a < opacityLookup.length; a++) {
 				opacityLookup[a] = (int) (a * opacity);
 			}
-
-			GaussianKernel kernel = new GaussianKernel(k);
 
 			int x1 = k;
 			int x2 = k + srcWidth;
@@ -142,6 +144,11 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 			return dst;
 
+		}
+
+		@Override
+		public GaussianKernel getKernel(ShadowAttributes attr) {
+			return new GaussianKernel(attr.getShadowKernelRadius());
 		}
 	}
 
@@ -197,7 +204,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 	static class ProfileResults {
 		Map<String, SortedMap<Double, Double>> results = new TreeMap<>();
 
-		public void store(ShadowRenderer renderer, int kernelSize, long time) {
+		public void store(ShadowRenderer renderer, float kernelSize,
+				long time) {
 			SortedMap<Double, Double> m = results
 					.get(renderer.getClass().getSimpleName());
 			if (m == null) {
@@ -234,7 +242,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 	}
 
 	JComboBox<String> rendererComboBox = new JComboBox<>();
-	JSlider kernelSizeSlider = new JSlider(1, 15, 5);
+	JSpinner kernelSizeSpinner = new JSpinner(
+			new SpinnerNumberModel(5f, 1f, 15f, .1f));
 	JSlider opacitySlider = new JSlider(1, 100, 50);
 	JSlider angleSlider = new JSlider(0, 359, 45);
 	JSlider offsetSlider = new JSlider(0, 20, 10);
@@ -263,7 +272,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		super();
 		Inspector inspector = new Inspector(configurationPanel);
 		inspector.addRow(new JLabel("Renderer:"), rendererComboBox);
-		inspector.addRow(new JLabel("Kernel Size:"), kernelSizeSlider);
+		inspector.addRow(new JLabel("Kernel Size:"), kernelSizeSpinner);
 		inspector.addRow(new JLabel("Opacity:"), opacitySlider);
 		inspector.addRow(new JLabel("Angle:"), angleSlider);
 		inspector.addRow(new JLabel("Offset:"), offsetSlider);
@@ -271,7 +280,6 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		rendererComboBox.addItem("Fast (JDesktop)");
 		rendererComboBox.addItem("Gaussian");
 
-		addSliderPopover(kernelSizeSlider, " pixels");
 		addSliderPopover(opacitySlider, "%");
 		addSliderPopover(offsetSlider, " pixels");
 
@@ -279,7 +287,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		angleSlider.setUI(ui);
 
 		rendererComboBox.addActionListener(refreshActionListener);
-		kernelSizeSlider.addChangeListener(refreshChangeListener);
+		kernelSizeSpinner.addChangeListener(refreshChangeListener);
 		opacitySlider.addChangeListener(refreshChangeListener);
 		angleSlider.addChangeListener(refreshChangeListener);
 		offsetSlider.addChangeListener(refreshChangeListener);
@@ -296,17 +304,20 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			srcImage.getRaster().getDataElements(0, 0, srcPixels.getWidth(),
 					srcPixels.getHeight(), srcPixels.getPixels());
 
-			for (ShadowRenderer renderer : renderers) {
-				for (int kernelSize = kernelSizeSlider
-						.getMinimum(); kernelSize <= kernelSizeSlider
-								.getMaximum(); kernelSize++) {
+			SpinnerNumberModel model = (SpinnerNumberModel) kernelSizeSpinner
+					.getModel();
 
-					ARGBPixels dstPixels = new ARGBPixels(
-							srcImage.getWidth() + 2 * kernelSize,
-							srcImage.getHeight() + 2 * kernelSize);
+			for (ShadowRenderer renderer : renderers) {
+				float min = ((Number) model.getMinimum()).floatValue();
+				float max = ((Number) model.getMaximum()).floatValue();
+				for (float kernelSize = min; kernelSize <= max; kernelSize += .5f) {
 
 					ShadowAttributes attr = new ShadowAttributes(kernelSize,
 							.5f);
+					int k = renderer.getKernel(attr).getKernelRadius();
+					ARGBPixels dstPixels = new ARGBPixels(
+							srcImage.getWidth() + 2 * k,
+							srcImage.getHeight() + 2 * k);
 
 					long[] times = new long[10];
 					for (int a = 0; a < times.length; a++) {
@@ -321,16 +332,16 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 					Arrays.sort(times);
 					profileResults.store(renderer, kernelSize,
 							times[times.length / 2]);
-					final int newProgressValue = ++progress;
-
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							progressBar.setValue(newProgressValue);
-						}
-					});
-
 				}
+
+				final int newProgressValue = ++progress;
+
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						progressBar.setValue(newProgressValue);
+					}
+				});
 			}
 			profileResults.printTable();
 		} catch (Throwable t) {
@@ -360,7 +371,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 			public void actionPerformed(ActionEvent e) {
 				progressBar = new JProgressBar(SwingConstants.HORIZONTAL, 0,
-						renderers.size() * kernelSizeSlider.getMaximum());
+						renderers.size());
 
 				JFrame frame = (JFrame) SwingUtilities
 						.getWindowAncestor(ShadowRendererDemo.this);
@@ -424,10 +435,11 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 		Dimension size = new Dimension(srcImage.getWidth(),
 				srcImage.getHeight());
-		size.width += 2 * kernelSizeSlider.getMaximum()
-				+ 2 * offsetSlider.getMaximum();
-		size.height += 2 * kernelSizeSlider.getMaximum()
-				+ 2 * offsetSlider.getMaximum();
+		SpinnerNumberModel model = (SpinnerNumberModel) kernelSizeSpinner
+				.getModel();
+		Number max = (Number) model.getMaximum();
+		size.width += 2 * max.intValue() + 2 * offsetSlider.getMaximum();
+		size.height += 2 * max.intValue() + 2 * offsetSlider.getMaximum();
 
 		BufferedImage returnValue = new BufferedImage(size.width, size.height,
 				BufferedImage.TYPE_INT_ARGB);
@@ -439,15 +451,17 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				? new FastShadowRenderer()
 				: new GaussianShadowRenderer();
 		float opacity = (float) (opacitySlider.getValue()) / 100f;
-		int k = kernelSizeSlider.getValue();
-		ShadowAttributes attr = new ShadowAttributes(k, opacity);
+
+		Number k1 = (Number) kernelSizeSpinner.getValue();
+		ShadowAttributes attr = new ShadowAttributes(k1.floatValue(), opacity);
+		float k = renderer.getKernel(attr).getKernelRadius();
 		BufferedImage shadow = renderer.createShadow(srcImage, attr);
-		Graphics2D g2 = (Graphics2D) g.create();
 		double theta = ((double) angleSlider.getValue()) * Math.PI / 180.0;
 		double dx = offsetSlider.getValue() * Math.cos(theta);
 		double dy = offsetSlider.getValue() * Math.sin(theta);
-		g2.translate(dx, dy);
-		g2.drawImage(shadow, -k, -k, null);
+		Graphics2D g2 = (Graphics2D) g.create();
+		g2.translate(dx - k, dy - k);
+		g2.drawImage(shadow, 0, 0, null);
 		g2.dispose();
 		g.drawImage(srcImage, 0, 0, null);
 		g.dispose();

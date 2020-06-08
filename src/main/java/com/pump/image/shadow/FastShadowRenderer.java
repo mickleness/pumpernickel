@@ -5,6 +5,9 @@ package com.pump.image.shadow;
  * and Romain Guy. This is a very fast renderer, but it uses a uniform kernel
  * (instead of a bell-shaped kernel), so the blur can look a little blocky in
  * some cases.
+ * <p>
+ * This does not support a float-based kernel size; it rounds the kernel size
+ * attribute to the nearest int.
  * 
  * @author Romain Guy <romain.guy@mac.com>
  * @author Sebastien Petrucci
@@ -14,8 +17,10 @@ public class FastShadowRenderer implements ShadowRenderer {
 	@Override
 	public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
 			ShadowAttributes attr) {
+		int kernelSize = getKernel(attr).getKernelRadius();
+
 		// Written by Sebastien Petrucci
-		int shadowSize = attr.getShadowKernelSize() * 2;
+		int shadowSize = kernelSize * 2;
 
 		int srcWidth = src.getWidth();
 		int srcHeight = src.getHeight();
@@ -35,7 +40,7 @@ public class FastShadowRenderer implements ShadowRenderer {
 			throw new IllegalArgumentException(
 					dst.getWidth() + " != " + dstWidth);
 
-		int left = attr.getShadowKernelSize();
+		int left = kernelSize;
 		int right = shadowSize - left;
 
 		int yStop = dstHeight - right;
@@ -176,5 +181,15 @@ public class FastShadowRenderer implements ShadowRenderer {
 			}
 		}
 		return dst;
+	}
+
+	@Override
+	public GaussianKernel getKernel(ShadowAttributes attr) {
+		int r = (int) attr.getShadowKernelRadius();
+		int[] array = new int[2 * r + 1];
+		for (int a = 0; a < array.length; a++) {
+			array[a] = 1;
+		}
+		return new GaussianKernel(array);
 	}
 }

@@ -12,11 +12,25 @@ public class ShadowAttributes extends AbstractAttributeDataImpl {
 			Float.class, "shadowOffsetRadians", 1f);
 	public static final Key<Float> KEY_SHADOW_OFFSET = new Key<>(Float.class,
 			"shadowOffsetPixels", 0f);
-	public static final Key<Integer> KEY_SHADOW_KERNEL_SIZE = new Key<>(
-			Integer.class, "shadowKernelSize", 1);
+	public static final Key<Float> KEY_SHADOW_KERNEL_RADIUS = new Key<>(
+			Float.class, "shadowKernelRadius", 1f);
 
-	public ShadowAttributes(int kernelSize, float opacity) {
-		setShadowKernelSize(kernelSize);
+	/**
+	 * 
+	 * @param kernelRadius
+	 *            a kernel radius that is positive. "1" may create a kernel
+	 *            resembling [1]. "2" may create a kernel resembling [1, 2, 1].
+	 *            "3" may create a kernel resembling: "1, 2, 2, 4, 2, 2, 1",
+	 *            etc.
+	 *            <p>
+	 *            Some renderers may round this attribute to the nearest
+	 *            integer.
+	 * 
+	 * @param opacity
+	 *            a float from 0-1.
+	 */
+	public ShadowAttributes(float kernelRadius, float opacity) {
+		setShadowKernelRadius(kernelRadius);
 		setShadowOpacity(opacity);
 	}
 
@@ -24,8 +38,8 @@ public class ShadowAttributes extends AbstractAttributeDataImpl {
 		return getAttribute(KEY_SHADOW_OPACITY);
 	}
 
-	public int getShadowKernelSize() {
-		return getAttribute(KEY_SHADOW_KERNEL_SIZE);
+	public float getShadowKernelRadius() {
+		return getAttribute(KEY_SHADOW_KERNEL_RADIUS);
 	}
 
 	public float getShadowOffsetAngle() {
@@ -40,8 +54,8 @@ public class ShadowAttributes extends AbstractAttributeDataImpl {
 		setAttribute(KEY_SHADOW_OPACITY, opacity);
 	}
 
-	public void setShadowKernelSize(int kernelSize) {
-		setAttribute(KEY_SHADOW_KERNEL_SIZE, kernelSize);
+	public void setShadowKernelRadius(float kernelSize) {
+		setAttribute(KEY_SHADOW_KERNEL_RADIUS, kernelSize);
 	}
 
 	public void setShadowOffsetAngle(float offsetRadians) {

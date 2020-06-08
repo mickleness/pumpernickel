@@ -119,7 +119,9 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 
 		public Renderer(ARGBPixels srcPixels, ARGBPixels dstPixels,
 				ShadowAttributes attr) {
-			k = attr.getShadowKernelSize();
+			GaussianKernel kernel = new GaussianKernel(
+					attr.getShadowKernelRadius());
+			k = kernel.getKernelRadius();
 			int shadowSize = k * 2;
 
 			srcWidth = srcPixels.getWidth();
@@ -131,7 +133,6 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			dstBuffer = dstPixels.getPixels();
 			srcBuffer = srcPixels.getPixels();
 
-			GaussianKernel kernel = new GaussianKernel(k);
 			this.kernel = kernel.getArray();
 			kernelSum = kernel.getArraySum();
 
@@ -169,7 +170,7 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 	@Override
 	public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
 			ShadowAttributes attr) {
-		int k = attr.getShadowKernelSize();
+		int k = getKernel(attr).getKernelRadius();
 		if (dst == null)
 			dst = new ARGBPixels(src.getWidth() + 2 * k,
 					src.getHeight() + 2 * k);
@@ -180,5 +181,10 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			throw new RuntimeException(e);
 		}
 		return dst;
+	}
+
+	@Override
+	public GaussianKernel getKernel(ShadowAttributes attr) {
+		return new GaussianKernel(attr.getShadowKernelRadius());
 	}
 }
