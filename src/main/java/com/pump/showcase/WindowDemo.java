@@ -38,11 +38,11 @@ import com.pump.plaf.QPanelUI;
 public class WindowDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	JComboBox<String> classComboBox = new JComboBox<>(new String[] { "JFrame",
-			"JDialog", "JWindow" });
+	JComboBox<String> classComboBox = new JComboBox<>(
+			new String[] { "JFrame", "JDialog", "JWindow" });
 	JComboBox<Window.Type> typeComboBox = new JComboBox<>(Window.Type.values());
-	JComboBox<String> styleComboBox = new JComboBox<>(new String[] { "none",
-			"small", "textured", "unified", "hud" });
+	JComboBox<String> styleComboBox = new JComboBox<>(
+			new String[] { "none", "small", "textured", "unified", "hud" });
 	JComboBox<Dialog.ModalExclusionType> modalExclusionComboBox = new JComboBox<>(
 			Dialog.ModalExclusionType.values());
 	JComboBox<ModalityType> modalityTypeComboBox = new JComboBox<>(
@@ -86,10 +86,10 @@ public class WindowDemo extends ShowcaseExampleDemo {
 				autoRequestFocusCheckbox, resizableCheckbox,
 				isTransparentCheckbox, undecoratedCheckbox);
 		inspector.addRow(optionsLabel, swingOptions);
+		inspector.addRow(new JLabel("Alpha:"), windowAlpha, false);
 
 		inspector.addSeparator();
 		inspector.addRow(new JLabel("Mac Window Style:"), styleComboBox, false);
-		inspector.addRow(new JLabel("Mac Alpha:"), windowAlpha, false);
 
 		JPanel macControls = gridLayout.createGrid(hideOnDeactivateCheckbox,
 				closeableCheckbox, draggableBackgroundCheckbox,
@@ -144,10 +144,10 @@ public class WindowDemo extends ShowcaseExampleDemo {
 				.setToolTipText("Client Property \"apple.awt.fullscreenable\"");
 		documentFileCheckbox
 				.setToolTipText("Client Property \"Window.documentFile\"");
-		modalSheetCheckbox
-				.setToolTipText("Client Property \"apple.awt.documentModalSheet\"");
-		draggableBackgroundCheckbox
-				.setToolTipText("Client Property \"apple.awt.draggableWindowBackground\"");
+		modalSheetCheckbox.setToolTipText(
+				"Client Property \"apple.awt.documentModalSheet\"");
+		draggableBackgroundCheckbox.setToolTipText(
+				"Client Property \"apple.awt.draggableWindowBackground\"");
 		hideOnDeactivateCheckbox
 				.setToolTipText("Client Property \"Window.hidesOnDeactivate\"");
 	}
@@ -196,8 +196,8 @@ public class WindowDemo extends ShowcaseExampleDemo {
 			w = f;
 		} else if (classComboBox.getSelectedIndex() == 1) {
 			JDialog d = new JDialog(owner, "JDialog");
-			d.setModalityType((ModalityType) modalityTypeComboBox
-					.getSelectedItem());
+			d.setModalityType(
+					(ModalityType) modalityTypeComboBox.getSelectedItem());
 			d.setUndecorated(undecoratedCheckbox.isSelected());
 			d.setResizable(resizableCheckbox.isSelected());
 			w = d;
@@ -209,24 +209,25 @@ public class WindowDemo extends ShowcaseExampleDemo {
 		w.setType((Window.Type) typeComboBox.getSelectedItem());
 		w.setAutoRequestFocus(autoRequestFocusCheckbox.isSelected());
 		w.setAlwaysOnTop(alwaysOnTopCheckbox.isSelected());
-		w.setModalExclusionType((Dialog.ModalExclusionType) modalExclusionComboBox
-				.getSelectedItem());
+		w.setModalExclusionType(
+				(Dialog.ModalExclusionType) modalExclusionComboBox
+						.getSelectedItem());
 		if (isTransparentCheckbox.isSelected())
 			w.setBackground(new Color(0, 0, 0, 0));
 		currentWindow = w;
 
 		if (styleComboBox.getSelectedIndex() != 0) {
 			String style = (String) styleComboBox.getSelectedItem();
-			((RootPaneContainer) w).getRootPane().putClientProperty(
-					"Window.style", style);
+			((RootPaneContainer) w).getRootPane()
+					.putClientProperty("Window.style", style);
 		}
 
 		((RootPaneContainer) w).getRootPane().putClientProperty(
 				"Window.documentModified",
 				documentModifiedCheckbox.isSelected());
 
-		((RootPaneContainer) w).getRootPane().putClientProperty(
-				"Window.shadow", shadowCheckbox.isSelected());
+		((RootPaneContainer) w).getRootPane().putClientProperty("Window.shadow",
+				shadowCheckbox.isSelected());
 
 		((RootPaneContainer) w).getRootPane().putClientProperty(
 				"Window.minimizable", minimizableCheckbox.isSelected());
@@ -244,13 +245,13 @@ public class WindowDemo extends ShowcaseExampleDemo {
 		if (documentFileCheckbox.isSelected()) {
 			String filePath = System.getProperty("user.dir");
 			File file = new File(filePath);
-			((RootPaneContainer) w).getRootPane().putClientProperty(
-					"Window.documentFile", file);
+			((RootPaneContainer) w).getRootPane()
+					.putClientProperty("Window.documentFile", file);
 		}
 
-		((RootPaneContainer) w).getRootPane()
-				.putClientProperty("apple.awt.documentModalSheet",
-						modalSheetCheckbox.isSelected());
+		((RootPaneContainer) w).getRootPane().putClientProperty(
+				"apple.awt.documentModalSheet",
+				modalSheetCheckbox.isSelected());
 
 		((RootPaneContainer) w).getRootPane().putClientProperty(
 				"apple.awt.draggableWindowBackground",
@@ -261,8 +262,7 @@ public class WindowDemo extends ShowcaseExampleDemo {
 				hideOnDeactivateCheckbox.isSelected());
 
 		Float alpha = windowAlpha.getValue() / 100f;
-		((RootPaneContainer) w).getRootPane().putClientProperty("Window.alpha",
-				alpha);
+		w.setOpacity(alpha);
 
 		JButton closeButton = new JButton("OK");
 		closeButton.addActionListener(new ActionListener() {
@@ -282,9 +282,9 @@ public class WindowDemo extends ShowcaseExampleDemo {
 		c.weightx = 1;
 		c.weighty = 1;
 		c.insets = new Insets(3, 3, 3, 3);
-		content.add(
-				new JLabel("This is your new "
-						+ classComboBox.getSelectedItem() + "."), c);
+		content.add(new JLabel(
+				"This is your new " + classComboBox.getSelectedItem() + "."),
+				c);
 		c.gridy++;
 		c.insets = new Insets(13, 3, 3, 3);
 		content.add(closeButton, c);
