@@ -88,7 +88,6 @@ public class GaussianKernel
 					upperArray.length);
 
 			data = tween(lowerArray, upperArray, fraction);
-			data = upperArray;
 		}
 
 		updateSum();
