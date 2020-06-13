@@ -18,10 +18,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.TexturePaint;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -145,10 +148,10 @@ public class PlafPaintUtils {
 	 */
 	public static void drawBevel(Graphics2D g, Rectangle r) {
 		g.setStroke(new BasicStroke(1));
-		drawColors(blacks, g, r.x, r.y + r.height, r.x + r.width, r.y
-				+ r.height, SwingConstants.SOUTH);
-		drawColors(blacks, g, r.x + r.width, r.y, r.x + r.width,
-				r.y + r.height, SwingConstants.EAST);
+		drawColors(blacks, g, r.x, r.y + r.height, r.x + r.width,
+				r.y + r.height, SwingConstants.SOUTH);
+		drawColors(blacks, g, r.x + r.width, r.y, r.x + r.width, r.y + r.height,
+				SwingConstants.EAST);
 
 		drawColors(whites, g, r.x, r.y, r.x + r.width, r.y,
 				SwingConstants.NORTH);
@@ -221,8 +224,8 @@ public class PlafPaintUtils {
 					if (f >= positions[b - 1] && f < positions[b]) {
 						float p = (f - positions[b - 1])
 								/ (positions[b] - positions[b - 1]);
-						array[a] = AnimationManager.tween(colors[b - 1],
-								colors[b], p).getRGB();
+						array[a] = AnimationManager
+								.tween(colors[b - 1], colors[b], p).getRGB();
 						hit = true;
 						break findMatch;
 					}
@@ -260,9 +263,64 @@ public class PlafPaintUtils {
 			g.fillRect(0, 0, checkerSize, checkerSize);
 			g.fillRect(checkerSize, checkerSize, checkerSize, checkerSize);
 			g.dispose();
-			paint = new TexturePaint(bi, new Rectangle(0, 0, bi.getWidth(),
-					bi.getHeight()));
+			paint = new TexturePaint(bi,
+					new Rectangle(0, 0, bi.getWidth(), bi.getHeight()));
 			checkers.put(key, paint);
+		}
+		return paint;
+	}
+
+	private static Map<Object, TexturePaint> diagonalStripes;
+
+	/**
+	 * Create a diagonal stripe pattern.
+	 * 
+	 * @param stripeWidth
+	 *            the stripe width. The exact size of the resulting image will
+	 *            be approximately (sqrt(8)*stripeWidth)
+	 * @param color1
+	 *            the color of one stripe
+	 * @param color2
+	 *            the color of the other stripe
+	 * @return
+	 */
+	public static TexturePaint getDiagonalStripes(int stripeWidth, Color color1,
+			Color color2) {
+		Object key = Arrays.asList(stripeWidth, color1.toString(),
+				color2.toString());
+		if (diagonalStripes == null)
+			diagonalStripes = new HashMap<>();
+		TexturePaint paint = diagonalStripes.get(key);
+		if (paint == null) {
+			int k = (int) (Math.sqrt(2) * stripeWidth * 2 + .5);
+			BufferedImage bi = new BufferedImage(k, k,
+					BufferedImage.TYPE_INT_ARGB);
+
+			// now cheat just a little and revise our stripe width based on the
+			// real int-based tile:
+			float kf = k;
+			float realStripeWidth = (float) (kf / 2f / Math.sqrt(2));
+
+			kf = kf / 2f;
+			Graphics2D g = bi.createGraphics();
+			g.setStroke(new BasicStroke(realStripeWidth, BasicStroke.CAP_BUTT,
+					BasicStroke.JOIN_MITER));
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+			g.setColor(color1);
+			g.draw(new Line2D.Float(kf * (-1), kf * .5f, kf * .5f, -kf));
+			g.draw(new Line2D.Float(kf * (-1), kf * 2.5f, kf * 2.5f, -kf));
+			g.draw(new Line2D.Float(kf * .5f, kf * 3, kf * 3f, kf * .5f));
+			g.setColor(color2);
+			g.draw(new Line2D.Float(kf * (-1), kf * 1.5f, kf * 1.5f,
+					kf * (-1)));
+			g.draw(new Line2D.Float(kf * (-.5f), kf * 3, kf * 3, kf * (-.5f)));
+			g.draw(new Line2D.Float(kf * 1.5f, kf * 3, kf * 3, kf * (1.5f)));
+			g.dispose();
+
+			paint = new TexturePaint(bi,
+					new Rectangle(0, 0, bi.getWidth(), bi.getHeight()));
+			diagonalStripes.put(key, paint);
 		}
 		return paint;
 	}

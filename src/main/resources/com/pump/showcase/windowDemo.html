@@ -36,7 +36,14 @@ The shadow toggle is invaluable if you ever want a custom/subtle window. The doc
 The closeable/minimizable/zoomable attributes are actually the original motivation for this demo. I knew it was possible to disable these controls, but I forgot where to look so I decided to make this demo so (hopefully) I'll never forget again. On Windows if I need to make a decorated dialog uncloseable I call:
 <br><code>setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);</code>
 <p>
-This awkward hack leaves the close decoration visible, but it does nothing.
+Unfortunately that awkward hack leaves the close decoration visible, but it does nothing.
+<p>
+<p>
+The "Transparent Title Bar" is a relatively new property. (It pairs well with "Full Window" discussed below.) This option is pretty self-explanatory: this turns off the pronounced line below the title bar in most windows. (The "textured" window style already did this, but using that window style forces you to exclusively use that gray background.)
+<p>
+The "Full Window" property allows your component to paint inside (or under) the title bar. (That is: you're painting inside the "full window". It has nothing to do with "full screen" features.) Unfortunately the title bar still consumes all mouse events, so you can't embed any useful buttons or text fields in the title bar and still retain the native close decorations.
+<p>
+As of this writing Safari includes the default close buttons, backward/forward buttons, a bookmarks button, a URL text field, and other controls all within the title bar. The "full window" property is great if you really want granular control of how your window <i>paints</i> while retaining the OS window decorations, but it falls short of letting you write a native-feeling UI like Safari. (If you're willing to forego the OS window decorations (or if you're willing to write your own replicas), then you can avoid all of this by just making an undecorated frame/dialog and creating the title bar using Swing components yourself.)
 <p>
 All of these custom Mac properties are configured using client properties, so they should have no effect on other platforms that do not support them. I looked around for a similar suite of properties for Windows, but so far I haven't found them. (If anyone has any leads: let me know and I'll see if I can add them here.)
 

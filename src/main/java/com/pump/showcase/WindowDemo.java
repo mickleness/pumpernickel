@@ -1,18 +1,26 @@
 package com.pump.showcase;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dialog.ModalExclusionType;
 import java.awt.Dialog.ModalityType;
 import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Paint;
+import java.awt.Rectangle;
+import java.awt.Transparency;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Area;
 import java.io.File;
 import java.net.URL;
+import java.util.Objects;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -25,18 +33,59 @@ import javax.swing.JSlider;
 import javax.swing.JWindow;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.Border;
 
 import com.pump.inspector.ControlGridLayout;
 import com.pump.inspector.Inspector;
 import com.pump.inspector.InspectorRowPanel;
+import com.pump.plaf.PlafPaintUtils;
 import com.pump.plaf.QPanelUI;
 
 /**
- * 
+ * This demonstrates JFrame/JWindow/JDialog properties, including some
+ * Mac-specific properties.
  */
 public class WindowDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * This paints a margin with a Paint.
+	 */
+	private static class PaintBorder implements Border {
+		Paint paint;
+		Insets insets;
+
+		public PaintBorder(int margin, Paint paint) {
+			Objects.requireNonNull(paint);
+
+			insets = new Insets(margin, margin, margin, margin);
+			this.paint = paint;
+		}
+
+		@Override
+		public void paintBorder(Component c, Graphics g, int x, int y,
+				int width, int height) {
+			Graphics2D g2 = (Graphics2D) g.create();
+			Area area = new Area(new Rectangle(x, y, width, height));
+			area.subtract(new Area(new Rectangle(x + insets.left,
+					y + insets.top, width - insets.left - insets.right,
+					height - insets.top - insets.bottom)));
+			g2.setPaint(paint);
+			g2.fill(area);
+			g2.dispose();
+		}
+
+		@Override
+		public Insets getBorderInsets(Component c) {
+			return new Insets(insets.top, insets.left, insets.bottom,
+					insets.right);
+		}
+
+		@Override
+		public boolean isBorderOpaque() {
+			return paint.getTransparency() == Transparency.OPAQUE;
+		}
+	}
 
 	JComboBox<String> classComboBox = new JComboBox<>(
 			new String[] { "JFrame", "JDialog", "JWindow" });
@@ -66,6 +115,9 @@ public class WindowDemo extends ShowcaseExampleDemo {
 	JCheckBox draggableBackgroundCheckbox = new JCheckBox("Draggable", false);
 	JCheckBox modalSheetCheckbox = new JCheckBox("Modal Sheet", false);
 	JCheckBox hideOnDeactivateCheckbox = new JCheckBox("Auto Hide");
+	JCheckBox fullWindowCheckbox = new JCheckBox("Full Window");
+	JCheckBox transparentTitleBarCheckbox = new JCheckBox(
+			"Transparent Title Bar");
 
 	JSlider windowAlpha = new ShowcaseSlider(0, 100, 100);
 
@@ -93,9 +145,10 @@ public class WindowDemo extends ShowcaseExampleDemo {
 
 		JPanel macControls = gridLayout.createGrid(hideOnDeactivateCheckbox,
 				closeableCheckbox, draggableBackgroundCheckbox,
-				documentFileCheckbox, fullScreenCheckbox, minimizableCheckbox,
-				modalSheetCheckbox, documentModifiedCheckbox, shadowCheckbox,
-				zoomableCheckbox);
+				documentFileCheckbox, fullScreenCheckbox, fullWindowCheckbox,
+				minimizableCheckbox, modalSheetCheckbox,
+				documentModifiedCheckbox, shadowCheckbox,
+				transparentTitleBarCheckbox, zoomableCheckbox);
 		inspector.addRow(new JLabel("Mac Options:"), macControls);
 
 		examplePanel.add(showWindowButton);
@@ -133,6 +186,10 @@ public class WindowDemo extends ShowcaseExampleDemo {
 		isTransparentCheckbox.setToolTipText("setBackground(transparent)");
 		documentModifiedCheckbox
 				.setToolTipText("Client Property \"Window.documentModified\"");
+		transparentTitleBarCheckbox.setToolTipText(
+				"Client Property \"apple.awt.transparentTitleBar\", not supported in JDK 8");
+		fullWindowCheckbox.setToolTipText(
+				"Client Property \"apple.awt.fullWindowContent\", not supported in JDK 8");
 		styleComboBox.setToolTipText("Client Property \"Window.style\"");
 		shadowCheckbox.setToolTipText("Client Property \"Window.shadow\"");
 		minimizableCheckbox
@@ -258,6 +315,13 @@ public class WindowDemo extends ShowcaseExampleDemo {
 				draggableBackgroundCheckbox.isSelected());
 
 		((RootPaneContainer) w).getRootPane().putClientProperty(
+				"apple.awt.fullWindowContent", fullWindowCheckbox.isSelected());
+
+		((RootPaneContainer) w).getRootPane().putClientProperty(
+				"apple.awt.transparentTitleBar",
+				transparentTitleBarCheckbox.isSelected());
+
+		((RootPaneContainer) w).getRootPane().putClientProperty(
 				"Window.hidesOnDeactivate",
 				hideOnDeactivateCheckbox.isSelected());
 
@@ -301,7 +365,8 @@ public class WindowDemo extends ShowcaseExampleDemo {
 			wrapper.add(content);
 			content = wrapper;
 		}
-		content.setBorder(new EmptyBorder(10, 10, 10, 10));
+		content.setBorder(new PaintBorder(2, PlafPaintUtils
+				.getDiagonalStripes(2, new Color(0, 0, 0, 0), Color.gray)));
 
 		((RootPaneContainer) w).getContentPane().add(content);
 
