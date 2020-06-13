@@ -118,9 +118,7 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 		int[] opacityLookup = new int[256];
 
 		public Renderer(ARGBPixels srcPixels, ARGBPixels dstPixels,
-				ShadowAttributes attr) {
-			GaussianKernel kernel = new GaussianKernel(
-					attr.getShadowKernelRadius());
+				GaussianKernel kernel, float shadowOpacity) {
 			k = kernel.getKernelRadius();
 			int shadowSize = k * 2;
 
@@ -136,9 +134,8 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			this.kernel = kernel.getArray();
 			kernelSum = kernel.getArraySum();
 
-			float opacity = attr.getShadowOpacity();
 			for (int a = 0; a < opacityLookup.length; a++) {
-				opacityLookup[a] = ((int) (a * opacity)) << 24;
+				opacityLookup[a] = ((int) (a * shadowOpacity)) << 24;
 			}
 		}
 
@@ -174,7 +171,8 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 		if (dst == null)
 			dst = new ARGBPixels(src.getWidth() + 2 * k,
 					src.getHeight() + 2 * k);
-		Renderer r = new Renderer(src, dst, attr);
+		Renderer r = new Renderer(src, dst, getKernel(attr),
+				attr.getShadowOpacity());
 		try {
 			r.run();
 		} catch (InterruptedException e) {
