@@ -36,6 +36,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
+import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -293,6 +294,9 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		opacitySlider.addChangeListener(refreshChangeListener);
 		angleSlider.addChangeListener(refreshChangeListener);
 		offsetSlider.addChangeListener(refreshChangeListener);
+
+		((DefaultEditor) kernelSizeSpinner.getEditor()).getTextField()
+				.setColumns(4);
 
 		refreshExample();
 	}
