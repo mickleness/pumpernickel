@@ -151,7 +151,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 		@Override
 		public GaussianKernel getKernel(ShadowAttributes attr) {
-			return new GaussianKernel(attr.getShadowKernelRadius());
+			return new GaussianKernel(attr.getShadowKernelRadius(), false);
 		}
 	}
 

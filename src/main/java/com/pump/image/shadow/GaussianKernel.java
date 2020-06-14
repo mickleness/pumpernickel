@@ -44,8 +44,23 @@ public class GaussianKernel
 	 *            the radius of the kernel. The total length of this kernel will
 	 *            be (2*radius + 1)
 	 */
-	public GaussianKernel(float kernelRadius) {
-		initialize(kernelRadius);
+	public GaussianKernel(float shadowKernelRadius) {
+		this(shadowKernelRadius, true);
+	}
+
+	/**
+	 * Create a kernel with a default bell-shaped distribution.
+	 * 
+	 * @param kernelRadius
+	 *            the radius of the kernel. The total length of this kernel will
+	 *            be (2*radius + 1)
+	 * @param condense
+	 *            if true then leading/trailing zeroes will be purged. This
+	 *            should always be true, but it is left as an option for
+	 *            testing/comparison.
+	 */
+	public GaussianKernel(float kernelRadius, boolean condense) {
+		initialize(kernelRadius, condense);
 	}
 
 	/**
@@ -71,7 +86,7 @@ public class GaussianKernel
 		}
 	}
 
-	private void initialize(float kernelSize) {
+	private void initialize(float kernelSize, boolean condense) {
 		if (kernelSize <= 0)
 			throw new IllegalArgumentException(
 					"kernel size (" + kernelSize + ") must be positive");
@@ -90,7 +105,32 @@ public class GaussianKernel
 			data = tween(lowerArray, upperArray, fraction);
 		}
 
+		if (condense)
+			data = condense(data);
+
 		updateSum();
+	}
+
+	/**
+	 * Remove leading/trailing zeroes from an array.
+	 */
+	private static int[] condense(int[] data) {
+		int zeroCtr = 0;
+		for (int a = 0; a < data.length / 2; a++) {
+			if (data[a] == 0) {
+				zeroCtr++;
+			} else {
+				break;
+			}
+		}
+		if (zeroCtr == 0)
+			return data;
+		int[] newArray = new int[data.length - zeroCtr * 2];
+		for (int a = 0; a < newArray.length; a++) {
+			newArray[a] = data[a + zeroCtr];
+		}
+
+		return newArray;
 	}
 
 	private int[] getKernel(int kernelSize) {
