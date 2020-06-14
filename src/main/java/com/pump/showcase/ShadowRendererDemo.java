@@ -246,7 +246,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 	JComboBox<String> rendererComboBox = new JComboBox<>();
 	JSpinner kernelSizeSpinner = new JSpinner(
-			new SpinnerNumberModel(5f, 1f, 15f, .1f));
+			new SpinnerNumberModel(5f, 1f, 25f, .1f));
 	JSlider opacitySlider = new JSlider(1, 100, 50);
 	JSlider angleSlider = new JSlider(0, 359, 45);
 	JSlider offsetSlider = new JSlider(0, 20, 10);
@@ -369,7 +369,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			for (ShadowRenderer renderer : renderers) {
 				float min = ((Number) model.getMinimum()).floatValue();
 				float max = ((Number) model.getMaximum()).floatValue();
-				for (float kernelSize = min; kernelSize <= max; kernelSize += .5f) {
+				for (float kernelSize = min; kernelSize <= max; kernelSize += 1) {
 					ShadowAttributes attr = new ShadowAttributes(kernelSize,
 							.5f);
 					int k = renderer.getKernel(attr).getKernelRadius();
@@ -384,11 +384,12 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			SwingUtilities.invokeLater(
 					new UpdateProgressBar(progressBar, 0, runnables.size(), 0));
 			int ctr = 0;
+			int size = runnables.size();
 			while (!runnables.isEmpty()) {
 				Runnable runnable = runnables.remove(0);
 				runnable.run();
-				SwingUtilities.invokeLater(new UpdateProgressBar(progressBar, 0,
-						runnables.size(), ctr++));
+				SwingUtilities.invokeLater(
+						new UpdateProgressBar(progressBar, 0, size, ctr++));
 			}
 
 			profileResults.printTable();
