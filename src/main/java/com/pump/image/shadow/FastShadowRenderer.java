@@ -108,13 +108,15 @@ public class FastShadowRenderer implements ShadowRenderer {
 
 				int aSum = 0;
 				int aHistoryIdx = 0;
-				for (int x = 0; x <= kernelSize; x++) {
-					int alpha = srcBuffer[srcOffsetBase + x] >>> 24;
+
+				int srcOffsetBasePlusKernel = srcOffsetBase + kernelSize;
+				int dstOffsetBaseMinusKernel = dstOffsetBase - kernelSize;
+				for (int srcIndex = srcOffsetBase, dstIndex = dstOffsetBaseMinusKernel; srcIndex <= srcOffsetBasePlusKernel; srcIndex++, dstIndex++) {
+					int alpha = srcBuffer[srcIndex] >>> 24;
 					aHistory[aHistoryIdx++] = alpha;
 					aSum += alpha;
 
-					dstBuffer[dstOffsetBase - kernelSize
-							+ x] = divideByShadowSizeLUT[aSum] << 24;
+					dstBuffer[dstIndex] = divideByShadowSizeLUT[aSum] << 24;
 				}
 
 				int x = 0;
