@@ -16,261 +16,81 @@ import java.util.Objects;
  */
 public class FastShadowRenderer implements ShadowRenderer {
 
-	static class Renderer_SrcToDst {
-		ARGBPixels dst, src;
-		int[] dstBuffer, srcBuffer;
+	static class Renderer {
+		ARGBPixels src, dst;
+		int[] srcBuffer, dstBuffer;
 		int shadowSize, kernelSize;
 
-		int srcWidth, srcHeight, dstWidth, dstHeight, srcToDstX, srcToDstY;
-		int[] aHistory;
-
-		float shadowOpacity;
-
-		public Renderer_SrcToDst(ARGBPixels src, ARGBPixels dst, int srcToDstX,
-				int srcToDstY, int kernelSize, float shadowOpacity) {
-			this.src = src;
-			this.dst = dst;
-			this.shadowOpacity = shadowOpacity;
-			this.kernelSize = kernelSize;
-
-			this.srcToDstX = srcToDstX;
-			this.srcToDstY = srcToDstY;
-
-			shadowSize = kernelSize * 2;
-
-			srcWidth = src.getWidth();
-			srcHeight = src.getHeight();
-
-			if (dst == null) {
-				dstWidth = srcToDstX + srcWidth + kernelSize;
-				dstHeight = srcToDstY + srcHeight + kernelSize;
-				dst = new ARGBPixels(dstWidth, dstHeight);
-			} else {
-				dstWidth = dst.getWidth();
-				dstHeight = dst.getHeight();
-			}
-
-			if (srcToDstX < kernelSize)
-				throw new IllegalArgumentException("srcToDstX = " + srcToDstX
-						+ "; kernelSize = " + kernelSize);
-			if (srcToDstY < kernelSize)
-				throw new IllegalArgumentException("srcToDstY = " + srcToDstY
-						+ "; kernelSize = " + kernelSize);
-
-			if (srcToDstX + srcWidth + kernelSize > dstWidth)
-				throw new IllegalArgumentException("srcToDstX = " + srcToDstX
-						+ "; kernelSize = " + kernelSize + "; srcWidth = "
-						+ srcWidth + "; dstWidth = " + dstWidth);
-			if (srcToDstY + srcHeight + kernelSize > dstHeight)
-				throw new IllegalArgumentException("srcToDstY = " + srcToDstY
-						+ "; kernelSize = " + kernelSize + "; srcHeight = "
-						+ srcHeight + "; dstHeight = " + dstHeight);
-
-			dstBuffer = dst.getPixels();
-			srcBuffer = src.getPixels();
-
-			aHistory = new int[shadowSize];
-
-		}
-
-		public void run() {
-			runHorizontalPass();
-			runVerticalPass();
-		}
-
-		private void runHorizontalPass() {
-			float hSumDivider = 1.0f / shadowSize;
-
-			int[] hSumLookup = new int[256 * shadowSize];
-			for (int i = 0; i < hSumLookup.length; i++) {
-				hSumLookup[i] = (int) (i * hSumDivider);
-			}
-
-			int historyIdx, aSum, srcOffset;
-
-			// horizontal pass : extract the alpha mask from the source picture
-			// and blur it into the destination picture
-			for (int srcY = 0; srcY < srcHeight; srcY++) {
-
-				// first pixels are empty
-				for (historyIdx = 0; historyIdx < shadowSize;) {
-					aHistory[historyIdx++] = 0;
-				}
-
-				aSum = 0;
-				historyIdx = 0;
-				srcOffset = srcY * srcWidth;
-				int dstOffset = (srcToDstY + srcY) * dstWidth + srcToDstX
-						- kernelSize;
-
-				// compute the blur average with pixels from the source image
-				for (int srcX = 0; srcX < srcWidth; srcX++) {
-
-					int a = hSumLookup[aSum];
-					dstBuffer[dstOffset++] = a << 24;
-
-					aSum -= aHistory[historyIdx]; // subtract the oldest pixel
-													// from the sum
-
-					// extract the new pixel ...
-					a = srcBuffer[srcOffset + srcX] >>> 24;
-					aHistory[historyIdx] = a; // ... and store its value into
-												// history
-					aSum += a; // ... and add its value to the sum
-
-					if (++historyIdx >= shadowSize) {
-						historyIdx -= shadowSize;
-					}
-				}
-
-				// blur the end of the row - no new pixels to grab
-				for (int i = 0; i < shadowSize; i++) {
-
-					int a = hSumLookup[aSum];
-					dstBuffer[dstOffset++] = a << 24;
-
-					// substract the oldest pixel from the sum ... and nothing
-					// new to add !
-					aSum -= aHistory[historyIdx];
-
-					if (++historyIdx >= shadowSize) {
-						historyIdx -= shadowSize;
-					}
-				}
-			}
-		}
-
-		private void runVerticalPass() {
-			float vSumDivider = shadowOpacity / shadowSize;
-
-			int[] vSumLookup = new int[256 * shadowSize];
-			for (int i = 0; i < vSumLookup.length; i++) {
-				vSumLookup[i] = (int) (i * vSumDivider);
-			}
-
-			int historyIdx, aSum;
-
-			int left = kernelSize;
-			int right = shadowSize - left;
-
-			int yStop = dstHeight - right;
-			int lastPixelOffset = right * dstWidth;
-
-			// vertical pass
-			for (int x = 0; x < dstWidth; x++) {
-				int bufferOffset = x;
-				aSum = 0;
-
-				// first pixels are empty
-				for (historyIdx = 0; historyIdx < left;) {
-					aHistory[historyIdx++] = 0;
-				}
-
-				// and then they come from the dstBuffer
-				for (int y = 0; y < right; y++, bufferOffset += dstWidth) {
-					int a = dstBuffer[bufferOffset] >>> 24; // extract alpha
-					aHistory[historyIdx++] = a; // store into history
-					aSum += a; // and add to sum
-				}
-
-				bufferOffset = x;
-				historyIdx = 0;
-
-				// compute the blur average with pixels from the previous pass
-				for (int y = 0; y < yStop; y++, bufferOffset += dstWidth) {
-
-					int a = vSumLookup[aSum];
-					dstBuffer[bufferOffset] = a << 24; // store alpha value +
-														// shadow
-														// color
-
-					aSum -= aHistory[historyIdx]; // subtract the oldest pixel
-													// from the sum
-
-					a = dstBuffer[bufferOffset + lastPixelOffset] >>> 24; // extract
-																			// the
-																			// new
-																			// pixel
-																			// ...
-					aHistory[historyIdx] = a; // ... and store its value into
-												// history
-					aSum += a; // ... and add its value to the sum
-
-					if (++historyIdx >= shadowSize) {
-						historyIdx -= shadowSize;
-					}
-				}
-
-				// blur the end of the column - no pixels to grab anymore
-				for (int y = yStop; y < dstHeight; y++, bufferOffset += dstWidth) {
-
-					int a = vSumLookup[aSum];
-					dstBuffer[bufferOffset] = a << 24;
-
-					aSum -= aHistory[historyIdx]; // subtract the oldest pixel
-													// from the sum
-
-					if (++historyIdx >= shadowSize) {
-						historyIdx -= shadowSize;
-					}
-				}
-			}
-		}
-	}
-
-	static class Renderer_SrcOnly {
-		ARGBPixels src;
-		int[] srcBuffer;
-		int shadowSize, kernelSize;
-
-		int srcWidth, srcHeight, dstWidth, dstHeight, srcX, srcY;
+		int width, height;
+		int dstX, dstY, srcX, srcY;
 		int[] aHistory;
 
 		int[] divideByShadowSizeLUT;
 		float shadowOpacity;
 
-		public Renderer_SrcOnly(ARGBPixels src, int srcX, int srcY,
-				int srcWidth, int srcHeight, int kernelSize,
+		public Renderer(ARGBPixels src, ARGBPixels dst, int srcX, int srcY,
+				int dstX, int dstY, int width, int height, int kernelSize,
 				float shadowOpacity) {
 			Objects.requireNonNull(src);
 
+			if (dst == null) {
+				dst = new ARGBPixels(dstX + width + kernelSize,
+						dstY + height + kernelSize);
+			}
+
 			this.src = src;
+			this.dst = dst;
 			this.shadowOpacity = shadowOpacity;
 			this.kernelSize = kernelSize;
 
 			this.srcX = srcX;
 			this.srcY = srcY;
-			this.srcWidth = srcWidth;
-			this.srcHeight = srcHeight;
+			this.dstX = dstX;
+			this.dstY = dstY;
+
+			this.width = width;
+			this.height = height;
 
 			shadowSize = kernelSize * 2 + 1;
 
-			dstWidth = src.getWidth();
-			dstHeight = src.getHeight();
-
-			if (srcX < kernelSize)
-				throw new IllegalArgumentException(
-						"srcX = " + srcX + "; kernelSize = " + kernelSize);
-			if (srcY < kernelSize)
-				throw new IllegalArgumentException(
-						"srcY = " + srcY + "; kernelSize = " + kernelSize);
-
-			if (srcX + srcWidth + kernelSize > dstWidth)
-				throw new IllegalArgumentException("srcX = " + srcX
-						+ "; kernelSize = " + kernelSize + "; srcWidth = "
-						+ srcWidth + "; dstWidth = " + dstWidth);
-			if (srcY + srcHeight + kernelSize > dstHeight)
-				throw new IllegalArgumentException("srcY = " + srcY
-						+ "; kernelSize = " + kernelSize + "; srcHeight = "
-						+ srcHeight + "; dstHeight = " + dstHeight);
-
 			srcBuffer = src.getPixels();
+			dstBuffer = dst.getPixels();
 
 			aHistory = new int[shadowSize];
 			divideByShadowSizeLUT = new int[256 * shadowSize];
 			for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
 				divideByShadowSizeLUT[i] = (int) (i / shadowSize);
 			}
+
+			// make sure our src bounds will fit within src:
+			if (srcX < 0)
+				throw new IllegalArgumentException("srcX = " + srcX);
+			if (srcY < 0)
+				throw new IllegalArgumentException("srcY = " + srcY);
+			if (srcX + width > src.getWidth())
+				throw new IllegalArgumentException(
+						"srcX = " + srcX + "; width = " + width
+								+ "; src.getWidth() = " + src.getWidth());
+			if (srcY + height > src.getHeight())
+				throw new IllegalArgumentException(
+						"srcY = " + srcY + "; height = " + height
+								+ "; src.getHeight() = " + src.getHeight());
+
+			// make sure our dst bounds will fit within dst:
+			if (dstX < kernelSize)
+				throw new IllegalArgumentException(
+						"dstX = " + dstX + "; kernelSize = " + kernelSize);
+			if (dstY < kernelSize)
+				throw new IllegalArgumentException(
+						"dstY = " + dstY + "; kernelSize = " + kernelSize);
+			if (dstX + width + kernelSize > dst.getWidth())
+				throw new IllegalArgumentException("dstX = " + dstX
+						+ "; kernelSize = " + kernelSize + "; width = " + width
+						+ "; dst.getWidth() = " + dst.getWidth());
+			if (dstY + height + kernelSize > dst.getHeight())
+				throw new IllegalArgumentException("dstY = " + dstY
+						+ "; kernelSize = " + kernelSize + "; height = "
+						+ height + "; dst.getHeight() = " + dst.getHeight());
 		}
 
 		public void run() {
@@ -279,8 +99,12 @@ public class FastShadowRenderer implements ShadowRenderer {
 		}
 
 		private void runHorizontalPass() {
-			for (int y = 0; y < srcHeight; y++) {
-				int srcOffsetBase = (srcY + y) * dstWidth + srcX;
+			int srcWidth = src.getWidth();
+			int dstWidth = dst.getWidth();
+
+			for (int y = 0; y < height; y++) {
+				int srcOffsetBase = (srcY + y) * srcWidth + srcX;
+				int dstOffsetBase = (dstY + y) * dstWidth + dstX;
 
 				int aSum = 0;
 				int aHistoryIdx = 0;
@@ -288,11 +112,14 @@ public class FastShadowRenderer implements ShadowRenderer {
 					int alpha = srcBuffer[srcOffsetBase + x] >>> 24;
 					aHistory[aHistoryIdx++] = alpha;
 					aSum += alpha;
+
+					dstBuffer[dstOffsetBase - kernelSize
+							+ x] = divideByShadowSizeLUT[aSum] << 24;
 				}
 
 				int x = 0;
 				for (; x < kernelSize; x++) {
-					srcBuffer[srcOffsetBase
+					dstBuffer[dstOffsetBase
 							+ x] = divideByShadowSizeLUT[aSum] << 24;
 
 					int alpha = srcBuffer[srcOffsetBase + x + kernelSize
@@ -302,22 +129,35 @@ public class FastShadowRenderer implements ShadowRenderer {
 				}
 
 				aHistoryIdx = 0;
-				for (; x < srcWidth - kernelSize; x++) {
-					srcBuffer[srcOffsetBase
+				for (; x < width - kernelSize; x++) {
+					dstBuffer[dstOffsetBase
 							+ x] = divideByShadowSizeLUT[aSum] << 24;
 
 					aSum -= aHistory[aHistoryIdx];
 
-					int alpha = srcBuffer[srcOffsetBase + x + kernelSize
-							+ 1] >>> 24;
-					aSum += alpha;
-					aHistory[aHistoryIdx] = alpha;
+					// TODO: refactor
+					if (srcOffsetBase + x + kernelSize + 1 < srcBuffer.length) {
+						int alpha = srcBuffer[srcOffsetBase + x + kernelSize
+								+ 1] >>> 24;
+						aSum += alpha;
+						aHistory[aHistoryIdx] = alpha;
+					} else {
+						aHistory[aHistoryIdx] = 0;
+					}
 					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
 				}
 
-				for (; x < srcWidth; x++) {
-					srcBuffer[srcOffsetBase
+				for (; x < width; x++) {
+					dstBuffer[dstOffsetBase
 							+ x] = divideByShadowSizeLUT[aSum] << 24;
+
+					aSum -= aHistory[aHistoryIdx];
+					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
+				}
+
+				for (int j = 0; j < kernelSize; j++) {
+					dstBuffer[dstOffsetBase + x
+							+ j] = divideByShadowSizeLUT[aSum] << 24;
 
 					aSum -= aHistory[aHistoryIdx];
 					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
@@ -326,50 +166,70 @@ public class FastShadowRenderer implements ShadowRenderer {
 		}
 
 		private void runVerticalPass() {
+			// in this (second) pass we don't need to consult srcBuffer at all
 
-			int x1 = srcX - kernelSize;
-			int x2 = srcX + srcWidth + kernelSize;
+			int x1 = dstX - kernelSize;
+			int x2 = dstX + width + kernelSize;
+			int dstWidth = dst.getWidth();
 			for (int x = x1; x <= x2; x++) {
 				int aSum = 0;
 				int aHistoryIdx = 0;
 
 				for (int y = 0; y <= kernelSize; y++) {
-					int alpha = srcBuffer[(y + srcY) * dstWidth + x] >>> 24;
+					int alpha = dstBuffer[(y + dstY) * dstWidth + x] >>> 24;
 					aHistory[aHistoryIdx++] = alpha;
 					aSum += alpha;
+
+					dstBuffer[(y + dstY - kernelSize) * dstWidth
+							+ x] = divideByShadowSizeLUT[aSum] << 24;
 				}
 
 				int y = 0;
 				for (; y < kernelSize; y++) {
-					srcBuffer[(y + srcY) * dstWidth
+					dstBuffer[(y + dstY) * dstWidth
 							+ x] = divideByShadowSizeLUT[aSum] << 24;
 
-					int alpha = srcBuffer[(y + srcY + kernelSize + 1) * dstWidth
+					int alpha = dstBuffer[(y + dstY + kernelSize + 1) * dstWidth
 							+ x] >>> 24;
 					aSum += alpha;
 					aHistory[aHistoryIdx++] = alpha;
 				}
 
 				aHistoryIdx = 0;
-				for (; y < srcHeight - kernelSize; y++) {
-					srcBuffer[(y + srcY) * dstWidth
+				for (; y < height - kernelSize; y++) {
+					dstBuffer[(y + dstY) * dstWidth
 							+ x] = divideByShadowSizeLUT[aSum] << 24;
 
 					aSum -= aHistory[aHistoryIdx];
 
-					int alpha = srcBuffer[(y + srcY + kernelSize + 1) * dstWidth
-							+ x] >>> 24;
-					aSum += alpha;
-					aHistory[aHistoryIdx] = alpha;
+					// TODO: refactor
+					if ((y + dstY + kernelSize + 1) * dstWidth
+							+ x < dstBuffer.length) {
+						int alpha = dstBuffer[(y + dstY + kernelSize + 1)
+								* dstWidth + x] >>> 24;
+						aSum += alpha;
+						aHistory[aHistoryIdx] = alpha;
+					} else {
+						aHistory[aHistoryIdx] = 0;
+					}
 					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
 				}
 
-				for (; y < srcHeight; y++) {
-					srcBuffer[(y + srcY) * dstWidth
+				for (; y < height; y++) {
+					dstBuffer[(y + dstY) * dstWidth
 							+ x] = divideByShadowSizeLUT[aSum] << 24;
 
 					aSum -= aHistory[aHistoryIdx];
 
+					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
+				}
+
+				for (int j = 0; j < kernelSize; j++) {
+					if ((y + dstY + j) * dstWidth + x < dstBuffer.length) {
+						dstBuffer[(y + dstY + j) * dstWidth
+								+ x] = divideByShadowSizeLUT[aSum] << 24;
+					}
+					aSum -= aHistory[aHistoryIdx];
 					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
 				}
 			}
@@ -385,16 +245,16 @@ public class FastShadowRenderer implements ShadowRenderer {
 
 	public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
 			int srcToDstX, int srcToDstY, ShadowAttributes attr) {
-		Renderer_SrcToDst renderer = new Renderer_SrcToDst(src, dst, srcToDstX,
-				srcToDstY, getKernel(attr).getKernelRadius(),
-				attr.getShadowOpacity());
+		Renderer renderer = new Renderer(src, dst, 0, 0, srcToDstX, srcToDstY,
+				src.getWidth(), src.getHeight(),
+				getKernel(attr).getKernelRadius(), attr.getShadowOpacity());
 		renderer.run();
 		return renderer.dst;
 	}
 
 	public void applyShadow(ARGBPixels pixels, int x, int y, int width,
 			int height, ShadowAttributes attr) {
-		Renderer_SrcOnly renderer = new Renderer_SrcOnly(pixels, x, y, width,
+		Renderer renderer = new Renderer(pixels, pixels, x, y, x, y, width,
 				height, getKernel(attr).getKernelRadius(),
 				attr.getShadowOpacity());
 		renderer.run();
