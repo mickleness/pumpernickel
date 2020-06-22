@@ -14,11 +14,9 @@ public class FastShadowRendererTest extends TestCase {
 	/**
 	 * This calculates the vertical blur for a 7x7 grid. I ran (some of) the
 	 * numbers by hand to verify the results.
-	 * 
-	 * TODO: test fringe cases where kernel exceeds image size
 	 */
 	@Test
-	public void testVerticalBlur() {
+	public void testVerticalBlur_7() {
 		ARGBPixels srcImage = new ARGBPixels(7, 7);
 		int[] srcPixels = srcImage.getPixels();
 		// @formatter:off
@@ -81,6 +79,222 @@ public class FastShadowRendererTest extends TestCase {
 		assertEquals(18, dstPixels[8 + 8 * 11]);
 		assertEquals(17, dstPixels[8 + 9 * 11]);
 		assertEquals(9, dstPixels[8 + 10 * 11]);
+	}
+
+	/**
+	 * A variation of the testVerticalBlur_7 that uses 6 rows.
+	 */
+	@Test
+	public void testVerticalBlur_6() {
+		ARGBPixels srcImage = new ARGBPixels(6, 6);
+		int[] srcPixels = srcImage.getPixels();
+		// @formatter:off
+		int[] srcPixelsCopy = new int[] {
+			9, 2, 41, 16, 29, 23, 
+			42, 30, 24, 36, 10, 3, 
+			18, 43, 31, 4, 37, 11, 
+			38, 44, 5, 12, 19, 49, 
+			45, 20, 13, 0, 26, 32, 
+			7, 27, 47, 33, 21, 14
+		};
+		// @formatter:on
+		System.arraycopy(srcPixelsCopy, 0, srcPixels, 0, srcPixels.length);
+		for (int a = 0; a < srcPixels.length; a++) {
+			srcPixels[a] = srcPixels[a] << 24;
+		}
+
+		ARGBPixels dstImage = new ARGBPixels(10, 10);
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 1f);
+		renderer.runVerticalBlur();
+
+		int[] dstPixels = dstImage.getPixels();
+		// test leftmost column
+		assertEquals(1, dstPixels[2 + 0 * 10]);
+		assertEquals(10, dstPixels[2 + 1 * 10]);
+		assertEquals(13, dstPixels[2 + 2 * 10]);
+		assertEquals(21, dstPixels[2 + 3 * 10]);
+		assertEquals(30, dstPixels[2 + 4 * 10]);
+		assertEquals(30, dstPixels[2 + 5 * 10]);
+		assertEquals(21, dstPixels[2 + 6 * 10]);
+		assertEquals(18, dstPixels[2 + 7 * 10]);
+		assertEquals(10, dstPixels[2 + 8 * 10]);
+		assertEquals(1, dstPixels[2 + 9 * 10]);
+	}
+
+	/**
+	 * A variation of the testVerticalBlur_7 that uses 5 rows.
+	 */
+	@Test
+	public void testVerticalBlur_5() {
+		ARGBPixels srcImage = new ARGBPixels(5, 5);
+		int[] srcPixels = srcImage.getPixels();
+		// @formatter:off
+		int[] srcPixelsCopy = new int[] {
+			9, 2, 41, 16, 29, 
+			42, 30, 24, 36, 10, 
+			18, 43, 31, 4, 37, 
+			38, 44, 5, 12, 19, 
+			45, 20, 13, 0, 26
+		};
+		// @formatter:on
+		System.arraycopy(srcPixelsCopy, 0, srcPixels, 0, srcPixels.length);
+		for (int a = 0; a < srcPixels.length; a++) {
+			srcPixels[a] = srcPixels[a] << 24;
+		}
+
+		ARGBPixels dstImage = new ARGBPixels(9, 9);
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 1f);
+		renderer.runVerticalBlur();
+
+		int[] dstPixels = dstImage.getPixels();
+		// test leftmost column
+		assertEquals(1, dstPixels[2 + 0 * 9]);
+		assertEquals(10, dstPixels[2 + 1 * 9]);
+		assertEquals(13, dstPixels[2 + 2 * 9]);
+		assertEquals(21, dstPixels[2 + 3 * 9]);
+		assertEquals(30, dstPixels[2 + 4 * 9]);
+		assertEquals(28, dstPixels[2 + 5 * 9]);
+		assertEquals(20, dstPixels[2 + 6 * 9]);
+		assertEquals(16, dstPixels[2 + 7 * 9]);
+		assertEquals(9, dstPixels[2 + 8 * 9]);
+	}
+
+	/**
+	 * A variation of the testVerticalBlur_7 that uses 4 rows.
+	 */
+	@Test
+	public void testVerticalBlur_4() {
+		ARGBPixels srcImage = new ARGBPixels(4, 4);
+		int[] srcPixels = srcImage.getPixels();
+		// @formatter:off
+		int[] srcPixelsCopy = new int[] {
+			9, 2, 41, 16, 
+			42, 30, 24, 36, 
+			18, 43, 31, 4, 
+			38, 44, 5, 12
+		};
+		// @formatter:on
+		System.arraycopy(srcPixelsCopy, 0, srcPixels, 0, srcPixels.length);
+		for (int a = 0; a < srcPixels.length; a++) {
+			srcPixels[a] = srcPixels[a] << 24;
+		}
+
+		ARGBPixels dstImage = new ARGBPixels(8, 8);
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 1f);
+		renderer.runVerticalBlur();
+
+		int[] dstPixels = dstImage.getPixels();
+		// test leftmost column
+		assertEquals(1, dstPixels[2 + 0 * 8]);
+		assertEquals(10, dstPixels[2 + 1 * 8]);
+		assertEquals(13, dstPixels[2 + 2 * 8]);
+		assertEquals(21, dstPixels[2 + 3 * 8]);
+		assertEquals(21, dstPixels[2 + 4 * 8]);
+		assertEquals(19, dstPixels[2 + 5 * 8]);
+		assertEquals(11, dstPixels[2 + 6 * 8]);
+		assertEquals(7, dstPixels[2 + 7 * 8]);
+	}
+
+	/**
+	 * A variation of the testVerticalBlur_7 that uses 3 rows.
+	 */
+	@Test
+	public void testVerticalBlur_3() {
+		ARGBPixels srcImage = new ARGBPixels(3, 3);
+		int[] srcPixels = srcImage.getPixels();
+		// @formatter:off
+		int[] srcPixelsCopy = new int[] {
+			9, 2, 41,
+			42, 30, 24, 
+			18, 43, 31
+		};
+		// @formatter:on
+		System.arraycopy(srcPixelsCopy, 0, srcPixels, 0, srcPixels.length);
+		for (int a = 0; a < srcPixels.length; a++) {
+			srcPixels[a] = srcPixels[a] << 24;
+		}
+
+		ARGBPixels dstImage = new ARGBPixels(7, 7);
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 1f);
+		renderer.runVerticalBlur();
+
+		int[] dstPixels = dstImage.getPixels();
+		// test leftmost column
+		assertEquals(1, dstPixels[2 + 0 * 7]);
+		assertEquals(10, dstPixels[2 + 1 * 7]);
+		assertEquals(13, dstPixels[2 + 2 * 7]);
+		assertEquals(13, dstPixels[2 + 3 * 7]);
+		assertEquals(13, dstPixels[2 + 4 * 7]);
+		assertEquals(12, dstPixels[2 + 5 * 7]);
+		assertEquals(3, dstPixels[2 + 6 * 7]);
+	}
+
+	/**
+	 * A variation of the testVerticalBlur_7 that uses 2 rows.
+	 */
+	@Test
+	public void testVerticalBlur_2() {
+		ARGBPixels srcImage = new ARGBPixels(2, 2);
+		int[] srcPixels = srcImage.getPixels();
+		// @formatter:off
+		int[] srcPixelsCopy = new int[] {
+			9, 2,
+			42, 30
+		};
+		// @formatter:on
+		System.arraycopy(srcPixelsCopy, 0, srcPixels, 0, srcPixels.length);
+		for (int a = 0; a < srcPixels.length; a++) {
+			srcPixels[a] = srcPixels[a] << 24;
+		}
+
+		ARGBPixels dstImage = new ARGBPixels(6, 6);
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 1f);
+		renderer.runVerticalBlur();
+
+		int[] dstPixels = dstImage.getPixels();
+		// test leftmost column
+		assertEquals(1, dstPixels[2 + 0 * 6]);
+		assertEquals(10, dstPixels[2 + 1 * 6]);
+		assertEquals(10, dstPixels[2 + 2 * 6]);
+		assertEquals(10, dstPixels[2 + 3 * 6]);
+		assertEquals(10, dstPixels[2 + 4 * 6]);
+		assertEquals(8, dstPixels[2 + 5 * 6]);
+	}
+
+	/**
+	 * A variation of the testVerticalBlur_7 that uses 1 row.
+	 */
+	@Test
+	public void testVerticalBlur_1() {
+		ARGBPixels srcImage = new ARGBPixels(1, 1);
+		int[] srcPixels = srcImage.getPixels();
+		// @formatter:off
+		int[] srcPixelsCopy = new int[] {
+			9
+		};
+		// @formatter:on
+		System.arraycopy(srcPixelsCopy, 0, srcPixels, 0, srcPixels.length);
+		for (int a = 0; a < srcPixels.length; a++) {
+			srcPixels[a] = srcPixels[a] << 24;
+		}
+
+		ARGBPixels dstImage = new ARGBPixels(5, 5);
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 1f);
+		renderer.runVerticalBlur();
+
+		int[] dstPixels = dstImage.getPixels();
+		// test leftmost column
+		assertEquals(1, dstPixels[2 + 0 * 5]);
+		assertEquals(1, dstPixels[2 + 1 * 5]);
+		assertEquals(1, dstPixels[2 + 2 * 5]);
+		assertEquals(1, dstPixels[2 + 3 * 5]);
+		assertEquals(1, dstPixels[2 + 4 * 5]);
 	}
 
 	/**

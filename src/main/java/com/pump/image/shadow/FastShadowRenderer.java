@@ -199,14 +199,19 @@ public class FastShadowRenderer implements ShadowRenderer {
 				divideByShadowSizeLUT[i] = (int) (i / shadowSize);
 			}
 
-			int endX = dstX + width;
-			int srcWidth = src.getWidth();
-			int dstWidth = dst.getWidth();
-
 			int y1 = dstY - kernelSize;
 			int y2 = dstY + kernelSize + 1;
 			int y3 = dstY + height - kernelSize;
 			int y4 = dstY + height + kernelSize;
+
+			if (!(y1 <= y2 && y2 <= y3 && y3 <= y4)) {
+				runVerticalBlur_unoptimized();
+				return;
+			}
+
+			int endX = dstX + width;
+			int srcWidth = src.getWidth();
+			int dstWidth = dst.getWidth();
 
 			// avoid multiplication in our loop:
 			int srcIndexBase = srcY * srcWidth - dstX + srcX;
@@ -250,6 +255,50 @@ public class FastShadowRenderer implements ShadowRenderer {
 					dstBuffer[dstIndex] = divideByShadowSizeLUT[aSum];
 					dstIndex += dstWidth;
 					y++;
+				}
+			}
+		}
+
+		/**
+		 * This addresses fringe cases where the columns are unusually short.
+		 * This method uses a few more if/thens and is slightly less efficient,
+		 * but since the columns are short it probably won't matter much.
+		 */
+		private void runVerticalBlur_unoptimized() {
+			int y1 = dstY - kernelSize;
+			int y2 = dstY + height + kernelSize;
+			int loopCount = y2 - y1;
+
+			int endX = dstX + width;
+			int srcWidth = src.getWidth();
+			int dstWidth = dst.getWidth();
+
+			// avoid multiplication in our loop:
+			int srcIndexBase = srcY * srcWidth - dstX + srcX;
+			int dstIndexBase = y1 * dstWidth;
+			int whenAddingStops = height + 2 * kernelSize - shadowSize;
+
+			for (int x = dstX; x < endX; x++) {
+				int aHistoryIdx = -1;
+				int aSum = 0;
+
+				int srcIndex = srcIndexBase + x;
+				int dstIndex = dstIndexBase + x;
+
+				for (int loopCtr = 0; loopCtr < loopCount; loopCtr++) {
+					aHistoryIdx++;
+					if (aHistoryIdx == shadowSize)
+						aHistoryIdx = 0;
+					if (loopCtr <= whenAddingStops) {
+						int alpha = srcBuffer[srcIndex] >>> 24;
+						aSum += alpha;
+						aHistory[aHistoryIdx] = alpha;
+						srcIndex += srcWidth;
+					}
+					if (loopCtr >= shadowSize)
+						aSum -= aHistory[aHistoryIdx];
+					dstBuffer[dstIndex] = divideByShadowSizeLUT[aSum];
+					dstIndex += dstWidth;
 				}
 			}
 		}
