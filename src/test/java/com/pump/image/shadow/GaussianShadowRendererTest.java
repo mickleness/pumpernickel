@@ -40,11 +40,11 @@ public class GaussianShadowRendererTest extends TestCase {
 			result2 = resized;
 		}
 
-		String msg = equals(result1, result2);
+		String msg = equals(result1, result2, 0);
 		assertTrue(msg, msg == null);
 	}
 
-	private String equals(BufferedImage bi1, BufferedImage bi2) {
+	static String equals(BufferedImage bi1, BufferedImage bi2, int tolerance) {
 		if (bi1.getType() != bi2.getType())
 			return "types: " + bi1.getType() + " != " + bi2.getType();
 		if (bi1.getWidth() != bi2.getWidth())
@@ -55,15 +55,34 @@ public class GaussianShadowRendererTest extends TestCase {
 			for (int x = 0; x < bi1.getWidth(); x++) {
 				int rgb1 = bi1.getRGB(x, y);
 				int rgb2 = bi2.getRGB(x, y);
-				if (rgb1 != rgb2)
-					return "colors: " + toString(rgb1) + " != " + toString(rgb2)
-							+ " at " + x + ", " + y;
+				if (rgb1 != rgb2) {
+					int a1 = (rgb1 >> 24) & 0xff;
+					int r1 = (rgb1 >> 16) & 0xff;
+					int g1 = (rgb1 >> 8) & 0xff;
+					int b1 = (rgb1 >> 0) & 0xff;
+					int a2 = (rgb2 >> 24) & 0xff;
+					int r2 = (rgb2 >> 16) & 0xff;
+					int g2 = (rgb2 >> 8) & 0xff;
+					int b2 = (rgb2 >> 0) & 0xff;
+					boolean failed = false;
+					if (Math.abs(a1 - a2) > tolerance)
+						failed = true;
+					if (Math.abs(r1 - r2) > tolerance)
+						failed = true;
+					if (Math.abs(g1 - g2) > tolerance)
+						failed = true;
+					if (Math.abs(b1 - b2) > tolerance)
+						failed = true;
+					if (failed)
+						return "colors: " + toString(rgb1) + " != "
+								+ toString(rgb2) + " at " + x + ", " + y;
+				}
 			}
 		}
 		return null;
 	}
 
-	private String toString(int rgb) {
+	static String toString(int rgb) {
 		String s = Integer.toHexString(rgb);
 		while (s.length() < 8) {
 			s = "0" + s;

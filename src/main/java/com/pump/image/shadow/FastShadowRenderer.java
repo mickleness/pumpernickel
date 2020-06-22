@@ -3,19 +3,32 @@ package com.pump.image.shadow;
 import java.util.Objects;
 
 /**
- * This is adapted from JDesktop's ShadowRenderer class by Sebastien Petrucci
- * and Romain Guy. This is a very fast renderer, but it uses a uniform kernel
- * (instead of a bell-shaped kernel), so the blur can look a little blocky in
- * some cases.
+ * This ShadowRenderer uses a uniform kernel and a specialized algorithm to
+ * render the shadow quickly. The uniform kernel, though, means the resulting
+ * shadow is blocky. (A bell-shaped kernel produces a better looking shadow.)
  * <p>
- * This does not support a float-based kernel size; it rounds the kernel size
- * attribute to the nearest int.
- * 
- * @author Romain Guy <romain.guy@mac.com>
- * @author Sebastien Petrucci
+ * This supports using the same int array as both the source and the
+ * destination.
+ * <p>
+ * This was originally based on JDesktop's ShadowRenderer class by Sebastien
+ * Petrucci and Romain Guy, but the current implementation is a complete rewrite
+ * from their original code.
+ * <p>
+ * This implementation supports assigning an (x,y) coordinate for both the
+ * source and dest pixels to read/write. This lets us support several
+ * consecutive passes using the same int arrays.
+ * <p>
+ * This class does not currently support floating-point kernel radiuses. The
+ * kernel radius is rounded to the nearest int.
  */
 public class FastShadowRenderer implements ShadowRenderer {
 
+	// TODO: we could probably support floating-point kernel radiuses with
+	// a separate internal Renderer class.
+
+	/**
+	 * This helper class runs the two separate blurs.
+	 */
 	static class Renderer {
 		ARGBPixels src, dst;
 		int[] srcBuffer, dstBuffer;
@@ -37,6 +50,9 @@ public class FastShadowRenderer implements ShadowRenderer {
 				dst = new ARGBPixels(dstX + width + kernelSize,
 						dstY + height + kernelSize);
 			}
+			if (shadowOpacity < 0 || shadowOpacity > 1)
+				throw new IllegalArgumentException("Shadow opacity ("
+						+ shadowOpacity + ") should be between zero and one.");
 
 			this.src = src;
 			this.dst = dst;
@@ -58,9 +74,6 @@ public class FastShadowRenderer implements ShadowRenderer {
 
 			aHistory = new int[shadowSize];
 			divideByShadowSizeLUT = new int[256 * shadowSize];
-			for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
-				divideByShadowSizeLUT[i] = (int) (i / shadowSize);
-			}
 
 			// make sure our src bounds will fit within src:
 			if (srcX < 0)
@@ -94,145 +107,149 @@ public class FastShadowRenderer implements ShadowRenderer {
 		}
 
 		public void run() {
-			runHorizontalPass();
-			runVerticalPass();
+			runVerticalBlur();
+			runHorizontalBlur();
 		}
 
-		private void runHorizontalPass() {
-			int srcWidth = src.getWidth();
+		/**
+		 * This blurs pixels horizontally from the dstBuffer into the dstBuffer.
+		 * This assumes that {@link #runVerticalBlur()} has already been called,
+		 * and the opacity information is stored in the rightmost byte of each
+		 * pixel. (So it is stored in the blue channel, and all other channels
+		 * are empty).
+		 */
+		void runHorizontalBlur() {
+			// in addition to being a divisor LUT, this also takes into account
+			// the final opacity multiplier and shifts the result back into the
+			// alpha channel
+			int shadowMultiplier = (int) (shadowOpacity * 0xff);
+			int shadowDivisor = shadowSize * 0xff;
+			for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
+				divideByShadowSizeLUT[i] = ((i * shadowMultiplier
+						/ shadowDivisor) & 0xff) << 24;
+			}
+
 			int dstWidth = dst.getWidth();
+			int x1 = dstX - kernelSize;
+			int x2 = dstX + kernelSize + 1;
+			int x3 = dstX + width - kernelSize;
+			int x4 = dstX + width + kernelSize;
 
-			for (int y = 0; y < height; y++) {
-				int srcOffsetBase = (srcY + y) * srcWidth + srcX;
-				int dstOffsetBase = (dstY + y) * dstWidth + dstX;
+			int y1 = dstY - kernelSize;
+			int y2 = dstY + height + kernelSize;
 
+			int readIndexBase = y1 * dstWidth + x1 + kernelSize;
+			int writeIndexBase = y1 * dstWidth + x1;
+			for (int y = y1; y < y2; y++) {
+				int aHistoryIdx = -1;
 				int aSum = 0;
-				int aHistoryIdx = 0;
 
-				int srcOffsetBasePlusKernel = srcOffsetBase + kernelSize;
-				int dstOffsetBaseMinusKernel = dstOffsetBase - kernelSize;
-				for (int srcIndex = srcOffsetBase, dstIndex = dstOffsetBaseMinusKernel; srcIndex <= srcOffsetBasePlusKernel; srcIndex++, dstIndex++) {
-					int alpha = srcBuffer[srcIndex] >>> 24;
-					aHistory[aHistoryIdx++] = alpha;
+				int x = x1;
+				int readIndex = readIndexBase;
+				int writeIndex = writeIndexBase;
+				while (x < x2) {
+					int alpha = dstBuffer[readIndex];
+					aHistory[++aHistoryIdx] = alpha;
 					aSum += alpha;
-
-					dstBuffer[dstIndex] = divideByShadowSizeLUT[aSum] << 24;
+					dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
+					readIndex++;
+					writeIndex++;
+					x++;
 				}
 
-				int x = 0;
-				for (; x < kernelSize; x++) {
-					dstBuffer[dstOffsetBase
-							+ x] = divideByShadowSizeLUT[aSum] << 24;
-
-					int alpha = srcBuffer[srcOffsetBase + x + kernelSize
-							+ 1] >>> 24;
-					aSum += alpha;
-					aHistory[aHistoryIdx++] = alpha;
+				while (x < x3) {
+					aHistoryIdx++;
+					if (aHistoryIdx == shadowSize)
+						aHistoryIdx = 0;
+					int alpha = dstBuffer[readIndex];
+					aSum += alpha - aHistory[aHistoryIdx];
+					aHistory[aHistoryIdx] = alpha;
+					dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
+					readIndex++;
+					writeIndex++;
+					x++;
 				}
 
-				aHistoryIdx = 0;
-				for (; x < width - kernelSize; x++) {
-					dstBuffer[dstOffsetBase
-							+ x] = divideByShadowSizeLUT[aSum] << 24;
-
+				while (x < x4) {
+					aHistoryIdx++;
+					if (aHistoryIdx == shadowSize)
+						aHistoryIdx = 0;
 					aSum -= aHistory[aHistoryIdx];
-
-					// TODO: refactor
-					if (srcOffsetBase + x + kernelSize + 1 < srcBuffer.length) {
-						int alpha = srcBuffer[srcOffsetBase + x + kernelSize
-								+ 1] >>> 24;
-						aSum += alpha;
-						aHistory[aHistoryIdx] = alpha;
-					} else {
-						aHistory[aHistoryIdx] = 0;
-					}
-					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
+					dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
+					writeIndex++;
+					x++;
 				}
 
-				for (; x < width; x++) {
-					dstBuffer[dstOffsetBase
-							+ x] = divideByShadowSizeLUT[aSum] << 24;
-
-					aSum -= aHistory[aHistoryIdx];
-					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
-				}
-
-				for (int j = 0; j < kernelSize; j++) {
-					dstBuffer[dstOffsetBase + x
-							+ j] = divideByShadowSizeLUT[aSum] << 24;
-
-					aSum -= aHistory[aHistoryIdx];
-					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
-				}
+				writeIndexBase += dstWidth;
+				readIndexBase += dstWidth;
 			}
 		}
 
-		private void runVerticalPass() {
-			// in this (second) pass we don't need to consult srcBuffer at all
+		/**
+		 * This blurs pixels vertically from the srcBuffer into the dstBuffer.
+		 * <p>
+		 * The resulting value (in dstBuffer) is the unshifted alpha value. For
+		 * example: if the source pixels are all 0xff000000 (opaque black), then
+		 * will create destination pixels that are all 0xff. (Technically this
+		 * is the blue channel, but {@link #runHorizontalBlur()} consults the
+		 * blue channel and shifts it back to the alpha channel.
+		 */
+		void runVerticalBlur() {
+			for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
+				divideByShadowSizeLUT[i] = (int) (i / shadowSize);
+			}
 
-			int x1 = dstX - kernelSize;
-			int x2 = dstX + width + kernelSize;
+			int endX = dstX + width;
+			int srcWidth = src.getWidth();
 			int dstWidth = dst.getWidth();
-			for (int x = x1; x <= x2; x++) {
+
+			int y1 = dstY - kernelSize;
+			int y2 = dstY + kernelSize + 1;
+			int y3 = dstY + height - kernelSize;
+			int y4 = dstY + height + kernelSize;
+
+			// avoid multiplication in our loop:
+			int srcIndexBase = srcY * srcWidth - dstX + srcX;
+			int dstIndexBase = y1 * dstWidth;
+
+			for (int x = dstX; x < endX; x++) {
+				int aHistoryIdx = -1;
 				int aSum = 0;
-				int aHistoryIdx = 0;
 
-				for (int y = 0; y <= kernelSize; y++) {
-					int alpha = dstBuffer[(y + dstY) * dstWidth + x] >>> 24;
-					aHistory[aHistoryIdx++] = alpha;
+				int y = y1;
+				int srcIndex = srcIndexBase + x;
+				int dstIndex = dstIndexBase + x;
+				while (y < y2) {
+					int alpha = srcBuffer[srcIndex] >>> 24;
+					aHistory[++aHistoryIdx] = alpha;
 					aSum += alpha;
-
-					dstBuffer[(y + dstY - kernelSize) * dstWidth
-							+ x] = divideByShadowSizeLUT[aSum] << 24;
+					dstBuffer[dstIndex] = divideByShadowSizeLUT[aSum];
+					dstIndex += dstWidth;
+					srcIndex += srcWidth;
+					y++;
 				}
 
-				int y = 0;
-				for (; y < kernelSize; y++) {
-					dstBuffer[(y + dstY) * dstWidth
-							+ x] = divideByShadowSizeLUT[aSum] << 24;
-
-					int alpha = dstBuffer[(y + dstY + kernelSize + 1) * dstWidth
-							+ x] >>> 24;
-					aSum += alpha;
-					aHistory[aHistoryIdx++] = alpha;
+				while (y < y3) {
+					aHistoryIdx++;
+					if (aHistoryIdx == shadowSize)
+						aHistoryIdx = 0;
+					int alpha = srcBuffer[srcIndex] >>> 24;
+					aSum += alpha - aHistory[aHistoryIdx];
+					aHistory[aHistoryIdx] = alpha;
+					dstBuffer[dstIndex] = divideByShadowSizeLUT[aSum];
+					dstIndex += dstWidth;
+					srcIndex += srcWidth;
+					y++;
 				}
 
-				aHistoryIdx = 0;
-				for (; y < height - kernelSize; y++) {
-					dstBuffer[(y + dstY) * dstWidth
-							+ x] = divideByShadowSizeLUT[aSum] << 24;
-
+				while (y < y4) {
+					aHistoryIdx++;
+					if (aHistoryIdx == shadowSize)
+						aHistoryIdx = 0;
 					aSum -= aHistory[aHistoryIdx];
-
-					// TODO: refactor
-					if ((y + dstY + kernelSize + 1) * dstWidth
-							+ x < dstBuffer.length) {
-						int alpha = dstBuffer[(y + dstY + kernelSize + 1)
-								* dstWidth + x] >>> 24;
-						aSum += alpha;
-						aHistory[aHistoryIdx] = alpha;
-					} else {
-						aHistory[aHistoryIdx] = 0;
-					}
-					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
-				}
-
-				for (; y < height; y++) {
-					dstBuffer[(y + dstY) * dstWidth
-							+ x] = divideByShadowSizeLUT[aSum] << 24;
-
-					aSum -= aHistory[aHistoryIdx];
-
-					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
-				}
-
-				for (int j = 0; j < kernelSize; j++) {
-					if ((y + dstY + j) * dstWidth + x < dstBuffer.length) {
-						dstBuffer[(y + dstY + j) * dstWidth
-								+ x] = divideByShadowSizeLUT[aSum] << 24;
-					}
-					aSum -= aHistory[aHistoryIdx];
-					aHistoryIdx = (aHistoryIdx + 1) % shadowSize;
+					dstBuffer[dstIndex] = divideByShadowSizeLUT[aSum];
+					dstIndex += dstWidth;
+					y++;
 				}
 			}
 		}
