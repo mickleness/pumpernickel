@@ -298,10 +298,11 @@ public class FastShadowRendererTest extends TestCase {
 	}
 
 	/**
-	 * Test the horizontal blur using the same data as the previous test.
+	 * Test the horizontal blur using the same data as the
+	 * {@link #testVerticalBlur_7()}
 	 */
 	@Test
-	public void testHorizontalBlur() {
+	public void testHorizontalBlur_7() {
 		// we don't really use the source in this unit test
 		ARGBPixels srcImage = new ARGBPixels(7, 7);
 
@@ -356,6 +357,234 @@ public class FastShadowRendererTest extends TestCase {
 
 		// no need to test more, horizontal passes are much simpler since data
 		// is continuous.
+	}
+
+	/**
+	 * A variation of the testHorizontalBlur_7 that uses 6 rows.
+	 */
+	@Test
+	public void testHorizontalBlur_6() {
+		// we don't really use the source in this unit test
+		ARGBPixels srcImage = new ARGBPixels(6, 6);
+
+		ARGBPixels dstImage = new ARGBPixels(10, 10);
+		// @formatter:off
+		int[] dstPixelsCopy = new int[] {
+		    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 9, 2, 41, 16, 29, 23, 0, 0, 
+			0, 0, 42, 30, 24, 36, 10, 3, 0, 0, 
+			0, 0, 18, 43, 31, 4, 37, 11, 0, 0, 
+			0, 0, 38, 44, 5, 12, 19, 49, 0, 0, 
+			0, 0, 45, 20, 13, 0, 26, 32, 0, 0, 
+			0, 0, 7, 27, 47, 33, 21, 14, 0, 0, 
+		    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		};
+		// @formatter:on
+		int[] dstPixels = dstImage.getPixels();
+		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
+
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 1f);
+		renderer.runHorizontalBlur();
+
+		// test topmost row (of data)
+		assertEquals(1 << 24, dstPixels[20]);
+		assertEquals(2 << 24, dstPixels[21]);
+		assertEquals(10 << 24, dstPixels[22]);
+		assertEquals(13 << 24, dstPixels[23]);
+		assertEquals(19 << 24, dstPixels[24]);
+		assertEquals(22 << 24, dstPixels[25]);
+		assertEquals(21 << 24, dstPixels[26]);
+		assertEquals(13 << 24, dstPixels[27]);
+		assertEquals(10 << 24, dstPixels[28]);
+		assertEquals(4 << 24, dstPixels[29]);
+	}
+
+	/**
+	 * A variation of the testHorizontalBlur_7 that uses 5 rows.
+	 */
+	@Test
+	public void testHorizontalBlur_5() {
+		// we don't really use the source in this unit test
+		ARGBPixels srcImage = new ARGBPixels(5, 5);
+
+		ARGBPixels dstImage = new ARGBPixels(9, 9);
+		// @formatter:off
+		int[] dstPixelsCopy = new int[] {
+		    0, 0, 0, 0, 0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 9, 2, 41, 16, 29, 0, 0, 
+			0, 0, 42, 30, 24, 36, 10, 0, 0, 
+			0, 0, 18, 43, 31, 4, 37, 0, 0, 
+			0, 0, 38, 44, 5, 12, 19, 0, 0, 
+			0, 0, 45, 20, 13, 0, 26, 0, 0, 
+		    0, 0, 0, 0, 0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0, 0, 0, 0, 0
+		};
+		// @formatter:on
+		int[] dstPixels = dstImage.getPixels();
+		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
+
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 1f);
+		renderer.runHorizontalBlur();
+
+		// test topmost row (of data)
+		assertEquals(1 << 24, dstPixels[18]);
+		assertEquals(2 << 24, dstPixels[19]);
+		assertEquals(10 << 24, dstPixels[20]);
+		assertEquals(13 << 24, dstPixels[21]);
+		assertEquals(19 << 24, dstPixels[22]);
+		assertEquals(17 << 24, dstPixels[23]);
+		assertEquals(17 << 24, dstPixels[24]);
+		assertEquals(9 << 24, dstPixels[25]);
+		assertEquals(5 << 24, dstPixels[26]);
+	}
+
+	/**
+	 * A variation of the testHorizontalBlur_7 that uses 4 rows.
+	 */
+	@Test
+	public void testHorizontalBlur_4() {
+		// we don't really use the source in this unit test
+		ARGBPixels srcImage = new ARGBPixels(4, 4);
+
+		ARGBPixels dstImage = new ARGBPixels(8, 8);
+		// @formatter:off
+		int[] dstPixelsCopy = new int[] {
+		    0, 0, 0, 0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 9, 2, 41, 16, 0, 0, 
+			0, 0, 42, 30, 24, 36, 0, 0, 
+			0, 0, 18, 43, 31, 4, 0, 0, 
+			0, 0, 38, 44, 5, 12, 0, 0, 
+		    0, 0, 0, 0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0, 0, 0, 0
+		};
+		// @formatter:on
+		int[] dstPixels = dstImage.getPixels();
+		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
+
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 1f);
+		renderer.runHorizontalBlur();
+
+		// test topmost row (of data)
+		assertEquals(1 << 24, dstPixels[16]);
+		assertEquals(2 << 24, dstPixels[17]);
+		assertEquals(10 << 24, dstPixels[18]);
+		assertEquals(13 << 24, dstPixels[19]);
+		assertEquals(13 << 24, dstPixels[20]);
+		assertEquals(11 << 24, dstPixels[21]);
+		assertEquals(11 << 24, dstPixels[22]);
+		assertEquals(3 << 24, dstPixels[23]);
+	}
+
+	/**
+	 * A variation of the testHorizontalBlur_7 that uses 3 rows.
+	 */
+	@Test
+	public void testHorizontalBlur_3() {
+		// we don't really use the source in this unit test
+		ARGBPixels srcImage = new ARGBPixels(3, 3);
+
+		ARGBPixels dstImage = new ARGBPixels(7, 7);
+		// @formatter:off
+		int[] dstPixelsCopy = new int[] {
+		    0, 0, 0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0, 0, 0,
+			0, 0, 9, 2, 41, 0, 0, 
+			0, 0, 42, 30, 24, 0, 0, 
+			0, 0, 18, 43, 31, 0, 0,
+		    0, 0, 0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0, 0, 0
+		};
+		// @formatter:on
+		int[] dstPixels = dstImage.getPixels();
+		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
+
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 1f);
+		renderer.runHorizontalBlur();
+
+		// test topmost row (of data)
+		assertEquals(1 << 24, dstPixels[14]);
+		assertEquals(2 << 24, dstPixels[15]);
+		assertEquals(10 << 24, dstPixels[16]);
+		assertEquals(10 << 24, dstPixels[17]);
+		assertEquals(10 << 24, dstPixels[18]);
+		assertEquals(8 << 24, dstPixels[19]);
+		assertEquals(8 << 24, dstPixels[20]);
+	}
+
+	/**
+	 * A variation of the testHorizontalBlur_7 that uses 2 rows.
+	 */
+	@Test
+	public void testHorizontalBlur_2() {
+		// we don't really use the source in this unit test
+		ARGBPixels srcImage = new ARGBPixels(2, 2);
+
+		ARGBPixels dstImage = new ARGBPixels(6, 6);
+		// @formatter:off
+		int[] dstPixelsCopy = new int[] {
+		    0, 0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0, 0,
+			0, 0, 19, 12, 0, 0, 
+			0, 0, 42, 30, 0, 0,
+		    0, 0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0, 0
+		};
+		// @formatter:on
+		int[] dstPixels = dstImage.getPixels();
+		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
+
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 1f);
+		renderer.runHorizontalBlur();
+
+		// test topmost row (of data)
+		assertEquals(3 << 24, dstPixels[12]);
+		assertEquals(6 << 24, dstPixels[13]);
+		assertEquals(6 << 24, dstPixels[14]);
+		assertEquals(6 << 24, dstPixels[15]);
+		assertEquals(6 << 24, dstPixels[16]);
+		assertEquals(2 << 24, dstPixels[17]);
+	}
+
+	/**
+	 * A variation of the testHorizontalBlur_7 that uses 1 row.
+	 */
+	@Test
+	public void testHorizontalBlur_1() {
+		// we don't really use the source in this unit test
+		ARGBPixels srcImage = new ARGBPixels(1, 1);
+
+		ARGBPixels dstImage = new ARGBPixels(5, 5);
+		// @formatter:off
+		int[] dstPixelsCopy = new int[] {
+		    0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0,
+			0, 0, 9, 0, 0, 
+		    0, 0, 0, 0, 0,
+		    0, 0, 0, 0, 0
+		};
+		// @formatter:on
+		int[] dstPixels = dstImage.getPixels();
+		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
+
+		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 1f);
+		renderer.runHorizontalBlur();
+
+		// test topmost row (of data)
+		assertEquals(1 << 24, dstPixels[10]);
+		assertEquals(1 << 24, dstPixels[11]);
+		assertEquals(1 << 24, dstPixels[12]);
+		assertEquals(1 << 24, dstPixels[13]);
+		assertEquals(1 << 24, dstPixels[14]);
 	}
 
 	/**

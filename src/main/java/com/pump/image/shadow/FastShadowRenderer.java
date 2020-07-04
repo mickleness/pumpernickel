@@ -1,5 +1,6 @@
 package com.pump.image.shadow;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -129,11 +130,17 @@ public class FastShadowRenderer implements ShadowRenderer {
 						/ shadowDivisor) & 0xff) << 24;
 			}
 
-			int dstWidth = dst.getWidth();
 			int x1 = dstX - kernelSize;
 			int x2 = dstX + kernelSize + 1;
 			int x3 = dstX + width - kernelSize;
 			int x4 = dstX + width + kernelSize;
+
+			if (!(x1 <= x2 && x2 <= x3 && x3 <= x4)) {
+				runHorizontalBlur_unoptimized();
+				return;
+			}
+
+			int dstWidth = dst.getWidth();
 
 			int y1 = dstY - kernelSize;
 			int y2 = dstY + height + kernelSize;
@@ -178,6 +185,43 @@ public class FastShadowRenderer implements ShadowRenderer {
 					dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
 					writeIndex++;
 					x++;
+				}
+
+				writeIndexBase += dstWidth;
+				readIndexBase += dstWidth;
+			}
+		}
+
+		private void runHorizontalBlur_unoptimized() {
+			int x1 = dstX - kernelSize;
+			int x2 = dstX + width + kernelSize;
+
+			int dstWidth = dst.getWidth();
+
+			int y1 = dstY - kernelSize;
+			int y2 = dstY + height + kernelSize;
+
+			int readIndexBase = y1 * dstWidth + x1 + kernelSize;
+			int writeIndexBase = y1 * dstWidth + x1;
+			for (int y = y1; y < y2; y++) {
+				int aHistoryIdx = -1;
+				int aSum = 0;
+				Arrays.fill(aHistory, 0);
+
+				int readIndex = readIndexBase;
+				int writeIndex = writeIndexBase;
+				for (int x = x1; x < x2; x++) {
+					aHistoryIdx++;
+					if (aHistoryIdx == shadowSize)
+						aHistoryIdx = 0;
+					int alpha = readIndex < dstBuffer.length
+							? dstBuffer[readIndex]
+							: 0;
+					aSum += alpha - aHistory[aHistoryIdx];
+					aHistory[aHistoryIdx] = alpha;
+					dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
+					readIndex++;
+					writeIndex++;
 				}
 
 				writeIndexBase += dstWidth;
@@ -281,6 +325,7 @@ public class FastShadowRenderer implements ShadowRenderer {
 			for (int x = dstX; x < endX; x++) {
 				int aHistoryIdx = -1;
 				int aSum = 0;
+				Arrays.fill(aHistory, 0);
 
 				int srcIndex = srcIndexBase + x;
 				int dstIndex = dstIndexBase + x;
