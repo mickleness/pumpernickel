@@ -19,6 +19,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -164,5 +165,21 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 			c.fill = GridBagConstraints.HORIZONTAL;
 		}
 		add(examplePanel, c);
+		JComponent below = getComponentBelowExamplePanel();
+		if (below != null) {
+			c.gridy++;
+			c.fill = GridBagConstraints.NONE;
+			add(below, c);
+		}
+	}
+
+	/**
+	 * Return a component to position below the example panel, or null.
+	 * <p>
+	 * By default this is null, but subclasses can use this to add a component
+	 * if desired.
+	 */
+	protected JComponent getComponentBelowExamplePanel() {
+		return null;
 	}
 }

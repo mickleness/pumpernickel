@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.showcase;
+package com.pump.showcase.chart;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -43,6 +43,11 @@ public class BarChartRenderer {
 	 * calculations.
 	 */
 	public static final Long ERROR_CODE = Long.MIN_VALUE + 1;
+
+	// some colors from https://flatuicolors.com/palette/ru
+	static final Color[] colors = new Color[] { new Color(0x574b90),
+			new Color(0xe77f67), new Color(0x3dc1d3), new Color(0xCAD3C8),
+			new Color(0xf7d794), new Color(0xD6A2E8) };
 
 	interface Row {
 		public int getHeight();
@@ -119,8 +124,8 @@ public class BarChartRenderer {
 
 		@Override
 		public int getHeight() {
-			return (int) (Math.max(groupLabelRect.getHeight(), data.size()
-					* barHeight) + .5);
+			return (int) (Math.max(groupLabelRect.getHeight(),
+					data.size() * barHeight) + .5);
 		}
 
 		@Override
@@ -132,14 +137,14 @@ public class BarChartRenderer {
 		public void paint(Graphics2D g, int xMin, int y, int xMax) {
 			g = (Graphics2D) g.create();
 			int h = getHeight();
-			float labelX = (float) (xMin - groupLabelRightGap - groupLabelRect
-					.getWidth());
-			float labelY = (float) (y + h / 2 - groupLabelRect.getHeight() / 2 - groupLabelRect
-					.getY());
+			float labelX = (float) (xMin - groupLabelRightGap
+					- groupLabelRect.getWidth());
+			float labelY = (float) (y + h / 2 - groupLabelRect.getHeight() / 2
+					- groupLabelRect.getY());
 			g.setColor(Color.black);
 			g.drawString(groupLabel, labelX, labelY);
-			Function xFunction = PolynomialFunction.createFit(0, xMin,
-					maxValue, xMax);
+			Function xFunction = PolynomialFunction.createFit(0, xMin, maxValue,
+					xMax);
 			Font font = g.getFont();
 
 			int j = y;
@@ -152,14 +157,14 @@ public class BarChartRenderer {
 					double w = g.getFontMetrics().getStringBounds(str, g)
 							.getWidth();
 					Shape[] bullets = new Shape[] {
-							new Ellipse2D.Double(xMin + 6 - r, j + barHeight
-									/ 2 - r + 1, 2 * r, 2 * r),
-							new Ellipse2D.Double(xMin + 15 - r, j + barHeight
-									/ 2 - r + 1, 2 * r, 2 * r),
-							new Ellipse2D.Double(xMin + w + 18 + 5 - r, j
-									+ barHeight / 2 - r + 1, 2 * r, 2 * r),
-							new Ellipse2D.Double(xMin + w + 18 + 14 - r, j
-									+ barHeight / 2 - r + 1, 2 * r, 2 * r) };
+							new Ellipse2D.Double(xMin + 6 - r,
+									j + barHeight / 2 - r + 1, 2 * r, 2 * r),
+							new Ellipse2D.Double(xMin + 15 - r,
+									j + barHeight / 2 - r + 1, 2 * r, 2 * r),
+							new Ellipse2D.Double(xMin + w + 18 + 5 - r,
+									j + barHeight / 2 - r + 1, 2 * r, 2 * r),
+							new Ellipse2D.Double(xMin + w + 18 + 14 - r,
+									j + barHeight / 2 - r + 1, 2 * r, 2 * r) };
 					for (Shape bullet : bullets) {
 						g.setColor(barColor);
 						g.fill(bullet);
@@ -187,12 +192,7 @@ public class BarChartRenderer {
 
 	private Color getColor(String key) {
 		int i = barLabelsList.indexOf(key);
-
-		// some colors from https://flatuicolors.com/palette/ru
-		Color[] colors = new Color[] { new Color(0x574b90),
-				new Color(0xe77f67), new Color(0x3dc1d3), new Color(0xCAD3C8),
-				new Color(0xf7d794), new Color(0xD6A2E8) };
-		return colors[i];
+		return colors[i % colors.length];
 	}
 
 	Map<String, Map<String, Long>> data;

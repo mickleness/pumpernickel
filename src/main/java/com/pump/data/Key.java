@@ -37,6 +37,22 @@ import com.pump.data.encoder.ValueEncoder;
 public class Key<T> implements CharSequence, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static <T extends Number> Key<T> createBoundedKey(String name,
+			T defaultValue, T minValue, T maxValue) {
+		Objects.requireNonNull(minValue);
+		Objects.requireNonNull(maxValue);
+		Class<T> type = (Class<T>) minValue.getClass();
+		Key<T> returnValue;
+		if (defaultValue == null) {
+			returnValue = new Key<T>(type, name);
+		} else {
+			returnValue = new Key<T>(type, name, defaultValue);
+		}
+		returnValue.addBoundsChecker(new ComparableBoundsChecker(
+				(Comparable) minValue, (Comparable) maxValue, true, true));
+		return returnValue;
+	}
+
 	protected final String name;
 	protected final Class<T> type;
 	protected List<BoundsChecker<T>> checkers;
@@ -52,8 +68,8 @@ public class Key<T> implements CharSequence, Serializable {
 	}
 
 	public Key(Class<T> type, String name, T defaultValue, boolean canBeNull) {
-		this(type, name, defaultValue, canBeNull, ValueEncoder
-				.getDefaultEncoder(type));
+		this(type, name, defaultValue, canBeNull,
+				ValueEncoder.getDefaultEncoder(type));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -230,7 +246,8 @@ public class Key<T> implements CharSequence, Serializable {
 	 * @return the value of this key based on the map provided.
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public T getClientProperty(JComponent jcomponent, boolean applyDefaultValue) {
+	public T getClientProperty(JComponent jcomponent,
+			boolean applyDefaultValue) {
 		T value = (T) jcomponent.getClientProperty(toString());
 		if (value == null && applyDefaultValue)
 			value = getDefaultValue();
