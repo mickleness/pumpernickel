@@ -21,6 +21,9 @@ public class BasicPopupTarget implements PopupTarget {
 
 	@Override
 	public Rectangle getScreenBounds() {
+		if (!component.isShowing())
+			return null;
+
 		Insets insets;
 		if (component instanceof JComponent) {
 			insets = ((JComponent) component).getInsets();

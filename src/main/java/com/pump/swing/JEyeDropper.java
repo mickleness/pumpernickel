@@ -36,6 +36,8 @@ import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
@@ -51,11 +53,15 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.basic.BasicButtonUI;
+
+import com.apple.eawt.Application;
+import com.pump.util.JVM;
 
 /**
  * The JEyeDropper is a modal dialog that follows the user's mouse to select a
@@ -172,6 +178,7 @@ public class JEyeDropper extends JDialog {
 		private Rectangle screenRect;
 
 		private void adjustLocation(Point mouseLocOnScreen) {
+			Application.getApplication().requestForeground(false);
 			JEyeDropper w = JEyeDropper.this;
 			if (isShowing() && !isFocusOwner() && !requestedFocusYet) {
 				requestedFocusYet = true;
@@ -205,7 +212,6 @@ public class JEyeDropper extends JDialog {
 				repaint();
 				// when we switch apps the cursor reappears, so let's
 				// constantly remind the component what its cursor should be
-				setCursor(hiddenCursor);
 
 				int x = bi.getWidth() / 2;
 				int y = bi.getHeight() / 2;
@@ -537,8 +543,34 @@ public class JEyeDropper extends JDialog {
 		model.setValueIsAdjusting(true);
 		this.circleDiameter = circleDiameter;
 		robot = new Robot();
-		setAlwaysOnTop(true);
-		setType(Window.Type.POPUP);
+		if (JVM.isMac) {
+			// issue #24: on mac using setAlwaysOnTop makes the cursor visible
+			this.addWindowFocusListener(new WindowFocusListener() {
+
+				@Override
+				public void windowGainedFocus(WindowEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void windowLostFocus(WindowEvent e) {
+					setAlwaysOnTop(true);
+					toFront();
+					SwingUtilities.invokeLater(new Runnable() {
+
+						@Override
+						public void run() {
+							setAlwaysOnTop(false);
+						}
+
+					});
+				}
+			});
+		} else {
+			setAlwaysOnTop(true);
+		}
+		// setType(Window.Type.POPUP);
 		setUndecorated(true);
 		setBackground(new Color(0, 0, 0, 0));
 		getRootPane().setOpaque(false);

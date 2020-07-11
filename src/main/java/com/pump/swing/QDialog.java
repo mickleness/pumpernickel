@@ -59,7 +59,8 @@ import com.pump.window.WindowDragger;
  * to worry about line breaks.</li>
  * <LI>Use of the {@link com.pump.swing.DialogFooter}, to give more flexible
  * options in the dialog footer (particularly for a help button).</li>
- * <LI>Several OS-specific enhancements to blend in with individual platforms.</LI>
+ * <LI>Several OS-specific enhancements to blend in with individual
+ * platforms.</LI>
  * </ul>
  * <P>
  * This class tries to observe conventions from Microsoft and Apple when
@@ -71,24 +72,28 @@ import com.pump.window.WindowDragger;
  * QDialog. Here is a thorough discussion of what the main parameters mean, and
  * how to use each:
  * <ul>
- * <LI><b><code>frame</code></b> the optional component to host this dialog.</li>
+ * <LI><b><code>frame</code></b> the optional component to host this
+ * dialog.</li>
  * <LI><b><code>icon</code></b> the optional icon/image to present on the left
  * side of this dialog.
  * <P>
- * Microsoft <A
- * HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx">cautions</A>:
- * "Don't use large graphics that serve no purpose beyond filling space with eye candy."
+ * Microsoft
+ * <A HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx">cautions</A>:
+ * "Don't use large graphics that serve no purpose beyond filling space with eye
+ * candy."
  * <A HREF="http://msdn.microsoft.com/en-us/library/aa511277.aspx">Also</A>:
  * "Not every message needs an icon. Icons are not a way to decorate messages."
  * <P>
  * At the same time, Apple <A HREF=
  * "http://developer.apple.com/documentation/UserExperience/Conceptual/AppleHIGuidelines/XHIGWindows/chapter_18_section_7.html#//apple_ref/doc/uid/20000961-BACFBACB"
- * >points out</A>:
- * "Because of the Mac OS X window layering model, an icon is necessary to make it clear to the user which application is displaying the alert."
+ * >points out</A>: "Because of the Mac OS X window layering model, an icon is
+ * necessary to make it clear to the user which application is displaying the
+ * alert."
  * <P>
  * This contradiction is a little tricky, but it's not as bad as it sounds.
  * Microsoft's comments were especially geared toward the abuse of warning and
- * error icons. In fact both Microsoft and Apple agree strongly on this point: <BR>
+ * error icons. In fact both Microsoft and Apple agree strongly on this point:
+ * <BR>
  * &nbsp; &nbsp; &nbsp; Microsoft says: "We overwarn in Windows programs ...
  * [this] makes using a program feel like a hazardous activity, and it detracts
  * from truly significant issues." <BR>
@@ -104,9 +109,9 @@ import com.pump.window.WindowDragger;
  * Apple says they are not. Actually Apple has already provided a partial
  * solution: Macs don't actually have a QUESTION or INFORMATION icons like other
  * L&amp;F's do. For those messages all you see is the applications icon (that
- * is, the icon has nothing to do with a "question message", or an
- * "information message"). So they already brand most of your dialogs with your
- * application for you.
+ * is, the icon has nothing to do with a "question message", or an "information
+ * message"). So they already brand most of your dialogs with your application
+ * for you.
  * <P>
  * So QDialog takes this a step further to provide a cross-platform solution:
  * when you request a <code>PLAIN_MESSAGE</code> dialog containing only text, on
@@ -121,9 +126,10 @@ import com.pump.window.WindowDragger;
  * "http://developer.apple.com/documentation/UserExperience/Conceptual/AppleHIGuidelines/XHIGWindows/chapter_18_section_7.html#//apple_ref/doc/uid/20000961-BACFBACB"
  * >advises</A> using "a title that matches the command" that invoked this
  * dialog. <BR>
- * Vista <A
- * HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx">says</a>:
- * "Use the title to identify the command, feature, or program where a dialog box came from."
+ * Vista
+ * <A HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx">says</a>:
+ * "Use the title to identify the command, feature, or program where a dialog
+ * box came from."
  * <P>
  * Note on Mac in Java 1.6+, dialogs can be presented as sheet if the
  * <code>frame</code> argument is non-null. This makes the title irrelevant, so
@@ -226,16 +232,16 @@ import com.pump.window.WindowDragger;
  * you think you need either of these checkboxes: your entire dialog/workflow
  * might benefit from redesign.</LI>
  * </ul>
- * <H3>Platform Differences</H3>
- * Because I was mostly studying Vista and Apple guidelines, the main GUI
- * differences are designed mostly for these two environments. There are several
- * OS-specific adjustments that take place in this class:
+ * <H3>Platform Differences</H3> Because I was mostly studying Vista and Apple
+ * guidelines, the main GUI differences are designed mostly for these two
+ * environments. There are several OS-specific adjustments that take place in
+ * this class:
  * <ul>
  * <LI>Insets are different on different platforms.</li>
  * <LI>On Vista the help link is <i>removed from the footer</i> and placed just
  * below the <code>content</code> area. This is because in big bold letters the
- * Vista guidelines <A
- * HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx#help">say</A>:
+ * Vista guidelines
+ * <A HREF="http://msdn.microsoft.com/en-us/library/aa511268.aspx#help">say</A>:
  * "Locate Help links at the bottom of the content area of the dialog box."</li>
  * <LI>Also on Vista a separator is added between the content area and the
  * footer.</li>
@@ -243,8 +249,8 @@ import com.pump.window.WindowDragger;
  * non-null.</LI>
  * </ul>
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2008/06/joptionpane-making-alternative.html">JOptionPane:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2008/06/joptionpane-making-alternative.html">JOptionPane:
  *      Making an Alternative</a>
  */
 public class QDialog extends JDialog {
@@ -277,8 +283,8 @@ public class QDialog extends JDialog {
 			} else {
 				content = QDialog.createContentPanel(
 						replace(strings.getString("dialogMacSavePromptTitled"),
-								"^0", documentName), strings
-								.getString("dialogMacSaveInfo"), null, // innerComponent
+								"^0", documentName),
+						strings.getString("dialogMacSaveInfo"), null, // innerComponent
 						true); // selectable
 			}
 		} else {
@@ -288,11 +294,11 @@ public class QDialog extends JDialog {
 						null, // innerComponent
 						true); // selectable
 			} else {
-				content = QDialog.createContentPanel(
-						null,
+				content = QDialog.createContentPanel(null,
 						replace(strings
-								.getString("dialogVistaSavePromptTitled"),
-								"^0", documentName), null, // innerComponent
+								.getString("dialogVistaSavePromptTitled"), "^0",
+								documentName),
+						null, // innerComponent
 						true); // selectable
 			}
 		}
@@ -347,8 +353,8 @@ public class QDialog extends JDialog {
 	public static boolean showMnemonics = false;
 
 	/**
-	 * This is used to store information about when the user selects a
-	 * "Don't Show This Again" or a "Always Apply This Decision" checkbox.
+	 * This is used to store information about when the user selects a "Don't
+	 * Show This Again" or a "Always Apply This Decision" checkbox.
 	 * <P>
 	 * The default implementation defers to Java's standard
 	 * <code>Preferences</code> class, but it's made public so you can override
@@ -361,8 +367,8 @@ public class QDialog extends JDialog {
 	public static Storage prefStorage = new Storage() {
 
 		public String get(Object key) {
-			return Preferences.userNodeForPackage(QDialog.class).get(
-					key.toString(), null);
+			return Preferences.userNodeForPackage(QDialog.class)
+					.get(key.toString(), null);
 		}
 
 		public boolean put(Object key, String value) {
@@ -498,8 +504,8 @@ public class QDialog extends JDialog {
 			boldTextArea.setBorder(null);
 			boldTextArea.putClientProperty("Nimbus.Overrides.InheritDefaults",
 					"false");
-			boldTextArea
-					.putClientProperty("Nimbus.Overrides", textAreaDefaults);
+			boldTextArea.putClientProperty("Nimbus.Overrides",
+					textAreaDefaults);
 
 			if (selectable == false) {
 				boldTextArea.setEnabled(false);
@@ -527,8 +533,8 @@ public class QDialog extends JDialog {
 
 			if (selectable == false) {
 				plainTextArea.setEnabled(false);
-				plainTextArea.setDisabledTextColor(plainTextArea
-						.getForeground());
+				plainTextArea
+						.setDisabledTextColor(plainTextArea.getForeground());
 			}
 
 			if (boldTextArea != null)
@@ -795,10 +801,9 @@ public class QDialog extends JDialog {
 	 *         commit button (via the close decoration)
 	 */
 	public static int showDialog(Frame frame, String dialogTitle, int type,
-			JComponent content, JComponent[] leftControls,
-			String[] buttonNames, int defaultButtonIndex, boolean closeable,
-			String dontShowKey, String alwaysApplyKey,
-			EscapeKeyBehavior escapeKeyBehavior) {
+			JComponent content, JComponent[] leftControls, String[] buttonNames,
+			int defaultButtonIndex, boolean closeable, String dontShowKey,
+			String alwaysApplyKey, EscapeKeyBehavior escapeKeyBehavior) {
 		if (escapeKeyBehavior == EscapeKeyBehavior.TRIGGERS_CANCEL)
 			throw new IllegalArgumentException(
 					"TRIGGERS_CANCEL cannot be used with this static method: no cancel button is provided.");
@@ -808,7 +813,8 @@ public class QDialog extends JDialog {
 			rightButtons[a] = new JButton(buttonNames[a]);
 		}
 		JButton defaultButton = null;
-		if (defaultButtonIndex >= 0 && defaultButtonIndex < buttonNames.length) {
+		if (defaultButtonIndex >= 0
+				&& defaultButtonIndex < buttonNames.length) {
 			defaultButton = rightButtons[defaultButtonIndex];
 			if (escapeKeyBehavior == EscapeKeyBehavior.TRIGGERS_DEFAULT) {
 				DialogFooter.makeEscapeKeyActivate(defaultButton);
@@ -825,8 +831,8 @@ public class QDialog extends JDialog {
 			}
 
 		}
-		DialogFooter footer = new DialogFooter(leftControls, rightButtons,
-				true, defaultButton);
+		DialogFooter footer = new DialogFooter(leftControls, rightButtons, true,
+				defaultButton);
 		return QDialog.showDialog(frame, dialogTitle, getIcon(type), content,
 				footer, closeable, dontShowKey, alwaysApplyKey);
 	}
@@ -902,8 +908,8 @@ public class QDialog extends JDialog {
 	public static int showDialog(Frame frame, String dialogTitle, Icon icon,
 			JComponent content, DialogFooter footer, boolean closeable,
 			String dontShowKey, String alwaysApplyKey) {
-		return showDialog_(frame, dialogTitle, icon, content, footer,
-				closeable, dontShowKey, alwaysApplyKey);
+		return showDialog_(frame, dialogTitle, icon, content, footer, closeable,
+				dontShowKey, alwaysApplyKey);
 	}
 
 	/**
@@ -943,9 +949,9 @@ public class QDialog extends JDialog {
 				closeable, dontShowKey, alwaysApplyKey);
 	}
 
-	private static int showDialog_(Window window, String dialogTitle,
-			Icon icon, JComponent content, DialogFooter footer,
-			boolean closeable, String dontShowKey, String alwaysApplyKey) {
+	private static int showDialog_(Window window, String dialogTitle, Icon icon,
+			JComponent content, DialogFooter footer, boolean closeable,
+			String dontShowKey, String alwaysApplyKey) {
 		QDialog dialog;
 		if (window instanceof Frame) {
 			dialog = new QDialog((Frame) window, dialogTitle, icon, content,
@@ -1026,8 +1032,8 @@ public class QDialog extends JDialog {
 	protected JComponent content;
 
 	WindowListener windowListener = new WindowAdapter() {
-		Object originalMnemonicValue = UIManager.getDefaults().get(
-				"Button.showMnemonics");
+		Object originalMnemonicValue = UIManager.getDefaults()
+				.get("Button.showMnemonics");
 
 		@Override
 		public void windowClosed(WindowEvent e) {
@@ -1201,8 +1207,8 @@ public class QDialog extends JDialog {
 			c.gridy = 1;
 			panel.add(dontShowCheckbox, c);
 		} else if (alwaysApplyKey != null) {
-			alwaysApplyCheckbox.setText(strings
-					.getString("alwaysApplyCheckbox"));
+			alwaysApplyCheckbox
+					.setText(strings.getString("alwaysApplyCheckbox"));
 			c.gridy = 1;
 			panel.add(alwaysApplyCheckbox, c);
 		}
@@ -1283,6 +1289,8 @@ public class QDialog extends JDialog {
 
 	/**
 	 * Assigns the footer of this dialog.
+	 * <p>
+	 * The footer is optional, but it is highly recommended.
 	 * 
 	 */
 	public void setFooter(DialogFooter f) {
@@ -1290,30 +1298,33 @@ public class QDialog extends JDialog {
 			footer.removeActionListener(footerListener);
 		}
 		footer = f;
-		footer.addActionListener(footerListener);
+		if (footer != null) {
+			footer.addActionListener(footerListener);
 
-		// the enforces mnemonics
-		JComponent[] dismissControls = footer.getDismissControls();
+			// the enforces mnemonics
+			JComponent[] dismissControls = footer.getDismissControls();
 
-		for (int a = 0; a < dismissControls.length; a++) {
-			if (dismissControls[a] instanceof JButton) {
-				int keyCode = ((JButton) dismissControls[a]).getMnemonic();
-				if (keyCode != 0) {
-					KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode, 0);
-					getRootPane().getInputMap(
-							JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
-							keyStroke, keyStroke);
-					AbstractAction action = new DialogFooter.ClickAction(
-							(JButton) dismissControls[a]) {
-						private static final long serialVersionUID = 1L;
+			for (int a = 0; a < dismissControls.length; a++) {
+				if (dismissControls[a] instanceof JButton) {
+					int keyCode = ((JButton) dismissControls[a]).getMnemonic();
+					if (keyCode != 0) {
+						KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode,
+								0);
+						getRootPane().getInputMap(
+								JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+								.put(keyStroke, keyStroke);
+						AbstractAction action = new DialogFooter.ClickAction(
+								(JButton) dismissControls[a]) {
+							private static final long serialVersionUID = 1L;
 
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							if (showMnemonics == false)
-								return;
-						}
-					};
-					getRootPane().getActionMap().put(keyStroke, action);
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								if (showMnemonics == false)
+									return;
+							}
+						};
+						getRootPane().getActionMap().put(keyStroke, action);
+					}
 				}
 			}
 		}
@@ -1376,8 +1387,8 @@ public class QDialog extends JDialog {
 	 * been clicked yet.
 	 */
 	public JButton getSelectedButton() {
-		JButton dismissalButton = (JButton) getRootPane().getClientProperty(
-				"QDialog.selectedButton");
+		JButton dismissalButton = (JButton) getRootPane()
+				.getClientProperty("QDialog.selectedButton");
 		return dismissalButton;
 	}
 
