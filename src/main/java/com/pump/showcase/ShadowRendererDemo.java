@@ -47,6 +47,7 @@ import javax.swing.plaf.SliderUI;
 import com.pump.geom.Spiral2D;
 import com.pump.geom.StarPolygon;
 import com.pump.image.shadow.ARGBPixels;
+import com.pump.image.shadow.CompositeShadowRenderer;
 import com.pump.image.shadow.FastShadowRenderer;
 import com.pump.image.shadow.GaussianKernel;
 import com.pump.image.shadow.GaussianShadowRenderer;
@@ -280,7 +281,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		inspector.addRow(new JLabel("Angle:"), angleSlider);
 		inspector.addRow(new JLabel("Offset:"), offsetSlider);
 
-		rendererComboBox.addItem("Fast (JDesktop)");
+		rendererComboBox.addItem("Fast");
+		rendererComboBox.addItem("Composite");
 		rendererComboBox.addItem("Gaussian");
 
 		addSliderPopover(opacitySlider, "%");
@@ -416,7 +418,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 			Collection<ShadowRenderer> renderers = Arrays.asList(
 					new OriginalGaussianShadowRenderer(),
-					new GaussianShadowRenderer(), new FastShadowRenderer());
+					new GaussianShadowRenderer(), new CompositeShadowRenderer(),
+					new FastShadowRenderer());
 
 			public void actionPerformed(ActionEvent e) {
 				progressBar = new JProgressBar(SwingConstants.HORIZONTAL, 0,
@@ -497,9 +500,15 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		g.translate(size.width / 2 - srcImage.getWidth() / 2,
 				size.height / 2 - srcImage.getHeight() / 2);
 
-		ShadowRenderer renderer = rendererComboBox.getSelectedIndex() == 0
-				? new FastShadowRenderer()
-				: new GaussianShadowRenderer();
+		ShadowRenderer renderer;
+		if (rendererComboBox.getSelectedIndex() == 0) {
+			renderer = new FastShadowRenderer();
+		} else if (rendererComboBox.getSelectedIndex() == 1) {
+			renderer = new CompositeShadowRenderer();
+		} else {
+			renderer = new GaussianShadowRenderer();
+		}
+
 		float opacity = (float) (opacitySlider.getValue()) / 100f;
 
 		Number k1 = (Number) kernelSizeSpinner.getValue();
