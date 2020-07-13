@@ -371,7 +371,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			for (ShadowRenderer renderer : renderers) {
 				float min = ((Number) model.getMinimum()).floatValue();
 				float max = ((Number) model.getMaximum()).floatValue();
-				for (float kernelSize = min; kernelSize <= max; kernelSize += 1) {
+				for (float kernelSize = min; kernelSize <= max; kernelSize += .5f) {
 					ShadowAttributes attr = new ShadowAttributes(kernelSize,
 							.5f);
 					int k = renderer.getKernel(attr).getKernelRadius();

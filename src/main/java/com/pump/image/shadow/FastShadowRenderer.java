@@ -8,6 +8,15 @@ import java.util.Objects;
  * render the shadow quickly. The uniform kernel, though, means the resulting
  * shadow is blocky. (A bell-shaped kernel produces a better looking shadow.)
  * <p>
+ * Although the kernel is uniform (meaning "all elements are the same"), this
+ * includes an option to make the edges of the kernel weighted (meaning "the
+ * first and last elements of the kernel are softer"). When you use a solid
+ * integer kernel radius the kernel is truly uniform, but when you use a
+ * fractional value this renderer uses weighted edges. The weighted edges are a
+ * little more expensive to calculate. (The primary motivation behind supporting
+ * weighted edges has to do with giving the CompositeShadowRenderer a greater
+ * depth of support.)
+ * <p>
  * This supports using the same int array as both the source and the
  * destination.
  * <p>
@@ -24,9 +33,6 @@ import java.util.Objects;
  */
 public class FastShadowRenderer implements ShadowRenderer {
 
-	// TODO: we could probably support floating-point kernel radiuses with
-	// a separate internal Renderer class.
-
 	/**
 	 * This helper class runs the two separate blurs.
 	 */
@@ -34,17 +40,35 @@ public class FastShadowRenderer implements ShadowRenderer {
 		ARGBPixels src, dst;
 		int[] srcBuffer, dstBuffer;
 		int shadowSize, kernelSize;
+		float weightedShadowSize;
 
 		int width, height;
 		int dstX, dstY, srcX, srcY;
+		int edgeWeight, edgeWeightComplement;
 		int[] aHistory;
 
 		int[] divideByShadowSizeLUT;
 		float shadowOpacity;
 
+		/**
+		 * 
+		 * @param src
+		 * @param dst
+		 * @param srcX
+		 * @param srcY
+		 * @param dstX
+		 * @param dstY
+		 * @param width
+		 * @param height
+		 * @param kernelSize
+		 * @param edgeWeight
+		 *            a value from [1,255] indicating how much weight the edge
+		 *            pixels in a kernel should receive.
+		 * @param shadowOpacity
+		 */
 		public Renderer(ARGBPixels src, ARGBPixels dst, int srcX, int srcY,
 				int dstX, int dstY, int width, int height, int kernelSize,
-				float shadowOpacity) {
+				int edgeWeight, float shadowOpacity) {
 			Objects.requireNonNull(src);
 
 			if (dst == null) {
@@ -54,6 +78,13 @@ public class FastShadowRenderer implements ShadowRenderer {
 			if (shadowOpacity < 0 || shadowOpacity > 1)
 				throw new IllegalArgumentException("Shadow opacity ("
 						+ shadowOpacity + ") should be between zero and one.");
+
+			if (edgeWeight < 1 || edgeWeight > 255)
+				throw new IllegalArgumentException(
+						"edgeWeight should be between [1, 255]");
+
+			this.edgeWeight = edgeWeight;
+			edgeWeightComplement = 255 - edgeWeight;
 
 			this.src = src;
 			this.dst = dst;
@@ -69,6 +100,9 @@ public class FastShadowRenderer implements ShadowRenderer {
 			this.height = height;
 
 			shadowSize = kernelSize * 2 + 1;
+
+			weightedShadowSize = shadowSize - 2f
+					+ 2f * ((float) edgeWeight) / 255f;
 
 			srcBuffer = src.getPixels();
 			dstBuffer = dst.getPixels();
@@ -120,6 +154,16 @@ public class FastShadowRenderer implements ShadowRenderer {
 		 * are empty).
 		 */
 		void runHorizontalBlur() {
+			int x1 = dstX - kernelSize;
+			int x2 = dstX + kernelSize + 1;
+			int x3 = dstX + width - kernelSize;
+			int x4 = dstX + width + kernelSize;
+
+			if (!(x1 <= x2 && x2 <= x3 && x3 <= x4 && this.edgeWeight == 255)) {
+				runHorizontalBlur_unoptimized();
+				return;
+			}
+
 			// in addition to being a divisor LUT, this also takes into account
 			// the final opacity multiplier and shifts the result back into the
 			// alpha channel
@@ -128,16 +172,6 @@ public class FastShadowRenderer implements ShadowRenderer {
 			for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
 				divideByShadowSizeLUT[i] = ((i * shadowMultiplier
 						/ shadowDivisor) & 0xff) << 24;
-			}
-
-			int x1 = dstX - kernelSize;
-			int x2 = dstX + kernelSize + 1;
-			int x3 = dstX + width - kernelSize;
-			int x4 = dstX + width + kernelSize;
-
-			if (!(x1 <= x2 && x2 <= x3 && x3 <= x4)) {
-				runHorizontalBlur_unoptimized();
-				return;
 			}
 
 			int dstWidth = dst.getWidth();
@@ -203,23 +237,43 @@ public class FastShadowRenderer implements ShadowRenderer {
 
 			int readIndexBase = y1 * dstWidth + x1 + kernelSize;
 			int writeIndexBase = y1 * dstWidth + x1;
+
+			// in addition to being a divisor LUT, this also takes into account
+			// the final opacity multiplier and shifts the result back into the
+			// alpha channel
+			int shadowMultiplier = (int) (shadowOpacity * 0xff);
+			int shadowDivisor = (int) (weightedShadowSize * 0xff);
+			for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
+				divideByShadowSizeLUT[i] = ((i * shadowMultiplier
+						/ shadowDivisor) & 0xff) << 24;
+			}
+
 			for (int y = y1; y < y2; y++) {
 				int aHistoryIdx = -1;
 				int aSum = 0;
 				Arrays.fill(aHistory, 0);
+				int nextAlphaHistoryIndex = 0;
 
 				int readIndex = readIndexBase;
 				int writeIndex = writeIndexBase;
 				for (int x = x1; x < x2; x++) {
-					aHistoryIdx++;
-					if (aHistoryIdx == shadowSize)
-						aHistoryIdx = 0;
+					aHistoryIdx = nextAlphaHistoryIndex;
+
 					int alpha = readIndex < dstBuffer.length
 							? dstBuffer[readIndex]
 							: 0;
 					aSum += alpha - aHistory[aHistoryIdx];
 					aHistory[aHistoryIdx] = alpha;
-					dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
+
+					nextAlphaHistoryIndex++;
+					if (nextAlphaHistoryIndex == shadowSize)
+						nextAlphaHistoryIndex = 0;
+
+					dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum
+							- aHistory[aHistoryIdx] * edgeWeightComplement / 255
+							- aHistory[nextAlphaHistoryIndex]
+									* edgeWeightComplement / 255];
+
 					readIndex++;
 					writeIndex++;
 				}
@@ -239,18 +293,19 @@ public class FastShadowRenderer implements ShadowRenderer {
 		 * blue channel and shifts it back to the alpha channel.
 		 */
 		void runVerticalBlur() {
-			for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
-				divideByShadowSizeLUT[i] = (int) (i / shadowSize);
-			}
 
 			int y1 = dstY - kernelSize;
 			int y2 = dstY + kernelSize + 1;
 			int y3 = dstY + height - kernelSize;
 			int y4 = dstY + height + kernelSize;
 
-			if (!(y1 <= y2 && y2 <= y3 && y3 <= y4)) {
+			if (!(y1 <= y2 && y2 <= y3 && y3 <= y4 && edgeWeight == 255)) {
 				runVerticalBlur_unoptimized();
 				return;
+			}
+
+			for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
+				divideByShadowSizeLUT[i] = (int) (i / shadowSize);
 			}
 
 			int endX = dstX + width;
@@ -322,27 +377,42 @@ public class FastShadowRenderer implements ShadowRenderer {
 			int dstIndexBase = y1 * dstWidth;
 			int whenAddingStops = height + 2 * kernelSize - shadowSize;
 
+			for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
+				divideByShadowSizeLUT[i] = (int) (i / weightedShadowSize);
+			}
+
 			for (int x = dstX; x < endX; x++) {
 				int aHistoryIdx = -1;
 				int aSum = 0;
 				Arrays.fill(aHistory, 0);
+				int nextAlphaHistoryIndex = 0;
 
 				int srcIndex = srcIndexBase + x;
 				int dstIndex = dstIndexBase + x;
 
 				for (int loopCtr = 0; loopCtr < loopCount; loopCtr++) {
-					aHistoryIdx++;
-					if (aHistoryIdx == shadowSize)
-						aHistoryIdx = 0;
+					aHistoryIdx = nextAlphaHistoryIndex;
+
+					if (loopCtr >= shadowSize)
+						aSum -= aHistory[aHistoryIdx];
 					if (loopCtr <= whenAddingStops) {
 						int alpha = srcBuffer[srcIndex] >>> 24;
 						aSum += alpha;
 						aHistory[aHistoryIdx] = alpha;
 						srcIndex += srcWidth;
+					} else {
+						aHistory[aHistoryIdx] = 0;
 					}
-					if (loopCtr >= shadowSize)
-						aSum -= aHistory[aHistoryIdx];
-					dstBuffer[dstIndex] = divideByShadowSizeLUT[aSum];
+
+					nextAlphaHistoryIndex++;
+					if (nextAlphaHistoryIndex == shadowSize)
+						nextAlphaHistoryIndex = 0;
+
+					dstBuffer[dstIndex] = divideByShadowSizeLUT[aSum
+							- aHistory[aHistoryIdx] * edgeWeightComplement / 255
+							- aHistory[nextAlphaHistoryIndex]
+									* edgeWeightComplement / 255];
+
 					dstIndex += dstWidth;
 				}
 			}
@@ -352,34 +422,62 @@ public class FastShadowRenderer implements ShadowRenderer {
 	@Override
 	public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
 			ShadowAttributes attr) {
-		int r = (int) attr.getShadowKernelRadius();
+		int r = getKernel(attr).getKernelRadius();
 		return createShadow(src, dst, r, r, attr);
 	}
 
 	public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
 			int srcToDstX, int srcToDstY, ShadowAttributes attr) {
+		GaussianKernel k = getKernel(attr);
+		int edgeWeight = getEdgeWeight(attr.getShadowKernelRadius());
 		Renderer renderer = new Renderer(src, dst, 0, 0, srcToDstX, srcToDstY,
-				src.getWidth(), src.getHeight(),
-				getKernel(attr).getKernelRadius(), attr.getShadowOpacity());
+				src.getWidth(), src.getHeight(), k.getKernelRadius(),
+				edgeWeight, attr.getShadowOpacity());
 		renderer.run();
 		return renderer.dst;
 	}
 
 	public void applyShadow(ARGBPixels pixels, int x, int y, int width,
 			int height, ShadowAttributes attr) {
+		GaussianKernel k = getKernel(attr);
+		int edgeWeight = getEdgeWeight(attr.getShadowKernelRadius());
 		Renderer renderer = new Renderer(pixels, pixels, x, y, x, y, width,
-				height, getKernel(attr).getKernelRadius(),
+				height, k.getKernelRadius(), edgeWeight,
 				attr.getShadowOpacity());
 		renderer.run();
 	}
 
 	@Override
 	public GaussianKernel getKernel(ShadowAttributes attr) {
-		int r = (int) attr.getShadowKernelRadius();
-		int[] array = new int[2 * r + 1];
-		for (int a = 0; a < array.length; a++) {
-			array[a] = 1;
+		int ceil = (int) (Math.ceil(attr.getShadowKernelRadius()) + .5);
+		int[] array = new int[2 * ceil + 1];
+		int edgeWeight = getEdgeWeight(attr.getShadowKernelRadius());
+
+		if (edgeWeight == 255) {
+			Arrays.fill(array, 1);
+		} else {
+			Arrays.fill(array, 255);
+			array[0] = edgeWeight;
+			array[array.length - 1] = edgeWeight;
 		}
 		return new GaussianKernel(array);
+	}
+
+	/**
+	 * Return a value from 1-255 indicating how much weight the edge pixels in
+	 * the kernel should have.
+	 */
+	protected int getEdgeWeight(float shadowKernelRadius) {
+		int ceil = (int) (Math.ceil(shadowKernelRadius) + .5);
+		int floor = (int) shadowKernelRadius;
+		int edgeWeight;
+		if (floor == ceil) {
+			edgeWeight = 255;
+		} else {
+			float remaining = shadowKernelRadius - floor;
+			edgeWeight = (int) (255 * remaining);
+			edgeWeight = Math.max(1, edgeWeight);
+		}
+		return edgeWeight;
 	}
 }

@@ -37,7 +37,7 @@ public class FastShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(11, 11);
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -105,7 +105,7 @@ public class FastShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(10, 10);
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -145,7 +145,7 @@ public class FastShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(9, 9);
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -183,7 +183,7 @@ public class FastShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(8, 8);
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -219,7 +219,7 @@ public class FastShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(7, 7);
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -253,7 +253,7 @@ public class FastShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(6, 6);
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -285,7 +285,7 @@ public class FastShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(5, 5);
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -326,7 +326,7 @@ public class FastShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
 		// test topmost row (of data)
@@ -386,7 +386,7 @@ public class FastShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
 		// test topmost row (of data)
@@ -428,7 +428,7 @@ public class FastShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
 		// test topmost row (of data)
@@ -468,7 +468,7 @@ public class FastShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
 		// test topmost row (of data)
@@ -506,7 +506,7 @@ public class FastShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
 		// test topmost row (of data)
@@ -542,7 +542,7 @@ public class FastShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
 		// test topmost row (of data)
@@ -576,7 +576,7 @@ public class FastShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
 		// test topmost row (of data)
