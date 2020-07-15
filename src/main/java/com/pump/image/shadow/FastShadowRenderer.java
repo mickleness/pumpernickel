@@ -269,10 +269,15 @@ public class FastShadowRenderer implements ShadowRenderer {
 					if (nextAlphaHistoryIndex == shadowSize)
 						nextAlphaHistoryIndex = 0;
 
-					dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum
+					int z = aSum
 							- aHistory[aHistoryIdx] * edgeWeightComplement / 255
 							- aHistory[nextAlphaHistoryIndex]
-									* edgeWeightComplement / 255];
+									* edgeWeightComplement / 255;
+					try {
+						dstBuffer[writeIndex] = divideByShadowSizeLUT[z];
+					} catch(RuntimeException e) {
+						throw e;
+					}
 
 					readIndex++;
 					writeIndex++;
@@ -475,7 +480,7 @@ public class FastShadowRenderer implements ShadowRenderer {
 			edgeWeight = 255;
 		} else {
 			float remaining = shadowKernelRadius - floor;
-			edgeWeight = (int) (255 * remaining);
+			edgeWeight = (int) (255 * remaining + .5);
 			edgeWeight = Math.max(1, edgeWeight);
 		}
 		return edgeWeight;
