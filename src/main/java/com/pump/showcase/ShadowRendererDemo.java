@@ -248,9 +248,9 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 	JComboBox<String> rendererComboBox = new JComboBox<>();
 	JSpinner kernelSizeSpinner = new JSpinner(
 			new SpinnerNumberModel(5f, 1f, 25f, .1f));
-	JSlider opacitySlider = new JSlider(1, 100, 50);
-	JSlider angleSlider = new JSlider(0, 359, 45);
-	JSlider offsetSlider = new JSlider(0, 20, 10);
+	JSlider opacitySlider = new ShowcaseSlider(1, 100, 50);
+	JSlider angleSlider = new ShowcaseSlider(0, 359, 45);
+	JSlider offsetSlider = new ShowcaseSlider(0, 20, 10);
 
 	BufferedImage srcImage;
 
