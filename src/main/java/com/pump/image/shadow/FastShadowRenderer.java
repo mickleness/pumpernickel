@@ -159,19 +159,9 @@ public class FastShadowRenderer implements ShadowRenderer {
 			int x3 = dstX + width - kernelSize;
 			int x4 = dstX + width + kernelSize;
 
-			if (!(x1 <= x2 && x2 <= x3 && x3 <= x4 && this.edgeWeight == 255)) {
+			if (!(x1 <= x2 && x2 <= x3 && x3 <= x4)) {
 				runHorizontalBlur_unoptimized();
 				return;
-			}
-
-			// in addition to being a divisor LUT, this also takes into account
-			// the final opacity multiplier and shifts the result back into the
-			// alpha channel
-			int shadowMultiplier = (int) (shadowOpacity * 0xff);
-			int shadowDivisor = shadowSize * 0xff;
-			for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
-				divideByShadowSizeLUT[i] = ((i * shadowMultiplier
-						/ shadowDivisor) & 0xff) << 24;
 			}
 
 			int dstWidth = dst.getWidth();
@@ -181,48 +171,142 @@ public class FastShadowRenderer implements ShadowRenderer {
 
 			int readIndexBase = y1 * dstWidth + x1 + kernelSize;
 			int writeIndexBase = y1 * dstWidth + x1;
-			for (int y = y1; y < y2; y++) {
-				int aHistoryIdx = -1;
-				int aSum = 0;
 
-				int x = x1;
-				int readIndex = readIndexBase;
-				int writeIndex = writeIndexBase;
-				while (x < x2) {
-					int alpha = dstBuffer[readIndex];
-					aHistory[++aHistoryIdx] = alpha;
-					aSum += alpha;
-					dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
-					readIndex++;
-					writeIndex++;
-					x++;
+			if (edgeWeight == 255) {
+				int shadowMultiplier = (int) (shadowOpacity * 0xff);
+				int shadowDivisor = shadowSize * 0xff;
+				for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
+					divideByShadowSizeLUT[i] = ((i * shadowMultiplier
+							/ shadowDivisor) & 0xff) << 24;
 				}
 
-				while (x < x3) {
-					aHistoryIdx++;
-					if (aHistoryIdx == shadowSize)
-						aHistoryIdx = 0;
-					int alpha = dstBuffer[readIndex];
-					aSum += alpha - aHistory[aHistoryIdx];
-					aHistory[aHistoryIdx] = alpha;
-					dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
-					readIndex++;
-					writeIndex++;
-					x++;
+				for (int y = y1; y < y2; y++) {
+					int aHistoryIdx = -1;
+					int aSum = 0;
+
+					int x = x1;
+					int readIndex = readIndexBase;
+					int writeIndex = writeIndexBase;
+					while (x < x2) {
+						int alpha = dstBuffer[readIndex];
+						aHistory[++aHistoryIdx] = alpha;
+						aSum += alpha;
+						dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
+						readIndex++;
+						writeIndex++;
+						x++;
+					}
+
+					while (x < x3) {
+						aHistoryIdx++;
+						if (aHistoryIdx == shadowSize)
+							aHistoryIdx = 0;
+						int alpha = dstBuffer[readIndex];
+						aSum += alpha - aHistory[aHistoryIdx];
+						aHistory[aHistoryIdx] = alpha;
+						dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
+						readIndex++;
+						writeIndex++;
+						x++;
+					}
+
+					while (x < x4) {
+						aHistoryIdx++;
+						if (aHistoryIdx == shadowSize)
+							aHistoryIdx = 0;
+						aSum -= aHistory[aHistoryIdx];
+						dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
+						writeIndex++;
+						x++;
+					}
+
+					writeIndexBase += dstWidth;
+					readIndexBase += dstWidth;
+				}
+			} else {
+				int shadowMultiplier = (int) (shadowOpacity * 0xff);
+				int shadowDivisor = (int) (weightedShadowSize * 0xff);
+				for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
+					divideByShadowSizeLUT[i] = ((i * shadowMultiplier
+							/ shadowDivisor) & 0xff) << 24;
 				}
 
-				while (x < x4) {
-					aHistoryIdx++;
-					if (aHistoryIdx == shadowSize)
-						aHistoryIdx = 0;
-					aSum -= aHistory[aHistoryIdx];
-					dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
-					writeIndex++;
-					x++;
-				}
+				for (int y = y1; y < y2; y++) {
+					int aHistoryIdx = -1;
+					Arrays.fill(aHistory, 0);
+					int nextAlphaHistoryIndex = 0;
+					int aSum = 0;
 
-				writeIndexBase += dstWidth;
-				readIndexBase += dstWidth;
+					int x = x1;
+					int readIndex = readIndexBase;
+					int writeIndex = writeIndexBase;
+					while (x < x2) {
+						int alpha = dstBuffer[readIndex];
+						aHistoryIdx = nextAlphaHistoryIndex;
+						aHistory[aHistoryIdx] = alpha;
+						aSum += alpha;
+
+						nextAlphaHistoryIndex++;
+						if (nextAlphaHistoryIndex == shadowSize)
+							nextAlphaHistoryIndex = 0;
+
+						int z = aSum
+								- aHistory[aHistoryIdx] * edgeWeightComplement
+										/ 255
+								- aHistory[nextAlphaHistoryIndex]
+										* edgeWeightComplement / 255;
+						dstBuffer[writeIndex] = divideByShadowSizeLUT[z];
+
+						readIndex++;
+						writeIndex++;
+						x++;
+					}
+
+					while (x < x3) {
+						aHistoryIdx = nextAlphaHistoryIndex;
+						int alpha = dstBuffer[readIndex];
+						aSum += alpha - aHistory[aHistoryIdx];
+						aHistory[aHistoryIdx] = alpha;
+
+						nextAlphaHistoryIndex++;
+						if (nextAlphaHistoryIndex == shadowSize)
+							nextAlphaHistoryIndex = 0;
+
+						int z = aSum
+								- aHistory[aHistoryIdx] * edgeWeightComplement
+										/ 255
+								- aHistory[nextAlphaHistoryIndex]
+										* edgeWeightComplement / 255;
+						dstBuffer[writeIndex] = divideByShadowSizeLUT[z];
+
+						readIndex++;
+						writeIndex++;
+						x++;
+					}
+
+					while (x < x4) {
+						aHistoryIdx = nextAlphaHistoryIndex;
+						aSum -= aHistory[aHistoryIdx];
+						aHistory[aHistoryIdx] = 0;
+
+						nextAlphaHistoryIndex++;
+						if (nextAlphaHistoryIndex == shadowSize)
+							nextAlphaHistoryIndex = 0;
+
+						int z = aSum
+								- aHistory[aHistoryIdx] * edgeWeightComplement
+										/ 255
+								- aHistory[nextAlphaHistoryIndex]
+										* edgeWeightComplement / 255;
+						dstBuffer[writeIndex] = divideByShadowSizeLUT[z];
+
+						writeIndex++;
+						x++;
+					}
+
+					writeIndexBase += dstWidth;
+					readIndexBase += dstWidth;
+				}
 			}
 		}
 
@@ -238,53 +322,81 @@ public class FastShadowRenderer implements ShadowRenderer {
 			int readIndexBase = y1 * dstWidth + x1 + kernelSize;
 			int writeIndexBase = y1 * dstWidth + x1;
 
-			// in addition to being a divisor LUT, this also takes into account
-			// the final opacity multiplier and shifts the result back into the
-			// alpha channel
-			int shadowMultiplier = (int) (shadowOpacity * 0xff);
-			int shadowDivisor = (int) (weightedShadowSize * 0xff);
-			for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
-				divideByShadowSizeLUT[i] = ((i * shadowMultiplier
-						/ shadowDivisor) & 0xff) << 24;
-			}
-
-			for (int y = y1; y < y2; y++) {
-				int aHistoryIdx = -1;
-				int aSum = 0;
-				Arrays.fill(aHistory, 0);
-				int nextAlphaHistoryIndex = 0;
-
-				int readIndex = readIndexBase;
-				int writeIndex = writeIndexBase;
-				for (int x = x1; x < x2; x++) {
-					aHistoryIdx = nextAlphaHistoryIndex;
-
-					int alpha = readIndex < dstBuffer.length
-							? dstBuffer[readIndex]
-							: 0;
-					aSum += alpha - aHistory[aHistoryIdx];
-					aHistory[aHistoryIdx] = alpha;
-
-					nextAlphaHistoryIndex++;
-					if (nextAlphaHistoryIndex == shadowSize)
-						nextAlphaHistoryIndex = 0;
-
-					int z = aSum
-							- aHistory[aHistoryIdx] * edgeWeightComplement / 255
-							- aHistory[nextAlphaHistoryIndex]
-									* edgeWeightComplement / 255;
-					try {
-						dstBuffer[writeIndex] = divideByShadowSizeLUT[z];
-					} catch(RuntimeException e) {
-						throw e;
-					}
-
-					readIndex++;
-					writeIndex++;
+			if (edgeWeight == 255) {
+				int shadowMultiplier = (int) (shadowOpacity * 0xff);
+				int shadowDivisor = shadowSize * 0xff;
+				for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
+					divideByShadowSizeLUT[i] = ((i * shadowMultiplier
+							/ shadowDivisor) & 0xff) << 24;
 				}
 
-				writeIndexBase += dstWidth;
-				readIndexBase += dstWidth;
+				for (int y = y1; y < y2; y++) {
+					int aHistoryIdx = -1;
+					int aSum = 0;
+					Arrays.fill(aHistory, 0);
+
+					int readIndex = readIndexBase;
+					int writeIndex = writeIndexBase;
+					for (int x = x1; x < x2; x++) {
+						aHistoryIdx++;
+						if (aHistoryIdx == shadowSize)
+							aHistoryIdx = 0;
+						int alpha = readIndex < dstBuffer.length
+								? dstBuffer[readIndex]
+								: 0;
+						aSum += alpha - aHistory[aHistoryIdx];
+						aHistory[aHistoryIdx] = alpha;
+						dstBuffer[writeIndex] = divideByShadowSizeLUT[aSum];
+						readIndex++;
+						writeIndex++;
+					}
+
+					writeIndexBase += dstWidth;
+					readIndexBase += dstWidth;
+				}
+			} else {
+				int shadowMultiplier = (int) (shadowOpacity * 0xff);
+				int shadowDivisor = (int) (weightedShadowSize * 0xff);
+				for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
+					divideByShadowSizeLUT[i] = ((i * shadowMultiplier
+							/ shadowDivisor) & 0xff) << 24;
+				}
+
+				for (int y = y1; y < y2; y++) {
+					int aHistoryIdx = -1;
+					int aSum = 0;
+					Arrays.fill(aHistory, 0);
+					int nextAlphaHistoryIndex = 0;
+
+					int readIndex = readIndexBase;
+					int writeIndex = writeIndexBase;
+					for (int x = x1; x < x2; x++) {
+						aHistoryIdx = nextAlphaHistoryIndex;
+
+						int alpha = readIndex < dstBuffer.length
+								? dstBuffer[readIndex]
+								: 0;
+						aSum += alpha - aHistory[aHistoryIdx];
+						aHistory[aHistoryIdx] = alpha;
+
+						nextAlphaHistoryIndex++;
+						if (nextAlphaHistoryIndex == shadowSize)
+							nextAlphaHistoryIndex = 0;
+
+						int z = aSum
+								- aHistory[aHistoryIdx] * edgeWeightComplement
+										/ 255
+								- aHistory[nextAlphaHistoryIndex]
+										* edgeWeightComplement / 255;
+						dstBuffer[writeIndex] = divideByShadowSizeLUT[z];
+
+						readIndex++;
+						writeIndex++;
+					}
+
+					writeIndexBase += dstWidth;
+					readIndexBase += dstWidth;
+				}
 			}
 		}
 
