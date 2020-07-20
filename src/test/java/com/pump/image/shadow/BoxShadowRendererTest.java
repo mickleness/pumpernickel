@@ -38,7 +38,7 @@ public class BoxShadowRendererTest extends TestCase {
 		ARGBPixels dstImage = new ARGBPixels(11, 11);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 255, 1f);
-		renderer.runVerticalBlur();
+		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
 		// test leftmost column
@@ -106,7 +106,7 @@ public class BoxShadowRendererTest extends TestCase {
 		ARGBPixels dstImage = new ARGBPixels(10, 10);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 255, 1f);
-		renderer.runVerticalBlur();
+		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
 		// test leftmost column
@@ -146,7 +146,7 @@ public class BoxShadowRendererTest extends TestCase {
 		ARGBPixels dstImage = new ARGBPixels(9, 9);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 255, 1f);
-		renderer.runVerticalBlur();
+		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
 		// test leftmost column
@@ -184,7 +184,7 @@ public class BoxShadowRendererTest extends TestCase {
 		ARGBPixels dstImage = new ARGBPixels(8, 8);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 255, 1f);
-		renderer.runVerticalBlur();
+		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
 		// test leftmost column
@@ -220,7 +220,7 @@ public class BoxShadowRendererTest extends TestCase {
 		ARGBPixels dstImage = new ARGBPixels(7, 7);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 255, 1f);
-		renderer.runVerticalBlur();
+		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
 		// test leftmost column
@@ -254,7 +254,7 @@ public class BoxShadowRendererTest extends TestCase {
 		ARGBPixels dstImage = new ARGBPixels(6, 6);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 255, 1f);
-		renderer.runVerticalBlur();
+		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
 		// test leftmost column
@@ -286,7 +286,7 @@ public class BoxShadowRendererTest extends TestCase {
 		ARGBPixels dstImage = new ARGBPixels(5, 5);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 255, 1f);
-		renderer.runVerticalBlur();
+		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
 		// test leftmost column
@@ -327,7 +327,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 255, 1f);
-		renderer.runHorizontalBlur();
+		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
 		assertEquals(1 << 24, dstPixels[22]);
@@ -387,7 +387,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 255, 1f);
-		renderer.runHorizontalBlur();
+		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
 		assertEquals(1 << 24, dstPixels[20]);
@@ -429,7 +429,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 255, 1f);
-		renderer.runHorizontalBlur();
+		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
 		assertEquals(1 << 24, dstPixels[18]);
@@ -469,7 +469,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 255, 1f);
-		renderer.runHorizontalBlur();
+		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
 		assertEquals(1 << 24, dstPixels[16]);
@@ -507,7 +507,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 255, 1f);
-		renderer.runHorizontalBlur();
+		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
 		assertEquals(1 << 24, dstPixels[14]);
@@ -543,7 +543,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 255, 1f);
-		renderer.runHorizontalBlur();
+		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
 		assertEquals(3 << 24, dstPixels[12]);
@@ -577,7 +577,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 255, 1f);
-		renderer.runHorizontalBlur();
+		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
 		assertEquals(1 << 24, dstPixels[10]);

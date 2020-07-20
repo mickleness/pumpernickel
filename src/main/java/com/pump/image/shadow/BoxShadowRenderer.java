@@ -33,7 +33,18 @@ public class BoxShadowRenderer implements ShadowRenderer {
 	 */
 	static class Renderer {
 
+		/**
+		 * This must run after the VerticalRenderer.
+		 * <p>
+		 * This looks for data in the rightmost 8 bits of the dest buffer (the
+		 * blue channel) and ends up blurring it and moving it to the leftmost 8
+		 * bits (the alpha channel)
+		 */
 		class HorizontalRenderer {
+			int xMin, xMin_plusHistory, xMax_minusHistory, xMax;
+			int dstWidth;
+			int y1, y2;
+			int readIndexBase, writeIndexBase;
 
 			public HorizontalRenderer() {
 				int shadowMultiplier = (int) (shadowOpacity * 0xff);
@@ -42,43 +53,36 @@ public class BoxShadowRenderer implements ShadowRenderer {
 					divideByShadowSizeLUT[i] = ((i * shadowMultiplier
 							/ shadowDivisor) & 0xff) << 24;
 				}
+
+				xMin = dstX - kernelSize;
+				xMin_plusHistory = dstX + kernelSize + 1;
+				xMax_minusHistory = dstX + width - kernelSize;
+				xMax = dstX + width + kernelSize;
+				dstWidth = dst.getWidth();
+				y1 = dstY - kernelSize;
+				y2 = dstY + height + kernelSize;
+				readIndexBase = y1 * dstWidth + xMin + kernelSize;
+				writeIndexBase = y1 * dstWidth + xMin;
 			}
 
-			/**
-			 * This blurs pixels horizontally from the dstBuffer into the
-			 * dstBuffer. This assumes that {@link #runVerticalBlur()} has
-			 * already been called, and the opacity information is stored in the
-			 * rightmost byte of each pixel. (So it is stored in the blue
-			 * channel, and all other channels are empty).
-			 */
 			public void run() {
-				int x1 = dstX - kernelSize;
-				int x2 = dstX + kernelSize + 1;
-				int x3 = dstX + width - kernelSize;
-				int x4 = dstX + width + kernelSize;
-
-				if (!(x1 <= x2 && x2 <= x3 && x3 <= x4)) {
+				if (!(xMin <= xMin_plusHistory
+						&& xMin_plusHistory <= xMax_minusHistory
+						&& xMax_minusHistory <= xMax)) {
 					runHorizontalBlur_unoptimized();
 					return;
 				}
 
-				int dstWidth = dst.getWidth();
-
-				int y1 = dstY - kernelSize;
-				int y2 = dstY + height + kernelSize;
-
-				int readIndexBase = y1 * dstWidth + x1 + kernelSize;
-				int writeIndexBase = y1 * dstWidth + x1;
-
 				if (edgeWeight == 255) {
+					// no weighted edges makes this our most efficient case:
 					for (int y = y1; y < y2; y++) {
 						int aHistoryIdx = -1;
 						int aSum = 0;
 
-						int x = x1;
+						int x = xMin;
 						int readIndex = readIndexBase;
 						int writeIndex = writeIndexBase;
-						while (x < x2) {
+						while (x < xMin_plusHistory) {
 							int alpha = dstBuffer[readIndex];
 							aHistory[++aHistoryIdx] = alpha;
 							aSum += alpha;
@@ -88,7 +92,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 							x++;
 						}
 
-						while (x < x3) {
+						while (x < xMax_minusHistory) {
 							aHistoryIdx++;
 							if (aHistoryIdx == shadowSize)
 								aHistoryIdx = 0;
@@ -101,7 +105,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 							x++;
 						}
 
-						while (x < x4) {
+						while (x < xMax) {
 							aHistoryIdx++;
 							if (aHistoryIdx == shadowSize)
 								aHistoryIdx = 0;
@@ -121,10 +125,10 @@ public class BoxShadowRenderer implements ShadowRenderer {
 						int nextAlphaHistoryIndex = 0;
 						int aSum = 0;
 
-						int x = x1;
+						int x = xMin;
 						int readIndex = readIndexBase;
 						int writeIndex = writeIndexBase;
-						while (x < x2) {
+						while (x < xMin_plusHistory) {
 							int alpha = dstBuffer[readIndex];
 							aHistoryIdx = nextAlphaHistoryIndex;
 							aHistory[aHistoryIdx] = alpha;
@@ -142,7 +146,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 							x++;
 						}
 
-						while (x < x3) {
+						while (x < xMax_minusHistory) {
 							aHistoryIdx = nextAlphaHistoryIndex;
 							int alpha = dstBuffer[readIndex];
 							aSum += alpha - aHistory[aHistoryIdx];
@@ -162,7 +166,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 							x++;
 						}
 
-						while (x < x4) {
+						while (x < xMax) {
 							aHistoryIdx = nextAlphaHistoryIndex;
 							aSum -= aHistory[aHistoryIdx];
 							aHistory[aHistoryIdx] = 0;
@@ -185,18 +189,13 @@ public class BoxShadowRenderer implements ShadowRenderer {
 				}
 			}
 
+			/**
+			 * This addresses fringe cases where the rows are unusually short.
+			 * This method uses a few more if/thens and is slightly less
+			 * efficient, but since the rows are short it probably won't matter
+			 * much.
+			 */
 			private void runHorizontalBlur_unoptimized() {
-				int x1 = dstX - kernelSize;
-				int x2 = dstX + width + kernelSize;
-
-				int dstWidth = dst.getWidth();
-
-				int y1 = dstY - kernelSize;
-				int y2 = dstY + height + kernelSize;
-
-				int readIndexBase = y1 * dstWidth + x1 + kernelSize;
-				int writeIndexBase = y1 * dstWidth + x1;
-
 				if (edgeWeight == 255) {
 					for (int y = y1; y < y2; y++) {
 						int aHistoryIdx = -1;
@@ -205,7 +204,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 
 						int readIndex = readIndexBase;
 						int writeIndex = writeIndexBase;
-						for (int x = x1; x < x2; x++) {
+						for (int x = xMin; x < xMax; x++) {
 							aHistoryIdx++;
 							if (aHistoryIdx == shadowSize)
 								aHistoryIdx = 0;
@@ -231,7 +230,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 
 						int readIndex = readIndexBase;
 						int writeIndex = writeIndexBase;
-						for (int x = x1; x < x2; x++) {
+						for (int x = xMin; x < xMax; x++) {
 							aHistoryIdx = nextAlphaHistoryIndex;
 
 							int alpha = readIndex < dstBuffer.length
@@ -260,53 +259,56 @@ public class BoxShadowRenderer implements ShadowRenderer {
 			}
 		}
 
+		/**
+		 * This must run before the HorizontalRender.
+		 * <p>
+		 * This looks for data in the leftmost 8 bits of the src buffer (the
+		 * alpha channel) and ends up blurring it and moving it to the rightmost
+		 * 8 bits of the dest buffer (the blue channel)
+		 */
 		class VerticalRenderer {
+			int yMin, yMin_plusHistory, yMax_minusHistory, yMax;
+			int endX;
+			int srcWidth, dstWidth;
+			int srcIndexBase, dstIndexBase;
+			int x1, x2;
 
 			public VerticalRenderer() {
 				for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
 					divideByShadowSizeLUT[i] = (int) (i / weightedShadowSize);
 				}
+				yMin = dstY - kernelSize;
+				yMin_plusHistory = dstY + kernelSize + 1;
+				yMax_minusHistory = dstY + height - kernelSize;
+				yMax = dstY + height + kernelSize;
+
+				endX = dstX + width;
+				srcWidth = src.getWidth();
+				dstWidth = dst.getWidth();
+				srcIndexBase = srcY * srcWidth - dstX + srcX;
+				dstIndexBase = yMin * dstWidth;
+				x1 = dstX;
+				x2 = endX;
 			}
 
-			/**
-			 * This blurs pixels vertically from the srcBuffer into the
-			 * dstBuffer.
-			 * <p>
-			 * The resulting value (in dstBuffer) is the unshifted alpha value.
-			 * For example: if the source pixels are all 0xff000000 (opaque
-			 * black), then will create destination pixels that are all 0xff.
-			 * (Technically this is the blue channel, but
-			 * {@link #runHorizontalBlur()} consults the blue channel and shifts
-			 * it back to the alpha channel.
-			 */
 			public void run() {
-				int y1 = dstY - kernelSize;
-				int y2 = dstY + kernelSize + 1;
-				int y3 = dstY + height - kernelSize;
-				int y4 = dstY + height + kernelSize;
-
-				if (!(y1 <= y2 && y2 <= y3 && y3 <= y4)) {
+				if (!(yMin <= yMin_plusHistory
+						&& yMin_plusHistory <= yMax_minusHistory
+						&& yMax_minusHistory <= yMax)) {
 					runVerticalBlur_unoptimized();
 					return;
 				}
 
-				int endX = dstX + width;
-				int srcWidth = src.getWidth();
-				int dstWidth = dst.getWidth();
-
-				// avoid multiplication in our loop:
-				int srcIndexBase = srcY * srcWidth - dstX + srcX;
-				int dstIndexBase = y1 * dstWidth;
-
 				if (edgeWeight == 255) {
-					for (int x = dstX; x < endX; x++) {
+					// no weighted edges makes this our most efficient case:
+					for (int x = x1; x < x2; x++) {
 						int aHistoryIdx = -1;
 						int aSum = 0;
 
-						int y = y1;
+						int y = yMin;
 						int srcIndex = srcIndexBase + x;
 						int dstIndex = dstIndexBase + x;
-						while (y < y2) {
+						while (y < yMin_plusHistory) {
 							int alpha = srcBuffer[srcIndex] >>> 24;
 							aHistory[++aHistoryIdx] = alpha;
 							aSum += alpha;
@@ -316,7 +318,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 							y++;
 						}
 
-						while (y < y3) {
+						while (y < yMax_minusHistory) {
 							aHistoryIdx++;
 							if (aHistoryIdx == shadowSize)
 								aHistoryIdx = 0;
@@ -329,7 +331,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 							y++;
 						}
 
-						while (y < y4) {
+						while (y < yMax) {
 							aHistoryIdx++;
 							if (aHistoryIdx == shadowSize)
 								aHistoryIdx = 0;
@@ -340,16 +342,16 @@ public class BoxShadowRenderer implements ShadowRenderer {
 						}
 					}
 				} else {
-					for (int x = dstX; x < endX; x++) {
+					for (int x = x1; x < x2; x++) {
 						int aHistoryIdx = -1;
 						Arrays.fill(aHistory, 0);
 						int nextAlphaHistoryIndex = 0;
 						int aSum = 0;
 
-						int y = y1;
+						int y = yMin;
 						int srcIndex = srcIndexBase + x;
 						int dstIndex = dstIndexBase + x;
-						while (y < y2) {
+						while (y < yMin_plusHistory) {
 							int alpha = srcBuffer[srcIndex] >>> 24;
 							aHistoryIdx = nextAlphaHistoryIndex;
 							aHistory[aHistoryIdx] = alpha;
@@ -367,7 +369,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 							y++;
 						}
 
-						while (y < y3) {
+						while (y < yMax_minusHistory) {
 							aHistoryIdx = nextAlphaHistoryIndex;
 							int alpha = srcBuffer[srcIndex] >>> 24;
 							aSum += alpha - aHistory[aHistoryIdx];
@@ -388,7 +390,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 							y++;
 						}
 
-						while (y < y4) {
+						while (y < yMax) {
 							aHistoryIdx = nextAlphaHistoryIndex;
 							aSum -= aHistory[aHistoryIdx];
 							aHistory[aHistoryIdx] = 0;
@@ -415,21 +417,12 @@ public class BoxShadowRenderer implements ShadowRenderer {
 			 * matter much.
 			 */
 			private void runVerticalBlur_unoptimized() {
-				int y1 = dstY - kernelSize;
-				int y2 = dstY + height + kernelSize;
-				int loopCount = y2 - y1;
+				int loopCount = yMax - yMin;
 
-				int endX = dstX + width;
-				int srcWidth = src.getWidth();
-				int dstWidth = dst.getWidth();
-
-				// avoid multiplication in our loop:
-				int srcIndexBase = srcY * srcWidth - dstX + srcX;
-				int dstIndexBase = y1 * dstWidth;
 				int whenAddingStops = height + 2 * kernelSize - shadowSize;
 
 				if (edgeWeight == 255) {
-					for (int x = dstX; x < endX; x++) {
+					for (int x = x1; x < x2; x++) {
 						int aHistoryIdx = -1;
 						int aSum = 0;
 						Arrays.fill(aHistory, 0);
@@ -454,7 +447,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 						}
 					}
 				} else {
-					for (int x = dstX; x < endX; x++) {
+					for (int x = x1; x < x2; x++) {
 						int aHistoryIdx = -1;
 						int aSum = 0;
 						Arrays.fill(aHistory, 0);
@@ -600,15 +593,6 @@ public class BoxShadowRenderer implements ShadowRenderer {
 
 		public void run() {
 			new VerticalRenderer().run();
-			new HorizontalRenderer().run();
-		}
-
-		// TODO: replace, these currently only exist for unit tests
-		void runVerticalBlur() {
-			new VerticalRenderer().run();
-		}
-
-		void runHorizontalBlur() {
 			new HorizontalRenderer().run();
 		}
 	}
