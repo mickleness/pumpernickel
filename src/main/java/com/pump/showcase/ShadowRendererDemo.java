@@ -47,8 +47,8 @@ import javax.swing.plaf.SliderUI;
 import com.pump.geom.Spiral2D;
 import com.pump.geom.StarPolygon;
 import com.pump.image.shadow.ARGBPixels;
-import com.pump.image.shadow.CompositeShadowRenderer;
-import com.pump.image.shadow.FastShadowRenderer;
+import com.pump.image.shadow.BoxShadowRenderer;
+import com.pump.image.shadow.DoubleBoxShadowRenderer;
 import com.pump.image.shadow.GaussianKernel;
 import com.pump.image.shadow.GaussianShadowRenderer;
 import com.pump.image.shadow.ShadowAttributes;
@@ -247,7 +247,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 	JComboBox<String> rendererComboBox = new JComboBox<>();
 	JSpinner kernelSizeSpinner = new JSpinner(
-			new SpinnerNumberModel(5f, 1f, 25f, .1f));
+			new SpinnerNumberModel(5f, .1f, 25f, .1f));
 	JSlider opacitySlider = new ShowcaseSlider(1, 100, 50);
 	JSlider angleSlider = new ShowcaseSlider(0, 359, 45);
 	JSlider offsetSlider = new ShowcaseSlider(0, 20, 10);
@@ -281,8 +281,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		inspector.addRow(new JLabel("Angle:"), angleSlider);
 		inspector.addRow(new JLabel("Offset:"), offsetSlider);
 
-		rendererComboBox.addItem("Fast");
-		rendererComboBox.addItem("Composite");
+		rendererComboBox.addItem("Box");
+		rendererComboBox.addItem("Double Box");
 		rendererComboBox.addItem("Gaussian");
 
 		addSliderPopover(opacitySlider, "%");
@@ -364,13 +364,10 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			srcImage.getRaster().getDataElements(0, 0, srcPixels.getWidth(),
 					srcPixels.getHeight(), srcPixels.getPixels());
 
-			SpinnerNumberModel model = (SpinnerNumberModel) kernelSizeSpinner
-					.getModel();
-
 			List<Runnable> runnables = new LinkedList<>();
 			for (ShadowRenderer renderer : renderers) {
-				float min = ((Number) model.getMinimum()).floatValue();
-				float max = ((Number) model.getMaximum()).floatValue();
+				float min = .5f;
+				float max = 25;
 				for (float kernelSize = min; kernelSize <= max; kernelSize += .5f) {
 					ShadowAttributes attr = new ShadowAttributes(kernelSize,
 							.5f);
@@ -418,8 +415,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 			Collection<ShadowRenderer> renderers = Arrays.asList(
 					new OriginalGaussianShadowRenderer(),
-					new GaussianShadowRenderer(), new CompositeShadowRenderer(),
-					new FastShadowRenderer());
+					new GaussianShadowRenderer(), new DoubleBoxShadowRenderer(),
+					new BoxShadowRenderer());
 
 			public void actionPerformed(ActionEvent e) {
 				progressBar = new JProgressBar(SwingConstants.HORIZONTAL, 0,
@@ -502,9 +499,9 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 		ShadowRenderer renderer;
 		if (rendererComboBox.getSelectedIndex() == 0) {
-			renderer = new FastShadowRenderer();
+			renderer = new BoxShadowRenderer();
 		} else if (rendererComboBox.getSelectedIndex() == 1) {
-			renderer = new CompositeShadowRenderer();
+			renderer = new DoubleBoxShadowRenderer();
 		} else {
 			renderer = new GaussianShadowRenderer();
 		}
@@ -552,7 +549,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 	@Override
 	public Class<?>[] getClasses() {
 		return new Class[] { ShadowRenderer.class, ShadowAttributes.class,
-				FastShadowRenderer.class, GaussianShadowRenderer.class };
+				BoxShadowRenderer.class, GaussianShadowRenderer.class };
 	}
 
 }

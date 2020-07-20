@@ -10,34 +10,44 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * This mimics a {@link GaussianShadowRenderer} by applying two iterations
- * of a {@link FastShadowRenderer}. This class is preloaded with information
- * about how to best combine FastShadowRenderers to resemble a
- * GaussianShadowRenderer for kernel radii of up to 100 pixels.
+ * This mimics a {@link GaussianShadowRenderer} by applying two iterations of a
+ * {@link BoxShadowRenderer}. This class is preloaded with information about how
+ * to best combine BoxShadowRenderers to resemble a GaussianShadowRenderer for
+ * kernel radii of up to 100 pixels.
+ * <p>
+ * Usually a "double box" or "triple box" refers to applying a box blur in one
+ * dimension x-many times, and then apply the box blur in the opposite dimension
+ * x-many times. Instead this class applies one complete box blur (in both
+ * dimensions) before applying the second. I think (?) this lets us apply only
+ * two iterations to get sufficiently close to a gaussian blur.
  * <p>
  * Warning: the kernel returned by {@link #getKernel(ShadowAttributes)} is an
- * approximation. No single kernel will exactly describe the effects of this renderer.
+ * approximation. No single kernel will exactly describe the effects of this
+ * renderer.
  */
-public class CompositeShadowRenderer implements ShadowRenderer {
+public class DoubleBoxShadowRenderer implements ShadowRenderer {
 
 	static TreeMap<Number, Combo> lookupTable = new TreeMap<>();
 
 	static {
-		try(InputStream in = CompositeShadowRenderer.class.getResourceAsStream("CompositeShadowRendererTable.csv")) {
-			try(BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"))) {
+		try (InputStream in = DoubleBoxShadowRenderer.class
+				.getResourceAsStream("DoubleBoxShadowRendererTable.csv")) {
+			try (BufferedReader br = new BufferedReader(
+					new InputStreamReader(in, "UTF-8"))) {
 				String s = br.readLine();
-				while(s!=null) {
+				while (s != null) {
 					String[] terms = s.split(",");
-					Number radius= Float.parseFloat(terms[0]);
-					Combo combo = new Combo( Float.parseFloat(terms[1]), Float.parseFloat(terms[2]));
+					Number radius = Float.parseFloat(terms[0]);
+					Combo combo = new Combo(Float.parseFloat(terms[1]),
+							Float.parseFloat(terms[2]));
 					lookupTable.put(radius, combo);
-					
+
 					s = br.readLine();
 				}
 			}
-		} catch(RuntimeException e) {
+		} catch (RuntimeException e) {
 			throw e;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -53,7 +63,7 @@ public class CompositeShadowRenderer implements ShadowRenderer {
 			for (float radius : fastKernelRadii) {
 				if (radius != 0)
 					sortedRadii.add(radius);
-				radiiSum += (int)(Math.ceil(radius)+.5);
+				radiiSum += (int) (Math.ceil(radius) + .5);
 
 			}
 			Collections.sort(sortedRadii);
@@ -99,9 +109,9 @@ public class CompositeShadowRenderer implements ShadowRenderer {
 			return sortedRadii.hashCode();
 		}
 
-		public ARGBPixels createShadow(ARGBPixels srcImage, ARGBPixels destImage, float shadowOpacity) {
+		public ARGBPixels createShadow(ARGBPixels srcImage,
+				ARGBPixels destImage, float shadowOpacity) {
 
-			
 			int dstWidth = srcImage.getWidth() + 2 * radiiSum;
 			int dstHeight = srcImage.getHeight() + 2 * radiiSum;
 
@@ -118,7 +128,7 @@ public class CompositeShadowRenderer implements ShadowRenderer {
 									+ ") must be " + dstHeight + " or greater");
 			}
 
-			FastShadowRenderer r = new FastShadowRenderer();
+			BoxShadowRenderer r = new BoxShadowRenderer();
 			int x = radiiSum;
 			int y = radiiSum;
 			int width = srcImage.getWidth();
@@ -136,12 +146,12 @@ public class CompositeShadowRenderer implements ShadowRenderer {
 					r.applyShadow(destImage, x, y, width, height, attr2);
 				}
 
-				int p = (int)(Math.ceil(sortedRadii.get(a)) + .5);
-				
+				int p = (int) (Math.ceil(sortedRadii.get(a)) + .5);
+
 				x -= p;
 				y -= p;
-				width += 2*p;
-				height += 2*p;
+				width += 2 * p;
+				height += 2 * p;
 			}
 
 			return destImage;
@@ -152,29 +162,39 @@ public class CompositeShadowRenderer implements ShadowRenderer {
 	public ARGBPixels createShadow(ARGBPixels srcImage, ARGBPixels destImage,
 			ShadowAttributes attr) {
 		float kernelRadius = attr.getShadowKernelRadius();
-		
-		Map.Entry<Number, Combo> entry = lookupTable.floorEntry(kernelRadius);
-		if (entry==null) {
+
+		Combo combo = getCombo(kernelRadius);
+		if (combo == null) {
 			GaussianShadowRenderer r = new GaussianShadowRenderer();
 			return r.createShadow(srcImage, destImage, attr);
 		}
 
-		Combo combo = entry.getValue();
-
 		return combo.createShadow(srcImage, destImage, attr.getShadowOpacity());
+	}
+
+	private Combo getCombo(float kernelRadius) {
+		Map.Entry<Number, Combo> floorEntry = lookupTable
+				.floorEntry(kernelRadius);
+		if (floorEntry == null) {
+			return null;
+		}
+		Map.Entry<Number, Combo> ceilEntry = lookupTable
+				.ceilingEntry(kernelRadius);
+		if (ceilEntry == null) {
+			return null;
+		}
+		return floorEntry.getValue();
 	}
 
 	@Override
 	public GaussianKernel getKernel(ShadowAttributes attr) {
 		float kernelRadius = attr.getShadowKernelRadius();
-		
-		Map.Entry<Number, Combo> entry = lookupTable.floorEntry(kernelRadius);
-		if (entry==null) {
+
+		Combo combo = getCombo(kernelRadius);
+		if (combo == null) {
 			GaussianShadowRenderer r = new GaussianShadowRenderer();
 			return r.getKernel(attr);
 		}
-		
-		Combo combo = entry.getValue();
 
 		double[] kernel = createCombinedKernel(combo);
 		int[] intKernel = new int[kernel.length];
@@ -208,17 +228,17 @@ public class CompositeShadowRenderer implements ShadowRenderer {
 	}
 
 	private double[] createSingleKernel(float fastKernelRadius) {
-		FastShadowRenderer r = new FastShadowRenderer();
+		BoxShadowRenderer r = new BoxShadowRenderer();
 		ShadowAttributes attr = new ShadowAttributes(fastKernelRadius, 1f);
 		GaussianKernel k = r.getKernel(attr);
 		int[] z = k.getArray();
 		double sum = 0;
-		for(int e : z) {
+		for (int e : z) {
 			sum += e;
 		}
 		double[] returnValue = new double[z.length];
-		for(int a = 0; a<z.length; a++) {
-			returnValue[a] = ((double)z[a])/sum;
+		for (int a = 0; a < z.length; a++) {
+			returnValue[a] = ((double) z[a]) / sum;
 		}
 		return returnValue;
 	}

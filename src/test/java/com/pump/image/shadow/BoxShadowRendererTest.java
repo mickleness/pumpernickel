@@ -9,7 +9,7 @@ import com.pump.showcase.ShadowRendererDemo.OriginalGaussianShadowRenderer;
 
 import junit.framework.TestCase;
 
-public class FastShadowRendererTest extends TestCase {
+public class BoxShadowRendererTest extends TestCase {
 
 	/**
 	 * This calculates the vertical blur for a 7x7 grid. I ran (some of) the
@@ -36,7 +36,7 @@ public class FastShadowRendererTest extends TestCase {
 		}
 
 		ARGBPixels dstImage = new ARGBPixels(11, 11);
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
@@ -104,7 +104,7 @@ public class FastShadowRendererTest extends TestCase {
 		}
 
 		ARGBPixels dstImage = new ARGBPixels(10, 10);
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
@@ -144,7 +144,7 @@ public class FastShadowRendererTest extends TestCase {
 		}
 
 		ARGBPixels dstImage = new ARGBPixels(9, 9);
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
@@ -182,7 +182,7 @@ public class FastShadowRendererTest extends TestCase {
 		}
 
 		ARGBPixels dstImage = new ARGBPixels(8, 8);
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
@@ -218,7 +218,7 @@ public class FastShadowRendererTest extends TestCase {
 		}
 
 		ARGBPixels dstImage = new ARGBPixels(7, 7);
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
@@ -252,7 +252,7 @@ public class FastShadowRendererTest extends TestCase {
 		}
 
 		ARGBPixels dstImage = new ARGBPixels(6, 6);
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
@@ -284,7 +284,7 @@ public class FastShadowRendererTest extends TestCase {
 		}
 
 		ARGBPixels dstImage = new ARGBPixels(5, 5);
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 255, 1f);
 		renderer.runVerticalBlur();
 
@@ -325,7 +325,7 @@ public class FastShadowRendererTest extends TestCase {
 		int[] dstPixels = dstImage.getPixels();
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
@@ -385,7 +385,7 @@ public class FastShadowRendererTest extends TestCase {
 		int[] dstPixels = dstImage.getPixels();
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
@@ -427,7 +427,7 @@ public class FastShadowRendererTest extends TestCase {
 		int[] dstPixels = dstImage.getPixels();
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
@@ -467,7 +467,7 @@ public class FastShadowRendererTest extends TestCase {
 		int[] dstPixels = dstImage.getPixels();
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
@@ -505,7 +505,7 @@ public class FastShadowRendererTest extends TestCase {
 		int[] dstPixels = dstImage.getPixels();
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
@@ -541,7 +541,7 @@ public class FastShadowRendererTest extends TestCase {
 		int[] dstPixels = dstImage.getPixels();
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
@@ -575,7 +575,7 @@ public class FastShadowRendererTest extends TestCase {
 		int[] dstPixels = dstImage.getPixels();
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
-		FastShadowRenderer.Renderer renderer = new FastShadowRenderer.Renderer(
+		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
 				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 255, 1f);
 		renderer.runHorizontalBlur();
 
@@ -589,13 +589,13 @@ public class FastShadowRendererTest extends TestCase {
 
 	/**
 	 * This confirms that a thorough un-optimized Gaussian renderer that uses
-	 * the uniform kernel reaches the same output as the FastShadowRenderer
+	 * the uniform kernel reaches the same output as the BoxShadowRenderer
 	 * 
 	 * @throws Exception
 	 */
 	@Test
 	public void testShadowImage() throws Exception {
-		ShadowRenderer renderer1 = new FastShadowRenderer();
+		ShadowRenderer renderer1 = new BoxShadowRenderer();
 		ShadowAttributes attr = new ShadowAttributes(15, .5f);
 
 		final GaussianKernel kernel = renderer1.getKernel(attr);
