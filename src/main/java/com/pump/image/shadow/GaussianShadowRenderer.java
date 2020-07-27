@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * This renderer uses a Gaussian kernel to blur a shadow.
@@ -107,7 +108,13 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			}
 		}
 
-		static ExecutorService executor = Executors.newCachedThreadPool();
+		static ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactory() {
+			int ctr = 0;
+
+			@Override
+			public Thread newThread(Runnable r) {
+				return new Thread(r, "GaussianShadowRenderer-"+(ctr++));
+			}});
 
 		final int k;
 		final int srcWidth, srcHeight, dstWidth, dstHeight;

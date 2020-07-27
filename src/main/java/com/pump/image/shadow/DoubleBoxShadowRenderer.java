@@ -38,8 +38,8 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 				while (s != null) {
 					String[] terms = s.split(",");
 					Number radius = Float.parseFloat(terms[0]);
-					Combo combo = new Combo(Float.parseFloat(terms[1]),
-							Float.parseFloat(terms[2]));
+					Combo combo = new Combo(Float.parseFloat(terms[2]),
+							Float.parseFloat(terms[3]));
 					lookupTable.put(radius, combo);
 
 					s = br.readLine();
