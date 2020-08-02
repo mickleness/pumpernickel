@@ -42,7 +42,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.plaf.SliderUI;
 
 import com.pump.geom.Spiral2D;
 import com.pump.geom.StarPolygon;
@@ -54,7 +53,6 @@ import com.pump.image.shadow.GaussianShadowRenderer;
 import com.pump.image.shadow.ShadowAttributes;
 import com.pump.image.shadow.ShadowRenderer;
 import com.pump.inspector.Inspector;
-import com.pump.plaf.AngleSliderUI;
 import com.pump.showcase.chart.LineChartRenderer;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JFancyBox;
@@ -251,12 +249,17 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		}
 	}
 
+	/**
+	 * The maximum dx & dy offset for the shadow
+	 */
+	private final static int MAX_OFFSET = 25;
+
 	JComboBox<String> rendererComboBox = new JComboBox<>();
 	JSpinner kernelSizeSpinner = new JSpinner(
 			new SpinnerNumberModel(5f, .1f, 25f, .1f));
 	JSlider opacitySlider = new ShowcaseSlider(1, 100, 50);
-	JSlider angleSlider = new ShowcaseSlider(0, 359, 45);
-	JSlider offsetSlider = new ShowcaseSlider(0, 20, 10);
+	JSlider xOffsetSlider = new ShowcaseSlider(-MAX_OFFSET, MAX_OFFSET, 10);
+	JSlider yOffsetSlider = new ShowcaseSlider(-MAX_OFFSET, MAX_OFFSET, 10);
 	JColorWell colorWell = new JColorWell(Color.black);
 
 	BufferedImage srcImage;
@@ -284,10 +287,10 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		Inspector inspector = new Inspector(configurationPanel);
 		inspector.addRow(new JLabel("Renderer:"), rendererComboBox);
 		inspector.addRow(new JLabel("Kernel Size:"), kernelSizeSpinner);
-		inspector.addRow(new JLabel("Opacity:"), opacitySlider);
-		inspector.addRow(new JLabel("Angle:"), angleSlider);
-		inspector.addRow(new JLabel("Offset:"), offsetSlider);
+		inspector.addRow(new JLabel("X:"), xOffsetSlider);
+		inspector.addRow(new JLabel("Y:"), yOffsetSlider);
 		inspector.addRow(new JLabel("Color:"), colorWell);
+		inspector.addRow(new JLabel("Opacity:"), opacitySlider);
 
 		rendererComboBox.addItem("Box");
 		rendererComboBox.addItem("Double Box");
@@ -297,16 +300,14 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		rendererComboBox.setSelectedIndex(1);
 
 		addSliderPopover(opacitySlider, "%");
-		addSliderPopover(offsetSlider, " pixels");
-
-		SliderUI ui = new AngleSliderUI();
-		angleSlider.setUI(ui);
+		addSliderPopover(xOffsetSlider, " pixels");
+		addSliderPopover(yOffsetSlider, " pixels");
 
 		rendererComboBox.addActionListener(refreshActionListener);
 		kernelSizeSpinner.addChangeListener(refreshChangeListener);
 		opacitySlider.addChangeListener(refreshChangeListener);
-		angleSlider.addChangeListener(refreshChangeListener);
-		offsetSlider.addChangeListener(refreshChangeListener);
+		xOffsetSlider.addChangeListener(refreshChangeListener);
+		yOffsetSlider.addChangeListener(refreshChangeListener);
 		colorWell.getColorSelectionModel()
 				.addChangeListener(refreshChangeListener);
 
@@ -504,15 +505,11 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		SpinnerNumberModel model = (SpinnerNumberModel) kernelSizeSpinner
 				.getModel();
 		Number max = (Number) model.getMaximum();
-		size.width += 2 * max.intValue() + 2 * offsetSlider.getMaximum();
-		size.height += 2 * max.intValue() + 2 * offsetSlider.getMaximum();
+		size.width += 2 * max.intValue() + 2 * MAX_OFFSET;
+		size.height += 2 * max.intValue() + 2 * MAX_OFFSET;
 
 		BufferedImage returnValue = new BufferedImage(size.width, size.height,
 				BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = returnValue.createGraphics();
-		g.translate(size.width / 2 - srcImage.getWidth() / 2,
-				size.height / 2 - srcImage.getHeight() / 2);
-
 		ShadowRenderer renderer;
 		if (rendererComboBox.getSelectedIndex() == 0) {
 			renderer = new BoxShadowRenderer();
@@ -528,20 +525,14 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				(int) (255 * opacity));
 
 		Number k1 = (Number) kernelSizeSpinner.getValue();
-		ShadowAttributes attr = new ShadowAttributes(0, 0, k1.floatValue(),
+		int dx = xOffsetSlider.getValue();
+		int dy = yOffsetSlider.getValue();
+		ShadowAttributes attr = new ShadowAttributes(dx, dy, k1.floatValue(),
 				color);
-		float k = renderer.getKernel(attr.getShadowKernelRadius())
-				.getKernelRadius();
-		BufferedImage shadow = renderer.createShadow(srcImage,
-				attr.getShadowKernelRadius(), attr.getShadowColor());
-		double theta = ((double) angleSlider.getValue()) * Math.PI / 180.0;
-		double dx = offsetSlider.getValue() * Math.cos(theta);
-		double dy = offsetSlider.getValue() * Math.sin(theta);
-		Graphics2D g2 = (Graphics2D) g.create();
-		g2.translate(dx - k, dy - k);
-		g2.drawImage(shadow, 0, 0, null);
-		g2.dispose();
-		g.drawImage(srcImage, 0, 0, null);
+		Graphics2D g = returnValue.createGraphics();
+		renderer.paint(g, srcImage,
+				returnValue.getWidth() / 2 - srcImage.getWidth() / 2,
+				returnValue.getHeight() / 2 - srcImage.getHeight() / 2, attr);
 		g.dispose();
 
 		return returnValue;

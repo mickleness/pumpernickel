@@ -1,9 +1,44 @@
 package com.pump.image.shadow;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+/**
+ * This interface can create and render a shadow of an image.
+ */
 public interface ShadowRenderer {
+
+	/**
+	 * Paint an image with a shadow.
+	 * <p>
+	 * This will create and paint a shadow layer first, and then paint the image
+	 * layer second.
+	 * 
+	 * @param g
+	 *            the Graphics2D to paint to.
+	 * @param img
+	 *            the image to paint with a shadow
+	 * @param x
+	 *            the x offset to paint the image at
+	 * @param y
+	 *            the y offset to paint the image at
+	 * @param attr
+	 *            the attributes used to render and position the shadow
+	 */
+	public default void paint(Graphics2D g, BufferedImage img, int x, int y,
+			ShadowAttributes attr) {
+		GaussianKernel k = getKernel(attr.getShadowKernelRadius());
+		BufferedImage shadow = createShadow(img, attr.getShadowKernelRadius(),
+				attr.getShadowColor());
+
+		AffineTransform tx = AffineTransform.getTranslateInstance(
+				x - k.getKernelRadius() + attr.getShadowXOffset(),
+				y - k.getKernelRadius() + attr.getShadowYOffset());
+		g.drawImage(shadow, tx, null);
+		g.drawImage(img, x, y, null);
+	}
 
 	/**
 	 * Create a black translucent shadow image based on a source image.
