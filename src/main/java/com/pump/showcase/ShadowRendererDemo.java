@@ -56,6 +56,7 @@ import com.pump.image.shadow.ShadowRenderer;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.AngleSliderUI;
 import com.pump.showcase.chart.LineChartRenderer;
+import com.pump.swing.JColorWell;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.QDialog;
 
@@ -97,9 +98,15 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			int[] srcBuffer = src.getPixels();
 
 			int[] opacityLookup = new int[256];
-			float opacity = attr.getShadowOpacity();
-			for (int a = 0; a < opacityLookup.length; a++) {
-				opacityLookup[a] = (int) (a * opacity);
+
+			{
+				Color color = attr.getShadowColor();
+				int rgb = color.getRGB() & 0xffffff;
+				int alpha = color.getAlpha();
+				for (int a = 0; a < opacityLookup.length; a++) {
+					int newAlpha = (int) (a * alpha / 255);
+					opacityLookup[a] = (newAlpha << 24) + rgb;
+				}
 			}
 
 			int x1 = k;
@@ -142,7 +149,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 						}
 					}
 					w = w / kernelSum;
-					dstBuffer[dstY * dstWidth + dstX] = opacityLookup[w] << 24;
+					dstBuffer[dstY * dstWidth + dstX] = opacityLookup[w];
 				}
 			}
 
@@ -251,6 +258,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 	JSlider opacitySlider = new ShowcaseSlider(1, 100, 50);
 	JSlider angleSlider = new ShowcaseSlider(0, 359, 45);
 	JSlider offsetSlider = new ShowcaseSlider(0, 20, 10);
+	JColorWell colorWell = new JColorWell(Color.black);
 
 	BufferedImage srcImage;
 
@@ -280,6 +288,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		inspector.addRow(new JLabel("Opacity:"), opacitySlider);
 		inspector.addRow(new JLabel("Angle:"), angleSlider);
 		inspector.addRow(new JLabel("Offset:"), offsetSlider);
+		inspector.addRow(new JLabel("Color:"), colorWell);
 
 		rendererComboBox.addItem("Box");
 		rendererComboBox.addItem("Double Box");
@@ -296,6 +305,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		opacitySlider.addChangeListener(refreshChangeListener);
 		angleSlider.addChangeListener(refreshChangeListener);
 		offsetSlider.addChangeListener(refreshChangeListener);
+		colorWell.getColorSelectionModel()
+				.addChangeListener(refreshChangeListener);
 
 		((DefaultEditor) kernelSizeSpinner.getEditor()).getTextField()
 				.setColumns(4);
@@ -370,7 +381,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				float max = 25;
 				for (float kernelSize = min; kernelSize <= max; kernelSize += .5f) {
 					ShadowAttributes attr = new ShadowAttributes(kernelSize,
-							.5f);
+							Color.black);
 					int k = renderer.getKernel(attr).getKernelRadius();
 					ARGBPixels dstPixels = new ARGBPixels(
 							srcImage.getWidth() + 2 * k,
@@ -507,9 +518,12 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		}
 
 		float opacity = (float) (opacitySlider.getValue()) / 100f;
+		Color color = colorWell.getColorSelectionModel().getSelectedColor();
+		color = new Color(color.getRed(), color.getGreen(), color.getBlue(),
+				(int) (255 * opacity));
 
 		Number k1 = (Number) kernelSizeSpinner.getValue();
-		ShadowAttributes attr = new ShadowAttributes(k1.floatValue(), opacity);
+		ShadowAttributes attr = new ShadowAttributes(k1.floatValue(), color);
 		float k = renderer.getKernel(attr).getKernelRadius();
 		BufferedImage shadow = renderer.createShadow(srcImage, attr);
 		double theta = ((double) angleSlider.getValue()) * Math.PI / 180.0;

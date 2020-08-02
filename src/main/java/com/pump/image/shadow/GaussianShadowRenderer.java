@@ -1,5 +1,6 @@
 package com.pump.image.shadow;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -108,13 +109,16 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			}
 		}
 
-		static ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactory() {
-			int ctr = 0;
+		static ExecutorService executor = Executors
+				.newCachedThreadPool(new ThreadFactory() {
+					int ctr = 0;
 
-			@Override
-			public Thread newThread(Runnable r) {
-				return new Thread(r, "GaussianShadowRenderer-"+(ctr++));
-			}});
+					@Override
+					public Thread newThread(Runnable r) {
+						return new Thread(r,
+								"GaussianShadowRenderer-" + (ctr++));
+					}
+				});
 
 		final int k;
 		final int srcWidth, srcHeight, dstWidth, dstHeight;
@@ -125,7 +129,7 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 		int[] opacityLookup = new int[256];
 
 		public Renderer(ARGBPixels srcPixels, ARGBPixels dstPixels,
-				GaussianKernel kernel, float shadowOpacity) {
+				GaussianKernel kernel, Color shadowColor) {
 			k = kernel.getKernelRadius();
 			int shadowSize = k * 2;
 
@@ -141,8 +145,11 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			this.kernel = kernel.getArray();
 			kernelSum = kernel.getArraySum();
 
+			int rgb = shadowColor.getRGB() & 0xffffff;
+			int alpha = shadowColor.getAlpha();
 			for (int a = 0; a < opacityLookup.length; a++) {
-				opacityLookup[a] = ((int) (a * shadowOpacity)) << 24;
+				int newAlpha = (int) (a * alpha / 255);
+				opacityLookup[a] = (newAlpha << 24) + rgb;
 			}
 		}
 
@@ -179,7 +186,7 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			dst = new ARGBPixels(src.getWidth() + 2 * k,
 					src.getHeight() + 2 * k);
 		Renderer r = new Renderer(src, dst, getKernel(attr),
-				attr.getShadowOpacity());
+				attr.getShadowColor());
 		try {
 			r.run();
 		} catch (InterruptedException e) {

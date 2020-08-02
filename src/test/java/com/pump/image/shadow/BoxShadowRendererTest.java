@@ -1,5 +1,6 @@
 package com.pump.image.shadow;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(11, 11);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 255, Color.black);
 		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -105,7 +106,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(10, 10);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 255, Color.black);
 		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -145,7 +146,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(9, 9);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 255, Color.black);
 		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -183,7 +184,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(8, 8);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 255, Color.black);
 		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -219,7 +220,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(7, 7);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 255, Color.black);
 		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -253,7 +254,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(6, 6);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 255, Color.black);
 		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -285,7 +286,7 @@ public class BoxShadowRendererTest extends TestCase {
 
 		ARGBPixels dstImage = new ARGBPixels(5, 5);
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 255, Color.black);
 		renderer.new VerticalRenderer().run();
 
 		int[] dstPixels = dstImage.getPixels();
@@ -326,7 +327,7 @@ public class BoxShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 7, 7, 2, 255, Color.black);
 		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
@@ -386,7 +387,7 @@ public class BoxShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 6, 6, 2, 255, Color.black);
 		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
@@ -428,7 +429,7 @@ public class BoxShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 5, 5, 2, 255, Color.black);
 		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
@@ -468,7 +469,7 @@ public class BoxShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 4, 4, 2, 255, Color.black);
 		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
@@ -506,7 +507,7 @@ public class BoxShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 3, 3, 2, 255, Color.black);
 		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
@@ -542,7 +543,7 @@ public class BoxShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 2, 2, 2, 255, Color.black);
 		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
@@ -576,7 +577,7 @@ public class BoxShadowRendererTest extends TestCase {
 		System.arraycopy(dstPixelsCopy, 0, dstPixels, 0, dstPixelsCopy.length);
 
 		BoxShadowRenderer.Renderer renderer = new BoxShadowRenderer.Renderer(
-				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 255, 1f);
+				srcImage, dstImage, 0, 0, 2, 2, 1, 1, 2, 255, Color.black);
 		renderer.new HorizontalRenderer().run();
 
 		// test topmost row (of data)
@@ -596,7 +597,8 @@ public class BoxShadowRendererTest extends TestCase {
 	@Test
 	public void testShadowImage() throws Exception {
 		ShadowRenderer renderer1 = new BoxShadowRenderer();
-		ShadowAttributes attr = new ShadowAttributes(15, .5f);
+		ShadowAttributes attr = new ShadowAttributes(15,
+				new Color(0, 0, 0, 128));
 
 		final GaussianKernel kernel = renderer1.getKernel(attr);
 

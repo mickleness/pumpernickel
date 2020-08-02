@@ -1,19 +1,21 @@
 package com.pump.image.shadow;
 
+import java.awt.Color;
+
 import com.pump.data.AbstractAttributeDataImpl;
 import com.pump.data.Key;
 
 public class ShadowAttributes extends AbstractAttributeDataImpl {
 	private static final long serialVersionUID = 1L;
 
-	public static final Key<Float> KEY_SHADOW_OPACITY = Key
-			.createBoundedKey("shadowOpacity", 1f, 0f, 1f);
 	public static final Key<Float> KEY_SHADOW_OFFSET_RADIANS = new Key<>(
 			Float.class, "shadowOffsetRadians", 1f);
 	public static final Key<Float> KEY_SHADOW_OFFSET = new Key<>(Float.class,
 			"shadowOffsetPixels", 0f);
 	public static final Key<Float> KEY_SHADOW_KERNEL_RADIUS = new Key<>(
 			Float.class, "shadowKernelRadius", 1f);
+	public static final Key<Color> KEY_SHADOW_COLOR = new Key<>(Color.class,
+			"shadowColor", Color.BLACK);
 
 	/**
 	 * 
@@ -26,16 +28,18 @@ public class ShadowAttributes extends AbstractAttributeDataImpl {
 	 *            Some renderers may round this attribute to the nearest
 	 *            integer.
 	 * 
-	 * @param opacity
-	 *            a float from 0-1.
+	 * @param color
+	 *            the shadow color, such as Color.BLACK. This color can include
+	 *            its own custom opacity, but remember that larger blur radiuses
+	 *            also dilute the opacity.
 	 */
-	public ShadowAttributes(float kernelRadius, float opacity) {
+	public ShadowAttributes(float kernelRadius, Color color) {
 		setShadowKernelRadius(kernelRadius);
-		setShadowOpacity(opacity);
+		setShadowColor(color);
 	}
 
-	public float getShadowOpacity() {
-		return getAttribute(KEY_SHADOW_OPACITY);
+	public Color getShadowColor() {
+		return getAttribute(KEY_SHADOW_COLOR);
 	}
 
 	public float getShadowKernelRadius() {
@@ -50,8 +54,8 @@ public class ShadowAttributes extends AbstractAttributeDataImpl {
 		return getAttribute(KEY_SHADOW_OFFSET);
 	}
 
-	public void setShadowOpacity(float opacity) {
-		setAttribute(KEY_SHADOW_OPACITY, opacity);
+	public void setShadowColor(Color color) {
+		setAttribute(KEY_SHADOW_COLOR, color);
 	}
 
 	public void setShadowKernelRadius(float kernelSize) {

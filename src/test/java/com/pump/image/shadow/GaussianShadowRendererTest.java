@@ -1,5 +1,6 @@
 package com.pump.image.shadow;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -23,7 +24,8 @@ public class GaussianShadowRendererTest extends TestCase {
 
 		BufferedImage bi = ShadowRendererDemo.createTestImage();
 
-		ShadowAttributes attr = new ShadowAttributes(15, .5f);
+		ShadowAttributes attr = new ShadowAttributes(15,
+				new Color(0, 0, 0, 128));
 		BufferedImage result1 = renderer1.createShadow(bi, attr);
 		BufferedImage result2 = renderer2.createShadow(bi, attr);
 

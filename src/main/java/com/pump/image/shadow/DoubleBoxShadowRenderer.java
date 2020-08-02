@@ -1,5 +1,6 @@
 package com.pump.image.shadow;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -110,7 +111,9 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 		}
 
 		public ARGBPixels createShadow(ARGBPixels srcImage,
-				ARGBPixels destImage, float shadowOpacity) {
+				ARGBPixels destImage, Color shadowColor) {
+			Color opaqueShadowColor = new Color(shadowColor.getRed(),
+					shadowColor.getGreen(), shadowColor.getBlue(), 255);
 
 			int dstWidth = srcImage.getWidth() + 2 * radiiSum;
 			int dstHeight = srcImage.getHeight() + 2 * radiiSum;
@@ -136,9 +139,9 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 
 			for (int a = 0; a < sortedRadii.size(); a++) {
 				ShadowAttributes attr2 = new ShadowAttributes(
-						sortedRadii.get(a), 1);
+						sortedRadii.get(a), opaqueShadowColor);
 				if (a == sortedRadii.size() - 1)
-					attr2.setShadowOpacity(shadowOpacity);
+					attr2.setShadowColor(shadowColor);
 
 				if (a == 0) {
 					r.createShadow(srcImage, destImage, x, y, attr2);
@@ -169,7 +172,7 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 			return r.createShadow(srcImage, destImage, attr);
 		}
 
-		return combo.createShadow(srcImage, destImage, attr.getShadowOpacity());
+		return combo.createShadow(srcImage, destImage, attr.getShadowColor());
 	}
 
 	private Combo getCombo(float kernelRadius) {
@@ -229,7 +232,8 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 
 	private double[] createSingleKernel(float fastKernelRadius) {
 		BoxShadowRenderer r = new BoxShadowRenderer();
-		ShadowAttributes attr = new ShadowAttributes(fastKernelRadius, 1f);
+		ShadowAttributes attr = new ShadowAttributes(fastKernelRadius,
+				Color.black);
 		GaussianKernel k = r.getKernel(attr);
 		int[] z = k.getArray();
 		double sum = 0;

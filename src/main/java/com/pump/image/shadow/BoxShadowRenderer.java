@@ -1,5 +1,6 @@
 package com.pump.image.shadow;
 
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -47,11 +48,12 @@ public class BoxShadowRenderer implements ShadowRenderer {
 			int readIndexBase, writeIndexBase;
 
 			public HorizontalRenderer() {
-				int shadowMultiplier = (int) (shadowOpacity * 0xff);
+				int rgb = shadowColor.getRGB() & 0xffffff;
+				int shadowMultiplier = (int) (shadowColor.getAlpha());
 				int shadowDivisor = (int) (weightedShadowSize * 0xff);
 				for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
-					divideByShadowSizeLUT[i] = ((i * shadowMultiplier
-							/ shadowDivisor) & 0xff) << 24;
+					divideByShadowSizeLUT[i] = (((i * shadowMultiplier
+							/ shadowDivisor) & 0xff) << 24) + rgb;
 				}
 
 				xMin = dstX - kernelSize;
@@ -498,7 +500,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 		int[] aHistory;
 
 		int[] divideByShadowSizeLUT;
-		float shadowOpacity;
+		Color shadowColor;
 
 		/**
 		 * 
@@ -518,17 +520,14 @@ public class BoxShadowRenderer implements ShadowRenderer {
 		 */
 		public Renderer(ARGBPixels src, ARGBPixels dst, int srcX, int srcY,
 				int dstX, int dstY, int width, int height, int kernelSize,
-				int edgeWeight, float shadowOpacity) {
+				int edgeWeight, Color shadowColor) {
 			Objects.requireNonNull(src);
+			Objects.requireNonNull(shadowColor);
 
 			if (dst == null) {
 				dst = new ARGBPixels(dstX + width + kernelSize,
 						dstY + height + kernelSize);
 			}
-			if (shadowOpacity < 0 || shadowOpacity > 1)
-				throw new IllegalArgumentException("Shadow opacity ("
-						+ shadowOpacity + ") should be between zero and one.");
-
 			if (edgeWeight < 1 || edgeWeight > 255)
 				throw new IllegalArgumentException(
 						"edgeWeight should be between [1, 255]");
@@ -538,7 +537,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 
 			this.src = src;
 			this.dst = dst;
-			this.shadowOpacity = shadowOpacity;
+			this.shadowColor = shadowColor;
 			this.kernelSize = kernelSize;
 
 			this.srcX = srcX;
@@ -610,7 +609,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 		int edgeWeight = getEdgeWeight(attr.getShadowKernelRadius());
 		Renderer renderer = new Renderer(src, dst, 0, 0, srcToDstX, srcToDstY,
 				src.getWidth(), src.getHeight(), k.getKernelRadius(),
-				edgeWeight, attr.getShadowOpacity());
+				edgeWeight, attr.getShadowColor());
 		renderer.run();
 		return renderer.dst;
 	}
@@ -620,8 +619,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 		GaussianKernel k = getKernel(attr);
 		int edgeWeight = getEdgeWeight(attr.getShadowKernelRadius());
 		Renderer renderer = new Renderer(pixels, pixels, x, y, x, y, width,
-				height, k.getKernelRadius(), edgeWeight,
-				attr.getShadowOpacity());
+				height, k.getKernelRadius(), edgeWeight, attr.getShadowColor());
 		renderer.run();
 	}
 

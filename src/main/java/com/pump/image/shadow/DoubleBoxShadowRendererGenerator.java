@@ -30,7 +30,7 @@ import com.pump.image.shadow.DoubleBoxShadowRenderer.Combo;
 class DoubleBoxShadowRendererGenerator
 		implements Callable<DoubleBoxShadowRendererGenerator.Results> {
 	private static GaussianShadowRenderer gaussianRenderer = new GaussianShadowRenderer();
-	private static final float SHADOW_OPACITY = .75f;
+	private static final Color SHADOW_COLOR = new Color(0, 0, 0, 192);
 
 	private static final BufferedImage star = createStar();
 	private static final ARGBPixels starPixels = new ARGBPixels(star, true);
@@ -116,7 +116,7 @@ class DoubleBoxShadowRendererGenerator
 	public Results call() {
 		try {
 			ShadowAttributes attr = new ShadowAttributes(
-					gaussianRadius.floatValue(), SHADOW_OPACITY);
+					gaussianRadius.floatValue(), SHADOW_COLOR);
 			gaussianShadowImage = gaussianRenderer.createShadow(star, attr);
 
 			Results results = getBestFit(fastIncr, fastMax, BigDecimal.ONE);
@@ -153,7 +153,7 @@ class DoubleBoxShadowRendererGenerator
 				int width = 2 * combo.radiiSum + starPixels.getWidth();
 				int height = 2 * combo.radiiSum + starPixels.getHeight();
 				ARGBPixels shadowPixels = new ARGBPixels(width, height);
-				combo.createShadow(starPixels, shadowPixels, SHADOW_OPACITY);
+				combo.createShadow(starPixels, shadowPixels, SHADOW_COLOR);
 				long error = getError(gaussianShadowImage,
 						shadowPixels.createBufferedImage(true));
 				Results results = new Results(error, combo, shadowPixels, v1,
