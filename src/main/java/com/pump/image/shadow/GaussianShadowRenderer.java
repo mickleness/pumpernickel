@@ -181,7 +181,12 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 	@Override
 	public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
 			float kernelRadius, Color shadowColor) {
+
 		int k = getKernel(kernelRadius).getKernelRadius();
+		if (k == 0) {
+			return createUnblurredShadow(src, dst, 0, 0, 0, 0, src.getWidth(),
+					src.getHeight(), shadowColor);
+		}
 		if (dst == null)
 			dst = new ARGBPixels(src.getWidth() + 2 * k,
 					src.getHeight() + 2 * k);
@@ -191,6 +196,45 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			r.run();
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
+		}
+		return dst;
+	}
+
+	/**
+	 * This creates a shadow layer with no blurring. This basically copies the
+	 * src to the dest but it replaces the RGB data.
+	 */
+	static ARGBPixels createUnblurredShadow(ARGBPixels src, ARGBPixels dst,
+			int srcX, int srcY, int dstX, int dstY, int width, int height,
+			Color shadowColor) {
+		if (dst == null)
+			dst = new ARGBPixels(width, height);
+		int srcIndex = 0;
+		int dstIndex = 0;
+		int[] srcPixels = src.getPixels();
+		int[] dstPixels = dst.getPixels();
+
+		int shadowAlpha = shadowColor.getAlpha();
+		int shadowRGB = shadowColor.getRGB() & 0xff;
+
+		int[] shadowLUT = new int[256];
+		for (int a = 0; a < shadowLUT.length; a++) {
+			int alpha = a * shadowAlpha / 255;
+			shadowLUT[a] = (alpha << 24) + shadowRGB;
+		}
+
+		for (int y = 0; y < height; y++) {
+			srcIndex = y * width + srcX;
+			dstIndex = y * width + dstX;
+			for (int x = 0; x < width; x++) {
+				int inARGB = srcPixels[srcIndex];
+				int inAlpha = (inARGB >> 24) & 0xff;
+				int dstARGB = shadowLUT[inAlpha];
+				dstPixels[dstIndex] = dstARGB;
+
+				srcIndex++;
+				dstIndex++;
+			}
 		}
 		return dst;
 	}

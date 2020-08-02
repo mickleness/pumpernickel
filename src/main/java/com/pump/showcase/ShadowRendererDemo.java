@@ -256,7 +256,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 	JComboBox<String> rendererComboBox = new JComboBox<>();
 	JSpinner kernelSizeSpinner = new JSpinner(
-			new SpinnerNumberModel(5f, .1f, 25f, .1f));
+			new SpinnerNumberModel(5f, 0f, 25f, .5f));
 	JSlider opacitySlider = new ShowcaseSlider(1, 100, 50);
 	JSlider xOffsetSlider = new ShowcaseSlider(-MAX_OFFSET, MAX_OFFSET, 10);
 	JSlider yOffsetSlider = new ShowcaseSlider(-MAX_OFFSET, MAX_OFFSET, 10);
@@ -382,7 +382,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 			List<Runnable> runnables = new LinkedList<>();
 			for (ShadowRenderer renderer : renderers) {
-				float min = .5f;
+				float min = 0;
 				float max = 25;
 				for (float kernelSize = min; kernelSize <= max; kernelSize += .5f) {
 					ShadowAttributes attr = new ShadowAttributes(0, 0,

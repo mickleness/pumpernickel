@@ -607,6 +607,11 @@ public class BoxShadowRenderer implements ShadowRenderer {
 			int srcToDstX, int srcToDstY, float kernelRadius,
 			Color shadowColor) {
 		GaussianKernel k = getKernel(kernelRadius);
+		if (k.getKernelRadius() == 0) {
+			return GaussianShadowRenderer.createUnblurredShadow(src, dst, 0, 0,
+					srcToDstX, srcToDstY, src.getWidth(), src.getHeight(),
+					shadowColor);
+		}
 		int edgeWeight = getEdgeWeight(kernelRadius);
 		Renderer renderer = new Renderer(src, dst, 0, 0, srcToDstX, srcToDstY,
 				src.getWidth(), src.getHeight(), k.getKernelRadius(),
@@ -617,7 +622,13 @@ public class BoxShadowRenderer implements ShadowRenderer {
 
 	public void applyShadow(ARGBPixels pixels, int x, int y, int width,
 			int height, float kernelRadius, Color shadowColor) {
+		Objects.requireNonNull(pixels);
 		GaussianKernel k = getKernel(kernelRadius);
+		if (k.getKernelRadius() == 0) {
+			GaussianShadowRenderer.createUnblurredShadow(pixels, pixels, x, y,
+					x, y, width, height, shadowColor);
+			return;
+		}
 		int edgeWeight = getEdgeWeight(kernelRadius);
 		Renderer renderer = new Renderer(pixels, pixels, x, y, x, y, width,
 				height, k.getKernelRadius(), edgeWeight, shadowColor);

@@ -87,9 +87,9 @@ public class GaussianKernel
 	}
 
 	private void initialize(float kernelSize, boolean condense) {
-		if (kernelSize <= 0)
+		if (kernelSize < 0)
 			throw new IllegalArgumentException(
-					"kernel size (" + kernelSize + ") must be positive");
+					"kernel size (" + kernelSize + ") must be zero or greater");
 
 		int lowerKernelBound = (int) kernelSize;
 		int upperKernelBound = lowerKernelBound + 1;
@@ -134,6 +134,9 @@ public class GaussianKernel
 	}
 
 	private int[] getKernel(int kernelSize) {
+		if (kernelSize == 0) {
+			return new int[] { 1 };
+		}
 		int[] returnValue = new int[2 * kernelSize + 1];
 		double sigma = kernelSize / 3.0;
 		double k = 1f / (2 * Math.PI * sigma * sigma);
