@@ -380,8 +380,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				float min = .5f;
 				float max = 25;
 				for (float kernelSize = min; kernelSize <= max; kernelSize += .5f) {
-					ShadowAttributes attr = new ShadowAttributes(kernelSize,
-							Color.black);
+					ShadowAttributes attr = new ShadowAttributes(0, 0,
+							kernelSize, Color.black);
 					int k = renderer.getKernel(attr).getKernelRadius();
 					ARGBPixels dstPixels = new ARGBPixels(
 							srcImage.getWidth() + 2 * k,
@@ -523,7 +523,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				(int) (255 * opacity));
 
 		Number k1 = (Number) kernelSizeSpinner.getValue();
-		ShadowAttributes attr = new ShadowAttributes(k1.floatValue(), color);
+		ShadowAttributes attr = new ShadowAttributes(0, 0, k1.floatValue(),
+				color);
 		float k = renderer.getKernel(attr).getKernelRadius();
 		BufferedImage shadow = renderer.createShadow(srcImage, attr);
 		double theta = ((double) angleSlider.getValue()) * Math.PI / 180.0;

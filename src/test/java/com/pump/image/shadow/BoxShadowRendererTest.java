@@ -597,7 +597,7 @@ public class BoxShadowRendererTest extends TestCase {
 	@Test
 	public void testShadowImage() throws Exception {
 		ShadowRenderer renderer1 = new BoxShadowRenderer();
-		ShadowAttributes attr = new ShadowAttributes(15,
+		ShadowAttributes attr = new ShadowAttributes(0, 0, 15,
 				new Color(0, 0, 0, 128));
 
 		final GaussianKernel kernel = renderer1.getKernel(attr);

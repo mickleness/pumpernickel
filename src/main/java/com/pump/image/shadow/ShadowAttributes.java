@@ -5,13 +5,16 @@ import java.awt.Color;
 import com.pump.data.AbstractAttributeDataImpl;
 import com.pump.data.Key;
 
+/**
+ * This is an immutable set of attributes used to render a shadow.
+ */
 public class ShadowAttributes extends AbstractAttributeDataImpl {
 	private static final long serialVersionUID = 1L;
 
-	public static final Key<Float> KEY_SHADOW_OFFSET_RADIANS = new Key<>(
-			Float.class, "shadowOffsetRadians", 1f);
-	public static final Key<Float> KEY_SHADOW_OFFSET = new Key<>(Float.class,
-			"shadowOffsetPixels", 0f);
+	public static final Key<Float> KEY_SHADOW_X_OFFSET = new Key<>(Float.class,
+			"x", 2f);
+	public static final Key<Float> KEY_SHADOW_Y_OFFSET = new Key<>(Float.class,
+			"y", 2f);
 	public static final Key<Float> KEY_SHADOW_KERNEL_RADIUS = new Key<>(
 			Float.class, "shadowKernelRadius", 1f);
 	public static final Key<Color> KEY_SHADOW_COLOR = new Key<>(Color.class,
@@ -19,23 +22,38 @@ public class ShadowAttributes extends AbstractAttributeDataImpl {
 
 	/**
 	 * 
+	 * @param xOffset
+	 *            the x offset for this shadow. Most of the time this should be
+	 *            an integer. ShadowRenderers are not guaranteed to support
+	 *            fractional values, and if they do it may come at a significant
+	 *            performance cost.
+	 * @param yOffset
+	 *            the y offset for this shadow. Most of the time this should be
+	 *            an integer. ShadowRenderers are not guaranteed to support
+	 *            fractional values, and if they do it may come at a significant
+	 *            performance cost.
 	 * @param kernelRadius
-	 *            a kernel radius that is positive. "1" may create a kernel
-	 *            resembling [1]. "2" may create a kernel resembling [1, 2, 1].
-	 *            "3" may create a kernel resembling: "1, 2, 2, 4, 2, 2, 1",
-	 *            etc.
+	 *            a kernel radius that is positive. The length of the kernel
+	 *            should always be (2 * r + 1). The "+1" comes from the center
+	 *            element (so even a radius of zero has a kernel of [n]).
 	 *            <p>
-	 *            Some renderers may round this attribute to the nearest
-	 *            integer.
-	 * 
+	 *            Renderers are not guaranteed to support decimal precision
+	 *            radii, but the three current renderers (BoxShadowRenderer,
+	 *            DoubleBoxShadowRenderer and GaussianShadowRenderer) support
+	 *            decimal precision. Decimal precision may be especially using
+	 *            during animation (so the radius doesn't jump from 1.0 to 2.0),
+	 *            but it may also come with a performance cost.
 	 * @param color
 	 *            the shadow color, such as Color.BLACK. This color can include
 	 *            its own custom opacity, but remember that larger blur radiuses
 	 *            also dilute the opacity.
 	 */
-	public ShadowAttributes(float kernelRadius, Color color) {
-		setShadowKernelRadius(kernelRadius);
-		setShadowColor(color);
+	public ShadowAttributes(float xOffset, float yOffset, float kernelRadius,
+			Color color) {
+		setAttribute(KEY_SHADOW_KERNEL_RADIUS, kernelRadius);
+		setAttribute(KEY_SHADOW_COLOR, color);
+		setAttribute(KEY_SHADOW_X_OFFSET, xOffset);
+		setAttribute(KEY_SHADOW_Y_OFFSET, yOffset);
 	}
 
 	public Color getShadowColor() {
@@ -46,27 +64,11 @@ public class ShadowAttributes extends AbstractAttributeDataImpl {
 		return getAttribute(KEY_SHADOW_KERNEL_RADIUS);
 	}
 
-	public float getShadowOffsetAngle() {
-		return getAttribute(KEY_SHADOW_OFFSET_RADIANS);
+	public float getShadowXOffset() {
+		return getAttribute(KEY_SHADOW_X_OFFSET);
 	}
 
-	public float getShadowOffsetDistance() {
-		return getAttribute(KEY_SHADOW_OFFSET);
-	}
-
-	public void setShadowColor(Color color) {
-		setAttribute(KEY_SHADOW_COLOR, color);
-	}
-
-	public void setShadowKernelRadius(float kernelSize) {
-		setAttribute(KEY_SHADOW_KERNEL_RADIUS, kernelSize);
-	}
-
-	public void setShadowOffsetAngle(float offsetRadians) {
-		setAttribute(KEY_SHADOW_OFFSET_RADIANS, offsetRadians);
-	}
-
-	public void setShadowOffsetDistance(float shadowOffset) {
-		setAttribute(KEY_SHADOW_OFFSET, shadowOffset);
+	public float getShadowYOffset() {
+		return getAttribute(KEY_SHADOW_Y_OFFSET);
 	}
 }

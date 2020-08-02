@@ -115,7 +115,7 @@ class DoubleBoxShadowRendererGenerator
 
 	public Results call() {
 		try {
-			ShadowAttributes attr = new ShadowAttributes(
+			ShadowAttributes attr = new ShadowAttributes(0, 0,
 					gaussianRadius.floatValue(), SHADOW_COLOR);
 			gaussianShadowImage = gaussianRenderer.createShadow(star, attr);
 

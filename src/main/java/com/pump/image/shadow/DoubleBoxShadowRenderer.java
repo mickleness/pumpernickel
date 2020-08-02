@@ -138,10 +138,11 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 			int height = srcImage.getHeight();
 
 			for (int a = 0; a < sortedRadii.size(); a++) {
-				ShadowAttributes attr2 = new ShadowAttributes(
-						sortedRadii.get(a), opaqueShadowColor);
+				Color currentShadowColor = opaqueShadowColor;
 				if (a == sortedRadii.size() - 1)
-					attr2.setShadowColor(shadowColor);
+					currentShadowColor = shadowColor;
+				ShadowAttributes attr2 = new ShadowAttributes(0, 0,
+						sortedRadii.get(a), currentShadowColor);
 
 				if (a == 0) {
 					r.createShadow(srcImage, destImage, x, y, attr2);
@@ -232,7 +233,7 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 
 	private double[] createSingleKernel(float fastKernelRadius) {
 		BoxShadowRenderer r = new BoxShadowRenderer();
-		ShadowAttributes attr = new ShadowAttributes(fastKernelRadius,
+		ShadowAttributes attr = new ShadowAttributes(0, 0, fastKernelRadius,
 				Color.black);
 		GaussianKernel k = r.getKernel(attr);
 		int[] z = k.getArray();
