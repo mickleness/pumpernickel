@@ -72,8 +72,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 		@Override
 		public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
-				ShadowAttributes attr) {
-			GaussianKernel kernel = getKernel(attr);
+				float kernelRadius, Color shadowColor) {
+			GaussianKernel kernel = getKernel(kernelRadius);
 			int k = kernel.getKernelRadius();
 
 			int shadowSize = k * 2;
@@ -100,9 +100,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			int[] opacityLookup = new int[256];
 
 			{
-				Color color = attr.getShadowColor();
-				int rgb = color.getRGB() & 0xffffff;
-				int alpha = color.getAlpha();
+				int rgb = shadowColor.getRGB() & 0xffffff;
+				int alpha = shadowColor.getAlpha();
 				for (int a = 0; a < opacityLookup.length; a++) {
 					int newAlpha = (int) (a * alpha / 255);
 					opacityLookup[a] = (newAlpha << 24) + rgb;
@@ -158,8 +157,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		}
 
 		@Override
-		public GaussianKernel getKernel(ShadowAttributes attr) {
-			return new GaussianKernel(attr.getShadowKernelRadius(), false);
+		public GaussianKernel getKernel(float kernelRadius) {
+			return new GaussianKernel(kernelRadius, false);
 		}
 	}
 
@@ -294,6 +293,9 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		rendererComboBox.addItem("Double Box");
 		rendererComboBox.addItem("Gaussian");
 
+		// use Double Box as default:
+		rendererComboBox.setSelectedIndex(1);
+
 		addSliderPopover(opacitySlider, "%");
 		addSliderPopover(offsetSlider, " pixels");
 
@@ -337,7 +339,9 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				times[a] = System.currentTimeMillis();
 				for (int b = 0; b < 100; b++) {
 					Arrays.fill(dstPixels.getPixels(), 0);
-					renderer.createShadow(srcPixels, dstPixels, attr);
+					renderer.createShadow(srcPixels, dstPixels,
+							attr.getShadowKernelRadius(),
+							attr.getShadowColor());
 				}
 				times[a] = System.currentTimeMillis() - times[a];
 			}
@@ -382,7 +386,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				for (float kernelSize = min; kernelSize <= max; kernelSize += .5f) {
 					ShadowAttributes attr = new ShadowAttributes(0, 0,
 							kernelSize, Color.black);
-					int k = renderer.getKernel(attr).getKernelRadius();
+					int k = renderer.getKernel(attr.getShadowKernelRadius())
+							.getKernelRadius();
 					ARGBPixels dstPixels = new ARGBPixels(
 							srcImage.getWidth() + 2 * k,
 							srcImage.getHeight() + 2 * k);
@@ -525,8 +530,10 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		Number k1 = (Number) kernelSizeSpinner.getValue();
 		ShadowAttributes attr = new ShadowAttributes(0, 0, k1.floatValue(),
 				color);
-		float k = renderer.getKernel(attr).getKernelRadius();
-		BufferedImage shadow = renderer.createShadow(srcImage, attr);
+		float k = renderer.getKernel(attr.getShadowKernelRadius())
+				.getKernelRadius();
+		BufferedImage shadow = renderer.createShadow(srcImage,
+				attr.getShadowKernelRadius(), attr.getShadowColor());
 		double theta = ((double) angleSlider.getValue()) * Math.PI / 180.0;
 		double dx = offsetSlider.getValue() * Math.cos(theta);
 		double dy = offsetSlider.getValue() * Math.sin(theta);

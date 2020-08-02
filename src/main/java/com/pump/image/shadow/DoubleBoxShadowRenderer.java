@@ -141,13 +141,13 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 				Color currentShadowColor = opaqueShadowColor;
 				if (a == sortedRadii.size() - 1)
 					currentShadowColor = shadowColor;
-				ShadowAttributes attr2 = new ShadowAttributes(0, 0,
-						sortedRadii.get(a), currentShadowColor);
 
 				if (a == 0) {
-					r.createShadow(srcImage, destImage, x, y, attr2);
+					r.createShadow(srcImage, destImage, x, y,
+							sortedRadii.get(a), currentShadowColor);
 				} else {
-					r.applyShadow(destImage, x, y, width, height, attr2);
+					r.applyShadow(destImage, x, y, width, height,
+							sortedRadii.get(a), currentShadowColor);
 				}
 
 				int p = (int) (Math.ceil(sortedRadii.get(a)) + .5);
@@ -164,16 +164,16 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 
 	@Override
 	public ARGBPixels createShadow(ARGBPixels srcImage, ARGBPixels destImage,
-			ShadowAttributes attr) {
-		float kernelRadius = attr.getShadowKernelRadius();
+			float kernelRadius, Color shadowColor) {
 
 		Combo combo = getCombo(kernelRadius);
 		if (combo == null) {
 			GaussianShadowRenderer r = new GaussianShadowRenderer();
-			return r.createShadow(srcImage, destImage, attr);
+			return r.createShadow(srcImage, destImage, kernelRadius,
+					shadowColor);
 		}
 
-		return combo.createShadow(srcImage, destImage, attr.getShadowColor());
+		return combo.createShadow(srcImage, destImage, shadowColor);
 	}
 
 	private Combo getCombo(float kernelRadius) {
@@ -191,13 +191,12 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 	}
 
 	@Override
-	public GaussianKernel getKernel(ShadowAttributes attr) {
-		float kernelRadius = attr.getShadowKernelRadius();
+	public GaussianKernel getKernel(float kernelRadius) {
 
 		Combo combo = getCombo(kernelRadius);
 		if (combo == null) {
 			GaussianShadowRenderer r = new GaussianShadowRenderer();
-			return r.getKernel(attr);
+			return r.getKernel(kernelRadius);
 		}
 
 		double[] kernel = createCombinedKernel(combo);
@@ -233,9 +232,7 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 
 	private double[] createSingleKernel(float fastKernelRadius) {
 		BoxShadowRenderer r = new BoxShadowRenderer();
-		ShadowAttributes attr = new ShadowAttributes(0, 0, fastKernelRadius,
-				Color.black);
-		GaussianKernel k = r.getKernel(attr);
+		GaussianKernel k = r.getKernel(fastKernelRadius);
 		int[] z = k.getArray();
 		double sum = 0;
 		for (int e : z) {

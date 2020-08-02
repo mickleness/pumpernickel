@@ -1,5 +1,6 @@
 package com.pump.image.shadow;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 public interface ShadowRenderer {
@@ -15,19 +16,21 @@ public interface ShadowRenderer {
 	 * 
 	 * @param srcImage
 	 *            the image to create a shadow for.
-	 * @param attr
-	 *            a description of the shadow attributes.
-	 * @return a new BufferedImage that contains the blurred shadow image.
+	 * @param kernelRadius
+	 *            the kernel radius. The actual kernel should be [2 * r + 1]
+	 *            elements long.
+	 * @param shadowColor
+	 *            the shadow color, including the alpha component.
 	 */
 	public default BufferedImage createShadow(BufferedImage srcImage,
-			ShadowAttributes attr) {
-		int k = getKernel(attr).getKernelRadius();
+			float kernelRadius, Color shadowColor) {
+		int k = getKernel(kernelRadius).getKernelRadius();
 
 		int destW = srcImage.getWidth() + 2 * k;
 		int destH = srcImage.getHeight() + 2 * k;
 		ARGBPixels destPixels = new ARGBPixels(destW, destH);
 		ARGBPixels srcPixels = new ARGBPixels(srcImage);
-		createShadow(srcPixels, destPixels, attr);
+		createShadow(srcPixels, destPixels, kernelRadius, shadowColor);
 
 		return destPixels.createBufferedImage();
 	}
@@ -40,16 +43,23 @@ public interface ShadowRenderer {
 	 * @param destImage
 	 *            an optional destination to write to. If null then a new
 	 *            destination is created.
-	 * @param attr
-	 *            a description of the shadow attributes.
+	 * @param kernelRadius
+	 *            the kernel radius. The actual kernel should be [2 * r + 1]
+	 *            elements long.
+	 * @param shadowColor
+	 *            the shadow color, including the alpha component.
 	 * @return a set of ARGB pixels representing the shadow.
 	 */
 	public ARGBPixels createShadow(ARGBPixels srcImage, ARGBPixels destImage,
-			ShadowAttributes attr);
+			float kernelRadius, Color shadowColor);
 
 	/**
-	 * Return the GaussianKernel this renderer will apply based on a set of
-	 * attributes.
+	 * Return the GaussianKernel this renderer will apply based on a kernel
+	 * radius.
+	 * 
+	 * @param kernelRadius
+	 *            the kernel radius. The actual kernel should be [2 * r + 1]
+	 *            elements long.
 	 */
-	public GaussianKernel getKernel(ShadowAttributes attr);
+	public GaussianKernel getKernel(float kernelRadius);
 }

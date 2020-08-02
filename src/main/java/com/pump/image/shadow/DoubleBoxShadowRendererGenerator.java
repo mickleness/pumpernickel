@@ -117,7 +117,8 @@ class DoubleBoxShadowRendererGenerator
 		try {
 			ShadowAttributes attr = new ShadowAttributes(0, 0,
 					gaussianRadius.floatValue(), SHADOW_COLOR);
-			gaussianShadowImage = gaussianRenderer.createShadow(star, attr);
+			gaussianShadowImage = gaussianRenderer.createShadow(star,
+					attr.getShadowKernelRadius(), attr.getShadowColor());
 
 			Results results = getBestFit(fastIncr, fastMax, BigDecimal.ONE);
 			while (results.incr.compareTo(fastIncr) >= 0) {

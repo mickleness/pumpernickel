@@ -598,36 +598,37 @@ public class BoxShadowRenderer implements ShadowRenderer {
 
 	@Override
 	public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
-			ShadowAttributes attr) {
-		int r = getKernel(attr).getKernelRadius();
-		return createShadow(src, dst, r, r, attr);
+			float kernelRadius, Color shadowColor) {
+		int r = getKernel(kernelRadius).getKernelRadius();
+		return createShadow(src, dst, r, r, kernelRadius, shadowColor);
 	}
 
 	public ARGBPixels createShadow(ARGBPixels src, ARGBPixels dst,
-			int srcToDstX, int srcToDstY, ShadowAttributes attr) {
-		GaussianKernel k = getKernel(attr);
-		int edgeWeight = getEdgeWeight(attr.getShadowKernelRadius());
+			int srcToDstX, int srcToDstY, float kernelRadius,
+			Color shadowColor) {
+		GaussianKernel k = getKernel(kernelRadius);
+		int edgeWeight = getEdgeWeight(kernelRadius);
 		Renderer renderer = new Renderer(src, dst, 0, 0, srcToDstX, srcToDstY,
 				src.getWidth(), src.getHeight(), k.getKernelRadius(),
-				edgeWeight, attr.getShadowColor());
+				edgeWeight, shadowColor);
 		renderer.run();
 		return renderer.dst;
 	}
 
 	public void applyShadow(ARGBPixels pixels, int x, int y, int width,
-			int height, ShadowAttributes attr) {
-		GaussianKernel k = getKernel(attr);
-		int edgeWeight = getEdgeWeight(attr.getShadowKernelRadius());
+			int height, float kernelRadius, Color shadowColor) {
+		GaussianKernel k = getKernel(kernelRadius);
+		int edgeWeight = getEdgeWeight(kernelRadius);
 		Renderer renderer = new Renderer(pixels, pixels, x, y, x, y, width,
-				height, k.getKernelRadius(), edgeWeight, attr.getShadowColor());
+				height, k.getKernelRadius(), edgeWeight, shadowColor);
 		renderer.run();
 	}
 
 	@Override
-	public GaussianKernel getKernel(ShadowAttributes attr) {
-		int ceil = (int) (Math.ceil(attr.getShadowKernelRadius()) + .5);
+	public GaussianKernel getKernel(float kernelRadius) {
+		int ceil = (int) (Math.ceil(kernelRadius) + .5);
 		int[] array = new int[2 * ceil + 1];
-		int edgeWeight = getEdgeWeight(attr.getShadowKernelRadius());
+		int edgeWeight = getEdgeWeight(kernelRadius);
 
 		if (edgeWeight == 255) {
 			Arrays.fill(array, 1);

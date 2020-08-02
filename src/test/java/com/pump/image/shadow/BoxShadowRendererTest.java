@@ -600,20 +600,23 @@ public class BoxShadowRendererTest extends TestCase {
 		ShadowAttributes attr = new ShadowAttributes(0, 0, 15,
 				new Color(0, 0, 0, 128));
 
-		final GaussianKernel kernel = renderer1.getKernel(attr);
+		final GaussianKernel kernel = renderer1
+				.getKernel(attr.getShadowKernelRadius());
 
 		ShadowRenderer renderer2 = new OriginalGaussianShadowRenderer() {
 
 			@Override
-			public GaussianKernel getKernel(ShadowAttributes attr) {
+			public GaussianKernel getKernel(float kernelRadius) {
 				return kernel;
 			}
 		};
 
 		BufferedImage bi = ShadowRendererDemo.createTestImage();
 
-		BufferedImage result1 = renderer1.createShadow(bi, attr);
-		BufferedImage result2 = renderer2.createShadow(bi, attr);
+		BufferedImage result1 = renderer1.createShadow(bi,
+				attr.getShadowKernelRadius(), attr.getShadowColor());
+		BufferedImage result2 = renderer2.createShadow(bi,
+				attr.getShadowKernelRadius(), attr.getShadowColor());
 
 		// I had set tolerance to 1 to get this to pass. I'm OK with
 		// a smidge of rounding error. I looked at the BufferedImages and they

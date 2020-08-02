@@ -26,8 +26,10 @@ public class GaussianShadowRendererTest extends TestCase {
 
 		ShadowAttributes attr = new ShadowAttributes(0, 0, 15,
 				new Color(0, 0, 0, 128));
-		BufferedImage result1 = renderer1.createShadow(bi, attr);
-		BufferedImage result2 = renderer2.createShadow(bi, attr);
+		BufferedImage result1 = renderer1.createShadow(bi,
+				attr.getShadowKernelRadius(), attr.getShadowColor());
+		BufferedImage result2 = renderer2.createShadow(bi,
+				attr.getShadowKernelRadius(), attr.getShadowColor());
 
 		// if zeroes are trimmed off the optimized kernel, the images
 		// may show the same thing but be padded differently
