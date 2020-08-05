@@ -40,8 +40,8 @@ public class EmptyAtom extends Atom {
 	}
 
 	@Override
-	public Enumeration<Object> children() {
-		return EMPTY_ENUMERATION;
+	public Enumeration<? extends TreeNode> children() {
+		return (Enumeration) EMPTY_ENUMERATION;
 	}
 
 	@Override

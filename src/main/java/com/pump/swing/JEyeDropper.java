@@ -14,6 +14,7 @@ import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -60,7 +61,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import com.apple.eawt.Application;
 import com.pump.util.JVM;
 
 /**
@@ -178,7 +178,9 @@ public class JEyeDropper extends JDialog {
 		private Rectangle screenRect;
 
 		private void adjustLocation(Point mouseLocOnScreen) {
-			Application.getApplication().requestForeground(false);
+			if(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.APP_REQUEST_FOREGROUND)) {
+				Desktop.getDesktop().requestForeground(false);
+			}
 			JEyeDropper w = JEyeDropper.this;
 			if (isShowing() && !isFocusOwner() && !requestedFocusYet) {
 				requestedFocusYet = true;
