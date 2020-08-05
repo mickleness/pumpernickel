@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
@@ -68,7 +69,6 @@ import com.pump.util.list.ChangeElementEvent;
 import com.pump.util.list.ListListener;
 import com.pump.util.list.RemoveElementsEvent;
 import com.pump.util.list.ReplaceElementsEvent;
-import com.sun.glass.events.KeyEvent;
 
 /**
  * This JPanel inspects all the Operations in a VectorGraphics2D.
