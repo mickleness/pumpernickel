@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
@@ -14,6 +15,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
@@ -152,10 +154,179 @@ public class LineChartRenderer {
 
 	}
 
+	private class Legend {
+
+		class Layout {
+			class Cell {
+				String text;
+				int seriesIndex;
+				int textX, textY;
+				Rectangle cellBounds;
+				int colorSwatchWidth = 10;
+				int colorSwatchPadding = 5;
+				Rectangle colorSwatchBounds;
+
+				public Cell(int x, int y, int seriesIndex,
+						Entry<String, Rectangle2D> stringEntry) {
+
+					x += cellInsets.left;
+					y += cellInsets.top;
+
+					this.seriesIndex = seriesIndex;
+					this.text = stringEntry.getKey();
+					int height = (int) (stringEntry.getValue().getMaxY()
+							- stringEntry.getValue().getMinY() + .5);
+					int width = (int) (stringEntry.getValue().getWidth()
+							+ colorSwatchWidth + colorSwatchPadding + .5);
+
+					colorSwatchBounds = new Rectangle(x, y, colorSwatchWidth,
+							height - 2);
+					textX = colorSwatchBounds.x + colorSwatchBounds.width
+							+ colorSwatchPadding;
+					textY = (int) (y - stringEntry.getValue().getY() + .5);
+					cellBounds = new Rectangle(x, y, width, height);
+				}
+
+				public void paint(Graphics2D g) {
+					g.setColor(getSeriesColor(seriesIndex));
+					g.fill(colorSwatchBounds);
+					g.setColor(Color.black);
+					g.draw(colorSwatchBounds);
+
+					g.drawString(text, textX, textY);
+				}
+			}
+
+			Cell[][] cells;
+
+			int imageWidth;
+			Insets cellInsets = new Insets(5, 5, 5, 5);
+
+			public Layout(int columnCount, int imageWidth,
+					Map<String, Rectangle2D> stringBounds) {
+				int rows = (int) (Math.ceil(
+						((double) stringBounds.size()) / ((double) columnCount))
+						+ .5);
+				cells = new Cell[rows][columnCount];
+
+				int rowIndex = 0;
+				int columnIndex = 0;
+				int x = 0;
+				int y = 0;
+				int seriesIndex = 0;
+				for (Entry<String, Rectangle2D> stringEntry : stringBounds
+						.entrySet()) {
+					cells[rowIndex][columnIndex] = new Cell(x, y, seriesIndex,
+							stringEntry);
+
+					rowIndex++;
+					if (rowIndex == rows) {
+						rowIndex = 0;
+						columnIndex++;
+						x = getWidth();
+						y = 0;
+					} else {
+						y += cells[rowIndex - 1][columnIndex].cellBounds.height
+								+ cellInsets.top + cellInsets.bottom;
+					}
+
+					seriesIndex++;
+				}
+
+				this.imageWidth = imageWidth;
+			}
+
+			public boolean isValid() {
+				return getWidth() < imageWidth;
+			}
+
+			public Rectangle getBounds() {
+				Rectangle sum = null;
+				for (int row = 0; row < cells.length; row++) {
+					for (int column = 0; column < cells[row].length; column++) {
+						if (cells[row][column] != null) {
+							if (sum == null) {
+								sum = new Rectangle(
+										cells[row][column].cellBounds);
+							} else {
+								sum.add(cells[row][column].cellBounds);
+							}
+						}
+					}
+				}
+				return sum;
+			}
+
+			public int getWidth() {
+				return getBounds().width + cellInsets.right;
+			}
+
+			public int getHeight() {
+				return getBounds().height + cellInsets.bottom;
+			}
+		}
+
+		Layout layout;
+
+		public Legend(Font font, FontRenderContext fontRenderContext,
+				Dimension imageSize) {
+			Map<String, Rectangle2D> stringBounds = new LinkedHashMap<>();
+			for (String key : dataContainer.data.keySet()) {
+				Rectangle2D bounds = font.getStringBounds(key,
+						fontRenderContext);
+				stringBounds.put(key, bounds);
+			}
+			layout = layoutCells(stringBounds, imageSize.width);
+		}
+
+		private Layout layoutCells(Map<String, Rectangle2D> stringBounds,
+				int imageWidth) {
+			for (int columnCount = stringBounds
+					.size(); columnCount >= 1; columnCount--) {
+				Layout layout = new Layout(columnCount, imageWidth,
+						stringBounds);
+				if (layout.isValid() || columnCount == 1) {
+					return layout;
+				}
+			}
+			// we should only reach this in bizarre cases where there is no
+			// chart data
+			return null;
+		}
+
+		public int getHeight() {
+			if (layout == null)
+				return 0;
+			return layout.getHeight();
+		}
+
+		public void paint(Graphics2D g, Rectangle emptySpace) {
+			if (layout == null)
+				return;
+
+			g = (Graphics2D) g.create();
+			g.translate(emptySpace.x, emptySpace.y);
+
+			for (int y = 0; y < layout.cells.length; y++) {
+				for (int x = 0; x < layout.cells[y].length; x++) {
+					if (layout.cells[y][x] != null)
+						layout.cells[y][x].paint(g);
+				}
+			}
+			g.dispose();
+		}
+
+	}
+
 	DataContainer dataContainer;
 
 	public LineChartRenderer(Map<String, SortedMap<Double, Double>> data) {
 		dataContainer = new DataContainer(data);
+	}
+
+	public Color getSeriesColor(int seriesIndex) {
+		return BarChartRenderer.colors[seriesIndex
+				% BarChartRenderer.colors.length];
 	}
 
 	public BufferedImage render(Dimension maxSize) {
@@ -170,9 +341,12 @@ public class LineChartRenderer {
 				g.getFontRenderContext(), imageSize);
 		HorizontalAxis horizontalAxis = new HorizontalAxis(g.getFont(),
 				g.getFontRenderContext(), imageSize);
+		Legend legend = new Legend(g.getFont(), g.getFontRenderContext(),
+				imageSize);
 
 		int topY = (int) (g.getFont().getSize2D() * 2 / 3);
-		int bottomY = bi.getHeight() - horizontalAxis.getHeight();
+		int bottomY = bi.getHeight() - horizontalAxis.getHeight()
+				- legend.getHeight();
 		int leftX = verticalAxis.getWidth();
 		int rightX = bi.getWidth()
 				- horizontalAxis.getRightPadding(g.getFontRenderContext());
@@ -199,12 +373,16 @@ public class LineChartRenderer {
 					path.lineTo(entry2.getKey(), entry2.getValue());
 				}
 			}
-			g.setColor(BarChartRenderer.colors[index
-					% BarChartRenderer.colors.length]);
+			g.setColor(getSeriesColor(index));
 			path.transform(tx);
 			g.draw(path);
 			index++;
 		}
+
+		int k = chartRect.y + chartRect.height + horizontalAxis.getHeight();
+		Rectangle emptySpace = new Rectangle(0, k, bi.getWidth(),
+				bi.getHeight() - k);
+		legend.paint(g, emptySpace);
 
 		g.dispose();
 		return bi;

@@ -334,7 +334,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		}
 
 		public void run() {
-			long[] times = new long[10];
+			long[] times = new long[6];
 			for (int a = 0; a < times.length; a++) {
 
 				times[a] = System.currentTimeMillis();
@@ -384,7 +384,9 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			for (ShadowRenderer renderer : renderers) {
 				float min = 0;
 				float max = 25;
-				for (float kernelSize = min; kernelSize <= max; kernelSize += .5f) {
+				// load max first so we front more expensive things at the
+				// beginning of progress bar updates
+				for (float kernelSize = max; kernelSize >= min; kernelSize -= .5f) {
 					ShadowAttributes attr = new ShadowAttributes(0, 0,
 							kernelSize, Color.black);
 					int k = renderer.getKernel(attr.getShadowKernelRadius())
@@ -430,6 +432,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 			QDialog dialog;
 			JProgressBar progressBar;
 
+			// frontload most expensive renderers first:
 			Collection<ShadowRenderer> renderers = Arrays.asList(
 					new OriginalGaussianShadowRenderer(),
 					new GaussianShadowRenderer(), new DoubleBoxShadowRenderer(),
@@ -467,7 +470,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				try {
 					LineChartRenderer renderer = new LineChartRenderer(
 							profileResults.results);
-					BufferedImage bi = renderer.render(new Dimension(600, 300));
+					BufferedImage bi = renderer.render(new Dimension(600, 400));
 					JLabel content = new JLabel(new ImageIcon(bi));
 					JFancyBox box = new JFancyBox(frame, content);
 					box.setVisible(true);
