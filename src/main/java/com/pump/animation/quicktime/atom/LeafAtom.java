@@ -24,8 +24,8 @@ public abstract class LeafAtom extends Atom {
 	}
 
 	@Override
-	public Enumeration<?> children() {
-		return EMPTY_ENUMERATION;
+	public Enumeration<? extends TreeNode> children() {
+		return (Enumeration) EMPTY_ENUMERATION;
 	}
 
 	@Override
