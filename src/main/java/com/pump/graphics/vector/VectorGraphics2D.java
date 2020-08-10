@@ -345,6 +345,15 @@ public class VectorGraphics2D extends Graphics2D {
 	}
 
 	@Override
+	public void drawRect(int x, int y, int width, int height) {
+		// if we use super.drawRect(..) we'll get 4 lines,
+		// which (depending on the opacity of the stroke) may be the wrong
+		// behavior
+		Rectangle r = new Rectangle(x, y, width, height);
+		draw(r);
+	}
+
+	@Override
 	public void fillOval(int x, int y, int width, int height) {
 		Ellipse2D e = new Ellipse2D.Float(x, y, width, height);
 		fill(e);
