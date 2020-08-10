@@ -12,6 +12,8 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.TexturePaint;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
@@ -69,6 +71,7 @@ import com.pump.swing.ContextualMenuHelper;
 import com.pump.swing.DialogFooter;
 import com.pump.swing.DialogFooter.EscapeKeyBehavior;
 import com.pump.swing.FileDialogUtils;
+import com.pump.swing.ImageTransferable;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.QDialog;
@@ -319,6 +322,21 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 					JLabel content = new JLabel(icon);
 					ContextualMenuHelper ctx = new ContextualMenuHelper(
 							content);
+
+					ctx.add("Copy", new Runnable() {
+						@Override
+						public void run() {
+							BufferedImage bi = new BufferedImage(
+									icon.getIconWidth(), icon.getIconHeight(),
+									BufferedImage.TYPE_INT_ARGB);
+							Graphics2D g = bi.createGraphics();
+							icon.paintIcon(null, g, 0, 0);
+							g.dispose();
+							Transferable contents = new ImageTransferable(bi);
+							Toolkit.getDefaultToolkit().getSystemClipboard()
+									.setContents(contents, null);
+						}
+					});
 
 					ctx.add("Export As PNG", new Runnable() {
 						@Override
