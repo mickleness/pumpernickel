@@ -47,6 +47,8 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.geom.Spiral2D;
 import com.pump.geom.StarPolygon;
+import com.pump.graphics.vector.VectorImage;
+import com.pump.graphics.vector.VectorImageIcon;
 import com.pump.image.shadow.ARGBPixels;
 import com.pump.image.shadow.BoxShadowRenderer;
 import com.pump.image.shadow.DoubleBoxShadowRenderer;
@@ -304,8 +306,9 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 					LineChartRenderer renderer = new LineChartRenderer(
 							profiler.results.data, "Kernel Radius",
 							"Execution Time (ms) for 100 Renders");
-					BufferedImage bi = renderer.render(new Dimension(600, 400));
-					JLabel content = new JLabel(new ImageIcon(bi));
+					VectorImage img = new VectorImage();
+					renderer.paint(img.createGraphics(), 600, 400);
+					JLabel content = new JLabel(new VectorImageIcon(img));
 					JFancyBox box = new JFancyBox(frame, content);
 					box.setVisible(true);
 				} else {
@@ -417,13 +420,26 @@ class Profiler {
 
 		public void store(ShadowRenderer renderer, float kernelSize,
 				long time) {
-			SortedMap<Double, Double> m = data
-					.get(renderer.getClass().getSimpleName());
+			String name = getName(renderer);
+			SortedMap<Double, Double> m = data.get(name);
 			if (m == null) {
 				m = new TreeMap<>();
-				data.put(renderer.getClass().getSimpleName(), m);
+				data.put(name, m);
 			}
 			m.put((double) kernelSize, (double) time);
+		}
+
+		private String getName(ShadowRenderer renderer) {
+			String str = renderer.getClass().getSimpleName();
+			StringBuilder sb = new StringBuilder();
+			for (int a = 0; a < str.length(); a++) {
+				char ch = str.charAt(a);
+				if (Character.isUpperCase(ch) && sb.length() > 0) {
+					sb.append(' ');
+				}
+				sb.append(ch);
+			}
+			return sb.toString();
 		}
 
 		public void printTable() {
