@@ -14,7 +14,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -390,14 +389,12 @@ public class LineChartRenderer {
 				% BarChartRenderer.colors.length];
 	}
 
-	public BufferedImage render(Dimension maxSize) {
-		Dimension imageSize = maxSize;
-		BufferedImage bi = new BufferedImage(imageSize.width, imageSize.height,
-				BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = bi.createGraphics();
+	public void paint(Graphics2D g, int width, int height) {
+		g = (Graphics2D) g.create();
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
+		Dimension imageSize = new Dimension(width, height);
 		VerticalAxis verticalAxis = new VerticalAxis(g.getFont(),
 				g.getFontRenderContext(), imageSize);
 		HorizontalAxis horizontalAxis = new HorizontalAxis(g.getFont(),
@@ -406,10 +403,10 @@ public class LineChartRenderer {
 				imageSize);
 
 		int topY = (int) (g.getFont().getSize2D() * 2 / 3);
-		int bottomY = bi.getHeight() - horizontalAxis.getHeight()
+		int bottomY = imageSize.height - horizontalAxis.getHeight()
 				- legend.getHeight();
 		int leftX = verticalAxis.getWidth();
-		int rightX = bi.getWidth()
+		int rightX = imageSize.width
 				- horizontalAxis.getRightPadding(g.getFontRenderContext());
 		Rectangle chartRect = new Rectangle(leftX, topY, rightX - leftX,
 				bottomY - topY);
@@ -441,11 +438,10 @@ public class LineChartRenderer {
 		}
 
 		int k = chartRect.y + chartRect.height + horizontalAxis.getHeight();
-		Rectangle emptySpace = new Rectangle(0, k, bi.getWidth(),
-				bi.getHeight() - k);
+		Rectangle emptySpace = new Rectangle(0, k, imageSize.width,
+				imageSize.height - k);
 		legend.paint(g, emptySpace);
 
 		g.dispose();
-		return bi;
 	}
 }

@@ -17,6 +17,9 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,6 +32,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -60,8 +65,10 @@ import com.pump.inspector.Inspector;
 import com.pump.showcase.Profiler.ProfileResults;
 import com.pump.showcase.ShadowRendererDemo.OriginalGaussianShadowRenderer;
 import com.pump.showcase.chart.LineChartRenderer;
+import com.pump.swing.ContextualMenuHelper;
 import com.pump.swing.DialogFooter;
 import com.pump.swing.DialogFooter.EscapeKeyBehavior;
+import com.pump.swing.FileDialogUtils;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.QDialog;
@@ -306,9 +313,54 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 					LineChartRenderer renderer = new LineChartRenderer(
 							profiler.results.data, "Kernel Radius",
 							"Execution Time (ms) for 100 Renders");
-					VectorImage img = new VectorImage();
+					final VectorImage img = new VectorImage();
 					renderer.paint(img.createGraphics(), 600, 400);
-					JLabel content = new JLabel(new VectorImageIcon(img));
+					final Icon icon = new VectorImageIcon(img);
+					JLabel content = new JLabel(icon);
+					ContextualMenuHelper ctx = new ContextualMenuHelper(
+							content);
+
+					ctx.add("Export As PNG", new Runnable() {
+						@Override
+						public void run() {
+							BufferedImage bi = new BufferedImage(
+									icon.getIconWidth(), icon.getIconHeight(),
+									BufferedImage.TYPE_INT_ARGB);
+							Graphics2D g = bi.createGraphics();
+							icon.paintIcon(null, g, 0, 0);
+							g.dispose();
+							Frame frame = (Frame) SwingUtilities
+									.getWindowAncestor(ShadowRendererDemo.this);
+							File file = FileDialogUtils.showSaveDialog(frame,
+									"Save As", "Shadow Performance.png", "png");
+							if (file != null) {
+								try {
+									ImageIO.write(bi, "png", file);
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					});
+
+					ctx.add("Export As JVG", new Runnable() {
+						@Override
+						public void run() {
+							Frame frame = (Frame) SwingUtilities
+									.getWindowAncestor(ShadowRendererDemo.this);
+							File file = FileDialogUtils.showSaveDialog(frame,
+									"Save As", "Shadow Performance.jvg", "jvg");
+							if (file != null) {
+								try (FileOutputStream fileOut = new FileOutputStream(
+										file)) {
+									img.save(fileOut);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					});
+
 					JFancyBox box = new JFancyBox(frame, content);
 					box.setVisible(true);
 				} else {

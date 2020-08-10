@@ -4,10 +4,15 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Arrays;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import javax.swing.event.ChangeListener;
 
@@ -18,17 +23,45 @@ import com.pump.util.list.ObservableList;
 import com.pump.util.list.ObservableList.ArrayListener;
 
 /**
- * A VectorImage is a list of Operations. Its doesn't have clearly defined
- * bounds
+ * A VectorImage is a list of Operations. It doesn't have clearly defined
+ * bounds; when you ask the bounds they are dynamically calculated.
  * <p>
- * <h3>Serialization</h3> <br>
+ * <h3>Serialization</h3> All the Operations in this image are always
+ * serialized.
+ * <p>
  * If an ObservableList listener is serializable then this class will preserve
  * it. Otherwise non-serializable listeners are ignored during serialization.
  */
 public class VectorImage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * This ("JVG") is the recommended file format if you read/write
+	 * VectorImages to files. (It stands for "java vector graphics".)
+	 */
+	public static final String FILE_EXTENSION = "JVG";
+
 	protected ObservableList<Operation> operations = new ObservableList<>();
+
+	/**
+	 * Create an empty VectorImage.
+	 */
+	public VectorImage() {
+	}
+
+	/**
+	 * Read a VectorImage that was previously saved by calling
+	 * {@link #save(OutputStream)}.
+	 */
+	public VectorImage(InputStream in)
+			throws IOException, ClassNotFoundException {
+		try (GZIPInputStream zipIn = new GZIPInputStream(in)) {
+			try (ObjectInputStream objIn = new ObjectInputStream(zipIn)) {
+				VectorImage i = (VectorImage) objIn.readObject();
+				operations = i.operations;
+			}
+		}
+	}
 
 	/**
 	 * Create a new VectorGraphics2D that modifies this VectorImage.
@@ -60,9 +93,9 @@ public class VectorImage implements Serializable {
 	 * Return the bounds of all operations in {@link #getOperations()}, or null
 	 * if there are no defined bounds.
 	 * <p>
-	 * For example: if this contains an operation that falls outside (For
-	 * example: an operation that renders outside of its clipped area will have
-	 * null bounds.)
+	 * For example: if this contains no operations, or an operation that falls
+	 * outside (For example: an operation that renders outside of its clipped
+	 * area will have null bounds.)
 	 */
 	public Rectangle2D getBounds() {
 		Rectangle2D sum = null;
@@ -195,6 +228,18 @@ public class VectorImage implements Serializable {
 			return Arrays.equals(z1, z2);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Write this VectorImage to an OutputStream. This uses GZIP compression and
+	 * Java serialization.
+	 */
+	public void save(OutputStream out) throws IOException {
+		try (GZIPOutputStream zipOut = new GZIPOutputStream(out)) {
+			try (ObjectOutputStream objOut = new ObjectOutputStream(zipOut)) {
+				objOut.writeObject(this);
+			}
 		}
 	}
 }
