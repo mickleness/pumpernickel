@@ -492,6 +492,13 @@ public class VectorGraphics2D extends Graphics2D {
 		addOperation(new StringOperation(getContext(), str, x, y));
 
 		// this is equivalent to:
+		// TextLayout layout = new TextLayout(iterator, getFontRenderContext());
+		// layout.draw(this, x, y);
+
+		// using a GlyphVector may work for English, but limited experience
+		// suggests it may fail for Arabic or other more complex languages.
+		// (TextLayouts do support Arabic well, though.)
+
 		// GlyphVector glyphVector = getFont().createGlyphVector(
 		// getFontRenderContext(), str);
 		// drawGlyphVector(glyphVector, x, y);
