@@ -302,7 +302,8 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				ProfileResults results = profiler.getResults();
 				if (results != null) {
 					LineChartRenderer renderer = new LineChartRenderer(
-							profiler.results.data);
+							profiler.results.data, "Kernel Radius",
+							"Execution Time (ms) for 100 Renders");
 					BufferedImage bi = renderer.render(new Dimension(600, 400));
 					JLabel content = new JLabel(new ImageIcon(bi));
 					JFancyBox box = new JFancyBox(frame, content);

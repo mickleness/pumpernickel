@@ -54,6 +54,8 @@ public class LineChartRenderer {
 		int labelWidth = 0;
 		Font font;
 
+		Rectangle2D axisLabelBoundsUntransformed;
+
 		public VerticalAxis(Font font, FontRenderContext frc,
 				Dimension imageSize) {
 			this.font = font;
@@ -66,10 +68,23 @@ public class LineChartRenderer {
 				Rectangle2D r = font.getStringBounds(labeledTick, frc);
 				labelWidth = Math.max(labelWidth, (int) (r.getWidth() + .5));
 			}
+
+			if (verticalAxisLabel != null) {
+				axisLabelBoundsUntransformed = font
+						.getStringBounds(verticalAxisLabel, frc);
+			}
 		}
 
 		public int getWidth() {
-			return 5 + labelWidth;
+			// 3 for tickmarks
+			int width = 5;
+			width += labelWidth;
+			if (axisLabelBoundsUntransformed != null) {
+				width += (int) (axisLabelBoundsUntransformed.getMaxY()
+						- axisLabelBoundsUntransformed.getMinY());
+				width += 2;
+			}
+			return width;
 		}
 
 		public void paint(Graphics2D g, Rectangle chartRect,
@@ -77,6 +92,17 @@ public class LineChartRenderer {
 			g.setColor(Color.gray);
 			g.drawLine(chartRect.x, chartRect.y + chartRect.height, chartRect.x,
 					chartRect.y);
+
+			if (axisLabelBoundsUntransformed != null) {
+				Graphics2D g2 = (Graphics2D) g.create();
+				int x = chartRect.x - labelWidth - 10;
+				int y = (int) (chartRect.y + chartRect.height / 2
+						+ axisLabelBoundsUntransformed.getY() / 2);
+				g2.rotate(-Math.PI / 2, x, y);
+				g2.drawString(verticalAxisLabel,
+						(int) (x - axisLabelBoundsUntransformed.getWidth() / 2),
+						y);
+			}
 
 			for (Double tickValue : labeledTicks.keySet()) {
 				Point2D tickPoint = dataToPanelTransform
@@ -102,8 +128,8 @@ public class LineChartRenderer {
 	private class HorizontalAxis {
 
 		SortedMap<Double, String> labeledTicks;
-		int labelWidth = 0;
 		Font font;
+		Rectangle2D axisLabelBounds;
 
 		public HorizontalAxis(Font font, FontRenderContext frc,
 				Dimension imageSize) {
@@ -112,11 +138,25 @@ public class LineChartRenderer {
 					dataContainer.domainMin, dataContainer.domainMax);
 
 			dataContainer.domainMax = labeledTicks.lastKey();
+
+			if (horizontalAxisLabel != null) {
+				axisLabelBounds = font.getStringBounds(horizontalAxisLabel,
+						frc);
+			}
 		}
 
 		public int getHeight() {
 			// 4 for tick mark height
-			return (int) (font.getSize2D() * 5 / 3) + 4;
+			int height = 4;
+			height += (int) (font.getSize2D() * 5 / 3);
+
+			if (axisLabelBounds != null) {
+				height += 2;
+				height += (int) (axisLabelBounds.getMaxY()
+						- axisLabelBounds.getMinY());
+			}
+
+			return height;
 		}
 
 		public void paint(Graphics2D g, Rectangle chartRect,
@@ -141,8 +181,17 @@ public class LineChartRenderer {
 				g.drawString(tickLabel,
 						(float) (tickPoint.getX() - r.getWidth() / 2),
 						(float) (tickPoint.getY() + 6 + (-r.getY())));
-
 			}
+
+			if (axisLabelBounds != null) {
+
+				g.drawString(horizontalAxisLabel,
+						(float) (chartRect.getX() + chartRect.getWidth() / 2
+								- axisLabelBounds.getWidth() / 2),
+						(float) (chartRect.getY() + chartRect.getHeight() + 6
+								+ font.getSize2D() - axisLabelBounds.getY()));
+			}
+
 		}
 
 		public int getRightPadding(FontRenderContext frc) {
@@ -319,9 +368,21 @@ public class LineChartRenderer {
 	}
 
 	DataContainer dataContainer;
+	String horizontalAxisLabel, verticalAxisLabel;
 
-	public LineChartRenderer(Map<String, SortedMap<Double, Double>> data) {
+	/**
+	 * 
+	 * @param data
+	 * @param horizontalAxisLabel
+	 *            optional String to render under horizontal axis
+	 * @param verticalAxisLabel
+	 *            optional String to render to the left of vertical axis
+	 */
+	public LineChartRenderer(Map<String, SortedMap<Double, Double>> data,
+			String horizontalAxisLabel, String verticalAxisLabel) {
 		dataContainer = new DataContainer(data);
+		this.horizontalAxisLabel = horizontalAxisLabel;
+		this.verticalAxisLabel = verticalAxisLabel;
 	}
 
 	public Color getSeriesColor(int seriesIndex) {
