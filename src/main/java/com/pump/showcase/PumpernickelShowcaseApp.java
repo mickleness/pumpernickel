@@ -101,6 +101,7 @@ import com.pump.swing.SectionContainer.Section;
 import com.pump.swing.TextFieldPrompt;
 import com.pump.swing.ThrobberManager;
 import com.pump.text.WildcardPattern;
+import com.pump.text.html.QHTMLEditorKit;
 import com.pump.util.JVM;
 import com.pump.window.WindowDragger;
 import com.pump.window.WindowMenu;
@@ -926,7 +927,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			}
 		};
 		textPane.setEditable(false);
-		HTMLEditorKit kit = new HTMLEditorKit();
+		HTMLEditorKit kit = new QHTMLEditorKit();
 		textPane.setEditorKit(kit);
 
 		StyleSheet styleSheet = kit.getStyleSheet();
