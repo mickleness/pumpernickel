@@ -58,6 +58,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -90,6 +91,7 @@ import com.pump.io.FileTreeIterator;
 import com.pump.plaf.QPanelUI;
 import com.pump.plaf.QPanelUI.CalloutType;
 import com.pump.plaf.RoundTextFieldUI;
+import com.pump.plaf.SubtleScrollBarUI;
 import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.FileDialogUtils;
 import com.pump.swing.HelpButton;
@@ -818,6 +820,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 						textPane = createTextPane(
 								getShowcaseDemo().getHelpURL());
 						scrollPane = new JScrollPane(textPane);
+						scrollPane.getVerticalScrollBar()
+								.setUI(new SubtleScrollBarUI());
+						scrollPane.getHorizontalScrollBar()
+								.setUI(new SubtleScrollBarUI());
 
 						updatePreferredSize();
 						PumpernickelShowcaseApp.this
@@ -834,7 +840,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 						try {
 							textPane.setPage(getShowcaseDemo().getHelpURL());
 							box = new JFancyBox(PumpernickelShowcaseApp.this,
-									scrollPane);
+									scrollPane, JLayeredPane.PALETTE_LAYER, 0);
 						} catch (IOException e2) {
 							e2.printStackTrace();
 						}
@@ -933,7 +939,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		StyleSheet styleSheet = kit.getStyleSheet();
 
 		styleSheet.addRule(
-				"body {  padding: 12em 12em 12em 12em;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
+				"body {  padding: 12px 12px 12px 12px;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
 
 		styleSheet.addRule("h1, h2, h3, h4, h5, h6 { text-align: left }");
 		styleSheet.addRule("h1, h2, h3 { color: #005a9c }");

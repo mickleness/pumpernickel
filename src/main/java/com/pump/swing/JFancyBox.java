@@ -20,7 +20,6 @@ import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -44,6 +43,7 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.RootPaneContainer;
 
+import com.pump.awt.OverlappingLayoutManager;
 import com.pump.awt.TextSize;
 import com.pump.blog.ResourceSample;
 
@@ -63,7 +63,8 @@ import com.pump.blog.ResourceSample;
  * 
  * @see <a href="http://fancybox.net/">fancybox.net</a>
  */
-@ResourceSample(sample = { "new com.pump.swing.JFancyBox( new javax.swing.JInternalFrame(), \"Sample JFancyBox containing text\")" })
+@ResourceSample(sample = {
+		"new com.pump.swing.JFancyBox( new javax.swing.JInternalFrame(), \"Sample JFancyBox containing text\")" })
 public class JFancyBox extends JComponent {
 	private static final long serialVersionUID = 1L;
 
@@ -165,11 +166,18 @@ public class JFancyBox extends JComponent {
 	/** The default JLayeredPane layer to put a box in. */
 	protected static int DEFAULT_LAYER = JLayeredPane.PALETTE_LAYER;
 
-	class MyLayoutManager implements LayoutManager {
+	/**
+	 * The default padding around the content.
+	 */
+	private static final int DEFAULT_INSET = 12;
 
+	class MyLayoutManager extends OverlappingLayoutManager {
+
+		@Override
 		public void addLayoutComponent(String constraint, Component comp) {
 		}
 
+		@Override
 		public void layoutContainer(Container c) {
 			if (c != JFancyBox.this)
 				throw new IllegalArgumentException();
@@ -194,25 +202,30 @@ public class JFancyBox extends JComponent {
 				contentSize.height = c.getHeight() - 30;
 			}
 			contentContainer.setBounds(getWidth() / 2 - contentSize.width / 2,
-					getHeight() / 2 - contentSize.height / 2,
-					contentSize.width, contentSize.height);
+					getHeight() / 2 - contentSize.height / 2, contentSize.width,
+					contentSize.height);
 			Dimension closeButtonSize = closeButton.getPreferredSize();
-			closeButton.setBounds(getWidth() / 2 + contentSize.width / 2
-					- closeButtonSize.width / 2, getHeight() / 2
-					- contentSize.height / 2 - closeButtonSize.height / 2,
+			closeButton.setBounds(
+					getWidth() / 2 + contentSize.width / 2
+							- closeButtonSize.width / 2,
+					getHeight() / 2 - contentSize.height / 2
+							- closeButtonSize.height / 2,
 					closeButtonSize.width, closeButtonSize.height);
 		}
 
+		@Override
 		public Dimension minimumLayoutSize(Container c) {
 			if (c != JFancyBox.this)
 				throw new IllegalArgumentException();
 			return new Dimension(600, 600);
 		}
 
+		@Override
 		public Dimension preferredLayoutSize(Container c) {
 			return new Dimension(600, 600);
 		}
 
+		@Override
 		public void removeLayoutComponent(Component comp) {
 		}
 
@@ -267,18 +280,29 @@ public class JFancyBox extends JComponent {
 	}
 
 	public JFancyBox(RootPaneContainer parent, String text, int layer) {
-		this(parent, createContent(text), layer);
+		this(parent, createContent(text), layer, DEFAULT_INSET);
 	}
 
 	public JFancyBox(RootPaneContainer parent, String text) {
-		this(parent, createContent(text), DEFAULT_LAYER);
+		this(parent, createContent(text), DEFAULT_LAYER, DEFAULT_INSET);
 	}
 
 	public JFancyBox(RootPaneContainer parent, JComponent content) {
-		this(parent, content, DEFAULT_LAYER);
+		this(parent, content, DEFAULT_LAYER, DEFAULT_INSET);
 	}
 
-	public JFancyBox(RootPaneContainer parent, JComponent content, int layer) {
+	/**
+	 * 
+	 * @param parent
+	 * @param content
+	 * @param layer
+	 * @param inset
+	 *            the padding between the box bounds and the content. The
+	 *            recommended default value is 12, but you can set this to zero
+	 *            if you want no padding.
+	 */
+	public JFancyBox(RootPaneContainer parent, JComponent content, int layer,
+			int inset) {
 		rpc = parent;
 		this.content = content;
 
@@ -287,6 +311,10 @@ public class JFancyBox extends JComponent {
 
 		closeButton.setBorderPainted(false);
 		closeButton.setContentAreaFilled(false);
+
+		setOpaque(false);
+		background.setOpaque(false);
+		closeButton.setOpaque(false);
 
 		addPropertyChangeListener(PROPERTY_CLOSEABLE,
 				new PropertyChangeListener() {
@@ -327,10 +355,10 @@ public class JFancyBox extends JComponent {
 		updateBounds();
 		setVisible(false);
 
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close");
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "close");
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close");
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "close");
 		getActionMap().put("close", new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 
@@ -346,7 +374,7 @@ public class JFancyBox extends JComponent {
 		c.gridy = 0;
 		c.weightx = 1;
 		c.weighty = 1;
-		c.insets = new Insets(12, 12, 12, 12);
+		c.insets = new Insets(inset, inset, inset, inset);
 		c.fill = GridBagConstraints.BOTH;
 		contentContainer.add(content, c);
 		contentContainer.setOpaque(true);
@@ -354,8 +382,8 @@ public class JFancyBox extends JComponent {
 	}
 
 	private void updateBounds() {
-		setBounds(0, 0, rpc.getLayeredPane().getWidth(), rpc.getLayeredPane()
-				.getHeight());
+		setBounds(0, 0, rpc.getLayeredPane().getWidth(),
+				rpc.getLayeredPane().getHeight());
 	}
 
 	/**

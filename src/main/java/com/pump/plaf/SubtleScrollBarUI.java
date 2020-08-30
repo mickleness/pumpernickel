@@ -26,6 +26,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JScrollBar;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -48,14 +49,17 @@ public class SubtleScrollBarUI extends BasicScrollBarUI {
 			.getName() + "#active";
 
 	protected JButton createDecreaseButton(int orientation) {
-		JButton b = new JButton();
-		b.setPreferredSize(new Dimension(0, 0));
-		b.setVisible(false);
-		return b;
+		JButton returnValue = super.createDecreaseButton(orientation);
+		returnValue.setPreferredSize(new Dimension(0, 0));
+		returnValue.setVisible(false);
+		return returnValue;
 	}
 
 	protected JButton createIncreaseButton(int orientation) {
-		return createDecreaseButton(orientation);
+		JButton returnValue = super.createIncreaseButton(orientation);
+		returnValue.setPreferredSize(new Dimension(0, 0));
+		returnValue.setVisible(false);
+		return returnValue;
 	}
 
 	@Override
@@ -65,7 +69,8 @@ public class SubtleScrollBarUI extends BasicScrollBarUI {
 	}
 
 	@Override
-	protected void paintThumb(Graphics g0, JComponent c, Rectangle thumbBounds) {
+	protected void paintThumb(Graphics g0, JComponent c,
+			Rectangle thumbBounds) {
 		Graphics2D g = (Graphics2D) g0.create();
 		int alpha = 60;
 		Number rollover = (Number) scrollbar
@@ -77,14 +82,24 @@ public class SubtleScrollBarUI extends BasicScrollBarUI {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		int k = thumbWidth;
-		g.fill(new RoundRectangle2D.Float(thumbBounds.x + thumbBounds.width / 2
-				- thumbWidth / 2, thumbBounds.y, thumbWidth,
-				thumbBounds.height, k, k));
+
+		JScrollBar b = (JScrollBar) c;
+		if (b.getOrientation() == JScrollBar.VERTICAL) {
+			g.fill(new RoundRectangle2D.Float(
+					thumbBounds.x + thumbBounds.width / 2 - thumbWidth / 2,
+					thumbBounds.y, thumbWidth, thumbBounds.height, k, k));
+		} else {
+			g.fill(new RoundRectangle2D.Float(thumbBounds.x,
+					thumbBounds.y + thumbBounds.height / 2 - thumbWidth / 2,
+					thumbBounds.width, thumbWidth, k, k));
+		}
+
 		g.dispose();
 	}
 
 	@Override
-	protected void paintTrack(Graphics g0, JComponent c, Rectangle trackBounds) {
+	protected void paintTrack(Graphics g0, JComponent c,
+			Rectangle trackBounds) {
 		if (scrollbar.isOpaque()) {
 			Graphics2D g = (Graphics2D) g0.create();
 			paintBackground(g);
@@ -148,7 +163,8 @@ public class SubtleScrollBarUI extends BasicScrollBarUI {
 		c.addPropertyChangeListener("opaque", opaqueListener);
 		trackColor = new Color(trackColor.getRed(), trackColor.getGreen(),
 				trackColor.getBlue(), 0);
-		c.addPropertyChangeListener(PROPERTY_ROLLOVER_BOOLEAN, rolloverListener);
+		c.addPropertyChangeListener(PROPERTY_ROLLOVER_BOOLEAN,
+				rolloverListener);
 		c.addFocusListener(focusListener);
 		refreshActive();
 		refreshBorder();
@@ -181,8 +197,9 @@ public class SubtleScrollBarUI extends BasicScrollBarUI {
 	protected void refreshBorder() {
 		Border b = new EmptyBorder(3, 3, 3, 3);
 		if (scrollbar.isOpaque()) {
-			b = new CompoundBorder(new PartialLineBorder(
-					new Color(0, 0, 0, 30), 0, 1, 0, 0), b);
+			b = new CompoundBorder(
+					new PartialLineBorder(new Color(0, 0, 0, 30), 0, 1, 0, 0),
+					b);
 		}
 		scrollbar.setBorder(b);
 	}
