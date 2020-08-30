@@ -21,7 +21,7 @@ public class StarPolygonDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 	int MAX = 100;
 
-	JSlider pointsSlider = new ShowcaseSlider(2, 20, 5);
+	JSlider pointsSlider = new ShowcaseSlider(3, 20, 5);
 	JSlider outerRadiusSlider = new ShowcaseSlider(1, MAX, 50);
 	JSlider innerRadiusSlider = new ShowcaseSlider(1, MAX, 19);
 
