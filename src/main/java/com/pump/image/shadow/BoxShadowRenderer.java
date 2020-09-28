@@ -121,6 +121,8 @@ public class BoxShadowRenderer implements ShadowRenderer {
 						readIndexBase += dstWidth;
 					}
 				} else {
+					xMin_plusHistory--;
+
 					for (int y = y1; y < y2; y++) {
 						int aHistoryIdx = -1;
 						Arrays.fill(aHistory, 0);
@@ -344,6 +346,8 @@ public class BoxShadowRenderer implements ShadowRenderer {
 						}
 					}
 				} else {
+					yMin_plusHistory--;
+
 					for (int x = x1; x < x2; x++) {
 						int aHistoryIdx = -1;
 						Arrays.fill(aHistory, 0);
