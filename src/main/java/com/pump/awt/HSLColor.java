@@ -17,6 +17,15 @@ import java.awt.Color;
  * <P>
  * This is copied from Rob Camick's class here: <br>
  * http://tips4java.wordpress.com/2009/07/05/hsl-color/
+ * <p>
+ * The "About" page for that website says: "You are free to use and/or modify
+ * and/or distribute any or all code posted on the Java Tips Weblog without
+ * restriction. A credit in the code comments would be nice, but not in any way
+ * mandatory."
+ * <p>
+ * In this code the author says "luminance", but I've also seen documentation
+ * that describes the "L" as "lightness". They appear interchangeable. But HSL
+ * is NOT the same as HSB (also known as HSV).
  * 
  * @see <a href="http://tips4java.wordpress.com/2009/07/05/hsl-color/">HSL
  *      Color</a>
@@ -176,11 +185,8 @@ public class HSLColor {
 	}
 
 	private static float HueToRGB(float p, float q, float h) {
-		if (h < 0)
-			h += 1;
-
-		if (h > 1)
-			h -= 1;
+		if (h < 0 || h > 1)
+			h = (float) (h - Math.floor(h));
 
 		if (6 * h < 1) {
 			return p + ((q - p) * 6 * h);

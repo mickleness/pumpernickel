@@ -71,4 +71,29 @@ public class ShadowAttributes extends AbstractAttributeDataImpl {
 	public float getShadowYOffset() {
 		return getAttribute(KEY_SHADOW_Y_OFFSET);
 	}
+
+	@Override
+	public String toString() {
+		return "ShadowAttribute[ " + toCSSString() + "]";
+	}
+
+	/**
+	 * Produce a CSS-like string representing this object like "0px 0px 3px
+	 * #FF00FF"
+	 */
+	public String toCSSString() {
+		Color c = getShadowColor();
+		String colorHex;
+		if (c.getAlpha() == 255) {
+			colorHex = Integer.toHexString(c.getRGB() & 0xFFFFFF);
+			while (colorHex.length() < 6)
+				colorHex = "0" + colorHex;
+		} else {
+			colorHex = Integer.toHexString(c.getRGB());
+			while (colorHex.length() < 8)
+				colorHex = "0" + colorHex;
+		}
+		return getShadowXOffset() + "px " + getShadowYOffset() + "px "
+				+ getShadowKernelRadius() + "px #" + colorHex;
+	}
 }

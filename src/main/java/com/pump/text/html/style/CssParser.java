@@ -1,4 +1,4 @@
-package com.pump.text.html;
+package com.pump.text.html.style;
 
 import java.text.CharacterIterator;
 import java.util.ArrayList;
@@ -12,15 +12,15 @@ import java.util.Objects;
  * This parses simple CSS rules. It does not parse rules that start with "@".
  * <p>
  * This exists because javax.swing.text.html.StyleSheet.CssParser is not public
- * and it drops properties it doesn't recognize as CSS.Attributes
+ * and it drops properties it doesn't recognize as CSS.Attributes.
  */
 public class CssParser {
 
 	/**
 	 * One or more selectors that include a map of key/value attributes.
 	 * <p>
-	 * For example: the CSS represented as "h1, h2 {color:red}" includes
-	 * two selectors ("h1", "h2") and a one-element map (color/red).
+	 * For example: the CSS represented as "h1, h2 {color:red}" includes two
+	 * selectors ("h1", "h2") and a one-element map (color/red).
 	 */
 	public static class Rule {
 		List<String> selectors;
@@ -322,6 +322,15 @@ public class CssParser {
 		if (ch >= 'a' && ch <= 'f')
 			return true;
 		return false;
+	}
+
+	/**
+	 * Parse a semicolon-separated list of properties, like "color:red;
+	 * text-shadow:none"
+	 */
+	public Map<String, String> parseDeclaration(String decl) {
+		String rule = "ignore { " + decl + " }";
+		return parseRules(rule).get(0).properties;
 	}
 
 }

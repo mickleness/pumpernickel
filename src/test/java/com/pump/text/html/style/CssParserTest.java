@@ -1,4 +1,4 @@
-package com.pump.text.html;
+package com.pump.text.html.style;
 
 import java.util.List;
 

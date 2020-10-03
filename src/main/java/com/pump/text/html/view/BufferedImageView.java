@@ -1,4 +1,4 @@
-package com.pump.text.html;
+package com.pump.text.html.view;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -11,18 +11,21 @@ import javax.swing.text.html.ImageView;
 /**
  * This View shows a BufferedImage.
  */
-class BufferedImageView extends ImageView {
+public class BufferedImageView extends ImageView {
 
 	// So... I'm not crazy about extending ImageView. But it appears to have
 	// some nice code in it related to painting highlights and borders (and
 	// maybe other stuff), so unless I do a bigger read-through of everything it
 	// does: it's nice to try to automatically inherit that behavior. But it
 	// also comes with some weird baggage about image loaders and almost
-	// everything I want to touch is private. (If they just updated most of the
-	// fields/methods to be protected I'd be more comfortable with it.)
+	// everything I want to override is private. (If they just updated most of
+	// the fields/methods to be protected I'd be more comfortable with it.)
 
 	protected BufferedImage image;
 
+	/**
+	 * Create a view that always shows a BufferedImage.
+	 */
 	public BufferedImageView(Element elem, BufferedImage img) {
 		super(elem);
 		image = img;

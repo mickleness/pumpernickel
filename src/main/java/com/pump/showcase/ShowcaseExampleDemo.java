@@ -100,9 +100,18 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 
 	public ShowcaseExampleDemo(boolean stretchExampleToFillHoriz,
 			boolean stretchExampleToFillVert, boolean useRoundedCorners) {
+		this(stretchExampleToFillHoriz, stretchExampleToFillVert,
+				useRoundedCorners, false);
+	}
+
+	public ShowcaseExampleDemo(boolean stretchExampleToFillHoriz,
+			boolean stretchExampleToFillVert, boolean useRoundedCorners,
+			boolean stretchConfigurationToFillHoriz) {
+
 		super();
 		this.stretchExampleToFillHoriz = stretchExampleToFillHoriz;
 		this.stretchExampleToFillVert = stretchExampleToFillVert;
+		this.stretchConfigurationToFillHoriz = stretchConfigurationToFillHoriz;
 
 		layoutComponents();
 
