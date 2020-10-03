@@ -215,7 +215,7 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 		int[] dstPixels = dst.getPixels();
 
 		int shadowAlpha = shadowColor.getAlpha();
-		int shadowRGB = shadowColor.getRGB() & 0xff;
+		int shadowRGB = shadowColor.getRGB() & 0xffffff;
 
 		int[] shadowLUT = new int[256];
 		for (int a = 0; a < shadowLUT.length; a++) {
