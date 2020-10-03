@@ -101,7 +101,7 @@ public class QHTMLFactory extends HTMLFactory {
 					|| (kind == HTML.Tag.DL) || (kind == HTML.Tag.DD)
 					|| (kind == HTML.Tag.DIV) || (kind == HTML.Tag.BLOCKQUOTE)
 					|| (kind == HTML.Tag.PRE) || (kind == HTML.Tag.FORM)) {
-				return new QBlockView(elem);
+				return new QBlockView(elem, View.Y_AXIS);
 			} else if (kind == HTML.Tag.IMG) {
 				// should we create a QImageView?
 				return null;

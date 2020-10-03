@@ -5,16 +5,16 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 
 import javax.swing.text.Element;
-import javax.swing.text.html.ParagraphView;
+import javax.swing.text.html.BlockView;
 
 /**
  * This BlockView uses the QViewHelper to support text-shadows.
  */
-public class QBlockView extends ParagraphView {
+public class QBlockView extends BlockView {
 	QViewHelper helper;
 
-	public QBlockView(Element elem) {
-		super(elem);
+	public QBlockView(Element elem, int axis) {
+		super(elem, axis);
 
 		helper = new QViewHelper(this);
 	}
