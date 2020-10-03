@@ -15,6 +15,7 @@ import javax.swing.text.html.HTMLEditorKit.HTMLFactory;
 
 import com.pump.image.ImageLoader;
 import com.pump.text.html.view.BufferedImageView;
+import com.pump.text.html.view.QBlockView;
 import com.pump.text.html.view.QHtmlBlockView;
 import com.pump.text.html.view.QParagraphView;
 
@@ -100,8 +101,7 @@ public class QHTMLFactory extends HTMLFactory {
 					|| (kind == HTML.Tag.DL) || (kind == HTML.Tag.DD)
 					|| (kind == HTML.Tag.DIV) || (kind == HTML.Tag.BLOCKQUOTE)
 					|| (kind == HTML.Tag.PRE) || (kind == HTML.Tag.FORM)) {
-				// should we create a QBlockView?
-				return null;
+				return new QBlockView(elem);
 			} else if (kind == HTML.Tag.IMG) {
 				// should we create a QImageView?
 				return null;
