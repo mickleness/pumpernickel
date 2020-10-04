@@ -24,7 +24,8 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 	public static final String PROPERTY_COLOR = "color";
 
 	private static Map<String, Color> namedColors = new HashMap<>();
-	{
+
+	static {
 		namedColors.put("lightsalmon", new Color(255, 160, 122));
 		namedColors.put("salmon", new Color(250, 128, 114));
 		namedColors.put("darksalmon", new Color(233, 150, 122));

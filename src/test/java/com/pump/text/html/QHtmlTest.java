@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.util.List;
 
 import javax.swing.JEditorPane;
+import javax.swing.text.html.HTMLEditorKit;
 
 import com.pump.graphics.vector.FillOperation;
 import com.pump.graphics.vector.ImageOperation;
@@ -18,7 +19,11 @@ import junit.framework.TestCase;
 
 /**
  * This renders a series of HTML and makes sure misc visual features are
- * painted.
+ * painted. Most tests check to see that the QHTMLEditorKit produces certain
+ * results AND that the default HTMLEditorKit fails to produce those same
+ * results. In the unlikely event that the HTMLEditorKit is ever enhanced and
+ * some of its shortcomings are addressed: we should remove some of the extra
+ * work the QHTMLEditorKit is doing.
  */
 public class QHtmlTest extends TestCase {
 
@@ -31,9 +36,13 @@ public class QHtmlTest extends TestCase {
 					  "  <h3 style=\"color: darkorchid;font-size: 150%;\">Lorem Ipsum</h3>\n" + 
 				      "</html>";
 		//@formatter:on
-		List<Operation> ops = getOperations(html);
 		Color darkorchid = CssColorPropertyHandler.getNamedColor("darkorchid");
-		assertEquals(darkorchid, ops.get(1).getContext().getPaint());
+
+		List<Operation> ops1 = getOperations(true, html);
+		assertEquals(darkorchid, ops1.get(1).getContext().getPaint());
+
+		List<Operation> ops2 = getOperations(false, html);
+		assertEquals(Color.black, ops2.get(1).getContext().getPaint());
 	}
 
 	/**
@@ -52,9 +61,14 @@ public class QHtmlTest extends TestCase {
 				"  </body>\n" + 
 				"</html>";
 		//@formatter:on
-		List<Operation> ops = getOperations(html);
+
 		Color darkorchid = CssColorPropertyHandler.getNamedColor("darkorchid");
-		assertEquals(darkorchid, ops.get(1).getContext().getPaint());
+
+		List<Operation> ops1 = getOperations(true, html);
+		assertEquals(darkorchid, ops1.get(1).getContext().getPaint());
+
+		List<Operation> ops2 = getOperations(false, html);
+		assertEquals(Color.black, ops2.get(1).getContext().getPaint());
 	}
 
 	/**
@@ -67,8 +81,11 @@ public class QHtmlTest extends TestCase {
 				"  <h3 style=\"color: #321C;font-size: 150%;\">Lorem Ipsum</h3>\n" + 
 				"</html>";
 		//@formatter:on
-		List<Operation> ops = getOperations(html);
-		assertEquals(204, ops.get(1).getContext().getColor().getAlpha());
+		List<Operation> ops1 = getOperations(true, html);
+		assertEquals(204, ops1.get(1).getContext().getColor().getAlpha());
+
+		List<Operation> ops2 = getOperations(false, html);
+		assertEquals(255, ops2.get(1).getContext().getColor().getAlpha());
 	}
 
 	/**
@@ -88,8 +105,11 @@ public class QHtmlTest extends TestCase {
 				"  </body>\n" + 
 				"</html>";
 		//@formatter:on
-		List<Operation> ops = getOperations(html);
-		assertEquals(153, ops.get(1).getContext().getColor().getAlpha());
+		List<Operation> ops1 = getOperations(true, html);
+		assertEquals(153, ops1.get(1).getContext().getColor().getAlpha());
+
+		List<Operation> ops2 = getOperations(false, html);
+		assertEquals(255, ops2.get(1).getContext().getColor().getAlpha());
 	}
 
 	/**
@@ -143,23 +163,34 @@ public class QHtmlTest extends TestCase {
 	 * (the shadow), and text
 	 */
 	private void testTextShadow(String html) {
-		List<Operation> ops = getOperations(html);
+		List<Operation> ops1 = getOperations(true, html);
 
-		assertEquals(3, ops.size());
+		assertEquals(3, ops1.size());
 
 		// background:
-		assertTrue(ops.get(0) instanceof FillOperation);
+		assertTrue(ops1.get(0) instanceof FillOperation);
 
 		// shadow:
-		assertTrue(ops.get(1) instanceof ImageOperation);
+		assertTrue(ops1.get(1) instanceof ImageOperation);
 
 		// text:
-		assertTrue(ops.get(2) instanceof StringOperation);
+		assertTrue(ops1.get(2) instanceof StringOperation);
+
+		List<Operation> ops2 = getOperations(false, html);
+
+		assertEquals(2, ops2.size());
+
+		// background:
+		assertTrue(ops2.get(0) instanceof FillOperation);
+
+		// text:
+		assertTrue(ops2.get(1) instanceof StringOperation);
 	}
 
-	private List<Operation> getOperations(String html) {
+	private List<Operation> getOperations(boolean useQHTMLKit, String html) {
 
-		QHTMLEditorKit kit = new QHTMLEditorKit();
+		HTMLEditorKit kit = useQHTMLKit ? new QHTMLEditorKit()
+				: new HTMLEditorKit();
 
 		JEditorPane p = new JEditorPane();
 		p.setEditorKit(kit);
