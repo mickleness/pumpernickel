@@ -188,41 +188,6 @@ public class HTMLDemo extends ShowcaseExampleDemo {
 
 	private void initializePresets() {
 
-		presetComboBox.addItem(new Preset("color, named, inline", "<html>\n"
-				+ "  <h3 style=\"color: darkorchid;font-size: 150%;\">Lorem Ipsum</h3>\n"
-				+ "</html>", ""));
-		presetComboBox.addItem(new Preset("color, named, internal sheet",
-				"<html>\n" + "  <head>\n" + "    <style>\n"
-						+ "      h1   {color: darkorchid;}\n" + "    </style>\n"
-						+ "  </head>\n" + "  <body>\n"
-						+ "    <h1 style=\"font-size: 150%;\">Lorem Ipsum</h1>\n"
-						+ "  </body>\n" + "</html>",
-				""));
-
-		presetComboBox.addItem(new Preset("color, hex, inline", "<html>\n"
-				+ "  <h3 style=\"color: #321C;font-size: 150%;\">Lorem Ipsum</h3>\n"
-				+ "</html>", ""));
-		presetComboBox.addItem(new Preset("color, hex, internal sheet",
-				"<html>\n" + "  <head>\n" + "    <style>\n"
-						+ "      h1   {color: #00331199;}\n" + "    </style>\n"
-						+ "  </head>\n" + "  <body>\n"
-						+ "    <h1 style=\"font-size: 150%;\">Lorem Ipsum</h1>\n"
-						+ "  </body>\n" + "</html>",
-				""));
-
-		presetComboBox.addItem(new Preset("text-shadow inline", "<html>\n"
-				+ "  <h3 style=\"color:darkorchid; text-shadow: 2px 2px 4px plum;font-size: 150%;\">Lorem Ipsum</h3>\n"
-				+ "</html>",
-				"Loosely based on https://codepen.io/namho/pen/jEaXra"));
-
-		presetComboBox.addItem(new Preset("text-shadow internal sheet",
-				"<html>\n" + "  <head>\n" + "    <style>\n"
-						+ "      h1   {color:darkorchid; text-shadow: 2px 2px 4px plum;}\n"
-						+ "    </style>\n" + "  </head>\n" + "  <body>\n"
-						+ "    <h1 style=\"font-size: 150%;\">Lorem Ipsum</h1>\n"
-						+ "  </body>\n" + "</html>",
-				""));
-
 		presetComboBox.addItem(new Preset("text-shadow emboss demo", "<html>\n"
 				+ "  <head>\n" + "    <style>\n"
 				+ "      body { background-color: #383 }\n"

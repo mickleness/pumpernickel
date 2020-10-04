@@ -1,6 +1,5 @@
 package com.pump.text.html;
 
-import javax.swing.text.Document;
 import javax.swing.text.ViewFactory;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
@@ -30,7 +29,7 @@ public class QHTMLEditorKit extends HTMLEditorKit {
 	}
 
 	@Override
-	public Document createDefaultDocument() {
+	public HTMLDocument createDefaultDocument() {
 		// this is copied and pasted from HTMLEditorKit, see comments for
 		// changes:
 

@@ -17,6 +17,7 @@ import com.pump.image.ImageLoader;
 import com.pump.text.html.view.BufferedImageView;
 import com.pump.text.html.view.QBlockView;
 import com.pump.text.html.view.QHtmlBlockView;
+import com.pump.text.html.view.QInlineView;
 import com.pump.text.html.view.QParagraphView;
 
 /**
@@ -75,8 +76,7 @@ public class QHTMLFactory extends HTMLFactory {
 				// in the future?)
 				return null;
 			} else if (kind == HTML.Tag.CONTENT) {
-				// should we create a QInlineView?
-				return null;
+				return new QInlineView(elem);
 			} else if (kind == HTML.Tag.IMPLIED) {
 				String ws = (String) elem.getAttributes()
 						.getAttribute(CSS.Attribute.WHITE_SPACE);
