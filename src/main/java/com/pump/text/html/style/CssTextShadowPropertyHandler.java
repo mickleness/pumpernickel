@@ -33,49 +33,20 @@ public class CssTextShadowPropertyHandler
 	 */
 	@Override
 	public List<ShadowAttributes> parse(String textShadowCSS) {
-		List<String> shadowTerms = splitCommaSeparatedList(textShadowCSS);
+		List<String> shadowTerms = CssParserUtils
+				.splitCommaSeparatedList(textShadowCSS, true);
 		List<ShadowAttributes> attributes = new LinkedList<>();
 		for (String shadowTerm : shadowTerms) {
 			if (shadowTerm.equalsIgnoreCase("none")) {
 				// do nothing
 			} else {
-				attributes.add(parseSingle(shadowTerm));
+				attributes.add(parseShadowAttributes(shadowTerm));
 			}
 		}
 		return attributes;
 	}
 
-	/**
-	 * Split the argument into comma-separated terms, but also account for
-	 * parentheses. So for ex: "rgb(0,0,0), rgb(5,5,5)" will produce two terms
-	 * even though there are 6 commas.
-	 * 
-	 */
-	private List<String> splitCommaSeparatedList(String str) {
-		List<String> returnValue = new LinkedList<>();
-		StringBuilder sb = new StringBuilder();
-		int parenthesesCtr = 0;
-		for (int a = 0; a < str.length(); a++) {
-			char ch = str.charAt(a);
-			if (ch == '(') {
-				parenthesesCtr++;
-				sb.append(ch);
-			} else if (ch == ')') {
-				parenthesesCtr--;
-				sb.append(ch);
-			} else if (ch == ',' && parenthesesCtr == 0) {
-				returnValue.add(sb.toString());
-				sb.delete(0, sb.length());
-			} else {
-				sb.append(ch);
-			}
-		}
-		returnValue.add(sb.toString());
-		return returnValue;
-
-	}
-
-	private ShadowAttributes parseSingle(String textShadowCSS) {
+	private ShadowAttributes parseShadowAttributes(String textShadowCSS) {
 		List<String> terms = getCSSTerms(textShadowCSS);
 		if (terms.size() >= 2 && terms.size() <= 4) {
 			int dx = parseInt(terms.get(0));

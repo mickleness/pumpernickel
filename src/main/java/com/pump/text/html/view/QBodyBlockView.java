@@ -6,21 +6,18 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 
 import javax.swing.text.Element;
-import javax.swing.text.html.BlockView;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.text.html.StyleSheet.BoxPainter;
 
 import com.pump.geom.ShapeBounds;
 
-/**
- * This BlockView uses the QViewHelper to support text-shadows.
- */
-public class QBlockView extends BlockView {
+public class QBodyBlockView extends SwingBodyBlockView {
+
 	QViewHelper helper;
 	BoxPainter boxPainter;
 
-	public QBlockView(Element elem, int axis) {
-		super(elem, axis);
+	public QBodyBlockView(Element elem) {
+		super(elem);
 
 		helper = new QViewHelper(this);
 	}
@@ -40,9 +37,8 @@ public class QBlockView extends BlockView {
 		super.setPropertiesFromAttributes();
 
 		// what we really want is access to our super's BoxPainter,
-		// but that's private so we'll create our own that's just like it.
+		// but that's private so we'll create our own
 		StyleSheet sheet = super.getStyleSheet();
 		boxPainter = sheet.getBoxPainter(sheet.getViewAttributes(this));
 	}
-
 }

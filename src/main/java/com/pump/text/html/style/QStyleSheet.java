@@ -16,7 +16,6 @@ import javax.swing.text.Element;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.View;
 import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTML.Tag;
@@ -35,13 +34,6 @@ public class QStyleSheet extends StyleSheet {
 	public QStyleSheet() {
 		addCssPropertyHandler(new CssTextShadowPropertyHandler());
 		addCssPropertyHandler(new CssColorPropertyHandler(CSS.Attribute.COLOR));
-		addCssPropertyHandler(
-				new CssColorPropertyHandler(CSS.Attribute.BACKGROUND_COLOR));
-	}
-
-	public AttributeSet getViewAttributes(View v) {
-		AttributeSet returnValue = super.getViewAttributes(v);
-		return returnValue;
 	}
 
 	/**
@@ -70,6 +62,7 @@ public class QStyleSheet extends StyleSheet {
 	 * aren't interested in changing this method, but we do want to implement
 	 * our own getResolvedStyle().
 	 */
+	@Override
 	public Style getRule(HTML.Tag t, Element e) {
 		final Style originalStyle = super.getRule(t, e);
 
@@ -259,14 +252,6 @@ public class QStyleSheet extends StyleSheet {
 			}
 		}
 		return returnValue;
-	}
-
-	@Override
-	public Color getBackground(AttributeSet a) {
-		Object t = a.getAttribute(CSS.Attribute.BACKGROUND_COLOR);
-		if (t instanceof Color)
-			return (Color) t;
-		return super.getBackground(a);
 	}
 
 	@Override

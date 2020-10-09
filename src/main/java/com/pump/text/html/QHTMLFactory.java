@@ -16,6 +16,7 @@ import javax.swing.text.html.HTMLEditorKit.HTMLFactory;
 import com.pump.image.ImageLoader;
 import com.pump.text.html.view.BufferedImageView;
 import com.pump.text.html.view.QBlockView;
+import com.pump.text.html.view.QBodyBlockView;
 import com.pump.text.html.view.QHtmlBlockView;
 import com.pump.text.html.view.QInlineView;
 import com.pump.text.html.view.QParagraphView;
@@ -61,15 +62,16 @@ public class QHTMLFactory extends HTMLFactory {
 			if (kind == HTML.Tag.NOFRAMES || kind == HTML.Tag.ISINDEX) {
 				// these are deprecated tags we don't care about
 				return null;
-			} else if (kind == HTML.Tag.BODY || kind == HTML.Tag.HR
-					|| kind == HTML.Tag.BR || kind == HTML.Tag.TABLE
-					|| kind == HTML.Tag.FRAME || kind == HTML.Tag.COMMENT
-					|| kind == HTML.Tag.TITLE || kind == HTML.Tag.META
-					|| kind == HTML.Tag.LINK || kind == HTML.Tag.STYLE
-					|| kind == HTML.Tag.SCRIPT || kind == HTML.Tag.AREA
-					|| kind == HTML.Tag.MAP || kind == HTML.Tag.PARAM
-					|| kind == HTML.Tag.HEAD || kind == HTML.Tag.APPLET
-					|| kind == HTML.Tag.FRAMESET
+			} else if (kind == HTML.Tag.BODY) {
+				return new QBodyBlockView(elem);
+			} else if (kind == HTML.Tag.HR || kind == HTML.Tag.BR
+					|| kind == HTML.Tag.TABLE || kind == HTML.Tag.FRAME
+					|| kind == HTML.Tag.COMMENT || kind == HTML.Tag.TITLE
+					|| kind == HTML.Tag.META || kind == HTML.Tag.LINK
+					|| kind == HTML.Tag.STYLE || kind == HTML.Tag.SCRIPT
+					|| kind == HTML.Tag.AREA || kind == HTML.Tag.MAP
+					|| kind == HTML.Tag.PARAM || kind == HTML.Tag.HEAD
+					|| kind == HTML.Tag.APPLET || kind == HTML.Tag.FRAMESET
 					|| kind instanceof HTML.UnknownTag) {
 				// if you look in super.create(View), these tags don't return a
 				// public class we can extend. (We can address these as needed

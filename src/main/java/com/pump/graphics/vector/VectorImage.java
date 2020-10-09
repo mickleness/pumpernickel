@@ -1,6 +1,7 @@
 package com.pump.graphics.vector;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -68,6 +69,18 @@ public class VectorImage implements Serializable {
 	 */
 	public VectorGraphics2D createGraphics() {
 		return new VectorGraphics2D(new Graphics2DContext(), operations);
+	}
+
+	/**
+	 * Create a new VectorGraphics2D with an initial clipRect
+	 * 
+	 * @param clipRect
+	 *            the clip rect to assign to the VectorGraphics2D
+	 */
+	public VectorGraphics2D createGraphics(Rectangle clipRect) {
+		VectorGraphics2D g = createGraphics();
+		g.clipRect(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
+		return g;
 	}
 
 	/**

@@ -198,6 +198,53 @@ public class HTMLDemo extends ShowcaseExampleDemo {
 				+ "    <h1 style=\"font-size: 100pt;\">LOREM IMPSUM</h1>\n"
 				+ "  </body>\n" + "</html>",
 				"See https://designshack.net/articles/css/12-fun-css-text-shadows-you-can-copy-and-paste/"));
+
+		presetComboBox.addItem(new Preset("background-image plaid demo",
+				"<html>\n" + "  <head>\n" + "    <style>\n"
+						+ "      body { background-image:\n"
+						+ "      repeating-linear-gradient(90deg, transparent, transparent 50px,\n"
+						+ "        rgba(255, 127, 0, 0.25) 50px, rgba(255, 127, 0, 0.25) 56px,\n"
+						+ "        transparent 56px, transparent 63px,\n"
+						+ "        rgba(255, 127, 0, 0.25) 63px, rgba(255, 127, 0, 0.25) 69px,\n"
+						+ "        transparent 69px, transparent 116px,\n"
+						+ "        rgba(255, 206, 0, 0.25) 116px, rgba(255, 206, 0, 0.25) 166px),\n"
+						+ "      repeating-linear-gradient(0deg, transparent, transparent 50px,\n"
+						+ "        rgba(255, 127, 0, 0.25) 50px, rgba(255, 127, 0, 0.25) 56px,\n"
+						+ "        transparent 56px, transparent 63px,\n"
+						+ "        rgba(255, 127, 0, 0.25) 63px, rgba(255, 127, 0, 0.25) 69px,\n"
+						+ "        transparent 69px, transparent 116px,\n"
+						+ "        rgba(255, 206, 0, 0.25) 116px, rgba(255, 206, 0, 0.25) 166px),\n"
+						+ "      repeating-linear-gradient(-45deg, transparent, transparent 5px,\n"
+						+ "        rgba(143, 77, 63, 0.25) 5px, rgba(143, 77, 63, 0.25) 10px),\n"
+						+ "      repeating-linear-gradient(45deg, transparent, transparent 5px,\n"
+						+ "        rgba(143, 77, 63, 0.25) 5px, rgba(143, 77, 63, 0.25) 10px); }\n"
+						+ "      h1   { font-size: 100pt;font-weight: bold;}\n"
+						+ "    </style>\n" + "  </head>\n" + "  <body>\n"
+						+ "    <h1>LOREM IMPSUM</h1>\n" + "  </body>\n"
+						+ "</html>",
+				"See https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients"));
+
+		presetComboBox.addItem(new Preset("background-image gradient demo",
+				"<html>\n" + "  <head>\n" + "    <style>\n"
+						+ "      body { background-image:\n"
+						+ "      repeating-linear-gradient(190deg, rgba(255, 0, 0, 0.5) 40px,\n"
+						+ "        rgba(255, 153, 0, 0.5) 80px, rgba(255, 255, 0, 0.5) 120px,\n"
+						+ "        rgba(0, 255, 0, 0.5) 160px, rgba(0, 0, 255, 0.5) 200px,\n"
+						+ "        rgba(75, 0, 130, 0.5) 240px, rgba(238, 130, 238, 0.5) 280px,\n"
+						+ "        rgba(255, 0, 0, 0.5) 300px),\n"
+						+ "      repeating-linear-gradient(-190deg, rgba(255, 0, 0, 0.5) 30px,\n"
+						+ "        rgba(255, 153, 0, 0.5) 60px, rgba(255, 255, 0, 0.5) 90px,\n"
+						+ "        rgba(0, 255, 0, 0.5) 120px, rgba(0, 0, 255, 0.5) 150px,\n"
+						+ "        rgba(75, 0, 130, 0.5) 180px, rgba(238, 130, 238, 0.5) 210px,\n"
+						+ "        rgba(255, 0, 0, 0.5) 230px),\n"
+						+ "      repeating-linear-gradient(23deg, red 50px, orange 100px,\n"
+						+ "        yellow 150px, green 200px, blue 250px,\n"
+						+ "        indigo 300px, violet 350px, red 370px); }\n"
+						+ "      h1   { font-size: 100pt;font-weight: bold;}\n"
+						+ "    </style>\n" + "  </head>\n" + "  <body>\n"
+						+ "    <h1>LOREM IMPSUM</h1>\n" + "  </body>\n"
+						+ "</html>",
+				"See https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients"));
 	}
 
 	@Override

@@ -21,8 +21,7 @@ public class QInlineView extends InlineView {
 
 	@Override
 	public void paint(Graphics g, Shape a) {
-		Graphics2D g2 = (Graphics2D) g.create();
-		helper.install(g2);
+		Graphics2D g2 = helper.createGraphics((Graphics2D) g);
 		super.paint(g2, a);
 		g2.dispose();
 	}
