@@ -2,6 +2,8 @@ package com.pump.text.html.style;
 
 import org.junit.Test;
 
+import com.pump.text.html.css.CssParserUtils;
+
 import junit.framework.TestCase;
 
 public class CssParserUtilsTest extends TestCase {

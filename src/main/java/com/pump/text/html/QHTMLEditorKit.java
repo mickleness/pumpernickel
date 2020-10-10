@@ -5,7 +5,7 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 
-import com.pump.text.html.style.QStyleSheet;
+import com.pump.text.html.css.QStyleSheet;
 
 /**
  * This is an enhanced HTMLEditorKit.

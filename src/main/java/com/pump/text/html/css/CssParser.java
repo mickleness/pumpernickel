@@ -1,4 +1,4 @@
-package com.pump.text.html.style;
+package com.pump.text.html.css;
 
 import java.text.CharacterIterator;
 import java.util.ArrayList;

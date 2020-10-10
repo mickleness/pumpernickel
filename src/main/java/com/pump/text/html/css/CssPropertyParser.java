@@ -1,11 +1,11 @@
-package com.pump.text.html.style;
+package com.pump.text.html.css;
 
 /**
  * This parses a CSS attribute from a String into another Object.
  * 
  * <T> the type of object this creates, like a Color or a ShadowAttribute.
  */
-public interface CssPropertyHandler<T> {
+public interface CssPropertyParser<T> {
 	String getPropertyName();
 
 	T parse(String value);

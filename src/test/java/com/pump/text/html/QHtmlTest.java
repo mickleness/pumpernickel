@@ -13,7 +13,7 @@ import com.pump.graphics.vector.Operation;
 import com.pump.graphics.vector.StringOperation;
 import com.pump.graphics.vector.VectorGraphics2D;
 import com.pump.graphics.vector.VectorImage;
-import com.pump.text.html.style.CssColorPropertyHandler;
+import com.pump.text.html.css.CssColorParser;
 
 import junit.framework.TestCase;
 
@@ -36,7 +36,7 @@ public class QHtmlTest extends TestCase {
 					  "  <h3 style=\"color: darkorchid;font-size: 150%;\">Lorem Ipsum</h3>\n" + 
 				      "</html>";
 		//@formatter:on
-		Color darkorchid = CssColorPropertyHandler.getNamedColor("darkorchid");
+		Color darkorchid = CssColorParser.getNamedColor("darkorchid");
 
 		List<Operation> ops1 = getOperations(true, html);
 		assertEquals(darkorchid, ops1.get(1).getContext().getPaint());
@@ -62,7 +62,7 @@ public class QHtmlTest extends TestCase {
 				"</html>";
 		//@formatter:on
 
-		Color darkorchid = CssColorPropertyHandler.getNamedColor("darkorchid");
+		Color darkorchid = CssColorParser.getNamedColor("darkorchid");
 
 		List<Operation> ops1 = getOperations(true, html);
 		assertEquals(darkorchid, ops1.get(1).getContext().getPaint());

@@ -1,4 +1,4 @@
-package com.pump.text.html.style;
+package com.pump.text.html.css;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import com.pump.image.shadow.ShadowAttributes;
  * <p>
  * This currently assumes all the units are pixels.
  */
-public class CssTextShadowPropertyHandler
-		implements CssPropertyHandler<List<ShadowAttributes>> {
+public class CssTextShadowParser
+		implements CssPropertyParser<List<ShadowAttributes>> {
 
 	public static final String PROPERTY_TEXT_SHADOW = "text-shadow";
 
@@ -53,7 +53,7 @@ public class CssTextShadowPropertyHandler
 			int dy = parseInt(terms.get(1));
 			int radius = 0;
 
-			CssColorPropertyHandler colorParser = new CssColorPropertyHandler();
+			CssColorParser colorParser = new CssColorParser();
 			Color color;
 			if (terms.size() == 3) {
 				color = colorParser.parse(terms.get(2));
@@ -114,6 +114,6 @@ public class CssTextShadowPropertyHandler
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof CssTextShadowPropertyHandler;
+		return obj instanceof CssTextShadowParser;
 	}
 }

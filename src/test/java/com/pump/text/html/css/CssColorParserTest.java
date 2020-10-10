@@ -1,13 +1,15 @@
-package com.pump.text.html.style;
+package com.pump.text.html.css;
 
 import java.awt.Color;
+
+import com.pump.text.html.css.CssColorParser;
 
 import junit.framework.TestCase;
 
 /**
  * These test the CSS color parser class.
  */
-public class CssColorPropertyHandlerTest extends TestCase {
+public class CssColorParserTest extends TestCase {
 
 	/*
 	 * These "pink" tests are based on
@@ -16,7 +18,7 @@ public class CssColorPropertyHandlerTest extends TestCase {
 
 	void assertPink(String str) {
 		Color pink = new Color(255, 0, 153);
-		Color c = new CssColorPropertyHandler().parse(str);
+		Color c = new CssColorParser().parse(str);
 		assertEquals(pink, c);
 	}
 
@@ -109,7 +111,7 @@ public class CssColorPropertyHandlerTest extends TestCase {
 
 	void assertCyan(String str) {
 		Color cyan = new Color(0, 255, 255, 255);
-		Color c = new CssColorPropertyHandler().parse(str);
+		Color c = new CssColorParser().parse(str);
 		assertSimilar(cyan, c, 1);
 	}
 

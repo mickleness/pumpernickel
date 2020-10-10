@@ -1,4 +1,4 @@
-package com.pump.text.html.style;
+package com.pump.text.html.css;
 
 import java.awt.Color;
 import java.lang.reflect.InvocationHandler;
@@ -29,19 +29,19 @@ public class QStyleSheet extends StyleSheet {
 	private static final long serialVersionUID = 1L;
 
 	protected Map<String, Map<Object, Object>> qRules = new HashMap<>();
-	protected Map<String, CssPropertyHandler<?>> propertyHandlers = new HashMap<>();
+	protected Map<String, CssPropertyParser<?>> propertyHandlers = new HashMap<>();
 
 	public QStyleSheet() {
-		addCssPropertyHandler(new CssTextShadowPropertyHandler());
-		addCssPropertyHandler(new CssColorPropertyHandler(CSS.Attribute.COLOR));
+		addCssPropertyHandler(new CssTextShadowParser());
+		addCssPropertyHandler(new CssColorParser(CSS.Attribute.COLOR));
 	}
 
 	/**
 	 * Add a CssPropertyHandler that is consulted in
 	 * {@link #getSupportedProperties(Map)}
 	 */
-	public void addCssPropertyHandler(CssPropertyHandler<?> handler) {
-		CssPropertyHandler<?> oldHandler = propertyHandlers
+	public void addCssPropertyHandler(CssPropertyParser<?> handler) {
+		CssPropertyParser<?> oldHandler = propertyHandlers
 				.put(handler.getPropertyName(), handler);
 		if (oldHandler != null)
 			throw new RuntimeException(
@@ -49,11 +49,11 @@ public class QStyleSheet extends StyleSheet {
 							+ "\": " + oldHandler + ", " + handler);
 	}
 
-	public void removeCssPropertyHandler(CssPropertyHandler<?> handler) {
+	public void removeCssPropertyHandler(CssPropertyParser<?> handler) {
 		propertyHandlers.remove(handler.getPropertyName());
 	}
 
-	public Map<String, CssPropertyHandler<?>> getCssPropertyHandlers() {
+	public Map<String, CssPropertyParser<?>> getCssPropertyHandlers() {
 		return Collections.unmodifiableMap(propertyHandlers);
 	}
 
@@ -213,8 +213,7 @@ public class QStyleSheet extends StyleSheet {
 		Map<Object, Object> returnValue = null;
 
 		for (Map.Entry<String, String> entry : incomingProperties.entrySet()) {
-			CssPropertyHandler<?> handler = propertyHandlers
-					.get(entry.getKey());
+			CssPropertyParser<?> handler = propertyHandlers.get(entry.getKey());
 			if (handler != null) {
 				try {
 					Object value = handler.parse(entry.getValue());

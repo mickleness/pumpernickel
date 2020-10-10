@@ -16,9 +16,10 @@ import com.pump.graphics.vector.Operation;
 import com.pump.graphics.vector.VectorGraphics2D;
 import com.pump.graphics.vector.VectorImage;
 import com.pump.image.shadow.ShadowAttributes;
-import com.pump.text.html.style.CssBackgroundImagePropertyHandler;
-import com.pump.text.html.style.CssColorPropertyHandler;
-import com.pump.text.html.style.CssTextShadowPropertyHandler;
+import com.pump.text.html.css.CssColorParser;
+import com.pump.text.html.css.CssTextShadowParser;
+import com.pump.text.html.css.image.CssImageParser;
+import com.pump.text.html.css.image.CssImageValue;
 import com.pump.util.list.AddElementsEvent;
 import com.pump.util.list.ListAdapter;
 import com.pump.util.list.ObservableList;
@@ -56,7 +57,7 @@ public class QViewHelper {
 
 		@Override
 		public String toString() {
-			return CssTextShadowPropertyHandler.PROPERTY_TEXT_SHADOW;
+			return CssTextShadowParser.PROPERTY_TEXT_SHADOW;
 		}
 	};
 
@@ -113,17 +114,20 @@ public class QViewHelper {
 	}
 
 	private Object getAttribute(Object attrKey) {
+		// get value from tag declaration
 		Object value = view.getElement().getAttributes().getAttribute(attrKey);
 
-		if (value == null)
+		if (value == null) {
+			// get value from css rule
 			value = view.getAttributes().getAttribute(attrKey);
+		}
 
 		if (attrKey == CSS.Attribute.BACKGROUND_IMAGE && value != null) {
 			String str = value.toString();
-			return new CssBackgroundImagePropertyHandler().parse(str);
+			return new CssImageParser().parse(str);
 		} else if (attrKey == CSS.Attribute.BACKGROUND_COLOR && value != null) {
 			String str = value.toString();
-			return new CssColorPropertyHandler(CSS.Attribute.BACKGROUND_COLOR)
+			return new CssColorParser(CSS.Attribute.BACKGROUND_COLOR)
 					.parse(str);
 		}
 
@@ -141,7 +145,7 @@ public class QViewHelper {
 		returnValue.setRenderingHint(HINT_KEY_ELEMENT, view.getElement());
 
 		Object shadowValue = getAttribute(
-				CssTextShadowPropertyHandler.PROPERTY_TEXT_SHADOW);
+				CssTextShadowParser.PROPERTY_TEXT_SHADOW);
 		if (shadowValue != null)
 			returnValue.setRenderingHint(HINT_KEY_TEXT_SHADOW, shadowValue);
 
@@ -182,7 +186,7 @@ public class QViewHelper {
 			g.fillRect(r.x, r.y, r.width, r.height);
 		}
 
-		CssBackgroundImagePropertyHandler.BackgroundImage bkgndImg = (CssBackgroundImagePropertyHandler.BackgroundImage) getAttribute(
+		CssImageValue bkgndImg = (CssImageValue) getAttribute(
 				CSS.Attribute.BACKGROUND_IMAGE);
 		if (bkgndImg != null) {
 			bkgndImg.paintRectangle(g, r.x, r.y, r.width, r.height);

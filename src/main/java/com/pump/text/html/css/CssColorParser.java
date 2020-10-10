@@ -1,4 +1,4 @@
-package com.pump.text.html.style;
+package com.pump.text.html.css;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -19,168 +19,178 @@ import com.pump.awt.HSLColor;
  * named colors, alpha channels, the "hsl" and "hsla" identifier, and a few
  * additional features.
  */
-public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
+public class CssColorParser implements CssPropertyParser<CssColorValue> {
 
 	public static final String PROPERTY_COLOR = "color";
 
-	private static Map<String, Color> namedColors = new HashMap<>();
+	private static Map<String, CssColorValue> namedColors = new HashMap<>();
 
-	static {
-		namedColors.put("lightsalmon", new Color(255, 160, 122));
-		namedColors.put("salmon", new Color(250, 128, 114));
-		namedColors.put("darksalmon", new Color(233, 150, 122));
-		namedColors.put("lightcoral", new Color(240, 128, 128));
-		namedColors.put("indianred", new Color(205, 92, 92));
-		namedColors.put("crimson", new Color(220, 20, 60));
-		namedColors.put("firebrick", new Color(178, 34, 34));
-		namedColors.put("red", new Color(255, 0, 0));
-		namedColors.put("darkred", new Color(139, 0, 0));
-
-		namedColors.put("coral", new Color(255, 127, 80));
-		namedColors.put("tomato", new Color(255, 99, 71));
-		namedColors.put("orangered", new Color(255, 69, 0));
-		namedColors.put("gold", new Color(255, 215, 0));
-		namedColors.put("orange", new Color(255, 165, 0));
-		namedColors.put("darkorange", new Color(255, 140, 0));
-
-		namedColors.put("lightyellow", new Color(255, 255, 224));
-		namedColors.put("lemonchiffon", new Color(255, 250, 205));
-		namedColors.put("lightgoldenrodyellow", new Color(250, 250, 210));
-		namedColors.put("papayawhip", new Color(255, 239, 213));
-		namedColors.put("moccasin", new Color(255, 228, 181));
-		namedColors.put("peachpuff", new Color(255, 218, 185));
-		namedColors.put("palegoldenrod", new Color(238, 232, 170));
-		namedColors.put("khaki", new Color(240, 230, 140));
-		namedColors.put("darkkhaki", new Color(189, 183, 107));
-		namedColors.put("yellow", new Color(255, 255, 0));
-
-		namedColors.put("lawngreen", new Color(124, 252, 0));
-		namedColors.put("chartreuse", new Color(127, 255, 0));
-		namedColors.put("limegreen", new Color(50, 205, 50));
-		namedColors.put("lime", new Color(0, 255, 0));
-		namedColors.put("forestgreen", new Color(34, 139, 34));
-		namedColors.put("green", new Color(0, 128, 0));
-		namedColors.put("darkgreen", new Color(0, 100, 0));
-		namedColors.put("greenyellow", new Color(173, 255, 47));
-		namedColors.put("yellowgreen", new Color(154, 205, 50));
-		namedColors.put("springgreen", new Color(0, 255, 127));
-		namedColors.put("mediumspringgreen", new Color(0, 250, 154));
-		namedColors.put("lightgreen", new Color(144, 238, 144));
-		namedColors.put("palegreen", new Color(152, 251, 152));
-		namedColors.put("darkseagreen", new Color(143, 188, 143));
-		namedColors.put("mediumseagreen", new Color(60, 179, 113));
-		namedColors.put("seagreen", new Color(46, 139, 87));
-		namedColors.put("olive", new Color(128, 128, 0));
-		namedColors.put("darkolivegreen", new Color(85, 107, 47));
-		namedColors.put("olivedrab", new Color(107, 142, 35));
-
-		namedColors.put("lightcyan", new Color(224, 255, 255));
-		namedColors.put("cyan", new Color(0, 255, 255));
-		namedColors.put("aqua", new Color(0, 255, 255));
-		namedColors.put("aquamarine", new Color(127, 255, 212));
-		namedColors.put("mediumaquamarine", new Color(102, 205, 170));
-		namedColors.put("paleturquoise", new Color(175, 238, 238));
-		namedColors.put("turquoise", new Color(64, 224, 208));
-		namedColors.put("mediumturquoise", new Color(72, 209, 204));
-		namedColors.put("darkturquoise", new Color(0, 206, 209));
-		namedColors.put("lightseagreen", new Color(32, 178, 170));
-		namedColors.put("cadetblue", new Color(95, 158, 160));
-		namedColors.put("darkcyan", new Color(0, 139, 139));
-		namedColors.put("teal", new Color(0, 128, 128));
-
-		namedColors.put("powderblue", new Color(176, 224, 230));
-		namedColors.put("lightblue", new Color(173, 216, 230));
-		namedColors.put("lightskyblue", new Color(135, 206, 250));
-		namedColors.put("skyblue", new Color(135, 206, 235));
-		namedColors.put("deepskyblue", new Color(0, 191, 255));
-		namedColors.put("lightsteelblue", new Color(176, 196, 222));
-		namedColors.put("dodgerblue", new Color(30, 144, 255));
-		namedColors.put("cornflowerblue", new Color(100, 149, 237));
-		namedColors.put("steelblue", new Color(70, 130, 180));
-		namedColors.put("royalblue", new Color(65, 105, 225));
-		namedColors.put("blue", new Color(0, 0, 255));
-		namedColors.put("mediumblue", new Color(0, 0, 205));
-		namedColors.put("darkblue", new Color(0, 0, 139));
-		namedColors.put("navy", new Color(0, 0, 128));
-		namedColors.put("midnightblue", new Color(25, 25, 112));
-		namedColors.put("mediumslateblue", new Color(123, 104, 238));
-		namedColors.put("slateblue", new Color(106, 90, 205));
-		namedColors.put("darkslateblue", new Color(72, 61, 139));
-
-		namedColors.put("lavender", new Color(230, 230, 250));
-		namedColors.put("thistle", new Color(216, 191, 216));
-		namedColors.put("plum", new Color(221, 160, 221));
-		namedColors.put("violet", new Color(238, 130, 238));
-		namedColors.put("orchid", new Color(218, 112, 214));
-		namedColors.put("fuchsia", new Color(255, 0, 255));
-		namedColors.put("magenta", new Color(255, 0, 255));
-		namedColors.put("mediumorchid", new Color(186, 85, 211));
-		namedColors.put("mediumpurple", new Color(147, 112, 219));
-		namedColors.put("blueviolet", new Color(138, 43, 226));
-		namedColors.put("darkviolet", new Color(148, 0, 211));
-		namedColors.put("darkorchid", new Color(153, 50, 204));
-		namedColors.put("darkmagenta", new Color(139, 0, 139));
-		namedColors.put("purple", new Color(128, 0, 128));
-		namedColors.put("indigo", new Color(75, 0, 130));
-
-		namedColors.put("pink", new Color(255, 192, 203));
-		namedColors.put("lightpink", new Color(255, 182, 193));
-		namedColors.put("hotpink", new Color(255, 105, 180));
-		namedColors.put("deeppink", new Color(255, 20, 147));
-		namedColors.put("palevioletred", new Color(219, 112, 147));
-		namedColors.put("mediumvioletred", new Color(199, 21, 133));
-
-		namedColors.put("white", new Color(255, 255, 255));
-		namedColors.put("snow", new Color(255, 250, 250));
-		namedColors.put("honeydew", new Color(240, 255, 240));
-		namedColors.put("mintcream", new Color(245, 255, 250));
-		namedColors.put("azure", new Color(240, 255, 255));
-		namedColors.put("aliceblue", new Color(240, 248, 255));
-		namedColors.put("ghostwhite", new Color(248, 248, 255));
-		namedColors.put("whitesmoke", new Color(245, 245, 245));
-		namedColors.put("seashell", new Color(255, 245, 238));
-		namedColors.put("beige", new Color(245, 245, 220));
-		namedColors.put("oldlace", new Color(253, 245, 230));
-		namedColors.put("floralwhite", new Color(255, 250, 240));
-		namedColors.put("ivory", new Color(255, 255, 240));
-		namedColors.put("antiquewhite", new Color(250, 235, 215));
-		namedColors.put("linen", new Color(250, 240, 230));
-		namedColors.put("lavenderblush", new Color(255, 240, 245));
-		namedColors.put("mistyrose", new Color(255, 228, 225));
-
-		namedColors.put("gainsboro", new Color(220, 220, 220));
-		namedColors.put("lightgray", new Color(211, 211, 211));
-		namedColors.put("silver", new Color(192, 192, 192));
-		namedColors.put("darkgray", new Color(169, 169, 169));
-		namedColors.put("gray", new Color(128, 128, 128));
-		namedColors.put("dimgray", new Color(105, 105, 105));
-		namedColors.put("lightslategray", new Color(119, 136, 153));
-		namedColors.put("slategray", new Color(112, 128, 144));
-		namedColors.put("darkslategray", new Color(47, 79, 79));
-		namedColors.put("black", new Color(0, 0, 0));
-
-		namedColors.put("cornsilk", new Color(255, 248, 220));
-		namedColors.put("blanchedalmond", new Color(255, 235, 205));
-		namedColors.put("bisque", new Color(255, 228, 196));
-		namedColors.put("navajowhite", new Color(255, 222, 173));
-		namedColors.put("wheat", new Color(245, 222, 179));
-		namedColors.put("burlywood", new Color(222, 184, 135));
-		namedColors.put("tan", new Color(210, 180, 140));
-		namedColors.put("rosybrown", new Color(188, 143, 143));
-		namedColors.put("sandybrown", new Color(244, 164, 96));
-		namedColors.put("goldenrod", new Color(218, 165, 32));
-		namedColors.put("peru", new Color(205, 133, 63));
-		namedColors.put("chocolate", new Color(210, 105, 30));
-		namedColors.put("saddlebrown", new Color(139, 69, 19));
-		namedColors.put("sienna", new Color(160, 82, 45));
-		namedColors.put("brown", new Color(165, 42, 42));
-		namedColors.put("maroon", new Color(128, 0, 0));
-
-		namedColors.put("rebeccapurple", new Color(102, 51, 153));
-		namedColors.put("transparent", new Color(0, 0, 0, 0));
+	private static void initNamedColor(String name, int red, int green,
+			int blue) {
+		initNamedColor(name, red, green, blue, 255);
 	}
 
-	public static Color getNamedColor(String colorName) {
+	private static void initNamedColor(String name, int red, int green,
+			int blue, int alpha) {
+		namedColors.put(name, new CssColorValue(name, red, green, blue, alpha));
+	}
+
+	static {
+		initNamedColor("lightsalmon", 255, 160, 122);
+		initNamedColor("salmon", 250, 128, 114);
+		initNamedColor("darksalmon", 233, 150, 122);
+		initNamedColor("lightcoral", 240, 128, 128);
+		initNamedColor("indianred", 205, 92, 92);
+		initNamedColor("crimson", 220, 20, 60);
+		initNamedColor("firebrick", 178, 34, 34);
+		initNamedColor("red", 255, 0, 0);
+		initNamedColor("darkred", 139, 0, 0);
+
+		initNamedColor("coral", 255, 127, 80);
+		initNamedColor("tomato", 255, 99, 71);
+		initNamedColor("orangered", 255, 69, 0);
+		initNamedColor("gold", 255, 215, 0);
+		initNamedColor("orange", 255, 165, 0);
+		initNamedColor("darkorange", 255, 140, 0);
+
+		initNamedColor("lightyellow", 255, 255, 224);
+		initNamedColor("lemonchiffon", 255, 250, 205);
+		initNamedColor("lightgoldenrodyellow", 250, 250, 210);
+		initNamedColor("papayawhip", 255, 239, 213);
+		initNamedColor("moccasin", 255, 228, 181);
+		initNamedColor("peachpuff", 255, 218, 185);
+		initNamedColor("palegoldenrod", 238, 232, 170);
+		initNamedColor("khaki", 240, 230, 140);
+		initNamedColor("darkkhaki", 189, 183, 107);
+		initNamedColor("yellow", 255, 255, 0);
+
+		initNamedColor("lawngreen", 124, 252, 0);
+		initNamedColor("chartreuse", 127, 255, 0);
+		initNamedColor("limegreen", 50, 205, 50);
+		initNamedColor("lime", 0, 255, 0);
+		initNamedColor("forestgreen", 34, 139, 34);
+		initNamedColor("green", 0, 128, 0);
+		initNamedColor("darkgreen", 0, 100, 0);
+		initNamedColor("greenyellow", 173, 255, 47);
+		initNamedColor("yellowgreen", 154, 205, 50);
+		initNamedColor("springgreen", 0, 255, 127);
+		initNamedColor("mediumspringgreen", 0, 250, 154);
+		initNamedColor("lightgreen", 144, 238, 144);
+		initNamedColor("palegreen", 152, 251, 152);
+		initNamedColor("darkseagreen", 143, 188, 143);
+		initNamedColor("mediumseagreen", 60, 179, 113);
+		initNamedColor("seagreen", 46, 139, 87);
+		initNamedColor("olive", 128, 128, 0);
+		initNamedColor("darkolivegreen", 85, 107, 47);
+		initNamedColor("olivedrab", 107, 142, 35);
+
+		initNamedColor("lightcyan", 224, 255, 255);
+		initNamedColor("cyan", 0, 255, 255);
+		initNamedColor("aqua", 0, 255, 255);
+		initNamedColor("aquamarine", 127, 255, 212);
+		initNamedColor("mediumaquamarine", 102, 205, 170);
+		initNamedColor("paleturquoise", 175, 238, 238);
+		initNamedColor("turquoise", 64, 224, 208);
+		initNamedColor("mediumturquoise", 72, 209, 204);
+		initNamedColor("darkturquoise", 0, 206, 209);
+		initNamedColor("lightseagreen", 32, 178, 170);
+		initNamedColor("cadetblue", 95, 158, 160);
+		initNamedColor("darkcyan", 0, 139, 139);
+		initNamedColor("teal", 0, 128, 128);
+
+		initNamedColor("powderblue", 176, 224, 230);
+		initNamedColor("lightblue", 173, 216, 230);
+		initNamedColor("lightskyblue", 135, 206, 250);
+		initNamedColor("skyblue", 135, 206, 235);
+		initNamedColor("deepskyblue", 0, 191, 255);
+		initNamedColor("lightsteelblue", 176, 196, 222);
+		initNamedColor("dodgerblue", 30, 144, 255);
+		initNamedColor("cornflowerblue", 100, 149, 237);
+		initNamedColor("steelblue", 70, 130, 180);
+		initNamedColor("royalblue", 65, 105, 225);
+		initNamedColor("blue", 0, 0, 255);
+		initNamedColor("mediumblue", 0, 0, 205);
+		initNamedColor("darkblue", 0, 0, 139);
+		initNamedColor("navy", 0, 0, 128);
+		initNamedColor("midnightblue", 25, 25, 112);
+		initNamedColor("mediumslateblue", 123, 104, 238);
+		initNamedColor("slateblue", 106, 90, 205);
+		initNamedColor("darkslateblue", 72, 61, 139);
+
+		initNamedColor("lavender", 230, 230, 250);
+		initNamedColor("thistle", 216, 191, 216);
+		initNamedColor("plum", 221, 160, 221);
+		initNamedColor("violet", 238, 130, 238);
+		initNamedColor("orchid", 218, 112, 214);
+		initNamedColor("fuchsia", 255, 0, 255);
+		initNamedColor("magenta", 255, 0, 255);
+		initNamedColor("mediumorchid", 186, 85, 211);
+		initNamedColor("mediumpurple", 147, 112, 219);
+		initNamedColor("blueviolet", 138, 43, 226);
+		initNamedColor("darkviolet", 148, 0, 211);
+		initNamedColor("darkorchid", 153, 50, 204);
+		initNamedColor("darkmagenta", 139, 0, 139);
+		initNamedColor("purple", 128, 0, 128);
+		initNamedColor("indigo", 75, 0, 130);
+
+		initNamedColor("pink", 255, 192, 203);
+		initNamedColor("lightpink", 255, 182, 193);
+		initNamedColor("hotpink", 255, 105, 180);
+		initNamedColor("deeppink", 255, 20, 147);
+		initNamedColor("palevioletred", 219, 112, 147);
+		initNamedColor("mediumvioletred", 199, 21, 133);
+
+		initNamedColor("white", 255, 255, 255);
+		initNamedColor("snow", 255, 250, 250);
+		initNamedColor("honeydew", 240, 255, 240);
+		initNamedColor("mintcream", 245, 255, 250);
+		initNamedColor("azure", 240, 255, 255);
+		initNamedColor("aliceblue", 240, 248, 255);
+		initNamedColor("ghostwhite", 248, 248, 255);
+		initNamedColor("whitesmoke", 245, 245, 245);
+		initNamedColor("seashell", 255, 245, 238);
+		initNamedColor("beige", 245, 245, 220);
+		initNamedColor("oldlace", 253, 245, 230);
+		initNamedColor("floralwhite", 255, 250, 240);
+		initNamedColor("ivory", 255, 255, 240);
+		initNamedColor("antiquewhite", 250, 235, 215);
+		initNamedColor("linen", 250, 240, 230);
+		initNamedColor("lavenderblush", 255, 240, 245);
+		initNamedColor("mistyrose", 255, 228, 225);
+
+		initNamedColor("gainsboro", 220, 220, 220);
+		initNamedColor("lightgray", 211, 211, 211);
+		initNamedColor("silver", 192, 192, 192);
+		initNamedColor("darkgray", 169, 169, 169);
+		initNamedColor("gray", 128, 128, 128);
+		initNamedColor("dimgray", 105, 105, 105);
+		initNamedColor("lightslategray", 119, 136, 153);
+		initNamedColor("slategray", 112, 128, 144);
+		initNamedColor("darkslategray", 47, 79, 79);
+		initNamedColor("black", 0, 0, 0);
+
+		initNamedColor("cornsilk", 255, 248, 220);
+		initNamedColor("blanchedalmond", 255, 235, 205);
+		initNamedColor("bisque", 255, 228, 196);
+		initNamedColor("navajowhite", 255, 222, 173);
+		initNamedColor("wheat", 245, 222, 179);
+		initNamedColor("burlywood", 222, 184, 135);
+		initNamedColor("tan", 210, 180, 140);
+		initNamedColor("rosybrown", 188, 143, 143);
+		initNamedColor("sandybrown", 244, 164, 96);
+		initNamedColor("goldenrod", 218, 165, 32);
+		initNamedColor("peru", 205, 133, 63);
+		initNamedColor("chocolate", 210, 105, 30);
+		initNamedColor("saddlebrown", 139, 69, 19);
+		initNamedColor("sienna", 160, 82, 45);
+		initNamedColor("brown", 165, 42, 42);
+		initNamedColor("maroon", 128, 0, 0);
+
+		initNamedColor("rebeccapurple", 102, 51, 153);
+		initNamedColor("transparent", 0, 0, 0, 0);
+	}
+
+	public static CssColorValue getNamedColor(String colorName) {
 		if (colorName == null)
 			return null;
 		return namedColors.get(colorName.toLowerCase());
@@ -194,16 +204,16 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 	 */
 	CSS.Attribute cssAttribute;
 
-	public CssColorPropertyHandler() {
+	public CssColorParser() {
 		this(PROPERTY_COLOR);
 	}
 
-	public CssColorPropertyHandler(String propertyName) {
+	public CssColorParser(String propertyName) {
 		Objects.requireNonNull(propertyName);
 		this.propertyName = propertyName;
 	}
 
-	public CssColorPropertyHandler(CSS.Attribute cssAttribute) {
+	public CssColorParser(CSS.Attribute cssAttribute) {
 		this(cssAttribute.toString());
 		this.cssAttribute = cssAttribute;
 	}
@@ -219,9 +229,9 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 	}
 
 	@Override
-	public Color parse(String value) {
-		value = value.toLowerCase().trim();
-		Color namedColor = getNamedColor(value);
+	public CssColorValue parse(final String cssValue) {
+		String value = cssValue.toLowerCase().trim();
+		CssColorValue namedColor = getNamedColor(value);
 		if (namedColor != null)
 			return namedColor;
 
@@ -229,7 +239,7 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 			int i1 = value.indexOf("(");
 			int i2 = value.lastIndexOf(")");
 			if (i2 != -1) {
-				return parseRGB(value.substring(i1 + 1, i2));
+				return parseRGB(cssValue, value.substring(i1 + 1, i2));
 			}
 			throw new IllegalArgumentException(
 					"missing closing parentheses (\"" + value + "\"");
@@ -237,17 +247,17 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 			int i1 = value.indexOf("(");
 			int i2 = value.lastIndexOf(")");
 			if (i2 != -1) {
-				return parseHSL(value.substring(i1 + 1, i2));
+				return parseHSL(cssValue, value.substring(i1 + 1, i2));
 			}
 			throw new IllegalArgumentException(
 					"missing closing parentheses (\"" + value + "\"");
 		} else if (value.startsWith("#")) {
-			return parseHex(value.substring("#".length()));
+			return parseHex(cssValue, value.substring("#".length()));
 		}
 
 		// CSS#stringToColor says "sometimes get specified without leading #"
 		try {
-			parseHex(value);
+			return parseHex(cssValue, value);
 		} catch (RuntimeException e) {
 			// do nothing, this was a longshot anyway
 		}
@@ -255,7 +265,7 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 				"unsupported color \"" + value + "\"");
 	}
 
-	protected Color parseHex(String hexStr) {
+	protected CssColorValue parseHex(String originalCssString, String hexStr) {
 		if (hexStr.length() == 3) {
 			hexStr = "" + hexStr.charAt(0) + hexStr.charAt(0) + hexStr.charAt(1)
 					+ hexStr.charAt(1) + hexStr.charAt(2) + hexStr.charAt(2);
@@ -269,7 +279,8 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 			int green = Integer.parseInt(hexStr.substring(2, 4), 16);
 			int blue = Integer.parseInt(hexStr.substring(4, 6), 16);
 			int alpha = Integer.parseInt(hexStr.substring(6, 8), 16);
-			return new Color(red, green, blue, alpha);
+			Color c = new Color(red, green, blue, alpha);
+			return new CssColorValue(originalCssString, c);
 		} else if (hexStr.length() == 7) {
 			throw new RuntimeException("Unsupported hexadecimal: \"" + hexStr
 					+ "\" (expected 6 or 8 chars)");
@@ -277,7 +288,8 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 		while (hexStr.length() < 6) {
 			hexStr = "0" + hexStr;
 		}
-		return new Color(Integer.parseInt(hexStr, 16), false);
+		Color c = new Color(Integer.parseInt(hexStr, 16), false);
+		return new CssColorValue(originalCssString, c);
 	}
 
 	/**
@@ -300,7 +312,7 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 	 * @param rgbArgs
 	 * @return
 	 */
-	protected Color parseRGB(String rgbArgs) {
+	protected CssColorValue parseRGB(String originalCssString, String rgbArgs) {
 		List<String> args = parseArgs(rgbArgs);
 		int red, green, blue, alpha;
 
@@ -349,7 +361,7 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 		blue = Math.min(255, Math.max(0, blue));
 		alpha = Math.min(255, Math.max(0, alpha));
 
-		return new Color(red, green, blue, alpha);
+		return new CssColorValue(originalCssString, red, green, blue, alpha);
 	}
 
 	protected List<String> parseArgs(String args) {
@@ -401,7 +413,7 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 	 * @param hslArgs
 	 * @return
 	 */
-	protected Color parseHSL(String hslArgs) {
+	protected CssColorValue parseHSL(String originalCssString, String hslArgs) {
 		List<String> args = parseArgs(hslArgs);
 		if (args.size() < 3 || args.size() > 4)
 			throw new IllegalArgumentException(
@@ -459,7 +471,8 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 			}
 		}
 
-		return new Color(HSLColor.toRGB(h, s, l, alpha), true);
+		Color c = new Color(HSLColor.toRGB(h, s, l, alpha), true);
+		return new CssColorValue(originalCssString, c);
 	}
 
 	@Override
@@ -469,9 +482,9 @@ public class CssColorPropertyHandler implements CssPropertyHandler<Color> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof CssColorPropertyHandler))
+		if (!(obj instanceof CssColorParser))
 			return false;
-		CssColorPropertyHandler other = (CssColorPropertyHandler) obj;
+		CssColorParser other = (CssColorParser) obj;
 		if (!(Objects.equals(cssAttribute, other.cssAttribute)))
 			return false;
 		if (!(Objects.equals(propertyName, other.propertyName)))

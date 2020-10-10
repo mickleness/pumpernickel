@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.pump.text.html.css.CssParser;
+
 import junit.framework.TestCase;
 
 /**
