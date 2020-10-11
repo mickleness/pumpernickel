@@ -14,13 +14,10 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -64,8 +61,8 @@ import javax.swing.event.ChangeListener;
  * which invokes
  * <code>Toolkit.getDefaultToolkit().addAWTEventListener(..)</code>.
  *
- * @see <a
- *      href="https://javagraphics.blogspot.com/2008/11/windows-adding-window-menu.html">Windows:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2008/11/windows-adding-window-menu.html">Windows:
  *      Adding a Window Menu</a>
  */
 public class WindowMenu extends JMenu {
@@ -88,7 +85,7 @@ public class WindowMenu extends JMenu {
 			if (customItems.length != 0) {
 				addSeparator();
 				for (int a = 0; a < customItems.length; a++) {
-					if(customItems[a]!=null)
+					if (customItems[a] != null)
 						add(customItems[a]);
 				}
 			}
@@ -101,44 +98,8 @@ public class WindowMenu extends JMenu {
 				item.setSelected(frames[a] == myFrame);
 				add(item);
 			}
-			fixMenuBar(myFrame, WindowMenu.this);
 		}
 	};
-
-	/**
-	 * On Mac often the menus won't really update without this hack-ish twist:
-	 * remove the menu and re-add it. Voila! It's both unnecessary and crucial
-	 * at the same time.
-	 * 
-	 * @param f
-	 *            the frame whose menubar you need to update.
-	 * @param menu
-	 *            the menu you need to update.
-	 */
-	static void fixMenuBar(JFrame f, JMenu menu) {
-		JMenuBar mb = f.getJMenuBar();
-		if (mb != null) {
-			JMenu[] menus = new JMenu[mb.getMenuCount()];
-			for (int a = 0; a < menus.length; a++) {
-				menus[a] = mb.getMenu(a);
-			}
-
-			boolean found = false;
-			List<JMenu> menusToAdd = new ArrayList<>();
-			for (int a = 0; a < menus.length; a++) {
-				if (menus[a] == menu)
-					found = true;
-
-				if (found) {
-					mb.remove(menus[a]);
-					menusToAdd.add(menus[a]);
-				}
-			}
-			for (JMenu menuToAdd : menusToAdd) {
-				mb.add(menuToAdd);
-			}
-		}
-	}
 
 	private JFrame myFrame = null;
 
@@ -156,8 +117,8 @@ public class WindowMenu extends JMenu {
 			} else if (src == bringItem) {
 				Frame[] frames = WindowList.getFrames(false, false, true);
 				for (int a = 0; a < frames.length; a++) {
-					if (frames[a].isVisible()
-							|| frames[a].getExtendedState() == Frame.ICONIFIED) {
+					if (frames[a].isVisible() || frames[a]
+							.getExtendedState() == Frame.ICONIFIED) {
 						frames[a].toFront();
 						if (frames[a].getExtendedState() == Frame.ICONIFIED)
 							frames[a].setExtendedState(Frame.NORMAL);
@@ -186,7 +147,7 @@ public class WindowMenu extends JMenu {
 	 *            the frame that this menu belongs to.
 	 * @param extraItems
 	 *            an optional array of extra items to put in this menu.
-	 * */
+	 */
 	public WindowMenu(JFrame frame, JMenuItem... extraItems) {
 		super("Window");
 		minimizeItem.addActionListener(actionListener);
@@ -196,8 +157,8 @@ public class WindowMenu extends JMenu {
 		System.arraycopy(extraItems, 0, customItems, 0, extraItems.length);
 
 		myFrame = frame;
-		minimizeItem.setAccelerator(KeyStroke.getKeyStroke('M', Toolkit
-				.getDefaultToolkit().getMenuShortcutKeyMask()));
+		minimizeItem.setAccelerator(KeyStroke.getKeyStroke('M',
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
 		WindowList.addChangeListener(changeListener);
 		updateRunnable.run();
