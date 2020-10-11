@@ -66,6 +66,12 @@ public class CssImageParser implements CssPropertyParser<CssImageValue> {
 			String urlStr = cssString.substring(index + "url(\"".length(), i2);
 			dest.add(new CssUrlImageValue(cssStr, urlStr));
 			return index + i2 + "\")".length();
+		} else if (s.startsWith("url('")) {
+			int i2 = s.indexOf("')");
+			String cssStr = cssString.substring(index, i2 + "')".length());
+			String urlStr = cssString.substring(index + "url('".length(), i2);
+			dest.add(new CssUrlImageValue(cssStr, urlStr));
+			return index + i2 + "')".length();
 		} else if (s.startsWith("url(")) {
 			// I'm not sure why, but quotations appear to be automatically
 			// stripped away.
