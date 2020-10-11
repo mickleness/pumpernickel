@@ -189,7 +189,7 @@ public class QViewHelper {
 		CssImageValue bkgndImg = (CssImageValue) getAttribute(
 				CSS.Attribute.BACKGROUND_IMAGE);
 		if (bkgndImg != null) {
-			bkgndImg.paintRectangle(g, r.x, r.y, r.width, r.height);
+			bkgndImg.paintRectangle(g, view, r.x, r.y, r.width, r.height);
 		}
 	}
 }

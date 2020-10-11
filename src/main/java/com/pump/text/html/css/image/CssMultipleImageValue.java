@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.text.View;
+
 public class CssMultipleImageValue implements CssImageValue {
 
 	private final String cssStr;
@@ -20,11 +22,11 @@ public class CssMultipleImageValue implements CssImageValue {
 	}
 
 	@Override
-	public void paintRectangle(Graphics2D g, int x, int y, int width,
+	public void paintRectangle(Graphics2D g, View view, int x, int y, int width,
 			int height) {
 		for (int a = images.size() - 1; a >= 0; a--) {
 			Graphics2D g2 = (Graphics2D) g.create();
-			images.get(a).paintRectangle(g2, x, y, width, height);
+			images.get(a).paintRectangle(g2, view, x, y, width, height);
 			g2.dispose();
 		}
 	}

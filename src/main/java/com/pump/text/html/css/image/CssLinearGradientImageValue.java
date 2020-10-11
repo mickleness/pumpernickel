@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.swing.text.View;
+
 import com.pump.awt.GradientTexturePaint;
 import com.pump.plaf.AnimationManager;
 import com.pump.text.html.css.CssColorParser;
@@ -257,7 +259,7 @@ public class CssLinearGradientImageValue implements CssImageValue {
 	}
 
 	@Override
-	public void paintRectangle(Graphics2D g, int x, int y, int width,
+	public void paintRectangle(Graphics2D g, View view, int x, int y, int width,
 			int height) {
 		Paint p = createPaint(x, y, width, height);
 		g.setPaint(p);
