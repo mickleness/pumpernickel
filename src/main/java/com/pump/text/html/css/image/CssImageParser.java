@@ -1,5 +1,6 @@
 package com.pump.text.html.css.image;
 
+import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +65,28 @@ public class CssImageParser implements CssPropertyParser<CssImageValue> {
 			String cssStr = cssString.substring(index, i2 + "\")".length());
 			String urlStr = cssString.substring(index + "url(\"".length(), i2);
 			dest.add(new CssUrlImageValue(cssStr, urlStr));
-			return i2 + "\")".length();
+			return index + i2 + "\")".length();
+		} else if (s.startsWith("url(")) {
+			// I'm not sure why, but quotations appear to be automatically
+			// stripped away.
+			int i2 = s.indexOf(")");
+
+			// look for ")," or ") " or ")\n"
+			while (true) {
+				char nextChar = i2 + 1 < s.length() ? s.charAt(i2 + 1)
+						: CharacterIterator.DONE;
+				if (nextChar == ',' || Character.isWhitespace(nextChar)
+						|| nextChar == CharacterIterator.DONE) {
+					break;
+				}
+				i2 = s.indexOf(")", i2 + 1);
+			}
+			String cssStr = cssString.substring(index,
+					index + i2 + ")".length());
+			String urlStr = cssString.substring(index + "url(".length(),
+					index + i2);
+			dest.add(new CssUrlImageValue(cssStr, urlStr));
+			return index + i2 + ")".length();
 		} else if (s.startsWith("linear-gradient(")) {
 			StringBuilder sb = new StringBuilder();
 			int i2 = CssParserUtils.getClosingParentheses(cssString,
