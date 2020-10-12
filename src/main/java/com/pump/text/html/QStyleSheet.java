@@ -25,6 +25,7 @@ import com.pump.text.html.css.CssColorParser;
 import com.pump.text.html.css.CssParser;
 import com.pump.text.html.css.CssPropertyParser;
 import com.pump.text.html.css.CssTextShadowParser;
+import com.pump.text.html.css.background.CssBackgroundPositionParser;
 import com.pump.text.html.css.background.CssBackgroundRepeatParser;
 
 /**
@@ -41,6 +42,7 @@ public class QStyleSheet extends StyleSheet {
 		addCssPropertyHandler(new CssTextShadowParser());
 		addCssPropertyHandler(new CssColorParser(CSS.Attribute.COLOR));
 		addCssPropertyHandler(new CssBackgroundRepeatParser());
+		addCssPropertyHandler(new CssBackgroundPositionParser());
 	}
 
 	/**

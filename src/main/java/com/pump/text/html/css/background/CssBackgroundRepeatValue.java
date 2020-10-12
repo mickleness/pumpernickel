@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import com.pump.text.html.css.CssLength;
 import com.pump.text.html.css.CssValue;
 
 public class CssBackgroundRepeatValue implements CssValue {
@@ -33,13 +34,26 @@ public class CssBackgroundRepeatValue implements CssValue {
 
 			@Override
 			public List<Span> getSpans(int canvasStart, int canvasLength,
-					int imageLength) {
+					int imageLength, CssLength position,
+					boolean positionFromStart) {
+
 				List<Span> returnValue = new LinkedList<>();
-				int j = 0;
-				while (j < canvasLength) {
+				Span originalSpan = NO_REPEAT.getSpans(canvasStart,
+						canvasLength, imageLength, position, positionFromStart)
+						.get(0);
+				returnValue.add(originalSpan);
+
+				for (int j = originalSpan.position
+						+ originalSpan.length; j < canvasStart
+								+ canvasLength; j += imageLength) {
 					returnValue.add(new Span(j, imageLength));
-					j += imageLength;
 				}
+
+				for (int j = originalSpan.position - imageLength; j
+						+ imageLength >= canvasStart; j -= imageLength) {
+					returnValue.add(new Span(j, imageLength));
+				}
+
 				return returnValue;
 			}
 		},
@@ -55,8 +69,8 @@ public class CssBackgroundRepeatValue implements CssValue {
 		SPACE {
 			@Override
 			public List<Span> getSpans(int canvasStart, int canvasLength,
-					int imageLength) {
-				// TODO: integrate background-position
+					int imageLength, CssLength position,
+					boolean positionFromStart) {
 				List<Span> returnValue = new LinkedList<>();
 
 				int repetitions = canvasLength / imageLength;
@@ -67,9 +81,8 @@ public class CssBackgroundRepeatValue implements CssValue {
 								imageLength));
 					}
 				} else {
-					returnValue.add(new Span(
-							canvasStart + canvasLength / 2 - imageLength / 2,
-							imageLength));
+					return NO_REPEAT.getSpans(canvasStart, canvasLength,
+							imageLength, position, positionFromStart);
 				}
 
 				return returnValue;
@@ -88,7 +101,8 @@ public class CssBackgroundRepeatValue implements CssValue {
 		ROUND {
 			@Override
 			public List<Span> getSpans(int canvasStart, int canvasLength,
-					int imageLength) {
+					int imageLength, CssLength position,
+					boolean positionFromStart) {
 				// this formula is from
 				// https://www.w3.org/TR/css-backgrounds-3/#propdef-background-size
 				float imageLengthPrime = ((float) canvasLength / Math
@@ -117,11 +131,33 @@ public class CssBackgroundRepeatValue implements CssValue {
 		NO_REPEAT("no-repeat") {
 			@Override
 			public List<Span> getSpans(int canvasStart, int canvasLength,
-					int imageLength) {
-				// TODO: consult background position
-				return Collections.singletonList(new Span(
-						canvasStart + canvasLength / 2 - imageLength / 2,
-						imageLength));
+					int imageLength, CssLength position,
+					boolean positionFromStart) {
+				if (position == null) {
+					return Collections.singletonList(new Span(
+							canvasStart + canvasLength / 2 - imageLength / 2,
+							imageLength));
+				}
+				if ("%".equals(position.getUnit())) {
+					int canvasLengthP = canvasLength - imageLength;
+					float percent = positionFromStart ? position.getValue()
+							: 100 - position.getValue();
+					int pos = (int) (canvasLengthP * percent / 100);
+					return Collections
+							.singletonList(new Span(pos, imageLength));
+				} else if ("px".equals(position.getUnit())) {
+					int pos;
+					if (positionFromStart) {
+						pos = (int) (position.getValue());
+					} else {
+						pos = (int) (canvasLength - imageLength
+								- position.getValue());
+					}
+					return Collections
+							.singletonList(new Span(pos, imageLength));
+				}
+				throw new RuntimeException(
+						"unsupported position unit: " + position);
 			}
 		};
 
@@ -140,7 +176,7 @@ public class CssBackgroundRepeatValue implements CssValue {
 		}
 
 		public abstract List<Span> getSpans(int canvasStart, int canvasLength,
-				int imageLength);
+				int imageLength, CssLength position, boolean positionFromStart);
 	}
 
 	private final String cssString;

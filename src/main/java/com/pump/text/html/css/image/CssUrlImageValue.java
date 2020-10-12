@@ -11,6 +11,7 @@ import java.util.Objects;
 import javax.swing.text.Document;
 
 import com.pump.image.ImageLoader;
+import com.pump.text.html.css.background.CssBackgroundPositionValue;
 import com.pump.text.html.css.background.CssBackgroundRepeatValue;
 import com.pump.text.html.css.background.CssBackgroundRepeatValue.Span;
 import com.pump.text.html.view.QViewHelper;
@@ -114,29 +115,33 @@ public class CssUrlImageValue implements CssImageValue {
 			int height) {
 		g.clipRect(x, y, width, height);
 
-		CssBackgroundRepeatValue repeatValue = null;
-
-		List<CssBackgroundRepeatValue> allLayers = (List<CssBackgroundRepeatValue>) viewHelper
+		List<CssBackgroundRepeatValue> allRepeats = (List<CssBackgroundRepeatValue>) viewHelper
 				.getAttribute("background-repeat");
+		List<CssBackgroundPositionValue> allPositions = (List<CssBackgroundPositionValue>) viewHelper
+				.getAttribute("background-position");
 
-		if (allLayers != null && layerIndex < allLayers.size()) {
-			repeatValue = allLayers.get(layerIndex);
-		} else if (allLayers.isEmpty()) {
-			repeatValue = new CssBackgroundRepeatValue(
-					CssBackgroundRepeatValue.Mode.REPEAT);
-		} else {
-			// erg, not sure what to do here?
-			repeatValue = allLayers.get(allLayers.size() - 1);
-		}
+		CssBackgroundRepeatValue repeatValue = getLayerValue(layerIndex,
+				allRepeats);
+		CssBackgroundPositionValue positionValue = getLayerValue(layerIndex,
+				allPositions);
+
 		if (repeatValue == null) {
 			repeatValue = new CssBackgroundRepeatValue(
 					CssBackgroundRepeatValue.Mode.REPEAT);
 		}
 
 		for (Span xSpan : repeatValue.getHorizontalMode().getSpans(x, width,
-				bi.getWidth())) {
+				bi.getWidth(),
+				positionValue == null ? null
+						: positionValue.getHorizontalPosition(),
+				positionValue == null ? true
+						: positionValue.isHorizontalPositionFromLeft())) {
 			for (Span ySpan : repeatValue.getVerticalMode().getSpans(y, height,
-					bi.getHeight())) {
+					bi.getHeight(),
+					positionValue == null ? null
+							: positionValue.getVerticalPosition(),
+					positionValue == null ? true
+							: positionValue.isVerticalPositionFromTop())) {
 				g.drawImage(bi, xSpan.position, ySpan.position, xSpan.length,
 						ySpan.length, null);
 			}
@@ -145,6 +150,16 @@ public class CssUrlImageValue implements CssImageValue {
 		// TODO: once more dust settles evaluate the relationship of the "image"
 		// package to the "background" package
 
+	}
+
+	private <T> T getLayerValue(int layerIndex, List<T> allLayers) {
+		if (allLayers != null && layerIndex < allLayers.size()) {
+			return allLayers.get(layerIndex);
+		} else if (allLayers == null || allLayers.isEmpty()) {
+			return null;
+		}
+		// erg, not sure what to do here?
+		return allLayers.get(allLayers.size() - 1);
 	}
 
 	protected BufferedImage createBufferedImage() {
