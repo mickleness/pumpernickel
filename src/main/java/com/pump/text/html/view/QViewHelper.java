@@ -113,7 +113,7 @@ public class QViewHelper {
 		this.view = view;
 	}
 
-	private Object getAttribute(Object attrKey) {
+	public Object getAttribute(Object attrKey) {
 		// get value from tag declaration
 		Object value = view.getElement().getAttributes().getAttribute(attrKey);
 
@@ -186,10 +186,19 @@ public class QViewHelper {
 			g.fillRect(r.x, r.y, r.width, r.height);
 		}
 
-		CssImageValue bkgndImg = (CssImageValue) getAttribute(
+		List<CssImageValue> bkgndImgs = (List<CssImageValue>) getAttribute(
 				CSS.Attribute.BACKGROUND_IMAGE);
-		if (bkgndImg != null) {
-			bkgndImg.paintRectangle(g, view, r.x, r.y, r.width, r.height);
+		if (bkgndImgs != null) {
+			for (int a = bkgndImgs.size() - 1; a >= 0; a--) {
+				Graphics2D g2 = (Graphics2D) g.create();
+				bkgndImgs.get(a).paintRectangle(g2, this, a, r.x, r.y, r.width,
+						r.height);
+				g2.dispose();
+			}
 		}
+	}
+
+	public View getView() {
+		return view;
 	}
 }

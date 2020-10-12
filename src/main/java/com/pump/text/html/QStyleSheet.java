@@ -1,4 +1,4 @@
-package com.pump.text.html.css;
+package com.pump.text.html;
 
 import java.awt.Color;
 import java.lang.reflect.InvocationHandler;
@@ -21,6 +21,12 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.StyleSheet;
 
+import com.pump.text.html.css.CssColorParser;
+import com.pump.text.html.css.CssParser;
+import com.pump.text.html.css.CssPropertyParser;
+import com.pump.text.html.css.CssTextShadowParser;
+import com.pump.text.html.css.background.CssBackgroundRepeatParser;
+
 /**
  * This specialized StyleSheet offers (limited) support for additional CSS
  * attributes.
@@ -34,6 +40,7 @@ public class QStyleSheet extends StyleSheet {
 	public QStyleSheet() {
 		addCssPropertyHandler(new CssTextShadowParser());
 		addCssPropertyHandler(new CssColorParser(CSS.Attribute.COLOR));
+		addCssPropertyHandler(new CssBackgroundRepeatParser());
 	}
 
 	/**
@@ -186,7 +193,8 @@ public class QStyleSheet extends StyleSheet {
 						allProperties);
 
 				if (customProperties != null) {
-					selector = "html body " + selector;
+					selector = selector.equals("body") ? "html body"
+							: "html body " + selector;
 					Map<Object, Object> properties = qRules.get(selector);
 					if (properties == null) {
 						properties = new LinkedHashMap<>();

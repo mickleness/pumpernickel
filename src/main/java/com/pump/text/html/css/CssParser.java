@@ -195,7 +195,30 @@ public class CssParser {
 		while (true) {
 			char ch = index < str.length() ? str.charAt(index)
 					: CharacterIterator.DONE;
-			if (ch == ';') {
+			if (ch == '"' || ch == '\'') {
+				propertyValue.append(ch);
+				index++;
+
+				char closingQuotationMark = ch;
+				boolean insideQuotation = true;
+				while (insideQuotation) {
+					ch = index < str.length() ? str.charAt(index)
+							: CharacterIterator.DONE;
+					if (ch == '\\') {
+						index = parseEscapedChar(str, index, propertyValue);
+						index++;
+					} else if (ch == closingQuotationMark) {
+						insideQuotation = false;
+						propertyValue.append(ch);
+					} else if (ch == CharacterIterator.DONE) {
+						throw new RuntimeException(
+								"Unexpected EOF inside quotation mark");
+					} else {
+						propertyValue.append(ch);
+						index++;
+					}
+				}
+			} else if (ch == ';') {
 				rule.getProperties().put(propertyKey,
 						propertyValue.toString().trim());
 				return index + 1;

@@ -7,12 +7,12 @@ import java.util.List;
 import javax.swing.text.html.CSS;
 
 import com.pump.text.html.css.CssLength;
+import com.pump.text.html.css.CssListParser;
 import com.pump.text.html.css.CssParserUtils;
-import com.pump.text.html.css.CssPropertyParser;
 import com.pump.text.html.css.image.CssLinearGradientImageValue.ColorStop;
 import com.pump.text.html.css.image.CssLinearGradientImageValue.Direction;
 
-public class CssImageParser implements CssPropertyParser<CssImageValue> {
+public class CssImageParser extends CssListParser<CssImageValue> {
 
 	@Override
 	public String getPropertyName() {
@@ -20,42 +20,7 @@ public class CssImageParser implements CssPropertyParser<CssImageValue> {
 	}
 
 	@Override
-	public CssImageValue parse(final String cssString) {
-		int index = 0;
-
-		// consume leading whitespace
-		while (index < cssString.length()
-				&& Character.isWhitespace(cssString.charAt(index))) {
-			index++;
-		}
-
-		List<CssImageValue> images = new ArrayList<>();
-		while (index < cssString.length()) {
-			index = parseImageValue(cssString, index, images);
-
-			// consume trailing whitespace
-			while (index < cssString.length()
-					&& Character.isWhitespace(cssString.charAt(index))) {
-				index++;
-			}
-
-			// consume possible comma
-			if (index < cssString.length() && cssString.charAt(index) == ',') {
-				index++;
-			}
-
-			// consume leading whitespace
-			while (index < cssString.length()
-					&& Character.isWhitespace(cssString.charAt(index))) {
-				index++;
-			}
-		}
-		if (images.size() == 1)
-			return images.get(0);
-		return new CssMultipleImageValue(cssString, images);
-	}
-
-	protected int parseImageValue(String cssString, int index,
+	protected int parseListElement(String cssString, int index,
 			List<CssImageValue> dest) {
 		String s = cssString.toLowerCase();
 
@@ -247,5 +212,4 @@ public class CssImageParser implements CssPropertyParser<CssImageValue> {
 		throw new IllegalArgumentException(
 				"unrecognized direction \"" + arg + "\"");
 	}
-
 }

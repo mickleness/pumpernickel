@@ -5,12 +5,15 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 
 import javax.swing.text.Document;
-import javax.swing.text.View;
 
 import com.pump.image.ImageLoader;
+import com.pump.text.html.css.background.CssBackgroundRepeatValue;
+import com.pump.text.html.css.background.CssBackgroundRepeatValue.Span;
+import com.pump.text.html.view.QViewHelper;
 import com.pump.util.Cache;
 
 public class CssUrlImageValue implements CssImageValue {
@@ -89,19 +92,59 @@ public class CssUrlImageValue implements CssImageValue {
 	}
 
 	@Override
-	public void paintRectangle(Graphics2D g, View view, int x, int y, int width,
-			int height) {
-		Cache<String, LoadedImage> imageCache = getCache(view.getDocument());
+	public void paintRectangle(Graphics2D g, QViewHelper viewHelper,
+			int layerIndex, int x, int y, int width, int height) {
+		Cache<String, LoadedImage> imageCache = getCache(
+				viewHelper.getView().getDocument());
 		LoadedImage img = imageCache.get(cssStr);
 		if (img == null) {
 			img = new LoadedImage(createBufferedImage());
 			imageCache.put(cssStr, img);
 		}
 		if (img.bi != null) {
-			g.drawImage(img.bi, x, y, width, height, null);
+			paintImage(g, img.bi, viewHelper, layerIndex, x, y, width, height);
 		} else {
-			// this probably means an error occurred loading the image
+			// this probably means an error occurred loading the image, so we
+			// give up
 		}
+	}
+
+	protected void paintImage(Graphics2D g, BufferedImage bi,
+			QViewHelper viewHelper, int layerIndex, int x, int y, int width,
+			int height) {
+		g.clipRect(x, y, width, height);
+
+		CssBackgroundRepeatValue repeatValue = null;
+
+		List<CssBackgroundRepeatValue> allLayers = (List<CssBackgroundRepeatValue>) viewHelper
+				.getAttribute("background-repeat");
+
+		if (allLayers != null && layerIndex < allLayers.size()) {
+			repeatValue = allLayers.get(layerIndex);
+		} else if (allLayers.isEmpty()) {
+			repeatValue = new CssBackgroundRepeatValue(
+					CssBackgroundRepeatValue.Mode.REPEAT);
+		} else {
+			// erg, not sure what to do here?
+			repeatValue = allLayers.get(allLayers.size() - 1);
+		}
+		if (repeatValue == null) {
+			repeatValue = new CssBackgroundRepeatValue(
+					CssBackgroundRepeatValue.Mode.REPEAT);
+		}
+
+		for (Span xSpan : repeatValue.getHorizontalMode().getSpans(x, width,
+				bi.getWidth())) {
+			for (Span ySpan : repeatValue.getVerticalMode().getSpans(y, height,
+					bi.getHeight())) {
+				g.drawImage(bi, xSpan.position, ySpan.position, xSpan.length,
+						ySpan.length, null);
+			}
+		}
+
+		// TODO: once more dust settles evaluate the relationship of the "image"
+		// package to the "background" package
+
 	}
 
 	protected BufferedImage createBufferedImage() {
