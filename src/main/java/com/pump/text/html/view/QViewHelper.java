@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.util.List;
 
 import javax.swing.text.Element;
@@ -17,6 +18,9 @@ import com.pump.graphics.vector.VectorGraphics2D;
 import com.pump.graphics.vector.VectorImage;
 import com.pump.image.shadow.ShadowAttributes;
 import com.pump.text.html.css.CssColorParser;
+import com.pump.text.html.css.CssLength;
+import com.pump.text.html.css.CssOverflowParser;
+import com.pump.text.html.css.CssOverflowValue;
 import com.pump.text.html.css.CssTextShadowParser;
 import com.pump.text.html.css.image.CssImageParser;
 import com.pump.text.html.css.image.CssImageValue;
@@ -107,6 +111,31 @@ public class QViewHelper {
 		}
 	}
 
+	public static Float getPredefinedSize(View view, int axis) {
+		// TODO: percents require incorporating parent size
+
+		// TODO: consider other unit sizes
+
+		if (axis == View.X_AXIS) {
+			Object z = (Object) view.getAttributes()
+					.getAttribute(CSS.Attribute.WIDTH);
+			if (z != null) {
+				CssLength l = new CssLength(z.toString());
+				return l.getValue();
+			}
+			return null;
+		} else if (axis == View.Y_AXIS) {
+			Object z = (Object) view.getAttributes()
+					.getAttribute(CSS.Attribute.HEIGHT);
+			if (z != null) {
+				CssLength l = new CssLength(z.toString());
+				return l.getValue();
+			}
+			return null;
+		}
+		throw new IllegalArgumentException("unrecognized axis: " + axis);
+	}
+
 	protected final View view;
 
 	public QViewHelper(View view) {
@@ -135,10 +164,16 @@ public class QViewHelper {
 	}
 
 	/**
-	 * Return a Graphics2D to paint a View to that embeds special
-	 * RenderingHints.
+	 * Return a Graphics2D to paint a View to that embeds special RenderingHints
+	 * and may set the clipping.
+	 * 
+	 * @param isBody
+	 *            if true then this is an attempt to paint the &lt;body&gt; tag.
+	 *            In this case we apply special clipping regardless of the
+	 *            "overflow" attribute.
 	 */
-	public Graphics2D createGraphics(Graphics2D g) {
+	public Graphics2D createGraphics(Graphics2D g, Shape allocation,
+			boolean isBody) {
 
 		Graphics2D returnValue = (Graphics2D) g.create();
 
@@ -148,6 +183,22 @@ public class QViewHelper {
 				CssTextShadowParser.PROPERTY_TEXT_SHADOW);
 		if (shadowValue != null)
 			returnValue.setRenderingHint(HINT_KEY_TEXT_SHADOW, shadowValue);
+
+		CssOverflowValue overflow = (CssOverflowValue) getAttribute(
+				CssOverflowParser.PROPERTY_OVERFLOW);
+		boolean requestedClipping = overflow != null
+				&& overflow.getMode() == CssOverflowValue.Mode.HIDDEN;
+		boolean requestedScrollbar = overflow != null
+				&& overflow.getMode() == CssOverflowValue.Mode.SCROLL;
+		boolean requestedAuto = overflow != null
+				&& overflow.getMode() == CssOverflowValue.Mode.AUTO;
+		// we don't support internal scrollpanes (yet), but if you wanted
+		// a scrollpane it's probably safe to say you didn't want text to
+		// spill out of view into other views, so we'll clip it.
+		if (isBody || requestedClipping || requestedScrollbar
+				|| requestedAuto) {
+			returnValue.clip(allocation);
+		}
 
 		return returnValue;
 	}

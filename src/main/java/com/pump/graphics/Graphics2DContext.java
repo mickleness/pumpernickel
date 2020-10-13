@@ -427,8 +427,10 @@ public class Graphics2DContext implements Serializable {
 	 * @see java.awt.Graphics2D#getClipBounds()
 	 */
 	public Rectangle getClipBounds() {
-		if (clip == null || ShapeUtils.isEmpty(clip))
+		if (clip == null)
 			return null;
+		if (ShapeUtils.isEmpty(clip))
+			return clip.getBounds();
 		return ShapeBounds.getBounds(getClip(true)).getBounds();
 	}
 

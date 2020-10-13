@@ -24,7 +24,7 @@ public class QBodyBlockView extends SwingBodyBlockView {
 
 	@Override
 	public void paint(Graphics g, Shape allocation) {
-		Graphics2D g2 = helper.createGraphics((Graphics2D) g);
+		Graphics2D g2 = helper.createGraphics((Graphics2D) g, allocation, true);
 		Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
 		helper.paintBackground(g2, r);
 		g2 = helper.createGraphicsWithoutBoxPainter(g2, r, boxPainter);

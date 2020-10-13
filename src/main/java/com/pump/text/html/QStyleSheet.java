@@ -22,6 +22,7 @@ import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.StyleSheet;
 
 import com.pump.text.html.css.CssColorParser;
+import com.pump.text.html.css.CssOverflowParser;
 import com.pump.text.html.css.CssParser;
 import com.pump.text.html.css.CssPropertyParser;
 import com.pump.text.html.css.CssTextShadowParser;
@@ -43,6 +44,7 @@ public class QStyleSheet extends StyleSheet {
 		addCssPropertyHandler(new CssColorParser(CSS.Attribute.COLOR));
 		addCssPropertyHandler(new CssBackgroundRepeatParser());
 		addCssPropertyHandler(new CssBackgroundPositionParser());
+		addCssPropertyHandler(new CssOverflowParser());
 	}
 
 	/**

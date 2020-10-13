@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JEditorPane;
@@ -198,6 +199,16 @@ public class QHtmlTest extends TestCase {
 		assertTrue(ops2.get(1) instanceof StringOperation);
 	}
 
+	/**
+	 * Return the visible Operations used to render certain HTML.
+	 * <p>
+	 * If an Operation would not be visible (because of clipping) then it is not
+	 * included in the returned list.
+	 * 
+	 * @param useQHTMLKit
+	 * @param html
+	 * @return
+	 */
 	private List<Operation> getOperations(boolean useQHTMLKit, String html) {
 
 		HTMLEditorKit kit = useQHTMLKit ? new QHTMLEditorKit()
@@ -214,7 +225,14 @@ public class QHtmlTest extends TestCase {
 		p.paint(vig);
 		vig.dispose();
 
-		return vi.getOperations();
+		List<Operation> returnValue = vi.getOperations();
+		Iterator<Operation> iter = returnValue.iterator();
+		while (iter.hasNext()) {
+			Operation op = iter.next();
+			if (op.getBounds() == null)
+				iter.remove();
+		}
+		return returnValue;
 	}
 
 	public void testRepeatBackground_base64img_no_repeat() {
@@ -391,5 +409,88 @@ public class QHtmlTest extends TestCase {
 		assertEquals(2, ops2.size());
 		assertTrue(ops2.get(0) instanceof FillOperation);
 		assertTrue(ops2.get(1) instanceof StringOperation);
+	}
+
+	/**
+	 * Test that an overflowing div clips its contents as expected when
+	 * "overflow:hidden" is used.
+	 */
+	public void testOverflow_hidden_div() {
+		//@formatter:off
+		String html = "<html>\n" + 
+				"  <body> \n" + 
+				"    <div style=\"overflow:hidden;font-size: 30pt;height:30px;width:40px;background-color:#6FF;\">little baby buggy bumpers</div>\n" + 
+				"  </body> \n" + 
+				"</html> ";
+		//@formatter:on
+
+		List<Operation> ops1 = getOperations(true, html);
+
+		assertEquals(3, ops1.size());
+
+		// page background:
+		assertTrue(ops1.get(0) instanceof FillOperation);
+		// div background:
+		assertTrue(ops1.get(1) instanceof FillOperation);
+		assertTrue(ops1.get(2) instanceof StringOperation);
+
+		FillOperation f = (FillOperation) ops1.get(1);
+		Rectangle r = f.getBounds().getBounds();
+		assertEquals(40, r.width);
+		assertEquals(30, r.height);
+
+		r = ops1.get(2).getBounds().getBounds();
+		assertTrue(r.getWidth() <= 40);
+		assertTrue(r.getHeight() <= 30);
+
+		// the old Swing should ignore "hidden":
+		List<Operation> ops2 = getOperations(false, html);
+
+		// we have multiple lines of text
+		assertEquals(3, ops2.size());
+		assertTrue(ops2.get(0) instanceof FillOperation);
+		assertTrue(ops2.get(1) instanceof FillOperation);
+		assertTrue(ops2.get(2) instanceof StringOperation);
+		f = (FillOperation) ops2.get(1);
+		r = f.getBounds().getBounds();
+		assertFalse(r.width == 40);
+		assertFalse(r.height == 30);
+
+		r = ops2.get(2).getBounds().getBounds();
+		assertTrue(r.getWidth() > 40);
+	}
+
+	/**
+	 * This is derived from testOverflow_hidden_div, except when we use spans we
+	 * should NOT successfully clip anything. (When testing in chrome: spans
+	 * don't clip but divs do.)
+	 */
+	public void testOverflow_hidden_span() {
+		//@formatter:off
+		String html = "<html>\n" + 
+				"  <body> \n" + 
+				"    <span style=\"overflow:hidden;font-size: 30pt;height:30px;width:40px;background-color:#6FF;\">little baby buggy bumpers</span>\n" + 
+				"  </body> \n" + 
+				"</html> ";
+		//@formatter:on
+
+		for (boolean useNewKit : new boolean[] { true, false }) {
+			List<Operation> ops = getOperations(useNewKit, html);
+
+			assertEquals(3, ops.size());
+
+			// page background:
+			assertTrue(ops.get(0) instanceof FillOperation);
+			// div background:
+			assertTrue(ops.get(1) instanceof FillOperation);
+			assertTrue(ops.get(2) instanceof StringOperation);
+
+			FillOperation f = (FillOperation) ops.get(1);
+			Rectangle r = f.getBounds().getBounds();
+			assertTrue(r.getWidth() > 40);
+
+			r = ops.get(2).getBounds().getBounds();
+			assertTrue(r.getWidth() > 40);
+		}
 	}
 }
