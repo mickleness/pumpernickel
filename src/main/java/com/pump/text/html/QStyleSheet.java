@@ -42,6 +42,8 @@ public class QStyleSheet extends StyleSheet {
 	public QStyleSheet() {
 		addCssPropertyHandler(new CssTextShadowParser());
 		addCssPropertyHandler(new CssColorParser(CSS.Attribute.COLOR));
+		addCssPropertyHandler(
+				new CssColorParser(CSS.Attribute.BACKGROUND_COLOR));
 		addCssPropertyHandler(new CssBackgroundRepeatParser());
 		addCssPropertyHandler(new CssBackgroundPositionParser());
 		addCssPropertyHandler(new CssOverflowParser());
@@ -271,5 +273,13 @@ public class QStyleSheet extends StyleSheet {
 		if (t instanceof Color)
 			return (Color) t;
 		return super.getForeground(a);
+	}
+
+	@Override
+	public Color getBackground(AttributeSet a) {
+		Object t = a.getAttribute(CSS.Attribute.BACKGROUND_COLOR);
+		if (t instanceof Color)
+			return (Color) t;
+		return super.getBackground(a);
 	}
 }

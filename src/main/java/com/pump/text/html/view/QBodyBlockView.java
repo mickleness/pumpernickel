@@ -19,7 +19,7 @@ public class QBodyBlockView extends SwingBodyBlockView {
 	public QBodyBlockView(Element elem) {
 		super(elem);
 
-		helper = new QViewHelper(this);
+		helper = new QViewHelper(this, getStyleSheet());
 	}
 
 	@Override

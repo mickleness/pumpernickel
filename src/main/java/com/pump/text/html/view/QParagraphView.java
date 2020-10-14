@@ -23,7 +23,7 @@ public class QParagraphView extends ParagraphView {
 	public QParagraphView(Element elem) {
 		super(elem);
 
-		helper = new QViewHelper(this);
+		helper = new QViewHelper(this, getStyleSheet());
 	}
 
 	@Override
@@ -32,6 +32,7 @@ public class QParagraphView extends ParagraphView {
 		Graphics2D g2 = helper.createGraphics((Graphics2D) g, allocation,
 				false);
 		g2 = helper.createGraphicsWithoutBoxPainter(g2, r, boxPainter);
+		helper.paintBackground(g2, r);
 		super.paint(g2, allocation);
 		g2.dispose();
 	}

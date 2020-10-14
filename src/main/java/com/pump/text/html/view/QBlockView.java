@@ -23,7 +23,7 @@ public class QBlockView extends BlockView {
 	public QBlockView(Element elem, int axis) {
 		super(elem, axis);
 
-		helper = new QViewHelper(this);
+		helper = new QViewHelper(this, getStyleSheet());
 	}
 
 	@Override

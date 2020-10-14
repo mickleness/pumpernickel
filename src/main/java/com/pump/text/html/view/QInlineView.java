@@ -16,7 +16,7 @@ public class QInlineView extends InlineView {
 	public QInlineView(Element elem) {
 		super(elem);
 
-		helper = new QViewHelper(this);
+		helper = new QViewHelper(this, getStyleSheet());
 	}
 
 	@Override

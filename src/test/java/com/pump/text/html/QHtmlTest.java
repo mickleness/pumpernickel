@@ -412,6 +412,35 @@ public class QHtmlTest extends TestCase {
 	}
 
 	/**
+	 * Test that h1 tags support background-colors. This test was added as a
+	 * result of an observed failure.
+	 */
+	public void testBackground_color_h1() {
+		//@formatter:off
+		String html = "<html>\n" + 
+				"  <body> \n" + 
+				"    <h1 style=\"background-color:#F0F;font-size: 30pt;\">LOREM IPSUM</h1>\n" + 
+				"  </body> \n" + 
+				"</html> ";
+		//@formatter:on
+
+		for (boolean useNewKit : new boolean[] { true, false }) {
+			List<Operation> ops = getOperations(useNewKit, html);
+
+			assertEquals(3, ops.size());
+
+			// page background:
+			assertTrue(ops.get(0) instanceof FillOperation);
+			// h1 background:
+			assertTrue(ops.get(1) instanceof FillOperation);
+			assertTrue(ops.get(2) instanceof StringOperation);
+
+			assertEquals(new Color(255, 0, 255),
+					ops.get(1).getContext().getPaint());
+		}
+	}
+
+	/**
 	 * Test that an overflowing div clips its contents as expected when
 	 * "overflow:hidden" is used.
 	 */

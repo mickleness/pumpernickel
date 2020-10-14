@@ -7,9 +7,11 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.util.List;
 
+import javax.swing.text.AttributeSet;
 import javax.swing.text.Element;
 import javax.swing.text.View;
 import javax.swing.text.html.CSS;
+import javax.swing.text.html.StyleSheet;
 import javax.swing.text.html.StyleSheet.BoxPainter;
 
 import com.pump.graphics.Graphics2DContext;
@@ -137,9 +139,11 @@ public class QViewHelper {
 	}
 
 	protected final View view;
+	protected final StyleSheet styleSheet;
 
-	public QViewHelper(View view) {
+	public QViewHelper(View view, StyleSheet styleSheet) {
 		this.view = view;
+		this.styleSheet = styleSheet;
 	}
 
 	public Object getAttribute(Object attrKey) {
@@ -148,7 +152,8 @@ public class QViewHelper {
 
 		if (value == null) {
 			// get value from css rule
-			value = view.getAttributes().getAttribute(attrKey);
+			AttributeSet attrs = view.getAttributes();
+			value = attrs == null ? null : attrs.getAttribute(attrKey);
 		}
 
 		if (attrKey == CSS.Attribute.BACKGROUND_IMAGE && value != null) {
@@ -231,9 +236,11 @@ public class QViewHelper {
 	}
 
 	public void paintBackground(Graphics2D g, Rectangle r) {
-		Color color = (Color) getAttribute(CSS.Attribute.BACKGROUND_COLOR);
-		if (color != null) {
-			g.setColor(color);
+		Color bgColor = styleSheet
+				.getBackground(styleSheet.getViewAttributes(view));
+
+		if (bgColor != null) {
+			g.setColor(bgColor);
 			g.fillRect(r.x, r.y, r.width, r.height);
 		}
 
