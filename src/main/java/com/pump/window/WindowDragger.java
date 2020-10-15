@@ -63,9 +63,10 @@ public class WindowDragger extends MouseInputAdapter {
 			if (JVM.isMac)
 				p.y = Math.max(0, p.y);
 			if (active) {
+				Component src = (Component) e.getSource();
+				Window w = e.getSource() instanceof Window ? (Window) src : SwingUtilities.getWindowAncestor(src);
 				WindowDragger.translateWindow(p.x - mouseLoc.x, p.y
-						- mouseLoc.y, SwingUtilities
-						.getWindowAncestor((Component) e.getSource()));
+						- mouseLoc.y, w);
 			}
 			mouseLoc.setLocation(p);
 		}
