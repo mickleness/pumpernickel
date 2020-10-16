@@ -2,12 +2,19 @@ package com.pump.text.html;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
+import java.awt.geom.Point2D;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.text.html.HTMLEditorKit;
 
 import com.pump.graphics.vector.FillOperation;
@@ -199,6 +206,11 @@ public class QHtmlTest extends TestCase {
 		assertTrue(ops2.get(1) instanceof StringOperation);
 	}
 
+	interface TextPaneFormatter {
+		JComponent format(JEditorPane p);
+
+	}
+
 	/**
 	 * Return the visible Operations used to render certain HTML.
 	 * <p>
@@ -210,6 +222,11 @@ public class QHtmlTest extends TestCase {
 	 * @return
 	 */
 	private List<Operation> getOperations(boolean useQHTMLKit, String html) {
+		return getOperations(useQHTMLKit, html, null);
+	}
+
+	private List<Operation> getOperations(boolean useQHTMLKit, String html,
+			TextPaneFormatter textPaneFormatter) {
 
 		HTMLEditorKit kit = useQHTMLKit ? new QHTMLEditorKit()
 				: new HTMLEditorKit();
@@ -218,11 +235,15 @@ public class QHtmlTest extends TestCase {
 		p.setEditorKit(kit);
 		p.setText(html);
 
+		p.setPreferredSize(htmlPaneSize);
 		p.setSize(htmlPaneSize);
+
+		JComponent jc = textPaneFormatter == null ? p
+				: textPaneFormatter.format(p);
 
 		VectorImage vi = new VectorImage();
 		VectorGraphics2D vig = vi.createGraphics();
-		p.paint(vig);
+		jc.paint(vig);
 		vig.dispose();
 
 		List<Operation> returnValue = vi.getOperations();
@@ -520,6 +541,105 @@ public class QHtmlTest extends TestCase {
 
 			r = ops.get(2).getBounds().getBounds();
 			assertTrue(r.getWidth() > 40);
+		}
+	}
+
+	/**
+	 * Test that using "background-attachment:fixed" vs
+	 * "background-attachment:scroll" positions a background image in a
+	 * JScrollPane appropriately. (When the property is "fixed" the image should
+	 * render in the location, and when it is "scroll" the background image
+	 * should move.)
+	 */
+	public void testBackgroundAttachment_base64img() {
+		class ScrollPaneFormatter implements TextPaneFormatter {
+			int xOffset, yOffset;
+
+			public ScrollPaneFormatter(int xOffset, int yOffset) {
+				this.xOffset = xOffset;
+				this.yOffset = yOffset;
+			}
+
+			@Override
+			public JComponent format(JEditorPane p) {
+				JScrollPane scrollPane = new JScrollPane(p,
+						JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+						JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				scrollPane.getViewport()
+						.setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
+				Dimension d = new Dimension(400, 200);
+				scrollPane.setSize(d);
+				scrollPane.setBorder(null);
+				scrollPane.getViewport().setBorder(null);
+				scrollPane.doLayout();
+				scrollPane.getViewport()
+						.setViewPosition(new Point(xOffset, yOffset));
+
+				return scrollPane;
+			}
+		}
+
+		for (String attachmentProperty : new String[] { "fixed", "scroll" }) {
+
+			//@formatter:off
+			String html = "<html>\n" + 
+					"  <head>\n" + 
+					"    <style>\n" + 
+					"      body { background-color: #387;\n" + 
+					"      background-repeat:no-repeat;\n" + 
+					"      background-attachment:"+attachmentProperty+";\n" + 
+					"      background-image:"+batDataURL+"; \n" + 
+					"}\n" + 
+					"      h1   { color: rgba(0,240,0,1); font-weight: bold;}\n" + 
+					"    </style>\n" + 
+					"  </head>\n" + 
+					"  <body>\n" + 
+					"    <h1 style=\"font-size: 100pt;\">LOREM IMPSUM</h1>\n" + 
+					"  </body>\n" + 
+					"</html>";
+			//@formatter:on
+
+			Collection<Integer> imageYs = new HashSet<>();
+			Collection<Double> string1Ys = new HashSet<>();
+			for (int y = 0; y < 500; y += 50) {
+				ScrollPaneFormatter formatter = new ScrollPaneFormatter(0, y);
+
+				List<Operation> ops = getOperations(true, html, formatter);
+
+				assertEquals(5, ops.size());
+
+				// scrollpane/page background:
+				assertTrue(ops.get(0) instanceof FillOperation);
+				assertTrue(ops.get(1) instanceof FillOperation);
+				assertTrue(ops.get(2) instanceof ImageOperation);
+				// two lines of text:
+				assertTrue(ops.get(3) instanceof StringOperation);
+				assertTrue(ops.get(4) instanceof StringOperation);
+
+				ImageOperation io = (ImageOperation) ops.get(2);
+				Rectangle imageRect = io.getContext().getTransform()
+						.createTransformedShape(io.getDestRect()).getBounds()
+						.getBounds();
+
+				imageYs.add(imageRect.y);
+
+				StringOperation so = (StringOperation) ops.get(3);
+				Point2D stringPos = so.getContext().getTransform().transform(
+						new Point2D.Float(so.getX(), so.getY()), null);
+				string1Ys.add(stringPos.getY());
+			}
+
+			// this is the main event: did our image always paint at the same
+			// position
+			if ("fixed".equals(attachmentProperty)) {
+				assertEquals(1, imageYs.size());
+			} else {
+				assertEquals(10, imageYs.size());
+			}
+
+			// make sure the text is scrolling; this proves our viewport was
+			// changing each iteration.
+			assertEquals(10, string1Ys.size());
 		}
 	}
 }

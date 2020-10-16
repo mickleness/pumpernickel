@@ -1,5 +1,6 @@
 package com.pump.text.html.css.image;
 
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -8,9 +9,11 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
+import javax.swing.JViewport;
 import javax.swing.text.Document;
 
 import com.pump.image.ImageLoader;
+import com.pump.text.html.css.background.CssBackgroundAttachmentValue;
 import com.pump.text.html.css.background.CssBackgroundPositionValue;
 import com.pump.text.html.css.background.CssBackgroundRepeatValue;
 import com.pump.text.html.css.background.CssBackgroundRepeatValue.Span;
@@ -110,20 +113,45 @@ public class CssUrlImageValue implements CssImageValue {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void paintImage(Graphics2D g, BufferedImage bi,
 			QViewHelper viewHelper, int layerIndex, int x, int y, int width,
 			int height) {
+
 		g.clipRect(x, y, width, height);
 
 		List<CssBackgroundRepeatValue> allRepeats = (List<CssBackgroundRepeatValue>) viewHelper
 				.getAttribute("background-repeat");
 		List<CssBackgroundPositionValue> allPositions = (List<CssBackgroundPositionValue>) viewHelper
 				.getAttribute("background-position");
+		List<CssBackgroundAttachmentValue> allAttachments = (List<CssBackgroundAttachmentValue>) viewHelper
+				.getAttribute(
+						CssBackgroundAttachmentValue.PROPERTY_BACKGROUND_ATTACHMENT);
 
 		CssBackgroundRepeatValue repeatValue = getLayerValue(layerIndex,
 				allRepeats);
 		CssBackgroundPositionValue positionValue = getLayerValue(layerIndex,
 				allPositions);
+		CssBackgroundAttachmentValue attachmentValue = getLayerValue(layerIndex,
+				allAttachments);
+
+		if (attachmentValue != null && attachmentValue
+				.getMode() == CssBackgroundAttachmentValue.Mode.FIXED) {
+			Component c = viewHelper.getView().getContainer();
+			JViewport viewport = null;
+			while (c != null && viewport == null) {
+				if (c instanceof JViewport)
+					viewport = (JViewport) c;
+				c = c.getParent();
+			}
+			if (viewport != null) {
+				// if you try scrolling in the default (blitting) mode:
+				// you see some terrible repaints.
+				viewport.setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
+				g.translate(viewport.getViewPosition().x,
+						viewport.getViewPosition().y);
+			}
+		}
 
 		if (repeatValue == null) {
 			repeatValue = new CssBackgroundRepeatValue(
