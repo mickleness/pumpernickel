@@ -256,7 +256,7 @@ public class QHtmlTest extends TestCase {
 		return returnValue;
 	}
 
-	public void testRepeatBackground_base64img_no_repeat() {
+	public void testBackgroundRepeat_base64img_no_repeat() {
 		//@formatter:off
 		
 		// the same layout, but test a single "no-repeat" argument vs two consecutive "no-repeat" arguments.
@@ -313,7 +313,7 @@ public class QHtmlTest extends TestCase {
 		}
 	}
 
-	public void testRepeatBackground_base64img_repeat_x() {
+	public void testBackgroundRepeat_base64img_repeat_x() {
 		//@formatter:off
 		String html = "<html>\n" + 
 				"  <head>\n" + 
@@ -335,7 +335,7 @@ public class QHtmlTest extends TestCase {
 		ops1.remove(0); // background color
 		ops1.remove(ops1.size() - 1); // text
 
-		assertEquals(13, ops1.size());
+		assertEquals(14, ops1.size());
 
 		for (int a = 0; a < ops1.size(); a++) {
 			assertTrue(ops1.get(a) instanceof ImageOperation);
@@ -352,7 +352,7 @@ public class QHtmlTest extends TestCase {
 		assertTrue(ops2.get(1) instanceof StringOperation);
 	}
 
-	public void testRepeatBackground_base64img_repeat_y() {
+	public void testBackgroundRepeat_base64img_repeat_y() {
 		//@formatter:off
 		String html = "<html>\n" + 
 				"  <head>\n" + 
@@ -374,7 +374,7 @@ public class QHtmlTest extends TestCase {
 		ops1.remove(0); // background color
 		ops1.remove(ops1.size() - 1); // text
 
-		assertEquals(13, ops1.size());
+		assertEquals(14, ops1.size());
 
 		for (int a = 0; a < ops1.size(); a++) {
 			assertTrue(ops1.get(a) instanceof ImageOperation);
@@ -391,7 +391,7 @@ public class QHtmlTest extends TestCase {
 		assertTrue(ops2.get(1) instanceof StringOperation);
 	}
 
-	public void testRepeatBackground_base64img_repeat() {
+	public void testBackgroundRepeat_base64img_repeat() {
 		//@formatter:off
 		String html = "<html>\n" + 
 				"  <head>\n" + 
@@ -430,6 +430,42 @@ public class QHtmlTest extends TestCase {
 		assertEquals(2, ops2.size());
 		assertTrue(ops2.get(0) instanceof FillOperation);
 		assertTrue(ops2.get(1) instanceof StringOperation);
+	}
+
+	/**
+	 * Make sure when no position is specified that the image is in the
+	 * top-left. This test was added as a result of an observed failure.
+	 */
+	public void testBackgroundPosition_base64img_none() {
+		//@formatter:off
+		String html = "<html>\n" + 
+				"  <head>\n" + 
+				"    <style>\n" + 
+				"      body {\n" + 
+				"background-repeat: no-repeat;\n"+
+				"background-image: "+batDataURL+"\n" + 
+				" }\n" + 
+				"    </style>\n" + 
+				"  </head>\n" + 
+				"  <body>\n" + 
+				"  </body>\n" + 
+				"</html>";
+		//@formatter:on
+
+		List<Operation> ops = getOperations(true, html);
+
+		assertEquals(2, ops.size());
+
+		// page background:
+		assertTrue(ops.get(0) instanceof FillOperation);
+		// h1 background:
+		assertTrue(ops.get(1) instanceof ImageOperation);
+
+		ImageOperation io = (ImageOperation) ops.get(1);
+		assertEquals(0, io.getDestRect().x);
+		assertEquals(0, io.getDestRect().y);
+
+		// we can't test the Swing renderer using a base64 image
 	}
 
 	/**

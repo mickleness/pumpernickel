@@ -13,6 +13,7 @@ import javax.swing.JViewport;
 import javax.swing.text.Document;
 
 import com.pump.image.ImageLoader;
+import com.pump.text.html.css.CssLength;
 import com.pump.text.html.css.background.CssBackgroundAttachmentValue;
 import com.pump.text.html.css.background.CssBackgroundPositionValue;
 import com.pump.text.html.css.background.CssBackgroundRepeatValue;
@@ -156,6 +157,11 @@ public class CssUrlImageValue implements CssImageValue {
 		if (repeatValue == null) {
 			repeatValue = new CssBackgroundRepeatValue(
 					CssBackgroundRepeatValue.Mode.REPEAT);
+		}
+
+		if (positionValue == null) {
+			positionValue = new CssBackgroundPositionValue("",
+					new CssLength(0, "px"), true, new CssLength(0, "px"), true);
 		}
 
 		for (Span xSpan : repeatValue.getHorizontalMode().getSpans(x, width,
