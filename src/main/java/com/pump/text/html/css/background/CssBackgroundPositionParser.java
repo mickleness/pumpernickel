@@ -1,6 +1,5 @@
 package com.pump.text.html.css.background;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +8,7 @@ import javax.swing.text.html.CSS;
 
 import com.pump.text.html.css.CssLength;
 import com.pump.text.html.css.CssListParser;
+import com.pump.text.html.css.CssParserUtils;
 
 public class CssBackgroundPositionParser
 		extends CssListParser<CssBackgroundPositionValue> {
@@ -45,7 +45,7 @@ public class CssBackgroundPositionParser
 		int i = cssString.indexOf(',', index);
 		String s = i == -1 ? cssString : cssString.substring(index, i);
 
-		List<Object> words = parseLengthsAndStrings(s);
+		List<Object> words = CssParserUtils.parseLengthsAndStrings(s, keywords);
 
 		CssLength horizPosition = null;
 		CssLength vertPosition = null;
@@ -181,39 +181,5 @@ public class CssBackgroundPositionParser
 				vertPosition, isFromTop));
 
 		return index + s.length();
-	}
-
-	private List<Object> parseLengthsAndStrings(final String s) {
-		List<Object> words = new ArrayList<>();
-		String t = s;
-		while (t.length() > 0) {
-			int i = indexOfWhitespace(t);
-			String word = i == -1 ? t : t.substring(0, i);
-			word = word.toLowerCase();
-			if (keywords.contains(word)) {
-				words.add(word);
-			} else {
-				try {
-					CssLength l = new CssLength(word);
-					words.add(l);
-				} catch (RuntimeException e) {
-					// if it wasn't a length, it was a keyword ("left",
-					// "center", etc)
-					throw new RuntimeException(
-							"unsupported position element \"" + word + "\"");
-				}
-			}
-			t = t.substring(word.length()).trim();
-		}
-		return words;
-	}
-
-	private int indexOfWhitespace(String str) {
-		for (int a = 0; a < str.length(); a++) {
-			char ch = str.charAt(a);
-			if (Character.isWhitespace(ch))
-				return a;
-		}
-		return -1;
 	}
 }

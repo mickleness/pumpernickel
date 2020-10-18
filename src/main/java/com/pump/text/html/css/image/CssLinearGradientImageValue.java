@@ -271,6 +271,9 @@ public class CssLinearGradientImageValue implements CssImageValue {
 	}
 
 	protected Paint createPaint(int x, int y, int width, int height) {
+		// TODO: we could consult background-size here; does that every really
+		// come up?
+
 		Line2D line;
 		if (direction != null) {
 			line = direction.createLine(x, y, width, height);

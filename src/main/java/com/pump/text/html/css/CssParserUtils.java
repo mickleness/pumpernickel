@@ -1,5 +1,7 @@
 package com.pump.text.html.css;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -91,6 +93,55 @@ public class CssParserUtils {
 			index++;
 		}
 
+	}
+
+	/**
+	 * Return the first index of whitespace in a String.
+	 */
+	public static int indexOfWhitespace(String str, int i) {
+		for (int a = i; a < str.length(); a++) {
+			char ch = str.charAt(a);
+			if (Character.isWhitespace(ch))
+				return a;
+		}
+		return -1;
+	}
+
+	/**
+	 * Return a List of Strings and CssLengths separated by whitespace.
+	 * 
+	 * @param s
+	 *            the String to parse, which will be compared to keywords with
+	 *            case insensitivity.
+	 * @param allowedKeywords
+	 *            a set of lowercase keywords that may be returned as Strings
+	 *            Every space-separated String not in this collection is
+	 *            converted to a CssLength
+	 */
+	public static List<Object> parseLengthsAndStrings(final String s,
+			Collection<String> allowedKeywords) {
+		List<Object> words = new ArrayList<>();
+		String t = s;
+		while (t.length() > 0) {
+			int i = CssParserUtils.indexOfWhitespace(t, 0);
+			String word = i == -1 ? t : t.substring(0, i);
+			word = word.toLowerCase();
+			if (allowedKeywords.contains(word)) {
+				words.add(word);
+			} else {
+				try {
+					CssLength l = new CssLength(word);
+					words.add(l);
+				} catch (RuntimeException e) {
+					// if it wasn't a length, it was a keyword ("left",
+					// "center", etc)
+					throw new RuntimeException(
+							"unsupported position element \"" + word + "\"");
+				}
+			}
+			t = t.substring(word.length()).trim();
+		}
+		return words;
 	}
 
 }

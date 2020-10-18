@@ -29,6 +29,7 @@ import com.pump.text.html.css.CssTextShadowParser;
 import com.pump.text.html.css.background.CssBackgroundAttachmentParser;
 import com.pump.text.html.css.background.CssBackgroundPositionParser;
 import com.pump.text.html.css.background.CssBackgroundRepeatParser;
+import com.pump.text.html.css.background.CssBackgroundSizeParser;
 
 /**
  * This specialized StyleSheet offers (limited) support for additional CSS
@@ -48,6 +49,7 @@ public class QStyleSheet extends StyleSheet {
 		addCssPropertyHandler(new CssBackgroundRepeatParser());
 		addCssPropertyHandler(new CssBackgroundPositionParser());
 		addCssPropertyHandler(new CssBackgroundAttachmentParser());
+		addCssPropertyHandler(new CssBackgroundSizeParser());
 		addCssPropertyHandler(new CssOverflowParser());
 	}
 

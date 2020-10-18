@@ -1,6 +1,7 @@
 package com.pump.text.html.css.image;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -18,6 +19,7 @@ import com.pump.text.html.css.background.CssBackgroundAttachmentValue;
 import com.pump.text.html.css.background.CssBackgroundPositionValue;
 import com.pump.text.html.css.background.CssBackgroundRepeatValue;
 import com.pump.text.html.css.background.CssBackgroundRepeatValue.Span;
+import com.pump.text.html.css.background.CssBackgroundSizeValue;
 import com.pump.text.html.view.QViewHelper;
 import com.pump.util.Cache;
 
@@ -121,10 +123,13 @@ public class CssUrlImageValue implements CssImageValue {
 
 		g.clipRect(x, y, width, height);
 
+		// TODO refactor away this list
 		List<CssBackgroundRepeatValue> allRepeats = (List<CssBackgroundRepeatValue>) viewHelper
 				.getAttribute("background-repeat");
 		List<CssBackgroundPositionValue> allPositions = (List<CssBackgroundPositionValue>) viewHelper
 				.getAttribute("background-position");
+		List<CssBackgroundSizeValue> allSizes = (List<CssBackgroundSizeValue>) viewHelper
+				.getAttribute("background-size");
 		List<CssBackgroundAttachmentValue> allAttachments = (List<CssBackgroundAttachmentValue>) viewHelper
 				.getAttribute(
 						CssBackgroundAttachmentValue.PROPERTY_BACKGROUND_ATTACHMENT);
@@ -135,6 +140,7 @@ public class CssUrlImageValue implements CssImageValue {
 				allPositions);
 		CssBackgroundAttachmentValue attachmentValue = getLayerValue(layerIndex,
 				allAttachments);
+		CssBackgroundSizeValue sizeValue = getLayerValue(layerIndex, allSizes);
 
 		if (attachmentValue != null && attachmentValue
 				.getMode() == CssBackgroundAttachmentValue.Mode.FIXED) {
@@ -164,14 +170,18 @@ public class CssUrlImageValue implements CssImageValue {
 					new CssLength(0, "px"), true, new CssLength(0, "px"), true);
 		}
 
+		Dimension imageSize = new Dimension(bi.getWidth(), bi.getHeight());
+		imageSize = sizeValue == null ? imageSize
+				: sizeValue.getCalculator().getSize(width, height, imageSize);
+
 		for (Span xSpan : repeatValue.getHorizontalMode().getSpans(x, width,
-				bi.getWidth(),
+				imageSize.width,
 				positionValue == null ? null
 						: positionValue.getHorizontalPosition(),
 				positionValue == null ? true
 						: positionValue.isHorizontalPositionFromLeft())) {
 			for (Span ySpan : repeatValue.getVerticalMode().getSpans(y, height,
-					bi.getHeight(),
+					imageSize.height,
 					positionValue == null ? null
 							: positionValue.getVerticalPosition(),
 					positionValue == null ? true
