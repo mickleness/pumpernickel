@@ -27,6 +27,7 @@ import com.pump.text.html.css.CssParser;
 import com.pump.text.html.css.CssPropertyParser;
 import com.pump.text.html.css.CssTextShadowParser;
 import com.pump.text.html.css.background.CssBackgroundAttachmentParser;
+import com.pump.text.html.css.background.CssBackgroundClipParser;
 import com.pump.text.html.css.background.CssBackgroundPositionParser;
 import com.pump.text.html.css.background.CssBackgroundRepeatParser;
 import com.pump.text.html.css.background.CssBackgroundSizeParser;
@@ -50,6 +51,7 @@ public class QStyleSheet extends StyleSheet {
 		addCssPropertyHandler(new CssBackgroundPositionParser());
 		addCssPropertyHandler(new CssBackgroundAttachmentParser());
 		addCssPropertyHandler(new CssBackgroundSizeParser());
+		addCssPropertyHandler(new CssBackgroundClipParser());
 		addCssPropertyHandler(new CssOverflowParser());
 	}
 

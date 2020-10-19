@@ -2,6 +2,7 @@ package com.pump.text.html.view;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
@@ -24,6 +25,7 @@ import com.pump.text.html.css.CssLength;
 import com.pump.text.html.css.CssOverflowParser;
 import com.pump.text.html.css.CssOverflowValue;
 import com.pump.text.html.css.CssTextShadowParser;
+import com.pump.text.html.css.background.CssBackgroundClipValue;
 import com.pump.text.html.css.image.CssImageParser;
 import com.pump.text.html.css.image.CssImageValue;
 import com.pump.util.list.AddElementsEvent;
@@ -239,21 +241,83 @@ public class QViewHelper {
 		Color bgColor = styleSheet
 				.getBackground(styleSheet.getViewAttributes(view));
 
+		CssBackgroundClipValue clipValue = (CssBackgroundClipValue) getAttribute(
+				CssBackgroundClipValue.PROPERTY_BACKGROUND_CLIP);
+
+		Graphics2D g2 = (Graphics2D) g.create();
+
+		if (clipValue != null) {
+			CssBackgroundClipValue.Mode m = clipValue.getMode();
+			if (m == CssBackgroundClipValue.Mode.BORDER_BOX) {
+				// do nothing, this is the the biggest/normal option
+			} else if (m == CssBackgroundClipValue.Mode.PADDING_BOX) {
+				Insets i = getBorderInsets(r.width, r.height);
+				Rectangle clipRect = new Rectangle(r.x + i.left, r.y + i.top,
+						r.width - i.left - i.right,
+						r.height - i.top - i.bottom);
+				g2.clipRect(clipRect.x, clipRect.y, clipRect.width,
+						clipRect.height);
+			} else if (m == CssBackgroundClipValue.Mode.CONTENT_BOX) {
+				Insets i1 = getBorderInsets(r.width, r.height);
+				Insets i2 = getPaddingInsets(r.width, r.height);
+				Rectangle clipRect = new Rectangle(r.x + i1.left + i2.left,
+						r.y + i1.top + i2.top,
+						r.width - i1.left - i1.right - i2.left - i2.right,
+						r.height - i1.top - i1.bottom - i2.top - i2.bottom);
+				g2.clipRect(clipRect.x, clipRect.y, clipRect.width,
+						clipRect.height);
+			}
+		}
+
 		if (bgColor != null) {
-			g.setColor(bgColor);
-			g.fillRect(r.x, r.y, r.width, r.height);
+			g2.setColor(bgColor);
+			g2.fillRect(r.x, r.y, r.width, r.height);
 		}
 
 		List<CssImageValue> bkgndImgs = (List<CssImageValue>) getAttribute(
 				CSS.Attribute.BACKGROUND_IMAGE);
 		if (bkgndImgs != null) {
 			for (int a = bkgndImgs.size() - 1; a >= 0; a--) {
-				Graphics2D g2 = (Graphics2D) g.create();
-				bkgndImgs.get(a).paintRectangle(g2, this, a, r.x, r.y, r.width,
+				Graphics2D g3 = (Graphics2D) g2.create();
+				bkgndImgs.get(a).paintRectangle(g3, this, a, r.x, r.y, r.width,
 						r.height);
-				g2.dispose();
+				g3.dispose();
 			}
 		}
+		g2.dispose();
+	}
+
+	private Insets getPaddingInsets(int width, int height) {
+		int top = getLength(CSS.Attribute.PADDING_TOP, height);
+		int left = getLength(CSS.Attribute.PADDING_LEFT, width);
+		int bottom = getLength(CSS.Attribute.PADDING_BOTTOM, height);
+		int right = getLength(CSS.Attribute.PADDING_RIGHT, width);
+
+		return new Insets(top, left, bottom, right);
+	}
+
+	private int getLength(Object attributeKey, int range) {
+		Object attr = view.getAttributes().getAttribute(attributeKey);
+		if (attr == null)
+			return 0;
+
+		CssLength l = new CssLength(attr.toString().toString());
+		if (l.getUnit().equals("%")) {
+			return (int) (l.getValue() * range / 100);
+		} else if (l.getUnit().equals("px")) {
+			return (int) (l.getValue() + .5f);
+		}
+		throw new IllegalArgumentException(
+				"Unsupported unit in \"" + attr.toString() + "\"");
+	}
+
+	private Insets getBorderInsets(int width, int height) {
+		int top = getLength(CSS.Attribute.BORDER_TOP_WIDTH, height);
+		int left = getLength(CSS.Attribute.BORDER_LEFT_WIDTH, width);
+		int bottom = getLength(CSS.Attribute.BORDER_BOTTOM_WIDTH, height);
+		int right = getLength(CSS.Attribute.BORDER_RIGHT_WIDTH, width);
+
+		return new Insets(top, left, bottom, right);
 	}
 
 	public View getView() {
