@@ -31,8 +31,8 @@ public class QParagraphView extends ParagraphView {
 		Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
 		Graphics2D g2 = helper.createGraphics((Graphics2D) g, allocation,
 				false);
-		g2 = helper.createGraphicsWithoutBoxPainter(g2, r, boxPainter);
 		helper.paintBackground(g2, r);
+		g2 = helper.createGraphicsWithoutBoxPainter(g2, r, boxPainter);
 		super.paint(g2, allocation);
 		g2.dispose();
 	}
