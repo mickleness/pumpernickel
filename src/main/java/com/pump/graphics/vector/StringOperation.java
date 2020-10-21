@@ -3,6 +3,8 @@ package com.pump.graphics.vector;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.Objects;
@@ -108,5 +110,18 @@ public class StringOperation extends Operation {
 		r.setFrame(r.getX() + getX(), r.getY() + getY(), r.getWidth(),
 				r.getHeight());
 		return ctx.getTransform().createTransformedShape(r);
+	}
+
+	/**
+	 * Return the exact shape of this String. For example: if this operation
+	 * paints the letter 'o' then this should return a donut shape. Meanwhile
+	 * {@link #getOutline()} should return a rectangle surrounding the donut
+	 * shape.
+	 */
+	public Shape getShape() {
+		TextLayout layout = new TextLayout(getString(), getContext().getFont(),
+				getContext().getFontRenderContext());
+		return layout.getOutline(
+				AffineTransform.getTranslateInstance(getX(), getY()));
 	}
 }
