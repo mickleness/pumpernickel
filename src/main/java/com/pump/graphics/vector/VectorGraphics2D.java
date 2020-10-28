@@ -559,7 +559,12 @@ public class VectorGraphics2D extends Graphics2D {
 
 	@Override
 	public void clearRect(int x, int y, int width, int height) {
-		addOperation(new ClearRectOperation(getContext(), x, y, width, height));
+		// this is based on SunGraphics2D's implementation of clearRect
+		Graphics2DContext context = getContext();
+		context.setComposite(AlphaComposite.Src);
+		context.setColor(getBackground());
+		Rectangle rect = new Rectangle(x, y, width, height);
+		addOperation(new FillOperation(context, rect));
 	}
 
 	@Override

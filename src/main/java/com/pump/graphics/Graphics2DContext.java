@@ -85,7 +85,12 @@ public class Graphics2DContext implements Serializable {
 	public Graphics2DContext() {
 		composite = AlphaComposite.SrcOver;
 		transform = new AffineTransform();
-		backgroundColor = null;
+
+		// I'd like backgroundColor to start out transparent so
+		// Graphics2D#clearRect works more intuitively, but instead I'm focusing
+		// on mimicking what SunGraphics2D appears to do by default.
+		backgroundColor = Color.black;
+
 		font = DEFAULT_FONT;
 		stroke = new BasicStroke(1);
 		xorColor = null;
