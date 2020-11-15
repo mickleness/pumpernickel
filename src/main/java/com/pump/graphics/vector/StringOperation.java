@@ -124,4 +124,23 @@ public class StringOperation extends Operation {
 		return layout.getOutline(
 				AffineTransform.getTranslateInstance(getX(), getY()));
 	}
+
+	@Override
+	public Operation[] toSoftClipOperation(Shape clippingShape) {
+		FillOperation fillOp = toFillOperation();
+		return fillOp.toSoftClipOperation(clippingShape);
+	}
+
+	/**
+	 * Convert this StringOperation to a FillOperation by invoking
+	 * {@link #getShape()}.
+	 * <p>
+	 * The resulting FillOperation may not render identically to this
+	 * StringOperation depending on the current rendering hints and the
+	 * underlying graphics pipeline -- but it will be very close.
+	 */
+	public FillOperation toFillOperation() {
+		Graphics2DContext context = getContext();
+		return new FillOperation(context, getShape());
+	}
 }

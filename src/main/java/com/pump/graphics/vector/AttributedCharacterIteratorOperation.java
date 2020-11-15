@@ -6,6 +6,9 @@ import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.text.AttributedCharacterIterator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import com.pump.graphics.Graphics2DContext;
@@ -112,6 +115,35 @@ public class AttributedCharacterIteratorOperation extends Operation {
 		} else {
 			throw new IOException("unsupported internal version " + version);
 		}
+	}
+
+	/**
+	 * Convert this AttributedCharacterIteratorOperation to zero or more
+	 * Operations by asking a java.awt.font.TextLayout to render this
+	 * AttributedCharacterIterator.
+	 */
+	public Operation[] toTextLayoutOperations() {
+		VectorImage vi = new VectorImage();
+		VectorGraphics2D g = vi.createGraphics();
+
+		context.install(g);
+		TextLayout layout = new TextLayout(getAttributedCharacterIterator(),
+				g.getFontRenderContext());
+		layout.draw(g, getX(), getY());
+
+		g.dispose();
+		return vi.getOperations()
+				.toArray(new Operation[vi.getOperations().size()]);
+	}
+
+	@Override
+	public Operation[] toSoftClipOperation(Shape clippingShape) {
+		List<Operation> returnValue = new ArrayList<>();
+		for (Operation op : toTextLayoutOperations()) {
+			returnValue.addAll(
+					Arrays.asList(op.toSoftClipOperation(clippingShape)));
+		}
+		return returnValue.toArray(new Operation[returnValue.size()]);
 	}
 
 }

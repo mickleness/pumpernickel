@@ -308,4 +308,32 @@ public abstract class Operation implements Serializable {
 			sb.append(" ");
 		}
 	}
+
+	/**
+	 * Create derivative Operations that take this Operation and intersect it
+	 * with the argument shape. This can achieve a "soft clip" effect. But this
+	 * has nothing to do with the {@link java.awt.Graphics#getClip()} property.
+	 * <p>
+	 * If the resulting operations are rendering with an antialiased rendering
+	 * hint, then as far as the user is concerned this effectively achieves a
+	 * soft clip. Whatever is rendered is still rendered through the Graphics's
+	 * actual clipping (which is usually a rectangle).
+	 * <p>
+	 * This may return an empty array if this Operation doesn't intersect with
+	 * the argument.
+	 * <p>
+	 * The result operations may not be completely identical to this original
+	 * Operation. For example: StringOperations may change how they render based
+	 * on rendering hints. But once a StringOperation is converted to a
+	 * FillOperation (to apply the soft clipping shape): those rendering hints
+	 * are no longer consulted. (Because now we're rendering a shape instead of
+	 * a String). So the result will always be highly similar, but the exact
+	 * pixels may vary.
+	 * 
+	 * @param softCippingShape
+	 *            the soft clipping shape to apply to this Operation.
+	 * @return zero or more Operations that represent what this Operation looks
+	 *         like if it intersects with the argument.
+	 */
+	public abstract Operation[] toSoftClipOperation(Shape softCippingShape);
 }

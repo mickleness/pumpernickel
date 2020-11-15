@@ -112,7 +112,24 @@ public class RenderableImageOperation extends Operation {
 			g.dispose();
 			return bi;
 		}
+	}
 
+	/**
+	 * Convert a RenderableImage to an ARGB BufferedImage.
+	 */
+	private static BufferedImage toBufferedImage(RenderableImage ri) {
+		int width = (int) (ri.getWidth() + .5);
+		int height = (int) (ri.getHeight() + .5);
+		if (width <= 0 || height <= 0)
+			throw new IllegalArgumentException(
+					"Unsupported RenderableImage size: " + ri.getWidth() + "x"
+							+ ri.getHeight());
+		BufferedImage bi = new BufferedImage(width, height,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bi.createGraphics();
+		g.drawRenderableImage(ri, new AffineTransform());
+		g.dispose();
+		return bi;
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -200,6 +217,24 @@ public class RenderableImageOperation extends Operation {
 		} else {
 			throw new IOException("unsupported internal version " + version);
 		}
+	}
+
+	/**
+	 * Convert this RenderableImageOperation to an ImageOperation using an ARGB
+	 * BufferedImage.
+	 */
+	public ImageOperation toImageOperation() {
+		RenderableImage ri = getImage();
+		BufferedImage bi = toBufferedImage(ri);
+		Graphics2DContext context = getContext();
+		context.transform(getTransform());
+		return new ImageOperation(context, bi, 0, 0, bi.getWidth(),
+				bi.getHeight(), 0, 0, bi.getWidth(), bi.getHeight(), null);
+	}
+
+	@Override
+	public Operation[] toSoftClipOperation(Shape clippingShape) {
+		return toImageOperation().toSoftClipOperation(clippingShape);
 	}
 
 }

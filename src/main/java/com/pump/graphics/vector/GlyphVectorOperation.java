@@ -104,4 +104,20 @@ public class GlyphVectorOperation extends Operation {
 		return ShapeBounds.getBounds(s1);
 	}
 
+	/**
+	 * Convert this GlyphVectorOperation to a FillOperation by invoking
+	 * {@link GlyphVector#getOutline(float, float)}.
+	 */
+	public FillOperation toFillOperation() {
+		Shape fillShape = getGlyphVector().getOutline(getX(), getY());
+		return new FillOperation(getContext(), fillShape);
+
+	}
+
+	@Override
+	public Operation[] toSoftClipOperation(Shape clippingShape) {
+		FillOperation fillOp = toFillOperation();
+		return fillOp.toSoftClipOperation(clippingShape);
+	}
+
 }

@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.util.Objects;
@@ -19,6 +20,18 @@ import com.pump.graphics.Graphics2DContext;
 public class RenderedImageOperation extends Operation {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Convert a RenderedImage to an ARGB BufferedImage.
+	 */
+	private static BufferedImage toBufferedImage(RenderedImage ri) {
+		BufferedImage bi = new BufferedImage(ri.getWidth(), ri.getHeight(),
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bi.createGraphics();
+		g.drawRenderedImage(ri, new AffineTransform());
+		g.dispose();
+		return bi;
+	}
 
 	protected static final String PROPERTY_IMAGE = "image";
 	protected static final String PROPERTY_TRANSFORM = "transform";
@@ -95,6 +108,31 @@ public class RenderedImageOperation extends Operation {
 		AffineTransform tx = getContext().getTransform();
 		tx.concatenate(getTransform());
 		return tx.createTransformedShape(r);
+	}
+
+	/**
+	 * Convert this RenderedImageOperation to an ImageOperation.
+	 * <p>
+	 * If the RenderedImage is not already a BufferedImage: this converts it to
+	 * an ARGB BufferedImage.
+	 */
+	public ImageOperation toImageOperation() {
+		RenderedImage ri = getImage();
+		BufferedImage bi;
+		if (ri instanceof BufferedImage) {
+			bi = (BufferedImage) ri;
+		} else {
+			bi = toBufferedImage(ri);
+		}
+		Graphics2DContext context = getContext();
+		context.transform(getTransform());
+		return new ImageOperation(context, bi, 0, 0, bi.getWidth(),
+				bi.getHeight(), 0, 0, bi.getWidth(), bi.getHeight(), null);
+	}
+
+	@Override
+	public Operation[] toSoftClipOperation(Shape clippingShape) {
+		return toImageOperation().toSoftClipOperation(clippingShape);
 	}
 
 }

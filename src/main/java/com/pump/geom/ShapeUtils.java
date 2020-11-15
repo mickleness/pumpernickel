@@ -602,4 +602,19 @@ public class ShapeUtils {
 
 		return null;
 	}
+
+	/**
+	 * Create a flattened derivative of a shape.
+	 * 
+	 * @param shape the shape to flatten
+     * @param flatness the maximum distance that the line segments used to
+     *          approximate the curved segments are allowed to deviate
+     *          from any point on the original curve
+	 */
+	public static Shape flatten(Shape shape, float flatness) {
+		PathIterator pi = shape.getPathIterator(null, flatness);
+		Path2D.Float returnValue = new Path2D.Float(pi.getWindingRule());
+		returnValue.append(pi, false);
+		return returnValue;
+	}
 }

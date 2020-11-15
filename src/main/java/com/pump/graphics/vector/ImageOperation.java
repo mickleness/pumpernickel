@@ -4,11 +4,18 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.TexturePaint;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+import com.pump.geom.Clipper;
+import com.pump.geom.ShapeUtils;
 import com.pump.graphics.Graphics2DContext;
+import com.pump.image.ImageLoader;
 
 /**
  * This is an operation for all of <code>java.awt.Graphics#drawImage(..)</code>
@@ -125,5 +132,28 @@ public class ImageOperation extends Operation {
 	public Shape getUnclippedOutline() {
 		return getContext().getTransform()
 				.createTransformedShape(getDestRect());
+	}
+
+	@Override
+	public Operation[] toSoftClipOperation(Shape clippingShape) {
+		Graphics2DContext context = getContext();
+		Rectangle destRect = getDestRect();
+		try {
+			clippingShape = context.getTransform().createInverse()
+					.createTransformedShape(clippingShape);
+		} catch (NoninvertibleTransformException e) {
+			return new Operation[] {};
+		}
+		Shape intersection = Clipper.clipToRect(clippingShape, destRect);
+		if (ShapeUtils.isEmpty(intersection)) {
+			return new Operation[0];
+		}
+		BufferedImage bi = ImageLoader.createImage(getImage());
+		TexturePaint texturePaint = new TexturePaint(bi, getDestRect());
+		context.setPaint(texturePaint);
+		context.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		FillOperation returnValue = new FillOperation(context, intersection);
+		return new Operation[] { returnValue };
 	}
 }

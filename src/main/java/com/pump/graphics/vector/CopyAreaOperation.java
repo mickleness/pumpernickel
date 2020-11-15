@@ -101,4 +101,19 @@ public class CopyAreaOperation extends Operation {
 		return getContext().getTransform().createTransformedShape(dst);
 	}
 
+	@Override
+	public Operation[] toSoftClipOperation(Shape clippingShape) {
+		// honestly I'm a little surprised this one worked so easily. I'm a
+		// little curious why that is, but I also don't want to put much
+		// time/energy into copyArea without a concrete need. I personally don't
+		// use this method much (or ever); I'm not sure if there are common use
+		// cases out there I just don't know about?
+
+		Rectangle src = getSourceRect();
+		Graphics2DContext context = getContext();
+		context.clip(clippingShape);
+		return new Operation[] { new CopyAreaOperation(context, src.x, src.y,
+				src.width, src.height, getDX(), getDY()) };
+	}
+
 }

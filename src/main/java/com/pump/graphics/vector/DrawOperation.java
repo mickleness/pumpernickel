@@ -98,4 +98,26 @@ public class DrawOperation extends ShapeOperation {
 		AffineTransform tx = getContext().getTransform();
 		return tx.createTransformedShape(strokedShape);
 	}
+
+	@Override
+	public Operation[] toSoftClipOperation(Shape clippingShape) {
+		FillOperation fillOp = toFillOperation();
+		return fillOp.toSoftClipOperation(clippingShape);
+	}
+
+	/**
+	 * Convert this DrawOperation to a FillOperation by invoking
+	 * {@link java.awt.Stroke#createStrokedShape(Shape)}.
+	 * <p>
+	 * The resulting FillOperation should render identically to this
+	 * DrawOperation if the stroke rendering hint is set to PURE. If the stroke
+	 * rendering hint for this DrawOperation is not PURE: the graphics pipeline
+	 * may introduce subtle differences (because it optimizes certain common
+	 * strokes).
+	 */
+	public FillOperation toFillOperation() {
+		Graphics2DContext context = getContext();
+		Shape strokedShape = context.getStroke().createStrokedShape(getShape());
+		return new FillOperation(context, strokedShape);
+	}
 }
