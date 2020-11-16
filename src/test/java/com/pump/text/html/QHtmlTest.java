@@ -270,7 +270,7 @@ public class QHtmlTest extends TestCase {
 				"    </style>\n" + 
 				"  </head>\n" + 
 				"  <body>\n" + 
-				"    <h1>LOREM IMPSUM</h1>\n" + 
+				"    <h1>LOREM IPSUM</h1>\n" + 
 				"  </body>\n" + 
 				"</html>";
 
@@ -284,7 +284,7 @@ public class QHtmlTest extends TestCase {
 				"    </style>\n" + 
 				"  </head>\n" + 
 				"  <body>\n" + 
-				"    <h1>LOREM IMPSUM</h1>\n" + 
+				"    <h1>LOREM IPSUM</h1>\n" + 
 				"  </body>\n" + 
 				"</html>";
 		//@formatter:on
@@ -325,7 +325,7 @@ public class QHtmlTest extends TestCase {
 				"    </style>\n" + 
 				"  </head>\n" + 
 				"  <body>\n" + 
-				"    <h1>LOREM IMPSUM</h1>\n" + 
+				"    <h1>LOREM IPSUM</h1>\n" + 
 				"  </body>\n" + 
 				"</html>";
 		//@formatter:on
@@ -364,7 +364,7 @@ public class QHtmlTest extends TestCase {
 				"    </style>\n" + 
 				"  </head>\n" + 
 				"  <body>\n" + 
-				"    <h1>LOREM IMPSUM</h1>\n" + 
+				"    <h1>LOREM IPSUM</h1>\n" + 
 				"  </body>\n" + 
 				"</html>";
 		//@formatter:on
@@ -403,7 +403,7 @@ public class QHtmlTest extends TestCase {
 				"    </style>\n" + 
 				"  </head>\n" + 
 				"  <body>\n" + 
-				"    <h1>LOREM IMPSUM</h1>\n" + 
+				"    <h1>LOREM IPSUM</h1>\n" + 
 				"  </body>\n" + 
 				"</html>";
 		//@formatter:on
@@ -630,7 +630,7 @@ public class QHtmlTest extends TestCase {
 					"    </style>\n" + 
 					"  </head>\n" + 
 					"  <body>\n" + 
-					"    <h1 style=\"font-size: 100pt;\">LOREM IMPSUM</h1>\n" + 
+					"    <h1 style=\"font-size: 100pt;\">LOREM IPSUM</h1>\n" + 
 					"  </body>\n" + 
 					"</html>";
 			//@formatter:on

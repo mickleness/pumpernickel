@@ -195,7 +195,7 @@ public class HTMLDemo extends ShowcaseExampleDemo {
 				+ "             text-shadow: 2px 8px 6px rgba(0,0,0,.3),\n"
 				+ "                 0px -5px 10px rgba(255,255,255,.3); font-weight: bold;}\n"
 				+ "    </style>\n" + "  </head>\n" + "  <body>\n"
-				+ "    <h1 style=\"font-size: 100pt;\">LOREM IMPSUM</h1>\n"
+				+ "    <h1 style=\"font-size: 100pt;\">LOREM IPSUM</h1>\n"
 				+ "  </body>\n" + "</html>",
 				"See https://designshack.net/articles/css/12-fun-css-text-shadows-you-can-copy-and-paste/"));
 
@@ -220,7 +220,7 @@ public class HTMLDemo extends ShowcaseExampleDemo {
 						+ "        rgba(143, 77, 63, 0.25) 5px, rgba(143, 77, 63, 0.25) 10px); }\n"
 						+ "      h1   { font-size: 100pt;font-weight: bold;}\n"
 						+ "    </style>\n" + "  </head>\n" + "  <body>\n"
-						+ "    <h1>LOREM IMPSUM</h1>\n" + "  </body>\n"
+						+ "    <h1>LOREM IPSUM</h1>\n" + "  </body>\n"
 						+ "</html>",
 				"See https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients"));
 
@@ -242,7 +242,7 @@ public class HTMLDemo extends ShowcaseExampleDemo {
 						+ "        indigo 300px, violet 350px, red 370px); }\n"
 						+ "      h1   { font-size: 100pt;font-weight: bold;}\n"
 						+ "    </style>\n" + "  </head>\n" + "  <body>\n"
-						+ "    <h1>LOREM IMPSUM</h1>\n" + "  </body>\n"
+						+ "    <h1>LOREM IPSUM</h1>\n" + "  </body>\n"
 						+ "</html>",
 				"See https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients"));
 	}
