@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.Element;
@@ -15,6 +16,7 @@ import javax.swing.text.html.CSS;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.text.html.StyleSheet.BoxPainter;
 
+import com.pump.geom.ShapeBounds;
 import com.pump.graphics.Graphics2DContext;
 import com.pump.graphics.vector.Operation;
 import com.pump.graphics.vector.VectorGraphics2D;
@@ -115,7 +117,7 @@ public class QViewHelper {
 		}
 	}
 
-	public static Float getPredefinedSize(View view, int axis) {
+	public static java.lang.Float getPredefinedSize(View view, int axis) {
 		// TODO: percents require incorporating parent size
 
 		// TODO: consider other unit sizes
@@ -141,10 +143,16 @@ public class QViewHelper {
 	}
 
 	protected final View view;
+	protected final LegacyCssView legacyView;
 	protected final StyleSheet styleSheet;
 
-	public QViewHelper(View view, StyleSheet styleSheet) {
+	public QViewHelper(View view, LegacyCssView legacyView,
+			StyleSheet styleSheet) {
+		Objects.requireNonNull(view);
+		Objects.requireNonNull(legacyView);
+		Objects.requireNonNull(styleSheet);
 		this.view = view;
+		this.legacyView = legacyView;
 		this.styleSheet = styleSheet;
 	}
 
@@ -179,7 +187,7 @@ public class QViewHelper {
 	 *            In this case we apply special clipping regardless of the
 	 *            "overflow" attribute.
 	 */
-	public Graphics2D createGraphics(Graphics2D g, Shape allocation,
+	private Graphics2D createGraphics(Graphics2D g, Shape allocation,
 			boolean isBody) {
 
 		Graphics2D returnValue = (Graphics2D) g.create();
@@ -225,8 +233,8 @@ public class QViewHelper {
 	 *            the BoxPainter we want to ignore
 	 * @return a new Graphics2D that skips certain rendering operations
 	 */
-	public Graphics2D createGraphicsWithoutBoxPainter(Graphics2D g, Rectangle r,
-			BoxPainter boxPainter) {
+	private Graphics2D createGraphicsWithoutBoxPainter(Graphics2D g,
+			Rectangle r, BoxPainter boxPainter) {
 		VectorImage boxPainterRendering = new VectorImage();
 		VectorGraphics2D boxPainterG = boxPainterRendering.createGraphics(r);
 		boxPainter.paint(boxPainterG, r.x, r.y, r.width, r.height, view);
@@ -237,7 +245,7 @@ public class QViewHelper {
 		return new VectorGraphics2D(new Graphics2DContext(g), operations);
 	}
 
-	public void paintBackground(Graphics2D g, Rectangle r) {
+	private void paintBackground(Graphics2D g, Rectangle r) {
 		Color bgColor = styleSheet
 				.getBackground(styleSheet.getViewAttributes(view));
 
@@ -322,5 +330,27 @@ public class QViewHelper {
 
 	public View getView() {
 		return view;
+	}
+
+	/**
+	 * 
+	 * @param g
+	 * @param allocation
+	 * @param boxPainter
+	 *            this should be non-null if this object is responsible for
+	 *            paint the background/border (and stripping out the legacy
+	 *            background/border)
+	 * @param isBody
+	 */
+	public void paint(Graphics2D g, Shape allocation, BoxPainter boxPainter,
+			boolean isBody) {
+		Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
+		Graphics2D g2 = createGraphics(g, allocation, isBody);
+		if (boxPainter != null) {
+			paintBackground(g2, r);
+			g2 = createGraphicsWithoutBoxPainter(g2, r, boxPainter);
+		}
+		legacyView.paintLegacyCss2(g2, allocation);
+		g2.dispose();
 	}
 }

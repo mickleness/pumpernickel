@@ -2,7 +2,6 @@ package com.pump.text.html.view;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.Shape;
 
 import javax.swing.text.Element;
@@ -11,30 +10,27 @@ import javax.swing.text.html.ParagraphView;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.text.html.StyleSheet.BoxPainter;
 
-import com.pump.geom.ShapeBounds;
-
 /**
  * This ParagraphView uses the QViewHelper to support text-shadows.
  */
-public class QParagraphView extends ParagraphView {
+public class QParagraphView extends ParagraphView implements LegacyCssView {
 	QViewHelper helper;
 	BoxPainter boxPainter;
 
 	public QParagraphView(Element elem) {
 		super(elem);
 
-		helper = new QViewHelper(this, getStyleSheet());
+		helper = new QViewHelper(this, this, getStyleSheet());
 	}
 
 	@Override
 	public void paint(Graphics g, Shape allocation) {
-		Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
-		Graphics2D g2 = helper.createGraphics((Graphics2D) g, allocation,
-				false);
-		helper.paintBackground(g2, r);
-		g2 = helper.createGraphicsWithoutBoxPainter(g2, r, boxPainter);
-		super.paint(g2, allocation);
-		g2.dispose();
+		helper.paint((Graphics2D) g, allocation, boxPainter, false);
+	}
+
+	@Override
+	public void paintLegacyCss2(Graphics g, Shape allocation) {
+		super.paint(g, allocation);
 	}
 
 	@Override
