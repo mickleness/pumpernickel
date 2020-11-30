@@ -174,12 +174,17 @@ public class Graphics2DContext implements Serializable {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+
+	public String toString(boolean multiline) {
+		String separator = multiline ? "\n" : " ";
 		StringBuilder sb = new StringBuilder("Graphics2DContext[");
-		sb.append("hints=" + renderingHints + ", ");
-		sb.append("paint=" + paint + ", ");
-		sb.append("stroke=" + stroke + ", ");
-		sb.append("font=" + font + ", ");
-		sb.append("backgroundColor=" + backgroundColor + ", ");
+		sb.append("hints=" + renderingHints + "," + separator);
+		sb.append("paint=" + paint + "," + separator);
+		sb.append("stroke=" + stroke + "," + separator);
+		sb.append("font=" + font + "," + separator);
+		sb.append("backgroundColor=" + backgroundColor + "," + separator);
 
 		Shape myClip = null;
 		if (clip != null) {
@@ -193,17 +198,18 @@ public class Graphics2DContext implements Serializable {
 		}
 
 		if (myClip == null) {
-			sb.append("clip=null, ");
+			sb.append("clip=null," + separator);
 		} else if (myClip instanceof Rectangle2D) {
-			sb.append("clip=" + myClip + ", ");
+			sb.append("clip=" + myClip + "," + separator);
 		} else {
-			sb.append("clip=" + ShapeStringUtils.toString(myClip) + ", ");
+			sb.append("clip=" + ShapeStringUtils.toString(myClip) + ","
+					+ separator);
 		}
-		sb.append("transform=" + transform + ", ");
+		sb.append("transform=" + transform + "," + separator);
 		String modeStr = xorColor != null ? "xor (" + xorColor + ")" : "paint";
 		sb.append("mode=" + modeStr);
 		if (xorColor == null) {
-			sb.append(", composite=" + composite);
+			sb.append("," + separator + "composite=" + composite);
 		}
 
 		sb.append("]");
