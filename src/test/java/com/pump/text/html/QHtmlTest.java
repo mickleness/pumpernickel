@@ -2,10 +2,12 @@ package com.pump.text.html;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -677,5 +679,109 @@ public class QHtmlTest extends TestCase {
 			// changing each iteration.
 			assertEquals(10, string1Ys.size());
 		}
+	}
+
+	/**
+	 * Text shadows should always render as if the text was 100% opaque.
+	 * <p>
+	 * This one surprised me. (I assumed the shadow's alpha should be multiplied
+	 * by the text's alpha?) But if we assume "correct behavior" is defined as
+	 * "what existing browsers already do", then this test checks for the
+	 * correct behavior
+	 */
+	public void testTextShadowWithTransparentText() throws Exception {
+		// render text in purple (no shadow)
+		String plainHtml = "<html>\n" + "  <body>\n"
+				+ "    <h1 style=\"font-size: 100pt; color: #F0F;\">LOREM IPSUM</h1>\n"
+				+ "  </body>\n" + "</html>";
+
+		// render text transparently, but apply a purple (unblurred) shadow:
+		String transparentHtml = "<html>\n" + "  <body>\n"
+				+ "    <h1 style=\"font-size: 100pt; color: transparent; text-shadow: 0px 0px 0px rgba(255,0,255,1);\">LOREM IPSUM</h1>\n"
+				+ "  </body>\n" + "</html>";
+
+		// these two snippets of HTML should visually be the same
+
+		BufferedImage bi1 = getImage(transparentHtml);
+		BufferedImage bi2 = getImage(plainHtml);
+		assertImageEquals(bi1, bi2, 0);
+
+		List<Operation> ops1 = getOperations(true, plainHtml);
+		List<Operation> ops2 = getOperations(true, transparentHtml);
+
+		assertEquals(2, ops1.size());
+		assertEquals(2, ops2.size());
+
+		// paint using a shadow (BufferedImage)
+		assertTrue(ops2.get(0) instanceof FillOperation);
+		assertTrue(ops2.get(1) instanceof ImageOperation);
+
+		// don't paint using a shadow:
+		assertTrue(ops1.get(0) instanceof FillOperation);
+		assertFalse(ops1.get(1) instanceof ImageOperation);
+	}
+
+	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,
+			int tolerance) {
+		assertEquals(bi1.getWidth(), bi2.getWidth());
+		assertEquals(bi1.getHeight(), bi2.getHeight());
+
+		assertEquals(bi1.getType(), BufferedImage.TYPE_INT_ARGB);
+		assertEquals(bi2.getType(), BufferedImage.TYPE_INT_ARGB);
+
+		int[] row1 = new int[bi1.getWidth()];
+		int[] row2 = new int[bi1.getWidth()];
+		for (int y = 0; y < bi1.getHeight(); y++) {
+			bi1.getRaster().getDataElements(0, y, row1.length, 1, row1);
+			bi2.getRaster().getDataElements(0, y, row1.length, 1, row2);
+			for (int x = 0; x < bi1.getWidth(); x++) {
+				int red1 = (row1[x] >> 16) & 0xff;
+				int green1 = (row1[x] >> 8) & 0xff;
+				int blue1 = (row1[x] >> 0) & 0xff;
+				int alpha1 = (row1[x] >> 24) & 0xff;
+
+				int red2 = (row2[x] >> 16) & 0xff;
+				int green2 = (row2[x] >> 8) & 0xff;
+				int blue2 = (row2[x] >> 0) & 0xff;
+				int alpha2 = (row2[x] >> 24) & 0xff;
+
+				assertTrue(
+						"red1 = " + red1 + ", red2 = " + red2 + " at (" + x
+								+ "," + y + ")",
+						Math.abs(red1 - red2) <= tolerance);
+				assertTrue(
+						"green1 = " + green1 + ", green2 = " + green2 + " at ("
+								+ x + "," + y + ")",
+						Math.abs(green1 - green2) <= tolerance);
+				assertTrue(
+						"blue1 = " + blue1 + ", blue2 = " + blue2 + " at (" + x
+								+ "," + y + ")",
+						Math.abs(blue1 - blue2) <= tolerance);
+				assertTrue(
+						"alpha1 = " + alpha1 + ", alpha2 = " + alpha2 + " at ("
+								+ x + "," + y + ")",
+						Math.abs(alpha1 - alpha2) <= tolerance);
+			}
+		}
+	}
+
+	private BufferedImage getImage(String html) {
+
+		HTMLEditorKit kit = new QHTMLEditorKit();
+
+		JEditorPane p = new JEditorPane();
+		p.setEditorKit(kit);
+		p.setText(html);
+
+		p.setPreferredSize(htmlPaneSize);
+		p.setSize(htmlPaneSize);
+
+		BufferedImage bi = new BufferedImage(htmlPaneSize.width,
+				htmlPaneSize.height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bi.createGraphics();
+		p.paint(g);
+		g.dispose();
+
+		return bi;
 	}
 }
