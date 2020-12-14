@@ -11,10 +11,13 @@
 package com.pump.geom;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -619,5 +622,46 @@ public abstract class Clipper {
 		}
 
 		g.clip(newClip);
+	}
+
+	/**
+	 * Calculate the intersection of two shapes using the Clipper approach if possible.
+	 * <p>
+	 * If neither argument is rectangular then both shapes are flattened (using the
+	 * flatness argument) and converted to Areas to calculate the intersection.
+	 */
+	public static Shape intersect(Shape shape1, Shape shape2, float flatness) {
+		Rectangle2D r1 = ShapeUtils.getRectangle2D(shape1);
+		Rectangle2D r2 = ShapeUtils.getRectangle2D(shape2);
+		Shape returnValue;
+		if (r1 != null && r2 != null) {
+			returnValue = r1.createIntersection(r2);
+		} else if (r1 != null) {
+			returnValue = clipToRect(shape2, r1);
+		} else if (r2 != null) {
+			returnValue = clipToRect(shape1, r2);
+		} else {
+			PathIterator iter1 = shape1.getPathIterator(null, flatness);
+			PathIterator iter2 = shape2.getPathIterator(null, flatness);
+			Path2D p1 = new Path2D.Float(iter1.getWindingRule());
+			Path2D p2 = new Path2D.Float(iter2.getWindingRule());
+			p1.append(iter1, false);
+			p2.append(iter2, false);
+			Area a1 = new Area(p1);
+			Area a2 = new Area(p2);
+			a1.intersect(a2);
+			returnValue = a1;
+		}
+
+		Rectangle returnValueAsRect = ShapeUtils.getRectangle(returnValue);
+		if (returnValueAsRect != null)
+			return returnValueAsRect;
+
+		Rectangle2D returnValueAsRect2D = ShapeUtils
+				.getRectangle2D(returnValue);
+		if (returnValueAsRect2D != null)
+			return returnValueAsRect2D;
+
+		return returnValue;
 	}
 }

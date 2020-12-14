@@ -1,21 +1,19 @@
 package com.pump.graphics.vector;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.TexturePaint;
-import java.awt.geom.NoninvertibleTransformException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-import com.pump.geom.Clipper;
-import com.pump.geom.ShapeUtils;
 import com.pump.graphics.Graphics2DContext;
 import com.pump.image.ImageLoader;
+import com.pump.image.ImageSize;
 
 /**
  * This is an operation for all of <code>java.awt.Graphics#drawImage(..)</code>
@@ -33,14 +31,42 @@ public class ImageOperation extends Operation {
 	protected static final String PROPERTY_DEST_RECT = "destRect";
 	protected static final String PROPERTY_BKGND_COLOR = "backgroundColor";
 
+	/**
+	 * Create an ImageOperation using the source and dest rectangles.
+	 */
+	public ImageOperation(Graphics2DContext context, Image img,
+			Rectangle dstRect, Rectangle srcRect, Color bgcolor) {
+		super(context);
+		setImage(img);
+		setDestRect(dstRect);
+		setSourceRect(srcRect);
+		setBackgroundColor(bgcolor);
+	}
+
+	/**
+	 * Create an ImageOperation using the source and dest rectangles.
+	 * <p>
+	 * These rectangles are expressed with edges, not with a width/height.
+	 */
 	public ImageOperation(Graphics2DContext context, Image img, int dx1,
 			int dy1, int dx2, int dy2, int sx1, int sy1, int sx2, int sy2,
 			Color bgcolor) {
+		this(context, img, new Rectangle(dx1, dy1, dx2 - dx1, dy2 - dy1),
+				new Rectangle(sx1, sy1, sx2 - sx1, sy2 - sy1), bgcolor);
+	}
+
+	/**
+	 * Create an ImageOperation.
+	 * <p>
+	 * This constructor assumes the source dest is the whole image.
+	 */
+	public ImageOperation(Graphics2DContext context, Image img, int x, int y) {
 		super(context);
 		setImage(img);
-		setDestRect(new Rectangle(dx1, dy1, dx2 - dx1, dy2 - dy1));
-		setSourceRect(new Rectangle(sx1, sy1, sx2 - sx1, sy2 - sy1));
-		setBackgroundColor(bgcolor);
+		Dimension size = ImageSize.get(img);
+		setDestRect(new Rectangle(x, y, size.width, size.height));
+		setSourceRect(new Rectangle(0, 0, size.width, size.height));
+		setBackgroundColor(null);
 	}
 
 	/**
@@ -134,26 +160,26 @@ public class ImageOperation extends Operation {
 				.createTransformedShape(getDestRect());
 	}
 
-	@Override
-	public Operation[] toSoftClipOperation(Shape clippingShape) {
+	/**
+	 * Convert this ImageOperation to a FillOperation that uses a TexturePaint.
+	 */
+	public FillOperation toFillOperation() {
 		Graphics2DContext context = getContext();
-		Rectangle destRect = getDestRect();
-		try {
-			clippingShape = context.getTransform().createInverse()
-					.createTransformedShape(clippingShape);
-		} catch (NoninvertibleTransformException e) {
-			return new Operation[] {};
-		}
-		Shape intersection = Clipper.clipToRect(clippingShape, destRect);
-		if (ShapeUtils.isEmpty(intersection)) {
-			return new Operation[0];
-		}
 		BufferedImage bi = ImageLoader.createImage(getImage());
+		Rectangle srcRect = getSourceRect();
+		if (!srcRect
+				.equals(new Rectangle(0, 0, bi.getWidth(), bi.getHeight()))) {
+			bi = bi.getSubimage(srcRect.x, srcRect.y, srcRect.width,
+					srcRect.height);
+		}
 		TexturePaint texturePaint = new TexturePaint(bi, getDestRect());
 		context.setPaint(texturePaint);
-		context.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		FillOperation returnValue = new FillOperation(context, intersection);
-		return new Operation[] { returnValue };
+		FillOperation returnValue = new FillOperation(context, getDestRect());
+		return returnValue;
+	}
+
+	@Override
+	public Operation[] toSoftClipOperation(Shape clippingShape) {
+		return toFillOperation().toSoftClipOperation(clippingShape);
 	}
 }

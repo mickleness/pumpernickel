@@ -6,6 +6,7 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.geom.Path2D;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,7 +19,9 @@ import javax.swing.text.html.StyleSheet.BoxPainter;
 
 import com.pump.geom.ShapeBounds;
 import com.pump.graphics.Graphics2DContext;
+import com.pump.graphics.vector.GlyphVectorOperation;
 import com.pump.graphics.vector.Operation;
+import com.pump.graphics.vector.StringOperation;
 import com.pump.graphics.vector.VectorGraphics2D;
 import com.pump.graphics.vector.VectorImage;
 import com.pump.image.shadow.ShadowAttributes;
@@ -89,6 +92,22 @@ public class QViewHelper {
 		@Override
 		public String toString() {
 			return "element";
+		}
+	};
+
+	/**
+	 * This rendering hint should map to a Shape that is applied as a "soft
+	 * clipping" for all incoming rendering operations. This lets you achieve an
+	 * antialiased clipping. This is applied independently of the Graphics2D's
+	 * clipping. (So the soft clipping alters what we paint to the underlying
+	 * Graphics2D, and the underlying Graphics2D's clipping still applies.)
+	 */
+	public static final RenderingHints.Key HINT_KEY_SOFT_CLIP = new RenderingHints.Key(
+			-930183) {
+
+		@Override
+		public boolean isCompatibleValue(Object val) {
+			return val == null || val instanceof Shape;
 		}
 	};
 
@@ -215,6 +234,17 @@ public class QViewHelper {
 			returnValue.clip(allocation);
 		}
 
+		CssBackgroundClipValue clipValue = (CssBackgroundClipValue) getAttribute(
+				CssBackgroundClipValue.PROPERTY_BACKGROUND_CLIP);
+		if (clipValue != null) {
+			CssBackgroundClipValue.Mode m = clipValue.getMode();
+			if (m == CssBackgroundClipValue.Mode.TEXT) {
+				Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
+				Shape textShape = getTextShape(r);
+				returnValue.setRenderingHint(HINT_KEY_SOFT_CLIP, textShape);
+			}
+		}
+
 		return returnValue;
 	}
 
@@ -274,6 +304,9 @@ public class QViewHelper {
 						r.height - i1.top - i1.bottom - i2.top - i2.bottom);
 				g2.clipRect(clipRect.x, clipRect.y, clipRect.width,
 						clipRect.height);
+			} else if (m == CssBackgroundClipValue.Mode.TEXT) {
+				// do nothing, the SoftClipGraphics2D.KEY_SOFT_CLIP should
+				// already be set up in createGraphics(..)
 			}
 		}
 
@@ -293,6 +326,29 @@ public class QViewHelper {
 			}
 		}
 		g2.dispose();
+	}
+
+	/**
+	 * Return a Shape outline of all the text. This is used to isolate when the
+	 * "background-clip" property is "text".
+	 */
+	private Shape getTextShape(Rectangle r) {
+		VectorImage vi = new VectorImage();
+		Graphics2D g = vi.createGraphics(r);
+		legacyView.paintLegacyCss2(g, r);
+		g.dispose();
+		Path2D returnValue = new Path2D.Float();
+		for (Operation op : vi.getOperations()) {
+			if (op instanceof StringOperation) {
+				StringOperation so = (StringOperation) op;
+				Shape outline = so.getShape();
+				returnValue.append(outline, false);
+			} else if (op instanceof GlyphVectorOperation) {
+				GlyphVectorOperation gvo = (GlyphVectorOperation) op;
+				returnValue.append(gvo.getOutline(), false);
+			}
+		}
+		return returnValue;
 	}
 
 	private Insets getPaddingInsets(int width, int height) {

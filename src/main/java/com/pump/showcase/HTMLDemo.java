@@ -245,6 +245,19 @@ public class HTMLDemo extends ShowcaseExampleDemo {
 						+ "    <h1>LOREM IPSUM</h1>\n" + "  </body>\n"
 						+ "</html>",
 				"See https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients"));
+
+		presetComboBox.addItem(new Preset("background-clip text inset demo",
+				"<html>\n" + "  <head>\n" + "    <style>\n"
+						+ "      body { background-color: #cbcbcb }\n"
+						+ "      h1   { \n" + "           color: transparent;\n"
+						+ "           background-color: #666666;\n"
+						+ "           background-clip: text; \n"
+						+ "           text-shadow: 2px 3px 3px rgba(255,255,255,0.5) ;\n"
+						+ "}\n" + "    </style>\n" + "  </head>\n"
+						+ "  <body>\n"
+						+ "    <h1 style=\"font-size: 100pt;\">LOREM IPSUM</h1>\n"
+						+ "  </body>\n" + "</html>",
+				"See https://www.webcodegeeks.com/css/css-text-shadow-example/"));
 	}
 
 	@Override

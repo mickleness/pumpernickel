@@ -2,6 +2,7 @@ package com.pump.graphics.vector;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints.Key;
 import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
@@ -336,4 +337,23 @@ public abstract class Operation implements Serializable {
 	 *         like if it intersects with the argument.
 	 */
 	public abstract Operation[] toSoftClipOperation(Shape softCippingShape);
+
+	/**
+	 * Assign a RenderingHint in this operation's context.
+	 * <p>
+	 * Alternatively: you could call {@link #getContext()}, change the hint, and
+	 * then call {@link #setContext(Graphics2DContext)}, but that clones the
+	 * context twice. This call is more efficient.
+	 */
+	public void setRenderingHint(Key hintKey, Object hintValue) {
+		context.setRenderingHint(hintKey, hintValue);
+	}
+
+	/**
+	 * This is a convenience method for calling
+	 * <code>getContext().getRenderingHint(x)</code>
+	 */
+	public Object getRenderingHint(Key hintKey) {
+		return context.getRenderingHint(hintKey);
+	}
 }

@@ -20,6 +20,7 @@ import javax.swing.text.html.BlockView;
 import com.pump.graphics.Graphics2DContext;
 import com.pump.graphics.vector.FillOperation;
 import com.pump.graphics.vector.GlyphVectorOperation;
+import com.pump.graphics.vector.ImageOperation;
 import com.pump.graphics.vector.Operation;
 import com.pump.graphics.vector.StringOperation;
 import com.pump.graphics.vector.VectorImage;
@@ -40,9 +41,9 @@ public class QHtmlBlockView extends BlockView {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void paint(Graphics destG, Shape allocation) {
-		List<Operation> operations = getOperations(allocation);
+		List<Operation> inOperations = getOperations(allocation);
 		List<List<Operation>> operationsByParent = getOperationsGroupedByParent(
-				operations);
+				inOperations);
 
 		// We want to paint all the shadows belonging to the same run
 		// of Operations first, then paint the run of Operations on top.
@@ -63,7 +64,7 @@ public class QHtmlBlockView extends BlockView {
 			while (opIter.hasNext()) {
 				Operation op = opIter.next();
 				if (isHighlighter(op)) {
-					Graphics2D g2 = createGraphics((Graphics2D) destG, op);
+					Graphics2D g2 = (Graphics2D) destG.create();
 					op.paint(g2);
 					g2.dispose();
 					opIter.remove();
@@ -92,9 +93,23 @@ public class QHtmlBlockView extends BlockView {
 			// step 3: paint everything else
 
 			for (Operation op : opRun) {
-				Graphics2D g2 = createGraphics((Graphics2D) destG, op);
-				op.paint(g2);
+				Graphics2D g2 = (Graphics2D) destG.create();
+				paint(g2, op, (Shape) op
+						.getRenderingHint(QViewHelper.HINT_KEY_SOFT_CLIP));
 				g2.dispose();
+			}
+		}
+	}
+
+	/**
+	 * @param softClip an optional soft clip shape to apply
+	 */
+	private void paint(Graphics2D g, Operation op, Shape softClip) {
+		if (softClip == null || isHighlighter(op)) {
+			op.paint(g);
+		} else {
+			for (Operation subOp : op.toSoftClipOperation(softClip)) {
+				subOp.paint(g);
 			}
 		}
 	}
@@ -131,17 +146,18 @@ public class QHtmlBlockView extends BlockView {
 		}
 
 		big.dispose();
+
 		for (ShadowAttributes attr : attrs) {
 			BufferedImage shadow = new DoubleBoxShadowRenderer().createShadow(
 					bi, attr.getShadowKernelRadius(), attr.getShadowColor());
 			int dx = (shadow.getWidth() - bi.getWidth()) / 2;
 			int dy = (shadow.getHeight() - bi.getHeight()) / 2;
 
-			Graphics2D g2 = createGraphics((Graphics2D) destG, textOp);
-			g2.drawImage(shadow,
-					(int) (r.x + attr.getShadowXOffset() - dx + .5),
-					(int) (r.y + attr.getShadowYOffset() - dy + .5), null);
-			g2.dispose();
+			ImageOperation imageOp = new ImageOperation(new Graphics2DContext(),
+					shadow, (int) (r.x + attr.getShadowXOffset() - dx + .5),
+					(int) (r.y + attr.getShadowYOffset() - dy + .5));
+			paint(destG, imageOp, (Shape) textOp
+					.getRenderingHint(QViewHelper.HINT_KEY_SOFT_CLIP));
 		}
 	}
 
@@ -184,10 +200,6 @@ public class QHtmlBlockView extends BlockView {
 		super.paint(vig, allocation);
 		vig.dispose();
 		return vi.getOperations();
-	}
-
-	private Graphics2D createGraphics(Graphics2D g, Operation op) {
-		return (Graphics2D) g.create();
 	}
 
 	/**

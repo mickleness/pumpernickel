@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.geom.Area;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class FillOperation extends ShapeOperation {
 			return;
 		}
 		Rectangle2D rect2D = ShapeUtils.getRectangle2D(shape);
-		Shape localShape = rect2D == null ? getShape() : rect2D;
+		Shape localShape = rect2D == null ? shape : rect2D;
 		g.fill(localShape);
 	}
 
@@ -60,35 +60,24 @@ public class FillOperation extends ShapeOperation {
 
 	@Override
 	public Operation[] toSoftClipOperation(Shape clippingShape) {
-		Graphics2DContext context = getContext();
 		try {
-			clippingShape = context.getTransform().createInverse()
-					.createTransformedShape(clippingShape);
+			Graphics2DContext context = getContext();
+			AffineTransform tx = context.getTransform();
+			Shape shape = getShape();
+			Shape intersection = Clipper.intersect(
+					tx.createTransformedShape(shape), clippingShape, .01f);
+			if (ShapeUtils.isEmpty(intersection)) {
+				return new Operation[0];
+			}
+			context.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+			intersection = tx.createInverse()
+					.createTransformedShape(intersection);
+			FillOperation returnValue = new FillOperation(context,
+					intersection);
+			return new Operation[] { returnValue };
 		} catch (NoninvertibleTransformException e) {
-			return new Operation[] {};
+			return new Operation[0];
 		}
-
-		Rectangle2D r1 = ShapeUtils.getRectangle2D(clippingShape);
-		Rectangle2D r2 = ShapeUtils.getRectangle2D(getShape());
-		Shape intersection;
-		if (r1 != null && r2 != null) {
-			intersection = r1.createIntersection(r2);
-		} else if (r1 != null) {
-			intersection = Clipper.clipToRect(getShape(), r1);
-		} else if (r2 != null) {
-			intersection = Clipper.clipToRect(clippingShape, r2);
-		} else {
-			Area a1 = new Area(ShapeUtils.flatten(getShape(), .01f));
-			Area a2 = new Area(ShapeUtils.flatten(clippingShape, .01f));
-			a1.intersect(a2);
-			intersection = a1;
-		}
-
-		if (ShapeUtils.isEmpty(intersection))
-			return new Operation[] {};
-
-		context.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		return new Operation[] { new FillOperation(context, intersection) };
 	}
 }
