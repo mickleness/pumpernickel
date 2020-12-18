@@ -14,18 +14,16 @@ import javax.swing.text.html.StyleSheet.BoxPainter;
  * This BlockView uses the QViewHelper to support text-shadows.
  */
 public class QBlockView extends BlockView implements LegacyCssView {
-	QViewHelper helper;
 	BoxPainter boxPainter;
 
 	public QBlockView(Element elem, int axis) {
 		super(elem, axis);
-
-		helper = new QViewHelper(this, this, getStyleSheet());
 	}
 
 	@Override
 	public void paint(Graphics g, Shape allocation) {
-		helper.paint((Graphics2D) g, allocation, boxPainter, false);
+		QViewHelper.paint((Graphics2D) g, allocation, this, this,
+				getStyleSheet(), boxPainter, false);
 	}
 
 	@Override

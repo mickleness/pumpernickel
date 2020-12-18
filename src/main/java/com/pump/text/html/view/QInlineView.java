@@ -11,17 +11,15 @@ import javax.swing.text.html.InlineView;
  * This InlineView uses the QViewHelper to support text-shadows.
  */
 public class QInlineView extends InlineView implements LegacyCssView {
-	QViewHelper helper;
 
 	public QInlineView(Element elem) {
 		super(elem);
-
-		helper = new QViewHelper(this, this, getStyleSheet());
 	}
 
 	@Override
 	public void paint(Graphics g, Shape allocation) {
-		helper.paint((Graphics2D) g, allocation, null, false);
+		QViewHelper.paint((Graphics2D) g, allocation, this, this,
+				getStyleSheet(), null, false);
 	}
 
 	@Override

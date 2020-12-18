@@ -46,6 +46,34 @@ import com.pump.util.list.ObservableList;
  * QHtmlBlockView to address later.
  */
 public class QViewHelper {
+
+	/**
+	 * 
+	 * @param g
+	 * @param allocation
+	 * @param boxPainter
+	 *            this should be non-null if this object is responsible for
+	 *            painting the background/border (and stripping out the legacy
+	 *            background/border)
+	 * @param isBody
+	 *            if true then this is an attempt to paint the &lt;body&gt; tag.
+	 *            In this case we apply special clipping regardless of the
+	 *            "overflow" attribute.
+	 */
+	public static void paint(Graphics2D g, Shape allocation, View view,
+			LegacyCssView legacyView, StyleSheet styleSheet,
+			BoxPainter boxPainter, boolean isBody) {
+		QViewHelper helper = new QViewHelper(view, styleSheet, legacyView);
+		Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
+		Graphics2D g2 = helper.createGraphics(g, allocation, isBody);
+		if (boxPainter != null) {
+			helper.paintBackground(g2, r);
+			g2 = helper.createGraphicsWithoutBoxPainter(g2, r, boxPainter);
+		}
+		legacyView.paintLegacyCss2(g2, allocation);
+		g2.dispose();
+	}
+
 	/**
 	 * This RenderingHint.Key resolves to a List of ShadowAttributes (or null)
 	 */
@@ -165,17 +193,17 @@ public class QViewHelper {
 	protected final LegacyCssView legacyView;
 	protected final StyleSheet styleSheet;
 
-	public QViewHelper(View view, LegacyCssView legacyView,
-			StyleSheet styleSheet) {
+	private QViewHelper(View view, StyleSheet styleSheet,
+			LegacyCssView legacyView) {
 		Objects.requireNonNull(view);
 		Objects.requireNonNull(legacyView);
 		Objects.requireNonNull(styleSheet);
 		this.view = view;
-		this.legacyView = legacyView;
 		this.styleSheet = styleSheet;
+		this.legacyView = legacyView;
 	}
 
-	public Object getAttribute(Object attrKey) {
+	private Object getAttribute(Object attrKey) {
 		// get value from tag declaration
 		Object value = view.getElement().getAttributes().getAttribute(attrKey);
 
@@ -382,31 +410,5 @@ public class QViewHelper {
 		int right = getLength(CSS.Attribute.BORDER_RIGHT_WIDTH, width);
 
 		return new Insets(top, left, bottom, right);
-	}
-
-	public View getView() {
-		return view;
-	}
-
-	/**
-	 * 
-	 * @param g
-	 * @param allocation
-	 * @param boxPainter
-	 *            this should be non-null if this object is responsible for
-	 *            paint the background/border (and stripping out the legacy
-	 *            background/border)
-	 * @param isBody
-	 */
-	public void paint(Graphics2D g, Shape allocation, BoxPainter boxPainter,
-			boolean isBody) {
-		Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
-		Graphics2D g2 = createGraphics(g, allocation, isBody);
-		if (boxPainter != null) {
-			paintBackground(g2, r);
-			g2 = createGraphicsWithoutBoxPainter(g2, r, boxPainter);
-		}
-		legacyView.paintLegacyCss2(g2, allocation);
-		g2.dispose();
 	}
 }

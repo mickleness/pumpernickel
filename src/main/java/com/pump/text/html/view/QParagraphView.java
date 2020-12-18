@@ -14,18 +14,16 @@ import javax.swing.text.html.StyleSheet.BoxPainter;
  * This ParagraphView uses the QViewHelper to support text-shadows.
  */
 public class QParagraphView extends ParagraphView implements LegacyCssView {
-	QViewHelper helper;
 	BoxPainter boxPainter;
 
 	public QParagraphView(Element elem) {
 		super(elem);
-
-		helper = new QViewHelper(this, this, getStyleSheet());
 	}
 
 	@Override
 	public void paint(Graphics g, Shape allocation) {
-		helper.paint((Graphics2D) g, allocation, boxPainter, false);
+		QViewHelper.paint((Graphics2D) g, allocation, this, this,
+				getStyleSheet(), boxPainter, false);
 	}
 
 	@Override

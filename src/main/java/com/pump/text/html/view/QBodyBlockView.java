@@ -11,18 +11,16 @@ import javax.swing.text.html.StyleSheet.BoxPainter;
 public class QBodyBlockView extends SwingBodyBlockView
 		implements LegacyCssView {
 
-	QViewHelper helper;
 	BoxPainter boxPainter;
 
 	public QBodyBlockView(Element elem) {
 		super(elem);
-
-		helper = new QViewHelper(this, this, getStyleSheet());
 	}
 
 	@Override
 	public void paint(Graphics g, Shape allocation) {
-		helper.paint((Graphics2D) g, allocation, boxPainter, true);
+		QViewHelper.paint((Graphics2D) g, allocation, this, this,
+				getStyleSheet(), boxPainter, true);
 	}
 
 	@Override
