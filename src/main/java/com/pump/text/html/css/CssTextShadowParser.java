@@ -2,6 +2,7 @@ package com.pump.text.html.css;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,17 +50,32 @@ public class CssTextShadowParser
 	private ShadowAttributes parseShadowAttributes(String textShadowCSS) {
 		List<String> terms = getCSSTerms(textShadowCSS);
 		if (terms.size() >= 2 && terms.size() <= 4) {
+			// the specs say the color "can be specified either before or after
+			// the offset"
+
+			Iterator<String> termIter = terms.iterator();
+			CssColorParser colorParser = new CssColorParser();
+
+			// If unspecified, the color's value is left up to the user agent:
+			Color color = Color.black;
+
+			while (termIter.hasNext()) {
+				String term = termIter.next();
+				try {
+					color = colorParser.parse(term);
+					termIter.remove();
+					break;
+				} catch (Exception e) {
+					// do nothing
+				}
+			}
+
 			int dx = parseInt(terms.get(0));
 			int dy = parseInt(terms.get(1));
 			int radius = 0;
 
-			CssColorParser colorParser = new CssColorParser();
-			Color color;
 			if (terms.size() == 3) {
-				color = colorParser.parse(terms.get(2));
-			} else {
 				radius = parseInt(terms.get(2));
-				color = colorParser.parse(terms.get(3));
 			}
 			return new ShadowAttributes(dx, dy, radius, color);
 		} else {
