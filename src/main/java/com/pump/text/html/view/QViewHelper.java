@@ -203,7 +203,10 @@ public class QViewHelper {
 		this.legacyView = legacyView;
 	}
 
-	private Object getAttribute(Object attrKey) {
+	/**
+	 * Return an attribute associated.
+	 */
+	public Object getAttribute(Object attrKey) {
 		// get value from tag declaration
 		Object value = view.getElement().getAttributes().getAttribute(attrKey);
 
@@ -410,5 +413,12 @@ public class QViewHelper {
 		int right = getLength(CSS.Attribute.BORDER_RIGHT_WIDTH, width);
 
 		return new Insets(top, left, bottom, right);
+	}
+
+	/**
+	 * Return the View associated with this QViewHelper.
+	 */
+	public View getView() {
+		return view;
 	}
 }
