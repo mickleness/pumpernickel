@@ -682,6 +682,44 @@ public class QHtmlTest extends TestCase {
 	}
 
 	/**
+	 * This identifies a bug related line wrapping.
+	 * <p>
+	 * The QInlineView is cloned as line wrapping is calculated. In earlier
+	 * versions of the QViewHelper class we kept a reference to the original
+	 * (uncloned) QInlineView. So painting the newly wrapped QInlineView
+	 * actually invoked the old unwrapped QInlineView. The end result for the
+	 * user is the text was printed twice.
+	 */
+	public void testLineWrapping() {
+
+		//@formatter:off
+		String html = "<html>\n"
+				+ "  <body>\n"
+				+ "    <h1 style=\"font-size: 100pt;\">LOREM IPSUM</h1>\n"
+				+ "  </body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		TextPaneFormatter formatter = new TextPaneFormatter() {
+
+			@Override
+			public JComponent format(JEditorPane p) {
+				p.setSize(new Dimension(540, 540));
+				return p;
+			}
+		};
+		List<Operation> ops = getOperations(true, html, formatter);
+		int charCtr = 0;
+		for (Operation op : ops) {
+			if (op instanceof StringOperation) {
+				StringOperation strOp = (StringOperation) op;
+				charCtr += strOp.getString().length();
+			}
+		}
+		assertEquals("LOREM IPSUM".length(), charCtr);
+	}
+
+	/**
 	 * Text shadows should always render as if the text was 100% opaque.
 	 * <p>
 	 * This one surprised me. (I assumed the shadow's alpha should be multiplied
