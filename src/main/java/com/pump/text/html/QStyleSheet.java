@@ -31,6 +31,21 @@ import com.pump.text.html.css.background.CssBackgroundClipParser;
 import com.pump.text.html.css.background.CssBackgroundPositionParser;
 import com.pump.text.html.css.background.CssBackgroundRepeatParser;
 import com.pump.text.html.css.background.CssBackgroundSizeParser;
+import com.pump.text.html.css.border.CssBorderBottomColorParser;
+import com.pump.text.html.css.border.CssBorderBottomStyleParser;
+import com.pump.text.html.css.border.CssBorderBottomWidthParser;
+import com.pump.text.html.css.border.CssBorderColorParser;
+import com.pump.text.html.css.border.CssBorderLeftColorParser;
+import com.pump.text.html.css.border.CssBorderLeftStyleParser;
+import com.pump.text.html.css.border.CssBorderLeftWidthParser;
+import com.pump.text.html.css.border.CssBorderRightColorParser;
+import com.pump.text.html.css.border.CssBorderRightStyleParser;
+import com.pump.text.html.css.border.CssBorderRightWidthParser;
+import com.pump.text.html.css.border.CssBorderStyleParser;
+import com.pump.text.html.css.border.CssBorderTopColorParser;
+import com.pump.text.html.css.border.CssBorderTopStyleParser;
+import com.pump.text.html.css.border.CssBorderTopWidthParser;
+import com.pump.text.html.css.border.CssBorderWidthParser;
 
 /**
  * This specialized StyleSheet offers (limited) support for additional CSS
@@ -53,6 +68,22 @@ public class QStyleSheet extends StyleSheet {
 		addCssPropertyHandler(new CssBackgroundSizeParser());
 		addCssPropertyHandler(new CssBackgroundClipParser());
 		addCssPropertyHandler(new CssOverflowParser());
+
+		addCssPropertyHandler(new CssBorderBottomColorParser());
+		addCssPropertyHandler(new CssBorderBottomWidthParser());
+		addCssPropertyHandler(new CssBorderBottomStyleParser());
+		addCssPropertyHandler(new CssBorderLeftColorParser());
+		addCssPropertyHandler(new CssBorderLeftWidthParser());
+		addCssPropertyHandler(new CssBorderLeftStyleParser());
+		addCssPropertyHandler(new CssBorderTopColorParser());
+		addCssPropertyHandler(new CssBorderTopWidthParser());
+		addCssPropertyHandler(new CssBorderTopStyleParser());
+		addCssPropertyHandler(new CssBorderRightColorParser());
+		addCssPropertyHandler(new CssBorderRightWidthParser());
+		addCssPropertyHandler(new CssBorderRightStyleParser());
+		addCssPropertyHandler(new CssBorderColorParser());
+		addCssPropertyHandler(new CssBorderWidthParser());
+		addCssPropertyHandler(new CssBorderStyleParser());
 	}
 
 	/**

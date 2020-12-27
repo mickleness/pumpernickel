@@ -4,7 +4,7 @@ import java.util.Objects;
 
 /**
  * A value (a float) and a unit (String). The unit may be an empty string, but
- * it will not be empty.
+ * it will not be null.
  */
 public class CssLength implements CssValue {
 	private final String cssString;
@@ -108,5 +108,21 @@ public class CssLength implements CssValue {
 		if (!unit.equals(other.unit))
 			return false;
 		return true;
+	}
+
+	/**
+	 * Return the value of this length.
+	 * 
+	 * @param percentRange
+	 *            if this length is a percentage then this argument informs the
+	 *            value to return. For example if this argument is 12, and this
+	 *            value is "50%", then this method will return 6.
+	 */
+	public float getValue(double percentRange) {
+		if ("%".equals(getUnit())) {
+			return (float) (percentRange * getValue() / 100f);
+		}
+		// TODO: convert other css length units
+		return getValue();
 	}
 }

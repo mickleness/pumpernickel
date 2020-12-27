@@ -64,14 +64,57 @@ public class QViewHelper {
 			LegacyCssView legacyView, StyleSheet styleSheet,
 			BoxPainter boxPainter, boolean isBody) {
 		QViewHelper helper = new QViewHelper(view, styleSheet, legacyView);
-		Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
 		Graphics2D g2 = helper.createGraphics(g, allocation, isBody);
-		if (boxPainter != null) {
-			helper.paintBackground(g2, r);
-			g2 = helper.createGraphicsWithoutBoxPainter(g2, r, boxPainter);
-		}
+		g2 = helper.paintBelowContent(g2, allocation, helper, boxPainter);
 		legacyView.paintLegacyCss2(g2, allocation);
 		g2.dispose();
+	}
+
+	/**
+	 * This paints everything below the "content" in the box model.
+	 * <p>
+	 * The "box model" used to render HTML elements consists of these concentric
+	 * rectangles: margin, border, padding, content. So this method paints
+	 * everything except the content. (Normally I'd call this something like
+	 * "paintBackground", but the word "background" has special meaning here.)
+	 * 
+	 * @param g
+	 * @param allocation
+	 * @param helper
+	 * @param boxPainter
+	 * @return
+	 */
+	private Graphics2D paintBelowContent(Graphics2D g, Shape allocation,
+			QViewHelper helper, BoxPainter boxPainter) {
+		Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
+
+		int topMargin = getLength(CSS.Attribute.MARGIN_TOP, r.height);
+		int bottomMargin = getLength(CSS.Attribute.MARGIN_BOTTOM, r.height);
+		int leftMargin = getLength(CSS.Attribute.MARGIN_LEFT, r.width);
+		int rightMargin = getLength(CSS.Attribute.MARGIN_RIGHT, r.width);
+
+		// The legacy BoxPainter paints background color, image, then
+		// Border in that order.
+
+		// this handles the background color & image:
+		helper.paintBackground(g, r);
+
+		// this handles the border:
+		Rectangle borderR = new Rectangle(r);
+		borderR.x += leftMargin;
+		borderR.y += topMargin;
+		borderR.width -= leftMargin + rightMargin;
+		borderR.height -= topMargin + bottomMargin;
+
+		BorderRendering borderRendering = new BorderRendering(helper, borderR);
+		borderRendering.paint(g);
+
+		if (boxPainter != null) {
+			// this strips away the legacy rendering:
+			g = helper.createGraphicsWithoutBoxPainter(g, r, boxPainter);
+		}
+
+		return g;
 	}
 
 	/**
@@ -397,13 +440,7 @@ public class QViewHelper {
 			return 0;
 
 		CssLength l = new CssLength(attr.toString().toString());
-		if (l.getUnit().equals("%")) {
-			return (int) (l.getValue() * range / 100);
-		} else if (l.getUnit().equals("px")) {
-			return (int) (l.getValue() + .5f);
-		}
-		throw new IllegalArgumentException(
-				"Unsupported unit in \"" + attr.toString() + "\"");
+		return Math.round((float) l.getValue(range));
 	}
 
 	private Insets getBorderInsets(int width, int height) {
