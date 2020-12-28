@@ -32,18 +32,22 @@ import com.pump.text.html.css.background.CssBackgroundPositionParser;
 import com.pump.text.html.css.background.CssBackgroundRepeatParser;
 import com.pump.text.html.css.background.CssBackgroundSizeParser;
 import com.pump.text.html.css.border.CssBorderBottomColorParser;
+import com.pump.text.html.css.border.CssBorderBottomParser;
 import com.pump.text.html.css.border.CssBorderBottomStyleParser;
 import com.pump.text.html.css.border.CssBorderBottomWidthParser;
 import com.pump.text.html.css.border.CssBorderColorParser;
 import com.pump.text.html.css.border.CssBorderLeftColorParser;
+import com.pump.text.html.css.border.CssBorderLeftParser;
 import com.pump.text.html.css.border.CssBorderLeftStyleParser;
 import com.pump.text.html.css.border.CssBorderLeftWidthParser;
 import com.pump.text.html.css.border.CssBorderParser;
 import com.pump.text.html.css.border.CssBorderRightColorParser;
+import com.pump.text.html.css.border.CssBorderRightParser;
 import com.pump.text.html.css.border.CssBorderRightStyleParser;
 import com.pump.text.html.css.border.CssBorderRightWidthParser;
 import com.pump.text.html.css.border.CssBorderStyleParser;
 import com.pump.text.html.css.border.CssBorderTopColorParser;
+import com.pump.text.html.css.border.CssBorderTopParser;
 import com.pump.text.html.css.border.CssBorderTopStyleParser;
 import com.pump.text.html.css.border.CssBorderTopWidthParser;
 import com.pump.text.html.css.border.CssBorderWidthParser;
@@ -86,6 +90,10 @@ public class QStyleSheet extends StyleSheet {
 		addCssPropertyHandler(new CssBorderWidthParser());
 		addCssPropertyHandler(new CssBorderStyleParser());
 		addCssPropertyHandler(new CssBorderParser());
+		addCssPropertyHandler(new CssBorderBottomParser());
+		addCssPropertyHandler(new CssBorderLeftParser());
+		addCssPropertyHandler(new CssBorderTopParser());
+		addCssPropertyHandler(new CssBorderRightParser());
 	}
 
 	/**

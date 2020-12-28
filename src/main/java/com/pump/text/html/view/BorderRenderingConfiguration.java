@@ -5,19 +5,23 @@ import java.util.List;
 import com.pump.text.html.css.CssColorValue;
 import com.pump.text.html.css.CssLength;
 import com.pump.text.html.css.border.CssBorderBottomColorParser;
+import com.pump.text.html.css.border.CssBorderBottomParser;
 import com.pump.text.html.css.border.CssBorderBottomStyleParser;
 import com.pump.text.html.css.border.CssBorderBottomWidthParser;
 import com.pump.text.html.css.border.CssBorderColorParser;
 import com.pump.text.html.css.border.CssBorderLeftColorParser;
+import com.pump.text.html.css.border.CssBorderLeftParser;
 import com.pump.text.html.css.border.CssBorderLeftStyleParser;
 import com.pump.text.html.css.border.CssBorderLeftWidthParser;
 import com.pump.text.html.css.border.CssBorderParser;
 import com.pump.text.html.css.border.CssBorderRightColorParser;
+import com.pump.text.html.css.border.CssBorderRightParser;
 import com.pump.text.html.css.border.CssBorderRightStyleParser;
 import com.pump.text.html.css.border.CssBorderRightWidthParser;
 import com.pump.text.html.css.border.CssBorderStyleParser;
 import com.pump.text.html.css.border.CssBorderStyleValue;
 import com.pump.text.html.css.border.CssBorderTopColorParser;
+import com.pump.text.html.css.border.CssBorderTopParser;
 import com.pump.text.html.css.border.CssBorderTopStyleParser;
 import com.pump.text.html.css.border.CssBorderTopWidthParser;
 import com.pump.text.html.css.border.CssBorderValue;
@@ -38,13 +42,59 @@ public class BorderRenderingConfiguration {
 	public CssBorderStyleValue leftStyle, topStyle, rightStyle, bottomStyle;
 
 	public BorderRenderingConfiguration(QViewHelper helper) {
-		CssBorderValue v = (CssBorderValue) helper
-				.getAttribute(CssBorderParser.PROPERTY_BORDER);
-		if (v != null) {
-			leftWidth = rightWidth = topWidth = bottomWidth = v.getWidth();
-			leftColor = rightColor = topColor = bottomColor = v.getColor();
-			leftStyle = rightStyle = topStyle = bottomStyle = v.getStyle();
+		{
+			CssBorderValue all = (CssBorderValue) helper
+					.getAttribute(CssBorderParser.PROPERTY_BORDER);
+			if (all != null) {
+				leftWidth = rightWidth = topWidth = bottomWidth = all
+						.getWidth();
+				leftColor = rightColor = topColor = bottomColor = all
+						.getColor();
+				leftStyle = rightStyle = topStyle = bottomStyle = all
+						.getStyle();
+			}
 		}
+
+		{
+			CssBorderValue left = (CssBorderValue) helper
+					.getAttribute(CssBorderLeftParser.PROPERTY_BORDER_LEFT);
+			if (left != null) {
+				leftWidth = left.getWidth();
+				leftColor = left.getColor();
+				leftStyle = left.getStyle();
+			}
+		}
+
+		{
+			CssBorderValue right = (CssBorderValue) helper
+					.getAttribute(CssBorderRightParser.PROPERTY_BORDER_RIGHT);
+			if (right != null) {
+				rightWidth = right.getWidth();
+				rightColor = right.getColor();
+				rightStyle = right.getStyle();
+			}
+		}
+
+		{
+			CssBorderValue top = (CssBorderValue) helper
+					.getAttribute(CssBorderTopParser.PROPERTY_BORDER_TOP);
+			if (top != null) {
+				topWidth = top.getWidth();
+				topColor = top.getColor();
+				topStyle = top.getStyle();
+			}
+		}
+
+		{
+			CssBorderValue bottom = (CssBorderValue) helper
+					.getAttribute(CssBorderBottomParser.PROPERTY_BORDER_BOTTOM);
+			if (bottom != null) {
+				bottomWidth = bottom.getWidth();
+				bottomColor = bottom.getColor();
+				bottomStyle = bottom.getStyle();
+			}
+		}
+
 		initWidths(helper);
 		initColors(helper);
 		initStyles(helper);

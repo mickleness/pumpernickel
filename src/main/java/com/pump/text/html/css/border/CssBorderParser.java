@@ -1,6 +1,7 @@
 package com.pump.text.html.css.border;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.pump.text.html.css.CssColorValue;
 import com.pump.text.html.css.CssLength;
@@ -24,9 +25,20 @@ public class CssBorderParser implements CssPropertyParser<CssBorderValue> {
 
 	public static final String PROPERTY_BORDER = "border";
 
+	String propertyName;
+
+	public CssBorderParser() {
+		this(PROPERTY_BORDER);
+	}
+
+	protected CssBorderParser(String propertyName) {
+		Objects.requireNonNull(propertyName);
+		this.propertyName = propertyName;
+	}
+
 	@Override
 	public String getPropertyName() {
-		return PROPERTY_BORDER;
+		return propertyName;
 	}
 
 	@Override
