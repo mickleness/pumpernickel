@@ -7,6 +7,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RectangularShape;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -403,7 +404,7 @@ public class BorderRendering {
 		double space = maxX - minX;
 		double width = height;
 		double padding = height;
-		List<Ellipse2D.Double> dots = new ArrayList<>(
+		List<RectangularShape> dots = new ArrayList<>(
 				(int) (Math.ceil(space / (width + padding)) + 1.5));
 		double x = minX + width;
 		while (x + width + padding < maxX) {
@@ -411,12 +412,26 @@ public class BorderRendering {
 			x += width + padding;
 		}
 
-		double remaining = maxX - x;
-		for (int a = 0; a < dots.size(); a++) {
-			Ellipse2D dot = dots.get(a);
-			dot.setFrame(dot.getX() + (a + 1) * remaining / (dots.size() + 1),
-					dot.getY(), dot.getWidth(), dot.getHeight());
-			g.fill(dot);
+		distributePaddingAndPaint(g, dots, maxX - x, true);
+	}
+
+	private void distributePaddingAndPaint(Graphics2D g,
+			List<RectangularShape> shapes, double spaceToDistribute,
+			boolean distributeHorizontally) {
+		for (int a = 0; a < shapes.size(); a++) {
+			RectangularShape shape = shapes.get(a);
+			if (distributeHorizontally) {
+				shape.setFrame(
+						shape.getX() + (a + 1) * spaceToDistribute
+								/ (shapes.size() + 1),
+						shape.getY(), shape.getWidth(), shape.getHeight());
+			} else {
+				shape.setFrame(shape.getX(),
+						shape.getY() + (a + 1) * spaceToDistribute
+								/ (shapes.size() + 1),
+						shape.getWidth(), shape.getHeight());
+			}
+			g.fill(shape);
 		}
 	}
 
@@ -426,7 +441,7 @@ public class BorderRendering {
 		double space = maxY - minY;
 		double height = width;
 		double padding = width;
-		List<Ellipse2D.Double> dots = new ArrayList<>(
+		List<RectangularShape> dots = new ArrayList<>(
 				(int) (Math.ceil(space / (height + padding)) + 1.5));
 		double y = minY + height;
 		while (y + height + padding < maxY) {
@@ -434,14 +449,7 @@ public class BorderRendering {
 			y += height + padding;
 		}
 
-		double remaining = maxY - y;
-		for (int a = 0; a < dots.size(); a++) {
-			Ellipse2D dot = dots.get(a);
-			dot.setFrame(dot.getX(),
-					dot.getY() + (a + 1) * remaining / (dots.size() + 1),
-					dot.getWidth(), dot.getHeight());
-			g.fill(dot);
-		}
+		distributePaddingAndPaint(g, dots, maxY - y, false);
 	}
 
 	/**
@@ -516,7 +524,7 @@ public class BorderRendering {
 		double space = maxX - minX;
 		double width = 2 * height;
 		double padding = 2 * height;
-		List<Rectangle2D.Double> dashes = new ArrayList<>(
+		List<RectangularShape> dashes = new ArrayList<>(
 				(int) (Math.ceil(space / (width + padding)) + 1.5));
 		double x = minX + padding;
 		while (x + width + padding < maxX) {
@@ -524,14 +532,7 @@ public class BorderRendering {
 			x += width + padding;
 		}
 
-		double remaining = maxX - x;
-		for (int a = 0; a < dashes.size(); a++) {
-			Rectangle2D dash = dashes.get(a);
-			dash.setFrame(
-					dash.getX() + (a + 1) * remaining / (dashes.size() + 1),
-					dash.getY(), dash.getWidth(), dash.getHeight());
-			g.fill(dash);
-		}
+		distributePaddingAndPaint(g, dashes, maxX - x, true);
 	}
 
 	private void renderVerticalDashes(Graphics2D g, double minY, double maxY,
@@ -540,7 +541,7 @@ public class BorderRendering {
 		double space = maxY - minY;
 		double height = 2 * width;
 		double padding = 2 * width;
-		List<Rectangle2D.Double> dashes = new ArrayList<>(
+		List<RectangularShape> dashes = new ArrayList<>(
 				(int) (Math.ceil(space / (height + padding)) + 1.5));
 		double y = minY + padding;
 		while (y + height + padding < maxY) {
@@ -548,14 +549,7 @@ public class BorderRendering {
 			y += height + padding;
 		}
 
-		double remaining = maxY - y;
-		for (int a = 0; a < dashes.size(); a++) {
-			Rectangle2D dash = dashes.get(a);
-			dash.setFrame(dash.getX(),
-					dash.getY() + (a + 1) * remaining / (dashes.size() + 1),
-					dash.getWidth(), dash.getHeight());
-			g.fill(dash);
-		}
+		distributePaddingAndPaint(g, dashes, maxY - y, false);
 	}
 
 	/**
