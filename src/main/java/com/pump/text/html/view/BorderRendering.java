@@ -7,6 +7,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -398,28 +399,49 @@ public class BorderRendering {
 
 	private void renderHorizontalDots(Graphics2D g, double minX, double maxX,
 			double y, float height) {
-		double k = maxX - minX;
-		if (k < 1.5 * height)
-			return;
-		double centerX = (minX + maxX) / 2;
-		double e1 = centerX - height / 2;
-		double e2 = centerX + height / 2;
-		g.fill(new Ellipse2D.Double(e1, y, height, height));
-		renderHorizontalDots(g, minX, e1, y, height);
-		renderHorizontalDots(g, e2, maxX, y, height);
+		height = Math.max(1, height);
+		double space = maxX - minX;
+		double width = height;
+		double padding = height;
+		List<Ellipse2D.Double> dots = new ArrayList<>(
+				(int) (Math.ceil(space / (width + padding)) + 1.5));
+		double x = minX + width;
+		while (x + width + padding < maxX) {
+			dots.add(new Ellipse2D.Double(x, y, width, height));
+			x += width + padding;
+		}
+
+		double remaining = maxX - x;
+		for (int a = 0; a < dots.size(); a++) {
+			Ellipse2D dot = dots.get(a);
+			dot.setFrame(dot.getX() + (a + 1) * remaining / (dots.size() + 1),
+					dot.getY(), dot.getWidth(), dot.getHeight());
+			g.fill(dot);
+		}
 	}
 
 	private void renderVerticalDots(Graphics2D g, double minY, double maxY,
 			double x, float width) {
-		double k = maxY - minY;
-		if (k < 1.5 * width)
-			return;
-		double centerY = (minY + maxY) / 2;
-		double e1 = centerY - width / 2;
-		double e2 = centerY + width / 2;
-		g.fill(new Ellipse2D.Double(x, e1, width, width));
-		renderVerticalDots(g, minY, e1, x, width);
-		renderVerticalDots(g, e2, maxY, x, width);
+		width = Math.max(1, width);
+		double space = maxY - minY;
+		double height = width;
+		double padding = width;
+		List<Ellipse2D.Double> dots = new ArrayList<>(
+				(int) (Math.ceil(space / (height + padding)) + 1.5));
+		double y = minY + height;
+		while (y + height + padding < maxY) {
+			dots.add(new Ellipse2D.Double(x, y, width, height));
+			y += height + padding;
+		}
+
+		double remaining = maxY - y;
+		for (int a = 0; a < dots.size(); a++) {
+			Ellipse2D dot = dots.get(a);
+			dot.setFrame(dot.getX(),
+					dot.getY() + (a + 1) * remaining / (dots.size() + 1),
+					dot.getWidth(), dot.getHeight());
+			g.fill(dot);
+		}
 	}
 
 	/**
@@ -490,28 +512,50 @@ public class BorderRendering {
 
 	private void renderHorizontalDashes(Graphics2D g, double minX, double maxX,
 			double y, float height) {
-		double k = maxX - minX;
-		if (k < 3.5 * Math.max(2, height))
-			return;
-		double centerX = (minX + maxX) / 2;
-		double e1 = centerX - height;
-		double e2 = centerX + height;
-		g.fill(new Rectangle2D.Double(e1, y, e2 - e1, height));
-		renderHorizontalDashes(g, minX, e1, y, height);
-		renderHorizontalDashes(g, e2, maxX, y, height);
+		height = Math.max(1, height);
+		double space = maxX - minX;
+		double width = 2 * height;
+		double padding = 2 * height;
+		List<Rectangle2D.Double> dashes = new ArrayList<>(
+				(int) (Math.ceil(space / (width + padding)) + 1.5));
+		double x = minX + padding;
+		while (x + width + padding < maxX) {
+			dashes.add(new Rectangle2D.Double(x, y, width, height));
+			x += width + padding;
+		}
+
+		double remaining = maxX - x;
+		for (int a = 0; a < dashes.size(); a++) {
+			Rectangle2D dash = dashes.get(a);
+			dash.setFrame(
+					dash.getX() + (a + 1) * remaining / (dashes.size() + 1),
+					dash.getY(), dash.getWidth(), dash.getHeight());
+			g.fill(dash);
+		}
 	}
 
 	private void renderVerticalDashes(Graphics2D g, double minY, double maxY,
 			double x, float width) {
-		double k = maxY - minY;
-		if (k < 3.5 * Math.max(2, width))
-			return;
-		double centerY = (minY + maxY) / 2;
-		double e1 = centerY - width;
-		double e2 = centerY + width;
-		g.fill(new Rectangle2D.Double(x, e1, width, e2 - e1));
-		renderVerticalDashes(g, minY, e1, x, width);
-		renderVerticalDashes(g, e2, maxY, x, width);
+		width = Math.max(1, width);
+		double space = maxY - minY;
+		double height = 2 * width;
+		double padding = 2 * width;
+		List<Rectangle2D.Double> dashes = new ArrayList<>(
+				(int) (Math.ceil(space / (height + padding)) + 1.5));
+		double y = minY + padding;
+		while (y + height + padding < maxY) {
+			dashes.add(new Rectangle2D.Double(x, y, width, height));
+			y += height + padding;
+		}
+
+		double remaining = maxY - y;
+		for (int a = 0; a < dashes.size(); a++) {
+			Rectangle2D dash = dashes.get(a);
+			dash.setFrame(dash.getX(),
+					dash.getY() + (a + 1) * remaining / (dashes.size() + 1),
+					dash.getWidth(), dash.getHeight());
+			g.fill(dash);
+		}
 	}
 
 	/**
