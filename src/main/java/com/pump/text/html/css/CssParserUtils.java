@@ -12,38 +12,12 @@ public class CssParserUtils {
 	 * parentheses. So for ex: "rgb(0,0,0), rgb(5,5,5)" will produce two terms
 	 * even though there are 6 commas.
 	 * 
+	 * @param trim
+	 *            if true then the elements in the returned list are trimmed
 	 */
 	public static List<String> splitCommaSeparatedList(String str,
 			boolean trim) {
-		List<String> returnValue = new LinkedList<>();
-		StringBuilder sb = new StringBuilder();
-		int parenthesesCtr = 0;
-		for (int a = 0; a < str.length(); a++) {
-			char ch = str.charAt(a);
-			if (ch == '(') {
-				parenthesesCtr++;
-				sb.append(ch);
-			} else if (ch == ')') {
-				parenthesesCtr--;
-				sb.append(ch);
-			} else if (ch == ',' && parenthesesCtr == 0) {
-				if (trim) {
-					returnValue.add(sb.toString().trim());
-				} else {
-					returnValue.add(sb.toString());
-				}
-				sb.delete(0, sb.length());
-			} else {
-				sb.append(ch);
-			}
-		}
-		if (trim) {
-			returnValue.add(sb.toString().trim());
-		} else {
-			returnValue.add(sb.toString());
-		}
-
-		return returnValue;
+		return splitList(str, ',', trim);
 	}
 
 	/**
@@ -142,6 +116,56 @@ public class CssParserUtils {
 			t = t.substring(word.length()).trim();
 		}
 		return words;
+	}
+
+	/**
+	 * Split the argument into space-separated terms. For example: "4mm ridge
+	 * rgba(170, 50, 220, .6)" is converted into "4mm" "ridge" and "rgba(170,
+	 * 50, 220, .6)".
+	 * 
+	 * @param trim
+	 *            if true then the elements in the returned list are trimmed
+	 */
+	public static List<String> splitSpaceSeparatedList(String str,
+			boolean trim) {
+		return splitList(str, ' ', trim);
+	}
+
+	public static List<String> splitList(String str, char separator,
+			boolean trim) {
+		List<String> returnValue = new LinkedList<>();
+		StringBuilder sb = new StringBuilder();
+		int parenthesesCtr = 0;
+		for (int a = 0; a < str.length(); a++) {
+			char ch = str.charAt(a);
+			if (ch == '(') {
+				parenthesesCtr++;
+				sb.append(ch);
+			} else if (ch == ')') {
+				parenthesesCtr--;
+				sb.append(ch);
+			} else if (ch == separator && parenthesesCtr == 0) {
+				if (sb.length() > 0) {
+					if (trim) {
+						returnValue.add(sb.toString().trim());
+					} else {
+						returnValue.add(sb.toString());
+					}
+				}
+				sb.delete(0, sb.length());
+			} else {
+				sb.append(ch);
+			}
+		}
+		if (sb.length() > 0) {
+			if (trim) {
+				returnValue.add(sb.toString().trim());
+			} else {
+				returnValue.add(sb.toString());
+			}
+		}
+
+		return returnValue;
 	}
 
 }

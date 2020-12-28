@@ -306,7 +306,7 @@ public class BorderRendering {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
-		if (topStyleValue == Value.DOTTED) {
+		if (topStyleValue == Value.DOTTED && config.topColor != null) {
 			// paint top row of dots:
 			g.setColor(config.topColor);
 			double minX, maxX;
@@ -331,7 +331,7 @@ public class BorderRendering {
 					topWidthValue);
 		}
 
-		if (bottomStyleValue == Value.DOTTED) {
+		if (bottomStyleValue == Value.DOTTED && config.bottomColor != null) {
 			// paint bottom row of dots:
 			g.setColor(config.bottomColor);
 			double minX, maxX;
@@ -355,7 +355,7 @@ public class BorderRendering {
 					bounds.getMaxY() - bottomWidthValue, bottomWidthValue);
 		}
 
-		if (leftStyleValue == Value.DOTTED) {
+		if (leftStyleValue == Value.DOTTED && config.leftColor != null) {
 			// paint left column of dots:
 			g.setColor(config.leftColor);
 			double minY, maxY;
@@ -374,7 +374,7 @@ public class BorderRendering {
 			renderVerticalDots(g, minY, maxY, bounds.getMinX(), leftWidthValue);
 		}
 
-		if (rightStyleValue == Value.DOTTED) {
+		if (rightStyleValue == Value.DOTTED && config.rightColor != null) {
 			// paint right column of dots:
 			g.setColor(config.rightColor);
 			double minY, maxY;
@@ -461,7 +461,7 @@ public class BorderRendering {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
-		if (topStyleValue == Value.DASHED) {
+		if (topStyleValue == Value.DASHED && config.topColor != null) {
 			g.setColor(config.topColor);
 			if (leftStyleValue == Value.DASHED) {
 				g.fill(new Rectangle2D.Double(bounds.getMinX(),
@@ -479,7 +479,7 @@ public class BorderRendering {
 					topWidthValue);
 		}
 
-		if (bottomStyleValue == Value.DASHED) {
+		if (bottomStyleValue == Value.DASHED && config.bottomColor != null) {
 			g.setColor(config.bottomColor);
 			if (leftStyleValue == Value.DASHED) {
 				g.fill(new Rectangle2D.Double(bounds.getMinX(),
@@ -498,7 +498,7 @@ public class BorderRendering {
 					bounds.getMaxY() - bottomWidthValue, bottomWidthValue);
 		}
 
-		if (leftStyleValue == Value.DASHED) {
+		if (leftStyleValue == Value.DASHED && config.leftColor != null) {
 			g.setColor(config.leftColor);
 			double minY = bounds.getMinY() + topWidthValue;
 			double maxY = bounds.getMaxY() - bottomWidthValue;
@@ -506,7 +506,7 @@ public class BorderRendering {
 					leftWidthValue);
 		}
 
-		if (rightStyleValue == Value.DASHED) {
+		if (rightStyleValue == Value.DASHED && config.rightColor != null) {
 			g.setColor(config.rightColor);
 			double minY = bounds.getMinY() + topWidthValue;
 			double maxY = bounds.getMaxY() - bottomWidthValue;
