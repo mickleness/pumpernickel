@@ -125,14 +125,15 @@ public class CssUrlImageValue implements CssImageValue {
 
 		// TODO refactor away this list
 		List<CssBackgroundRepeatValue> allRepeats = (List<CssBackgroundRepeatValue>) viewHelper
-				.getAttribute("background-repeat");
+				.getAttribute("background-repeat", false);
 		List<CssBackgroundPositionValue> allPositions = (List<CssBackgroundPositionValue>) viewHelper
-				.getAttribute("background-position");
+				.getAttribute("background-position", false);
 		List<CssBackgroundSizeValue> allSizes = (List<CssBackgroundSizeValue>) viewHelper
-				.getAttribute("background-size");
+				.getAttribute("background-size", false);
 		List<CssBackgroundAttachmentValue> allAttachments = (List<CssBackgroundAttachmentValue>) viewHelper
 				.getAttribute(
-						CssBackgroundAttachmentValue.PROPERTY_BACKGROUND_ATTACHMENT);
+						CssBackgroundAttachmentValue.PROPERTY_BACKGROUND_ATTACHMENT,
+						false);
 
 		CssBackgroundRepeatValue repeatValue = getLayerValue(layerIndex,
 				allRepeats);

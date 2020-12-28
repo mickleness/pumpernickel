@@ -44,7 +44,7 @@ public class BorderRenderingConfiguration {
 	public BorderRenderingConfiguration(QViewHelper helper) {
 		{
 			CssBorderValue all = (CssBorderValue) helper
-					.getAttribute(CssBorderParser.PROPERTY_BORDER);
+					.getAttribute(CssBorderParser.PROPERTY_BORDER, false);
 			if (all != null) {
 				leftWidth = rightWidth = topWidth = bottomWidth = all
 						.getWidth();
@@ -56,8 +56,8 @@ public class BorderRenderingConfiguration {
 		}
 
 		{
-			CssBorderValue left = (CssBorderValue) helper
-					.getAttribute(CssBorderLeftParser.PROPERTY_BORDER_LEFT);
+			CssBorderValue left = (CssBorderValue) helper.getAttribute(
+					CssBorderLeftParser.PROPERTY_BORDER_LEFT, false);
 			if (left != null) {
 				leftWidth = left.getWidth();
 				leftColor = left.getColor();
@@ -66,8 +66,8 @@ public class BorderRenderingConfiguration {
 		}
 
 		{
-			CssBorderValue right = (CssBorderValue) helper
-					.getAttribute(CssBorderRightParser.PROPERTY_BORDER_RIGHT);
+			CssBorderValue right = (CssBorderValue) helper.getAttribute(
+					CssBorderRightParser.PROPERTY_BORDER_RIGHT, false);
 			if (right != null) {
 				rightWidth = right.getWidth();
 				rightColor = right.getColor();
@@ -76,8 +76,8 @@ public class BorderRenderingConfiguration {
 		}
 
 		{
-			CssBorderValue top = (CssBorderValue) helper
-					.getAttribute(CssBorderTopParser.PROPERTY_BORDER_TOP);
+			CssBorderValue top = (CssBorderValue) helper.getAttribute(
+					CssBorderTopParser.PROPERTY_BORDER_TOP, false);
 			if (top != null) {
 				topWidth = top.getWidth();
 				topColor = top.getColor();
@@ -86,8 +86,8 @@ public class BorderRenderingConfiguration {
 		}
 
 		{
-			CssBorderValue bottom = (CssBorderValue) helper
-					.getAttribute(CssBorderBottomParser.PROPERTY_BORDER_BOTTOM);
+			CssBorderValue bottom = (CssBorderValue) helper.getAttribute(
+					CssBorderBottomParser.PROPERTY_BORDER_BOTTOM, false);
 			if (bottom != null) {
 				bottomWidth = bottom.getWidth();
 				bottomColor = bottom.getColor();
@@ -102,7 +102,8 @@ public class BorderRenderingConfiguration {
 
 	private void initStyles(QViewHelper helper) {
 		List<CssBorderStyleValue> styles = (List<CssBorderStyleValue>) helper
-				.getAttribute(CssBorderStyleParser.PROPERTY_BORDER_STYLE);
+				.getAttribute(CssBorderStyleParser.PROPERTY_BORDER_STYLE,
+						false);
 		if (styles != null && styles.size() == 1) {
 			topStyle = styles.get(0);
 			rightStyle = styles.get(0);
@@ -131,13 +132,13 @@ public class BorderRenderingConfiguration {
 		}
 
 		CssBorderStyleValue t = (CssBorderStyleValue) helper.getAttribute(
-				CssBorderTopStyleParser.PROPERTY_BORDER_TOP_STYLE);
+				CssBorderTopStyleParser.PROPERTY_BORDER_TOP_STYLE, false);
 		CssBorderStyleValue r = (CssBorderStyleValue) helper.getAttribute(
-				CssBorderRightStyleParser.PROPERTY_BORDER_RIGHT_STYLE);
+				CssBorderRightStyleParser.PROPERTY_BORDER_RIGHT_STYLE, false);
 		CssBorderStyleValue b = (CssBorderStyleValue) helper.getAttribute(
-				CssBorderBottomStyleParser.PROPERTY_BORDER_BOTTOM_STYLE);
+				CssBorderBottomStyleParser.PROPERTY_BORDER_BOTTOM_STYLE, false);
 		CssBorderStyleValue l = (CssBorderStyleValue) helper.getAttribute(
-				CssBorderLeftStyleParser.PROPERTY_BORDER_LEFT_STYLE);
+				CssBorderLeftStyleParser.PROPERTY_BORDER_LEFT_STYLE, false);
 
 		if (t != null)
 			topStyle = t;
@@ -150,8 +151,8 @@ public class BorderRenderingConfiguration {
 	}
 
 	private void initWidths(QViewHelper helper) {
-		List<CssLength> widths = (List<CssLength>) helper
-				.getAttribute(CssBorderWidthParser.PROPERTY_BORDER_WIDTH);
+		List<CssLength> widths = (List<CssLength>) helper.getAttribute(
+				CssBorderWidthParser.PROPERTY_BORDER_WIDTH, false);
 		if (widths != null && widths.size() == 1) {
 			topWidth = widths.get(0);
 			rightWidth = widths.get(0);
@@ -179,13 +180,13 @@ public class BorderRenderingConfiguration {
 							+ " must be 1-4 elements");
 		}
 		CssLength t = (CssLength) helper.getAttribute(
-				CssBorderTopWidthParser.PROPERTY_BORDER_TOP_WIDTH);
+				CssBorderTopWidthParser.PROPERTY_BORDER_TOP_WIDTH, false);
 		CssLength r = (CssLength) helper.getAttribute(
-				CssBorderRightWidthParser.PROPERTY_BORDER_RIGHT_WIDTH);
+				CssBorderRightWidthParser.PROPERTY_BORDER_RIGHT_WIDTH, false);
 		CssLength b = (CssLength) helper.getAttribute(
-				CssBorderBottomWidthParser.PROPERTY_BORDER_BOTTOM_WIDTH);
+				CssBorderBottomWidthParser.PROPERTY_BORDER_BOTTOM_WIDTH, false);
 		CssLength l = (CssLength) helper.getAttribute(
-				CssBorderLeftWidthParser.PROPERTY_BORDER_LEFT_WIDTH);
+				CssBorderLeftWidthParser.PROPERTY_BORDER_LEFT_WIDTH, false);
 
 		if (t != null)
 			topWidth = t;
@@ -199,8 +200,8 @@ public class BorderRenderingConfiguration {
 
 	private void initColors(QViewHelper helper) {
 
-		List<CssColorValue> colors = (List<CssColorValue>) helper
-				.getAttribute(CssBorderColorParser.PROPERTY_BORDER_COLOR);
+		List<CssColorValue> colors = (List<CssColorValue>) helper.getAttribute(
+				CssBorderColorParser.PROPERTY_BORDER_COLOR, false);
 		if (colors != null && colors.size() == 1) {
 			topColor = colors.get(0);
 			rightColor = colors.get(0);
@@ -229,13 +230,13 @@ public class BorderRenderingConfiguration {
 		}
 
 		CssColorValue t = (CssColorValue) helper.getAttribute(
-				CssBorderTopColorParser.PROPERTY_BORDER_TOP_COLOR);
+				CssBorderTopColorParser.PROPERTY_BORDER_TOP_COLOR, false);
 		CssColorValue r = (CssColorValue) helper.getAttribute(
-				CssBorderRightColorParser.PROPERTY_BORDER_RIGHT_COLOR);
+				CssBorderRightColorParser.PROPERTY_BORDER_RIGHT_COLOR, false);
 		CssColorValue b = (CssColorValue) helper.getAttribute(
-				CssBorderBottomColorParser.PROPERTY_BORDER_BOTTOM_COLOR);
+				CssBorderBottomColorParser.PROPERTY_BORDER_BOTTOM_COLOR, false);
 		CssColorValue l = (CssColorValue) helper.getAttribute(
-				CssBorderLeftColorParser.PROPERTY_BORDER_LEFT_COLOR);
+				CssBorderLeftColorParser.PROPERTY_BORDER_LEFT_COLOR, false);
 
 		if (t != null)
 			topColor = t;

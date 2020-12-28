@@ -249,9 +249,13 @@ public class QViewHelper {
 	/**
 	 * Return an attribute associated.
 	 */
-	public Object getAttribute(Object attrKey) {
+	public Object getAttribute(Object attrKey, boolean canConsultParent) {
 		// get value from tag declaration
-		Object value = view.getElement().getAttributes().getAttribute(attrKey);
+		Object value = null;
+		if (canConsultParent
+				|| view.getElement().getAttributes().isDefined(attrKey)) {
+			value = view.getElement().getAttributes().getAttribute(attrKey);
+		}
 
 		if (value == null) {
 			// get value from css rule
@@ -288,12 +292,12 @@ public class QViewHelper {
 		returnValue.setRenderingHint(HINT_KEY_ELEMENT, view.getElement());
 
 		Object shadowValue = getAttribute(
-				CssTextShadowParser.PROPERTY_TEXT_SHADOW);
+				CssTextShadowParser.PROPERTY_TEXT_SHADOW, true);
 		if (shadowValue != null)
 			returnValue.setRenderingHint(HINT_KEY_TEXT_SHADOW, shadowValue);
 
 		CssOverflowValue overflow = (CssOverflowValue) getAttribute(
-				CssOverflowParser.PROPERTY_OVERFLOW);
+				CssOverflowParser.PROPERTY_OVERFLOW, false);
 		boolean requestedClipping = overflow != null
 				&& overflow.getMode() == CssOverflowValue.Mode.HIDDEN;
 		boolean requestedScrollbar = overflow != null
@@ -309,7 +313,7 @@ public class QViewHelper {
 		}
 
 		CssBackgroundClipValue clipValue = (CssBackgroundClipValue) getAttribute(
-				CssBackgroundClipValue.PROPERTY_BACKGROUND_CLIP);
+				CssBackgroundClipValue.PROPERTY_BACKGROUND_CLIP, false);
 		if (clipValue != null) {
 			CssBackgroundClipValue.Mode m = clipValue.getMode();
 			if (m == CssBackgroundClipValue.Mode.TEXT) {
@@ -354,7 +358,7 @@ public class QViewHelper {
 				.getBackground(styleSheet.getViewAttributes(view));
 
 		CssBackgroundClipValue clipValue = (CssBackgroundClipValue) getAttribute(
-				CssBackgroundClipValue.PROPERTY_BACKGROUND_CLIP);
+				CssBackgroundClipValue.PROPERTY_BACKGROUND_CLIP, false);
 
 		Graphics2D g2 = (Graphics2D) g.create();
 
@@ -390,7 +394,7 @@ public class QViewHelper {
 		}
 
 		List<CssImageValue> bkgndImgs = (List<CssImageValue>) getAttribute(
-				CSS.Attribute.BACKGROUND_IMAGE);
+				CSS.Attribute.BACKGROUND_IMAGE, false);
 		if (bkgndImgs != null) {
 			for (int a = bkgndImgs.size() - 1; a >= 0; a--) {
 				Graphics2D g3 = (Graphics2D) g2.create();
