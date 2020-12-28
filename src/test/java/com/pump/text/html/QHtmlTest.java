@@ -759,6 +759,21 @@ public class QHtmlTest extends TestCase {
 		assertFalse(ops1.get(1) instanceof ImageOperation);
 	}
 
+	/**
+	 * At one point a bug made an inner view inherit the border of its parent.
+	 * The correct behavior is for views to NOT inherit their parent's border.
+	 */
+	public void testSingleBorder() {
+		String html = "<html>\n" + "  <body>  \n"
+				+ "    <p style=\"border: solid red 7px;\">Lorem Ipsum</div>\n"
+				+ "  </body>\n" + "</html>";
+
+		List<Operation> ops = getOperations(true, html);
+		assertEquals(3, ops.size());
+		assertEquals(Color.red,
+				((FillOperation) ops.get(1)).getContext().getPaint());
+	}
+
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,
 			int tolerance) {
 		assertEquals(bi1.getWidth(), bi2.getWidth());
