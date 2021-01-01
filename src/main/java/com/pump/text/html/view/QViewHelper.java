@@ -97,7 +97,7 @@ public class QViewHelper {
 		// Border in that order.
 
 		// this handles the background color & image:
-		helper.paintBackground(g, r);
+		helper.paintBackground(g, r, boxPainter);
 
 		// this handles the border:
 		Rectangle borderR = new Rectangle(r);
@@ -353,9 +353,8 @@ public class QViewHelper {
 		return new VectorGraphics2D(new Graphics2DContext(g), operations);
 	}
 
-	private void paintBackground(Graphics2D g, Rectangle r) {
-		Color bgColor = styleSheet
-				.getBackground(styleSheet.getViewAttributes(view));
+	private void paintBackground(Graphics2D g, Rectangle r,
+			BoxPainter boxPainter) {
 
 		CssBackgroundClipValue clipValue = (CssBackgroundClipValue) getAttribute(
 				CssBackgroundClipValue.PROPERTY_BACKGROUND_CLIP, false);
@@ -388,9 +387,18 @@ public class QViewHelper {
 			}
 		}
 
-		if (bgColor != null) {
-			g2.setColor(bgColor);
-			g2.fillRect(r.x, r.y, r.width, r.height);
+		if (boxPainter != null) {
+			// Erg. We shouldn't need to check the existence of a BoxPainter
+			// here. But if we remove this check then a unit test fails (because
+			// we redundantly paint a background rectangle twice). So this is an
+			// awkward hack I'd love to eliminate some day.
+
+			Color bgColor = styleSheet
+					.getBackground(styleSheet.getViewAttributes(view));
+			if (bgColor != null) {
+				g2.setColor(bgColor);
+				g2.fillRect(r.x, r.y, r.width, r.height);
+			}
 		}
 
 		List<CssImageValue> bkgndImgs = (List<CssImageValue>) getAttribute(
