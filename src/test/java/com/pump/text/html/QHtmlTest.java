@@ -774,6 +774,45 @@ public class QHtmlTest extends TestCase {
 				((FillOperation) ops.get(1)).getContext().getPaint());
 	}
 
+	/**
+	 * Test that when giving a nested div both the outer and inner div show the
+	 * appropriate CSS border.
+	 */
+	public void testSelector_nestedDiv() {
+		//@formatter:off
+		String html = "<html>\n"
+				+ "  <head>\n"
+				+ "    <style>\n"
+				+ "      div   { border: 10px solid #ff0000; }\n"
+				+ "    </style>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    <div>\n"
+				+ "      <div style=\"font-size: 10pt;\">LOREM IPSUM</div>\n"
+				+ "    </div>\n"
+				+ "  </body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		List<Operation> ops = getOperations(true, html);
+		assertEquals(4, ops.size());
+
+		// the white background:
+		assertTrue(ops.get(0) instanceof FillOperation);
+		assertEquals(Color.white, ops.get(0).getContext().getPaint());
+
+		// the outer div border:
+		assertTrue(ops.get(1) instanceof FillOperation);
+		assertEquals(Color.red, ops.get(1).getContext().getPaint());
+
+		// the inner div border:
+		assertTrue(ops.get(2) instanceof FillOperation);
+		assertEquals(Color.red, ops.get(2).getContext().getPaint());
+
+		// the inner div border:
+		assertTrue(ops.get(3) instanceof StringOperation);
+	}
+
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,
 			int tolerance) {
 		assertEquals(bi1.getWidth(), bi2.getWidth());

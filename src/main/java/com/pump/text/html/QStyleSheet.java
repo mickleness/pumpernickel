@@ -5,9 +5,12 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -212,17 +215,22 @@ public class QStyleSheet extends StyleSheet {
 	 *         class supports.
 	 */
 	private Style createStyleWrapper(Style originalStyle, String selector) {
+
+		final Collection<String> allSelectors = getSubSelectors(selector);
+
 		InvocationHandler handler = new InvocationHandler() {
 
 			@Override
 			public Object invoke(Object proxy, Method method, Object[] args)
 					throws Throwable {
 				if (method.getName().equals("getAttribute")) {
-					Map<Object, Object> qProperties = qRules.get(selector);
-					if (qProperties != null) {
-						Object value = qProperties.get(args[0]);
-						if (value != null)
-							return value;
+					for (String selector : allSelectors) {
+						Map<Object, Object> qProperties = qRules.get(selector);
+						if (qProperties != null) {
+							Object value = qProperties.get(args[0]);
+							if (value != null)
+								return value;
+						}
 					}
 				}
 				return method.invoke(originalStyle, args);
@@ -232,6 +240,39 @@ public class QStyleSheet extends StyleSheet {
 		return (Style) Proxy.newProxyInstance(
 				QStyleSheet.class.getClassLoader(), new Class[] { Style.class },
 				handler);
+	}
+
+	/**
+	 * Convert a literal (real) selector into all the abstract selectors
+	 * that might be applied.
+	 */
+	private Collection<String> getSubSelectors(String selector) {
+
+		// I'm not sure how the superclass code handles this correctly,
+		// but if the selector comes back as "html body div div" and we've only
+		// identified rules for "html body div": then we need a way to make sure
+		// we realize one "div" can be dropped and still get correct results.
+
+		// this current approach feels wrong/incorrect, and I expect I'll add
+		// some more unit tests shortly that require revising this.
+		String[] selectorTerms = selector.split(" ");
+		Collection<String> allSelectors = new LinkedHashSet<>();
+		allSelectors.add(selector);
+
+		LinkedList<String> nonconsecutiveTerms = new LinkedList<>();
+		for (int a = 0; a < selectorTerms.length; a++) {
+			if (!selectorTerms[a].equals(nonconsecutiveTerms.peekLast()))
+				nonconsecutiveTerms.add(selectorTerms[a]);
+		}
+		StringBuffer sb = new StringBuffer();
+		for (String nct : nonconsecutiveTerms) {
+			if (sb.length() > 0)
+				sb.append(' ');
+			sb.append(nct);
+		}
+		allSelectors.add(sb.toString());
+
+		return allSelectors;
 	}
 
 	@Override
