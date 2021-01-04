@@ -62,7 +62,7 @@ public class CssTextShadowParser
 			while (termIter.hasNext()) {
 				String term = termIter.next();
 				try {
-					color = colorParser.parse(term);
+					color = colorParser.parse(term, false);
 					termIter.remove();
 					break;
 				} catch (Exception e) {
@@ -75,7 +75,11 @@ public class CssTextShadowParser
 			int radius = 0;
 
 			if (terms.size() == 3) {
-				radius = parseInt(terms.get(2));
+				try {
+					radius = parseInt(terms.get(2));
+				} catch (RuntimeException e) {
+					throw e;
+				}
 			}
 			return new ShadowAttributes(dx, dy, radius, color);
 		} else {

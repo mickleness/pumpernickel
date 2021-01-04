@@ -229,7 +229,20 @@ public class CssColorParser implements CssPropertyParser<CssColorValue> {
 	}
 
 	@Override
-	public CssColorValue parse(final String cssValue) {
+	public CssColorValue parse(String cssValue) {
+		return parse(cssValue, true);
+	}
+
+	/**
+	 * 
+	 * @param cssValue
+	 * @param attemptBadFormatting
+	 *            if true then we'll parse "ffffff" as a color, even though it
+	 *            is formatted incorrectly.
+	 * @return
+	 */
+	public CssColorValue parse(final String cssValue,
+			boolean attemptBadFormatting) {
 		String value = cssValue.toLowerCase().trim();
 		CssColorValue namedColor = getNamedColor(value);
 		if (namedColor != null)
@@ -255,11 +268,14 @@ public class CssColorParser implements CssPropertyParser<CssColorValue> {
 			return parseHex(cssValue, value.substring("#".length()));
 		}
 
-		// CSS#stringToColor says "sometimes get specified without leading #"
-		try {
-			return parseHex(cssValue, value);
-		} catch (RuntimeException e) {
-			// do nothing, this was a longshot anyway
+		if (attemptBadFormatting) {
+			// CSS#stringToColor says "sometimes get specified without leading
+			// #"
+			try {
+				return parseHex(cssValue, value);
+			} catch (RuntimeException e) {
+				// do nothing, this was a longshot anyway
+			}
 		}
 		throw new IllegalArgumentException(
 				"unsupported color \"" + value + "\"");
