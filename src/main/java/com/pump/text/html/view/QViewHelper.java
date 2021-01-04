@@ -65,8 +65,19 @@ public class QViewHelper {
 			BoxPainter boxPainter, boolean isBody) {
 		QViewHelper helper = new QViewHelper(view, styleSheet, legacyView);
 		Graphics2D g2 = helper.createGraphics(g, allocation, isBody);
-		g2 = helper.paintBelowContent(g2, allocation, helper, boxPainter);
-		legacyView.paintLegacyCss2(g2, allocation);
+		helper.paintBelowContent(g2, allocation, helper, boxPainter);
+
+		Graphics2D legacyG;
+		if (boxPainter != null) {
+			// this strips away the legacy rendering:
+			Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
+			legacyG = helper.createGraphicsWithoutBoxPainter(g2, r, boxPainter);
+		} else {
+			legacyG = g2;
+		}
+
+		legacyView.paintLegacyCss2(legacyG, allocation);
+		legacyG.dispose();
 		g2.dispose();
 	}
 
@@ -84,7 +95,7 @@ public class QViewHelper {
 	 * @param boxPainter
 	 * @return
 	 */
-	private Graphics2D paintBelowContent(Graphics2D g, Shape allocation,
+	private void paintBelowContent(Graphics2D g, Shape allocation,
 			QViewHelper helper, BoxPainter boxPainter) {
 		Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
 
@@ -108,13 +119,6 @@ public class QViewHelper {
 
 		BorderRendering borderRendering = new BorderRendering(helper, borderR);
 		borderRendering.paint(g);
-
-		if (boxPainter != null) {
-			// this strips away the legacy rendering:
-			g = helper.createGraphicsWithoutBoxPainter(g, r, boxPainter);
-		}
-
-		return g;
 	}
 
 	/**
@@ -265,7 +269,7 @@ public class QViewHelper {
 
 		if (attrKey == CSS.Attribute.BACKGROUND_IMAGE && value != null) {
 			String str = value.toString();
-			return new CssImageParser().parse(str);
+			return str == null ? null : new CssImageParser().parse(str);
 		} else if (attrKey == CSS.Attribute.BACKGROUND_COLOR && value != null) {
 			String str = value.toString();
 			return new CssColorParser(CSS.Attribute.BACKGROUND_COLOR)
