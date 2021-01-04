@@ -834,6 +834,29 @@ public class QHtmlTest extends TestCase {
 		//@formatter:on
 
 		List<Operation> ops = getOperations(true, html);
+		assertEquals(8, ops.size());
+
+		// the white background:
+		assertTrue(ops.get(0) instanceof FillOperation);
+		assertEquals(Color.white, ops.get(0).getContext().getPaint());
+
+		assertTrue(ops.get(1) instanceof StringOperation);
+		assertEquals("Outside", ((StringOperation) (ops.get(1))).getString());
+
+		// ops.get(2) is a bullet shape
+
+		assertTrue(ops.get(3) instanceof StringOperation);
+		assertEquals("Item 1", ((StringOperation) (ops.get(3))).getString());
+
+		// ops.get(4) is a bullet shape
+
+		assertTrue(ops.get(5) instanceof StringOperation);
+		assertEquals("Item 2", ((StringOperation) (ops.get(5))).getString());
+
+		// ops.get(6) is a bullet shape
+
+		assertTrue(ops.get(7) instanceof StringOperation);
+		assertEquals("Item 3", ((StringOperation) (ops.get(7))).getString());
 	}
 
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,
