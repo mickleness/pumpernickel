@@ -813,6 +813,29 @@ public class QHtmlTest extends TestCase {
 		assertTrue(ops.get(3) instanceof StringOperation);
 	}
 
+	/**
+	 * Test a basic unordered list.
+	 * <p>
+	 * At one point any reference to a list tag failed (with a NPE) because
+	 * antialiasing hints were undefined.
+	 */
+	public void testList() {
+		//@formatter:off
+		String html = "<html>\n"
+				+ "  <body>\n"
+				+ "    Outside\n"
+				+ "    <ul>\n"
+				+ "      <li>Item 1</li>\n"
+				+ "      <li>Item 2</li>\n"
+				+ "      <li>Item 3</li>\n"
+				+ "    </ul>\n"
+				+ "  </body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		List<Operation> ops = getOperations(true, html);
+	}
+
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,
 			int tolerance) {
 		assertEquals(bi1.getWidth(), bi2.getWidth());
