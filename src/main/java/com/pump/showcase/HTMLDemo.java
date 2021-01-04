@@ -27,6 +27,8 @@ import com.pump.desktop.error.ErrorManager;
 import com.pump.inspector.Inspector;
 import com.pump.inspector.InspectorRow;
 import com.pump.text.html.QHTMLEditorKit;
+import com.pump.text.html.QHTMLFactory;
+import com.pump.text.html.QStyleSheet;
 
 public class HTMLDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
@@ -278,14 +280,13 @@ public class HTMLDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[] { "html", "css" };
 	}
 
 	@Override
 	public Class<?>[] getClasses() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Class[] { QHTMLEditorKit.class, HTMLEditorKit.class,
+				QStyleSheet.class, QHTMLFactory.class };
 	}
 
 }
