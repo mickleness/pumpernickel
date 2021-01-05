@@ -842,21 +842,28 @@ public class QHtmlTest extends TestCase {
 
 		assertTrue(ops.get(1) instanceof StringOperation);
 		assertEquals("Outside", ((StringOperation) (ops.get(1))).getString());
+		float outerX = ((StringOperation) (ops.get(1))).getX();
 
 		// ops.get(2) is a bullet shape
 
 		assertTrue(ops.get(3) instanceof StringOperation);
-		assertEquals("Item 1", ((StringOperation) (ops.get(3))).getString());
+		StringOperation li1 = (StringOperation) (ops.get(3));
+		assertEquals("Item 1", li1.getString());
+		assertTrue(li1.getX() > outerX);
 
 		// ops.get(4) is a bullet shape
 
 		assertTrue(ops.get(5) instanceof StringOperation);
-		assertEquals("Item 2", ((StringOperation) (ops.get(5))).getString());
+		StringOperation li2 = (StringOperation) (ops.get(5));
+		assertEquals("Item 2", li2.getString());
+		assertTrue(li2.getX() > outerX);
 
 		// ops.get(6) is a bullet shape
 
 		assertTrue(ops.get(7) instanceof StringOperation);
-		assertEquals("Item 3", ((StringOperation) (ops.get(7))).getString());
+		StringOperation li3 = (StringOperation) (ops.get(7));
+		assertEquals("Item 3", li3.getString());
+		assertTrue(li3.getX() > outerX);
 	}
 
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,

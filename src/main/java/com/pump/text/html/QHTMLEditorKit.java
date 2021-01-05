@@ -19,11 +19,25 @@ public class QHTMLEditorKit extends HTMLEditorKit {
 	 * The super classes uses a constant style sheet for the whole app. (I don't
 	 * know what the backstory is there.)
 	 */
-	protected StyleSheet mySheet;
+	protected QStyleSheet mySheet;
 
 	public QHTMLEditorKit() {
 		super();
-		setStyleSheet(new QStyleSheet());
+
+		// so... I'm not entirely why this is, but super.getStyleSheet
+		// returns a STATIC StyleSheet. And it comes installed with all
+		// sorts of important basic properties (like "ul { margin-left: 50px;
+		// }"). So we want to incorporate that stylesheet, but we also want OUR
+		// style sheet to be a locally maintained QStyleSheet:
+
+		QStyleSheet newSheet = new QStyleSheet();
+
+		StyleSheet superSheet = super.getStyleSheet();
+		if (superSheet != null) {
+			// do a null check just in case something changes in the future
+			newSheet.addStyleSheet(superSheet);
+		}
+		setStyleSheet(newSheet);
 	}
 
 	@Override
@@ -53,13 +67,17 @@ public class QHTMLEditorKit extends HTMLEditorKit {
 		return new QStyleSheet();
 	}
 
+	/**
+	 * The incoming StyleSheet must be a QStyleSheet, or a ClassCastException
+	 * will be thrown.
+	 */
 	@Override
 	public void setStyleSheet(StyleSheet s) {
-		mySheet = s;
+		mySheet = (QStyleSheet) s;
 	}
 
 	@Override
-	public StyleSheet getStyleSheet() {
+	public QStyleSheet getStyleSheet() {
 		return mySheet;
 	}
 
