@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +53,7 @@ import com.pump.text.html.css.border.CssBorderTopParser;
 import com.pump.text.html.css.border.CssBorderTopStyleParser;
 import com.pump.text.html.css.border.CssBorderTopWidthParser;
 import com.pump.text.html.css.border.CssBorderWidthParser;
+import com.pump.util.CombinationIterator;
 
 /**
  * This specialized StyleSheet offers (limited) support for additional CSS
@@ -243,36 +243,49 @@ public class QStyleSheet extends StyleSheet {
 	}
 
 	/**
-	 * Convert a literal (real) selector into all the abstract selectors
-	 * that might be applied.
+	 * Convert a literal (real) selector into all the abstract selectors that
+	 * might be applied.
 	 */
 	private Collection<String> getSubSelectors(String selector) {
 
-		// I'm not sure how the superclass code handles this correctly,
-		// but if the selector comes back as "html body div div" and we've only
-		// identified rules for "html body div": then we need a way to make sure
-		// we realize one "div" can be dropped and still get correct results.
+		// this still feels like fuzzy hand-waving to me, but so far
+		// it passes the (limited) unit tests I've dreamed up:
 
-		// this current approach feels wrong/incorrect, and I expect I'll add
-		// some more unit tests shortly that require revising this.
+		Collection<String> returnValue = new LinkedHashSet<>();
+
 		String[] selectorTerms = selector.split(" ");
-		Collection<String> allSelectors = new LinkedHashSet<>();
-		allSelectors.add(selector);
 
-		LinkedList<String> nonconsecutiveTerms = new LinkedList<>();
+		List<String[]> selectorTermsConfig = new ArrayList<>(
+				selectorTerms.length);
 		for (int a = 0; a < selectorTerms.length; a++) {
-			if (!selectorTerms[a].equals(nonconsecutiveTerms.peekLast()))
-				nonconsecutiveTerms.add(selectorTerms[a]);
+			if (a == 0 || a == 1 || a == selectorTerms.length - 1) {
+				// always include leading "html body" and trailing selector term
+				selectorTermsConfig.add(new String[] { selectorTerms[a] });
+			} else {
+				selectorTermsConfig
+						.add(new String[] { selectorTerms[a], null });
+			}
 		}
-		StringBuffer sb = new StringBuffer();
-		for (String nct : nonconsecutiveTerms) {
-			if (sb.length() > 0)
-				sb.append(' ');
-			sb.append(nct);
-		}
-		allSelectors.add(sb.toString());
 
-		return allSelectors;
+		CombinationIterator<String> comboIter = new CombinationIterator<>(
+				selectorTermsConfig);
+		while (comboIter.hasNext()) {
+			StringBuffer sb = new StringBuffer();
+			List<String> combo = comboIter.next();
+			for (String str : combo) {
+				if (str != null) {
+					if (sb.length() > 0) {
+						sb.append(' ');
+					}
+					sb.append(str);
+				}
+			}
+			String subSelector = sb.toString();
+			if (!subSelector.isEmpty() && qRules.containsKey(subSelector))
+				returnValue.add(subSelector);
+		}
+
+		return returnValue;
 	}
 
 	@Override

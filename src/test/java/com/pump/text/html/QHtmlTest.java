@@ -813,6 +813,62 @@ public class QHtmlTest extends TestCase {
 		assertTrue(ops.get(3) instanceof StringOperation);
 	}
 
+	public void testSelector_nestedList() {
+		//@formatter:off
+		String html = "<html>\n"
+				+ "  <head>\n"
+				+ "    <style>\n"
+				+ "        li { list-style-type: none;}\n"
+				+ "        li div { color: red; border: 10px solid red; }\n"
+				+ "        ul li div { border: 10px solid green; }\n"
+				+ "        ul li div { border: 10px solid blue; }\n"
+				+ "        div { border: 10px solid gray; }\n"
+				+ "    </style>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    <div>div</div>\n"
+				+ "    <ul>\n"
+				+ "      <li>\n"
+				+ "        <div>li div</div>\n"
+				+ "      </li>\n"
+				+ "      <li>\n"
+				+ "        <ul>\n"
+				+ "          <li>\n"
+				+ "            <div>li li div</div>\n"
+				+ "          </li>\n"
+				+ "        </ul>\n"
+				+ "      </li>\n"
+				+ "    </ul>\n"
+				+ "  </body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		List<Operation> ops = getOperations(true, html);
+		assertEquals(7, ops.size());
+
+		// the white background:
+		assertTrue(ops.get(0) instanceof FillOperation);
+		assertEquals(Color.white, ops.get(0).getContext().getPaint());
+
+		// the outer div border:
+		assertTrue(ops.get(1) instanceof FillOperation);
+		assertEquals(Color.gray, ops.get(1).getContext().getPaint());
+
+		assertTrue(ops.get(2) instanceof StringOperation);
+
+		// the first (simple) list
+		assertTrue(ops.get(3) instanceof FillOperation);
+		assertEquals(Color.blue, ops.get(3).getContext().getPaint());
+
+		assertTrue(ops.get(4) instanceof StringOperation);
+
+		// the list-within-the-list
+		assertTrue(ops.get(5) instanceof FillOperation);
+		assertEquals(Color.blue, ops.get(5).getContext().getPaint());
+
+		assertTrue(ops.get(6) instanceof StringOperation);
+	}
+
 	/**
 	 * Test a basic unordered list.
 	 * <p>
