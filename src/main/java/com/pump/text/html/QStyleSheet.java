@@ -53,6 +53,11 @@ import com.pump.text.html.css.border.CssBorderTopParser;
 import com.pump.text.html.css.border.CssBorderTopStyleParser;
 import com.pump.text.html.css.border.CssBorderTopWidthParser;
 import com.pump.text.html.css.border.CssBorderWidthParser;
+import com.pump.text.html.css.border.CssOutlineColorParser;
+import com.pump.text.html.css.border.CssOutlineOffsetParser;
+import com.pump.text.html.css.border.CssOutlineParser;
+import com.pump.text.html.css.border.CssOutlineStyleParser;
+import com.pump.text.html.css.border.CssOutlineWidthParser;
 import com.pump.util.CombinationIterator;
 
 /**
@@ -97,6 +102,11 @@ public class QStyleSheet extends StyleSheet {
 		addCssPropertyHandler(new CssBorderLeftParser());
 		addCssPropertyHandler(new CssBorderTopParser());
 		addCssPropertyHandler(new CssBorderRightParser());
+		addCssPropertyHandler(new CssOutlineParser());
+		addCssPropertyHandler(new CssOutlineOffsetParser());
+		addCssPropertyHandler(new CssOutlineColorParser());
+		addCssPropertyHandler(new CssOutlineStyleParser());
+		addCssPropertyHandler(new CssOutlineWidthParser());
 	}
 
 	/**

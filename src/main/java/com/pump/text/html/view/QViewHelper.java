@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,6 +32,7 @@ import com.pump.text.html.css.CssOverflowParser;
 import com.pump.text.html.css.CssOverflowValue;
 import com.pump.text.html.css.CssTextShadowParser;
 import com.pump.text.html.css.background.CssBackgroundClipValue;
+import com.pump.text.html.css.border.CssOutlineOffsetParser;
 import com.pump.text.html.css.image.CssImageParser;
 import com.pump.text.html.css.image.CssImageValue;
 import com.pump.util.list.AddElementsEvent;
@@ -110,14 +112,45 @@ public class QViewHelper {
 		// this handles the background color & image:
 		helper.paintBackground(g, r, boxPainter);
 
-		// this handles the border:
+		// calculate where the border/outline paints:
 		Rectangle borderR = new Rectangle(r);
 		borderR.x += leftMargin;
 		borderR.y += topMargin;
 		borderR.width -= leftMargin + rightMargin;
 		borderR.height -= topMargin + bottomMargin;
 
-		BorderRendering borderRendering = new BorderRendering(helper, borderR);
+		// this addresses the "outline" attribute -- not previously supported in
+		// Swing
+		BorderRenderingConfiguration outlineConfig = BorderRenderingConfiguration
+				.forOutline(helper);
+		if (outlineConfig.bottomStyle != null) {
+			// outlines all have a uniform style, so we only check one attribute
+
+			CssLength offset = (CssLength) helper.getAttribute(
+					CssOutlineOffsetParser.PROPERTY_OUTLINE_OFFSET, false);
+			if (offset == null)
+				offset = new CssLength("", 0, "px");
+			Rectangle2D outlineR = new Rectangle2D.Float(
+					borderR.x - outlineConfig.leftWidth.getValue()
+							- offset.getValue(),
+					borderR.y - outlineConfig.topWidth.getValue()
+							- offset.getValue(),
+					borderR.width + outlineConfig.leftWidth.getValue()
+							+ outlineConfig.rightWidth.getValue()
+							+ 2 * offset.getValue(),
+					borderR.height + outlineConfig.topWidth.getValue()
+							+ outlineConfig.bottomWidth.getValue()
+							+ 2 * offset.getValue());
+			BorderRendering outlineRendering = new BorderRendering(
+					outlineConfig, outlineR);
+			outlineRendering.paint(g);
+		}
+
+		// paint the actual "border"
+		BorderRenderingConfiguration borderConfig = BorderRenderingConfiguration
+				.forBorder(helper);
+		BorderRendering borderRendering = new BorderRendering(borderConfig,
+				borderR);
 		borderRendering.paint(g);
 	}
 

@@ -26,6 +26,10 @@ import com.pump.text.html.css.border.CssBorderTopStyleParser;
 import com.pump.text.html.css.border.CssBorderTopWidthParser;
 import com.pump.text.html.css.border.CssBorderValue;
 import com.pump.text.html.css.border.CssBorderWidthParser;
+import com.pump.text.html.css.border.CssOutlineColorParser;
+import com.pump.text.html.css.border.CssOutlineParser;
+import com.pump.text.html.css.border.CssOutlineStyleParser;
+import com.pump.text.html.css.border.CssOutlineWidthParser;
 
 /**
  * This identifies the properties necessary to setup a BorderRendering.
@@ -37,20 +41,61 @@ import com.pump.text.html.css.border.CssBorderWidthParser;
  */
 public class BorderRenderingConfiguration {
 
-	public CssLength leftWidth, rightWidth, topWidth, bottomWidth;
-	public CssColorValue leftColor, topColor, rightColor, bottomColor;
-	public CssBorderStyleValue leftStyle, topStyle, rightStyle, bottomStyle;
+	/**
+	 * Create a configuration for an outline.
+	 */
+	public static BorderRenderingConfiguration forOutline(QViewHelper helper) {
+		BorderRenderingConfiguration rv = new BorderRenderingConfiguration();
 
-	public BorderRenderingConfiguration(QViewHelper helper) {
+		{
+			CssBorderValue all = (CssBorderValue) helper
+					.getAttribute(CssOutlineParser.PROPERTY_OUTLINE, false);
+			if (all != null) {
+				rv.leftWidth = rv.rightWidth = rv.topWidth = rv.bottomWidth = all
+						.getWidth();
+				rv.leftColor = rv.rightColor = rv.topColor = rv.bottomColor = all
+						.getColor();
+				rv.leftStyle = rv.rightStyle = rv.topStyle = rv.bottomStyle = all
+						.getStyle();
+			}
+		}
+
+		CssColorValue color = (CssColorValue) helper.getAttribute(
+				CssOutlineColorParser.PROPERTY_OUTLINE_COLOR, false);
+		if (color != null) {
+			rv.leftColor = rv.rightColor = rv.topColor = rv.bottomColor = color;
+		}
+
+		CssBorderStyleValue style = (CssBorderStyleValue) helper.getAttribute(
+				CssOutlineStyleParser.PROPERTY_OUTLINE_STYLE, false);
+		if (style != null) {
+			rv.leftStyle = rv.rightStyle = rv.topStyle = rv.bottomStyle = style;
+		}
+
+		CssLength width = (CssLength) helper.getAttribute(
+				CssOutlineWidthParser.PROPERTY_OUTLINE_WIDTH, false);
+		if (width != null) {
+			rv.leftWidth = rv.rightWidth = rv.topWidth = rv.bottomWidth = width;
+		}
+
+		return rv;
+	}
+
+	/**
+	 * Create a configuration for a border.
+	 */
+	public static BorderRenderingConfiguration forBorder(QViewHelper helper) {
+		BorderRenderingConfiguration rv = new BorderRenderingConfiguration();
+
 		{
 			CssBorderValue all = (CssBorderValue) helper
 					.getAttribute(CssBorderParser.PROPERTY_BORDER, false);
 			if (all != null) {
-				leftWidth = rightWidth = topWidth = bottomWidth = all
+				rv.leftWidth = rv.rightWidth = rv.topWidth = rv.bottomWidth = all
 						.getWidth();
-				leftColor = rightColor = topColor = bottomColor = all
+				rv.leftColor = rv.rightColor = rv.topColor = rv.bottomColor = all
 						.getColor();
-				leftStyle = rightStyle = topStyle = bottomStyle = all
+				rv.leftStyle = rv.rightStyle = rv.topStyle = rv.bottomStyle = all
 						.getStyle();
 			}
 		}
@@ -59,9 +104,9 @@ public class BorderRenderingConfiguration {
 			CssBorderValue left = (CssBorderValue) helper.getAttribute(
 					CssBorderLeftParser.PROPERTY_BORDER_LEFT, false);
 			if (left != null) {
-				leftWidth = left.getWidth();
-				leftColor = left.getColor();
-				leftStyle = left.getStyle();
+				rv.leftWidth = left.getWidth();
+				rv.leftColor = left.getColor();
+				rv.leftStyle = left.getStyle();
 			}
 		}
 
@@ -69,9 +114,9 @@ public class BorderRenderingConfiguration {
 			CssBorderValue right = (CssBorderValue) helper.getAttribute(
 					CssBorderRightParser.PROPERTY_BORDER_RIGHT, false);
 			if (right != null) {
-				rightWidth = right.getWidth();
-				rightColor = right.getColor();
-				rightStyle = right.getStyle();
+				rv.rightWidth = right.getWidth();
+				rv.rightColor = right.getColor();
+				rv.rightStyle = right.getStyle();
 			}
 		}
 
@@ -79,9 +124,9 @@ public class BorderRenderingConfiguration {
 			CssBorderValue top = (CssBorderValue) helper.getAttribute(
 					CssBorderTopParser.PROPERTY_BORDER_TOP, false);
 			if (top != null) {
-				topWidth = top.getWidth();
-				topColor = top.getColor();
-				topStyle = top.getStyle();
+				rv.topWidth = top.getWidth();
+				rv.topColor = top.getColor();
+				rv.topStyle = top.getStyle();
 			}
 		}
 
@@ -89,15 +134,24 @@ public class BorderRenderingConfiguration {
 			CssBorderValue bottom = (CssBorderValue) helper.getAttribute(
 					CssBorderBottomParser.PROPERTY_BORDER_BOTTOM, false);
 			if (bottom != null) {
-				bottomWidth = bottom.getWidth();
-				bottomColor = bottom.getColor();
-				bottomStyle = bottom.getStyle();
+				rv.bottomWidth = bottom.getWidth();
+				rv.bottomColor = bottom.getColor();
+				rv.bottomStyle = bottom.getStyle();
 			}
 		}
 
-		initWidths(helper);
-		initColors(helper);
-		initStyles(helper);
+		rv.initWidths(helper);
+		rv.initColors(helper);
+		rv.initStyles(helper);
+
+		return rv;
+	}
+
+	public CssLength leftWidth, rightWidth, topWidth, bottomWidth;
+	public CssColorValue leftColor, topColor, rightColor, bottomColor;
+	public CssBorderStyleValue leftStyle, topStyle, rightStyle, bottomStyle;
+
+	private BorderRenderingConfiguration() {
 	}
 
 	private void initStyles(QViewHelper helper) {

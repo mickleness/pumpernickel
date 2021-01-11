@@ -38,10 +38,6 @@ public class BorderRendering {
 	VectorImage imageRendering = new VectorImage();
 	Rectangle2D bounds;
 
-	public BorderRendering(QViewHelper helper, Rectangle2D bounds) {
-		this(new BorderRenderingConfiguration(helper), bounds);
-	}
-
 	public BorderRendering(BorderRenderingConfiguration config,
 			Rectangle2D bounds) {
 		this.config = config;

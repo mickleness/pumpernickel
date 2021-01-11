@@ -22,9 +22,12 @@ import com.pump.text.html.css.CssListParser;
  */
 public class CssBorderWidthParser extends CssListParser<CssLength> {
 
-	public static final String VALUE_THIN = "thin";
-	public static final String VALUE_MEDIUM = "medium";
-	public static final String VALUE_THICK = "thick";
+	AbstractWidthParser widthParser = new AbstractWidthParser() {
+		@Override
+		public String getPropertyName() {
+			return null;
+		}
+	};
 
 	public static final String PROPERTY_BORDER_WIDTH = "border-width";
 
@@ -36,35 +39,10 @@ public class CssBorderWidthParser extends CssListParser<CssLength> {
 	@Override
 	protected int parseListElement(String cssString, int index,
 			List<CssLength> dest) {
-		String substring1 = cssString.substring(index);
-		String substring2 = substring1.stripLeading().toLowerCase();
-		int deletedWhitespace = substring1.length() - substring2.length();
-		if (substring2.startsWith(VALUE_THIN)) {
-			String cssWord = substring1.substring(deletedWhitespace,
-					deletedWhitespace + VALUE_THIN.length());
-			dest.add(new CssLength(cssWord, 1, "px"));
-			return index + cssWord.length() + deletedWhitespace;
-		} else if (substring2.startsWith(VALUE_MEDIUM)) {
-			String cssWord = substring1.substring(deletedWhitespace,
-					deletedWhitespace + VALUE_MEDIUM.length());
-			dest.add(new CssLength(cssWord, 2, "px"));
-			return index + cssWord.length() + deletedWhitespace;
-		} else if (substring2.startsWith(VALUE_THICK)) {
-			String cssWord = substring1.substring(deletedWhitespace,
-					deletedWhitespace + VALUE_THICK.length());
-			dest.add(new CssLength(cssWord, 4, "px"));
-			return index + cssWord.length() + deletedWhitespace;
-		}
-
-		for (int a = 0; a < substring2.length(); a++) {
-			char ch = substring2.charAt(a);
-			if (Character.isWhitespace(ch)) {
-				String cssWord = substring1.substring(deletedWhitespace, a);
-				dest.add(new CssLength(cssWord));
-				return a;
-			}
-		}
-		dest.add(new CssLength(substring1));
-		return index + substring1.length();
+		String str = cssString.substring(index);
+		CssLength newLength = widthParser.parse(str);
+		dest.add(newLength);
+		int i = cssString.indexOf(newLength.toCSSString(), index);
+		return i + newLength.toCSSString().length();
 	}
 }
