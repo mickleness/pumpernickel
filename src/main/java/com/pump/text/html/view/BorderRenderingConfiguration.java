@@ -5,7 +5,9 @@ import java.util.List;
 import com.pump.text.html.css.CssColorValue;
 import com.pump.text.html.css.CssLength;
 import com.pump.text.html.css.border.CssBorderBottomColorParser;
+import com.pump.text.html.css.border.CssBorderBottomLeftRadiusParser;
 import com.pump.text.html.css.border.CssBorderBottomParser;
+import com.pump.text.html.css.border.CssBorderBottomRightRadiusParser;
 import com.pump.text.html.css.border.CssBorderBottomStyleParser;
 import com.pump.text.html.css.border.CssBorderBottomWidthParser;
 import com.pump.text.html.css.border.CssBorderColorParser;
@@ -14,6 +16,8 @@ import com.pump.text.html.css.border.CssBorderLeftParser;
 import com.pump.text.html.css.border.CssBorderLeftStyleParser;
 import com.pump.text.html.css.border.CssBorderLeftWidthParser;
 import com.pump.text.html.css.border.CssBorderParser;
+import com.pump.text.html.css.border.CssBorderRadiusParser;
+import com.pump.text.html.css.border.CssBorderRadiusValue;
 import com.pump.text.html.css.border.CssBorderRightColorParser;
 import com.pump.text.html.css.border.CssBorderRightParser;
 import com.pump.text.html.css.border.CssBorderRightStyleParser;
@@ -21,7 +25,9 @@ import com.pump.text.html.css.border.CssBorderRightWidthParser;
 import com.pump.text.html.css.border.CssBorderStyleParser;
 import com.pump.text.html.css.border.CssBorderStyleValue;
 import com.pump.text.html.css.border.CssBorderTopColorParser;
+import com.pump.text.html.css.border.CssBorderTopLeftRadiusParser;
 import com.pump.text.html.css.border.CssBorderTopParser;
+import com.pump.text.html.css.border.CssBorderTopRightRadiusParser;
 import com.pump.text.html.css.border.CssBorderTopStyleParser;
 import com.pump.text.html.css.border.CssBorderTopWidthParser;
 import com.pump.text.html.css.border.CssBorderValue;
@@ -143,6 +149,7 @@ public class BorderRenderingConfiguration {
 		rv.initWidths(helper);
 		rv.initColors(helper);
 		rv.initStyles(helper);
+		rv.initRadii(helper);
 
 		return rv;
 	}
@@ -150,6 +157,8 @@ public class BorderRenderingConfiguration {
 	public CssLength leftWidth, rightWidth, topWidth, bottomWidth;
 	public CssColorValue leftColor, topColor, rightColor, bottomColor;
 	public CssBorderStyleValue leftStyle, topStyle, rightStyle, bottomStyle;
+	public CssBorderRadiusValue topLeftRadius, topRightRadius,
+			bottomRightRadius, bottomLeftRadius;
 
 	private BorderRenderingConfiguration() {
 	}
@@ -300,5 +309,41 @@ public class BorderRenderingConfiguration {
 			rightColor = r;
 		if (b != null)
 			bottomColor = b;
+	}
+
+	private void initRadii(QViewHelper helper) {
+		List<CssBorderRadiusValue> radii = (List<CssBorderRadiusValue>) helper
+				.getAttribute(CssBorderRadiusParser.PROPERTY_BORDER_RADIUS,
+						false);
+		if (radii != null) {
+			topLeftRadius = radii.get(0);
+			topRightRadius = radii.get(1);
+			bottomRightRadius = radii.get(2);
+			bottomLeftRadius = radii.get(3);
+		}
+
+		CssBorderRadiusValue tl = (CssBorderRadiusValue) helper.getAttribute(
+				CssBorderTopLeftRadiusParser.PROPERTY_BORDER_TOP_LEFT_RADIUS,
+				false);
+		if (tl != null)
+			topLeftRadius = tl;
+
+		CssBorderRadiusValue tr = (CssBorderRadiusValue) helper.getAttribute(
+				CssBorderTopRightRadiusParser.PROPERTY_BORDER_TOP_RIGHT_RADIUS,
+				false);
+		if (tr != null)
+			topRightRadius = tr;
+
+		CssBorderRadiusValue br = (CssBorderRadiusValue) helper.getAttribute(
+				CssBorderBottomRightRadiusParser.PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS,
+				false);
+		if (br != null)
+			bottomRightRadius = br;
+
+		CssBorderRadiusValue bl = (CssBorderRadiusValue) helper.getAttribute(
+				CssBorderBottomLeftRadiusParser.PROPERTY_BORDER_BOTTOM_LEFT_RADIUS,
+				false);
+		if (bl != null)
+			bottomLeftRadius = bl;
 	}
 }
