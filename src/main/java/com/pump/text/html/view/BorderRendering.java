@@ -36,12 +36,12 @@ public class BorderRendering {
 			bottomStyleValue;
 	BorderRenderingConfiguration config;
 	VectorImage imageRendering = new VectorImage();
-	Rectangle2D bounds;
+	RectangularShape shape;
 
 	public BorderRendering(BorderRenderingConfiguration config,
 			Rectangle2D bounds) {
 		this.config = config;
-		this.bounds = bounds;
+		shape = getShape(bounds);
 		topWidthValue = config.topWidth == null ? 0
 				: config.topWidth.getValue(bounds.getHeight());
 		bottomWidthValue = config.bottomWidth == null ? 0
@@ -63,6 +63,15 @@ public class BorderRendering {
 		imageRendering.getOperations().addAll(renderDottedBorders());
 		imageRendering.getOperations().addAll(renderDashedBorders());
 		imageRendering.getOperations().addAll(renderTrapezoidBorders());
+	}
+
+	private RectangularShape getShape(Rectangle2D bounds) {
+		CssRoundRectangle2D r = new CssRoundRectangle2D(bounds,
+				config.topLeftRadius, config.topRightRadius,
+				config.bottomRightRadius, config.bottomLeftRadius);
+		if (r.isRectangle())
+			return (Rectangle2D) bounds.clone();
+		return r;
 	}
 
 	private double getWidth(Edge edge) {
@@ -247,44 +256,44 @@ public class BorderRendering {
 		Path2D p = new Path2D.Double();
 		switch (edge) {
 		case TOP:
-			p.moveTo(bounds.getMinX() + leftWidthValue * startFraction,
-					bounds.getMinY() + topWidthValue * startFraction);
-			p.lineTo(bounds.getMaxX() - rightWidthValue * startFraction,
-					bounds.getMinY() + topWidthValue * startFraction);
-			p.lineTo(bounds.getMaxX() - rightWidthValue * endFraction,
-					bounds.getMinY() + topWidthValue * endFraction);
-			p.lineTo(bounds.getMinX() + leftWidthValue * endFraction,
-					bounds.getMinY() + topWidthValue * endFraction);
+			p.moveTo(shape.getMinX() + leftWidthValue * startFraction,
+					shape.getMinY() + topWidthValue * startFraction);
+			p.lineTo(shape.getMaxX() - rightWidthValue * startFraction,
+					shape.getMinY() + topWidthValue * startFraction);
+			p.lineTo(shape.getMaxX() - rightWidthValue * endFraction,
+					shape.getMinY() + topWidthValue * endFraction);
+			p.lineTo(shape.getMinX() + leftWidthValue * endFraction,
+					shape.getMinY() + topWidthValue * endFraction);
 			break;
 		case LEFT:
-			p.moveTo(bounds.getMinX() + leftWidthValue * startFraction,
-					bounds.getMaxY() - bottomWidthValue * startFraction);
-			p.lineTo(bounds.getMinX() + leftWidthValue * startFraction,
-					bounds.getMinY() + topWidthValue * startFraction);
-			p.lineTo(bounds.getMinX() + leftWidthValue * endFraction,
-					bounds.getMinY() + topWidthValue * endFraction);
-			p.lineTo(bounds.getMinX() + leftWidthValue * endFraction,
-					bounds.getMaxY() - bottomWidthValue * endFraction);
+			p.moveTo(shape.getMinX() + leftWidthValue * startFraction,
+					shape.getMaxY() - bottomWidthValue * startFraction);
+			p.lineTo(shape.getMinX() + leftWidthValue * startFraction,
+					shape.getMinY() + topWidthValue * startFraction);
+			p.lineTo(shape.getMinX() + leftWidthValue * endFraction,
+					shape.getMinY() + topWidthValue * endFraction);
+			p.lineTo(shape.getMinX() + leftWidthValue * endFraction,
+					shape.getMaxY() - bottomWidthValue * endFraction);
 			break;
 		case RIGHT:
-			p.moveTo(bounds.getMaxX() - rightWidthValue * startFraction,
-					bounds.getMinY() + topWidthValue * startFraction);
-			p.lineTo(bounds.getMaxX() - rightWidthValue * startFraction,
-					bounds.getMaxY() - bottomWidthValue * startFraction);
-			p.lineTo(bounds.getMaxX() - rightWidthValue * endFraction,
-					bounds.getMaxY() - bottomWidthValue * endFraction);
-			p.lineTo(bounds.getMaxX() - rightWidthValue * endFraction,
-					bounds.getMinY() + topWidthValue * endFraction);
+			p.moveTo(shape.getMaxX() - rightWidthValue * startFraction,
+					shape.getMinY() + topWidthValue * startFraction);
+			p.lineTo(shape.getMaxX() - rightWidthValue * startFraction,
+					shape.getMaxY() - bottomWidthValue * startFraction);
+			p.lineTo(shape.getMaxX() - rightWidthValue * endFraction,
+					shape.getMaxY() - bottomWidthValue * endFraction);
+			p.lineTo(shape.getMaxX() - rightWidthValue * endFraction,
+					shape.getMinY() + topWidthValue * endFraction);
 			break;
 		case BOTTOM:
-			p.moveTo(bounds.getMinX() + leftWidthValue * startFraction,
-					bounds.getMaxY() - bottomWidthValue * startFraction);
-			p.lineTo(bounds.getMaxX() - rightWidthValue * startFraction,
-					bounds.getMaxY() - bottomWidthValue * startFraction);
-			p.lineTo(bounds.getMaxX() - rightWidthValue * endFraction,
-					bounds.getMaxY() - bottomWidthValue * endFraction);
-			p.lineTo(bounds.getMinX() + leftWidthValue * endFraction,
-					bounds.getMaxY() - bottomWidthValue * endFraction);
+			p.moveTo(shape.getMinX() + leftWidthValue * startFraction,
+					shape.getMaxY() - bottomWidthValue * startFraction);
+			p.lineTo(shape.getMaxX() - rightWidthValue * startFraction,
+					shape.getMaxY() - bottomWidthValue * startFraction);
+			p.lineTo(shape.getMaxX() - rightWidthValue * endFraction,
+					shape.getMaxY() - bottomWidthValue * endFraction);
+			p.lineTo(shape.getMinX() + leftWidthValue * endFraction,
+					shape.getMaxY() - bottomWidthValue * endFraction);
 			break;
 		default:
 			throw new IllegalStateException("edge: " + edge);
@@ -308,23 +317,22 @@ public class BorderRendering {
 			double minX, maxX;
 			if (leftStyleValue == Value.DOTTED) {
 				double z = Math.min(leftWidthValue, topWidthValue);
-				g.fill(new Ellipse2D.Double(bounds.getMinX(), bounds.getMinY(),
-						z, z));
-				minX = bounds.getMinX() + z;
+				g.fill(new Ellipse2D.Double(shape.getMinX(), shape.getMinY(), z,
+						z));
+				minX = shape.getMinX() + z;
 			} else {
-				minX = bounds.getMinX() + leftWidthValue;
+				minX = shape.getMinX() + leftWidthValue;
 			}
 
 			if (rightStyleValue == Value.DOTTED) {
 				double z = Math.min(rightWidthValue, topWidthValue);
-				g.fill(new Ellipse2D.Double(bounds.getMaxX() - z,
-						bounds.getMinY(), z, z));
-				maxX = bounds.getMaxX() - z;
+				g.fill(new Ellipse2D.Double(shape.getMaxX() - z,
+						shape.getMinY(), z, z));
+				maxX = shape.getMaxX() - z;
 			} else {
-				maxX = bounds.getMaxX() - rightWidthValue;
+				maxX = shape.getMaxX() - rightWidthValue;
 			}
-			renderHorizontalDots(g, minX, maxX, bounds.getMinY(),
-					topWidthValue);
+			renderHorizontalDots(g, minX, maxX, shape.getMinY(), topWidthValue);
 		}
 
 		if (bottomStyleValue == Value.DOTTED && config.bottomColor != null) {
@@ -333,22 +341,22 @@ public class BorderRendering {
 			double minX, maxX;
 			if (leftStyleValue == Value.DOTTED) {
 				double z = Math.min(leftWidthValue, bottomWidthValue);
-				g.fill(new Ellipse2D.Double(bounds.getMinX(),
-						bounds.getMaxY() - z, z, z));
-				minX = bounds.getMinX() + z;
+				g.fill(new Ellipse2D.Double(shape.getMinX(),
+						shape.getMaxY() - z, z, z));
+				minX = shape.getMinX() + z;
 			} else {
-				minX = bounds.getMinX() + leftWidthValue;
+				minX = shape.getMinX() + leftWidthValue;
 			}
 			if (rightStyleValue == Value.DOTTED) {
 				double z = Math.min(rightWidthValue, bottomWidthValue);
-				g.fill(new Ellipse2D.Double(bounds.getMaxX() - z,
-						bounds.getMaxY() - bottomWidthValue, z, z));
-				maxX = bounds.getMaxX() - z;
+				g.fill(new Ellipse2D.Double(shape.getMaxX() - z,
+						shape.getMaxY() - bottomWidthValue, z, z));
+				maxX = shape.getMaxX() - z;
 			} else {
-				maxX = bounds.getMaxX() - rightWidthValue;
+				maxX = shape.getMaxX() - rightWidthValue;
 			}
 			renderHorizontalDots(g, minX, maxX,
-					bounds.getMaxY() - bottomWidthValue, bottomWidthValue);
+					shape.getMaxY() - bottomWidthValue, bottomWidthValue);
 		}
 
 		if (leftStyleValue == Value.DOTTED && config.leftColor != null) {
@@ -357,17 +365,17 @@ public class BorderRendering {
 			double minY, maxY;
 			if (topStyleValue == Value.DOTTED) {
 				double z = Math.min(topWidthValue, leftWidthValue);
-				minY = bounds.getMinY() + z;
+				minY = shape.getMinY() + z;
 			} else {
-				minY = bounds.getMinY() + topWidthValue;
+				minY = shape.getMinY() + topWidthValue;
 			}
 			if (bottomStyleValue == Value.DOTTED) {
 				double z = Math.min(bottomWidthValue, leftWidthValue);
-				maxY = bounds.getMaxY() - z;
+				maxY = shape.getMaxY() - z;
 			} else {
-				maxY = bounds.getMaxY() - bottomWidthValue;
+				maxY = shape.getMaxY() - bottomWidthValue;
 			}
-			renderVerticalDots(g, minY, maxY, bounds.getMinX(), leftWidthValue);
+			renderVerticalDots(g, minY, maxY, shape.getMinX(), leftWidthValue);
 		}
 
 		if (rightStyleValue == Value.DOTTED && config.rightColor != null) {
@@ -376,18 +384,18 @@ public class BorderRendering {
 			double minY, maxY;
 			if (topStyleValue == Value.DOTTED) {
 				double z = Math.min(topWidthValue, rightWidthValue);
-				minY = bounds.getMinY() + z;
+				minY = shape.getMinY() + z;
 			} else {
-				minY = bounds.getMinY() + topWidthValue;
+				minY = shape.getMinY() + topWidthValue;
 			}
 			if (bottomStyleValue == Value.DOTTED) {
 				double z = Math.min(bottomWidthValue, rightWidthValue);
-				maxY = bounds.getMaxY() - z;
+				maxY = shape.getMaxY() - z;
 			} else {
-				maxY = bounds.getMaxY() - bottomWidthValue;
+				maxY = shape.getMaxY() - bottomWidthValue;
 			}
-			renderVerticalDots(g, minY, maxY,
-					bounds.getMaxX() - rightWidthValue, rightWidthValue);
+			renderVerticalDots(g, minY, maxY, shape.getMaxX() - rightWidthValue,
+					rightWidthValue);
 		}
 		g.dispose();
 
@@ -460,54 +468,52 @@ public class BorderRendering {
 		if (topStyleValue == Value.DASHED && config.topColor != null) {
 			g.setColor(config.topColor);
 			if (leftStyleValue == Value.DASHED) {
-				g.fill(new Rectangle2D.Double(bounds.getMinX(),
-						bounds.getMinY(), leftWidthValue, topWidthValue));
+				g.fill(new Rectangle2D.Double(shape.getMinX(), shape.getMinY(),
+						leftWidthValue, topWidthValue));
 			}
 			if (rightStyleValue == Value.DASHED) {
-				g.fill(new Rectangle2D.Double(
-						bounds.getMaxX() - rightWidthValue, bounds.getMinY(),
-						rightWidthValue, topWidthValue));
+				g.fill(new Rectangle2D.Double(shape.getMaxX() - rightWidthValue,
+						shape.getMinY(), rightWidthValue, topWidthValue));
 			}
-			double minX = bounds.getMinX() + leftWidthValue;
-			double maxX = bounds.getMaxX() - rightWidthValue;
+			double minX = shape.getMinX() + leftWidthValue;
+			double maxX = shape.getMaxX() - rightWidthValue;
 
-			renderHorizontalDashes(g, minX, maxX, bounds.getMinY(),
+			renderHorizontalDashes(g, minX, maxX, shape.getMinY(),
 					topWidthValue);
 		}
 
 		if (bottomStyleValue == Value.DASHED && config.bottomColor != null) {
 			g.setColor(config.bottomColor);
 			if (leftStyleValue == Value.DASHED) {
-				g.fill(new Rectangle2D.Double(bounds.getMinX(),
-						bounds.getMaxY() - bottomWidthValue, leftWidthValue,
+				g.fill(new Rectangle2D.Double(shape.getMinX(),
+						shape.getMaxY() - bottomWidthValue, leftWidthValue,
 						bottomWidthValue));
 			}
 			if (rightStyleValue == Value.DASHED) {
-				g.fill(new Rectangle2D.Double(
-						bounds.getMaxX() - rightWidthValue,
-						bounds.getMaxY() - bottomWidthValue, rightWidthValue,
+				g.fill(new Rectangle2D.Double(shape.getMaxX() - rightWidthValue,
+						shape.getMaxY() - bottomWidthValue, rightWidthValue,
 						bottomWidthValue));
 			}
-			double minX = bounds.getMinX() + leftWidthValue;
-			double maxX = bounds.getMaxX() - rightWidthValue;
+			double minX = shape.getMinX() + leftWidthValue;
+			double maxX = shape.getMaxX() - rightWidthValue;
 			renderHorizontalDashes(g, minX, maxX,
-					bounds.getMaxY() - bottomWidthValue, bottomWidthValue);
+					shape.getMaxY() - bottomWidthValue, bottomWidthValue);
 		}
 
 		if (leftStyleValue == Value.DASHED && config.leftColor != null) {
 			g.setColor(config.leftColor);
-			double minY = bounds.getMinY() + topWidthValue;
-			double maxY = bounds.getMaxY() - bottomWidthValue;
-			renderVerticalDashes(g, minY, maxY, bounds.getMinX(),
+			double minY = shape.getMinY() + topWidthValue;
+			double maxY = shape.getMaxY() - bottomWidthValue;
+			renderVerticalDashes(g, minY, maxY, shape.getMinX(),
 					leftWidthValue);
 		}
 
 		if (rightStyleValue == Value.DASHED && config.rightColor != null) {
 			g.setColor(config.rightColor);
-			double minY = bounds.getMinY() + topWidthValue;
-			double maxY = bounds.getMaxY() - bottomWidthValue;
+			double minY = shape.getMinY() + topWidthValue;
+			double maxY = shape.getMaxY() - bottomWidthValue;
 			renderVerticalDashes(g, minY, maxY,
-					bounds.getMaxX() - rightWidthValue, rightWidthValue);
+					shape.getMaxX() - rightWidthValue, rightWidthValue);
 		}
 		g.dispose();
 

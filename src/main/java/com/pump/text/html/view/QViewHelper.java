@@ -2,12 +2,12 @@ package com.pump.text.html.view;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RectangularShape;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +18,7 @@ import javax.swing.text.html.CSS;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.text.html.StyleSheet.BoxPainter;
 
+import com.pump.awt.Insets2D;
 import com.pump.geom.ShapeBounds;
 import com.pump.graphics.Graphics2DContext;
 import com.pump.graphics.vector.GlyphVectorOperation;
@@ -101,23 +102,28 @@ public class QViewHelper {
 			QViewHelper helper, BoxPainter boxPainter) {
 		Rectangle r = ShapeBounds.getBounds(allocation).getBounds();
 
-		int topMargin = getLength(CSS.Attribute.MARGIN_TOP, r.height);
-		int bottomMargin = getLength(CSS.Attribute.MARGIN_BOTTOM, r.height);
-		int leftMargin = getLength(CSS.Attribute.MARGIN_LEFT, r.width);
-		int rightMargin = getLength(CSS.Attribute.MARGIN_RIGHT, r.width);
+		float topMargin = getLength(CSS.Attribute.MARGIN_TOP, r.height);
+		float bottomMargin = getLength(CSS.Attribute.MARGIN_BOTTOM, r.height);
+		float leftMargin = getLength(CSS.Attribute.MARGIN_LEFT, r.width);
+		float rightMargin = getLength(CSS.Attribute.MARGIN_RIGHT, r.width);
+
+		// calculate where the border/outline paints:
+		Rectangle2D borderR = new Rectangle2D.Float(r.x, r.y, r.width,
+				r.height);
+		borderR.setRect(borderR.getX() + leftMargin, borderR.getY() + topMargin,
+				borderR.getWidth() - leftMargin - rightMargin,
+				borderR.getHeight() - topMargin
+						- bottomMargin);
+		BorderRenderingConfiguration borderConfig = BorderRenderingConfiguration
+				.forBorder(helper);
+		BorderRendering borderRendering = new BorderRendering(borderConfig,
+				borderR);
 
 		// The legacy BoxPainter paints background color, image, then
 		// Border in that order.
 
 		// this handles the background color & image:
-		helper.paintBackground(g, r, boxPainter);
-
-		// calculate where the border/outline paints:
-		Rectangle borderR = new Rectangle(r);
-		borderR.x += leftMargin;
-		borderR.y += topMargin;
-		borderR.width -= leftMargin + rightMargin;
-		borderR.height -= topMargin + bottomMargin;
+		helper.paintBackground(g, borderRendering.shape, boxPainter);
 
 		// this addresses the "outline" attribute -- not previously supported in
 		// Swing
@@ -130,15 +136,15 @@ public class QViewHelper {
 					CssOutlineOffsetParser.PROPERTY_OUTLINE_OFFSET, false);
 			if (offset == null)
 				offset = new CssLength("", 0, "px");
-			Rectangle2D outlineR = new Rectangle2D.Float(
-					borderR.x - outlineConfig.leftWidth.getValue()
+			Rectangle2D outlineR = new Rectangle2D.Double(
+					borderR.getX() - outlineConfig.leftWidth.getValue()
 							- offset.getValue(),
-					borderR.y - outlineConfig.topWidth.getValue()
+					borderR.getY() - outlineConfig.topWidth.getValue()
 							- offset.getValue(),
-					borderR.width + outlineConfig.leftWidth.getValue()
+					borderR.getWidth() + outlineConfig.leftWidth.getValue()
 							+ outlineConfig.rightWidth.getValue()
 							+ 2 * offset.getValue(),
-					borderR.height + outlineConfig.topWidth.getValue()
+					borderR.getHeight() + outlineConfig.topWidth.getValue()
 							+ outlineConfig.bottomWidth.getValue()
 							+ 2 * offset.getValue());
 			BorderRendering outlineRendering = new BorderRendering(
@@ -147,10 +153,6 @@ public class QViewHelper {
 		}
 
 		// paint the actual "border"
-		BorderRenderingConfiguration borderConfig = BorderRenderingConfiguration
-				.forBorder(helper);
-		BorderRendering borderRendering = new BorderRendering(borderConfig,
-				borderR);
 		borderRendering.paint(g);
 	}
 
@@ -393,7 +395,7 @@ public class QViewHelper {
 		return new VectorGraphics2D(new Graphics2DContext(g), operations);
 	}
 
-	private void paintBackground(Graphics2D g, Rectangle r,
+	private void paintBackground(Graphics2D g, RectangularShape shape,
 			BoxPainter boxPainter) {
 
 		CssBackgroundClipValue clipValue = (CssBackgroundClipValue) getAttribute(
@@ -406,21 +408,26 @@ public class QViewHelper {
 			if (m == CssBackgroundClipValue.Mode.BORDER_BOX) {
 				// do nothing, this is the the biggest/normal option
 			} else if (m == CssBackgroundClipValue.Mode.PADDING_BOX) {
-				Insets i = getBorderInsets(r.width, r.height);
-				Rectangle clipRect = new Rectangle(r.x + i.left, r.y + i.top,
-						r.width - i.left - i.right,
-						r.height - i.top - i.bottom);
-				g2.clipRect(clipRect.x, clipRect.y, clipRect.width,
-						clipRect.height);
+				Insets2D i = getBorderInsets(shape.getWidth(),
+						shape.getHeight());
+				Rectangle2D clipRect = new Rectangle2D.Double(
+						shape.getX() + i.left, shape.getY() + i.top,
+						shape.getWidth() - i.left - i.right,
+						shape.getHeight() - i.top - i.bottom);
+				g2.clip(clipRect);
 			} else if (m == CssBackgroundClipValue.Mode.CONTENT_BOX) {
-				Insets i1 = getBorderInsets(r.width, r.height);
-				Insets i2 = getPaddingInsets(r.width, r.height);
-				Rectangle clipRect = new Rectangle(r.x + i1.left + i2.left,
-						r.y + i1.top + i2.top,
-						r.width - i1.left - i1.right - i2.left - i2.right,
-						r.height - i1.top - i1.bottom - i2.top - i2.bottom);
-				g2.clipRect(clipRect.x, clipRect.y, clipRect.width,
-						clipRect.height);
+				Insets2D i1 = getBorderInsets(shape.getWidth(),
+						shape.getHeight());
+				Insets2D i2 = getPaddingInsets(shape.getWidth(),
+						shape.getHeight());
+				Rectangle2D clipRect = new Rectangle2D.Double(
+						shape.getX() + i1.left + i2.left,
+						shape.getY() + i1.top + i2.top,
+						shape.getWidth() - i1.left - i1.right - i2.left
+								- i2.right,
+						shape.getHeight() - i1.top - i1.bottom - i2.top
+								- i2.bottom);
+				g2.clip(clipRect);
 			} else if (m == CssBackgroundClipValue.Mode.TEXT) {
 				// do nothing, the SoftClipGraphics2D.KEY_SOFT_CLIP should
 				// already be set up in createGraphics(..)
@@ -437,13 +444,14 @@ public class QViewHelper {
 					.getBackground(styleSheet.getViewAttributes(view));
 			if (bgColor != null) {
 				g2.setColor(bgColor);
-				g2.fillRect(r.x, r.y, r.width, r.height);
+				g2.fill(shape);
 			}
 		}
 
 		List<CssImageValue> bkgndImgs = (List<CssImageValue>) getAttribute(
 				CSS.Attribute.BACKGROUND_IMAGE, false);
 		if (bkgndImgs != null) {
+			Rectangle r = ShapeBounds.getBounds(shape).getBounds();
 			for (int a = bkgndImgs.size() - 1; a >= 0; a--) {
 				Graphics2D g3 = (Graphics2D) g2.create();
 				bkgndImgs.get(a).paintRectangle(g3, this, a, r.x, r.y, r.width,
@@ -477,31 +485,31 @@ public class QViewHelper {
 		return returnValue;
 	}
 
-	private Insets getPaddingInsets(int width, int height) {
-		int top = getLength(CSS.Attribute.PADDING_TOP, height);
-		int left = getLength(CSS.Attribute.PADDING_LEFT, width);
-		int bottom = getLength(CSS.Attribute.PADDING_BOTTOM, height);
-		int right = getLength(CSS.Attribute.PADDING_RIGHT, width);
+	private Insets2D getPaddingInsets(double width, double height) {
+		float top = getLength(CSS.Attribute.PADDING_TOP, height);
+		float left = getLength(CSS.Attribute.PADDING_LEFT, width);
+		float bottom = getLength(CSS.Attribute.PADDING_BOTTOM, height);
+		float right = getLength(CSS.Attribute.PADDING_RIGHT, width);
 
-		return new Insets(top, left, bottom, right);
+		return new Insets2D(top, left, bottom, right);
 	}
 
-	private int getLength(Object attributeKey, int range) {
+	private float getLength(Object attributeKey, double range) {
 		Object attr = view.getAttributes().getAttribute(attributeKey);
 		if (attr == null)
 			return 0;
 
 		CssLength l = new CssLength(attr.toString().toString());
-		return Math.round((float) l.getValue(range));
+		return l.getValue(range);
 	}
 
-	private Insets getBorderInsets(int width, int height) {
-		int top = getLength(CSS.Attribute.BORDER_TOP_WIDTH, height);
-		int left = getLength(CSS.Attribute.BORDER_LEFT_WIDTH, width);
-		int bottom = getLength(CSS.Attribute.BORDER_BOTTOM_WIDTH, height);
-		int right = getLength(CSS.Attribute.BORDER_RIGHT_WIDTH, width);
+	private Insets2D getBorderInsets(double width, double height) {
+		float top = getLength(CSS.Attribute.BORDER_TOP_WIDTH, height);
+		float left = getLength(CSS.Attribute.BORDER_LEFT_WIDTH, width);
+		float bottom = getLength(CSS.Attribute.BORDER_BOTTOM_WIDTH, height);
+		float right = getLength(CSS.Attribute.BORDER_RIGHT_WIDTH, width);
 
-		return new Insets(top, left, bottom, right);
+		return new Insets2D(top, left, bottom, right);
 	}
 
 	/**

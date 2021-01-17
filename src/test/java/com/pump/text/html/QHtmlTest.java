@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
@@ -18,6 +20,8 @@ import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.text.html.HTMLEditorKit;
+
+import org.junit.Test;
 
 import com.pump.graphics.vector.FillOperation;
 import com.pump.graphics.vector.ImageOperation;
@@ -920,6 +924,37 @@ public class QHtmlTest extends TestCase {
 		StringOperation li3 = (StringOperation) (ops.get(7));
 		assertEquals("Item 3", li3.getString());
 		assertTrue(li3.getX() > outerX);
+	}
+
+	/**
+	 * Confirm that the background of 200x200 div with a border radius of 50%
+	 * resembles a circle.
+	 */
+	@Test
+	public void testBorderRadius() {
+		//@formatter:off
+		String html = "<html>\n"
+				+ "<body>\n"
+				+ "<div style=\"border-radius: 50%; width: 200px; height: 200px; background-color: #F0B;\"></div>\n"
+				+ "</body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		BufferedImage bi1 = getImage(html);
+
+		BufferedImage bi2 = new BufferedImage(1000, 1000,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bi2.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setColor(Color.white);
+		g.fillRect(0, 0, bi2.getWidth(), bi2.getHeight());
+		g.setColor(new Color(0xff00bb));
+		g.fill(new Ellipse2D.Float(0, 0, 200, 200));
+		g.dispose();
+
+		assertImageEquals(bi1, bi2, 0);
+
 	}
 
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,
