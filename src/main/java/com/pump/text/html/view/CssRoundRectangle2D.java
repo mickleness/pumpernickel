@@ -132,22 +132,46 @@ public class CssRoundRectangle2D extends RectangularShape
 				&& bottomRightRadiusHoriz == 0 && bottomRightRadiusVert == 0;
 
 		topLeftRadiusHoriz = (float) Math.min(topLeftRadiusHoriz,
-				frame.getWidth() / 2);
+				frame.getWidth());
 		topRightRadiusHoriz = (float) Math.min(topRightRadiusHoriz,
-				frame.getWidth() / 2);
-		bottomLeftRadiusHoriz = (float) Math.min(bottomLeftRadiusHoriz,
-				frame.getWidth() / 2);
+				frame.getWidth());
 		bottomRightRadiusHoriz = (float) Math.min(bottomRightRadiusHoriz,
-				frame.getWidth() / 2);
-
+				frame.getWidth());
+		bottomLeftRadiusHoriz = (float) Math.min(bottomLeftRadiusHoriz,
+				frame.getWidth());
 		topLeftRadiusVert = (float) Math.min(topLeftRadiusVert,
-				frame.getHeight() / 2);
+				frame.getHeight());
 		topRightRadiusVert = (float) Math.min(topRightRadiusVert,
-				frame.getHeight() / 2);
-		bottomLeftRadiusVert = (float) Math.min(bottomLeftRadiusVert,
-				frame.getHeight() / 2);
+				frame.getHeight());
 		bottomRightRadiusVert = (float) Math.min(bottomRightRadiusVert,
-				frame.getHeight() / 2);
+				frame.getHeight());
+		bottomLeftRadiusVert = (float) Math.min(bottomLeftRadiusVert,
+				frame.getHeight());
+
+		if (topLeftRadiusHoriz + topRightRadiusHoriz > frame.getWidth()) {
+			float multiplier = (float) frame.getWidth()
+					/ (topLeftRadiusHoriz + topRightRadiusHoriz);
+			topLeftRadiusHoriz = topLeftRadiusHoriz * multiplier;
+			topRightRadiusHoriz = topRightRadiusHoriz * multiplier;
+		}
+		if (bottomLeftRadiusHoriz + bottomRightRadiusHoriz > frame.getWidth()) {
+			float multiplier = (float) frame.getWidth()
+					/ (bottomLeftRadiusHoriz + bottomRightRadiusHoriz);
+			bottomLeftRadiusHoriz = bottomLeftRadiusHoriz * multiplier;
+			bottomRightRadiusHoriz = bottomRightRadiusHoriz * multiplier;
+		}
+		if (topLeftRadiusVert + bottomLeftRadiusVert > frame.getHeight()) {
+			float multiplier = (float) frame.getHeight()
+					/ (topLeftRadiusVert + bottomLeftRadiusVert);
+			topLeftRadiusVert = topLeftRadiusVert * multiplier;
+			bottomLeftRadiusVert = bottomLeftRadiusVert * multiplier;
+		}
+		if (topRightRadiusVert + bottomRightRadiusVert > frame.getHeight()) {
+			float multiplier = (float) frame.getHeight()
+					/ (topRightRadiusVert + bottomRightRadiusVert);
+			topRightRadiusVert = topRightRadiusVert * multiplier;
+			bottomRightRadiusVert = bottomRightRadiusVert * multiplier;
+		}
 
 		path = new Path2D.Float();
 		path.moveTo(frame.getMinX() + topLeftRadiusHoriz, frame.getMinY());
