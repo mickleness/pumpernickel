@@ -39,7 +39,7 @@ public class CssBorderStyleParser extends CssListParser<CssBorderStyleValue> {
 			if (Character.isWhitespace(ch)) {
 				String cssWord = substring1.substring(deletedWhitespace, a);
 				dest.add(new CssBorderStyleValue(cssWord));
-				return a;
+				return index + a;
 			}
 		}
 		dest.add(new CssBorderStyleValue(substring1));

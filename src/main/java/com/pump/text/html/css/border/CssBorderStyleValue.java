@@ -49,4 +49,17 @@ public class CssBorderStyleValue implements CssValue {
 		return cssString;
 	}
 
+	@Override
+	public int hashCode() {
+		return value.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof CssBorderStyleValue))
+			return false;
+		CssBorderStyleValue other = (CssBorderStyleValue) obj;
+		return other.value.equals(value)
+				&& Objects.equals(cssString, other.cssString);
+	}
 }
