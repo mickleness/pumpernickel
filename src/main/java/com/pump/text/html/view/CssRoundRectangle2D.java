@@ -290,4 +290,40 @@ public class CssRoundRectangle2D extends RectangularShape
 		resetShape();
 	}
 
+	public CssBorderRadiusValue getTopLeftRadius() {
+		return topLeftRadius;
+	}
+
+	public CssBorderRadiusValue getTopRightRadius() {
+		return topRightRadius;
+	}
+
+	public CssBorderRadiusValue getBottomRightRadius() {
+		return bottomRightRadius;
+	}
+
+	public CssBorderRadiusValue getBottomLeftRadius() {
+		return bottomLeftRadius;
+	}
+
+	public void setTopLeftRadius(CssBorderRadiusValue topLeftRadius) {
+		this.topLeftRadius = topLeftRadius;
+		resetShape();
+	}
+
+	public void setTopRightRadius(CssBorderRadiusValue topRightRadius) {
+		this.topRightRadius = topRightRadius;
+		resetShape();
+	}
+
+	public void setBottomRightRadius(CssBorderRadiusValue bottomRightRadius) {
+		this.bottomRightRadius = bottomRightRadius;
+		resetShape();
+	}
+
+	public void setBottomLeftRadius(CssBorderRadiusValue bottomLeftRadius) {
+		this.bottomLeftRadius = bottomLeftRadius;
+		resetShape();
+	}
+
 }
