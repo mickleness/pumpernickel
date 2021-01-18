@@ -53,7 +53,7 @@ public class CssBorderRadiusValue implements CssValue {
 		int leadingWhitespace = cssString.length() - z.length();
 
 		String firstTerm = null;
-		String secondTerm = null;
+		int secondTermStart = -1;
 		for (int a = 0; a < z.length(); a++) {
 			char ch = z.charAt(a);
 			if (Character.isWhitespace(ch)) {
@@ -62,9 +62,8 @@ public class CssBorderRadiusValue implements CssValue {
 							leadingWhitespace + a);
 				}
 			} else {
-				if (firstTerm != null) {
-					secondTerm = cssString.substring(leadingWhitespace,
-							leadingWhitespace + a);
+				if (firstTerm != null && secondTermStart == -1) {
+					secondTermStart = a;
 					break;
 				}
 			}
@@ -74,6 +73,8 @@ public class CssBorderRadiusValue implements CssValue {
 			horizontalValue = new CssLength(cssString);
 			verticalValue = horizontalValue;
 		} else {
+			String secondTerm = cssString
+					.substring(leadingWhitespace + secondTermStart);
 			horizontalValue = new CssLength(firstTerm);
 			verticalValue = new CssLength(secondTerm);
 		}
