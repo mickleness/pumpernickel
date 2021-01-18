@@ -369,8 +369,9 @@ public class BorderRendering {
 	 */
 	private Area createWedge(Edge edge) {
 		// always fudge k pixels on all sides to be 100% sure areas will err on
-		// the side of overlapping instead of underlapping.
-		float k = .125f;
+		// the side of overlapping instead of underlapping. Without this we can
+		// see a faint hairline separation between two edges.
+		float k = .5f;
 
 		Path2D wedge = new Path2D.Double();
 		switch (edge) {
