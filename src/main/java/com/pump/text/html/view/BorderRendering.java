@@ -1,11 +1,14 @@
 package com.pump.text.html.view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
 import java.util.ArrayList;
@@ -60,8 +63,12 @@ public class BorderRendering {
 		bottomStyleValue = config.bottomStyle == null ? Value.NONE
 				: config.bottomStyle.getValue();
 
-		imageRendering.getOperations().addAll(renderDottedBorders());
-		imageRendering.getOperations().addAll(renderDashedBorders());
+		if (shape instanceof Rectangle2D) {
+			imageRendering.getOperations()
+					.addAll(renderRectangleDottedBorders());
+			imageRendering.getOperations()
+					.addAll(renderRectangleDashedBorders());
+		}
 		imageRendering.getOperations().addAll(renderTrapezoidBorders());
 	}
 
@@ -117,7 +124,8 @@ public class BorderRendering {
 	}
 
 	/**
-	 * This renders borders that can be expressed as trapezoids.
+	 * This renders borders that can be expressed as trapezoids (SOLID, DOUBLE,
+	 * INSET, OUTSET, RIDGE, GROOVE).
 	 */
 	private List<Operation> renderTrapezoidBorders() {
 		Map<Color, Area> areas = new HashMap<>();
@@ -127,17 +135,17 @@ public class BorderRendering {
 			if (getWidth(edge) > 0 && color != null) {
 				switch (getStyle(edge)) {
 				case SOLID:
-					Path2D p1 = createTrapezoid(edge, 0, 1);
+					Shape p1 = createEdgeShape(edge, 0, 1);
 					addShape(areas, p1, color);
 					break;
 				case DOUBLE:
-					Path2D p2a = createTrapezoid(edge, 0, .333f);
-					Path2D p2b = createTrapezoid(edge, .666f, 1);
+					Shape p2a = createEdgeShape(edge, 0, .333f);
+					Shape p2b = createEdgeShape(edge, .666f, 1);
 					addShape(areas, p2a, color);
 					addShape(areas, p2b, color);
 					break;
 				case INSET:
-					Path2D p3 = createTrapezoid(edge, 0, 1);
+					Shape p3 = createEdgeShape(edge, 0, 1);
 					Color c1;
 					if (edge == Edge.TOP || edge == Edge.LEFT) {
 						c1 = darken(color);
@@ -147,7 +155,7 @@ public class BorderRendering {
 					addShape(areas, p3, c1);
 					break;
 				case OUTSET:
-					Path2D p4 = createTrapezoid(edge, 0, 1);
+					Shape p4 = createEdgeShape(edge, 0, 1);
 					Color c2;
 					if (edge == Edge.TOP || edge == Edge.LEFT) {
 						c2 = lighten(color);
@@ -157,8 +165,8 @@ public class BorderRendering {
 					addShape(areas, p4, c2);
 					break;
 				case RIDGE:
-					Path2D p5a = createTrapezoid(edge, .5f, 1);
-					Path2D p5b = createTrapezoid(edge, 0, .5f);
+					Shape p5a = createEdgeShape(edge, .5f, 1);
+					Shape p5b = createEdgeShape(edge, 0, .5f);
 
 					Color c3, c4;
 					if (edge == Edge.TOP || edge == Edge.LEFT) {
@@ -173,8 +181,8 @@ public class BorderRendering {
 					addShape(areas, p5b, c4);
 					break;
 				case GROOVE:
-					Path2D p6a = createTrapezoid(edge, .5f, 1);
-					Path2D p6b = createTrapezoid(edge, 0, .5f);
+					Shape p6a = createEdgeShape(edge, .5f, 1);
+					Shape p6b = createEdgeShape(edge, 0, .5f);
 
 					Color c5, c6;
 					if (edge == Edge.TOP || edge == Edge.LEFT) {
@@ -225,13 +233,13 @@ public class BorderRendering {
 		return new Color(argb, true);
 	}
 
-	private void addShape(Map<Color, Area> areas, Path2D newShape,
-			Color color) {
+	private void addShape(Map<Color, Area> areas, Shape newShape, Color color) {
 		// clone the Color just to be sure CssColorValue won't act up
 		// as a key in our map
 		Color key = new Color(color.getRGB(), true);
 		Area oldArea = areas.get(key);
-		Area newArea = new Area(newShape);
+		Area newArea = newShape instanceof Area ? (Area) newShape
+				: new Area(newShape);
 		if (oldArea == null) {
 			areas.put(key, newArea);
 		} else {
@@ -240,72 +248,175 @@ public class BorderRendering {
 	}
 
 	/**
-	 * Create a trapezoid representing part of an edge.
+	 * Create a shape representing an edge.
+	 * <p>
+	 * When the parent shape is rectangular this returns a trapezoid Path2D. But
+	 * when curvature is applied this returns a (flattened) Area.
 	 * 
 	 * @param edge
 	 *            the edge to represent
-	 * @param startFraction
+	 * @param startFractionDepth
 	 *            a value from [0,1], where 0 = outer edge, 1 = inner edge, and
 	 *            .5 = halfway in-between
-	 * @param endFraction
-	 *            a value from [0,1], like startFraction
+	 * @param endFractionDepth
+	 *            a value from [0,1], like startFractionDepth
 	 * @return a trapezoidal shape representing the edge/fractions.
 	 */
-	private Path2D createTrapezoid(Edge edge, float startFraction,
-			float endFraction) {
-		Path2D p = new Path2D.Double();
+	private Shape createEdgeShape(Edge edge, float startFractionDepth,
+			float endFractionDepth) {
+		Shape returnValue;
+		if (shape instanceof Rectangle2D) {
+			Path2D p = new Path2D.Double();
+			switch (edge) {
+			case TOP:
+				p.moveTo(shape.getMinX() + leftWidthValue * startFractionDepth,
+						shape.getMinY() + topWidthValue * startFractionDepth);
+				p.lineTo(shape.getMaxX() - rightWidthValue * startFractionDepth,
+						shape.getMinY() + topWidthValue * startFractionDepth);
+				p.lineTo(shape.getMaxX() - rightWidthValue * endFractionDepth,
+						shape.getMinY() + topWidthValue * endFractionDepth);
+				p.lineTo(shape.getMinX() + leftWidthValue * endFractionDepth,
+						shape.getMinY() + topWidthValue * endFractionDepth);
+				break;
+			case LEFT:
+				p.moveTo(shape.getMinX() + leftWidthValue * startFractionDepth,
+						shape.getMaxY()
+								- bottomWidthValue * startFractionDepth);
+				p.lineTo(shape.getMinX() + leftWidthValue * startFractionDepth,
+						shape.getMinY() + topWidthValue * startFractionDepth);
+				p.lineTo(shape.getMinX() + leftWidthValue * endFractionDepth,
+						shape.getMinY() + topWidthValue * endFractionDepth);
+				p.lineTo(shape.getMinX() + leftWidthValue * endFractionDepth,
+						shape.getMaxY() - bottomWidthValue * endFractionDepth);
+				break;
+			case RIGHT:
+				p.moveTo(shape.getMaxX() - rightWidthValue * startFractionDepth,
+						shape.getMinY() + topWidthValue * startFractionDepth);
+				p.lineTo(shape.getMaxX() - rightWidthValue * startFractionDepth,
+						shape.getMaxY()
+								- bottomWidthValue * startFractionDepth);
+				p.lineTo(shape.getMaxX() - rightWidthValue * endFractionDepth,
+						shape.getMaxY() - bottomWidthValue * endFractionDepth);
+				p.lineTo(shape.getMaxX() - rightWidthValue * endFractionDepth,
+						shape.getMinY() + topWidthValue * endFractionDepth);
+				break;
+			case BOTTOM:
+				p.moveTo(shape.getMinX() + leftWidthValue * startFractionDepth,
+						shape.getMaxY()
+								- bottomWidthValue * startFractionDepth);
+				p.lineTo(shape.getMaxX() - rightWidthValue * startFractionDepth,
+						shape.getMaxY()
+								- bottomWidthValue * startFractionDepth);
+				p.lineTo(shape.getMaxX() - rightWidthValue * endFractionDepth,
+						shape.getMaxY() - bottomWidthValue * endFractionDepth);
+				p.lineTo(shape.getMinX() + leftWidthValue * endFractionDepth,
+						shape.getMaxY() - bottomWidthValue * endFractionDepth);
+				break;
+			default:
+				throw new IllegalStateException("edge: " + edge);
+			}
+			p.closePath();
+			returnValue = p;
+		} else {
+			Area shapeArea = getWedgeArea(edge);
+
+			BasicStroke outerStroke = new BasicStroke(
+					(float) (endFractionDepth * 2 * getWidth(edge)));
+			Area strokeArea = flatten(outerStroke.createStrokedShape(shape));
+			strokeArea.intersect(shapeArea);
+
+			if (startFractionDepth != 0) {
+				BasicStroke innerStroke = new BasicStroke(
+						(float) (startFractionDepth * 2 * getWidth(edge)));
+				Area innerStrokeArea = flatten(
+						innerStroke.createStrokedShape(shape));
+				strokeArea.subtract(innerStrokeArea);
+			}
+			returnValue = strokeArea;
+		}
+		return returnValue;
+	}
+
+	private Area shapeAsArea = null;
+	private Map<Edge, Area> shapeWedgesByEdge = new HashMap<>();
+
+	/**
+	 * Return the intersection of the parent shape and createWedge.
+	 * <p>
+	 * That is: if the parent shape is a pie divided into 4 pieces, this returns
+	 * one piece as an Area. The Area is flattened (so it is made up of small
+	 * line segments).
+	 * <p>
+	 * This caches values. Bevels, ridges, doubles, etc reuse the same wedge
+	 * area.
+	 */
+	private Area getWedgeArea(Edge edge) {
+		Area returnValue = shapeWedgesByEdge.get(edge);
+		if (returnValue == null) {
+			if (shapeAsArea == null)
+				shapeAsArea = flatten(shape);
+
+			returnValue = new Area(shapeAsArea);
+			returnValue.intersect(createWedge(edge));
+			shapeWedgesByEdge.put(edge, returnValue);
+		}
+		return returnValue;
+	}
+
+	/**
+	 * Create the triangular wedge shape that is guaranteed to encompass an
+	 * edge.
+	 */
+	private Area createWedge(Edge edge) {
+		// always fudge k pixels on all sides to be 100% sure areas will err on
+		// the side of overlapping instead of underlapping.
+		float k = .125f;
+
+		Path2D wedge = new Path2D.Double();
 		switch (edge) {
 		case TOP:
-			p.moveTo(shape.getMinX() + leftWidthValue * startFraction,
-					shape.getMinY() + topWidthValue * startFraction);
-			p.lineTo(shape.getMaxX() - rightWidthValue * startFraction,
-					shape.getMinY() + topWidthValue * startFraction);
-			p.lineTo(shape.getMaxX() - rightWidthValue * endFraction,
-					shape.getMinY() + topWidthValue * endFraction);
-			p.lineTo(shape.getMinX() + leftWidthValue * endFraction,
-					shape.getMinY() + topWidthValue * endFraction);
+			wedge.moveTo(shape.getCenterX() - k, shape.getCenterY());
+			wedge.lineTo(shape.getMinX() - k, shape.getMinY());
+			wedge.lineTo(shape.getMaxX() + k, shape.getMinY());
+			wedge.lineTo(shape.getCenterX() + k, shape.getCenterY());
 			break;
 		case LEFT:
-			p.moveTo(shape.getMinX() + leftWidthValue * startFraction,
-					shape.getMaxY() - bottomWidthValue * startFraction);
-			p.lineTo(shape.getMinX() + leftWidthValue * startFraction,
-					shape.getMinY() + topWidthValue * startFraction);
-			p.lineTo(shape.getMinX() + leftWidthValue * endFraction,
-					shape.getMinY() + topWidthValue * endFraction);
-			p.lineTo(shape.getMinX() + leftWidthValue * endFraction,
-					shape.getMaxY() - bottomWidthValue * endFraction);
+			wedge.moveTo(shape.getCenterX(), shape.getCenterY() - k);
+			wedge.lineTo(shape.getMinX(), shape.getMinY() - k);
+			wedge.lineTo(shape.getMinX(), shape.getMaxY() + k);
+			wedge.moveTo(shape.getCenterX(), shape.getCenterY() + k);
 			break;
 		case RIGHT:
-			p.moveTo(shape.getMaxX() - rightWidthValue * startFraction,
-					shape.getMinY() + topWidthValue * startFraction);
-			p.lineTo(shape.getMaxX() - rightWidthValue * startFraction,
-					shape.getMaxY() - bottomWidthValue * startFraction);
-			p.lineTo(shape.getMaxX() - rightWidthValue * endFraction,
-					shape.getMaxY() - bottomWidthValue * endFraction);
-			p.lineTo(shape.getMaxX() - rightWidthValue * endFraction,
-					shape.getMinY() + topWidthValue * endFraction);
+			wedge.moveTo(shape.getCenterX(), shape.getCenterY() - k);
+			wedge.lineTo(shape.getMaxX(), shape.getMinY() - k);
+			wedge.lineTo(shape.getMaxX(), shape.getMaxY() + k);
+			wedge.moveTo(shape.getCenterX(), shape.getCenterY() + k);
 			break;
 		case BOTTOM:
-			p.moveTo(shape.getMinX() + leftWidthValue * startFraction,
-					shape.getMaxY() - bottomWidthValue * startFraction);
-			p.lineTo(shape.getMaxX() - rightWidthValue * startFraction,
-					shape.getMaxY() - bottomWidthValue * startFraction);
-			p.lineTo(shape.getMaxX() - rightWidthValue * endFraction,
-					shape.getMaxY() - bottomWidthValue * endFraction);
-			p.lineTo(shape.getMinX() + leftWidthValue * endFraction,
-					shape.getMaxY() - bottomWidthValue * endFraction);
+			wedge.moveTo(shape.getCenterX() - k, shape.getCenterY());
+			wedge.lineTo(shape.getMinX() - k, shape.getMaxY());
+			wedge.lineTo(shape.getMaxX() + k, shape.getMaxY());
+			wedge.lineTo(shape.getCenterX() + k, shape.getCenterY());
 			break;
 		default:
 			throw new IllegalStateException("edge: " + edge);
 		}
-		p.closePath();
-		return p;
+		wedge.closePath();
+
+		return new Area(wedge);
+	}
+
+	private Area flatten(Shape shape) {
+		PathIterator flattenedPI = shape.getPathIterator(null, .01);
+		Path2D p = new Path2D.Double(flattenedPI.getWindingRule());
+		p.append(flattenedPI, false);
+		return new Area(p);
 	}
 
 	/**
-	 * This method only renders DOTTED borders.
+	 * This method only renders DOTTED borders around Rectangle2D borders.
 	 */
-	private List<Operation> renderDottedBorders() {
+	private List<Operation> renderRectangleDottedBorders() {
 		VectorImage i = new VectorImage();
 		Graphics2D g = i.createGraphics();
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -457,9 +568,9 @@ public class BorderRendering {
 	}
 
 	/**
-	 * This method only renders DASHED borders.
+	 * This method only renders DASHED borders around Rectangle2D borders.
 	 */
-	private List<Operation> renderDashedBorders() {
+	private List<Operation> renderRectangleDashedBorders() {
 		VectorImage i = new VectorImage();
 		Graphics2D g = i.createGraphics();
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
