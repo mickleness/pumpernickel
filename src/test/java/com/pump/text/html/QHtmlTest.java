@@ -931,7 +931,7 @@ public class QHtmlTest extends TestCase {
 	 * resembles a circle.
 	 */
 	@Test
-	public void testBorderRadius() {
+	public BufferedImage testBorderRadius() {
 		//@formatter:off
 		String html = "<html>\n"
 				+ "<body>\n"
@@ -955,6 +955,35 @@ public class QHtmlTest extends TestCase {
 
 		assertImageEquals(bi1, bi2, 0);
 
+		return bi1;
+	}
+
+	/**
+	 * This tests an ID selector (in this case "myDIV"). The actual style here
+	 * is just another way of writing testBorderRadius().
+	 */
+	public void testSelector_plainID() {
+		//@formatter:off
+		String html = "<html>\n" 
+				+ "  <head>\n"
+				+ "    <style>\n" 
+				+ "      #myDIV { \n" 
+				+ "        border-radius: 50%;\n"
+				+ "        width: 200px;\n" 
+				+ "        height: 200px;\n"
+				+ "        background-color: #F0B;\n" 
+				+ "      }\n" 
+				+ "    </style>  \n"
+				+ "  </head>\n" 
+				+ "  <body>\n" 
+				+ "    <div id=\"myDIV\"></div>\n"
+				+ "  </body>\n" 
+				+ "</html>\n";
+		//@formatter:on
+
+		BufferedImage bi1 = getImage(html);
+		BufferedImage bi2 = testBorderRadius();
+		assertImageEquals(bi1, bi2, 0);
 	}
 
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -280,13 +281,20 @@ public class QStyleSheet extends StyleSheet {
 		List<String[]> selectorTermsConfig = new ArrayList<>(
 				selectorTerms.length);
 		for (int a = 0; a < selectorTerms.length; a++) {
-			if (a == 0 || a == 1 || a == selectorTerms.length - 1) {
-				// always include leading "html body" and trailing selector term
-				selectorTermsConfig.add(new String[] { selectorTerms[a] });
-			} else {
-				selectorTermsConfig
-						.add(new String[] { selectorTerms[a], null });
+			List<String> z = new LinkedList<>();
+			z.add(selectorTerms[a]);
+			if (!(a == 0 || a == 1 || a == selectorTerms.length - 1)) {
+				// always include leading "html body" and trailing selector term,
+				// but all other terms are optional (so they may be null)
+				z.add(null);
 			}
+
+			int i = selectorTerms[a].indexOf("#");
+			if (i != -1 && a >= 2) {
+				z.add(selectorTerms[a].substring(i));
+			}
+
+			selectorTermsConfig.add(z.toArray(new String[z.size()]));
 		}
 
 		CombinationIterator<String> comboIter = new CombinationIterator<>(
