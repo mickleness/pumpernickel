@@ -166,7 +166,7 @@ public class CssRoundRectangle2D extends RectangularShape
 		path.curveTo(frame.getMinX() + bottomLeftRadiusHoriz * (1 - CtrlVal),
 				frame.getMaxY(), frame.getMinX(),
 				frame.getMaxY() - bottomLeftRadiusVert * (1 - CtrlVal),
-				frame.getMinX(), frame.getMaxY() - bottomRightRadiusVert);
+				frame.getMinX(), frame.getMaxY() - bottomLeftRadiusVert);
 		path.lineTo(frame.getMinX(), frame.getMinY() + topLeftRadiusVert);
 		path.curveTo(frame.getMinX(),
 				frame.getMinY() + topLeftRadiusVert * (1 - CtrlVal),
