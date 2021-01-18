@@ -353,8 +353,16 @@ public class BorderRendering {
 	private Area getWedgeArea(Edge edge) {
 		Area returnValue = shapeWedgesByEdge.get(edge);
 		if (returnValue == null) {
-			if (shapeAsArea == null)
+			if (shapeAsArea == null) {
 				shapeAsArea = flatten(shape);
+
+				// this helps cover up some antialiasing bleed-through from
+				// the background when both the background body and border
+				// are opaque
+				BasicStroke thinGrowth = new BasicStroke(.9f);
+				shapeAsArea.add(new Area(
+						flatten(thinGrowth.createStrokedShape(shape))));
+			}
 
 			returnValue = new Area(shapeAsArea);
 			returnValue.intersect(createWedge(edge));
@@ -372,6 +380,9 @@ public class BorderRendering {
 		// the side of overlapping instead of underlapping. Without this we can
 		// see a faint hairline separation between two edges.
 		float k = .5f;
+
+		// ... in theory we may want to let k = 0 if there's translucency
+		// involved
 
 		Path2D wedge = new Path2D.Double();
 		switch (edge) {
