@@ -118,6 +118,8 @@ public class BorderRendering {
 		} else {
 			imageRendering.getOperations()
 					.addAll(renderNonRectangleDashedBorders());
+			imageRendering.getOperations()
+					.addAll(renderNonRectangleDottedBorders());
 		}
 		imageRendering.getOperations().addAll(renderTrapezoidBorders());
 	}
@@ -391,8 +393,8 @@ public class BorderRendering {
 	private Map<Edge, Area> shapeWedgesByEdge = new HashMap<>();
 
 	/**
-	 * Return the root {@code shape} field as an Area, and slightly grow it by .45px
-	 * to help issues with bleeding/antialiased colors.
+	 * Return the root {@code shape} field as an Area, and slightly grow it by
+	 * .45px to help issues with bleeding/antialiased colors.
 	 */
 	private Area getShapeArea() {
 		if (shapeAsArea == null) {
@@ -698,6 +700,80 @@ public class BorderRendering {
 						.toArray(new Edge[edgeCluster.edges.size()]))));
 
 				g2.fill(area);
+			}
+		}
+
+		return i.getOperations();
+	}
+
+	/**
+	 * Render DOTTED borders when our root shape is not a Rectangle2D
+	 */
+	private List<Operation> renderNonRectangleDottedBorders() {
+		VectorImage i = new VectorImage();
+		Graphics2D g = i.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+
+		for (EdgeCluster edgeCluster : getEdgeClusters()) {
+			if (edgeCluster.style == CssBorderStyleValue.Value.DOTTED) {
+				BasicStroke stroke = new BasicStroke(
+						(float) (2 * edgeCluster.width), BasicStroke.CAP_BUTT,
+						BasicStroke.JOIN_ROUND, 10.0f,
+						new float[] { (float) edgeCluster.width,
+								(float) edgeCluster.width },
+						0.0f);
+				Graphics2D g2 = (Graphics2D) g.create();
+				g2.setStroke(stroke);
+				g2.setColor(edgeCluster.color);
+
+				Area area = new Area();
+				area.add(new Area(stroke.createStrokedShape(shape)));
+				area.intersect(getShapeArea());
+				area.intersect(new Area(createWedge(edgeCluster.edges
+						.toArray(new Edge[edgeCluster.edges.size()]))));
+
+				// now we convert the dashed outline into a series of dots
+
+				float dotRadius = (float) (edgeCluster.width / 2);
+				PathIterator pi = area.getPathIterator(null, 1);
+				double[] coords = new double[6];
+				Rectangle2D dotBounds = null;
+
+				while (!pi.isDone()) {
+					int k = pi.currentSegment(coords);
+					if (k == PathIterator.SEG_MOVETO) {
+						if (dotBounds != null) {
+							// we do this contains(..) check because sometimes
+							// we seem to get residue on the perimeter of the
+							// shape that doesn't actually have a body. So make
+							// sure we're actually our shape before we paint our
+							// dot
+							if (shape.contains(dotBounds.getCenterX() - .1,
+									dotBounds.getCenterY() - .1, .2, .2)) {
+								g2.fill(new Ellipse2D.Double(
+										dotBounds.getCenterX() - dotRadius,
+										dotBounds.getCenterY() - dotRadius,
+										2 * dotRadius, 2 * dotRadius));
+							}
+						}
+						dotBounds = new java.awt.geom.Rectangle2D.Double(
+								coords[0], coords[1], 0, 0);
+					} else if (k == PathIterator.SEG_LINETO) {
+						dotBounds.add(coords[0], coords[1]);
+					}
+					pi.next();
+				}
+
+				if (dotBounds != null) {
+					if (shape.contains(dotBounds.getCenterX() - .1,
+							dotBounds.getCenterY() - .1, .2, .2)) {
+						g2.fill(new Ellipse2D.Double(
+								dotBounds.getCenterX() - dotRadius,
+								dotBounds.getCenterY() - dotRadius,
+								2 * dotRadius, 2 * dotRadius));
+					}
+				}
 			}
 		}
 
