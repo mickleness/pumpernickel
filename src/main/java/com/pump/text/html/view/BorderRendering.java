@@ -12,7 +12,9 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,7 +33,52 @@ import com.pump.text.html.css.border.CssBorderStyleValue.Value;
  */
 public class BorderRendering {
 	enum Edge {
-		LEFT, RIGHT, TOP, BOTTOM;
+		TOP, RIGHT, BOTTOM, LEFT;
+
+		/**
+		 * Return true if the argument is adjacent to this Edge.
+		 */
+		public boolean isAdjacent(Edge otherEdge) {
+			boolean isHorizontal = ordinal() % 2 == 0;
+			boolean otherIsHorizontal = otherEdge.ordinal() % 2 == 0;
+			return isHorizontal != otherIsHorizontal;
+		}
+	}
+
+	/**
+	 * This is a cluster of Edges with the same color, style and width.
+	 */
+	static class EdgeCluster {
+		Collection<Edge> edges = new HashSet<>();
+		CssColorValue color;
+		Value style;
+		double width;
+
+		public EdgeCluster(Edge edge, double width, CssColorValue color,
+				Value style) {
+			edges.add(edge);
+			this.width = width;
+			this.style = style;
+			this.color = color;
+		}
+
+		protected boolean add(EdgeCluster otherCluster) {
+			if (otherCluster.width != width)
+				return false;
+			if (otherCluster.style != style)
+				return false;
+			if (otherCluster.color.getRGB() != color.getRGB())
+				return false;
+			for (Edge myEdge : edges) {
+				for (Edge otherEdge : otherCluster.edges) {
+					if (myEdge.isAdjacent(otherEdge)) {
+						edges.addAll(otherCluster.edges);
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 	}
 
 	float topWidthValue, bottomWidthValue, leftWidthValue, rightWidthValue;
@@ -68,6 +115,9 @@ public class BorderRendering {
 					.addAll(renderRectangleDottedBorders());
 			imageRendering.getOperations()
 					.addAll(renderRectangleDashedBorders());
+		} else {
+			imageRendering.getOperations()
+					.addAll(renderNonRectangleDashedBorders());
 		}
 		imageRendering.getOperations().addAll(renderTrapezoidBorders());
 	}
@@ -341,6 +391,24 @@ public class BorderRendering {
 	private Map<Edge, Area> shapeWedgesByEdge = new HashMap<>();
 
 	/**
+	 * Return the root {@code shape} field as an Area, and slightly grow it by .45px
+	 * to help issues with bleeding/antialiased colors.
+	 */
+	private Area getShapeArea() {
+		if (shapeAsArea == null) {
+			shapeAsArea = flatten(shape);
+
+			// this helps cover up some antialiasing bleed-through from
+			// the background when both the background body and border
+			// are opaque
+			BasicStroke thinGrowth = new BasicStroke(.9f);
+			shapeAsArea.add(
+					new Area(flatten(thinGrowth.createStrokedShape(shape))));
+		}
+		return shapeAsArea;
+	}
+
+	/**
 	 * Return the intersection of the parent shape and createWedge.
 	 * <p>
 	 * That is: if the parent shape is a pie divided into 4 pieces, this returns
@@ -353,18 +421,8 @@ public class BorderRendering {
 	private Area getWedgeArea(Edge edge) {
 		Area returnValue = shapeWedgesByEdge.get(edge);
 		if (returnValue == null) {
-			if (shapeAsArea == null) {
-				shapeAsArea = flatten(shape);
 
-				// this helps cover up some antialiasing bleed-through from
-				// the background when both the background body and border
-				// are opaque
-				BasicStroke thinGrowth = new BasicStroke(.9f);
-				shapeAsArea.add(new Area(
-						flatten(thinGrowth.createStrokedShape(shape))));
-			}
-
-			returnValue = new Area(shapeAsArea);
+			returnValue = new Area(getShapeArea());
 			returnValue.intersect(createWedge(edge));
 			shapeWedgesByEdge.put(edge, returnValue);
 		}
@@ -375,7 +433,7 @@ public class BorderRendering {
 	 * Create the triangular wedge shape that is guaranteed to encompass an
 	 * edge.
 	 */
-	private Area createWedge(Edge edge) {
+	private Area createWedge(Edge... edges) {
 		// always fudge k pixels on all sides to be 100% sure areas will err on
 		// the side of overlapping instead of underlapping. Without this we can
 		// see a faint hairline separation between two edges.
@@ -384,38 +442,43 @@ public class BorderRendering {
 		// ... in theory we may want to let k = 0 if there's translucency
 		// involved
 
-		Path2D wedge = new Path2D.Double();
-		switch (edge) {
-		case TOP:
-			wedge.moveTo(shape.getCenterX() - k, shape.getCenterY());
-			wedge.lineTo(shape.getMinX() - k, shape.getMinY());
-			wedge.lineTo(shape.getMaxX() + k, shape.getMinY());
-			wedge.lineTo(shape.getCenterX() + k, shape.getCenterY());
-			break;
-		case LEFT:
-			wedge.moveTo(shape.getCenterX(), shape.getCenterY() - k);
-			wedge.lineTo(shape.getMinX(), shape.getMinY() - k);
-			wedge.lineTo(shape.getMinX(), shape.getMaxY() + k);
-			wedge.moveTo(shape.getCenterX(), shape.getCenterY() + k);
-			break;
-		case RIGHT:
-			wedge.moveTo(shape.getCenterX(), shape.getCenterY() - k);
-			wedge.lineTo(shape.getMaxX(), shape.getMinY() - k);
-			wedge.lineTo(shape.getMaxX(), shape.getMaxY() + k);
-			wedge.moveTo(shape.getCenterX(), shape.getCenterY() + k);
-			break;
-		case BOTTOM:
-			wedge.moveTo(shape.getCenterX() - k, shape.getCenterY());
-			wedge.lineTo(shape.getMinX() - k, shape.getMaxY());
-			wedge.lineTo(shape.getMaxX() + k, shape.getMaxY());
-			wedge.lineTo(shape.getCenterX() + k, shape.getCenterY());
-			break;
-		default:
-			throw new IllegalStateException("edge: " + edge);
-		}
-		wedge.closePath();
+		Area sum = new Area();
+		for (Edge edge : edges) {
+			Path2D wedge = new Path2D.Double();
+			switch (edge) {
+			case TOP:
+				wedge.moveTo(shape.getCenterX() - k, shape.getCenterY());
+				wedge.lineTo(shape.getMinX() - k, shape.getMinY());
+				wedge.lineTo(shape.getMaxX() + k, shape.getMinY());
+				wedge.lineTo(shape.getCenterX() + k, shape.getCenterY());
+				break;
+			case LEFT:
+				wedge.moveTo(shape.getCenterX(), shape.getCenterY() - k);
+				wedge.lineTo(shape.getMinX(), shape.getMinY() - k);
+				wedge.lineTo(shape.getMinX(), shape.getMaxY() + k);
+				wedge.moveTo(shape.getCenterX(), shape.getCenterY() + k);
+				break;
+			case RIGHT:
+				wedge.moveTo(shape.getCenterX(), shape.getCenterY() - k);
+				wedge.lineTo(shape.getMaxX(), shape.getMinY() - k);
+				wedge.lineTo(shape.getMaxX(), shape.getMaxY() + k);
+				wedge.moveTo(shape.getCenterX(), shape.getCenterY() + k);
+				break;
+			case BOTTOM:
+				wedge.moveTo(shape.getCenterX() - k, shape.getCenterY());
+				wedge.lineTo(shape.getMinX() - k, shape.getMaxY());
+				wedge.lineTo(shape.getMaxX() + k, shape.getMaxY());
+				wedge.lineTo(shape.getCenterX() + k, shape.getCenterY());
+				break;
+			default:
+				throw new IllegalStateException("edge: " + edge);
+			}
+			wedge.closePath();
 
-		return new Area(wedge);
+			sum.add(new Area(wedge));
+		}
+
+		return sum;
 	}
 
 	private Area flatten(Shape shape) {
@@ -577,6 +640,68 @@ public class BorderRendering {
 		}
 
 		distributePaddingAndPaint(g, dots, maxY - y, false);
+	}
+
+	/**
+	 * Return all the edge clusters.
+	 */
+	private List<EdgeCluster> getEdgeClusters() {
+		List<EdgeCluster> edgeClusters = new ArrayList<>(4);
+		EdgeCluster lastCluster = null;
+		for (Edge edge : Edge.values()) {
+			double width = getWidth(edge);
+			CssColorValue color = getColor(edge);
+			CssBorderStyleValue.Value style = getStyle(edge);
+
+			if (width > 0 && color != null && style != null) {
+				EdgeCluster newCluster = new EdgeCluster(edge, width, color,
+						style);
+				if (!(lastCluster != null && lastCluster.add(newCluster))) {
+					edgeClusters.add(newCluster);
+				}
+				lastCluster = newCluster;
+			}
+		}
+		if (edgeClusters.size() > 1) {
+			if (edgeClusters.get(0)
+					.add(edgeClusters.get(edgeClusters.size() - 1)))
+				edgeClusters.remove(edgeClusters.size() - 1);
+		}
+		return edgeClusters;
+	}
+
+	/**
+	 * Render DASHED borders when our root shape is not a Rectangle2D
+	 */
+	private List<Operation> renderNonRectangleDashedBorders() {
+		VectorImage i = new VectorImage();
+		Graphics2D g = i.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+
+		for (EdgeCluster edgeCluster : getEdgeClusters()) {
+			if (edgeCluster.style == CssBorderStyleValue.Value.DASHED) {
+				BasicStroke stroke = new BasicStroke(
+						(float) (2 * edgeCluster.width), BasicStroke.CAP_BUTT,
+						BasicStroke.JOIN_ROUND, 10.0f,
+						new float[] { (float) edgeCluster.width * 2,
+								(float) edgeCluster.width * 2 },
+						0.0f);
+				Graphics2D g2 = (Graphics2D) g.create();
+				g2.setStroke(stroke);
+				g2.setColor(edgeCluster.color);
+
+				Area area = new Area();
+				area.add(new Area(stroke.createStrokedShape(shape)));
+				area.intersect(getShapeArea());
+				area.intersect(new Area(createWedge(edgeCluster.edges
+						.toArray(new Edge[edgeCluster.edges.size()]))));
+
+				g2.fill(area);
+			}
+		}
+
+		return i.getOperations();
 	}
 
 	/**
