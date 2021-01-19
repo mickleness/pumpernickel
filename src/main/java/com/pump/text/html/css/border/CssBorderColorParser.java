@@ -33,12 +33,26 @@ public class CssBorderColorParser extends CssListParser<CssColorValue> {
 	protected int parseListElement(String cssString, int index,
 			List<CssColorValue> dest) {
 		CssColorParser p = new CssColorParser();
-		String substring = cssString.substring(index);
-		CssColorValue v = p.parse(substring);
+
+		String substring1 = cssString.substring(index);
+		String substring2 = substring1.trim();
+		int leadingWhitespace = substring1.length() - substring2.length();
+
+		for (int i = 0; i < substring2.length(); i++) {
+			char ch = substring2.charAt(i);
+			if (Character.isWhitespace(ch)) {
+				String firstTerm = substring2.substring(0, i);
+				CssColorValue v = p.parse(firstTerm);
+				dest.add(v);
+				return index + i + leadingWhitespace;
+			}
+		}
+
+		CssColorValue v = p.parse(substring2);
 		dest.add(v);
 
 		String z = v.toCSSString();
-		return cssString.indexOf(z, index) + z.length();
+		return index + leadingWhitespace + z.length();
 	}
 
 }
