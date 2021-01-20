@@ -100,6 +100,23 @@ public class CssParserUtils {
 			int i = CssParserUtils.indexOfWhitespace(t, 0);
 			String word = i == -1 ? t : t.substring(0, i);
 			word = word.toLowerCase();
+
+			// consider "5%/4%", where "/" is a keyword. In this case
+			// whitespace isn't separating our words, but we want to
+			// parse this into "5%", "/" and "4%". This should break up
+			// those words (in two different passes):
+			for (String allowedKeyword : allowedKeywords) {
+				if (word.startsWith(allowedKeyword)) {
+					word = allowedKeyword;
+					break;
+				}
+				int j = word.indexOf(allowedKeyword);
+				if (j != -1) {
+					word = word.substring(0, j);
+					break;
+				}
+			}
+
 			if (allowedKeywords.contains(word)) {
 				words.add(word);
 			} else {

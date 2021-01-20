@@ -84,23 +84,23 @@ public class CssBorderRadiusParser
 						"Expected 1-4 terms in \"" + cssString + "\"");
 			}
 		} else {
-			List<Object> horizontalTerms = terms.subList(0, i - 1);
-			List<Object> verticalTerms = terms.subList(i + 1, terms.size() - 1);
+			List<Object> horizontalTerms = terms.subList(0, i);
+			List<Object> verticalTerms = terms.subList(i + 1, terms.size());
 
-			if (terms.size() == 1) {
+			if (horizontalTerms.size() == 1) {
 				topLeftHoriz = topRightHoriz = bottomRightHoriz = bottomLeftHoriz = (CssLength) horizontalTerms
 						.get(0);
-			} else if (terms.size() == 2) {
+			} else if (horizontalTerms.size() == 2) {
 				topLeftHoriz = bottomRightHoriz = (CssLength) horizontalTerms
 						.get(0);
 				topRightHoriz = bottomLeftHoriz = (CssLength) horizontalTerms
 						.get(1);
-			} else if (terms.size() == 3) {
+			} else if (horizontalTerms.size() == 3) {
 				topLeftHoriz = (CssLength) horizontalTerms.get(0);
 				topRightHoriz = bottomLeftHoriz = (CssLength) horizontalTerms
 						.get(1);
 				bottomRightHoriz = (CssLength) horizontalTerms.get(2);
-			} else if (terms.size() == 4) {
+			} else if (horizontalTerms.size() == 4) {
 				topLeftHoriz = (CssLength) horizontalTerms.get(0);
 				topRightHoriz = (CssLength) horizontalTerms.get(1);
 				bottomRightHoriz = (CssLength) horizontalTerms.get(2);
@@ -111,20 +111,20 @@ public class CssBorderRadiusParser
 								+ "\"");
 			}
 
-			if (terms.size() == 1) {
+			if (verticalTerms.size() == 1) {
 				topLeftVert = topRightVert = bottomRightVert = bottomLeftVert = (CssLength) verticalTerms
 						.get(0);
-			} else if (terms.size() == 2) {
+			} else if (verticalTerms.size() == 2) {
 				topLeftVert = bottomRightVert = (CssLength) verticalTerms
 						.get(0);
 				topRightVert = bottomLeftVert = (CssLength) verticalTerms
 						.get(1);
-			} else if (terms.size() == 3) {
+			} else if (verticalTerms.size() == 3) {
 				topLeftVert = (CssLength) verticalTerms.get(0);
 				topRightVert = bottomLeftVert = (CssLength) verticalTerms
 						.get(1);
 				bottomRightVert = (CssLength) verticalTerms.get(2);
-			} else if (terms.size() == 4) {
+			} else if (verticalTerms.size() == 4) {
 				topLeftVert = (CssLength) verticalTerms.get(0);
 				topRightVert = (CssLength) verticalTerms.get(1);
 				bottomRightVert = (CssLength) verticalTerms.get(2);

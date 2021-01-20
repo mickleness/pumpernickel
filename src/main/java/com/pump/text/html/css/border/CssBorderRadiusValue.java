@@ -80,6 +80,26 @@ public class CssBorderRadiusValue implements CssValue {
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		return Double.hashCode(horizontalValue.getValue(100)) << 8
+				+ Double.hashCode(verticalValue.getValue(100));
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof CssBorderRadiusValue))
+			return false;
+		CssBorderRadiusValue other = (CssBorderRadiusValue) obj;
+		if (!Objects.equals(cssString, other.cssString))
+			return false;
+		if (!Objects.equals(horizontalValue, other.horizontalValue))
+			return false;
+		if (!Objects.equals(verticalValue, other.verticalValue))
+			return false;
+		return true;
+	}
+
 	public CssLength getHorizontalValue() {
 		return horizontalValue;
 	}
