@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.pump.awt.HSLColor;
+import com.pump.geom.ShapeBounds;
 import com.pump.graphics.vector.Operation;
 import com.pump.graphics.vector.VectorImage;
 import com.pump.text.html.css.CssColorValue;
@@ -87,6 +89,14 @@ public class BorderRendering {
 	BorderRenderingConfiguration config;
 	VectorImage imageRendering = new VectorImage();
 	RectangularShape shape;
+
+	/**
+	 * The corners of the shape (top-left, top-right, bottom-right,
+	 * bottom-left). These coordinates take into account rounded corners, so the
+	 * top-left coordinate may not be exactly the same as
+	 * <code>(shape.getMinX(), shape.getMinY())</code>
+	 */
+	private transient float[] cornerPoints;
 
 	public BorderRendering(BorderRenderingConfiguration config,
 			Rectangle2D bounds) {
@@ -373,13 +383,15 @@ public class BorderRendering {
 			Area shapeArea = getWedgeArea(edge);
 
 			BasicStroke outerStroke = new BasicStroke(
-					(float) (endFractionDepth * 2 * getWidth(edge)));
+					(float) (endFractionDepth * 2 * getWidth(edge)),
+					BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
 			Area strokeArea = flatten(outerStroke.createStrokedShape(shape));
 			strokeArea.intersect(shapeArea);
 
 			if (startFractionDepth != 0) {
 				BasicStroke innerStroke = new BasicStroke(
-						(float) (startFractionDepth * 2 * getWidth(edge)));
+						(float) (startFractionDepth * 2 * getWidth(edge)),
+						BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
 				Area innerStrokeArea = flatten(
 						innerStroke.createStrokedShape(shape));
 				strokeArea.subtract(innerStrokeArea);
@@ -403,7 +415,8 @@ public class BorderRendering {
 			// this helps cover up some antialiasing bleed-through from
 			// the background when both the background body and border
 			// are opaque
-			BasicStroke thinGrowth = new BasicStroke(.9f);
+			BasicStroke thinGrowth = new BasicStroke(.9f, BasicStroke.CAP_BUTT,
+					BasicStroke.JOIN_BEVEL);
 			shapeAsArea.add(
 					new Area(flatten(thinGrowth.createStrokedShape(shape))));
 		}
@@ -439,38 +452,62 @@ public class BorderRendering {
 		// always fudge k pixels on all sides to be 100% sure areas will err on
 		// the side of overlapping instead of underlapping. Without this we can
 		// see a faint hairline separation between two edges.
-		float k = .5f;
+		float k1 = .5f;
+		float k2 = .5f;
 
 		// ... in theory we may want to let k = 0 if there's translucency
 		// involved
+
+		double centerX = shape.getCenterX();
+		double centerY = shape.getCenterY();
+
+		if (cornerPoints == null) {
+			AffineTransform rotateA = AffineTransform
+					.getRotateInstance(Math.PI / 4, centerX, centerY);
+
+			cornerPoints = ShapeBounds
+					.getEdgePoints(shape.getPathIterator(rotateA));
+
+			AffineTransform rotateB = AffineTransform
+					.getRotateInstance(-Math.PI / 4, centerX, centerY);
+			rotateB.transform(cornerPoints, 0, cornerPoints, 0, 4);
+		}
 
 		Area sum = new Area();
 		for (Edge edge : edges) {
 			Path2D wedge = new Path2D.Double();
 			switch (edge) {
 			case TOP:
-				wedge.moveTo(shape.getCenterX() - k, shape.getCenterY());
-				wedge.lineTo(shape.getMinX() - k, shape.getMinY());
-				wedge.lineTo(shape.getMaxX() + k, shape.getMinY());
-				wedge.lineTo(shape.getCenterX() + k, shape.getCenterY());
+				wedge.moveTo(centerX - k1, centerY);
+				wedge.lineTo(centerX - 2 * (centerX - cornerPoints[0]) - k2,
+						centerY - 2 * (centerY - cornerPoints[1]));
+				wedge.lineTo(centerX + 2 * (cornerPoints[2] - centerX) + k2,
+						centerY - 2 * (centerY - cornerPoints[3]));
+				wedge.lineTo(centerX + k1, centerY);
 				break;
 			case LEFT:
-				wedge.moveTo(shape.getCenterX(), shape.getCenterY() - k);
-				wedge.lineTo(shape.getMinX(), shape.getMinY() - k);
-				wedge.lineTo(shape.getMinX(), shape.getMaxY() + k);
-				wedge.moveTo(shape.getCenterX(), shape.getCenterY() + k);
+				wedge.moveTo(centerX, centerY - k1);
+				wedge.lineTo(centerX - 2 * (centerX - cornerPoints[0]),
+						centerY - 2 * (centerY - cornerPoints[1]) - k2);
+				wedge.lineTo(centerX - 2 * (centerX - cornerPoints[6]),
+						centerY + 2 * (cornerPoints[7] - centerY) + k2);
+				wedge.moveTo(centerX, centerY + k1);
 				break;
 			case RIGHT:
-				wedge.moveTo(shape.getCenterX(), shape.getCenterY() - k);
-				wedge.lineTo(shape.getMaxX(), shape.getMinY() - k);
-				wedge.lineTo(shape.getMaxX(), shape.getMaxY() + k);
-				wedge.moveTo(shape.getCenterX(), shape.getCenterY() + k);
+				wedge.moveTo(centerX, centerY - k1);
+				wedge.lineTo(centerX + 2 * (cornerPoints[2] - centerX),
+						centerY - 2 * (centerY - cornerPoints[3]) - k2);
+				wedge.lineTo(centerX + 2 * (cornerPoints[4] - centerX),
+						centerY - 2 * (centerY - cornerPoints[5]) + k2);
+				wedge.moveTo(centerX, centerY + k1);
 				break;
 			case BOTTOM:
-				wedge.moveTo(shape.getCenterX() - k, shape.getCenterY());
-				wedge.lineTo(shape.getMinX() - k, shape.getMaxY());
-				wedge.lineTo(shape.getMaxX() + k, shape.getMaxY());
-				wedge.lineTo(shape.getCenterX() + k, shape.getCenterY());
+				wedge.moveTo(centerX - k1, centerY);
+				wedge.lineTo(centerX + 2 * (cornerPoints[4] - centerX) + k2,
+						centerY + 2 * (cornerPoints[5] - centerY));
+				wedge.lineTo(centerX - 2 * (centerX - cornerPoints[6]) - k2,
+						centerY + 2 * (cornerPoints[7] - centerY));
+				wedge.lineTo(centerX + k1, centerY);
 				break;
 			default:
 				throw new IllegalStateException("edge: " + edge);

@@ -24,8 +24,8 @@ import java.awt.geom.Rectangle2D;
  * <code>java.awt.geom.Area</code> class.
  * 
  * @see com.pump.showcase.ShapeBoundsDemo
- * @see <a
- *      href="https://javagraphics.blogspot.com/2007/05/shapes-calculating-bounds.html">Shapes:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2007/05/shapes-calculating-bounds.html">Shapes:
  *      Calculating Bounds</a>
  */
 public class ShapeBounds {
@@ -150,12 +150,48 @@ public class ShapeBounds {
 	 * @return the bounds of <code>i</code>.
 	 */
 	public static Rectangle2D getBounds(PathIterator i, Rectangle2D r) {
+		float[] points = getEdgePoints(i);
+
+		float top = points[1];
+		float right = points[2];
+		float bottom = points[5];
+		float left = points[6];
+
+		if (r != null) {
+			r.setFrame(left, top, right - left, bottom - top);
+			return r;
+		}
+		return new Rectangle2D.Float(left, top, right - left, bottom - top);
+	}
+
+	private static final int TOPMOST_X = 0;
+	private static final int TOPMOST_Y = 1;
+	private static final int RIGHTMOST_X = 2;
+	private static final int RIGHTMOST_Y = 3;
+	private static final int BOTTOMMOST_X = 4;
+	private static final int BOTTOMMOST_Y = 5;
+	private static final int LEFTMOST_X = 6;
+	private static final int LEFTMOST_Y = 7;
+
+	/**
+	 * Return 4 points: topmost edge, rightmost edge, bottommost edge, leftmost
+	 * edge. This identifies edges as they occur in the PathIterator. So for a
+	 * Rectangle, the "rightmost edge" may be either the top-right vertex or the
+	 * bottom-right vertex, depending on which comes up first in the
+	 * PathIterator.
+	 */
+	public static float[] getEdgePoints(PathIterator i) {
+
+		// I apologize to anyone reading this: there's a lot we could do to make
+		// this more readable. But I wrote this with efficiency in mind: I want
+		// to minimize any additional helper methods or data structures to make
+		// this as fast as possible.
+
 		float[] f = new float[6];
 
 		int k;
 
-		/** left, top, right, and bottom bounds */
-		float[] bounds = null;
+		float[] returnValue = null;
 
 		float lastX = 0;
 		float lastY = 0;
@@ -178,40 +214,66 @@ public class ShapeBounds {
 				// so if the shape is badly defined the bounds
 				// should still make sense.
 			} else {
-				if (bounds == null) {
-					bounds = new float[] { lastX, lastY, lastX, lastY };
+				if (returnValue == null) {
+					returnValue = new float[] { lastX, lastY, lastX, lastY,
+							lastX, lastY, lastX, lastY };
 				} else {
-					if (lastX < bounds[0])
-						bounds[0] = lastX;
-					if (lastY < bounds[1])
-						bounds[1] = lastY;
-					if (lastX > bounds[2])
-						bounds[2] = lastX;
-					if (lastY > bounds[3])
-						bounds[3] = lastY;
+					if (lastX < returnValue[LEFTMOST_X]) {
+						returnValue[LEFTMOST_X] = lastX;
+						returnValue[LEFTMOST_Y] = lastY;
+					}
+					if (lastY < returnValue[TOPMOST_Y]) {
+						returnValue[TOPMOST_X] = lastX;
+						returnValue[TOPMOST_Y] = lastY;
+					}
+					if (lastX > returnValue[RIGHTMOST_X]) {
+						returnValue[RIGHTMOST_X] = lastX;
+						returnValue[RIGHTMOST_Y] = lastY;
+					}
+					if (lastY > returnValue[BOTTOMMOST_Y]) {
+						returnValue[BOTTOMMOST_X] = lastX;
+						returnValue[BOTTOMMOST_Y] = lastY;
+					}
 				}
 
 				if (k == PathIterator.SEG_LINETO) {
-					if (f[0] < bounds[0])
-						bounds[0] = f[0];
-					if (f[1] < bounds[1])
-						bounds[1] = f[1];
-					if (f[0] > bounds[2])
-						bounds[2] = f[0];
-					if (f[1] > bounds[3])
-						bounds[3] = f[1];
+					if (f[0] < returnValue[LEFTMOST_X]) {
+						returnValue[LEFTMOST_X] = f[0];
+						returnValue[LEFTMOST_Y] = f[1];
+					}
+					if (f[1] < returnValue[TOPMOST_Y]) {
+						returnValue[TOPMOST_X] = f[0];
+						returnValue[TOPMOST_Y] = f[1];
+					}
+					if (f[0] > returnValue[RIGHTMOST_X]) {
+						returnValue[RIGHTMOST_X] = f[0];
+						returnValue[RIGHTMOST_Y] = f[1];
+					}
+					if (f[1] > returnValue[BOTTOMMOST_Y]) {
+						returnValue[BOTTOMMOST_X] = f[0];
+						returnValue[BOTTOMMOST_Y] = f[1];
+					}
+
 					lastX = f[0];
 					lastY = f[1];
 				} else if (k == PathIterator.SEG_QUADTO) {
 					// check the end point
-					if (f[2] < bounds[0])
-						bounds[0] = f[2];
-					if (f[3] < bounds[1])
-						bounds[1] = f[3];
-					if (f[2] > bounds[2])
-						bounds[2] = f[2];
-					if (f[3] > bounds[3])
-						bounds[3] = f[3];
+					if (f[2] < returnValue[LEFTMOST_X]) {
+						returnValue[LEFTMOST_X] = f[2];
+						returnValue[LEFTMOST_Y] = f[3];
+					}
+					if (f[3] < returnValue[TOPMOST_Y]) {
+						returnValue[TOPMOST_X] = f[2];
+						returnValue[TOPMOST_Y] = f[3];
+					}
+					if (f[2] > returnValue[RIGHTMOST_X]) {
+						returnValue[RIGHTMOST_X] = f[2];
+						returnValue[RIGHTMOST_Y] = f[3];
+					}
+					if (f[3] > returnValue[BOTTOMMOST_Y]) {
+						returnValue[BOTTOMMOST_X] = f[2];
+						returnValue[BOTTOMMOST_Y] = f[3];
+					}
 
 					// find the extrema
 					x_coeff[0] = lastX - 2 * f[0] + f[2];
@@ -227,30 +289,50 @@ public class ShapeBounds {
 					t = -x_coeff[1] / (2 * x_coeff[0]);
 					if (t > 0 && t < 1) {
 						x = x_coeff[0] * t * t + x_coeff[1] * t + x_coeff[2];
-						if (x < bounds[0])
-							bounds[0] = x;
-						if (x > bounds[2])
-							bounds[2] = x;
+						if (x < returnValue[LEFTMOST_X]) {
+							returnValue[LEFTMOST_X] = x;
+							returnValue[LEFTMOST_Y] = y_coeff[0] * t * t
+									+ y_coeff[1] * t + y_coeff[2];
+						}
+						if (x > returnValue[RIGHTMOST_X]) {
+							returnValue[RIGHTMOST_X] = x;
+							returnValue[RIGHTMOST_Y] = y_coeff[0] * t * t
+									+ y_coeff[1] * t + y_coeff[2];
+						}
 					}
 					t = -y_coeff[1] / (2 * y_coeff[0]);
 					if (t > 0 && t < 1) {
 						y = y_coeff[0] * t * t + y_coeff[1] * t + y_coeff[2];
-						if (y < bounds[1])
-							bounds[1] = y;
-						if (y > bounds[3])
-							bounds[3] = y;
+						if (y < returnValue[TOPMOST_Y]) {
+							returnValue[TOPMOST_X] = x_coeff[0] * t * t
+									+ x_coeff[1] * t + x_coeff[2];
+							returnValue[TOPMOST_Y] = y;
+						}
+						if (y > returnValue[BOTTOMMOST_Y]) {
+							returnValue[BOTTOMMOST_X] = x_coeff[0] * t * t
+									+ x_coeff[1] * t + x_coeff[2];
+							returnValue[BOTTOMMOST_Y] = y;
+						}
 					}
 					lastX = f[2];
 					lastY = f[3];
 				} else if (k == PathIterator.SEG_CUBICTO) {
-					if (f[4] < bounds[0])
-						bounds[0] = f[4];
-					if (f[5] < bounds[1])
-						bounds[1] = f[5];
-					if (f[4] > bounds[2])
-						bounds[2] = f[4];
-					if (f[5] > bounds[3])
-						bounds[3] = f[5];
+					if (f[4] < returnValue[LEFTMOST_X]) {
+						returnValue[LEFTMOST_X] = f[4];
+						returnValue[LEFTMOST_Y] = f[5];
+					}
+					if (f[5] < returnValue[TOPMOST_Y]) {
+						returnValue[TOPMOST_X] = f[4];
+						returnValue[TOPMOST_Y] = f[5];
+					}
+					if (f[4] > returnValue[RIGHTMOST_X]) {
+						returnValue[RIGHTMOST_X] = f[4];
+						returnValue[RIGHTMOST_Y] = f[5];
+					}
+					if (f[5] > returnValue[BOTTOMMOST_Y]) {
+						returnValue[BOTTOMMOST_X] = f[4];
+						returnValue[BOTTOMMOST_Y] = f[5];
+					}
 
 					x_coeff[0] = -lastX + 3 * f[0] - 3 * f[2] + f[4];
 					x_coeff[1] = 3 * lastX - 6 * f[0] + 3 * f[2];
@@ -269,8 +351,8 @@ public class ShapeBounds {
 					// B = 2*b
 					// C = c
 					// t = (-2*b+-sqrt(4*b*b-12*a*c)]/(6*a)
-					det = (4 * x_coeff[1] * x_coeff[1] - 12 * x_coeff[0]
-							* x_coeff[2]);
+					det = (4 * x_coeff[1] * x_coeff[1]
+							- 12 * x_coeff[0] * x_coeff[2]);
 					if (det < 0) {
 						// there are no solutions! nothing to do here
 					} else if (det == 0) {
@@ -279,10 +361,18 @@ public class ShapeBounds {
 						if (t > 0 && t < 1) {
 							x = x_coeff[0] * t * t * t + x_coeff[1] * t * t
 									+ x_coeff[2] * t + x_coeff[3];
-							if (x < bounds[0])
-								bounds[0] = x;
-							if (x > bounds[2])
-								bounds[2] = x;
+							if (x < returnValue[LEFTMOST_X]) {
+								returnValue[LEFTMOST_X] = x;
+								returnValue[LEFTMOST_Y] = y_coeff[0] * t * t * t
+										+ y_coeff[1] * t * t + y_coeff[2] * t
+										+ y_coeff[3];
+							}
+							if (x > returnValue[RIGHTMOST_X]) {
+								returnValue[RIGHTMOST_X] = x;
+								returnValue[RIGHTMOST_Y] = y_coeff[0] * t * t
+										* t + y_coeff[1] * t * t
+										+ y_coeff[2] * t + y_coeff[3];
+							}
 						}
 					} else {
 						// there are 2 solutions:
@@ -291,25 +381,41 @@ public class ShapeBounds {
 						if (t > 0 && t < 1) {
 							x = x_coeff[0] * t * t * t + x_coeff[1] * t * t
 									+ x_coeff[2] * t + x_coeff[3];
-							if (x < bounds[0])
-								bounds[0] = x;
-							if (x > bounds[2])
-								bounds[2] = x;
+							if (x < returnValue[LEFTMOST_X]) {
+								returnValue[LEFTMOST_X] = x;
+								returnValue[LEFTMOST_Y] = y_coeff[0] * t * t * t
+										+ y_coeff[1] * t * t + y_coeff[2] * t
+										+ y_coeff[3];
+							}
+							if (x > returnValue[RIGHTMOST_X]) {
+								returnValue[RIGHTMOST_X] = x;
+								returnValue[RIGHTMOST_Y] = y_coeff[0] * t * t
+										* t + y_coeff[1] * t * t
+										+ y_coeff[2] * t + y_coeff[3];
+							}
 						}
 
 						t = (-2 * x_coeff[1] - det) / (6 * x_coeff[0]);
 						if (t > 0 && t < 1) {
 							x = x_coeff[0] * t * t * t + x_coeff[1] * t * t
 									+ x_coeff[2] * t + x_coeff[3];
-							if (x < bounds[0])
-								bounds[0] = x;
-							if (x > bounds[2])
-								bounds[2] = x;
+							if (x < returnValue[LEFTMOST_X]) {
+								returnValue[LEFTMOST_X] = x;
+								returnValue[LEFTMOST_Y] = y_coeff[0] * t * t * t
+										+ y_coeff[1] * t * t + y_coeff[2] * t
+										+ y_coeff[3];
+							}
+							if (x > returnValue[RIGHTMOST_X]) {
+								returnValue[RIGHTMOST_X] = x;
+								returnValue[RIGHTMOST_Y] = y_coeff[0] * t * t
+										* t + y_coeff[1] * t * t
+										+ y_coeff[2] * t + y_coeff[3];
+							}
 						}
 					}
 
-					det = (4 * y_coeff[1] * y_coeff[1] - 12 * y_coeff[0]
-							* y_coeff[2]);
+					det = (4 * y_coeff[1] * y_coeff[1]
+							- 12 * y_coeff[0] * y_coeff[2]);
 					if (det < 0) {
 						// there are no solutions! nothing to do here
 					} else if (det == 0) {
@@ -318,10 +424,18 @@ public class ShapeBounds {
 						if (t > 0 && t < 1) {
 							y = y_coeff[0] * t * t * t + y_coeff[1] * t * t
 									+ y_coeff[2] * t + y_coeff[3];
-							if (y < bounds[1])
-								bounds[1] = y;
-							if (y > bounds[3])
-								bounds[3] = y;
+							if (y < returnValue[TOPMOST_Y]) {
+								returnValue[TOPMOST_X] = x_coeff[0] * t * t * t
+										+ x_coeff[1] * t * t + x_coeff[2] * t
+										+ x_coeff[3];
+								returnValue[TOPMOST_Y] = y;
+							}
+							if (y > returnValue[BOTTOMMOST_Y]) {
+								returnValue[BOTTOMMOST_X] = x_coeff[0] * t * t
+										* t + x_coeff[1] * t * t
+										+ x_coeff[2] * t + x_coeff[3];
+								returnValue[BOTTOMMOST_Y] = y;
+							}
 						}
 					} else {
 						// there are 2 solutions:
@@ -330,20 +444,36 @@ public class ShapeBounds {
 						if (t > 0 && t < 1) {
 							y = y_coeff[0] * t * t * t + y_coeff[1] * t * t
 									+ y_coeff[2] * t + y_coeff[3];
-							if (y < bounds[1])
-								bounds[1] = y;
-							if (y > bounds[3])
-								bounds[3] = y;
+							if (y < returnValue[TOPMOST_Y]) {
+								returnValue[TOPMOST_X] = x_coeff[0] * t * t * t
+										+ x_coeff[1] * t * t + x_coeff[2] * t
+										+ x_coeff[3];
+								returnValue[TOPMOST_Y] = y;
+							}
+							if (y > returnValue[BOTTOMMOST_Y]) {
+								returnValue[BOTTOMMOST_X] = x_coeff[0] * t * t
+										* t + x_coeff[1] * t * t
+										+ x_coeff[2] * t + x_coeff[3];
+								returnValue[BOTTOMMOST_Y] = y;
+							}
 						}
 
 						t = (-2 * y_coeff[1] - det) / (6 * y_coeff[0]);
 						if (t > 0 && t < 1) {
 							y = y_coeff[0] * t * t * t + y_coeff[1] * t * t
 									+ y_coeff[2] * t + y_coeff[3];
-							if (y < bounds[1])
-								bounds[1] = y;
-							if (y > bounds[3])
-								bounds[3] = y;
+							if (y < returnValue[TOPMOST_Y]) {
+								returnValue[TOPMOST_X] = x_coeff[0] * t * t * t
+										+ x_coeff[1] * t * t + x_coeff[2] * t
+										+ x_coeff[3];
+								returnValue[TOPMOST_Y] = y;
+							}
+							if (y > returnValue[BOTTOMMOST_Y]) {
+								returnValue[BOTTOMMOST_X] = x_coeff[0] * t * t
+										* t + x_coeff[1] * t * t
+										+ x_coeff[2] * t + x_coeff[3];
+								returnValue[BOTTOMMOST_Y] = y;
+							}
 						}
 					}
 
@@ -354,15 +484,9 @@ public class ShapeBounds {
 			i.next();
 		}
 
-		if (bounds == null) {
+		if (returnValue == null) {
 			throw new EmptyPathException();
 		}
-		if (r != null) {
-			r.setFrame(bounds[0], bounds[1], bounds[2] - bounds[0], bounds[3]
-					- bounds[1]);
-			return r;
-		}
-		return new Rectangle2D.Float(bounds[0], bounds[1], bounds[2]
-				- bounds[0], bounds[3] - bounds[1]);
+		return returnValue;
 	}
 }
