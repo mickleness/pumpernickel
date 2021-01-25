@@ -45,26 +45,20 @@ public class QParagraphView extends ParagraphView implements LegacyCssView {
 
 	@Override
 	public float getPreferredSpan(int axis) {
-		Float prefinedSpanSize = QViewHelper.getPredefinedSize(this, axis);
-		if (prefinedSpanSize != null)
-			return prefinedSpanSize.floatValue();
-		return super.getPreferredSpan(axis);
+		return QViewHelper.getPreferredSpan(this, axis,
+				super.getPreferredSpan(axis));
 	}
 
 	@Override
 	public float getMinimumSpan(int axis) {
-		Float prefinedSpanSize = QViewHelper.getPredefinedSize(this, axis);
-		if (prefinedSpanSize != null)
-			return prefinedSpanSize.floatValue();
-		return super.getMinimumSpan(axis);
+		return QViewHelper.getMinimumSpan(this, axis,
+				super.getMinimumSpan(axis));
 	}
 
 	@Override
 	public float getMaximumSpan(int axis) {
-		Float prefinedSpanSize = QViewHelper.getPredefinedSize(this, axis);
-		if (prefinedSpanSize != null)
-			return prefinedSpanSize.floatValue();
-		return super.getMaximumSpan(axis);
+		return QViewHelper.getMaximumSpan(this, axis,
+				super.getMaximumSpan(axis));
 	}
 
 	@Override

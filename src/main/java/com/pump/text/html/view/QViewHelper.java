@@ -112,8 +112,7 @@ public class QViewHelper {
 				r.height);
 		borderR.setRect(borderR.getX() + leftMargin, borderR.getY() + topMargin,
 				borderR.getWidth() - leftMargin - rightMargin,
-				borderR.getHeight() - topMargin
-						- bottomMargin);
+				borderR.getHeight() - topMargin - bottomMargin);
 		BorderRenderingConfiguration borderConfig = BorderRenderingConfiguration
 				.forBorder(helper);
 		BorderRendering borderRendering = new BorderRendering(borderConfig,
@@ -246,7 +245,40 @@ public class QViewHelper {
 		}
 	}
 
-	public static java.lang.Float getPredefinedSize(View view, int axis) {
+	public static float getPreferredSpan(View view, int axis,
+			float defaultLegacyPreferredSpan) {
+		float returnValue = defaultLegacyPreferredSpan;
+
+		Float prefinedSpanSize = getPredefinedSize(view, axis);
+		if (prefinedSpanSize != null) {
+			returnValue = Math.max(returnValue, prefinedSpanSize.floatValue());
+		}
+		return returnValue;
+	}
+
+	public static float getMinimumSpan(View view, int axis,
+			float defaultLegacyMinimumSpan) {
+		float returnValue = defaultLegacyMinimumSpan;
+
+		Float prefinedSpanSize = getPredefinedSize(view, axis);
+		if (prefinedSpanSize != null) {
+			returnValue = Math.max(returnValue, prefinedSpanSize.floatValue());
+		}
+		return returnValue;
+	}
+
+	public static float getMaximumSpan(View view, int axis,
+			float defaultLegacyMaximumSpan) {
+		float returnValue = defaultLegacyMaximumSpan;
+
+		Float prefinedSpanSize = getPredefinedSize(view, axis);
+		if (prefinedSpanSize != null) {
+			returnValue = Math.max(returnValue, prefinedSpanSize.floatValue());
+		}
+		return returnValue;
+	}
+
+	static java.lang.Float getPredefinedSize(View view, int axis) {
 		// TODO: percents require incorporating parent size
 
 		// TODO: consider other unit sizes
