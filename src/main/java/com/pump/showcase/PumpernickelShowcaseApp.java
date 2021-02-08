@@ -519,6 +519,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 			addSection("VectorImage", "VectorImageDemo");
 			addSection("StarPolygon", "StarPolygonDemo");
 			addSection("ShadowRenderer", "ShadowRendererDemo");
+			addSection("HTML, QHTMLEditorKit", "HTMLDemo");
 			if (JVM.isMac) {
 				addSection("AquaIcon", "AquaIconDemo");
 				addSection("NSImage", "NSImageDemo");
@@ -817,8 +818,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (scrollPane == null) {
-						textPane = createTextPane(
-								getShowcaseDemo().getHelpURL());
+						textPane = createTextPane();
 						scrollPane = new JScrollPane(textPane);
 						scrollPane.getVerticalScrollBar()
 								.setUI(new SubtleScrollBarUI());
@@ -920,7 +920,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		return t;
 	}
 
-	public JEditorPane createTextPane(URL url) {
+	public JEditorPane createTextPane() {
 		JEditorPane textPane = new JEditorPane() {
 			private static final long serialVersionUID = 1L;
 
