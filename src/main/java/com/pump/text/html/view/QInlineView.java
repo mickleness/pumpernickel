@@ -18,7 +18,7 @@ public class QInlineView extends InlineView implements LegacyCssView {
 
 	@Override
 	public void paint(Graphics g, Shape allocation) {
-		QViewHelper.paint((Graphics2D) g, allocation, this, this,
+		QViewRenderer.paint((Graphics2D) g, allocation, this, this,
 				getStyleSheet(), null, false);
 	}
 

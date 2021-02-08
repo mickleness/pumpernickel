@@ -79,7 +79,8 @@ public class QHtmlBlockView extends BlockView {
 				if (isText(op)) {
 					Graphics2DContext ctxt = op.getContext();
 					List<ShadowAttributes> attrs = (List<ShadowAttributes>) ctxt
-							.getRenderingHint(QViewHelper.HINT_KEY_TEXT_SHADOW);
+							.getRenderingHint(
+									QViewRenderer.HINT_KEY_TEXT_SHADOW);
 					if (attrs != null && !attrs.isEmpty()) {
 						paintShadow((Graphics2D) destG, op, attrs);
 					}
@@ -95,14 +96,15 @@ public class QHtmlBlockView extends BlockView {
 			for (Operation op : opRun) {
 				Graphics2D g2 = (Graphics2D) destG.create();
 				paint(g2, op, (Shape) op
-						.getRenderingHint(QViewHelper.HINT_KEY_SOFT_CLIP));
+						.getRenderingHint(QViewRenderer.HINT_KEY_SOFT_CLIP));
 				g2.dispose();
 			}
 		}
 	}
 
 	/**
-	 * @param softClip an optional soft clip shape to apply
+	 * @param softClip
+	 *            an optional soft clip shape to apply
 	 */
 	private void paint(Graphics2D g, Operation op, Shape softClip) {
 		if (softClip == null || isHighlighter(op)) {
@@ -157,7 +159,7 @@ public class QHtmlBlockView extends BlockView {
 					shadow, (int) (r.x + attr.getShadowXOffset() - dx + .5),
 					(int) (r.y + attr.getShadowYOffset() - dy + .5));
 			paint(destG, imageOp, (Shape) textOp
-					.getRenderingHint(QViewHelper.HINT_KEY_SOFT_CLIP));
+					.getRenderingHint(QViewRenderer.HINT_KEY_SOFT_CLIP));
 		}
 	}
 
@@ -175,7 +177,7 @@ public class QHtmlBlockView extends BlockView {
 		for (Operation op : operations) {
 			Graphics2DContext ctxt = op.getContext();
 			Element e = (Element) ctxt
-					.getRenderingHint(QViewHelper.HINT_KEY_ELEMENT);
+					.getRenderingHint(QViewRenderer.HINT_KEY_ELEMENT);
 			Element parent = e == null ? null : e.getParentElement();
 			if (parent != currentParent) {
 				if (!currentRun.isEmpty()) {

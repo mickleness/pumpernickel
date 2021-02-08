@@ -22,7 +22,7 @@ public class QParagraphView extends ParagraphView implements LegacyCssView {
 
 	@Override
 	public void paint(Graphics g, Shape allocation) {
-		QViewHelper.paint((Graphics2D) g, allocation, this, this,
+		QViewRenderer.paint((Graphics2D) g, allocation, this, this,
 				getStyleSheet(), boxPainter, false);
 	}
 
@@ -45,28 +45,27 @@ public class QParagraphView extends ParagraphView implements LegacyCssView {
 
 	@Override
 	public float getPreferredSpan(int axis) {
-		return QViewHelper.getPreferredSpan(this, axis,
-				super.getPreferredSpan(axis));
+		QViewSizeHelper q = new QViewSizeHelper(this);
+		return q.getPreferredSpan(this, axis, super.getPreferredSpan(axis));
 	}
 
 	@Override
 	public float getMinimumSpan(int axis) {
-		return QViewHelper.getMinimumSpan(this, axis,
-				super.getMinimumSpan(axis));
+		QViewSizeHelper q = new QViewSizeHelper(this);
+		return q.getMinimumSpan(this, axis, super.getMinimumSpan(axis));
 	}
 
 	@Override
 	public float getMaximumSpan(int axis) {
-		return QViewHelper.getMaximumSpan(this, axis,
-				super.getMaximumSpan(axis));
+		QViewSizeHelper q = new QViewSizeHelper(this);
+		return q.getMaximumSpan(this, axis, super.getMaximumSpan(axis));
 	}
 
 	@Override
 	public void setSize(float width, float height) {
-		Float predefinedWidth = QViewHelper.getPredefinedSize(this,
-				View.X_AXIS);
-		Float predefinedHeight = QViewHelper.getPredefinedSize(this,
-				View.Y_AXIS);
+		QViewSizeHelper q = new QViewSizeHelper(this);
+		Float predefinedWidth = q.getPredefinedSize(this, View.X_AXIS);
+		Float predefinedHeight = q.getPredefinedSize(this, View.Y_AXIS);
 		if (predefinedWidth != null)
 			width = predefinedWidth;
 		if (predefinedHeight != null)
