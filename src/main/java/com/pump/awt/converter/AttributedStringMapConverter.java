@@ -1,4 +1,4 @@
-package com.pump.awt.serialization;
+package com.pump.awt.converter;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,32 +14,34 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 
-import com.pump.io.serialization.AbstractSerializationWrapper;
-import com.pump.io.serialization.SerializationFilter;
-import com.pump.io.serialization.SerializationWrapper;
+import com.pump.data.Key;
+import com.pump.data.converter.BeanMapConverter;
+import com.pump.data.converter.ConverterUtils;
 
 /**
- * This is a SerializationWrapper for AttributedStrings.
+ * This is a BeanMapConverter for AttributedStrings.
  */
-public class AttributedStringSerializationWrapper
-		extends AbstractSerializationWrapper<AttributedString> {
+public class AttributedStringMapConverter
+		implements BeanMapConverter<AttributedString> {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * This filter converts an AttributedString into a
-	 * AttributedStringSerializationWrapper.
+	 * This property defines the unattributed String.
 	 */
-	public static SerializationFilter FILTER = new SerializationFilter() {
-		@Override
-		public SerializationWrapper<?> filter(Object object) {
-			if (object instanceof AttributedString) {
-				AttributedString as = (AttributedString) object;
-				return new AttributedStringSerializationWrapper(as);
-			}
-			return null;
-		}
-	};
+	public static final Key<String> PROPERTY_STRING = new Key<>(String.class,
+			"string");
+
+	/**
+	 * This property defines a Map of Runs.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static final Key<Map> PROPERTY_RUNS = new Key<>(Map.class, "runs");
+
+	@Override
+	public Class<AttributedString> getType() {
+		return AttributedString.class;
+	}
 
 	private static class Run implements Serializable {
 		private static final long serialVersionUID = 1L;
@@ -55,16 +57,16 @@ public class AttributedStringSerializationWrapper
 		private void writeObject(java.io.ObjectOutputStream out)
 				throws IOException {
 			out.writeInt(0);
-			out.writeObject(value);
 			out.writeInt(endIndex);
+			ConverterUtils.writeObject(out, value);
 		}
 
 		private void readObject(java.io.ObjectInputStream in)
 				throws IOException, ClassNotFoundException {
 			int version = in.readInt();
 			if (version == 0) {
-				value = in.readObject();
 				endIndex = in.readInt();
+				value = ConverterUtils.readObject(in);
 			} else {
 				throw new IOException(
 						"unsupported internal version " + version);
@@ -75,13 +77,29 @@ public class AttributedStringSerializationWrapper
 		public String toString() {
 			return "Run[ " + value + ", " + endIndex + "]";
 		}
+
+		@Override
+		public int hashCode() {
+			return endIndex;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Run))
+				return false;
+			Run other = (Run) obj;
+			if (other.endIndex != endIndex)
+				return false;
+			if (!ConverterUtils.equals(value, other.value))
+				return false;
+
+			return true;
+		}
 	}
 
-	protected static final String KEY_STRING = "string";
-	protected static final String KEY_RUN_MAP = "runMap";
-
-	public AttributedStringSerializationWrapper(AttributedString as) {
-		AttributedCharacterIterator iter = as.getIterator();
+	@Override
+	public Map<String, Object> createAtoms(AttributedString attrString) {
+		AttributedCharacterIterator iter = attrString.getIterator();
 		Set<Attribute> allAttributes = iter.getAllAttributeKeys();
 		StringBuilder sb = new StringBuilder();
 		while (true) {
@@ -94,7 +112,7 @@ public class AttributedStringSerializationWrapper
 
 		Map<Attribute, List<Run>> runMap = new HashMap<>();
 		for (Attribute attribute : allAttributes) {
-			AttributedCharacterIterator iter2 = as
+			AttributedCharacterIterator iter2 = attrString
 					.getIterator(new Attribute[] { attribute });
 
 			List<Run> runs = new ArrayList<>();
@@ -117,35 +135,23 @@ public class AttributedStringSerializationWrapper
 				iter2.next();
 			}
 
-			for (Run run : runs) {
-				for (SerializationFilter filter : AWTSerializationUtils.FILTERS) {
-					Object filteredValue = filter.filter(run.value);
-					if (filteredValue != null)
-						run.value = filteredValue;
-				}
-			}
-
 			runMap.put(attribute, runs);
 		}
 
-		map.put(KEY_STRING, sb.toString());
-		map.put(KEY_RUN_MAP, runMap);
+		Map<String, Object> atoms = new HashMap<>(2);
+		PROPERTY_STRING.put(atoms, sb.toString());
+		PROPERTY_RUNS.put(atoms, runMap);
+		return atoms;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public AttributedString create() {
-		String str = (String) map.get(KEY_STRING);
+	public AttributedString createFromAtoms(Map<String, Object> atoms) {
+		String str = PROPERTY_STRING.get(atoms);
 		AttributedString returnValue = new AttributedString(str);
 
-		Map<Attribute, List<Run>> runMap = (Map<Attribute, List<Run>>) map
-				.get(KEY_RUN_MAP);
+		Map<Attribute, List<Run>> runMap = PROPERTY_RUNS.get(atoms);
 		for (Entry<Attribute, List<Run>> entry : runMap.entrySet()) {
-			for (Run run : entry.getValue()) {
-				if (run.value instanceof SerializationWrapper) {
-					run.value = ((SerializationWrapper<?>) run.value).create();
-				}
-			}
-
 			int index = -1;
 			for (Run run : entry.getValue()) {
 				if (run.value != null) {
@@ -158,5 +164,4 @@ public class AttributedStringSerializationWrapper
 
 		return returnValue;
 	}
-
 }

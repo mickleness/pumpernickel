@@ -1,4 +1,4 @@
-package com.pump.awt.serialization;
+package com.pump.awt.converter;
 
 import java.awt.RenderingHints;
 import java.awt.RenderingHints.Key;
@@ -6,38 +6,25 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Map.Entry;
 
-import com.pump.io.serialization.AbstractSerializationWrapper;
-import com.pump.io.serialization.SerializationFilter;
-import com.pump.io.serialization.SerializationWrapper;
+import com.pump.data.converter.BeanMapConverter;
 
 /**
- * This is a SerializationWrapper for RenderingHints.
+ * This is a BeanMapConverter for RenderingHints.
  * <p>
- * This only addresses Java's default RenderingHints. If you add define custom
+ * The map used here is a map of rendering hints and their values represented as
+ * Strings.
+ * <p>
+ * This only addresses Java's default RenderingHints. If you add custom
  * keys/values then you need to modify {@link #ALL_RENDERING_HINT_KEYS} and
  * {@link #ALL_RENDERING_HINT_VALUES}.
  */
-public class RenderingHintsSerializationWrapper
-		extends AbstractSerializationWrapper<RenderingHints> {
+public class RenderingHintsMapConverter
+		implements BeanMapConverter<RenderingHints> {
 
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * This filter converts a RenderingHints into a
-	 * RenderingHintsSerializationWrapper.
-	 */
-	public static SerializationFilter FILTER = new SerializationFilter() {
-		@Override
-		public SerializationWrapper<?> filter(Object object) {
-			if (object instanceof RenderingHints) {
-				RenderingHints rh = (RenderingHints) object;
-				return new RenderingHintsSerializationWrapper(rh);
-			}
-			return null;
-		}
-	};
 
 	/**
 	 * This is a collection of all known rendering hints. Each hint should have
@@ -118,23 +105,33 @@ public class RenderingHintsSerializationWrapper
 		// If you reach this exception: you may need to adjust
 		// ALL_RENDERING_HINT_KEYS.
 		// It's public & static so you can easily add new keys.
-		// Just make sure you new key has a unique toString() method.
+		// Just make sure your new key has a unique toString() method.
 		throw new IllegalArgumentException("Unsupported key name: " + keyName);
 	}
 
-	public RenderingHintsSerializationWrapper(RenderingHints hints) {
-		for (Entry<Object, Object> entry : hints.entrySet()) {
-			map.put(entry.getKey().toString(), entry.getValue().toString());
-		}
+	@Override
+	public Class<RenderingHints> getType() {
+		return RenderingHints.class;
 	}
 
 	@Override
-	public RenderingHints create() {
+	public Map<String, Object> createAtoms(RenderingHints hints) {
+		Map<String, Object> atoms = new HashMap<>(hints.size());
+
+		for (Entry<Object, Object> entry : hints.entrySet()) {
+			atoms.put(entry.getKey().toString(), entry.getValue().toString());
+		}
+		return atoms;
+	}
+
+	@Override
+	public RenderingHints createFromAtoms(Map<String, Object> atoms) {
 		RenderingHints returnValue = new RenderingHints(
 				new HashMap<RenderingHints.Key, Object>());
-		for (Entry<String, Object> entry : map.entrySet()) {
-			returnValue.put(getKey(entry.getKey()),
-					getValue((String) entry.getValue()));
+		for (Entry<String, Object> atomEntry : atoms.entrySet()) {
+			Key key = getKey((String) atomEntry.getKey());
+			Object value = getValue((String) atomEntry.getValue());
+			returnValue.put(key, value);
 		}
 		return returnValue;
 	}

@@ -81,8 +81,8 @@ public class CalligraphyStroke implements Stroke, Serializable {
 
 	/**
 	 * Creates the calligraphic outline of the argument shape.
-	 * 
 	 */
+	@Override
 	public Shape createStrokedShape(Shape p) {
 		GeneralPath dest = new GeneralPath();
 		GeneralPathWriter writer = new GeneralPathWriter(dest);
@@ -112,4 +112,27 @@ public class CalligraphyStroke implements Stroke, Serializable {
 					"Unsupported internal version: " + internalVersion);
 		}
 	}
+
+	@Override
+	public int hashCode() {
+		return Float.hashCode(width + theta);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof CalligraphyStroke))
+			return false;
+		CalligraphyStroke cs = (CalligraphyStroke) obj;
+		if (cs.getWidth() != getWidth())
+			return false;
+		if (cs.getTheta() != getTheta())
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "CalligraphyStroke[ width=" + width + ", theta=" + theta + "]";
+	}
+
 }

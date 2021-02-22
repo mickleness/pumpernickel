@@ -39,7 +39,6 @@ public class BrushStroke implements Stroke, Serializable {
 	float width;
 	float theta;
 	float thickness = 0;
-	int layers;
 	long randomSeed = 0;
 
 	/**
@@ -98,7 +97,6 @@ public class BrushStroke implements Stroke, Serializable {
 		this.thickness = thickness;
 		this.randomSeed = randomSeed;
 		this.theta = theta;
-		layers = (int) (2 * width) + 2;
 	}
 
 	public long getRandomSeed() {
@@ -117,6 +115,7 @@ public class BrushStroke implements Stroke, Serializable {
 		return theta;
 	}
 
+	@Override
 	public Shape createStrokedShape(Shape p) {
 		if (thinStrokes == null) {
 			thinStrokes = new BasicStroke[100];
@@ -138,6 +137,7 @@ public class BrushStroke implements Stroke, Serializable {
 
 		GeneralPath thisLayer = new GeneralPath(Path2D.WIND_NON_ZERO);
 		GeneralPathWriter writer = new GeneralPathWriter(thisLayer);
+		int layers = (int) (2 * width) + 2;
 		for (int a = 0; a < layers; a++) {
 			writer.reset();
 			float k1 = a * width / (layers - 1f);
@@ -217,10 +217,9 @@ public class BrushStroke implements Stroke, Serializable {
 
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
-		out.writeInt(0);
+		out.writeInt(1);
 		out.writeFloat(width);
 		out.writeFloat(thickness);
-		out.writeInt(layers);
 		out.writeLong(randomSeed);
 		out.writeFloat(theta);
 
@@ -232,7 +231,15 @@ public class BrushStroke implements Stroke, Serializable {
 		if (internalVersion == 0) {
 			width = in.readFloat();
 			thickness = in.readFloat();
-			layers = in.readInt();
+
+			// we used to embed layers:
+			in.readInt();
+
+			randomSeed = in.readLong();
+			theta = in.readFloat();
+		} else if (internalVersion == 1) {
+			width = in.readFloat();
+			thickness = in.readFloat();
 			randomSeed = in.readLong();
 			theta = in.readFloat();
 		} else {
@@ -240,4 +247,32 @@ public class BrushStroke implements Stroke, Serializable {
 					"Unsupported internal version: " + internalVersion);
 		}
 	}
+
+	@Override
+	public int hashCode() {
+		return Float.hashCode(width + theta + thickness);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof BrushStroke))
+			return false;
+		BrushStroke bs = (BrushStroke) obj;
+		if (bs.getWidth() != getWidth())
+			return false;
+		if (bs.getTheta() != getTheta())
+			return false;
+		if (bs.getThickness() != getThickness())
+			return false;
+		if (bs.getRandomSeed() != getRandomSeed())
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "BrushStroke[ width=" + width + ", thickness=" + thickness
+				+ ", theta=" + theta + ", randomSeed=" + randomSeed + "]";
+	}
+
 }

@@ -33,10 +33,7 @@ public class BristleStroke implements Stroke, Serializable {
 
 	private float width;
 	private float thickness;
-	private int layers;
 	private long randomSeed;
-	private float grain;
-	private float spacing;
 
 	/**
 	 * Creates a new BristleStroke.
@@ -73,13 +70,7 @@ public class BristleStroke implements Stroke, Serializable {
 					"the thickness (" + thickness + ") must be greater than 0");
 		this.width = width;
 		this.thickness = thickness;
-		this.grain = getGrain(width, thickness);
-		this.spacing = .5f + .5f * thickness;
 		this.randomSeed = randomSeed;
-		int l = (int) ((1 + 2 * thickness) * width) + 10;
-		if (l > 20)
-			l = 20;
-		this.layers = 20;
 	}
 
 	private static float getGrain(float width, float thickness) {
@@ -115,11 +106,16 @@ public class BristleStroke implements Stroke, Serializable {
 		return width;
 	}
 
+	@Override
 	public Shape createStrokedShape(Shape p) {
 		GeneralPath path = new GeneralPath();
 		Random r = new Random(randomSeed);
 
 		MeasuredShape[] paths = MeasuredShape.getSubpaths(p);
+
+		float grain = getGrain(width, thickness);
+		float spacing = .5f + .5f * thickness;
+		int layers = 20;
 
 		for (int a = 0; a < layers; a++) {
 			float k1 = ((float) a) / ((float) (layers - 1));
@@ -206,13 +202,10 @@ public class BristleStroke implements Stroke, Serializable {
 
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
-		out.writeInt(0);
+		out.writeInt(1);
 		out.writeFloat(width);
 		out.writeFloat(thickness);
-		out.writeInt(layers);
 		out.writeLong(randomSeed);
-		out.writeFloat(grain);
-		out.writeFloat(spacing);
 	}
 
 	private void readObject(java.io.ObjectInputStream in)
@@ -221,13 +214,47 @@ public class BristleStroke implements Stroke, Serializable {
 		if (internalVersion == 0) {
 			width = in.readFloat();
 			thickness = in.readFloat();
-			layers = in.readInt();
+
+			// we used to embed layers:
+			in.readInt();
+
 			randomSeed = in.readLong();
-			grain = in.readFloat();
-			spacing = in.readFloat();
+
+			// we used to embed grain/spacing:
+			in.readFloat();
+			in.readFloat();
+		} else if (internalVersion == 1) {
+			width = in.readFloat();
+			thickness = in.readFloat();
+			randomSeed = in.readLong();
 		} else {
 			throw new IOException(
 					"Unsupported internal version: " + internalVersion);
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return Float.hashCode(width + thickness);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof BristleStroke))
+			return false;
+		BristleStroke bs = (BristleStroke) obj;
+		if (bs.getWidth() != getWidth())
+			return false;
+		if (bs.getRandomSeed() != getRandomSeed())
+			return false;
+		if (bs.getThickness() != getThickness())
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "BristleStroke[ width=" + width + ", thickness=" + thickness
+				+ ", randomSeed=" + randomSeed + "]";
 	}
 }

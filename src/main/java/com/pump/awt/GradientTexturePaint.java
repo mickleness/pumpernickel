@@ -25,6 +25,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -772,4 +773,56 @@ public class GradientTexturePaint implements Paint, Serializable {
 					"Unsupported internal version: " + internalVersion);
 		}
 	}
+
+	@Override
+	public int hashCode() {
+		return Float.hashCode(x1 + y1) << 16 + Float.hashCode(x2 + y2);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof GradientTexturePaint))
+			return false;
+		GradientTexturePaint gtp = (GradientTexturePaint) obj;
+		if (x1 != gtp.x1)
+			return false;
+		if (y1 != gtp.y1)
+			return false;
+		if (x2 != gtp.x2)
+			return false;
+		if (y2 != gtp.y2)
+			return false;
+		if (!Objects.equals(transform, gtp.transform))
+			return false;
+		if (cycle != gtp.cycle)
+			return false;
+
+		if (!Arrays.equals(colors, gtp.colors))
+			return false;
+		if (!Arrays.equals(fractions, gtp.fractions))
+			return false;
+
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "GradientTexturePaint[ p1=(" + x1 + ", " + y1 + ") p2=(" + x2
+				+ ", " + y2 + "), cycle=" + cycle + ", colors="
+				+ Arrays.asList(colors) + ", fractions=" + toString(fractions)
+				+ "]";
+	}
+
+	private static String toString(float[] array) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		for (int a = 0; a < array.length; a++) {
+			if (a != 0)
+				sb.append(", ");
+			sb.append(array[a]);
+		}
+		sb.append("]");
+		return sb.toString();
+	}
+
 }

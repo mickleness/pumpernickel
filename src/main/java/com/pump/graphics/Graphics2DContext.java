@@ -17,21 +17,16 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Rectangle2D;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
-import com.pump.awt.serialization.AWTSerializationUtils;
+import com.pump.data.converter.ConverterUtils;
 import com.pump.geom.ImmutableShape;
 import com.pump.geom.ShapeBounds;
 import com.pump.geom.ShapeStringUtils;
 import com.pump.geom.ShapeUtils;
-import com.pump.io.serialization.FilteredObjectInputStream;
-import com.pump.io.serialization.FilteredObjectOutputStream;
 
 /**
  * This contains all the contextual information for a Graphics2D that affects
@@ -576,39 +571,37 @@ public class Graphics2DContext implements Serializable {
 
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
-		FilteredObjectOutputStream fout = AWTSerializationUtils
-				.createFilteredObjectOutputStream(out);
+		out.writeInt(0);
+		out.writeBoolean(isDisposed);
+		out.writeObject(transform);
+		out.writeObject(backgroundColor);
+		out.writeObject(font);
+		out.writeObject(xorColor);
+		out.writeObject(color);
 
-		fout.writeInt(0);
-		fout.writeBoolean(isDisposed);
-		fout.writeObject(composite);
-		fout.writeObject(transform);
-		fout.writeObject(backgroundColor);
-		fout.writeObject(font);
-		fout.writeObject(stroke);
-		fout.writeObject(xorColor);
-		fout.writeObject(color);
-		fout.writeObject(paint);
-		fout.writeObject(renderingHints);
-		fout.writeObject(clip);
+		ConverterUtils.writeObject(out, paint);
+		ConverterUtils.writeObject(out, composite);
+		ConverterUtils.writeObject(out, stroke);
+		ConverterUtils.writeObject(out, renderingHints);
+		ConverterUtils.writeObject(out, clip);
 	}
 
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
-		FilteredObjectInputStream fin = new FilteredObjectInputStream(in);
-		int version = fin.readInt();
+		int version = in.readInt();
 		if (version == 0) {
-			isDisposed = fin.readBoolean();
-			composite = (Composite) fin.readObject();
-			transform = (AffineTransform) fin.readObject();
-			backgroundColor = (Color) fin.readObject();
-			font = (Font) fin.readObject();
-			stroke = (Stroke) fin.readObject();
-			xorColor = (Color) fin.readObject();
-			color = (Color) fin.readObject();
-			paint = (Paint) fin.readObject();
-			renderingHints = (RenderingHints) fin.readObject();
-			clip = (Shape) fin.readObject();
+			isDisposed = in.readBoolean();
+			transform = (AffineTransform) in.readObject();
+			backgroundColor = (Color) in.readObject();
+			font = (Font) in.readObject();
+			xorColor = (Color) in.readObject();
+			color = (Color) in.readObject();
+
+			paint = (Paint) ConverterUtils.readObject(in);
+			composite = (Composite) ConverterUtils.readObject(in);
+			stroke = (Stroke) ConverterUtils.readObject(in);
+			renderingHints = (RenderingHints) ConverterUtils.readObject(in);
+			clip = (Shape) ConverterUtils.readObject(in);
 		} else {
 			throw new IOException("unsupported internal version " + version);
 		}
@@ -646,31 +639,17 @@ public class Graphics2DContext implements Serializable {
 			return false;
 		if (!Objects.equals(color, other.color))
 			return false;
-		if (!Objects.equals(renderingHints, other.renderingHints))
+
+		if (!ConverterUtils.equals(renderingHints, other.renderingHints))
 			return false;
-
-		// that leaves: composite, stroke, paint, clip.
-		// It's hard to trust these interfaces to have an accurate equals(..)
-		// methods, so instead I'll fall back on all the serialization work we
-		// already did:
-
-		try {
-			ByteArrayOutputStream b1 = new ByteArrayOutputStream();
-			ObjectOutputStream obj1 = new ObjectOutputStream(b1);
-			obj1.writeObject(this);
-			obj1.close();
-
-			ByteArrayOutputStream b2 = new ByteArrayOutputStream();
-			ObjectOutputStream obj2 = new ObjectOutputStream(b2);
-			obj2.writeObject(obj);
-			obj2.close();
-
-			byte[] z1 = b1.toByteArray();
-			byte[] z2 = b2.toByteArray();
-
-			return Arrays.equals(z1, z2);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		if (!ConverterUtils.equals(composite, other.composite))
+			return false;
+		if (!ConverterUtils.equals(stroke, other.stroke))
+			return false;
+		if (!ConverterUtils.equals(paint, other.paint))
+			return false;
+		if (!ConverterUtils.equals(clip, other.clip))
+			return false;
+		return true;
 	}
 }

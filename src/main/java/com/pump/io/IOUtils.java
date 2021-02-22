@@ -244,9 +244,8 @@ public class IOUtils {
 			}
 			int status = p.waitFor();
 			if (dir.exists()) {
-				System.err.println("IOUtils.deleteDir( "
-						+ dir.getAbsolutePath() + " ) failed (status=" + status
-						+ ")");
+				System.err.println("IOUtils.deleteDir( " + dir.getAbsolutePath()
+						+ " ) failed (status=" + status + ")");
 				String s = read(p.getErrorStream());
 				if (s != null)
 					System.err.println(s);
@@ -317,7 +316,8 @@ public class IOUtils {
 		if (!zip1.exists())
 			return true; // erg, two missing files are equal I guess?
 
-		Pattern[] ignorablePatterns = ignorableEntries == null ? new Pattern[] {}
+		Pattern[] ignorablePatterns = ignorableEntries == null
+				? new Pattern[] {}
 				: new Pattern[ignorableEntries.length];
 		for (int a = 0; a < ignorablePatterns.length; a++) {
 			ignorablePatterns[a] = Pattern.compile(ignorableEntries[a]);
@@ -414,7 +414,8 @@ public class IOUtils {
 	 * @return the CRC32 checksum for this InputStream.
 	 * @throws IOException
 	 */
-	public static long getCRC(InputStream in, boolean close) throws IOException {
+	public static long getCRC(InputStream in, boolean close)
+			throws IOException {
 		CRC32 crc = new CRC32();
 		byte[] chunk = new byte[4096];
 		try {
@@ -451,19 +452,25 @@ public class IOUtils {
 		return true;
 	}
 
-	public static boolean equals(byte[] a, byte[] a2, int length) {
-		if (a == a2)
+	public static boolean equals(byte[] a1, byte[] a2, int length) {
+		if (a1 == a2)
 			return true;
-		if (a == null || a2 == null)
+		if (a1 == null || a2 == null)
 			return false;
 
-		if (length > a.length)
-			throw new IllegalArgumentException();
-		if (length > a2.length)
-			throw new IllegalArgumentException();
+		int amountToRead1 = Math.min(a1.length, length);
+		int amountToRead2 = Math.min(a2.length, length);
+
+		if (amountToRead1 < length && amountToRead2 < length)
+			throw new IllegalArgumentException("requested to compare " + length
+					+ " bytes, but the arrays only contains " + a1.length
+					+ " and " + a2.length);
+
+		if (amountToRead1 != amountToRead2)
+			return false;
 
 		for (int i = 0; i < length; i++)
-			if (a[i] != a2[i])
+			if (a1[i] != a2[i])
 				return false;
 
 		return true;
@@ -559,7 +566,8 @@ public class IOUtils {
 	 *            before any data transfer is attempted.
 	 * @throws IOException
 	 */
-	public synchronized static void copy(File src, File dst) throws IOException {
+	public synchronized static void copy(File src, File dst)
+			throws IOException {
 		copy(src, dst, false);
 	}
 
@@ -618,8 +626,8 @@ public class IOUtils {
 
 		if (!dst.exists())
 			if (!dst.createNewFile())
-				throw new IOException("createNewFile failed for "
-						+ dst.getAbsolutePath());
+				throw new IOException(
+						"createNewFile failed for " + dst.getAbsolutePath());
 		try (InputStream in = new FileInputStream(src);
 				OutputStream out = new FileOutputStream(dst)) {
 			int k = in.read(b1);
@@ -718,7 +726,8 @@ public class IOUtils {
 	 */
 	public static String[] readLines(InputStream in, int maxArraySize)
 			throws IOException {
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+		try (BufferedReader br = new BufferedReader(
+				new InputStreamReader(in))) {
 			List<String> strings = new ArrayList<String>();
 			String s = br.readLine();
 			while (s != null
@@ -809,8 +818,9 @@ public class IOUtils {
 	 */
 	public static String read(InputStream in, String charsetName)
 			throws IOException {
-		try (InputStreamReader inputReader = charsetName == null ? new InputStreamReader(
-				in) : new InputStreamReader(in, charsetName)) {
+		try (InputStreamReader inputReader = charsetName == null
+				? new InputStreamReader(in)
+				: new InputStreamReader(in, charsetName)) {
 			try (BufferedReader br = new BufferedReader(inputReader)) {
 				return read(br);
 			}
@@ -1110,8 +1120,8 @@ public class IOUtils {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	public static Serializable deserialize(File file) throws IOException,
-			ClassNotFoundException {
+	public static Serializable deserialize(File file)
+			throws IOException, ClassNotFoundException {
 		try (FileInputStream fileIn = new FileInputStream(file)) {
 			try (GZIPInputStream zipIn = new GZIPInputStream(fileIn)) {
 				try (ObjectInputStream objIn = new ObjectInputStream(zipIn)) {
@@ -1144,7 +1154,8 @@ public class IOUtils {
 
 		try (FileOutputStream fileOut = new FileOutputStream(dest)) {
 			try (GZIPOutputStream zipOut = new GZIPOutputStream(fileOut)) {
-				try (ObjectOutputStream objOut = new ObjectOutputStream(zipOut)) {
+				try (ObjectOutputStream objOut = new ObjectOutputStream(
+						zipOut)) {
 					objOut.writeObject(object);
 				}
 			}

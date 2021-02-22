@@ -23,9 +23,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 
-import com.pump.awt.serialization.AWTSerializationUtils;
-import com.pump.io.serialization.FilteredObjectInputStream;
-import com.pump.io.serialization.FilteredObjectOutputStream;
+import com.pump.data.converter.ConverterUtils;
 
 /**
  * This effectively extends <code>TexturePaint</code> to support arbitrary
@@ -96,25 +94,38 @@ public class TransformedTexturePaint implements Paint, Serializable {
 
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
-		FilteredObjectOutputStream fout = AWTSerializationUtils
-				.createFilteredObjectOutputStream(out);
-		fout.writeInt(0);
-		fout.writeObject(transform);
-		fout.writeObject(texturePaint);
+		out.writeInt(0);
+		out.writeObject(transform);
+		ConverterUtils.writeObject(out, texturePaint);
 
 	}
 
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
-		FilteredObjectInputStream fin = new FilteredObjectInputStream(in);
-
-		int internalVersion = fin.readInt();
+		int internalVersion = in.readInt();
 		if (internalVersion == 0) {
-			transform = (AffineTransform) fin.readObject();
-			texturePaint = (TexturePaint) fin.readObject();
+			transform = (AffineTransform) in.readObject();
+			texturePaint = (TexturePaint) ConverterUtils.readObject(in);
 		} else {
 			throw new IOException(
 					"Unsupported internal version: " + internalVersion);
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return ConverterUtils.hashCode(texturePaint, transform);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof TransformedTexturePaint))
+			return false;
+		TransformedTexturePaint ttp = (TransformedTexturePaint) obj;
+		if (!ConverterUtils.equals(texturePaint, ttp.texturePaint))
+			return false;
+		if (!transform.equals(transform))
+			return false;
+		return true;
 	}
 }

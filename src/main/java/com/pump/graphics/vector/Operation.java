@@ -7,19 +7,17 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.renderable.RenderableImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-import com.pump.awt.serialization.AWTSerializationUtils;
+import com.pump.data.converter.ConverterUtils;
 import com.pump.geom.Clipper;
 import com.pump.geom.EmptyPathException;
 import com.pump.geom.ShapeBounds;
@@ -27,8 +25,6 @@ import com.pump.geom.ShapeStringUtils;
 import com.pump.geom.ShapeUtils;
 import com.pump.graphics.Graphics2DContext;
 import com.pump.io.HashCodeOutputStream;
-import com.pump.io.serialization.FilteredObjectInputStream;
-import com.pump.io.serialization.FilteredObjectOutputStream;
 
 /**
  * Each Operation subclass corresponds to one or more painting methods in the
@@ -97,53 +93,44 @@ public abstract class Operation implements Serializable {
 
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
-		FilteredObjectOutputStream fout = AWTSerializationUtils
-				.createFilteredObjectOutputStream(out);
-		fout.writeInt(0);
-		fout.writeObject(context);
-		writeMap(fout, coreProperties);
-		writeMap(fout, clientProperties);
+		out.writeInt(0);
+		out.writeObject(context);
+		writeMap(out, coreProperties);
+		writeMap(out, clientProperties);
 	}
 
-	private void writeMap(FilteredObjectOutputStream fout,
+	private static void writeMap(ObjectOutputStream out,
 			Map<String, Object> map) throws IOException {
-		fout.writeInt(map.size());
-
-		// our #equals() method relies on the exact order of map entries
-		// being constant between two Operations, so let's sort the keys:
-		SortedSet<String> sortedKeys = new TreeSet<>();
-		sortedKeys.addAll(map.keySet());
-
-		for (String key : sortedKeys) {
-			fout.writeObject(key);
+		out.writeInt(map.size());
+		for (String key : map.keySet()) {
+			out.writeObject(key);
 			Object v = map.get(key);
 			if (v instanceof RenderableImage) {
 				v = ((RenderableImage) v).createDefaultRendering();
 			}
-			fout.writeObject(v);
+			ConverterUtils.writeObject(out, v);
 		}
 	}
 
-	private void readObject(java.io.ObjectInputStream in)
+	private void readObject(ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
-		FilteredObjectInputStream fin = new FilteredObjectInputStream(in);
 		int version = in.readInt();
 		if (version == 0) {
 			context = (Graphics2DContext) in.readObject();
-			coreProperties = readMap(fin);
-			clientProperties = readMap(fin);
+			coreProperties = readMap(in);
+			clientProperties = readMap(in);
 		} else {
 			throw new IOException("unsupported internal version " + version);
 		}
 	}
 
-	private Map<String, Object> readMap(FilteredObjectInputStream fin)
+	private static Map<String, Object> readMap(ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
-		int size = fin.readInt();
+		int size = in.readInt();
 		Map<String, Object> returnValue = new HashMap<>(size);
 		while (size > 0) {
-			String key = (String) fin.readObject();
-			Object value = fin.readObject();
+			String key = (String) in.readObject();
+			Object value = ConverterUtils.readObject(in);
 			returnValue.put(key, value);
 			size--;
 		}
@@ -242,31 +229,53 @@ public abstract class Operation implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null)
+		if (!(obj instanceof Operation))
 			return false;
-		if (getClass() != obj.getClass())
+		return equals((Operation) obj, true);
+	}
+
+	/**
+	 * Return true if two Operations are equal
+	 * 
+	 * @param obj
+	 * @param includeContext
+	 *            if true then the Graphics2DContexts must be identical, if
+	 *            false then the Graphics2DContexts are not consulted.
+	 * @return
+	 */
+	public boolean equals(Operation other, boolean includeContext) {
+		if (other == null)
+			return false;
+		if (getClass() != other.getClass())
 			return false;
 
-		// I'm not proud of this, but we put so much attention into
-		// serialization that's probably the simplest way to check equality now:
-		try {
-			ByteArrayOutputStream b1 = new ByteArrayOutputStream();
-			ObjectOutputStream obj1 = new ObjectOutputStream(b1);
-			obj1.writeObject(this);
-			obj1.close();
-
-			ByteArrayOutputStream b2 = new ByteArrayOutputStream();
-			ObjectOutputStream obj2 = new ObjectOutputStream(b2);
-			obj2.writeObject(obj);
-			obj2.close();
-
-			byte[] z1 = b1.toByteArray();
-			byte[] z2 = b2.toByteArray();
-
-			return Arrays.equals(z1, z2);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		if (includeContext) {
+			if (!context.equals(other.context))
+				return false;
 		}
+
+		if (!isMapEqual(coreProperties, other.coreProperties))
+			return false;
+		if (!isMapEqual(clientProperties, other.clientProperties))
+			return false;
+		return true;
+	}
+
+	private boolean isMapEqual(Map<String, Object> map1,
+			Map<String, Object> map2) {
+		Collection<String> keys1 = map1.keySet();
+		Collection<String> keys2 = map2.keySet();
+
+		if (!keys1.equals(keys2))
+			return false;
+
+		for (String key : keys1) {
+			Object obj1 = map1.get(key);
+			Object obj2 = map2.get(key);
+			if (!ConverterUtils.equals(obj1, obj2))
+				return false;
+		}
+		return true;
 	}
 
 	@Override

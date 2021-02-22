@@ -564,7 +564,7 @@ public class VectorImageTest extends TestCase {
 				g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
 						RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 				g.transform(AffineTransform.getShearInstance(0, .1));
-				g.drawString("Shakespear in the park", 50, 50);
+				g.drawString("Shakespeare in the park", 50, 50);
 			}
 
 		};
@@ -603,7 +603,8 @@ public class VectorImageTest extends TestCase {
 				g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
 						RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 
-				AttributedString attrStr = createAttributedString();
+				AttributedString attrStr = createAttributedString(
+						new Font("Georgia", 0, 15));
 				g.drawString(attrStr.getIterator(), 50, 50);
 			}
 
@@ -611,10 +612,9 @@ public class VectorImageTest extends TestCase {
 		t2.test();
 	}
 
-	private AttributedString createAttributedString() {
+	private AttributedString createAttributedString(Font font) {
 		AttributedString attrStr = new AttributedString("¿was it a rat I saw?");
-		attrStr.addAttribute(TextAttribute.FONT, new Font("Georgia", 0, 15), 1,
-				4);
+		attrStr.addAttribute(TextAttribute.FONT, font, 1, 4);
 		attrStr.addAttribute(TextAttribute.BACKGROUND, Color.cyan, 5, 7);
 		attrStr.addAttribute(TextAttribute.FOREGROUND, Color.orange, 0, 1);
 		Paint gradient = new GradientPaint(0, 0, Color.red, 0, 3, Color.yellow,
@@ -630,16 +630,30 @@ public class VectorImageTest extends TestCase {
 			@Override
 			public void paint(Graphics2D g) {
 				g.setPaint(Color.DARK_GRAY);
-				g.setFont(new Font("Dialog", 0, 14));
 				g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
 						RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 				g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
 						RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 
-				AttributedString attrStr = createAttributedString();
-				TextLayout layout = new TextLayout(attrStr.getIterator(),
-						g.getFontRenderContext());
-				layout.draw(g, 10, 90);
+				// include different styles so we'll test serializing font
+				// postures/weights:
+				int dy = 0;
+				for (boolean bold : new boolean[] { false, true }) {
+					for (boolean italic : new boolean[] { false, true }) {
+						int style = 0;
+						if (bold)
+							style += Font.BOLD;
+						if (italic)
+							style += Font.ITALIC;
+						AttributedString attrStr = createAttributedString(
+								new Font("Dialog", style, 14));
+						TextLayout layout = new TextLayout(
+								attrStr.getIterator(),
+								g.getFontRenderContext());
+						layout.draw(g, 10, 90 + dy);
+						dy += 20;
+					}
+				}
 			}
 
 		};

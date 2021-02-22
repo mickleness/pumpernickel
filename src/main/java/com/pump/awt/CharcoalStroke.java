@@ -17,10 +17,8 @@ import java.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.io.Serializable;
 
-import com.pump.awt.serialization.AWTSerializationUtils;
+import com.pump.data.converter.ConverterUtils;
 import com.pump.geom.GeneralPathWriter;
-import com.pump.io.serialization.FilteredObjectInputStream;
-import com.pump.io.serialization.FilteredObjectOutputStream;
 
 /**
  * This applies cracks using the {@link CharcoalEffect} to another
@@ -128,6 +126,7 @@ public class CharcoalStroke implements FilteredStroke, Serializable {
 		return new CharcoalStroke(newStroke, crackSize, angle, randomSeed);
 	}
 
+	@Override
 	public Shape createStrokedShape(Shape p) {
 		Shape shape = stroke.createStrokedShape(p);
 		if (crackSize == 0)
@@ -170,28 +169,51 @@ public class CharcoalStroke implements FilteredStroke, Serializable {
 
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
-		FilteredObjectOutputStream fout = AWTSerializationUtils
-				.createFilteredObjectOutputStream(out);
-		fout.writeInt(0);
-		fout.writeFloat(crackSize);
-		fout.writeFloat(angle);
-		fout.writeInt(randomSeed);
-		fout.writeObject(stroke);
+		out.writeInt(0);
+		out.writeFloat(crackSize);
+		out.writeFloat(angle);
+		out.writeInt(randomSeed);
+		ConverterUtils.writeObject(out, stroke);
 
 	}
 
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
-		FilteredObjectInputStream fin = new FilteredObjectInputStream(in);
-		int internalVersion = fin.readInt();
+		int internalVersion = in.readInt();
 		if (internalVersion == 0) {
-			crackSize = fin.readFloat();
-			angle = fin.readFloat();
-			randomSeed = fin.readInt();
-			stroke = (Stroke) fin.readObject();
+			crackSize = in.readFloat();
+			angle = in.readFloat();
+			randomSeed = in.readInt();
+			stroke = (Stroke) ConverterUtils.readObject(in);
 		} else {
 			throw new IOException(
 					"Unsupported internal version: " + internalVersion);
 		}
 	}
+
+	@Override
+	public int hashCode() {
+		return Float.hashCode(angle + crackSize);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof CharcoalStroke))
+			return false;
+		CharcoalStroke cs = (CharcoalStroke) obj;
+		if (cs.getCrackSize() != getCrackSize())
+			return false;
+		if (cs.getAngle() != getAngle())
+			return false;
+		if (!ConverterUtils.equals(getStroke(), cs.getStroke()))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "CharcoalStroke[ crackSize=" + crackSize + ", angle=" + angle
+				+ ", stroke=" + stroke + "]";
+	}
+
 }

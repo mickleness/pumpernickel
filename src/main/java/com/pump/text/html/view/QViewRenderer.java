@@ -8,6 +8,7 @@ import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,7 +65,8 @@ public class QViewRenderer extends QViewHelper {
 			LegacyCssView legacyView, StyleSheet styleSheet,
 			BoxPainter boxPainter, boolean isBody) {
 		QViewRenderer helper = new QViewRenderer(view, styleSheet, legacyView);
-		Graphics2D g2 = helper.createGraphics(g, allocation, isBody);
+		Graphics2D g2 = helper.createGraphicsWithRenderingHints(g, allocation,
+				isBody);
 		helper.paintBelowContent(g2, allocation, helper, boxPainter);
 
 		Graphics2D legacyG;
@@ -230,14 +232,17 @@ public class QViewRenderer extends QViewHelper {
 
 		@Override
 		public void elementsAdded(AddElementsEvent<Operation> event) {
-			for (Operation op : event.getNewElements()) {
-				if (operationsToIgnore.isEmpty()) {
-					op.paint(delegate);
-				} else {
-					// TODO: we should be able to call .remove(op), but the
-					// Operation#equal method is failing
-					operationsToIgnore.remove(0);
+			outerLoop: for (Operation op : event.getNewElements()) {
+				Iterator<Operation> ignorableOpIter = operationsToIgnore
+						.iterator();
+				while (ignorableOpIter.hasNext()) {
+					Operation ignorableOp = ignorableOpIter.next();
+					if (ignorableOp.equals(op, false)) {
+						ignorableOpIter.remove();
+						continue outerLoop;
+					}
 				}
+				op.paint(delegate);
 			}
 		}
 	}
@@ -263,8 +268,8 @@ public class QViewRenderer extends QViewHelper {
 	 *            In this case we apply special clipping regardless of the
 	 *            "overflow" attribute.
 	 */
-	private Graphics2D createGraphics(Graphics2D g, Shape allocation,
-			boolean isBody) {
+	private Graphics2D createGraphicsWithRenderingHints(Graphics2D g,
+			Shape allocation, boolean isBody) {
 
 		Graphics2D returnValue = (Graphics2D) g.create();
 
@@ -326,13 +331,15 @@ public class QViewRenderer extends QViewHelper {
 	private Graphics2D createGraphicsWithoutBoxPainter(Graphics2D g,
 			Rectangle r, BoxPainter boxPainter) {
 		VectorImage boxPainterRendering = new VectorImage();
+		Graphics2DContext gContext = new Graphics2DContext(g);
 		VectorGraphics2D boxPainterG = boxPainterRendering.createGraphics(r);
+		gContext.install(boxPainterG);
 		boxPainter.paint(boxPainterG, r.x, r.y, r.width, r.height, view);
 
 		ObservableList<Operation> operations = new ObservableList<>();
 		operations.addListListener(new DropOperationsAndPassThrough(g,
 				boxPainterRendering.getOperations()), false);
-		return new VectorGraphics2D(new Graphics2DContext(g), operations);
+		return new VectorGraphics2D(gContext, operations);
 	}
 
 	private void paintBackground(Graphics2D g, RectangularShape shape,
