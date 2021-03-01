@@ -10,9 +10,6 @@ public class CssBorderBottomWidthParser
 
 	public static final String PROPERTY_BORDER_BOTTOM_WIDTH = "border-bottom-width";
 
-	public CssBorderBottomWidthParser() {
-	}
-
 	@Override
 	public String getPropertyName() {
 		return PROPERTY_BORDER_BOTTOM_WIDTH;

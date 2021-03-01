@@ -3,10 +3,10 @@ package com.pump.text.html.css.background;
 import java.awt.Dimension;
 import java.util.Objects;
 
+import com.pump.text.html.css.AbstractCssValue;
 import com.pump.text.html.css.CssLength;
-import com.pump.text.html.css.CssValue;
 
-public class CssBackgroundSizeValue implements CssValue {
+public class CssBackgroundSizeValue extends AbstractCssValue {
 
 	public interface Calculator {
 

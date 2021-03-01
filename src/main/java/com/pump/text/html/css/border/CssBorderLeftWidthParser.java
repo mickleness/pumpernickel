@@ -9,9 +9,6 @@ public class CssBorderLeftWidthParser implements CssPropertyParser<CssLength> {
 
 	public static final String PROPERTY_BORDER_LEFT_WIDTH = "border-left-width";
 
-	public CssBorderLeftWidthParser() {
-	}
-
 	@Override
 	public String getPropertyName() {
 		return PROPERTY_BORDER_LEFT_WIDTH;

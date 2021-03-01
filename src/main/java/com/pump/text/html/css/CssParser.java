@@ -2,8 +2,8 @@ package com.pump.text.html.css;
 
 import java.text.CharacterIterator;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +28,8 @@ public class CssParser {
 
 		public Rule(List<String> selectors) {
 			this.selectors = selectors;
-			properties = new HashMap<>();
+			// order matters for BorderRenderingConfiguration, see QHtmlTests
+			properties = new LinkedHashMap<>();
 		}
 
 		public List<String> getSelectors() {

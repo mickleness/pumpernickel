@@ -2,8 +2,8 @@ package com.pump.text.html.css.border;
 
 import java.util.Objects;
 
+import com.pump.text.html.css.AbstractCssValue;
 import com.pump.text.html.css.CssLength;
-import com.pump.text.html.css.CssValue;
 
 /**
  * <p>
@@ -19,7 +19,7 @@ import com.pump.text.html.css.CssValue;
  * corner.
  *
  */
-public class CssBorderRadiusValue implements CssValue {
+public class CssBorderRadiusValue extends AbstractCssValue {
 	CssLength horizontalValue, verticalValue;
 	String cssString;
 

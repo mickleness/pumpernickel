@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * As of this writing we only support "visible" or "hidden".
  */
-public class CssOverflowValue implements CssValue {
+public class CssOverflowValue extends AbstractCssValue {
 	public enum Mode {
 		/**
 		 * Default. The overflow is not clipped. The content renders outside the

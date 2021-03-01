@@ -14,6 +14,7 @@ import javax.swing.JViewport;
 import javax.swing.text.Document;
 
 import com.pump.image.ImageLoader;
+import com.pump.text.html.css.AbstractCssValue;
 import com.pump.text.html.css.CssLength;
 import com.pump.text.html.css.background.CssBackgroundAttachmentValue;
 import com.pump.text.html.css.background.CssBackgroundPositionValue;
@@ -23,7 +24,8 @@ import com.pump.text.html.css.background.CssBackgroundSizeValue;
 import com.pump.text.html.view.QViewHelper;
 import com.pump.util.Cache;
 
-public class CssUrlImageValue implements CssImageValue {
+public class CssUrlImageValue extends AbstractCssValue
+		implements CssImageValue {
 	private static final String PROPERTY_IMAGE_CACHE = CssUrlImageValue.class
 			.getName() + "#imageCache";
 

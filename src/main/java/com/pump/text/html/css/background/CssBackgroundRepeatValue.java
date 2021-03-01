@@ -5,10 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import com.pump.text.html.css.AbstractCssValue;
 import com.pump.text.html.css.CssLength;
-import com.pump.text.html.css.CssValue;
 
-public class CssBackgroundRepeatValue implements CssValue {
+public class CssBackgroundRepeatValue extends AbstractCssValue {
 
 	public static class Span {
 		public int position, length;

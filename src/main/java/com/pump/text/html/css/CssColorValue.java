@@ -12,6 +12,8 @@ public class CssColorValue extends Color implements CssValue {
 
 	private final String cssString;
 
+	protected final CssValueCreationToken creationToken = new CssValueCreationToken();
+
 	public CssColorValue(String cssStr, int r, int g, int b, int a) {
 		super(r, g, b, a);
 		Objects.requireNonNull(cssStr);
@@ -26,6 +28,11 @@ public class CssColorValue extends Color implements CssValue {
 	@Override
 	public String toCSSString() {
 		return cssString;
+	}
+
+	@Override
+	public CssValueCreationToken getCreationToken() {
+		return creationToken;
 	}
 
 }

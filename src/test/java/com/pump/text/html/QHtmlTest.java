@@ -986,6 +986,100 @@ public class QHtmlTest extends TestCase {
 		assertImageEquals(bi1, bi2, 0);
 	}
 
+	/**
+	 * When there are competing constituent attributes to define a border: make
+	 * sure we use the last one.
+	 */
+	public void testBorderConstituentOrder_border() {
+		//@formatter:off
+		String html = "<html>\n"
+				+ "  <head>\n"
+				+ "    <style>\n"
+				+ "      body { \n"
+				+ "             border-color: #00ff22;\n"
+				+ "             border-top-color: #ffff02;\n"
+				+ "             border: solid red;\n"
+				+ "      }\n"
+				+ "    </style>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    <div>LOREM IPSUM</div>\n"
+				+ "  </body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		List<Operation> ops = getOperations(true, html);
+		assertEquals(3, ops.size());
+		assertTrue(ops.get(1) instanceof FillOperation);
+		assertEquals(0xffff0000, ops.get(1).getContext().getColor().getRGB());
+	}
+
+	/**
+	 * When there are competing constituent attributes to define a border: make
+	 * sure we use the last one.
+	 */
+	public void testBorderConstituentOrder_border_color() {
+		//@formatter:off
+		String html = "<html>\n"
+				+ "  <head>\n"
+				+ "    <style>\n"
+				+ "      body { \n"
+				+ "             border: solid red;\n"
+				+ "             border-top-color: #ffff02;\n"
+				+ "             border-color: #00ff22;\n"
+				+ "      }\n"
+				+ "    </style>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    <div>LOREM IPSUM</div>\n"
+				+ "  </body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		List<Operation> ops = getOperations(true, html);
+		assertEquals(3, ops.size());
+		assertTrue(ops.get(1) instanceof FillOperation);
+		assertEquals(0xff00ff22, ops.get(1).getContext().getColor().getRGB());
+	}
+
+	/**
+	 * When there are competing constituent attributes to define a border: make
+	 * sure we use the last ones.
+	 */
+	public void testBorderConstituentOrder_border_top_color() {
+		//@formatter:off
+		String html = "<html>\n"
+				+ "  <head>\n"
+				+ "    <style>\n"
+				+ "      body { \n"
+				+ "             border: solid red;\n"
+				+ "             border-color: #00ff22;\n"
+				+ "             border-top-color: #ffff02;\n"
+				+ "      }\n"
+				+ "    </style>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    <div>LOREM IPSUM</div>\n"
+				+ "  </body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		List<Operation> ops = getOperations(true, html);
+		assertEquals(4, ops.size());
+		assertTrue(ops.get(1) instanceof FillOperation);
+		assertTrue(ops.get(2) instanceof FillOperation);
+
+		// the exact order they're painted in might not match the css above,
+		// but just the fact that we have two colors indicates the css was
+		// parsed correctly
+		Collection<Integer> rgbs = new HashSet<>();
+		rgbs.add(ops.get(1).getContext().getColor().getRGB());
+		rgbs.add(ops.get(2).getContext().getColor().getRGB());
+
+		assertTrue(rgbs.contains(0xff00ff22));
+		assertTrue(rgbs.contains(0xffffff02));
+	}
+
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,
 			int tolerance) {
 		assertEquals(bi1.getWidth(), bi2.getWidth());

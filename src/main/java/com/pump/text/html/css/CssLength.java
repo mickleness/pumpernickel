@@ -6,7 +6,7 @@ import java.util.Objects;
  * A value (a float) and a unit (String). The unit may be an empty string, but
  * it will not be null.
  */
-public class CssLength implements CssValue {
+public class CssLength extends AbstractCssValue {
 	private final String cssString;
 
 	private float value;
@@ -71,8 +71,8 @@ public class CssLength implements CssValue {
 	}
 
 	@Override
-	public CssLength clone() {
-		return new CssLength(cssString);
+	public Object clone() throws CloneNotSupportedException {
+		throw new CloneNotSupportedException();
 	}
 
 	@Override

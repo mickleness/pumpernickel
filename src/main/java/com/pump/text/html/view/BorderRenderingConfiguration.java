@@ -1,9 +1,16 @@
 package com.pump.text.html.view;
 
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 
 import com.pump.text.html.css.CssColorValue;
 import com.pump.text.html.css.CssLength;
+import com.pump.text.html.css.CssPropertyParser;
+import com.pump.text.html.css.CssValue;
+import com.pump.text.html.css.CssValueCreationToken;
 import com.pump.text.html.css.border.CssBorderBottomColorParser;
 import com.pump.text.html.css.border.CssBorderBottomLeftRadiusParser;
 import com.pump.text.html.css.border.CssBorderBottomParser;
@@ -44,44 +51,99 @@ import com.pump.text.html.css.border.CssOutlineWidthParser;
  * "border-right-style": all of those might contain information about the style.
  * This object flattens all of that into a unique set of attributes for each
  * edge.
+ * <p>
+ * When two CSS statements conflict (for ex: "border: solid red;" vs
+ * "border-color: green;"), the most recently defined CSS statement takes
+ * priority.
  */
 public class BorderRenderingConfiguration {
 
 	/**
-	 * Create a configuration for an outline.
+	 * This helps sort values according to their creation timestamps, so we can
+	 * safely identify the last (most recently defined) CSS statement.
+	 */
+	static class Attribute {
+		CssValueCreationToken creationToken;
+		CssPropertyParser<?> parser;
+		Object value;
+
+		Attribute(CssPropertyParser<?> parser) {
+			this.parser = parser;
+		}
+
+		/**
+		 * Populate the value field and creationToken
+		 */
+		void resolve(QViewHelper helper) {
+			value = helper.getAttribute(parser.getPropertyName(), false);
+			if (value instanceof CssValue) {
+				creationToken = ((CssValue) value).getCreationToken();
+			} else if (value instanceof List) {
+				creationToken = ((CssValue) ((List) value).get(0))
+						.getCreationToken();
+			}
+		}
+	}
+
+	/**
+	 * This sorts Attributes according to their creation token timestamp's. That
+	 * is: the Attributes are sorted into the order they are parsed.
+	 */
+	private static Comparator<Attribute> ATTRIBUTE_COMPARATOR = new Comparator<Attribute>() {
+
+		@Override
+		public int compare(Attribute o1, Attribute o2) {
+			return o1.creationToken.compareTo(o2.creationToken);
+		}
+
+	};
+
+	/**
+	 * Create a configuration for an outline. This is much simpler than a
+	 * border, because there are only a few CSS properties to consult.
 	 */
 	public static BorderRenderingConfiguration forOutline(QViewHelper helper) {
-		BorderRenderingConfiguration rv = new BorderRenderingConfiguration();
+		Collection<Attribute> attrs = new HashSet<>();
+		attrs.add(new Attribute(new CssOutlineParser()));
+		attrs.add(new Attribute(new CssOutlineColorParser()));
+		attrs.add(new Attribute(new CssOutlineStyleParser()));
+		attrs.add(new Attribute(new CssOutlineWidthParser()));
 
-		{
-			CssBorderValue all = (CssBorderValue) helper
-					.getAttribute(CssOutlineParser.PROPERTY_OUTLINE, false);
-			if (all != null) {
+		// sort all properties by timestamp so the most recent one "wins":
+		Collection<Attribute> sortedAttrs = new TreeSet<>(ATTRIBUTE_COMPARATOR);
+
+		for (Attribute attr : attrs) {
+			attr.resolve(helper);
+			if (attr.creationToken != null)
+				sortedAttrs.add(attr);
+		}
+
+		BorderRenderingConfiguration rv = new BorderRenderingConfiguration();
+		for (Attribute attr : sortedAttrs) {
+			if (attr.parser instanceof CssOutlineParser) {
+				CssBorderValue all = (CssBorderValue) helper
+						.getAttribute(CssOutlineParser.PROPERTY_OUTLINE, false);
 				rv.leftWidth = rv.rightWidth = rv.topWidth = rv.bottomWidth = all
 						.getWidth();
 				rv.leftColor = rv.rightColor = rv.topColor = rv.bottomColor = all
 						.getColor();
 				rv.leftStyle = rv.rightStyle = rv.topStyle = rv.bottomStyle = all
 						.getStyle();
+			} else if (attr.parser instanceof CssOutlineColorParser) {
+				CssColorValue color = (CssColorValue) helper.getAttribute(
+						CssOutlineColorParser.PROPERTY_OUTLINE_COLOR, false);
+				rv.leftColor = rv.rightColor = rv.topColor = rv.bottomColor = color;
+			} else if (attr.parser instanceof CssOutlineStyleParser) {
+				CssBorderStyleValue style = (CssBorderStyleValue) helper
+						.getAttribute(
+								CssOutlineStyleParser.PROPERTY_OUTLINE_STYLE,
+								false);
+				rv.leftStyle = rv.rightStyle = rv.topStyle = rv.bottomStyle = style;
+			} else if (attr.parser instanceof CssOutlineWidthParser) {
+				CssLength width = (CssLength) helper.getAttribute(
+						CssOutlineWidthParser.PROPERTY_OUTLINE_WIDTH, false);
+				rv.leftWidth = rv.rightWidth = rv.topWidth = rv.bottomWidth = width;
 			}
-		}
-
-		CssColorValue color = (CssColorValue) helper.getAttribute(
-				CssOutlineColorParser.PROPERTY_OUTLINE_COLOR, false);
-		if (color != null) {
-			rv.leftColor = rv.rightColor = rv.topColor = rv.bottomColor = color;
-		}
-
-		CssBorderStyleValue style = (CssBorderStyleValue) helper.getAttribute(
-				CssOutlineStyleParser.PROPERTY_OUTLINE_STYLE, false);
-		if (style != null) {
-			rv.leftStyle = rv.rightStyle = rv.topStyle = rv.bottomStyle = style;
-		}
-
-		CssLength width = (CssLength) helper.getAttribute(
-				CssOutlineWidthParser.PROPERTY_OUTLINE_WIDTH, false);
-		if (width != null) {
-			rv.leftWidth = rv.rightWidth = rv.topWidth = rv.bottomWidth = width;
 		}
 
 		return rv;
@@ -91,65 +153,196 @@ public class BorderRenderingConfiguration {
 	 * Create a configuration for a border.
 	 */
 	public static BorderRenderingConfiguration forBorder(QViewHelper helper) {
-		BorderRenderingConfiguration rv = new BorderRenderingConfiguration();
 
-		{
-			CssBorderValue all = (CssBorderValue) helper
-					.getAttribute(CssBorderParser.PROPERTY_BORDER, false);
-			if (all != null) {
+		Collection<Attribute> attrs = new HashSet<>();
+		attrs.add(new Attribute(new CssBorderBottomColorParser()));
+		attrs.add(new Attribute(new CssBorderBottomLeftRadiusParser()));
+		attrs.add(new Attribute(new CssBorderBottomParser()));
+		attrs.add(new Attribute(new CssBorderBottomRightRadiusParser()));
+		attrs.add(new Attribute(new CssBorderBottomStyleParser()));
+		attrs.add(new Attribute(new CssBorderBottomWidthParser()));
+		attrs.add(new Attribute(new CssBorderColorParser()));
+		attrs.add(new Attribute(new CssBorderLeftColorParser()));
+		attrs.add(new Attribute(new CssBorderLeftParser()));
+		attrs.add(new Attribute(new CssBorderLeftStyleParser()));
+		attrs.add(new Attribute(new CssBorderLeftWidthParser()));
+		attrs.add(new Attribute(new CssBorderParser()));
+		attrs.add(new Attribute(new CssBorderRadiusParser()));
+		attrs.add(new Attribute(new CssBorderRightColorParser()));
+		attrs.add(new Attribute(new CssBorderRightParser()));
+		attrs.add(new Attribute(new CssBorderRightStyleParser()));
+		attrs.add(new Attribute(new CssBorderRightWidthParser()));
+		attrs.add(new Attribute(new CssBorderStyleParser()));
+		attrs.add(new Attribute(new CssBorderTopColorParser()));
+		attrs.add(new Attribute(new CssBorderTopLeftRadiusParser()));
+		attrs.add(new Attribute(new CssBorderTopParser()));
+		attrs.add(new Attribute(new CssBorderTopRightRadiusParser()));
+		attrs.add(new Attribute(new CssBorderTopStyleParser()));
+		attrs.add(new Attribute(new CssBorderTopWidthParser()));
+		attrs.add(new Attribute(new CssBorderWidthParser()));
+
+		// sort all properties by timestamp so the most recent one "wins":
+		Collection<Attribute> sortedAttrs = new TreeSet<>(ATTRIBUTE_COMPARATOR);
+
+		for (Attribute attr : attrs) {
+			attr.resolve(helper);
+			if (attr.creationToken != null)
+				sortedAttrs.add(attr);
+		}
+
+		BorderRenderingConfiguration rv = new BorderRenderingConfiguration();
+		for (Attribute attr : sortedAttrs) {
+			if (attr.parser instanceof CssBorderBottomColorParser) {
+				rv.bottomColor = (CssColorValue) attr.value;
+			} else if (attr.parser instanceof CssBorderBottomLeftRadiusParser) {
+				rv.bottomLeftRadius = (CssBorderRadiusValue) attr.value;
+			} else if (attr.parser instanceof CssBorderBottomParser) {
+				rv.bottomWidth = ((CssBorderValue) attr.value).getWidth();
+				rv.bottomColor = ((CssBorderValue) attr.value).getColor();
+				rv.bottomStyle = ((CssBorderValue) attr.value).getStyle();
+			} else if (attr.parser instanceof CssBorderBottomRightRadiusParser) {
+				rv.bottomRightRadius = (CssBorderRadiusValue) attr.value;
+			} else if (attr.parser instanceof CssBorderBottomStyleParser) {
+				rv.bottomStyle = (CssBorderStyleValue) attr.value;
+			} else if (attr.parser instanceof CssBorderBottomWidthParser) {
+				rv.bottomWidth = (CssLength) attr.value;
+			} else if (attr.parser instanceof CssBorderColorParser) {
+				List<CssColorValue> colors = (List<CssColorValue>) attr.value;
+				if (colors.size() == 1) {
+					rv.topColor = colors.get(0);
+					rv.rightColor = colors.get(0);
+					rv.bottomColor = colors.get(0);
+					rv.leftColor = colors.get(0);
+				} else if (colors.size() == 2) {
+					rv.topColor = colors.get(0);
+					rv.rightColor = colors.get(1);
+					rv.bottomColor = colors.get(0);
+					rv.leftColor = colors.get(1);
+				} else if (colors.size() == 3) {
+					rv.topColor = colors.get(0);
+					rv.rightColor = colors.get(1);
+					rv.bottomColor = colors.get(2);
+					rv.leftColor = colors.get(1);
+				} else if (colors.size() == 4) {
+					rv.topColor = colors.get(0);
+					rv.rightColor = colors.get(1);
+					rv.bottomColor = colors.get(2);
+					rv.leftColor = colors.get(3);
+				} else {
+					// TODO: somehow make this exception during parsing, not
+					// rendering
+					throw new RuntimeException(
+							CssBorderColorParser.PROPERTY_BORDER_COLOR
+									+ " must be 1-4 elements");
+				}
+			} else if (attr.parser instanceof CssBorderLeftColorParser) {
+				rv.leftColor = (CssColorValue) attr.value;
+			} else if (attr.parser instanceof CssBorderLeftParser) {
+				rv.leftWidth = ((CssBorderValue) attr.value).getWidth();
+				rv.leftColor = ((CssBorderValue) attr.value).getColor();
+				rv.leftStyle = ((CssBorderValue) attr.value).getStyle();
+			} else if (attr.parser instanceof CssBorderLeftStyleParser) {
+				rv.leftStyle = (CssBorderStyleValue) attr.value;
+			} else if (attr.parser instanceof CssBorderLeftWidthParser) {
+				rv.leftWidth = (CssLength) attr.value;
+			} else if (attr.parser instanceof CssBorderParser) {
+				CssBorderValue all = (CssBorderValue) attr.value;
 				rv.leftWidth = rv.rightWidth = rv.topWidth = rv.bottomWidth = all
 						.getWidth();
 				rv.leftColor = rv.rightColor = rv.topColor = rv.bottomColor = all
 						.getColor();
 				rv.leftStyle = rv.rightStyle = rv.topStyle = rv.bottomStyle = all
 						.getStyle();
+			} else if (attr.parser instanceof CssBorderRadiusParser) {
+				List<CssBorderRadiusValue> radii = (List<CssBorderRadiusValue>) attr.value;
+				rv.topLeftRadius = radii.get(0);
+				rv.topRightRadius = radii.get(1);
+				rv.bottomRightRadius = radii.get(2);
+				rv.bottomLeftRadius = radii.get(3);
+			} else if (attr.parser instanceof CssBorderRightColorParser) {
+				rv.rightColor = (CssColorValue) attr.value;
+			} else if (attr.parser instanceof CssBorderRightParser) {
+				rv.rightWidth = ((CssBorderValue) attr.value).getWidth();
+				rv.rightColor = ((CssBorderValue) attr.value).getColor();
+				rv.rightStyle = ((CssBorderValue) attr.value).getStyle();
+			} else if (attr.parser instanceof CssBorderRightStyleParser) {
+				rv.rightStyle = (CssBorderStyleValue) attr.value;
+			} else if (attr.parser instanceof CssBorderRightWidthParser) {
+				rv.rightWidth = (CssLength) attr.value;
+			} else if (attr.parser instanceof CssBorderStyleParser) {
+				List<CssBorderStyleValue> styles = (List<CssBorderStyleValue>) attr.value;
+				if (styles.size() == 1) {
+					rv.topStyle = styles.get(0);
+					rv.rightStyle = styles.get(0);
+					rv.bottomStyle = styles.get(0);
+					rv.leftStyle = styles.get(0);
+				} else if (styles.size() == 2) {
+					rv.topStyle = styles.get(0);
+					rv.rightStyle = styles.get(1);
+					rv.bottomStyle = styles.get(0);
+					rv.leftStyle = styles.get(1);
+				} else if (styles.size() == 3) {
+					rv.topStyle = styles.get(0);
+					rv.rightStyle = styles.get(1);
+					rv.bottomStyle = styles.get(2);
+					rv.leftStyle = styles.get(1);
+				} else if (styles.size() == 4) {
+					rv.topStyle = styles.get(0);
+					rv.rightStyle = styles.get(1);
+					rv.bottomStyle = styles.get(2);
+					rv.leftStyle = styles.get(3);
+				} else {
+					// TODO: somehow make this exception during parsing, not
+					// rendering
+					throw new RuntimeException(
+							CssBorderStyleParser.PROPERTY_BORDER_STYLE
+									+ " must be 1-4 elements");
+				}
+			} else if (attr.parser instanceof CssBorderTopColorParser) {
+				rv.topColor = (CssColorValue) attr.value;
+			} else if (attr.parser instanceof CssBorderTopLeftRadiusParser) {
+				rv.topLeftRadius = (CssBorderRadiusValue) attr.value;
+			} else if (attr.parser instanceof CssBorderTopParser) {
+				rv.topWidth = ((CssBorderValue) attr.value).getWidth();
+				rv.topColor = ((CssBorderValue) attr.value).getColor();
+				rv.topStyle = ((CssBorderValue) attr.value).getStyle();
+			} else if (attr.parser instanceof CssBorderTopRightRadiusParser) {
+				rv.topRightRadius = (CssBorderRadiusValue) attr.value;
+			} else if (attr.parser instanceof CssBorderTopStyleParser) {
+				rv.topStyle = (CssBorderStyleValue) attr.value;
+			} else if (attr.parser instanceof CssBorderTopWidthParser) {
+				rv.topWidth = (CssLength) attr.value;
+			} else if (attr.parser instanceof CssBorderWidthParser) {
+				List<CssLength> widths = (List<CssLength>) attr.value;
+				if (widths.size() == 1) {
+					rv.topWidth = widths.get(0);
+					rv.rightWidth = widths.get(0);
+					rv.bottomWidth = widths.get(0);
+					rv.leftWidth = widths.get(0);
+				} else if (widths.size() == 2) {
+					rv.topWidth = widths.get(0);
+					rv.rightWidth = widths.get(1);
+					rv.bottomWidth = widths.get(0);
+					rv.leftWidth = widths.get(1);
+				} else if (widths.size() == 3) {
+					rv.topWidth = widths.get(0);
+					rv.rightWidth = widths.get(1);
+					rv.bottomWidth = widths.get(2);
+					rv.leftWidth = widths.get(1);
+				} else if (widths.size() == 4) {
+					rv.topWidth = widths.get(0);
+					rv.rightWidth = widths.get(1);
+					rv.bottomWidth = widths.get(2);
+					rv.leftWidth = widths.get(3);
+				} else {
+					// TODO: somehow make this exception during parsing, not
+					// rendering
+					throw new RuntimeException(
+							CssBorderWidthParser.PROPERTY_BORDER_WIDTH
+									+ " must be 1-4 elements");
+				}
 			}
 		}
-
-		{
-			CssBorderValue left = (CssBorderValue) helper.getAttribute(
-					CssBorderLeftParser.PROPERTY_BORDER_LEFT, false);
-			if (left != null) {
-				rv.leftWidth = left.getWidth();
-				rv.leftColor = left.getColor();
-				rv.leftStyle = left.getStyle();
-			}
-		}
-
-		{
-			CssBorderValue right = (CssBorderValue) helper.getAttribute(
-					CssBorderRightParser.PROPERTY_BORDER_RIGHT, false);
-			if (right != null) {
-				rv.rightWidth = right.getWidth();
-				rv.rightColor = right.getColor();
-				rv.rightStyle = right.getStyle();
-			}
-		}
-
-		{
-			CssBorderValue top = (CssBorderValue) helper.getAttribute(
-					CssBorderTopParser.PROPERTY_BORDER_TOP, false);
-			if (top != null) {
-				rv.topWidth = top.getWidth();
-				rv.topColor = top.getColor();
-				rv.topStyle = top.getStyle();
-			}
-		}
-
-		{
-			CssBorderValue bottom = (CssBorderValue) helper.getAttribute(
-					CssBorderBottomParser.PROPERTY_BORDER_BOTTOM, false);
-			if (bottom != null) {
-				rv.bottomWidth = bottom.getWidth();
-				rv.bottomColor = bottom.getColor();
-				rv.bottomStyle = bottom.getStyle();
-			}
-		}
-
-		rv.initWidths(helper);
-		rv.initColors(helper);
-		rv.initStyles(helper);
-		rv.initRadii(helper);
 
 		return rv;
 	}
@@ -159,191 +352,4 @@ public class BorderRenderingConfiguration {
 	public CssBorderStyleValue leftStyle, topStyle, rightStyle, bottomStyle;
 	public CssBorderRadiusValue topLeftRadius, topRightRadius,
 			bottomRightRadius, bottomLeftRadius;
-
-	private BorderRenderingConfiguration() {
-	}
-
-	private void initStyles(QViewHelper helper) {
-		List<CssBorderStyleValue> styles = (List<CssBorderStyleValue>) helper
-				.getAttribute(CssBorderStyleParser.PROPERTY_BORDER_STYLE,
-						false);
-		if (styles != null && styles.size() == 1) {
-			topStyle = styles.get(0);
-			rightStyle = styles.get(0);
-			bottomStyle = styles.get(0);
-			leftStyle = styles.get(0);
-		} else if (styles != null && styles.size() == 2) {
-			topStyle = styles.get(0);
-			rightStyle = styles.get(1);
-			bottomStyle = styles.get(0);
-			leftStyle = styles.get(1);
-		} else if (styles != null && styles.size() == 3) {
-			topStyle = styles.get(0);
-			rightStyle = styles.get(1);
-			bottomStyle = styles.get(2);
-			leftStyle = styles.get(1);
-		} else if (styles != null && styles.size() == 4) {
-			topStyle = styles.get(0);
-			rightStyle = styles.get(1);
-			bottomStyle = styles.get(2);
-			leftStyle = styles.get(3);
-		} else if (styles != null) {
-			// TODO: somehow make this exception during parsing, not rendering
-			throw new RuntimeException(
-					CssBorderStyleParser.PROPERTY_BORDER_STYLE
-							+ " must be 1-4 elements");
-		}
-
-		CssBorderStyleValue t = (CssBorderStyleValue) helper.getAttribute(
-				CssBorderTopStyleParser.PROPERTY_BORDER_TOP_STYLE, false);
-		CssBorderStyleValue r = (CssBorderStyleValue) helper.getAttribute(
-				CssBorderRightStyleParser.PROPERTY_BORDER_RIGHT_STYLE, false);
-		CssBorderStyleValue b = (CssBorderStyleValue) helper.getAttribute(
-				CssBorderBottomStyleParser.PROPERTY_BORDER_BOTTOM_STYLE, false);
-		CssBorderStyleValue l = (CssBorderStyleValue) helper.getAttribute(
-				CssBorderLeftStyleParser.PROPERTY_BORDER_LEFT_STYLE, false);
-
-		if (t != null)
-			topStyle = t;
-		if (l != null)
-			leftStyle = l;
-		if (r != null)
-			rightStyle = r;
-		if (b != null)
-			bottomStyle = b;
-	}
-
-	private void initWidths(QViewHelper helper) {
-		List<CssLength> widths = (List<CssLength>) helper.getAttribute(
-				CssBorderWidthParser.PROPERTY_BORDER_WIDTH, false);
-		if (widths != null && widths.size() == 1) {
-			topWidth = widths.get(0);
-			rightWidth = widths.get(0);
-			bottomWidth = widths.get(0);
-			leftWidth = widths.get(0);
-		} else if (widths != null && widths.size() == 2) {
-			topWidth = widths.get(0);
-			rightWidth = widths.get(1);
-			bottomWidth = widths.get(0);
-			leftWidth = widths.get(1);
-		} else if (widths != null && widths.size() == 3) {
-			topWidth = widths.get(0);
-			rightWidth = widths.get(1);
-			bottomWidth = widths.get(2);
-			leftWidth = widths.get(1);
-		} else if (widths != null && widths.size() == 4) {
-			topWidth = widths.get(0);
-			rightWidth = widths.get(1);
-			bottomWidth = widths.get(2);
-			leftWidth = widths.get(3);
-		} else if (widths != null) {
-			// TODO: somehow make this exception during parsing, not rendering
-			throw new RuntimeException(
-					CssBorderWidthParser.PROPERTY_BORDER_WIDTH
-							+ " must be 1-4 elements");
-		}
-		CssLength t = (CssLength) helper.getAttribute(
-				CssBorderTopWidthParser.PROPERTY_BORDER_TOP_WIDTH, false);
-		CssLength r = (CssLength) helper.getAttribute(
-				CssBorderRightWidthParser.PROPERTY_BORDER_RIGHT_WIDTH, false);
-		CssLength b = (CssLength) helper.getAttribute(
-				CssBorderBottomWidthParser.PROPERTY_BORDER_BOTTOM_WIDTH, false);
-		CssLength l = (CssLength) helper.getAttribute(
-				CssBorderLeftWidthParser.PROPERTY_BORDER_LEFT_WIDTH, false);
-
-		if (t != null)
-			topWidth = t;
-		if (l != null)
-			leftWidth = l;
-		if (r != null)
-			rightWidth = r;
-		if (b != null)
-			bottomWidth = b;
-	}
-
-	private void initColors(QViewHelper helper) {
-
-		List<CssColorValue> colors = (List<CssColorValue>) helper.getAttribute(
-				CssBorderColorParser.PROPERTY_BORDER_COLOR, false);
-		if (colors != null && colors.size() == 1) {
-			topColor = colors.get(0);
-			rightColor = colors.get(0);
-			bottomColor = colors.get(0);
-			leftColor = colors.get(0);
-		} else if (colors != null && colors.size() == 2) {
-			topColor = colors.get(0);
-			rightColor = colors.get(1);
-			bottomColor = colors.get(0);
-			leftColor = colors.get(1);
-		} else if (colors != null && colors.size() == 3) {
-			topColor = colors.get(0);
-			rightColor = colors.get(1);
-			bottomColor = colors.get(2);
-			leftColor = colors.get(1);
-		} else if (colors != null && colors.size() == 4) {
-			topColor = colors.get(0);
-			rightColor = colors.get(1);
-			bottomColor = colors.get(2);
-			leftColor = colors.get(3);
-		} else if (colors != null) {
-			// TODO: somehow make this exception during parsing, not rendering
-			throw new RuntimeException(
-					CssBorderColorParser.PROPERTY_BORDER_COLOR
-							+ " must be 1-4 elements");
-		}
-
-		CssColorValue t = (CssColorValue) helper.getAttribute(
-				CssBorderTopColorParser.PROPERTY_BORDER_TOP_COLOR, false);
-		CssColorValue r = (CssColorValue) helper.getAttribute(
-				CssBorderRightColorParser.PROPERTY_BORDER_RIGHT_COLOR, false);
-		CssColorValue b = (CssColorValue) helper.getAttribute(
-				CssBorderBottomColorParser.PROPERTY_BORDER_BOTTOM_COLOR, false);
-		CssColorValue l = (CssColorValue) helper.getAttribute(
-				CssBorderLeftColorParser.PROPERTY_BORDER_LEFT_COLOR, false);
-
-		if (t != null)
-			topColor = t;
-		if (l != null)
-			leftColor = l;
-		if (r != null)
-			rightColor = r;
-		if (b != null)
-			bottomColor = b;
-	}
-
-	private void initRadii(QViewHelper helper) {
-		List<CssBorderRadiusValue> radii = (List<CssBorderRadiusValue>) helper
-				.getAttribute(CssBorderRadiusParser.PROPERTY_BORDER_RADIUS,
-						false);
-		if (radii != null) {
-			topLeftRadius = radii.get(0);
-			topRightRadius = radii.get(1);
-			bottomRightRadius = radii.get(2);
-			bottomLeftRadius = radii.get(3);
-		}
-
-		CssBorderRadiusValue tl = (CssBorderRadiusValue) helper.getAttribute(
-				CssBorderTopLeftRadiusParser.PROPERTY_BORDER_TOP_LEFT_RADIUS,
-				false);
-		if (tl != null)
-			topLeftRadius = tl;
-
-		CssBorderRadiusValue tr = (CssBorderRadiusValue) helper.getAttribute(
-				CssBorderTopRightRadiusParser.PROPERTY_BORDER_TOP_RIGHT_RADIUS,
-				false);
-		if (tr != null)
-			topRightRadius = tr;
-
-		CssBorderRadiusValue br = (CssBorderRadiusValue) helper.getAttribute(
-				CssBorderBottomRightRadiusParser.PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS,
-				false);
-		if (br != null)
-			bottomRightRadius = br;
-
-		CssBorderRadiusValue bl = (CssBorderRadiusValue) helper.getAttribute(
-				CssBorderBottomLeftRadiusParser.PROPERTY_BORDER_BOTTOM_LEFT_RADIUS,
-				false);
-		if (bl != null)
-			bottomLeftRadius = bl;
-	}
 }

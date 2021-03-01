@@ -4,13 +4,13 @@ import java.util.Objects;
 
 import javax.swing.text.html.CSS;
 
-import com.pump.text.html.css.CssValue;
+import com.pump.text.html.css.AbstractCssValue;
 
 /**
  * The background-attachment CSS property sets whether a background image's
  * position is fixed within the viewport, or scrolls with its containing block.
  */
-public class CssBackgroundAttachmentValue implements CssValue {
+public class CssBackgroundAttachmentValue extends AbstractCssValue {
 
 	// TODO: we support fixed/scroll, but not anything else
 

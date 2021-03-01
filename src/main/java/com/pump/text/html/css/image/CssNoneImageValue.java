@@ -2,13 +2,15 @@ package com.pump.text.html.css.image;
 
 import java.awt.Graphics2D;
 
+import com.pump.text.html.css.AbstractCssValue;
 import com.pump.text.html.view.QViewHelper;
 
 /**
  * This CssImageValue renders nothing.
  *
  */
-public class CssNoneImageValue implements CssImageValue {
+public class CssNoneImageValue extends AbstractCssValue
+		implements CssImageValue {
 
 	@Override
 	public String toCSSString() {

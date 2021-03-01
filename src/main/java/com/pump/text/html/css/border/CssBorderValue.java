@@ -2,11 +2,11 @@ package com.pump.text.html.css.border;
 
 import java.util.Objects;
 
+import com.pump.text.html.css.AbstractCssValue;
 import com.pump.text.html.css.CssColorValue;
 import com.pump.text.html.css.CssLength;
-import com.pump.text.html.css.CssValue;
 
-public class CssBorderValue implements CssValue {
+public class CssBorderValue extends AbstractCssValue {
 	String cssString;
 	CssLength width;
 	CssBorderStyleValue style;

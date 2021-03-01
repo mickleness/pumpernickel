@@ -17,7 +17,7 @@ public class CssBackgroundClipParser
 		String s = cssString.toLowerCase();
 		for (CssBackgroundClipValue.Mode mode : CssBackgroundClipValue.Mode
 				.values()) {
-			if (s.startsWith(mode.toCSSString())) {
+			if (s.startsWith(mode.toString())) {
 				return new CssBackgroundClipValue(cssString, mode);
 			}
 		}

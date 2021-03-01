@@ -2,17 +2,17 @@ package com.pump.text.html.css.background;
 
 import java.util.Objects;
 
-import com.pump.text.html.css.CssValue;
+import com.pump.text.html.css.AbstractCssValue;
 
 /**
  * The background-clip CSS property sets whether an element's background extends
  * underneath its border box, padding box, or content box.
  */
-public class CssBackgroundClipValue implements CssValue {
+public class CssBackgroundClipValue extends AbstractCssValue {
 
 	public static final String PROPERTY_BACKGROUND_CLIP = "background-clip";
 
-	public enum Mode implements CssValue {
+	public enum Mode {
 		/**
 		 * The background extends to the outside edge of the border (but
 		 * underneath the border in z-ordering).
@@ -44,7 +44,7 @@ public class CssBackgroundClipValue implements CssValue {
 		}
 
 		@Override
-		public String toCSSString() {
+		public String toString() {
 			return cssName;
 		}
 	}

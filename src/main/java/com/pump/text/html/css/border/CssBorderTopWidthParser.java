@@ -9,9 +9,6 @@ public class CssBorderTopWidthParser implements CssPropertyParser<CssLength> {
 
 	public static final String PROPERTY_BORDER_TOP_WIDTH = "border-top-width";
 
-	public CssBorderTopWidthParser() {
-	}
-
 	@Override
 	public String getPropertyName() {
 		return PROPERTY_BORDER_TOP_WIDTH;

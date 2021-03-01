@@ -2,9 +2,9 @@ package com.pump.text.html.css.border;
 
 import java.util.Objects;
 
-import com.pump.text.html.css.CssValue;
+import com.pump.text.html.css.AbstractCssValue;
 
-public class CssBorderStyleValue implements CssValue {
+public class CssBorderStyleValue extends AbstractCssValue {
 
 	public enum Value {
 		NONE, HIDDEN, DOTTED, DASHED, SOLID, DOUBLE, GROOVE, RIDGE, INSET, OUTSET;

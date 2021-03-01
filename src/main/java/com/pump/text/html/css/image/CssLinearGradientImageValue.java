@@ -14,11 +14,13 @@ import java.util.Objects;
 
 import com.pump.awt.GradientTexturePaint;
 import com.pump.plaf.AnimationManager;
+import com.pump.text.html.css.AbstractCssValue;
 import com.pump.text.html.css.CssColorParser;
 import com.pump.text.html.css.CssLength;
 import com.pump.text.html.view.QViewHelper;
 
-public class CssLinearGradientImageValue implements CssImageValue {
+public class CssLinearGradientImageValue extends AbstractCssValue
+		implements CssImageValue {
 
 	public static class ColorStop {
 		Color color;
@@ -371,12 +373,12 @@ public class CssLinearGradientImageValue implements CssImageValue {
 
 				if (cs.pos2 != null) {
 					newPos1 = new ColorStop(cs.color,
-							cs.pos1 == null ? null : cs.pos1.clone());
+							cs.pos1 == null ? null : cs.pos1);
 					newPos2 = new ColorStop(cs.color,
-							cs.pos2 == null ? null : cs.pos2.clone());
+							cs.pos2 == null ? null : cs.pos2);
 				} else {
 					newPos1 = new ColorStop(cs.color,
-							cs.pos1 == null ? null : cs.pos1.clone());
+							cs.pos1 == null ? null : cs.pos1);
 					newPos2 = null;
 				}
 

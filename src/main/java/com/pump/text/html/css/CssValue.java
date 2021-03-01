@@ -6,4 +6,9 @@ package com.pump.text.html.css;
  */
 public interface CssValue {
 	String toCSSString();
+
+	/**
+	 * Return a CssValueCreationToken, which is basically a timestamp.
+	 */
+	CssValueCreationToken getCreationToken();
 }

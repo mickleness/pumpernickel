@@ -2,10 +2,10 @@ package com.pump.text.html.css.background;
 
 import java.util.Objects;
 
+import com.pump.text.html.css.AbstractCssValue;
 import com.pump.text.html.css.CssLength;
-import com.pump.text.html.css.CssValue;
 
-public class CssBackgroundPositionValue implements CssValue {
+public class CssBackgroundPositionValue extends AbstractCssValue {
 
 	private final String cssString;
 
