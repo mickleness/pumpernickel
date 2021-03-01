@@ -306,7 +306,9 @@ public abstract class Operation implements Serializable {
 						String str = ShapeStringUtils.toString(s);
 						if (str.length() > 100) {
 							int i = str.indexOf(' ', 100);
-							str = str.substring(0, i) + "...";
+							if (i != -1) {
+								str = str.substring(0, i) + "...";
+							}
 						}
 						v = str;
 					}
