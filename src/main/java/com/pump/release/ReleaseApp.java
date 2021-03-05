@@ -14,14 +14,14 @@ import java.io.File;
 
 import com.pump.desktop.temp.TempFileManager;
 import com.pump.io.IOUtils;
-import com.pump.showcase.PumpernickelShowcaseApp;
+import com.pump.showcase.app.PumpernickelShowcaseApp;
 
 /**
  * Instructions:
  * <ol>
  * <li>Run this app</li>
- * <li>Right-click pumpernickel/pom.xml and select "Run As...". Select
- * "Maven install"</li>
+ * <li>Right-click pumpernickel/pom.xml and select "Run As...". Select "Maven
+ * install"</li>
  * <li>Run "BackupJars" app.</li>
  * </ol>
  */
@@ -43,8 +43,8 @@ public class ReleaseApp {
 				filename);
 		File versionedJar = project.buildJar(true, "release", "jars",
 				PumpernickelShowcaseApp.VERSION);
-		File currentJar = new File(
-				versionedJar.getParentFile().getParentFile(), filename);
+		File currentJar = new File(versionedJar.getParentFile().getParentFile(),
+				filename);
 		IOUtils.copy(versionedJar, currentJar, true);
 
 		System.out.println("Created/updated " + versionedJar.getAbsolutePath());

@@ -5,8 +5,8 @@ import java.awt.image.BufferedImage;
 
 import org.junit.Test;
 
-import com.pump.showcase.ShadowRendererDemo;
-import com.pump.showcase.ShadowRendererDemo.OriginalGaussianShadowRenderer;
+import com.pump.showcase.demo.ShadowRendererDemo;
+import com.pump.showcase.demo.ShadowRendererDemo.OriginalGaussianShadowRenderer;
 
 import junit.framework.TestCase;
 
