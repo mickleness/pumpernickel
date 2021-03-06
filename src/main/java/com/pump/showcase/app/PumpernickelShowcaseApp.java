@@ -471,64 +471,9 @@ public class PumpernickelShowcaseApp extends JFrame {
 		getContentPane().setPreferredSize(new Dimension(800, 600));
 
 		try {
-			addSection("Transition2D", "Transition2DDemo");
-			addSection("Transition3D", "Transition3DDemo");
-			addSection("BmpEncoder, BmpDecoder", "BmpComparisonDemo");
-			addSection("AlphaComposite", "AlphaCompositeDemo");
-			addSection("TextEffect", "TextEffectDemo");
-			addSection("AWTMonitor", "AWTMonitorDemo");
-			addSection("GradientTexturePaint", "GradientTexturePaintDemo");
-			addSection("ClickSensitivityControl",
-					"ClickSensitivityControlDemo");
-			addSection("ShapeBounds", "ShapeBoundsDemo");
-			addSection("Clipper", "ClipperDemo");
-			addSection("AngleSliderUI", "AngleSliderUIDemo");
-			addSection("Spiral2D", "Spiral2DDemo");
-			addSection("DecoratedListUI, DecoratedTreeUI", "DecoratedDemo");
-			addSection("JThrobber", "ThrobberDemo");
-			addSection("JBreadCrumb", "BreadCrumbDemo");
-			addSection("CollapsibleContainer", "CollapsibleContainerDemo");
-			addSection("CustomizedToolbar", "CustomizedToolbarDemo");
-			addSection("JToolTip, QPopupFactory", "JToolTipDemo");
-			addSection("JPopover", "JPopoverDemo");
-			addSection("Scaling", "ScalingDemo");
-			// addSection("ImageQuantization", new ImageQuantizationDemo());
-			addSection("JColorPicker", "JColorPickerDemo");
-			// addSection("Shapes: AreaX Tests", new AreaXTestPanel());
-			addSection("JPEGMetaData", "JPEGMetaDataDemo");
-			addSection("QPanelUI", "QPanelUIDemo");
-			addSection("AudioPlayer", "AudioPlayerDemo");
-			addSection("JavaTextComponentHighlighter",
-					"JavaTextComponentHighlighterDemo");
-			addSection("XMLTextComponentHighlighter",
-					"XMLTextComponentHighlighterDemo");
-			// addSection("Text: Search Controls", new TextSearchDemo());
-			// addSection("QuickTime: Writing Movies", new MovWriterDemo());
-			addSection("Highlighters, WildcardPattern",
-					"WildcardPatternHighlighterDemo");
-			addSection("BoxTabbedPaneUI", "BoxTabbedPaneUIDemo");
-			addSection("CircularProgressBarUI", "CircularProgressBarUIDemo");
-			addSection("Strokes, MouseSmoothing", "StrokeMouseSmoothingDemo");
-			addSection("JColorWell, JPalette", "JColorWellPaletteDemo");
-			addSection("JEyeDropper", "JEyeDropperDemo");
-			addSection("JSwitchButton", "JSwitchButtonDemo");
-			addSection("JButton, QButtonUI", "JButtonDemo");
-			addSection("MixedCheckBoxState", "MixedCheckBoxStateDemo");
-			addSection("JFrame, JDialog, JWindow", "WindowDemo");
-			addSection("System Properties", "SystemPropertiesDemo");
-			addSection("FileIcon", "FileIconDemo");
-			addSection("DesktopHelper", "DesktopHelperDemo");
-			addSection("VectorImage", "VectorImageDemo");
-			addSection("StarPolygon", "StarPolygonDemo");
-			addSection("ShadowRenderer", "ShadowRendererDemo");
-			addSection("HTML, QHTMLEditorKit", "HTMLDemo");
-			if (JVM.isMac) {
-				addSection("AquaIcon", "AquaIconDemo");
-				addSection("NSImage", "NSImageDemo");
-			} else if (JVM.isWindows) {
-				addSection("WindowsIcon", "WindowsIconDemo");
+			for (DemoListElement e : new DemoList()) {
+				addSection(e.getDemoName(), e.getDemoSimpleClassName());
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
