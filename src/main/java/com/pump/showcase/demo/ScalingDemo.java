@@ -20,8 +20,9 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -316,66 +317,60 @@ public class ScalingDemo extends ShowcaseChartDemo {
 	long[] memorySamples = new long[SAMPLE_COUNT];
 	BufferedImage sampleImage;
 
-	@Override
-	protected Map<String, Map<String, Long>> collectData(int... params)
-			throws Exception {
-		while (sampleImage == null) {
-			Thread.sleep(50);
-		}
+	private static final String IMPLEMENTATION_SCALED_INSTANCE = "Image.getScaledInstance";
+	private static final String IMPLEMENTATION_GRAPHICS_UTILITIES = "GraphicsUtilities";
+	private static final String IMPLEMENTATION_TRANSFORM = "Transform";
+	private static final String IMPLEMENTATION_PUMP = "Pump Scaling";
 
-		if (data == null) {
-			data = new LinkedHashMap<>();
-			data.put(GROUP_TIME, new LinkedHashMap<String, Long>());
-			data.put(GROUP_MEMORY, new LinkedHashMap<String, Long>());
-		}
-		int sampleIndex = params[0];
-		String label;
+	class MeasurementRunnable extends TimeMemoryMeasurementRunnable {
 		Callable<BufferedImage> callable;
-		switch (params[1]) {
-		case 0:
-			label = LABEL_SCALED_INSTANCE;
-			callable = SCALED_INSTANCE_ICON;
-			break;
-		case 1:
-			label = LABEL_GRAPHICS_UTILITIES;
-			callable = GRAPHICS_UTILITIES_ICON;
-			break;
-		case 2:
-			label = LABEL_TRANSFORM;
-			callable = TRANSFORM_ICON;
-			break;
-		default:
-			label = LABEL_SCALING;
-			callable = SCALING_ICON;
+
+		public MeasurementRunnable(Map<String, Map<String, SampleSet>> data,
+				String implementation) {
+			super(data, null, implementation);
+
+			if (implementation.equals(IMPLEMENTATION_SCALED_INSTANCE)) {
+				callable = SCALED_INSTANCE_ICON;
+			} else if (implementation
+					.equals(IMPLEMENTATION_GRAPHICS_UTILITIES)) {
+				callable = GRAPHICS_UTILITIES_ICON;
+			} else if (implementation.equals(IMPLEMENTATION_TRANSFORM)) {
+				callable = TRANSFORM_ICON;
+			} else {
+				callable = SCALING_ICON;
+			}
 		}
 
-		timeSamples[sampleIndex] = System.currentTimeMillis();
-		memorySamples[sampleIndex] = Runtime.getRuntime().freeMemory();
-
-		for (int z = 0; z < 3; z++) {
-			callable.call();
+		@Override
+		protected void runSample() {
+			try {
+				for (int z = 0; z < 3; z++) {
+					callable.call();
+				}
+			} catch (RuntimeException e) {
+				throw e;
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
 
-		timeSamples[sampleIndex] = System.currentTimeMillis()
-				- timeSamples[sampleIndex];
-		memorySamples[sampleIndex] = memorySamples[sampleIndex]
-				- Runtime.getRuntime().freeMemory();
-
-		if (sampleIndex == SAMPLE_COUNT - 1) {
-			Arrays.sort(timeSamples);
-			Arrays.sort(memorySamples);
-			data.get(GROUP_TIME).put(label,
-					timeSamples[timeSamples.length / 2]);
-			data.get(GROUP_MEMORY).put(label,
-					memorySamples[memorySamples.length / 2]);
-		}
-
-		return data;
 	}
 
 	@Override
-	protected int[] getCollectDataParamLimits() {
-		return new int[] { SAMPLE_COUNT, 4 };
+	protected Collection<Runnable> getMeasurementRunnables(
+			Map<String, Map<String, SampleSet>> data) {
+		String[] implementations = new String[] {
+				IMPLEMENTATION_SCALED_INSTANCE,
+				IMPLEMENTATION_GRAPHICS_UTILITIES, IMPLEMENTATION_PUMP,
+				IMPLEMENTATION_TRANSFORM };
+		List<Runnable> returnValue = new ArrayList<>(
+				SAMPLE_COUNT * implementations.length);
+		for (String implementation : implementations) {
+			Runnable r = new MeasurementRunnable(data, implementation);
+			for (int sample = 0; sample < SAMPLE_COUNT; sample++) {
+				returnValue.add(r);
+			}
+		}
+		return returnValue;
 	}
-
 }

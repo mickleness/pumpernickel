@@ -25,8 +25,9 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -243,88 +244,64 @@ public class ClipperDemo extends ShowcaseChartDemo {
 		return new Class[] { Clipper.class };
 	}
 
-	private static final String CLIP_TIME = "Time";
-	private static final String CLIP_MEMORY = "Memory";
-	private static final String LABEL_AREA_LINEAR = "java.awt.geom.Area class (Linear)";
-	private static final String LABEL_CLIPPER_LINEAR = "com.pump.geom.Clipper class (Linear)";
-	private static final String LABEL_AREA_QUADRATIC = "java.awt.geom.Area class (Quadratic)";
-	private static final String LABEL_CLIPPER_QUADRATIC = "com.pump.geom.Clipper class (Quadratic)";
-	private static final String LABEL_AREA_CUBIC = "java.awt.geom.Area class (Cubic)";
-	private static final String LABEL_CLIPPER_CUBIC = "com.pump.geom.Clipper class (Cubic)";
 	private static final int SAMPLE_COUNT = 10;
 
-	Map<String, Map<String, Long>> data;
-	long[] timeSamples = new long[SAMPLE_COUNT];
-	long[] memorySamples = new long[SAMPLE_COUNT];
-	int sampleCtr = 0;
+	private static final String OPERATION_CUBIC = "Cubic";
+	private static final String OPERATION_QUADRATIC = "Quadratic";
+	private static final String OPERATION_LINEAR = "Linear";
 
-	@Override
-	protected Map<String, Map<String, Long>> collectData(int... params)
-			throws Exception {
-		if (data == null) {
-			data = new LinkedHashMap<>();
-			data.put(CLIP_TIME, new LinkedHashMap<String, Long>());
-			data.put(CLIP_MEMORY, new LinkedHashMap<String, Long>());
-		}
+	private static final String IMPLEMENTATION_AREA = "Area";
+	private static final String IMPLEMENTATION_CLIPPER = "Clipper";
 
-		int sampleIndex = params[0];
-		// invert so we go from slowest to fastest
-		int degree = 2 - params[1];
-		boolean useArea = params[2] == 0;
+	static class MeasurementRunnable extends TimeMemoryMeasurementRunnable {
 
 		Rectangle2D rect = new Rectangle(100, 100, 100, 100);
 		Area rArea = new Area(rect);
 
-		System.runFinalization();
-		System.gc();
-		System.runFinalization();
-		System.gc();
-		long time = System.currentTimeMillis();
-		long memory = Runtime.getRuntime().freeMemory();
-		for (int a = 0; a < p[degree].length; a++) {
-			if (useArea) {
-				Area area = new Area(p[degree][a]);
-				area.intersect(rArea);
+		public MeasurementRunnable(Map<String, Map<String, SampleSet>> data,
+				String operation, String implementation) {
+			super(data, operation, implementation);
+		}
+
+		@Override
+		protected void runSample() {
+			int degree;
+			if (operation.equals(OPERATION_CUBIC)) {
+				degree = 2;
+			} else if (operation.equals(OPERATION_QUADRATIC)) {
+				degree = 1;
 			} else {
-				Clipper.clipToRect(p[degree][a], rect);
+				degree = 0;
+			}
+			for (int a = 0; a < p[degree].length; a++) {
+				if (implementation.equals(IMPLEMENTATION_AREA)) {
+					Area area = new Area(p[degree][a]);
+					area.intersect(rArea);
+				} else {
+					Clipper.clipToRect(p[degree][a], rect);
+				}
 			}
 		}
-		time = System.currentTimeMillis() - time;
-		memory = memory - Runtime.getRuntime().freeMemory();
-
-		timeSamples[sampleIndex] = time;
-		memorySamples[sampleIndex] = memory;
-
-		if (sampleIndex == timeSamples.length - 1) {
-			// we just populated all our samples, so let's record the latest
-			// figures:
-			Arrays.sort(timeSamples);
-			Arrays.sort(memorySamples);
-			String label;
-
-			switch (degree) {
-			case 1:
-				label = useArea ? LABEL_AREA_QUADRATIC
-						: LABEL_CLIPPER_QUADRATIC;
-				break;
-			case 2:
-				label = useArea ? LABEL_AREA_CUBIC : LABEL_CLIPPER_CUBIC;
-				break;
-			default:
-				label = useArea ? LABEL_AREA_LINEAR : LABEL_CLIPPER_LINEAR;
-				break;
-			}
-			data.get(CLIP_TIME).put(label, timeSamples[timeSamples.length / 2]);
-			data.get(CLIP_MEMORY).put(label,
-					memorySamples[memorySamples.length / 2]);
-		}
-
-		return data;
 	}
 
 	@Override
-	protected int[] getCollectDataParamLimits() {
-		return new int[] { SAMPLE_COUNT, 3, 2 };
+	protected Collection<Runnable> getMeasurementRunnables(
+			Map<String, Map<String, SampleSet>> data) {
+		String[] operations = new String[] { OPERATION_CUBIC,
+				OPERATION_QUADRATIC, OPERATION_LINEAR };
+		String[] implementations = new String[] { IMPLEMENTATION_AREA,
+				IMPLEMENTATION_CLIPPER };
+		List<Runnable> returnValue = new ArrayList<>(
+				SAMPLE_COUNT * operations.length * implementations.length);
+		for (String operation : operations) {
+			for (String implementation : implementations) {
+				Runnable r = new MeasurementRunnable(data, operation,
+						implementation);
+				for (int sample = 0; sample < SAMPLE_COUNT; sample++) {
+					returnValue.add(r);
+				}
+			}
+		}
+		return returnValue;
 	}
-
 }

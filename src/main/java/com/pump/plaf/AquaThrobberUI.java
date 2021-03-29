@@ -18,6 +18,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.swing.JComponent;
 
@@ -55,8 +56,20 @@ public class AquaThrobberUI extends ThrobberUI {
 	private static final Line2D line = new Line2D.Float();
 	private static final Map<Color, Color[]> foregroundTable = new HashMap<Color, Color[]>();
 
+	private Color defaultForeground;
+
 	public AquaThrobberUI() {
+		this(Color.gray);
+	}
+
+	/**
+	 * Create a AquaThrobberUI that will render with a default color. Note this
+	 * color is overridden by the JComponent's foreground color, if possible.
+	 */
+	public AquaThrobberUI(Color foreground) {
 		super(DEFAULT_PERIOD / 12);
+		Objects.requireNonNull(foreground);
+		this.defaultForeground = foreground;
 	}
 
 	/**
@@ -93,8 +106,8 @@ public class AquaThrobberUI extends ThrobberUI {
 			int centerX, int centerY, int r1, int r2, float strokeWidth) {
 
 		if (fraction < 0)
-			throw new IllegalArgumentException("fraction (" + fraction
-					+ ") must be within [0, 1]");
+			throw new IllegalArgumentException(
+					"fraction (" + fraction + ") must be within [0, 1]");
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
@@ -158,6 +171,6 @@ public class AquaThrobberUI extends ThrobberUI {
 
 	@Override
 	public Color getDefaultForeground() {
-		return Color.gray;
+		return defaultForeground;
 	}
 }

@@ -14,15 +14,14 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
-import java.awt.geom.Rectangle2D;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import com.pump.geom.ShapeBounds;
-import com.pump.showcase.chart.BarChartRenderer;
 
 /**
  * A simple test showing off the efficiency of {@link ShapeBounds}.
@@ -37,6 +36,40 @@ public class ShapeBoundsDemo extends ShowcaseChartDemo {
 	private static final long serialVersionUID = 1L;
 
 	private static final int SAMPLE_COUNT = 10;
+
+	private static final String IMPLEMENTATION_SHAPE_BOUNDS = "ShapeBounds";
+	private static final String IMPLEMENTATION_AREA = "Area";
+	private static final String IMPLEMENTATION_FLATTENED_AREA = "Flattened Area";
+
+	static class MeasurementRunnable extends TimeMemoryMeasurementRunnable {
+
+		Path2D path;
+		Path2D flattenedShape;
+		Area area;
+
+		public MeasurementRunnable(Map<String, Map<String, SampleSet>> data,
+				String implementation, Path2D path) {
+			super(data, null, implementation);
+			this.path = path;
+			flattenedShape = new Path2D.Float();
+			flattenedShape.append(path.getPathIterator(null, .1f), false);
+			area = new Area(path);
+		}
+
+		@Override
+		protected void runSample() {
+			for (int a = 0; a < 20; a++) {
+				if (implementation.equals(IMPLEMENTATION_AREA)) {
+					new Area(path).getBounds2D();
+				} else if (implementation
+						.equals(IMPLEMENTATION_FLATTENED_AREA)) {
+					new Area(flattenedShape).getBounds2D();
+				} else {
+					ShapeBounds.getBounds(path);
+				}
+			}
+		}
+	}
 
 	@Override
 	public String getTitle() {
@@ -64,87 +97,21 @@ public class ShapeBoundsDemo extends ShowcaseChartDemo {
 				PathIterator.class };
 	}
 
-	String GROUP_TIME = "Time";
-	String GROUP_MEMORY = "Memory";
-	long[] sampleTimes = new long[SAMPLE_COUNT];
-	long[] sampleMemory = new long[SAMPLE_COUNT];
-	Map<String, Map<String, Long>> data;
-
 	@Override
-	protected Map<String, Map<String, Long>> collectData(int... params)
-			throws Exception {
-		if (data == null) {
-			data = new HashMap<>();
-			data.put(GROUP_MEMORY, new HashMap<String, Long>());
-			data.put(GROUP_TIME, new HashMap<String, Long>());
-		}
-
-		int sampleIndex = params[0];
-		int testType = params[1];
-
-		System.runFinalization();
-		System.gc();
-		System.runFinalization();
-		System.gc();
-		sampleTimes[sampleIndex] = System.currentTimeMillis();
-		sampleMemory[sampleIndex] = Runtime.getRuntime().freeMemory();
-
+	protected Collection<Runnable> getMeasurementRunnables(
+			Map<String, Map<String, SampleSet>> data) {
+		String[] implementations = new String[] { IMPLEMENTATION_SHAPE_BOUNDS,
+				IMPLEMENTATION_AREA, IMPLEMENTATION_FLATTENED_AREA };
 		Path2D path = createPath();
-		Path2D flattenedShape = new Path2D.Float();
-		flattenedShape.append(path.getPathIterator(null, .1f), false);
-		Area area = new Area(path);
-		// this is our gold standard we compare against:
-		Rectangle2D expectedBounds = area.getBounds2D();
-		Rectangle2D actualBounds = null;
-		String typeName = null;
-		for (int a = 0; a < 20; a++) {
-			switch (testType) {
-			case 0:
-				typeName = "Area";
-				actualBounds = new Area(path).getBounds2D();
-				break;
-			case 1:
-				typeName = "Area (flattened)";
-				actualBounds = new Area(flattenedShape).getBounds2D();
-				break;
-			case 2:
-				typeName = "ShapeBounds";
-				actualBounds = ShapeBounds.getBounds(path);
-				break;
-			case 3:
-				typeName = "Path2D";
-				actualBounds = new Path2D.Float(path).getBounds2D();
-				break;
-			default:
-				throw new IllegalStateException("unexpected type: " + testType);
+		List<Runnable> returnValue = new ArrayList<>(
+				SAMPLE_COUNT * implementations.length);
+		for (String implementation : implementations) {
+			Runnable r = new MeasurementRunnable(data, implementation, path);
+			for (int sample = 0; sample < SAMPLE_COUNT; sample++) {
+				returnValue.add(r);
 			}
 		}
-
-		if (!equivalent(actualBounds, expectedBounds)) {
-			sampleTimes[sampleIndex] = BarChartRenderer.ERROR_CODE;
-			sampleMemory[sampleIndex] = BarChartRenderer.ERROR_CODE;
-		} else {
-			sampleTimes[sampleIndex] = System.currentTimeMillis()
-					- sampleTimes[sampleIndex];
-			sampleMemory[sampleIndex] = sampleMemory[sampleIndex]
-					- Runtime.getRuntime().freeMemory();
-		}
-
-		if (sampleIndex == sampleTimes.length - 1) {
-			Arrays.sort(sampleTimes);
-			Arrays.sort(sampleMemory);
-
-			data.get(GROUP_TIME).put(typeName,
-					sampleTimes[sampleTimes.length / 2]);
-			data.get(GROUP_MEMORY).put(typeName,
-					sampleMemory[sampleMemory.length / 2]);
-		}
-		return data;
-	}
-
-	@Override
-	protected int[] getCollectDataParamLimits() {
-		return new int[] { SAMPLE_COUNT, 4 };
+		return returnValue;
 	}
 
 	private Path2D.Double createPath() {
@@ -159,18 +126,5 @@ public class ShapeBoundsDemo extends ShowcaseChartDemo {
 		}
 		p.closePath();
 		return p;
-	}
-
-	private static boolean equivalent(Rectangle2D r1, Rectangle2D r2) {
-		double tolerance = .001;
-		if (Math.abs(r1.getMinX() - r2.getMinX()) > tolerance)
-			return false;
-		if (Math.abs(r1.getMaxX() - r2.getMaxX()) > tolerance)
-			return false;
-		if (Math.abs(r1.getMinY() - r2.getMinY()) > tolerance)
-			return false;
-		if (Math.abs(r1.getMaxY() - r2.getMaxY()) > tolerance)
-			return false;
-		return true;
 	}
 }

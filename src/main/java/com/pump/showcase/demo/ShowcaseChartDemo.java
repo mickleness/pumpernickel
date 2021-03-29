@@ -18,6 +18,13 @@ import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.awt.image.BufferedImage;
 import java.text.NumberFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -33,6 +40,135 @@ import com.pump.showcase.chart.BarChartRenderer;
 public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * This is a Number that is based on the median value of several numbers.
+	 * <p>
+	 * The intended use case is to record several measurements, add them to this
+	 * object, and then treat this object like a single Number measurement.
+	 * 
+	 */
+	protected static class SampleSet extends Number {
+		private static final long serialVersionUID = 1L;
+
+		List<Number> samples = new LinkedList<>();
+		Number median = null;
+
+		public void addSample(Number number) {
+			samples.add(number);
+			median = null;
+		}
+
+		public Number getMedian() {
+			if (median == null) {
+				median = calculateMedian();
+			}
+			return median;
+		}
+
+		@Override
+		public synchronized String toString() {
+			// sorts everything
+			getMedian();
+			return "SampleSet[ " + samples + "]";
+		}
+
+		private synchronized Number calculateMedian() {
+			Collections.sort((List) samples);
+			int index = samples.size() / 2;
+			Iterator<Number> iter = samples.iterator();
+			while (iter.hasNext()) {
+				Number value = iter.next();
+				if (index == 0)
+					return value;
+				index--;
+			}
+
+			// this should only happen when samples is empty
+			return 0;
+		}
+
+		@Override
+		public int intValue() {
+			return getMedian().intValue();
+		}
+
+		@Override
+		public long longValue() {
+			return getMedian().longValue();
+		}
+
+		@Override
+		public float floatValue() {
+			return getMedian().floatValue();
+		}
+
+		@Override
+		public double doubleValue() {
+			return getMedian().doubleValue();
+		}
+	}
+
+	protected abstract static class TimeMemoryMeasurementRunnable
+			implements Runnable {
+
+		protected Map<String, Map<String, SampleSet>> data;
+		protected String operation, implementation;
+
+		public TimeMemoryMeasurementRunnable(
+				Map<String, Map<String, SampleSet>> data, String operation,
+				String implementation) {
+			this.data = data;
+			this.operation = operation;
+			this.implementation = implementation;
+		}
+
+		public void run() {
+			String prefix = operation == null ? "" : operation + " ";
+			String categoryTime = prefix + "Time";
+			String categoryMemory = prefix + "Memory";
+
+			Map<String, SampleSet> timeData = data.get(categoryTime);
+			if (timeData == null) {
+				timeData = new LinkedHashMap<>();
+				data.put(categoryTime, timeData);
+			}
+			Map<String, SampleSet> memoryData = data.get(categoryMemory);
+			if (memoryData == null) {
+				memoryData = new LinkedHashMap<>();
+				data.put(categoryMemory, memoryData);
+			}
+
+			SampleSet timeSampleSet = timeData.get(implementation);
+			if (timeSampleSet == null) {
+				timeSampleSet = new SampleSet();
+				timeData.put(implementation, timeSampleSet);
+			}
+			SampleSet memorySampleSet = memoryData.get(implementation);
+			if (memorySampleSet == null) {
+				memorySampleSet = new SampleSet();
+				memoryData.put(implementation, memorySampleSet);
+			}
+
+			System.runFinalization();
+			System.gc();
+			System.runFinalization();
+			System.gc();
+
+			long time = System.currentTimeMillis();
+			long memory = Runtime.getRuntime().freeMemory();
+
+			runSample();
+
+			time = System.currentTimeMillis() - time;
+			memory = memory - Runtime.getRuntime().freeMemory();
+
+			timeSampleSet.addSample(time);
+			memorySampleSet.addSample(memory);
+		}
+
+		protected abstract void runSample();
+	}
 
 	class UpdateProgressRunnable implements Runnable {
 		float fraction;
@@ -52,19 +188,49 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 	}
 
 	class InstallResults implements Runnable {
-		Map<String, Map<String, Long>> data;
+		Map<String, Map<String, SampleSet>> data;
 
-		public InstallResults(Map<String, Map<String, Long>> data) {
+		public InstallResults(Map<String, Map<String, SampleSet>> data) {
 			this.data = data;
 		}
 
 		@Override
 		public void run() {
-			BarChartRenderer r = new BarChartRenderer(data);
+			if (!SwingUtilities.isEventDispatchThread()) {
+				// the first time this is run it's called from our worker
+				// thread:
+				SwingUtilities.invokeLater(this);
+				return;
+			}
+			//
+			Map<String, Map<String, Long>> dataCopy = convertSampleSetToLong(
+					data);
+			BarChartRenderer r = new BarChartRenderer(dataCopy);
 			BufferedImage bi = r.render(new Dimension(500, 1000));
 			progressBar.setVisible(false);
 			results.setVisible(true);
 			results.add(new JLabel(new ImageIcon(bi)));
+		}
+
+		/**
+		 * Convert our data from SampleSets to Longs. If we did a major refactor
+		 * we could remove this method, but this accommodates some legacy code
+		 * for now.
+		 */
+		private Map<String, Map<String, Long>> convertSampleSetToLong(
+				Map<String, Map<String, SampleSet>> d) {
+			Map<String, Map<String, Long>> returnValue = new LinkedHashMap<>();
+			for (Entry<String, Map<String, SampleSet>> outerEntry : d
+					.entrySet()) {
+				Map<String, Long> entryCopy = new LinkedHashMap<>();
+				for (Entry<String, SampleSet> innerEntry : outerEntry.getValue()
+						.entrySet()) {
+					entryCopy.put(innerEntry.getKey(),
+							innerEntry.getValue().longValue());
+				}
+				returnValue.put(outerEntry.getKey(), entryCopy);
+			}
+			return returnValue;
 		}
 
 	}
@@ -111,62 +277,6 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 				isShowing = isShowing();
 			}
 		});
-
-		Thread thread = new Thread(this.getClass().getSimpleName()) {
-			public void run() {
-				long i = 0;
-				int[] limits = getCollectDataParamLimits();
-				long iterationMax = 1;
-				for (int a = 0; a < limits.length; a++) {
-					iterationMax *= limits[a];
-					// this will throw a "null data" exception below, but this
-					// helps
-					// us pinpoint the core problem better
-					if (limits[a] == 0)
-						throw new RuntimeException("limits[" + a + "] = 0");
-				}
-				Map<String, Map<String, Long>> data = null;
-				while (i < iterationMax) {
-					if (!isShowing) {
-						sleep();
-					} else {
-						try {
-							int[] params = split(i, limits);
-							data = collectData(params);
-						} catch (Exception e) {
-							/*
-							 * If you find collectData is throwing an exception,
-							 * instead catch that exception and store the value
-							 * as BarChartRenderer.ERROR_CODE
-							 */
-							e.printStackTrace();
-							return;
-						}
-						i++;
-						SwingUtilities.invokeLater(
-								new UpdateProgressRunnable(i, iterationMax));
-					}
-				}
-				if (data == null)
-					throw new NullPointerException("null data for "
-							+ ShowcaseChartDemo.this.getClass().getName());
-
-				System.out.println(
-						ShowcaseChartDemo.this.getClass().getSimpleName()
-								+ ":\n" + toHtml(data));
-				Runnable installResults = new InstallResults(data);
-				SwingUtilities.invokeLater(installResults);
-			}
-
-			private void sleep() {
-				try {
-					Thread.sleep(250);
-				} catch (InterruptedException e) {
-					Thread.yield();
-				}
-			}
-		};
-		thread.start();
 	}
 
 	protected String toHtml(Map<String, Map<String, Long>> data) {
@@ -187,60 +297,29 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 		return sb.toString();
 	}
 
-	/**
-	 * Split in iteration index into a series of parameters.
-	 * <p>
-	 * For example, if paramSizes is {2, 3, 2}, then:
-	 * 
-	 * <pre>
-	 * iterationIndex = 0, return = {0, 0, 0}
-	 * iterationIndex = 1, return = {1, 0, 0}
-	 * iterationIndex = 2, return = {0, 1, 0}
-	 * iterationIndex = 3, return = {1, 1, 0}
-	 * iterationIndex = 4, return = {0, 2, 0}
-	 * iterationIndex = 5, return = {1, 2, 0}
-	 * iterationIndex = 6, return = {0, 0, 1}
-	 * iterationIndex = 7, return = {1, 0, 1}
-	 * iterationIndex = 8, return = {0, 1, 1}
-	 * iterationIndex = 9, return = {1, 1, 1}
-	 * iterationIndex = 10, return = {0, 2, 1}
-	 * iterationIndex = 11, return = {1, 2, 1}
-	 * iterationIndex = 12, return = null
-	 * </pre>
-	 * 
-	 * @param iterationIndex
-	 *            the value to split into parameters.
-	 * @param paramSizes
-	 *            a list of the maximum value of each parameter.
-	 * @return the iteration index split into separate parameters, or null if
-	 *         the iterationIndex is too large to split into parameters based on
-	 *         paramSize
-	 */
-	private int[] split(long iterationIndex, int... paramSizes) {
-		int[] returnValue = new int[paramSizes.length];
-		for (int a = 0; a < paramSizes.length; a++) {
-			returnValue[a] = (int) (iterationIndex % paramSizes[a]);
-			iterationIndex /= paramSizes[a];
-		}
-		if (iterationIndex != 0)
-			return null;
+	protected JPanel upperControls = new JPanel();
+	protected JPanel lowerControls = new JPanel();
+
+	@Override
+	public final List<Runnable> getInitializationRunnables() {
+		List<Runnable> returnValue = new LinkedList<>();
+
+		Map<String, Map<String, SampleSet>> data = new HashMap<>();
+		returnValue.addAll(getMeasurementRunnables(data));
+
+		returnValue.add(new InstallResults(data));
 
 		return returnValue;
 	}
 
-	protected JPanel upperControls = new JPanel();
-	protected JPanel lowerControls = new JPanel();
-
 	/**
-	 * Calculate the data to show in charts for this demo.
-	 * <p>
-	 * This method will be repeatedly called until all possible combinations of
-	 * parameters have been passed in.
+	 * Return a collection of Runnables that will be used to measure data.
 	 * 
-	 * @throws Exception
+	 * @param data
+	 *            the data to present to the user. Initially this will be empty;
+	 *            the runnables this method creates should populate it.
 	 */
-	protected abstract Map<String, Map<String, Long>> collectData(int... params)
-			throws Exception;
+	protected abstract Collection<Runnable> getMeasurementRunnables(
+			Map<String, Map<String, SampleSet>> data);
 
-	protected abstract int[] getCollectDataParamLimits();
 }

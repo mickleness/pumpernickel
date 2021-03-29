@@ -62,8 +62,8 @@ public class BasicDecoration implements ListTreeDecoration {
 	 *            an optional ActionListener to receive events when this
 	 *            decoration is clicked.
 	 */
-	public BasicDecoration(Icon normalIcon, Icon rolloverIcon,
-			Icon pressedIcon, ActionListener actionListener) {
+	public BasicDecoration(Icon normalIcon, Icon rolloverIcon, Icon pressedIcon,
+			ActionListener actionListener) {
 		this(normalIcon);
 		this.rolloverIcon = rolloverIcon;
 		this.pressedIcon = pressedIcon;
@@ -74,7 +74,7 @@ public class BasicDecoration implements ListTreeDecoration {
 	public Icon getIcon(JTree tree, Object value, boolean selected,
 			boolean expanded, boolean leaf, int row, boolean isRollover,
 			boolean isPressed) {
-		return getIcon(isRollover, isPressed);
+		return getIcon(row, isRollover, isPressed, selected, false);
 	}
 
 	/** Returns true if the node is selected. */
@@ -94,7 +94,7 @@ public class BasicDecoration implements ListTreeDecoration {
 	@Override
 	public Icon getIcon(JList list, Object value, int row, boolean isSelected,
 			boolean cellHasFocus, boolean isRollover, boolean isPressed) {
-		return getIcon(isRollover, isPressed);
+		return getIcon(row, isRollover, isPressed, isSelected, cellHasFocus);
 	}
 
 	@Override
@@ -113,13 +113,14 @@ public class BasicDecoration implements ListTreeDecoration {
 	public Point getLocation(JList list, Object value, int row,
 			boolean isSelected, boolean cellHasFocus) {
 		Rectangle r = list.getUI().getCellBounds(list, row, row);
-		Icon icon = getIcon(false, false);
-		Point p = new Point(r.x + r.width - icon.getIconWidth(), r.height / 2
-				- icon.getIconHeight() / 2);
+		Icon icon = getIcon(row, false, false, isSelected, cellHasFocus);
+		Point p = new Point(r.x + r.width - icon.getIconWidth(),
+				r.height / 2 - icon.getIconHeight() / 2);
 		return p;
 	}
 
-	protected Icon getIcon(boolean isRollover, boolean isPressed) {
+	protected Icon getIcon(int row, boolean isRollover, boolean isPressed,
+			boolean isSelected, boolean cellHasFocus) {
 		if (isPressed && pressedIcon != null)
 			return pressedIcon;
 		if (isRollover && rolloverIcon != null)

@@ -25,7 +25,12 @@ public class Property<T> {
 	boolean isUserAdjustable = true;
 
 	public Property(String propertyName) {
+		this(propertyName, null);
+	}
+
+	public Property(String propertyName, T initialValue) {
 		name = propertyName;
+		setValue(initialValue);
 	}
 
 	public boolean isEnabled() {

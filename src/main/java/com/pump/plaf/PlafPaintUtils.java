@@ -116,7 +116,7 @@ public class PlafPaintUtils {
 					BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 			g.setColor(focusArray[2]);
 			g.draw(shape);
-			if (2 * pixelSize + 1 > 0) {
+			if (2 * pixelSize - 2 + 1 > 0) {
 				g.setStroke(new BasicStroke(2 * pixelSize - 2 + 1,
 						BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 				g.setColor(focusArray[1]);

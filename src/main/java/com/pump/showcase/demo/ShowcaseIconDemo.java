@@ -1,6 +1,5 @@
 package com.pump.showcase.demo;
 
-import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -11,13 +10,13 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 
 import javax.swing.AbstractAction;
@@ -26,12 +25,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -40,7 +36,6 @@ import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.BytePixelIterator;
 import com.pump.image.pixel.IntPixelIterator;
 import com.pump.inspector.Inspector;
-import com.pump.plaf.CircularProgressBarUI;
 import com.pump.plaf.LabelCellRenderer;
 import com.pump.swing.ContextualMenuHelper;
 import com.pump.swing.ImageTransferable;
@@ -76,7 +71,6 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 			JList<?> list = (JList<?>) e.getSource();
 			list.setSelectedIndices(new int[] {});
 		}
-
 	}
 
 	static class CopyIconRunnable implements Runnable {
@@ -95,6 +89,47 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 			Transferable contents = new ImageTransferable(img);
 			Toolkit.getDefaultToolkit().getSystemClipboard()
 					.setContents(contents, null);
+		}
+	}
+
+	class LoadImageRunnable implements Runnable {
+		String id;
+		Dimension defaultImageSize;
+
+		public LoadImageRunnable(String id) {
+			this.id = id;
+			int k = getCellSize();
+			defaultImageSize = new Dimension(k, k);
+		}
+
+		public void run() {
+			BufferedImage img = getImage(id, defaultImageSize);
+			img = padImage(img);
+			add(id, img);
+		}
+
+		private BufferedImage padImage(BufferedImage img) {
+			int z = getCellSize();
+			if (img.getWidth() < z || img.getHeight() < z) {
+				BufferedImage bi = new BufferedImage(z, z,
+						BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g = bi.createGraphics();
+				g.drawImage(img, bi.getWidth() / 2 - img.getWidth() / 2,
+						bi.getHeight() / 2 - img.getHeight() / 2, null);
+				g.dispose();
+				return bi;
+			}
+			return img;
+		}
+
+		private void add(String id, BufferedImage img) {
+			for (ShowcaseIcon s : icons) {
+				if (s.matchesImage(img)) {
+					s.ids.add(id);
+					return;
+				}
+			}
+			icons.add(new ShowcaseIcon(img, id));
 		}
 	}
 
@@ -165,41 +200,23 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 	protected ObservableList<ShowcaseIcon> icons = new ObservableList<>();
 	protected JList<ShowcaseIcon> list = new JList<>(
 			icons.createUIMirror(null));
-	CardLayout cardLayout = new CardLayout();
-	JPanel cardPanel = new JPanel(cardLayout);
-	JProgressBar progressBar = new JProgressBar();
 	boolean isShowing = false;
-	JPanel iconPanel = new JPanel(new GridBagLayout());
 	Inspector inspector = new Inspector();
 
 	public ShowcaseIconDemo() {
-		progressBar.setUI(new CircularProgressBarUI());
-		progressBar.setPreferredSize(new Dimension(90, 90));
-		JPanel progressBarPanel = new JPanel();
-		progressBarPanel.add(progressBar);
-		cardPanel.add(progressBarPanel, "loading");
-		cardPanel.add(iconPanel, "icons");
 		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-		add(cardPanel, c);
-		progressBar.setIndeterminate(true);
 
-		c = new GridBagConstraints();
+		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
 		c.weighty = 0;
 		c.fill = GridBagConstraints.BOTH;
-		iconPanel.add(inspector.getPanel(), c);
+		add(inspector.getPanel(), c);
 		c.gridy++;
 		c.weighty = 1;
 		JScrollPane scrollPane = new JScrollPane(list);
-		iconPanel.add(scrollPane, c);
+		add(scrollPane, c);
 
 		// use a small preferred size so the separate at the top
 		// of the header is never pushed aside. The GridBagLayout
@@ -208,116 +225,6 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 
 		inspector.addRow(new JLabel("Icon Size:"), getSizeControl());
 
-		Thread thread = new Thread("loading " + getClass().getSimpleName()) {
-
-			Dimension defaultImageSize;
-
-			{
-				int k = getCellSize();
-				defaultImageSize = new Dimension(k, k);
-			}
-
-			class UpdateProgressRunnable implements Runnable {
-				int value, max;
-
-				public UpdateProgressRunnable(int value, int max) {
-					this.value = value;
-					this.max = max;
-				}
-
-				public void run() {
-					progressBar.setIndeterminate(false);
-					progressBar.getModel().setRangeProperties(value, 1, 0, max,
-							true);
-				}
-			}
-
-			public void run() {
-				String[] ids = null;
-				int i = 0;
-				try {
-					while (true) {
-						waitForShowing();
-
-						if (ids == null)
-							ids = getImageIDs();
-						if (i == ids.length)
-							return;
-
-						BufferedImage img = getImage(ids[i], defaultImageSize);
-						img = padImage(img);
-						add(ids[i], img);
-						i++;
-
-						SwingUtilities.invokeLater(
-								new UpdateProgressRunnable(i, ids.length));
-					}
-				} finally {
-					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
-							cardLayout.show(cardPanel, "icons");
-						}
-					});
-				}
-			}
-
-			private BufferedImage padImage(BufferedImage img) {
-				int z = getCellSize();
-				if (img.getWidth() < z || img.getHeight() < z) {
-					BufferedImage bi = new BufferedImage(z, z,
-							BufferedImage.TYPE_INT_ARGB);
-					Graphics2D g = bi.createGraphics();
-					g.drawImage(img, bi.getWidth() / 2 - img.getWidth() / 2,
-							bi.getHeight() / 2 - img.getHeight() / 2, null);
-					g.dispose();
-					return bi;
-				}
-				return img;
-			}
-
-			private void add(String id, BufferedImage img) {
-				for (ShowcaseIcon s : icons) {
-					if (s.matchesImage(img)) {
-						s.ids.add(id);
-						return;
-					}
-				}
-				icons.add(new ShowcaseIcon(img, id));
-			}
-
-			private void waitForShowing() {
-				while (true) {
-					synchronized (ShowcaseIconDemo.this) {
-						if (isShowing)
-							return;
-						try {
-							ShowcaseIconDemo.this.wait();
-						} catch (InterruptedException e) {
-							// do nothing
-						}
-					}
-					Thread.yield();
-				}
-			}
-		};
-		thread.start();
-
-		addHierarchyListener(new HierarchyListener() {
-
-			@Override
-			public void hierarchyChanged(HierarchyEvent e) {
-				synchronized (ShowcaseIconDemo.this) {
-					boolean newIsShowing = isShowing();
-					if (newIsShowing != isShowing) {
-						synchronized (ShowcaseIconDemo.this) {
-							isShowing = newIsShowing;
-							ShowcaseIconDemo.this.notifyAll();
-						}
-					}
-				}
-			}
-
-		});
 		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		list.setVisibleRowCount(0);
 
@@ -439,4 +346,15 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 	 * Return all the supported image IDs.
 	 */
 	protected abstract String[] getImageIDs();
+
+	@SuppressWarnings("unchecked")
+	public List<Runnable> getInitializationRunnables() {
+		String[] allIDs = getImageIDs();
+
+		List<Runnable> returnValue = new ArrayList<>(allIDs.length);
+		for (String id : allIDs) {
+			returnValue.add(new LoadImageRunnable(id));
+		}
+		return returnValue;
+	}
 }

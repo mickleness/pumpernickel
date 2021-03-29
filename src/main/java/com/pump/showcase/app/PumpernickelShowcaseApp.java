@@ -13,74 +13,48 @@ package com.pump.showcase.app;
 import java.awt.AWTEvent;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.StyleSheet;
 
 import com.pump.desktop.AboutControl;
 import com.pump.desktop.DesktopApplication;
@@ -91,22 +65,16 @@ import com.pump.io.FileTreeIterator;
 import com.pump.plaf.QPanelUI;
 import com.pump.plaf.QPanelUI.CalloutType;
 import com.pump.plaf.RoundTextFieldUI;
-import com.pump.plaf.SubtleScrollBarUI;
-import com.pump.showcase.demo.ShowcaseDemo;
 import com.pump.showcase.demo.ShowcaseExampleDemo;
 import com.pump.swing.CollapsibleContainer;
 import com.pump.swing.FileDialogUtils;
-import com.pump.swing.HelpButton;
-import com.pump.swing.JFancyBox;
 import com.pump.swing.JSwitchButton;
-import com.pump.swing.ListSectionContainer;
 import com.pump.swing.MagnificationPanel;
 import com.pump.swing.SectionContainer.Section;
 import com.pump.swing.TextFieldPrompt;
 import com.pump.swing.ThrobberManager;
-import com.pump.text.WildcardPattern;
-import com.pump.text.html.QHTMLEditorKit;
 import com.pump.util.JVM;
+import com.pump.util.Property;
 import com.pump.window.WindowDragger;
 import com.pump.window.WindowMenu;
 
@@ -141,10 +109,129 @@ public class PumpernickelShowcaseApp extends JFrame {
 				p.setLocationRelativeTo(null);
 				p.setVisible(true);
 				p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-				p.loadDemos();
 			}
 		});
+	}
+
+	/**
+	 * Add a CollapsibleContainer to a panel so it fills the space and gives
+	 * equal vertical weight to non-closable sections.
+	 * 
+	 * @param panel
+	 * @param collapsibleContainer
+	 * @param sections
+	 */
+	public static void installSections(JPanel panel,
+			CollapsibleContainer collapsibleContainer, Section... sections) {
+		panel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(3, 3, 3, 3);
+		panel.add(collapsibleContainer, c);
+
+		for (Section section : sections) {
+			section.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);
+			collapsibleContainer.getHeader(section).putClientProperty(
+					CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
+			collapsibleContainer.getHeader(section)
+					.setBorder(new EmptyBorder(3, 2, 3, 2));
+			collapsibleContainer.getHeader(section)
+					.setFont(ShowcaseExampleDemo.getHeaderLabelFont());
+		}
+	}
+
+	static ShowcaseDemoInfo[] getDemos() {
+		SortedSet<ShowcaseDemoInfo> returnValue = new TreeSet<>();
+		returnValue
+				.add(new ShowcaseDemoInfo("Transition2D", "Transition2DDemo"));
+		returnValue
+				.add(new ShowcaseDemoInfo("Transition3D", "Transition3DDemo"));
+		returnValue.add(new ShowcaseDemoInfo("BmpEncoder, BmpDecoder",
+				"BmpComparisonDemo"));
+		returnValue.add(
+				new ShowcaseDemoInfo("AlphaComposite", "AlphaCompositeDemo"));
+		returnValue.add(new ShowcaseDemoInfo("TextEffect", "TextEffectDemo"));
+		returnValue.add(new ShowcaseDemoInfo("AWTMonitor", "AWTMonitorDemo"));
+		returnValue.add(new ShowcaseDemoInfo("GradientTexturePaint",
+				"GradientTexturePaintDemo"));
+		returnValue.add(new ShowcaseDemoInfo("ClickSensitivityControl",
+				"ClickSensitivityControlDemo"));
+		returnValue.add(new ShowcaseDemoInfo("ShapeBounds", "ShapeBoundsDemo"));
+		returnValue.add(new ShowcaseDemoInfo("Clipper", "ClipperDemo"));
+		returnValue.add(
+				new ShowcaseDemoInfo("AngleSliderUI", "AngleSliderUIDemo"));
+		returnValue.add(new ShowcaseDemoInfo("Spiral2D", "Spiral2DDemo"));
+		returnValue.add(new ShowcaseDemoInfo("DecoratedListUI, DecoratedTreeUI",
+				"DecoratedDemo"));
+		returnValue.add(new ShowcaseDemoInfo("JThrobber", "ThrobberDemo"));
+		returnValue.add(new ShowcaseDemoInfo("JBreadCrumb", "BreadCrumbDemo"));
+		returnValue.add(new ShowcaseDemoInfo("CollapsibleContainer",
+				"CollapsibleContainerDemo"));
+		returnValue.add(new ShowcaseDemoInfo("CustomizedToolbar",
+				"CustomizedToolbarDemo"));
+		returnValue.add(new ShowcaseDemoInfo("JToolTip, QPopupFactory",
+				"JToolTipDemo"));
+		returnValue.add(new ShowcaseDemoInfo("JPopover", "JPopoverDemo"));
+		returnValue.add(new ShowcaseDemoInfo("Scaling", "ScalingDemo"));
+		// add(new DemoListElement("ImageQuantization", new
+		// ImageQuantizationDemo());
+		returnValue
+				.add(new ShowcaseDemoInfo("JColorPicker", "JColorPickerDemo"));
+		// add(new DemoListElement("Shapes: AreaX Tests", new AreaXTestPanel());
+		returnValue
+				.add(new ShowcaseDemoInfo("JPEGMetaData", "JPEGMetaDataDemo"));
+		returnValue.add(new ShowcaseDemoInfo("QPanelUI", "QPanelUIDemo"));
+		returnValue.add(new ShowcaseDemoInfo("AudioPlayer", "AudioPlayerDemo"));
+		returnValue.add(new ShowcaseDemoInfo("JavaTextComponentHighlighter",
+				"JavaTextComponentHighlighterDemo"));
+		returnValue.add(new ShowcaseDemoInfo("XMLTextComponentHighlighter",
+				"XMLTextComponentHighlighterDemo"));
+		// add(new DemoListElement("Text: Search Controls", new
+		// TextSearchDemo());
+		// add(new DemoListElement("QuickTime: Writing Movies", new
+		// MovWriterDemo());
+		returnValue.add(new ShowcaseDemoInfo("Highlighters, WildcardPattern",
+				"WildcardPatternHighlighterDemo"));
+		returnValue.add(
+				new ShowcaseDemoInfo("BoxTabbedPaneUI", "BoxTabbedPaneUIDemo"));
+		returnValue.add(new ShowcaseDemoInfo("CircularProgressBarUI",
+				"CircularProgressBarUIDemo"));
+		returnValue.add(new ShowcaseDemoInfo("Strokes, MouseSmoothing",
+				"StrokeMouseSmoothingDemo"));
+		returnValue.add(new ShowcaseDemoInfo("JColorWell, JPalette",
+				"JColorWellPaletteDemo"));
+		returnValue.add(new ShowcaseDemoInfo("JEyeDropper", "JEyeDropperDemo"));
+		returnValue.add(
+				new ShowcaseDemoInfo("JSwitchButton", "JSwitchButtonDemo"));
+		returnValue
+				.add(new ShowcaseDemoInfo("JButton, QButtonUI", "JButtonDemo"));
+		returnValue.add(new ShowcaseDemoInfo("MixedCheckBoxState",
+				"MixedCheckBoxStateDemo"));
+		returnValue.add(
+				new ShowcaseDemoInfo("JFrame, JDialog, JWindow", "WindowDemo"));
+		returnValue.add(new ShowcaseDemoInfo("System Properties",
+				"SystemPropertiesDemo"));
+		returnValue.add(new ShowcaseDemoInfo("FileIcon", "FileIconDemo"));
+		returnValue.add(
+				new ShowcaseDemoInfo("DesktopHelper", "DesktopHelperDemo"));
+		returnValue.add(new ShowcaseDemoInfo("VectorImage", "VectorImageDemo"));
+		returnValue.add(new ShowcaseDemoInfo("StarPolygon", "StarPolygonDemo"));
+		returnValue.add(
+				new ShowcaseDemoInfo("ShadowRenderer", "ShadowRendererDemo"));
+		returnValue
+				.add(new ShowcaseDemoInfo("HTML, QHTMLEditorKit", "HTMLDemo"));
+		if (JVM.isMac) {
+			returnValue.add(new ShowcaseDemoInfo("AquaIcon", "AquaIconDemo"));
+			returnValue.add(new ShowcaseDemoInfo("NSImage", "NSImageDemo"));
+		} else if (JVM.isWindows) {
+			returnValue.add(
+					new ShowcaseDemoInfo("WindowsIcon", "WindowsIconDemo"));
+		}
+		return returnValue.toArray(new ShowcaseDemoInfo[returnValue.size()]);
 	}
 
 	/**
@@ -195,14 +282,14 @@ public class PumpernickelShowcaseApp extends JFrame {
 	JPanel searchFieldPanel = new JPanel(new GridBagLayout());
 	TextFieldPrompt searchPrompt;
 	List<Section> masterSectionList = new ArrayList<>();
-	ListSectionContainer sectionContainer = new ListSectionContainer(true, null,
-			searchFieldPanel);
+	JPanel rightContainer = new JPanel(new GridBagLayout());
 	JMenuBar menuBar = new JMenuBar();
 	JMenu editMenu = createEditMenu();
 	JMenu helpMenu = new JMenu("Help");
 	JCheckBoxMenuItem magnifierItem = new JCheckBoxMenuItem("Magnifier");
 	JMenuItem saveScreenshotItem = new JMenuItem("Save Screenshot...");
 	ThrobberManager loadingThrobberManager = new ThrobberManager();
+	Property<String> searchPhrase = new Property<>("search-phrase", "");
 
 	ActionListener magnifierListener = new ActionListener() {
 
@@ -281,110 +368,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 			return w;
 		}
-
-	};
-	private DocumentListener searchDocListener = new DocumentListener() {
-
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			change();
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			change();
-		}
-
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-		}
-
-		private void change() {
-			closeFancyBoxes();
-			String str = searchField.getText();
-
-			Comparator<Section> comparator = new Comparator<Section>() {
-				@Override
-				public int compare(Section o1, Section o2) {
-					return o1.getName().toLowerCase()
-							.compareTo(o2.getName().toLowerCase());
-				}
-			};
-
-			Collection<Section> matches = new TreeSet<>(comparator);
-			for (Section section : masterSectionList) {
-				if (isMatching(section, str))
-					matches.add(section);
-			}
-
-			sectionContainer.getSections()
-					.setAll(matches.toArray(new Section[matches.size()]));
-		}
-
-		private boolean isMatching(Section section, String phrase) {
-			if (phrase == null || phrase.trim().length() == 0)
-				return true;
-			phrase = phrase.toLowerCase();
-			String[] terms = phrase.split("\\s");
-			for (String term : terms) {
-				if (section.getName().toLowerCase().contains(term))
-					return true;
-				List<String> keywords = getKeywords(section.getBody());
-				for (String keyword : keywords) {
-					if (keyword.contains(term))
-						return true;
-				}
-
-				if (term.contains("*") || term.contains("?")
-						|| term.contains("[")) {
-					WildcardPattern pattern = new WildcardPattern(term);
-
-					if (pattern.matches(section.getName().toLowerCase()))
-						return true;
-					for (String keyword : keywords) {
-						if (pattern.matches(keyword))
-							return true;
-					}
-				}
-			}
-			return false;
-		}
-
-		private List<String> getKeywords(JComponent jc) {
-			List<String> returnValue = new ArrayList<>();
-			if (jc instanceof LazyDemoPanel) {
-				LazyDemoPanel ldp = (LazyDemoPanel) jc;
-				ShowcaseDemo d = ldp.getShowcaseDemo();
-				if (d.getKeywords() == null)
-					throw new NullPointerException(ldp.demoClassName);
-				for (String keyword : d.getKeywords()) {
-					returnValue.add(keyword.toLowerCase());
-				}
-				Class[] classes = d.getClasses();
-				if (classes == null)
-					throw new NullPointerException(
-							d.getClass().getSimpleName());
-				for (Class z : classes) {
-					int layer = 0;
-					/*
-					 * Include at least 4 layers: CircularProgressBarUI ->
-					 * BasicProgressBarUI -> ProgressBarUI -> ComponentUI
-					 */
-					while (z != null && !z.equals(Object.class) && layer < 4) {
-						returnValue.add(z.getSimpleName().toLowerCase());
-						returnValue.add(z.getName().toLowerCase());
-						z = z.getSuperclass();
-						layer++;
-					}
-				}
-			}
-			for (int a = 0; a < jc.getComponentCount(); a++) {
-				if (jc.getComponent(a) instanceof JComponent)
-					returnValue.addAll(
-							getKeywords((JComponent) jc.getComponent(a)));
-			}
-			return returnValue;
-		}
 	};
 
 	ActionListener saveScreenshotActionListener = new ActionListener() {
@@ -400,8 +383,43 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 	};
 
+	CardLayout demoCardLayout = new CardLayout();
+	JPanel demoCardPanel = new JPanel(demoCardLayout);
+	DemoLoadThread loadingThread;
+	HeaderRow headerRow;
+
+	private final static String PROPERTY_SELECTED_DEMO = PumpernickelShowcaseApp.class
+			.getName() + "#selectedDemo";
+
 	public PumpernickelShowcaseApp() {
 		super("Pumpernickel Showcase");
+		ShowcaseDemoInfo[] allDemos = getDemos();
+
+		loadingThread = new DemoLoadThread(allDemos);
+		loadingThread.start();
+
+		getRootPane().addPropertyChangeListener(PROPERTY_SELECTED_DEMO,
+				new PropertyChangeListener() {
+
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						ShowcaseDemoInfo e = getSelectedDemo();
+						if (e.getPanel() == null) {
+							ShowcaseDemoPanel panel = new ShowcaseDemoPanel(e,
+									searchPhrase);
+							e.setPanel(panel);
+
+							demoCardPanel.add(panel,
+									e.getDemoSimpleClassName());
+						}
+						demoCardLayout.show(demoCardPanel,
+								e.getDemoSimpleClassName());
+						demoCardPanel.validate();
+						loadingThread.request(e);
+					}
+				});
+
+		headerRow = new HeaderRow(this, allDemos);
 
 		setJMenuBar(menuBar);
 		menuBar.add(editMenu);
@@ -438,22 +456,31 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 		getContentPane().setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+
+		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
 		c.weighty = 0;
 		c.fill = GridBagConstraints.BOTH;
+		getContentPane().add(headerRow, c);
 		c.gridy++;
 		c.weighty = 1;
-		getContentPane().add(sectionContainer, c);
+		getContentPane().add(rightContainer, c);
+
+		c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		rightContainer.add(demoCardPanel, c);
 
 		searchField.setUI(new RoundTextFieldUI());
 		searchField.putClientProperty("JTextField.variant", "search");
 		searchPrompt = new TextFieldPrompt(searchField, "Loading...");
 		searchField.setBorder(new CompoundBorder(new EmptyBorder(3, 3, 3, 3),
 				searchField.getBorder()));
-
-		searchField.getDocument().addDocumentListener(searchDocListener);
 
 		c = new GridBagConstraints();
 		c.gridx = 0;
@@ -470,14 +497,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 		getContentPane().setPreferredSize(new Dimension(800, 600));
 
-		try {
-			for (DemoListElement e : new DemoList()) {
-				addSection(e.getDemoName(), e.getDemoSimpleClassName());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		// Type the F1 key to take a screenshot that is automatically
 		// file away in the resources/showcase directory.
 		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
@@ -491,8 +510,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 						&& k.getKeyCode() == KeyEvent.VK_F1) {
 					try {
 						File dir = getShowcaseScreenshotDirectory();
-						Section section = getSelectedSection();
-						String defaultName = getDemoName(section.getBody());
+						ShowcaseDemoInfo demo = getSelectedDemo();
+						String defaultName = demo.getDemoName();
 						createScreenshot(new File(dir, defaultName + ".png"));
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -532,63 +551,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 	}
 
 	/**
-	 * Create a worker thread that loads all the demos. The search field is
-	 * disabled until this thread completes.
-	 */
-	public void loadDemos() {
-		searchField.setEnabled(false);
-		Thread thread = new Thread("Loading demos") {
-			@Override
-			public void run() {
-				ThrobberManager.Token token = loadingThrobberManager
-						.createToken();
-				try {
-					loadSections();
-				} finally {
-					loadingThrobberManager.returnToken(token);
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							searchField.setEnabled(true);
-							searchPrompt.setText("Search...");
-						}
-					});
-				}
-			}
-
-			private void loadSections() {
-				for (Section section : sectionContainer.getSections()) {
-					try {
-						final LazyDemoPanel p = (LazyDemoPanel) section
-								.getBody().getComponent(0);
-						final AtomicBoolean loaded = new AtomicBoolean(false);
-						SwingUtilities.invokeLater(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									p.loadPanel();
-								} finally {
-									loaded.set(true);
-								}
-							}
-						});
-						while (!loaded.get()) {
-							try {
-								Thread.sleep(10);
-							} catch (InterruptedException e) {
-								Thread.yield();
-							}
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		};
-		thread.start();
-	}
-
-	/**
 	 * Take a screenshot of the currently selected demo panel.
 	 * 
 	 * @param destFile
@@ -596,10 +558,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 	 *            is prompted with a file dialog to choose the file destination.
 	 */
 	protected File createScreenshot(File destFile) throws Exception {
-		Section section = getSelectedSection();
-		BufferedImage bi = getScreenshot(section.getBody());
+		ShowcaseDemoInfo e = getSelectedDemo();
+		BufferedImage bi = getScreenshot(e.getDemo());
 		if (destFile == null) {
-			String defaultName = getDemoName(section.getBody());
+			String defaultName = e.getDemoName();
 			destFile = FileDialogUtils.showSaveDialog(
 					PumpernickelShowcaseApp.this, "Export as...",
 					defaultName + ".png", "png");
@@ -607,26 +569,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 		ImageIO.write(bi, "png", destFile);
 		System.out.println("Saved screenshot as " + destFile.getAbsolutePath());
 		return destFile;
-	}
-
-	/**
-	 * Return the name of the showcase demo panel in the given component.
-	 */
-	private String getDemoName(Component c) {
-		if (c instanceof LazyDemoPanel)
-			c = ((LazyDemoPanel) c).showcaseDemo;
-		Class z = c.getClass();
-		if (z.getName().contains("pump.showcase."))
-			return z.getSimpleName();
-		if (c instanceof Container) {
-			Container c2 = (Container) c;
-			for (Component child : c2.getComponents()) {
-				String n = getDemoName(child);
-				if (n != null)
-					return n;
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -643,16 +585,14 @@ public class PumpernickelShowcaseApp extends JFrame {
 		return robot.createScreenCapture(screenRect);
 	}
 
-	/**
-	 * Return the selected Section, or throw a NullPointerException if no
-	 * selection exists.
-	 */
-	protected Section getSelectedSection() {
-		Section section = sectionContainer.getSelectedSection();
-		if (section == null)
-			throw new NullPointerException(
-					"Please select a topic in the list on the left to capture a screenshot.");
-		return section;
+	public ShowcaseDemoInfo getSelectedDemo() {
+		ShowcaseDemoInfo sdi = (ShowcaseDemoInfo) getRootPane()
+				.getClientProperty(PROPERTY_SELECTED_DEMO);
+		return sdi;
+	}
+
+	public void setSelectedDemo(ShowcaseDemoInfo sdi) {
+		getRootPane().putClientProperty(PROPERTY_SELECTED_DEMO, sdi);
 	}
 
 	/**
@@ -681,317 +621,5 @@ public class PumpernickelShowcaseApp extends JFrame {
 		editMenu.add(selectAllItem);
 
 		return editMenu;
-	}
-
-	/**
-	 * Add a new section to this demo.
-	 * 
-	 * @param title
-	 *            the title that appears in the index of topics on the left
-	 * @param demoClassName
-	 *            the name of the class. This is passed as a String to improve
-	 *            application startup time. (The cost of loading every class was
-	 *            causing a noticeable delay in startup.)
-	 */
-	private void addSection(String title, String demoClassName) {
-		Section section = sectionContainer.addSection(title, title);
-		masterSectionList.add(section);
-		JPanel body = section.getBody();
-		body.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-		body.add(new LazyDemoPanel(demoClassName), c);
-	}
-
-	class LazyDemoPanel extends JPanel {
-		private static final long serialVersionUID = 1L;
-
-		CardLayout cardLayout = new CardLayout();
-		JPanel loadingPanel = new JPanel();
-		String demoClassName;
-		ShowcaseDemo showcaseDemo;
-
-		public LazyDemoPanel(String demoClassName) {
-			super();
-			this.demoClassName = "com.pump.showcase.demo." + demoClassName;
-			setLayout(cardLayout);
-			add(loadingPanel, "loading");
-			cardLayout.show(this, "loading");
-
-			// loadingPanel is never really shown to the user,
-			// so there's no point in putting a throbber or other content in it
-			addHierarchyListener(new HierarchyListener() {
-
-				@Override
-				public void hierarchyChanged(HierarchyEvent e) {
-					if (loadingPanel.isShowing()) {
-						loadPanel();
-						removeHierarchyListener(this);
-					}
-				}
-
-			});
-		}
-
-		void loadPanel() {
-			if (loadingPanel.isShowing()) {
-				add(createDemoPanel(), "demo");
-				cardLayout.show(LazyDemoPanel.this, "demo");
-			}
-		}
-
-		ShowcaseDemo getShowcaseDemo() {
-			if (showcaseDemo == null) {
-				try {
-					Class demoClass = Class.forName(demoClassName);
-					showcaseDemo = (ShowcaseDemo) demoClass.newInstance();
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			}
-			return showcaseDemo;
-		}
-
-		private JComponent createDemoPanel() {
-			ActionListener actionListener = new ActionListener() {
-				JScrollPane scrollPane;
-				JFancyBox box;
-				JEditorPane textPane;
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (scrollPane == null) {
-						textPane = createTextPane();
-						scrollPane = new JScrollPane(textPane);
-						scrollPane.getVerticalScrollBar()
-								.setUI(new SubtleScrollBarUI());
-						scrollPane.getHorizontalScrollBar()
-								.setUI(new SubtleScrollBarUI());
-
-						updatePreferredSize();
-						PumpernickelShowcaseApp.this
-								.addComponentListener(new ComponentAdapter() {
-
-									@Override
-									public void componentResized(
-											ComponentEvent e) {
-										updatePreferredSize();
-									}
-
-								});
-
-						try {
-							textPane.setPage(getShowcaseDemo().getHelpURL());
-							box = new JFancyBox(PumpernickelShowcaseApp.this,
-									scrollPane, JLayeredPane.PALETTE_LAYER, 0);
-						} catch (IOException e2) {
-							e2.printStackTrace();
-						}
-					}
-					box.setVisible(true);
-				}
-
-				private void updatePreferredSize() {
-					Dimension d = PumpernickelShowcaseApp.this.getSize();
-					d.width = Math.max(200, d.width - 100);
-					d.height = Math.max(200, d.height - 100);
-					scrollPane.setMinimumSize(d);
-					scrollPane.setPreferredSize(d);
-					textPane.setMinimumSize(d);
-					textPane.setPreferredSize(d);
-					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
-							scrollPane.revalidate();
-						}
-					});
-				}
-
-			};
-
-			JPanel replacement = new JPanel(new GridBagLayout());
-
-			JTextArea headerTextArea = createTextArea(
-					getShowcaseDemo().getTitle(), 18);
-			JTextArea descriptionTextArea = createTextArea(
-					getShowcaseDemo().getSummary(), 14);
-
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			c.weightx = 1;
-			c.weighty = 0;
-			c.weightx = 0;
-			JButton jc = HelpButton.create(actionListener, null);
-			c.anchor = GridBagConstraints.EAST;
-			c.fill = GridBagConstraints.NONE;
-			c.insets = new Insets(6, 3, 3, 3);
-			c.weightx = 0;
-			replacement.add(jc, c);
-
-			c.anchor = GridBagConstraints.WEST;
-			c.fill = GridBagConstraints.BOTH;
-			c.insets = new Insets(10, 3, 3, 3);
-			replacement.add(headerTextArea, c);
-			jc.setVisible(getShowcaseDemo().getHelpURL() != null);
-			c.gridx = 0;
-			c.gridwidth = GridBagConstraints.REMAINDER;
-			c.fill = GridBagConstraints.BOTH;
-			c.gridy++;
-			replacement.add(descriptionTextArea, c);
-			c.gridy++;
-			c.weightx = 1;
-			replacement.add(new JSeparator(), c);
-
-			c.gridy++;
-			c.weighty = 1;
-			c.insets = new Insets(3, 3, 3, 3);
-			replacement.add((JPanel) getShowcaseDemo(), c);
-			return replacement;
-		}
-	}
-
-	private JTextArea createTextArea(String str, float fontSize) {
-		JTextArea t = new JTextArea(str);
-		Font font = UIManager.getFont("Label.font");
-		if (font == null)
-			font = t.getFont();
-		t.setFont(font.deriveFont(fontSize));
-		t.setEditable(false);
-		t.setOpaque(false);
-		t.setLineWrap(true);
-		t.setWrapStyleWord(true);
-		return t;
-	}
-
-	public JEditorPane createTextPane() {
-		JEditorPane textPane = new JEditorPane() {
-			private static final long serialVersionUID = 1L;
-
-			public void paint(Graphics g0) {
-				Graphics2D g = (Graphics2D) g0;
-				// for text bullets:
-				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-						RenderingHints.VALUE_ANTIALIAS_ON);
-				super.paint(g);
-			}
-		};
-		textPane.setEditable(false);
-		HTMLEditorKit kit = new QHTMLEditorKit();
-		textPane.setEditorKit(kit);
-
-		StyleSheet styleSheet = kit.getStyleSheet();
-
-		styleSheet.addRule(
-				"body {  padding: 12px 12px 12px 12px;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
-
-		styleSheet.addRule("h1, h2, h3, h4, h5, h6 { text-align: left }");
-		styleSheet.addRule("h1, h2, h3 { color: #005a9c }");
-		styleSheet.addRule("h1 { font: 160% sans-serif }");
-		styleSheet.addRule("h2 { font: 140% sans-serif }");
-		styleSheet.addRule("h3 { font: 120% sans-serif }");
-		styleSheet.addRule("h4 { font: bold 100% sans-serif }");
-		styleSheet.addRule("h5 { font: italic 100% sans-serif }");
-		styleSheet.addRule("h6 { font: small-caps 100% sans-serif }");
-
-		textPane.addHyperlinkListener(new HyperlinkListener() {
-			public void hyperlinkUpdate(HyperlinkEvent e) {
-				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-					URL url = e.getURL();
-					String str = e.getDescription();
-					if (str != null && str.startsWith("resource:")) {
-						str = str.substring("resource:".length());
-						searchField.setText(str);
-						return;
-					}
-					try {
-						Desktop.getDesktop().browse(url.toURI());
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					} catch (URISyntaxException e1) {
-						e1.printStackTrace();
-					}
-				}
-			}
-		});
-
-		return textPane;
-	}
-
-	void closeFancyBoxes() {
-		closeFancyBoxes(getLayeredPane());
-	}
-
-	void closeFancyBoxes(Container container) {
-		for (int a = 0; a < container.getComponentCount(); a++) {
-			Component c = container.getComponent(a);
-			if (c instanceof JFancyBox) {
-				c.setVisible(false);
-			} else if (c instanceof Container) {
-				closeFancyBoxes((Container) c);
-			}
-		}
-	}
-
-	/**
-	 * Add a CollapsibleContainer to a panel so it fills the space and gives
-	 * equal vertical weight to non-closable sections.
-	 * 
-	 * @param panel
-	 * @param collapsibleContainer
-	 * @param sections
-	 */
-	public static void installSections(JPanel panel,
-			CollapsibleContainer collapsibleContainer, Section... sections) {
-		panel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(3, 3, 3, 3);
-		panel.add(collapsibleContainer, c);
-
-		for (Section section : sections) {
-			section.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);
-			collapsibleContainer.getHeader(section).putClientProperty(
-					CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
-			collapsibleContainer.getHeader(section)
-					.setBorder(new EmptyBorder(3, 2, 3, 2));
-			collapsibleContainer.getHeader(section)
-					.setFont(ShowcaseExampleDemo.getHeaderLabelFont());
-		}
-	}
-
-	public void showDemo(ShowcaseDemo demo) {
-		searchField.setText("");
-		Map<Section, LazyDemoPanel> c = new HashMap<>();
-		for (Section section : sectionContainer.getSections()) {
-			if (section.getBody().getComponent(0) instanceof LazyDemoPanel) {
-				LazyDemoPanel ldp = (LazyDemoPanel) section.getBody()
-						.getComponent(0);
-				c.put(section, ldp);
-			}
-		}
-
-		// first see if it's already loaded/ready:
-		for (Entry<Section, LazyDemoPanel> entry : c.entrySet()) {
-			if (entry.getValue().showcaseDemo == demo) {
-				sectionContainer.setSelectedSection(entry.getKey());
-				return;
-			}
-		}
-
-		// same thing, but invoke getShowcaseDemo() to lazily load the demo
-		for (Entry<Section, LazyDemoPanel> entry : c.entrySet()) {
-			if (entry.getValue().getShowcaseDemo() == demo) {
-				sectionContainer.setSelectedSection(entry.getKey());
-				return;
-			}
-		}
 	}
 }

@@ -13,16 +13,14 @@ package com.pump.showcase.demo;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -46,99 +44,61 @@ public class BmpComparisonDemo extends ShowcaseChartDemo {
 
 	static final int SAMPLE_COUNT = 10;
 
-	class DataGenerator {
-		Map<String, Map<String, Long>> data;
-		BufferedImage sampleImage;
-		File bmpFile;
-		long[] sampleTimes = new long[SAMPLE_COUNT];
-		long[] sampleMemory = new long[sampleTimes.length];
-		String CREATE_THUMBNAIL_TIME = "Decode BMP (Time)";
-		String CREATE_THUMBNAIL_MEMORY = "Decode BMP (Memory)";
-		String ENCODE_IMAGE_TIME = "Encode BMP (Time)";
-		String ENCODE_IMAGE_MEMORY = "Encode BMP (Memory)";
-		String LABEL_IMAGEIO = "javax.imageio.ImageIO classes";
-		String LABEL_PUMP = "com.pump.image.bmp classes";
+	private static final String OPERATION_ENCODE = "Encode";
+	private static final String OPERATION_DECODE = "Decode";
+	private static final String IMPLEMENTATION_IMAGEIO = "ImageIO";
+	private static final String IMPLEMENTATION_PUMP = "com.pump";
 
-		public DataGenerator() throws IOException {
-			data = new LinkedHashMap<>();
-			data.put(CREATE_THUMBNAIL_TIME, new HashMap<String, Long>());
-			data.put(CREATE_THUMBNAIL_MEMORY, new HashMap<String, Long>());
-			data.put(ENCODE_IMAGE_TIME, new HashMap<String, Long>());
-			data.put(ENCODE_IMAGE_MEMORY, new HashMap<String, Long>());
+	private static BufferedImage SAMPLE_IMAGE;
+	private static File SAMPLE_FILE;
 
-			sampleImage = new BufferedImage(800, 600,
+	private static BufferedImage getSampleImage() {
+		if (SAMPLE_IMAGE == null) {
+			SAMPLE_IMAGE = new BufferedImage(800, 600,
 					BufferedImage.TYPE_INT_RGB);
-			Graphics2D g = sampleImage.createGraphics();
+			Graphics2D g = SAMPLE_IMAGE.createGraphics();
 			Color[] colors = new Color[] { new Color(0xffeaa7),
 					new Color(0x55efc4) };
-			DemoPaintable.paint(g, sampleImage.getWidth(),
-					sampleImage.getHeight(), colors, "BMP");
+			DemoPaintable.paint(g, SAMPLE_IMAGE.getWidth(),
+					SAMPLE_IMAGE.getHeight(), colors, "BMP");
 			g.dispose();
-
-			bmpFile = File.createTempFile("sample", ".bmp");
-			bmpFile.deleteOnExit();
-			try (FileOutputStream out = new FileOutputStream(bmpFile)) {
-				BmpEncoder.write(sampleImage, out);
-			}
 		}
+		return SAMPLE_IMAGE;
+	}
 
-		public Map<String, Map<String, Long>> iterate(int[] params)
-				throws Exception {
-			int sampleIndex = params[0];
-			int testType = params[1];
-			int implementationType = params[2];
-
-			System.runFinalization();
-			System.gc();
-			System.runFinalization();
-			System.gc();
-			sampleTimes[sampleIndex] = System.currentTimeMillis();
-			sampleMemory[sampleIndex] = Runtime.getRuntime().freeMemory();
-			for (int a = 0; a < 30; a++) {
-				if (testType == 0) {
-					decodeBMP(implementationType == 1);
-				} else {
-					encodeBMP(implementationType == 1);
-				}
-			}
-
-			sampleTimes[sampleIndex] = System.currentTimeMillis()
-					- sampleTimes[sampleIndex];
-			sampleMemory[sampleIndex] = sampleMemory[sampleIndex]
-					- Runtime.getRuntime().freeMemory();
-			if (sampleIndex == sampleTimes.length - 1) {
-				Arrays.sort(sampleTimes);
-				Arrays.sort(sampleMemory);
-				long medianSampleTime = sampleTimes[sampleTimes.length / 2];
-				long medianSampleMemory = sampleMemory[sampleMemory.length / 2];
-
-				String groupLabelTime = testType == 0 ? CREATE_THUMBNAIL_TIME
-						: ENCODE_IMAGE_TIME;
-				String groupLabelMemory = testType == 0
-						? CREATE_THUMBNAIL_MEMORY
-						: ENCODE_IMAGE_MEMORY;
-				String dataType = implementationType == 1 ? LABEL_PUMP
-						: LABEL_IMAGEIO;
-
-				data.get(groupLabelTime).put(dataType, medianSampleTime);
-				data.get(groupLabelMemory).put(dataType, medianSampleMemory);
-			}
-			return data;
+	private static byte[] getSampleBytes() throws Exception {
+		try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
+			BmpEncoder.write(getSampleImage(), byteOut);
+			return byteOut.toByteArray();
 		}
+	}
 
+	static class MeasurementRunnable extends TimeMemoryMeasurementRunnable {
+		boolean usePumpClasses;
 		ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+		byte[] sampleFileBytes;
 
-		private void encodeBMP(boolean usePumpClasses) throws Exception {
-			bOut.reset();
-			if (usePumpClasses) {
-				BmpEncoder.write(sampleImage, bOut);
-			} else {
-				ImageIO.write(sampleImage, "bmp", bOut);
+		public MeasurementRunnable(Map<String, Map<String, SampleSet>> data,
+				String operation, String implementation) throws Exception {
+			super(data, operation, implementation);
+			usePumpClasses = implementation.equals(IMPLEMENTATION_PUMP);
+			if (operation.equals(OPERATION_DECODE)) {
+				sampleFileBytes = getSampleBytes();
 			}
 		}
 
-		private void decodeBMP(boolean usePumpClasses) throws Exception {
-			try (InputStream in = new FileInputStream(bmpFile)) {
+		private void encodeBMP() throws Exception {
+			bOut.reset();
+			BufferedImage bi = getSampleImage();
+			if (usePumpClasses) {
+				BmpEncoder.write(bi, bOut);
+			} else {
+				ImageIO.write(bi, "bmp", bOut);
+			}
+		}
+
+		private void decodeBMP() throws Exception {
+			try (InputStream in = new ByteArrayInputStream(sampleFileBytes)) {
 				if (usePumpClasses) {
 					BmpDecoder.readImage(in);
 				} else {
@@ -146,21 +106,51 @@ public class BmpComparisonDemo extends ShowcaseChartDemo {
 				}
 			}
 		}
+
+		@Override
+		protected void runSample() {
+			try {
+				for (int a = 0; a < 30; a++) {
+					if (operation.equals(OPERATION_DECODE)) {
+						decodeBMP();
+					} else {
+						encodeBMP();
+					}
+				}
+			} catch (RuntimeException e) {
+				throw e;
+			} catch (Throwable t) {
+				throw new RuntimeException(t);
+			}
+		}
 	}
 
-	DataGenerator dataGenerator;
-
 	@Override
-	protected int[] getCollectDataParamLimits() {
-		return new int[] { SAMPLE_COUNT, 2, 2 };
-	}
+	protected Collection<Runnable> getMeasurementRunnables(
+			Map<String, Map<String, SampleSet>> data) {
+		String[] operations = new String[] { OPERATION_ENCODE,
+				OPERATION_DECODE };
+		String[] implementations = new String[] { IMPLEMENTATION_IMAGEIO,
+				IMPLEMENTATION_PUMP };
+		List<Runnable> returnValue = new ArrayList<>(
+				SAMPLE_COUNT * operations.length * implementations.length);
 
-	@Override
-	protected Map<String, Map<String, Long>> collectData(int... params)
-			throws Exception {
-		if (dataGenerator == null)
-			dataGenerator = new DataGenerator();
-		return dataGenerator.iterate(params);
+		try {
+			for (String operation : operations) {
+				for (String implementation : implementations) {
+					Runnable r = new MeasurementRunnable(data, operation,
+							implementation);
+					for (int sample = 0; sample < SAMPLE_COUNT; sample++) {
+						returnValue.add(r);
+					}
+				}
+			}
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return returnValue;
 	}
 
 	@Override

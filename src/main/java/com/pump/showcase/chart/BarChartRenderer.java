@@ -44,10 +44,22 @@ public class BarChartRenderer {
 	 */
 	public static final Long ERROR_CODE = Long.MIN_VALUE + 1;
 
-	// some colors from https://flatuicolors.com/palette/ru
-	static final Color[] colors = new Color[] { new Color(0x574b90),
-			new Color(0xe77f67), new Color(0x3dc1d3), new Color(0xCAD3C8),
-			new Color(0xf7d794), new Color(0xD6A2E8) };
+	// based on https://coolors.co/f9c80e-f86624-ea3546-662e9b-43bccd
+	static final Color[] colors = new Color[] {
+			// cyan
+			new Color(0x43bccd),
+			// yellow
+			new Color(0xf9c80e),
+			// red
+			new Color(0xea3546),
+			// purple
+			new Color(0x662e9b),
+			// orange
+			new Color(0xf86624),
+			// green
+			new Color(0x02c34a)
+
+	};
 
 	interface Row {
 		public int getHeight();

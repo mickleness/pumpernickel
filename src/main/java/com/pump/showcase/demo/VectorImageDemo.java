@@ -64,7 +64,8 @@ public class VectorImageDemo extends ShowcaseDemo {
 							null, // alwaysApplyKey,
 							DialogFooter.EscapeKeyBehavior.TRIGGERS_CANCEL);
 					if (option == DialogFooter.OK_OPTION) {
-						frame.showDemo(VectorImageDemo.this);
+						// TODO: update this
+						// frame.showDemo(VectorImageDemo.this);
 					}
 				}
 			}

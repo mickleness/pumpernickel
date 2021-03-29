@@ -32,6 +32,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -87,8 +88,8 @@ public class QComboBoxUI extends BasicComboBoxUI {
 	 * up.
 	 *
 	 * @see #isPopDown()
-	 * @see <a
-	 *      href="https://developer.apple.com/library/mac/#technotes/tn2007/tn2196.html">Apple
+	 * @see <a href=
+	 *      "https://developer.apple.com/library/mac/#technotes/tn2007/tn2196.html">Apple
 	 *      Tech Note 2196</a>
 	 *
 	 */
@@ -290,11 +291,10 @@ public class QComboBoxUI extends BasicComboBoxUI {
 				Dimension popupSize = comboBox.getSize();
 				Insets insets = comboBox.getInsets();
 
-				popupSize
-						.setSize(
-								popupSize.width - (insets.right + insets.left),
-								getPopupHeightForRowCount(comboBox
-										.getMaximumRowCount()));
+				popupSize.setSize(
+						popupSize.width - (insets.right + insets.left),
+						getPopupHeightForRowCount(
+								comboBox.getMaximumRowCount()));
 				int width = currentValueBounds == null ? comboBox.getWidth()
 						: currentValueBounds.width;
 
@@ -304,8 +304,8 @@ public class QComboBoxUI extends BasicComboBoxUI {
 							.getRenderer();
 					Icon icon = r.getLabel().getIcon();
 					if (icon != null) {
-						dx = -(icon.getIconWidth() + r.getLabel()
-								.getIconTextGap());
+						dx = -(icon.getIconWidth()
+								+ r.getLabel().getIconTextGap());
 					}
 				}
 
@@ -346,8 +346,9 @@ public class QComboBoxUI extends BasicComboBoxUI {
 		// much wider than the original JComboBox because it includes a
 		// checkmark. The popup will still jut out to the left of the popup a
 		// little bit, but with this offset it's a little less conspicuous
-		comboBox.setBorder(new CompoundBorder(buttonUI
-				.createBackground(comboBox), new EmptyBorder(0, 8, 0, 0)));
+		comboBox.setBorder(
+				new CompoundBorder(buttonUI.createBackground(comboBox),
+						new EmptyBorder(0, 8, 0, 0)));
 
 		// this can't be called in installListeners because arrowButton is not
 		// initialized there
@@ -410,19 +411,20 @@ public class QComboBoxUI extends BasicComboBoxUI {
 	 * always appear over the pop-up control, whereas pop-down menus always
 	 * appear below the pop-down control.
 	 *
-	 * @see <a
-	 *      href="https://developer.apple.com/library/mac/#technotes/tn2007/tn2196.html">Apple
+	 * @see <a href=
+	 *      "https://developer.apple.com/library/mac/#technotes/tn2007/tn2196.html">Apple
 	 *      Tech Note 2196</a>
 	 */
 	protected boolean isPopDown() {
-		return Boolean.TRUE.equals(comboBox
-				.getClientProperty(PROPERTY_IS_POP_DOWN));
+		return Boolean.TRUE
+				.equals(comboBox.getClientProperty(PROPERTY_IS_POP_DOWN));
 	}
 
 	/**
 	 * Paints the currently selected item.
 	 */
-	public void paintCurrentValue(Graphics g, Rectangle bounds, boolean hasFocus) {
+	public void paintCurrentValue(Graphics g, Rectangle bounds,
+			boolean hasFocus) {
 		currentValueBounds = new Rectangle(bounds);
 		super.paintCurrentValue(g, bounds, false);
 	}
@@ -437,8 +439,8 @@ public class QComboBoxUI extends BasicComboBoxUI {
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
-		arrowButton.getModel().removeChangeListener(
-				arrowButtonModelChangeListener);
+		arrowButton.getModel()
+				.removeChangeListener(arrowButtonModelChangeListener);
 
 		comboBox.removeFocusListener(focusListener);
 		comboBox.removeMouseListener(mouseListener);
@@ -480,16 +482,14 @@ public class QComboBoxUI extends BasicComboBoxUI {
 
 		comboBox.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0),
 				ACTION_SELECT_PREVIOUS);
-		comboBox.getInputMap().put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_KP_UP, 0),
+		comboBox.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_KP_UP, 0),
 				ACTION_SELECT_PREVIOUS);
 		comboBox.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0),
 				ACTION_SELECT_NEXT);
 		comboBox.getInputMap().put(
 				KeyStroke.getKeyStroke(KeyEvent.VK_KP_DOWN, 0),
 				ACTION_SELECT_NEXT);
-		comboBox.getInputMap().put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_CLEAR, 0),
+		comboBox.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_CLEAR, 0),
 				ACTION_POPUP_CANCEL);
 		comboBox.getInputMap().put(
 				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
@@ -517,15 +517,12 @@ public class QComboBoxUI extends BasicComboBoxUI {
 				KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0),
 				ACTION_SELECT_PAGE_DOWN);
 
-		comboBox.getInputMap().put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+		comboBox.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
 				ACTION_POPUP_TOGGLE);
-		comboBox.getInputMap().put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
+		comboBox.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
 				ACTION_POPUP_TOGGLE);
-		comboBox.getInputMap()
-				.put(KeyStroke.getKeyStroke(KeyEvent.VK_BEGIN, 0),
-						ACTION_POPUP_SHOW);
+		comboBox.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_BEGIN, 0),
+				ACTION_POPUP_SHOW);
 
 		listBox.setAutoscrolls(true);
 		comboBox.getActionMap().put(ACTION_SELECT_PREVIOUS,
@@ -601,7 +598,8 @@ public class QComboBoxUI extends BasicComboBoxUI {
 							return;
 						}
 
-						listBox.setSelectedIndex(listBox.getModel().getSize() - 1);
+						listBox.setSelectedIndex(
+								listBox.getModel().getSize() - 1);
 					}
 
 				});
@@ -690,8 +688,8 @@ public class QComboBoxUI extends BasicComboBoxUI {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						if (popup.isVisible()) {
-							comboBox.setSelectedIndex(listBox
-									.getSelectedIndex());
+							comboBox.setSelectedIndex(
+									listBox.getSelectedIndex());
 							popup.hide();
 						} else {
 							popup.show();
@@ -719,8 +717,8 @@ public class QComboBoxUI extends BasicComboBoxUI {
 	 * relate to the popup.)
 	 */
 	public boolean isPressed() {
-		return Boolean.TRUE.equals(comboBox
-				.getClientProperty(PROPERTY_IS_MOUSE_PRESSED));
+		return Boolean.TRUE
+				.equals(comboBox.getClientProperty(PROPERTY_IS_MOUSE_PRESSED));
 	}
 
 	/**
@@ -728,8 +726,8 @@ public class QComboBoxUI extends BasicComboBoxUI {
 	 * not relate to the popup.)
 	 */
 	public boolean isRollover() {
-		return Boolean.TRUE.equals(comboBox
-				.getClientProperty(PROPERTY_IS_MOUSE_ROLLOVER));
+		return Boolean.TRUE
+				.equals(comboBox.getClientProperty(PROPERTY_IS_MOUSE_ROLLOVER));
 	}
 
 	/**
@@ -738,11 +736,12 @@ public class QComboBoxUI extends BasicComboBoxUI {
 	 */
 	protected void refreshButtonState() {
 		ButtonState.Float state = new ButtonState.Float(
-				new ButtonState.Boolean(comboBox.isEnabled(), arrowButton
-						.getModel().isSelected() || popup.isVisible(),
+				new ButtonState.Boolean(comboBox.isEnabled(),
+						arrowButton.getModel().isSelected()
+								|| popup.isVisible(),
 						arrowButton.getModel().isPressed() || isPressed(),
-						arrowButton.getModel().isArmed(), arrowButton
-								.getModel().isRollover() || isRollover()));
+						arrowButton.getModel().isArmed(),
+						arrowButton.getModel().isRollover() || isRollover()));
 		AnimationManager.setTargetProperty(comboBox,
 				QButtonUI.PROPERTY_FLOAT_BUTTON_STATE,
 				new AnimationManager.ButtonStateAdjuster(.1f, state));
@@ -775,5 +774,14 @@ public class QComboBoxUI extends BasicComboBoxUI {
 	public JComboBox<?> getComboBox() {
 		// this method was added for the benefit of the QComboBoxRenderer
 		return comboBox;
+	}
+
+	/**
+	 * Return the JList this combobox shows when the combobox's popup is
+	 * visible. This will always return a non-null value, but the returned value
+	 * may not be showing.
+	 */
+	public JList getList() {
+		return listBox;
 	}
 }
