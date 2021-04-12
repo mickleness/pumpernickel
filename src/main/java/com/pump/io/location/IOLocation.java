@@ -422,7 +422,8 @@ public abstract class IOLocation {
 	 *            to see if <code>isCancelled()</code> is <code>true</code>.
 	 * @return the optional icon for this location.
 	 */
-	public BufferedImage getThumbnail(Dimension maxSize, Cancellable cancellable) {
+	public BufferedImage getThumbnail(Dimension maxSize,
+			Cancellable cancellable) {
 		if (cancellable.isCancelled())
 			return null;
 
@@ -627,9 +628,10 @@ public abstract class IOLocation {
 		g.scale(s, s);
 		for (int a = 0; a < thumbnailArray.length; a++) {
 			BufferedImage nextImage = thumbnailArray[a];
-			g.drawImage(nextImage, size.width / 2 - nextImage.getWidth() / 2
-					+ a * padding, size.height / 2 - nextImage.getHeight() / 2
-					+ a * padding, null);
+			g.drawImage(nextImage,
+					size.width / 2 - nextImage.getWidth() / 2 + a * padding,
+					size.height / 2 - nextImage.getHeight() / 2 + a * padding,
+					null);
 		}
 		g.dispose();
 		return image;
@@ -647,17 +649,10 @@ public abstract class IOLocation {
 
 		try {
 			if (suffix.equals("jpeg") || suffix.equals("jpg")) {
-				InputStream in = createInputStream();
-				try {
-					JPEGMetaData metaData = new JPEGMetaData(in, true);
-					BufferedImage bi = metaData.getThumbnail();
+				try (InputStream in = createInputStream()) {
+					BufferedImage bi = JPEGMetaData.getThumbnail(in);
 					if (bi != null)
 						return bi;
-				} finally {
-					try {
-						in.close();
-					} catch (IOException e) {
-					}
 				}
 			}
 
@@ -726,8 +721,8 @@ public abstract class IOLocation {
 	 * @throws IOException
 	 *             if an IO problem occurs.
 	 */
-	public abstract IOLocation setName(String s) throws IOException,
-			SetNameException;
+	public abstract IOLocation setName(String s)
+			throws IOException, SetNameException;
 
 	/**
 	 * Creates an <code>InputStream</code> to read from this location -- if
@@ -747,8 +742,8 @@ public abstract class IOLocation {
 	 * @throws IOException
 	 *             if an IO problem occurs.
 	 */
-	public abstract OutputStream createOutputStream() throws IOException,
-			FileCreationException;
+	public abstract OutputStream createOutputStream()
+			throws IOException, FileCreationException;
 
 	/**
 	 * Returns the size of this resource.

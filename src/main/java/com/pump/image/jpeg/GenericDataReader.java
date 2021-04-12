@@ -13,36 +13,25 @@ package com.pump.image.jpeg;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 
 /**
- * Use this data block when we expect a small thumbnail JPEG is inside a larger
- * block of data we don't know how to parse.
+ * Use this data block when we expect a small thumbnail JPEG is somewhere inside
+ * a larger block of data. (But we don't have specs to properly parse the data,
+ * so we're just looking for starting/ending markers.)
  */
-class GenericDataWithThumbnail {
+class GenericDataReader {
 
-	BufferedImage thumbnail;
 	final static byte[] start = new byte[] { (byte) 0xff, (byte) 0xd8,
 			(byte) 0xff };
 	final static byte[] end = new byte[] { (byte) 0xff, (byte) 0xd9 };
 
-	GenericDataWithThumbnail(JPEGMarkerInputStream in, boolean storeThumbnail)
-			throws IOException {
-		// For now the only thing we do here is load this thumbnail, so return
-		// immediately if we aren't searching for a graphic:
-		if (!storeThumbnail)
-			return;
-
-		// TODO: if we could understand the format of this data block we
-		// wouldn't
-		// have to load the entire byte array into memory just to process the
-		// thumbnail.
-		thumbnail = readJPEG(in);
-	}
-
-	protected static BufferedImage readJPEG(JPEGMarkerInputStream in)
-			throws IOException {
+	public static void read(JPEGMarkerInputStream in, String markerName,
+			JPEGMetaDataListener listener) throws IOException {
 		byte[] dest = new byte[in.remainingMarkerLength];
 		if (in.readFully(dest, dest.length) != dest.length)
 			throw new IOException();
@@ -52,10 +41,9 @@ class GenericDataWithThumbnail {
 			if (endIndex != -1) {
 				ByteArrayInputStream imageData = new ByteArrayInputStream(dest,
 						startIndex, endIndex - startIndex);
-				return ImageIO.read(imageData);
+				readThumbnail(markerName, imageData, listener);
 			}
 		}
-		return null;
 	}
 
 	protected static final int indexOf(byte[] searchable, byte[] phrase) {
@@ -87,10 +75,25 @@ class GenericDataWithThumbnail {
 	}
 
 	/**
-	 * This returns the thumbnail found in this APP1 block if it exists.
-	 * 
+	 * This uses ImageIO to identify the width/height of the image in the
+	 * InputStream provided, then verify that the listener wants to receive the
+	 * image, and then (if needed) parse the image and pass to the listener.
 	 */
-	public BufferedImage getThumbnail() {
-		return thumbnail;
+	static void readThumbnail(String markerName, InputStream in,
+			JPEGMetaDataListener listener) throws IOException {
+
+		Iterator<ImageReader> iterator = ImageIO
+				.getImageReadersBySuffix("jpeg");
+		while (iterator.hasNext()) {
+			ImageReader reader = iterator.next();
+			reader.setInput(ImageIO.createImageInputStream(in));
+			int height = reader.getHeight(0);
+			int width = reader.getWidth(0);
+			if (listener.isThumbnailAccepted(markerName, width, height)) {
+				BufferedImage thumbnail = reader.read(0);
+				listener.addThumbnail(JPEGMarkerInputStream.APP1_MARKER,
+						thumbnail);
+			}
+		}
 	}
 }

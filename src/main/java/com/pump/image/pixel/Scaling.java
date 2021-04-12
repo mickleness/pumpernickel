@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import com.pump.awt.Dimension2D;
 import com.pump.image.ImageSize;
 import com.pump.image.bmp.BmpDecoderIterator;
 
@@ -27,8 +28,8 @@ import com.pump.image.bmp.BmpDecoderIterator;
  * {@link com.pump.image.pixel.ScalingIterator}.
  * 
  * @see com.pump.awt.Dimension2D#scaleProportionally(Dimension, Dimension)
- * @see <a
- *      href="https://javagraphics.blogspot.com/2010/06/images-scaling-down.html">Images:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2010/06/images-scaling-down.html">Images:
  *      Scaling Down</a>
  */
 public class Scaling {
@@ -77,7 +78,8 @@ public class Scaling {
 	 *         <code>BufferedImage.TYPE_INT_ARGB</code> or
 	 *         <code>BufferedImage.TYPE_INT_RGB</code>.
 	 */
-	public static BufferedImage scale(BufferedImage source, Dimension destSize) {
+	public static BufferedImage scale(BufferedImage source,
+			Dimension destSize) {
 		return scale(source, null, destSize);
 	}
 
@@ -117,8 +119,8 @@ public class Scaling {
 				} else if (preferredType == BufferedImage.TYPE_4BYTE_ABGR) {
 					finalIter = new ByteBGRAConverter(scalingIter);
 				} else {
-					throw new IllegalArgumentException("unrecognized type: "
-							+ preferredType);
+					throw new IllegalArgumentException(
+							"unrecognized type: " + preferredType);
 				}
 				BufferedImage image = BufferedImageIterator.create(finalIter,
 						null);
@@ -127,8 +129,8 @@ public class Scaling {
 				return null;
 			}
 		}
-		Image image = Toolkit.getDefaultToolkit().createImage(
-				source.getAbsolutePath());
+		Image image = Toolkit.getDefaultToolkit()
+				.createImage(source.getAbsolutePath());
 		try {
 			return scale(image, null, destSize);
 		} finally {
@@ -175,8 +177,8 @@ public class Scaling {
 				} else if (preferredType == BufferedImage.TYPE_4BYTE_ABGR) {
 					finalIter = new ByteBGRAConverter(scalingIter);
 				} else {
-					throw new IllegalArgumentException("unrecognized type: "
-							+ preferredType);
+					throw new IllegalArgumentException(
+							"unrecognized type: " + preferredType);
 				}
 				BufferedImage image = BufferedImageIterator.create(finalIter,
 						null);
@@ -308,9 +310,9 @@ public class Scaling {
 					+ ") must be less than source width (" + sourceSize.width
 					+ ")");
 		} else if (destSize != null && destSize.height > sourceSize.height) {
-			throw new IllegalArgumentException("dest height ("
-					+ destSize.height + ") must be less than source height ("
-					+ sourceSize.height + ")");
+			throw new IllegalArgumentException("dest height (" + destSize.height
+					+ ") must be less than source height (" + sourceSize.height
+					+ ")");
 		} else if (destSize != null && dest != null
 				&& destSize.width > dest.getWidth()) {
 			throw new IllegalArgumentException("dest width (" + destSize.width
@@ -318,8 +320,7 @@ public class Scaling {
 					+ dest.getWidth() + ")");
 		} else if (destSize != null && dest != null
 				&& destSize.height > dest.getHeight()) {
-			throw new IllegalArgumentException("dest height ("
-					+ destSize.height
+			throw new IllegalArgumentException("dest height (" + destSize.height
 					+ ") must not exceed the destination image height ("
 					+ dest.getHeight() + ")");
 		}
@@ -328,8 +329,8 @@ public class Scaling {
 				: BufferedImage.TYPE_INT_ARGB;
 		PixelIterator iter = GenericImageSinglePassIterator.get(source,
 				destType);
-		PixelIterator scalingIter = destSize == null ? iter : ScalingIterator
-				.get(iter, destSize.width, destSize.height);
+		PixelIterator scalingIter = destSize == null ? iter
+				: ScalingIterator.get(iter, destSize.width, destSize.height);
 		return BufferedImageIterator.create(scalingIter, null);
 	}
 
@@ -349,13 +350,7 @@ public class Scaling {
 	 */
 	public static BufferedImage scaleProportionally(BufferedImage image,
 			int maxWidth, int maxHeight) {
-		float widthRatio = ((float) maxWidth) / ((float) image.getWidth());
-		float heightRatio = ((float) maxHeight) / ((float) image.getHeight());
-		float ratio = Math.min(widthRatio, heightRatio);
-
-		int w = (int) (ratio * image.getWidth());
-		int h = (int) (ratio * image.getHeight());
-		return scale(image, w, h);
+		return scaleProportionally(image, new Dimension(maxWidth, maxHeight));
 	}
 
 	/**
@@ -372,6 +367,25 @@ public class Scaling {
 	 */
 	public static BufferedImage scaleProportionally(BufferedImage image,
 			Dimension maxSize) {
-		return scaleProportionally(image, maxSize.width, maxSize.height);
+		Dimension d = Dimension2D.scaleProportionally(
+				new Dimension(image.getWidth(), image.getHeight()), maxSize);
+		return scale(image, d.width, d.height);
+	}
+
+	/**
+	 * Return true if a filename ends with PNG, BMP, JPG, JPEG or GIF.
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static boolean isSupported(File file) {
+		String filename = file.getName();
+		int i = filename.lastIndexOf('.');
+		if (i == -1)
+			return false;
+		filename = filename.toLowerCase().substring(i + 1);
+		return filename.equals("png") || filename.equals("jpg")
+				|| filename.equals("jpeg") || filename.equals("bmp")
+				|| filename.endsWith("gif");
 	}
 }

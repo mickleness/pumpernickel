@@ -15,7 +15,7 @@ import java.awt.Dimension;
 public class Dimension2D extends java.awt.geom.Dimension2D {
 
 	/**
-	 * This is a convenience method to calculate how to scale down an image
+	 * This is a convenience method to calculate how to scale an image
 	 * proportionally.
 	 * 
 	 * @param originalSize
@@ -26,6 +26,26 @@ public class Dimension2D extends java.awt.geom.Dimension2D {
 	 */
 	public static Dimension scaleProportionally(Dimension originalSize,
 			Dimension maxSize) {
+		return scaleProportionally(originalSize, maxSize, false);
+	}
+
+	/**
+	 * This is a convenience method to calculate how to scale down an image
+	 * proportionally.
+	 * 
+	 * @param originalSize
+	 *            the original image dimensions.
+	 * @param maxSize
+	 *            the maximum new dimensions.
+	 * @param returnNullForScalingUp
+	 *            if true then this method will return null when the original
+	 *            size is smaller than the maximum size. If false then this
+	 *            method always returns a non-null value, even if the return
+	 *            value scales up the original size.
+	 * @return dimensions that are <code>maxSize</code> or smaller.
+	 */
+	public static Dimension scaleProportionally(Dimension originalSize,
+			Dimension maxSize, boolean returnNullForScalingUp) {
 		float widthRatio = ((float) maxSize.width)
 				/ ((float) originalSize.width);
 		float heightRatio = ((float) maxSize.height)
@@ -38,6 +58,11 @@ public class Dimension2D extends java.awt.geom.Dimension2D {
 			h = maxSize.height;
 			w = (int) (heightRatio * originalSize.width);
 		}
+
+		if (returnNullForScalingUp
+				&& (w > originalSize.width || h > originalSize.height))
+			return null;
+
 		return new Dimension(w, h);
 	}
 

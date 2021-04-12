@@ -10,27 +10,17 @@
  */
 package com.pump.image.jpeg;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
 
 import com.pump.io.GuardedInputStream;
 
-class APP1Data {
-
-	public static final int TYPE_EXIF = 0;
-	public static final int TYPE_XMP = 1;
-	public static final int TYPE_UNKNOWN = -1;
-
-	BufferedImage thumbnail;
-	Map<String, Object> properties = new HashMap<>();
-	final int type;
+/**
+ * This reads an APP1 block and passes information to a JPEGMetaDataListener.
+ */
+class APP1DataReader {
 
 	static final Comparator<ImageFileDirectory.DirectoryEntry> directoryEntryComparator = new Comparator<ImageFileDirectory.DirectoryEntry>() {
 		public int compare(ImageFileDirectory.DirectoryEntry d1,
@@ -40,38 +30,37 @@ class APP1Data {
 		}
 	};
 
-	APP1Data(JPEGMarkerInputStream in, boolean storeThumbnail)
-			throws IOException {
+	public static void read(JPEGMarkerInputStream in,
+			JPEGMetaDataListener listener) throws IOException {
 		byte[] array = new byte[4];
 
 		if (in.readFully(array, 4) != 4) {
 			throw new IOException();
 		}
 
-		if (array[0] == 88 && array[1] == 77 && array[2] == 80 && array[3] == 0) {
-			parseXMP(in, storeThumbnail);
-			type = TYPE_XMP;
+		if (array[0] == 88 && array[1] == 77 && array[2] == 80
+				&& array[3] == 0) {
+			readXMP(in, listener);
 		} else if (array[0] == 69 && array[1] == 120 && array[2] == 105
 				&& array[3] == 102) {
 			if (in.readFully(array, 2) != 2)
 				throw new IOException();
 
 			if (array[0] == 0 && array[1] == 0) {
-				parseExif(in, storeThumbnail);
+				readExif(in, listener);
 			} else {
 				throw new IOException(
 						"APP1 expected to begin with \"Exif__\". (Exif"
 								+ JPEGMarkerInputStream.toString(array, 2)
 								+ ")");
 			}
-			type = TYPE_EXIF;
 		} else {
-			type = TYPE_UNKNOWN;
+			// are there any other types we should support?
 		}
 	}
 
-	private void parseXMP(JPEGMarkerInputStream in, boolean storeThumbnail)
-			throws IOException {
+	private static void readXMP(JPEGMarkerInputStream in,
+			JPEGMetaDataListener listener) throws IOException {
 		// TODO: after somehow filtering this content we can parse the XML for
 		// properties
 		//
@@ -81,8 +70,8 @@ class APP1Data {
 		// Element root = dom.getDocumentElement();
 	}
 
-	private void parseExif(JPEGMarkerInputStream in, boolean storeThumbnail)
-			throws IOException {
+	private static void readExif(JPEGMarkerInputStream in,
+			JPEGMetaDataListener listener) throws IOException {
 		/**
 		 * Originally I tried parsing this data in a single pass, but my testing
 		 * showed some JPEGs are structured: 1. TIFF header 2. Specific IFD
@@ -120,16 +109,14 @@ class APP1Data {
 		if (ifd0 != null) {
 			for (int a = 0; a < ifd0.entries.length; a++) {
 				String name = ifd0.entries[a].getPropertyName();
-				if (name == null) {
-					properties.put(Integer.toString(ifd0.entries[a].tagNumber),
-							ifd0.entries[a].value);
-				} else {
-					properties.put(name, ifd0.entries[a].value);
+				if (name != null) {
+					listener.addProperty(JPEGMarkerInputStream.APP1_MARKER,
+							name, ifd0.entries[a].value);
 				}
 			}
 		}
 
-		if (ifd1 != null && storeThumbnail) {
+		if (ifd1 != null) {
 			Number jpegPosition = (Number) ifd1.getProperty(513);
 			Number jpegLength = (Number) ifd1.getProperty(514);
 
@@ -147,23 +134,10 @@ class APP1Data {
 
 				GuardedInputStream guardedIn = new GuardedInputStream(
 						bufferedIn, jpegLength.longValue(), false);
-				thumbnail = ImageIO.read(guardedIn);
+
+				GenericDataReader.readThumbnail(
+						JPEGMarkerInputStream.APP1_MARKER, guardedIn, listener);
 			}
 		}
-	}
-
-	/**
-	 * Returns the properties found in this APP1 block, if any.
-	 */
-	public Map<String, Object> getProperties() {
-		return properties;
-	}
-
-	/**
-	 * This returns the thumbnail found in this APP1 block if it exists.
-	 * 
-	 */
-	public BufferedImage getThumbnail() {
-		return thumbnail;
 	}
 }
