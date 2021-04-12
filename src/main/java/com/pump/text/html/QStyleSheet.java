@@ -25,10 +25,12 @@ import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.StyleSheet;
 
 import com.pump.text.html.css.CssColorParser;
+import com.pump.text.html.css.CssHeightParser;
 import com.pump.text.html.css.CssOverflowParser;
 import com.pump.text.html.css.CssParser;
 import com.pump.text.html.css.CssPropertyParser;
 import com.pump.text.html.css.CssTextShadowParser;
+import com.pump.text.html.css.CssWidthParser;
 import com.pump.text.html.css.background.CssBackgroundAttachmentParser;
 import com.pump.text.html.css.background.CssBackgroundClipParser;
 import com.pump.text.html.css.background.CssBackgroundPositionParser;
@@ -120,6 +122,9 @@ public class QStyleSheet extends StyleSheet {
 		addCssPropertyHandler(new CssOutlineColorParser());
 		addCssPropertyHandler(new CssOutlineStyleParser());
 		addCssPropertyHandler(new CssOutlineWidthParser());
+
+		addCssPropertyHandler(new CssWidthParser());
+		addCssPropertyHandler(new CssHeightParser());
 	}
 
 	/**
@@ -284,8 +289,8 @@ public class QStyleSheet extends StyleSheet {
 			List<String> z = new LinkedList<>();
 			z.add(selectorTerms[a]);
 			if (!(a == 0 || a == 1 || a == selectorTerms.length - 1)) {
-				// always include leading "html body" and trailing selector term,
-				// but all other terms are optional (so they may be null)
+				// always include leading "html body" and trailing selector
+				// term, but all other terms are optional (so they may be null)
 				z.add(null);
 			}
 

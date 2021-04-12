@@ -1080,6 +1080,92 @@ public class QHtmlTest extends TestCase {
 		assertTrue(rgbs.contains(0xffffff02));
 	}
 
+	/**
+	 * This tests "width: max-content" and "width: min-content".
+	 */
+	public void testWidth() {
+		//@formatter:off
+		String maxContent = "<html>\n"
+				+ "  <head>\n"
+				+ "    <style>\n"
+				+ "      h1   { width: max-content; background-color: red; }\n"
+				+ "    </style>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    <h1>LOREM  IPSUM</h1>\n"
+				+ "  </body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		// first test the orig Swing implementation:
+		{
+			List<Operation> ops = getOperations(false, maxContent);
+
+			assertEquals(3, ops.size());
+
+			FillOperation bodyBackground = (FillOperation) ops.get(0);
+			FillOperation h1Background = (FillOperation) ops.get(1);
+
+			assertEquals(1000, bodyBackground.getBounds().getBounds().width);
+
+			// it didn't recognize "max-content":
+			assertTrue(h1Background.getBounds().getBounds().width > 900);
+		}
+
+		// our new implementation should use smaller width:
+		{
+			List<Operation> maxContentOps = getOperations(true, maxContent);
+
+			{
+				assertEquals(3, maxContentOps.size());
+
+				FillOperation bodyBackground = (FillOperation) maxContentOps
+						.get(0);
+				FillOperation h1Background = (FillOperation) maxContentOps
+						.get(1);
+
+				assertEquals(1000,
+						bodyBackground.getBounds().getBounds().width);
+
+				// ... we should support "max-content":
+				assertTrue(h1Background.getBounds().getBounds().width < 200);
+			}
+
+			// and now a little extra test: let's compare the min-content
+			// against the max-content. Since we're using two words ("LOREM
+			// IPSUM") the min-content should produce two wrapping lines of
+			// text.
+
+			//@formatter:off
+			String minContent = "<html>\n"
+					+ "  <head>\n"
+					+ "    <style>\n"
+					+ "      h1   { width: min-content; background-color: red; }\n"
+					+ "    </style>\n"
+					+ "  </head>\n"
+					+ "  <body>\n"
+					+ "    <h1>LOREM  IPSUM</h1>\n"
+					+ "  </body>\n"
+					+ "</html>";
+			//@formatter:on
+
+			List<Operation> minContentOps = getOperations(true, minContent);
+
+			// 2 lines of text now (before we had 1)
+			assertEquals(4, minContentOps.size());
+
+			FillOperation h1BackgroundMin = (FillOperation) minContentOps
+					.get(1);
+			FillOperation h1BackgroundMax = (FillOperation) maxContentOps
+					.get(1);
+
+			// is our "min-content" narrower than our max-content
+			assertTrue(h1BackgroundMin.getBounds()
+					.getBounds().width < h1BackgroundMax.getBounds()
+							.getBounds().width);
+		}
+	}
+
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,
 			int tolerance) {
 		assertEquals(bi1.getWidth(), bi2.getWidth());

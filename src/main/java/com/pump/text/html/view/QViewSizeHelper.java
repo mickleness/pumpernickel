@@ -1,9 +1,15 @@
 package com.pump.text.html.view;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import javax.swing.text.View;
 import javax.swing.text.html.CSS;
 
+import com.pump.text.html.css.CssDimensionValue;
+import com.pump.text.html.css.CssHeightParser;
 import com.pump.text.html.css.CssLength;
+import com.pump.text.html.css.CssWidthParser;
 
 /**
  * This class helps with span size calculations.
@@ -17,6 +23,8 @@ import com.pump.text.html.css.CssLength;
  * but the HTML requests 50x50: then this returns 100x100.
  */
 public class QViewSizeHelper extends QViewHelper {
+
+	private static ThreadLocal<Collection<View>> activeViewCalculations = new ThreadLocal<>();
 
 	public QViewSizeHelper(View view) {
 		super(view);
@@ -60,39 +68,67 @@ public class QViewSizeHelper extends QViewHelper {
 
 		// TODO: consider other unit sizes
 
-		float topMargin = getLength(CSS.Attribute.MARGIN_TOP, -1);
-		float bottomMargin = getLength(CSS.Attribute.MARGIN_BOTTOM, -1);
-		float leftMargin = getLength(CSS.Attribute.MARGIN_LEFT, -1);
-		float rightMargin = getLength(CSS.Attribute.MARGIN_RIGHT, -1);
-
-		BorderRenderingConfiguration borderConfig = BorderRenderingConfiguration
-				.forBorder(this);
-		topMargin += borderConfig.topWidth == null ? 0
-				: borderConfig.topWidth.getValue();
-		bottomMargin += borderConfig.bottomWidth == null ? 0
-				: borderConfig.bottomWidth.getValue();
-		leftMargin += borderConfig.leftWidth == null ? 0
-				: borderConfig.leftWidth.getValue();
-		rightMargin += borderConfig.rightWidth == null ? 0
-				: borderConfig.rightWidth.getValue();
-
-		if (axis == View.X_AXIS) {
-			Object z = (Object) view.getAttributes()
-					.getAttribute(CSS.Attribute.WIDTH);
-			if (z != null) {
-				CssLength l = new CssLength(z.toString());
-				return l.getValue() + leftMargin + rightMargin;
-			}
-			return null;
-		} else if (axis == View.Y_AXIS) {
-			Object z = (Object) view.getAttributes()
-					.getAttribute(CSS.Attribute.HEIGHT);
-			if (z != null) {
-				CssLength l = new CssLength(z.toString());
-				return l.getValue() + topMargin + bottomMargin;
-			}
-			return null;
+		Collection<View> activeViews = activeViewCalculations.get();
+		if (activeViews == null) {
+			activeViews = new HashSet<>();
+			activeViewCalculations.set(activeViews);
 		}
-		throw new IllegalArgumentException("unrecognized axis: " + axis);
+		if (!activeViews.add(view))
+			return null;
+
+		try {
+			CssDimensionValue d;
+			if (axis == View.X_AXIS) {
+				d = (CssDimensionValue) getAttribute(
+						CssWidthParser.PROPERTY_WIDTH, false);
+			} else if (axis == View.Y_AXIS) {
+				d = (CssDimensionValue) getAttribute(
+						CssHeightParser.PROPERTY_HEIGHT, false);
+			} else {
+				throw new IllegalArgumentException(
+						"unrecognized axis: " + axis);
+			}
+
+			if (d != null) {
+				BorderRenderingConfiguration borderConfig = BorderRenderingConfiguration
+						.forBorder(this);
+
+				float totalMargins;
+				if (axis == View.X_AXIS) {
+					float leftMargin = getLength(CSS.Attribute.MARGIN_LEFT, -1);
+					float rightMargin = getLength(CSS.Attribute.MARGIN_RIGHT,
+							-1);
+					leftMargin += borderConfig.leftWidth == null ? 0
+							: borderConfig.leftWidth.getValue();
+					rightMargin += borderConfig.rightWidth == null ? 0
+							: borderConfig.rightWidth.getValue();
+					totalMargins = leftMargin + rightMargin;
+				} else {
+					float topMargin = getLength(CSS.Attribute.MARGIN_TOP, -1);
+					float bottomMargin = getLength(CSS.Attribute.MARGIN_BOTTOM,
+							-1);
+					topMargin += borderConfig.topWidth == null ? 0
+							: borderConfig.topWidth.getValue();
+					bottomMargin += borderConfig.bottomWidth == null ? 0
+							: borderConfig.bottomWidth.getValue();
+					totalMargins = topMargin + bottomMargin;
+				}
+
+				CssDimensionValue.Type type = d.getType();
+				if (type == CssDimensionValue.Type.MAX_CONTENT) {
+					return view.getPreferredSpan(axis) + totalMargins;
+				} else if (type == CssDimensionValue.Type.MIN_CONTENT) {
+					return view.getMinimumSpan(axis) + totalMargins;
+				} else if (type == CssDimensionValue.Type.LENGTH) {
+					CssLength l = d.getLength();
+					return l.getValue() + totalMargins;
+				}
+			}
+			return null;
+		} finally {
+			activeViews.remove(view);
+			if (activeViews.isEmpty())
+				activeViewCalculations.remove();
+		}
 	}
 }

@@ -1,7 +1,7 @@
 package com.pump.text.html.css;
 
 /**
- * This CssValue includes a generic {@link #getCreationToken()}.s
+ * This CssValue includes a generic {@link #getCreationToken()}.
  */
 public abstract class AbstractCssValue implements CssValue {
 
