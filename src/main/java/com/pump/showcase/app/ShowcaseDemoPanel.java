@@ -160,10 +160,16 @@ public class ShowcaseDemoPanel extends JPanel {
 				"body {  padding: 12px 12px 12px 12px;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
 
 		styleSheet.addRule("h1, h2, h3, h4, h5, h6 { text-align: left }");
-		styleSheet.addRule("h1, h2, h3 { color: #005a9c }");
-		styleSheet.addRule("h1 { font: 160% sans-serif }");
-		styleSheet.addRule("h2 { font: 140% sans-serif }");
-		styleSheet.addRule("h3 { font: 120% sans-serif }");
+		
+		styleSheet.addRule(
+				"h1 { color: #005a9c; font: bold 160% sans-serif; padding: 6px 20px 6px 20px; width: max-content; background-clip: border-box; border: border: 2px solid #005a9c; border-radius:15px;}");
+
+		styleSheet.addRule(
+				"h2 { padding: 4px 15px 4px 15px; background-color: #005a9c; color: white; width: max-content; background-clip: border-box; border: transparent; border-radius:15px;}");
+		
+		styleSheet.addRule(
+				"h3 { font: 120% sans-serif; color: #005a9c; }");
+		
 		styleSheet.addRule("h4 { font: bold 100% sans-serif }");
 		styleSheet.addRule("h5 { font: italic 100% sans-serif }");
 		styleSheet.addRule("h6 { font: small-caps 100% sans-serif }");

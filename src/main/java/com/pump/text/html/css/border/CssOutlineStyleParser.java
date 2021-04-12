@@ -8,7 +8,7 @@ import com.pump.text.html.css.CssPropertyParser;
  * <p>
  * The only two differences between an outline style and a border style are:
  * <ol>
- * <li>"hidden" is not supported for outliness</li>
+ * <li>"hidden" is not supported for outlines</li>
  * <li>"auto" is not supported for borders.</li>
  * </ol>
  */

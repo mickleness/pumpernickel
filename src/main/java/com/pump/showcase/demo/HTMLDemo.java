@@ -260,6 +260,30 @@ public class HTMLDemo extends ShowcaseExampleDemo {
 						+ "    <h1 style=\"font-size: 100pt;\">LOREM IPSUM</h1>\n"
 						+ "  </body>\n" + "</html>",
 				"See https://www.webcodegeeks.com/css/css-text-shadow-example/"));
+
+		presetComboBox.addItem(new Preset(
+				"border-radius background-clip max-content header demo",
+				"<html>\n" + "  <head>\n" + "    <style>\n"
+						+ "      body { background-color: white; }\n" + "\n"
+						+ "      h1 { color: #005a9c; \n"
+						+ "           font: bold 160% sans-serif; \n"
+						+ "           padding: 6px 20px 6px 20px; \n"
+						+ "           width: max-content;\n"
+						+ "           background-clip: border-box; \n"
+						+ "           border: 2px solid #005a9c; \n"
+						+ "           border-radius:32px; }\n" + "\n"
+						+ "      h2 { padding: 4px 10px 4px 10px; \n"
+						+ "           background-color: #005a9c; \n"
+						+ "           font: bold 130% sans-serif; \n"
+						+ "           color: white; \n"
+						+ "           width: max-content; \n"
+						+ "           background-clip: border-box; \n"
+						+ "           border: transparent; \n"
+						+ "           border-radius:10px;}\n" + "    </style>\n"
+						+ "  </head>\n" + "  <body>\n"
+						+ "    <h1>Header 1</h1>\n" + "    <h2>Header 2</h2>\n"
+						+ "  </body>\n" + "</html>",
+				""));
 	}
 
 	@Override
