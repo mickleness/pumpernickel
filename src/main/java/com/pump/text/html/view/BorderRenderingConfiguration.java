@@ -1,15 +1,10 @@
 package com.pump.text.html.view;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.TreeSet;
+import java.util.Map;
 
 import com.pump.text.html.css.CssColorValue;
 import com.pump.text.html.css.CssLength;
-import com.pump.text.html.css.CssPropertyParser;
-import com.pump.text.html.css.CssValue;
 import com.pump.text.html.css.CssValueCreationToken;
 import com.pump.text.html.css.border.CssBorderBottomColorParser;
 import com.pump.text.html.css.border.CssBorderBottomLeftRadiusParser;
@@ -59,89 +54,38 @@ import com.pump.text.html.css.border.CssOutlineWidthParser;
 public class BorderRenderingConfiguration {
 
 	/**
-	 * This helps sort values according to their creation timestamps, so we can
-	 * safely identify the last (most recently defined) CSS statement.
-	 */
-	static class Attribute {
-		CssValueCreationToken creationToken;
-		CssPropertyParser<?> parser;
-		Object value;
-
-		Attribute(CssPropertyParser<?> parser) {
-			this.parser = parser;
-		}
-
-		/**
-		 * Populate the value field and creationToken
-		 */
-		void resolve(QViewHelper helper) {
-			value = helper.getAttribute(parser.getPropertyName(), false);
-			if (value instanceof CssValue) {
-				creationToken = ((CssValue) value).getCreationToken();
-			} else if (value instanceof List) {
-				creationToken = ((CssValue) ((List) value).get(0))
-						.getCreationToken();
-			}
-		}
-	}
-
-	/**
-	 * This sorts Attributes according to their creation token timestamp's. That
-	 * is: the Attributes are sorted into the order they are parsed.
-	 */
-	private static Comparator<Attribute> ATTRIBUTE_COMPARATOR = new Comparator<Attribute>() {
-
-		@Override
-		public int compare(Attribute o1, Attribute o2) {
-			return o1.creationToken.compareTo(o2.creationToken);
-		}
-
-	};
-
-	/**
 	 * Create a configuration for an outline. This is much simpler than a
 	 * border, because there are only a few CSS properties to consult.
 	 */
 	public static BorderRenderingConfiguration forOutline(QViewHelper helper) {
-		Collection<Attribute> attrs = new HashSet<>();
-		attrs.add(new Attribute(new CssOutlineParser()));
-		attrs.add(new Attribute(new CssOutlineColorParser()));
-		attrs.add(new Attribute(new CssOutlineStyleParser()));
-		attrs.add(new Attribute(new CssOutlineWidthParser()));
-
-		// sort all properties by timestamp so the most recent one "wins":
-		Collection<Attribute> sortedAttrs = new TreeSet<>(ATTRIBUTE_COMPARATOR);
-
-		for (Attribute attr : attrs) {
-			attr.resolve(helper);
-			if (attr.creationToken != null)
-				sortedAttrs.add(attr);
-		}
+		Map<String, Object> properties = CssValueCreationToken
+				.getOrderedProperties(helper, CssOutlineParser.PROPERTY_OUTLINE,
+						CssOutlineColorParser.PROPERTY_OUTLINE_COLOR,
+						CssOutlineWidthParser.PROPERTY_OUTLINE_WIDTH,
+						CssOutlineStyleParser.PROPERTY_OUTLINE_STYLE);
 
 		BorderRenderingConfiguration rv = new BorderRenderingConfiguration();
-		for (Attribute attr : sortedAttrs) {
-			if (attr.parser instanceof CssOutlineParser) {
-				CssBorderValue all = (CssBorderValue) helper
-						.getAttribute(CssOutlineParser.PROPERTY_OUTLINE, false);
+		for (Map.Entry<String, Object> entry : properties.entrySet()) {
+			if (entry.getKey().equals(CssOutlineParser.PROPERTY_OUTLINE)) {
+				CssBorderValue all = (CssBorderValue) entry.getValue();
 				rv.leftWidth = rv.rightWidth = rv.topWidth = rv.bottomWidth = all
 						.getWidth();
 				rv.leftColor = rv.rightColor = rv.topColor = rv.bottomColor = all
 						.getColor();
 				rv.leftStyle = rv.rightStyle = rv.topStyle = rv.bottomStyle = all
 						.getStyle();
-			} else if (attr.parser instanceof CssOutlineColorParser) {
-				CssColorValue color = (CssColorValue) helper.getAttribute(
-						CssOutlineColorParser.PROPERTY_OUTLINE_COLOR, false);
+			} else if (entry.getKey()
+					.equals(CssOutlineColorParser.PROPERTY_OUTLINE_COLOR)) {
+				CssColorValue color = (CssColorValue) entry.getValue();
 				rv.leftColor = rv.rightColor = rv.topColor = rv.bottomColor = color;
-			} else if (attr.parser instanceof CssOutlineStyleParser) {
-				CssBorderStyleValue style = (CssBorderStyleValue) helper
-						.getAttribute(
-								CssOutlineStyleParser.PROPERTY_OUTLINE_STYLE,
-								false);
+			} else if (entry.getKey()
+					.equals(CssOutlineStyleParser.PROPERTY_OUTLINE_STYLE)) {
+				CssBorderStyleValue style = (CssBorderStyleValue) entry
+						.getValue();
 				rv.leftStyle = rv.rightStyle = rv.topStyle = rv.bottomStyle = style;
-			} else if (attr.parser instanceof CssOutlineWidthParser) {
-				CssLength width = (CssLength) helper.getAttribute(
-						CssOutlineWidthParser.PROPERTY_OUTLINE_WIDTH, false);
+			} else if (entry.getKey()
+					.equals(CssOutlineWidthParser.PROPERTY_OUTLINE_WIDTH)) {
+				CssLength width = (CssLength) entry.getValue();
 				rv.leftWidth = rv.rightWidth = rv.topWidth = rv.bottomWidth = width;
 			}
 		}
@@ -154,60 +98,60 @@ public class BorderRenderingConfiguration {
 	 */
 	public static BorderRenderingConfiguration forBorder(QViewHelper helper) {
 
-		Collection<Attribute> attrs = new HashSet<>();
-		attrs.add(new Attribute(new CssBorderBottomColorParser()));
-		attrs.add(new Attribute(new CssBorderBottomLeftRadiusParser()));
-		attrs.add(new Attribute(new CssBorderBottomParser()));
-		attrs.add(new Attribute(new CssBorderBottomRightRadiusParser()));
-		attrs.add(new Attribute(new CssBorderBottomStyleParser()));
-		attrs.add(new Attribute(new CssBorderBottomWidthParser()));
-		attrs.add(new Attribute(new CssBorderColorParser()));
-		attrs.add(new Attribute(new CssBorderLeftColorParser()));
-		attrs.add(new Attribute(new CssBorderLeftParser()));
-		attrs.add(new Attribute(new CssBorderLeftStyleParser()));
-		attrs.add(new Attribute(new CssBorderLeftWidthParser()));
-		attrs.add(new Attribute(new CssBorderParser()));
-		attrs.add(new Attribute(new CssBorderRadiusParser()));
-		attrs.add(new Attribute(new CssBorderRightColorParser()));
-		attrs.add(new Attribute(new CssBorderRightParser()));
-		attrs.add(new Attribute(new CssBorderRightStyleParser()));
-		attrs.add(new Attribute(new CssBorderRightWidthParser()));
-		attrs.add(new Attribute(new CssBorderStyleParser()));
-		attrs.add(new Attribute(new CssBorderTopColorParser()));
-		attrs.add(new Attribute(new CssBorderTopLeftRadiusParser()));
-		attrs.add(new Attribute(new CssBorderTopParser()));
-		attrs.add(new Attribute(new CssBorderTopRightRadiusParser()));
-		attrs.add(new Attribute(new CssBorderTopStyleParser()));
-		attrs.add(new Attribute(new CssBorderTopWidthParser()));
-		attrs.add(new Attribute(new CssBorderWidthParser()));
-
-		// sort all properties by timestamp so the most recent one "wins":
-		Collection<Attribute> sortedAttrs = new TreeSet<>(ATTRIBUTE_COMPARATOR);
-
-		for (Attribute attr : attrs) {
-			attr.resolve(helper);
-			if (attr.creationToken != null)
-				sortedAttrs.add(attr);
-		}
+		Map<String, Object> properties = CssValueCreationToken
+				.getOrderedProperties(helper,
+						CssBorderBottomColorParser.PROPERTY_BORDER_BOTTOM_COLOR,
+						CssBorderBottomLeftRadiusParser.PROPERTY_BORDER_BOTTOM_LEFT_RADIUS,
+						CssBorderBottomParser.PROPERTY_BORDER_BOTTOM,
+						CssBorderBottomRightRadiusParser.PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS,
+						CssBorderBottomStyleParser.PROPERTY_BORDER_BOTTOM_STYLE,
+						CssBorderBottomWidthParser.PROPERTY_BORDER_BOTTOM_WIDTH,
+						CssBorderColorParser.PROPERTY_BORDER_COLOR,
+						CssBorderLeftColorParser.PROPERTY_BORDER_LEFT_COLOR,
+						CssBorderLeftParser.PROPERTY_BORDER_LEFT,
+						CssBorderLeftStyleParser.PROPERTY_BORDER_LEFT_STYLE,
+						CssBorderLeftWidthParser.PROPERTY_BORDER_LEFT_WIDTH,
+						CssBorderParser.PROPERTY_BORDER,
+						CssBorderRadiusParser.PROPERTY_BORDER_RADIUS,
+						CssBorderRightColorParser.PROPERTY_BORDER_RIGHT_COLOR,
+						CssBorderRightParser.PROPERTY_BORDER_RIGHT,
+						CssBorderRightStyleParser.PROPERTY_BORDER_RIGHT_STYLE,
+						CssBorderRightWidthParser.PROPERTY_BORDER_RIGHT_WIDTH,
+						CssBorderStyleParser.PROPERTY_BORDER_STYLE,
+						CssBorderTopColorParser.PROPERTY_BORDER_TOP_COLOR,
+						CssBorderTopLeftRadiusParser.PROPERTY_BORDER_TOP_LEFT_RADIUS,
+						CssBorderTopParser.PROPERTY_BORDER_TOP,
+						CssBorderTopRightRadiusParser.PROPERTY_BORDER_TOP_RIGHT_RADIUS,
+						CssBorderTopStyleParser.PROPERTY_BORDER_TOP_STYLE,
+						CssBorderTopWidthParser.PROPERTY_BORDER_TOP_WIDTH,
+						CssBorderWidthParser.PROPERTY_BORDER_WIDTH);
 
 		BorderRenderingConfiguration rv = new BorderRenderingConfiguration();
-		for (Attribute attr : sortedAttrs) {
-			if (attr.parser instanceof CssBorderBottomColorParser) {
-				rv.bottomColor = (CssColorValue) attr.value;
-			} else if (attr.parser instanceof CssBorderBottomLeftRadiusParser) {
-				rv.bottomLeftRadius = (CssBorderRadiusValue) attr.value;
-			} else if (attr.parser instanceof CssBorderBottomParser) {
-				rv.bottomWidth = ((CssBorderValue) attr.value).getWidth();
-				rv.bottomColor = ((CssBorderValue) attr.value).getColor();
-				rv.bottomStyle = ((CssBorderValue) attr.value).getStyle();
-			} else if (attr.parser instanceof CssBorderBottomRightRadiusParser) {
-				rv.bottomRightRadius = (CssBorderRadiusValue) attr.value;
-			} else if (attr.parser instanceof CssBorderBottomStyleParser) {
-				rv.bottomStyle = (CssBorderStyleValue) attr.value;
-			} else if (attr.parser instanceof CssBorderBottomWidthParser) {
-				rv.bottomWidth = (CssLength) attr.value;
-			} else if (attr.parser instanceof CssBorderColorParser) {
-				List<CssColorValue> colors = (List<CssColorValue>) attr.value;
+		for (Map.Entry<String, Object> entry : properties.entrySet()) {
+			if (entry.getKey().equals(
+					CssBorderBottomColorParser.PROPERTY_BORDER_BOTTOM_COLOR)) {
+				rv.bottomColor = (CssColorValue) entry.getValue();
+			} else if (entry.getKey().equals(
+					CssBorderBottomLeftRadiusParser.PROPERTY_BORDER_BOTTOM_LEFT_RADIUS)) {
+				rv.bottomLeftRadius = (CssBorderRadiusValue) entry.getValue();
+			} else if (entry.getKey()
+					.equals(CssBorderBottomParser.PROPERTY_BORDER_BOTTOM)) {
+				rv.bottomWidth = ((CssBorderValue) entry.getValue()).getWidth();
+				rv.bottomColor = ((CssBorderValue) entry.getValue()).getColor();
+				rv.bottomStyle = ((CssBorderValue) entry.getValue()).getStyle();
+			} else if (entry.getKey().equals(
+					CssBorderBottomRightRadiusParser.PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS)) {
+				rv.bottomRightRadius = (CssBorderRadiusValue) entry.getValue();
+			} else if (entry.getKey().equals(
+					CssBorderBottomStyleParser.PROPERTY_BORDER_BOTTOM_STYLE)) {
+				rv.bottomStyle = (CssBorderStyleValue) entry.getValue();
+			} else if (entry.getKey().equals(
+					CssBorderBottomWidthParser.PROPERTY_BORDER_BOTTOM_WIDTH)) {
+				rv.bottomWidth = (CssLength) entry.getValue();
+			} else if (entry.getKey()
+					.equals(CssBorderColorParser.PROPERTY_BORDER_COLOR)) {
+				List<CssColorValue> colors = (List<CssColorValue>) entry
+						.getValue();
 				if (colors.size() == 1) {
 					rv.topColor = colors.get(0);
 					rv.rightColor = colors.get(0);
@@ -235,42 +179,54 @@ public class BorderRenderingConfiguration {
 							CssBorderColorParser.PROPERTY_BORDER_COLOR
 									+ " must be 1-4 elements");
 				}
-			} else if (attr.parser instanceof CssBorderLeftColorParser) {
-				rv.leftColor = (CssColorValue) attr.value;
-			} else if (attr.parser instanceof CssBorderLeftParser) {
-				rv.leftWidth = ((CssBorderValue) attr.value).getWidth();
-				rv.leftColor = ((CssBorderValue) attr.value).getColor();
-				rv.leftStyle = ((CssBorderValue) attr.value).getStyle();
-			} else if (attr.parser instanceof CssBorderLeftStyleParser) {
-				rv.leftStyle = (CssBorderStyleValue) attr.value;
-			} else if (attr.parser instanceof CssBorderLeftWidthParser) {
-				rv.leftWidth = (CssLength) attr.value;
-			} else if (attr.parser instanceof CssBorderParser) {
-				CssBorderValue all = (CssBorderValue) attr.value;
+			} else if (entry.getKey().equals(
+					CssBorderLeftColorParser.PROPERTY_BORDER_LEFT_COLOR)) {
+				rv.leftColor = (CssColorValue) entry.getValue();
+			} else if (entry.getKey()
+					.equals(CssBorderLeftParser.PROPERTY_BORDER_LEFT)) {
+				rv.leftWidth = ((CssBorderValue) entry.getValue()).getWidth();
+				rv.leftColor = ((CssBorderValue) entry.getValue()).getColor();
+				rv.leftStyle = ((CssBorderValue) entry.getValue()).getStyle();
+			} else if (entry.getKey().equals(
+					CssBorderLeftStyleParser.PROPERTY_BORDER_LEFT_STYLE)) {
+				rv.leftStyle = (CssBorderStyleValue) entry.getValue();
+			} else if (entry.getKey().equals(
+					CssBorderLeftWidthParser.PROPERTY_BORDER_LEFT_WIDTH)) {
+				rv.leftWidth = (CssLength) entry.getValue();
+			} else if (entry.getKey().equals(CssBorderParser.PROPERTY_BORDER)) {
+				CssBorderValue all = (CssBorderValue) entry.getValue();
 				rv.leftWidth = rv.rightWidth = rv.topWidth = rv.bottomWidth = all
 						.getWidth();
 				rv.leftColor = rv.rightColor = rv.topColor = rv.bottomColor = all
 						.getColor();
 				rv.leftStyle = rv.rightStyle = rv.topStyle = rv.bottomStyle = all
 						.getStyle();
-			} else if (attr.parser instanceof CssBorderRadiusParser) {
-				List<CssBorderRadiusValue> radii = (List<CssBorderRadiusValue>) attr.value;
+			} else if (entry.getKey()
+					.equals(CssBorderRadiusParser.PROPERTY_BORDER_RADIUS)) {
+				List<CssBorderRadiusValue> radii = (List<CssBorderRadiusValue>) entry
+						.getValue();
 				rv.topLeftRadius = radii.get(0);
 				rv.topRightRadius = radii.get(1);
 				rv.bottomRightRadius = radii.get(2);
 				rv.bottomLeftRadius = radii.get(3);
-			} else if (attr.parser instanceof CssBorderRightColorParser) {
-				rv.rightColor = (CssColorValue) attr.value;
-			} else if (attr.parser instanceof CssBorderRightParser) {
-				rv.rightWidth = ((CssBorderValue) attr.value).getWidth();
-				rv.rightColor = ((CssBorderValue) attr.value).getColor();
-				rv.rightStyle = ((CssBorderValue) attr.value).getStyle();
-			} else if (attr.parser instanceof CssBorderRightStyleParser) {
-				rv.rightStyle = (CssBorderStyleValue) attr.value;
-			} else if (attr.parser instanceof CssBorderRightWidthParser) {
-				rv.rightWidth = (CssLength) attr.value;
-			} else if (attr.parser instanceof CssBorderStyleParser) {
-				List<CssBorderStyleValue> styles = (List<CssBorderStyleValue>) attr.value;
+			} else if (entry.getKey().equals(
+					CssBorderRightColorParser.PROPERTY_BORDER_RIGHT_COLOR)) {
+				rv.rightColor = (CssColorValue) entry.getValue();
+			} else if (entry.getKey()
+					.equals(CssBorderRightParser.PROPERTY_BORDER_RIGHT)) {
+				rv.rightWidth = ((CssBorderValue) entry.getValue()).getWidth();
+				rv.rightColor = ((CssBorderValue) entry.getValue()).getColor();
+				rv.rightStyle = ((CssBorderValue) entry.getValue()).getStyle();
+			} else if (entry.getKey().equals(
+					CssBorderRightStyleParser.PROPERTY_BORDER_RIGHT_STYLE)) {
+				rv.rightStyle = (CssBorderStyleValue) entry.getValue();
+			} else if (entry.getKey().equals(
+					CssBorderRightWidthParser.PROPERTY_BORDER_RIGHT_WIDTH)) {
+				rv.rightWidth = (CssLength) entry.getValue();
+			} else if (entry.getKey()
+					.equals(CssBorderStyleParser.PROPERTY_BORDER_STYLE)) {
+				List<CssBorderStyleValue> styles = (List<CssBorderStyleValue>) entry
+						.getValue();
 				if (styles.size() == 1) {
 					rv.topStyle = styles.get(0);
 					rv.rightStyle = styles.get(0);
@@ -298,22 +254,29 @@ public class BorderRenderingConfiguration {
 							CssBorderStyleParser.PROPERTY_BORDER_STYLE
 									+ " must be 1-4 elements");
 				}
-			} else if (attr.parser instanceof CssBorderTopColorParser) {
-				rv.topColor = (CssColorValue) attr.value;
-			} else if (attr.parser instanceof CssBorderTopLeftRadiusParser) {
-				rv.topLeftRadius = (CssBorderRadiusValue) attr.value;
-			} else if (attr.parser instanceof CssBorderTopParser) {
-				rv.topWidth = ((CssBorderValue) attr.value).getWidth();
-				rv.topColor = ((CssBorderValue) attr.value).getColor();
-				rv.topStyle = ((CssBorderValue) attr.value).getStyle();
-			} else if (attr.parser instanceof CssBorderTopRightRadiusParser) {
-				rv.topRightRadius = (CssBorderRadiusValue) attr.value;
-			} else if (attr.parser instanceof CssBorderTopStyleParser) {
-				rv.topStyle = (CssBorderStyleValue) attr.value;
-			} else if (attr.parser instanceof CssBorderTopWidthParser) {
-				rv.topWidth = (CssLength) attr.value;
-			} else if (attr.parser instanceof CssBorderWidthParser) {
-				List<CssLength> widths = (List<CssLength>) attr.value;
+			} else if (entry.getKey().equals(
+					CssBorderTopColorParser.PROPERTY_BORDER_TOP_COLOR)) {
+				rv.topColor = (CssColorValue) entry.getValue();
+			} else if (entry.getKey().equals(
+					CssBorderTopLeftRadiusParser.PROPERTY_BORDER_TOP_LEFT_RADIUS)) {
+				rv.topLeftRadius = (CssBorderRadiusValue) entry.getValue();
+			} else if (entry.getKey()
+					.equals(CssBorderTopParser.PROPERTY_BORDER_TOP)) {
+				rv.topWidth = ((CssBorderValue) entry.getValue()).getWidth();
+				rv.topColor = ((CssBorderValue) entry.getValue()).getColor();
+				rv.topStyle = ((CssBorderValue) entry.getValue()).getStyle();
+			} else if (entry.getKey().equals(
+					CssBorderTopRightRadiusParser.PROPERTY_BORDER_TOP_RIGHT_RADIUS)) {
+				rv.topRightRadius = (CssBorderRadiusValue) entry.getValue();
+			} else if (entry.getKey().equals(
+					CssBorderTopStyleParser.PROPERTY_BORDER_TOP_STYLE)) {
+				rv.topStyle = (CssBorderStyleValue) entry.getValue();
+			} else if (entry.getKey().equals(
+					CssBorderTopWidthParser.PROPERTY_BORDER_TOP_WIDTH)) {
+				rv.topWidth = (CssLength) entry.getValue();
+			} else if (entry.getKey()
+					.equals(CssBorderWidthParser.PROPERTY_BORDER_WIDTH)) {
+				List<CssLength> widths = (List<CssLength>) entry.getValue();
 				if (widths.size() == 1) {
 					rv.topWidth = widths.get(0);
 					rv.rightWidth = widths.get(0);
