@@ -78,6 +78,14 @@ public class QParagraphView extends ParagraphView implements LegacyCssView {
 		if (axis == View.X_AXIS) {
 			// TODO: make default for h1 max-content to be left-aligned, like
 			// jsfiddle
+
+			// The original Swing HTML model interprets margins pretty well,
+			// but it doesn't support "auto". So if a margin is something like
+			// "5px", then architecture outside of this method is already
+			// going to do the right thing. This method only needs to push
+			// things to be left, center or right-aligned based on the auto
+			// option.
+
 			QViewSizeHelper q = new QViewSizeHelper(this);
 			MarginConfiguration mc = new MarginConfiguration(q);
 			if (mc.left != null && mc.right != null && mc.left.isAuto()
