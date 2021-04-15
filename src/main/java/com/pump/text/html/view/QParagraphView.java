@@ -72,4 +72,34 @@ public class QParagraphView extends ParagraphView implements LegacyCssView {
 			height = predefinedHeight;
 		super.setSize(width, height);
 	}
+
+	@Override
+	public float getAlignment(int axis) {
+		if (axis == View.X_AXIS) {
+			// TODO: make default for h1 max-content to be left-aligned, like
+			// jsfiddle
+			QViewSizeHelper q = new QViewSizeHelper(this);
+			MarginConfiguration mc = new MarginConfiguration(q);
+			if (mc.left != null && mc.right != null && mc.left.isAuto()
+					&& mc.right.isAuto()) {
+				return .5f;
+			} else if (mc.left != null && mc.left.isAuto()) {
+				return 1;
+			} else if (mc.right != null && mc.right.isAuto()) {
+				return 0;
+			}
+		} else if (axis == View.Y_AXIS) {
+			QViewSizeHelper q = new QViewSizeHelper(this);
+			MarginConfiguration mc = new MarginConfiguration(q);
+			if (mc.top != null && mc.bottom != null && mc.top.isAuto()
+					&& mc.bottom.isAuto()) {
+				return .5f;
+			} else if (mc.top != null && mc.top.isAuto()) {
+				return 1;
+			} else if (mc.bottom != null && mc.bottom.isAuto()) {
+				return 0;
+			}
+		}
+		return super.getAlignment(axis);
+	}
 }

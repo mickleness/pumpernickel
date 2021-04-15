@@ -1166,6 +1166,133 @@ public class QHtmlTest extends TestCase {
 		}
 	}
 
+	/**
+	 * This tests that margins of "auto" can be used to left-align, right-align
+	 * or center-align h1 views.
+	 */
+	public void testMargin_auto() {
+		{
+			//@formatter:off
+			String maxContent = "<html>\n"
+					+ "  <head>\n"
+					+ "    <style>\n"
+					+ "      h1   { width: max-content; background-color: red; margin-right:auto;}\n"
+					+ "    </style>\n"
+					+ "  </head>\n"
+					+ "  <body>\n"
+					+ "    <h1>LOREM  IPSUM</h1>\n"
+					+ "  </body>\n"
+					+ "</html>";
+			//@formatter:on
+
+			List<Operation> ops = getOperations(true, maxContent);
+			assertEquals(3, ops.size());
+
+			Rectangle h1Background = ops.get(1).getBounds().getBounds();
+			assertTrue(h1Background.getMaxX() < 200);
+		}
+
+		{
+			//@formatter:off
+			String maxContent = "<html>\n"
+					+ "  <head>\n"
+					+ "    <style>\n"
+					+ "      h1   { width: max-content; background-color: red; margin-left:auto;}\n"
+					+ "    </style>\n"
+					+ "  </head>\n"
+					+ "  <body>\n"
+					+ "    <h1>LOREM  IPSUM</h1>\n"
+					+ "  </body>\n"
+					+ "</html>";
+			//@formatter:on
+
+			List<Operation> ops = getOperations(true, maxContent);
+			assertEquals(3, ops.size());
+
+			Rectangle h1Background = ops.get(1).getBounds().getBounds();
+			assertTrue(h1Background.getMinX() > htmlPaneSize.width - 200);
+		}
+
+		{
+			//@formatter:off
+			String maxContent = "<html>\n"
+					+ "  <head>\n"
+					+ "    <style>\n"
+					+ "      h1   { width: max-content; background-color: red; margin-left:auto; margin-right:auto}\n"
+					+ "    </style>\n"
+					+ "  </head>\n"
+					+ "  <body>\n"
+					+ "    <h1>LOREM  IPSUM</h1>\n"
+					+ "  </body>\n"
+					+ "</html>";
+			//@formatter:on
+
+			List<Operation> ops = getOperations(true, maxContent);
+			assertEquals(3, ops.size());
+
+			Rectangle h1Background = ops.get(1).getBounds().getBounds();
+			assertTrue(Math.abs(
+					h1Background.getCenterX() - htmlPaneSize.width / 2) < 5);
+		}
+	}
+
+	/**
+	 * This checks that if there are competing instructions for "margin" and
+	 * "margin-right" that we respect the last instruction.
+	 */
+	public void testMarginConstituentOrder() {
+
+		// this should be left-aligned:
+		{
+			//@formatter:off
+			String maxContent = "<html>\n"
+					+ "  <head>\n"
+					+ "    <style>\n"
+					+ "      h1   { width: max-content; background-color: red; "
+					+ "             margin: 0; "
+					+ "             margin-right:auto;}\n"
+					+ "    </style>\n"
+					+ "  </head>\n"
+					+ "  <body>\n"
+					+ "    <h1>LOREM  IPSUM</h1>\n"
+					+ "  </body>\n"
+					+ "</html>";
+			//@formatter:on
+
+			List<Operation> ops = getOperations(true, maxContent);
+			assertEquals(3, ops.size());
+
+			Rectangle h1Background = ops.get(1).getBounds().getBounds();
+			assertTrue(h1Background.getMaxX() < 200);
+		}
+
+		// this should be centered
+		{
+			//@formatter:off
+			String maxContent = "<html>\n"
+					+ "  <head>\n"
+					+ "    <style>\n"
+					+ "      h1   { width: max-content; background-color: red; "
+					+ "             margin-right:auto;\n"
+					+ "             margin: 0 }"
+					+ "    </style>\n"
+					+ "  </head>\n"
+					+ "  <body>\n"
+					+ "    <h1>LOREM  IPSUM</h1>\n"
+					+ "  </body>\n"
+					+ "</html>";
+			//@formatter:on
+
+			List<Operation> ops = getOperations(true, maxContent);
+			assertEquals(3, ops.size());
+
+			Rectangle h1Background = ops.get(1).getBounds().getBounds();
+			assertTrue(Math.abs(
+					h1Background.getCenterX() - htmlPaneSize.width / 2) < 5);
+		}
+
+	}
+
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,
 			int tolerance) {
 		assertEquals(bi1.getWidth(), bi2.getWidth());

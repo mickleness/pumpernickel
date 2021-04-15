@@ -26,9 +26,11 @@ import javax.swing.text.html.StyleSheet;
 
 import com.pump.text.html.css.CssColorParser;
 import com.pump.text.html.css.CssHeightParser;
+import com.pump.text.html.css.CssMultiMarginParser;
 import com.pump.text.html.css.CssOverflowParser;
 import com.pump.text.html.css.CssParser;
 import com.pump.text.html.css.CssPropertyParser;
+import com.pump.text.html.css.CssSingleMarginParser;
 import com.pump.text.html.css.CssTextShadowParser;
 import com.pump.text.html.css.CssWidthParser;
 import com.pump.text.html.css.background.CssBackgroundAttachmentParser;
@@ -125,6 +127,15 @@ public class QStyleSheet extends StyleSheet {
 
 		addCssPropertyHandler(new CssWidthParser());
 		addCssPropertyHandler(new CssHeightParser());
+		addCssPropertyHandler(new CssSingleMarginParser(
+				CssSingleMarginParser.PROPERTY_MARGIN_BOTTOM));
+		addCssPropertyHandler(new CssSingleMarginParser(
+				CssSingleMarginParser.PROPERTY_MARGIN_LEFT));
+		addCssPropertyHandler(new CssSingleMarginParser(
+				CssSingleMarginParser.PROPERTY_MARGIN_RIGHT));
+		addCssPropertyHandler(new CssSingleMarginParser(
+				CssSingleMarginParser.PROPERTY_MARGIN_TOP));
+		addCssPropertyHandler(new CssMultiMarginParser());
 	}
 
 	/**
