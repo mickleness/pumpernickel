@@ -32,8 +32,8 @@ public class CssLength extends AbstractCssValue {
 			}
 		}
 		unit = sb.toString();
-		value = Float.parseFloat(
-				cssString.substring(0, cssString.length() - sb.length()));
+		value = Float.parseFloat(cssString
+				.substring(0, cssString.length() - sb.length()).trim());
 	}
 
 	/**

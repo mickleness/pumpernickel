@@ -159,20 +159,34 @@ public class ShowcaseDemoPanel extends JPanel {
 		styleSheet.addRule(
 				"body {  padding: 12px 12px 12px 12px;  margin: 0;  font-family: sans-serif;  color: black;  background: white;  background-position: top left;  background-attachment: fixed;  background-repeat: no-repeat;}");
 
-		styleSheet.addRule("h1, h2, h3, h4, h5, h6 { text-align: left }");
-		
 		styleSheet.addRule(
-				"h1 { color: #005a9c; font: bold 160% sans-serif; padding: 6px 20px 6px 20px; width: max-content; background-clip: border-box; border: border: 2px solid #005a9c; border-radius:15px;}");
+				"h1 { color: #005a9c; \n" + "           font: bold 150%; \n"
+						+ "           width: max-content }");
+
+		styleSheet.addRule("h2 { padding: 4px 10px 4px 10px; \n"
+				+ "           background-color: #005a9c; \n"
+				+ "           font: bold 130%; \n"
+				+ "           color: white; \n"
+				+ "           width: max-content; \n"
+				+ "           margin-right:auto; }");
 
 		styleSheet.addRule(
-				"h2 { padding: 4px 15px 4px 15px; background-color: #005a9c; color: white; width: max-content; background-clip: border-box; border: transparent; border-radius:15px;}");
-		
+				"h3 { color: #005a9c; \n" + "           font: bold 120%; }");
+
 		styleSheet.addRule(
-				"h3 { font: 120% sans-serif; color: #005a9c; }");
-		
-		styleSheet.addRule("h4 { font: bold 100% sans-serif }");
-		styleSheet.addRule("h5 { font: italic 100% sans-serif }");
-		styleSheet.addRule("h6 { font: small-caps 100% sans-serif }");
+				"h4 { color: #005a9c; \n" + "           font: bold 110%; }");
+
+		styleSheet.addRule("pre { font-family: consolas, monospace;\n"
+				+ "            font-size: 103%;\n"
+				+ "            background-color: #ffffe9; \n"
+				+ "            width: max-content; \n"
+				+ "            padding: 4px;\n"
+				+ "            padding-left: 8px;\n"
+				+ "            margin-left: 8px;\n"
+				+ "            border-left: 2px solid #83e377 }");
+
+		styleSheet.addRule("code { font-family: consolas, monospace;\n"
+				+ "            font-size: 103%; font-weight:bold; }");
 
 		textPane.addHyperlinkListener(new HyperlinkListener() {
 			public void hyperlinkUpdate(HyperlinkEvent e) {

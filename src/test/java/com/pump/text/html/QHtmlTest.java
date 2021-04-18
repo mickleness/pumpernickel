@@ -30,6 +30,7 @@ import com.pump.graphics.vector.StringOperation;
 import com.pump.graphics.vector.VectorGraphics2D;
 import com.pump.graphics.vector.VectorImage;
 import com.pump.text.html.css.CssColorParser;
+import com.pump.text.html.css.CssLineHeightValue;
 
 import junit.framework.TestCase;
 
@@ -1290,7 +1291,87 @@ public class QHtmlTest extends TestCase {
 			assertTrue(Math.abs(
 					h1Background.getCenterX() - htmlPaneSize.width / 2) < 5);
 		}
+	}
 
+	/**
+	 * This makes sure a line height of three is spread out to take 3x as much
+	 * space as usual.
+	 */
+	public void testLineHeight() {
+
+		//@formatter:off
+		String html = "<html>\n"
+				+ "  <head>\n"
+				+ "    <style>\n"
+				+ "      body { line-height: 3; }"
+				+ "    </style>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    Lorem  ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam"
+				+ "  </body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		TextPaneFormatter smallText = new TextPaneFormatter() {
+
+			@Override
+			public JComponent format(JEditorPane p) {
+				p.setSize(new Dimension(100, 1000));
+				return p;
+			}
+
+		};
+
+		List<Operation> opsQ = getOperations(true, html, smallText);
+		List<Operation> opsOrig = getOperations(false, html, smallText);
+
+		int indexQ = 1;
+		int indexOrig = 2;
+		while (indexOrig < 10) {
+			StringOperation opOrig = (StringOperation) opsOrig.get(indexOrig);
+			StringOperation opQ = (StringOperation) opsQ.get(indexQ);
+			assertEquals(opOrig.getY(), opQ.getY());
+
+			indexOrig += 3;
+			indexQ++;
+		}
+	}
+
+	/**
+	 * This makes sure the keyword "normal" makes taller lines in the QHtml
+	 * renderer.
+	 */
+	public void testLineHeight_normalDefault() {
+
+		//@formatter:off
+		String html = "<html>\n"
+				+ "  <head>\n"
+				+ "    <style>\n"
+				+ "      body { line-height: normal; }"
+				+ "    </style>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    Lorem  ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam"
+				+ "  </body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		TextPaneFormatter smallText = new TextPaneFormatter() {
+
+			@Override
+			public JComponent format(JEditorPane p) {
+				p.setSize(new Dimension(100, 1000));
+				return p;
+			}
+
+		};
+
+		List<Operation> opsQ = getOperations(true, html, smallText);
+		List<Operation> opsOrig = getOperations(false, html, smallText);
+
+		assertTrue(opsOrig.get(opsOrig.size() - 1).getBounds().getMaxY() > 150);
+		assertTrue(opsQ.get(opsQ.size() - 1).getBounds().getMaxY() > 150
+				* CssLineHeightValue.VALUE_NORMAL);
 	}
 
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,
