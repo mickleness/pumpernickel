@@ -17,10 +17,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -30,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.SortedMap;
 import java.util.TreeSet;
 
 import javax.swing.UIManager;
@@ -38,11 +37,6 @@ import com.pump.math.function.Function;
 import com.pump.math.function.PolynomialFunction;
 
 public class BarChartRenderer {
-	/**
-	 * Use this value in your data to indicate an error occurred during
-	 * calculations.
-	 */
-	public static final Long ERROR_CODE = Long.MIN_VALUE + 1;
 
 	// based on https://coolors.co/f9c80e-f86624-ea3546-662e9b-43bccd
 	static final Color[] colors = new Color[] {
@@ -112,10 +106,14 @@ public class BarChartRenderer {
 	}
 
 	class DataRow implements Row {
+		int TICK_HEIGHT = 5;
+
 		String groupLabel;
 		Rectangle2D groupLabelRect;
 		Map<String, Long> data = new LinkedHashMap<>();
 		long maxValue;
+		SortedMap<Double, String> tickMap;
+		Font tickFont = new Font("Arial", 0, 12);
 
 		public DataRow(String groupLabel, Map<String, Long> data) {
 			this.groupLabel = groupLabel;
@@ -132,12 +130,15 @@ public class BarChartRenderer {
 					}
 				}
 			}
+			BasicTickLabeler l = new BasicTickLabeler();
+			tickMap = l.getLabeledTicks(0, maxValue);
+
 		}
 
 		@Override
 		public int getHeight() {
 			return (int) (Math.max(groupLabelRect.getHeight(),
-					data.size() * barHeight) + .5);
+					data.size() * barHeight) + .5) + TICK_HEIGHT + 20;
 		}
 
 		@Override
@@ -155,49 +156,63 @@ public class BarChartRenderer {
 					- groupLabelRect.getY());
 			g.setColor(Color.black);
 			g.drawString(groupLabel, labelX, labelY);
-			Function xFunction = PolynomialFunction.createFit(0, xMin, maxValue,
-					xMax);
+
+			Function xFunction;
+
+			g.setFont(tickFont);
+			Double lastXTick = tickMap.lastKey();
+			String lastTickStr = tickMap.get(lastXTick);
+			Rectangle2D lastTickStrR = g.getFontMetrics()
+					.getStringBounds(lastTickStr, g);
+			boolean isTooBig = false;
+			int xRightBound = xMax;
+			do {
+				xFunction = PolynomialFunction.createFit(0, xMin, maxValue,
+						xMax);
+
+				int x = Math.round((float) xFunction.evaluate(lastXTick));
+				isTooBig = x + lastTickStrR.getWidth() / 2 > xRightBound;
+				if (isTooBig) {
+					xMax--;
+				}
+
+			} while (isTooBig);
+
 			Font font = g.getFont();
 
 			int j = y;
 			for (Entry<String, Long> e : data.entrySet()) {
 				Long v = e.getValue();
 				Color barColor = getColor(e.getKey());
-				if (ERROR_CODE.equals(v)) {
-					int r = 3;
-					String str = "Error";
-					double w = g.getFontMetrics().getStringBounds(str, g)
-							.getWidth();
-					Shape[] bullets = new Shape[] {
-							new Ellipse2D.Double(xMin + 6 - r,
-									j + barHeight / 2 - r + 1, 2 * r, 2 * r),
-							new Ellipse2D.Double(xMin + 15 - r,
-									j + barHeight / 2 - r + 1, 2 * r, 2 * r),
-							new Ellipse2D.Double(xMin + w + 18 + 5 - r,
-									j + barHeight / 2 - r + 1, 2 * r, 2 * r),
-							new Ellipse2D.Double(xMin + w + 18 + 14 - r,
-									j + barHeight / 2 - r + 1, 2 * r, 2 * r) };
-					for (Shape bullet : bullets) {
-						g.setColor(barColor);
-						g.fill(bullet);
-						g.setColor(Color.black);
-						g.draw(bullet);
-					}
-
-					g.setColor(Color.black);
-					g.setFont(font.deriveFont(font.getSize2D() - 2));
-					g.drawString(str, xMin + 20, j + barHeight - 3);
-				} else {
-					int k = (int) (xFunction.evaluate(v) + .5);
-					Rectangle2D r = new Rectangle(xMin, j, k - xMin, barHeight);
-					g.setColor(barColor);
-					g.fill(r);
-					g.setStroke(new BasicStroke(1));
-					g.setColor(Color.black);
-					g.draw(r);
-				}
+				int k = (int) (xFunction.evaluate(v) + .5);
+				Rectangle2D r = new Rectangle(xMin, j, k - xMin, barHeight);
+				g.setColor(barColor);
+				g.fill(r);
+				g.setStroke(new BasicStroke(1));
+				g.setColor(Color.black);
+				g.draw(r);
 				j += barHeight;
 			}
+
+			g.setColor(new Color(0, 0, 0, 200));
+			for (Entry<Double, String> entry : tickMap.entrySet()) {
+				int x = Math.round((float) xFunction
+						.evaluate(entry.getKey().doubleValue()));
+				g.drawLine(x, j, x, j + 5);
+			}
+			j += 5;
+
+			g.setFont(tickFont);
+			for (Entry<Double, String> entry : tickMap.entrySet()) {
+				int x = Math.round((float) xFunction
+						.evaluate(entry.getKey().doubleValue()));
+				Rectangle2D r = g.getFontMetrics()
+						.getStringBounds(entry.getValue(), g);
+				g.drawString(entry.getValue(), (float) (x - r.getWidth() / 2),
+						j + 14);
+
+			}
+
 			g.dispose();
 		}
 	}
@@ -247,7 +262,7 @@ public class BarChartRenderer {
 		return r;
 	}
 
-	public BufferedImage render(Dimension maxSize) {
+	public BufferedImage paint(Dimension maxSize) {
 		int height = 0;
 		int x = 0;
 		for (Row row : rows) {
@@ -257,10 +272,20 @@ public class BarChartRenderer {
 		}
 		height -= groupGap;
 		height++;
-
 		BufferedImage bi = new BufferedImage(maxSize.width, height,
 				BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = bi.createGraphics();
+		paint(g, maxSize);
+		return bi;
+	}
+
+	public void paint(Graphics2D g, Dimension maxSize) {
+		int x = 0;
+		for (Row row : rows) {
+			x = Math.max(x, row.getGroupLabelWidth()) + groupLabelLeftGap
+					+ groupLabelRightGap;
+		}
+
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -274,10 +299,6 @@ public class BarChartRenderer {
 			row.paint(g, x, y, maxSize.width - 1);
 			y += row.getHeight() + groupGap;
 		}
-
-		g.dispose();
-
-		return bi;
 	}
 
 	private Map<String, Long> createMaxMap() {

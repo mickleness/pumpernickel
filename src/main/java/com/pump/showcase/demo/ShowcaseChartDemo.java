@@ -206,7 +206,7 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 			Map<String, Map<String, Long>> dataCopy = convertSampleSetToLong(
 					data);
 			BarChartRenderer r = new BarChartRenderer(dataCopy);
-			BufferedImage bi = r.render(new Dimension(500, 1000));
+			BufferedImage bi = r.paint(new Dimension(500, 1000));
 			progressBar.setVisible(false);
 			results.setVisible(true);
 			results.add(new JLabel(new ImageIcon(bi)));
@@ -286,9 +286,7 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 			for (Entry<String, Long> entry2 : entry.getValue().entrySet()) {
 				sb.append("\t<tr>\n");
 				sb.append("\t\t\t<td>" + entry2.getKey() + "</td>\n");
-				String v = entry2.getValue().equals(BarChartRenderer.ERROR_CODE)
-						? "Error"
-						: NumberFormat.getInstance().format(entry2.getValue());
+				String v = NumberFormat.getInstance().format(entry2.getValue());
 				sb.append("\t\t\t<td>" + v + "</td>\n");
 				sb.append("\t</tr>\n");
 			}

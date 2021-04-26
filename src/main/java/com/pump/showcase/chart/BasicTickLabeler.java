@@ -35,9 +35,16 @@ public class BasicTickLabeler {
 		}
 
 		StringBuilder pattern = new StringBuilder();
+		int ctr = 0;
 		for (int a = 0; a < leftMaxDigits; a++) {
-			pattern.append("#");
+			if (ctr == 3) {
+				ctr = 0;
+				pattern.insert(0, ',');
+			}
+			ctr++;
+			pattern.insert(0, "#");
 		}
+
 		if (rightMaxDigits > 0) {
 			pattern.append(".");
 			for (int a = 0; a < rightMaxDigits; a++) {
