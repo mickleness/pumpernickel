@@ -424,12 +424,12 @@ public class QHtmlTest extends TestCase {
 		for (int a = 0; a < ops1.size(); a++) {
 			assertTrue(ops1.get(a) instanceof ImageOperation);
 			ImageOperation c = (ImageOperation) ops1.get(a);
-			sum.add(new Area(c.getDestRect()));
+			sum.add(new Area(c.getBounds()));
 		}
 
 		// did our tiles cover everything:
-		assertTrue(sum.contains(
-				new Rectangle(0, 0, htmlPaneSize.width, htmlPaneSize.height)));
+		assertTrue(sum.contains(new Rectangle(1, 1, htmlPaneSize.width - 2,
+				htmlPaneSize.height - 2)));
 
 		// Swing's default renderer should support repeat-x, but not with a
 		// base64-encoded image

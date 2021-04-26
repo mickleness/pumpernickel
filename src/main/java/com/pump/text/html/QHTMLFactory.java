@@ -1,7 +1,5 @@
 package com.pump.text.html;
 
-import java.awt.image.BufferedImage;
-
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.Element;
@@ -13,6 +11,7 @@ import javax.swing.text.html.HTMLEditorKit.HTMLFactory;
 
 import com.pump.text.html.css.image.CssUrlImageValue;
 import com.pump.text.html.view.BufferedImageView;
+import com.pump.text.html.view.PaintableView;
 import com.pump.text.html.view.QBlockView;
 import com.pump.text.html.view.QBodyBlockView;
 import com.pump.text.html.view.QHtmlBlockView;
@@ -128,8 +127,15 @@ public class QHTMLFactory extends HTMLFactory {
 	protected View createBase64Image(Element elem, String src) {
 		try {
 			if (src.startsWith("data:image/")) {
-				BufferedImage bi = CssUrlImageValue.createImageFromDataUrl(src);
-				return new BufferedImageView(elem, bi);
+				CssUrlImageValue.ImageDataValue d = CssUrlImageValue
+						.createPaintableFromDataUrl(src);
+				if (d.bufferedImage != null) {
+					// use BufferedImageView by default, in case it
+					// inherits valuable features the PaintableView
+					// may (currently) lack.
+					return new BufferedImageView(elem, d.bufferedImage);
+				}
+				return new PaintableView(elem, d.paintable);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

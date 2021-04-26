@@ -5,14 +5,21 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JViewport;
 import javax.swing.text.Document;
 
+import com.pump.awt.BufferedImagePaintable;
+import com.pump.awt.Paintable;
+import com.pump.graphics.vector.VectorImage;
+import com.pump.graphics.vector.VectorImagePaintable;
 import com.pump.image.ImageLoader;
 import com.pump.text.html.css.AbstractCssValue;
 import com.pump.text.html.css.CssLength;
@@ -30,16 +37,40 @@ public class CssUrlImageValue extends AbstractCssValue
 			.getName() + "#imageCache";
 
 	/**
-	 * Create a BufferedImage from a url that begins with something like:
+	 * This is guaranteed to have a non-null Paintable, but the BufferedImage
+	 * is optional. When the BufferedImage exists, the Paintable is just a
+	 * BufferedImagePaintable.
+	 * <p>
+	 * So this accommodates both vector graphics (which can be a Paintable)
+	 * and a plain BufferedImage.
+	 */
+	public static class ImageDataValue {
+		public Paintable paintable;
+		public BufferedImage bufferedImage;
+
+		public ImageDataValue(BufferedImage img) {
+			Objects.requireNonNull(img);
+			bufferedImage = img;
+			paintable = new BufferedImagePaintable(img);
+		}
+
+		public ImageDataValue(Paintable paintable) {
+			Objects.requireNonNull(paintable);
+			this.paintable = paintable;
+		}
+	}
+
+	/**
+	 * Create a ImageDataValue from a url that begins with something like:
 	 * "data:image/png;base64,". This currently throws an exception for any
-	 * image that isn't a PNG or JPG. (We could add support for GIFs, but since
-	 * that requires supporting animation it's a whole separate project.)
+	 * image that isn't a PNG, JPG of JVG. (We could add support for GIFs, but
+	 * since that requires supporting animation it's a whole separate project.)
 	 * 
 	 * @param urlStr
 	 *            a URL of base-64 encoded data that begins with something like
 	 *            "data:image/png;base64,"
 	 */
-	public static BufferedImage createImageFromDataUrl(String urlStr) {
+	public static ImageDataValue createPaintableFromDataUrl(String urlStr) {
 		if (!urlStr.startsWith("data:"))
 			throw new IllegalArgumentException();
 
@@ -66,29 +97,23 @@ public class CssUrlImageValue extends AbstractCssValue
 				|| fileFormat.equals("png")) {
 			BufferedImage img = ImageLoader.createImage(
 					Toolkit.getDefaultToolkit().createImage(bytes));
-			return img;
+			return new ImageDataValue(img);
+		} else if (fileFormat.equalsIgnoreCase(VectorImage.FILE_EXTENSION)) {
+			VectorImage vi;
+			try (InputStream in = new ByteArrayInputStream(bytes)) {
+				vi = new VectorImage(in);
+			} catch (RuntimeException e) {
+				throw e;
+			} catch (Throwable t) {
+				throw new RuntimeException(t);
+			}
+			return new ImageDataValue(new VectorImagePaintable(vi));
 		} else {
 			// regarding gifs: we could support them, we just haven't
 			// bothered yet.
 			throw new UnsupportedOperationException(
 					"This decoder does not support bas64 encoded " + fileFormat
 							+ ".");
-		}
-	}
-
-	/**
-	 * This wrapper contains a BufferedImage, or null if an error occurred
-	 * trying to load that image.
-	 *
-	 */
-	private static class LoadedImage {
-		/**
-		 * This may be null if an error occurred trying to load this URL.
-		 */
-		private BufferedImage bi;
-
-		private LoadedImage(BufferedImage bi) {
-			this.bi = bi;
 		}
 	}
 
@@ -103,15 +128,16 @@ public class CssUrlImageValue extends AbstractCssValue
 	@Override
 	public void paintRectangle(Graphics2D g, QViewHelper viewHelper,
 			int layerIndex, int x, int y, int width, int height) {
-		Cache<String, LoadedImage> imageCache = getCache(
+		Cache<String, AtomicReference<ImageDataValue>> imageCache = getCache(
 				viewHelper.getView().getDocument());
-		LoadedImage img = imageCache.get(cssStr);
-		if (img == null) {
-			img = new LoadedImage(createBufferedImage());
-			imageCache.put(cssStr, img);
+		AtomicReference<ImageDataValue> ref = imageCache.get(cssStr);
+		if (ref == null) {
+			ref = new AtomicReference<>(createPaintable());
+			imageCache.put(cssStr, ref);
 		}
-		if (img.bi != null) {
-			paintImage(g, img.bi, viewHelper, layerIndex, x, y, width, height);
+		ImageDataValue p = ref.get();
+		if (p != null) {
+			paintImage(g, p, viewHelper, layerIndex, x, y, width, height);
 		} else {
 			// this probably means an error occurred loading the image, so we
 			// give up
@@ -119,7 +145,7 @@ public class CssUrlImageValue extends AbstractCssValue
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void paintImage(Graphics2D g, BufferedImage bi,
+	protected void paintImage(Graphics2D g, ImageDataValue p,
 			QViewHelper viewHelper, int layerIndex, int x, int y, int width,
 			int height) {
 
@@ -173,7 +199,8 @@ public class CssUrlImageValue extends AbstractCssValue
 					new CssLength(0, "px"), true, new CssLength(0, "px"), true);
 		}
 
-		Dimension imageSize = new Dimension(bi.getWidth(), bi.getHeight());
+		Dimension imageSize = new Dimension(p.paintable.getWidth(),
+				p.paintable.getHeight());
 		imageSize = sizeValue == null ? imageSize
 				: sizeValue.getCalculator().getSize(width, height, imageSize);
 
@@ -189,8 +216,20 @@ public class CssUrlImageValue extends AbstractCssValue
 							: positionValue.getVerticalPosition(),
 					positionValue == null ? true
 							: positionValue.isVerticalPositionFromTop())) {
-				g.drawImage(bi, xSpan.position, ySpan.position, xSpan.length,
-						ySpan.length, null);
+				if (p.bufferedImage != null) {
+					g.drawImage(p.bufferedImage, xSpan.position, ySpan.position, xSpan.length,
+							ySpan.length, null);
+				} else {
+					Graphics2D g2 = (Graphics2D) g.create();
+					g2.translate(xSpan.position, ySpan.position);
+					g2.scale(
+							((double) xSpan.length)
+									/ ((double) imageSize.width),
+							((double) ySpan.length)
+									/ ((double) imageSize.height));
+					p.paintable.paint(g2);
+					g2.dispose();
+				}
 			}
 		}
 
@@ -209,24 +248,26 @@ public class CssUrlImageValue extends AbstractCssValue
 		return allLayers.get(allLayers.size() - 1);
 	}
 
-	protected BufferedImage createBufferedImage() {
-		BufferedImage bi = null;
+	protected ImageDataValue createPaintable() {
+		ImageDataValue paintable = null;
 		try {
 			if (urlStr.startsWith("data:")) {
-				bi = createImageFromDataUrl(urlStr);
+				paintable = createPaintableFromDataUrl(urlStr);
 			} else {
 				URL url = new URL(urlStr);
-				bi = ImageLoader.createImage(url);
+				BufferedImage bi = ImageLoader.createImage(url);
+				paintable = new ImageDataValue(bi);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return bi;
+		return paintable;
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Cache<String, LoadedImage> getCache(Document doc) {
-		Cache<String, LoadedImage> cache = (Cache<String, LoadedImage>) doc
+	protected Cache<String, AtomicReference<ImageDataValue>> getCache(
+			Document doc) {
+		Cache<String, AtomicReference<ImageDataValue>> cache = (Cache<String, AtomicReference<ImageDataValue>>) doc
 				.getProperty(PROPERTY_IMAGE_CACHE);
 		if (cache == null) {
 			cache = new Cache<>(100, 10000, 500);
