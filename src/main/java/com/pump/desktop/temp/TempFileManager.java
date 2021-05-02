@@ -13,6 +13,7 @@ package com.pump.desktop.temp;
 import java.io.File;
 import java.io.IOException;
 import java.nio.channels.FileLock;
+import java.util.Objects;
 import java.util.Random;
 
 import com.pump.io.IOUtils;
@@ -78,11 +79,10 @@ public class TempFileManager {
 			if (manager.getApplicationName().equals(appName)) {
 				return false;
 			}
-			System.err
-					.println("Warning: TempFileManager previously initialized as \""
+			System.err.println(
+					"Warning: TempFileManager previously initialized as \""
 							+ manager.getApplicationName()
-							+ "\", now attmped to initialize as \""
-							+ appName
+							+ "\", now attmped to initialize as \"" + appName
 							+ "\".");
 			return false;
 		}
@@ -90,8 +90,8 @@ public class TempFileManager {
 		File dir = new File(System.getProperty("java.io.tmpdir"));
 		File appDir = new File(dir, appName + "+TempFileMgr");
 		if (!appDir.exists() && !appDir.mkdirs())
-			throw new IOException("File.mkdirs() failed for "
-					+ appDir.getAbsolutePath());
+			throw new IOException(
+					"File.mkdirs() failed for " + appDir.getAbsolutePath());
 
 		Random random = new Random();
 		int n = random.nextInt(0xFFFFFFF);
@@ -107,8 +107,8 @@ public class TempFileManager {
 								+ appDir.getAbsolutePath());
 		}
 		if (!localDir.mkdirs())
-			throw new IOException("File.mkdirs() failed for "
-					+ localDir.getAbsolutePath());
+			throw new IOException(
+					"File.mkdirs() failed for " + localDir.getAbsolutePath());
 		File lockedFile = new File(localDir, LOCK_FILE_NAME);
 		if (!lockedFile.createNewFile())
 			throw new IOException("File.createNewFile() failed for "
@@ -120,10 +120,10 @@ public class TempFileManager {
 		new CleanThread(appDir, localDir, null).start();
 
 		// clean up this session -- later
-		Runtime.getRuntime().addShutdownHook(
-				new CleanThread(appDir, null, lock));
-		System.out.println("Initialized temp directory as "
-				+ localDir.getAbsolutePath());
+		Runtime.getRuntime()
+				.addShutdownHook(new CleanThread(appDir, null, lock));
+		System.out.println(
+				"Initialized temp directory as " + localDir.getAbsolutePath());
 
 		manager = new TempFileManager(appName, localDir);
 
@@ -166,8 +166,8 @@ public class TempFileManager {
 							File lockFile = new File(child, LOCK_FILE_NAME);
 							if ((!lockFile.exists()) || (!isLocked(lockFile))) {
 								if (!IOUtils.delete(child))
-									System.err
-											.println("IOUtils.delete(..) failed for "
+									System.err.println(
+											"IOUtils.delete(..) failed for "
 													+ child.getAbsolutePath());
 							} else {
 								System.err.println("Active session detected: "
@@ -186,7 +186,10 @@ public class TempFileManager {
 	File dir;
 
 	private TempFileManager(String appName, File dir) {
+		Objects.requireNonNull(appName);
+		Objects.requireNonNull(dir);
 		this.dir = dir;
+		this.appName = appName;
 	}
 
 	protected String getApplicationName() {

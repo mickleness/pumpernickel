@@ -40,14 +40,20 @@ public class BufferedPipe {
 	PrintStream out;
 	String prefix;
 
+	private StringBuilder log = new StringBuilder();
+	private boolean isLogActive = false;
+
 	public BufferedPipe(InputStream in, PrintStream out) {
-		this(in, out, "");
+		this(in, out, "", false);
 	}
 
-	public BufferedPipe(InputStream in, PrintStream out, String prefix) {
+	public BufferedPipe(InputStream in, PrintStream out, String prefix,
+			boolean isLogActive) {
 		this.in = in;
 		this.out = out;
 		this.prefix = prefix;
+		this.isLogActive = isLogActive;
+
 		Thread thread = new Thread("BufferedPipe-" + (threadCtr++)) {
 			@Override
 			public void run() {
@@ -81,5 +87,33 @@ public class BufferedPipe {
 	protected void process(String s) {
 		if (out != null)
 			out.println(prefix + s);
+
+		if (isLogActive()) {
+			log.append(s);
+			log.append("\n");
+		}
+	}
+
+	/**
+	 * Return true if all the output from the process should be logged.
+	 */
+	public boolean isLogActive() {
+		return isLogActive;
+	}
+
+	/**
+	 * Toggle logging on/off. When true {@link #getLog()} returns all the output
+	 * from the input stream.
+	 */
+	public void setLogActive(boolean logActive) {
+		isLogActive = logActive;
+	}
+
+	/**
+	 * Return the log. This will only contain data if
+	 * {@link #setLogActive(boolean)} has been called.
+	 */
+	public String getLog() {
+		return log.toString();
 	}
 }

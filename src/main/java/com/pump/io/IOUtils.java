@@ -1161,4 +1161,23 @@ public class IOUtils {
 			}
 		}
 	}
+
+	/**
+	 * Read a file into a byte array.
+	 */
+	public static byte[] readBytes(File file) throws IOException {
+		byte[] returnValue = new byte[(int) file.length()];
+		int t = 0;
+		try (FileInputStream fileIn = new FileInputStream(file)) {
+			int j;
+			do {
+				j = fileIn.read(returnValue, t, returnValue.length - t);
+				if (j <= 0)
+					return returnValue;
+				t += j;
+			} while (j >= 0);
+		}
+
+		return returnValue;
+	}
 }

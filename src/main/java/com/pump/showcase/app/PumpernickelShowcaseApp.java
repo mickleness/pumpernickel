@@ -224,6 +224,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 				new ShowcaseDemoInfo("ShadowRenderer", "ShadowRendererDemo"));
 		returnValue
 				.add(new ShowcaseDemoInfo("HTML, QHTMLEditorKit", "HTMLDemo"));
+		returnValue.add(new ShowcaseDemoInfo("ThumbnailGenerator",
+				"ThumbnailGeneratorDemo"));
 		if (JVM.isMac) {
 			returnValue.add(new ShowcaseDemoInfo("AquaIcon", "AquaIconDemo"));
 			returnValue.add(new ShowcaseDemoInfo("NSImage", "NSImageDemo"));
