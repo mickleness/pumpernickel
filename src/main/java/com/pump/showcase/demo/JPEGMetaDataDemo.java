@@ -109,18 +109,18 @@ public class JPEGMetaDataDemo extends ShowcaseResourceExampleDemo<URL> {
 		}
 
 		@Override
-		public void close() throws Exception {
+		public void startFile() {
+			htmlBody = new StringBuilder();
+		}
+
+		@Override
+		public void endFile() {
 			if (currentMarkerCode != null)
 				htmlBody.append("</div>");
 
 			htmlBody.insert(0, "<html>");
 			htmlBody.append("</html>");
 			textPane.setText(htmlBody.toString());
-		}
-
-		@Override
-		public void start() {
-			htmlBody = new StringBuilder();
 		}
 
 	};

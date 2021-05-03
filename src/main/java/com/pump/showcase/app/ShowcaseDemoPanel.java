@@ -188,6 +188,9 @@ public class ShowcaseDemoPanel extends JPanel {
 		styleSheet.addRule("code { font-family: consolas, monospace;\n"
 				+ "            font-size: 103%; font-weight:bold; }");
 
+		styleSheet.addRule(
+				"blockquote { color: #222222; \n" + "font-style: italic;}");
+
 		textPane.addHyperlinkListener(new HyperlinkListener() {
 			public void hyperlinkUpdate(HyperlinkEvent e) {
 				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {

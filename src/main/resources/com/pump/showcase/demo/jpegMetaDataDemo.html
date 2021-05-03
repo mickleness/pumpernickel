@@ -4,13 +4,35 @@
 <title>JPEGMetaData Demo</title>
 </head>
 <body>
-This demos the JPEGMetaData class, which is more efficient at producing thumbnails from JPEGs than some other approaches.
-<h3>First Draft</h3>
-The original customer request was simple enough: the user wanted to be able to browse a folder of images. Most of the time these images would be JPEGs from a high-resolution camera, so they would be over a thousand pixels in each dimension.
-<p>
-Our first implementation was as straight-forward as possible: render the image, then scale it to a thumbnail. But as you can imagine this was painfully slow for users with thousands of photos. When the customer compared this implementation to other apps: we were quickly shamed into figuring out a better solution.
-<h3>Second Draft</h3>
-We knew those file included an embedded thumbnail for just this purpose. But ... surprise! Getting those thumbnails wasn't easy. I tried googling how to use ImageIO to read thumbnails. The <a href="http://java.sun.com/j2se/1.5.0/docs/guide/imageio/spec/apps.fm3.html">first link</a> I found was from Sun, and it said:<br />
+<h1>JPEGMetaData Demo</h1>
+<h2>What Is It</h2>
+<p>The <code>JPEGMetaData</code> class parses meta data from JPG files. The primary use case is to quickly extract embedded thumbnails from a large JPG image.</p>
+<h2>How To Use It</h2>
+<p>The simplest invocation to retrieve the largest thumbnail is:</p>
+<pre>
+BufferedImage bi = JPEGMetaData.getThumbnail(myFile);
+</pre>
+<p>But if you want more granular control you can create your own <code>JPEGMetaDataListener</code> to receive each incoming key/value property, thumbnail and comment:</p>
+<pre>
+JPEGMetaDataListener listener = createListener();
+JPEGMetaData reader = new JPEGMetaData(listener);
+reader.read(inputStream);
+</pre>
+<h2>How It Works</h2>
+<p>The <code>JPEGMetaData</code> object skims chunks of the JPG input stream for supported meta data. If you're interested in properties, comments, or more than one thumbnail, then you can implement your own <code>JPEGMetaDataListener</code>:
+<pre>public interface JPEGMetaDataListener {
+	void startFile();
+	boolean isThumbnailAccepted(String markerName, int width, int height);
+	void addProperty(String markerName, String propertyName, Object value);
+	void addThumbnail(String markerName, BufferedImage bi);
+	void addComment(String markerName, String comment);
+	void endFile();
+}</pre>
+<h2>Discussion</h2>
+<p>This class was originally developed to help the user browse a folder of megapixel images.</p>
+<p>This is not intended to be a fully functional JPEG parser. (I have no intention of recreating that wheel!) But it's pretty light weight solution to the problem.
+<h3>ImageIO</h3>
+<p>When I say this is a "light weight solution": I'm implicitly comparing this approach to an <code>ImageIO</code>-based solution. The <a href="http://java.sun.com/j2se/1.5.0/docs/guide/imageio/spec/apps.fm3.html">documentation</a> for <code>ImageIO</code> says:<p/>
 <blockquote>
 <b>3.3.4  Reading "Thumbnail" Images</b><br />
 <br />
@@ -28,9 +50,9 @@ BufferedImage bi;
 bi = reader.readThumbnail(imageIndex, thumbnailIndex);</pre>
 <br /></blockquote>
 
-This makes sense. The problem is: it doesn't actually work.
+<p>That sounds great, but the catch is: it doesn't actually work. No built-in readers actually produced a thumbnail using the approach above.
 <p>
-A little more digging led me to <a href="http://forums.java.net/jive/thread.jspa?messageID=373652">another link</a> where a developer wrote:<br />
+I found <a href="http://forums.java.net/jive/thread.jspa?messageID=373652">a discussion online</a> where a developer wrote:<br />
 <blockquote>
 I should have remarked that the JAI Image I/O Tools JPEG reader supports via the thumbnail method calls all thumbnails embedded in the JFIF APP0, JFXX APP0, and EXIF APP1 marker segments. Please see this javadoc for more information:<br />
 <br />
@@ -38,8 +60,7 @@ I should have remarked that the JAI Image I/O Tools JPEG reader supports via the
 <br />
 I think that the only thumbnails supported by the Java SE Image I/O JPEG reader via the thumbnail method calls are those in the JFIF and JFXX marker segments. If you are unable to use JAI Image I/O Tools for some reason you could however derive the EXIF thumbnail by parsing the contents of the "unknown" node in the image metadata corresponding to the EXIF APP1 marker segment.</blockquote>
 <br />
-I think he just summed up the problem I was seeing.  If I ran the following code (without JAI installed), I get an exception:<br />
-<blockquote>
+<p>To paraphase: we would need to install a separate library/extension (<a href="https://www.oracle.com/java/technologies/advanced-imaging-api.html">JAI - Java Advanced Imaging</a>) for the <code>ImageIO</code> calls to "just work". If I run the following code (without JAI installed), I get an exception:<p/>
 <pre>Iterator iterator = ImageIO.getImageReadersBySuffix("jpeg");
 while(iterator.hasNext()) {
  ImageReader reader = (ImageReader)iterator.next();
@@ -50,19 +71,13 @@ while(iterator.hasNext()) {
   e.printStackTrace();
  }
 }</pre>
-</blockquote>
-<br />
-(The exception I get is: <code>java.lang.IndexOutOfBoundsException: No such thumbnail at com.sun.imageio.plugins.jpeg.JPEGImageReader.readThumbnail(JPEGImageReader.java:1354)</code>.)
-<p>
+<p>I have nothing against JAI, and honestly I forget why we ruled that out as the solution to our problem. (This project is over a decade old at this point.) But for whatever reason: we tried our hand at parsing the thumbnails ourselves.</p>
 <h3>Implementation</h3>
-<p>
-A little more exploration quickly confirmed that JPEG image data is not a trivial thing to write a decoder for. But like most media formats: it is composed of discrete blocks.
-<p>
-It wasn't too hard to tease out the blocks used for thumbnails. Like the developer suggested above: APP0 and APP1 blocks were easily identifiable. (They contained mini stand-alone JPEGs. ImageIO is perfectly capable of reading them, you just have to present the data as its own ByteArrayInputStream.)
-<p>
-A little more detective work also revealed a 3rd block: <a href="http://www.ozhiker.com/electronics/pjmt/jpeg_info/app_segments.html">APP13</a>. This is apparently Adobe's invention; it's also known as an Image Resource Block (IRB). I iterated over thousands of images (from various sources) and found that about 1/3 of them <em>only</em> used an IRB block for a thumbnail. Like the Netscape block for GIFs: this may have started with Adobe, but it looks like other folks are using it just because it's popular.
-<p>
-While I was there I harvested comments and properties. (You know all those tech-y articles advising you how to turn off geolocation tags in your phone's camera? Those tags and more are listed in a raw table of properties. Including exposure time, camera manufacturer, resolution, etc.) This all resulted in the new <code>JPEGMetaData</code> class. This is a (relatively) lightweight class that can parse an InputStream and harvest thumbnails, comments, and other properties. Is it better than JAI? Of course not. But if all you want is JPEG thumbnails: it's a big improvement over ImageIO.
-
+<p>It isn't too hard to tease out the blocks used for thumbnails. Like the developer suggested above: APP0 and APP1 blocks were easily identifiable. (They contained mini stand-alone JPEGs. ImageIO is perfectly capable of reading them, you just have to present the data as its own ByteArrayInputStream.)</p>
+<p>A little more detective work also revealed a 3rd block: <a href="http://www.ozhiker.com/electronics/pjmt/jpeg_info/app_segments.html">APP13</a>. This is apparently Adobe's invention; it's also known as an Image Resource Block (IRB). I iterated over thousands of images (from various sources) and found that about 1/3 of them <em>only</em> used an IRB block for a thumbnail. Like the Netscape block for GIFs: this may have started with Adobe, but it looks like other folks are using it just because it's popular. But this is still easy to parse with the same basic approach: it's a mini-JPG embedded inside a JPG.</p>
+<p>Adding properties and comments to the reader was more of an afterthought. So far I haven't used that information; I've been exclusively interested in thumbnails.</p>
+<p>So overall: this meets the original goals/needs we set out to satisfy, but it is hackish in nature. There's probably a lot of metadata -- and maybe even some thumbnails -- we don't support yet.</p>
+<h3>Performance</h3>
+<p>See the <em>ThumbnailGenerator Demo</em> for details about performance. As of this writing: retrieving the thumbnail from a large megapixel JPG via the <code>JPEGMetaData</code> is about 50x faster than reading and scaling the image.
 </body>
 </html>

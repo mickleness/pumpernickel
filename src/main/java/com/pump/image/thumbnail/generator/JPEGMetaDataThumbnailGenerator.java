@@ -61,12 +61,12 @@ public class JPEGMetaDataThumbnailGenerator implements ThumbnailGenerator {
 			}
 
 			@Override
-			public void close() throws Exception {
+			public void endFile() {
 				// intentionally empty
 			}
 
 			@Override
-			public void start() {
+			public void startFile() {
 				// intentionally empty
 			}
 

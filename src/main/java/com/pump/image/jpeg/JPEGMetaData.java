@@ -82,13 +82,12 @@ public class JPEGMetaData {
 			}
 
 			@Override
-			public void close() throws Exception {
+			public void endFile() {
 				// intentionally empty
-
 			}
 
 			@Override
-			public void start() {
+			public void startFile() {
 				// intentionally empty
 			}
 		};
@@ -119,7 +118,7 @@ public class JPEGMetaData {
 
 	@SuppressWarnings("resource")
 	public void read(InputStream in) throws IOException {
-		listener.start();
+		listener.startFile();
 		try (JPEGMarkerInputStream jpegIn = new JPEGMarkerInputStream(in)) {
 			String markerCode = jpegIn.getNextMarker();
 			JPEGMarker marker = JPEGMarker.getMarkerForByteCode(markerCode);
@@ -167,13 +166,7 @@ public class JPEGMetaData {
 				markerCode = jpegIn.getNextMarker();
 			}
 		} finally {
-			try {
-				listener.close();
-			} catch (RuntimeException | IOException e) {
-				throw e;
-			} catch (Exception e) {
-				throw new IOException(e);
-			}
+			listener.endFile();
 		}
 	}
 

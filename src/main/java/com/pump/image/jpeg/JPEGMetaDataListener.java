@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 /**
  * This listens to new JPEG meta data as a JPEGMetaData object parses it.
  */
-public interface JPEGMetaDataListener extends AutoCloseable {
+public interface JPEGMetaDataListener {
 	/**
 	 * If this returns true then the reader will attempt to parse an incoming
 	 * BufferedImage and pass it to
@@ -61,6 +61,11 @@ public interface JPEGMetaDataListener extends AutoCloseable {
 	 * implementation is single-threaded, so you should see a simple/clear path
 	 * of execution from this start method to the close method.)
 	 */
-	void start();
+	void startFile();
+
+	/**
+	 * This is called to indicate an InputStream is finished.
+	 */
+	void endFile();
 
 }
