@@ -110,7 +110,7 @@ class APP1DataReader {
 			for (int a = 0; a < ifd0.entries.length; a++) {
 				String name = ifd0.entries[a].getPropertyName();
 				if (name != null) {
-					listener.addProperty(JPEGMarkerInputStream.APP1_MARKER,
+					listener.addProperty(JPEGMarker.APP1_MARKER.getByteCode(),
 							name, ifd0.entries[a].value);
 				}
 			}
@@ -136,7 +136,8 @@ class APP1DataReader {
 						bufferedIn, jpegLength.longValue(), false);
 
 				GenericDataReader.readThumbnail(
-						JPEGMarkerInputStream.APP1_MARKER, guardedIn, listener);
+						JPEGMarker.APP1_MARKER.getByteCode(), guardedIn,
+						listener);
 			}
 		}
 	}

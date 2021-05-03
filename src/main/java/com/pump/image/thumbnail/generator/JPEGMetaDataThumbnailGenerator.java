@@ -60,6 +60,16 @@ public class JPEGMetaDataThumbnailGenerator implements ThumbnailGenerator {
 				// intentionally empty
 			}
 
+			@Override
+			public void close() throws Exception {
+				// intentionally empty
+			}
+
+			@Override
+			public void start() {
+				// intentionally empty
+			}
+
 		};
 		JPEGMetaData reader = new JPEGMetaData(listener);
 		try (InputStream in = new FileInputStream(file)) {

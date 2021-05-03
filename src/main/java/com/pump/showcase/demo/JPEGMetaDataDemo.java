@@ -11,101 +11,150 @@
 package com.pump.showcase.demo;
 
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.Base64;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 
-import com.pump.image.ImageLoader;
+import com.pump.desktop.error.ErrorManager;
+import com.pump.image.jpeg.JPEGMarker;
 import com.pump.image.jpeg.JPEGMetaData;
-import com.pump.image.thumbnail.Thumbnail;
+import com.pump.image.jpeg.JPEGMetaDataListener;
+import com.pump.io.HTMLEncoding;
+import com.pump.text.html.QHTMLEditorKit;
 
 /**
  * A simple demo for the {@link JPEGMetaData} class.
- * <p>
- * Here is a sample screenshot of this showcase demo:
- * <p>
- * <img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JPEGMetaDataDemo.png"
- * alt="A screenshot of the JPEGMetaDataDemo.">
  */
-public class JPEGMetaDataDemo extends ShowcaseChartDemo {
+public class JPEGMetaDataDemo extends ShowcaseResourceExampleDemo<URL> {
 	private static final long serialVersionUID = 1L;
 
-	private static final int SAMPLE_COUNT = 10;
+	JTextPane textPane = new JTextPane();
 
-	private final static URL url = ImageLoader.class.getResource("bridge3.jpg");
+	JPEGMetaDataListener listener = new JPEGMetaDataListener() {
 
-	private static final String IMPLEMENTATION_IMAGEIO_SCALED = "ImageIO Scaled";
-	private static final String IMPLEMENTATION_JPEGMETADATA = "JPEGMetaData";
-	private static final String IMPLEMENTATION_IMAGEIO_READER = "ImageIO Reader";
+		String currentMarkerCode = null;
+		StringBuilder htmlBody = new StringBuilder();
 
-	static class MeasurementRunnable extends TimeMemoryMeasurementRunnable {
-
-		ImageReader imageReader;
-
-		public MeasurementRunnable(Map<String, Map<String, SampleSet>> data,
-				String implementation) {
-			super(data, null, implementation);
+		@Override
+		public boolean isThumbnailAccepted(String markerName, int width,
+				int height) {
+			return true;
 		}
 
 		@Override
-		protected void runSample() {
-			try (InputStream in = url.openStream()) {
-				if (implementation.equals(IMPLEMENTATION_JPEGMETADATA)) {
-					if (JPEGMetaData.getThumbnail(in) == null)
-						throw new UnsupportedOperationException(
-								"JPEGMetaData could not read a thumbnail for \""
-										+ url + "\"");
-				} else if (implementation
-						.equals(IMPLEMENTATION_IMAGEIO_SCALED)) {
-					ImageReader reader = ALL_READERS
-							.get(ALL_READERS.size() - 1);
-					reader.setInput(ImageIO.createImageInputStream(in));
-					BufferedImage image = reader.read(0);
-					if (image == null) {
-						throw new UnsupportedOperationException(
-								"ImageIO could not read an image for \""
-										+ url.toString() + "\"");
-					}
-					Thumbnail.Plain.create(image, new Dimension(128, 128));
-				} else {
-					readImageIOThumbnail(in);
+		public void addProperty(String markerName, String propertyName,
+				Object value) {
+			setMarker(markerName);
+			htmlBody.append("<strong>" + HTMLEncoding.encode(propertyName)
+					+ "</strong>: " + HTMLEncoding.encode(String.valueOf(value))
+					+ "<br/>");
+		}
+
+		@Override
+		public void addThumbnail(String markerName, BufferedImage bi) {
+			setMarker(markerName);
+
+			try {
+				byte[] jpgBytes;
+				try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
+					ImageIO.write(bi, "jpg", byteOut);
+					jpgBytes = byteOut.toByteArray();
 				}
-			} catch (RuntimeException e) {
-				throw e;
+
+				String base64 = new String(
+						Base64.getEncoder().encode(jpgBytes));
+				htmlBody.append(
+						"<strong>Thumbnail</strong>: <img src=\"data:image/jpg;base64,"
+								+ base64 + "\"/><br>");
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				String stacktrace = ErrorManager.getStackTrace(e);
+				htmlBody.append(
+						"<pre>" + HTMLEncoding.encode(stacktrace) + "</pre>br");
 			}
 		}
-	}
 
-	private static void readImageIOThumbnail(InputStream in) throws Exception {
-		ImageReader reader = ALL_READERS.get(ALL_READERS.size() - 1);
-		reader.setInput(ImageIO.createImageInputStream(in));
-		BufferedImage thumbnail = reader.readThumbnail(0, 0);
-		if (thumbnail == null) {
-			throw new UnsupportedOperationException(
-					"ImageIO could not read a thumbnail for \"" + url.toString()
-							+ "\"");
+		@Override
+		public void addComment(String markerName, String comment) {
+			setMarker(markerName);
+			htmlBody.append("<strong>Comment</strong>: "
+					+ HTMLEncoding.encode(String.valueOf(comment)) + "<br>");
 		}
-	}
 
-	static List<ImageReader> ALL_READERS = new ArrayList<>();
-	static {
-		Iterator<ImageReader> iterator = ImageIO
-				.getImageReadersBySuffix("jpeg");
-		while (iterator.hasNext()) {
-			ImageReader reader = iterator.next();
-			ALL_READERS.add(reader);
+		private void setMarker(String markerCode) {
+			if (markerCode.equals(currentMarkerCode)) {
+				return;
+			}
+			if (currentMarkerCode != null)
+				htmlBody.append("</div>");
+
+			JPEGMarker marker = JPEGMarker.getMarkerForByteCode(markerCode);
+
+			String str = marker != null ? marker.name() : "Unknown";
+			str += " (" + markerCode + ")";
+
+			htmlBody.append(
+					"<h3>" + HTMLEncoding.encode(str) + " Identified: </h3>");
+			htmlBody.append("<div class='indented-section'>");
+			currentMarkerCode = markerCode;
 		}
+
+		@Override
+		public void close() throws Exception {
+			if (currentMarkerCode != null)
+				htmlBody.append("</div>");
+
+			htmlBody.insert(0, "<html>");
+			htmlBody.append("</html>");
+			textPane.setText(htmlBody.toString());
+		}
+
+		@Override
+		public void start() {
+			htmlBody = new StringBuilder();
+		}
+
+	};
+	JPEGMetaData reader = new JPEGMetaData(listener);
+
+	public JPEGMetaDataDemo() {
+		super(URL.class, true, "jpg", "jpeg");
+
+		configurationLabel.setText("Input:");
+		exampleLabel.setText("Output:");
+
+		examplePanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		JScrollPane scrollPane = new JScrollPane(textPane);
+		scrollPane.setPreferredSize(new Dimension(500, 200));
+		examplePanel.add(scrollPane, c);
+
+		textPane.setEditable(false);
+		HTMLEditorKit kit = new QHTMLEditorKit();
+		textPane.setEditorKit(kit);
+
+		StyleSheet styleSheet = kit.getStyleSheet();
+
+		styleSheet.addRule(
+				"body {  padding: 5px; font-family: sans-serif; color: black; background: white; }");
+
+		styleSheet.addRule("h3 { color: #624cab; font: bold 110%;}");
+		styleSheet.addRule(
+				".indented-section { margin-left: 10px; line-height:1.5; }");
 	}
 
 	@Override
@@ -115,7 +164,7 @@ public class JPEGMetaDataDemo extends ShowcaseChartDemo {
 
 	@Override
 	public String getSummary() {
-		return "This compares the new JPEGMetaData with ImageIO when reading JPG thumbnails.";
+		return "This demos the JPEGMetaData's ability to parse meta data.";
 	}
 
 	@Override
@@ -135,28 +184,24 @@ public class JPEGMetaDataDemo extends ShowcaseChartDemo {
 	}
 
 	@Override
-	protected Collection<Runnable> getMeasurementRunnables(
-			Map<String, Map<String, SampleSet>> data) {
-		String[] implementations = new String[] { IMPLEMENTATION_IMAGEIO_SCALED,
-				IMPLEMENTATION_JPEGMETADATA, IMPLEMENTATION_IMAGEIO_READER };
-
-		try (InputStream in = url.openStream()) {
-			readImageIOThumbnail(in);
-		} catch (Throwable t) {
-			// this is what we expect most of the time: thumbnails aren't
-			// supported by default
-			implementations = new String[] { IMPLEMENTATION_IMAGEIO_SCALED,
-					IMPLEMENTATION_JPEGMETADATA };
-		}
-
-		List<Runnable> returnValue = new ArrayList<>(
-				SAMPLE_COUNT * implementations.length);
-		for (String implementation : implementations) {
-			Runnable r = new MeasurementRunnable(data, implementation);
-			for (int sample = 0; sample < SAMPLE_COUNT; sample++) {
-				returnValue.add(r);
+	protected void refreshFile(URL url, String str) {
+		if (url == null) {
+			if (str.isEmpty()) {
+				textPane.setText(
+						"<html>Select a file or paste a URL to read the JPEG meta data.</html>");
+			} else {
+				textPane.setText("<html>Unable to read \""
+						+ HTMLEncoding.encode(str) + "\"</html>");
+			}
+		} else {
+			try (InputStream in = url.openStream()) {
+				reader.read(in);
+			} catch (Exception e) {
+				String stacktrace = ErrorManager.getStackTrace(e);
+				textPane.setText("<html>Unable to read \""
+						+ HTMLEncoding.encode(str) + "<p></p><pre>"
+						+ HTMLEncoding.encode(stacktrace) + "</pre></html>");
 			}
 		}
-		return returnValue;
 	}
 }

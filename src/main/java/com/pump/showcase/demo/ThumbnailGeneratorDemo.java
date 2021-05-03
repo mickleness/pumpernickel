@@ -1,7 +1,5 @@
 package com.pump.showcase.demo;
 
-import java.awt.Color;
-import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,33 +8,23 @@ import java.net.URL;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
-import com.pump.icon.StrikeThroughIcon;
 import com.pump.image.thumbnail.generator.BasicThumbnailGenerator;
 import com.pump.image.thumbnail.generator.JPEGMetaDataThumbnailGenerator;
 import com.pump.image.thumbnail.generator.MacCImageThumbnailGenerator;
 import com.pump.image.thumbnail.generator.MacQuickLookThumbnailGenerator;
 import com.pump.image.thumbnail.generator.ScalingThumbnailGenerator;
 import com.pump.image.thumbnail.generator.ThumbnailGenerator;
-import com.pump.inspector.Inspector;
-import com.pump.swing.FileDialogUtils;
 
-public class ThumbnailGeneratorDemo extends ShowcaseExampleDemo {
+public class ThumbnailGeneratorDemo extends ShowcaseResourceExampleDemo<File> {
 	private static final long serialVersionUID = 1L;
-
-	private static Icon NO_ICON = new StrikeThroughIcon(Color.gray, 64);
 
 	public final static ThumbnailGenerator[] GENERATORS = new ThumbnailGenerator[] {
 			new BasicThumbnailGenerator(), new JPEGMetaDataThumbnailGenerator(),
@@ -44,56 +32,21 @@ public class ThumbnailGeneratorDemo extends ShowcaseExampleDemo {
 			new MacQuickLookThumbnailGenerator() };
 
 	JLabel previewLabel = new JLabel();
-	JButton fileDialogButton = new JButton("Browse...");
-	JTextField filePathField = new JTextField(20);
 	JSlider sizeSlider = new ShowcaseSlider(10, 300);
 	JCheckBox sizeCheckBox = new JCheckBox("Requested Size:");
 	JComboBox<String> generatorComboBox = new JComboBox<>();
 
 	public ThumbnailGeneratorDemo() {
+		super(File.class, false);
+
 		for (ThumbnailGenerator g : GENERATORS) {
 			generatorComboBox.addItem(g.getClass().getSimpleName());
 		}
 
-		Inspector inspector = new Inspector(configurationPanel);
-		inspector.addRow(new JLabel("File:"), filePathField, fileDialogButton);
 		inspector.addRow(new JLabel("Generator:"), generatorComboBox);
 		inspector.addRow(sizeCheckBox, sizeSlider, false);
 
 		examplePanel.add(previewLabel);
-
-		filePathField.getDocument().addDocumentListener(new DocumentListener() {
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				refreshFile();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				refreshFile();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				refreshFile();
-			}
-
-		});
-
-		fileDialogButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Frame frame = (Frame) SwingUtilities
-						.getWindowAncestor(configurationPanel);
-				File file = FileDialogUtils.showOpenDialog(frame, "Select",
-						FileIconDemo.ALL_FILES);
-				if (file != null)
-					filePathField.setText(file.getPath());
-			}
-
-		});
 
 		sizeSlider.addChangeListener(new ChangeListener() {
 
@@ -129,9 +82,8 @@ public class ThumbnailGeneratorDemo extends ShowcaseExampleDemo {
 		refreshFile();
 	}
 
-	protected void refreshFile() {
-		File file = new File(filePathField.getText());
-
+	@Override
+	protected void refreshFile(File file, String filePath) {
 		Icon icon;
 		if (!file.exists()) {
 			icon = NO_ICON;

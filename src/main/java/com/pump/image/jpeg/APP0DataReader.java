@@ -46,30 +46,26 @@ class APP0DataReader {
 		}
 		int versionMajor = array[0] & 0xff;
 		int versionMinor = array[1] & 0xff;
-		listener.addProperty(JPEGMarkerInputStream.APP0_MARKER,
-				PROPERTY_VERSION_MAJOR, versionMajor);
-		listener.addProperty(JPEGMarkerInputStream.APP0_MARKER,
-				PROPERTY_VERSION_MINOR, versionMinor);
+		String marker = JPEGMarker.APP0_MARKER.getByteCode();
+		listener.addProperty(marker, PROPERTY_VERSION_MAJOR, versionMajor);
+		listener.addProperty(marker, PROPERTY_VERSION_MINOR, versionMinor);
 
-		listener.addProperty(JPEGMarkerInputStream.APP0_MARKER, PROPERTY_UNITS,
+		listener.addProperty(marker, PROPERTY_UNITS,
 				Unit.values()[array[2] & 0xff]);
 
 		int horizDensity = ((array[3] & 0xff) << 16) + (array[4] & 0xff);
 		int vertDensity = ((array[5] & 0xff) << 16) + (array[6] & 0xff);
-		listener.addProperty(JPEGMarkerInputStream.APP0_MARKER,
-				PROPERTY_HORIZONTAL_DENSITY, horizDensity);
-		listener.addProperty(JPEGMarkerInputStream.APP0_MARKER,
-				PROPERTY_VERTICAL_DENSITY, vertDensity);
+		listener.addProperty(marker, PROPERTY_HORIZONTAL_DENSITY, horizDensity);
+		listener.addProperty(marker, PROPERTY_VERTICAL_DENSITY, vertDensity);
 
 		int thumbnailWidth = array[7] & 0xff;
 		int thumbnailHeight = array[8] & 0xff;
-		listener.addProperty(JPEGMarkerInputStream.APP0_MARKER,
-				PROPERTY_THUMBNAIL_WIDTH, thumbnailWidth);
-		listener.addProperty(JPEGMarkerInputStream.APP0_MARKER,
-				PROPERTY_THUMBNAIL_HEIGHT, thumbnailHeight);
+		listener.addProperty(marker, PROPERTY_THUMBNAIL_WIDTH, thumbnailWidth);
+		listener.addProperty(marker, PROPERTY_THUMBNAIL_HEIGHT,
+				thumbnailHeight);
 		if (thumbnailWidth * thumbnailHeight > 0) {
-			if (listener.isThumbnailAccepted(JPEGMarkerInputStream.APP0_MARKER,
-					thumbnailWidth, thumbnailHeight)) {
+			if (listener.isThumbnailAccepted(marker, thumbnailWidth,
+					thumbnailHeight)) {
 				// TODO: test this. I haven't found a single file that uses
 				// an APP0 thumbnail, so this code has never been tested.
 				byte[] dataByte = new byte[thumbnailWidth * 3];
@@ -87,7 +83,7 @@ class APP0DataReader {
 					image.getRaster().setDataElements(0, y, thumbnailWidth, 1,
 							array);
 				}
-				listener.addThumbnail(JPEGMarkerInputStream.APP0_MARKER, image);
+				listener.addThumbnail(marker, image);
 			}
 		}
 	}

@@ -91,7 +91,7 @@ class GenericDataReader {
 			int width = reader.getWidth(0);
 			if (listener.isThumbnailAccepted(markerName, width, height)) {
 				BufferedImage thumbnail = reader.read(0);
-				listener.addThumbnail(JPEGMarkerInputStream.APP1_MARKER,
+				listener.addThumbnail(JPEGMarker.APP1_MARKER.getByteCode(),
 						thumbnail);
 			}
 		}

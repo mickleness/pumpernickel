@@ -28,27 +28,6 @@ import java.io.InputStream;
  */
 class JPEGMarkerInputStream extends InputStream {
 
-	protected static final String START_OF_IMAGE_MARKER = "FFD8";
-	protected static final String END_OF_IMAGE_MARKER = "FFD9";
-	protected static final String APP0_MARKER = "FFE0";
-	protected static final String APP1_MARKER = "FFE1";
-	protected static final String APP2_MARKER = "FFE2";
-	protected static final String APP13_MARKER = "FFED";
-	protected static final String COMMENT_MARKER = "FFFE";
-	protected static final String DEFINE_QUANTIZATION_MARKER = "FFDB";
-	protected static final String BASELINE_MARKER = "FFC0";
-	protected static final String DEFINE_HUFFMAN_MARKER = "FFC4";
-
-	/**
-	 * The start of scan marker is tricky. It technically has a small number of
-	 * byte data (12 bytes), but following that header is all the image data for
-	 * this JPEG until the end of image marker is reached. We can't really
-	 * accurately predict how much data this will be, though, so basically when
-	 * we hit this marker this input stream is done being useful.
-	 * 
-	 */
-	protected static final String START_OF_SCAN_MARKER = "FFDA";
-
 	InputStream in;
 	String currentMarker;
 	int remainingMarkerLength = 0;
@@ -78,8 +57,9 @@ class JPEGMarkerInputStream extends InputStream {
 			throw new EOFException("EOF reached");
 		int i = (scratch[0] & 0xff) * 256 + (scratch[1] & 0xff);
 		currentMarker = Integer.toString(i, 16).toUpperCase();
-		if (START_OF_IMAGE_MARKER.equals(currentMarker)
-				|| END_OF_IMAGE_MARKER.equals(currentMarker)) {
+		if (JPEGMarker.START_OF_IMAGE_MARKER.getByteCode().equals(currentMarker)
+				|| JPEGMarker.END_OF_IMAGE_MARKER.getByteCode()
+						.equals(currentMarker)) {
 			remainingMarkerLength = 0;
 		} else {
 			remainingMarkerLength = 2;

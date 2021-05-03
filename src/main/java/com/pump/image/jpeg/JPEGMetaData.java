@@ -80,6 +80,17 @@ public class JPEGMetaData {
 			public void addComment(String markerName, String comment) {
 				// intentionally empty
 			}
+
+			@Override
+			public void close() throws Exception {
+				// intentionally empty
+
+			}
+
+			@Override
+			public void start() {
+				// intentionally empty
+			}
 		};
 		JPEGMetaData reader = new JPEGMetaData(listener);
 		reader.read(in);
@@ -108,48 +119,61 @@ public class JPEGMetaData {
 
 	@SuppressWarnings("resource")
 	public void read(InputStream in) throws IOException {
-		JPEGMarkerInputStream jpegIn = new JPEGMarkerInputStream(in);
-		String marker = jpegIn.getNextMarker();
-		if (!JPEGMarkerInputStream.START_OF_IMAGE_MARKER.equals(marker)) {
-			// did you see "0x4748"? as in the first two letters of "GIF89a"?
-			throw new IOException("error: expecting \""
-					+ JPEGMarkerInputStream.START_OF_IMAGE_MARKER
-					+ "\", but found \"" + marker + "\"");
-		}
-		marker = jpegIn.getNextMarker();
-		while (marker != null) {
-			try {
-				if (JPEGMarkerInputStream.APP0_MARKER.equals(marker)) {
-					APP0DataReader.read(jpegIn, listener);
-				} else if (JPEGMarkerInputStream.APP1_MARKER.equals(marker)) {
-					APP1DataReader.read(jpegIn, listener);
-				} else if (JPEGMarkerInputStream.APP2_MARKER.equals(marker)
-						|| JPEGMarkerInputStream.APP13_MARKER.equals(marker)) {
-					// I don't understand these markers and don't have a clear
-					// spec for them, but they sometimes embed a JPEG:
-					GenericDataReader.read(jpegIn, marker, listener);
-				} else if (JPEGMarkerInputStream.COMMENT_MARKER
-						.equals(marker)) {
-					byte[] b = new byte[64];
-					StringBuffer buffer = new StringBuffer();
-					int t = jpegIn.read(b);
-					while (t > 0) {
-						for (int a = 0; a < t; a++) {
-							char c = (char) (b[a] & 0xff);
-							buffer.append(c);
+		listener.start();
+		try (JPEGMarkerInputStream jpegIn = new JPEGMarkerInputStream(in)) {
+			String markerCode = jpegIn.getNextMarker();
+			JPEGMarker marker = JPEGMarker.getMarkerForByteCode(markerCode);
+			if (marker != JPEGMarker.START_OF_IMAGE_MARKER) {
+				// did you see "0x4748"? as in the first two letters of
+				// "GIF89a"?
+				throw new IOException("error: expecting \""
+						+ JPEGMarker.START_OF_IMAGE_MARKER.getByteCode()
+						+ "\", but found \"" + markerCode + "\"");
+			}
+			markerCode = jpegIn.getNextMarker();
+			while (markerCode != null) {
+				marker = JPEGMarker.getMarkerForByteCode(markerCode);
+				try {
+					if (marker == JPEGMarker.APP0_MARKER) {
+						APP0DataReader.read(jpegIn, listener);
+					} else if (marker == JPEGMarker.APP1_MARKER) {
+						APP1DataReader.read(jpegIn, listener);
+					} else if (marker == JPEGMarker.APP2_MARKER
+							|| marker == JPEGMarker.APP13_MARKER) {
+						// I don't understand these markers and don't have a
+						// clear spec for them, but they sometimes embed a JPEG:
+						GenericDataReader.read(jpegIn, markerCode, listener);
+					} else if (marker == JPEGMarker.COMMENT_MARKER) {
+						byte[] b = new byte[64];
+						StringBuffer buffer = new StringBuffer();
+						int t = jpegIn.read(b);
+						while (t > 0) {
+							for (int a = 0; a < t; a++) {
+								char c = (char) (b[a] & 0xff);
+								buffer.append(c);
+							}
+							t = jpegIn.read(b);
 						}
-						t = jpegIn.read(b);
+						listener.addComment(
+								JPEGMarker.COMMENT_MARKER.getByteCode(),
+								buffer.toString());
 					}
-					listener.addComment(JPEGMarkerInputStream.COMMENT_MARKER,
-							buffer.toString());
+				} catch (Exception e) {
+					processException(e, markerCode);
 				}
+				if (marker == JPEGMarker.START_OF_SCAN_MARKER) {
+					return;
+				}
+				markerCode = jpegIn.getNextMarker();
+			}
+		} finally {
+			try {
+				listener.close();
+			} catch (RuntimeException | IOException e) {
+				throw e;
 			} catch (Exception e) {
-				processException(e, marker);
+				throw new IOException(e);
 			}
-			if (JPEGMarkerInputStream.START_OF_SCAN_MARKER.equals(marker)) {
-				return;
-			}
-			marker = jpegIn.getNextMarker();
 		}
 	}
 
