@@ -14,7 +14,6 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -23,6 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.pump.data.converter.ConverterUtils;
+import com.pump.geom.Clipper;
 import com.pump.geom.ImmutableShape;
 import com.pump.geom.ShapeBounds;
 import com.pump.geom.ShapeStringUtils;
@@ -418,14 +418,12 @@ public class Graphics2DContext implements Serializable {
 	/**
 	 * @see java.awt.Graphics2D#clip(Shape)
 	 */
-	public void clip(Shape s) {
-		s = transform.createTransformedShape(s);
+	public void clip(Shape incomingClip) {
+		incomingClip = transform.createTransformedShape(incomingClip);
 		if (clip == null) {
-			clip = s;
+			clip = incomingClip;
 		} else {
-			Area area = new Area(clip);
-			area.intersect(new Area(s));
-			clip = area;
+			clip = Clipper.intersect(clip, incomingClip, false, false);
 		}
 	}
 

@@ -625,10 +625,15 @@ public abstract class Clipper {
 	}
 
 	/**
-	 * Calculate the intersection of two shapes using the Clipper approach if possible.
+	 * Calculate the intersection of two shapes using the Clipper approach if
+	 * possible.
 	 * <p>
-	 * If neither argument is rectangular then both shapes are flattened (using the
-	 * flatness argument) and converted to Areas to calculate the intersection.
+	 * If neither argument is rectangular then both shapes are flattened (using
+	 * the flatness argument) and converted to Areas to calculate the
+	 * intersection.
+	 * 
+	 * @return the intersection of the two arguments. This tries to return a
+	 *         Rectangle or Rectangle2D before it returns an abstract Shape.
 	 */
 	public static Shape intersect(Shape shape1, Shape shape2, float flatness) {
 		Rectangle2D r1 = ShapeUtils.getRectangle2D(shape1);
@@ -651,6 +656,90 @@ public abstract class Clipper {
 			Area a2 = new Area(p2);
 			a1.intersect(a2);
 			returnValue = a1;
+		}
+
+		Rectangle returnValueAsRect = ShapeUtils.getRectangle(returnValue);
+		if (returnValueAsRect != null)
+			return returnValueAsRect;
+
+		Rectangle2D returnValueAsRect2D = ShapeUtils
+				.getRectangle2D(returnValue);
+		if (returnValueAsRect2D != null)
+			return returnValueAsRect2D;
+
+		return returnValue;
+	}
+
+	/**
+	 * Calculate the intersection of two shapes using the Clipper approach if
+	 * possible.
+	 * <p>
+	 * If neither argument is rectangular then both shapes are converted to
+	 * Areas to calculate the intersection.
+	 * 
+	 * @param canChangeShape1
+	 *            if true then this method has permission to modify the "shape1"
+	 *            argument and return that argument. If false then this method
+	 *            will, if appropriate, either modify the "shape2" argument or
+	 *            create entirely new Area objects to calculate the
+	 *            intersection.
+	 * 
+	 * @param canChangeShape2
+	 *            if true then this method has permission to modify the "shape2"
+	 *            argument and return that argument. If false then this method
+	 *            will, if appropriate, either modify the "shape1" argument or
+	 *            create entirely new Area objects to calculate the
+	 *            intersection.
+	 * 
+	 * @return the intersection of the two arguments. This tries to return a
+	 *         Rectangle or Rectangle2D before it returns an abstract Shape.
+	 */
+	public static Shape intersect(Shape shape1, Shape shape2,
+			boolean canChangeShape1, boolean canChangeShape2) {
+		Rectangle2D r1 = ShapeUtils.getRectangle2D(shape1);
+		Rectangle2D r2 = ShapeUtils.getRectangle2D(shape2);
+		Shape returnValue;
+		if (r1 != null && r2 != null) {
+			returnValue = r1.createIntersection(r2);
+		} else if (r1 != null) {
+			returnValue = clipToRect(shape2, r1);
+		} else if (r2 != null) {
+			returnValue = clipToRect(shape1, r2);
+		} else {
+			// the next 30 lines just try to assign returnValue in a way that
+			// creates as few new Areas as possible.
+
+			if (shape1 instanceof Area) {
+				Area a1 = (Area) shape1;
+				if (shape2 instanceof Area) {
+					Area a2 = (Area) shape2;
+					if (canChangeShape1) {
+						a1.intersect(a2);
+						returnValue = a1;
+					} else if (canChangeShape2) {
+						a2.intersect(a1);
+						returnValue = a2;
+					} else {
+						Area copy = new Area(a1);
+						copy.intersect(a2);
+						returnValue = copy;
+					}
+				} else {
+					Area a2 = new Area(shape2);
+					a2.intersect(a1);
+					returnValue = a2;
+				}
+			} else if (shape2 instanceof Area) {
+				Area a1 = new Area(shape1);
+				Area a2 = (Area) shape2;
+				a1.intersect(a2);
+				returnValue = a2;
+			} else {
+				Area a1 = new Area(shape1);
+				Area a2 = new Area(shape2);
+				a1.intersect(a2);
+				returnValue = a1;
+			}
 		}
 
 		Rectangle returnValueAsRect = ShapeUtils.getRectangle(returnValue);
