@@ -4,24 +4,33 @@
 <title>Mixed CheckBox State Demo</title>
 </head>
 <body>
-This demos a mixed-state indicator for JCheckBoxes.
-<h3>Context</h3>
-<p>
-Checkboxes traditionally have two states. But sometimes you need a mixed state (or tri-state) option when multiple elements are being represented.
-<p>
-This example is from a <a href="https://w3c.github.io/aria-practices/examples/checkbox/checkbox-2/checkbox-2.html">W3C example</a> of the same feature. Their primary use case seems to relate to when the mixed state checkbox acts like a parent/group for several individual checkboxes:
+<h1>Mixed CheckBox State Demo</h1>
+<h2>What Is It</h2>
+<p>This demos a mixed-state indicator for JCheckBoxes.</p>
+<p>Checkboxes traditionally have two states. But sometimes you need a mixed state (or tri-state) option when multiple elements are being represented.</p>
+<h2>How To Use It</h2>
+<p>This demo simply calls:</p>
+<pre>new MixedCheckBoxButtonGroup(allCheckBox, lettuceCheckBox,
+		tomatoCheckBox, mustardCheckBox);</pre>
+<p>Here the first element is the "master checkbox", and all checkboxes that follow are the "subordinate checkboxes".</p>
+<p>If you don't want to control a <code>MixedCheckBoxButtonGroup</code>, you can instead call:</p>
+<pre>boolean wasMixed = MixedCheckBoxState.isMixedState(myCheckBox);
+boolean newState = ...;
+MixedCheckBoxState.setMixed(myCheckBox, newState);</pre>
+<h2>How It Works</h2>
+<h3>MixedCheckBoxButtonGroup</h3>
+<p>The <code>MixedCheckBoxButtonGroup</code> manages a set of buttons like you see in the demo. There is a master button that can toggle all of the subordinates on/off. But if the user has selected only subset of the subordinate buttons, then the master button shows the mixed state.</p>
+<h3>Rendering Implementation</h3>
+<p>Calls to <code>MixedCheckBoxState.setMixed(..)</code> ultimately end up replacing the checkbox's <code>javax.swing.Icon</code>.</p>
+<h2>Discussion</h2>
+<h3>Mixed States Overview</h3>
+<p>The example in this demo is from a <a href="https://w3c.github.io/aria-practices/examples/checkbox/checkbox-2/checkbox-2.html">W3C example</a> of the same feature. Their primary use case seems to relate to when the mixed state checkbox acts like a parent/group for several individual checkboxes:</p>
 <blockquote>One common use of a tri-state checkbox can be found in software installers where a single tri-state checkbox is used to represent and control the state of an entire group of install options. And, each option in the group can be individually turned on or off with a dual state checkbox.</blockquote>
-<p>
-Apple's <a href="https://developer.apple.com/design/human-interface-guidelines/macos/buttons/checkboxes/">guidelines</a> similarly say:
+<p>Apple's <a href="https://developer.apple.com/design/human-interface-guidelines/macos/buttons/checkboxes/">guidelines</a> similarly say:</p>
 <blockquote>Use a mixed state when it makes sense. A checkbox should accurately reflect its state. If a checkbox is used to globally enable and disable multiple child checkboxes, it should show a mixed state—reflected by a dash—when those children are not all in the same state.</blockquote>
-<p>
-Personally I found this feature useful a while ago when working on a document editor that supported selecting multiple objects at once. Imagine an inspector with a checkbox to toggle a shadow on/off. What should happen when you have two images selected -- one with a shadow and one without? For this use case I'd also argue that we should include mixed states in nearly all controls. (How do we communicate with a radio button, spinner or combobox that multiple values are represented?)
-<p>
-<h3>Implementation</h3>
-
-This implementation assigns a custom icon that renders a tick on top of the original icon. This is simple enough for a BasicCheckBoxUI (which is what Windows uses), but it required some awkward hacks (reflection) to implement in Aqua on Macs.
-<p>
-(If anyone has any suggestions for an improved Aqua implementation: I'd love to hear them. Another solution might just be to force your JCheckBoxes to use a particular UI that you know is always a BasicCheckBoxUI. This is a less fragile/brittle approach, but your checkboxes may not look as native...)
-
-<p>
+<p>Personally I hope to use this feature for a separate use case: when an inspector needs to represent several elements in a selection. We may need more than a simple boolean representation to signal to the user that some elements use a feature and others do not. (And if this ever gets off the ground it begs the question: what about other components? Spinners? Comboboxes?)</p>
+<h3>Icon-Based Implementation</h3>
+<p>This class replaces the original checkbox's icon with a new icon that delegates to the original.</p>
+<p>This is simple enough for a BasicCheckBoxUI (which is what Windows L&F uses), but it required some awkward hacks (reflection) to implement in Aqua on Macs. Someday (?) I hope to rewrite this to avoid reflection on Mac.</p>
 </body>
+</html>
