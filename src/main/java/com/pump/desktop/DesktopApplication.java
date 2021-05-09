@@ -10,9 +10,13 @@
  */
 package com.pump.desktop;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
+import java.awt.desktop.AboutEvent;
+import java.awt.desktop.AboutHandler;
+import java.awt.desktop.QuitStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -193,7 +197,8 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 			DesktopApplication existing = get();
 			if (existing != null && existing != this) {
 				throw new IllegalStateException("The application " + existing
-						+ " was installed before attempting to install " + this);
+						+ " was installed before attempting to install "
+						+ this);
 			}
 			installedApplication = this;
 		}
@@ -238,8 +243,8 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 										simpleAppName, supportEmail);
 								ErrorDialogThrowableHandler edth = ErrorManager
 										.getDefaultErrorHandler();
-								edth.addLeftComponent(BugReporter.get()
-										.createPanel(edth));
+								edth.addLeftComponent(
+										BugReporter.get().createPanel(edth));
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -266,44 +271,89 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 
 				if (invocationCtr == 5) {
 					long millis = currentTime - startTime;
-					System.out
-							.println("Startup took "
-									+ NumberFormat.getInstance().format(millis)
-									+ " ms");
+					System.out.println("Startup took "
+							+ NumberFormat.getInstance().format(millis)
+							+ " ms");
 				} else {
 					SwingUtilities.invokeLater(this);
 				}
 			}
 		});
 
-		initializeMac();
+		// TODO: add support for preference dialog, maybe?
+
+		initializeQuitStrategy();
+		initializeAboutHandler();
 	}
 
-	/**
-	 * Initialize unique Mac-specific properties.
-	 */
-	private void initializeMac() {
-		if (JVM.isMac) {
-			// TODO: add support for about dialog, preference dialog, maybe
+	private void initializeQuitStrategy() {
+		if (Desktop.isDesktopSupported()) {
+			Desktop d = Desktop.getDesktop();
+			if (d.isSupported(Desktop.Action.APP_QUIT_STRATEGY)) {
+				d.setQuitStrategy(QuitStrategy.CLOSE_ALL_WINDOWS);
+				return;
+			}
+		}
+
+		if (JVM.isMac && JVM.getMajorJavaVersion() < 1.9) {
 			try {
-				Class applicationClass = Class
-						.forName("com.apple.eawt.Application");
+				Object macApplication = getMacApplication();
 				Class quitStrategyEnum = Class
 						.forName("com.apple.eawt.QuitStrategy");
 				Object[] enumConstants = quitStrategyEnum.getEnumConstants();
 
+				Reflection.invokeMethod(macApplication.getClass(),
+						macApplication, "setQuitStrategy", enumConstants[1]);
+
+				System.out.println("Set " + macApplication.getClass().getName()
+						+ " quitStrategy to " + enumConstants[1]);
+			} catch (Exception e) {
+				e.printStackTrace();
+				// throw new RuntimeException(e);
+			}
+		}
+	}
+
+	private Object getMacApplication() {
+		Object returnValue = getAttribute(KEY_MAC_APPLICATION);
+		if (returnValue == null && JVM.isMac) {
+			try {
+				Class applicationClass = Class
+						.forName("com.apple.eawt.Application");
+				returnValue = Reflection.invokeMethod(applicationClass, null,
+						"getApplication");
+				setAttribute(KEY_MAC_APPLICATION, returnValue);
+			} catch (ClassNotFoundException e) {
+				return null;
+			}
+		}
+		return returnValue;
+	}
+
+	private void initializeAboutHandler() {
+		if (Desktop.isDesktopSupported()) {
+			Desktop d = Desktop.getDesktop();
+			if (d.isSupported(Desktop.Action.APP_ABOUT)) {
+				d.setAboutHandler(new AboutHandler() {
+
+					@Override
+					public void handleAbout(AboutEvent e) {
+						Runnable runnable = get().getAboutRunnable();
+						if (runnable != null)
+							runnable.run();
+					}
+
+				});
+				d.setQuitStrategy(QuitStrategy.CLOSE_ALL_WINDOWS);
+				return;
+			}
+		}
+
+		if (JVM.isMac && JVM.getMajorJavaVersion() < 1.9) {
+			try {
+				Object macApplication = getMacApplication();
 				Class aboutHandlerClass = Class
 						.forName("com.apple.eawt.AboutHandler");
-
-				Object application = Reflection.invokeMethod(applicationClass,
-						null, "getApplication");
-				setAttribute(KEY_MAC_APPLICATION, application);
-
-				Reflection.invokeMethod(applicationClass, application,
-						"setQuitStrategy", enumConstants[1]);
-
-				System.out.println("Set " + applicationClass.getName()
-						+ " quitStrategy to " + enumConstants[1]);
 
 				InvocationHandler invocationHandler = new InvocationHandler() {
 
@@ -321,10 +371,14 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 						DesktopApplication.class.getClassLoader(),
 						new Class[] { aboutHandlerClass }, invocationHandler);
 
-				Reflection.invokeMethod(applicationClass, application,
-						"setAboutHandler", aboutHandler);
+				Reflection.invokeMethod(macApplication.getClass(),
+						macApplication, "setAboutHandler", aboutHandler);
+
+				System.out.println("Set " + macApplication.getClass().getName()
+						+ "aboutHandler");
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				e.printStackTrace();
+				// throw new RuntimeException(e);
 			}
 		}
 	}
@@ -356,11 +410,10 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 	public BufferedImage getImage() {
 		BufferedImage i = getAttribute(KEY_APP_IMAGE);
 		if (i == null) {
-			Object application = getAttribute(KEY_MAC_APPLICATION);
-			if (application != null) {
-				Image img = (Image) Reflection
-						.invokeMethod(application.getClass(), application,
-								"getDockIconImage");
+			Object macApp = getMacApplication();
+			if (macApp != null) {
+				Image img = (Image) Reflection.invokeMethod(macApp.getClass(),
+						macApp, "getDockIconImage");
 				i = ImageLoader.createImage(img);
 				if (i.getWidth() > 64 || i.getHeight() > 64) {
 					i = Scaling.scaleProportionally(i, new Dimension(64, 64));
@@ -377,9 +430,9 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 	public void setImage(BufferedImage bi) {
 		setAttribute(KEY_APP_IMAGE, bi);
 
-		Object application = getAttribute(KEY_MAC_APPLICATION);
-		if (application != null) {
-			Reflection.invokeMethod(application.getClass(), application,
+		Object macApp = getMacApplication();
+		if (macApp != null) {
+			Reflection.invokeMethod(macApp.getClass(), macApp,
 					"setDockIconImage", bi);
 		}
 	}
@@ -399,8 +452,8 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 	}
 
 	/**
-	 * Assing the String describing this application's copyright as:
-	 * "Copyright [firstYear]-[currentYear] [author]".
+	 * Assing the String describing this application's copyright as: "Copyright
+	 * [firstYear]-[currentYear] [author]".
 	 * 
 	 * @param firstYear
 	 *            the first year to list in the copyright's year range.
@@ -409,8 +462,9 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 	 */
 	public void setCopyright(int firstYear, String author) {
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-		String yearStr = firstYear == currentYear ? Integer
-				.toString(currentYear) : firstYear + "-" + currentYear;
+		String yearStr = firstYear == currentYear
+				? Integer.toString(currentYear)
+				: firstYear + "-" + currentYear;
 		String str = "Copyright " + yearStr + " " + author;
 		setCopyright(str);
 	}
