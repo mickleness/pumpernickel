@@ -43,6 +43,15 @@ public abstract class ShowcaseResourceExampleDemo<R>
 
 	private static final long serialVersionUID = 1L;
 
+	static FilenameFilter ALL_FILES = new FilenameFilter() {
+
+		@Override
+		public boolean accept(File dir, String name) {
+			return true;
+		}
+
+	};
+
 	private final String prefKeyLastResource;
 
 	protected static Icon NO_ICON = new StrikeThroughIcon(Color.gray, 64);
@@ -119,7 +128,7 @@ public abstract class ShowcaseResourceExampleDemo<R>
 						.getWindowAncestor(configurationPanel);
 				FilenameFilter filter;
 				if (fileExtensions.length == 0) {
-					filter = FileIconDemo.ALL_FILES;
+					filter = ALL_FILES;
 				} else {
 					filter = new SuffixFilenameFilter(fileExtensions);
 				}
@@ -144,9 +153,20 @@ public abstract class ShowcaseResourceExampleDemo<R>
 				String lastResource = prefs.get(prefKeyLastResource, null);
 				if (lastResource != null) {
 					resourcePathField.setText(lastResource);
+				} else {
+					setDefaultResourcePath();
 				}
 			}
 		});
+	}
+
+	/**
+	 * This populates the resourcePathField with a default value. This
+	 * implementation just sets the text field to an empty string, but
+	 * subclasses may override this as needed.
+	 */
+	protected void setDefaultResourcePath() {
+		resourcePathField.setText("");
 	}
 
 	protected final void refreshFile() {

@@ -44,13 +44,7 @@ public abstract class FileIcon {
 	}
 
 	private static FileIcon getDefaultFileIcon() {
-		if (JVM.isMac) {
-			try {
-				return new AquaFileIcon();
-			} catch (Exception e) {
-				// weird; did Apple's classes change significantly?
-			}
-		} else if (JVM.isWindows) {
+		if (JVM.isWindows) {
 			return new FileSystemViewFileIcon();
 		}
 		return new FileViewFileIcon();
@@ -79,6 +73,15 @@ public abstract class FileIcon {
 			return UIManager.getIcon("FileView.directoryIcon");
 		}
 		return i;
+	}
+
+	/**
+	 * This returns the generic icon for a folder or file. This will never
+	 * return null.
+	 */
+	protected Icon getDefaultIcon(File file) {
+		return UIManager.getIcon(file.isDirectory() ? "FileView.directoryIcon"
+				: "FileView.fileIcon");
 	}
 
 	/**

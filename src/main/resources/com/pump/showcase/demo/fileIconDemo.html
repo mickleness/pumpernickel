@@ -4,22 +4,89 @@
 <title>FileIcon Demo</title>
 </head>
 <body>
-The abstract <code>FileIcon</code> class returns a <code>javax.swing.Icon</code> for a file.
-<p>
-This demo includes 2-3 implementations depending on your OS.
+<h1>FileIcon Demo</h1>
+<h2>What Is It</h2>
+<p>The <code>FileIcon</code> is an abstract class creates a <code>javax.swing.Icon</code> for a <code>File</code>.</p>
+<p>A file icon is a small (usually about 16x16) icon you can place next to a file name. Usually all files with the same file extension share the same file icon.</p>
+<p>An "icon" is different from a "thumbnail", which is a static image that is a rendering of a given file. And sometimes the word "preview" also carries special implications of interactivity (for ex: a video). So "icon", "thumbnail" and "preview" are all separate buzzwords.</p>
+<h2>How To Use It</h2>
+<p>The simplest one-line invocation resembles:</p>
+<pre>Icon icon = FileIcon.get().getIcon(file);</pre>
+<h2>How It Works</h2>
+<p>Each subclass is responsible for deciding how to identify the appropriate icon. And the <code>FileIcon</code> class has a static getter/setter method for maintaining the active default <code>FileIcon</code> on a given system.
+<h2>Discussion</h2>
+<h3>Implementations</h3>
+<p>There are currently 2 subclasses of <code>FileIcon</code>.
+<h4>Implementation #1: FileSystemViewFileIcon</h4>
+<p>This implementation uses <code>FileSystemView</code>, and it resembles:</p>
+<pre>public class FileSystemViewFileIcon extends FileIcon {
+	@Override
+	public Icon getIcon(File file) {
+		FileSystemView fsv = FileSystemView.getFileSystemView();
+		Icon icon = fsv.getSystemIcon(file);
+		if (icon != null)
+			return icon;
+		return super.getDefaultIcon(file);
+	}
+}</pre>
+<p>This looks like it should be the ideal way to go, because it's so clean/direct. But on Mac it only ever returns a generic file or folder icon. I tried rummaging through the source code for <code>FileSystemView</code> (and related classes) to see if I could modify (hack) it without reflection, but there aren't a lot of entry points.</p>
+<p>Specifically: the method <code>FileSystemView.getFileSystemView()</code> is hardwired to return either a <code>WindowsFileSystemView</code>, a <code>UnixFileSystemView</code>, or a <code>GenericFileSystemView</code>. (If I was willing to use reflection: I could reach inside and assign the <code>FileSystemView.unixFileSystemView</code> field, though.)</p>
+<p>Or I could try looking to the <code>sun.awt.shell.ShellFolder</code>. It includes a static method <code>getShellFolder(File)</code>. It looks like if I set the desktop property "Shell.shellFolderManager", then I could slip in my own <code>MyShellFolderManager</code> subclass. That could construct a new <code>MyShellFolder</code> object. But the catches are: <code>ShellFolder</code> (which is public) doesn't have a public or protected constructor. And <code>ShellFolderManager</code> isn't public. So even if I wanted to extend classes from a sun package: these are just not made for subclassing.
+<h4>Implementation #2: FileViewFileIcon</h4>
+<p>This implementation uses a <code>JFileChooser's</code> <code>FileView</code>, and it resembles:</p>
+<pre>public class FileViewFileIcon extends FileIcon {
+	FileView fileView;
+	public FileViewFileIcon(boolean useReflection) {
+		JFileChooser chooser = new JFileChooser();
+		fileView = chooser.getUI().getFileView(chooser);
+	}
 
-<h3>AquaFileIcon</h3>
-This implementation is the default on Mac, and it is only available on Mac.
-<p>
-This uses reflection to invoke the <code>com.apple.laf.AquaIcon.FileIcon</code> class.
-<h3>FileViewFileIcon</h3>
-This implementation creates a new JFileChooser and uses its FileView.
-<p>
-This also works on Mac, but it requires the overhead of setting up a new JFileChooser.
-<h3>FileSystemViewFileIcon</h3>
-This implementation uses <code>FileSystemView.getFileSystemView()</code> to identify icons.
-<p>
-This does not work on Mac. (It only returns two icons: one for documents and one for folders.)
+	@Override
+	public Icon getIcon(File file) {
+		return fileView.getIcon(file);
+	}
+}</pre>
+<p>I don't like that this is so indirect and clunky. Sometimes creating a <code>JFileChooser</code> is not trivially cheap, either. But on Mac: this works great. It returns scalable icons for most every file type.</p>
+<p>On Windows: both of this approach and the <code>FileSystemView</code> approach produce unscaleable (kind of crappy/pixelated) 16x16 icons. But today as I wrote this I saw emails trickle in about <a href="https://github.com/openjdk/jdk/pull/2875/files">a pull request to update this</a> in future Java versions, so that's exciting.</p>
+<p>I tried to find a way to get these high-quality icons without using reflection, but just like before: this proved difficult. I did find one approach that appeared to work:
+<pre>fileView = new AquaFileChooserUI(null).getFileView(null);</pre>
+<p>This requires importing <code>com.apple.laf.AquaFileChooserUI</code>, which is not something I want to do currently. Someday in a magic far-away land of free time it might be nice to include a Mac-only source directory in this project. But until I get around to that: I want this codebase to be error-free on Windows, so importing the AquaFileChooserUI is off the table. And using reflection to grab the appropriate constructor produces those ominous console warnings about reflection being unsupported at a later date.</p>
+<h4>Implementation #3: AquaFileIcon</h4>
+<p>I'll leave this reference here for posterity, but I've deleted this class because it's entirely reflection-based:</p>
+<pre>public class AquaFileIcon extends FileIcon {
 
+	Constructor constructor;
+
+	/**
+	 * This constructor throws an exception if we can't access the
+	 * <code>com.apple.laf.AquaIcon$FileIcon</code> using reflection.
+	 */
+	public AquaFileIcon() throws ClassNotFoundException, NoSuchMethodException,
+			SecurityException {
+		Class<?> z = Class.forName("com.apple.laf.AquaIcon$FileIcon");
+		constructor = z.getConstructor(new Class[] { File.class });
+		constructor.setAccessible(true);
+	}
+
+	@Override
+	public Icon getIcon(File file) {
+		try {
+			Icon icon = (Icon) constructor.newInstance(file);
+			if (icon != null)
+				return icon;
+		} catch (InstantiationException | IllegalAccessException
+				| IllegalArgumentException | InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+		return null;
+	}
+
+}</pre>
+<p>This is functionally equivalent to the <code>FileViewFileIcon</code>, but it doesn't create a <code>JFileChooser</code> to get the job done.</p>
+<p>I looked around on Windows for an equivalent class, but so far I haven't found anything.
+<h3>Scaling</h3>
+<p>This demo includes an option to scale the icon.</p>
+<p>On Mac the icons we get back are high-resolution, so they can scale to most any size with great clarity.</p>
+<p>On Windows the icons are not (yet) high-resolution. (Although in a future Java release that should change.) So if you want a universal cross-platform approach: you ought to just stick with the icon's default size. (And even that, unfortunately, will look pixelated on a high-resolution monitor on Windows.)</p>
 </body>
 </html>

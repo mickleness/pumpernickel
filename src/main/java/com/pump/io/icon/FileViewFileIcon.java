@@ -23,7 +23,10 @@ public class FileViewFileIcon extends FileIcon {
 
 	@Override
 	public Icon getIcon(File file) {
-		return fileView.getIcon(file);
+		Icon returnValue = fileView.getIcon(file);
+		if (returnValue != null)
+			return returnValue;
+		return super.getDefaultIcon(file);
 	}
 
 }

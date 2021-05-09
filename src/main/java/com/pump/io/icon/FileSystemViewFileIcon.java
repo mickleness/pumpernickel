@@ -17,7 +17,7 @@ public class FileSystemViewFileIcon extends FileIcon {
 		Icon icon = fsv.getSystemIcon(file);
 		if (icon != null)
 			return icon;
-		return null;
+		return getDefaultIcon(file);
 	}
 
 }

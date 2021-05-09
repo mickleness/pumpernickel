@@ -2,72 +2,53 @@ package com.pump.showcase.demo;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Icon;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import com.pump.awt.Dimension2D;
 import com.pump.icon.IconUtils;
 import com.pump.icon.StrikeThroughIcon;
-import com.pump.inspector.Inspector;
 import com.pump.io.icon.AquaFileIcon;
 import com.pump.io.icon.FileIcon;
 import com.pump.io.icon.FileSystemViewFileIcon;
 import com.pump.io.icon.FileViewFileIcon;
-import com.pump.swing.FileDialogUtils;
 import com.pump.util.JVM;
 
 /**
  * This demonstrates the FileIcon class
  */
-public class FileIconDemo extends ShowcaseExampleDemo {
+public class FileIconDemo extends ShowcaseResourceExampleDemo<File> {
 
 	private static final long serialVersionUID = 1L;
 
-	static FilenameFilter ALL_FILES = new FilenameFilter() {
-
-		@Override
-		public boolean accept(File dir, String name) {
-			return true;
-		}
-
-	};
-
-	JLabel fileLabel = new JLabel();
-	JButton fileDialogButton = new JButton("Browse...");
-	JTextField filePathField = new JTextField(20);
 	JCheckBox sizeCheckBox = new JCheckBox("Custom Size:");
 	JSlider sizeSlider = new ShowcaseSlider(10, 300);
 
 	JComboBox<String> fileIconComboBox;
 	boolean sizeSliderUsed = false;
 
+	JLabel demoLabel = new JLabel();
 	AquaFileIcon aquaFileIcon;
 	FileViewFileIcon fileViewFileIcon;
 	FileSystemViewFileIcon fileSystemViewFileIcon;
 	List<FileIcon> fileIcons;
 
 	public FileIconDemo() {
+		super(File.class, false);
 		if (JVM.isMac) {
 			try {
 				aquaFileIcon = new AquaFileIcon();
@@ -84,8 +65,6 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 			fileIcons.add(fileViewFileIcon);
 		if (fileSystemViewFileIcon != null)
 			fileIcons.add(fileSystemViewFileIcon);
-
-		filePathField.setText(System.getProperty("user.home"));
 
 		int selectedIndex = -1;
 		String aquaName = "Aqua";
@@ -112,31 +91,10 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 
 		fileIconComboBox.setSelectedIndex(selectedIndex);
 
-		Inspector inspector = new Inspector(configurationPanel);
-		inspector.addRow(new JLabel("File:"), filePathField, fileDialogButton);
 		inspector.addRow(new JLabel("FileIcon Class:"), fileIconComboBox,
 				false);
 		inspector.addRow(sizeCheckBox, sizeSlider, false);
-		examplePanel.add(fileLabel);
-
-		filePathField.getDocument().addDocumentListener(new DocumentListener() {
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				refreshFile();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				refreshFile();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				refreshFile();
-			}
-
-		});
+		examplePanel.add(demoLabel);
 
 		ActionListener actionListener = new ActionListener() {
 
@@ -148,19 +106,6 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 		};
 		fileIconComboBox.addActionListener(actionListener);
 		sizeCheckBox.addActionListener(actionListener);
-		fileDialogButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Frame frame = (Frame) SwingUtilities
-						.getWindowAncestor(configurationPanel);
-				File file = FileDialogUtils.showOpenDialog(frame, "Select",
-						ALL_FILES);
-				if (file != null)
-					filePathField.setText(file.getPath());
-			}
-
-		});
 
 		sizeSlider.addChangeListener(new ChangeListener() {
 
@@ -176,8 +121,13 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 
 		refreshControls();
 
-		fileLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
-		fileLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		demoLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
+		demoLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+	}
+
+	@Override
+	protected void setDefaultResourcePath() {
+		resourcePathField.setText(System.getProperty("user.home"));
 	}
 
 	protected void refreshControls() {
@@ -192,19 +142,19 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 		return null;
 	}
 
-	protected void refreshFile() {
-		File file = new File(filePathField.getText());
+	@Override
+	protected void refreshFile(File file, String str) {
 		Icon icon;
 		FileIcon fileIcon = getFileIcon();
-		fileLabel.setText("");
+		demoLabel.setText("");
 		if (!file.exists()) {
 			icon = new StrikeThroughIcon(Color.gray, 20);
-			fileLabel.setText("File Missing");
+			demoLabel.setText("File Missing");
 		} else if (fileIcon != null) {
 			icon = fileIcon.getIcon(file, false);
 		} else {
 			icon = UIManager.getIcon("FileView.fileIcon");
-			fileLabel.setText("FileView.fileIcon");
+			demoLabel.setText("FileView.fileIcon");
 		}
 		int w = icon.getIconWidth();
 		int h = icon.getIconHeight();
@@ -214,16 +164,16 @@ public class FileIconDemo extends ShowcaseExampleDemo {
 					new Dimension(m, m));
 			if (d.width != w || d.height != h) {
 				icon = IconUtils.createScaledIcon(icon, d.width, d.height);
-				if (fileLabel.getText().length() == 0) {
-					fileLabel.setText("Scaled");
+				if (demoLabel.getText().length() == 0) {
+					demoLabel.setText("Scaled");
 				} else {
-					fileLabel.setText(fileLabel.getText() + " - Scaled");
+					demoLabel.setText(demoLabel.getText() + " - Scaled");
 				}
 			}
 		} else if (!sizeSliderUsed) {
 			sizeSlider.setValue(Math.max(w, h));
 		}
-		fileLabel.setIcon(icon);
+		demoLabel.setIcon(icon);
 	}
 
 	@Override
