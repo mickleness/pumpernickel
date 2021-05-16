@@ -67,6 +67,7 @@ public class ShowcaseDemoInfo extends AbstractAttributeDataImpl
 				Class<?> demoClass = Class.forName(z);
 				demo = (ShowcaseDemo) demoClass.getDeclaredConstructor()
 						.newInstance();
+				demo.setDemoInfo(this);
 				setAttribute(KEY_SHOWCASE_DEMO, demo);
 			} catch (Exception e) {
 				throw new RuntimeException(e);

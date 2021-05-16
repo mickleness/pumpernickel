@@ -78,7 +78,8 @@ public class AnimationController extends JPanel {
 	 *            other arguments are added to this container.
 	 * @param togglePlayButton
 	 *            this button will be the left-most button. It is expected to
-	 *            always be visible.
+	 *            always be visible. This is optional; if this is null it will
+	 *            be skipped.
 	 * @param buttons
 	 *            an optional collection of buttons to display after the
 	 *            togglePlayButton.
@@ -98,7 +99,8 @@ public class AnimationController extends JPanel {
 		c.weightx = 0;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.VERTICAL;
-		container.add(togglePlayButton, c);
+		if (togglePlayButton != null)
+			container.add(togglePlayButton, c);
 		for (int a = 0; a < buttons.length; a++) {
 			c.gridx++;
 			container.add(buttons[a], c);
@@ -106,42 +108,46 @@ public class AnimationController extends JPanel {
 			buttons[a].setContentAreaFilled(false);
 			buttons[a].setRolloverIcon(new DarkenedIcon(buttons[a], .5f));
 			buttons[a].setPressedIcon(new DarkenedIcon(buttons[a], .75f));
-			buttons[a].setBorder(new PartialLineBorder(Color.gray, new Insets(
-					1, 0, 1, 1)));
+			buttons[a].setBorder(
+					new PartialLineBorder(Color.gray, new Insets(1, 0, 1, 1)));
 		}
 		c.weightx = 1;
 		c.gridx++;
 		c.fill = GridBagConstraints.BOTH;
 		container.add(slider, c);
 
-		togglePlayButton.setOpaque(false);
-		togglePlayButton.setContentAreaFilled(false);
-		togglePlayButton.setBorder(new LineBorder(Color.gray));
-		slider.setOpaque(false);
-		slider.setBorder(new PartialLineBorder(Color.gray, new Insets(1, 0, 1,
-				1)));
 		Dimension d = slider.getPreferredSize();
 		d.width = 60;
 		d.height = 25;
 		slider.setPreferredSize((Dimension) d.clone());
 		d.width = d.height;
-		togglePlayButton.setPreferredSize(d);
+		if (togglePlayButton != null) {
+			togglePlayButton.setOpaque(false);
+			togglePlayButton.setContentAreaFilled(false);
+			togglePlayButton.setBorder(new LineBorder(Color.gray));
+			togglePlayButton.setPreferredSize(d);
+			slider.setBorder(
+					new PartialLineBorder(Color.gray, new Insets(1, 0, 1, 1)));
+
+			InputMap inputMap = slider.getInputMap(JComponent.WHEN_FOCUSED);
+			inputMap.put(KeyStroke.getKeyStroke(' '), "togglePlay");
+			slider.getActionMap().put("togglePlay", new AbstractAction() {
+				private static final long serialVersionUID = 1L;
+
+				public void actionPerformed(ActionEvent e) {
+					togglePlayButton.doClick();
+				}
+			});
+
+			togglePlayButton.setFocusPainted(false);
+			setInsetFocusBorder(togglePlayButton);
+		} else {
+			slider.setBorder(new LineBorder(Color.gray));
+		}
+		slider.setOpaque(false);
 		for (int a = 0; a < buttons.length; a++) {
 			buttons[a].setPreferredSize(d);
 		}
-
-		InputMap inputMap = slider.getInputMap(JComponent.WHEN_FOCUSED);
-		inputMap.put(KeyStroke.getKeyStroke(' '), "togglePlay");
-		slider.getActionMap().put("togglePlay", new AbstractAction() {
-			private static final long serialVersionUID = 1L;
-
-			public void actionPerformed(ActionEvent e) {
-				togglePlayButton.doClick();
-			}
-		});
-
-		togglePlayButton.setFocusPainted(false);
-		setInsetFocusBorder(togglePlayButton);
 		for (JButton button : buttons) {
 			button.setFocusPainted(false);
 			setInsetFocusBorder(button);
@@ -181,7 +187,8 @@ public class AnimationController extends JPanel {
 				int width, int height) {
 			if (c.isFocusOwner()) {
 				g.clipRect(x, y, width, height);
-				Rectangle r = new Rectangle(x - 1, y - 1, width + 1, height + 1);
+				Rectangle r = new Rectangle(x - 1, y - 1, width + 1,
+						height + 1);
 				PlafPaintUtils.paintFocus((Graphics2D) g, r, 2);
 			}
 		}
@@ -221,8 +228,8 @@ public class AnimationController extends JPanel {
 	 * A client property that maps to a Number indicating the current duration
 	 * (in seconds).
 	 */
-	public static String DURATION_PROPERTY = AnimationController.class
-			.getName() + ".duration";
+	public static String DURATION_PROPERTY = AnimationController.class.getName()
+			+ ".duration";
 	/**
 	 * A client property that maps to a Boolean indicating whether this
 	 * controller is playing.
