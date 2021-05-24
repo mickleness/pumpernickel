@@ -42,10 +42,19 @@ public abstract class Transition2D extends AbstractTransition {
 	 */
 	protected final void doPaint(Graphics2D g, BufferedImage frameA,
 			BufferedImage frameB, float progress) {
-		Transition2DInstruction[] i = getInstructions(progress, new Dimension(
-				frameA.getWidth(), frameA.getHeight()));
-		for (int a = 0; a < i.length; a++) {
-			i[a].paint(g, frameA, frameB);
+		if (progress < .001) {
+			new ImageInstruction(true, 1).paint(g, frameA, frameA);
+		} else if (progress < .999) {
+			Transition2DInstruction[] i = getInstructions(progress,
+					new Dimension(frameA.getWidth(), frameA.getHeight()));
+			for (int a = 0; a < i.length; a++) {
+				i[a].paint(g, frameA, frameB);
+			}
+		} else {
+			// some transitions show seams (hairline edges) at t=100%,
+			// so if we're near t=100% just manually simplify what we're
+			// painting
+			new ImageInstruction(false, 1).paint(g, frameB, frameB);
 		}
 	}
 }

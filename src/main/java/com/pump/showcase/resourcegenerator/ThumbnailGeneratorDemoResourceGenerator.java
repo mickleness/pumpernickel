@@ -1,7 +1,8 @@
-package com.pump.showcase.demo;
+package com.pump.showcase.resourcegenerator;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
@@ -15,23 +16,19 @@ import javax.imageio.ImageIO;
 import com.pump.graphics.vector.VectorImage;
 import com.pump.image.thumbnail.generator.BasicThumbnailGenerator;
 import com.pump.image.thumbnail.generator.ThumbnailGenerator;
-import com.pump.io.IOUtils;
 import com.pump.showcase.chart.BarChartRenderer;
+import com.pump.showcase.demo.ThumbnailGeneratorDemo;
 
+/**
+ * This creates the JVG image of the chart showing the ThumbnailGenerators
+ * relative performances.
+ */
 public class ThumbnailGeneratorDemoResourceGenerator
 		extends DemoResourceGenerator {
 
-	public static void main(String[] args) throws Exception {
-		ThumbnailGeneratorDemoResourceGenerator g = new ThumbnailGeneratorDemoResourceGenerator();
-		g.run();
-	}
-
-	String prefix = getClass().getSimpleName() + ": ";
-
-	public void run() throws Exception {
-		File srcFile = getFile("bridge3.jpg");
-		System.out
-				.println(prefix + "source file: " + srcFile.getAbsolutePath());
+	public void run(DemoResourceContext context) throws Exception {
+		File srcFile = context.getFile("bridge3.jpg");
+		System.out.println("Source file: " + srcFile.getAbsolutePath());
 
 		Thread.sleep(3000);
 
@@ -56,13 +53,11 @@ public class ThumbnailGeneratorDemoResourceGenerator
 				}
 				Arrays.sort(times);
 				long time = times[times.length / 2];
-				System.out.println(
-						prefix + gs.getClass().getSimpleName() + " " + time);
+				System.out.println(gs.getClass().getSimpleName() + " " + time);
 				chartData.get("Time").put(gs.getClass().getSimpleName(), time);
 			} catch (Throwable t) {
 				t.printStackTrace();
-				System.out.println(
-						prefix + gs.getClass().getSimpleName() + " failed");
+				System.out.println(gs.getClass().getSimpleName() + " failed");
 			}
 		}
 
@@ -70,23 +65,30 @@ public class ThumbnailGeneratorDemoResourceGenerator
 		VectorImage vi = new VectorImage();
 		renderer.paint(vi.createGraphics(), new Dimension(300, 100));
 
-		File jvgFile = new File("ThumbnailGeneratorDemo.jvg");
-		try (FileOutputStream fileOut = new FileOutputStream(jvgFile)) {
-			vi.save(fileOut);
-		} catch (Exception e) {
-			e.printStackTrace();
+		boolean writeFiles = false;
+
+		if (writeFiles) {
+			File jvgFile = new File("ThumbnailGeneratorDemo.jvg");
+			try (FileOutputStream fileOut = new FileOutputStream(jvgFile)) {
+				vi.save(fileOut);
+			}
+			System.out.println("Chart: " + jvgFile.getAbsolutePath());
 		}
-		System.out.println(prefix + "chart: " + jvgFile.getAbsolutePath());
 
-		// make a PNG version just for quick human reference:
-		BufferedImage bi = renderer.paint(new Dimension(300, 100));
-		File pngFile = new File("ThumbnailGeneratorDemo.png");
-		ImageIO.write(bi, "png", pngFile);
-		System.out.println(prefix + "chart: " + pngFile.getAbsolutePath());
+		if (writeFiles) {
+			// make a PNG version just for quick human reference:
+			BufferedImage bi = renderer.paint(new Dimension(300, 100));
+			File pngFile = new File("ThumbnailGeneratorDemo.png");
+			ImageIO.write(bi, "png", pngFile);
+			System.out.println("Chart: " + pngFile.getAbsolutePath());
+		}
 
-		byte[] bytes = IOUtils.readBytes(jvgFile);
-		String str = new String(Base64.getEncoder().encode(bytes));
-		System.out.println(prefix + "base64 encoding of jvg:");
-		System.out.println(str);
+		try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
+			vi.save(byteOut);
+			byte[] bytes = byteOut.toByteArray();
+			String str = new String(Base64.getEncoder().encode(bytes));
+			System.out.println("Base64 encoding of jvg:");
+			System.out.println(str);
+		}
 	}
 }

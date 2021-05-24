@@ -73,8 +73,8 @@ import com.pump.image.transition.ZoomTransition2D;
 public class Transition2DDemo extends TransitionDemo {
 	private static final long serialVersionUID = 1L;
 
-	public Transition2DDemo() {
-		super(BarsTransition2D.getDemoTransitions(),
+	public static Transition[][] getTransitions() {
+		return new Transition[][] { BarsTransition2D.getDemoTransitions(),
 				new Transition[] { new BlendTransition2D() },
 				BlindsTransition2D.getDemoTransitions(),
 				BoxTransition2D.getDemoTransitions(),
@@ -88,7 +88,7 @@ public class Transition2DDemo extends TransitionDemo {
 				new Transition[] { new DropTransition2D() },
 				FlurryTransition2D.getDemoTransitions(),
 				FunkyWipeTransition2D.getDemoTransitions(),
-				new Transition[] { new GooTransition2D() },
+				GooTransition2D.getDemoTransitions(),
 				HalftoneTransition2D.getDemoTransitions(),
 				new Transition[] { new KaleidoscopeTransition2D() },
 				new Transition[] { new LevitateTransition2D() },
@@ -107,15 +107,19 @@ public class Transition2DDemo extends TransitionDemo {
 				SlideTransition2D.getDemoTransitions(),
 				SpiralTransition2D.getDemoTransitions(),
 				SplitTransition2D.getDemoTransitions(),
-				new Transition[] { new SquareRainTransition2D() },
-				new Transition[] { new SquaresTransition2D() },
+				SquareRainTransition2D.getDemoTransitions(),
+				SquaresTransition2D.getDemoTransitions(),
 				StarTransition2D.getDemoTransitions(),
 				StarsTransition2D.getDemoTransitions(),
 				SwivelTransition2D.getDemoTransitions(),
 				TossTransition2D.getDemoTransitions(),
 				WaveTransition2D.getDemoTransitions(),
 				WipeTransition2D.getDemoTransitions(),
-				ZoomTransition2D.getDemoTransitions());
+				ZoomTransition2D.getDemoTransitions() };
+	}
+
+	public Transition2DDemo() {
+		super(getTransitions());
 	}
 
 	@Override

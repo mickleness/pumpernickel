@@ -1,4 +1,4 @@
-package com.pump.showcase.demo;
+package com.pump.showcase.resourcegenerator;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -17,7 +17,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import javax.swing.Icon;
 
@@ -25,19 +25,12 @@ import com.pump.graphics.vector.VectorImage;
 
 public class VectorImageDemoResourceGenerator extends DemoResourceGenerator {
 
-	public static void main(String[] args) throws Exception {
-		VectorImageDemoResourceGenerator g = new VectorImageDemoResourceGenerator();
-		g.run();
-	}
-
-	String prefix = getClass().getSimpleName() + ": ";
-
 	@Override
-	public void run() throws Exception {
+	public void run(DemoResourceContext context) throws Exception {
 
-		File dir = new File("jvg");
-		if (!dir.exists())
-			dir.mkdirs();
+		File jvgDir = context.getFile("resources/com/pump/showcase/demo/jvg"
+				.replace("/", File.separator));
+		context.indexDirectory(jvgDir);
 
 		Icon[] icons = new Icon[] { new InhabitantsPiglet(704, 800),
 				new KindergartenTeacher(1371, 1136), new HardDrive(361, 518),
@@ -48,13 +41,15 @@ public class VectorImageDemoResourceGenerator extends DemoResourceGenerator {
 			icon.paintIcon(null, g, 0, 0);
 			g.dispose();
 
-			File file = new File(dir, icon.getClass().getSimpleName() + "."
+			File file = new File(jvgDir, icon.getClass().getSimpleName() + "."
 					+ VectorImage.FILE_EXTENSION.toLowerCase());
-			try (FileOutputStream fileOut = new FileOutputStream(file)) {
-				img.save(fileOut);
+			try (OutputStream out = context.createFileOutputStream(file)) {
+				img.save(out);
 			}
-			System.out.println(prefix + "wrote: " + file.getAbsolutePath());
+			System.out.println("Wrote: " + file.getAbsolutePath());
 		}
+
+		context.removeOldFiles(jvgDir);
 	}
 
 }

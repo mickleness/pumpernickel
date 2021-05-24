@@ -25,9 +25,11 @@ import com.pump.util.JVM;
  * want to replace, and then when you close this stream we swap out the two
  * files (if they are different).
  * <p>
- * This offers a few advantages: 1. If an error comes up in writing the file,
- * the original file is not damaged. To really properly account for this though
- * you should set up code that resembles:
+ * This offers a few advantages:
+ * <ol>
+ * <li>If an error comes up in writing the file, the original file is not
+ * damaged. To really properly account for this though you should set up code
+ * that resembles:
  * 
  * <pre>
  * try(AdjacentFileOutputStream out = AdjacentFileOutputStream.create(myFile) {
@@ -42,12 +44,13 @@ import com.pump.util.JVM;
  * 
  * If you don't call {@link #cancel()}, then when {@link #close()} is
  * automatically called: the files are still swapped. So if an exception occurs
- * and your file is only half-written, you want to avoid that. 2. If the new
- * file is identical to the original, the new file is deleted. This keeps the
- * modification date and any other meta info about the original file in tact.
+ * and your file is only half-written, you want to avoid that.</li>
+ * <li>If the new file is identical to the original, the new file is deleted.
+ * This keeps the modification date and any other meta info about the original
+ * file in tact.</li>
  */
-public class AdjacentFileOutputStream extends FileOutputStream implements
-		Cancellable {
+public class AdjacentFileOutputStream extends FileOutputStream
+		implements Cancellable {
 	public static AdjacentFileOutputStream create(File targetFile)
 			throws IOException {
 		String adjacentFilename = targetFile.getName();
@@ -81,7 +84,7 @@ public class AdjacentFileOutputStream extends FileOutputStream implements
 	File targetFile, fileToWriteTo;
 	BasicCancellable cancellable = new BasicCancellable();
 
-	private AdjacentFileOutputStream(File fileToWriteTo, File targetFile)
+	public AdjacentFileOutputStream(File fileToWriteTo, File targetFile)
 			throws FileNotFoundException {
 		super(fileToWriteTo);
 		this.fileToWriteTo = fileToWriteTo;
