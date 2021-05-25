@@ -354,6 +354,7 @@ public class VectorImageDemo extends ShowcaseExampleDemo {
 	protected void setVectorImage(VectorImage img) {
 		instructionSlider.removeChangeListener(instructionSliderListener);
 		try {
+			this.img = img;
 			int max = img.getOperations().size();
 			instructionSlider.getModel().setRangeProperties(max - 1,
 					instructionSlider.getExtent(), 0, max - 1, false);
@@ -366,8 +367,6 @@ public class VectorImageDemo extends ShowcaseExampleDemo {
 			// resize slider every time preview resizes
 			AnimationController.format(previewControllerPanel, null, null,
 					instructionSlider);
-
-			this.img = img;
 		} finally {
 			instructionSlider.addChangeListener(instructionSliderListener);
 			instructionSliderListener.stateChanged(null);
