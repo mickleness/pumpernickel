@@ -14,7 +14,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -91,7 +90,7 @@ public class BorderRendering {
 	CssBorderStyleValue.Value topStyleValue, leftStyleValue, rightStyleValue,
 			bottomStyleValue;
 	BorderRenderingConfiguration config;
-	VectorImage imageRendering = new VectorImage();
+	List<Operation> operations;
 	RectangularShape shape;
 
 	/**
@@ -125,17 +124,13 @@ public class BorderRendering {
 				: config.bottomStyle.getValue();
 
 		if (shape instanceof Rectangle2D) {
-			imageRendering.getOperations()
-					.addAll(renderRectangleDottedBorders());
-			imageRendering.getOperations()
-					.addAll(renderRectangleDashedBorders());
+			initRectangleDottedBorders();
+			initRectangleDashedBorders();
 		} else {
-			imageRendering.getOperations()
-					.addAll(renderNonRectangleDashedBorders());
-			imageRendering.getOperations()
-					.addAll(renderNonRectangleDottedBorders());
+			initNonRectangleDashedBorders();
+			initNonRectangleDottedBorders();
 		}
-		imageRendering.getOperations().addAll(renderTrapezoidBorders());
+		initTrapezoidBorders();
 	}
 
 	private RectangularShape getShape(Rectangle2D bounds) {
@@ -193,8 +188,8 @@ public class BorderRendering {
 	 * This renders borders that can be expressed as trapezoids (SOLID, DOUBLE,
 	 * INSET, OUTSET, RIDGE, GROOVE).
 	 */
-	private List<Operation> renderTrapezoidBorders() {
-		Map<Color, Area> areas = new HashMap<>();
+	private void initTrapezoidBorders() {
+		Map<Color, Area> areas = null;
 
 		for (Edge edge : Edge.values()) {
 			CssColorValue color = getColor(edge);
@@ -202,13 +197,13 @@ public class BorderRendering {
 				switch (getStyle(edge)) {
 				case SOLID:
 					Shape p1 = createEdgeShape(edge, 0, 1);
-					addShape(areas, p1, color);
+					areas = addShape(areas, p1, color);
 					break;
 				case DOUBLE:
 					Shape p2a = createEdgeShape(edge, 0, .333f);
 					Shape p2b = createEdgeShape(edge, .666f, 1);
-					addShape(areas, p2a, color);
-					addShape(areas, p2b, color);
+					areas = addShape(areas, p2a, color);
+					areas = addShape(areas, p2b, color);
 					break;
 				case INSET:
 					Shape p3 = createEdgeShape(edge, 0, 1);
@@ -218,7 +213,7 @@ public class BorderRendering {
 					} else {
 						c1 = lighten(color);
 					}
-					addShape(areas, p3, c1);
+					areas = addShape(areas, p3, c1);
 					break;
 				case OUTSET:
 					Shape p4 = createEdgeShape(edge, 0, 1);
@@ -228,7 +223,7 @@ public class BorderRendering {
 					} else {
 						c2 = darken(color);
 					}
-					addShape(areas, p4, c2);
+					areas = addShape(areas, p4, c2);
 					break;
 				case RIDGE:
 					Shape p5a = createEdgeShape(edge, .5f, 1);
@@ -243,8 +238,8 @@ public class BorderRendering {
 						c4 = darken(color);
 					}
 
-					addShape(areas, p5a, c3);
-					addShape(areas, p5b, c4);
+					areas = addShape(areas, p5a, c3);
+					areas = addShape(areas, p5b, c4);
 					break;
 				case GROOVE:
 					Shape p6a = createEdgeShape(edge, .5f, 1);
@@ -259,8 +254,8 @@ public class BorderRendering {
 						c6 = lighten(color);
 					}
 
-					addShape(areas, p6a, c5);
-					addShape(areas, p6b, c6);
+					areas = addShape(areas, p6a, c5);
+					areas = addShape(areas, p6b, c6);
 					break;
 				default:
 					// intentionally empty
@@ -269,8 +264,8 @@ public class BorderRendering {
 			}
 		}
 
-		if (areas.isEmpty())
-			return Collections.EMPTY_LIST;
+		if (areas == null)
+			return;
 
 		VectorImage i = new VectorImage();
 		Graphics2D g = i.createGraphics();
@@ -283,7 +278,9 @@ public class BorderRendering {
 			g.fill(v);
 		}
 
-		return i.getOperations();
+		if (operations == null)
+			operations = new LinkedList<>();
+		operations.addAll(i.getOperations());
 	}
 
 	private Color darken(Color color) {
@@ -302,7 +299,11 @@ public class BorderRendering {
 		return new Color(argb, true);
 	}
 
-	private void addShape(Map<Color, Area> areas, Shape newShape, Color color) {
+	private Map<Color, Area> addShape(Map<Color, Area> areas, Shape newShape,
+			Color color) {
+		if (areas == null)
+			areas = new HashMap<>();
+
 		// clone the Color just to be sure CssColorValue won't act up
 		// as a key in our map
 		Color key = new Color(color.getRGB(), true);
@@ -314,6 +315,7 @@ public class BorderRendering {
 		} else {
 			oldArea.add(newArea);
 		}
+		return areas;
 	}
 
 	/**
@@ -537,12 +539,13 @@ public class BorderRendering {
 	/**
 	 * This method only renders DOTTED borders around Rectangle2D borders.
 	 */
-	private List<Operation> renderRectangleDottedBorders() {
-		List<Operation> returnValue = new LinkedList<>();
+	private void initRectangleDottedBorders() {
 		Graphics2D g = null;
 
 		if (topStyleValue == Value.DOTTED && config.topColor != null) {
-			g = new VectorGraphics2D(new Graphics2DContext(), returnValue);
+			if (operations == null)
+				operations = new LinkedList<>();
+			g = new VectorGraphics2D(new Graphics2DContext(), operations);
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -571,7 +574,9 @@ public class BorderRendering {
 
 		if (bottomStyleValue == Value.DOTTED && config.bottomColor != null) {
 			if (g == null) {
-				g = new VectorGraphics2D(new Graphics2DContext(), returnValue);
+				if (operations == null)
+					operations = new LinkedList<>();
+				g = new VectorGraphics2D(new Graphics2DContext(), operations);
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 						RenderingHints.VALUE_ANTIALIAS_ON);
 			}
@@ -601,7 +606,9 @@ public class BorderRendering {
 
 		if (leftStyleValue == Value.DOTTED && config.leftColor != null) {
 			if (g == null) {
-				g = new VectorGraphics2D(new Graphics2DContext(), returnValue);
+				if (operations == null)
+					operations = new LinkedList<>();
+				g = new VectorGraphics2D(new Graphics2DContext(), operations);
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 						RenderingHints.VALUE_ANTIALIAS_ON);
 			}
@@ -626,7 +633,9 @@ public class BorderRendering {
 
 		if (rightStyleValue == Value.DOTTED && config.rightColor != null) {
 			if (g == null) {
-				g = new VectorGraphics2D(new Graphics2DContext(), returnValue);
+				if (operations == null)
+					operations = new LinkedList<>();
+				g = new VectorGraphics2D(new Graphics2DContext(), operations);
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 						RenderingHints.VALUE_ANTIALIAS_ON);
 			}
@@ -649,10 +658,6 @@ public class BorderRendering {
 			renderVerticalDots(g, minY, maxY, shape.getMaxX() - rightWidthValue,
 					rightWidthValue);
 		}
-		if (g != null)
-			g.dispose();
-
-		return returnValue;
 	}
 
 	private void renderHorizontalDots(Graphics2D g, double minX, double maxX,
@@ -740,8 +745,7 @@ public class BorderRendering {
 	/**
 	 * Render DASHED borders when our root shape is not a Rectangle2D
 	 */
-	private List<Operation> renderNonRectangleDashedBorders() {
-		List<Operation> returnValue = new LinkedList<>();
+	private void initNonRectangleDashedBorders() {
 		Graphics2D g = null;
 
 		for (EdgeCluster edgeCluster : getEdgeClusters()) {
@@ -754,8 +758,10 @@ public class BorderRendering {
 						0.0f);
 
 				if (g == null) {
+					if (operations == null)
+						operations = new LinkedList<>();
 					g = new VectorGraphics2D(new Graphics2DContext(),
-							returnValue);
+							operations);
 					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 							RenderingHints.VALUE_ANTIALIAS_ON);
 				}
@@ -772,15 +778,12 @@ public class BorderRendering {
 				g.fill(area);
 			}
 		}
-
-		return returnValue;
 	}
 
 	/**
 	 * Render DOTTED borders when our root shape is not a Rectangle2D
 	 */
-	private List<Operation> renderNonRectangleDottedBorders() {
-		List<Operation> returnValue = new LinkedList<>();
+	private void initNonRectangleDottedBorders() {
 		Graphics2D g = null;
 
 		for (EdgeCluster edgeCluster : getEdgeClusters()) {
@@ -793,8 +796,10 @@ public class BorderRendering {
 						0.0f);
 
 				if (g == null) {
+					if (operations == null)
+						operations = new LinkedList<>();
 					g = new VectorGraphics2D(new Graphics2DContext(),
-							returnValue);
+							operations);
 					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 							RenderingHints.VALUE_ANTIALIAS_ON);
 				}
@@ -850,19 +855,18 @@ public class BorderRendering {
 				}
 			}
 		}
-
-		return returnValue;
 	}
 
 	/**
 	 * This method only renders DASHED borders around Rectangle2D borders.
 	 */
-	private List<Operation> renderRectangleDashedBorders() {
-		List<Operation> returnValue = new LinkedList<>();
+	private void initRectangleDashedBorders() {
 		Graphics2D g = null;
 
 		if (topStyleValue == Value.DASHED && config.topColor != null) {
-			g = new VectorGraphics2D(new Graphics2DContext(), returnValue);
+			if (operations == null)
+				operations = new LinkedList<>();
+			g = new VectorGraphics2D(new Graphics2DContext(), operations);
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -884,7 +888,9 @@ public class BorderRendering {
 
 		if (bottomStyleValue == Value.DASHED && config.bottomColor != null) {
 			if (g == null) {
-				g = new VectorGraphics2D(new Graphics2DContext(), returnValue);
+				if (operations == null)
+					operations = new LinkedList<>();
+				g = new VectorGraphics2D(new Graphics2DContext(), operations);
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 						RenderingHints.VALUE_ANTIALIAS_ON);
 			}
@@ -908,7 +914,9 @@ public class BorderRendering {
 
 		if (leftStyleValue == Value.DASHED && config.leftColor != null) {
 			if (g == null) {
-				g = new VectorGraphics2D(new Graphics2DContext(), returnValue);
+				if (operations == null)
+					operations = new LinkedList<>();
+				g = new VectorGraphics2D(new Graphics2DContext(), operations);
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 						RenderingHints.VALUE_ANTIALIAS_ON);
 			}
@@ -922,7 +930,9 @@ public class BorderRendering {
 
 		if (rightStyleValue == Value.DASHED && config.rightColor != null) {
 			if (g == null) {
-				g = new VectorGraphics2D(new Graphics2DContext(), returnValue);
+				if (operations == null)
+					operations = new LinkedList<>();
+				g = new VectorGraphics2D(new Graphics2DContext(), operations);
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 						RenderingHints.VALUE_ANTIALIAS_ON);
 			}
@@ -933,10 +943,6 @@ public class BorderRendering {
 			renderVerticalDashes(g, minY, maxY,
 					shape.getMaxX() - rightWidthValue, rightWidthValue);
 		}
-		if (g != null)
-			g.dispose();
-
-		return returnValue;
 	}
 
 	private void renderHorizontalDashes(Graphics2D g, double minX, double maxX,
@@ -977,6 +983,11 @@ public class BorderRendering {
 	 * Paint this BorderRendering.
 	 */
 	public void paint(Graphics2D g) {
-		imageRendering.paint(g);
+		if (operations == null)
+			return;
+
+		for (Operation operation : operations) {
+			operation.paint(g);
+		}
 	}
 }

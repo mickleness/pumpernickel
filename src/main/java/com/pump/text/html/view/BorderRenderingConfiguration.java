@@ -1,7 +1,9 @@
 package com.pump.text.html.view;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.pump.text.html.css.CssColorValue;
 import com.pump.text.html.css.CssLength;
@@ -58,14 +60,14 @@ public class BorderRenderingConfiguration {
 	 * border, because there are only a few CSS properties to consult.
 	 */
 	public static BorderRenderingConfiguration forOutline(QViewHelper helper) {
-		Map<String, Object> properties = CssValueCreationToken
+		Collection<Entry<String, Object>> properties = CssValueCreationToken
 				.getOrderedProperties(helper, CssOutlineParser.PROPERTY_OUTLINE,
 						CssOutlineColorParser.PROPERTY_OUTLINE_COLOR,
 						CssOutlineWidthParser.PROPERTY_OUTLINE_WIDTH,
 						CssOutlineStyleParser.PROPERTY_OUTLINE_STYLE);
 
 		BorderRenderingConfiguration rv = new BorderRenderingConfiguration();
-		for (Map.Entry<String, Object> entry : properties.entrySet()) {
+		for (Map.Entry<String, Object> entry : properties) {
 			if (entry.getKey().equals(CssOutlineParser.PROPERTY_OUTLINE)) {
 				CssBorderValue all = (CssBorderValue) entry.getValue();
 				rv.leftWidth = rv.rightWidth = rv.topWidth = rv.bottomWidth = all
@@ -97,8 +99,7 @@ public class BorderRenderingConfiguration {
 	 * Create a configuration for a border.
 	 */
 	public static BorderRenderingConfiguration forBorder(QViewHelper helper) {
-
-		Map<String, Object> properties = CssValueCreationToken
+		Collection<Entry<String, Object>> properties = CssValueCreationToken
 				.getOrderedProperties(helper,
 						CssBorderBottomColorParser.PROPERTY_BORDER_BOTTOM_COLOR,
 						CssBorderBottomLeftRadiusParser.PROPERTY_BORDER_BOTTOM_LEFT_RADIUS,
@@ -127,7 +128,7 @@ public class BorderRenderingConfiguration {
 						CssBorderWidthParser.PROPERTY_BORDER_WIDTH);
 
 		BorderRenderingConfiguration rv = new BorderRenderingConfiguration();
-		for (Map.Entry<String, Object> entry : properties.entrySet()) {
+		for (Map.Entry<String, Object> entry : properties) {
 			if (entry.getKey().equals(
 					CssBorderBottomColorParser.PROPERTY_BORDER_BOTTOM_COLOR)) {
 				rv.bottomColor = (CssColorValue) entry.getValue();

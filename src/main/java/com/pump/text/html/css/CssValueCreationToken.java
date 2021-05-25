@@ -3,11 +3,12 @@ package com.pump.text.html.css;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.AbstractMap;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 import com.pump.text.html.view.QViewHelper;
 
@@ -21,10 +22,9 @@ public class CssValueCreationToken
 		implements Comparable<CssValueCreationToken>, Serializable {
 
 	/**
-	 * Return a map of property names to their values that is sorted in order of
-	 * creation.
+	 * Return a list of key/value pairs that is sorted in order of creation.
 	 * <p>
-	 * The first element in the map is the oldest element, and the last element
+	 * The first element in the list is the oldest element, and the last element
 	 * is the newest. This is useful when interpreting CSS, because if
 	 * sequential CSS properties conflict then the most recent (last) one
 	 * overrides any previous properties.
@@ -33,47 +33,39 @@ public class CssValueCreationToken
 	 *            the helper used to retrieve properties.
 	 * @param propertyNames
 	 *            the property names to retrieve.
-	 * @return a map of sorted properties.
+	 * @return a list of sorted properties.
 	 */
-	public static LinkedHashMap<String, Object> getOrderedProperties(
+	public static Collection<Map.Entry<String, Object>> getOrderedProperties(
 			QViewHelper helper, String... propertyNames) {
-		Collection<Wrapper> wrappers = new TreeSet<>();
+		Map<SortedKey, Map.Entry<String, Object>> sortedProperties = new TreeMap<>();
 		for (String propertyName : propertyNames) {
-			wrappers.add(new Wrapper(helper, propertyName));
+			Object propertyValue = helper.getAttribute(propertyName, false);
+			if (propertyValue != null) {
+				SortedKey key = new SortedKey(propertyValue);
+				Map.Entry<String, Object> entry = new AbstractMap.SimpleEntry<String, Object>(
+						propertyName, propertyValue);
+				sortedProperties.put(key, entry);
+			}
 		}
 
-		LinkedHashMap<String, Object> returnValue = new LinkedHashMap<>();
-
-		for (Wrapper wrapper : wrappers) {
-			if (wrapper.value != null)
-				returnValue.put(wrapper.propertyName, wrapper.value);
-		}
-		return returnValue;
+		return sortedProperties.values();
 	}
 
 	/**
 	 * This helps sort values according to their creation timestamps, so we can
 	 * safely identify the last (most recently defined) CSS statement.
 	 */
-	private static class Wrapper implements Comparable<Wrapper> {
+	private static class SortedKey implements Comparable<SortedKey> {
 		final CssValueCreationToken creationToken;
-		final Object value;
-		final String propertyName;
 
-		Wrapper(QViewHelper helper, String propertyName) {
-			Objects.requireNonNull(helper);
-			Objects.requireNonNull(propertyName);
+		SortedKey(Object value) {
+			Objects.requireNonNull(value);
 
-			this.propertyName = propertyName;
-			value = helper.getAttribute(propertyName, false);
 			if (value instanceof CssValue) {
 				creationToken = ((CssValue) value).getCreationToken();
 			} else if (value instanceof List) {
 				creationToken = ((CssValue) ((List) value).get(0))
 						.getCreationToken();
-			} else if (value == null) {
-				// this is harmless: just set up any non-null value
-				creationToken = new CssValueCreationToken();
 			} else {
 				throw new RuntimeException("Unexpected value: "
 						+ value.getClass().getName() + " " + value);
@@ -81,7 +73,7 @@ public class CssValueCreationToken
 		}
 
 		@Override
-		public int compareTo(Wrapper o2) {
+		public int compareTo(SortedKey o2) {
 			return creationToken.compareTo(o2.creationToken);
 		}
 	}

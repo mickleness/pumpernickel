@@ -1,7 +1,7 @@
 package com.pump.text.html.view;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import com.pump.text.html.css.CssMarginValue;
@@ -21,13 +21,14 @@ public class MarginConfiguration {
 	public CssMarginValue left, top, right, bottom;
 
 	public MarginConfiguration(QViewHelper helper) {
-		Map<String, Object> map = CssValueCreationToken.getOrderedProperties(
-				helper, CssSingleMarginParser.PROPERTY_MARGIN_BOTTOM,
-				CssSingleMarginParser.PROPERTY_MARGIN_LEFT,
-				CssSingleMarginParser.PROPERTY_MARGIN_TOP,
-				CssSingleMarginParser.PROPERTY_MARGIN_RIGHT,
-				CssMultiMarginParser.PROPERTY_MARGIN);
-		for (Entry<String, Object> entry : map.entrySet()) {
+		Collection<Entry<String, Object>> map = CssValueCreationToken
+				.getOrderedProperties(helper,
+						CssSingleMarginParser.PROPERTY_MARGIN_BOTTOM,
+						CssSingleMarginParser.PROPERTY_MARGIN_LEFT,
+						CssSingleMarginParser.PROPERTY_MARGIN_TOP,
+						CssSingleMarginParser.PROPERTY_MARGIN_RIGHT,
+						CssMultiMarginParser.PROPERTY_MARGIN);
+		for (Entry<String, Object> entry : map) {
 			if (entry.getKey()
 					.equals(CssSingleMarginParser.PROPERTY_MARGIN_BOTTOM)) {
 				bottom = (CssMarginValue) entry.getValue();
