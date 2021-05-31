@@ -92,7 +92,7 @@ public class ShapeTracer {
 								+ newY + ")");
 			}
 
-			if (direction != newDirection) {
+			if (direction != newDirection || direction == DIRECTION_UNDEFINED) {
 				// we changed direction, so commit this line:
 				dest.lineTo(currentX + dx, currentY + dy);
 				lastCommittedX = currentX;
