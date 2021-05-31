@@ -43,6 +43,98 @@ public class ShapeTracerTest extends TestCase {
 	}
 
 	/**
+	 * Test that the ShapeTracer can identify the outline of basic L-shapes
+	 * rotated 90 degrees.
+	 */
+	public void testLs() throws Exception {
+		BufferedImage bi = new BufferedImage(11, 11,
+				BufferedImage.TYPE_INT_ARGB);
+		// top-left corner
+		bi.setRGB(1, 1, 0xff000000);
+		bi.setRGB(2, 1, 0xff000000);
+		bi.setRGB(3, 1, 0xff000000);
+		bi.setRGB(4, 1, 0xff000000);
+		bi.setRGB(1, 2, 0xff000000);
+		bi.setRGB(2, 2, 0xff000000);
+		bi.setRGB(3, 2, 0xff000000);
+		bi.setRGB(4, 2, 0xff000000);
+		bi.setRGB(1, 3, 0xff000000);
+		bi.setRGB(2, 3, 0xff000000);
+		bi.setRGB(1, 4, 0xff000000);
+		bi.setRGB(2, 4, 0xff000000);
+
+		// top-right corner
+		bi.setRGB(7, 1, 0xff000000);
+		bi.setRGB(8, 1, 0xff000000);
+		bi.setRGB(9, 1, 0xff000000);
+		bi.setRGB(10, 1, 0xff000000);
+		bi.setRGB(7, 2, 0xff000000);
+		bi.setRGB(8, 2, 0xff000000);
+		bi.setRGB(9, 2, 0xff000000);
+		bi.setRGB(10, 2, 0xff000000);
+		bi.setRGB(9, 3, 0xff000000);
+		bi.setRGB(10, 3, 0xff000000);
+		bi.setRGB(9, 4, 0xff000000);
+		bi.setRGB(10, 4, 0xff000000);
+
+		// bottom-left corner
+		bi.setRGB(1, 10, 0xff000000);
+		bi.setRGB(2, 10, 0xff000000);
+		bi.setRGB(3, 10, 0xff000000);
+		bi.setRGB(4, 10, 0xff000000);
+		bi.setRGB(1, 9, 0xff000000);
+		bi.setRGB(2, 9, 0xff000000);
+		bi.setRGB(3, 9, 0xff000000);
+		bi.setRGB(4, 9, 0xff000000);
+		bi.setRGB(1, 8, 0xff000000);
+		bi.setRGB(2, 8, 0xff000000);
+		bi.setRGB(1, 7, 0xff000000);
+		bi.setRGB(2, 7, 0xff000000);
+
+		// bottom-right corner
+		bi.setRGB(7, 10, 0xff000000);
+		bi.setRGB(8, 10, 0xff000000);
+		bi.setRGB(9, 10, 0xff000000);
+		bi.setRGB(10, 10, 0xff000000);
+		bi.setRGB(7, 9, 0xff000000);
+		bi.setRGB(8, 9, 0xff000000);
+		bi.setRGB(9, 9, 0xff000000);
+		bi.setRGB(10, 9, 0xff000000);
+		bi.setRGB(9, 8, 0xff000000);
+		bi.setRGB(10, 8, 0xff000000);
+		bi.setRGB(9, 7, 0xff000000);
+		bi.setRGB(10, 7, 0xff000000);
+
+		testImage(bi, "small Ls");
+	}
+
+	/**
+	 * Test that the ShapeTracer can identify the outline of space-invader-like
+	 * shapes.
+	 */
+	public void testSpaceInvaders() throws Exception {
+		BufferedImage bi = new BufferedImage(11, 11,
+				BufferedImage.TYPE_INT_ARGB);
+		// top-left corner
+		bi.setRGB(5, 2, 0xff000000);
+		bi.setRGB(5, 3, 0xff000000);
+		bi.setRGB(6, 1, 0xff000000);
+		bi.setRGB(6, 2, 0xff000000);
+		bi.setRGB(7, 2, 0xff000000);
+		bi.setRGB(7, 3, 0xff000000);
+
+		// top-right corner
+		bi.setRGB(1, 5, 0xff000000);
+		bi.setRGB(2, 5, 0xff000000);
+		bi.setRGB(2, 6, 0xff000000);
+		bi.setRGB(3, 6, 0xff000000);
+		bi.setRGB(1, 7, 0xff000000);
+		bi.setRGB(2, 7, 0xff000000);
+
+		testImage(bi, "space invaders");
+	}
+
+	/**
 	 * Test that the ShapeTracer can identify the outlines of nearly 90 common
 	 * English glyphs.
 	 */
@@ -104,7 +196,7 @@ public class ShapeTracerTest extends TestCase {
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		g.drawImage(bi, 0, 0, null);
 		g.setXORMode(Color.red);
-		g.fill(shape);
+		g.drawImage(copy, 0, 0, null);
 		g.dispose();
 
 		BufferedImage comparison = new BufferedImage(bi.getWidth() * 3,
@@ -116,7 +208,7 @@ public class ShapeTracerTest extends TestCase {
 		g.dispose();
 
 		try {
-			assertSolidColor(0x00FFFF, overlap, id);
+			assertSolidColor(0xff0000, overlap, id);
 		} catch (AssertionFailedError e) {
 			if (writeFiles) {
 				File dir = new File("ShapeTracerTest");
@@ -125,6 +217,7 @@ public class ShapeTracerTest extends TestCase {
 
 				File file = new File(dir, id + ".png");
 				ImageIO.write(comparison, "png", file);
+				System.out.println("Wrote " + file.getAbsolutePath());
 			}
 			throw e;
 		}

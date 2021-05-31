@@ -58,22 +58,20 @@ public class ShapeTracer {
 	 */
 	static class PathWriter {
 		Path2D dest;
-		int currentX, currentY, lastCommittedX, lastCommittedY, dx, dy;
+		int currentX, currentY, lastCommittedX, lastCommittedY;
 		byte direction = DIRECTION_UNDEFINED;
 
-		public PathWriter(Path2D dest, int startX, int startY, int dx, int dy) {
-			this.dx = dx;
-			this.dy = dy;
+		public PathWriter(Path2D dest, int startX, int startY) {
 			this.dest = dest;
-			dest.moveTo(startX + dx, startY + dy);
+			dest.moveTo(startX, startY);
 			lastCommittedX = currentX = startX;
 			lastCommittedY = currentY = startY;
 		}
 
 		public void add(int newX, int newY) {
-			// this shouldn't happen, but just in case:
-			if (newX == currentX && newY == currentY)
+			if (newX == currentX && newY == currentY) {
 				return;
+			}
 
 			byte newDirection = DIRECTION_UNDEFINED;
 
@@ -94,7 +92,7 @@ public class ShapeTracer {
 
 			if (direction != newDirection || direction == DIRECTION_UNDEFINED) {
 				// we changed direction, so commit this line:
-				dest.lineTo(currentX + dx, currentY + dy);
+				dest.lineTo(currentX, currentY);
 				lastCommittedX = currentX;
 				lastCommittedY = currentY;
 			}
@@ -105,7 +103,7 @@ public class ShapeTracer {
 
 		public void close() {
 			if (currentX != lastCommittedX || currentY != lastCommittedY)
-				dest.lineTo(currentX + dx, currentY + dy);
+				dest.lineTo(currentX, currentY);
 
 			dest.closePath();
 		}
@@ -113,7 +111,10 @@ public class ShapeTracer {
 
 	protected void traceMask(byte[] mask, int width, int height, int startX,
 			int startY, Path2D path) {
-		PathWriter writer = new PathWriter(path, startX, startY, -1, -1);
+		boolean leftSide = true;
+		boolean topSide = true;
+		PathWriter writer = new PathWriter(path, startX + (leftSide ? -1 : 0),
+				startY + (topSide ? -1 : 0));
 		int x = startX;
 		int y = startY;
 		byte direction = DIRECTION_RIGHT;
@@ -123,6 +124,7 @@ public class ShapeTracer {
 				if (mask[(y - 1) * width + x] != EMPTY) {
 					// try counter-clockwise:
 					direction = DIRECTION_UP;
+					topSide = false;
 					y--;
 				} else if (mask[y * width + x + 1] != EMPTY) {
 					// continue right
@@ -130,19 +132,26 @@ public class ShapeTracer {
 				} else if (mask[(y + 1) * width + x] != EMPTY) {
 					// try clockwise
 					direction = DIRECTION_DOWN;
+					leftSide = false;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 					y++;
 				} else {
 					// reverse
 					direction = DIRECTION_LEFT;
+					leftSide = false;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
+					topSide = false;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 					x--;
 				}
-				writer.add(x, y);
+				writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 				mask[y * width + x] = OPAQUE_PROCESSED;
 				break;
 			case DIRECTION_DOWN:
 				if (mask[y * width + x + 1] != EMPTY) {
 					// try counter-clockwise:
 					direction = DIRECTION_RIGHT;
+					leftSide = true;
 					x++;
 				} else if (mask[(y + 1) * width + x] != EMPTY) {
 					// continue down
@@ -150,19 +159,26 @@ public class ShapeTracer {
 				} else if (mask[y * width + x - 1] != EMPTY) {
 					// try clockwise
 					direction = DIRECTION_LEFT;
+					topSide = false;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 					x--;
 				} else {
 					// reverse
 					direction = DIRECTION_UP;
+					topSide = false;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
+					leftSide = true;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 					y--;
 				}
-				writer.add(x, y);
+				writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 				mask[y * width + x] = OPAQUE_PROCESSED;
 				break;
 			case DIRECTION_LEFT:
 				if (mask[(y + 1) * width + x] != EMPTY) {
 					// try counter-clockwise:
 					direction = DIRECTION_DOWN;
+					topSide = true;
 					y++;
 				} else if (mask[y * width + x - 1] != EMPTY) {
 					// continue left
@@ -170,19 +186,26 @@ public class ShapeTracer {
 				} else if (mask[(y - 1) * width + x] != EMPTY) {
 					// try clockwise
 					direction = DIRECTION_UP;
+					leftSide = true;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 					y--;
 				} else {
 					// reverse
 					direction = DIRECTION_RIGHT;
+					leftSide = true;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
+					topSide = true;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 					x++;
 				}
-				writer.add(x, y);
+				writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 				mask[y * width + x] = OPAQUE_PROCESSED;
 				break;
 			case DIRECTION_UP:
 				if (mask[y * width + x - 1] != EMPTY) {
 					// try counter-clockwise:
 					direction = DIRECTION_LEFT;
+					leftSide = false;
 					x--;
 				} else if (mask[(y - 1) * width + x] != EMPTY) {
 					// continue up
@@ -190,13 +213,19 @@ public class ShapeTracer {
 				} else if (mask[y * width + x + 1] != EMPTY) {
 					// try clockwise
 					direction = DIRECTION_RIGHT;
+					topSide = true;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 					x++;
 				} else {
 					// reverse
 					direction = DIRECTION_DOWN;
+					topSide = true;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
+					leftSide = false;
+					writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 					y++;
 				}
-				writer.add(x, y);
+				writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 				mask[y * width + x] = OPAQUE_PROCESSED;
 				break;
 			default:
@@ -207,6 +236,7 @@ public class ShapeTracer {
 			if (x == startX && y == startY)
 				break;
 		}
+		writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
 		writer.close();
 	}
 }
