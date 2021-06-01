@@ -1,5 +1,6 @@
 package com.pump.awt;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -195,7 +196,7 @@ public class ShapeTracerTest extends TestCase {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		g.drawImage(bi, 0, 0, null);
-		g.setXORMode(Color.red);
+		g.setComposite(AlphaComposite.Xor);
 		g.drawImage(copy, 0, 0, null);
 		g.dispose();
 
@@ -208,7 +209,7 @@ public class ShapeTracerTest extends TestCase {
 		g.dispose();
 
 		try {
-			assertSolidColor(0xff0000, overlap, id);
+			assertEmpty(overlap, id);
 		} catch (AssertionFailedError e) {
 			if (writeFiles) {
 				File dir = new File("ShapeTracerTest");
@@ -241,6 +242,24 @@ public class ShapeTracerTest extends TestCase {
 								+ Integer.toHexString(expectedRGB)
 								+ ", found 0x" + Integer.toHexString(actualRGB),
 						expectedRGB, actualRGB);
+			}
+		}
+	}
+
+	private void assertEmpty(BufferedImage bi, String id) {
+		assertEquals(BufferedImage.TYPE_INT_ARGB, bi.getType());
+
+		int[] row = new int[bi.getWidth()];
+		for (int y = 0; y < bi.getHeight(); y++) {
+			bi.getRaster().getDataElements(0, y, row.length, 1, row);
+			for (int x = 0; x < row.length; x++) {
+				int argb = row[x];
+				int alpha = (argb >> 24) & 0xff;
+				if (alpha == 0)
+					continue;
+				fail("id \"" + id + "\", (" + x + ", " + y
+						+ "), expected empty pixel but was 0x"
+						+ Integer.toHexString(argb));
 			}
 		}
 	}
