@@ -1,9 +1,12 @@
 package com.pump.awt;
 
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class ShapeTracer {
 	private static final byte EMPTY = 0;
@@ -60,16 +63,37 @@ public class ShapeTracer {
 		Path2D dest;
 		int currentX, currentY, lastCommittedX, lastCommittedY;
 		byte direction = DIRECTION_UNDEFINED;
+		Collection<Point> points = new HashSet<>();
+		boolean closed = false;
 
 		public PathWriter(Path2D dest, int startX, int startY) {
 			this.dest = dest;
+			points.add(new Point(startX, startY));
 			dest.moveTo(startX, startY);
 			lastCommittedX = currentX = startX;
 			lastCommittedY = currentY = startY;
 		}
 
+		public boolean isClosed() {
+			return closed;
+		}
+
+		/**
+		 * 
+		 * @param newX
+		 * @param newY
+		 */
 		public void add(int newX, int newY) {
+			if (closed)
+				return;
 			if (newX == currentX && newY == currentY) {
+				return;
+			}
+			if (!points.add(new Point(newX, newY))) {
+				if (currentX != lastCommittedX || currentY != lastCommittedY)
+					dest.lineTo(currentX, currentY);
+				dest.closePath();
+				closed = true;
 				return;
 			}
 
@@ -99,13 +123,7 @@ public class ShapeTracer {
 			direction = newDirection;
 			currentX = newX;
 			currentY = newY;
-		}
-
-		public void close() {
-			if (currentX != lastCommittedX || currentY != lastCommittedY)
-				dest.lineTo(currentX, currentY);
-
-			dest.closePath();
+			return;
 		}
 	}
 
@@ -118,7 +136,7 @@ public class ShapeTracer {
 		int x = startX;
 		int y = startY;
 		byte direction = DIRECTION_RIGHT;
-		while (true) {
+		while (!writer.isClosed()) {
 			switch (direction) {
 			case DIRECTION_RIGHT:
 				if (mask[(y - 1) * width + x] != EMPTY) {
@@ -233,10 +251,6 @@ public class ShapeTracer {
 				throw new RuntimeException(
 						"Unexpected direction: " + direction);
 			}
-			if (x == startX && y == startY)
-				break;
 		}
-		writer.add(x + (leftSide ? -1 : 0), y + (topSide ? -1 : 0));
-		writer.close();
 	}
 }
