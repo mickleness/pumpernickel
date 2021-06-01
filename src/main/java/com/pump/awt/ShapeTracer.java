@@ -34,14 +34,16 @@ public class ShapeTracer {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++, k++) {
 				if ((pixels[k] & PIXEL_OPAQUE) == 1) {
-					if (x - 1 >= 0 && (pixels[k - 1] & PIXEL_OPAQUE) == 0) {
+					if (x - 1 >= 0 && (pixels[k - 1] & PIXEL_OPAQUE) == 0
+							|| x == 0) {
 						pixels[k] += EDGE_LEFT;
 					}
 					if (x + 1 < width && (pixels[k + 1] & PIXEL_OPAQUE) == 0) {
 						pixels[k + 1] += EDGE_LEFT;
 					}
 
-					if (y - 1 >= 0 && (pixels[k - width] & PIXEL_OPAQUE) == 0) {
+					if (y - 1 >= 0 && (pixels[k - width] & PIXEL_OPAQUE) == 0
+							|| y == 0) {
 						pixels[k] += EDGE_TOP;
 					}
 					if (y + 1 < height

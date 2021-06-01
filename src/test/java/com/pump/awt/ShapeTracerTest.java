@@ -23,117 +23,14 @@ import com.pump.geom.TransformUtils;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
+/**
+ * These makes sure the ShapeTracer correctly outlines several different shapes
+ * with pixel precision.
+ */
 public class ShapeTracerTest extends TestCase {
 
-	Font font = new Font("sansserif", 0, 12);
-	boolean writeFiles = true;
-
-	/**
-	 * Test that the ShapeTracer can identify the outline of a simple black
-	 * square.
-	 */
-	public void testSquare() throws Exception {
-		BufferedImage bi = new BufferedImage(10, 10,
-				BufferedImage.TYPE_INT_ARGB);
-		for (int y = 4; y <= 7; y++) {
-			for (int x = 4; x <= 8; x++) {
-				bi.setRGB(x, y, 0xff000000);
-			}
-		}
-		testImage(bi, "small square");
-	}
-
-	/**
-	 * Test that the ShapeTracer can identify the outline of basic L-shapes
-	 * rotated 90 degrees.
-	 */
-	public void testLs() throws Exception {
-		BufferedImage bi = new BufferedImage(11, 11,
-				BufferedImage.TYPE_INT_ARGB);
-		// top-left corner
-		bi.setRGB(1, 1, 0xff000000);
-		bi.setRGB(2, 1, 0xff000000);
-		bi.setRGB(3, 1, 0xff000000);
-		bi.setRGB(4, 1, 0xff000000);
-		bi.setRGB(1, 2, 0xff000000);
-		bi.setRGB(2, 2, 0xff000000);
-		bi.setRGB(3, 2, 0xff000000);
-		bi.setRGB(4, 2, 0xff000000);
-		bi.setRGB(1, 3, 0xff000000);
-		bi.setRGB(2, 3, 0xff000000);
-		bi.setRGB(1, 4, 0xff000000);
-		bi.setRGB(2, 4, 0xff000000);
-
-		// top-right corner
-		bi.setRGB(7, 1, 0xff000000);
-		bi.setRGB(8, 1, 0xff000000);
-		bi.setRGB(9, 1, 0xff000000);
-		bi.setRGB(10, 1, 0xff000000);
-		bi.setRGB(7, 2, 0xff000000);
-		bi.setRGB(8, 2, 0xff000000);
-		bi.setRGB(9, 2, 0xff000000);
-		bi.setRGB(10, 2, 0xff000000);
-		bi.setRGB(9, 3, 0xff000000);
-		bi.setRGB(10, 3, 0xff000000);
-		bi.setRGB(9, 4, 0xff000000);
-		bi.setRGB(10, 4, 0xff000000);
-
-		// bottom-left corner
-		bi.setRGB(1, 10, 0xff000000);
-		bi.setRGB(2, 10, 0xff000000);
-		bi.setRGB(3, 10, 0xff000000);
-		bi.setRGB(4, 10, 0xff000000);
-		bi.setRGB(1, 9, 0xff000000);
-		bi.setRGB(2, 9, 0xff000000);
-		bi.setRGB(3, 9, 0xff000000);
-		bi.setRGB(4, 9, 0xff000000);
-		bi.setRGB(1, 8, 0xff000000);
-		bi.setRGB(2, 8, 0xff000000);
-		bi.setRGB(1, 7, 0xff000000);
-		bi.setRGB(2, 7, 0xff000000);
-
-		// bottom-right corner
-		bi.setRGB(7, 10, 0xff000000);
-		bi.setRGB(8, 10, 0xff000000);
-		bi.setRGB(9, 10, 0xff000000);
-		bi.setRGB(10, 10, 0xff000000);
-		bi.setRGB(7, 9, 0xff000000);
-		bi.setRGB(8, 9, 0xff000000);
-		bi.setRGB(9, 9, 0xff000000);
-		bi.setRGB(10, 9, 0xff000000);
-		bi.setRGB(9, 8, 0xff000000);
-		bi.setRGB(10, 8, 0xff000000);
-		bi.setRGB(9, 7, 0xff000000);
-		bi.setRGB(10, 7, 0xff000000);
-
-		testImage(bi, "small Ls");
-	}
-
-	/**
-	 * Test that the ShapeTracer can identify the outline of space-invader-like
-	 * shapes.
-	 */
-	public void testSpaceInvaders() throws Exception {
-		BufferedImage bi = new BufferedImage(11, 11,
-				BufferedImage.TYPE_INT_ARGB);
-		// top-left corner
-		bi.setRGB(5, 2, 0xff000000);
-		bi.setRGB(5, 3, 0xff000000);
-		bi.setRGB(6, 1, 0xff000000);
-		bi.setRGB(6, 2, 0xff000000);
-		bi.setRGB(7, 2, 0xff000000);
-		bi.setRGB(7, 3, 0xff000000);
-
-		// top-right corner
-		bi.setRGB(1, 5, 0xff000000);
-		bi.setRGB(2, 5, 0xff000000);
-		bi.setRGB(2, 6, 0xff000000);
-		bi.setRGB(3, 6, 0xff000000);
-		bi.setRGB(1, 7, 0xff000000);
-		bi.setRGB(2, 7, 0xff000000);
-
-		testImage(bi, "space invaders");
-	}
+	static Font font = new Font("sansserif", 0, 12);
+	static boolean writeFiles = true;
 
 	/**
 	 * Test that the ShapeTracer can identify the outlines of nearly 90 common
@@ -162,6 +59,58 @@ public class ShapeTracerTest extends TestCase {
 			g.dispose();
 
 			testImage(bi, "char-" + ch);
+		}
+	}
+
+	/**
+	 * Test every possible 3x3 configuration (512 total).
+	 */
+	@Test
+	public void test3x3Grids() throws IOException {
+		int[] colors = new int[] { 0, 0xff000000 };
+		for (int i0 : colors) {
+			for (int i1 : colors) {
+				for (int i2 : colors) {
+					for (int i3 : colors) {
+						for (int i4 : colors) {
+							for (int i5 : colors) {
+								for (int i6 : colors) {
+									for (int i7 : colors) {
+										for (int i8 : colors) {
+
+											String id = "3x3-";
+											id += (i0 == 0 ? "0" : "1");
+											id += (i1 == 0 ? "0" : "1");
+											id += (i2 == 0 ? "0" : "1");
+											id += (i3 == 0 ? "0" : "1");
+											id += (i4 == 0 ? "0" : "1");
+											id += (i5 == 0 ? "0" : "1");
+											id += (i6 == 0 ? "0" : "1");
+											id += (i7 == 0 ? "0" : "1");
+											id += (i8 == 0 ? "0" : "1");
+
+											BufferedImage bi = new BufferedImage(
+													3, 3,
+													BufferedImage.TYPE_INT_ARGB);
+											bi.setRGB(0, 0, i0);
+											bi.setRGB(1, 0, i1);
+											bi.setRGB(2, 0, i2);
+											bi.setRGB(0, 1, i3);
+											bi.setRGB(1, 1, i4);
+											bi.setRGB(2, 1, i5);
+											bi.setRGB(0, 2, i6);
+											bi.setRGB(1, 2, i7);
+											bi.setRGB(2, 2, i8);
+
+											testImage(bi, id);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
