@@ -68,9 +68,56 @@ public class ShapeTracer {
 		return path;
 	}
 
+	/**
+	 * This collapses colinear horizontal and vertical points. For example, if
+	 * you add (0,0), (1,0) and (2,0) to this polygon, then it will only record
+	 * (0,0) and (2,0).
+	 */
+	static class CollapsedPolygon extends Polygon {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void addPoint(int x, int y) {
+			if (npoints > 0 && xpoints[npoints - 1] == x
+					&& ypoints[npoints - 1] == y)
+				return;
+			if (npoints > 1) {
+				int xMinus2 = xpoints[npoints - 2];
+				int yMinus2 = ypoints[npoints - 2];
+				int xMinus1 = xpoints[npoints - 1];
+				int yMinus1 = ypoints[npoints - 1];
+				if (xMinus2 == xMinus1 && xMinus1 == x) {
+					// we have a vertical line
+					if (yMinus2 < yMinus1 && yMinus1 < y) {
+						ypoints[npoints - 1] = y;
+						invalidate();
+						return;
+					} else if (y < yMinus1 && yMinus1 < yMinus2) {
+						ypoints[npoints - 1] = y;
+						invalidate();
+						return;
+					}
+				} else if (yMinus2 == yMinus1 && yMinus1 == y) {
+					// we have a horizonal line
+					if (xMinus2 < xMinus1 && xMinus1 < x) {
+						xpoints[npoints - 1] = x;
+						invalidate();
+						return;
+					} else if (x < xMinus1 && xMinus1 < xMinus2) {
+						xpoints[npoints - 1] = x;
+						invalidate();
+						return;
+					}
+				}
+			}
+			super.addPoint(x, y);
+		}
+
+	}
+
 	private Polygon tracePath(int[] pixels, int width, int height, int startX,
 			int startY) {
-		Polygon returnValue = new Polygon();
+		Polygon returnValue = new CollapsedPolygon();
 		int x = startX;
 		int y = startY;
 		int edge = EDGE_TOP;
