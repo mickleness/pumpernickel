@@ -52,7 +52,7 @@ public class ShapeTracer {
 			}
 		}
 
-		Path2D path = new Path2D.Float(PathIterator.WIND_NON_ZERO);
+		Path2D path = new Path2D.Float(PathIterator.WIND_EVEN_ODD);
 
 		k = 0;
 		for (int y = 0; y < height; y++) {
