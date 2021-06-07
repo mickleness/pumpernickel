@@ -33,7 +33,6 @@ import com.pump.awt.BristleStroke;
 import com.pump.awt.BrushStroke;
 import com.pump.awt.CalligraphyStroke;
 import com.pump.awt.CharcoalStroke;
-import com.pump.awt.GradientTexturePaint;
 import com.pump.awt.TransformedTexturePaint;
 import com.pump.graphics.DualGraphics2D;
 
@@ -692,13 +691,9 @@ public class VectorImageTest extends TestCase {
 	}
 
 	public void testCustomPaints() throws Exception {
-		Paint[] paints = new Paint[] {
-				new GradientTexturePaint(0, 0, new Color(200, 200, 200), 200, 0,
-						new Color(210, 210, 210)),
-
-				new TransformedTexturePaint(
-						getCheckerBoard(8, Color.gray, Color.white),
-						AffineTransform.getRotateInstance(.34f)) };
+		Paint[] paints = new Paint[] { new TransformedTexturePaint(
+				getCheckerBoard(8, Color.gray, Color.white),
+				AffineTransform.getRotateInstance(.34f)) };
 		for (Paint paint : paints) {
 			final Paint fPaint = paint;
 			RenderTest t2 = new RenderTest() {

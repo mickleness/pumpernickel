@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import com.pump.awt.GradientTexturePaint;
 import com.pump.plaf.AnimationManager;
 import com.pump.text.html.css.AbstractCssValue;
 import com.pump.text.html.css.CssColorParser;
@@ -311,10 +310,8 @@ public class CssLinearGradientImageValue extends AbstractCssValue
 				positions[a] = positions[a] / lastFraction;
 			}
 
-			// GradientTexturePaint antialiases the seam of repeating tiles
-			// better
-			return new GradientTexturePaint(colors, positions, line.getP1(),
-					line.getP2(), cycle);
+			return new LinearGradientPaint(line.getP1(), line.getP2(),
+					positions, colors, cycle);
 		}
 
 		return new LinearGradientPaint(line.getP1(), line.getP2(), positions,

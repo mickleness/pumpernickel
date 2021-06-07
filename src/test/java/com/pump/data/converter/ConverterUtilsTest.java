@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.TexturePaint;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
@@ -13,11 +12,9 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-import com.pump.awt.GradientTexturePaint;
 import com.pump.awt.converter.Rectangle2DMapConverter;
 import com.pump.awt.converter.RenderedImageMapConverter;
 import com.pump.awt.converter.ShapeMapConverter;
-import com.pump.awt.converter.TexturePaintMapConverter;
 
 import junit.framework.TestCase;
 
@@ -183,28 +180,5 @@ public class ConverterUtilsTest extends TestCase {
 
 		String str = ConverterUtils.toString(shape);
 		assertTrue(str.startsWith("Shape["));
-	}
-
-	/**
-	 * Make sure a subclass of a supported class does not pick up that class's
-	 * converter.
-	 * <p>
-	 * For example: the TexturePaintMapConverter is designed to support
-	 * TexturePaints. It is NOT designed to support the subclass
-	 * GradientTexturePaint, so SerializationUtils should not associate
-	 * GradientTexturePaint with TexturePaintMapConverter.
-	 * <p>
-	 * (This principle is only for subclasses; it is not applicable to
-	 * interfaces.)
-	 */
-	public void testGetConverter_subclassOfSupportedClass() {
-		// this is our baseline:
-		assertEquals(TexturePaintMapConverter.class,
-				ConverterUtils.getConverter(TexturePaint.class).getClass());
-
-		// but make sure our subclass (GradientTexturePaint) doesn't pick up the
-		// TexturePaintMapConverter
-		assertTrue(ConverterUtils
-				.getConverter(GradientTexturePaint.class) == null);
 	}
 }

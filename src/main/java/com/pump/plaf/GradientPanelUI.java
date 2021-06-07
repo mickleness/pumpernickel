@@ -25,7 +25,6 @@ import java.awt.geom.Point2D;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 
-import com.pump.awt.GradientTexturePaint;
 import com.pump.util.ObservableProperties.Key;
 import com.pump.util.ObservableProperties.SetBoundsChecker;
 
@@ -176,7 +175,8 @@ public class GradientPanelUI extends AbstractPanelUI {
 		int bottomY = c.getHeight() - i.bottom;
 		int leftX = i.left;
 		int rightX = c.getWidth() - i.right;
-		Rectangle r = new Rectangle(leftX, topY, rightX - leftX, bottomY - topY);
+		Rectangle r = new Rectangle(leftX, topY, rightX - leftX,
+				bottomY - topY);
 		paintGradient(g, r.x, r.y, r.width, r.height, r);
 	}
 
@@ -236,7 +236,8 @@ public class GradientPanelUI extends AbstractPanelUI {
 		Graphics2D g = (Graphics2D) g0.create();
 		g.setRenderingHint(RenderingHints.KEY_RENDERING,
 				RenderingHints.VALUE_RENDER_QUALITY);
-		Paint p = createGradient(x, y, w, h, KEY_FILL_COLOR_1, KEY_FILL_COLOR_2);
+		Paint p = createGradient(x, y, w, h, KEY_FILL_COLOR_1,
+				KEY_FILL_COLOR_2);
 		if (p != null) {
 			g.setPaint(p);
 			g.fill(fillShape);
@@ -265,9 +266,9 @@ public class GradientPanelUI extends AbstractPanelUI {
 
 		Paint p;
 		if (SwingConstants.VERTICAL == getGradientOrientation()) {
-			p = new GradientTexturePaint(0, y, color1, 0, y + h, color2);
+			p = new GradientPaint(0, y, color1, 0, y + h, color2);
 		} else {
-			p = new GradientTexturePaint(x, y, color1, x + w, y, color2);
+			p = new GradientPaint(x, y, color1, x + w, y, color2);
 		}
 		return p;
 	}
