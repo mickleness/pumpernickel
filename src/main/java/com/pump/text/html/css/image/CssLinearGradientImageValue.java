@@ -301,6 +301,15 @@ public class CssLinearGradientImageValue extends AbstractCssValue
 			ctr++;
 		}
 
+		// if two gradient stops were equal, they need to become trivially
+		// different
+		for (int a = 1; a < positions.length; a++) {
+			if (positions[a - 1] == positions[a]) {
+				positions[a - 1] -= .0000001f;
+				positions[a] += .0000001f;
+			}
+		}
+
 		CycleMethod cycle = CycleMethod.NO_CYCLE;
 		if (repeating) {
 			cycle = CycleMethod.REPEAT;
