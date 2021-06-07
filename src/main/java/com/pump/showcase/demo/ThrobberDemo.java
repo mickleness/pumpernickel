@@ -36,6 +36,7 @@ import com.pump.plaf.PulsingCirclesThrobberUI;
 import com.pump.plaf.ThrobberUI;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JThrobber;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This panel shows three simple JThrobber implementations.
@@ -57,8 +58,8 @@ public class ThrobberDemo extends ShowcaseExampleDemo {
 	JCheckBox colorCheckBox = new JCheckBox("Custom Foreground:");
 
 	public ThrobberDemo() {
-		addSliderPopover(sizeSlider, " pixels");
-		addSliderPopover(rateSlider, "%");
+		JPopover.add(sizeSlider, " pixels");
+		JPopover.add(rateSlider, "%");
 
 		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Type:"), typeComboBox);

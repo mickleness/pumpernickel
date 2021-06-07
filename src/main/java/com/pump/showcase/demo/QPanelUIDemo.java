@@ -40,6 +40,7 @@ import com.pump.inspector.Inspector;
 import com.pump.plaf.QPanelUI;
 import com.pump.plaf.QPanelUI.CalloutType;
 import com.pump.swing.JColorWell;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This demonstrates the QPanelUI.
@@ -112,9 +113,9 @@ public class QPanelUIDemo extends ShowcaseExampleDemo {
 	public QPanelUIDemo() {
 		super(false, false, false);
 
-		addSliderPopover(cornerSize, " pixels");
-		addSliderPopover(calloutSize, " pixels");
-		addSliderPopover(shadowSize, " pixels");
+		JPopover.add(cornerSize, " pixels");
+		JPopover.add(calloutSize, " pixels");
+		JPopover.add(shadowSize, " pixels");
 
 		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Preset:"), presetBox, presetToolTip);

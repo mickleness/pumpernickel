@@ -22,6 +22,7 @@ import com.pump.image.thumbnail.generator.MacCImageThumbnailGenerator;
 import com.pump.image.thumbnail.generator.MacQuickLookThumbnailGenerator;
 import com.pump.image.thumbnail.generator.ScalingThumbnailGenerator;
 import com.pump.image.thumbnail.generator.ThumbnailGenerator;
+import com.pump.swing.popover.JPopover;
 
 public class ThumbnailGeneratorDemo extends ShowcaseResourceExampleDemo<File> {
 	private static final long serialVersionUID = 1L;
@@ -69,7 +70,7 @@ public class ThumbnailGeneratorDemo extends ShowcaseResourceExampleDemo<File> {
 		sizeCheckBox.addActionListener(actionListener);
 		generatorComboBox.addActionListener(actionListener);
 
-		addSliderPopover(sizeSlider, " pixels");
+		JPopover.add(sizeSlider, " pixels");
 
 		previewLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		previewLabel.setHorizontalTextPosition(SwingConstants.CENTER);

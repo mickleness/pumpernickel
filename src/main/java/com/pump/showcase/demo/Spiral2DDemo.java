@@ -35,6 +35,7 @@ import com.pump.geom.AbstractShape;
 import com.pump.geom.ParametricPathIterator;
 import com.pump.geom.Spiral2D;
 import com.pump.inspector.Inspector;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This demos the {@link Spiral2D} class
@@ -68,7 +69,7 @@ public class Spiral2DDemo extends ShowcaseExampleDemo {
 	public Spiral2DDemo() {
 		super(true, true, true);
 
-		addSliderPopover(angleOffset, "\u00B0");
+		JPopover.add(angleOffset, "\u00B0");
 
 		Inspector inspector = new Inspector(configurationPanel);
 		inspector.addRow(coilGapLabel, coilGap);

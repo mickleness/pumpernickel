@@ -56,6 +56,7 @@ import com.pump.inspector.Inspector;
 import com.pump.inspector.InspectorRowPanel;
 import com.pump.plaf.AngleSliderUI;
 import com.pump.plaf.PlafPaintUtils;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This demo shows a few new Stroke implementations and a model to smooth out
@@ -251,8 +252,8 @@ public class StrokeMouseSmoothingDemo extends ShowcaseExampleDemo {
 	public StrokeMouseSmoothingDemo() {
 		super(true, true, false);
 
-		addSliderPopover(crackSizeSlider, "%");
-		addSliderPopover(thicknessSlider, "%");
+		JPopover.add(crackSizeSlider, "%");
+		JPopover.add(thicknessSlider, "%");
 
 		JPanel animatingInspectorPanel = new AnimatingInspectorPanel();
 		configurationPanel.add(animatingInspectorPanel);

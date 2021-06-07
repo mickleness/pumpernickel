@@ -28,6 +28,7 @@ import com.pump.plaf.ColorWellUI.ShowColorPaletteActionListener;
 import com.pump.plaf.PaletteUI;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JPalette;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This demos the JColorWell and JPalette.
@@ -48,7 +49,7 @@ public class JColorWellPaletteDemo extends ShowcaseExampleDemo {
 	JColorWell colorWell = new JColorWell();
 
 	public JColorWellPaletteDemo() {
-		addSliderPopover(cellSizeSlider, " pixels");
+		JPopover.add(cellSizeSlider, " pixels");
 
 		Inspector layout1 = new Inspector(configurationPanel);
 		layout1.addRow(new JLabel("Type:"), typeComboBox);

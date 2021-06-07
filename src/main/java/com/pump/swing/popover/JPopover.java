@@ -20,8 +20,10 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Callable;
 
 import javax.swing.JComponent;
+import javax.swing.JSlider;
 import javax.swing.JToolTip;
 import javax.swing.MenuSelectionManager;
 import javax.swing.PopupFactory;
@@ -33,6 +35,7 @@ import javax.swing.event.ChangeListener;
 import com.pump.swing.popup.PopupTarget;
 import com.pump.swing.popup.QPopup;
 import com.pump.swing.popup.QPopupFactory;
+import com.pump.swing.popup.SliderThumbPopupTarget;
 import com.pump.util.BooleanProperty;
 
 /**
@@ -97,16 +100,16 @@ public class JPopover<T extends JComponent> {
 	 * will automatically detach from the MenuSelectionManager if the reference
 	 * is lost.
 	 */
-	protected static class MenuSelectionManagerListener implements
-			ChangeListener {
+	protected static class MenuSelectionManagerListener
+			implements ChangeListener {
 
 		/**
 		 * This installs a new MenuSelectionManagerListener on the
 		 * MenuSelectionManager.
 		 */
 		public static void install(JPopover<?> p) {
-			MenuSelectionManager.defaultManager().addChangeListener(
-					new MenuSelectionManagerListener(p));
+			MenuSelectionManager.defaultManager()
+					.addChangeListener(new MenuSelectionManagerListener(p));
 		}
 
 		WeakReference<JPopover<?>> ref;
@@ -135,6 +138,80 @@ public class JPopover<T extends JComponent> {
 				}
 			});
 		}
+	}
+
+	/**
+	 * Add a popover labeling a slider.
+	 * 
+	 * @param suffix
+	 *            the text to append after the numeric value, such as "%" or "
+	 *            pixels".
+	 */
+	public static void add(final JSlider slider, final String suffix) {
+		Callable<String> textGenerator = new Callable<String>() {
+
+			@Override
+			public String call() throws Exception {
+				int v = slider.getValue();
+				String newText;
+				if (v == 1 && suffix.startsWith(" ") && suffix.endsWith("s")) {
+					newText = v + suffix.substring(0, suffix.length() - 1);
+				} else {
+					newText = v + suffix;
+				}
+				return newText;
+			}
+
+		};
+		add(slider, textGenerator);
+	}
+
+	/**
+	 * Add a popover labeling a slider.
+	 */
+	public static void add(JSlider slider,
+			final Callable<String> textGenerator) {
+		JPopover<JToolTip> p = new JPopover<JToolTip>(slider, new JToolTip(),
+				false) {
+
+			@Override
+			protected void doRefreshPopup() {
+				String str = null;
+				try {
+					str = textGenerator.call();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if (str == null) {
+					refreshVisibility(true);
+					return;
+				}
+
+				getContents().setTipText(str);
+
+				// this is only because we have the JToolTipDemo so
+				// colors might change:
+				getContents().updateUI();
+				getContents().setBorder(null);
+			}
+		};
+		p.setTarget(new SliderThumbPopupTarget(slider));
+
+		p.setVisibility(new BasicPopoverVisibility<JToolTip>() {
+
+			@Override
+			public boolean isVisible(JPopover<JToolTip> popover) {
+				String str = null;
+				try {
+					str = textGenerator.call();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				return super.isVisible(popover) && str != null;
+			}
+
+		});
 	}
 
 	static JPopover<?> activePopover;

@@ -24,6 +24,7 @@ import javax.swing.event.ChangeListener;
 import com.pump.awt.Dimension2D;
 import com.pump.icon.AquaIcon;
 import com.pump.icon.IconUtils;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This demonstrates the AquaIcon class and its built-in examples.
@@ -128,7 +129,7 @@ public class AquaIconDemo extends ShowcaseIconDemo {
 		if (sizeSlider == null) {
 			sizeSlider = new JSlider(16, 200, 48);
 
-			addSliderPopover(sizeSlider, " pixels");
+			JPopover.add(sizeSlider, " pixels");
 			sizeSlider.addChangeListener(new ChangeListener() {
 
 				@Override

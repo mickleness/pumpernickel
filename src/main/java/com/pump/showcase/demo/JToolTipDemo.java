@@ -36,6 +36,7 @@ import com.pump.inspector.Inspector;
 import com.pump.plaf.QPanelUI.CalloutType;
 import com.pump.swing.FontComboBox;
 import com.pump.swing.JColorWell;
+import com.pump.swing.popover.JPopover;
 import com.pump.swing.popup.QPopup;
 import com.pump.swing.popup.QPopupFactory;
 
@@ -69,7 +70,7 @@ public class JToolTipDemo extends ShowcaseExampleDemo {
 	JComboBox<String> calloutTypeComboBox = new JComboBox<>();
 
 	public JToolTipDemo() {
-		addSliderPopover(fontSizeSlider, " pts");
+		JPopover.add(fontSizeSlider, " pts");
 
 		toolTipTypeComboBox.addItem("Use QPopupFactory");
 		toolTipTypeComboBox.addItem("Use Default PopupFactory");

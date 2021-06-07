@@ -47,6 +47,7 @@ import javax.swing.event.ChangeListener;
 import com.pump.image.ImageLoader;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.PlafPaintUtils;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This is a simple demo exploring the different types of
@@ -83,9 +84,9 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 	CompositePreview preview = new CompositePreview();
 
 	public AlphaCompositeDemo() {
-		addSliderPopover(alpha, "%");
-		addSliderPopover(dstAlpha, "%");
-		addSliderPopover(srcAlpha, "%");
+		JPopover.add(alpha, "%");
+		JPopover.add(dstAlpha, "%");
+		JPopover.add(srcAlpha, "%");
 
 		Inspector inspector = new Inspector(configurationPanel);
 		inspector.addRow(new JLabel("Composite:"), composites, false);

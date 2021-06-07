@@ -75,6 +75,7 @@ import com.pump.swing.ImageTransferable;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JFancyBox;
 import com.pump.swing.QDialog;
+import com.pump.swing.popover.JPopover;
 
 public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
@@ -277,9 +278,9 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		// use Double Box as default:
 		rendererComboBox.setSelectedIndex(1);
 
-		addSliderPopover(opacitySlider, "%");
-		addSliderPopover(xOffsetSlider, " pixels");
-		addSliderPopover(yOffsetSlider, " pixels");
+		JPopover.add(opacitySlider, "%");
+		JPopover.add(xOffsetSlider, " pixels");
+		JPopover.add(yOffsetSlider, " pixels");
 
 		rendererComboBox.addActionListener(refreshActionListener);
 		kernelSizeSpinner.addChangeListener(refreshChangeListener);

@@ -30,6 +30,7 @@ import javax.swing.event.ChangeListener;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.CircularProgressBarUI;
 import com.pump.swing.JColorWell;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This demos the CircularProgressBarUI.
@@ -205,8 +206,8 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 	};
 
 	public CircularProgressBarUIDemo() {
-		addSliderPopover(sizeSlider, " pixels");
-		addSliderPopover(strokeSlider, " pixels");
+		JPopover.add(sizeSlider, " pixels");
+		JPopover.add(strokeSlider, " pixels");
 
 		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);

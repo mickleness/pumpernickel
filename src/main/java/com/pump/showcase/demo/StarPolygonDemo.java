@@ -16,6 +16,7 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.geom.StarPolygon;
 import com.pump.inspector.Inspector;
+import com.pump.swing.popover.JPopover;
 
 public class StarPolygonDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
@@ -58,9 +59,9 @@ public class StarPolygonDemo extends ShowcaseExampleDemo {
 		inspector.addRow(new JLabel("Points:"), pointsSlider);
 		inspector.addRow(new JLabel("Outer Radius:"), outerRadiusSlider);
 		inspector.addRow(new JLabel("Inner Radius:"), innerRadiusSlider);
-		addSliderPopover(pointsSlider, " points");
-		addSliderPopover(outerRadiusSlider, " pixels");
-		addSliderPopover(innerRadiusSlider, " pixels");
+		JPopover.add(pointsSlider, " points");
+		JPopover.add(outerRadiusSlider, " pixels");
+		JPopover.add(innerRadiusSlider, " pixels");
 
 		pointsSlider.addChangeListener(repaintListener);
 		outerRadiusSlider.addChangeListener(repaintListener);

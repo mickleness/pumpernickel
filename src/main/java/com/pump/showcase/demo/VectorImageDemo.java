@@ -52,6 +52,7 @@ import com.pump.image.ImageSize;
 import com.pump.inspector.Inspector;
 import com.pump.showcase.app.PumpernickelShowcaseApp;
 import com.pump.swing.AnimationController;
+import com.pump.swing.popover.JPopover;
 import com.pump.util.list.AddElementsEvent;
 import com.pump.util.list.ChangeElementEvent;
 import com.pump.util.list.ListListener;
@@ -336,7 +337,7 @@ public class VectorImageDemo extends ShowcaseExampleDemo {
 			}
 
 		};
-		addSliderPopover(instructionSlider, stacktraceTooltipGenerator);
+		JPopover.add(instructionSlider, stacktraceTooltipGenerator);
 	}
 
 	private void refreshResource() {

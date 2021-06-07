@@ -40,6 +40,7 @@ import com.pump.inspector.Inspector;
 import com.pump.inspector.InspectorRowPanel;
 import com.pump.plaf.PlafPaintUtils;
 import com.pump.plaf.QPanelUI;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This demonstrates JFrame/JWindow/JDialog properties, including some
@@ -174,7 +175,7 @@ public class WindowDemo extends ShowcaseExampleDemo {
 		modalityTypeComboBox.setSelectedItem(Dialog.DEFAULT_MODALITY_TYPE);
 		refreshConfiguration();
 
-		addSliderPopover(windowAlpha, "%");
+		JPopover.add(windowAlpha, "%");
 
 		undecoratedCheckbox.setToolTipText("setUndecorated(..)");
 		resizableCheckbox.setToolTipText("setResizable(..)");

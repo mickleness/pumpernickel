@@ -23,6 +23,7 @@ import com.pump.awt.Dimension2D;
 import com.pump.image.NSImage;
 import com.pump.image.pixel.Scaling;
 import com.pump.inspector.Inspector;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This demonstrates the NSImage class
@@ -164,7 +165,7 @@ public class NSImageDemo extends ShowcaseIconDemo {
 		if (sizeSlider == null) {
 			sizeSlider = new JSlider(16, 200, 48);
 
-			addSliderPopover(sizeSlider, " pixels");
+			JPopover.add(sizeSlider, " pixels");
 			sizeSlider.addChangeListener(new ChangeListener() {
 
 				@Override

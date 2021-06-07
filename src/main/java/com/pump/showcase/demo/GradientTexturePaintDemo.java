@@ -39,6 +39,7 @@ import com.pump.awt.GradientTexturePaint;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.AnimationManager;
 import com.pump.swing.JColorWell;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This small demo app features two horizontal gradients, and each shows below
@@ -195,7 +196,7 @@ public class GradientTexturePaintDemo extends ShowcaseExampleDemo {
 
 		actionListener.actionPerformed(null);
 
-		addSliderPopover(numberOfColorsSlider, " colors");
+		JPopover.add(numberOfColorsSlider, " colors");
 
 		numberOfColorsSlider.addChangeListener(repaintListener);
 		well1.getColorSelectionModel().addChangeListener(repaintListener);

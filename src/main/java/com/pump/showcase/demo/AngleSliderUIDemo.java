@@ -27,6 +27,7 @@ import javax.swing.plaf.SliderUI;
 
 import com.pump.inspector.Inspector;
 import com.pump.plaf.AngleSliderUI;
+import com.pump.swing.popover.JPopover;
 
 /**
  * This demos the <code>AngleSliderUI</code> class.
@@ -64,7 +65,7 @@ public class AngleSliderUIDemo extends ShowcaseExampleDemo {
 	};
 
 	public AngleSliderUIDemo() {
-		addSliderPopover(sizeSlider, " pixels");
+		JPopover.add(sizeSlider, " pixels");
 
 		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);

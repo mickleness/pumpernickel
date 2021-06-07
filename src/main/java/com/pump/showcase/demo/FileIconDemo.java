@@ -26,6 +26,7 @@ import com.pump.io.icon.AquaFileIcon;
 import com.pump.io.icon.FileIcon;
 import com.pump.io.icon.FileSystemViewFileIcon;
 import com.pump.io.icon.FileViewFileIcon;
+import com.pump.swing.popover.JPopover;
 import com.pump.util.JVM;
 
 /**
@@ -117,7 +118,7 @@ public class FileIconDemo extends ShowcaseResourceExampleDemo<File> {
 
 		});
 
-		addSliderPopover(sizeSlider, " pixels");
+		JPopover.add(sizeSlider, " pixels");
 
 		refreshControls();
 
