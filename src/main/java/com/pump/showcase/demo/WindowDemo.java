@@ -6,6 +6,7 @@ import java.awt.Dialog;
 import java.awt.Dialog.ModalExclusionType;
 import java.awt.Dialog.ModalityType;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -63,6 +64,7 @@ import com.pump.showcase.demo.WindowOptionsForm.ShapeType;
 import com.pump.swing.DialogFooter;
 import com.pump.swing.DialogFooter.EscapeKeyBehavior;
 import com.pump.swing.popover.JPopover;
+import com.pump.util.JVM;
 
 /**
  * This demonstrates JFrame/JWindow/JDialog properties, including some
@@ -116,7 +118,7 @@ public class WindowDemo extends ShowcaseExampleDemo {
 	public WindowDemo() {
 		Inspector inspector = new Inspector(configurationPanel);
 		WindowOptionsFormUI formUI = new WindowOptionsFormUI(newWindowForm,
-				inspector);
+				inspector, false);
 		formUI.positionRow.setVisible(false);
 
 		examplePanel.add(showWindowButton);
@@ -171,7 +173,8 @@ public class WindowDemo extends ShowcaseExampleDemo {
 
 		JPanel windowContent = new JPanel();
 		Inspector inspector = new Inspector(windowContent);
-		WindowOptionsFormUI formUI = new WindowOptionsFormUI(myForm, inspector);
+		WindowOptionsFormUI formUI = new WindowOptionsFormUI(myForm, inspector,
+				true);
 		// you can't change these properties on a currently-displaying window:
 		formUI.windowClassRow.setVisible(false);
 		formUI.windowTypeRow.setVisible(false);
@@ -554,7 +557,8 @@ class WindowOptionsFormUI {
 	JSpinner ySpinner = new JSpinner(
 			new SpinnerNumberModel(0, -10000, 10000, 10));
 
-	public WindowOptionsFormUI(WindowOptionsForm form, Inspector inspector) {
+	public WindowOptionsFormUI(WindowOptionsForm form, Inspector inspector,
+			boolean small) {
 		this.form = form;
 
 		JPopover.add(windowAlpha, "%");
@@ -727,7 +731,7 @@ class WindowOptionsFormUI {
 		positionControls.add(xSpinner);
 		positionControls.add(ySpinner);
 		positionControls.setOpaque(false);
-		
+
 		positionRow = inspector.addRow(new JLabel("Position:"),
 				positionControls, false);
 		windowClassRow = inspector.addRow(new JLabel("Window Class:"),
@@ -758,6 +762,25 @@ class WindowOptionsFormUI {
 		inspector.addRow(new JLabel("Mac Options:"), macControls);
 
 		refreshControls();
+
+		if (small) {
+			shrink(inspector.getPanel());
+		}
+	}
+
+	private void shrink(JComponent jc) {
+		if (JVM.isMac) {
+			jc.putClientProperty("JComponent.sizeVariant", "small");
+		} else {
+			Font font = jc.getFont();
+			font = font
+					.deriveFont((float) Math.round(font.getSize2D() * 4 / 5));
+			jc.setFont(font);
+		}
+		for (Component child : jc.getComponents()) {
+			if (child instanceof JComponent)
+				shrink((JComponent) child);
+		}
 	}
 
 	private void attachListener(JCheckBox checkbox, Key<Boolean> key) {
