@@ -134,21 +134,7 @@ public class WindowDemo extends ShowcaseExampleDemo {
 		});
 	}
 
-	Window currentWindow;
-
 	private void showWindow() {
-		if (currentWindow != null) {
-			if (currentWindow.isShowing()) {
-				currentWindow.setVisible(false);
-			}
-			try {
-				currentWindow.dispose();
-			} catch (Throwable t) {
-				t.printStackTrace();
-			}
-			currentWindow = null;
-		}
-
 		Frame owner = (Frame) SwingUtilities
 				.getWindowAncestor(showWindowButton);
 
@@ -162,7 +148,6 @@ public class WindowDemo extends ShowcaseExampleDemo {
 		} else {
 			w = new JWindow(owner);
 		}
-		currentWindow = w;
 
 		final WindowOptionsForm myForm = new WindowOptionsForm(newWindowForm);
 		myForm.configureWindow(w);
