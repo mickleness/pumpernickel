@@ -156,8 +156,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 				new ShowcaseDemoInfo("AlphaComposite", "AlphaCompositeDemo"));
 		returnValue.add(new ShowcaseDemoInfo("TextEffect", "TextEffectDemo"));
 		returnValue.add(new ShowcaseDemoInfo("AWTMonitor", "AWTMonitorDemo"));
-		returnValue.add(new ShowcaseDemoInfo("GradientTexturePaint",
-				"GradientTexturePaintDemo"));
 		returnValue.add(new ShowcaseDemoInfo("ClickSensitivityControl",
 				"ClickSensitivityControlDemo"));
 		returnValue.add(new ShowcaseDemoInfo("ShapeBounds", "ShapeBoundsDemo"));
