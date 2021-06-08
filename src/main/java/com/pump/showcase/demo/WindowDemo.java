@@ -776,13 +776,16 @@ class WindowOptionsFormUI {
 		inspector.addSeparator();
 		inspector.addRow(new JLabel("Mac Window Style:"), styleComboBox, false);
 
-		JPanel macControls = gridLayout.createGrid(hideOnDeactivateCheckbox,
-				closeableCheckbox, draggableBackgroundCheckbox,
-				documentFileCheckbox, fullScreenCheckbox, fullWindowCheckbox,
-				minimizableCheckbox, modalSheetCheckbox,
-				documentModifiedCheckbox, shadowCheckbox,
-				transparentTitleBarCheckbox, zoomableCheckbox);
-		inspector.addRow(new JLabel("Mac Options:"), macControls);
+		JPanel macTitleControls = gridLayout.createGrid(closeableCheckbox,
+				documentFileCheckbox, fullScreenCheckbox, minimizableCheckbox,
+				documentModifiedCheckbox, zoomableCheckbox);
+		JPanel macOtherControls = gridLayout.createGrid(
+				hideOnDeactivateCheckbox, draggableBackgroundCheckbox,
+				fullWindowCheckbox, modalSheetCheckbox, shadowCheckbox,
+				transparentTitleBarCheckbox);
+		inspector.addRow(new JLabel("Mac Title Bar Options:"),
+				macTitleControls);
+		inspector.addRow(new JLabel("Other Mac Options:"), macOtherControls);
 
 		refreshControls();
 
