@@ -55,6 +55,7 @@ import javax.swing.event.ChangeListener;
 import com.pump.data.AttributeDataImpl;
 import com.pump.data.Key;
 import com.pump.desktop.temp.TempFileManager;
+import com.pump.inspector.AnimatingInspectorPanel;
 import com.pump.inspector.ControlGridLayout;
 import com.pump.inspector.Inspector;
 import com.pump.inspector.InspectorRowPanel;
@@ -116,7 +117,9 @@ public class WindowDemo extends ShowcaseExampleDemo {
 	WindowOptionsForm newWindowForm = new WindowOptionsForm();
 
 	public WindowDemo() {
-		Inspector inspector = new Inspector(configurationPanel);
+		JPanel animatingPanel = new AnimatingInspectorPanel();
+		Inspector inspector = new Inspector(animatingPanel);
+		configurationPanel.add(animatingPanel);
 		WindowOptionsFormUI formUI = new WindowOptionsFormUI(newWindowForm,
 				inspector, false);
 		formUI.positionRow.setVisible(false);
