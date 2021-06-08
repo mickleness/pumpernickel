@@ -164,10 +164,22 @@ public class WindowDemo extends ShowcaseExampleDemo {
 		final WindowOptionsForm myForm = new WindowOptionsForm(newWindowForm);
 		myForm.configureWindow(w);
 		myForm.addAttributePropertyChangeListener(new PropertyChangeListener() {
+			boolean dirty = false;
+
+			Runnable configureWindowRunnable = new Runnable() {
+				@Override
+				public void run() {
+					if (!dirty)
+						return;
+					dirty = false;
+					myForm.configureWindow(w);
+				}
+			};
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				myForm.configureWindow(w);
+				dirty = true;
+				SwingUtilities.invokeLater(configureWindowRunnable);
 			}
 		});
 
@@ -545,9 +557,22 @@ class WindowOptionsFormUI {
 
 	PropertyChangeListener formListener = new PropertyChangeListener() {
 
+		boolean dirty = false;
+		Runnable refreshRunnable = new Runnable() {
+
+			@Override
+			public void run() {
+				if (!dirty)
+					return;
+				dirty = false;
+				refreshControls();
+			}
+		};
+
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			refreshControls();
+			dirty = true;
+			SwingUtilities.invokeLater(refreshRunnable);
 		}
 
 	};
@@ -556,6 +581,29 @@ class WindowOptionsFormUI {
 			new SpinnerNumberModel(0, -10000, 10000, 10));
 	JSpinner ySpinner = new JSpinner(
 			new SpinnerNumberModel(0, -10000, 10000, 10));
+
+	ChangeListener locSpinnerListener = new ChangeListener() {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			int x = ((SpinnerNumberModel) xSpinner.getModel()).getNumber()
+					.intValue();
+			int y = ((SpinnerNumberModel) ySpinner.getModel()).getNumber()
+					.intValue();
+			form.setAttribute(WindowOptionsForm.KEY_X, x);
+			form.setAttribute(WindowOptionsForm.KEY_Y, y);
+		}
+	};
+
+	ChangeListener alphaChangeListener = new ChangeListener() {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			float f = windowAlpha.getValue() / 100f;
+			form.setAttribute(WindowOptionsForm.KEY_ALPHA, f);
+		}
+
+	};
 
 	public WindowOptionsFormUI(WindowOptionsForm form, Inspector inspector,
 			boolean small) {
@@ -661,16 +709,6 @@ class WindowOptionsFormUI {
 				WindowOptionsForm.KEY_TRANSPARENT);
 		attachListener(resizableCheckbox, WindowOptionsForm.KEY_RESIZABLE);
 
-		windowAlpha.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				float f = windowAlpha.getValue() / 100f;
-				form.setAttribute(WindowOptionsForm.KEY_ALPHA, f);
-			}
-
-		});
-
 		styleComboBox.addActionListener(new ActionListener() {
 
 			@Override
@@ -711,21 +749,6 @@ class WindowOptionsFormUI {
 						file);
 			}
 		});
-
-		ChangeListener locSpinnerListener = new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				int x = ((SpinnerNumberModel) xSpinner.getModel()).getNumber()
-						.intValue();
-				int y = ((SpinnerNumberModel) ySpinner.getModel()).getNumber()
-						.intValue();
-				form.setAttribute(WindowOptionsForm.KEY_X, x);
-				form.setAttribute(WindowOptionsForm.KEY_Y, y);
-			}
-		};
-		xSpinner.addChangeListener(locSpinnerListener);
-		ySpinner.addChangeListener(locSpinnerListener);
 
 		JPanel positionControls = new JPanel(new FlowLayout());
 		positionControls.add(xSpinner);
@@ -784,7 +807,6 @@ class WindowOptionsFormUI {
 	}
 
 	private void attachListener(JCheckBox checkbox, Key<Boolean> key) {
-
 		checkbox.addActionListener(new ActionListener() {
 
 			@Override
@@ -796,6 +818,9 @@ class WindowOptionsFormUI {
 
 	private void refreshControls() {
 		form.removeAttributePropertyChangeListener(formListener);
+		xSpinner.removeChangeListener(locSpinnerListener);
+		ySpinner.removeChangeListener(locSpinnerListener);
+		windowAlpha.removeChangeListener(alphaChangeListener);
 		try {
 			Class z = form.getAttribute(WindowOptionsForm.KEY_WINDOW_CLASS);
 			int i = 2;
@@ -864,6 +889,9 @@ class WindowOptionsFormUI {
 					WindowOptionsForm.KEY_MAC_TRANSPARENT_TITLE_BAR));
 		} finally {
 			form.addAttributePropertyChangeListener(formListener);
+			xSpinner.addChangeListener(locSpinnerListener);
+			ySpinner.addChangeListener(locSpinnerListener);
+			windowAlpha.addChangeListener(alphaChangeListener);
 			refreshVisibleControls();
 		}
 	}
