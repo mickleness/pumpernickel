@@ -511,13 +511,19 @@ class WindowOptionsForm extends AttributeDataImpl {
 
 	}
 
+	public boolean isDecoratable() {
+		if (getAttribute(KEY_WINDOW_CLASS) == JWindow.class)
+			return false;
+		return !getAttribute(KEY_UNDECORATED);
+	}
+
 }
 
 class WindowOptionsFormUI {
 	WindowOptionsForm form;
 
 	InspectorRowPanel modalityTypeRow, positionRow, windowClassRow,
-			windowTypeRow;
+			windowTypeRow, macTitleBarRow;
 
 	// Swing options
 	JComboBox<String> classComboBox = new JComboBox<>(
@@ -776,16 +782,20 @@ class WindowOptionsFormUI {
 		inspector.addSeparator();
 		inspector.addRow(new JLabel("Mac Window Style:"), styleComboBox, false);
 
-		JPanel macTitleControls = gridLayout.createGrid(closeableCheckbox,
-				documentFileCheckbox, fullScreenCheckbox, minimizableCheckbox,
-				documentModifiedCheckbox, zoomableCheckbox);
-		JPanel macOtherControls = gridLayout.createGrid(
-				hideOnDeactivateCheckbox, draggableBackgroundCheckbox,
-				fullWindowCheckbox, modalSheetCheckbox, shadowCheckbox,
-				transparentTitleBarCheckbox);
-		inspector.addRow(new JLabel("Mac Title Bar Options:"),
-				macTitleControls);
-		inspector.addRow(new JLabel("Other Mac Options:"), macOtherControls);
+		if (JVM.isMac) {
+			JPanel macTitleControls = gridLayout.createGrid(closeableCheckbox,
+					documentFileCheckbox, fullScreenCheckbox,
+					minimizableCheckbox, documentModifiedCheckbox,
+					zoomableCheckbox);
+			JPanel macOtherControls = gridLayout.createGrid(
+					hideOnDeactivateCheckbox, draggableBackgroundCheckbox,
+					fullWindowCheckbox, modalSheetCheckbox, shadowCheckbox,
+					transparentTitleBarCheckbox);
+			macTitleBarRow = inspector.addRow(
+					new JLabel("Mac Title Bar Options:"), macTitleControls);
+			inspector.addRow(new JLabel("Other Mac Options:"),
+					macOtherControls);
+		}
 
 		refreshControls();
 
@@ -794,6 +804,9 @@ class WindowOptionsFormUI {
 		}
 	}
 
+	/**
+	 * Reduce the size / font size of a JComponent and its descendants.
+	 */
 	private void shrink(JComponent jc) {
 		if (JVM.isMac) {
 			jc.putClientProperty("JComponent.sizeVariant", "small");
@@ -917,6 +930,9 @@ class WindowOptionsFormUI {
 			undecoratedCheckbox.setVisible(false);
 			resizableCheckbox.setVisible(false);
 			modalityTypeRow.setVisible(false);
+		}
+		if (macTitleBarRow != null) {
+			macTitleBarRow.setVisible(form.isDecoratable());
 		}
 	}
 }
