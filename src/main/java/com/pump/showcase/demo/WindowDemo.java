@@ -30,6 +30,8 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.swing.JButton;
@@ -152,21 +154,33 @@ public class WindowDemo extends ShowcaseExampleDemo {
 		final WindowOptionsForm myForm = new WindowOptionsForm(newWindowForm);
 		myForm.configureWindow(w);
 		myForm.addAttributePropertyChangeListener(new PropertyChangeListener() {
-			boolean dirty = false;
+			List<PropertyChangeEvent> changes = new LinkedList<>();
 
 			Runnable configureWindowRunnable = new Runnable() {
 				@Override
 				public void run() {
-					if (!dirty)
+					if (changes.isEmpty())
 						return;
-					dirty = false;
-					myForm.configureWindow(w);
+
+					try {
+						myForm.configureWindow(w);
+						changes.clear();
+					} catch (RuntimeException e) {
+						PropertyChangeEvent[] array = changes
+								.toArray(new PropertyChangeEvent[0]);
+						changes.clear();
+						for (PropertyChangeEvent event : array) {
+							myForm.setAttribute(event.getPropertyName(),
+									event.getOldValue());
+						}
+						throw e;
+					}
 				}
 			};
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				dirty = true;
+				changes.add(evt);
 				SwingUtilities.invokeLater(configureWindowRunnable);
 			}
 		});
@@ -175,10 +189,9 @@ public class WindowDemo extends ShowcaseExampleDemo {
 		Inspector inspector = new Inspector(windowContent);
 		WindowOptionsFormUI formUI = new WindowOptionsFormUI(myForm, inspector,
 				true);
-		// you can't change these properties on a currently-displaying window:
+		// once it's showing: you can't change the type of window
 		formUI.windowClassRow.setVisible(false);
-		formUI.windowTypeRow.setVisible(false);
-		formUI.undecoratedCheckbox.setEnabled(false);
+
 		w.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentMoved(ComponentEvent e) {
@@ -423,6 +436,14 @@ class WindowOptionsForm extends AttributeDataImpl {
 		putAllAttributes(otherForm.data, true);
 	}
 
+	/**
+	 * Override to make public
+	 */
+	@Override
+	public Object setAttribute(String attributeName, Object value) {
+		return super.setAttribute(attributeName, value);
+	}
+
 	public void configureWindow(Window w) {
 		boolean alphaSupported;
 		if (w instanceof JFrame) {
@@ -456,7 +477,7 @@ class WindowOptionsForm extends AttributeDataImpl {
 		ShapeType shape = getAttribute(KEY_SHAPE);
 		w.setShape(shape.getShape());
 
-		if (alphaSupported)
+		if (w.getOpacity() != getAttribute(KEY_ALPHA).floatValue())
 			w.setOpacity(getAttribute(KEY_ALPHA).floatValue());
 
 		w.setLocation(getAttribute(KEY_X), getAttribute(KEY_Y));
@@ -844,7 +865,7 @@ class WindowOptionsFormUI {
 			WindowOptionsForm.ShapeType shape = form
 					.getAttribute(WindowOptionsForm.KEY_SHAPE);
 			i = shape == WindowOptionsForm.ShapeType.NONE ? 0 : 1;
-			shapeComboBox.setSelectedItem(i);
+			shapeComboBox.setSelectedIndex(i);
 
 			xSpinner.setValue(form.getAttribute(WindowOptionsForm.KEY_X));
 			ySpinner.setValue(form.getAttribute(WindowOptionsForm.KEY_Y));
