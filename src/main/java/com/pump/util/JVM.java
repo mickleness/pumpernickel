@@ -14,8 +14,6 @@ import java.security.AccessControlException;
 
 import javax.swing.UIManager;
 
-import com.pump.reflect.Reflection;
-
 /**
  * Static methods relating to the JVM environment.
  * <P>
@@ -24,32 +22,6 @@ import com.pump.reflect.Reflection;
  * need to access it they don't necessary have to
  */
 public class JVM {
-
-	/**
-	 * Check to see if we're in a JNLP session.
-	 * 
-	 * @return true if this is executing from within a JNLP session.
-	 */
-	public static boolean isJNLP() {
-		try {
-			Class<?> serviceManagerClass = Class
-					.forName("javax.jnlp.ServiceManager");
-			Class<?> basicServiceClass = Class
-					.forName("javax.jnlp.BasicService");
-
-			Object basicService = Reflection.invokeMethod(serviceManagerClass,
-					null, "lookup", new Object[] { "javax.jnlp.BasicSerivce" });
-			if (basicService == Reflection.INVOCATION_ERROR)
-				return false;
-			Object codeBase = Reflection.invokeMethod(basicServiceClass,
-					basicService, "getCodeBase", new Object[] {});
-			if (codeBase == Reflection.INVOCATION_ERROR)
-				return false;
-			return codeBase != null;
-		} catch (Throwable t) {
-			return false;
-		}
-	}
 
 	/**
 	 * Prints basic information about this session's JVM: the OS name &amp;
@@ -65,11 +37,11 @@ public class JVM {
 	 */
 	public static String getProfile() {
 		StringBuffer sb = new StringBuffer();
-		String k = isJNLP() ? ", JNLP" : "";
 		sb.append("OS = " + System.getProperty("os.name") + " ("
 				+ System.getProperty("os.version") + "), "
-				+ System.getProperty("os.arch") + k + "\n");
-		sb.append("Java Version = " + System.getProperty("java.version") + "\n");
+				+ System.getProperty("os.arch") + "\n");
+		sb.append(
+				"Java Version = " + System.getProperty("java.version") + "\n");
 		return sb.toString();
 	}
 
@@ -123,10 +95,9 @@ public class JVM {
 
 	private static boolean isUsingQuartz() {
 		try {
-			return isMac
-					&& ((javaVersion > 0 && javaVersion < 1.4f) || (System
-							.getProperty("apple.awt.graphics.UseQuartz") != null && System
-							.getProperty("apple.awt.graphics.UseQuartz")
+			return isMac && ((javaVersion > 0 && javaVersion < 1.4f) || (System
+					.getProperty("apple.awt.graphics.UseQuartz") != null
+					&& System.getProperty("apple.awt.graphics.UseQuartz")
 							.toString().equals("true")));
 		} catch (AccessControlException e) {
 			e.printStackTrace();
@@ -180,8 +151,8 @@ public class JVM {
 			return getMajorJavaVersion();
 		} catch (RuntimeException t) {
 			if (catchSecurityException) {
-				System.err
-						.println("this exception was ignored without incident, but it means we can't determine the major java version:");
+				System.err.println(
+						"this exception was ignored without incident, but it means we can't determine the major java version:");
 				t.printStackTrace();
 				return -1;
 			}
