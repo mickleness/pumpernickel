@@ -27,13 +27,13 @@ import com.pump.util.JVM;
  * This is especially convenient for floating palettes, but it also can be used
  * for frames, too.
  * <P>
- * In Mac OS 10.5 (Java 1.5) there is a system property discussed <A
- * HREF="http://developer.apple.com/technotes/tn2007/tn2196.html">here</A> that
- * achieves about the same goal. To my knowledge they are the same in function,
- * but I haven't explored the subject in depth.
+ * In Mac OS 10.5 (Java 1.5) there is a system property discussed
+ * <A HREF="http://developer.apple.com/technotes/tn2007/tn2196.html">here</A>
+ * that achieves about the same goal. To my knowledge they are the same in
+ * function, but I haven't explored the subject in depth.
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2007/04/windows-dragging-made-easy.html">Windows:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2007/04/windows-dragging-made-easy.html">Windows:
  *      Dragging Made Easy</a>
  */
 public class WindowDragger extends MouseInputAdapter {
@@ -63,9 +63,12 @@ public class WindowDragger extends MouseInputAdapter {
 			if (JVM.isMac)
 				p.y = Math.max(0, p.y);
 			if (active) {
-				WindowDragger.translateWindow(p.x - mouseLoc.x, p.y
-						- mouseLoc.y, SwingUtilities
-						.getWindowAncestor((Component) e.getSource()));
+				Window w = e.getSource() instanceof Window
+						? (Window) e.getSource()
+						: SwingUtilities
+								.getWindowAncestor((Component) e.getSource());
+				WindowDragger.translateWindow(p.x - mouseLoc.x,
+						p.y - mouseLoc.y, w);
 			}
 			mouseLoc.setLocation(p);
 		}
