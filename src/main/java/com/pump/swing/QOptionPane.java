@@ -11,7 +11,7 @@
 package com.pump.swing;
 
 import java.awt.CardLayout;
-import java.awt.Dialog;
+import java.awt.Dialog.ModalityType;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -35,7 +35,6 @@ import javax.swing.UIManager;
 
 import com.pump.plaf.PanelImageUI;
 import com.pump.plaf.QOptionPaneUI;
-import com.pump.reflect.Reflection;
 import com.pump.swing.DialogFooter.EscapeKeyBehavior;
 import com.pump.util.JVM;
 
@@ -120,7 +119,8 @@ public class QOptionPane extends JComponent {
 		updateUI();
 	}
 
-	public QOptionPane(String mainMessage, String secondaryMessage, int iconType) {
+	public QOptionPane(String mainMessage, String secondaryMessage,
+			int iconType) {
 		this(mainMessage, secondaryMessage, getIcon(iconType),
 				DialogFooter.UNDEFINED_OPTION, null);
 	}
@@ -235,13 +235,9 @@ public class QOptionPane extends JComponent {
 		String dialogTitle = getDialogTitle();
 		JDialog dialog = new JDialog(owner, dialogTitle, true);
 		if (useSheets && JVM.getMajorJavaVersion() >= 1.6f) {
-			Reflection
-					.invokeMethod(Dialog.class, dialog, "setModalityType",
-							new Object[] { Reflection.getFieldValue(
-									"java.awt.Dialog$ModalityType",
-									"DOCUMENT_MODAL") });
+			dialog.setModalityType(ModalityType.DOCUMENT_MODAL);
 			dialog.getRootPane().putClientProperty(
-					"apple.awt.documentModalSheet", new Boolean(useSheets));
+					"apple.awt.documentModalSheet", Boolean.valueOf(useSheets));
 		}
 		dialog.getContentPane().add(createDebugPanel());
 		dialog.setResizable(false);
@@ -274,7 +270,8 @@ public class QOptionPane extends JComponent {
 	}
 
 	private JComponent createDebugPanel() {
-		BufferedImage img = (BufferedImage) getClientProperty("debug.ghost.image");
+		BufferedImage img = (BufferedImage) getClientProperty(
+				"debug.ghost.image");
 
 		if (img == null)
 			return this;
@@ -299,7 +296,8 @@ public class QOptionPane extends JComponent {
 
 		Timer timer = new Timer(2000, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String mode = (System.currentTimeMillis() % 4000) > 2000 ? "real"
+				String mode = (System.currentTimeMillis() % 4000) > 2000
+						? "real"
 						: "debug";
 				cardLayout.show(panel, mode);
 			}
