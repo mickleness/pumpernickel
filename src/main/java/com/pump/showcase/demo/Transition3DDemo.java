@@ -32,9 +32,17 @@ import com.pump.image.transition.Transition3D;
 public class Transition3DDemo extends TransitionDemo {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Return the transitions used in this demo and used by the resource
+	 * generator (to update gifs).
+	 */
+	public static Transition[][] getTransitions() {
+		return new Transition[][] { CubeTransition3D.getDemoTransitions(),
+				FlipTransition3D.getDemoTransitions() };
+	}
+
 	public Transition3DDemo() {
-		super(CubeTransition3D.getDemoTransitions(),
-				FlipTransition3D.getDemoTransitions());
+		super(getTransitions());
 	}
 
 	@Override

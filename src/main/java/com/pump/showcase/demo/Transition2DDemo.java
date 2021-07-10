@@ -73,6 +73,10 @@ import com.pump.image.transition.ZoomTransition2D;
 public class Transition2DDemo extends TransitionDemo {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Return the transitions used in this demo and used by the resource
+	 * generator (to update gifs).
+	 */
 	public static Transition[][] getTransitions() {
 		return new Transition[][] { BarsTransition2D.getDemoTransitions(),
 				new Transition[] { new BlendTransition2D() },

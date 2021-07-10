@@ -78,7 +78,7 @@ public class Transition2DDemoResourceGenerator extends DemoResourceGenerator {
 				.getFile("resources" + File.separator + "transition");
 
 		List<Output> outputs = new LinkedList<>();
-		for (Transition[] ts : Transition2DDemo.getTransitions()) {
+		for (Transition[] ts : getTransitions()) {
 			for (Transition transition : ts) {
 				Output output = new Output(context, transition);
 				outputs.add(output);
@@ -117,6 +117,10 @@ public class Transition2DDemoResourceGenerator extends DemoResourceGenerator {
 		sb.append("</table>");
 
 		System.out.println(sb);
+	}
+
+	protected Transition[][] getTransitions() {
+		return Transition2DDemo.getTransitions();
 	}
 
 	private Output[][] createTable(Collection<Output> gifFiles) {

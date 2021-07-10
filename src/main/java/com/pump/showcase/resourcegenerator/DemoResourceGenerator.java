@@ -14,7 +14,8 @@ public abstract class DemoResourceGenerator {
 		DemoResourceGenerator[] gs = new DemoResourceGenerator[] {
 				new VectorImageDemoResourceGenerator(),
 				new ThumbnailGeneratorDemoResourceGenerator(),
-				new Transition2DDemoResourceGenerator() };
+				new Transition2DDemoResourceGenerator(),
+				new Transition3DDemoResourceGenerator() };
 
 		for (DemoResourceGenerator g : gs) {
 			long time = System.currentTimeMillis();

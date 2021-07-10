@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Transition23 Demo</title>
+<title>Transition3D Demo</title>
 </head>
 <body>
-This demo presents a pair of common 3D transitions.
-<p>
-These use the <code>ImageContext</code> to render an image using four transform points. (By contrast: the standard <code>AffineTransform</code> class only lets you use three transform points.)
-<p>
-Unlike the Transition2D classes: there is not a unifying architecture supporting the 3D-style transitions.
+<h1>Transition3D Demo</h1>
+<h2>What Is It</h2>
+<p>The <code>Transition3D</code> class helps support transitions modeled with simple 3D transformations. For now (and the foreseeable future) there are only two subclasses:</p>
+<ul><li><strong>CubeTransition3D</em> rotates images as if they are on a cube.</li>
+<li><strong>FlipTransition3D</strong> flips images as if they are on opposite sides of a sign.</li></ul>
+<h2>How To Use It</h2>
+<p>Like the <code>Transition2D</code> classes the usage is very simple:</p>
+<pre>CubeTransition3D t = new CubeTransition3D(Transition.DOWN, false);
+float progress = ...;
+t.paint(graphics2D, imgA, imgB, progress);</pre>
+<h2>How It Works</h2>
+<p>These use the <code>ImageContext</code> class to render an image using four transform points. Java's built-in <code>AffineTransform</code> class only lets you use three transform points (not four), so it is more limiting.</p>
+<h2>Examples</h2>
+<table><tr><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeUp.gif" width="100" height="100"><br>Cube Up</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeDown.gif" width="100" height="100"><br>Cube Down</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeLeft.gif" width="100" height="100"><br>Cube Left</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeRight.gif" width="100" height="100"><br>Cube Right</td></tr><tr><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeUpFlush.gif" width="100" height="100"><br>Cube Up Flush</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeDownFlush.gif" width="100" height="100"><br>Cube Down Flush</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeLeftFlush.gif" width="100" height="100"><br>Cube Left Flush</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeRightFlush.gif" width="100" height="100"><br>Cube Right Flush</td></tr><tr><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipUp.gif" width="100" height="100"><br>Flip Up</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipDown.gif" width="100" height="100"><br>Flip Down</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipLeft.gif" width="100" height="100"><br>Flip Left</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipRight.gif" width="100" height="100"><br>Flip Right</td></tr><tr><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipUpFlush.gif" width="100" height="100"><br>Flip Up Flush</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipDownFlush.gif" width="100" height="100"><br>Flip Down Flush</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipLeftFlush.gif" width="100" height="100"><br>Flip Left Flush</td><td><img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipRightFlush.gif" width="100" height="100"><br>Flip Right Flush</td></tr></table>
 </body>
 </html>
