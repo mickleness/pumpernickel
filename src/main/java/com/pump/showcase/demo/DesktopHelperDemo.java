@@ -4,7 +4,6 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.ButtonGroup;
@@ -21,6 +20,7 @@ import com.pump.desktop.DesktopHelper.FileOperationType;
 import com.pump.desktop.temp.TempFileManager;
 import com.pump.inspector.ControlGridLayout;
 import com.pump.inspector.Inspector;
+import com.pump.io.FileUtils;
 import com.pump.util.JVM;
 
 public class DesktopHelperDemo extends ShowcaseExampleDemo {
@@ -102,10 +102,7 @@ public class DesktopHelperDemo extends ShowcaseExampleDemo {
 					file = TempFileManager.get().createFile("throwawayFile",
 							"txt");
 					try {
-						if (!file.createNewFile())
-							throw new IOException(
-									"The file \"" + file.getAbsolutePath()
-											+ "\" could not be created.");
+						FileUtils.createNewFile(file);
 					} catch (Exception e2) {
 						e2.printStackTrace();
 						return;

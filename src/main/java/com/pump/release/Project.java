@@ -21,6 +21,7 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
 import com.pump.io.FileTreeIterator;
+import com.pump.io.FileUtils;
 import com.pump.io.IOUtils;
 import com.pump.io.parser.java.JavaClassSummary;
 
@@ -48,9 +49,7 @@ public class Project {
 		File currentDir = projectDir;
 		for (int a = 0; a < subdirectories.length; a++) {
 			File newDir = new File(currentDir, subdirectories[a]);
-			if (!newDir.exists() && !newDir.mkdirs())
-				throw new IOException("mkdirs failed for "
-						+ newDir.getAbsolutePath());
+			FileUtils.mkdirs(newDir);
 			currentDir = newDir;
 		}
 
@@ -58,7 +57,7 @@ public class Project {
 		if (jarFile.exists()) {
 			jarFile.delete();
 		}
-		jarFile.createNewFile();
+		FileUtils.createNewFile(jarFile);
 
 		File targetDir = new File(projectDir, "target");
 		File classesDir = new File(targetDir, "classes");
@@ -69,7 +68,8 @@ public class Project {
 		Manifest manifest = createManifest();
 		Collection<String> entries = new HashSet<>();
 		try (FileOutputStream fileOut = new FileOutputStream(jarFile)) {
-			try (JarOutputStream jarOut = new JarOutputStream(fileOut, manifest)) {
+			try (JarOutputStream jarOut = new JarOutputStream(fileOut,
+					manifest)) {
 				FileTreeIterator iter = new FileTreeIterator(classesDir);
 				while (iter.hasNext()) {
 					File f = iter.next();
@@ -90,8 +90,8 @@ public class Project {
 							File f = iter.next();
 							if ((!f.isDirectory()) && (!f.isHidden())) {
 								String path = f.getAbsolutePath().substring(
-										javaSourceDir.getAbsolutePath()
-												.length() + 1);
+										javaSourceDir.getAbsolutePath().length()
+												+ 1);
 								path = path.replace(File.separatorChar, '/');
 								entries.add(path);
 								jarOut.putNextEntry(new JarEntry(path));
@@ -118,8 +118,8 @@ public class Project {
 				if (!x.contains("/test/"))
 					returnValue.add(new File(x));
 			} catch (Exception e) {
-				throw new RuntimeException("Error processing "
-						+ javaFile.getAbsolutePath(), e);
+				throw new RuntimeException(
+						"Error processing " + javaFile.getAbsolutePath(), e);
 			}
 		}
 		System.out

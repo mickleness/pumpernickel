@@ -74,9 +74,7 @@ public class AdjacentFileOutputStream extends FileOutputStream
 			adjacentFile = new File(targetFile.getParentFile(),
 					adjacentFilename + (ctr++) + ".tmp");
 		}
-		if (!adjacentFile.createNewFile())
-			throw new IOException("File.createNewFile() failed for "
-					+ adjacentFile.getAbsolutePath());
+		FileUtils.createNewFile(adjacentFile);
 		return new AdjacentFileOutputStream(adjacentFile, targetFile);
 	}
 

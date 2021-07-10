@@ -50,6 +50,7 @@ import javax.swing.event.AncestorListener;
 import com.pump.awt.dnd.FileLabel;
 import com.pump.desktop.cache.CacheManager;
 import com.pump.desktop.logging.SessionLog;
+import com.pump.io.FileUtils;
 import com.pump.io.IOUtils;
 import com.pump.swing.JThrobber;
 
@@ -103,9 +104,7 @@ public class BugReporter {
 		incidentDir = new File(CacheManager.get().getDirectory(false),
 				"Incidents");
 		if (!incidentDir.exists()) {
-			if (!incidentDir.mkdirs())
-				throw new IOException("mkdirs failed for "
-						+ incidentDir.getAbsolutePath());
+			FileUtils.mkdirs(incidentDir);
 		}
 		System.out.println("BugReporter initialized using: "
 				+ incidentDir.getAbsolutePath());
@@ -124,9 +123,8 @@ public class BugReporter {
 							System.out.println("BugReporter deleted \""
 									+ child.getName() + "\"");
 						} else {
-							System.err
-									.println("BugReporter could not delete \""
-											+ child.getName() + "\"");
+							System.err.println("BugReporter could not delete \""
+									+ child.getName() + "\"");
 						}
 					}
 				} catch (Exception e) {
@@ -204,9 +202,11 @@ public class BugReporter {
 						try {
 							String filename = DATE_FORMAT.format(new Date())
 									+ ".zip";
-							final File zipFile = new File(incidentDir, filename);
+							final File zipFile = new File(incidentDir,
+									filename);
 
-							final ThrowableDescriptor[] throwables = dialogThrowableHandler == null ? new ThrowableDescriptor[] {}
+							final ThrowableDescriptor[] throwables = dialogThrowableHandler == null
+									? new ThrowableDescriptor[] {}
 									: dialogThrowableHandler.getThrowables();
 							writeIncidentReportArchive(zipFile, throwables);
 
@@ -225,10 +225,11 @@ public class BugReporter {
 										uri.append(URLEncoder.encode(recipient,
 												"UTF-8"));
 										uri.append("?subject=");
-										uri.append(encode(simpleAppName
-												+ " Problem"));
+										uri.append(encode(
+												simpleAppName + " Problem"));
 										StringBuffer body = new StringBuffer();
-										body.append("Please drag the zip archive from the dialog to this message, add any helpful comments or descriptions, and click \"Send\".\n\n");
+										body.append(
+												"Please drag the zip archive from the dialog to this message, add any helpful comments or descriptions, and click \"Send\".\n\n");
 										for (int a = 0; a < throwables.length; a++) {
 											if (throwables[a]
 													.getUserFriendlyMessage() != null)
@@ -237,22 +238,24 @@ public class BugReporter {
 														+ "\n");
 											body.append(throwables[a].throwable
 													.getMessage() + "\n");
-											body.append(ErrorManager
-													.getStackTrace(throwables[a].throwable)
-													+ "\n");
+											body.append(
+													ErrorManager.getStackTrace(
+															throwables[a].throwable)
+															+ "\n");
 										}
 										uri.append("&body=");
 										uri.append(encode(body.toString()));
 										URI u = new URI(uri.toString());
 										Desktop.getDesktop().mail(u);
-									} catch (URISyntaxException | IOException e) {
+									} catch (URISyntaxException
+											| IOException e) {
 										e.printStackTrace();
 									}
 								}
 							});
 						} catch (Throwable t) {
-							System.err
-									.println("BugReporter: the following error occurred while trying to prepare an incident report:");
+							System.err.println(
+									"BugReporter: the following error occurred while trying to prepare an incident report:");
 							System.err.println(ErrorManager.getStackTrace(t));
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
@@ -299,8 +302,8 @@ public class BugReporter {
 					SessionLog sessionLog = SessionLog.get();
 					if (sessionLog != null) {
 						File sessionLogFile = sessionLog.getFile();
-						zipOut.putNextEntry(new ZipEntry(sessionLogFile
-								.getName()));
+						zipOut.putNextEntry(
+								new ZipEntry(sessionLogFile.getName()));
 						IOUtils.write(sessionLogFile, zipOut);
 						zipOut.closeEntry();
 					}
@@ -338,41 +341,42 @@ public class BugReporter {
 										}
 									}
 									Robot robot = new Robot();
-									Dimension size = Toolkit
-											.getDefaultToolkit()
+									Dimension size = Toolkit.getDefaultToolkit()
 											.getScreenSize();
 									Rectangle screenRect = new Rectangle(0, 0,
 											size.width, size.height);
 									BufferedImage screen = robot
 											.createScreenCapture(screenRect);
-									zipOut.putNextEntry(new ZipEntry(
-											"Screen.png"));
+									zipOut.putNextEntry(
+											new ZipEntry("Screen.png"));
 									ImageIO.write(screen, "png", zipOut);
 									zipOut.closeEntry();
 								}
 							} catch (Exception e) {
-								System.err
-										.println("BugReporter: an error occurred while trying to get screenshots.");
+								System.err.println(
+										"BugReporter: an error occurred while trying to get screenshots.");
 							}
 							try {
 								if (includeDocuments) {
 									for (Window window : windows) {
 										if (window instanceof JFrame) {
 											JFrame jf = (JFrame) window;
-											Object t = jf
-													.getRootPane()
+											Object t = jf.getRootPane()
 													.getClientProperty(
 															"Window.documentFile");
 											if (t instanceof File) {
 												File file = (File) t;
-												zipOut.putNextEntry(new ZipEntry(
-														file.getName()));
+												zipOut.putNextEntry(
+														new ZipEntry(file
+																.getName()));
 												if (file.length() < documentSizeLimit) {
 													IOUtils.write(file, zipOut);
 												} else {
 													byte[] b = ("This file was too large to encode ("
-															+ file.length() + " byte).")
-															.getBytes("UTF-8");
+															+ file.length()
+															+ " byte).")
+																	.getBytes(
+																			"UTF-8");
 													zipOut.write(b);
 												}
 												zipOut.closeEntry();
@@ -381,8 +385,8 @@ public class BugReporter {
 									}
 								}
 							} catch (Exception e) {
-								System.err
-										.println("BugReporter: an error occurred while trying to embed documents.");
+								System.err.println(
+										"BugReporter: an error occurred while trying to embed documents.");
 							}
 						}
 					};
@@ -392,15 +396,15 @@ public class BugReporter {
 						try {
 							SwingUtilities.invokeAndWait(edtRunnable);
 						} catch (Exception e) {
-							System.err
-									.println("BugReporter: an error occurred while trying to get screenshots.");
+							System.err.println(
+									"BugReporter: an error occurred while trying to get screenshots.");
 						}
 					}
 				}
 			}
 		} catch (Exception e) {
-			System.err
-					.println("An error occurred preparing the incident report archive.");
+			System.err.println(
+					"An error occurred preparing the incident report archive.");
 		}
 	}
 

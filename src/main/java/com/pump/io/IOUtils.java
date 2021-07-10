@@ -596,11 +596,7 @@ public class IOUtils {
 	 */
 	public static boolean copy(File src, File dst, boolean abortIfIdentical)
 			throws IOException {
-		if (!dst.getParentFile().exists())
-			if (!dst.getParentFile().mkdirs())
-				throw new IOException("mkdirs failed for "
-						+ dst.getParentFile().getAbsolutePath());
-
+		FileUtils.mkdirs(dst.getParentFile());
 		if (src.isDirectory() || dst.isDirectory())
 			throw new IllegalArgumentException(
 					"This method does not support directories");
@@ -629,9 +625,7 @@ public class IOUtils {
 		byte[] b1 = new byte[4096];
 
 		if (!dst.exists())
-			if (!dst.createNewFile())
-				throw new IOException(
-						"createNewFile failed for " + dst.getAbsolutePath());
+			FileUtils.createNewFile(dst);
 		try (InputStream in = new FileInputStream(src);
 				OutputStream out = new FileOutputStream(dst)) {
 			int k = in.read(b1);
@@ -683,7 +677,7 @@ public class IOUtils {
 			}
 		}
 		file.delete();
-		file.createNewFile();
+		FileUtils.createNewFile(file);
 
 		try (FileOutputStream out = new FileOutputStream(file);
 				PrintStream ps = new PrintStream(out)) {
@@ -768,9 +762,9 @@ public class IOUtils {
 				return false;
 			}
 		}
-		file.getParentFile().mkdirs();
+		FileUtils.mkdirs(file.getParentFile());
 		file.delete();
-		file.createNewFile();
+		FileUtils.createNewFile(file);
 		try (FileOutputStream out = new FileOutputStream(file);
 				OutputStreamWriter writer = new OutputStreamWriter(out)) {
 			writer.write(text);
@@ -889,7 +883,7 @@ public class IOUtils {
 	 */
 	public static void write(InputStream in, File dest) throws IOException {
 		if (dest.exists() == false)
-			dest.createNewFile();
+			FileUtils.createNewFile(dest);
 		try (OutputStream out = new FileOutputStream(dest)) {
 			write(in, out);
 		}
@@ -1150,10 +1144,7 @@ public class IOUtils {
 			throws IOException {
 
 		if (!dest.exists()) {
-			if (!dest.createNewFile()) {
-				throw new IOException("File.createNewFile() failed for "
-						+ dest.getAbsolutePath());
-			}
+			FileUtils.createNewFile(dest);
 		}
 
 		try (FileOutputStream fileOut = new FileOutputStream(dest)) {

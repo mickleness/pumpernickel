@@ -2,7 +2,6 @@ package com.pump.image.thumbnail.generator;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.imageio.ImageIO;
 
 import com.pump.desktop.temp.TempFileManager;
+import com.pump.io.FileUtils;
 import com.pump.io.IOUtils;
 import com.pump.util.BufferedPipe;
 
@@ -216,9 +216,7 @@ public class MacQuickLookThumbnailGenerator implements ThumbnailGenerator {
 				.createFile("MacQuickLookFilePreview", null);
 		Process process = null;
 		try {
-			if (!destDir.mkdir())
-				throw new IOException(
-						"mkdir failed for " + destDir.getAbsolutePath());
+			FileUtils.mkdir(destDir);
 			ProcessBuilderThread t = new ProcessBuilderThread("QuickLook",
 					pipeOutput, pipeOutput);
 

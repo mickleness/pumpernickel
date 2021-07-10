@@ -42,8 +42,8 @@ public class FileLogger {
 			return new File(System.getProperty("user.home")
 					+ "\\Application Data\\" + fileName);
 		}
-		return new File(System.getProperty("user.home") + File.separator
-				+ fileName);
+		return new File(
+				System.getProperty("user.home") + File.separator + fileName);
 	}
 
 	public FileLogger(File f) {
@@ -52,8 +52,8 @@ public class FileLogger {
 			try {
 				if (f.getParentFile() != null
 						&& f.getParentFile().exists() == false)
-					f.getParentFile().mkdirs();
-				f.createNewFile();
+					FileUtils.mkdirs(f.getParentFile());
+				FileUtils.createNewFile(f);
 			} catch (IOException e) {
 				throw new RuntimeException(e.getMessage());
 			}

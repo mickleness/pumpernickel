@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import com.pump.io.ConsoleLogger;
 import com.pump.io.FileLogger;
+import com.pump.io.FileUtils;
 
 /**
  * This class combines the ConsoleLogger (which records System.err and
@@ -69,9 +70,7 @@ public class SessionLog {
 							+ GLOBAL.appName);
 		File dir = FileLogger.createLocalLog(appName + " Logs");
 		if (!dir.exists()) {
-			if (!dir.mkdirs())
-				throw new IOException("mkdirs failed for \""
-						+ dir.getAbsolutePath() + "\"");
+			FileUtils.mkdirs(dir);
 		} else {
 			if (!dir.isDirectory())
 				throw new IOException("the file \"" + dir.getAbsolutePath()
@@ -86,8 +85,8 @@ public class SessionLog {
 					+ "\" already exists");
 
 		GLOBAL = new SessionLog(file, appName);
-		System.out.println("SessionLog initialized using: "
-				+ file.getAbsolutePath());
+		System.out.println(
+				"SessionLog initialized using: " + file.getAbsolutePath());
 
 		if (limit != null) {
 			File[] children = dir.listFiles();
@@ -109,8 +108,8 @@ public class SessionLog {
 				Date d = files.keySet().iterator().next();
 				File f = files.remove(d);
 				f.delete();
-				System.out.println("SessionLog: deleting "
-						+ f.getAbsolutePath());
+				System.out
+						.println("SessionLog: deleting " + f.getAbsolutePath());
 			}
 		}
 	}

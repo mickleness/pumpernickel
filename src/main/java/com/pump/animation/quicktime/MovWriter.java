@@ -47,6 +47,7 @@ import com.pump.animation.quicktime.atom.VideoSampleDescriptionEntry;
 import com.pump.audio.CombinedAudioInputStream;
 import com.pump.audio.SilentAudioInputStream;
 import com.pump.image.ImageSize;
+import com.pump.io.FileUtils;
 import com.pump.io.MeasuredOutputStream;
 
 /**
@@ -64,8 +65,8 @@ import com.pump.io.MeasuredOutputStream;
  * <code>close()</code> is called, the movie structure is added and a
  * <code>RandomAccessFile</code> is used to correctly set the size headers.
  *
- * @see <a
- *      href="https://javagraphics.blogspot.com/2008/06/movies-writing-mov-files-without.html">Movies:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2008/06/movies-writing-mov-files-without.html">Movies:
  *      Writing MOV Files Without QuickTime</a>
  */
 public abstract class MovWriter {
@@ -74,8 +75,8 @@ public abstract class MovWriter {
 	 * This is used to indicate that a frame requested an unacceptable duration,
 	 * such as 0 or -1.
 	 */
-	public static class InvalidDurationException extends
-			IllegalArgumentException {
+	public static class InvalidDurationException
+			extends IllegalArgumentException {
 		private static final long serialVersionUID = 1L;
 
 		public InvalidDurationException(String msg) {
@@ -89,8 +90,8 @@ public abstract class MovWriter {
 	 * <p>
 	 * (Usually this is a missing file that is 0K.)
 	 */
-	public static class InvalidFileLengthException extends
-			IllegalArgumentException {
+	public static class InvalidFileLengthException
+			extends IllegalArgumentException {
 		private static final long serialVersionUID = 1L;
 
 		public InvalidFileLengthException(String msg) {
@@ -196,8 +197,8 @@ public abstract class MovWriter {
 		private void closeChunk() throws IOException {
 			if (samplesInCurrentChunk > 0) {
 				stsc.addChunk(currentChunkIndex + 1, samplesInCurrentChunk, 1);
-				stco.addChunkOffset(samples.get(samples.size()
-						- samplesInCurrentChunk).dataStart);
+				stco.addChunkOffset(samples
+						.get(samples.size() - samplesInCurrentChunk).dataStart);
 
 				for (AudioTrack audio : audioTracks) {
 					audio.writeAudio(durationOfCurrentChunk);
@@ -232,9 +233,7 @@ public abstract class MovWriter {
 				if (w != width || h != height) {
 					throw new IllegalArgumentException(
 							"Each frame must have the same dimension.  This frame ("
-									+ width
-									+ "x"
-									+ height
+									+ width + "x" + height
 									+ ") is not the same dimensions as previous frames ("
 									+ w + "x" + h + ").");
 				}
@@ -276,8 +275,8 @@ public abstract class MovWriter {
 			// been tested, but it seems appropriate:
 			AudioFormat audioFormat = audio.getFormat();
 			AudioFormat.Encoding encoding = audioFormat.getEncoding();
-			if (!(AudioFormat.Encoding.PCM_SIGNED.equals(encoding) || AudioFormat.Encoding.PCM_UNSIGNED
-					.equals(encoding))) {
+			if (!(AudioFormat.Encoding.PCM_SIGNED.equals(encoding)
+					|| AudioFormat.Encoding.PCM_UNSIGNED.equals(encoding))) {
 				if (audioFormat.getSampleSizeInBits() > 8) {
 					audio = AudioSystem.getAudioInputStream(
 							AudioFormat.Encoding.PCM_SIGNED, audio);
@@ -323,8 +322,8 @@ public abstract class MovWriter {
 				 * late in the movie.
 				 * 
 				 */
-				long silentSamples = (long) (audioOffset * audioIn.getFormat()
-						.getFrameRate());
+				long silentSamples = (long) (audioOffset
+						* audioIn.getFormat().getFrameRate());
 				AudioInputStream silence = new SilentAudioInputStream(
 						audioIn.getFormat(), silentSamples);
 				audioIn = new CombinedAudioInputStream(silence, audioIn);
@@ -414,20 +413,20 @@ public abstract class MovWriter {
 
 		private void closeChunk(long chunkSizeInBytes) {
 			if (chunkSizeInBytes <= 0)
-				throw new IllegalArgumentException("chunkSizeInBytes = "
-						+ chunkSizeInBytes);
+				throw new IllegalArgumentException(
+						"chunkSizeInBytes = " + chunkSizeInBytes);
 
 			long dataStart = out.getBytesWritten() - chunkSizeInBytes;
 
-			stsc.addChunk(currentChunkIndex + 1, chunkSizeInBytes
-					/ sampleMultiplier, 1);
+			stsc.addChunk(currentChunkIndex + 1,
+					chunkSizeInBytes / sampleMultiplier, 1);
 			stco.addChunkOffset(dataStart);
 			currentChunkIndex++;
 
 			long samplesWritten = chunkSizeInBytes / sampleMultiplier;
 			totalSamples += samplesWritten;
-			totalDurationInMovieTimeScale += samplesWritten
-					* DEFAULT_TIME_SCALE / myTimeScale;
+			totalDurationInMovieTimeScale += samplesWritten * DEFAULT_TIME_SCALE
+					/ myTimeScale;
 		}
 	}
 
@@ -461,7 +460,7 @@ public abstract class MovWriter {
 	 */
 	public MovWriter(File file) throws IOException {
 		dest = file;
-		file.createNewFile();
+		FileUtils.createNewFile(file);
 		out = new MeasuredOutputStream(new FileOutputStream(file));
 
 		Atom.write32Int(out, 1); // an extended size field
@@ -539,8 +538,8 @@ public abstract class MovWriter {
 					"cannot add audio after video data has been started");
 		AudioTrack newTrack;
 
-		long sampleMin = (long) ((endTime - startTime) * audio.getFormat()
-				.getFrameRate());
+		long sampleMin = (long) ((endTime - startTime)
+				* audio.getFormat().getFrameRate());
 		if (sampleMin < audio.getFrameLength()) {
 			AudioInputStream limitedAudioIn = new AudioInputStream(audio,
 					audio.getFormat(), sampleMin);

@@ -107,9 +107,7 @@ public class DirectoryCopyTask extends AbstractAttributeDataImpl
 									+ " exists as a file, but this operation expects a directory");
 						}
 					} else {
-						if (!dstChild.mkdir())
-							throw new IOException("mkdir failed for "
-									+ dstChild.getAbsolutePath());
+						FileUtils.mkdir(dstChild);
 					}
 					index(child, dstChild);
 				} else {

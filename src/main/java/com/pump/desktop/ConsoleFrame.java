@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import com.pump.io.FileUtils;
 import com.pump.io.IOUtils;
 import com.pump.swing.BasicConsole;
 import com.pump.swing.ContextualMenuHelper;
@@ -85,9 +86,8 @@ public class ConsoleFrame {
 					return;
 				File file = new File(fd.getDirectory() + fd.getFile());
 				try {
-					if ((!file.exists()) && (!file.createNewFile()))
-						throw new IOException("createNewFile failed for "
-								+ file.getAbsolutePath());
+					if ((!file.exists()))
+						FileUtils.createNewFile(file);
 					IOUtils.write(file, console.getText(), true);
 				} catch (IOException e) {
 					e.printStackTrace();

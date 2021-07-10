@@ -16,6 +16,7 @@ import java.nio.channels.FileLock;
 import java.util.Objects;
 import java.util.Random;
 
+import com.pump.io.FileUtils;
 import com.pump.io.IOUtils;
 
 /**
@@ -89,9 +90,7 @@ public class TempFileManager {
 
 		File dir = new File(System.getProperty("java.io.tmpdir"));
 		File appDir = new File(dir, appName + "+TempFileMgr");
-		if (!appDir.exists() && !appDir.mkdirs())
-			throw new IOException(
-					"File.mkdirs() failed for " + appDir.getAbsolutePath());
+		FileUtils.mkdirs(appDir);
 
 		Random random = new Random();
 		int n = random.nextInt(0xFFFFFFF);
@@ -106,13 +105,9 @@ public class TempFileManager {
 						"Failed to initialize TempFileManager; see "
 								+ appDir.getAbsolutePath());
 		}
-		if (!localDir.mkdirs())
-			throw new IOException(
-					"File.mkdirs() failed for " + localDir.getAbsolutePath());
+		FileUtils.mkdirs(localDir);
 		File lockedFile = new File(localDir, LOCK_FILE_NAME);
-		if (!lockedFile.createNewFile())
-			throw new IOException("File.createNewFile() failed for "
-					+ lockedFile.getAbsolutePath());
+		FileUtils.createNewFile(lockedFile);
 
 		FileLock lock = IOUtils.getFileLock(lockedFile, true);
 

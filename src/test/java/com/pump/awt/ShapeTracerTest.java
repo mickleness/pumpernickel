@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import com.pump.geom.ShapeBounds;
 import com.pump.geom.TransformUtils;
+import com.pump.io.FileUtils;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
@@ -163,7 +164,7 @@ public class ShapeTracerTest extends TestCase {
 			if (writeFiles) {
 				File dir = new File("ShapeTracerTest");
 				if (!dir.exists())
-					dir.mkdir();
+					FileUtils.mkdir(dir);
 
 				File file = new File(dir, id + ".png");
 				ImageIO.write(comparison, "png", file);

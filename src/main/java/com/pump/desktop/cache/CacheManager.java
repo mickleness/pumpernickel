@@ -19,6 +19,7 @@ import java.io.ObjectOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import com.pump.io.FileUtils;
 import com.pump.io.IOUtils;
 import com.pump.util.JVM;
 
@@ -45,8 +46,8 @@ public class CacheManager {
 			dir = new File(System.getProperty("user.home")
 					+ "\\Application Data\\" + appName);
 		} else {
-			dir = new File(System.getProperty("user.home") + File.separator
-					+ appName);
+			dir = new File(
+					System.getProperty("user.home") + File.separator + appName);
 		}
 		validate(dir);
 		return dir;
@@ -62,16 +63,14 @@ public class CacheManager {
 	 */
 	private static final void validate(File dir) throws IOException {
 		if (!dir.exists()) {
-			if (!dir.mkdirs())
-				throw new IOException("mkdirs failed for "
-						+ dir.getAbsolutePath());
+			FileUtils.mkdirs(dir);
 		}
 		if (!dir.canRead())
-			throw new IOException("insufficient privilege for "
-					+ dir.getAbsolutePath());
+			throw new IOException(
+					"insufficient privilege for " + dir.getAbsolutePath());
 		if (!dir.canWrite())
-			throw new IOException("insufficient privilege for "
-					+ dir.getAbsolutePath());
+			throw new IOException(
+					"insufficient privilege for " + dir.getAbsolutePath());
 	}
 
 	static private CacheManager GLOBAL;
@@ -183,8 +182,8 @@ public class CacheManager {
 	 * @param cachedObject
 	 *            the file to uncache.
 	 */
-	public static Object uncache(File cachedObject) throws IOException,
-			ClassNotFoundException {
+	public static Object uncache(File cachedObject)
+			throws IOException, ClassNotFoundException {
 		try (FileInputStream fileIn = new FileInputStream(cachedObject)) {
 			try (GZIPInputStream zipIn = new GZIPInputStream(fileIn)) {
 				try (ObjectInputStream objIn = new ObjectInputStream(zipIn)) {
@@ -204,12 +203,11 @@ public class CacheManager {
 	 */
 	public static void cache(Object object, File dest) throws IOException {
 		if (!dest.exists())
-			if (!dest.createNewFile())
-				throw new IOException("createNewFile() failed for "
-						+ dest.getAbsolutePath());
+			FileUtils.createNewFile(dest);
 		try (FileOutputStream fileOut = new FileOutputStream(dest)) {
 			try (GZIPOutputStream zipOut = new GZIPOutputStream(fileOut)) {
-				try (ObjectOutputStream objOut = new ObjectOutputStream(zipOut)) {
+				try (ObjectOutputStream objOut = new ObjectOutputStream(
+						zipOut)) {
 					objOut.writeObject(object);
 				}
 			}

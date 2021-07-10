@@ -43,9 +43,9 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import com.pump.inspector.Inspector;
+import com.pump.io.FileUtils;
 
 public class AddRulesTest extends BasicTestElement {
 	static class Case {
@@ -108,8 +108,9 @@ public class AddRulesTest extends BasicTestElement {
 				Shape shape = shapes.get(a);
 				split(shape, newShapes);
 			}
-			Case returnValue = new Case(newShapes.toArray(new Shape[newShapes
-					.size()]), name + " Split");
+			Case returnValue = new Case(
+					newShapes.toArray(new Shape[newShapes.size()]),
+					name + " Split");
 			try {
 				returnValue.write();
 			} catch (IOException e) {
@@ -126,7 +127,7 @@ public class AddRulesTest extends BasicTestElement {
 		 */
 		public void write() throws IOException {
 			File file = new File(name + ".shapes");
-			file.createNewFile();
+			FileUtils.createNewFile(file);
 			OutputStream out = null;
 			try {
 				out = new FileOutputStream(file);
@@ -393,7 +394,8 @@ public class AddRulesTest extends BasicTestElement {
 		AreaXRules[] rules = new AreaXRules[] { new AreaXRules(),
 				new BoundsRules(true, false), new BoundsRules(false, true),
 				new BoundsRules(true, true) };
-		String[] names = new String[] { "No Rules", "Inner", "Merging", "Both" };
+		String[] names = new String[] { "No Rules", "Inner", "Merging",
+				"Both" };
 
 		long[][] times = new long[cases.length][rules.length + 1];
 		long[] tempList = new long[5]; // how many times we repeat each method
@@ -413,8 +415,8 @@ public class AddRulesTest extends BasicTestElement {
 
 				float m = base + ((float) b) / ((float) tempList.length)
 						/ (cases.length) / (rules.length + 1f);
-				progress.setValue((int) (m * (progress.getMaximum() - progress
-						.getMinimum())));
+				progress.setValue((int) (m
+						* (progress.getMaximum() - progress.getMinimum())));
 
 				tempList[b] = System.currentTimeMillis();
 				Area sum = new Area();
@@ -436,11 +438,12 @@ public class AddRulesTest extends BasicTestElement {
 					if (cancelled)
 						return;
 
-					float m = base + (i + 1f) / (rules.length + 1f)
-							/ (cases.length) + ((float) b)
-							/ ((float) tempList.length) / (cases.length) / 3f;
-					progress.setValue((int) (m * (progress.getMaximum() - progress
-							.getMinimum())));
+					float m = base
+							+ (i + 1f) / (rules.length + 1f) / (cases.length)
+							+ ((float) b) / ((float) tempList.length)
+									/ (cases.length) / 3f;
+					progress.setValue((int) (m
+							* (progress.getMaximum() - progress.getMinimum())));
 
 					tempList[b] = System.currentTimeMillis();
 					AreaX sum = new AreaX();
@@ -479,8 +482,8 @@ public class AddRulesTest extends BasicTestElement {
 				line = line + "\t" + times[a][i];
 			}
 			for (int i = 1; i < times[a].length; i++) {
-				double percent = ((double) times[a][i])
-						/ ((double) times[a][0]) * 100;
+				double percent = ((double) times[a][i]) / ((double) times[a][0])
+						* 100;
 				line = line + "\t" + percent;
 			}
 			printStream.println(line);
@@ -505,11 +508,11 @@ public class AddRulesTest extends BasicTestElement {
 		g.setColor(new Color(255, 0, 0, 128));
 		g.fill(bad);
 		g.dispose();
-		printStream.println("the resulting shape for \"" + id
-				+ "\" wasn't correct.");
+		printStream.println(
+				"the resulting shape for \"" + id + "\" wasn't correct.");
 		try {
-			ImageIO.write(image, "png", new File("comparison " + (ctr++)
-					+ ".png"));
+			ImageIO.write(image, "png",
+					new File("comparison " + (ctr++) + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
