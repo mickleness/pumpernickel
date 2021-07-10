@@ -601,6 +601,10 @@ public class IOUtils {
 				throw new IOException("mkdirs failed for "
 						+ dst.getParentFile().getAbsolutePath());
 
+		if (src.isDirectory() || dst.isDirectory())
+			throw new IllegalArgumentException(
+					"This method does not support directories");
+
 		if (abortIfIdentical) {
 			if (equals(src, dst))
 				return false;

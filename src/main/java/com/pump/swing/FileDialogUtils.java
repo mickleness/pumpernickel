@@ -16,8 +16,23 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import com.pump.io.SuffixFilenameFilter;
+import com.pump.util.JVM;
 
 public class FileDialogUtils {
+
+	public static File showOpenFolderDialog(Frame f, String title) {
+		if (JVM.isMac) {
+			try {
+				System.setProperty("apple.awt.fileDialogForDirectories",
+						"true");
+				return showOpenDialog(f, title);
+			} finally {
+				System.setProperty("apple.awt.fileDialogForDirectories",
+						"false");
+			}
+		}
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Returns a file the user selected or null if the user cancelled the
