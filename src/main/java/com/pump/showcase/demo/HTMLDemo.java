@@ -298,8 +298,7 @@ public class HTMLDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return getClass().getResource("qhtmlDemo.html");
 	}
 
 	@Override

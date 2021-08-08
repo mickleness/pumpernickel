@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>QHTML Demo</title>
+</head>
+<body>
+<h1>QHTML Demo</h1>
+<h2>What Is It</h2>
+<p>This is set of classes that extends Java's default HTML Swing renderer to support newer CSS features (discussed below).</p>
+<p>This doesn't fully support any particular CSS version, so this is not intended to be used for arbitrary pages. The intended usage for these classes is to present HTML that you have complete control over, such as a set of help pages.</p>
+<h2>How To Use It</h2>
+<p>Installing this architecture is simple:</p>
+<pre>JEditorPane textPane = new JEditorPane();
+HTMLEditorKit kit = new QHTMLEditorKit();
+textPane.setEditorKit(kit);</pre>
+<h2>How It Works</h2>
+<p>This extends Swing's existing <code>HTMLEditorKit</code> to support newer CSS features.
+<h2>Discussion</h2>
+<h3>Context</h3>
+<p>Swing has included HTML support for decades, but it has been conspicuously limited (and therefore dated). The <code>QHTMLEditorKit</code> is an attempt to spruce up the appearance of the HTML without completely reinventing the rendering engine.</p>
+<p>Other resources you might want to consider include:</p>
+<ol><li><a href="https://github.com/flyingsaucerproject/flyingsaucer">Flying Saucer</a> can also render HTML to Swing panels (in addition to other formats).</li>
+<li>JavaFX can embed a WebKit in a JComponent. The underlying implementation varies by platform.</li></ol>
+<h3>Feature Support</h3>
+<p>Below is a (approximate) set of features the QHTML classes support:</p>
+<ul><li><a href="https://www.techopedia.com/definition/27209/base64">Base64 encoded images</a></li>
+<li>The <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/text-shadow">text-shadow</a> CSS property</li>
+<li>The <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/background-image">background-image</a> CSS property is supported for "url", "linear-gradient", and "none", including layered combinations.</li>
+<li>The <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value">color</a> data type supports "rgb", "rgba", "hsl", "hsla", 4 and 8 digit hex Strings, and all named colors up to CSS module 4 (such as "tomato" and "plum").</li>
+<li>The <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/background-clip">background-clip</a> CSS property (including "text").</li>
+<li>The <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius">border-radius</a> CSS property.
+<li>The <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/min-width">min-width</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/max-width">max-width</a> CSS property.
+<li>The <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/line-height">line-height</a> CSS property.</li>
+</ul>
+<p>Also these classes support base64-encoding of our custom <a href="resource:VectorImage">JVG</a> file format, which is used in some of the help documentation in the showcase app to embed vector graphics.
+
+</body>
+</html>
