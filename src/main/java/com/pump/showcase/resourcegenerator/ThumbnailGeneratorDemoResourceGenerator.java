@@ -1,17 +1,11 @@
 package com.pump.showcase.resourcegenerator;
 
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.imageio.ImageIO;
 
 import com.pump.graphics.vector.VectorImage;
 import com.pump.image.thumbnail.generator.BasicThumbnailGenerator;
@@ -64,31 +58,6 @@ public class ThumbnailGeneratorDemoResourceGenerator
 		BarChartRenderer renderer = new BarChartRenderer(chartData);
 		VectorImage vi = new VectorImage();
 		renderer.paint(vi.createGraphics(), new Dimension(300, 100));
-
-		boolean writeFiles = false;
-
-		if (writeFiles) {
-			File jvgFile = new File("ThumbnailGeneratorDemo.jvg");
-			try (FileOutputStream fileOut = new FileOutputStream(jvgFile)) {
-				vi.save(fileOut);
-			}
-			System.out.println("Chart: " + jvgFile.getAbsolutePath());
-		}
-
-		if (writeFiles) {
-			// make a PNG version just for quick human reference:
-			BufferedImage bi = renderer.paint(new Dimension(300, 100));
-			File pngFile = new File("ThumbnailGeneratorDemo.png");
-			ImageIO.write(bi, "png", pngFile);
-			System.out.println("Chart: " + pngFile.getAbsolutePath());
-		}
-
-		try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
-			vi.save(byteOut);
-			byte[] bytes = byteOut.toByteArray();
-			String str = new String(Base64.getEncoder().encode(bytes));
-			System.out.println("Base64 encoding of jvg:");
-			System.out.println(str);
-		}
+		writeImage(vi, "ThumbnailGeneratorDemo");
 	}
 }

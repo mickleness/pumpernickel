@@ -3,7 +3,6 @@ package com.pump.showcase.demo;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,50 +11,25 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.TexturePaint;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.geom.Spiral2D;
 import com.pump.geom.StarPolygon;
-import com.pump.graphics.vector.VectorImage;
-import com.pump.graphics.vector.VectorImageIcon;
 import com.pump.image.shadow.ARGBPixels;
 import com.pump.image.shadow.BoxShadowRenderer;
 import com.pump.image.shadow.DoubleBoxShadowRenderer;
@@ -64,17 +38,7 @@ import com.pump.image.shadow.GaussianShadowRenderer;
 import com.pump.image.shadow.ShadowAttributes;
 import com.pump.image.shadow.ShadowRenderer;
 import com.pump.inspector.Inspector;
-import com.pump.showcase.chart.LineChartRenderer;
-import com.pump.showcase.demo.Profiler.ProfileResults;
-import com.pump.showcase.demo.ShadowRendererDemo.OriginalGaussianShadowRenderer;
-import com.pump.swing.ContextualMenuHelper;
-import com.pump.swing.DialogFooter;
-import com.pump.swing.DialogFooter.EscapeKeyBehavior;
-import com.pump.swing.FileDialogUtils;
-import com.pump.swing.ImageTransferable;
 import com.pump.swing.JColorWell;
-import com.pump.swing.JFancyBox;
-import com.pump.swing.QDialog;
 import com.pump.swing.popover.JPopover;
 
 public class ShadowRendererDemo extends ShowcaseExampleDemo {
@@ -82,7 +46,6 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 	/**
 	 * For testing and comparison purposes: this is the original unoptimized
 	 * Gaussian shadow renderer.
-	 *
 	 */
 	public static class OriginalGaussianShadowRenderer
 			implements ShadowRenderer {
@@ -296,101 +259,6 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 		refreshExample();
 	}
 
-	@Override
-	protected JComponent getComponentBelowExamplePanel() {
-		JButton profileButton = new JButton("Profile Performance");
-
-		profileButton.addActionListener(new ActionListener() {
-			Profiler profiler;
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				JFrame frame = (JFrame) SwingUtilities
-						.getWindowAncestor(ShadowRendererDemo.this);
-				if (profiler == null) {
-					profiler = new Profiler(ShadowRendererDemo.this);
-				}
-
-				ProfileResults results = profiler.getResults();
-				if (results != null) {
-					LineChartRenderer renderer = new LineChartRenderer(
-							profiler.results.data, "Kernel Radius",
-							"Execution Time (ms) for 100 Renders");
-					final VectorImage img = new VectorImage();
-					renderer.paint(img.createGraphics(), 600, 400);
-					final Icon icon = new VectorImageIcon(img);
-					JLabel content = new JLabel(icon);
-					ContextualMenuHelper ctx = new ContextualMenuHelper(
-							content);
-
-					ctx.add("Copy", new Runnable() {
-						@Override
-						public void run() {
-							BufferedImage bi = new BufferedImage(
-									icon.getIconWidth(), icon.getIconHeight(),
-									BufferedImage.TYPE_INT_ARGB);
-							Graphics2D g = bi.createGraphics();
-							icon.paintIcon(null, g, 0, 0);
-							g.dispose();
-							Transferable contents = new ImageTransferable(bi);
-							Toolkit.getDefaultToolkit().getSystemClipboard()
-									.setContents(contents, null);
-						}
-					});
-
-					ctx.add("Export As PNG", new Runnable() {
-						@Override
-						public void run() {
-							BufferedImage bi = new BufferedImage(
-									icon.getIconWidth(), icon.getIconHeight(),
-									BufferedImage.TYPE_INT_ARGB);
-							Graphics2D g = bi.createGraphics();
-							icon.paintIcon(null, g, 0, 0);
-							g.dispose();
-							Frame frame = (Frame) SwingUtilities
-									.getWindowAncestor(ShadowRendererDemo.this);
-							File file = FileDialogUtils.showSaveDialog(frame,
-									"Save As", "Shadow Performance.png", "png");
-							if (file != null) {
-								try {
-									ImageIO.write(bi, "png", file);
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
-							}
-						}
-					});
-
-					ctx.add("Export As JVG", new Runnable() {
-						@Override
-						public void run() {
-							Frame frame = (Frame) SwingUtilities
-									.getWindowAncestor(ShadowRendererDemo.this);
-							File file = FileDialogUtils.showSaveDialog(frame,
-									"Save As", "Shadow Performance.jvg", "jvg");
-							if (file != null) {
-								try (FileOutputStream fileOut = new FileOutputStream(
-										file)) {
-									img.save(fileOut);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						}
-					});
-
-					JFancyBox box = new JFancyBox(frame, content);
-					box.setVisible(true);
-				} else {
-					profiler = null;
-				}
-			}
-		});
-
-		return profileButton;
-	}
-
 	protected void refreshExample() {
 		examplePanel.removeAll();
 		examplePanel.setLayout(new GridBagLayout());
@@ -475,253 +343,4 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 				BoxShadowRenderer.class, GaussianShadowRenderer.class };
 	}
 
-}
-
-/**
- * This compares the performance of different ShadowRenderers as the kernel
- * radius increases.
- * <p>
- * This class includes the UI and the comparison logic.
- */
-class Profiler {
-
-	static class ProfileResults {
-		Map<String, SortedMap<Double, Double>> data = new TreeMap<>();
-
-		public void store(ShadowRenderer renderer, float kernelSize,
-				long time) {
-			String name = getName(renderer);
-			SortedMap<Double, Double> m = data.get(name);
-			if (m == null) {
-				m = new TreeMap<>();
-				data.put(name, m);
-			}
-			m.put((double) kernelSize, (double) time);
-		}
-
-		private String getName(ShadowRenderer renderer) {
-			if (renderer instanceof GaussianShadowRenderer)
-				return "Optimized Gaussian Shadow Renderer";
-			if (renderer instanceof OriginalGaussianShadowRenderer)
-				return "Unoptimized Gaussian Shadow Renderer";
-			
-			String str = renderer.getClass().getSimpleName();
-			StringBuilder sb = new StringBuilder();
-			for (int a = 0; a < str.length(); a++) {
-				char ch = str.charAt(a);
-				if (Character.isUpperCase(ch) && sb.length() > 0) {
-					sb.append(' ');
-				}
-				sb.append(ch);
-			}
-			return sb.toString();
-		}
-
-		public void printTable() {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Kernel\t");
-			for (String name : data.keySet()) {
-				sb.append(name);
-				sb.append("\t");
-			}
-			System.out.println(sb.toString().trim());
-
-			SortedSet<Double> allKeys = new TreeSet<>();
-			for (SortedMap<Double, Double> m : data.values()) {
-				allKeys.addAll(m.keySet());
-			}
-			for (Double key : allKeys) {
-				sb.delete(0, sb.length());
-				sb.append(key.toString());
-				sb.append("\t");
-				for (String name : data.keySet()) {
-					sb.append(data.get(name).get(key));
-					sb.append("\t");
-				}
-				System.out.println(sb.toString().trim());
-			}
-		}
-	}
-
-	static class UpdateProgressBar implements Runnable {
-		JProgressBar progressBar;
-		int min, max, value;
-
-		UpdateProgressBar(JProgressBar progressBar, int min, int max,
-				int value) {
-			this.progressBar = progressBar;
-			this.min = min;
-			this.max = max;
-			this.value = value;
-		}
-
-		@Override
-		public void run() {
-			progressBar.getModel().setRangeProperties(value, 1, min, max,
-					false);
-			progressBar.setIndeterminate(false);
-		}
-	}
-
-	static class RunSample implements Runnable {
-		ShadowRenderer renderer;
-		ShadowAttributes attr;
-		ARGBPixels srcPixels, dstPixels;
-		ProfileResults profileResults;
-
-		public RunSample(ProfileResults profileResults, ShadowRenderer renderer,
-				ShadowAttributes attr, ARGBPixels srcPixels,
-				ARGBPixels dstPixels) {
-			this.renderer = renderer;
-			this.attr = attr;
-			this.dstPixels = dstPixels;
-			this.srcPixels = srcPixels;
-			this.profileResults = profileResults;
-		}
-
-		public void run() {
-			long[] times = new long[6];
-			for (int a = 0; a < times.length; a++) {
-
-				times[a] = System.currentTimeMillis();
-				for (int b = 0; b < 100; b++) {
-					Arrays.fill(dstPixels.getPixels(), 0);
-					renderer.createShadow(srcPixels, dstPixels,
-							attr.getShadowKernelRadius(),
-							attr.getShadowColor());
-				}
-				times[a] = System.currentTimeMillis() - times[a];
-			}
-			Arrays.sort(times);
-			profileResults.store(renderer, attr.getShadowKernelRadius(),
-					times[times.length / 2]);
-		}
-	}
-
-	// frontload most expensive renderers first:
-	Collection<ShadowRenderer> renderers = Arrays.asList(
-			new OriginalGaussianShadowRenderer(), new GaussianShadowRenderer(),
-			new DoubleBoxShadowRenderer(), new BoxShadowRenderer());
-
-	ProfileResults results;
-	QDialog dialog;
-	JProgressBar progressBar;
-	ShadowRendererDemo demo;
-	Frame frame;
-
-	public Profiler(ShadowRendererDemo demo) {
-		this.demo = demo;
-		frame = (Frame) SwingUtilities.getWindowAncestor(demo);
-		progressBar = new JProgressBar(SwingConstants.HORIZONTAL, 0, 100);
-		progressBar.setIndeterminate(true);
-
-		JComponent content = QDialog.createContentPanel(
-				"Profiling ShadowRenderers...",
-				"Please wait while I test the execution time for different shadow configurations.",
-				progressBar, true);
-		DialogFooter footer = DialogFooter.createDialogFooter(
-				DialogFooter.CANCEL_OPTION, EscapeKeyBehavior.TRIGGERS_CANCEL);
-		dialog = new QDialog(frame, "Profiling",
-				QDialog.getIcon(QDialog.INFORMATION_MESSAGE), content, footer,
-				true);
-		footer.getButton(DialogFooter.CANCEL_OPTION)
-				.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						dialog.setVisible(false);
-					}
-				});
-	}
-
-	public ProfileResults getResults() {
-		if (results == null) {
-			results = createResults();
-		}
-		return results;
-	}
-
-	protected ProfileResults createResults() {
-		ProfileResults returnValue = new ProfileResults();
-		AtomicBoolean isCancelled = new AtomicBoolean(false);
-		AtomicBoolean isComplete = new AtomicBoolean(false);
-
-		dialog.pack();
-		dialog.setLocationRelativeTo(frame);
-
-		Thread profileThread = new Thread("ShadowRenderer-Profiler") {
-			@Override
-			public void run() {
-				profileRenderers(returnValue, dialog, progressBar, renderers,
-						isCancelled, isComplete);
-			}
-		};
-		profileThread.start();
-		dialog.setVisible(true);
-
-		if (!isComplete.get())
-			isCancelled.set(true);
-
-		if (isComplete.get())
-			return returnValue;
-		return null;
-	}
-
-	private void profileRenderers(ProfileResults profileResults,
-			final QDialog dialog, final JProgressBar progressBar,
-			Collection<ShadowRenderer> renderers, AtomicBoolean isCancelled,
-			AtomicBoolean isComplete) {
-		try {
-			ARGBPixels srcPixels = new ARGBPixels(demo.srcImage);
-			demo.srcImage.getRaster().getDataElements(0, 0,
-					srcPixels.getWidth(), srcPixels.getHeight(),
-					srcPixels.getPixels());
-
-			List<Runnable> runnables = new LinkedList<>();
-			for (ShadowRenderer renderer : renderers) {
-				float min = 0;
-				float max = 25;
-				// load max first so we front more expensive things at the
-				// beginning of progress bar updates
-				for (float kernelSize = max; kernelSize >= min; kernelSize -= .5f) {
-					ShadowAttributes attr = new ShadowAttributes(0, 0,
-							kernelSize, Color.black);
-					int k = renderer.getKernel(attr.getShadowKernelRadius())
-							.getKernelRadius();
-					ARGBPixels dstPixels = new ARGBPixels(
-							demo.srcImage.getWidth() + 2 * k,
-							demo.srcImage.getHeight() + 2 * k);
-					runnables.add(new RunSample(profileResults, renderer, attr,
-							srcPixels, dstPixels));
-				}
-			}
-
-			SwingUtilities.invokeLater(
-					new UpdateProgressBar(progressBar, 0, runnables.size(), 0));
-			int ctr = 0;
-			int size = runnables.size();
-			while (!runnables.isEmpty()) {
-				if (isCancelled.get()) {
-					break;
-				}
-				Runnable runnable = runnables.remove(0);
-				runnable.run();
-				SwingUtilities.invokeLater(
-						new UpdateProgressBar(progressBar, 0, size, ctr++));
-			}
-
-			isComplete.set(runnables.isEmpty());
-
-			if (isComplete.get())
-				profileResults.printTable();
-		} catch (Throwable t) {
-			t.printStackTrace();
-		} finally {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					dialog.setVisible(false);
-				}
-			});
-		}
-	}
 }

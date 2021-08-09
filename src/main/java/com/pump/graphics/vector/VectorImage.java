@@ -3,6 +3,7 @@ package com.pump.graphics.vector;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -254,5 +255,19 @@ public class VectorImage implements Serializable {
 				objOut.writeObject(this);
 			}
 		}
+	}
+
+	/**
+	 * Create a BufferedImage rendering of this image.
+	 */
+	public BufferedImage toBufferedImage() {
+		Rectangle bounds = getBounds().getBounds();
+		BufferedImage bi = new BufferedImage(bounds.width, bounds.height,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bi.createGraphics();
+		g.translate(-bounds.x, -bounds.y);
+		paint(g);
+		g.dispose();
+		return bi;
 	}
 }
