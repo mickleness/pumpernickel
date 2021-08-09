@@ -208,7 +208,7 @@ public class LineChartRenderer {
 			class Cell {
 				String text;
 				int seriesIndex;
-				int textX, textY;
+				float textX, textY;
 				Rectangle cellBounds;
 				int colorSwatchWidth = 10;
 				int colorSwatchPadding = 5;
@@ -222,16 +222,21 @@ public class LineChartRenderer {
 
 					this.seriesIndex = seriesIndex;
 					this.text = stringEntry.getKey();
-					int height = (int) (stringEntry.getValue().getMaxY()
-							- stringEntry.getValue().getMinY() + .5);
+					int height = (int) (Math
+							.ceil(stringEntry.getValue().getMaxY()
+									- stringEntry.getValue().getMinY())
+							+ .5);
 					int width = (int) (stringEntry.getValue().getWidth()
 							+ colorSwatchWidth + colorSwatchPadding + .5);
 
-					colorSwatchBounds = new Rectangle(x, y, colorSwatchWidth,
+					int colorSwatchHeight = Math.min(colorSwatchWidth,
 							height - 2);
+					colorSwatchBounds = new Rectangle(x,
+							y + height / 2 - colorSwatchHeight / 2,
+							colorSwatchWidth, colorSwatchHeight);
 					textX = colorSwatchBounds.x + colorSwatchBounds.width
 							+ colorSwatchPadding;
-					textY = (int) (y - stringEntry.getValue().getY() + .5);
+					textY = (float) (y - stringEntry.getValue().getY());
 					cellBounds = new Rectangle(x, y, width, height);
 				}
 
@@ -302,15 +307,19 @@ public class LineChartRenderer {
 						}
 					}
 				}
+				sum.setFrame(sum.getMinX() - cellInsets.left,
+						sum.getMinY() - cellInsets.top,
+						sum.getWidth() + cellInsets.left + cellInsets.right,
+						sum.getHeight() + cellInsets.top + cellInsets.bottom);
 				return sum;
 			}
 
 			public int getWidth() {
-				return getBounds().width + cellInsets.right;
+				return getBounds().width;
 			}
 
 			public int getHeight() {
-				return getBounds().height + cellInsets.bottom;
+				return getBounds().height;
 			}
 		}
 
@@ -354,6 +363,12 @@ public class LineChartRenderer {
 
 			g = (Graphics2D) g.create();
 			g.translate(emptySpace.x, emptySpace.y);
+
+			// this hack helps resolve a bug where the shadow chart renderer
+			// cut off the descent of letters like p, j, g. Not exactly
+			// sure why yet:
+			g.setColor(new Color(0, 0, 0, 0));
+			g.fill(layout.getBounds());
 
 			for (int y = 0; y < layout.cells.length; y++) {
 				for (int x = 0; x < layout.cells[y].length; x++) {

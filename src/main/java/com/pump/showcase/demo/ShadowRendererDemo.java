@@ -500,6 +500,11 @@ class Profiler {
 		}
 
 		private String getName(ShadowRenderer renderer) {
+			if (renderer instanceof GaussianShadowRenderer)
+				return "Optimized Gaussian Shadow Renderer";
+			if (renderer instanceof OriginalGaussianShadowRenderer)
+				return "Unoptimized Gaussian Shadow Renderer";
+			
 			String str = renderer.getClass().getSimpleName();
 			StringBuilder sb = new StringBuilder();
 			for (int a = 0; a < str.length(); a++) {
