@@ -184,10 +184,10 @@ public class PumpernickelShowcaseApp extends JFrame {
 				.add(new ShowcaseDemoInfo("JPEGMetaData", "JPEGMetaDataDemo"));
 		returnValue.add(new ShowcaseDemoInfo("QPanelUI", "QPanelUIDemo"));
 		returnValue.add(new ShowcaseDemoInfo("AudioPlayer", "AudioPlayerDemo"));
-		returnValue.add(new ShowcaseDemoInfo("JavaTextComponentHighlighter",
-				"JavaTextComponentHighlighterDemo"));
-		returnValue.add(new ShowcaseDemoInfo("XMLTextComponentHighlighter",
-				"XMLTextComponentHighlighterDemo"));
+		returnValue.add(
+				new ShowcaseDemoInfo("JavaFormatter", "JavaFormatterDemo"));
+		returnValue
+				.add(new ShowcaseDemoInfo("XMLFormatter", "XMLFormatterDemo"));
 		// add(new DemoListElement("Text: Search Controls", new
 		// TextSearchDemo());
 		// add(new DemoListElement("QuickTime: Writing Movies", new

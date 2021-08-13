@@ -20,34 +20,24 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import com.pump.io.parser.java.JavaParser;
-import com.pump.swing.JavaTextComponentHighlighter;
+import com.pump.swing.JavaFormatter;
 import com.pump.swing.LineNumberBorder;
-import com.pump.text.TextBoxHighlightPainter;
 
 /**
- * This little demo app combines the
- * {@link com.pump.swing.JavaTextComponentHighlighter} with a
- * {@link com.pump.swing.LineNumberBorder} and demos a
- * {@link TextBoxHighlightPainter}.
- * <p>
- * Here is a sample screenshot of this showcase demo:
- * <p>
- * <img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/JavaTextComponentHighlighterDemo.png"
- * alt="A screenshot of the JavaTextComponentHighlighterDemo.">
+ * This little demo app combines the {@link com.pump.swing.JavaFormatter} with a
+ * {@link com.pump.swing.LineNumberBorder}.
  */
-public class JavaTextComponentHighlighterDemo extends ShowcaseDemo {
+public class JavaFormatterDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JTextPane textPane = new JTextPane();
 	JScrollPane scrollPane = new JScrollPane(textPane);
-	JavaTextComponentHighlighter highlighter;
 
-	public JavaTextComponentHighlighterDemo() {
+	public JavaFormatterDemo() {
 		LineNumberBorder.install(scrollPane, textPane);
 
 		textPane.setText(
-				"package com.org.net;\n\nimport java.util.*;\n\npublic class Foo {\n\n\tFoo() {\n\t\tSystem.out.println(\"Foo\");\n\t}\n}");
+				"package com.org.net;\n\nimport java.util.*;\n\n/**\n * Documentation\n */\npublic class Foo {\n\n\tFoo() {\n\t\t// another comment\n\t\tSystem.out.println(\"Foo\");\n\t}\n}");
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -60,12 +50,14 @@ public class JavaTextComponentHighlighterDemo extends ShowcaseDemo {
 		add(scrollPane, c);
 		scrollPane.setPreferredSize(new Dimension(400, 200));
 
-		highlighter = new JavaTextComponentHighlighter(textPane);
+		new JavaFormatter(textPane);
+
+		installExportJVGContextMenu(textPane, scrollPane);
 	}
 
 	@Override
 	public String getTitle() {
-		return "JavaTextComponentHighlighter Demo";
+		return "JavaFormatter Demo";
 	}
 
 	@Override
@@ -75,19 +67,18 @@ public class JavaTextComponentHighlighterDemo extends ShowcaseDemo {
 
 	@Override
 	public URL getHelpURL() {
-		return XMLTextComponentHighlighterDemo.class
-				.getResource("javaTextComponentHighlighterDemo.html");
+		return JavaFormatterDemo.class.getResource("javaFormatterDemo.html");
 	}
 
 	@Override
 	public String[] getKeywords() {
 		return new String[] { "source-code", "text", "editor", "Swing", "ui",
-				"java" };
+				"java", "style", "attribute", "format" };
 	}
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { JavaTextComponentHighlighterDemo.class,
-				LineNumberBorder.class, JavaParser.class };
+		return new Class[] { JavaFormatter.class, LineNumberBorder.class,
+				JavaParser.class };
 	}
 }

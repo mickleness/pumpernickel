@@ -29,6 +29,8 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.TabSet;
+import javax.swing.text.TabStop;
 
 /**
  * This abstract helper class triggers certain methods as a
@@ -221,7 +223,8 @@ public abstract class TextComponentHighlighter {
 				try {
 					Document doc = jtc.getDocument();
 					if (!(doc instanceof StyledDocument)) {
-						printOnce("TextComponentHighlighter: Attributes were provided but the document does not support styled attributes.");
+						printOnce(
+								"TextComponentHighlighter: Attributes were provided but the document does not support styled attributes.");
 						return;
 					}
 					SimpleAttributeSet defaultAttributes = getDefaultAttributes();
@@ -230,6 +233,8 @@ public abstract class TextComponentHighlighter {
 					d.setCharacterAttributes(0, d.getLength(),
 							defaultAttributes, true);
 					if (active) {
+						formatParagraphAttributes(text, d, selectionStart,
+								selectionEnd);
 						formatTextComponent(text, d, selectionStart,
 								selectionEnd);
 					}
@@ -249,6 +254,24 @@ public abstract class TextComponentHighlighter {
 
 	protected abstract void formatTextComponent(String text, StyledDocument d,
 			int selectionStart, int selectionEnd) throws BadLocationException;
+
+	/**
+	 * This installs paragraph attributes. Currently it only
+	 * applies a TabSet to reduce Swing's default tab size.
+	 */
+	protected void formatParagraphAttributes(String text, StyledDocument d,
+			int selectionStart, int selectionEnd) {
+		TabStop[] tabs = new TabStop[50];
+		for (int j = 0; j < tabs.length; j++) {
+			int tab = j + 1;
+			tabs[j] = new TabStop(tab * 20);
+		}
+		TabSet tabSet = new TabSet(tabs);
+
+		SimpleAttributeSet paragraphAttributes = new SimpleAttributeSet();
+		StyleConstants.setTabSet(paragraphAttributes, tabSet);
+		d.setParagraphAttributes(0, text.length(), paragraphAttributes, false);
+	}
 
 	private boolean hasDocListener = false;
 

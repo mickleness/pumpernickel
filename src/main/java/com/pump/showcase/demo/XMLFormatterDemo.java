@@ -21,31 +21,23 @@ import javax.swing.JTextPane;
 
 import com.pump.io.parser.xml.XMLParser;
 import com.pump.swing.LineNumberBorder;
-import com.pump.swing.XMLTextComponentHighlighter;
+import com.pump.swing.XMLFormatter;
 
 /**
- * This little demo app combines the
- * {@link com.pump.swing.XMLTextComponentHighlighter} with a
+ * This little demo app combines the {@link com.pump.swing.XMLFormatter} with a
  * {@link com.pump.swing.LineNumberBorder}.
- * <p>
- * Here is a sample screenshot of this showcase demo:
- * <p>
- * <img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/XMLTextComponentHighlighterDemo.png"
- * alt="A screenshot of the XMLTextComponentHighlighterDemo.">
  */
-public class XMLTextComponentHighlighterDemo extends ShowcaseDemo {
+public class XMLFormatterDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
 	JTextPane textPane = new JTextPane();
 	JScrollPane scrollPane = new JScrollPane(textPane);
-	XMLTextComponentHighlighter highlighter;
 
-	public XMLTextComponentHighlighterDemo() {
+	public XMLFormatterDemo() {
 		LineNumberBorder.install(scrollPane, textPane);
 
 		textPane.setText(
-				"<?xml version=\"1.0\"?>\n<mysqldump xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n<database name=\"test\">\n\t<table_structure name=\"onerow\">\n\t\t<field Field=\"a\" Type=\"int(11)\" Null=\"YES\" Key=\"\" Extra=\"\" />\n\t</table_structure>\n\t<table_data name=\"onerow\">\n\t<row>\n\t\t<field name=\"a\">1</field>\n\t</row>\n\t</table_data>\n</database>\n</mysqldump>");
+				"<?xml version=\"1.0\"?>\n<mysqldump xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n\t<database name=\"test\">\n\t\t<!--This table needs work -->\n\t\t<table_structure name=\"onerow\">\n\t\t\t<field Field=\"a\" Type=\"int(11)\" Null=\"YES\" Key=\"\" Extra=\"\" />\n\t\t</table_structure>\n\t\t<table_data name=\"onerow\">\n\t\t\t<row>\n\t\t\t\t<field name=\"a\">1</field>\n\t\t\t</row>\n\t\t</table_data>\n\t</database>\n</mysqldump>");
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -57,12 +49,14 @@ public class XMLTextComponentHighlighterDemo extends ShowcaseDemo {
 		add(scrollPane, c);
 		scrollPane.setPreferredSize(new Dimension(400, 200));
 
-		highlighter = new XMLTextComponentHighlighter(textPane);
+		new XMLFormatter(textPane);
+
+		installExportJVGContextMenu(textPane, scrollPane);
 	}
 
 	@Override
 	public String getTitle() {
-		return "XMLTextComponentHighlighter Demo";
+		return "XMLFormatter Demo";
 	}
 
 	@Override
@@ -72,18 +66,18 @@ public class XMLTextComponentHighlighterDemo extends ShowcaseDemo {
 
 	@Override
 	public URL getHelpURL() {
-		return XMLTextComponentHighlighterDemo.class
-				.getResource("xmlTextComponentHighlighterDemo.html");
+		return XMLFormatterDemo.class.getResource("xmlFormatterDemo.html");
 	}
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "xml", "text", "editor", "Swing", "ui" };
+		return new String[] { "xml", "text", "editor", "Swing", "ui", "style",
+				"attribute", "format" };
 	}
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { XMLTextComponentHighlighterDemo.class,
-				LineNumberBorder.class, XMLParser.class };
+		return new Class[] { XMLFormatter.class, LineNumberBorder.class,
+				XMLParser.class };
 	}
 }

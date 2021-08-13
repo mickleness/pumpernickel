@@ -12,40 +12,46 @@ package com.pump.swing;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.Reader;
+import java.io.StringReader;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
+import com.pump.io.parser.Parser.CommentToken;
 import com.pump.io.parser.Parser.StringToken;
 import com.pump.io.parser.Parser.SymbolCharToken;
 import com.pump.io.parser.Parser.UnparsedToken;
 import com.pump.io.parser.Token;
+import com.pump.io.parser.java.JavaParser;
 import com.pump.io.parser.java.JavaParser.CharToken;
-import com.pump.io.parser.xml.XMLParser;
-import com.pump.io.parser.xml.XMLParser.CommentToken;
-import com.pump.io.parser.xml.XMLParser.TagDeclarationToken;
-import com.pump.io.parser.xml.XMLParser.WordToken;
+import com.pump.io.parser.java.JavaParser.WordToken;
 import com.pump.text.TokenTextComponentHighlighter;
 import com.pump.util.Receiver;
 
-public class XMLTextComponentHighlighter extends TokenTextComponentHighlighter {
+/**
+ * This formats text using a monospaced formatting scheme similar to the default
+ * Eclipse formatting options.
+ * 
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2015/12/text-formatting-source-code-in-swing.html">Text:
+ *      Formatting Source Code in Swing</a>
+ */
+public class JavaFormatter extends TokenTextComponentHighlighter {
 
-	protected SimpleAttributeSet defaultAttributes;
-	protected SimpleAttributeSet elementNameAttributes;
-	protected SimpleAttributeSet errorAttributes;
-	protected SimpleAttributeSet commentAttributes;
-	protected SimpleAttributeSet stringAttributes;
-	protected SimpleAttributeSet importantPunctuationAttributes;
+	protected SimpleAttributeSet defaultAttributes, keywordAttributes,
+			errorAttributes, commentAttributes, stringAttributes,
+			importantPunctuationAttributes;
 
 	/**
-	 * Create a new JavaTextComponentHighlighter.
+	 * Create a new JavaFormatter.
 	 * 
 	 * @param jtc
 	 *            the text component to apply formatting to.
 	 */
-	public XMLTextComponentHighlighter(JTextComponent jtc) {
+	public JavaFormatter(JTextComponent jtc) {
 		super(jtc);
 
 		jtc.putClientProperty("caretWidth", new Integer(3));
@@ -77,18 +83,18 @@ public class XMLTextComponentHighlighter extends TokenTextComponentHighlighter {
 			StyleConstants.setFontFamily(defaultAttributes, "Monospaced");
 			StyleConstants.setFontSize(defaultAttributes, 14);
 
-			elementNameAttributes = new SimpleAttributeSet(defaultAttributes);
-			StyleConstants.setBold(elementNameAttributes, true);
-			StyleConstants.setForeground(elementNameAttributes, keywordColor);
+			keywordAttributes = new SimpleAttributeSet(defaultAttributes);
+			StyleConstants.setBold(keywordAttributes, true);
+			StyleConstants.setForeground(keywordAttributes, keywordColor);
 
 			commentAttributes = new SimpleAttributeSet(defaultAttributes);
 			StyleConstants.setForeground(commentAttributes, commentColor);
 
-			errorAttributes = new SimpleAttributeSet(defaultAttributes);
-			StyleConstants.setForeground(errorAttributes, errorColor);
-
 			stringAttributes = new SimpleAttributeSet(defaultAttributes);
 			StyleConstants.setForeground(stringAttributes, stringColor);
+
+			errorAttributes = new SimpleAttributeSet(defaultAttributes);
+			StyleConstants.setForeground(errorAttributes, errorColor);
 
 			importantPunctuationAttributes = new SimpleAttributeSet(
 					defaultAttributes);
@@ -104,9 +110,10 @@ public class XMLTextComponentHighlighter extends TokenTextComponentHighlighter {
 			return stringAttributes;
 		}
 
-		Token prev = tokenIndex == 0 ? null : tokens[tokenIndex - 1];
-		if (token instanceof WordToken && prev instanceof TagDeclarationToken) {
-			return elementNameAttributes;
+		if (token instanceof WordToken) {
+			WordToken word = (WordToken) token;
+			if (word.isKeyword || word.isLiteral)
+				return keywordAttributes;
 		}
 
 		if (token instanceof CommentToken) {
@@ -129,6 +136,8 @@ public class XMLTextComponentHighlighter extends TokenTextComponentHighlighter {
 	@Override
 	protected void createTokens(String inputText, Receiver<Token> receiver)
 			throws Exception {
-		new XMLParser().parse(inputText, receiver);
+		try (Reader reader = new StringReader(inputText)) {
+			new JavaParser().parse(reader, receiver);
+		}
 	}
 }
