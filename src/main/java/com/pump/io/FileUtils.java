@@ -42,4 +42,18 @@ public class FileUtils {
 					"File.mkdirs failed for " + dir.getAbsolutePath());
 		return true;
 	}
+
+	/**
+	 * This calls File.delete(), and it throws an IOException if it fails.
+	 */
+	public static boolean delete(File file) throws IOException {
+		if (!file.exists())
+			return false;
+
+		if (!file.delete())
+			throw new IOException(
+					"File.delete failed for " + file.getAbsolutePath());
+
+		return true;
+	}
 }
