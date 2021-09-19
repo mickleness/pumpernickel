@@ -13,6 +13,7 @@ package com.pump.data.encoder;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,8 +81,8 @@ public abstract class ValueEncoder<T> {
 			if (NULL.equals(str) || str == null)
 				return null;
 			if (str.charAt(0) == '\'' && str.charAt(str.length() - 1) == '\'') {
-				String decoded = JavaEncoding.decode(str.substring(1,
-						str.length() - 1));
+				String decoded = JavaEncoding
+						.decode(str.substring(1, str.length() - 1));
 				if (decoded.length() == 1) {
 					return decoded.charAt(0);
 				}
@@ -146,7 +147,8 @@ public abstract class ValueEncoder<T> {
 		}
 	};
 
-	public static ValueEncoder<Long> LONG = new DirectEncoder<Long>(Long.class) {
+	public static ValueEncoder<Long> LONG = new DirectEncoder<Long>(
+			Long.class) {
 
 		@Override
 		public Long parseNonNull(String str) {
@@ -181,7 +183,8 @@ public abstract class ValueEncoder<T> {
 		}
 	};
 
-	public static ValueEncoder<Byte> BYTE = new DirectEncoder<Byte>(Byte.class) {
+	public static ValueEncoder<Byte> BYTE = new DirectEncoder<Byte>(
+			Byte.class) {
 
 		@Override
 		public Byte parseNonNull(String str) {
@@ -204,6 +207,22 @@ public abstract class ValueEncoder<T> {
 		public String encode(Rectangle value) {
 			return value.x + " " + value.y + " " + value.width + " "
 					+ value.height;
+		}
+
+	};
+
+	public static ValueEncoder<Date> DATE = new ValueEncoder<Date>(Date.class) {
+
+		@Override
+		public Date parse(String str) {
+			long l = Long.parseLong(str);
+			Date date = new Date(l);
+			return date;
+		}
+
+		@Override
+		public String encode(Date value) {
+			return Long.toString(value.getTime());
 		}
 
 	};
@@ -265,6 +284,7 @@ public abstract class ValueEncoder<T> {
 		defaultEncoders.put(Boolean.class, ValueEncoder.BOOLEAN);
 		defaultEncoders.put(Byte.class, ValueEncoder.BYTE);
 		defaultEncoders.put(Rectangle.class, ValueEncoder.RECTANGLE);
+		defaultEncoders.put(Date.class, ValueEncoder.DATE);
 	}
 
 	public static <T> ValueEncoder<T> getDefaultEncoder(Class<T> type) {
