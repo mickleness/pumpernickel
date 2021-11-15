@@ -606,15 +606,54 @@ public class ShapeUtils {
 	/**
 	 * Create a flattened derivative of a shape.
 	 * 
-	 * @param shape the shape to flatten
-     * @param flatness the maximum distance that the line segments used to
-     *          approximate the curved segments are allowed to deviate
-     *          from any point on the original curve
+	 * @param shape
+	 *            the shape to flatten
+	 * @param flatness
+	 *            the maximum distance that the line segments used to
+	 *            approximate the curved segments are allowed to deviate from
+	 *            any point on the original curve
 	 */
 	public static Shape flatten(Shape shape, float flatness) {
 		PathIterator pi = shape.getPathIterator(null, flatness);
 		Path2D.Float returnValue = new Path2D.Float(pi.getWindingRule());
 		returnValue.append(pi, false);
+		return returnValue;
+	}
+
+	public static List<Point2D> getEndPoints(Shape path) {
+		List<Point2D> returnValue = new ArrayList<>();
+
+		float[] coords = new float[6];
+		PathIterator pi = path.getPathIterator(null);
+		Point2D move = null;
+		Point2D last = null;
+		while (!pi.isDone()) {
+			int k = pi.currentSegment(coords);
+			if (k == PathIterator.SEG_MOVETO) {
+				if (move != null) {
+					returnValue.add(move);
+					returnValue.add(last);
+				}
+
+				move = new Point2D.Float(coords[0], coords[1]);
+				last = new Point2D.Float(coords[0], coords[1]);
+			} else if (k == PathIterator.SEG_LINETO) {
+				last.setLocation(coords[0], coords[1]);
+			} else if (k == PathIterator.SEG_QUADTO) {
+				last.setLocation(coords[2], coords[3]);
+			} else if (k == PathIterator.SEG_CUBICTO) {
+				last.setLocation(coords[4], coords[5]);
+			} else if (k == PathIterator.SEG_CLOSE) {
+				move = null;
+			}
+			pi.next();
+		}
+
+		if (move != null) {
+			returnValue.add(move);
+			returnValue.add(last);
+		}
+
 		return returnValue;
 	}
 }
