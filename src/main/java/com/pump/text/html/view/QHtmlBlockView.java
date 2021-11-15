@@ -1,3 +1,13 @@
+/**
+ * This software is released as part of the Pumpernickel project.
+ * 
+ * All com.pump resources in the Pumpernickel project are distributed under the
+ * MIT License:
+ * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * 
+ * More information about the Pumpernickel project is available here:
+ * https://mickleness.github.io/pumpernickel/
+ */
 package com.pump.text.html.view;
 
 import java.awt.Color;
@@ -17,6 +27,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.text.Element;
 import javax.swing.text.html.BlockView;
 
+import com.pump.geom.ShapeBounds;
 import com.pump.graphics.Graphics2DContext;
 import com.pump.graphics.vector.FillOperation;
 import com.pump.graphics.vector.GlyphVectorOperation;
@@ -41,7 +52,8 @@ public class QHtmlBlockView extends BlockView {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void paint(Graphics destG, Shape allocation) {
-		List<Operation> inOperations = getOperations(allocation);
+		Shape clipping = destG.getClip();
+		List<Operation> inOperations = getOperations(allocation, clipping);
 		List<List<Operation>> operationsByParent = getOperationsGroupedByParent(
 				inOperations);
 
@@ -194,11 +206,22 @@ public class QHtmlBlockView extends BlockView {
 		return returnValue;
 	}
 
-	private List<Operation> getOperations(Shape allocation) {
+	private List<Operation> getOperations(Shape allocation, Shape clipping) {
 		VectorImage vi = new VectorImage();
 		Graphics2D vig = vi.createGraphics();
-		// if clipping isn't defined some classes throw NPE's
-		vig.clipRect(0, 0, Integer.MAX_VALUE / 2, Integer.MAX_VALUE / 2);
+
+		// we have to define SOME clipping, or else some classes throw NPE's.
+		// Also this can really save on CPU demand if we do it right:
+		Rectangle viClip = allocation == null
+				? (new Rectangle(0, 0, Integer.MAX_VALUE / 2,
+						Integer.MAX_VALUE / 2))
+				: ShapeBounds.getBounds(allocation).getBounds();
+		if (clipping != null) {
+			viClip = viClip
+					.intersection(ShapeBounds.getBounds(clipping).getBounds());
+		}
+		vig.clipRect(viClip.x, viClip.y, viClip.width, viClip.height);
+
 		super.paint(vig, allocation);
 		vig.dispose();
 		return vi.getOperations();
