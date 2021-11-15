@@ -47,6 +47,9 @@ public abstract class ValueEncoder<T> {
 		}
 	};
 
+	/**
+	 * This wraps a String in quotes, and escape-encoded inner quotes.
+	 */
 	public static ValueEncoder<String> STRING = new ValueEncoder<String>(
 			String.class) {
 
@@ -71,6 +74,25 @@ public abstract class ValueEncoder<T> {
 			sb.append("\"");
 			return sb.toString();
 		}
+	};
+
+	/**
+	 * This immediately returns the argument; it doesn't apply quotation marks
+	 * or escape-encode anything.
+	 */
+	public static ValueEncoder<String> STRING_NO_QUOTES = new ValueEncoder<String>(
+			String.class) {
+
+		@Override
+		public String parse(String str) {
+			return str;
+		}
+
+		@Override
+		public String encode(String value) {
+			return value;
+		}
+
 	};
 
 	public static ValueEncoder<Character> CHAR = new ValueEncoder<Character>(
