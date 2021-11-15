@@ -12,6 +12,9 @@ package com.pump.geom;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class PathSegment {
 
@@ -115,8 +118,10 @@ public abstract class PathSegment {
 			float[] rValue = null;
 			if (type == PathIterator.SEG_CUBICTO) {
 				rValue = new float[4];
-				rValue[0] = (float) (-last[0] + 3 * myData[0] - 3 * myData[2] + myData[4]);
-				rValue[1] = (float) (3 * last[0] - 6 * myData[0] + 3 * myData[2]);
+				rValue[0] = (float) (-last[0] + 3 * myData[0] - 3 * myData[2]
+						+ myData[4]);
+				rValue[1] = (float) (3 * last[0] - 6 * myData[0]
+						+ 3 * myData[2]);
 				rValue[2] = (float) (-3 * last[0] + 3 * myData[0]);
 				rValue[3] = (float) (last[0]);
 			} else if (type == PathIterator.SEG_QUADTO) {
@@ -169,8 +174,10 @@ public abstract class PathSegment {
 			float[] rValue = null;
 			if (type == PathIterator.SEG_CUBICTO) {
 				rValue = new float[4];
-				rValue[0] = (float) (-last[1] + 3 * myData[1] - 3 * myData[3] + myData[5]);
-				rValue[1] = (float) (3 * last[1] - 6 * myData[1] + 3 * myData[3]);
+				rValue[0] = (float) (-last[1] + 3 * myData[1] - 3 * myData[3]
+						+ myData[5]);
+				rValue[1] = (float) (3 * last[1] - 6 * myData[1]
+						+ 3 * myData[3]);
 				rValue[2] = (float) (-3 * last[1] + 3 * myData[1]);
 				rValue[3] = (float) (last[1]);
 			} else if (type == PathIterator.SEG_QUADTO) {
@@ -260,7 +267,8 @@ public abstract class PathSegment {
 		 *            from values less than t.
 		 * @return the tangent angle (in radians).
 		 */
-		public float getTheta(float t, AffineTransform transform, int direction) {
+		public float getTheta(float t, AffineTransform transform,
+				int direction) {
 			float[] x_coeffs = getXCoeffs(transform);
 			float[] y_coeffs = getYCoeffs(transform);
 			float dx, dy;
@@ -332,7 +340,8 @@ public abstract class PathSegment {
 			}
 
 			float otherAngle = (float) Math.atan2(dy, dx);
-			if (difference(otherAngle, angle1) < difference(otherAngle, angle2)) {
+			if (difference(otherAngle, angle1) < difference(otherAngle,
+					angle2)) {
 				return angle1;
 			}
 			return angle2;
@@ -521,9 +530,52 @@ public abstract class PathSegment {
 				}
 				dest.moveTo((float) pt[0], (float) pt[1]);
 			} else {
-				throw new UnsupportedOperationException(toTypeName(type)
-						+ " not supported here.");
+				throw new UnsupportedOperationException(
+						toTypeName(type) + " not supported here.");
 			}
+		}
+
+		public Point2D[] getPoints(boolean includePrecedingEnd) {
+			List<Point2D> returnValue = new ArrayList<>(4);
+			if (includePrecedingEnd) {
+				if (prev.type == PathIterator.SEG_MOVETO
+						|| prev.type == PathIterator.SEG_LINETO) {
+					returnValue
+							.add(new Point2D.Float(prev.data[0], prev.data[1]));
+				} else if (prev.type == PathIterator.SEG_QUADTO) {
+					returnValue
+							.add(new Point2D.Float(prev.data[2], prev.data[3]));
+				} else if (prev.type == PathIterator.SEG_CUBICTO) {
+					returnValue
+							.add(new Point2D.Float(prev.data[4], prev.data[5]));
+				} else if (prev.type == PathIterator.SEG_CLOSE) {
+					// skip
+				} else {
+					throw new RuntimeException(
+							"unsupported type: " + prev.type);
+				}
+			}
+
+			if (type == PathIterator.SEG_MOVETO
+					|| type == PathIterator.SEG_LINETO) {
+				returnValue.add(new Point2D.Float(data[0], data[1]));
+			} else if (type == PathIterator.SEG_QUADTO) {
+				returnValue.add(new Point2D.Float(data[0], data[1]));
+				returnValue.add(new Point2D.Float(data[2], data[3]));
+			} else if (type == PathIterator.SEG_CUBICTO) {
+				returnValue.add(new Point2D.Float(data[0], data[1]));
+				returnValue.add(new Point2D.Float(data[2], data[3]));
+				returnValue.add(new Point2D.Float(data[4], data[5]));
+			} else if (type == PathIterator.SEG_CLOSE) {
+				Float t = this;
+				while (t.type != PathIterator.SEG_MOVETO) {
+					t = t.prev;
+				}
+				returnValue.add(new Point2D.Float(t.data[0], t.data[1]));
+			} else {
+				throw new RuntimeException("unsupported type: " + prev.type);
+			}
+			return returnValue.toArray(new Point2D[0]);
 		}
 	}
 
