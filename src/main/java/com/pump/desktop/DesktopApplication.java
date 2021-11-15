@@ -121,6 +121,7 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 	 */
 	public DesktopApplication(String qualifiedAppName, String simpleAppName,
 			String version, String supportEmail) throws IOException {
+
 		Objects.requireNonNull(qualifiedAppName);
 		Objects.requireNonNull(simpleAppName);
 		Objects.requireNonNull(version);

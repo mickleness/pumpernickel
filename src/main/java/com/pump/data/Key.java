@@ -217,7 +217,13 @@ public class Key<T> implements CharSequence, Serializable {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public T get(Map attributes, boolean applyDefaultValue) {
-		T value = (T) attributes.get(toString());
+		Object v = attributes.get(toString());
+		if (v instanceof String && !String.class.equals(getType())) {
+			String str = (String) v;
+			ValueEncoder e = getEncoder();
+			v = e.parse(str);
+		}
+		T value = (T) v;
 		if (value == null && applyDefaultValue)
 			value = getDefaultValue();
 		return value;
