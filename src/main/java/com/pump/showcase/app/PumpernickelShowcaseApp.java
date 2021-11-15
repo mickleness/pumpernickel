@@ -86,7 +86,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String VERSION = "1.02";
+	public static final String VERSION = "1.03-beta";
 
 	public static void main(String[] args) throws Exception {
 		DesktopApplication app = new DesktopApplication("com.pump.showcase",
@@ -188,6 +188,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 				new ShowcaseDemoInfo("JavaFormatter", "JavaFormatterDemo"));
 		returnValue
 				.add(new ShowcaseDemoInfo("XMLFormatter", "XMLFormatterDemo"));
+//		returnValue.add(
+//				new ShowcaseDemoInfo("ThreadProfiler", "ThreadProfilerDemo"));
 		// add(new DemoListElement("Text: Search Controls", new
 		// TextSearchDemo());
 		// add(new DemoListElement("QuickTime: Writing Movies", new
