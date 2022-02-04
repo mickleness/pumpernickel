@@ -63,19 +63,12 @@ public class WindowDragger extends MouseInputAdapter {
 			if (JVM.isMac)
 				p.y = Math.max(0, p.y);
 			if (active) {
-<<<<<<< HEAD
 				Window w = e.getSource() instanceof Window
 						? (Window) e.getSource()
 						: SwingUtilities
 								.getWindowAncestor((Component) e.getSource());
 				WindowDragger.translateWindow(p.x - mouseLoc.x,
 						p.y - mouseLoc.y, w);
-=======
-				Component src = (Component) e.getSource();
-				Window w = e.getSource() instanceof Window ? (Window) src : SwingUtilities.getWindowAncestor(src);
-				WindowDragger.translateWindow(p.x - mouseLoc.x, p.y
-						- mouseLoc.y, w);
->>>>>>> branch 'master' of https://github.com/mickleness/pumpernickel.git
 			}
 			mouseLoc.setLocation(p);
 		}
