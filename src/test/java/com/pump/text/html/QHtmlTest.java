@@ -19,6 +19,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.HashSet;
@@ -33,6 +34,7 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import org.junit.Test;
 
+import com.pump.geom.ShapeUtils;
 import com.pump.graphics.vector.FillOperation;
 import com.pump.graphics.vector.ImageOperation;
 import com.pump.graphics.vector.Operation;
@@ -1386,6 +1388,82 @@ public class QHtmlTest extends TestCase {
 		assertTrue(opsOrig.get(opsOrig.size() - 1).getBounds().getMaxY() > 150);
 		assertTrue(opsQ.get(opsQ.size() - 1).getBounds().getMaxY() > 150
 				* CssLineHeightValue.VALUE_NORMAL);
+	}
+
+	/**
+	 * When we have a background image with a border radius: we need to render
+	 * the background with the appropriate Shape.
+	 * <p>
+	 * This covers issue #80 where we were ignoring the shape and rendering the
+	 * background as a Rectangle.
+	 */
+	public void testRoundedCornerBackgroundImage() {
+		//@formatter:off
+		
+		// this one does NOT have a 'border-radius', so it uses a rectangular background
+		String rectHtml = "<html>\n"
+				+ "  <head>\n"
+				+ "    <style>\n"
+				+ "      body { background-color: white; }\n"
+				+ "      h2 { padding: 4px 10px 4px 10px; \n"
+				+ "           background-image:\n"
+				+ "      repeating-linear-gradient(190deg, rgba(255, 0, 0, 0.5) 40px,\n"
+				+ "        rgba(255, 153, 0, 0.5) 80px, rgba(255, 255, 0, 0.5) 120px,\n"
+				+ "        rgba(0, 255, 0, 0.5) 160px, rgba(0, 0, 255, 0.5) 200px,\n"
+				+ "        rgba(75, 0, 130, 0.5) 240px, rgba(238, 130, 238, 0.5) 280px,\n"
+				+ "        rgba(255, 0, 0, 0.5) 300px);\n"
+				+ "           font: bold 130% sans-serif; \n"
+				+ "           color: white; \n"
+				+ "           width: max-content; \n"
+				+ "           background-clip: border-box; \n"
+				+ "           border: transparent;}\n"
+				+ "    </style>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    <h2>Header 2</h2>\n"
+				+ "  </body>\n"
+				+ "</html>";
+		
+		// this one has a 'border-radius', so it uses a rounded rectangle background:
+		String roundRectHtml = "<html>\n"
+				+ "  <head>\n"
+				+ "    <style>\n"
+				+ "      body { background-color: white; }\n"
+				+ "      h2 { padding: 4px 10px 4px 10px; \n"
+				+ "           background-image:\n"
+				+ "      repeating-linear-gradient(190deg, rgba(255, 0, 0, 0.5) 40px,\n"
+				+ "        rgba(255, 153, 0, 0.5) 80px, rgba(255, 255, 0, 0.5) 120px,\n"
+				+ "        rgba(0, 255, 0, 0.5) 160px, rgba(0, 0, 255, 0.5) 200px,\n"
+				+ "        rgba(75, 0, 130, 0.5) 240px, rgba(238, 130, 238, 0.5) 280px,\n"
+				+ "        rgba(255, 0, 0, 0.5) 300px);\n"
+				+ "           font: bold 130% sans-serif; \n"
+				+ "           color: white; \n"
+				+ "           width: max-content; \n"
+				+ "           background-clip: border-box; \n"
+				+ "           border: transparent; \n"
+				+ "           border-radius:10px;}\n"
+				+ "    </style>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    <h2>Header 2</h2>\n"
+				+ "  </body>\n"
+				+ "</html>";
+		//@formatter:on
+
+		List<Operation> rectOps = getOperations(true, rectHtml);
+		List<Operation> roundRectOps = getOperations(true, roundRectHtml);
+
+		Rectangle2D rectHeaderBackgroundAsRect = ShapeUtils
+				.getRectangle2D(((FillOperation) rectOps.get(2)).getShape());
+		Rectangle2D roundRectHeaderBkgndAsRect = ShapeUtils.getRectangle2D(
+				((FillOperation) roundRectOps.get(2)).getShape());
+
+		// the aliased one (with no rounded corners) should be a Rectangle2D:
+		assertNotNull(rectHeaderBackgroundAsRect);
+
+		// the antialiased one (with rounded corners) should not be a
+		// Rectangle2D:
+		assertNull(roundRectHeaderBkgndAsRect);
 	}
 
 	private static void assertImageEquals(BufferedImage bi1, BufferedImage bi2,
