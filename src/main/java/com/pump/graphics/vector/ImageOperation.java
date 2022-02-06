@@ -17,10 +17,13 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+import com.pump.geom.RectangularTransform;
+import com.pump.geom.ShapeUtils;
 import com.pump.graphics.Graphics2DContext;
 import com.pump.image.ImageLoader;
 import com.pump.image.ImageSize;
@@ -29,7 +32,7 @@ import com.pump.image.ImageSize;
  * This is an operation for all of <code>java.awt.Graphics#drawImage(..)</code>
  * methods.
  * <p>
- * The Image is not cloned. When asked to paint this always passed in a null
+ * The Image is not cloned. When asked to paint this always uses a null
  * ImageObserver.
  */
 public class ImageOperation extends Operation {
@@ -190,6 +193,52 @@ public class ImageOperation extends Operation {
 
 	@Override
 	public Operation[] toSoftClipOperation(Shape clippingShape) {
+
+		// We should only resort to a FillOperation as a last resort. Using a
+		// TexturePaint is probably more expensive than just rendering an image
+		// directly. So let's see if we can either turn this object or a related
+		// ImageOperation first:
+
+		if (ShapeUtils.isEmpty(clippingShape))
+			return new Operation[] { this };
+
+		Rectangle destRect = getDestRect();
+		Rectangle2D rect2D = ShapeUtils.getRectangle2D(clippingShape);
+		if (rect2D != null && rect2D.contains(destRect)) {
+			return new Operation[] { this };
+		} else if (rect2D != null && !rect2D.intersects(destRect)) {
+			return new Operation[] {};
+		}
+
+		Rectangle rect = ShapeUtils.getRectangle(clippingShape);
+		if (rect != null) {
+			Rectangle newDestRect = rect.intersection(destRect);
+			RectangularTransform tx = new RectangularTransform(
+					new Rectangle(0, 0, destRect.width, destRect.height),
+					new Rectangle(newDestRect.x - destRect.x,
+							newDestRect.y - destRect.y, newDestRect.width,
+							newDestRect.height));
+
+			Rectangle srcRect = getSourceRect();
+			Rectangle2D newSrcRect2D = tx.transform(
+					new Rectangle(0, 0, srcRect.width, srcRect.height));
+			newSrcRect2D.setFrame(newSrcRect2D.getX() + srcRect.x,
+					newSrcRect2D.getY() + srcRect.y, newSrcRect2D.getWidth(),
+					newSrcRect2D.getHeight());
+
+			Rectangle newSrcRect = ShapeUtils.getRectangle(newSrcRect2D);
+			if (newSrcRect != null) {
+				ImageOperation newImageOp = new ImageOperation(getContext(),
+						getImage(), newDestRect, newSrcRect,
+						getBackgroundColor());
+				return new Operation[] { newImageOp };
+
+			}
+
+		}
+
+		// we couldn't find a shortcut, so let's just do it this way:
+
 		return toFillOperation().toSoftClipOperation(clippingShape);
 	}
 }

@@ -204,23 +204,23 @@ public class QHtmlTest extends TestCase {
 		assertEquals(3, ops1.size());
 
 		// background:
-		assertTrue(ops1.get(0) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops1.get(0).getClass());
 
 		// shadow:
-		assertTrue(ops1.get(1) instanceof ImageOperation);
+		assertEquals(ImageOperation.class, ops1.get(1).getClass());
 
 		// text:
-		assertTrue(ops1.get(2) instanceof StringOperation);
+		assertEquals(StringOperation.class, ops1.get(2).getClass());
 
 		List<Operation> ops2 = getOperations(false, html);
 
 		assertEquals(2, ops2.size());
 
 		// background:
-		assertTrue(ops2.get(0) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops2.get(0).getClass());
 
 		// text:
-		assertTrue(ops2.get(1) instanceof StringOperation);
+		assertEquals(StringOperation.class, ops2.get(1).getClass());
 	}
 
 	interface TextPaneFormatter {
@@ -310,23 +310,23 @@ public class QHtmlTest extends TestCase {
 			List<Operation> ops1 = getOperations(true, html);
 			assertEquals(3, ops1.size());
 
-			assertTrue(ops1.get(0) instanceof FillOperation);
+			assertEquals(FillOperation.class, ops1.get(0).getClass());
 
 			// image:
-			assertTrue(ops1.get(1) instanceof ImageOperation);
+			assertEquals(ImageOperation.class, ops1.get(1).getClass());
 			ImageOperation io = (ImageOperation) ops1.get(1);
 			assertEquals(batDataSize.width, io.getDestRect().width);
 			assertEquals(batDataSize.height, io.getDestRect().height);
 
 			// text:
-			assertTrue(ops1.get(2) instanceof StringOperation);
+			assertEquals(StringOperation.class, ops1.get(2).getClass());
 
 			// Swing's default renderer should support no-repeat, but not with a
 			// base64-encoded image
 			List<Operation> ops2 = getOperations(false, html);
 			assertEquals(2, ops2.size());
-			assertTrue(ops2.get(0) instanceof FillOperation);
-			assertTrue(ops2.get(1) instanceof StringOperation);
+			assertEquals(FillOperation.class, ops2.get(0).getClass());
+			assertEquals(StringOperation.class, ops2.get(1).getClass());
 		}
 	}
 
@@ -352,10 +352,10 @@ public class QHtmlTest extends TestCase {
 		ops1.remove(0); // background color
 		ops1.remove(ops1.size() - 1); // text
 
-		assertEquals(14, ops1.size());
+		assertEquals(13, ops1.size());
 
 		for (int a = 0; a < ops1.size(); a++) {
-			assertTrue(ops1.get(a) instanceof ImageOperation);
+			assertEquals(ImageOperation.class, ops1.get(a).getClass());
 			ImageOperation first = (ImageOperation) ops1.get(0);
 			ImageOperation c = (ImageOperation) ops1.get(a);
 			assertEquals(first.getDestRect().y, c.getDestRect().y);
@@ -365,8 +365,8 @@ public class QHtmlTest extends TestCase {
 		// base64-encoded image
 		List<Operation> ops2 = getOperations(false, html);
 		assertEquals(2, ops2.size());
-		assertTrue(ops2.get(0) instanceof FillOperation);
-		assertTrue(ops2.get(1) instanceof StringOperation);
+		assertEquals(FillOperation.class, ops2.get(0).getClass());
+		assertEquals(StringOperation.class, ops2.get(1).getClass());
 	}
 
 	public void testBackgroundRepeat_base64img_repeat_y() {
@@ -391,10 +391,10 @@ public class QHtmlTest extends TestCase {
 		ops1.remove(0); // background color
 		ops1.remove(ops1.size() - 1); // text
 
-		assertEquals(14, ops1.size());
+		assertEquals(13, ops1.size());
 
 		for (int a = 0; a < ops1.size(); a++) {
-			assertTrue(ops1.get(a) instanceof ImageOperation);
+			assertEquals(ImageOperation.class, ops1.get(a).getClass());
 			ImageOperation first = (ImageOperation) ops1.get(0);
 			ImageOperation c = (ImageOperation) ops1.get(a);
 			assertEquals(first.getDestRect().x, c.getDestRect().x);
@@ -404,8 +404,8 @@ public class QHtmlTest extends TestCase {
 		// base64-encoded image
 		List<Operation> ops2 = getOperations(false, html);
 		assertEquals(2, ops2.size());
-		assertTrue(ops2.get(0) instanceof FillOperation);
-		assertTrue(ops2.get(1) instanceof StringOperation);
+		assertEquals(FillOperation.class, ops2.get(0).getClass());
+		assertEquals(StringOperation.class, ops2.get(1).getClass());
 	}
 
 	public void testBackgroundRepeat_base64img_repeat() {
@@ -432,7 +432,7 @@ public class QHtmlTest extends TestCase {
 
 		Area sum = new Area();
 		for (int a = 0; a < ops1.size(); a++) {
-			assertTrue(ops1.get(a) instanceof ImageOperation);
+			assertEquals(ImageOperation.class, ops1.get(a).getClass());
 			ImageOperation c = (ImageOperation) ops1.get(a);
 			sum.add(new Area(c.getBounds()));
 		}
@@ -445,8 +445,8 @@ public class QHtmlTest extends TestCase {
 		// base64-encoded image
 		List<Operation> ops2 = getOperations(false, html);
 		assertEquals(2, ops2.size());
-		assertTrue(ops2.get(0) instanceof FillOperation);
-		assertTrue(ops2.get(1) instanceof StringOperation);
+		assertEquals(FillOperation.class, ops2.get(0).getClass());
+		assertEquals(StringOperation.class, ops2.get(1).getClass());
 	}
 
 	/**
@@ -474,9 +474,9 @@ public class QHtmlTest extends TestCase {
 		assertEquals(2, ops.size());
 
 		// page background:
-		assertTrue(ops.get(0) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(0).getClass());
 		// h1 background:
-		assertTrue(ops.get(1) instanceof ImageOperation);
+		assertEquals(ImageOperation.class, ops.get(1).getClass());
 
 		ImageOperation io = (ImageOperation) ops.get(1);
 		assertEquals(0, io.getDestRect().x);
@@ -504,10 +504,10 @@ public class QHtmlTest extends TestCase {
 			assertEquals(3, ops.size());
 
 			// page background:
-			assertTrue(ops.get(0) instanceof FillOperation);
+			assertEquals(FillOperation.class, ops.get(0).getClass());
 			// h1 background:
-			assertTrue(ops.get(1) instanceof FillOperation);
-			assertTrue(ops.get(2) instanceof StringOperation);
+			assertEquals(FillOperation.class, ops.get(1).getClass());
+			assertEquals(StringOperation.class, ops.get(2).getClass());
 
 			assertEquals(new Color(255, 0, 255),
 					ops.get(1).getContext().getPaint());
@@ -532,10 +532,10 @@ public class QHtmlTest extends TestCase {
 		assertEquals(3, ops1.size());
 
 		// page background:
-		assertTrue(ops1.get(0) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops1.get(0).getClass());
 		// div background:
-		assertTrue(ops1.get(1) instanceof FillOperation);
-		assertTrue(ops1.get(2) instanceof StringOperation);
+		assertEquals(FillOperation.class, ops1.get(1).getClass());
+		assertEquals(StringOperation.class, ops1.get(2).getClass());
 
 		FillOperation f = (FillOperation) ops1.get(1);
 		Rectangle r = f.getBounds().getBounds();
@@ -551,9 +551,9 @@ public class QHtmlTest extends TestCase {
 
 		// we have multiple lines of text
 		assertEquals(3, ops2.size());
-		assertTrue(ops2.get(0) instanceof FillOperation);
-		assertTrue(ops2.get(1) instanceof FillOperation);
-		assertTrue(ops2.get(2) instanceof StringOperation);
+		assertEquals(FillOperation.class, ops2.get(0).getClass());
+		assertEquals(FillOperation.class, ops2.get(1).getClass());
+		assertEquals(StringOperation.class, ops2.get(2).getClass());
 		f = (FillOperation) ops2.get(1);
 		r = f.getBounds().getBounds();
 		assertFalse(r.width == 40);
@@ -583,10 +583,10 @@ public class QHtmlTest extends TestCase {
 			assertEquals(3, ops.size());
 
 			// page background:
-			assertTrue(ops.get(0) instanceof FillOperation);
+			assertEquals(FillOperation.class, ops.get(0).getClass());
 			// div background:
-			assertTrue(ops.get(1) instanceof FillOperation);
-			assertTrue(ops.get(2) instanceof StringOperation);
+			assertEquals(FillOperation.class, ops.get(1).getClass());
+			assertEquals(StringOperation.class, ops.get(2).getClass());
 
 			FillOperation f = (FillOperation) ops.get(1);
 			Rectangle r = f.getBounds().getBounds();
@@ -663,12 +663,12 @@ public class QHtmlTest extends TestCase {
 				assertTrue(ops.size() >= 3);
 
 				// scrollpane/page background:
-				assertTrue(ops.get(0) instanceof FillOperation);
-				assertTrue(ops.get(1) instanceof FillOperation);
-				assertTrue(ops.get(2) instanceof ImageOperation);
+				assertEquals(FillOperation.class, ops.get(0).getClass());
+				assertEquals(FillOperation.class, ops.get(1).getClass());
+				assertEquals(ImageOperation.class, ops.get(2).getClass());
 				// two lines of text (sometimes true):
-				// assertTrue(ops.get(3) instanceof StringOperation);
-				// assertTrue(ops.get(4) instanceof StringOperation);
+				// assertEquals(StringOperation.class, ops.get(3).getClass());
+				// assertEquals(StringOperation.class, ops.get(4).getClass());
 
 				ImageOperation io = (ImageOperation) ops.get(2);
 				Rectangle imageRect = io.getContext().getTransform()
@@ -696,7 +696,7 @@ public class QHtmlTest extends TestCase {
 
 			// make sure the text is scrolling; this proves our viewport was
 			// changing each iteration.
-			assertEquals(5, string1Ys.size());
+			assertEquals(6, string1Ys.size());
 		}
 	}
 
@@ -770,11 +770,11 @@ public class QHtmlTest extends TestCase {
 		assertEquals(2, ops2.size());
 
 		// paint using a shadow (BufferedImage)
-		assertTrue(ops2.get(0) instanceof FillOperation);
-		assertTrue(ops2.get(1) instanceof ImageOperation);
+		assertEquals(FillOperation.class, ops2.get(0).getClass());
+		assertEquals(ImageOperation.class, ops2.get(1).getClass());
 
 		// don't paint using a shadow:
-		assertTrue(ops1.get(0) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops1.get(0).getClass());
 		assertFalse(ops1.get(1) instanceof ImageOperation);
 	}
 
@@ -817,19 +817,19 @@ public class QHtmlTest extends TestCase {
 		assertEquals(4, ops.size());
 
 		// the white background:
-		assertTrue(ops.get(0) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(0).getClass());
 		assertEquals(Color.white, ops.get(0).getContext().getPaint());
 
 		// the outer div border:
-		assertTrue(ops.get(1) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(1).getClass());
 		assertEquals(Color.red, ops.get(1).getContext().getPaint());
 
 		// the inner div border:
-		assertTrue(ops.get(2) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(2).getClass());
 		assertEquals(Color.red, ops.get(2).getContext().getPaint());
 
 		// the inner div border:
-		assertTrue(ops.get(3) instanceof StringOperation);
+		assertEquals(StringOperation.class, ops.get(3).getClass());
 	}
 
 	public void testSelector_nestedList() {
@@ -866,26 +866,26 @@ public class QHtmlTest extends TestCase {
 		assertEquals(7, ops.size());
 
 		// the white background:
-		assertTrue(ops.get(0) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(0).getClass());
 		assertEquals(Color.white, ops.get(0).getContext().getPaint());
 
 		// the outer div border:
-		assertTrue(ops.get(1) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(1).getClass());
 		assertEquals(Color.gray, ops.get(1).getContext().getPaint());
 
-		assertTrue(ops.get(2) instanceof StringOperation);
+		assertEquals(StringOperation.class, ops.get(2).getClass());
 
 		// the first (simple) list
-		assertTrue(ops.get(3) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(3).getClass());
 		assertEquals(Color.blue, ops.get(3).getContext().getPaint());
 
-		assertTrue(ops.get(4) instanceof StringOperation);
+		assertEquals(StringOperation.class, ops.get(4).getClass());
 
 		// the list-within-the-list
-		assertTrue(ops.get(5) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(5).getClass());
 		assertEquals(Color.blue, ops.get(5).getContext().getPaint());
 
-		assertTrue(ops.get(6) instanceof StringOperation);
+		assertEquals(StringOperation.class, ops.get(6).getClass());
 	}
 
 	/**
@@ -912,30 +912,30 @@ public class QHtmlTest extends TestCase {
 		assertEquals(8, ops.size());
 
 		// the white background:
-		assertTrue(ops.get(0) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(0).getClass());
 		assertEquals(Color.white, ops.get(0).getContext().getPaint());
 
-		assertTrue(ops.get(1) instanceof StringOperation);
+		assertEquals(StringOperation.class, ops.get(1).getClass());
 		assertEquals("Outside", ((StringOperation) (ops.get(1))).getString());
 		float outerX = ((StringOperation) (ops.get(1))).getX();
 
 		// ops.get(2) is a bullet shape
 
-		assertTrue(ops.get(3) instanceof StringOperation);
+		assertEquals(StringOperation.class, ops.get(3).getClass());
 		StringOperation li1 = (StringOperation) (ops.get(3));
 		assertEquals("Item 1", li1.getString());
 		assertTrue(li1.getX() > outerX);
 
 		// ops.get(4) is a bullet shape
 
-		assertTrue(ops.get(5) instanceof StringOperation);
+		assertEquals(StringOperation.class, ops.get(5).getClass());
 		StringOperation li2 = (StringOperation) (ops.get(5));
 		assertEquals("Item 2", li2.getString());
 		assertTrue(li2.getX() > outerX);
 
 		// ops.get(6) is a bullet shape
 
-		assertTrue(ops.get(7) instanceof StringOperation);
+		assertEquals(StringOperation.class, ops.get(7).getClass());
 		StringOperation li3 = (StringOperation) (ops.get(7));
 		assertEquals("Item 3", li3.getString());
 		assertTrue(li3.getX() > outerX);
@@ -1025,7 +1025,7 @@ public class QHtmlTest extends TestCase {
 
 		List<Operation> ops = getOperations(true, html);
 		assertEquals(3, ops.size());
-		assertTrue(ops.get(1) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(1).getClass());
 		assertEquals(0xffff0000, ops.get(1).getContext().getColor().getRGB());
 	}
 
@@ -1053,7 +1053,7 @@ public class QHtmlTest extends TestCase {
 
 		List<Operation> ops = getOperations(true, html);
 		assertEquals(3, ops.size());
-		assertTrue(ops.get(1) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(1).getClass());
 		assertEquals(0xff00ff22, ops.get(1).getContext().getColor().getRGB());
 	}
 
@@ -1081,8 +1081,8 @@ public class QHtmlTest extends TestCase {
 
 		List<Operation> ops = getOperations(true, html);
 		assertEquals(4, ops.size());
-		assertTrue(ops.get(1) instanceof FillOperation);
-		assertTrue(ops.get(2) instanceof FillOperation);
+		assertEquals(FillOperation.class, ops.get(1).getClass());
+		assertEquals(FillOperation.class, ops.get(2).getClass());
 
 		// the exact order they're painted in might not match the css above,
 		// but just the fact that we have two colors indicates the css was
