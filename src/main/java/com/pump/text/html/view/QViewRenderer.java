@@ -29,6 +29,7 @@ import javax.swing.text.html.StyleSheet;
 import javax.swing.text.html.StyleSheet.BoxPainter;
 
 import com.pump.awt.Insets2D;
+import com.pump.geom.Clipper;
 import com.pump.geom.ShapeBounds;
 import com.pump.graphics.Graphics2DContext;
 import com.pump.graphics.vector.GlyphVectorOperation;
@@ -411,6 +412,15 @@ public class QViewRenderer extends QViewHelper {
 			Rectangle r = ShapeBounds.getBounds(shape).getBounds();
 			for (int a = bkgndImgs.size() - 1; a >= 0; a--) {
 				Graphics2D g3 = (Graphics2D) g2.create();
+
+				Shape existingSoftClip = (Shape) g3
+						.getRenderingHint(QViewRenderer.HINT_KEY_SOFT_CLIP);
+				Shape newSoftClip = existingSoftClip == null ? shape
+						: Clipper.intersect(existingSoftClip, shape, false,
+								false);
+				g3.setRenderingHint(QViewRenderer.HINT_KEY_SOFT_CLIP,
+						newSoftClip);
+
 				bkgndImgs.get(a).paintRectangle(g3, this, a, r.x, r.y, r.width,
 						r.height);
 				g3.dispose();
