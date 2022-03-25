@@ -15,6 +15,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -107,7 +108,8 @@ public class ScalingDemo2 {
 			sb.append(model.getClass().getSimpleName() + "\t");
 		}
 		System.out.println(sb.toString());
-		for (int size = 16; size <= 48; size++) {
+		// for (int size = 16; size <= 48; size++) {
+		for (int size = 24; size <= 24; size++) {
 			sb = new StringBuilder(size + "\t");
 			BufferedImage dst = new BufferedImage(size, size,
 					docIcon.getType());
@@ -157,6 +159,10 @@ public class ScalingDemo2 {
 		crease.lineTo(15 - 2, 5);
 
 		Graphics2D g = bi.createGraphics();
+
+		g.transform(AffineTransform.getRotateInstance(Math.PI / 2,
+				bi.getWidth() / 2 - .5, bi.getHeight() / 2 - .5));
+
 		g.setColor(Color.white);
 		g.fill(outline);
 		g.setColor(Color.black);
