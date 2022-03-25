@@ -1524,7 +1524,7 @@ public abstract class ScalingIterator implements PixelIterator {
 		 * be a little bit more work, and would result in a lower image
 		 * quality... so I'm not going to implement it for now.
 		 */
-		double sy = (dstH) / (srcH - 1.0);
+		double sy = (dstH - 1.0) / (srcH - 1.0);
 		double srcPosition = (dstY) / sy;
 		int srcY0 = (int) Math.floor(srcPosition);
 		int srcY1 = (int) Math.ceil(srcPosition);
