@@ -250,7 +250,10 @@ public class Graphics2DContext implements Serializable {
 	 * @see java.awt.Graphics2D#setComposite(Composite)
 	 */
 	public void setComposite(Composite comp) {
+
+		// SunGraphics2D#setComposite will throw an IAE for a null arg
 		Objects.requireNonNull(comp);
+
 		composite = comp;
 	}
 
@@ -294,7 +297,10 @@ public class Graphics2DContext implements Serializable {
 	 * @see java.awt.Graphics2D#setTransform(AffineTransform)
 	 */
 	public void setTransform(AffineTransform tx) {
+
+		// SunGraphics2D will indirectly throw a NPE exception if tx is null
 		Objects.requireNonNull(tx);
+
 		try {
 			tx.createInverse();
 		} catch (NoninvertibleTransformException e) {
@@ -375,7 +381,12 @@ public class Graphics2DContext implements Serializable {
 	 * @see java.awt.Graphics2D#setColor(Color)
 	 */
 	public void setColor(Color color) {
-		Objects.requireNonNull(color);
+		if (color == null) {
+			// SunGraphics2D quietly ignores null arguments, so I'll do the
+			// same.
+			return;
+		}
+
 		this.color = color;
 		setPaint(color);
 	}
@@ -384,8 +395,11 @@ public class Graphics2DContext implements Serializable {
 	 * @see java.awt.Graphics2D#setPaint(Paint)
 	 */
 	public void setPaint(Paint paint) {
-		Objects.requireNonNull(paint);
-		if (paint instanceof Color) {
+		if (paint == null) {
+			// SunGraphics2D quietly ignores null arguments, so I'll do the
+			// same.
+			return;
+		} else if (paint instanceof Color) {
 			color = (Color) paint;
 		}
 		this.paint = paint;
@@ -402,7 +416,9 @@ public class Graphics2DContext implements Serializable {
 	 * @see java.awt.Graphics2D#setXORMode(Color)
 	 */
 	public void setXORMode(Color xorColor) {
+		// SunGraphics2D will throw an exception if xorColor is null
 		Objects.requireNonNull(xorColor, "use setPaintMode()");
+
 		this.xorColor = xorColor;
 	}
 
@@ -419,7 +435,9 @@ public class Graphics2DContext implements Serializable {
 	 * @see java.awt.Graphics2D#setStroke(Stroke)
 	 */
 	public void setStroke(Stroke s) {
+		// SunGraphics2D will throw an IAE exception if s is null
 		Objects.requireNonNull(s);
+
 		stroke = s;
 	}
 
@@ -519,7 +537,12 @@ public class Graphics2DContext implements Serializable {
 	 * @see java.awt.Graphics2D#setFont(Font)
 	 */
 	public void setFont(Font font) {
-		Objects.requireNonNull(font);
+		if (font == null) {
+			// SunGraphics2D quietly ignores null arguments, so I'll do the
+			// same.
+			return;
+		}
+
 		this.font = font;
 	}
 
