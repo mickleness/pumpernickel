@@ -716,42 +716,51 @@ public abstract class ScalingIterator implements PixelIterator {
 						"fraction (" + fraction + ") must be within [0,1]");
 			IntRow next = (IntRow) nextRow;
 
+			double complement = 1 - fraction;
 			switch (type) {
 			case BufferedImage.TYPE_INT_RGB:
 				for (int x = 0; x < width; x++) {
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					destArray[x] = (r << 16) + (g << 8) + (b);
 				}
 				break;
 			case BufferedImage.TYPE_INT_BGR:
 				for (int x = 0; x < width; x++) {
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					destArray[x] = (b << 16) + (g << 8) + (r);
 				}
 				break;
 			case BufferedImage.TYPE_INT_ARGB:
 			case BufferedImage.TYPE_INT_ARGB_PRE:
 				for (int x = 0; x < width; x++) {
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					int a = isOpaque ? 255
-							: (int) ((alphas[x] / sums[x]) * (1 - fraction)
-									+ (next.alphas[x] / next.sums[x])
-											* fraction);
+							: (int) (alphas[x] * multiplier1
+									+ next.alphas[x] * multiplier2);
 					destArray[x] = (a << 24) + (r << 16) + (g << 8) + (b);
 				}
 				break;
@@ -770,16 +779,21 @@ public abstract class ScalingIterator implements PixelIterator {
 						"fraction (" + fraction + ") must be within [0,1]");
 			IntRow next = (IntRow) nextRow;
 
+			double complement = 1 - fraction;
+
 			switch (type) {
 			case BufferedImage.TYPE_3BYTE_BGR:
 				for (int x = 0; x < dstW; x++) {
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
 					int k2 = x * 3;
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					destArray[k2 + 2] = (byte) (r);
 					destArray[k2 + 1] = (byte) (g);
 					destArray[k2] = (byte) (b);
@@ -787,13 +801,16 @@ public abstract class ScalingIterator implements PixelIterator {
 				break;
 			case PixelIterator.TYPE_3BYTE_RGB:
 				for (int x = 0; x < dstW; x++) {
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
 					int k2 = x * 3;
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					destArray[k2] = (byte) (r);
 					destArray[k2 + 1] = (byte) (g);
 					destArray[k2 + 2] = (byte) (b);
@@ -802,17 +819,19 @@ public abstract class ScalingIterator implements PixelIterator {
 			case BufferedImage.TYPE_4BYTE_ABGR:
 			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
 				for (int x = 0; x < dstW; x++) {
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
 					int k2 = x * 4;
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					int a = isOpaque ? 255
-							: (int) ((alphas[x] / sums[x]) * (1 - fraction)
-									+ (next.alphas[x] / next.sums[x])
-											* fraction);
+							: (int) (alphas[x] * multiplier1
+									+ next.alphas[x] * multiplier2);
 					destArray[k2 + 3] = (byte) (r);
 					destArray[k2 + 2] = (byte) (g);
 					destArray[k2 + 1] = (byte) (b);
@@ -822,17 +841,19 @@ public abstract class ScalingIterator implements PixelIterator {
 			case PixelIterator.TYPE_4BYTE_ARGB:
 			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0; x < dstW; x++) {
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
 					int k2 = x * 4;
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					int a = isOpaque ? 255
-							: (int) ((alphas[x] / sums[x]) * (1 - fraction)
-									+ (next.alphas[x] / next.sums[x])
-											* fraction);
+							: (int) (alphas[x] * multiplier1
+									+ next.alphas[x] * multiplier2);
 					destArray[k2 + 1] = (byte) (r);
 					destArray[k2 + 2] = (byte) (g);
 					destArray[k2 + 3] = (byte) (b);
@@ -841,12 +862,15 @@ public abstract class ScalingIterator implements PixelIterator {
 				break;
 			case BufferedImage.TYPE_BYTE_GRAY:
 				for (int x = 0; x < dstW; x++) {
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					destArray[x] = (byte) ((r + g + b) / 3);
 				}
 				break;
@@ -1177,42 +1201,52 @@ public abstract class ScalingIterator implements PixelIterator {
 						"fraction (" + fraction + ") must be within [0,1]");
 			ShortRow next = (ShortRow) nextRow;
 
+			double complement = 1 - fraction;
+
 			switch (type) {
 			case BufferedImage.TYPE_INT_RGB:
 				for (int x = 0; x < width; x++) {
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					destArray[x] = (r << 16) + (g << 8) + (b);
 				}
 				break;
 			case BufferedImage.TYPE_INT_BGR:
 				for (int x = 0; x < width; x++) {
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					destArray[x] = (b << 16) + (g << 8) + (r);
 				}
 				break;
 			case BufferedImage.TYPE_INT_ARGB:
 			case BufferedImage.TYPE_INT_ARGB_PRE:
 				for (int x = 0; x < width; x++) {
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					int a = isOpaque ? 255
-							: (int) ((alphas[x] / sums[x]) * (1 - fraction)
-									+ (next.alphas[x] / next.sums[x])
-											* fraction);
+							: (int) (alphas[x] * multiplier1
+									+ next.alphas[x] * multiplier2);
 					destArray[x] = (a << 24) + (r << 16) + (g << 8) + (b);
 				}
 				break;
@@ -1231,16 +1265,20 @@ public abstract class ScalingIterator implements PixelIterator {
 						"fraction (" + fraction + ") must be within [0,1]");
 			ShortRow next = (ShortRow) nextRow;
 
+			double complement = 1 - fraction;
 			switch (type) {
 			case BufferedImage.TYPE_3BYTE_BGR:
 				for (int x = 0; x < dstW; x++) {
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
 					int k2 = x * 3;
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					destArray[k2 + 2] = (byte) (r);
 					destArray[k2 + 1] = (byte) (g);
 					destArray[k2] = (byte) (b);
@@ -1248,13 +1286,16 @@ public abstract class ScalingIterator implements PixelIterator {
 				break;
 			case PixelIterator.TYPE_3BYTE_RGB:
 				for (int x = 0; x < dstW; x++) {
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
 					int k2 = x * 3;
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					destArray[k2] = (byte) (r);
 					destArray[k2 + 1] = (byte) (g);
 					destArray[k2 + 2] = (byte) (b);
@@ -1263,17 +1304,19 @@ public abstract class ScalingIterator implements PixelIterator {
 			case BufferedImage.TYPE_4BYTE_ABGR:
 			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
 				for (int x = 0; x < dstW; x++) {
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
 					int k2 = x * 4;
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					int a = isOpaque ? 255
-							: (int) ((alphas[x] / sums[x]) * (1 - fraction)
-									+ (next.alphas[x] / next.sums[x])
-											* fraction);
+							: (int) (alphas[x] * multiplier1
+									+ next.alphas[x] * multiplier2);
 					destArray[k2 + 3] = (byte) (r);
 					destArray[k2 + 2] = (byte) (g);
 					destArray[k2 + 1] = (byte) (b);
@@ -1283,17 +1326,19 @@ public abstract class ScalingIterator implements PixelIterator {
 			case PixelIterator.TYPE_4BYTE_ARGB:
 			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0; x < dstW; x++) {
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
 					int k2 = x * 4;
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					int a = isOpaque ? 255
-							: (int) ((alphas[x] / sums[x]) * (1 - fraction)
-									+ (next.alphas[x] / next.sums[x])
-											* fraction);
+							: (int) (alphas[x] * multiplier1
+									+ next.alphas[x] * multiplier2);
 					destArray[k2 + 1] = (byte) (r);
 					destArray[k2 + 2] = (byte) (g);
 					destArray[k2 + 3] = (byte) (b);
@@ -1302,12 +1347,15 @@ public abstract class ScalingIterator implements PixelIterator {
 				break;
 			case BufferedImage.TYPE_BYTE_GRAY:
 				for (int x = 0; x < dstW; x++) {
-					int r = (int) ((reds[x] / sums[x]) * (1 - fraction)
-							+ (next.reds[x] / next.sums[x]) * fraction);
-					int g = (int) ((greens[x] / sums[x]) * (1 - fraction)
-							+ (next.greens[x] / next.sums[x]) * fraction);
-					int b = (int) ((blues[x] / sums[x]) * (1 - fraction)
-							+ (next.blues[x] / next.sums[x]) * fraction);
+					double multiplier1 = complement / sums[x];
+					double multiplier2 = fraction / sums[x];
+
+					int r = (int) (reds[x] * multiplier1
+							+ next.reds[x] * multiplier2);
+					int g = (int) (greens[x] * multiplier1
+							+ next.greens[x] * multiplier2);
+					int b = (int) (blues[x] * multiplier1
+							+ next.blues[x] * multiplier2);
 					destArray[x] = (byte) ((r + g + b) / 3);
 				}
 				break;
@@ -1476,7 +1524,7 @@ public abstract class ScalingIterator implements PixelIterator {
 		 * be a little bit more work, and would result in a lower image
 		 * quality... so I'm not going to implement it for now.
 		 */
-		double sy = (dstH) / (srcH - 1.0);
+		double sy = (dstH - 1.0) / (srcH - 1.0);
 		double srcPosition = (dstY) / sy;
 		int srcY0 = (int) Math.floor(srcPosition);
 		int srcY1 = (int) Math.ceil(srcPosition);
