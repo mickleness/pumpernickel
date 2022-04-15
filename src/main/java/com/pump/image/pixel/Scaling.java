@@ -91,7 +91,7 @@ public class Scaling {
 	 * 
 	 * @param source
 	 *            the source image file.
-	 * @param preferredType
+	 * @param imageType
 	 *            <code>TYPE_INT_RGB</code>, <code>TYPE_INT_ARGB</code>,
 	 *            <code>TYPE_3BYTE_BGR</code>, <code>TYPE_4BYTE_ABGR</code>.
 	 * @param destSize
@@ -100,10 +100,10 @@ public class Scaling {
 	 *         <code>BufferedImage.TYPE_INT_ARGB</code> or
 	 *         <code>BufferedImage.TYPE_INT_RGB</code>.
 	 */
-	public static BufferedImage scale(File source, int preferredType,
+	public static BufferedImage scale(File source, int imageType,
 			Dimension destSize) {
 		return scale(source.getName(), new FileInputStreamSource(source),
-				preferredType, destSize);
+				imageType, destSize);
 	}
 
 	/**
@@ -120,14 +120,14 @@ public class Scaling {
 	 *         <code>BufferedImage.TYPE_INT_ARGB</code> or
 	 *         <code>BufferedImage.TYPE_INT_RGB</code>.
 	 */
-	public static BufferedImage scale(URL source, int preferredType,
+	public static BufferedImage scale(URL source, int imageType,
 			Dimension destSize) {
 		return scale(source.toString(), new URLInputStreamSource(source),
-				preferredType, destSize);
+				imageType, destSize);
 	}
 
 	private static BufferedImage scale(String name, InputStreamSource src,
-			int preferredType, Dimension destSize) {
+			int imageType, Dimension destSize) {
 		String pathLower = name.toLowerCase();
 		if (pathLower.endsWith(".bmp")) {
 			try (InputStream in = src.createInputStream()) {
@@ -136,18 +136,18 @@ public class Scaling {
 						: ScalingIterator.get(iter, destSize.width,
 								destSize.height);
 				PixelIterator finalIter = scalingIter;
-				if (preferredType == BufferedImage.TYPE_INT_ARGB
-						|| preferredType == BufferedImage.TYPE_INT_ARGB_PRE) {
+				if (imageType == BufferedImage.TYPE_INT_ARGB
+						|| imageType == BufferedImage.TYPE_INT_ARGB_PRE) {
 					finalIter = new IntARGBConverter(scalingIter);
-				} else if (preferredType == BufferedImage.TYPE_INT_RGB) {
+				} else if (imageType == BufferedImage.TYPE_INT_RGB) {
 					finalIter = new IntRGBConverter(scalingIter);
-				} else if (preferredType == BufferedImage.TYPE_3BYTE_BGR) {
+				} else if (imageType == BufferedImage.TYPE_3BYTE_BGR) {
 					finalIter = new ByteBGRConverter(scalingIter);
-				} else if (preferredType == BufferedImage.TYPE_4BYTE_ABGR) {
+				} else if (imageType == BufferedImage.TYPE_4BYTE_ABGR) {
 					finalIter = new ByteBGRAConverter(scalingIter);
 				} else {
 					throw new IllegalArgumentException(
-							"unrecognized type: " + preferredType);
+							"unrecognized image type: " + imageType);
 				}
 				BufferedImage image = BufferedImageIterator.create(finalIter,
 						null);
@@ -169,8 +169,9 @@ public class Scaling {
 			throw new IllegalStateException(src.getClass().getName());
 		}
 		try {
-			// TODO: take into account preferredType
-			return scale(image, null, destSize);
+			BufferedImage dest = new BufferedImage(destSize.width,
+					destSize.height, imageType);
+			return scale(image, dest, null);
 		} finally {
 			if (image != null)
 				image.flush();
