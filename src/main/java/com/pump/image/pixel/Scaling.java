@@ -22,6 +22,9 @@ import java.net.URL;
 import com.pump.awt.Dimension2D;
 import com.pump.image.ImageSize;
 import com.pump.image.bmp.BmpDecoderIterator;
+import com.pump.io.FileInputStreamSource;
+import com.pump.io.InputStreamSource;
+import com.pump.io.URLInputStreamSource;
 
 /**
  * This contains a few static methods for scaling BufferedImages using the
@@ -99,44 +102,8 @@ public class Scaling {
 	 */
 	public static BufferedImage scale(File source, int preferredType,
 			Dimension destSize) {
-		// NOTE: this method mirrors scale(URL, ...), so when you modify one:
-		// modify the other
-		String pathLower = source.getAbsolutePath().toLowerCase();
-		if (pathLower.endsWith(".bmp")) {
-			try {
-				PixelIterator iter = BmpDecoderIterator.get(source);
-				PixelIterator scalingIter = destSize == null ? iter
-						: ScalingIterator.get(iter, destSize.width,
-								destSize.height);
-				PixelIterator finalIter = scalingIter;
-				if (preferredType == BufferedImage.TYPE_INT_ARGB
-						|| preferredType == BufferedImage.TYPE_INT_ARGB_PRE) {
-					finalIter = new IntARGBConverter(scalingIter);
-				} else if (preferredType == BufferedImage.TYPE_INT_RGB) {
-					finalIter = new IntRGBConverter(scalingIter);
-				} else if (preferredType == BufferedImage.TYPE_3BYTE_BGR) {
-					finalIter = new ByteBGRConverter(scalingIter);
-				} else if (preferredType == BufferedImage.TYPE_4BYTE_ABGR) {
-					finalIter = new ByteBGRAConverter(scalingIter);
-				} else {
-					throw new IllegalArgumentException(
-							"unrecognized type: " + preferredType);
-				}
-				BufferedImage image = BufferedImageIterator.create(finalIter,
-						null);
-				return image;
-			} catch (IOException e) {
-				return null;
-			}
-		}
-		Image image = Toolkit.getDefaultToolkit()
-				.createImage(source.getAbsolutePath());
-		try {
-			return scale(image, null, destSize);
-		} finally {
-			if (image != null)
-				image.flush();
-		}
+		return scale(source.getName(), new FileInputStreamSource(source),
+				preferredType, destSize);
 	}
 
 	/**
@@ -155,13 +122,15 @@ public class Scaling {
 	 */
 	public static BufferedImage scale(URL source, int preferredType,
 			Dimension destSize) {
-		// NOTE: this method mirrors scale(File, ...), so when you modify one:
-		// modify the other
-		String pathLower = source.toString().toLowerCase();
+		return scale(source.toString(), new URLInputStreamSource(source),
+				preferredType, destSize);
+	}
+
+	private static BufferedImage scale(String name, InputStreamSource src,
+			int preferredType, Dimension destSize) {
+		String pathLower = name.toLowerCase();
 		if (pathLower.endsWith(".bmp")) {
-			InputStream in = null;
-			try {
-				in = source.openStream();
+			try (InputStream in = src.createInputStream()) {
 				PixelIterator iter = BmpDecoderIterator.get(in);
 				PixelIterator scalingIter = destSize == null ? iter
 						: ScalingIterator.get(iter, destSize.width,
@@ -185,17 +154,22 @@ public class Scaling {
 				return image;
 			} catch (IOException e) {
 				return null;
-			} finally {
-				try {
-					if (in != null)
-						in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 			}
 		}
-		Image image = Toolkit.getDefaultToolkit().createImage(source);
+
+		Image image;
+		if (src instanceof FileInputStreamSource) {
+			File file = ((FileInputStreamSource) src).getFile();
+			image = Toolkit.getDefaultToolkit()
+					.createImage(file.getAbsolutePath());
+		} else if (src instanceof URLInputStreamSource) {
+			URL url = ((URLInputStreamSource) src).getURL();
+			image = Toolkit.getDefaultToolkit().createImage(url);
+		} else {
+			throw new IllegalStateException(src.getClass().getName());
+		}
 		try {
+			// TODO: take into account preferredType
 			return scale(image, null, destSize);
 		} finally {
 			if (image != null)
