@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.IntARGBConverter;
+import com.pump.image.pixel.converter.IntARGBConverter;
 
 /**
  * This class stores information about the frequency of colors. This assumes all

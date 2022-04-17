@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 
 import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.IndexedBytePixelIterator;
-import com.pump.image.pixel.IntARGBConverter;
+import com.pump.image.pixel.converter.IntARGBConverter;
 
 /**
  * This implements image quantization using a nearest-neighbor approach.

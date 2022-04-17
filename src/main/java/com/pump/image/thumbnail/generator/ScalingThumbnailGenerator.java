@@ -44,16 +44,10 @@ public class ScalingThumbnailGenerator implements ThumbnailGenerator {
 		Dimension scaledImageSize = Dimension2D.scaleProportionally(imageSize,
 				maxSize, true);
 		if (scaledImageSize == null) {
-			return ImageLoader.createImage(file);
+			return ImageLoader.createImage(file, ImageLoader.TYPE_DEFAULT);
 		}
 
-		// TODO: currently we're converting to ARGB. It'd be nice to include
-		// an option to leave image type blank/default. For ex:
-		// if an image would normally be BGR, then let the scaled image also
-		// be BGR.
-
-		return Scaling.scale(file, BufferedImage.TYPE_INT_ARGB,
-				scaledImageSize);
+		return Scaling.scale(file, Scaling.TYPE_DEFAULT, scaledImageSize);
 	}
 
 }

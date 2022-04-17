@@ -22,6 +22,10 @@ import java.net.URL;
 import com.pump.awt.Dimension2D;
 import com.pump.image.ImageSize;
 import com.pump.image.bmp.BmpDecoderIterator;
+import com.pump.image.pixel.converter.ByteBGRAConverter;
+import com.pump.image.pixel.converter.ByteBGRConverter;
+import com.pump.image.pixel.converter.IntARGBConverter;
+import com.pump.image.pixel.converter.IntRGBConverter;
 import com.pump.io.FileInputStreamSource;
 import com.pump.io.InputStreamSource;
 import com.pump.io.URLInputStreamSource;
@@ -36,6 +40,12 @@ import com.pump.io.URLInputStreamSource;
  *      Scaling Down</a>
  */
 public class Scaling {
+
+	/**
+	 * This is an image type alternative that indicates we should return
+	 * whatever is simplest/most expedient.
+	 */
+	public static final int TYPE_DEFAULT = GenericImageSinglePassIterator.TYPE_DEFAULT;
 
 	/**
 	 * Scales the source image into the destination.
@@ -147,7 +157,7 @@ public class Scaling {
 					finalIter = new ByteBGRAConverter(scalingIter);
 				} else {
 					throw new IllegalArgumentException(
-							"unrecognized image type: " + imageType);
+							"unrecognized imtype: " + imageType);
 				}
 				BufferedImage image = BufferedImageIterator.create(finalIter,
 						null);
@@ -169,9 +179,13 @@ public class Scaling {
 			throw new IllegalStateException(src.getClass().getName());
 		}
 		try {
-			BufferedImage dest = new BufferedImage(destSize.width,
-					destSize.height, imageType);
-			return scale(image, dest, null);
+			if (imageType == TYPE_DEFAULT) {
+				return scale(image, null, destSize);
+			} else {
+				BufferedImage dest = new BufferedImage(destSize.width,
+						destSize.height, imageType);
+				return scale(image, dest, null);
+			}
 		} finally {
 			if (image != null)
 				image.flush();
@@ -271,37 +285,40 @@ public class Scaling {
 			Dimension destSize) {
 		if (source instanceof BufferedImage) {
 			return scale((BufferedImage) source, dest, destSize);
+		} else if (source == null) {
+			throw new NullPointerException("no source image");
 		}
 
-		if (destSize == null && dest != null) {
-			destSize = new Dimension(dest.getWidth(), dest.getHeight());
+		if (destSize == null) {
+			if (dest != null) {
+				destSize = new Dimension(dest.getWidth(), dest.getHeight());
+			} else {
+				throw new NullPointerException();
+			}
 		}
+
 		Dimension sourceSize = ImageSize.get(source);
 
-		if (source == null) {
-			throw new NullPointerException("no source image");
-		} else if (destSize != null && destSize.width > sourceSize.width) {
+		if (destSize.width > sourceSize.width) {
 			throw new IllegalArgumentException("dest width (" + destSize.width
 					+ ") must be less than source width (" + sourceSize.width
 					+ ")");
-		} else if (destSize != null && destSize.height > sourceSize.height) {
+		} else if (destSize.height > sourceSize.height) {
 			throw new IllegalArgumentException("dest height (" + destSize.height
 					+ ") must be less than source height (" + sourceSize.height
 					+ ")");
-		} else if (destSize != null && dest != null
-				&& destSize.width > dest.getWidth()) {
+		} else if (dest != null && destSize.width > dest.getWidth()) {
 			throw new IllegalArgumentException("dest width (" + destSize.width
 					+ ") must not exceed the destination image width ("
 					+ dest.getWidth() + ")");
-		} else if (destSize != null && dest != null
-				&& destSize.height > dest.getHeight()) {
+		} else if (dest != null && destSize.height > dest.getHeight()) {
 			throw new IllegalArgumentException("dest height (" + destSize.height
 					+ ") must not exceed the destination image height ("
 					+ dest.getHeight() + ")");
 		}
 
 		int destType = dest != null ? dest.getType()
-				: BufferedImage.TYPE_INT_ARGB;
+				: GenericImageSinglePassIterator.TYPE_DEFAULT;
 		PixelIterator iter = GenericImageSinglePassIterator.get(source,
 				destType);
 		PixelIterator scalingIter = destSize == null ? iter

@@ -21,5 +21,5 @@ public interface IndexedBytePixelIterator extends BytePixelIterator {
 	/**
 	 * Returns the <code>IndexColorModel</code> this iterator uses.
 	 */
-	public abstract IndexColorModel getIndexColorModel();
+	IndexColorModel getIndexColorModel();
 }

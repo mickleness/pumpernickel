@@ -178,7 +178,8 @@ public class ImageOperation extends Operation {
 	 */
 	public FillOperation toFillOperation() {
 		Graphics2DContext context = getContext();
-		BufferedImage bi = ImageLoader.createImage(getImage());
+		BufferedImage bi = ImageLoader.createImage(getImage(),
+				ImageLoader.TYPE_DEFAULT);
 		Rectangle srcRect = getSourceRect();
 		if (!srcRect
 				.equals(new Rectangle(0, 0, bi.getWidth(), bi.getHeight()))) {

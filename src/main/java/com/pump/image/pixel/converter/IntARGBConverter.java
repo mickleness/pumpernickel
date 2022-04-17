@@ -8,23 +8,29 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.image.pixel;
+package com.pump.image.pixel.converter;
 
 import java.awt.image.BufferedImage;
 
+import com.pump.image.pixel.BufferedImageIterator;
+import com.pump.image.pixel.IntPixelIterator;
+import com.pump.image.pixel.PixelIterator;
+
 /**
- * A <code>PixelConverter</code> that converts all data to RGB-formatted
+ * A <code>PixelConverter</code> that converts all data to ARGB-formatted
  * integers.
  */
-public class IntRGBConverter extends PixelConverter implements IntPixelIterator {
+public class IntARGBConverter extends PixelConverter<int[]>
+		implements IntPixelIterator {
 
-	byte[] rTable, gTable, bTable;
+	byte[] rTable, gTable, bTable, aTable;
 	byte[] byteScratch;
 
-	public IntRGBConverter(PixelIterator i) {
+	public IntARGBConverter(PixelIterator<?> i) {
 		super(i);
 	}
 
+	@Override
 	public void skip() {
 		if (byteIterator != null) {
 			byteIterator.skip();
@@ -33,6 +39,7 @@ public class IntRGBConverter extends PixelConverter implements IntPixelIterator 
 		}
 	}
 
+	@Override
 	public void next(int[] dest) {
 		if (byteIterator != null) {
 			if (byteScratch == null) {
@@ -43,59 +50,85 @@ public class IntRGBConverter extends PixelConverter implements IntPixelIterator 
 			switch (originalType) {
 			case BufferedImage.TYPE_3BYTE_BGR:
 				for (int a = 0; a < width; a++) {
-					dest[a] = ((byteScratch[3 * a + 2] & 0xff) << 16)
+					dest[a] = 0xff000000
+							+ ((byteScratch[3 * a + 2] & 0xff) << 16)
 							+ ((byteScratch[3 * a + 1] & 0xff) << 8)
 							+ ((byteScratch[3 * a + 0] & 0xff));
 				}
 				break;
 			case TYPE_4BYTE_BGRA:
 				for (int a = 0; a < width; a++) {
-					dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 16)
+					dest[a] = ((byteScratch[4 * a + 3] & 0xff) << 24)
+							+ ((byteScratch[4 * a + 0] & 0xff) << 16)
 							+ ((byteScratch[4 * a + 1] & 0xff) << 8)
 							+ ((byteScratch[4 * a + 2] & 0xff));
 				}
 				break;
 			case BufferedImage.TYPE_4BYTE_ABGR:
 				for (int a = 0; a < width; a++) {
-					dest[a] = ((byteScratch[4 * a + 3] & 0xff) << 16)
+					dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
+							+ ((byteScratch[4 * a + 3] & 0xff) << 16)
 							+ ((byteScratch[4 * a + 2] & 0xff) << 8)
 							+ ((byteScratch[4 * a + 1] & 0xff));
 				}
 				break;
 			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
 				for (int a = 0; a < width; a++) {
-					alpha = (dest[4 * a + 3] & 0xff);
-					dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
-							+ ((byteScratch[4 * a + 3] & 0xff) * 255 / alpha << 16)
-							+ ((byteScratch[4 * a + 2] & 0xff) * 255 / alpha << 8)
-							+ ((byteScratch[4 * a + 1] & 0xff) * 255 / alpha);
+					alpha = (byteScratch[4 * a + 0] & 0xff);
+					if (alpha != 0) {
+						dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
+								+ ((byteScratch[4 * a + 3] & 0xff) * 255
+										/ alpha << 16)
+								+ ((byteScratch[4 * a + 2] & 0xff) * 255
+										/ alpha << 8)
+								+ ((byteScratch[4 * a + 1] & 0xff) * 255
+										/ alpha);
+					} else {
+						dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
+								+ ((byteScratch[4 * a + 3] & 0xff) << 16)
+								+ ((byteScratch[4 * a + 2] & 0xff) << 8)
+								+ ((byteScratch[4 * a + 1] & 0xff));
+					}
 				}
 				break;
 			case PixelIterator.TYPE_3BYTE_RGB:
 				for (int a = 0; a < width; a++) {
-					dest[a] = ((byteScratch[3 * a + 0] & 0xff) << 16)
+					dest[a] = 0xff000000 + ((byteScratch[3 * a + 2] & 0xff))
 							+ ((byteScratch[3 * a + 1] & 0xff) << 8)
-							+ ((byteScratch[3 * a + 2] & 0xff));
+							+ ((byteScratch[3 * a + 0] & 0xff) << 16);
 				}
 				break;
 			case PixelIterator.TYPE_4BYTE_ARGB:
 				for (int a = 0; a < width; a++) {
-					dest[a] = ((byteScratch[4 * a + 1] & 0xff) << 16)
+					dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
+							+ ((byteScratch[4 * a + 1] & 0xff) << 16)
 							+ ((byteScratch[4 * a + 2] & 0xff) << 8)
 							+ ((byteScratch[4 * a + 3] & 0xff));
 				}
+				break;
 			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
 				for (int a = 0; a < width; a++) {
-					alpha = (dest[4 * a + 3] & 0xff);
-					dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
-							+ ((byteScratch[4 * a + 1] & 0xff) * 255 / alpha << 16)
-							+ ((byteScratch[4 * a + 2] & 0xff) * 255 / alpha << 8)
-							+ ((byteScratch[4 * a + 3] & 0xff) * 255 / alpha);
+					alpha = (byteScratch[4 * a + 0] & 0xff);
+					if (alpha != 0) {
+						dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
+								+ ((byteScratch[4 * a + 1] & 0xff) * 255
+										/ alpha << 16)
+								+ ((byteScratch[4 * a + 2] & 0xff) * 255
+										/ alpha << 8)
+								+ ((byteScratch[4 * a + 3] & 0xff) * 255
+										/ alpha);
+					} else {
+						dest[a] = ((byteScratch[4 * a + 0] & 0xff) << 24)
+								+ ((byteScratch[4 * a + 1] & 0xff) << 16)
+								+ ((byteScratch[4 * a + 2] & 0xff) << 8)
+								+ ((byteScratch[4 * a + 3] & 0xff));
+					}
 				}
 				break;
 			case BufferedImage.TYPE_BYTE_GRAY:
 				for (int a = 0; a < width; a++) {
-					dest[a] = ((byteScratch[a] & 0xff) << 16)
+					dest[a] = ((0xff000000) << 24)
+							+ ((byteScratch[a] & 0xff) << 16)
 							+ ((byteScratch[a] & 0xff) << 8)
 							+ ((byteScratch[a] & 0xff) << 0);
 				}
@@ -105,55 +138,68 @@ public class IntRGBConverter extends PixelConverter implements IntPixelIterator 
 					rTable = new byte[indexModel.getMapSize()];
 					gTable = new byte[indexModel.getMapSize()];
 					bTable = new byte[indexModel.getMapSize()];
+					aTable = new byte[indexModel.getMapSize()];
 					indexModel.getReds(rTable);
 					indexModel.getGreens(gTable);
 					indexModel.getBlues(bTable);
+					indexModel.getAlphas(aTable);
 				}
 				for (int a = 0; a < width; a++) {
-					dest[a] = ((rTable[dest[a]] & 0xff) << 16)
-							+ ((gTable[dest[a]] & 0xff) << 8)
-							+ ((bTable[dest[a]] & 0xff));
+					try {
+						alpha = (aTable[byteScratch[a] & 0xff] & 0xff);
+						int red = (rTable[byteScratch[a] & 0xff] & 0xff);
+						int green = (gTable[byteScratch[a] & 0xff] & 0xff);
+						int blue = (bTable[byteScratch[a] & 0xff] & 0xff);
+						dest[a] = (alpha << 24) + (red << 16) + (green << 8)
+								+ (blue);
+					} catch (RuntimeException e) {
+						throw e;
+					}
 				}
 				break;
 			default:
 				throw new RuntimeException("Unrecognized type ("
-						+ BufferedImageIterator.getTypeName(originalType) + ")");
+						+ BufferedImageIterator.getTypeName(originalType)
+						+ ")");
 			}
 		} else {
 			intIterator.next(dest);
 			int alpha;
 			switch (originalType) {
-			case BufferedImage.TYPE_INT_RGB:
+			case BufferedImage.TYPE_INT_ARGB:
 				return;
 			case BufferedImage.TYPE_INT_ARGB_PRE:
 				for (int a = 0; a < width; a++) {
 					alpha = ((dest[a] >> 24) & 0xff);
 					if (alpha > 0 && alpha < 255) {
-						dest[a] = (((dest[a] >> 16) & 0xff) * 255 / alpha << 16)
+						dest[a] = (dest[a] & 0xff000000)
+								+ (((dest[a] >> 16) & 0xff) * 255 / alpha << 16)
 								+ (((dest[a] >> 8) & 0xff) * 255 / alpha << 8)
 								+ (((dest[a]) & 0xff) * 255 / alpha);
 					}
 				}
 				break;
-			case BufferedImage.TYPE_INT_ARGB:
+			case BufferedImage.TYPE_INT_RGB:
 				for (int a = 0; a < width; a++) {
-					dest[a] = (dest[a] & 0xffffff);
+					dest[a] = (0xff000000) + (dest[a] & 0xffffff);
 				}
 				break;
 			case BufferedImage.TYPE_INT_BGR:
 				for (int a = 0; a < width; a++) {
-					dest[a] = (((dest[a] >> 16) & 0xff)) + // blue
+					dest[a] = (0xff000000) + (((dest[a] >> 16) & 0xff)) + // blue
 							(dest[a] & 0x00ff00) + // green stays put
 							(((dest[a] & 0xff) << 16)); // red
 				}
 				break;
 			default:
 				throw new RuntimeException("Unrecognized type ("
-						+ BufferedImageIterator.getTypeName(originalType) + ")");
+						+ BufferedImageIterator.getTypeName(originalType)
+						+ ")");
 			}
 		}
 	}
 
+	@Override
 	public int getMinimumArrayLength() {
 		if (intIterator != null) {
 			return Math.max(intIterator.getMinimumArrayLength(), getWidth());
@@ -161,11 +207,8 @@ public class IntRGBConverter extends PixelConverter implements IntPixelIterator 
 		return getWidth();
 	}
 
+	@Override
 	public int getType() {
-		return BufferedImage.TYPE_INT_RGB;
-	}
-
-	public int getPixelSize() {
-		return 1;
+		return BufferedImage.TYPE_INT_ARGB;
 	}
 }

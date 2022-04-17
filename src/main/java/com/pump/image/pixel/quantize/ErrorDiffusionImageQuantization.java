@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.IndexedBytePixelIterator;
-import com.pump.image.pixel.IntARGBConverter;
+import com.pump.image.pixel.converter.IntARGBConverter;
 import com.pump.image.pixel.quantize.ColorLUT.Match;
 
 /**

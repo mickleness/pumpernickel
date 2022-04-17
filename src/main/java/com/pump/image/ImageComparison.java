@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 
 import com.jhlabs.image.GaussianFilter;
 import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.IntARGBConverter;
+import com.pump.image.pixel.converter.IntARGBConverter;
 
 /** This contains static methods related to comparing images. */
 public class ImageComparison {

@@ -8,16 +8,19 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.image.pixel;
+package com.pump.image.pixel.converter;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.IndexColorModel;
+
+import com.pump.image.pixel.BufferedImageIterator;
+import com.pump.image.pixel.BytePixelIterator;
+import com.pump.image.pixel.PixelIterator;
 
 /**
  * A <code>PixelConverter</code> that converts all data to BGR-formatted bytes.
  */
-public class ByteBGRConverter extends PixelConverter implements
-		BytePixelIterator {
+public class ByteBGRConverter extends PixelConverter<byte[]>
+		implements BytePixelIterator {
 
 	byte[] rTable, gTable, bTable;
 	int[] intScratch;
@@ -26,10 +29,11 @@ public class ByteBGRConverter extends PixelConverter implements
 	 * 
 	 * @param i
 	 */
-	public ByteBGRConverter(PixelIterator i) {
+	public ByteBGRConverter(PixelIterator<?> i) {
 		super(i);
 	}
 
+	@Override
 	public void skip() {
 		if (byteIterator != null) {
 			byteIterator.skip();
@@ -38,6 +42,7 @@ public class ByteBGRConverter extends PixelConverter implements
 		}
 	}
 
+	@Override
 	public void next(byte[] dest) {
 		if (byteIterator != null) {
 			byteIterator.next(dest);
@@ -95,7 +100,8 @@ public class ByteBGRConverter extends PixelConverter implements
 				break;
 			default:
 				throw new RuntimeException("Unrecognized type ("
-						+ BufferedImageIterator.getTypeName(originalType) + ")");
+						+ BufferedImageIterator.getTypeName(originalType)
+						+ ")");
 			}
 		} else {
 			if (intScratch == null) {
@@ -123,15 +129,13 @@ public class ByteBGRConverter extends PixelConverter implements
 				break;
 			default:
 				throw new RuntimeException("Unrecognized type ("
-						+ BufferedImageIterator.getTypeName(originalType) + ")");
+						+ BufferedImageIterator.getTypeName(originalType)
+						+ ")");
 			}
 		}
 	}
 
-	public IndexColorModel getIndexColorModel() {
-		return null;
-	}
-
+	@Override
 	public int getMinimumArrayLength() {
 		if (byteIterator != null) {
 			return Math.max(byteIterator.getMinimumArrayLength(),
@@ -140,11 +144,8 @@ public class ByteBGRConverter extends PixelConverter implements
 		return 3 * getWidth();
 	}
 
+	@Override
 	public int getType() {
 		return BufferedImage.TYPE_3BYTE_BGR;
-	}
-
-	public int getPixelSize() {
-		return 3;
 	}
 }

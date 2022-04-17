@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 
 import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.IntARGBConverter;
+import com.pump.image.pixel.converter.IntARGBConverter;
 
 /**
  * This represents ARGB-encoded pixel data for an image.

@@ -32,9 +32,9 @@ import java.util.Map;
 import com.pump.UserCancelledException;
 import com.pump.image.ImageSize;
 import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.ByteBGRAConverter;
-import com.pump.image.pixel.ByteBGRConverter;
 import com.pump.image.pixel.BytePixelIterator;
+import com.pump.image.pixel.converter.ByteBGRAConverter;
+import com.pump.image.pixel.converter.ByteBGRConverter;
 import com.pump.util.PushPullQueue;
 
 /**

@@ -24,7 +24,7 @@ import com.pump.image.gif.block.GifImageDataBlock;
 import com.pump.image.gif.block.GifImageDescriptor;
 import com.pump.image.gif.block.GifLocalColorTable;
 import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.IntARGBConverter;
+import com.pump.image.pixel.converter.IntARGBConverter;
 
 /**
  * This tests out 3 possible frame disposal methods and chooses the one that

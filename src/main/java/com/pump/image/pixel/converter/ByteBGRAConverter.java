@@ -8,16 +8,19 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.image.pixel;
+package com.pump.image.pixel.converter;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.IndexColorModel;
+
+import com.pump.image.pixel.BufferedImageIterator;
+import com.pump.image.pixel.BytePixelIterator;
+import com.pump.image.pixel.PixelIterator;
 
 /**
  * A <code>PixelConverter</code> that converts all data to BGRA-formatted bytes.
  */
-public class ByteBGRAConverter extends PixelConverter implements
-		BytePixelIterator {
+public class ByteBGRAConverter extends PixelConverter<byte[]>
+		implements BytePixelIterator {
 
 	byte[] rTable, gTable, bTable, aTable;
 	int[] intScratch;
@@ -25,10 +28,11 @@ public class ByteBGRAConverter extends PixelConverter implements
 	/**
 	 * @param i
 	 */
-	public ByteBGRAConverter(PixelIterator i) {
+	public ByteBGRAConverter(PixelIterator<?> i) {
 		super(i);
 	}
 
+	@Override
 	public void skip() {
 		if (byteIterator != null) {
 			byteIterator.skip();
@@ -37,6 +41,7 @@ public class ByteBGRAConverter extends PixelConverter implements
 		}
 	}
 
+	@Override
 	public void next(byte[] dest) {
 		if (byteIterator != null) {
 			byte swap;
@@ -110,7 +115,8 @@ public class ByteBGRAConverter extends PixelConverter implements
 				break;
 			default:
 				throw new RuntimeException("Unrecognized type ("
-						+ BufferedImageIterator.getTypeName(originalType) + ")");
+						+ BufferedImageIterator.getTypeName(originalType)
+						+ ")");
 			}
 		} else {
 			if (intScratch == null) {
@@ -130,9 +136,12 @@ public class ByteBGRAConverter extends PixelConverter implements
 				for (int a = 0; a < width; a++) {
 					int alpha = (intScratch[a] >> 24) & 0xff;
 					if (alpha > 0 && alpha < 255) {
-						dest[4 * a] = (byte) (((intScratch[a]) & 0xff) * 255 / alpha);
-						dest[4 * a + 1] = (byte) (((intScratch[a] >> 8) & 0xff) * 255 / alpha);
-						dest[4 * a + 2] = (byte) (((intScratch[a] >> 16) & 0xff) * 255 / alpha);
+						dest[4 * a] = (byte) (((intScratch[a]) & 0xff) * 255
+								/ alpha);
+						dest[4 * a + 1] = (byte) (((intScratch[a] >> 8) & 0xff)
+								* 255 / alpha);
+						dest[4 * a + 2] = (byte) (((intScratch[a] >> 16) & 0xff)
+								* 255 / alpha);
 					} else {
 						dest[4 * a] = (byte) ((intScratch[a]) & 0xff);
 						dest[4 * a + 1] = (byte) ((intScratch[a] >> 8) & 0xff);
@@ -159,15 +168,13 @@ public class ByteBGRAConverter extends PixelConverter implements
 				break;
 			default:
 				throw new RuntimeException("Unrecognized type ("
-						+ BufferedImageIterator.getTypeName(originalType) + ")");
+						+ BufferedImageIterator.getTypeName(originalType)
+						+ ")");
 			}
 		}
 	}
 
-	public IndexColorModel getIndexColorModel() {
-		return null;
-	}
-
+	@Override
 	public int getMinimumArrayLength() {
 		if (byteIterator != null) {
 			return Math.max(byteIterator.getMinimumArrayLength(),
@@ -176,11 +183,8 @@ public class ByteBGRAConverter extends PixelConverter implements
 		return 4 * getWidth();
 	}
 
+	@Override
 	public int getType() {
 		return BufferedImage.TYPE_4BYTE_ABGR;
-	}
-
-	public int getPixelSize() {
-		return 4;
 	}
 }

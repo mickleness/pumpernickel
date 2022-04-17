@@ -13,6 +13,11 @@ package com.pump.image.pixel;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
+import com.pump.image.pixel.converter.ByteBGRAConverter;
+import com.pump.image.pixel.converter.ByteBGRConverter;
+import com.pump.image.pixel.converter.IntARGBConverter;
+import com.pump.image.pixel.converter.IntRGBConverter;
+
 /**
  * This iterator scales another iterator as it is being read.
  * <p>
@@ -24,7 +29,7 @@ import java.util.Arrays;
  *      "https://javagraphics.blogspot.com/2010/06/images-scaling-down.html">Images:
  *      Scaling Down</a>
  */
-public abstract class ScalingIterator implements PixelIterator {
+public abstract class ScalingIterator<T> implements PixelIterator<T> {
 
 	/**
 	 * Returns a <code>IntPixelIterator</code> scaled to a specific ratio.
@@ -208,20 +213,20 @@ public abstract class ScalingIterator implements PixelIterator {
 	 *            the new height.
 	 * @return an iterator that uses the width and height specified.
 	 */
-	public static PixelIterator get(PixelIterator i, int newWidth,
+	public static <T> PixelIterator<T> get(PixelIterator<T> i, int newWidth,
 			int newHeight) {
 		if (i instanceof BytePixelIterator) {
 			BytePixelIterator bpi = (BytePixelIterator) i;
-			return get(bpi, newWidth, newHeight);
+			return (PixelIterator<T>) get(bpi, newWidth, newHeight);
 		} else if (i instanceof IntPixelIterator) {
 			IntPixelIterator ipi = (IntPixelIterator) i;
-			return get(ipi, newWidth, newHeight);
+			return (PixelIterator<T>) get(ipi, newWidth, newHeight);
 		}
 		throw new IllegalArgumentException(
 				"Unsupported iterator: " + i.getClass().getName());
 	}
 
-	public static class ByteScalingIterator extends ScalingIterator
+	public static class ByteScalingIterator extends ScalingIterator<byte[]>
 			implements BytePixelIterator {
 		final int imageType;
 
@@ -250,10 +255,12 @@ public abstract class ScalingIterator implements PixelIterator {
 								+ newImageType + ")");
 		}
 
+		@Override
 		public void next(byte[] dest) {
 			next(dest, null);
 		}
 
+		@Override
 		public int getMinimumArrayLength() {
 			int bytesPerPixel = getPixelSize();
 			if (srcIterator instanceof BytePixelIterator) {
@@ -263,29 +270,13 @@ public abstract class ScalingIterator implements PixelIterator {
 			return dstW * bytesPerPixel;
 		}
 
-		public int getPixelSize() {
-			switch (imageType) {
-			case PixelIterator.TYPE_3BYTE_RGB:
-			case BufferedImage.TYPE_3BYTE_BGR:
-				return 3;
-			case PixelIterator.TYPE_4BYTE_ARGB:
-			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
-			case BufferedImage.TYPE_4BYTE_ABGR:
-			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-				return 4;
-			case BufferedImage.TYPE_BYTE_GRAY:
-				return 1;
-			}
-			throw new RuntimeException(
-					"unexpected condition: imageType = " + imageType);
-		}
-
+		@Override
 		public int getType() {
 			return imageType;
 		}
 	}
 
-	public static class IntScalingIterator extends ScalingIterator
+	public static class IntScalingIterator extends ScalingIterator<int[]>
 			implements IntPixelIterator {
 		final int imageType;
 
@@ -314,10 +305,12 @@ public abstract class ScalingIterator implements PixelIterator {
 								+ newImageType + ")");
 		}
 
+		@Override
 		public void next(int[] dest) {
 			next(null, dest);
 		}
 
+		@Override
 		public int getMinimumArrayLength() {
 			if (srcIterator instanceof IntPixelIterator) {
 				return Math.max(srcIterator.getMinimumArrayLength(), dstW);
@@ -325,10 +318,12 @@ public abstract class ScalingIterator implements PixelIterator {
 			return dstW;
 		}
 
+		@Override
 		public int getPixelSize() {
 			return 1;
 		}
 
+		@Override
 		public int getType() {
 			return imageType;
 		}
@@ -1374,7 +1369,7 @@ public abstract class ScalingIterator implements PixelIterator {
 	final double scaleX, scaleY;
 	final boolean topDown, isOpaque;
 
-	private ScalingIterator(PixelIterator srcIterator, int srcW, int srcH,
+	private ScalingIterator(PixelIterator<?> srcIterator, int srcW, int srcH,
 			int scaledWidth, int scaledHeight, boolean topDown,
 			boolean isOpaque) {
 		if (srcIterator instanceof BytePixelIterator
@@ -1449,19 +1444,23 @@ public abstract class ScalingIterator implements PixelIterator {
 		scratchIntArray = null;
 	}
 
+	@Override
 	public int getHeight() {
 		return dstH;
 	}
 
+	@Override
 	public int getWidth() {
 		return dstW;
 	}
 
+	@Override
 	public boolean isDone() {
 		boolean returnValue = dstY >= dstH;
 		return returnValue;
 	}
 
+	@Override
 	public void skip() {
 		srcY++;
 		if (isDone())
@@ -1476,10 +1475,12 @@ public abstract class ScalingIterator implements PixelIterator {
 		srcY = srcH;
 	}
 
+	@Override
 	public boolean isTopDown() {
 		return topDown;
 	}
 
+	@Override
 	public boolean isOpaque() {
 		return isOpaque;
 	}

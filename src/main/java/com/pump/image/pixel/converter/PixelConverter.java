@@ -8,45 +8,28 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.image.pixel;
+package com.pump.image.pixel.converter;
 
-import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
+
+import com.pump.image.pixel.BytePixelIterator;
+import com.pump.image.pixel.IndexedBytePixelIterator;
+import com.pump.image.pixel.IntPixelIterator;
+import com.pump.image.pixel.PixelIterator;
 
 /**
  * This is the abstract base class for most of the converters in this package.
  * 
  */
-public abstract class PixelConverter implements PixelIterator {
-	private final PixelIterator i;
-	final BytePixelIterator byteIterator;
-	final IntPixelIterator intIterator;
+public abstract class PixelConverter<T> implements PixelIterator<T> {
+	private final PixelIterator<?> i;
+	protected final BytePixelIterator byteIterator;
+	protected final IntPixelIterator intIterator;
 	final int originalType;
 	final int width;
-	final IndexColorModel indexModel;
+	protected final IndexColorModel indexModel;
 
-	/**
-	 * Returns <code>true</code> if the image type corresponds to an opaque
-	 * color model.
-	 * <P>
-	 * If an unexpected image type is encountered, this returns true to err on
-	 * the side of caution.
-	 */
-	public static boolean isOpaque(int imageType) {
-		if (imageType == BufferedImage.TYPE_3BYTE_BGR
-				|| imageType == PixelIterator.TYPE_3BYTE_RGB
-				|| imageType == BufferedImage.TYPE_BYTE_BINARY
-				|| imageType == BufferedImage.TYPE_BYTE_GRAY
-				|| imageType == BufferedImage.TYPE_INT_BGR
-				|| imageType == BufferedImage.TYPE_INT_RGB
-				|| imageType == BufferedImage.TYPE_USHORT_555_RGB
-				|| imageType == BufferedImage.TYPE_USHORT_565_RGB
-				|| imageType == BufferedImage.TYPE_USHORT_GRAY)
-			return true;
-		return false;
-	}
-
-	public PixelConverter(PixelIterator i) {
+	public PixelConverter(PixelIterator<?> i) {
 		this.i = i;
 		originalType = i.getType();
 		width = i.getWidth();
@@ -71,22 +54,22 @@ public abstract class PixelConverter implements PixelIterator {
 		}
 	}
 
-	public boolean isOpaque() {
-		return isOpaque(getType());
-	}
-
+	@Override
 	public int getHeight() {
 		return i.getHeight();
 	}
 
+	@Override
 	public int getWidth() {
 		return width;
 	}
 
+	@Override
 	public boolean isDone() {
 		return i.isDone();
 	}
 
+	@Override
 	public boolean isTopDown() {
 		return i.isTopDown();
 	}

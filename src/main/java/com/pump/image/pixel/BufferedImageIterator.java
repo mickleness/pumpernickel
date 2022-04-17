@@ -23,7 +23,7 @@ import java.lang.reflect.Modifier;
  * <code>get(...)</code> methods to create <code>BufferedImageIterators</code>.
  *
  */
-public abstract class BufferedImageIterator implements PixelIterator {
+public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	static class RGBtoBGR implements BytePixelIterator {
 		final BytePixelIterator bpi;
 
@@ -31,42 +31,47 @@ public abstract class BufferedImageIterator implements PixelIterator {
 			this.bpi = bpi;
 		}
 
+		@Override
 		public int getType() {
 			return bpi.getType();
 		}
 
+		@Override
 		public boolean isOpaque() {
 			return bpi.isOpaque();
 		}
 
-		public int getPixelSize() {
-			return bpi.getPixelSize();
-		}
-
+		@Override
 		public boolean isDone() {
 			return bpi.isDone();
 		}
 
+		@Override
 		public boolean isTopDown() {
 			return bpi.isTopDown();
 		}
 
+		@Override
 		public int getWidth() {
 			return bpi.getWidth();
 		}
 
+		@Override
 		public int getHeight() {
 			return bpi.getHeight();
 		}
 
+		@Override
 		public int getMinimumArrayLength() {
 			return bpi.getMinimumArrayLength();
 		}
 
+		@Override
 		public void skip() {
 			bpi.skip();
 		}
 
+		@Override
 		public void next(byte[] dest) {
 			bpi.next(dest);
 			int w = getWidth();
@@ -85,42 +90,47 @@ public abstract class BufferedImageIterator implements PixelIterator {
 			this.bpi = bpi;
 		}
 
+		@Override
 		public int getType() {
 			return bpi.getType();
 		}
 
+		@Override
 		public boolean isOpaque() {
 			return bpi.isOpaque();
 		}
 
-		public int getPixelSize() {
-			return bpi.getPixelSize();
-		}
-
+		@Override
 		public boolean isDone() {
 			return bpi.isDone();
 		}
 
+		@Override
 		public boolean isTopDown() {
 			return bpi.isTopDown();
 		}
 
+		@Override
 		public int getWidth() {
 			return bpi.getWidth();
 		}
 
+		@Override
 		public int getHeight() {
 			return bpi.getHeight();
 		}
 
+		@Override
 		public int getMinimumArrayLength() {
 			return bpi.getMinimumArrayLength();
 		}
 
+		@Override
 		public void skip() {
 			bpi.skip();
 		}
 
+		@Override
 		public void next(byte[] dest) {
 			bpi.next(dest);
 			int w = getWidth();
@@ -141,7 +151,7 @@ public abstract class BufferedImageIterator implements PixelIterator {
 	 *            an optional image to write the image data to.
 	 * @return a BufferedImage
 	 */
-	public static BufferedImage create(PixelIterator i, BufferedImage dest) {
+	public static BufferedImage create(PixelIterator<?> i, BufferedImage dest) {
 		int type = i.getType();
 
 		int w = i.getWidth();
@@ -242,18 +252,20 @@ public abstract class BufferedImageIterator implements PixelIterator {
 		}
 	}
 
-	static class BufferedImageIntIterator extends BufferedImageIterator
+	static class BufferedImageIntIterator extends BufferedImageIterator<int[]>
 			implements IntPixelIterator {
 		BufferedImageIntIterator(BufferedImage bi, boolean topDown) {
 			super(bi, topDown);
 			if (!(type == BufferedImage.TYPE_INT_ARGB
 					|| type == BufferedImage.TYPE_INT_ARGB_PRE
-					|| type == BufferedImage.TYPE_INT_BGR || type == BufferedImage.TYPE_INT_RGB)) {
+					|| type == BufferedImage.TYPE_INT_BGR
+					|| type == BufferedImage.TYPE_INT_RGB)) {
 				throw new IllegalArgumentException("The image type "
 						+ getTypeName(type) + " is not supported.");
 			}
 		}
 
+		@Override
 		public void next(int[] dest) {
 			if (topDown) {
 				if (y >= h)
@@ -266,10 +278,6 @@ public abstract class BufferedImageIterator implements PixelIterator {
 				bi.getRaster().getDataElements(0, y, w, 1, dest);
 				y--;
 			}
-		}
-
-		public int getPixelSize() {
-			return 1;
 		}
 	}
 
@@ -305,7 +313,7 @@ public abstract class BufferedImageIterator implements PixelIterator {
 		return describedType;
 	}
 
-	static class BufferedImageByteIterator extends BufferedImageIterator
+	static class BufferedImageByteIterator extends BufferedImageIterator<byte[]>
 			implements BytePixelIterator {
 		int pixelSize;
 
@@ -329,6 +337,7 @@ public abstract class BufferedImageIterator implements PixelIterator {
 			}
 		}
 
+		@Override
 		public void next(byte[] dest) {
 			if (topDown) {
 				if (y >= h)
@@ -343,6 +352,7 @@ public abstract class BufferedImageIterator implements PixelIterator {
 			}
 		}
 
+		@Override
 		public int getPixelSize() {
 			return pixelSize;
 		}
@@ -355,86 +365,35 @@ public abstract class BufferedImageIterator implements PixelIterator {
 			super(bi, topDown);
 		}
 
+		@Override
 		public IndexColorModel getIndexColorModel() {
 			return ((IndexColorModel) bi.getColorModel());
 		}
 	}
 
-	/**
-	 * This is to be used only when the BufferedImageByteIterator and
-	 * BufferedImageIntIterator are acceptable.
-	 * 
-	 * @warning This class is a last resort. If you look up the code for
-	 *          BufferedImage.getRGB() you'll see it's incredibly inefficient.
-	 */
-	static class BufferedImageUnknownIterator extends BufferedImageIterator
-			implements IntPixelIterator {
-		static boolean warning = false;
-
-		BufferedImageUnknownIterator(BufferedImage bi, boolean topDown) {
-			super(bi, topDown);
-			if (!(type == BufferedImage.TYPE_BYTE_BINARY
-					|| type == BufferedImage.TYPE_CUSTOM
-					|| type == BufferedImage.TYPE_USHORT_555_RGB
-					|| type == BufferedImage.TYPE_USHORT_565_RGB || type == BufferedImage.TYPE_USHORT_GRAY)) {
-				throw new IllegalArgumentException("The image type "
-						+ getTypeName(type) + " is not supported.");
-			}
-			if (warning == false) {
-				warning = true;
-				System.err
-						.println("The BufferedImageUnknownIterator is being used for an image of type "
-								+ getTypeName(type)
-								+ ".  This is not recommended.");
-			}
-		}
-
-		@Override
-		public int getType() {
-			return BufferedImage.TYPE_INT_ARGB;
-		}
-
-		public void next(int[] dest) {
-			if (topDown) {
-				if (y >= h)
-					throw new RuntimeException("end of data reached");
-				bi.getRGB(0, y, w, 1, dest, 0, w);
-				y++;
-			} else {
-				if (y <= -1)
-					throw new RuntimeException("end of data reached");
-				bi.getRGB(0, y, w, 1, dest, 0, w);
-				y--;
-			}
-		}
-
-		public int getPixelSize() {
-			return 1;
-		}
-	}
-
+	@Override
 	public int getHeight() {
 		return h;
 	}
 
+	@Override
 	public int getType() {
 		return type;
 	}
 
+	@Override
 	public int getWidth() {
 		return w;
 	}
 
-	public boolean isOpaque() {
-		return PixelConverter.isOpaque(getType());
-	}
-
+	@Override
 	public boolean isDone() {
 		if (topDown)
 			return y >= h;
 		return y < 0;
 	}
 
+	@Override
 	public boolean isTopDown() {
 		return topDown;
 	}
@@ -479,11 +438,12 @@ public abstract class BufferedImageIterator implements PixelIterator {
 		return null;
 	}
 
-	public static BufferedImageIterator get(BufferedImage bi) {
+	public static BufferedImageIterator<?> get(BufferedImage bi) {
 		return get(bi, true);
 	}
 
-	public static BufferedImageIterator get(BufferedImage bi, boolean topDown) {
+	public static BufferedImageIterator<?> get(BufferedImage bi,
+			boolean topDown) {
 		int type = bi.getType();
 		if (type == BufferedImage.TYPE_INT_ARGB
 				|| type == BufferedImage.TYPE_INT_ARGB_PRE
@@ -498,14 +458,17 @@ public abstract class BufferedImageIterator implements PixelIterator {
 				|| type == BufferedImage.TYPE_BYTE_GRAY) {
 			return new BufferedImageByteIterator(bi, topDown);
 		} else {
-			return new BufferedImageUnknownIterator(bi, topDown);
+			throw new IllegalArgumentException(
+					"unsupported image type: " + bi.getType());
 		}
 	}
 
+	@Override
 	public int getMinimumArrayLength() {
 		return getWidth() * getPixelSize();
 	}
 
+	@Override
 	public void skip() {
 		if (topDown) {
 			if (y >= h)

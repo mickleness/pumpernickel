@@ -27,7 +27,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import com.pump.awt.Dimension2D;
-import com.pump.reflect.Reflection;
+import com.pump.image.ColorModelUtils;
 import com.pump.util.PushPullQueue;
 
 /**
@@ -70,7 +70,8 @@ import com.pump.util.PushPullQueue;
  * "https://javagraphics.blogspot.com/2011/05/images-scaling-jpegs-and-pngs.html"
  * >Images: Scaling JPEGs and PNGs</a>
  */
-public abstract class GenericImageSinglePassIterator implements PixelIterator {
+public abstract class GenericImageSinglePassIterator<T>
+		implements PixelIterator<T> {
 
 	/**
 	 * The number of milliseconds threads wait before timing out while reading.
@@ -84,6 +85,12 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 	 * AWT classes only allow 4 threads at a time. By default this is 120,000.
 	 */
 	public static long TIMEOUT_FOR_CONSTRUCTION = 120000;
+
+	/**
+	 * This is an image type alternative that indicates we should return
+	 * whatever is simplest/most expedient.
+	 */
+	public static int TYPE_DEFAULT = -888321;
 
 	/**
 	 * This exception indicates that the source image did not provide all the
@@ -123,7 +130,8 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 		String error;
 
 		synchronized void deliver(int x, int y, int w, int h,
-				ColorModel colorModel, Object pixels, int offset, int scanSize) {
+				ColorModel colorModel, Object pixels, int offset,
+				int scanSize) {
 			error = null;
 			this.x = x;
 			this.y = y;
@@ -148,28 +156,13 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 		}
 	}
 
-	private static class GenericImageSinglePassByteIterator extends
-			GenericImageSinglePassIterator implements BytePixelIterator {
+	private static class GenericImageSinglePassByteIterator
+			extends GenericImageSinglePassIterator<byte[]>
+			implements BytePixelIterator {
 
 		public GenericImageSinglePassByteIterator(int width, int height,
 				int type, boolean topDown) {
 			super(width, height, type, topDown);
-		}
-
-		public int getPixelSize() {
-			switch (type) {
-			case BufferedImage.TYPE_4BYTE_ABGR:
-			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-			case PixelIterator.TYPE_4BYTE_ARGB:
-			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
-				return 4;
-			case PixelIterator.TYPE_3BYTE_RGB:
-			case BufferedImage.TYPE_3BYTE_BGR:
-				return 3;
-			case BufferedImage.TYPE_BYTE_GRAY:
-				return 1;
-			}
-			throw new RuntimeException("unexpected iterator type: " + type);
 		}
 
 		@Override
@@ -297,7 +290,8 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 							&& bytesPerPixel == 3 && isBGR(colorModel)) {
 						System.arraycopy(pixelData, offset + 3 * x, destArray,
 								3 * x, width * 3);
-					} else if ((type == BufferedImage.TYPE_4BYTE_ABGR_PRE || type == BufferedImage.TYPE_4BYTE_ABGR)
+					} else if ((type == BufferedImage.TYPE_4BYTE_ABGR_PRE
+							|| type == BufferedImage.TYPE_4BYTE_ABGR)
 							&& bytesPerPixel == 4 && isABGR(colorModel)) {
 						System.arraycopy(pixelData, offset + 4 * x, destArray,
 								4 * x, width * 4);
@@ -308,30 +302,44 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 					} else {
 						for (int myX = x; myX < x + width; myX++) {
 							for (int k = 0; k < bytesPerPixel; k++) {
-								scratchArray[k] = pixelData[offset + myX
-										* bytesPerPixel + k];
+								scratchArray[k] = pixelData[offset
+										+ myX * bytesPerPixel + k];
 							}
 							int rgb = colorModel.getRGB(scratchArray);
 							if (type == BufferedImage.TYPE_3BYTE_BGR) {
-								destArray[3 * myX + 0] = (byte) ((rgb >> 16) & 0xff);
-								destArray[3 * myX + 1] = (byte) ((rgb >> 8) & 0xff);
-								destArray[3 * myX + 2] = (byte) ((rgb >> 0) & 0xff);
+								destArray[3 * myX
+										+ 0] = (byte) ((rgb >> 16) & 0xff);
+								destArray[3 * myX
+										+ 1] = (byte) ((rgb >> 8) & 0xff);
+								destArray[3 * myX
+										+ 2] = (byte) ((rgb >> 0) & 0xff);
 							} else if (type == BufferedImage.TYPE_4BYTE_ABGR
 									|| type == BufferedImage.TYPE_4BYTE_ABGR) {
-								destArray[4 * myX + 0] = (byte) ((rgb >> 24) & 0xff);
-								destArray[4 * myX + 1] = (byte) ((rgb >> 16) & 0xff);
-								destArray[4 * myX + 2] = (byte) ((rgb >> 8) & 0xff);
-								destArray[4 * myX + 3] = (byte) ((rgb >> 0) & 0xff);
+								destArray[4 * myX
+										+ 0] = (byte) ((rgb >> 24) & 0xff);
+								destArray[4 * myX
+										+ 1] = (byte) ((rgb >> 16) & 0xff);
+								destArray[4 * myX
+										+ 2] = (byte) ((rgb >> 8) & 0xff);
+								destArray[4 * myX
+										+ 3] = (byte) ((rgb >> 0) & 0xff);
 							} else if (type == PixelIterator.TYPE_3BYTE_RGB) {
-								destArray[3 * myX + 0] = (byte) ((rgb >> 0) & 0xff);
-								destArray[3 * myX + 1] = (byte) ((rgb >> 8) & 0xff);
-								destArray[3 * myX + 2] = (byte) ((rgb >> 16) & 0xff);
+								destArray[3 * myX
+										+ 0] = (byte) ((rgb >> 0) & 0xff);
+								destArray[3 * myX
+										+ 1] = (byte) ((rgb >> 8) & 0xff);
+								destArray[3 * myX
+										+ 2] = (byte) ((rgb >> 16) & 0xff);
 							} else if (type == PixelIterator.TYPE_4BYTE_ARGB
 									|| type == PixelIterator.TYPE_4BYTE_ARGB_PRE) {
-								destArray[4 * myX + 0] = (byte) ((rgb >> 24) & 0xff);
-								destArray[4 * myX + 1] = (byte) ((rgb >> 0) & 0xff);
-								destArray[4 * myX + 2] = (byte) ((rgb >> 8) & 0xff);
-								destArray[4 * myX + 3] = (byte) ((rgb >> 16) & 0xff);
+								destArray[4 * myX
+										+ 0] = (byte) ((rgb >> 24) & 0xff);
+								destArray[4 * myX
+										+ 1] = (byte) ((rgb >> 0) & 0xff);
+								destArray[4 * myX
+										+ 2] = (byte) ((rgb >> 8) & 0xff);
+								destArray[4 * myX
+										+ 3] = (byte) ((rgb >> 16) & 0xff);
 							} else if (type == BufferedImage.TYPE_BYTE_GRAY) {
 								int c1 = (rgb >> 16) & 0xff;
 								int c2 = (rgb >> 8) & 0xff;
@@ -340,13 +348,15 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 							}
 						}
 					}
-				} else if (colorModel.getTransferType() == DataBuffer.TYPE_INT) {
+				} else if (colorModel
+						.getTransferType() == DataBuffer.TYPE_INT) {
 					int[] pixelData = (int[]) pixels;
 					if (type == BufferedImage.TYPE_3BYTE_BGR) {
 						for (int myX = x; myX < x + width; myX++) {
 							int rgb = colorModel
 									.getRGB(pixelData[myX + offset]);
-							destArray[3 * myX + 0] = (byte) ((rgb >> 16) & 0xff);
+							destArray[3 * myX
+									+ 0] = (byte) ((rgb >> 16) & 0xff);
 							destArray[3 * myX + 1] = (byte) ((rgb >> 8) & 0xff);
 							destArray[3 * myX + 2] = (byte) ((rgb >> 0) & 0xff);
 						}
@@ -355,8 +365,10 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 						for (int myX = x; myX < x + width; myX++) {
 							int rgb = colorModel
 									.getRGB(pixelData[myX + offset]);
-							destArray[4 * myX + 0] = (byte) ((rgb >> 24) & 0xff);
-							destArray[4 * myX + 1] = (byte) ((rgb >> 16) & 0xff);
+							destArray[4 * myX
+									+ 0] = (byte) ((rgb >> 24) & 0xff);
+							destArray[4 * myX
+									+ 1] = (byte) ((rgb >> 16) & 0xff);
 							destArray[4 * myX + 2] = (byte) ((rgb >> 8) & 0xff);
 							destArray[4 * myX + 3] = (byte) ((rgb >> 0) & 0xff);
 						}
@@ -366,17 +378,20 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 									.getRGB(pixelData[myX + offset]);
 							destArray[3 * myX + 0] = (byte) ((rgb >> 0) & 0xff);
 							destArray[3 * myX + 1] = (byte) ((rgb >> 8) & 0xff);
-							destArray[3 * myX + 2] = (byte) ((rgb >> 16) & 0xff);
+							destArray[3 * myX
+									+ 2] = (byte) ((rgb >> 16) & 0xff);
 						}
 					} else if (type == PixelIterator.TYPE_4BYTE_ARGB
 							|| type == PixelIterator.TYPE_4BYTE_ARGB_PRE) {
 						for (int myX = x; myX < x + width; myX++) {
 							int rgb = colorModel
 									.getRGB(pixelData[myX + offset]);
-							destArray[4 * myX + 0] = (byte) ((rgb >> 24) & 0xff);
+							destArray[4 * myX
+									+ 0] = (byte) ((rgb >> 24) & 0xff);
 							destArray[4 * myX + 1] = (byte) ((rgb >> 0) & 0xff);
 							destArray[4 * myX + 2] = (byte) ((rgb >> 8) & 0xff);
-							destArray[4 * myX + 3] = (byte) ((rgb >> 16) & 0xff);
+							destArray[4 * myX
+									+ 3] = (byte) ((rgb >> 16) & 0xff);
 						}
 					} else if (type == BufferedImage.TYPE_BYTE_GRAY) {
 						for (int myX = x; myX < x + width; myX++) {
@@ -408,32 +423,18 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 		 *             if the source image did not deliver the image in a single
 		 *             pass.
 		 */
+		@Override
 		public void next(byte[] dest) {
 			processNextRow(dest);
 		}
 	}
 
 	private static class GenericImageSinglePassIntIterator extends
-			GenericImageSinglePassIterator implements IntPixelIterator {
+			GenericImageSinglePassIterator<int[]> implements IntPixelIterator {
 
 		public GenericImageSinglePassIntIterator(int width, int height,
 				int type, boolean topDown) {
 			super(width, height, type, topDown);
-		}
-
-		public int getPixelSize() {
-			switch (type) {
-			case BufferedImage.TYPE_INT_ARGB:
-			case BufferedImage.TYPE_INT_ARGB_PRE:
-			case BufferedImage.TYPE_INT_RGB:
-			case BufferedImage.TYPE_INT_BGR:
-				return 1;
-			}
-			throw new RuntimeException("unexpected iterator type: "
-					+ type
-					+ " "
-					+ Reflection.nameStaticField(BufferedImage.class,
-							new Integer(type)));
 		}
 
 		/**
@@ -489,8 +490,8 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 					}
 					for (int myX = 0; myX < width; myX++) {
 						for (int k = 0; k < bytesPerPixel; k++) {
-							scratchArray[k] = pixelData[offset + myX
-									* bytesPerPixel + k];
+							scratchArray[k] = pixelData[offset
+									+ myX * bytesPerPixel + k];
 						}
 						int rgb = colorModel.getRGB(scratchArray);
 						destArray[myX + x] = rgb;
@@ -499,7 +500,8 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 						// flip bytes B and R, keeping A and G constant:
 						flipBytes(destArray, x, width, 0xff00ff00, 0, 2);
 					}
-				} else if (colorModel.getTransferType() == DataBuffer.TYPE_INT) {
+				} else if (colorModel
+						.getTransferType() == DataBuffer.TYPE_INT) {
 					int[] pixelData = (int[]) pixels;
 					DirectColorModel dcm = null;
 					if (colorModel instanceof DirectColorModel) {
@@ -510,30 +512,30 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 							&& dcm.getGreenMask() == 0xff00
 							&& dcm.getBlueMask() == 0xff) {
 						System.arraycopy(pixelData, offset + x, dest, x, width);
-					} else if ((type == BufferedImage.TYPE_INT_ARGB || type == BufferedImage.TYPE_INT_ARGB_PRE)
-							&& dcm != null
-							&& dcm.getRedMask() == 0xff0000
+					} else if ((type == BufferedImage.TYPE_INT_ARGB
+							|| type == BufferedImage.TYPE_INT_ARGB_PRE)
+							&& dcm != null && dcm.getRedMask() == 0xff0000
 							&& dcm.getGreenMask() == 0xff00
 							&& dcm.getBlueMask() == 0xff
 							&& dcm.getAlphaMask() == 0xff000000) {
 						System.arraycopy(pixelData, offset + x, dest, x, width);
-					} else if ((type == BufferedImage.TYPE_INT_ARGB || type == BufferedImage.TYPE_INT_ARGB_PRE)
-							&& dcm != null
-							&& dcm.getRedMask() == 0xff0000
+					} else if ((type == BufferedImage.TYPE_INT_ARGB
+							|| type == BufferedImage.TYPE_INT_ARGB_PRE)
+							&& dcm != null && dcm.getRedMask() == 0xff0000
 							&& dcm.getGreenMask() == 0xff00
 							&& dcm.getBlueMask() == 0xff
 							&& dcm.getAlphaMask() == 0x00) {
 						for (int a = 0; a < width; a++) {
-							destArray[x + a] = 0xff000000 + (pixelData[offset
-									+ x + a] & 0xffffff);
+							destArray[x + a] = 0xff000000
+									+ (pixelData[offset + x + a] & 0xffffff);
 						}
-					} else if (type == BufferedImage.TYPE_INT_BGR
-							&& dcm != null && dcm.getRedMask() == 0xff
+					} else if (type == BufferedImage.TYPE_INT_BGR && dcm != null
+							&& dcm.getRedMask() == 0xff
 							&& dcm.getGreenMask() == 0xff00
 							&& dcm.getBlueMask() == 0xff0000) {
 						System.arraycopy(pixelData, offset + x, dest, x, width);
-					} else if (type == BufferedImage.TYPE_INT_BGR
-							&& dcm != null && dcm.getRedMask() == 0xff0000
+					} else if (type == BufferedImage.TYPE_INT_BGR && dcm != null
+							&& dcm.getRedMask() == 0xff0000
 							&& dcm.getGreenMask() == 0xff00
 							&& dcm.getBlueMask() == 0xff) {
 						// we want BGR, but we have RGB:
@@ -570,6 +572,7 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 		 *             if the source image did not deliver the image in a single
 		 *             pass.
 		 */
+		@Override
 		public void next(int[] dest) {
 			processNextRow(dest);
 		}
@@ -608,8 +611,8 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 	 */
 	private static class Consumer implements ImageConsumer {
 		final ImageProducer producer;
-		Integer width = null;
-		Integer height = null;
+		Integer imgWidth = null;
+		Integer imgHeight = null;
 		@SuppressWarnings("rawtypes")
 		Map properties = new HashMap();
 		PushPullQueue<PixelPackage> outgoing;
@@ -622,7 +625,6 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 		 */
 		PushPullQueue<Object> incomingIteratorOrError = new PushPullQueue<Object>();
 
-		// relating to juggling threads/listeners:
 		int iteratorType;
 
 		Consumer(ImageProducer producer, int iteratorType) {
@@ -630,20 +632,25 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 			this.iteratorType = iteratorType;
 		}
 
+		@Override
 		public void setDimensions(int width, int height) {
-			this.width = new Integer(width);
-			this.height = new Integer(height);
+			imgWidth = Integer.valueOf(width);
+			imgHeight = Integer.valueOf(height);
 		}
 
 		@SuppressWarnings("unchecked")
-		public void setProperties(@SuppressWarnings("rawtypes") Hashtable props) {
+		@Override
+		public void setProperties(
+				@SuppressWarnings("rawtypes") Hashtable props) {
 			properties.putAll(props);
 		}
 
+		@Override
 		public void setColorModel(ColorModel model) {
 			// meh. The API explicitly says this is a guideline, not a guarantee
 		}
 
+		@Override
 		public void setHints(int hintFlags) {
 			/**
 			 * In my experience these hints are unreliable. A core part of
@@ -656,11 +663,13 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 			 */
 		}
 
+		@Override
 		public synchronized void setPixels(int x, int y, int w, int h,
 				ColorModel model, byte[] pixels, int offset, int scanSize) {
 			_setPixels(x, y, w, h, model, pixels, offset, scanSize);
 		}
 
+		@Override
 		public synchronized void setPixels(int x, int y, int w, int h,
 				ColorModel model, int[] pixels, int offset, int scanSize) {
 			_setPixels(x, y, w, h, model, pixels, offset, scanSize);
@@ -683,7 +692,19 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 				Object pixels, int offset, int scanSize) {
 			if (!listening)
 				return;
-			initIterator(y == 0);
+
+			if (!isInitialized) {
+				boolean isTopDown;
+				if (y == 0) {
+					isTopDown = true;
+				} else if (y == imgHeight - 1) {
+					isTopDown = false;
+				} else {
+					throw new RuntimeException("Cannot identify isTopDown. y = "
+							+ y + ", imgHeight = " + imgHeight);
+				}
+				initialize(isTopDown, model);
+			}
 
 			/**
 			 * Sometimes images are decoded in multiple passes. Google PNG
@@ -693,8 +714,8 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 			 * this work.
 			 * 
 			 */
-			if (x == 0 && y == 0 && width.intValue() == w
-					&& height.intValue() == h) {
+			if (x == 0 && y == 0 && imgWidth.intValue() == w
+					&& imgHeight.intValue() == h) {
 				cachedPixelPackage = new PixelPackage();
 				cachedPixelPackage.deliver(x, y, w, h, model, pixels, offset,
 						scanSize);
@@ -705,8 +726,8 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 			processPixels(x, y, w, h, model, pixels, offset, scanSize);
 		}
 
-		private void processPixels(int x, int y, int w, int h,
-				ColorModel model, Object pixels, int offset, int scanSize) {
+		private void processPixels(int x, int y, int w, int h, ColorModel model,
+				Object pixels, int offset, int scanSize) {
 			try {
 				/**
 				 * 1. First we receive an empty (or rewritable) package for a
@@ -736,7 +757,7 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 			}
 		}
 
-		private boolean definedIterator = false;
+		private boolean isInitialized = false;
 
 		/**
 		 * This is called when setPixels(...) is called, and if a
@@ -747,48 +768,53 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 		 *            whether this data is readable as top-to-bottom data vs
 		 *            bottom-to-top.
 		 */
-		private void initIterator(boolean topDown) {
-			if (definedIterator == false) {
-				if (width == null || height == null) {
-					String error = "pixel data was sent but the dimensions were undefined";
-					incomingIteratorOrError.push(error);
-					throw new RuntimeException(error);
-				}
-
-				GenericImageSinglePassIterator iterator;
-				int w = width.intValue();
-				int h = height.intValue();
-
-				switch (iteratorType) {
-				case BufferedImage.TYPE_3BYTE_BGR:
-				case BufferedImage.TYPE_4BYTE_ABGR:
-				case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-				case PixelIterator.TYPE_3BYTE_RGB:
-				case PixelIterator.TYPE_4BYTE_ARGB:
-				case PixelIterator.TYPE_4BYTE_ARGB_PRE:
-				case BufferedImage.TYPE_BYTE_GRAY:
-					iterator = new GenericImageSinglePassByteIterator(w, h,
-							iteratorType, topDown);
-					break;
-
-				case BufferedImage.TYPE_INT_ARGB:
-				case BufferedImage.TYPE_INT_ARGB_PRE:
-				case BufferedImage.TYPE_INT_BGR:
-				case BufferedImage.TYPE_INT_RGB:
-					iterator = new GenericImageSinglePassIntIterator(w, h,
-							iteratorType, topDown);
-					break;
-				default:
-					throw new RuntimeException("unsupported iterator type: "
-							+ iteratorType);
-				}
-				this.incoming = iterator.outgoing;
-				this.outgoing = iterator.incoming;
-				incomingIteratorOrError.push(iterator);
-				definedIterator = true;
+		private void initialize(boolean topDown, ColorModel colorModel) {
+			if (imgWidth == null || imgHeight == null) {
+				String error = "pixel data was sent but the dimensions were undefined";
+				incomingIteratorOrError.push(error);
+				throw new RuntimeException(error);
 			}
+
+			GenericImageSinglePassIterator iterator;
+			int w = imgWidth.intValue();
+			int h = imgHeight.intValue();
+
+			if (iteratorType == TYPE_DEFAULT) {
+				iteratorType = ColorModelUtils.getBufferedImageType(colorModel);
+				if (iteratorType == ColorModelUtils.TYPE_UNRECOGNIZED)
+					iteratorType = BufferedImage.TYPE_INT_ARGB;
+			}
+
+			switch (iteratorType) {
+			case BufferedImage.TYPE_3BYTE_BGR:
+			case BufferedImage.TYPE_4BYTE_ABGR:
+			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
+			case PixelIterator.TYPE_3BYTE_RGB:
+			case PixelIterator.TYPE_4BYTE_ARGB:
+			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
+			case BufferedImage.TYPE_BYTE_GRAY:
+				iterator = new GenericImageSinglePassByteIterator(w, h,
+						iteratorType, topDown);
+				break;
+
+			case BufferedImage.TYPE_INT_ARGB:
+			case BufferedImage.TYPE_INT_ARGB_PRE:
+			case BufferedImage.TYPE_INT_BGR:
+			case BufferedImage.TYPE_INT_RGB:
+				iterator = new GenericImageSinglePassIntIterator(w, h,
+						iteratorType, topDown);
+				break;
+			default:
+				throw new RuntimeException(
+						"unsupported iterator type: " + iteratorType);
+			}
+			this.incoming = iterator.outgoing;
+			this.outgoing = iterator.incoming;
+			incomingIteratorOrError.push(iterator);
+			isInitialized = true;
 		}
 
+		@Override
 		public void imageComplete(int status) {
 
 			processCachedPixels();
@@ -797,7 +823,7 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 			// now:
 			producer.removeConsumer(this);
 
-			if (definedIterator == false) {
+			if (isInitialized == false) {
 				String error = "imageComplete( " + status
 						+ " ) was called before setPixels(...)";
 				incomingIteratorOrError.push(error);
@@ -879,9 +905,10 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 	 * @return a <code>GenericImageSinglePassIterator</code> for the file
 	 *         provided.
 	 */
-	public static GenericImageSinglePassIterator get(File file, int iteratorType) {
-		Image image = Toolkit.getDefaultToolkit().createImage(
-				file.getAbsolutePath());
+	public static GenericImageSinglePassIterator get(File file,
+			int iteratorType) {
+		Image image = Toolkit.getDefaultToolkit()
+				.createImage(file.getAbsolutePath());
 		if (image == null)
 			throw new IllegalArgumentException(
 					"The toolkit could not create an image for "
@@ -911,7 +938,8 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 		IntPixelIterator iter = (IntPixelIterator) get(image, type);
 		if (iter == null)
 			return null;
-		Dimension currentSize = new Dimension(iter.getWidth(), iter.getHeight());
+		Dimension currentSize = new Dimension(iter.getWidth(),
+				iter.getHeight());
 		if (currentSize.width <= maxSize.width
 				&& currentSize.height <= maxSize.height) {
 			return BufferedImageIterator.create(iter, null);
@@ -938,21 +966,22 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 	 */
 	public static GenericImageSinglePassIterator get(Image image,
 			int iteratorType) {
-		if (!(iteratorType == BufferedImage.TYPE_INT_ARGB
+		if (!(iteratorType == TYPE_DEFAULT
+				|| iteratorType == BufferedImage.TYPE_INT_ARGB
 				|| iteratorType == BufferedImage.TYPE_INT_ARGB_PRE
 				|| iteratorType == BufferedImage.TYPE_INT_RGB
 				|| iteratorType == BufferedImage.TYPE_INT_BGR
 				|| iteratorType == BufferedImage.TYPE_3BYTE_BGR
 				|| iteratorType == BufferedImage.TYPE_BYTE_GRAY
-				|| iteratorType == BufferedImage.TYPE_4BYTE_ABGR || iteratorType == BufferedImage.TYPE_4BYTE_ABGR_PRE)) {
-			throw new IllegalArgumentException("illegal iterator type: "
-					+ iteratorType);
+				|| iteratorType == BufferedImage.TYPE_4BYTE_ABGR
+				|| iteratorType == BufferedImage.TYPE_4BYTE_ABGR_PRE)) {
+			throw new IllegalArgumentException(
+					"illegal iterator type: " + iteratorType);
 		}
 		final ImageProducer producer = image.getSource();
 		final Consumer consumer = new Consumer(producer, iteratorType);
 		// ImageProducer.startProduction often starts its own thread, but it's
-		// not
-		// required to. Sometimes in my testing a BufferedImage would make
+		// not required to. Sometimes in my testing a BufferedImage would make
 		// this a blocking call. So to be safe this call should be in its
 		// own thread:
 		Thread productionThread = new Thread(
@@ -989,16 +1018,9 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 	 * TYPE_INT_BGR, TYPE_3BYTE_BGR, TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR,
 	 * TYPE_4BYTE_ABGR_PRE.
 	 */
+	@Override
 	public int getType() {
 		return type;
-	}
-
-	/**
-	 * Returns true if the pixel type of this iterator can only express opaque
-	 * images.
-	 */
-	public boolean isOpaque() {
-		return PixelConverter.isOpaque(type);
 	}
 
 	/**
@@ -1006,6 +1028,7 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 	 * <code>next(...)</code>.
 	 * 
 	 */
+	@Override
 	public boolean isDone() {
 		return rowCtr == height;
 	}
@@ -1014,6 +1037,7 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 	 * Whether this data is processed top-down or bottom-up.
 	 * 
 	 */
+	@Override
 	public boolean isTopDown() {
 		return topDown;
 	}
@@ -1022,14 +1046,15 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 	 * The width of the image we're iterating over.
 	 * 
 	 */
+	@Override
 	public int getWidth() {
 		return width;
 	}
 
 	/**
 	 * The height of the image we're iterating over.
-	 * 
 	 */
+	@Override
 	public int getHeight() {
 		return height;
 	}
@@ -1037,11 +1062,13 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 	/**
 	 * The length to create arrays to pass to the <code>next(...)</code> method.
 	 */
+	@Override
 	public int getMinimumArrayLength() {
 		return getWidth() * getPixelSize();
 	}
 
 	/** Skip the next row of data. */
+	@Override
 	public void skip() {
 		/**
 		 * This method does nothing, because it's in the next() method that we
@@ -1114,8 +1141,8 @@ public abstract class GenericImageSinglePassIterator implements PixelIterator {
 					throw new NonSinglePassException(error);
 				} else if (pixelPackage.y == rowCtr) {
 					populate(destArray, pixelPackage.pixels,
-							pixelPackage.offset, pixelPackage.x,
-							pixelPackage.w, pixelPackage.colorModel);
+							pixelPackage.offset, pixelPackage.x, pixelPackage.w,
+							pixelPackage.colorModel);
 					rowCtr++;
 					pixelPackage.y++;
 					pixelPackage.h--;
