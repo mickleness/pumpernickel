@@ -1,6 +1,5 @@
 package com.pump.image.pixel;
 
-import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -78,29 +77,70 @@ public class ImageTypeTests extends TestCase {
 	public void testARGBConversions() {
 		int[] intArray = new int[] { 0xe6f1f5f8, 0xfffdffff, 0xffeaeef1, 0xfdb2bbc1, 0xd292a0ad, 0x8d7289a5, 0x50366093, 0x35214d6a, 0x2727485b };
 		
-		testARGBConversions(intArray, ImageType.BYTE_ABGR);
-		testARGBConversions(intArray, ImageType.BYTE_ARGB);
-		testARGBConversions(intArray, ImageType.BYTE_BGRA);
-		testARGBConversions(intArray, ImageType.BYTE_ABGR, ImageType.BYTE_ARGB, ImageType.BYTE_BGRA);
-		testARGBConversions(intArray, ImageType.BYTE_ARGB, ImageType.BYTE_ABGR, ImageType.BYTE_BGRA);
-		testARGBConversions(intArray, ImageType.BYTE_ABGR, ImageType.BYTE_BGRA, ImageType.BYTE_ARGB);
-		testARGBConversions(intArray, ImageType.BYTE_ARGB, ImageType.BYTE_BGRA, ImageType.BYTE_ABGR);
-		testARGBConversions(intArray, ImageType.BYTE_BGRA, ImageType.BYTE_ABGR, ImageType.BYTE_ARGB);
-		testARGBConversions(intArray, ImageType.BYTE_BGRA, ImageType.BYTE_ARGB, ImageType.BYTE_ABGR);
+		testConversions(ImageType.INT_ARGB, intArray, ImageType.BYTE_ABGR);
+		testConversions(ImageType.INT_ARGB, intArray, ImageType.BYTE_ARGB);
+		testConversions(ImageType.INT_ARGB, intArray, ImageType.BYTE_BGRA);
+		testConversions(ImageType.INT_ARGB, intArray, ImageType.BYTE_ABGR, ImageType.BYTE_ARGB, ImageType.BYTE_BGRA);
+		testConversions(ImageType.INT_ARGB, intArray, ImageType.BYTE_ARGB, ImageType.BYTE_ABGR, ImageType.BYTE_BGRA);
+		testConversions(ImageType.INT_ARGB, intArray, ImageType.BYTE_ABGR, ImageType.BYTE_BGRA, ImageType.BYTE_ARGB);
+		testConversions(ImageType.INT_ARGB, intArray, ImageType.BYTE_ARGB, ImageType.BYTE_BGRA, ImageType.BYTE_ABGR);
+		testConversions(ImageType.INT_ARGB, intArray, ImageType.BYTE_BGRA, ImageType.BYTE_ABGR, ImageType.BYTE_ARGB);
+		testConversions(ImageType.INT_ARGB, intArray, ImageType.BYTE_BGRA, ImageType.BYTE_ARGB, ImageType.BYTE_ABGR);
 	}
 	
-	private void testARGBConversions(int[] input, ImageTypeByte... types) {
-		PixelIterator<?> iter = new BufferedIntPixelIterator(input, input.length, 1, 0, input.length, BufferedImage.TYPE_INT_ARGB);
+	private void testConversions(ImageTypeInt inputType, int[] input, ImageType... types) {
+		PixelIterator<?> iter = new BufferedIntPixelIterator(input, input.length, 1, 0, input.length, inputType.code);
 		iter = types[0].createConverter(iter);
 		for (int a = 1; a < types.length; a++) {
 			iter = types[a].createConverter(iter);
 		}
-		IntPixelConverter lastIter = ImageType.INT_ARGB.createConverter(iter);
+		IntPixelConverter lastIter = inputType.createConverter(iter);
 		
 		int[] actual = new int[input.length];
 		lastIter.next(actual);
 		
 		assertEquals(Arrays.asList(types).toString(), input, actual);
+	}
+
+	
+	/**
+	 * Convert pixel data into several RGB formats and back into an INT_RGB format.
+	 */
+	public void testRGBConversions() {
+		int[] intArray = new int[] { 0xe1f5f8, 0xfdffff, 0xeaeef1, 0xb2bbc1, 0x92a0ad, 0x7289a5, 0x366093, 0x214d6a, 0x27485b };
+		
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_RGB);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_RGB);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_BGR);
+		
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_BGR, ImageType.BYTE_RGB, ImageType.INT_RGB, ImageType.INT_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_BGR, ImageType.BYTE_RGB, ImageType.INT_BGR, ImageType.INT_RGB);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_BGR, ImageType.INT_RGB, ImageType.BYTE_RGB, ImageType.INT_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_BGR, ImageType.INT_RGB, ImageType.INT_BGR, ImageType.BYTE_RGB);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_BGR, ImageType.INT_BGR, ImageType.BYTE_RGB, ImageType.INT_RGB);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_BGR, ImageType.INT_BGR, ImageType.INT_RGB, ImageType.BYTE_RGB);
+
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_RGB, ImageType.BYTE_BGR, ImageType.INT_RGB, ImageType.INT_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_RGB, ImageType.BYTE_BGR, ImageType.INT_BGR, ImageType.INT_RGB);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_RGB, ImageType.INT_RGB, ImageType.BYTE_BGR, ImageType.INT_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_RGB, ImageType.INT_RGB, ImageType.INT_BGR, ImageType.BYTE_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_RGB, ImageType.INT_BGR, ImageType.BYTE_BGR, ImageType.INT_RGB);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.BYTE_RGB, ImageType.INT_BGR, ImageType.INT_RGB, ImageType.BYTE_BGR);
+
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_RGB, ImageType.BYTE_RGB, ImageType.BYTE_BGR, ImageType.INT_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_RGB, ImageType.BYTE_RGB, ImageType.INT_BGR, ImageType.BYTE_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_RGB, ImageType.BYTE_BGR, ImageType.BYTE_RGB, ImageType.INT_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_RGB, ImageType.BYTE_BGR, ImageType.INT_BGR, ImageType.BYTE_RGB);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_RGB, ImageType.INT_BGR, ImageType.BYTE_RGB, ImageType.BYTE_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_RGB, ImageType.INT_BGR, ImageType.BYTE_BGR, ImageType.BYTE_RGB);
+
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_BGR, ImageType.BYTE_RGB, ImageType.INT_RGB, ImageType.BYTE_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_BGR, ImageType.BYTE_RGB, ImageType.BYTE_BGR, ImageType.INT_RGB);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_BGR, ImageType.INT_RGB, ImageType.BYTE_RGB, ImageType.BYTE_BGR);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_BGR, ImageType.INT_RGB, ImageType.BYTE_BGR, ImageType.BYTE_RGB);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_BGR, ImageType.BYTE_BGR, ImageType.BYTE_RGB, ImageType.INT_RGB);
+		testConversions(ImageType.INT_RGB, intArray, ImageType.INT_BGR, ImageType.BYTE_BGR, ImageType.INT_RGB, ImageType.BYTE_RGB);
 	}
 	
 	

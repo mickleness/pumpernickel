@@ -21,8 +21,8 @@ public abstract class ImageTypeInt extends ImageType {
 
 	void invertLast3Channels_noAlpha(int[] pixels, int width) {
 		for (int a = 0; a < width; a++) {
-			pixels[width] = ((pixels[width] & 0xff0000) >> 16)
-					| (pixels[width] & 0xff00) | ((pixels[width] & 0xff) << 16);
+			pixels[a] = ((pixels[a] & 0xff0000) >> 16) | (pixels[a] & 0xff00)
+					| ((pixels[a] & 0xff) << 16);
 		}
 	}
 
