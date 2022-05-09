@@ -154,20 +154,18 @@ public abstract class ImageType {
 		public void convertFromARGBPre(int[] pixels, int width) {
 			for (int a = 0; a < width; a++) {
 				int alpha1 = pixels[a] & 0xff000000;
-				int alpha2 = alpha1 >> 24;
+				int alpha2 = (pixels[a] >> 24) & 0xff;
 
-				if (alpha2 == -1 || alpha2 == 0) {
+				if (alpha2 == 255 || alpha2 == 0) {
 					// intentionally empty; do nothing
 				} else {
-					alpha2 = alpha2 & 0xff;
-
 					int r = (pixels[a] >> 8) & 0xff00;
 					int g = pixels[a] & 0xff00;
 					int b = (pixels[a] << 8) & 0xff00;
 
-					r = r / alpha2;
-					g = g / alpha2;
-					b = b / alpha2;
+					r = Math.min(255, r / alpha2);
+					g = Math.min(255, g / alpha2);
+					b = Math.min(255, b / alpha2);
 
 					pixels[a] = alpha1 | (r << 16) | (g << 8) | b;
 				}
@@ -213,9 +211,9 @@ public abstract class ImageType {
 					int g = (bytesIn[byteCtr++] & 0xff) << 8;
 					int r = (bytesIn[byteCtr++] & 0xff) << 8;
 
-					r = r / alpha;
-					g = g / alpha;
-					b = b / alpha;
+					r = Math.min(255, r / alpha);
+					g = Math.min(255, g / alpha);
+					b = Math.min(255, b / alpha);
 
 					pixels[intCtr++] = (alpha << 24) | (r << 16) | (g << 8) | b;
 				}
@@ -262,9 +260,9 @@ public abstract class ImageType {
 					int g = (bytesIn[byteCtr++] & 0xff) << 8;
 					int b = (bytesIn[byteCtr++] & 0xff) << 8;
 
-					r = r / alpha;
-					g = g / alpha;
-					b = b / alpha;
+					r = Math.min(255, r / alpha);
+					g = Math.min(255, g / alpha);
+					b = Math.min(255, b / alpha);
 
 					pixels[intCtr++] = (alpha << 24) | (r << 16) | (g << 8) | b;
 				}
@@ -569,9 +567,7 @@ public abstract class ImageType {
 		public void convertFromABGRPre(byte[] bytesIn, int[] pixels,
 				int width) {
 			for (int intCtr = 0, byteCtr = 0; intCtr < width;) {
-				byteCtr++; // drop
-							// the
-							// alpha
+				byteCtr++; // drop the alpha
 
 				int b = bytesIn[byteCtr++] & 0xff;
 				int g = bytesIn[byteCtr++] & 0xff;
@@ -888,13 +884,17 @@ public abstract class ImageType {
 					pixels[i2++] = (byte) ((argbPre >> 16) & 0xff);
 				} else {
 					pixels[i2++] = (byte) alpha;
-					int redPre = (argbPre >> 16) & 0xff;
-					int greenPre = (argbPre >> 8) & 0xff;
-					int bluePre = (argbPre) & 0xff;
+					int red = (argbPre >> 8) & 0xff00;
+					int green = (argbPre) & 0xff00;
+					int blue = (argbPre << 8) & 0xff00;
 
-					pixels[i2++] = (byte) ((bluePre << 8) / alpha);
-					pixels[i2++] = (byte) ((greenPre << 8) / alpha);
-					pixels[i2++] = (byte) ((redPre << 8) / alpha);
+					red = Math.min(255, red / alpha);
+					green = Math.min(255, green / alpha);
+					blue = Math.min(255, blue / alpha);
+
+					pixels[i2++] = (byte) (red);
+					pixels[i2++] = (byte) (green);
+					pixels[i2++] = (byte) (blue);
 				}
 			}
 		}
@@ -957,13 +957,17 @@ public abstract class ImageType {
 					// intentionally empty
 				} else {
 					int alphaInt = alpha & 0xff;
-					int bluePre = pixels[i + 1] & 0xff;
-					int greenPre = pixels[i + 2] & 0xff;
-					int redPre = pixels[i + 3] & 0xff;
+					int blue = pixels[i + 1] & 0xff;
+					int green = pixels[i + 2] & 0xff;
+					int red = pixels[i + 3] & 0xff;
 
-					pixels[i + 1] = (byte) ((bluePre << 8) / alphaInt);
-					pixels[i + 2] = (byte) ((greenPre << 8) / alphaInt);
-					pixels[i + 3] = (byte) ((redPre << 8) / alphaInt);
+					red = Math.min(255, (red << 8) / alphaInt);
+					green = Math.min(255, (green << 8) / alphaInt);
+					blue = Math.min(255, (blue << 8) / alphaInt);
+
+					pixels[i + 1] = (byte) (blue);
+					pixels[i + 2] = (byte) (green);
+					pixels[i + 3] = (byte) (red);
 				}
 			}
 		}
@@ -1001,13 +1005,17 @@ public abstract class ImageType {
 					// intentionally empty
 				} else {
 					int alphaInt = alpha & 0xff;
-					int redPre = pixels[i + 1] & 0xff;
-					int greenPre = pixels[i + 2] & 0xff;
-					int bluePre = pixels[i + 3] & 0xff;
+					int red = pixels[i + 1] & 0xff;
+					int green = pixels[i + 2] & 0xff;
+					int blue = pixels[i + 3] & 0xff;
 
-					pixels[i + 1] = (byte) ((bluePre << 8) / alphaInt);
-					pixels[i + 2] = (byte) ((greenPre << 8) / alphaInt);
-					pixels[i + 3] = (byte) ((redPre << 8) / alphaInt);
+					red = Math.min(255, (red << 8) / alphaInt);
+					green = Math.min(255, (green << 8) / alphaInt);
+					blue = Math.min(255, (blue << 8) / alphaInt);
+
+					pixels[i + 1] = (byte) blue;
+					pixels[i + 2] = (byte) green;
+					pixels[i + 3] = (byte) red;
 				}
 			}
 		}
@@ -1418,13 +1426,17 @@ public abstract class ImageType {
 					pixels[i2++] = (byte) (argbPre & 0xff);
 				} else {
 					pixels[i2++] = (byte) alpha;
-					int redPre = (argbPre >> 16) & 0xff;
-					int greenPre = (argbPre >> 8) & 0xff;
-					int bluePre = (argbPre) & 0xff;
+					int red = (argbPre >> 8) & 0xff00;
+					int green = (argbPre) & 0xff00;
+					int blue = (argbPre << 8) & 0xff00;
 
-					pixels[i2++] = (byte) ((redPre << 8) / alpha);
-					pixels[i2++] = (byte) ((greenPre << 8) / alpha);
-					pixels[i2++] = (byte) ((bluePre << 8) / alpha);
+					red = Math.min(255, red / alpha);
+					green = Math.min(255, green / alpha);
+					blue = Math.min(255, blue / alpha);
+
+					pixels[i2++] = (byte) red;
+					pixels[i2++] = (byte) green;
+					pixels[i2++] = (byte) blue;
 				}
 			}
 		}
@@ -1491,13 +1503,17 @@ public abstract class ImageType {
 					// intentionally empty
 				} else {
 					int alphaInt = alpha & 0xff;
-					int bluePre = pixels[i + 1] & 0xff;
-					int greenPre = pixels[i + 2] & 0xff;
-					int redPre = pixels[i + 3] & 0xff;
+					int blue = pixels[i + 1] & 0xff;
+					int green = pixels[i + 2] & 0xff;
+					int red = pixels[i + 3] & 0xff;
 
-					pixels[i + 1] = (byte) ((redPre << 8) / alphaInt);
-					pixels[i + 2] = (byte) ((greenPre << 8) / alphaInt);
-					pixels[i + 3] = (byte) ((bluePre << 8) / alphaInt);
+					red = Math.min(255, (red << 8) / alphaInt);
+					green = Math.min(255, (green << 8) / alphaInt);
+					blue = Math.min(255, (blue << 8) / alphaInt);
+
+					pixels[i + 1] = (byte) red;
+					pixels[i + 2] = (byte) green;
+					pixels[i + 3] = (byte) blue;
 				}
 			}
 		}
@@ -1530,13 +1546,17 @@ public abstract class ImageType {
 					// intentionally empty
 				} else {
 					int alphaInt = alpha & 0xff;
-					int redPre = pixels[i + 1] & 0xff;
-					int greenPre = pixels[i + 2] & 0xff;
-					int bluePre = pixels[i + 3] & 0xff;
+					int red = pixels[i + 1] & 0xff;
+					int green = pixels[i + 2] & 0xff;
+					int blue = pixels[i + 3] & 0xff;
 
-					pixels[i + 1] = (byte) ((redPre << 8) / alphaInt);
-					pixels[i + 2] = (byte) ((greenPre << 8) / alphaInt);
-					pixels[i + 3] = (byte) ((bluePre << 8) / alphaInt);
+					red = Math.min(255, (red << 8) / alphaInt);
+					green = Math.min(255, (green << 8) / alphaInt);
+					blue = Math.min(255, (blue << 8) / alphaInt);
+
+					pixels[i + 1] = (byte) red;
+					pixels[i + 2] = (byte) green;
+					pixels[i + 3] = (byte) blue;
 				}
 			}
 		}
@@ -1792,23 +1812,23 @@ public abstract class ImageType {
 					pixels[byteCtr++] = 0;
 					pixels[byteCtr++] = 0;
 				} else if (alpha == 255) {
+					pixels[byteCtr++] = (byte) (argbPre & 0xff);
 					pixels[byteCtr++] = (byte) ((argbPre >> 8) & 0xff);
 					pixels[byteCtr++] = (byte) ((argbPre >> 16) & 0xff);
-					pixels[byteCtr++] = (byte) ((argbPre >> 24) & 0xff);
 					pixels[byteCtr++] = -1;
 				} else {
-					int blue = argbPre & 0xff;
-					int green = (argbPre >> 8) & 0xff;
-					int red = (argbPre >> 16) & 0xff;
+					int blue = (argbPre << 8) & 0xff00;
+					int green = (argbPre) & 0xff00;
+					int red = (argbPre >> 8) & 0xff00;
 
-					blue = blue / alpha;
-					red = red / alpha;
-					green = green / alpha;
+					blue = Math.min(255, blue / alpha);
+					red = Math.min(255, red / alpha);
+					green = Math.min(255, green / alpha);
 
 					pixels[byteCtr++] = (byte) blue;
 					pixels[byteCtr++] = (byte) green;
 					pixels[byteCtr++] = (byte) red;
-					pixels[byteCtr++] = (byte) (alpha);
+					pixels[byteCtr++] = (byte) alpha;
 				}
 
 			}
@@ -1896,9 +1916,11 @@ public abstract class ImageType {
 					int blueInt = blue & 0xff;
 					int redInt = red & 0xff;
 					int greenInt = green & 0xff;
-					blueInt = blueInt / alpha;
-					greenInt = greenInt / alpha;
-					redInt = redInt / alpha;
+
+					blueInt = Math.min(255, (blueInt << 8) / alpha);
+					greenInt = Math.min(255, (greenInt << 8) / alpha);
+					redInt = Math.min(255, (redInt << 8) / alpha);
+
 					pixels[i] = (byte) blueInt;
 					pixels[i + 1] = (byte) greenInt;
 					pixels[i + 2] = (byte) redInt;
@@ -1955,9 +1977,11 @@ public abstract class ImageType {
 					int blueInt = blue & 0xff;
 					int redInt = red & 0xff;
 					int greenInt = green & 0xff;
-					blueInt = blueInt / alpha;
-					greenInt = greenInt / alpha;
-					redInt = redInt / alpha;
+
+					blueInt = Math.min(255, (blueInt << 8) / alpha);
+					greenInt = Math.min(255, (greenInt << 8) / alpha);
+					redInt = Math.min(255, (redInt << 8) / alpha);
+
 					pixels[i] = (byte) blueInt;
 					pixels[i + 1] = (byte) greenInt;
 					pixels[i + 2] = (byte) redInt;
