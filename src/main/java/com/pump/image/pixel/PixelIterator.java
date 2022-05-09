@@ -23,33 +23,6 @@ package com.pump.image.pixel;
 public interface PixelIterator<T> {
 
 	/**
-	 * This is used to reflect when 3 bytes are used for [red, green, blue]
-	 * data. I'm very confused about BufferedImage.TYPE_3BYTE_BGR, which
-	 * somtimes appears to really reflect [blue, green, red] (as I'd expect) and
-	 * at other times reflects [red, green blue]. In these classes I hope to
-	 * easily distinguish between BGR and RGB.
-	 */
-	int TYPE_3BYTE_RGB = 777;
-
-	/**
-	 * This is used to reflect when 4 bytes are used for [alpha, red, green,
-	 * blue] data.
-	 */
-	int TYPE_4BYTE_ARGB = TYPE_3BYTE_RGB + 1;
-
-	/**
-	 * This is used to reflect when 4 bytes are used for [alpha, red, green,
-	 * blue] premultiplied data.
-	 */
-	int TYPE_4BYTE_ARGB_PRE = TYPE_3BYTE_RGB + 2;
-
-	/**
-	 * This is used to reflect when 4 bytes are used for [blue, green, red,
-	 * alpha] premultiplied data.
-	 */
-	int TYPE_4BYTE_BGRA = TYPE_3BYTE_RGB + 3;
-
-	/**
 	 * The format of this pixel iterator. This will probably be one of the
 	 * BufferedImage type constants.
 	 */

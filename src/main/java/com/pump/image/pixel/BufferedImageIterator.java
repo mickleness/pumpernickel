@@ -172,11 +172,11 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 					indexModel);
 		} else {
 			int imageType = type;
-			if (type == PixelIterator.TYPE_4BYTE_ARGB)
+			if (type == ImageType.TYPE_4BYTE_ARGB)
 				imageType = BufferedImage.TYPE_4BYTE_ABGR;
-			if (type == PixelIterator.TYPE_4BYTE_ARGB_PRE)
+			if (type == ImageType.TYPE_4BYTE_ARGB_PRE)
 				imageType = BufferedImage.TYPE_4BYTE_ABGR_PRE;
-			if (type == PixelIterator.TYPE_3BYTE_RGB)
+			if (type == ImageType.TYPE_3BYTE_RGB)
 				imageType = BufferedImage.TYPE_3BYTE_BGR;
 			dest = new BufferedImage(w, h, imageType);
 		}
@@ -290,7 +290,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			int b = bi.getColorModel().getBlue(array);
 
 			if (r == 100 && g == 50 && b == 10) {
-				return TYPE_3BYTE_RGB;
+				return ImageType.TYPE_3BYTE_RGB;
 			}
 			return BufferedImage.TYPE_3BYTE_BGR;
 		} else if (describedType == BufferedImage.TYPE_4BYTE_ABGR
@@ -302,11 +302,11 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 			if (r == 100 && g == 50 && b == 10) {
 				if (describedType == BufferedImage.TYPE_4BYTE_ABGR) {
-					return TYPE_4BYTE_ARGB;
+					return ImageType.TYPE_4BYTE_ARGB;
 				}
-				return TYPE_4BYTE_ARGB_PRE;
+				return ImageType.TYPE_4BYTE_ARGB_PRE;
 			} else if (r == 128 && g == 100 && b == 50) {
-				return TYPE_4BYTE_BGRA;
+				return ImageType.TYPE_4BYTE_BGRA;
 			}
 			return describedType;
 		}
@@ -320,13 +320,13 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		BufferedImageByteIterator(BufferedImage bi, boolean topDown) {
 			super(bi, getRealType(bi), topDown);
 			if (type == BufferedImage.TYPE_3BYTE_BGR
-					|| type == PixelIterator.TYPE_3BYTE_RGB) {
+					|| type == ImageType.TYPE_3BYTE_RGB) {
 				pixelSize = 3;
 			} else if (type == BufferedImage.TYPE_4BYTE_ABGR
 					|| type == BufferedImage.TYPE_4BYTE_ABGR_PRE
-					|| type == PixelIterator.TYPE_4BYTE_BGRA
-					|| type == PixelIterator.TYPE_4BYTE_ARGB
-					|| type == PixelIterator.TYPE_4BYTE_ARGB_PRE) {
+					|| type == ImageType.TYPE_4BYTE_BGRA
+					|| type == ImageType.TYPE_4BYTE_ARGB
+					|| type == ImageType.TYPE_4BYTE_ARGB_PRE) {
 				pixelSize = 4;
 			} else if (type == BufferedImage.TYPE_BYTE_GRAY
 					|| type == BufferedImage.TYPE_BYTE_INDEXED) {

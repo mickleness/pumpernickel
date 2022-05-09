@@ -24,7 +24,7 @@ public class PixelUtils {
 		switch (imageType) {
 
 		// opaque:
-		case PixelIterator.TYPE_3BYTE_RGB:
+		case ImageType.TYPE_3BYTE_RGB:
 		case BufferedImage.TYPE_3BYTE_BGR:
 		case BufferedImage.TYPE_BYTE_GRAY:
 		case BufferedImage.TYPE_BYTE_BINARY:
@@ -41,9 +41,9 @@ public class PixelUtils {
 
 		// definitely has alpha
 
-		case PixelIterator.TYPE_4BYTE_BGRA:
-		case PixelIterator.TYPE_4BYTE_ARGB:
-		case PixelIterator.TYPE_4BYTE_ARGB_PRE:
+		case ImageType.TYPE_4BYTE_ARGB:
+		case ImageType.TYPE_4BYTE_ARGB_PRE:
+		case ImageType.TYPE_4BYTE_BGRA:
 		case BufferedImage.TYPE_4BYTE_ABGR:
 		case BufferedImage.TYPE_4BYTE_ABGR_PRE:
 		case BufferedImage.TYPE_INT_ARGB:
@@ -72,15 +72,15 @@ public class PixelUtils {
 		switch (imageType) {
 
 		// bytes:
-		case PixelIterator.TYPE_3BYTE_RGB:
+		case ImageType.TYPE_3BYTE_RGB:
 		case BufferedImage.TYPE_3BYTE_BGR:
 			return 3;
 		case BufferedImage.TYPE_BYTE_INDEXED:
 		case BufferedImage.TYPE_BYTE_GRAY:
 			return 1;
-		case PixelIterator.TYPE_4BYTE_BGRA:
-		case PixelIterator.TYPE_4BYTE_ARGB:
-		case PixelIterator.TYPE_4BYTE_ARGB_PRE:
+		case ImageType.TYPE_4BYTE_BGRA:
+		case ImageType.TYPE_4BYTE_ARGB:
+		case ImageType.TYPE_4BYTE_ARGB_PRE:
 		case BufferedImage.TYPE_4BYTE_ABGR:
 		case BufferedImage.TYPE_4BYTE_ABGR_PRE:
 			return 4;

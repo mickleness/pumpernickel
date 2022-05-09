@@ -23,9 +23,8 @@ import com.pump.image.gif.block.GifGraphicControlExtension.DisposalMethod;
 import com.pump.image.gif.block.GifImageDataBlock;
 import com.pump.image.gif.block.GifImageDescriptor;
 import com.pump.image.gif.block.GifLocalColorTable;
-import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.converter.IntARGBConverter;
-
+import com.pump.image.pixel.ImageType;
+import com.pump.image.pixel.IntPixelIterator;
 /**
  * This tests out 3 possible frame disposal methods and chooses the one that
  * would result in the smallest frame dimensions.
@@ -65,7 +64,8 @@ public class BasicGifEncoder extends GifEncoder {
 		int y = 0;
 
 		public Frame(BufferedImage image, int durationInCentiseconds,
-				IndexColorModel globalColorModel, boolean writeLocalColorTable) {
+				IndexColorModel globalColorModel,
+				boolean writeLocalColorTable) {
 			this.wholeImage = image;
 			this.optimizedImage = image;
 			this.globalColorModel = globalColorModel;
@@ -103,7 +103,8 @@ public class BasicGifEncoder extends GifEncoder {
 					d.height, false, localColorSize);
 			id.write(out);
 			if (localColorSize > 0) {
-				GifLocalColorTable ct = new GifLocalColorTable(globalColorModel);
+				GifLocalColorTable ct = new GifLocalColorTable(
+						globalColorModel);
 				ct.write(out);
 			}
 			GifImageDataBlock dataBlock = new GifImageDataBlock(optimizedImage,
@@ -178,10 +179,8 @@ public class BasicGifEncoder extends GifEncoder {
 					+ background.getWidth() + "x" + background.getHeight()
 					+ ", " + incoming.getWidth() + "x" + incoming.getHeight());
 
-		IntARGBConverter c1 = new IntARGBConverter(
-				BufferedImageIterator.get(background));
-		IntARGBConverter c2 = new IntARGBConverter(
-				BufferedImageIterator.get(incoming));
+		IntPixelIterator c1 = ImageType.INT_ARGB.createConverter(background);
+		IntPixelIterator c2 = ImageType.INT_ARGB.createConverter(incoming);
 		int[] row1 = new int[c1.getMinimumArrayLength()];
 		int[] row2 = new int[c2.getMinimumArrayLength()];
 		Rectangle r = null;

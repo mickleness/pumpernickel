@@ -30,9 +30,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.image.pixel.BufferedIntPixelIterator;
+import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.IntPixelIterator;
-import com.pump.image.pixel.converter.IntARGBConverter;
-import com.pump.image.pixel.converter.IntRGBConverter;
+import com.pump.image.pixel.converter.IntPixelConverter;
 import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
 import com.pump.util.Warnings;
@@ -250,16 +250,15 @@ public class ImageLoader {
 	 * loaded. If your image were a text document, this is basically telling you
 	 * where the text cursor was last placed. However the
 	 * <code>ImageProducer</code> may make several different iterations over the
-	 * image to deliver the complete image, so it is completely possible that
-	 * this value will range from 0 to 1 a few different times.
+	 * image to deliver the complete image, so it is possible that this value
+	 * will range from 0 to 1 a few different times.
 	 * <P>
-	 * I wish this could be more precise, but I don't see how more precision is
+	 * (I wish this could be more precise, but I don't see how more precision is
 	 * possible given the way the <code>ImageProducer</code>/
-	 * <code>ImageConsumer</code> model works.
+	 * <code>ImageConsumer</code> model works.)
 	 * <P>
-	 * For the most part, this will be a straight-forward 1-pass system. If you
-	 * limit yourself to certain types of images (like PNGs) this is probably
-	 * the case.
+	 * Often this will be a straight-forward 1-pass system, but you may observe
+	 * some images require multiple passes.
 	 */
 	public float getProgress() {
 		return progress;
@@ -289,8 +288,7 @@ public class ImageLoader {
 	protected void fireChangeListeners() {
 		if (listeners == null)
 			return;
-		for (int a = 0; a < listeners.size(); a++) {
-			ChangeListener l = listeners.get(a);
+		for (ChangeListener l : listeners.toArray(new ChangeListener[0])) {
 			try {
 				l.stateChanged(new ChangeEvent(this));
 			} catch (Exception e) {
@@ -354,6 +352,7 @@ public class ImageLoader {
 	}
 
 	class InnerImageConsumer implements ImageConsumer {
+
 		public InnerImageConsumer() {
 		}
 
@@ -378,41 +377,36 @@ public class ImageLoader {
 		public void setColorModel(ColorModel cm) {
 			if (debug)
 				System.err.println("setColorModel( " + cm + " )");
+			// the doc says this isn't really binding, so let's ignore it
 		}
 
 		@Override
-		public void setDimensions(int w, int h) {
-			try {
-				if (debug)
-					System.err.println("setDimensions(" + w + "," + h + ")");
-				if (w <= 0)
-					throw new IllegalArgumentException(
-							"Width must be greater than zero.  (" + w + ")");
-				if (h <= 0)
-					throw new IllegalArgumentException(
-							"Height must be greater than zero.  (" + h + ")");
-				if (size != null) {
-					// eh? already exists?
-					if (size.width == w && size.height == h)
-						return;
-					if (dest != null) {
-						throw new RuntimeException("An image of "
-								+ (size.getWidth()) + "x" + size.getHeight()
-								+ " was already created.  Illegal attempt to call setDimensions("
-								+ w + "," + h + ")");
-					}
+		public synchronized void setDimensions(int w, int h) {
+			if (debug)
+				System.err.println("setDimensions(" + w + "," + h + ")");
+			if (w <= 0)
+				throw new IllegalArgumentException(
+						"Width must be greater than zero.  (" + w + ")");
+			if (h <= 0)
+				throw new IllegalArgumentException(
+						"Height must be greater than zero.  (" + h + ")");
+			if (size != null) {
+				// eh? already exists?
+
+				if (size.width == w && size.height == h) {
+					// weird, but harmless
+					return;
 				}
-				size = new Dimension(w, h);
-				fireChangeListeners();
-			} catch (RuntimeException e) {
-				System.err.println("setDimensions( " + w + ", " + h + " )");
-				System.err.println(description);
-				throw e;
-			} catch (Error e) {
-				System.err.println("setDimensions( " + w + ", " + h + " )");
-				System.err.println(description);
-				throw e;
+
+				if (dest != null) {
+					throw new RuntimeException("An image of "
+							+ (size.getWidth()) + "x" + size.getHeight()
+							+ " was already created.  Illegal attempt to call setDimensions("
+							+ w + "," + h + ")");
+				}
 			}
+			size = new Dimension(w, h);
+			fireChangeListeners();
 		}
 
 		@Override
@@ -438,14 +432,14 @@ public class ImageLoader {
 		private byte[] rowByte = null;
 
 		@Override
-		public void setPixels(int x, int y, int w, int h, ColorModel cm,
-				byte[] data, int offset, int scanSize) {
+		public synchronized void setPixels(int x, int y, int w, int h,
+				ColorModel cm, byte[] data, int offset, int scanSize) {
 			setPixels(x, y, w, h, cm, null, data, offset, scanSize);
 		}
 
 		@Override
-		public void setPixels(int x, int y, int w, int h, ColorModel colorModel,
-				int[] data, int offset, int scanSize) {
+		public synchronized void setPixels(int x, int y, int w, int h,
+				ColorModel colorModel, int[] data, int offset, int scanSize) {
 			setPixels(x, y, w, h, colorModel, data, null, offset, scanSize);
 		}
 
@@ -455,6 +449,19 @@ public class ImageLoader {
 		private void setPixels(int x, int y, int w, int h,
 				ColorModel colorModel, int[] intData, byte[] byteData,
 				int offset, int scanSize) {
+
+			if (debug) {
+				if (intData != null) {
+					System.err.println("setPixels(" + x + " ," + y + " ," + w
+							+ " ," + h + ", " + colorModel + ", ..., " + offset
+							+ ", " + scanSize + ") (int[])");
+				} else {
+					System.err.println("setPixels(" + x + " ," + y + " ," + w
+							+ " ," + h + ", " + colorModel + ", ..., " + offset
+							+ ", " + scanSize + ") (byte[])");
+				}
+			}
+
 			try {
 				if (intData == null && byteData == null)
 					throw new NullPointerException();
@@ -464,21 +471,8 @@ public class ImageLoader {
 				if (cancellable.isCancelled()) {
 					if (debug)
 						System.err.println("the Cancellable was activated");
-					producer.removeConsumer(this);
 					unblock(STATUS_CANCELLABLE_CANCELLED);
 					return;
-				}
-
-				if (debug) {
-					if (intData != null) {
-						System.err.println("setPixels(" + x + " ," + y + " ,"
-								+ w + " ," + h + ", " + colorModel + ", ..., "
-								+ offset + ", " + scanSize + ") (int[])");
-					} else {
-						System.err.println("setPixels(" + x + " ," + y + " ,"
-								+ w + " ," + h + ", " + colorModel + ", ..., "
-								+ offset + ", " + scanSize + ") (byte[])");
-					}
 				}
 
 				if (size == null)
@@ -495,8 +489,8 @@ public class ImageLoader {
 					if (destImageType == ImageLoader.TYPE_DEFAULT) {
 						// we need to decide our BufferedImage's type:
 						if (colorModelImageType == ColorModelUtils.TYPE_UNRECOGNIZED) {
-							// we may get error downstream (or we may not), but
-							// this is an OK guess right now:
+							// we may get error downstream (or we may not),
+							// but this is an OK guess right now:
 							dest = new MutableBufferedImage(size.width,
 									size.height, BufferedImage.TYPE_INT_ARGB);
 						} else {
@@ -506,6 +500,11 @@ public class ImageLoader {
 					} else {
 						dest = new MutableBufferedImage(size.width, size.height,
 								destImageType);
+					}
+
+					if (pendingProperties != null) {
+						dest.setProperties(pendingProperties);
+						pendingProperties = null;
 					}
 				}
 
@@ -575,115 +574,39 @@ public class ImageLoader {
 			}
 		}
 
-		private void writePixels(int[] data, int dataType, int x, int y, int w,
-				int h, int offset, int scanSize, ColorModel colorModel) {
+		private void writePixels(int[] inData, int inDataType, int x, int y,
+				int w, int h, int offset, int scanSize, ColorModel colorModel) {
 
-			boolean writePixelsDirectly = dest.getType() == dataType;
+			// attempt #1: can we use a PixelConverter?
 
-			// attempt #1: can we just write rows of data directly into our
-			// image?
-
-			if ((dest.getType() == BufferedImage.TYPE_INT_ARGB
-					|| dest.getType() == BufferedImage.TYPE_INT_ARGB_PRE)
-					&& dataType == BufferedImage.TYPE_INT_RGB) {
-				// we have opaque RGB pixels coming in, so we can just add
-				// an opaque alpha channel to every pixel:
-				for (int q = y; q < y + h; q++) {
-					int i = offset + (q - y) * scanSize;
-					int i_end = i + w;
-					for (; i < i_end; i++) {
-						data[i] = 0xff000000 | (data[i] & 0xffffff);
-					}
-				}
-				writePixelsDirectly = true;
-			} else if (dest.getType() == BufferedImage.TYPE_INT_ARGB
-					&& dataType == BufferedImage.TYPE_INT_ARGB_PRE) {
-				// our incoming is ARGB_PRE, and we want to convert to ARGB
-				for (int q = y; q < y + h; q++) {
-					int i = offset + (q - y) * scanSize;
-					int i_end = i + w;
-					for (; i < i_end; i++) {
-						int alpha1 = data[i] & 0xff000000;
-						int alpha2 = (alpha1 >> 24);
-
-						if (alpha2 != 0 && alpha2 != -1) {
-							// convert to [0,255]
-							alpha2 = alpha2 & 0xff;
-
-							int r = (data[i] >> 8) & 0xff00;
-							int g = data[i] & 0xff00;
-							int b = (data[i] << 8) & 0xff00;
-
-							// can we ever exceed 255 due to rounding error?
-							// let's use Math.min() to avoid any risk
-							r = Math.min(255, r / alpha2);
-							g = Math.min(255, g / alpha2);
-							b = Math.min(255, b / alpha2);
-
-							data[i] = alpha1 | (r << 16) | (g << 8) | b;
-						}
-					}
-				}
-				writePixelsDirectly = true;
-			} else if (dest.getType() == BufferedImage.TYPE_INT_ARGB_PRE
-					&& dataType == BufferedImage.TYPE_INT_ARGB) {
-				// our incoming is ARGB, and we want to convert to ARGB_PRE
-				for (int q = y; q < y + h; q++) {
-					int i = offset + (q - y) * scanSize;
-					int i_end = i + w;
-					for (; i < i_end; i++) {
-						int alpha1 = data[i] & 0xff000000;
-						int alpha2 = alpha1 >> 24;
-
-						if (alpha2 == 0) {
-							data[i] = 0;
-						} else if (alpha2 == -1) {
-							// intentionally empty, opaque pixel
-						} else {
-							// convert to [0,255]
-							alpha2 = alpha2 & 0xff;
-
-							int r = ((data[i] & 0xff0000) * alpha2) >> 8;
-							int g = ((data[i] & 0xff00) * alpha2) >> 8;
-							int b = ((data[i] & 0xff) * alpha2) >> 8;
-
-							data[i] = alpha1 | r | g | b;
-						}
-					}
-				}
-				writePixelsDirectly = true;
-			}
-
-			if (writePixelsDirectly) {
-				if (offset == 0 && scanSize == w) {
-					dest.getRaster().setDataElements(x, y, w, h, data);
-				} else {
-					if (rowInt == null || rowInt.length < w)
-						rowInt = new int[w];
-
-					for (int n = y; n < y + h; n++) {
-						int arrayOffset = (n - y) * scanSize - x + offset;
-						System.arraycopy(data, arrayOffset, rowInt, 0, w);
-						dest.getRaster().setDataElements(x, n, w, 1, rowInt);
-					}
-				}
-				return;
-			}
-
-			// attempt #2: can we use a PixelConverter?
-
-			IntPixelIterator intConverterIter = null;
+			IntPixelIterator intConverterIter;
 			switch (dest.getType()) {
 			case BufferedImage.TYPE_INT_ARGB:
-				IntPixelIterator dataIter1 = new BufferedIntPixelIterator(data,
-						w, h, offset, scanSize, dataType);
-				intConverterIter = new IntARGBConverter(dataIter1);
+				IntPixelIterator dataIter1 = new BufferedIntPixelIterator(
+						inData, w, h, offset, scanSize, inDataType);
+				intConverterIter = new IntPixelConverter(dataIter1,
+						ImageType.INT_ARGB);
+				break;
+			case BufferedImage.TYPE_INT_ARGB_PRE:
+				IntPixelIterator dataIter2 = new BufferedIntPixelIterator(
+						inData, w, h, offset, scanSize, inDataType);
+				intConverterIter = new IntPixelConverter(dataIter2,
+						ImageType.INT_ARGB_PRE);
 				break;
 			case BufferedImage.TYPE_INT_RGB:
-				IntPixelIterator dataIter2 = new BufferedIntPixelIterator(data,
-						w, h, offset, scanSize, dataType);
-				intConverterIter = new IntRGBConverter(dataIter2);
+				IntPixelIterator dataIter3 = new BufferedIntPixelIterator(
+						inData, w, h, offset, scanSize, inDataType);
+				intConverterIter = new IntPixelConverter(dataIter3,
+						ImageType.INT_RGB);
 				break;
+			case BufferedImage.TYPE_INT_BGR:
+				IntPixelIterator dataIter4 = new BufferedIntPixelIterator(
+						inData, w, h, offset, scanSize, inDataType);
+				intConverterIter = new IntPixelConverter(dataIter4,
+						ImageType.INT_BGR);
+				break;
+			default:
+				intConverterIter = null;
 			}
 
 			if (intConverterIter != null) {
@@ -698,13 +621,12 @@ public class ImageLoader {
 				return;
 			}
 
-			// attempt #3 -- last resort: use the colorModel.getRGB
+			// attempt #2 -- last resort: use the colorModel.getRGB
 
 			for (int n = y; n < y + h; n++) {
 				for (int m = x; m < x + w; m++) {
-					// TODO: this will fail for bytes
 					int argb = colorModel.getRGB(
-							data[(n - y) * scanSize + (m - x) + offset]);
+							inData[(n - y) * scanSize + (m - x) + offset]);
 					dest.setRGB(x, y, argb);
 				}
 			}
@@ -717,33 +639,24 @@ public class ImageLoader {
 		}
 
 		@Override
-		public void setProperties(Hashtable<?, ?> p) {
-			try {
-				if (debug) {
-					System.err.println("setProperties(): " + p);
+		public synchronized void setProperties(Hashtable<?, ?> p) {
+			if (debug) {
+				System.err.println("setProperties(): " + p);
+			}
+
+			if (dest != null) {
+				for (Map.Entry<?, ?> entry : p.entrySet()) {
+					String key = String.valueOf(entry.getKey());
+					dest.setProperty(key, entry.getValue());
 				}
+			} else {
+				if (pendingProperties == null)
+					pendingProperties = new HashMap<>();
 
-				if (dest != null) {
-					for (Map.Entry<?, ?> entry : p.entrySet()) {
-						String key = String.valueOf(entry.getKey());
-						dest.setProperty(key, entry.getValue());
-					}
-				} else {
-					if (pendingProperties == null)
-						pendingProperties = new HashMap<>();
-
-					for (Map.Entry<?, ?> entry : p.entrySet()) {
-						String key = String.valueOf(entry.getKey());
-						pendingProperties.put(key, entry.getValue());
-					}
+				for (Map.Entry<?, ?> entry : p.entrySet()) {
+					String key = String.valueOf(entry.getKey());
+					pendingProperties.put(key, entry.getValue());
 				}
-
-			} catch (RuntimeException e) {
-				System.err.println(description);
-				throw e;
-			} catch (Error e) {
-				System.err.println(description);
-				throw e;
 			}
 		}
 	}

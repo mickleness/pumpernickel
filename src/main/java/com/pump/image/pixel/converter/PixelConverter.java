@@ -10,68 +10,108 @@
  */
 package com.pump.image.pixel.converter;
 
-import java.awt.image.IndexColorModel;
+import java.util.Objects;
 
+import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.BytePixelIterator;
+import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.IndexedBytePixelIterator;
 import com.pump.image.pixel.IntPixelIterator;
 import com.pump.image.pixel.PixelIterator;
 
 /**
- * This is the abstract base class for most of the converters in this package.
- * 
+ * This is an abstract parent class for converter iterators.
  */
-public abstract class PixelConverter<T> implements PixelIterator<T> {
-	private final PixelIterator<?> i;
-	protected final BytePixelIterator byteIterator;
-	protected final IntPixelIterator intIterator;
-	final int originalType;
-	final int width;
-	protected final IndexColorModel indexModel;
+public abstract class PixelConverter<T, I extends ImageType>
+		implements PixelIterator<T> {
+	/**
+	 * The source pixel data we're iterating over.
+	 */
+	protected final PixelIterator<?> srcIter;
 
-	public PixelConverter(PixelIterator<?> i) {
-		this.i = i;
-		originalType = i.getType();
-		width = i.getWidth();
+	/**
+	 * This will be null or srcIter.
+	 */
+	protected final BytePixelIterator srcByteIterator;
 
-		if (i instanceof IndexedBytePixelIterator) {
-			IndexedBytePixelIterator ibpi = (IndexedBytePixelIterator) i;
-			byteIterator = ibpi;
-			indexModel = ibpi.getIndexColorModel();
-			intIterator = null;
-		} else if (i instanceof BytePixelIterator) {
-			byteIterator = (BytePixelIterator) i;
-			indexModel = null;
-			intIterator = null;
-		} else if (i instanceof IntPixelIterator) {
-			intIterator = (IntPixelIterator) i;
-			byteIterator = null;
-			indexModel = null;
+	/**
+	 * This will be null or srcIter.
+	 */
+	protected final IntPixelIterator srcIntIterator;
+
+	protected final I dstImageType;
+
+	/**
+	 * This will be non-null if the source pixels use an IndexColorModel.
+	 */
+	protected final IndexColorModelLUT indexColorModelLUT;
+
+	/**
+	 * 
+	 * @param i
+	 *            the incoming source data we iterate over
+	 * @param dstImageType
+	 *            the type of image data this converter ultimately produces.
+	 */
+	public PixelConverter(PixelIterator<?> srcIter, I dstImageType) {
+		this.srcIter = srcIter;
+		this.dstImageType = Objects.requireNonNull(dstImageType);
+		if (srcIter instanceof IndexedBytePixelIterator) {
+			IndexedBytePixelIterator ibpi = (IndexedBytePixelIterator) srcIter;
+			srcByteIterator = ibpi;
+			indexColorModelLUT = new IndexColorModelLUT(
+					ibpi.getIndexColorModel());
+			srcIntIterator = null;
+		} else if (srcIter instanceof BytePixelIterator) {
+			srcByteIterator = (BytePixelIterator) srcIter;
+			indexColorModelLUT = null;
+			srcIntIterator = null;
+		} else if (srcIter instanceof IntPixelIterator) {
+			srcIntIterator = (IntPixelIterator) srcIter;
+			srcByteIterator = null;
+			indexColorModelLUT = null;
 		} else {
 			throw new IllegalArgumentException(
 					"the converted iterator must be a BytePixelIterator or an IntPixelIterator (not a "
-							+ i.getClass().getName() + ")");
+							+ srcIter.getClass().getName() + ")");
 		}
 	}
 
 	@Override
+	public int getType() {
+		return dstImageType.code;
+	}
+
+	@Override
 	public int getHeight() {
-		return i.getHeight();
+		return srcIter.getHeight();
 	}
 
 	@Override
 	public int getWidth() {
-		return width;
+		return srcIter.getWidth();
 	}
 
 	@Override
 	public boolean isDone() {
-		return i.isDone();
+		return srcIter.isDone();
 	}
 
 	@Override
 	public boolean isTopDown() {
-		return i.isTopDown();
+		return srcIter.isTopDown();
 	}
 
+	@Override
+	public void skip() {
+		srcIter.skip();
+	}
+
+	/**
+	 * This throws an exception describing the current source iterator.
+	 */
+	protected void failUnsupportedSourceType() {
+		throw new RuntimeException("Unrecognized source type. "
+				+ BufferedImageIterator.getTypeName(srcIter.getType()));
+	}
 }

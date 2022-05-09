@@ -323,15 +323,15 @@ public abstract class GenericImageSinglePassIterator<T>
 										+ 2] = (byte) ((rgb >> 8) & 0xff);
 								destArray[4 * myX
 										+ 3] = (byte) ((rgb >> 0) & 0xff);
-							} else if (type == PixelIterator.TYPE_3BYTE_RGB) {
+							} else if (type == ImageType.TYPE_3BYTE_RGB) {
 								destArray[3 * myX
 										+ 0] = (byte) ((rgb >> 0) & 0xff);
 								destArray[3 * myX
 										+ 1] = (byte) ((rgb >> 8) & 0xff);
 								destArray[3 * myX
 										+ 2] = (byte) ((rgb >> 16) & 0xff);
-							} else if (type == PixelIterator.TYPE_4BYTE_ARGB
-									|| type == PixelIterator.TYPE_4BYTE_ARGB_PRE) {
+							} else if (type == ImageType.TYPE_4BYTE_ARGB
+									|| type == ImageType.TYPE_4BYTE_ARGB_PRE) {
 								destArray[4 * myX
 										+ 0] = (byte) ((rgb >> 24) & 0xff);
 								destArray[4 * myX
@@ -372,7 +372,7 @@ public abstract class GenericImageSinglePassIterator<T>
 							destArray[4 * myX + 2] = (byte) ((rgb >> 8) & 0xff);
 							destArray[4 * myX + 3] = (byte) ((rgb >> 0) & 0xff);
 						}
-					} else if (type == PixelIterator.TYPE_3BYTE_RGB) {
+					} else if (type == ImageType.TYPE_3BYTE_RGB) {
 						for (int myX = x; myX < x + width; myX++) {
 							int rgb = colorModel
 									.getRGB(pixelData[myX + offset]);
@@ -381,8 +381,8 @@ public abstract class GenericImageSinglePassIterator<T>
 							destArray[3 * myX
 									+ 2] = (byte) ((rgb >> 16) & 0xff);
 						}
-					} else if (type == PixelIterator.TYPE_4BYTE_ARGB
-							|| type == PixelIterator.TYPE_4BYTE_ARGB_PRE) {
+					} else if (type == ImageType.TYPE_4BYTE_ARGB
+							|| type == ImageType.TYPE_4BYTE_ARGB_PRE) {
 						for (int myX = x; myX < x + width; myX++) {
 							int rgb = colorModel
 									.getRGB(pixelData[myX + offset]);
@@ -789,9 +789,9 @@ public abstract class GenericImageSinglePassIterator<T>
 			case BufferedImage.TYPE_3BYTE_BGR:
 			case BufferedImage.TYPE_4BYTE_ABGR:
 			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-			case PixelIterator.TYPE_3BYTE_RGB:
-			case PixelIterator.TYPE_4BYTE_ARGB:
-			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
+			case ImageType.TYPE_3BYTE_RGB:
+			case ImageType.TYPE_4BYTE_ARGB:
+			case ImageType.TYPE_4BYTE_ARGB_PRE:
 			case BufferedImage.TYPE_BYTE_GRAY:
 				iterator = new GenericImageSinglePassByteIterator(w, h,
 						iteratorType, topDown);

@@ -13,10 +13,8 @@ package com.pump.image.pixel;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
-import com.pump.image.pixel.converter.ByteBGRAConverter;
-import com.pump.image.pixel.converter.ByteBGRConverter;
-import com.pump.image.pixel.converter.IntARGBConverter;
-import com.pump.image.pixel.converter.IntRGBConverter;
+import com.pump.image.pixel.converter.BytePixelConverter;
+import com.pump.image.pixel.converter.IntPixelConverter;
 
 /**
  * This iterator scales another iterator as it is being read.
@@ -117,9 +115,9 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 		return (type == BufferedImage.TYPE_3BYTE_BGR
 				|| type == BufferedImage.TYPE_4BYTE_ABGR
 				|| type == BufferedImage.TYPE_4BYTE_ABGR_PRE
-				|| type == PixelIterator.TYPE_3BYTE_RGB
-				|| type == PixelIterator.TYPE_4BYTE_ARGB
-				|| type == PixelIterator.TYPE_4BYTE_ARGB_PRE
+				|| type == ImageType.TYPE_3BYTE_RGB
+				|| type == ImageType.TYPE_4BYTE_ARGB
+				|| type == ImageType.TYPE_4BYTE_ARGB_PRE
 				|| type == BufferedImage.TYPE_BYTE_GRAY);
 	}
 
@@ -428,7 +426,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (reds[x] / sums[x]);
 				}
 				break;
-			case PixelIterator.TYPE_3BYTE_RGB:
+			case ImageType.TYPE_3BYTE_RGB:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
 					destArray[k2++] = (byte) (reds[x] / sums[x]);
 					destArray[k2++] = (byte) (greens[x] / sums[x]);
@@ -445,8 +443,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (reds[x] / sums[x]);
 				}
 				break;
-			case PixelIterator.TYPE_4BYTE_ARGB:
-			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
+			case ImageType.TYPE_4BYTE_ARGB:
+			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
 					destArray[k2++] = isOpaque ? -127
 							: (byte) (alphas[x] / sums[x]);
@@ -482,7 +480,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					sums[k]++;
 				}
 				break;
-			case PixelIterator.TYPE_3BYTE_RGB:
+			case ImageType.TYPE_3BYTE_RGB:
 				for (int x = 0, k2 = 0; x < srcW; x += incr) {
 					int k = srcXLUT[x];
 					reds[k] += sourceArray[k2++] & 0xff;
@@ -504,8 +502,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					sums[k]++;
 				}
 				break;
-			case PixelIterator.TYPE_4BYTE_ARGB:
-			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
+			case ImageType.TYPE_4BYTE_ARGB:
+			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0, k2 = 0; x < srcW; x += incr) {
 					int k = srcXLUT[x];
 					if (alphas != null)
@@ -747,7 +745,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (r);
 				}
 				break;
-			case PixelIterator.TYPE_3BYTE_RGB:
+			case ImageType.TYPE_3BYTE_RGB:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
 					int m1 = mult1 / sums[x];
 					int m2 = mult2 / sums[x];
@@ -779,8 +777,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (r);
 				}
 				break;
-			case PixelIterator.TYPE_4BYTE_ARGB:
-			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
+			case ImageType.TYPE_4BYTE_ARGB:
+			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
 					int m1 = mult1 / sums[x];
 					int m2 = mult2 / sums[x];
@@ -853,7 +851,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (reds[x] / sums[x]);
 				}
 				break;
-			case PixelIterator.TYPE_3BYTE_RGB:
+			case ImageType.TYPE_3BYTE_RGB:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
 					destArray[k2++] = (byte) (reds[x] / sums[x]);
 					destArray[k2++] = (byte) (greens[x] / sums[x]);
@@ -870,8 +868,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (reds[x] / sums[x]);
 				}
 				break;
-			case PixelIterator.TYPE_4BYTE_ARGB:
-			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
+			case ImageType.TYPE_4BYTE_ARGB:
+			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
 					destArray[k2++] = isOpaque ? -127
 							: (byte) (alphas[x] / sums[x]);
@@ -907,7 +905,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					sums[k]++;
 				}
 				break;
-			case PixelIterator.TYPE_3BYTE_RGB:
+			case ImageType.TYPE_3BYTE_RGB:
 				for (int x = 0, k2 = 0; x < srcW; x += incr) {
 					int k = srcXLUT[x];
 					reds[k] += sourceArray[k2++] & 0xff;
@@ -929,8 +927,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					sums[k]++;
 				}
 				break;
-			case PixelIterator.TYPE_4BYTE_ARGB:
-			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
+			case ImageType.TYPE_4BYTE_ARGB:
+			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0, k2 = 0; x < srcW; x += incr) {
 					int k = srcXLUT[x];
 					if (alphas != null)
@@ -1174,7 +1172,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (r);
 				}
 				break;
-			case PixelIterator.TYPE_3BYTE_RGB:
+			case ImageType.TYPE_3BYTE_RGB:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
 					int m1 = mult1 / sums[x];
 					int m2 = mult2 / sums[x];
@@ -1206,8 +1204,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (r);
 				}
 				break;
-			case PixelIterator.TYPE_4BYTE_ARGB:
-			case PixelIterator.TYPE_4BYTE_ARGB_PRE:
+			case ImageType.TYPE_4BYTE_ARGB:
+			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
 					int m1 = mult1 / sums[x];
 					int m2 = mult2 / sums[x];
@@ -1258,16 +1256,16 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 		if (srcIterator instanceof BytePixelIterator
 				&& (!isSupportedByteType(srcIterator.getType()))) {
 			if (srcIterator.isOpaque()) {
-				srcIterator = new ByteBGRConverter(srcIterator);
+				srcIterator = ImageType.BYTE_BGR.createConverter(srcIterator);
 			} else {
-				srcIterator = new ByteBGRAConverter(srcIterator);
+				srcIterator = ImageType.BYTE_BGRA.createConverter(srcIterator);
 			}
 		} else if (srcIterator instanceof IntPixelIterator
 				&& (!isSupportedIntType(srcIterator.getType()))) {
 			if (srcIterator.isOpaque()) {
-				srcIterator = new IntRGBConverter(srcIterator);
+				srcIterator = ImageType.INT_RGB.createConverter(srcIterator);
 			} else {
-				srcIterator = new IntARGBConverter(srcIterator);
+				srcIterator = ImageType.INT_ARGB.createConverter(srcIterator);
 			}
 		}
 		this.srcIterator = srcIterator;

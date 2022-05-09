@@ -22,10 +22,7 @@ import java.net.URL;
 import com.pump.awt.Dimension2D;
 import com.pump.image.ImageSize;
 import com.pump.image.bmp.BmpDecoderIterator;
-import com.pump.image.pixel.converter.ByteBGRAConverter;
-import com.pump.image.pixel.converter.ByteBGRConverter;
-import com.pump.image.pixel.converter.IntARGBConverter;
-import com.pump.image.pixel.converter.IntRGBConverter;
+import com.pump.image.pixel.converter.IntPixelConverter;
 import com.pump.io.FileInputStreamSource;
 import com.pump.io.InputStreamSource;
 import com.pump.io.URLInputStreamSource;
@@ -145,20 +142,9 @@ public class Scaling {
 				PixelIterator scalingIter = destSize == null ? iter
 						: ScalingIterator.get(iter, destSize.width,
 								destSize.height);
-				PixelIterator finalIter = scalingIter;
-				if (imageType == BufferedImage.TYPE_INT_ARGB
-						|| imageType == BufferedImage.TYPE_INT_ARGB_PRE) {
-					finalIter = new IntARGBConverter(scalingIter);
-				} else if (imageType == BufferedImage.TYPE_INT_RGB) {
-					finalIter = new IntRGBConverter(scalingIter);
-				} else if (imageType == BufferedImage.TYPE_3BYTE_BGR) {
-					finalIter = new ByteBGRConverter(scalingIter);
-				} else if (imageType == BufferedImage.TYPE_4BYTE_ABGR) {
-					finalIter = new ByteBGRAConverter(scalingIter);
-				} else {
-					throw new IllegalArgumentException(
-							"unrecognized imtype: " + imageType);
-				}
+				PixelIterator finalIter = ImageType.get(imageType)
+						.createConverter(scalingIter);
+
 				BufferedImage image = BufferedImageIterator.create(finalIter,
 						null);
 				return image;
@@ -239,7 +225,7 @@ public class Scaling {
 				BufferedImageIterator.get(source), destSize.width,
 				destSize.height);
 		if (pi instanceof BytePixelIterator) {
-			pi = new IntARGBConverter(pi);
+			pi = ImageType.INT_ARGB.createConverter(pi);
 		}
 		IntPixelIterator i = (IntPixelIterator) pi;
 		int[] row = new int[i.getMinimumArrayLength()];

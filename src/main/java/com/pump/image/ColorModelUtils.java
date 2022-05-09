@@ -65,28 +65,4 @@ public class ColorModelUtils {
 
 		return TYPE_UNRECOGNIZED;
 	}
-
-	/**
-	 * This checks to see if two DirectColorModels are identical. Apparently the
-	 * "equals" method in DirectColorModel doesn't really work.
-	 */
-	private static boolean equals(DirectColorModel d1, DirectColorModel d2) {
-		if (d1.getAlphaMask() != d2.getAlphaMask())
-			return false;
-		if (d1.getGreenMask() != d2.getGreenMask())
-			return false;
-		if (d1.getRedMask() != d2.getRedMask())
-			return false;
-		if (d1.getBlueMask() != d2.getBlueMask())
-			return false;
-		if (d1.getColorSpace() != d2.getColorSpace())
-			return false;
-		if (d1.isAlphaPremultiplied() != d2.isAlphaPremultiplied())
-			return false;
-		if (d1.getTransferType() != d2.getTransferType())
-			return false;
-		if (d1.getTransparency() != d2.getTransparency())
-			return false;
-		return true;
-	}
 }

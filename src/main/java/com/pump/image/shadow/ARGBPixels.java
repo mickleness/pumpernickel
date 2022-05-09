@@ -20,8 +20,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Hashtable;
 
-import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.converter.IntARGBConverter;
+import com.pump.image.pixel.ImageType;
+import com.pump.image.pixel.IntPixelIterator;
 
 /**
  * This represents ARGB-encoded pixel data for an image.
@@ -107,8 +107,7 @@ public class ARGBPixels implements Serializable {
 		if (pixels == null) {
 			pixels = new int[width * height];
 			int[] row = new int[width];
-			IntARGBConverter c = new IntARGBConverter(
-					BufferedImageIterator.get(srcImage));
+			IntPixelIterator c = ImageType.INT_ARGB.createConverter(srcImage);
 			int y = 0;
 			while (!c.isDone()) {
 				c.next(row);
