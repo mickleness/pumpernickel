@@ -53,20 +53,11 @@ public class BmpDecoder {
 	 */
 	public static BufferedImage readImage(File bmpFile, BufferedImage dst)
 			throws IOException {
-		FileInputStream in = null;
-		if (bmpFile == null) {
-			throw new NullPointerException();
-		} else if (bmpFile.length() == 0) {
+		if (bmpFile.length() == 0) {
 			return null;
 		}
-		try {
-			in = new FileInputStream(bmpFile);
+		try (InputStream in = new FileInputStream(bmpFile)) {
 			return readImage(in, dst);
-		} finally {
-			try {
-				in.close();
-			} catch (IOException e) {
-			}
 		}
 	}
 
