@@ -1,6 +1,11 @@
 package com.pump.image.pixel;
 
+import java.awt.image.BufferedImage;
+import java.util.Arrays;
+
 import org.junit.Test;
+
+import com.pump.image.pixel.converter.IntPixelConverter;
 
 import junit.framework.TestCase;
 
@@ -63,13 +68,49 @@ public class ImageTypeTests extends TestCase {
 
 		for (int a = 0; a < in.length; a++) {
 			ImageType.INT_ARGB.convertFromARGBPre(in[a], in[a].length);
-			assertEquals(expected[a], in[a]);
+			assertEquals(null, expected[a], in[a]);
 		}
 	}
 	
-	void assertEquals(int[] expectedArray, int[] actualArray) {
+	/**
+	 * Convert pixel data into several ARGB formats and back into an INT_ARGB format.
+	 */
+	public void testARGBConversions() {
+		int[] intArray = new int[] { 0xe6f1f5f8, 0xfffdffff, 0xffeaeef1, 0xfdb2bbc1, 0xd292a0ad, 0x8d7289a5, 0x50366093, 0x35214d6a, 0x2727485b };
+		
+		testARGBConversions(intArray, ImageType.BYTE_ABGR);
+		testARGBConversions(intArray, ImageType.BYTE_ARGB);
+		testARGBConversions(intArray, ImageType.BYTE_BGRA);
+		testARGBConversions(intArray, ImageType.BYTE_ABGR, ImageType.BYTE_ARGB, ImageType.BYTE_BGRA);
+		testARGBConversions(intArray, ImageType.BYTE_ARGB, ImageType.BYTE_ABGR, ImageType.BYTE_BGRA);
+		testARGBConversions(intArray, ImageType.BYTE_ABGR, ImageType.BYTE_BGRA, ImageType.BYTE_ARGB);
+		testARGBConversions(intArray, ImageType.BYTE_ARGB, ImageType.BYTE_BGRA, ImageType.BYTE_ABGR);
+		testARGBConversions(intArray, ImageType.BYTE_BGRA, ImageType.BYTE_ABGR, ImageType.BYTE_ARGB);
+		testARGBConversions(intArray, ImageType.BYTE_BGRA, ImageType.BYTE_ARGB, ImageType.BYTE_ABGR);
+	}
+	
+	private void testARGBConversions(int[] input, ImageTypeByte... types) {
+		PixelIterator<?> iter = new BufferedIntPixelIterator(input, input.length, 1, 0, input.length, BufferedImage.TYPE_INT_ARGB);
+		iter = types[0].createConverter(iter);
+		for (int a = 1; a < types.length; a++) {
+			iter = types[a].createConverter(iter);
+		}
+		IntPixelConverter lastIter = ImageType.INT_ARGB.createConverter(iter);
+		
+		int[] actual = new int[input.length];
+		lastIter.next(actual);
+		
+		assertEquals(Arrays.asList(types).toString(), input, actual);
+	}
+	
+	
+	void assertEquals(String msg, int[] expectedArray, int[] actualArray) {
 		for (int a = 0; a < expectedArray.length; a++) {
-			assertEquals(Integer.toHexString(expectedArray[a])+", "+Integer.toHexString(actualArray[a]), expectedArray[a], actualArray[a]);
+			String str = msg == null ? "" : msg;
+			str = str + " " + Integer.toHexString(expectedArray[a])+", "+Integer.toHexString(actualArray[a]);
+			str = str.trim();
+			
+			assertEquals(str, expectedArray[a], actualArray[a]);
 		}
 	}
 }

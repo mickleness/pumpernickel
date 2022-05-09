@@ -1056,9 +1056,9 @@ public abstract class ImageType {
 				byte alpha = pixels[i1 + 3];
 
 				pixels[i1] = alpha;
-				pixels[i1 + 1] = red;
+				pixels[i1 + 1] = blue;
 				pixels[i1 + 2] = green;
-				pixels[i1 + 3] = blue;
+				pixels[i1 + 3] = red;
 			}
 		}
 	};
