@@ -13,17 +13,29 @@ package com.pump.showcase.demo;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.plaf.basic.BasicCheckBoxUI;
 
-import com.pump.plaf.button.MixedCheckBoxButtonGroup;
+import com.pump.inspector.Inspector;
 import com.pump.plaf.button.MixedCheckBoxState;
+import com.pump.plaf.button.mixed.MixedState;
 
 public class MixedCheckBoxStateDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	JCheckBox allCheckBox = new JCheckBox("All condiments");
+	JComboBox<String> stateComboBox = new JComboBox<String>(new String[] {
+			MixedState.UNSELECTED.name(),
+			MixedState.SELECTED.name(),
+			MixedState.MIXED.name() }
+			);
+	
+	JCheckBox condimentsCheckBox = new JCheckBox("All condiments");
 	JCheckBox lettuceCheckBox = new JCheckBox("Lettuce");
 	JCheckBox tomatoCheckBox = new JCheckBox("Tomato", true);
 	JCheckBox mustardCheckBox = new JCheckBox("Mustard", true);
@@ -33,20 +45,33 @@ public class MixedCheckBoxStateDemo extends ShowcaseExampleDemo {
 		lettuceCheckBox.setOpaque(false);
 		tomatoCheckBox.setOpaque(false);
 		mustardCheckBox.setOpaque(false);
-		allCheckBox.setOpaque(false);
+		condimentsCheckBox.setOpaque(false);
 
-		configurationPanel.setVisible(false);
-		configurationLabel.setVisible(false);
+
+		Inspector inspector = new Inspector(configurationPanel);
+		inspector.addRow(new JLabel("State:"), stateComboBox);
+		
+		stateComboBox.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int i = stateComboBox.getSelectedIndex();
+				MixedState state = MixedState.values()[i];
+				MixedState.setState(condimentsCheckBox, state);
+			}});
 
 		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+		
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
 		c.weighty = 1;
 		c.insets = new Insets(2, 2, 2, 2);
+		
+		
 		c.fill = GridBagConstraints.HORIZONTAL;
-		examplePanel.add(allCheckBox, c);
+		examplePanel.add(condimentsCheckBox, c);
 		c.insets = new Insets(2, 20, 2, 2);
 		c.gridy++;
 		examplePanel.add(lettuceCheckBox, c);
@@ -55,8 +80,12 @@ public class MixedCheckBoxStateDemo extends ShowcaseExampleDemo {
 		c.gridy++;
 		examplePanel.add(mustardCheckBox, c);
 
-		new MixedCheckBoxButtonGroup(allCheckBox, lettuceCheckBox,
-				tomatoCheckBox, mustardCheckBox);
+		
+		/////
+		condimentsCheckBox.setUI(new BasicCheckBoxUI());
+		
+//		new MixedCheckBoxButtonGroup(allCheckBox, lettuceCheckBox,
+//				tomatoCheckBox, mustardCheckBox);
 	}
 
 	@Override
