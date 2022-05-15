@@ -1,6 +1,7 @@
 package com.pump.plaf.button.mixed;
 
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.Serializable;
 import java.util.Collection;
@@ -13,6 +14,13 @@ import javax.swing.ButtonModel;
 import javax.swing.JCheckBox;
 import javax.swing.event.ChangeListener;
 
+/**
+ * This installs/uninstalls a mixed state look on a JCheckBox. Different subclasses will require
+ * a "mixed state" sets the selected state to TRUE or FALSE, depending on how the rendering requirements.
+ * (That is: in a mixed state <code>myCheckBox.isSelected()</code> may return <code>true</code>
+ * or <code>false</code> depending on the specific MixedStateUI in use. But in either case
+ * {@link MixedState#getState(JCheckBox)} will return {@link MixedState#MIXED}.)
+ */
 public abstract class MixedStateUI {
 	
 	class MixedStateUIButtonModel implements ButtonModel, Serializable {
@@ -66,7 +74,7 @@ public abstract class MixedStateUI {
 			if (editingThreads.add(currentThread)) {
 				try {
 					MixedState newState = b ? MixedState.SELECTED : MixedState.UNSELECTED;
-					MixedState.setState(checkBox, newState);
+					MixedState.set(checkBox, newState);
 				} finally {
 					editingThreads.remove(currentThread);
 				}
@@ -112,7 +120,7 @@ public abstract class MixedStateUI {
 
 		@Override
 		public void setGroup(ButtonGroup group) {
-			delegateModel.setGroup(group);;
+			delegateModel.setGroup(group);
 		}
 
 		@Override
@@ -144,8 +152,25 @@ public abstract class MixedStateUI {
 		public void removeChangeListener(ChangeListener l) {
 			delegateModel.removeChangeListener(l);
 		}
-		
 	}
+	
+	/**
+	 * This listener is attached when a MixedStateUI is installed. If it identifies
+	 * a SELECTED or DESELECTED event: it updates the MixedState appropriately so
+	 * the MixedStateUI will be uninstalled.
+	 */
+	private static ItemListener ITEM_LISTENER = new ItemListener() {
+		
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				MixedState.set( (JCheckBox) e.getSource(), MixedState.SELECTED);
+			} else if(e.getStateChange() == ItemEvent.DESELECTED) {
+				MixedState.set( (JCheckBox) e.getSource(), MixedState.UNSELECTED);
+			}
+		}
+		
+	};
 
 	private final Collection<Thread> editingThreads = Collections.synchronizedCollection(new HashSet<>());
 	protected final JCheckBox checkBox;
@@ -167,6 +192,7 @@ public abstract class MixedStateUI {
 		try {
 			checkBox.setModel(newModel);
 			doInstall();
+			checkBox.addItemListener(ITEM_LISTENER);
 		} finally {
 			if (outerEdit)
 				editingThreads.remove(currentThread);
@@ -186,6 +212,7 @@ public abstract class MixedStateUI {
 		Thread currentThread = Thread.currentThread();
 		boolean outerEdit = editingThreads.add(currentThread);
 		try {
+			checkBox.removeItemListener(ITEM_LISTENER);
 			checkBox.setModel(originalModel);
 			doUninstall();
 		} finally {

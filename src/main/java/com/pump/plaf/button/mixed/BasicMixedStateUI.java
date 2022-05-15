@@ -15,7 +15,9 @@ import javax.swing.JCheckBox;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
 
 /**
- * This MixedStateUI is compatible with ButtonUIs that subclass BasicRadioButtonUI.
+ * This installs mixed state UI for a JCheckBox whose UI subclasses BasicRadioButtonUI.
+ * To render the mixed state this sets the JCheckBox to unselected and renders a tick
+ * mark on top of the existing unselected icon.
  */
 public class BasicMixedStateUI extends MixedStateUI {
 
@@ -98,6 +100,7 @@ public class BasicMixedStateUI extends MixedStateUI {
 
 	@Override
 	protected void doInstall() {
+		checkBox.setSelected(false);
 		TickIcon tickIcon = new TickIcon(defaultIcon);
 		checkBox.setIcon(tickIcon);
 	}

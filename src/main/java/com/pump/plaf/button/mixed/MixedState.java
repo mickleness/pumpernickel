@@ -7,6 +7,19 @@ import javax.swing.plaf.basic.BasicRadioButtonUI;
 
 import com.pump.util.JVM;
 
+/**
+ * This is a three-state enum describing the state of a JCheckBox. The new third state (MIXED) indicates
+ * a checkbox is neither fully selected nor unselected. This probably is because the checkbox summarizes
+ * several requirements that are only partially filled.
+ * <p>
+ * This is necessarily hacky, because the JCheckBox and ButtonModels only define the "selected" state as a
+ * boolean. But as long as you consistently use {@link MixedState#setState(JCheckBox, MixedState)} and
+ * {@link MixedState#getState(JCheckBox)} instead of {@link JCheckBox#isSelected()}, you should interact
+ * with the appropriate state.
+ * <p>
+ * On Mac the UI is implemented so a MIXED state is rendered on top of a selected JCheckBox. On Windows
+ * the UI is implemented so it is rendered on top of an unselected JCheckBox.
+ */
 public enum MixedState {
 	UNSELECTED(), SELECTED(), MIXED();
 
@@ -15,12 +28,26 @@ public enum MixedState {
 	 * JCheckBox is currently displaying a mixed state.
 	 */
 	private static final String PROPERTY_MIXED_STATE_UI = "MixedState#ui";
+
+	/**
+	 * This client property on a JCheckBox resolves to a MixedState. This is updated with every
+	 * call to {@link #setState(JCheckBox, MixedState)}. This is not an essential part of our
+	 * data model, but it is updated so other parties can attach listeners.
+	 */
+	public static final String PROPERTY_MIXED_STATE = "MixedState#state";
 	
-	public static boolean setState(JCheckBox checkBox, MixedState newState) {
+	/**
+	 * Assign the MixedState of a JCheckBox.
+	 * 
+	 * @param checkBox the JCheckBox to change the state of.
+	 * @param newState the new state
+	 * @return true if a change occurred.
+	 */
+	public static boolean set(JCheckBox checkBox, MixedState newState) {
 		Objects.requireNonNull(checkBox);
 		Objects.requireNonNull(newState);
 
-		MixedState oldState = getState(checkBox);
+		MixedState oldState = get(checkBox);
 		MixedStateUI ui = (MixedStateUI) checkBox.getClientProperty(PROPERTY_MIXED_STATE_UI);
 		
 		switch (newState) {
@@ -48,18 +75,17 @@ public enum MixedState {
 				checkBox.setSelected(true);
 				break;
 		}
+		checkBox.putClientProperty(PROPERTY_MIXED_STATE, newState);
 		
 		return oldState != newState;
 	}
 	
 	/**
 	 * Return the MixedState for a JCheckBox.
-	 * <p>
-	 * If a MixedState has never been assigned then this will return {@link #UNSELECTED} or {@link #SELECTED} based on the checkbox's button model.
 	 */
-	public static MixedState getState(JCheckBox checkBox) {
+	public static MixedState get(JCheckBox checkBox) {
 		MixedStateUI ui = (MixedStateUI) checkBox.getClientProperty(PROPERTY_MIXED_STATE_UI);
-		if (ui !=null)
+		if (ui != null)
 			return MixedState.MIXED;
 		return checkBox.isSelected() ? MixedState.SELECTED : MixedState.UNSELECTED;
 	}
@@ -73,6 +99,10 @@ public enum MixedState {
 		}
 		
 		// I need to inspect the setup where this happens to find a good solution
+		
+		// We could probably use a VectorGraphics2D to render the JCheckBox and identify how
+		// the icon is drawn?
+		
 		throw new UnsupportedOperationException();
 	}
 

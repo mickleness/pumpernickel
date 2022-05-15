@@ -209,8 +209,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 				new ShowcaseDemoInfo("JSwitchButton", "JSwitchButtonDemo"));
 		returnValue
 				.add(new ShowcaseDemoInfo("JButton, QButtonUI", "JButtonDemo"));
-		returnValue.add(new ShowcaseDemoInfo("MixedCheckBoxState",
-				"MixedCheckBoxStateDemo"));
+		returnValue.add(new ShowcaseDemoInfo("MixedState",
+				"MixedStateDemo"));
 		returnValue.add(
 				new ShowcaseDemoInfo("JFrame, JDialog, JWindow", "WindowDemo"));
 		returnValue.add(new ShowcaseDemoInfo("System Properties",

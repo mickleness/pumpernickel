@@ -2,6 +2,11 @@ package com.pump.plaf.button.mixed;
 
 import javax.swing.JCheckBox;
 
+/**
+ * This installs an Aqua-based mixed state UI. To render the mixed state this sets the
+ * JCheckBox to selected and turns on a special client property the Aqua L&F supports:
+ * <br><code>checkBox.putClientProperty("JButton.selectedState", "indeterminate");</code>
+ */
 public class AquaMixedStateUI extends MixedStateUI {
 
 	public AquaMixedStateUI(JCheckBox checkBox) {
