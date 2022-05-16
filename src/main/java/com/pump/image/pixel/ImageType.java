@@ -2028,7 +2028,8 @@ public abstract class ImageType {
 	 * @param imageType
 	 *            the image type constant, such as
 	 *            {@linK BufferedImage#TYPE_3BYTE_BGR} or
-	 *            {@link #TYPE_4BYTE_ARGB}
+	 *            {@link #TYPE_4BYTE_ARGB}, or null if the int provided doesn't
+	 *            match an ImageType constant.
 	 */
 	public static ImageType get(int imageType) {
 		return imageTypeByCode.get(imageType);

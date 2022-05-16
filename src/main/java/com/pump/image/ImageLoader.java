@@ -29,13 +29,14 @@ import java.util.Map;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.pump.image.pixel.BufferedBytePixelIterator;
 import com.pump.image.pixel.BufferedIntPixelIterator;
+import com.pump.image.pixel.BytePixelIterator;
 import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.IntPixelIterator;
-import com.pump.image.pixel.converter.IntPixelConverter;
+import com.pump.image.pixel.PixelIterator;
 import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
-import com.pump.util.Warnings;
 
 /**
  * This class can convert an abstract <code>Image</code> into a
@@ -185,6 +186,7 @@ public class ImageLoader {
 	Map<String, Object> pendingProperties;
 
 	MutableBufferedImage dest;
+	ImageType destType;
 
 	/**
 	 * This constructs an ImageLoader. As soon as an ImageLoader is constructed
@@ -209,7 +211,7 @@ public class ImageLoader {
 	 *            a constant like BufferedImage.TYPE_INT_ARGB, or
 	 *            {@link #TYPE_DEFAULT}
 	 */
-	public ImageLoader(ImageProducer p, Cancellable c,
+	private ImageLoader(ImageProducer p, Cancellable c,
 			ChangeListener changeListener, String description, int imageType) {
 		cancellable = c == null ? new BasicCancellable() : c;
 		producer = p;
@@ -433,209 +435,108 @@ public class ImageLoader {
 
 		@Override
 		public synchronized void setPixels(int x, int y, int w, int h,
-				ColorModel cm, byte[] data, int offset, int scanSize) {
-			setPixels(x, y, w, h, cm, null, data, offset, scanSize);
+				ColorModel colorModel, byte[] data, int offset, int scanSize) {
+			if (debug) {
+				System.err.println("setPixels(" + x + " ," + y + " ," + w + " ,"
+						+ h + ", " + colorModel + ", ..., " + offset + ", "
+						+ scanSize + ") (byte[])");
+			}
+
+			int inDataType = prepareSetPixels(colorModel);
+			PixelIterator<?> srcIter = new BufferedBytePixelIterator(data, w, h,
+					offset, scanSize, inDataType);
+			setPixels(srcIter, x, y, w, h, colorModel);
 		}
 
 		@Override
 		public synchronized void setPixels(int x, int y, int w, int h,
 				ColorModel colorModel, int[] data, int offset, int scanSize) {
-			setPixels(x, y, w, h, colorModel, data, null, offset, scanSize);
-		}
-
-		/**
-		 * Either intData or byteData must be non-null
-		 */
-		private void setPixels(int x, int y, int w, int h,
-				ColorModel colorModel, int[] intData, byte[] byteData,
-				int offset, int scanSize) {
-
 			if (debug) {
-				if (intData != null) {
-					System.err.println("setPixels(" + x + " ," + y + " ," + w
-							+ " ," + h + ", " + colorModel + ", ..., " + offset
-							+ ", " + scanSize + ") (int[])");
-				} else {
-					System.err.println("setPixels(" + x + " ," + y + " ," + w
-							+ " ," + h + ", " + colorModel + ", ..., " + offset
-							+ ", " + scanSize + ") (byte[])");
-				}
+				System.err.println("setPixels(" + x + " ," + y + " ," + w + " ,"
+						+ h + ", " + colorModel + ", ..., " + offset + ", "
+						+ scanSize + ") (int[])");
 			}
 
-			try {
-				if (intData == null && byteData == null)
-					throw new NullPointerException();
-				if (intData != null && byteData != null)
-					throw new IllegalArgumentException();
+			int inDataType = prepareSetPixels(colorModel);
+			PixelIterator<?> srcIter = new BufferedIntPixelIterator(data, w, h,
+					offset, scanSize, inDataType);
+			setPixels(srcIter, x, y, w, h, colorModel);
+		}
 
-				if (cancellable.isCancelled()) {
-					if (debug)
-						System.err.println("the Cancellable was activated");
-					unblock(STATUS_CANCELLABLE_CANCELLED);
-					return;
-				}
+		private int prepareSetPixels(ColorModel colorModel) {
+			int colorModelImageType = colorModel == lastCM ? lastImageType
+					: ColorModelUtils.getBufferedImageType(colorModel);
 
-				if (size == null)
-					throw new RuntimeException(
-							"The dimensions of this image are not yet defined.  Cannot write image data until the dimensions of the image are known.");
+			lastCM = colorModel;
+			lastImageType = colorModelImageType;
 
-				int colorModelImageType = colorModel == lastCM ? lastImageType
-						: ColorModelUtils.getBufferedImageType(colorModel);
-
-				lastCM = colorModel;
-				lastImageType = colorModelImageType;
-
-				if (dest == null) {
-					if (destImageType == ImageLoader.TYPE_DEFAULT) {
-						// we need to decide our BufferedImage's type:
-						if (colorModelImageType == ColorModelUtils.TYPE_UNRECOGNIZED) {
-							// we may get error downstream (or we may not),
-							// but this is an OK guess right now:
-							dest = new MutableBufferedImage(size.width,
-									size.height, BufferedImage.TYPE_INT_ARGB);
-						} else {
-							dest = new MutableBufferedImage(size.width,
-									size.height, colorModelImageType);
-						}
+			if (dest == null) {
+				if (destImageType == ImageLoader.TYPE_DEFAULT) {
+					// we need to decide our BufferedImage's type:
+					if (colorModelImageType == ColorModelUtils.TYPE_UNRECOGNIZED) {
+						// we may get error downstream (or we may not),
+						// but this is an OK guess right now:
+						dest = new MutableBufferedImage(size.width, size.height,
+								BufferedImage.TYPE_INT_ARGB);
 					} else {
 						dest = new MutableBufferedImage(size.width, size.height,
-								destImageType);
+								colorModelImageType);
 					}
-
-					if (pendingProperties != null) {
-						dest.setProperties(pendingProperties);
-						pendingProperties = null;
-					}
-				}
-
-				if (intData != null) {
-					writePixels(intData, colorModelImageType, x, y, w, h,
-							offset, scanSize, colorModel);
 				} else {
-					// TODO: implement byte support
-					// writePixels(byteData, colorModelImageType, x, y, w, h,
-					// offset, scanSize, colorModel);
-
-					// TODO: reimplement
-
-					// if (cm == lastCM && indexed != null) {
-					// int argb;
-					// byte k = 0;
-					// int k2 = 0;
-					// for (int n = y; n < y + h; n++) {
-					// for (int m = x; m < x + w; m++) {
-					// k = data[(n - y) * scanSize + (m - x) + offset];
-					// if (k >= 0) {
-					// k2 = k;
-					// } else {
-					// k2 = k + 256;
-					// }
-					// argb = indexed[k2];
-					// row[m - x] = argb;
-					// }
-					// dest.getRaster().setDataElements(x, n, w, 1, row);
-					// }
-					// } else {
-					// int transIndex = (cm instanceof IndexColorModel)
-					// ? ((IndexColorModel) cm).getTransparentPixel()
-					// : -1;
-					//
-					// int argb;
-					// for (int n = y; n < y + h; n++) {
-					// for (int m = x; m < x + w; m++) {
-					// byte k = data[(n - y) * scanSize + (m - x)
-					// + offset];
-					// int k2 = k & 0xff;
-					// if (k2 == transIndex) {
-					// argb = 0;
-					// } else {
-					// argb = cm.getRGB(k2);
-					// }
-					// row[m - x] = argb;
-					// }
-					// dest.getRaster().setDataElements(x, n, w, 1, row);
-					// }
-					// }
+					dest = new MutableBufferedImage(size.width, size.height,
+							destImageType);
 				}
+				destType = ImageType.get(dest.getType());
 
-				setProgress(x + w, y + h);
-			} catch (RuntimeException e) {
-				System.err.println("setPixels(" + x + " ," + y + " ," + w + " ,"
-						+ h + ", " + colorModel + ", ..., " + offset + ", "
-						+ scanSize + ")");
-				System.err.println(description);
-				throw e;
-			} catch (Error e) {
-				System.err.println("setPixels(" + x + " ," + y + " ," + w + " ,"
-						+ h + ", " + colorModel + ", ..., " + offset + ", "
-						+ scanSize + ")");
-				System.err.println(description);
-				throw e;
+				if (pendingProperties != null) {
+					dest.setProperties(pendingProperties);
+					pendingProperties = null;
+				}
 			}
+			return colorModelImageType;
 		}
 
-		private void writePixels(int[] inData, int inDataType, int x, int y,
-				int w, int h, int offset, int scanSize, ColorModel colorModel) {
+		private void setPixels(PixelIterator<?> srcIter, int x, int y, int w,
+				int h, ColorModel colorModel) {
 
-			// attempt #1: can we use a PixelConverter?
-
-			IntPixelIterator intConverterIter;
-			switch (dest.getType()) {
-			case BufferedImage.TYPE_INT_ARGB:
-				IntPixelIterator dataIter1 = new BufferedIntPixelIterator(
-						inData, w, h, offset, scanSize, inDataType);
-				intConverterIter = new IntPixelConverter(dataIter1,
-						ImageType.INT_ARGB);
-				break;
-			case BufferedImage.TYPE_INT_ARGB_PRE:
-				IntPixelIterator dataIter2 = new BufferedIntPixelIterator(
-						inData, w, h, offset, scanSize, inDataType);
-				intConverterIter = new IntPixelConverter(dataIter2,
-						ImageType.INT_ARGB_PRE);
-				break;
-			case BufferedImage.TYPE_INT_RGB:
-				IntPixelIterator dataIter3 = new BufferedIntPixelIterator(
-						inData, w, h, offset, scanSize, inDataType);
-				intConverterIter = new IntPixelConverter(dataIter3,
-						ImageType.INT_RGB);
-				break;
-			case BufferedImage.TYPE_INT_BGR:
-				IntPixelIterator dataIter4 = new BufferedIntPixelIterator(
-						inData, w, h, offset, scanSize, inDataType);
-				intConverterIter = new IntPixelConverter(dataIter4,
-						ImageType.INT_BGR);
-				break;
-			default:
-				intConverterIter = null;
-			}
-
-			if (intConverterIter != null) {
-				if (rowInt == null || rowInt.length < intConverterIter
-						.getMinimumArrayLength())
-					rowInt = new int[intConverterIter.getMinimumArrayLength()];
-				while (!intConverterIter.isDone()) {
-					intConverterIter.next(rowInt);
-					dest.getRaster().setDataElements(x, y, w, 1, rowInt);
-					y++;
-				}
+			if (cancellable.isCancelled()) {
+				if (debug)
+					System.err.println("the Cancellable was activated");
+				unblock(STATUS_CANCELLABLE_CANCELLED);
 				return;
 			}
 
-			// attempt #2 -- last resort: use the colorModel.getRGB
+			if (size == null)
+				throw new RuntimeException(
+						"The dimensions of this image are not yet defined.  Cannot write image data until the dimensions of the image are known.");
 
-			for (int n = y; n < y + h; n++) {
-				for (int m = x; m < x + w; m++) {
-					int argb = colorModel.getRGB(
-							inData[(n - y) * scanSize + (m - x) + offset]);
-					dest.setRGB(x, y, argb);
+			PixelIterator<?> dstIter = destType.createConverter(srcIter);
+
+			if (dstIter instanceof IntPixelIterator) {
+				if (rowInt == null
+						|| rowInt.length < dstIter.getMinimumArrayLength())
+					rowInt = new int[dstIter.getMinimumArrayLength()];
+
+				IntPixelIterator dstIterInt = (IntPixelIterator) dstIter;
+				while (!dstIterInt.isDone()) {
+					dstIterInt.next(rowInt);
+					dest.getRaster().setDataElements(x, y, w, 1, rowInt);
+					y++;
+				}
+			} else if (dstIter instanceof BytePixelIterator) {
+				if (rowByte == null
+						|| rowByte.length < dstIter.getMinimumArrayLength())
+					rowByte = new byte[dstIter.getMinimumArrayLength()];
+
+				BytePixelIterator dstIterByte = (BytePixelIterator) dstIter;
+				while (!dstIterByte.isDone()) {
+					dstIterByte.next(rowByte);
+					dest.getRaster().setDataElements(x, y, w, 1, rowByte);
+					y++;
 				}
 			}
 
-			// if we see this message: we should add a condition above to
-			// address whatever is happening
-			Warnings.println(
-					"ImageLoader#writePixels(..) is writing pixel data inefficiently.",
-					10000);
+			setProgress(x + w, y + h);
 		}
 
 		@Override
