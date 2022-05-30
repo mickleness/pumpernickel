@@ -16,25 +16,31 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
-import java.awt.image.DirectColorModel;
 import java.awt.image.ImageConsumer;
 import java.awt.image.ImageProducer;
-import java.awt.image.IndexColorModel;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.pump.image.pixel.BufferedBytePixelIterator;
+import com.pump.image.pixel.BufferedIntPixelIterator;
+import com.pump.image.pixel.BytePixelIterator;
+import com.pump.image.pixel.ImageType;
+import com.pump.image.pixel.IntPixelIterator;
+import com.pump.image.pixel.PixelIterator;
+import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
 
 /**
- * This class can convert an abstract <code>Image</code> into a ARGB
- * <code>BufferedImage</code>.
+ * This class can convert an abstract <code>Image</code> into a
+ * <code>MutableBufferedImage</code> with a specified image type.
  * <P>
  * It was written to replace the <code>MediaTracker</code>; on my Macs this
  * class is faster and more efficient. It has come to my attention that on Linux
@@ -42,92 +48,124 @@ import com.pump.swing.Cancellable;
  * "https://javagraphics.blogspot.com/2007/04/images-studying-mediatracker.html"
  * >blog</a> for more discussion.)
  * <P>
- * Also this class has the added advantage of always returning an RGB image.
- * Using other methods (such as ImageIO) may return an arbitrary image type.
- * (And this class doesn't require a <code>java.awt.Component</code> to
- * initialize; why does the MediaTracker do that? It's just a strange animal.)
+ * Also this class has the added advantage of always returning an image in a
+ * certain format. Using other methods (such as ImageIO) may return an arbitrary
+ * image type. (And this class doesn't require a <code>java.awt.Component</code>
+ * to initialize; why does the MediaTracker do that? It's just a strange
+ * animal.)
+ * <p>
+ * This class only loads the first image of an ImageProducer. So if there are
+ * multiple frames: all frames after the first are ignored.
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2007/04/images-studying-mediatracker.html">Images:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2007/04/images-studying-mediatracker.html">Images:
  *      Studying MediaTracker</a>
  */
 public class ImageLoader {
 	private static boolean debug = false;
-	private static final DirectColorModel ARGBModel = (DirectColorModel) ColorModel
-			.getRGBdefault();
-	private static final DirectColorModel RGBModel = new DirectColorModel(32,
-			0xff0000, 0xff00, 0xff, 0);
 
-	public static BufferedImage createImage(URL url) {
+	/**
+	 * This is an image type alternative that indicates we should return
+	 * whatever is simplest/most expedient.
+	 */
+	public static int TYPE_DEFAULT = -888321;
+
+	/**
+	 * This code indicates our attempt to load the image was aborted because our
+	 * Cancellable was activated.
+	 */
+	private static int STATUS_CANCELLABLE_CANCELLED = -1;
+
+	/**
+	 * Create an ARGB BufferedImage from a URL.
+	 */
+	public static MutableBufferedImage createImage(URL url) {
+		return createImage(url, BufferedImage.TYPE_INT_ARGB);
+	}
+
+	/**
+	 * @param imageType
+	 *            a constant like BufferedImage.TYPE_INT_ARGB, or
+	 *            {@link #TYPE_DEFAULT}
+	 */
+	public static MutableBufferedImage createImage(URL url, int imageType) {
 		if (url == null)
 			throw new NullPointerException();
 		try {
 			return createImage(Toolkit.getDefaultToolkit().createImage(url),
-					url.toString());
+					url.toString(), imageType);
 		} catch (RuntimeException e) {
 			System.err.println("url: " + url);
 			throw e;
 		}
 	}
 
-	public static BufferedImage createImage(File file) {
-		Image i = Toolkit.getDefaultToolkit().createImage(
-				file.getAbsolutePath());
-		return createImage(i, file.getAbsolutePath());
+	/**
+	 * Create an ARGB BufferedImage from a File.
+	 */
+	public static MutableBufferedImage createImage(File file) {
+		return createImage(file, BufferedImage.TYPE_INT_ARGB);
 	}
 
 	/**
-	 * This returns an ARGB BufferedImage depicting the argument <code>i</code>.
+	 * @param imageType
+	 *            a constant like BufferedImage.TYPE_INT_ARGB, or
+	 *            {@link #TYPE_DEFAULT}
+	 */
+	public static MutableBufferedImage createImage(File file, int imageType) {
+		Image i = Toolkit.getDefaultToolkit()
+				.createImage(file.getAbsolutePath());
+		return createImage(i, file.getAbsolutePath(), imageType);
+	}
+
+	/**
+	 * Create an ARGB BufferedImage of an image.
+	 */
+	public static MutableBufferedImage createImage(Image i) {
+		return createImage(i, BufferedImage.TYPE_INT_ARGB);
+	}
+
+	/**
+	 * This returns a BufferedImage depicting the argument <code>i</code>.
 	 * <P>
-	 * Note that if <code>i</code> is already an ARGB BufferedImage, then it is
-	 * immediately returned and this method does NOT duplicate it.
+	 * Note that if <code>i</code> is already a BufferedImage, then it may
+	 * immediately be returned and this method does NOT duplicate it.
 	 * 
 	 * @param i
+	 * @param imageType
+	 *            a constant like BufferedImage.TYPE_INT_ARGB, or
+	 *            {@link #TYPE_DEFAULT}
 	 * @return an ARGB BufferedImage identical to the argument.
 	 */
-	public static BufferedImage createImage(Image i) {
+	public static MutableBufferedImage createImage(Image i, int imageType) {
 		if (i instanceof BufferedImage) {
 			BufferedImage bi = (BufferedImage) i;
-			int type = bi.getType();
-			if (type == BufferedImage.TYPE_INT_ARGB)
-				return bi;
-			BufferedImage newImage = new BufferedImage(bi.getWidth(),
-					bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			int currentType = bi.getType();
+			if (imageType == TYPE_DEFAULT)
+				imageType = currentType;
+
+			if (imageType == currentType) {
+				if (bi instanceof MutableBufferedImage)
+					return (MutableBufferedImage) bi;
+				return new MutableBufferedImage(bi);
+			}
+
+			MutableBufferedImage newImage = new MutableBufferedImage(
+					bi.getWidth(), bi.getHeight(), imageType);
 			Graphics2D g = newImage.createGraphics();
 			g.drawImage(bi, 0, 0, null);
 			g.dispose();
+			newImage.setProperties(MutableBufferedImage.getProperties(bi));
 			return newImage;
 		}
-		return createImage(i, null);
+		return createImage(i, null, imageType);
 	}
 
-	protected static BufferedImage createImage(Image i, String description) {
-		ImageLoader l = new ImageLoader(i.getSource(), null, null, description);
+	protected static MutableBufferedImage createImage(Image i,
+			String description, int imageType) {
+		ImageLoader l = new ImageLoader(i.getSource(), null, null, description,
+				imageType);
 		return l.getImage();
-	}
-
-	/**
-	 * This checks to see if two DirectColorModels are identical. Apparently the
-	 * "equals" method in DirectColorModel doesn't really work.
-	 */
-	private static boolean equals(DirectColorModel d1, DirectColorModel d2) {
-		if (d1.getAlphaMask() != d2.getAlphaMask())
-			return false;
-		if (d1.getGreenMask() != d2.getGreenMask())
-			return false;
-		if (d1.getRedMask() != d2.getRedMask())
-			return false;
-		if (d1.getBlueMask() != d2.getBlueMask())
-			return false;
-		if (d1.getColorSpace() != d2.getColorSpace())
-			return false;
-		if (d1.isAlphaPremultiplied() != d2.isAlphaPremultiplied())
-			return false;
-		if (d1.getTransferType() != d2.getTransferType())
-			return false;
-		if (d1.getTransparency() != d2.getTransparency())
-			return false;
-		return true;
 	}
 
 	InnerImageConsumer consumer;
@@ -135,7 +173,20 @@ public class ImageLoader {
 	List<ChangeListener> listeners;
 	ImageProducer producer;
 	float progress = 0;
+	int destImageType;
 	String description;
+
+	int status = 0;
+	Dimension size;
+
+	/**
+	 * A set of properties that we'll store in dest as soon as we initialize
+	 * dest.
+	 */
+	Map<String, Object> pendingProperties;
+
+	MutableBufferedImage dest;
+	ImageType destType;
 
 	/**
 	 * This constructs an ImageLoader. As soon as an ImageLoader is constructed
@@ -156,15 +207,19 @@ public class ImageLoader {
 	 *            loading begins
 	 * @param description
 	 *            an optional description that may be useful for debugging
+	 * @param imageType
+	 *            a constant like BufferedImage.TYPE_INT_ARGB, or
+	 *            {@link #TYPE_DEFAULT}
 	 */
-	public ImageLoader(ImageProducer p, Cancellable c,
-			ChangeListener changeListener, String description) {
-		cancellable = c;
+	private ImageLoader(ImageProducer p, Cancellable c,
+			ChangeListener changeListener, String description, int imageType) {
+		cancellable = c == null ? new BasicCancellable() : c;
 		producer = p;
+		this.destImageType = imageType;
+		this.description = description;
 		addChangeListener(changeListener);
 		consumer = new InnerImageConsumer();
 		p.startProduction(consumer);
-		this.description = description;
 	}
 
 	/**
@@ -197,16 +252,15 @@ public class ImageLoader {
 	 * loaded. If your image were a text document, this is basically telling you
 	 * where the text cursor was last placed. However the
 	 * <code>ImageProducer</code> may make several different iterations over the
-	 * image to deliver the complete image, so it is completely possible that
-	 * this value will range from 0 to 1 a few different times.
+	 * image to deliver the complete image, so it is possible that this value
+	 * will range from 0 to 1 a few different times.
 	 * <P>
-	 * I wish this could be more precise, but I don't see how more precision is
+	 * (I wish this could be more precise, but I don't see how more precision is
 	 * possible given the way the <code>ImageProducer</code>/
-	 * <code>ImageConsumer</code> model works.
+	 * <code>ImageConsumer</code> model works.)
 	 * <P>
-	 * For the most part, this will be a straight-forward 1-pass system. If you
-	 * limit yourself to certain types of images (like PNGs) this is probably
-	 * the case.
+	 * Often this will be a straight-forward 1-pass system, but you may observe
+	 * some images require multiple passes.
 	 */
 	public float getProgress() {
 		return progress;
@@ -219,7 +273,7 @@ public class ImageLoader {
 	 * accurate.
 	 */
 	public boolean isDone() {
-		return finished;
+		return status != 0;
 	}
 
 	/**
@@ -236,8 +290,7 @@ public class ImageLoader {
 	protected void fireChangeListeners() {
 		if (listeners == null)
 			return;
-		for (int a = 0; a < listeners.size(); a++) {
-			ChangeListener l = listeners.get(a);
+		for (ChangeListener l : listeners.toArray(new ChangeListener[0])) {
 			try {
 				l.stateChanged(new ChangeEvent(this));
 			} catch (Exception e) {
@@ -250,99 +303,62 @@ public class ImageLoader {
 	 * This blocks until the image has finished loading, an error occurs, or the
 	 * operation has been cancelled.
 	 * 
-	 * @return the ARGB image represented in the original ImageProducer, or
+	 * @return the image represented in the original ImageProducer, or
 	 *         <code>null</code> if the operation was cancelled.
 	 * @throws RuntimeException
 	 *             if an error occurred while loading this image
 	 */
-	public BufferedImage getImage() {
+	public MutableBufferedImage getImage() {
+		int status = block();
 
-		block();
-
-		if (cancellable != null && cancellable.isCancelled()) {
+		if (status == STATUS_CANCELLABLE_CANCELLED) {
 			producer.removeConsumer(consumer);
-			if (finished) // extremely unlikely, but just in case:
-				return dest;
 			return null;
-		}
-		if (status == ImageConsumer.IMAGEERROR)
+		} else if (status == ImageConsumer.IMAGEERROR) {
 			throw new RuntimeException("An error occurred.");
-		if (status == ImageConsumer.IMAGEABORTED)
+		} else if (status == ImageConsumer.IMAGEABORTED) {
 			throw new RuntimeException("The operation was aborted.");
+		}
 
 		return dest;
 	}
 
-	private Thread waitingThread;
-	private List<Thread> waitingThreads;
-
 	/**
-	 * Blocks this thread until the image is finished
-	 * 
+	 * Blocks this thread until the image is finished loading (or cancelled, or
+	 * aborted)
 	 */
-	private void block() {
-		Thread t = Thread.currentThread();
-		int i = 0;
-		synchronized (this) {
-			if (waitingThreads == null) {
-				// there is no list defined
-				if (waitingThread == null) {
-					waitingThread = t;
-				} else {
-					waitingThreads = new ArrayList<Thread>();
-					waitingThreads.add(waitingThread);
-					waitingThreads.add(t);
-					i = 1;
-					waitingThread = null;
-				}
-			} else {
-				i = waitingThreads.size();
-				waitingThreads.add(t);
-			}
-		}
-		while (!finished
-				&& (cancellable == null || cancellable.isCancelled() == false)) {
-			try {
-				t.wait(500);
-			} catch (Exception e) {
-				Thread.yield();
-			}
-		}
-		synchronized (this) {
-			Thread.interrupted();
-			if (waitingThread == t) {
-				waitingThread = null;
-			}
-			if (waitingThreads != null) {
-				waitingThreads.remove(i);
-			}
-		}
-	}
-
-	private void unblock() {
-		synchronized (this) {
-			if (waitingThread != null) {
-				waitingThread.interrupt();
-			}
-			if (waitingThreads != null) {
-				for (int a = 0; a < waitingThreads.size(); a++) {
-					Thread t = waitingThreads.get(a);
-					t.interrupt();
+	private int block() {
+		while (true) {
+			synchronized (this) {
+				if (status != 0)
+					return status;
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					// intentionally empty
 				}
 			}
 		}
 	}
 
-	boolean finished = false;
-	int status;
-	Dimension size;
-	Properties properties;
-	BufferedImage dest;
+	private void unblock(int newStatus) {
+		synchronized (this) {
+			if (status != 0)
+				return;
+			this.status = newStatus;
+
+			producer.removeConsumer(consumer);
+			this.notifyAll();
+		}
+		fireChangeListeners();
+	}
 
 	class InnerImageConsumer implements ImageConsumer {
+
 		public InnerImageConsumer() {
 		}
 
+		@Override
 		public void imageComplete(int completionStatus) {
 			if (debug) {
 				System.err.println("imageComplete(): ");
@@ -356,95 +372,46 @@ public class ImageLoader {
 					System.err.println("\tSTATICIMAGEDONE");
 			}
 
-			producer.removeConsumer(this);
+			unblock(completionStatus);
+		}
 
-			status = completionStatus;
-			finished = true;
-			unblock();
+		@Override
+		public void setColorModel(ColorModel cm) {
+			if (debug)
+				System.err.println("setColorModel( " + cm + " )");
+			// the doc says this isn't really binding, so let's ignore it
+		}
+
+		@Override
+		public synchronized void setDimensions(int w, int h) {
+			if (debug)
+				System.err.println("setDimensions(" + w + "," + h + ")");
+			if (w <= 0)
+				throw new IllegalArgumentException(
+						"Width must be greater than zero.  (" + w + ")");
+			if (h <= 0)
+				throw new IllegalArgumentException(
+						"Height must be greater than zero.  (" + h + ")");
+			if (size != null) {
+				// eh? already exists?
+
+				if (size.width == w && size.height == h) {
+					// weird, but harmless
+					return;
+				}
+
+				if (dest != null) {
+					throw new RuntimeException("An image of "
+							+ (size.getWidth()) + "x" + size.getHeight()
+							+ " was already created.  Illegal attempt to call setDimensions("
+							+ w + "," + h + ")");
+				}
+			}
+			size = new Dimension(w, h);
 			fireChangeListeners();
 		}
 
-		int[] indexed;
-
-		public void setColorModel(ColorModel cm) {
-			try {
-				if (debug)
-					System.err.println("setColorModel( " + cm + " )");
-				lastCM = cm;
-				indexed = null;
-				if (cm instanceof IndexColorModel) {
-					IndexColorModel i = (IndexColorModel) cm;
-					if (i.getMapSize() <= 256) {
-						indexed = new int[i.getMapSize()];
-						for (int a = 0; a < indexed.length; a++) {
-							int r = i.getRed(a);
-							int g = i.getGreen(a);
-							int b = i.getBlue(a);
-							int alpha = i.getAlpha(a);
-							indexed[a] = (alpha << 24) + (r << 16) + (g << 8)
-									+ b;
-						}
-						int t = i.getTransparentPixel();
-						if (i.hasAlpha() && t >= 0 && t < indexed.length) {
-							if (debug)
-								System.err.println("i.getTransparentPixel: "
-										+ i.getTransparentPixel());
-							indexed[t] = 0;
-						}
-					}
-				}
-			} catch (RuntimeException e) {
-				System.err.println("setColorModel( " + cm + " )");
-				System.err.println(description);
-				throw e;
-			} catch (Error e) {
-				System.err.println("setColorModel( " + cm + " )");
-				System.err.println(description);
-				throw e;
-			}
-		}
-
-		private transient int[] row;
-
-		public void setDimensions(int w, int h) {
-			try {
-				if (debug)
-					System.err.println("setDimensions(" + w + "," + h + ")");
-				if (w <= 0)
-					throw new IllegalArgumentException(
-							"Width must be greater than zero.  (" + w + ")");
-				if (h <= 0)
-					throw new IllegalArgumentException(
-							"Height must be greater than zero.  (" + h + ")");
-				if (size != null) {
-					// eh? already exists?
-					if (size.width == w && size.height == h)
-						return;
-					if (dest != null) {
-						throw new RuntimeException(
-								"An image of "
-										+ (size.getWidth())
-										+ "x"
-										+ size.getHeight()
-										+ " was already created.  Illegal attempt to call setDimensions("
-										+ w + "," + h + ")");
-					}
-				}
-				size = new Dimension(w, h);
-				dest = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-				row = new int[w];
-				fireChangeListeners();
-			} catch (RuntimeException e) {
-				System.err.println("setDimensions( " + w + ", " + h + " )");
-				System.err.println(description);
-				throw e;
-			} catch (Error e) {
-				System.err.println("setDimensions( " + w + ", " + h + " )");
-				System.err.println(description);
-				throw e;
-			}
-		}
-
+		@Override
 		public void setHints(int hints) {
 			if (debug) {
 				System.err.println("setHints():");
@@ -461,195 +428,136 @@ public class ImageLoader {
 			}
 		}
 
-		public void setPixels(int x, int y, int w, int h, ColorModel cm,
-				byte[] data, int offset, int scanSize) {
-			try {
-				if (cancellable != null && cancellable.isCancelled()) {
-					if (debug)
-						System.err
-								.println("removing this consumer because the Cancellable was activated");
-					producer.removeConsumer(this);
-					unblock();
-				}
+		private int lastImageType;
+		private ColorModel lastCM = null;
+		private int[] rowInt = null;
+		private byte[] rowByte = null;
 
-				if (size == null)
-					throw new RuntimeException(
-							"The dimensions of this image are not yet defined.  Cannot write image data until the dimensions of the image are known.");
+		@Override
+		public synchronized void setPixels(int x, int y, int w, int h,
+				ColorModel colorModel, byte[] data, int offset, int scanSize) {
+			if (debug) {
+				System.err.println("setPixels(" + x + " ," + y + " ," + w + " ,"
+						+ h + ", " + colorModel + ", ..., " + offset + ", "
+						+ scanSize + ") (byte[])");
+			}
 
-				if (debug)
-					System.err.println(Thread.currentThread().getName()
-							+ " setPixels(" + x + " ," + y + " ," + w + " ,"
-							+ h + ", " + cm + ", ..., " + offset + ", "
-							+ scanSize + ") (byte[])");
+			int inDataType = prepareSetPixels(colorModel);
+			PixelIterator<?> srcIter = new BufferedBytePixelIterator(data, w, h,
+					offset, scanSize, inDataType);
+			setPixels(srcIter, x, y, w, h, colorModel);
+		}
 
-				if (cm == lastCM && indexed != null) {
-					int argb;
-					byte k = 0;
-					int k2 = 0;
-					for (int n = y; n < y + h; n++) {
-						for (int m = x; m < x + w; m++) {
-							k = data[(n - y) * scanSize + (m - x) + offset];
-							if (k >= 0) {
-								k2 = k;
-							} else {
-								k2 = k + 256;
-							}
-							argb = indexed[k2];
-							row[m - x] = argb;
-						}
-						dest.getRaster().setDataElements(x, n, w, 1, row);
+		@Override
+		public synchronized void setPixels(int x, int y, int w, int h,
+				ColorModel colorModel, int[] data, int offset, int scanSize) {
+			if (debug) {
+				System.err.println("setPixels(" + x + " ," + y + " ," + w + " ,"
+						+ h + ", " + colorModel + ", ..., " + offset + ", "
+						+ scanSize + ") (int[])");
+			}
+
+			int inDataType = prepareSetPixels(colorModel);
+			PixelIterator<?> srcIter = new BufferedIntPixelIterator(data, w, h,
+					offset, scanSize, inDataType);
+			setPixels(srcIter, x, y, w, h, colorModel);
+		}
+
+		private int prepareSetPixels(ColorModel colorModel) {
+			int colorModelImageType = colorModel == lastCM ? lastImageType
+					: ColorModelUtils.getBufferedImageType(colorModel);
+
+			lastCM = colorModel;
+			lastImageType = colorModelImageType;
+
+			if (dest == null) {
+				if (destImageType == ImageLoader.TYPE_DEFAULT) {
+					// we need to decide our BufferedImage's type:
+					if (colorModelImageType == ColorModelUtils.TYPE_UNRECOGNIZED) {
+						// we may get error downstream (or we may not),
+						// but this is an OK guess right now:
+						dest = new MutableBufferedImage(size.width, size.height,
+								BufferedImage.TYPE_INT_ARGB);
+					} else {
+						dest = new MutableBufferedImage(size.width, size.height,
+								colorModelImageType);
 					}
 				} else {
-					int transIndex = (cm instanceof IndexColorModel) ? ((IndexColorModel) cm)
-							.getTransparentPixel() : -1;
-
-					int argb;
-					for (int n = y; n < y + h; n++) {
-						for (int m = x; m < x + w; m++) {
-							byte k = data[(n - y) * scanSize + (m - x) + offset];
-							int k2 = k & 0xff;
-							if (k2 == transIndex) {
-								argb = 0;
-							} else {
-								argb = cm.getRGB(k2);
-							}
-							row[m - x] = argb;
-						}
-						dest.getRaster().setDataElements(x, n, w, 1, row);
-					}
+					dest = new MutableBufferedImage(size.width, size.height,
+							destImageType);
 				}
-				setProgress(x + w, y + h);
-			} catch (RuntimeException e) {
-				System.err.println("setPixels(" + x + " ," + y + " ," + w
-						+ " ," + h + ", " + cm + ", ..., " + offset + ", "
-						+ scanSize + ") (byte[])");
-				System.err.println(description);
-				throw e;
-			} catch (Error e) {
-				System.err.println("setPixels(" + x + " ," + y + " ," + w
-						+ " ," + h + ", " + cm + ", ..., " + offset + ", "
-						+ scanSize + ") (byte[])");
-				System.err.println(description);
-				throw e;
+				destType = ImageType.get(dest.getType());
+
+				if (pendingProperties != null) {
+					dest.setProperties(pendingProperties);
+					pendingProperties = null;
+				}
 			}
+			return colorModelImageType;
 		}
 
-		private boolean lastCMwasRGB = false;
-		private boolean lastCMwasARGB = false;
-		ColorModel lastCM = null;
+		private void setPixels(PixelIterator<?> srcIter, int x, int y, int w,
+				int h, ColorModel colorModel) {
 
-		public void setPixels(int x, int y, int w, int h, ColorModel cm,
-				int[] data, int offset, int scanSize) {
-			try {
-				if (cancellable != null && cancellable.isCancelled()) {
-					if (debug)
-						System.err
-								.println("removing this consumer because the Cancellable was activated");
-					producer.removeConsumer(this);
-					unblock();
-				}
-
+			if (cancellable.isCancelled()) {
 				if (debug)
-					System.err.println("setPixels(" + x + " ," + y + " ," + w
-							+ " ," + h + ", " + cm + ", ..., " + offset + ", "
-							+ scanSize + ") (int[])");
-
-				if (size == null)
-					throw new RuntimeException(
-							"The dimensions of this image are not yet defined.  Cannot write image data until the dimensions of the image are known.");
-				if (cm instanceof DirectColorModel) {
-					// don't call "equals" all the time; that's just a waste
-					// this is a little uglier, but it will save hundreds of
-					// method calls:
-					boolean quickRGB = (cm == lastCM && lastCMwasRGB);
-					boolean quickARGB = (cm == lastCM && lastCMwasARGB);
-
-					DirectColorModel d = (DirectColorModel) cm;
-					if (quickARGB
-							|| ((!quickRGB) && ImageLoader.equals(d, ARGBModel))) {
-						for (int n = y; n < y + h; n++) {
-							int k = (n - y) * scanSize - x + offset;
-							System.arraycopy(data, k, row, 0, w);
-							dest.getRaster().setDataElements(x, n, w, 1, row);
-						}
-						lastCMwasRGB = false;
-						lastCMwasARGB = true;
-						lastCM = cm;
-						return;
-					} else if (quickRGB || ImageLoader.equals(d, RGBModel)) {
-						// same thing, but no alpha:
-						for (int n = y; n < y + h; n++) {
-							int k = (n - y) * scanSize - x + offset;
-							System.arraycopy(data, k, row, 0, w);
-							// add alpha to every pixel:
-							for (int a = 0; a < w; a++) {
-								row[a] = (row[a] & 0xffffff) + 0xff000000;
-							}
-							dest.getRaster().setDataElements(x, n, w, 1, row);
-						}
-						lastCMwasRGB = true;
-						lastCMwasARGB = false;
-						lastCM = cm;
-						return;
-					}
-				}
-				int argb;
-				// If you know what your ColorModel is,
-				// it'd be good to make a special-case loop
-				// to deal with that data (like the if/then above),
-				// because a million calls to getRGB() is NOT cheap.
-				for (int n = y; n < y + h; n++) {
-					for (int m = x; m < x + w; m++) {
-						argb = cm.getRGB(data[(n - y) * scanSize + (m - x)
-								+ offset]);
-						row[m - x] = argb;
-					}
-					dest.getRaster().setDataElements(x, n, w, 1, row);
-				}
-				lastCMwasRGB = false;
-				lastCMwasARGB = false;
-				lastCM = cm;
-
-				setProgress(x + w, y + h);
-			} catch (RuntimeException e) {
-				System.err.println("setPixels(" + x + " ," + y + " ," + w
-						+ " ," + h + ", " + cm + ", ..., " + offset + ", "
-						+ scanSize + ") (int[])");
-				System.err.println(description);
-				throw e;
-			} catch (Error e) {
-				System.err.println("setPixels(" + x + " ," + y + " ," + w
-						+ " ," + h + ", " + cm + ", ..., " + offset + ", "
-						+ scanSize + ") (int[])");
-				System.err.println(description);
-				throw e;
+					System.err.println("the Cancellable was activated");
+				unblock(STATUS_CANCELLABLE_CANCELLED);
+				return;
 			}
+
+			if (size == null)
+				throw new RuntimeException(
+						"The dimensions of this image are not yet defined.  Cannot write image data until the dimensions of the image are known.");
+
+			PixelIterator<?> dstIter = destType.createConverter(srcIter);
+
+			if (dstIter instanceof IntPixelIterator) {
+				if (rowInt == null
+						|| rowInt.length < dstIter.getMinimumArrayLength())
+					rowInt = new int[dstIter.getMinimumArrayLength()];
+
+				IntPixelIterator dstIterInt = (IntPixelIterator) dstIter;
+				while (!dstIterInt.isDone()) {
+					dstIterInt.next(rowInt);
+					dest.getRaster().setDataElements(x, y, w, 1, rowInt);
+					y++;
+				}
+			} else if (dstIter instanceof BytePixelIterator) {
+				if (rowByte == null
+						|| rowByte.length < dstIter.getMinimumArrayLength())
+					rowByte = new byte[dstIter.getMinimumArrayLength()];
+
+				BytePixelIterator dstIterByte = (BytePixelIterator) dstIter;
+				while (!dstIterByte.isDone()) {
+					dstIterByte.next(rowByte);
+					dest.getRaster().setDataElements(x, y, w, 1, rowByte);
+					y++;
+				}
+			}
+
+			setProgress(x + w, y + h);
 		}
 
-		public void setProperties(Hashtable<?, ?> p) {
-			try {
-				// TODO: one day integrate these
-				// it wouldn't be hard to extend BufferedImage
-				// and override the methods regarding
-				// "getProperty" if you need to.
+		@Override
+		public synchronized void setProperties(Hashtable<?, ?> p) {
+			if (debug) {
+				System.err.println("setProperties(): " + p);
+			}
 
-				if (properties == null)
-					properties = new Properties();
-				properties.putAll(p);
-				if (debug) {
-					System.err.println("setProperties():");
-					properties.list(System.err);
+			if (dest != null) {
+				for (Map.Entry<?, ?> entry : p.entrySet()) {
+					String key = String.valueOf(entry.getKey());
+					dest.setProperty(key, entry.getValue());
 				}
-			} catch (RuntimeException e) {
-				System.err.println("setProperties():");
-				properties.list(System.err);
-				System.err.println(description);
-				throw e;
-			} catch (Error e) {
-				System.err.println("setProperties():");
-				properties.list(System.err);
-				System.err.println(description);
-				throw e;
+			} else {
+				if (pendingProperties == null)
+					pendingProperties = new HashMap<>();
+
+				for (Map.Entry<?, ?> entry : p.entrySet()) {
+					String key = String.valueOf(entry.getKey());
+					pendingProperties.put(key, entry.getValue());
+				}
 			}
 		}
 	}

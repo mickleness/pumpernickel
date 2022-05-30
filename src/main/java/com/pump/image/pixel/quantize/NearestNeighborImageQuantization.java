@@ -12,9 +12,9 @@ package com.pump.image.pixel.quantize;
 
 import java.awt.image.BufferedImage;
 
-import com.pump.image.pixel.BufferedImageIterator;
+import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.IndexedBytePixelIterator;
-import com.pump.image.pixel.IntARGBConverter;
+import com.pump.image.pixel.IntPixelIterator;
 
 /**
  * This implements image quantization using a nearest-neighbor approach.
@@ -29,18 +29,18 @@ public class NearestNeighborImageQuantization extends ImageQuantization {
 	 * The pixel iterator that implements the nearest neighbor image
 	 * quantization.
 	 */
-	protected static class NearestNeighborIndexedBytePixelIterator extends
-			AbstractIndexedBytePixelIterator {
+	protected static class NearestNeighborIndexedBytePixelIterator
+			extends AbstractIndexedBytePixelIterator {
 
 		int[] incomingRow;
-		IntARGBConverter iter;
+		IntPixelIterator iter;
 		protected int y = 0;
 
 		NearestNeighborIndexedBytePixelIterator(BufferedImage source,
 				ColorLUT lut) {
 			super(source, lut);
 			incomingRow = new int[getWidth()];
-			iter = new IntARGBConverter(BufferedImageIterator.get(source));
+			iter = ImageType.INT_ARGB.createConverter(source);
 		}
 
 		public void skip() {

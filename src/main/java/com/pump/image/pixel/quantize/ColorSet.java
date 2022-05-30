@@ -24,7 +24,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.IntARGBConverter;
+import com.pump.image.pixel.ImageType;
+import com.pump.image.pixel.PixelIterator;
+import com.pump.image.pixel.converter.IntPixelConverter;
 
 /**
  * This class stores information about the frequency of colors. This assumes all
@@ -394,10 +396,9 @@ public class ColorSet implements Serializable {
 			boolean includeTransparentPixel, boolean optimizeForGifs) {
 		int colorCount = getColorCount();
 		if (colorCount > 255 && includeTransparentPixel)
-			throw new IllegalStateException(
-					"There are too many colors ("
-							+ colorCount
-							+ ") to make an IndexColorModel (max is 255 + 1 transparent pixel)");
+			throw new IllegalStateException("There are too many colors ("
+					+ colorCount
+					+ ") to make an IndexColorModel (max is 255 + 1 transparent pixel)");
 		if (colorCount > 256)
 			throw new IllegalStateException("There are too many colors ("
 					+ colorCount + ") to make an IndexColorModel (max is 256)");
@@ -477,33 +478,33 @@ public class ColorSet implements Serializable {
 	}
 
 	private static final int[] colorOrder8Bit = new int[] { 0, 1, 2, 4, 8, 16,
-			32, 64, 128, 3, 5, 6, 9, 10, 12, 17, 18, 20, 24, 33, 34, 36, 40,
-			48, 65, 66, 68, 72, 80, 96, 129, 130, 132, 136, 144, 160, 192, 7,
-			11, 13, 14, 19, 21, 22, 25, 26, 28, 35, 37, 38, 41, 42, 44, 49, 50,
-			52, 56, 67, 69, 70, 73, 74, 76, 81, 82, 84, 88, 97, 98, 100, 104,
-			112, 131, 133, 134, 137, 138, 140, 145, 146, 148, 152, 161, 162,
-			164, 168, 176, 193, 194, 196, 200, 208, 224, 15, 23, 27, 29, 30,
-			39, 43, 45, 46, 51, 53, 54, 57, 58, 60, 71, 75, 77, 78, 83, 85, 86,
-			89, 90, 92, 99, 101, 102, 105, 106, 108, 113, 114, 116, 120, 135,
-			139, 141, 142, 147, 149, 150, 153, 154, 156, 163, 165, 166, 169,
-			170, 172, 177, 178, 180, 184, 195, 197, 198, 201, 202, 204, 209,
-			210, 212, 216, 225, 226, 228, 232, 240, 31, 47, 55, 59, 61, 62, 79,
-			87, 91, 93, 94, 103, 107, 109, 110, 115, 117, 118, 121, 122, 124,
-			143, 151, 155, 157, 158, 167, 171, 173, 174, 179, 181, 182, 185,
-			186, 188, 199, 203, 205, 206, 211, 213, 214, 217, 218, 220, 227,
-			229, 230, 233, 234, 236, 241, 242, 244, 248, 63, 95, 111, 119, 123,
-			125, 126, 159, 175, 183, 187, 189, 190, 207, 215, 219, 221, 222,
-			231, 235, 237, 238, 243, 245, 246, 249, 250, 252, 127, 191, 223,
-			239, 247, 251, 253, 254, 255 };
+			32, 64, 128, 3, 5, 6, 9, 10, 12, 17, 18, 20, 24, 33, 34, 36, 40, 48,
+			65, 66, 68, 72, 80, 96, 129, 130, 132, 136, 144, 160, 192, 7, 11,
+			13, 14, 19, 21, 22, 25, 26, 28, 35, 37, 38, 41, 42, 44, 49, 50, 52,
+			56, 67, 69, 70, 73, 74, 76, 81, 82, 84, 88, 97, 98, 100, 104, 112,
+			131, 133, 134, 137, 138, 140, 145, 146, 148, 152, 161, 162, 164,
+			168, 176, 193, 194, 196, 200, 208, 224, 15, 23, 27, 29, 30, 39, 43,
+			45, 46, 51, 53, 54, 57, 58, 60, 71, 75, 77, 78, 83, 85, 86, 89, 90,
+			92, 99, 101, 102, 105, 106, 108, 113, 114, 116, 120, 135, 139, 141,
+			142, 147, 149, 150, 153, 154, 156, 163, 165, 166, 169, 170, 172,
+			177, 178, 180, 184, 195, 197, 198, 201, 202, 204, 209, 210, 212,
+			216, 225, 226, 228, 232, 240, 31, 47, 55, 59, 61, 62, 79, 87, 91,
+			93, 94, 103, 107, 109, 110, 115, 117, 118, 121, 122, 124, 143, 151,
+			155, 157, 158, 167, 171, 173, 174, 179, 181, 182, 185, 186, 188,
+			199, 203, 205, 206, 211, 213, 214, 217, 218, 220, 227, 229, 230,
+			233, 234, 236, 241, 242, 244, 248, 63, 95, 111, 119, 123, 125, 126,
+			159, 175, 183, 187, 189, 190, 207, 215, 219, 221, 222, 231, 235,
+			237, 238, 243, 245, 246, 249, 250, 252, 127, 191, 223, 239, 247,
+			251, 253, 254, 255 };
 	private static final int[] colorOrder7Bit = new int[] { 0, 1, 2, 4, 8, 16,
 			32, 64, 3, 5, 6, 9, 10, 12, 17, 18, 20, 24, 33, 34, 36, 40, 48, 65,
 			66, 68, 72, 80, 96, 7, 11, 13, 14, 19, 21, 22, 25, 26, 28, 35, 37,
 			38, 41, 42, 44, 49, 50, 52, 56, 67, 69, 70, 73, 74, 76, 81, 82, 84,
 			88, 97, 98, 100, 104, 112, 15, 23, 27, 29, 30, 39, 43, 45, 46, 51,
-			53, 54, 57, 58, 60, 71, 75, 77, 78, 83, 85, 86, 89, 90, 92, 99,
-			101, 102, 105, 106, 108, 113, 114, 116, 120, 31, 47, 55, 59, 61,
-			62, 79, 87, 91, 93, 94, 103, 107, 109, 110, 115, 117, 118, 121,
-			122, 124, 63, 95, 111, 119, 123, 125, 126, 127 };
+			53, 54, 57, 58, 60, 71, 75, 77, 78, 83, 85, 86, 89, 90, 92, 99, 101,
+			102, 105, 106, 108, 113, 114, 116, 120, 31, 47, 55, 59, 61, 62, 79,
+			87, 91, 93, 94, 103, 107, 109, 110, 115, 117, 118, 121, 122, 124,
+			63, 95, 111, 119, 123, 125, 126, 127 };
 	private static final int[] colorOrder6Bit = new int[] { 0, 1, 2, 4, 8, 16,
 			32, 3, 5, 6, 9, 10, 12, 17, 18, 20, 24, 33, 34, 36, 40, 48, 7, 11,
 			13, 14, 19, 21, 22, 25, 26, 28, 35, 37, 38, 41, 42, 44, 49, 50, 52,
@@ -512,10 +513,10 @@ public class ColorSet implements Serializable {
 	private static final int[] colorOrder5Bit = new int[] { 0, 1, 2, 4, 8, 16,
 			3, 5, 6, 9, 10, 12, 17, 18, 20, 24, 7, 11, 13, 14, 19, 21, 22, 25,
 			26, 28, 15, 23, 27, 29, 30, 31 };
-	private static final int[] colorOrder4Bit = new int[] { 0, 1, 2, 4, 8, 3,
-			5, 6, 9, 10, 12, 7, 11, 13, 14, 15 };
-	private static final int[] colorOrder3Bit = new int[] { 0, 1, 2, 4, 3, 5,
-			6, 7 };
+	private static final int[] colorOrder4Bit = new int[] { 0, 1, 2, 4, 8, 3, 5,
+			6, 9, 10, 12, 7, 11, 13, 14, 15 };
+	private static final int[] colorOrder3Bit = new int[] { 0, 1, 2, 4, 3, 5, 6,
+			7 };
 	private static final int[] colorOrder2Bit = new int[] { 0, 1, 2, 3 };
 	private static final int[] colorOrder1Bit = new int[] { 0, 1 };
 
@@ -527,18 +528,18 @@ public class ColorSet implements Serializable {
 	 *            the image to process.
 	 */
 	public void addColors(BufferedImage i) {
-		IntARGBConverter g = new IntARGBConverter(BufferedImageIterator.get(i));
-		addColors(g);
+		addColors(BufferedImageIterator.get(i));
 	}
 
 	/**
 	 * Add all the pixels in this iterator that are more than 50% opaque. This
 	 * does not account for premultiplied alpha.
 	 * 
-	 * @param i
+	 * @param pixelIter
 	 *            the pixel data to process.
 	 */
-	public void addColors(IntARGBConverter i) {
+	public void addColors(PixelIterator<?> pixelIter) {
+		IntPixelConverter i = ImageType.INT_ARGB.createConverter(pixelIter);
 
 		int w = i.getWidth();
 

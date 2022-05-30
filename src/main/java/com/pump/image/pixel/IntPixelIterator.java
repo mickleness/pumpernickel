@@ -10,12 +10,9 @@
  */
 package com.pump.image.pixel;
 
-public interface IntPixelIterator extends PixelIterator {
-	/**
-	 * Reads a row of pixel data.
-	 * 
-	 * @param dest
-	 *            the array to store the pixels in
-	 */
-	public abstract void next(int[] dest);
+/**
+ * This is a {@link com.pump.image.pixel.PixelIterator} that iterates over an
+ * image that expresses its pixels in integers.
+ */
+public interface IntPixelIterator extends PixelIterator<int[]> {
 }

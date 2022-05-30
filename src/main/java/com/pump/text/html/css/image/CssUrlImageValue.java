@@ -47,12 +47,12 @@ public class CssUrlImageValue extends AbstractCssValue
 			.getName() + "#imageCache";
 
 	/**
-	 * This is guaranteed to have a non-null Paintable, but the BufferedImage
-	 * is optional. When the BufferedImage exists, the Paintable is just a
+	 * This is guaranteed to have a non-null Paintable, but the BufferedImage is
+	 * optional. When the BufferedImage exists, the Paintable is just a
 	 * BufferedImagePaintable.
 	 * <p>
-	 * So this accommodates both vector graphics (which can be a Paintable)
-	 * and a plain BufferedImage.
+	 * So this accommodates both vector graphics (which can be a Paintable) and
+	 * a plain BufferedImage.
 	 */
 	public static class ImageDataValue {
 		public Paintable paintable;
@@ -106,7 +106,8 @@ public class CssUrlImageValue extends AbstractCssValue
 		if (fileFormat.equals("jpg") || fileFormat.equals("jpeg")
 				|| fileFormat.equals("png")) {
 			BufferedImage img = ImageLoader.createImage(
-					Toolkit.getDefaultToolkit().createImage(bytes));
+					Toolkit.getDefaultToolkit().createImage(bytes),
+					ImageLoader.TYPE_DEFAULT);
 			return new ImageDataValue(img);
 		} else if (fileFormat.equalsIgnoreCase(VectorImage.FILE_EXTENSION)) {
 			VectorImage vi;
@@ -227,8 +228,8 @@ public class CssUrlImageValue extends AbstractCssValue
 					positionValue == null ? true
 							: positionValue.isVerticalPositionFromTop())) {
 				if (p.bufferedImage != null) {
-					g.drawImage(p.bufferedImage, xSpan.position, ySpan.position, xSpan.length,
-							ySpan.length, null);
+					g.drawImage(p.bufferedImage, xSpan.position, ySpan.position,
+							xSpan.length, ySpan.length, null);
 				} else {
 					Graphics2D g2 = (Graphics2D) g.create();
 					g2.translate(xSpan.position, ySpan.position);
@@ -265,7 +266,8 @@ public class CssUrlImageValue extends AbstractCssValue
 				paintable = createPaintableFromDataUrl(urlStr);
 			} else {
 				URL url = new URL(urlStr);
-				BufferedImage bi = ImageLoader.createImage(url);
+				BufferedImage bi = ImageLoader.createImage(url,
+						ImageLoader.TYPE_DEFAULT);
 				paintable = new ImageDataValue(bi);
 			}
 		} catch (Exception e) {
