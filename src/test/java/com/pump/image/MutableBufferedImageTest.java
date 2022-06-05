@@ -39,6 +39,10 @@ public class MutableBufferedImageTest {
 				assertFalse(bi1.equals(bi2));
 			}
 		}
+
+		bi2 = createSampleImage(60, 40, BufferedImage.TYPE_INT_ARGB);
+		bi2.setProperty("x", "y");
+		assertFalse(bi1.equals(bi2));
 	}
 
 	@Test

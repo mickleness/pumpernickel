@@ -185,6 +185,10 @@ public class MutableBufferedImage extends BufferedImage
 				throw new IllegalStateException(row1.getClass().getName());
 			}
 		}
+
+		if (!getProperties(this).equals(getProperties(other)))
+			return false;
+
 		return true;
 	}
 
