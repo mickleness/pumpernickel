@@ -17,7 +17,6 @@ import java.awt.Insets;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.awt.image.BufferedImage;
-import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -210,6 +209,9 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 			progressBar.setVisible(false);
 			results.setVisible(true);
 			results.add(new JLabel(new ImageIcon(bi)));
+
+			System.out.println(ShowcaseChartDemo.this.getClass().getName());
+			System.out.println(BarChartRenderer.toHtml(dataCopy));
 		}
 
 		/**
@@ -277,22 +279,6 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 				isShowing = isShowing();
 			}
 		});
-	}
-
-	protected String toHtml(Map<String, Map<String, Long>> data) {
-		StringBuilder sb = new StringBuilder();
-		for (Entry<String, Map<String, Long>> entry : data.entrySet()) {
-			sb.append(entry.getKey() + ":\n<table>\n");
-			for (Entry<String, Long> entry2 : entry.getValue().entrySet()) {
-				sb.append("\t<tr>\n");
-				sb.append("\t\t\t<td>" + entry2.getKey() + "</td>\n");
-				String v = NumberFormat.getInstance().format(entry2.getValue());
-				sb.append("\t\t\t<td>" + v + "</td>\n");
-				sb.append("\t</tr>\n");
-			}
-			sb.append("</table>\n");
-		}
-		return sb.toString();
 	}
 
 	protected JPanel upperControls = new JPanel();
