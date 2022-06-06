@@ -33,8 +33,8 @@ import com.pump.swing.ContextualMenuHelper;
 /**
  * This is a panel for BarChartGenerators that examine performance.
  * <p>
- * This includes a "loading" panel with a a progress bar while
- * the samples are being collected.
+ * This includes a "loading" panel with a a progress bar while the samples are
+ * being collected.
  */
 public class PerformanceChartPanel extends JPanel {
 

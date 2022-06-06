@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.imageio.ImageIO;
 
@@ -99,18 +102,82 @@ public class ImageLoaderDemo extends ShowcaseDemo {
 		private void runSample(Map<String, ?> parameters, int loopCount)
 				throws Exception {
 			String model = (String) parameters.get(PARAMETER_MODEL);
-			for (int i = 0; i < loopCount; i++) {
-				if (MODEL_IMAGE_IO.equals(model)) {
-					ImageIO.read(files[i]);
-				} else if (MODEL_IMAGE_LOADER.equals(model)) {
-					ImageLoader.createImage(files[i]);
-				} else if (MODEL_MEDIA_TRACKER.equals(model)) {
+
+			boolean multithreadTest = false;
+
+			if (multithreadTest) {
+				// TODO: figure out why this performs so differently.
+
+				// when multithreadTest = true, my results resemble:
+
+				// *** Time
+				// ImageLoader = 577
+				// ImageIO = 612
+				// MediaTracker = 732
+
+				// when multithreadTest = false, my results resemble:
+
+				// *** Time
+				// ImageLoader = 989
+				// ImageIO = 1357
+				// MediaTracker = 883
+
+				if (MODEL_MEDIA_TRACKER.equals(model)) {
 					MediaTracker mediaTracker = new MediaTracker(new Label());
-					Image image = Toolkit.getDefaultToolkit()
-							.createImage(files[i].getAbsolutePath());
-					mediaTracker.addImage(image, i);
+					Image[] images = new Image[files.length];
+					for (int a = 0; a < loopCount; a++) {
+						images[a] = Toolkit.getDefaultToolkit()
+								.createImage(files[a].getAbsolutePath());
+						mediaTracker.addImage(images[a], a);
+					}
 					mediaTracker.waitForAll();
-					image.flush();
+					for (Image image : images) {
+						image.flush();
+					}
+				} else {
+					// the default Toolkit code uses 4 "Image Fetcher" threads,
+					// so to compare performance we should have 4 threads too.
+					ExecutorService executor = Executors.newFixedThreadPool(4);
+					List<Future<?>> futures = new ArrayList<>(100);
+					for (int a = 0; a < loopCount; a++) {
+						final int z = a;
+						futures.add(executor.submit(new Runnable() {
+							public void run() {
+
+								try {
+									if (MODEL_IMAGE_IO.equals(model)) {
+										ImageIO.read(files[z]);
+									} else if (MODEL_IMAGE_LOADER
+											.equals(model)) {
+										ImageLoader.createImage(files[z]);
+									}
+								} catch (Exception e) {
+									throw new RuntimeException(e);
+								}
+
+							}
+						}));
+					}
+					executor.shutdown();
+					for (Future<?> future : futures) {
+						future.get();
+					}
+				}
+			} else {
+				for (int i = 0; i < loopCount; i++) {
+					if (MODEL_IMAGE_IO.equals(model)) {
+						ImageIO.read(files[i]);
+					} else if (MODEL_IMAGE_LOADER.equals(model)) {
+						ImageLoader.createImage(files[i]);
+					} else if (MODEL_MEDIA_TRACKER.equals(model)) {
+						MediaTracker mediaTracker = new MediaTracker(
+								new Label());
+						Image image = Toolkit.getDefaultToolkit()
+								.createImage(files[i].getAbsolutePath());
+						mediaTracker.addImage(image, i);
+						mediaTracker.waitForAll();
+						image.flush();
+					}
 				}
 			}
 		}
