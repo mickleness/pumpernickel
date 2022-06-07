@@ -1,6 +1,7 @@
 package com.pump.showcase.demo;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Label;
@@ -24,12 +25,12 @@ import javax.imageio.ImageIO;
 
 import com.pump.desktop.temp.TempFileManager;
 import com.pump.image.ImageLoader;
+import com.pump.image.ImageSize;
 import com.pump.image.pixel.PixelIterator;
-import com.pump.io.IOUtils;
 import com.pump.showcase.chart.ChartDataGenerator;
 import com.pump.showcase.chart.PerformanceChartPanel;
 
-public class ImageLoaderDemo extends ShowcaseDemo {
+public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -41,8 +42,26 @@ public class ImageLoaderDemo extends ShowcaseDemo {
 	class ImageLoaderChartDataGenerator implements ChartDataGenerator {
 		final File file;
 
+		// how many times we load the image to measure the time it takes
+		// it's important this figure is small when the image is large (so the
+		// samples don't take forever to collect), and large when the image is
+		// small (so they can show statistically significant differences).
+		final int loopCount;
+
 		public ImageLoaderChartDataGenerator(File file) {
 			this.file = file;
+
+			Dimension imgSize = ImageSize.get(file);
+			int area = imgSize.width * imgSize.height;
+
+			if (area > 3000000) {
+				loopCount = 10;
+			} else if (area > 500000) {
+				loopCount = 25;
+			} else {
+				loopCount = 100;
+			}
+
 		}
 
 		@Override
@@ -90,7 +109,7 @@ public class ImageLoaderDemo extends ShowcaseDemo {
 
 		@Override
 		public void runTimedSample(Map<String, ?> parameters) throws Exception {
-			runSample(parameters, 100);
+			runSample(parameters, loopCount);
 		}
 
 		@Override
@@ -124,10 +143,10 @@ public class ImageLoaderDemo extends ShowcaseDemo {
 
 				if (MODEL_MEDIA_TRACKER.equals(model)) {
 					MediaTracker mediaTracker = new MediaTracker(new Label());
-					Image[] images = new Image[files.length];
+					Image[] images = new Image[loopCount];
 					for (int a = 0; a < loopCount; a++) {
 						images[a] = Toolkit.getDefaultToolkit()
-								.createImage(files[a].getAbsolutePath());
+								.createImage(file.getAbsolutePath());
 						mediaTracker.addImage(images[a], a);
 					}
 					mediaTracker.waitForAll();
@@ -146,10 +165,10 @@ public class ImageLoaderDemo extends ShowcaseDemo {
 
 								try {
 									if (MODEL_IMAGE_IO.equals(model)) {
-										ImageIO.read(files[z]);
+										ImageIO.read(file);
 									} else if (MODEL_IMAGE_LOADER
 											.equals(model)) {
-										ImageLoader.createImage(files[z]);
+										ImageLoader.createImage(file);
 									}
 								} catch (Exception e) {
 									throw new RuntimeException(e);
@@ -166,52 +185,19 @@ public class ImageLoaderDemo extends ShowcaseDemo {
 			} else {
 				for (int i = 0; i < loopCount; i++) {
 					if (MODEL_IMAGE_IO.equals(model)) {
-						ImageIO.read(files[i]);
+						ImageIO.read(file);
 					} else if (MODEL_IMAGE_LOADER.equals(model)) {
-						ImageLoader.createImage(files[i]);
+						ImageLoader.createImage(file);
 					} else if (MODEL_MEDIA_TRACKER.equals(model)) {
 						MediaTracker mediaTracker = new MediaTracker(
 								new Label());
 						Image image = Toolkit.getDefaultToolkit()
-								.createImage(files[i].getAbsolutePath());
+								.createImage(file.getAbsolutePath());
 						mediaTracker.addImage(image, i);
 						mediaTracker.waitForAll();
 						image.flush();
 					}
 				}
-			}
-		}
-
-		File[] files = new File[100];
-
-		@Override
-		public void setupTimedSample(Map<String, ?> parameters) {
-			setupMemorySample(parameters);
-		}
-
-		@Override
-		public void setupMemorySample(Map<String, ?> parameters) {
-			for (int a = 0; a < files.length; a++) {
-				files[a] = TempFileManager.get().createFile("tempImageLoader",
-						"png");
-				try {
-					IOUtils.copy(file, files[a]);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		@Override
-		public void tearDownTimedSample(Map<String, ?> parameters) {
-			tearDownMemorySample(parameters);
-		}
-
-		@Override
-		public void tearDownMemorySample(Map<String, ?> parameters) {
-			for (int a = 0; a < files.length; a++) {
-				files[a].delete();
-				files[a] = null;
 			}
 		}
 
@@ -237,16 +223,32 @@ public class ImageLoaderDemo extends ShowcaseDemo {
 		return bi;
 	}
 
-	public ImageLoaderDemo() throws Exception {
-		PerformanceChartPanel p = new PerformanceChartPanel();
-		BufferedImage bi = createSampleImage();
-		File file = TempFileManager.get().createFile("imageLoader", "png");
-		ImageIO.write(bi, "png", file);
-		ChartDataGenerator dataGenerator = new ImageLoaderChartDataGenerator(
-				file);
-		p.reset(dataGenerator);
+	PerformanceChartPanel perfChartPanel;
+	File sampleFile;
 
-		add(p);
+	public ImageLoaderDemo() throws Exception {
+		super(File.class, false, "png", "jpg", "jpeg");
+
+		perfChartPanel = new PerformanceChartPanel();
+
+		examplePanel.add(perfChartPanel);
+
+	}
+
+	@Override
+	protected void setDefaultResourcePath() {
+		try {
+			if (sampleFile == null) {
+				BufferedImage sampleImage = createSampleImage();
+				sampleFile = TempFileManager.get().createFile("sampleImage",
+						"png");
+				ImageIO.write(sampleImage, "png", sampleFile);
+			}
+			resourcePathField.setText(sampleFile.getAbsolutePath());
+		} catch (IOException e) {
+			e.printStackTrace();
+			super.setDefaultResourcePath();
+		}
 	}
 
 	@Override
@@ -272,6 +274,13 @@ public class ImageLoaderDemo extends ShowcaseDemo {
 	@Override
 	public Class<?>[] getClasses() {
 		return new Class[] { ImageLoader.class, PixelIterator.class };
+	}
+
+	@Override
+	protected void refreshFile(File file, String resourceStr) {
+		ChartDataGenerator dataGenerator = new ImageLoaderChartDataGenerator(
+				file);
+		perfChartPanel.reset(dataGenerator);
 	}
 
 }

@@ -34,5 +34,6 @@ public class BarChartPanel extends JPanel {
 		setUI(new BarChartPanelUI());
 		setMinimumSize(minimumSize);
 		setPreferredSize(preferredSize);
+		setOpaque(false);
 	}
 }

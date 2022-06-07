@@ -276,13 +276,15 @@ public class BarChartRenderer {
 
 		barLabelsList = new ArrayList<>();
 		for (Entry<String, Map<String, Long>> entry : data.entrySet()) {
-			DataRow row = new DataRow(entry.getKey(), entry.getValue());
-			rows.add(row);
+			if (!entry.getValue().isEmpty()) {
+				DataRow row = new DataRow(entry.getKey(), entry.getValue());
+				rows.add(row);
 
-			// populate barLabelsList in the order rows will be seen
-			for (String str : row.data.keySet()) {
-				if (!barLabelsList.contains(str))
-					barLabelsList.add(str);
+				// populate barLabelsList in the order rows will be seen
+				for (String str : row.data.keySet()) {
+					if (!barLabelsList.contains(str))
+						barLabelsList.add(str);
+				}
 			}
 		}
 		rows.add(new KeyRow());

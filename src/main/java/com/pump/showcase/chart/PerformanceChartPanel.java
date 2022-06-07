@@ -349,6 +349,10 @@ public class PerformanceChartPanel extends JPanel {
 		add(loadingPanel, CARD_LOADING);
 		add(resultsPanel, CARD_RESULTS);
 
+		setOpaque(false);
+		loadingPanel.setOpaque(false);
+		resultsPanel.setOpaque(false);
+
 		addHierarchyListener(new HierarchyListener() {
 
 			boolean wasShowing = false;
@@ -447,6 +451,8 @@ public class PerformanceChartPanel extends JPanel {
 				ContextualMenuHelper.clear(resultsPanel);
 				chartData = null;
 
+				progressBar.setValue(0);
+				;
 				cardLayout.show(PerformanceChartPanel.this, CARD_LOADING);
 
 				if (workerThreadCancellable != null)
