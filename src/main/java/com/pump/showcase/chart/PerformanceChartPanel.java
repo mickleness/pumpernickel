@@ -10,12 +10,12 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +26,7 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
 import com.pump.plaf.CircularProgressBarUI;
+import com.pump.showcase.demo.ShowcaseDemo;
 import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
 import com.pump.swing.ContextualMenuHelper;
@@ -39,6 +40,9 @@ import com.pump.swing.ContextualMenuHelper;
 public class PerformanceChartPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+
+	public final static String CHART_NAME_TIME = "Time";
+	public final static String CHART_NAME_MEMORY = "Memory";
 
 	private static final String CARD_LOADING = "loading";
 	private static final String CARD_RESULTS = "results";
@@ -342,10 +346,17 @@ public class PerformanceChartPanel extends JPanel {
 			100);
 
 	AbstractAction copyAction_text, copyAction_html;
-	Map<String, Map<String, Long>> chartData;
+	List<Chart> charts = null;
+	String name;
 
-	public PerformanceChartPanel() {
+	/**
+	 * @param name
+	 *            A human-readable name for this chart. Something like
+	 *            "ImageLoader Performance Results".
+	 */
+	public PerformanceChartPanel(String name) {
 		setLayout(cardLayout);
+		this.name = name;
 		add(loadingPanel, CARD_LOADING);
 		add(resultsPanel, CARD_RESULTS);
 
@@ -385,7 +396,7 @@ public class PerformanceChartPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String str = BarChartRenderer.toText(chartData);
+				String str = BarChartRenderer.toText(charts);
 				Toolkit.getDefaultToolkit().getSystemClipboard()
 						.setContents(new StringSelection(str), null);
 			}
@@ -397,7 +408,7 @@ public class PerformanceChartPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String str = BarChartRenderer.toHtml(chartData);
+				String str = BarChartRenderer.toHtml(charts);
 				Toolkit.getDefaultToolkit().getSystemClipboard()
 						.setContents(new StringSelection(str), null);
 			}
@@ -405,16 +416,12 @@ public class PerformanceChartPanel extends JPanel {
 		};
 	}
 
-	private void copy(String str) {
-	}
-
 	protected void populateResultsPanel(
 			Map<Map<String, ?>, PerformanceResult> resultsMap) {
-		chartData = new LinkedHashMap<>();
-		Map<String, Long> timeData = new LinkedHashMap<>();
-		Map<String, Long> memoryData = new HashMap<>();
-		chartData.put("Time", timeData);
-		chartData.put("Memory", memoryData);
+
+		charts = new LinkedList<>();
+		charts.add(new Chart(CHART_NAME_TIME));
+		charts.add(new Chart(CHART_NAME_MEMORY));
 
 		for (Map.Entry<Map<String, ?>, PerformanceResult> entry : resultsMap
 				.entrySet()) {
@@ -425,9 +432,11 @@ public class PerformanceChartPanel extends JPanel {
 						"PARAMETER_NAME must be defined in the parameters to create chart.");
 			PerformanceResult r = entry.getValue();
 			if (r.getMedianTime() > 0)
-				timeData.put(name, r.getMedianTime());
+				charts.get(0).getSeriesData().add(
+						new AbstractMap.SimpleEntry<>(name, r.getMedianTime()));
 			if (r.getMedianMemory() > 0)
-				memoryData.put(name, r.getMedianMemory());
+				charts.get(1).getSeriesData().add(new AbstractMap.SimpleEntry<>(
+						name, r.getMedianMemory()));
 		}
 
 		resultsPanel.removeAll();
@@ -435,13 +444,15 @@ public class PerformanceChartPanel extends JPanel {
 
 		int width = 400;
 		int height = 270;
-		BarChartRenderer chartRenderer = new BarChartRenderer(chartData);
+		BarChartRenderer chartRenderer = new BarChartRenderer(charts);
 		BarChartPanel p = new BarChartPanel(chartRenderer,
 				new Dimension(width, height), new Dimension(width, height));
 		resultsPanel.add(p);
 
 		ContextualMenuHelper.add(resultsPanel, copyAction_text);
 		ContextualMenuHelper.add(resultsPanel, copyAction_html);
+		ShowcaseDemo.installExportJVGContextMenu(resultsPanel, resultsPanel,
+				name);
 	}
 
 	public void reset(ChartDataGenerator generator) {
@@ -449,10 +460,9 @@ public class PerformanceChartPanel extends JPanel {
 			@Override
 			public void run() {
 				ContextualMenuHelper.clear(resultsPanel);
-				chartData = null;
+				charts = null;
 
 				progressBar.setValue(0);
-				;
 				cardLayout.show(PerformanceChartPanel.this, CARD_LOADING);
 
 				if (workerThreadCancellable != null)

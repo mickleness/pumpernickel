@@ -52,7 +52,7 @@ public class JavaFormatterDemo extends ShowcaseDemo {
 
 		new JavaFormatter(textPane);
 
-		installExportJVGContextMenu(textPane, scrollPane);
+		installExportJVGContextMenu(textPane, scrollPane, getTitle());
 	}
 
 	@Override

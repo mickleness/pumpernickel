@@ -11,7 +11,6 @@
 package com.pump.showcase.chart;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -34,39 +33,13 @@ public class BasicTickLabeler {
 	 *         should display the accompanying String at each tick. The Strings
 	 *         will all share the same number of decimal places.
 	 */
-	public SortedMap<Double, String> getLabeledTicks(double min, double max) {
+	public SortedMap<Double, String> getLabeledTicks(double min, double max,
+			Chart chart) {
 		SortedSet<BigDecimal> t = getTicks(min, max);
-		int leftMaxDigits = 0;
-		int rightMaxDigits = 0;
-		for (BigDecimal d : t) {
-			String str = d.toPlainString();
-			leftMaxDigits = Math.max(leftMaxDigits, getLeftDigits(str));
-			rightMaxDigits = Math.max(rightMaxDigits, getRightDigits(str));
-		}
-
-		StringBuilder pattern = new StringBuilder();
-		int ctr = 0;
-		for (int a = 0; a < leftMaxDigits; a++) {
-			if (ctr == 3) {
-				ctr = 0;
-				pattern.insert(0, ',');
-			}
-			ctr++;
-			pattern.insert(0, "#");
-		}
-
-		if (rightMaxDigits > 0) {
-			pattern.append(".");
-			for (int a = 0; a < rightMaxDigits; a++) {
-				pattern.append("0");
-			}
-		}
-
-		DecimalFormat format = new DecimalFormat(pattern.toString());
 		SortedMap<Double, String> returnValue = new TreeMap<>();
 
 		for (BigDecimal d : t) {
-			returnValue.put(d.doubleValue(), format.format(d.doubleValue()));
+			returnValue.put(d.doubleValue(), chart.formatValue(d));
 		}
 
 		return returnValue;

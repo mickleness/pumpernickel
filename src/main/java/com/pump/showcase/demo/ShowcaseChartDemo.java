@@ -17,6 +17,7 @@ import java.awt.Insets;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.awt.image.BufferedImage;
+import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import javax.swing.SwingUtilities;
 
 import com.pump.plaf.CircularProgressBarUI;
 import com.pump.showcase.chart.BarChartRenderer;
+import com.pump.showcase.chart.Chart;
 
 public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 
@@ -47,7 +49,8 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 	 * object, and then treat this object like a single Number measurement.
 	 * 
 	 */
-	protected static class SampleSet extends Number {
+	protected static class SampleSet extends Number
+			implements Comparable<SampleSet> {
 		private static final long serialVersionUID = 1L;
 
 		List<Number> samples = new LinkedList<>();
@@ -105,6 +108,11 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 		@Override
 		public double doubleValue() {
 			return getMedian().doubleValue();
+		}
+
+		@Override
+		public int compareTo(SampleSet o) {
+			return Double.compare(doubleValue(), o.doubleValue());
 		}
 	}
 
@@ -202,8 +210,7 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 				return;
 			}
 			//
-			Map<String, Map<String, Long>> dataCopy = convertSampleSetToLong(
-					data);
+			List<Chart> dataCopy = convertSampleSetToLong(data);
 			BarChartRenderer r = new BarChartRenderer(dataCopy);
 			BufferedImage bi = r.paint(new Dimension(500, 1000));
 			progressBar.setVisible(false);
@@ -219,18 +226,18 @@ public abstract class ShowcaseChartDemo extends ShowcaseDemo {
 		 * we could remove this method, but this accommodates some legacy code
 		 * for now.
 		 */
-		private Map<String, Map<String, Long>> convertSampleSetToLong(
+		private List<Chart> convertSampleSetToLong(
 				Map<String, Map<String, SampleSet>> d) {
-			Map<String, Map<String, Long>> returnValue = new LinkedHashMap<>();
+			List<Chart> returnValue = new LinkedList<>();
 			for (Entry<String, Map<String, SampleSet>> outerEntry : d
 					.entrySet()) {
-				Map<String, Long> entryCopy = new LinkedHashMap<>();
+				Chart c = new Chart(outerEntry.getKey());
 				for (Entry<String, SampleSet> innerEntry : outerEntry.getValue()
 						.entrySet()) {
-					entryCopy.put(innerEntry.getKey(),
-							innerEntry.getValue().longValue());
+					c.getSeriesData().add(new AbstractMap.SimpleEntry<>(
+							innerEntry.getKey(), innerEntry.getValue()));
 				}
-				returnValue.put(outerEntry.getKey(), entryCopy);
+				returnValue.add(c);
 			}
 			return returnValue;
 		}

@@ -76,7 +76,7 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 
 		@Override
 		public int getMemorySampleCount() {
-			return 10;
+			return 20;
 		}
 
 		@Override
@@ -229,7 +229,8 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 	public ImageLoaderDemo() throws Exception {
 		super(File.class, false, "png", "jpg", "jpeg");
 
-		perfChartPanel = new PerformanceChartPanel();
+		perfChartPanel = new PerformanceChartPanel(
+				"ImageLoader Performance Results");
 
 		examplePanel.add(perfChartPanel);
 
@@ -263,7 +264,7 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 
 	@Override
 	public URL getHelpURL() {
-		return null;
+		return VectorImageDemo.class.getResource("imageLoader.html");
 	}
 
 	@Override
