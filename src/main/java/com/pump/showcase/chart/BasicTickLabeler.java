@@ -11,6 +11,7 @@
 package com.pump.showcase.chart;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -28,6 +29,9 @@ public class BasicTickLabeler {
 	 *            The minimum of the range to express
 	 * @param max
 	 *            the maximum of the range to express
+	 * @param chart
+	 *            an optional Chart that, if non-null, will be consulted bia
+	 *            {@link Chart#formatValue(Number)}.
 	 * @return a map of values and their String representations. The chart
 	 *         should render tickmarks at the Double values provided, and it
 	 *         should display the accompanying String at each tick. The Strings
@@ -38,8 +42,44 @@ public class BasicTickLabeler {
 		SortedSet<BigDecimal> t = getTicks(min, max);
 		SortedMap<Double, String> returnValue = new TreeMap<>();
 
+		int leftMaxDigits = 0;
+		int rightMaxDigits = 0;
 		for (BigDecimal d : t) {
-			returnValue.put(d.doubleValue(), chart.formatValue(d));
+			String str = d.toPlainString();
+			leftMaxDigits = Math.max(leftMaxDigits, getLeftDigits(str));
+			rightMaxDigits = Math.max(rightMaxDigits, getRightDigits(str));
+		}
+
+		StringBuilder pattern = new StringBuilder();
+		int ctr = 0;
+		for (int a = 0; a < leftMaxDigits; a++) {
+			if (ctr == 3) {
+				ctr = 0;
+				pattern.insert(0, ',');
+			}
+			ctr++;
+			pattern.insert(0, "#");
+		}
+
+		if (rightMaxDigits > 0) {
+			pattern.append(".");
+			for (int a = 0; a < rightMaxDigits; a++) {
+				pattern.append("0");
+			}
+		}
+		DecimalFormat defaultPattern = new DecimalFormat(pattern.toString());
+
+		for (BigDecimal d : t) {
+			String str = null;
+			if (chart != null) {
+				str = chart.formatValue(d);
+			}
+
+			if (str == null) {
+				str = defaultPattern.format(d.doubleValue());
+			}
+
+			returnValue.put(d.doubleValue(), str);
 		}
 
 		return returnValue;

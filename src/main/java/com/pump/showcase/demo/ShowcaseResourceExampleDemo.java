@@ -86,7 +86,7 @@ public abstract class ShowcaseResourceExampleDemo<R>
 		this.resourceType = resourceType;
 
 		if (resourceType.equals(File.class)) {
-			resourcePathField = new JTextField(20);
+			resourcePathField = new JTextField(40);
 		} else if (resourceType.equals(URL.class)) {
 			resourcePathField = new JTextField(40);
 		} else {

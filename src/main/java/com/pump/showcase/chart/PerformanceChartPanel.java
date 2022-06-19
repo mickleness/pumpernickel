@@ -10,6 +10,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
+import java.text.DecimalFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +20,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.swing.AbstractAction;
 import javax.swing.JPanel;
@@ -420,8 +422,31 @@ public class PerformanceChartPanel extends JPanel {
 			Map<Map<String, ?>, PerformanceResult> resultsMap) {
 
 		charts = new LinkedList<>();
-		charts.add(new Chart(CHART_NAME_TIME));
-		charts.add(new Chart(CHART_NAME_MEMORY));
+
+		Chart timeChart = new Chart(CHART_NAME_TIME);
+		Chart memoryChart = new Chart(CHART_NAME_MEMORY);
+
+		timeChart.setValueFormatter(new Function<Number, String>() {
+			DecimalFormat format = new DecimalFormat("#.0");
+
+			@Override
+			public String apply(Number t) {
+				return format.format(t.doubleValue() / 1000.0) + " ms";
+			}
+		});
+
+		memoryChart.setValueFormatter(new Function<Number, String>() {
+			DecimalFormat format = new DecimalFormat("#.0");
+
+			@Override
+			public String apply(Number t) {
+				return format.format(t.doubleValue() / (1024.0 * 1024.0))
+						+ " MB";
+			}
+		});
+
+		charts.add(timeChart);
+		charts.add(memoryChart);
 
 		for (Map.Entry<Map<String, ?>, PerformanceResult> entry : resultsMap
 				.entrySet()) {

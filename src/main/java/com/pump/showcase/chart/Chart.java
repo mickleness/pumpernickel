@@ -18,6 +18,10 @@ public class Chart {
 		this.name = Objects.requireNonNull(name);
 	}
 
+	public void setValueFormatter(Function<Number, String> valueFormatter) {
+		this.valueFormatter = valueFormatter;
+	}
+
 	public List<Map.Entry<String, Number>> getSeriesData() {
 		return seriesData;
 	}

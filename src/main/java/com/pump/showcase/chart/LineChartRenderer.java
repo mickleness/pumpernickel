@@ -69,7 +69,7 @@ public class LineChartRenderer {
 				Dimension imageSize) {
 			this.font = font;
 			labeledTicks = new BasicTickLabeler().getLabeledTicks(
-					dataContainer.rangeMin, dataContainer.rangeMax);
+					dataContainer.rangeMin, dataContainer.rangeMax, null);
 
 			dataContainer.rangeMax = labeledTicks.lastKey();
 
@@ -144,7 +144,7 @@ public class LineChartRenderer {
 				Dimension imageSize) {
 			this.font = font;
 			labeledTicks = new BasicTickLabeler().getLabeledTicks(
-					dataContainer.domainMin, dataContainer.domainMax);
+					dataContainer.domainMin, dataContainer.domainMax, null);
 
 			dataContainer.domainMax = labeledTicks.lastKey();
 
