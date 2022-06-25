@@ -10,15 +10,21 @@
  */
 package com.pump.image.transition;
 
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 
+import com.pump.image.ImageContext;
 import com.pump.math.function.PolynomialFunction;
 
 /**
  * This provides a few static tools to help make 3D transitions.
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2014/05/images-3d-transitions-and.html">Images:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2014/05/images-3d-transitions-and.html">Images:
  *      3D Transforms and Transitions</a>
  */
 public abstract class Transition3D extends AbstractTransition {
@@ -67,10 +73,92 @@ public abstract class Transition3D extends AbstractTransition {
 		}
 	}
 
+	public static class Quadrilateral3D {
+		Point3D topLeft, topRight, bottomRight, bottomLeft;
+
+		public Quadrilateral3D(double topLeftX, double topLeftY,
+				double topLeftZ, double topRightX, double topRightY,
+				double topRightZ, double bottomRightX, double bottomRightY,
+				double bottomRightZ, double bottomLeftX, double bottomLeftY,
+				double bottomLeftZ) {
+			topLeft = new Point3D.Double(topLeftX, topLeftY, topLeftZ);
+			topRight = new Point3D.Double(topRightX, topRightY, topRightZ);
+			bottomRight = new Point3D.Double(bottomRightX, bottomRightY,
+					bottomRightZ);
+			bottomLeft = new Point3D.Double(bottomLeftX, bottomLeftY,
+					bottomLeftZ);
+		}
+
+		@Override
+		public String toString() {
+			return "Quadrilateral3D[ " + topLeft + ", " + topRight + ", "
+					+ bottomRight + ", " + bottomLeft + "]";
+		}
+
+		public Quadrilateral2D toQuadrilateral2D(double width, double height) {
+			BasicProjection p = new BasicProjection(width, height);
+			return new Quadrilateral2D(p.transform(topLeft),
+					p.transform(topRight), p.transform(bottomRight),
+					p.transform(bottomLeft));
+		}
+	}
+
+	public static class Quadrilateral2D {
+		Point2D topLeft, topRight, bottomRight, bottomLeft;
+
+		public Quadrilateral2D(Point2D topLeft, Point2D topRight,
+				Point2D bottomRight, Point2D bottomLeft) {
+			this(topLeft.getX(), topLeft.getY(), topRight.getX(),
+					topRight.getY(), bottomRight.getX(), bottomRight.getY(),
+					bottomLeft.getX(), bottomLeft.getY());
+		}
+
+		public Quadrilateral2D(double topLeftX, double topLeftY,
+				double topRightX, double topRightY, double bottomRightX,
+				double bottomRightY, double bottomLeftX, double bottomLeftY) {
+			topLeft = new Point2D.Double(topLeftX, topLeftY);
+			topRight = new Point2D.Double(topRightX, topRightY);
+			bottomRight = new Point2D.Double(bottomRightX, bottomRightY);
+			bottomLeft = new Point2D.Double(bottomLeftX, bottomLeftY);
+		}
+
+		@Override
+		public String toString() {
+			return "Quadrilateral2D[ " + topLeft + ", " + topRight + ", "
+					+ bottomRight + ", " + bottomLeft + "]";
+		}
+
+		public boolean isFlippedHorizontally() {
+			double centerRightX = (bottomRight.getX() + topRight.getX()) / 2.0;
+			double centerRightY = (bottomRight.getY() + topRight.getY()) / 2.0;
+			double theta = Math.atan2(topRight.getY() - bottomRight.getY(),
+					topRight.getX() - bottomRight.getX());
+
+			AffineTransform tx = new AffineTransform();
+			tx.rotate(theta);
+			tx.translate(-centerRightX, -centerRightY);
+			if (tx.transform(topLeft, null).getY() <= 0)
+				return true;
+			if (tx.transform(bottomLeft, null).getY() <= 0)
+				return true;
+			return false;
+		}
+
+		public Shape toShape() {
+			Path2D p = new Path2D.Double();
+			p.moveTo(topLeft.getX(), topLeft.getY());
+			p.lineTo(topRight.getX(), topRight.getY());
+			p.lineTo(bottomRight.getX(), bottomRight.getY());
+			p.lineTo(bottomLeft.getX(), bottomLeft.getY());
+			p.closePath();
+			return p;
+		}
+	}
+
 	public static class BasicProjection {
 		double w, h;
-		PolynomialFunction pf = PolynomialFunction.createFit(new double[] {
-				-500, 1.5 }, new double[] { 0, 1 });
+		PolynomialFunction pf = PolynomialFunction
+				.createFit(new double[] { -500, 1.5 }, new double[] { 0, 1 });
 
 		public BasicProjection(double width, double height) {
 			w = width;
@@ -115,6 +203,31 @@ public abstract class Transition3D extends AbstractTransition {
 
 			return new Point2D.Double(screenX + w / 2.0, screenY + h / 2.0);
 		}
+	}
+
+	protected Quadrilateral2D paint(Graphics2D g, int width, int height,
+			BufferedImage img, Quadrilateral3D quad3D,
+			boolean skipIfFlippedHorizontally) {
+		Quadrilateral2D quad2 = quad3D.toQuadrilateral2D(width, height);
+
+		if (skipIfFlippedHorizontally && quad2.isFlippedHorizontally()) {
+			return null;
+		}
+
+		BufferedImage scratchImage = new BufferedImage(width, height,
+				BufferedImage.TYPE_INT_ARGB);
+		ImageContext context = ImageContext.create(scratchImage);
+		try {
+			context.setRenderingHints(g.getRenderingHints());
+			context.drawImage(img, quad2.topLeft, quad2.topRight,
+					quad2.bottomRight, quad2.bottomLeft);
+		} finally {
+			context.dispose();
+		}
+
+		g.drawImage(scratchImage, 0, 0, null);
+		return quad2;
+
 	}
 
 	/**
