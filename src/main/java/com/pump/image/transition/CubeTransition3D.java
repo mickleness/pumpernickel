@@ -23,54 +23,47 @@ import com.pump.image.ImageContext;
  * This transition rotates a cube 90 degrees to reveal the next image. Here are
  * playback samples:
  * <p>
- * <table summary="Sample Animations of CubeTransition3D" cellspacing="50" border="0">
+ * <table summary="Sample Animations of CubeTransition3D" cellspacing="50"
+ * border="0">
  * <tr>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeLeft.gif"
  * alt="Cube Left">
  * <p>
  * Cube Left</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeRight.gif"
  * alt="Cube Right">
  * <p>
  * Cube Right</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeUp.gif"
  * alt="Cube Up">
  * <p>
  * Cube Up</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeDown.gif"
  * alt="Cube Down">
  * <p>
  * Cube Down</td>
  * </tr>
  * <tr>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeLeftFlush.gif"
  * alt="Cube Left Flush">
  * <p>
  * Cube Left Flush</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeRightFlush.gif"
  * alt="Cube Right Flush">
  * <p>
  * Cube Right Flush</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeUpFlush.gif"
  * alt="Cube UP Flush">
  * <p>
  * Cube Up Flush</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeDownFlush.gif"
  * alt="Cube Down Flush">
  * <p>
@@ -136,7 +129,8 @@ public class CubeTransition3D extends Transition3D {
 	 *            the optional background color to paint behind this transition.
 	 */
 	public CubeTransition3D(int direction, boolean flush, Color background) {
-		if (!(direction == UP || direction == DOWN || direction == LEFT || direction == RIGHT)) {
+		if (!(direction == UP || direction == DOWN || direction == LEFT
+				|| direction == RIGHT)) {
 			throw new IllegalArgumentException(
 					"direction must be UP, DOWN, LEFT or RIGHT");
 		}
@@ -163,20 +157,22 @@ public class CubeTransition3D extends Transition3D {
 			double centerX = w / 2.0;
 			double z = Point2D.distance(centerX, centerX, 0, 0);
 			double j = -z * Math.sin(2 * Math.PI / 8);
-			topLeftA3D = new Point3D.Double(centerX - z * Math.cos(k * t), 0, z
-					* Math.sin(k * t) + j);
+			topLeftA3D = new Point3D.Double(centerX - z * Math.cos(k * t), 0,
+					z * Math.sin(k * t) + j);
 			topRightA3D = new Point3D.Double(centerX - z * Math.cos(k * t + k),
 					0, z * Math.sin(k * t + k) + j);
-			bottomLeftA3D = new Point3D.Double(centerX - z * Math.cos(k * t),
-					h, z * Math.sin(k * t) + j);
-			bottomRightA3D = new Point3D.Double(centerX - z
-					* Math.cos(k * t + k), h, z * Math.sin(k * t + k) + j);
+			bottomLeftA3D = new Point3D.Double(centerX - z * Math.cos(k * t), h,
+					z * Math.sin(k * t) + j);
+			bottomRightA3D = new Point3D.Double(
+					centerX - z * Math.cos(k * t + k), h,
+					z * Math.sin(k * t + k) + j);
 			topLeftB3D = new Point3D.Double(centerX - z * Math.cos(k * t - k),
 					0, z * Math.sin(k * t - k) + j);
 			topRightB3D = new Point3D.Double(centerX - z * Math.cos(k * t), 0,
 					z * Math.sin(k * t) + j);
-			bottomLeftB3D = new Point3D.Double(centerX - z
-					* Math.cos(k * t - k), h, z * Math.sin(k * t - k) + j);
+			bottomLeftB3D = new Point3D.Double(
+					centerX - z * Math.cos(k * t - k), h,
+					z * Math.sin(k * t - k) + j);
 			bottomRightB3D = new Point3D.Double(centerX - z * Math.cos(k * t),
 					h, z * Math.sin(k * t) + j);
 		} else if (direction == LEFT) {
@@ -189,54 +185,64 @@ public class CubeTransition3D extends Transition3D {
 					0, z * Math.sin(k * t + k) + j);
 			bottomRightA3D = new Point3D.Double(centerX + z * Math.cos(k * t),
 					h, z * Math.sin(k * t) + j);
-			bottomLeftA3D = new Point3D.Double(centerX + z
-					* Math.cos(k * t + k), h, z * Math.sin(k * t + k) + j);
+			bottomLeftA3D = new Point3D.Double(
+					centerX + z * Math.cos(k * t + k), h,
+					z * Math.sin(k * t + k) + j);
 			topRightB3D = new Point3D.Double(centerX + z * Math.cos(k * t - k),
 					0, z * Math.sin(k * t - k) + j);
-			topLeftB3D = new Point3D.Double(centerX + z * Math.cos(k * t), 0, z
-					* Math.sin(k * t) + j);
-			bottomRightB3D = new Point3D.Double(centerX + z
-					* Math.cos(k * t - k), h, z * Math.sin(k * t - k) + j);
-			bottomLeftB3D = new Point3D.Double(centerX + z * Math.cos(k * t),
-					h, z * Math.sin(k * t) + j);
+			topLeftB3D = new Point3D.Double(centerX + z * Math.cos(k * t), 0,
+					z * Math.sin(k * t) + j);
+			bottomRightB3D = new Point3D.Double(
+					centerX + z * Math.cos(k * t - k), h,
+					z * Math.sin(k * t - k) + j);
+			bottomLeftB3D = new Point3D.Double(centerX + z * Math.cos(k * t), h,
+					z * Math.sin(k * t) + j);
 		} else if (direction == DOWN) {
 			double centerY = h / 2.0;
 			double z = Point2D.distance(centerY, centerY, 0, 0);
 			double j = -z * Math.sin(2 * Math.PI / 8);
-			topLeftA3D = new Point3D.Double(0, centerY - z * Math.cos(k * t), z
-					* Math.sin(k * t) + j);
-			bottomLeftA3D = new Point3D.Double(0, centerY - z
-					* Math.cos(k * t + k), z * Math.sin(k * t + k) + j);
+			topLeftA3D = new Point3D.Double(0, centerY - z * Math.cos(k * t),
+					z * Math.sin(k * t) + j);
+			bottomLeftA3D = new Point3D.Double(0,
+					centerY - z * Math.cos(k * t + k),
+					z * Math.sin(k * t + k) + j);
 			topRightA3D = new Point3D.Double(w, centerY - z * Math.cos(k * t),
 					z * Math.sin(k * t) + j);
-			bottomRightA3D = new Point3D.Double(w, centerY - z
-					* Math.cos(k * t + k), z * Math.sin(k * t + k) + j);
-			topLeftB3D = new Point3D.Double(0, centerY - z
-					* Math.cos(k * t - k), z * Math.sin(k * t - k) + j);
-			bottomLeftB3D = new Point3D.Double(0,
+			bottomRightA3D = new Point3D.Double(w,
+					centerY - z * Math.cos(k * t + k),
+					z * Math.sin(k * t + k) + j);
+			topLeftB3D = new Point3D.Double(0,
+					centerY - z * Math.cos(k * t - k),
+					z * Math.sin(k * t - k) + j);
+			bottomLeftB3D = new Point3D.Double(0, centerY - z * Math.cos(k * t),
+					z * Math.sin(k * t) + j);
+			topRightB3D = new Point3D.Double(w,
+					centerY - z * Math.cos(k * t - k),
+					z * Math.sin(k * t - k) + j);
+			bottomRightB3D = new Point3D.Double(w,
 					centerY - z * Math.cos(k * t), z * Math.sin(k * t) + j);
-			topRightB3D = new Point3D.Double(w, centerY - z
-					* Math.cos(k * t - k), z * Math.sin(k * t - k) + j);
-			bottomRightB3D = new Point3D.Double(w, centerY - z
-					* Math.cos(k * t), z * Math.sin(k * t) + j);
 		} else {
 			double centerY = h / 2.0;
 			double z = Point2D.distance(centerY, centerY, 0, 0);
 			double j = -z * Math.sin(2 * Math.PI / 8);
-			bottomLeftA3D = new Point3D.Double(0,
+			bottomLeftA3D = new Point3D.Double(0, centerY + z * Math.cos(k * t),
+					z * Math.sin(k * t) + j);
+			topLeftA3D = new Point3D.Double(0,
+					centerY + z * Math.cos(k * t + k),
+					z * Math.sin(k * t + k) + j);
+			bottomRightA3D = new Point3D.Double(w,
 					centerY + z * Math.cos(k * t), z * Math.sin(k * t) + j);
-			topLeftA3D = new Point3D.Double(0, centerY + z
-					* Math.cos(k * t + k), z * Math.sin(k * t + k) + j);
-			bottomRightA3D = new Point3D.Double(w, centerY + z
-					* Math.cos(k * t), z * Math.sin(k * t) + j);
-			topRightA3D = new Point3D.Double(w, centerY + z
-					* Math.cos(k * t + k), z * Math.sin(k * t + k) + j);
-			bottomLeftB3D = new Point3D.Double(0, centerY + z
-					* Math.cos(k * t - k), z * Math.sin(k * t - k) + j);
-			topLeftB3D = new Point3D.Double(0, centerY + z * Math.cos(k * t), z
-					* Math.sin(k * t) + j);
-			bottomRightB3D = new Point3D.Double(w, centerY + z
-					* Math.cos(k * t - k), z * Math.sin(k * t - k) + j);
+			topRightA3D = new Point3D.Double(w,
+					centerY + z * Math.cos(k * t + k),
+					z * Math.sin(k * t + k) + j);
+			bottomLeftB3D = new Point3D.Double(0,
+					centerY + z * Math.cos(k * t - k),
+					z * Math.sin(k * t - k) + j);
+			topLeftB3D = new Point3D.Double(0, centerY + z * Math.cos(k * t),
+					z * Math.sin(k * t) + j);
+			bottomRightB3D = new Point3D.Double(w,
+					centerY + z * Math.cos(k * t - k),
+					z * Math.sin(k * t - k) + j);
 			topRightB3D = new Point3D.Double(w, centerY + z * Math.cos(k * t),
 					z * Math.sin(k * t) + j);
 		}
@@ -290,12 +296,12 @@ public class CubeTransition3D extends Transition3D {
 			alphaA = Math.min(alphaA, 255);
 			alphaB = Math.min(alphaB, 255);
 
-			shadowA = new GradientPaint(0, (float) topLeftA.getY(), new Color(
-					0, 0, 0, alphaA), 0, (float) bottomLeftA.getY(), new Color(
-					0, 0, 0, 0));
-			shadowB = new GradientPaint(0, (float) topLeftB.getY(), new Color(
-					0, 0, 0, 0), 0, (float) bottomLeftB.getY(), new Color(0, 0,
-					0, alphaB));
+			shadowA = new GradientPaint(0, (float) topLeftA.getY(),
+					new Color(0, 0, 0, alphaA), 0, (float) bottomLeftA.getY(),
+					new Color(0, 0, 0, 0));
+			shadowB = new GradientPaint(0, (float) topLeftB.getY(),
+					new Color(0, 0, 0, 0), 0, (float) bottomLeftB.getY(),
+					new Color(0, 0, 0, alphaB));
 		} else if (direction == DOWN) {
 			int alphaA = (int) (255 * (bottomLeftA.getX() / w * 2));
 			int alphaB = (int) (255 * (topLeftB.getX() / w * 2));
@@ -305,33 +311,33 @@ public class CubeTransition3D extends Transition3D {
 			shadowA = new GradientPaint(0, (float) bottomLeftA.getY(),
 					new Color(0, 0, 0, alphaA), 0, (float) topLeftA.getY(),
 					new Color(0, 0, 0, 0));
-			shadowB = new GradientPaint(0, (float) topLeftB.getY(), new Color(
-					0, 0, 0, alphaB), 0, (float) bottomLeftB.getY(), new Color(
-					0, 0, 0, 0));
+			shadowB = new GradientPaint(0, (float) topLeftB.getY(),
+					new Color(0, 0, 0, alphaB), 0, (float) bottomLeftB.getY(),
+					new Color(0, 0, 0, 0));
 		} else if (direction == LEFT) {
 			int alphaA = (int) (255 * (topLeftA.getY() / h * 2));
 			int alphaB = (int) (255 * (topRightB.getY() / h * 2));
 			alphaA = Math.min(alphaA, 255);
 			alphaB = Math.min(alphaB, 255);
 
-			shadowA = new GradientPaint((float) topLeftA.getX(), 0, new Color(
-					0, 0, 0, alphaA), (float) topRightA.getX(), 0, new Color(0,
-					0, 0, 0));
-			shadowB = new GradientPaint((float) topLeftB.getX(), 0, new Color(
-					0, 0, 0, 0), (float) topRightB.getX(), 0, new Color(0, 0,
-					0, alphaB));
+			shadowA = new GradientPaint((float) topLeftA.getX(), 0,
+					new Color(0, 0, 0, alphaA), (float) topRightA.getX(), 0,
+					new Color(0, 0, 0, 0));
+			shadowB = new GradientPaint((float) topLeftB.getX(), 0,
+					new Color(0, 0, 0, 0), (float) topRightB.getX(), 0,
+					new Color(0, 0, 0, alphaB));
 		} else { // right:
 			int alphaA = (int) (255 * (topRightA.getY() / h * 2));
 			int alphaB = (int) (255 * (topLeftB.getY() / h * 2));
 			alphaA = Math.min(alphaA, 255);
 			alphaB = Math.min(alphaB, 255);
 
-			shadowA = new GradientPaint((float) topLeftA.getX(), 0, new Color(
-					0, 0, 0, 0), (float) topRightA.getX(), 0, new Color(0, 0,
-					0, alphaA));
-			shadowB = new GradientPaint((float) topLeftB.getX(), 0, new Color(
-					0, 0, 0, alphaB), (float) topRightB.getX(), 0, new Color(0,
-					0, 0, 0));
+			shadowA = new GradientPaint((float) topLeftA.getX(), 0,
+					new Color(0, 0, 0, 0), (float) topRightA.getX(), 0,
+					new Color(0, 0, 0, alphaA));
+			shadowB = new GradientPaint((float) topLeftB.getX(), 0,
+					new Color(0, 0, 0, alphaB), (float) topRightB.getX(), 0,
+					new Color(0, 0, 0, 0));
 		}
 
 		Graphics2D g3 = scratchImage.createGraphics();

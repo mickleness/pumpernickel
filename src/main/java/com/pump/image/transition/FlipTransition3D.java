@@ -24,54 +24,47 @@ import com.pump.image.ImageContext;
  * This transition flips the viewing surface over 180 degrees to reveal the
  * inverted back. Here are playback samples:
  * <p>
- * <table summary="Sample Animations of FlipTransition3D" cellspacing="50" border="0">
+ * <table summary="Sample Animations of FlipTransition3D" cellspacing="50"
+ * border="0">
  * <tr>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipLeft.gif"
  * alt="Flip Left">
  * <p>
  * Flip Left</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipRight.gif"
  * alt="Flip Right">
  * <p>
  * Flip Right</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipUp.gif"
  * alt="Flip Up">
  * <p>
  * Flip Up</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipDown.gif"
  * alt="Flip Down">
  * <p>
  * Flip Down</td>
  * </tr>
  * <tr>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipLeftFlush.gif"
  * alt="Flip Left Flush">
  * <p>
  * Flip Left Flush</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipRightFlush.gif"
  * alt="Flip Right Flush">
  * <p>
  * Flip Right Flush</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipUpFlush.gif"
  * alt="Flip Up Flush">
  * <p>
  * Flip Up Flush</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipDownFlush.gif"
  * alt="Flip Down Flush">
  * <p>
@@ -138,7 +131,8 @@ public class FlipTransition3D extends Transition3D {
 	 */
 	public FlipTransition3D(int direction, boolean flush, Color background) {
 		if (!(direction == Transition.UP || direction == Transition.DOWN
-				|| direction == Transition.LEFT || direction == Transition.RIGHT)) {
+				|| direction == Transition.LEFT
+				|| direction == Transition.RIGHT)) {
 			throw new IllegalArgumentException(
 					"direction must be UP, DOWN, LEFT or RIGHT");
 		}
@@ -162,60 +156,60 @@ public class FlipTransition3D extends Transition3D {
 		Point3D topLeft3D, topRight3D, bottomLeft3D, bottomRight3D;
 		BasicProjection p = new BasicProjection(w, h);
 		if (direction == UP) {
-			topLeft3D = new Point3D.Double(0, h / 2 - h / 2
-					* Math.cos(Math.PI * progress), -h / 2
-					* Math.sin(Math.PI * progress));
-			topRight3D = new Point3D.Double(w, h / 2 - h / 2
-					* Math.cos(Math.PI * progress), -h / 2
-					* Math.sin(Math.PI * progress));
-			bottomLeft3D = new Point3D.Double(0, h / 2 + h / 2
-					* Math.cos(Math.PI * progress), h / 2
-					* Math.sin(Math.PI * progress));
-			bottomRight3D = new Point3D.Double(w, h / 2 + h / 2
-					* Math.cos(Math.PI * progress), h / 2
-					* Math.sin(Math.PI * progress));
+			topLeft3D = new Point3D.Double(0,
+					h / 2 - h / 2 * Math.cos(Math.PI * progress),
+					-h / 2 * Math.sin(Math.PI * progress));
+			topRight3D = new Point3D.Double(w,
+					h / 2 - h / 2 * Math.cos(Math.PI * progress),
+					-h / 2 * Math.sin(Math.PI * progress));
+			bottomLeft3D = new Point3D.Double(0,
+					h / 2 + h / 2 * Math.cos(Math.PI * progress),
+					h / 2 * Math.sin(Math.PI * progress));
+			bottomRight3D = new Point3D.Double(w,
+					h / 2 + h / 2 * Math.cos(Math.PI * progress),
+					h / 2 * Math.sin(Math.PI * progress));
 			vert = true;
 		} else if (direction == DOWN) {
-			topLeft3D = new Point3D.Double(0, h / 2 - h / 2
-					* Math.cos(Math.PI * progress), h / 2
-					* Math.sin(Math.PI * progress));
-			topRight3D = new Point3D.Double(w, h / 2 - h / 2
-					* Math.cos(Math.PI * progress), h / 2
-					* Math.sin(Math.PI * progress));
-			bottomLeft3D = new Point3D.Double(0, h / 2 + h / 2
-					* Math.cos(Math.PI * progress), -h / 2
-					* Math.sin(Math.PI * progress));
-			bottomRight3D = new Point3D.Double(w, h / 2 + h / 2
-					* Math.cos(Math.PI * progress), -h / 2
-					* Math.sin(Math.PI * progress));
+			topLeft3D = new Point3D.Double(0,
+					h / 2 - h / 2 * Math.cos(Math.PI * progress),
+					h / 2 * Math.sin(Math.PI * progress));
+			topRight3D = new Point3D.Double(w,
+					h / 2 - h / 2 * Math.cos(Math.PI * progress),
+					h / 2 * Math.sin(Math.PI * progress));
+			bottomLeft3D = new Point3D.Double(0,
+					h / 2 + h / 2 * Math.cos(Math.PI * progress),
+					-h / 2 * Math.sin(Math.PI * progress));
+			bottomRight3D = new Point3D.Double(w,
+					h / 2 + h / 2 * Math.cos(Math.PI * progress),
+					-h / 2 * Math.sin(Math.PI * progress));
 			vert = true;
 		} else if (direction == LEFT) {
-			topLeft3D = new Point3D.Double(w / 2 - w / 2
-					* Math.cos(Math.PI * progress), 0, -w / 2
-					* Math.sin(Math.PI * progress));
-			topRight3D = new Point3D.Double(w / 2 + w / 2
-					* Math.cos(Math.PI * progress), 0, w / 2
-					* Math.sin(Math.PI * progress));
-			bottomLeft3D = new Point3D.Double(w / 2 - w / 2
-					* Math.cos(Math.PI * progress), h, -w / 2
-					* Math.sin(Math.PI * progress));
-			bottomRight3D = new Point3D.Double(w / 2 + w / 2
-					* Math.cos(Math.PI * progress), h, w / 2
-					* Math.sin(Math.PI * progress));
+			topLeft3D = new Point3D.Double(
+					w / 2 - w / 2 * Math.cos(Math.PI * progress), 0,
+					-w / 2 * Math.sin(Math.PI * progress));
+			topRight3D = new Point3D.Double(
+					w / 2 + w / 2 * Math.cos(Math.PI * progress), 0,
+					w / 2 * Math.sin(Math.PI * progress));
+			bottomLeft3D = new Point3D.Double(
+					w / 2 - w / 2 * Math.cos(Math.PI * progress), h,
+					-w / 2 * Math.sin(Math.PI * progress));
+			bottomRight3D = new Point3D.Double(
+					w / 2 + w / 2 * Math.cos(Math.PI * progress), h,
+					w / 2 * Math.sin(Math.PI * progress));
 			vert = false;
 		} else {
-			topLeft3D = new Point3D.Double(w / 2 - w / 2
-					* Math.cos(Math.PI * progress), 0, w / 2
-					* Math.sin(Math.PI * progress));
-			topRight3D = new Point3D.Double(w / 2 + w / 2
-					* Math.cos(Math.PI * progress), 0, -w / 2
-					* Math.sin(Math.PI * progress));
-			bottomLeft3D = new Point3D.Double(w / 2 - w / 2
-					* Math.cos(Math.PI * progress), h, w / 2
-					* Math.sin(Math.PI * progress));
-			bottomRight3D = new Point3D.Double(w / 2 + w / 2
-					* Math.cos(Math.PI * progress), h, -w / 2
-					* Math.sin(Math.PI * progress));
+			topLeft3D = new Point3D.Double(
+					w / 2 - w / 2 * Math.cos(Math.PI * progress), 0,
+					w / 2 * Math.sin(Math.PI * progress));
+			topRight3D = new Point3D.Double(
+					w / 2 + w / 2 * Math.cos(Math.PI * progress), 0,
+					-w / 2 * Math.sin(Math.PI * progress));
+			bottomLeft3D = new Point3D.Double(
+					w / 2 - w / 2 * Math.cos(Math.PI * progress), h,
+					w / 2 * Math.sin(Math.PI * progress));
+			bottomRight3D = new Point3D.Double(
+					w / 2 + w / 2 * Math.cos(Math.PI * progress), h,
+					-w / 2 * Math.sin(Math.PI * progress));
 			vert = false;
 		}
 		if (flush)
@@ -256,8 +250,8 @@ public class FlipTransition3D extends Transition3D {
 		if (vert) {
 			if (direction == UP) {
 				g3.setPaint(new GradientPaint(0, (float) topLeft.getY(),
-						new Color(0, 0, 0, alpha), 0,
-						(float) bottomLeft.getY(), new Color(0, 0, 0, 0)));
+						new Color(0, 0, 0, alpha), 0, (float) bottomLeft.getY(),
+						new Color(0, 0, 0, 0)));
 			} else {
 				g3.setPaint(new GradientPaint(0, (float) bottomLeft.getY(),
 						new Color(0, 0, 0, alpha), 0, (float) topLeft.getY(),
