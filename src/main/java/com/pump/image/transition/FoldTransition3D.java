@@ -1,9 +1,11 @@
 package com.pump.image.transition;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.LinearGradientPaint;
 import java.awt.Paint;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class FoldTransition3D extends Transition3D {
@@ -13,20 +15,27 @@ public class FoldTransition3D extends Transition3D {
 	 *         transition.
 	 */
 	public static Transition[] getDemoTransitions() {
-		return new Transition[] { new FoldTransition3D(UP),
-				new FoldTransition3D(DOWN), new FoldTransition3D(LEFT),
-				new FoldTransition3D(RIGHT), };
+		return new Transition[] { new FoldTransition3D(UP, false),
+				new FoldTransition3D(DOWN, false),
+				new FoldTransition3D(LEFT, false),
+				new FoldTransition3D(RIGHT, false),
+				new FoldTransition3D(UP, true),
+				new FoldTransition3D(DOWN, true),
+				new FoldTransition3D(LEFT, true),
+				new FoldTransition3D(RIGHT, true) };
 	}
 
 	int direction;
+	boolean twice;
 
-	public FoldTransition3D(int direction) {
+	public FoldTransition3D(int direction, boolean twice) {
 		if (!(direction == Transition.UP || direction == Transition.DOWN
 				|| direction == Transition.LEFT
 				|| direction == Transition.RIGHT)) {
 			throw new IllegalArgumentException(
 					"direction must be UP, DOWN, LEFT or RIGHT");
 		}
+		this.twice = twice;
 		this.direction = direction;
 	}
 
@@ -36,74 +45,139 @@ public class FoldTransition3D extends Transition3D {
 		int h = frameA.getHeight();
 		int w = frameA.getWidth();
 
-		BufferedImage scratchImage = new BufferedImage(w, h,
-				BufferedImage.TYPE_INT_ARGB);
+		int[] imageIndices = progress < .5 ? new int[] { 1, 0 }
+				: new int[] { 0, 1 };
 
-		switch (direction) {
-		default:
-			// TODO: make context support subimages w/o copying
-			BufferedImage half1 = copy(frameA.getSubimage(0, 0, w / 2, h));
-			BufferedImage half2 = copy(
-					frameA.getSubimage(w / 2, 0, w - w / 2, h));
+		double q = .5 * Math.sin(Math.PI * progress - Math.PI / 2.0) + .5;
+		q = .5 * Math.sin(Math.PI * q - Math.PI / 2.0) + .5;
 
-			progress = (float) Math.pow(progress, 2);
+		// TODO: implement other directions
+		if (direction == LEFT) {
+			double cursor = w * (1 - q);
+			double imgA_width = w * (1 - q) + q * w / 3;
+			double imgB_width = w * q + (1 - q) * w / 3;
 
-			double cursor = w * (1 - progress);
-			double imgA_width = cursor + progress * w / 4;
-			double imgA_leftEdge = cursor - imgA_width;
+			for (int imageIndex : imageIndices) {
+				if (imageIndex == 0) {
+					paintHorizontalCreasedImage((Graphics2D) g.create(), frameA,
+							cursor - imgA_width, imgA_width);
+				} else if (imageIndex == 1) {
+					if (twice) {
+						paintHorizontalCreasedImage((Graphics2D) g.create(),
+								frameB, cursor, imgB_width);
+					} else {
+						Graphics2D g2 = (Graphics2D) g.create();
+						g2.translate(cursor, 0);
+						g2.drawImage(frameB, 0, 0, null);
+						g2.dispose();
+					}
+				}
+			}
+		} else if (direction == RIGHT) {
+			double cursor = w * q;
+			double imgA_width = w * (1 - q) + q * w / 3;
+			double imgB_width = w * q + (1 - q) * w / 3;
 
-			double creaseX = cursor - imgA_width / 2;
-
-			// @formatter:off
-			Quadrilateral3D q1 = new Quadrilateral3D(
-					imgA_leftEdge,0,0,
-					creaseX, 0, -progress * 100,
-					creaseX, h, -progress * 100,
-					imgA_leftEdge, h, 0
-					);
-			Quadrilateral3D q2 = new Quadrilateral3D(
-					creaseX,0, -progress * 100,
-					cursor, 0, 0,
-					cursor, h, 0,
-					creaseX, h, -progress * 100
-					);
-			// @formatter:on
-
-			paint(g, w, h, half1, q1, true);
-			paint(g, w, h, half2, q2, true);
-			g.translate(cursor, 0);
-			g.drawImage(frameB, 0, 0, null);
+			for (int imageIndex : imageIndices) {
+				if (imageIndex == 0) {
+					paintHorizontalCreasedImage((Graphics2D) g.create(), frameA,
+							cursor, imgA_width);
+				} else if (imageIndex == 1) {
+					if (twice) {
+						paintHorizontalCreasedImage((Graphics2D) g.create(),
+								frameB, cursor - imgB_width, imgB_width);
+					} else {
+						Graphics2D g2 = (Graphics2D) g.create();
+						g2.translate(cursor - w, 0);
+						g2.drawImage(frameB, 0, 0, null);
+						g2.dispose();
+					}
+				}
+			}
 		}
+
+		// TODO: resolve antialias edges
+		// TODO: apply similar fixes to other 3D transitions
+		// TODO: add background color well to demo inspector? remove background
+		// background color from other transitions?
+		// TODO: add some sort of page turn transition
 	}
 
-	protected Quadrilateral2D paint(Graphics2D g, int width, int height,
-			BufferedImage img, Quadrilateral3D quad3D,
-			boolean skipIfFlippedHorizontally) {
-		Quadrilateral2D q = super.paint(g, width, height, img, quad3D,
-				skipIfFlippedHorizontally);
-		if (q != null) {
-			Paint p = null;
-			if (quad3D.topLeft.getZ() < quad3D.topRight.getZ()) {
-				double j = -quad3D.topLeft.getZ() + quad3D.topRight.getZ();
-				int alpha = (int) (255 * j / 100);
-				p = new GradientPaint((float) q.topLeft.getX(), 0,
-						new Color(0, 0, 0, alpha / 4),
-						(float) q.topRight.getX(), 0, new Color(0, 0, 0, 0));
-			} else if (quad3D.topLeft.getZ() > quad3D.topRight.getZ()) {
-				// make this side slightly darker, because in UI's we usually
-				// imagine a light source from the upper-left
-				double j = quad3D.topLeft.getZ() - quad3D.topRight.getZ();
-				int alpha = (int) (255 * j / 100);
-				p = new GradientPaint((float) q.topRight.getX(), 0,
-						new Color(0, 0, 0, alpha / 3), (float) q.topLeft.getX(),
-						0, new Color(0, 0, 0, 0));
-			}
-			if (p != null) {
-				g.setPaint(p);
-				g.fill(q.toShape());
-			}
+	private void paintHorizontalCreasedImage(Graphics2D g, BufferedImage img,
+			double x, double collapsedWidth) {
+		int h = img.getHeight();
+		int w = img.getWidth();
+
+		if (w == collapsedWidth) {
+			g.translate(x, 0);
+			g.drawImage(img, 0, 0, null);
+			return;
 		}
-		return q;
+
+		// TODO: make context support subimages w/o copying
+		BufferedImage half1 = copy(img.getSubimage(0, 0, w / 2, h));
+		BufferedImage half2 = copy(img.getSubimage(w / 2, 0, w - w / 2, h));
+
+		double crease = x + collapsedWidth / 2.0;
+		double k = 1 - collapsedWidth / h;
+
+		// @formatter:off
+		Quadrilateral3D q1 = new Quadrilateral3D(
+				x,0,0,
+				crease, 0, -k * 100,
+				crease, h, -k * 100,
+				x, h, 0
+				);
+		Quadrilateral3D q2 = new Quadrilateral3D(
+				crease,0, -k * 100,
+				x + collapsedWidth, 0, 0,
+				x + collapsedWidth, h, 0,
+				crease, h, -k * 100
+				);
+		// @formatter:on
+
+		// TODO: implement caching model for scratch image cache
+		Quadrilateral2D j1 = paint(g, w, h, half1, q1, true);
+		Quadrilateral2D j2 = paint(g, w, h, half2, q2, true);
+
+		Color transBlack = new Color(0, 0, 0, 0);
+		Color lightBlack = new Color(0, 0, 0, (int) (250 * k));
+
+		Rectangle2D r = new Rectangle2D.Double();
+		Paint p = null;
+		if (j1 == null && j2 == null) {
+			// do nothing
+		} else if (j2 == null) {
+			r.setFrame(j1.toShape().getBounds2D());
+			p = new LinearGradientPaint(j1.topLeft, j1.topRight,
+					new float[] { 0, 1 },
+					new Color[] { transBlack, lightBlack });
+		} else if (j1 == null) {
+			r.setFrame(j2.toShape().getBounds2D());
+			p = new LinearGradientPaint(j2.topLeft, j2.topRight,
+					new float[] { 0, 1 },
+					new Color[] { transBlack, lightBlack });
+		} else {
+			r.setFrame(j1.toShape().getBounds2D());
+			r.add(j2.toShape().getBounds2D());
+
+			float creaseAsFloat = (float) ((j1.topRight.getX()
+					- j1.topLeft.getX()) / r.getWidth());
+			creaseAsFloat = (float) Math.min(Math.max(creaseAsFloat, .0000001),
+					.999999f);
+
+			p = new LinearGradientPaint(j1.topLeft, j2.topRight,
+					new float[] { 0, creaseAsFloat, 1 },
+					new Color[] { transBlack, lightBlack, transBlack });
+		}
+
+		// TODO: apply this paint to the scratch image, not to g
+		if (p != null) {
+			g.setPaint(p);
+			g.setComposite(AlphaComposite.SrcAtop);
+			g.fill(r);
+		}
+
 	}
 
 	private static BufferedImage copy(BufferedImage src) {
@@ -126,6 +200,9 @@ public class FoldTransition3D extends Transition3D {
 			sb.append("Left");
 		} else {
 			sb.append("Right");
+		}
+		if (twice) {
+			sb.append(" Twice");
 		}
 		return sb.toString();
 	}
