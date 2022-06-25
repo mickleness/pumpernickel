@@ -10,14 +10,13 @@
  */
 package com.pump.image.transition;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import com.pump.image.ImageContext;
+import com.pump.awt.GradientStopHelper;
 
 /**
  * This transition rotates a cube 90 degrees to reveal the next image. Here are
@@ -150,7 +149,6 @@ public class CubeTransition3D extends Transition3D {
 		}
 		Point3D topLeftA3D, topRightA3D, bottomLeftA3D, bottomRightA3D;
 		Point3D topLeftB3D, topRightB3D, bottomLeftB3D, bottomRightB3D;
-		BasicProjection p = new BasicProjection(w, h);
 		double t = progress + 4f / 8f;
 		double k = Math.PI / 2.0;
 		if (direction == RIGHT) {
@@ -252,106 +250,117 @@ public class CubeTransition3D extends Transition3D {
 					bottomRightA3D, topRightA3D, bottomLeftB3D, topLeftB3D,
 					bottomRightB3D, topRightB3D);
 
-		Point2D topLeftA, topRightA, bottomLeftA, bottomRightA;
-		Point2D topLeftB, topRightB, bottomLeftB, bottomRightB;
-		bottomLeftA = p.transform(bottomLeftA3D);
-		topLeftA = p.transform(topLeftA3D);
-		bottomRightA = p.transform(bottomRightA3D);
-		topRightA = p.transform(topRightA3D);
-		bottomLeftB = p.transform(bottomLeftB3D);
-		topLeftB = p.transform(topLeftB3D);
-		bottomRightB = p.transform(bottomRightB3D);
-		topRightB = p.transform(topRightB3D);
-
-		// if the image is flipped (either horizontally or vertically): then
-		// it's
-		// not supposed to be showing
-		boolean visibleA = bottomRightA.getY() > topRightA.getY()
-				&& bottomRightA.getX() > bottomLeftA.getX();
-		boolean visibleB = bottomRightB.getY() > topRightB.getY()
-				&& bottomRightB.getX() > bottomLeftB.getX();
-
 		BufferedImage scratchImage = borrowScratchImage(w, h);
 		try {
-			ImageContext context = ImageContext.create(scratchImage);
-			context.setRenderingHints(g.getRenderingHints());
+			Quadrilateral3D qb3 = new Quadrilateral3D(topLeftB3D, topRightB3D,
+					bottomRightB3D, bottomLeftB3D);
+			Quadrilateral2D qb = paint(scratchImage, g.getRenderingHints(),
+					frameB, qb3, true, true);
 
-			if (visibleB) {
-				context.drawImage(frameB, topLeftB, topRightB, bottomRightB,
-						bottomLeftB);
-			}
-			if (visibleA) {
-				context.drawImage(frameA, topLeftA, topRightA, bottomRightA,
-						bottomLeftA);
-			}
-
-			context.dispose();
+			Quadrilateral3D qa3 = new Quadrilateral3D(topLeftA3D, topRightA3D,
+					bottomRightA3D, bottomLeftA3D);
+			Quadrilateral2D qa = paint(scratchImage, g.getRenderingHints(),
+					frameA, qa3, true, true);
 
 			// draw the shadows
-			GradientPaint shadowA, shadowB;
+
+			Color transBlack = new Color(0, 0, 0, 0);
+
+			Paint paint;
+
 			if (direction == UP) {
-				int alphaA = (int) (255 * (topLeftA.getX() / w * 2));
-				int alphaB = (int) (255 * (bottomLeftB.getX() / w * 2));
-				alphaA = Math.min(alphaA, 255);
-				alphaB = Math.min(alphaB, 255);
+				GradientStopHelper gsh = new GradientStopHelper();
 
-				shadowA = new GradientPaint(0, (float) topLeftA.getY(),
-						new Color(0, 0, 0, alphaA), 0,
-						(float) bottomLeftA.getY(), new Color(0, 0, 0, 0));
-				shadowB = new GradientPaint(0, (float) topLeftB.getY(),
-						new Color(0, 0, 0, 0), 0, (float) bottomLeftB.getY(),
-						new Color(0, 0, 0, alphaB));
+				if (qa != null) {
+					int alphaA = (int) (255 * (qa.topLeft.getX() / w * 2));
+					alphaA = Math.min(alphaA, 255);
+					Color shadowA = new Color(0, 0, 0, alphaA);
+					gsh.addStop(qa.topLeft.getY() / h, shadowA);
+					gsh.addStop(qa.bottomLeft.getY() / h, transBlack);
+				}
+
+				if (qb != null) {
+					int alphaB = (int) (255 * (qb.bottomLeft.getX() / w * 2));
+					alphaB = Math.min(alphaB, 255);
+					Color shadowB = new Color(0, 0, 0, alphaB);
+					gsh.addStop(qb.topLeft.getY() / h, transBlack);
+					gsh.addStop(qb.bottomLeft.getY() / h, shadowB);
+				}
+
+				paint = gsh.toPaint(0, 0, 0, h);
 			} else if (direction == DOWN) {
-				int alphaA = (int) (255 * (bottomLeftA.getX() / w * 2));
-				int alphaB = (int) (255 * (topLeftB.getX() / w * 2));
-				alphaA = Math.min(alphaA, 255);
-				alphaB = Math.min(alphaB, 255);
+				GradientStopHelper gsh = new GradientStopHelper();
 
-				shadowA = new GradientPaint(0, (float) bottomLeftA.getY(),
-						new Color(0, 0, 0, alphaA), 0, (float) topLeftA.getY(),
-						new Color(0, 0, 0, 0));
-				shadowB = new GradientPaint(0, (float) topLeftB.getY(),
-						new Color(0, 0, 0, alphaB), 0,
-						(float) bottomLeftB.getY(), new Color(0, 0, 0, 0));
+				if (qa != null) {
+					int alphaA = (int) (255 * (qa.bottomLeft.getX() / w * 2));
+					alphaA = Math.min(alphaA, 255);
+					Color shadowA = new Color(0, 0, 0, alphaA);
+					gsh.addStop(qa.bottomLeft.getY() / h, shadowA);
+					gsh.addStop(qa.topLeft.getY() / h, transBlack);
+				}
+
+				if (qb != null) {
+					int alphaB = (int) (255 * (qb.topLeft.getX() / w * 2));
+					alphaB = Math.min(alphaB, 255);
+					Color shadowB = new Color(0, 0, 0, alphaB);
+					gsh.addStop(qb.topLeft.getY() / h, shadowB);
+					gsh.addStop(qb.bottomLeft.getY() / h, transBlack);
+				}
+
+				paint = gsh.toPaint(0, 0, 0, h);
 			} else if (direction == LEFT) {
-				int alphaA = (int) (255 * (topLeftA.getY() / h * 2));
-				int alphaB = (int) (255 * (topRightB.getY() / h * 2));
-				alphaA = Math.min(alphaA, 255);
-				alphaB = Math.min(alphaB, 255);
+				GradientStopHelper gsh = new GradientStopHelper();
 
-				shadowA = new GradientPaint((float) topLeftA.getX(), 0,
-						new Color(0, 0, 0, alphaA), (float) topRightA.getX(), 0,
-						new Color(0, 0, 0, 0));
-				shadowB = new GradientPaint((float) topLeftB.getX(), 0,
-						new Color(0, 0, 0, 0), (float) topRightB.getX(), 0,
-						new Color(0, 0, 0, alphaB));
-			} else { // right:
-				int alphaA = (int) (255 * (topRightA.getY() / h * 2));
-				int alphaB = (int) (255 * (topLeftB.getY() / h * 2));
-				alphaA = Math.min(alphaA, 255);
-				alphaB = Math.min(alphaB, 255);
+				if (qa != null) {
+					int alphaA = (int) (255 * (qa.topLeft.getY() / h * 2));
+					alphaA = Math.min(alphaA, 255);
+					Color shadowA = new Color(0, 0, 0, alphaA);
+					gsh.addStop(qa.topLeft.getX() / w, shadowA);
+					gsh.addStop(qa.topRight.getX() / w, transBlack);
+				}
 
-				shadowA = new GradientPaint((float) topLeftA.getX(), 0,
-						new Color(0, 0, 0, 0), (float) topRightA.getX(), 0,
-						new Color(0, 0, 0, alphaA));
-				shadowB = new GradientPaint((float) topLeftB.getX(), 0,
-						new Color(0, 0, 0, alphaB), (float) topRightB.getX(), 0,
-						new Color(0, 0, 0, 0));
+				if (qb != null) {
+					int alphaB = (int) (255 * (qb.topRight.getY() / h * 2));
+					alphaB = Math.min(alphaB, 255);
+					Color shadowB = new Color(0, 0, 0, alphaB);
+					gsh.addStop(qb.topLeft.getX() / w, transBlack);
+					gsh.addStop(qb.topRight.getX() / w, shadowB);
+				}
+
+				paint = gsh.toPaint(0, 0, w, 0);
+			} else {
+				// direction == RIGHT
+
+				GradientStopHelper gsh = new GradientStopHelper();
+
+				if (qa != null) {
+					int alphaA = (int) (255 * (qa.topRight.getY() / h * 2));
+					alphaA = Math.min(alphaA, 255);
+					Color shadowA = new Color(0, 0, 0, alphaA);
+					gsh.addStop(qa.topLeft.getX() / w, transBlack);
+					gsh.addStop(qa.topRight.getX() / w, shadowA);
+				}
+
+				if (qb != null) {
+					int alphaB = (int) (255 * (qb.topLeft.getY() / h * 2));
+					alphaB = Math.min(alphaB, 255);
+					Color shadowB = new Color(0, 0, 0, alphaB);
+					gsh.addStop(qb.topLeft.getX() / w, shadowB);
+					gsh.addStop(qb.topRight.getX() / w, transBlack);
+				}
+
+				paint = gsh.toPaint(0, 0, w, 0);
 			}
 
-			Graphics2D g3 = scratchImage.createGraphics();
-			g3.setComposite(AlphaComposite.SrcAtop);
-			if (visibleA) {
-				g3.setPaint(shadowA);
-				g3.fill(getBounds(topLeftA, topRightA, bottomLeftA,
-						bottomRightA));
+			if (paint != null) {
+				Graphics2D g2 = scratchImage.createGraphics();
+				g2.setPaint(paint);
+				g2.fillRect(0, 0, w, h);
+				g2.dispose();
 			}
-			if (visibleB) {
-				g3.setPaint(shadowB);
-				g3.fill(getBounds(topLeftB, topRightB, bottomLeftB,
-						bottomRightB));
-			}
-			g3.dispose();
+
+			clearOutside(scratchImage, qb == null ? null : qb.toShape(),
+					qa == null ? null : qa.toShape());
 
 			g.drawImage(scratchImage, 0, 0, null);
 		} finally {

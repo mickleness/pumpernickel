@@ -12,8 +12,11 @@ package com.pump.image.transition;
 
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -77,6 +80,14 @@ public abstract class Transition3D extends AbstractTransition {
 
 	public static class Quadrilateral3D {
 		Point3D topLeft, topRight, bottomRight, bottomLeft;
+
+		public Quadrilateral3D(Point3D topLeft, Point3D topRight,
+				Point3D bottomRight, Point3D bottomLeft) {
+			this(topLeft.getX(), topLeft.getY(), topLeft.getZ(),
+					topRight.getX(), topRight.getY(), topRight.getZ(),
+					bottomRight.getX(), bottomRight.getY(), bottomRight.getZ(),
+					bottomLeft.getX(), bottomLeft.getY(), bottomLeft.getZ());
+		}
 
 		public Quadrilateral3D(double topLeftX, double topLeftY,
 				double topLeftZ, double topRightX, double topRightY,
@@ -146,6 +157,22 @@ public abstract class Transition3D extends AbstractTransition {
 			return false;
 		}
 
+		public boolean isFlippedVertically() {
+			double centerTopX = (topLeft.getX() + topRight.getX()) / 2.0;
+			double centerTopY = (topLeft.getY() + topRight.getY()) / 2.0;
+			double theta = Math.atan2(topRight.getY() - topLeft.getY(),
+					topRight.getX() - topLeft.getX());
+
+			AffineTransform tx = new AffineTransform();
+			tx.rotate(theta);
+			tx.translate(-centerTopX, -centerTopY);
+			if (tx.transform(bottomRight, null).getY() <= 0)
+				return true;
+			if (tx.transform(bottomLeft, null).getY() <= 0)
+				return true;
+			return false;
+		}
+
 		public Shape toShape() {
 			Path2D p = new Path2D.Double();
 			p.moveTo(topLeft.getX(), topLeft.getY());
@@ -207,31 +234,30 @@ public abstract class Transition3D extends AbstractTransition {
 		}
 	}
 
-	protected Quadrilateral2D paint(Graphics2D g, int width, int height,
-			BufferedImage img, Quadrilateral3D quad3D,
-			boolean skipIfFlippedHorizontally) {
-		Quadrilateral2D quad2 = quad3D.toQuadrilateral2D(width, height);
+	protected Quadrilateral2D paint(BufferedImage dst,
+			RenderingHints renderingHints, BufferedImage img,
+			Quadrilateral3D quad3D, boolean skipIfFlippedHorizontally,
+			boolean skipIfFlippedVertically) {
+		Quadrilateral2D quad2 = quad3D.toQuadrilateral2D(dst.getWidth(),
+				dst.getHeight());
 
 		if (skipIfFlippedHorizontally && quad2.isFlippedHorizontally()) {
 			return null;
 		}
-
-		BufferedImage scratchImage = borrowScratchImage(width, height);
-		try {
-			ImageContext context = ImageContext.create(scratchImage);
-			try {
-				context.setRenderingHints(g.getRenderingHints());
-				context.drawImage(img, quad2.topLeft, quad2.topRight,
-						quad2.bottomRight, quad2.bottomLeft);
-			} finally {
-				context.dispose();
-			}
-
-			g.drawImage(scratchImage, 0, 0, null);
-			return quad2;
-		} finally {
-			releaseScratchImage(scratchImage);
+		if (skipIfFlippedVertically && quad2.isFlippedVertically()) {
+			return null;
 		}
+
+		ImageContext context = ImageContext.create(dst);
+		try {
+			context.setRenderingHints(renderingHints);
+			context.drawImage(img, quad2.topLeft, quad2.topRight,
+					quad2.bottomRight, quad2.bottomLeft);
+		} finally {
+			context.dispose();
+		}
+
+		return quad2;
 
 	}
 
@@ -278,5 +304,34 @@ public abstract class Transition3D extends AbstractTransition {
 			long key = (((long) image.getWidth()) << 30) + image.getHeight();
 			scratchImageCache.put(key, image);
 		}
+	}
+
+	/**
+	 * Clear the pixels outside of the given shapes. This is a hacky by simple
+	 * way to get antialiased edges, since the 3D perspective renderer we have
+	 * now doesn't antialias the edge of an image.
+	 * 
+	 * TODO: this appears to help the bottom, left and right edges, but not the
+	 * top edges. Ideally we should probably remove this method and just fix the
+	 * renderer
+	 * 
+	 * @param img
+	 *            the image to clear pixels from
+	 * @param shapes
+	 *            the shapes to preserve / erase around
+	 */
+	protected void clearOutside(BufferedImage img, Shape... shapes) {
+		Area area = new Area(
+				new Rectangle(0, 0, img.getWidth(), img.getHeight()));
+		for (Shape shape : shapes) {
+			if (shape != null)
+				area.subtract(new Area(shape));
+		}
+		Graphics2D g = img.createGraphics();
+		g.setComposite(AlphaComposite.Clear);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		g.fill(area);
+		g.dispose();
 	}
 }

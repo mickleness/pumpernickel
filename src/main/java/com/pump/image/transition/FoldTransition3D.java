@@ -117,6 +117,7 @@ public class FoldTransition3D extends Transition3D {
 		// TODO: make context support subimages w/o copying
 		BufferedImage half1 = copy(img.getSubimage(0, 0, w / 2, h));
 		BufferedImage half2 = copy(img.getSubimage(w / 2, 0, w - w / 2, h));
+		BufferedImage scratchImage = borrowScratchImage(w, h);
 
 		try {
 			double crease = x + collapsedWidth / 2.0;
@@ -137,29 +138,27 @@ public class FoldTransition3D extends Transition3D {
 					);
 			// @formatter:on
 
-			// TODO: implement caching model for scratch image cache
-			Quadrilateral2D j1 = paint(g, w, h, half1, q1, true);
-			Quadrilateral2D j2 = paint(g, w, h, half2, q2, true);
+			Quadrilateral2D j1 = paint(scratchImage, g.getRenderingHints(),
+					half1, q1, true, true);
+			Quadrilateral2D j2 = paint(scratchImage, g.getRenderingHints(),
+					half2, q2, true, true);
 
 			Color transBlack = new Color(0, 0, 0, 0);
 			Color lightBlack = new Color(0, 0, 0, (int) (250 * k));
 
-			Rectangle2D r = new Rectangle2D.Double();
 			Paint p = null;
 			if (j1 == null && j2 == null) {
 				// do nothing
 			} else if (j2 == null) {
-				r.setFrame(j1.toShape().getBounds2D());
 				p = new LinearGradientPaint(j1.topLeft, j1.topRight,
 						new float[] { 0, 1 },
 						new Color[] { transBlack, lightBlack });
 			} else if (j1 == null) {
-				r.setFrame(j2.toShape().getBounds2D());
 				p = new LinearGradientPaint(j2.topLeft, j2.topRight,
 						new float[] { 0, 1 },
 						new Color[] { transBlack, lightBlack });
 			} else {
-				r.setFrame(j1.toShape().getBounds2D());
+				Rectangle2D r = j1.toShape().getBounds2D();
 				r.add(j2.toShape().getBounds2D());
 
 				float creaseAsFloat = (float) ((j1.topRight.getX()
@@ -172,14 +171,20 @@ public class FoldTransition3D extends Transition3D {
 						new Color[] { transBlack, lightBlack, transBlack });
 			}
 
-			// TODO: apply this paint to the scratch image, not to g
 			if (p != null) {
-				g.setPaint(p);
-				g.setComposite(AlphaComposite.SrcAtop);
-				g.fill(r);
+				Graphics2D scratchG = scratchImage.createGraphics();
+				scratchG.setPaint(p);
+				scratchG.setComposite(AlphaComposite.SrcAtop);
+				scratchG.fillRect(0, 0, w, h);
+				scratchG.dispose();
 			}
+
+			clearOutside(scratchImage, j1 == null ? null : j1.toShape(),
+					j2 == null ? null : j2.toShape());
+
+			g.drawImage(scratchImage, 0, 0, null);
 		} finally {
-			releaseScratchImage(half1, half2);
+			releaseScratchImage(half1, half2, scratchImage);
 		}
 
 	}

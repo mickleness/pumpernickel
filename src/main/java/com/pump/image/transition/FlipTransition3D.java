@@ -14,11 +14,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-
-import com.pump.image.ImageContext;
 
 /**
  * This transition flips the viewing surface over 180 degrees to reveal the
@@ -152,9 +148,7 @@ public class FlipTransition3D extends Transition3D {
 		}
 
 		boolean vert;
-		Point2D topLeft, topRight, bottomLeft, bottomRight;
 		Point3D topLeft3D, topRight3D, bottomLeft3D, bottomRight3D;
-		BasicProjection p = new BasicProjection(w, h);
 		if (direction == UP) {
 			topLeft3D = new Point3D.Double(0,
 					h / 2 - h / 2 * Math.cos(Math.PI * progress),
@@ -215,64 +209,67 @@ public class FlipTransition3D extends Transition3D {
 		if (flush)
 			flushZCoordinateWithSurface(topLeft3D, topRight3D, bottomLeft3D,
 					bottomRight3D);
-		topLeft = p.transform(topLeft3D);
-		topRight = p.transform(topRight3D);
-		bottomLeft = p.transform(bottomLeft3D);
-		bottomRight = p.transform(bottomRight3D);
 
 		BufferedImage scratchImage = borrowScratchImage(w, h);
 		try {
-			ImageContext context = ImageContext.create(scratchImage);
-			context.setRenderingHints(g.getRenderingHints());
-
+			Quadrilateral2D q2;
 			if (progress > .5) {
 				if (vert) {
-					context.drawImage(frameB, bottomLeft, bottomRight, topRight,
-							topLeft);
+					Quadrilateral3D q3 = new Quadrilateral3D(bottomLeft3D,
+							bottomRight3D, topRight3D, topLeft3D);
+					q2 = paint(scratchImage, g.getRenderingHints(), frameB, q3,
+							false, false);
 				} else {
-					context.drawImage(frameB, topRight, topLeft, bottomLeft,
-							bottomRight);
+					Quadrilateral3D q3 = new Quadrilateral3D(topRight3D,
+							topLeft3D, bottomLeft3D, bottomRight3D);
+					q2 = paint(scratchImage, g.getRenderingHints(), frameB, q3,
+							false, false);
 				}
 			} else {
-				context.drawImage(frameA, topLeft, topRight, bottomRight,
-						bottomLeft);
+				Quadrilateral3D q3 = new Quadrilateral3D(topLeft3D, topRight3D,
+						bottomRight3D, bottomLeft3D);
+				q2 = paint(scratchImage, g.getRenderingHints(), frameA, q3,
+						false, false);
 			}
-			context.dispose();
 
 			Graphics2D g3 = scratchImage.createGraphics();
 			g3.setComposite(AlphaComposite.SrcAtop);
 			double maxDarkness = 150;
-			double z = vert ? Math.abs(bottomLeft.getY() - topLeft.getY()) / h
-					: Math.abs(bottomLeft.getX() - bottomRight.getX()) / w;
+			double z = vert
+					? Math.abs(q2.bottomLeft.getY() - q2.topLeft.getY()) / h
+					: Math.abs(q2.bottomLeft.getX() - q2.bottomRight.getX())
+							/ w;
 			int alpha = (int) (maxDarkness * (1 - z));
 			alpha = Math.min(Math.max(0, alpha), 255);
 			if (vert) {
 				if (direction == UP) {
-					g3.setPaint(new GradientPaint(0, (float) topLeft.getY(),
+					g3.setPaint(new GradientPaint(0, (float) q2.topLeft.getY(),
 							new Color(0, 0, 0, alpha), 0,
-							(float) bottomLeft.getY(), new Color(0, 0, 0, 0)));
+							(float) q2.bottomLeft.getY(),
+							new Color(0, 0, 0, 0)));
 				} else {
-					g3.setPaint(new GradientPaint(0, (float) bottomLeft.getY(),
+					g3.setPaint(new GradientPaint(0,
+							(float) q2.bottomLeft.getY(),
 							new Color(0, 0, 0, alpha), 0,
-							(float) topLeft.getY(), new Color(0, 0, 0, 0)));
+							(float) q2.topLeft.getY(), new Color(0, 0, 0, 0)));
 				}
 			} else {
 				if (direction == LEFT) {
-					g3.setPaint(new GradientPaint((float) topLeft.getX(), 0,
-							new Color(0, 0, 0, alpha), (float) topRight.getX(),
-							0, new Color(0, 0, 0, 0)));
+					g3.setPaint(new GradientPaint((float) q2.topLeft.getX(), 0,
+							new Color(0, 0, 0, alpha),
+							(float) q2.topRight.getX(), 0,
+							new Color(0, 0, 0, 0)));
 				} else {
-					g3.setPaint(new GradientPaint((float) topRight.getX(), 0,
-							new Color(0, 0, 0, alpha), (float) topLeft.getX(),
-							0, new Color(0, 0, 0, 0)));
+					g3.setPaint(new GradientPaint((float) q2.topRight.getX(), 0,
+							new Color(0, 0, 0, alpha),
+							(float) q2.topLeft.getX(), 0,
+							new Color(0, 0, 0, 0)));
 				}
 			}
-			Rectangle2D r = CubeTransition3D.getBounds(topLeft, topRight,
-					bottomLeft, bottomRight);
-			r.setFrame(r.getX() - 1, r.getY() - 1, r.getWidth() + 2,
-					r.getHeight() + 2);
-			g3.fill(r);
+			g3.fillRect(0, 0, w, h);
 			g3.dispose();
+
+			clearOutside(scratchImage, q2.toShape());
 
 			g.drawImage(scratchImage, 0, 0, null);
 		} finally {
