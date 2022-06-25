@@ -253,12 +253,12 @@ public abstract class Transition3D extends AbstractTransition {
 	 * but if we're rendering a transition in a tight loop: it will be nice to
 	 * reuse scratch images.
 	 */
-	static Cache<Long, BufferedImage> scratchImageCache = new Cache<>(5, 1000,
-			1000);
+	private static Cache<Long, BufferedImage> scratchImageCache = new Cache<>(
+			50000, -1, -1);
 
 	protected BufferedImage borrowScratchImage(int width, int height) {
-		long key = (width << 30) + height;
-		BufferedImage bi = scratchImageCache.get(key);
+		long key = (((long) width) << 30) + height;
+		BufferedImage bi = scratchImageCache.remove(key);
 		if (bi == null) {
 			bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		} else {
@@ -275,7 +275,7 @@ public abstract class Transition3D extends AbstractTransition {
 			if (image == null)
 				continue;
 
-			long key = (image.getWidth() << 30) + image.getHeight();
+			long key = (((long) image.getWidth()) << 30) + image.getHeight();
 			scratchImageCache.put(key, image);
 		}
 	}

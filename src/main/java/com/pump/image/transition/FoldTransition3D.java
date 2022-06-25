@@ -118,71 +118,74 @@ public class FoldTransition3D extends Transition3D {
 		BufferedImage half1 = copy(img.getSubimage(0, 0, w / 2, h));
 		BufferedImage half2 = copy(img.getSubimage(w / 2, 0, w - w / 2, h));
 
-		double crease = x + collapsedWidth / 2.0;
-		double k = 1 - collapsedWidth / h;
+		try {
+			double crease = x + collapsedWidth / 2.0;
+			double k = 1 - collapsedWidth / h;
 
-		// @formatter:off
-		Quadrilateral3D q1 = new Quadrilateral3D(
-				x,0,0,
-				crease, 0, -k * 100,
-				crease, h, -k * 100,
-				x, h, 0
-				);
-		Quadrilateral3D q2 = new Quadrilateral3D(
-				crease,0, -k * 100,
-				x + collapsedWidth, 0, 0,
-				x + collapsedWidth, h, 0,
-				crease, h, -k * 100
-				);
-		// @formatter:on
+			// @formatter:off
+			Quadrilateral3D q1 = new Quadrilateral3D(
+					x,0,0,
+					crease, 0, -k * 100,
+					crease, h, -k * 100,
+					x, h, 0
+					);
+			Quadrilateral3D q2 = new Quadrilateral3D(
+					crease,0, -k * 100,
+					x + collapsedWidth, 0, 0,
+					x + collapsedWidth, h, 0,
+					crease, h, -k * 100
+					);
+			// @formatter:on
 
-		// TODO: implement caching model for scratch image cache
-		Quadrilateral2D j1 = paint(g, w, h, half1, q1, true);
-		Quadrilateral2D j2 = paint(g, w, h, half2, q2, true);
+			// TODO: implement caching model for scratch image cache
+			Quadrilateral2D j1 = paint(g, w, h, half1, q1, true);
+			Quadrilateral2D j2 = paint(g, w, h, half2, q2, true);
 
-		Color transBlack = new Color(0, 0, 0, 0);
-		Color lightBlack = new Color(0, 0, 0, (int) (250 * k));
+			Color transBlack = new Color(0, 0, 0, 0);
+			Color lightBlack = new Color(0, 0, 0, (int) (250 * k));
 
-		Rectangle2D r = new Rectangle2D.Double();
-		Paint p = null;
-		if (j1 == null && j2 == null) {
-			// do nothing
-		} else if (j2 == null) {
-			r.setFrame(j1.toShape().getBounds2D());
-			p = new LinearGradientPaint(j1.topLeft, j1.topRight,
-					new float[] { 0, 1 },
-					new Color[] { transBlack, lightBlack });
-		} else if (j1 == null) {
-			r.setFrame(j2.toShape().getBounds2D());
-			p = new LinearGradientPaint(j2.topLeft, j2.topRight,
-					new float[] { 0, 1 },
-					new Color[] { transBlack, lightBlack });
-		} else {
-			r.setFrame(j1.toShape().getBounds2D());
-			r.add(j2.toShape().getBounds2D());
+			Rectangle2D r = new Rectangle2D.Double();
+			Paint p = null;
+			if (j1 == null && j2 == null) {
+				// do nothing
+			} else if (j2 == null) {
+				r.setFrame(j1.toShape().getBounds2D());
+				p = new LinearGradientPaint(j1.topLeft, j1.topRight,
+						new float[] { 0, 1 },
+						new Color[] { transBlack, lightBlack });
+			} else if (j1 == null) {
+				r.setFrame(j2.toShape().getBounds2D());
+				p = new LinearGradientPaint(j2.topLeft, j2.topRight,
+						new float[] { 0, 1 },
+						new Color[] { transBlack, lightBlack });
+			} else {
+				r.setFrame(j1.toShape().getBounds2D());
+				r.add(j2.toShape().getBounds2D());
 
-			float creaseAsFloat = (float) ((j1.topRight.getX()
-					- j1.topLeft.getX()) / r.getWidth());
-			creaseAsFloat = (float) Math.min(Math.max(creaseAsFloat, .0000001),
-					.999999f);
+				float creaseAsFloat = (float) ((j1.topRight.getX()
+						- j1.topLeft.getX()) / r.getWidth());
+				creaseAsFloat = (float) Math
+						.min(Math.max(creaseAsFloat, .0000001), .999999f);
 
-			p = new LinearGradientPaint(j1.topLeft, j2.topRight,
-					new float[] { 0, creaseAsFloat, 1 },
-					new Color[] { transBlack, lightBlack, transBlack });
-		}
+				p = new LinearGradientPaint(j1.topLeft, j2.topRight,
+						new float[] { 0, creaseAsFloat, 1 },
+						new Color[] { transBlack, lightBlack, transBlack });
+			}
 
-		// TODO: apply this paint to the scratch image, not to g
-		if (p != null) {
-			g.setPaint(p);
-			g.setComposite(AlphaComposite.SrcAtop);
-			g.fill(r);
+			// TODO: apply this paint to the scratch image, not to g
+			if (p != null) {
+				g.setPaint(p);
+				g.setComposite(AlphaComposite.SrcAtop);
+				g.fill(r);
+			}
+		} finally {
+			releaseScratchImage(half1, half2);
 		}
 
 	}
 
-	private static BufferedImage copy(BufferedImage src) {
-		BufferedImage d = new BufferedImage(src.getWidth(), src.getHeight(),
-				src.getType());
+	private BufferedImage copy(BufferedImage src) {
+		BufferedImage d = borrowScratchImage(src.getWidth(), src.getHeight());
 		Graphics2D g = d.createGraphics();
 		g.drawImage(src, 0, 0, null);
 		g.dispose();
