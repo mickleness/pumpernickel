@@ -427,19 +427,23 @@ public class PerformanceChartPanel extends JPanel {
 		Chart memoryChart = new Chart(CHART_NAME_MEMORY);
 
 		timeChart.setValueFormatter(new Function<Number, String>() {
-			DecimalFormat format = new DecimalFormat("#.0");
+			DecimalFormat format = new DecimalFormat("0.0");
 
 			@Override
 			public String apply(Number t) {
-				return format.format(t.doubleValue() / 1000.0) + " ms";
+				if (t.doubleValue() == 0)
+					return "0 s";
+				return format.format(t.doubleValue() / 1000.0) + " s";
 			}
 		});
 
 		memoryChart.setValueFormatter(new Function<Number, String>() {
-			DecimalFormat format = new DecimalFormat("#.0");
+			DecimalFormat format = new DecimalFormat("0.0");
 
 			@Override
 			public String apply(Number t) {
+				if (t.doubleValue() == 0)
+					return "0 MB";
 				return format.format(t.doubleValue() / (1024.0 * 1024.0))
 						+ " MB";
 			}
