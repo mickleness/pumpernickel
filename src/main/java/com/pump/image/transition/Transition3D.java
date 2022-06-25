@@ -10,6 +10,7 @@
  */
 package com.pump.image.transition;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -19,6 +20,7 @@ import java.awt.image.BufferedImage;
 
 import com.pump.image.ImageContext;
 import com.pump.math.function.PolynomialFunction;
+import com.pump.util.Cache;
 
 /**
  * This provides a few static tools to help make 3D transitions.
@@ -214,19 +216,22 @@ public abstract class Transition3D extends AbstractTransition {
 			return null;
 		}
 
-		BufferedImage scratchImage = new BufferedImage(width, height,
-				BufferedImage.TYPE_INT_ARGB);
-		ImageContext context = ImageContext.create(scratchImage);
+		BufferedImage scratchImage = borrowScratchImage(width, height);
 		try {
-			context.setRenderingHints(g.getRenderingHints());
-			context.drawImage(img, quad2.topLeft, quad2.topRight,
-					quad2.bottomRight, quad2.bottomLeft);
-		} finally {
-			context.dispose();
-		}
+			ImageContext context = ImageContext.create(scratchImage);
+			try {
+				context.setRenderingHints(g.getRenderingHints());
+				context.drawImage(img, quad2.topLeft, quad2.topRight,
+						quad2.bottomRight, quad2.bottomLeft);
+			} finally {
+				context.dispose();
+			}
 
-		g.drawImage(scratchImage, 0, 0, null);
-		return quad2;
+			g.drawImage(scratchImage, 0, 0, null);
+			return quad2;
+		} finally {
+			releaseScratchImage(scratchImage);
+		}
 
 	}
 
@@ -240,6 +245,38 @@ public abstract class Transition3D extends AbstractTransition {
 		}
 		for (Point3D p : points) {
 			p.setLocation(p.getX(), p.getY(), p.getZ() - maxZ);
+		}
+	}
+
+	/**
+	 * This is a very short/small cache. We could get by without a cache at all,
+	 * but if we're rendering a transition in a tight loop: it will be nice to
+	 * reuse scratch images.
+	 */
+	static Cache<Long, BufferedImage> scratchImageCache = new Cache<>(5, 1000,
+			1000);
+
+	protected BufferedImage borrowScratchImage(int width, int height) {
+		long key = (width << 30) + height;
+		BufferedImage bi = scratchImageCache.get(key);
+		if (bi == null) {
+			bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		} else {
+			Graphics2D g = bi.createGraphics();
+			g.setComposite(AlphaComposite.Clear);
+			g.fillRect(0, 0, width, height);
+			g.dispose();
+		}
+		return bi;
+	}
+
+	protected void releaseScratchImage(BufferedImage... images) {
+		for (BufferedImage image : images) {
+			if (image == null)
+				continue;
+
+			long key = (image.getWidth() << 30) + image.getHeight();
+			scratchImageCache.put(key, image);
 		}
 	}
 }

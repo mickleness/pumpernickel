@@ -271,88 +271,92 @@ public class CubeTransition3D extends Transition3D {
 		boolean visibleB = bottomRightB.getY() > topRightB.getY()
 				&& bottomRightB.getX() > bottomLeftB.getX();
 
-		BufferedImage scratchImage = new BufferedImage(w, h,
-				BufferedImage.TYPE_INT_ARGB);
+		BufferedImage scratchImage = borrowScratchImage(w, h);
+		try {
+			ImageContext context = ImageContext.create(scratchImage);
+			context.setRenderingHints(g.getRenderingHints());
 
-		ImageContext context = ImageContext.create(scratchImage);
-		context.setRenderingHints(g.getRenderingHints());
+			if (visibleB) {
+				context.drawImage(frameB, topLeftB, topRightB, bottomRightB,
+						bottomLeftB);
+			}
+			if (visibleA) {
+				context.drawImage(frameA, topLeftA, topRightA, bottomRightA,
+						bottomLeftA);
+			}
 
-		if (visibleB) {
-			context.drawImage(frameB, topLeftB, topRightB, bottomRightB,
-					bottomLeftB);
+			context.dispose();
+
+			// draw the shadows
+			GradientPaint shadowA, shadowB;
+			if (direction == UP) {
+				int alphaA = (int) (255 * (topLeftA.getX() / w * 2));
+				int alphaB = (int) (255 * (bottomLeftB.getX() / w * 2));
+				alphaA = Math.min(alphaA, 255);
+				alphaB = Math.min(alphaB, 255);
+
+				shadowA = new GradientPaint(0, (float) topLeftA.getY(),
+						new Color(0, 0, 0, alphaA), 0,
+						(float) bottomLeftA.getY(), new Color(0, 0, 0, 0));
+				shadowB = new GradientPaint(0, (float) topLeftB.getY(),
+						new Color(0, 0, 0, 0), 0, (float) bottomLeftB.getY(),
+						new Color(0, 0, 0, alphaB));
+			} else if (direction == DOWN) {
+				int alphaA = (int) (255 * (bottomLeftA.getX() / w * 2));
+				int alphaB = (int) (255 * (topLeftB.getX() / w * 2));
+				alphaA = Math.min(alphaA, 255);
+				alphaB = Math.min(alphaB, 255);
+
+				shadowA = new GradientPaint(0, (float) bottomLeftA.getY(),
+						new Color(0, 0, 0, alphaA), 0, (float) topLeftA.getY(),
+						new Color(0, 0, 0, 0));
+				shadowB = new GradientPaint(0, (float) topLeftB.getY(),
+						new Color(0, 0, 0, alphaB), 0,
+						(float) bottomLeftB.getY(), new Color(0, 0, 0, 0));
+			} else if (direction == LEFT) {
+				int alphaA = (int) (255 * (topLeftA.getY() / h * 2));
+				int alphaB = (int) (255 * (topRightB.getY() / h * 2));
+				alphaA = Math.min(alphaA, 255);
+				alphaB = Math.min(alphaB, 255);
+
+				shadowA = new GradientPaint((float) topLeftA.getX(), 0,
+						new Color(0, 0, 0, alphaA), (float) topRightA.getX(), 0,
+						new Color(0, 0, 0, 0));
+				shadowB = new GradientPaint((float) topLeftB.getX(), 0,
+						new Color(0, 0, 0, 0), (float) topRightB.getX(), 0,
+						new Color(0, 0, 0, alphaB));
+			} else { // right:
+				int alphaA = (int) (255 * (topRightA.getY() / h * 2));
+				int alphaB = (int) (255 * (topLeftB.getY() / h * 2));
+				alphaA = Math.min(alphaA, 255);
+				alphaB = Math.min(alphaB, 255);
+
+				shadowA = new GradientPaint((float) topLeftA.getX(), 0,
+						new Color(0, 0, 0, 0), (float) topRightA.getX(), 0,
+						new Color(0, 0, 0, alphaA));
+				shadowB = new GradientPaint((float) topLeftB.getX(), 0,
+						new Color(0, 0, 0, alphaB), (float) topRightB.getX(), 0,
+						new Color(0, 0, 0, 0));
+			}
+
+			Graphics2D g3 = scratchImage.createGraphics();
+			g3.setComposite(AlphaComposite.SrcAtop);
+			if (visibleA) {
+				g3.setPaint(shadowA);
+				g3.fill(getBounds(topLeftA, topRightA, bottomLeftA,
+						bottomRightA));
+			}
+			if (visibleB) {
+				g3.setPaint(shadowB);
+				g3.fill(getBounds(topLeftB, topRightB, bottomLeftB,
+						bottomRightB));
+			}
+			g3.dispose();
+
+			g.drawImage(scratchImage, 0, 0, null);
+		} finally {
+			releaseScratchImage(scratchImage);
 		}
-		if (visibleA) {
-			context.drawImage(frameA, topLeftA, topRightA, bottomRightA,
-					bottomLeftA);
-		}
-
-		context.dispose();
-
-		// draw the shadows
-		GradientPaint shadowA, shadowB;
-		if (direction == UP) {
-			int alphaA = (int) (255 * (topLeftA.getX() / w * 2));
-			int alphaB = (int) (255 * (bottomLeftB.getX() / w * 2));
-			alphaA = Math.min(alphaA, 255);
-			alphaB = Math.min(alphaB, 255);
-
-			shadowA = new GradientPaint(0, (float) topLeftA.getY(),
-					new Color(0, 0, 0, alphaA), 0, (float) bottomLeftA.getY(),
-					new Color(0, 0, 0, 0));
-			shadowB = new GradientPaint(0, (float) topLeftB.getY(),
-					new Color(0, 0, 0, 0), 0, (float) bottomLeftB.getY(),
-					new Color(0, 0, 0, alphaB));
-		} else if (direction == DOWN) {
-			int alphaA = (int) (255 * (bottomLeftA.getX() / w * 2));
-			int alphaB = (int) (255 * (topLeftB.getX() / w * 2));
-			alphaA = Math.min(alphaA, 255);
-			alphaB = Math.min(alphaB, 255);
-
-			shadowA = new GradientPaint(0, (float) bottomLeftA.getY(),
-					new Color(0, 0, 0, alphaA), 0, (float) topLeftA.getY(),
-					new Color(0, 0, 0, 0));
-			shadowB = new GradientPaint(0, (float) topLeftB.getY(),
-					new Color(0, 0, 0, alphaB), 0, (float) bottomLeftB.getY(),
-					new Color(0, 0, 0, 0));
-		} else if (direction == LEFT) {
-			int alphaA = (int) (255 * (topLeftA.getY() / h * 2));
-			int alphaB = (int) (255 * (topRightB.getY() / h * 2));
-			alphaA = Math.min(alphaA, 255);
-			alphaB = Math.min(alphaB, 255);
-
-			shadowA = new GradientPaint((float) topLeftA.getX(), 0,
-					new Color(0, 0, 0, alphaA), (float) topRightA.getX(), 0,
-					new Color(0, 0, 0, 0));
-			shadowB = new GradientPaint((float) topLeftB.getX(), 0,
-					new Color(0, 0, 0, 0), (float) topRightB.getX(), 0,
-					new Color(0, 0, 0, alphaB));
-		} else { // right:
-			int alphaA = (int) (255 * (topRightA.getY() / h * 2));
-			int alphaB = (int) (255 * (topLeftB.getY() / h * 2));
-			alphaA = Math.min(alphaA, 255);
-			alphaB = Math.min(alphaB, 255);
-
-			shadowA = new GradientPaint((float) topLeftA.getX(), 0,
-					new Color(0, 0, 0, 0), (float) topRightA.getX(), 0,
-					new Color(0, 0, 0, alphaA));
-			shadowB = new GradientPaint((float) topLeftB.getX(), 0,
-					new Color(0, 0, 0, alphaB), (float) topRightB.getX(), 0,
-					new Color(0, 0, 0, 0));
-		}
-
-		Graphics2D g3 = scratchImage.createGraphics();
-		g3.setComposite(AlphaComposite.SrcAtop);
-		if (visibleA) {
-			g3.setPaint(shadowA);
-			g3.fill(getBounds(topLeftA, topRightA, bottomLeftA, bottomRightA));
-		}
-		if (visibleB) {
-			g3.setPaint(shadowB);
-			g3.fill(getBounds(topLeftB, topRightB, bottomLeftB, bottomRightB));
-		}
-		g3.dispose();
-
-		g.drawImage(scratchImage, 0, 0, null);
 	}
 
 	@Override
