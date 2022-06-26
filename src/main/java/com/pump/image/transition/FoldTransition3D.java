@@ -27,34 +27,34 @@ import java.awt.image.BufferedImage;
  * <p>
  * Fold Right</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldUp.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FoldTransition3D/FoldUp.gif"
  * alt="Fold Up">
  * <p>
  * Fold Up</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldDown.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FoldTransition3D/FoldDown.gif"
  * alt="Fold Down">
  * <p>
  * Fold Down</td>
  * </tr>
  * <tr>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldLeftTwice.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FoldTransition3D/FoldLeftTwice.gif"
  * alt="Fold Left Twice">
  * <p>
  * Fold Left Twice</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldRightTwice.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FoldTransition3D/FoldRightTwice.gif"
  * alt="Fold Right Twice">
  * <p>
  * Fold Right Twice</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldUpTwice.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FoldTransition3D/FoldUpTwice.gif"
  * alt="Fold Up Twice">
  * <p>
  * Fold Up Twice</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldDownTwice.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FoldTransition3D/FoldDownTwice.gif"
  * alt="Fold Down Twice">
  * <p>
  * Fold Down Twice</td>

@@ -63,6 +63,11 @@ public class Transition2DDemoResourceGenerator extends DemoResourceGenerator {
 			transitionClassDirs.add(classTransitionDir);
 			String filename = (transition.toString() + ".gif").replaceAll(" ",
 					"");
+
+			if (!classTransitionDir.exists() && !classTransitionDir.mkdirs())
+				throw new IOException("File.mkdirs() failed for "
+						+ classTransitionDir.getAbsolutePath());
+
 			gifFile = new File(classTransitionDir, filename);
 
 			try (AdjacentFileOutputStream fileOut = context
