@@ -8,6 +8,59 @@ import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
+/**
+ * This transition always folds the outgoing into two halves, and it may
+ * optionally unfold the incoming image as it slides into place. Here are
+ * playback samples:
+ * <p>
+ * <table summary="Sample Animations of FoldTransition3D" cellspacing="50"
+ * border="0">
+ * <tr>
+ * <td align="center"><img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldLeft.gif"
+ * alt="Fold Left">
+ * <p>
+ * Fold Left</td>
+ * <td align="center"><img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldRight.gif"
+ * alt="Fold Right">
+ * <p>
+ * Fold Right</td>
+ * <td align="center"><img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldUp.gif"
+ * alt="Fold Up">
+ * <p>
+ * Fold Up</td>
+ * <td align="center"><img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldDown.gif"
+ * alt="Fold Down">
+ * <p>
+ * Fold Down</td>
+ * </tr>
+ * <tr>
+ * <td align="center"><img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldLeftTwice.gif"
+ * alt="Fold Left Twice">
+ * <p>
+ * Fold Left Twice</td>
+ * <td align="center"><img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldRightTwice.gif"
+ * alt="Fold Right Twice">
+ * <p>
+ * Fold Right Twice</td>
+ * <td align="center"><img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldUpTwice.gif"
+ * alt="Fold Up Twice">
+ * <p>
+ * Fold Up Twice</td>
+ * <td align="center"><img src=
+ * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldDownTwice.gif"
+ * alt="Fold Down Twice">
+ * <p>
+ * Fold Down Twice</td>
+ * </tr>
+ * </table>
+ */
 public class FoldTransition3D extends Transition3D {
 
 	/**

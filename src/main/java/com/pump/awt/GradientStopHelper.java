@@ -2,19 +2,43 @@ package com.pump.awt;
 
 import java.awt.Color;
 import java.awt.LinearGradientPaint;
-import java.awt.Paint;
 import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
 import com.pump.plaf.AnimationManager;
 
+/**
+ * This helps organize gradient stops.
+ * <p>
+ * You can add any number of stops between 0 and 1. You can add them in any
+ * order, and this object will sort them.
+ * </p>
+ * <p>
+ * If you add a stop outside of [0,1], then that stop will be replaced with a
+ * stop at 0 or 1. For example, if you add a stop at 1 for white, and a stop at
+ * -1 for black, then the -1 entry will be replaced with a gray at 0.
+ * </p>
+ */
 public class GradientStopHelper {
 
 	float[] stops = new float[0];
 	Color[] colors = new Color[0];
 
-	public Paint toPaint(double x1, double y1, double x2, double y2) {
+	/**
+	 * Convert this GradientStopHelper to a LinearGradientPaint.
+	 * 
+	 * @param x1
+	 *            the x of the starting point.
+	 * @param y1
+	 *            the y of the starting point.
+	 * @param x2
+	 *            the x of the final point.
+	 * @param y2
+	 *            the y of the final point.
+	 */
+	public LinearGradientPaint toPaint(double x1, double y1, double x2,
+			double y2) {
 		if (stops.length == 0)
 			return null;
 		Point2D start = new Point2D.Double(x1, y1);
@@ -23,6 +47,16 @@ public class GradientStopHelper {
 		return new LinearGradientPaint(start, end, stops, colors);
 	}
 
+	/**
+	 * Add a color stop for this gradient.
+	 * 
+	 * @param d
+	 *            a fractional value on a scale of [0, 1]. This may be outside
+	 *            of [0,1], but this GradientStopHelper will never store a stop
+	 *            value outside of [0,1].
+	 * @param c
+	 *            the color to add.
+	 */
 	public void addStop(double d, Color c) {
 		float f = (float) d;
 		if (stops.length == 0) {
@@ -92,14 +126,29 @@ public class GradientStopHelper {
 		return sb.toString();
 	}
 
+	/**
+	 * Return the number of stops.
+	 */
 	public int size() {
 		return stops.length;
 	}
 
+	/**
+	 * Return a specific Color.
+	 * 
+	 * @param i
+	 *            the stop index
+	 */
 	public Color getColor(int i) {
 		return colors[i];
 	}
 
+	/**
+	 * Return a specific stop.
+	 * 
+	 * @param i
+	 *            the stop index
+	 */
 	public float getStop(int i) {
 		return stops[i];
 	}
