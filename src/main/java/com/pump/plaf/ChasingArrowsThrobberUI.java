@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -26,13 +26,13 @@ import javax.swing.JComponent;
  * <table summary="Sample Animations of ChasingArrowsThrobberUI" cellpadding="10">
  * <tr>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/ChasingArrowsThrobberUI.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/ChasingArrowsThrobberUI.gif"
  * alt="ChassingArrowsThrobberUI"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/ChasingArrowsThrobberUIx2.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/ChasingArrowsThrobberUIx2.gif"
  * alt="ChassingArrowsThrobberUI Magnified 2x"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/ChasingArrowsThrobberUIx4.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/ChasingArrowsThrobberUIx4.gif"
  * alt="ChassingArrowsThrobberUI Magnified 4x"></td>
  * </tr>
  * </table>

@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -21,25 +21,25 @@ import java.awt.geom.AffineTransform;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RevealTransition2D/RevealLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/RevealTransition2D/RevealLeft.gif"
  * alt="Reveal Left">
  * <p>
  * Reveal Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RevealTransition2D/RevealRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/RevealTransition2D/RevealRight.gif"
  * alt="Reveal Right">
  * <p>
  * Reveal Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RevealTransition2D/RevealUp.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/RevealTransition2D/RevealUp.gif"
  * alt="Reveal Up">
  * <p>
  * Reveal Up</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RevealTransition2D/RevealDown.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/RevealTransition2D/RevealDown.gif"
  * alt="Reveal Down">
  * <p>
  * Reveal Down</td>

@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -20,25 +20,25 @@ import java.awt.geom.Point2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/ZoomTransition2D/ZoomLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/ZoomTransition2D/ZoomLeft.gif"
  * alt="Zoom Left">
  * <p>
  * Zoom Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/ZoomTransition2D/ZoomRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/ZoomTransition2D/ZoomRight.gif"
  * alt="Zoom Right">
  * <p>
  * Zoom Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/ZoomTransition2D/ZoomLeftStationary.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/ZoomTransition2D/ZoomLeftStationary.gif"
  * alt="Zoom Left Stationary">
  * <p>
  * Zoom Left Stationary</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/ZoomTransition2D/ZoomRightStationary.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/ZoomTransition2D/ZoomRightStationary.gif"
  * alt="Zoom Right Stationary">
  * <p>
  * Zoom Right Stationary</td>

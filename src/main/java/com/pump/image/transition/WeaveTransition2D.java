@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -21,7 +21,7 @@ import java.util.List;
  * place. Here is a playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WeaveTransition2D/Weave.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/WeaveTransition2D/Weave.gif"
  * alt="WeaveTransition2D Demo">
  * 
  */

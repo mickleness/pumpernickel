@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -21,50 +21,50 @@ import java.awt.geom.AffineTransform;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PivotTransition2D/PivotInTopLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PivotTransition2D/PivotInTopLeft.gif"
  * alt="Pivot In Top Left">
  * <p>
  * Pivot In Top Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PivotTransition2D/PivotInTopRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PivotTransition2D/PivotInTopRight.gif"
  * alt="Pivot In Top Right">
  * <p>
  * Pivot In Top Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PivotTransition2D/PivotInBottomLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PivotTransition2D/PivotInBottomLeft.gif"
  * alt="Pivot In Bottom Left">
  * <p>
  * Pivot In Bottom Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PivotTransition2D/PivotInBottomRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PivotTransition2D/PivotInBottomRight.gif"
  * alt="Pivot In Bottom Right">
  * <p>
  * Pivot In Bottom Right</td>
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PivotTransition2D/PivotOutTopLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PivotTransition2D/PivotOutTopLeft.gif"
  * alt="Pivot Out Top Left">
  * <p>
  * Pivot Out Top Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PivotTransition2D/PivotOutTopRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PivotTransition2D/PivotOutTopRight.gif"
  * alt="Pivot Out Top Right">
  * <p>
  * Pivot Out Top Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PivotTransition2D/PivotOutBottomLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PivotTransition2D/PivotOutBottomLeft.gif"
  * alt="Pivot Out Bottom Left">
  * <p>
  * Pivot Out Bottom Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PivotTransition2D/PivotOutBottomRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PivotTransition2D/PivotOutBottomRight.gif"
  * alt="Pivot Out Top Right">
  * <p>
  * Pivot Out Bottom Right</td>

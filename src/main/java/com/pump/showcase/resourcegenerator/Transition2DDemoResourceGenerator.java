@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -63,6 +63,11 @@ public class Transition2DDemoResourceGenerator extends DemoResourceGenerator {
 			transitionClassDirs.add(classTransitionDir);
 			String filename = (transition.toString() + ".gif").replaceAll(" ",
 					"");
+
+			if (!classTransitionDir.exists() && !classTransitionDir.mkdirs())
+				throw new IOException("File.mkdirs() failed for "
+						+ classTransitionDir.getAbsolutePath());
+
 			gifFile = new File(classTransitionDir, filename);
 
 			try (AdjacentFileOutputStream fileOut = context
@@ -114,7 +119,7 @@ public class Transition2DDemoResourceGenerator extends DemoResourceGenerator {
 				String s = output.gifFile.getAbsolutePath()
 						.replaceAll(File.separator, "/");
 				int i = s.indexOf("/resources/");
-				String url = "https://raw.githubusercontent.com/mickleness/pumpernickel/master"
+				String url = "https://github.com/mickleness/pumpernickel/raw/master"
 						+ s.substring(i);
 
 				sb.append("<img src=\"" + url + "\" width=\"" + SIZE

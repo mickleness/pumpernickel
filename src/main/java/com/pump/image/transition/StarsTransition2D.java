@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -34,13 +34,13 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/StarsTransition2D/StarsLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/StarsTransition2D/StarsLeft.gif"
  * alt="Stars Left">
  * <p>
  * Stars Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/StarsTransition2D/StarsRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/StarsTransition2D/StarsRight.gif"
  * alt="Stars Right">
  * <p>
  * Stars Right</td>

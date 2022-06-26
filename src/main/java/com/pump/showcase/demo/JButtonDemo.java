@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -18,6 +18,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
@@ -113,8 +114,68 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		}
 	}
 
-	Map<String, Class> buttonUITypeMap = new HashMap<>();
-	JComboBox<String> buttonUIClassComboBox = new JComboBox<>();
+	/**
+	 * This installs a ButtonUI on an AbstractButton.
+	 */
+	interface ButtonUIFormatter {
+		void installButtonUI(AbstractButton button) throws Exception;
+	}
+	
+	/**
+	 * This installs a specific ButtonUI by instantiating its Class.
+	 * <p>
+	 * This can only be used for ButtonUIs from this module/codebase. Attempting
+	 * to use this for ButtonUIs outside of this module throws an IllegalAccessException.
+	 */
+	class ReflectionButtonUIFormatter implements ButtonUIFormatter {
+		Class<?> uiClass;
+		
+		ReflectionButtonUIFormatter(Class<?> uiClass) {
+			this.uiClass = uiClass;
+		}
+
+		@Override
+		public void installButtonUI(AbstractButton button) throws Exception {
+			ButtonUI buttonUI = (ButtonUI) uiClass.getDeclaredConstructor().newInstance();
+			button.setUI(buttonUI);
+		}
+
+		@Override
+		public String toString() {
+			return uiClass.getSimpleName();
+		}
+	}
+	
+	/**
+	 * This installs a ButtonUI from a LookAndFeel.
+	 */
+	static class LookAndFeelButtonUIFormatter implements ButtonUIFormatter {
+		
+		private LookAndFeel laf;
+		private String uiSimpleClassName = null;
+		
+		public LookAndFeelButtonUIFormatter(LookAndFeel laf) {
+			this.laf = laf;
+			installButtonUI(new JButton("test"));
+		}
+
+		@Override
+		public void installButtonUI(AbstractButton button) {
+			UIDefaults defaults = laf.getDefaults();
+			ButtonUI ui = (ButtonUI) defaults.getUI(button);
+			uiSimpleClassName = ui.getClass().getSimpleName();
+			button.setUI(ui);
+		}
+		
+		@Override
+		public String toString() {
+			return uiSimpleClassName;
+		}
+	}
+	
+	
+	
+	JComboBox<ButtonUIFormatter> buttonUIFormatterComboBox = new JComboBox<>();
 	JComboBox<String> iconComboBox = new JComboBox<>();
 	JTextField text = new JTextField("Name");
 	JCheckBox paintBorderCheckbox = new JCheckBox("Border", true);
@@ -145,29 +206,23 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 			"segmentedGradient", "segmentedRoundRect", "segmentedTextured",
 			"segmentedTexturedRounded", "square", "text", "textured",
 			"texturedRound", "toggle", "toolbar", "well");
-
+	
 	public JButtonDemo() {
-		JButton dummyButton = new JButton();
 
-		Collection<Class> buttonUITypes = new LinkedHashSet<>();
-
-		LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
-		for (LookAndFeelInfo lafInfo : lafs) {
+		for (LookAndFeelInfo lafInfo : UIManager.getInstalledLookAndFeels()) {
 			try {
-				LookAndFeel laf = (LookAndFeel) Class
-						.forName(lafInfo.getClassName()).newInstance();
-				laf.initialize();
-				UIDefaults defaults = laf.getDefaults();
-				JButton testButton = new JButton("test");
-				ButtonUI ui = (ButtonUI) defaults.getUI(testButton);
+				LookAndFeel laf = UIManager.createLookAndFeel(lafInfo.getName());
+
 				try {
-					testButton.setUI(ui);
+					laf.initialize();
+					LookAndFeelButtonUIFormatter formatter = new LookAndFeelButtonUIFormatter(laf);
+					buttonUIFormatterComboBox.addItem(formatter);
+	
 					// only keep the UI if the call to setUI didn't throw an
 					// exception:
-					buttonUITypes.add(ui.getClass());
 				} catch (Exception e) {
 					// Nimbus throws an exception resembling:
-
+	
 					// @formatter:off
 					// java.lang.ClassCastException: com.apple.laf.AquaLookAndFeel cannot be cast to javax.swing.plaf.nimbus.NimbusLookAndFeel
 					// at javax.swing.plaf.nimbus.NimbusStyle.validate(NimbusStyle.java:250)
@@ -186,18 +241,22 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 			}
 		}
 
-		buttonUITypes.add(BevelButtonUI.class);
-		buttonUITypes.add(GradientButtonUI.class);
-		buttonUITypes.add(RecessedButtonUI.class);
-		buttonUITypes.add(RoundRectButtonUI.class);
-		buttonUITypes.add(SquareButtonUI.class);
+		buttonUIFormatterComboBox.addItem(new ReflectionButtonUIFormatter(BevelButtonUI.class));
+		buttonUIFormatterComboBox.addItem(new ReflectionButtonUIFormatter(GradientButtonUI.class));
+		buttonUIFormatterComboBox.addItem(new ReflectionButtonUIFormatter(RecessedButtonUI.class));
+		buttonUIFormatterComboBox.addItem(new ReflectionButtonUIFormatter(RoundRectButtonUI.class));
+		buttonUIFormatterComboBox.addItem(new ReflectionButtonUIFormatter(SquareButtonUI.class));
+		
 
-		for (Class buttonUIType : buttonUITypes) {
-			buttonUITypeMap.put(buttonUIType.getSimpleName(), buttonUIType);
-			buttonUIClassComboBox.addItem(buttonUIType.getSimpleName());
+		JButton sampleButton = new JButton();
+		String defaultButtonUISimpleClassName = sampleButton.getUI().getClass().getSimpleName();
+		for (int i = 0; i < buttonUIFormatterComboBox.getItemCount(); i++) {
+			String str = buttonUIFormatterComboBox.getItemAt(i).toString();
+			if (str.equals(defaultButtonUISimpleClassName)) {
+				buttonUIFormatterComboBox.setSelectedIndex(i);
+				break;
+			}
 		}
-		buttonUIClassComboBox.setSelectedItem(
-				dummyButton.getUI().getClass().getSimpleName());
 
 		ActionListener actionRefreshListener = new ActionListener() {
 
@@ -216,7 +275,7 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		configurationPanel.add(animatingInspectorPanel);
 
 		Inspector inspector = new Inspector(animatingInspectorPanel);
-		inspector.addRow(new JLabel("ButtonUI:"), buttonUIClassComboBox);
+		inspector.addRow(new JLabel("ButtonUI:"), buttonUIFormatterComboBox);
 		inspector.addRow(new JLabel("Icon:"), iconComboBox);
 		inspector.addRow(new JLabel("Text:"), text, true);
 		inspector.addRow(new JLabel("Horizontal Alignment:"),
@@ -231,13 +290,13 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 				paintContentCheckbox, paintFocusCheckbox, paintStrokeCheckbox);
 
 		horizontalAlignmentComboBox.setSelectedItem(
-				Horizontal.valueOf(dummyButton.getHorizontalAlignment()));
+				Horizontal.valueOf(sampleButton.getHorizontalAlignment()));
 		horizontalTextPositionComboBox.setSelectedItem(
-				Horizontal.valueOf(dummyButton.getHorizontalTextPosition()));
+				Horizontal.valueOf(sampleButton.getHorizontalTextPosition()));
 		verticalAlignmentComboBox.setSelectedItem(
-				Vertical.valueOf(dummyButton.getVerticalAlignment()));
+				Vertical.valueOf(sampleButton.getVerticalAlignment()));
 		verticalTextPositionComboBox.setSelectedItem(
-				Vertical.valueOf(dummyButton.getVerticalTextPosition()));
+				Vertical.valueOf(sampleButton.getVerticalTextPosition()));
 
 		aquaTypeComboBox = new JComboBox<String>();
 		for (String aquaType : aquaTypes) {
@@ -264,7 +323,7 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		iconComboBox.addItem("Thumbnail");
 		iconComboBox.addItem("Refresh");
 
-		buttonUIClassComboBox.addActionListener(actionRefreshListener);
+		buttonUIFormatterComboBox.addActionListener(actionRefreshListener);
 		iconComboBox.addActionListener(actionRefreshListener);
 		paintBorderCheckbox.addActionListener(actionRefreshListener);
 		paintStrokeCheckbox.addActionListener(actionRefreshListener);
@@ -329,7 +388,6 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 
 	private AbstractButton lastButton;
 	boolean isAqua, isQButton;
-	String buttonUIClass;
 
 	private void refreshButton() {
 		try {
@@ -449,14 +507,11 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		return p;
 	}
 
-	JButton createButton(String text)
-			throws InstantiationException, IllegalAccessException {
+	JButton createButton(String text) throws Exception {
 		JButton button = new JButton();
 
-		buttonUIClass = (String) buttonUIClassComboBox.getSelectedItem();
-		ButtonUI buttonUI = (ButtonUI) buttonUITypeMap.get(buttonUIClass)
-				.newInstance();
-		button.setUI(buttonUI);
+		ButtonUIFormatter formatter = (ButtonUIFormatter) buttonUIFormatterComboBox.getSelectedItem();
+		formatter.installButtonUI(button);
 
 		if (lastButton != null)
 			button.setSelected(lastButton.isSelected());
@@ -491,7 +546,7 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		button.putClientProperty(QButtonUI.PROPERTY_STROKE_PAINTED,
 				paintStrokeCheckbox.isSelected());
 
-		isAqua = buttonUIClass.toLowerCase().contains("aqua");
+		isAqua = button.getUI().getClass().getSimpleName().toLowerCase().contains("aqua");
 		isQButton = QButtonUI.class.isInstance(button.getUI());
 		for (InspectorRowPanel p : aquaRows) {
 			p.setVisible(isAqua);

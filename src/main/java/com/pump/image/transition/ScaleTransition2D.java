@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -24,13 +24,13 @@ import com.pump.geom.RectangularTransform;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/ScaleTransition2D/ScaleIn.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/ScaleTransition2D/ScaleIn.gif"
  * alt="Scale In">
  * <p>
  * Scale In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/ScaleTransition2D/ScaleOut.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/ScaleTransition2D/ScaleOut.gif"
  * alt="Scale Out">
  * <p>
  * Scale Out</td>

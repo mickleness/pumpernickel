@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -20,25 +20,25 @@ import java.awt.geom.Rectangle2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WipeTransition2D/WipeLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/WipeTransition2D/WipeLeft.gif"
  * alt="Wipe Left">
  * <p>
  * Wipe Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WipeTransition2D/WipeRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/WipeTransition2D/WipeRight.gif"
  * alt="Wipe Right">
  * <p>
  * Wipe Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WipeTransition2D/WipeUp.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/WipeTransition2D/WipeUp.gif"
  * alt="Wipe Up">
  * <p>
  * Wipe Up</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WipeTransition2D/WipeDown.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/WipeTransition2D/WipeDown.gif"
  * alt="Wipe Down">
  * <p>
  * Wipe Down</td>
