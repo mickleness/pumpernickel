@@ -81,6 +81,15 @@ public class FoldTransition3D extends Transition3D {
 	int direction;
 	boolean twice;
 
+	/**
+	 * Create a new FoldTransition3D.
+	 * 
+	 * @param direction
+	 *            UP, DOWN, LEFT or RIGHT
+	 * @param twice
+	 *            if true then both the outgoing and incoming images are folded.
+	 *            If false then only the outgoing image is folded.
+	 */
 	public FoldTransition3D(int direction, boolean twice) {
 		if (!(direction == Transition.UP || direction == Transition.DOWN
 				|| direction == Transition.LEFT
