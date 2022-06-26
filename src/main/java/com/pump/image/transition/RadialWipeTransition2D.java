@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -24,13 +24,13 @@ import java.awt.geom.Rectangle2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RadialWipeTransition2D/RadialWipeClockwise.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/RadialWipeTransition2D/RadialWipeClockwise.gif"
  * alt="Radial Wipe Clockwise">
  * <p>
  * Radial Wipe Clockwise</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/RadialWipeTransition2D/RadialWipeCounterclockwise.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/RadialWipeTransition2D/RadialWipeCounterclockwise.gif"
  * alt="Radial Wipe Counterclockwise">
  * <p>
  * Radial Wipe Counterclockwise</td>

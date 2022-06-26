@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -39,7 +39,7 @@ import com.pump.swing.MultiThumbSlider;
  *            <tr>
  *            <td>Thumb.Circle</td>
  *            <td><img src=
- *            "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/DefaultMultiThumbSliderUI/sample.png"
+ *            "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/DefaultMultiThumbSliderUI/sample.png"
  *            alt=
  *            "com.pump.plaf.DefaultMultiThumbSliderUI.createDemo(&#160;com.pump.plaf.DefaultMultiThumbSliderUI.class,&#160;com.pump.plaf.MultiThumbSliderUI$Thumb.Circle&#160;)"
  *            ></td>
@@ -47,7 +47,7 @@ import com.pump.swing.MultiThumbSlider;
  *            <tr>
  *            <td>Thumb.Triangle</td>
  *            <td><img src=
- *            "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/DefaultMultiThumbSliderUI/sample2.png"
+ *            "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/DefaultMultiThumbSliderUI/sample2.png"
  *            alt=
  *            "com.pump.plaf.DefaultMultiThumbSliderUI.createDemo(&#160;com.pump.plaf.DefaultMultiThumbSliderUI.class,&#160;com.pump.plaf.MultiThumbSliderUI$Thumb.Triangle&#160;)"
  *            ></td>
@@ -55,7 +55,7 @@ import com.pump.swing.MultiThumbSlider;
  *            <tr>
  *            <td>Thumb.Rectangle</td>
  *            <td><img src=
- *            "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/DefaultMultiThumbSliderUI/sample3.png"
+ *            "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/DefaultMultiThumbSliderUI/sample3.png"
  *            alt=
  *            "com.pump.plaf.DefaultMultiThumbSliderUI.createDemo(&#160;com.pump.plaf.DefaultMultiThumbSliderUI.class,&#160;com.pump.plaf.MultiThumbSliderUI$Thumb.Rectangle&#160;)"
  *            ></td>
@@ -63,7 +63,7 @@ import com.pump.swing.MultiThumbSlider;
  *            <tr>
  *            <td>Thumb.Hourglass</td>
  *            <td><img src=
- *            "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/DefaultMultiThumbSliderUI/sample4.png"
+ *            "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/DefaultMultiThumbSliderUI/sample4.png"
  *            alt=
  *            "com.pump.plaf.DefaultMultiThumbSliderUI.createDemo(&#160;com.pump.plaf.DefaultMultiThumbSliderUI.class,&#160;com.pump.plaf.MultiThumbSliderUI$Thumb.Hourglass&#160;)"
  *            ></td>

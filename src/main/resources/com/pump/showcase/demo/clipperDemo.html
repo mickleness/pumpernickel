@@ -16,7 +16,7 @@ I wasn't aware of the <a href="http://en.wikipedia.org/wiki/Sutherland-Hodgman_c
 <p>
 In my new <code>Clipper</code> class, the <code>PathIterator</code> from the source shape is traced exactly once. As it is traced it is constrained by the clipping shape. If a curve/segment lies outside the clipping rectangle (or intersects it), then it is flattened against the rectangle. For example:
 <br />
-<img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/clipping.gif" /> &nbsp; <img src="https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/clipping2.gif" />
+<img src="https://github.com/mickleness/pumpernickel/raw/master/resources/clipping.gif" /> &nbsp; <img src="https://github.com/mickleness/pumpernickel/raw/master/resources/clipping2.gif" />
 <br />
 This can lead to redundant lines with no depth, but this data is passed through another filter that collapses redundant points outside the clipping bounds.
 <p>

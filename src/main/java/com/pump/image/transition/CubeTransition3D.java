@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -26,44 +26,44 @@ import com.pump.awt.GradientStopHelper;
  * border="0">
  * <tr>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CubeTransition3D/CubeLeft.gif"
  * alt="Cube Left">
  * <p>
  * Cube Left</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CubeTransition3D/CubeRight.gif"
  * alt="Cube Right">
  * <p>
  * Cube Right</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeUp.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CubeTransition3D/CubeUp.gif"
  * alt="Cube Up">
  * <p>
  * Cube Up</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeDown.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CubeTransition3D/CubeDown.gif"
  * alt="Cube Down">
  * <p>
  * Cube Down</td>
  * </tr>
  * <tr>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeLeftFlush.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CubeTransition3D/CubeLeftFlush.gif"
  * alt="Cube Left Flush">
  * <p>
  * Cube Left Flush</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeRightFlush.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CubeTransition3D/CubeRightFlush.gif"
  * alt="Cube Right Flush">
  * <p>
  * Cube Right Flush</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeUpFlush.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CubeTransition3D/CubeUpFlush.gif"
  * alt="Cube UP Flush">
  * <p>
  * Cube Up Flush</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CubeTransition3D/CubeDownFlush.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CubeTransition3D/CubeDownFlush.gif"
  * alt="Cube Down Flush">
  * <p>
  * Cube Down Flush</td>

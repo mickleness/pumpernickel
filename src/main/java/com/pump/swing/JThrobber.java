@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -27,13 +27,13 @@ import com.pump.plaf.ThrobberUI;
  * <table summary="Sample ThrobberUIs" cellpadding="10">
  * <tr>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/AquaThrobberUIx2.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/AquaThrobberUIx2.gif"
  * alt="Sample of AquaThrobberUI"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/ChasingArrowsThrobberUIx2.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/ChasingArrowsThrobberUIx2.gif"
  * alt="Sample of ChasingArrowsThrobberUI"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/PulsingCirclesThrobberUIx2.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/PulsingCirclesThrobberUIx2.gif"
  * alt="Sample of PulsingCirclesThrobberUI"></td>
  * </tr>
  * </table>

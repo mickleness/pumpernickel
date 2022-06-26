@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -49,16 +49,16 @@ import com.pump.geom.ShapeStringUtils;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/MusicIcon/24x24.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/MusicIcon/24x24.png"
  * alt="new&#160;com.pump.swing.resources.MusicIcon(24)"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/MusicIcon/32x32.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/MusicIcon/32x32.png"
  * alt="new&#160;com.pump.swing.resources.MusicIcon(32)"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/MusicIcon/64x64.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/MusicIcon/64x64.png"
  * alt="new&#160;com.pump.swing.resources.MusicIcon(64)"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/MusicIcon/128x128.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/MusicIcon/128x128.png"
  * alt="new&#160;com.pump.swing.resources.MusicIcon(128)"></td>
  * </tr>
  * <tr>

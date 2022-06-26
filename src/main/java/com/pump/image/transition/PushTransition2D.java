@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -20,25 +20,25 @@ import java.awt.geom.AffineTransform;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PushTransition2D/PushLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PushTransition2D/PushLeft.gif"
  * alt="Push Left">
  * <p>
  * Push Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PushTransition2D/PushRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PushTransition2D/PushRight.gif"
  * alt="Push Right">
  * <p>
  * Push Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PushTransition2D/PushUp.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PushTransition2D/PushUp.gif"
  * alt="Push Up">
  * <p>
  * Push Up</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/PushTransition2D/PushDown.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/PushTransition2D/PushDown.gif"
  * alt="Push Down">
  * <p>
  * Push Down</td>

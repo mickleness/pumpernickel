@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -26,7 +26,7 @@ import com.pump.plaf.BreadCrumbUI;
  * Here are two possible UI's depicting the same basic data:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/screenshot_breadcrumb_demo.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/screenshot_breadcrumb_demo.png"
  * alt="Sample Screenshots of JBreadCrumb">
  *
  * @param <T>

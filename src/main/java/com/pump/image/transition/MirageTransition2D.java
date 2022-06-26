@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -24,7 +24,7 @@ import java.util.Random;
  * in a desert. Here is a playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/MirageTransition2D/Mirage.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/MirageTransition2D/Mirage.gif"
  * alt="MirageTransition2D Demo">
  * 
  */

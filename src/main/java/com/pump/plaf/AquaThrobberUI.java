@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -30,13 +30,13 @@ import javax.swing.JComponent;
  * <table summary="Sample Animations of AquaThrobberUI" cellpadding="10">
  * <tr>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/AquaThrobberUI.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/AquaThrobberUI.gif"
  * alt="AquaThrobberUI"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/AquaThrobberUIx2.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/AquaThrobberUIx2.gif"
  * alt="AquaThrobberUI Magnified 2x"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/throbber/AquaThrobberUIx4.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/AquaThrobberUIx4.gif"
  * alt="AquaThrobberUI Magnified 4x"></td>
  * </tr>
  * </table>

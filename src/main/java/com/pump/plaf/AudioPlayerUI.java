@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -136,7 +136,7 @@ public class AudioPlayerUI extends ComponentUI {
 	protected void installDefaultSource(AudioPlayerComponent c) {
 		try {
 			c.setSource(new URL(
-					"https://raw.githubusercontent.com/mickleness/pumpernickel/master/src/main/resources/com/pump/showcase/Ludic.wav"));
+					"https://github.com/mickleness/pumpernickel/raw/master/src/main/resources/com/pump/showcase/Ludic.wav"));
 		} catch (MalformedURLException e) {
 			c.setSource(null);
 			e.printStackTrace();

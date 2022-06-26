@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -40,13 +40,13 @@ import com.pump.geom.ShapeBounds;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GlyphIcon/Note.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/GlyphIcon/Note.png"
  * alt="com.pump.swing.resources.GlyphIcon.NOTE"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GlyphIcon/Recycle.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/GlyphIcon/Recycle.png"
  * alt="com.pump.swing.resources.GlyphIcon.RECYCLE"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GlyphIcon/Writing Hand.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/GlyphIcon/Writing Hand.png"
  * alt="com.pump.swing.resources.GlyphIcon.WRITING_HAND"></td>
  * </tr>
  * <tr>
@@ -58,10 +58,10 @@ import com.pump.geom.ShapeBounds;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GlyphIcon/Flower.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/GlyphIcon/Flower.png"
  * alt="com.pump.swing.resources.GlyphIcon.FLOWER"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/GlyphIcon/Warning.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/GlyphIcon/Warning.png"
  * alt="com.pump.swing.resources.GlyphIcon.WARNING"></td>
  * </tr>
  * <tr>

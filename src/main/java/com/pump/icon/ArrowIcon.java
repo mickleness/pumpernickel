@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -40,22 +40,22 @@ import com.pump.blog.ResourceSample;
  * <tr>
  * <td>12x12</td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/ArrowIcon/sample.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/ArrowIcon/sample.png"
  * alt=
  * "new&#160;com.pump.swing.resources.ArrowIcon(&#160;javax.swing.SwingConstants.NORTH,&#160;12,&#160;12)"
  * ></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/ArrowIcon/sample2.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/ArrowIcon/sample2.png"
  * alt=
  * "new&#160;com.pump.swing.resources.ArrowIcon(&#160;javax.swing.SwingConstants.SOUTH,&#160;12,&#160;12)"
  * ></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/ArrowIcon/sample3.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/ArrowIcon/sample3.png"
  * alt=
  * "new&#160;com.pump.swing.resources.ArrowIcon(&#160;javax.swing.SwingConstants.EAST,&#160;12,&#160;12)"
  * ></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/ArrowIcon/sample4.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/ArrowIcon/sample4.png"
  * alt=
  * "new&#160;com.pump.swing.resources.ArrowIcon(&#160;javax.swing.SwingConstants.WEST,&#160;12,&#160;12)"
  * ></td>
@@ -63,22 +63,22 @@ import com.pump.blog.ResourceSample;
  * <tr>
  * <td>24x24</td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/ArrowIcon/sample5.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/ArrowIcon/sample5.png"
  * alt=
  * "new&#160;com.pump.swing.resources.ArrowIcon(&#160;javax.swing.SwingConstants.NORTH,&#160;24,&#160;24)"
  * ></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/ArrowIcon/sample6.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/ArrowIcon/sample6.png"
  * alt=
  * "new&#160;com.pump.swing.resources.ArrowIcon(&#160;javax.swing.SwingConstants.SOUTH,&#160;24,&#160;24)"
  * ></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/ArrowIcon/sample7.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/ArrowIcon/sample7.png"
  * alt=
  * "new&#160;com.pump.swing.resources.ArrowIcon(&#160;javax.swing.SwingConstants.EAST,&#160;24,&#160;24)"
  * ></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/ArrowIcon/sample8.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/ArrowIcon/sample8.png"
  * alt=
  * "new&#160;com.pump.swing.resources.ArrowIcon(&#160;javax.swing.SwingConstants.WEST,&#160;24,&#160;24)"
  * ></td>
