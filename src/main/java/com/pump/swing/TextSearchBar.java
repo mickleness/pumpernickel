@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -61,12 +61,12 @@ import com.pump.plaf.button.RoundRectButtonUI;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/TextSearchBar/Safari.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/TextSearchBar/Safari.png"
  * alt=
  * "com.pump.swing.TextSearchBar.createSafariStyleBar(new&#160;javax.swing.JTextArea())"
  * ></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/TextSearchBar/Firefox.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/TextSearchBar/Firefox.png"
  * alt=
  * "com.pump.swing.TextSearchBar.createFirefoxStyleBar(new&#160;javax.swing.JTextArea())"
  * ></td>

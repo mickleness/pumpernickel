@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -23,7 +23,7 @@ import com.pump.plaf.PlafPaintUtils;
  * This resembles the "recessed" button UI seen in Mac OS 10.15.
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/filledbuttonui/RecessedButtonUI.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/filledbuttonui/RecessedButtonUI.png"
  * alt="RecessedButtonUI Screenshot">
  * <P>
  * It is not intended to be an exact replica, but it is very similar.

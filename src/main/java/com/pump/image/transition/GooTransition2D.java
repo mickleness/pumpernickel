@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -23,19 +23,19 @@ import java.util.Random;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/GooTransition2D/Goo(10).gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/GooTransition2D/Goo(10).gif"
  * alt="Goo (10)">
  * <p>
  * Goo (10)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/GooTransition2D/Goo(20).gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/GooTransition2D/Goo(20).gif"
  * alt="Goo (10)">
  * <p>
  * Goo (20)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/GooTransition2D/Goo(50).gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/GooTransition2D/Goo(50).gif"
  * alt="Goo (10)">
  * <p>
  * Goo (50)</td>

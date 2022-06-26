@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -21,13 +21,13 @@ import java.awt.geom.Ellipse2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CircleTransition2D/CircleIn.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CircleTransition2D/CircleIn.gif"
  * alt="Circle In">
  * <p>
  * Circle In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CircleTransition2D/CircleOut.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CircleTransition2D/CircleOut.gif"
  * alt="Circle Out">
  * <p>
  * Circle Out</td>

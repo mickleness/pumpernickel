@@ -17,12 +17,12 @@ import java.awt.image.BufferedImage;
  * border="0">
  * <tr>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FoldTransition3D/FoldLeft.gif"
  * alt="Fold Left">
  * <p>
  * Fold Left</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FoldTransition3D/FoldRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FoldTransition3D/FoldRight.gif"
  * alt="Fold Right">
  * <p>
  * Fold Right</td>

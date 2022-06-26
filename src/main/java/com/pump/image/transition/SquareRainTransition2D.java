@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -30,19 +30,19 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SquareRainTransition2D/SquareRain(6).gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SquareRainTransition2D/SquareRain(6).gif"
  * alt="Square Rain (6)">
  * <p>
  * Square Rain (6)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SquareRainTransition2D/SquareRain(12).gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SquareRainTransition2D/SquareRain(12).gif"
  * alt="Square Rain (12)">
  * <p>
  * Square Rain (12)</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SquareRainTransition2D/SquareRain(24).gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SquareRainTransition2D/SquareRain(24).gif"
  * alt="Square Rain (24)">
  * <p>
  * Square Rain (24)</td>

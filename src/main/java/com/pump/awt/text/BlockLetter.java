@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -50,7 +50,7 @@ public abstract class BlockLetter {
 	 * (unnuanced) Paint:
 	 * <p>
 	 * <img src=
-	 * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/simple-block-text.png"
+	 * "https://github.com/mickleness/pumpernickel/raw/master/resources/simple-block-text.png"
 	 * alt="simple block text">
 	 * <p>
 	 * This will be slightly faster than the <code>Gradient</code>
@@ -120,7 +120,7 @@ public abstract class BlockLetter {
 	 * Here is a sample:
 	 * <p>
 	 * <img src=
-	 * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/gradient-block-text.png"
+	 * "https://github.com/mickleness/pumpernickel/raw/master/resources/gradient-block-text.png"
 	 * alt="gradient block text demo">
 	 */
 	public static class Gradient extends BlockLetter {

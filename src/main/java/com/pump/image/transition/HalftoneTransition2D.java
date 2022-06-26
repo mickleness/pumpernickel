@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -30,13 +30,13 @@ import java.util.List;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/HalftoneTransition2D/HalftoneIn.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/HalftoneTransition2D/HalftoneIn.gif"
  * alt="Halftone In">
  * <p>
  * Halftone In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/HalftoneTransition2D/HalftoneOut.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/HalftoneTransition2D/HalftoneOut.gif"
  * alt="Halftone Out">
  * <p>
  * Halftone Out</td>

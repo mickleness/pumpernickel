@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -28,7 +28,7 @@ import java.util.Objects;
  * letters are punched for emphasis:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/punch-text-effect.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/punch-text-effect.gif"
  * alt="punch text effect demo">
  * </p>
  */

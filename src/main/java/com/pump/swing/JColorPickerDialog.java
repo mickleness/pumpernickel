@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -32,7 +32,7 @@ import com.pump.swing.DialogFooter.EscapeKeyBehavior;
  * (This object is used by the static calls in <code>JColorPicker</code> to show
  * a dialog.) <br>
  * <IMG SRC=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/colorpicker.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/colorpicker.png"
  * alt="Screenshot of ColorPickerDialog">
  * 
  * @see JColorPicker

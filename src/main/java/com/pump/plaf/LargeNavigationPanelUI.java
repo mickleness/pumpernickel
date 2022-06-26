@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -59,10 +59,10 @@ import com.pump.swing.NavigationButtons;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/LargeNavigationPanelUI/SpinnerNumberModel.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/LargeNavigationPanelUI/SpinnerNumberModel.png"
  * alt="com.pump.plaf.LargeNavigationPanelUI.createDemo(true)"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/LargeNavigationPanelUI/Any Other Model.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/LargeNavigationPanelUI/Any Other Model.png"
  * alt="com.pump.plaf.LargeNavigationPanelUI.createDemo(false)"></td>
  * </tr>
  * <tr>

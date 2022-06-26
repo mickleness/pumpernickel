@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -22,13 +22,13 @@ import java.awt.geom.Point2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SwivelTransition2D/SwivelCounterclockwise.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SwivelTransition2D/SwivelCounterclockwise.gif"
  * alt="Swivel Counterclockwise">
  * <p>
  * Swivel Counterclockwise</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SwivelTransition2D/SwivelClockwise.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SwivelTransition2D/SwivelClockwise.gif"
  * alt="Swivel Clockwise">
  * <p>
  * Swivel Clockwise</td>

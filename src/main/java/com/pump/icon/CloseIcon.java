@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -44,15 +44,15 @@ import com.pump.blog.ResourceSample;
  * <tr>
  * <td>32x32</td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/CloseIcon/sample.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/CloseIcon/sample.png"
  * alt="new&#160;com.pump.swing.resources.CloseIcon(32)"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/CloseIcon/sample2.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/CloseIcon/sample2.png"
  * alt=
  * "new&#160;com.pump.swing.resources.CloseIcon(32,&#160;com.pump.swing.resources.CloseIcon$State.ROLLOVER&#160;)"
  * ></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/CloseIcon/sample3.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/CloseIcon/sample3.png"
  * alt=
  * "new&#160;com.pump.swing.resources.CloseIcon(32,&#160;com.bripumpc.swing.resources.CloseIcon$State.PRESSED&#160;)"
  * ></td>
@@ -60,15 +60,15 @@ import com.pump.blog.ResourceSample;
  * <tr>
  * <td>12x12</td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/CloseIcon/sample4.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/CloseIcon/sample4.png"
  * alt="new&#160;com.pump.swing.resources.CloseIcon(12)"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/CloseIcon/sample5.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/CloseIcon/sample5.png"
  * alt=
  * "new&#160;com.pump.swing.resources.CloseIcon(12,&#160;com.pump.swing.resources.CloseIcon$State.ROLLOVER&#160;)"
  * ></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/CloseIcon/sample6.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/CloseIcon/sample6.png"
  * alt=
  * "new&#160;com.pump.swing.resources.CloseIcon(12,&#160;com.pump.swing.resources.CloseIcon$State.PRESSED&#160;)"
  * ></td>

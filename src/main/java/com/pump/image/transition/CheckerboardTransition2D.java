@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -24,25 +24,25 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CheckerboardTransition2D/CheckerboardLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CheckerboardTransition2D/CheckerboardLeft.gif"
  * alt="Checkerboard Left">
  * <p>
  * Checkerboard Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CheckerboardTransition2D/CheckerboardRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CheckerboardTransition2D/CheckerboardRight.gif"
  * alt="Checkerboard Right">
  * <p>
  * Checkerboard Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CheckerboardTransition2D/CheckerboardUp.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CheckerboardTransition2D/CheckerboardUp.gif"
  * alt="Checkerboard Up">
  * <p>
  * Checkerboard Up</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/CheckerboardTransition2D/CheckerboardDown.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/CheckerboardTransition2D/CheckerboardDown.gif"
  * alt="Checkerboard Down">
  * <p>
  * Checkerboard Down</td>

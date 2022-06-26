@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -24,44 +24,44 @@ import java.awt.image.BufferedImage;
  * border="0">
  * <tr>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FlipTransition3D/FlipLeft.gif"
  * alt="Flip Left">
  * <p>
  * Flip Left</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FlipTransition3D/FlipRight.gif"
  * alt="Flip Right">
  * <p>
  * Flip Right</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipUp.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FlipTransition3D/FlipUp.gif"
  * alt="Flip Up">
  * <p>
  * Flip Up</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipDown.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FlipTransition3D/FlipDown.gif"
  * alt="Flip Down">
  * <p>
  * Flip Down</td>
  * </tr>
  * <tr>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipLeftFlush.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FlipTransition3D/FlipLeftFlush.gif"
  * alt="Flip Left Flush">
  * <p>
  * Flip Left Flush</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipRightFlush.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FlipTransition3D/FlipRightFlush.gif"
  * alt="Flip Right Flush">
  * <p>
  * Flip Right Flush</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipUpFlush.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FlipTransition3D/FlipUpFlush.gif"
  * alt="Flip Up Flush">
  * <p>
  * Flip Up Flush</td>
  * <td align="center"><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlipTransition3D/FlipDownFlush.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FlipTransition3D/FlipDownFlush.gif"
  * alt="Flip Down Flush">
  * <p>
  * Flip Down Flush</td>

@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -23,7 +23,7 @@ import com.pump.geom.RectangularTransform;
  * playback sample:
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/MotionBlendTransition2D/MotionBlend.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/MotionBlendTransition2D/MotionBlend.gif"
  * alt="MotionBlendTransition2D Demo">
  */
 public class MotionBlendTransition2D extends Transition2D {

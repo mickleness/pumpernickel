@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -21,13 +21,13 @@ import java.awt.geom.Rectangle2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BoxTransition2D/BoxIn.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/BoxTransition2D/BoxIn.gif"
  * alt="Box In">
  * <p>
  * Box In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/BoxTransition2D/BoxOut.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/BoxTransition2D/BoxOut.gif"
  * alt="Box Out">
  * <p>
  * Box Out</td>

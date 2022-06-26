@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -24,25 +24,25 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WaveTransition2D/WaveLeft.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/WaveTransition2D/WaveLeft.gif"
  * alt="Wave Left">
  * <p>
  * Wave Left</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WaveTransition2D/WaveRight.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/WaveTransition2D/WaveRight.gif"
  * alt="Wave Right">
  * <p>
  * Wave Right</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WaveTransition2D/WaveUp.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/WaveTransition2D/WaveUp.gif"
  * alt="Wave Up">
  * <p>
  * Wave Up</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/WaveTransition2D/WaveDown.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/WaveTransition2D/WaveDown.gif"
  * alt="Wave Down">
  * <p>
  * Wave Down</td>
