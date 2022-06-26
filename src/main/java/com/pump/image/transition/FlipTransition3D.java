@@ -269,7 +269,7 @@ public class FlipTransition3D extends Transition3D {
 			g3.fillRect(0, 0, w, h);
 			g3.dispose();
 
-			clearOutside(scratchImage, q2.toShape());
+			clearOutside(scratchImage, q2);
 
 			g.drawImage(scratchImage, 0, 0, null);
 		} finally {

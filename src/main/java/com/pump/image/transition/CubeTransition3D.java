@@ -359,8 +359,7 @@ public class CubeTransition3D extends Transition3D {
 				g2.dispose();
 			}
 
-			clearOutside(scratchImage, qb == null ? null : qb.toShape(),
-					qa == null ? null : qa.toShape());
+			clearOutside(scratchImage, qb, qa);
 
 			g.drawImage(scratchImage, 0, 0, null);
 		} finally {

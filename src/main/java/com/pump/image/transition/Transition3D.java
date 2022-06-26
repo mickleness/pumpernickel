@@ -334,4 +334,13 @@ public abstract class Transition3D extends AbstractTransition {
 		g.fill(area);
 		g.dispose();
 	}
+
+	protected void clearOutside(BufferedImage scratchImage,
+			Quadrilateral2D... quads) {
+		Shape[] shapes = new Shape[quads.length];
+		for (int a = 0; a < quads.length; a++) {
+			shapes[a] = quads[a] == null ? null : quads[a].toShape();
+		}
+		clearOutside(scratchImage, shapes);
+	}
 }

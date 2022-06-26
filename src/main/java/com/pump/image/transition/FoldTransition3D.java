@@ -51,11 +51,9 @@ public class FoldTransition3D extends Transition3D {
 		double q = .5 * Math.sin(Math.PI * progress - Math.PI / 2.0) + .5;
 		q = .5 * Math.sin(Math.PI * q - Math.PI / 2.0) + .5;
 
-		// TODO: implement other directions
 		if (direction == LEFT) {
 			double cursor = w * (1 - q);
 			double imgA_width = w * (1 - q) + q * w / 3;
-			double imgB_width = w * q + (1 - q) * w / 3;
 
 			for (int imageIndex : imageIndices) {
 				if (imageIndex == 0) {
@@ -63,6 +61,7 @@ public class FoldTransition3D extends Transition3D {
 							cursor - imgA_width, imgA_width);
 				} else if (imageIndex == 1) {
 					if (twice) {
+						double imgB_width = w * q + (1 - q) * w / 3;
 						paintHorizontalCreasedImage((Graphics2D) g.create(),
 								frameB, cursor, imgB_width);
 					} else {
@@ -76,7 +75,6 @@ public class FoldTransition3D extends Transition3D {
 		} else if (direction == RIGHT) {
 			double cursor = w * q;
 			double imgA_width = w * (1 - q) + q * w / 3;
-			double imgB_width = w * q + (1 - q) * w / 3;
 
 			for (int imageIndex : imageIndices) {
 				if (imageIndex == 0) {
@@ -84,6 +82,7 @@ public class FoldTransition3D extends Transition3D {
 							cursor, imgA_width);
 				} else if (imageIndex == 1) {
 					if (twice) {
+						double imgB_width = w * q + (1 - q) * w / 3;
 						paintHorizontalCreasedImage((Graphics2D) g.create(),
 								frameB, cursor - imgB_width, imgB_width);
 					} else {
@@ -94,10 +93,50 @@ public class FoldTransition3D extends Transition3D {
 					}
 				}
 			}
+		} else if (direction == UP) {
+			double cursor = h * (1 - q);
+			double imgA_height = h * (1 - q) + q * h / 3;
+
+			for (int imageIndex : imageIndices) {
+				if (imageIndex == 0) {
+					paintVerticalCreasedImage((Graphics2D) g.create(), frameA,
+							cursor - imgA_height, imgA_height);
+				} else if (imageIndex == 1) {
+					if (twice) {
+						double imgB_height = h * q + (1 - q) * h / 3;
+						paintVerticalCreasedImage((Graphics2D) g.create(),
+								frameB, cursor, imgB_height);
+					} else {
+						Graphics2D g2 = (Graphics2D) g.create();
+						g2.translate(0, cursor);
+						g2.drawImage(frameB, 0, 0, null);
+						g2.dispose();
+					}
+				}
+			}
+		} else if (direction == DOWN) {
+			double cursor = h * q;
+			double imgA_height = h * (1 - q) + q * h / 3;
+
+			for (int imageIndex : imageIndices) {
+				if (imageIndex == 0) {
+					paintVerticalCreasedImage((Graphics2D) g.create(), frameA,
+							cursor, imgA_height);
+				} else if (imageIndex == 1) {
+					if (twice) {
+						double imgB_height = h * q + (1 - q) * h / 3;
+						paintVerticalCreasedImage((Graphics2D) g.create(),
+								frameB, cursor - imgB_height, imgB_height);
+					} else {
+						Graphics2D g2 = (Graphics2D) g.create();
+						g2.translate(0, cursor - h);
+						g2.drawImage(frameB, 0, 0, null);
+						g2.dispose();
+					}
+				}
+			}
 		}
 
-		// TODO: resolve antialias edges
-		// TODO: apply similar fixes to other 3D transitions
 		// TODO: add background color well to demo inspector? remove background
 		// background color from other transitions?
 		// TODO: add some sort of page turn transition
@@ -114,9 +153,8 @@ public class FoldTransition3D extends Transition3D {
 			return;
 		}
 
-		// TODO: make context support subimages w/o copying
-		BufferedImage half1 = copy(img.getSubimage(0, 0, w / 2, h));
-		BufferedImage half2 = copy(img.getSubimage(w / 2, 0, w - w / 2, h));
+		BufferedImage half1 = getSubimage(img, 0, 0, w / 2, h);
+		BufferedImage half2 = getSubimage(img, w / 2, 0, w - w / 2, h);
 		BufferedImage scratchImage = borrowScratchImage(w, h);
 
 		try {
@@ -143,20 +181,24 @@ public class FoldTransition3D extends Transition3D {
 			Quadrilateral2D j2 = paint(scratchImage, g.getRenderingHints(),
 					half2, q2, true, true);
 
-			Color transBlack = new Color(0, 0, 0, 0);
-			Color lightBlack = new Color(0, 0, 0, (int) (250 * k));
+			Color transparent = new Color(0, 0, 0, 0);
+			Color shadow = new Color(0, 0, 0, (int) (250 * k));
 
 			Paint p = null;
 			if (j1 == null && j2 == null) {
 				// do nothing
 			} else if (j2 == null) {
-				p = new LinearGradientPaint(j1.topLeft, j1.topRight,
-						new float[] { 0, 1 },
-						new Color[] { transBlack, lightBlack });
+				Rectangle2D r = j1.toShape().getBounds2D();
+				p = new LinearGradientPaint((float) r.getMinX(),
+						(float) r.getMinY(), (float) r.getMaxX(),
+						(float) r.getMinY(), new float[] { 0, 1 },
+						new Color[] { transparent, shadow });
 			} else if (j1 == null) {
-				p = new LinearGradientPaint(j2.topLeft, j2.topRight,
-						new float[] { 0, 1 },
-						new Color[] { transBlack, lightBlack });
+				Rectangle2D r = j2.toShape().getBounds2D();
+				p = new LinearGradientPaint((float) r.getMinX(),
+						(float) r.getMinY(), (float) r.getMaxX(),
+						(float) r.getMinY(), new float[] { 0, 1 },
+						new Color[] { shadow, transparent });
 			} else {
 				Rectangle2D r = j1.toShape().getBounds2D();
 				r.add(j2.toShape().getBounds2D());
@@ -168,7 +210,7 @@ public class FoldTransition3D extends Transition3D {
 
 				p = new LinearGradientPaint(j1.topLeft, j2.topRight,
 						new float[] { 0, creaseAsFloat, 1 },
-						new Color[] { transBlack, lightBlack, transBlack });
+						new Color[] { transparent, shadow, transparent });
 			}
 
 			if (p != null) {
@@ -179,17 +221,105 @@ public class FoldTransition3D extends Transition3D {
 				scratchG.dispose();
 			}
 
-			clearOutside(scratchImage, j1 == null ? null : j1.toShape(),
-					j2 == null ? null : j2.toShape());
+			clearOutside(scratchImage, j1, j2);
 
 			g.drawImage(scratchImage, 0, 0, null);
 		} finally {
 			releaseScratchImage(half1, half2, scratchImage);
 		}
-
 	}
 
-	private BufferedImage copy(BufferedImage src) {
+	private void paintVerticalCreasedImage(Graphics2D g, BufferedImage img,
+			double y, double collapsedHeight) {
+		int h = img.getHeight();
+		int w = img.getWidth();
+
+		if (h == collapsedHeight) {
+			g.translate(0, y);
+			g.drawImage(img, 0, 0, null);
+			return;
+		}
+
+		BufferedImage half1 = getSubimage(img, 0, 0, w, h / 2);
+		BufferedImage half2 = getSubimage(img, 0, h / 2, w, h - h / 2);
+		BufferedImage scratchImage = borrowScratchImage(w, h);
+
+		try {
+			double crease = y + collapsedHeight / 2.0;
+			double k = 1 - collapsedHeight / w;
+
+			// @formatter:off
+			Quadrilateral3D q1 = new Quadrilateral3D(
+					0, y, 0,
+					w, y, 0,
+					w, crease, -k * 100,
+					0, crease, -k * 100
+					);
+			Quadrilateral3D q2 = new Quadrilateral3D(
+					0, crease, -k * 100,
+					w, crease, -k * 100,
+					w, y + collapsedHeight, 0,
+					0, y + collapsedHeight, 0 );
+			// @formatter:on
+
+			Quadrilateral2D j1 = paint(scratchImage, g.getRenderingHints(),
+					half1, q1, true, true);
+			Quadrilateral2D j2 = paint(scratchImage, g.getRenderingHints(),
+					half2, q2, true, true);
+
+			Color transparent = new Color(0, 0, 0, 0);
+			Color shadow = new Color(0, 0, 0, (int) (250 * k));
+
+			Paint p = null;
+			if (j1 == null && j2 == null) {
+				// do nothing
+			} else if (j2 == null) {
+				Rectangle2D r = j1.toShape().getBounds2D();
+				p = new LinearGradientPaint((float) r.getMinX(),
+						(float) r.getMinY(), (float) r.getMinX(),
+						(float) r.getMaxY(), new float[] { 0, 1 },
+						new Color[] { transparent, shadow });
+			} else if (j1 == null) {
+				Rectangle2D r = j2.toShape().getBounds2D();
+				p = new LinearGradientPaint((float) r.getMinX(),
+						(float) r.getMinY(), (float) r.getMinX(),
+						(float) r.getMaxY(), new float[] { 0, 1 },
+						new Color[] { shadow, transparent });
+			} else {
+				Rectangle2D r = j1.toShape().getBounds2D();
+				r.add(j2.toShape().getBounds2D());
+
+				float creaseAsFloat = (float) ((j1.bottomRight.getY()
+						- j1.topRight.getY()) / r.getHeight());
+				creaseAsFloat = (float) Math
+						.min(Math.max(creaseAsFloat, .0000001), .999999f);
+
+				p = new LinearGradientPaint(j1.topLeft, j2.bottomLeft,
+						new float[] { 0, creaseAsFloat, 1 },
+						new Color[] { transparent, shadow, transparent });
+			}
+
+			if (p != null) {
+				Graphics2D scratchG = scratchImage.createGraphics();
+				scratchG.setPaint(p);
+				scratchG.setComposite(AlphaComposite.SrcAtop);
+				scratchG.fillRect(0, 0, w, h);
+				scratchG.dispose();
+			}
+
+			clearOutside(scratchImage, j1, j2);
+
+			g.drawImage(scratchImage, 0, 0, null);
+		} finally {
+			releaseScratchImage(half1, half2, scratchImage);
+		}
+	}
+
+	private BufferedImage getSubimage(BufferedImage img, int x, int y, int w,
+			int h) {
+		// TODO: I'd love to refactor this away someday, but right now the log
+		// we use to render 3D images doesn't appear to support subimages.
+		BufferedImage src = img.getSubimage(x, y, w, h);
 		BufferedImage d = borrowScratchImage(src.getWidth(), src.getHeight());
 		Graphics2D g = d.createGraphics();
 		g.drawImage(src, 0, 0, null);
