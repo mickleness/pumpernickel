@@ -30,23 +30,26 @@ public abstract class DemoResourceGenerator {
 	public static void main(String[] args) throws Exception {
 		DemoResourceContext context = new DemoResourceContext();
 
-		DemoResourceGenerator[] gs = new DemoResourceGenerator[] {
-				new VectorImageDemoResourceGenerator(),
-				new ThumbnailGeneratorDemoResourceGenerator(),
-				new ShadowRendererDemoResourceGenerator(),
-				new Transition2DDemoResourceGenerator(),
-				new Transition3DDemoResourceGenerator() };
+		try {
+			DemoResourceGenerator[] gs = new DemoResourceGenerator[] {
+					new VectorImageDemoResourceGenerator(),
+					new ThumbnailGeneratorDemoResourceGenerator(),
+					new ShadowRendererDemoResourceGenerator(),
+					new Transition2DDemoResourceGenerator(),
+					new Transition3DDemoResourceGenerator() };
 
-		for (DemoResourceGenerator g : gs) {
-			long time = System.currentTimeMillis();
-			System.out.println(g.getClass().getSimpleName() + " Running:");
-			g.run(context);
-			time = System.currentTimeMillis() - time;
-			System.out.println("(" + time + " ms)");
-			System.out.println();
+			for (DemoResourceGenerator g : gs) {
+				long time = System.currentTimeMillis();
+				System.out.println(g.getClass().getSimpleName() + " Running:");
+				g.run(context);
+				time = System.currentTimeMillis() - time;
+				System.out.println("(" + time + " ms)");
+				System.out.println();
+			}
+		} finally {
+			System.out.println("Finished");
+			System.exit(0);
 		}
-		System.out.println("Finished");
-		System.exit(0);
 	}
 
 	public abstract void run(DemoResourceContext context) throws Exception;
