@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import com.pump.image.ImageLoader;
 import com.pump.swing.JLink;
 
 /**
@@ -51,8 +52,8 @@ public class DefaultAboutRunnable implements Runnable {
 		String copyright = app.getCopyright();
 		URL url = app.getURL();
 
-		JLabel versionLabel = version == null ? null : new JLabel("Version "
-				+ version);
+		JLabel versionLabel = version == null ? null
+				: new JLabel("Version " + version);
 		JLabel copyrightLabel = name == null ? null : new JLabel(copyright);
 
 		Font bigFont = UIManager.getFont("InternalFrame.titleFont");
@@ -86,7 +87,7 @@ public class DefaultAboutRunnable implements Runnable {
 				copyrightLabel.setFont(smallFont);
 		}
 
-		BufferedImage image = app.getImage();
+		BufferedImage image = ImageLoader.createImage(app.getImage());
 
 		JDialog dialog = new JDialog();
 		JPanel panel = new JPanel(new GridBagLayout());

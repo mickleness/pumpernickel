@@ -11,17 +11,15 @@
 package com.pump.desktop;
 
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
+import java.awt.Taskbar;
+import java.awt.Taskbar.Feature;
 import java.awt.desktop.AboutEvent;
 import java.awt.desktop.AboutHandler;
 import java.awt.desktop.QuitStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -41,9 +39,6 @@ import com.pump.desktop.error.ErrorDialogThrowableHandler;
 import com.pump.desktop.error.ErrorManager;
 import com.pump.desktop.logging.SessionLog;
 import com.pump.desktop.temp.TempFileManager;
-import com.pump.image.ImageLoader;
-import com.pump.image.pixel.Scaling;
-import com.pump.reflect.Reflection;
 import com.pump.util.JVM;
 import com.pump.window.WindowList;
 
@@ -95,8 +90,6 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 			String.class, "simpleName");
 	public final static Key<String> KEY_APP_COPYRIGHT = new Key<>(String.class,
 			"copyright");
-	public final static Key<BufferedImage> KEY_APP_IMAGE = new Key<>(
-			BufferedImage.class, "image");
 	public final static Key<String> KEY_APP_VERSION = new Key<>(String.class,
 			"version");
 	public final static Key<String> KEY_SUPPORT_EMAIL = new Key<>(String.class,
@@ -295,40 +288,6 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 				return;
 			}
 		}
-
-		if (JVM.isMac && JVM.getMajorJavaVersion() < 1.9) {
-			try {
-				Object macApplication = getMacApplication();
-				Class quitStrategyEnum = Class
-						.forName("com.apple.eawt.QuitStrategy");
-				Object[] enumConstants = quitStrategyEnum.getEnumConstants();
-
-				Reflection.invokeMethod(macApplication.getClass(),
-						macApplication, "setQuitStrategy", enumConstants[1]);
-
-				System.out.println("Set " + macApplication.getClass().getName()
-						+ " quitStrategy to " + enumConstants[1]);
-			} catch (Exception e) {
-				e.printStackTrace();
-				// throw new RuntimeException(e);
-			}
-		}
-	}
-
-	private Object getMacApplication() {
-		Object returnValue = getAttribute(KEY_MAC_APPLICATION);
-		if (returnValue == null && JVM.isMac) {
-			try {
-				Class applicationClass = Class
-						.forName("com.apple.eawt.Application");
-				returnValue = Reflection.invokeMethod(applicationClass, null,
-						"getApplication");
-				setAttribute(KEY_MAC_APPLICATION, returnValue);
-			} catch (ClassNotFoundException e) {
-				return null;
-			}
-		}
-		return returnValue;
 	}
 
 	private void initializeAboutHandler() {
@@ -347,39 +306,6 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 				});
 				d.setQuitStrategy(QuitStrategy.CLOSE_ALL_WINDOWS);
 				return;
-			}
-		}
-
-		if (JVM.isMac && JVM.getMajorJavaVersion() < 1.9) {
-			try {
-				Object macApplication = getMacApplication();
-				Class aboutHandlerClass = Class
-						.forName("com.apple.eawt.AboutHandler");
-
-				InvocationHandler invocationHandler = new InvocationHandler() {
-
-					@Override
-					public Object invoke(Object proxy, Method method,
-							Object[] args) throws Throwable {
-						Runnable runnable = get().getAboutRunnable();
-						if (runnable != null)
-							runnable.run();
-						return Void.TYPE;
-					}
-
-				};
-				Object aboutHandler = Proxy.newProxyInstance(
-						DesktopApplication.class.getClassLoader(),
-						new Class[] { aboutHandlerClass }, invocationHandler);
-
-				Reflection.invokeMethod(macApplication.getClass(),
-						macApplication, "setAboutHandler", aboutHandler);
-
-				System.out.println("Set " + macApplication.getClass().getName()
-						+ "aboutHandler");
-			} catch (Exception e) {
-				e.printStackTrace();
-				// throw new RuntimeException(e);
 			}
 		}
 	}
@@ -404,38 +330,22 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 	 * <p>
 	 * This should be a small thumbnail (maybe 60x60) that can be used in an
 	 * about dialog or other similar informational presentation.
-	 * <p>
-	 * On Mac this automatically derived from the dock's image. (Which by
-	 * default is a Java icon.)
 	 */
-	public BufferedImage getImage() {
-		BufferedImage i = getAttribute(KEY_APP_IMAGE);
-		if (i == null) {
-			Object macApp = getMacApplication();
-			if (macApp != null) {
-				Image img = (Image) Reflection.invokeMethod(macApp.getClass(),
-						macApp, "getDockIconImage");
-				i = ImageLoader.createImage(img);
-				if (i.getWidth() > 64 || i.getHeight() > 64) {
-					i = Scaling.scaleProportionally(i, new Dimension(64, 64));
-				}
-				setAttribute(KEY_APP_IMAGE, i);
-			}
+	public Image getImage() {
+		if (Taskbar.isTaskbarSupported()
+				&& Taskbar.getTaskbar().isSupported(Feature.ICON_IMAGE)) {
+			return Taskbar.getTaskbar().getIconImage();
 		}
-		return i;
+		return null;
 	}
 
 	/**
 	 * Assign the image thumbnail that represents this application.
 	 */
 	public void setImage(BufferedImage bi) {
-		setAttribute(KEY_APP_IMAGE, bi);
-
-		Object macApp = getMacApplication();
-		if (macApp != null) {
-			Reflection.invokeMethod(macApp.getClass(), macApp,
-					"setDockIconImage", bi);
-		}
+		if (Taskbar.isTaskbarSupported()
+				&& Taskbar.getTaskbar().isSupported(Feature.ICON_IMAGE))
+			Taskbar.getTaskbar().setIconImage(bi);
 	}
 
 	/**
