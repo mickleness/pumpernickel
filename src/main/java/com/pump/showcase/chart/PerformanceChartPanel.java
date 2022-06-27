@@ -12,6 +12,7 @@ package com.pump.showcase.chart;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -33,12 +34,15 @@ import java.util.Map;
 import java.util.function.Function;
 
 import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import com.pump.math.Fraction;
 import com.pump.plaf.CircularProgressBarUI;
+import com.pump.showcase.app.ShowcaseDemoInfo;
 import com.pump.showcase.demo.ShowcaseDemo;
 import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
@@ -254,9 +258,31 @@ public class PerformanceChartPanel extends JPanel {
 		public void addTasks(PerformanceChartPanel panel,
 				ChartDataGenerator dataGenerator, Cancellable cancellable,
 				Listener listener) {
+			Listener multiListener = new Listener() {
+
+				@Override
+				public void progressUpdate(int completedIterations, int totalIterations) {
+					listener.progressUpdate(completedIterations, totalIterations);
+					ShowcaseDemoInfo i = getShowcaseDemoInfo(panel);
+					if (i != null)
+						i.setLoadingProgress(new Fraction(completedIterations, totalIterations));
+				}
+
+				@Override
+				public void complete(Map<Map<String, ?>, PerformanceResult> resultsMap) {
+					listener.complete(resultsMap);
+					ShowcaseDemoInfo i = getShowcaseDemoInfo(panel);
+					if (i != null)
+						i.setLoadingProgress(new Fraction(1, 1));
+				}
+				
+			};
+			ShowcaseDemoInfo i = getShowcaseDemoInfo(panel);
+			if (i != null)
+				i.setLoadingProgress(new Fraction(0, 1));
 
 			WorkerTaskGroup group = new WorkerTaskGroup(panel, dataGenerator,
-					listener);
+					multiListener);
 
 			synchronized (tasks) {
 
@@ -288,6 +314,21 @@ public class PerformanceChartPanel extends JPanel {
 
 				checkWorkerThread();
 			}
+		}
+
+		private ShowcaseDemoInfo getShowcaseDemoInfo(JComponent jc) {
+			while (jc != null) {
+				if (jc instanceof ShowcaseDemo) {
+					return ((ShowcaseDemo)jc).getDemoInfo();
+				}
+				
+				if (jc.getParent() instanceof JComponent) {
+					jc = (JComponent) jc.getParent();
+				} else {
+					break;
+				}
+			}
+			return null;
 		}
 
 		private void createWorkerTasks(WorkerTaskGroup group, int sampleCount,
@@ -407,6 +448,7 @@ public class PerformanceChartPanel extends JPanel {
 		resultsLowerTextArea.setEditable(false);
 		resultsLowerTextArea.setWrapStyleWord(true);
 		resultsLowerTextArea.setLineWrap(true);
+		resultsLowerTextArea.setFont( new Font("default", 0, resultsLowerTextArea.getFont().getSize()) );
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
