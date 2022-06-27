@@ -28,7 +28,6 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.image.thumbnail.generator.BasicThumbnailGenerator;
 import com.pump.image.thumbnail.generator.JPEGMetaDataThumbnailGenerator;
-import com.pump.image.thumbnail.generator.MacCImageThumbnailGenerator;
 import com.pump.image.thumbnail.generator.MacQuickLookThumbnailGenerator;
 import com.pump.image.thumbnail.generator.ScalingThumbnailGenerator;
 import com.pump.image.thumbnail.generator.ThumbnailGenerator;
@@ -39,7 +38,7 @@ public class ThumbnailGeneratorDemo extends ShowcaseResourceExampleDemo<File> {
 
 	public final static ThumbnailGenerator[] GENERATORS = new ThumbnailGenerator[] {
 			new BasicThumbnailGenerator(), new JPEGMetaDataThumbnailGenerator(),
-			new MacCImageThumbnailGenerator(), new ScalingThumbnailGenerator(),
+			new ScalingThumbnailGenerator(),
 			new MacQuickLookThumbnailGenerator() };
 
 	JLabel previewLabel = new JLabel();
@@ -149,7 +148,6 @@ public class ThumbnailGeneratorDemo extends ShowcaseResourceExampleDemo<File> {
 		return new Class[] { ThumbnailGenerator.class,
 				BasicThumbnailGenerator.class, ScalingThumbnailGenerator.class,
 				JPEGMetaDataThumbnailGenerator.class,
-				MacCImageThumbnailGenerator.class,
 				MacQuickLookThumbnailGenerator.class };
 	}
 }

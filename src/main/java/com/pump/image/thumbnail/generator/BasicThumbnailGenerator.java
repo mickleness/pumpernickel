@@ -23,7 +23,7 @@ public class BasicThumbnailGenerator implements ThumbnailGenerator {
 
 	protected ThumbnailGenerator[] DEFAULT_GENERATORS = new ThumbnailGenerator[] {
 			new JPEGMetaDataThumbnailGenerator(),
-			new MacCImageThumbnailGenerator(), new ScalingThumbnailGenerator(),
+			new ScalingThumbnailGenerator(),
 			new MacQuickLookThumbnailGenerator() };
 
 	/**
@@ -65,13 +65,7 @@ public class BasicThumbnailGenerator implements ThumbnailGenerator {
 		for (ThumbnailGenerator generator : generators) {
 			try {
 				BufferedImage returnValue = null;
-				if (generator instanceof MacCImageThumbnailGenerator) {
-					if (JVM.isMac
-							&& MacCImageThumbnailGenerator.isInitialized()) {
-						returnValue = generator.createThumbnail(file,
-								requestedMaxImageSize);
-					}
-				} else if (generator instanceof JPEGMetaDataThumbnailGenerator) {
+				if (generator instanceof JPEGMetaDataThumbnailGenerator) {
 					if (filename.endsWith(".jpg")
 							|| filename.endsWith(".jpeg")) {
 						returnValue = generator.createThumbnail(file,
