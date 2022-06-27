@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -178,7 +178,8 @@ public class ImageOperation extends Operation {
 	 */
 	public FillOperation toFillOperation() {
 		Graphics2DContext context = getContext();
-		BufferedImage bi = ImageLoader.createImage(getImage());
+		BufferedImage bi = ImageLoader.createImage(getImage(),
+				ImageLoader.TYPE_DEFAULT);
 		Rectangle srcRect = getSourceRect();
 		if (!srcRect
 				.equals(new Rectangle(0, 0, bi.getWidth(), bi.getHeight()))) {

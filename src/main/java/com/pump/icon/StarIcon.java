@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -38,11 +38,11 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/StarIcon/Filled.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/StarIcon/Filled.png"
  * alt =
  * "new&#160;com.pump.swing.resources.StarIcon(&#160;16,&#160;16,&#160;false)"></td>
  * <td><img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/samples/StarIcon/Empty.png"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/samples/StarIcon/Empty.png"
  * alt
  * ="new&#160;com.pump.swing.resources.StarIcon(&#160;16,&#160;16,&#160;true)"></td>
  * </tr>

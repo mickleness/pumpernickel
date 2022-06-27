@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -47,7 +47,7 @@ import com.pump.plaf.MultiThumbSliderUI;
  * "GradientSliderUI". By default this is "com.pump.plaf.GradientSliderUI".
  * <p>
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/gradientslider.jpg"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/gradientslider.jpg"
  * alt="Screenshot of the GradientSlider">
  * 
  * @see <a

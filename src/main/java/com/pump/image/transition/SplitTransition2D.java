@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -21,25 +21,25 @@ import java.awt.geom.Rectangle2D;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SplitTransition2D/SplitHorizontalIn.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SplitTransition2D/SplitHorizontalIn.gif"
  * alt="Split Horizontal In">
  * <p>
  * Split Horizontal In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SplitTransition2D/SplitHorizontalOut.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SplitTransition2D/SplitHorizontalOut.gif"
  * alt="Split Horizontal Out">
  * <p>
  * Split Horizontal Out</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SplitTransition2D/SplitVerticalIn.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SplitTransition2D/SplitVerticalIn.gif"
  * alt="Split Vertical In">
  * <p>
  * Split Vertical In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SplitTransition2D/SplitVerticalOut.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SplitTransition2D/SplitVerticalOut.gif"
  * alt="Split Vertical Out">
  * <p>
  * Split Vertical Out</td>

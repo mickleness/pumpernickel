@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -53,20 +53,11 @@ public class BmpDecoder {
 	 */
 	public static BufferedImage readImage(File bmpFile, BufferedImage dst)
 			throws IOException {
-		FileInputStream in = null;
-		if (bmpFile == null) {
-			throw new NullPointerException();
-		} else if (bmpFile.length() == 0) {
+		if (bmpFile.length() == 0) {
 			return null;
 		}
-		try {
-			in = new FileInputStream(bmpFile);
+		try (InputStream in = new FileInputStream(bmpFile)) {
 			return readImage(in, dst);
-		} finally {
-			try {
-				in.close();
-			} catch (IOException e) {
-			}
 		}
 	}
 

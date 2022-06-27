@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -19,14 +19,14 @@ import com.pump.image.pixel.IndexedBytePixelIterator;
  * This is an algorithm that converts an image with thousands or millions of
  * colors into a simpler image with a fixed color palette.
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2014/02/images-color-palette-reduction.html">Images:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2014/02/images-color-palette-reduction.html">Images:
  *      Color Palette Reduction</a>
  */
 public abstract class ImageQuantization {
 
-	protected abstract static class AbstractIndexedBytePixelIterator implements
-			IndexedBytePixelIterator {
+	protected abstract static class AbstractIndexedBytePixelIterator
+			implements IndexedBytePixelIterator {
 
 		protected BufferedImage source;
 		protected ColorLUT lut;
@@ -44,10 +44,6 @@ public abstract class ImageQuantization {
 
 		public boolean isOpaque() {
 			return icm.getTransparentPixel() < 0;
-		}
-
-		public int getPixelSize() {
-			return 1;
 		}
 
 		public boolean isTopDown() {

@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -69,7 +69,7 @@ public class LineChartRenderer {
 				Dimension imageSize) {
 			this.font = font;
 			labeledTicks = new BasicTickLabeler().getLabeledTicks(
-					dataContainer.rangeMin, dataContainer.rangeMax);
+					dataContainer.rangeMin, dataContainer.rangeMax, null);
 
 			dataContainer.rangeMax = labeledTicks.lastKey();
 
@@ -144,7 +144,7 @@ public class LineChartRenderer {
 				Dimension imageSize) {
 			this.font = font;
 			labeledTicks = new BasicTickLabeler().getLabeledTicks(
-					dataContainer.domainMin, dataContainer.domainMax);
+					dataContainer.domainMin, dataContainer.domainMax, null);
 
 			dataContainer.domainMax = labeledTicks.lastKey();
 

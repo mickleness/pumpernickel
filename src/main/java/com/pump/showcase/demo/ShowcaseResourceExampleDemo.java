@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -86,7 +86,7 @@ public abstract class ShowcaseResourceExampleDemo<R>
 		this.resourceType = resourceType;
 
 		if (resourceType.equals(File.class)) {
-			resourcePathField = new JTextField(20);
+			resourcePathField = new JTextField(40);
 		} else if (resourceType.equals(URL.class)) {
 			resourcePathField = new JTextField(40);
 		} else {
@@ -104,6 +104,24 @@ public abstract class ShowcaseResourceExampleDemo<R>
 
 		resourcePathField.getDocument()
 				.addDocumentListener(new DocumentListener() {
+					boolean dirty = false;
+					Runnable refreshRunnable = new Runnable() {
+						public void run() {
+							if (!dirty)
+								return;
+							dirty = false;
+
+							refreshFile();
+							String str = resourcePathField.getText();
+							prefs.put(prefKeyLastResource, str);
+
+							try {
+								prefs.sync();
+							} catch (BackingStoreException e1) {
+								e1.printStackTrace();
+							}
+						}
+					};
 
 					@Override
 					public void insertUpdate(DocumentEvent e) {
@@ -117,15 +135,8 @@ public abstract class ShowcaseResourceExampleDemo<R>
 
 					@Override
 					public void changedUpdate(DocumentEvent e) {
-						refreshFile();
-						String str = resourcePathField.getText();
-						prefs.put(prefKeyLastResource, str);
-
-						try {
-							prefs.sync();
-						} catch (BackingStoreException e1) {
-							e1.printStackTrace();
-						}
+						dirty = true;
+						SwingUtilities.invokeLater(refreshRunnable);
 					}
 
 				});
@@ -181,17 +192,25 @@ public abstract class ShowcaseResourceExampleDemo<R>
 
 	protected final void refreshFile() {
 		String str = resourcePathField.getText();
+		R resource = getResource();
+		refreshFile(resource, str);
+	}
+
+	public R getResource() {
+		String str = resourcePathField.getText();
 		if (resourceType.equals(File.class)) {
 			File file = new File(str);
-			ShowcaseResourceExampleDemo.this.refreshFile((R) file, str);
+			return (R) file;
 		} else if (resourceType.equals(URL.class)) {
 			try {
-				URL url = new URL(resourcePathField.getText());
-				ShowcaseResourceExampleDemo.this.refreshFile((R) url, str);
+				URL url = new URL(str);
+				return (R) url;
 			} catch (MalformedURLException e) {
-				ShowcaseResourceExampleDemo.this.refreshFile((R) null, str);
+				return null;
 			}
 		}
+		throw new IllegalStateException("resourceType ("
+				+ resourceType.getName() + ") should be File or URL");
 	}
 
 	/**

@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -15,6 +15,7 @@ import java.net.URL;
 import com.pump.image.ImageContext;
 import com.pump.image.transition.CubeTransition3D;
 import com.pump.image.transition.FlipTransition3D;
+import com.pump.image.transition.FoldTransition3D;
 import com.pump.image.transition.Transition;
 import com.pump.image.transition.Transition3D;
 
@@ -38,7 +39,8 @@ public class Transition3DDemo extends TransitionDemo {
 	 */
 	public static Transition[][] getTransitions() {
 		return new Transition[][] { CubeTransition3D.getDemoTransitions(),
-				FlipTransition3D.getDemoTransitions() };
+				FlipTransition3D.getDemoTransitions(),
+				FoldTransition3D.getDemoTransitions() };
 	}
 
 	public Transition3DDemo() {

@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -20,7 +20,6 @@ import java.io.InputStream;
 
 import com.pump.image.pixel.BytePixelIterator;
 import com.pump.image.pixel.IndexedBytePixelIterator;
-import com.pump.image.pixel.PixelConverter;
 import com.pump.io.MeasuredInputStream;
 
 /**
@@ -71,9 +70,10 @@ public class BmpDecoderIterator implements BytePixelIterator {
 		BmpHeader header = new BmpHeader(in2);
 
 		if (!(header.bitsPerPixel == 1 || header.bitsPerPixel == 4
-				|| header.bitsPerPixel == 8 || header.bitsPerPixel == 24 || header.bitsPerPixel == 32))
-			throw new IOException("unsupported depth (" + header.bitsPerPixel
-					+ ")");
+				|| header.bitsPerPixel == 8 || header.bitsPerPixel == 24
+				|| header.bitsPerPixel == 32))
+			throw new IOException(
+					"unsupported depth (" + header.bitsPerPixel + ")");
 
 		if (header.colorModel != null) {
 			return new BmpDecoderIndexedIterator(in, header.colorModel,
@@ -85,8 +85,8 @@ public class BmpDecoderIterator implements BytePixelIterator {
 			throw new IOException("unsupported planes (" + header.planes + ")");
 
 		if (header.compression != 0)
-			throw new IOException("unsupported compression ("
-					+ header.compression + ")");
+			throw new IOException(
+					"unsupported compression (" + header.compression + ")");
 
 		// we should already be pointing to the bitmap offset,
 		// but in case the file format changes in the future
@@ -99,13 +99,12 @@ public class BmpDecoderIterator implements BytePixelIterator {
 				header.bitsPerPixel, header.topDown);
 	}
 
-	static class BmpDecoderIndexedIterator extends BmpDecoderIterator implements
-			IndexedBytePixelIterator {
+	static class BmpDecoderIndexedIterator extends BmpDecoderIterator
+			implements IndexedBytePixelIterator {
 		IndexColorModel colorModel;
 
-		private BmpDecoderIndexedIterator(InputStream in,
-				IndexColorModel model, int width, int height, int depth,
-				boolean topDown) {
+		private BmpDecoderIndexedIterator(InputStream in, IndexColorModel model,
+				int width, int height, int depth, boolean topDown) {
 			super(in, width, height, depth, topDown);
 			this.colorModel = model;
 		}
@@ -154,8 +153,8 @@ public class BmpDecoderIterator implements BytePixelIterator {
 	int y;
 	int scanline;
 
-	private BmpDecoderIterator(InputStream in, int width, int height,
-			int depth, boolean topDown) {
+	private BmpDecoderIterator(InputStream in, int width, int height, int depth,
+			boolean topDown) {
 		this.in = in;
 		this.width = width;
 		this.height = height;
@@ -170,8 +169,8 @@ public class BmpDecoderIterator implements BytePixelIterator {
 																	// we're
 																	// under
 																	// control
-			throw new IllegalArgumentException("unsupported depth (" + depth
-					+ ")");
+			throw new IllegalArgumentException(
+					"unsupported depth (" + depth + ")");
 		}
 
 		int r = scanline % 4;
@@ -182,10 +181,7 @@ public class BmpDecoderIterator implements BytePixelIterator {
 		y = height - 1;
 	}
 
-	public boolean isOpaque() {
-		return PixelConverter.isOpaque(getType());
-	}
-
+	@Override
 	public void next(byte[] dest) {
 		try {
 			read(in, dest, scanline);
@@ -210,6 +206,7 @@ public class BmpDecoderIterator implements BytePixelIterator {
 		}
 	}
 
+	@Override
 	public void skip() {
 		try {
 			skip(in, scanline);
@@ -231,32 +228,39 @@ public class BmpDecoderIterator implements BytePixelIterator {
 		}
 	}
 
+	@Override
 	public int getHeight() {
 		return height;
 	}
 
+	@Override
 	public int getMinimumArrayLength() {
 		return scanline;
 	}
 
+	@Override
 	public int getPixelSize() {
 		return depth / 8;
 	}
 
+	@Override
 	public int getType() {
 		if (depth == 24)
 			return BufferedImage.TYPE_3BYTE_BGR;
 		return BufferedImage.TYPE_4BYTE_ABGR;
 	}
 
+	@Override
 	public int getWidth() {
 		return width;
 	}
 
+	@Override
 	public boolean isDone() {
 		return y == -1;
 	}
 
+	@Override
 	public boolean isTopDown() {
 		return topDown;
 	}

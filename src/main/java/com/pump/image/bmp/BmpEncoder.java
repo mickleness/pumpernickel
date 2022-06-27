@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -13,6 +13,7 @@ package com.pump.image.bmp;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.ImageConsumer;
@@ -23,18 +24,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
 import com.pump.UserCancelledException;
 import com.pump.image.ImageSize;
-import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.ByteBGRAConverter;
-import com.pump.image.pixel.ByteBGRConverter;
 import com.pump.image.pixel.BytePixelIterator;
+import com.pump.image.pixel.ImageType;
 import com.pump.util.PushPullQueue;
 
 /**
@@ -61,8 +58,8 @@ public class BmpEncoder {
 		File tempBMPFile = null;
 		Image image = null;
 		try {
-			image = Toolkit.getDefaultToolkit().createImage(
-					sourceFile.getAbsolutePath());
+			image = Toolkit.getDefaultToolkit()
+					.createImage(sourceFile.getAbsolutePath());
 			tempBMPFile = File.createTempFile("tempImage", ".bmp");
 			writeImageUsingRandomAccess(image, tempBMPFile, d);
 			return BmpDecoder.readImage(tempBMPFile);
@@ -120,30 +117,12 @@ public class BmpEncoder {
 	public static void write(BufferedImage image, OutputStream out,
 			boolean closeStreamOnCompletion) throws IOException {
 		BytePixelIterator i;
-		BufferedImage bi = image;
-		BufferedImageIterator imageIter = BufferedImageIterator.get(bi, false);
-		if (isOpaque(bi)) {
-			i = new ByteBGRConverter(imageIter);
+		if (image.getTransparency() == Transparency.OPAQUE) {
+			i = ImageType.BYTE_BGR.createConverter(image);
 		} else {
-			i = new ByteBGRAConverter(imageIter);
+			i = ImageType.BYTE_BGRA.createConverter(image);
 		}
 		write(out, i, closeStreamOnCompletion);
-	}
-
-	public static boolean isOpaque(BufferedImage bi) {
-		try {
-			Method m = BufferedImage.class.getMethod("getTransparency",
-					new Class[] {});
-			Object returnValue = m.invoke(bi, new Object[] {});
-			Field f = BufferedImage.class.getField("OPAQUE");
-			return f.get(null).equals(returnValue);
-		} catch (Throwable e) {
-			// in earlier JVMs this will be a problem:
-			int type = bi.getType();
-			return (type == BufferedImage.TYPE_4BYTE_ABGR
-					|| type == BufferedImage.TYPE_4BYTE_ABGR_PRE
-					|| type == BufferedImage.TYPE_INT_ARGB || type == BufferedImage.TYPE_INT_ARGB_PRE);
-		}
 	}
 
 	protected static final int HEADER_SIZE = 26;
@@ -179,14 +158,14 @@ public class BmpEncoder {
 	protected static int writeHeader(byte[] destinationArray, int arrayOffset,
 			int width, int height, int bitsPerPixel) {
 		if (width <= 0)
-			throw new IllegalArgumentException("width (" + width
-					+ ") must be positive");
+			throw new IllegalArgumentException(
+					"width (" + width + ") must be positive");
 		if (height <= 0)
-			throw new IllegalArgumentException("height (" + height
-					+ ") must be positive");
+			throw new IllegalArgumentException(
+					"height (" + height + ") must be positive");
 		if (!(bitsPerPixel == 24 || bitsPerPixel == 32))
-			throw new IllegalArgumentException("bitsPerPixel (" + bitsPerPixel
-					+ ") must be 24 or 32");
+			throw new IllegalArgumentException(
+					"bitsPerPixel (" + bitsPerPixel + ") must be 24 or 32");
 
 		int scanLineSize = getScanlineSize(width, bitsPerPixel / 8);
 
@@ -208,8 +187,10 @@ public class BmpEncoder {
 		// where the image data begins:
 		destinationArray[10 + arrayOffset] = (byte) ((HEADER_SIZE >> 0) & 0xff);
 		destinationArray[11 + arrayOffset] = (byte) ((HEADER_SIZE >> 8) & 0xff);
-		destinationArray[12 + arrayOffset] = (byte) ((HEADER_SIZE >> 16) & 0xff);
-		destinationArray[13 + arrayOffset] = (byte) ((HEADER_SIZE >> 24) & 0xff);
+		destinationArray[12
+				+ arrayOffset] = (byte) ((HEADER_SIZE >> 16) & 0xff);
+		destinationArray[13
+				+ arrayOffset] = (byte) ((HEADER_SIZE >> 24) & 0xff);
 
 		// size of the remaining header (12)
 		destinationArray[14 + arrayOffset] = (byte) ((12 >> 0) & 0xff);
@@ -381,8 +362,8 @@ public class BmpEncoder {
 			Dimension d = new Dimension(width.intValue(), height.intValue());
 			int totalBytes = scanlineSize * d.height + HEADER_SIZE;
 			try {
-				dataModel = new RandomAccessDataModel(dest, totalBytes,
-						d.width, d.height, bytesPerPixel * 8);
+				dataModel = new RandomAccessDataModel(dest, totalBytes, d.width,
+						d.height, bytesPerPixel * 8);
 				sizeQueue.push(d);
 			} catch (Exception e) {
 				imageComplete(ImageConsumer.IMAGEERROR, e);
@@ -432,7 +413,8 @@ public class BmpEncoder {
 						int rgb;
 						if (indexColorModel != null) {
 							int index = (pixels[j * scanSize + k]) & 0xff;
-							if (index == indexColorModel.getTransparentPixel()) {
+							if (index == indexColorModel
+									.getTransparentPixel()) {
 								rgb = 0x00000000;
 							} else {
 								rgb = indexColorModel.getRGB(index);
@@ -444,15 +426,22 @@ public class BmpEncoder {
 						}
 						switch (bytesPerPixel) {
 						case 3:
-							scratchByteArray[3 * k + 0] = (byte) ((rgb >> 0) & 0xff);
-							scratchByteArray[3 * k + 1] = (byte) ((rgb >> 8) & 0xff);
-							scratchByteArray[3 * k + 2] = (byte) ((rgb >> 16) & 0xff);
+							scratchByteArray[3 * k
+									+ 0] = (byte) ((rgb >> 0) & 0xff);
+							scratchByteArray[3 * k
+									+ 1] = (byte) ((rgb >> 8) & 0xff);
+							scratchByteArray[3 * k
+									+ 2] = (byte) ((rgb >> 16) & 0xff);
 							break;
 						case 4:
-							scratchByteArray[4 * k + 0] = (byte) ((rgb >> 0) & 0xff);
-							scratchByteArray[4 * k + 1] = (byte) ((rgb >> 8) & 0xff);
-							scratchByteArray[4 * k + 2] = (byte) ((rgb >> 16) & 0xff);
-							scratchByteArray[4 * k + 3] = (byte) ((rgb >> 24) & 0xff);
+							scratchByteArray[4 * k
+									+ 0] = (byte) ((rgb >> 0) & 0xff);
+							scratchByteArray[4 * k
+									+ 1] = (byte) ((rgb >> 8) & 0xff);
+							scratchByteArray[4 * k
+									+ 2] = (byte) ((rgb >> 16) & 0xff);
+							scratchByteArray[4 * k
+									+ 3] = (byte) ((rgb >> 24) & 0xff);
 							break;
 						default:
 							throw new RuntimeException(
@@ -460,8 +449,9 @@ public class BmpEncoder {
 											+ bytesPerPixel);
 						}
 					}
-					dataModel.write((height.intValue() - 1 - (y + j))
-							* scanlineSize + x * outPixelSize,
+					dataModel.write(
+							(height.intValue() - 1 - (y + j)) * scanlineSize
+									+ x * outPixelSize,
 							scratchByteArray, 0, w * outPixelSize);
 				}
 			} catch (Exception e) {
@@ -488,29 +478,38 @@ public class BmpEncoder {
 				case 3:
 					for (int j = 0; j < h; j++) {
 						for (int k = 0; k < w; k++) {
-							int rgb = model.getRGB(pixels[x + k + offset + j
-									* scanSize]);
-							scratchByteArray[3 * k + 0] = (byte) ((rgb >> 0) & 0xff);
-							scratchByteArray[3 * k + 1] = (byte) ((rgb >> 8) & 0xff);
-							scratchByteArray[3 * k + 2] = (byte) ((rgb >> 16) & 0xff);
+							int rgb = model.getRGB(
+									pixels[x + k + offset + j * scanSize]);
+							scratchByteArray[3 * k
+									+ 0] = (byte) ((rgb >> 0) & 0xff);
+							scratchByteArray[3 * k
+									+ 1] = (byte) ((rgb >> 8) & 0xff);
+							scratchByteArray[3 * k
+									+ 2] = (byte) ((rgb >> 16) & 0xff);
 						}
-						dataModel.write((height.intValue() - 1 - (y + j))
-								* scanlineSize + x * bytesPerPixel,
+						dataModel.write(
+								(height.intValue() - 1 - (y + j)) * scanlineSize
+										+ x * bytesPerPixel,
 								scratchByteArray, 0, w * bytesPerPixel);
 					}
 					return;
 				case 4:
 					for (int j = 0; j < h; j++) {
 						for (int k = 0; k < w; k++) {
-							int rgb = model.getRGB(pixels[x + k + offset + j
-									* scanSize]);
-							scratchByteArray[4 * k + 0] = (byte) ((rgb >> 0) & 0xff);
-							scratchByteArray[4 * k + 1] = (byte) ((rgb >> 8) & 0xff);
-							scratchByteArray[4 * k + 2] = (byte) ((rgb >> 16) & 0xff);
-							scratchByteArray[4 * k + 3] = (byte) ((rgb >> 24) & 0xff);
+							int rgb = model.getRGB(
+									pixels[x + k + offset + j * scanSize]);
+							scratchByteArray[4 * k
+									+ 0] = (byte) ((rgb >> 0) & 0xff);
+							scratchByteArray[4 * k
+									+ 1] = (byte) ((rgb >> 8) & 0xff);
+							scratchByteArray[4 * k
+									+ 2] = (byte) ((rgb >> 16) & 0xff);
+							scratchByteArray[4 * k
+									+ 3] = (byte) ((rgb >> 24) & 0xff);
 						}
-						dataModel.write((height.intValue() - 1 - (y + j))
-								* scanlineSize + x * bytesPerPixel,
+						dataModel.write(
+								(height.intValue() - 1 - (y + j)) * scanlineSize
+										+ x * bytesPerPixel,
 								scratchByteArray, 0, w * bytesPerPixel);
 					}
 					return;
@@ -531,14 +530,16 @@ public class BmpEncoder {
 			} else if (status == ImageConsumer.IMAGEERROR) {
 				throwable = new IOException(
 						"An error occurred reading this image.");
-			} else if (!(status == ImageConsumer.SINGLEFRAMEDONE || status == ImageConsumer.STATICIMAGEDONE)) {
+			} else if (!(status == ImageConsumer.SINGLEFRAMEDONE
+					|| status == ImageConsumer.STATICIMAGEDONE)) {
 				throwable = new IOException(
 						"Unrecognized completion status code: " + status);
 			}
 			imageComplete(status, throwable);
 		}
 
-		private synchronized void imageComplete(int status, Throwable throwable) {
+		private synchronized void imageComplete(int status,
+				Throwable throwable) {
 			if (returnValue == null) {
 				try {
 					dataModel.dispose();
@@ -553,10 +554,9 @@ public class BmpEncoder {
 				this.throwable = throwable;
 				if (sizeQueue.isEmpty() && (width == null || height == null)) {
 					if (this.throwable == null) {
-						this.throwable = new IOException(
-								"Completion code ("
-										+ status
-										+ ") was sent before width and height were defined.");
+						this.throwable = new IOException("Completion code ("
+								+ status
+								+ ") was sent before width and height were defined.");
 					}
 					sizeQueue.push(new Dimension(-1, -1));
 				}
@@ -584,8 +584,8 @@ public class BmpEncoder {
 			Dimension imageSize) throws IOException {
 		final ImageProducer imageProducer = image.getSource();
 		final Consumer consumer = new Consumer(imageProducer, dest, imageSize);
-		Thread thread = new Thread("Produce/Consume Image "
-				+ imageProducer.toString()) {
+		Thread thread = new Thread(
+				"Produce/Consume Image " + imageProducer.toString()) {
 			@Override
 			public void run() {
 				imageProducer.startProduction(consumer);
@@ -593,7 +593,8 @@ public class BmpEncoder {
 		};
 		thread.start();
 		int returnValue = consumer.getReturnValue();
-		if (!(returnValue == ImageConsumer.SINGLEFRAMEDONE || returnValue == ImageConsumer.STATICIMAGEDONE)) {
+		if (!(returnValue == ImageConsumer.SINGLEFRAMEDONE
+				|| returnValue == ImageConsumer.STATICIMAGEDONE)) {
 			if (consumer.throwable instanceof IOException) {
 				IOException e2 = new IOException(
 						consumer.throwable.getMessage());

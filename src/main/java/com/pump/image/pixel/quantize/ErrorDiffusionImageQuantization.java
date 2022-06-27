@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -13,9 +13,9 @@ package com.pump.image.pixel.quantize;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
-import com.pump.image.pixel.BufferedImageIterator;
+import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.IndexedBytePixelIterator;
-import com.pump.image.pixel.IntARGBConverter;
+import com.pump.image.pixel.IntPixelIterator;
 import com.pump.image.pixel.quantize.ColorLUT.Match;
 
 /**
@@ -31,10 +31,10 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 	 * The pixel iterator that implements the error diffusion image
 	 * quantization.
 	 */
-	protected class ErrorDiffusionIndexedBytePixelIterator extends
-			AbstractIndexedBytePixelIterator {
+	protected class ErrorDiffusionIndexedBytePixelIterator
+			extends AbstractIndexedBytePixelIterator {
 
-		IntARGBConverter iter;
+		IntPixelIterator iter;
 		int[] incomingRow;
 		int y = 0;
 		int[][] diffusionR, diffusionG, diffusionB;
@@ -43,7 +43,7 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 		ErrorDiffusionIndexedBytePixelIterator(BufferedImage source,
 				ColorLUT lut) {
 			super(source, lut);
-			iter = new IntARGBConverter(BufferedImageIterator.get(source));
+			iter = ImageType.INT_ARGB.createConverter(source);
 			incomingRow = new int[iter.getWidth()];
 
 			diffusionR = new int[kernel.length][iter.getWidth()];
@@ -75,7 +75,8 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 					int db = b - match.node.blue;
 					for (int ky = 0; ky < kernel.length; ky++) {
 						for (int kx = 0; kx < kernel[ky].length; kx++) {
-							if (x + kx - z >= 0 && x + kx - z < iter.getWidth()) {
+							if (x + kx - z >= 0
+									&& x + kx - z < iter.getWidth()) {
 								diffusionR[ky][x + kx - z] += dr
 										* kernel[ky][kx];
 								diffusionG[ky][x + kx - z] += dg

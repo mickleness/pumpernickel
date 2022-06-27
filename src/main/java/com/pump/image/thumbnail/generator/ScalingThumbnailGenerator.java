@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -44,16 +44,10 @@ public class ScalingThumbnailGenerator implements ThumbnailGenerator {
 		Dimension scaledImageSize = Dimension2D.scaleProportionally(imageSize,
 				maxSize, true);
 		if (scaledImageSize == null) {
-			return ImageLoader.createImage(file);
+			return ImageLoader.createImage(file, ImageLoader.TYPE_DEFAULT);
 		}
 
-		// TODO: currently we're converting to ARGB. It'd be nice to include
-		// an option to leave image type blank/default. For ex:
-		// if an image would normally be BGR, then let the scaled image also
-		// be BGR.
-
-		return Scaling.scale(file, BufferedImage.TYPE_INT_ARGB,
-				scaledImageSize);
+		return Scaling.scale(file, Scaling.TYPE_DEFAULT, scaledImageSize);
 	}
 
 }

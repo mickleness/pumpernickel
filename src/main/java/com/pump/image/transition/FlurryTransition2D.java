@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -35,13 +35,13 @@ import com.pump.geom.TransformUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlurryTransition2D/FlurryIn.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FlurryTransition2D/FlurryIn.gif"
  * alt="Flurry In">
  * <p>
  * Flurry In</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/FlurryTransition2D/FlurryOut.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/FlurryTransition2D/FlurryOut.gif"
  * alt="Flurry Out">
  * <p>
  * Flurry Out</td>

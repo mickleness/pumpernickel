@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -92,19 +92,25 @@ public abstract class ShowcaseDemo extends JPanel {
 	}
 
 	/**
-	 * Install a "Export JVG" context menu item on a component.
+	 * Install a "Export JVG" context menu item on a component. When selected
+	 * this produces a Base64 encoding of a JVG resource. (This primarily
+	 * benefits the Pumpernickel's internal HTML write-ups.)
 	 * 
 	 * @param contextMenuComponent
 	 *            the component that the user can right-click to trigger the
 	 *            "Export JVG" context menu item.
 	 * @param componentToPaint
 	 *            the component to render in the JVG image.
+	 * @param name
+	 *            the name of this JVG. This is only used in the console/log
+	 *            output to describe the JVG image.
 	 */
-	protected void installExportJVGContextMenu(JComponent contextMenuComponent,
-			JComponent componentToPaint) {
+	public static void installExportJVGContextMenu(
+			JComponent contextMenuComponent, JComponent componentToPaint,
+			String name) {
 		Runnable exportRunnable = new Runnable() {
 			public void run() {
-				exportJVG(componentToPaint);
+				exportJVG(componentToPaint, name);
 			}
 		};
 		ContextualMenuHelper.add(contextMenuComponent, "Export JVG",
@@ -120,7 +126,7 @@ public abstract class ShowcaseDemo extends JPanel {
 	 * @param jc
 	 *            the component to render.
 	 */
-	protected void exportJVG(JComponent jc) {
+	public static void exportJVG(JComponent jc, String name) {
 		try {
 			VectorImage img = new VectorImage();
 			jc.paint(img.createGraphics());
@@ -130,10 +136,10 @@ public abstract class ShowcaseDemo extends JPanel {
 				byte[] bytes = byteOut.toByteArray();
 				String str = new String(Base64.getEncoder().encode(bytes));
 				System.out.println(
-						"Base64 encoding \"" + getTitle() + "\" jvg:\n" + str);
+						"Base64 encoding \"" + name + "\" jvg:\n" + str);
 			}
 
-			Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
+			Frame frame = (Frame) SwingUtilities.getWindowAncestor(jc);
 			File file = FileDialogUtils.showSaveDialog(frame, "Save As", "jvg");
 			if (file == null)
 				return;

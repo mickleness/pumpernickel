@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -20,38 +20,13 @@ package com.pump.image.pixel;
  * expressed either in bytes or ints).
  * 
  */
-public interface PixelIterator {
-
-	/**
-	 * This is used to reflect when 3 bytes are used for [red, green, blue]
-	 * data. I'm very confused about BufferedImage.TYPE_3BYTE_BGR, which
-	 * somtimes appears to really reflect [blue, green, red] (as I'd expect) and
-	 * at other times reflects [red, green blue]. In these classes I hope to
-	 * easily distinguish between BGR and RGB.
-	 * 
-	 */
-	public static final int TYPE_3BYTE_RGB = 777;
-	/**
-	 * This is used to reflect when 4 bytes are used for [alpha, red, green,
-	 * blue] data.
-	 */
-	public static final int TYPE_4BYTE_ARGB = TYPE_3BYTE_RGB + 1;
-	/**
-	 * This is used to reflect when 4 bytes are used for [alpha, red, green,
-	 * blue] premultiplied data.
-	 */
-	public static final int TYPE_4BYTE_ARGB_PRE = TYPE_3BYTE_RGB + 2;
-	/**
-	 * This is used to reflect when 4 bytes are used for [blue, green, red,
-	 * alpha] premultiplied data.
-	 */
-	public static final int TYPE_4BYTE_BGRA = TYPE_3BYTE_RGB + 3;
+public interface PixelIterator<T> {
 
 	/**
 	 * The format of this pixel iterator. This will probably be one of the
 	 * BufferedImage type constants.
 	 */
-	public abstract int getType();
+	int getType();
 
 	/**
 	 * Returns true if this image is guaranteed to be an opaque image. This has
@@ -59,7 +34,9 @@ public interface PixelIterator {
 	 * example: an image with an alpha channel that happens to be opaque may
 	 * still return false.)
 	 */
-	public abstract boolean isOpaque();
+	default boolean isOpaque() {
+		return PixelUtils.isOpaque(getType());
+	}
 
 	/**
 	 * The number of array elements used to store 1 pixel.
@@ -69,35 +46,37 @@ public interface PixelIterator {
 	 * 
 	 * @return the number of array elements used to store 1 pixel.
 	 */
-	public abstract int getPixelSize();
+	default int getPixelSize() {
+		return PixelUtils.getPixelSize(getType());
+	}
 
 	/**
 	 * Whether this iterator is finished or not
 	 * 
 	 * @return <code>true</code> if there is no more pixel data to read.
 	 */
-	public abstract boolean isDone();
+	boolean isDone();
 
 	/**
 	 * Indicates whether this iterator returns rows in a top-to-bottom order or
 	 * a bottom-to-top order
 	 * 
 	 */
-	public abstract boolean isTopDown();
+	boolean isTopDown();
 
 	/**
 	 * Returns the width of this image.
 	 * 
 	 * @return the width of this image.
 	 */
-	public abstract int getWidth();
+	int getWidth();
 
 	/**
 	 * Returns the height of this image.
 	 * 
 	 * @return the height of this image.
 	 */
-	public abstract int getHeight();
+	int getHeight();
 
 	/**
 	 * The minimum length an array should be that is used to retrieve a row of
@@ -110,19 +89,28 @@ public interface PixelIterator {
 	 * in the subinterfaces: {@link com.pump.image.pixel.BytePixelIterator} and
 	 * {@link com.pump.image.pixel.IntPixelIterator}.
 	 * <P>
-	 * You should <i>not</i> assume you know what this value is. For example: If
-	 * an iterator is actually a 4-byte iterator that is reducing to a 3-byte
-	 * format, then this value may be 4*getWidth() instead of the expected
-	 * 3*getWidth(). Conversion and scaling is performed in the original array
-	 * if possible to minimize overhead.
+	 * You should not assume you know what this value is. For example: if your
+	 * original data source is a 3-byte BGR image but it is being converted to a
+	 * 1-byte grayscale image, then it is wrong to assume this method will
+	 * return <code>getWidth()</code>. It may (or may not) return
+	 * <code>3 * getWidth()</code>, because the converter layer may be passing
+	 * the same array to the source.
 	 * 
 	 * @return The minimum length an array should be that is used to retrieve a
 	 *         row of pixel data.
 	 */
-	public int getMinimumArrayLength();
+	int getMinimumArrayLength();
 
 	/**
 	 * Skips a row of pixel data.
 	 */
-	public abstract void skip();
+	void skip();
+
+	/**
+	 * Reads a row of pixel data.
+	 * 
+	 * @param dest
+	 *            the array to store the pixels in
+	 */
+	void next(T dest);
 }

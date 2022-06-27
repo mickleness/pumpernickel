@@ -3,7 +3,7 @@
  * 
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
- * https://raw.githubusercontent.com/mickleness/pumpernickel/master/License.txt
+ * https://github.com/mickleness/pumpernickel/raw/master/License.txt
  * 
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
@@ -28,13 +28,13 @@ import com.pump.geom.ShapeUtils;
  * <tr>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SpiralTransition2D/SpiralSprawl.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SpiralTransition2D/SpiralSprawl.gif"
  * alt="Spiral Sprawl">
  * <p>
  * Spiral Sprawl</td>
  * <td align="center">
  * <img src=
- * "https://raw.githubusercontent.com/mickleness/pumpernickel/master/resources/transition/SpiralTransition2D/Spiral.gif"
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SpiralTransition2D/Spiral.gif"
  * alt="Spiral">
  * <p>
  * Spiral</td>
