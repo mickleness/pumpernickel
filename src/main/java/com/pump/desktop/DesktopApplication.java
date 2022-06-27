@@ -209,7 +209,22 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 		JVM.printProfile();
 		ErrorManager.initialize(simpleAppName);
 		TempFileManager.initialize(qualifiedAppName);
-		AWTMonitor.installAWTListener(simpleAppName, false);
+
+		// let lots of other invokeLaters run on the EDT first, otherwise we're
+		// nearly guaranteed to get an AWT warning during healthy startup
+		// activity
+		SwingUtilities.invokeLater(new Runnable() {
+			int ctr = 500;
+
+			public void run() {
+				if (ctr-- == 0) {
+					AWTMonitor.installAWTListener(simpleAppName, false);
+				} else {
+					SwingUtilities.invokeLater(this);
+				}
+			}
+		});
+
 		CacheManager.initialize(qualifiedAppName, version);
 
 		while (true) {
