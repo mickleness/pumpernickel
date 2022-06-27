@@ -44,8 +44,8 @@ public class AudioPlayerUI extends ComponentUI {
 
 		@Override
 		public void playbackProgress(float timeElapsed, float timeAsFraction) {
-			apc.getUI()
-					.notifyPlaybackProgress(apc, timeElapsed, timeAsFraction);
+			apc.getUI().notifyPlaybackProgress(apc, timeElapsed,
+					timeAsFraction);
 		}
 
 		@Override
@@ -62,7 +62,8 @@ public class AudioPlayerUI extends ComponentUI {
 			float timeElapsed, float timeAsFraction) {
 	}
 
-	protected void notifyPlaybackStopped(AudioPlayerComponent apc, Throwable t) {
+	protected void notifyPlaybackStopped(AudioPlayerComponent apc,
+			Throwable t) {
 	}
 
 	PropertyChangeListener audioPlayerListener = new PropertyChangeListener() {
@@ -136,7 +137,7 @@ public class AudioPlayerUI extends ComponentUI {
 	protected void installDefaultSource(AudioPlayerComponent c) {
 		try {
 			c.setSource(new URL(
-					"https://github.com/mickleness/pumpernickel/raw/master/src/main/resources/com/pump/showcase/Ludic.wav"));
+					"https://github.com/mickleness/pumpernickel/raw/master/src/main/resources/com/pump/showcase/demo/Ludic.wav"));
 		} catch (MalformedURLException e) {
 			c.setSource(null);
 			e.printStackTrace();
