@@ -82,7 +82,7 @@ public abstract class DemoResourceGenerator {
 	 * should only be used in testing.
 	 */
 	protected void writeImage(VectorImage image, String name) throws Exception {
-		boolean writeFiles = true;
+		boolean writeFiles = false;
 
 		if (writeFiles) {
 			File jvgFile = new File(name + ".jvg");
