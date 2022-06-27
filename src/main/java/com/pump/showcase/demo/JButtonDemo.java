@@ -165,6 +165,7 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 			ButtonUI ui = (ButtonUI) defaults.getUI(button);
 			uiSimpleClassName = ui.getClass().getSimpleName();
 			button.setUI(ui);
+			button.setOpaque(false);
 		}
 		
 		@Override

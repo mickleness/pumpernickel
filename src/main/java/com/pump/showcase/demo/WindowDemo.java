@@ -129,6 +129,7 @@ public class WindowDemo extends ShowcaseExampleDemo {
 	WindowOptionsForm newWindowForm = new WindowOptionsForm();
 
 	public WindowDemo() {
+		showWindowButton.setOpaque(false);
 		JPanel animatingPanel = new AnimatingInspectorPanel();
 		Inspector inspector = new Inspector(animatingPanel);
 		configurationPanel.add(animatingPanel);

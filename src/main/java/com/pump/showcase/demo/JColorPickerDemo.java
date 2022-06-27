@@ -59,6 +59,8 @@ public class JColorPickerDemo extends ShowcaseExampleDemo {
 		inspector.addRow(null, rgbCheckbox, false);
 		inspector.addRow(null, modeCheckbox, false);
 		inspector.addRow(null, button, false);
+		
+		button.setOpaque(false);
 
 		examplePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();

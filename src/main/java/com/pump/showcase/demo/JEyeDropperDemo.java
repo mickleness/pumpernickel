@@ -54,6 +54,7 @@ public class JEyeDropperDemo extends ShowcaseExampleDemo {
 	public JEyeDropperDemo() {
 		super(true, true, false);
 		exampleLabel.setVisible(false);
+		showEyeDropper.setOpaque(false);
 
 		Inspector layout = new Inspector(configurationPanel);
 		layout.addRow(new JLabel("Diameter:"), diameterSpinner);

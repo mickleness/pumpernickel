@@ -84,6 +84,8 @@ public abstract class ShowcaseResourceExampleDemo<R>
 		super(stretchExampleToFillWindow, stretchExampleToFillWindow, true);
 		this.fileExtensions = fileExtensions;
 		this.resourceType = resourceType;
+		
+		fileDialogButton.setOpaque(false);
 
 		if (resourceType.equals(File.class)) {
 			resourcePathField = new JTextField(40);
