@@ -228,9 +228,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 				"ThumbnailGeneratorDemo"));
 		if (JVM.isMac) {
 			returnValue.add(new ShowcaseDemoInfo("NSImage", "NSImageDemo"));
-		} else if (JVM.isWindows) {
-			returnValue.add(
-					new ShowcaseDemoInfo("WindowsIcon", "WindowsIconDemo"));
 		}
 		return returnValue.toArray(new ShowcaseDemoInfo[returnValue.size()]);
 	}
