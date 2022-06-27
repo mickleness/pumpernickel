@@ -14,9 +14,8 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.awt.image.MultiResolutionImage;
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -70,7 +69,8 @@ public class NSImage implements Serializable {
 
 	/** A Bluetooth template image. Available in OS X v10.5 and later. */
 	public static final NSImage BluetoothTemplate = get("BluetoothTemplate",
-			"A Bluetooth template image.", "Available in OS X v10.5 and later.");
+			"A Bluetooth template image.",
+			"Available in OS X v10.5 and later.");
 
 	/** An iChat Theater template image. Available in OS X v10.5 and later. */
 	public static final NSImage IChatTheaterTemplate = get(
@@ -79,7 +79,8 @@ public class NSImage implements Serializable {
 
 	/** A slideshow template image. Available in OS X v10.5 and later. */
 	public static final NSImage SlideshowTemplate = get("SlideshowTemplate",
-			"A slideshow template image.", "Available in OS X v10.5 and later.");
+			"A slideshow template image.",
+			"Available in OS X v10.5 and later.");
 
 	/** An action menu template image. Available in OS X v10.5 and later. */
 	public static final NSImage ActionTemplate = get("ActionTemplate",
@@ -180,7 +181,8 @@ public class NSImage implements Serializable {
 
 	/** An add item template image. Available in OS X v10.5 and later. */
 	public static final NSImage AddTemplate = get("AddTemplate",
-			"An add item template image.", "Available in OS X v10.5 and later.");
+			"An add item template image.",
+			"Available in OS X v10.5 and later.");
 
 	/** A remove item template image. Available in OS X v10.5 and later. */
 	public static final NSImage RemoveTemplate = get("RemoveTemplate",
@@ -287,8 +289,7 @@ public class NSImage implements Serializable {
 	 * General preferences toolbar icon. Use in a preferences window only.
 	 * Available in OS X v10.5 and later.
 	 */
-	public static final NSImage PreferencesGeneral = get(
-			"PreferencesGeneral",
+	public static final NSImage PreferencesGeneral = get("PreferencesGeneral",
 			"General preferences toolbar icon. Use in a preferences window only.",
 			"Available in OS X v10.5 and later.");
 
@@ -326,7 +327,8 @@ public class NSImage implements Serializable {
 
 	/** A color panel toolbar icon. Available in OS X v10.5 and later. */
 	public static final NSImage ColorPanel = get("ColorPanel",
-			"A color panel toolbar icon.", "Available in OS X v10.5 and later.");
+			"A color panel toolbar icon.",
+			"Available in OS X v10.5 and later.");
 
 	/** Permissions for a single user. Available in OS X v10.5 and later. */
 	public static final NSImage User = get("User",
@@ -360,7 +362,9 @@ public class NSImage implements Serializable {
 			"An image of the full trash can.",
 			"Available in OS X v10.6 and later.");
 
-	/** Home image suitable for a template. Available in OS X v10.6 and later. */
+	/**
+	 * Home image suitable for a template. Available in OS X v10.6 and later.
+	 */
 	public static final NSImage HomeTemplate = get("HomeTemplate",
 			"Home image suitable for a template.",
 			"Available in OS X v10.6 and later.");
@@ -410,8 +414,7 @@ public class NSImage implements Serializable {
 	 * A check mark. Drawing these outside of menus is discouraged. Available in
 	 * OS X v10.6 and later.
 	 */
-	public static final NSImage MenuOnStateTemplate = get(
-			"MenuOnStateTemplate",
+	public static final NSImage MenuOnStateTemplate = get("MenuOnStateTemplate",
 			"A check mark. Drawing these outside of menus is discouraged.",
 			"Available in OS X v10.6 and later.");
 
@@ -429,13 +432,11 @@ public class NSImage implements Serializable {
 	 * image, although that image is not expected to be deprecated. Available in
 	 * OS X v10.6 and later.
 	 */
-	public static final NSImage MobileMe = get(
-			"MobileMe",
+	public static final NSImage MobileMe = get("MobileMe",
 			"MobileMe logo. Use of this image is discouraged; instead, use networkName.",
 			"Available in OS X v10.6 and later.");
 
-	public static final NSImage MultipleDocuments = get(
-			"MultipleDocuments",
+	public static final NSImage MultipleDocuments = get("MultipleDocuments",
 			"A drag image for multiple items. You can use this icon as the drag image when dragging multiple items. You should not use this image for any other intended purpose.",
 			"Available in OS X v10.5 and later.");
 
@@ -479,7 +480,8 @@ public class NSImage implements Serializable {
 	public static final NSImage AccountsTemplate = get("AccountsTemplate");
 	public static final NSImage ActionsTemplate = get("ActionsTemplate");
 	public static final NSImage AddBoomark = get("AddBookmark");
-	public static final NSImage AdvancedPreferences = get("AdvancedPreferences");
+	public static final NSImage AdvancedPreferences = get(
+			"AdvancedPreferences");
 	public static final NSImage AdvancedTemplate = get("AdvancedTemplate");
 	public static final NSImage BonjourTemplate = get("BonjourTemplate");
 	public static final NSImage BookmarkLock = get("BookmarkLock");
@@ -538,7 +540,8 @@ public class NSImage implements Serializable {
 	public static final NSImage PlayTemplate = get("PlayTemplate");
 	public static final NSImage PrintTemplate = get("PrintTemplate");
 	public static final NSImage QuickLook = get("QuickLook");
-	public static final NSImage RefreshFreestanding = get("RefreshFreestanding");
+	public static final NSImage RefreshFreestanding = get(
+			"RefreshFreestanding");
 	public static final NSImage ReloadTemplate = get("ReloadTemplate");
 	public static final NSImage RevealFreestanding = get("RevealFreestanding");
 	public static final NSImage RewindTemplate = get("RewindTemplate");
@@ -548,8 +551,10 @@ public class NSImage implements Serializable {
 	public static final NSImage SnapbackTemplate = get("SnapbackTemplate");
 	public static final NSImage StopProgress = get("StopProgress");
 	public static final NSImage StopTemplate = get("StopTemplate");
-	public static final NSImage SynchronizeTemplate = get("SynchronizeTemplate");
-	public static final NSImage SynchronizeConflict = get("SynchronizeConflict");
+	public static final NSImage SynchronizeTemplate = get(
+			"SynchronizeTemplate");
+	public static final NSImage SynchronizeConflict = get(
+			"SynchronizeConflict");
 	public static final NSImage SynchronizeStart = get("SynchronizeStart");
 	public static final NSImage Synchronize = get("Synchronize");
 	public static final NSImage TheaterStart = get("TheaterStart");
@@ -633,11 +638,6 @@ public class NSImage implements Serializable {
 		return image;
 	}
 
-	private static Class cImageClass;
-	private static Field creatorField;
-	private static Object creator;
-	private static Method createImageFromNameMethod;
-
 	/**
 	 * This returns an Image that is scaled to a given size.
 	 * <p>
@@ -649,28 +649,16 @@ public class NSImage implements Serializable {
 	 */
 	public Image getImage(Dimension maxConstrainingSize) {
 		Image img = getImage();
+
 		Dimension originalSize = ImageSize.get(img);
 		Dimension newSize = Dimension2D.scaleProportionally(originalSize,
 				maxConstrainingSize);
 
-		String nsName = "NS" + name;
-
-		try {
-			if (cImageClass == null) {
-				cImageClass = Class.forName("sun.lwawt.macosx.CImage");
-				creatorField = cImageClass.getDeclaredField("creator");
-				creatorField.setAccessible(true);
-				creator = creatorField.get(null);
-				createImageFromNameMethod = creator.getClass().getMethod(
-						"createImageFromName", String.class, Integer.TYPE,
-						Integer.TYPE);
-			}
-
-			return (Image) createImageFromNameMethod.invoke(creator, nsName,
-					newSize.width, newSize.height);
-		} catch (Throwable t) {
-			throw new RuntimeException(t);
+		if (img instanceof MultiResolutionImage) {
+			MultiResolutionImage mri = (MultiResolutionImage) img;
+			img = mri.getResolutionVariant(newSize.width, newSize.height);
 		}
+		return img;
 	}
 
 	/**
@@ -711,8 +699,8 @@ public class NSImage implements Serializable {
 	}
 
 	/**
-	 * Return an optional String describing this icon, such as
-	 * "A Bluetooth template image."
+	 * Return an optional String describing this icon, such as "A Bluetooth
+	 * template image."
 	 */
 	public String getDescription() {
 		return description;
