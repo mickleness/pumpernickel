@@ -26,7 +26,6 @@ public class FileViewFileIcon extends FileIcon {
 	FileView fileView;
 
 	public FileViewFileIcon() {
-
 		JFileChooser chooser = new JFileChooser();
 		fileView = chooser.getUI().getFileView(chooser);
 	}

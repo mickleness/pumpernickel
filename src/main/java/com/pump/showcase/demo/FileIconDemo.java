@@ -32,12 +32,10 @@ import javax.swing.event.ChangeListener;
 import com.pump.awt.Dimension2D;
 import com.pump.icon.IconUtils;
 import com.pump.icon.StrikeThroughIcon;
-import com.pump.io.icon.AquaFileIcon;
 import com.pump.io.icon.FileIcon;
 import com.pump.io.icon.FileSystemViewFileIcon;
 import com.pump.io.icon.FileViewFileIcon;
 import com.pump.swing.popover.JPopover;
-import com.pump.util.JVM;
 
 /**
  * This demonstrates the FileIcon class
@@ -53,48 +51,32 @@ public class FileIconDemo extends ShowcaseResourceExampleDemo<File> {
 	boolean sizeSliderUsed = false;
 
 	JLabel demoLabel = new JLabel();
-	AquaFileIcon aquaFileIcon;
 	FileViewFileIcon fileViewFileIcon;
 	FileSystemViewFileIcon fileSystemViewFileIcon;
 	List<FileIcon> fileIcons;
 
 	public FileIconDemo() {
 		super(File.class, false);
-		if (JVM.isMac) {
-			try {
-				aquaFileIcon = new AquaFileIcon();
-			} catch (Throwable t) {
-				t.printStackTrace();
-			}
-		}
 		fileViewFileIcon = new FileViewFileIcon();
 		fileSystemViewFileIcon = new FileSystemViewFileIcon();
 		fileIcons = new ArrayList<>();
-		if (aquaFileIcon != null)
-			fileIcons.add(aquaFileIcon);
 		if (fileViewFileIcon != null)
 			fileIcons.add(fileViewFileIcon);
 		if (fileSystemViewFileIcon != null)
 			fileIcons.add(fileSystemViewFileIcon);
 
 		int selectedIndex = -1;
-		String aquaName = "Aqua";
 		String fvName = "FileView";
 		String sfvName = "FileSystemView";
-		if (FileIcon.get() instanceof AquaFileIcon) {
-			aquaName += " (Default)";
-			selectedIndex = 0;
-		} else if (FileIcon.get() instanceof FileViewFileIcon) {
+		if (FileIcon.get() instanceof FileViewFileIcon) {
 			fvName += " (Default)";
-			selectedIndex = aquaFileIcon == null ? 0 : 1;
+			selectedIndex = 0;
 		} else if (FileIcon.get() instanceof FileSystemViewFileIcon) {
 			sfvName += " (Default)";
-			selectedIndex = aquaFileIcon == null ? 1 : 2;
+			selectedIndex = 1;
 		}
 
 		fileIconComboBox = new JComboBox<String>();
-		if (aquaFileIcon != null)
-			fileIconComboBox.addItem(aquaName);
 		if (fileViewFileIcon != null)
 			fileIconComboBox.addItem(fvName);
 		if (fileSystemViewFileIcon != null)
