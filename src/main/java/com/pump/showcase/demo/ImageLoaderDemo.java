@@ -34,10 +34,52 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 
 	private static final long serialVersionUID = 1L;
 
-	private static String PARAMETER_MODEL = "model";
-	private static String MODEL_IMAGE_IO = "imageIO";
-	private static String MODEL_MEDIA_TRACKER = "mediaTracker";
-	private static String MODEL_IMAGE_LOADER = "imageLoader";
+	public static String PARAMETER_MODEL = "model";
+
+	public enum LoaderModel {
+		IMAGE_IO("ImageIO") {
+
+			@Override
+			public BufferedImage load(File file) throws Exception {
+				return ImageIO.read(file);
+			}
+		},
+		MEDIA_TRACKER("MediaTracker") {
+			int idCtr = 0;
+
+			@Override
+			public BufferedImage load(File file) throws Exception {
+				MediaTracker mediaTracker = new MediaTracker(new Label());
+				Image image = Toolkit.getDefaultToolkit()
+						.createImage(file.getAbsolutePath());
+				mediaTracker.addImage(image, idCtr++);
+				mediaTracker.waitForAll();
+				image.flush();
+
+				return null;
+			}
+		},
+		IMAGE_LOADER("ImageLoader") {
+
+			@Override
+			public BufferedImage load(File file) throws Exception {
+				return ImageLoader.createImage(file);
+			}
+		};
+
+		String name;
+
+		LoaderModel(String name) {
+			this.name = name;
+		}
+
+		public abstract BufferedImage load(File file) throws Exception;
+
+		@Override
+		public String toString() {
+			return name;
+		}
+	}
 
 	class ImageLoaderChartDataGenerator implements ChartDataGenerator {
 		final File file;
@@ -48,20 +90,9 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 		// small (so they can show statistically significant differences).
 		final int loopCount;
 
-		public ImageLoaderChartDataGenerator(File file) {
+		public ImageLoaderChartDataGenerator(File file, int loopCount) {
 			this.file = file;
-
-			Dimension imgSize = ImageSize.get(file);
-			int area = imgSize.width * imgSize.height;
-
-			if (area > 3000000) {
-				loopCount = 10;
-			} else if (area > 500000) {
-				loopCount = 25;
-			} else {
-				loopCount = 100;
-			}
-
+			this.loopCount = loopCount;
 		}
 
 		@Override
@@ -83,20 +114,12 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 		public List<Map<String, ?>> getTimedParameters() {
 			List<Map<String, ?>> returnValue = new ArrayList<>();
 
-			Map<String, Object> p1 = new HashMap<>();
-			p1.put(PARAMETER_MODEL, MODEL_IMAGE_IO);
-			p1.put(PerformanceChartPanel.PARAMETER_NAME, "ImageIO");
-			returnValue.add(p1);
-
-			Map<String, Object> p2 = new HashMap<>();
-			p2.put(PARAMETER_MODEL, MODEL_MEDIA_TRACKER);
-			p2.put(PerformanceChartPanel.PARAMETER_NAME, "MediaTracker");
-			returnValue.add(p2);
-
-			Map<String, Object> p3 = new HashMap<>();
-			p3.put(PARAMETER_MODEL, MODEL_IMAGE_LOADER);
-			p3.put(PerformanceChartPanel.PARAMETER_NAME, "ImageLoader");
-			returnValue.add(p3);
+			for (LoaderModel m : LoaderModel.values()) {
+				Map<String, Object> p = new HashMap<>();
+				p.put(PARAMETER_MODEL, m);
+				p.put(PerformanceChartPanel.PARAMETER_NAME, m.toString());
+				returnValue.add(p);
+			}
 
 			return returnValue;
 
@@ -120,7 +143,7 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 
 		private void runSample(Map<String, ?> parameters, int loopCount)
 				throws Exception {
-			String model = (String) parameters.get(PARAMETER_MODEL);
+			LoaderModel model = (LoaderModel) parameters.get(PARAMETER_MODEL);
 
 			boolean multithreadTest = false;
 
@@ -141,7 +164,7 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 				// ImageIO = 1357
 				// MediaTracker = 883
 
-				if (MODEL_MEDIA_TRACKER.equals(model)) {
+				if (model == LoaderModel.MEDIA_TRACKER) {
 					MediaTracker mediaTracker = new MediaTracker(new Label());
 					Image[] images = new Image[loopCount];
 					for (int a = 0; a < loopCount; a++) {
@@ -159,17 +182,11 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 					ExecutorService executor = Executors.newFixedThreadPool(4);
 					List<Future<?>> futures = new ArrayList<>(100);
 					for (int a = 0; a < loopCount; a++) {
-						final int z = a;
 						futures.add(executor.submit(new Runnable() {
 							public void run() {
 
 								try {
-									if (MODEL_IMAGE_IO.equals(model)) {
-										ImageIO.read(file);
-									} else if (MODEL_IMAGE_LOADER
-											.equals(model)) {
-										ImageLoader.createImage(file);
-									}
+									model.load(file);
 								} catch (Exception e) {
 									throw new RuntimeException(e);
 								}
@@ -184,19 +201,7 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 				}
 			} else {
 				for (int i = 0; i < loopCount; i++) {
-					if (MODEL_IMAGE_IO.equals(model)) {
-						ImageIO.read(file);
-					} else if (MODEL_IMAGE_LOADER.equals(model)) {
-						ImageLoader.createImage(file);
-					} else if (MODEL_MEDIA_TRACKER.equals(model)) {
-						MediaTracker mediaTracker = new MediaTracker(
-								new Label());
-						Image image = Toolkit.getDefaultToolkit()
-								.createImage(file.getAbsolutePath());
-						mediaTracker.addImage(image, i);
-						mediaTracker.waitForAll();
-						image.flush();
-					}
+					model.load(file);
 				}
 			}
 		}
@@ -279,8 +284,25 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 
 	@Override
 	protected void refreshFile(File file, String resourceStr) {
+
+		Dimension imgSize = ImageSize.get(file);
+		int area = imgSize.width * imgSize.height;
+
+		int loopCount;
+		if (area > 3000000) {
+			loopCount = 10;
+		} else if (area > 500000) {
+			loopCount = 25;
+		} else {
+			loopCount = 100;
+		}
+
+		perfChartPanel.setChartDescription(
+				"The \"Time\" chart shows the median time it took each model to prepare this file "
+						+ loopCount
+						+ " times. The \"Memory\" chart shows the memory allocated to read this file once.");
 		ChartDataGenerator dataGenerator = new ImageLoaderChartDataGenerator(
-				file);
+				file, loopCount);
 		perfChartPanel.reset(dataGenerator);
 	}
 

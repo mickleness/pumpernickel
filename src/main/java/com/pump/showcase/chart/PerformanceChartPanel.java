@@ -25,6 +25,7 @@ import java.util.function.Function;
 import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import com.pump.plaf.CircularProgressBarUI;
@@ -156,18 +157,24 @@ public class PerformanceChartPanel extends JPanel {
 			final Map<String, ?> parameters;
 			final boolean measureTime;
 			final boolean measureMemory;
+			final Cancellable cancellable;
 
 			public WorkerTask(WorkerTaskGroup group, Map<String, ?> parameters,
-					boolean measureTime, boolean measureMemory) {
+					boolean measureTime, boolean measureMemory,
+					Cancellable cancellable) {
 				this.parameters = parameters;
 				this.measureTime = measureTime;
 				this.measureMemory = measureMemory;
 				this.group = group;
 				group.addTask(this);
+				this.cancellable = cancellable;
 			}
 
 			@Override
 			public void run() {
+				if (cancellable.isCancelled())
+					return;
+
 				if (measureTime) {
 					group.dataGenerator.setupTimedSample(parameters);
 				} else if (measureMemory) {
@@ -250,19 +257,22 @@ public class PerformanceChartPanel extends JPanel {
 							dataGenerator.getMemorySampleCount(),
 							dataGenerator.getTimedSampleCount());
 					createWorkerTasks(group, sampleCount,
-							dataGenerator.getTimedParameters(), true, true);
+							dataGenerator.getTimedParameters(), true, true,
+							cancellable);
 				}
 				if (mode == ChartDataGenerator.ExecutionMode.RECORD_TIME_AND_MEMORY_SEPARATELY
 						|| mode == ChartDataGenerator.ExecutionMode.RECORD_TIME_ONLY) {
 					createWorkerTasks(group,
 							dataGenerator.getTimedSampleCount(),
-							dataGenerator.getTimedParameters(), true, false);
+							dataGenerator.getTimedParameters(), true, false,
+							cancellable);
 				}
 				if (mode == ChartDataGenerator.ExecutionMode.RECORD_TIME_AND_MEMORY_SEPARATELY
 						|| mode == ChartDataGenerator.ExecutionMode.RECORD_MEMORY_ONLY) {
 					createWorkerTasks(group,
 							dataGenerator.getMemorySampleCount(),
-							dataGenerator.getMemoryParameters(), false, true);
+							dataGenerator.getMemoryParameters(), false, true,
+							cancellable);
 				}
 				tasks.addAll(group.getWorkerTasks());
 
@@ -272,7 +282,7 @@ public class PerformanceChartPanel extends JPanel {
 
 		private void createWorkerTasks(WorkerTaskGroup group, int sampleCount,
 				List<Map<String, ?>> parameterList, boolean recordTime,
-				boolean recordMemory) {
+				boolean recordMemory, Cancellable cancellable) {
 			for (Map<String, ?> parameters : parameterList) {
 				for (int sampleIndex = 0; sampleIndex < sampleCount; sampleIndex++) {
 					Map<String, Object> newParameters = new HashMap<>();
@@ -280,7 +290,7 @@ public class PerformanceChartPanel extends JPanel {
 					newParameters.put(PARAMETER_SAMPLE_INDEX,
 							Integer.valueOf(sampleIndex));
 					new WorkerTask(group, newParameters, recordTime,
-							recordMemory);
+							recordMemory, cancellable);
 				}
 			}
 		}
@@ -347,6 +357,8 @@ public class PerformanceChartPanel extends JPanel {
 	JProgressBar progressBar = new JProgressBar(JProgressBar.HORIZONTAL, 0,
 			100);
 
+	JTextArea resultsLowerTextArea = new JTextArea();
+
 	AbstractAction copyAction_text, copyAction_html;
 	List<Chart> charts = null;
 	String name;
@@ -380,6 +392,11 @@ public class PerformanceChartPanel extends JPanel {
 			}
 
 		});
+
+		resultsLowerTextArea.setOpaque(false);
+		resultsLowerTextArea.setEditable(false);
+		resultsLowerTextArea.setWrapStyleWord(true);
+		resultsLowerTextArea.setLineWrap(true);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -416,6 +433,8 @@ public class PerformanceChartPanel extends JPanel {
 			}
 
 		};
+
+		setChartDescription("");
 	}
 
 	protected void populateResultsPanel(
@@ -476,7 +495,18 @@ public class PerformanceChartPanel extends JPanel {
 		BarChartRenderer chartRenderer = new BarChartRenderer(charts);
 		BarChartPanel p = new BarChartPanel(chartRenderer,
 				new Dimension(width, height), new Dimension(width, height));
-		resultsPanel.add(p);
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 1;
+		gbc.weighty = 1;
+		gbc.insets = new Insets(3, 3, 3, 3);
+
+		resultsPanel.add(p, gbc);
+		gbc.gridy++;
+		gbc.fill = GridBagConstraints.BOTH;
+		resultsPanel.add(resultsLowerTextArea, gbc);
 
 		ContextualMenuHelper.add(resultsPanel, copyAction_text);
 		ContextualMenuHelper.add(resultsPanel, copyAction_html);
@@ -507,5 +537,15 @@ public class PerformanceChartPanel extends JPanel {
 		} else {
 			SwingUtilities.invokeLater(r);
 		}
+	}
+
+	/**
+	 * Set an optional block of text below the graph.
+	 */
+	public void setChartDescription(String chartDescription) {
+		if (chartDescription == null)
+			chartDescription = null;
+		resultsLowerTextArea.setText(chartDescription);
+		resultsLowerTextArea.setVisible(!chartDescription.isEmpty());
 	}
 }

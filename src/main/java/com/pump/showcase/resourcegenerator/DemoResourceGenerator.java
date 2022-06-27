@@ -32,6 +32,7 @@ public abstract class DemoResourceGenerator {
 
 		try {
 			DemoResourceGenerator[] gs = new DemoResourceGenerator[] {
+					new ImageLoaderDemoResourceGenerator(.5),
 					new VectorImageDemoResourceGenerator(),
 					new ThumbnailGeneratorDemoResourceGenerator(),
 					new ShadowRendererDemoResourceGenerator(),
@@ -81,7 +82,7 @@ public abstract class DemoResourceGenerator {
 	 * should only be used in testing.
 	 */
 	protected void writeImage(VectorImage image, String name) throws Exception {
-		boolean writeFiles = false;
+		boolean writeFiles = true;
 
 		if (writeFiles) {
 			File jvgFile = new File(name + ".jvg");
