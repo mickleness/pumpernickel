@@ -39,6 +39,7 @@ import com.pump.desktop.error.ErrorDialogThrowableHandler;
 import com.pump.desktop.error.ErrorManager;
 import com.pump.desktop.logging.SessionLog;
 import com.pump.desktop.temp.TempFileManager;
+import com.pump.image.ImageLoader;
 import com.pump.util.JVM;
 import com.pump.window.WindowList;
 
@@ -90,6 +91,8 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 			String.class, "simpleName");
 	public final static Key<String> KEY_APP_COPYRIGHT = new Key<>(String.class,
 			"copyright");
+	public final static Key<BufferedImage> KEY_APP_IMAGE = new Key<>(
+			BufferedImage.class, "image");
 	public final static Key<String> KEY_APP_VERSION = new Key<>(String.class,
 			"version");
 	public final static Key<String> KEY_SUPPORT_EMAIL = new Key<>(String.class,
@@ -346,10 +349,14 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 	 * This should be a small thumbnail (maybe 60x60) that can be used in an
 	 * about dialog or other similar informational presentation.
 	 */
-	public Image getImage() {
+	public BufferedImage getImage() {
+		BufferedImage i = getAttribute(KEY_APP_IMAGE);
+		if (i != null)
+			return i;
+		
 		if (Taskbar.isTaskbarSupported()
 				&& Taskbar.getTaskbar().isSupported(Feature.ICON_IMAGE)) {
-			return Taskbar.getTaskbar().getIconImage();
+			return ImageLoader.createImage(Taskbar.getTaskbar().getIconImage());
 		}
 		return null;
 	}
@@ -358,6 +365,8 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 	 * Assign the image thumbnail that represents this application.
 	 */
 	public void setImage(BufferedImage bi) {
+		setAttribute(KEY_APP_IMAGE, bi);
+		
 		if (Taskbar.isTaskbarSupported()
 				&& Taskbar.getTaskbar().isSupported(Feature.ICON_IMAGE))
 			Taskbar.getTaskbar().setIconImage(bi);
