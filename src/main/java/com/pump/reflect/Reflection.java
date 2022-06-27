@@ -403,7 +403,12 @@ public class Reflection {
 	 * This object is returned by <code>invokeMethod(..)</code> when an error
 	 * occurs.
 	 */
-	public static final Object INVOCATION_ERROR = new Object();
+	public static final Object INVOCATION_ERROR = new Object() {
+		@Override
+		public String toString() {
+			return "Reflection.INVOCATION_ERROR";
+		}
+	};
 
 	/**
 	 * This uses reflection to call a method that may not exist in the compiling

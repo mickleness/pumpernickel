@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MixedState Demo</title>
+</head>
+<body>
+<h1>MixedState Demo</h1>
+<h2>What Is It</h2>
+<p>This demos a mixed-state indicator for JCheckBoxes.</p>
+<p>Checkboxes traditionally have two states. But sometimes you need a mixed state (or tri-state) option when multiple elements are being represented.</p>
+<p>This demo includes two controls: one control for setting this new three-state option, and one control showing the traditional two-state option.</p>
+<h2>How To Use It</h2>
+<p>This demo simply calls:</p>
+<pre>MixedState.set(sampleCheckBox, MixedState.MIXED);</pre>
+<p>You can also pass in <code>MixedState.SELECTED</code> or <code>MixedState.UNSELECTED</code>. Or you can continue to call <code>myCheckBox.setSelected(b)</code> where you don't require a mixed state.
+<p>You can also retrieve the state by calling:</p>
+<pre>MixedState s = MixedState.get(sampleCheckBox);</pre>
+<h2>How It Works</h2>
+<p>Setting the MixedState to MIXED does a couple of things:</p>
+<ol><li>It replaces the current ButtonModel. The new model intercepts all calls <code>myButton.setSelected(b)</code> or <code>myButton.getModel().setSelected(b)</code>. Those calls are redirected to call <code>MixedState.set(jc, UNSELECTED)</code> or <code>MixedState.set(jc, SELECTED)</code>.</li>
+<li>It installs a <code>MixedStateUI</code>. (Despite its name this is not a conventional <code>ComponentUI</code>.) This object is responsible for rendering the mixed state. There are separate rendering implementations for Mac and Windows.</li></ol>
+<h3>Windows Rendering</h3>
+<p>On Windows (or more specifically: in LookAndFeels where the JCheckBox's UI subclasses BasicRadioButtonUI): the rendering is achieved by replacing the JCheckBox's icon. The new icon paints an unselected checkbox and adds a tick mark on top of it.</p>
+<h3>Mac Rendering</h3>
+<p>On Mac the rendering is already taken care of for us if we call this code on a selected JCheckBox:</p>
+<pre>checkBox.putClientProperty("JButton.selectedState", "indeterminate");</pre>
+<p>This takes into account the current user's appearance settings. So for example: if all checkboxes for a user render in pink, then the Java component will render in pink too.</p>
+<h3>Selected State</h3>
+<p>These two implementations are subtly different. The Windows implementation is rendered when the JCheckBox is unselected, and the Mac implementation is rendered when the JCheckBox is selected. For the most part the user shouldn't notice, but it leads to different behavior when the user clicks a mixed-state checkbox. On Windows a single click will change the state from MIXED to SELECTED. On Mac a single click will change the state from MIXED to UNSELECTED. As of this writing: I don't see an easy way to avoid this inconsistency.</p>
+<h2>Discussion</h2>
+<h3>Mixed States Overview</h3>
+<p>Here is a <a href="https://www.w3.org/TR/wai-aria-practices-1.1/examples/checkbox/checkbox-2/checkbox-2.html">W3C example</a> of this general feature. Their primary use case relates to when the mixed state checkbox acts like a parent/group for several individual checkboxes:</p>
+<blockquote>One common use of a tri-state checkbox can be found in software installers where a single tri-state checkbox is used to represent and control the state of an entire group of install options. And, each option in the group can be individually turned on or off with a dual state checkbox.</blockquote>
+<p>Apple's <a href="https://developer.apple.com/design/human-interface-guidelines/macos/buttons/checkboxes/">guidelines</a> similarly say:</p>
+<blockquote>Use a mixed state when it makes sense. A checkbox should accurately reflect its state. If a checkbox is used to globally enable and disable multiple child checkboxes, it should show a mixed state—reflected by a dash—when those children are not all in the same state.</blockquote>
+<p>Personally I hope to use this feature for a separate use case: when an inspector needs to represent several elements in a selection. We may need more than a simple boolean representation to signal to the user that some elements use a feature and others do not.</p>
+<h3>Future Enhancements</h3>
+<p>I tried creating a subclass of a JCheckBox so I could create my own <code>AccessibleContext</code> that identified a <code>AccesibleState#INDETERMINATE</code>. I was testing on Mac at the time, and I never got VoiceOver to identify the INDETERMINATE property. (I did not test on Windows.) For a fully accessible application this will be a problem, because a visually impaired user will only hear the checkbox described in the traditional terms of "checked" or "unchecked".
+</body>
+</html>
