@@ -196,8 +196,8 @@ public class WavReader {
 
 		final WavReader reader = new WavReader(in) {
 			@Override
-			protected void processSamples(byte[] sample, int offset,
-					int length, int numberOfSamples) throws IOException {
+			protected void processSamples(byte[] sample, int offset, int length,
+					int numberOfSamples) throws IOException {
 				pipedOut.write(sample, offset, length);
 			}
 		};
@@ -219,8 +219,8 @@ public class WavReader {
 
 		thread.start();
 
-		while (thread.isAlive()
-				&& (reader.getFormatChunk() == null || reader.dataChunkSize == -1)) {
+		while (thread.isAlive() && (reader.getFormatChunk() == null
+				|| reader.dataChunkSize == -1)) {
 			try {
 				Thread.sleep(15);
 			} catch (Exception e) {
@@ -347,8 +347,8 @@ public class WavReader {
 		} else if (id.equals("data")) {
 			dataChunkSize = size;
 			if (lastFormatChunk == null) {
-				System.err
-						.println("no format chunk available; unable to interpret data.");
+				System.err.println(
+						"no format chunk available; unable to interpret data.");
 				skip(size);
 			} else if (lastFormatChunk.compressionCode != WavFormatChunk.COMPRESSION_PCM) {
 				System.err.println("unsupported compression code: "
@@ -377,7 +377,7 @@ public class WavReader {
 				}
 			}
 		} else {
-			System.err.println("skipping \"" + id + "\" of size " + size);
+			// System.err.println("skipping \"" + id + "\" of size " + size);
 			skip(size);
 		}
 	}
