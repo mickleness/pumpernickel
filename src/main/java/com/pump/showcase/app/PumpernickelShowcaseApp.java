@@ -189,8 +189,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 				new ShowcaseDemoInfo("JavaFormatter", "JavaFormatterDemo"));
 		returnValue
 				.add(new ShowcaseDemoInfo("XMLFormatter", "XMLFormatterDemo"));
-//		returnValue.add(
-//				new ShowcaseDemoInfo("ThreadProfiler", "ThreadProfilerDemo"));
+		// returnValue.add(
+		// new ShowcaseDemoInfo("ThreadProfiler", "ThreadProfilerDemo"));
 		// add(new DemoListElement("Text: Search Controls", new
 		// TextSearchDemo());
 		// add(new DemoListElement("QuickTime: Writing Movies", new
@@ -210,8 +210,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 				new ShowcaseDemoInfo("JSwitchButton", "JSwitchButtonDemo"));
 		returnValue
 				.add(new ShowcaseDemoInfo("JButton, QButtonUI", "JButtonDemo"));
-		returnValue.add(new ShowcaseDemoInfo("MixedState",
-				"MixedStateDemo"));
+		returnValue.add(new ShowcaseDemoInfo("MixedState", "MixedStateDemo"));
 		returnValue.add(
 				new ShowcaseDemoInfo("JFrame, JDialog, JWindow", "WindowDemo"));
 		returnValue.add(new ShowcaseDemoInfo("System Properties",
@@ -228,7 +227,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 		returnValue.add(new ShowcaseDemoInfo("ThumbnailGenerator",
 				"ThumbnailGeneratorDemo"));
 		if (JVM.isMac) {
-			returnValue.add(new ShowcaseDemoInfo("AquaIcon", "AquaIconDemo"));
 			returnValue.add(new ShowcaseDemoInfo("NSImage", "NSImageDemo"));
 		} else if (JVM.isWindows) {
 			returnValue.add(
