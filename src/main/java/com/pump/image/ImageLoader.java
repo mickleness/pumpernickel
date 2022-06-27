@@ -20,10 +20,8 @@ import java.awt.image.ImageConsumer;
 import java.awt.image.ImageProducer;
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.event.ChangeEvent;
@@ -91,11 +89,14 @@ public class ImageLoader {
 	public static MutableBufferedImage createImage(URL url, int imageType) {
 		if (url == null)
 			throw new NullPointerException();
+		Image img = null;
 		try {
-			return createImage(Toolkit.getDefaultToolkit().createImage(url),
-					url.toString(), imageType);
+			img = Toolkit.getDefaultToolkit().createImage(url);
+			return createImage(img, url.toString(), imageType);
 		} catch (RuntimeException e) {
 			System.err.println("url: " + url);
+			if (img != null)
+				img.flush();
 			throw e;
 		}
 	}
@@ -115,7 +116,11 @@ public class ImageLoader {
 	public static MutableBufferedImage createImage(File file, int imageType) {
 		Image i = Toolkit.getDefaultToolkit()
 				.createImage(file.getAbsolutePath());
-		return createImage(i, file.getAbsolutePath(), imageType);
+		try {
+			return createImage(i, file.getAbsolutePath(), imageType);
+		} finally {
+			i.flush();
+		}
 	}
 
 	/**
@@ -165,12 +170,14 @@ public class ImageLoader {
 			String description, int imageType) {
 		ImageLoader l = new ImageLoader(i.getSource(), null, null, description,
 				imageType);
-		return l.getImage();
+		MutableBufferedImage bi = l.getImage();
+		bi.setAccelerationPriority(i.getAccelerationPriority());
+		return bi;
 	}
 
 	InnerImageConsumer consumer;
 	Cancellable cancellable;
-	List<ChangeListener> listeners;
+	ChangeListener changeListener;
 	ImageProducer producer;
 	float progress = 0;
 	int destImageType;
@@ -199,12 +206,7 @@ public class ImageLoader {
 	 *            an optional <code>Cancellable</code> object.
 	 * @param changeListener
 	 *            an optional <code>ChangeListener</code>. This will be notified
-	 *            when a change occurs. It can be added here in the constructor
-	 *            because loading the image begins immediately; depending on how
-	 *            <code>ImageProducer.startProduction</code> is implemented this
-	 *            <i>may</i> be a blocking call so the
-	 *            <code>ChangeListener</code> needs to be added before the
-	 *            loading begins
+	 *            when a change occurs.
 	 * @param description
 	 *            an optional description that may be useful for debugging
 	 * @param imageType
@@ -217,34 +219,9 @@ public class ImageLoader {
 		producer = p;
 		this.destImageType = imageType;
 		this.description = description;
-		addChangeListener(changeListener);
+		this.changeListener = changeListener;
 		consumer = new InnerImageConsumer();
 		p.startProduction(consumer);
-	}
-
-	/**
-	 * Adds a ChangeListener to this loader. This listener will be notified
-	 * either when the image is fully loaded/created, or when
-	 * <code>getProgress()</code> changes value.
-	 */
-	public void addChangeListener(ChangeListener l) {
-		if (l == null)
-			return;
-
-		if (listeners == null)
-			listeners = new ArrayList<ChangeListener>();
-		if (listeners.contains(l))
-			return;
-		listeners.add(l);
-	}
-
-	/**
-	 * Removes a ChangeListener from this loader.
-	 */
-	public void removeChangeListener(ChangeListener l) {
-		if (listeners == null)
-			return;
-		listeners.remove(l);
 	}
 
 	/**
@@ -286,13 +263,10 @@ public class ImageLoader {
 		return new Dimension(size.width, size.height);
 	}
 
-	/** Fires all change listeners */
-	protected void fireChangeListeners() {
-		if (listeners == null)
-			return;
-		for (ChangeListener l : listeners.toArray(new ChangeListener[0])) {
+	private void fireChangeListener() {
+		if (changeListener != null) {
 			try {
-				l.stateChanged(new ChangeEvent(this));
+				changeListener.stateChanged(new ChangeEvent(this));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -350,7 +324,7 @@ public class ImageLoader {
 			producer.removeConsumer(consumer);
 			this.notifyAll();
 		}
-		fireChangeListeners();
+		fireChangeListener();
 	}
 
 	class InnerImageConsumer implements ImageConsumer {
@@ -408,7 +382,7 @@ public class ImageLoader {
 				}
 			}
 			size = new Dimension(w, h);
-			fireChangeListeners();
+			fireChangeListener();
 		}
 
 		@Override
@@ -565,6 +539,6 @@ public class ImageLoader {
 	private void setProgress(int x, int y) {
 		progress = ((float) (y * size.width + x))
 				/ ((float) (size.width * size.height));
-		fireChangeListeners();
+		fireChangeListener();
 	}
 }

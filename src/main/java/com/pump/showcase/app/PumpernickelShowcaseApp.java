@@ -92,7 +92,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 		DesktopApplication app = new DesktopApplication("com.pump.showcase",
 				"Pumpernickel Showcase", VERSION, "jeremy.wood@mac.com");
 		app.setFrameClass(PumpernickelShowcaseApp.class);
-		app.setCopyright(2018, "Jeremy Wood");
+		app.setCopyright(2022, "Jeremy Wood");
 		app.setURL(new URL("https://mickleness.github.io/pumpernickel/"));
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -152,6 +152,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 				.add(new ShowcaseDemoInfo("Transition3D", "Transition3DDemo"));
 		returnValue.add(new ShowcaseDemoInfo("BmpEncoder, BmpDecoder",
 				"BmpComparisonDemo"));
+		returnValue.add(new ShowcaseDemoInfo("ImageLoader", "ImageLoaderDemo"));
 		returnValue.add(
 				new ShowcaseDemoInfo("AlphaComposite", "AlphaCompositeDemo"));
 		returnValue.add(new ShowcaseDemoInfo("TextEffect", "TextEffectDemo"));

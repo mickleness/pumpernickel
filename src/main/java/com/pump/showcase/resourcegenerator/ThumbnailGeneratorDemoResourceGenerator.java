@@ -12,15 +12,16 @@ package com.pump.showcase.resourcegenerator;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.util.AbstractMap;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.pump.graphics.vector.VectorImage;
 import com.pump.image.thumbnail.generator.BasicThumbnailGenerator;
 import com.pump.image.thumbnail.generator.ThumbnailGenerator;
 import com.pump.showcase.chart.BarChartRenderer;
+import com.pump.showcase.chart.Chart;
 import com.pump.showcase.demo.ThumbnailGeneratorDemo;
 
 /**
@@ -35,9 +36,8 @@ public class ThumbnailGeneratorDemoResourceGenerator
 		System.out.println("Source file: " + srcFile.getAbsolutePath());
 
 		Thread.sleep(3000);
-
-		Map<String, Map<String, Long>> chartData = new HashMap<>();
-		chartData.put("Time", new LinkedHashMap<>());
+		List<Chart> charts = new LinkedList<>();
+		Chart timeChart = new Chart("Time");
 		for (ThumbnailGenerator gs : ThumbnailGeneratorDemo.GENERATORS) {
 			if (gs instanceof BasicThumbnailGenerator)
 				continue;
@@ -58,14 +58,15 @@ public class ThumbnailGeneratorDemoResourceGenerator
 				Arrays.sort(times);
 				long time = times[times.length / 2];
 				System.out.println(gs.getClass().getSimpleName() + " " + time);
-				chartData.get("Time").put(gs.getClass().getSimpleName(), time);
+				timeChart.getSeriesData().add(new AbstractMap.SimpleEntry<>(
+						gs.getClass().getSimpleName(), time));
 			} catch (Throwable t) {
 				t.printStackTrace();
 				System.out.println(gs.getClass().getSimpleName() + " failed");
 			}
 		}
 
-		BarChartRenderer renderer = new BarChartRenderer(chartData);
+		BarChartRenderer renderer = new BarChartRenderer(charts);
 		VectorImage vi = new VectorImage();
 		renderer.paint(vi.createGraphics(), new Dimension(300, 100));
 		writeImage(vi, "ThumbnailGeneratorDemo");

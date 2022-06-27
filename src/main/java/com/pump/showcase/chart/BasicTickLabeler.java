@@ -29,13 +29,19 @@ public class BasicTickLabeler {
 	 *            The minimum of the range to express
 	 * @param max
 	 *            the maximum of the range to express
+	 * @param chart
+	 *            an optional Chart that, if non-null, will be consulted bia
+	 *            {@link Chart#formatValue(Number)}.
 	 * @return a map of values and their String representations. The chart
 	 *         should render tickmarks at the Double values provided, and it
 	 *         should display the accompanying String at each tick. The Strings
 	 *         will all share the same number of decimal places.
 	 */
-	public SortedMap<Double, String> getLabeledTicks(double min, double max) {
+	public SortedMap<Double, String> getLabeledTicks(double min, double max,
+			Chart chart) {
 		SortedSet<BigDecimal> t = getTicks(min, max);
+		SortedMap<Double, String> returnValue = new TreeMap<>();
+
 		int leftMaxDigits = 0;
 		int rightMaxDigits = 0;
 		for (BigDecimal d : t) {
@@ -61,12 +67,19 @@ public class BasicTickLabeler {
 				pattern.append("0");
 			}
 		}
-
-		DecimalFormat format = new DecimalFormat(pattern.toString());
-		SortedMap<Double, String> returnValue = new TreeMap<>();
+		DecimalFormat defaultPattern = new DecimalFormat(pattern.toString());
 
 		for (BigDecimal d : t) {
-			returnValue.put(d.doubleValue(), format.format(d.doubleValue()));
+			String str = null;
+			if (chart != null) {
+				str = chart.formatValue(d);
+			}
+
+			if (str == null) {
+				str = defaultPattern.format(d.doubleValue());
+			}
+
+			returnValue.put(d.doubleValue(), str);
 		}
 
 		return returnValue;

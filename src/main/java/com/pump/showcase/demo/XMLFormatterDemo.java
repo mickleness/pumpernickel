@@ -51,7 +51,7 @@ public class XMLFormatterDemo extends ShowcaseDemo {
 
 		new XMLFormatter(textPane);
 
-		installExportJVGContextMenu(textPane, scrollPane);
+		installExportJVGContextMenu(textPane, scrollPane, getTitle());
 	}
 
 	@Override

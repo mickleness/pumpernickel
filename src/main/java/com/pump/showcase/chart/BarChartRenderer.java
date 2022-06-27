@@ -55,6 +55,43 @@ public class BarChartRenderer {
 
 	};
 
+	/**
+	 * Create a block of HTML that represents clusters of tables.
+	 */
+	public static String toHtml(List<Chart> charts) {
+		StringBuilder sb = new StringBuilder();
+		for (Chart chart : charts) {
+			sb.append(chart.getName() + ":\n<table>\n");
+			for (Map.Entry<String, Number> entry : chart.getSeriesData()) {
+				sb.append("\t<tr>\n");
+				sb.append("\t\t\t<td>" + entry.getKey() + "</td>\n");
+				Number value = entry.getValue();
+				String valueStr = chart.formatValue(value);
+				sb.append("\t\t\t<td>" + valueStr + "</td>\n");
+				sb.append("\t</tr>\n");
+			}
+			sb.append("</table>\n");
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Create a block of plain text that represents clusters of tables.
+	 */
+	public static String toText(List<Chart> charts) {
+		StringBuilder sb = new StringBuilder();
+		for (Chart chart : charts) {
+			sb.append("*** " + chart.getName() + "\n");
+			for (Map.Entry<String, Number> entry : chart.getSeriesData()) {
+				Number value = entry.getValue();
+				String valueStr = chart.formatValue(value);
+				sb.append(entry.getKey() + " = " + valueStr + "\n");
+			}
+			sb.append("\n");
+		}
+		return sb.toString().trim();
+	}
+
 	interface Row {
 		public int getHeight();
 
@@ -110,35 +147,38 @@ public class BarChartRenderer {
 
 		String groupLabel;
 		Rectangle2D groupLabelRect;
-		Map<String, Long> data = new LinkedHashMap<>();
-		long maxValue;
+		Chart chart;
+		Number maxValue;
 		SortedMap<Double, String> tickMap;
 		Font tickFont = new Font("Arial", 0, 12);
+		Map<String, Number> orderedData = new LinkedHashMap<>();
 
-		public DataRow(String groupLabel, Map<String, Long> data) {
-			this.groupLabel = groupLabel;
+		public DataRow(Chart chart) {
+			this.chart = chart;
+			this.groupLabel = chart.getName();
 			groupLabelRect = getTextSize(groupLabel);
 
-			TreeSet<Long> sortedLongs = new TreeSet<>(data.values());
+			Map<String, Number> chartMap = chart.toMap();
+			TreeSet<Number> sortedLongs = new TreeSet<>(chartMap.values());
 			maxValue = sortedLongs.last();
-			Iterator<Long> iter = sortedLongs.descendingIterator();
+			Iterator<Number> iter = sortedLongs.iterator();
 			while (iter.hasNext()) {
-				Long z = iter.next();
-				for (Entry<String, Long> e : data.entrySet()) {
+				Number z = iter.next();
+				for (Entry<String, Number> e : chartMap.entrySet()) {
 					if (e.getValue().equals(z)) {
-						this.data.put(e.getKey(), e.getValue());
+						orderedData.put(e.getKey(), e.getValue());
 					}
 				}
 			}
 			BasicTickLabeler l = new BasicTickLabeler();
-			tickMap = l.getLabeledTicks(0, maxValue);
+			tickMap = l.getLabeledTicks(0, maxValue.doubleValue(), chart);
 
 		}
 
 		@Override
 		public int getHeight() {
 			return (int) (Math.max(groupLabelRect.getHeight(),
-					data.size() * barHeight) + .5) + TICK_HEIGHT + 20;
+					orderedData.size() * barHeight) + .5) + TICK_HEIGHT + 20;
 		}
 
 		@Override
@@ -167,8 +207,8 @@ public class BarChartRenderer {
 			boolean isTooBig = false;
 			int xRightBound = xMax;
 			do {
-				xFunction = PolynomialFunction.createFit(0, xMin, maxValue,
-						xMax);
+				xFunction = PolynomialFunction.createFit(0, xMin,
+						maxValue.doubleValue(), xMax);
 
 				int x = Math.round((float) xFunction.evaluate(lastXTick));
 				isTooBig = x + lastTickStrR.getWidth() / 2 > xRightBound;
@@ -178,13 +218,11 @@ public class BarChartRenderer {
 
 			} while (isTooBig);
 
-			Font font = g.getFont();
-
 			int j = y;
-			for (Entry<String, Long> e : data.entrySet()) {
-				Long v = e.getValue();
+			for (Entry<String, Number> e : chart.toMap().entrySet()) {
+				Number v = e.getValue();
 				Color barColor = getColor(e.getKey());
-				int k = (int) (xFunction.evaluate(v) + .5);
+				int k = (int) (xFunction.evaluate(v.doubleValue()) + .5);
 				Rectangle2D r = new Rectangle(xMin, j, k - xMin, barHeight);
 				g.setColor(barColor);
 				g.fill(r);
@@ -222,8 +260,7 @@ public class BarChartRenderer {
 		return colors[i % colors.length];
 	}
 
-	Map<String, Map<String, Long>> data;
-	Map<String, Long> maxMap;
+	List<Chart> data;
 	List<String> barLabelsList;
 	Map<String, Rectangle2D> textSizeMap = new HashMap<>();
 	List<Row> rows = new ArrayList<>();
@@ -235,19 +272,18 @@ public class BarChartRenderer {
 	FontRenderContext frc = new FontRenderContext(new AffineTransform(), true,
 			true);
 
-	public BarChartRenderer(Map<String, Map<String, Long>> data) {
+	public BarChartRenderer(List<Chart> data) {
 		this.data = data;
-		maxMap = createMaxMap();
 
 		barLabelsList = new ArrayList<>();
-		for (Entry<String, Map<String, Long>> entry : data.entrySet()) {
-			DataRow row = new DataRow(entry.getKey(), entry.getValue());
-			rows.add(row);
-
-			// populate barLabelsList in the order rows will be seen
-			for (String str : row.data.keySet()) {
-				if (!barLabelsList.contains(str))
-					barLabelsList.add(str);
+		for (Chart chart : data) {
+			if (!chart.isEmpty()) {
+				DataRow row = new DataRow(chart);
+				rows.add(row);
+				for (String labelName : row.orderedData.keySet()) {
+					if (!barLabelsList.contains(labelName))
+						barLabelsList.add(labelName);
+				}
 			}
 		}
 		rows.add(new KeyRow());
@@ -299,17 +335,5 @@ public class BarChartRenderer {
 			row.paint(g, x, y, maxSize.width - 1);
 			y += row.getHeight() + groupGap;
 		}
-	}
-
-	private Map<String, Long> createMaxMap() {
-		Map<String, Long> m = new HashMap<>();
-		for (Entry<String, Map<String, Long>> entry : data.entrySet()) {
-			long max = 0;
-			for (Long value : entry.getValue().values()) {
-				max = Math.max(max, value);
-			}
-			m.put(entry.getKey(), max);
-		}
-		return m;
 	}
 }
