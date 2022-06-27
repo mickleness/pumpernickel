@@ -17,7 +17,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -123,7 +122,6 @@ public class AudioPlayerUI extends ComponentUI {
 	@Override
 	public void installUI(JComponent c) {
 		super.installUI(c);
-		installDefaultSource((AudioPlayerComponent) c);
 		c.addPropertyChangeListener(AudioPlayerComponent.PLAYER_KEY,
 				audioPlayerListener);
 	}
@@ -132,15 +130,5 @@ public class AudioPlayerUI extends ComponentUI {
 	public void uninstallUI(JComponent c) {
 		c.removePropertyChangeListener(AudioPlayerComponent.PLAYER_KEY,
 				audioPlayerListener);
-	}
-
-	protected void installDefaultSource(AudioPlayerComponent c) {
-		try {
-			c.setSource(new URL(
-					"https://github.com/mickleness/pumpernickel/raw/master/src/main/resources/com/pump/showcase/demo/Ludic.wav"));
-		} catch (MalformedURLException e) {
-			c.setSource(null);
-			e.printStackTrace();
-		}
 	}
 }
