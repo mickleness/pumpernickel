@@ -398,12 +398,16 @@ public class ConverterUtils {
 
 		Module existingModule = null;
 		for (Class<?> z : typeHierarchy) {
-			if (z.getModule() == ConverterUtils.class.getModule()) {
-				// skip OUR module, because it's reasonable to assume on
-				// deserialization our code will still be available.
-				continue;
-			}
-			
+
+			// this throws off our unit test, and I don't see an immediate need
+			// for this exception:
+
+			// if (z.getModule() == ConverterUtils.class.getModule()) {
+			// // skip OUR module, because it's reasonable to assume on
+			// // deserialization our code will still be available.
+			// continue;
+			// }
+
 			if (existingModule == null) {
 				existingModule = z.getModule();
 			} else if (existingModule != z.getModule()) {
