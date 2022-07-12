@@ -17,7 +17,7 @@
 <pre>MixedState s = MixedState.get(sampleCheckBox);</pre>
 <h2>How It Works</h2>
 <p>Setting the MixedState to MIXED does a couple of things:</p>
-<ol><li>It replaces the current ButtonModel. The new model intercepts all calls <code>myButton.setSelected(b)</code> or <code>myButton.getModel().setSelected(b)</code>. Those calls are redirected to call <code>MixedState.set(jc, UNSELECTED)</code> or <code>MixedState.set(jc, SELECTED)</code>.</li>
+<ol><li>It replaces the current ButtonModel. The new model intercepts all calls to <code>myButton.setSelected(b)</code> or <code>myButton.getModel().setSelected(b)</code>. Those calls are redirected to call <code>MixedState.set(jc, UNSELECTED)</code> or <code>MixedState.set(jc, SELECTED)</code>.</li>
 <li>It installs a <code>MixedStateUI</code>. (Despite its name this is not a conventional <code>ComponentUI</code>.) This object is responsible for rendering the mixed state. There are separate rendering implementations for Mac and Windows.</li></ol>
 <h3>Windows Rendering</h3>
 <p>On Windows (or more specifically: in LookAndFeels where the JCheckBox's UI subclasses BasicRadioButtonUI): the rendering is achieved by replacing the JCheckBox's icon. The new icon paints an unselected checkbox and adds a tick mark on top of it.</p>

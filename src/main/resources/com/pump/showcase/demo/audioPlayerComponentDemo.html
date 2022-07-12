@@ -4,31 +4,32 @@
 <title>AudioPlayer Demo</title>
 </head>
 <body>
-This demo shows a few different UI components for playing back audio.
-<h3>WAV Audio Support</h3>
-This demo covers a lot of ground, but all of it relies on WAV files. In theory we can expand this so we can make it work with any <code>javax.sound.sampled.AudioInputStream</code>, but so far I haven't had to do this. The one commercial usage of some of this code (that I'm aware of) was comfortable storing audio as WAV files, adding them to movies, and then using some JNI code to compress the finished product. I know there are some free-ish Java tools to work with MP3 files, but I seem to recall MP3 audio (like MP4 video) is mired in legal murkiness. I don't plan on exploring that further until I have a clear business need to.
-<p>
-Below is a summary of the different classes used in this demo and what they do.
+<h1>AudioPlayer Demo</h1>
+<h2>What Is It</h2>
+<p>This demo shows a few different UI components for playing audio:</p>
+<ul>
+<li>The <code>AudioPlayerComponent</code> and the accompanying <code>BasicAudioPlayerUI</code></li>
+<li>The <code>WaveformSliderUI</code> for JSliders</li>
+<li>The <code>AquaAudioListUI</code> for JLists</li>
+</ul>
 
-<h3>AudioPlayer</h3>
-The <code>AudioPlayer</code> is a helper class that lets you start/pause audio playback of any <code>AudioInputStream</code>.
-<p>
-It manages the threads for you; you can call things in such a way that your thread blocks until playback is complete, or in a multi-threaded environment. It updates specialized listeners regarding progress, including errors. Listeners can be notified in real-time on the thread that is playing back the audio, or they can be notified separately on the event dispatch thread. Notifications on the EDT may be coalesced together.
+<h2>How To Use It</h2>
+<p>The <code>BasicAudioPlayerUI</code> contains the <code>WaveformSliderUI</code> by default, so to invoke both you just call:</p>
+<pre>AudioPlayerComponent apc = new AudioPlayerComponent();
+apc.setSource(wavURL);</pre>
+<p>The <code>AquaAudioListUI</code> can be set up via:</p>
+<pre>JList<URL> list = new JList&lt;&gt;(listModel);
+list.setUI(new AquaAudioListUI());</pre>
 
-<h3>AudioPlayerComponent, AudioPlayerUI, BasicAudioPlayerUI</h3>
-The <code>AudioPlayerComponent</code> as a <code>JComponent</code> that relies on a URL pointing to an audio file. (For now only WAV files are well supported.) It also keeps an internal <code>AudioPlayer</code> object to help with playback. It is expected to use an <code>AudioPlayerUI</code>, but that class is abstract.
-<p>
-The <code>BasicAudioPlayerUI</code> is the <code>ComponentUI</code> you see in the top half of this demo. It includes the playback button and the waveform slider.
-
-<h3>WaveformSliderUI</h3>
-Nestled inside the <code>BasicAudioPlayerUI</code> is a <code>JSlider</code> that uses the <code>WaveformSliderUI</code>. This generates a simple waveform rendered as a shape with a hairline cursor to indicate the thumb.
-
-<h3>AquaAudioListUI</h3>
-The lower half of the demo features the <code>AquaAudioListUI</code>. This is modeled after a similar UI observed on Mac. When an audio is selected you can either play it back or delete it.
-<p>
-This component is not well tested and to my knowledge it's not deployed in any real-world projects, but it's a very promising proof of concept.
+<h2>How It Works</h2>
+<p>The <code>com.pump.audio.AudioPlayer</code> does all the heavy lifting regarding actually playing/pausing any <code>javax.sound.sampled.AudioInputStream</code>. Both of the UI components described below use this to help manage playback. This class includes an interface to notify listeners about the current playback progress/state. Currently I've only tested this against WAV files, but in theory any audio file you can convert to an <code>AudioInputStream</code> should work.</p>
+<h3>The AudioPlayerComponent</h3>
+<p>The <code>AudioPlayerComponent</code> is a very simple <code>JComponent</code> that maintains a reference to a "source" (a URL) and an <code>AudioPlayerUI</code>. The <code>AudioPlayerUI</code> is an abstract class with a few helper methods, but currently the only subclass is the <code>BasicAudioPlayerUI</code>. This is the UI you see in this demo: it includes a play/pause button that toggles, and a JSlider that uses the <code>WaveformSliderUI</code>.</p>
+<p>The <code>WaveformSliderUI</code> is pretty self-explanatory. It extends <code>BasicSliderUI</code>, but instead of a thumb and a line/track: it renders a hairline cursor and a waveform image.</p>
+<h3>The AquaAudioListUI</h3>
+<p>This is a <code>com.pump.plaf.decorate.DecoratedListUI</code> modeled after a similar UI observed on Mac. When an audio URL is selected you can play it back (or delete it).
 
 <h3>Attributions</h3>
-All the sounds used here are available <a href="https://freesound.org/people/mickleness/">here</a>.
+<p>I made all the sounds used in this demo, and they're available <a href="https://freesound.org/people/mickleness/">here</a> under a <a href="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons Zero license.</a></p>
 </body>
 </html>
