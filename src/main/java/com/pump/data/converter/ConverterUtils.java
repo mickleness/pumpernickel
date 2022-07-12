@@ -396,24 +396,19 @@ public class ConverterUtils {
 			typeHierarchy.remove(0);
 		}
 
-		Module existingModule = null;
+		boolean isJavaOrJavax = false;
 		for (Class<?> z : typeHierarchy) {
-
-			// this throws off our unit test, and I don't see an immediate need
-			// for this exception:
-
-			// if (z.getModule() == ConverterUtils.class.getModule()) {
-			// // skip OUR module, because it's reasonable to assume on
-			// // deserialization our code will still be available.
-			// continue;
-			// }
-
-			if (existingModule == null) {
-				existingModule = z.getModule();
-			} else if (existingModule != z.getModule()) {
+			if (z.getName().startsWith("java.")
+					|| z.getName().startsWith("javax.")) {
+				isJavaOrJavax = true;
+			} else if (isJavaOrJavax) {
+				// if we transition from java.awt.Font to
+				// com.apple.laf.AquaFonts$DerivedUIResourceFont, then we should
+				// reject this type
 				return false;
 			}
 		}
+
 		return true;
 	}
 
