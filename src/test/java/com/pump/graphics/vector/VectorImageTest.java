@@ -30,8 +30,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.text.AttributedString;
 import java.util.Random;
 
@@ -45,7 +47,9 @@ import com.pump.awt.CalligraphyStroke;
 import com.pump.awt.CharcoalStroke;
 import com.pump.awt.TransformedTexturePaint;
 import com.pump.graphics.DualGraphics2D;
+import com.pump.graphics.Graphics2DContext;
 
+import junit.framework.ComparisonFailure;
 import junit.framework.TestCase;
 
 /**
@@ -732,14 +736,114 @@ public class VectorImageTest extends TestCase {
 
 		int[] row1 = new int[bi1.getWidth()];
 		int[] row2 = new int[bi1.getWidth()];
-		for (int y = 0; y < bi1.getHeight(); y++) {
-			bi1.getRaster().getDataElements(0, y, row1.length, 1, row1);
-			bi2.getRaster().getDataElements(0, y, row1.length, 1, row2);
-			for (int x = 0; x < bi1.getWidth(); x++) {
-				String hex1 = Integer.toHexString(row1[x]);
-				String hex2 = Integer.toHexString(row2[x]);
-				assertEquals("x = " + x + ", y = " + y, hex1, hex2);
+		try {
+			for (int y = 0; y < bi1.getHeight(); y++) {
+				bi1.getRaster().getDataElements(0, y, row1.length, 1, row1);
+				bi2.getRaster().getDataElements(0, y, row1.length, 1, row2);
+				for (int x = 0; x < bi1.getWidth(); x++) {
+					String hex1 = Integer.toHexString(row1[x]);
+					String hex2 = Integer.toHexString(row2[x]);
+					assertEquals("x = " + x + ", y = " + y, hex1, hex2);
+				}
 			}
+		} catch (ComparisonFailure f) {
+			File f1 = new File("imageA.png");
+			File f2 = new File("imageB.png");
+			try {
+				ImageIO.write(bi1, "png", f1);
+				ImageIO.write(bi2, "png", f2);
+				System.err.println("f1: " + f1.getAbsolutePath());
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
+			throw f;
+		}
+	}
+
+	static class CustomFont extends Font {
+
+		private static final long serialVersionUID = 1L;
+
+		public CustomFont(String name, int style, int size) {
+			super(name, style, size);
+		}
+
+	}
+
+	static class CustomColor extends Color {
+
+		private static final long serialVersionUID = 1L;
+
+		public CustomColor(int r, int g, int b) {
+			super(r, g, b);
+		}
+
+	}
+
+	/**
+	 * This makes sure we strip custom subclasses of supported (and
+	 * Serializable) data.
+	 * <p>
+	 * In issue 94 we saw this exception:
+	 * 
+	 * <pre>
+	 * java.lang.ClassNotFoundException: com.apple.laf.AquaFonts$DerivedUIResourceFont
+	 * </pre>
+	 * 
+	 * <p>
+	 * When deserializing some data on a Windows machine, we didn't have access
+	 * to the AquaFonts subclass. So we changed our serialization model: if the
+	 * object we need to serialize comes from a different Module than the super
+	 * that originally declared itself as Serializable, then we DON'T trust the
+	 * default serialization logic. If we have access to a BeanMapConverter: we
+	 * rely on that to reencode the object. So we're intentionally stripping
+	 * away part of that object's identity. (Hopefully for the better.)
+	 * <p>
+	 * Specifically this method tests a subclassed Font (the original issue),
+	 * and a subclassed Color (a similar possible problem that is yet unreported
+	 * in the real world).
+	 */
+	public void testDeserialization() throws Exception {
+
+		for (Font font : new Font[] { new Font("default", 0, 14),
+				new CustomFont("default", 0, 14) }) {
+			for (Color color : new Color[] { new Color(211, 159, 90),
+					new CustomColor(211, 159, 90) }) {
+				testDeserialization(font, color);
+			}
+		}
+	}
+
+	private void testDeserialization(Font font, Color color) throws Exception {
+		Graphics2DContext c = new Graphics2DContext();
+		c.setFont(font);
+		c.setColor(color);
+
+		byte[] b = serialize(c);
+		Graphics2DContext c2 = (Graphics2DContext) deserialize(b);
+
+		assertEquals(c.getFont(), c2.getFont());
+		assertEquals(c.getColor(), c2.getColor());
+
+		assertEquals(Font.class, c2.getFont().getClass());
+		assertEquals(Color.class, c2.getColor().getClass());
+
+	}
+
+	private static Serializable deserialize(byte[] b) throws Exception {
+		try (ByteArrayInputStream byteIn = new ByteArrayInputStream(b)) {
+			try (ObjectInputStream objIn = new ObjectInputStream(byteIn)) {
+				return (Serializable) objIn.readObject();
+			}
+		}
+	}
+
+	private static byte[] serialize(Serializable c) throws IOException {
+		try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
+			try (ObjectOutputStream objOut = new ObjectOutputStream(byteOut)) {
+				objOut.writeObject(c);
+			}
+			return byteOut.toByteArray();
 		}
 	}
 }

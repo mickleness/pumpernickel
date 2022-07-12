@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -27,6 +28,7 @@ import com.pump.awt.converter.AlphaCompositeMapConverter;
 import com.pump.awt.converter.AttributedCharacterIteratorMapConverter;
 import com.pump.awt.converter.AttributedStringMapConverter;
 import com.pump.awt.converter.BasicStrokeMapConverter;
+import com.pump.awt.converter.ColorMapConverter;
 import com.pump.awt.converter.FontMapConverter;
 import com.pump.awt.converter.FontRenderContextMapConverter;
 import com.pump.awt.converter.GlyphJustificationInfoMapConverter;
@@ -217,10 +219,10 @@ public class ConverterUtils {
 		addConverter(new RenderingHintsMapConverter(), false, false, true,
 				false);
 		addConverter(new TexturePaintMapConverter(), true, true, true, true);
+		addConverter(new ColorMapConverter(), false, false, true, false);
 
 		// these image converters do the same thing; it doesn't matter which
-		// comes
-		// first but only one will "win".
+		// comes first but only one will "win".
 		addConverter(new ImageMapConverter(), true, true, true, true);
 		addConverter(new RenderedImageMapConverter(), true, true, true, true);
 	}
@@ -352,13 +354,13 @@ public class ConverterUtils {
 			objOut.writeObject(null);
 			objOut.writeObject(null);
 		} else {
-			if (obj instanceof Serializable) {
+			BeanMapConverter converter = getConverter(obj.getClass());
+			if (converter == null || !isForSerialization(converter)) {
 				objOut.writeObject(null);
 				objOut.writeObject(obj);
 			} else {
-				Class<?> objClass = obj.getClass();
-				BeanMapConverter converter = getConverter(objClass);
-				if (converter == null || !isForSerialization(converter)) {
+				if (obj instanceof Serializable
+						&& isSafelyDeserializable(obj.getClass())) {
 					objOut.writeObject(null);
 					objOut.writeObject(obj);
 				} else {
@@ -368,6 +370,47 @@ public class ConverterUtils {
 				}
 			}
 		}
+	}
+
+	/**
+	 * In issue #94 we were able to serialize a
+	 * com.apple.laf.AquaFonts$DerivedUIResourceFont, but we weren't able to
+	 * *deserialize* that font on a Windows machine. This method makes sure the
+	 * Class we're considering serializing is part of the same Module that
+	 * originally declared itself to be Serializable. We assume if we ever get a
+	 * Module mismatch then we should return false and make sure that our
+	 * BeanMapConverter serializes the object (instead of using traditional
+	 * Serialization and risk a deserialization problem).
+	 */
+	private static boolean isSafelyDeserializable(Class<?> type) {
+		List<Class<?>> typeHierarchy = new LinkedList<>();
+		for (Class<?> z = type; z != null; z = z.getSuperclass()) {
+			typeHierarchy.add(0, z);
+		}
+
+		for (int a = 0; a < typeHierarchy.size();) {
+			if (Arrays.asList(typeHierarchy.get(0).getInterfaces())
+					.contains(Serializable.class)) {
+				break;
+			}
+			typeHierarchy.remove(0);
+		}
+
+		Module existingModule = null;
+		for (Class<?> z : typeHierarchy) {
+			if (z.getModule() == ConverterUtils.class.getModule()) {
+				// skip OUR module, because it's reasonable to assume on
+				// deserialization our code will still be available.
+				continue;
+			}
+			
+			if (existingModule == null) {
+				existingModule = z.getModule();
+			} else if (existingModule != z.getModule()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@SuppressWarnings("unchecked")
