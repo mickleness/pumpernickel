@@ -602,14 +602,21 @@ public class Graphics2DContext implements Serializable {
 
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
-		out.writeInt(0);
+		out.writeInt(1);
 		out.writeBoolean(isDisposed);
-		out.writeObject(transform);
-		out.writeObject(backgroundColor);
-		out.writeObject(font);
-		out.writeObject(xorColor);
-		out.writeObject(color);
 
+		// these objects were initially serialized as-is, but that led to a
+		// serialization error across platforms when I tried deserializing a
+		// com.apple.laf.AquaFonts$DerivedUIResourceFont
+		// on Windows. Technically any of these classes (AffineTransfornm,
+		// Color, Font) could be extended to produce a similar problem
+		ConverterUtils.writeObject(out, transform);
+		ConverterUtils.writeObject(out, backgroundColor);
+		ConverterUtils.writeObject(out, font);
+		ConverterUtils.writeObject(out, xorColor);
+		ConverterUtils.writeObject(out, color);
+
+		// these objects we always knew we had to serialize with ConverterUtils:
 		ConverterUtils.writeObject(out, paint);
 		ConverterUtils.writeObject(out, composite);
 		ConverterUtils.writeObject(out, stroke);
@@ -620,7 +627,20 @@ public class Graphics2DContext implements Serializable {
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		int version = in.readInt();
-		if (version == 0) {
+		if (version == 1) {
+			isDisposed = in.readBoolean();
+			transform = (AffineTransform) ConverterUtils.readObject(in);
+			backgroundColor = (Color) ConverterUtils.readObject(in);
+			font = (Font) ConverterUtils.readObject(in);
+			xorColor = (Color) ConverterUtils.readObject(in);
+			color = (Color) ConverterUtils.readObject(in);
+
+			paint = (Paint) ConverterUtils.readObject(in);
+			composite = (Composite) ConverterUtils.readObject(in);
+			stroke = (Stroke) ConverterUtils.readObject(in);
+			renderingHints = (RenderingHints) ConverterUtils.readObject(in);
+			clip = (Shape) ConverterUtils.readObject(in);
+		} else if (version == 0) {
 			isDisposed = in.readBoolean();
 			transform = (AffineTransform) in.readObject();
 			backgroundColor = (Color) in.readObject();
