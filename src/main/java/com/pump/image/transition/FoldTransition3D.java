@@ -121,7 +121,7 @@ public class FoldTransition3D extends Transition3D {
 				: new int[] { 0, 1 };
 
 		double q = .5 * Math.sin(Math.PI * progress - Math.PI / 2.0) + .5;
-		q = .5 * Math.sin(Math.PI * q - Math.PI / 2.0) + .5;
+		// q = .5 * Math.sin(Math.PI * q - Math.PI / 2.0) + .5;
 
 		if (direction == LEFT) {
 			double cursor = w * (1 - q);
@@ -231,22 +231,24 @@ public class FoldTransition3D extends Transition3D {
 
 		try {
 			double crease = x + collapsedWidth / 2.0;
-			double k = 1 - collapsedWidth / h;
+			double k = 1 - collapsedWidth / w;
+
+			double maxZDepth = Math.min(w, h) / 2;
 
 			// @formatter:off
-			Quadrilateral3D q1 = new Quadrilateral3D(
-					x,0,0,
-					crease, 0, -k * 100,
-					crease, h, -k * 100,
-					x, h, 0
-					);
-			Quadrilateral3D q2 = new Quadrilateral3D(
-					crease,0, -k * 100,
-					x + collapsedWidth, 0, 0,
-					x + collapsedWidth, h, 0,
-					crease, h, -k * 100
-					);
-			// @formatter:on
+            Quadrilateral3D q1 = new Quadrilateral3D(
+                    x,0,0,
+                    crease, 0, -k * maxZDepth,
+                    crease, h, -k * maxZDepth,
+                    x, h, 0
+            );
+            Quadrilateral3D q2 = new Quadrilateral3D(
+                    crease,0, -k * maxZDepth,
+                    x + collapsedWidth, 0, 0,
+                    x + collapsedWidth, h, 0,
+                    crease, h, -k * maxZDepth
+            );
+            // @formatter:on
 
 			Quadrilateral2D j1 = paint(scratchImage, g.getRenderingHints(),
 					half1, q1, true, true);
@@ -319,20 +321,22 @@ public class FoldTransition3D extends Transition3D {
 		try {
 			double crease = y + collapsedHeight / 2.0;
 			double k = 1 - collapsedHeight / w;
+			
+			double maxZDepth = Math.min(w, h) / 2;
 
 			// @formatter:off
-			Quadrilateral3D q1 = new Quadrilateral3D(
-					0, y, 0,
-					w, y, 0,
-					w, crease, -k * 100,
-					0, crease, -k * 100
-					);
-			Quadrilateral3D q2 = new Quadrilateral3D(
-					0, crease, -k * 100,
-					w, crease, -k * 100,
-					w, y + collapsedHeight, 0,
-					0, y + collapsedHeight, 0 );
-			// @formatter:on
+            Quadrilateral3D q1 = new Quadrilateral3D(
+                    0, y, 0,
+                    w, y, 0,
+                    w, crease, -k * maxZDepth,
+                    0, crease, -k * maxZDepth
+            );
+            Quadrilateral3D q2 = new Quadrilateral3D(
+                    0, crease, -k * maxZDepth,
+                    w, crease, -k * maxZDepth,
+                    w, y + collapsedHeight, 0,
+                    0, y + collapsedHeight, 0 );
+            // @formatter:on
 
 			Quadrilateral2D j1 = paint(scratchImage, g.getRenderingHints(),
 					half1, q1, true, true);
