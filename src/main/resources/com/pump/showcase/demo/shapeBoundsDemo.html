@@ -4,77 +4,26 @@
 <title>ShapeBounds Demo</title>
 </head>
 <body>
-<p>
-Did you know that if you look up the API for the <code>java.awt.Shape#getBounds()</code> method it mentions:
+<h2>What Is It</h2>
+<p>The <code>ShapeBounds</code> class contains static helper methods to return the exact bounding box of a <code>java.awt.Shape</code>.</p>
+<p>This class is no longer necessary in JDK 20 (as long as you use standard shapes like <code>Path2D</code> or <code>GeneralPath</code>), but in my experience it may take developers/companies several years to upgrade Java versions so I'll keep this around a while longer.</p>
+<p>Up until JDK 20: the <code>java.awt.geom.Area</code> was the only other reliable way to identify the concise bounds of a shape, so this demo compares the performance of the <code>ShapeBounds</code> class against the <code>Area</code> class.</p>
+<h2>How To Use It</h2>
+<p>There are several methods in <code>ShapeBounds</code> that you can use, but the most simple is probably:</p>
+<pre>Rectangle2D r = ShapeBounds.getBounds(myShape)</pre>
+<h2>How It Works</h2>
+<p>The <code>ShapeBounds</code> class will walk through a <code>PathIterator</code> and calculate the exact bounding box of each segment.</p>
+<p>More specifically: each bezier segment's bounding box must include its endpoints (at t = 0 and t = 1), and the extrema of its derivatives (between 0 and 1). A bezier segment can be linear, quadratic or cubic; so the most complex derivative we'll deal with is a quadratic equation.</p>
+<h2>Discussion</h2>
+<p>The API for the <code>java.awt.Shape#getBounds()</code> method mentions:</p>
 <blockquote>Note that there is no guarantee that the returned Rectangle2D is the smallest bounding box that encloses the Shape, only that the Shape lies entirely within the indicated Rectangle2D.</blockquote>
-<p>
-That is: it's telling you it can be wrong. As long as it errs on the side of rounding up (so the bounding box is generously too large) it fulfills the contract of the method.
-<p>
-So what options do you have if you want the actual bounds of a shape? If you're familiar with Java2D, the go-to answer is the <code>java.awt.geom.Area</code> class. It's amazingly powerful but painfully slow.
-<p>
-But calculating the bounds of a shape is not hard. A shape is a series of bezier curve segments. These segments can be linear, quadratic, or cubic. The bounds of the shape are going to be the bounds of all the segments. All you have to do is look at the starting position, the end position, and the position of all the inflection points.
-<p>
-The <code>com.pump.geom.ShapeBounds</code> iterates over all the path segments and computes the sum bounds. With javadoc the class is about 370 lines. It's easy, safe, and if all you want is the bounds: it's an amazing improvement over the Area class.
-<p>
-<h3>Comparison</h3>
-<p>
-This test creates a shape using 20 random cubic segments. It measures the time/memory used to calculate the bounds of that shape 20 times.
-<p>
-The "Area" test creates a new <code>java.awt.geom.Area</code> class that wraps the path each time. In this test I assume the bottleneck is in the actual construction, and once we have the constructed <code>Area</code> it's pretty easy/efficient to calculate the bounds.
-<p>
-The "Area (flattened)" test creates an <code>Area</code> but instead of wrapping the actual cubic path segments it wraps a flattened copy of the shape. The question this answers is, "Is it the cubic data (for which the Area class is notoriously slow) that is a significant obstacle?" By flattening the path it should be reduced to linear segments. What impact did this make? Well, it did significantly reduce the time, but it increased the memory consumption.
-<p>
-The "ShapeBounds" test uses the new class described above. It's as lean as possible, and it outperforms the other approaches.
-<p>
-(The "Path2D" test just calls <code>Path2D.getBounds()</code>. This returns the wrong value, though. The actual bounds should be about 928x971, but this returns a rectangle this is about 988x983. This is about 7% larger than necessary.)
-<p>
-Each test is repeated 10 times and the median time/memory is recorded.
-<h3>Results</h3>
-<p>
-As of this writing the results I see when I run this comparison are:
-<p>
-Memory:
-<table>
-	<tr>
-			<td>Path2D</td>
-			<td>Error</td>
-	</tr>
-	<tr>
-			<td>Area</td>
-			<td>20.46 MB</td>
-	</tr>
-	<tr>
-			<td>Area (flattened)</td>
-			<td>32.8 MB</td>
-	</tr>
-	<tr>
-			<td>ShapeBounds</td>
-			<td>3.72 MB</td>
-	</tr>
-</table>
-Time:
-<table>
-	<tr>
-			<td>Path2D</td>
-			<td>Error</td>
-	</tr>
-	<tr>
-			<td>Area</td>
-			<td>287 ms</td>
-	</tr>
-	<tr>
-			<td>Area (flattened)</td>
-			<td>119 ms</td>
-	</tr>
-	<tr>
-			<td>ShapeBounds</td>
-			<td>18 ms</td>
-	</tr>
-</table>
-<h3>Conclusion</h3>
-<p>
-If all you're doing is calculating the bounds of some simple shapes/icons (such as glyphs in a font): you probably won't notice a problem. But if you're calculating the bounds of, say, complex SVG clip art: you'll see a strong improvement using ShapeBounds.
-<p>
-Also see the <a href="resource:clipper">Clipper</a> class for an alternative to calculating rectangular clippings.
+<p>That is: the javadoc is warning us that the bounds it returns may be larger than the actual bounds.</p>
+<p>This originally became a problem for me decades ago when our app wanted to render a rectangular outline around a piece of clip art the user added to their document: sometimes the rectangle was very concise, and sometimes it wasn't. So we got to digging and the <code>ShapeBounds</code> class ended up solving that problem.</code></p>
+<p>The <code>java.awt.geom.Area</code> class has a much more specific contract than the <code>Shape</code> class, though, and it guarantees a concise bounding box. But it can be painfully slow. (And to be fair: identifying a shape's bounding box is not really what it's designed for. Using the <code>Area</code> class only to identify the correct bounds is like using an airplane when all you really needed was a kite.)</p>
+<h2>Comparison</h2>
+<p>This demo creates a shape using 20 random cubic bezier segments, and it measures the time/memory used to calculate the bounds of that shape 50 times.</p>
+<p>It examines 4 implementations: <code>ShapeBounds</code>, <code>Area</code>, and then both of those again using a flattened shape (so the shape it flattened from cubic curves to lines).</p>
+<p>As of this writing the results I see when I run this comparison resemble:</p>
+<img src="data:image/jvg;base64,H4sIAAAAAAAAAO1bXWwbRRBe23GaH5qEqgHSqiVtk0IRuSRuA1QpFMfBaZBpq6QUQQCxttf2Jee76946cXhAoZXgARA/AoSoQBTBW4VAqhCoFBUBEiCQQGpfACFUCR4qEH0DnmBmz3e2Qx1SSOpIPks3d7c7Mzcz38ysfb47/isJWpx0JYysYuayppLm1MyoCUuZZglhcOWg3I1maZoR++MLEF+MNBkm41Sohm4JsiUG8r0o35sTqtarqZbo3Re3GJ+mcY3F4HQwb87UoXiOk+6JWMXr7XPUDk4R7c/hm+P3+wnJmyC4Cey8vqLcuOCqnnali7aSPCeb//1yRYFAjLQlNJXpYj9HJ4XKwMXW2CSdprZ7d1FzMEZWJQxdsLwQpLvovqO/d6RwEBqO2Gwg0ZIwOCsqPUQeIaucsIBzW/5p5T+0FM1svo80qdawapmGxZIx0hqniak0N3J6MmJoBhekzTaZzoheOQIW1IFjZtnMeIaaDGaCCWRBk5pjpBEsAbWqYIKsLdVSGEVNKTDIDQvORmEAFZlUxZmSa+zHEfSfMz3JEKc9MABB7SjyjJVNAXO9JbgxBQZcWWKsHILJRsGpbqUMnhXk2uJ8mgEO4VRK1dkBhwG4G/IGj7juQcSDGEJiQsw3oKwCsgrKKvNk1+Sfbb/z7F/xAKkfJoFsX5+k/ZKGkPbLkX450h/Km7svkLLP7Q3l5868M55HG1pcG6SRvjevPtL29PacnwSjpD5FNTNDR0lwmmo5FiP+BMRtfdFlCZuN77hJE2xwgjSmeDou2QXxT0QnQIk8Q++vkaVE/oLNhA9c/VpUlVesGYi9Ymo0pSCQd4+OMcvI8QTzDX3y+Eebnxjxy0pa7dqKXJ8eG/j5yx8OWhCfUdKBGTEOGFJNfZglh6mgBxm3oLaipNE0ANZxGB8ldZbcBS0xC62BrE2NsUM5KDGWDAso4nhOYL21l9TbHmplBDYSzDudZsGvNfa0RvV0r136g9IzX7hPBrYZCWR6/QGaMbI0D76i+x02Bbf73WJDZ6CUp6EoGVfCGG430aHSI86UU3r+AmxXylCggQoaCKzBVd9+9PFVD30TIP4oadIMmoxS2T0hXzOcWRlDS0KO3C71BGYwB7D2/YLU8ZzGXJ3olTIK9Z5mfM251974/dHHb/ETn5MEAENbkW9vLhtn/LHjL2xofv7HJ5xmGRAkKDMHlLYWmaNglPj2189f/27XhV9AZdRRiWHZunsOpEFAqRCbIWqpCbsGKwcGNW0u+FgvfcQtKCAgUFo9M2pSZCTTNrwcDCcheD1oqd0Rt6GgIA2SO0Fthd12mBrl4CTkkjsKrM1ZQIr3aCrsbRXhTtuRSiCXN5vF+VKG18YRzYhTrZPqAtMd4qKnO5mOOdo5xWYFWRd2Zliy0217nVkjCcnbfQA6eY9lsoSaUhOVlbSXKsHuL+Vl8q1x63AMFjKAVmMfvz0ZXPfFpPCTulFSn2FqOiMgZWTAR4kvD9ss5oavBbZn0CPc8nL5gXTBfgsGQM3UHVCxxHyFAGwLtz0JUfbNFk6Hds7M2WtWvrADe7ZWXGGjqqZVWJavq7ya46p0USk0ob6wZOJxk9vM8WztpTdguy1I6fWygdhwX1FoIMEwNjTsH5LlKtk9U8pRs9BR9iLZVClTcLgLyXVIri/mvfTjxkrFgsNKkRkP+orFgQchJNuR7EAygOSmkuTHo50LWTWIZBeSW5HcVgB798XzwweBsBATl4u0wqgC+y5UXp4Pi0mLYU5nKgK8Z+kBRhorXwVqAzmcu+eSYEPWkeVDoKSOzg9EnTpSaxaNGwpotFZG416vHqqMwOWph8gHXzn1cLhW0ZAfRGOjVw8rF4HLUw9/ftbi1MPRmkWjsYBGj1cPNYlAsR4+I/ZdGxw4UVNocLKu/EZdTNVZaLhL3s+4+0jA+u3Yc6fgh2+U+PP9SEJAZvFoNpQ3h9oIkRv8+h06vNDX3mUupBM1CB3uTg2dgcif8RCoHgKRXkJw8xCoGgI5QCDnIVBFBF6ZI7h5CFQNgdOAwOnFIBD0EFgqBAI4FzYFCfR1Sr6Ic2P/e9ueO5w7+6/OR8SDYpmgCPYp/eVgDL3vgVE9MELlYEQ2zXlgVA2M7fPASHtgVA+MHfPAePG0B0bVwBiYB8b7Sw6G8dIziwVjYw3eHnTBaJaPKAzh43bl36kuzFvGvz55+n/eP/8PkByu4f+QVhc2vGv74NL8xPOKYjkQ8NrS0rel9qhGhWA6S3YutkH9UY0GdbSG/9QrLQ/uNaiVi4DXoJa+QbUUG1SYM7pQZ4q0PfDj5e9Mag0/jlZaF495nWnlIuB1pqXvTHX/2o+6qtGP9tbSY+YLVMPLXj9akQjIXVOOk1DJW53yrSh8C1Qpfwu0K8w5ncUj+AbAB9/pf/nF93b9ZDhvLeHLoVsmYqVvpLFppgslkqF6mrlyHzacPT91Mv5Uqdzmi14eRVyxjnffes1/jt3hipn5vwHU+4aDADsAAA==" alt="This shows both Area-based approaches take over .4 s. The flattened ShapeBounds approach takes around .01 s, and the ShapeBounds takes approximately 0 s."/>
 </body>
 </html>

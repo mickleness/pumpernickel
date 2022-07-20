@@ -531,10 +531,10 @@ public class PerformanceChartPanel extends JPanel {
 				throw new NullPointerException(
 						"PARAMETER_NAME must be defined in the parameters to create chart.");
 			PerformanceResult r = entry.getValue();
-			if (r.getMedianTime() > 0)
+			if (r.getMedianTime() >= 0)
 				charts.get(0).getSeriesData().add(
 						new AbstractMap.SimpleEntry<>(name, r.getMedianTime()));
-			if (r.getMedianMemory() > 0)
+			if (r.getMedianMemory() >= 0)
 				charts.get(1).getSeriesData().add(new AbstractMap.SimpleEntry<>(
 						name, r.getMedianMemory()));
 		}
