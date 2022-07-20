@@ -174,6 +174,16 @@ public abstract class ShowcaseResourceExampleDemo<R>
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				String lastResource = prefs.get(prefKeyLastResource, null);
+
+				// what if we're trying to restore a reference to a file that no longer exists?
+				// this
+				if (resourceType.equals(File.class)) {
+					File file = new File(lastResource);
+					if (!file.exists()) {
+						lastResource = null;
+					}
+				}
+
 				if (lastResource != null) {
 					resourcePathField.setText(lastResource);
 				} else {
