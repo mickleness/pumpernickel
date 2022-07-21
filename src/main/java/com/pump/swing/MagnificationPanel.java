@@ -48,7 +48,7 @@ import com.pump.plaf.PlafPaintUtils;
 public class MagnificationPanel extends JComponent {
 	private static final long serialVersionUID = 1L;
 
-	public static final String PIXELATED_KEY = MagnificationPanel.class
+	private static final String PIXELATED_KEY = MagnificationPanel.class
 			.getName() + ".pixelated";
 
 	MouseInputAdapter mouseListener = new MouseInputAdapter() {

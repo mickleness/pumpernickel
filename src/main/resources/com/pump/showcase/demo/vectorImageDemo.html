@@ -32,7 +32,7 @@ myImage.save(outputStream);</pre>
 <h2>Discussion</h2>
 <h3>Usages</h3>
 <p>The original intended use case for this class was for debugging. Have you ever had a stray line or artifact in your UI? This object lets you diagram every rendering operation. You can even add the stack trace that triggered each call, so you can pinpoint exactly what code is responsible for rendering each pixel.</p>
-<p>(If you take a screenshot in the demo by pressed F6, then as you adjust the demo's slider you see a tooltip showing exactly what line of source code each rendering operation originated from.)</p>
+<p>(If you take a screenshot in the demo by pressing F6, then as you adjust the demo's slider you see a tooltip showing exactly what line of source code each rendering operation originated from.)</p>
 <p>But once I had the <code>VectorImage</code> in my toolbelt I found lots of other uses for it. For example: most of the sliders in this showcase app include a popover that points directly at the thumb. How do I know where the thumb is? As long as the <code>SliderUI</code> is a <code>BasicSliderUI</code>, I can call:</p>
 <pre>VectorImage img = new VectorImage();
 myBasicSliderUI.paintThumb(img.createGraphics());
