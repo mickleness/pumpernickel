@@ -37,83 +37,41 @@ import com.pump.util.PushPullQueue;
 /**
  * This is a set of static calls to write a simple BMP 2.x image, either in
  * 24-bit or 32-bit depending on whether the source image is opaque.
- *
+ * <p>
+ * These methods require a <code>java.awt.image.BufferedImage</code>. If you
+ * only have a <code>java.awt.Image</code>: you can use the {@link com.pump.image.ImageLoader}
+ * to convert a plain <code>Image</code> to a <code>BufferedImage</code>.
+ * </p>
  */
 public class BmpEncoder {
 
 	/**
-	 * This reads a PNG, JPG or GIF file as a BufferedImage.
-	 * <p>
-	 * This method writes the image out to a temporary BMP file, and then reads
-	 * it back using a BMP decoder.
-	 * 
-	 * TODO: rename this bizarre and deceiving method
-	 * 
+	 * Write an image to a file as a BMP.
+	 *
 	 * @throws IOException
-	 *             if an IO problem occurs.
 	 */
-	public static BufferedImage read(File sourceFile) throws IOException {
-		Dimension d = ImageSize.get(sourceFile);
-
-		File tempBMPFile = null;
-		Image image = null;
-		try {
-			image = Toolkit.getDefaultToolkit()
-					.createImage(sourceFile.getAbsolutePath());
-			tempBMPFile = File.createTempFile("tempImage", ".bmp");
-			writeImageUsingRandomAccess(image, tempBMPFile, d);
-			return BmpDecoder.readImage(tempBMPFile);
-		} finally {
-			if (image != null)
-				image.flush();
-			if (tempBMPFile != null)
-				tempBMPFile.delete();
+	public static void write(BufferedImage image, File dest) throws IOException {
+		try(FileOutputStream fileOut = new FileOutputStream(dest)) {
+			write(image, fileOut);
 		}
 	}
 
 	/**
-	 * Write an image to a file. If the image argument is a
-	 * <code>BufferedImage</code>: then this method calls
-	 * <code>write(BufferedImage, OutputStream)</code>.
-	 * <p>
-	 * There is a known bug in Oracle's GIF decoder that can result in images
-	 * with less than 256 giving incorrect image dimensions. (I have 2 sample
-	 * images that reproduce this consistently, but I don't own the images so I
-	 * can't distribute them.) The <code>read(File)</code> method avoids this
-	 * problem by using <code>ImageIO</code> to get the dimensions of the source
-	 * image, but since that's not an option with this method: the resulting BMP
-	 * might be too large.
-	 * 
-	 * @param image
-	 * @param dest
+	 * Write an image to an OutputStream as a BMP.
+	 *
 	 * @throws IOException
 	 */
-	public static void write(Image image, File dest) throws IOException {
-		if (image instanceof BufferedImage) {
-			BufferedImage bi = (BufferedImage) image;
-			FileOutputStream out = null;
-			try {
-				out = new FileOutputStream(dest);
-				write(bi, out);
-			} finally {
-				if (out != null) {
-					try {
-						out.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			return;
-		}
-		writeImageUsingRandomAccess(image, dest, null);
-	}
-
 	public static void write(BufferedImage image, OutputStream out)
 			throws IOException {
 		write(image, out, true);
 	}
 
+	/**
+	 * Write an image to an OutputStream as a BMP.
+	 *
+	 * @param closeStreamOnCompletion if true then this method calls {@link OutputStream#close()}, if false
+	 *                                then this method leaves the OutputStream open.
+	 */
 	public static void write(BufferedImage image, OutputStream out,
 			boolean closeStreamOnCompletion) throws IOException {
 		BytePixelIterator i;
@@ -234,382 +192,15 @@ public class BmpEncoder {
 		out.write(scrap, 0, HEADER_SIZE);
 
 		while (i.isDone() == false) {
+			// TODO: when we encode the BMP we found were swapping the blue and red channels twice.
+			// Instead if we directly interacted with the DataBufferByte: we could avoid any swapping and
+			// outperform ImageIO classes.
+			// So maybe (?) a similar performance gain can be seen here: is the ByteInterleavedRaster swapping
+			// color channels automatically for us?
 			i.next(scrap);
 			out.write(scrap, 0, scanLineSize);
 		}
 		if (closeStreamOnCompletion)
 			out.close();
-	}
-
-	/**
-	 * In another draft of this project there was an alternative data model:
-	 * keeping the pixel data in a large byte array in memory. It wouldn't be
-	 * hard to reimplement that model based on the methods in this object if
-	 * that ever becomes appropriate.
-	 */
-	private static class RandomAccessDataModel {
-		RandomAccessFile randomAccessFile;
-
-		// File file;
-
-		RandomAccessDataModel(File file, int totalBytes, int width, int height,
-				int bitsPerPixel) throws IOException {
-			// this.file = file;
-			randomAccessFile = new RandomAccessFile(file, "rw");
-			randomAccessFile.setLength(totalBytes);
-
-			byte[] header = new byte[HEADER_SIZE];
-			writeHeader(header, 0, width, height, bitsPerPixel);
-			randomAccessFile.write(header, 0, header.length);
-		}
-
-		public void write(int position, byte[] data, int dataOffset,
-				int dataLength) throws IOException {
-			randomAccessFile.seek(position + HEADER_SIZE);
-			randomAccessFile.write(data, dataOffset, dataLength);
-
-		}
-
-		// public void read(int position,byte[] dest,int destOffset,int
-		// destLength) throws IOException {
-		// randomAccessFile.seek(position+HEADER_SIZE);
-		// randomAccessFile.readFully(dest, destOffset, destLength);
-		// }
-
-		public void dispose() throws IOException {
-			randomAccessFile.close();
-		}
-	}
-
-	/**
-	 * The number of milliseconds we will wait for a <code>java.awt.Image</code>
-	 * to finish sending all its pixel data. The default value is 15,000 (15
-	 * seconds).
-	 */
-	public static long LOAD_IMAGE_TIMEOUT = 15000;
-
-	/**
-	 * This is the consumer that listens for updates from the ImageProducer.
-	 * These changes are then passed to the pixel iterator.
-	 */
-	private static class Consumer implements ImageConsumer {
-		Integer width = null;
-		Integer height = null;
-		@SuppressWarnings("rawtypes")
-		Map properties = new HashMap();
-		Integer returnValue;
-		PushPullQueue<Dimension> sizeQueue = new PushPullQueue<Dimension>();
-		PushPullQueue<Integer> statusQueue = new PushPullQueue<Integer>();
-		// An error that occurred.
-		Throwable throwable;
-		ImageProducer imageProducer;
-		RandomAccessDataModel dataModel;
-		File dest;
-		int bytesPerPixel = -1;
-		int scanlineSize;
-
-		Consumer(ImageProducer imageProducer, File dest, Dimension imageSize) {
-			this.imageProducer = imageProducer;
-			this.dest = dest;
-			if (imageSize != null) {
-				setDimensions(imageSize.width, imageSize.height);
-			}
-		}
-
-		public void setDimensions(int w, int h) {
-			if (w >= 0 && width == null)
-				width = new Integer(w);
-			if (h >= 0 && height == null)
-				height = new Integer(h);
-		}
-
-		private int getReturnValue() {
-			if (returnValue != null)
-				return returnValue.intValue();
-
-			return statusQueue.pull(LOAD_IMAGE_TIMEOUT).intValue();
-		}
-
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		public void setProperties(Hashtable props) {
-			properties.putAll(props);
-		}
-
-		public void setColorModel(ColorModel model) {
-		}
-
-		public void setHints(int hintFlags) {
-		}
-
-		private void initDataModel(ColorModel colorModel) {
-			if (dataModel != null)
-				return;
-
-			if (width == null || height == null) {
-				RuntimeException e = new RuntimeException(
-						"width and height were not initialized when pixel data was sent.");
-				imageComplete(ImageConsumer.IMAGEERROR, e);
-				return;
-			}
-
-			if (colorModel.hasAlpha()) {
-				bytesPerPixel = 4;
-			} else {
-				bytesPerPixel = 3;
-			}
-
-			scanlineSize = getScanlineSize(width.intValue(), bytesPerPixel);
-			Dimension d = new Dimension(width.intValue(), height.intValue());
-			int totalBytes = scanlineSize * d.height + HEADER_SIZE;
-			try {
-				dataModel = new RandomAccessDataModel(dest, totalBytes, d.width,
-						d.height, bytesPerPixel * 8);
-				sizeQueue.push(d);
-			} catch (Exception e) {
-				imageComplete(ImageConsumer.IMAGEERROR, e);
-			}
-
-		}
-
-		byte[] smallArray;
-		int dy = 0;
-		int dx = 0;
-
-		public synchronized void setPixels(int x, int y, final int w,
-				final int h, final ColorModel model, final byte[] pixels,
-				final int offset, final int scanSize) {
-			initDataModel(model);
-
-			if (returnValue != null)
-				throw new IllegalStateException();
-
-			int inPixelSize = model.getPixelSize();
-			int outPixelSize = bytesPerPixel;
-			if (smallArray == null || smallArray.length < inPixelSize)
-				smallArray = new byte[inPixelSize];
-			if (scratchByteArray == null
-					|| scratchByteArray.length < scanlineSize)
-				scratchByteArray = new byte[scanlineSize];
-
-			try {
-				IndexColorModel indexColorModel = null;
-				if (model instanceof IndexColorModel) {
-					indexColorModel = (IndexColorModel) model;
-					/**
-					 * This addresses a bug with GIFs on my 10.5.8 machine where
-					 * the abstract Image provides the wrong size:
-					 */
-					if (x + w > width.intValue() && w == width.intValue()
-							&& dx == 0) {
-						dx = -x;
-						dy = -y;
-					}
-					x += dx;
-					y += dy;
-				}
-
-				for (int j = 0; j < h; j++) {
-					for (int k = 0; k < w; k++) {
-						int rgb;
-						if (indexColorModel != null) {
-							int index = (pixels[j * scanSize + k]) & 0xff;
-							if (index == indexColorModel
-									.getTransparentPixel()) {
-								rgb = 0x00000000;
-							} else {
-								rgb = indexColorModel.getRGB(index);
-							}
-						} else {
-							System.arraycopy(pixels, j * scanSize + k,
-									smallArray, 0, inPixelSize);
-							rgb = model.getRGB(smallArray);
-						}
-						switch (bytesPerPixel) {
-						case 3:
-							scratchByteArray[3 * k
-									+ 0] = (byte) ((rgb >> 0) & 0xff);
-							scratchByteArray[3 * k
-									+ 1] = (byte) ((rgb >> 8) & 0xff);
-							scratchByteArray[3 * k
-									+ 2] = (byte) ((rgb >> 16) & 0xff);
-							break;
-						case 4:
-							scratchByteArray[4 * k
-									+ 0] = (byte) ((rgb >> 0) & 0xff);
-							scratchByteArray[4 * k
-									+ 1] = (byte) ((rgb >> 8) & 0xff);
-							scratchByteArray[4 * k
-									+ 2] = (byte) ((rgb >> 16) & 0xff);
-							scratchByteArray[4 * k
-									+ 3] = (byte) ((rgb >> 24) & 0xff);
-							break;
-						default:
-							throw new RuntimeException(
-									"unexpected condition: bytesPerPixel = "
-											+ bytesPerPixel);
-						}
-					}
-					dataModel.write(
-							(height.intValue() - 1 - (y + j)) * scanlineSize
-									+ x * outPixelSize,
-							scratchByteArray, 0, w * outPixelSize);
-				}
-			} catch (Exception e) {
-				imageComplete(ImageConsumer.IMAGEERROR, e);
-			}
-		}
-
-		byte[] scratchByteArray;
-
-		public synchronized void setPixels(int x, int y, int w, int h,
-				ColorModel model, int[] pixels, int offset, int scanSize) {
-			initDataModel(model);
-
-			if (returnValue != null)
-				throw new IllegalStateException();
-
-			if (scratchByteArray == null
-					|| scratchByteArray.length < scanlineSize) {
-				scratchByteArray = new byte[scanlineSize];
-			}
-
-			try {
-				switch (bytesPerPixel) {
-				case 3:
-					for (int j = 0; j < h; j++) {
-						for (int k = 0; k < w; k++) {
-							int rgb = model.getRGB(
-									pixels[x + k + offset + j * scanSize]);
-							scratchByteArray[3 * k
-									+ 0] = (byte) ((rgb >> 0) & 0xff);
-							scratchByteArray[3 * k
-									+ 1] = (byte) ((rgb >> 8) & 0xff);
-							scratchByteArray[3 * k
-									+ 2] = (byte) ((rgb >> 16) & 0xff);
-						}
-						dataModel.write(
-								(height.intValue() - 1 - (y + j)) * scanlineSize
-										+ x * bytesPerPixel,
-								scratchByteArray, 0, w * bytesPerPixel);
-					}
-					return;
-				case 4:
-					for (int j = 0; j < h; j++) {
-						for (int k = 0; k < w; k++) {
-							int rgb = model.getRGB(
-									pixels[x + k + offset + j * scanSize]);
-							scratchByteArray[4 * k
-									+ 0] = (byte) ((rgb >> 0) & 0xff);
-							scratchByteArray[4 * k
-									+ 1] = (byte) ((rgb >> 8) & 0xff);
-							scratchByteArray[4 * k
-									+ 2] = (byte) ((rgb >> 16) & 0xff);
-							scratchByteArray[4 * k
-									+ 3] = (byte) ((rgb >> 24) & 0xff);
-						}
-						dataModel.write(
-								(height.intValue() - 1 - (y + j)) * scanlineSize
-										+ x * bytesPerPixel,
-								scratchByteArray, 0, w * bytesPerPixel);
-					}
-					return;
-				default:
-					throw new RuntimeException(
-							"unexpected condition: bytesPerPixel = "
-									+ bytesPerPixel);
-				}
-			} catch (Exception e) {
-				imageComplete(ImageConsumer.IMAGEERROR, e);
-			}
-		}
-
-		public void imageComplete(int status) {
-			Throwable throwable = null;
-			if (status == ImageConsumer.IMAGEABORTED) {
-				throwable = new UserCancelledException();
-			} else if (status == ImageConsumer.IMAGEERROR) {
-				throwable = new IOException(
-						"An error occurred reading this image.");
-			} else if (!(status == ImageConsumer.SINGLEFRAMEDONE
-					|| status == ImageConsumer.STATICIMAGEDONE)) {
-				throwable = new IOException(
-						"Unrecognized completion status code: " + status);
-			}
-			imageComplete(status, throwable);
-		}
-
-		private synchronized void imageComplete(int status,
-				Throwable throwable) {
-			if (returnValue == null) {
-				try {
-					dataModel.dispose();
-				} catch (Exception e) {
-					if (throwable == null) {
-						throwable = e;
-					} else {
-						e.printStackTrace();
-					}
-				}
-
-				this.throwable = throwable;
-				if (sizeQueue.isEmpty() && (width == null || height == null)) {
-					if (this.throwable == null) {
-						this.throwable = new IOException("Completion code ("
-								+ status
-								+ ") was sent before width and height were defined.");
-					}
-					sizeQueue.push(new Dimension(-1, -1));
-				}
-				returnValue = new Integer(status);
-				// unless we're interested in other frames, we should stop
-				// listening now:
-				imageProducer.removeConsumer(this);
-				statusQueue.push(returnValue);
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * @param image
-	 * @param dest
-	 * @param imageSize
-	 *            an optional argument for the size of the image. This is
-	 *            provided because on my Mac 10.5.8 machine running Java 1.6:
-	 *            the Toolkit-based GIF images with less than 256 can return
-	 *            dimensions that are too large.
-	 * @throws IOException
-	 */
-	private static void writeImageUsingRandomAccess(Image image, File dest,
-			Dimension imageSize) throws IOException {
-		final ImageProducer imageProducer = image.getSource();
-		final Consumer consumer = new Consumer(imageProducer, dest, imageSize);
-		Thread thread = new Thread(
-				"Produce/Consume Image " + imageProducer.toString()) {
-			@Override
-			public void run() {
-				imageProducer.startProduction(consumer);
-			}
-		};
-		thread.start();
-		int returnValue = consumer.getReturnValue();
-		if (!(returnValue == ImageConsumer.SINGLEFRAMEDONE
-				|| returnValue == ImageConsumer.STATICIMAGEDONE)) {
-			if (consumer.throwable instanceof IOException) {
-				IOException e2 = new IOException(
-						consumer.throwable.getMessage());
-				e2.initCause(consumer.throwable);
-				throw e2;
-			} else if (consumer.throwable != null) {
-				RuntimeException e2 = new RuntimeException(
-						consumer.throwable.getMessage());
-				e2.initCause(consumer.throwable);
-				throw e2;
-			} else {
-				throw new IOException(
-						"An error occurred processing this image.  Completion code: "
-								+ returnValue);
-			}
-		}
 	}
 }

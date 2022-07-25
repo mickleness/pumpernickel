@@ -62,8 +62,7 @@ public class ShapeBoundsDemo extends ShowcaseDemo {
 				ShapeBounds.getBounds(path.getPathIterator(null, .01));
 			}
 		};
-
-		String name;
+		final String name;
 		Model(String name) {
 			this.name = name;
 		}
@@ -79,27 +78,14 @@ public class ShapeBoundsDemo extends ShowcaseDemo {
 	public ShapeBoundsDemo() {
 		chartPanel = new PerformanceChartPanel("ShapeBounds Performance Results");
 		ChartDataGenerator dataGenerator = new ChartDataGenerator() {
-			@Override
-			public ExecutionMode getExecutionMode() {
-				return ExecutionMode.RECORD_TIME_ONLY;
-			}
 
 			@Override
-			public int getTimedSampleCount() {
-				return 10;
-			}
-
-			@Override
-			public int getMemorySampleCount() {
-				return 0;
-			}
-
-			@Override
-			public List<Map<String, ?>> getTimedParameters() {
-				List<Map<String,?>> returnValue = new ArrayList<>();
+			public List<Map<String, Object>> getParameters() {
+				List<Map<String,Object>> returnValue = new ArrayList<>();
 				for (Model model : Model.values()) {
 					Map<String, Object> params = new HashMap<>();
 					params.put(PerformanceChartPanel.PARAMETER_NAME, model.toString());
+					params.put(PerformanceChartPanel.PARAMETER_CHART_NAME, "Time");
 					params.put("model", model);
 					returnValue.add(params);
 				}
@@ -107,23 +93,13 @@ public class ShapeBoundsDemo extends ShowcaseDemo {
 			}
 
 			@Override
-			public List<Map<String, ?>> getMemoryParameters() {
-				return Collections.EMPTY_LIST;
-			}
-
-			@Override
-			public void runTimedSample(Map<String, ?> parameters) {
+			public void runSample(Map<String, Object> parameters) {
 				Model model = (Model) parameters.get("model");
 
 				Path2D.Double p = createPath();
 				for (int a = 0; a < 50; a++) {
 					model.run(p);
 				}
-			}
-
-			@Override
-			public void runMemorySample(Map<String, ?> parameters) {
-				throw new UnsupportedOperationException();
 			}
 		};
 		chartPanel.reset(dataGenerator);

@@ -21,15 +21,8 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeSet;
 
 import javax.swing.UIManager;
 
@@ -58,7 +51,7 @@ public class BarChartRenderer {
 	/**
 	 * Create a block of HTML that represents clusters of tables.
 	 */
-	public static String toHtml(List<Chart> charts) {
+	public static String toHtml(Collection<Chart> charts) {
 		StringBuilder sb = new StringBuilder();
 		for (Chart chart : charts) {
 			sb.append(chart.getName() + ":\n<table>\n");
@@ -78,7 +71,7 @@ public class BarChartRenderer {
 	/**
 	 * Create a block of plain text that represents clusters of tables.
 	 */
-	public static String toText(List<Chart> charts) {
+	public static String toText(Collection<Chart> charts) {
 		StringBuilder sb = new StringBuilder();
 		for (Chart chart : charts) {
 			sb.append("*** " + chart.getName() + "\n");
@@ -219,7 +212,7 @@ public class BarChartRenderer {
 			} while (isTooBig);
 
 			int j = y;
-			for (Entry<String, Number> e : chart.toMap().entrySet()) {
+			for (Entry<String, Number> e : orderedData.entrySet()) {
 				Number v = e.getValue();
 				Color barColor = getColor(e.getKey());
 				int k = (int) (xFunction.evaluate(v.doubleValue()) + .5);
@@ -266,7 +259,7 @@ public class BarChartRenderer {
 	List<Row> rows = new ArrayList<>();
 	int groupGap = 5;
 	int groupLabelLeftGap = 3;
-	int groupLabelRightGap = 3;
+	int groupLabelRightGap = 8;
 	int barHeight = 15;
 	Font font = UIManager.getFont("Label.font");
 	FontRenderContext frc = new FontRenderContext(new AffineTransform(), true,

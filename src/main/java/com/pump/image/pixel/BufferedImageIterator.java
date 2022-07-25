@@ -10,10 +10,10 @@
  */
 package com.pump.image.pixel;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.IndexColorModel;
+import java.awt.image.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
 /**
  * This interfaces the <code>PixelIterator</code> model with
@@ -198,35 +198,93 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		} else {
 			BytePixelIterator bpi = (BytePixelIterator) i;
 
-			/**
-			 * BMPs are considered "BGR" data: the color components will be
-			 * unloaded as array = {blue1, green1, red1, blue2, green2, red2,
-			 * ...} However if we dump them into a BufferedImage with this type:
-			 * they appear backwards. I don't know why this happens, but let's
-			 * fix it here:
-			 */
-			if (type == BufferedImage.TYPE_3BYTE_BGR) {
-				bpi = new RGBtoBGR(bpi);
-			} else if (type == BufferedImage.TYPE_4BYTE_ABGR
-					|| type == BufferedImage.TYPE_4BYTE_ABGR_PRE) {
-				bpi = new ARGBtoABGR(bpi);
-			}
+			bpi = handleBGR(bpi, dest);
 
-			byte[] row = new byte[i.getMinimumArrayLength()];
-			if (i.isTopDown()) {
-				for (int y = 0; y < h; y++) {
-					bpi.next(row);
-					dest.getRaster().setDataElements(0, y, w, 1, row);
-				}
-			} else {
-				for (int y = h - 1; y >= 0; y--) {
-					bpi.next(row);
-
-					dest.getRaster().setDataElements(0, y, w, 1, row);
+			if (bpi != null) {
+				byte[] row = new byte[i.getMinimumArrayLength()];
+				if (bpi.isTopDown()) {
+					for (int y = 0; y < h; y++) {
+						bpi.next(row);
+						dest.getRaster().setDataElements(0, y, w, 1, row);
+					}
+				} else {
+					for (int y = h - 1; y >= 0; y--) {
+						bpi.next(row);
+						dest.getRaster().setDataElements(0, y, w, 1, row);
+					}
 				}
 			}
 		}
 		return dest;
+	}
+
+	/**
+	 * This addresses weird BGR and BGRA problems.
+	 * <p>
+	 * This is primarily targeted at BMP images. For some reason if you call
+	 * {@link WritableRaster#setDataElements(int, int, int, int, Object)} on a BufferedImage.TYPE_3BYTE_BGR
+	 * image, it swaps and R and B channels. (This is also true for TYPE_4BYTE_ABGR.) So if we're
+	 * dealing with one of those image types: we want to trust that the iterator has ordered the pixel channels
+	 * correctly. We'll first try to write the pixel data directly to the DataBuffer's byte array.
+	 * <p>If that fails (if the DataBuffer uses more than one DataBuffer, or is otherwise weirdly formatted):
+	 * then this method will return a new BytePixelIterator that swaps the incoming red and blue channels.</p>
+	 * </p>
+	 *
+	 * @return the BytePixelIterator to use, or null if this handle wrote the iterator's data in the dest image.
+	 * 		   This may return the original BytePixelIterator, or a new custom BytePixelIterator that rearranges
+	 * 		   incoming data.
+	 */
+	private static BytePixelIterator handleBGR(BytePixelIterator bpi, BufferedImage dest) {
+		if ( bpi.getType() == BufferedImage.TYPE_3BYTE_BGR &&
+				dest.getRaster() instanceof WritableRaster &&
+				dest.getRaster().getSampleModel() instanceof PixelInterleavedSampleModel &&
+				dest.getRaster().getDataBuffer() instanceof DataBufferByte &&
+				dest.getRaster().getDataBuffer().getNumBanks() == 1 &&
+				dest.getRaster().getSampleModel() instanceof ComponentSampleModel) {
+			PixelInterleavedSampleModel pixelSampleModel = (PixelInterleavedSampleModel) dest.getRaster().getSampleModel();
+			ComponentSampleModel compSampleModel = (ComponentSampleModel) dest.getRaster().getSampleModel();
+			int[] pxBandOffsets = pixelSampleModel.getBandOffsets();
+			int[] compBandOffsets = compSampleModel.getBandOffsets();
+			if ( (dest.getRaster().getSampleModel().getNumBands() == 3 &&
+					Arrays.equals(new int[] {2, 1, 0}, pxBandOffsets)) ) {
+				// TODO: we could also probably do this raw copy for ABGR images
+				int minY = dest.getRaster().getMinY();
+				int minX = dest.getRaster().getMinX();
+				int scanlineStride = compSampleModel.getScanlineStride();
+				int pixelStride = compSampleModel.getPixelStride();
+
+				DataBufferByte dataBuffer = (DataBufferByte) dest.getRaster().getDataBuffer();
+				byte[] byteArray = dataBuffer.getData();
+
+				int w = dest.getWidth();
+				int h = dest.getHeight();
+				int rowLength = w * bpi.getPixelSize();
+				byte[] row = new byte[bpi.getMinimumArrayLength()];
+				if (bpi.isTopDown()) {
+					for (int y = 0; y < h; y++) {
+						bpi.next(row);
+						int yoff = (y-minY)*scanlineStride +
+								(-minX)*pixelStride;
+						System.arraycopy(row, 0, byteArray, yoff, rowLength);
+					}
+				} else {
+					for (int y = h - 1; y >= 0; y--) {
+						bpi.next(row);
+						int yoff = (y - minY) * scanlineStride +
+								(-minX) * pixelStride;
+						System.arraycopy(row, 0, byteArray, yoff, rowLength);
+					}
+				}
+				return null;
+			}
+		}
+		if (bpi.getType() == BufferedImage.TYPE_3BYTE_BGR) {
+			return new RGBtoBGR(bpi);
+		} else if (bpi.getType() == BufferedImage.TYPE_4BYTE_ABGR
+				|| bpi.getType() == BufferedImage.TYPE_4BYTE_ABGR_PRE) {
+			return new ARGBtoABGR(bpi);
+		}
+		return bpi;
 	}
 
 	final BufferedImage bi;

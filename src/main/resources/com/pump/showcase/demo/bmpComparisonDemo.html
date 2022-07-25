@@ -1,80 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>BmpEncode, BmpDecoder Demo</title>
+<title>BmpEncoder, BmpDecoder Demo</title>
 </head>
-<body>
-This compares the performance of the Pumpernickel BMP encoder/decoder with ImageIO classes.
-<h3>Context</h3>
-Look, I know. BMP's are lame and horrible because they're uncompressed. If your app writes images and you default to BMP: shame on you. (Even if you don't want to write a <a href="https://en.wikipedia.org/wiki/Lossless_JPEG">lossless jpeg</a>, a PNG at least offers zip-style compression!)
-<p>
-But if your app claims to support most modern image formats and you don't support BMP, shame on you too. And if you're going to support it: why not support it well?
-<h3>Results</h3>
-<p>
-The <code>BmpEncoder</code> and <code>BmpDecoder</code> classes are designed with performance in mind. As of this writing this demo generates these results on my Mac laptop:
-<p>
-
-Decode BMP (Time):
-<table>
-	<tr>
-			<td>com.pump.image.bmp classes</td>
-			<td>271 ms</td>
-	</tr>
-	<tr>
-			<td>javax.imageio.ImageIO classes</td>
-			<td>2,163 ms</td>
-	</tr>
+<h1>BmpEncoder, BmpDecoder Demo</h1>
+<h2>What Is It</h2>
+<p>This demo demonstrates Pumpernickel's BMP image encoding/decoding classes, and compares them with the analogous ImageIO classes.</p>
+<h2>How To Use It</h2>
+<p>The primary use case is:</p>
+<pre>BufferedImage bi = BmpDecoder.read(bmpFile);</pre>
+<p>Or:</p>
+<pre>BmpEncoder.write(bi, bmpFile);</pre>
+<p>There are also a few additional static methods including:</p>
+<pre>Dimension d = BmpDecoder.getSize(bmpFile);
+BufferedImage bi = BmpDecoder.createThumbnail(bmpFile, maxSize);</pre>
+<h2>How It Works</h2>
+<p>Like most file formats: the BMP file format can actually be surprisingly complex/varied. These classes only support a small subset of possible BMP encodings. I think these are "the most common", but of course that's a subjective assessment.</p>
+<p>More specifically: this supports uncompressed BGR or BGRA image data. Once the file header is set up this image format is basically a raw dump of BGR or BGRA bytes. The only novel catch is: BMPs read rows from the bottom up.</p>
+<h2>Discussion</h2>
+<h3>Performance</h3>
+<p>As of this writing (summer of 2022), this demo on my Mac laptop resembles:</p>
+<br><img src="data:image/jvg;base64,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" alt="This shows the Pumpernickel classes outperform the ImageIO classes: encoding takes 1.3 s vs 1.5 s, and decoding takes 0.2 s vs 0.3 s"/>
+<p>I left at least one TODO note in the code (or maybe more?) to explore other possible performance gains.</p>
+<h3>History</h3>
+<p>This topic originally came to my attention decades ago when we were developing an animation app. At the time: we found we got the best performance if we cached each frame of the animation to the disk instead of rendering it in real time. (That may not be the case today: our animations were not amazingly complex.) Originally we just did a raw dump of the BufferedImage's data, but we quickly decided instead to use uncompressed BMPs to help us debug our application along the way. (We tried compressing the data, mostly using ZIP compression so they were effectively PNGs, but the playback performance began to suffer.)</p>
+<h3>Thumbnails</h3>
+<p>The Pumpernickel classes use the <code>com.pump.image.pixel.PixelIterator</code> architecture to iterate over rows of pixel data. This means it's trivially easy to use the <code>com.pump.image.Scaling</code> class to scale incoming rows of data as they are being read. So we never have to fully load the BMP image into memory to create a thumbnail.</p>
+<h3>Alpha Channel</h3>
+<p>The <code>ImageIO</code> implementation and the Pumpernickel implementation are currently incompatible when it comes to translucent images. I think this is because of two factors:</p>
+<ul><li>The Pumpernickel implementation only covers a subset of possible BMP encodings. It only supports the file header used for "Windows 2.x and OS/2 1.x". This file header includes a field for <code>bitsPerPixel</code>. We can store "32" in this field. And other applications (like Preview on Mac) can read the BMP file back fine.</li>
+<li>The ImageIO implementation is (in my opinion) overly strict. The <code>BMPImageReader</code> throws an <code>IIOException</code> if the <code>bitsPerPixel</code> is 32 when using the simpler file header, but it should be simple to add support for it instead. (The ImageIO implementation <em>does</em> support an alpha channel with a more complex file header, though.) Probably ImageIO is technically "correct" here. I bet if I dig deep into the file specifications I'll find the older file header wasn't specifically designed to support 32 bits per pixel. But empirically: this is a usage that takes place in the real world (I'm not the first person to think of it), and it would be nice if ImageIO supported it.</li></ul>
+<p>As a result: a BGRA image encoded with one implementation can't be read by the other, and vice versa. Opaque images are cross-compatible, though. If I ever develop a compelling need to address this maybe I'll revisit this issue.</p>
 </table>
-Decode BMP (Memory):
-<table>
-	<tr>
-			<td>com.pump.image.bmp classes</td>
-			<td>41.48 MB</td>
-	</tr>
-	<tr>
-			<td>javax.imageio.ImageIO classes</td>
-			<td>42.58 MB</td>
-	</tr>
-</table>
-Encode BMP (Time):
-<table>
-	<tr>
-			<td>com.pump.image.bmp classes</td>
-			<td>69 ms</td>
-	</tr>
-	<tr>
-			<td>javax.imageio.ImageIO classes</td>
-			<td>1,092 ms</td>
-	</tr>
-</table>
-Encode BMP (Memory):
-<table>
-	<tr>
-			<td>com.pump.image.bmp classes</td>
-			<td>.28 MB</td>
-	</tr>
-	<tr>
-			<td>javax.imageio.ImageIO classes</td>
-			<td>32.20 MB</td>
-	</tr>
-</table>
-<p>
-<h3>What This Demo Compares</h3>
-<p>
-This demo prepares an 800x600 image. Then it conducts two tests. Each sample of the test contains a loop that runs 30 times. The time it takes for that loop to execute and the memory allocated during that loop are recorded as one sample. We collect 10 samples and only report the median. (Garbage collection alone can introduce significant variability, but hopefully taking the median of 10 samples is sufficient to get a "typical" reading.)
-<p>
-<ul><li>One test focuses on decoding BMPs. Here <code>BmpDecoder.readImage(InputStream)</code> or <code>ImageIO.read(InputStream)</code> is used. (The resulting BufferedImage is immediately discarded.)
-<li>The other test focuses on encoding BMPs to a ByteArrayOutputStream that is reset before each use. This test calls <code>BmpEncoder.write(BufferedImage, OutputStream)</code> or <code>ImageIO.write(BufferedImage, "bmp", OutputStream)</code></ul>.
-<p>
-<h3>Scaling Images</h3>
-<p>
-This is implemented using the <code>com.pump.image.pixel.PixelIterator</code> architecture. One slick advantage this offers is: it can automagically scale incoming pixel data into a thumbnail really efficiently. This demo doesn't showcase that aspect, but all you have to do to activate this feature is call <code>BmpDecoder.createThumbnail(InputStream, Dimension)</code>, where the Dimension is the maximum size of the thumbnail (for ex: 128x128).
-<p>
-By contrast the <a href="https://download.java.net/media/jai-imageio/javadoc/1.1/overview-summary.html">ImageIO documentation</a> says its BMP support doesn't include thumbnails. (Search for "ImageReader.readerSupportsThumbnails()"). This means if you want to read a 1024x768 image into a a 100x75 pixel thumbnail: ImageIO will allocate at least 2.27 MB of RAM, and the BmpDecoder will allocate about 22 KB. And I can't quantify exactly how much faster the BmpDecoder will be, but if the current patterns hold you'll see a speed benefit too.
-<p>
-<h3>In Defense of BMPs</h3>
-<p>
-To be fair: we did rely on BMPs for one product. We found that file IO was fastest for BMPs, so we wrote cached images to the tmp folder as uncompressed BMPs. They read back so well we can read and render them on-the-fly without the user noticing. If the real litmus test of a decision is whether you'd repeat that decision: I'd definitely consider it if a future project presents a similar need. File IO isn't free (performance-wise), but it was faster than the compression overhead of JPGs or PNGs last we checked.
-
 </body>
 </html>

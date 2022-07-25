@@ -77,7 +77,7 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 			}
 		};
 
-		String name;
+		final String name;
 
 		LoaderModel(String name) {
 			this.name = name;
@@ -91,7 +91,7 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 		}
 	}
 
-	class ImageLoaderChartDataGenerator implements ChartDataGenerator {
+	static class ImageLoaderChartDataGenerator implements ChartDataGenerator {
 		final File file;
 
 		// how many times we load the image to measure the time it takes
@@ -106,28 +106,14 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 		}
 
 		@Override
-		public ExecutionMode getExecutionMode() {
-			return ExecutionMode.RECORD_TIME_AND_MEMORY_SEPARATELY;
-		}
-
-		@Override
-		public int getTimedSampleCount() {
-			return 10;
-		}
-
-		@Override
-		public int getMemorySampleCount() {
-			return 20;
-		}
-
-		@Override
-		public List<Map<String, ?>> getTimedParameters() {
-			List<Map<String, ?>> returnValue = new ArrayList<>();
+		public List<Map<String, Object>> getParameters() {
+			List<Map<String, Object>> returnValue = new ArrayList<>();
 
 			for (LoaderModel m : LoaderModel.values()) {
 				Map<String, Object> p = new HashMap<>();
 				p.put(PARAMETER_MODEL, m);
 				p.put(PerformanceChartPanel.PARAMETER_NAME, m.toString());
+				p.put(PerformanceChartPanel.PARAMETER_CHART_NAME, "Time");
 				returnValue.add(p);
 			}
 
@@ -135,23 +121,8 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 
 		}
 
-		@Override
-		public List<Map<String, ?>> getMemoryParameters() {
-			return getTimedParameters();
-		}
 
-		@Override
-		public void runTimedSample(Map<String, ?> parameters) throws Exception {
-			runSample(parameters, loopCount);
-		}
-
-		@Override
-		public void runMemorySample(Map<String, ?> parameters)
-				throws Exception {
-			runSample(parameters, 1);
-		}
-
-		private void runSample(Map<String, ?> parameters, int loopCount)
+		public void runSample(Map<String, Object> parameters)
 				throws Exception {
 			LoaderModel model = (LoaderModel) parameters.get(PARAMETER_MODEL);
 
@@ -218,9 +189,9 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 
 	}
 
-	private static BufferedImage createSampleImage() {
+	public static BufferedImage createSampleImage(boolean includeAlphaChannel) {
 		BufferedImage bi = new BufferedImage(800, 600,
-				BufferedImage.TYPE_INT_ARGB);
+				includeAlphaChannel ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = bi.createGraphics();
 		Random r = new Random(0);
 		Color[] colors = new Color[] { Color.red, Color.gray, Color.green,
@@ -229,11 +200,16 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 		for (int a = 0; a < 100; a++) {
 			Color color = colors[r.nextInt(colors.length)];
 			g.setColor(color);
-			float radius = r.nextInt(20) + 20;
-			Ellipse2D circle = new Ellipse2D.Float(r.nextInt(800),
-					r.nextInt(600), radius, radius);
+			int radius = r.nextInt(20) + 20;
+			Ellipse2D circle = new Ellipse2D.Float(r.nextInt(800 + radius) - radius,
+					r.nextInt(600 + radius) - radius,
+					radius, radius);
 			g.fill(circle);
 		}
+		// a visual marker of the top-left corner:
+		g.setColor(Color.orange);
+		g.fillRect(0,0,20,20);
+
 		g.dispose();
 		return bi;
 	}
@@ -241,7 +217,7 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 	PerformanceChartPanel perfChartPanel;
 	File sampleFile;
 
-	public ImageLoaderDemo() throws Exception {
+	public ImageLoaderDemo() {
 		super(File.class, false, "png", "jpg", "jpeg");
 
 		perfChartPanel = new PerformanceChartPanel(
@@ -255,10 +231,10 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 	protected void setDefaultResourcePath() {
 		try {
 			if (sampleFile == null) {
-				BufferedImage sampleImage = createSampleImage();
+				BufferedImage sampleImage = createSampleImage(true);
 				sampleFile = TempFileManager.get().createFile("sampleImage",
-						"png");
-				ImageIO.write(sampleImage, "png", sampleFile);
+						"jpg");
+				ImageIO.write(sampleImage, "jpg", sampleFile);
 			}
 			resourcePathField.setText(sampleFile.getAbsolutePath());
 		} catch (IOException e) {

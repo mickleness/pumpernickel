@@ -22,6 +22,9 @@ import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.PixelIterator;
 import com.pump.image.pixel.ScalingIterator;
 
+/**
+ * This is a collection of static methods to help decode BMP images.
+ */
 public class BmpDecoder {
 
 	/**
@@ -34,8 +37,8 @@ public class BmpDecoder {
 	 * @throws IOException
 	 *             if an IO problem occurs.
 	 */
-	public static BufferedImage readImage(File bmpFile) throws IOException {
-		return readImage(bmpFile, null);
+	public static BufferedImage read(File bmpFile) throws IOException {
+		return read(bmpFile, null);
 	}
 
 	/**
@@ -51,13 +54,13 @@ public class BmpDecoder {
 	 * @throws IOException
 	 *             if an IO problem occurs.
 	 */
-	public static BufferedImage readImage(File bmpFile, BufferedImage dst)
+	public static BufferedImage read(File bmpFile, BufferedImage dst)
 			throws IOException {
 		if (bmpFile.length() == 0) {
-			return null;
+			throw new IOException("the source image file is zero bytes ("+bmpFile.getAbsolutePath()+")");
 		}
 		try (InputStream in = new FileInputStream(bmpFile)) {
-			return readImage(in, dst);
+			return read(in, dst);
 		}
 	}
 
@@ -71,8 +74,8 @@ public class BmpDecoder {
 	 * @throws IOException
 	 *             if an IO problem occurs.
 	 */
-	public static BufferedImage readImage(InputStream in) throws IOException {
-		return readImage(in, null);
+	public static BufferedImage read(InputStream in) throws IOException {
+		return read(in, null);
 	}
 
 	/**
@@ -88,7 +91,7 @@ public class BmpDecoder {
 	 * @throws IOException
 	 *             if an IO problem occurs.
 	 */
-	public static BufferedImage readImage(InputStream in, BufferedImage dst)
+	public static BufferedImage read(InputStream in, BufferedImage dst)
 			throws IOException {
 		try {
 			BmpDecoderIterator iterator = BmpDecoderIterator.get(in);
@@ -109,9 +112,9 @@ public class BmpDecoder {
 	 *             if an IO problem occurs.
 	 */
 	public static Dimension getSize(File file) throws IOException {
-		FileInputStream in = null;
-		in = new FileInputStream(file);
-		return getSize(in);
+		try (FileInputStream fileIn = new FileInputStream(file)) {
+			return getSize(fileIn);
+		}
 	}
 
 	/**
@@ -136,7 +139,7 @@ public class BmpDecoder {
 
 	/**
 	 * Create a thumbnail of a BMP file.
-	 * 
+	 *
 	 * @param bmpFile
 	 *            a BMP file.
 	 * @param maxSize
@@ -153,22 +156,14 @@ public class BmpDecoder {
 	 */
 	public static BufferedImage createThumbnail(File bmpFile, Dimension maxSize)
 			throws IOException {
-		InputStream in = null;
-		try {
-			in = new FileInputStream(bmpFile);
+		try (InputStream in = new FileInputStream(bmpFile)) {
 			return createThumbnail(in, maxSize);
-		} finally {
-			try {
-				if (in != null)
-					in.close();
-			} catch (Exception e) {
-			}
 		}
 	}
 
 	/**
 	 * Create a thumbnail of a BMP file.
-	 * 
+	 *
 	 * @param bmpURL
 	 *            a BMP file.
 	 * @param maxSize
@@ -185,22 +180,14 @@ public class BmpDecoder {
 	 */
 	public static BufferedImage createThumbnail(URL bmpURL, Dimension maxSize)
 			throws IOException {
-		InputStream in = null;
-		try {
-			in = bmpURL.openStream();
+		try (InputStream in = bmpURL.openStream()) {
 			return createThumbnail(in, maxSize);
-		} finally {
-			try {
-				if (in != null)
-					in.close();
-			} catch (Exception e) {
-			}
 		}
 	}
 
 	/**
 	 * Create a thumbnail of a BMP image.
-	 * 
+	 *
 	 * @param bmp
 	 *            a BMP image.
 	 * @param maxSize
@@ -216,7 +203,7 @@ public class BmpDecoder {
 	 *             if an IO problem occurs.
 	 */
 	public static BufferedImage createThumbnail(InputStream bmp,
-			Dimension maxSize) throws IOException {
+												Dimension maxSize) throws IOException {
 		PixelIterator i = BmpDecoderIterator.get(bmp);
 		int srcW = i.getWidth();
 		int srcH = i.getHeight();
@@ -233,7 +220,7 @@ public class BmpDecoder {
 
 	/**
 	 * Create a thumbnail of a BMP file.
-	 * 
+	 *
 	 * @param bmpFile
 	 *            a BMP file.
 	 * @param dest
@@ -244,22 +231,14 @@ public class BmpDecoder {
 	 */
 	public static void createThumbnail(File bmpFile, BufferedImage dest)
 			throws IOException {
-		InputStream in = null;
-		try {
-			in = new FileInputStream(bmpFile);
+		try (InputStream in = new FileInputStream(bmpFile)) {
 			createThumbnail(in, dest);
-		} finally {
-			try {
-				if (in != null)
-					in.close();
-			} catch (Exception e) {
-			}
 		}
 	}
 
 	/**
 	 * Create a thumbnail of a BMP image.
-	 * 
+	 *
 	 * @param bmp
 	 *            a BMP image.
 	 * @param dest
@@ -270,7 +249,6 @@ public class BmpDecoder {
 	public static void createThumbnail(InputStream bmp, BufferedImage dest)
 			throws IOException {
 		PixelIterator i = BmpDecoderIterator.get(bmp);
-
 		i = ScalingIterator.get(i, dest.getWidth(), dest.getHeight());
 		BufferedImageIterator.create(i, dest);
 	}

@@ -10,27 +10,14 @@
  */
 package com.pump.showcase.chart;
 
-import java.awt.CardLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.text.DecimalFormat;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import javax.swing.AbstractAction;
@@ -58,40 +45,28 @@ public class PerformanceChartPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public final static String CHART_NAME_TIME = "Time";
-	public final static String CHART_NAME_MEMORY = "Memory";
-
 	private static final String CARD_LOADING = "loading";
 	private static final String CARD_RESULTS = "results";
 
 	private static final String PARAMETER_SAMPLE_INDEX = "sample index";
 	public final static String PARAMETER_NAME = "name";
 
+	public final static String PARAMETER_CHART_NAME = "chart name";
+
 	static class PerformanceResult {
 		List<Long> times = new ArrayList<>();
-		List<Long> memories = new ArrayList<>();
 
 		public synchronized void addTime(long time) {
 			times.add(time);
-
-		}
-
-		public synchronized void addMemory(long memory) {
-			memories.add(memory);
 		}
 
 		@Override
 		public String toString() {
-			return getClass().getSimpleName() + "[ time = " + getMedianTime()
-					+ " memory = " + getMedianMemory() + "]";
+			return getClass().getSimpleName() + "[ time = " + getMedianTime() + "]";
 		}
 
 		public synchronized long getMedianTime() {
 			return getMedian(times);
-		}
-
-		public synchronized long getMedianMemory() {
-			return getMedian(memories);
 		}
 
 		private synchronized long getMedian(List<Long> elements) {
@@ -127,7 +102,7 @@ public class PerformanceChartPanel extends JPanel {
 				this.listener = listener;
 			}
 
-			public void record(WorkerTask task, long time, long usedMemory) {
+			public void record(WorkerTask task, long time) {
 				Map<String, Object> parameters = new HashMap<>();
 				parameters.putAll(task.parameters);
 				parameters.remove(PARAMETER_SAMPLE_INDEX);
@@ -137,12 +112,7 @@ public class PerformanceChartPanel extends JPanel {
 					result = new PerformanceResult();
 					resultMap.put(parameters, result);
 				}
-				if (task.measureMemory && usedMemory > 0) {
-					result.addMemory(usedMemory);
-				}
-				if (task.measureTime) {
-					result.addTime(time);
-				}
+				result.addTime(time);
 
 				recordCtr++;
 				try {
@@ -168,17 +138,12 @@ public class PerformanceChartPanel extends JPanel {
 
 		class WorkerTask implements Runnable {
 			final WorkerTaskGroup group;
-			final Map<String, ?> parameters;
-			final boolean measureTime;
-			final boolean measureMemory;
+			final Map<String, Object> parameters;
 			final Cancellable cancellable;
 
-			public WorkerTask(WorkerTaskGroup group, Map<String, ?> parameters,
-					boolean measureTime, boolean measureMemory,
+			public WorkerTask(WorkerTaskGroup group, Map<String, Object> parameters,
 					Cancellable cancellable) {
 				this.parameters = parameters;
-				this.measureTime = measureTime;
-				this.measureMemory = measureMemory;
 				this.group = group;
 				group.addTask(this);
 				this.cancellable = cancellable;
@@ -189,45 +154,23 @@ public class PerformanceChartPanel extends JPanel {
 				if (cancellable.isCancelled())
 					return;
 
-				if (measureTime) {
-					group.dataGenerator.setupTimedSample(parameters);
-				} else if (measureMemory) {
-					group.dataGenerator.setupMemorySample(parameters);
-				}
+				group.dataGenerator.setupSample(parameters);
+
 				try {
 					Runtime.getRuntime().gc();
-					Runtime.getRuntime().runFinalization();
-					Runtime.getRuntime().gc();
-					Runtime.getRuntime().runFinalization();
 
 					long time = System.currentTimeMillis();
-					long freeMemory = Runtime.getRuntime().freeMemory();
-					long totalMemory = Runtime.getRuntime().totalMemory();
 
 					try {
-						if (measureTime) {
-							group.dataGenerator.runTimedSample(parameters);
-						} else if (measureMemory) {
-							group.dataGenerator.runMemorySample(parameters);
-						}
+						group.dataGenerator.runSample(parameters);
 					} catch (Throwable t) {
 						t.printStackTrace();
 					} finally {
 						time = System.currentTimeMillis() - time;
-						long usedMemory = freeMemory
-								- Runtime.getRuntime().freeMemory();
-
-						if (Runtime.getRuntime().totalMemory() != totalMemory)
-							usedMemory = -1;
-
-						group.record(this, time, usedMemory);
+						group.record(this, time);
 					}
 				} finally {
-					if (measureTime) {
-						group.dataGenerator.tearDownTimedSample(parameters);
-					} else if (measureMemory) {
-						group.dataGenerator.tearDownMemorySample(parameters);
-					}
+					group.dataGenerator.tearDownSample(parameters);
 				}
 			}
 
@@ -237,7 +180,7 @@ public class PerformanceChartPanel extends JPanel {
 
 		Thread workerThread;
 
-		List<WorkerTask> tasks = new LinkedList<>();
+		final List<WorkerTask> tasks = new LinkedList<>();
 
 		Runnable taskManagerRunnable = new Runnable() {
 
@@ -258,60 +201,13 @@ public class PerformanceChartPanel extends JPanel {
 		public void addTasks(PerformanceChartPanel panel,
 				ChartDataGenerator dataGenerator, Cancellable cancellable,
 				Listener listener) {
-			Listener multiListener = new Listener() {
-
-				@Override
-				public void progressUpdate(int completedIterations, int totalIterations) {
-					listener.progressUpdate(completedIterations, totalIterations);
-					ShowcaseDemoInfo i = getShowcaseDemoInfo(panel);
-					if (i != null)
-						i.setLoadingProgress(new Fraction(completedIterations, totalIterations));
-				}
-
-				@Override
-				public void complete(Map<Map<String, ?>, PerformanceResult> resultsMap) {
-					listener.complete(resultsMap);
-					ShowcaseDemoInfo i = getShowcaseDemoInfo(panel);
-					if (i != null)
-						i.setLoadingProgress(new Fraction(1, 1));
-				}
-				
-			};
 			ShowcaseDemoInfo i = getShowcaseDemoInfo(panel);
 			if (i != null)
 				i.setLoadingProgress(new Fraction(0, 1));
 
-			WorkerTaskGroup group = new WorkerTaskGroup(panel, dataGenerator,
-					multiListener);
-
 			synchronized (tasks) {
-
-				ChartDataGenerator.ExecutionMode mode = dataGenerator
-						.getExecutionMode();
-				if (mode == ChartDataGenerator.ExecutionMode.RECORD_TIME_AND_MEMORY_SIMULTANEOUSLY) {
-					int sampleCount = Math.max(
-							dataGenerator.getMemorySampleCount(),
-							dataGenerator.getTimedSampleCount());
-					createWorkerTasks(group, sampleCount,
-							dataGenerator.getTimedParameters(), true, true,
-							cancellable);
-				}
-				if (mode == ChartDataGenerator.ExecutionMode.RECORD_TIME_AND_MEMORY_SEPARATELY
-						|| mode == ChartDataGenerator.ExecutionMode.RECORD_TIME_ONLY) {
-					createWorkerTasks(group,
-							dataGenerator.getTimedSampleCount(),
-							dataGenerator.getTimedParameters(), true, false,
-							cancellable);
-				}
-				if (mode == ChartDataGenerator.ExecutionMode.RECORD_TIME_AND_MEMORY_SEPARATELY
-						|| mode == ChartDataGenerator.ExecutionMode.RECORD_MEMORY_ONLY) {
-					createWorkerTasks(group,
-							dataGenerator.getMemorySampleCount(),
-							dataGenerator.getMemoryParameters(), false, true,
-							cancellable);
-				}
+				WorkerTaskGroup group = createWorkerTaskGroup(panel, dataGenerator, 5, cancellable, listener);
 				tasks.addAll(group.getWorkerTasks());
-
 				checkWorkerThread();
 			}
 		}
@@ -331,19 +227,44 @@ public class PerformanceChartPanel extends JPanel {
 			return null;
 		}
 
-		private void createWorkerTasks(WorkerTaskGroup group, int sampleCount,
-				List<Map<String, ?>> parameterList, boolean recordTime,
-				boolean recordMemory, Cancellable cancellable) {
-			for (Map<String, ?> parameters : parameterList) {
+		private WorkerTaskGroup createWorkerTaskGroup(PerformanceChartPanel panel, ChartDataGenerator dataGenerator, int sampleCount,
+													  Cancellable cancellable, Listener listener) {
+			Listener multiListener = new Listener() {
+
+				@Override
+				public void progressUpdate(int completedIterations, int totalIterations) {
+					listener.progressUpdate(completedIterations, totalIterations);
+					ShowcaseDemoInfo i = getShowcaseDemoInfo(panel);
+					if (i != null)
+						i.setLoadingProgress(new Fraction(completedIterations, totalIterations));
+				}
+
+				@Override
+				public void complete(Map<Map<String, ?>, PerformanceResult> resultsMap) {
+					listener.complete(resultsMap);
+					ShowcaseDemoInfo i = getShowcaseDemoInfo(panel);
+					if (i != null)
+						i.setLoadingProgress(new Fraction(1, 1));
+				}
+
+			};
+
+			WorkerTaskGroup group = new WorkerTaskGroup(panel, dataGenerator,
+					multiListener);
+
+			for (Map<String, ?> parameters : dataGenerator.getParameters()) {
 				for (int sampleIndex = 0; sampleIndex < sampleCount; sampleIndex++) {
 					Map<String, Object> newParameters = new HashMap<>();
 					newParameters.putAll(parameters);
 					newParameters.put(PARAMETER_SAMPLE_INDEX,
 							Integer.valueOf(sampleIndex));
-					new WorkerTask(group, newParameters, recordTime,
-							recordMemory, cancellable);
+					if (!newParameters.containsKey(PARAMETER_CHART_NAME))
+						newParameters.put(PARAMETER_CHART_NAME, "Time");
+
+					new WorkerTask(group, newParameters, cancellable);
 				}
 			}
+			return group;
 		}
 
 		/**
@@ -411,7 +332,7 @@ public class PerformanceChartPanel extends JPanel {
 	JTextArea resultsLowerTextArea = new JTextArea();
 
 	AbstractAction copyAction_text, copyAction_html;
-	List<Chart> charts = null;
+	Map<String, Chart> chartMap;
 	String name;
 
 	/**
@@ -467,7 +388,7 @@ public class PerformanceChartPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String str = BarChartRenderer.toText(charts);
+				String str = BarChartRenderer.toText(chartMap.values());
 				Toolkit.getDefaultToolkit().getSystemClipboard()
 						.setContents(new StringSelection(str), null);
 			}
@@ -479,7 +400,7 @@ public class PerformanceChartPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String str = BarChartRenderer.toHtml(charts);
+				String str = BarChartRenderer.toHtml(chartMap.values());
 				Toolkit.getDefaultToolkit().getSystemClipboard()
 						.setContents(new StringSelection(str), null);
 			}
@@ -491,38 +412,7 @@ public class PerformanceChartPanel extends JPanel {
 
 	protected void populateResultsPanel(
 			Map<Map<String, ?>, PerformanceResult> resultsMap) {
-
-		charts = new LinkedList<>();
-
-		Chart timeChart = new Chart(CHART_NAME_TIME);
-		Chart memoryChart = new Chart(CHART_NAME_MEMORY);
-
-		timeChart.setValueFormatter(new Function<Number, String>() {
-			DecimalFormat format = new DecimalFormat("0.0");
-
-			@Override
-			public String apply(Number t) {
-				if (t.doubleValue() == 0)
-					return "0 s";
-				return format.format(t.doubleValue() / 1000.0) + " s";
-			}
-		});
-
-		memoryChart.setValueFormatter(new Function<Number, String>() {
-			DecimalFormat format = new DecimalFormat("0.0");
-
-			@Override
-			public String apply(Number t) {
-				if (t.doubleValue() == 0)
-					return "0 MB";
-				return format.format(t.doubleValue() / (1024.0 * 1024.0))
-						+ " MB";
-			}
-		});
-
-		charts.add(timeChart);
-		charts.add(memoryChart);
-
+		chartMap = new LinkedHashMap<>();
 		for (Map.Entry<Map<String, ?>, PerformanceResult> entry : resultsMap
 				.entrySet()) {
 			Map<String, ?> params = entry.getKey();
@@ -531,22 +421,34 @@ public class PerformanceChartPanel extends JPanel {
 				throw new NullPointerException(
 						"PARAMETER_NAME must be defined in the parameters to create chart.");
 			PerformanceResult r = entry.getValue();
-			if (r.getMedianTime() >= 0)
-				charts.get(0).getSeriesData().add(
-						new AbstractMap.SimpleEntry<>(name, r.getMedianTime()));
-			if (r.getMedianMemory() >= 0)
-				charts.get(1).getSeriesData().add(new AbstractMap.SimpleEntry<>(
-						name, r.getMedianMemory()));
+
+			String chartName = (String) params.get(PARAMETER_CHART_NAME);
+			Chart chart = chartMap.get(chartName);
+			if (chart == null) {
+				chart = new Chart(chartName);
+				chartMap.put(chartName, chart);
+				chart.setValueFormatter(new Function<Number, String>() {
+					DecimalFormat format = new DecimalFormat("0.0");
+
+					@Override
+					public String apply(Number t) {
+						if (t.doubleValue() == 0)
+							return "0 s";
+						return format.format(t.doubleValue() / 1000.0) + " s";
+					}
+				});
+			}
+			long time = r.getMedianTime();
+			chart.getSeriesData().add(
+					new AbstractMap.SimpleEntry<>(name, time));
 		}
 
 		resultsPanel.removeAll();
 		resultsPanel.setLayout(new GridBagLayout());
 
-		int width = 400;
-		int height = 270;
-		BarChartRenderer chartRenderer = new BarChartRenderer(charts);
-		BarChartPanel p = new BarChartPanel(chartRenderer,
-				new Dimension(width, height), new Dimension(width, height));
+		List<Chart> chartList = new ArrayList<>(chartMap.values());
+		BarChartRenderer chartRenderer = new BarChartRenderer(chartList);
+		BarChartPanel p = new BarChartPanel(chartRenderer, 450);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -558,11 +460,13 @@ public class PerformanceChartPanel extends JPanel {
 		resultsPanel.add(p, gbc);
 		gbc.gridy++;
 		gbc.fill = GridBagConstraints.BOTH;
+		gbc.insets.top += 6;
 		resultsPanel.add(resultsLowerTextArea, gbc);
 
+		ContextualMenuHelper.clear(resultsPanel);
 		ContextualMenuHelper.add(resultsPanel, copyAction_text);
 		ContextualMenuHelper.add(resultsPanel, copyAction_html);
-		ShowcaseDemo.installExportJVGContextMenu(resultsPanel, resultsPanel,
+		ShowcaseDemo.installExportJVGContextMenu(resultsPanel, p,
 				name);
 	}
 
@@ -571,7 +475,7 @@ public class PerformanceChartPanel extends JPanel {
 			@Override
 			public void run() {
 				ContextualMenuHelper.clear(resultsPanel);
-				charts = null;
+				chartMap = null;
 
 				progressBar.setValue(0);
 				cardLayout.show(PerformanceChartPanel.this, CARD_LOADING);

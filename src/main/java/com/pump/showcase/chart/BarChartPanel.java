@@ -10,9 +10,13 @@
  */
 package com.pump.showcase.chart;
 
+import com.pump.graphics.vector.VectorGraphics2D;
+import com.pump.graphics.vector.VectorImage;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Objects;
 
 import javax.swing.JComponent;
@@ -26,7 +30,7 @@ public class BarChartPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	class BarChartPanelUI extends BasicPanelUI {
+	static class BarChartPanelUI extends BasicPanelUI {
 		@Override
 		public void paint(Graphics g, JComponent c) {
 			super.paint(g, c);
@@ -38,12 +42,19 @@ public class BarChartPanel extends JPanel {
 
 	BarChartRenderer renderer;
 
-	public BarChartPanel(BarChartRenderer renderer, Dimension preferredSize,
-			Dimension minimumSize) {
+	public BarChartPanel(BarChartRenderer renderer, int width) {
 		this.renderer = Objects.requireNonNull(renderer);
 		setUI(new BarChartPanelUI());
-		setMinimumSize(minimumSize);
-		setPreferredSize(preferredSize);
+
+		// identify the height we need to render:
+		VectorImage img = new VectorImage();
+		VectorGraphics2D g = img.createGraphics();
+		renderer.paint(g, new Dimension(1000, 1000));
+		g.dispose();
+		Rectangle2D r = img.getBounds();
+		int height = (int)(r.getHeight() + .5);
+		setPreferredSize(new Dimension(width, height));
+
 		setOpaque(false);
 	}
 }
