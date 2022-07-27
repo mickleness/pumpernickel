@@ -134,9 +134,9 @@ public class PumpernickelShowcaseApp extends JFrame {
 		panel.add(collapsibleContainer, c);
 
 		for (Section section : sections) {
-			section.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);
+			section.setProperty(CollapsibleContainer.PROPERTY_VERTICAL_WEIGHT, 1);
 			collapsibleContainer.getHeader(section).putClientProperty(
-					CollapsibleContainer.COLLAPSIBLE, Boolean.FALSE);
+					CollapsibleContainer.PROPERTY_COLLAPSIBLE, Boolean.FALSE);
 			collapsibleContainer.getHeader(section)
 					.setBorder(new EmptyBorder(3, 2, 3, 2));
 			collapsibleContainer.getHeader(section)

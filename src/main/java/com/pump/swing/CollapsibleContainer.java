@@ -10,25 +10,15 @@
  */
 package com.pump.swing;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.LayoutManager;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 import javax.swing.Icon;
@@ -88,34 +78,34 @@ import com.pump.util.WeakSet;
  *      Collapsible Sections</a>
  */
 public class CollapsibleContainer extends SectionContainer {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 	/**
 	 * A property name for a Section that maps to the JButton used as a header
 	 * for that Section.
 	 */
-	protected static final String HEADER = CollapsibleContainer.class.getName()
+	protected static final String PROPERTY_HEADER = CollapsibleContainer.class.getName()
 			+ ".header";
 
 	/**
 	 * A property name for a Section that identifies its vertical weight. When
 	 * it is absent the vertical weight is assumed to be zero.
 	 */
-	public static final String VERTICAL_WEIGHT = CollapsibleContainer.class
+	public static final String PROPERTY_VERTICAL_WEIGHT = CollapsibleContainer.class
 			.getName() + ".vertical-weight";
 
 	/**
 	 * A client property name for the JButton header of a <code>Section</code>
 	 * that determines whether a the user can collapse/expand a section.
 	 */
-	public static final String COLLAPSIBLE = CollapsibleContainer.class
+	public static final String PROPERTY_COLLAPSIBLE = CollapsibleContainer.class
 			.getName() + ".collapsible";
 
 	/**
 	 * A client property name for the JButton header of a <code>Section</code>
 	 * that determines whether a Section is collapsed.
 	 */
-	public static final String COLLAPSED = CollapsibleContainer.class.getName()
+	public static final String PROPERTY_COLLAPSED = CollapsibleContainer.class.getName()
 			+ ".collapsed";
 
 	/**
@@ -147,36 +137,86 @@ public class CollapsibleContainer extends SectionContainer {
 	private static float ANIMATION_DURATION = .2f;
 
 	/**
+	 * Add a new Section to this CollapsibleContainer.
+	 * @param sectionLabel the text used to label the content
+	 * @param content the component to show
+	 * @param verticalWeight the vertical weight of all visible sections is used to determine
+	 *                       how to vertically distribute the available space to every
+	 *                       element.
+	 * @return a new Section
+	 */
+    public Section addSection(String sectionLabel, JComponent content, int verticalWeight) {
+		Section newSection = addSection(getUniqueSectionID(), sectionLabel);
+		newSection.getBody().setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+		if (!(content instanceof JScrollPane)) {
+			c.insets = new Insets(4, 4, 4, 4);
+		}
+		newSection.getBody().add(content, c);
+		newSection.setProperty(CollapsibleContainer.PROPERTY_VERTICAL_WEIGHT, verticalWeight);
+		return newSection;
+    }
+
+	/**
+	 * Return a unique ID that isn't currently used by any existing Section
+	 * in this CollapsibleContainer.
+	 */
+	private String getUniqueSectionID() {
+		int z = sections.size();
+		String id = "section" + z;
+		while (getSection(id) != null) {
+			z++;
+			id = "section" + z;
+		}
+		return id;
+	}
+
+	/**
+	 * Return a Section matching a given ID, or null.
+	 */
+	public Section getSection(String id) {
+		Objects.requireNonNull(id);
+		for (Section section : sections) {
+			if (id.equals(section.id))
+				return section;
+		}
+		return null;
+	}
+
+	/**
 	 * This contains the preferred layout of this container at a given instant.
 	 * This layout can be installed in one instant or incrementally (for
 	 * animation)
 	 */
 	class LayoutBlueprint extends AnimationManager.Adjuster<Float> {
 
-		List<JComponent> components = new ArrayList<JComponent>();
-		Map<JComponent, Integer> heightMap = new HashMap<JComponent, Integer>();
-		Map<JComponent, Integer> originalHeightMap = new HashMap<JComponent, Integer>();
-		Set<JComponent> visibleComponents = new HashSet<JComponent>();
+		List<JComponent> components = new ArrayList<>();
+		Map<JComponent, Integer> heightMap = new HashMap<>();
+		Map<JComponent, Integer> originalHeightMap = new HashMap<>();
+		Set<JComponent> visibleComponents = new HashSet<>();
 		boolean initialPermitLocked;
 
 		protected LayoutBlueprint(boolean initialPermitLocked) {
 			super(ANIMATION_DURATION, 1F);
 			this.initialPermitLocked = initialPermitLocked;
 			Insets insets = getInsets();
-			int height = getHeight() - insets.top - insets.bottom;
 
-			int remainingHeight = height;
+			int remainingHeight = getHeight() - insets.top - insets.bottom;
 
 			float totalVerticalWeight = 0;
-			Map<JComponent, Number> verticalWeightMap = new HashMap<JComponent, Number>();
+			Map<JComponent, Number> verticalWeightMap = new HashMap<>();
 
-			for (int a = 0; a < sections.size(); a++) {
-				Section section = sections.get(a);
+			for (Section section : sections) {
 				JPanel body = section.getBody();
 				JButton header = getHeader(section);
 
 				Boolean collapsed = (Boolean) header
-						.getClientProperty(COLLAPSED);
+						.getClientProperty(PROPERTY_COLLAPSED);
 				if (collapsed == null)
 					collapsed = Boolean.FALSE;
 				if (!header.isVisible())
@@ -190,7 +230,7 @@ public class CollapsibleContainer extends SectionContainer {
 				if ((!collapsed))
 					visibleComponents.add(body);
 
-				Number n = (Number) section.getProperty(VERTICAL_WEIGHT);
+				Number n = (Number) section.getProperty(PROPERTY_VERTICAL_WEIGHT);
 				if (n == null)
 					n = 0;
 				if (visibleComponents.contains(body)) {
@@ -266,8 +306,7 @@ public class CollapsibleContainer extends SectionContainer {
 				int y = insets.top;
 				int width = getWidth() - insets.right - insets.left;
 
-				for (int a = 0; a < components.size(); a++) {
-					JComponent jc = components.get(a);
+				for (JComponent jc : components) {
 					if (visibleComponents.contains(jc)) {
 						int h = heightMap.get(jc);
 						jc.setBounds(x, y, width, h);
@@ -305,8 +344,7 @@ public class CollapsibleContainer extends SectionContainer {
 					}
 				}
 
-				for (int a = 0; a < components.size(); a++) {
-					JComponent jc = components.get(a);
+				for (JComponent jc : components) {
 					int originalHeight = originalHeightMap.get(jc);
 					int targetHeight = heightMap.get(jc);
 					int newHeight = (int) (targetHeight * (fraction)
@@ -389,7 +427,7 @@ public class CollapsibleContainer extends SectionContainer {
 		}
 	}
 
-	private Set<JButton> headers = new HashSet<JButton>();
+	private final Set<JButton> headers = new HashSet<>();
 	ChangeListener sectionListener = new ChangeListener() {
 
 		public void stateChanged(ChangeEvent e) {
@@ -409,7 +447,7 @@ public class CollapsibleContainer extends SectionContainer {
 				Section section = (Section) header.getClientProperty(SECTION);
 				if (section.getBody().getParent() != CollapsibleContainer.this) {
 					iter.remove();
-					section.setProperty(HEADER, null);
+					section.setProperty(PROPERTY_HEADER, null);
 					remove(header);
 					remove(section.getBody());
 				}
@@ -423,7 +461,7 @@ public class CollapsibleContainer extends SectionContainer {
 		sections.addChangeListener(sectionListener, false);
 
 		sections.addChangeListener(new ChangeListener() {
-			Set<Section> mySections = new WeakSet<>();
+			final Set<Section> mySections = new WeakSet<>();
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -448,18 +486,17 @@ public class CollapsibleContainer extends SectionContainer {
 			}
 
 			private void refreshSectionBody(JPanel container) {
-				JPanel p = container;
 				QPanelUI ui;
-				if (!(p.getUI() instanceof QPanelUI)) {
+				if (!(container.getUI() instanceof QPanelUI)) {
 					ui = new QPanelUI();
-					p.setUI(ui);
+					container.setUI(ui);
 				} else {
-					ui = (QPanelUI) p.getUI();
+					ui = (QPanelUI) container.getUI();
 				}
 				ui.assign(QPanelUI.createBoxUI());
 
-				if (p.getComponentCount() == 1) {
-					Component child = p.getComponent(0);
+				if (container.getComponentCount() == 1) {
+					Component child = container.getComponent(0);
 					if (child instanceof JList || child instanceof JTree) {
 						JComponent jc = (JComponent) child;
 						Border b = jc.getBorder();
@@ -496,7 +533,7 @@ public class CollapsibleContainer extends SectionContainer {
 
 	/** Return the header button associated with a Section. */
 	public JButton getHeader(final Section section) {
-		JButton header = (JButton) section.getProperty(HEADER);
+		JButton header = (JButton) section.getProperty(PROPERTY_HEADER);
 		if (header == null) {
 			header = createHeader(section);
 			final JButton headerRef = header;
@@ -511,7 +548,7 @@ public class CollapsibleContainer extends SectionContainer {
 			section.addPropertyChangeListener(nameListener);
 			nameListener.propertyChange(null);
 
-			header.addPropertyChangeListener(COLLAPSED,
+			header.addPropertyChangeListener(PROPERTY_COLLAPSED,
 					new PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent evt) {
 							midanimation.acquireUninterruptibly();
@@ -525,7 +562,7 @@ public class CollapsibleContainer extends SectionContainer {
 						}
 					});
 
-			section.setProperty(HEADER, header);
+			section.setProperty(PROPERTY_HEADER, header);
 			headers.add(header);
 			header.putClientProperty(SECTION, section);
 			add(header);
@@ -534,33 +571,9 @@ public class CollapsibleContainer extends SectionContainer {
 	}
 
 	/**
-	 * @return a button that can toggle the property <code>COLLAPSED</code> if
-	 *         the property <code>COLLAPSIBLE</code> is <code>true</code>.
-	 *         <p>
-	 *         This button (by default) uses a <code>QButtonUI</code>, so if you
-	 *         configure it's position then you can toggle off certain parts of
-	 *         the border.
-	 *         <p>
-	 *         The following property of this button are automatically
-	 *         maintained through a set of listeners:
-	 *         <ul>
-	 *         <li>Request Focus Enabled</li>
-	 *         <li>Focusable</li>
-	 *         <li>Icon</li>
-	 *         <li>COLLAPSED</li>
-	 *         <li>Internal properties including ROTATION and TARGET_ROTATION</li>
-	 *         </ul>
-	 */
-	public static JButton createCollapsibleButton() {
-		return createCollapsibleButton("", true);
-	}
-
-	/**
 	 * 
 	 * @param text
 	 *            the text in this button
-	 * @param includeLeftAndRightEdges
-	 *            whether the left and right edges should be visible
 	 * @param collapsible
 	 *            whether this button should initially be collapsible.
 	 * @return a button that can toggle the property <code>COLLAPSED</code> if
@@ -609,14 +622,14 @@ public class CollapsibleContainer extends SectionContainer {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if ((Boolean) button.getClientProperty(COLLAPSIBLE)) {
+				if ((Boolean) button.getClientProperty(PROPERTY_COLLAPSIBLE)) {
 					if (e.getKeyCode() == KeyEvent.VK_LEFT
 							|| e.getKeyCode() == KeyEvent.VK_UP) {
-						button.putClientProperty(COLLAPSED, true);
+						button.putClientProperty(PROPERTY_COLLAPSED, true);
 						e.consume();
 					} else if (e.getKeyCode() == KeyEvent.VK_RIGHT
 							|| e.getKeyCode() == KeyEvent.VK_DOWN) {
-						button.putClientProperty(COLLAPSED, false);
+						button.putClientProperty(PROPERTY_COLLAPSED, false);
 						e.consume();
 					}
 				}
@@ -626,8 +639,8 @@ public class CollapsibleContainer extends SectionContainer {
 
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Boolean b = (Boolean) button.getClientProperty(COLLAPSED);
-				button.putClientProperty(COLLAPSED, !b);
+				Boolean b = (Boolean) button.getClientProperty(PROPERTY_COLLAPSED);
+				button.putClientProperty(PROPERTY_COLLAPSED, !b);
 			}
 		});
 
@@ -638,28 +651,28 @@ public class CollapsibleContainer extends SectionContainer {
 		button.addPropertyChangeListener(new PropertyChangeListener() {
 
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (COLLAPSIBLE.equals(evt.getPropertyName())) {
+				if (PROPERTY_COLLAPSIBLE.equals(evt.getPropertyName())) {
 					boolean collapsible = ((Boolean) evt.getNewValue());
 					button.setEnabled(collapsible);
 					updateIcon();
-				} else if (COLLAPSED.equals(evt.getPropertyName())) {
+				} else if (PROPERTY_COLLAPSED.equals(evt.getPropertyName())) {
 					boolean collapsed = ((Boolean) evt.getNewValue());
 					if (collapsed) {
-						button.putClientProperty(TARGET_ROTATION, new Double(0));
+						button.putClientProperty(TARGET_ROTATION, 0);
 					} else {
-						button.putClientProperty(TARGET_ROTATION, new Double(
-								Math.PI / 2.0));
+						button.putClientProperty(TARGET_ROTATION,
+								Math.PI / 2.0);
 					}
 				} else if (ROTATION.equals(evt.getPropertyName())) {
 					updateIcon();
 				}
 			}
 
-			private Icon triangleIcon = new TriangleIcon(SwingConstants.EAST,
+			private final Icon triangleIcon = new TriangleIcon(SwingConstants.EAST,
 					10, 10);
 
 			private void updateIcon() {
-				if ((Boolean) button.getClientProperty(COLLAPSIBLE)) {
+				if ((Boolean) button.getClientProperty(PROPERTY_COLLAPSIBLE)) {
 					Number n = (Number) button.getClientProperty(ROTATION);
 					if (n == null)
 						n = 0;
@@ -672,8 +685,8 @@ public class CollapsibleContainer extends SectionContainer {
 
 		});
 
-		button.putClientProperty(COLLAPSIBLE, collapsible);
-		button.putClientProperty(COLLAPSED, false);
+		button.putClientProperty(PROPERTY_COLLAPSIBLE, collapsible);
+		button.putClientProperty(PROPERTY_COLLAPSED, false);
 
 		UIEffect.installTweenEffect(button, TARGET_ROTATION, ROTATION, .15f, 20);
 
