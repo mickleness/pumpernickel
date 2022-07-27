@@ -4,17 +4,19 @@
 <title>NSImage Demo</title>
 </head>
 <body>
-The <code>com.pump.image.NSImage</code> class identifies several images available only on Mac. If you attempt to invoke any NSImages on another platform you may get an exception or an empty image.
-<h3>Toolkit Support</h3>
-You're probably familiar with calling <code>Toolkit.getDefaultToolkit().getImage(myImagePath)</code>, right? The default Mac toolkit (the <code>sun.lwawt.macosx.LWCToolkit</code>) has special logic to intercept all requests for images that start with the prefix "NSImage://".
-<p>
-The NSImage class provides a list of these types of images that are available through the OS. The images may change from one OS release to another, so it's important that you choose them for their intended usage and not for their actual image.
-<p>
-The fields in NSImage are not meant to be an exhaustive list. You may be able to request some images not listed here.
-<p>
-Because this functionality is baked into the Toolkit class on Mac: the NSImage doesn't offer you much added value if you just want to use the Toolkit to load specific images directly. (But it's worth including this demo in the showcase app to remind everyone that this functionality is there.)
-
-<h3>Reflection / Scaling</h3>
-Many of the images in NSImage are highly scalable, and the NSImage class includes a separate getter method that returns a scaled Image (or BufferedImage) to accommodate a certain image size. This logic uses reflection to get to non-public <code>com.apple</code> classes. So if you don't have complete control over the JDK you install/ship with: you may want to avoid these methods.
+<h1>NSImage Demo</h1>
+<h2>What Is It</h2>
+<p>The <code>com.pump.image.NSImage</code> class identifies several images available only on Mac.</p>
+<h2>How To Use It</h2>
+<p>Here are a few ways to access the image titled "Computer":</p>
+<pre>Image img1 = NSImage.Computer.getImage();
+Image img2 = NSImage.Computer.getImage(new Dimension(64, 64));
+BufferedImage img3 = NSImage.Computer.getBufferedImage();
+BufferedImage img3 = NSImage.Computer.getBufferedImage(new Dimension(64, 64));</pre>
+<h2>How It Works</h2>
+<p>The default Mac toolkit (the <code>sun.lwawt.macosx.LWCToolkit</code>) has special logic to intercept all requests for images that start with the prefix "NSImage://NS". You don't actually need the <code>com.pump.image.NSImage</code> class to access this feature on Mac; this demo primary exists as a reminder of what images are available.</p>
+<p>The fields in NSImage are not meant to be an exhaustive list. You may be able to request some images not listed here.</p>
+<p>The images may change from one OS release to another, so it's important that you choose them for their intended usage and not for their actual image.</p>
+<p>If you attempt to invoke any NSImages on another platform you may get an exception or an empty image.</p>
 </body>
 </html>
