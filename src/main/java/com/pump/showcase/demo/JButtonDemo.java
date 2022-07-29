@@ -275,6 +275,20 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		JPanel animatingInspectorPanel = new AnimatingInspectorPanel();
 		configurationPanel.add(animatingInspectorPanel);
 
+		buttonUIFormatterComboBox.setToolTipText("This controls AbstractButton#setUI(ui)");
+		iconComboBox.setToolTipText(
+				"This controls AbstractButton#setIcon(Icon)");
+		text.setToolTipText(
+				"This controls AbstractButton#setText(String)");
+		horizontalAlignmentComboBox.setToolTipText(
+				"This controls AbstractButton#setHorizontalAlignment(int)");
+		horizontalTextPositionComboBox.setToolTipText(
+				"This controls AbstractButton#setHorizontalTextPosition(int)");
+		verticalAlignmentComboBox.setToolTipText(
+				"This controls AbstractButton#setVerticalAlignment(int)");
+		verticalTextPositionComboBox.setToolTipText(
+				"This controls AbstractButton#setVerticalTextPosition(int)");
+
 		Inspector inspector = new Inspector(animatingInspectorPanel);
 		inspector.addRow(new JLabel("ButtonUI:"), buttonUIFormatterComboBox);
 		inspector.addRow(new JLabel("Icon:"), iconComboBox);
@@ -309,6 +323,10 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 				inspector.addRow(new JLabel("Button Type:"), aquaTypeComboBox));
 		aquaRows.add(inspector.addRow(new JLabel("Size Variant:"),
 				sizeVariantComboBox));
+
+		aquaTypeComboBox.setToolTipText("This controls AbstractButton#putClientProperty(\"JButton.buttonType\", type)");
+		sizeVariantComboBox.setToolTipText("This controls AbstractButton#putClientProperty(\"JButton.sizeVariant\", size)");
+
 		qbuttonRows.add(inspector.addRow(new JLabel("Paint Focus:"),
 				paintFocusInside, paintFocusOutside));
 		qbuttonRows.add(inspector.addRow(new JLabel("JComboBox:"),
@@ -319,6 +337,14 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		comboBoxPopDownCheckBox.addActionListener(actionRefreshListener);
 		aquaTypeComboBox.addActionListener(actionRefreshListener);
 		sizeVariantComboBox.addActionListener(actionRefreshListener);
+
+		comboBoxPopDownCheckBox.setToolTipText(
+				"This controls JComboBox#putClientProperty(QComboBoxUI.PROPERTY_IS_POP_DOWN, Boolean)");
+
+		paintFocusInside.setToolTipText(
+				"This controls QButtonUI#setPaintFocus(PaintFocus.INSIDE)");
+		paintFocusOutside.setToolTipText(
+				"This controls QButtonUI#setPaintFocus(PaintFocus.OUTSIDE)");
 
 		iconComboBox.addItem("None");
 		iconComboBox.addItem("Thumbnail");
@@ -361,7 +387,7 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		paintFocusCheckbox.setToolTipText(
 				"This controls AbstractButton#setFocusPainted(boolean)");
 		paintStrokeCheckbox.setToolTipText(
-				"This QButtonUI option toggles the stroke painted in the border.");
+				"This controls JComponent#putClientProperty(QButtonUI.PROPERTY_STROKE_PAINTED, Boolean)");
 
 		refreshButton();
 	}
