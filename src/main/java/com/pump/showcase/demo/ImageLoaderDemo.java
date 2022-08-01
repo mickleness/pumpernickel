@@ -231,7 +231,7 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 	protected void setDefaultResourcePath() {
 		try {
 			if (sampleFile == null) {
-				BufferedImage sampleImage = createSampleImage(true);
+				BufferedImage sampleImage = createSampleImage(false);
 				sampleFile = TempFileManager.get().createFile("sampleImage",
 						"jpg");
 				ImageIO.write(sampleImage, "jpg", sampleFile);
