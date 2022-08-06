@@ -15,13 +15,11 @@ import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import com.pump.geom.ShapeBounds;
+import com.pump.showcase.chart.ChartDataGenerator;
+import com.pump.showcase.chart.PerformanceChartPanel;
 
 /**
  * A simple test showing off the efficiency of {@link ShapeBounds}.
@@ -32,43 +30,81 @@ import com.pump.geom.ShapeBounds;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/ShapeBoundsDemo.png"
  * alt="A screenshot of the ShapeBoundsDemo.">
  **/
-public class ShapeBoundsDemo extends ShowcaseChartDemo {
+public class ShapeBoundsDemo extends ShowcaseDemo {
 	private static final long serialVersionUID = 1L;
 
-	private static final int SAMPLE_COUNT = 10;
-
-	private static final String IMPLEMENTATION_SHAPE_BOUNDS = "ShapeBounds";
-	private static final String IMPLEMENTATION_AREA = "Area";
-	private static final String IMPLEMENTATION_FLATTENED_AREA = "Flattened Area";
-
-	static class MeasurementRunnable extends TimeMemoryMeasurementRunnable {
-
-		Path2D path;
-		Path2D flattenedShape;
-		Area area;
-
-		public MeasurementRunnable(Map<String, Map<String, SampleSet>> data,
-				String implementation, Path2D path) {
-			super(data, null, implementation);
-			this.path = path;
-			flattenedShape = new Path2D.Float();
-			flattenedShape.append(path.getPathIterator(null, .1f), false);
-			area = new Area(path);
+	PerformanceChartPanel chartPanel;
+	
+	enum Model {
+		AREA("Area") {
+			@Override
+			public void run(Path2D.Double path) {
+				new Area(path).getBounds2D();
+			}
+		},
+		AREA_FLATTENED("Flattened Area") {
+			@Override
+			public void run(Path2D.Double path) {
+				Path2D flatCopy = new Path2D.Double();
+				flatCopy.append(path.getPathIterator(null, .01), false);
+				new Area(flatCopy).getBounds2D();
+			}
+		},
+		SHAPE_BOUNDS("ShapeBounds") {
+			@Override
+			public void run(Path2D.Double path) {
+				ShapeBounds.getBounds(path);
+			}
+		},
+		SHAPE_BOUNDS_FLATTENED("Flattened ShapeBounds") {
+			@Override
+			public void run(Path2D.Double path) {
+				ShapeBounds.getBounds(path.getPathIterator(null, .01));
+			}
+		};
+		final String name;
+		Model(String name) {
+			this.name = name;
 		}
 
 		@Override
-		protected void runSample() {
-			for (int a = 0; a < 20; a++) {
-				if (implementation.equals(IMPLEMENTATION_AREA)) {
-					new Area(path).getBounds2D();
-				} else if (implementation
-						.equals(IMPLEMENTATION_FLATTENED_AREA)) {
-					new Area(flattenedShape).getBounds2D();
-				} else {
-					ShapeBounds.getBounds(path);
+		public String toString() {
+			return name;
+		}
+
+		public abstract void run(Path2D.Double path);
+	}
+	
+	public ShapeBoundsDemo() {
+		chartPanel = new PerformanceChartPanel("ShapeBounds Performance Results");
+		ChartDataGenerator dataGenerator = new ChartDataGenerator() {
+
+			@Override
+			public List<Map<String, Object>> getParameters() {
+				List<Map<String,Object>> returnValue = new ArrayList<>();
+				for (Model model : Model.values()) {
+					Map<String, Object> params = new HashMap<>();
+					params.put(PerformanceChartPanel.PARAMETER_NAME, model.toString());
+					params.put(PerformanceChartPanel.PARAMETER_CHART_NAME, "Time");
+					params.put("model", model);
+					returnValue.add(params);
+				}
+				return returnValue;
+			}
+
+			@Override
+			public void runSample(Map<String, Object> parameters) {
+				Model model = (Model) parameters.get("model");
+
+				Path2D.Double p = createPath();
+				for (int a = 0; a < 50; a++) {
+					model.run(p);
 				}
 			}
-		}
+		};
+		chartPanel.reset(dataGenerator);
+
+		add(chartPanel);
 	}
 
 	@Override
@@ -78,7 +114,7 @@ public class ShapeBoundsDemo extends ShowcaseChartDemo {
 
 	@Override
 	public String getSummary() {
-		return "This compares the time and memory required to calculate a shape's bounds using the com.pump.geom.ShapeBounds class and the Area class.\n\nThis demos the com.pump.geom.ShapeBounds's ability to calculate a shape's bounds against the java.awt.geom.Area.\n\n(This also considers the return value of Path2D#getBounds(), but that's inaccurate so it doesn't really count...)";
+		return "This compares the time required to calculate a shape's bounds using the com.pump.geom.ShapeBounds class and the Area class.\n\nThis demos the com.pump.geom.ShapeBounds's ability to calculate a shape's bounds against the java.awt.geom.Area.";
 	}
 
 	@Override
@@ -95,23 +131,6 @@ public class ShapeBoundsDemo extends ShowcaseChartDemo {
 	public Class<?>[] getClasses() {
 		return new Class[] { ShapeBounds.class, Area.class, Shape.class,
 				PathIterator.class };
-	}
-
-	@Override
-	protected Collection<Runnable> getMeasurementRunnables(
-			Map<String, Map<String, SampleSet>> data) {
-		String[] implementations = new String[] { IMPLEMENTATION_SHAPE_BOUNDS,
-				IMPLEMENTATION_AREA, IMPLEMENTATION_FLATTENED_AREA };
-		Path2D path = createPath();
-		List<Runnable> returnValue = new ArrayList<>(
-				SAMPLE_COUNT * implementations.length);
-		for (String implementation : implementations) {
-			Runnable r = new MeasurementRunnable(data, implementation, path);
-			for (int sample = 0; sample < SAMPLE_COUNT; sample++) {
-				returnValue.add(r);
-			}
-		}
-		return returnValue;
 	}
 
 	private Path2D.Double createPath() {

@@ -39,6 +39,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.MouseInputAdapter;
 
+import com.pump.awt.DescendantListener;
 import com.pump.plaf.PlafPaintUtils;
 
 /**
@@ -48,7 +49,7 @@ import com.pump.plaf.PlafPaintUtils;
 public class MagnificationPanel extends JComponent {
 	private static final long serialVersionUID = 1L;
 
-	public static final String PIXELATED_KEY = MagnificationPanel.class
+	private static final String PIXELATED_KEY = MagnificationPanel.class
 			.getName() + ".pixelated";
 
 	MouseInputAdapter mouseListener = new MouseInputAdapter() {
@@ -111,10 +112,10 @@ public class MagnificationPanel extends JComponent {
 	 */
 	public MagnificationPanel(Component zoomedComponent, int visiblePixelWidth,
 			int visiblePixelHeight, int pixelSize) {
+		DescendantListener.addMouseListener(zoomedComponent, mouseListener, true);
+		DescendantListener.addMouseListener(this, mouseListener, true);
 		this.pixelSize = pixelSize;
 		this.zoomedComponent = zoomedComponent;
-		addMouseListeners(zoomedComponent);
-		addMouseListeners(this);
 		setPreferredSize(new Dimension(visiblePixelWidth * pixelSize,
 				visiblePixelHeight * pixelSize));
 
@@ -161,49 +162,6 @@ public class MagnificationPanel extends JComponent {
 
 		checkers = PlafPaintUtils.getCheckerBoard(Math.max(4, pixelSize / 2),
 				Color.white, new Color(238, 238, 238));
-	}
-
-	private ContainerListener containerListener = new ContainerListener() {
-
-		public void componentAdded(ContainerEvent e) {
-			addMouseListeners(e.getComponent());
-		}
-
-		public void componentRemoved(ContainerEvent e) {
-			removeMouseListeners(e.getComponent());
-		}
-	};
-
-	/**
-	 * Add MouseListeners to a component and its children. If children have a
-	 * MouseListener for mouse-moved events, then this component won't otherwise
-	 * receive mouse-moved events (and therefore it won't repaint correctly).
-	 * <p>
-	 * A common instance of this problem is simply the presence of tooltips
-	 * (which require a MouseListener).
-	 */
-	private void addMouseListeners(Component c) {
-		c.addMouseMotionListener(mouseListener);
-		c.addMouseListener(mouseListener);
-		if (c instanceof Container) {
-			Container c2 = (Container) c;
-			c2.addContainerListener(containerListener);
-			for (Component child : c2.getComponents()) {
-				addMouseListeners(child);
-			}
-		}
-	}
-
-	private void removeMouseListeners(Component c) {
-		c.removeMouseMotionListener(mouseListener);
-		c.removeMouseListener(mouseListener);
-		if (c instanceof Container) {
-			Container c2 = (Container) c;
-			c2.removeContainerListener(containerListener);
-			for (Component child : c2.getComponents()) {
-				addMouseListeners(child);
-			}
-		}
 	}
 
 	/**

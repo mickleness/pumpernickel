@@ -27,15 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import com.pump.plaf.QPanelUI;
 import com.pump.swing.CollapsibleContainer;
@@ -76,7 +68,7 @@ public class CollapsibleContainerDemo extends ShowcaseDemo {
 						JPopupMenu popup = new JPopupMenu();
 						Boolean collapsible = (Boolean) header
 								.getClientProperty(
-										CollapsibleContainer.COLLAPSIBLE);
+										CollapsibleContainer.PROPERTY_COLLAPSIBLE);
 						if (collapsible == null)
 							collapsible = Boolean.TRUE;
 						JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(
@@ -85,16 +77,17 @@ public class CollapsibleContainerDemo extends ShowcaseDemo {
 							public void actionPerformed(ActionEvent e) {
 								Boolean collapsible = (Boolean) header
 										.getClientProperty(
-												CollapsibleContainer.COLLAPSIBLE);
+												CollapsibleContainer.PROPERTY_COLLAPSIBLE);
 								if (collapsible == null)
 									collapsible = Boolean.TRUE;
 								header.putClientProperty(
-										CollapsibleContainer.COLLAPSIBLE,
+										CollapsibleContainer.PROPERTY_COLLAPSIBLE,
 										!collapsible);
 							}
 						});
 						popup.add(menuItem);
 						popup.show(header, x, y);
+						header.getModel().setArmed(false);
 					}
 				});
 			}
@@ -106,6 +99,18 @@ public class CollapsibleContainerDemo extends ShowcaseDemo {
 	private TexturePaint stripes;
 
 	public CollapsibleContainerDemo() {
+		BufferedImage stripeImage = createStripeImage();
+		stripes = new TexturePaint(stripeImage, new Rectangle(0, 0,
+				stripeImage.getWidth(), stripeImage.getHeight()));
+
+		JLabel label = new JLabel("... this is a label with no vertical weight.");
+		JTextPane text2 = new JTextPane();
+		text2.setText(
+				"This section is given a weight of 1, so by default it should occupy 1/3 of the free space.");
+		JTextPane text3 = new JTextPane();
+		text3.setText(
+				"This section is given a weight of 2, so by default it should occupy 2/3's of the free space.");
+
 		container = new CollapsibleContainer() {
 			private static final long serialVersionUID = 1L;
 
@@ -117,24 +122,10 @@ public class CollapsibleContainerDemo extends ShowcaseDemo {
 				g.fillRect(0, 0, getWidth(), getHeight());
 			}
 		};
-		BufferedImage stripeImage = createStripeImage();
-		stripes = new TexturePaint(stripeImage, new Rectangle(0, 0,
-				stripeImage.getWidth(), stripeImage.getHeight()));
-		section1 = container.addSection("section1", "Section 1");
-		install(section1.getBody(),
-				new JLabel("... this is a label with no vertical weight."));
-		section2 = container.addSection("section2", "Section 2");
-		JTextPane text2 = new JTextPane();
-		text2.setText(
-				"This section is given a weight of 1, so by default it should occupy 1/3 of the free space.");
-		install(section2.getBody(), new JScrollPane(text2));
-		section2.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 1);
-		section3 = container.addSection("section3", "Section 3");
-		JTextPane text3 = new JTextPane();
-		text3.setText(
-				"This section is given a weight of 2, so by default it should occupy 2/3's of the free space.");
-		install(section3.getBody(), new JScrollPane(text3));
-		section3.setProperty(CollapsibleContainer.VERTICAL_WEIGHT, 2);
+		section1 = container.addSection("Section 1", label, 0);
+		section2 = container.addSection("Section 2", new JScrollPane(text2), 1);
+		section3 = container.addSection("Section 3", new JScrollPane(text3), 2);
+
 		container.getHeader(section1).addMouseListener(
 				new PopupListener(container.getHeader(section1)));
 		container.getHeader(section2).addMouseListener(
@@ -150,20 +141,6 @@ public class CollapsibleContainerDemo extends ShowcaseDemo {
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		add(container, c);
-	}
-
-	private void install(JPanel container, JComponent comp) {
-		container.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-		if (!(comp instanceof JScrollPane)) {
-			c.insets = new Insets(4, 4, 4, 4);
-		}
-		container.add(comp, c);
 	}
 
 	private BufferedImage createStripeImage() {

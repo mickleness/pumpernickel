@@ -3,12 +3,30 @@
 <head>
 <title>CollapsibleContainer Demo</title>
 </head>
-<body>
-Call it an <a href="https://www.nngroup.com/articles/accordions-complex-content/">accordion</a>, call it a <a href="https://developer.apple.com/design/human-interface-guidelines/macos/buttons/disclosure-controls/">disclosure control</a>, or call it <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dn742409(v=vs.85).aspx">progressive</a>. It's a great alternative to tabs when you have too many UI controls to squeeze into your available real estate.
-<p>
-The <code>CollapsibleContainer</code> helps set up a series of labeled sections. Through client properties you can control whether a section is collapsible, and/or what vertical weight a section should have in the layout.
-<p>
-Scrollpanes preserve their existing rectangular border. Trees and lists are given a single-pixel rectangular border. Everything else is put inside a <a href="resource:QPanelUI">box UI</a> to group controls together.
-
+<h1>CollapsibleContainer Demo</h1>
+<h2>What Is It</h2>
+<p>The <code>CollapsibleContainer</code> is a <code>JPanel</code> that can present labeled components that are collapsible.</p>
+<h2>How To Use It</h2>
+<p>This demo is set up using code that resembles:</p>
+<pre>CollapsibleContainer container = new CollapsibleContainer();
+container.addSection("Section 1", label, 0);
+container.addSection("Section 2", new JScrollPane(textPane2), 1);
+container.addSection("Section 3", new JScrollPane(textPane3), 2);</pre>
+<p>All sections are collapsible by default, but you can toggle that off by calling:</p>
+<pre>Section section1 = container.addSection("Section 1", label, 0);
+container.getHeader(section1).putClientProperty(CollapsibleContainer.PROPERTY_COLLAPSIBLE, Boolean.FALSE);</pre>
+<p>Also in this demo you can right-click the section headers to toggle the "Collapsible" property.</p>
+<h2>How It Works</h2>
+<p>The headers are all <code>JButtons</code> with animating vector icons. This should help screen readers navigate this component; although I haven't invested time (yet?) in helping screen readers identify AccessibleStates like EXPANDED, EXPANDABLE, and COLLAPSED.</p>
+<p>When scrollpanes are added as sections they preserve their existing rectangular border. If a tree or list is added they are given a single-pixel rectangular border. All other components are put inside a <a href="resource:QPanelUI">box UI</a> to group controls together.</p>
+<p>The actual animation is handled by a private internal LayoutManager: a <code>CollapsibleLayout</code>.</p>
+<h2>Discussion</h2>
+<p>This basic idea is also known as an <a href="https://www.nngroup.com/articles/accordions-complex-content/">accordion</a>, or it might be called a <a href="https://developer.apple.com/design/human-interface-guidelines/macos/buttons/disclosure-controls/">disclosure control</a>, or a <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dn742409(v=vs.85).aspx">progressive disclosure control</a>.</p>
+<p>This component is a great alternative to tabs when you have too many UI controls to squeeze into a given space.</p>
+<p>As of this writing I've used this for some developer tools, but I haven't deployed it in any customer-facing applications. This component shows potential, but there are areas for improvement such as:</p>
+<ul><li>Some "PROPERTY" constants are stored in the header JButton. I'd rather all the PROPERTY constants be stored in the Section to better separate the data model from the UI.</li>
+<li>I'd like to define a maximum height for sections. For ex: if only one section is expanded, that doesn't mean that section must be the <em>entire height</em> of the CollapsibleContainer. Maybe some components need to max out at a certain height.</li>
+<li>Some accordions have one active section at a time. (That is: opening section X will automatically close all other sections.) That might be a nice feature to add if I find a clear use case for it.</li>
+<li>Modeling a separate <code>CollapsibleContainerUI</code>. Or maybe architecturally this entire class should be rewritten as a <code>javax.swing.plaf.ComponentUI</code> for the <code>SectionContainer</code> class. There could be specific Mac and Windows L&F variations.</li></ul>
 </body>
 </html>

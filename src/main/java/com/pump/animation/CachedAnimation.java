@@ -50,7 +50,7 @@ public class CachedAnimation extends AbstractAnimation {
 				if (myFiles == null)
 					throw new IllegalStateException(
 							"this animation has already been disposed");
-				bi = BmpDecoder.readImage(file, bi);
+				bi = BmpDecoder.read(file, bi);
 				return bi;
 			}
 		}
@@ -128,7 +128,6 @@ public class CachedAnimation extends AbstractAnimation {
 	@Override
 	protected void finalize() throws Throwable {
 		dispose();
-		super.finalize();
 	}
 
 	@Override

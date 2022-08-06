@@ -29,9 +29,7 @@ import com.pump.awt.Dimension2D;
  * <p>
  * If you are not scaling these images: these are already accessible on Mac by
  * calling:
- * <code>Toolkit.getDefaultToolkit().getImage("NSImage://NSComputer")</code>
- * <p>
- * The scaling logic uses reflection to help guarantee a high-resolution image.
+ * <code>Toolkit.getDefaultToolkit().getImage("NSImage://NSComputer")</code>.
  * <p>
  * The list of constants is based on Apple's documentation here: <br>
  * <a href="https://developer.apple.com/documentation/appkit/nsimage/">https://
@@ -41,14 +39,12 @@ import com.pump.awt.Dimension2D;
  * "touchBar", because Apple's documentation mentions: "Touch Bar template
  * images are exclusively for use in NSTouchBarItem objects and not in onscreen
  * windows.")
- * 
- * @see com.pump.icon.AquaIcon
  */
 public class NSImage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** All known NSImages. */
-	private static final Map<String, NSImage> knownImages = new LinkedHashMap<String, NSImage>();
+	private static final Map<String, NSImage> knownImages = new LinkedHashMap<>();
 
 	/**
 	 * Return all the IDs this runtime session has referred to, including all
@@ -565,6 +561,76 @@ public class NSImage implements Serializable {
 	public static final NSImage ViewIcons = get("ViewIcons");
 	public static final NSImage KEXT = get("KEXT");
 
+	// some old-looking ones from https://hetima.github.io/fucking_nsimage_syntax/
+//	public static final NSImage ToolbarBookmarks = get("ToolbarBookmarks");
+//	public static final NSImage ToolbarClipIndicator = get("ToolbarClipIndicator");
+//	public static final NSImage ToolbarCustomizeToolbarItemImage = get("ToolbarCustomizeToolbarItemImage");
+//	public static final NSImage ToolbarFlexibleSpaceItemPaletteRep = get("ToolbarFlexibleSpaceItemPaletteRep");
+//	public static final NSImage ToolbarMoreTemplate = get("ToolbarMoreTemplate");
+//	public static final NSImage ToolbarPrintItemImage = get("ToolbarPrintItemImage");
+//	public static final NSImage ToolbarShowColorsItemImage = get("ToolbarShowColorsItemImage");
+//	public static final NSImage ToolbarShowFontsItemImage = get("ToolbarShowFontsItemImage");
+//	public static final NSImage ToolbarSpaceItemPaletteRep = get("ToolbarSpaceItemPaletteRep");
+//
+//	public static final NSImage MediaBrowserIcon = get("MediaBrowserIcon");
+//	public static final NSImage MediaBrowserMediaTypeAudio = get("MediaBrowserMediaTypeAudio");
+//	public static final NSImage MediaBrowserMediaTypeAudioTemplate32 = get("MediaBrowserMediaTypeAudioTemplate32");
+//	public static final NSImage MediaBrowserMediaTypeMovies = get("MediaBrowserMediaTypeMovies");
+//	public static final NSImage MediaBrowserMediaTypeMoviesTemplate32 = get("MediaBrowserMediaTypeMoviesTemplate32");
+//	public static final NSImage MediaBrowserMediaTypePhotos = get("MediaBrowserMediaTypePhotos");
+//	public static final NSImage MediaBrowserMediaTypePhotosTemplate32 = get("MediaBrowserMediaTypePhotosTemplate32");
+//
+//	public static final NSImage CMYKButton = get("CMYKButton");
+//	public static final NSImage ColorPickerCrayon = get("ColorPickerCrayon");
+//	public static final NSImage ColorPickerList = get("ColorPickerList");
+//	public static final NSImage ColorPickerSliders = get("ColorPickerSliders");
+//	public static final NSImage ColorPickerUser = get("ColorPickerUser");
+//	public static final NSImage ColorPickerWheel = get("ColorPickerWheel");
+//	public static final NSImage ColorSwatchResizeDimple = get("ColorSwatchResizeDimple");
+//	public static final NSImage GreyButton = get("GreyButton");
+//	public static final NSImage HSBButton = get("HSBButton");
+//	public static final NSImage MagnifyingGlass = get("MagnifyingGlass");
+//	public static final NSImage RGBButton = get("RGBButton");
+//	public static final NSImage SmallMagnifyingGlass = get("SmallMagnifyingGlass");
+//
+//	public static final NSImage FontPanelActionButton = get("FontPanelActionButton");
+//	public static final NSImage FontPanelActionButtonPressed = get("FontPanelActionButtonPressed");
+//	public static final NSImage FontPanelBlurEffect = get("FontPanelBlurEffect");
+//	public static final NSImage FontPanelDropEffect = get("FontPanelDropEffect");
+//	public static final NSImage FontPanelDropEffectPressed = get("FontPanelDropEffectPressed");
+//	public static final NSImage FontPanelEffectsDivider = get("FontPanelEffectsDivider");
+//	public static final NSImage FontPanelMinusIdle = get("FontPanelMinusIdle");
+//	public static final NSImage FontPanelMinusPressed = get("FontPanelMinusPressed");
+//	public static final NSImage FontPanelOpacityEffect = get("FontPanelOpacityEffect");
+//	public static final NSImage FontPanelPaperColour = get("FontPanelPaperColour");
+//	public static final NSImage FontPanelPaperColourPressed = get("FontPanelPaperColourPressed");
+//	public static final NSImage FontPanelPlusIdle = get("FontPanelPlusIdle");
+//	public static final NSImage FontPanelPlusPressed = get("FontPanelPlusPressed");
+//	public static final NSImage FontPanelSliderThumb = get("FontPanelSliderThumb");
+//	public static final NSImage FontPanelSliderThumbPressed = get("FontPanelSliderThumbPressed");
+//	public static final NSImage FontPanelSliderTrack = get("FontPanelSliderTrack");
+//	public static final NSImage FontPanelSplitterKnob = get("FontPanelSplitterKnob");
+//	public static final NSImage FontPanelSpreadEffect = get("FontPanelSpreadEffect");
+//	public static final NSImage FontPanelStrikeEffect = get("FontPanelStrikeEffect");
+//	public static final NSImage FontPanelStrikeEffectPressed = get("FontPanelStrikeEffectPressed");
+//	public static final NSImage FontPanelTextColour = get("FontPanelTextColour");
+//	public static final NSImage FontPanelTextColourPressed = get("FontPanelTextColourPressed");
+//	public static final NSImage FontPanelUnderlineEffect = get("FontPanelUnderlineEffect");
+//	public static final NSImage FontPanelUnderlineEffectPressed = get("FontPanelUnderlineEffectPressed");
+//
+//	public static final NSImage DatePickerCalendarArrowLeft = get("DatePickerCalendarArrowLeft");
+//	public static final NSImage DatePickerCalendarArrowRight = get("DatePickerCalendarArrowRight");
+//	public static final NSImage DatePickerCalendarHome = get("DatePickerCalendarHome");
+//	public static final NSImage DatePickerClockCenter = get("DatePickerClockCenter");
+//	public static final NSImage DatePickerClockFace = get("DatePickerClockFace");
+//
+//	public static final NSImage TextRulerCenterTab = get("TextRulerCenterTab");
+//	public static final NSImage TextRulerDecimalTab = get("TextRulerDecimalTab");
+//	public static final NSImage TextRulerFirstLineIndent = get("TextRulerFirstLineIndent");
+//	public static final NSImage TextRulerIndent = get("TextRulerIndent");
+//	public static final NSImage TextRulerLeftTab = get("TextRulerLeftTab");
+//	public static final NSImage TextRulerRightTab = get("TextRulerRightTab");
+
 	private static NSImage get(String name, String description,
 			String availability) {
 		NSImage img = knownImages.get(name);
@@ -578,7 +644,7 @@ public class NSImage implements Serializable {
 	/**
 	 * Return a cached NSImage based on the name.
 	 * 
-	 * @param the
+	 * @param name
 	 *            unique NSImage name, such as "Computer" or "TrashFull". This
 	 *            class lists dozens of fields that include supported names, but
 	 *            you can pass any value here. If you know of a special name (or

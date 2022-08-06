@@ -10,25 +10,23 @@
  */
 package com.pump.showcase.demo;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.text.NumberFormat;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import com.pump.awt.DemoPaintable;
+import com.pump.desktop.temp.TempFileManager;
+import com.pump.image.ImageSize;
 import com.pump.image.bmp.BmpDecoder;
 import com.pump.image.bmp.BmpEncoder;
 import com.pump.image.pixel.PixelIterator;
+import com.pump.showcase.chart.ChartDataGenerator;
+import com.pump.showcase.chart.PerformanceChartPanel;
 
 /**
  * This demos the BmpEncoder and BmpDecoder.
@@ -39,118 +37,163 @@ import com.pump.image.pixel.PixelIterator;
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/BmpComparisonDemo.png"
  * alt="A screenshot of the BmpComparisonDemo.">
  */
-public class BmpComparisonDemo extends ShowcaseChartDemo {
+public class BmpComparisonDemo extends ShowcaseResourceExampleDemo<File> {
 	private static final long serialVersionUID = 1L;
 
-	static final int SAMPLE_COUNT = 10;
+	public static String PARAMETER_MODEL = "model";
 
-	private static final String OPERATION_ENCODE = "Encode";
-	private static final String OPERATION_DECODE = "Decode";
-	private static final String IMPLEMENTATION_IMAGEIO = "ImageIO";
-	private static final String IMPLEMENTATION_PUMP = "com.pump";
+	public static String PARAMETER_OPERATION = "operation";
 
-	private static BufferedImage SAMPLE_IMAGE;
-	private static File SAMPLE_FILE;
+	public static String OPERATION_ENCODE = "Encode";
+	public static String OPERATION_DECODE = "Decode";
 
-	private static BufferedImage getSampleImage() {
-		if (SAMPLE_IMAGE == null) {
-			SAMPLE_IMAGE = new BufferedImage(800, 600,
-					BufferedImage.TYPE_INT_RGB);
-			Graphics2D g = SAMPLE_IMAGE.createGraphics();
-			Color[] colors = new Color[] { new Color(0xffeaa7),
-					new Color(0x55efc4) };
-			DemoPaintable.paint(g, SAMPLE_IMAGE.getWidth(),
-					SAMPLE_IMAGE.getHeight(), colors, "BMP");
-			g.dispose();
+	public enum Model {
+		IMAGE_IO("ImageIO") {
+			@Override
+			public void encode(BufferedImage image, File file) throws Exception {
+				ImageIO.write(image, "bmp", file);
+			}
+
+			@Override
+			public BufferedImage decode(File file) throws Exception {
+				return ImageIO.read(file);
+			}
+		},
+		PUMPERNICKEL("Pumpernickel") {
+			@Override
+			public void encode(BufferedImage image, File file) throws Exception {
+				BmpEncoder.write(image, file);
+			}
+
+			@Override
+			public BufferedImage decode(File file) throws Exception {
+				return BmpDecoder.read(file);
+			}
+		};
+
+		final String name;
+
+		Model(String name) {
+			this.name = name;
 		}
-		return SAMPLE_IMAGE;
+
+		public abstract void encode(BufferedImage image, File file) throws Exception;
+		public abstract BufferedImage decode(File file) throws Exception;
+
+		@Override
+		public String toString() {
+			return name;
+		}
 	}
 
-	private static byte[] getSampleBytes() throws Exception {
-		try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
-			BmpEncoder.write(getSampleImage(), byteOut);
-			return byteOut.toByteArray();
-		}
-	}
+	static class BmpComparisonChartDataGenerator implements ChartDataGenerator {
+		final File file;
+		final BufferedImage image;
+		final int loopCount;
 
-	static class MeasurementRunnable extends TimeMemoryMeasurementRunnable {
-		boolean usePumpClasses;
-		ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-		byte[] sampleFileBytes;
-
-		public MeasurementRunnable(Map<String, Map<String, SampleSet>> data,
-				String operation, String implementation) throws Exception {
-			super(data, operation, implementation);
-			usePumpClasses = implementation.equals(IMPLEMENTATION_PUMP);
-			if (operation.equals(OPERATION_DECODE)) {
-				sampleFileBytes = getSampleBytes();
-			}
-		}
-
-		private void encodeBMP() throws Exception {
-			bOut.reset();
-			BufferedImage bi = getSampleImage();
-			if (usePumpClasses) {
-				BmpEncoder.write(bi, bOut);
-			} else {
-				ImageIO.write(bi, "bmp", bOut);
-			}
-		}
-
-		private void decodeBMP() throws Exception {
-			try (InputStream in = new ByteArrayInputStream(sampleFileBytes)) {
-				if (usePumpClasses) {
-					BmpDecoder.readImage(in);
-				} else {
-					ImageIO.read(in);
-				}
-			}
+		public BmpComparisonChartDataGenerator(File file, int loopCount) throws IOException {
+			this.file = file;
+			this.image = BmpDecoder.read(file);
+			this.loopCount = loopCount;
 		}
 
 		@Override
-		protected void runSample() {
-			try {
-				for (int a = 0; a < 30; a++) {
-					if (operation.equals(OPERATION_DECODE)) {
-						decodeBMP();
-					} else {
-						encodeBMP();
+		public List<Map<String, Object>> getParameters() {
+			List<Map<String, Object>> returnValue = new ArrayList<>();
+
+			for (String operation : new String[] {OPERATION_ENCODE, OPERATION_DECODE}) {
+				for (Model m : Model.values()) {
+					Map<String, Object> p = new HashMap<>();
+					p.put(PARAMETER_MODEL, m);
+					p.put(PARAMETER_OPERATION, operation);
+					p.put(PerformanceChartPanel.PARAMETER_CHART_NAME, operation+" Time");
+					p.put(PerformanceChartPanel.PARAMETER_NAME, m.toString());
+					returnValue.add(p);
+				}
+			}
+
+			return returnValue;
+
+		}
+
+		@Override
+		public void runSample(Map<String, Object> parameters) throws Exception {
+			Model model = (Model) parameters.get(PARAMETER_MODEL);
+			String operation = (String) parameters.get(PARAMETER_OPERATION);
+
+			for (int a = 0; a < loopCount; a++) {
+				if (operation.equals(OPERATION_DECODE)) {
+					model.decode(file);
+				} else {
+					File tmpFile = File.createTempFile("encode-test", ".bmp");
+					try {
+						model.encode(image, tmpFile);
+					} finally {
+						tmpFile.delete();
 					}
 				}
-			} catch (RuntimeException e) {
-				throw e;
-			} catch (Throwable t) {
-				throw new RuntimeException(t);
 			}
+		}
+
+	}
+
+	PerformanceChartPanel perfChartPanel;
+	File sampleFile;
+
+	public BmpComparisonDemo() {
+		super(File.class, false, "bmp");
+
+		perfChartPanel = new PerformanceChartPanel(
+				"BMP Performance Results");
+
+		examplePanel.add(perfChartPanel);
+		perfChartPanel.setBackground(Color.orange);
+
+	}
+
+	@Override
+	protected void setDefaultResourcePath() {
+		try {
+			if (sampleFile == null) {
+				BufferedImage sampleImage = ImageLoaderDemo.createSampleImage(false);
+				sampleFile = TempFileManager.get().createFile("sampleImage",
+						"bmp");
+				BmpEncoder.write(sampleImage, sampleFile);
+			}
+			resourcePathField.setText(sampleFile.getAbsolutePath());
+		} catch (IOException e) {
+			e.printStackTrace();
+			super.setDefaultResourcePath();
 		}
 	}
 
 	@Override
-	protected Collection<Runnable> getMeasurementRunnables(
-			Map<String, Map<String, SampleSet>> data) {
-		String[] operations = new String[] { OPERATION_ENCODE,
-				OPERATION_DECODE };
-		String[] implementations = new String[] { IMPLEMENTATION_IMAGEIO,
-				IMPLEMENTATION_PUMP };
-		List<Runnable> returnValue = new ArrayList<>(
-				SAMPLE_COUNT * operations.length * implementations.length);
+	protected void refreshFile(File file, String resourceStr) {
 
-		try {
-			for (String operation : operations) {
-				for (String implementation : implementations) {
-					Runnable r = new MeasurementRunnable(data, operation,
-							implementation);
-					for (int sample = 0; sample < SAMPLE_COUNT; sample++) {
-						returnValue.add(r);
-					}
-				}
-			}
-		} catch (RuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		Dimension imgSize = ImageSize.get(file);
+		int area = imgSize.width * imgSize.height;
+
+		int loopCount;
+		if (area > 3000000) {
+			loopCount = 10;
+		} else if (area > 500000) {
+			loopCount = 25;
+		} else {
+			loopCount = 100;
 		}
-		return returnValue;
+		loopCount *= 3;
+
+		perfChartPanel.setChartDescription(
+				"These charts show the median time it took each model to prepare this image/file "
+						+ NumberFormat.getInstance().format(loopCount)
+						+ " times.");
+		try {
+			ChartDataGenerator dataGenerator = new BmpComparisonChartDataGenerator(
+					file, loopCount);
+			perfChartPanel.reset(dataGenerator);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -160,7 +203,7 @@ public class BmpComparisonDemo extends ShowcaseChartDemo {
 
 	@Override
 	public String getSummary() {
-		return "This compares the performance of a new BmpEncoder and BmpDecoder class with the analogous ImageIO encoder and decoder.\n\nAs of this writing the pump classes significantly outperform ImageIO classes in speed. Regarding memory usage: encoding shows a significant improvement, but decoding is nearly identical.";
+		return "This compares the performance of a new BmpEncoder and BmpDecoder class with the analogous ImageIO encoder and decoder.";
 	}
 
 	@Override
