@@ -4,11 +4,18 @@
 <title>JSwitchButton Demo</title>
 </head>
 <body>
-The <code>JSwitchButton</code> and <code>SwitchButtonUI</code> offer a toggle button that is rendered using a switch.
-<p>
-This was popularized by the rise of tablets/smartphones (and accompanying swipe gestures). As of this writing it looks to me like that switches exist occasionally on desktop computers, but they haven't really saturated desktop apps. (At least not yet.) For example: when I open the preferences for Pages on my Mac: I see a sea of tabbed panes and checkboxes (and a few other controls). The only place I've seen switches so far are in my notifications.
-<p>
-Functionally this is the same as a checkbox. It has a "selected" and "unselected" state. What's the difference? <a href="https://uxmovement.com/buttons/when-to-use-a-switch-or-checkbox/">One website</a> explains:
+<h1>JSwitchButton Demo</h1>
+<h2>What Is It</h2>
+<p>The <code>JSwitchButton</code> and <code>SwitchButtonUI</code> offer a toggle button that is rendered using a switch.</p>
+<h2>How To Use It</h2>
+<p>You can treat a <code>JSwitchButton</code> like any other <code>JToggleButton</code>:</p>
+<pre>JSwitchButton b = new JSwitchButton();
+b.addChangeListener(changeListener);</pre>
+<h2>How It Works</h2>
+<p>The <code>SwitchButtonUI</code> presents this button as a <code>BasicRadioButtonUI</code> with an animating icon on the right hand side.</p>
+<h2>Discussion</h2>
+<p>This kind of button was popularized by the rise of tablets/smartphones (and accompanying swipe gestures). As of this writing it looks to me like that switches exist occasionally on desktop computers, but they haven't really saturated desktop apps. (At least not yet.) When I look at the wifi and bluetooth menus on my Mac: the leading component is a switch button. But when I open the preferences for Pages: I see a sea of tabbed panes and checkboxes -- but no switches.</p>
+<p>Functionally this is the same as a checkbox. It has a "selected" and "unselected" state. What's the difference? <a href="https://uxmovement.com/buttons/when-to-use-a-switch-or-checkbox/">One website</a> explains:</p>
 <blockquote>
 You should only use switches on settings that need to take effect instantaneously. If a setting requires a button press before it can take effect, you should use a checkbox instead.
 </blockquote>

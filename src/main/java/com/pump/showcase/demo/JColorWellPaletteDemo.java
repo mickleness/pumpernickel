@@ -148,12 +148,13 @@ public class JColorWellPaletteDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "palette", "color", "Swing" };
+		return new String[] { "palette", "color", "Swing", "well" };
 	}
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { Color.class, JColorChooser.class, JPalette.class };
+		return new Class[] { Color.class, JColorChooser.class, JPalette.class,
+				JColorWell.class };
 	}
 
 }

@@ -4,8 +4,19 @@
 <title>Throbber Demo</title>
 </head>
 <body>
-
-Let me start by saying: I didn't choose this name. Although, to be fair, I don't have a better name in mind. (What else would I call it? "JSpinner"?)
+<h1>Throbber Demo</h1>
+<h2>What Is It</h2>
+<p>A throbber is an indeterminate (or asynchronous) progress indicator. Usually it's very small and circular.</p>
+<h2>How To Use It</h2>
+<p>You can configure a throbber by calling:</p>
+<pre>JThrobber throbber = new JThrobber();</pre>
+<p>That should get you a pretty good out-of-the-box experience. If you want you can further customize it:</p>
+<pre>throbber.setUI(new ChasingArrowsThrobberUI());
+throbber.setPreferredSize(new Dimension(60,60));
+throbber.setForeground(Color.cyan);</pre>
+<h2>How It Works</h2>
+<p>As long as a <code>JThrobber</code> is showing the <code>ThrobberUI</code> repaints it on a timer. All the UI subclasses are lightweight and vector-based.</p>
+<h2>Discussion</h2>
 <p>
 <a href="http://en.wikipedia.org/wiki/Throbber">Wikipedia</a> defines a throbber as:
 <p>
@@ -17,10 +28,10 @@ Throbbers saw a resurgence with client-side applications (such as Ajax web apps)
 <p>
 If you're developing exclusively on Macs, Apple has their own unique implementation in <a href="http://developer.apple.com/technotes/tn2007/tn2196.html">Technical Note 2196</a> (as part of their ProgressBarUI). That's a great start, but:
 <ul><li>Why limit this solution to Macs? Windows needs this component too.
-<li>It's ... just not a JProgressBar. It has no numeric value. The interdeterminate flag, the orientation, the ChangeListeners: they're all lies when you dress the slider up as a throbber. White lies, maybe, but they're the kind of white lies that make your code hard to read for new developers. ("It says here there's a progress bar... but where in the interface is there a progress bar? I don't remember seeing one...")
+<li>It's ... just not a JProgressBar. It has no numeric value. The interdeterminate flag, the orientation, the ChangeListeners: they're all lies when you dress the slider up as a throbber. And off the top of my head I'm not sure if Voice Over correctly describes these "progress bars" as not-progress-bars.
 </li></ul>
 <p>
-Speaking of progress bars, though, be sure to check out the <a href="resource:CircularProgressBarUI">CircularProgressBarUI</a> if that's what you're looking for.
+(Speaking of progress bars, though, be sure to check out the <a href="resource:CircularProgressBarUI">CircularProgressBarUI</a> if that's what you're looking for.)
 <p>
 Apple's guidelines used to refer to this as an "asynchronous progress indicator". They advised:
 <blockquote>An asynchronous progress indicator provides feedback on an ongoing process.
@@ -32,6 +43,6 @@ Apple's guidelines used to refer to this as an "asynchronous progress indicator"
 <p>If the process might change from indeterminate to determinate, start with an indeterminate  progress bar. You don't want to start with an asynchronous progress indicator because the determinate progress bar is a different shape and takes up much more space. Similarly, if the process might change from indeterminate to determinate, use an indeterminate progress bar instead  of an asynchronous progress indicator, because it is the same shape and size as the determinate  progress bar.
 <p>In general, avoid supplying a label. Because an asynchronous progress indicator typically  appears when the user initiates a process, a label is not usually necessary. If you decide to provide a label that appears with the indicator, create a complete or partial sentence that briefly describes the process that is occurring. You should use sentence-style capitalization (for more information on this style, see "Capitalizing Labels and Text") and you can end the label with an ellipsis (...) to emphasize the ongoing nature of the processing.</blockquote>
 <p>
-Also if you have several tasks that a single throbber represents: the <code>ThrobberManager</code> class helps. Each task takes a token as it starts, and then it returns that token when its finished. Meanwhile the <code>ThrobberManager</code> can produces any number of <code>JThrobbers</code> that are automatically shown/hidden depending on whether any tasks are currently unfinished.
+Also if you have several tasks that a single throbber represents: the <code>ThrobberManager</code> class helps. Each task takes a token as it starts, and then it returns that token when its finished. Meanwhile the <code>ThrobberManager</code> can produces any number of <code>JThrobbers</code> that are automatically shown/hidden depending on whether any tasks are currently unfinished.</p>
 </body>
 </html>

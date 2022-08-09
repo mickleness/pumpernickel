@@ -4,20 +4,28 @@
 <title>JColorPicker Demo</title>
 </head>
 <body>
-
-The <code>com.pump.swing.JColorPicker</code> and the <code>com.pump.swing.JColorPickerDialog</code> are an alternative to Swing's default <code>javax.swing.JColorChooser</code>.
-<p>
-As a reminder, the <code>JColorChooser</code> resembles:
-<br /><img src="https://github.com/mickleness/pumpernickel/raw/master/resources/jcolorchooser-600.jpg"/>
-<p>
-Technically you could convert the <code>JColorPicker</code> to a <code>AbstractColorChooserPanel</code> so it can live inside a <code>JColorChooser</code>, but to date nobody has suggested/requested that.
-<p>
-The key differences between this new <code>JColorPicker</code> and the old-school <code>JColorChooser</code> are probably:
-<ul><li>The <code>JColorPicker</code> uses a wheel to display a range of hues, not a square. A square obviously maximizes your pixel real estate better, but I still prefer a circle. I like how it looks, and it's generally how children are introduced to hues in school.
-<li>The dialog footer uses a <a href="resource:DialogFooter">DialogFooter</a>, which (among other things) means the buttons are right-aligned like most other dialogs.
-<li>As the demo shows the <code>JColorPicker</code> scales in complexity well.</ul>
-<p>
-That being said: the <code>JColorChooser</code> offers something this panel doesn't: its default view is a palette of swatches. I'd suggest this should be the go-to approach most of the time (depending on your audience). The <a href="resource:JColorWell">JColorWell</a> is a component that offers both a palette and a dialog.
-
+<h1>JColorPicker Demo</h1>
+<h2>What Is It</h2>
+<p>The <code>com.pump.swing.JColorPicker</code> is an alternative to Swing's default <code>javax.swing.JColorChooser</code> that presents a color wheel and other Photoshop-inspired UI controls.</p>
+<h2>How To Use It</h2>
+<p>You can create a <code>JColorPicker</code> that can be inserted anywhere in your UI by calling:</p>
+<pre>JColorPicker picker = new JColorPicker(true, false);
+picker.addPropertyChangeListener(JColorPicker.SELECTED_COLOR_PROPERTY, pcl);</pre>
+<p>Or you can invoke a modal dialog by calling:</p>
+<pre>boolean includeOpacity = true;
+Color c = JColorPicker.showDialog(window, initialColor, includeOpacity);</pre>`
+<h2>How It Works</h2>
+<p>The <code>JColorPicker</code> mostly manages the data model and a series of UI controls that can be toggled on/off as needed. Since a color is generally represented by 3 numbers and our UI can only present 2D data (either as a rectangle or a circle): we end up holding one number constant. The default constant is "Brightness", but the JColorPicker (and this demo) lets you choose any of the 6 values: red, green, blue, hue, saturation, brightness.</p>
+<p>The <code>JColorPickerPanel</code> is the JComponent that actually renders the large gradient wheel/rectangle. The JColorPicker, by contrast, is the container that embeds the JColorPickerPanel and dozens of other UI controls.</p>
+<h2>Discussion</h2>
+<p>The original motivation for this class was simple: I didn't like how the <code>JColorChooser</code> looks:</p> 
+<img src="https://github.com/mickleness/pumpernickel/raw/master/resources/jcolorchooser-600.jpg" alt="screenshots of the JColorChooser"/></p>
+<p>Personally I think palettes are the best way to choose a color (so the JColorChooser is off to a good start), but specifically my main critiques include:</p>
+<ul><li>This default palette doesn't include a white and black option. Also it's pretty lacking in browns.</li>
+<li>This default palette has lots of dead space. We know that's because of the other tabs, but still: it looks unpolished.</li>
+<li>The "Preview" section feels awfully bloated. And anymore I'd suggest: your app should be making undoable/previewable changes in real-time, so the whole concept of a "Preview" section might be outdated.</li>
+<li>More broadly: I don't like offering 3 tabs of UIs to choose a color. If possible (and sometimes it may not be possible): I'd prefer to just pick one model and stick to that. Don't overwhelm the user with lots of choices. But I concede if you're audience is impossibly broad: sometimes a UI like this is an acceptable tax on the user's attention.</li></ul>
+<p>The JColorPicker is loosely modeled after options I observed in Photoshop. (But as a disclaimer: I wrote it over a decade ago, and I haven't opened Photoshop lately.) My ideal usage is to pick just one view (usually a brightness-based wheel) and not let the user further configure it.</p>
+<p>The <a href="resource:JColorWell">JColorWell</a> is a separate component that offers <em>both</em> a palette and a dialog. The JColorPicker is what I consider the "most advanced" option. I want to use it when the user has signaled that they want really granular control over their color choice.</p>
 </body>
 </html>
