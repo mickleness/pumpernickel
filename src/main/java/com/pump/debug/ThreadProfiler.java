@@ -215,6 +215,11 @@ public class ThreadProfiler {
 
 		Map<Thread.State, AtomicInteger> stateMap = new TreeMap<>();
 
+		/**
+		 * The most recent leaf node from the last stacktrace profile
+		 */
+		StackTraceElementNode activeLeafNode;
+
 		RootStackTraceElementNode(StackTraceElement e) {
 			super(e);
 		}
@@ -334,6 +339,10 @@ public class ThreadProfiler {
 						// record what's left:
 
 						synchronized (stackTraceData) {
+							for (RootStackTraceElementNode node : stackTraceData
+									.values()) {
+								node.activeLeafNode = null;
+							}
 							for (Map.Entry<Thread, StackTraceElement[]> entry : map
 									.entrySet()) {
 								Thread thread = entry.getKey();
@@ -353,8 +362,16 @@ public class ThreadProfiler {
 										node = node.catalog(elements[a],
 												currentMillis);
 									}
+									if (root.frequency > 1) {
+										// don't log activeLeafNode when
+										// frequency == 0. When frequency == 0:
+										// only one tree is shown so the active
+										// node is implied/obvious
+										root.activeLeafNode = node;
+									}
 								}
 							}
+
 						}
 					}
 				} finally {
@@ -508,28 +525,35 @@ public class ThreadProfiler {
 					+ thread.getPriority() + ", " + stateStr.toString() + "\n");
 			int max = node.getMaxFrequency();
 			StringBuilder indent = new StringBuilder();
-			write(sb, node, max, indent);
+			write(sb, node, max, indent, node.activeLeafNode);
 		}
 		return sb.toString();
 	}
 
 	private void write(StringBuilder output, StackTraceElementNode node,
-			int maxFrequency, StringBuilder indent) {
+			int maxFrequency, StringBuilder indent,
+			StackTraceElementNode activeLeafNode) {
 		float fraction = node.frequency * 100f / maxFrequency;
 		String percentStr = format.format(fraction);
-
-		// if(node.active) {
-		// output.append("-> ");
-		// } else {
-		// output.append(" ");
-		// }
 
 		output.append(percentStr);
 		output.append("%");
 		for (int a = percentStr.length(); a < 6; a++) {
 			output.append(' ');
 		}
-		output.append(indent);
+
+		if (node != activeLeafNode) {
+			output.append(indent);
+		} else {
+			// flag active node with asterisk:
+			String indentation = indent.toString();
+			if (indentation.length() > 3) {
+				indentation = indentation.substring(0, indentation.length() - 3)
+						+ "=> ";
+			}
+			output.append(indentation);
+		}
+
 		output.append(
 				node.element.getClassName() + "#" + node.element.getMethodName()
 						+ "(" + node.element.getFileName() + ":"
@@ -542,11 +566,12 @@ public class ThreadProfiler {
 
 		output.append("\n");
 		indent.append(" ");
+
 		TreeSet<StackTraceElementNode> children = new TreeSet<>(
 				NODE_FREQUENCY_COMPARATOR);
 		children.addAll(node.children.keySet());
 		for (StackTraceElementNode child : children) {
-			write(output, child, maxFrequency, indent);
+			write(output, child, maxFrequency, indent, activeLeafNode);
 		}
 		indent.delete(indent.length() - 1, indent.length());
 	}
