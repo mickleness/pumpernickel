@@ -231,6 +231,7 @@ public class ThreadProfiler {
 	}
 
 	private static DecimalFormat format = new DecimalFormat("#.0");
+	private static DecimalFormat intFormat = new DecimalFormat("#");
 
 	private static Comparator<StackTraceElementNode> NODE_FREQUENCY_COMPARATOR = new Comparator<StackTraceElementNode>() {
 		@Override
@@ -475,7 +476,14 @@ public class ThreadProfiler {
 		};
 		Collection<Thread> threads = new TreeSet<>(comparator);
 
-		threads.addAll(stackTraceData.keySet());
+		int maxFrequency = 0;
+		for (Map.Entry<Thread, RootStackTraceElementNode> entry : stackTraceData
+				.entrySet()) {
+			threads.add(entry.getKey());
+			maxFrequency = Math.max(maxFrequency, entry.getValue().frequency);
+		}
+
+		sb.append(intFormat.format(maxFrequency) + " samples collected.\n\n");
 
 		for (Thread thread : threads) {
 			RootStackTraceElementNode node = stackTraceData.get(thread);
