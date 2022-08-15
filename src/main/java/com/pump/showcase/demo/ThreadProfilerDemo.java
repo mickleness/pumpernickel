@@ -61,7 +61,7 @@ public class ThreadProfilerDemo extends ShowcaseExampleDemo {
 	};
 
 	public ThreadProfilerDemo() {
-		super(true, true, false);
+		super(true, true, true, false, false);
 		Inspector inspector = new Inspector(configurationPanel);
 		inspector.addRow(new JLabel("State:"), onButton, offButton);
 		inspector.addRow(new JLabel("Poll Interval:"), pollIntervalSpinner);

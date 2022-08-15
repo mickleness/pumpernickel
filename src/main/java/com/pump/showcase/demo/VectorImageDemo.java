@@ -181,7 +181,7 @@ public class VectorImageDemo extends ShowcaseExampleDemo {
 	};
 
 	public VectorImageDemo() {
-		super(false, false, false, false);
+		super(false, false, true, false, false);
 
 		urls.add(this.getClass().getResource("jvg/InhabitantsPiglet.jvg"));
 		urls.add(this.getClass().getResource("jvg/KindergartenTeacher.jvg"));
