@@ -30,8 +30,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.DefaultCaret;
 
-import com.pump.debug.ThreadProfiler;
 import com.pump.inspector.Inspector;
+import com.pump.thread.ThreadProfiler;
 
 public class ThreadProfilerDemo extends ShowcaseExampleDemo {
 
@@ -156,8 +156,7 @@ public class ThreadProfilerDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return getClass().getResource("threadProfilerDemo.html");
 	}
 
 	@Override

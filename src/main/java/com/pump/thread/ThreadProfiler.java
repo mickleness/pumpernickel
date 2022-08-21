@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.debug;
+package com.pump.thread;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -35,12 +36,36 @@ import java.util.function.Function;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ * This is a simple thread performance profiler. It shows a composite stack
+ * trace of all your threads to help identify performance bottlenecks.
+ * <p>
+ * While the profiler is active a background thread monitors all other thread
+ * activity.
+ * </p>
+ * <p>
+ * Listeners attached to this thread will be notified when the profiler becomes
+ * inactive, and optionally after a fixed interval of milliseconds.
+ * </p>
+ * <p>
+ * The {@link ThreadProfiler#getOutput()} and <code>write</code> methods write a
+ * plain text summary of the composite stack traces.
+ * </p>
+ * <p>
+ * If you have access to a suite professionally maintained performance
+ * diagnostic tools: by all means you should use those. By comparison I'm sure
+ * this is very crude. But I've been in a few situations where I could deploy
+ * code to a remote server that I otherwise couldn't configure or restart; so in
+ * cases like that this crude profiler tool can be helpful.
+ * </p>
+ */
 public class ThreadProfiler {
 
 	static class ProfilerThread extends Thread {
 
 		public ProfilerThread(Runnable runnable) {
 			super(runnable);
+			setDaemon(true);
 		}
 
 	}
@@ -258,11 +283,35 @@ public class ThreadProfiler {
 	Map<Thread, RootStackTraceElementNode> stackTraceData = new HashMap<>();
 	List<ListenerInfo> listeners = new LinkedList<>();
 
+	/**
+	 * Create a ThreadProfiler that will monitor all threads.
+	 */
 	public ThreadProfiler() {
-		this(null);
+		this((Function<Thread, Boolean>) null);
 	}
 
 	/**
+	 * Create a ThreadProfiler that will monitor specific threads.
+	 */
+	public ThreadProfiler(Thread... threadsToProfile) {
+		this(new Function<Thread, Boolean>() {
+			Collection<Thread> threadSet;
+
+			@Override
+			public Boolean apply(Thread t) {
+				if (threadSet == null) {
+					threadSet = new HashSet<>();
+					threadSet.addAll(Arrays.asList(threadsToProfile));
+				}
+				return threadSet.contains(t);
+			}
+
+		});
+	}
+
+	/**
+	 * Create a ThreadProfiler that may choose which threads to profile.
+	 * 
 	 * @param threadFilter
 	 *            an optional filter; if this is null then all threads are
 	 *            profiled.
@@ -391,6 +440,11 @@ public class ThreadProfiler {
 		}
 	}
 
+	/**
+	 * Assign the time between polling stacktraces. For example: if millis is
+	 * 50, then this will wait approximately 50 milliseconds between calls to
+	 * fetch all stacktraces.
+	 */
 	public synchronized void setSampleInterval(long millis) {
 		if (millis < 10)
 			throw new IllegalArgumentException(
@@ -399,8 +453,9 @@ public class ThreadProfiler {
 	}
 
 	/**
-	 * Add a listener that will be notified after a given interval when this
-	 * profiler is running.
+	 * Add a listener that will be notified after a given interval while this
+	 * profiler is running. Listeners are always notified when this profiler
+	 * changes its status to inactive.
 	 * 
 	 * @param intervalMillis
 	 *            the number of millis between updates.
@@ -438,10 +493,18 @@ public class ThreadProfiler {
 		return false;
 	}
 
+	/**
+	 * Return true if this profiler is active and a separate Thread is profiling
+	 * other threads.
+	 */
 	public synchronized boolean isActive() {
 		return active;
 	}
 
+	/**
+	 * Toggle whether this profiler is active. When activated a new thread
+	 * starts.
+	 */
 	public synchronized void setActive(boolean active) {
 		if (this.active == active)
 			return;
@@ -453,6 +516,9 @@ public class ThreadProfiler {
 		}
 	}
 
+	/**
+	 * Return a String representation of all the data this profiler collected.
+	 */
 	public synchronized String getOutput() {
 		StringBuilder sb = new StringBuilder();
 
@@ -576,12 +642,18 @@ public class ThreadProfiler {
 		indent.delete(indent.length() - 1, indent.length());
 	}
 
+	/**
+	 * Write {@link #getOutput()} to a File.
+	 */
 	public void writeOutput(File file) throws IOException {
 		try (FileOutputStream fileOut = new FileOutputStream(file)) {
 			writeOutput(fileOut);
 		}
 	}
 
+	/**
+	 * Write {@link #getOutput()} to an OutputStream.
+	 */
 	public void writeOutput(OutputStream fileOut) throws IOException {
 		try (OutputStreamWriter writer = new OutputStreamWriter(fileOut,
 				Charset.forName("UTF-8"))) {
@@ -589,7 +661,12 @@ public class ThreadProfiler {
 		}
 	}
 
+	/**
+	 * Clear all profiler data.
+	 */
 	public void reset() {
-		stackTraceData.clear();
+		synchronized (stackTraceData) {
+			stackTraceData.clear();
+		}
 	}
 }
