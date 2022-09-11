@@ -151,7 +151,7 @@ public class ThreadProfilerDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String getSummary() {
-		return "This demonstrates the ThreadProfiler class.";
+		return "This demonstrates a minimal pure-Java thread profiler tool.";
 	}
 
 	@Override
