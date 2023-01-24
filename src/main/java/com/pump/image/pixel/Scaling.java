@@ -225,6 +225,9 @@ public class Scaling {
 				BufferedImageIterator.get(source), destSize.width,
 				destSize.height);
 		if (pi instanceof BytePixelIterator) {
+			// TODO: it's wasteful to scale a BYTE_BGR image in BYTE_BGR space and then convert it
+			// to INT_ARGB space. We could just handle the conversion with the scaling and save
+			// a little time.
 			pi = ImageType.INT_ARGB.createConverter(pi);
 		}
 		IntPixelIterator i = (IntPixelIterator) pi;
