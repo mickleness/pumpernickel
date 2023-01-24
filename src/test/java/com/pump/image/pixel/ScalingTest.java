@@ -19,57 +19,89 @@ public class ScalingTest extends TestCase {
             Color.blue
     };
 
-    public void testWidth() throws Throwable {
-        int[] imageTypes = new int[] {
-                BufferedImage.TYPE_INT_ARGB,
-                BufferedImage.TYPE_INT_RGB,
-                BufferedImage.TYPE_3BYTE_BGR,
-                BufferedImage.TYPE_4BYTE_ABGR,
-                BufferedImage.TYPE_INT_RGB,
-                BufferedImage.TYPE_INT_ARGB_PRE
-        };
+    static int[] imageTypes = new int[] {
+            BufferedImage.TYPE_INT_ARGB,
+            BufferedImage.TYPE_INT_RGB,
+            BufferedImage.TYPE_3BYTE_BGR,
+            BufferedImage.TYPE_4BYTE_ABGR,
+            BufferedImage.TYPE_INT_RGB,
+            BufferedImage.TYPE_INT_ARGB_PRE
+    };
 
+    static double[] imageScales = new double[] {
+            0.05, 0.1, 0.15, .2, .25, .3, .35, .4, .45, .5, .6, .7, .8, .9, .99, 1, 1.05, 1.1, 1.2, 1.5, 2, 3, 4
+    };
+
+    /**
+     * Test that an image with 6 bands is being scaled correctly.
+     * <p>
+     * This test is derived from a real-world failure in which the thumbnail
+     * appeared to be stretched 200% horizontally.
+     * </p>
+     */
+    public void testColorBands() throws Throwable {
         List<Throwable> errors = new LinkedList<>();
 
-        for (int imageType : imageTypes) {
-            System.err.println("Testing image type: " + ImageType.get(imageType));
+        for (boolean isHorizontal : new boolean[] { true, false }) {
+            for (int imageType : imageTypes) {
+                for (double scale : imageScales) {
 
-            try {
-                BufferedImage rainbowImage = createRainbowImage(imageType);
-                BufferedImage scaled = Scaling.scale(rainbowImage, 80, 70);
-                Map<Color, Integer> colorMap = getColorMap(scaled);
+                    System.err.println("Testing image type = " + ImageType.get(imageType) + ", image scale: " + scale+", isHorizontal: " + isHorizontal);
 
-                int redCount = colorMap.containsKey(Color.red) ? colorMap.get(Color.red) : 0;
-                int orangeCount = colorMap.containsKey(Color.orange) ? colorMap.get(Color.orange) : 0;
-                int yellowCount = colorMap.containsKey(Color.yellow) ? colorMap.get(Color.yellow) : 0;
-                int greenCount = colorMap.containsKey(Color.green) ? colorMap.get(Color.green) : 0;
-                int cyanCount = colorMap.containsKey(Color.cyan) ? colorMap.get(Color.cyan) : 0;
-                int blueCount = colorMap.containsKey(Color.blue) ? colorMap.get(Color.blue) : 0;
+                    BufferedImage rainbowImage = null;
+                    BufferedImage scaledImage = null;
+                    try {
+                        rainbowImage = createRainbowImage(imageType, isHorizontal);
+                        int scaledWidth = (int)(rainbowImage.getWidth() * scale);
+                        int scaledHeight = (int)(rainbowImage.getHeight() * scale);
+                        scaledImage = Scaling.scale(rainbowImage, scaledWidth, scaledHeight);
+                        Map<Color, Integer> colorMap = getColorMap(scaledImage);
 
-                int totalPixels = scaled.getWidth() * scaled.getHeight();
+                        int redCount = getColorCount(colorMap, Color.red);
+                        int orangeCount = getColorCount(colorMap, Color.orange);
+                        int yellowCount = getColorCount(colorMap, Color.yellow);
+                        int greenCount = getColorCount(colorMap, Color.green);
+                        int cyanCount = getColorCount(colorMap, Color.cyan);
+                        int blueCount = getColorCount(colorMap, Color.blue);
 
-                float redPercent = redCount * 100 / totalPixels;
-                float orangePercent = orangeCount * 100 / totalPixels;
-                float yellowPercent = yellowCount * 100 / totalPixels;
-                float greenPercent = greenCount * 100 / totalPixels;
-                float cyanPercent = cyanCount * 100 / totalPixels;
-                float bluePercent = blueCount * 100 / totalPixels;
+                        int totalPixels = scaledImage.getWidth() * scaledImage.getHeight();
 
-                // a little bit of detail may be antialiased away, but we should have 6 really clear stripes:
-                assertTrue("red band missing", redPercent > 10);
-                assertTrue("orange band missing", orangePercent > 10);
-                assertTrue("yellow band missing", yellowPercent > 10);
-                assertTrue("green band missing", greenPercent > 10);
-                assertTrue("cyan band missing", cyanPercent > 10);
-                assertTrue("blue band missing", bluePercent > 10);
-            } catch(Throwable e) {
-                errors.add(e);
-                e.printStackTrace();
+                        float redPercent = redCount * 100 / totalPixels;
+                        float orangePercent = orangeCount * 100 / totalPixels;
+                        float yellowPercent = yellowCount * 100 / totalPixels;
+                        float greenPercent = greenCount * 100 / totalPixels;
+                        float cyanPercent = cyanCount * 100 / totalPixels;
+                        float bluePercent = blueCount * 100 / totalPixels;
+
+                        // a little bit of detail may be antialiased away, but we should have 6 really clear stripes:
+                        assertTrue("red band missing: " + redPercent, redPercent > 10);
+                        assertTrue("orange band missing: " + orangePercent, orangePercent > 10);
+                        assertTrue("yellow band missing: " + yellowPercent, yellowPercent > 10);
+                        assertTrue("green band missing: " + greenPercent, greenPercent > 10);
+                        assertTrue("cyan band missing: " + cyanPercent, cyanPercent > 10);
+                        assertTrue("blue band missing: " + bluePercent, bluePercent > 10);
+                    } catch (Throwable e) {
+                        errors.add(e);
+                        e.printStackTrace();
+                    }
+                }
             }
         }
 
         if (!errors.isEmpty())
             throw errors.get(0);
+    }
+
+    private int getColorCount(Map<Color, Integer> colorMap, Color c) {
+        int returnValue = 0;
+        for (Map.Entry<Color,Integer> entry : colorMap.entrySet()) {
+            if ( Math.abs(c.getRed() - entry.getKey().getRed()) < 10 &&
+                    Math.abs(c.getGreen() - entry.getKey().getGreen()) < 10 &&
+                    Math.abs(c.getBlue() - entry.getKey().getBlue()) < 10) {
+                returnValue += entry.getValue().intValue();
+            }
+        }
+        return returnValue;
     }
 
     private Map<Color,Integer> getColorMap(BufferedImage image) {
@@ -89,8 +121,8 @@ public class ScalingTest extends TestCase {
         return map;
     }
 
-    private BufferedImage createRainbowImage(int imageType) {
-        BufferedImage bi = new BufferedImage(1000, 750, imageType);
+    private BufferedImage createRainbowImage(int imageType, boolean isHorizontal) {
+        BufferedImage bi = new BufferedImage(1000, 1000, imageType);
 
         Graphics2D g = bi.createGraphics();
         int x = 0;
@@ -100,7 +132,11 @@ public class ScalingTest extends TestCase {
                 endX = bi.getWidth();
             }
             g.setColor(colors[a]);
-            g.fillRect(x, 0, endX - x, bi.getHeight());
+            if (!isHorizontal) {
+                g.fillRect(x, 0, endX - x, bi.getHeight());
+            } else {
+                g.fillRect(0, x, bi.getWidth(), endX - x);
+            }
 
             x = endX;
         }
