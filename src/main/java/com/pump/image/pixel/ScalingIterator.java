@@ -895,9 +895,11 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 		@Override
 		void readColorComponents(byte[] sourceArray, int type) {
 			int incr = scaleX < .25 ? 2 : 1;
+			int kIncr;
 			switch (type) {
 			case BufferedImage.TYPE_3BYTE_BGR:
-				for (int x = 0, k2 = 0; x < srcW; x += incr) {
+				kIncr = 3 * incr - 3;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
 					int k = srcXLUT[x];
 					blues[k] += sourceArray[k2++] & 0xff;
 					greens[k] += sourceArray[k2++] & 0xff;
@@ -906,7 +908,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				}
 				break;
 			case ImageType.TYPE_3BYTE_RGB:
-				for (int x = 0, k2 = 0; x < srcW; x += incr) {
+				kIncr = 3 * incr - 3;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
 					int k = srcXLUT[x];
 					reds[k] += sourceArray[k2++] & 0xff;
 					greens[k] += sourceArray[k2++] & 0xff;
@@ -916,7 +919,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			case BufferedImage.TYPE_4BYTE_ABGR:
 			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-				for (int x = 0, k2 = 0; x < srcW; x += incr) {
+				kIncr = 4 * incr - 4;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
 					int k = srcXLUT[x];
 					if (alphas != null)
 						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
@@ -929,7 +933,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			case ImageType.TYPE_4BYTE_ARGB:
 			case ImageType.TYPE_4BYTE_ARGB_PRE:
-				for (int x = 0, k2 = 0; x < srcW; x += incr) {
+				kIncr = 4 * incr - 4;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
 					int k = srcXLUT[x];
 					if (alphas != null)
 						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
