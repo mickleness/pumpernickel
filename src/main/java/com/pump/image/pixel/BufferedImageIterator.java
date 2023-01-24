@@ -319,7 +319,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 					|| type == BufferedImage.TYPE_INT_BGR
 					|| type == BufferedImage.TYPE_INT_RGB)) {
 				throw new IllegalArgumentException("The image type "
-						+ getTypeName(type) + " is not supported.");
+						+ ImageType.toString(type) + " is not supported.");
 			}
 		}
 
@@ -391,7 +391,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				pixelSize = 1;
 			} else {
 				throw new IllegalArgumentException("The image type "
-						+ getTypeName(type) + " is not supported.");
+						+ ImageType.toString(type) + " is not supported.");
 			}
 		}
 
@@ -456,44 +456,9 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		return topDown;
 	}
 
-	/**
-	 * Used for exceptions, this method retrieved the field name from
-	 * BufferedImage whose constant matches the argument. For example, if you
-	 * call: <BR>
-	 * <code>getTypeName(myBufferedImage.getType());</code> <BR>
-	 * ... then this may return the string "TYPE_INT_ARGB_PRE".
-	 * <P>
-	 * If the correct name cannot be determined (because it does not exist, or a
-	 * security exception is thrown), then a string representation of the
-	 * argument is returned.
-	 * 
-	 * @param type
-	 *            a type of image
-	 * @return a more human-readable description of the image type, hopefully.
-	 */
-	public static String getTypeName(int type) {
-		try {
-			String s = getTypeName(type, BufferedImage.class);
-			if (s == null)
-				s = getTypeName(type, PixelIterator.class);
-			if (s != null)
-				return s;
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
-		return Integer.toString(type);
-	}
-
-	private static String getTypeName(int type, Class t) throws Throwable {
-		Field[] f = t.getFields();
-		for (int a = 0; a < f.length; a++) {
-			if ((f[a].getModifiers() & Modifier.STATIC) > 0
-					&& f[a].getType() == Integer.TYPE) {
-				if (((Number) f[a].get(null)).intValue() == type)
-					return t.getSimpleName() + "." + f[a].getName();
-			}
-		}
-		return null;
+	@Override
+	public String toString() {
+		return getClass().getSimpleName()+"[ image type = "+ImageType.toString(getType())+", width = " + getWidth() + ", height = "+ getHeight()+", isTopDown() = " + isTopDown() + "]";
 	}
 
 	public static BufferedImageIterator<?> get(BufferedImage bi) {

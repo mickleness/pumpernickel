@@ -11,6 +11,8 @@
 package com.pump.image.pixel;
 
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +30,39 @@ public abstract class ImageType {
 	public static final int TYPE_3BYTE_RGB = 25;
 	public static final int TYPE_4BYTE_ARGB = 26;
 	public static final int TYPE_4BYTE_ARGB_PRE = 27;
+
+	/**
+	 * This method returns a programmer-friendly name for an image
+	 * type, such as "BufferedImage.TYPE_INT_ARGB" or "ImageType.TYPE_3BYTE_RGB".
+	 *
+	 * @param type
+	 *            a type of image
+	 * @return a more human-readable description of the image type.
+	 */
+	public static String toString(int type) {
+		try {
+			String s = getTypeName(type, BufferedImage.class);
+			if (s == null)
+				s = getTypeName(type, ImageType.class);
+			if (s != null)
+				return s;
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+		return Integer.toString(type);
+	}
+
+	private static String getTypeName(int type, Class t) throws Throwable {
+		Field[] f = t.getFields();
+		for (int a = 0; a < f.length; a++) {
+			if ((f[a].getModifiers() & Modifier.STATIC) > 0
+					&& f[a].getType() == Integer.TYPE) {
+				if (((Number) f[a].get(null)).intValue() == type)
+					return t.getSimpleName() + "." + f[a].getName();
+			}
+		}
+		return null;
+	}
 
 	public static final ImageTypeInt INT_RGB = new ImageTypeInt("INT_RGB",
 			BufferedImage.TYPE_INT_RGB) {

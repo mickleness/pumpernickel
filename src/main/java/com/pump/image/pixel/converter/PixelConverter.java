@@ -47,8 +47,6 @@ public abstract class PixelConverter<T, I extends ImageType>
 	protected final IndexColorModelLUT indexColorModelLUT;
 
 	/**
-	 * 
-	 * @param i
 	 *            the incoming source data we iterate over
 	 * @param dstImageType
 	 *            the type of image data this converter ultimately produces.
@@ -112,6 +110,6 @@ public abstract class PixelConverter<T, I extends ImageType>
 	 */
 	protected void failUnsupportedSourceType() {
 		throw new RuntimeException("Unrecognized source type. "
-				+ BufferedImageIterator.getTypeName(srcIter.getType()));
+				+ ImageType.toString(srcIter.getType()));
 	}
 }
