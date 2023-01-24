@@ -931,6 +931,20 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					sums[k]++;
 				}
 				break;
+			case ImageType.TYPE_4BYTE_BGRA:
+				kIncr = 4 * incr - 4;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
+					int k = srcXLUT[x];
+					reds[k] += sourceArray[k2++] & 0xff;
+					greens[k] += sourceArray[k2++] & 0xff;
+					blues[k] += sourceArray[k2++] & 0xff;
+					if (alphas != null) {
+						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
+					}
+					k2++;
+					sums[k]++;
+				}
+				break;
 			case ImageType.TYPE_4BYTE_ARGB:
 			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				kIncr = 4 * incr - 4;
@@ -954,6 +968,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				}
 				break;
 			default:
+				// types BYTE_ABGR and INT_ARGB_PRE aren't supporte yet.
 				throw new RuntimeException(
 						"unexpected condition: the type should have been converted when this object was constructed");
 			}
