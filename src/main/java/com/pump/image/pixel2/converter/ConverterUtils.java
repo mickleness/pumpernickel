@@ -10,7 +10,6 @@ class ConverterUtils {
      * method will convert that to "0xAABBGGRR"
      */
     static void swapFirstAndThirdSamples(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO: revise. only try to anticipate scenario where dest==source && offsets match; everything else can add buffer
         if (destPixels == sourcePixels && destOffset > srcOffset) {
             int destIndex = destOffset + pixelCount - 1;
             for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset; srcIndex--, destIndex--) {
@@ -36,20 +35,10 @@ class ConverterUtils {
      * becomes {255, R1, G1, B1, 255, R2, G2, B2, ...}
      */
     static void prependAlpha(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO: revise. only try to anticipate scenario where dest==source && offsets match; everything else can add buffer
         int destEnd = destOffset + 4 * pixelCount;
         int srcEnd = srcOffset + 3 * pixelCount;
-        if (destPixels != sourcePixels || destEnd < srcOffset || destOffset > srcEnd) {
-            // we can iterate LTR
-            int dstIndex = destOffset;
-            for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
-                destPixels[dstIndex++] = -1;
-                destPixels[dstIndex++] = sourcePixels[srcIndex++];
-                destPixels[dstIndex++] = sourcePixels[srcIndex++];
-                destPixels[dstIndex++] = sourcePixels[srcIndex++];
-            }
-        } else if (destOffset >= srcOffset) {
-            // we can iterate RTL
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            // we'll iterate RTL:
             int dstIndex = destEnd - 1;
             for (int srcIndex = srcEnd - 1; srcIndex >= srcOffset; ) {
                 destPixels[dstIndex--] = sourcePixels[srcIndex--];
