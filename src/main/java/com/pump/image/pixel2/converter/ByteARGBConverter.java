@@ -28,7 +28,7 @@ public class ByteARGBConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromABGR(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.swapFirstAndThirdSamples_4samples(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override

@@ -10,6 +10,7 @@ class ConverterUtils {
      * method will convert that to "0xAABBGGRR"
      */
     static void swapFirstAndThirdSamples(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        // TODO: revise. only try to anticipate scenario where dest==source && offsets match; everything else can add buffer
         if (destPixels == sourcePixels && destOffset > srcOffset) {
             int destIndex = destOffset + pixelCount - 1;
             for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset; srcIndex--, destIndex--) {
@@ -35,6 +36,7 @@ class ConverterUtils {
      * becomes {255, R1, G1, B1, 255, R2, G2, B2, ...}
      */
     static void prependAlpha(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        // TODO: revise. only try to anticipate scenario where dest==source && offsets match; everything else can add buffer
         int destEnd = destOffset + 4 * pixelCount;
         int srcEnd = srcOffset + 3 * pixelCount;
         if (destPixels != sourcePixels || destEnd < srcOffset || destOffset > srcEnd) {
@@ -87,6 +89,29 @@ class ConverterUtils {
         synchronized (byteArrays) {
             if (array.length >= minByteArrayLength && byteArrays.size() < 10) {
                 byteArrays.add(array);
+            }
+        }
+    }
+
+    static void swapFirstAndThirdSamples_4samples(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int destIndex = destOffset;
+            int srcEnd = srcOffset + 4 * pixelCount;
+            for (int srcIndex = srcOffset; srcIndex < srcEnd; destIndex += 4) {
+                destPixels[destIndex + 0] = sourcePixels[srcIndex++];
+                byte swap1 = sourcePixels[srcIndex++];
+                destPixels[destIndex + 2] = sourcePixels[srcIndex++];
+                byte swap2 = sourcePixels[srcIndex++];
+                destPixels[destIndex + 1] = swap2;
+                destPixels[destIndex + 3] = swap1;
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                prependAlpha(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
+            } finally {
+                storeScratchArray(scratch);
             }
         }
     }
