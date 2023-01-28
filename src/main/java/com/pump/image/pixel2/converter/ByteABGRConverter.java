@@ -63,7 +63,7 @@ public class ByteABGRConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromBGR(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.prependAlpha(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
