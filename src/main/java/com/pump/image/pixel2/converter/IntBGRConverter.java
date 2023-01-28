@@ -59,12 +59,12 @@ public class IntBGRConverter implements PixelConverter<int[]> {
 
     @Override
     public void convertFromRGB(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert3samples_swapFirstAndThirdSamples(destPixels,destOffset,sourcePixels,srcOffset,pixelCount);
     }
 
     @Override
     public void convertFromBGR(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert3samples(destPixels,destOffset,sourcePixels,srcOffset,pixelCount);
     }
 
     @Override

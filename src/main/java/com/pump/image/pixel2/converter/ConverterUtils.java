@@ -104,4 +104,59 @@ class ConverterUtils {
             }
         }
     }
+
+    /**
+     * Convert 3-sample byte data into an int array
+     */
+    static void convert3samples(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 3 * pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            destPixels[destIndex++] = (((sourcePixels[srcIndex++]) & 0xff) << 16) | (((sourcePixels[srcIndex++]) & 0xff) << 8) | ((sourcePixels[srcIndex++]) & 0xff);
+        }
+    }
+
+    /**
+     * Convert 3-sample byte data into an int array, and swap the first and third channels. For ex: BGR data can become RGB.
+     */
+    static void convert3samples_swapFirstAndThirdSamples(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 3 * pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            destPixels[destIndex++] = ((sourcePixels[srcIndex++]) & 0xff) | (((sourcePixels[srcIndex++]) & 0xff) << 8) | (((sourcePixels[srcIndex++]) & 0xff) << 16);
+        }
+    }
+
+    /**
+     * Average 3-sample int data into one byte value. So this can convert int-base BGR or RGB data into a grayscale byte.
+     */
+    public static void average3Samples(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            int value = sourcePixels[srcIndex++];
+            destPixels[destIndex++] = (byte) ( ( ((value >> 16) & 0xff) + ((value >> 8) & 0xff) + (value & 0xff)) / 3);
+        }
+    }
+
+    /**
+     * Average 3-sample byte data into one byte value. So this can convert byte-base BGR or RGB data into a grayscale byte.
+     */
+    public static void average3Samples(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int srcEnd = srcOffset + 3 * pixelCount;
+            int destIndex = destOffset;
+            for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+                destPixels[destIndex++] = (byte) ( ( ((sourcePixels[srcIndex++]) & 0xff) + ((sourcePixels[srcIndex++]) & 0xff) + ((sourcePixels[srcIndex++]) & 0xff)) / 3);
+            }
+        } else {
+            byte[] scratch = getScratchArray(pixelCount);
+            try {
+                average3Samples(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
 }

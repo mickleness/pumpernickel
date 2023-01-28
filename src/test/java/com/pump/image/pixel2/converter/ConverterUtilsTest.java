@@ -87,4 +87,71 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x51, pixels[15]);
 
     }
+
+    public void test_convert3samples() {
+
+        byte[] pixels = new byte[] {
+                0x03, 0x05, 0x07,
+                0x13, 0x17, 0x19,
+                0x29, 0x31, 0x33,
+                0x41, 0x43, 0x47,
+                0x49, 0x51, 0x57 };
+
+        int[] dest = new int[5];
+        ConverterUtils.convert3samples(dest, 0, pixels, 0, 5);
+        assertEquals(0x030507, dest[0]);
+        assertEquals(0x131719, dest[1]);
+        assertEquals(0x293133, dest[2]);
+        assertEquals(0x414347, dest[3]);
+        assertEquals(0x495157, dest[4]);
+    }
+
+    public void test_convert3samples_swapFirstAndThirdSamples() {
+
+        byte[] pixels = new byte[] {
+                0x03, 0x05, 0x07,
+                0x13, 0x17, 0x19,
+                0x29, 0x31, 0x33,
+                0x41, 0x43, 0x47,
+                0x49, 0x51, 0x57 };
+
+        int[] dest = new int[5];
+        ConverterUtils.convert3samples_swapFirstAndThirdSamples(dest, 0, pixels, 0, 5);
+        assertEquals(0x070503, dest[0]);
+        assertEquals(0x191713, dest[1]);
+        assertEquals(0x333129, dest[2]);
+        assertEquals(0x474341, dest[3]);
+        assertEquals(0x575149, dest[4]);
+    }
+
+    public void test_average3Samples_int_to_byte() {
+        int[] pixels = new int[] {
+                0x030507,
+                0x131719,
+                0x293133,
+                0x414347,
+                0x495157 };
+        byte[] dest = new byte[3 * 5];
+        ConverterUtils.average3Samples(dest, 0, pixels, 0, 5);
+        assertEquals((3 + 5 + 7)/3, dest[0]);
+        assertEquals((19 + 23 + 25)/3, dest[1]);
+        assertEquals((41 + 49 + 51)/3, dest[2]);
+        assertEquals((65 + 67 + 71)/3, dest[3]);
+        assertEquals((73 + 81 + 87)/3, dest[4]);
+    }
+
+    public void test_average3Samples_byte_to_byte() {
+        byte[] pixels = new byte[] {
+                0x03, 0x05, 0x07,
+                0x13, 0x17, 0x19,
+                0x29, 0x31, 0x33,
+                0x41, 0x43, 0x47,
+                0x49, 0x51, 0x57 };
+        ConverterUtils.average3Samples(pixels, 0, pixels, 0, 5);
+        assertEquals((3 + 5 + 7)/3, pixels[0]);
+        assertEquals((19 + 23 + 25)/3, pixels[1]);
+        assertEquals((41 + 49 + 51)/3, pixels[2]);
+        assertEquals((65 + 67 + 71)/3, pixels[3]);
+        assertEquals((73 + 81 + 87)/3, pixels[4]);
+    }
 }
