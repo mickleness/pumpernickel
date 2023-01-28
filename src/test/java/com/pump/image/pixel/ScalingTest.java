@@ -51,7 +51,7 @@ public class ScalingTest extends TestCase {
                     BufferedImage rainbowImage = null;
                     BufferedImage scaledImage = null;
                     try {
-                        rainbowImage = createRainbowImage(imageType, isHorizontal);
+                        rainbowImage = createRainbowImage(1000, 1000, imageType, isHorizontal);
                         int scaledWidth = (int)(rainbowImage.getWidth() * scale);
                         int scaledHeight = (int)(rainbowImage.getHeight() * scale);
                         scaledImage = Scaling.scale(rainbowImage, scaledWidth, scaledHeight);
@@ -121,8 +121,8 @@ public class ScalingTest extends TestCase {
         return map;
     }
 
-    private BufferedImage createRainbowImage(int imageType, boolean isHorizontal) {
-        BufferedImage bi = new BufferedImage(1000, 1000, imageType);
+    public static BufferedImage createRainbowImage(int width, int height, int imageType, boolean isHorizontal) {
+        BufferedImage bi = new BufferedImage(width, height, imageType);
 
         Graphics2D g = bi.createGraphics();
         int x = 0;
