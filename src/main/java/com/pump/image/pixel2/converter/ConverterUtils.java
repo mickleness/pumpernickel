@@ -97,7 +97,7 @@ class ConverterUtils {
         } else {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
-                prependAlpha(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                swapFirstAndThirdSamples_4samples(scratch, 0, sourcePixels, srcOffset, pixelCount);
                 System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
