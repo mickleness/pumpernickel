@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 class ConverterUtils {
 
-    static void convert_XYZ_ints_to_ZYX_bytes(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_ints_to_ZYX_ints(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         if (destPixels == sourcePixels && destOffset > srcOffset) {
             int destIndex = destOffset + pixelCount - 1;
             for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset;) {

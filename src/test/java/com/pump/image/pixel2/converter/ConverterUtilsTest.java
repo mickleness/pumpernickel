@@ -3,10 +3,10 @@ package com.pump.image.pixel2.converter;
 import junit.framework.TestCase;
 
 public class ConverterUtilsTest extends TestCase {
-    public void test_convert_XYZ_ints_to_ZYX_bytes() {
+    public void test_convert_XYZ_ints_to_ZYX_ints() {
         // test storing it to the left of where our source pixels start
         int[] pixels = new int[] {0x02030507, 0x11131719, 0x23293133, 0x37414347};
-        ConverterUtils.convert_XYZ_ints_to_ZYX_bytes(pixels, 0, pixels, 0, 4);
+        ConverterUtils.convert_XYZ_ints_to_ZYX_ints(pixels, 0, pixels, 0, 4);
         assertEquals(0x02070503, pixels[0]);
         assertEquals(0x11191713, pixels[1]);
         assertEquals(0x23333129, pixels[2]);
