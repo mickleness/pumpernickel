@@ -29,6 +29,35 @@ class ConverterUtils {
     }
 
     /**
+     * Convert RGB bytes into ARGB int, where the alpha channel is assumed to be 255.
+     */
+    public static void prependAlpha(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 3 * pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            destPixels[destIndex++] = 0xff000000 |
+                    ((sourcePixels[srcIndex++] & 0xff) << 16) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                    (sourcePixels[srcIndex++] & 0xff);
+        }
+    }
+
+
+    /**
+     * Convert RGB bytes into ABGR int, where the alpha channel is assumed to be 255.
+     */
+    public static void prependAlpha_swapFirstAndThirdSamples(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 3 * pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            destPixels[destIndex++] = 0xff000000 |
+                    ((int)(sourcePixels[srcIndex++] & 0xff)) |
+                    ((int)(sourcePixels[srcIndex++] & 0xff) << 8) |
+                    ((int)(sourcePixels[srcIndex++] & 0xff) << 16);
+        }
+    }
+
+    /**
      * Convert RGB bytes into ARGB bytes, where the alpha channel is assumed to be 255.
      */
     static void prependAlpha(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
@@ -51,6 +80,111 @@ class ConverterUtils {
             } finally {
                 storeScratchArray(scratch);
             }
+        }
+    }
+
+    /**
+     * Convert RGB ints into ARGB bytes, where the alpha channel is assumed to be 255.
+     */
+    public static void prependAlpha(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            int value = sourcePixels[srcIndex++];
+            destPixels[destIndex++] = -1;
+            destPixels[destIndex++] = (byte) ((value >> 16) & 0xff);
+            destPixels[destIndex++] = (byte) ((value >> 8) & 0xff);
+            destPixels[destIndex++] = (byte) (value & 0xff);
+        }
+    }
+
+    /**
+     * Convert RGB ints into ABGR bytes, where the alpha channel is assumed to be 255.
+     */
+    public static void prependAlpha_swapFirstAndThirdSamples(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            int value = sourcePixels[srcIndex++];
+            destPixels[destIndex++] = -1;
+            destPixels[destIndex++] = (byte) (value & 0xff);
+            destPixels[destIndex++] = (byte) ((value >> 8) & 0xff);
+            destPixels[destIndex++] = (byte) ((value >> 16) & 0xff);
+        }
+    }
+
+    /**
+     * Convert RGB bytes into ABGR bytes, where the alpha channel is assumed to be 255.
+     */
+    public static void prependAlpha_swapFirstAndThirdSamples(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int destEnd = destOffset + 4 * pixelCount;
+        int srcEnd = srcOffset + 3 * pixelCount;
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            // we'll iterate RTL:
+            int dstIndex = destEnd - 1;
+            for (int srcIndex = srcEnd - 1; srcIndex >= srcOffset; ) {
+                byte v1 = sourcePixels[srcIndex--];
+                byte v2 = sourcePixels[srcIndex--];
+                byte v3 = sourcePixels[srcIndex--];
+                destPixels[dstIndex--] = v3;
+                destPixels[dstIndex--] = v2;
+                destPixels[dstIndex--] = v1;
+                destPixels[dstIndex--] = -1;
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                prependAlpha_swapFirstAndThirdSamples(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    /**
+     * Convert RGB ints into ARGB ints, where the alpha channel is assumed to be 255.
+     */
+    public static void prependAlpha(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int alpha = 0xff000000;
+
+        if (destPixels == sourcePixels && destOffset > srcOffset) {
+            int destIndex = destOffset + pixelCount - 1;
+            for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset;) {
+                destPixels[destIndex--] = alpha | (sourcePixels[srcIndex--] & 0xffffff);
+            }
+            return;
+        }
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            destPixels[destIndex++] = alpha | (sourcePixels[srcIndex++] & 0xffffff);
+        }
+    }
+
+    /**
+     * Convert RGB ints into ABGR ints, where the alpha channel is assumed to be 255.
+     */
+    public static void prependAlpha_swapFirstAndThirdSamples(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int alpha = 0xff000000;
+
+        if (destPixels == sourcePixels && destOffset > srcOffset) {
+            int destIndex = destOffset + pixelCount - 1;
+            for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset;) {
+                int value = sourcePixels[srcIndex--];
+                int sampleA = value & 0xff;
+                int sampleB = (value >> 16) & 0xff;
+                destPixels[destIndex--] = alpha | (value & 0xff00) | sampleB | (sampleA << 16);
+            }
+            return;
+        }
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int value = sourcePixels[srcIndex++];
+            int sampleA = value & 0xff;
+            int sampleB = (value >> 16) & 0xff;
+            destPixels[destIndex++] = alpha | (value & 0xff00) | sampleB | (sampleA << 16);
         }
     }
 
