@@ -35,7 +35,7 @@ public class ByteGrayConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromBGR(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        ConverterUtils.average3Samples(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+        ConverterUtils.convert_XYZ_ints_to_G_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
@@ -53,17 +53,17 @@ public class ByteGrayConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromRGB(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        ConverterUtils.average3Samples(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+        ConverterUtils.convert_XYZ_ints_to_G_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
     public void convertFromRGB(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        ConverterUtils.average3Samples(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+        ConverterUtils.convert_XYZ_bytes_to_G_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
     public void convertFromBGR(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        ConverterUtils.average3Samples(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+        ConverterUtils.convert_XYZ_bytes_to_G_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override

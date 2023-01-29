@@ -23,7 +23,7 @@ public class IntARGBPreConverter implements PixelConverter<int[]> {
 
     @Override
     public void convertFromARGBPre(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        ConverterUtils.convert4samples(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+        ConverterUtils.convert_AXYZ_bytes_to_AXYZ_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
@@ -33,12 +33,12 @@ public class IntARGBPreConverter implements PixelConverter<int[]> {
 
     @Override
     public void convertFromABGRPre(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        ConverterUtils.convert4samples_swapFirstAndThird(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+        ConverterUtils.convert_AXYZ_bytes_to_AZYX_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
     public void convertFromBGR(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        ConverterUtils.prependAlpha_swapFirstAndThirdSamples(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+        ConverterUtils.convert_XYZ_ints_to_AZYX_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
@@ -53,17 +53,17 @@ public class IntARGBPreConverter implements PixelConverter<int[]> {
 
     @Override
     public void convertFromRGB(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        ConverterUtils.prependAlpha(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+        ConverterUtils.convert_XYZ_ints_to_AXYZ_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
     public void convertFromRGB(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        ConverterUtils.prependAlpha(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+        ConverterUtils.convert_XYZ_bytes_to_AXYZ_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
     public void convertFromBGR(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        ConverterUtils.prependAlpha_swapFirstAndThirdSamples(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+        ConverterUtils.convert_XYZ_bytes_to_AZYX_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override

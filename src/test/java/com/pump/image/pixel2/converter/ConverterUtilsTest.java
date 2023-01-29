@@ -3,19 +3,17 @@ package com.pump.image.pixel2.converter;
 import junit.framework.TestCase;
 
 public class ConverterUtilsTest extends TestCase {
-    public void test_swapFirstAndThirdSamples() {
+    public void test_convert_XYZ_ints_to_ZYX_bytes() {
         // test storing it to the left of where our source pixels start
         int[] pixels = new int[] {0x02030507, 0x11131719, 0x23293133, 0x37414347};
-        ConverterUtils.swapFirstAndThirdSamples(pixels, 0, pixels, 0, 4);
+        ConverterUtils.convert_XYZ_ints_to_ZYX_bytes(pixels, 0, pixels, 0, 4);
         assertEquals(0x02070503, pixels[0]);
         assertEquals(0x11191713, pixels[1]);
         assertEquals(0x23333129, pixels[2]);
         assertEquals(0x37474341, pixels[3]);
     }
 
-
-
-    public void test_prependAlpha_byte_to_byte() {
+    public void test_convert_XYZ_bytes_to_AXYZ_bytes() {
         byte[] pixels = new byte[] {
                 0x03, 0x05, 0x07,
                 0x13, 0x17, 0x19,
@@ -24,7 +22,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x49, 0x51, 0x57,
                 0x59, 0x61, 0x67,
                 0, 0, 0, 0, 0, 0};
-        ConverterUtils.prependAlpha(pixels, 0, pixels, 0, 6);
+        ConverterUtils.convert_XYZ_bytes_to_AXYZ_bytes(pixels, 0, pixels, 0, 6);
         assertEquals(-1, pixels[0]);
         assertEquals(0x03, pixels[1]);
         assertEquals(0x05, pixels[2]);
@@ -55,7 +53,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x61, pixels[22]);
         assertEquals(0x67, pixels[23]);
     }
-    public void test_prependAlpha_swapFirstAndThirdSamples_byte_to_byte() {
+    public void test_convert_XYZ_bytes_to_AZYX_bytes() {
         byte[] pixels = new byte[] {
                 0x03, 0x05, 0x07,
                 0x13, 0x17, 0x19,
@@ -64,7 +62,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x49, 0x51, 0x57,
                 0x59, 0x61, 0x67,
                 0, 0, 0, 0, 0, 0};
-        ConverterUtils.prependAlpha_swapFirstAndThirdSamples(pixels, 0, pixels, 0, 6);
+        ConverterUtils.convert_XYZ_bytes_to_AZYX_bytes(pixels, 0, pixels, 0, 6);
         assertEquals(-1, pixels[0]);
         assertEquals(0x07, pixels[1]);
         assertEquals(0x05, pixels[2]);
@@ -95,7 +93,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x61, pixels[22]);
         assertEquals(0x59, pixels[23]);
     }
-    public void test_prependAlpha_swapFirstAndThirdSamples_int_to_int() {
+    public void test_convert_XYZ_ints_to_AZYX_ints() {
         int[] pixels = new int[] {
                 0x030507,
                 0x131719,
@@ -104,7 +102,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x495157,
                 0x596167,
                 0, 0, 0, 0, 0, 0};
-        ConverterUtils.prependAlpha_swapFirstAndThirdSamples(pixels, 0, pixels, 0, 6);
+        ConverterUtils.convert_XYZ_ints_to_AZYX_ints(pixels, 0, pixels, 0, 6);
         assertEquals(0xff070503, pixels[0]);
         assertEquals(0xff191713, pixels[1]);
         assertEquals(0xff333129, pixels[2]);
@@ -112,7 +110,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0xff575149, pixels[4]);
         assertEquals(0xff676159, pixels[5]);
     }
-    public void test_prependAlpha_int_to_int() {
+    public void test_convert_XYZ_ints_to_AXYZ_ints() {
         int[] pixels = new int[] {
                 0x030507,
                 0x131719,
@@ -121,7 +119,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x495157,
                 0x596167,
                 0, 0, 0, 0, 0, 0};
-        ConverterUtils.prependAlpha(pixels, 0, pixels, 0, 6);
+        ConverterUtils.convert_XYZ_ints_to_AXYZ_ints(pixels, 0, pixels, 0, 6);
         assertEquals(0xff030507, pixels[0]);
         assertEquals(0xff131719, pixels[1]);
         assertEquals(0xff293133, pixels[2]);
@@ -129,7 +127,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0xff495157, pixels[4]);
         assertEquals(0xff596167, pixels[5]);
     }
-    public void test_prependAlpha_byte_to_int() {
+    public void test_convert_XYZ_bytes_to_AXYZ_ints() {
         byte[] pixels = new byte[] {
                 0x03, 0x05, 0x07,
                 0x13, 0x17, 0x19,
@@ -138,7 +136,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x49, 0x51, 0x57,
                 0x59, 0x61, 0x67};
         int[] dest = new int[6];
-        ConverterUtils.prependAlpha(dest, 0, pixels, 0, 6);
+        ConverterUtils.convert_XYZ_bytes_to_AXYZ_ints(dest, 0, pixels, 0, 6);
         assertEquals(0xff030507, dest[0]);
         assertEquals(0xff131719, dest[1]);
         assertEquals(0xff293133, dest[2]);
@@ -147,7 +145,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0xff596167, dest[5]);
     }
 
-    public void test_prependAlpha_swapFirstAndThirdSamples_byte_to_int() {
+    public void test_convert_XYZ_bytes_to_AZYX_ints() {
         byte[] pixels = new byte[] {
                 0x03, 0x05, 0x07,
                 0x13, 0x17, 0x19,
@@ -156,7 +154,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x49, 0x51, 0x57,
                 0x59, 0x61, 0x67};
         int[] dest = new int[6];
-        ConverterUtils.prependAlpha_swapFirstAndThirdSamples(dest, 0, pixels, 0, 6);
+        ConverterUtils.convert_XYZ_bytes_to_AZYX_ints(dest, 0, pixels, 0, 6);
         assertEquals(0xff070503, dest[0]);
         assertEquals(0xff191713, dest[1]);
         assertEquals(0xff333129, dest[2]);
@@ -165,7 +163,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0xff676159, dest[5]);
     }
 
-    public void test_prependAlpha_int_to_byte() {
+    public void test_convert_XYZ_ints_to_AXYZ_bytes() {
         int[] pixels = new int[] {
                 0x030507,
                 0x131719,
@@ -174,7 +172,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x495157,
                 0x596167};
         byte[] dest = new byte[4 * 6];
-        ConverterUtils.prependAlpha(dest, 0, pixels, 0, 6);
+        ConverterUtils.convert_XYZ_ints_to_AXYZ_bytes(dest, 0, pixels, 0, 6);
         assertEquals(-1, dest[0]);
         assertEquals(0x03, dest[1]);
         assertEquals(0x05, dest[2]);
@@ -206,7 +204,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x67, dest[23]);
     }
 
-    public void test_prependAlpha_swapFirstAndThirdSamples_int_to_byte() {
+    public void test_convert_XYZ_ints_to_AZYX_bytes() {
         int[] pixels = new int[] {
                 0x030507,
                 0x131719,
@@ -215,7 +213,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x495157,
                 0x596167};
         byte[] dest = new byte[4 * 6];
-        ConverterUtils.prependAlpha_swapFirstAndThirdSamples(dest, 0, pixels, 0, 6);
+        ConverterUtils.convert_XYZ_ints_to_AZYX_bytes(dest, 0, pixels, 0, 6);
         assertEquals(-1, dest[0]);
         assertEquals(0x07, dest[1]);
         assertEquals(0x05, dest[2]);
@@ -247,13 +245,13 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x59, dest[23]);
     }
 
-    public void test_swapFirstAndThirdSamples_4samples() {
+    public void test_convert_AXYZ_bytes_to_AZYX_bytes() {
         byte[] pixels = new byte[] {
                 0x03, 0x05, 0x07, 0x13,
                 0x17, 0x19, 0x29, 0x31,
                 0x33, 0x41, 0x43, 0x47,
                 0x49, 0x51, 0x57, 0x59 };
-        ConverterUtils.swapFirstAndThirdSamples_4samples(pixels, 0, pixels, 0, 4);
+        ConverterUtils.convert_AXYZ_bytes_to_AZYX_bytes(pixels, 0, pixels, 0, 4);
 
         assertEquals(0x03, pixels[0]);
         assertEquals(0x13, pixels[1]);
@@ -277,7 +275,7 @@ public class ConverterUtilsTest extends TestCase {
 
     }
 
-    public void test_convert3samples() {
+    public void test_convert_XYZ_bytes_to_XYZ_ints() {
 
         byte[] pixels = new byte[] {
                 0x03, 0x05, 0x07,
@@ -287,7 +285,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x49, 0x51, 0x57 };
 
         int[] dest = new int[5];
-        ConverterUtils.convert3samples(dest, 0, pixels, 0, 5);
+        ConverterUtils.convert_XYZ_bytes_to_XYZ_ints(dest, 0, pixels, 0, 5);
         assertEquals(0x030507, dest[0]);
         assertEquals(0x131719, dest[1]);
         assertEquals(0x293133, dest[2]);
@@ -295,7 +293,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x495157, dest[4]);
     }
 
-    public void test_convert3samples_swapFirstAndThirdSamples() {
+    public void test_convert_XYZ_bytes_to_ZYX_ints() {
 
         byte[] pixels = new byte[] {
                 0x03, 0x05, 0x07,
@@ -305,7 +303,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x49, 0x51, 0x57 };
 
         int[] dest = new int[5];
-        ConverterUtils.convert3samples_swapFirstAndThirdSamples(dest, 0, pixels, 0, 5);
+        ConverterUtils.convert_XYZ_bytes_to_ZYX_ints(dest, 0, pixels, 0, 5);
         assertEquals(0x070503, dest[0]);
         assertEquals(0x191713, dest[1]);
         assertEquals(0x333129, dest[2]);
@@ -313,7 +311,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x575149, dest[4]);
     }
 
-    public void test_average3Samples_int_to_byte() {
+    public void test_convert_XYZ_ints_to_G_bytes() {
         int[] pixels = new int[] {
                 0x030507,
                 0x131719,
@@ -321,7 +319,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x414347,
                 0x495157 };
         byte[] dest = new byte[3 * 5];
-        ConverterUtils.average3Samples(dest, 0, pixels, 0, 5);
+        ConverterUtils.convert_XYZ_ints_to_G_bytes(dest, 0, pixels, 0, 5);
         assertEquals((3 + 5 + 7)/3, dest[0]);
         assertEquals((19 + 23 + 25)/3, dest[1]);
         assertEquals((41 + 49 + 51)/3, dest[2]);
@@ -329,14 +327,14 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals((73 + 81 + 87)/3, dest[4]);
     }
 
-    public void test_average3Samples_byte_to_byte() {
+    public void test_convert_XYZ_bytes_to_G_bytes() {
         byte[] pixels = new byte[] {
                 0x03, 0x05, 0x07,
                 0x13, 0x17, 0x19,
                 0x29, 0x31, 0x33,
                 0x41, 0x43, 0x47,
                 0x49, 0x51, 0x57 };
-        ConverterUtils.average3Samples(pixels, 0, pixels, 0, 5);
+        ConverterUtils.convert_XYZ_bytes_to_G_bytes(pixels, 0, pixels, 0, 5);
         assertEquals((3 + 5 + 7)/3, pixels[0]);
         assertEquals((19 + 23 + 25)/3, pixels[1]);
         assertEquals((41 + 49 + 51)/3, pixels[2]);
@@ -344,7 +342,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals((73 + 81 + 87)/3, pixels[4]);
     }
 
-    public void test_convert4samples_int_to_byte() {
+    public void test_convert_AXYZ_ints_to_AXYZ_bytes() {
         int[] pixels = new int[] {
                 0x63030507,
                 0x67131719,
@@ -352,7 +350,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x73414347,
                 0x77495157 };
         byte[] dest = new byte[4 * 5];
-        ConverterUtils.convert4samples(dest, 0, pixels, 0, 5);
+        ConverterUtils.convert_AXYZ_ints_to_AXYZ_bytes(dest, 0, pixels, 0, 5);
 
         assertEquals(0x63, dest[0]);
         assertEquals(0x03, dest[1]);
@@ -380,7 +378,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x57, dest[19]);
     }
 
-    public void test_convert4samples_swapFirstAndThird_int_to_byte() {
+    public void test_convert_AXYZ_ints_to_AZYX_bytes() {
         int[] pixels = new int[] {
                 0x63030507,
                 0x67131719,
@@ -388,7 +386,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x73414347,
                 0x77495157 };
         byte[] dest = new byte[4 * 5];
-        ConverterUtils.convert4samples_swapFirstAndThird(dest, 0, pixels, 0, 5);
+        ConverterUtils.convert_AXYZ_ints_to_AZYX_bytes(dest, 0, pixels, 0, 5);
 
         assertEquals(0x63, dest[0]);
         assertEquals(0x07, dest[1]);
@@ -415,7 +413,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x51, dest[18]);
         assertEquals(0x49, dest[19]);
     }
-    public void test_convert4samples_byte_to_int() {
+    public void test_convert_AXYZ_bytes_to_AXYZ_ints() {
         byte[] pixels = new byte[] {
                 0x63, 0x03, 0x05, 0x07,
                 0x67, 0x13, 0x17, 0x19,
@@ -423,7 +421,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x73, 0x41, 0x43, 0x47,
                 0x77, 0x49, 0x51, 0x57 };
         int[] dest = new int[5];
-        ConverterUtils.convert4samples(dest, 0, pixels, 0, 5);
+        ConverterUtils.convert_AXYZ_bytes_to_AXYZ_ints(dest, 0, pixels, 0, 5);
 
         assertEquals(0x63030507, dest[0]);
         assertEquals(0x67131719, dest[1]);
@@ -432,7 +430,7 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x77495157, dest[4]);
     }
 
-    public void test_convert4samples_swapFirstAndThird_byte_to_int() {
+    public void test_convert_AXYZ_bytes_to_AZYX_ints() {
         byte[] pixels = new byte[] {
                 0x63, 0x03, 0x05, 0x07,
                 0x67, 0x13, 0x17, 0x19,
@@ -440,7 +438,7 @@ public class ConverterUtilsTest extends TestCase {
                 0x73, 0x41, 0x43, 0x47,
                 0x77, 0x49, 0x51, 0x57 };
         int[] dest = new int[5];
-        ConverterUtils.convert4samples_swapFirstAndThird(dest, 0, pixels, 0, 5);
+        ConverterUtils.convert_AXYZ_bytes_to_AZYX_ints(dest, 0, pixels, 0, 5);
 
         assertEquals(0x63070503, dest[0]);
         assertEquals(0x67191713, dest[1]);

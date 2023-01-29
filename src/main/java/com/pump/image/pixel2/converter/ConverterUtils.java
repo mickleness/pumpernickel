@@ -4,10 +4,7 @@ import java.util.LinkedList;
 
 class ConverterUtils {
 
-    /**
-     * Convert RGB ints into BGR bytes
-     */
-    static void swapFirstAndThirdSamples(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_ints_to_ZYX_bytes(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         if (destPixels == sourcePixels && destOffset > srcOffset) {
             int destIndex = destOffset + pixelCount - 1;
             for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset;) {
@@ -28,10 +25,7 @@ class ConverterUtils {
         }
     }
 
-    /**
-     * Convert RGB bytes into ARGB int, where the alpha channel is assumed to be 255.
-     */
-    public static void prependAlpha(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_bytes_to_AXYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + 3 * pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
@@ -42,25 +36,18 @@ class ConverterUtils {
         }
     }
 
-
-    /**
-     * Convert RGB bytes into ABGR int, where the alpha channel is assumed to be 255.
-     */
-    public static void prependAlpha_swapFirstAndThirdSamples(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_bytes_to_AZYX_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + 3 * pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
             destPixels[destIndex++] = 0xff000000 |
-                    ((int)(sourcePixels[srcIndex++] & 0xff)) |
-                    ((int)(sourcePixels[srcIndex++] & 0xff) << 8) |
-                    ((int)(sourcePixels[srcIndex++] & 0xff) << 16);
+                    (sourcePixels[srcIndex++] & 0xff) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 16);
         }
     }
 
-    /**
-     * Convert RGB bytes into ARGB bytes, where the alpha channel is assumed to be 255.
-     */
-    static void prependAlpha(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_bytes_to_AXYZ_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int destEnd = destOffset + 4 * pixelCount;
         int srcEnd = srcOffset + 3 * pixelCount;
         if (destPixels != sourcePixels || destOffset == srcOffset) {
@@ -75,7 +62,7 @@ class ConverterUtils {
         } else {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
-                prependAlpha(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                convert_XYZ_bytes_to_AXYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
                 System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
@@ -83,10 +70,7 @@ class ConverterUtils {
         }
     }
 
-    /**
-     * Convert RGB ints into ARGB bytes, where the alpha channel is assumed to be 255.
-     */
-    public static void prependAlpha(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_ints_to_AXYZ_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
@@ -98,10 +82,7 @@ class ConverterUtils {
         }
     }
 
-    /**
-     * Convert RGB ints into ABGR bytes, where the alpha channel is assumed to be 255.
-     */
-    public static void prependAlpha_swapFirstAndThirdSamples(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_ints_to_AZYX_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
@@ -113,10 +94,7 @@ class ConverterUtils {
         }
     }
 
-    /**
-     * Convert RGB bytes into ABGR bytes, where the alpha channel is assumed to be 255.
-     */
-    public static void prependAlpha_swapFirstAndThirdSamples(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_bytes_to_AZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int destEnd = destOffset + 4 * pixelCount;
         int srcEnd = srcOffset + 3 * pixelCount;
         if (destPixels != sourcePixels || destOffset == srcOffset) {
@@ -134,7 +112,7 @@ class ConverterUtils {
         } else {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
-                prependAlpha_swapFirstAndThirdSamples(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                convert_XYZ_bytes_to_AZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
                 System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
@@ -142,10 +120,7 @@ class ConverterUtils {
         }
     }
 
-    /**
-     * Convert RGB ints into ARGB ints, where the alpha channel is assumed to be 255.
-     */
-    public static void prependAlpha(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_ints_to_AXYZ_ints(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int alpha = 0xff000000;
 
         if (destPixels == sourcePixels && destOffset > srcOffset) {
@@ -162,10 +137,7 @@ class ConverterUtils {
         }
     }
 
-    /**
-     * Convert RGB ints into ABGR ints, where the alpha channel is assumed to be 255.
-     */
-    public static void prependAlpha_swapFirstAndThirdSamples(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_ints_to_AZYX_ints(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int alpha = 0xff000000;
 
         if (destPixels == sourcePixels && destOffset > srcOffset) {
@@ -188,10 +160,10 @@ class ConverterUtils {
         }
     }
 
-    static LinkedList<byte[]> byteArrays = new LinkedList<>();
-    static int minByteArrayLength = 4000;
+    private static final LinkedList<byte[]> byteArrays = new LinkedList<>();
+    private static int minByteArrayLength = 4000;
 
-    static byte[] getScratchArray(int minLength) {
+    private static byte[] getScratchArray(int minLength) {
         synchronized (byteArrays) {
             minByteArrayLength = Math.max(minByteArrayLength, minLength);
 
@@ -213,15 +185,12 @@ class ConverterUtils {
         }
     }
 
-    /**
-     * Convert ARGB bytes into ABGR bytes.
-     */
-    static void swapFirstAndThirdSamples_4samples(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_AXYZ_bytes_to_AZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         if (destPixels != sourcePixels || destOffset == srcOffset) {
             int destIndex = destOffset;
             int srcEnd = srcOffset + 4 * pixelCount;
             for (int srcIndex = srcOffset; srcIndex < srcEnd; destIndex += 4) {
-                destPixels[destIndex + 0] = sourcePixels[srcIndex++];
+                destPixels[destIndex] = sourcePixels[srcIndex++];
                 byte swap1 = sourcePixels[srcIndex++];
                 destPixels[destIndex + 2] = sourcePixels[srcIndex++];
                 byte swap2 = sourcePixels[srcIndex++];
@@ -231,7 +200,7 @@ class ConverterUtils {
         } else {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
-                swapFirstAndThirdSamples_4samples(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                convert_AXYZ_bytes_to_AZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
                 System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
@@ -239,10 +208,7 @@ class ConverterUtils {
         }
     }
 
-    /**
-     * Convert RGB bytes into RGB ints.
-     */
-    static void convert3samples(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_bytes_to_XYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + 3 * pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
@@ -250,10 +216,7 @@ class ConverterUtils {
         }
     }
 
-    /**
-     * Convert RGB bytes into BGR ints.
-     */
-    static void convert3samples_swapFirstAndThirdSamples(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_bytes_to_ZYX_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + 3 * pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
@@ -261,10 +224,7 @@ class ConverterUtils {
         }
     }
 
-    /**
-     * Convert RGB ints into grayscale bytes.
-     */
-    public static void average3Samples(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_ints_to_G_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
@@ -273,10 +233,7 @@ class ConverterUtils {
         }
     }
 
-    /**
-     * Convert RGB bytes into grayscale bytes.
-     */
-    public static void average3Samples(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_bytes_to_G_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         if (destPixels != sourcePixels || destOffset == srcOffset) {
             int srcEnd = srcOffset + 3 * pixelCount;
             int destIndex = destOffset;
@@ -286,7 +243,7 @@ class ConverterUtils {
         } else {
             byte[] scratch = getScratchArray(pixelCount);
             try {
-                average3Samples(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                convert_XYZ_bytes_to_G_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
                 System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
             } finally {
                 storeScratchArray(scratch);
@@ -294,8 +251,7 @@ class ConverterUtils {
         }
     }
 
-    /** Convert ARGB ints into ARGB bytes. */
-    public static void convert4samples(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_AXYZ_ints_to_AXYZ_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
@@ -307,8 +263,7 @@ class ConverterUtils {
         }
     }
 
-    /** Convert ARGB ints into ABGR bytes. */
-    public static void convert4samples_swapFirstAndThird(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_AXYZ_ints_to_AZYX_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
@@ -320,8 +275,7 @@ class ConverterUtils {
         }
     }
 
-    /** Convert ARGB bytes into ARGB ints. */
-    public static void convert4samples(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_AXYZ_bytes_to_AXYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + 4 * pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
@@ -333,8 +287,7 @@ class ConverterUtils {
         }
     }
 
-    /** Convert ARGB bytes into ABGR ints. */
-    public static void convert4samples_swapFirstAndThird(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_AXYZ_bytes_to_AZYX_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + 4 * pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
