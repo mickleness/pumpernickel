@@ -63,7 +63,7 @@ public class ByteRGBConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromBGR(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_XYZ_bytes_to_ZYX_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
