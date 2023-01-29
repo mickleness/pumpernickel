@@ -15,7 +15,7 @@ public class ByteARGBPreConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromARGBPre(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert4samples(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override

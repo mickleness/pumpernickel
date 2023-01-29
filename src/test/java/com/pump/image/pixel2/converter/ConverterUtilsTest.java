@@ -154,4 +154,109 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals((65 + 67 + 71)/3, pixels[3]);
         assertEquals((73 + 81 + 87)/3, pixels[4]);
     }
+
+    public void test_convert4samples_int_to_byte() {
+        int[] pixels = new int[] {
+                0x63030507,
+                0x67131719,
+                0x71293133,
+                0x73414347,
+                0x77495157 };
+        byte[] dest = new byte[4 * 5];
+        ConverterUtils.convert4samples(dest, 0, pixels, 0, 5);
+
+        assertEquals(0x63, dest[0]);
+        assertEquals(0x03, dest[1]);
+        assertEquals(0x05, dest[2]);
+        assertEquals(0x07, dest[3]);
+
+        assertEquals(0x67, dest[4]);
+        assertEquals(0x13, dest[5]);
+        assertEquals(0x17, dest[6]);
+        assertEquals(0x19, dest[7]);
+
+        assertEquals(0x71, dest[8]);
+        assertEquals(0x29, dest[9]);
+        assertEquals(0x31, dest[10]);
+        assertEquals(0x33, dest[11]);
+
+        assertEquals(0x73, dest[12]);
+        assertEquals(0x41, dest[13]);
+        assertEquals(0x43, dest[14]);
+        assertEquals(0x47, dest[15]);
+
+        assertEquals(0x77, dest[16]);
+        assertEquals(0x49, dest[17]);
+        assertEquals(0x51, dest[18]);
+        assertEquals(0x57, dest[19]);
+    }
+
+    public void test_convert4samples_swapFirstAndThird_int_to_byte() {
+        int[] pixels = new int[] {
+                0x63030507,
+                0x67131719,
+                0x71293133,
+                0x73414347,
+                0x77495157 };
+        byte[] dest = new byte[4 * 5];
+        ConverterUtils.convert4samples_swapFirstAndThird(dest, 0, pixels, 0, 5);
+
+        assertEquals(0x63, dest[0]);
+        assertEquals(0x07, dest[1]);
+        assertEquals(0x05, dest[2]);
+        assertEquals(0x03, dest[3]);
+
+        assertEquals(0x67, dest[4]);
+        assertEquals(0x19, dest[5]);
+        assertEquals(0x17, dest[6]);
+        assertEquals(0x13, dest[7]);
+
+        assertEquals(0x71, dest[8]);
+        assertEquals(0x33, dest[9]);
+        assertEquals(0x31, dest[10]);
+        assertEquals(0x29, dest[11]);
+
+        assertEquals(0x73, dest[12]);
+        assertEquals(0x47, dest[13]);
+        assertEquals(0x43, dest[14]);
+        assertEquals(0x41, dest[15]);
+
+        assertEquals(0x77, dest[16]);
+        assertEquals(0x57, dest[17]);
+        assertEquals(0x51, dest[18]);
+        assertEquals(0x49, dest[19]);
+    }
+    public void test_convert4samples_byte_to_int() {
+        byte[] pixels = new byte[] {
+                0x63, 0x03, 0x05, 0x07,
+                0x67, 0x13, 0x17, 0x19,
+                0x71, 0x29, 0x31, 0x33,
+                0x73, 0x41, 0x43, 0x47,
+                0x77, 0x49, 0x51, 0x57 };
+        int[] dest = new int[5];
+        ConverterUtils.convert4samples(dest, 0, pixels, 0, 5);
+
+        assertEquals(0x63030507, dest[0]);
+        assertEquals(0x67131719, dest[1]);
+        assertEquals(0x71293133, dest[2]);
+        assertEquals(0x73414347, dest[3]);
+        assertEquals(0x77495157, dest[4]);
+    }
+
+    public void test_convert4samples_swapFirstAndThird_byte_to_int() {
+        byte[] pixels = new byte[] {
+                0x63, 0x03, 0x05, 0x07,
+                0x67, 0x13, 0x17, 0x19,
+                0x71, 0x29, 0x31, 0x33,
+                0x73, 0x41, 0x43, 0x47,
+                0x77, 0x49, 0x51, 0x57 };
+        int[] dest = new int[5];
+        ConverterUtils.convert4samples_swapFirstAndThird(dest, 0, pixels, 0, 5);
+
+        assertEquals(0x63070503, dest[0]);
+        assertEquals(0x67191713, dest[1]);
+        assertEquals(0x71333129, dest[2]);
+        assertEquals(0x73474341, dest[3]);
+        assertEquals(0x77575149, dest[4]);
+    }
 }

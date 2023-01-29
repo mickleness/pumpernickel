@@ -4,10 +4,8 @@ import java.util.LinkedList;
 
 class ConverterUtils {
 
-
     /**
-     * Swap the 1st and 3rd channels/samples of pixels. So if one pixel is represented as "0xAARRGGBB" then this
-     * method will convert that to "0xAABBGGRR"
+     * Convert RGB ints into BGR bytes
      */
     static void swapFirstAndThirdSamples(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         if (destPixels == sourcePixels && destOffset > srcOffset) {
@@ -31,8 +29,7 @@ class ConverterUtils {
     }
 
     /**
-     * Take 3-sample data and prepend an opaque "255" before each pixel. So {R1, G1, B1, R2, G2, B2, ...}
-     * becomes {255, R1, G1, B1, 255, R2, G2, B2, ...}
+     * Convert RGB bytes into ARGB bytes, where the alpha channel is assumed to be 255.
      */
     static void prependAlpha(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int destEnd = destOffset + 4 * pixelCount;
@@ -82,6 +79,9 @@ class ConverterUtils {
         }
     }
 
+    /**
+     * Convert ARGB bytes into ABGR bytes.
+     */
     static void swapFirstAndThirdSamples_4samples(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         if (destPixels != sourcePixels || destOffset == srcOffset) {
             int destIndex = destOffset;
@@ -106,7 +106,7 @@ class ConverterUtils {
     }
 
     /**
-     * Convert 3-sample byte data into an int array
+     * Convert RGB bytes into RGB ints.
      */
     static void convert3samples(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + 3 * pixelCount;
@@ -117,7 +117,7 @@ class ConverterUtils {
     }
 
     /**
-     * Convert 3-sample byte data into an int array, and swap the first and third channels. For ex: BGR data can become RGB.
+     * Convert RGB bytes into BGR ints.
      */
     static void convert3samples_swapFirstAndThirdSamples(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + 3 * pixelCount;
@@ -128,7 +128,7 @@ class ConverterUtils {
     }
 
     /**
-     * Average 3-sample int data into one byte value. So this can convert int-base BGR or RGB data into a grayscale byte.
+     * Convert RGB ints into grayscale bytes.
      */
     public static void average3Samples(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
@@ -140,7 +140,7 @@ class ConverterUtils {
     }
 
     /**
-     * Average 3-sample byte data into one byte value. So this can convert byte-base BGR or RGB data into a grayscale byte.
+     * Convert RGB bytes into grayscale bytes.
      */
     public static void average3Samples(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         if (destPixels != sourcePixels || destOffset == srcOffset) {
@@ -157,6 +157,58 @@ class ConverterUtils {
             } finally {
                 storeScratchArray(scratch);
             }
+        }
+    }
+
+    /** Convert ARGB ints into ARGB bytes. */
+    public static void convert4samples(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            int value = sourcePixels[srcIndex++];
+            destPixels[destIndex++] = (byte) ((value >> 24) & 0xff);
+            destPixels[destIndex++] = (byte) ((value >> 16) & 0xff);
+            destPixels[destIndex++] = (byte) ((value >> 8) & 0xff);
+            destPixels[destIndex++] = (byte) (value & 0xff);
+        }
+    }
+
+    /** Convert ARGB ints into ABGR bytes. */
+    public static void convert4samples_swapFirstAndThird(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            int value = sourcePixels[srcIndex++];
+            destPixels[destIndex++] = (byte) ((value >> 24) & 0xff);
+            destPixels[destIndex++] = (byte) (value & 0xff);
+            destPixels[destIndex++] = (byte) ((value >> 8) & 0xff);
+            destPixels[destIndex++] = (byte) ((value >> 16) & 0xff);
+        }
+    }
+
+    /** Convert ARGB bytes into ARGB ints. */
+    public static void convert4samples(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 4 * pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            destPixels[destIndex++] =
+                    ((sourcePixels[srcIndex++] & 0xff) << 24) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 16) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                    ((sourcePixels[srcIndex++] & 0xff));
+        }
+    }
+
+    /** Convert ARGB bytes into ABGR ints. */
+    public static void convert4samples_swapFirstAndThird(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 4 * pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            destPixels[destIndex++] =
+                    ((sourcePixels[srcIndex++] & 0xff) << 24) |
+                            ((sourcePixels[srcIndex++] & 0xff)) |
+                            ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                            ((sourcePixels[srcIndex++] & 0xff) << 16);
         }
     }
 }

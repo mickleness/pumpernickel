@@ -13,7 +13,7 @@ public class IntARGBConverter implements PixelConverter<int[]> {
 
     @Override
     public void convertFromARGB(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert4samples(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class IntARGBConverter implements PixelConverter<int[]> {
 
     @Override
     public void convertFromABGR(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert4samples_swapFirstAndThird(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
