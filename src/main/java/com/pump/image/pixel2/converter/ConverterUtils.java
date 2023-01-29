@@ -319,7 +319,7 @@ class ConverterUtils {
         }
     }
 
-    public static void convert_G_bytes_to_XYZ_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_G_bytes_to_XYZ_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         if (destPixels != sourcePixels || destOffset == srcOffset) {
             int destIndex = destOffset + 3 * pixelCount - 1;
             for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset; ) {
@@ -338,7 +338,7 @@ class ConverterUtils {
         }
     }
 
-    public static void convert_G_bytes_to_AXYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_G_bytes_to_AXYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
         int dstIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
@@ -347,7 +347,7 @@ class ConverterUtils {
         }
     }
 
-    public static void convert_G_bytes_to_XYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_G_bytes_to_XYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
         int dstIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
@@ -356,7 +356,7 @@ class ConverterUtils {
         }
     }
 
-    public static void convert_XYZ_ints_to_XYZ_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_ints_to_XYZ_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
@@ -366,4 +366,17 @@ class ConverterUtils {
             destPixels[destIndex++] = (byte)( xyz & 0xff);
         }
     }
+
+    static void convert_XYZ_ints_to_ZYX_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            int xyz = sourcePixels[srcIndex++];
+            destPixels[destIndex++] = (byte)( xyz & 0xff);
+            destPixels[destIndex++] = (byte)( (xyz >> 8) & 0xff);
+            destPixels[destIndex++] = (byte)( (xyz >> 16) & 0xff);
+        }
+    }
+
+
 }
