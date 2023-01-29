@@ -355,4 +355,15 @@ class ConverterUtils {
             destPixels[dstIndex++] = (gray << 16) | (gray << 8) | gray;
         }
     }
+
+    public static void convert_XYZ_ints_to_XYZ_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+            int xyz = sourcePixels[srcIndex++];
+            destPixels[destIndex++] = (byte)( (xyz >> 16) & 0xff);
+            destPixels[destIndex++] = (byte)( (xyz >> 8) & 0xff);
+            destPixels[destIndex++] = (byte)( xyz & 0xff);
+        }
+    }
 }
