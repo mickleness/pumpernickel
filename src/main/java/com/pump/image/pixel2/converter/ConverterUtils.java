@@ -12,11 +12,11 @@ class ConverterUtils {
     static void swapFirstAndThirdSamples(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         if (destPixels == sourcePixels && destOffset > srcOffset) {
             int destIndex = destOffset + pixelCount - 1;
-            for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset; srcIndex--, destIndex--) {
-                int value = sourcePixels[srcIndex];
+            for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset;) {
+                int value = sourcePixels[srcIndex--];
                 int sampleA = value & 0xff;
                 int sampleB = (value >> 16) & 0xff;
-                destPixels[destIndex] = (value & 0xff00ff00) | sampleB | (sampleA << 16);
+                destPixels[destIndex--] = (value & 0xff00ff00) | sampleB | (sampleA << 16);
             }
             return;
         }
