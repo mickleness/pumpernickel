@@ -45,7 +45,7 @@ public class ByteBGRConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromGray(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_G_bytes_to_XYZ_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override

@@ -298,4 +298,61 @@ class ConverterUtils {
                             ((sourcePixels[srcIndex++] & 0xff) << 16);
         }
     }
+
+    static void convert_G_bytes_to_AXYZ_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int destIndex = destOffset + 4 * pixelCount - 1;
+            for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset; ) {
+                destPixels[destIndex--] = sourcePixels[srcIndex];
+                destPixels[destIndex--] = sourcePixels[srcIndex];
+                destPixels[destIndex--] = sourcePixels[srcIndex--];
+                destPixels[destIndex--] = -1;
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_G_bytes_to_AXYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    public static void convert_G_bytes_to_XYZ_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int destIndex = destOffset + 3 * pixelCount - 1;
+            for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset; ) {
+                destPixels[destIndex--] = sourcePixels[srcIndex];
+                destPixels[destIndex--] = sourcePixels[srcIndex];
+                destPixels[destIndex--] = sourcePixels[srcIndex--];
+            }
+        } else {
+            byte[] scratch = getScratchArray(3 * pixelCount);
+            try {
+                convert_G_bytes_to_AXYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    public static void convert_G_bytes_to_AXYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int dstIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int gray = sourcePixels[srcIndex++] & 0xff;
+            destPixels[dstIndex++] = 0xff000000 | (gray << 16) | (gray << 8) | gray;
+        }
+    }
+
+    public static void convert_G_bytes_to_XYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int dstIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int gray = sourcePixels[srcIndex++] & 0xff;
+            destPixels[dstIndex++] = (gray << 16) | (gray << 8) | gray;
+        }
+    }
 }
