@@ -434,4 +434,16 @@ class ConverterUtils {
             destPixels[destIndex++] = -1;
         }
     }
+
+    public static void convert_XYZ_ints_to_ZYXA_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int destIndex = destOffset;
+        int srcEnd = srcOffset + pixelCount;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int axyz = sourcePixels[srcIndex++];
+            destPixels[destIndex++] = (byte)( axyz & 0xff );
+            destPixels[destIndex++] = (byte)( (axyz >> 8) & 0xff );
+            destPixels[destIndex++] = (byte)( (axyz >> 16) & 0xff );
+            destPixels[destIndex++] = -1;
+        }
+    }
 }
