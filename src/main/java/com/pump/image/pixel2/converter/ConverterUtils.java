@@ -549,4 +549,30 @@ class ConverterUtils {
             }
         }
     }
+
+    public static void convert_XYZ_bytes_to_ZYXA_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int destEnd = destOffset + 4 * pixelCount;
+            int srcEnd = srcOffset + 3 * pixelCount;
+
+            // we'll iterate RTL:
+            int dstIndex = destEnd - 1;
+            for (int srcIndex = srcEnd - 1; srcIndex >= srcOffset; ) {
+                byte z = sourcePixels[srcIndex--];
+                byte y = sourcePixels[srcIndex--];
+                destPixels[dstIndex--] = -1;
+                destPixels[dstIndex--] = sourcePixels[srcIndex--];
+                destPixels[dstIndex--] = y;
+                destPixels[dstIndex--] = z;
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_XYZ_bytes_to_ZYXA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
 }
