@@ -637,4 +637,42 @@ class ConverterUtils {
             }
         }
     }
+
+    static void convert_XYZA_bytes_to_AZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels == sourcePixels && destOffset == srcOffset) {
+            int dstEnd = destOffset + 4 * pixelCount;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                byte v1 = destPixels[dstIndex];
+                byte v2 = destPixels[dstIndex + 1];
+                byte v3 = destPixels[dstIndex + 2];
+                byte v4 = destPixels[dstIndex + 3];
+
+                destPixels[dstIndex++] = v4;
+                destPixels[dstIndex++] = v3;
+                destPixels[dstIndex++] = v2;
+                destPixels[dstIndex++] = v1;
+            }
+        } else if (destPixels != sourcePixels) {
+            int srcEnd = srcOffset + 4 * pixelCount;
+            int destIndex = destOffset;
+            for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+                byte v1 = sourcePixels[srcIndex++];
+                byte v2 = sourcePixels[srcIndex++];
+                byte v3 = sourcePixels[srcIndex++];
+                byte v4 = sourcePixels[srcIndex++];
+                destPixels[destIndex++] = v4;
+                destPixels[destIndex++] = v3;
+                destPixels[destIndex++] = v2;
+                destPixels[destIndex++] = v1;
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_XYZA_bytes_to_AZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
 }

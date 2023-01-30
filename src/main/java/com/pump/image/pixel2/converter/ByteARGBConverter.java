@@ -43,7 +43,7 @@ public class ByteARGBConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromBGRA(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_XYZA_bytes_to_AZYX_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
