@@ -48,9 +48,10 @@ class ConverterUtils {
     }
 
     static void convert_XYZ_bytes_to_AXYZ_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        int destEnd = destOffset + 4 * pixelCount;
-        int srcEnd = srcOffset + 3 * pixelCount;
         if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int destEnd = destOffset + 4 * pixelCount;
+            int srcEnd = srcOffset + 3 * pixelCount;
+
             // we'll iterate RTL:
             int dstIndex = destEnd - 1;
             for (int srcIndex = srcEnd - 1; srcIndex >= srcOffset; ) {
@@ -95,9 +96,10 @@ class ConverterUtils {
     }
 
     static void convert_XYZ_bytes_to_AZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        int destEnd = destOffset + 4 * pixelCount;
-        int srcEnd = srcOffset + 3 * pixelCount;
         if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int destEnd = destOffset + 4 * pixelCount;
+            int srcEnd = srcOffset + 3 * pixelCount;
+
             // we'll iterate RTL:
             int dstIndex = destEnd - 1;
             for (int srcIndex = srcEnd - 1; srcIndex >= srcOffset; ) {
@@ -517,6 +519,31 @@ class ConverterUtils {
             try {
                 convert_AXYZ_bytes_to_XYZA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
                 System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    public static void convert_G_bytes_to_XYZA_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int destEnd = destOffset + 4 * pixelCount;
+            int srcEnd = srcOffset + pixelCount;
+
+            // we'll iterate RTL:
+            int dstIndex = destEnd - 1;
+            for (int srcIndex = srcEnd - 1; srcIndex >= srcOffset; ) {
+                byte g = sourcePixels[srcIndex--];
+                destPixels[dstIndex--] = -1;
+                destPixels[dstIndex--] = g;
+                destPixels[dstIndex--] = g;
+                destPixels[dstIndex--] = g;
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_G_bytes_to_XYZA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }

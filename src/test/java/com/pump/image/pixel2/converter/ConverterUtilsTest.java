@@ -794,4 +794,40 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x73, pixels[18]);
         assertEquals(0x49, pixels[19]);
     }
+
+    public void test_convert_G_bytes_to_XYZA_bytes() {
+        byte[] pixels = new byte[] {
+                0x03,
+                0x13,
+                0x29,
+                0x41,
+                0x49,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        ConverterUtils.convert_G_bytes_to_XYZA_bytes(pixels, 0, pixels, 0, 5);
+
+        assertEquals(0x03, pixels[0]);
+        assertEquals(0x03, pixels[1]);
+        assertEquals(0x03, pixels[2]);
+        assertEquals(-1, pixels[3]);
+
+        assertEquals(0x13, pixels[4]);
+        assertEquals(0x13, pixels[5]);
+        assertEquals(0x13, pixels[6]);
+        assertEquals(-1, pixels[7]);
+
+        assertEquals(0x29, pixels[8]);
+        assertEquals(0x29, pixels[9]);
+        assertEquals(0x29, pixels[10]);
+        assertEquals(-1, pixels[11]);
+
+        assertEquals(0x41, pixels[12]);
+        assertEquals(0x41, pixels[13]);
+        assertEquals(0x41, pixels[14]);
+        assertEquals(-1, pixels[15]);
+
+        assertEquals(0x49, pixels[16]);
+        assertEquals(0x49, pixels[17]);
+        assertEquals(0x49, pixels[18]);
+        assertEquals(-1, pixels[19]);
+    }
 }
