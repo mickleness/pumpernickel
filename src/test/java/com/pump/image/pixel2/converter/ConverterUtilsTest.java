@@ -628,4 +628,36 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x51, pixels[13]);
         assertEquals(0x49, pixels[14]);
     }
+
+    public void test_convert_AXYZ_ints_to_ZYXA_bytes() {
+        int[] pixels = new int[] {0x61030507, 0x67131719, 0x71293133, 0x73414347, 0x79495157 };
+        byte[] dest = new byte[4 * 5];
+
+        ConverterUtils.convert_AXYZ_ints_to_ZYXA_bytes(dest, 0, pixels, 0, 5);
+
+        assertEquals(0x07, dest[0]);
+        assertEquals(0x05, dest[1]);
+        assertEquals(0x03, dest[2]);
+        assertEquals(0x61, dest[3]);
+
+        assertEquals(0x19, dest[4]);
+        assertEquals(0x17, dest[5]);
+        assertEquals(0x13, dest[6]);
+        assertEquals(0x67, dest[7]);
+
+        assertEquals(0x33, dest[8]);
+        assertEquals(0x31, dest[9]);
+        assertEquals(0x29, dest[10]);
+        assertEquals(0x71, dest[11]);
+
+        assertEquals(0x47, dest[12]);
+        assertEquals(0x43, dest[13]);
+        assertEquals(0x41, dest[14]);
+        assertEquals(0x73, dest[15]);
+
+        assertEquals(0x57, dest[16]);
+        assertEquals(0x51, dest[17]);
+        assertEquals(0x49, dest[18]);
+        assertEquals(0x79, dest[19]);
+    }
 }

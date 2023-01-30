@@ -378,7 +378,7 @@ class ConverterUtils {
         }
     }
 
-    public static void convert_XYZ_bytes_to_ZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_XYZ_bytes_to_ZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         if (destPixels == sourcePixels && destOffset == srcOffset) {
             int dstEnd = destOffset + 3 * pixelCount;
             for (int dstIndex = destOffset; dstIndex < dstEnd;) {
@@ -408,6 +408,18 @@ class ConverterUtils {
             } finally {
                 storeScratchArray(scratch);
             }
+        }
+    }
+
+    static void convert_AXYZ_ints_to_ZYXA_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int destIndex = destOffset;
+        int srcEnd = srcOffset + pixelCount;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int axyz = sourcePixels[srcIndex++];
+            destPixels[destIndex++] = (byte)( axyz & 0xff );
+            destPixels[destIndex++] = (byte)( (axyz >> 8) & 0xff );
+            destPixels[destIndex++] = (byte)( (axyz >> 16) & 0xff );
+            destPixels[destIndex++] = (byte)( (axyz >> 24) & 0xff );
         }
     }
 }
