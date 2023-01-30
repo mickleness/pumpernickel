@@ -675,4 +675,16 @@ class ConverterUtils {
             }
         }
     }
+
+    static void convert_XYZA_bytes_to_AZYX_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int destIndex = destOffset;
+        int srcEnd = srcOffset + 4 * pixelCount;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            destPixels[destIndex++] = (sourcePixels[srcIndex++] & 0xff) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 16) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 24) ;
+
+        }
+    }
 }
