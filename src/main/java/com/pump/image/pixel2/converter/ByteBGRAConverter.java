@@ -35,7 +35,7 @@ public class ByteBGRAConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromBGR(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_XYZ_ints_to_XYZA_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
