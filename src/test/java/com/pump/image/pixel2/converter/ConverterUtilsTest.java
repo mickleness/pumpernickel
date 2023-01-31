@@ -989,4 +989,31 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x71474341, dest[3]);
         assertEquals(0x73575149, dest[4]);
     }
+
+    public void test_convert_AXYZ_ints_to_XYZ_bytes() {
+        int[] pixels = new int[] {0xE3030507, 0xC3131719, 0x89293137, 0x41414347, 0x09475157 };
+        byte[] dest = new byte[3 * 5];
+
+        ConverterUtils.convert_AXYZ_ints_to_XYZ_bytes(dest, 0, pixels, 0, 5);
+
+        assertEquals(0x02, dest[0]);
+        assertEquals(0x04, dest[1]);
+        assertEquals(0x06, dest[2]);
+
+        assertEquals(0x0E, dest[3]);
+        assertEquals(0x11, dest[4]);
+        assertEquals(0x13, dest[5]);
+
+        assertEquals(0x15, dest[6]);
+        assertEquals(0x1A, dest[7]);
+        assertEquals(0x1D, dest[8]);
+
+        assertEquals(0x10, dest[9]);
+        assertEquals(0x11, dest[10]);
+        assertEquals(0x12, dest[11]);
+
+        assertEquals(0x02, dest[12]);
+        assertEquals(0x02, dest[13]);
+        assertEquals(0x03, dest[14]);
+    }
 }
