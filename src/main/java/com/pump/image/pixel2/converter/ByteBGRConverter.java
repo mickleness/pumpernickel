@@ -5,7 +5,7 @@ import com.pump.image.pixel.converter.IndexColorModelLUT;
 public class ByteBGRConverter implements PixelConverter<byte[]> {
     @Override
     public void convertFromARGB(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZ_ints_to_ZYX_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override

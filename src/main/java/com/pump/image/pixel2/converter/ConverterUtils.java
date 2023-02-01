@@ -720,4 +720,16 @@ class ConverterUtils {
             }
         }
     }
+
+    public static void convert_AXYZ_ints_to_ZYX_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int destIndex = destOffset;
+        int srcEnd = srcOffset + pixelCount;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int axyz = sourcePixels[srcIndex++];
+            int alpha = (axyz >> 24) & 0xff;
+            destPixels[destIndex++] = (byte)( (( (axyz & 0xff) * alpha) >> 8) & 0xff );
+            destPixels[destIndex++] = (byte)( (( (axyz & 0xff00) * alpha) >> 16) & 0xff );
+            destPixels[destIndex++] = (byte)( (( (axyz & 0xff0000) * alpha) >> 24) & 0xff );
+        }
+    }
 }
