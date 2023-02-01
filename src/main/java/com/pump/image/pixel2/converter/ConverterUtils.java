@@ -721,7 +721,7 @@ class ConverterUtils {
         }
     }
 
-    public static void convert_AXYZ_ints_to_ZYX_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_AXYZ_ints_to_ZYX_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int destIndex = destOffset;
         int srcEnd = srcOffset + pixelCount;
         for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
@@ -730,6 +730,30 @@ class ConverterUtils {
             destPixels[destIndex++] = (byte)( (( (axyz & 0xff) * alpha) >> 8) & 0xff );
             destPixels[destIndex++] = (byte)( (( (axyz & 0xff00) * alpha) >> 16) & 0xff );
             destPixels[destIndex++] = (byte)( (( (axyz & 0xff0000) * alpha) >> 24) & 0xff );
+        }
+    }
+
+    static void convert_AXYZ_bytes_to_ZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 3 * pixelCount;
+            int srcIndex = srcOffset;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                int alpha = destPixels[srcIndex++] & 0xff;
+                int x = (destPixels[srcIndex++] & 0xff);
+                int y = (destPixels[srcIndex++] & 0xff);
+                int z = (destPixels[srcIndex++] & 0xff);
+                destPixels[dstIndex++] = (byte) ((z * alpha) >> 8);
+                destPixels[dstIndex++] = (byte) ((y * alpha) >> 8);
+                destPixels[dstIndex++] = (byte) ((x * alpha) >> 8);
+            }
+        } else {
+            byte[] scratch = getScratchArray(3 * pixelCount);
+            try {
+                convert_AXYZ_bytes_to_ZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
         }
     }
 }
