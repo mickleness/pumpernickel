@@ -827,4 +827,27 @@ class ConverterUtils {
                     ((((value & 0xff) * alpha) >> 8) & 0xff);
         }
     }
+
+    static void convert_AXYZ_ints_to_ZYX_ints(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels == sourcePixels && destOffset > srcOffset) {
+            int destIndex = destOffset + pixelCount - 1;
+            for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset;) {
+                int value = sourcePixels[srcIndex--];
+                int alpha = (value >> 24) & 0xff;
+                destPixels[destIndex--] = ((((value & 0xff0000) * alpha) >> 24) & 0xff) |
+                        ((((value & 0xff00) * alpha) >> 8) & 0xff00) |
+                        ((((value & 0xff) * alpha) >> 8) << 16);
+            }
+            return;
+        }
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int value = sourcePixels[srcIndex++];
+            int alpha = (value >> 24) & 0xff;
+            destPixels[destIndex++] = ((((value & 0xff0000) * alpha) >> 24) & 0xff) |
+                    ((((value & 0xff00) * alpha) >> 8) & 0xff00) |
+                    ((((value & 0xff) * alpha) >> 8) << 16);
+        }
+    }
 }
