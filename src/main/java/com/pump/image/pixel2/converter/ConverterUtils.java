@@ -17,11 +17,11 @@ class ConverterUtils {
         }
         int srcEnd = srcOffset + pixelCount;
         int destIndex = destOffset;
-        for (int srcIndex = srcOffset; srcIndex < srcEnd; srcIndex++, destIndex++) {
-            int value = sourcePixels[srcIndex];
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int value = sourcePixels[srcIndex++];
             int sampleA = value & 0xff;
             int sampleB = (value >> 16) & 0xff;
-            destPixels[destIndex] = (value & 0xff00ff00) | sampleB | (sampleA << 16);
+            destPixels[destIndex++] = (value & 0xff00ff00) | sampleB | (sampleA << 16);
         }
     }
 
@@ -802,6 +802,29 @@ class ConverterUtils {
             } finally {
                 storeScratchArray(scratch);
             }
+        }
+    }
+
+    static void convert_AXYZ_ints_to_XYZ_ints(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels == sourcePixels && destOffset > srcOffset) {
+            int destIndex = destOffset + pixelCount - 1;
+            for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset;) {
+                int value = sourcePixels[srcIndex--];
+                int alpha = (value >> 24) & 0xff;
+                destPixels[destIndex--] = ((((value & 0xff0000) * alpha) >> 8) & 0xff0000) |
+                        ((((value & 0xff00) * alpha) >> 8) & 0xff00) |
+                        ((((value & 0xff) * alpha) >> 8) & 0xff);
+            }
+            return;
+        }
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int value = sourcePixels[srcIndex++];
+            int alpha = (value >> 24) & 0xff;
+            destPixels[destIndex++] = ((((value & 0xff0000) * alpha) >> 8) & 0xff0000) |
+                    ((((value & 0xff00) * alpha) >> 8) & 0xff00) |
+                    ((((value & 0xff) * alpha) >> 8) & 0xff);
         }
     }
 }

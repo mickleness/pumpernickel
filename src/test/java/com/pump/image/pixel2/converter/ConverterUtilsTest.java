@@ -1163,4 +1163,20 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x02, pixels[13]);
         assertEquals(0x02, pixels[14]);
     }
+
+    public void test_convert_AXYZ_ints_to_XYZ_ints() {
+        int[] pixels = new int[] { 0xE3030507,
+                            0xC3131719,
+                            0x89293137,
+                            0x41414347,
+                            0x09475157 };
+
+        ConverterUtils.convert_AXYZ_ints_to_XYZ_ints(pixels, 0, pixels, 0, 5);
+
+        assertEquals(0x020406, pixels[0]);
+        assertEquals(0x0E1113, pixels[1]);
+        assertEquals(0x151A1D, pixels[2]);
+        assertEquals(0x101112, pixels[3]);
+        assertEquals(0x020203, pixels[4]);
+    }
 }
