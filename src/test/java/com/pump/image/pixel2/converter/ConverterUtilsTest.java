@@ -1212,4 +1212,21 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x101112, dest[3]);
         assertEquals(0x020203, dest[4]);
     }
+
+    public void test_convert_AXYZ_bytes_to_ZYX_ints() {
+        byte[] pixels = new byte[] {(byte) 0xE3,0x03, 0x05, 0x07,
+                (byte) 0xC3, 0x13, 0x17, 0x19,
+                (byte) 0x89, 0x29, 0x31, 0x37,
+                0x41, 0x41, 0x43, 0x47,
+                0x09, 0x47, 0x51, 0x57 };
+
+        int[] dest = new int[5];
+        ConverterUtils.convert_AXYZ_bytes_to_ZYX_ints(dest, 0, pixels, 0, 5);
+
+        assertEquals(0x060402, dest[0]);
+        assertEquals(0x13110E, dest[1]);
+        assertEquals(0x1D1A15, dest[2]);
+        assertEquals(0x121110, dest[3]);
+        assertEquals(0x030202, dest[4]);
+    }
 }
