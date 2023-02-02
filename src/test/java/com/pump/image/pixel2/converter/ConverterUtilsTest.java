@@ -1229,4 +1229,21 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x121110, dest[3]);
         assertEquals(0x030202, dest[4]);
     }
+
+    public void test_convert_XYZA_bytes_to_XYZ_ints() {
+        byte[] pixels = new byte[] {0x03, 0x05, 0x07, (byte) 0xE3,
+                0x13, 0x17, 0x19, (byte) 0xC3,
+                0x29, 0x31, 0x37, (byte) 0x89,
+                0x41, 0x43, 0x47, 0x41,
+                0x47, 0x51, 0x57, 0x09 };
+
+        int[] dest = new int[5];
+        ConverterUtils.convert_XYZA_bytes_to_XYZ_ints(dest, 0, pixels, 0, 5);
+
+        assertEquals(0x020406, dest[0]);
+        assertEquals(0x0E1113, dest[1]);
+        assertEquals(0x151A1D, dest[2]);
+        assertEquals(0x101112, dest[3]);
+        assertEquals(0x020203, dest[4]);
+    }
 }
