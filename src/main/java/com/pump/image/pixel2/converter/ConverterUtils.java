@@ -906,4 +906,27 @@ class ConverterUtils {
                     (((x * alpha) & 0xff00) >> 8);
         }
     }
+
+    public static void convert_AXYZPre_bytes_to_ZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 3 * pixelCount;
+            int srcIndex = srcOffset;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                srcIndex++; // skip the A channel
+                byte x = destPixels[srcIndex++];
+                byte y = destPixels[srcIndex++];
+                destPixels[dstIndex++] = destPixels[srcIndex++];
+                destPixels[dstIndex++] = y;
+                destPixels[dstIndex++] = x;
+            }
+        } else {
+            byte[] scratch = getScratchArray(3 * pixelCount);
+            try {
+                convert_AXYZPre_bytes_to_ZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
 }
