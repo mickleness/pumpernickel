@@ -179,7 +179,8 @@ class ConverterUtils {
         }
     }
 
-    // TODO: once finished: search this class for `storeScratchArray` and check against copy-paste misuse
+    // TODO: once finished: search this class for `storeScratchArray` and check against copy-paste misuse,
+    // TODO: and while there: double-check that the scratch array is the right length
     private static void storeScratchArray(byte[] array) {
         synchronized (byteArrays) {
             if (array.length >= minByteArrayLength && byteArrays.size() < 10) {
@@ -907,7 +908,7 @@ class ConverterUtils {
         }
     }
 
-    public static void convert_AXYZPre_bytes_to_ZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+    static void convert_AXYZPre_bytes_to_ZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         if (destPixels != sourcePixels || destOffset == srcOffset) {
             int dstEnd = destOffset + 3 * pixelCount;
             int srcIndex = srcOffset;
@@ -918,6 +919,27 @@ class ConverterUtils {
                 destPixels[dstIndex++] = destPixels[srcIndex++];
                 destPixels[dstIndex++] = y;
                 destPixels[dstIndex++] = x;
+            }
+        } else {
+            byte[] scratch = getScratchArray(3 * pixelCount);
+            try {
+                convert_AXYZPre_bytes_to_ZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    static void convert_AXYZPre_bytes_to_XYZ_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 3 * pixelCount;
+            int srcIndex = srcOffset;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                srcIndex++; // skip the A channel
+                destPixels[dstIndex++] = destPixels[srcIndex++];
+                destPixels[dstIndex++] = destPixels[srcIndex++];
+                destPixels[dstIndex++] = destPixels[srcIndex++];
             }
         } else {
             byte[] scratch = getScratchArray(3 * pixelCount);

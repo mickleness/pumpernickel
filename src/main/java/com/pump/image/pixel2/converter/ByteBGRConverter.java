@@ -30,7 +30,7 @@ public class ByteBGRConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromABGRPre(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZPre_bytes_to_XYZ_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
