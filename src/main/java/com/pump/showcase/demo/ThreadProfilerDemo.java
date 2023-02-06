@@ -68,7 +68,8 @@ public class ThreadProfilerDemo extends ShowcaseExampleDemo {
 		inspector.addRow(new JLabel("Refresh UI Interval:"),
 				refreshUIIntervalSpinner);
 
-		onButton.setToolTipText("Reset the profiler and collection samples.");
+		onButton.setToolTipText(
+				"Reset the profiler and start collecting new samples.");
 		offButton.setToolTipText(
 				"Stop the profiler and stop collecting samples.");
 		refreshUIIntervalSpinner.setToolTipText(

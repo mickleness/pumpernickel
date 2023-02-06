@@ -18,7 +18,7 @@ try {
   profiler.writeOutput(profilerFile);
 }</pre>
 <h2>How It Works</h2>
-<p>While active the profiler runs a helper daemon thread that constantly polls the stacktraces of all threads.</p>
+<p>While it is active the profiler runs a helper daemon thread that constantly polls the stacktraces of designated threads.</p>
 <p>You can adjust the interval between polling. (Personally I recommend 50 ms.)</p>
 <p>The stacktraces are then merged together, including how often each stacktrace line is observed.</p>
 <p>The output is a plain text String (that requires viewing in a monospaced font) that shows these composite stacktraces. It shows what percentage of the time was observed in each method, and how often the thread was observed in each possible state (RUNNABLE, BLOCKED, WAITING, etc.)</p>

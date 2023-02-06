@@ -134,7 +134,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 		panel.add(collapsibleContainer, c);
 
 		for (Section section : sections) {
-			section.setProperty(CollapsibleContainer.PROPERTY_VERTICAL_WEIGHT, 1);
+			section.setProperty(CollapsibleContainer.PROPERTY_VERTICAL_WEIGHT,
+					1);
 			collapsibleContainer.getHeader(section).putClientProperty(
 					CollapsibleContainer.PROPERTY_COLLAPSIBLE, Boolean.FALSE);
 			collapsibleContainer.getHeader(section)
@@ -156,7 +157,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 		returnValue.add(
 				new ShowcaseDemoInfo("AlphaComposite", "AlphaCompositeDemo"));
 		returnValue.add(new ShowcaseDemoInfo("TextEffect", "TextEffectDemo"));
-		returnValue.add(new ShowcaseDemoInfo("AWTMonitor", "AWTMonitorDemo"));
+		returnValue.add(new ShowcaseDemoInfo("EventDispatchThreadMonitor",
+				"EventDispatchThreadMonitorDemo"));
 		returnValue.add(new ShowcaseDemoInfo("ClickSensitivityControl",
 				"ClickSensitivityControlDemo"));
 		returnValue.add(new ShowcaseDemoInfo("ShapeBounds", "ShapeBoundsDemo"));
