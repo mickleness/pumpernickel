@@ -31,6 +31,39 @@ import java.awt.Color;
  *      Color</a>
  */
 public class HSLColor {
+
+	/**
+	 * Transform a Color
+	 * 
+	 * @param color
+	 *            the input color
+	 * @param hueShift
+	 *            the amount to add to the hue value
+	 * @param saturationMultiplier
+	 *            the amount to multiply the saturation
+	 * @param luminanceMultiplier
+	 *            the amount to multiply the luminance/lightness
+	 * @return a transformed color
+	 */
+	public static Color transform(Color color, float hueShift,
+			float saturationMultiplier, float luminanceMultiplier) {
+		if (saturationMultiplier < 0)
+			throw new IllegalArgumentException("saturation multiplier ("
+					+ saturationMultiplier + ") must be nonnegative");
+		if (luminanceMultiplier < 0)
+			throw new IllegalArgumentException("luminance multiplier ("
+					+ luminanceMultiplier + ") must be nonnegative");
+		float[] hsl = new float[3];
+		fromRGB(color, hsl);
+		hsl[0] += hueShift;
+		hsl[1] = Math.min(1, hsl[1] * saturationMultiplier);
+		hsl[2] = Math.min(1, hsl[2] * luminanceMultiplier);
+
+		float alpha = ((float) color.getAlpha()) / 255f;
+		return new Color(toRGB(hsl, alpha), true);
+
+	}
+
 	/**
 	 * Convert a RGB Color to it corresponding HSL values.
 	 *
