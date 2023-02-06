@@ -26,16 +26,15 @@ import com.pump.geom.TransformUtils;
  * current frame. (Or as if a coin is scratching a scratch-and-win game ticket.)
  * Here are playback samples:
  * <p>
- * <table summary="Sample Animations of ScribbleTransition2D" cellspacing="50" border="0">
+ * <table summary="Sample Animations of ScribbleTransition2D" cellspacing="50"
+ * border="0">
  * <tr>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/ScribbleTransition2D/Scribble.gif"
  * alt="Scribble">
  * <p>
  * Scribble</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/ScribbleTransition2D/ScribbleTwice.gif"
  * alt="Scribble Twice">
  * <p>
@@ -72,8 +71,8 @@ public class ScribbleTransition2D extends Transition2D {
 	 *            whether this transition is depicted in two scribbles or one.
 	 */
 	public ScribbleTransition2D(boolean twoPasses) {
-		scribble = ShapeStringUtils
-				.createGeneralPath("m -6.286 19.763 l 10.03 -2.175 l 2.183 58.034 l 24.854 -3.692 l 18.468 60.811 l 39.862 -5.543 l 35.711 58.651 l 53.273 -4.926 l 48.934 54.989 l 55.852 27.084 l 60.936 55.565 z");
+		scribble = ShapeStringUtils.createPath(
+				"m -6.286 19.763 l 10.03 -2.175 l 2.183 58.034 l 24.854 -3.692 l 18.468 60.811 l 39.862 -5.543 l 35.711 58.651 l 53.273 -4.926 l 48.934 54.989 l 55.852 27.084 l 60.936 55.565 z");
 		this.twoPasses = twoPasses;
 		shapeBounds = new Rectangle2D.Float(0, 0, 60, 60);
 	}
@@ -90,12 +89,12 @@ public class ScribbleTransition2D extends Transition2D {
 			// flip horizontal
 			Rectangle2D r1 = shapeBounds;
 			t = TransformUtils.createAffineTransform(r1.getX(), r1.getY(),
-					r1.getX() + r1.getWidth(), r1.getY(), r1.getX(), r1.getY()
-							+ r1.getHeight(),
+					r1.getX() + r1.getWidth(), r1.getY(), r1.getX(),
+					r1.getY() + r1.getHeight(),
 					bigRect.getX() + bigRect.getWidth(), bigRect.getY(),
 					bigRect.getX(), bigRect.getY(),
-					bigRect.getX() + bigRect.getWidth(), bigRect.getY()
-							+ bigRect.getHeight());
+					bigRect.getX() + bigRect.getWidth(),
+					bigRect.getY() + bigRect.getHeight());
 		}
 
 		if (twoPasses == false) {

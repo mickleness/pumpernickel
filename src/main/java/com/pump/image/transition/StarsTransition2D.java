@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -30,16 +31,15 @@ import com.pump.geom.TransformUtils;
  * In this transition the current frame splits apart into shrinking stars that
  * spin off towards a distant point. Here are playback samples:
  * <p>
- * <table summary="Sample Animations of StarsTransition2D" cellspacing="50" border="0">
+ * <table summary="Sample Animations of StarsTransition2D" cellspacing="50"
+ * border="0">
  * <tr>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/StarsTransition2D/StarsLeft.gif"
  * alt="Stars Left">
  * <p>
  * Stars Left</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/StarsTransition2D/StarsRight.gif"
  * alt="Stars Right">
  * <p>
@@ -120,11 +120,12 @@ public class StarsTransition2D extends AbstractClippedTransition2D {
 		}
 	}
 
-	protected void fit(GeneralPath p, float length, float centerX,
-			float centerY, GeneralPath path, Dimension size, float progress) {
+	protected void fit(Path2D p, float length, float centerX, float centerY,
+			Path2D path, Dimension size, float progress) {
 		Rectangle2D r = p.getBounds2D();
 		AffineTransform t = new AffineTransform();
-		t.translate(-r.getX() - r.getWidth() / 2, -r.getY() - r.getHeight() / 2);
+		t.translate(-r.getX() - r.getWidth() / 2,
+				-r.getY() - r.getHeight() / 2);
 		t.rotate((1 - progress) * 1);
 		double scaleProgress = Math.pow(progress, 3) * .75f;
 		t.scale(length / r.getWidth() * (.02 + 1.8 * scaleProgress),
@@ -143,20 +144,20 @@ public class StarsTransition2D extends AbstractClippedTransition2D {
 		pathTransform.transform(endPoint, endPoint);
 		pathTransform.transform(startPoint, startPoint);
 		r = p.getBounds();
-		t.setToTranslation(-r.getCenterX() + centerX - endPoint.getX()
-				+ startPoint.getX(),
-				-r.getCenterY() + centerY - endPoint.getY() + startPoint.getY());
+		t.setToTranslation(
+				-r.getCenterX() + centerX - endPoint.getX() + startPoint.getX(),
+				-r.getCenterY() + centerY - endPoint.getY()
+						+ startPoint.getY());
 
 		p.transform(t);
 	}
 
-	GeneralPath[] paths = new GeneralPath[] {
-			ShapeStringUtils
-					.createGeneralPath("m 82.604 6.405 c 81.496 6.405 58.748 5.967 57.234 5.937 c 48.657 5.767 39.783 5.605 30.4 11.819 c 19.367 19.125 9.915 39.783 23.713 50.988 c 35.754 60.766 50.748 54.184 53.807 47.734 c 56.105 42.887 49.464 38.223 45.159 38.223"),
-			ShapeStringUtils
-					.createGeneralPath("m 130.936 47.089 c 130.636 46.6 113.679 45.149 103.386 45.364 c 94.251 45.555 88.013 49.832 82.977 54.875 c 75.353 62.51 70.458 72.743 73.292 82.281 c 76.126 91.818 93.239 89.414 93.239 89.414 c 93.239 89.414 101.796 85.728 100.734 78.276 c 99.683 70.903 96.561 71.393 93.124 71.393 c 84.366 71.393 85.661 83.327 94.277 78.651"),
-			ShapeStringUtils
-					.createGeneralPath("m 124.379 23.124 c 124.044 24.216 107.26 20.206 97.997 21.225 c 88.734 22.245 74.072 27.614 64.329 38.119 c 54.586 48.624 52.078 53.184 52.683 61.27 c 53.288 69.356 71.622 78.91 77.935 66.901") };
+	Path2D[] paths = new Path2D[] { ShapeStringUtils.createPath(
+			"m 82.604 6.405 c 81.496 6.405 58.748 5.967 57.234 5.937 c 48.657 5.767 39.783 5.605 30.4 11.819 c 19.367 19.125 9.915 39.783 23.713 50.988 c 35.754 60.766 50.748 54.184 53.807 47.734 c 56.105 42.887 49.464 38.223 45.159 38.223"),
+			ShapeStringUtils.createPath(
+					"m 130.936 47.089 c 130.636 46.6 113.679 45.149 103.386 45.364 c 94.251 45.555 88.013 49.832 82.977 54.875 c 75.353 62.51 70.458 72.743 73.292 82.281 c 76.126 91.818 93.239 89.414 93.239 89.414 c 93.239 89.414 101.796 85.728 100.734 78.276 c 99.683 70.903 96.561 71.393 93.124 71.393 c 84.366 71.393 85.661 83.327 94.277 78.651"),
+			ShapeStringUtils.createPath(
+					"m 124.379 23.124 c 124.044 24.216 107.26 20.206 97.997 21.225 c 88.734 22.245 74.072 27.614 64.329 38.119 c 54.586 48.624 52.078 53.184 52.683 61.27 c 53.288 69.356 71.622 78.91 77.935 66.901") };
 
 	@Override
 	public Shape[] getShapes(float progress, Dimension size) {

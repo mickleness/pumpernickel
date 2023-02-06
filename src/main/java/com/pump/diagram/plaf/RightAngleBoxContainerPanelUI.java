@@ -23,6 +23,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -130,16 +131,16 @@ public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 					int span = rect.height;
 					int x = side == Side.LEFT ? rect.x : rect.x + rect.width;
 					for (int i = 0; i < orderedJoins.length; i++) {
-						int y = rect.y + (i + 1) * span
-								/ (orderedJoins.length + 1);
+						int y = rect.y
+								+ (i + 1) * span / (orderedJoins.length + 1);
 						anchors[i] = new Point(x, y);
 					}
 				} else {
 					int span = rect.width;
 					int y = side == Side.DOWN ? rect.y + rect.height : rect.y;
 					for (int i = 0; i < orderedJoins.length; i++) {
-						int x = rect.x + (i + 1) * span
-								/ (orderedJoins.length + 1);
+						int x = rect.x
+								+ (i + 1) * span / (orderedJoins.length + 1);
 						anchors[i] = new Point(x, y);
 					}
 				}
@@ -227,8 +228,8 @@ public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 		g.setColor(Color.DARK_GRAY);
 		g.setStroke(new BasicStroke(1));
 		for (Shape shape : scenario.getShapes(false)) {
-			GeneralPath[] subpaths = ShapeUtils.getSubPaths(shape);
-			for (GeneralPath subpath : subpaths) {
+			Path2D[] subpaths = ShapeUtils.getSubPaths(shape);
+			for (Path2D subpath : subpaths) {
 				if (ShapeUtils.isClosed(subpath)) {
 					g.fill(subpath);
 				} else {
@@ -249,11 +250,11 @@ public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 					if (opacity < 0) {
 						iter.remove();
 					} else {
-						g.setComposite(AlphaComposite.getInstance(
-								AlphaComposite.SRC_OVER, opacity));
+						g.setComposite(AlphaComposite
+								.getInstance(AlphaComposite.SRC_OVER, opacity));
 
-						g.setStroke(new BasicStroke(3 * (1 - opacity * opacity
-								* opacity * opacity)));
+						g.setStroke(new BasicStroke(3
+								* (1 - opacity * opacity * opacity * opacity)));
 						for (Shape shape : oldScenario.getShapes(true)) {
 							g.draw(shape);
 						}
@@ -399,8 +400,8 @@ public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 
 		@Override
 		public String toString() {
-			return "Join[ edge=" + boxEdge + ", first=" + first
-					+ ", connector=" + connector + "]";
+			return "Join[ edge=" + boxEdge + ", first=" + first + ", connector="
+					+ connector + "]";
 		}
 	}
 
@@ -430,8 +431,8 @@ public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 						dirty = false;
 					}
 					for (ChangeListener changeListener : changeListeners) {
-						changeListener.stateChanged(new ChangeEvent(
-								Staging.this));
+						changeListener
+								.stateChanged(new ChangeEvent(Staging.this));
 					}
 				}
 			}
@@ -449,10 +450,10 @@ public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 
 				List<Join[]> possibleJoins = new ArrayList<>();
 				for (Connector connector : connectors) {
-					boolean b1 = boxContainer.getBoxes().contains(
-							connector.getBox1());
-					boolean b2 = boxContainer.getBoxes().contains(
-							connector.getBox2());
+					boolean b1 = boxContainer.getBoxes()
+							.contains(connector.getBox1());
+					boolean b2 = boxContainer.getBoxes()
+							.contains(connector.getBox2());
 					if (b1 && b2) {
 						Join[] join1 = calculatePossibleJoins(connector, true);
 						Join[] join2 = calculatePossibleJoins(connector, false);
@@ -583,7 +584,8 @@ public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 			synchronized (staging.boxContainerPanel) {
 				staging.boxContainerPanel.repaint();
 
-				PlafContext currentContext = getContext(staging.boxContainerPanel);
+				PlafContext currentContext = getContext(
+						staging.boxContainerPanel);
 				Staging currentStaging = currentContext.get(KEY_STAGING);
 				if (currentStaging == staging && staging.finished) {
 					staging.boxContainerPanel.remove(throbber);
@@ -788,14 +790,14 @@ public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 											p2b.y = p3b.y;
 										}
 
-										newScore.value += isIntersection(p1,
-												p2, p1b, p2b) ? 1 : 0;
-										newScore.value += isIntersection(p1,
-												p2, p2b, p3b) ? 1 : 0;
-										newScore.value += isIntersection(p2,
-												p3, p1b, p2b) ? 1 : 0;
-										newScore.value += isIntersection(p2,
-												p3, p2b, p3b) ? 1 : 0;
+										newScore.value += isIntersection(p1, p2,
+												p1b, p2b) ? 1 : 0;
+										newScore.value += isIntersection(p1, p2,
+												p2b, p3b) ? 1 : 0;
+										newScore.value += isIntersection(p2, p3,
+												p1b, p2b) ? 1 : 0;
+										newScore.value += isIntersection(p2, p3,
+												p2b, p3b) ? 1 : 0;
 									}
 								}
 							}
@@ -882,7 +884,8 @@ public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 			return false;
 		}
 
-		private static int getOverlap(Point p1, Point p2, Point p1b, Point p2b) {
+		private static int getOverlap(Point p1, Point p2, Point p1b,
+				Point p2b) {
 			// TODO Auto-generated method stub
 			return 0;
 		}
@@ -950,7 +953,8 @@ public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 			return 0;
 		}
 
-		public Collection<? extends Shape> getShapes(boolean forceRegeneration) {
+		public Collection<? extends Shape> getShapes(
+				boolean forceRegeneration) {
 			if (connectorShapes.size() == 0 || forceRegeneration) {
 				connectorShapes.clear();
 				Map<Connector, List<Point>> pointMap = new HashMap<>();
@@ -974,7 +978,8 @@ public class RightAngleBoxContainerPanelUI extends BoxContainerPanelUI {
 							points.add(joinPoint);
 						} else {
 							Point last = points.get(points.size() - 1);
-							if (last.x != joinPoint.x && last.y != joinPoint.y) {
+							if (last.x != joinPoint.x
+									&& last.y != joinPoint.y) {
 								points.add(center);
 							}
 							points.add(joinPoint);
