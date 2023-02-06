@@ -94,13 +94,12 @@ public class CompositePaintable<T extends Paintable> implements Paintable {
 	private void refreshBounds() {
 		Rectangle2D sum = null;
 		Rectangle t = new Rectangle();
-		Rectangle2D t2 = new Rectangle2D.Double();
 		for (int a = 0; a < paintables.size(); a++) {
 			t.x = 0;
 			t.y = 0;
 			t.width = paintables.get(a).getWidth();
 			t.height = paintables.get(a).getHeight();
-			ShapeBounds.getBounds(t, transforms.get(a), t2);
+			Rectangle2D t2 = ShapeBounds.getBounds(t, transforms.get(a));
 			if (sum == null) {
 				sum = new Rectangle2D.Double(t2.getX(), t2.getY(),
 						t2.getWidth(), t2.getHeight());
@@ -111,8 +110,8 @@ public class CompositePaintable<T extends Paintable> implements Paintable {
 		if (sum == null) {
 			bounds = new Rectangle(0, 0, 0, 0);
 		} else {
-			AffineTransform translation = AffineTransform.getTranslateInstance(
-					-sum.getX(), -sum.getY());
+			AffineTransform translation = AffineTransform
+					.getTranslateInstance(-sum.getX(), -sum.getY());
 			for (int a = 0; a < transforms.size(); a++) {
 				transforms.get(a).preConcatenate(translation);
 			}
@@ -156,9 +155,8 @@ public class CompositePaintable<T extends Paintable> implements Paintable {
 			g2.transform(transforms.get(a));
 			Paintable paintable = paintables.get(a);
 			Shape clip = g2.getClip();
-			if (clip == null
-					|| clip.intersects(0, 0, paintable.getWidth(),
-							paintable.getHeight())) {
+			if (clip == null || clip.intersects(0, 0, paintable.getWidth(),
+					paintable.getHeight())) {
 				// g2.setColor(new Color( Color.HSBtoRGB( (float)(a)/.7f, .2f,
 				// 1f) ));
 				// g2.fillRect(0, 0, paintables.get(a).getWidth(),
@@ -184,8 +182,8 @@ public class CompositePaintable<T extends Paintable> implements Paintable {
 		if (bounds == null)
 			refreshBounds();
 
-		Rectangle2D r = new Rectangle2D.Double(0, 0, paintables.get(a)
-				.getWidth(), paintables.get(a).getHeight());
+		Rectangle2D r = new Rectangle2D.Double(0, 0,
+				paintables.get(a).getWidth(), paintables.get(a).getHeight());
 		return ShapeBounds.getBounds(r, transforms.get(a));
 	}
 }
