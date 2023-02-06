@@ -15,14 +15,12 @@ public class FloatProperty extends Property<Float> {
 
 	public FloatProperty(String name, float minValue, float maxValue,
 			float defaultValue) {
-		super(name);
+		super(name, defaultValue);
 		min = minValue;
 		max = maxValue;
 		if (max < min)
-			throw new IllegalArgumentException("the max (" + max
-					+ ") is less than the min (" + min + ")");
-
-		setValue(defaultValue);
+			throw new IllegalArgumentException(
+					"the max (" + max + ") is less than the min (" + min + ")");
 	}
 
 	public float getMin() {
@@ -39,6 +37,12 @@ public class FloatProperty extends Property<Float> {
 
 	@Override
 	protected void validateValue(Float value) {
+
+		if (min == 0 && max == 0) {
+			// we're high up in construction; this doesn't count
+			return;
+		}
+
 		if (value < min)
 			throw new IllegalArgumentException("the value (" + value
 					+ ") is less than the min (" + min + ")");
