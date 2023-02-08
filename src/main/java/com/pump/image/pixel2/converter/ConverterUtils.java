@@ -957,7 +957,6 @@ class ConverterUtils {
                                                    int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
         int destIndex = destOffset;
-        int x, y, z;
         for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
             int axyz = sourcePixels[srcIndex++];
             int alpha = (axyz >> 24) & 0xff;
@@ -970,24 +969,16 @@ class ConverterUtils {
                     destPixels[destIndex++] = 0;
                     break;
                 case 255:
-                    x = (axyz >> 16) & 0xff;
-                    y = (axyz >> 8) & 0xff;
-                    z = axyz & 0xff;
-
                     destPixels[destIndex++] = -1;
-                    destPixels[destIndex++] = (byte) z;
-                    destPixels[destIndex++] = (byte) y;
-                    destPixels[destIndex++] = (byte) x;
+                    destPixels[destIndex++] = (byte) (axyz & 0xff);
+                    destPixels[destIndex++] = (byte) ((axyz >> 8) & 0xff);
+                    destPixels[destIndex++] = (byte) ((axyz >> 16) & 0xff);
                     break;
                 default:
-                    x = Math.min(255, (((axyz >> 8) & 0xff00) / alpha));
-                    y = Math.min(255, ((axyz & 0xff00) / alpha));
-                    z = Math.min(255, (((axyz << 8) & 0xff00) / alpha));
-
                     destPixels[destIndex++] = (byte) alpha;
-                    destPixels[destIndex++] = (byte) z;
-                    destPixels[destIndex++] = (byte) y;
-                    destPixels[destIndex++] = (byte) x;
+                    destPixels[destIndex++] = (byte) Math.min(255, (((axyz << 8) & 0xff00) / alpha));
+                    destPixels[destIndex++] = (byte) Math.min(255, ((axyz & 0xff00) / alpha));
+                    destPixels[destIndex++] = (byte) Math.min(255, (((axyz >> 8) & 0xff00) / alpha));
                     break;
             }
         }
@@ -997,7 +988,6 @@ class ConverterUtils {
                                                    int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
         int destIndex = destOffset;
-        int x, y, z;
         for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
             int axyz = sourcePixels[srcIndex++];
             int alpha = (axyz >> 24) & 0xff;
@@ -1010,24 +1000,16 @@ class ConverterUtils {
                     destPixels[destIndex++] = 0;
                     break;
                 case 255:
-                    x = (axyz >> 16) & 0xff;
-                    y = (axyz >> 8) & 0xff;
-                    z = axyz & 0xff;
-
                     destPixels[destIndex++] = -1;
-                    destPixels[destIndex++] = (byte) x;
-                    destPixels[destIndex++] = (byte) y;
-                    destPixels[destIndex++] = (byte) z;
+                    destPixels[destIndex++] = (byte) ((axyz >> 16) & 0xff);
+                    destPixels[destIndex++] = (byte) ((axyz >> 8) & 0xff);
+                    destPixels[destIndex++] = (byte) (axyz & 0xff);
                     break;
                 default:
-                    x = Math.min(255, (((axyz >> 8) & 0xff00) / alpha));
-                    y = Math.min(255, ((axyz & 0xff00) / alpha));
-                    z = Math.min(255, (((axyz << 8) & 0xff00) / alpha));
-
                     destPixels[destIndex++] = (byte) alpha;
-                    destPixels[destIndex++] = (byte) x;
-                    destPixels[destIndex++] = (byte) y;
-                    destPixels[destIndex++] = (byte) z;
+                    destPixels[destIndex++] = (byte) (Math.min(255, (((axyz >> 8) & 0xff00) / alpha)));
+                    destPixels[destIndex++] = (byte) (Math.min(255, ((axyz & 0xff00) / alpha)));
+                    destPixels[destIndex++] = (byte) (Math.min(255, (((axyz << 8) & 0xff00) / alpha)));
                     break;
             }
         }
@@ -1036,7 +1018,6 @@ class ConverterUtils {
     static void convert_AXYZPre_ints_to_ZYXA_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
         int destIndex = destOffset;
-        int x, y, z;
         for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
             int axyz = sourcePixels[srcIndex++];
             int alpha = (axyz >> 24) & 0xff;
@@ -1049,24 +1030,46 @@ class ConverterUtils {
                     destPixels[destIndex++] = 0;
                     break;
                 case 255:
-                    x = (axyz >> 16) & 0xff;
-                    y = (axyz >> 8) & 0xff;
-                    z = axyz & 0xff;
-
-                    destPixels[destIndex++] = (byte) z;
-                    destPixels[destIndex++] = (byte) y;
-                    destPixels[destIndex++] = (byte) x;
+                    destPixels[destIndex++] = (byte) (axyz & 0xff);
+                    destPixels[destIndex++] = (byte) ((axyz >> 8) & 0xff);
+                    destPixels[destIndex++] = (byte) ((axyz >> 16) & 0xff);
                     destPixels[destIndex++] = -1;
                     break;
                 default:
-                    x = Math.min(255, (((axyz >> 8) & 0xff00) / alpha));
-                    y = Math.min(255, ((axyz & 0xff00) / alpha));
-                    z = Math.min(255, (((axyz << 8) & 0xff00) / alpha));
-
-                    destPixels[destIndex++] = (byte) z;
-                    destPixels[destIndex++] = (byte) y;
-                    destPixels[destIndex++] = (byte) x;
+                    destPixels[destIndex++] = (byte) (Math.min(255, (((axyz << 8) & 0xff00) / alpha)));
+                    destPixels[destIndex++] = (byte) (Math.min(255, ((axyz & 0xff00) / alpha)));
+                    destPixels[destIndex++] = (byte) (Math.min(255, (((axyz >> 8) & 0xff00) / alpha)));
                     destPixels[destIndex++] = (byte) alpha;
+                    break;
+            }
+        }
+    }
+
+    static void convert_AXYZ_ints_to_AZYXPre_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int axyz = sourcePixels[srcIndex++];
+            int alpha = (axyz >> 24) & 0xff;
+
+            switch (alpha) {
+                case 0:
+                    destPixels[destIndex++] = 0;
+                    destPixels[destIndex++] = 0;
+                    destPixels[destIndex++] = 0;
+                    destPixels[destIndex++] = 0;
+                    break;
+                case 255:
+                    destPixels[destIndex++] = -1;
+                    destPixels[destIndex++] = (byte) (axyz & 0xff);
+                    destPixels[destIndex++] = (byte) ((axyz >> 8) & 0xff);
+                    destPixels[destIndex++] = (byte) ((axyz >> 16) & 0xff);
+                    break;
+                default:
+                    destPixels[destIndex++] = (byte) alpha;
+                    destPixels[destIndex++] = (byte) ( (((axyz & 0xff) * alpha) >> 8) & 0xff );
+                    destPixels[destIndex++] = (byte) ( (((axyz & 0xff00) * alpha) >> 16) & 0xff );
+                    destPixels[destIndex++] = (byte) ( (((axyz & 0xff0000) * alpha) >> 24) & 0xff );
                     break;
             }
         }
