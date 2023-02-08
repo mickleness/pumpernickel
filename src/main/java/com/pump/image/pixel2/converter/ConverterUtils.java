@@ -179,6 +179,7 @@ class ConverterUtils {
         }
     }
 
+    // TODO: spot check for other cases were a switch/case might help alpha computations
     // TODO: once finished: search this class for `storeScratchArray` and check against copy-paste misuse,
     // TODO: and while there: double-check that the scratch array is the right length
     private static void storeScratchArray(byte[] array) {

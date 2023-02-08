@@ -11,60 +11,62 @@ import java.util.Objects;
 
 public class ImageType<T> implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     public static final ImageType<int[]> TYPE_INT_RGB = new ImageType<>("INT_RGB", true,
             BufferedImage.TYPE_INT_RGB, 3, true, false,
             new IntRGBConverter());
 
-    public static final ImageType<int[]> TYPE_INT_ARGB = new ImageType("INT_ARGB", true,
+    public static final ImageType<int[]> TYPE_INT_ARGB = new ImageType<>("INT_ARGB", true,
             BufferedImage.TYPE_INT_ARGB, 4, false, false,
             new IntARGBConverter());
 
-    public static final ImageType<int[]> TYPE_INT_ARGB_PRE = new ImageType("INT_ARGB_PRE", true,
+    public static final ImageType<int[]> TYPE_INT_ARGB_PRE = new ImageType<>("INT_ARGB_PRE", true,
             BufferedImage.TYPE_INT_ARGB_PRE, 4, false, true,
             new IntARGBPreConverter());
 
-    public static final ImageType<int[]> TYPE_INT_BGR = new ImageType("INT_BGR", true,
+    public static final ImageType<int[]> TYPE_INT_BGR = new ImageType<>("INT_BGR", true,
             BufferedImage.TYPE_INT_BGR, 3, true, false,
             new IntBGRConverter());
 
-    public static final ImageType<byte[]> TYPE_3BYTE_BGR = new ImageType("3BYTE_BGR", false,
+    public static final ImageType<byte[]> TYPE_3BYTE_BGR = new ImageType<>("3BYTE_BGR", false,
             BufferedImage.TYPE_3BYTE_BGR, 3, true, false,
             new ByteBGRConverter());
 
-    public static final ImageType<byte[]> TYPE_4BYTE_ABGR = new ImageType("4BYTE_ABGR", false,
+    public static final ImageType<byte[]> TYPE_4BYTE_ABGR = new ImageType<>("4BYTE_ABGR", false,
             BufferedImage.TYPE_4BYTE_ABGR, 4, false, false,
             new ByteABGRConverter());
 
-    public static final ImageType<byte[]> TYPE_4BYTE_ABGR_PRE = new ImageType("4BYTE_ABGR_PRE", false,
+    public static final ImageType<byte[]> TYPE_4BYTE_ABGR_PRE = new ImageType<>("4BYTE_ABGR_PRE", false,
             BufferedImage.TYPE_4BYTE_ABGR_PRE, 4, false, true,
             new ByteABGRPreConverter());
 
-    public static final ImageType<byte[]> TYPE_BYTE_GRAY = new ImageType("BYTE_GRAY", false,
+    public static final ImageType<byte[]> TYPE_BYTE_GRAY = new ImageType<>("BYTE_GRAY", false,
             BufferedImage.TYPE_BYTE_GRAY, 1, true, false,
             new ByteGrayConverter());
 
-    public static final ImageType<byte[]> TYPE_BYTE_INDEXED = new ImageType("BYTE_INDEXED", false,
+    public static final ImageType<byte[]> TYPE_BYTE_INDEXED = new ImageType<>("BYTE_INDEXED", false,
             BufferedImage.TYPE_BYTE_INDEXED, 1, false, false,
             new ByteIndexedConverter());
 
 
     // custom types not from BufferedImage:
 
-    public static final ImageType<byte[]> TYPE_4BYTE_BGRA = new ImageType("4BYTE_BGRA", false,
+    public static final ImageType<byte[]> TYPE_4BYTE_BGRA = new ImageType<>("4BYTE_BGRA", false,
             -1, 4, false, false,
             new ByteBGRAConverter());
-    public static final ImageType<byte[]> TYPE_3BYTE_RGB = new ImageType("3BYTE_RGB", false,
+    public static final ImageType<byte[]> TYPE_3BYTE_RGB = new ImageType<>("3BYTE_RGB", false,
             -1, 3, true, false,
             new ByteRGBConverter());
-    public static final ImageType<byte[]> TYPE_4BYTE_ARGB = new ImageType("4BYTE_ARGB", false,
+    public static final ImageType<byte[]> TYPE_4BYTE_ARGB = new ImageType<>("4BYTE_ARGB", false,
             -1,  4, false, false,
             new ByteARGBConverter());
-    public static final ImageType<byte[]> TYPE_4BYTE_ARGB_PRE = new ImageType("4BYTE_ARGB_PRE", false,
+    public static final ImageType<byte[]> TYPE_4BYTE_ARGB_PRE = new ImageType<>("4BYTE_ARGB_PRE", false,
             -1, 4, false, true,
             new ByteARGBPreConverter());
-    private static Map<Integer, ImageType> BUFFERED_IMAGE_TYPES = new HashMap<>();
+    private static Map<Integer, ImageType<?>> BUFFERED_IMAGE_TYPES = new HashMap<>();
 
-    public static ImageType get(int bufferedImageType) {
+    public static ImageType<?> get(int bufferedImageType) {
         return BUFFERED_IMAGE_TYPES.get(bufferedImageType);
     }
 
