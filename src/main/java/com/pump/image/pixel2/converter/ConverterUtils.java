@@ -953,6 +953,8 @@ class ConverterUtils {
         }
     }
 
+    // TODO: add tests for alpha = 0 and 255, esp if ConverterUtils uses a switch/case
+
     static void convert_AXYZPre_ints_to_AZYX_bytes(byte[] destPixels,
                                                    int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
@@ -1070,6 +1072,36 @@ class ConverterUtils {
                     destPixels[destIndex++] = (byte) ( (((axyz & 0xff) * alpha) >> 8) & 0xff );
                     destPixels[destIndex++] = (byte) ( (((axyz & 0xff00) * alpha) >> 16) & 0xff );
                     destPixels[destIndex++] = (byte) ( (((axyz & 0xff0000) * alpha) >> 24) & 0xff );
+                    break;
+            }
+        }
+    }
+
+    static void convert_AXYZ_ints_to_AXYZPre_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int axyz = sourcePixels[srcIndex++];
+            int alpha = (axyz >> 24) & 0xff;
+
+            switch (alpha) {
+                case 0:
+                    destPixels[destIndex++] = 0;
+                    destPixels[destIndex++] = 0;
+                    destPixels[destIndex++] = 0;
+                    destPixels[destIndex++] = 0;
+                    break;
+                case 255:
+                    destPixels[destIndex++] = -1;
+                    destPixels[destIndex++] = (byte) ((axyz >> 16) & 0xff);
+                    destPixels[destIndex++] = (byte) ((axyz >> 8) & 0xff);
+                    destPixels[destIndex++] = (byte) (axyz & 0xff);
+                    break;
+                default:
+                    destPixels[destIndex++] = (byte) alpha;
+                    destPixels[destIndex++] = (byte) ( (((axyz & 0xff0000) * alpha) >> 24) & 0xff );
+                    destPixels[destIndex++] = (byte) ( (((axyz & 0xff00) * alpha) >> 16) & 0xff );
+                    destPixels[destIndex++] = (byte) ( (((axyz & 0xff) * alpha) >> 8) & 0xff );
                     break;
             }
         }
