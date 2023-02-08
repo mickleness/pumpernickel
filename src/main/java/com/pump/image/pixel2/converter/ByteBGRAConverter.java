@@ -15,7 +15,7 @@ public class ByteBGRAConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromARGBPre(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZPre_ints_to_ZYXA_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
