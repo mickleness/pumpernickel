@@ -23,7 +23,7 @@ public class IntARGBConverter implements PixelConverter<int[]> {
 
     @Override
     public void convertFromARGBPre(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZPre_bytes_to_AXYZ_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
