@@ -1208,4 +1208,32 @@ class ConverterUtils {
             }
         }
     }
+
+    static void convert_XYZA_bytes_to_AZYXPre_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 4 * pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int alpha = sourcePixels[srcIndex + 3];
+            switch (alpha) {
+                case 0:
+                    destPixels[destIndex++] = 0;
+                    srcIndex += 4;
+                    break;
+                case -1:
+                    destPixels[destIndex++] = 0xff000000 |
+                            (sourcePixels[srcIndex++] & 0xff) |
+                            ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                            ((sourcePixels[srcIndex++] & 0xff) << 16);
+                    srcIndex++;
+                    break;
+                default:
+                    alpha = alpha & 0xff;
+                    destPixels[destIndex++] = (alpha << 24) |
+                            ((((sourcePixels[srcIndex++] & 0xff) * alpha) >> 8)) |
+                            ((((sourcePixels[srcIndex++] & 0xff) * alpha) >> 8) << 8) |
+                            ((((sourcePixels[srcIndex++] & 0xff) * alpha) >> 8) << 16);
+                    srcIndex++;
+            }
+        }
+    }
 }

@@ -43,7 +43,7 @@ public class IntARGBPreConverter implements PixelConverter<int[]> {
 
     @Override
     public void convertFromBGRA(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_XYZA_bytes_to_AZYXPre_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override

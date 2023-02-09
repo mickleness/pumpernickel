@@ -1557,4 +1557,22 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x41040404, dest[3]);
         assertEquals(0x09000000, dest[4]);
     }
+
+    public void test_convert_XYZA_bytes_to_AZYXPre_ints() {
+        byte[] pixels = new byte[] {
+                0x06, 0x04, 0x02, (byte) 0xE3,
+                0x13, 0x11, 0x0E, (byte) 0xC3,
+                0x1D, 0x1A, 0x15, (byte) 0x89,
+                0x12, 0x11, 0x10, (byte) 0x41,
+                0x03, 0x02, 0x02, (byte) 0x09
+        };
+        int[] dest = new int[5];
+        ConverterUtils.convert_XYZA_bytes_to_AZYXPre_ints(dest, 0, pixels, 0, 5);
+
+        assertEquals(0xE3010305, dest[0]);
+        assertEquals(0xC30A0C0E, dest[1]);
+        assertEquals(0x890B0D0F, dest[2]);
+        assertEquals(0x41040404, dest[3]);
+        assertEquals(0x09000000, dest[4]);
+    }
 }
