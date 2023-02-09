@@ -1502,4 +1502,23 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(0x41423f3b, dest[3]);
         assertEquals(0x09381c1c, dest[4]);
     }
+
+    public void test_convert_AXYZPre_bytes_to_AZYX_ints() {
+        byte[] pixels = new byte[] {
+                (byte) 0xE3, 0x05, 0x03, 0x01,
+                (byte) 0xC3, 0x12, 0x10, 0x0D,
+                (byte) 0x89, 0x1C, 0x19, 0x14,
+                0x41, 0x11, 0x10, 0x0F,
+                0x09, 0x02, 0x01, 0x01
+        };
+
+        int[] dest = new int[5];
+        ConverterUtils.convert_AXYZPre_bytes_to_AZYX_ints(dest, 0, pixels, 0, 5);
+
+        assertEquals(0xe3010305, dest[0]);
+        assertEquals(0xc3111517, dest[1]);
+        assertEquals(0x89252e34, dest[2]);
+        assertEquals(0x413b3f42, dest[3]);
+        assertEquals(0x091c1c38, dest[4]);
+    }
 }

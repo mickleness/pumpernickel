@@ -1114,11 +1114,11 @@ class ConverterUtils {
             int alpha = sourcePixels[srcIndex++] & 0xff;
             switch (alpha) {
                 case 0:
-                    destPixels[destOffset++] = 0;
+                    destPixels[destIndex++] = 0;
                     srcIndex += 3;
                     break;
                 case 255:
-                    destPixels[destOffset++] = 0xff000000 |
+                    destPixels[destIndex++] = 0xff000000 |
                             ((sourcePixels[srcIndex++] & 0xff) << 16) |
                             ((sourcePixels[srcIndex++] & 0xff) << 8) |
                             (sourcePixels[srcIndex++]);
@@ -1127,7 +1127,32 @@ class ConverterUtils {
                     int x = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
                     int y = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
                     int z = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
-                    destPixels[destOffset++] = (alpha << 24) | (x << 16) | (y << 8) | (z);
+                    destPixels[destIndex++] = (alpha << 24) | (x << 16) | (y << 8) | (z);
+            }
+        }
+    }
+
+    static void convert_AXYZPre_bytes_to_AZYX_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 4 * pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int alpha = sourcePixels[srcIndex++] & 0xff;
+            switch (alpha) {
+                case 0:
+                    destPixels[destIndex++] = 0;
+                    srcIndex += 3;
+                    break;
+                case 255:
+                    destPixels[destIndex++] = 0xff000000 |
+                            (sourcePixels[srcIndex++]) |
+                            ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 16);
+                    break;
+                default:
+                    int x = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
+                    int y = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
+                    int z = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
+                    destPixels[destIndex++] = (alpha << 24) | (z << 16) | (y << 8) | (x);
             }
         }
     }
