@@ -11,7 +11,7 @@
 package com.pump.geom;
 
 import java.awt.Shape;
-import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 
 /**
@@ -27,7 +27,8 @@ public class ShapeStringUtils {
 	 * based on how SVG encodes shape data.
 	 * <P>
 	 * The call: <BR>
-	 * <code>ShapeUtils.createPathIterator(ShapeUtils.toString(shape));</code> <BR>
+	 * <code>ShapeUtils.createPathIterator(ShapeUtils.toString(shape));</code>
+	 * <BR>
 	 * should result in an identical shape.
 	 * <P>
 	 * The shape data is formatted as a single letter (m, l, q, c, z) followed
@@ -96,8 +97,8 @@ public class ShapeStringUtils {
 	 *            textual representation of a path.
 	 *            <P>
 	 *            This should be the output of
-	 *            <code>ShapeUtils.toString()</code>, resembling:
-	 *            "m 1 2 l 3 4 q 5 6 7 8 c 9 10 11 12 13 14 z"
+	 *            <code>ShapeUtils.toString()</code>, resembling: "m 1 2 l 3 4 q
+	 *            5 6 7 8 c 9 10 11 12 13 14 z"
 	 * @return a <code>PathIterator</code> that will iterate over the data in s.
 	 */
 	public static PathIterator createPathIterator(String s) {
@@ -105,11 +106,11 @@ public class ShapeStringUtils {
 	}
 
 	/**
-	 * This creates a <code>GeneralPath</code> of rule WIND_EVEN_ODD that
-	 * represents this shape data.
+	 * This creates a <code>Path2D</code> of rule WIND_EVEN_ODD that represents
+	 * this shape data.
 	 * <P>
 	 * This method simply calls: <BR>
-	 * <code>GeneralPath p = new GeneralPath();</code> <BR>
+	 * <code>Path2D p = new Path2D.Float();</code> <BR>
 	 * <code>p.append(createPathIterator(s),true);</code> <BR>
 	 * <code>return p;</code>
 	 * 
@@ -117,12 +118,12 @@ public class ShapeStringUtils {
 	 *            textual representation of a path.
 	 *            <P>
 	 *            This should be the output of
-	 *            <code>ShapeUtils.toString()</code>, resembling:
-	 *            "m 1 2 l 3 4 q 5 6 7 8 c 9 10 11 12 13 14 z"
+	 *            <code>ShapeUtils.toString()</code>, resembling: "m 1 2 l 3 4 q
+	 *            5 6 7 8 c 9 10 11 12 13 14 z"
 	 * @return a <code>GeneralPath</code> that represents this shape.
 	 */
-	public static GeneralPath createGeneralPath(String s) {
-		GeneralPath p = new GeneralPath();
+	public static Path2D createPath(String s) {
+		Path2D p = new Path2D.Float();
 		p.append(createPathIterator(s), true);
 		return p;
 	}
@@ -138,15 +139,14 @@ public class ShapeStringUtils {
 	 *            PathIterator.WIND_NON_ZERO or PathIterator.WIND_EVEN_ODD.)
 	 *            <P>
 	 *            This should be the output of
-	 *            <code>ShapeUtils.toString()</code>, resembling:
-	 *            "m 1 2 l 3 4 q 5 6 7 8 c 9 10 11 12 13 14 z"
+	 *            <code>ShapeUtils.toString()</code>, resembling: "m 1 2 l 3 4 q
+	 *            5 6 7 8 c 9 10 11 12 13 14 z"
 	 * @return a <code>PathIterator</code> that will iterate over the data in s.
 	 */
 	public static PathIterator createPathIterator(String s, int windingRule) {
 		/**
-		 * This little bit is added so if the string passed resembles:
-		 * "Data[ m 34 20 l 20 10 z ]" Then we focus only on the part in
-		 * brackets.
+		 * This little bit is added so if the string passed resembles: "Data[ m
+		 * 34 20 l 20 10 z ]" Then we focus only on the part in brackets.
 		 */
 		int i1 = s.indexOf('[');
 		int i2 = s.indexOf(']');

@@ -74,8 +74,8 @@ public class FillOperation extends ShapeOperation {
 			Graphics2DContext context = getContext();
 			AffineTransform tx = context.getTransform();
 			Shape shape = getShape();
-			Shape intersection = Clipper.intersect(
-					tx.createTransformedShape(shape), clippingShape, .01f);
+			Shape intersection = Clipper.intersect(.01f,
+					tx.createTransformedShape(shape), clippingShape);
 			if (ShapeUtils.isEmpty(intersection)) {
 				return new Operation[0];
 			}

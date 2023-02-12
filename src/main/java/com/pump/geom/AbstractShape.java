@@ -69,7 +69,8 @@ public abstract class AbstractShape implements Shape {
 	 * total is used in combination with the winding rule to determine when a
 	 * point is inside a shape.
 	 */
-	protected int countCrossings(double x, double y, AffineTransform transform) {
+	protected int countCrossings(double x, double y,
+			AffineTransform transform) {
 		// draw an imaginary line from (-infinity,y) to (x,y)
 		// and count how many crossings we have
 
@@ -212,8 +213,8 @@ public abstract class AbstractShape implements Shape {
 							// there is 1 solution
 							double t = -2 * by / (6 * ay);
 							if (t > 0 && t < 1) {
-								double newY = ay * t * t * t + by * t * t + cy
-										* t + dy;
+								double newY = ay * t * t * t + by * t * t
+										+ cy * t + dy;
 								minY = Math.min(minY, newY);
 								maxY = Math.max(maxY, newY);
 							}
@@ -222,16 +223,16 @@ public abstract class AbstractShape implements Shape {
 							det = (float) Math.sqrt(det);
 							double t = (-2 * by + det) / (6 * ay);
 							if (t > 0 && t < 1) {
-								double newY = ay * t * t * t + by * t * t + cy
-										* t + dy;
+								double newY = ay * t * t * t + by * t * t
+										+ cy * t + dy;
 								minY = Math.min(minY, newY);
 								maxY = Math.max(maxY, newY);
 							}
 
 							t = (-2 * by - det) / (6 * ay);
 							if (t > 0 && t < 1) {
-								double newY = ay * t * t * t + by * t * t + cy
-										* t + dy;
+								double newY = ay * t * t * t + by * t * t
+										+ cy * t + dy;
 								minY = Math.min(minY, newY);
 								maxY = Math.max(maxY, newY);
 							}
@@ -253,8 +254,8 @@ public abstract class AbstractShape implements Shape {
 
 						for (int a = 0; a < i; a++) {
 							if (results[a] >= 0 && results[a] <= 1) {
-								myX = (((ax * results[a] + bx) * results[a] + cx)
-										* results[a] + dx);
+								myX = (((ax * results[a] + bx) * results[a]
+										+ cx) * results[a] + dx);
 								if (myX < x) {
 									curvature = ((3 * ay * results[a] + 2 * by)
 											* results[a] + cy);
@@ -643,33 +644,21 @@ public abstract class AbstractShape implements Shape {
 
 	@Override
 	public Rectangle getBounds() {
-		Rectangle r = new Rectangle();
-		getBounds(null, r);
-		return r;
+		return getBounds2D().getBounds();
 	}
 
 	@Override
 	public Rectangle2D getBounds2D() {
-		Rectangle2D r = new Rectangle2D.Double();
-		getBounds(null, r);
-		return r;
+		return getBounds2D(null);
 	}
 
 	public Rectangle getBounds(AffineTransform transform) {
-		Rectangle r = new Rectangle();
-		getBounds(transform, r);
-		return r;
+		return getBounds2D(transform).getBounds();
 	}
 
 	public Rectangle2D getBounds2D(AffineTransform transform) {
-		Rectangle2D r = new Rectangle2D.Double();
-		getBounds(transform, r);
-		return r;
-	}
-
-	public Rectangle2D getBounds(AffineTransform transform, Rectangle2D r) {
 		PathIterator iterator = getPathIterator(transform);
-		return ShapeBounds.getBounds(iterator, r);
+		return ShapeBounds.getBounds(iterator);
 	}
 
 	@Override

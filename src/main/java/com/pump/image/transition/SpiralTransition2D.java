@@ -24,16 +24,15 @@ import com.pump.geom.ShapeUtils;
  * In this transition a wobbling spiral grows to fill the entire frame; inside
  * the shape is the incoming image. Here are playback samples:
  * <p>
- * <table summary="Sample Animations of SpiralTransition2D" cellspacing="50" border="0">
+ * <table summary="Sample Animations of SpiralTransition2D" cellspacing="50"
+ * border="0">
  * <tr>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SpiralTransition2D/SpiralSprawl.gif"
  * alt="Spiral Sprawl">
  * <p>
  * Spiral Sprawl</td>
- * <td align="center">
- * <img src=
+ * <td align="center"><img src=
  * "https://github.com/mickleness/pumpernickel/raw/master/resources/transition/SpiralTransition2D/Spiral.gif"
  * alt="Spiral">
  * <p>
@@ -65,8 +64,8 @@ public class SpiralTransition2D extends Transition2D {
 	 * 
 	 */
 	public SpiralTransition2D(boolean sprawl) {
-		spiral = ShapeStringUtils
-				.createGeneralPath("m 32.574 32.527 c 21.77 23.645 42.863 21.455 42.537 32.494 c 42.212 43.533 34.209 45.303 27.629 42.58 c 21.049 39.857 17.374 35.943 18.708 27.331 c 20.043 18.72 27.036 7.229 39.603 12.433 c 52.17 17.636 56.668 23.651 53.935 37.469 c 51.202 51.287 43.916 57.222 28.139 53.074 c 12.361 48.927 0.062 39.761 7.31 20.954 c 14.558 2.147 23.188 -2.412 40.942 0.083 c 58.696 2.579 69.57 20.663 64.804 38.565 c 60.038 56.468 53.063 66.173 28.941 64.198 c 4.82 62.224 -7.552 41.196 -6.927 32.645 c -6.303 24.094 -1.187 8.315 6.772 -1.593 z");
+		spiral = ShapeStringUtils.createPath(
+				"m 32.574 32.527 c 21.77 23.645 42.863 21.455 42.537 32.494 c 42.212 43.533 34.209 45.303 27.629 42.58 c 21.049 39.857 17.374 35.943 18.708 27.331 c 20.043 18.72 27.036 7.229 39.603 12.433 c 52.17 17.636 56.668 23.651 53.935 37.469 c 51.202 51.287 43.916 57.222 28.139 53.074 c 12.361 48.927 0.062 39.761 7.31 20.954 c 14.558 2.147 23.188 -2.412 40.942 0.083 c 58.696 2.579 69.57 20.663 64.804 38.565 c 60.038 56.468 53.063 66.173 28.941 64.198 c 4.82 62.224 -7.552 41.196 -6.927 32.645 c -6.303 24.094 -1.187 8.315 6.772 -1.593 z");
 		this.sprawl = sprawl;
 		shapeBounds = new Rectangle2D.Float(0, 0, 60, 60);
 	}

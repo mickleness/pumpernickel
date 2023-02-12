@@ -22,14 +22,12 @@ public class IntegerProperty extends Property<Integer> {
 
 	public IntegerProperty(String name, int minValue, int maxValue,
 			int defaultValue) {
-		super(name);
+		super(name, defaultValue);
 		min = minValue;
 		max = maxValue;
 		if (max < min)
-			throw new IllegalArgumentException("the max (" + max
-					+ ") is less than the min (" + min + ")");
-
-		setValue(defaultValue);
+			throw new IllegalArgumentException(
+					"the max (" + max + ") is less than the min (" + min + ")");
 	}
 
 	public int getMin() {
@@ -42,6 +40,12 @@ public class IntegerProperty extends Property<Integer> {
 
 	@Override
 	protected void validateValue(Integer value) {
+
+		if (min == 0 && max == 0) {
+			// we're high up in construction; this doesn't count
+			return;
+		}
+
 		if (value < min)
 			throw new IllegalArgumentException("the value (" + value
 					+ ") is less than the min (" + min + ")");

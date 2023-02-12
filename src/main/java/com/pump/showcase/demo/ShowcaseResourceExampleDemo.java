@@ -81,10 +81,11 @@ public abstract class ShowcaseResourceExampleDemo<R>
 	 */
 	public ShowcaseResourceExampleDemo(Class<R> resourceType,
 			boolean stretchExampleToFillWindow, String... fileExtensions) {
-		super(stretchExampleToFillWindow, stretchExampleToFillWindow, true);
+		super(stretchExampleToFillWindow, stretchExampleToFillWindow, true,
+				!stretchExampleToFillWindow, false);
 		this.fileExtensions = fileExtensions;
 		this.resourceType = resourceType;
-		
+
 		fileDialogButton.setOpaque(false);
 
 		if (resourceType.equals(File.class)) {
@@ -175,7 +176,8 @@ public abstract class ShowcaseResourceExampleDemo<R>
 			public void run() {
 				String lastResource = prefs.get(prefKeyLastResource, null);
 
-				// what if we're trying to restore a reference to a file that no longer exists?
+				// what if we're trying to restore a reference to a file that no
+				// longer exists?
 				// this
 				if (lastResource != null && resourceType.equals(File.class)) {
 					File file = new File(lastResource);
