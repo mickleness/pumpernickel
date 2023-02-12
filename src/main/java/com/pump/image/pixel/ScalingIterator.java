@@ -13,9 +13,6 @@ package com.pump.image.pixel;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
-import com.pump.image.pixel.converter.BytePixelConverter;
-import com.pump.image.pixel.converter.IntPixelConverter;
-
 /**
  * This iterator scales another iterator as it is being read.
  * <p>
@@ -470,9 +467,11 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 		@Override
 		void readColorComponents(byte[] sourceArray, int type) {
 			int incr = scaleX < .25 ? 2 : 1;
+			int kIncr;
 			switch (type) {
 			case BufferedImage.TYPE_3BYTE_BGR:
-				for (int x = 0, k2 = 0; x < srcW; x += incr) {
+				kIncr = 3 * incr - 3;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
 					int k = srcXLUT[x];
 					blues[k] += sourceArray[k2++] & 0xff;
 					greens[k] += sourceArray[k2++] & 0xff;
@@ -481,7 +480,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				}
 				break;
 			case ImageType.TYPE_3BYTE_RGB:
-				for (int x = 0, k2 = 0; x < srcW; x += incr) {
+				kIncr = 3 * incr - 3;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
 					int k = srcXLUT[x];
 					reds[k] += sourceArray[k2++] & 0xff;
 					greens[k] += sourceArray[k2++] & 0xff;
@@ -491,7 +491,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			case BufferedImage.TYPE_4BYTE_ABGR:
 			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-				for (int x = 0, k2 = 0; x < srcW; x += incr) {
+				kIncr = 4 * incr - 4;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
 					int k = srcXLUT[x];
 					if (alphas != null)
 						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
@@ -502,9 +503,24 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					sums[k]++;
 				}
 				break;
+			case ImageType.TYPE_4BYTE_BGRA:
+				kIncr = 4 * incr - 4;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
+					int k = srcXLUT[x];
+					reds[k] += sourceArray[k2++] & 0xff;
+					greens[k] += sourceArray[k2++] & 0xff;
+					blues[k] += sourceArray[k2++] & 0xff;
+					if (alphas != null) {
+						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
+					}
+					k2++;
+					sums[k]++;
+				}
+				break;
 			case ImageType.TYPE_4BYTE_ARGB:
 			case ImageType.TYPE_4BYTE_ARGB_PRE:
-				for (int x = 0, k2 = 0; x < srcW; x += incr) {
+				kIncr = 4 * incr - 4;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
 					int k = srcXLUT[x];
 					if (alphas != null)
 						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
@@ -524,6 +540,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				}
 				break;
 			default:
+				// types BYTE_ABGR and INT_ARGB_PRE aren't supporte yet.
 				throw new RuntimeException(
 						"unexpected condition: the type should have been converted when this object was constructed");
 			}
@@ -1453,9 +1470,23 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				row.interpolateXValues();
 		}
 
+		boolean writeOnlyOneRow = false;
+
 		if (srcY0 == srcY1) {
 			// in the first iteration: both srcY0 and srcY1
 			// will equal zero:
+			writeOnlyOneRow = true;
+		} else if (srcY >= srcH) {
+			// given how we skip rows this can happen for the last row.
+			// it'd be great to fix this, but for now just repeat the last
+			// row of pixel data.
+			// TODO: revisit this, examine how last row renders.
+			// (hint: start by leaving writeOnlyOneRow false, and then
+			// resolve the unit test failures that follow)
+			writeOnlyOneRow = true;
+		}
+
+		if (writeOnlyOneRow) {
 			if (incomingIntArray != null) {
 				row.writeColorComponents(incomingIntArray, getType());
 			} else {
