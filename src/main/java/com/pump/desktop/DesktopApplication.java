@@ -12,7 +12,6 @@ package com.pump.desktop;
 
 import java.awt.Desktop;
 import java.awt.Frame;
-import java.awt.Image;
 import java.awt.Taskbar;
 import java.awt.Taskbar.Feature;
 import java.awt.desktop.AboutEvent;
@@ -32,7 +31,6 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.data.AbstractAttributeDataImpl;
 import com.pump.data.Key;
-import com.pump.debug.AWTMonitor;
 import com.pump.desktop.cache.CacheManager;
 import com.pump.desktop.error.BugReporter;
 import com.pump.desktop.error.ErrorDialogThrowableHandler;
@@ -40,6 +38,7 @@ import com.pump.desktop.error.ErrorManager;
 import com.pump.desktop.logging.SessionLog;
 import com.pump.desktop.temp.TempFileManager;
 import com.pump.image.ImageLoader;
+import com.pump.thread.EventDispatchThreadMonitor;
 import com.pump.util.JVM;
 import com.pump.window.WindowList;
 
@@ -213,20 +212,8 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 		ErrorManager.initialize(simpleAppName);
 		TempFileManager.initialize(qualifiedAppName);
 
-		// let lots of other invokeLaters run on the EDT first, otherwise we're
-		// nearly guaranteed to get an AWT warning during healthy startup
-		// activity
-		SwingUtilities.invokeLater(new Runnable() {
-			int ctr = 500;
-
-			public void run() {
-				if (ctr-- == 0) {
-					AWTMonitor.installAWTListener(simpleAppName, false);
-				} else {
-					SwingUtilities.invokeLater(this);
-				}
-			}
-		});
+		EventDispatchThreadMonitor.get().addListener(400,
+				new EventDispatchThreadProfilerListener());
 
 		CacheManager.initialize(qualifiedAppName, version);
 
@@ -353,7 +340,7 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 		BufferedImage i = getAttribute(KEY_APP_IMAGE);
 		if (i != null)
 			return i;
-		
+
 		if (Taskbar.isTaskbarSupported()
 				&& Taskbar.getTaskbar().isSupported(Feature.ICON_IMAGE)) {
 			return ImageLoader.createImage(Taskbar.getTaskbar().getIconImage());
@@ -366,7 +353,7 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 	 */
 	public void setImage(BufferedImage bi) {
 		setAttribute(KEY_APP_IMAGE, bi);
-		
+
 		if (Taskbar.isTaskbarSupported()
 				&& Taskbar.getTaskbar().isSupported(Feature.ICON_IMAGE))
 			Taskbar.getTaskbar().setIconImage(bi);

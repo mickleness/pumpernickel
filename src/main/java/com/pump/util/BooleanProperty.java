@@ -17,7 +17,6 @@ public class BooleanProperty extends Property<Boolean> {
 	}
 
 	public BooleanProperty(String propertyName, boolean defaultValue) {
-		super(propertyName);
-		setValue(defaultValue);
+		super(propertyName, defaultValue);
 	}
 }

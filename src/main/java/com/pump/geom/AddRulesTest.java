@@ -162,8 +162,7 @@ public class AddRulesTest extends BasicTestElement {
 
 			for (int b = 0; b < subpaths.size(); b++) {
 				String source = (String) subpaths.get(b);
-				AreaX area = new AreaX(
-						ShapeStringUtils.createGeneralPath(source));
+				AreaX area = new AreaX(ShapeStringUtils.createPath(source));
 				subpaths.set(b, new Object[] { source, area });
 			}
 			for (int b = 0; b < subpaths.size(); b++) {
@@ -177,19 +176,19 @@ public class AddRulesTest extends BasicTestElement {
 								+ ((String) array2[0]);
 						array1[0] = newPath;
 						AreaX t = new AreaX(
-								ShapeStringUtils.createGeneralPath(newPath));
+								ShapeStringUtils.createPath(newPath));
 						array1[1] = t;
 						subpaths.remove(c);
 						c = b;
 					}
 				}
 				String source = (String) array1[0];
-				newShapes.add(ShapeStringUtils.createGeneralPath(source));
+				newShapes.add(ShapeStringUtils.createPath(source));
 			}
 		}
 
 		private void add(String shape) {
-			add(ShapeStringUtils.createGeneralPath(shape));
+			add(ShapeStringUtils.createPath(shape));
 		}
 
 		private void add(Shape shape) {

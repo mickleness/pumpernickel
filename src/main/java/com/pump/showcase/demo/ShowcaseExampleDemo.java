@@ -101,11 +101,12 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 	public ShowcaseExampleDemo(boolean stretchExampleToFillHoriz,
 			boolean stretchExampleToFillVert, boolean useRoundedCorners) {
 		this(stretchExampleToFillHoriz, stretchExampleToFillVert,
-				useRoundedCorners, false);
+				useRoundedCorners, useRoundedCorners, false);
 	}
 
 	public ShowcaseExampleDemo(boolean stretchExampleToFillHoriz,
-			boolean stretchExampleToFillVert, boolean useRoundedCorners,
+			boolean stretchExampleToFillVert, boolean useRoundedCornersOnConfig,
+			boolean useRoundedCornersOnExample,
 			boolean stretchConfigurationToFillHoriz) {
 
 		super();
@@ -122,9 +123,10 @@ public abstract class ShowcaseExampleDemo extends ShowcaseDemo {
 		QPanelUI panelUI = QPanelUI.createBoxUI();
 		configurationPanel.setUI(panelUI);
 
-		if (useRoundedCorners) {
+		if (useRoundedCornersOnExample) {
 			examplePanel.setUI(panelUI);
-		} else {
+		}
+		if (!useRoundedCornersOnConfig) {
 			panelUI = QPanelUI.createBoxUI();
 			panelUI.setCornerSize(0);
 			configurationPanel.setUI(panelUI);

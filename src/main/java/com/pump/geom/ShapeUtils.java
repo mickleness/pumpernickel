@@ -339,8 +339,8 @@ public class ShapeUtils {
 		return ctr++;
 	}
 
-	/** Returns each path in s as a separate GeneralPath */
-	public static GeneralPath[] getSubPaths(Shape s) {
+	/** Returns each path in s as a separate Path2D */
+	public static Path2D[] getSubPaths(Shape s) {
 		String s2 = ShapeStringUtils.toString(s);
 		int ctr = 0;
 		int i = 0;
@@ -366,7 +366,7 @@ public class ShapeUtils {
 			}
 		}
 
-		GeneralPath[] p = new GeneralPath[ctr];
+		Path2D[] p = new GeneralPath[ctr];
 		for (i = 0; i < indices.length; i++) {
 			String text;
 			if (i < indices.length - 1) {
@@ -374,7 +374,7 @@ public class ShapeUtils {
 			} else {
 				text = s2.substring(indices[i]);
 			}
-			p[i] = ShapeStringUtils.createGeneralPath(text);
+			p[i] = ShapeStringUtils.createPath(text);
 		}
 		return p;
 	}

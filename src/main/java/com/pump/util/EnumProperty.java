@@ -14,7 +14,7 @@ public class EnumProperty<T> extends Property<T> {
 	T[] values;
 
 	public EnumProperty(String name, T[] values, T defaultValue) {
-		super(name);
+		super(name, defaultValue);
 		this.values = values;
 		for (int a = 0; a < values.length; a++) {
 			if (values[a] == null)
@@ -23,7 +23,7 @@ public class EnumProperty<T> extends Property<T> {
 		}
 		if (values.length == 0)
 			throw new IllegalArgumentException("there were no values");
-		setValue(defaultValue);
+		validateValue(getValue());
 	}
 
 	public T[] getValues() {
@@ -32,6 +32,12 @@ public class EnumProperty<T> extends Property<T> {
 
 	@Override
 	protected void validateValue(Object obj) {
+
+		if (values == null) {
+			// this will happen high up in the constructor
+			return;
+		}
+
 		if (obj == null)
 			throw new NullPointerException("the value must not be null");
 		for (int a = 0; a < values.length; a++) {
@@ -39,8 +45,8 @@ public class EnumProperty<T> extends Property<T> {
 				return;
 		}
 		throw new IllegalArgumentException("the value (\"" + obj
-				+ "\") did not match any of the allowed values ("
-				+ listValues() + ")");
+				+ "\") did not match any of the allowed values (" + listValues()
+				+ ")");
 	}
 
 	protected String listValues() {

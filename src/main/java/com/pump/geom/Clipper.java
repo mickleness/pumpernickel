@@ -625,37 +625,80 @@ public abstract class Clipper {
 	}
 
 	/**
-	 * Calculate the intersection of two shapes using the Clipper approach if
-	 * possible.
+	 * Calculate the intersection of multiple shapes.
 	 * <p>
-	 * If neither argument is rectangular then both shapes are flattened (using
-	 * the flatness argument) and converted to Areas to calculate the
-	 * intersection.
+	 * First this attempts to process the incoming shapes as Rectangle2Ds. If
+	 * any rectangular shapes were detected: then this uses the Clipper class to
+	 * confine remaining Shapes to the known rectangular bounding box. Any
+	 * remaining shapes are flattened and converted to Areas, and the Area class
+	 * is used to perform the remaining intersection calculations.
 	 * 
-	 * @return the intersection of the two arguments. This tries to return a
+	 * @return the intersection of the arguments. This tries to return a
 	 *         Rectangle or Rectangle2D before it returns an abstract Shape.
 	 */
-	public static Shape intersect(Shape shape1, Shape shape2, float flatness) {
-		Rectangle2D r1 = ShapeUtils.getRectangle2D(shape1);
-		Rectangle2D r2 = ShapeUtils.getRectangle2D(shape2);
+	public static Shape intersect(float flatness, Shape... shapes) {
+		// consolidate as many elements of `shapes` into `intersectionRect` as
+		// possible
+		Rectangle2D intersectionRect = null;
+		for (int a = 0; a < shapes.length; a++) {
+
+			if (shapes[a] == null)
+				throw new NullPointerException("a = " + a);
+
+			Rectangle2D z = ShapeUtils.getRectangle2D(shapes[a]);
+			if (z != null) {
+				shapes[a] = null;
+				if (intersectionRect == null) {
+					intersectionRect = z;
+				} else {
+					intersectionRect = intersectionRect.createIntersection(z);
+				}
+			}
+		}
+
+		// take any remaining non-Rectangle shapes and clip them to our
+		// rectangle:
+		if (intersectionRect != null) {
+			for (int a = 0; a < shapes.length; a++) {
+				if (shapes[a] != null) {
+					shapes[a] = clipToRect(shapes[a], intersectionRect);
+				}
+			}
+		}
+
+		int shapeCtr = 0;
+		Shape lastNonNullShape = null;
+		for (int a = 0; a < shapes.length; a++) {
+			if (shapes[a] != null) {
+				shapeCtr++;
+				lastNonNullShape = shapes[a];
+			}
+		}
+
 		Shape returnValue;
-		if (r1 != null && r2 != null) {
-			returnValue = r1.createIntersection(r2);
-		} else if (r1 != null) {
-			returnValue = clipToRect(shape2, r1);
-		} else if (r2 != null) {
-			returnValue = clipToRect(shape1, r2);
+
+		if (shapeCtr == 0) {
+			returnValue = intersectionRect;
+		} else if (shapeCtr == 1) {
+			returnValue = lastNonNullShape;
 		} else {
-			PathIterator iter1 = shape1.getPathIterator(null, flatness);
-			PathIterator iter2 = shape2.getPathIterator(null, flatness);
-			Path2D p1 = new Path2D.Float(iter1.getWindingRule());
-			Path2D p2 = new Path2D.Float(iter2.getWindingRule());
-			p1.append(iter1, false);
-			p2.append(iter2, false);
-			Area a1 = new Area(p1);
-			Area a2 = new Area(p2);
-			a1.intersect(a2);
-			returnValue = a1;
+			Area returnArea = null;
+			for (int a = 0; a < shapes.length; a++) {
+				if (shapes[a] != null) {
+					PathIterator iter1 = shapes[a].getPathIterator(null,
+							flatness);
+					Path2D p1 = new Path2D.Float(iter1.getWindingRule());
+					p1.append(iter1, false);
+					Area a1 = new Area(p1);
+
+					if (returnArea == null) {
+						returnArea = a1;
+					} else {
+						returnArea.intersect(a1);
+					}
+				}
+			}
+			returnValue = returnArea;
 		}
 
 		Rectangle returnValueAsRect = ShapeUtils.getRectangle(returnValue);
