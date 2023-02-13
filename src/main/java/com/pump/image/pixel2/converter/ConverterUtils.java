@@ -1360,4 +1360,26 @@ class ConverterUtils {
             destPixels[destIndex++] = value & 0xffffff;
         }
     }
+
+    static void convert_AXYZPre_bytes_to_ZYX_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 4 * pixelCount;
+        int dstIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            srcIndex++;
+            destPixels[dstIndex++] = ((sourcePixels[srcIndex++] & 0xff)) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 16);
+        }
+    }
+
+    static void convert_AXYZPre_bytes_to_XYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 4 * pixelCount;
+        int dstIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            srcIndex++;
+            destPixels[dstIndex++] = ((sourcePixels[srcIndex++] & 0xff) << 16) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                    ((sourcePixels[srcIndex++] & 0xff));
+        }
+    }
 }

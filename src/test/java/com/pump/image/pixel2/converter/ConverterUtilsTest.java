@@ -1647,4 +1647,42 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(Integer.toUnsignedString(pixels[3], 16), 0x423F3B, pixels[3]);
         assertEquals(Integer.toUnsignedString(pixels[4], 16), 0x381C1C, pixels[4]);
     }
+
+    public void test_convert_AXYZPre_bytes_to_XYZ_ints() {
+        byte[] pixels = new byte[] {
+                (byte) 0xe3, 0x05, 0x03, 0x01,
+                (byte) 0xc3, 0x17, 0x15, 0x11,
+                (byte) 0x89, 0x34, 0x2e, 0x25,
+                0x41, 0x42, 0x3f, 0x3b,
+                0x09, 0x38, 0x1c, 0x1c
+        };
+
+        int[] dest = new int[5];
+        ConverterUtils.convert_AXYZPre_bytes_to_XYZ_ints(dest, 0, pixels, 0, 5);
+
+        assertEquals(Integer.toUnsignedString(dest[0], 16), 0x050301, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1], 16), 0x171511, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2], 16), 0x342E25, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3], 16), 0x423F3B, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4], 16), 0x381C1C, dest[4]);
+    }
+
+    public void test_convert_AXYZPre_bytes_to_ZYX_ints() {
+        byte[] pixels = new byte[] {
+                (byte) 0xe3, 0x05, 0x03, 0x01,
+                (byte) 0xc3, 0x17, 0x15, 0x11,
+                (byte) 0x89, 0x34, 0x2e, 0x25,
+                0x41, 0x42, 0x3f, 0x3b,
+                0x09, 0x38, 0x1c, 0x1c
+        };
+
+        int[] dest = new int[5];
+        ConverterUtils.convert_AXYZPre_bytes_to_ZYX_ints(dest, 0, pixels, 0, 5);
+
+        assertEquals(Integer.toUnsignedString(dest[0], 16), 0x010305, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1], 16), 0x111517, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2], 16), 0x252E34, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3], 16), 0x3B3F42, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4], 16), 0x1C1C38, dest[4]);
+    }
 }
