@@ -1685,4 +1685,153 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(Integer.toUnsignedString(dest[3], 16), 0x3B3F42, dest[3]);
         assertEquals(Integer.toUnsignedString(dest[4], 16), 0x1C1C38, dest[4]);
     }
+
+    public void test_convert_AXYZPre_bytes_to_AXYZ_bytes() {
+        byte[] pixels = new byte[] {
+                (byte) 0xe3, 0x05, 0x03, 0x01,
+                (byte) 0xc3, 0x17, 0x15, 0x11,
+                (byte) 0x89, 0x34, 0x2e, 0x25,
+                0x41, 0x42, 0x3f, 0x3b,
+                0x09, 0x38, 0x1c, 0x1c
+        };
+
+        ConverterUtils.convert_AXYZPre_bytes_to_AXYZ_bytes(pixels, 0, pixels, 0, 5);
+
+        assertEquals( (byte) 0xe3, pixels[0]);
+        assertEquals( 0x05, pixels[1]);
+        assertEquals( 0x03, pixels[2]);
+        assertEquals( 0x01, pixels[3]);
+
+        assertEquals( (byte) 0xc3, pixels[4]);
+        assertEquals( 0x1E, pixels[5]);
+        assertEquals( 0x1B, pixels[6]);
+        assertEquals( 0x16, pixels[7]);
+
+        assertEquals( (byte) 0x89, pixels[8]);
+        assertEquals( 0x61, pixels[9]);
+        assertEquals( 0x55, pixels[10]);
+        assertEquals( 0x45, pixels[11]);
+
+        assertEquals( 0x41, pixels[12]);
+        assertEquals( (byte) 0xff, pixels[13]);
+        assertEquals( (byte) 0xf8, pixels[14]);
+        assertEquals( (byte) 0xe8, pixels[15]);
+
+        assertEquals( 0x09, pixels[16]);
+        assertEquals( (byte) 0xff, pixels[17]);
+        assertEquals( (byte) 0xff, pixels[18]);
+        assertEquals( (byte) 0xff, pixels[19]);
+    }
+
+    public void test_convert_AXYZPre_bytes_to_AZYX_bytes() {
+        byte[] pixels = new byte[] {
+                (byte) 0xe3, 0x05, 0x03, 0x01,
+                (byte) 0xc3, 0x17, 0x15, 0x11,
+                (byte) 0x89, 0x34, 0x2e, 0x25,
+                0x41, 0x42, 0x3f, 0x3b,
+                0x09, 0x38, 0x1c, 0x1c
+        };
+
+        ConverterUtils.convert_AXYZPre_bytes_to_AZYX_bytes(pixels, 0, pixels, 0, 5);
+
+        assertEquals( (byte) 0xe3, pixels[0]);
+        assertEquals( 0x01, pixels[1]);
+        assertEquals( 0x03, pixels[2]);
+        assertEquals( 0x05, pixels[3]);
+
+        assertEquals( (byte) 0xc3, pixels[4]);
+        assertEquals( 0x16, pixels[5]);
+        assertEquals( 0x1B, pixels[6]);
+        assertEquals( 0x1E, pixels[7]);
+
+        assertEquals( (byte) 0x89, pixels[8]);
+        assertEquals( 0x45, pixels[9]);
+        assertEquals( 0x55, pixels[10]);
+        assertEquals( 0x61, pixels[11]);
+
+        assertEquals( 0x41, pixels[12]);
+        assertEquals( (byte) 0xe8, pixels[13]);
+        assertEquals( (byte) 0xf8, pixels[14]);
+        assertEquals( (byte) 0xff, pixels[15]);
+
+        assertEquals( 0x09, pixels[16]);
+        assertEquals( (byte) 0xff, pixels[17]);
+        assertEquals( (byte) 0xff, pixels[18]);
+        assertEquals( (byte) 0xff, pixels[19]);
+    }
+
+    public void test_convert_AXYZPre_bytes_to_ZYXA_bytes() {
+        byte[] pixels = new byte[] {
+                (byte) 0xe3, 0x05, 0x03, 0x01,
+                (byte) 0xc3, 0x17, 0x15, 0x11,
+                (byte) 0x89, 0x34, 0x2e, 0x25,
+                0x41, 0x42, 0x3f, 0x3b,
+                0x09, 0x38, 0x1c, 0x1c
+        };
+
+        ConverterUtils.convert_AXYZPre_bytes_to_ZYXA_bytes(pixels, 0, pixels, 0, 5);
+
+        assertEquals( 0x01, pixels[0]);
+        assertEquals( 0x03, pixels[1]);
+        assertEquals( 0x05, pixels[2]);
+        assertEquals( (byte) 0xe3, pixels[3]);
+
+        assertEquals( 0x16, pixels[4]);
+        assertEquals( 0x1B, pixels[5]);
+        assertEquals( 0x1E, pixels[6]);
+        assertEquals( (byte) 0xc3, pixels[7]);
+
+        assertEquals( 0x45, pixels[8]);
+        assertEquals( 0x55, pixels[9]);
+        assertEquals( 0x61, pixels[10]);
+        assertEquals( (byte) 0x89, pixels[11]);
+
+        assertEquals( (byte) 0xe8, pixels[12]);
+        assertEquals( (byte) 0xf8, pixels[13]);
+        assertEquals( (byte) 0xff, pixels[14]);
+        assertEquals( 0x41, pixels[15]);
+
+        assertEquals( (byte) 0xff, pixels[16]);
+        assertEquals( (byte) 0xff, pixels[17]);
+        assertEquals( (byte) 0xff, pixels[18]);
+        assertEquals( 0x09, pixels[19]);
+    }
+
+    public void test_convert_AXYZPre_bytes_to_XYZA_bytes() {
+        byte[] pixels = new byte[] {
+                (byte) 0xe3, 0x05, 0x03, 0x01,
+                (byte) 0xc3, 0x17, 0x15, 0x11,
+                (byte) 0x89, 0x34, 0x2e, 0x25,
+                0x41, 0x42, 0x3f, 0x3b,
+                0x09, 0x38, 0x1c, 0x1c
+        };
+
+        ConverterUtils.convert_AXYZPre_bytes_to_XYZA_bytes(pixels, 0, pixels, 0, 5);
+
+        assertEquals( 0x05, pixels[0]);
+        assertEquals( 0x03, pixels[1]);
+        assertEquals( 0x01, pixels[2]);
+        assertEquals( (byte) 0xe3, pixels[3]);
+
+        assertEquals( 0x1E, pixels[4]);
+        assertEquals( 0x1B, pixels[5]);
+        assertEquals( 0x16, pixels[6]);
+        assertEquals( (byte) 0xc3, pixels[7]);
+
+        assertEquals( 0x61, pixels[8]);
+        assertEquals( 0x55, pixels[9]);
+        assertEquals( 0x45, pixels[10]);
+        assertEquals( (byte) 0x89, pixels[11]);
+
+        assertEquals( (byte) 0xff, pixels[12]);
+        assertEquals( (byte) 0xf8, pixels[13]);
+        assertEquals( (byte) 0xe8, pixels[14]);
+        assertEquals( 0x41, pixels[15]);
+
+        assertEquals( (byte) 0xff, pixels[16]);
+        assertEquals( (byte) 0xff, pixels[17]);
+        assertEquals( (byte) 0xff, pixels[18]);
+        assertEquals( 0x09, pixels[19]);
+
+    }
 }
