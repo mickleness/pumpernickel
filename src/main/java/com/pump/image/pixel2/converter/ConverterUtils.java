@@ -180,8 +180,6 @@ class ConverterUtils {
     }
 
     // TODO: spot check for other cases were a switch/case might help alpha computations
-    // TODO: once finished: search this class for `storeScratchArray` and check against copy-paste misuse,
-    // TODO: and while there: double-check that the scratch array is the right length
     private static void storeScratchArray(byte[] array) {
         synchronized (byteArrays) {
             if (array.length >= minByteArrayLength && byteArrays.size() < 10) {
@@ -335,7 +333,7 @@ class ConverterUtils {
         } else {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
-                convert_G_bytes_to_AXYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                convert_G_bytes_to_XYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
                 System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
             } finally {
                 storeScratchArray(scratch);
@@ -945,7 +943,7 @@ class ConverterUtils {
         } else {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
-                convert_AXYZPre_bytes_to_ZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                convert_AXYZPre_bytes_to_XYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
                 System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
             } finally {
                 storeScratchArray(scratch);
@@ -1453,7 +1451,7 @@ class ConverterUtils {
         } else {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
-                convert_AXYZPre_bytes_to_AXYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                convert_AXYZPre_bytes_to_AZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
                 System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
             } finally {
                 storeScratchArray(scratch);
