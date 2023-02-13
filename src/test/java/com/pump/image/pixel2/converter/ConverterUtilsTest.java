@@ -1593,4 +1593,22 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(Integer.toUnsignedString(pixels[3], 16), 0x41423f3b, pixels[3]);
         assertEquals(Integer.toUnsignedString(pixels[4], 16), 0x09381c1c, pixels[4]);
     }
+
+    public void test_convert_AXYZ_ints_to_AXYZPre_ints() {
+        int[] pixels = new int[] {
+                0xe3050301,
+                0xc3171511,
+                0x89342e25,
+                0x41423f3b,
+                0x09381c1c
+        };
+
+        ConverterUtils.convert_AXYZ_ints_to_AXYZPre_ints(pixels, 0, pixels, 0, 5);
+
+        assertEquals(Integer.toUnsignedString(pixels[0], 16), 0xE3040200, pixels[0]);
+        assertEquals(Integer.toUnsignedString(pixels[1], 16), 0xC3110F0C, pixels[1]);
+        assertEquals(Integer.toUnsignedString(pixels[2], 16), 0x891B1813, pixels[2]);
+        assertEquals(Integer.toUnsignedString(pixels[3], 16), 0x41100F0E, pixels[3]);
+        assertEquals(Integer.toUnsignedString(pixels[4], 16), 0x09010000, pixels[4]);
+    }
 }

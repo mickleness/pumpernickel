@@ -5,7 +5,7 @@ import com.pump.image.pixel.converter.IndexColorModelLUT;
 public class IntARGBPreConverter implements PixelConverter<int[]> {
     @Override
     public void convertFromARGB(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZ_ints_to_AXYZPre_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override

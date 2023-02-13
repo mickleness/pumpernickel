@@ -1279,4 +1279,47 @@ class ConverterUtils {
             }
         }
     }
+
+    static void convert_AXYZ_ints_to_AXYZPre_ints(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels == sourcePixels && destOffset > srcOffset) {
+            int destIndex = destOffset + pixelCount - 1;
+            for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset;) {
+                int value = sourcePixels[srcIndex--];
+                int alpha = (value >> 24) & 0xff;
+                switch (alpha) {
+                    case 255:
+                        destPixels[destIndex--] = value;
+                        break;
+                    case 0:
+                        destPixels[destIndex--] = 0;
+                    default:
+                        destPixels[destIndex--] = (value & 0xff000000) |
+                                ((((value & 0xff0000) * alpha) >> 8) & 0xff0000) |
+                                ((((value & 0xff00) * alpha) >> 8) & 0xff00) |
+                                ((((value & 0xff) * alpha) >> 8) & 0xff);
+                        break;
+                }
+            }
+            return;
+        }
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int value = sourcePixels[srcIndex++];
+            int alpha = (value >> 24) & 0xff;
+            switch (alpha) {
+                case 255:
+                    destPixels[destIndex++] = value;
+                    break;
+                case 0:
+                    destPixels[destIndex++] = 0;
+                default:
+                    destPixels[destIndex++] = (value & 0xff000000) |
+                            ((((value & 0xff0000) * alpha) >> 8) & 0xff0000) |
+                            ((((value & 0xff00) * alpha) >> 8) & 0xff00) |
+                            ((((value & 0xff) * alpha) >> 8) & 0xff);
+                    break;
+            }
+        }
+    }
 }
