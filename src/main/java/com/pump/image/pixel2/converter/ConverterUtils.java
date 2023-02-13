@@ -1322,4 +1322,42 @@ class ConverterUtils {
             }
         }
     }
+
+    static void convert_AXYZPre_ints_to_ZYX_ints(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels == sourcePixels && destOffset > srcOffset) {
+            int destIndex = destOffset + pixelCount - 1;
+            for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset;) {
+                int value = sourcePixels[srcIndex--];
+                destPixels[destIndex--] = ((value >> 16) & 0xff) |
+                        ((value >> 8) & 0xff00) |
+                        ((value << 16) & 0xff0000);
+            }
+            return;
+        }
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int value = sourcePixels[srcIndex++];
+            destPixels[destIndex++] = ((value >> 16) & 0xff) |
+                    (value & 0xff00) |
+                    ((value << 16) & 0xff0000);
+        }
+    }
+
+    static void convert_AXYZPre_ints_to_XYZ_ints(int[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels == sourcePixels && destOffset > srcOffset) {
+            int destIndex = destOffset + pixelCount - 1;
+            for (int srcIndex = srcOffset + pixelCount - 1; srcIndex >= srcOffset;) {
+                int value = sourcePixels[srcIndex--];
+                destPixels[destIndex--] = value & 0xffffff;
+            }
+            return;
+        }
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int value = sourcePixels[srcIndex++];
+            destPixels[destIndex++] = value & 0xffffff;
+        }
+    }
 }

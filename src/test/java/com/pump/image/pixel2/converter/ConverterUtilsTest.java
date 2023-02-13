@@ -1611,4 +1611,40 @@ public class ConverterUtilsTest extends TestCase {
         assertEquals(Integer.toUnsignedString(pixels[3], 16), 0x41100F0E, pixels[3]);
         assertEquals(Integer.toUnsignedString(pixels[4], 16), 0x09010000, pixels[4]);
     }
+
+    public void test_convert_AXYZPre_ints_to_ZYX_ints() {
+        int[] pixels = new int[] {
+                0xe3050301,
+                0xc3171511,
+                0x89342e25,
+                0x41423f3b,
+                0x09381c1c
+        };
+
+        ConverterUtils.convert_AXYZPre_ints_to_ZYX_ints(pixels, 0, pixels, 0, 5);
+
+        assertEquals(Integer.toUnsignedString(pixels[0], 16), 0x010305, pixels[0]);
+        assertEquals(Integer.toUnsignedString(pixels[1], 16), 0x111517, pixels[1]);
+        assertEquals(Integer.toUnsignedString(pixels[2], 16), 0x252E34, pixels[2]);
+        assertEquals(Integer.toUnsignedString(pixels[3], 16), 0x3B3F42, pixels[3]);
+        assertEquals(Integer.toUnsignedString(pixels[4], 16), 0x1C1C38, pixels[4]);
+    }
+
+    public void test_convert_AXYZPre_ints_to_XYZ_ints() {
+        int[] pixels = new int[] {
+                0xe3050301,
+                0xc3171511,
+                0x89342e25,
+                0x41423f3b,
+                0x09381c1c
+        };
+
+        ConverterUtils.convert_AXYZPre_ints_to_XYZ_ints(pixels, 0, pixels, 0, 5);
+
+        assertEquals(Integer.toUnsignedString(pixels[0], 16), 0x050301, pixels[0]);
+        assertEquals(Integer.toUnsignedString(pixels[1], 16), 0x171511, pixels[1]);
+        assertEquals(Integer.toUnsignedString(pixels[2], 16), 0x342E25, pixels[2]);
+        assertEquals(Integer.toUnsignedString(pixels[3], 16), 0x423F3B, pixels[3]);
+        assertEquals(Integer.toUnsignedString(pixels[4], 16), 0x381C1C, pixels[4]);
+    }
 }
