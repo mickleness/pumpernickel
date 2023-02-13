@@ -47,7 +47,7 @@ public class ImageType<T> implements Serializable {
 
     public static final ImageType<byte[]> TYPE_BYTE_INDEXED = new ImageType<>("BYTE_INDEXED", false,
             BufferedImage.TYPE_BYTE_INDEXED, 1, false, false,
-            new ByteIndexedConverter());
+            null);
 
 
     // custom types not from BufferedImage:
@@ -85,7 +85,7 @@ public class ImageType<T> implements Serializable {
         this.isInt = isInt;
         if (bufferedImageType > 0)
             BUFFERED_IMAGE_TYPES.put(bufferedImageType, this);
-        this.pixelConverter = Objects.requireNonNull(converter);
+        this.pixelConverter = converter;
     }
 
     public boolean isInt() {
