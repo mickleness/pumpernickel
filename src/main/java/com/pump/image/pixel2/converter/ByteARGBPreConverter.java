@@ -10,7 +10,7 @@ public class ByteARGBPreConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromARGB(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZ_bytes_to_AXYZPre_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ByteARGBPreConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromABGR(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZ_bytes_to_AZYXPre_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ByteARGBPreConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromBGRA(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_XYZA_bytes_to_AZYXPre_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
