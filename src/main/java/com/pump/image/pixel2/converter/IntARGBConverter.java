@@ -8,7 +8,7 @@ public class IntARGBConverter implements PixelConverter<int[]> {
         if (destPixels == sourcePixels && destOffset == srcOffset) {
             return;
         }
-        System.arraycopy(sourcePixels, srcOffset, destOffset, destOffset, pixelCount);
+        System.arraycopy(sourcePixels, srcOffset, destPixels, destOffset, pixelCount);
     }
 
     @Override

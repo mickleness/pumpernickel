@@ -23,7 +23,7 @@ public class ByteARGBPreConverter implements PixelConverter<byte[]> {
         if (destPixels == sourcePixels && destOffset == srcOffset) {
             return;
         }
-        System.arraycopy(sourcePixels, srcOffset, destOffset, destOffset, 4 * pixelCount);
+        System.arraycopy(sourcePixels, srcOffset, destPixels, destOffset, 4 * pixelCount);
     }
 
     @Override

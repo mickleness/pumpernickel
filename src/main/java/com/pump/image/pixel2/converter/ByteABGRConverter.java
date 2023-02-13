@@ -28,7 +28,7 @@ public class ByteABGRConverter implements PixelConverter<byte[]> {
         if (destPixels == sourcePixels && destOffset == srcOffset) {
             return;
         }
-        System.arraycopy(sourcePixels, srcOffset, destOffset, destOffset, 3 * pixelCount);
+        System.arraycopy(sourcePixels, srcOffset, destPixels, destOffset, 3 * pixelCount);
     }
 
     @Override
