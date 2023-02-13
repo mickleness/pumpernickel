@@ -5,32 +5,32 @@ import com.pump.image.pixel.converter.IndexColorModelLUT;
 public class ByteGrayConverter implements PixelConverter<byte[]> {
     @Override
     public void convertFromARGB(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZ_ints_to_G_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
     public void convertFromARGB(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZ_bytes_to_G_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
     public void convertFromARGBPre(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZPre_ints_to_G_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
     public void convertFromARGBPre(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZPre_bytes_to_G_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
     public void convertFromABGR(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZPre_bytes_to_G_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
     public void convertFromABGRPre(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_AXYZPre_bytes_to_G_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ByteGrayConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromBGRA(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
-        // TODO
+        ConverterUtils.convert_XYZA_bytes_to_G_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }
 
     @Override
@@ -68,6 +68,22 @@ public class ByteGrayConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromIndexed(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount, IndexColorModelLUT colorModel) {
-        // TODO
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int j = sourcePixels[srcIndex] & 0xff;
+            int alpha = colorModel.alphaTable_int[j];
+            switch(alpha) {
+                case 0:
+                    destPixels[destIndex++] = 0;
+                    break;
+                case 255:
+                    destPixels[destIndex++] = (byte)( (colorModel.redTable_int[j] + colorModel.greenTable_int[j] + colorModel.blueTable_int[j]) / 3 );
+                    break;
+                default:
+                    destPixels[destIndex++] = (byte)( ( (colorModel.redTable_pre_byte[j] & 0xff) + (colorModel.greenTable_pre_byte[j] & 0xff) + (colorModel.blueTable_pre_byte[j] & 0xff)) / 3 );
+                    break;
+            }
+        }
     }
 }
