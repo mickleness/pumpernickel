@@ -20,6 +20,7 @@ public class IndexColorModelLUT {
 	public final IndexColorModel indexColorModel;
 	public final byte[] redTable_byte, greenTable_byte, blueTable_byte,
 			alphaTable_byte;
+	public final byte[] redTable_pre_byte, greenTable_pre_byte, blueTable_pre_byte;
 
 	public final int[] redTable_int, greenTable_int, blueTable_int,
 			alphaTable_int;
@@ -35,13 +36,25 @@ public class IndexColorModelLUT {
 		indexColorModel.getBlues(blueTable_byte);
 		indexColorModel.getAlphas(alphaTable_byte);
 
-		redTable_int = convert(redTable_byte);
-		greenTable_int = convert(greenTable_byte);
-		blueTable_int = convert(blueTable_byte);
-		alphaTable_int = convert(alphaTable_byte);
+		redTable_int = convertIntsToBytes(redTable_byte);
+		greenTable_int = convertIntsToBytes(greenTable_byte);
+		blueTable_int = convertIntsToBytes(blueTable_byte);
+		alphaTable_int = convertIntsToBytes(alphaTable_byte);
+
+		redTable_pre_byte = premultiplyBytes(redTable_byte, alphaTable_int);
+		greenTable_pre_byte = premultiplyBytes(greenTable_byte, alphaTable_int);
+		blueTable_pre_byte = premultiplyBytes(blueTable_byte, alphaTable_int);
 	}
 
-	private int[] convert(byte[] array) {
+	private static byte[] premultiplyBytes(byte[] byteArray, int[] alphaTable) {
+		byte[] returnValue = new byte[byteArray.length];
+		for (int a = 0; a < byteArray.length; a++) {
+			returnValue[a] = (byte)( (byteArray[a] & 0xff) * alphaTable[a] );
+		}
+		return returnValue;
+	}
+
+	private static int[] convertIntsToBytes(byte[] array) {
 		int[] returnValue = new int[array.length];
 		for (int a = 0; a < returnValue.length; a++) {
 			returnValue[a] = array[a] & 0xff;

@@ -68,6 +68,14 @@ public class ByteABGRPreConverter implements PixelConverter<byte[]> {
 
     @Override
     public void convertFromIndexed(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount, IndexColorModelLUT colorModel) {
-        // TODO
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int j = sourcePixels[srcIndex++] & 0xff;
+            destPixels[destIndex++] = colorModel.alphaTable_byte[j];
+            destPixels[destIndex++] = colorModel.blueTable_pre_byte[j];
+            destPixels[destIndex++] = colorModel.greenTable_pre_byte[j];
+            destPixels[destIndex++] = colorModel.redTable_pre_byte[j];
+        }
     }
 }

@@ -68,6 +68,14 @@ public class IntARGBConverter implements PixelConverter<int[]> {
 
     @Override
     public void convertFromIndexed(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount, IndexColorModelLUT colorModel) {
-        // TODO
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int j = sourcePixels[srcIndex++] & 0xff;
+            destPixels[destIndex++] = (colorModel.alphaTable_int[j] << 24) |
+                    (colorModel.redTable_int[j] << 16) |
+                    (colorModel.greenTable_int[j] << 8) |
+                    (colorModel.blueTable_int[j]);
+        }
     }
 }
