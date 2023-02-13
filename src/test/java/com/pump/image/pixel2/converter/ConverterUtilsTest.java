@@ -7,10 +7,10 @@ public class ConverterUtilsTest extends TestCase {
         // test storing it to the left of where our source pixels start
         int[] pixels = new int[] {0x02030507, 0x11131719, 0x23293133, 0x37414347};
         ConverterUtils.convert_XYZ_ints_to_ZYX_ints(pixels, 0, pixels, 0, 4);
-        assertEquals(0x02070503, pixels[0]);
-        assertEquals(0x11191713, pixels[1]);
-        assertEquals(0x23333129, pixels[2]);
-        assertEquals(0x37474341, pixels[3]);
+        assertEquals(Integer.toUnsignedString(pixels[0]),0x02070503, pixels[0]);
+        assertEquals(Integer.toUnsignedString(pixels[1]),0x11191713, pixels[1]);
+        assertEquals(Integer.toUnsignedString(pixels[2]),0x23333129, pixels[2]);
+        assertEquals(Integer.toUnsignedString(pixels[3]),0x37474341, pixels[3]);
     }
 
     public void test_convert_XYZ_bytes_to_AXYZ_bytes() {
@@ -103,12 +103,12 @@ public class ConverterUtilsTest extends TestCase {
                 0x596167,
                 0, 0, 0, 0, 0, 0};
         ConverterUtils.convert_XYZ_ints_to_AZYX_ints(pixels, 0, pixels, 0, 6);
-        assertEquals(0xff070503, pixels[0]);
-        assertEquals(0xff191713, pixels[1]);
-        assertEquals(0xff333129, pixels[2]);
-        assertEquals(0xff474341, pixels[3]);
-        assertEquals(0xff575149, pixels[4]);
-        assertEquals(0xff676159, pixels[5]);
+        assertEquals(Integer.toUnsignedString(pixels[0]),0xff070503, pixels[0]);
+        assertEquals(Integer.toUnsignedString(pixels[1]),0xff191713, pixels[1]);
+        assertEquals(Integer.toUnsignedString(pixels[2]),0xff333129, pixels[2]);
+        assertEquals(Integer.toUnsignedString(pixels[3]),0xff474341, pixels[3]);
+        assertEquals(Integer.toUnsignedString(pixels[4]),0xff575149, pixels[4]);
+        assertEquals(Integer.toUnsignedString(pixels[5]),0xff676159, pixels[5]);
     }
     public void test_convert_XYZ_ints_to_AXYZ_ints() {
         int[] pixels = new int[] {
@@ -120,12 +120,12 @@ public class ConverterUtilsTest extends TestCase {
                 0x596167,
                 0, 0, 0, 0, 0, 0};
         ConverterUtils.convert_XYZ_ints_to_AXYZ_ints(pixels, 0, pixels, 0, 6);
-        assertEquals(0xff030507, pixels[0]);
-        assertEquals(0xff131719, pixels[1]);
-        assertEquals(0xff293133, pixels[2]);
-        assertEquals(0xff414347, pixels[3]);
-        assertEquals(0xff495157, pixels[4]);
-        assertEquals(0xff596167, pixels[5]);
+        assertEquals(Integer.toUnsignedString(pixels[0]),0xff030507, pixels[0]);
+        assertEquals(Integer.toUnsignedString(pixels[1]),0xff131719, pixels[1]);
+        assertEquals(Integer.toUnsignedString(pixels[2]),0xff293133, pixels[2]);
+        assertEquals(Integer.toUnsignedString(pixels[3]),0xff414347, pixels[3]);
+        assertEquals(Integer.toUnsignedString(pixels[4]),0xff495157, pixels[4]);
+        assertEquals(Integer.toUnsignedString(pixels[5]),0xff596167, pixels[5]);
     }
     public void test_convert_XYZ_bytes_to_AXYZ_ints() {
         byte[] pixels = new byte[] {
@@ -137,12 +137,12 @@ public class ConverterUtilsTest extends TestCase {
                 0x59, 0x61, 0x67};
         int[] dest = new int[6];
         ConverterUtils.convert_XYZ_bytes_to_AXYZ_ints(dest, 0, pixels, 0, 6);
-        assertEquals(0xff030507, dest[0]);
-        assertEquals(0xff131719, dest[1]);
-        assertEquals(0xff293133, dest[2]);
-        assertEquals(0xff414347, dest[3]);
-        assertEquals(0xff495157, dest[4]);
-        assertEquals(0xff596167, dest[5]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0xff030507, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0xff131719, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0xff293133, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0xff414347, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0xff495157, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[5]),0xff596167, dest[5]);
     }
 
     public void test_convert_XYZ_bytes_to_AZYX_ints() {
@@ -155,12 +155,12 @@ public class ConverterUtilsTest extends TestCase {
                 0x59, 0x61, 0x67};
         int[] dest = new int[6];
         ConverterUtils.convert_XYZ_bytes_to_AZYX_ints(dest, 0, pixels, 0, 6);
-        assertEquals(0xff070503, dest[0]);
-        assertEquals(0xff191713, dest[1]);
-        assertEquals(0xff333129, dest[2]);
-        assertEquals(0xff474341, dest[3]);
-        assertEquals(0xff575149, dest[4]);
-        assertEquals(0xff676159, dest[5]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0xff070503, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0xff191713, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0xff333129, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0xff474341, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0xff575149, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[5]),0xff676159, dest[5]);
     }
 
     public void test_convert_XYZ_ints_to_AXYZ_bytes() {
@@ -286,11 +286,11 @@ public class ConverterUtilsTest extends TestCase {
 
         int[] dest = new int[5];
         ConverterUtils.convert_XYZ_bytes_to_XYZ_ints(dest, 0, pixels, 0, 5);
-        assertEquals(0x030507, dest[0]);
-        assertEquals(0x131719, dest[1]);
-        assertEquals(0x293133, dest[2]);
-        assertEquals(0x414347, dest[3]);
-        assertEquals(0x495157, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0x030507, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0x131719, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0x293133, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0x414347, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0x495157, dest[4]);
     }
 
     public void test_convert_XYZ_bytes_to_ZYX_ints() {
@@ -304,11 +304,11 @@ public class ConverterUtilsTest extends TestCase {
 
         int[] dest = new int[5];
         ConverterUtils.convert_XYZ_bytes_to_ZYX_ints(dest, 0, pixels, 0, 5);
-        assertEquals(0x070503, dest[0]);
-        assertEquals(0x191713, dest[1]);
-        assertEquals(0x333129, dest[2]);
-        assertEquals(0x474341, dest[3]);
-        assertEquals(0x575149, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0x070503, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0x191713, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0x333129, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0x474341, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0x575149, dest[4]);
     }
 
     public void test_convert_XYZ_ints_to_G_bytes() {
@@ -423,11 +423,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_AXYZ_bytes_to_AXYZ_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0x63030507, dest[0]);
-        assertEquals(0x67131719, dest[1]);
-        assertEquals(0x71293133, dest[2]);
-        assertEquals(0x73414347, dest[3]);
-        assertEquals(0x77495157, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0x63030507, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0x67131719, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0x71293133, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0x73414347, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0x77495157, dest[4]);
     }
 
     public void test_convert_AXYZ_bytes_to_AZYX_ints() {
@@ -440,11 +440,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_AXYZ_bytes_to_AZYX_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0x63070503, dest[0]);
-        assertEquals(0x67191713, dest[1]);
-        assertEquals(0x71333129, dest[2]);
-        assertEquals(0x73474341, dest[3]);
-        assertEquals(0x77575149, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0x63070503, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0x67191713, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0x71333129, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0x73474341, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0x77575149, dest[4]);
     }
 
     public void test_convert_G_bytes_to_AXYZ_bytes() {
@@ -522,12 +522,12 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[6];
         ConverterUtils.convert_G_bytes_to_AXYZ_ints(dest, 0, pixels, 0, 6);
 
-        assertEquals(0xff636363, dest[0]);
-        assertEquals(0xff030303, dest[1]);
-        assertEquals(0xff050505, dest[2]);
-        assertEquals(0xff070707, dest[3]);
-        assertEquals(0xff676767, dest[4]);
-        assertEquals(0xff131313, dest[5]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0xff636363, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0xff030303, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0xff050505, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0xff070707, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0xff676767, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[5]),0xff131313, dest[5]);
     }
 
     public void test_convert_G_bytes_to_XYZ_ints() {
@@ -537,12 +537,12 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[6];
         ConverterUtils.convert_G_bytes_to_XYZ_ints(dest, 0, pixels, 0, 6);
 
-        assertEquals(0x636363, dest[0]);
-        assertEquals(0x030303, dest[1]);
-        assertEquals(0x050505, dest[2]);
-        assertEquals(0x070707, dest[3]);
-        assertEquals(0x676767, dest[4]);
-        assertEquals(0x131313, dest[5]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0x636363, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0x030303, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0x050505, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0x070707, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0x676767, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[5]),0x131313, dest[5]);
     }
 
     public void test_convert_XYZ_ints_to_XYZ_bytes() {
@@ -983,11 +983,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_XYZA_bytes_to_AZYX_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0x59070503, dest[0]);
-        assertEquals(0x61191713, dest[1]);
-        assertEquals(0x67333129, dest[2]);
-        assertEquals(0x71474341, dest[3]);
-        assertEquals(0x73575149, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0x59070503, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0x61191713, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0x67333129, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0x71474341, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0x73575149, dest[4]);
     }
 
     public void test_convert_AXYZ_ints_to_XYZ_bytes() {
@@ -1173,11 +1173,11 @@ public class ConverterUtilsTest extends TestCase {
 
         ConverterUtils.convert_AXYZ_ints_to_XYZ_ints(pixels, 0, pixels, 0, 5);
 
-        assertEquals(0x020406, pixels[0]);
-        assertEquals(0x0E1113, pixels[1]);
-        assertEquals(0x151A1D, pixels[2]);
-        assertEquals(0x101112, pixels[3]);
-        assertEquals(0x020203, pixels[4]);
+        assertEquals(Integer.toUnsignedString(pixels[0]),0x020406, pixels[0]);
+        assertEquals(Integer.toUnsignedString(pixels[1]),0x0E1113, pixels[1]);
+        assertEquals(Integer.toUnsignedString(pixels[2]),0x151A1D, pixels[2]);
+        assertEquals(Integer.toUnsignedString(pixels[3]),0x101112, pixels[3]);
+        assertEquals(Integer.toUnsignedString(pixels[4]),0x020203, pixels[4]);
     }
 
     public void test_convert_AXYZ_ints_to_ZYX_ints() {
@@ -1189,11 +1189,11 @@ public class ConverterUtilsTest extends TestCase {
 
         ConverterUtils.convert_AXYZ_ints_to_ZYX_ints(pixels, 0, pixels, 0, 5);
 
-        assertEquals(0x060402, pixels[0]);
-        assertEquals(0x13110E, pixels[1]);
-        assertEquals(0x1D1A15, pixels[2]);
-        assertEquals(0x121110, pixels[3]);
-        assertEquals(0x030202, pixels[4]);
+        assertEquals(Integer.toUnsignedString(pixels[0]),0x060402, pixels[0]);
+        assertEquals(Integer.toUnsignedString(pixels[1]),0x13110E, pixels[1]);
+        assertEquals(Integer.toUnsignedString(pixels[2]),0x1D1A15, pixels[2]);
+        assertEquals(Integer.toUnsignedString(pixels[3]),0x121110, pixels[3]);
+        assertEquals(Integer.toUnsignedString(pixels[4]),0x030202, pixels[4]);
     }
 
     public void test_convert_AXYZ_bytes_to_XYZ_ints() {
@@ -1206,11 +1206,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_AXYZ_bytes_to_XYZ_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0x020406, dest[0]);
-        assertEquals(0x0E1113, dest[1]);
-        assertEquals(0x151A1D, dest[2]);
-        assertEquals(0x101112, dest[3]);
-        assertEquals(0x020203, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0x020406, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0x0E1113, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0x151A1D, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0x101112, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0x020203, dest[4]);
     }
 
     public void test_convert_AXYZ_bytes_to_ZYX_ints() {
@@ -1223,11 +1223,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_AXYZ_bytes_to_ZYX_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0x060402, dest[0]);
-        assertEquals(0x13110E, dest[1]);
-        assertEquals(0x1D1A15, dest[2]);
-        assertEquals(0x121110, dest[3]);
-        assertEquals(0x030202, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0x060402, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0x13110E, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0x1D1A15, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0x121110, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0x030202, dest[4]);
     }
 
     public void test_convert_XYZA_bytes_to_XYZ_ints() {
@@ -1240,11 +1240,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_XYZA_bytes_to_XYZ_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0x020406, dest[0]);
-        assertEquals(0x0E1113, dest[1]);
-        assertEquals(0x151A1D, dest[2]);
-        assertEquals(0x101112, dest[3]);
-        assertEquals(0x020203, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0x020406, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0x0E1113, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0x151A1D, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0x101112, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0x020203, dest[4]);
     }
 
     public void test_convert_XYZA_bytes_to_ZYX_ints() {
@@ -1257,11 +1257,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_XYZA_bytes_to_ZYX_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0x060402, dest[0]);
-        assertEquals(0x13110E, dest[1]);
-        assertEquals(0x1D1A15, dest[2]);
-        assertEquals(0x121110, dest[3]);
-        assertEquals(0x030202, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]),0x060402, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]),0x13110E, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]),0x1D1A15, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]),0x121110, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]),0x030202, dest[4]);
     }
 
     public void test_convert_AXYZPre_bytes_to_ZYX_bytes() {
@@ -1496,11 +1496,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_AXYZPre_bytes_to_AXYZ_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0xe3050301, dest[0]);
-        assertEquals(0xc3171511, dest[1]);
-        assertEquals(0x89342e25, dest[2]);
-        assertEquals(0x41423f3b, dest[3]);
-        assertEquals(0x09381c1c, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]), 0xe3050301, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]), 0xc3171511, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]), 0x89342e25, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]), 0x41423f3b, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]), 0x09381c1c, dest[4]);
     }
 
     public void test_convert_AXYZPre_bytes_to_AZYX_ints() {
@@ -1515,11 +1515,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_AXYZPre_bytes_to_AZYX_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0xe3010305, dest[0]);
-        assertEquals(0xc3111517, dest[1]);
-        assertEquals(0x89252e34, dest[2]);
-        assertEquals(0x413b3f42, dest[3]);
-        assertEquals(0x091c1c38, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]), 0xe3010305, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]), 0xc3111517, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]), 0x89252e34, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]), 0x413b3f42, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]), 0x091c1c38, dest[4]);
     }
 
     public void test_convert_AXYZ_bytes_to_AXYZPre_ints() {
@@ -1533,11 +1533,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_AXYZ_bytes_to_AXYZPre_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0xE3050301, dest[0]);
-        assertEquals(0xC30E0C0A, dest[1]);
-        assertEquals(0x890f0D0B, dest[2]);
-        assertEquals(0x41040404, dest[3]);
-        assertEquals(0x09000000, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0]), 0xE3050301, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1]), 0xC30E0C0A, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2]), 0x890f0D0B, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3]), 0x41040404, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4]), 0x09000000, dest[4]);
     }
 
     public void test_convert_AXYZ_bytes_to_AZYXPre_ints() {
@@ -1551,11 +1551,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_AXYZ_bytes_to_AZYXPre_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0xE3010305, dest[0]);
-        assertEquals(0xC30A0C0E, dest[1]);
-        assertEquals(0x890B0D0F, dest[2]);
-        assertEquals(0x41040404, dest[3]);
-        assertEquals(0x09000000, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0], 16), 0xE3010305, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1], 16), 0xC30A0C0E, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2], 16), 0x890B0D0F, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3], 16), 0x41040404, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4], 16), 0x09000000, dest[4]);
     }
 
     public void test_convert_XYZA_bytes_to_AZYXPre_ints() {
@@ -1569,11 +1569,11 @@ public class ConverterUtilsTest extends TestCase {
         int[] dest = new int[5];
         ConverterUtils.convert_XYZA_bytes_to_AZYXPre_ints(dest, 0, pixels, 0, 5);
 
-        assertEquals(0xE3010305, dest[0]);
-        assertEquals(0xC30A0C0E, dest[1]);
-        assertEquals(0x890B0D0F, dest[2]);
-        assertEquals(0x41040404, dest[3]);
-        assertEquals(0x09000000, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[0], 16), 0xE3010305, dest[0]);
+        assertEquals(Integer.toUnsignedString(dest[1], 16), 0xC30A0C0E, dest[1]);
+        assertEquals(Integer.toUnsignedString(dest[2], 16), 0x890B0D0F, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3], 16), 0x41040404, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4], 16), 0x09000000, dest[4]);
     }
 
     public void test_convert_AXYZPre_ints_to_AXYZ_ints() {
