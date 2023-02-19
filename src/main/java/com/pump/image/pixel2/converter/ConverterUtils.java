@@ -179,8 +179,6 @@ class ConverterUtils {
         }
     }
 
-    // TODO: spot check for other cases were a switch/case might help alpha computations
-    // TODO: when dividing by alpha, always take min(255, x) instead of assuming (x & 0ff) is sufficient
     private static void storeScratchArray(byte[] array) {
         synchronized (byteArrays) {
             if (array.length >= minByteArrayLength && byteArrays.size() < 10) {
@@ -1145,9 +1143,6 @@ class ConverterUtils {
         }
     }
 
-    // TODO: add tests for alpha = 0 and 255, esp if ConverterUtils uses a switch/case
-    // TODO: include test for premultiplied alpha where RGB values are technically out-of-bounds
-
     static void convert_AXYZPre_ints_to_AZYX_bytes(byte[] destPixels,
                                                    int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + pixelCount;
@@ -1292,9 +1287,9 @@ class ConverterUtils {
                     break;
                 default:
                     destPixels[destIndex++] = (byte) alpha;
-                    destPixels[destIndex++] = (byte) ( (((axyz & 0xff0000) >> 16) * alpha / 255) & 0xff );
-                    destPixels[destIndex++] = (byte) ( (((axyz & 0xff00) >> 8) * alpha / 255) & 0xff );
-                    destPixels[destIndex++] = (byte) ( (((axyz & 0xff) * alpha / 255) & 0xff));
+                    destPixels[destIndex++] = (byte) ( ((axyz & 0xff0000) >> 16) * alpha / 255 );
+                    destPixels[destIndex++] = (byte) ( ((axyz & 0xff00) >> 8) * alpha / 255 );
+                    destPixels[destIndex++] = (byte) ( ((axyz & 0xff) * alpha / 255));
                     break;
             }
         }
@@ -1342,10 +1337,10 @@ class ConverterUtils {
                     ((sourcePixels[srcIndex++] & 0xff) << 16);
                     break;
                 default:
-                    int x = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
-                    int y = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
-                    int z = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
-                    destPixels[destIndex++] = (alpha << 24) | (z << 16) | (y << 8) | (x);
+                    destPixels[destIndex++] = (alpha << 24) |
+                            Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha) |
+                            (Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha) << 8) |
+                            (Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha) << 16);
             }
         }
     }
