@@ -180,6 +180,7 @@ class ConverterUtils {
     }
 
     // TODO: spot check for other cases were a switch/case might help alpha computations
+    // TODO: when dividing by alpha, always take min(255, x) instead of assuming (x & 0ff) is sufficient
     private static void storeScratchArray(byte[] array) {
         synchronized (byteArrays) {
             if (array.length >= minByteArrayLength && byteArrays.size() < 10) {
@@ -1103,9 +1104,9 @@ class ConverterUtils {
                     break;
                 default:
                     destPixels[destIndex++] = (byte) alpha;
-                    destPixels[destIndex++] = (byte) Math.min(255, (((axyz << 8) & 0xff00) / alpha));
-                    destPixels[destIndex++] = (byte) Math.min(255, ((axyz & 0xff00) / alpha));
-                    destPixels[destIndex++] = (byte) Math.min(255, (((axyz >> 8) & 0xff00) / alpha));
+                    destPixels[destIndex++] = (byte) Math.min(255, ((axyz) & 0xff) * 255 / alpha);
+                    destPixels[destIndex++] = (byte) Math.min(255, ((axyz >> 8) & 0xff) * 255 / alpha);
+                    destPixels[destIndex++] = (byte) Math.min(255, ((axyz >> 16) & 0xff) * 255 / alpha);
                     break;
             }
         }
@@ -1134,9 +1135,9 @@ class ConverterUtils {
                     break;
                 default:
                     destPixels[destIndex++] = (byte) alpha;
-                    destPixels[destIndex++] = (byte) (Math.min(255, (((axyz >> 8) & 0xff00) / alpha)));
-                    destPixels[destIndex++] = (byte) (Math.min(255, ((axyz & 0xff00) / alpha)));
-                    destPixels[destIndex++] = (byte) (Math.min(255, (((axyz << 8) & 0xff00) / alpha)));
+                    destPixels[destIndex++] = (byte) (Math.min(255, (((axyz >> 16) & 0xff) * 255 / alpha)));
+                    destPixels[destIndex++] = (byte) (Math.min(255, (((axyz >> 8) & 0xff) * 255 / alpha)));
+                    destPixels[destIndex++] = (byte) (Math.min(255, ((axyz & 0xff) * 255 / alpha)));
                     break;
             }
         }
@@ -1163,9 +1164,9 @@ class ConverterUtils {
                     destPixels[destIndex++] = -1;
                     break;
                 default:
-                    destPixels[destIndex++] = (byte) (Math.min(255, (((axyz << 8) & 0xff00) / alpha)));
-                    destPixels[destIndex++] = (byte) (Math.min(255, ((axyz & 0xff00) / alpha)));
-                    destPixels[destIndex++] = (byte) (Math.min(255, (((axyz >> 8) & 0xff00) / alpha)));
+                    destPixels[destIndex++] = (byte) (Math.min(255, (axyz & 0xff) * 255 / alpha ));
+                    destPixels[destIndex++] = (byte) (Math.min(255, ( (axyz & 0xff00) >> 8) * 255 / alpha ));
+                    destPixels[destIndex++] = (byte) (Math.min(255, ( (axyz & 0xff0000) >> 16) * 255 / alpha ));
                     destPixels[destIndex++] = (byte) alpha;
                     break;
             }
@@ -1376,11 +1377,12 @@ class ConverterUtils {
                         break;
                     case 0:
                         destPixels[destIndex--] = 0;
+                        break;
                     default:
                         destPixels[destIndex--] = (value & 0xff000000) |
-                                (((((value & 0xff0000) >> 8) / alpha) & 0xff) << 16) |
-                                ((((value & 0xff00) / alpha) & 0xff) << 8) |
-                                ((((value & 0xff) << 8) / alpha) & 0xff);
+                                (Math.min(255, ((value & 0xff0000) >> 16 ) * 255 / alpha) << 16) |
+                                (Math.min(255, ((value & 0xff00) >> 8) * 255 / alpha) << 8) |
+                                Math.min(255, (value & 0xff) * 255 / alpha);
                         break;
                 }
             }
@@ -1397,11 +1399,12 @@ class ConverterUtils {
                     break;
                 case 0:
                     destPixels[destIndex++] = 0;
+                    break;
                 default:
                     destPixels[destIndex++] = (value & 0xff000000) |
-                            (((((value & 0xff0000) >> 8) / alpha) & 0xff) << 16) |
-                            ((((value & 0xff00) / alpha) & 0xff) << 8) |
-                            ((((value & 0xff) << 8) / alpha) & 0xff);
+                            (Math.min(255, ((value & 0xff0000) >> 16 ) * 255 / alpha) << 16) |
+                            (Math.min(255, ((value & 0xff00) >> 8) * 255 / alpha) << 8) |
+                            Math.min(255, (value & 0xff) * 255 / alpha);
                     break;
             }
         }
