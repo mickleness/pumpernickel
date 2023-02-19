@@ -1057,6 +1057,10 @@ class ConverterUtils {
             int dstEnd = destOffset + 3 * pixelCount;
             int srcIndex = srcOffset;
             for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                // in most other cases if alpha == 0 (premultiplied or not) we make the RGB channels zero.
+                // But in this case: it's more efficient to leave them alone. It's OK to assume our incoming
+                // premultiplied bytes really are premultiplied. And if they're not: that's not our responsibility.
+
                 srcIndex++; // skip the A channel
                 destPixels[dstIndex++] = sourcePixels[srcIndex++];
                 destPixels[dstIndex++] = sourcePixels[srcIndex++];
@@ -1245,9 +1249,9 @@ class ConverterUtils {
                             (sourcePixels[srcIndex++]);
                     break;
                 default:
-                    int x = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
-                    int y = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
-                    int z = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
+                    int x = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
+                    int y = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
+                    int z = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
                     destPixels[destIndex++] = (alpha << 24) | (x << 16) | (y << 8) | (z);
             }
         }
@@ -1270,9 +1274,9 @@ class ConverterUtils {
                     ((sourcePixels[srcIndex++] & 0xff) << 16);
                     break;
                 default:
-                    int x = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
-                    int y = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
-                    int z = Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha);
+                    int x = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
+                    int y = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
+                    int z = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
                     destPixels[destIndex++] = (alpha << 24) | (z << 16) | (y << 8) | (x);
             }
         }
@@ -1519,6 +1523,7 @@ class ConverterUtils {
                         destPixels[dstIndex++] = 0;
                         destPixels[dstIndex++] = 0;
                         destPixels[dstIndex++] = 0;
+                        srcIndex += 3;
                         break;
                     case 255:
                         destPixels[dstIndex++] = sourcePixels[srcIndex++];
@@ -1526,9 +1531,10 @@ class ConverterUtils {
                         destPixels[dstIndex++] = sourcePixels[srcIndex++];
                         break;
                     default:
-                        destPixels[dstIndex++] = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
-                        destPixels[dstIndex++] = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
-                        destPixels[dstIndex++] = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        break;
                 }
             }
         } else {
@@ -1555,6 +1561,7 @@ class ConverterUtils {
                         destPixels[dstIndex++] = 0;
                         destPixels[dstIndex++] = 0;
                         destPixels[dstIndex++] = 0;
+                        srcIndex += 3;
                         break;
                     case 255:
                         x = sourcePixels[srcIndex++];
@@ -1565,9 +1572,9 @@ class ConverterUtils {
                         destPixels[dstIndex++] = x;
                         break;
                     default:
-                        x = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
-                        y = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
-                        z = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
+                        x = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        y = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        z = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
                         destPixels[dstIndex++] = z;
                         destPixels[dstIndex++] = y;
                         destPixels[dstIndex++] = x;
@@ -1598,6 +1605,7 @@ class ConverterUtils {
                         destPixels[dstIndex++] = 0;
                         destPixels[dstIndex++] = 0;
                         destPixels[dstIndex++] = 0;
+                        srcIndex += 3;
                         break;
                     case 255:
                         x = sourcePixels[srcIndex++];
@@ -1609,9 +1617,9 @@ class ConverterUtils {
                         destPixels[dstIndex++] = a;
                         break;
                     default:
-                        x = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
-                        y = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
-                        z = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
+                        x = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        y = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        z = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
                         destPixels[dstIndex++] = z;
                         destPixels[dstIndex++] = y;
                         destPixels[dstIndex++] = x;
@@ -1643,6 +1651,7 @@ class ConverterUtils {
                         destPixels[dstIndex++] = 0;
                         destPixels[dstIndex++] = 0;
                         destPixels[dstIndex++] = 0;
+                        srcIndex += 3;
                         break;
                     case 255:
                         destPixels[dstIndex++] = sourcePixels[srcIndex++];
@@ -1651,9 +1660,9 @@ class ConverterUtils {
                         destPixels[dstIndex++] = a;
                         break;
                     default:
-                        destPixels[dstIndex++] = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
-                        destPixels[dstIndex++] = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
-                        destPixels[dstIndex++] = (byte)( Math.min(255, ((sourcePixels[srcIndex++] & 0xff) << 8) / alpha));
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
                         destPixels[dstIndex++] = a;
                 }
             }
