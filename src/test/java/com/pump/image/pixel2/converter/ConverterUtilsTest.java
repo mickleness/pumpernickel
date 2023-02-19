@@ -2018,11 +2018,11 @@ public class ConverterUtilsTest extends TestCase {
 
         assertEquals(Integer.toUnsignedString(dest[0], 16), 0x086255, dest[0]);
         assertEquals(Integer.toUnsignedString(dest[1], 16), 0x426715, dest[1]);
-        assertEquals(Integer.toUnsignedString(dest[0], 16), 0x010305, dest[2]);
-        assertEquals(Integer.toUnsignedString(dest[1], 16), 0x111517, dest[3]);
-        assertEquals(Integer.toUnsignedString(dest[2], 16), 0x252E34, dest[4]);
-        assertEquals(Integer.toUnsignedString(dest[3], 16), 0x3B3F42, dest[5]);
-        assertEquals(Integer.toUnsignedString(dest[4], 16), 0x1C1C38, dest[6]);
+        assertEquals(Integer.toUnsignedString(dest[2], 16), 0x010305, dest[2]);
+        assertEquals(Integer.toUnsignedString(dest[3], 16), 0x111517, dest[3]);
+        assertEquals(Integer.toUnsignedString(dest[4], 16), 0x252E34, dest[4]);
+        assertEquals(Integer.toUnsignedString(dest[5], 16), 0x3B3F42, dest[5]);
+        assertEquals(Integer.toUnsignedString(dest[6], 16), 0x1C1C38, dest[6]);
     }
 
     public void test_convert_AXYZPre_bytes_to_AXYZ_bytes() {
