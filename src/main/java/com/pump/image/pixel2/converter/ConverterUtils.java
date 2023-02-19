@@ -824,13 +824,27 @@ class ConverterUtils {
             int dstEnd = destOffset + 3 * pixelCount;
             int srcIndex = srcOffset;
             for (int dstIndex = destOffset; dstIndex < dstEnd;) {
-                int x = (sourcePixels[srcIndex++] & 0xff);
-                int y = (sourcePixels[srcIndex++] & 0xff);
-                int z = (sourcePixels[srcIndex++] & 0xff);
-                int alpha = sourcePixels[srcIndex++] & 0xff;
-                destPixels[dstIndex++] = (byte) ((x * alpha) >> 8);
-                destPixels[dstIndex++] = (byte) ((y * alpha) >> 8);
-                destPixels[dstIndex++] = (byte) ((z * alpha) >> 8);
+                int alpha = sourcePixels[srcIndex + 3] & 0xff;
+                switch (alpha) {
+                    case 0:
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        srcIndex += 4;
+                        break;
+                    case 255:
+                        destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                        srcIndex++;
+                        break;
+                    default:
+                        destPixels[dstIndex++] = (byte) ( (sourcePixels[srcIndex++] & 0xff) * alpha / 255);
+                        destPixels[dstIndex++] = (byte) ( (sourcePixels[srcIndex++] & 0xff) * alpha / 255);
+                        destPixels[dstIndex++] = (byte) ( (sourcePixels[srcIndex++] & 0xff) * alpha / 255);
+                        srcIndex++;
+                        break;
+                }
             }
         } else {
             byte[] scratch = getScratchArray(3 * pixelCount);
@@ -847,14 +861,36 @@ class ConverterUtils {
         if (destPixels != sourcePixels || destOffset == srcOffset) {
             int dstEnd = destOffset + 3 * pixelCount;
             int srcIndex = srcOffset;
+            int x1, y1, z1;
+            byte x2, y2, z2;
             for (int dstIndex = destOffset; dstIndex < dstEnd;) {
-                int x = (sourcePixels[srcIndex++] & 0xff);
-                int y = (sourcePixels[srcIndex++] & 0xff);
-                int z = (sourcePixels[srcIndex++] & 0xff);
-                int alpha = sourcePixels[srcIndex++] & 0xff;
-                destPixels[dstIndex++] = (byte) ((z * alpha) >> 8);
-                destPixels[dstIndex++] = (byte) ((y * alpha) >> 8);
-                destPixels[dstIndex++] = (byte) ((x * alpha) >> 8);
+                int alpha = sourcePixels[srcIndex + 3] & 0xff;
+                switch (alpha) {
+                    case 0:
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        srcIndex+=4;
+                        break;
+                    case 255:
+                        x2 = sourcePixels[srcIndex++];
+                        y2 = sourcePixels[srcIndex++];
+                        z2 = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = z2;
+                        destPixels[dstIndex++] = y2;
+                        destPixels[dstIndex++] = x2;
+                        srcIndex++;
+                        break;
+                    default:
+                        x1 = (sourcePixels[srcIndex++] & 0xff);
+                        y1 = (sourcePixels[srcIndex++] & 0xff);
+                        z1 = (sourcePixels[srcIndex++] & 0xff);
+                        destPixels[dstIndex++] = (byte) (z1 * alpha / 255);
+                        destPixels[dstIndex++] = (byte) (y1 * alpha / 255);
+                        destPixels[dstIndex++] = (byte) (x1 * alpha / 255);
+                        srcIndex++;
+                        break;
+                }
             }
         } else {
             byte[] scratch = getScratchArray(3 * pixelCount);
@@ -1006,27 +1042,58 @@ class ConverterUtils {
         int srcEnd = srcOffset + 4 * pixelCount;
         int destIndex = destOffset;
         for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
-            int x = sourcePixels[srcIndex++] & 0xff;
-            int y = sourcePixels[srcIndex++] & 0xff;
-            int z = sourcePixels[srcIndex++] & 0xff;
-            int alpha = sourcePixels[srcIndex++] & 0xff;
-            destPixels[destIndex++] = (((x * alpha) & 0xff00) << 8) |
-                    (((y * alpha) & 0xff00)) |
-                    (((z * alpha) & 0xff00) >> 8);
+            int alpha = sourcePixels[srcIndex + 3] & 0xff;
+            switch (alpha) {
+                case 0:
+                    destPixels[destIndex++] = 0;
+                    srcIndex += 4;
+                    break;
+                case 255:
+                    destPixels[destIndex++] = (( (sourcePixels[srcIndex++] & 0xff)) << 16) |
+                            ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                            (sourcePixels[srcIndex++] & 0xff);
+                    srcIndex++;
+                    break;
+                default:
+                    destPixels[destIndex++] = ((( (sourcePixels[srcIndex++] & 0xff) * alpha / 255)) << 16) |
+                            ((( (sourcePixels[srcIndex++] & 0xff) * alpha / 255) << 8)) |
+                            ( (sourcePixels[srcIndex++] & 0xff) * alpha / 255);
+                    srcIndex++;
+                    break;
+            }
         }
     }
 
     static void convert_XYZA_bytes_to_ZYX_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         int srcEnd = srcOffset + 4 * pixelCount;
         int destIndex = destOffset;
+        int x, y, z;
         for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
-            int x = sourcePixels[srcIndex++] & 0xff;
-            int y = sourcePixels[srcIndex++] & 0xff;
-            int z = sourcePixels[srcIndex++] & 0xff;
-            int alpha = sourcePixels[srcIndex++] & 0xff;
-            destPixels[destIndex++] = (((z * alpha) & 0xff00) << 8) |
-                    (((y * alpha) & 0xff00)) |
-                    (((x * alpha) & 0xff00) >> 8);
+            int alpha = sourcePixels[srcIndex + 3] & 0xff;
+            switch (alpha) {
+                case 0:
+                    destPixels[destIndex++] = 0;
+                    srcIndex += 4;
+                    break;
+                case 255:
+                    x = sourcePixels[srcIndex++] & 0xff;
+                    y = sourcePixels[srcIndex++] & 0xff;
+                    z = sourcePixels[srcIndex++] & 0xff;
+                    destPixels[destIndex++] = (z << 16) |
+                            (y << 8) |
+                            (x);
+                    srcIndex++;
+                    break;
+                default:
+                    x = sourcePixels[srcIndex++] & 0xff;
+                    y = sourcePixels[srcIndex++] & 0xff;
+                    z = sourcePixels[srcIndex++] & 0xff;
+                    destPixels[destIndex++] = ((z * alpha / 255) << 16) |
+                            ((y * alpha / 255) << 8) |
+                            ((x * alpha / 255) );
+                    srcIndex++;
+                    break;
+            }
         }
     }
 
@@ -1357,9 +1424,9 @@ class ConverterUtils {
                 default:
                     alpha = alpha & 0xff;
                     destPixels[destIndex++] = (alpha << 24) |
-                            ((((sourcePixels[srcIndex++] & 0xff) * alpha) >> 8)) |
-                            ((((sourcePixels[srcIndex++] & 0xff) * alpha) >> 8) << 8) |
-                            ((((sourcePixels[srcIndex++] & 0xff) * alpha) >> 8) << 16);
+                            (((sourcePixels[srcIndex++] & 0xff) * alpha / 255)) |
+                            (((sourcePixels[srcIndex++] & 0xff) * alpha / 255) << 8) |
+                            (((sourcePixels[srcIndex++] & 0xff) * alpha / 255) << 16);
                     srcIndex++;
             }
         }
@@ -1787,9 +1854,9 @@ class ConverterUtils {
                         break;
                     default:
                         destPixels[dstIndex++] = a;
-                        destPixels[dstIndex++] = (byte)( ((x & 0xff) * alpha) >> 8);
-                        destPixels[dstIndex++] = (byte)( ((y & 0xff) * alpha) >> 8);
-                        destPixels[dstIndex++] = (byte)( ((z & 0xff) * alpha) >> 8);
+                        destPixels[dstIndex++] = (byte)( ((x & 0xff) * alpha / 255));
+                        destPixels[dstIndex++] = (byte)( ((y & 0xff) * alpha / 255));
+                        destPixels[dstIndex++] = (byte)( ((z & 0xff) * alpha / 255));
                 }
             }
         } else {
