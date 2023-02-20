@@ -1706,7 +1706,7 @@ class ConverterUtils {
         if (destPixels != sourcePixels || destOffset == srcOffset) {
             int dstEnd = destOffset + 4 * pixelCount;
             int srcIndex = srcOffset;
-            byte x, z, y, a;
+            byte a;
             for (int dstIndex = destOffset; dstIndex < dstEnd;) {
                 a = sourcePixels[srcIndex++];
                 int alpha = a & 0xff;
