@@ -18,12 +18,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.pump.image.pixel.BytePixelIterator;
 import com.pump.image.pixel.IndexedBytePixelIterator;
+import com.pump.image.pixel.PixelIterator;
 import com.pump.io.MeasuredInputStream;
 
 /**
- * A {@link com.pump.image.pixel.BytePixelIterator} that reads simple BMP
+ * A PixelIterator that reads simple BMP
  * graphics. You cannot directly instantiate this object because a BMP image may
  * require a <code>BytePixelIterator</code> or a
  * <codE>IndexedBytePixelIterator</code> to decode correctly: so the
@@ -40,7 +40,7 @@ import com.pump.io.MeasuredInputStream;
  * @see <a href="http://www.fileformat.info/format/bmp/egff.htm">Microsoft
  *      Windows Bitmap File Format Summary</a>
  */
-public class BmpDecoderIterator implements BytePixelIterator {
+public class BmpDecoderIterator implements PixelIterator<byte[]> {
 
 	/**
 	 * Returns a <code>BmpDecoderIterator</code> from a <code>File</code>.

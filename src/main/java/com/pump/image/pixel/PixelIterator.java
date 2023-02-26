@@ -10,15 +10,10 @@
  */
 package com.pump.image.pixel;
 
+import java.awt.image.BufferedImage;
+
 /**
- * This iterates over an image, one row of pixels at a time.
- * <P>
- * Note this interface is not complete by itself: the
- * {@link com.pump.image.pixel.BytePixelIterator} and the
- * {@link com.pump.image.pixel.IntPixelIterator} interfaces add the crucial
- * <code>next(array)</code> method (where the <code>array</code> argument is
- * expressed either in bytes or ints).
- * 
+ * This iterates over an image as a series of pixel rows.
  */
 public interface PixelIterator<T> {
 
@@ -29,6 +24,25 @@ public interface PixelIterator<T> {
 	 * many cases.
 	 */
 	int getType();
+
+	/**
+	 * Return true if this iterator stores pixels as byte arrays.
+	 */
+	default boolean isByte() {
+		int t = getType();
+		if (t == BufferedImage.TYPE_BYTE_INDEXED)
+			return true;
+		ImageType type = ImageType.get(t);
+		return type != null && type.isByte();
+	}
+
+	/**
+	 * Return true if this iterator stores pixels as int arrays.
+	 */
+	default boolean isInt() {
+		ImageType type = ImageType.get(getType());
+		return type != null && type.isInt();
+	}
 
 	/**
 	 * Returns true if this image is guaranteed to be an opaque image. This has

@@ -29,9 +29,7 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.image.pixel.BufferedBytePixelIterator;
 import com.pump.image.pixel.BufferedIntPixelIterator;
-import com.pump.image.pixel.BytePixelIterator;
 import com.pump.image.pixel.ImageType;
-import com.pump.image.pixel.IntPixelIterator;
 import com.pump.image.pixel.PixelIterator;
 import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
@@ -486,23 +484,23 @@ public class ImageLoader {
 
 			PixelIterator<?> dstIter = destType.createPixelIterator(srcIter);
 
-			if (dstIter instanceof IntPixelIterator) {
+			if (dstIter.isInt()) {
 				if (rowInt == null
 						|| rowInt.length < dstIter.getMinimumArrayLength())
 					rowInt = new int[dstIter.getMinimumArrayLength()];
 
-				IntPixelIterator dstIterInt = (IntPixelIterator) dstIter;
+				PixelIterator<int[]> dstIterInt = (PixelIterator<int[]>) dstIter;
 				while (!dstIterInt.isDone()) {
 					dstIterInt.next(rowInt);
 					dest.getRaster().setDataElements(x, y, w, 1, rowInt);
 					y++;
 				}
-			} else if (dstIter instanceof BytePixelIterator) {
+			} else if (dstIter.isByte()) {
 				if (rowByte == null
 						|| rowByte.length < dstIter.getMinimumArrayLength())
 					rowByte = new byte[dstIter.getMinimumArrayLength()];
 
-				BytePixelIterator dstIterByte = (BytePixelIterator) dstIter;
+				PixelIterator<byte[]> dstIterByte = (PixelIterator<byte[]>) dstIter;
 				while (!dstIterByte.isDone()) {
 					dstIterByte.next(rowByte);
 					dest.getRaster().setDataElements(x, y, w, 1, rowByte);

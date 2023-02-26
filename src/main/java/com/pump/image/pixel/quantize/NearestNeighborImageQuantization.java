@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
 
 import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.IndexedBytePixelIterator;
-import com.pump.image.pixel.IntPixelIterator;
 import com.pump.image.pixel.PixelIterator;
 
 /**

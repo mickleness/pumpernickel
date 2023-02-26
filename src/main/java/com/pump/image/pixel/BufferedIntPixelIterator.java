@@ -13,7 +13,7 @@ package com.pump.image.pixel;
 /**
  * This iterates over an int array of pixels.
  */
-public class BufferedIntPixelIterator implements IntPixelIterator {
+public class BufferedIntPixelIterator implements PixelIterator<int[]> {
 	int[] data;
 	int dataIndex, row;
 	final int width, height, pixelType, scanSize;

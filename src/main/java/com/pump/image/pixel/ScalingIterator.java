@@ -27,50 +27,6 @@ import java.util.Arrays;
 public abstract class ScalingIterator<T> implements PixelIterator<T> {
 
 	/**
-	 * Returns a <code>IntPixelIterator</code> scaled to a specific ratio.
-	 * <p>
-	 * If the ratio is 1.0: then this method returns the argument provided.
-	 * Otherwise a new scaled iterator is returned.
-	 * <p>
-	 * If the image type of the source image is one of the four supported
-	 * int-based types (ARGB, ARGB_PRE, RGB, or BGR) then the new scaled
-	 * iterator will also use that type. Otherwise the new iterator will use
-	 * ARGB or RGB (depending on whether the source image is opaque or not).
-	 * 
-	 * @param i
-	 *            the incoming source image data.
-	 * @param scaledRatio
-	 *            the ratio to scale to, where 1.0 is 100%, .5 is 50%, etc.
-	 * @return a scaled iterator.
-	 */
-	public static IntScalingIterator get(IntPixelIterator i,
-			float scaledRatio) {
-		return (IntScalingIterator) get((PixelIterator) i, scaledRatio);
-	}
-
-	/**
-	 * Returns a <code>BytePixelIterator</code> scaled to a specific ratio.
-	 * <p>
-	 * If the ratio is 1.0: then this method returns the argument provided.
-	 * Otherwise a new scaled iterator is returned.
-	 * <p>
-	 * If the image type of the source image is one of the four supported
-	 * byte-based types (ABGR, ABGR_PRE, BGR, or GRAY) then the new scaled
-	 * iterator will also use that type. Otherwise the new iterator will use
-	 * ABGR or BGR (depending on whether the source image is opaque or not).
-	 * 
-	 * @param i
-	 *            the incoming source image data.
-	 * @param scaledRatio
-	 *            the ratio to scale to, where 1.0 is 100%, .5 is 50%, etc.
-	 * @return a scaled iterator.
-	 */
-	public static ByteScalingIterator get(BytePixelIterator i,
-			float scaledRatio) {
-		return (ByteScalingIterator) get((PixelIterator) i, scaledRatio);
-	}
-
-	/**
 	 * Returns a <code>PixelIterator</code> scaled to a specific ratio.
 	 * <p>
 	 * If the ratio is 1.0: then this method returns the argument provided.
@@ -87,7 +43,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	 *            the ratio to scale to, where 1.0 is 100%, .5 is 50%, etc.
 	 * @return a scaled iterator.
 	 */
-	public static PixelIterator get(PixelIterator i, float scaledRatio) {
+	public static <T> PixelIterator<T> get(PixelIterator<T> i, float scaledRatio) {
 		int newWidth = (int) (scaledRatio * i.getWidth());
 		int newHeight = (int) (scaledRatio * i.getHeight());
 		return get(i, newWidth, newHeight);
@@ -221,7 +177,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	}
 
 	public static class ByteScalingIterator extends ScalingIterator<byte[]>
-			implements BytePixelIterator {
+			implements PixelIterator<byte[]> {
 		final int imageType;
 
 		/**
@@ -272,7 +228,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	}
 
 	public static class IntScalingIterator extends ScalingIterator<int[]>
-			implements IntPixelIterator {
+			implements PixelIterator<int[]> {
 		final int imageType;
 
 		/**

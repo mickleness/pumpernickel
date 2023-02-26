@@ -158,7 +158,7 @@ public abstract class GenericImageSinglePassIterator<T>
 
 	private static class GenericImageSinglePassByteIterator
 			extends GenericImageSinglePassIterator<byte[]>
-			implements BytePixelIterator {
+			implements PixelIterator<byte[]> {
 
 		public GenericImageSinglePassByteIterator(int width, int height,
 				int type, boolean topDown) {
@@ -430,7 +430,7 @@ public abstract class GenericImageSinglePassIterator<T>
 	}
 
 	private static class GenericImageSinglePassIntIterator extends
-			GenericImageSinglePassIterator<int[]> implements IntPixelIterator {
+			GenericImageSinglePassIterator<int[]> implements PixelIterator<int[]> {
 
 		public GenericImageSinglePassIntIterator(int width, int height,
 				int type, boolean topDown) {
@@ -935,7 +935,7 @@ public abstract class GenericImageSinglePassIterator<T>
 				|| url.toString().toLowerCase().endsWith(".jpeg");
 		int type = isJPEG ? BufferedImage.TYPE_INT_RGB
 				: BufferedImage.TYPE_INT_ARGB;
-		IntPixelIterator iter = (IntPixelIterator) get(image, type);
+		PixelIterator iter = (PixelIterator<int[]>) get(image, type);
 		if (iter == null)
 			return null;
 		Dimension currentSize = new Dimension(iter.getWidth(),

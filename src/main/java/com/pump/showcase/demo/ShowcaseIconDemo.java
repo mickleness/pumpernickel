@@ -43,8 +43,7 @@ import javax.swing.event.ListSelectionListener;
 
 import com.pump.icon.IconUtils;
 import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.BytePixelIterator;
-import com.pump.image.pixel.IntPixelIterator;
+import com.pump.image.pixel.PixelIterator;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.LabelCellRenderer;
 import com.pump.swing.ContextualMenuHelper;
@@ -165,9 +164,9 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 				return false;
 			BufferedImageIterator i1 = BufferedImageIterator.get(img, true);
 			BufferedImageIterator i2 = BufferedImageIterator.get(other, true);
-			if (i1 instanceof BytePixelIterator) {
-				BytePixelIterator b1 = (BytePixelIterator) i1;
-				BytePixelIterator b2 = (BytePixelIterator) i2;
+			if (i1.isByte()) {
+				PixelIterator<byte[]> b1 = (PixelIterator<byte[]>) i1;
+				PixelIterator<byte[]> b2 = (PixelIterator<byte[]>) i2;
 				byte[] row1 = new byte[b1.getMinimumArrayLength()];
 				byte[] row2 = new byte[b2.getMinimumArrayLength()];
 				while (!b1.isDone()) {
@@ -177,8 +176,8 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 						return false;
 				}
 			} else {
-				IntPixelIterator b1 = (IntPixelIterator) i1;
-				IntPixelIterator b2 = (IntPixelIterator) i2;
+				PixelIterator<int[]> b1 = (PixelIterator<int[]>) i1;
+				PixelIterator<int[]> b2 = (PixelIterator<int[]>) i2;
 				int[] row1 = new int[b1.getMinimumArrayLength()];
 				int[] row2 = new int[b2.getMinimumArrayLength()];
 				while (!b1.isDone()) {
