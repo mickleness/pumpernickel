@@ -38,30 +38,37 @@ public abstract class ImageQuantization {
 			icm = lut.getIndexColorModel();
 		}
 
+		@Override
 		public int getType() {
 			return BufferedImage.TYPE_BYTE_INDEXED;
 		}
 
+		@Override
 		public boolean isOpaque() {
 			return icm.getTransparentPixel() < 0;
 		}
 
+		@Override
 		public boolean isTopDown() {
 			return true;
 		}
 
+		@Override
 		public int getWidth() {
 			return source.getWidth();
 		}
 
+		@Override
 		public int getHeight() {
 			return source.getHeight();
 		}
 
+		@Override
 		public int getMinimumArrayLength() {
 			return getWidth();
 		}
 
+		@Override
 		public IndexColorModel getIndexColorModel() {
 			return icm;
 		}

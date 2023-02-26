@@ -181,7 +181,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			dest = new BufferedImage(w, h, imageType);
 		}
 
-		if (ImageType.get(i.getType()).isInt()) {
+		if (i.isInt()) {
 			PixelIterator<int[]> ipi = (PixelIterator<int[]>) i;
 			int[] row = new int[i.getMinimumArrayLength()];
 			if (i.isTopDown()) {

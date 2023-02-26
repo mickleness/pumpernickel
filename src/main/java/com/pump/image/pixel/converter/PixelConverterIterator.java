@@ -48,12 +48,14 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
             isIntToInt = imageType.isInt() && srcType.isInt();
         }
 
-        if (srcType.isByte()) {
+        if (src.isByte()) {
             scratchIntArray = null;
             scratchByteArray = new byte[src.getMinimumArrayLength()];
-        } else {
+        } else if (src.isInt()) {
             scratchIntArray = new int[src.getMinimumArrayLength()];
             scratchByteArray = null;
+        } else {
+            throw new UnsupportedOperationException( "This converter does not support " + ImageType.toString(src.getType()) );
         }
     }
 

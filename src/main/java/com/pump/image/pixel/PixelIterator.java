@@ -51,7 +51,12 @@ public interface PixelIterator<T> {
 	 * still return false.)
 	 */
 	default boolean isOpaque() {
-		return ImageType.get(getType()).isOpaque();
+		ImageType type = ImageType.get(getType());
+		if (type == null) {
+			// this method needs to be overwritten if the ImageType is unknown
+			throw new UnsupportedOperationException();
+		}
+		return type.isOpaque();
 	}
 
 	/**
@@ -63,7 +68,12 @@ public interface PixelIterator<T> {
 	 * @return the number of array elements used to store 1 pixel.
 	 */
 	default int getPixelSize() {
-		return ImageType.get(getType()).getSampleCount();
+		ImageType type = ImageType.get(getType());
+		if (type == null) {
+			// this method needs to be overwritten if the ImageType is unknown
+			throw new UnsupportedOperationException();
+		}
+		return type.getSampleCount();
 	}
 
 	/**
