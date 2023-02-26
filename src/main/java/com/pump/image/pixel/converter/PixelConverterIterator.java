@@ -66,7 +66,7 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
 
     @Override
     public boolean isDone() {
-        return rowCtr < src.getHeight();
+        return rowCtr >= src.getHeight();
     }
 
     @Override
@@ -164,5 +164,7 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
             default:
                 throw new UnsupportedOperationException("Unable to convert from " + src.getType() + " to " + imageType.getName());
         }
+
+        rowCtr++;
     }
 }
