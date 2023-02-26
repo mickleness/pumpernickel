@@ -1,4 +1,4 @@
-package com.pump.image.pixel2.converter;
+package com.pump.image.pixel.converter;
 
 import java.util.LinkedList;
 

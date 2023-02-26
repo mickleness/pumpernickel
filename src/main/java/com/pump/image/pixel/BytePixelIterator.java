@@ -13,6 +13,7 @@ package com.pump.image.pixel;
 /**
  * This is a {@link com.pump.image.pixel.PixelIterator} that iterates over an
  * image that expresses its pixels in bytes.
+ * TODO: remove
  */
 public interface BytePixelIterator extends PixelIterator<byte[]> {
 }

@@ -26,6 +26,7 @@ import javax.swing.ProgressMonitor;
 
 import com.pump.UserCancelledException;
 import com.pump.animation.AnimationReader;
+import com.pump.animation.ResettableAnimationReader;
 import com.pump.animation.quicktime.atom.VideoSampleDescriptionEntry;
 
 /**
@@ -60,6 +61,15 @@ public class JPEGMovWriter extends MovWriter {
 	public JPEGMovWriter(File file, float defaultQuality) throws IOException {
 		super(file);
 		this.defaultQuality = defaultQuality;
+	}
+
+	/**
+	 * Write a JPEG-encoded animation with no audio to a MOV file.
+	 */
+	public static void write(File movFile, float defaultQuality, AnimationReader animation) throws IOException {
+		try (JPEGMovWriter writer = new JPEGMovWriter(movFile, defaultQuality)) {
+			writer.add(animation);
+		}
 	}
 
 	@Override

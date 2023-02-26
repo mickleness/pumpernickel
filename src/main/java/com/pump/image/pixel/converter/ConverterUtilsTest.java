@@ -1,5 +1,6 @@
-package com.pump.image.pixel2.converter;
+package com.pump.image.pixel.converter;
 
+import com.pump.image.pixel.converter.ConverterUtils;
 import junit.framework.TestCase;
 
 public class ConverterUtilsTest extends TestCase {

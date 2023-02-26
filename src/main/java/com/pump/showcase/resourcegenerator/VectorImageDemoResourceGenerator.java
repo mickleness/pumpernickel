@@ -53,7 +53,7 @@ public class VectorImageDemoResourceGenerator extends DemoResourceGenerator {
 
 			File file = new File(jvgDir, icon.getClass().getSimpleName() + "."
 					+ VectorImage.FILE_EXTENSION.toLowerCase());
-			try (OutputStream out = context.createFileOutputStream(file)) {
+			try (OutputStream out = context.createAdjacentFile(file).createOutputStream()) {
 				img.save(out);
 			}
 			System.out.println("Wrote: " + file.getAbsolutePath());

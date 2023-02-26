@@ -46,7 +46,7 @@ public class BufferedBytePixelIterator implements BytePixelIterator {
 					"height must be greater than zero. (height = " + height
 							+ ")");
 
-		pixelSize = PixelUtils.getPixelSize(pixelType);
+		pixelSize = ImageType.get(pixelType).getSampleCount();
 
 		if (scanSize < width * pixelSize)
 			throw new IllegalArgumentException(

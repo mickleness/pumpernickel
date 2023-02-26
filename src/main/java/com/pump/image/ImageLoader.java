@@ -484,7 +484,7 @@ public class ImageLoader {
 				throw new RuntimeException(
 						"The dimensions of this image are not yet defined.  Cannot write image data until the dimensions of the image are known.");
 
-			PixelIterator<?> dstIter = destType.createConverter(srcIter);
+			PixelIterator<?> dstIter = destType.createPixelIterator(srcIter);
 
 			if (dstIter instanceof IntPixelIterator) {
 				if (rowInt == null

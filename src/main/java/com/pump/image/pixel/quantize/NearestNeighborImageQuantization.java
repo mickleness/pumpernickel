@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.IndexedBytePixelIterator;
 import com.pump.image.pixel.IntPixelIterator;
+import com.pump.image.pixel.PixelIterator;
 
 /**
  * This implements image quantization using a nearest-neighbor approach.
@@ -33,14 +34,14 @@ public class NearestNeighborImageQuantization extends ImageQuantization {
 			extends AbstractIndexedBytePixelIterator {
 
 		int[] incomingRow;
-		IntPixelIterator iter;
+		PixelIterator<int[]> iter;
 		protected int y = 0;
 
 		NearestNeighborIndexedBytePixelIterator(BufferedImage source,
 				ColorLUT lut) {
 			super(source, lut);
 			incomingRow = new int[getWidth()];
-			iter = ImageType.INT_ARGB.createConverter(source);
+			iter = ImageType.INT_ARGB.createPixelIterator(source);
 		}
 
 		public void skip() {

@@ -26,7 +26,6 @@ import java.util.TreeMap;
 import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.PixelIterator;
-import com.pump.image.pixel.converter.IntPixelConverter;
 
 /**
  * This class stores information about the frequency of colors. This assumes all
@@ -539,7 +538,7 @@ public class ColorSet implements Serializable {
 	 *            the pixel data to process.
 	 */
 	public void addColors(PixelIterator<?> pixelIter) {
-		IntPixelConverter i = ImageType.INT_ARGB.createConverter(pixelIter);
+		PixelIterator<int[]> i = ImageType.INT_ARGB.createPixelIterator(pixelIter);
 
 		int w = i.getWidth();
 

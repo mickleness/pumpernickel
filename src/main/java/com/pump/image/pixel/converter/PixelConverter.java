@@ -1,115 +1,34 @@
-/**
- * This software is released as part of the Pumpernickel project.
- * 
- * All com.pump resources in the Pumpernickel project are distributed under the
- * MIT License:
- * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
- * More information about the Pumpernickel project is available here:
- * https://mickleness.github.io/pumpernickel/
- */
 package com.pump.image.pixel.converter;
 
-import java.util.Objects;
+import com.pump.image.pixel.converter.IndexColorModelLUT;
 
-import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.BytePixelIterator;
-import com.pump.image.pixel.ImageType;
-import com.pump.image.pixel.IndexedBytePixelIterator;
-import com.pump.image.pixel.IntPixelIterator;
-import com.pump.image.pixel.PixelIterator;
+public interface PixelConverter<T> {
 
-/**
- * This is an abstract parent class for converter iterators.
- */
-public abstract class PixelConverter<T, I extends ImageType>
-		implements PixelIterator<T> {
-	/**
-	 * The source pixel data we're iterating over.
-	 */
-	protected final PixelIterator<?> srcIter;
+    public void convertFromARGB(T destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount);
+    public void convertFromARGB(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount);
 
-	/**
-	 * This will be null or srcIter.
-	 */
-	protected final BytePixelIterator srcByteIterator;
+    public void convertFromARGBPre(T destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount);
+    public void convertFromARGBPre(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount);
 
-	/**
-	 * This will be null or srcIter.
-	 */
-	protected final IntPixelIterator srcIntIterator;
+    public void convertFromABGR(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount);
 
-	protected final I dstImageType;
+    public void convertFromABGRPre(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount);
 
-	/**
-	 * This will be non-null if the source pixels use an IndexColorModel.
-	 */
-	protected final IndexColorModelLUT indexColorModelLUT;
 
-	/**
-	 *            the incoming source data we iterate over
-	 * @param dstImageType
-	 *            the type of image data this converter ultimately produces.
-	 */
-	public PixelConverter(PixelIterator<?> srcIter, I dstImageType) {
-		this.srcIter = srcIter;
-		this.dstImageType = Objects.requireNonNull(dstImageType);
-		if (srcIter instanceof IndexedBytePixelIterator) {
-			IndexedBytePixelIterator ibpi = (IndexedBytePixelIterator) srcIter;
-			srcByteIterator = ibpi;
-			indexColorModelLUT = new IndexColorModelLUT(
-					ibpi.getIndexColorModel());
-			srcIntIterator = null;
-		} else if (srcIter instanceof BytePixelIterator) {
-			srcByteIterator = (BytePixelIterator) srcIter;
-			indexColorModelLUT = null;
-			srcIntIterator = null;
-		} else if (srcIter instanceof IntPixelIterator) {
-			srcIntIterator = (IntPixelIterator) srcIter;
-			srcByteIterator = null;
-			indexColorModelLUT = null;
-		} else {
-			throw new IllegalArgumentException(
-					"the converted iterator must be a BytePixelIterator or an IntPixelIterator (not a "
-							+ srcIter.getClass().getName() + ")");
-		}
-	}
+    public void convertFromBGR(T destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount);
 
-	@Override
-	public int getType() {
-		return dstImageType.code;
-	}
+    public void convertFromBGRA(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount);
 
-	@Override
-	public int getHeight() {
-		return srcIter.getHeight();
-	}
 
-	@Override
-	public int getWidth() {
-		return srcIter.getWidth();
-	}
+    public void convertFromGray(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount);
 
-	@Override
-	public boolean isDone() {
-		return srcIter.isDone();
-	}
 
-	@Override
-	public boolean isTopDown() {
-		return srcIter.isTopDown();
-	}
+    public void convertFromRGB(T destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount);
+    public void convertFromRGB(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount);
 
-	@Override
-	public void skip() {
-		srcIter.skip();
-	}
 
-	/**
-	 * This throws an exception describing the current source iterator.
-	 */
-	protected void failUnsupportedSourceType() {
-		throw new RuntimeException("Unrecognized source type. "
-				+ ImageType.toString(srcIter.getType()));
-	}
+    public void convertFromBGR(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount);
+
+    public void convertFromIndexed(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount, IndexColorModelLUT colorModel);
+
 }

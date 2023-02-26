@@ -16,6 +16,7 @@ import java.util.Arrays;
 import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.IndexedBytePixelIterator;
 import com.pump.image.pixel.IntPixelIterator;
+import com.pump.image.pixel.PixelIterator;
 import com.pump.image.pixel.quantize.ColorLUT.Match;
 
 /**
@@ -34,7 +35,7 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 	protected class ErrorDiffusionIndexedBytePixelIterator
 			extends AbstractIndexedBytePixelIterator {
 
-		IntPixelIterator iter;
+		PixelIterator<int[]> iter;
 		int[] incomingRow;
 		int y = 0;
 		int[][] diffusionR, diffusionG, diffusionB;
@@ -43,7 +44,7 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 		ErrorDiffusionIndexedBytePixelIterator(BufferedImage source,
 				ColorLUT lut) {
 			super(source, lut);
-			iter = ImageType.INT_ARGB.createConverter(source);
+			iter = ImageType.INT_ARGB.createPixelIterator(source);
 			incomingRow = new int[iter.getWidth()];
 
 			diffusionR = new int[kernel.length][iter.getWidth()];

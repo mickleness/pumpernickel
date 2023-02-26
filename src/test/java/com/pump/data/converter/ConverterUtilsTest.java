@@ -95,7 +95,7 @@ public class ConverterUtilsTest extends TestCase {
 	}
 
 	/**
-	 * This confirms that {@link AWTSerializationUtils#equals(Object,Object)} is
+	 * This confirms that {@link ConverterUtils#equals(Object, Object)} is
 	 * able to recognize the atoms from two GradientPaints as equal.
 	 * <p>
 	 * The GradientPaint is a good example because it does NOT implement its own

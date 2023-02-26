@@ -27,6 +27,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import com.pump.animation.AnimationReader;
 import com.pump.animation.quicktime.atom.Atom;
 import com.pump.animation.quicktime.atom.ChunkOffsetAtom;
 import com.pump.animation.quicktime.atom.DataReferenceAtom;
@@ -69,7 +70,7 @@ import com.pump.io.MeasuredOutputStream;
  *      "https://javagraphics.blogspot.com/2008/06/movies-writing-mov-files-without.html">Movies:
  *      Writing MOV Files Without QuickTime</a>
  */
-public abstract class MovWriter {
+public abstract class MovWriter implements AutoCloseable {
 
 	/**
 	 * This is used to indicate that a frame requested an unacceptable duration,
@@ -635,6 +636,22 @@ public abstract class MovWriter {
 	 * Subclasses must define the VideoSampleDescriptionEntry this writer uses.
 	 */
 	protected abstract VideoSampleDescriptionEntry getVideoSampleDescriptionEntry();
+
+	/**
+	 * Write an Animation to this MovWriter with no audio.
+	 */
+	public void add(AnimationReader animation) throws IOException {
+		for (int frameIndex = 0; frameIndex < animation.getFrameCount(); frameIndex++) {
+			BufferedImage bi = animation.getNextFrame(false);
+			float duration = (float) animation.getFrameDuration();
+			addFrame(duration, bi, null);
+		}
+	}
+
+	@Override
+	public void close() throws IOException {
+		close(false);
+	}
 
 	/**
 	 * This finishes writing the movie file.

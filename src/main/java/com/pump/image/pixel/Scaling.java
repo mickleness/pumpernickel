@@ -22,7 +22,6 @@ import java.net.URL;
 import com.pump.awt.Dimension2D;
 import com.pump.image.ImageSize;
 import com.pump.image.bmp.BmpDecoderIterator;
-import com.pump.image.pixel.converter.IntPixelConverter;
 import com.pump.io.FileInputStreamSource;
 import com.pump.io.InputStreamSource;
 import com.pump.io.URLInputStreamSource;
@@ -118,7 +117,7 @@ public class Scaling {
 	 * 
 	 * @param source
 	 *            the source image file.
-	 * @param preferredType
+	 * @param imageType
 	 *            <code>TYPE_INT_RGB</code>, <code>TYPE_INT_ARGB</code>,
 	 *            <code>TYPE_3BYTE_BGR</code>, <code>TYPE_4BYTE_ABGR</code>.
 	 * @param destSize
@@ -143,7 +142,7 @@ public class Scaling {
 						: ScalingIterator.get(iter, destSize.width,
 								destSize.height);
 				PixelIterator finalIter = ImageType.get(imageType)
-						.createConverter(scalingIter);
+						.createPixelIterator(scalingIter);
 
 				BufferedImage image = BufferedImageIterator.create(finalIter,
 						null);
@@ -224,22 +223,22 @@ public class Scaling {
 		PixelIterator pi = ScalingIterator.get(
 				BufferedImageIterator.get(source), destSize.width,
 				destSize.height);
-		if (pi instanceof BytePixelIterator) {
+		ImageType type = ImageType.get(pi.getType());
+		if (type.isByte()) {
 			// TODO: it's wasteful to scale a BYTE_BGR image in BYTE_BGR space and then convert it
 			// to INT_ARGB space. We could just handle the conversion with the scaling and save
 			// a little time.
-			pi = ImageType.INT_ARGB.createConverter(pi);
+			pi = ImageType.INT_ARGB.createPixelIterator(pi);
 		}
-		IntPixelIterator i = (IntPixelIterator) pi;
-		int[] row = new int[i.getMinimumArrayLength()];
-		if (i.isTopDown()) {
+		int[] row = new int[pi.getMinimumArrayLength()];
+		if (pi.isTopDown()) {
 			for (int y = 0; y < destSize.height; y++) {
-				i.next(row);
+				pi.next(row);
 				dest.getRaster().setDataElements(0, y, destSize.width, 1, row);
 			}
 		} else {
 			for (int y = destSize.height - 1; y >= 0; y--) {
-				i.next(row);
+				pi.next(row);
 				dest.getRaster().setDataElements(0, y, destSize.width, 1, row);
 			}
 		}

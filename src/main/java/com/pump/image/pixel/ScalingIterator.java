@@ -138,7 +138,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	 *            the new height.
 	 * @return an iterator that uses the width and height specified.
 	 */
-	public static IntPixelIterator get(IntPixelIterator i, int newWidth,
+	public static PixelIterator<int[]> getFromInt(PixelIterator<int[]> i, int newWidth,
 			int newHeight) {
 		if (i.getWidth() == newWidth && i.getHeight() == newHeight)
 			return i;
@@ -173,7 +173,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	 *            the new height.
 	 * @return an iterator that uses the width and height specified.
 	 */
-	public static BytePixelIterator get(BytePixelIterator i, int newWidth,
+	private static PixelIterator<byte[]> getFromByte(PixelIterator<byte[]> i, int newWidth,
 			int newHeight) {
 		if (i.getWidth() == newWidth && i.getHeight() == newHeight)
 			return i;
@@ -210,12 +210,11 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	 */
 	public static <T> PixelIterator<T> get(PixelIterator<T> i, int newWidth,
 			int newHeight) {
-		if (i instanceof BytePixelIterator) {
-			BytePixelIterator bpi = (BytePixelIterator) i;
-			return (PixelIterator<T>) get(bpi, newWidth, newHeight);
-		} else if (i instanceof IntPixelIterator) {
-			IntPixelIterator ipi = (IntPixelIterator) i;
-			return (PixelIterator<T>) get(ipi, newWidth, newHeight);
+		ImageType imageType = ImageType.get(i.getType());
+		if (imageType.isByte()) {
+			return (PixelIterator<T>) getFromByte( (PixelIterator<byte[]>) i, newWidth, newHeight);
+		} else if (imageType.isInt()) {
+			return (PixelIterator<T>) getFromInt( (PixelIterator<int[]>) i, newWidth, newHeight);
 		}
 		throw new IllegalArgumentException(
 				"Unsupported iterator: " + i.getClass().getName());
@@ -258,11 +257,12 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 		@Override
 		public int getMinimumArrayLength() {
 			int bytesPerPixel = getPixelSize();
-			if (srcIterator instanceof BytePixelIterator) {
-				return Math.max(srcIterator.getMinimumArrayLength(),
-						dstW * bytesPerPixel);
+			ImageType type = ImageType.get(imageType);
+			int returnValue = dstW * bytesPerPixel;
+			if (type.isByte()) {
+				returnValue = Math.max(srcIterator.getMinimumArrayLength(), returnValue);
 			}
-			return dstW * bytesPerPixel;
+			return returnValue;
 		}
 
 		@Override
@@ -307,7 +307,8 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 
 		@Override
 		public int getMinimumArrayLength() {
-			if (srcIterator instanceof IntPixelIterator) {
+			ImageType type = ImageType.get(getType());
+			if (type.isInt()) {
 				return Math.max(srcIterator.getMinimumArrayLength(), dstW);
 			}
 			return dstW;
@@ -1286,23 +1287,25 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	int[] srcXLUT;
 	final double scaleX, scaleY;
 	final boolean topDown, isOpaque;
+	final ImageType srcType;
 
 	private ScalingIterator(PixelIterator<?> srcIterator, int srcW, int srcH,
 			int scaledWidth, int scaledHeight, boolean topDown,
 			boolean isOpaque) {
-		if (srcIterator instanceof BytePixelIterator
+		srcType = ImageType.get(srcIterator.getType());
+		if (srcType.isByte()
 				&& (!isSupportedByteType(srcIterator.getType()))) {
 			if (srcIterator.isOpaque()) {
-				srcIterator = ImageType.BYTE_BGR.createConverter(srcIterator);
+				srcIterator = ImageType.BYTE_BGR.createPixelIterator(srcIterator);
 			} else {
-				srcIterator = ImageType.BYTE_BGRA.createConverter(srcIterator);
+				srcIterator = ImageType.BYTE_BGRA.createPixelIterator(srcIterator);
 			}
-		} else if (srcIterator instanceof IntPixelIterator
+		} else if (srcType.isInt()
 				&& (!isSupportedIntType(srcIterator.getType()))) {
 			if (srcIterator.isOpaque()) {
-				srcIterator = ImageType.INT_RGB.createConverter(srcIterator);
+				srcIterator = ImageType.INT_RGB.createPixelIterator(srcIterator);
 			} else {
-				srcIterator = ImageType.INT_ARGB.createConverter(srcIterator);
+				srcIterator = ImageType.INT_ARGB.createPixelIterator(srcIterator);
 			}
 		}
 		this.srcIterator = srcIterator;
@@ -1567,7 +1570,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	void nextSourceRow(Row row, byte[] incomingByteArray,
 			int[] incomingIntArray) {
 		srcY++;
-		if (srcIterator instanceof IntPixelIterator) {
+		if (srcType.isInt()) {
 			int[] intArray = incomingIntArray;
 			if (intArray == null) {
 				// the source is ints, but we were provided
@@ -1577,8 +1580,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 							.getMinimumArrayLength()];
 				intArray = scratchIntArray;
 			}
-			IntPixelIterator intIterator = (IntPixelIterator) srcIterator;
-			intIterator.next(intArray);
+			srcIterator.next(intArray);
 			row.readColorComponents(intArray, srcIterator.getType());
 		} else {
 			byte[] byteArray = incomingByteArray;
@@ -1590,8 +1592,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 							.getMinimumArrayLength()];
 				byteArray = scratchByteArray;
 			}
-			BytePixelIterator byteIterator = (BytePixelIterator) srcIterator;
-			byteIterator.next(byteArray);
+			srcIterator.next(byteArray);
 			row.readColorComponents(byteArray, srcIterator.getType());
 		}
 	}

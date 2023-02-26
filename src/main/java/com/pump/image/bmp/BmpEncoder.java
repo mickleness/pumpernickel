@@ -10,29 +10,14 @@
  */
 package com.pump.image.bmp;
 
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.ImageConsumer;
-import java.awt.image.ImageProducer;
-import java.awt.image.IndexColorModel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.RandomAccessFile;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
-import com.pump.UserCancelledException;
-import com.pump.image.ImageSize;
-import com.pump.image.pixel.BytePixelIterator;
 import com.pump.image.pixel.ImageType;
-import com.pump.util.PushPullQueue;
+import com.pump.image.pixel.PixelIterator;
 
 /**
  * This is a set of static calls to write a simple BMP 2.x image, either in
@@ -74,11 +59,11 @@ public class BmpEncoder {
 	 */
 	public static void write(BufferedImage image, OutputStream out,
 			boolean closeStreamOnCompletion) throws IOException {
-		BytePixelIterator i;
+		PixelIterator<byte[]> i;
 		if (image.getTransparency() == Transparency.OPAQUE) {
-			i = ImageType.BYTE_BGR.createConverter(image);
+			i = ImageType.BYTE_BGR.createPixelIterator(image);
 		} else {
-			i = ImageType.BYTE_BGRA.createConverter(image);
+			i = ImageType.BYTE_BGRA.createPixelIterator(image);
 		}
 		write(out, i, closeStreamOnCompletion);
 	}
@@ -174,12 +159,12 @@ public class BmpEncoder {
 		return scanLineSize;
 	}
 
-	public static void write(OutputStream out, BytePixelIterator i)
+	public static void write(OutputStream out, PixelIterator<byte[]> i)
 			throws IOException {
 		write(out, i, true);
 	}
 
-	public static void write(OutputStream out, BytePixelIterator i,
+	public static void write(OutputStream out, PixelIterator<byte[]> i,
 			boolean closeStreamOnCompletion) throws IOException {
 		byte bitsPerPixel = (byte) (i.getPixelSize() * 8);
 

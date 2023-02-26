@@ -24,10 +24,10 @@ import java.util.Arrays;
  *
  */
 public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
-	static class RGBtoBGR implements BytePixelIterator {
-		final BytePixelIterator bpi;
+	static class RGBtoBGR implements PixelIterator<byte[]> {
+		final PixelIterator<byte[]> bpi;
 
-		RGBtoBGR(BytePixelIterator bpi) {
+		RGBtoBGR(PixelIterator<byte[]> bpi) {
 			this.bpi = bpi;
 		}
 
@@ -83,10 +83,10 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		}
 	}
 
-	static class ARGBtoABGR implements BytePixelIterator {
-		final BytePixelIterator bpi;
+	static class ARGBtoABGR implements PixelIterator<byte[]> {
+		final PixelIterator<byte[]> bpi;
 
-		ARGBtoABGR(BytePixelIterator bpi) {
+		ARGBtoABGR(PixelIterator<byte[]> bpi) {
 			this.bpi = bpi;
 		}
 
@@ -181,8 +181,8 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			dest = new BufferedImage(w, h, imageType);
 		}
 
-		if (i instanceof IntPixelIterator) {
-			IntPixelIterator ipi = (IntPixelIterator) i;
+		if (ImageType.get(i.getType()).isInt()) {
+			PixelIterator<int[]> ipi = (PixelIterator<int[]>) i;
 			int[] row = new int[i.getMinimumArrayLength()];
 			if (i.isTopDown()) {
 				for (int y = 0; y < h; y++) {
@@ -196,7 +196,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				}
 			}
 		} else {
-			BytePixelIterator bpi = (BytePixelIterator) i;
+			PixelIterator<byte[]> bpi = (PixelIterator<byte[]>) i;
 
 			bpi = handleBGR(bpi, dest);
 
@@ -234,7 +234,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	 * 		   This may return the original BytePixelIterator, or a new custom BytePixelIterator that rearranges
 	 * 		   incoming data.
 	 */
-	private static BytePixelIterator handleBGR(BytePixelIterator bpi, BufferedImage dest) {
+	private static PixelIterator<byte[]> handleBGR(PixelIterator<byte[]> bpi, BufferedImage dest) {
 		if ( bpi.getType() == BufferedImage.TYPE_3BYTE_BGR &&
 				dest.getRaster() instanceof WritableRaster &&
 				dest.getRaster().getSampleModel() instanceof PixelInterleavedSampleModel &&
@@ -311,7 +311,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	}
 
 	static class BufferedImageIntIterator extends BufferedImageIterator<int[]>
-			implements IntPixelIterator {
+			implements PixelIterator<int[]> {
 		BufferedImageIntIterator(BufferedImage bi, boolean topDown) {
 			super(bi, topDown);
 			if (!(type == BufferedImage.TYPE_INT_ARGB
@@ -372,7 +372,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	}
 
 	static class BufferedImageByteIterator extends BufferedImageIterator<byte[]>
-			implements BytePixelIterator {
+			implements PixelIterator<byte[]> {
 		int pixelSize;
 
 		BufferedImageByteIterator(BufferedImage bi, boolean topDown) {

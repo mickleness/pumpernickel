@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import com.pump.io.AdjacentFileOutputStream;
+import com.pump.io.AdjacentFile;
 import com.pump.io.IOUtils;
 
 public class DemoResourceContext {
@@ -67,7 +67,7 @@ public class DemoResourceContext {
 
 	/**
 	 * This indexes all the files in a directory. After calling this method you
-	 * should call {@link #createFileOutputStream(File)} any number of times,
+	 * should call {@link #createAdjacentFile(File)} any number of times,
 	 * and then clean up by calling {@link #removeOldFiles(File)}.
 	 */
 	public void indexDirectory(File dir) {
@@ -76,10 +76,10 @@ public class DemoResourceContext {
 		indexedChildren.put(dir, dir.listFiles());
 	}
 
-	public AdjacentFileOutputStream createFileOutputStream(File file)
+	public AdjacentFile createAdjacentFile(File file)
 			throws IOException {
 		newFiles.add(file);
-		return AdjacentFileOutputStream.create(file);
+		return new AdjacentFile(file);
 	}
 
 	public void removeOldFiles(File dir) {

@@ -1,6 +1,4 @@
-package com.pump.image.pixel2.converter;
-
-import com.pump.image.pixel.converter.IndexColorModelLUT;
+package com.pump.image.pixel.converter;
 
 public class IntBGRConverter implements PixelConverter<int[]> {
     @Override

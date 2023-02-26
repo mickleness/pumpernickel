@@ -23,8 +23,10 @@ package com.pump.image.pixel;
 public interface PixelIterator<T> {
 
 	/**
-	 * The format of this pixel iterator. This will probably be one of the
-	 * BufferedImage type constants.
+	 * The format of this pixel iterator. This should be a "TYPE" constant from BufferedImage or
+	 * ImageType, such as {@link java.awt.image.BufferedImage#TYPE_INT_ARGB} or {@link ImageType#TYPE_4BYTE_BGRA}.
+	 * You can call {@link ImageType#get(int)} to identify more information about this image type in
+	 * many cases.
 	 */
 	int getType();
 
@@ -35,7 +37,7 @@ public interface PixelIterator<T> {
 	 * still return false.)
 	 */
 	default boolean isOpaque() {
-		return PixelUtils.isOpaque(getType());
+		return ImageType.get(getType()).isOpaque();
 	}
 
 	/**
@@ -43,11 +45,11 @@ public interface PixelIterator<T> {
 	 * <P>
 	 * So in TYPE_4BYTE_ARGB this will be 4, but in TYPE_INT_ARGB this will be
 	 * 1.
-	 * 
+	 *
 	 * @return the number of array elements used to store 1 pixel.
 	 */
 	default int getPixelSize() {
-		return PixelUtils.getPixelSize(getType());
+		return ImageType.get(getType()).getSampleCount();
 	}
 
 	/**
@@ -59,8 +61,7 @@ public interface PixelIterator<T> {
 
 	/**
 	 * Indicates whether this iterator returns rows in a top-to-bottom order or
-	 * a bottom-to-top order
-	 * 
+	 * a bottom-to-top order.
 	 */
 	boolean isTopDown();
 
@@ -84,10 +85,6 @@ public interface PixelIterator<T> {
 	 * <P>
 	 * When you call <code>next(array)</code> on this iterator, the array's
 	 * length should at least be <code>getMinimumArrayLength()</code>.
-	 * <P>
-	 * (Note the <code>next()</code> method is not in this interface: it exists
-	 * in the subinterfaces: {@link com.pump.image.pixel.BytePixelIterator} and
-	 * {@link com.pump.image.pixel.IntPixelIterator}.
 	 * <P>
 	 * You should not assume you know what this value is. For example: if your
 	 * original data source is a 3-byte BGR image but it is being converted to a

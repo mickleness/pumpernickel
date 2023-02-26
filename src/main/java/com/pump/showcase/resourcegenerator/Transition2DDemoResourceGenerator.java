@@ -15,6 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import com.pump.image.gif.GifWriter.ColorReduction;
 import com.pump.image.transition.AbstractTransition;
 import com.pump.image.transition.Transition;
 import com.pump.image.transition.Transition3D;
-import com.pump.io.AdjacentFileOutputStream;
+import com.pump.io.AdjacentFile;
 import com.pump.showcase.demo.Transition2DDemo;
 
 /**
@@ -70,12 +71,12 @@ public class Transition2DDemoResourceGenerator extends DemoResourceGenerator {
 
 			gifFile = new File(classTransitionDir, filename);
 
-			try (AdjacentFileOutputStream fileOut = context
-					.createFileOutputStream(gifFile)) {
-				try {
+			try (AdjacentFile adjFile = context
+					.createAdjacentFile(gifFile)) {
+				try (FileOutputStream fileOut = adjFile.createOutputStream()) {
 					writeTransition(transition, fileOut);
 				} catch (Exception e) {
-					fileOut.cancel();
+					adjFile.cancel();
 					throw e;
 				}
 			}

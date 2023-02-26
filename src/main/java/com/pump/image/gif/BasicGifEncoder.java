@@ -24,7 +24,8 @@ import com.pump.image.gif.block.GifImageDataBlock;
 import com.pump.image.gif.block.GifImageDescriptor;
 import com.pump.image.gif.block.GifLocalColorTable;
 import com.pump.image.pixel.ImageType;
-import com.pump.image.pixel.IntPixelIterator;
+import com.pump.image.pixel.PixelIterator;
+
 /**
  * This tests out 3 possible frame disposal methods and chooses the one that
  * would result in the smallest frame dimensions.
@@ -179,8 +180,8 @@ public class BasicGifEncoder extends GifEncoder {
 					+ background.getWidth() + "x" + background.getHeight()
 					+ ", " + incoming.getWidth() + "x" + incoming.getHeight());
 
-		IntPixelIterator c1 = ImageType.INT_ARGB.createConverter(background);
-		IntPixelIterator c2 = ImageType.INT_ARGB.createConverter(incoming);
+		PixelIterator<int[]> c1 = ImageType.INT_ARGB.createPixelIterator(background);
+		PixelIterator<int[]> c2 = ImageType.INT_ARGB.createPixelIterator(incoming);
 		int[] row1 = new int[c1.getMinimumArrayLength()];
 		int[] row2 = new int[c2.getMinimumArrayLength()];
 		Rectangle r = null;

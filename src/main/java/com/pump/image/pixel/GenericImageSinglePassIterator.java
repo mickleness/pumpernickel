@@ -1088,13 +1088,6 @@ public abstract class GenericImageSinglePassIterator<T>
 		}
 	}
 
-	@Override
-	protected synchronized void finalize() {
-		while (!isDone()) {
-			skip();
-		}
-	}
-
 	PushPullQueue<PixelPackage> incoming = new MyPushPullQueue(this);
 	PushPullQueue<PixelPackage> outgoing = new MyPushPullQueue(this);
 	private PixelPackage scratchPackage = new PixelPackage();
