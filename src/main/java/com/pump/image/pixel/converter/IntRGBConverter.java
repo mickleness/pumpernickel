@@ -42,6 +42,11 @@ public class IntRGBConverter implements PixelConverter<int[]> {
     }
 
     @Override
+    public void convertFromRGBA(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        ConverterUtils.convert_XYZA_bytes_to_XYZ_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+    }
+
+    @Override
     public void convertFromGray(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         ConverterUtils.convert_G_bytes_to_XYZ_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }

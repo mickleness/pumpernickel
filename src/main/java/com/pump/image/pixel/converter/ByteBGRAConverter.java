@@ -45,6 +45,11 @@ public class ByteBGRAConverter implements PixelConverter<byte[]> {
     }
 
     @Override
+    public void convertFromRGBA(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        ConverterUtils.convert_XYZA_bytes_to_ZYXA_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+    }
+
+    @Override
     public void convertFromGray(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
         ConverterUtils.convert_G_bytes_to_XYZA_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
     }

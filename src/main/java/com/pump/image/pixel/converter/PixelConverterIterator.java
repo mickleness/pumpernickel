@@ -96,6 +96,7 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
     @Override
     public void skip() {
         src.skip();
+        rowCtr++;
     }
 
     @Override
@@ -148,6 +149,9 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
                 break;
             case ImageType.TYPE_4BYTE_BGRA:
                 converter.convertFromBGRA(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                break;
+            case ImageType.TYPE_4BYTE_RGBA:
+                converter.convertFromRGBA(dest, 0, (byte[]) srcArray, 0, src.getWidth());
                 break;
             case BufferedImage.TYPE_BYTE_GRAY:
                 converter.convertFromGray(dest, 0, (byte[]) srcArray, 0, src.getWidth());

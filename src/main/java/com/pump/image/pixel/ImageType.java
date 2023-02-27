@@ -45,6 +45,11 @@ public class ImageType<T> implements Serializable {
             BufferedImage.TYPE_4BYTE_ABGR_PRE, 4, false, true,
             new ByteABGRPreConverter());
 
+    /**
+     * Warning: this architecture's concept of "BYTE_GRAY" is different than BufferedImage's. In both
+     * cases 0 = 0 and 255 = 255, but this implementation features a plain linear scale, whereas BufferedImage's
+     * implementation is more complicated (see ComponentColorModel#is_ICCGray_stdScale)
+     */
     public static final ImageType<byte[]> BYTE_GRAY = new ImageType<>("BYTE_GRAY", false,
             BufferedImage.TYPE_BYTE_GRAY, 1, true, false,
             new ByteGrayConverter());
@@ -74,6 +79,11 @@ public class ImageType<T> implements Serializable {
      */
     public static final int TYPE_4BYTE_ARGB_PRE = CUSTOM_TYPE_STARTING_INDEX + 3;
 
+    /**
+     * The value of {@link #getCode()} for {@link #BYTE_RGBA}.
+     */
+    public static final int TYPE_4BYTE_RGBA = CUSTOM_TYPE_STARTING_INDEX + 4;
+
     public static final ImageType<byte[]> BYTE_BGRA = new ImageType<>("4BYTE_BGRA", false,
             TYPE_4BYTE_BGRA, 4, false, false,
             new ByteBGRAConverter());
@@ -86,6 +96,10 @@ public class ImageType<T> implements Serializable {
     public static final ImageType<byte[]> BYTE_ARGB_PRE = new ImageType<>("4BYTE_ARGB_PRE", false,
             TYPE_4BYTE_ARGB_PRE, 4, false, true,
             new ByteARGBPreConverter());
+
+    public static final ImageType<byte[]> BYTE_RGBA = new ImageType<>("4BYTE_RGBA", false,
+            TYPE_4BYTE_RGBA, 4, false, false,
+            new ByteRGBAConverter());
 
     /**
      * Return an ImageType based on {@link BufferedImage#getType()}. Note this will return null for
@@ -280,6 +294,8 @@ public class ImageType<T> implements Serializable {
             pixelConverter.convertFromRGB( (T) destPixels, destOffset, (byte[]) srcPixels, srcOffset, pixelCount);
         } else if (srcType == ImageType.BYTE_BGR) {
             pixelConverter.convertFromBGR( (T) destPixels, destOffset, (byte[]) srcPixels, srcOffset, pixelCount);
+        } else if (srcType == ImageType.BYTE_RGBA) {
+            pixelConverter.convertFromRGBA( (T) destPixels, destOffset, (byte[]) srcPixels, srcOffset, pixelCount);
         } else {
             // this method does not support IndexedColorModel conversions (which would require another argument)
             throw new UnsupportedOperationException();

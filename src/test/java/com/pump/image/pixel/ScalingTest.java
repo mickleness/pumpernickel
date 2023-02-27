@@ -46,16 +46,15 @@ public class ScalingTest extends TestCase {
 
 		for (boolean isHorizontal : new boolean[] { true, false }) {
 			for (int imageType : imageTypes) {
+				BufferedImage rainbowImage = createRainbowImage(1000, 1000, imageType, isHorizontal);
 				for (double scale : imageScales) {
 
-					System.err.println("Testing image type = "
+					System.out.println("Testing image type = "
 							+ ImageType.get(imageType) + ", image scale: "
 							+ scale + ", isHorizontal: " + isHorizontal);
 
-                    BufferedImage rainbowImage = null;
                     BufferedImage scaledImage = null;
                     try {
-                        rainbowImage = createRainbowImage(1000, 1000, imageType, isHorizontal);
                         int scaledWidth = (int)(rainbowImage.getWidth() * scale);
                         int scaledHeight = (int)(rainbowImage.getHeight() * scale);
                         scaledImage = Scaling.scale(rainbowImage, scaledWidth, scaledHeight);

@@ -69,6 +69,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				|| type == BufferedImage.TYPE_4BYTE_ABGR
 				|| type == BufferedImage.TYPE_4BYTE_ABGR_PRE
 				|| type == ImageType.TYPE_3BYTE_RGB
+				|| type == ImageType.TYPE_4BYTE_RGBA
 				|| type == ImageType.TYPE_4BYTE_ARGB
 				|| type == ImageType.TYPE_4BYTE_ARGB_PRE
 				|| type == BufferedImage.TYPE_BYTE_GRAY);
@@ -200,7 +201,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 
 			if (isSupportedByteType(imageType) == false)
 				throw new IllegalArgumentException(
-						"the image type for this contructor must be TYPE_3BYTE_BGR, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE or TYPE_BYTE_GRAY. (newImageType = "
+						"the image type for this constructor must be TYPE_3BYTE_BGR, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE or TYPE_BYTE_GRAY. (newImageType = "
 								+ newImageType + ")");
 		}
 
@@ -405,6 +406,15 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (blues[x] / sums[x]);
 				}
 				break;
+			case ImageType.TYPE_4BYTE_RGBA:
+				for (int x = 0, k2 = 0; x < dstW; x++) {
+					destArray[k2++] = (byte) (reds[x] / sums[x]);
+					destArray[k2++] = (byte) (greens[x] / sums[x]);
+					destArray[k2++] = (byte) (blues[x] / sums[x]);
+					destArray[k2++] = isOpaque ? -127
+							: (byte) (alphas[x] / sums[x]);
+				}
+				break;
 			case BufferedImage.TYPE_BYTE_GRAY:
 				for (int x = 0; x < dstW; x++) {
 					int r = reds[x];
@@ -415,7 +425,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			default:
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
 
@@ -472,6 +482,20 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					sums[k]++;
 				}
 				break;
+			case ImageType.TYPE_4BYTE_RGBA:
+				kIncr = 4 * incr - 4;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
+					int k = srcXLUT[x];
+					reds[k] += sourceArray[k2++] & 0xff;
+					greens[k] += sourceArray[k2++] & 0xff;
+					blues[k] += sourceArray[k2++] & 0xff;
+					if (alphas != null) {
+						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
+					}
+					k2++;
+					sums[k]++;
+				}
+				break;
 			case ImageType.TYPE_4BYTE_ARGB:
 			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				kIncr = 4 * incr - 4;
@@ -495,9 +519,9 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				}
 				break;
 			default:
-				// types BYTE_ABGR and INT_ARGB_PRE aren't supporte yet.
+				// types BYTE_ABGR and INT_ARGB_PRE aren't supported yet.
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
 
@@ -538,7 +562,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			default:
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
 
@@ -570,7 +594,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			default:
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
 
@@ -686,7 +710,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			default:
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 
 		}
@@ -782,7 +806,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			default:
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
 	}
@@ -840,6 +864,15 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (reds[x] / sums[x]);
 				}
 				break;
+			case ImageType.TYPE_4BYTE_RGBA:
+				for (int x = 0, k2 = 0; x < dstW; x++) {
+					destArray[k2++] = (byte) (reds[x] / sums[x]);
+					destArray[k2++] = (byte) (greens[x] / sums[x]);
+					destArray[k2++] = (byte) (blues[x] / sums[x]);
+					destArray[k2++] = isOpaque ? -127
+							: (byte) (alphas[x] / sums[x]);
+				}
+				break;
 			case ImageType.TYPE_4BYTE_ARGB:
 			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
@@ -860,7 +893,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			default:
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
 
@@ -907,6 +940,20 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				kIncr = 4 * incr - 4;
 				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
 					int k = srcXLUT[x];
+					blues[k] += sourceArray[k2++] & 0xff;
+					greens[k] += sourceArray[k2++] & 0xff;
+					reds[k] += sourceArray[k2++] & 0xff;
+					if (alphas != null) {
+						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
+					}
+					k2++;
+					sums[k]++;
+				}
+				break;
+			case ImageType.TYPE_4BYTE_RGBA:
+				kIncr = 4 * incr - 4;
+				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
+					int k = srcXLUT[x];
 					reds[k] += sourceArray[k2++] & 0xff;
 					greens[k] += sourceArray[k2++] & 0xff;
 					blues[k] += sourceArray[k2++] & 0xff;
@@ -940,9 +987,9 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				}
 				break;
 			default:
-				// types BYTE_ABGR and INT_ARGB_PRE aren't supporte yet.
+				// types BYTE_ABGR and INT_ARGB_PRE aren't supported yet.
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
 
@@ -983,7 +1030,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			default:
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
 
@@ -1015,7 +1062,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			default:
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
 
@@ -1133,7 +1180,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			default:
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 
 		}
@@ -1196,6 +1243,23 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (r);
 				}
 				break;
+			case ImageType.TYPE_4BYTE_RGBA:
+				for (int x = 0, k2 = 0; x < dstW; x++) {
+					int m1 = mult1 / sums[x];
+					int m2 = mult2 / sums[x];
+
+					int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
+					int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
+					int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
+
+					int a = isOpaque ? 255
+							: (alphas[x] * m1 + next.alphas[x] * m2) >> 8;
+					destArray[k2++] = (byte) (r);
+					destArray[k2++] = (byte) (g);
+					destArray[k2++] = (byte) (b);
+					destArray[k2++] = (byte) (a);
+				}
+				break;
 			case ImageType.TYPE_4BYTE_ARGB:
 			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
@@ -1229,7 +1293,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 				break;
 			default:
 				throw new RuntimeException(
-						"unexpected condition: the type should have been converted when this object was constructed");
+						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
 	}
@@ -1550,4 +1614,11 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 			row.readColorComponents(byteArray, srcIterator.getType());
 		}
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName()+"[ image type = "+ImageType.toString(getType())+", width = " + getWidth() + ", height = "+ getHeight()+", isTopDown() = " + isTopDown() + ", src = " + srcIterator + "]";
+	}
+
+	// TODO: review short/int implementations for parity, review switch statements in general
 }
