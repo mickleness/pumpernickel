@@ -396,6 +396,15 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (reds[x] / sums[x]);
 				}
 				break;
+				case ImageType.TYPE_4BYTE_RGBA:
+					for (int x = 0, k2 = 0; x < dstW; x++) {
+						destArray[k2++] = (byte) (reds[x] / sums[x]);
+						destArray[k2++] = (byte) (greens[x] / sums[x]);
+						destArray[k2++] = (byte) (blues[x] / sums[x]);
+						destArray[k2++] = isOpaque ? -127
+								: (byte) (alphas[x] / sums[x]);
+					}
+					break;
 			case ImageType.TYPE_4BYTE_ARGB:
 			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
@@ -404,15 +413,6 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (reds[x] / sums[x]);
 					destArray[k2++] = (byte) (greens[x] / sums[x]);
 					destArray[k2++] = (byte) (blues[x] / sums[x]);
-				}
-				break;
-			case ImageType.TYPE_4BYTE_RGBA:
-				for (int x = 0, k2 = 0; x < dstW; x++) {
-					destArray[k2++] = (byte) (reds[x] / sums[x]);
-					destArray[k2++] = (byte) (greens[x] / sums[x]);
-					destArray[k2++] = (byte) (blues[x] / sums[x]);
-					destArray[k2++] = isOpaque ? -127
-							: (byte) (alphas[x] / sums[x]);
 				}
 				break;
 			case BufferedImage.TYPE_BYTE_GRAY:
@@ -773,6 +773,23 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (r);
 				}
 				break;
+				case ImageType.TYPE_4BYTE_RGBA:
+					for (int x = 0, k2 = 0; x < dstW; x++) {
+						int m1 = mult1 / sums[x];
+						int m2 = mult2 / sums[x];
+
+						int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
+						int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
+						int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
+
+						int a = isOpaque ? 255
+								: (alphas[x] * m1 + next.alphas[x] * m2) >> 8;
+						destArray[k2++] = (byte) (r);
+						destArray[k2++] = (byte) (g);
+						destArray[k2++] = (byte) (b);
+						destArray[k2++] = (byte) (a);
+					}
+					break;
 			case ImageType.TYPE_4BYTE_ARGB:
 			case ImageType.TYPE_4BYTE_ARGB_PRE:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
@@ -1619,6 +1636,4 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	public String toString() {
 		return getClass().getSimpleName()+"[ image type = "+ImageType.toString(getType())+", width = " + getWidth() + ", height = "+ getHeight()+", isTopDown() = " + isTopDown() + ", src = " + srcIterator + "]";
 	}
-
-	// TODO: review short/int implementations for parity, review switch statements in general
 }
