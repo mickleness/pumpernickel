@@ -946,7 +946,7 @@ public abstract class GenericImageSinglePassIterator<T>
 		}
 		Dimension newSize = Dimension2D.scaleProportionally(currentSize,
 				maxSize);
-		PixelIterator scalingIter = ScalingIterator.get(iter, newSize.width,
+		PixelIterator scalingIter = new ScalingIterator(iter, newSize.width,
 				newSize.height);
 		return BufferedImageIterator.create(scalingIter, null);
 	}

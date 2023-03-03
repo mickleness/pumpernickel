@@ -12,6 +12,7 @@ package com.pump.image.pixel;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * This iterator scales another iterator as it is being read.
@@ -24,7 +25,7 @@ import java.util.Arrays;
  *      "https://javagraphics.blogspot.com/2010/06/images-scaling-down.html">Images:
  *      Scaling Down</a>
  */
-public abstract class ScalingIterator<T> implements PixelIterator<T> {
+public class ScalingIterator<T> implements PixelIterator<T> {
 
 	/**
 	 * Returns a <code>PixelIterator</code> scaled to a specific ratio.
@@ -37,247 +38,16 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	 * the new iterator will use ABGR / BGR (for bytes) or ARGB / RGB (for
 	 * ints).
 	 * 
-	 * @param i
+	 * @param src
 	 *            the incoming source image data.
 	 * @param scaledRatio
 	 *            the ratio to scale to, where 1.0 is 100%, .5 is 50%, etc.
 	 * @return a scaled iterator.
 	 */
-	public static <T> PixelIterator<T> get(PixelIterator<T> i, float scaledRatio) {
-		int newWidth = (int) (scaledRatio * i.getWidth());
-		int newHeight = (int) (scaledRatio * i.getHeight());
-		return get(i, newWidth, newHeight);
-	}
-
-	/**
-	 * Checks the incoming image type against the 4 int types this class
-	 * supports.
-	 */
-	protected static boolean isSupportedIntType(int type) {
-		return (type == BufferedImage.TYPE_INT_ARGB
-				|| type == BufferedImage.TYPE_INT_ARGB_PRE
-				|| type == BufferedImage.TYPE_INT_BGR
-				|| type == BufferedImage.TYPE_INT_RGB);
-	}
-
-	/**
-	 * Checks the incoming image type against the 4 byte types this class
-	 * supports.
-	 */
-	protected static boolean isSupportedByteType(int type) {
-		return (type == BufferedImage.TYPE_3BYTE_BGR
-				|| type == BufferedImage.TYPE_4BYTE_ABGR
-				|| type == BufferedImage.TYPE_4BYTE_ABGR_PRE
-				|| type == ImageType.TYPE_3BYTE_RGB
-				|| type == ImageType.TYPE_4BYTE_RGBA
-				|| type == ImageType.TYPE_4BYTE_ARGB
-				|| type == ImageType.TYPE_4BYTE_ARGB_PRE
-				|| type == BufferedImage.TYPE_BYTE_GRAY);
-	}
-
-	/**
-	 * Returns a <code>IntPixelIterator</code> with a fixed width and height.
-	 * <p>
-	 * If the source image is already the width and height specified: then this
-	 * method returns the argument provided. Otherwise a new scaled iterator is
-	 * returned.
-	 * <p>
-	 * If the image type of the source image is one of the four supported
-	 * int-based types (ARGB, ARGB_PRE, RGB, or BGR) then the new scaled
-	 * iterator will also use that type. Otherwise the new iterator will use
-	 * ARGB or RGB (depending on whether the source image is opaque or not).
-	 * 
-	 * @param i
-	 *            the incoming source image data.
-	 * @param newWidth
-	 *            the new width.
-	 * @param newHeight
-	 *            the new height.
-	 * @return an iterator that uses the width and height specified.
-	 */
-	public static PixelIterator<int[]> getFromInt(PixelIterator<int[]> i, int newWidth,
-			int newHeight) {
-		if (i.getWidth() == newWidth && i.getHeight() == newHeight)
-			return i;
-		int imageType = i.getType();
-		if (isSupportedIntType(imageType) == false) {
-			if (i.isOpaque()) {
-				imageType = BufferedImage.TYPE_INT_RGB;
-			} else {
-				imageType = BufferedImage.TYPE_INT_ARGB;
-			}
-		}
-		return new IntScalingIterator(i, imageType, newWidth, newHeight);
-	}
-
-	/**
-	 * Returns a <code>BytePixelIterator</code> with a fixed width and height.
-	 * <p>
-	 * If the source image is already the width and height specified: then this
-	 * method returns the argument provided. Otherwise a new scaled iterator is
-	 * returned.
-	 * <p>
-	 * If the image type of the source image is one of the four supported
-	 * byte-based types (ABGR, ABGR_PRE, BGR, or GRAY) then the new scaled
-	 * iterator will also use that type. Otherwise the new iterator will use
-	 * ABGR or BGR (depending on whether the source image is opaque or not).
-	 * 
-	 * @param i
-	 *            the incoming source image data.
-	 * @param newWidth
-	 *            the new width.
-	 * @param newHeight
-	 *            the new height.
-	 * @return an iterator that uses the width and height specified.
-	 */
-	private static PixelIterator<byte[]> getFromByte(PixelIterator<byte[]> i, int newWidth,
-			int newHeight) {
-		if (i.getWidth() == newWidth && i.getHeight() == newHeight)
-			return i;
-		int imageType = i.getType();
-		if (isSupportedByteType(imageType) == false) {
-			if (i.isOpaque()) {
-				imageType = BufferedImage.TYPE_3BYTE_BGR;
-			} else {
-				imageType = BufferedImage.TYPE_4BYTE_ABGR;
-			}
-		}
-		return new ByteScalingIterator(i, imageType, newWidth, newHeight);
-	}
-
-	/**
-	 * Returns a <code>PixelIterator</code> with a fixed width and height.
-	 * <p>
-	 * If the source image is already the width and height specified: then this
-	 * method returns the argument provided. Otherwise a new scaled iterator is
-	 * returned.
-	 * <p>
-	 * If the image type of the source image is one of the eight supported
-	 * types: then the new scaled iterator will also use that type. Otherwise
-	 * the new iterator will use ABGR / BGR (for bytes) or ARGB / RGB (for
-	 * ints).
-	 * 
-	 * @param i
-	 *            the incoming source image data.
-	 * @param newWidth
-	 *            the new width.
-	 * @param newHeight
-	 *            the new height.
-	 * @return an iterator that uses the width and height specified.
-	 */
-	public static <T> PixelIterator<T> get(PixelIterator<T> i, int newWidth,
-			int newHeight) {
-		if (i.isByte()) {
-			return (PixelIterator<T>) getFromByte( (PixelIterator<byte[]>) i, newWidth, newHeight);
-		} else if (i.isInt()) {
-			return (PixelIterator<T>) getFromInt( (PixelIterator<int[]>) i, newWidth, newHeight);
-		}
-		throw new IllegalArgumentException(
-				"Unsupported iterator: " + i.getClass().getName());
-	}
-
-	public static class ByteScalingIterator extends ScalingIterator<byte[]>
-			implements PixelIterator<byte[]> {
-		final int imageType;
-
-		/**
-		 * Create a new <code>ByteScalingIterator</code>.
-		 * 
-		 * @param i
-		 *            the incoming image data to scale.
-		 * @param newImageType
-		 *            this must be one of the four byte-based pixel types this
-		 *            object supports: BGR, ABGR, ABGR_PRE, or GRAY.
-		 * @param newWidth
-		 *            the width to scale to.
-		 * @param newHeight
-		 *            the height to scale to.
-		 */
-		public ByteScalingIterator(PixelIterator i, int newImageType,
-				int newWidth, int newHeight) {
-			super(i, i.getWidth(), i.getHeight(), newWidth, newHeight,
-					i.isTopDown(), i.isOpaque());
-			this.imageType = newImageType;
-
-			if (isSupportedByteType(imageType) == false)
-				throw new IllegalArgumentException(
-						"the image type for this constructor must be TYPE_3BYTE_BGR, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE or TYPE_BYTE_GRAY. (newImageType = "
-								+ newImageType + ")");
-		}
-
-		@Override
-		public void next(byte[] dest) {
-			next(dest, null);
-		}
-
-		@Override
-		public int getMinimumArrayLength() {
-			int bytesPerPixel = getPixelSize();
-			ImageType type = ImageType.get(imageType);
-			int returnValue = dstW * bytesPerPixel;
-			if (type.isByte()) {
-				returnValue = Math.max(srcIterator.getMinimumArrayLength(), returnValue);
-			}
-			return returnValue;
-		}
-
-		@Override
-		public int getType() {
-			return imageType;
-		}
-	}
-
-	public static class IntScalingIterator extends ScalingIterator<int[]>
-			implements PixelIterator<int[]> {
-		final int imageType;
-
-		/**
-		 * Create a new <code>IntScalingIterator</code>.
-		 * 
-		 * @param i
-		 *            the incoming image data to scale.
-		 * @param newImageType
-		 *            this must be one of the four int-based pixel types this
-		 *            object supports: ARGB, ARGB_PRE, RGB or BGR.
-		 * @param newWidth
-		 *            the width to scale to.
-		 * @param newHeight
-		 *            the height to scale to.
-		 */
-		public IntScalingIterator(PixelIterator i, int newImageType,
-				int newWidth, int newHeight) {
-			super(i, i.getWidth(), i.getHeight(), newWidth, newHeight,
-					i.isTopDown(), i.isOpaque());
-			this.imageType = newImageType;
-
-			if (isSupportedIntType(newImageType) == false)
-				throw new IllegalArgumentException(
-						"the image type for this constructor must be TYPE_INT_ARGB, TYPE_INT_ARGB_PRE, TYPE_INT_BGR, or TYPE_INT_RGB. (newImageType = "
-								+ newImageType + ")");
-		}
-
-		@Override
-		public void next(int[] dest) {
-			next(null, dest);
-		}
-
-		@Override
-		public int getMinimumArrayLength() {
-			if (isInt()) {
-				return Math.max(srcIterator.getMinimumArrayLength(), dstW);
-			}
-			return dstW;
-		}
-
-		@Override
-		public int getPixelSize() {
-			return 1;
-		}
-
-		@Override
-		public int getType() {
-			return imageType;
-		}
+	public static <D, S> PixelIterator<D> get(ImageType<D> type, PixelIterator<S> src, float scaledRatio) {
+		int newWidth = Math.max(1, (int) (scaledRatio * src.getWidth()));
+		int newHeight = Math.max(1, (int) (scaledRatio * src.getHeight()));
+		return new ScalingIterator<D>(type, src, newWidth, newHeight);
 	}
 
 	final int srcW, srcH, dstW, dstH;
@@ -1323,31 +1093,48 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	final double scaleX, scaleY;
 	final boolean topDown, isOpaque;
 	final ImageType srcType;
+	final ImageType<T> destType;
 
-	private ScalingIterator(PixelIterator<?> srcIterator, int srcW, int srcH,
-			int scaledWidth, int scaledHeight, boolean topDown,
-			boolean isOpaque) {
+
+	/**
+	 * Create a ScalingIterator that scales an incoming PixelIterator and preserves its image type.
+	 * <p>
+	 * Note a ScalingIterator is a great opportunity to change the pixel encoding (image type). The pixel
+	 * data is already going to be reencoded in this iterator, so if you want to change the pixel encoding
+	 * this is a good occasion to do so.
+	 * </p>
+	 * @param srcIterator the source PixelIterator to scale
+	 * @param scaledWidth the width of this ScalingIterator
+	 * @param scaledHeight the height of this ScalingIterator
+	 */
+	public ScalingIterator(PixelIterator<?> srcIterator, int scaledWidth, int scaledHeight) {
+		this( (ImageType<T>) ImageType.get(srcIterator.getType()), srcIterator, scaledWidth, scaledHeight);
+	}
+
+	/**
+	 * Create a new ScalingIterator
+	 *
+	 * @param destType the image type of this ScalingIterator
+	 * @param srcIterator the source PixelIterator to scale
+	 * @param scaledWidth the width of this ScalingIterator
+	 * @param scaledHeight the height of this ScalingIterator
+	 */
+	public ScalingIterator(ImageType<T> destType,
+						   PixelIterator<?> srcIterator,
+						   int scaledWidth, int scaledHeight) {
+		this.destType = Objects.requireNonNull(destType);
 		srcType = ImageType.get(srcIterator.getType());
-		if (srcIterator.isByte()
-				&& (!isSupportedByteType(srcIterator.getType()))) {
-			if (srcIterator.isOpaque()) {
-				srcIterator = ImageType.BYTE_BGR.createPixelIterator(srcIterator);
-			} else {
-				srcIterator = ImageType.BYTE_BGRA.createPixelIterator(srcIterator);
-			}
-		} else if (srcIterator.isInt()
-				&& (!isSupportedIntType(srcIterator.getType()))) {
-			if (srcIterator.isOpaque()) {
-				srcIterator = ImageType.INT_RGB.createPixelIterator(srcIterator);
-			} else {
-				srcIterator = ImageType.INT_ARGB.createPixelIterator(srcIterator);
-			}
-		}
 		this.srcIterator = srcIterator;
-		this.srcW = srcW;
-		this.srcH = srcH;
-		this.topDown = topDown;
-		this.isOpaque = isOpaque;
+		this.srcW = srcIterator.getWidth();
+		this.srcH = srcIterator.getHeight();
+		this.topDown = srcIterator.isTopDown();
+		this.isOpaque = srcIterator.isOpaque();
+
+		if (scaledWidth <= 0)
+			throw new IllegalArgumentException("the scaled width ("+scaledWidth+") must be greater than zero");
+		if (scaledHeight <= 0)
+			throw new IllegalArgumentException("the scaled height ("+scaledHeight+") must be greater than zero");
+
 		dstW = scaledWidth;
 		dstH = scaledHeight;
 		dstY = 0;
@@ -1392,6 +1179,23 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 		 */
 	}
 
+	@Override
+	public int getMinimumArrayLength() {
+		int bytesPerPixel = getPixelSize();
+		int returnValue = dstW * bytesPerPixel;
+		if (destType.isByte() == srcType.isByte()) {
+			returnValue = Math.max(srcIterator.getMinimumArrayLength(), returnValue);
+		} else if (destType.isInt() == srcType.isInt()) {
+			returnValue = Math.max(srcIterator.getMinimumArrayLength(), returnValue);
+		}
+		return returnValue;
+	}
+
+	@Override
+	public int getType() {
+		return destType.getCode();
+	}
+
 	protected void flush() {
 		skipRemainingRows();
 		row = null;
@@ -1423,6 +1227,83 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 			flush();
 	}
 
+	@Override
+	public void next(T row) {
+
+		// This is an optimized case where there is no scaling.
+		// (why did someone use a ScalingIterator to NOT scale? Not sure,
+		// but let's not punish them for it...)
+		if (srcW == dstW && srcIterator.getHeight() == dstH) {
+			next_unscaled(row);
+			return;
+		}
+
+		int srcMin = srcIterator.getMinimumArrayLength();
+		if (destType.isByte()) {
+			byte[] byteRow = (byte[]) row;
+			if (srcIterator.isByte()) {
+				if (byteRow.length >= srcMin) {
+					next(byteRow, null, byteRow, null);
+				} else {
+					if (scratchByteArray == null || scratchByteArray.length < srcMin)
+						scratchByteArray = new byte[srcMin];
+					next(byteRow, null, scratchByteArray, null);
+				}
+			} else {
+				if (scratchIntArray == null || scratchIntArray.length < srcMin)
+					scratchIntArray = new int[srcMin];
+				next(byteRow, null, null, scratchIntArray);
+			}
+		} else if (destType.isInt()) {
+			int[] intRow = (int[]) row;
+			if (srcIterator.isInt()) {
+				if (intRow.length >= srcMin) {
+					next(null, intRow, null, intRow);
+				} else {
+					if (scratchIntArray == null || scratchIntArray.length < srcMin)
+						scratchIntArray = new int[srcMin];
+					next(null, intRow, null, scratchIntArray);
+				}
+			} else {
+				if (scratchByteArray == null || scratchByteArray.length < srcMin)
+					scratchByteArray = new byte[srcMin];
+				next(null, intRow, scratchByteArray, null);
+			}
+		}
+	}
+
+	private void next_unscaled(T row) {
+		int srcMin = srcIterator.getMinimumArrayLength();
+		Object srcPixels = null;
+		if (srcType.isByte() && destType.isByte()) {
+			byte[] dest = (byte[]) row;
+			if (dest.length <= srcMin) {
+				srcPixels = dest;
+			}
+		} else if (srcType.isInt() && destType.isInt()) {
+			int[] dest = (int[]) row;
+			if (dest.length <= srcMin) {
+				srcPixels = dest;
+			}
+		}
+
+		if (srcPixels == null) {
+			if (srcType.isInt()) {
+				if (scratchIntArray == null || scratchIntArray.length < srcMin)
+					scratchIntArray = new int[srcMin];
+				srcPixels = scratchIntArray;
+			} else {
+				if (scratchByteArray == null || scratchByteArray.length < srcMin)
+					scratchByteArray = new byte[srcMin];
+				srcPixels = scratchByteArray;
+			}
+		}
+
+		srcIterator.next(srcPixels);
+
+		destType.convertFrom(srcType, srcPixels, 0, row, 0, srcW);
+	}
+
 	protected void skipRemainingRows() {
 		while (srcIterator.isDone() == false) {
 			srcIterator.skip();
@@ -1445,18 +1326,14 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	private byte[] scratchByteArray;
 
 	/**
-	 * This is called by both the int and byte subclasses, so exactly one of
-	 * these arguments will always be null. But so much of the logic is the same
-	 * it made sense to put it all in one method.
-	 * 
-	 * @param incomingByteArray
-	 * @param incomingIntArray
+	 * Each pair of arguments is mutually exclusive: either destByteArray or destIntArray will be null.
+	 * Either srcByteArray or srcIntArray will be null.
 	 */
-	void next(byte[] incomingByteArray, int[] incomingIntArray) {
+	void next(byte[] destByteArray, int[] destIntArray, byte[] srcByteArray, int[] srcIntArray) {
 		if (scaleY <= 1) {
-			nextDownsample(incomingByteArray, incomingIntArray);
+			nextDownsample(destByteArray, destIntArray, srcByteArray, srcIntArray);
 		} else {
-			nextUpsample(incomingByteArray, incomingIntArray);
+			nextUpsample(destByteArray, destIntArray, srcByteArray, srcIntArray);
 		}
 
 		dstY++;
@@ -1472,7 +1349,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	 * Exactly one of the arguments will be null, depending on whether this data
 	 * should be written with ints or bytes.
 	 */
-	void nextUpsample(byte[] incomingByteArray, int[] incomingIntArray) {
+	void nextUpsample(byte[] destByteArray, int[] destIntArray, byte[] srcByteArray, int[] srcIntArray) {
 		/**
 		 * I took the path of least resistance in writing this upsampling
 		 * method: We tween ALL rows (except the first row). The result is a
@@ -1502,7 +1379,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 
 		if (row.marker < srcY0) {
 			row.clear();
-			nextSourceRow(row, incomingByteArray, incomingIntArray);
+			nextSourceRow(row, srcByteArray, srcIntArray);
 			row.marker = srcY0;
 			if (scaleX > 1)
 				row.interpolateXValues();
@@ -1525,26 +1402,26 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 		}
 
 		if (writeOnlyOneRow) {
-			if (incomingIntArray != null) {
-				row.writeColorComponents(incomingIntArray, getType());
+			if (destIntArray != null) {
+				row.writeColorComponents(destIntArray, getType());
 			} else {
-				row.writeColorComponents(incomingByteArray, getType());
+				row.writeColorComponents(destByteArray, getType());
 			}
 		} else {
 			// in every normal iteration we'll want to compare the two rows:
 			if (row2.marker < srcY1) {
 				row2.clear();
-				nextSourceRow(row2, incomingByteArray, incomingIntArray);
+				nextSourceRow(row2, srcByteArray, srcIntArray);
 				row2.marker = srcY1;
 				if (scaleX > 1)
 					row2.interpolateXValues();
 			}
 
-			if (incomingIntArray != null) {
-				row.writeColorComponents(row2, srcFraction, incomingIntArray,
+			if (destIntArray != null) {
+				row.writeColorComponents(row2, srcFraction, destIntArray,
 						getType());
 			} else {
-				row.writeColorComponents(row2, srcFraction, incomingByteArray,
+				row.writeColorComponents(row2, srcFraction, destByteArray,
 						getType());
 			}
 		}
@@ -1554,10 +1431,9 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 	 * This is called when scaleY<=1, and we have to collapse one or more rows
 	 * of the source image into the destination image.
 	 * <P>
-	 * Exactly one of the arguments will be null, depending on whether this data
-	 * should be written with ints or bytes.
+	 * Each pair of arguments is mutually exclusive: one of them will be null.
 	 */
-	void nextDownsample(byte[] incomingByteArray, int[] incomingIntArray) {
+	void nextDownsample(byte[] destByteArray, int[] destIntArray, byte[] srcByteArray, int[] srcIntArray) {
 		int srcY0 = (int) ((dstY) / scaleY);
 		int srcY1 = (int) (((dstY + 1)) / scaleY);
 		if (srcY1 != srcY0)
@@ -1571,7 +1447,7 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 		}
 
 		while (srcY <= srcY1) {
-			nextSourceRow(row, incomingByteArray, incomingIntArray);
+			nextSourceRow(row, srcByteArray, srcIntArray);
 
 			if (scaleY < .25 && srcY < srcY1) {
 				srcY++;
@@ -1581,10 +1457,10 @@ public abstract class ScalingIterator<T> implements PixelIterator<T> {
 		if (scaleX > 1)
 			row.interpolateXValues();
 
-		if (incomingIntArray != null) {
-			row.writeColorComponents(incomingIntArray, getType());
+		if (destIntArray != null) {
+			row.writeColorComponents(destIntArray, getType());
 		} else {
-			row.writeColorComponents(incomingByteArray, getType());
+			row.writeColorComponents(destByteArray, getType());
 		}
 		row.clear();
 	}

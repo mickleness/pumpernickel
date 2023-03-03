@@ -138,14 +138,13 @@ public class Scaling {
 		if (pathLower.endsWith(".bmp")) {
 			try (InputStream in = src.createInputStream()) {
 				PixelIterator iter = BmpDecoderIterator.get(in);
-				PixelIterator scalingIter = destSize == null ? iter
-						: ScalingIterator.get(iter, destSize.width,
-								destSize.height);
-				PixelIterator finalIter = ImageType.get(imageType)
-						.createPixelIterator(scalingIter);
+				if (destSize != null) {
+					iter = new ScalingIterator(ImageType.get(imageType), iter, destSize.width, destSize.height);
+				} else {
+					iter = ImageType.get(imageType).createPixelIterator(iter);
+				}
 
-				BufferedImage image = BufferedImageIterator.create(finalIter,
-						null);
+				BufferedImage image = BufferedImageIterator.create(iter,null);
 				return image;
 			} catch (IOException e) {
 				return null;
@@ -220,27 +219,8 @@ public class Scaling {
 			}
 		}
 
-		PixelIterator pi = ScalingIterator.get(
-				BufferedImageIterator.get(source), destSize.width,
-				destSize.height);
-		if (pi.isByte()) {
-			// TODO: it's wasteful to scale a BYTE_BGR image in BYTE_BGR space and then convert it
-			// to INT_ARGB space. We could just handle the conversion with the scaling and save
-			// a little time.
-			pi = ImageType.INT_ARGB.createPixelIterator(pi);
-		}
-		int[] row = new int[pi.getMinimumArrayLength()];
-		if (pi.isTopDown()) {
-			for (int y = 0; y < destSize.height; y++) {
-				pi.next(row);
-				dest.getRaster().setDataElements(0, y, destSize.width, 1, row);
-			}
-		} else {
-			for (int y = destSize.height - 1; y >= 0; y--) {
-				pi.next(row);
-				dest.getRaster().setDataElements(0, y, destSize.width, 1, row);
-			}
-		}
+		PixelIterator pi = new ScalingIterator( ImageType.get(dest.getType()), BufferedImageIterator.get(source), destSize.width, destSize.height);
+		BufferedImageIterator.create(pi, dest);
 		return dest;
 	}
 
@@ -308,9 +288,11 @@ public class Scaling {
 				: GenericImageSinglePassIterator.TYPE_DEFAULT;
 		PixelIterator iter = GenericImageSinglePassIterator.get(source,
 				destType);
+		if (destType == GenericImageSinglePassIterator.TYPE_DEFAULT)
+			destType = iter.getType();
 		PixelIterator scalingIter = destSize == null ? iter
-				: ScalingIterator.get(iter, destSize.width, destSize.height);
-		return BufferedImageIterator.create(scalingIter, null);
+				: new ScalingIterator( ImageType.get(destType), iter, destSize.width, destSize.height);
+		return BufferedImageIterator.create(scalingIter, dest);
 	}
 
 	/**

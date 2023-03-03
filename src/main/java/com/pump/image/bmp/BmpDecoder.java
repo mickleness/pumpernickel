@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import com.pump.image.pixel.BufferedImageIterator;
+import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.PixelIterator;
 import com.pump.image.pixel.ScalingIterator;
 
@@ -213,7 +214,7 @@ public class BmpDecoder {
 		float ratio = Math.min(widthRatio, heightRatio);
 
 		if (ratio < 1) {
-			i = ScalingIterator.get(i, ratio);
+			i = ScalingIterator.get(ImageType.get(i.getType()), i, ratio);
 		}
 		return BufferedImageIterator.create(i, null);
 	}
@@ -249,7 +250,7 @@ public class BmpDecoder {
 	public static void createThumbnail(InputStream bmp, BufferedImage dest)
 			throws IOException {
 		PixelIterator i = BmpDecoderIterator.get(bmp);
-		i = ScalingIterator.get(i, dest.getWidth(), dest.getHeight());
+		i = new ScalingIterator(i, dest.getWidth(), dest.getHeight());
 		BufferedImageIterator.create(i, dest);
 	}
 }
