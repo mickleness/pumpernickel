@@ -29,4 +29,6 @@ public interface PixelConverter<T> {
     void convertFromBGR(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount);
 
     void convertFromIndexed(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount, IndexColorModelLUT colorModel);
+
+    void convertFromRGBAPre(T destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount);
 }

@@ -1316,6 +1316,7 @@ class ConverterUtils {
                     int y = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
                     int z = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
                     destPixels[destIndex++] = (alpha << 24) | (x << 16) | (y << 8) | (z);
+                    break;
             }
         }
     }
@@ -1341,6 +1342,7 @@ class ConverterUtils {
                             Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha) |
                             (Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha) << 8) |
                             (Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha) << 16);
+                    break;
             }
         }
     }
@@ -1423,6 +1425,7 @@ class ConverterUtils {
                             (((sourcePixels[srcIndex++] & 0xff) * alpha / 255) << 8) |
                             (((sourcePixels[srcIndex++] & 0xff) * alpha / 255) << 16);
                     srcIndex++;
+                    break;
             }
         }
     }
@@ -1512,6 +1515,7 @@ class ConverterUtils {
                             ((((value & 0xff0000) >> 16) * alpha / 255) << 16) |
                             ((((value & 0xff00) >> 8) * alpha / 255) << 8) |
                             (((value & 0xff) * alpha / 255));
+                    break;
             }
         }
     }
@@ -1643,6 +1647,7 @@ class ConverterUtils {
                         destPixels[dstIndex++] = z;
                         destPixels[dstIndex++] = y;
                         destPixels[dstIndex++] = x;
+                        break;
                 }
             }
         } else {
@@ -1689,6 +1694,7 @@ class ConverterUtils {
                         destPixels[dstIndex++] = y;
                         destPixels[dstIndex++] = x;
                         destPixels[dstIndex++] = a;
+                        break;
                 }
             }
         } else {
@@ -1729,6 +1735,7 @@ class ConverterUtils {
                         destPixels[dstIndex++] = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
                         destPixels[dstIndex++] = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
                         destPixels[dstIndex++] = a;
+                        break;
                 }
             }
         } else {
@@ -1852,6 +1859,7 @@ class ConverterUtils {
                         destPixels[dstIndex++] = (byte)( ((x & 0xff) * alpha / 255));
                         destPixels[dstIndex++] = (byte)( ((y & 0xff) * alpha / 255));
                         destPixels[dstIndex++] = (byte)( ((z & 0xff) * alpha / 255));
+                        break;
                 }
             }
         } else {
@@ -1894,6 +1902,7 @@ class ConverterUtils {
                         destPixels[dstIndex++] = (byte)( ((z & 0xff) * alpha) >> 8);
                         destPixels[dstIndex++] = (byte)( ((y & 0xff) * alpha) >> 8);
                         destPixels[dstIndex++] = (byte)( ((x & 0xff) * alpha) >> 8);
+                        break;
                 }
             }
         } else {
@@ -1984,6 +1993,7 @@ class ConverterUtils {
                 switch(a) {
                     case 0:
                         destPixels[destIndex++] = 0;
+                        srcIndex += 3;
                         break;
                     default:
                         destPixels[destIndex++] =  (byte) ( ((sourcePixels[srcIndex++] & 0xff) + (sourcePixels[srcIndex++] & 0xff) + (sourcePixels[srcIndex++])) / 3);
@@ -2150,6 +2160,528 @@ class ConverterUtils {
                             (((sourcePixels[srcIndex++] & 0xff) * alpha / 255) << 8) |
                             ((sourcePixels[srcIndex++] & 0xff) * alpha / 255);
                     srcIndex++;
+                    break;
+            }
+        }
+    }
+
+    static void convert_AXYZ_ints_to_XYZAPre_bytes(byte[] destPixels, int destOffset, int[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int axyz = sourcePixels[srcIndex++];
+            int alpha = (axyz >> 24) & 0xff;
+
+            switch (alpha) {
+                case 0:
+                    destPixels[destIndex++] = 0;
+                    destPixels[destIndex++] = 0;
+                    destPixels[destIndex++] = 0;
+                    destPixels[destIndex++] = 0;
+                    break;
+                case 255:
+                    destPixels[destIndex++] = (byte) ((axyz >> 16) & 0xff);
+                    destPixels[destIndex++] = (byte) ((axyz >> 8) & 0xff);
+                    destPixels[destIndex++] = (byte) (axyz & 0xff);
+                    destPixels[destIndex++] = -1;
+                    break;
+                default:
+                    destPixels[destIndex++] = (byte) ( ((axyz & 0xff0000) >> 16) * alpha / 255 );
+                    destPixels[destIndex++] = (byte) ( ((axyz & 0xff00) >> 8) * alpha / 255 );
+                    destPixels[destIndex++] = (byte) ( ((axyz & 0xff) * alpha / 255));
+                    destPixels[destIndex++] = (byte) alpha;
+                    break;
+            }
+        }
+    }
+
+    static void convert_AXYZ_bytes_to_XYZAPre_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 4 * pixelCount;
+            int srcIndex = srcOffset;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                byte a = sourcePixels[srcIndex++];
+                int alpha = a & 0xff;
+                switch (alpha) {
+                    case 0:
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        srcIndex += 3;
+                        break;
+                    case 255:
+                        destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = -1;
+                        break;
+                    default:
+                        destPixels[dstIndex++] = (byte)( (sourcePixels[srcIndex++] & 0xff) * alpha / 255);
+                        destPixels[dstIndex++] = (byte)( (sourcePixels[srcIndex++] & 0xff) * alpha / 255);
+                        destPixels[dstIndex++] = (byte)( (sourcePixels[srcIndex++] & 0xff) * alpha / 255);
+                        destPixels[dstIndex++] = a;
+                        break;
+                }
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_AXYZ_bytes_to_XYZAPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    static void convert_AXYZ_bytes_to_ZYXAPre_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 4 * pixelCount;
+            int srcIndex = srcOffset;
+            byte x, z, y, a;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                a = sourcePixels[srcIndex++];
+                int alpha = a & 0xff;
+                switch (alpha) {
+                    case 0:
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        srcIndex += 3;
+                        break;
+                    case 255:
+                        x = sourcePixels[srcIndex++];
+                        y = sourcePixels[srcIndex++];
+                        z = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = z;
+                        destPixels[dstIndex++] = y;
+                        destPixels[dstIndex++] = x;
+                        destPixels[dstIndex++] = -1;
+                        break;
+                    default:
+                        x = (byte)( (sourcePixels[srcIndex++] & 0xff) * alpha / 255);
+                        y = (byte)( (sourcePixels[srcIndex++] & 0xff) * alpha / 255);
+                        z = (byte)( (sourcePixels[srcIndex++] & 0xff) * alpha / 255);
+                        destPixels[dstIndex++] = z;
+                        destPixels[dstIndex++] = y;
+                        destPixels[dstIndex++] = x;
+                        destPixels[dstIndex++] = a;
+                        break;
+                }
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_AXYZ_bytes_to_ZYXAPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    static void convert_XYZA_bytes_to_ZYXAPre_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 4 * pixelCount;
+            int srcIndex = srcOffset;
+            byte x, z, y, a;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                x = sourcePixels[srcIndex++];
+                y = sourcePixels[srcIndex++];
+                z = sourcePixels[srcIndex++];
+                a = sourcePixels[srcIndex++];
+                int alpha = a & 0xff;
+                switch (alpha) {
+                    case 0:
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        break;
+                    case 255:
+                        destPixels[dstIndex++] = z;
+                        destPixels[dstIndex++] = y;
+                        destPixels[dstIndex++] = x;
+                        destPixels[dstIndex++] = a;
+                        break;
+                    default:
+                        destPixels[dstIndex++] = (byte)( ((z & 0xff) * alpha) >> 8);
+                        destPixels[dstIndex++] = (byte)( ((y & 0xff) * alpha) >> 8);
+                        destPixels[dstIndex++] = (byte)( ((x & 0xff) * alpha) >> 8);
+                        destPixels[dstIndex++] = a;
+                        break;
+                }
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_XYZA_bytes_to_ZYXAPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    static void convert_XYZA_bytes_to_XYZAPre_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 4 * pixelCount;
+            int srcIndex = srcOffset;
+            byte x, z, y, a;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                x = sourcePixels[srcIndex++];
+                y = sourcePixels[srcIndex++];
+                z = sourcePixels[srcIndex++];
+                a = sourcePixels[srcIndex++];
+                int alpha = a & 0xff;
+                switch (alpha) {
+                    case 0:
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        break;
+                    case 255:
+                        destPixels[dstIndex++] = x;
+                        destPixels[dstIndex++] = y;
+                        destPixels[dstIndex++] = z;
+                        destPixels[dstIndex++] = a;
+                        break;
+                    default:
+                        destPixels[dstIndex++] = (byte)( ((x & 0xff) * alpha / 255));
+                        destPixels[dstIndex++] = (byte)( ((y & 0xff) * alpha / 255));
+                        destPixels[dstIndex++] = (byte)( ((z & 0xff) * alpha / 255));
+                        destPixels[dstIndex++] = a;
+                        break;
+                }
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_XYZA_bytes_to_XYZAPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    static void convert_XYZAPre_bytes_to_XYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 4 * pixelCount;
+        int dstIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            destPixels[dstIndex++] = ((sourcePixels[srcIndex++] & 0xff) << 16) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                    ((sourcePixels[srcIndex++] & 0xff));
+            srcIndex++;
+        }
+    }
+
+    static void convert_XYZAPre_bytes_to_XYZA_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 4 * pixelCount;
+            int srcIndex = srcOffset;
+            byte a;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                a = sourcePixels[srcIndex + 3];
+                int alpha = a & 0xff;
+                switch (alpha) {
+                    case 0:
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        srcIndex += 4;
+                        break;
+                    case 255:
+                        destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = a;
+                        srcIndex++;
+                        break;
+                    default:
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        destPixels[dstIndex++] = a;
+                        srcIndex++;
+                        break;
+                }
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_XYZAPre_bytes_to_XYZA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    static void convert_XYZAPre_bytes_to_G_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int srcEnd = srcOffset + 4 * pixelCount;
+            int destIndex = destOffset;
+            for (int srcIndex = srcOffset; srcIndex < srcEnd; ) {
+                byte a = sourcePixels[srcIndex + 3];
+                switch(a) {
+                    case 0:
+                        destPixels[destIndex++] = 0;
+                        srcIndex += 4;
+                        break;
+                    default:
+                        destPixels[destIndex++] = (byte) ( ((sourcePixels[srcIndex++] & 0xff) + (sourcePixels[srcIndex++] & 0xff) + (sourcePixels[srcIndex++])) / 3);
+                        srcIndex++;
+                        break;
+                }
+            }
+        } else {
+            byte[] scratch = getScratchArray(pixelCount);
+            try {
+                convert_XYZAPre_bytes_to_G_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    static void convert_XYZAPre_bytes_to_ZYX_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 4 * pixelCount;
+        int dstIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            destPixels[dstIndex++] = ((sourcePixels[srcIndex++] & 0xff)) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                    ((sourcePixels[srcIndex++] & 0xff) << 16);
+            srcIndex++;
+        }
+    }
+
+    static void convert_XYZAPre_bytes_to_AXYZ_ints(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        int srcEnd = srcOffset + 4 * pixelCount;
+        int destIndex = destOffset;
+        for (int srcIndex = srcOffset; srcIndex < srcEnd;) {
+            int alpha = sourcePixels[srcIndex + 3] & 0xff;
+            switch (alpha) {
+                case 0:
+                    destPixels[destIndex++] = 0;
+                    srcIndex += 4;
+                    break;
+                case 255:
+                    destPixels[destIndex++] = 0xff000000 |
+                            ((sourcePixels[srcIndex++] & 0xff) << 16) |
+                            ((sourcePixels[srcIndex++] & 0xff) << 8) |
+                            (sourcePixels[srcIndex++]);
+                    srcIndex++;
+                    break;
+                default:
+                    int x = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
+                    int y = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
+                    int z = Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha);
+                    destPixels[destIndex++] = (alpha << 24) | (x << 16) | (y << 8) | (z);
+                    srcIndex++;
+                    break;
+            }
+        }
+    }
+
+    static void convert_XYZAPre_bytes_to_XYZ_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 3 * pixelCount;
+            int srcIndex = srcOffset;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                // in most other cases if alpha == 0 (premultiplied or not) we make the RGB channels zero.
+                // But in this case: it's more efficient to leave them alone. It's OK to assume our incoming
+                // premultiplied bytes really are premultiplied. And if they're not: that's not our responsibility.
+
+                destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                srcIndex++; // skip the A channel
+            }
+        } else {
+            byte[] scratch = getScratchArray(3 * pixelCount);
+            try {
+                convert_XYZAPre_bytes_to_XYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    static void convert_XYZAPre_bytes_to_ZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 3 * pixelCount;
+            int srcIndex = srcOffset;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                byte x = sourcePixels[srcIndex++];
+                byte y = sourcePixels[srcIndex++];
+                destPixels[dstIndex++] = sourcePixels[srcIndex++];
+                destPixels[dstIndex++] = y;
+                destPixels[dstIndex++] = x;
+                srcIndex++; // skip the A channel
+            }
+        } else {
+            byte[] scratch = getScratchArray(3 * pixelCount);
+            try {
+                convert_XYZAPre_bytes_to_ZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    static void convert_XYZAPre_bytes_to_ZYXA_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 4 * pixelCount;
+            int srcIndex = srcOffset;
+            byte x, z, y, a;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                a = sourcePixels[srcIndex + 3];
+                int alpha = a & 0xff;
+                switch (alpha) {
+                    case 0:
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        srcIndex += 4;
+                        break;
+                    case 255:
+                        x = sourcePixels[srcIndex++];
+                        y = sourcePixels[srcIndex++];
+                        z = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = z;
+                        destPixels[dstIndex++] = y;
+                        destPixels[dstIndex++] = x;
+                        destPixels[dstIndex++] = a;
+                        srcIndex++;
+                        break;
+                    default:
+                        x = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        y = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        z = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        destPixels[dstIndex++] = z;
+                        destPixels[dstIndex++] = y;
+                        destPixels[dstIndex++] = x;
+                        destPixels[dstIndex++] = a;
+                        srcIndex++;
+                        break;
+                }
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_XYZAPre_bytes_to_ZYXA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    static void convert_XYZAPre_bytes_to_AXYZ_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 4 * pixelCount;
+            int srcIndex = srcOffset;
+            byte a, x, y, z;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                a = sourcePixels[srcIndex + 3];
+                int alpha = a & 0xff;
+                switch (alpha) {
+                    case 0:
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        srcIndex += 4;
+                        break;
+                    case 255:
+                        x = sourcePixels[srcIndex++];
+                        y = sourcePixels[srcIndex++];
+                        z = sourcePixels[srcIndex++];
+                        srcIndex++;
+
+                        destPixels[dstIndex++] = a;
+                        destPixels[dstIndex++] = x;
+                        destPixels[dstIndex++] = y;
+                        destPixels[dstIndex++] = z;
+                        break;
+                    default:
+                        x = sourcePixels[srcIndex++];
+                        y = sourcePixels[srcIndex++];
+                        z = sourcePixels[srcIndex++];
+                        srcIndex++;
+
+                        destPixels[dstIndex++] = a;
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (x & 0xff) * 255 / alpha));
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (y & 0xff) * 255 / alpha));
+                        destPixels[dstIndex++] = (byte)( Math.min(255, (z & 0xff) * 255 / alpha));
+                        break;
+                }
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_XYZAPre_bytes_to_AXYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
+            }
+        }
+    }
+
+    static void convert_XYZAPre_bytes_to_AZYX_bytes(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        if (destPixels != sourcePixels || destOffset == srcOffset) {
+            int dstEnd = destOffset + 4 * pixelCount;
+            int srcIndex = srcOffset;
+            byte a, x, z, y;
+            for (int dstIndex = destOffset; dstIndex < dstEnd;) {
+                a = sourcePixels[srcIndex + 3];
+                int alpha = a & 0xff;
+                switch (alpha) {
+                    case 0:
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        destPixels[dstIndex++] = 0;
+                        srcIndex += 4;
+                        break;
+                    case 255:
+                        x = sourcePixels[srcIndex++];
+                        y = sourcePixels[srcIndex++];
+                        z = sourcePixels[srcIndex++];
+                        destPixels[dstIndex++] = a;
+                        destPixels[dstIndex++] = z;
+                        destPixels[dstIndex++] = y;
+                        destPixels[dstIndex++] = x;
+                        srcIndex++;
+                        break;
+                    default:
+                        x = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        y = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        z = (byte)( Math.min(255, (sourcePixels[srcIndex++] & 0xff) * 255 / alpha));
+                        destPixels[dstIndex++] = a;
+                        destPixels[dstIndex++] = z;
+                        destPixels[dstIndex++] = y;
+                        destPixels[dstIndex++] = x;
+                        srcIndex++;
+                        break;
+                }
+            }
+        } else {
+            byte[] scratch = getScratchArray(4 * pixelCount);
+            try {
+                convert_XYZAPre_bytes_to_AZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+            } finally {
+                storeScratchArray(scratch);
             }
         }
     }

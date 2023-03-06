@@ -15,7 +15,7 @@ public class BufferedImageIteratorTest extends TestCase {
         BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
         bi.setRGB(0, 0, new Color(10, 20, 30).getRGB());
 
-        PixelIterator<int[]> iter = new BufferedImageIterator.BufferedImageIntIterator_FromRaster(bi, true);
+        PixelIterator<int[]> iter = new BufferedImageIterator.BufferedImageIterator_FromRaster(bi, true);
         int[] pixels = new int[1];
         iter.next(pixels);
         assertEquals(BufferedImage.TYPE_INT_RGB, iter.getType());
@@ -26,7 +26,7 @@ public class BufferedImageIteratorTest extends TestCase {
         BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         bi.setRGB(0, 0, new Color(10, 20, 30, 40).getRGB());
 
-        PixelIterator<int[]> iter = new BufferedImageIterator.BufferedImageIntIterator_FromRaster(bi, true);
+        PixelIterator<int[]> iter = new BufferedImageIterator.BufferedImageIterator_FromRaster(bi, true);
         int[] pixels = new int[1];
         iter.next(pixels);
         assertEquals(BufferedImage.TYPE_INT_ARGB, iter.getType());
@@ -37,7 +37,7 @@ public class BufferedImageIteratorTest extends TestCase {
         BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE);
         bi.setRGB(0, 0, new Color(20, 40, 80, 64).getRGB());
 
-        PixelIterator<int[]> iter = new BufferedImageIterator.BufferedImageIntIterator_FromRaster(bi, true);
+        PixelIterator<int[]> iter = new BufferedImageIterator.BufferedImageIterator_FromRaster(bi, true);
         int[] pixels = new int[1];
         iter.next(pixels);
         assertEquals(BufferedImage.TYPE_INT_ARGB_PRE, iter.getType());
@@ -48,7 +48,7 @@ public class BufferedImageIteratorTest extends TestCase {
         BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_INT_BGR);
         bi.setRGB(0, 0, new Color(10, 20, 30).getRGB());
 
-        PixelIterator<int[]> iter = new BufferedImageIterator.BufferedImageIntIterator_FromRaster(bi, true);
+        PixelIterator<int[]> iter = new BufferedImageIterator.BufferedImageIterator_FromRaster(bi, true);
         int[] pixels = new int[1];
         iter.next(pixels);
         assertEquals(BufferedImage.TYPE_INT_BGR, iter.getType());
@@ -59,7 +59,7 @@ public class BufferedImageIteratorTest extends TestCase {
         BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
         bi.setRGB(0, 0, new Color(10, 20, 30).getRGB());
 
-        PixelIterator<byte[]> iter = new BufferedImageIterator.BufferedImageByteIterator_FromRaster(bi, true);
+        PixelIterator<byte[]> iter = new BufferedImageIterator.BufferedImageIterator_FromRaster(bi, true);
         byte[] pixels = new byte[3];
         iter.next(pixels);
         assertEquals(ImageType.TYPE_3BYTE_RGB, iter.getType());
@@ -72,7 +72,7 @@ public class BufferedImageIteratorTest extends TestCase {
         BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
         bi.setRGB(0, 0, new Color(10, 20, 30, 40).getRGB());
 
-        PixelIterator<byte[]> iter = new BufferedImageIterator.BufferedImageByteIterator_FromRaster(bi, true);
+        PixelIterator<byte[]> iter = new BufferedImageIterator.BufferedImageIterator_FromRaster(bi, true);
         byte[] pixels = new byte[4];
         iter.next(pixels);
 
@@ -83,21 +83,20 @@ public class BufferedImageIteratorTest extends TestCase {
         assertEquals(40, pixels[3]);
     }
 
-    // TODO: support RGBA_PRE
-//    public void test_4BYTE_ABGR_PRE() {
-//        BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR_PRE);
-//        bi.setRGB(0, 0, new Color(20, 40, 80, 64).getRGB());
-//
-//        PixelIterator<byte[]> iter = new BufferedImageIterator.BufferedImageByteIterator_FromRaster(bi, true);
-//        byte[] pixels = new byte[4];
-//        iter.next(pixels);
-//
-//        assertEquals(ImageType.TYPE_4BYTE_RGBA_PRE, iter.getType());
-//        assertEquals(5, pixels[0]);
-//        assertEquals(10, pixels[1]);
-//        assertEquals(20, pixels[2]);
-//        assertEquals(64, pixels[3]);
-//    }
+    public void test_4BYTE_ABGR_PRE() {
+        BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR_PRE);
+        bi.setRGB(0, 0, new Color(20, 40, 80, 64).getRGB());
+
+        PixelIterator<byte[]> iter = new BufferedImageIterator.BufferedImageIterator_FromRaster(bi, true);
+        byte[] pixels = new byte[4];
+        iter.next(pixels);
+
+        assertEquals(ImageType.TYPE_4BYTE_RGBA_PRE, iter.getType());
+        assertEquals(5, pixels[0]);
+        assertEquals(10, pixels[1]);
+        assertEquals(20, pixels[2]);
+        assertEquals(64, pixels[3]);
+    }
 
     public void test_BYTE_GRAY() {
         BufferedImage bi = new BufferedImage(256, 1, BufferedImage.TYPE_BYTE_GRAY);
@@ -105,7 +104,7 @@ public class BufferedImageIteratorTest extends TestCase {
             bi.setRGB(x, 0, new Color(x,x,x).getRGB());
         }
 
-        PixelIterator<byte[]> iter = new BufferedImageIterator.BufferedImageByteIterator_FromRaster(bi, true);
+        PixelIterator<byte[]> iter = new BufferedImageIterator.BufferedImageIterator_FromRaster(bi, true);
         byte[] pixels = new byte[256];
         iter.next(pixels);
 

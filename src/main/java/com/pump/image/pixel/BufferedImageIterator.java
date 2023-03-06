@@ -46,15 +46,14 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			if (type == BufferedImage.TYPE_INT_ARGB
 					|| type == BufferedImage.TYPE_INT_ARGB_PRE
 					|| type == BufferedImage.TYPE_INT_BGR
-					|| type == BufferedImage.TYPE_INT_RGB) {
-				return new BufferedImageIntIterator_FromRaster(bufferedImage, isTopDown);
-			} else if (type == BufferedImage.TYPE_BYTE_INDEXED) {
-				return new BufferedImageIndexedByteIterator(bufferedImage, isTopDown);
-			} else if (type == BufferedImage.TYPE_3BYTE_BGR
+					|| type == BufferedImage.TYPE_INT_RGB
+					|| type == BufferedImage.TYPE_3BYTE_BGR
 					|| type == BufferedImage.TYPE_4BYTE_ABGR
 					|| type == BufferedImage.TYPE_4BYTE_ABGR_PRE
 					|| type == BufferedImage.TYPE_BYTE_GRAY) {
-				return new BufferedImageByteIterator_FromRaster(bufferedImage, isTopDown);
+				return new BufferedImageIterator_FromRaster(bufferedImage, isTopDown);
+			} else if (type == BufferedImage.TYPE_BYTE_INDEXED) {
+				return new BufferedImageIndexedIterator(bufferedImage, isTopDown);
 			} else {
 				throw new IllegalArgumentException(
 						"unsupported image type: " + bufferedImage.getType());
@@ -153,7 +152,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			int imageType = type;
 			if (type == ImageType.TYPE_4BYTE_ARGB || type == ImageType.TYPE_4BYTE_BGRA || type == ImageType.TYPE_4BYTE_RGBA)
 				imageType = BufferedImage.TYPE_4BYTE_ABGR;
-			if (type == ImageType.TYPE_4BYTE_ARGB_PRE)
+			if (type == ImageType.TYPE_4BYTE_RGBA_PRE)
 				imageType = BufferedImage.TYPE_4BYTE_ABGR_PRE;
 			if (type == ImageType.TYPE_3BYTE_RGB)
 				imageType = BufferedImage.TYPE_3BYTE_BGR;
@@ -219,63 +218,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	/**
 	 * This uses getRaster().getDataElements() to fetch rows of pixel data.
 	 */
-	static class BufferedImageIntIterator_FromRaster extends BufferedImageIterator<int[]>
-			implements PixelIterator<int[]> {
-		BufferedImageIntIterator_FromRaster(BufferedImage bi, boolean topDown) {
-			super(bi, topDown);
-			if (!(type == BufferedImage.TYPE_INT_ARGB
-					|| type == BufferedImage.TYPE_INT_ARGB_PRE
-					|| type == BufferedImage.TYPE_INT_BGR
-					|| type == BufferedImage.TYPE_INT_RGB)) {
-				throw new IllegalArgumentException("The image type "
-						+ ImageType.toString(type) + " is not supported.");
-			}
-		}
-
-		@Override
-		public void next(int[] dest) {
-			if (topDown) {
-				if (y >= h)
-					throw new RuntimeException("end of data reached");
-				bi.getRaster().getDataElements(0, y, w, 1, dest);
-				y++;
-			} else {
-				if (y <= -1)
-					throw new RuntimeException("end of data reached");
-				bi.getRaster().getDataElements(0, y, w, 1, dest);
-				y--;
-			}
-		}
-	}
-
-	abstract static class BufferedImageByteIterator extends BufferedImageIterator<byte[]>
-			implements PixelIterator<byte[]> {
-
-		final int pixelSize;
-
-		BufferedImageByteIterator(BufferedImage bi, int imageTypeCode, boolean topDown) {
-			super(bi, imageTypeCode, topDown);
-			ImageType type = ImageType.get(getType());
-			if (type != null) {
-				pixelSize = type.getSampleCount();
-			} else if (getType() == BufferedImage.TYPE_BYTE_INDEXED) {
-				pixelSize = 1;
-			} else {
-				throw new IllegalArgumentException("The image type "
-						+ ImageType.toString(getType()) + " is not supported.");
-			}
-		}
-
-		@Override
-		public int getPixelSize() {
-			return pixelSize;
-		}
-	}
-
-	/**
-	 * This uses getRaster().getDataElements() to fetch rows of pixel data.
-	 */
-	static class BufferedImageByteIterator_FromRaster extends BufferedImageByteIterator {
+	static class BufferedImageIterator_FromRaster<T> extends BufferedImageIterator<T> {
 
 		/**
 		 * The BufferedImage types TYPE_3BYTE_BGR and 4BYTE_ARGB are
@@ -289,17 +232,31 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 					return ImageType.TYPE_3BYTE_RGB;
 				case BufferedImage.TYPE_4BYTE_ABGR:
 					return ImageType.TYPE_4BYTE_RGBA;
+				case BufferedImage.TYPE_4BYTE_ABGR_PRE:
+					return ImageType.TYPE_4BYTE_RGBA_PRE;
 				default:
 					return type;
 			}
 		}
 
-		BufferedImageByteIterator_FromRaster(BufferedImage bi, boolean topDown) {
+		BufferedImageIterator_FromRaster(BufferedImage bi, boolean topDown) {
 			super(bi, getRasterReturnType(bi), topDown);
+			if (!(type == BufferedImage.TYPE_INT_ARGB
+					|| type == BufferedImage.TYPE_INT_ARGB_PRE
+					|| type == BufferedImage.TYPE_INT_BGR
+					|| type == BufferedImage.TYPE_INT_RGB
+					|| type == BufferedImage.TYPE_BYTE_GRAY
+					|| type == BufferedImage.TYPE_3BYTE_BGR
+					|| type == ImageType.TYPE_3BYTE_RGB
+					|| type == ImageType.TYPE_4BYTE_RGBA
+					|| type == ImageType.TYPE_4BYTE_RGBA_PRE)) {
+				throw new IllegalArgumentException("The image type "
+						+ ImageType.toString(type) + " is not supported.");
+			}
 		}
 
 		@Override
-		public void next(byte[] dest) {
+		public void next(T dest) {
 			if (topDown) {
 				if (y >= h)
 					throw new RuntimeException("end of data reached");
@@ -314,8 +271,8 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		}
 	}
 
-	// TODO implement / test, also write int counterpart
-	static class BufferedImageByteIterator_FromDataBuffer extends BufferedImageByteIterator {
+	// TODO implement / test
+	static class BufferedImageByteIterator_FromDataBuffer extends BufferedImageIterator<byte[]> {
 
 		BufferedImageByteIterator_FromDataBuffer(BufferedImage bi, int imageTypeCode, boolean topDown) {
 			super(bi, imageTypeCode, topDown);
@@ -327,10 +284,10 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		}
 	}
 
-	static class BufferedImageIndexedByteIterator extends
-			BufferedImageByteIterator_FromRaster implements IndexedBytePixelIterator {
+	static class BufferedImageIndexedIterator extends
+			BufferedImageIterator_FromRaster<byte[]> implements IndexedBytePixelIterator {
 
-		BufferedImageIndexedByteIterator(BufferedImage bi, boolean topDown) {
+		BufferedImageIndexedIterator(BufferedImage bi, boolean topDown) {
 			super(bi, topDown);
 		}
 

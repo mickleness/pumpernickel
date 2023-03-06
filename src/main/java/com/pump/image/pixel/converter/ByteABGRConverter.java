@@ -81,4 +81,9 @@ public class ByteABGRConverter implements PixelConverter<byte[]> {
             destPixels[destIndex++] = colorModel.redTable_byte[j];
         }
     }
+
+    @Override
+    public void convertFromRGBAPre(byte[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        ConverterUtils.convert_XYZAPre_bytes_to_AZYX_bytes(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+    }
 }

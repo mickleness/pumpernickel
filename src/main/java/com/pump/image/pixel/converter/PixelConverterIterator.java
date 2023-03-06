@@ -153,6 +153,9 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
             case ImageType.TYPE_4BYTE_RGBA:
                 converter.convertFromRGBA(dest, 0, (byte[]) srcArray, 0, src.getWidth());
                 break;
+            case ImageType.TYPE_4BYTE_RGBA_PRE:
+                converter.convertFromRGBAPre(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                break;
             case BufferedImage.TYPE_BYTE_GRAY:
                 converter.convertFromGray(dest, 0, (byte[]) srcArray, 0, src.getWidth());
                 break;

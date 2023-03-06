@@ -210,7 +210,8 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (reds[x] / sums[x]);
 				}
 				break;
-				case ImageType.TYPE_4BYTE_RGBA:
+			case ImageType.TYPE_4BYTE_RGBA:
+			case ImageType.TYPE_4BYTE_RGBA_PRE:
 					for (int x = 0, k2 = 0; x < dstW; x++) {
 						destArray[k2++] = (byte) (reds[x] / sums[x]);
 						destArray[k2++] = (byte) (greens[x] / sums[x]);
@@ -297,6 +298,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 				}
 				break;
 			case ImageType.TYPE_4BYTE_RGBA:
+			case ImageType.TYPE_4BYTE_RGBA_PRE:
 				kIncr = 4 * incr - 4;
 				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
 					int k = srcXLUT[x];
@@ -587,7 +589,8 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 					destArray[k2++] = (byte) (r);
 				}
 				break;
-				case ImageType.TYPE_4BYTE_RGBA:
+			case ImageType.TYPE_4BYTE_RGBA:
+			case ImageType.TYPE_4BYTE_RGBA_PRE:
 					for (int x = 0, k2 = 0; x < dstW; x++) {
 						int m1 = mult1 / sums[x];
 						int m2 = mult2 / sums[x];
@@ -696,6 +699,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 				}
 				break;
 			case ImageType.TYPE_4BYTE_RGBA:
+			case ImageType.TYPE_4BYTE_RGBA_PRE:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
 					destArray[k2++] = (byte) (reds[x] / sums[x]);
 					destArray[k2++] = (byte) (greens[x] / sums[x]);
@@ -782,6 +786,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 				}
 				break;
 			case ImageType.TYPE_4BYTE_RGBA:
+			case ImageType.TYPE_4BYTE_RGBA_PRE:
 				kIncr = 4 * incr - 4;
 				for (int x = 0, k2 = 0; x < srcW; x += incr, k2 += kIncr) {
 					int k = srcXLUT[x];
@@ -1075,6 +1080,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 				}
 				break;
 			case ImageType.TYPE_4BYTE_RGBA:
+			case ImageType.TYPE_4BYTE_RGBA_PRE:
 				for (int x = 0, k2 = 0; x < dstW; x++) {
 					int m1 = mult1 / sums[x];
 					int m2 = mult2 / sums[x];

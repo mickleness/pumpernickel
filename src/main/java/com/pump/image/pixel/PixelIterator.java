@@ -98,7 +98,11 @@ public interface PixelIterator<T> {
 	 * @return the number of array elements used to store 1 pixel.
 	 */
 	default int getPixelSize() {
-		ImageType<?> type = ImageType.get(getType());
+		int t = getType();
+		if (t == BufferedImage.TYPE_BYTE_INDEXED)
+			return 1;
+
+		ImageType<?> type = ImageType.get(t);
 		if (type == null) {
 			// this method needs to be overwritten if the ImageType is unknown
 			throw new UnsupportedOperationException();

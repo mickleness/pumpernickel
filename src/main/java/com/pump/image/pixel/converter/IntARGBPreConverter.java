@@ -81,4 +81,9 @@ public class IntARGBPreConverter implements PixelConverter<int[]> {
                     (colorModel.blueTable_pre_byte[j] & 0xff) ;
         }
     }
+
+    @Override
+    public void convertFromRGBAPre(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        ConverterUtils.convert_XYZAPre_bytes_to_AXYZ_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+    }
 }

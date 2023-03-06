@@ -82,4 +82,9 @@ public class IntBGRConverter implements PixelConverter<int[]> {
                     (colorModel.redTable_pre_byte[j] & 0xff) ;
         }
     }
+
+    @Override
+    public void convertFromRGBAPre(int[] destPixels, int destOffset, byte[] sourcePixels, int srcOffset, int pixelCount) {
+        ConverterUtils.convert_XYZAPre_bytes_to_ZYX_ints(destPixels, destOffset, sourcePixels, srcOffset, pixelCount);
+    }
 }

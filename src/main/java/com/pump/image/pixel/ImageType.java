@@ -118,6 +118,10 @@ public class ImageType<T> implements Serializable {
      * The value of {@link #getCode()} for {@link #BYTE_RGBA}.
      */
     public static final int TYPE_4BYTE_RGBA = CUSTOM_TYPE_STARTING_INDEX + 4;
+    /**
+     * The value of {@link #getCode()} for {@link #BYTE_RGBA_PRE}.
+     */
+    public static final int TYPE_4BYTE_RGBA_PRE = CUSTOM_TYPE_STARTING_INDEX + 5;
 
     public static final ImageType<byte[]> BYTE_BGRA = new ImageType<>("4BYTE_BGRA",
             TYPE_4BYTE_BGRA,
@@ -150,6 +154,13 @@ public class ImageType<T> implements Serializable {
                     Transparency.TRANSLUCENT,
                     DataBuffer.TYPE_BYTE),
             new ByteRGBAConverter(), false);
+
+    public static final ImageType<byte[]> BYTE_RGBA_PRE = new ImageType<>("4BYTE_RGBA_PRE",
+            TYPE_4BYTE_RGBA_PRE,
+            new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), new int[] {8, 8, 8, 8}, true, true,
+                    Transparency.TRANSLUCENT,
+                    DataBuffer.TYPE_BYTE),
+            new ByteRGBAPreConverter(), false);
 
     /**
      * Return an ImageType based on {@link BufferedImage#getType()}. Note this will return null for
@@ -403,6 +414,8 @@ public class ImageType<T> implements Serializable {
             pixelConverter.convertFromBGR( destPixels, destOffset, (byte[]) srcPixels, srcOffset, pixelCount);
         } else if (srcType == ImageType.BYTE_RGBA) {
             pixelConverter.convertFromRGBA( destPixels, destOffset, (byte[]) srcPixels, srcOffset, pixelCount);
+        } else if (srcType == ImageType.BYTE_RGBA_PRE) {
+            pixelConverter.convertFromRGBAPre( destPixels, destOffset, (byte[]) srcPixels, srcOffset, pixelCount);
         } else {
             // this method does not support IndexedColorModel conversions (which would require another argument)
             throw new UnsupportedOperationException();
