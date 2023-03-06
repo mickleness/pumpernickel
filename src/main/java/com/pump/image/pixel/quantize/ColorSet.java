@@ -543,7 +543,7 @@ public class ColorSet implements Serializable {
 		int w = i.getWidth();
 
 		int r, g, b, alpha;
-		int[] t = new int[i.getMinimumArrayLength()];
+		int[] t = new int[i.getWidth() * i.getPixelSize()];
 		while (i.isDone() == false) {
 			i.next(t);
 			for (int a = 0; a < w; a++) {

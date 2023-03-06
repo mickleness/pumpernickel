@@ -97,11 +97,6 @@ public class BufferedBytePixelIterator implements PixelIterator<byte[]> {
 	}
 
 	@Override
-	public int getMinimumArrayLength() {
-		return width * pixelSize;
-	}
-
-	@Override
 	public void skip() {
 		dataIndex += scanSize;
 	}

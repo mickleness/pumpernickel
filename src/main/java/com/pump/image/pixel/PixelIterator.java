@@ -142,25 +142,6 @@ public interface PixelIterator<T> {
 	int getHeight();
 
 	/**
-	 * The minimum length an array should be that is used to retrieve a row of
-	 * pixel data.
-	 * <P>
-	 * When you call <code>next(array)</code> on this iterator, the array's
-	 * length should at least be <code>getMinimumArrayLength()</code>.
-	 * <P>
-	 * You should not assume you know what this value is. For example: if your
-	 * original data source is a 3-byte BGR image but it is being converted to a
-	 * 1-byte grayscale image, then it is wrong to assume this method will
-	 * return <code>getWidth()</code>. It may (or may not) return
-	 * <code>3 * getWidth()</code>, because the converter layer may be passing
-	 * the same array to the source.
-	 * 
-	 * @return The minimum length an array should be that is used to retrieve a
-	 *         row of pixel data.
-	 */
-	int getMinimumArrayLength();
-
-	/**
 	 * Skips a row of pixel data.
 	 */
 	void skip();

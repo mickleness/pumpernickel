@@ -694,18 +694,6 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 	}
 
 	@Override
-	public int getMinimumArrayLength() {
-		int bytesPerPixel = getPixelSize();
-		int returnValue = dstW * bytesPerPixel;
-		if (destType.isByte() == srcType.isByte()) {
-			returnValue = Math.max(srcIterator.getMinimumArrayLength(), returnValue);
-		} else if (destType.isInt() == srcType.isInt()) {
-			returnValue = Math.max(srcIterator.getMinimumArrayLength(), returnValue);
-		}
-		return returnValue;
-	}
-
-	@Override
 	public int getType() {
 		return destType.getCode();
 	}
@@ -752,7 +740,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 			return;
 		}
 
-		int srcMin = srcIterator.getMinimumArrayLength();
+		int srcMin = srcW * srcIterator.getPixelSize();
 		if (destType.isByte()) {
 			byte[] byteRow = (byte[]) row;
 			if (srcIterator.isByte()) {
@@ -787,7 +775,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 	}
 
 	private void next_unscaled(T row) {
-		int srcMin = srcIterator.getMinimumArrayLength();
+		int srcMin = srcW * srcIterator.getPixelSize();
 		Object srcPixels = null;
 		if (srcType.isByte() && destType.isByte()) {
 			byte[] dest = (byte[]) row;
@@ -1001,8 +989,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 				// the source is ints, but we were provided
 				// a byte array to write to:
 				if (scratchIntArray == null)
-					scratchIntArray = new int[srcIterator
-							.getMinimumArrayLength()];
+					scratchIntArray = new int[srcW * srcIterator.getPixelSize()];
 				intArray = scratchIntArray;
 			}
 			srcIterator.next(intArray);
@@ -1013,8 +1000,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 				// the source is bytes, but we were provided
 				// an int array to write to:
 				if (scratchByteArray == null)
-					scratchByteArray = new byte[srcIterator
-							.getMinimumArrayLength()];
+					scratchByteArray = new byte[srcW * srcIterator.getPixelSize()];
 				byteArray = scratchByteArray;
 			}
 			srcIterator.next(byteArray);

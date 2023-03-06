@@ -48,11 +48,12 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
             isIntToInt = imageType.isInt() && srcType.isInt();
         }
 
+        int minArraySize = src.getWidth() * src.getPixelSize();
         if (src.isByte()) {
             scratchIntArray = null;
-            scratchByteArray = new byte[src.getMinimumArrayLength()];
+            scratchByteArray = new byte[minArraySize];
         } else if (src.isInt()) {
-            scratchIntArray = new int[src.getMinimumArrayLength()];
+            scratchIntArray = new int[minArraySize];
             scratchByteArray = null;
         } else {
             throw new UnsupportedOperationException( "This converter does not support " + ImageType.toString(src.getType()) );
@@ -82,15 +83,6 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
     @Override
     public int getHeight() {
         return src.getHeight();
-    }
-
-    @Override
-    public int getMinimumArrayLength() {
-        if (isByteToByte || isIntToInt) {
-            // we're going to reuse
-            return Math.max(getWidth() * imageType.getSampleCount(), src.getMinimumArrayLength());
-        }
-        return getWidth() * imageType.getSampleCount();
     }
 
     @Override

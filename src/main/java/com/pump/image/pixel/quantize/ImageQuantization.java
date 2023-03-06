@@ -64,11 +64,6 @@ public abstract class ImageQuantization {
 		}
 
 		@Override
-		public int getMinimumArrayLength() {
-			return getWidth();
-		}
-
-		@Override
 		public IndexColorModel getIndexColorModel() {
 			return icm;
 		}

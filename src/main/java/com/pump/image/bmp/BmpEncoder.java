@@ -169,7 +169,7 @@ public class BmpEncoder {
 		byte bitsPerPixel = (byte) (i.getPixelSize() * 8);
 
 		byte[] scrap = new byte[Math.max(HEADER_SIZE,
-				i.getMinimumArrayLength() + 8)];
+				i.getWidth() * i.getPixelSize() + 8)];
 
 		int scanLineSize = writeHeader(scrap, 0, i.getWidth(), i.getHeight(),
 				bitsPerPixel);

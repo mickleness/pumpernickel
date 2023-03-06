@@ -161,7 +161,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 		if (i.isInt()) {
 			PixelIterator<int[]> ipi = (PixelIterator<int[]>) i;
-			int[] row = new int[i.getMinimumArrayLength()];
+			int[] row = new int[w * i.getPixelSize()];
 			if (i.isTopDown()) {
 				for (int y = 0; y < h; y++) {
 					ipi.next(row);
@@ -176,7 +176,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		} else {
 			PixelIterator<byte[]> bpi = (PixelIterator<byte[]>) i;
 
-			byte[] row = new byte[i.getMinimumArrayLength()];
+			byte[] row = new byte[w * i.getPixelSize()];
 			if (bpi.isTopDown()) {
 				for (int y = 0; y < h; y++) {
 					bpi.next(row);
@@ -335,11 +335,6 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 	public static BufferedImageIterator<?> create(BufferedImage bi, boolean topDown) {
 		return new Source(bi, topDown).createPixelIterator();
-	}
-
-	@Override
-	public int getMinimumArrayLength() {
-		return getWidth() * getPixelSize();
 	}
 
 	@Override

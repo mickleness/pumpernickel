@@ -181,11 +181,6 @@ public class BmpDecoderIterator implements PixelIterator<byte[]>, AutoCloseable 
 		}
 
 		@Override
-		public int getMinimumArrayLength() {
-			return Math.max(super.getMinimumArrayLength(), width);
-		}
-
-		@Override
 		public void next(byte[] dest) {
 			super.next(dest);
 			// unpack the data
@@ -294,11 +289,6 @@ public class BmpDecoderIterator implements PixelIterator<byte[]>, AutoCloseable 
 	@Override
 	public int getHeight() {
 		return height;
-	}
-
-	@Override
-	public int getMinimumArrayLength() {
-		return scanline;
 	}
 
 	@Override

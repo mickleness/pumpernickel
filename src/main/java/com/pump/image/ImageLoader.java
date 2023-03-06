@@ -484,10 +484,11 @@ public class ImageLoader {
 
 			PixelIterator<?> dstIter = destType.createPixelIterator(srcIter);
 
+			int minArraySize = dstIter.getWidth() * dstIter.getPixelSize();
 			if (dstIter.isInt()) {
 				if (rowInt == null
-						|| rowInt.length < dstIter.getMinimumArrayLength())
-					rowInt = new int[dstIter.getMinimumArrayLength()];
+						|| rowInt.length < minArraySize)
+					rowInt = new int[minArraySize];
 
 				PixelIterator<int[]> dstIterInt = (PixelIterator<int[]>) dstIter;
 				while (!dstIterInt.isDone()) {
@@ -497,8 +498,8 @@ public class ImageLoader {
 				}
 			} else if (dstIter.isByte()) {
 				if (rowByte == null
-						|| rowByte.length < dstIter.getMinimumArrayLength())
-					rowByte = new byte[dstIter.getMinimumArrayLength()];
+						|| rowByte.length < minArraySize)
+					rowByte = new byte[minArraySize];
 
 				PixelIterator<byte[]> dstIterByte = (PixelIterator<byte[]>) dstIter;
 				while (!dstIterByte.isDone()) {

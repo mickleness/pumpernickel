@@ -182,8 +182,8 @@ public class BasicGifEncoder extends GifEncoder {
 
 		PixelIterator<int[]> c1 = ImageType.INT_ARGB.createPixelIterator(background);
 		PixelIterator<int[]> c2 = ImageType.INT_ARGB.createPixelIterator(incoming);
-		int[] row1 = new int[c1.getMinimumArrayLength()];
-		int[] row2 = new int[c2.getMinimumArrayLength()];
+		int[] row1 = new int[c1.getWidth() * c1.getPixelSize()];
+		int[] row2 = new int[c2.getWidth() * c2.getPixelSize()];
 		Rectangle r = null;
 
 		int y = 0;

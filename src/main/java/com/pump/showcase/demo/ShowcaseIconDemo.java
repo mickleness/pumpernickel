@@ -167,8 +167,8 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 			if (i1.isByte()) {
 				PixelIterator<byte[]> b1 = (PixelIterator<byte[]>) i1;
 				PixelIterator<byte[]> b2 = (PixelIterator<byte[]>) i2;
-				byte[] row1 = new byte[b1.getMinimumArrayLength()];
-				byte[] row2 = new byte[b2.getMinimumArrayLength()];
+				byte[] row1 = new byte[b1.getWidth() * b1.getPixelSize()];
+				byte[] row2 = new byte[b2.getWidth() * b2.getPixelSize()];
 				while (!b1.isDone()) {
 					b1.next(row1);
 					b2.next(row2);
@@ -178,8 +178,8 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 			} else {
 				PixelIterator<int[]> b1 = (PixelIterator<int[]>) i1;
 				PixelIterator<int[]> b2 = (PixelIterator<int[]>) i2;
-				int[] row1 = new int[b1.getMinimumArrayLength()];
-				int[] row2 = new int[b2.getMinimumArrayLength()];
+				int[] row1 = new int[b1.getWidth() * b1.getPixelSize()];
+				int[] row2 = new int[b2.getWidth() * b2.getPixelSize()];
 				while (!b1.isDone()) {
 					b1.next(row1);
 					b2.next(row2);

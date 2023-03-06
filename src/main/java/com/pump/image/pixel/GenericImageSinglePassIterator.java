@@ -1096,14 +1096,6 @@ public abstract class GenericImageSinglePassIterator<T>
 		return height;
 	}
 
-	/**
-	 * The length to create arrays to pass to the <code>next(...)</code> method.
-	 */
-	@Override
-	public int getMinimumArrayLength() {
-		return getWidth() * getPixelSize();
-	}
-
 	/** Skip the next row of data. */
 	@Override
 	public void skip() {
