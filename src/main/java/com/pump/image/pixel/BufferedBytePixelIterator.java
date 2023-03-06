@@ -108,7 +108,7 @@ public class BufferedBytePixelIterator implements PixelIterator<byte[]> {
 
 	@Override
 	public void next(byte[] dest) {
-		System.arraycopy(data, dataIndex, dest, 0, width);
+		System.arraycopy(data, dataIndex, dest, 0, width * pixelSize);
 		dataIndex += scanSize;
 		row++;
 	}

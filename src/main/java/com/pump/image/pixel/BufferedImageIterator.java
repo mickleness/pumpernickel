@@ -11,9 +11,8 @@
 package com.pump.image.pixel;
 
 import java.awt.image.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * This interfaces the <code>PixelIterator</code> model with
@@ -25,6 +24,53 @@ import java.util.Arrays;
  */
 public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
+	/**
+	 * This is a PixelIteratorSource for BufferedImages.
+	 */
+	public static class Source implements PixelIterator.Source {
+		private final BufferedImage bufferedImage;
+		private final boolean isTopDown;
+
+		public Source(BufferedImage bufferedImage) {
+			this (bufferedImage, true);
+		}
+
+		public Source(BufferedImage bufferedImage, boolean isTopDown) {
+			this.bufferedImage = Objects.requireNonNull(bufferedImage);
+			this.isTopDown = isTopDown;
+		}
+
+		@Override
+		public BufferedImageIterator createPixelIterator() {
+			int type = bufferedImage.getType();
+			if (type == BufferedImage.TYPE_INT_ARGB
+					|| type == BufferedImage.TYPE_INT_ARGB_PRE
+					|| type == BufferedImage.TYPE_INT_BGR
+					|| type == BufferedImage.TYPE_INT_RGB) {
+				return new BufferedImageIntIterator_FromRaster(bufferedImage, isTopDown);
+			} else if (type == BufferedImage.TYPE_BYTE_INDEXED) {
+				return new BufferedImageIndexedByteIterator(bufferedImage, isTopDown);
+			} else if (type == BufferedImage.TYPE_3BYTE_BGR
+					|| type == BufferedImage.TYPE_4BYTE_ABGR
+					|| type == BufferedImage.TYPE_4BYTE_ABGR_PRE
+					|| type == BufferedImage.TYPE_BYTE_GRAY) {
+				return new BufferedImageByteIterator_FromRaster(bufferedImage, isTopDown);
+			} else {
+				throw new IllegalArgumentException(
+						"unsupported image type: " + bufferedImage.getType());
+			}
+		}
+
+		@Override
+		public int getWidth() {
+			return bufferedImage.getWidth();
+		}
+
+		@Override
+		public int getHeight() {
+			return bufferedImage.getHeight();
+		}
+	}
 
 	/**
 	 * I don't fully understand this phenomenon, but for TYPE_3BYTE_BGR images:
@@ -105,7 +151,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 					indexModel);
 		} else {
 			int imageType = type;
-			if (type == ImageType.TYPE_4BYTE_ARGB)
+			if (type == ImageType.TYPE_4BYTE_ARGB || type == ImageType.TYPE_4BYTE_BGRA || type == ImageType.TYPE_4BYTE_RGBA)
 				imageType = BufferedImage.TYPE_4BYTE_ABGR;
 			if (type == ImageType.TYPE_4BYTE_ARGB_PRE)
 				imageType = BufferedImage.TYPE_4BYTE_ABGR_PRE;
@@ -326,29 +372,12 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		return getClass().getSimpleName()+"[ image type = "+ImageType.toString(getType())+", width = " + getWidth() + ", height = "+ getHeight()+", isTopDown() = " + isTopDown() + "]";
 	}
 
-	public static BufferedImageIterator<?> get(BufferedImage bi) {
-		return get(bi, true);
+	public static BufferedImageIterator<?> create(BufferedImage bi) {
+		return create(bi, true);
 	}
 
-	public static BufferedImageIterator<?> get(BufferedImage bi,
-			boolean topDown) {
-		int type = bi.getType();
-		if (type == BufferedImage.TYPE_INT_ARGB
-				|| type == BufferedImage.TYPE_INT_ARGB_PRE
-				|| type == BufferedImage.TYPE_INT_BGR
-				|| type == BufferedImage.TYPE_INT_RGB) {
-			return new BufferedImageIntIterator_FromRaster(bi, topDown);
-		} else if (type == BufferedImage.TYPE_BYTE_INDEXED) {
-			return new BufferedImageIndexedByteIterator(bi, topDown);
-		} else if (type == BufferedImage.TYPE_3BYTE_BGR
-				|| type == BufferedImage.TYPE_4BYTE_ABGR
-				|| type == BufferedImage.TYPE_4BYTE_ABGR_PRE
-				|| type == BufferedImage.TYPE_BYTE_GRAY) {
-			return new BufferedImageByteIterator_FromRaster(bi, topDown);
-		} else {
-			throw new IllegalArgumentException(
-					"unsupported image type: " + bi.getType());
-		}
+	public static BufferedImageIterator<?> create(BufferedImage bi, boolean topDown) {
+		return new Source(bi, topDown).createPixelIterator();
 	}
 
 	@Override

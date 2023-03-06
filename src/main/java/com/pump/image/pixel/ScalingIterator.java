@@ -28,6 +28,48 @@ import java.util.Objects;
 public class ScalingIterator<T> implements PixelIterator<T> {
 
 	/**
+	 * This PixelIterator.Source scales another Source.
+	 */
+	public static class Source<T> implements PixelIterator.Source<T> {
+		final int scaledWidth, scaledHeight;
+		final PixelIterator.Source<?> pixelSource;
+		final ImageType<T> destType;
+
+		public Source(PixelIterator.Source<?> pixelSource, int scaledWidth,int scaledHeight) {
+			destType = null;
+			this.scaledWidth = scaledWidth;
+			this.scaledHeight = scaledHeight;
+			this.pixelSource = Objects.requireNonNull(pixelSource);
+		}
+
+		public Source(ImageType<T> destType, PixelIterator.Source<?> pixelSource, int scaledWidth, int scaledHeight) {
+			this.destType = Objects.requireNonNull(destType);
+			this.scaledWidth = scaledWidth;
+			this.scaledHeight = scaledHeight;
+			this.pixelSource = Objects.requireNonNull(pixelSource);
+		}
+
+		@Override
+		public ScalingIterator createPixelIterator() {
+			if (destType == null)
+				return new ScalingIterator(pixelSource.createPixelIterator(), scaledWidth, scaledHeight);
+			return new ScalingIterator(destType, pixelSource.createPixelIterator(), scaledWidth, scaledHeight);
+		}
+
+		@Override
+		public int getWidth() {
+			return scaledWidth;
+		}
+
+		@Override
+		public int getHeight() {
+			return scaledHeight;
+		}
+	}
+
+	// TODO: remove this method
+
+	/**
 	 * Returns a <code>PixelIterator</code> scaled to a specific ratio.
 	 * <p>
 	 * If the ratio is 1.0: then this method returns the argument provided.
@@ -54,6 +96,8 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 	final PixelIterator srcIterator;
 	int dstY;
 	int srcY = 0;
+
+	// TODO: collapse all Row classes into integer class; the short concept is an unproven optimization
 
 	static abstract class Row {
 		/**

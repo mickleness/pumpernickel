@@ -162,8 +162,8 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 					|| img.getWidth() != other.getWidth()
 					|| img.getHeight() != other.getHeight())
 				return false;
-			BufferedImageIterator i1 = BufferedImageIterator.get(img, true);
-			BufferedImageIterator i2 = BufferedImageIterator.get(other, true);
+			BufferedImageIterator i1 = BufferedImageIterator.create(img);
+			BufferedImageIterator i2 = BufferedImageIterator.create(other);
 			if (i1.isByte()) {
 				PixelIterator<byte[]> b1 = (PixelIterator<byte[]>) i1;
 				PixelIterator<byte[]> b2 = (PixelIterator<byte[]>) i2;

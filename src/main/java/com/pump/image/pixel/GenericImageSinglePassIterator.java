@@ -13,21 +13,18 @@ package com.pump.image.pixel;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.DataBuffer;
-import java.awt.image.DirectColorModel;
-import java.awt.image.ImageConsumer;
-import java.awt.image.ImageProducer;
+import java.awt.image.*;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Objects;
 
 import com.pump.awt.Dimension2D;
 import com.pump.image.ColorModelUtils;
+import com.pump.image.ImageSize;
 import com.pump.util.PushPullQueue;
 
 /**
@@ -661,6 +658,17 @@ public abstract class GenericImageSinglePassIterator<T>
 			 * This class will end up throwing an exception if the iterator
 			 * tries to go back to a row it already finished.
 			 */
+			// TODO: revisit these, I think we may be getting valid hints
+//			System.out.println();
+//			System.out.println("SINGLEFRAME: " + (hintFlags & ImageConsumer.SINGLEFRAME));
+//			System.out.println("SINGLEPASS: " + (hintFlags & ImageConsumer.SINGLEPASS));
+//			System.out.println("IMAGEERROR: " + (hintFlags & ImageConsumer.IMAGEERROR));
+//			System.out.println("COMPLETESCANLINES: " + (hintFlags & ImageConsumer.COMPLETESCANLINES));
+//			System.out.println("STATICIMAGEDONE: " + (hintFlags & ImageConsumer.STATICIMAGEDONE));
+//			System.out.println("IMAGEABORTED: " + (hintFlags & ImageConsumer.IMAGEABORTED));
+//			System.out.println("TOPDOWNLEFTRIGHT: " + (hintFlags & ImageConsumer.TOPDOWNLEFTRIGHT));
+//			System.out.println("RANDOMPIXELORDER: " + (hintFlags & ImageConsumer.RANDOMPIXELORDER));
+//			System.out.println("SINGLEFRAMEDONE: " + (hintFlags & ImageConsumer.SINGLEFRAMEDONE));
 		}
 
 		@Override
@@ -854,6 +862,61 @@ public abstract class GenericImageSinglePassIterator<T>
 		}
 	}
 
+	public static class Source<T> implements PixelIterator.Source<T> {
+		private final Image image;
+		private final int iteratorType;
+
+		private Dimension size;
+
+		public Source(Image image, int iteratorType) {
+			this.image = Objects.requireNonNull(image);
+			this.iteratorType = iteratorType;
+
+			this.size = Objects.requireNonNull(ImageSize.get(image));
+		}
+
+		@Override
+		public GenericImageSinglePassIterator createPixelIterator() {
+			if (!(iteratorType == TYPE_DEFAULT
+					|| iteratorType == BufferedImage.TYPE_INT_ARGB
+					|| iteratorType == BufferedImage.TYPE_INT_ARGB_PRE
+					|| iteratorType == BufferedImage.TYPE_INT_RGB
+					|| iteratorType == BufferedImage.TYPE_INT_BGR
+					|| iteratorType == BufferedImage.TYPE_3BYTE_BGR
+					|| iteratorType == BufferedImage.TYPE_BYTE_GRAY
+					|| iteratorType == BufferedImage.TYPE_4BYTE_ABGR
+					|| iteratorType == BufferedImage.TYPE_4BYTE_ABGR_PRE)) {
+				throw new IllegalArgumentException(
+						"illegal iterator type: " + iteratorType);
+			}
+			final ImageProducer producer = image.getSource();
+			final Consumer consumer = new Consumer(producer, iteratorType);
+			// ImageProducer.startProduction often starts its own thread, but it's
+			// not required to. Sometimes in my testing a BufferedImage would make
+			// this a blocking call. So to be safe this call should be in its
+			// own thread:
+			Thread productionThread = new Thread(
+					"GenericImageSinglePassIterator: Production Thread") {
+				@Override
+				public void run() {
+					producer.startProduction(consumer);
+				}
+			};
+			productionThread.start();
+			return consumer.getPixelIterator();
+		}
+
+		@Override
+		public int getWidth() {
+			return size.width;
+		}
+
+		@Override
+		public int getHeight() {
+			return size.height;
+		}
+	}
+
 	/**
 	 * Returns a <code>GenericImageSinglePassIntIterator</code>.
 	 * 
@@ -966,33 +1029,7 @@ public abstract class GenericImageSinglePassIterator<T>
 	 */
 	public static GenericImageSinglePassIterator get(Image image,
 			int iteratorType) {
-		if (!(iteratorType == TYPE_DEFAULT
-				|| iteratorType == BufferedImage.TYPE_INT_ARGB
-				|| iteratorType == BufferedImage.TYPE_INT_ARGB_PRE
-				|| iteratorType == BufferedImage.TYPE_INT_RGB
-				|| iteratorType == BufferedImage.TYPE_INT_BGR
-				|| iteratorType == BufferedImage.TYPE_3BYTE_BGR
-				|| iteratorType == BufferedImage.TYPE_BYTE_GRAY
-				|| iteratorType == BufferedImage.TYPE_4BYTE_ABGR
-				|| iteratorType == BufferedImage.TYPE_4BYTE_ABGR_PRE)) {
-			throw new IllegalArgumentException(
-					"illegal iterator type: " + iteratorType);
-		}
-		final ImageProducer producer = image.getSource();
-		final Consumer consumer = new Consumer(producer, iteratorType);
-		// ImageProducer.startProduction often starts its own thread, but it's
-		// not required to. Sometimes in my testing a BufferedImage would make
-		// this a blocking call. So to be safe this call should be in its
-		// own thread:
-		Thread productionThread = new Thread(
-				"GenericImageSinglePassIterator: Production Thread") {
-			@Override
-			public void run() {
-				producer.startProduction(consumer);
-			}
-		};
-		productionThread.start();
-		return consumer.getPixelIterator();
+		return new Source(image, iteratorType).createPixelIterator();
 	}
 
 	final int width, height, type;

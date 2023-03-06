@@ -98,8 +98,7 @@ public class Scaling {
 	 * @param source
 	 *            the source image file.
 	 * @param imageType
-	 *            <code>TYPE_INT_RGB</code>, <code>TYPE_INT_ARGB</code>,
-	 *            <code>TYPE_3BYTE_BGR</code>, <code>TYPE_4BYTE_ABGR</code>.
+	 * 			  the output image type
 	 * @param destSize
 	 *            the size of the new image.
 	 * @return a new scaled image of type
@@ -118,8 +117,7 @@ public class Scaling {
 	 * @param source
 	 *            the source image file.
 	 * @param imageType
-	 *            <code>TYPE_INT_RGB</code>, <code>TYPE_INT_ARGB</code>,
-	 *            <code>TYPE_3BYTE_BGR</code>, <code>TYPE_4BYTE_ABGR</code>.
+	 * 			  the output image type
 	 * @param destSize
 	 *            the size of the new image.
 	 * @return a new scaled image of type
@@ -219,7 +217,7 @@ public class Scaling {
 			}
 		}
 
-		PixelIterator pi = new ScalingIterator( ImageType.get(dest.getType()), BufferedImageIterator.get(source), destSize.width, destSize.height);
+		PixelIterator pi = new ScalingIterator( ImageType.get(dest.getType()), BufferedImageIterator.create(source), destSize.width, destSize.height);
 		BufferedImageIterator.create(pi, dest);
 		return dest;
 	}

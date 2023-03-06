@@ -10,12 +10,42 @@
  */
 package com.pump.image.pixel;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 /**
  * This iterates over an image as a series of pixel rows.
  */
 public interface PixelIterator<T> {
+
+	/**
+	 * This produces a PixelIterator. The same source may be used to
+	 * create several PixelIterator instances, in the same
+	 * way that one java.util.List can create several List iterators.
+	 */
+	interface Source<T> {
+		PixelIterator<T> createPixelIterator();
+
+		int getWidth();
+
+		int getHeight();
+
+		/**
+		 * Create a ToolkitImage using this Source.
+		 */
+		default Image createImage() {
+			return Toolkit.getDefaultToolkit().createImage(new PixelSourceImageProducer(this));
+		}
+
+		/**
+		 * Create a BufferedImage using this Source.
+		 */
+		default BufferedImage createBufferedImage() {
+			// TODO: is BufferedImageIterator.create(PixelIterator) where we want this logic to live?
+			return BufferedImageIterator.create(createPixelIterator(), null);
+		}
+	}
 
 	/**
 	 * The format of this pixel iterator. This should be a "TYPE" constant from BufferedImage or
@@ -32,7 +62,7 @@ public interface PixelIterator<T> {
 		int t = getType();
 		if (t == BufferedImage.TYPE_BYTE_INDEXED)
 			return true;
-		ImageType type = ImageType.get(t);
+		ImageType<?> type = ImageType.get(t);
 		return type != null && type.isByte();
 	}
 
@@ -40,7 +70,7 @@ public interface PixelIterator<T> {
 	 * Return true if this iterator stores pixels as int arrays.
 	 */
 	default boolean isInt() {
-		ImageType type = ImageType.get(getType());
+		ImageType<?> type = ImageType.get(getType());
 		return type != null && type.isInt();
 	}
 
@@ -51,7 +81,7 @@ public interface PixelIterator<T> {
 	 * still return false.)
 	 */
 	default boolean isOpaque() {
-		ImageType type = ImageType.get(getType());
+		ImageType<?> type = ImageType.get(getType());
 		if (type == null) {
 			// this method needs to be overwritten if the ImageType is unknown
 			throw new UnsupportedOperationException();
@@ -68,7 +98,7 @@ public interface PixelIterator<T> {
 	 * @return the number of array elements used to store 1 pixel.
 	 */
 	default int getPixelSize() {
-		ImageType type = ImageType.get(getType());
+		ImageType<?> type = ImageType.get(getType());
 		if (type == null) {
 			// this method needs to be overwritten if the ImageType is unknown
 			throw new UnsupportedOperationException();
@@ -86,6 +116,10 @@ public interface PixelIterator<T> {
 	/**
 	 * Indicates whether this iterator returns rows in a top-to-bottom order or
 	 * a bottom-to-top order.
+	 * <p>
+	 * If possible it is preferred for pixels to iterate from top-to-bottom. (The primary use
+	 * case for this method is BMP support; BMP images store pixel data in bottom-to-top pixel rows.)
+	 * </p>
 	 */
 	boolean isTopDown();
 

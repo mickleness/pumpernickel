@@ -527,7 +527,7 @@ public class ColorSet implements Serializable {
 	 *            the image to process.
 	 */
 	public void addColors(BufferedImage i) {
-		addColors(BufferedImageIterator.get(i));
+		addColors(BufferedImageIterator.create(i));
 	}
 
 	/**

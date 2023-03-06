@@ -53,7 +53,7 @@ public class ImageSize {
 				h.value = Math.max(h.value, y + height);
 				notify();
 			}
-			return false;
+			return w.value <= 0 || h.value <= 0;
 		}
 
 		public void load() {
