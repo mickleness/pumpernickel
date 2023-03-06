@@ -38,6 +38,9 @@ import com.pump.showcase.chart.PerformanceChartPanel;
  * alt="A screenshot of the BmpComparisonDemo.">
  */
 public class BmpComparisonDemo extends ShowcaseResourceExampleDemo<File> {
+
+	// TODO: I'm seeing erratic results with this. Is there a way to gain confidence in the comparison?
+
 	private static final long serialVersionUID = 1L;
 
 	public static String PARAMETER_MODEL = "model";
