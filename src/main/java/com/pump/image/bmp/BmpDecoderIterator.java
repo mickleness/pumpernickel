@@ -10,25 +10,23 @@
  */
 package com.pump.image.bmp;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URL;
+import java.util.Objects;
 
 import com.pump.image.pixel.IndexedBytePixelIterator;
 import com.pump.image.pixel.PixelIterator;
+import com.pump.io.InputStreamSource;
 import com.pump.io.MeasuredInputStream;
+import com.pump.io.URLInputStreamSource;
 
 /**
- * A PixelIterator that reads simple BMP
- * graphics. You cannot directly instantiate this object because a BMP image may
- * require a <code>BytePixelIterator</code> or a
- * <codE>IndexedBytePixelIterator</code> to decode correctly: so the
- * <code>get()</code> method returns the appropriate iterator for a given BMP
- * image.
+ * A PixelIterator that reads simple BMP images. You must instantiate
+ * this object using {@link #get(InputStream)}, which will return a
+ * BmpDecoderIterator that may or may not also be a IndexedBytePixelIterator.
  * <p>
  * FIXME: As of this writing: this BMP decoder is NOT fully functional. It has
  * been tested against 1, 4, 8, 24, and 32-bit images, but it does not support
@@ -40,7 +38,58 @@ import com.pump.io.MeasuredInputStream;
  * @see <a href="http://www.fileformat.info/format/bmp/egff.htm">Microsoft
  *      Windows Bitmap File Format Summary</a>
  */
-public class BmpDecoderIterator implements PixelIterator<byte[]> {
+public class BmpDecoderIterator implements PixelIterator<byte[]>, AutoCloseable {
+
+	/**
+	 * This {@link PixelIterator.Source} produces {@link BmpDecoderIterator BmpDecoderIterators} from a given URL.
+	 */
+	public static class Source implements PixelIterator.Source<byte[]> {
+		private final InputStreamSource src;
+		private int width = -1;
+		private int height = -1;
+
+		public Source(InputStreamSource src) {
+			this.src = Objects.requireNonNull(src);
+		}
+
+		@Override
+		public BmpDecoderIterator createPixelIterator() {
+			try {
+				BmpDecoderIterator returnValue = BmpDecoderIterator.get(src.createInputStream());
+				if (width == -1) {
+					width = returnValue.getWidth();
+					height = returnValue.getHeight();
+				}
+				return returnValue;
+			} catch(IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		@Override
+		public int getWidth() {
+			validateSize();
+			return width;
+		}
+
+		@Override
+		public int getHeight() {
+			validateSize();
+			return height;
+		}
+
+		private void validateSize() {
+			if (width == -1) {
+				try(InputStream in = src.createInputStream()) {
+					Dimension d = BmpDecoder.getSize(src.createInputStream());
+					width = d.width;
+					height = d.height;
+				} catch(IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}
+	}
 
 	/**
 	 * Returns a <code>BmpDecoderIterator</code> from a <code>File</code>.
@@ -51,9 +100,19 @@ public class BmpDecoderIterator implements PixelIterator<byte[]> {
 	 *             if an IO problem occurs.
 	 */
 	public static BmpDecoderIterator get(File file) throws IOException {
-		try (InputStream in = new FileInputStream(file)) {
-			return get(in);
-		}
+		return get(file.toURI().toURL());
+	}
+
+	/**
+	 * Returns a <code>BmpDecoderIterator</code> from a <code>URL</code>.
+	 *
+	 * @throws BmpHeaderException
+	 *             if this file does not appear to be a valid BMP image.
+	 * @throws IOException
+	 *             if an IO problem occurs.
+	 */
+	public static BmpDecoderIterator get(URL url) throws IOException {
+		return new Source(new URLInputStreamSource(url)).createPixelIterator();
 	}
 
 	/**
@@ -99,6 +158,9 @@ public class BmpDecoderIterator implements PixelIterator<byte[]> {
 				header.bitsPerPixel, header.topDown);
 	}
 
+	/**
+	 * This specialized BmpDecoderIterator is for IndexColorModels.
+	 */
 	static class BmpDecoderIndexedIterator extends BmpDecoderIterator
 			implements IndexedBytePixelIterator {
 		IndexColorModel colorModel;
@@ -145,12 +207,18 @@ public class BmpDecoderIterator implements PixelIterator<byte[]> {
 				}
 			}
 		}
+
+		@Override
+		protected void validateDepth() {
+			// intentionally empty
+		}
 	}
 
 	int width, height, depth;
 	InputStream in;
+	boolean closed;
 	boolean topDown;
-	int y;
+	int rowCtr;
 	int scanline;
 
 	private BmpDecoderIterator(InputStream in, int width, int height, int depth,
@@ -162,69 +230,64 @@ public class BmpDecoderIterator implements PixelIterator<byte[]> {
 		this.topDown = topDown;
 
 		scanline = width * depth / 8;
-		if (!(depth == 32 || depth == 24)
-				&& getClass().equals(BmpDecoderIterator.class)) { // if this is
-																	// a
-																	// BmpDecoderIndexedIterator
-																	// we're
-																	// under
-																	// control
-			throw new IllegalArgumentException(
-					"unsupported depth (" + depth + ")");
-		}
-
 		int r = scanline % 4;
 		if (r != 0) {
 			scanline = scanline + (4 - r);
 		}
 
-		y = height - 1;
+		rowCtr = 0;
+		validateDepth();
+	}
+
+	/**
+	 * This throws an exception if the {@link #depth} field is unsupported.
+	 */
+	protected void validateDepth() {
+		if (!(depth == 32 || depth == 24)) {
+			throw new IllegalArgumentException(
+					"unsupported depth (" + depth + ")");
+		}
 	}
 
 	@Override
 	public void next(byte[] dest) {
-		try {
-			read(in, dest, scanline);
-		} catch (IOException e) {
-			System.err.println("height = " + height);
-			System.err.println("y = " + y);
-			RuntimeException e2 = new RuntimeException();
-			e2.initCause(e);
-			throw e2;
-		}
-		y--;
-	}
+		if (closed)
+			throw new IllegalStateException("This BmpDecoderIterator is closed.");
 
-	private static void read(InputStream in, byte[] dest, int length)
-			throws IOException {
-		int k = 0;
-		while (k < length) {
-			int read = in.read(dest, k, length - k);
-			if (read == -1)
-				throw new EOFException("k = " + k + " length = " + length);
-			k += read;
+		try {
+			int read = in.readNBytes(dest, 0, scanline);
+			if (read != scanline)
+				throw new IOException("requested " + scanline+", but read " + read + " bytes");
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rowCtr++;
+			checkComplete();
 		}
 	}
 
 	@Override
 	public void skip() {
+		if (closed)
+			return;
+
 		try {
-			skip(in, scanline);
+			in.skipNBytes(scanline);
 		} catch (IOException e) {
-			RuntimeException e2 = new RuntimeException();
-			e2.initCause(e);
-			throw e2;
+			throw new RuntimeException(e);
+		} finally {
+			rowCtr++;
+			checkComplete();
 		}
-		y--;
 	}
 
-	private static void skip(InputStream in, int length) throws IOException {
-		long k = 0;
-		while (k < length) {
-			long read = in.skip(length - k);
-			if (read == -1)
-				throw new EOFException();
-			k += read;
+	private void checkComplete() {
+		if (isDone()) {
+			try {
+				close();
+			} catch(IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 
@@ -257,11 +320,20 @@ public class BmpDecoderIterator implements PixelIterator<byte[]> {
 
 	@Override
 	public boolean isDone() {
-		return y == -1;
+		return rowCtr == height;
 	}
 
 	@Override
 	public boolean isTopDown() {
 		return topDown;
+	}
+
+	@Override
+	public void close() throws IOException {
+		if (!closed) {
+			closed = true;
+			in.close();
+			in = null;
+		}
 	}
 }
