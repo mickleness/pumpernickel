@@ -25,7 +25,8 @@ public class PixelSourceImageProducerTest extends TestCase {
         assertEquals(img1.getType(), img2.getType());
         for (int y = 0; y < img1.getHeight(); y++) {
             for (int x = 0; x < img1.getWidth(); x++) {
-                assertEquals(img1.getRGB(x, y), img2.getRGB(x, y));
+                assertEquals(Integer.toUnsignedString(img1.getRGB(x, y), 16) + " != " +
+                        Integer.toUnsignedString(img2.getRGB(x, y), 16), img1.getRGB(x, y), img2.getRGB(x, y));
             }
         }
     }

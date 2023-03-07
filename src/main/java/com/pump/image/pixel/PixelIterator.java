@@ -86,7 +86,7 @@ public interface PixelIterator<T> {
 			// this method needs to be overwritten if the ImageType is unknown
 			throw new UnsupportedOperationException();
 		}
-		return type.isOpaque();
+		return type.getColorModel().getTransparency() == Transparency.OPAQUE;
 	}
 
 	/**

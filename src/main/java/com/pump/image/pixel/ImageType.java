@@ -290,20 +290,6 @@ public class ImageType<T> implements Serializable {
         return !isInt();
     }
 
-    /**
-     * Returns true if this image type can only ever be opaque.
-     */
-    public boolean isOpaque() {
-        return colorModel.getTransparency() == Transparency.OPAQUE;
-    }
-
-    /**
-     * Return true if this ImageType represents pixels with a premultiplied alpha component.
-     */
-    public boolean isAlphaPremultiplied() {
-        return colorModel.isAlphaPremultiplied();
-    }
-
     @Override
     public String toString() {
         return "ImageType[ \"" + name + "\" (" + imageCode + ")]";

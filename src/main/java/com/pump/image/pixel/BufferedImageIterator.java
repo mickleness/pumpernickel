@@ -51,6 +51,9 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 					|| type == BufferedImage.TYPE_4BYTE_ABGR
 					|| type == BufferedImage.TYPE_4BYTE_ABGR_PRE
 					|| type == BufferedImage.TYPE_BYTE_GRAY) {
+				if (getDataBufferScanline(bufferedImage, false) > 0) {
+					return new BufferedImageIterator_FromDataBuffer(bufferedImage, isTopDown);
+				}
 				return new BufferedImageIterator_FromRaster(bufferedImage, isTopDown);
 			} else if (type == BufferedImage.TYPE_BYTE_INDEXED) {
 				return new BufferedImageIndexedIterator(bufferedImage, isTopDown);
@@ -70,54 +73,6 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			return bufferedImage.getHeight();
 		}
 	}
-
-	/**
-	 * I don't fully understand this phenomenon, but for TYPE_3BYTE_BGR images:
-	 * the pixel data is actually ordered as RGB. It gets flipped in the
-	 * ByteInterleavedRaster (see ByteInterleavedRaster#inOrder).
-	 * <p>
-	 * This method inspects the BufferedImage's color model and returns an image
-	 * type code that reflects the order pixel channels will really be stored with.
-	 * </p>
-	 */
-	// TODO: either remove or integrate with buffer-based iterator
-	private static int getRealByteType(BufferedImage bi) {
-		int describedType = bi.getType();
-		if (describedType == BufferedImage.TYPE_3BYTE_BGR) {
-			byte[] array = new byte[] { 10, 20, 30 };
-			int r = bi.getColorModel().getRed(array);
-			int g = bi.getColorModel().getGreen(array);
-			int b = bi.getColorModel().getBlue(array);
-
-			if (r == 10 && g == 20 && b == 30) {
-				return ImageType.TYPE_3BYTE_RGB;
-			} else if (b == 10 && g == 20 && r == 30) {
-				return BufferedImage.TYPE_3BYTE_BGR;
-			}
-			throw new IllegalStateException("unrecognized state: " + Arrays.toString(array) + ", r = " + r + ", g = "+ g + ", b = " + b);
-		} else if (describedType == BufferedImage.TYPE_4BYTE_ABGR
-				|| describedType == BufferedImage.TYPE_4BYTE_ABGR_PRE) {
-			byte[] array = new byte[] { 10, 20, 30, 40 };
-			int r = bi.getColorModel().getRed(array);
-			int g = bi.getColorModel().getGreen(array);
-			int b = bi.getColorModel().getBlue(array);
-			int a = bi.getColorModel().getAlpha(array);
-
-
-			if (a == 10 && r == 20 && g == 30 && b == 40) {
-				return ImageType.TYPE_4BYTE_ARGB;
-			} else if (a == 40 && r == 64  && g == 128 && b == 191) {
-				return ImageType.TYPE_4BYTE_ARGB_PRE;
-			} else if (b == 10 && g == 20 && r == 30 && a == 40) {
-				return ImageType.TYPE_4BYTE_BGRA;
-			} else if (r == 10 && g == 20 && b == 30 && a == 40) {
-				return ImageType.TYPE_4BYTE_RGBA;
-			}
-			throw new IllegalStateException("unrecognized state: " + Arrays.toString(array) + ", r = " + r + ", g = "+ g + ", b = " + b + ", a = "+ a);
-		}
-		return describedType;
-	}
-
 
 	/**
 	 * Creates a BufferedImage from a PixelIterator.
@@ -148,47 +103,152 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			dest = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_INDEXED,
 					indexModel);
 		} else {
-			int imageType = type;
-			if (type == ImageType.TYPE_4BYTE_ARGB || type == ImageType.TYPE_4BYTE_BGRA || type == ImageType.TYPE_4BYTE_RGBA)
-				imageType = BufferedImage.TYPE_4BYTE_ABGR;
-			if (type == ImageType.TYPE_4BYTE_RGBA_PRE)
-				imageType = BufferedImage.TYPE_4BYTE_ABGR_PRE;
-			if (type == ImageType.TYPE_3BYTE_RGB)
-				imageType = BufferedImage.TYPE_3BYTE_BGR;
-			dest = new BufferedImage(w, h, imageType);
+			type = getBufferedImageType(type);
+			i = ImageType.get(type).createPixelIterator(i);
+			dest = new BufferedImage(w, h, type);
 		}
 
-		if (i.isInt()) {
-			PixelIterator<int[]> ipi = (PixelIterator<int[]>) i;
-			int[] row = new int[w * i.getPixelSize()];
-			if (i.isTopDown()) {
-				for (int y = 0; y < h; y++) {
-					ipi.next(row);
-					dest.getRaster().setDataElements(0, y, w, 1, row);
+		int dataBufferScanline = getDataBufferScanline(dest, false);
+		if (dataBufferScanline != -1) {
+			if (i.isInt()) {
+				DataBufferInt dataBuffer = (DataBufferInt) dest.getRaster().getDataBuffer();
+				int[] imgData = dataBuffer.getData();
+				int bufferOff = dataBuffer.getOffset();
+
+				PixelIterator<int[]> ipi = (PixelIterator<int[]>) i;
+				int[] row = new int[w * i.getPixelSize()];
+				if (i.isTopDown()) {
+					for (int y = 0; y < h; y++) {
+						// TODO: we're writing data into row and then immediately copying it to another array. Can
+						// we write it do the dest array directly? We'd need to include an offset arg
+						ipi.next(row);
+						System.arraycopy(row, 0, imgData, bufferOff + y * dataBufferScanline, dataBufferScanline);
+					}
+				} else {
+					for (int y = h - 1; y >= 0; y--) {
+						ipi.next(row);
+						System.arraycopy(row, 0, imgData, bufferOff + y * dataBufferScanline, dataBufferScanline);
+					}
 				}
 			} else {
-				for (int y = h - 1; y >= 0; y--) {
-					ipi.next(row);
-					dest.getRaster().setDataElements(0, y, w, 1, row);
+				DataBufferByte dataBuffer = (DataBufferByte) dest.getRaster().getDataBuffer();
+				byte[] imgData = dataBuffer.getData();
+				int bufferOff = dataBuffer.getOffset();
+
+				PixelIterator<byte[]> bpi = (PixelIterator<byte[]>) i;
+				byte[] row = new byte[w * i.getPixelSize()];
+				if (bpi.isTopDown()) {
+					for (int y = 0; y < h; y++) {
+						bpi.next(row);
+						System.arraycopy(row, 0, imgData, bufferOff + y * dataBufferScanline, dataBufferScanline);
+					}
+				} else {
+					for (int y = h - 1; y >= 0; y--) {
+						bpi.next(row);
+						System.arraycopy(row, 0, imgData, bufferOff + y * dataBufferScanline, dataBufferScanline);
+					}
 				}
 			}
 		} else {
-			PixelIterator<byte[]> bpi = (PixelIterator<byte[]>) i;
-
-			byte[] row = new byte[w * i.getPixelSize()];
-			if (bpi.isTopDown()) {
-				for (int y = 0; y < h; y++) {
-					bpi.next(row);
-					dest.getRaster().setDataElements(0, y, w, 1, row);
+			if (i.isInt()) {
+				PixelIterator<int[]> ipi = (PixelIterator<int[]>) i;
+				int[] row = new int[w * i.getPixelSize()];
+				if (i.isTopDown()) {
+					for (int y = 0; y < h; y++) {
+						ipi.next(row);
+						dest.getRaster().setDataElements(0, y, w, 1, row);
+					}
+				} else {
+					for (int y = h - 1; y >= 0; y--) {
+						ipi.next(row);
+						dest.getRaster().setDataElements(0, y, w, 1, row);
+					}
 				}
 			} else {
-				for (int y = h - 1; y >= 0; y--) {
-					bpi.next(row);
-					dest.getRaster().setDataElements(0, y, w, 1, row);
+				PixelIterator<byte[]> bpi = (PixelIterator<byte[]>) i;
+				byte[] row = new byte[w * i.getPixelSize()];
+				if (bpi.isTopDown()) {
+					for (int y = 0; y < h; y++) {
+						bpi.next(row);
+						dest.getRaster().setDataElements(0, y, w, 1, row);
+					}
+				} else {
+					for (int y = h - 1; y >= 0; y--) {
+						bpi.next(row);
+						dest.getRaster().setDataElements(0, y, w, 1, row);
+					}
 				}
 			}
 		}
 		return dest;
+	}
+
+	/**
+	 * Identify the DataBuffer scanline, if possible. It's possible this value may not be identifiable,
+	 * so callers need to be ready to accept a return value of -1. This also returns -1 if there are
+	 * multiple buffer banks. (I have yet to find a clear explanation of when/how multiple banks occur
+	 * in the wild? If I understood this better maybe I could support it better?)
+	 *
+	 * @param bi the image to analyze
+	 * @param throwException if true then we throw an exception instead of returning -1
+	 * @return the DataBuffer scanline, or -1 if it can't be safely determined.
+	 */
+	private static int getDataBufferScanline(BufferedImage bi, boolean throwException) {
+		ImageType type = ImageType.get(bi.getType());
+		DataBuffer dataBuffer = bi.getData().getDataBuffer();
+		int arrayLength;
+		if (dataBuffer instanceof DataBufferInt) {
+			arrayLength = ((DataBufferInt) dataBuffer).getData().length;
+		} else if (dataBuffer instanceof DataBufferByte) {
+			arrayLength = ((DataBufferByte) dataBuffer).getData().length;
+		} else {
+			if (throwException)
+				throw new IllegalArgumentException("Unsupported DataBuffer: "+ dataBuffer.getClass().getName());
+			return -1;
+		}
+
+		if (dataBuffer.getNumBanks() != 1)
+			throw new IllegalArgumentException("Unsupported number of banks: "+ dataBuffer.getNumBanks());
+		int dataBufferOffset = dataBuffer.getOffset();
+		if (dataBufferOffset + bi.getWidth() * bi.getHeight() * type.getSampleCount() != arrayLength) {
+			if (throwException)
+				throw new IllegalArgumentException("Unsupported array: length = " + arrayLength + ", offset = " + dataBufferOffset + ", buffer size = " + dataBuffer.getSize());
+			return -1;
+		}
+		return bi.getWidth() * ImageType.get(bi.getType()).getSampleCount();
+	}
+
+	/**
+	 * If the argument is not a BufferedImage TYPE constant, then this identifies the closest matching
+	 * BufferedImage TYPE constant. For example: {@link ImageType#TYPE_4BYTE_RGBA_PRE} uses 4 bytes and
+	 * is premultiplied, so it will be converted to {@link BufferedImage#TYPE_4BYTE_ABGR_PRE}.
+	 */
+	public static int getBufferedImageType(int imageType) {
+		ImageType t = ImageType.get(imageType);
+		if (t.isBufferedImageType())
+			return imageType;
+
+		if (t.isInt()) {
+			if (t.getColorModel().hasAlpha()) {
+				if (t.getColorModel().isAlphaPremultiplied()) {
+					return BufferedImage.TYPE_INT_ARGB_PRE;
+				} else {
+					return BufferedImage.TYPE_INT_ARGB;
+				}
+			} else {
+				return BufferedImage.TYPE_INT_RGB;
+			}
+		} else {
+			if (t.getColorModel().hasAlpha()) {
+				if (t.getColorModel().isAlphaPremultiplied()) {
+					return BufferedImage.TYPE_4BYTE_ABGR_PRE;
+				} else {
+					return BufferedImage.TYPE_4BYTE_ABGR;
+				}
+			} else {
+				return BufferedImage.TYPE_3BYTE_BGR;
+			}
+		}
 	}
 
 	final BufferedImage bi;
@@ -201,6 +261,11 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		this(bi, bi.getType(), topDown);
 	}
 
+	/**
+	 * @param type the image type of `bi`, which isn't always {@link BufferedImage#getType()}. If we're
+	 *             relying on the Raster: in some cases we convert one byte type to another to reflect that
+	 *             the Raster reorders the bytes.
+	 */
 	private BufferedImageIterator(BufferedImage bi, int type, boolean topDown) {
 		this.type = type;
 		this.bi = bi;
@@ -270,16 +335,44 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		}
 	}
 
-	// TODO implement / test
-	static class BufferedImageByteIterator_FromDataBuffer extends BufferedImageIterator<byte[]> {
+	/**
+	 * This iterates over pixels by directly accessing the DataBuffer
+	 *
+	 * You should only construct this if {@link #getDataBufferScanline(BufferedImage, boolean)} returns a positive value.
+	 */
+	static class BufferedImageIterator_FromDataBuffer<T> extends BufferedImageIterator<T> {
+		private final int[] intData;
+		private final byte[] byteData;
+		private final int dataBufferOffset;
+		private final int scanline;
 
-		BufferedImageByteIterator_FromDataBuffer(BufferedImage bi, int imageTypeCode, boolean topDown) {
-			super(bi, imageTypeCode, topDown);
+		BufferedImageIterator_FromDataBuffer(BufferedImage bi, boolean topDown) {
+			super(bi, bi.getType(), topDown);
+			scanline = getDataBufferScanline(bi, true);
+			dataBufferOffset = bi.getRaster().getDataBuffer().getOffset();
+			if (bi.getRaster().getDataBuffer() instanceof DataBufferInt) {
+				intData = ((DataBufferInt)bi.getRaster().getDataBuffer()).getData();
+				byteData = null;
+			} else {
+				byteData = ((DataBufferByte)bi.getRaster().getDataBuffer()).getData();
+				intData = null;
+			}
 		}
 
 		@Override
-		public void next(byte[] dest) {
-
+		public void next(T dest) {
+			if (byteData != null) {
+				byte[] destBytes = (byte[]) dest;
+				System.arraycopy(byteData, dataBufferOffset + scanline * y, destBytes, 0, scanline);
+			} else {
+				int[] destInts = (int[]) dest;
+				System.arraycopy(intData, dataBufferOffset + scanline * y, destInts, 0, scanline);
+			}
+			if (topDown) {
+				y++;
+			} else {
+				y--;
+			}
 		}
 	}
 
