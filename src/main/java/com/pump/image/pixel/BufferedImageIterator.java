@@ -106,8 +106,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 			if (a == 10 && r == 20 && g == 30 && b == 40) {
 				return ImageType.TYPE_4BYTE_ARGB;
-			} else if (a == 10 && r == 20  && g == 30 && b == 40) {
-				// TODO: what exactly would RGB values be here?
+			} else if (a == 40 && r == 64  && g == 128 && b == 191) {
 				return ImageType.TYPE_4BYTE_ARGB_PRE;
 			} else if (b == 10 && g == 20 && r == 30 && a == 40) {
 				return ImageType.TYPE_4BYTE_BGRA;
