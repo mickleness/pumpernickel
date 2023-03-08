@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.net.URL;
 
 import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.PixelIterator;
 import com.pump.image.pixel.ScalingIterator;
 
