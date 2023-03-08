@@ -67,31 +67,6 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 		}
 	}
 
-	// TODO: remove this method
-
-	/**
-	 * Returns a <code>PixelIterator</code> scaled to a specific ratio.
-	 * <p>
-	 * If the ratio is 1.0: then this method returns the argument provided.
-	 * Otherwise a new scaled iterator is returned.
-	 * <p>
-	 * If the image type of the source image is one of the eight supported
-	 * types: then the new scaled iterator will also use that type. Otherwise
-	 * the new iterator will use ABGR / BGR (for bytes) or ARGB / RGB (for
-	 * ints).
-	 * 
-	 * @param src
-	 *            the incoming source image data.
-	 * @param scaledRatio
-	 *            the ratio to scale to, where 1.0 is 100%, .5 is 50%, etc.
-	 * @return a scaled iterator.
-	 */
-	public static <D, S> PixelIterator<D> get(ImageType<D> type, PixelIterator<S> src, float scaledRatio) {
-		int newWidth = Math.max(1, (int) (scaledRatio * src.getWidth()));
-		int newHeight = Math.max(1, (int) (scaledRatio * src.getHeight()));
-		return new ScalingIterator<D>(type, src, newWidth, newHeight);
-	}
-
 	final int srcW, srcH, dstW, dstH;
 	final PixelIterator srcIterator;
 	int dstY;

@@ -214,7 +214,9 @@ public class BmpDecoder {
 		float ratio = Math.min(widthRatio, heightRatio);
 
 		if (ratio < 1) {
-			i = ScalingIterator.get(ImageType.get(i.getType()), i, ratio);
+			int scaledWidth = Math.max(1, Math.round(ratio * srcW));
+			int scaledHeight = Math.max(1, Math.round(ratio * srcH));
+			i = new ScalingIterator(i, scaledWidth, scaledHeight);
 		}
 		return BufferedImageIterator.create(i, null);
 	}
