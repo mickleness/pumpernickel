@@ -104,7 +104,7 @@ public class ImageTypeTest extends TestCase {
         PixelIterator lastIter = inputType.createPixelIterator(iter);
 
         int[] actual = new int[input.length];
-        lastIter.next(actual);
+        lastIter.next(actual, 0);
 
         assertEquals(Arrays.asList(types).toString(), input, actual);
     }

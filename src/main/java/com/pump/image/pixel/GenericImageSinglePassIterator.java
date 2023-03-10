@@ -17,10 +17,7 @@ import java.awt.image.*;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import com.pump.awt.Dimension2D;
 import com.pump.image.ColorModelUtils;
@@ -163,12 +160,10 @@ public abstract class GenericImageSinglePassIterator<T>
 		}
 
 		@Override
-		void fillEmptyRow(Object dest) {
+		void fillEmptyRow(Object dest, int destArrayOffset) {
 			int bytesPerPixel = getPixelSize();
 			byte[] destArray = (byte[]) dest;
-			for (int x = 0; x < width * bytesPerPixel; x++) {
-				destArray[x] = 0;
-			}
+			Arrays.fill(destArray, destArrayOffset, destArrayOffset + width * bytesPerPixel, (byte) 0);
 		}
 
 		/**
@@ -178,6 +173,8 @@ public abstract class GenericImageSinglePassIterator<T>
 			if (model.getTransferType() != DataBuffer.TYPE_BYTE
 					|| model.getPixelSize() != 24)
 				return false;
+			// TOOD: revisit this code
+
 			// There has to be a better way to do this, but I don't know what
 			// that is...
 			if (scratchArray == null || scratchArray.length < 3) {
@@ -211,6 +208,9 @@ public abstract class GenericImageSinglePassIterator<T>
 			if (model.getTransferType() != DataBuffer.TYPE_BYTE
 					|| model.getPixelSize() != 32)
 				return false;
+
+			// TODO: and revisit the one
+
 			// There has to be a better way to do this, but I don't know what
 			// that is...
 			if (scratchArray == null || scratchArray.length < 4) {
@@ -247,6 +247,9 @@ public abstract class GenericImageSinglePassIterator<T>
 			if (model.getTransferType() != DataBuffer.TYPE_BYTE
 					|| model.getPixelSize() != 8)
 				return false;
+
+			// TODO: revisit this; it may be outright wrong
+
 			// There has to be a better way to do this, but I don't know what
 			// that is...
 			if (scratchArray == null || scratchArray.length < 1) {
@@ -270,13 +273,13 @@ public abstract class GenericImageSinglePassIterator<T>
 		private byte[] scratchArray;
 
 		@Override
-		void populate(Object dest, Object pixels, int offset, int x, int width,
+		void populate(Object dest, int destArrayOffset, Object inPixels, int inOffset, int x, int width,
 				ColorModel colorModel) {
 			byte[] destArray = (byte[]) dest;
 			try {
 				int bitsPerPixel = colorModel.getPixelSize();
 				if (colorModel.getTransferType() == DataBuffer.TYPE_BYTE) {
-					byte[] pixelData = (byte[]) pixels;
+					byte[] pixelData = (byte[]) inPixels;
 					int bytesPerPixel = (bitsPerPixel + 7) / 8;
 					if (scratchArray == null
 							|| scratchArray.length < bytesPerPixel) {
@@ -285,119 +288,119 @@ public abstract class GenericImageSinglePassIterator<T>
 
 					if (type == BufferedImage.TYPE_3BYTE_BGR
 							&& bytesPerPixel == 3 && isBGR(colorModel)) {
-						System.arraycopy(pixelData, offset + 3 * x, destArray,
-								3 * x, width * 3);
+						System.arraycopy(pixelData, inOffset + 3 * x, destArray,
+								3 * x + destArrayOffset, width * 3);
 					} else if ((type == BufferedImage.TYPE_4BYTE_ABGR_PRE
 							|| type == BufferedImage.TYPE_4BYTE_ABGR)
 							&& bytesPerPixel == 4 && isABGR(colorModel)) {
-						System.arraycopy(pixelData, offset + 4 * x, destArray,
-								4 * x, width * 4);
+						System.arraycopy(pixelData, inOffset + 4 * x, destArray,
+								4 * x + destArrayOffset, width * 4);
 					} else if (type == BufferedImage.TYPE_BYTE_GRAY
 							&& bytesPerPixel == 1 && isGray(colorModel)) {
-						System.arraycopy(pixelData, offset + x, destArray, x,
+						System.arraycopy(pixelData, inOffset + x, destArray, x + destArrayOffset,
 								width);
 					} else {
 						for (int myX = x; myX < x + width; myX++) {
 							for (int k = 0; k < bytesPerPixel; k++) {
-								scratchArray[k] = pixelData[offset
+								scratchArray[k] = pixelData[inOffset
 										+ myX * bytesPerPixel + k];
 							}
 							int rgb = colorModel.getRGB(scratchArray);
 							if (type == BufferedImage.TYPE_3BYTE_BGR) {
 								destArray[3 * myX
-										+ 0] = (byte) ((rgb >> 16) & 0xff);
+										+ 0 + destArrayOffset] = (byte) ((rgb >> 16) & 0xff);
 								destArray[3 * myX
-										+ 1] = (byte) ((rgb >> 8) & 0xff);
+										+ 1 + destArrayOffset] = (byte) ((rgb >> 8) & 0xff);
 								destArray[3 * myX
-										+ 2] = (byte) ((rgb >> 0) & 0xff);
+										+ 2 + destArrayOffset] = (byte) ((rgb >> 0) & 0xff);
 							} else if (type == BufferedImage.TYPE_4BYTE_ABGR
 									|| type == BufferedImage.TYPE_4BYTE_ABGR) {
 								destArray[4 * myX
-										+ 0] = (byte) ((rgb >> 24) & 0xff);
+										+ 0 + destArrayOffset] = (byte) ((rgb >> 24) & 0xff);
 								destArray[4 * myX
-										+ 1] = (byte) ((rgb >> 16) & 0xff);
+										+ 1 + destArrayOffset] = (byte) ((rgb >> 16) & 0xff);
 								destArray[4 * myX
-										+ 2] = (byte) ((rgb >> 8) & 0xff);
+										+ 2 + destArrayOffset] = (byte) ((rgb >> 8) & 0xff);
 								destArray[4 * myX
-										+ 3] = (byte) ((rgb >> 0) & 0xff);
+										+ 3 + destArrayOffset] = (byte) ((rgb >> 0) & 0xff);
 							} else if (type == ImageType.TYPE_3BYTE_RGB) {
 								destArray[3 * myX
-										+ 0] = (byte) ((rgb >> 0) & 0xff);
+										+ 0 + destArrayOffset] = (byte) ((rgb >> 0) & 0xff);
 								destArray[3 * myX
-										+ 1] = (byte) ((rgb >> 8) & 0xff);
+										+ 1 + destArrayOffset] = (byte) ((rgb >> 8) & 0xff);
 								destArray[3 * myX
-										+ 2] = (byte) ((rgb >> 16) & 0xff);
+										+ 2 + destArrayOffset] = (byte) ((rgb >> 16) & 0xff);
 							} else if (type == ImageType.TYPE_4BYTE_ARGB
 									|| type == ImageType.TYPE_4BYTE_ARGB_PRE) {
 								destArray[4 * myX
-										+ 0] = (byte) ((rgb >> 24) & 0xff);
+										+ 0 + destArrayOffset] = (byte) ((rgb >> 24) & 0xff);
 								destArray[4 * myX
-										+ 1] = (byte) ((rgb >> 0) & 0xff);
+										+ 1 + destArrayOffset] = (byte) ((rgb >> 0) & 0xff);
 								destArray[4 * myX
-										+ 2] = (byte) ((rgb >> 8) & 0xff);
+										+ 2 + destArrayOffset] = (byte) ((rgb >> 8) & 0xff);
 								destArray[4 * myX
-										+ 3] = (byte) ((rgb >> 16) & 0xff);
+										+ 3 + destArrayOffset] = (byte) ((rgb >> 16) & 0xff);
 							} else if (type == BufferedImage.TYPE_BYTE_GRAY) {
 								int c1 = (rgb >> 16) & 0xff;
 								int c2 = (rgb >> 8) & 0xff;
 								int c3 = (rgb >> 0) & 0xff;
-								destArray[myX] = (byte) ((c1 + c2 + c3) / 3);
+								destArray[myX + destArrayOffset] = (byte) ((c1 + c2 + c3) / 3);
 							}
 						}
 					}
 				} else if (colorModel
 						.getTransferType() == DataBuffer.TYPE_INT) {
-					int[] pixelData = (int[]) pixels;
+					int[] pixelData = (int[]) inPixels;
 					if (type == BufferedImage.TYPE_3BYTE_BGR) {
 						for (int myX = x; myX < x + width; myX++) {
 							int rgb = colorModel
-									.getRGB(pixelData[myX + offset]);
+									.getRGB(pixelData[myX + inOffset]);
 							destArray[3 * myX
-									+ 0] = (byte) ((rgb >> 16) & 0xff);
-							destArray[3 * myX + 1] = (byte) ((rgb >> 8) & 0xff);
-							destArray[3 * myX + 2] = (byte) ((rgb >> 0) & 0xff);
+									+ 0 + destArrayOffset] = (byte) ((rgb >> 16) & 0xff);
+							destArray[3 * myX + 1 + destArrayOffset] = (byte) ((rgb >> 8) & 0xff);
+							destArray[3 * myX + 2 + destArrayOffset] = (byte) ((rgb >> 0) & 0xff);
 						}
 					} else if (type == BufferedImage.TYPE_4BYTE_ABGR
 							|| type == BufferedImage.TYPE_4BYTE_ABGR) {
 						for (int myX = x; myX < x + width; myX++) {
 							int rgb = colorModel
-									.getRGB(pixelData[myX + offset]);
+									.getRGB(pixelData[myX + inOffset]);
 							destArray[4 * myX
-									+ 0] = (byte) ((rgb >> 24) & 0xff);
+									+ 0 + destArrayOffset] = (byte) ((rgb >> 24) & 0xff);
 							destArray[4 * myX
-									+ 1] = (byte) ((rgb >> 16) & 0xff);
-							destArray[4 * myX + 2] = (byte) ((rgb >> 8) & 0xff);
-							destArray[4 * myX + 3] = (byte) ((rgb >> 0) & 0xff);
+									+ 1 + destArrayOffset] = (byte) ((rgb >> 16) & 0xff);
+							destArray[4 * myX + 2 + destArrayOffset] = (byte) ((rgb >> 8) & 0xff);
+							destArray[4 * myX + 3 + destArrayOffset] = (byte) ((rgb >> 0) & 0xff);
 						}
 					} else if (type == ImageType.TYPE_3BYTE_RGB) {
 						for (int myX = x; myX < x + width; myX++) {
 							int rgb = colorModel
-									.getRGB(pixelData[myX + offset]);
-							destArray[3 * myX + 0] = (byte) ((rgb >> 0) & 0xff);
-							destArray[3 * myX + 1] = (byte) ((rgb >> 8) & 0xff);
+									.getRGB(pixelData[myX + inOffset]);
+							destArray[3 * myX + 0 + destArrayOffset] = (byte) ((rgb >> 0) & 0xff);
+							destArray[3 * myX + 1 + destArrayOffset] = (byte) ((rgb >> 8) & 0xff);
 							destArray[3 * myX
-									+ 2] = (byte) ((rgb >> 16) & 0xff);
+									+ 2 + destArrayOffset] = (byte) ((rgb >> 16) & 0xff);
 						}
 					} else if (type == ImageType.TYPE_4BYTE_ARGB
 							|| type == ImageType.TYPE_4BYTE_ARGB_PRE) {
 						for (int myX = x; myX < x + width; myX++) {
 							int rgb = colorModel
-									.getRGB(pixelData[myX + offset]);
+									.getRGB(pixelData[myX + inOffset]);
 							destArray[4 * myX
-									+ 0] = (byte) ((rgb >> 24) & 0xff);
-							destArray[4 * myX + 1] = (byte) ((rgb >> 0) & 0xff);
-							destArray[4 * myX + 2] = (byte) ((rgb >> 8) & 0xff);
+									+ 0 + destArrayOffset] = (byte) ((rgb >> 24) & 0xff);
+							destArray[4 * myX + 1 + destArrayOffset] = (byte) ((rgb >> 0) & 0xff);
+							destArray[4 * myX + 2 + destArrayOffset] = (byte) ((rgb >> 8) & 0xff);
 							destArray[4 * myX
-									+ 3] = (byte) ((rgb >> 16) & 0xff);
+									+ 3 + destArrayOffset] = (byte) ((rgb >> 16) & 0xff);
 						}
 					} else if (type == BufferedImage.TYPE_BYTE_GRAY) {
 						for (int myX = x; myX < x + width; myX++) {
 							int rgb = colorModel
-									.getRGB(pixelData[myX + offset]);
+									.getRGB(pixelData[myX + inOffset]);
 							int c1 = (rgb >> 16) & 0xff;
 							int c2 = (rgb >> 8) & 0xff;
 							int c3 = (rgb >> 0) & 0xff;
-							destArray[myX] = (byte) ((c1 + c2 + c3) / 3);
+							destArray[myX + destArrayOffset] = (byte) ((c1 + c2 + c3) / 3);
 						}
 					}
 				} else {
@@ -421,8 +424,8 @@ public abstract class GenericImageSinglePassIterator<T>
 		 *             pass.
 		 */
 		@Override
-		public void next(byte[] dest) {
-			processNextRow(dest);
+		public void next(byte[] dest, int destOffset) {
+			processNextRow(dest, destOffset);
 		}
 	}
 
@@ -452,6 +455,8 @@ public abstract class GenericImageSinglePassIterator<T>
 		 */
 		static void flipBytes(int[] array, int offset, int length,
 				int constantMask, int byteIndex1, int byteIndex2) {
+			// TODO: can we remove this?
+
 			for (int i = 0; i < length; i++) {
 				int k = array[i + offset];
 				int byte1 = (k >> byteIndex1 * 8) & 0xff;
@@ -463,23 +468,21 @@ public abstract class GenericImageSinglePassIterator<T>
 		}
 
 		@Override
-		void fillEmptyRow(Object dest) {
+		void fillEmptyRow(Object dest, int destArrayOffset) {
 			int[] destArray = (int[]) dest;
-			for (int x = 0; x < width; x++) {
-				destArray[x] = 0;
-			}
+			Arrays.fill(destArray, destArrayOffset, destArrayOffset + width, 0);
 		}
 
 		private byte[] scratchArray;
 
 		@Override
-		void populate(Object dest, Object pixels, int offset, int x, int width,
+		void populate(Object dest, int destArrayOffset, Object inPixels, int inOffset, int x, int width,
 				ColorModel colorModel) {
 			int[] destArray = (int[]) dest;
 			try {
 				int bitsPerPixel = colorModel.getPixelSize();
 				if (colorModel.getTransferType() == DataBuffer.TYPE_BYTE) {
-					byte[] pixelData = (byte[]) pixels;
+					byte[] pixelData = (byte[]) inPixels;
 					int bytesPerPixel = (bitsPerPixel + 7) / 8;
 					if (scratchArray == null
 							|| scratchArray.length < bytesPerPixel) {
@@ -487,19 +490,19 @@ public abstract class GenericImageSinglePassIterator<T>
 					}
 					for (int myX = 0; myX < width; myX++) {
 						for (int k = 0; k < bytesPerPixel; k++) {
-							scratchArray[k] = pixelData[offset
+							scratchArray[k] = pixelData[inOffset
 									+ myX * bytesPerPixel + k];
 						}
 						int rgb = colorModel.getRGB(scratchArray);
-						destArray[myX + x] = rgb;
+						destArray[myX + x + destArrayOffset] = rgb;
 					}
 					if (type == BufferedImage.TYPE_INT_BGR) {
 						// flip bytes B and R, keeping A and G constant:
-						flipBytes(destArray, x, width, 0xff00ff00, 0, 2);
+						flipBytes(destArray, x + destArrayOffset, width, 0xff00ff00, 0, 2);
 					}
 				} else if (colorModel
 						.getTransferType() == DataBuffer.TYPE_INT) {
-					int[] pixelData = (int[]) pixels;
+					int[] pixelData = (int[]) inPixels;
 					DirectColorModel dcm = null;
 					if (colorModel instanceof DirectColorModel) {
 						dcm = (DirectColorModel) colorModel;
@@ -508,14 +511,14 @@ public abstract class GenericImageSinglePassIterator<T>
 							&& dcm.getRedMask() == 0xff0000
 							&& dcm.getGreenMask() == 0xff00
 							&& dcm.getBlueMask() == 0xff) {
-						System.arraycopy(pixelData, offset + x, dest, x, width);
+						System.arraycopy(pixelData, inOffset + x, dest, x + destArrayOffset, width);
 					} else if ((type == BufferedImage.TYPE_INT_ARGB
 							|| type == BufferedImage.TYPE_INT_ARGB_PRE)
 							&& dcm != null && dcm.getRedMask() == 0xff0000
 							&& dcm.getGreenMask() == 0xff00
 							&& dcm.getBlueMask() == 0xff
 							&& dcm.getAlphaMask() == 0xff000000) {
-						System.arraycopy(pixelData, offset + x, dest, x, width);
+						System.arraycopy(pixelData, inOffset + x, dest, x + destArrayOffset, width);
 					} else if ((type == BufferedImage.TYPE_INT_ARGB
 							|| type == BufferedImage.TYPE_INT_ARGB_PRE)
 							&& dcm != null && dcm.getRedMask() == 0xff0000
@@ -523,30 +526,30 @@ public abstract class GenericImageSinglePassIterator<T>
 							&& dcm.getBlueMask() == 0xff
 							&& dcm.getAlphaMask() == 0x00) {
 						for (int a = 0; a < width; a++) {
-							destArray[x + a] = 0xff000000
-									+ (pixelData[offset + x + a] & 0xffffff);
+							destArray[x + a + destArrayOffset] = 0xff000000
+									+ (pixelData[inOffset + x + a] & 0xffffff);
 						}
 					} else if (type == BufferedImage.TYPE_INT_BGR && dcm != null
 							&& dcm.getRedMask() == 0xff
 							&& dcm.getGreenMask() == 0xff00
 							&& dcm.getBlueMask() == 0xff0000) {
-						System.arraycopy(pixelData, offset + x, dest, x, width);
+						System.arraycopy(pixelData, inOffset + x, dest, x + destArrayOffset, width);
 					} else if (type == BufferedImage.TYPE_INT_BGR && dcm != null
 							&& dcm.getRedMask() == 0xff0000
 							&& dcm.getGreenMask() == 0xff00
 							&& dcm.getBlueMask() == 0xff) {
 						// we want BGR, but we have RGB:
-						System.arraycopy(pixelData, offset + x, dest, x, width);
-						flipBytes(destArray, x, width, 0xff00ff00, 0, 2);
+						System.arraycopy(pixelData, inOffset + x, dest, x + destArrayOffset, width);
+						flipBytes(destArray, x + destArrayOffset, width, 0xff00ff00, 0, 2);
 					} else {
 						for (int myX = x; myX < x + width; myX++) {
 							int rgb = colorModel.getRGB(pixelData[myX]);
-							destArray[myX] = rgb;
+							destArray[myX + destArrayOffset] = rgb;
 						}
 						// Of the 4 types we support, this is the only one that
 						// needs special attention here:
 						if (type == BufferedImage.TYPE_INT_BGR) {
-							flipBytes(destArray, x, width, 0xff00ff00, 0, 2);
+							flipBytes(destArray, x + destArrayOffset, width, 0xff00ff00, 0, 2);
 						}
 					}
 				} else {
@@ -570,8 +573,8 @@ public abstract class GenericImageSinglePassIterator<T>
 		 *             pass.
 		 */
 		@Override
-		public void next(int[] dest) {
-			processNextRow(dest);
+		public void next(int[] dest, int destOffset) {
+			processNextRow(dest, destOffset);
 		}
 	}
 
@@ -1126,7 +1129,7 @@ public abstract class GenericImageSinglePassIterator<T>
 	 * @param destArray
 	 *            will be either an int[] or byte[]
 	 */
-	synchronized void processNextRow(Object destArray) {
+	synchronized void processNextRow(Object destArray, int destArrayOffset) {
 		while (true) {
 			synchronized (outgoing) {
 				if (incoming.isEmpty()) {
@@ -1145,7 +1148,7 @@ public abstract class GenericImageSinglePassIterator<T>
 			try {
 				if (pixelPackage.finished) {
 					rowCtr++;
-					fillEmptyRow(destArray);
+					fillEmptyRow(destArray, destArrayOffset);
 					// guarantee that in the finally
 					// block below we'll continue to
 					// reuse this pixel package:
@@ -1162,7 +1165,7 @@ public abstract class GenericImageSinglePassIterator<T>
 					pixelPackage.error = error;
 					throw new NonSinglePassException(error);
 				} else if (pixelPackage.y == rowCtr) {
-					populate(destArray, pixelPackage.pixels,
+					populate(destArray, destArrayOffset, pixelPackage.pixels,
 							pixelPackage.offset, pixelPackage.x, pixelPackage.w,
 							pixelPackage.colorModel);
 					rowCtr++;
@@ -1195,8 +1198,9 @@ public abstract class GenericImageSinglePassIterator<T>
 		}
 	}
 
-	abstract void fillEmptyRow(Object destArray);
+	abstract void fillEmptyRow(Object destArray, int destArrayOffset);
 
-	abstract void populate(Object destArray, Object pixels, int offset, int x,
+	abstract void populate(Object destArray, int destArrayOffset,
+						   Object pixels, int offset, int x,
 			int width, ColorModel colorModel);
 }

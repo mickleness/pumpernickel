@@ -188,8 +188,8 @@ public class BasicGifEncoder extends GifEncoder {
 
 		int y = 0;
 		while (!c1.isDone()) {
-			c1.next(row1);
-			c2.next(row2);
+			c1.next(row1, 0);
+			c2.next(row2, 0);
 			int w = incoming.getWidth();
 			for (int x = 0; x < w; x++) {
 				int a1 = (row1[x] >> 24) & 0xff;

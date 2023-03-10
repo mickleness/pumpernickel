@@ -492,7 +492,8 @@ public class ImageLoader {
 
 				PixelIterator<int[]> dstIterInt = (PixelIterator<int[]>) dstIter;
 				while (!dstIterInt.isDone()) {
-					dstIterInt.next(rowInt);
+					// TODO: find alt way to insert pixels w/o calling raster.setDataElements(..)
+					dstIterInt.next(rowInt, 0);
 					dest.getRaster().setDataElements(x, y, w, 1, rowInt);
 					y++;
 				}
@@ -503,7 +504,8 @@ public class ImageLoader {
 
 				PixelIterator<byte[]> dstIterByte = (PixelIterator<byte[]>) dstIter;
 				while (!dstIterByte.isDone()) {
-					dstIterByte.next(rowByte);
+					// TODO: find alt way to insert pixels w/o calling raster.setDataElements(..)
+					dstIterByte.next(rowByte, 0);
 					dest.getRaster().setDataElements(x, y, w, 1, rowByte);
 					y++;
 				}

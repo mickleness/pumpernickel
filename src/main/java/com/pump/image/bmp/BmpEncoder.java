@@ -182,7 +182,7 @@ public class BmpEncoder {
 			// outperform ImageIO classes.
 			// So maybe (?) a similar performance gain can be seen here: is the ByteInterleavedRaster swapping
 			// color channels automatically for us?
-			i.next(scrap);
+			i.next(scrap, 0);
 			out.write(scrap, 0, scanLineSize);
 		}
 		if (closeStreamOnCompletion)

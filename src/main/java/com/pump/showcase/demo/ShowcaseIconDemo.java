@@ -170,8 +170,8 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 				byte[] row1 = new byte[b1.getWidth() * b1.getPixelSize()];
 				byte[] row2 = new byte[b2.getWidth() * b2.getPixelSize()];
 				while (!b1.isDone()) {
-					b1.next(row1);
-					b2.next(row2);
+					b1.next(row1, 0);
+					b2.next(row2, 0);
 					if (!Arrays.equals(row1, row2))
 						return false;
 				}
@@ -181,8 +181,8 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 				int[] row1 = new int[b1.getWidth() * b1.getPixelSize()];
 				int[] row2 = new int[b2.getWidth() * b2.getPixelSize()];
 				while (!b1.isDone()) {
-					b1.next(row1);
-					b2.next(row2);
+					b1.next(row1, 0);
+					b2.next(row2, 0);
 					if (!Arrays.equals(row1, row2))
 						return false;
 				}

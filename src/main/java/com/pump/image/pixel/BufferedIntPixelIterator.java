@@ -94,8 +94,8 @@ public class BufferedIntPixelIterator implements PixelIterator<int[]> {
 	}
 
 	@Override
-	public void next(int[] dest) {
-		System.arraycopy(data, dataIndex, dest, 0, width);
+	public void next(int[] dest, int offset) {
+		System.arraycopy(data, dataIndex, dest, offset, width);
 		dataIndex += scanSize;
 		row++;
 	}

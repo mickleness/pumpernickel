@@ -48,8 +48,8 @@ public class NearestNeighborImageQuantization extends ImageQuantization {
 			y++;
 		}
 
-		public void next(byte[] dest) {
-			iter.next(incomingRow);
+		public void next(byte[] dest, int offset) {
+			iter.next(incomingRow, 0);
 
 			if (isOpaque()) {
 
@@ -60,7 +60,7 @@ public class NearestNeighborImageQuantization extends ImageQuantization {
 
 					int index = lut.getIndexMatch(r, g, b);
 
-					dest[x] = (byte) (index);
+					dest[x + offset] = (byte) (index);
 				}
 			} else {
 				int t = icm.getTransparentPixel();
@@ -77,7 +77,7 @@ public class NearestNeighborImageQuantization extends ImageQuantization {
 						index = lut.getIndexMatch(r, g, b);
 					}
 
-					dest[x] = (byte) (index);
+					dest[x + offset] = (byte) (index);
 				}
 			}
 			y++;

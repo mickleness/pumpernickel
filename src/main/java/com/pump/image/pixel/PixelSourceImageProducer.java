@@ -63,14 +63,14 @@ public class PixelSourceImageProducer implements ImageProducer {
                 if (iterator.isInt()) {
                     int[] row = new int[iterator.getWidth() * pixelSize];
                     for (int k = 0; k < height; k++) {
-                        iterator.next(row);
+                        iterator.next(row, 0);
                         multiConsumer.setPixels(0, y, width, 1, colorModel, row, 0, width * pixelSize);
                         y += yIncr;
                     }
                 } else {
                     byte[] row = new byte[iterator.getWidth() * iterator.getPixelSize()];
                     for (int k = 0; k < height; k++) {
-                        iterator.next(row);
+                        iterator.next(row, 0);
                         multiConsumer.setPixels(0, y, width, 1, colorModel, row, 0, width * pixelSize);
                         y += yIncr;
                     }

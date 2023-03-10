@@ -116,18 +116,13 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				int bufferOff = dataBuffer.getOffset();
 
 				PixelIterator<int[]> ipi = (PixelIterator<int[]>) i;
-				int[] row = new int[w * i.getPixelSize()];
 				if (i.isTopDown()) {
 					for (int y = 0; y < h; y++) {
-						// TODO: we're writing data into row and then immediately copying it to another array. Can
-						// we write it do the dest array directly? We'd need to include an offset arg
-						ipi.next(row);
-						System.arraycopy(row, 0, imgData, bufferOff + y * dataBufferScanline, dataBufferScanline);
+						ipi.next(imgData, bufferOff + y * dataBufferScanline);
 					}
 				} else {
 					for (int y = h - 1; y >= 0; y--) {
-						ipi.next(row);
-						System.arraycopy(row, 0, imgData, bufferOff + y * dataBufferScanline, dataBufferScanline);
+						ipi.next(imgData, bufferOff + y * dataBufferScanline);
 					}
 				}
 			} else {
@@ -136,16 +131,13 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				int bufferOff = dataBuffer.getOffset();
 
 				PixelIterator<byte[]> bpi = (PixelIterator<byte[]>) i;
-				byte[] row = new byte[w * i.getPixelSize()];
 				if (bpi.isTopDown()) {
 					for (int y = 0; y < h; y++) {
-						bpi.next(row);
-						System.arraycopy(row, 0, imgData, bufferOff + y * dataBufferScanline, dataBufferScanline);
+						bpi.next(imgData, bufferOff + y * dataBufferScanline);
 					}
 				} else {
 					for (int y = h - 1; y >= 0; y--) {
-						bpi.next(row);
-						System.arraycopy(row, 0, imgData, bufferOff + y * dataBufferScanline, dataBufferScanline);
+						bpi.next(imgData, bufferOff + y * dataBufferScanline);
 					}
 				}
 			}
@@ -155,12 +147,12 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				int[] row = new int[w * i.getPixelSize()];
 				if (i.isTopDown()) {
 					for (int y = 0; y < h; y++) {
-						ipi.next(row);
+						ipi.next(row, 0);
 						dest.getRaster().setDataElements(0, y, w, 1, row);
 					}
 				} else {
 					for (int y = h - 1; y >= 0; y--) {
-						ipi.next(row);
+						ipi.next(row, 0);
 						dest.getRaster().setDataElements(0, y, w, 1, row);
 					}
 				}
@@ -169,12 +161,12 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				byte[] row = new byte[w * i.getPixelSize()];
 				if (bpi.isTopDown()) {
 					for (int y = 0; y < h; y++) {
-						bpi.next(row);
+						bpi.next(row, 0);
 						dest.getRaster().setDataElements(0, y, w, 1, row);
 					}
 				} else {
 					for (int y = h - 1; y >= 0; y--) {
-						bpi.next(row);
+						bpi.next(row, 0);
 						dest.getRaster().setDataElements(0, y, w, 1, row);
 					}
 				}
@@ -303,6 +295,8 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			}
 		}
 
+		final int scanline;
+
 		BufferedImageIterator_FromRaster(BufferedImage bi, boolean topDown) {
 			super(bi, getRasterReturnType(bi), topDown);
 			if (!(type == BufferedImage.TYPE_INT_ARGB
@@ -317,21 +311,32 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				throw new IllegalArgumentException("The image type "
 						+ ImageType.toString(type) + " is not supported.");
 			}
+			scanline = bi.getWidth() * ImageType.get(getType()).getSampleCount();
 		}
 
+		private Object spareArray;
+
 		@Override
-		public void next(T dest) {
-			if (topDown) {
-				if (y >= h)
-					throw new RuntimeException("end of data reached");
+		public void next(T dest, int offset) {
+			if (y >= h || y <= -1)
+				throw new RuntimeException("end of data reached");
+
+			if (offset == 0) {
 				bi.getRaster().getDataElements(0, y, w, 1, dest);
-				y++;
 			} else {
-				if (y <= -1)
-					throw new RuntimeException("end of data reached");
-				bi.getRaster().getDataElements(0, y, w, 1, dest);
-				y--;
+				if (spareArray == null) {
+					if (ImageType.get(getType()).isInt()) {
+						spareArray = new int[scanline];
+					} else {
+						spareArray = new byte[scanline];
+					}
+				}
+				// yikes, this feels especially wasteful. This is why this we prefer _fromDataBuffer over this class
+				bi.getRaster().getDataElements(0, y, w, 1, spareArray);
+				System.arraycopy(spareArray, 0, dest, offset, scanline);
 			}
+
+			y += topDown ? 1 : -1;
 		}
 	}
 
@@ -348,6 +353,9 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 		BufferedImageIterator_FromDataBuffer(BufferedImage bi, boolean topDown) {
 			super(bi, bi.getType(), topDown);
+
+			// TODO: what about subimages?
+
 			scanline = getDataBufferScanline(bi, true);
 			dataBufferOffset = bi.getRaster().getDataBuffer().getOffset();
 			if (bi.getRaster().getDataBuffer() instanceof DataBufferInt) {
@@ -360,13 +368,13 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		}
 
 		@Override
-		public void next(T dest) {
+		public void next(T dest, int destOffset) {
 			if (byteData != null) {
 				byte[] destBytes = (byte[]) dest;
-				System.arraycopy(byteData, dataBufferOffset + scanline * y, destBytes, 0, scanline);
+				System.arraycopy(byteData, dataBufferOffset + scanline * y, destBytes, destOffset, scanline);
 			} else {
 				int[] destInts = (int[]) dest;
-				System.arraycopy(intData, dataBufferOffset + scanline * y, destInts, 0, scanline);
+				System.arraycopy(intData, dataBufferOffset + scanline * y, destInts, destOffset, scanline);
 			}
 			if (topDown) {
 				y++;

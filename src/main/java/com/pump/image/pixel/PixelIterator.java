@@ -152,5 +152,5 @@ public interface PixelIterator<T> {
 	 * @param dest
 	 *            the array to store the pixels in
 	 */
-	void next(T dest);
+	void next(T dest, int offset);
 }

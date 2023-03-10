@@ -51,7 +51,7 @@ public class GifImageDataBlock extends GifBlock {
 			LZWOutputStream out = new LZWOutputStream(bytes, colorDepth, false);
 			byte[] row = new byte[w];
 			for (int y = 0; y < h; y++) {
-				imageData.next(row);
+				imageData.next(row, 0);
 				out.write(row);
 			}
 			out.close();
@@ -78,7 +78,7 @@ public class GifImageDataBlock extends GifBlock {
 		try {
 			LZWOutputStream out = new LZWOutputStream(bytes, colorDepth, false);
 			for (int y = 0; y < h; y++) {
-				iter.next(block);
+				iter.next(block, 0);
 				out.write(block);
 			}
 			out.close();

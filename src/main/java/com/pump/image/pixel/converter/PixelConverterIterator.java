@@ -41,7 +41,7 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
             colorModel = new IndexColorModelLUT(i.getIndexColorModel());
             isByteToByte = imageType.isByte();
             isIntToInt = false;
-            srcType = null;
+            srcType = null; // there is no ImageType for indexed pixel iterators
         } else {
             srcType = ImageType.get(src.getType());
             isByteToByte = imageType.isByte() && srcType.isByte();
@@ -92,7 +92,7 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
     }
 
     @Override
-    public void next(T dest) {
+    public void next(T dest, int destOffset) {
         Object srcArray;
         if (scratchIntArray != null) {
             srcArray = scratchIntArray;
@@ -112,53 +112,60 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
             }
         }
 
-        src.next(srcArray);
+        int srcArrayOffset;
+        if (srcArray == dest) {
+            srcArrayOffset = destOffset;
+            src.next(srcArray, destOffset);
+        } else {
+            srcArrayOffset = 0;
+            src.next(srcArray, 0);
+        }
 
         switch (src.getType()) {
             case BufferedImage.TYPE_INT_ARGB:
-                converter.convertFromARGB(dest, 0, (int[]) srcArray, 0, src.getWidth());
+                converter.convertFromARGB(dest, destOffset, (int[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case BufferedImage.TYPE_INT_RGB:
-                converter.convertFromRGB(dest, 0, (int[]) srcArray, 0, src.getWidth());
+                converter.convertFromRGB(dest, destOffset, (int[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case BufferedImage.TYPE_INT_BGR:
-                converter.convertFromBGR(dest, 0, (int[]) srcArray, 0, src.getWidth());
+                converter.convertFromBGR(dest, destOffset, (int[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case BufferedImage.TYPE_INT_ARGB_PRE:
-                converter.convertFromARGBPre(dest, 0, (int[]) srcArray, 0, src.getWidth());
+                converter.convertFromARGBPre(dest, destOffset, (int[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case ImageType.TYPE_4BYTE_ARGB:
-                converter.convertFromARGB(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                converter.convertFromARGB(dest, destOffset, (byte[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case ImageType.TYPE_4BYTE_ARGB_PRE:
-                converter.convertFromARGBPre(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                converter.convertFromARGBPre(dest, destOffset, (byte[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case BufferedImage.TYPE_4BYTE_ABGR:
-                converter.convertFromABGR(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                converter.convertFromABGR(dest, destOffset, (byte[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-                converter.convertFromABGRPre(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                converter.convertFromABGRPre(dest, destOffset, (byte[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case ImageType.TYPE_4BYTE_BGRA:
-                converter.convertFromBGRA(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                converter.convertFromBGRA(dest, destOffset, (byte[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case ImageType.TYPE_4BYTE_RGBA:
-                converter.convertFromRGBA(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                converter.convertFromRGBA(dest, destOffset, (byte[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case ImageType.TYPE_4BYTE_RGBA_PRE:
-                converter.convertFromRGBAPre(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                converter.convertFromRGBAPre(dest, destOffset, (byte[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case BufferedImage.TYPE_BYTE_GRAY:
-                converter.convertFromGray(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                converter.convertFromGray(dest, destOffset, (byte[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case ImageType.TYPE_3BYTE_RGB:
-                converter.convertFromRGB(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                converter.convertFromRGB(dest, destOffset, (byte[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case BufferedImage.TYPE_3BYTE_BGR:
-                converter.convertFromBGR(dest, 0, (byte[]) srcArray, 0, src.getWidth());
+                converter.convertFromBGR(dest, destOffset, (byte[]) srcArray, srcArrayOffset, src.getWidth());
                 break;
             case BufferedImage.TYPE_BYTE_INDEXED:
-                converter.convertFromIndexed(dest, 0, (byte[]) srcArray, 0, src.getWidth(), colorModel);
+                converter.convertFromIndexed(dest, destOffset, (byte[]) srcArray, srcArrayOffset, src.getWidth(), colorModel);
                 break;
             default:
                 throw new UnsupportedOperationException("Unable to convert from " + src.getType() + " to " + imageType.getName());

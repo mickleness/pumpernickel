@@ -194,7 +194,9 @@ public abstract class ImageQuantization {
 		IndexedBytePixelIterator iter = createImageData(source, colorLUT);
 		int y = 0;
 		while (!iter.isDone()) {
-			iter.next(row);
+			// TODO use BufferedImageIterator methods to populate BufferedImage. They'll plug directly
+			// into the DataBuffer instead of going through the raster.setDataElements
+			iter.next(row, 0);
 			bi.getRaster().setDataElements(0, y, width, 1, row);
 			y++;
 		}

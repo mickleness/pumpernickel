@@ -110,7 +110,7 @@ public class ARGBPixels implements Serializable {
 			PixelIterator<int[]> c = ImageType.INT_ARGB.createPixelIterator(srcImage);
 			int y = 0;
 			while (!c.isDone()) {
-				c.next(row);
+				c.next(row, 0);
 				System.arraycopy(row, 0, pixels, y * width, width);
 				y++;
 			}

@@ -181,23 +181,23 @@ public class BmpDecoderIterator implements PixelIterator<byte[]>, AutoCloseable 
 		}
 
 		@Override
-		public void next(byte[] dest) {
-			super.next(dest);
+		public void next(byte[] dest, int offset) {
+			super.next(dest, offset);
 			// unpack the data
 			if (depth == 4) {
 				for (int x = width / 2; x >= 0; x--) {
-					byte k = dest[x];
+					byte k = dest[x + offset];
 					if (2 * x + 1 < width)
-						dest[2 * x + 1] = (byte) (k & 0x0f);
+						dest[2 * x + 1 + offset] = (byte) (k & 0x0f);
 					if (2 * x < width)
-						dest[2 * x] = (byte) ((k >> 4) & 0x0f);
+						dest[2 * x + offset] = (byte) ((k >> 4) & 0x0f);
 				}
 			} else if (depth == 1) {
 				for (int x = width / 8; x >= 0; x--) {
-					byte k = dest[x];
+					byte k = dest[x + offset];
 					for (int i = 7; i >= 0; i--) {
 						if (8 * x + i < width)
-							dest[8 * x + i] = (byte) ((k >> (7 - i)) & 0x01);
+							dest[8 * x + i + offset] = (byte) ((k >> (7 - i)) & 0x01);
 					}
 				}
 			}
@@ -245,12 +245,12 @@ public class BmpDecoderIterator implements PixelIterator<byte[]>, AutoCloseable 
 	}
 
 	@Override
-	public void next(byte[] dest) {
+	public void next(byte[] dest, int offset) {
 		if (closed)
 			throw new IllegalStateException("This BmpDecoderIterator is closed.");
 
 		try {
-			int read = in.readNBytes(dest, 0, scanline);
+			int read = in.readNBytes(dest, offset, scanline);
 			if (read != scanline)
 				throw new IOException("requested " + scanline+", but read " + read + " bytes");
 		} catch (IOException e) {

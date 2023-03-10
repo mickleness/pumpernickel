@@ -51,8 +51,8 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 			diffusionB = new int[kernel.length][iter.getWidth()];
 		}
 
-		public void next(byte[] dest) {
-			iter.next(incomingRow);
+		public void next(byte[] dest, int offset) {
+			iter.next(incomingRow, 0);
 			if (isOpaque()) {
 				for (int x = 0; x < iter.getWidth(); x++) {
 					int r = (incomingRow[x] >> 16) & 0xff;
@@ -87,7 +87,7 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 						}
 					}
 
-					dest[x] = (byte) (match.node.index);
+					dest[x + offset] = (byte) (match.node.index);
 				}
 
 				iterateDiffusionData(diffusionR);
@@ -98,7 +98,7 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 				for (int x = 0; x < iter.getWidth(); x++) {
 					int a = (incomingRow[x] >> 24) & 0xff;
 					if (a < 128) {
-						dest[x] = (byte) (t);
+						dest[x + offset] = (byte) (t);
 					} else {
 						int r = (incomingRow[x] >> 16) & 0xff;
 						int g = (incomingRow[x] >> 8) & 0xff;
@@ -134,7 +134,7 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 								}
 							}
 						}
-						dest[x] = (byte) (match.node.index);
+						dest[x + offset] = (byte) (match.node.index);
 					}
 				}
 
