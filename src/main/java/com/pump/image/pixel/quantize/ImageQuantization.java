@@ -13,6 +13,7 @@ package com.pump.image.pixel.quantize;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 
+import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.IndexedBytePixelIterator;
 
 /**
@@ -192,15 +193,7 @@ public abstract class ImageQuantization {
 				BufferedImage.TYPE_BYTE_INDEXED, icm);
 		byte[] row = new byte[width];
 		IndexedBytePixelIterator iter = createImageData(source, colorLUT);
-		int y = 0;
-		while (!iter.isDone()) {
-			// TODO use BufferedImageIterator methods to populate BufferedImage. They'll plug directly
-			// into the DataBuffer instead of going through the raster.setDataElements
-			iter.next(row, 0);
-			bi.getRaster().setDataElements(0, y, width, 1, row);
-			y++;
-		}
-
+		BufferedImageIterator.writeToImage(iter, bi);
 		return bi;
 	}
 
