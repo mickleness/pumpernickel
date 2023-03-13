@@ -121,4 +121,24 @@ public class BufferedImageIteratorTest extends TestCase {
 //            System.out.println("x = " + x + ", g = " + (pixels[x] & 0xff) );
 //        }
     }
+
+    public void test_BufferedImageIterator_FromDataBuffer_subimages_verticalStripes() {
+        BufferedImage bi = ScalingTest.createRainbowImage(12, 12, BufferedImage.TYPE_INT_RGB, false);
+        BufferedImage subimage = bi.getSubimage(4, 2, 4, 9);
+
+        PixelIterator iter = new BufferedImageIterator.BufferedImageIterator_FromDataBuffer<>(subimage, true);
+        BufferedImage subimage2 = BufferedImageIterator.writeToImage(iter, null);
+
+        PixelSourceImageProducerTest.assertImageEquals(subimage, subimage2);
+    }
+
+    public void test_BufferedImageIterator_FromDataBuffer_subimages_horizontalStripes() {
+        BufferedImage bi = ScalingTest.createRainbowImage(12, 12, BufferedImage.TYPE_INT_RGB, true);
+        BufferedImage subimage = bi.getSubimage(2, 4, 9, 4);
+
+        PixelIterator iter = new BufferedImageIterator.BufferedImageIterator_FromDataBuffer<>(subimage, true);
+        BufferedImage subimage2 = BufferedImageIterator.writeToImage(iter, null);
+
+        PixelSourceImageProducerTest.assertImageEquals(subimage, subimage2);
+    }
 }

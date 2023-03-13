@@ -222,12 +222,14 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		if (dataBuffer.getNumBanks() != 1)
 			throw new IllegalArgumentException("Unsupported number of banks: "+ dataBuffer.getNumBanks());
 		int dataBufferOffset = dataBuffer.getOffset();
-		if (dataBufferOffset + bi.getWidth() * bi.getHeight() * type.getSampleCount() != arrayLength) {
+		int rasterWidth = bi.getData().getWidth();
+		int rasterHeight = bi.getData().getHeight();
+		if (dataBufferOffset + rasterWidth * rasterHeight * type.getSampleCount() != arrayLength) {
 			if (throwException)
 				throw new IllegalArgumentException("Unsupported array: length = " + arrayLength + ", offset = " + dataBufferOffset + ", buffer size = " + dataBuffer.getSize());
 			return -1;
 		}
-		return bi.getWidth() * ImageType.get(bi.getType()).getSampleCount();
+		return rasterWidth * ImageType.get(bi.getType()).getSampleCount();
 	}
 
 	/**
@@ -370,11 +372,10 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		private final byte[] byteData;
 		private final int dataBufferOffset;
 		private final int scanline;
+		private final int rowLength, subimageY, subimageX;
 
 		BufferedImageIterator_FromDataBuffer(BufferedImage bi, boolean topDown) {
 			super(bi, bi.getType(), topDown);
-
-			// TODO: what about subimages?
 
 			scanline = getDataBufferScanline(bi, true);
 			dataBufferOffset = bi.getRaster().getDataBuffer().getOffset();
@@ -385,16 +386,23 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				byteData = ((DataBufferByte)bi.getRaster().getDataBuffer()).getData();
 				intData = null;
 			}
+			rowLength = bi.getWidth() * getPixelSize();
+			subimageX = -bi.getData().getMinX();
+			subimageY = -bi.getData().getMinY();
 		}
 
 		@Override
 		public void next(T dest, int destOffset) {
 			if (byteData != null) {
 				byte[] destBytes = (byte[]) dest;
-				System.arraycopy(byteData, dataBufferOffset + scanline * y, destBytes, destOffset, scanline);
+				System.arraycopy(byteData,
+						dataBufferOffset + scanline * (y + subimageY) + subimageX,
+						destBytes, destOffset, rowLength);
 			} else {
 				int[] destInts = (int[]) dest;
-				System.arraycopy(intData, dataBufferOffset + scanline * y, destInts, destOffset, scanline);
+				System.arraycopy(intData,
+						dataBufferOffset + scanline * (y + subimageY) + subimageX,
+						destInts, destOffset, rowLength);
 			}
 			if (topDown) {
 				y++;

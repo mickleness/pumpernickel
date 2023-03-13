@@ -19,7 +19,7 @@ public class PixelSourceImageProducerTest extends TestCase {
         }
     }
 
-    private void assertImageEquals(BufferedImage img1, BufferedImage img2) {
+    public static void assertImageEquals(BufferedImage img1, BufferedImage img2) {
         assertEquals(img1.getWidth(), img2.getWidth());
         assertEquals(img1.getHeight(), img2.getHeight());
         assertEquals(img1.getType(), img2.getType());
