@@ -41,6 +41,7 @@ import com.pump.showcase.chart.ChartDataGenerator;
 import com.pump.showcase.chart.PerformanceChartPanel;
 
 public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
+	// TODO: check perf results of this class.
 
 	private static final long serialVersionUID = 1L;
 

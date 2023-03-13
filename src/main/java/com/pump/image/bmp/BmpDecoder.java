@@ -95,7 +95,7 @@ public class BmpDecoder {
 			throws IOException {
 		try {
 			BmpDecoderIterator iterator = BmpDecoderIterator.get(in);
-			return BufferedImageIterator.create(iterator, dst);
+			return BufferedImageIterator.writeToImage(iterator, dst);
 		} catch (BmpHeaderException e) {
 			return null;
 		}
@@ -217,7 +217,7 @@ public class BmpDecoder {
 			int scaledHeight = Math.max(1, Math.round(ratio * srcH));
 			i = new ScalingIterator(i, scaledWidth, scaledHeight);
 		}
-		return BufferedImageIterator.create(i, null);
+		return BufferedImageIterator.writeToImage(i, null);
 	}
 
 	/**
@@ -252,6 +252,6 @@ public class BmpDecoder {
 			throws IOException {
 		PixelIterator i = BmpDecoderIterator.get(bmp);
 		i = new ScalingIterator(i, dest.getWidth(), dest.getHeight());
-		BufferedImageIterator.create(i, dest);
+		BufferedImageIterator.writeToImage(i, dest);
 	}
 }

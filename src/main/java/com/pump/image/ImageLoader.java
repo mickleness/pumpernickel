@@ -27,10 +27,7 @@ import java.util.Map;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.image.pixel.BufferedBytePixelIterator;
-import com.pump.image.pixel.BufferedIntPixelIterator;
-import com.pump.image.pixel.ImageType;
-import com.pump.image.pixel.PixelIterator;
+import com.pump.image.pixel.*;
 import com.pump.swing.BasicCancellable;
 import com.pump.swing.Cancellable;
 
@@ -402,8 +399,6 @@ public class ImageLoader {
 
 		private int lastImageType;
 		private ColorModel lastCM = null;
-		private int[] rowInt = null;
-		private byte[] rowByte = null;
 
 		@Override
 		public synchronized void setPixels(int x, int y, int w, int h,
@@ -483,34 +478,7 @@ public class ImageLoader {
 						"The dimensions of this image are not yet defined.  Cannot write image data until the dimensions of the image are known.");
 
 			PixelIterator<?> dstIter = destType.createPixelIterator(srcIter);
-
-			int minArraySize = dstIter.getWidth() * dstIter.getPixelSize();
-			if (dstIter.isInt()) {
-				if (rowInt == null
-						|| rowInt.length < minArraySize)
-					rowInt = new int[minArraySize];
-
-				PixelIterator<int[]> dstIterInt = (PixelIterator<int[]>) dstIter;
-				while (!dstIterInt.isDone()) {
-					// TODO: find alt way to insert pixels w/o calling raster.setDataElements(..)
-					dstIterInt.next(rowInt, 0);
-					dest.getRaster().setDataElements(x, y, w, 1, rowInt);
-					y++;
-				}
-			} else if (dstIter.isByte()) {
-				if (rowByte == null
-						|| rowByte.length < minArraySize)
-					rowByte = new byte[minArraySize];
-
-				PixelIterator<byte[]> dstIterByte = (PixelIterator<byte[]>) dstIter;
-				while (!dstIterByte.isDone()) {
-					// TODO: find alt way to insert pixels w/o calling raster.setDataElements(..)
-					dstIterByte.next(rowByte, 0);
-					dest.getRaster().setDataElements(x, y, w, 1, rowByte);
-					y++;
-				}
-			}
-
+			BufferedImageIterator.writeToImage(dstIter, dest, x, y);
 			setProgress(x + w, y + h);
 		}
 

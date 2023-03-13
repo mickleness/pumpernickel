@@ -142,7 +142,7 @@ public class Scaling {
 					iter = ImageType.get(imageType).createPixelIterator(iter);
 				}
 
-				BufferedImage image = BufferedImageIterator.create(iter,null);
+				BufferedImage image = BufferedImageIterator.writeToImage(iter,null);
 				return image;
 			} catch (IOException e) {
 				return null;
@@ -217,8 +217,10 @@ public class Scaling {
 			}
 		}
 
-		PixelIterator pi = new ScalingIterator( ImageType.get(dest.getType()), BufferedImageIterator.create(source), destSize.width, destSize.height);
-		BufferedImageIterator.create(pi, dest);
+		PixelIterator pi = new ScalingIterator( ImageType.get(dest.getType()),
+				BufferedImageIterator.create(source),
+				destSize.width, destSize.height);
+		BufferedImageIterator.writeToImage(pi, dest);
 		return dest;
 	}
 
@@ -290,7 +292,7 @@ public class Scaling {
 			destType = iter.getType();
 		PixelIterator scalingIter = destSize == null ? iter
 				: new ScalingIterator( ImageType.get(destType), iter, destSize.width, destSize.height);
-		return BufferedImageIterator.create(scalingIter, dest);
+		return BufferedImageIterator.writeToImage(scalingIter, dest);
 	}
 
 	/**

@@ -11,7 +11,6 @@
 package com.pump.image.pixel;
 
 import java.awt.image.*;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -24,7 +23,7 @@ import java.util.Objects;
  */
 public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
-	/**
+    /**
 	 * This is a PixelIteratorSource for BufferedImages.
 	 */
 	public static class Source implements PixelIterator.Source {
@@ -75,54 +74,75 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	}
 
 	/**
-	 * Creates a BufferedImage from a PixelIterator.
+	 * Write a PixelIterator to a BufferedImage.
 	 * 
 	 * @param i
 	 *            the pixel data
 	 * @param dest
-	 *            an optional image to write the image data to.
+	 *            an optional image to write the image data to. If this is null a new image is created.
+	 *            If this is non-null then the pixel data is written to this image. (And exceptions are thrown
+	 *            if the incoming data doesn't match the destination image.)
 	 * @return a BufferedImage
 	 */
-	public static BufferedImage create(PixelIterator<?> i, BufferedImage dest) {
-		int type = i.getType();
+	public static BufferedImage writeToImage(PixelIterator<?> i, BufferedImage dest) {
+		return writeToImage(i, dest, 0, 0);
+	}
 
-		int w = i.getWidth();
-		int h = i.getHeight();
+
+	/**
+	 * Write a PixelIterator to a BufferedImage starting at a specific (x,y) offset.
+	 *
+	 * @param srcIter
+	 *            the pixel data to iterate over and store in a BufferedImage.
+	 * @param dest
+	 *            an optional image to write the image data to. If this is null a new image is created.
+	 *            If this is non-null then the pixel data is written to this image. (And exceptions are thrown
+	 *            if the incoming data doesn't match the destination image.)
+	 * @param x the x offset to start writing to in the dest image.
+	 * @param y the y offset to start writing to in the dest image.
+	 * @return a BufferedImage
+	 */
+	public static BufferedImage writeToImage(PixelIterator<?> srcIter, BufferedImage dest, final int x, final int y) {
+		int type = srcIter.getType();
+
+		int w = srcIter.getWidth();
+		int h = srcIter.getHeight();
 
 		if (dest != null) {
 			if (dest.getType() != type)
 				throw new IllegalArgumentException("types mismatch ("
 						+ dest.getType() + "!=" + type + ")");
-			if (dest.getWidth() < w)
-				throw new IllegalArgumentException("size mismatch ("
+			if (dest.getWidth() < x + w || dest.getHeight() < y + h)
+				throw new IllegalArgumentException("size mismatch: "
 						+ dest.getWidth() + "x" + dest.getHeight()
-						+ " is too small for " + w + "x" + h + ")");
-		} else if (i instanceof IndexedBytePixelIterator) {
-			IndexColorModel indexModel = ((IndexedBytePixelIterator) i)
+						+ " is too small for " + w + "x" + h + " that starts at (" + x + ", " + y+")");
+		} else if (srcIter instanceof IndexedBytePixelIterator) {
+			IndexColorModel indexModel = ((IndexedBytePixelIterator) srcIter)
 					.getIndexColorModel();
-			dest = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_INDEXED,
+			dest = new BufferedImage(w + x, h + y, BufferedImage.TYPE_BYTE_INDEXED,
 					indexModel);
 		} else {
 			type = getBufferedImageType(type);
-			i = ImageType.get(type).createPixelIterator(i);
-			dest = new BufferedImage(w, h, type);
+			srcIter = ImageType.get(type).createPixelIterator(srcIter);
+			dest = new BufferedImage(w + x, h + y, type);
 		}
 
 		int dataBufferScanline = getDataBufferScanline(dest, false);
 		if (dataBufferScanline != -1) {
-			if (i.isInt()) {
+			int xOffset = x * srcIter.getPixelSize();
+			if (srcIter.isInt()) {
 				DataBufferInt dataBuffer = (DataBufferInt) dest.getRaster().getDataBuffer();
 				int[] imgData = dataBuffer.getData();
 				int bufferOff = dataBuffer.getOffset();
 
-				PixelIterator<int[]> ipi = (PixelIterator<int[]>) i;
-				if (i.isTopDown()) {
-					for (int y = 0; y < h; y++) {
-						ipi.next(imgData, bufferOff + y * dataBufferScanline);
+				PixelIterator<int[]> ipi = (PixelIterator<int[]>) srcIter;
+				if (srcIter.isTopDown()) {
+					for (int y2 = 0; y2 < h; y2++) {
+						ipi.next(imgData, bufferOff + (y + y2) * dataBufferScanline + xOffset);
 					}
 				} else {
-					for (int y = h - 1; y >= 0; y--) {
-						ipi.next(imgData, bufferOff + y * dataBufferScanline);
+					for (int y2 = h - 1; y2 >= 0; y2--) {
+						ipi.next(imgData, bufferOff + (y + y2) * dataBufferScanline + xOffset);
 					}
 				}
 			} else {
@@ -130,44 +150,44 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				byte[] imgData = dataBuffer.getData();
 				int bufferOff = dataBuffer.getOffset();
 
-				PixelIterator<byte[]> bpi = (PixelIterator<byte[]>) i;
+				PixelIterator<byte[]> bpi = (PixelIterator<byte[]>) srcIter;
 				if (bpi.isTopDown()) {
-					for (int y = 0; y < h; y++) {
-						bpi.next(imgData, bufferOff + y * dataBufferScanline);
+					for (int y2 = 0; y2 < h; y2++) {
+						bpi.next(imgData, bufferOff + (y + y2) * dataBufferScanline + xOffset);
 					}
 				} else {
-					for (int y = h - 1; y >= 0; y--) {
-						bpi.next(imgData, bufferOff + y * dataBufferScanline);
+					for (int y2 = h - 1; y2 >= 0; y2--) {
+						bpi.next(imgData, bufferOff + (y + y2) * dataBufferScanline + xOffset);
 					}
 				}
 			}
 		} else {
-			if (i.isInt()) {
-				PixelIterator<int[]> ipi = (PixelIterator<int[]>) i;
-				int[] row = new int[w * i.getPixelSize()];
-				if (i.isTopDown()) {
-					for (int y = 0; y < h; y++) {
+			if (srcIter.isInt()) {
+				PixelIterator<int[]> ipi = (PixelIterator<int[]>) srcIter;
+				int[] row = new int[w * ipi.getPixelSize()];
+				if (ipi.isTopDown()) {
+					for (int y2 = 0; y2 < h; y2++) {
 						ipi.next(row, 0);
-						dest.getRaster().setDataElements(0, y, w, 1, row);
+						dest.getRaster().setDataElements(x, y + y2, w, 1, row);
 					}
 				} else {
-					for (int y = h - 1; y >= 0; y--) {
+					for (int y2 = h - 1; y2 >= 0; y2--) {
 						ipi.next(row, 0);
-						dest.getRaster().setDataElements(0, y, w, 1, row);
+						dest.getRaster().setDataElements(x, y + y2, w, 1, row);
 					}
 				}
 			} else {
-				PixelIterator<byte[]> bpi = (PixelIterator<byte[]>) i;
-				byte[] row = new byte[w * i.getPixelSize()];
+				PixelIterator<byte[]> bpi = (PixelIterator<byte[]>) srcIter;
+				byte[] row = new byte[w * bpi.getPixelSize()];
 				if (bpi.isTopDown()) {
-					for (int y = 0; y < h; y++) {
+					for (int y2 = 0; y2 < h; y2++) {
 						bpi.next(row, 0);
-						dest.getRaster().setDataElements(0, y, w, 1, row);
+						dest.getRaster().setDataElements(x, y + y2, w, 1, row);
 					}
 				} else {
-					for (int y = h - 1; y >= 0; y--) {
+					for (int y2 = h - 1; y2 >= 0; y2--) {
 						bpi.next(row, 0);
-						dest.getRaster().setDataElements(0, y, w, 1, row);
+						dest.getRaster().setDataElements(x, y + y2, w, 1, row);
 					}
 				}
 			}

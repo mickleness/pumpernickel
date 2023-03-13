@@ -42,8 +42,7 @@ public interface PixelIterator<T> {
 		 * Create a BufferedImage using this Source.
 		 */
 		default BufferedImage createBufferedImage() {
-			// TODO: is BufferedImageIterator.create(PixelIterator) where we want this logic to live?
-			return BufferedImageIterator.create(createPixelIterator(), null);
+			return BufferedImageIterator.writeToImage(createPixelIterator(), null);
 		}
 	}
 

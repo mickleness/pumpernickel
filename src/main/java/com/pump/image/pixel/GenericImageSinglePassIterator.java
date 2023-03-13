@@ -1008,13 +1008,13 @@ public abstract class GenericImageSinglePassIterator<T>
 				iter.getHeight());
 		if (currentSize.width <= maxSize.width
 				&& currentSize.height <= maxSize.height) {
-			return BufferedImageIterator.create(iter, null);
+			return BufferedImageIterator.writeToImage(iter, null);
 		}
 		Dimension newSize = Dimension2D.scaleProportionally(currentSize,
 				maxSize);
 		PixelIterator scalingIter = new ScalingIterator(iter, newSize.width,
 				newSize.height);
-		return BufferedImageIterator.create(scalingIter, null);
+		return BufferedImageIterator.writeToImage(scalingIter, null);
 	}
 
 	/**
