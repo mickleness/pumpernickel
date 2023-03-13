@@ -14,6 +14,7 @@ package com.pump.image.pixel;
  * This iterates over a byte array of pixels.
  */
 public class BufferedBytePixelIterator implements PixelIterator<byte[]> {
+	// TODO: see if we can consolidate this with the int flavor
 
 	byte[] data;
 	int dataIndex, row;
