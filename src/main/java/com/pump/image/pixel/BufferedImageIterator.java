@@ -10,6 +10,8 @@
  */
 package com.pump.image.pixel;
 
+import com.pump.image.MutableBufferedImage;
+
 import java.awt.image.*;
 import java.util.Objects;
 
@@ -120,9 +122,10 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	 *            an optional image to write the image data to. If this is null a new image is created.
 	 *            If this is non-null then the pixel data is written to this image. (And exceptions are thrown
 	 *            if the incoming data doesn't match the destination image.)
-	 * @return a BufferedImage
+	 * @return a MutableBufferedImage. If the `dest` argument was non-null but was not a MutableBufferedImage,
+	 * 			  then a new MutableBufferedImage wrapper is created that points to the same underlying raster.
 	 */
-	public static BufferedImage writeToImage(PixelIterator<?> i, BufferedImage dest) {
+	public static MutableBufferedImage writeToImage(PixelIterator<?> i, BufferedImage dest) {
 		return writeToImage(i, dest, 0, 0);
 	}
 
@@ -138,13 +141,16 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	 *            if the incoming data doesn't match the destination image.)
 	 * @param x the x offset to start writing to in the dest image.
 	 * @param y the y offset to start writing to in the dest image.
-	 * @return a BufferedImage
+	 * @return a MutableBufferedImage. If the `dest` argument was non-null but was not a MutableBufferedImage,
+	 * 			  then a new MutableBufferedImage wrapper is created that points to the same underlying raster.
 	 */
-	public static BufferedImage writeToImage(PixelIterator<?> srcIter, BufferedImage dest, int x, int y) {
+	public static MutableBufferedImage writeToImage(PixelIterator<?> srcIter, BufferedImage dest, int x, int y) {
 		int type = srcIter.getType();
 
 		int w = srcIter.getWidth();
 		int h = srcIter.getHeight();
+
+		MutableBufferedImage returnValue;
 
 		if (dest != null) {
 			if (dest.getType() != type)
@@ -154,26 +160,31 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				throw new IllegalArgumentException("size mismatch: "
 						+ dest.getWidth() + "x" + dest.getHeight()
 						+ " is too small for " + w + "x" + h + " that starts at (" + x + ", " + y+")");
+			if (dest instanceof MutableBufferedImage) {
+				returnValue = (MutableBufferedImage) dest;
+			} else {
+				returnValue = new MutableBufferedImage(dest);
+			}
 		} else if (srcIter instanceof IndexedBytePixelIterator) {
 			IndexColorModel indexModel = ((IndexedBytePixelIterator) srcIter)
 					.getIndexColorModel();
-			dest = new BufferedImage(w + x, h + y, BufferedImage.TYPE_BYTE_INDEXED,
+			returnValue = new MutableBufferedImage(w + x, h + y, BufferedImage.TYPE_BYTE_INDEXED,
 					indexModel);
 		} else {
 			type = getBufferedImageType(type);
 			srcIter = ImageType.get(type).createPixelIterator(srcIter);
-			dest = new BufferedImage(w + x, h + y, type);
+			returnValue = new MutableBufferedImage(w + x, h + y, type);
 		}
 
-		int dataBufferScanline = getDataBufferScanline(dest, false);
+		int dataBufferScanline = getDataBufferScanline(returnValue, false);
 
 		boolean writeDirectToDataBuffer = dataBufferScanline != -1;
 		if (writeDirectToDataBuffer) {
-			int xOffset = (x + -dest.getRaster().getMinX()) * srcIter.getPixelSize();
-			y += -dest.getRaster().getMinY();
+			int xOffset = (x + -returnValue.getRaster().getSampleModelTranslateX()) * srcIter.getPixelSize();
+			y += -returnValue.getRaster().getSampleModelTranslateY();
 
 			if (srcIter.isInt()) {
-				DataBufferInt dataBuffer = (DataBufferInt) dest.getRaster().getDataBuffer();
+				DataBufferInt dataBuffer = (DataBufferInt) returnValue.getRaster().getDataBuffer();
 				int[] imgData = dataBuffer.getData();
 				int bufferOff = dataBuffer.getOffset();
 
@@ -188,7 +199,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 					}
 				}
 			} else {
-				DataBufferByte dataBuffer = (DataBufferByte) dest.getRaster().getDataBuffer();
+				DataBufferByte dataBuffer = (DataBufferByte) returnValue.getRaster().getDataBuffer();
 				byte[] imgData = dataBuffer.getData();
 				int bufferOff = dataBuffer.getOffset();
 
@@ -210,31 +221,44 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				if (ipi.isTopDown()) {
 					for (int y2 = 0; y2 < h; y2++) {
 						ipi.next(row, 0);
-						dest.getRaster().setDataElements(x, y + y2, w, 1, row);
+						returnValue.getRaster().setDataElements(x, y + y2, w, 1, row);
 					}
 				} else {
 					for (int y2 = h - 1; y2 >= 0; y2--) {
 						ipi.next(row, 0);
-						dest.getRaster().setDataElements(x, y + y2, w, 1, row);
+						returnValue.getRaster().setDataElements(x, y + y2, w, 1, row);
 					}
 				}
 			} else {
 				PixelIterator<byte[]> bpi = (PixelIterator<byte[]>) srcIter;
+
+				switch (bpi.getType()) {
+					case BufferedImage.TYPE_3BYTE_BGR:
+						bpi = ImageType.BYTE_RGB.createPixelIterator(bpi);
+						break;
+					case BufferedImage.TYPE_4BYTE_ABGR_PRE:
+						bpi = ImageType.BYTE_RGBA_PRE.createPixelIterator(bpi);
+						break;
+					case BufferedImage.TYPE_4BYTE_ABGR:
+						bpi = ImageType.BYTE_RGBA.createPixelIterator(bpi);
+						break;
+				}
+
 				byte[] row = new byte[w * bpi.getPixelSize()];
 				if (bpi.isTopDown()) {
 					for (int y2 = 0; y2 < h; y2++) {
 						bpi.next(row, 0);
-						dest.getRaster().setDataElements(x, y + y2, w, 1, row);
+						returnValue.getRaster().setDataElements(x, y + y2, w, 1, row);
 					}
 				} else {
 					for (int y2 = h - 1; y2 >= 0; y2--) {
 						bpi.next(row, 0);
-						dest.getRaster().setDataElements(x, y + y2, w, 1, row);
+						returnValue.getRaster().setDataElements(x, y + y2, w, 1, row);
 					}
 				}
 			}
 		}
-		return dest;
+		return returnValue;
 	}
 
 	/**
@@ -264,8 +288,12 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		if (dataBuffer.getNumBanks() != 1)
 			throw new IllegalArgumentException("Unsupported number of banks: "+ dataBuffer.getNumBanks());
 		int dataBufferOffset = dataBuffer.getOffset();
-		int rasterWidth = bi.getRaster().getWidth();
-		int rasterHeight = bi.getRaster().getHeight();
+		WritableRaster r = bi.getRaster();
+		while (r.getParent() != null) {
+			r = r.getWritableParent();
+		}
+		int rasterWidth = r.getWidth();
+		int rasterHeight = r.getHeight();
 		if (dataBufferOffset + rasterWidth * rasterHeight * type.getSampleCount() != arrayLength) {
 			if (throwException)
 				throw new IllegalArgumentException("Unsupported array: length = " + arrayLength + ", offset = " + dataBufferOffset + ", buffer size = " + dataBuffer.getSize());
@@ -429,8 +457,8 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				intData = null;
 			}
 			rowLength = bi.getWidth() * getPixelSize();
-			subimageX = -bi.getRaster().getMinX();
-			subimageY = -bi.getRaster().getMinY();
+			subimageX = -bi.getRaster().getSampleModelTranslateX();
+			subimageY = -bi.getRaster().getSampleModelTranslateY();
 		}
 
 		@Override

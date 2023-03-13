@@ -21,6 +21,7 @@ import java.net.URL;
 
 import com.pump.awt.Dimension2D;
 import com.pump.image.ImageSize;
+import com.pump.image.MutableBufferedImage;
 import com.pump.image.bmp.BmpDecoderIterator;
 import com.pump.io.FileInputStreamSource;
 import com.pump.io.InputStreamSource;
@@ -130,7 +131,7 @@ public class Scaling {
 				imageType, destSize);
 	}
 
-	private static BufferedImage scale(String name, InputStreamSource src,
+	private static MutableBufferedImage scale(String name, InputStreamSource src,
 			int imageType, Dimension destSize) {
 		String pathLower = name.toLowerCase();
 		if (pathLower.endsWith(".bmp")) {
@@ -142,7 +143,7 @@ public class Scaling {
 					iter = ImageType.get(imageType).createPixelIterator(iter);
 				}
 
-				BufferedImage image = BufferedImageIterator.writeToImage(iter,null);
+				MutableBufferedImage image = BufferedImageIterator.writeToImage(iter,null);
 				return image;
 			} catch (IOException e) {
 				return null;
@@ -197,7 +198,7 @@ public class Scaling {
 	 * @return the <code>dest</code> argument, or a new image if no
 	 *         <code>dest</code> argument was provided.
 	 */
-	public static BufferedImage scale(BufferedImage source, BufferedImage dest,
+	public static MutableBufferedImage scale(BufferedImage source, BufferedImage dest,
 			Dimension destSize) {
 		if (destSize == null && dest != null) {
 			destSize = new Dimension(dest.getWidth(), dest.getHeight());
@@ -209,10 +210,10 @@ public class Scaling {
 			throw new NullPointerException("no dest size");
 		} else if (dest == null) {
 			if (source.getColorModel().hasAlpha()) {
-				dest = new BufferedImage(destSize.width, destSize.height,
+				dest = new MutableBufferedImage(destSize.width, destSize.height,
 						BufferedImage.TYPE_INT_ARGB);
 			} else {
-				dest = new BufferedImage(destSize.width, destSize.height,
+				dest = new MutableBufferedImage(destSize.width, destSize.height,
 						BufferedImage.TYPE_INT_RGB);
 			}
 		}
@@ -220,8 +221,7 @@ public class Scaling {
 		PixelIterator pi = new ScalingIterator( ImageType.get(dest.getType()),
 				BufferedImageIterator.create(source),
 				destSize.width, destSize.height);
-		BufferedImageIterator.writeToImage(pi, dest);
-		return dest;
+		return BufferedImageIterator.writeToImage(pi, dest);
 	}
 
 	/**
@@ -248,7 +248,7 @@ public class Scaling {
 	 * @return the <code>dest</code> argument, or a new image if no
 	 *         <code>dest</code> argument was provided.
 	 */
-	public static BufferedImage scale(Image source, BufferedImage dest,
+	public static MutableBufferedImage scale(Image source, BufferedImage dest,
 			Dimension destSize) {
 		if (source instanceof BufferedImage) {
 			return scale((BufferedImage) source, dest, destSize);

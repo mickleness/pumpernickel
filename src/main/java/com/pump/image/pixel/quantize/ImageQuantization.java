@@ -13,6 +13,7 @@ package com.pump.image.pixel.quantize;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 
+import com.pump.image.MutableBufferedImage;
 import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.IndexedBytePixelIterator;
 
@@ -182,14 +183,14 @@ public abstract class ImageQuantization {
 	 *            the new color table to use. This must be created from an
 	 *            IndexColorModel.
 	 */
-	public final BufferedImage createImage(BufferedImage source,
-			ColorLUT colorLUT) {
+	public final MutableBufferedImage createImage(BufferedImage source,
+												  ColorLUT colorLUT) {
 		IndexColorModel icm = colorLUT.getIndexColorModel();
 		if (icm == null)
 			throw new NullPointerException();
 		int width = source.getWidth();
 		int height = source.getHeight();
-		BufferedImage bi = new BufferedImage(width, height,
+		MutableBufferedImage bi = new MutableBufferedImage(width, height,
 				BufferedImage.TYPE_BYTE_INDEXED, icm);
 		byte[] row = new byte[width];
 		IndexedBytePixelIterator iter = createImageData(source, colorLUT);

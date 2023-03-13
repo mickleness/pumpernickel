@@ -166,9 +166,9 @@ public class BufferedImageIteratorTest extends TestCase {
             BufferedImage rainbow = ScalingTest.createRainbowImage(6, 1, imageType, false);
             BufferedImage largeImage = new BufferedImage(30, 30, imageType);
             PixelIterator iter = BufferedImageIterator.create(rainbow);
-            BufferedImageIterator.writeToImage(iter, largeImage.getSubimage(10, 10, 10, 10));
+            BufferedImageIterator.writeToImage(iter, largeImage.getSubimage(9, 7, 11, 12));
 
-            PixelSourceImageProducerTest.assertImageEquals(rainbow, largeImage.getSubimage(10, 10, 6, 1));
+            PixelSourceImageProducerTest.assertImageEquals(rainbow, largeImage.getSubimage(9, 7, 6, 1));
         }
     }
 }
