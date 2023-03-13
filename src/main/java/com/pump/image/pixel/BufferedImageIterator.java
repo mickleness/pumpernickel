@@ -131,8 +131,8 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 		boolean writeDirectToDataBuffer = dataBufferScanline != -1;
 		if (writeDirectToDataBuffer) {
-			int xOffset = (x + -dest.getData().getMinX()) * srcIter.getPixelSize();
-			y += -dest.getData().getMinY();
+			int xOffset = (x + -dest.getRaster().getMinX()) * srcIter.getPixelSize();
+			y += -dest.getRaster().getMinY();
 
 			if (srcIter.isInt()) {
 				DataBufferInt dataBuffer = (DataBufferInt) dest.getRaster().getDataBuffer();
@@ -211,7 +211,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	 */
 	private static int getDataBufferScanline(BufferedImage bi, boolean throwException) {
 		ImageType type = ImageType.get(bi.getType());
-		DataBuffer dataBuffer = bi.getData().getDataBuffer();
+		DataBuffer dataBuffer = bi.getRaster().getDataBuffer();
 		int arrayLength;
 		if (dataBuffer instanceof DataBufferInt) {
 			arrayLength = ((DataBufferInt) dataBuffer).getData().length;
@@ -226,8 +226,8 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		if (dataBuffer.getNumBanks() != 1)
 			throw new IllegalArgumentException("Unsupported number of banks: "+ dataBuffer.getNumBanks());
 		int dataBufferOffset = dataBuffer.getOffset();
-		int rasterWidth = bi.getData().getWidth();
-		int rasterHeight = bi.getData().getHeight();
+		int rasterWidth = bi.getRaster().getWidth();
+		int rasterHeight = bi.getRaster().getHeight();
 		if (dataBufferOffset + rasterWidth * rasterHeight * type.getSampleCount() != arrayLength) {
 			if (throwException)
 				throw new IllegalArgumentException("Unsupported array: length = " + arrayLength + ", offset = " + dataBufferOffset + ", buffer size = " + dataBuffer.getSize());
@@ -391,8 +391,8 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				intData = null;
 			}
 			rowLength = bi.getWidth() * getPixelSize();
-			subimageX = -bi.getData().getMinX();
-			subimageY = -bi.getData().getMinY();
+			subimageX = -bi.getRaster().getMinX();
+			subimageY = -bi.getRaster().getMinY();
 		}
 
 		@Override
