@@ -102,7 +102,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	 * @param y the y offset to start writing to in the dest image.
 	 * @return a BufferedImage
 	 */
-	public static BufferedImage writeToImage(PixelIterator<?> srcIter, BufferedImage dest, final int x, final int y) {
+	public static BufferedImage writeToImage(PixelIterator<?> srcIter, BufferedImage dest, int x, int y) {
 		int type = srcIter.getType();
 
 		int w = srcIter.getWidth();
@@ -128,8 +128,12 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		}
 
 		int dataBufferScanline = getDataBufferScanline(dest, false);
-		if (dataBufferScanline != -1) {
-			int xOffset = x * srcIter.getPixelSize();
+
+		boolean writeDirectToDataBuffer = dataBufferScanline != -1;
+		if (writeDirectToDataBuffer) {
+			int xOffset = (x + -dest.getData().getMinX()) * srcIter.getPixelSize();
+			y += -dest.getData().getMinY();
+
 			if (srcIter.isInt()) {
 				DataBufferInt dataBuffer = (DataBufferInt) dest.getRaster().getDataBuffer();
 				int[] imgData = dataBuffer.getData();

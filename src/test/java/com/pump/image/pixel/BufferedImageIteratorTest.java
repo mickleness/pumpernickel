@@ -122,23 +122,53 @@ public class BufferedImageIteratorTest extends TestCase {
 //        }
     }
 
+    private static final int[] COLOR_IMAGE_TYPES = new int[] { BufferedImage.TYPE_3BYTE_BGR,
+            BufferedImage.TYPE_INT_RGB,
+            BufferedImage.TYPE_INT_BGR,
+            BufferedImage.TYPE_4BYTE_ABGR,
+            BufferedImage.TYPE_4BYTE_ABGR_PRE,
+            BufferedImage.TYPE_INT_ARGB,
+            BufferedImage.TYPE_INT_ARGB_PRE };
+
     public void test_BufferedImageIterator_FromDataBuffer_subimages_verticalStripes() {
-        BufferedImage bi = ScalingTest.createRainbowImage(12, 12, BufferedImage.TYPE_INT_RGB, false);
-        BufferedImage subimage = bi.getSubimage(4, 2, 4, 9);
+        for (int imageType : COLOR_IMAGE_TYPES) {
+            System.out.println("Testing " + ImageType.get(imageType));
+            BufferedImage bi = ScalingTest.createRainbowImage(12, 12, BufferedImage.TYPE_INT_RGB, false);
+            BufferedImage subimage = bi.getSubimage(4, 2, 4, 9);
 
-        PixelIterator iter = new BufferedImageIterator.BufferedImageIterator_FromDataBuffer<>(subimage, true);
-        BufferedImage subimage2 = BufferedImageIterator.writeToImage(iter, null);
+            PixelIterator iter = new BufferedImageIterator.BufferedImageIterator_FromDataBuffer<>(subimage, true);
+            BufferedImage subimage2 = BufferedImageIterator.writeToImage(iter, null);
 
-        PixelSourceImageProducerTest.assertImageEquals(subimage, subimage2);
+            PixelSourceImageProducerTest.assertImageEquals(subimage, subimage2);
+        }
     }
 
     public void test_BufferedImageIterator_FromDataBuffer_subimages_horizontalStripes() {
-        BufferedImage bi = ScalingTest.createRainbowImage(12, 12, BufferedImage.TYPE_INT_RGB, true);
-        BufferedImage subimage = bi.getSubimage(2, 4, 9, 4);
+        for (int imageType : COLOR_IMAGE_TYPES) {
+            System.out.println("Testing " + ImageType.get(imageType));
+            BufferedImage bi = ScalingTest.createRainbowImage(12, 12, BufferedImage.TYPE_INT_RGB, true);
+            BufferedImage subimage = bi.getSubimage(2, 4, 9, 4);
 
-        PixelIterator iter = new BufferedImageIterator.BufferedImageIterator_FromDataBuffer<>(subimage, true);
-        BufferedImage subimage2 = BufferedImageIterator.writeToImage(iter, null);
+            PixelIterator iter = new BufferedImageIterator.BufferedImageIterator_FromDataBuffer<>(subimage, true);
+            BufferedImage subimage2 = BufferedImageIterator.writeToImage(iter, null);
 
-        PixelSourceImageProducerTest.assertImageEquals(subimage, subimage2);
+            PixelSourceImageProducerTest.assertImageEquals(subimage, subimage2);
+        }
+    }
+
+    /**
+     * This makes sure BufferedImageIterator.writeToImage will modify the appropriate pixels when the destination
+     * is a subimage.
+     */
+    public void test_writeToImage_subimage() {
+        for (int imageType : COLOR_IMAGE_TYPES) {
+            System.out.println("Testing " + ImageType.get(imageType));
+            BufferedImage rainbow = ScalingTest.createRainbowImage(6, 1, imageType, false);
+            BufferedImage largeImage = new BufferedImage(30, 30, imageType);
+            PixelIterator iter = BufferedImageIterator.create(rainbow);
+            BufferedImageIterator.writeToImage(iter, largeImage.getSubimage(10, 10, 10, 10));
+
+            PixelSourceImageProducerTest.assertImageEquals(rainbow, largeImage.getSubimage(10, 10, 6, 1));
+        }
     }
 }
