@@ -165,6 +165,7 @@ public class ImageLoader {
 			String description, int imageType) {
 		ImageLoader l = new ImageLoader(i.getSource(), null, null, description,
 				imageType);
+		// TODO: make ImageLoader (and other pixel classes) use MutableBufferedImage
 		MutableBufferedImage bi = l.getImage();
 		bi.setAccelerationPriority(i.getAccelerationPriority());
 		return bi;

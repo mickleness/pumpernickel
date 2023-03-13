@@ -365,6 +365,24 @@ public class ScalingDemo extends ShowcaseChartDemo {
 				IMPLEMENTATION_TRANSFORM };
 		List<Runnable> returnValue = new ArrayList<>(
 				SAMPLE_COUNT * implementations.length);
+
+		// block all other runnables until our sample image is ready:
+		returnValue.add(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					if (sampleImage != null) {
+						return;
+					}
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						throw new RuntimeException(e);
+					}
+				}
+			}
+		});
+
 		for (String implementation : implementations) {
 			Runnable r = new MeasurementRunnable(data, implementation);
 			for (int sample = 0; sample < SAMPLE_COUNT; sample++) {
