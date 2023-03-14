@@ -438,8 +438,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	 * You should only construct this if {@link #getDataBufferScanline(BufferedImage, boolean)} returns a positive value.
 	 */
 	static class BufferedImageIterator_FromDataBuffer<T> extends BufferedImageIterator<T> {
-		private final int[] intData;
-		private final byte[] byteData;
+		private final Object srcData;
 		private final int dataBufferOffset;
 		private final int scanline;
 		private final int rowLength, subimageY, subimageX;
@@ -450,11 +449,9 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			scanline = getDataBufferScanline(bi, true);
 			dataBufferOffset = bi.getRaster().getDataBuffer().getOffset();
 			if (bi.getRaster().getDataBuffer() instanceof DataBufferInt) {
-				intData = ((DataBufferInt)bi.getRaster().getDataBuffer()).getData();
-				byteData = null;
+				srcData = ((DataBufferInt)bi.getRaster().getDataBuffer()).getData();
 			} else {
-				byteData = ((DataBufferByte)bi.getRaster().getDataBuffer()).getData();
-				intData = null;
+				srcData = ((DataBufferByte)bi.getRaster().getDataBuffer()).getData();
 			}
 			rowLength = bi.getWidth() * getPixelSize();
 			subimageX = -bi.getRaster().getSampleModelTranslateX();
@@ -463,17 +460,10 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 		@Override
 		public void next(T dest, int destOffset) {
-			if (byteData != null) {
-				byte[] destBytes = (byte[]) dest;
-				System.arraycopy(byteData,
-						dataBufferOffset + scanline * (y + subimageY) + subimageX,
-						destBytes, destOffset, rowLength);
-			} else {
-				int[] destInts = (int[]) dest;
-				System.arraycopy(intData,
-						dataBufferOffset + scanline * (y + subimageY) + subimageX,
-						destInts, destOffset, rowLength);
-			}
+			System.arraycopy(srcData,
+					dataBufferOffset + scanline * (y + subimageY) + subimageX,
+					dest, destOffset, rowLength);
+
 			if (topDown) {
 				y++;
 			} else {

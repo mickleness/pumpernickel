@@ -715,17 +715,11 @@ public class GenericImageSinglePassIterator<T>
 					PixelIterator srcIter;
 					int inType = BufferedImageIterator.getImageType(pixelPackage.colorModel);
 
-					if (pixelPackage.colorModel.getTransferType() == DataBuffer.TYPE_BYTE) {
-						srcIter = new BufferedBytePixelIterator((byte[]) pixelPackage.pixels,
-								pixelPackage.w, 1,
-								pixelPackage.offset + (pixelPackage.y * pixelPackage.scanSize + pixelPackage.x) * getPixelSize(),
-								pixelPackage.w * getPixelSize(), inType);
-					} else {
-						srcIter = new BufferedIntPixelIterator((int[]) pixelPackage.pixels,
-								pixelPackage.w, 1,
-								pixelPackage.offset + (pixelPackage.y * pixelPackage.scanSize + pixelPackage.x) * getPixelSize(),
-								pixelPackage.w * getPixelSize(), inType);
-					}
+					srcIter = new ArrayPixelIterator(pixelPackage.pixels,
+							pixelPackage.w, 1,
+							pixelPackage.offset + (pixelPackage.y * pixelPackage.scanSize + pixelPackage.x) * getPixelSize(),
+							pixelPackage.w * getPixelSize(), inType);
+
 					PixelIterator srcIter2 = ImageType.get(getType()).createPixelIterator(srcIter);
 					srcIter2.next(destArray, destArrayOffset);
 

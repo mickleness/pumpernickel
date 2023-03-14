@@ -96,7 +96,7 @@ public class ImageTypeTest extends TestCase {
     }
 
     private void testConversions(ImageType inputType, int[] input, ImageType... types) {
-        PixelIterator<?> iter = new BufferedIntPixelIterator(input, input.length, 1, 0, input.length, inputType.getCode());
+        PixelIterator<?> iter = new ArrayPixelIterator(input, input.length, 1, 0, input.length, inputType.getCode());
         iter = types[0].createPixelIterator(iter);
         for (int a = 1; a < types.length; a++) {
             iter = types[a].createPixelIterator(iter);

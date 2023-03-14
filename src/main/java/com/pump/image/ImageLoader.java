@@ -403,29 +403,26 @@ public class ImageLoader {
 		@Override
 		public synchronized void setPixels(int x, int y, int w, int h,
 				ColorModel colorModel, byte[] data, int offset, int scanSize) {
-			if (debug) {
-				System.err.println("setPixels(" + x + " ," + y + " ," + w + " ,"
-						+ h + ", " + colorModel + ", ..., " + offset + ", "
-						+ scanSize + ") (byte[])");
-			}
-
-			int inDataType = prepareSetPixels(colorModel);
-			PixelIterator<?> srcIter = new BufferedBytePixelIterator(data, w, h,
-					offset, scanSize, inDataType);
-			setPixels(srcIter, x, y, w, h, colorModel);
+			setPixels_generic(x, y, w, h, colorModel, data, offset, scanSize);
 		}
 
 		@Override
 		public synchronized void setPixels(int x, int y, int w, int h,
 				ColorModel colorModel, int[] data, int offset, int scanSize) {
+			setPixels_generic(x, y, w, h, colorModel, data, offset, scanSize);
+		}
+
+		private synchronized void setPixels_generic(int x, int y, int w, int h,
+													ColorModel colorModel, Object data, int offset, int scanSize) {
+			int inDataType = prepareSetPixels(colorModel);
+
 			if (debug) {
 				System.err.println("setPixels(" + x + " ," + y + " ," + w + " ,"
 						+ h + ", " + colorModel + ", ..., " + offset + ", "
-						+ scanSize + ") (int[])");
+						+ scanSize + ") (" + ImageType.get(inDataType) + ")");
 			}
 
-			int inDataType = prepareSetPixels(colorModel);
-			PixelIterator<?> srcIter = new BufferedIntPixelIterator(data, w, h,
+			PixelIterator<?> srcIter = new ArrayPixelIterator(data, w, h,
 					offset, scanSize, inDataType);
 			setPixels(srcIter, x, y, w, h, colorModel);
 		}

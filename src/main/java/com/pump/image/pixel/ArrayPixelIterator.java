@@ -10,34 +10,36 @@
  */
 package com.pump.image.pixel;
 
-/**
- * This iterates over a byte array of pixels.
- */
-public class BufferedBytePixelIterator implements PixelIterator<byte[]> {
-	// TODO: see if we can consolidate this with the int flavor
+import java.lang.reflect.Array;
 
-	byte[] data;
-	int dataIndex, row;
-	final int width, height, pixelType, scanSize, pixelSize;
+/**
+ * This iterates over an array of pixels.
+ */
+public class ArrayPixelIterator<T> implements PixelIterator<T> {
+
+	T srcData;
+	int dataIndex, rowCtr;
+	final int width, height, scanSize;
+	final ImageType imageType;
 
 	/**
-	 * Create a BufferedIntPixelIterator.
+	 * Create a ArrayPixelIterator.
 	 * 
-	 * @param data
-	 *            the data to iterate over.
+	 * @param srcData
+	 *            the srcData to iterate over.
 	 * @param width
 	 *            the width of each row.
 	 * @param height
 	 *            the number of rows to iterate over.
 	 * @param offset
-	 *            the offset in the original data to start reading pixel data.
+	 *            the offset in the original source data to start reading pixel data.
 	 * @param scanSize
 	 *            the distance from one row of pixels to the next in the pixels
 	 *            array. This must be the width or larger.
 	 * @param pixelType
 	 *            a constant like BufferedImage.TYPE_INT_ARGB
 	 */
-	public BufferedBytePixelIterator(byte[] data, int width, int height,
+	public ArrayPixelIterator(T srcData, int width, int height,
 			int offset, int scanSize, int pixelType) {
 		if (width <= 0)
 			throw new IllegalArgumentException(
@@ -47,39 +49,38 @@ public class BufferedBytePixelIterator implements PixelIterator<byte[]> {
 					"height must be greater than zero. (height = " + height
 							+ ")");
 
-		pixelSize = ImageType.get(pixelType).getSampleCount();
+		imageType = ImageType.get(pixelType);
 
-		if (scanSize < width * pixelSize)
+		if (scanSize < width * imageType.getSampleCount())
 			throw new IllegalArgumentException(
 					"scanSize should be equal to or greater than the width (scanSize = "
-							+ scanSize + ", width = " + width + ")");
+							+ scanSize + ", width = " + width + ", pixelSize = " + imageType.getSampleCount() + ")");
 
 		int lastIndex = offset + scanSize * height;
-		if (lastIndex > data.length)
+		if (lastIndex > Array.getLength(srcData))
 			throw new IllegalArgumentException("this array is too short");
 
-		this.data = data;
-		this.pixelType = pixelType;
+		this.srcData = srcData;
 		this.dataIndex = offset;
 		this.width = width;
 		this.height = height;
 		this.scanSize = scanSize;
-		row = 0;
+		rowCtr = 0;
 	}
 
 	@Override
 	public int getType() {
-		return pixelType;
+		return imageType.getCode();
 	}
 
 	@Override
 	public int getPixelSize() {
-		return pixelSize;
+		return imageType.getSampleCount();
 	}
 
 	@Override
 	public boolean isDone() {
-		return row >= height;
+		return rowCtr >= height;
 	}
 
 	@Override
@@ -103,10 +104,10 @@ public class BufferedBytePixelIterator implements PixelIterator<byte[]> {
 	}
 
 	@Override
-	public void next(byte[] dest, int offset) {
-		System.arraycopy(data, dataIndex, dest, offset, width * pixelSize);
+	public void next(T dest, int offset) {
+		System.arraycopy(srcData, dataIndex, dest, offset, width * imageType.getSampleCount());
 		dataIndex += scanSize;
-		row++;
+		rowCtr++;
 	}
 
 }
