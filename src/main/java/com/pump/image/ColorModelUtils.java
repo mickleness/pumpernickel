@@ -10,11 +10,7 @@
  */
 package com.pump.image;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.DataBuffer;
-import java.awt.image.DirectColorModel;
-import java.awt.image.IndexColorModel;
+import java.awt.image.*;
 
 public class ColorModelUtils {
 
@@ -30,6 +26,10 @@ public class ColorModelUtils {
 	 */
 	public static final int TYPE_UNRECOGNIZED = -329123;
 
+	/**
+	 * Return the BufferedImage "TYPE_" constant associated with a ColorModel,
+	 * or return {@link #TYPE_UNRECOGNIZED} if no match was identified.
+	 */
 	public static int getBufferedImageType(ColorModel colorModel) {
 		if (colorModel instanceof IndexColorModel)
 			return BufferedImage.TYPE_BYTE_INDEXED;

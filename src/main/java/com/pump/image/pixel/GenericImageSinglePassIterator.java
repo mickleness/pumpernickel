@@ -713,7 +713,7 @@ public class GenericImageSinglePassIterator<T>
 					throw new NonSinglePassException(error);
 				} else if (pixelPackage.y == rowCtr) {
 					PixelIterator srcIter;
-					int inType = BufferedImageIterator.getImageType(pixelPackage.colorModel);
+					int inType = ColorModelUtils.getBufferedImageType(pixelPackage.colorModel);
 
 					srcIter = new ArrayPixelIterator(pixelPackage.pixels,
 							pixelPackage.w, 1,

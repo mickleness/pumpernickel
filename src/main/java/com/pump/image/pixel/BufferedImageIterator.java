@@ -26,44 +26,6 @@ import java.util.Objects;
 public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 	/**
-	 * Return the BufferedImage "TYPE_" constant associated with a ColorModel,
-	 * or throws an exception if the ColorModel is unsupported.
-	 */
-	public static int getImageType(ColorModel colorModel) {
-		if (colorModel instanceof DirectColorModel) {
-			DirectColorModel dcm = (DirectColorModel) colorModel;
-			if (dcm.hasAlpha()) {
-				if (dcm.getAlphaMask() == 0xff000000 &&
-						dcm.getRedMask() == 0xff0000 &&
-						dcm.getGreenMask() == 0xff00 &&
-						dcm.getBlueMask() == 0xff) {
-					if (dcm.isAlphaPremultiplied()) {
-						return BufferedImage.TYPE_INT_ARGB_PRE;
-					}
-					return BufferedImage.TYPE_INT_ARGB;
-				}
-			} else {
-				if (dcm.getRedMask() == 0xff0000 && dcm.getGreenMask() == 0xff00 && dcm.getBlueMask() == 0xff)
-					return BufferedImage.TYPE_INT_RGB;
-				if (dcm.getBlueMask() == 0xff0000 && dcm.getGreenMask() == 0xff00 && dcm.getRedMask() == 0xff)
-					return BufferedImage.TYPE_INT_BGR;
-			}
-		} else if (colorModel instanceof ComponentColorModel) {
-			ComponentColorModel ccm = (ComponentColorModel) colorModel;
-			if (ccm.hasAlpha()) {
-				if (ccm.isAlphaPremultiplied())
-					return BufferedImage.TYPE_4BYTE_ABGR_PRE;
-				return BufferedImage.TYPE_4BYTE_ABGR;
-			}
-			// TODO: check for GRAY
-			return BufferedImage.TYPE_3BYTE_BGR;
-		}
-
-
-		throw new IllegalArgumentException("Unsupported ColorModel: " + colorModel);
-	}
-
-	/**
 	 * This is a PixelIteratorSource for BufferedImages.
 	 */
 	public static class Source implements PixelIterator.Source {
