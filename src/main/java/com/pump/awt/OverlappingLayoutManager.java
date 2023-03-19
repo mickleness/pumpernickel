@@ -41,6 +41,7 @@ import javax.swing.SwingUtilities;
  * RepaintManager.
  */
 public abstract class OverlappingLayoutManager implements LayoutManager {
+	// TODO: try removing this; use swing logic to handle overlapping components
 
 	static class OverlappingRepaintManager extends RepaintManager {
 

@@ -18,6 +18,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -26,56 +27,32 @@ import com.pump.image.ColorModelUtils;
 import com.pump.image.ImageSize;
 
 /**
- * This pixel iterator processes a <code>java.awt.Image</code> in a single pass
- * using its ImageProducer. The advantage of this class is that
- * it pipes all this information through the PixelIterator interface as it becomes
- * available so a buffer of the <i>entire</i> image is not kept in memory.
+ * This PixelIterator iterates over a <code>java.awt.Image</code>.
  * <p>
- * This uses the <code>ImageConsumer</code>/<code>ImageProducer</code> model for
- * collecting image data.
- * <p>
- * If you combine this with the <code>ScalingIterator</code> class: then this
- * means you can pipe data from a large abstract image into a small thumbnail
- * without consuming too much memory. For example: I can create a thumbnail of a
- * 18967x13606 pixel JPEG in just a few seconds with a very low memory footprint
- * using this class.
- * <p>
- * The disadvantage to this class is it relies on being able to read images in a
- * <i>single pass</i>. The <code>ImageProducer</code> can deliver pixels in any
- * order, so we don't really know until we get started if an <code>Image</code>
- * is compatible or not. An <code>ImageProducer</code> does offer hints, though,
- * so we can mostly know as soon as the first pixels arrive (towards the beginning
- * of file parsing) if the producer has offered to deliver pixels the way we need.
- * <p>
- * Because this is piping data from the <code>ImageProducer</code> in another
- * thread: it is recommended that you call <code>next(...)</code> or
- * <code>skip()</code> until this iterator has no more pixel data. There are
- * some safeguards in place to recover the other thread (a 5-second timeout as
- * well as awareness of when this object is finalized), but those are unpleasant
- * safety nets. In many cases the AWT toolkit will only launch 4 "Image Fetcher"
- * threads at a time: if all 4 are hung for a minimum of 5 seconds, then <i>no
- * other images</i> can be processed through the AWT toolkit during that time.
+ * If the underlying ImageProducer is producing this data in a single pass,
+ * then this object only buffers a few rows of pixels at a time in memory.
+ * If the ImageProducer requires multiple passes, then this object will
+ * maintain an offscreen int or byte array to store all the pixel data
+ * and this iterator won't let you start iterating over the image until
+ * the entire image is buffered.
+ * </p>
  * 
  * <a href=
  * "https://javagraphics.blogspot.com/2011/05/images-scaling-jpegs-and-pngs.html"
  * >Images: Scaling JPEGs and PNGs</a>
  */
-public class ImageProducerPixelIterator<T>
+public class ImagePixelIterator<T>
 		implements PixelIterator<T>, AutoCloseable {
 
-	/**
-	 * The number of milliseconds threads wait before timing out while reading.
-	 * By default this is 5000.
-	 */
-	public static long TIMEOUT_IN_PROCESS = 5_000;
+	// TODO: add static methods to create MutableBufferedImages, then delete ImageLoader.
+	// Make sure new methods don't allocate new int[]/byte[] if our ImageConsumer has
+	// already buffered *everything* into memory and it comes all at once.
 
-	/**
-	 * The number of milliseconds threads wait before timing out for
-	 * construction. Note construction may be severely delayed, because Java's
-	 * AWT classes only allow 4 threads at a time. By default this is 120,000 ms
-	 * (2 minutes)
-	 */
-	public static long TIMEOUT_FOR_CONSTRUCTION = 120_000;
+	// TODO: review ImageLoader demo. The default jpg may not show much perf advantage, but I could grab a jpg
+	// of my hd that should gains like in the write-up
+
+	// TODO: write unit tests for this class, including lots of variations about how
+	// pixel data can arrive.
 
 	/**
 	 * This is an image type alternative that indicates we should return
@@ -83,30 +60,16 @@ public class ImageProducerPixelIterator<T>
 	 */
 	public static int TYPE_DEFAULT = -888321;
 
-	/**
-	 * This exception indicates that the ImageProducer didn't offer pixels in a
-	 * single top-down-left-right pass, or that it didn't advise us with hints
-	 * that it was planning to.
-	 * <p>
-	 * If this occurs you can try the {@link com.pump.image.ImageLoader} class,
-	 * which keeps a BufferedImage in memory as pixels made available.
-	 * </p>
-	 */
-	public static class IncompatibleProducerException extends Exception {
-		private static final long serialVersionUID = 1L;
-
-		public IncompatibleProducerException(String msg) {
-			super(msg);
-		}
-	}
-
 	private static class ImageDescriptor {
-		final int imgWidth, imgHeight, iteratorType;
+		final int imgWidth, imgHeight;
+		final ImageType imageType;
+		final boolean isOptimized;
 
-		public ImageDescriptor(int imgWidth, int imgHeight, int iteratorType) {
+		public ImageDescriptor(int imgWidth, int imgHeight, ImageType imageType, boolean isOptimized) {
 			this.imgWidth = imgWidth;
 			this.imgHeight = imgHeight;
-			this.iteratorType = iteratorType;
+			this.imageType = imageType;
+			this.isOptimized = isOptimized;
 		}
 	}
 
@@ -116,14 +79,12 @@ public class ImageProducerPixelIterator<T>
 	private static class PixelPackage {
 		final int x, y, w, h, offset, scanSize;
 		final Object pixels;
-		final ColorModel colorModel;
 
-		public PixelPackage(int x, int y, int w, int h, ColorModel model, Object pixels, int offset, int scanSize) {
+		public PixelPackage(int x, int y, int w, int h, Object pixels, int offset, int scanSize) {
 			this.x = x;
 			this.y = y;
 			this.w = w;
 			this.h = h;
-			this.colorModel = model;
 			this.pixels = pixels;
 			this.offset = offset;
 			this.scanSize = scanSize;
@@ -144,27 +105,39 @@ public class ImageProducerPixelIterator<T>
 		/**
 		 * This Consumer pushes data to this queue as it becomes available. This
 		 * may push 4 things:
-		 * 1. An ImageDescriptor
+		 * 1. An ImageDescriptor that precedes the first PixelPackage
 		 * 2. PixelPackages for incoming image data
 		 * 3. A String if an error occurs and this consumer is aborting.
 		 * 4. Boolean.TRUE if this consumer healthily finished.
+		 * <p>
+		 * This queue has a limited capacity because there should be another
+		 * thread actively ready data from this queue.
+		 *
+		 * TODO: test scenario where PixelIterator is orphaned
+		 * </p>
 		 */
-		SynchronousQueue<Object> queue = new SynchronousQueue<>();
+		ArrayBlockingQueue<Object> queue = new ArrayBlockingQueue<>(10);
 
-		int iteratorType;
+		ImageType pixelType;
+		/**
+		 * This is an int[] or byte[] which is only used for unoptimized image production.
+		 * That is: this is only used when we have to load the entire image into memory to
+		 * start iterating over pixels.
+		 */
+		Object buffer;
 
-		private boolean isSingleFrameHint, isSinglePassHint, isTopDownLeftRightHint;
+		private boolean isSinglePassHint, isTopDownLeftRightHint, isCompleteScanLineHint;
 		private long queueTimeoueMillis;
+		private boolean isInitialized = false;
 
 		/**
-		 *
-		 * @param producer
-		 * @param iteratorType
+		 * @param pixelType if null then the PixelIterator's type will be derived
+		 *                  based on some of the first incoming pixel data.
 		 * @param queueTimeoueMillis how long to wait in millis when pushing data to a queue.
 		 */
-		Consumer(ImageProducer producer, int iteratorType, long queueTimeoueMillis) {
+		Consumer(ImageProducer producer, ImageType pixelType, long queueTimeoueMillis) {
 			this.producer = producer;
-			this.iteratorType = iteratorType;
+			this.pixelType = pixelType;
 			this.queueTimeoueMillis = queueTimeoueMillis;
 		}
 
@@ -177,7 +150,7 @@ public class ImageProducerPixelIterator<T>
 			if (!closed) {
 				try {
 					producer.removeConsumer(this);
-					post(queue, closeStatus);
+					post(closeStatus);
 				} finally {
 					closed = true;
 				}
@@ -189,7 +162,7 @@ public class ImageProducerPixelIterator<T>
 		 * consumer has already called {@link #close(Object)}, or if this method exceeded the timeout
 		 * and nobody received our data.
 		 */
-		private boolean post(SynchronousQueue<Object> queue, Object element) {
+		private boolean post(Object element) {
 			if (closed)
 				return false;
 
@@ -228,12 +201,12 @@ public class ImageProducerPixelIterator<T>
 
 		@Override
 		public void setHints(int hintFlags) {
-			if ( (hintFlags & ImageConsumer.SINGLEFRAME) > 0)
-				isSingleFrameHint = true;
 			if ( (hintFlags & ImageConsumer.SINGLEPASS) > 0)
 				isSinglePassHint = true;
 			if ( (hintFlags & ImageConsumer.TOPDOWNLEFTRIGHT) > 0)
 				isTopDownLeftRightHint = true;
+			if ( (hintFlags & ImageConsumer.COMPLETESCANLINES) > 0)
+				isCompleteScanLineHint = true;
 		}
 
 		@Override
@@ -248,8 +221,6 @@ public class ImageProducerPixelIterator<T>
 			_setPixels(x, y, w, h, model, pixels, offset, scanSize);
 		}
 
-		private PixelPackage unsentPixels = null;
-
 		private void _setPixels(int x, int y, int w, int h, ColorModel model,
 				Object pixels, int offset, int scanSize) {
 			if (closed)
@@ -257,26 +228,24 @@ public class ImageProducerPixelIterator<T>
 
 			initialize(model);
 
-			/**
-			 * Sometimes images are decoded in multiple passes. (See PNG
-			 * interlacing for an example.) In this case we would be within our
-			 * rights to throw a NonSinglePassException, but since the ENTIRE
-			 * block is going to be repeated a few more times, we can still make
-			 * this work.
-			 *
-			 * TODO: is this still needed for PNGs?
-			 */
-			if (x == 0 && y == 0 && imgWidth.intValue() == w
-					&& imgHeight.intValue() == h) {
-				// TODO: should we replace or just supplement unsentPixels here?
-				unsentPixels = new PixelPackage(x, y, w, h, model, pixels, offset, scanSize);
+			if (buffer != null) {
+				PixelIterator iter = new ArrayPixelIterator(pixels,
+						w, h, offset, scanSize, ColorModelUtils.getBufferedImageType(model));
+				iter = pixelType.createPixelIterator(iter);
+				while (!iter.isDone()) {
+					iter.next(buffer, (y * imgWidth + x) * pixelType.getSampleCount());
+					y++;
+				}
 				return;
 			}
 
-			post(queue, new PixelPackage(x, y, w, h, model, pixels, offset, scanSize));
-		}
+			int modelType = ColorModelUtils.getBufferedImageType(model);
+			if (modelType != pixelType.getCode()) {
+				// TODO: convert data to pixelType
+			}
 
-		private boolean isInitialized = false;
+			post(new PixelPackage(x, y, w, h, pixels, offset, scanSize));
+		}
 
 		/**
 		 * This is called when setPixels(...) is called, and if a
@@ -294,26 +263,25 @@ public class ImageProducerPixelIterator<T>
 					throw new RuntimeException(error);
 				}
 
-				if (!(isSingleFrameHint && isSinglePassHint && isTopDownLeftRightHint)) {
-					String error = "The ImageProducer did not promise to deliver data in a single top-down-left-right-pass, so it is incompatible with this class. You may want to try the ImageLoader class instead.";
-					// TODO:
-					//  1. add custom error
-					//  2. add unit tests for this condition,
-					//  3. check how construction flows and if error should be thrown
-					close(error);
-					throw new RuntimeException(error);
-				}
-
 				int w = imgWidth.intValue();
 				int h = imgHeight.intValue();
 
-				if (iteratorType == TYPE_DEFAULT) {
-					iteratorType = ColorModelUtils.getBufferedImageType(colorModel);
-					if (iteratorType == ColorModelUtils.TYPE_UNRECOGNIZED)
-						iteratorType = BufferedImage.TYPE_INT_ARGB;
+				if (pixelType == null) {
+					// we're supposed to assign it from first sample of pixels:
+					int i = ColorModelUtils.getBufferedImageType(colorModel);
+					pixelType = ImageType.get(i);
+
+					// i might be ColorModelUtils.TYPE_UNRECOGNIZED
+					if (pixelType == null) {
+						pixelType = ImageType.INT_ARGB;
+					}
 				}
 
-				switch (iteratorType) {
+				// TODO: can we not require isCompleteScanLineHint? or does that ever come up in testing?
+				boolean optimized = isTopDownLeftRightHint && isSinglePassHint && isCompleteScanLineHint;
+
+				ImageDescriptor imageDescriptor;
+				switch (pixelType.getCode()) {
 					case BufferedImage.TYPE_3BYTE_BGR:
 					case BufferedImage.TYPE_4BYTE_ABGR:
 					case BufferedImage.TYPE_4BYTE_ABGR_PRE:
@@ -325,12 +293,23 @@ public class ImageProducerPixelIterator<T>
 					case BufferedImage.TYPE_INT_ARGB_PRE:
 					case BufferedImage.TYPE_INT_BGR:
 					case BufferedImage.TYPE_INT_RGB:
-						post(queue, new ImageDescriptor(w, h, iteratorType));
+						imageDescriptor = new ImageDescriptor(w, h, pixelType, optimized);
 						break;
 					default:
-						close("unsupported iterator type: " + iteratorType);
-						break;
+						String error = "unsupported iterator type: " + pixelType;
+						close(error);
+						throw new RuntimeException(error);
 				}
+
+				if (!optimized) {
+					if (pixelType.isInt()) {
+						buffer = new int[imageDescriptor.imgWidth * imageDescriptor.imgHeight * pixelType.getSampleCount()];
+					} else {
+						buffer = new byte[imageDescriptor.imgWidth * imageDescriptor.imgHeight * pixelType.getSampleCount()];
+					}
+				}
+
+				post(imageDescriptor);
 			} finally {
 				isInitialized = true;
 			}
@@ -341,35 +320,40 @@ public class ImageProducerPixelIterator<T>
 			if (closed)
 				return;
 
-			if (unsentPixels != null) {
-				post(queue, unsentPixels);
-			}
-
 			if (isInitialized == false) {
 				String error = "imageComplete( " + status
 						+ " ) was called before setPixels(...)";
 				close(error);
 				throw new RuntimeException(error);
 			}
-			post(queue, Boolean.TRUE);
+
+			if (buffer != null) {
+				post(new PixelPackage(0, 0, imgWidth, imgHeight, buffer, 0, imgWidth * pixelType.getSampleCount()));
+			}
+
+			if (status == ImageConsumer.IMAGEERROR) {
+				String error = "The ImageProducer failed with an error.";
+				close(error);
+				throw new RuntimeException(error);
+			} else if (status == ImageConsumer.IMAGEABORTED) {
+				String error = "The ImageProducer aborted.";
+				close(error);
+				throw new RuntimeException(error);
+			}
+
+			post(Boolean.TRUE);
 		}
 	}
 
 	public static class Source<T> implements PixelIterator.Source<T> {
 		private final Image image;
-		private final int iteratorType;
+		private final ImageType iteratorType;
 
 		private Dimension size;
 
 		public Source(Image image, int iteratorType) {
 			this.image = Objects.requireNonNull(image);
-			this.iteratorType = iteratorType;
 
-			this.size = Objects.requireNonNull(ImageSize.get(image));
-		}
-
-		@Override
-		public ImageProducerPixelIterator createPixelIterator() {
 			if (!(iteratorType == TYPE_DEFAULT
 					|| iteratorType == BufferedImage.TYPE_INT_ARGB
 					|| iteratorType == BufferedImage.TYPE_INT_ARGB_PRE
@@ -382,6 +366,13 @@ public class ImageProducerPixelIterator<T>
 				throw new IllegalArgumentException(
 						"illegal iterator type: " + iteratorType);
 			}
+			this.iteratorType = ImageType.get(iteratorType);
+
+			this.size = Objects.requireNonNull(ImageSize.get(image));
+		}
+
+		@Override
+		public ImagePixelIterator createPixelIterator() {
 			final ImageProducer producer = image.getSource();
 			final Consumer consumer = new Consumer(producer, iteratorType, 10_000);
 
@@ -392,7 +383,7 @@ public class ImageProducerPixelIterator<T>
 			// this a blocking call. So to be safe this call should be in its
 			// own thread:
 			Thread productionThread = new Thread(
-					"GenericImageSinglePassIterator: Production Thread") {
+					"ImagePixelIterator: Production Thread") {
 				@Override
 				public void run() {
 					producer.startProduction(consumer);
@@ -403,7 +394,7 @@ public class ImageProducerPixelIterator<T>
 			Object data = poll(consumer.queue, 100_000);
 			if (data instanceof ImageDescriptor) {
 				ImageDescriptor d = (ImageDescriptor) data;
-				return new ImageProducerPixelIterator(d.imgWidth, d.imgHeight, ImageType.get(d.iteratorType), consumer);
+				return new ImagePixelIterator(d.imgWidth, d.imgHeight, d.imageType, d.isOptimized, consumer);
 			} else if (data instanceof String) {
 				throw new RuntimeException((String) data);
 			} else if (data instanceof Boolean) {
@@ -429,7 +420,7 @@ public class ImageProducerPixelIterator<T>
 	/**
 	 * Pull an element from this queue, or return null if we timed out.
 	 */
-	private static Object poll(SynchronousQueue<Object> queue, long timeoutMillis) {
+	private static Object poll(ArrayBlockingQueue<Object> queue, long timeoutMillis) {
 		long start = System.currentTimeMillis();
 		long waitTime = timeoutMillis;
 		while (true) {
@@ -458,10 +449,10 @@ public class ImageProducerPixelIterator<T>
 	 *            one of these 8 BufferedImage types: TYPE_INT_ARGB,
 	 *            TYPE_INT_ARGB_PRE, TYPE_INT_RGB, TYPE_INT_BGR, TYPE_3BYTE_BGR,
 	 *            TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE.
-	 * @return a <code>GenericImageSinglePassIterator</code> for the file
+	 * @return a <code>ImagePixelIterator</code> for the file
 	 *         provided.
 	 */
-	public static ImageProducerPixelIterator get(File file,
+	public static ImagePixelIterator get(File file,
 			int iteratorType) {
 		Image image = Toolkit.getDefaultToolkit()
 				.createImage(file.getAbsolutePath());
@@ -508,7 +499,7 @@ public class ImageProducerPixelIterator<T>
 	}
 
 	/**
-	 * Returns a <code>GenericImageSinglePassIterator</code> that is either a
+	 * Returns a <code>ImagePixelIterator</code> that is either a
 	 * <code>IntPixelIterator</code> or a <code>BytePixelIterator</code>.
 	 * 
 	 * @param image
@@ -517,16 +508,17 @@ public class ImageProducerPixelIterator<T>
 	 *            one of these 8 BufferedImage types: TYPE_INT_ARGB,
 	 *            TYPE_INT_ARGB_PRE, TYPE_INT_RGB, TYPE_INT_BGR, TYPE_3BYTE_BGR,
 	 *            TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE.
-	 * @return a <code>GenericImageSinglePassIterator</code> for the image
+	 * @return a <code>ImagePixelIterator</code> for the image
 	 *         provided.
 	 */
-	public static ImageProducerPixelIterator get(Image image,
+	public static ImagePixelIterator get(Image image,
 			int iteratorType) {
 		return new Source(image, iteratorType).createPixelIterator();
 	}
 
 	final int width, height;
 	final ImageType type;
+	final boolean isOptimized;
 	final Consumer consumer;
 
 	/**
@@ -535,11 +527,22 @@ public class ImageProducerPixelIterator<T>
 	 */
 	int rowCtr = 0;
 
-	private ImageProducerPixelIterator(int width, int height, ImageType type, Consumer consumer) {
+	private ImagePixelIterator(int width, int height, ImageType type, boolean isOptimized, Consumer consumer) {
 		this.width = width;
 		this.height = height;
 		this.type = type;
 		this.consumer = consumer;
+		this.isOptimized = isOptimized;
+	}
+
+	/**
+	 * An optimized ImagePixelIterator streams pixel data from the ImageProducer as it
+	 * becomes available. An unoptimized ImagePixelIterator waits until the ImageProducer
+	 * has produced all the pixel data (stored in a large buffer) and then iterates
+	 * over that data all it once.
+	 */
+	public boolean isOptimized() {
+		return isOptimized;
 	}
 
 	/**
@@ -629,7 +632,6 @@ public class ImageProducerPixelIterator<T>
 	}
 
 	private void next_fromUnfinishedPixelPackage(T destArray, int destArrayOffset, boolean skip) {
-		// TODO: what if ColorModel changes?
 		if (!skip) {
 			System.arraycopy(unfinishedPixelPackage.pixels,
 					unfinishedPixelPackage.offset + unfinishedPixelPackageY * unfinishedPixelPackage.scanSize + (unfinishedPixelPackage.x) * type.getSampleCount(),
