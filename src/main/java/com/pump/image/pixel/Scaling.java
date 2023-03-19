@@ -42,7 +42,7 @@ public class Scaling {
 	 * This is an image type alternative that indicates we should return
 	 * whatever is simplest/most expedient.
 	 */
-	public static final int TYPE_DEFAULT = GenericImageSinglePassIterator.TYPE_DEFAULT;
+	public static final int TYPE_DEFAULT = ImageProducerPixelIterator.TYPE_DEFAULT;
 
 	/**
 	 * Scales the source image into the destination.
@@ -285,10 +285,10 @@ public class Scaling {
 		}
 
 		int destType = dest != null ? dest.getType()
-				: GenericImageSinglePassIterator.TYPE_DEFAULT;
-		PixelIterator iter = GenericImageSinglePassIterator.get(source,
+				: ImageProducerPixelIterator.TYPE_DEFAULT;
+		PixelIterator iter = ImageProducerPixelIterator.get(source,
 				destType);
-		if (destType == GenericImageSinglePassIterator.TYPE_DEFAULT)
+		if (destType == ImageProducerPixelIterator.TYPE_DEFAULT)
 			destType = iter.getType();
 		PixelIterator scalingIter = destSize == null ? iter
 				: new ScalingIterator( ImageType.get(destType), iter, destSize.width, destSize.height);
