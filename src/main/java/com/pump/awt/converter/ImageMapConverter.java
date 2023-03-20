@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.pump.data.converter.BeanMapConverter;
-import com.pump.image.ImageLoader;
+import com.pump.image.pixel.ImagePixelIterator;
 
 /**
  * This is a BeanMapConverter for Images.
@@ -38,7 +38,7 @@ public class ImageMapConverter implements BeanMapConverter<Image> {
 
 	@Override
 	public Map<String, Object> createAtoms(Image img) {
-		RenderedImage rendered = ImageLoader.createImage(img);
+		RenderedImage rendered = ImagePixelIterator.createBufferedImage(img);
 		Map<String, Object> atoms = new HashMap<>(1);
 		atoms.putAll(new RenderedImageMapConverter().createAtoms(rendered));
 		return atoms;

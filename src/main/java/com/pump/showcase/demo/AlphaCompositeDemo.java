@@ -44,7 +44,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.image.ImageLoader;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.PlafPaintUtils;
 import com.pump.swing.popover.JPopover;
@@ -68,10 +68,10 @@ public class AlphaCompositeDemo extends ShowcaseExampleDemo {
 
 	private static final long serialVersionUID = 1L;
 
-	BufferedImage backgroundImage = ImageLoader.createImage(
+	BufferedImage backgroundImage = ImagePixelIterator.createBufferedImage(
 			AlphaCompositeDemo.class.getResource("balloon-background.png"));
-	BufferedImage foregroundImage = ImageLoader
-			.createImage(AlphaCompositeDemo.class.getResource("balloon.png"));
+	BufferedImage foregroundImage = ImagePixelIterator.createBufferedImage(
+			AlphaCompositeDemo.class.getResource("balloon.png"));
 
 	JComboBox composites = new JComboBox();
 	JSlider alpha = new ShowcaseSlider(0, 100, 100);

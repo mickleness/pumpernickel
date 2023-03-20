@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.pump.awt.Dimension2D;
+import com.pump.image.pixel.ImagePixelIterator;
 
 /**
  * This class catalogs a set of images available only on Mac.
@@ -732,7 +733,7 @@ public class NSImage implements Serializable {
 	 */
 	public synchronized BufferedImage getBufferedImage() {
 		if (bufferedImage == null) {
-			bufferedImage = ImageLoader.createImage(getImage());
+			bufferedImage = ImagePixelIterator.createBufferedImage(getImage());
 		}
 		return bufferedImage;
 	}
@@ -746,7 +747,7 @@ public class NSImage implements Serializable {
 	 */
 	public synchronized BufferedImage getBufferedImage(
 			Dimension maxConstrainingSize) {
-		return ImageLoader.createImage(getImage(maxConstrainingSize));
+		return ImagePixelIterator.createBufferedImage(getImage(maxConstrainingSize));
 	}
 
 	/**

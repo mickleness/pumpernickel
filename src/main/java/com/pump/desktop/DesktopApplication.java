@@ -37,7 +37,7 @@ import com.pump.desktop.error.ErrorDialogThrowableHandler;
 import com.pump.desktop.error.ErrorManager;
 import com.pump.desktop.logging.SessionLog;
 import com.pump.desktop.temp.TempFileManager;
-import com.pump.image.ImageLoader;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.thread.EventDispatchThreadMonitor;
 import com.pump.util.JVM;
 import com.pump.window.WindowList;
@@ -343,7 +343,7 @@ public class DesktopApplication extends AbstractAttributeDataImpl {
 
 		if (Taskbar.isTaskbarSupported()
 				&& Taskbar.getTaskbar().isSupported(Feature.ICON_IMAGE)) {
-			return ImageLoader.createImage(Taskbar.getTaskbar().getIconImage());
+			return ImagePixelIterator.createBufferedImage(Taskbar.getTaskbar().getIconImage());
 		}
 		return null;
 	}

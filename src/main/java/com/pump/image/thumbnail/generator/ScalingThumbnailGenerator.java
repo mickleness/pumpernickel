@@ -15,8 +15,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import com.pump.awt.Dimension2D;
-import com.pump.image.ImageLoader;
 import com.pump.image.ImageSize;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.image.pixel.Scaling;
 
 /**
@@ -44,7 +44,7 @@ public class ScalingThumbnailGenerator implements ThumbnailGenerator {
 		Dimension scaledImageSize = Dimension2D.scaleProportionally(imageSize,
 				maxSize, true);
 		if (scaledImageSize == null) {
-			return ImageLoader.createImage(file, ImageLoader.TYPE_DEFAULT);
+			return ImagePixelIterator.createBufferedImage(file);
 		}
 
 		return Scaling.scale(file, Scaling.TYPE_DEFAULT, scaledImageSize);

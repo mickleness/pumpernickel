@@ -34,14 +34,15 @@ import java.util.concurrent.Future;
 import javax.imageio.ImageIO;
 
 import com.pump.desktop.temp.TempFileManager;
-import com.pump.image.ImageLoader;
 import com.pump.image.ImageSize;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.image.pixel.PixelIterator;
 import com.pump.showcase.chart.ChartDataGenerator;
 import com.pump.showcase.chart.PerformanceChartPanel;
 
 public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 	// TODO: check perf results of this class.
+	// TODO: rewrite as ImagePixelIteratorDemo
 
 	private static final long serialVersionUID = 1L;
 
@@ -74,7 +75,7 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 
 			@Override
 			public BufferedImage load(File file) throws Exception {
-				return ImageLoader.createImage(file);
+				return ImagePixelIterator.createBufferedImage(file);
 			}
 		};
 
@@ -266,7 +267,7 @@ public class ImageLoaderDemo extends ShowcaseResourceExampleDemo<File> {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { ImageLoader.class, PixelIterator.class };
+		return new Class[] { ImagePixelIterator.class, PixelIterator.class };
 	}
 
 	@Override

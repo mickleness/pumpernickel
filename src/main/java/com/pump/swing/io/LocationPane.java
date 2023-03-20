@@ -24,7 +24,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ComponentUI;
 
-import com.pump.image.ImageLoader;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.io.location.IOLocation;
 import com.pump.io.location.IOLocationFilter;
 import com.pump.io.location.IOLocationGroup;
@@ -32,10 +32,10 @@ import com.pump.plaf.LocationPaneUI;
 
 public abstract class LocationPane extends JComponent {
 
-	public static final BufferedImage FOLDER_THUMBNAIL = ImageLoader
-			.createImage(LocationPane.class.getResource("FolderIcon.png"));
-	public static final BufferedImage FILE_THUMBNAIL = ImageLoader
-			.createImage(LocationPane.class.getResource("DocumentIcon.png"));
+	public static final BufferedImage FOLDER_THUMBNAIL = ImagePixelIterator.createBufferedImage(
+			LocationPane.class.getResource("FolderIcon.png"));
+	public static final BufferedImage FILE_THUMBNAIL = ImagePixelIterator.createBufferedImage(
+			LocationPane.class.getResource("DocumentIcon.png"));
 
 	private static final long serialVersionUID = 1L;
 	public static final String ACCESSORY_KEY = "location.pane.accessory";

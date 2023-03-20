@@ -52,7 +52,7 @@ import javax.swing.plaf.ButtonUI;
 
 import com.pump.icon.GlyphIcon;
 import com.pump.icon.RefreshIcon;
-import com.pump.image.ImageLoader;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.image.pixel.Scaling;
 import com.pump.inspector.AnimatingInspectorPanel;
 import com.pump.inspector.Inspector;
@@ -604,7 +604,7 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 
 	private static BufferedImage getThumbnail() {
 		if (thumbnail == null) {
-			BufferedImage bi = ImageLoader.createImage(
+			BufferedImage bi = ImagePixelIterator.createBufferedImage(
 					AlphaCompositeDemo.class.getResource("balloon.png"));
 			thumbnail = Scaling.scaleProportionally(bi, new Dimension(30, 30));
 		}

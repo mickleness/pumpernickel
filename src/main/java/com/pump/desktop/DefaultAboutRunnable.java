@@ -26,7 +26,6 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import com.pump.image.ImageLoader;
 import com.pump.swing.JLink;
 
 /**
@@ -87,7 +86,7 @@ public class DefaultAboutRunnable implements Runnable {
 				copyrightLabel.setFont(smallFont);
 		}
 
-		BufferedImage image = ImageLoader.createImage(app.getImage());
+		BufferedImage image = app.getImage();
 
 		JDialog dialog = new JDialog();
 		JPanel panel = new JPanel(new GridBagLayout());

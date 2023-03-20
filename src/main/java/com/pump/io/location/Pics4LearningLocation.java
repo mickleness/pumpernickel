@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pump.image.ImageLoader;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.image.thumbnail.BasicThumbnail;
 import com.pump.swing.Cancellable;
 import com.pump.swing.io.DefaultSearchResults;
@@ -75,7 +75,7 @@ public class Pics4LearningLocation extends CachedLocation {
 		try {
 			if (thumbnailURLText != null) {
 				URL thumbnailURL = new URL(thumbnailURLText);
-				BufferedImage bi = ImageLoader.createImage(thumbnailURL);
+				BufferedImage bi = ImagePixelIterator.createBufferedImage(thumbnailURL);
 				return BasicThumbnail.Aqua.create(bi, size);
 			}
 		} catch (IOException e) {

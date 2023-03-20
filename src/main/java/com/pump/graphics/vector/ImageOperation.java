@@ -25,8 +25,8 @@ import java.util.Objects;
 import com.pump.geom.RectangularTransform;
 import com.pump.geom.ShapeUtils;
 import com.pump.graphics.Graphics2DContext;
-import com.pump.image.ImageLoader;
 import com.pump.image.ImageSize;
+import com.pump.image.pixel.ImagePixelIterator;
 
 /**
  * This is an operation for all of <code>java.awt.Graphics#drawImage(..)</code>
@@ -178,8 +178,7 @@ public class ImageOperation extends Operation {
 	 */
 	public FillOperation toFillOperation() {
 		Graphics2DContext context = getContext();
-		BufferedImage bi = ImageLoader.createImage(getImage(),
-				ImageLoader.TYPE_DEFAULT);
+		BufferedImage bi = ImagePixelIterator.createBufferedImage(getImage());
 		Rectangle srcRect = getSourceRect();
 		if (!srcRect
 				.equals(new Rectangle(0, 0, bi.getWidth(), bi.getHeight()))) {

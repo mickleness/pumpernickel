@@ -10,21 +10,19 @@
  */
 package com.pump.image.pixel;
 
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.image.*;
 import java.io.Closeable;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
 import com.pump.awt.Dimension2D;
 import com.pump.image.ColorModelUtils;
 import com.pump.image.ImageSize;
+import com.pump.image.MutableBufferedImage;
 
 /**
  * This PixelIterator iterates over a <code>java.awt.Image</code>.
@@ -43,10 +41,6 @@ import com.pump.image.ImageSize;
  */
 public class ImagePixelIterator<T>
 		implements PixelIterator<T>, AutoCloseable {
-
-	// TODO: add static methods to create MutableBufferedImages, then delete ImageLoader.
-	// Make sure new methods don't allocate new int[]/byte[] if our ImageConsumer has
-	// already buffered *everything* into memory and it comes all at once.
 
 	// TODO: review ImageLoader demo. The default jpg may not show much perf advantage, but I could grab a jpg
 	// of my hd that should gains like in the write-up
@@ -79,8 +73,9 @@ public class ImagePixelIterator<T>
 	private static class PixelPackage {
 		final int x, y, w, h, offset, scanSize;
 		final Object pixels;
+		final ImageType imageType;
 
-		public PixelPackage(int x, int y, int w, int h, Object pixels, int offset, int scanSize) {
+		public PixelPackage(int x, int y, int w, int h, Object pixels, int offset, int scanSize, ImageType imageType) {
 			this.x = x;
 			this.y = y;
 			this.w = w;
@@ -88,6 +83,59 @@ public class ImagePixelIterator<T>
 			this.pixels = pixels;
 			this.offset = offset;
 			this.scanSize = scanSize;
+			this.imageType = imageType;
+		}
+
+		/**
+		 * Create a MutableBufferedImage of all pixels in this PixelPackage.
+		 */
+		MutableBufferedImage createBufferedImage(int y) {
+			int arrayOffset = offset + y * scanSize;
+
+			WritableRaster raster = null;
+			if (imageType.getColorModel() instanceof DirectColorModel) {
+				DirectColorModel dcm = (DirectColorModel) imageType.getColorModel();
+				DataBuffer d = new DataBufferInt( (int[]) pixels, h * scanSize, arrayOffset);
+
+				int[] bandmasks;
+				if (dcm.hasAlpha()) {
+					bandmasks = new int[4];
+					bandmasks[3] = dcm.getAlphaMask();
+				}
+				else {
+					bandmasks = new int[3];
+				}
+				bandmasks[0] = dcm.getRedMask();
+				bandmasks[1] = dcm.getGreenMask();
+				bandmasks[2] = dcm.getBlueMask();
+
+				raster = Raster.createPackedRaster(d, w, h, scanSize, bandmasks, new Point(0,0));
+			} else if (imageType.getColorModel() instanceof ComponentColorModel) {
+				int[] bandOffsets = null;
+				switch (imageType.getCode()) {
+					case BufferedImage.TYPE_3BYTE_BGR:
+						bandOffsets = new int[] {2, 1, 0};
+						break;
+					case BufferedImage.TYPE_4BYTE_ABGR_PRE:
+					case BufferedImage.TYPE_4BYTE_ABGR:
+						bandOffsets = new int[] {3, 2, 1, 0};
+						break;
+					case BufferedImage.TYPE_BYTE_GRAY:
+						bandOffsets = new int[] {0};
+						break;
+				}
+
+				if (bandOffsets != null) {
+					DataBuffer d = new DataBufferByte((byte[]) pixels, h * scanSize, arrayOffset);
+					raster = Raster.createInterleavedRaster(d, w, h, scanSize,
+							imageType.getSampleCount(), bandOffsets, new Point(0, 0));
+				}
+			}
+
+			if (raster == null)
+				throw new NullPointerException("Unsupported image type: " + imageType);
+
+			return new MutableBufferedImage(imageType.getColorModel(), raster, imageType.getColorModel().isAlphaPremultiplied(), new Hashtable<>());
 		}
 	}
 
@@ -96,7 +144,9 @@ public class ImagePixelIterator<T>
 	 * This operates in its own thread.
 	 */
 	private static class Consumer implements ImageConsumer, Closeable {
-		final ImageProducer producer;
+		private final ImageProducer producer;
+		private final boolean allowOptimization;
+
 		Integer imgWidth;
 		Integer imgHeight;
 
@@ -134,11 +184,16 @@ public class ImagePixelIterator<T>
 		 * @param pixelType if null then the PixelIterator's type will be derived
 		 *                  based on some of the first incoming pixel data.
 		 * @param queueTimeoueMillis how long to wait in millis when pushing data to a queue.
+		 * @param allowOptimization if false then this consumer MUST create a large int[] or byte[] buffer
+		 *                          and populate it before passing any information back to the ImagePixelIterator.
+		 *                          If true then this consumer MAY stream pixel data back one row at a time,
+		 *                          if possible.
 		 */
-		Consumer(ImageProducer producer, ImageType pixelType, long queueTimeoueMillis) {
+		Consumer(ImageProducer producer, ImageType pixelType, long queueTimeoueMillis, boolean allowOptimization) {
 			this.producer = producer;
 			this.pixelType = pixelType;
 			this.queueTimeoueMillis = queueTimeoueMillis;
+			this.allowOptimization = allowOptimization;
 		}
 
 		@Override
@@ -244,7 +299,7 @@ public class ImagePixelIterator<T>
 				// TODO: convert data to pixelType
 			}
 
-			post(new PixelPackage(x, y, w, h, pixels, offset, scanSize));
+			post(new PixelPackage(x, y, w, h, pixels, offset, scanSize, pixelType));
 		}
 
 		/**
@@ -260,7 +315,7 @@ public class ImagePixelIterator<T>
 				if (imgWidth == null || imgHeight == null) {
 					String error = "pixel data was sent but the dimensions were undefined";
 					close(error);
-					throw new RuntimeException(error);
+					return;
 				}
 
 				int w = imgWidth.intValue();
@@ -278,7 +333,7 @@ public class ImagePixelIterator<T>
 				}
 
 				// TODO: can we not require isCompleteScanLineHint? or does that ever come up in testing?
-				boolean optimized = isTopDownLeftRightHint && isSinglePassHint && isCompleteScanLineHint;
+				boolean optimized = allowOptimization && isTopDownLeftRightHint && isSinglePassHint && isCompleteScanLineHint;
 
 				ImageDescriptor imageDescriptor;
 				switch (pixelType.getCode()) {
@@ -298,7 +353,7 @@ public class ImagePixelIterator<T>
 					default:
 						String error = "unsupported iterator type: " + pixelType;
 						close(error);
-						throw new RuntimeException(error);
+						return;
 				}
 
 				if (!optimized) {
@@ -324,24 +379,22 @@ public class ImagePixelIterator<T>
 				String error = "imageComplete( " + status
 						+ " ) was called before setPixels(...)";
 				close(error);
-				throw new RuntimeException(error);
+				return;
 			}
 
 			if (buffer != null) {
-				post(new PixelPackage(0, 0, imgWidth, imgHeight, buffer, 0, imgWidth * pixelType.getSampleCount()));
+				post(new PixelPackage(0, 0, imgWidth, imgHeight, buffer, 0, imgWidth * pixelType.getSampleCount(), pixelType));
 			}
 
 			if (status == ImageConsumer.IMAGEERROR) {
 				String error = "The ImageProducer failed with an error.";
 				close(error);
-				throw new RuntimeException(error);
 			} else if (status == ImageConsumer.IMAGEABORTED) {
 				String error = "The ImageProducer aborted.";
 				close(error);
-				throw new RuntimeException(error);
+			} else {
+				close(Boolean.TRUE);
 			}
-
-			post(Boolean.TRUE);
 		}
 	}
 
@@ -367,14 +420,27 @@ public class ImagePixelIterator<T>
 						"illegal iterator type: " + iteratorType);
 			}
 			this.iteratorType = ImageType.get(iteratorType);
+		}
 
-			this.size = Objects.requireNonNull(ImageSize.get(image));
+		@Override
+		public MutableBufferedImage createBufferedImage() {
+			// providing our own implementation saves us some memory allocation (and time):
+			// just use the int[]/byte[] provided in a PixelPackage to create a DataBuffer
+			// for a BufferedImage.
+			try (ImagePixelIterator iter = createPixelIterator(false)) {
+				iter.pollNextPixelPackage();
+				return iter.unfinishedPixelPackage.createBufferedImage(iter.unfinishedPixelPackageY);
+			}
 		}
 
 		@Override
 		public ImagePixelIterator createPixelIterator() {
+			return createPixelIterator(true);
+		}
+
+		public ImagePixelIterator createPixelIterator(boolean allowOptimization) {
 			final ImageProducer producer = image.getSource();
-			final Consumer consumer = new Consumer(producer, iteratorType, 10_000);
+			final Consumer consumer = new Consumer(producer, iteratorType, 10_000, allowOptimization);
 
 			// TODO: use a thread pool of a fixed size to initiate these
 
@@ -394,6 +460,9 @@ public class ImagePixelIterator<T>
 			Object data = poll(consumer.queue, 100_000);
 			if (data instanceof ImageDescriptor) {
 				ImageDescriptor d = (ImageDescriptor) data;
+				if (size == null) {
+					size = new Dimension(d.imgWidth, d.imgHeight);
+				}
 				return new ImagePixelIterator(d.imgWidth, d.imgHeight, d.imageType, d.isOptimized, consumer);
 			} else if (data instanceof String) {
 				throw new RuntimeException((String) data);
@@ -408,11 +477,17 @@ public class ImagePixelIterator<T>
 
 		@Override
 		public int getWidth() {
+			if (size == null) {
+				size = ImageSize.get(image);
+			}
 			return size.width;
 		}
 
 		@Override
 		public int getHeight() {
+			if (size == null) {
+				size = ImageSize.get(image);
+			}
 			return size.height;
 		}
 	}
@@ -461,6 +536,37 @@ public class ImagePixelIterator<T>
 					"The toolkit could not create an image for "
 							+ file.getAbsolutePath());
 		return get(image, iteratorType);
+	}
+
+	public static BufferedImage createBufferedImage(File file) {
+		return createBufferedImage(file, ImagePixelIterator.TYPE_DEFAULT);
+	}
+
+	public static MutableBufferedImage createBufferedImage(File file, int imageType) {
+		Image image = Toolkit.getDefaultToolkit().createImage(file.getAbsolutePath());
+		return createBufferedImage(image, imageType);
+	}
+
+	public static MutableBufferedImage createBufferedImage(Image image) {
+		return createBufferedImage(image, TYPE_DEFAULT);
+	}
+
+	public static MutableBufferedImage createBufferedImage(Image image, int imageType) {
+		if (image instanceof MutableBufferedImage) {
+			return (MutableBufferedImage) image;
+		} else if (image instanceof BufferedImage) {
+			return new MutableBufferedImage( (BufferedImage) image);
+		}
+		return new Source(image, imageType).createBufferedImage();
+	}
+
+	public static MutableBufferedImage createBufferedImage(URL resource) {
+		return createBufferedImage(resource, ImagePixelIterator.TYPE_DEFAULT);
+	}
+
+	public static MutableBufferedImage createBufferedImage(URL url, int imageType) {
+		Image image = Toolkit.getDefaultToolkit().createImage(url);
+		return createBufferedImage(image, imageType);
 	}
 
 	/**
@@ -609,11 +715,20 @@ public class ImagePixelIterator<T>
 
 	PixelPackage unfinishedPixelPackage = null;
 	int unfinishedPixelPackageY;
-	public void next(T destArray, int destArrayOffset, boolean skip) {
+	private void next(T destArray, int destArrayOffset, boolean skip) {
 		if (unfinishedPixelPackage != null) {
 			next_fromUnfinishedPixelPackage(destArray, destArrayOffset, skip);
 			return;
 		}
+		pollNextPixelPackage();
+		next_fromUnfinishedPixelPackage(destArray, destArrayOffset, skip);
+	}
+
+	/**
+	 * Prepares the {@link #unfinishedPixelPackage} field with the next unread PixelPackage,
+	 * or throws a RuntimeException if the producer thread has an error or times out.
+	 */
+	private void pollNextPixelPackage() {
 		Object data = poll(consumer.queue, 10_000);
 		if (data instanceof String) {
 			String str = (String) data;
@@ -627,7 +742,6 @@ public class ImagePixelIterator<T>
 		} else if (data instanceof PixelPackage) {
 			unfinishedPixelPackage = (PixelPackage) data;
 			unfinishedPixelPackageY = unfinishedPixelPackage.y;
-			next_fromUnfinishedPixelPackage(destArray, destArrayOffset, skip);
 		}
 	}
 
@@ -644,7 +758,7 @@ public class ImagePixelIterator<T>
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		consumer.close();
 	}
 }

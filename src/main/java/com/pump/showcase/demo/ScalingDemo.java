@@ -32,7 +32,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import com.pump.geom.TransformUtils;
-import com.pump.image.ImageLoader;
+import com.pump.image.ImageSize;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.image.pixel.PixelIterator;
 import com.pump.image.pixel.Scaling;
 
@@ -124,7 +125,7 @@ public class ScalingDemo extends ShowcaseChartDemo {
 		public BufferedImage call() throws Exception {
 			Image img = sampleImage.getScaledInstance(80, 60,
 					Image.SCALE_SMOOTH);
-			return ImageLoader.createImage(img);
+			return ImagePixelIterator.createBufferedImage(img);
 		}
 	};
 
@@ -222,8 +223,8 @@ public class ScalingDemo extends ShowcaseChartDemo {
 
 			@Override
 			public void run() {
-				sampleImage = ImageLoader.createImage(
-						ImageLoader.class.getResource("bridge3.jpg"));
+				sampleImage = ImagePixelIterator.createBufferedImage(
+						ImageSize.class.getResource("bridge3.jpg"));
 				try {
 					graphicsUtilitiesImage = GRAPHICS_UTILITIES_ICON.call();
 					SwingUtilities.invokeLater(new Runnable() {

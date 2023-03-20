@@ -30,7 +30,7 @@ import com.pump.awt.BufferedImagePaintable;
 import com.pump.awt.Paintable;
 import com.pump.graphics.vector.VectorImage;
 import com.pump.graphics.vector.VectorImagePaintable;
-import com.pump.image.ImageLoader;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.text.html.css.AbstractCssValue;
 import com.pump.text.html.css.CssLength;
 import com.pump.text.html.css.background.CssBackgroundAttachmentValue;
@@ -105,9 +105,8 @@ public class CssUrlImageValue extends AbstractCssValue
 
 		if (fileFormat.equals("jpg") || fileFormat.equals("jpeg")
 				|| fileFormat.equals("png")) {
-			BufferedImage img = ImageLoader.createImage(
-					Toolkit.getDefaultToolkit().createImage(bytes),
-					ImageLoader.TYPE_DEFAULT);
+			BufferedImage img = ImagePixelIterator.createBufferedImage(
+					Toolkit.getDefaultToolkit().createImage(bytes) );
 			return new ImageDataValue(img);
 		} else if (fileFormat.equalsIgnoreCase(VectorImage.FILE_EXTENSION)) {
 			VectorImage vi;
@@ -266,8 +265,7 @@ public class CssUrlImageValue extends AbstractCssValue
 				paintable = createPaintableFromDataUrl(urlStr);
 			} else {
 				URL url = new URL(urlStr);
-				BufferedImage bi = ImageLoader.createImage(url,
-						ImageLoader.TYPE_DEFAULT);
+				BufferedImage bi = ImagePixelIterator.createBufferedImage(url);
 				paintable = new ImageDataValue(bi);
 			}
 		} catch (Exception e) {
