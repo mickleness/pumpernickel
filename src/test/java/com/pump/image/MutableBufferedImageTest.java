@@ -10,19 +10,15 @@
  */
 package com.pump.image;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import org.junit.Test;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.awt.image.ImageObserver;
+import java.io.*;
 import java.util.Random;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class MutableBufferedImageTest {
 
@@ -94,6 +90,64 @@ public class MutableBufferedImageTest {
 			}
 		}
 		return returnValue;
+	}
+
+	// TODO: write better ImageProducer for MutableBufferedImage that passes this
+	// also check if we're getting the right hints
+	// also check TYPE_BYTE performance (I suspect it'll be slow?)
+	@Test
+	public void testGetWidth() {
+		PrintStream origErr = System.err;
+		System.setErr(new PrintStream(origErr) {
+			@Override
+			public void println(Object x) {
+				super.println(x);
+				if (x instanceof Object)
+					fail("Exception printed to System.err");
+			}
+		});
+		try {
+			BufferedImage rainbowImage = createSampleImage(500, 500, BufferedImage.TYPE_INT_RGB);
+			Image img = rainbowImage.getScaledInstance(80, 60,
+					Image.SCALE_SMOOTH);
+			ImageObserver observer = new ImageObserver() {
+				int width, height;
+				@Override
+				public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
+					System.out.println("imageUpdate " + img + " " + x + " " + y + " " + width + " " + height + " " + toString(infoflags));
+					if (width > 0)
+						this.width = width;
+					if (height > 0)
+						this.height = height;
+					return !(this.width > 0 && this.height > 0);
+				}
+
+				private String toString(int infoflags) {
+					StringBuilder sb = new StringBuilder();
+					if ( (infoflags & ImageObserver.WIDTH) > 0)
+						sb.append("width ");
+					if ( (infoflags & ImageObserver.HEIGHT) > 0)
+						sb.append("height ");
+					if ( (infoflags & ImageObserver.PROPERTIES) > 0)
+						sb.append("properties ");
+					if ( (infoflags & ImageObserver.SOMEBITS) > 0)
+						sb.append("somebits ");
+					if ( (infoflags & ImageObserver.FRAMEBITS) > 0)
+						sb.append("framebits ");
+					if ( (infoflags & ImageObserver.ALLBITS) > 0)
+						sb.append("allbits ");
+					if ( (infoflags & ImageObserver.ERROR) > 0)
+						sb.append("error ");
+					if ( (infoflags & ImageObserver.ABORT) > 0)
+						sb.append("abort ");
+					return sb.toString() + infoflags;
+				}
+			};
+			int w = img.getWidth(observer);
+			int h = img.getHeight(observer);
+		} finally {
+			System.setErr(origErr);
+		}
 	}
 
 }
