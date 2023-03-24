@@ -42,7 +42,6 @@ public class ScalingTest extends TestCase {
 	 * </p>
 	 */
 	public void testColorBands() throws Throwable {
-		// TODO: can we speed this up?
 		List<Throwable> errors = new LinkedList<>();
 
 		for (boolean isHorizontal : new boolean[] { true, false }) {
@@ -59,29 +58,22 @@ public class ScalingTest extends TestCase {
                         int scaledWidth = (int)(rainbowImage.getWidth() * scale);
                         int scaledHeight = (int)(rainbowImage.getHeight() * scale);
                         scaledImage = Scaling.scale(rainbowImage, scaledWidth, scaledHeight);
-                        Map<Color, Integer> colorMap = getColorMap(scaledImage);
 
-						int redCount = getColorCount(colorMap, Color.red);
-						int orangeCount = getColorCount(colorMap, Color.orange);
-						int yellowCount = getColorCount(colorMap, Color.yellow);
-						int greenCount = getColorCount(colorMap, Color.green);
-						int cyanCount = getColorCount(colorMap, Color.cyan);
-						int blueCount = getColorCount(colorMap, Color.blue);
+						RainbowColorProfile profile = new RainbowColorProfile(scaledImage);
 
 						int totalPixels = scaledImage.getWidth()
 								* scaledImage.getHeight();
 
-						float redPercent = redCount * 100 / totalPixels;
-						float orangePercent = orangeCount * 100 / totalPixels;
-						float yellowPercent = yellowCount * 100 / totalPixels;
-						float greenPercent = greenCount * 100 / totalPixels;
-						float cyanPercent = cyanCount * 100 / totalPixels;
-						float bluePercent = blueCount * 100 / totalPixels;
+						float redPercent = profile.redCount * 100 / totalPixels;
+						float orangePercent = profile.orangeCount * 100 / totalPixels;
+						float yellowPercent = profile.yellowCount * 100 / totalPixels;
+						float greenPercent = profile.greenCount * 100 / totalPixels;
+						float cyanPercent = profile.cyanCount * 100 / totalPixels;
+						float bluePercent = profile.blueCount * 100 / totalPixels;
 
 						try {
 							// a little bit of detail may be antialiased away,
-							// but
-							// we should have 6 really clear stripes:
+							// but we should have 6 really clear stripes:
 							assertTrue("red band missing: " + redPercent,
 									redPercent > 10);
 
@@ -90,8 +82,7 @@ public class ScalingTest extends TestCase {
 										"orange band missing: " + orangePercent,
 										orangePercent > 10);
 							} catch (AssertionFailedError e) {
-								int skyBlueCount = getColorCount(colorMap,
-										new Color(0, 200, 255));
+								int skyBlueCount = profile.skyBlueCount;
 								float skyBluePercent = skyBlueCount * 100
 										/ totalPixels;
 								if (skyBluePercent > 10) {
@@ -127,33 +118,42 @@ public class ScalingTest extends TestCase {
 			throw errors.get(0);
 	}
 
-	private int getColorCount(Map<Color, Integer> colorMap, Color c) {
-		int returnValue = 0;
-		for (Map.Entry<Color, Integer> entry : colorMap.entrySet()) {
-			if (Math.abs(c.getRed() - entry.getKey().getRed()) < 10
-					&& Math.abs(c.getGreen() - entry.getKey().getGreen()) < 10
-					&& Math.abs(c.getBlue() - entry.getKey().getBlue()) < 10) {
-				returnValue += entry.getValue().intValue();
-			}
-		}
-		return returnValue;
-	}
+	static class RainbowColorProfile {
+		int redCount, orangeCount, yellowCount, greenCount, cyanCount, blueCount;
 
-	private Map<Color, Integer> getColorMap(BufferedImage image) {
-		Map<Color, Integer> map = new HashMap<>();
-		for (int x = 0; x < image.getWidth(); x++) {
-			for (int y = 0; y < image.getHeight(); y++) {
-				int rgb = image.getRGB(x, y);
-				Color c = new Color(rgb);
-				Integer f = map.get(c);
-				if (f == null) {
-					map.put(c, Integer.valueOf(1));
-				} else {
-					map.put(c, Integer.valueOf(1 + f));
+		int skyBlueCount;
+
+		RainbowColorProfile(BufferedImage bi) {
+			PixelIterator iter = ImageType.INT_RGB.createPixelIterator(new ImagePixelIterator(bi, null));
+			int[] row = new int[bi.getWidth()];
+			while (!iter.isDone()) {
+				iter.next(row, 0);
+				for (int x = 0; x < row.length; x++) {
+					int rgb = row[x];
+					int red = (rgb >> 16) & 0xff;
+					int green = (rgb >> 8) & 0xff;
+					int blue = rgb & 0xff;
+
+					if (Math.abs(red - 255) < 10 && Math.abs(green - 0) < 10 && Math.abs(blue - 0) < 10) {
+						redCount++;
+					} else if (Math.abs(red - 255) < 10 && Math.abs(green - 200) < 10 && Math.abs(blue - 0) < 10) {
+						orangeCount++;
+					} else if (Math.abs(red - 255) < 10 && Math.abs(green - 255) < 10 && Math.abs(blue - 0) < 10) {
+						yellowCount++;
+					} else if (Math.abs(red - 0) < 10 && Math.abs(green - 255) < 10 && Math.abs(blue - 0) < 10) {
+						greenCount++;
+					} else if (Math.abs(red - 0) < 10 && Math.abs(green - 255) < 10 && Math.abs(blue - 255) < 10) {
+						cyanCount++;
+					} else if (Math.abs(red - 0) < 10 && Math.abs(green - 0) < 10 && Math.abs(blue - 255) < 10) {
+						blueCount++;
+					} else if (Math.abs(red - 0) < 10 && Math.abs(green - 200) < 10 && Math.abs(blue - 255) < 10) {
+						// this is an error condition where red and blue get switched; it's helpful if we
+						// can identify and mention this.
+						skyBlueCount++;
+					}
 				}
 			}
 		}
-		return map;
 	}
 
     public static BufferedImage createRainbowImage(int width, int height, int imageType, boolean isHorizontal) {
