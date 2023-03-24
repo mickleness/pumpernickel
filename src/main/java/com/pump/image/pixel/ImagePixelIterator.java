@@ -18,7 +18,6 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
 
-import com.pump.awt.Dimension2D;
 import com.pump.image.ColorModelUtils;
 import com.pump.image.ImageSize;
 import com.pump.image.MutableBufferedImage;
@@ -75,7 +74,7 @@ public class ImagePixelIterator<T>
 		final Object pixels;
 		final ImageType imageType;
 
-		public PixelPackage(int x, int y, int w, int h, Object pixels, int offset, int scanSize, ImageType imageType) {
+		PixelPackage(int x, int y, int w, int h, Object pixels, int offset, int scanSize, ImageType imageType) {
 			this.x = x;
 			this.y = y;
 			this.w = w;
@@ -295,11 +294,21 @@ public class ImagePixelIterator<T>
 			}
 
 			int modelType = ColorModelUtils.getBufferedImageType(model);
-			if (modelType != pixelType.getCode()) {
+			Object pixelPackageArray;
+			if (modelType == pixelType.getCode()) {
+				if (pixels instanceof int[] intArray) {
+					pixelPackageArray = intArray.clone();
+				} else if (pixels instanceof byte[] byteArray) {
+					pixelPackageArray = byteArray.clone();
+				} else {
+					throw new IllegalStateException(pixels.getClass().getName());
+				}
+			} else {
 				// TODO: convert data to pixelType
+				pixelPackageArray = pixels;
 			}
 
-			post(new PixelPackage(x, y, w, h, pixels, offset, scanSize, pixelType));
+			post(new PixelPackage(x, y, w, h, pixelPackageArray, offset, scanSize, pixelType));
 		}
 
 		/**
@@ -740,7 +749,7 @@ public class ImagePixelIterator<T>
 	private void next_fromUnfinishedPixelPackage(T destArray, int destArrayOffset, boolean skip) {
 		if (!skip) {
 			System.arraycopy(unfinishedPixelPackage.pixels,
-					unfinishedPixelPackage.offset + unfinishedPixelPackageY * unfinishedPixelPackage.scanSize + (unfinishedPixelPackage.x) * type.getSampleCount(),
+					unfinishedPixelPackage.offset + (unfinishedPixelPackageY - unfinishedPixelPackage.y) * unfinishedPixelPackage.scanSize + unfinishedPixelPackage.x * type.getSampleCount(),
 					destArray, destArrayOffset, unfinishedPixelPackage.w * type.getSampleCount());
 		}
 		rowCtr++;

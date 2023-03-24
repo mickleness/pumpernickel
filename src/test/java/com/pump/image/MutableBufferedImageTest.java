@@ -92,9 +92,7 @@ public class MutableBufferedImageTest {
 		return returnValue;
 	}
 
-	// TODO: write better ImageProducer for MutableBufferedImage that passes this
-	// also check if we're getting the right hints
-	// also check TYPE_BYTE performance (I suspect it'll be slow?)
+	// TODO: maybe make this a JDK test for JDK-4200096
 	@Test
 	public void testGetWidth() {
 		PrintStream origErr = System.err;
@@ -149,5 +147,4 @@ public class MutableBufferedImageTest {
 			System.setErr(origErr);
 		}
 	}
-
 }

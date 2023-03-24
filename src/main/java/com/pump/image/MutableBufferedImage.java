@@ -11,11 +11,7 @@
 package com.pump.image;
 
 import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.ImageObserver;
-import java.awt.image.IndexColorModel;
-import java.awt.image.WritableRaster;
+import java.awt.image.*;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -214,6 +210,11 @@ public class MutableBufferedImage extends BufferedImage
 				+ Integer.toHexString(hashCode()) + ", type = " + getType()
 				+ ", colorModel = " + getColorModel() + ", raster = "
 				+ getRaster() + ", properties = " + getProperties(this) + "]";
+	}
+
+	@Override
+	public ImageProducer getSource() {
+		return new QBufferedImageSource(this, getProperties(this), super.getSource());
 	}
 
 	///////// serialization:
