@@ -54,14 +54,6 @@ public class ImagePixelIterator<T>
 	// TODO: write unit tests for this class, including lots of variations about how
 	// pixel data can arrive.
 
-	/**
-	 * This is an image type alternative that indicates we should return
-	 * whatever is simplest/most expedient.
-	 *
-	 * TODO: do we still use this, or does null take its place?
-	 */
-	public static int TYPE_DEFAULT = -888321;
-
 	private static class ImageDescriptor {
 		final int imgWidth, imgHeight;
 		final ImageType imageType;
@@ -414,35 +406,35 @@ public class ImagePixelIterator<T>
 
 		private String errorDescriptor;
 
-		public Source(File file, int iteratorType) {
-			this( Toolkit.getDefaultToolkit().createImage(file.getAbsolutePath()), iteratorType, file.getAbsolutePath());
+		public Source(File file, ImageType imageType) {
+			this( Toolkit.getDefaultToolkit().createImage(file.getAbsolutePath()), imageType, file.getAbsolutePath());
 		}
 
-		public Source(URL url, int iteratorType) {
-			this( Toolkit.getDefaultToolkit().createImage(url), iteratorType, url.toString());
+		public Source(URL url, ImageType imageType) {
+			this( Toolkit.getDefaultToolkit().createImage(url), imageType, url.toString());
 		}
 
-		public Source(Image image, int iteratorType) {
-			this(image, iteratorType, null);
+		public Source(Image image, ImageType imageType) {
+			this(image, imageType, null);
 		}
 
-		private Source(Image image, int iteratorType, String errorDescriptor) {
+		private Source(Image image, ImageType imageType, String errorDescriptor) {
 			this.image = Objects.requireNonNull(image);
 			this.errorDescriptor = errorDescriptor;
 
-			if (!(iteratorType == TYPE_DEFAULT
-					|| iteratorType == BufferedImage.TYPE_INT_ARGB
-					|| iteratorType == BufferedImage.TYPE_INT_ARGB_PRE
-					|| iteratorType == BufferedImage.TYPE_INT_RGB
-					|| iteratorType == BufferedImage.TYPE_INT_BGR
-					|| iteratorType == BufferedImage.TYPE_3BYTE_BGR
-					|| iteratorType == BufferedImage.TYPE_BYTE_GRAY
-					|| iteratorType == BufferedImage.TYPE_4BYTE_ABGR
-					|| iteratorType == BufferedImage.TYPE_4BYTE_ABGR_PRE)) {
+			if (!(imageType == null
+					|| imageType.getCode() == BufferedImage.TYPE_INT_ARGB
+					|| imageType.getCode() == BufferedImage.TYPE_INT_ARGB_PRE
+					|| imageType.getCode() == BufferedImage.TYPE_INT_RGB
+					|| imageType.getCode() == BufferedImage.TYPE_INT_BGR
+					|| imageType.getCode() == BufferedImage.TYPE_3BYTE_BGR
+					|| imageType.getCode() == BufferedImage.TYPE_BYTE_GRAY
+					|| imageType.getCode() == BufferedImage.TYPE_4BYTE_ABGR
+					|| imageType.getCode() == BufferedImage.TYPE_4BYTE_ABGR_PRE)) {
 				throw new IllegalArgumentException(
-						"illegal iterator type: " + iteratorType);
+						"illegal iterator type: " + imageType);
 			}
-			this.iteratorType = ImageType.get(iteratorType);
+			this.iteratorType = imageType;
 		}
 
 		@Override
@@ -507,34 +499,38 @@ public class ImagePixelIterator<T>
 	}
 
 	public static BufferedImage createBufferedImage(File file) {
-		return createBufferedImage(file, ImagePixelIterator.TYPE_DEFAULT);
+		return createBufferedImage(file, null);
 	}
 
-	public static MutableBufferedImage createBufferedImage(File file, int imageType) {
+	public static MutableBufferedImage createBufferedImage(File file, ImageType<?> imageType) {
 		Image image = Toolkit.getDefaultToolkit().createImage(file.getAbsolutePath());
-		return createBufferedImage(image, imageType);
+		return createBufferedImage(image, imageType, file.getAbsolutePath());
 	}
 
 	public static MutableBufferedImage createBufferedImage(Image image) {
-		return createBufferedImage(image, TYPE_DEFAULT);
+		return createBufferedImage(image, null);
 	}
 
-	public static MutableBufferedImage createBufferedImage(Image image, int imageType) {
+	public static MutableBufferedImage createBufferedImage(Image image, ImageType<?> imageType) {
+		return createBufferedImage(image, imageType, null);
+	}
+
+	public static MutableBufferedImage createBufferedImage(Image image, ImageType<?> imageType, String errorDescription) {
 		if (image instanceof MutableBufferedImage) {
 			return (MutableBufferedImage) image;
 		} else if (image instanceof BufferedImage) {
 			return new MutableBufferedImage( (BufferedImage) image);
 		}
-		return new Source(image, imageType).createBufferedImage();
+		return new Source(image, imageType, errorDescription).createBufferedImage();
 	}
 
 	public static MutableBufferedImage createBufferedImage(URL resource) {
-		return createBufferedImage(resource, ImagePixelIterator.TYPE_DEFAULT);
+		return createBufferedImage(resource, null);
 	}
 
-	public static MutableBufferedImage createBufferedImage(URL url, int imageType) {
+	public static MutableBufferedImage createBufferedImage(URL url, ImageType<?> imageType) {
 		Image image = Toolkit.getDefaultToolkit().createImage(url);
-		return createBufferedImage(image, imageType);
+		return createBufferedImage(image, imageType, url.toString());
 	}
 
 	final int width, height;

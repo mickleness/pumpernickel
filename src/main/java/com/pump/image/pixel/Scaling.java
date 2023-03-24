@@ -41,8 +41,10 @@ public class Scaling {
 	/**
 	 * This is an image type alternative that indicates we should return
 	 * whatever is simplest/most expedient.
+	 *
+	 * // TODO: can we remove, replace with a null ImageType?
 	 */
-	public static final int TYPE_DEFAULT = ImagePixelIterator.TYPE_DEFAULT;
+	public static final int TYPE_DEFAULT = -235923;
 
 	/**
 	 * Scales the source image into the destination.
