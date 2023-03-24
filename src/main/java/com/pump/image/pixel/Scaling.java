@@ -284,14 +284,11 @@ public class Scaling {
 					+ dest.getHeight() + ")");
 		}
 
-		int destType = dest != null ? dest.getType()
-				: ImagePixelIterator.TYPE_DEFAULT;
-		PixelIterator iter = ImagePixelIterator.get(source,
-				destType);
-		if (destType == ImagePixelIterator.TYPE_DEFAULT)
-			destType = iter.getType();
+		ImageType destType = dest == null ? null : ImageType.get(dest.getType());
+		PixelIterator iter = new ImagePixelIterator(source, destType);
+		destType = ImageType.get(iter.getType());
 		PixelIterator scalingIter = destSize == null ? iter
-				: new ScalingIterator( ImageType.get(destType), iter, destSize.width, destSize.height);
+				: new ScalingIterator( destType, iter, destSize.width, destSize.height);
 		return BufferedImageIterator.writeToImage(scalingIter, dest);
 	}
 

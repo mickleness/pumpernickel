@@ -16,8 +16,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import com.pump.awt.Dimension2D;
 import com.pump.image.ColorModelUtils;
@@ -42,6 +41,13 @@ import com.pump.image.MutableBufferedImage;
 public class ImagePixelIterator<T>
 		implements PixelIterator<T>, AutoCloseable {
 
+
+	/**
+	 * This manages the threads use start ImageProducer production in.
+	 */
+	static ThreadPoolExecutor PRODUCTION_EXECUTOR = new ThreadPoolExecutor(0, 6,
+			0L,TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+
 	// TODO: review ImageLoader demo. The default jpg may not show much perf advantage, but I could grab a jpg
 	// of my hd that should gains like in the write-up
 
@@ -51,6 +57,8 @@ public class ImagePixelIterator<T>
 	/**
 	 * This is an image type alternative that indicates we should return
 	 * whatever is simplest/most expedient.
+	 *
+	 * TODO: do we still use this, or does null take its place?
 	 */
 	public static int TYPE_DEFAULT = -888321;
 
@@ -404,8 +412,23 @@ public class ImagePixelIterator<T>
 
 		private Dimension size;
 
+		private String errorDescriptor;
+
+		public Source(File file, int iteratorType) {
+			this( Toolkit.getDefaultToolkit().createImage(file.getAbsolutePath()), iteratorType, file.getAbsolutePath());
+		}
+
+		public Source(URL url, int iteratorType) {
+			this( Toolkit.getDefaultToolkit().createImage(url), iteratorType, url.toString());
+		}
+
 		public Source(Image image, int iteratorType) {
+			this(image, iteratorType, null);
+		}
+
+		private Source(Image image, int iteratorType, String errorDescriptor) {
 			this.image = Objects.requireNonNull(image);
+			this.errorDescriptor = errorDescriptor;
 
 			if (!(iteratorType == TYPE_DEFAULT
 					|| iteratorType == BufferedImage.TYPE_INT_ARGB
@@ -438,41 +461,12 @@ public class ImagePixelIterator<T>
 			return createPixelIterator(true);
 		}
 
-		public ImagePixelIterator createPixelIterator(boolean allowOptimization) {
-			final ImageProducer producer = image.getSource();
-			final Consumer consumer = new Consumer(producer, iteratorType, 10_000, allowOptimization);
-
-			// TODO: use a thread pool of a fixed size to initiate these
-
-			// ImageProducer.startProduction often starts its own thread, but it's
-			// not required to. Sometimes in my testing a BufferedImage would make
-			// this a blocking call. So to be safe this call should be in its
-			// own thread:
-			Thread productionThread = new Thread(
-					"ImagePixelIterator: Production Thread") {
-				@Override
-				public void run() {
-					producer.startProduction(consumer);
-				}
-			};
-			productionThread.start();
-
-			Object data = poll(consumer.queue, 100_000);
-			if (data instanceof ImageDescriptor) {
-				ImageDescriptor d = (ImageDescriptor) data;
-				if (size == null) {
-					size = new Dimension(d.imgWidth, d.imgHeight);
-				}
-				return new ImagePixelIterator(d.imgWidth, d.imgHeight, d.imageType, d.isOptimized, consumer);
-			} else if (data instanceof String) {
-				throw new RuntimeException((String) data);
-			} else if (data instanceof Boolean) {
-				// when we receive Boolean.TRUE that should signal a healthy completion, so... what just happened?
-				throw new RuntimeException();
-			} else {
-				// what happened here?
-				throw new RuntimeException(String.valueOf(data));
+		private ImagePixelIterator createPixelIterator(boolean allowOptimization) {
+			ImagePixelIterator returnValue = new ImagePixelIterator(image.getSource(), iteratorType, allowOptimization, errorDescriptor);
+			if (size == null) {
+				size = new Dimension(returnValue.getWidth(), returnValue.getHeight());
 			}
+			return returnValue;
 		}
 
 		@Override
@@ -512,32 +506,6 @@ public class ImagePixelIterator<T>
 		}
 	}
 
-	/**
-	 * Returns a <code>ImageProducerPixelIterator</code> that is either a
-	 * <code>IntPixelIterator</code> or a <code>BytePixelIterator</code>.
-	 * 
-	 * @param file
-	 *            <code>Toolkit.createImage(filePath)</code> is used to create
-	 *            the <code>java.awt.Image</code>, so the supported image types
-	 *            are JPG, PNG and GIF.
-	 * @param iteratorType
-	 *            one of these 8 BufferedImage types: TYPE_INT_ARGB,
-	 *            TYPE_INT_ARGB_PRE, TYPE_INT_RGB, TYPE_INT_BGR, TYPE_3BYTE_BGR,
-	 *            TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE.
-	 * @return a <code>ImagePixelIterator</code> for the file
-	 *         provided.
-	 */
-	public static ImagePixelIterator get(File file,
-			int iteratorType) {
-		Image image = Toolkit.getDefaultToolkit()
-				.createImage(file.getAbsolutePath());
-		if (image == null)
-			throw new IllegalArgumentException(
-					"The toolkit could not create an image for "
-							+ file.getAbsolutePath());
-		return get(image, iteratorType);
-	}
-
 	public static BufferedImage createBufferedImage(File file) {
 		return createBufferedImage(file, ImagePixelIterator.TYPE_DEFAULT);
 	}
@@ -569,59 +537,6 @@ public class ImagePixelIterator<T>
 		return createBufferedImage(image, imageType);
 	}
 
-	/**
-	 * Create a scaled image from a URL.
-	 * <p>
-	 * If the graphic is already smaller than the maximum size you request: then
-	 * the graphic is returned at its original size.
-	 * 
-	 * @param url
-	 *            the graphic to create a thumbnail of.
-	 * @param maxSize
-	 *            the largest bounds of the thumbnail. For example: if the
-	 *            graphic is 1024x768, and you pass a maximum bounds of 120x120:
-	 *            then the resulting thumbnail will be 120x90.
-	 */
-	public static BufferedImage createScaledImage(URL url, Dimension maxSize) {
-		Image image = Toolkit.getDefaultToolkit().createImage(url);
-		boolean isJPEG = url.toString().toLowerCase().endsWith(".jpg")
-				|| url.toString().toLowerCase().endsWith(".jpeg");
-		int type = isJPEG ? BufferedImage.TYPE_INT_RGB
-				: BufferedImage.TYPE_INT_ARGB;
-		PixelIterator iter = (PixelIterator<int[]>) get(image, type);
-		if (iter == null)
-			return null;
-		Dimension currentSize = new Dimension(iter.getWidth(),
-				iter.getHeight());
-		if (currentSize.width <= maxSize.width
-				&& currentSize.height <= maxSize.height) {
-			return BufferedImageIterator.writeToImage(iter, null);
-		}
-		Dimension newSize = Dimension2D.scaleProportionally(currentSize,
-				maxSize);
-		PixelIterator scalingIter = new ScalingIterator(iter, newSize.width,
-				newSize.height);
-		return BufferedImageIterator.writeToImage(scalingIter, null);
-	}
-
-	/**
-	 * Returns a <code>ImagePixelIterator</code> that is either a
-	 * <code>IntPixelIterator</code> or a <code>BytePixelIterator</code>.
-	 * 
-	 * @param image
-	 *            the image to iterate over.
-	 * @param iteratorType
-	 *            one of these 8 BufferedImage types: TYPE_INT_ARGB,
-	 *            TYPE_INT_ARGB_PRE, TYPE_INT_RGB, TYPE_INT_BGR, TYPE_3BYTE_BGR,
-	 *            TYPE_BYTE_GRAY, TYPE_4BYTE_ABGR, TYPE_4BYTE_ABGR_PRE.
-	 * @return a <code>ImagePixelIterator</code> for the image
-	 *         provided.
-	 */
-	public static ImagePixelIterator get(Image image,
-			int iteratorType) {
-		return new Source(image, iteratorType).createPixelIterator();
-	}
-
 	final int width, height;
 	final ImageType type;
 	final boolean isOptimized;
@@ -633,12 +548,93 @@ public class ImagePixelIterator<T>
 	 */
 	int rowCtr = 0;
 
-	private ImagePixelIterator(int width, int height, ImageType type, boolean isOptimized, Consumer consumer) {
-		this.width = width;
-		this.height = height;
-		this.type = type;
-		this.consumer = consumer;
-		this.isOptimized = isOptimized;
+	public ImagePixelIterator(URL url, ImageType<T> outputType) {
+		this(Toolkit.getDefaultToolkit()
+				.createImage(url), outputType, url.toString());
+	}
+
+	/**
+	 * @param file
+	 *            <code>Toolkit.createImage(filePath)</code> is used to create
+	 *            the <code>java.awt.Image</code>, so the supported image types
+	 *            are JPG, PNG and GIF.
+	 * @param outputType
+	 */
+	public ImagePixelIterator(File file, ImageType<T> outputType) {
+		this(Toolkit.getDefaultToolkit()
+				.createImage(file.getAbsolutePath()), outputType, file.getAbsolutePath());
+	}
+
+	/**
+	 * Create a new ImagePixelIterator based on an Image's {@link Image#getSource() ImageProducer}.
+	 *
+	 * @param image
+	 * @param outputType the optional ImageType this pixel data should output as. If this is null
+	 *                   then a default is chosen based on the incoming pixel data.
+	 */
+	public ImagePixelIterator(Image image, ImageType<T> outputType) {
+		this(image == null ? null : image.getSource(), outputType, true, null);
+	}
+
+	/**
+	 * @param errorDescriptor an optional String embedded in RuntimeExceptions if an error comes up
+	 *                        setting this iterator up. For example: if this image is coming from a specific
+	 *                        file then this should refer to the file path. This way an exception identifies
+	 *                        exactly which file was being read.
+	 */
+	private ImagePixelIterator(Image image, ImageType<T> outputType, String errorDescriptor) {
+		this(image == null ? null : image.getSource(), outputType, true, errorDescriptor);
+	}
+
+	/**
+	 * Create a new ImagePixelIterator based on an ImageProducer.
+	 *
+	 * @param imageProducer the ImageProducer that will provide pixel data.
+	 * @param outputType the optional ImageType this pixel data should output as. If this is null
+	 *                   then a default is chosen based on the incoming pixel data.
+	 */
+	public ImagePixelIterator(ImageProducer imageProducer, ImageType<T> outputType) {
+		this(imageProducer, outputType, true, null);
+	}
+
+	/**
+	 * @param errorDescriptor an optional String embedded in RuntimeExceptions if an error comes up
+	 *                        setting this iterator up. For example: if this image is coming from a specific
+	 *                        file then this should refer to the file path. This way an exception identifies
+	 *                        exactly which file was being read.
+	 */
+	private ImagePixelIterator(ImageProducer imageProducer, ImageType<T> requestedOutputType, boolean allowOptimization, String errorDescriptor) {
+		Objects.requireNonNull(imageProducer, errorDescriptor == null ? "null ImageProducer" : "null ImageProducer for " + errorDescriptor);
+
+		consumer = new Consumer(imageProducer, requestedOutputType, 10_000, allowOptimization);
+
+		// ImageProducer.startProduction often starts its own thread, but it's
+		// not required to. This *cannot* be a blocking call, so we must wrap it
+		// in a different thread to be safe.
+
+		Runnable productionRunnable = new Runnable() {
+			public void run() {
+				imageProducer.startProduction(consumer);
+			}
+		};
+		PRODUCTION_EXECUTOR.execute(productionRunnable);
+
+		Object data = poll(consumer.queue, 100_000);
+		if (data instanceof ImageDescriptor) {
+			ImageDescriptor d = (ImageDescriptor) data;
+			width = d.imgWidth;
+			height = d.imgHeight;
+			isOptimized = d.isOptimized;
+			type = d.imageType;
+		} else if (data instanceof String) {
+			throw new RuntimeException((String) data);
+		} else if (data instanceof Boolean) {
+			// when we receive Boolean.TRUE that should signal a healthy completion, so... what just happened?
+			throw new RuntimeException();
+		} else {
+			// what happened here?
+			throw new RuntimeException(String.valueOf(data));
+		}
 	}
 
 	/**

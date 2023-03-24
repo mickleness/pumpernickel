@@ -42,6 +42,7 @@ public class ScalingTest extends TestCase {
 	 * </p>
 	 */
 	public void testColorBands() throws Throwable {
+		// TODO: can we speed this up?
 		List<Throwable> errors = new LinkedList<>();
 
 		for (boolean isHorizontal : new boolean[] { true, false }) {
