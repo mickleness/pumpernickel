@@ -39,14 +39,6 @@ import com.pump.io.URLInputStreamSource;
 public class Scaling {
 
 	/**
-	 * This is an image type alternative that indicates we should return
-	 * whatever is simplest/most expedient.
-	 *
-	 * // TODO: can we remove, replace with a null ImageType?
-	 */
-	public static final int TYPE_DEFAULT = -235923;
-
-	/**
 	 * Scales the source image into the destination.
 	 * 
 	 * @param source
@@ -101,14 +93,14 @@ public class Scaling {
 	 * @param source
 	 *            the source image file.
 	 * @param imageType
-	 * 			  the output image type
+	 * 			  the optional image output type. If this is null then a default
+	 * 			  image type is chosen for you; usually the image type will be the
+	 * 			  simplest image type that requires the least conversions.
 	 * @param destSize
 	 *            the size of the new image.
-	 * @return a new scaled image of type
-	 *         <code>BufferedImage.TYPE_INT_ARGB</code> or
-	 *         <code>BufferedImage.TYPE_INT_RGB</code>.
+	 * @return a new scaled image
 	 */
-	public static BufferedImage scale(File source, int imageType,
+	public static BufferedImage scale(File source, ImageType imageType,
 			Dimension destSize) {
 		return scale(source.getName(), new FileInputStreamSource(source),
 				imageType, destSize);
@@ -120,29 +112,31 @@ public class Scaling {
 	 * @param source
 	 *            the source image file.
 	 * @param imageType
-	 * 			  the output image type
+	 * 			  the optional image output type. If this is null then a default
+	 * 			  image type is chosen for you; usually the image type will be the
+	 * 			  simplest image type that requires the least conversions.
 	 * @param destSize
 	 *            the size of the new image.
-	 * @return a new scaled image of type
-	 *         <code>BufferedImage.TYPE_INT_ARGB</code> or
-	 *         <code>BufferedImage.TYPE_INT_RGB</code>.
+	 * @return a new scaled image
 	 */
-	public static BufferedImage scale(URL source, int imageType,
+	public static BufferedImage scale(URL source, ImageType imageType,
 			Dimension destSize) {
 		return scale(source.toString(), new URLInputStreamSource(source),
 				imageType, destSize);
 	}
 
 	private static MutableBufferedImage scale(String name, InputStreamSource src,
-			int imageType, Dimension destSize) {
+			ImageType imageType, Dimension destSize) {
 		String pathLower = name.toLowerCase();
 		if (pathLower.endsWith(".bmp")) {
 			try (InputStream in = src.createInputStream()) {
 				PixelIterator iter = BmpDecoderIterator.get(in);
+				if (imageType == null)
+					imageType = ImageType.get(iter.getType());
 				if (destSize != null) {
-					iter = new ScalingIterator(ImageType.get(imageType), iter, destSize.width, destSize.height);
+					iter = new ScalingIterator(imageType, iter, destSize.width, destSize.height);
 				} else {
-					iter = ImageType.get(imageType).createPixelIterator(iter);
+					iter = imageType.createPixelIterator(iter);
 				}
 
 				MutableBufferedImage image = BufferedImageIterator.writeToImage(iter,null);
@@ -164,11 +158,11 @@ public class Scaling {
 			throw new IllegalStateException(src.getClass().getName());
 		}
 		try {
-			if (imageType == TYPE_DEFAULT) {
+			if (imageType == null) {
 				return scale(image, null, destSize);
 			} else {
 				BufferedImage dest = new BufferedImage(destSize.width,
-						destSize.height, imageType);
+						destSize.height, imageType.getCode());
 				return scale(image, dest, null);
 			}
 		} finally {

@@ -18,6 +18,7 @@ import java.io.File;
 import java.net.URL;
 
 import com.pump.image.ImageSize;
+import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.Scaling;
 import com.pump.image.thumbnail.BasicThumbnail.Layer;
 
@@ -125,7 +126,7 @@ public abstract class Thumbnail {
 
 		@Override
 		public BufferedImage scale(Dimension destinationSize) {
-			return Scaling.scale(url, BufferedImage.TYPE_INT_ARGB,
+			return Scaling.scale(url, ImageType.INT_ARGB,
 					destinationSize);
 		}
 	}
@@ -176,7 +177,7 @@ public abstract class Thumbnail {
 
 		@Override
 		public BufferedImage scale(Dimension destinationSize) {
-			return Scaling.scale(file, BufferedImage.TYPE_INT_ARGB,
+			return Scaling.scale(file, ImageType.INT_ARGB,
 					destinationSize);
 		}
 	}

@@ -39,6 +39,7 @@ import javax.swing.tree.TreePath;
 import com.pump.awt.Dimension2D;
 import com.pump.image.ImageSize;
 import com.pump.image.jpeg.JPEGMetaData;
+import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.Scaling;
 import com.pump.image.thumbnail.BasicThumbnail;
 import com.pump.swing.BasicCancellable;
@@ -665,7 +666,7 @@ public abstract class IOLocation {
 					try {
 						Dimension d = ImageSize.get(url);
 						d = Dimension2D.scaleProportionally(d, maxSize);
-						return Scaling.scale(url, BufferedImage.TYPE_INT_ARGB,
+						return Scaling.scale(url, ImageType.INT_ARGB,
 								d);
 					} catch (Throwable t) {
 						// do nothing. Pity this failed.

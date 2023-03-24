@@ -47,7 +47,7 @@ public class ScalingThumbnailGenerator implements ThumbnailGenerator {
 			return ImagePixelIterator.createBufferedImage(file);
 		}
 
-		return Scaling.scale(file, Scaling.TYPE_DEFAULT, scaledImageSize);
+		return Scaling.scale(file, null, scaledImageSize);
 	}
 
 }
