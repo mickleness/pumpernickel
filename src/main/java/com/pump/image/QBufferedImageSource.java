@@ -2,12 +2,14 @@ package com.pump.image;
 
 import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.ImageType;
+import com.pump.image.pixel.PixelIterator;
 
 import java.awt.image.*;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * This is modeled after the sun.awt.image.OffScreenImageSource, but it includes a few changes. Note these
+ * This is loosely modeled after the sun.awt.image.OffScreenImageSource, but it includes a few changes. Note these
  * changes are only activated if the BufferedImage is one of the image types supported by {@link com.pump.image.pixel.BufferedImageIterator}.
  * If the image is unsupported we fall back to the BufferedImage's default ImageProducer. The improvements/changes include:
  * <ul><li>This class calls {@link ImageConsumer#setHints(int)} before sending pixels.</li>
@@ -20,7 +22,7 @@ import java.util.*;
 public class QBufferedImageSource implements ImageProducer {
     private BufferedImage image;
     private Map<?, ?> properties;
-    private List<ImageConsumer> consumers = Collections.synchronizedList(new LinkedList<>());
+    private List<ImageConsumer> consumers = new CopyOnWriteArrayList<>();
     private ImageProducer backupImageProducer;
 
     QBufferedImageSource(BufferedImage image,
@@ -38,7 +40,7 @@ public class QBufferedImageSource implements ImageProducer {
     public void addConsumer(ImageConsumer consumer) {
         consumers.add(consumer);
 
-        BufferedImageIterator<?> pixelIter = null;
+        PixelIterator<?> pixelIter = null;
         ImageType<?> iterType = null;
         try {
             pixelIter = BufferedImageIterator.create(image);
@@ -79,52 +81,50 @@ public class QBufferedImageSource implements ImageProducer {
         // intentionally empty
     }
 
-    private void sendPixels(ImageConsumer consumer, BufferedImageIterator pixelIter, ImageType imageType) {
-        int width  = image.getWidth();
-
-        if (imageType.isInt()) {
-            int[] row = new int[width * pixelIter.getPixelSize()];
-            int y = 0;
-            while ( !pixelIter.isDone() && isConsumer(consumer)) {
-                pixelIter.next(row, 0);
-                consumer.setPixels(0, y++, width, 1, imageType.getColorModel(), row, 0, row.length);
-            }
-        } else if (imageType.isByte()) {
-            byte[] row = new byte[width * pixelIter.getPixelSize()];
-            int y = 0;
-            while ( !pixelIter.isDone() && isConsumer(consumer)) {
-                pixelIter.next(row, 0);
-                consumer.setPixels(0, y++, width, 1, imageType.getColorModel(), row, 0, row.length);
-            }
-        }
-    }
-
-    private void produce(ImageConsumer consumer, BufferedImageIterator<?> pixelIter, ImageType<?> imageType) {
+    private void produce(ImageConsumer consumer, PixelIterator pixelIter, ImageType<?> imageType) {
         // at any time the consumer could be unregistered, so we constantly
         // check to see if a consumer is still relevant (JDK-4200096)
 
         try {
             consumer.setDimensions(image.getWidth(), image.getHeight());
 
-            if (isConsumer(consumer))
+            if (consumers.contains(consumer))
                 consumer.setProperties(new Hashtable<>(properties));
 
-            if (isConsumer(consumer))
+            if (consumers.contains(consumer))
                 consumer.setHints(ImageConsumer.SINGLEPASS |
                         ImageConsumer.COMPLETESCANLINES |
                         ImageConsumer.TOPDOWNLEFTRIGHT |
                         ImageConsumer.SINGLEFRAME);
 
-            if (isConsumer(consumer))
-                sendPixels(consumer, pixelIter, imageType);
+            if (consumers.contains(consumer))
+                consumer.setColorModel(imageType.getColorModel());
 
-            if (isConsumer(consumer))
+            int width  = image.getWidth();
+
+            if (imageType.isInt()) {
+                int[] row = new int[width * pixelIter.getPixelSize()];
+                int y = 0;
+                while ( !pixelIter.isDone() && consumers.contains(consumer)) {
+                    pixelIter.next(row, 0);
+                    consumer.setPixels(0, y++, width, 1, imageType.getColorModel(), row, 0, row.length);
+                }
+            } else if (imageType.isByte()) {
+                byte[] row = new byte[width * pixelIter.getPixelSize()];
+                int y = 0;
+                while ( !pixelIter.isDone() && consumers.contains(consumer)) {
+                    pixelIter.next(row, 0);
+                    consumer.setPixels(0, y++, width, 1, imageType.getColorModel(), row, 0, row.length);
+                }
+            }
+
+            if (consumers.contains(consumer))
                 consumer.imageComplete(ImageConsumer.SINGLEFRAMEDONE);
 
-            if (isConsumer(consumer))
+            if (consumers.contains(consumer))
                 consumer.imageComplete(ImageConsumer.STATICIMAGEDONE);
         } catch (Exception e) {
-            if (isConsumer(consumer))
+            if (consumers.contains(consumer))
                 consumer.imageComplete(ImageConsumer.IMAGEERROR);
         }
     }

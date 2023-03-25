@@ -10,12 +10,16 @@
  */
 package com.pump.image;
 
+import com.pump.image.pixel.ImageType;
 import org.junit.Test;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.ImageConsumer;
 import java.awt.image.ImageObserver;
 import java.io.*;
+import java.util.Hashtable;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -24,21 +28,21 @@ public class MutableBufferedImageTest {
 
 	@Test
 	public void testEquals() {
-		MutableBufferedImage bi1 = createSampleImage(60, 40,
+		MutableBufferedImage bi1 = createSampleMutableImage(60, 40,
 				BufferedImage.TYPE_INT_ARGB);
-		MutableBufferedImage bi2 = createSampleImage(60, 40,
+		MutableBufferedImage bi2 = createSampleMutableImage(60, 40,
 				BufferedImage.TYPE_INT_ARGB);
 		assertEquals(bi1, bi2);
 		assertEquals(bi1.hashCode(), bi2.hashCode());
 
 		// change the image type:
-		bi2 = createSampleImage(60, 40, BufferedImage.TYPE_INT_RGB);
+		bi2 = createSampleMutableImage(60, 40, BufferedImage.TYPE_INT_RGB);
 		assertFalse(bi1.equals(bi2));
 
 		// change pixels
 		for (int y = 0; y < bi1.getHeight(); y++) {
 			for (int x = 0; x < bi1.getWidth(); x++) {
-				bi2 = createSampleImage(60, 40, BufferedImage.TYPE_INT_ARGB);
+				bi2 = createSampleMutableImage(60, 40, BufferedImage.TYPE_INT_ARGB);
 				int argb = bi2.getRGB(x, y);
 				argb++;
 				bi2.setRGB(x, y, argb);
@@ -46,14 +50,14 @@ public class MutableBufferedImageTest {
 			}
 		}
 
-		bi2 = createSampleImage(60, 40, BufferedImage.TYPE_INT_ARGB);
+		bi2 = createSampleMutableImage(60, 40, BufferedImage.TYPE_INT_ARGB);
 		bi2.setProperty("x", "y");
 		assertFalse(bi1.equals(bi2));
 	}
 
 	@Test
 	public void testSerialization() throws Exception {
-		MutableBufferedImage bi = createSampleImage(60, 40,
+		MutableBufferedImage bi = createSampleMutableImage(60, 40,
 				BufferedImage.TYPE_INT_ARGB);
 		byte[] bytes = serialize(bi);
 		MutableBufferedImage bi2 = (MutableBufferedImage) deserialize(bytes);
@@ -78,10 +82,14 @@ public class MutableBufferedImageTest {
 		}
 	}
 
-	private MutableBufferedImage createSampleImage(int width, int height,
+	private MutableBufferedImage createSampleMutableImage(int width, int height,
 			int type) {
-		MutableBufferedImage returnValue = new MutableBufferedImage(width,
-				height, type);
+		return new MutableBufferedImage(createSampleBufferedImage(width, height, type));
+	}
+
+	private BufferedImage createSampleBufferedImage(int width, int height,
+													int type) {
+		BufferedImage returnValue = new BufferedImage(width, height, type);
 		Random r = new Random(0);
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
@@ -105,8 +113,9 @@ public class MutableBufferedImageTest {
 			}
 		});
 		try {
-			BufferedImage rainbowImage = createSampleImage(500, 500, BufferedImage.TYPE_INT_RGB);
-			Image img = rainbowImage.getScaledInstance(80, 60,
+			// if we use a plain BufferedImage it fails, but a MutableBufferedImage passes:
+			BufferedImage sampleImage = createSampleMutableImage(500, 500, BufferedImage.TYPE_INT_RGB);
+			Image img = sampleImage.getScaledInstance(80, 60,
 					Image.SCALE_SMOOTH);
 			ImageObserver observer = new ImageObserver() {
 				int width, height;
@@ -147,4 +156,62 @@ public class MutableBufferedImageTest {
 			System.setErr(origErr);
 		}
 	}
+
+//	// TODO write this up somehow, or bundle it as a release action. This is worth noting, but not a unit test
+//	@Test
+//	public void testPerformance() {
+//		for (ImageType type : ImageType.values(true)) {
+//			BufferedImage bi1 = createSampleBufferedImage(2000,2000, type.getCode());
+//			MutableBufferedImage bi2 = createSampleMutableImage(2000,2000, type.getCode());
+//			System.out.println(type+" " + measurePerformance(bi1)+" " + measurePerformance(bi2));
+//		}
+//	}
+//
+//	private Object measurePerformance(BufferedImage bi) {
+//		ImageConsumer nullConsumer = new ImageConsumer() {
+//			@Override
+//			public void setDimensions(int width, int height) {
+//
+//			}
+//
+//			@Override
+//			public void setProperties(Hashtable<?, ?> props) {
+//
+//			}
+//
+//			@Override
+//			public void setColorModel(ColorModel model) {
+//
+//			}
+//
+//			@Override
+//			public void setHints(int hintflags) {
+//
+//			}
+//
+//			@Override
+//			public void setPixels(int x, int y, int w, int h, ColorModel model, byte[] pixels, int off, int scansize) {
+//
+//			}
+//
+//			@Override
+//			public void setPixels(int x, int y, int w, int h, ColorModel model, int[] pixels, int off, int scansize) {
+//
+//			}
+//
+//			@Override
+//			public void imageComplete(int status) {
+//
+//			}
+//		};
+//
+//
+//		long t = System.currentTimeMillis();
+//		for (int a = 0; a < 1000; a++) {
+//			bi.getSource().addConsumer(nullConsumer);
+//			bi.getSource().removeConsumer(nullConsumer);
+//		}
+//		t = System.currentTimeMillis() - t;
+//		return Long.toString(t);
+//	}
 }
