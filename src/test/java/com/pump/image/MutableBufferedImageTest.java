@@ -158,6 +158,8 @@ public class MutableBufferedImageTest {
 	}
 
 //	// TODO write this up somehow, or bundle it as a release action. This is worth noting, but not a unit test
+	// use ImageIO.read(URL) (which produces a byte based image) + Image.getScaledInstace(..) (which uses
+	// the BufferedImage's ImageProducer) to really highlight this bad performance
 //	@Test
 //	public void testPerformance() {
 //		for (ImageType type : ImageType.values(true)) {
