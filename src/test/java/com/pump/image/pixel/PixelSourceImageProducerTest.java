@@ -15,17 +15,18 @@ public class PixelSourceImageProducerTest extends TestCase {
             System.out.println("Testing " + imageType);
             BufferedImage original = ScalingTest.createRainbowImage(12, 12, imageType.getCode(), true);
             BufferedImage copy = new BufferedImageIterator.Source(original).createBufferedImage();
-            assertImageEquals(original, copy);
+            assertImageEquals(original, copy, true);
         }
     }
 
-    public static void assertImageEquals(BufferedImage img1, BufferedImage img2) {
+    public static void assertImageEquals(BufferedImage img1, BufferedImage img2, boolean includeType) {
         assertEquals(img1.getWidth(), img2.getWidth());
         assertEquals(img1.getHeight(), img2.getHeight());
-        assertEquals(img1.getType(), img2.getType());
+        if (includeType)
+            assertEquals(img1.getType(), img2.getType());
         for (int y = 0; y < img1.getHeight(); y++) {
             for (int x = 0; x < img1.getWidth(); x++) {
-                assertEquals(Integer.toUnsignedString(img1.getRGB(x, y), 16) + " != " +
+                assertEquals("x = " + x + " y = " + y + " " + Integer.toUnsignedString(img1.getRGB(x, y), 16) + " != " +
                         Integer.toUnsignedString(img2.getRGB(x, y), 16), img1.getRGB(x, y), img2.getRGB(x, y));
             }
         }

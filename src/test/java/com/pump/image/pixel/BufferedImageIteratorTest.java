@@ -139,7 +139,7 @@ public class BufferedImageIteratorTest extends TestCase {
             PixelIterator iter = new BufferedImageIterator.BufferedImageIterator_FromDataBuffer<>(subimage, true);
             BufferedImage subimage2 = BufferedImageIterator.writeToImage(iter, null);
 
-            PixelSourceImageProducerTest.assertImageEquals(subimage, subimage2);
+            PixelSourceImageProducerTest.assertImageEquals(subimage, subimage2, true);
         }
     }
 
@@ -152,7 +152,7 @@ public class BufferedImageIteratorTest extends TestCase {
             PixelIterator iter = new BufferedImageIterator.BufferedImageIterator_FromDataBuffer<>(subimage, true);
             BufferedImage subimage2 = BufferedImageIterator.writeToImage(iter, null);
 
-            PixelSourceImageProducerTest.assertImageEquals(subimage, subimage2);
+            PixelSourceImageProducerTest.assertImageEquals(subimage, subimage2, true);
         }
     }
 
@@ -168,7 +168,7 @@ public class BufferedImageIteratorTest extends TestCase {
             PixelIterator iter = BufferedImageIterator.create(rainbow);
             BufferedImageIterator.writeToImage(iter, largeImage.getSubimage(9, 7, 11, 12));
 
-            PixelSourceImageProducerTest.assertImageEquals(rainbow, largeImage.getSubimage(9, 7, 6, 1));
+            PixelSourceImageProducerTest.assertImageEquals(rainbow, largeImage.getSubimage(9, 7, 6, 1), true);
         }
     }
 }

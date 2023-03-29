@@ -40,6 +40,35 @@ import com.pump.image.MutableBufferedImage;
 public class ImagePixelIterator<T>
 		implements PixelIterator<T>, AutoCloseable {
 
+	/**
+	 * This exception is thrown if {@link ImageConsumer#imageComplete(int)} is called with {@link ImageConsumer#IMAGEERROR}.
+	 */
+	public static class ImageProducerException extends RuntimeException {
+		public ImageProducerException(String msg) {
+			super(msg);
+		}
+	}
+
+	/**
+	 * This exception is thrown if {@link ImageConsumer#imageComplete(int)} is called with {@link ImageConsumer#IMAGEABORTED}.
+	 */
+	public static class ImageProducerAbortedException extends RuntimeException {
+		public ImageProducerAbortedException(String msg) {
+			super(msg);
+		}
+	}
+
+	/**
+	 * This exception is thrown if the ImageProducer stops posting image updates after {@link #TIMEOUT_MILLIS} milliseconds.
+	 * This may indicate an IO difficulty (like a slow network connection), or it may indicate the production thread
+	 * has somehow aborted.
+	 */
+	public static class UnresponsiveImageProducerException extends RuntimeException {
+		public UnresponsiveImageProducerException(String msg) {
+			super(msg);
+		}
+	}
+
 
 	/**
 	 * This manages the threads use start ImageProducer production in.
@@ -47,11 +76,19 @@ public class ImagePixelIterator<T>
 	static ThreadPoolExecutor PRODUCTION_EXECUTOR = new ThreadPoolExecutor(0, 6,
 			0L,TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 
+	/**
+	 * The number of milliseconds before push/pull operations between threads timeout.
+	 */
+	public static long TIMEOUT_MILLIS = 10_000;
+
 	// TODO: review ImageLoader demo. The default jpg may not show much perf advantage, but I could grab a jpg
 	// of my hd that should gains like in the write-up
 
 	// TODO: write unit tests for this class, including lots of variations about how
 	// pixel data can arrive.
+
+	private static final String IMAGE_CONSUMER_COMPLETE_VIA_ERROR = "The ImageProducer failed with an error.";
+	private static final String IMAGE_CONSUMER_COMPLETE_VIA_ABORTED = "The ImageProducer aborted.";
 
 	private static class ImageDescriptor {
 		final int imgWidth, imgHeight;
@@ -304,11 +341,32 @@ public class ImagePixelIterator<T>
 					throw new IllegalStateException(pixels.getClass().getName());
 				}
 			} else {
-				// TODO: convert data to pixelType
-				pixelPackageArray = pixels;
+				PixelIterator iter = new ArrayPixelIterator(pixels,
+						w, h, offset, scanSize, ColorModelUtils.getBufferedImageType(model));
+				iter = pixelType.createPixelIterator(iter);
+				pixelPackageArray = readAll(iter);
+				offset = 0;
+				scanSize = iter.getWidth() * pixelType.getSampleCount();
 			}
 
 			post(new PixelPackage(x, y, w, h, pixelPackageArray, offset, scanSize, pixelType));
+		}
+
+		private Object readAll(PixelIterator iter) {
+			ImageType iterType = ImageType.get(iter.getType());
+			Object array;
+			if (iterType.isByte()) {
+				array = new byte[iter.getWidth() * iter.getPixelSize() * iter.getHeight()];
+			} else {
+				array = new int[iter.getWidth() * iter.getPixelSize() * iter.getHeight()];
+			}
+
+			int offset = 0;
+			while (!iter.isDone()) {
+				iter.next(array, offset);
+				offset += iter.getWidth() * pixelType.getSampleCount();
+			}
+			return array;
 		}
 
 		/**
@@ -384,6 +442,14 @@ public class ImagePixelIterator<T>
 			if (closed)
 				return;
 
+			if (status == ImageConsumer.IMAGEERROR) {
+				close(IMAGE_CONSUMER_COMPLETE_VIA_ERROR);
+				return;
+			} else if (status == ImageConsumer.IMAGEABORTED) {
+				close(IMAGE_CONSUMER_COMPLETE_VIA_ABORTED);
+				return;
+			}
+
 			if (isInitialized == false) {
 				String error = "imageComplete( " + status
 						+ " ) was called before setPixels(...)";
@@ -395,15 +461,7 @@ public class ImagePixelIterator<T>
 				post(new PixelPackage(0, 0, imgWidth, imgHeight, buffer, 0, imgWidth * pixelType.getSampleCount(), pixelType));
 			}
 
-			if (status == ImageConsumer.IMAGEERROR) {
-				String error = "The ImageProducer failed with an error.";
-				close(error);
-			} else if (status == ImageConsumer.IMAGEABORTED) {
-				String error = "The ImageProducer aborted.";
-				close(error);
-			} else {
-				close(Boolean.TRUE);
-			}
+			close(Boolean.TRUE);
 		}
 	}
 
@@ -611,7 +669,7 @@ public class ImagePixelIterator<T>
 	private ImagePixelIterator(ImageProducer imageProducer, ImageType<T> requestedOutputType, boolean allowOptimization, String errorDescriptor) {
 		Objects.requireNonNull(imageProducer, errorDescriptor == null ? "null ImageProducer" : "null ImageProducer for " + errorDescriptor);
 
-		consumer = new Consumer(imageProducer, requestedOutputType, 10_000, allowOptimization);
+		consumer = new Consumer(imageProducer, requestedOutputType, TIMEOUT_MILLIS, allowOptimization);
 
 		// ImageProducer.startProduction often starts its own thread, but it's
 		// not required to. This *cannot* be a blocking call, so we must wrap it
@@ -632,7 +690,12 @@ public class ImagePixelIterator<T>
 			isOptimized = d.isOptimized;
 			type = d.imageType;
 		} else if (data instanceof String) {
-			throw new RuntimeException((String) data);
+			throwException( (String) data);
+
+			// this won't be reached; it's just to make the compiler happy:
+			width = height = 0;
+			isOptimized = false;
+			type = null;
 		} else if (data instanceof Boolean) {
 			// when we receive Boolean.TRUE that should signal a healthy completion, so... what just happened?
 			throw new RuntimeException();
@@ -640,6 +703,20 @@ public class ImagePixelIterator<T>
 			// what happened here?
 			throw new RuntimeException(String.valueOf(data));
 		}
+	}
+
+	/**
+	 * This throws a RuntimeException with a given message. It may throw a specialized subclass
+	 * like ImageProducerException or ImageProducerAbortedException based on the message string.
+	 */
+	private void throwException(String msg) {
+		if (IMAGE_CONSUMER_COMPLETE_VIA_ERROR.equals(msg)) {
+			throw new ImageProducerException(IMAGE_CONSUMER_COMPLETE_VIA_ERROR);
+		} else if (IMAGE_CONSUMER_COMPLETE_VIA_ABORTED.equals(msg)) {
+			throw new ImageProducerAbortedException(IMAGE_CONSUMER_COMPLETE_VIA_ABORTED);
+		}
+
+		throw new RuntimeException((String) msg);
 	}
 
 	/**
@@ -730,16 +807,22 @@ public class ImagePixelIterator<T>
 	 * or throws a RuntimeException if the producer thread has an error or times out.
 	 */
 	private void pollNextPixelPackage() {
-		Object data = poll(consumer.queue, 10_000);
+		Object data = poll(consumer.queue, TIMEOUT_MILLIS);
 		if (data instanceof String) {
 			String str = (String) data;
 			rowCtr = height;
-			throw new RuntimeException(str);
+			throwException(str);
 		} else if (data instanceof Boolean) {
 			if (isDone())
 				throw new IllegalStateException();
 			rowCtr = height;
-			throw new RuntimeException("unexpected end of image reached at y = " + rowCtr);
+			if (Boolean.FALSE.equals(data)) {
+				// this indicates our poll timed out; the producer may be dead/aborted/unreachable
+				throw new UnresponsiveImageProducerException("the image consumer is unresponsive; y = " + rowCtr);
+			} else {
+				// this indicates the producer thinks it passed all the required info
+				throw new RuntimeException("unexpected end of image reached; y = " + rowCtr);
+			}
 		} else if (data instanceof PixelPackage) {
 			unfinishedPixelPackage = (PixelPackage) data;
 			unfinishedPixelPackageY = unfinishedPixelPackage.y;
