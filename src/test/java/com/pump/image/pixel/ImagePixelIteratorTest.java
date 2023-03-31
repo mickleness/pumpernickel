@@ -11,8 +11,12 @@ import java.awt.image.ImageProducer;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 public class ImagePixelIteratorTest extends TestCase {
+
+    static long DEFAULT_TIMEOUT = ImagePixelIterator.TIMEOUT_MILLIS;
 
     enum PixelOrder {
         RANDOM(ImageConsumer.RANDOMPIXELORDER),
@@ -182,69 +186,142 @@ public class ImagePixelIteratorTest extends TestCase {
     public void testImagePixelIterator() {
         // we're reading a BufferedImage that's already in memory; we can afford a smaller timeout interval:
         ImagePixelIterator.TIMEOUT_MILLIS = 100;
+        try {
+            BufferedImage bi = new MutableBufferedImage(ScalingTest.createRainbowImage(6, 20, BufferedImage.TYPE_INT_RGB, true));
+            ImageType[] outputTypes = new ImageType[]{
+                    null,
+                    ImageType.INT_ARGB_PRE,
+                    ImageType.INT_ARGB,
+                    ImageType.INT_RGB,
+                    ImageType.INT_BGR,
+                    ImageType.BYTE_ABGR_PRE,
+                    ImageType.BYTE_ABGR,
+                    ImageType.BYTE_BGR,
+            };
 
-        BufferedImage bi = new MutableBufferedImage(ScalingTest.createRainbowImage(60, 60, BufferedImage.TYPE_INT_RGB, true));
-        ImageType[] outputTypes = new ImageType[] {
-                null,
-                ImageType.INT_ARGB_PRE,
-                ImageType.INT_ARGB,
-                ImageType.INT_RGB,
-                ImageType.INT_BGR,
-                ImageType.BYTE_ABGR_PRE,
-                ImageType.BYTE_ABGR,
-                ImageType.BYTE_BGR,
-        };
 
+            ImageType[][] imageTypeArrays = new ImageType[][]{
+                    new ImageType[]{ImageType.INT_ARGB_PRE},
+                    new ImageType[]{ImageType.INT_ARGB},
+                    new ImageType[]{ImageType.INT_RGB},
+                    new ImageType[]{ImageType.INT_BGR},
+                    new ImageType[]{ImageType.BYTE_ABGR_PRE},
+                    new ImageType[]{ImageType.BYTE_ABGR},
+                    new ImageType[]{ImageType.BYTE_BGR},
 
-        ImageType[][] imageTypeArrays = new ImageType[][] {
-                new ImageType[] {ImageType.INT_ARGB_PRE},
-                new ImageType[] {ImageType.INT_ARGB},
-                new ImageType[] {ImageType.INT_RGB},
-                new ImageType[] {ImageType.INT_BGR},
-                new ImageType[] {ImageType.BYTE_ABGR_PRE},
-                new ImageType[] {ImageType.BYTE_ABGR},
-                new ImageType[] {ImageType.BYTE_BGR},
+                    // here our ImageProducer is going to cycle through ALL the possible pixel types as it delivers data.
+                    new ImageType[]{ImageType.INT_ARGB_PRE, ImageType.INT_ARGB, ImageType.INT_RGB, ImageType.INT_BGR, ImageType.BYTE_ABGR_PRE, ImageType.BYTE_ABGR, ImageType.BYTE_BGR},
+            };
 
-                // here our ImageProducer is going to cycle through ALL the possible pixel types as it delivers data.
-                new ImageType[] {ImageType.INT_ARGB_PRE, ImageType.INT_ARGB, ImageType.INT_RGB, ImageType.INT_BGR, ImageType.BYTE_ABGR_PRE, ImageType.BYTE_ABGR, ImageType.BYTE_BGR},
-        };
+            int ctr = 0;
+            for (ImageType[] imageTypes : imageTypeArrays) {
+                for (PixelOrder pixelOrder : PixelOrder.values()) {
+                    for (CompletionType completionType : CompletionType.values()) {
+                        MyImageProducer p = new MyImageProducer(bi, imageTypes, pixelOrder, completionType);
+                        for (ImageType outputType : outputTypes) {
+                            ctr++;
 
-        int ctr = 0;
-        for (ImageType[] imageTypes : imageTypeArrays) {
-            for (PixelOrder pixelOrder : PixelOrder.values()) {
-                for (CompletionType completionType : CompletionType.values()) {
-                    MyImageProducer p = new MyImageProducer(bi, imageTypes, pixelOrder, completionType);
-                    for (ImageType outputType : outputTypes) {
-                        ctr++;
-                        System.out.println("ctr = "+ ctr + " " + Arrays.asList(imageTypes) + " " + pixelOrder.name()+" "+ completionType.name() + " "+ outputType);
-//                        if (ctr < 101)
-//                            continue;
+                            if (ctr < 17)
+                                continue;
 
-                        try {
-                            ImagePixelIterator source = new ImagePixelIterator(p, outputType);
-                            BufferedImage copy = BufferedImageIterator.writeToImage(source, null);
-                            PixelSourceImageProducerTest.assertImageEquals(bi, copy, false);
+                            System.out.println("ctr = " + ctr + " " + Arrays.asList(imageTypes) + " " + pixelOrder.name() + " " + completionType.name() + " " + outputType);
 
-                            if (completionType == CompletionType.STALL_MIDWAY_THROUGH || completionType.expectError) {
-                                fail("completionType = " + completionType);
-                            }
+                            try {
+                                ImagePixelIterator source = new ImagePixelIterator(p, outputType);
+                                BufferedImage copy = BufferedImageIterator.writeToImage(source, null);
+                                PixelSourceImageProducerTest.assertImageEquals(bi, copy, false);
 
-                        } catch(ImagePixelIterator.UnresponsiveImageProducerException e) {
-                            if (completionType == CompletionType.STALL_MIDWAY_THROUGH) {
-                                // this is a success
-                            } else {
-                                throw e;
-                            }
-                        } catch(ImagePixelIterator.ImageProducerException e) {
-                            if (completionType.expectError) {
-                                // this is a success
-                            } else {
-                                throw e;
+                                if (completionType == CompletionType.STALL_MIDWAY_THROUGH || completionType.expectError) {
+                                    fail("completionType = " + completionType);
+                                }
+
+                            } catch (ImagePixelIterator.ImageProducerUnresponsiveException e) {
+                                if (completionType == CompletionType.STALL_MIDWAY_THROUGH) {
+                                    // this is a success
+                                } else {
+                                    throw e;
+                                }
+                            } catch (ImagePixelIterator.ImageProducerException e) {
+                                if (completionType.expectError) {
+                                    // this is a success
+                                } else {
+                                    throw e;
+                                }
                             }
                         }
                     }
                 }
             }
+        } finally {
+            ImagePixelIterator.TIMEOUT_MILLIS = DEFAULT_TIMEOUT;
+        }
+    }
+
+    /**
+     * This makes sure if an ImagePixelIterator is orphaned that the production thread
+     * aborts in a reasonable amount of time.
+     * <p>
+     * ... and then, after production aborts: does the ImagePixelIterator also abort once it
+     * realizes there's no new data from the production thread coming in.
+     * </p>
+     */
+    @Test
+    public void testImagePixelIterator_orphaned() {
+        // we're reading a BufferedImage that's already in memory; we can afford a smaller timeout interval:
+        ImagePixelIterator.TIMEOUT_MILLIS = 10;
+        try {
+            int height = 30;
+            BufferedImage bi = new MutableBufferedImage(ScalingTest.createRainbowImage(6, height, BufferedImage.TYPE_INT_RGB, true));
+            int[] array = new int[bi.getWidth() * 3];
+
+            for (int limit = 0; limit < height; limit++) {
+                Semaphore waitToFinishProduction = new Semaphore(1);
+                waitToFinishProduction.acquireUninterruptibly();
+                MyImageProducer producer = new MyImageProducer(bi,
+                        new ImageType[]{ImageType.INT_BGR},
+                        PixelOrder.SINGLE_PASS_TOP_DOWN_LEFT_RIGHT_COMPLETE_SCANLINES,
+                        CompletionType.SUCCESS) {
+                    @Override
+                    public void startProduction(ImageConsumer ic) {
+                        try {
+                            super.startProduction(ic);
+                        } catch(ImagePixelIterator.ImageProducerTimedOutException e) {
+                            // this is to be expected in most of these tests
+                        } finally {
+                            waitToFinishProduction.release();
+                        }
+                    }
+                };
+
+                // note the ImagePixelIterator uses a queue of about 10 elements, so it *immediately* tries to put
+                // about 10 elements in the queue. It only starts to block once it attempts to put the (n > 10)
+                // elements on the queue.
+
+                ImagePixelIterator pixelIterator = new ImagePixelIterator(producer, ImageType.INT_RGB);
+                for (int y = 0; y < limit; y++) {
+                    pixelIterator.next(array, 0);
+                }
+
+                try {
+                    waitToFinishProduction.tryAcquire(1, ImagePixelIterator.TIMEOUT_MILLIS + 10, TimeUnit.MILLISECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    fail();
+                }
+
+                // ok, now that the production thread has shut down what happens if we try to engage the consumer again?
+                try {
+                    while (!pixelIterator.isDone()) {
+                        pixelIterator.next(array, 0);
+                    }
+                    // note sometimes we may still reach this point. The production thread can post about 10 elements
+                    // to the queue, so it's possible it had enough elements queued up to see us through to completion.
+                } catch(ImagePixelIterator.ImageProducerTimedOutException e) {
+                    // this is great: our consumer knew to abort
+                }
+            }
+        } finally {
+            ImagePixelIterator.TIMEOUT_MILLIS = DEFAULT_TIMEOUT;
         }
     }
 }

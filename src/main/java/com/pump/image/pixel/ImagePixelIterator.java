@@ -59,16 +59,26 @@ public class ImagePixelIterator<T>
 	}
 
 	/**
-	 * This exception is thrown if the ImageProducer stops posting image updates after {@link #TIMEOUT_MILLIS} milliseconds.
-	 * This may indicate an IO difficulty (like a slow network connection), or it may indicate the production thread
-	 * has somehow aborted.
+	 * This exception is thrown in both the production and consumer threads if the producer timed out
+	 * while trying to post new data. This probably means the consumer was either orphaned or it
+	 * took too long to pull data from the incoming queue.
 	 */
-	public static class UnresponsiveImageProducerException extends RuntimeException {
-		public UnresponsiveImageProducerException(String msg) {
+	public static class ImageProducerTimedOutException extends RuntimeException {
+		public ImageProducerTimedOutException(String msg) {
 			super(msg);
 		}
 	}
 
+	/**
+	 * This exception is thrown if the ImageProducer stops posting image updates after {@link #TIMEOUT_MILLIS} milliseconds.
+	 * This may indicate an IO difficulty (like a slow network connection), or it may indicate the production thread
+	 * has somehow aborted.
+	 */
+	public static class ImageProducerUnresponsiveException extends RuntimeException {
+		public ImageProducerUnresponsiveException(String msg) {
+			super(msg);
+		}
+	}
 
 	/**
 	 * This manages the threads use start ImageProducer production in.
@@ -84,11 +94,9 @@ public class ImagePixelIterator<T>
 	// TODO: review ImageLoader demo. The default jpg may not show much perf advantage, but I could grab a jpg
 	// of my hd that should gains like in the write-up
 
-	// TODO: write unit tests for this class, including lots of variations about how
-	// pixel data can arrive.
-
 	private static final String IMAGE_CONSUMER_COMPLETE_VIA_ERROR = "The ImageProducer failed with an error.";
 	private static final String IMAGE_CONSUMER_COMPLETE_VIA_ABORTED = "The ImageProducer aborted.";
+	private static final String IMAGE_PRODUCER_TIMED_OUT_POSTING_DATA = "The ImageProducer thread aborted because it timed out while attempting to post new information.";
 
 	private static class ImageDescriptor {
 		final int imgWidth, imgHeight;
@@ -186,7 +194,7 @@ public class ImagePixelIterator<T>
 		Integer imgWidth;
 		Integer imgHeight;
 
-		boolean closed;
+		boolean closed, isClosing;
 
 		/**
 		 * This Consumer pushes data to this queue as it becomes available. This
@@ -198,9 +206,6 @@ public class ImagePixelIterator<T>
 		 * <p>
 		 * This queue has a limited capacity because there should be another
 		 * thread actively ready data from this queue.
-		 *
-		 * TODO: test scenario where PixelIterator is orphaned
-		 * </p>
 		 */
 		ArrayBlockingQueue<Object> queue = new ArrayBlockingQueue<>(10);
 
@@ -239,10 +244,12 @@ public class ImagePixelIterator<T>
 
 		private void close(Object closeStatus) {
 			if (!closed) {
+				isClosing = true;
 				try {
 					producer.removeConsumer(this);
 					post(closeStatus);
 				} finally {
+					isClosing = false;
 					closed = true;
 				}
 			}
@@ -267,8 +274,12 @@ public class ImagePixelIterator<T>
 					// do nothing
 				}
 				waitTime = queueTimeoueMillis - (System.currentTimeMillis() - start);
-				if (waitTime < 0)
-					return false;
+				if (waitTime < 0) {
+					if (!isClosing) {
+						close(IMAGE_PRODUCER_TIMED_OUT_POSTING_DATA);
+						throw new ImageProducerTimedOutException(IMAGE_PRODUCER_TIMED_OUT_POSTING_DATA);
+					}
+				}
 			}
 		}
 
@@ -399,7 +410,7 @@ public class ImagePixelIterator<T>
 					}
 				}
 
-				// TODO: can we not require isCompleteScanLineHint? or does that ever come up in testing?
+				// TODO: can we not require isCompleteScanLineHint? or does this case come up in real-world testing?
 				boolean optimized = allowOptimization && isTopDownLeftRightHint && isSinglePassHint && isCompleteScanLineHint;
 
 				ImageDescriptor imageDescriptor;
@@ -675,12 +686,22 @@ public class ImagePixelIterator<T>
 		// not required to. This *cannot* be a blocking call, so we must wrap it
 		// in a different thread to be safe.
 
+		Semaphore startedProductionSemaphore = new Semaphore(1);
+		startedProductionSemaphore.acquireUninterruptibly();
 		Runnable productionRunnable = new Runnable() {
 			public void run() {
+				startedProductionSemaphore.release();
+
+				// we don't know if startProduction(..) is going to launch
+				// a new thread or not.
 				imageProducer.startProduction(consumer);
 			}
 		};
 		PRODUCTION_EXECUTOR.execute(productionRunnable);
+
+		// don't start the clock on our timeout window until
+		// we're sure our Runnable had a chance to start:
+		startedProductionSemaphore.acquireUninterruptibly();
 
 		Object data = poll(consumer.queue, 100_000);
 		if (data instanceof ImageDescriptor) {
@@ -712,6 +733,8 @@ public class ImagePixelIterator<T>
 	private void throwException(String msg) {
 		if (IMAGE_CONSUMER_COMPLETE_VIA_ERROR.equals(msg)) {
 			throw new ImageProducerException(IMAGE_CONSUMER_COMPLETE_VIA_ERROR);
+		} else if (IMAGE_PRODUCER_TIMED_OUT_POSTING_DATA.equals(msg)) {
+			throw new ImageProducerTimedOutException(IMAGE_PRODUCER_TIMED_OUT_POSTING_DATA);
 		} else if (IMAGE_CONSUMER_COMPLETE_VIA_ABORTED.equals(msg)) {
 			throw new ImageProducerAbortedException(IMAGE_CONSUMER_COMPLETE_VIA_ABORTED);
 		}
@@ -827,7 +850,7 @@ public class ImagePixelIterator<T>
 			rowCtr = height;
 			if (Boolean.FALSE.equals(data)) {
 				// this indicates our poll timed out; the producer may be dead/aborted/unreachable
-				throw new UnresponsiveImageProducerException("the image consumer is unresponsive; y = " + rowCtr);
+				throw new ImageProducerUnresponsiveException("the image consumer is unresponsive; y = " + rowCtr);
 			} else {
 				// this indicates the producer thinks it passed all the required info
 				throw new RuntimeException("unexpected end of image reached; y = " + rowCtr);
