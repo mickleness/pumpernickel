@@ -196,7 +196,6 @@ public class ImagePixelIteratorTest extends TestCase {
         };
 
 
-        // TODO: add alternating types
         ImageType[][] imageTypeArrays = new ImageType[][] {
                 new ImageType[] {ImageType.INT_ARGB_PRE},
                 new ImageType[] {ImageType.INT_ARGB},
@@ -205,6 +204,9 @@ public class ImagePixelIteratorTest extends TestCase {
                 new ImageType[] {ImageType.BYTE_ABGR_PRE},
                 new ImageType[] {ImageType.BYTE_ABGR},
                 new ImageType[] {ImageType.BYTE_BGR},
+
+                // here our ImageProducer is going to cycle through ALL the possible pixel types as it delivers data.
+                new ImageType[] {ImageType.INT_ARGB_PRE, ImageType.INT_ARGB, ImageType.INT_RGB, ImageType.INT_BGR, ImageType.BYTE_ABGR_PRE, ImageType.BYTE_ABGR, ImageType.BYTE_BGR},
         };
 
         int ctr = 0;
