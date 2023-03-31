@@ -1,14 +1,11 @@
 package com.pump.image.pixel.converter;
 
-import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.IndexedBytePixelIterator;
 import com.pump.image.pixel.PixelIterator;
 
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -21,8 +18,8 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
 
     private int rowCtr = 0;
 
-    private final byte[] scratchByteArray;
-    private final int[] scratchIntArray;
+    private byte[] scratchByteArray;
+    private int[] scratchIntArray;
 
     private IndexColorModelLUT colorModel;
 
@@ -30,34 +27,24 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
      * This may be null for IndexColorModels
      */
     private final ImageType srcType;
-    private final boolean isByteToByte, isIntToInt;
+    private final boolean canWriteSrcToDest;
 
     public PixelConverterIterator(PixelIterator src, ImageType<T> imageType, PixelConverter<T> converter) {
         this.src = Objects.requireNonNull(src);
         this.imageType = Objects.requireNonNull(imageType);
         this.converter = Objects.requireNonNull(converter);
+
+        boolean isSameArrayType = false;
         if (src instanceof IndexedBytePixelIterator) {
             IndexedBytePixelIterator i = (IndexedBytePixelIterator) src;
             colorModel = new IndexColorModelLUT(i.getIndexColorModel());
-            isByteToByte = imageType.isByte();
-            isIntToInt = false;
+            isSameArrayType = imageType.isByte();
             srcType = null; // there is no ImageType for indexed pixel iterators
         } else {
             srcType = ImageType.get(src.getType());
-            isByteToByte = imageType.isByte() && srcType.isByte();
-            isIntToInt = imageType.isInt() && srcType.isInt();
+            isSameArrayType = (imageType.isByte() && srcType.isByte()) || (imageType.isInt() && srcType.isInt());
         }
-
-        int minArraySize = src.getWidth() * src.getPixelSize();
-        if (src.isByte()) {
-            scratchIntArray = null;
-            scratchByteArray = new byte[minArraySize];
-        } else if (src.isInt()) {
-            scratchIntArray = new int[minArraySize];
-            scratchByteArray = null;
-        } else {
-            throw new UnsupportedOperationException( "This converter does not support " + ImageType.toString(src.getType()) );
-        }
+        canWriteSrcToDest = isSameArrayType && src.getPixelSize() <= imageType.getSampleCount();
     }
 
     @Override
@@ -93,22 +80,23 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
 
     @Override
     public void next(T dest, int destOffset) {
-        Object srcArray;
-        if (scratchIntArray != null) {
-            srcArray = scratchIntArray;
-            if (isIntToInt) {
-                int destSize = Array.getLength(dest);
-                if (destSize >= scratchIntArray.length) {
-                    srcArray = dest;
-                }
+        Object srcArray = null;
+        if (canWriteSrcToDest) {
+            int destSize = Array.getLength(dest);
+            if (destOffset + srcType.getSampleCount() * src.getWidth() < destSize) {
+                srcArray = dest;
             }
-        } else {
-            srcArray = scratchByteArray;
-            if (isByteToByte) {
-                int destSize = Array.getLength(dest);
-                if (destSize >= scratchByteArray.length) {
-                    srcArray = dest;
-                }
+        }
+
+        if (srcArray == null) {
+            if (srcType.isInt()) {
+                if (scratchIntArray == null)
+                    scratchIntArray = new int[src.getWidth() * src.getPixelSize()];
+                srcArray = scratchIntArray;
+            } else if (srcType.isByte()) {
+                if (scratchByteArray == null)
+                    scratchByteArray = new byte[src.getWidth() * src.getPixelSize()];
+                srcArray = scratchByteArray;
             }
         }
 

@@ -510,7 +510,7 @@ public class ImagePixelIterator<T>
 			// just use the int[]/byte[] provided in a PixelPackage to create a DataBuffer
 			// for a BufferedImage.
 			try (ImagePixelIterator iter = createPixelIterator(false)) {
-				iter.pollNextPixelPackage();
+				iter.pollNextPixelPackage(TIMEOUT_MILLIS);
 				return iter.unfinishedPixelPackage.createBufferedImage(iter.unfinishedPixelPackageY);
 			}
 		}
@@ -747,7 +747,14 @@ public class ImagePixelIterator<T>
 	 */
 	@Override
 	public boolean isDone() {
-		return rowCtr == height;
+		if (rowCtr < height)
+			return false;
+
+		// one last check (without waiting) to see if there's an error condition after all pixel data is read:
+		if (unfinishedPixelPackage == null)
+			pollNextPixelPackage(0);
+
+		return true;
 	}
 
 	/**
@@ -798,7 +805,7 @@ public class ImagePixelIterator<T>
 			next_fromUnfinishedPixelPackage(destArray, destArrayOffset, skip);
 			return;
 		}
-		pollNextPixelPackage();
+		pollNextPixelPackage(TIMEOUT_MILLIS);
 		next_fromUnfinishedPixelPackage(destArray, destArrayOffset, skip);
 	}
 
@@ -806,15 +813,17 @@ public class ImagePixelIterator<T>
 	 * Prepares the {@link #unfinishedPixelPackage} field with the next unread PixelPackage,
 	 * or throws a RuntimeException if the producer thread has an error or times out.
 	 */
-	private void pollNextPixelPackage() {
-		Object data = poll(consumer.queue, TIMEOUT_MILLIS);
+	private void pollNextPixelPackage(long timeoutMillis) {
+		Object data = poll(consumer.queue, timeoutMillis);
 		if (data instanceof String) {
 			String str = (String) data;
 			rowCtr = height;
 			throwException(str);
 		} else if (data instanceof Boolean) {
-			if (isDone())
-				throw new IllegalStateException();
+			if (rowCtr == height && Boolean.TRUE.equals(data)) {
+				// we're finished, and we don't expect anymore incoming data
+				return;
+			}
 			rowCtr = height;
 			if (Boolean.FALSE.equals(data)) {
 				// this indicates our poll timed out; the producer may be dead/aborted/unreachable

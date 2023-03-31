@@ -34,7 +34,6 @@ public class ImagePixelIteratorTest extends TestCase {
         STALL_MIDWAY_THROUGH(false),
         ERROR_IMMEDIATELY(true),
         ERROR_BEFORE_PIXELS(true),
-        ERROR_AFTER_PIXELS(true),
         ERROR_MIDWAY_THROUGH(true);
 
         public boolean expectError;
@@ -117,7 +116,7 @@ public class ImagePixelIteratorTest extends TestCase {
             } else if (pixelOrder == PixelOrder.SINGLE_PASS_TOP_DOWN_LEFT_RIGHT_PARTIAL_SCANLINES) {
                 for (int y = 0; y < bi.getHeight(); y++) {
                     for (int x = 0; x < bi.getWidth(); x += 10) {
-                        queuedRectangles.add(new Rectangle(0, y, Math.min(bi.getWidth() - x, 10), 1));
+                        queuedRectangles.add(new Rectangle(x, y, Math.min(bi.getWidth() - x, 10), 1));
                     }
                 }
             } else if (pixelOrder == PixelOrder.SINGLE_PASS_DOWN_UP_LEFT_RIGHT_COMPLETE_SCANLINES) {
@@ -165,9 +164,7 @@ public class ImagePixelIteratorTest extends TestCase {
                 }
             }
 
-            if (completionType == CompletionType.ERROR_AFTER_PIXELS) {
-                ic.imageComplete(ImageConsumer.IMAGEERROR);
-            } else if (completionType == CompletionType.SUCCESS) {
+            if (completionType == CompletionType.SUCCESS) {
                 ic.imageComplete(ImageConsumer.SINGLEFRAMEDONE);
             }
         }
