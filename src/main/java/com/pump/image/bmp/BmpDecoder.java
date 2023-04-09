@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import com.pump.image.MutableBufferedImage;
 import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.PixelIterator;
 import com.pump.image.pixel.ScalingIterator;
@@ -37,7 +38,7 @@ public class BmpDecoder {
 	 * @throws IOException
 	 *             if an IO problem occurs.
 	 */
-	public static BufferedImage read(File bmpFile) throws IOException {
+	public static MutableBufferedImage read(File bmpFile) throws IOException {
 		return read(bmpFile, null);
 	}
 
@@ -54,7 +55,7 @@ public class BmpDecoder {
 	 * @throws IOException
 	 *             if an IO problem occurs.
 	 */
-	public static BufferedImage read(File bmpFile, BufferedImage dst)
+	public static MutableBufferedImage read(File bmpFile, BufferedImage dst)
 			throws IOException {
 		if (bmpFile.length() == 0) {
 			throw new IOException("the source image file is zero bytes ("+bmpFile.getAbsolutePath()+")");
@@ -91,7 +92,7 @@ public class BmpDecoder {
 	 * @throws IOException
 	 *             if an IO problem occurs.
 	 */
-	public static BufferedImage read(InputStream in, BufferedImage dst)
+	public static MutableBufferedImage read(InputStream in, BufferedImage dst)
 			throws IOException {
 		try {
 			BmpDecoderIterator iterator = BmpDecoderIterator.get(in);
