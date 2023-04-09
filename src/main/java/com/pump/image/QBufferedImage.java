@@ -25,10 +25,11 @@ import java.util.Map;
 
 /**
  * This is a <code>BufferedImage</code> that offers a <code>setProperty()</code>
- * method, is serializable, and supports
- * {@link #equals(Object)}/{@link #hashCode()}.
+ * method, is serializable, supports
+ * {@link #equals(Object)}/{@link #hashCode()}, and offers a {@link QBufferedImageSource}.
+ *
  */
-public class MutableBufferedImage extends BufferedImage
+public class QBufferedImage extends BufferedImage
 		implements Externalizable {
 
 	/**
@@ -65,30 +66,30 @@ public class MutableBufferedImage extends BufferedImage
 	 * 
 	 * @deprecated use any other constructor
 	 */
-	public MutableBufferedImage() {
+	public QBufferedImage() {
 		super(1, 1, BufferedImage.TYPE_INT_RGB);
 	}
 
-	public MutableBufferedImage(ColorModel cm, WritableRaster r,
-			boolean premultiplied, Hashtable<String, Object> properties) {
+	public QBufferedImage(ColorModel cm, WritableRaster r,
+						  boolean premultiplied, Hashtable<String, Object> properties) {
 		super(cm, r, premultiplied, properties);
 	}
 
-	public MutableBufferedImage(int width, int height, int imageType,
-			IndexColorModel cm) {
+	public QBufferedImage(int width, int height, int imageType,
+						  IndexColorModel cm) {
 		super(width, height, imageType, cm);
 	}
 
-	public MutableBufferedImage(int width, int height, int imageType) {
+	public QBufferedImage(int width, int height, int imageType) {
 		super(width, height, imageType);
 	}
 
 	/**
-	 * Create a MutableBufferedImage that stores data in the same raster as the
+	 * Create a QBufferedImage that stores data in the same raster as the
 	 * argument. If you modify this image or the argument: the other will also
 	 * be modified.
 	 */
-	public MutableBufferedImage(BufferedImage bi) {
+	public QBufferedImage(BufferedImage bi) {
 		this(bi.getColorModel(), bi.getRaster(), bi.isAlphaPremultiplied(),
 				getPropertiesHashtable(bi));
 		setAccelerationPriority(bi.getAccelerationPriority());
@@ -250,17 +251,17 @@ public class MutableBufferedImage extends BufferedImage
 		case BufferedImage.TYPE_BYTE_INDEXED:
 			// IndexColorModels COULD be supported, I just haven't gotten around
 			// to it:
-			return "This MutableBufferedImage is not serializable. IndexColorModels are not supported.";
+			return "This QBufferedImage is not serializable. IndexColorModels are not supported.";
 
 		case BufferedImage.TYPE_CUSTOM:
 		default:
-			return "This MutableBufferedImage is not serializable. This image type ("
+			return "This QBufferedImage is not serializable. This image type ("
 					+ getType() + ") is not supported.";
 
 		}
 	}
 
-	private transient MutableBufferedImage replacementImage;
+	private transient QBufferedImage replacementImage;
 
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
@@ -301,7 +302,7 @@ public class MutableBufferedImage extends BufferedImage
 			// WritableRaster. But for now I don't plan on using this in a hot
 			// loop so I'm not sure that optimization is necessary.
 
-			replacementImage = new MutableBufferedImage(width, height, type);
+			replacementImage = new QBufferedImage(width, height, type);
 			replacementImage.setAccelerationPriority(accelerationPriority);
 			replacementImage.getRaster().setDataElements(0, 0, width, height,
 					rasterData);

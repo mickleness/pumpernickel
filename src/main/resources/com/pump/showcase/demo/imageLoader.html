@@ -9,13 +9,13 @@
 <p>The <code>ImageLoader</code> converts a <code>java.awt.Image</code> into a <code>java.awt.image.BufferedImage</code>.</p>
 <h2>How To Use It</h2>
 <p>There are three static methods:</p>
-<pre>public MutableBufferedImage createImage(Image image)
-public MutableBufferedImage createImage(File file)
-public MutableBufferedImage createImage(URL url)</pre>
+<pre>public QBufferedImage createImage(Image image)
+public QBufferedImage createImage(File file)
+public QBufferedImage createImage(URL url)</pre>
 <p>Also three additional methods let you specify the image type (like <code>BufferedImage.TYPE_INT_ARGB</code>, or <code>BufferedImage.TYPE_3BYTE_BGR</code>):</p>
-<pre>public MutableBufferedImage createImage(Image image, int imageType)
-public MutableBufferedImage createImage(File file, int imageType)
-public MutableBufferedImage createImage(URL url, int imageType)</pre>
+<pre>public QBufferedImage createImage(Image image, int imageType)
+public QBufferedImage createImage(File file, int imageType)
+public QBufferedImage createImage(URL url, int imageType)</pre>
 <h2>How It Works</h2>
 <p>It calls <code>Image.getSource()</code> to identify the <code>ImageProducer</code>. Then it attaches a custom <code>ImageConsumer</code> and populates a <code>BufferedImage</code> as image data becomes available.</p>
 <p>If you specify a specific image type then the <code>com.pump.image.pixel.ImageType</code> classes are used to convert from one pixel type to another.</p>

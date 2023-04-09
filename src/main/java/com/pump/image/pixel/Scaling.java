@@ -21,7 +21,7 @@ import java.net.URL;
 
 import com.pump.awt.Dimension2D;
 import com.pump.image.ImageSize;
-import com.pump.image.MutableBufferedImage;
+import com.pump.image.QBufferedImage;
 import com.pump.image.bmp.BmpDecoderIterator;
 import com.pump.io.FileInputStreamSource;
 import com.pump.io.InputStreamSource;
@@ -125,8 +125,8 @@ public class Scaling {
 				imageType, destSize);
 	}
 
-	private static MutableBufferedImage scale(String name, InputStreamSource src,
-			ImageType imageType, Dimension destSize) {
+	private static QBufferedImage scale(String name, InputStreamSource src,
+                                        ImageType imageType, Dimension destSize) {
 		String pathLower = name.toLowerCase();
 		if (pathLower.endsWith(".bmp")) {
 			try (InputStream in = src.createInputStream()) {
@@ -139,7 +139,7 @@ public class Scaling {
 					iter = imageType.createPixelIterator(iter);
 				}
 
-				MutableBufferedImage image = BufferedImageIterator.writeToImage(iter,null);
+				QBufferedImage image = BufferedImageIterator.writeToImage(iter,null);
 				return image;
 			} catch (IOException e) {
 				return null;
@@ -194,8 +194,8 @@ public class Scaling {
 	 * @return the <code>dest</code> argument, or a new image if no
 	 *         <code>dest</code> argument was provided.
 	 */
-	public static MutableBufferedImage scale(BufferedImage source, BufferedImage dest,
-			Dimension destSize) {
+	public static QBufferedImage scale(BufferedImage source, BufferedImage dest,
+                                       Dimension destSize) {
 		if (destSize == null && dest != null) {
 			destSize = new Dimension(dest.getWidth(), dest.getHeight());
 		}
@@ -206,10 +206,10 @@ public class Scaling {
 			throw new NullPointerException("no dest size");
 		} else if (dest == null) {
 			if (source.getColorModel().hasAlpha()) {
-				dest = new MutableBufferedImage(destSize.width, destSize.height,
+				dest = new QBufferedImage(destSize.width, destSize.height,
 						BufferedImage.TYPE_INT_ARGB);
 			} else {
-				dest = new MutableBufferedImage(destSize.width, destSize.height,
+				dest = new QBufferedImage(destSize.width, destSize.height,
 						BufferedImage.TYPE_INT_RGB);
 			}
 		}
@@ -244,8 +244,8 @@ public class Scaling {
 	 * @return the <code>dest</code> argument, or a new image if no
 	 *         <code>dest</code> argument was provided.
 	 */
-	public static MutableBufferedImage scale(Image source, BufferedImage dest,
-			Dimension destSize) {
+	public static QBufferedImage scale(Image source, BufferedImage dest,
+                                       Dimension destSize) {
 		if (source instanceof BufferedImage) {
 			return scale((BufferedImage) source, dest, destSize);
 		} else if (source == null) {

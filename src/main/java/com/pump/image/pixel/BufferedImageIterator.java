@@ -10,7 +10,7 @@
  */
 package com.pump.image.pixel;
 
-import com.pump.image.MutableBufferedImage;
+import com.pump.image.QBufferedImage;
 
 import java.awt.image.*;
 import java.util.Objects;
@@ -84,10 +84,10 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	 *            an optional image to write the image data to. If this is null a new image is created.
 	 *            If this is non-null then the pixel data is written to this image. (And exceptions are thrown
 	 *            if the incoming data doesn't match the destination image.)
-	 * @return a MutableBufferedImage. If the `dest` argument was non-null but was not a MutableBufferedImage,
-	 * 			  then a new MutableBufferedImage wrapper is created that points to the same underlying raster.
+	 * @return a QBufferedImage. If the `dest` argument was non-null but was not a QBufferedImage,
+	 * 			  then a new QBufferedImage wrapper is created that points to the same underlying raster.
 	 */
-	public static MutableBufferedImage writeToImage(PixelIterator<?> i, BufferedImage dest) {
+	public static QBufferedImage writeToImage(PixelIterator<?> i, BufferedImage dest) {
 		return writeToImage(i, dest, 0, 0);
 	}
 
@@ -103,16 +103,16 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	 *            if the incoming data doesn't match the destination image.)
 	 * @param x the x offset to start writing to in the dest image.
 	 * @param y the y offset to start writing to in the dest image.
-	 * @return a MutableBufferedImage. If the `dest` argument was non-null but was not a MutableBufferedImage,
-	 * 			  then a new MutableBufferedImage wrapper is created that points to the same underlying raster.
+	 * @return a QBufferedImage. If the `dest` argument was non-null but was not a QBufferedImage,
+	 * 			  then a new QBufferedImage wrapper is created that points to the same underlying raster.
 	 */
-	public static MutableBufferedImage writeToImage(PixelIterator<?> srcIter, BufferedImage dest, int x, int y) {
+	public static QBufferedImage writeToImage(PixelIterator<?> srcIter, BufferedImage dest, int x, int y) {
 		int type = srcIter.getType();
 
 		int w = srcIter.getWidth();
 		int h = srcIter.getHeight();
 
-		MutableBufferedImage returnValue;
+		QBufferedImage returnValue;
 
 		if (dest != null) {
 			if (dest.getType() != type)
@@ -122,20 +122,20 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				throw new IllegalArgumentException("size mismatch: "
 						+ dest.getWidth() + "x" + dest.getHeight()
 						+ " is too small for " + w + "x" + h + " that starts at (" + x + ", " + y+")");
-			if (dest instanceof MutableBufferedImage) {
-				returnValue = (MutableBufferedImage) dest;
+			if (dest instanceof QBufferedImage) {
+				returnValue = (QBufferedImage) dest;
 			} else {
-				returnValue = new MutableBufferedImage(dest);
+				returnValue = new QBufferedImage(dest);
 			}
 		} else if (srcIter instanceof IndexedBytePixelIterator) {
 			IndexColorModel indexModel = ((IndexedBytePixelIterator) srcIter)
 					.getIndexColorModel();
-			returnValue = new MutableBufferedImage(w + x, h + y, BufferedImage.TYPE_BYTE_INDEXED,
+			returnValue = new QBufferedImage(w + x, h + y, BufferedImage.TYPE_BYTE_INDEXED,
 					indexModel);
 		} else {
 			type = getBufferedImageType(type);
 			srcIter = ImageType.get(type).createPixelIterator(srcIter);
-			returnValue = new MutableBufferedImage(w + x, h + y, type);
+			returnValue = new QBufferedImage(w + x, h + y, type);
 		}
 
 		int dataBufferScanline = getDataBufferScanline(returnValue, false);

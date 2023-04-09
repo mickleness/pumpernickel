@@ -20,7 +20,7 @@ import java.util.concurrent.*;
 
 import com.pump.image.ColorModelUtils;
 import com.pump.image.ImageSize;
-import com.pump.image.MutableBufferedImage;
+import com.pump.image.QBufferedImage;
 
 /**
  * This PixelIterator iterates over a <code>java.awt.Image</code>.
@@ -131,9 +131,9 @@ public class ImagePixelIterator<T>
 		}
 
 		/**
-		 * Create a MutableBufferedImage of all pixels in this PixelPackage.
+		 * Create a QBufferedImage of all pixels in this PixelPackage.
 		 */
-		MutableBufferedImage createBufferedImage(int y) {
+		QBufferedImage createBufferedImage(int y) {
 			int arrayOffset = offset + y * scanSize;
 
 			WritableRaster raster = null;
@@ -179,7 +179,7 @@ public class ImagePixelIterator<T>
 			if (raster == null)
 				throw new NullPointerException("Unsupported image type: " + imageType);
 
-			return new MutableBufferedImage(imageType.getColorModel(), raster, imageType.getColorModel().isAlphaPremultiplied(), new Hashtable<>());
+			return new QBufferedImage(imageType.getColorModel(), raster, imageType.getColorModel().isAlphaPremultiplied(), new Hashtable<>());
 		}
 	}
 
@@ -516,7 +516,7 @@ public class ImagePixelIterator<T>
 		}
 
 		@Override
-		public MutableBufferedImage createBufferedImage() {
+		public QBufferedImage createBufferedImage() {
 			// providing our own implementation saves us some memory allocation (and time):
 			// just use the int[]/byte[] provided in a PixelPackage to create a DataBuffer
 			// for a BufferedImage.
@@ -580,33 +580,33 @@ public class ImagePixelIterator<T>
 		return createBufferedImage(file, null);
 	}
 
-	public static MutableBufferedImage createBufferedImage(File file, ImageType<?> imageType) {
+	public static QBufferedImage createBufferedImage(File file, ImageType<?> imageType) {
 		Image image = Toolkit.getDefaultToolkit().createImage(file.getAbsolutePath());
 		return createBufferedImage(image, imageType, file.getAbsolutePath());
 	}
 
-	public static MutableBufferedImage createBufferedImage(Image image) {
+	public static QBufferedImage createBufferedImage(Image image) {
 		return createBufferedImage(image, null);
 	}
 
-	public static MutableBufferedImage createBufferedImage(Image image, ImageType<?> imageType) {
+	public static QBufferedImage createBufferedImage(Image image, ImageType<?> imageType) {
 		return createBufferedImage(image, imageType, null);
 	}
 
-	public static MutableBufferedImage createBufferedImage(Image image, ImageType<?> imageType, String errorDescription) {
-		if (image instanceof MutableBufferedImage) {
-			return (MutableBufferedImage) image;
+	public static QBufferedImage createBufferedImage(Image image, ImageType<?> imageType, String errorDescription) {
+		if (image instanceof QBufferedImage) {
+			return (QBufferedImage) image;
 		} else if (image instanceof BufferedImage) {
-			return new MutableBufferedImage( (BufferedImage) image);
+			return new QBufferedImage( (BufferedImage) image);
 		}
 		return new Source(image, imageType, errorDescription).createBufferedImage();
 	}
 
-	public static MutableBufferedImage createBufferedImage(URL resource) {
+	public static QBufferedImage createBufferedImage(URL resource) {
 		return createBufferedImage(resource, null);
 	}
 
-	public static MutableBufferedImage createBufferedImage(URL url, ImageType<?> imageType) {
+	public static QBufferedImage createBufferedImage(URL url, ImageType<?> imageType) {
 		Image image = Toolkit.getDefaultToolkit().createImage(url);
 		return createBufferedImage(image, imageType, url.toString());
 	}

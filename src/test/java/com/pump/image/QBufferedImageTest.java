@@ -10,27 +10,23 @@
  */
 package com.pump.image;
 
-import com.pump.image.pixel.ImageType;
 import org.junit.Test;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.ImageConsumer;
 import java.awt.image.ImageObserver;
 import java.io.*;
-import java.util.Hashtable;
 import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class MutableBufferedImageTest {
+public class QBufferedImageTest {
 
 	@Test
 	public void testEquals() {
-		MutableBufferedImage bi1 = createSampleMutableImage(60, 40,
+		QBufferedImage bi1 = createSampleMutableImage(60, 40,
 				BufferedImage.TYPE_INT_ARGB);
-		MutableBufferedImage bi2 = createSampleMutableImage(60, 40,
+		QBufferedImage bi2 = createSampleMutableImage(60, 40,
 				BufferedImage.TYPE_INT_ARGB);
 		assertEquals(bi1, bi2);
 		assertEquals(bi1.hashCode(), bi2.hashCode());
@@ -57,10 +53,10 @@ public class MutableBufferedImageTest {
 
 	@Test
 	public void testSerialization() throws Exception {
-		MutableBufferedImage bi = createSampleMutableImage(60, 40,
+		QBufferedImage bi = createSampleMutableImage(60, 40,
 				BufferedImage.TYPE_INT_ARGB);
 		byte[] bytes = serialize(bi);
-		MutableBufferedImage bi2 = (MutableBufferedImage) deserialize(bytes);
+		QBufferedImage bi2 = (QBufferedImage) deserialize(bytes);
 		assertEquals(bi, bi2);
 	}
 
@@ -82,9 +78,9 @@ public class MutableBufferedImageTest {
 		}
 	}
 
-	private MutableBufferedImage createSampleMutableImage(int width, int height,
-			int type) {
-		return new MutableBufferedImage(createSampleBufferedImage(width, height, type));
+	private QBufferedImage createSampleMutableImage(int width, int height,
+													int type) {
+		return new QBufferedImage(createSampleBufferedImage(width, height, type));
 	}
 
 	private BufferedImage createSampleBufferedImage(int width, int height,
@@ -113,7 +109,7 @@ public class MutableBufferedImageTest {
 			}
 		});
 		try {
-			// if we use a plain BufferedImage it fails, but a MutableBufferedImage passes:
+			// if we use a plain BufferedImage it fails, but a QBufferedImage passes:
 			BufferedImage sampleImage = createSampleMutableImage(500, 500, BufferedImage.TYPE_INT_RGB);
 			Image img = sampleImage.getScaledInstance(80, 60,
 					Image.SCALE_SMOOTH);
@@ -164,7 +160,7 @@ public class MutableBufferedImageTest {
 //	public void testPerformance() {
 //		for (ImageType type : ImageType.values(true)) {
 //			BufferedImage bi1 = createSampleBufferedImage(2000,2000, type.getCode());
-//			MutableBufferedImage bi2 = createSampleMutableImage(2000,2000, type.getCode());
+//			QBufferedImage bi2 = createSampleMutableImage(2000,2000, type.getCode());
 //			System.out.println(type+" " + measurePerformance(bi1)+" " + measurePerformance(bi2));
 //		}
 //	}

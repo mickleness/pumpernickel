@@ -1,6 +1,6 @@
 package com.pump.image.pixel;
 
-import com.pump.image.MutableBufferedImage;
+import com.pump.image.QBufferedImage;
 import junit.framework.TestCase;
 import org.junit.Test;
 
@@ -187,7 +187,7 @@ public class ImagePixelIteratorTest extends TestCase {
         // we're reading a BufferedImage that's already in memory; we can afford a smaller timeout interval:
         ImagePixelIterator.TIMEOUT_MILLIS = 100;
         try {
-            BufferedImage bi = new MutableBufferedImage(ScalingTest.createRainbowImage(6, 20, BufferedImage.TYPE_INT_RGB, true));
+            BufferedImage bi = new QBufferedImage(ScalingTest.createRainbowImage(6, 20, BufferedImage.TYPE_INT_RGB, true));
             ImageType[] outputTypes = new ImageType[]{
                     null,
                     ImageType.INT_ARGB_PRE,
@@ -271,7 +271,7 @@ public class ImagePixelIteratorTest extends TestCase {
         ImagePixelIterator.TIMEOUT_MILLIS = 10;
         try {
             int height = 30;
-            BufferedImage bi = new MutableBufferedImage(ScalingTest.createRainbowImage(6, height, BufferedImage.TYPE_INT_RGB, true));
+            BufferedImage bi = new QBufferedImage(ScalingTest.createRainbowImage(6, height, BufferedImage.TYPE_INT_RGB, true));
             int[] array = new int[bi.getWidth() * 3];
 
             for (int limit = 0; limit < height; limit++) {
