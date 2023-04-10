@@ -151,7 +151,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 				.add(new ShowcaseDemoInfo("Transition2D", "Transition2DDemo"));
 		returnValue
 				.add(new ShowcaseDemoInfo("Transition3D", "Transition3DDemo"));
-		returnValue.add(new ShowcaseDemoInfo("ImageLoader", "ImageLoaderDemo"));
 		returnValue.add(
 				new ShowcaseDemoInfo("AlphaComposite", "AlphaCompositeDemo"));
 		returnValue.add(new ShowcaseDemoInfo("TextEffect", "TextEffectDemo"));

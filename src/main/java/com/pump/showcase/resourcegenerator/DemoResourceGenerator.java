@@ -32,7 +32,6 @@ public abstract class DemoResourceGenerator {
 
 		try {
 			DemoResourceGenerator[] gs = new DemoResourceGenerator[] {
-					new ImageLoaderDemoResourceGenerator(.5),
 					new VectorImageDemoResourceGenerator(),
 					new ThumbnailGeneratorDemoResourceGenerator(),
 					new ShadowRendererDemoResourceGenerator(),
