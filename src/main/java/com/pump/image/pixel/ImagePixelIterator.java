@@ -91,9 +91,6 @@ public class ImagePixelIterator<T>
 	 */
 	public static long TIMEOUT_MILLIS = 10_000;
 
-	// TODO: review ImageLoader demo. The default jpg may not show much perf advantage, but I could grab a jpg
-	// of my hd that should gains like in the write-up
-
 	private static final String IMAGE_CONSUMER_COMPLETE_VIA_ERROR = "The ImageProducer failed with an error.";
 	private static final String IMAGE_CONSUMER_COMPLETE_VIA_ABORTED = "The ImageProducer aborted.";
 	private static final String IMAGE_PRODUCER_TIMED_OUT_POSTING_DATA = "The ImageProducer thread aborted because it timed out while attempting to post new information.";

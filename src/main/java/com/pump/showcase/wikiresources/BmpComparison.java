@@ -53,6 +53,7 @@ public class BmpComparison {
             return name;
         }
     }
+
     public static void main(String[] args) throws Exception {
         TempFileManager.initialize("BmpComparison");
         System.out.println("Running " + BmpComparison.class.getSimpleName());
