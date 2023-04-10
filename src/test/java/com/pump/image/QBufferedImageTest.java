@@ -10,11 +10,13 @@
  */
 package com.pump.image;
 
+import com.pump.geom.StarPolygon;
+import com.pump.image.pixel.ImageType;
 import org.junit.Test;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.image.*;
 import java.io.*;
 import java.util.Random;
 
@@ -24,21 +26,21 @@ public class QBufferedImageTest {
 
 	@Test
 	public void testEquals() {
-		QBufferedImage bi1 = createSampleMutableImage(60, 40,
+		QBufferedImage bi1 = createSampleQImage(60, 40,
 				BufferedImage.TYPE_INT_ARGB);
-		QBufferedImage bi2 = createSampleMutableImage(60, 40,
+		QBufferedImage bi2 = createSampleQImage(60, 40,
 				BufferedImage.TYPE_INT_ARGB);
 		assertEquals(bi1, bi2);
 		assertEquals(bi1.hashCode(), bi2.hashCode());
 
 		// change the image type:
-		bi2 = createSampleMutableImage(60, 40, BufferedImage.TYPE_INT_RGB);
+		bi2 = createSampleQImage(60, 40, BufferedImage.TYPE_INT_RGB);
 		assertFalse(bi1.equals(bi2));
 
 		// change pixels
 		for (int y = 0; y < bi1.getHeight(); y++) {
 			for (int x = 0; x < bi1.getWidth(); x++) {
-				bi2 = createSampleMutableImage(60, 40, BufferedImage.TYPE_INT_ARGB);
+				bi2 = createSampleQImage(60, 40, BufferedImage.TYPE_INT_ARGB);
 				int argb = bi2.getRGB(x, y);
 				argb++;
 				bi2.setRGB(x, y, argb);
@@ -46,14 +48,14 @@ public class QBufferedImageTest {
 			}
 		}
 
-		bi2 = createSampleMutableImage(60, 40, BufferedImage.TYPE_INT_ARGB);
+		bi2 = createSampleQImage(60, 40, BufferedImage.TYPE_INT_ARGB);
 		bi2.setProperty("x", "y");
 		assertFalse(bi1.equals(bi2));
 	}
 
 	@Test
 	public void testSerialization() throws Exception {
-		QBufferedImage bi = createSampleMutableImage(60, 40,
+		QBufferedImage bi = createSampleQImage(60, 40,
 				BufferedImage.TYPE_INT_ARGB);
 		byte[] bytes = serialize(bi);
 		QBufferedImage bi2 = (QBufferedImage) deserialize(bytes);
@@ -78,7 +80,7 @@ public class QBufferedImageTest {
 		}
 	}
 
-	private QBufferedImage createSampleMutableImage(int width, int height,
+	private QBufferedImage createSampleQImage(int width, int height,
 													int type) {
 		return new QBufferedImage(createSampleBufferedImage(width, height, type));
 	}
@@ -110,7 +112,7 @@ public class QBufferedImageTest {
 		});
 		try {
 			// if we use a plain BufferedImage it fails, but a QBufferedImage passes:
-			BufferedImage sampleImage = createSampleMutableImage(500, 500, BufferedImage.TYPE_INT_RGB);
+			BufferedImage sampleImage = createSampleQImage(500, 500, BufferedImage.TYPE_INT_RGB);
 			Image img = sampleImage.getScaledInstance(80, 60,
 					Image.SCALE_SMOOTH);
 			ImageObserver observer = new ImageObserver() {
@@ -212,4 +214,100 @@ public class QBufferedImageTest {
 //		t = System.currentTimeMillis() - t;
 //		return Long.toString(t);
 //	}
+
+	/**
+	 * Test the constructors that accept byte[] and int[]
+	 */
+	@Test
+	public void testArrayConstructors() {
+		for (int imageType : new int[] {
+				BufferedImage.TYPE_INT_RGB,
+				BufferedImage.TYPE_INT_ARGB,
+				BufferedImage.TYPE_INT_BGR,
+				BufferedImage.TYPE_INT_ARGB_PRE,
+				BufferedImage.TYPE_BYTE_GRAY,
+				BufferedImage.TYPE_BYTE_INDEXED,
+				BufferedImage.TYPE_3BYTE_BGR,
+				BufferedImage.TYPE_4BYTE_ABGR,
+				BufferedImage.TYPE_4BYTE_ABGR_PRE,
+
+		}) {
+			System.out.println("Testing " + ImageType.toString(imageType));
+			BufferedImage bi = new BufferedImage(80, 60, imageType);
+			drawRandomShapes(bi);
+			DataBuffer db = bi.getRaster().getDataBuffer();
+			QBufferedImage copy;
+			if (db instanceof DataBufferInt) {
+				copy = new QBufferedImage(bi.getColorModel(), bi.getWidth(), bi.getHeight(), ((DataBufferInt)db).getData());
+			} else if (db instanceof DataBufferByte) {
+				copy = new QBufferedImage(bi.getColorModel(), bi.getWidth(), bi.getHeight(), ((DataBufferByte)db).getData());
+			} else {
+				throw new UnsupportedOperationException("DataBuffer = "+ db);
+			}
+			assertEquals(imageType, copy.getType());
+			assertImageEquals(bi, copy);
+		}
+	}
+
+	private void assertImageEquals(BufferedImage bi1, BufferedImage bi2) {
+		QBufferedImage biA = createARGBCopy(bi1);
+		QBufferedImage biB = createARGBCopy(bi2);
+		assertTrue(biA.equals(biB));
+	}
+
+	private QBufferedImage createARGBCopy(BufferedImage bi) {
+		QBufferedImage returnValue = new QBufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = returnValue.createGraphics();
+		g.drawImage(bi, 0, 0, null);
+		g.dispose();
+		return returnValue;
+	}
+
+	private void drawRandomShapes(BufferedImage bi) {
+		Random r = new Random(0);
+		Graphics2D g = bi.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		for (int a = 0; a < 100; a++) {
+			Color c = new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256), r.nextInt(256));
+			g.setColor(c);
+			int x = r.nextInt(bi.getWidth() - 10);
+			int y = r.nextInt(bi.getHeight() - 10);
+			if (r.nextBoolean()) {
+				switch (r.nextInt(4)) {
+					case 0:
+						g.drawRect(x, y, 10, 10);
+						break;
+					case 1:
+						g.drawOval(x, y, 10, 10);
+						break;
+					case 2:
+						g.draw(new RoundRectangle2D.Double(x, y, 10, 10, 4, 4));
+						break;
+					case 3:
+						StarPolygon star = new StarPolygon(5);
+						star.setCenter(x + 5, y + 5);
+						g.draw(star);
+						break;
+				}
+			} else {
+				switch (r.nextInt(4)) {
+					case 0:
+						g.fillRect(x, y, 10, 10);
+						break;
+					case 1:
+						g.fillOval(x, y, 10, 10);
+						break;
+					case 2:
+						g.fill(new RoundRectangle2D.Double(x, y, 10, 10, 4, 4));
+						break;
+					case 3:
+						StarPolygon star = new StarPolygon(5);
+						star.setCenter(x + 5, y + 5);
+						g.fill(star);
+						break;
+				}
+			}
+		}
+		g.dispose();
+	}
 }

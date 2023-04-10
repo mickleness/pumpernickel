@@ -10,7 +10,7 @@
  */
 package com.pump.image;
 
-import java.awt.Point;
+import java.awt.*;
 import java.awt.image.*;
 import java.io.Externalizable;
 import java.io.IOException;
@@ -58,6 +58,41 @@ public class QBufferedImage extends BufferedImage
 		return returnValue;
 	}
 
+	private static int[] getBandMasks(DirectColorModel colorModel) {
+		if (colorModel.hasAlpha()) {
+			return new int[] {
+					colorModel.getRedMask(),
+					colorModel.getGreenMask(),
+					colorModel.getBlueMask(),
+					colorModel.getAlphaMask()
+			};
+		} else {
+			return new int[]{
+					colorModel.getRedMask(),
+					colorModel.getGreenMask(),
+					colorModel.getBlueMask()
+			};
+		}
+	}
+
+	private static WritableRaster createRaster(ColorModel colorModel, int width, int height, byte[] pixels) {
+		if (colorModel instanceof IndexColorModel) {
+			DataBuffer dataBuffer = new DataBufferByte(pixels, width);
+			return Raster.createInterleavedRaster(dataBuffer, width, height, width, 1, new int[] {0}, null);
+		} else if (colorModel instanceof ComponentColorModel) {
+			ComponentColorModel ccm = (ComponentColorModel) colorModel;
+			DataBuffer dataBuffer = new DataBufferByte(pixels, width * height * ccm.getPixelSize() / 8);
+			int[] bandOffsets = new int[ccm.getPixelSize() / 8];
+			for (int i = 0; i < bandOffsets.length; i++) {
+				bandOffsets[i] = bandOffsets.length - i - 1;
+			}
+			return Raster.createInterleavedRaster(dataBuffer, width, height, width * ccm.getPixelSize() / 8,
+					ccm.getPixelSize() / 8, bandOffsets, null);
+		}
+
+		throw new UnsupportedOperationException("unsupported ColorModel: " + colorModel);
+	}
+
 	Map<String, Object> extraProperties = null;
 
 	/**
@@ -93,6 +128,22 @@ public class QBufferedImage extends BufferedImage
 		this(bi.getColorModel(), bi.getRaster(), bi.isAlphaPremultiplied(),
 				getPropertiesHashtable(bi));
 		setAccelerationPriority(bi.getAccelerationPriority());
+	}
+
+	/**
+	 * Create a QBufferedImage backed by the array of ints provided.
+	 */
+	public QBufferedImage(ColorModel colorModel,int width, int height, int[] pixels) {
+		super(colorModel,
+				Raster.createPackedRaster(new DataBufferInt(pixels, width * height), width, height, width, getBandMasks( (DirectColorModel) colorModel), new Point(0,0)),
+				colorModel.isAlphaPremultiplied(), new Hashtable<>());
+	}
+
+	/**
+	 * Create a QBufferedImage backed by the array of bytes provided.
+	 */
+	public QBufferedImage(ColorModel colorModel,int width, int height, byte[] pixels) {
+		super(colorModel, createRaster(colorModel, width, height, pixels), colorModel.isAlphaPremultiplied(), new Hashtable<>());
 	}
 
 	@Override
