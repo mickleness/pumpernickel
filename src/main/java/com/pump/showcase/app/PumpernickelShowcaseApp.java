@@ -174,7 +174,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 		returnValue.add(new ShowcaseDemoInfo("JToolTip, QPopupFactory",
 				"JToolTipDemo"));
 		returnValue.add(new ShowcaseDemoInfo("JPopover", "JPopoverDemo"));
-		returnValue.add(new ShowcaseDemoInfo("Scaling", "ScalingDemo"));
 		returnValue
 				.add(new ShowcaseDemoInfo("JColorPicker", "JColorPickerDemo"));
 		// add(new DemoListElement("Shapes: AreaX Tests", new AreaXTestPanel());
