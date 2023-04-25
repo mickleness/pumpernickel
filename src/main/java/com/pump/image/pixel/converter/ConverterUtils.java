@@ -314,7 +314,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_G_bytes_to_AXYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -333,7 +333,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
                 convert_G_bytes_to_XYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 3 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -405,7 +405,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
                 convert_XYZ_bytes_to_ZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 3 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -479,7 +479,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_AXYZ_bytes_to_ZYXA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -517,7 +517,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_AXYZ_bytes_to_XYZA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -630,7 +630,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_XYZA_bytes_to_AXYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -668,7 +668,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_XYZA_bytes_to_AZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -742,7 +742,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
                 convert_AXYZ_bytes_to_XYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 3 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -810,7 +810,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
                 convert_AXYZ_bytes_to_ZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 3 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -848,7 +848,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
                 convert_XYZA_bytes_to_XYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 3 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -894,7 +894,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
                 convert_XYZA_bytes_to_ZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 3 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -1111,7 +1111,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
                 convert_AXYZPre_bytes_to_ZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 3 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -1136,7 +1136,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
                 convert_AXYZPre_bytes_to_XYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 3 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -1610,7 +1610,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_AXYZPre_bytes_to_AXYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -1654,7 +1654,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_AXYZPre_bytes_to_AZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -1701,7 +1701,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_AXYZPre_bytes_to_ZYXA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -1742,7 +1742,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_AXYZPre_bytes_to_XYZA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -1779,7 +1779,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_AXYZ_bytes_to_AXYZPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -1823,7 +1823,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_AXYZ_bytes_to_AZYXPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -1866,7 +1866,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_XYZA_bytes_to_AXYZPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -1909,7 +1909,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_XYZA_bytes_to_AZYXPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -2117,7 +2117,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_XYZA_bytes_to_ZYXA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -2228,7 +2228,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_AXYZ_bytes_to_XYZAPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -2275,7 +2275,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_AXYZ_bytes_to_ZYXAPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -2318,7 +2318,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_XYZA_bytes_to_ZYXAPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -2361,7 +2361,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_XYZA_bytes_to_XYZAPre_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -2415,7 +2415,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_XYZAPre_bytes_to_XYZA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -2507,7 +2507,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
                 convert_XYZAPre_bytes_to_XYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 3 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -2530,7 +2530,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(3 * pixelCount);
             try {
                 convert_XYZAPre_bytes_to_ZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 3 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -2579,7 +2579,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_XYZAPre_bytes_to_ZYXA_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -2630,7 +2630,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_XYZAPre_bytes_to_AXYZ_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
@@ -2679,7 +2679,7 @@ class ConverterUtils {
             byte[] scratch = getScratchArray(4 * pixelCount);
             try {
                 convert_XYZAPre_bytes_to_AZYX_bytes(scratch, 0, sourcePixels, srcOffset, pixelCount);
-                System.arraycopy(scratch, 0, destPixels, destOffset, pixelCount);
+                System.arraycopy(scratch, 0, destPixels, destOffset, 4 * pixelCount);
             } finally {
                 storeScratchArray(scratch);
             }
