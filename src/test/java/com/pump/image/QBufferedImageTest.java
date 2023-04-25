@@ -98,9 +98,13 @@ public class QBufferedImageTest {
 		return returnValue;
 	}
 
-	// TODO: maybe make this a JDK test for JDK-4200096
+	/**
+	 * This basically confirms JDK-4200096 does NOT reproduce in QBufferedImageSource.
+	 * I proposed a change for this to the OpenJDK project (in Apr 2023), but even if accepted it will
+	 * take years for us to adapt the latest JDK release and benefit from it.
+	 */
 	@Test
-	public void testGetWidth() {
+	public void testGetWidth_JDK_4200096() {
 		PrintStream origErr = System.err;
 		System.setErr(new PrintStream(origErr) {
 			@Override
@@ -117,6 +121,7 @@ public class QBufferedImageTest {
 					Image.SCALE_SMOOTH);
 			ImageObserver observer = new ImageObserver() {
 				int width, height;
+
 				@Override
 				public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
 					System.out.println("imageUpdate " + img + " " + x + " " + y + " " + width + " " + height + " " + toString(infoflags));
@@ -129,21 +134,21 @@ public class QBufferedImageTest {
 
 				private String toString(int infoflags) {
 					StringBuilder sb = new StringBuilder();
-					if ( (infoflags & ImageObserver.WIDTH) > 0)
+					if ((infoflags & ImageObserver.WIDTH) > 0)
 						sb.append("width ");
-					if ( (infoflags & ImageObserver.HEIGHT) > 0)
+					if ((infoflags & ImageObserver.HEIGHT) > 0)
 						sb.append("height ");
-					if ( (infoflags & ImageObserver.PROPERTIES) > 0)
+					if ((infoflags & ImageObserver.PROPERTIES) > 0)
 						sb.append("properties ");
-					if ( (infoflags & ImageObserver.SOMEBITS) > 0)
+					if ((infoflags & ImageObserver.SOMEBITS) > 0)
 						sb.append("somebits ");
-					if ( (infoflags & ImageObserver.FRAMEBITS) > 0)
+					if ((infoflags & ImageObserver.FRAMEBITS) > 0)
 						sb.append("framebits ");
-					if ( (infoflags & ImageObserver.ALLBITS) > 0)
+					if ((infoflags & ImageObserver.ALLBITS) > 0)
 						sb.append("allbits ");
-					if ( (infoflags & ImageObserver.ERROR) > 0)
+					if ((infoflags & ImageObserver.ERROR) > 0)
 						sb.append("error ");
-					if ( (infoflags & ImageObserver.ABORT) > 0)
+					if ((infoflags & ImageObserver.ABORT) > 0)
 						sb.append("abort ");
 					return sb.toString() + infoflags;
 				}
