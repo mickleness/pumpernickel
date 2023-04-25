@@ -10,6 +10,9 @@
  */
 package com.pump.image;
 
+import com.pump.image.pixel.ImagePixelIterator;
+import com.pump.image.pixel.Scaling;
+
 import java.awt.*;
 import java.awt.image.*;
 import java.io.Externalizable;
@@ -366,5 +369,13 @@ public class QBufferedImage extends BufferedImage
 			return replacementImage;
 		}
 		return this;
+	}
+
+	@Override
+	public QBufferedImage getScaledInstance(int width, int height, int hints) {
+		if ((hints & (SCALE_SMOOTH | SCALE_AREA_AVERAGING)) != 0) {
+			return Scaling.scale(this, new Dimension(width, height), null, null);
+		}
+		return ImagePixelIterator.createBufferedImage(super.getScaledInstance(width, height, hints));
 	}
 }
