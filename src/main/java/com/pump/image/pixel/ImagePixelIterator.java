@@ -556,7 +556,7 @@ public class ImagePixelIterator<T>
 	/**
 	 * Pull an element from this queue, or return null if we timed out.
 	 */
-	private static Object poll(ArrayBlockingQueue<Object> queue, long timeoutMillis) {
+	private static Object poll(ArrayBlockingQueue<Object> queue, long timeoutMillis, boolean allowFailedPoll) {
 		long start = System.currentTimeMillis();
 		long waitTime = timeoutMillis;
 		while (true) {
@@ -568,8 +568,11 @@ public class ImagePixelIterator<T>
 				// do nothing
 			}
 			waitTime = timeoutMillis - (System.currentTimeMillis() - start);
-			if (waitTime < 0)
-				return false;
+			if (waitTime < 0) {
+				if (allowFailedPoll)
+					return null;
+				return Boolean.FALSE;
+			}
 		}
 	}
 
@@ -700,7 +703,7 @@ public class ImagePixelIterator<T>
 		// we're sure our Runnable had a chance to start:
 		startedProductionSemaphore.acquireUninterruptibly();
 
-		Object data = poll(consumer.queue, 100_000);
+		Object data = poll(consumer.queue, 100_000, false);
 		if (data instanceof ImageDescriptor) {
 			ImageDescriptor d = (ImageDescriptor) data;
 			width = d.imgWidth;
@@ -834,7 +837,7 @@ public class ImagePixelIterator<T>
 	 * or throws a RuntimeException if the producer thread has an error or times out.
 	 */
 	private void pollNextPixelPackage(long timeoutMillis) {
-		Object data = poll(consumer.queue, timeoutMillis);
+		Object data = poll(consumer.queue, timeoutMillis, timeoutMillis == 0);
 		if (data instanceof String) {
 			String str = (String) data;
 			rowCtr = height;
