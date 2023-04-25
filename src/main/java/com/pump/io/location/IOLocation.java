@@ -666,8 +666,7 @@ public abstract class IOLocation {
 					try {
 						Dimension d = ImageSize.get(url);
 						d = Dimension2D.scaleProportionally(d, maxSize);
-						return Scaling.scale(url, ImageType.INT_ARGB,
-								d);
+						return Scaling.scale(url, d, ImageType.INT_ARGB, null);
 					} catch (Throwable t) {
 						// do nothing. Pity this failed.
 					}

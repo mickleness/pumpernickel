@@ -104,7 +104,7 @@ public class NSImageDemo extends ShowcaseIconDemo {
 		Dimension d = new Dimension(bi.getWidth(), bi.getHeight());
 		Dimension d2 = Dimension2D.scaleProportionally(d, maxConstrainingSize);
 		if (d2.width < d.width || d2.height < d.height) {
-			bi = Scaling.scale(bi, d2);
+			bi = Scaling.scale(bi, d2, null, null);
 		}
 		return bi;
 	}

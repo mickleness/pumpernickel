@@ -95,7 +95,7 @@ public class JPEGMetaDataThumbnailGenerator implements ThumbnailGenerator {
 						requestedMaxImageSize);
 				Dimension scaledSize = Dimension2D.scaleProportionally(biSize,
 						maxSize);
-				bi = Scaling.scale(bi, scaledSize);
+				bi = Scaling.scale(bi, scaledSize, null, null);
 			}
 		}
 

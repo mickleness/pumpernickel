@@ -606,7 +606,7 @@ public class JButtonDemo extends ShowcaseExampleDemo {
 		if (thumbnail == null) {
 			BufferedImage bi = ImagePixelIterator.createBufferedImage(
 					AlphaCompositeDemo.class.getResource("balloon.png"));
-			thumbnail = Scaling.scaleProportionally(bi, new Dimension(30, 30));
+			thumbnail = Scaling.scaleProportionally(bi, new Dimension(30, 30), null, null);
 		}
 		return thumbnail;
 	}

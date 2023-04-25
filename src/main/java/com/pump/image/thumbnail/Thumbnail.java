@@ -15,6 +15,7 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 import com.pump.image.ImageSize;
@@ -102,7 +103,7 @@ public abstract class Thumbnail {
 
 		@Override
 		public BufferedImage scale(Dimension destinationSize) {
-			return Scaling.scale(bi, destinationSize);
+			return Scaling.scale(bi, destinationSize, null, null);
 		}
 	}
 
@@ -126,8 +127,11 @@ public abstract class Thumbnail {
 
 		@Override
 		public BufferedImage scale(Dimension destinationSize) {
-			return Scaling.scale(url, ImageType.INT_ARGB,
-					destinationSize);
+			try {
+				return Scaling.scale(url, destinationSize, ImageType.INT_ARGB, null);
+			} catch(IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 
@@ -152,7 +156,7 @@ public abstract class Thumbnail {
 
 		@Override
 		public BufferedImage scale(Dimension destinationSize) {
-			return Scaling.scale(image, null, destinationSize);
+			return Scaling.scale(image, destinationSize, null, null);
 		}
 	}
 
@@ -177,8 +181,11 @@ public abstract class Thumbnail {
 
 		@Override
 		public BufferedImage scale(Dimension destinationSize) {
-			return Scaling.scale(file, ImageType.INT_ARGB,
-					destinationSize);
+			try {
+				return Scaling.scale(file, destinationSize, ImageType.INT_ARGB, null);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 

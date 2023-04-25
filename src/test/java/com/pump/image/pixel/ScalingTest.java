@@ -10,13 +10,10 @@
  */
 package com.pump.image.pixel;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
@@ -57,7 +54,7 @@ public class ScalingTest extends TestCase {
                     try {
                         int scaledWidth = (int)(rainbowImage.getWidth() * scale);
                         int scaledHeight = (int)(rainbowImage.getHeight() * scale);
-                        scaledImage = Scaling.scale(rainbowImage, scaledWidth, scaledHeight);
+                        scaledImage = Scaling.scale(rainbowImage, new Dimension(scaledWidth, scaledHeight), null, null);
 
 						RainbowColorProfile profile = new RainbowColorProfile(scaledImage);
 
@@ -89,8 +86,7 @@ public class ScalingTest extends TestCase {
 									System.err.println(
 											"## the orange is probably failing because the red and blue color channels are swapped");
 
-									scaledImage = Scaling.scale(rainbowImage,
-											scaledWidth, scaledHeight);
+									scaledImage = Scaling.scale(rainbowImage, new Dimension(scaledWidth, scaledHeight), null, null);
 								}
 								throw e;
 							}
