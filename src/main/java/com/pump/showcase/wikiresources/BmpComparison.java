@@ -7,6 +7,7 @@ import com.pump.image.bmp.BmpEncoder;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -19,7 +20,8 @@ public class BmpComparison {
         IMAGE_IO("ImageIO") {
             @Override
             public void encode(BufferedImage image, File file) throws Exception {
-                ImageIO.write(image, "bmp", file);
+                if(!ImageIO.write(image, "bmp", file))
+                    throw new IOException("ImageIO returned false when attempting to write " + image + " to "+ file);
             }
 
             @Override
