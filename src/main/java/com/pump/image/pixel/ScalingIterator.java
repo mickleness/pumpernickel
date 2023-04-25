@@ -778,10 +778,10 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 
 		if (srcPixels == row) {
 			srcIterator.next(srcPixels, rowOffset);
-			destType.convertFrom(srcType, srcPixels, rowOffset, row, rowOffset, srcW * destType.getSampleCount());
+			destType.convertFrom(srcType, srcPixels, rowOffset, row, rowOffset, srcW);
 		} else {
 			srcIterator.next(srcPixels, 0);
-			destType.convertFrom(srcType, srcPixels, 0, row, rowOffset, srcW * destType.getSampleCount());
+			destType.convertFrom(srcType, srcPixels, 0, row, rowOffset, srcW);
 		}
 	}
 
