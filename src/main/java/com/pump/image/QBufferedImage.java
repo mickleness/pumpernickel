@@ -10,8 +10,7 @@
  */
 package com.pump.image;
 
-import com.pump.image.pixel.ImagePixelIterator;
-import com.pump.image.pixel.Scaling;
+import com.pump.image.pixel.*;
 
 import java.awt.*;
 import java.awt.image.*;
@@ -211,6 +210,54 @@ public class QBufferedImage extends BufferedImage
 		if (extraProperties == null)
 			extraProperties = new HashMap<String, Object>();
 		extraProperties.putAll(properties);
+	}
+
+	/**
+	 * Return true if the argument is rendered identically to this image.
+	 * <p>
+	 * For example: if you have two images of equal size that render as
+	 * a solid sheet of red, then this method returns true even if the pixels
+	 * are formatted differently.
+	 */
+	public boolean equalPixels(BufferedImage img) {
+		int w = getWidth();
+		int h = getHeight();
+
+		if (w != img.getWidth() || h != img.getHeight())
+			return false;
+
+		BufferedImageIterator iter1 = BufferedImageIterator.create(this);
+		PixelIterator iter2 = BufferedImageIterator.create(img);
+		ImageType type = ImageType.get(iter1.getType());
+		iter2 = type.createPixelIterator(iter2);
+		int arrayLength = iter1.getWidth() * type.getSampleCount();
+		if (type.isInt()) {
+			int[] row1 = new int[arrayLength];
+			int[] row2 = new int[arrayLength];
+
+			while (!iter1.isDone()) {
+				iter1.next(row1, 0);
+				iter2.next(row2, 0);
+				for (int j = 0; j < arrayLength; j++) {
+					if (row1[j] != row2[j])
+						return false;
+				}
+			}
+		} else {
+			byte[] row1 = new byte[arrayLength];
+			byte[] row2 = new byte[arrayLength];
+
+			while (!iter1.isDone()) {
+				iter1.next(row1, 0);
+				iter2.next(row2, 0);
+				for (int j = 0; j < arrayLength; j++) {
+					if (row1[j] != row2[j])
+						return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	@Override

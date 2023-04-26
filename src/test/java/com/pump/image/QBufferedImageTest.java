@@ -317,4 +317,36 @@ public class QBufferedImageTest {
 		}
 		g.dispose();
 	}
+
+	@Test
+	public void testEqualPixels() {
+		Random random = new Random(0);
+		for (ImageType typeA : ImageType.values(true)) {
+			if (typeA == ImageType.BYTE_GRAY)
+				continue;
+
+			for (ImageType typeB : ImageType.values(true)) {
+				if (typeB == ImageType.BYTE_GRAY)
+					continue;
+
+				System.out.println("Testing " + typeA + " vs " + typeB);
+
+				QBufferedImage bi1 = createSampleQImage(80, 60, typeA.getCode());
+				BufferedImage bi2 = createSampleBufferedImage(80, 60, typeB.getCode());
+
+				assertTrue(bi1.equalPixels(bi2));
+
+				int x = random.nextInt(80);
+				int y = random.nextInt(60);
+				int newRGB = random.nextInt(0xffffff) | 0xff000000;
+				// now change one pixel
+				if (random.nextBoolean()) {
+					bi1.setRGB(x, y, newRGB);
+				} else {
+					bi2.setRGB(x, y, newRGB);
+				}
+				assertFalse(bi1.equalPixels(bi2));
+			}
+		}
+	}
 }
