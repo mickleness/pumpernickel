@@ -55,11 +55,13 @@ public class QBufferedImageTest {
 
 	@Test
 	public void testSerialization() throws Exception {
-		QBufferedImage bi = createSampleQImage(60, 40,
-				BufferedImage.TYPE_INT_ARGB);
-		byte[] bytes = serialize(bi);
-		QBufferedImage bi2 = (QBufferedImage) deserialize(bytes);
-		assertEquals(bi, bi2);
+		for (ImageType imageType : ImageType.values(true)) {
+			System.out.println("Testing " + imageType);
+			QBufferedImage bi = createSampleQImage(60, 40, imageType.getCode());
+			byte[] bytes = serialize(bi);
+			QBufferedImage bi2 = (QBufferedImage) deserialize(bytes);
+			assertEquals(bi, bi2);
+		}
 	}
 
 	private byte[] serialize(Serializable obj) throws IOException {
