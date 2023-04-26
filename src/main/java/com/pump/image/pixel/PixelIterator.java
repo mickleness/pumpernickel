@@ -16,6 +16,11 @@ import java.util.List;
 
 /**
  * This iterates over an image as a series of pixel rows.
+ * <p>
+ * This is similar to an ImageProducer, except this has a much stricter
+ * contract: all pixel data must be delivered in rows. And the pixel
+ * data must be either int arrays or byte arrays.
+ * </p>
  */
 public interface PixelIterator<T> {
 
