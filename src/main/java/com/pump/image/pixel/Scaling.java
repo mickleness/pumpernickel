@@ -549,7 +549,7 @@ public class Scaling {
 	}
 
 	private QBufferedImage getScaledEmbeddedThumbnail(String filename, InputStreamSource inputStreamSource) throws IOException {
-		String str = imageFile.getAbsolutePath().toLowerCase();
+		String str = filename.toLowerCase();
 		if (!(str.endsWith(".jpg") || str.endsWith(".jpeg")))
 			return null;
 		if (sizeFunction == null)
