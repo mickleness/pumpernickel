@@ -19,12 +19,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedHashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This is a <code>BufferedImage</code> that offers a <code>setProperty()</code>
@@ -36,6 +31,17 @@ public class QBufferedImage extends BufferedImage
 		implements Externalizable {
 
 	/**
+	 * This is how we encode null values in {@link #extraProperties}.
+	 * <p>
+	 * The contract in {@link Image#getProperty(String, ImageObserver)} promises to
+	 * return {@link Image#UndefinedProperty} for missing properties, so we want
+	 * to be sure if you defined a property as <code>null</code> then it will
+	 * be retrieved as <code>null</code> and node <code>UndefinedProperty</code>.
+	 * </p>
+	 */
+	private static final Object NULL_PLACEHOLDER = new Object();
+
+	/**
 	 * Return a map of all known properties of a BufferedImage.
 	 */
 	public static Map<String, Object> getProperties(BufferedImage bi) {
@@ -45,7 +51,9 @@ public class QBufferedImage extends BufferedImage
 				String[] propNames = bi.getPropertyNames();
 				if (propNames != null) {
 					for (String key : propNames) {
-						returnValue.put(key, bi.getProperty(key));
+						Object value = bi.getProperty(key);
+						if (!(value == null || value == Image.UndefinedProperty))
+							returnValue.put(key, value);
 					}
 				}
 			}
@@ -96,6 +104,10 @@ public class QBufferedImage extends BufferedImage
 		throw new UnsupportedOperationException("unsupported ColorModel: " + colorModel);
 	}
 
+
+	/**
+	 * These are accessed via {@link #getProperty(String)}.
+	 */
 	Map<String, Object> extraProperties = null;
 
 	/**
@@ -108,16 +120,25 @@ public class QBufferedImage extends BufferedImage
 		super(1, 1, BufferedImage.TYPE_INT_RGB);
 	}
 
+	/**
+	 * Create a new QBufferedImage.
+	 */
 	public QBufferedImage(ColorModel cm, WritableRaster r,
 						  boolean premultiplied, Hashtable<String, Object> properties) {
 		super(cm, r, premultiplied, properties);
 	}
 
+	/**
+	 * Create a new QBufferedImage.
+	 */
 	public QBufferedImage(int width, int height, int imageType,
 						  IndexColorModel cm) {
 		super(width, height, imageType, cm);
 	}
 
+	/**
+	 * Create a new QBufferedImage.
+	 */
 	public QBufferedImage(int width, int height, int imageType) {
 		super(width, height, imageType);
 	}
@@ -150,18 +171,12 @@ public class QBufferedImage extends BufferedImage
 	}
 
 	@Override
-	public synchronized Object getProperty(String name,
-			ImageObserver observer) {
-		if (extraProperties != null && extraProperties.containsKey(name)) {
-			return extraProperties.get(name);
-		}
-		return super.getProperty(name, observer);
-	}
-
-	@Override
 	public synchronized Object getProperty(String name) {
 		if (extraProperties != null && extraProperties.containsKey(name)) {
-			return extraProperties.get(name);
+			Object value = extraProperties.get(name);
+			if (value == NULL_PLACEHOLDER)
+				value = null;
+			return value;
 		}
 		return super.getProperty(name);
 	}
@@ -184,6 +199,8 @@ public class QBufferedImage extends BufferedImage
 	public synchronized void setProperty(String propertyName, Object value) {
 		if (extraProperties == null)
 			extraProperties = new HashMap<String, Object>();
+		if (value == null)
+			value = NULL_PLACEHOLDER;
 		extraProperties.put(propertyName, value);
 	}
 
@@ -231,8 +248,8 @@ public class QBufferedImage extends BufferedImage
 				if (!Arrays.equals((short[]) row1, (short[]) row2))
 					return false;
 			} else {
-				// I'm not sure if this can ever happen? If it does we can scale
-				// this method up
+				// I'm not sure if this can ever happen? If it does happen, then we can scale
+				// this method up as needed
 				throw new IllegalStateException(row1.getClass().getName());
 			}
 		}
