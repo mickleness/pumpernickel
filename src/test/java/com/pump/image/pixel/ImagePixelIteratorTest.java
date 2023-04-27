@@ -221,9 +221,6 @@ public class ImagePixelIteratorTest extends TestCase {
                         for (ImageType outputType : outputTypes) {
                             ctr++;
 
-                            if (ctr < 17)
-                                continue;
-
                             System.out.println("ctr = " + ctr + " " + Arrays.asList(imageTypes) + " " + pixelOrder.name() + " " + completionType.name() + " " + outputType);
 
                             try {
