@@ -12,11 +12,11 @@ package com.pump.image.pixel;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.io.Closeable;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.pump.image.ColorModelUtils;
 import com.pump.image.ImageSize;
@@ -94,6 +94,8 @@ public class ImagePixelIterator<T>
 	private static final String IMAGE_CONSUMER_COMPLETE_VIA_ERROR = "The ImageProducer failed with an error.";
 	private static final String IMAGE_CONSUMER_COMPLETE_VIA_ABORTED = "The ImageProducer aborted.";
 	private static final String IMAGE_PRODUCER_TIMED_OUT_POSTING_DATA = "The ImageProducer thread aborted because it timed out while attempting to post new information.";
+
+	private static final String PIXEL_ITERATOR_CLOSED = "The PixelIterator closed.";
 
 	private static class ImageDescriptor {
 		final int imgWidth, imgHeight;
@@ -184,14 +186,15 @@ public class ImagePixelIterator<T>
 	 * This is the ImageConsumer that listens for updates from the ImageProducer.
 	 * This operates in its own thread.
 	 */
-	private static class Consumer implements ImageConsumer, Closeable {
+	private static class Consumer implements ImageConsumer {
+
 		private final ImageProducer producer;
 		private final boolean allowOptimization;
 
 		Integer imgWidth;
 		Integer imgHeight;
 
-		boolean closed, isClosing;
+		AtomicBoolean isClosed = new AtomicBoolean(false);
 
 		/**
 		 * This Consumer pushes data to this queue as it becomes available. This
@@ -214,6 +217,8 @@ public class ImagePixelIterator<T>
 		 */
 		Object buffer;
 
+		private final Collection<Thread> pixelProductionThreads = Collections.synchronizedSet(new HashSet<>());
+
 		private boolean isSinglePassHint, isTopDownLeftRightHint, isCompleteScanLineHint;
 		private long queueTimeoueMillis;
 		private boolean isInitialized = false;
@@ -234,48 +239,50 @@ public class ImagePixelIterator<T>
 			this.allowOptimization = allowOptimization;
 		}
 
-		@Override
-		public void close() {
-			close("aborted");
-		}
+		private void close(Object closeStatus, boolean purgeQueuedImageData) {
+			if (isClosed.compareAndSet(false, true)) {
+				producer.removeConsumer(this);
 
-		private void close(Object closeStatus) {
-			if (!closed) {
-				isClosing = true;
-				try {
-					producer.removeConsumer(this);
-					post(closeStatus);
-				} finally {
-					isClosing = false;
-					closed = true;
+				if (purgeQueuedImageData)
+					queue.removeIf(o -> o instanceof ImageDescriptor || o instanceof PixelPackage);
+
+				synchronized (pixelProductionThreads) {
+					for (Thread thread : pixelProductionThreads) {
+						if (thread != Thread.currentThread())
+							thread.interrupt();
+					}
 				}
+
+				post(closeStatus);
 			}
 		}
 
 		/**
 		 * Post an element to a queue, or return false. This will return false if either this
-		 * consumer has already called {@link #close(Object)}, or if this method exceeded the timeout
+		 * consumer has already called <code>close(..)</code>> or if this method exceeded the timeout
 		 * and nobody received our data.
 		 */
 		private boolean post(Object element) {
-			if (closed)
-				return false;
-
 			long start = System.currentTimeMillis();
 			long waitTime = queueTimeoueMillis;
 			while (true) {
-				try {
-					if (queue.offer(element, waitTime, TimeUnit.MILLISECONDS))
-						return true;
-				} catch (InterruptedException e) {
-					// do nothing
-				}
-				waitTime = queueTimeoueMillis - (System.currentTimeMillis() - start);
-				if (waitTime < 0) {
-					if (!isClosing) {
-						close(IMAGE_PRODUCER_TIMED_OUT_POSTING_DATA);
-						throw new ImageProducerTimedOutException(IMAGE_PRODUCER_TIMED_OUT_POSTING_DATA);
+				if (isClosed.get()) {
+					if (element instanceof PixelPackage || element instanceof ImageDescriptor) {
+						return false;
 					}
+				}
+				try {
+					if(queue.offer(element, waitTime, TimeUnit.MILLISECONDS)) {
+						return true;
+					}
+				} catch(InterruptedException e) {
+					// do nothing, we'll iterate again and other offer (again) or abort
+				}
+
+				waitTime = queueTimeoueMillis - (System.currentTimeMillis() - start);
+				if (waitTime < 0 && !isClosed.get())  {
+					close(IMAGE_PRODUCER_TIMED_OUT_POSTING_DATA, true);
+					throw new ImageProducerTimedOutException(IMAGE_PRODUCER_TIMED_OUT_POSTING_DATA);
 				}
 			}
 		}
@@ -322,42 +329,48 @@ public class ImagePixelIterator<T>
 
 		private void _setPixels(int x, int y, int w, int h, ColorModel model,
 				Object pixels, int offset, int scanSize) {
-			if (closed)
+			if (isClosed.get())
 				return;
 
-			initialize(model);
+			Thread currentThread = Thread.currentThread();
+			pixelProductionThreads.add(currentThread);
+			try {
+				initialize(model);
 
-			if (buffer != null) {
-				PixelIterator iter = new ArrayPixelIterator(pixels,
-						w, h, offset, scanSize, ColorModelUtils.getBufferedImageType(model));
-				iter = pixelType.createPixelIterator(iter);
-				while (!iter.isDone()) {
-					iter.next(buffer, (y * imgWidth + x) * pixelType.getSampleCount());
-					y++;
+				if (buffer != null) {
+					PixelIterator iter = new ArrayPixelIterator(pixels,
+							w, h, offset, scanSize, ColorModelUtils.getBufferedImageType(model));
+					iter = pixelType.createPixelIterator(iter);
+					while (!iter.isDone()) {
+						iter.next(buffer, (y * imgWidth + x) * pixelType.getSampleCount());
+						y++;
+					}
+					return;
 				}
-				return;
-			}
 
-			int modelType = ColorModelUtils.getBufferedImageType(model);
-			Object pixelPackageArray;
-			if (modelType == pixelType.getCode()) {
-				if (pixels instanceof int[] intArray) {
-					pixelPackageArray = intArray.clone();
-				} else if (pixels instanceof byte[] byteArray) {
-					pixelPackageArray = byteArray.clone();
+				int modelType = ColorModelUtils.getBufferedImageType(model);
+				Object pixelPackageArray;
+				if (modelType == pixelType.getCode()) {
+					if (pixels instanceof int[] intArray) {
+						pixelPackageArray = intArray.clone();
+					} else if (pixels instanceof byte[] byteArray) {
+						pixelPackageArray = byteArray.clone();
+					} else {
+						throw new IllegalStateException(pixels.getClass().getName());
+					}
 				} else {
-					throw new IllegalStateException(pixels.getClass().getName());
+					PixelIterator iter = new ArrayPixelIterator(pixels,
+							w, h, offset, scanSize, ColorModelUtils.getBufferedImageType(model));
+					iter = pixelType.createPixelIterator(iter);
+					pixelPackageArray = readAll(iter);
+					offset = 0;
+					scanSize = iter.getWidth() * pixelType.getSampleCount();
 				}
-			} else {
-				PixelIterator iter = new ArrayPixelIterator(pixels,
-						w, h, offset, scanSize, ColorModelUtils.getBufferedImageType(model));
-				iter = pixelType.createPixelIterator(iter);
-				pixelPackageArray = readAll(iter);
-				offset = 0;
-				scanSize = iter.getWidth() * pixelType.getSampleCount();
-			}
 
-			post(new PixelPackage(x, y, w, h, pixelPackageArray, offset, scanSize, pixelType));
+				post(new PixelPackage(x, y, w, h, pixelPackageArray, offset, scanSize, pixelType));
+			} finally {
+				pixelProductionThreads.remove(currentThread);
+			}
 		}
 
 		private Object readAll(PixelIterator iter) {
@@ -389,7 +402,7 @@ public class ImagePixelIterator<T>
 			try {
 				if (imgWidth == null || imgHeight == null) {
 					String error = "pixel data was sent but the dimensions were undefined";
-					close(error);
+					close(error, false);
 					return;
 				}
 
@@ -427,7 +440,7 @@ public class ImagePixelIterator<T>
 						break;
 					default:
 						String error = "unsupported iterator type: " + pixelType;
-						close(error);
+						close(error, false);
 						return;
 				}
 
@@ -447,21 +460,21 @@ public class ImagePixelIterator<T>
 
 		@Override
 		public void imageComplete(int status) {
-			if (closed)
+			if (isClosed.get())
 				return;
 
 			if (status == ImageConsumer.IMAGEERROR) {
-				close(IMAGE_CONSUMER_COMPLETE_VIA_ERROR);
+				close(IMAGE_CONSUMER_COMPLETE_VIA_ERROR, false);
 				return;
 			} else if (status == ImageConsumer.IMAGEABORTED) {
-				close(IMAGE_CONSUMER_COMPLETE_VIA_ABORTED);
+				close(IMAGE_CONSUMER_COMPLETE_VIA_ABORTED, false);
 				return;
 			}
 
 			if (isInitialized == false) {
 				String error = "imageComplete( " + status
 						+ " ) was called before setPixels(...)";
-				close(error);
+				close(error, false);
 				return;
 			}
 
@@ -469,7 +482,7 @@ public class ImagePixelIterator<T>
 				post(new PixelPackage(0, 0, imgWidth, imgHeight, buffer, 0, imgWidth * pixelType.getSampleCount(), pixelType));
 			}
 
-			close(Boolean.TRUE);
+			close(Boolean.TRUE, false);
 		}
 	}
 
@@ -841,13 +854,22 @@ public class ImagePixelIterator<T>
 		if (data instanceof String) {
 			String str = (String) data;
 			rowCtr = height;
+
+			if (PIXEL_ITERATOR_CLOSED.equals(str)) {
+				// This means someone called pixelIterator.close(). We're OK; there's else nothing to poll.
+				return;
+			}
+
 			throwException(str);
 		} else if (data instanceof Boolean) {
 			if (rowCtr == height && Boolean.TRUE.equals(data)) {
 				// we're finished, and we don't expect anymore incoming data
 				return;
 			}
+
+			// make sure isDone() returns true
 			rowCtr = height;
+
 			if (Boolean.FALSE.equals(data)) {
 				// this indicates our poll timed out; the producer may be dead/aborted/unreachable
 				throw new ImageProducerUnresponsiveException("the image consumer is unresponsive; y = " + rowCtr);
@@ -875,6 +897,9 @@ public class ImagePixelIterator<T>
 
 	@Override
 	public void close() {
-		consumer.close();
+		consumer.close(PIXEL_ITERATOR_CLOSED, true);
+
+		// make sure isDone() returns true
+		rowCtr = height;
 	}
 }

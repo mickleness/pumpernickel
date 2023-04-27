@@ -324,4 +324,30 @@ public class ImagePixelIteratorTest extends TestCase {
             ImagePixelIterator.TIMEOUT_MILLIS = DEFAULT_TIMEOUT;
         }
     }
+
+    /**
+     * This makes sure that if you take 100 ImagePixelIterators and close them:
+     * the daemon threads they spawned should closely almost instantly so new
+     * ImagePixelIterators can start almost instantly.
+     * <p>
+     * The ImagePixelIterator class relies on a ThreadPoolExecutor with a fixed
+     * max number of threads. We need to make sure as each ImagePixelIterator
+     * is closed those daemon threads quickly abort so other new ImagePixelIterators
+     * can start running new threads.
+     * </p>
+     */
+    @Test
+    public void testImagePixelIterator_closed100() {
+        long startTime = System.currentTimeMillis();
+        for (int a = 0; a < 100; a++) {
+            BufferedImage bi = new QBufferedImage(ScalingTest.createRainbowImage(6, 100, BufferedImage.TYPE_INT_RGB, true));
+            MyImageProducer producer = new MyImageProducer(bi, new ImageType[]{ImageType.INT_ARGB}, PixelOrder.SINGLE_PASS_TOP_DOWN_LEFT_RIGHT_COMPLETE_SCANLINES, CompletionType.SUCCESS);
+            ImagePixelIterator iter = new ImagePixelIterator(Toolkit.getDefaultToolkit().createImage(producer), null);
+            iter.close();
+            assertTrue(iter.isDone());
+        }
+        long endTime = System.currentTimeMillis();
+        long elapsed = startTime - endTime;
+        assertTrue(elapsed < 200);
+    }
 }
