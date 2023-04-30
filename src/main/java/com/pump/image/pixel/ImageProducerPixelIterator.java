@@ -74,16 +74,6 @@ class ImageProducerPixelIterator<T>
 	}
 
 	/**
-	 * This manages the threads use start ImageProducer production in.
-	 * TODO: remove executor, always create daemon thread?
-	 */
-	static ThreadPoolExecutor PRODUCTION_EXECUTOR = new ThreadPoolExecutor(0, 6,
-			20L,TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
-	static {
-		PRODUCTION_EXECUTOR.allowCoreThreadTimeOut(true);
-	}
-
-	/**
 	 * The number of milliseconds before push/pull operations between threads timeout.
 	 */
 	public static long TIMEOUT_MILLIS = 10_000;
@@ -504,6 +494,8 @@ class ImageProducerPixelIterator<T>
 		}
 	}
 
+	private static int THREAD_CTR = 0;
+
 	final int width, height;
 	final ImageType type;
 	final boolean isOptimized;
@@ -528,25 +520,21 @@ class ImageProducerPixelIterator<T>
 		consumer = new Consumer(imageProducer, requestedOutputType, TIMEOUT_MILLIS);
 
 		// ImageProducer.startProduction often starts its own thread, but it's
-		// not required to. This *cannot* be a blocking call, so we must wrap it
-		// in a different thread to be safe.
+		// not required to. To be extra safe we're going to wrap the call to start
+		// production in a separate thread. Most of the time this is useless and
+		// this will instead activate *a different* thread (IIRC the Toolkit has
+		// a thread pool of 4 threads that help load images), but that's really out
+		// of our control.
+		//
+		// Note the BufferedImage's ImageProducer (the OffScreenImageSource)
+		// is NOT multithreaded; if somehow that is ever passed to this constructor:
+		// bad things (hopefully long timeouts) will happen. This class is intended
+		// to interact with ToolkitImages, though. There's a separate class/branch that
+		// should be in charge of BufferedImages.
 
-		Semaphore startedProductionSemaphore = new Semaphore(1);
-		startedProductionSemaphore.acquireUninterruptibly();
-		Runnable productionRunnable = new Runnable() {
-			public void run() {
-				startedProductionSemaphore.release();
-
-				// we don't know if startProduction(..) is going to launch
-				// a new thread or not.
-				imageProducer.startProduction(consumer);
-			}
-		};
-		PRODUCTION_EXECUTOR.execute(productionRunnable);
-
-		// don't start the clock on our timeout window until
-		// we're sure our Runnable had a chance to start:
-		startedProductionSemaphore.acquireUninterruptibly();
+		Runnable productionRunnable = () -> imageProducer.startProduction(consumer);
+		Thread thread = new Thread(productionRunnable, "ImageProducerPixelIterator-thread-"+(THREAD_CTR++));
+		thread.start();
 
 		Object data = poll(consumer.queue, 100_000, false);
 		if (data instanceof ImageDescriptor) {
