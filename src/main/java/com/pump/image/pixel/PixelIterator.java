@@ -74,7 +74,7 @@ public interface PixelIterator<T> extends AutoCloseable {
 		 *             If the BufferedImage is larger than this PixelIterator's data, the extra pixels will
 		 *             not be modified. If it is smaller: then an exception is thrown.
 		 */
-		default QBufferedImage createBufferedImage(BufferedImage dest) {
+		default QBufferedImage toBufferedImage(BufferedImage dest) {
 			try (PixelIterator i = createPixelIterator()) {
 				return BufferedImageIterator.writeToImage(i, dest);
 			}

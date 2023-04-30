@@ -118,7 +118,7 @@ public class ImagePixelIterator<T> implements PixelIterator<T> {
         } else if (image instanceof BufferedImage) {
             return new QBufferedImage( (BufferedImage) image);
         }
-        return new ImagePixelIterator.Source(image, imageType, errorDescription).createBufferedImage(null);
+        return new ImagePixelIterator.Source(image, imageType, errorDescription).toBufferedImage(null);
     }
 
     public static QBufferedImage createBufferedImage(URL resource) {

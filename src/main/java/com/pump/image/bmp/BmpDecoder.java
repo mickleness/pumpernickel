@@ -63,7 +63,7 @@ public class BmpDecoder {
 		try {
 			// create a one-time Source just for this method:
 			InputStreamSource src = () -> in;
-			return new BmpDecoderIterator.Source(src).createBufferedImage(dest);
+			return new BmpDecoderIterator.Source(src).toBufferedImage(dest);
 		} catch(RuntimeException e) {
 			if (e.getCause() instanceof BmpHeaderException)
 				return null;
