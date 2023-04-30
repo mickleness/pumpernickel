@@ -25,6 +25,9 @@ import java.util.Objects;
  */
 public class ImagePixelIterator<T> implements PixelIterator<T> {
 
+    /**
+     * This creates ImagePixelIterator based on an Image.
+     */
     public static class Source<T> implements PixelIterator.Source<T> {
         private final Image image;
         private final ImageType type;
@@ -33,6 +36,13 @@ public class ImagePixelIterator<T> implements PixelIterator<T> {
 
         private String errorDescriptor;
 
+        /**
+         * Create a Source based on a File.
+         *
+         * @param file the file to create an Image for.
+         * @param imageType an optional ImageType. If non-null then the PixelIterators this creates
+         *                  are guaranteed to use this image type.
+         */
         public Source(File file, ImageType imageType) {
             this( Toolkit.getDefaultToolkit().createImage(file.getAbsolutePath()), imageType, file.getAbsolutePath());
             // I would like to (optionally) add meta data from Files and URLs too
@@ -42,10 +52,24 @@ public class ImagePixelIterator<T> implements PixelIterator<T> {
             // So maybe someday I'll get to that. Later.
         }
 
+        /**
+         * Create a Source based on a URL.
+         *
+         * @param url the URL to create an Image for.
+         * @param imageType an optional ImageType. If non-null then the PixelIterators this creates
+         *                  are guaranteed to use this image type.
+         */
         public Source(URL url, ImageType imageType) {
             this( Toolkit.getDefaultToolkit().createImage(url), imageType, url.toString());
         }
 
+        /**
+         * Create a Source based on an Image.
+         *
+         * @param image the Image this creates ImagePixelIterators for.
+         * @param imageType an optional ImageType. If non-null then the PixelIterators this creates
+         *                  are guaranteed to use this image type.
+         */
         public Source(Image image, ImageType imageType) {
             this(image, imageType, null);
         }
@@ -186,6 +210,15 @@ public class ImagePixelIterator<T> implements PixelIterator<T> {
     protected final Image image;
     protected final boolean flushImageOnClose;
 
+    /**
+     * Create a new ImagePixelIterator.
+     * <p>
+     * This object will never call {@link Image#flush()}. Its image type will match the type of the incoming
+     * pixel data.
+     * </p>
+     *
+     * @param image the Image to iterate over.
+     */
     public ImagePixelIterator(Image image) {
         this(image, null, false, null);
     }
