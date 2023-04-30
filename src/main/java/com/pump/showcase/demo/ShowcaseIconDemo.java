@@ -42,8 +42,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.pump.icon.IconUtils;
-import com.pump.image.pixel.BufferedImageIterator;
-import com.pump.image.pixel.PixelIterator;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.LabelCellRenderer;
 import com.pump.swing.ContextualMenuHelper;
@@ -133,7 +132,7 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 
 		private void add(String id, BufferedImage img) {
 			for (ShowcaseIcon s : icons) {
-				if (s.matchesImage(img)) {
+				if (ImagePixelIterator.equalPixels(s.img, img)) {
 					s.ids.add(id);
 					return;
 				}
@@ -155,39 +154,6 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 			Objects.requireNonNull(id);
 			this.img = img;
 			ids.add(id);
-		}
-
-		public boolean matchesImage(BufferedImage other) {
-			if (img.getType() != other.getType()
-					|| img.getWidth() != other.getWidth()
-					|| img.getHeight() != other.getHeight())
-				return false;
-			BufferedImageIterator i1 = BufferedImageIterator.create(img);
-			BufferedImageIterator i2 = BufferedImageIterator.create(other);
-			if (i1.isByte()) {
-				PixelIterator<byte[]> b1 = (PixelIterator<byte[]>) i1;
-				PixelIterator<byte[]> b2 = (PixelIterator<byte[]>) i2;
-				byte[] row1 = new byte[b1.getWidth() * b1.getPixelSize()];
-				byte[] row2 = new byte[b2.getWidth() * b2.getPixelSize()];
-				while (!b1.isDone()) {
-					b1.next(row1, 0);
-					b2.next(row2, 0);
-					if (!Arrays.equals(row1, row2))
-						return false;
-				}
-			} else {
-				PixelIterator<int[]> b1 = (PixelIterator<int[]>) i1;
-				PixelIterator<int[]> b2 = (PixelIterator<int[]>) i2;
-				int[] row1 = new int[b1.getWidth() * b1.getPixelSize()];
-				int[] row2 = new int[b2.getWidth() * b2.getPixelSize()];
-				while (!b1.isDone()) {
-					b1.next(row1, 0);
-					b2.next(row2, 0);
-					if (!Arrays.equals(row1, row2))
-						return false;
-				}
-			}
-			return true;
 		}
 
 		public Icon getImageIcon(Dimension maxConstrainingSize) {

@@ -120,7 +120,7 @@ public class ScalingTest extends TestCase {
 		int skyBlueCount;
 
 		RainbowColorProfile(BufferedImage bi) {
-			PixelIterator iter = ImageType.INT_RGB.createPixelIterator(new ImagePixelIterator(bi, null));
+			PixelIterator iter = ImageType.INT_RGB.createPixelIterator(new ImagePixelIterator(bi));
 			int[] row = new int[bi.getWidth()];
 			while (!iter.isDone()) {
 				iter.next(row, 0);

@@ -21,9 +21,29 @@ import java.util.Objects;
  * <p>
  * You cannot directly instantiate this class: use one of the static
  * <code>get(...)</code> methods to create <code>BufferedImageIterators</code>.
- *
  */
-public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
+abstract class BufferedImageIterator<T> implements PixelIterator<T> {
+
+	/**
+	 * Return true if we a given BufferedImage type is supported.
+	 *
+	 * @param type a BufferedImage.TYPE constant
+	 */
+	static boolean isSupportedType(int type) {
+		switch (type) {
+			case BufferedImage.TYPE_INT_ARGB:
+			case BufferedImage.TYPE_INT_ARGB_PRE:
+			case BufferedImage.TYPE_INT_BGR:
+			case BufferedImage.TYPE_INT_RGB:
+			case BufferedImage.TYPE_3BYTE_BGR:
+			case BufferedImage.TYPE_4BYTE_ABGR:
+			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
+			case BufferedImage.TYPE_BYTE_GRAY:
+			case BufferedImage.TYPE_BYTE_INDEXED:
+				return true;
+		}
+		return false;
+	}
 
 	/**
 	 * This is a PixelIteratorSource for BufferedImages.
@@ -107,7 +127,6 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	 * 			  then a new QBufferedImage wrapper is created that points to the same underlying raster.
 	 */
 	public static QBufferedImage writeToImage(PixelIterator<?> srcIter, BufferedImage dest, int x, int y) {
-		int type = srcIter.getType();
 
 		int w = srcIter.getWidth();
 		int h = srcIter.getHeight();
@@ -115,9 +134,8 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		QBufferedImage returnValue;
 
 		if (dest != null) {
-			if (dest.getType() != type)
-				throw new IllegalArgumentException("types mismatch ("
-						+ dest.getType() + "!=" + type + ")");
+			if (dest.getType() != srcIter.getType())
+				srcIter = ImageType.get(dest.getType()).createPixelIterator(srcIter);
 			if (dest.getWidth() < x + w || dest.getHeight() < y + h)
 				throw new IllegalArgumentException("size mismatch: "
 						+ dest.getWidth() + "x" + dest.getHeight()
@@ -133,6 +151,7 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			returnValue = new QBufferedImage(w + x, h + y, BufferedImage.TYPE_BYTE_INDEXED,
 					indexModel);
 		} else {
+			int type = srcIter.getType();
 			type = getBufferedImageType(type);
 			srcIter = ImageType.get(type).createPixelIterator(srcIter);
 			returnValue = new QBufferedImage(w + x, h + y, type);

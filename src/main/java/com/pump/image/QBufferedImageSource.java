@@ -1,6 +1,6 @@
 package com.pump.image;
 
-import com.pump.image.pixel.BufferedImageIterator;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.PixelIterator;
 
@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * This is loosely modeled after the sun.awt.image.OffScreenImageSource, but it includes a few changes. Note these
- * changes are only activated if the BufferedImage is one of the image types supported by {@link com.pump.image.pixel.BufferedImageIterator}.
+ * changes are only activated if the BufferedImage is an int or byte-backed pixel type.
  * If the image is unsupported we fall back to the BufferedImage's default ImageProducer. The improvements/changes include:
  * <ul><li>This class calls {@link ImageConsumer#setHints(int)} before sending pixels.</li>
  * <li>This resolves <a href="https://bugs.openjdk.org/browse/JDK-4200096?jql=status%20%3D%20Open%20AND%20text%20~%20%22OffScreenImageSource%22%20ORDER%20BY%20priority%20DESC">JDK-4200096</a></li>
@@ -40,23 +40,17 @@ public class QBufferedImageSource implements ImageProducer {
     public void addConsumer(ImageConsumer consumer) {
         consumers.add(consumer);
 
-        PixelIterator<?> pixelIter = null;
-        ImageType<?> iterType = null;
-        try {
-            pixelIter = BufferedImageIterator.create(image);
-            iterType = ImageType.get(pixelIter.getType());
-        } catch(RuntimeException e) {
-            // this means the BufferedImage isn't supported (yet) by BufferedImageIterator,
-            // so we'll use our backup ImageProducer
-        }
-        if (pixelIter != null && iterType != null) {
-            produce(consumer, pixelIter, iterType);
-        } else {
-            backupImageProducer.addConsumer(consumer);
-            try {
-                backupImageProducer.startProduction(consumer);
-            } finally {
-                backupImageProducer.removeConsumer(consumer);
+        try (PixelIterator<?> pixelIter = new ImagePixelIterator(image)) {
+            ImageType<?> iterType = ImageType.get(pixelIter.getType());
+            if (pixelIter != null && iterType != null) {
+                produce(consumer, pixelIter, iterType);
+            } else {
+                backupImageProducer.addConsumer(consumer);
+                try {
+                    backupImageProducer.startProduction(consumer);
+                } finally {
+                    backupImageProducer.removeConsumer(consumer);
+                }
             }
         }
     }

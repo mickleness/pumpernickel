@@ -10,9 +10,10 @@
  */
 package com.pump.image.pixel;
 
+import com.pump.image.QBufferedImage;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 /**
  * This iterates over an image as a series of pixel rows.
@@ -67,10 +68,15 @@ public interface PixelIterator<T> extends AutoCloseable {
 
 		/**
 		 * Create a BufferedImage using this Source.
+		 *
+		 * @param dest if non-null then the image data is stored in this image.
+		 *             If necessary the image data will be converted to this BufferedImage's pixel format.
+		 *             If the BufferedImage is larger than this PixelIterator's data, the extra pixels will
+		 *             not be modified. If it is smaller: then an exception is thrown.
 		 */
-		default BufferedImage createBufferedImage() {
+		default QBufferedImage createBufferedImage(BufferedImage dest) {
 			try (PixelIterator i = createPixelIterator()) {
-				return BufferedImageIterator.writeToImage(i, null);
+				return BufferedImageIterator.writeToImage(i, dest);
 			}
 		}
 	}

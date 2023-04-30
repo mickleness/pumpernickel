@@ -37,7 +37,7 @@ public class BmpComparison {
 
             @Override
             public BufferedImage decode(File file) throws Exception {
-                return BmpDecoder.read(file);
+                return BmpDecoder.read(file, null);
             }
         };
 

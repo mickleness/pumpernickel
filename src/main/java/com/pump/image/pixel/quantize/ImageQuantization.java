@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 
 import com.pump.image.QBufferedImage;
-import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.IndexedBytePixelIterator;
 
 /**
@@ -194,7 +193,10 @@ public abstract class ImageQuantization {
 				BufferedImage.TYPE_BYTE_INDEXED, icm);
 		byte[] row = new byte[width];
 		try (IndexedBytePixelIterator iter = createImageData(source, colorLUT)) {
-			BufferedImageIterator.writeToImage(iter, bi);
+			for (int y = 0; y < height; y++) {
+				iter.next(row, 0);
+				bi.getRaster().setDataElements(0, y, width, 1, row);
+			}
 		}
 		return bi;
 	}

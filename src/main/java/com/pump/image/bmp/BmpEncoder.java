@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.PixelIterator;
 
@@ -24,7 +26,7 @@ import com.pump.image.pixel.PixelIterator;
  * 24-bit or 32-bit depending on whether the source image is opaque.
  * <p>
  * These methods require a <code>java.awt.image.BufferedImage</code>. If you
- * only have a <code>java.awt.Image</code>: you can use the {@link com.pump.image.pixel.ImagePixelIterator}
+ * only have a <code>java.awt.Image</code>: you can use the {@link ImagePixelIterator}
  * to convert a plain <code>Image</code> to a <code>BufferedImage</code>.
  * </p>
  */

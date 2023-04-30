@@ -10,7 +10,7 @@
  */
 package com.pump.image.pixel.quantize;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.pump.image.pixel.BufferedImageIterator;
+import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.PixelIterator;
 
@@ -526,8 +526,8 @@ public class ColorSet implements Serializable {
 	 * @param i
 	 *            the image to process.
 	 */
-	public void addColors(BufferedImage i) {
-		addColors(BufferedImageIterator.create(i));
+	public void addColors(Image i) {
+		addColors(new ImagePixelIterator(i));
 	}
 
 	/**

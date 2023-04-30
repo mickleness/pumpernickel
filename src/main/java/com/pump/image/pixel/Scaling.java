@@ -521,21 +521,21 @@ public class Scaling {
 				BufferedImage bi = (BufferedImage) image;
 				srcIter = BufferedImageIterator.create(bi);
 			} else if (image != null) {
-				srcIter = new ImagePixelIterator(image, null);
+				srcIter = new ImagePixelIterator(image);
 			} else if (imageFile != null) {
 				QBufferedImage scaledEmbeddedThumbnail = getScaledEmbeddedThumbnail(imageFile.getName(), new FileInputStreamSource(imageFile));
 				if (scaledEmbeddedThumbnail != null)
 					return scaledEmbeddedThumbnail;
 
 				flushableImage = Toolkit.getDefaultToolkit().createImage(imageFile.getAbsolutePath());
-				srcIter = new ImagePixelIterator(flushableImage, null);
+				srcIter = new ImagePixelIterator(flushableImage);
 			} else if (imageURL != null) {
 				QBufferedImage scaledEmbeddedThumbnail = getScaledEmbeddedThumbnail(imageURL.getPath(), new URLInputStreamSource(imageURL));
 				if (scaledEmbeddedThumbnail != null)
 					return scaledEmbeddedThumbnail;
 
 				flushableImage = Toolkit.getDefaultToolkit().createImage(imageURL);
-				srcIter = new ImagePixelIterator(flushableImage, null);
+				srcIter = new ImagePixelIterator(flushableImage);
 			} else {
 				// our constructors should safeguard us from this ever happening
 				throw new IllegalStateException();
@@ -638,8 +638,9 @@ public class Scaling {
 		}
 
 		try (InputStream in = inSrc.createInputStream()) {
-			PixelIterator iter = BmpDecoderIterator.get(in);
-			return scaleImage(iter);
+			try (PixelIterator iter = BmpDecoderIterator.get(in)) {
+				return scaleImage(iter);
+			}
 		}
 	}
 }
