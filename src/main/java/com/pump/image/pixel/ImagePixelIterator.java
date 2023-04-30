@@ -35,12 +35,15 @@ public class ImagePixelIterator<T> implements PixelIterator<T> {
 
         public Source(File file, ImageType imageType) {
             this( Toolkit.getDefaultToolkit().createImage(file.getAbsolutePath()), imageType, file.getAbsolutePath());
-            // TODO: support meta data
+            // I would like to (optionally) add meta data from Files and URLs too
+            // (for ex: timestamps, comments, etc.). Any metadata could be added
+            // as a property in a QBufferedImage.
+            // ... but: I'd be lying if I said I had a real use case for that presently.
+            // So maybe someday I'll get to that. Later.
         }
 
         public Source(URL url, ImageType imageType) {
             this( Toolkit.getDefaultToolkit().createImage(url), imageType, url.toString());
-            // TODO: support meta data
         }
 
         public Source(Image image, ImageType imageType) {
