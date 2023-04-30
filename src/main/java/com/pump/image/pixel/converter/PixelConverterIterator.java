@@ -23,6 +23,8 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
 
     private IndexColorModelLUT colorModel;
 
+    private boolean isClosed = false;
+
     /**
      * This may be null for IndexColorModels
      */
@@ -74,12 +76,19 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
 
     @Override
     public void skip() {
+        if (isClosed)
+            throw new ClosedException();
         src.skip();
         rowCtr++;
+        if (isDone())
+            close();
     }
 
     @Override
     public void next(T dest, int destOffset) {
+        if (isClosed)
+            throw new ClosedException();
+
         Object srcArray = null;
         if (canWriteSrcToDest) {
             int destSize = Array.getLength(dest);
@@ -160,5 +169,15 @@ public class PixelConverterIterator<T> implements PixelIterator<T> {
         }
 
         rowCtr++;
+
+        if (isDone())
+            close();
+    }
+
+    @Override
+    public void close() {
+        isClosed = true;
+        rowCtr = src.getHeight();
+        src.close();
     }
 }

@@ -17,12 +17,34 @@ import java.util.List;
 /**
  * This iterates over an image as a series of pixel rows.
  * <p>
- * This is similar to an ImageProducer, except this has a much stricter
+ * This is similar to an ImageProducer, except this has a stricter
  * contract: all pixel data must be delivered in rows. And the pixel
  * data must be either int arrays or byte arrays.
  * </p>
  */
-public interface PixelIterator<T> {
+public interface PixelIterator<T> extends AutoCloseable {
+
+	/**
+	 * This is thrown to indicate someone is attempting to interact with a PixelIterator after
+	 * {@link #close()} has been called.
+	 */
+	class ClosedException extends RuntimeException {
+
+	}
+
+	/**
+	 * The {@link #close()} method may wrap a more serious Exception
+	 * in this RuntimeException. Usually (for Images / BufferedImages)
+	 * {@link #close()} doesn't throw an exception; the only exceptions come
+	 * from more fringe-ish use cases like reading a BMP directly
+	 * from an InputStream.
+	 */
+	class ClosingException extends RuntimeException {
+
+		public ClosingException(Exception e) {
+			super(e);
+		}
+	}
 
 	/**
 	 * This produces a PixelIterator. The same source may be used to
@@ -47,7 +69,9 @@ public interface PixelIterator<T> {
 		 * Create a BufferedImage using this Source.
 		 */
 		default BufferedImage createBufferedImage() {
-			return BufferedImageIterator.writeToImage(createPixelIterator(), null);
+			try (PixelIterator i = createPixelIterator()) {
+				return BufferedImageIterator.writeToImage(i, null);
+			}
 		}
 	}
 
@@ -115,7 +139,11 @@ public interface PixelIterator<T> {
 	}
 
 	/**
-	 * Whether this iterator is finished or not
+	 * Return whether this iterator is finished or not. This will return true
+	 * if either of these conditions are met:
+	 * <ol><li>Each row of pixel data has been iterated over (either
+	 * by calling {@link #next(Object, int)} or {@link #skip()}</li>
+	 * <li>This iterator has been closed by calling {@link #close()}</li></ol>
 	 * 
 	 * @return <code>true</code> if there is no more pixel data to read.
 	 */
@@ -148,7 +176,7 @@ public interface PixelIterator<T> {
 	/**
 	 * Skips a row of pixel data.
 	 */
-	void skip();
+	void skip() throws ClosedException;
 
 	/**
 	 * Reads a row of pixel data.
@@ -156,5 +184,19 @@ public interface PixelIterator<T> {
 	 * @param dest
 	 *            the array to store the pixels in
 	 */
-	void next(T dest, int offset);
+	void next(T dest, int offset) throws ClosedException;
+
+	/**
+	 * Close/flush/dispose any resources associated with this iterator. Once this has been invoked then calling
+	 * {@link #next(Object, int)}, or {@link #skip()} will throw a {@link ClosedException}.
+	 * In the rare event that this method needs to throw an exception, it can throw a {@link ClosingException}.
+	 * <p>
+	 * When a PixelIterator finishes iterating over all rows (either by calling {@link #skip()} or
+	 * {@link #next(Object, int)} then it should automatically release any resources. This method
+	 * exists in case a caller wants to prematurely release resources <strong>without</strong>
+	 * iterating over all the pixel data.
+	 * </p>
+	 */
+	@Override
+	void close() throws ClosingException;
 }

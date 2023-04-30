@@ -38,7 +38,7 @@ import com.pump.io.URLInputStreamSource;
  * @see <a href="http://www.fileformat.info/format/bmp/egff.htm">Microsoft
  *      Windows Bitmap File Format Summary</a>
  */
-public class BmpDecoderIterator implements PixelIterator<byte[]>, AutoCloseable {
+public class BmpDecoderIterator implements PixelIterator<byte[]> {
 
 	/**
 	 * This {@link PixelIterator.Source} produces {@link BmpDecoderIterator BmpDecoderIterators} from a given URL.
@@ -278,11 +278,7 @@ public class BmpDecoderIterator implements PixelIterator<byte[]>, AutoCloseable 
 
 	private void checkComplete() {
 		if (isDone()) {
-			try {
-				close();
-			} catch(IOException e) {
-				throw new RuntimeException(e);
-			}
+			close();
 		}
 	}
 
@@ -319,10 +315,16 @@ public class BmpDecoderIterator implements PixelIterator<byte[]>, AutoCloseable 
 	}
 
 	@Override
-	public void close() throws IOException {
+	public void close() {
 		if (!closed) {
 			closed = true;
-			in.close();
+			try {
+				in.close();
+			} catch(RuntimeException e) {
+				throw e;
+			} catch(Exception e) {
+				throw new ClosingException(e);
+			}
 			in = null;
 		}
 	}

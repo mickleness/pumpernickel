@@ -40,6 +40,8 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 		int[][] diffusionR, diffusionG, diffusionB;
 		int z = kernel[0].length / 2;
 
+		private boolean isClosed = false;
+
 		ErrorDiffusionIndexedBytePixelIterator(BufferedImage source,
 				ColorLUT lut) {
 			super(source, lut);
@@ -51,6 +53,7 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 			diffusionB = new int[kernel.length][iter.getWidth()];
 		}
 
+		@Override
 		public void next(byte[] dest, int offset) {
 			iter.next(incomingRow, 0);
 			if (isOpaque()) {
@@ -144,15 +147,23 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 			}
 
 			y++;
+
+			if (isDone())
+				close();
 		}
 
+		@Override
 		public boolean isDone() {
 			return y == getHeight();
 		}
 
+		@Override
 		public void skip() {
 			iter.skip();
 			y++;
+
+			if (isDone())
+				close();
 		}
 
 		private void iterateDiffusionData(int[][] data) {
@@ -162,6 +173,12 @@ public class ErrorDiffusionImageQuantization extends ImageQuantization {
 			}
 			data[data.length - 1] = swap;
 			Arrays.fill(data[data.length - 1], 0);
+		}
+
+		@Override
+		public void close() {
+			isClosed = true;
+			iter.close();
 		}
 	}
 

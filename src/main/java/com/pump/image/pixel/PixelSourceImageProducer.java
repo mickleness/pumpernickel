@@ -43,36 +43,36 @@ public class PixelSourceImageProducer implements ImageProducer {
                 int height = imageProducer.pixelSource.getHeight();
                 multiConsumer.setDimensions(width, height);
 
-                PixelIterator iterator = imageProducer.pixelSource.createPixelIterator();
+                try (PixelIterator iterator = imageProducer.pixelSource.createPixelIterator()) {
+                    int hints = ImageConsumer.COMPLETESCANLINES + ImageConsumer.SINGLEPASS + ImageConsumer.SINGLEFRAME;
+                    if (iterator.isTopDown())
+                        hints += ImageConsumer.TOPDOWNLEFTRIGHT;
 
-                int hints = ImageConsumer.COMPLETESCANLINES + ImageConsumer.SINGLEPASS + ImageConsumer.SINGLEFRAME;
-                if (iterator.isTopDown())
-                    hints += ImageConsumer.TOPDOWNLEFTRIGHT;
+                    multiConsumer.setHints(hints);
 
-                multiConsumer.setHints(hints);
+                    ImageType type = ImageType.get(iterator.getType());
+                    ColorModel colorModel = type.getColorModel();
 
-                ImageType type = ImageType.get(iterator.getType());
-                ColorModel colorModel = type.getColorModel();
+                    multiConsumer.setColorModel(colorModel);
 
-                multiConsumer.setColorModel(colorModel);
+                    int pixelSize = iterator.getPixelSize();
 
-                int pixelSize = iterator.getPixelSize();
-
-                int y = iterator.isTopDown() ? 0 : height - 1;
-                int yIncr = iterator.isTopDown() ? 1 : -1;
-                if (iterator.isInt()) {
-                    int[] row = new int[iterator.getWidth() * pixelSize];
-                    for (int k = 0; k < height; k++) {
-                        iterator.next(row, 0);
-                        multiConsumer.setPixels(0, y, width, 1, colorModel, row, 0, width * pixelSize);
-                        y += yIncr;
-                    }
-                } else {
-                    byte[] row = new byte[iterator.getWidth() * iterator.getPixelSize()];
-                    for (int k = 0; k < height; k++) {
-                        iterator.next(row, 0);
-                        multiConsumer.setPixels(0, y, width, 1, colorModel, row, 0, width * pixelSize);
-                        y += yIncr;
+                    int y = iterator.isTopDown() ? 0 : height - 1;
+                    int yIncr = iterator.isTopDown() ? 1 : -1;
+                    if (iterator.isInt()) {
+                        int[] row = new int[iterator.getWidth() * pixelSize];
+                        for (int k = 0; k < height; k++) {
+                            iterator.next(row, 0);
+                            multiConsumer.setPixels(0, y, width, 1, colorModel, row, 0, width * pixelSize);
+                            y += yIncr;
+                        }
+                    } else {
+                        byte[] row = new byte[iterator.getWidth() * iterator.getPixelSize()];
+                        for (int k = 0; k < height; k++) {
+                            iterator.next(row, 0);
+                            multiConsumer.setPixels(0, y, width, 1, colorModel, row, 0, width * pixelSize);
+                            y += yIncr;
+                        }
                     }
                 }
                 exitCode = ImageConsumer.STATICIMAGEDONE;

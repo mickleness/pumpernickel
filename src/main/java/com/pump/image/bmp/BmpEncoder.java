@@ -24,7 +24,7 @@ import com.pump.image.pixel.PixelIterator;
  * 24-bit or 32-bit depending on whether the source image is opaque.
  * <p>
  * These methods require a <code>java.awt.image.BufferedImage</code>. If you
- * only have a <code>java.awt.Image</code>: you can use the {@link com.pump.image.ImageLoader}
+ * only have a <code>java.awt.Image</code>: you can use the {@link com.pump.image.pixel.ImagePixelIterator}
  * to convert a plain <code>Image</code> to a <code>BufferedImage</code>.
  * </p>
  */
@@ -65,7 +65,9 @@ public class BmpEncoder {
 		} else {
 			i = ImageType.BYTE_BGRA.createPixelIterator(image);
 		}
-		write(out, i, closeStreamOnCompletion);
+		try (PixelIterator i2 = i) {
+			write(out, i2, closeStreamOnCompletion);
+		}
 	}
 
 	protected static final int HEADER_SIZE = 26;

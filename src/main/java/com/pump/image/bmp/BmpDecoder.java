@@ -205,20 +205,22 @@ public class BmpDecoder {
 	 */
 	public static BufferedImage createThumbnail(InputStream bmp,
 												Dimension maxSize) throws IOException {
-		PixelIterator i = BmpDecoderIterator.get(bmp);
-		int srcW = i.getWidth();
-		int srcH = i.getHeight();
+		try (PixelIterator i = BmpDecoderIterator.get(bmp)) {
+			int srcW = i.getWidth();
+			int srcH = i.getHeight();
 
-		float widthRatio = ((float) maxSize.width) / ((float) srcW);
-		float heightRatio = ((float) maxSize.height) / ((float) srcH);
-		float ratio = Math.min(widthRatio, heightRatio);
+			float widthRatio = ((float) maxSize.width) / ((float) srcW);
+			float heightRatio = ((float) maxSize.height) / ((float) srcH);
+			float ratio = Math.min(widthRatio, heightRatio);
 
-		if (ratio < 1) {
-			int scaledWidth = Math.max(1, Math.round(ratio * srcW));
-			int scaledHeight = Math.max(1, Math.round(ratio * srcH));
-			i = new ScalingIterator(i, scaledWidth, scaledHeight);
+			PixelIterator i2 = i;
+			if (ratio < 1) {
+				int scaledWidth = Math.max(1, Math.round(ratio * srcW));
+				int scaledHeight = Math.max(1, Math.round(ratio * srcH));
+				i2 = new ScalingIterator(i, scaledWidth, scaledHeight);
+			}
+			return BufferedImageIterator.writeToImage(i2, null);
 		}
-		return BufferedImageIterator.writeToImage(i, null);
 	}
 
 	/**
@@ -251,8 +253,10 @@ public class BmpDecoder {
 	 */
 	public static void createThumbnail(InputStream bmp, BufferedImage dest)
 			throws IOException {
-		PixelIterator i = BmpDecoderIterator.get(bmp);
-		i = new ScalingIterator(i, dest.getWidth(), dest.getHeight());
-		BufferedImageIterator.writeToImage(i, dest);
+		try (PixelIterator i = BmpDecoderIterator.get(bmp)) {
+			try (PixelIterator i2 = new ScalingIterator(i, dest.getWidth(), dest.getHeight())) {
+				BufferedImageIterator.writeToImage(i2, dest);
+			}
+		}
 	}
 }

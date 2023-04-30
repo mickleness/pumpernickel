@@ -22,6 +22,8 @@ public class ArrayPixelIterator<T> implements PixelIterator<T> {
 	final int width, height, scanSize;
 	final ImageType imageType;
 
+	private boolean isClosed = false;
+
 	/**
 	 * Create a ArrayPixelIterator.
 	 * 
@@ -100,14 +102,34 @@ public class ArrayPixelIterator<T> implements PixelIterator<T> {
 
 	@Override
 	public void skip() {
+		if (isClosed)
+			throw new ClosedException();
+
 		dataIndex += scanSize;
+
+		if (isDone())
+			close();
 	}
 
 	@Override
 	public void next(T dest, int offset) {
+		if (isClosed)
+			throw new ClosedException();
+
 		System.arraycopy(srcData, dataIndex, dest, offset, width * imageType.getSampleCount());
 		dataIndex += scanSize;
 		rowCtr++;
+
+		if (isDone())
+			close();
 	}
 
+	/**
+	 * The ArrayPixelIterator doesn't have any resources to close, but subsequent calls
+	 * to some methods may throw a ClosedException.
+	 */
+	@Override
+	public void close() {
+		isClosed = true;
+	}
 }

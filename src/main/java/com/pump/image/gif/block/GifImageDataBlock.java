@@ -67,25 +67,25 @@ public class GifImageDataBlock extends GifBlock {
 		int h = src.getHeight();
 
 		ColorLUT lut = new ColorLUT(colorModel);
-		IndexedBytePixelIterator iter = ImageQuantization.MOST_DIFFUSION
-				.createImageData(src, lut);
+		try (IndexedBytePixelIterator iter = ImageQuantization.MOST_DIFFUSION
+				.createImageData(src, lut)) {
 
-		byte[] block = new byte[w];
+			byte[] block = new byte[w];
 
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		int colorDepth = getColorDepth(colorModel);
-		minimumLZWCodeSize = colorDepth;
-		try {
-			LZWOutputStream out = new LZWOutputStream(bytes, colorDepth, false);
-			for (int y = 0; y < h; y++) {
-				iter.next(block, 0);
-				out.write(block);
+			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			int colorDepth = getColorDepth(colorModel);
+			minimumLZWCodeSize = colorDepth;
+			try {
+				LZWOutputStream out = new LZWOutputStream(bytes, colorDepth, false);
+				for (int y = 0; y < h; y++) {
+					iter.next(block, 0);
+					out.write(block);
+				}
+				out.close();
+				encodedData = bytes.toByteArray();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
-			out.close();
-			encodedData = bytes.toByteArray();
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
 		}
 	}
 

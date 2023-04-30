@@ -332,8 +332,9 @@ public class ImageType<T> implements Serializable {
      * because it avoids converting any pixel data.
      */
     public PixelIterator<T> createPixelIterator(BufferedImage bufferedImage) {
-        BufferedImageIterator<?> iter = BufferedImageIterator.create(bufferedImage);
-        return createPixelIterator(iter);
+        try (BufferedImageIterator<?> iter = BufferedImageIterator.create(bufferedImage)) {
+            return createPixelIterator(iter);
+        }
     }
 
     /**

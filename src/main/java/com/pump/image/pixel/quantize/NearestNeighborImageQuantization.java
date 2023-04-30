@@ -36,6 +36,8 @@ public class NearestNeighborImageQuantization extends ImageQuantization {
 		PixelIterator<int[]> iter;
 		protected int y = 0;
 
+		private boolean isClosed = false;
+
 		NearestNeighborIndexedBytePixelIterator(BufferedImage source,
 				ColorLUT lut) {
 			super(source, lut);
@@ -43,12 +45,23 @@ public class NearestNeighborImageQuantization extends ImageQuantization {
 			iter = ImageType.INT_ARGB.createPixelIterator(source);
 		}
 
+		@Override
 		public void skip() {
+			if (isClosed)
+				throw new ClosedException();
+
 			iter.skip();
 			y++;
+
+			if (isDone())
+				close();
 		}
 
+		@Override
 		public void next(byte[] dest, int offset) {
+			if (isClosed)
+				throw new ClosedException();
+
 			iter.next(incomingRow, 0);
 
 			if (isOpaque()) {
@@ -81,10 +94,21 @@ public class NearestNeighborImageQuantization extends ImageQuantization {
 				}
 			}
 			y++;
+
+			if (isDone())
+				close();
 		}
 
+		@Override
 		public boolean isDone() {
 			return y == getHeight();
+		}
+
+		@Override
+		public void close() {
+			isClosed = true;
+			y = getHeight();
+			iter.close();
 		}
 	}
 

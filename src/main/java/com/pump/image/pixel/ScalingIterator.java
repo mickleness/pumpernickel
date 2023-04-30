@@ -72,6 +72,8 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 	int dstY;
 	int srcY = 0;
 
+	private boolean isClosed = false;
+
 	class Row {
 		/**
 		 * This indicates the source row this Row object corresponds to. This is
@@ -693,12 +695,18 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 
 	@Override
 	public boolean isDone() {
+		if (isClosed)
+			throw new ClosedException();
+
 		boolean returnValue = dstY >= dstH;
 		return returnValue;
 	}
 
 	@Override
 	public void skip() {
+		if (isClosed)
+			throw new ClosedException();
+
 		srcY++;
 		if (isDone())
 			flush();
@@ -706,6 +714,8 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 
 	@Override
 	public void next(T row, int rowOffset) {
+		if (isClosed)
+			throw new ClosedException();
 
 		// This is an optimized case where there is no scaling.
 		// (why did someone use a ScalingIterator to NOT scale? Not sure,
@@ -992,5 +1002,12 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 	@Override
 	public String toString() {
 		return getClass().getSimpleName()+"[ image type = "+ImageType.toString(getType())+", width = " + getWidth() + ", height = "+ getHeight()+", isTopDown() = " + isTopDown() + ", src = " + srcIterator + "]";
+	}
+
+	@Override
+	public void close() {
+		isClosed = true;
+		flush();
+		srcIterator.close();
 	}
 }

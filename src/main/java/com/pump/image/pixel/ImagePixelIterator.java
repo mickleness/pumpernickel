@@ -38,7 +38,7 @@ import com.pump.image.QBufferedImage;
  * >Images: Scaling JPEGs and PNGs</a>
  */
 public class ImagePixelIterator<T>
-		implements PixelIterator<T>, AutoCloseable {
+		implements PixelIterator<T> {
 
 	/**
 	 * This exception is thrown if {@link ImageConsumer#imageComplete(int)} is called with {@link ImageConsumer#IMAGEERROR}.

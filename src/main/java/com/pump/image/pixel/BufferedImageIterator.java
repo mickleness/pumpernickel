@@ -303,6 +303,8 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	final int w, h;
 	int y;
 
+	boolean isClosed = false;
+
 	private BufferedImageIterator(BufferedImage bi, boolean topDown) {
 		this(bi, bi.getType(), topDown);
 	}
@@ -372,6 +374,9 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 		@Override
 		public void next(T dest, int offset) {
+			if (isClosed)
+				throw new ClosedException();
+
 			if (y >= h || y <= -1)
 				throw new RuntimeException("end of data reached");
 
@@ -391,6 +396,9 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			}
 
 			y += topDown ? 1 : -1;
+
+			if (isDone())
+				close();
 		}
 	}
 
@@ -422,6 +430,9 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 		@Override
 		public void next(T dest, int destOffset) {
+			if (isClosed)
+				throw new ClosedException();
+
 			System.arraycopy(srcData,
 					dataBufferOffset + scanline * (y + subimageY) + subimageX,
 					dest, destOffset, rowLength);
@@ -431,6 +442,9 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 			} else {
 				y--;
 			}
+
+			if (isDone())
+				close();
 		}
 	}
 
@@ -489,6 +503,9 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 	@Override
 	public void skip() {
+		if (isClosed)
+			throw new ClosedException();
+
 		if (topDown) {
 			if (y >= h)
 				throw new RuntimeException("end of data reached");
@@ -498,5 +515,18 @@ public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				throw new RuntimeException("end of data reached");
 			y--;
 		}
+
+		if (isDone())
+			close();
+	}
+
+	/**
+	 * There is no need to explicitly close a BufferedImageIterator. There is
+	 * nothing to close/cleanup. But once this is called: other methods
+	 * will throw CloseExceptions.
+	 */
+	@Override
+	public void close() {
+		isClosed = true;
 	}
 }

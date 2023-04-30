@@ -193,8 +193,9 @@ public abstract class ImageQuantization {
 		QBufferedImage bi = new QBufferedImage(width, height,
 				BufferedImage.TYPE_BYTE_INDEXED, icm);
 		byte[] row = new byte[width];
-		IndexedBytePixelIterator iter = createImageData(source, colorLUT);
-		BufferedImageIterator.writeToImage(iter, bi);
+		try (IndexedBytePixelIterator iter = createImageData(source, colorLUT)) {
+			BufferedImageIterator.writeToImage(iter, bi);
+		}
 		return bi;
 	}
 
