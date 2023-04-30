@@ -288,6 +288,14 @@ public class QBufferedImage extends BufferedImage
 		return new QBufferedImageSource(this, getProperties(this), super.getSource());
 	}
 
+	@Override
+	public QBufferedImage getScaledInstance(int width, int height, int hints) {
+		if ((hints & (SCALE_SMOOTH | SCALE_AREA_AVERAGING)) != 0) {
+			return Scaling.scale(this, new Dimension(width, height), null, null);
+		}
+		return ImagePixelIterator.createBufferedImage(super.getScaledInstance(width, height, hints));
+	}
+
 	///////// serialization:
 
 	/**
@@ -385,13 +393,5 @@ public class QBufferedImage extends BufferedImage
 			return replacementImage;
 		}
 		return this;
-	}
-
-	@Override
-	public QBufferedImage getScaledInstance(int width, int height, int hints) {
-		if ((hints & (SCALE_SMOOTH | SCALE_AREA_AVERAGING)) != 0) {
-			return Scaling.scale(this, new Dimension(width, height), null, null);
-		}
-		return ImagePixelIterator.createBufferedImage(super.getScaledInstance(width, height, hints));
 	}
 }
