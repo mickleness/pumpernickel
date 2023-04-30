@@ -16,7 +16,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * <li>This resolves <a href="https://bugs.openjdk.org/browse/JDK-4200096?jql=status%20%3D%20Open%20AND%20text%20~%20%22OffScreenImageSource%22%20ORDER%20BY%20priority%20DESC">JDK-4200096</a></li>
  * <li>This supports multithreaded production. The <code>OffScreenImageSource</code> is thread-safe because it
  * is synchronized, but it is synchronized in a way that only lets one thread receive pixels at a time.</li>
- * <li>This will produce pixel data in formats other than ARGB (to save time converting).</li>
  * <li></li></ul>
  */
 public class QBufferedImageSource implements ImageProducer {
