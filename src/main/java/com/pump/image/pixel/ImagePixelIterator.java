@@ -6,6 +6,7 @@ import com.pump.image.QBufferedImage;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.lang.ref.Cleaner;
 import java.net.URL;
 import java.util.Objects;
 
@@ -24,6 +25,27 @@ import java.util.Objects;
  * >Images: Scaling JPEGs and PNGs</a>
  */
 public class ImagePixelIterator<T> implements PixelIterator<T> {
+
+    /**
+     * This invokes {@link AutoCloseable#close()}.
+     */
+    private static class CloseAutoCloseableRunnable implements Runnable {
+        AutoCloseable c;
+
+        public CloseAutoCloseableRunnable(AutoCloseable c) {
+            this.c = Objects.requireNonNull(c);
+        }
+
+        public void run() {
+            try {
+                c.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static Cleaner CLEANER_CLOSE_DELEGATE = Cleaner.create();
 
     /**
      * This creates ImagePixelIterator based on an Image.
@@ -260,6 +282,13 @@ public class ImagePixelIterator<T> implements PixelIterator<T> {
 
         this.flushImageOnClose = flushImageOnClose;
         this.image = Objects.requireNonNull(image);
+
+        // Using a Cleaner to call delegate.close() is only really interested in ImageProducerPixelIterators.
+        // I originally tried putting similar logic exclusively in ImageProducerPixelIterator (where I wanted
+        // to close its inner Consumer if the ImageProducerPixelIterator itself was gc'ed), but for some reason
+        // that didn't work. Putting the Cleaner logic here does work, though. And since I never intend to
+        // create ImageProducerPixelIterator outside of ImagePixelIterators: this should be good enough.
+        CLEANER_CLOSE_DELEGATE.register(this, new CloseAutoCloseableRunnable(delegate));
     }
 
     @Override
