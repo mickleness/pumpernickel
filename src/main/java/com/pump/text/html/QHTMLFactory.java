@@ -18,6 +18,7 @@ import javax.swing.text.View;
 import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLEditorKit.HTMLFactory;
+import javax.swing.text.html.ImageView;
 
 import com.pump.text.html.css.image.CssUrlImageValue;
 import com.pump.text.html.view.BufferedImageView;
@@ -32,6 +33,17 @@ import com.pump.text.html.view.QParagraphView;
  * This is an enhanced HTMLFactory that produces certain specialized Views.
  */
 public class QHTMLFactory extends HTMLFactory {
+
+	static {
+		// see https://github.com/mickleness/pumpernickel/issues/103 :
+		// These two methods for an image to fully load. If we wait until there
+		// are already dozens of images queued in the ToolkitImage pipeline: then
+		// the EDT can freeze while it waits for a chance to load these.
+		// If we load them here in advance: the UI is responsive.
+		ImageView v = new ImageView(null);
+		v.getLoadingImageIcon();
+		v.getNoImageIcon();
+	}
 
 	@Override
 	public View create(Element elem) {
