@@ -45,7 +45,8 @@ class EventDispatchThreadProfilerListener implements Listener {
 
 	@Override
 	public void becameResponsive(Thread eventDispatchThread,
-			long lastSuccessfulPingMillis, long unresponsiveMillis) {
+			long unresponsiveMillis,
+			long lastSuccessfulPingMillis) {
 		synchronized (this) {
 			if (profiler != null) {
 				profiler.setActive(false);
