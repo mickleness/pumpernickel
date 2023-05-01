@@ -10,15 +10,7 @@
  */
 package com.pump.plaf;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.AffineTransform;
@@ -170,8 +162,8 @@ public class RoundTextFieldUI extends BasicTextFieldUI {
 		}
 
 		Rectangle editorRect = getVisibleEditorRect();
-		g2.setPaint(PlafPaintUtils.getVerticalGradient("roundTextField",
-				editorRect.height, focusPadding, gradientPositions,
+		g2.setPaint(new LinearGradientPaint(0, editorRect.height,
+				0, focusPadding, gradientPositions,
 				gradientColors));
 		g2.draw(path);
 

@@ -10,17 +10,7 @@
  */
 package com.pump.plaf;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.TexturePaint;
+import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -93,9 +83,6 @@ public class PlafPaintUtils {
 	 *            the number of pixels the outline should cover.
 	 * @param focusColor
 	 *            the color of the focus ring to paint
-	 * @param changeRenderingHints
-	 *            if true then the rendering hints will be modified, if false
-	 *            they will be left in tact
 	 */
 	public static void paintFocus(Graphics2D g, Shape shape, int pixelSize,
 			Color focusColor) {
@@ -176,68 +163,6 @@ public class PlafPaintUtils {
 				g.drawLine(x1 + a, y1, x2 + a, y2);
 			}
 		}
-	}
-
-	/** The table used to store vertical gradients. */
-	private static Map<String, TexturePaint> verticalGradients;
-
-	/**
-	 * Create a vertical gradient. This gradient is stored in a table and reused
-	 * throughout the rest of this session.
-	 * 
-	 * @param name
-	 *            an identifying key for this gradient (used to cache it).
-	 * @param height
-	 *            the height of the gradient
-	 * @param y
-	 *            the y offset of the gradient
-	 * @param positions
-	 *            the fractional positions of each color (between [0,1]).
-	 * @param colors
-	 *            one color for each position.
-	 * @return the vertical gradient.
-	 */
-	public synchronized static Paint getVerticalGradient(String name,
-			int height, int y, float[] positions, Color[] colors) {
-		if (verticalGradients == null) {
-			verticalGradients = new HashMap<String, TexturePaint>();
-		}
-
-		String key = name + " " + height + " " + y;
-		TexturePaint paint = verticalGradients.get(key);
-		if (paint == null) {
-			height = Math.max(height, 1); // before a component is laid out, it
-											// may be 0x0
-			int imageType = BufferedImage.TYPE_INT_RGB;
-			for (Color c : colors) {
-				if (c.getAlpha() < 255)
-					imageType = BufferedImage.TYPE_INT_ARGB;
-			}
-
-			BufferedImage bi = new BufferedImage(1, height, imageType);
-			int[] array = new int[height];
-			for (int a = 0; a < array.length; a++) {
-				float f = a;
-				f = f / ((array.length - 1));
-				boolean hit = false;
-				findMatch: for (int b = 1; b < positions.length; b++) {
-					if (f >= positions[b - 1] && f < positions[b]) {
-						float p = (f - positions[b - 1])
-								/ (positions[b] - positions[b - 1]);
-						array[a] = AnimationManager
-								.tween(colors[b - 1], colors[b], p).getRGB();
-						hit = true;
-						break findMatch;
-					}
-				}
-				if (!hit)
-					array[a] = colors[colors.length - 1].getRGB();
-			}
-			bi.getRaster().setDataElements(0, 0, 1, height, array);
-			paint = new TexturePaint(bi, new Rectangle(0, y, 1, height));
-			verticalGradients.put(key, paint);
-		}
-		return paint;
 	}
 
 	private static Map<String, TexturePaint> checkers;

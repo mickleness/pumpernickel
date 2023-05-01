@@ -10,13 +10,7 @@
  */
 package com.pump.plaf;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Paint;
+import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 
@@ -111,8 +105,7 @@ public class AquaColorWellUI extends ColorWellUI {
 			if (!selected) {
 				g.setColor(fill);
 			} else {
-				Paint paint = PlafPaintUtils.getVerticalGradient(
-						"aquaSelectedColorWellFill", height, y, new float[] {
+				Paint paint = new LinearGradientPaint(0, height, 0, y, new float[] {
 								0, 1 }, selectedFillGradient);
 				g.setPaint(paint);
 			}
@@ -137,11 +130,9 @@ public class AquaColorWellUI extends ColorWellUI {
 
 			// side shades:
 			if (!selected) {
-				g.setPaint(PlafPaintUtils.getVerticalGradient("aquaColorWell",
-						height, y, new float[] { 0, 1 }, normalGradient));
+				g.setPaint(new LinearGradientPaint(0, height, 0, y, new float[] { 0, 1 }, normalGradient));
 			} else {
-				g.setPaint(PlafPaintUtils.getVerticalGradient(
-						"aquaSelectedColorWell", height, y,
+				g.setPaint(new LinearGradientPaint(0, height, 0, y,
 						new float[] { 0, 1 }, selectedGradient));
 			}
 			g.drawLine(x + 1, y + 1, x + 1, y + height - 2);

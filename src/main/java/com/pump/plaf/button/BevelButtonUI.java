@@ -10,9 +10,7 @@
  */
 package com.pump.plaf.button;
 
-import java.awt.Color;
-import java.awt.Paint;
-import java.awt.Rectangle;
+import java.awt.*;
 
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
@@ -69,9 +67,9 @@ public class BevelButtonUI extends QButtonUI {
 		public Paint getStroke(ButtonState.Float state, Rectangle fillRect) {
 			if (fillRect == null)
 				return strokeColors[1];
-			return PlafPaintUtils.getVerticalGradient("bevelUI.border",
-					fillRect.height + 1, fillRect.y, borderWeights,
-					strokeColors);
+			return new LinearGradientPaint(0, fillRect.height + 1,
+					0, fillRect.y,
+					borderWeights, strokeColors);
 		}
 
 		@Override
