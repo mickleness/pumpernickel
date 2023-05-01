@@ -49,16 +49,17 @@ public class SquareButtonUI extends QButtonUI {
 		private Color[] darkestColors = new Color[] { new Color(0xFFB0B0B0),
 				new Color(0xFFB2B2B2), new Color(0xFFCBCBCB) };
 
+		private VerticalGradientMaker darkestFill = new VerticalGradientMaker(fillWeights, darkestColors, "squareUI.darker");
+		private VerticalGradientMaker normalFill = new VerticalGradientMaker(fillWeights, normalColors, "squareUI.normal");
+
 		@Override
-		public Paint getDarkestFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("square.darkest",
-					fillRect.height, fillRect.y, fillWeights, darkestColors);
+		public VerticalGradientMaker getDarkestFill(Rectangle fillRect) {
+			return darkestFill;
 		}
 
 		@Override
-		public Paint getNormalFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("square.normal",
-					fillRect.height, fillRect.y, fillWeights, normalColors);
+		public VerticalGradientMaker getNormalFill(Rectangle fillRect) {
+			return normalFill;
 		}
 
 		@Override

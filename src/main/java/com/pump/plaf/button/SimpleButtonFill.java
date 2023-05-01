@@ -10,18 +10,82 @@
  */
 package com.pump.plaf.button;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.Rectangle;
-import java.awt.Transparency;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
+import java.awt.*;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.TreeSet;
 
-import com.pump.awt.TransformedTexturePaint;
+import com.pump.plaf.AnimationManager;
 
 public abstract class SimpleButtonFill extends ButtonFill {
+
+	public static class VerticalGradientMaker {
+		private final float[] fractions;
+		private final Color[] colors;
+		private final String name;
+
+		/**
+		 * @param name an optional name used in debugging
+		 */
+		public VerticalGradientMaker(float[] fractions, Color[] colors, String name) {
+			if (fractions.length != colors.length)
+				throw new IllegalArgumentException("fractions.length = "+ fractions.length+", colors.length = "+ colors.length);
+
+			this.name = name;
+			this.fractions = Objects.requireNonNull(fractions);
+			this.colors = Objects.requireNonNull(colors);
+		}
+
+		@Override
+		public String toString() {
+			return "VerticalGradientMaker[ name = \"" + name + "\", colors = " + Arrays.asList(colors) + "]";
+		}
+
+		public Paint createPaint(int y1, int y2) {
+			if (colors.length == 1)
+				return colors[0];
+			return new LinearGradientPaint(0, y1, 0, y2, fractions, colors);
+		}
+
+		public VerticalGradientMaker tween(VerticalGradientMaker otherFill, double tweenFraction) {
+			if (tweenFraction <= 0)
+				return this;
+			if (tweenFraction >= 1)
+				return otherFill;
+			TreeSet<Float> allFractions = new TreeSet<>();
+			for(float f : fractions) {
+				allFractions.add(f);
+			}
+			for(float f : otherFill.fractions) {
+				allFractions.add(f);
+			}
+			float[] newFractions = new float[allFractions.size()];
+			Color[] newColors = new Color[allFractions.size()];
+			int ctr = 0;
+			for (Float f : allFractions) {
+				newFractions[ctr] = f;
+				newColors[ctr] = AnimationManager.tween(getColor(f), otherFill.getColor(f), tweenFraction);
+				ctr++;
+			}
+			int percent = (int)(100 * tweenFraction);
+			String newName = name+" -> " + otherFill.name+" (" + percent + "%)";
+			return new VerticalGradientMaker(newFractions, newColors, newName);
+		}
+
+		public Color getColor(float f) {
+			if (f < fractions[0] )
+				return colors[0];
+			for (int i = 0; i < fractions.length - 1; i++) {
+				if (f >= fractions[i] && f < fractions[i + 1]) {
+					float span = fractions[i + 1] - fractions[i];
+					float elapsed = (f - fractions[i]) / span;
+					return AnimationManager.tween(colors[i], colors[i + 1], elapsed);
+				}
+			}
+			return colors[colors.length - 1];
+		}
+	}
+
 
 	protected static final Color shadowHighlight = new Color(255, 255, 255, 120);
 
@@ -40,7 +104,7 @@ public abstract class SimpleButtonFill extends ButtonFill {
 	 *            the rectangle the fill applies to.
 	 * @return the paint to use when a toggle button is selected.
 	 */
-	public abstract Paint getDarkestFill(Rectangle fillRect);
+	public abstract VerticalGradientMaker getDarkestFill(Rectangle fillRect);
 
 	/**
 	 * The normal fill of this button. Unlike the other <code>getter()</code>
@@ -50,47 +114,19 @@ public abstract class SimpleButtonFill extends ButtonFill {
 	 *            the rectangle the fill applies to.
 	 * @return the paint to use when this button is in its normal state.
 	 */
-	public abstract Paint getNormalFill(Rectangle fillRect);
+	public abstract VerticalGradientMaker getNormalFill(Rectangle fillRect);
 
 	@Override
 	public Paint getFill(ButtonState.Float state, Rectangle fillRect) {
-		Paint darkestFill = getDarkestFill(fillRect);
-		Paint normalFill = getNormalFill(fillRect);
-
-		int imageType = BufferedImage.TYPE_INT_RGB;
-		for (Paint p : new Paint[] { darkestFill, normalFill }) {
-			if (p.getTransparency() != Transparency.OPAQUE)
-				imageType = BufferedImage.TYPE_INT_ARGB;
+		VerticalGradientMaker currentFill;
+		VerticalGradientMaker normalFill = getNormalFill(fillRect);
+		double darkestFraction = Math.max(state.isArmed(), Math.max(state.isSelected() * .7f, state.isRollover() * .4));
+		if (darkestFraction > 0) {
+			VerticalGradientMaker darkestFill = getDarkestFill(fillRect);
+			currentFill = normalFill.tween(darkestFill, darkestFraction);
+		} else {
+			currentFill = normalFill;
 		}
-		int width = Math.max(1, fillRect.width);
-		int height = Math.max(1, fillRect.height);
-		BufferedImage bi = new BufferedImage(width, height, imageType);
-		Graphics2D g = bi.createGraphics();
-		g.translate(-fillRect.x, -fillRect.y);
-
-		paint(g, normalFill, 1, fillRect);
-
-		if (state.isArmed > 0) {
-			paint(g, darkestFill, state.isArmed(), fillRect);
-		}
-		if (state.isSelected() > 0) {
-			paint(g, darkestFill, state.isSelected() * .7f, fillRect);
-		}
-		if (state.isRollover() > 0) {
-			paint(g, darkestFill, state.isRollover() * .4f, fillRect);
-		}
-
-		return new TransformedTexturePaint(bi, new Rectangle(0, 0,
-				fillRect.width, fillRect.height),
-				AffineTransform.getTranslateInstance(fillRect.x, fillRect.y));
+		return currentFill.createPaint(fillRect.y, fillRect.y + fillRect.height);
 	}
-
-	private void paint(Graphics2D g, Paint paint, float alpha,
-			Rectangle fillRect) {
-		g.setPaint(paint);
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-				alpha));
-		g.fillRect(fillRect.x, fillRect.y, fillRect.width, fillRect.height);
-	}
-
 }

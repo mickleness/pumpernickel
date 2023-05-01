@@ -52,16 +52,17 @@ public class BevelButtonUI extends QButtonUI {
 				new Color(0xffCFCFCF), new Color(0xffC8C8C8),
 				new Color(0xffCBCBCB), new Color(0xffCDCDCD) };
 
+		private VerticalGradientMaker darkestFill = new VerticalGradientMaker(fillWeights, darkestColors, "bevelUI.darker");
+		private VerticalGradientMaker normalFill = new VerticalGradientMaker(fillWeights, normalColors, "bevelUI.normal");
+
 		@Override
-		public Paint getDarkestFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("bevelUI.darkest",
-					fillRect.height, fillRect.y, fillWeights, darkestColors);
+		public VerticalGradientMaker getDarkestFill(Rectangle fillRect) {
+			return darkestFill;
 		}
 
 		@Override
-		public Paint getNormalFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("bevelUI.normal",
-					fillRect.height, fillRect.y, fillWeights, normalColors);
+		public VerticalGradientMaker getNormalFill(Rectangle fillRect) {
+			return normalFill;
 		}
 
 		@Override

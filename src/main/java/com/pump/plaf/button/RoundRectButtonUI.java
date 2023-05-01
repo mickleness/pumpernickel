@@ -49,16 +49,17 @@ public class RoundRectButtonUI extends QButtonUI {
 		private Color[] darkestColors = new Color[] { new Color(0xffC0C0C0),
 				new Color(0xffCaCaCa) };
 
+		private VerticalGradientMaker darkestFill = new VerticalGradientMaker(fillWeights, darkestColors, "roundRect.darker");
+		private VerticalGradientMaker normalFill = new VerticalGradientMaker(fillWeights, normalColors, "roundRect.normal");
+
 		@Override
-		public Paint getDarkestFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("roundRect.darker",
-					fillRect.height, fillRect.y, fillWeights, darkestColors);
+		public VerticalGradientMaker getDarkestFill(Rectangle fillRect) {
+			return darkestFill;
 		}
 
 		@Override
-		public Paint getNormalFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("roundRect.normal",
-					fillRect.height, fillRect.y, fillWeights, normalColors);
+		public VerticalGradientMaker getNormalFill(Rectangle fillRect) {
+			return normalFill;
 		}
 
 		@Override

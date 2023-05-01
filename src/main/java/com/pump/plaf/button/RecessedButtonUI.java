@@ -45,16 +45,17 @@ public class RecessedButtonUI extends QButtonUI {
 		private Color[] darkestColors = new Color[] { new Color(0x4F000000,
 				true) };
 
+		private VerticalGradientMaker darkestFill = new VerticalGradientMaker(fillWeights, darkestColors, "recessedUI.darker");
+		private VerticalGradientMaker normalFill = new VerticalGradientMaker(fillWeights, normalColors, "recessedUI.normal");
+
 		@Override
-		public Paint getDarkestFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("recessedUI.darker",
-					fillRect.height, fillRect.y, fillWeights, darkestColors);
+		public VerticalGradientMaker getDarkestFill(Rectangle fillRect) {
+			return darkestFill;
 		}
 
 		@Override
-		public Paint getNormalFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("recessedUI.normal",
-					fillRect.height, fillRect.y, fillWeights, normalColors);
+		public VerticalGradientMaker getNormalFill(Rectangle fillRect) {
+			return normalFill;
 		}
 
 		@Override

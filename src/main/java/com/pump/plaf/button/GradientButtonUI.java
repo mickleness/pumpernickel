@@ -51,16 +51,17 @@ public class GradientButtonUI extends QButtonUI {
 		private Color[] darkestColors = new Color[] { new Color(0xffc1c1c1),
 				new Color(0xffb5b5b5) };
 
+		private VerticalGradientMaker darkestFill = new VerticalGradientMaker(fillWeights, darkestColors, "gradientUI.darker");
+		private VerticalGradientMaker normalFill = new VerticalGradientMaker(fillWeights, normalColors, "gradientUI.normal");
+
 		@Override
-		public Paint getDarkestFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("gradientUI.darkest",
-					fillRect.height, fillRect.y, fillWeights, darkestColors);
+		public VerticalGradientMaker getDarkestFill(Rectangle fillRect) {
+			return darkestFill;
 		}
 
 		@Override
-		public Paint getNormalFill(Rectangle fillRect) {
-			return PlafPaintUtils.getVerticalGradient("gradientUI.normal",
-					fillRect.height, fillRect.y, fillWeights, normalColors);
+		public VerticalGradientMaker getNormalFill(Rectangle fillRect) {
+			return normalFill;
 		}
 
 		@Override
