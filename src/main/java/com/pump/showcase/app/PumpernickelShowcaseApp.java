@@ -158,7 +158,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 				"EventDispatchThreadMonitorDemo"));
 		returnValue.add(new ShowcaseDemoInfo("ClickSensitivityControl",
 				"ClickSensitivityControlDemo"));
-		returnValue.add(new ShowcaseDemoInfo("ShapeBounds", "ShapeBoundsDemo"));
 		returnValue.add(
 				new ShowcaseDemoInfo("AngleSliderUI", "AngleSliderUIDemo"));
 		returnValue.add(new ShowcaseDemoInfo("Spiral2D", "Spiral2DDemo"));

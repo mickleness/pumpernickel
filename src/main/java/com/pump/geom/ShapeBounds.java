@@ -23,8 +23,7 @@ import java.awt.geom.Rectangle2D;
  * the bounds of the actual shape, so here I present a method to get the bounds
  * without resorting to the very-accurate-but-very-slow
  * <code>java.awt.geom.Area</code> class.
- * 
- * @see com.pump.showcase.ShapeBoundsDemo
+ *
  * @see <a href=
  *      "https://javagraphics.blogspot.com/2007/05/shapes-calculating-bounds.html">Shapes:
  *      Calculating Bounds</a>
