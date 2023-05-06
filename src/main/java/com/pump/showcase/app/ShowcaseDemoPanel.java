@@ -35,7 +35,6 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 
-import com.pump.math.Fraction;
 import com.pump.plaf.CircularProgressBarUI;
 import com.pump.showcase.demo.ShowcaseDemo;
 import com.pump.text.html.QHTMLEditorKit;
@@ -52,7 +51,7 @@ public class ShowcaseDemoPanel extends JPanel {
 	CardLayout contentCardLayout = new CardLayout();
 	JPanel contentCardPanel = new JPanel(contentCardLayout);
 	JPanel loadingPanel;
-	JProgressBar progressBar = new JProgressBar(0, 11);
+	JProgressBar progressBar = new JProgressBar();
 	Property<String> searchPhrase;
 	JTextArea descriptionTextArea;
 
@@ -82,6 +81,8 @@ public class ShowcaseDemoPanel extends JPanel {
 		loadingPanel = createLoadingPanel();
 		contentCardPanel.add(loadingPanel, NAME_LOADING);
 		contentCardLayout.show(contentCardPanel, NAME_LOADING);
+
+		progressBar.setIndeterminate(true);
 
 		descriptionTextArea = createTextArea(info.getDemo().getSummary(), 14);
 
@@ -126,22 +127,10 @@ public class ShowcaseDemoPanel extends JPanel {
 	}
 
 	private void refreshContentPanel() {
-		Fraction fraction = info.getLoadingProgress();
-		if (contentCardPanel.getComponentCount() == 1 && info.isDemoLoaded()
-				&& fraction.getNumerator() == fraction.getDenominator()) {
+		if (contentCardPanel.getComponentCount() == 1 && info.isDemoLoaded()) {
 			ShowcaseDemo demo = info.getDemo();
 			contentCardPanel.add(demo, NAME_DEMO);
 			contentCardLayout.show(contentCardPanel, NAME_DEMO);
-		} else {
-			if (fraction.getNumerator() == 0) {
-				progressBar.setIndeterminate(true);
-			} else {
-				progressBar.setIndeterminate(false);
-				int value = (int) fraction.getNumerator();
-				int max = (int) fraction.getDenominator();
-				progressBar.getModel().setRangeProperties(value, max, 0, max,
-						false);
-			}
 		}
 	}
 

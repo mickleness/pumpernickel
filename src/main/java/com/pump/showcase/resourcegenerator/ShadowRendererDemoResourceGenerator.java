@@ -20,14 +20,12 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.pump.graphics.vector.VectorImage;
 import com.pump.image.shadow.ARGBPixels;
 import com.pump.image.shadow.BoxShadowRenderer;
 import com.pump.image.shadow.DoubleBoxShadowRenderer;
 import com.pump.image.shadow.GaussianShadowRenderer;
 import com.pump.image.shadow.ShadowAttributes;
 import com.pump.image.shadow.ShadowRenderer;
-import com.pump.showcase.chart.LineChartRenderer;
 import com.pump.showcase.demo.ShadowRendererDemo;
 import com.pump.showcase.demo.ShadowRendererDemo.OriginalGaussianShadowRenderer;
 
@@ -37,13 +35,7 @@ public class ShadowRendererDemoResourceGenerator extends DemoResourceGenerator {
 	public void run(DemoResourceContext context) throws Exception {
 		ShadowRendererProfiler profiler = new ShadowRendererProfiler();
 		profiler.run();
-		LineChartRenderer renderer = new LineChartRenderer(
-				profiler.results.data, "Kernel Radius",
-				"Execution Time (ms) for 100 Renders");
-		VectorImage img = new VectorImage();
-		renderer.paint(img.createGraphics(), 600, 400);
-
-		writeImage(img, "ShadowRendererDemo");
+		profiler.results.printTable();
 	}
 }
 
@@ -113,9 +105,7 @@ class ShadowRendererProfiler {
 			long[] times = new long[6];
 			for (int a = 0; a < times.length; a++) {
 				System.gc();
-				System.runFinalization();
 				System.gc();
-				System.runFinalization();
 
 				times[a] = System.currentTimeMillis();
 				for (int b = 0; b < 100; b++) {

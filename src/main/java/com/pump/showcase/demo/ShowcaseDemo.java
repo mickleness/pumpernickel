@@ -65,16 +65,6 @@ public abstract class ShowcaseDemo extends JPanel {
 	public abstract Class<?>[] getClasses();
 
 	/**
-	 * Return a list of Runnables that should be invoked in a separate thread
-	 * before this demo is shown to the user. This is used for demos that need
-	 * to run thousands of timed comparisons to create charts.
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Runnable> getInitializationRunnables() {
-		return Collections.EMPTY_LIST;
-	}
-
-	/**
 	 * Assign the ShowcaseDemoInfo that created this object.
 	 */
 	public void setDemoInfo(ShowcaseDemoInfo showcaseDemoInfo) {

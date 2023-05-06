@@ -13,7 +13,7 @@ package com.pump.icon;
 import javax.swing.Icon;
 
 /**
- * An icon that renders an enother Icon through a scaling AffineTransform.
+ * An icon that renders another Icon through a scaling AffineTransform.
  * <p>
  * This is provided as an interface so {@link IconUtils} can create ScaledIcons
  * that still identify as other interfaces.

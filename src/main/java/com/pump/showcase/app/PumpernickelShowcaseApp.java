@@ -407,7 +407,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 						demoCardLayout.show(demoCardPanel,
 								e.getDemoSimpleClassName());
 						demoCardPanel.validate();
-						loadingThread.request(e);
 					}
 				});
 

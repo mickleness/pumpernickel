@@ -100,47 +100,6 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		}
 	}
 
-	class LoadImageRunnable implements Runnable {
-		String id;
-		Dimension defaultImageSize;
-
-		public LoadImageRunnable(String id) {
-			this.id = id;
-			int k = getCellSize();
-			defaultImageSize = new Dimension(k, k);
-		}
-
-		public void run() {
-			BufferedImage img = getImage(id, defaultImageSize);
-			img = padImage(img);
-			add(id, img);
-		}
-
-		private BufferedImage padImage(BufferedImage img) {
-			int z = getCellSize();
-			if (img.getWidth() < z || img.getHeight() < z) {
-				BufferedImage bi = new BufferedImage(z, z,
-						BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g = bi.createGraphics();
-				g.drawImage(img, bi.getWidth() / 2 - img.getWidth() / 2,
-						bi.getHeight() / 2 - img.getHeight() / 2, null);
-				g.dispose();
-				return bi;
-			}
-			return img;
-		}
-
-		private void add(String id, BufferedImage img) {
-			for (ShowcaseIcon s : icons) {
-				if (ImagePixelIterator.equalPixels(s.img, img)) {
-					s.ids.add(id);
-					return;
-				}
-			}
-			icons.add(new ShowcaseIcon(img, id));
-		}
-	}
-
 	/**
 	 * One image and all the IDs that produce that image.
 	 */
@@ -273,6 +232,44 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 		};
 
 		refreshCellSize();
+
+		new Thread() {
+			public void run() {
+				String[] allIDs = getImageIDs();
+				int k = getCellSize();
+				Dimension defaultImageSize = new Dimension(k, k);
+
+				for (String id : allIDs) {
+					BufferedImage img = getImage(id, defaultImageSize);
+					img = padImage(img);
+					add(id, img);
+				}
+			}
+
+			private BufferedImage padImage(BufferedImage img) {
+				int z = getCellSize();
+				if (img.getWidth() < z || img.getHeight() < z) {
+					BufferedImage bi = new BufferedImage(z, z,
+							BufferedImage.TYPE_INT_ARGB);
+					Graphics2D g = bi.createGraphics();
+					g.drawImage(img, bi.getWidth() / 2 - img.getWidth() / 2,
+							bi.getHeight() / 2 - img.getHeight() / 2, null);
+					g.dispose();
+					return bi;
+				}
+				return img;
+			}
+
+			private void add(String id, BufferedImage img) {
+				for (ShowcaseIcon s : icons) {
+					if (ImagePixelIterator.equalPixels(s.img, img)) {
+						s.ids.add(id);
+						return;
+					}
+				}
+				icons.add(new ShowcaseIcon(img, id));
+			}
+		}.start();
 	}
 
 	/**
@@ -321,15 +318,4 @@ public abstract class ShowcaseIconDemo extends ShowcaseDemo {
 	 * Return all the supported image IDs.
 	 */
 	protected abstract String[] getImageIDs();
-
-	@SuppressWarnings("unchecked")
-	public List<Runnable> getInitializationRunnables() {
-		String[] allIDs = getImageIDs();
-
-		List<Runnable> returnValue = new ArrayList<>(allIDs.length);
-		for (String id : allIDs) {
-			returnValue.add(new LoadImageRunnable(id));
-		}
-		return returnValue;
-	}
 }

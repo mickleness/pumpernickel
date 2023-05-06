@@ -26,6 +26,12 @@ import com.pump.image.pixel.Scaling;
  */
 public class ScalingThumbnailGenerator implements ThumbnailGenerator {
 
+	/**
+	 * If true then the ScalingThumbnailGenerator may use the embedded thumbnails in JPG files.
+	 * This is false sometimes during testing to measure the performance of the Scaling class.
+	 */
+	public static boolean ALLOW_EMBEDDED_THUMBNAILS = true;
+
 	@Override
 	public BufferedImage createThumbnail(File file, int requestedMaxImageSize)
 			throws Exception {
@@ -40,6 +46,9 @@ public class ScalingThumbnailGenerator implements ThumbnailGenerator {
 		BiFunction<Dimension, Boolean, Dimension> sizeFunction = new BiFunction<>() {
 			@Override
 			public Dimension apply(Dimension srcImageSize, Boolean isEmbeddedThumbnail) {
+				if (!ALLOW_EMBEDDED_THUMBNAILS && isEmbeddedThumbnail)
+					return null;
+
 				Dimension scaledImageSize = Dimension2D.scaleProportionally(srcImageSize, maxSize, true);
 				if (scaledImageSize == null) {
 					return srcImageSize;

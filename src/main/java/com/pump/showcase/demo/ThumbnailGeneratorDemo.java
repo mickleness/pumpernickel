@@ -26,11 +26,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.image.thumbnail.generator.BasicThumbnailGenerator;
-import com.pump.image.thumbnail.generator.JPEGMetaDataThumbnailGenerator;
-import com.pump.image.thumbnail.generator.MacQuickLookThumbnailGenerator;
-import com.pump.image.thumbnail.generator.ScalingThumbnailGenerator;
-import com.pump.image.thumbnail.generator.ThumbnailGenerator;
+import com.pump.image.thumbnail.generator.*;
 import com.pump.swing.popover.JPopover;
 
 public class ThumbnailGeneratorDemo extends ShowcaseResourceExampleDemo<File> {

@@ -14,9 +14,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Objects;
 
 import com.pump.data.AbstractAttributeDataImpl;
-import com.pump.data.ComparableBoundsChecker;
 import com.pump.data.Key;
-import com.pump.math.Fraction;
 import com.pump.showcase.demo.ShowcaseDemo;
 import com.pump.util.HumanStringComparator;
 
@@ -33,8 +31,6 @@ public class ShowcaseDemoInfo extends AbstractAttributeDataImpl
 
 	public static Key<ShowcaseDemoPanel> KEY_DEMO_PANEL = new Key<>(
 			ShowcaseDemoPanel.class, "panel");
-	public static Key<Fraction> KEY_LOADING_PROGRESS = new Key<>(Fraction.class,
-			"loadingProgress");
 	public static Key<String> KEY_NAME = new Key<>(String.class, "name");
 	public static Key<String> KEY_SIMPLE_CLASS_NAME = new Key<>(String.class,
 			"simpleClassName");
@@ -42,11 +38,6 @@ public class ShowcaseDemoInfo extends AbstractAttributeDataImpl
 			ShowcaseDemo.class, "demo");
 	public static Key<Throwable[]> KEY_LOADING_EXCEPTIONS = new Key<>(
 			Throwable[].class, "loadingExceptions");
-	static {
-		KEY_LOADING_PROGRESS.addBoundsChecker(
-				new ComparableBoundsChecker<Fraction>(new Fraction(0, 1),
-						new Fraction(1, 1), true, true));
-	}
 
 	public ShowcaseDemoInfo(String name, String classSimpleName) {
 		Objects.requireNonNull(name);
@@ -95,17 +86,6 @@ public class ShowcaseDemoInfo extends AbstractAttributeDataImpl
 	public int compareTo(ShowcaseDemoInfo o) {
 		HumanStringComparator hsc = new HumanStringComparator();
 		return hsc.compare(getDemoName(), o.getDemoName());
-	}
-
-	public void setLoadingProgress(Fraction progress) {
-		setAttribute(KEY_LOADING_PROGRESS, progress);
-	}
-
-	public Fraction getLoadingProgress() {
-		Fraction f = getAttribute(KEY_LOADING_PROGRESS);
-		if (f == null)
-			return new Fraction(0, 1);
-		return f;
 	}
 
 	public void addLoadingException(Throwable t) {

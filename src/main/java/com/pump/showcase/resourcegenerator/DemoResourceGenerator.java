@@ -10,17 +10,8 @@
  */
 package com.pump.showcase.resourcegenerator;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import com.pump.graphics.vector.VectorImage;
 
 /**
  * Create files/data used in the HTML documentation for several showcase demos.
@@ -73,36 +64,5 @@ public abstract class DemoResourceGenerator {
 			str = str.substring(row.length());
 		}
 		return returnValue;
-	}
-
-	/**
-	 * Write a VectorImage to the console in Base64 encoding. This method also
-	 * includes an internal debugger flag to write PNG and JVG files, but that
-	 * should only be used in testing.
-	 */
-	protected void writeImage(VectorImage image, String name) throws Exception {
-		boolean writeFiles = false;
-
-		if (writeFiles) {
-			File jvgFile = new File(name + ".jvg");
-			try (FileOutputStream fileOut = new FileOutputStream(jvgFile)) {
-				image.save(fileOut);
-			}
-			System.out.println("Chart: " + jvgFile.getAbsolutePath());
-
-			// make a PNG version just for quick human reference:
-			BufferedImage bi = image.toBufferedImage();
-			File pngFile = new File(name + ".png");
-			ImageIO.write(bi, "png", pngFile);
-			System.out.println("Chart: " + pngFile.getAbsolutePath());
-		}
-
-		try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
-			image.save(byteOut);
-			byte[] bytes = byteOut.toByteArray();
-			String str = new String(Base64.getEncoder().encode(bytes));
-			System.out.println("Base64 encoding of \"" + name + "\" jvg:");
-			System.out.println(str);
-		}
 	}
 }

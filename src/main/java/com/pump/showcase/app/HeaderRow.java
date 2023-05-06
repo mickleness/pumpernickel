@@ -68,7 +68,6 @@ public class HeaderRow extends JPanel {
 		private static final long serialVersionUID = 1L;
 
 		JLabel nameLabel = new JLabel();
-		JLabel progressLabel = new JLabel();
 
 		Color selectedBackground, unselectedBackground, selectedTextForeground,
 				unselectedTextForeground;
@@ -85,10 +84,6 @@ public class HeaderRow extends JPanel {
 			c.fill = GridBagConstraints.BOTH;
 			c.insets = new Insets(3, 3, 3, 3);
 			add(nameLabel, c);
-			c.weightx = 0;
-			c.gridx++;
-			c.insets = new Insets(3, 3, 3, 9);
-			add(progressLabel, c);
 
 			unselectedBackground = UIManager.getColor("List.background");
 			selectedBackground = UIManager.getColor("List.selectionBackground");
@@ -100,7 +95,6 @@ public class HeaderRow extends JPanel {
 			Font font = UIManager.getFont("List.font");
 			if (font != null) {
 				nameLabel.setFont(font);
-				progressLabel.setFont(font);
 			}
 		}
 
@@ -120,29 +114,12 @@ public class HeaderRow extends JPanel {
 			}
 
 			nameLabel.setFont(font);
-			progressLabel.setFont(font);
 
 			String name = value == null ? "" : value.getDemoName();
 			nameLabel.setText(name);
 
 			boolean isLoaded = value == null ? false : value.isDemoLoaded();
 			formatLabel(nameLabel, isLoaded, isSelected, 1);
-
-			Fraction loadFraction = value == null ? new Fraction(0, 1)
-					: value.getLoadingProgress();
-			if (loadFraction.getNumerator() == loadFraction.getDenominator()) {
-				progressLabel.setVisible(false);
-			} else {
-				progressLabel.setVisible(true);
-				if (loadFraction.getNumerator() == 0) {
-					progressLabel.setText("-");
-				} else {
-					String str = format.format(loadFraction.doubleValue() * 100)
-							+ "%";
-					progressLabel.setText(str);
-				}
-				formatLabel(progressLabel, isLoaded, isSelected, .7f);
-			}
 
 			return this;
 		}
