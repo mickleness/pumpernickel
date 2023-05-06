@@ -1,4 +1,4 @@
-package com.pump.showcase.wikiresources;
+package com.pump.showcase.resourcegenerator;
 
 import com.pump.desktop.temp.TempFileManager;
 import com.pump.geom.StarPolygon;
@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class ScalingComparison {
+public class ScalingComparison extends DemoResourceGenerator {
 
     public enum Model {
         /**
@@ -251,6 +251,11 @@ public class ScalingComparison {
         TempFileManager.initialize("ScalingComparison");
         System.out.println("Running " + ScalingComparison.class.getSimpleName());
         System.out.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
+        new ScalingComparison().run(null);
+    }
+
+    @Override
+    public void run(DemoResourceContext context) throws Exception {
         long[] samples = new long[20];
 
         for (Model model : ScalingComparison.Model.values()) {

@@ -10,6 +10,8 @@
  */
 package com.pump.showcase.resourcegenerator;
 
+import com.pump.desktop.temp.TempFileManager;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,15 +21,22 @@ import java.util.List;
 public abstract class DemoResourceGenerator {
 
 	public static void main(String[] args) throws Exception {
+		TempFileManager.initialize("DemoResourceGenerator");
+
 		DemoResourceContext context = new DemoResourceContext();
 
 		try {
-			DemoResourceGenerator[] gs = new DemoResourceGenerator[] {
+			DemoResourceGenerator[] gs = new DemoResourceGenerator[]{
 					new VectorImageDemoResourceGenerator(),
 					new ThumbnailGeneratorDemoResourceGenerator(),
 					new ShadowRendererDemoResourceGenerator(),
 					new Transition2DDemoResourceGenerator(),
-					new Transition3DDemoResourceGenerator() };
+					new Transition3DDemoResourceGenerator(),
+					new BmpComparison(),
+					new ClipperComparison(),
+					new LoadImagesComparison(),
+					new ScalingComparison()
+			};
 
 			for (DemoResourceGenerator g : gs) {
 				long time = System.currentTimeMillis();
@@ -37,6 +46,8 @@ public abstract class DemoResourceGenerator {
 				System.out.println("(" + time + " ms)");
 				System.out.println();
 			}
+		} catch(Throwable t) {
+			t.printStackTrace();
 		} finally {
 			System.out.println("Finished");
 			System.exit(0);

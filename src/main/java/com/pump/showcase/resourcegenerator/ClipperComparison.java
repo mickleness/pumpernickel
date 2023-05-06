@@ -1,4 +1,4 @@
-package com.pump.showcase.wikiresources;
+package com.pump.showcase.resourcegenerator;
 
 import java.util.List;
 import com.pump.geom.Clipper;
@@ -16,7 +16,7 @@ import java.util.Random;
 /**
  * This compares the time it takes for the Area class vs the Clipper class to clip a Rectangle
  */
-public class ClipperComparison {
+public class ClipperComparison extends DemoResourceGenerator {
 
     public enum Model {
         AREA("Area") {
@@ -64,8 +64,11 @@ public class ClipperComparison {
     public static void main(String[] args) throws Exception {
         System.out.println("Running " + ClipperComparison.class.getSimpleName());
         System.out.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
-        long[] samples = new long[20];
+        new ClipperComparison().run(null);
+    }
 
+    @Override
+    public void run(DemoResourceContext context) throws Exception {
         testShapes(1);
         testShapes(2);
         testShapes(3);

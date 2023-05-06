@@ -1,4 +1,4 @@
-package com.pump.showcase.wikiresources;
+package com.pump.showcase.resourcegenerator;
 
 import com.pump.desktop.temp.TempFileManager;
 import com.pump.image.bmp.BmpDecoder;
@@ -14,7 +14,7 @@ import java.util.Random;
 /**
  * This compares the time it takes for ImageIO vs Pumpernickel classes to read/write BMP images.
  */
-public class BmpComparison {
+public class BmpComparison extends DemoResourceGenerator {
 
     public enum Model {
         IMAGE_IO("ImageIO") {
@@ -60,6 +60,11 @@ public class BmpComparison {
         TempFileManager.initialize("BmpComparison");
         System.out.println("Running " + BmpComparison.class.getSimpleName());
         System.out.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
+        new BmpComparison().run(null);
+    }
+
+    @Override
+    public void run(DemoResourceContext context) throws Exception {
         long[] samples = new long[20];
 
 //        ImageIO can't handle reading or writing ARGB images, so there's no point in

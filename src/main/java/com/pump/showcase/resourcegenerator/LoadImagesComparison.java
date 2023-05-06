@@ -1,4 +1,4 @@
-package com.pump.showcase.wikiresources;
+package com.pump.showcase.resourcegenerator;
 
 import com.pump.image.ImageSize;
 import com.pump.image.QBufferedImage;
@@ -16,7 +16,7 @@ import java.util.Arrays;
  * (Where "load" mostly means "make sure the image is fully loaded". It doesn't
  * necessarily mean we end up with a BufferedImage.)
  */
-public class LoadImagesComparison {
+public class LoadImagesComparison extends DemoResourceGenerator {
 
     public enum LoaderModel {
         IMAGE_IO("ImageIO") {
@@ -88,6 +88,11 @@ public class LoadImagesComparison {
     public static void main(String[] args) throws Exception {
         System.out.println("Running " + LoadImagesComparison.class.getSimpleName());
         System.out.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
+        new LoadImagesComparison().run(null);
+    }
+
+    @Override
+    public void run(DemoResourceContext context) throws Exception {
         long[] samples = new long[20];
 
         URL url = LoadImagesComparison.class.getResource("pexels-irina-iriser-1408221.jpg");
