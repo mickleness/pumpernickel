@@ -635,7 +635,8 @@ public class SCImageContext extends ImageContext {
 	/**
 	 * Commit all changes back to the BufferedImage this context paints to.
 	 */
-	public synchronized void dispose() {
+	@Override
+	public synchronized void close() {
 		if (executor != null) {
 			executor.shutdown();
 			try {

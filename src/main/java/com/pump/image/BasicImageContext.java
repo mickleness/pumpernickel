@@ -877,7 +877,8 @@ public class BasicImageContext extends ImageContext {
 	/**
 	 * Commit all changes back to the BufferedImage this context paints to.
 	 */
-	public synchronized void dispose() {
+	@Override
+	public synchronized void close() {
 		processQueue();
 
 		if (executor != null) {

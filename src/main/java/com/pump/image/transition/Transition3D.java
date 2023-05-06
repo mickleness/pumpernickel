@@ -248,13 +248,11 @@ public abstract class Transition3D extends AbstractTransition {
 			return null;
 		}
 
-		ImageContext context = ImageContext.create(dst);
-		try {
+
+		try (ImageContext context = ImageContext.create(dst)) {
 			context.setRenderingHints(renderingHints);
 			context.drawImage(img, quad2.topLeft, quad2.topRight,
 					quad2.bottomRight, quad2.bottomLeft);
-		} finally {
-			context.dispose();
 		}
 
 		return quad2;

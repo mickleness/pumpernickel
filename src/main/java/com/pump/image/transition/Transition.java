@@ -51,6 +51,5 @@ public interface Transition {
 	 *            At progress = 0, frameA should be shown. At progress = 1,
 	 *            frameB should be shown.
 	 */
-	public void paint(Graphics2D g, BufferedImage frameA, BufferedImage frameB,
-			float progress);
+	void paint(Graphics2D g, BufferedImage frameA, BufferedImage frameB, float progress);
 }

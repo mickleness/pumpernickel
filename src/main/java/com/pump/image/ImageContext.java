@@ -26,7 +26,7 @@ import java.util.HashMap;
  * projecting a plane as if in a 3D view. The <code>PerspectiveTransform</code>
  * class generally handles the math of the transform itself.)
  */
-public abstract class ImageContext {
+public abstract class ImageContext implements AutoCloseable {
 
 	/**
 	 * Create an <code>ImageContext</code> for a <code>BufferedImage</code>.
@@ -48,7 +48,8 @@ public abstract class ImageContext {
 	public abstract void drawImage(BufferedImage img, Point2D topLeft,
 			Point2D topRight, Point2D bottomRight, Point2D bottomLeft);
 
-	public abstract void dispose();
+	@Override
+	public abstract void close();
 
 	/** Define a rendering hint. */
 	public void setRenderingHint(RenderingHints.Key key, Object value) {
