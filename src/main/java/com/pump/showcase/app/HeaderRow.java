@@ -344,8 +344,6 @@ public class HeaderRow extends JPanel {
 				int i = activeDemos.indexOf(selection);
 				if (i >= 0) {
 					demoComboBox.setSelectedIndex(i);
-				} else {
-					demoComboBox.setSelectedIndex(0);
 				}
 			}
 		}
@@ -372,6 +370,8 @@ public class HeaderRow extends JPanel {
 
 				// make as tall as the window
 				Rectangle rowBounds = comboBoxUI.getList().getCellBounds(0, 0);
+				if (rowBounds == null)
+					return 0;
 				Rectangle comboBoxBounds = new Rectangle(0, 0,
 						demoComboBox.getWidth(), demoComboBox.getHeight());
 				SwingUtilities.convertRectangle(demoComboBox, comboBoxBounds,
