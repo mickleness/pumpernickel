@@ -209,9 +209,10 @@ public abstract class Clipper {
 		 * @param x2
 		 *            at t = 1, x2 is the output of this function
 		 */
-		public void define(double x1, double x2) {
+		public Function define(double x1, double x2) {
 			slope = (x2 - x1);
 			intercept = x1;
+			return this;
 		}
 
 		@Override
@@ -248,10 +249,11 @@ public abstract class Clipper {
 		/**
 		 * Use the 3 control points of a bezier quadratic
 		 */
-		public void define(double x0, double x1, double x2) {
+		public Function define(double x0, double x1, double x2) {
 			a = x0 - 2 * x1 + x2;
 			b = -2 * x0 + 2 * x1;
 			c = x0;
+			return this;
 		}
 
 		public double evaluate(double t) {
@@ -263,6 +265,14 @@ public abstract class Clipper {
 		}
 
 		public int evaluateInverse(double x, double[] dest, int offset) {
+			if (a == 0) {
+				if (b == 0)
+					return 0;
+
+				dest[offset] = (x - c) / b;
+				return 1;
+			}
+
 			double C = c - x;
 			double det = b * b - 4 * a * C;
 			if (det < 0)
@@ -290,11 +300,12 @@ public abstract class Clipper {
 			return a + "*t*t*t+" + b + "*t*t+" + c + "*t+" + d;
 		}
 
-		public void define(double x0, double x1, double x2, double x3) {
+		public Function define(double x0, double x1, double x2, double x3) {
 			a = -x0 + 3 * x1 - 3 * x2 + x3;
 			b = 3 * x0 - 6 * x1 + 3 * x2;
 			c = -3 * x0 + 3 * x1;
 			d = x0;
+			return this;
 		}
 
 		public double evaluate(double t) {
@@ -482,23 +493,14 @@ public abstract class Clipper {
 			}
 			xf = null;
 			if (k == PathIterator.SEG_LINETO) {
-				lxf.define(lastX, f[0]);
-				lyf.define(lastY, f[1]);
-
-				xf = lxf;
-				yf = lyf;
+				xf = lxf.define(lastX, f[0]);
+				yf = lyf.define(lastY, f[1]);
 			} else if (k == PathIterator.SEG_QUADTO) {
-				qxf.define(lastX, f[0], f[2]);
-				qyf.define(lastY, f[1], f[3]);
-
-				xf = qxf;
-				yf = qyf;
+				xf = qxf.define(lastX, f[0], f[2]);
+				yf = qyf.define(lastY, f[1], f[3]);
 			} else if (k == PathIterator.SEG_CUBICTO) {
-				cxf.define(lastX, f[0], f[2], f[4]);
-				cyf.define(lastY, f[1], f[3], f[5]);
-
-				xf = cxf;
-				yf = cyf;
+				xf = cxf.define(lastX, f[0], f[2], f[4]);
+				yf = cyf.define(lastY, f[1], f[3], f[5]);
 			}
 			if (xf != null) {
 				// gather all the t values at which we might be
