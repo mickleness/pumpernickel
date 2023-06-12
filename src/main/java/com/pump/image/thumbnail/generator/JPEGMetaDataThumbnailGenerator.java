@@ -12,10 +12,7 @@ package com.pump.image.thumbnail.generator;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.*;
 
 import com.pump.awt.Dimension2D;
 import com.pump.image.jpeg.JPEGMetaData;
@@ -24,34 +21,54 @@ import com.pump.image.pixel.Scaling;
 
 /**
  * This ThumbnailGenerator uses the JPEGMetaData class to retrieve thumbnails.
- * (If the meta data doesn't embed a thumbnail: this immediately returns null.)
+ * (If the meta data doesn't embed a thumbnail: this returns null.)
  * This may scale that thumbnail down if necessary. If the requested thumbnail
- * size is larger than the JPEG's embedded thumbnail: this returns null.
+ * size is larger than the JPEG's embedded thumbnail: this returns null. This always
+ * returns the first thumbnail that is large enough. (And if no requested
+ * size is defined: all thumbnails are considered "all enough", so this returns
+ * the first embedded thumbnail.)
  */
 public class JPEGMetaDataThumbnailGenerator implements ThumbnailGenerator {
 
 	@Override
 	public BufferedImage createThumbnail(File file, int requestedMaxImageSize)
 			throws Exception {
-		AtomicReference<BufferedImage> thumbnail = new AtomicReference<>();
+		JPEGMetaData metaData = createMetaData(file, requestedMaxImageSize);
+		if (metaData.getThumbnailCount() > 0) {
+			BufferedImage bi = metaData.getThumbnail(0);
+
+			if (requestedMaxImageSize > 0 && bi != null) {
+				Dimension biSize = new Dimension(bi.getWidth(), bi.getHeight());
+				int largestDimension = Math.max(biSize.width, biSize.height);
+				if (largestDimension > requestedMaxImageSize) {
+					Dimension maxSize = new Dimension(requestedMaxImageSize,
+							requestedMaxImageSize);
+					Dimension scaledSize = Dimension2D.scaleProportionally(biSize,
+							maxSize);
+					bi = Scaling.scale(bi, scaledSize, null, null);
+				}
+			}
+
+			return bi;
+		}
+		return null;
+	}
+
+	public JPEGMetaData createMetaData(File file, int requestedMaxImageSize) throws IOException {
+		JPEGMetaData returnValue = new JPEGMetaData();
 		JPEGMetaDataListener listener = new JPEGMetaDataListener() {
 
 			@Override
 			public boolean isThumbnailAccepted(String markerName, int width,
 					int height) {
-				if (requestedMaxImageSize <= 0) {
-					BufferedImage bi = thumbnail.get();
-					if (bi == null || width > bi.getWidth()
-							|| height > bi.getHeight())
-						return true;
-					// we already have a larger thumbnail
+				if (returnValue.getThumbnailCount() > 0)
 					return false;
+
+				if (requestedMaxImageSize <= 0) {
+					return true;
 				}
 
-				if (width > height) {
-					return width >= requestedMaxImageSize;
-				}
-				return height >= requestedMaxImageSize;
+				return width >= requestedMaxImageSize && height >= requestedMaxImageSize;
 			}
 
 			@Override
@@ -62,7 +79,7 @@ public class JPEGMetaDataThumbnailGenerator implements ThumbnailGenerator {
 
 			@Override
 			public void addThumbnail(String markerName, BufferedImage bi) {
-				thumbnail.set(bi);
+				returnValue.addThumbnail(markerName, bi);
 			}
 
 			@Override
@@ -76,30 +93,27 @@ public class JPEGMetaDataThumbnailGenerator implements ThumbnailGenerator {
 			}
 
 			@Override
+			public void imageDescription(int bitsPerPixel, int width, int height, int numberOfComponents) {
+				returnValue.setImageSize(width, height);
+			}
+
+			@Override
+			public void processException(Exception e, String markerCode) {
+				e.printStackTrace();
+			}
+
+			@Override
 			public void startFile() {
 				// intentionally empty
 			}
 
 		};
-		JPEGMetaData reader = new JPEGMetaData(listener);
+
 		try (InputStream in = new FileInputStream(file)) {
-			reader.read(in);
-		}
-		BufferedImage bi = thumbnail.get();
-
-		if (requestedMaxImageSize > 0 && bi != null) {
-			Dimension biSize = new Dimension(bi.getWidth(), bi.getHeight());
-			int largestDimension = Math.max(biSize.width, biSize.height);
-			if (largestDimension > requestedMaxImageSize) {
-				Dimension maxSize = new Dimension(requestedMaxImageSize,
-						requestedMaxImageSize);
-				Dimension scaledSize = Dimension2D.scaleProportionally(biSize,
-						maxSize);
-				bi = Scaling.scale(bi, scaledSize, null, null);
-			}
+			JPEGMetaData.read(in, listener);
 		}
 
-		return bi;
+		return returnValue;
 	}
 
 }

@@ -123,8 +123,25 @@ public class JPEGMetaDataDemo extends ShowcaseResourceExampleDemo<URL> {
 			textPane.setText(htmlBody.toString());
 		}
 
+		@Override
+		public void imageDescription(int bitsPerPixel, int width, int height, int numberOfComponents) {
+			htmlBody.append("<strong>bitsPerPixel</strong>: "
+					+ bitsPerPixel + "<br>");
+			htmlBody.append("<strong>width</strong>: "
+					+ width + "<br>");
+			htmlBody.append("<strong>height</strong>: "
+					+ height + "<br>");
+			htmlBody.append("<strong>numberOfComponents</strong>: "
+					+ numberOfComponents + "<br>");
+		}
+
+		@Override
+		public void processException(Exception e, String markerCode) {
+			String str = ErrorManager.getStackTrace(e);
+			htmlBody.append(HTMLEncoding.encode(str));
+		}
+
 	};
-	JPEGMetaData reader = new JPEGMetaData(listener);
 
 	public JPEGMetaDataDemo() {
 		super(URL.class, true, "jpg", "jpeg");
@@ -195,7 +212,7 @@ public class JPEGMetaDataDemo extends ShowcaseResourceExampleDemo<URL> {
 			}
 		} else {
 			try (InputStream in = url.openStream()) {
-				reader.read(in);
+				JPEGMetaData.read(in, listener);
 			} catch (Exception e) {
 				String stacktrace = ErrorManager.getStackTrace(e);
 				textPane.setText("<html>Unable to read \""

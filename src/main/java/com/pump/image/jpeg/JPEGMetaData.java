@@ -10,20 +10,17 @@
  */
 package com.pump.image.jpeg;
 
+import com.pump.image.QBufferedImage;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * This class parses JPEG metadata to retrieve properties, comments and
- * thumbnails.
- * 
- * @see com.pump.showcase.JPEGMetaDataDemo
+ * This class parses JPEG metadata.
+ *
  * @see <a href=
  *      "https://javagraphics.blogspot.com/2010/03/images-reading-jpeg-thumbnails.html">Images:
  *      Reading JPEG Thumbnails</a>
@@ -31,93 +28,17 @@ import java.util.concurrent.atomic.AtomicReference;
 public class JPEGMetaData {
 
 	/**
-	 * Extract a thumbnail from a JPEG file, if possible. This may return null
-	 * if no thumbnail can be found.
-	 * 
-	 * @throws IOException
-	 *             if an IO problem occurs.
+	 * This property is set on QBufferedImages to identify which JPEG block a thumbnail originated from.
 	 */
-	public static BufferedImage getThumbnail(File file) throws IOException {
-		try (InputStream in = new FileInputStream(file)) {
-			return getThumbnail(in);
-		}
-	}
+	public static final String PROPERTY_JPEG_MARKER = "jpeg-marker";
 
 	/**
-	 * Extract a thumbnail from a JPEG image, if possible. This may return null
-	 * if no thumbnail can be found.
-	 * 
+	 * Read the data from a JPEG input stream and notify the listener as data is read (or considered)
+	 *
 	 * @throws IOException
 	 *             if an IO problem occurs.
 	 */
-	public static BufferedImage getThumbnail(InputStream in)
-			throws IOException {
-		AtomicReference<BufferedImage> thumbnail = new AtomicReference<>();
-		JPEGMetaDataListener listener = new JPEGMetaDataListener() {
-
-			@Override
-			public boolean isThumbnailAccepted(String markerName, int width,
-					int height) {
-				BufferedImage bi = thumbnail.get();
-				if (bi == null || width > bi.getWidth()
-						|| height > bi.getHeight())
-					return true;
-				return false;
-			}
-
-			@Override
-			public void addThumbnail(String markerName, BufferedImage bi) {
-				thumbnail.set(bi);
-			}
-
-			@Override
-			public void addProperty(String markerName, String propertyName,
-					Object value) {
-				// intentionally empty
-			}
-
-			@Override
-			public void addComment(String markerName, String comment) {
-				// intentionally empty
-			}
-
-			@Override
-			public void endFile() {
-				// intentionally empty
-			}
-
-			@Override
-			public void startFile() {
-				// intentionally empty
-			}
-		};
-		JPEGMetaData reader = new JPEGMetaData(listener);
-		reader.read(in);
-		return thumbnail.get();
-	}
-
-	/**
-	 * Extract a thumbnail from a JPEG image, if possible. This may return null
-	 * if no thumbnail can be found.
-	 * 
-	 * @throws IOException
-	 *             if an IO problem occurs.
-	 */
-	public static BufferedImage getThumbnail(URL url) throws IOException {
-		try (InputStream in = url.openStream()) {
-			return getThumbnail(in);
-		}
-	}
-
-	JPEGMetaDataListener listener;
-
-	public JPEGMetaData(JPEGMetaDataListener listener) {
-		Objects.requireNonNull(listener);
-		this.listener = listener;
-	}
-
-	@SuppressWarnings("resource")
-	public void read(InputStream in) throws IOException {
+	public static void read(InputStream in, JPEGMetaDataListener listener) throws IOException {
 		listener.startFile();
 		try (JPEGMarkerInputStream jpegIn = new JPEGMarkerInputStream(in)) {
 			String markerCode = jpegIn.getNextMarker();
@@ -137,6 +58,21 @@ public class JPEGMetaData {
 						APP0DataReader.read(jpegIn, listener);
 					} else if (marker == JPEGMarker.APP1_MARKER) {
 						APP1DataReader.read(jpegIn, listener);
+					} else if (marker == JPEGMarker.BASELINE_MARKER) {
+						byte[] array = new byte[8];
+						if (jpegIn.readFully(array, 8) != 8)
+							throw new IOException("Error reading start of frame marker");
+
+						int[] array2 = new int[array.length];
+						for (int a= 0; a < array2.length; a++) {
+							array2[a] = array[a] & 0xff;
+						}
+
+						int bitsPerPixel = array[0] & 0xff;
+						int height = (array[1] & 0xff) * 256 + (array[2] & 0xff);
+						int width = (array[3] & 0xff) * 256 + (array[4] & 0xff);
+						int numberOfComponents = array[5] & 0xff;
+						listener.imageDescription(bitsPerPixel, width, height, numberOfComponents);
 					} else if (marker == JPEGMarker.APP2_MARKER
 							|| marker == JPEGMarker.APP13_MARKER) {
 						// I don't understand these markers and don't have a
@@ -158,7 +94,7 @@ public class JPEGMetaData {
 								buffer.toString());
 					}
 				} catch (Exception e) {
-					processException(e, markerCode);
+					listener.processException(e, markerCode);
 				}
 				if (marker == JPEGMarker.START_OF_SCAN_MARKER) {
 					return;
@@ -171,17 +107,207 @@ public class JPEGMetaData {
 	}
 
 	/**
-	 * This is called when an exception occurs trying to parse an block of data.
-	 * The default implementation is simply to call
-	 * <code>e.printStackTrace()</code>, but subclasses can override this as
-	 * needed.
-	 * 
-	 * @param e
-	 *            the exception that occurred.
-	 * @param marker
-	 *            the type of marker we were trying to process.
+	 * Return the largest thumbnail available in a JPEG file.
 	 */
-	protected void processException(Exception e, String marker) {
-		e.printStackTrace();
+	public static BufferedImage getThumbnail(InputStream in)
+			throws IOException {
+		JPEGMetaData m = new JPEGMetaData(in);
+		if (m.getThumbnailCount() > 0)
+			return m.getThumbnail(0);
+		return null;
+	}
+
+	/**
+	 * Return the dimensions of a JPEG image, or null if the dimensions couldn't be identified (which should never
+	 * happen for a valid JPEG file)
+	 */
+	public static Dimension getSize(File file) throws IOException {
+		Dimension returnValue = new Dimension(-1, -1);
+		try (FileInputStream in = new FileInputStream(file)) {
+			read(in, new JPEGMetaDataListener() {
+
+				@Override
+				public boolean isThumbnailAccepted(String markerName, int width, int height) {
+					return false;
+				}
+
+				@Override
+				public void addProperty(String markerName, String propertyName, Object value) {
+					// intentionally empty
+				}
+
+				@Override
+				public void addThumbnail(String markerName, BufferedImage bi) {
+					// intentionally empty
+				}
+
+				@Override
+				public void addComment(String markerName, String comment) {
+					// intentionally empty
+				}
+
+				@Override
+				public void startFile() {
+					// intentionally empty
+				}
+
+				@Override
+				public void endFile() {
+					// intentionally empty
+				}
+
+				@Override
+				public void imageDescription(int bitsPerPixel, int width, int height, int numberOfComponents) {
+					returnValue.width = width;
+					returnValue.height = height;
+				}
+
+				@Override
+				public void processException(Exception e, String markerCode) {
+					// intentionally empty
+				}
+			});
+			if (returnValue.width == -1)
+				return null;
+			return returnValue;
+		}
+	}
+
+	private List<QBufferedImage> thumbnailImages = new ArrayList<>();
+	private int width, height, bitsPerPixel, numberOfComponents;
+
+	public JPEGMetaData() {}
+
+	public JPEGMetaData(InputStream in) throws IOException {
+		read(in, true);
+	}
+
+	/**
+	 * Add the metadata of a JPEG file to this object.
+	 *
+	 * @param in the InputStream containing a JPEG file.
+	 * @param keepOnlyLargestThumbnail if true then this JPEGMetaData will retain
+	 *                                 only the largest thumbnail from the incoming InputStream.
+	 *                                 If false then this will retain *all* incoming thumbnails.
+	 *                                 (Note the InputStream may contain 0 thumbnails, so regardless
+	 *                                 of this boolean this JPEGMetaData may have 0 new thumbnails added
+	 *                                 as a result of this method.)
+	 * @throws IOException
+	 */
+	public synchronized void read(InputStream in, boolean keepOnlyLargestThumbnail) throws IOException {
+		read(in, new JPEGMetaDataListener() {
+			int largestThumbnailWidth = -1;
+			int largestThumbnailHeight = -1;
+
+			@Override
+			public boolean isThumbnailAccepted(String markerName, int width, int height) {
+				if (!keepOnlyLargestThumbnail) {
+					return true;
+				}
+
+				if (width > largestThumbnailWidth || height > largestThumbnailHeight) {
+					return true;
+				}
+
+				return false;
+			}
+
+			@Override
+			public void addProperty(String markerName, String propertyName, Object value) {
+				JPEGMetaData.this.addProperty(markerName, propertyName, value);
+			}
+
+			@Override
+			public void addThumbnail(String markerName, BufferedImage bi) {
+				if (largestThumbnailWidth > 0) {
+					removeThumbnail(getThumbnailCount());
+				}
+				addThumbnail(markerName, bi);
+				largestThumbnailWidth = bi.getWidth();
+				largestThumbnailHeight = bi.getHeight();
+			}
+
+			@Override
+			public void addComment(String markerName, String comment) {
+				JPEGMetaData.this.addComment(markerName, comment);
+			}
+
+			@Override
+			public void startFile() {
+				// intentionally empty
+			}
+
+			@Override
+			public void endFile() {
+				// intentionally empty
+			}
+
+			@Override
+			public void imageDescription(int bitsPerPixel, int width, int height, int numberOfComponents) {
+				setImageSize(width, height);
+				setBitsPerPixel(bitsPerPixel);
+				setNumberOfComponents(numberOfComponents);
+			}
+
+			@Override
+			public void processException(Exception e, String markerCode) {
+				e.printStackTrace();
+			}
+		});
+	}
+
+	public void removeThumbnail(int thumbnailIndex) {
+		thumbnailImages.remove(thumbnailIndex);
+	}
+
+	public void addThumbnail(String markerName, BufferedImage bi) {
+		QBufferedImage qbi = (bi instanceof QBufferedImage) ? (QBufferedImage) bi : new QBufferedImage(bi);
+		qbi.setProperty(PROPERTY_JPEG_MARKER, markerName);
+		thumbnailImages.add(qbi);
+	}
+
+	public QBufferedImage getThumbnail(int thumbnailIndex) {
+		return thumbnailImages.get(thumbnailIndex);
+	}
+
+	private void addProperty(String markerName, String propertyName, Object value) {
+		// TODO: implement if we ever get a use case, add accompanying getter method(s)
+	}
+
+	public int getThumbnailCount() {
+		return thumbnailImages.size();
+	}
+
+	private void addComment(String markerName, String comment) {
+		// TODO: implement if we ever get a use case, add accompanying getter method(s)
+	}
+
+	public void setImageSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
+
+	public void setNumberOfComponents(int numberOfComponents) {
+		this.numberOfComponents = numberOfComponents;
+	}
+
+	public void setBitsPerPixel(int bitsPerPixel) {
+		this.bitsPerPixel = bitsPerPixel;
+	}
+
+	public int getBitsPerPixel() {
+		return bitsPerPixel;
+	}
+
+	public int getNumberOfComponents() {
+		return numberOfComponents;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 }

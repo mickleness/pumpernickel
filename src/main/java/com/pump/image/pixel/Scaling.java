@@ -587,13 +587,22 @@ public class Scaling {
 			}
 
 			@Override
+			public void imageDescription(int bitsPerPixel, int width, int height, int numberOfComponents) {
+				// intentionally empty
+			}
+
+			@Override
+			public void processException(Exception e, String markerCode) {
+				// intentionally empty
+			}
+
+			@Override
 			public void startFile() {
 				// intentionally empty
 			}
 		};
-		JPEGMetaData reader = new JPEGMetaData(listener);
 		try (InputStream in = inputStreamSource.createInputStream()) {
-			reader.read(in);
+			JPEGMetaData.read(in, listener);
 			BufferedImage bi = thumbnail.get();
 			if (bi == null)
 				return null;
