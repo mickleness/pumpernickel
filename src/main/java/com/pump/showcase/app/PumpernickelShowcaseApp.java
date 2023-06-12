@@ -167,8 +167,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 		returnValue.add(new ShowcaseDemoInfo("JBreadCrumb", "BreadCrumbDemo"));
 		returnValue.add(new ShowcaseDemoInfo("CollapsibleContainer",
 				"CollapsibleContainerDemo"));
-		returnValue.add(new ShowcaseDemoInfo("CustomizedToolbar",
-				"CustomizedToolbarDemo"));
 		returnValue.add(new ShowcaseDemoInfo("JToolTip, QPopupFactory",
 				"JToolTipDemo"));
 		returnValue.add(new ShowcaseDemoInfo("JPopover", "JPopoverDemo"));
