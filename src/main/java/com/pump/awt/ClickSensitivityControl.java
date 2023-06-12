@@ -20,7 +20,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import com.pump.util.Warnings;
 
@@ -37,40 +37,53 @@ import com.pump.util.Warnings;
  *      href="https://javagraphics.blogspot.com/2011/02/mouse-click-events-adding-wiggle-room.html">Mouse
  *      Click Events: Adding Wiggle Room</a>
  */
-public class ClickSensitivityControl implements AWTEventListener {
+public class ClickSensitivityControl {
+
+	/**
+	 * This client property on a JComponent resolves to a Boolean indicating whether this class should
+	 * simulate MOUSE_CLICKED events for this component.
+	 */
+	public static final String PROPERTY_ENABLED = ClickSensitivityControl.class.getName() + "#enabled";
+
+	private static final ClickSensitivityControl globalInstance = new ClickSensitivityControl();
+
+
 	/**
 	 * The distance between the point where the mouse is pressed and where it is
 	 * released that is allowed to constitute a "click".
 	 * <p>
-	 * Java by default effectively gives you a 0-pixel tolerance. The field is
-	 * initialized to 10, but you're welcome to change it as needed.
-	 * 
+	 * Java by default effectively gives you a 0-pixel tolerance.
+	 *
 	 */
-	public static int DEFAULT_CLICK_EVENT_TOLERANCE = 10;
-	private static Map<Key, Point> clickLocs = new HashMap<Key, Point>();
+	public static final int DEFAULT_CLICK_EVENT_TOLERANCE = 10;
 
-	private static class Key {
+	public static ClickSensitivityControl get() {
+		return globalInstance;
+	}
+
+	public static void install() {
+		// intentionally empty; this will statically install itself if the class loads.
+	}
+
+
+	private final static Map<ClickKey, Point> clickMap = new HashMap<>();
+
+	private static class ClickKey {
 		int button;
 		int modifiers;
 		WeakReference<Component> component;
 
-		Key(MouseEvent m) {
+		ClickKey(MouseEvent m) {
 			button = m.getButton();
 			modifiers = m.getModifiers();
-			component = new WeakReference<Component>(m.getComponent());
-		}
-
-		Key(Component c) {
-			button = MouseEvent.BUTTON1;
-			modifiers = MouseEvent.BUTTON1_MASK;
-			component = new WeakReference<Component>(c);
+			component = new WeakReference<>(m.getComponent());
 		}
 
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof Key))
+			if (!(obj instanceof ClickKey))
 				return false;
-			Key k = (Key) obj;
+			ClickKey k = (ClickKey) obj;
 			if (button != k.button)
 				return false;
 			if (modifiers != k.modifiers)
@@ -99,22 +112,21 @@ public class ClickSensitivityControl implements AWTEventListener {
 	}
 
 	/**
-	 * A runnable that trigger the mouseClicked event.
-	 * 
+	 * A runnable that trigger the MOUSE_CLICKED event.
 	 */
 	private static class TriggerMouseClick implements Runnable {
 		MouseEvent mouseEvent;
-		Key key;
+		ClickKey key;
 
-		public TriggerMouseClick(Key key, MouseEvent mouseEvent) {
+		public TriggerMouseClick(ClickKey key, MouseEvent mouseEvent) {
 			this.mouseEvent = mouseEvent;
 			this.key = key;
 		}
 
 		public void run() {
-			if (clickLocs.containsKey(key) == false)
+			if (clickMap.containsKey(key) == false)
 				return;
-			clickLocs.remove(key);
+			clickMap.remove(key);
 			MouseEvent newEvent = new MouseEvent(mouseEvent.getComponent(),
 					MouseEvent.MOUSE_CLICKED, mouseEvent.getWhen(),
 					mouseEvent.getModifiers(), mouseEvent.getX(),
@@ -131,104 +143,81 @@ public class ClickSensitivityControl implements AWTEventListener {
 		}
 	}
 
-	public synchronized static void install() {
-		install(DEFAULT_CLICK_EVENT_TOLERANCE);
-	}
+	int clickPixelTolerance = DEFAULT_CLICK_EVENT_TOLERANCE;
 
-	public synchronized static void install(int clickPixelTolerance) {
-		ClickSensitivityControl csc = new ClickSensitivityControl(
-				clickPixelTolerance);
-		Toolkit.getDefaultToolkit().addAWTEventListener(csc,
+	AWTEventListener listener = new AWTEventListener() {
+		@Override
+		public void eventDispatched(AWTEvent event) {
+			MouseEvent m = (MouseEvent) event;
+			if (m.getID() == MouseEvent.MOUSE_CLICKED) {
+				mouseClicked(m);
+			} else if (m.getID() == MouseEvent.MOUSE_DRAGGED) {
+				mouseDragged(m);
+			} else if (m.getID() == MouseEvent.MOUSE_PRESSED) {
+				mousePressed(m);
+			} else if (m.getID() == MouseEvent.MOUSE_RELEASED) {
+				mouseReleased(m);
+			}
+		}
+
+		protected void mouseDragged(MouseEvent e) {
+			ClickKey key = new ClickKey(e);
+			Point clickLoc = clickMap.get(key);
+			if (clickLoc == null)
+				return;
+
+			Point releaseLoc = e.getPoint();
+			double distance = releaseLoc.distance(clickLoc);
+
+			if (distance > getClickPixelTolerance())
+				clickMap.remove(key);
+		}
+
+		protected void mouseClicked(MouseEvent e) {
+			ClickKey key = new ClickKey(e);
+			clickMap.remove(key);
+		}
+
+		protected void mousePressed(MouseEvent e) {
+			if (e.getComponent() instanceof JComponent) {
+				JComponent jc = (JComponent) e.getComponent();
+				Boolean b = (Boolean) jc.getClientProperty(PROPERTY_ENABLED);
+				if (Boolean.FALSE.equals(b))
+					return;
+			}
+
+			ClickKey key = new ClickKey(e);
+			clickMap.put(key, e.getPoint());
+		}
+
+		protected void mouseReleased(MouseEvent e) {
+			ClickKey key = new ClickKey(e);
+			Point clickLoc = clickMap.get(key);
+			if (clickLoc == null)
+				return;
+
+			Point releaseLoc = e.getPoint();
+			double distance = releaseLoc.distance(clickLoc);
+
+			if (distance > getClickPixelTolerance()) {
+				clickMap.remove(key);
+				return;
+			}
+
+			SwingUtilities.invokeLater(new TriggerMouseClick(key, e));
+		}
+	};
+
+	public ClickSensitivityControl() {
+		Toolkit.getDefaultToolkit().addAWTEventListener(listener,
 				AWTEvent.MOUSE_EVENT_MASK + AWTEvent.MOUSE_MOTION_EVENT_MASK);
-	}
-
-	int clickPixelTolerance;
-
-	protected ClickSensitivityControl(int clickPixelTolerance) {
-		setClickPixelTolerance(clickPixelTolerance);
 	}
 
 	public void setClickPixelTolerance(int clickPixelTolerance) {
 		this.clickPixelTolerance = clickPixelTolerance;
 	}
 
-	public int getClickPixelTolerance(Component c) {
+	public int getClickPixelTolerance() {
 		return clickPixelTolerance;
-	}
-
-	@Override
-	public void eventDispatched(AWTEvent e) {
-		MouseEvent m = (MouseEvent) e;
-		if (m.getID() == MouseEvent.MOUSE_CLICKED) {
-			mouseClicked(m);
-		} else if (m.getID() == MouseEvent.MOUSE_DRAGGED) {
-			mouseDragged(m);
-		} else if (m.getID() == MouseEvent.MOUSE_ENTERED) {
-			mouseEntered(m);
-		} else if (m.getID() == MouseEvent.MOUSE_EXITED) {
-			mouseExited(m);
-		} else if (m.getID() == MouseEvent.MOUSE_MOVED) {
-			mouseMoved(m);
-		} else if (m.getID() == MouseEvent.MOUSE_PRESSED) {
-			mousePressed(m);
-		} else if (m.getID() == MouseEvent.MOUSE_RELEASED) {
-			mouseReleased(m);
-		}
-	}
-
-	protected void mouseDragged(MouseEvent e) {
-		Key key = new Key(e);
-		Point clickLoc = clickLocs.get(key);
-		if (clickLoc == null)
-			return;
-
-		Point releaseLoc = e.getPoint();
-		double distance = releaseLoc.distance(clickLoc);
-
-		if (distance > getClickPixelTolerance(e.getComponent())) {
-			clickLocs.remove(key);
-			return;
-		}
-	}
-
-	protected void mouseClicked(MouseEvent e) {
-		Key key = new Key(e);
-		clickLocs.remove(key);
-	}
-
-	protected void mousePressed(MouseEvent e) {
-		Key key = new Key(e);
-		clickLocs.put(key, e.getPoint());
-	}
-
-	protected void mouseReleased(MouseEvent e) {
-		Key key = new Key(e);
-		Point clickLoc = clickLocs.get(key);
-		if (clickLoc == null)
-			return;
-
-		Point releaseLoc = e.getPoint();
-		double distance = releaseLoc.distance(clickLoc);
-
-		if (distance > getClickPixelTolerance(e.getComponent())) {
-			clickLocs.remove(key);
-			return;
-		}
-
-		SwingUtilities.invokeLater(new TriggerMouseClick(key, e));
-	}
-
-	protected void mouseEntered(MouseEvent e) {
-	}
-
-	protected void mouseExited(MouseEvent e) {
-	}
-
-	protected void mouseMoved(MouseEvent e) {
-	}
-
-	public boolean isClick(Component c) {
-		Key key = new Key(c);
-		return clickLocs.containsKey(key);
 	}
 }

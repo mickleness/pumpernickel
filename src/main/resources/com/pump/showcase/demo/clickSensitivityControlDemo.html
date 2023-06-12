@@ -1,28 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>AlphaComposite Demo</title>
+    <title>ClickSensitivityControl Demo</title>
 </head>
 <body>
-
-This addresses a problem we saw creep up on our users over the years as touchscreens and tablets became more popular.
-<p>
-The <code>java.awt.event.MouseListener</code> is notified for (among other things) MOUSE_PRESSED, MOUSE_RELEASED and MOUSE_CLICKED events. The first two always work great. But MOUSE_CLICKED events are only triggered after a MOUSE_PRESSED and MOUSE_RELEASED event occur at the same (x,y) location.
-<p>
-Requiring all events happen at the same (x,y) has become a problem, though. In the same way that we need <a href="resource:mousesmoothing">MouseSmoothing</a> to smooth out the natural tremors in our hand movements, we need to allow for the possibility that users may move the cursor a few pixels and still be trying to "click" something. This relates to both new(ish) technologies for cursor control (such as touchscreens) and to accessibility (such as hand tremors).
-<p>
-The <code>ClickSensitivityControl</code> class provides a static <code>install()</code> method that creates a universal event listener that identifies and compensates for this issue.
-<p>
-In this demo you can see this in action when you interact with "Widget B". By contrast "Widget A" explicitly disables the <code>ClickSensitivityControl</code>, so the events it receives are the default events the JVM normally creates.
-<p>
-As an aside: it's worth noting that <code>AbstractButtons</code> do <em>not</em> rely on MOUSE_CLICKED events. They have their own complex interaction model involving arming buttons. The <code>ClickSensitivityControl</code> only affects logic listening for MOUSE_CLICKED events, such as the <code>BasicTreeUI</code>.
-<p>
-<h3>Implementation</h3>
-<p>
-The <code>ClickSensitivityControl</code> adds a <code>AWTEventListener</code> for <code>MouseEvents</code>. When a MOUSE_PRESSED, MOUSE_DRAGGED or MOUSE_RELEASED event comes in it is logged. Then we wait a beat (using <code>invokeLater(..)</code> and see if a corresponding MOUSE_CLICKED event comes in. If it does not, then we generate our own MOUSE_CLICKED event and post it to the event queue.
-<p>
-This implementation should safely handle the possibility that some other entity may also try to "fix" (or at least change) this going forward. If something else generates the MOUSE_CLICKED event: great! If not: we're ready to do it ourselves.
-<p>
-At any point if the user triggers a MOUSE_DRAGGED event that strays too far from the MOUSE_PRESSED location then the deal's off: the <code>ClickSensitivityControl</code> will never generate a MOUSE_CLICKED event. (To test this: set the click tolerance to 10 pixels, then click "Widget B", move the mouse 20 pixels, then move the mouse back to your starting point: you shouldn't see a MOUSE_CLICKED event.)
+<h2>What Is It</h2>
+<p>The <code>ClickSensitivityControl</code> class helps simulate MOUSE_CLICKED events even if the mouse moves a few pixels.
+<p>By default Java only fires MOUSE_CLICKED events after receiving a MOUSE_PRESSED and a MOUSE_RELEASED at exactly the same (x,y) location.
+<h2>How To Use It</h2>
+<p>All you need to call is: <code>ClickSensitivityControl.install()</code>.
+<h2>How It Works</h2>
+<p>The <code>ClickSensitivityControl</code> object uses a global <code>AWTEventListener</code> to listen for mouse activity. After receiving a MOUSE_RELEASED event: it checks to see if the mouse stayed within a certain range of pixels, and if so it may fire its own MOUSE_CLICKED event.
+<p>At any point if the user strays outside of the allotted range: we abort the potential MOUSE_CLICKED event. Also if someday Java changes its behavior: this class should detect the other MOUSE_CLICKED event and not fire a redundant event.</p>
+<h2>Discussion</h2>
+<p>Over the years we found the default Java behavior became problematic for a minority of our users.
+<p>You can think of this as an accessibility feature: if someone has minor hand tremors, then its harder for them to keep their mouse perfectly still. (Actually where this first came up for us was with small children who lacked the motor control most adult users have.)
+<p>Also this is useful for remote mice, or touchpads. In my opinion Java's default behavior works best with a traditional mouse, but with more abstract pointer devices: it's not always a safe bet that the mouse coordinates won't move at least a little bit when the user clicks.
+<p>It's worth noting that these concerns do not affect buttons. <code>JButtons</code> do <em>not</em> rely on MOUSE_CLICKED events. They have their own complex interaction model involving arming buttons. The <code>ClickSensitivityControl</code> only affects logic listening for MOUSE_CLICKED events, such as the <code>BasicTreeUI</code>.
 </body>
 </html>
+
