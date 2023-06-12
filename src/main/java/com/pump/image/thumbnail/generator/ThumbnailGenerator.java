@@ -23,7 +23,7 @@ public interface ThumbnailGenerator {
 	 * value then this is the value that subclasses may default to if they don't
 	 * have their own preference.
 	 */
-	public static int MAX_SIZE_DEFAULT = 100;
+	int MAX_SIZE_DEFAULT = 100;
 
 	/**
 	 * This value (-1) indicates the caller prefers any thumbnail that is
@@ -31,7 +31,7 @@ public interface ThumbnailGenerator {
 	 * embeds a thumbnail in its metadata then that thumbnail should be
 	 * returned.
 	 */
-	public static final int MAX_SIZE_UNDEFINED = -1;
+	int MAX_SIZE_UNDEFINED = -1;
 
 	/**
 	 * Create a file's image preview, or return null if this object can't read
@@ -46,6 +46,11 @@ public interface ThumbnailGenerator {
 	 *            This only applies when an image needs to scale down. If the
 	 *            image is 16x16px and you request a maximum image size of
 	 *            128px: then this method should return the 16x16px image.
+	 *            <p>
+	 *            If this value is positive and this generator can't produce a
+	 *            thumbnail that is as large as this value: then this method
+	 *            should return null.
+	 *            </p>
 	 */
 	public BufferedImage createThumbnail(File file, int requestedMaxImageSize)
 			throws Exception;

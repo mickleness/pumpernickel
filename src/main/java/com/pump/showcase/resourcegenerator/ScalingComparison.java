@@ -18,12 +18,10 @@ import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.Scaling;
 import com.pump.io.FileInputStreamSource;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class ScalingComparison extends DemoResourceGenerator {
@@ -33,17 +31,6 @@ public class ScalingComparison extends DemoResourceGenerator {
          * See https://bugs.openjdk.org/browse/JDK-6196792
          */
         GET_SCALED_INSTANCE("Image.getScaledInstance") {
-            @Override
-            public BufferedImage createThumbnail(File srcFile, int thumbnailWidth, int thumbnailHeight) {
-                Image srcImage = createImage(srcFile);
-                try {
-                    Image scaledImage = srcImage.getScaledInstance(thumbnailWidth, thumbnailHeight, Image.SCALE_SMOOTH);
-                    return ImagePixelIterator.createBufferedImage(scaledImage);
-                } finally {
-                    srcImage.flush();
-                }
-            }
-
             @Override
             public BufferedImage createThumbnail(BufferedImage srcImage, int thumbnailWidth, int thumbnailHeight) throws Exception {
                 Image scaledImage = srcImage.getScaledInstance(thumbnailWidth, thumbnailHeight, Image.SCALE_SMOOTH);
@@ -66,12 +53,6 @@ public class ScalingComparison extends DemoResourceGenerator {
 //         */
 //        IMGSCALR("imgscalr") {
 //            @Override
-//            public BufferedImage createThumbnail(File srcFile, int thumbnailWidth, int thumbnailHeight) throws Exception {
-//                BufferedImage bi = ImageIO.read(srcFile);
-//                return createThumbnail(bi, thumbnailWidth, thumbnailHeight);
-//            }
-//
-//            @Override
 //            public BufferedImage createThumbnail(BufferedImage srcImage, int thumbnailWidth, int thumbnailHeight) throws Exception {
 //                return Scalr.resize(srcImage, thumbnailWidth);
 //            }
@@ -81,12 +62,6 @@ public class ScalingComparison extends DemoResourceGenerator {
 //         * See https://github.com/coobird/thumbnailator
 //         */
 //        THUMBNAILATOR("Thumbnailator") {
-//            @Override
-//            public BufferedImage createThumbnail(File srcFile, int thumbnailWidth, int thumbnailHeight) throws Exception {
-//                return Thumbnails.of(srcFile)
-//                        .size(thumbnailWidth, thumbnailHeight).asBufferedImage();
-//            }
-//
 //            @Override
 //            public BufferedImage createThumbnail(BufferedImage srcImage, int thumbnailWidth, int thumbnailHeight) throws Exception {
 //                return Thumbnails.of(srcImage)
@@ -165,75 +140,8 @@ public class ScalingComparison extends DemoResourceGenerator {
 
                 return thumb;
             }
-
-            /**
-             * This is an adaptation of image that accepts a BufferedImage.
-             * @param srcFile
-             * @param thumbnailWidth
-             * @param thumbnailHeight
-             * @return
-             * @throws Exception
-             */
-            @Override
-            public BufferedImage createThumbnail(File srcFile, int thumbnailWidth, int thumbnailHeight) throws Exception {
-                Image image = Toolkit.getDefaultToolkit().createImage(srcFile.getAbsolutePath());
-
-                MediaTracker tracker = new MediaTracker(new Label());
-                tracker.addImage(image, 0);
-                tracker.waitForAll();
-
-                int width = image.getWidth(null);
-                int height = image.getHeight(null);
-
-                if (thumbnailWidth >= width || thumbnailHeight >= height) {
-                    throw new IllegalArgumentException("newWidth and newHeight cannot"
-                            + " be greater than the image" + " dimensions");
-                } else if (thumbnailWidth <= 0 || thumbnailHeight <= 0) {
-                    throw new IllegalArgumentException(
-                            "newWidth and newHeight must" + " be greater than 0");
-                }
-
-                Image thumb = image;
-
-                do {
-                    if (width > thumbnailWidth) {
-                        width /= 2;
-                        if (width < thumbnailWidth) {
-                            width = thumbnailWidth;
-                        }
-                    }
-
-                    if (height > thumbnailHeight) {
-                        height /= 2;
-                        if (height < thumbnailHeight) {
-                            height = thumbnailHeight;
-                        }
-                    }
-
-                    GraphicsConfiguration gc = GraphicsEnvironment
-                            .getLocalGraphicsEnvironment().getDefaultScreenDevice()
-                            .getDefaultConfiguration();
-                    BufferedImage temp = gc.createCompatibleImage(width, height);
-
-                    Graphics2D g2 = temp.createGraphics();
-                    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                            RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                    g2.drawImage(thumb, 0, 0, temp.getWidth(), temp.getHeight(), null);
-                    g2.dispose();
-
-                    thumb = temp;
-                } while (width != thumbnailWidth || height != thumbnailHeight);
-
-                return (BufferedImage) thumb;
-            }
         },
         PUMPERNICKEL("Pumpernickel") {
-            @Override
-            public BufferedImage createThumbnail(File srcFile, int thumbnailWidth, int thumbnailHeight) throws IOException {
-                Dimension size = new Dimension(thumbnailWidth, thumbnailHeight);
-                return Scaling.scale(srcFile, size, null, null);
-            }
-
             @Override
             public BufferedImage createThumbnail(BufferedImage srcImage, int thumbnailWidth, int thumbnailHeight) throws Exception {
                 Dimension size = new Dimension(thumbnailWidth, thumbnailHeight);
@@ -246,8 +154,6 @@ public class ScalingComparison extends DemoResourceGenerator {
         Model(String name) {
             this.name = name;
         }
-
-        public abstract BufferedImage createThumbnail(File srcFile, int thumbnailWidth, int thumbnailHeight) throws Exception;
 
         public abstract BufferedImage createThumbnail(BufferedImage srcImage, int thumbnailWidth, int thumbnailHeight) throws Exception;
 
@@ -264,25 +170,24 @@ public class ScalingComparison extends DemoResourceGenerator {
         new ScalingComparison().run(null);
     }
 
+    int[] imageTypes = new int[]{
+            BufferedImage.TYPE_INT_BGR, BufferedImage.TYPE_INT_RGB, BufferedImage.TYPE_INT_ARGB, BufferedImage.TYPE_INT_ARGB_PRE,
+            BufferedImage.TYPE_3BYTE_BGR, BufferedImage.TYPE_4BYTE_ABGR, BufferedImage.TYPE_4BYTE_ABGR_PRE
+    };
+
     @Override
     public void run(DemoResourceContext context) throws Exception {
         long[] samples = new long[20];
+
+        BufferedImage bi = createBufferedImage(2000, 1500);
+
+        testAntialiasing(bi);
 
         for (Model model : ScalingComparison.Model.values()) {
             System.out.print("\t" + model.name);
         }
         System.out.println();
 
-        BufferedImage bi = createBufferedImage(2000, 1500);
-        if (getAntialiasedPixels(bi) > 0)
-            throw new AssertionError("There should be no antialiased pixels in the source image. (fraction = " + getAntialiasedPixels(bi) +")" ) ;
-
-        BufferedImage lastImage = null;
-
-        int[] imageTypes = new int[]{
-                BufferedImage.TYPE_INT_BGR, BufferedImage.TYPE_INT_RGB, BufferedImage.TYPE_INT_ARGB, BufferedImage.TYPE_INT_ARGB_PRE,
-                BufferedImage.TYPE_3BYTE_BGR, BufferedImage.TYPE_4BYTE_ABGR, BufferedImage.TYPE_4BYTE_ABGR_PRE
-        };
         for (int imageType : imageTypes) {
             BufferedImage copy = createCopy(bi, imageType);
             System.out.print(ImageType.toString(imageType));
@@ -291,7 +196,7 @@ public class ScalingComparison extends DemoResourceGenerator {
                     samples[sampleIndex] = System.currentTimeMillis();
                     try {
                         for (int ctr = 0; ctr < 10; ctr++) {
-                            lastImage = model.createThumbnail(copy, 80, 60);
+                            model.createThumbnail(copy, 80, 60);
                         }
                     } catch (Throwable t) {
                         t.printStackTrace();
@@ -300,60 +205,30 @@ public class ScalingComparison extends DemoResourceGenerator {
                 }
                 Arrays.sort(samples);
                 System.out.print("\t" + samples[samples.length / 2]);
-
-                if (getAntialiasedPixels(lastImage) < .5)
-                    throw new AssertionError("There should be over 50% antialiased pixels in the scaled image. (fraction = " + getAntialiasedPixels(lastImage) +", model = " + model + ")" ) ;
             }
 
             System.out.println();
         }
+    }
 
+    /**
+     * This makes sure our scaling models are antialiasing/smoothing the image as they scale.
+     */
+    private void testAntialiasing(BufferedImage bi) {
+        if (getAntialiasedPixels(bi) > 0)
+            throw new AssertionError("There should be no antialiased pixels in the source image. (fraction = " + getAntialiasedPixels(bi) +")" ) ;
 
-        File pngFile = TempFileManager.get().createFile("sample", "png");
-        File jpgFile = TempFileManager.get().createFile("sample", "jpg");
-        File bmpFile = TempFileManager.get().createFile("sample", "bmp");
         try {
-            ImageIO.write(bi, "png", pngFile);
-            ImageIO.write(bi, "jpg", jpgFile);
-            ImageIO.write(bi, "bmp", bmpFile);
-
-            // bmpFiles fail for GET_SCALED_INSTANCE for multiple reasons:
-            // 1. They are bottom-to-top, so the scaling filter (AreaAveragingScaleFilter)
-            // automatically aborts to its "passthrough" default (ReplicateScaleFilter).
-            // 2. That default does the wrong thing (I think). My code ends up throwing
-            // an exception because it tries to produce a row of data where
-            // the scansize = the width (for RGB byte data). I'm 90% sure this is a OpenJDK bug,
-            // but as a rule I usually only worry about / report Java bugs that come up
-            // in the real world...
-            //                for (File file : new File[] { pngFile, jpgFile, bmpFile}) {
-
-            for (File file : new File[]{pngFile, jpgFile}) {
-                System.out.print(getFileExtension(file));
+            for (int imageType : imageTypes) {
+                BufferedImage copy = createCopy(bi, imageType);
                 for (ScalingComparison.Model model : ScalingComparison.Model.values()) {
-                    for (int sampleIndex = 0; sampleIndex < samples.length; sampleIndex++) {
-                        samples[sampleIndex] = System.currentTimeMillis();
-                        try {
-                            for (int ctr = 0; ctr < 10; ctr++) {
-                                lastImage = model.createThumbnail(file, 80, 60);
-                            }
-                        } catch (Throwable t) {
-                            t.printStackTrace();
-                        }
-                        samples[sampleIndex] = System.currentTimeMillis() - samples[sampleIndex];
-                    }
-
-                    if (getAntialiasedPixels(lastImage) < .5)
-                        throw new AssertionError("There should be over 50% antialiased pixels in the scaled image. (fraction = " + getAntialiasedPixels(lastImage) +", model = " + model + ")" ) ;
-
-                    Arrays.sort(samples);
-                    System.out.print("\t" + samples[samples.length / 2]);
+                    BufferedImage img = model.createThumbnail(copy, 80, 60);
+                    if (getAntialiasedPixels(img) < .5)
+                        throw new AssertionError("There should be over 50% antialiased pixels in the scaled image. (fraction = " + getAntialiasedPixels(img) +", model = " + model + ")" ) ;
                 }
-                System.out.println();
             }
-        } finally {
-            pngFile.delete();
-            jpgFile.delete();
-            bmpFile.delete();
+        } catch(Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

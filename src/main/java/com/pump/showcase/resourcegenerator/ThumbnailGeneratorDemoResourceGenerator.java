@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.*;
 
 import com.pump.image.thumbnail.generator.BasicThumbnailGenerator;
+import com.pump.image.thumbnail.generator.ImageIOThumbnailGenerator;
 import com.pump.image.thumbnail.generator.ScalingThumbnailGenerator;
 import com.pump.image.thumbnail.generator.ThumbnailGenerator;
 import com.pump.showcase.demo.ThumbnailGeneratorDemo;
@@ -26,51 +27,73 @@ public class ThumbnailGeneratorDemoResourceGenerator
 		extends DemoResourceGenerator {
 
 	public void run(DemoResourceContext context) throws Exception {
-		ScalingThumbnailGenerator.ALLOW_EMBEDDED_THUMBNAILS = false;
-		try {
-			File srcFile = context.getFile("bridge3.jpg");
-			System.out.println("Source file: " + srcFile.getAbsolutePath());
+		File srcFile = context.getFile("IMG-20171107-WA0002.jpg");
+		System.out.println("Source file: " + srcFile.getAbsolutePath());
 
-			Thread.sleep(3000);
+		Thread.sleep(3000);
 
-			StringBuilder sb = new StringBuilder();
+		List<ThumbnailGenerator> generators = new ArrayList<>();
+		generators.addAll(Arrays.asList(ThumbnailGeneratorDemo.GENERATORS));
+		generators.add(new ScalingThumbnailGenerator(false));
+		generators.add(new ImageIOThumbnailGenerator(false));
 
-			for (ThumbnailGenerator gs : ThumbnailGeneratorDemo.GENERATORS) {
-				if (gs instanceof BasicThumbnailGenerator)
-					continue;
-				String seriesName = gs.getClass().getSimpleName();
-				sb.append(seriesName + "\t");
-			}
-			sb.append("\n");
+		SortedSet<Long> sortedTimes = new TreeSet<>();
+		Map<ThumbnailGenerator, Long> timeMap = new HashMap<>();
 
-			for (ThumbnailGenerator gs : ThumbnailGeneratorDemo.GENERATORS) {
-				if (gs instanceof BasicThumbnailGenerator)
-					continue;
+		for (ThumbnailGenerator gs : generators) {
+			if (gs instanceof BasicThumbnailGenerator)
+				continue;
 
-				System.gc();
-				System.gc();
-				long[] times = new long[10];
-				try {
-					for (int a = 0; a < times.length; a++) {
-						times[a] = System.currentTimeMillis();
-						for (int b = 0; b < 10; b++) {
-							gs.createThumbnail(srcFile, -1);
-						}
-						times[a] = System.currentTimeMillis() - times[a];
+			System.gc();
+			System.gc();
+			long[] times = new long[10];
+			try {
+				for (int a = 0; a < times.length; a++) {
+					times[a] = System.currentTimeMillis();
+					for (int b = 0; b < 10; b++) {
+						gs.createThumbnail(srcFile, -1);
 					}
-					Arrays.sort(times);
-					long time = times[times.length / 2];
-					sb.append(time + "\t");
-				} catch (Throwable t) {
-					t.printStackTrace();
-					System.err.println(gs.getClass().getSimpleName() + " failed");
-					return;
+					times[a] = System.currentTimeMillis() - times[a];
+				}
+				Arrays.sort(times);
+				long time = times[times.length / 2];
+				sortedTimes.add(time);
+				timeMap.put(gs, time);
+			} catch (Throwable t) {
+				t.printStackTrace();
+				System.err.println(gs.getClass().getSimpleName() + " failed");
+				return;
+			}
+		}
+
+		StringBuilder row1 = new StringBuilder();
+		StringBuilder row2 = new StringBuilder();
+		for (Long time : sortedTimes) {
+			for (Map.Entry<ThumbnailGenerator, Long> entry : timeMap.entrySet()) {
+				if (entry.getValue().equals(time)) {
+					row1.append(toString(entry.getKey()) + "\t");
+					row2.append(entry.getValue() + "\t");
 				}
 			}
-			sb.append("\n");
-			System.out.println(sb);
-		} finally {
-			ScalingThumbnailGenerator.ALLOW_EMBEDDED_THUMBNAILS = true;
 		}
+		System.out.println(row1);
+		System.out.println(row2);
+
+	}
+
+	private String toString(ThumbnailGenerator gs) {
+		if (gs instanceof ScalingThumbnailGenerator) {
+			ScalingThumbnailGenerator stg = (ScalingThumbnailGenerator) gs;
+			if (stg.isAllowEmbeddedThumbnails())
+				return "ScalingThumbnailGenerator (Thumbnails)";
+			return "ScalingThumbnailGenerator (No Thumbnails)";
+		}
+		if (gs instanceof ImageIOThumbnailGenerator) {
+			ImageIOThumbnailGenerator itg = (ImageIOThumbnailGenerator) gs;
+			if (itg.isAllowDownsampling())
+				return "ImageIOThumbnailGenerator (Downsampling)";
+			return "ImageIOThumbnailGenerator (No Upsampling)";
+		}
+		return gs.getClass().getSimpleName();
 	}
 }
