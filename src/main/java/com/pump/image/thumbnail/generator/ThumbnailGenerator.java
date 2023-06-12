@@ -52,6 +52,6 @@ public interface ThumbnailGenerator {
 	 *            should return null.
 	 *            </p>
 	 */
-	public BufferedImage createThumbnail(File file, int requestedMaxImageSize)
+	BufferedImage createThumbnail(File file, int requestedMaxImageSize)
 			throws Exception;
 }

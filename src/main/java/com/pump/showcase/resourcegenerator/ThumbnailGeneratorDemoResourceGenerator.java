@@ -13,10 +13,7 @@ package com.pump.showcase.resourcegenerator;
 import java.io.File;
 import java.util.*;
 
-import com.pump.image.thumbnail.generator.BasicThumbnailGenerator;
-import com.pump.image.thumbnail.generator.ImageIOThumbnailGenerator;
-import com.pump.image.thumbnail.generator.ScalingThumbnailGenerator;
-import com.pump.image.thumbnail.generator.ThumbnailGenerator;
+import com.pump.image.thumbnail.generator.*;
 import com.pump.showcase.demo.ThumbnailGeneratorDemo;
 
 /**
@@ -91,8 +88,8 @@ public class ThumbnailGeneratorDemoResourceGenerator
 		if (gs instanceof ImageIOThumbnailGenerator) {
 			ImageIOThumbnailGenerator itg = (ImageIOThumbnailGenerator) gs;
 			if (itg.isAllowDownsampling())
-				return "ImageIOThumbnailGenerator (Downsampling)";
-			return "ImageIOThumbnailGenerator (No Upsampling)";
+				return "ImageIOThumbnailGenerator (Subsampling)";
+			return "ImageIOThumbnailGenerator (No Subsampling)";
 		}
 		return gs.getClass().getSimpleName();
 	}
