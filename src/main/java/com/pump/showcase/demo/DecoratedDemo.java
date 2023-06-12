@@ -264,7 +264,7 @@ public class DecoratedDemo extends ShowcaseDemo {
 		private Icon getIcon(JComponent jc) {
 			Number n = (Number) jc.getClientProperty(PROPERTY_STAR_COUNT);
 			if (n == null)
-				n = new Integer(0);
+				n = 0;
 			if (n.intValue() >= myStarIndex) {
 				return FULL_STAR_ICON;
 			}
