@@ -177,11 +177,9 @@ public class MacQuickLookThumbnailGenerator implements ThumbnailGenerator {
 	 * 
 	 * @param pipeOutput
 	 *            if true then we'll print the process output to System.out.
-	 * @param an
-	 *            optional set of file extensions to accept. If this is null
+	 * @param fileExtensions an optional set of file extensions to accept. If this is null
 	 *            then the default set is used.
-	 * @param the
-	 *            number of milliseconds to wait before killing the qlmanage
+	 * @param processTimeoutMS the number of milliseconds to wait before killing the qlmanage
 	 *            process.
 	 */
 	public MacQuickLookThumbnailGenerator(boolean pipeOutput,
