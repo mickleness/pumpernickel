@@ -10,18 +10,14 @@
  */
 package com.pump.text;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Highlighter.HighlightPainter;
 import javax.swing.text.JTextComponent;
 
+import com.pump.awt.HSLColor;
 import com.pump.awt.TextBlock;
 
 /**
@@ -36,10 +32,10 @@ public class TextBoxHighlightPainter implements HighlightPainter {
 	protected boolean includeFill;
 	protected float alpha = 1;
 
-	public TextBoxHighlightPainter(float hue, boolean includeFill) {
+	public TextBoxHighlightPainter(Color color, boolean includeFill) {
 		this.includeFill = includeFill;
 
-		textBlock = new TextBlock(hue, "") {
+		textBlock = new TextBlock(0, "") {
 			@Override
 			protected Rectangle2D getStringBounds() {
 				Rectangle2D r = new Rectangle2D.Float();
@@ -47,6 +43,8 @@ public class TextBoxHighlightPainter implements HighlightPainter {
 				return r;
 			}
 		};
+		Color darkerColor = HSLColor.transform(color, 0, 1, .8f);
+		textBlock.setBackground(new GradientPaint(0, 0, color, 0, 20, darkerColor));
 		textBlock.setCurveWidth(4);
 		textBlock.setInsets(new Insets(0, 0, 0, 0));
 		textBlock.setTextInsets(new Insets(0, 1, 0, 1));
@@ -54,8 +52,8 @@ public class TextBoxHighlightPainter implements HighlightPainter {
 		textBlock.setBackgroundShadowColor(new Color(0, 0, 0, 10));
 	}
 
-	public TextBoxHighlightPainter(float hue, boolean includeFill, float alpha) {
-		this(hue, includeFill);
+	public TextBoxHighlightPainter(Color color, boolean includeFill, float alpha) {
+		this(color, includeFill);
 		this.alpha = alpha;
 	}
 

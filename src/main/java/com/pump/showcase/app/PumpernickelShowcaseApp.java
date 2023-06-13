@@ -187,8 +187,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 		// TextSearchDemo());
 		// add(new DemoListElement("QuickTime: Writing Movies", new
 		// MovWriterDemo());
-		returnValue.add(new ShowcaseDemoInfo("Highlighters, WildcardPattern",
-				"WildcardPatternHighlighterDemo"));
+		returnValue.add(new ShowcaseDemoInfo("HighlightPainters",
+				"HighlightPainterDemo"));
 		returnValue.add(
 				new ShowcaseDemoInfo("BoxTabbedPaneUI", "BoxTabbedPaneUIDemo"));
 		returnValue.add(new ShowcaseDemoInfo("CircularProgressBarUI",
