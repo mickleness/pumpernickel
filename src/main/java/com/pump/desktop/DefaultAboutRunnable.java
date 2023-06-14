@@ -18,12 +18,7 @@ import java.awt.image.BufferedImage;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import com.pump.swing.JLink;
@@ -37,6 +32,19 @@ import com.pump.swing.JLink;
 public class DefaultAboutRunnable implements Runnable {
 	WeakReference<JDialog> lastDialogRef;
 
+	protected String appSimpleName, appVersion, appCopyright;
+	protected URL appURL;
+
+	/**
+	 * Any of these may be null
+	 */
+	protected JLabel versionLabel, copyrightLabel, imageLabel;
+
+	/**
+	 * This may be either a JLabel or a JLink.
+	 */
+	protected JComponent appNameLabel;
+
 	@Override
 	public void run() {
 		JDialog lastDialog = lastDialogRef == null ? null : lastDialogRef.get();
@@ -46,33 +54,33 @@ public class DefaultAboutRunnable implements Runnable {
 		}
 
 		DesktopApplication app = DesktopApplication.get();
-		String name = app.getSimpleName();
-		String version = app.getVersion();
-		String copyright = app.getCopyright();
-		URL url = app.getURL();
+		appSimpleName = app.getSimpleName();
+		appVersion = app.getVersion();
+		appCopyright = app.getCopyright();
+		appURL = app.getURL();
 
-		JLabel versionLabel = version == null ? null
-				: new JLabel("Version " + version);
-		JLabel copyrightLabel = name == null ? null : new JLabel(copyright);
+		versionLabel = appVersion == null ? null
+				: new JLabel("Version " + appVersion);
+		copyrightLabel = appCopyright == null ? null : new JLabel(appCopyright);
 
 		Font bigFont = UIManager.getFont("InternalFrame.titleFont");
 		Font smallFont = UIManager.getFont("IconButton.font");
 
-		JComponent nameComponent = null;
-		if (name != null) {
-			if (url == null) {
-				JLabel label = name == null ? null : new JLabel(name);
+		appNameLabel = null;
+		if (appSimpleName != null) {
+			if (appURL == null) {
+				JLabel label = appSimpleName == null ? null : new JLabel(appSimpleName);
 				if (bigFont != null)
 					label.setFont(bigFont);
 				label.setFont(label.getFont().deriveFont(Font.BOLD));
-				nameComponent = label;
+				appNameLabel = label;
 				;
 			} else {
-				JLink link = new JLink(name, url);
+				JLink link = new JLink(appSimpleName, appURL);
 				if (bigFont != null)
 					link.setFont(bigFont);
 				link.setFont(link.getFont().deriveFont(Font.BOLD));
-				nameComponent = link;
+				appNameLabel = link;
 			}
 		}
 
@@ -87,34 +95,32 @@ public class DefaultAboutRunnable implements Runnable {
 		}
 
 		BufferedImage image = app.getImage();
+		imageLabel = null;
+		if (image != null) {
+			imageLabel = new JLabel(new ImageIcon(image));
+		}
 
+		JDialog dialog = showDialog(imageLabel, appNameLabel, versionLabel, copyrightLabel);
+
+		lastDialogRef = new WeakReference<>(dialog);
+	}
+
+	protected JDialog showDialog(JComponent... components) {
 		JDialog dialog = new JDialog();
 		JPanel panel = new JPanel(new GridBagLayout());
 		dialog.setContentPane(panel);
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1;
 		c.anchor = GridBagConstraints.CENTER;
+		c.weightx = c.weighty = 1;
 		c.insets = new Insets(5, 5, 5, 5);
-		if (image != null) {
-			panel.add(new JLabel(new ImageIcon(image)), c);
-		}
 
-		if (nameComponent != null) {
-			c.gridy++;
-			panel.add(nameComponent, c);
-		}
-
-		if (versionLabel != null) {
-			c.gridy++;
-			panel.add(versionLabel, c);
-		}
-
-		if (copyrightLabel != null) {
-			c.gridy++;
-			panel.add(copyrightLabel, c);
+		for (JComponent component : components) {
+			if (component != null) {
+				panel.add(component, c);
+				c.gridy++;
+			}
 		}
 
 		panel.setBorder(new EmptyBorder(8, 8, 8, 8));
@@ -124,7 +130,7 @@ public class DefaultAboutRunnable implements Runnable {
 		dialog.setLocationRelativeTo(null);
 		dialog.setVisible(true);
 
-		lastDialogRef = new WeakReference<>(dialog);
+		return dialog;
 	}
 
 }

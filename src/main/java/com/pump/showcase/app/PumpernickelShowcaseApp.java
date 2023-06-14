@@ -32,31 +32,17 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JWindow;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import com.pump.desktop.AboutControl;
+import com.pump.desktop.DefaultAboutRunnable;
 import com.pump.desktop.DesktopApplication;
 import com.pump.desktop.edit.EditCommand;
 import com.pump.desktop.edit.EditMenuControls;
@@ -536,6 +522,23 @@ public class PumpernickelShowcaseApp extends JFrame {
 			}
 
 		}, AWTEvent.KEY_EVENT_MASK);
+
+		DesktopApplication.get().setAboutRunnable(new DefaultAboutRunnable() {
+
+			@Override
+			protected JDialog showDialog(JComponent... components) {
+				List<JComponent> z = new ArrayList<>(Arrays.asList(components));
+
+				JTextPane textPane = new JTextPane();
+				textPane.setEditable(false);
+				textPane.setOpaque(false);
+				textPane.setText("This application features many of the UI components in the Pumpernickel codebase.\n\nMany other features are discussed in the codebase's wiki.");
+				textPane.setPreferredSize(new Dimension(200,120));
+				z.add(textPane);
+
+				return super.showDialog(z.toArray(new JComponent[0]));
+			}
+		});
 	}
 
 	/**
