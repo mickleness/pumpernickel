@@ -4,20 +4,24 @@
 <title>JEyeDropper Demo</title>
 </head>
 <body>
-
+<h1>JEyeDropper Demo</h1>
+<h2>What Is It</h2>
 The <code>com.pump.swing.JEyeDropper</code> is a dialog that lets the user choose a pixel color from anywhere on the screen.
-
+<h2>How To Use It</h2>
+<pre>
+JEyeDropper d = new JEyeDropper(owner, diameter);
+ChangeListener changeListener = ...;
+d.getModel().addChangeListener(changeListener);
+d.setVisible(true);
+</pre>
+<h2>How It Works</h2>
+<p>This is implemented as a modal circular JDialog that follows the mouse. It uses the <code>java.awt.Robot</code> class both to capture pixel data and to move the mouse.</p>
+<p>This is modeled after the eyedropper tool we observed in macOS. (Like nearly all UI components in this codebase: it is not intended to be a pixel-perfect replica, though.)</p>
 <h3>Keyboard Support</h3>
-
-This includes the following keyboard events:
+<p>This includes the following keyboard events:
 <ol><li>Return/enter/space selects the current pixel.</li>
 <li>Escape cancels the operation.</li>
 <li>Left/right/up/down nudges the mouse location.</li>
 <li>Plus/minus zooms in/out.</li></ol>
-
-<h3>Implementation</h3>
-
-This is implemented as a modal circular JDialog that follows the mouse. It uses the <code>java.awt.Robot</code> class both to capture pixel data and to move the mouse.
-
 </body>
 </html>
