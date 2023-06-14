@@ -15,18 +15,21 @@ BufferedImage bi = JPEGMetaData.getThumbnail(myFile);
 <p>But if you want more granular control you can create your own <code>JPEGMetaDataListener</code> to receive each incoming key/value property, thumbnail and comment:</p>
 <pre>
 JPEGMetaDataListener listener = createListener();
-JPEGMetaData reader = new JPEGMetaData(listener);
-reader.read(inputStream);
+try (InputStream in = url.openStream()) {
+    JPEGMetaData.read(in, listener);
+}
 </pre>
 <h2>How It Works</h2>
 <p>The <code>JPEGMetaData</code> object skims chunks of the JPG input stream for supported meta data. If you're interested in properties, comments, or more than one thumbnail, then you can implement your own <code>JPEGMetaDataListener</code>:
 <pre>public interface JPEGMetaDataListener {
-	void startFile();
 	boolean isThumbnailAccepted(String markerName, int width, int height);
 	void addProperty(String markerName, String propertyName, Object value);
 	void addThumbnail(String markerName, BufferedImage bi);
 	void addComment(String markerName, String comment);
+	void startFile();
 	void endFile();
+	void imageDescription(int bitsPerPixel, int width, int height, int numberOfComponents);
+	void processException(Exception e, String markerCode);
 }</pre>
 <h2>Discussion</h2>
 <p>This class was originally developed to help the user browse a folder of megapixel images.</p>
