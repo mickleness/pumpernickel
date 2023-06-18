@@ -10,6 +10,8 @@
  */
 package com.pump.desktop.error;
 
+import com.pump.util.Warnings;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,17 +35,24 @@ public class ErrorDialogThrowableHandler implements ThrowableHandler {
 			if (throwables.length == 0)
 				return;
 
-			ErrorDialog errorDialog = ErrorDialog.get();
-			errorDialog.addThrowables(throwables);
-			synchronized (leftComponents) {
-				errorDialog.getFooter().setLeftComponents(
-						leftComponents.toArray(new JComponent[leftComponents
-								.size()]));
-			}
-			if (!errorDialog.isVisible()) {
-				errorDialog.pack();
-				errorDialog.setLocationRelativeTo(null);
-				errorDialog.setVisible(true);
+			try {
+				ErrorDialog errorDialog = ErrorDialog.get();
+				errorDialog.addThrowables(throwables);
+				synchronized (leftComponents) {
+					errorDialog.getFooter().setLeftComponents(
+							leftComponents.toArray(new JComponent[leftComponents
+									.size()]));
+				}
+				if (!errorDialog.isVisible()) {
+					errorDialog.pack();
+					errorDialog.setLocationRelativeTo(null);
+					errorDialog.setVisible(true);
+				}
+			} catch(Throwable t) {
+				// Once I got in a loop of NoClassDefFoundErrors. It was probably my fault for deleting
+				// the .jar file mid-session, but if anything catastrophically bad like that happens again
+				// let's not get a loop over it.
+				Warnings.printOnce(t);
 			}
 		}
 	};
