@@ -111,6 +111,9 @@ public class Project {
 		FileTreeIterator iter = new FileTreeIterator(projectDir, "java");
 		while (iter.hasNext()) {
 			File javaFile = iter.next();
+			if (javaFile.getName().equals("module-info.java"))
+				continue;
+
 			try {
 				String z = JavaClassSummary.getClassName(javaFile) + ".java";
 				String x = javaFile.getAbsolutePath();
