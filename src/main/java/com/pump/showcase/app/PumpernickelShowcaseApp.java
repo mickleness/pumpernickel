@@ -205,6 +205,7 @@ public class PumpernickelShowcaseApp extends JFrame {
 				"ThumbnailGeneratorDemo"));
 		if (JVM.isMac) {
 			returnValue.add(new ShowcaseDemoInfo("NSImage", "NSImageDemo"));
+			returnValue.add(new ShowcaseDemoInfo("GestureListener", "GestureListenerDemo"));
 		}
 		return returnValue.toArray(new ShowcaseDemoInfo[returnValue.size()]);
 	}
