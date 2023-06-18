@@ -18,22 +18,16 @@ import java.awt.Dialog.ModalityType;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Paint;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.Transparency;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -42,27 +36,12 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRootPane;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.JWindow;
-import javax.swing.RootPaneContainer;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.pump.data.AttributeDataImpl;
 import com.pump.data.Key;
@@ -85,45 +64,6 @@ import com.pump.util.JVM;
  */
 public class WindowDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * This paints a margin with a Paint.
-	 */
-	private static class PaintBorder implements Border {
-		Paint paint;
-		Insets insets;
-
-		public PaintBorder(int margin, Paint paint) {
-			Objects.requireNonNull(paint);
-
-			insets = new Insets(margin, margin, margin, margin);
-			this.paint = paint;
-		}
-
-		@Override
-		public void paintBorder(Component c, Graphics g, int x, int y,
-				int width, int height) {
-			Graphics2D g2 = (Graphics2D) g.create();
-			Area area = new Area(new Rectangle(x, y, width, height));
-			area.subtract(new Area(new Rectangle(x + insets.left,
-					y + insets.top, width - insets.left - insets.right,
-					height - insets.top - insets.bottom)));
-			g2.setPaint(paint);
-			g2.fill(area);
-			g2.dispose();
-		}
-
-		@Override
-		public Insets getBorderInsets(Component c) {
-			return new Insets(insets.top, insets.left, insets.bottom,
-					insets.right);
-		}
-
-		@Override
-		public boolean isBorderOpaque() {
-			return paint.getTransparency() == Transparency.OPAQUE;
-		}
-	}
 
 	JButton showWindowButton = new JButton("Show Window");
 	WindowOptionsForm newWindowForm = new WindowOptionsForm();
@@ -253,38 +193,6 @@ public class WindowDemo extends ShowcaseExampleDemo {
 		rpc.getContentPane().add(footer, c);
 
 		windowContent.setUI(QPanelUI.createBoxUI());
-		//
-		//
-		// JPanel content = new JPanel(new GridBagLayout());
-		//
-		// c.insets = new Insets(3, 3, 3, 3);
-		// content.add(new JLabel(
-		// "This is your new " + classComboBox.getSelectedItem() + "."),
-		// c);
-		// c.gridy++;
-		// c.insets = new Insets(13, 3, 3, 3);
-		// content.add(toBackButton, c);
-		// c.gridx++;
-		// content.add(toFrontButton, c);
-		// c.gridx++;
-		// content.add(closeButton, c);
-		// content.setOpaque(false);
-		//
-		// if (isTransparentCheckbox.isSelected()) {
-		// QPanelUI ui = QPanelUI.createToolTipUI();
-		// ui.setCalloutSize(0);
-		// ui.setCornerSize(15);
-		// content.setUI(ui);
-		//
-		// JPanel wrapper = new JPanel();
-		// wrapper.setOpaque(false);
-		// wrapper.add(content);
-		// content = wrapper;
-		// }
-		// content.setBorder(new PaintBorder(2, PlafPaintUtils
-		// .getDiagonalStripes(2, new Color(0, 0, 0, 0), Color.gray)));
-		//
-		// ((RootPaneContainer) w).getContentPane().add(content);
 
 		w.pack();
 
@@ -372,10 +280,10 @@ class WindowOptionsForm extends AttributeDataImpl {
 		};
 
 		abstract Shape getShape();
-	};
+	}
 
 	/**
-	 * The possible window styles for {@link #KEY_STYLE}.
+	 * The possible window styles for {@link WindowOptionsForm#KEY_MAC_STYLE}.
 	 */
 	public static final String[] MAC_STYLES = new String[] { "none", "small",
 			"textured", "unified", "hud" };
@@ -434,6 +342,7 @@ class WindowOptionsForm extends AttributeDataImpl {
 	public static final Key<Boolean> KEY_MAC_TRANSPARENT_TITLE_BAR = new Key<>(
 			Boolean.class, "apple.awt.transparentTitleBar", false);
 
+	public static final Key<String> KEY_TITLE = new Key<>(String.class, "title", "My Title");
 	public static final Key<Integer> KEY_X = new Key<>(Integer.class, "x", -1);
 	public static final Key<Integer> KEY_Y = new Key<>(Integer.class, "y", -1);
 
@@ -463,6 +372,7 @@ class WindowOptionsForm extends AttributeDataImpl {
 				f.setUndecorated(getAttribute(KEY_UNDECORATED));
 			f.setResizable(getAttribute(KEY_RESIZABLE));
 			alphaSupported = f.isUndecorated();
+			f.setTitle(getAttribute(KEY_TITLE));
 		} else if (w instanceof JDialog) {
 			JDialog d = (JDialog) w;
 			if (getAttribute(KEY_UNDECORATED) != d.isUndecorated())
@@ -470,6 +380,7 @@ class WindowOptionsForm extends AttributeDataImpl {
 			d.setModalityType(getAttribute(KEY_MODALITY_TYPE));
 			d.setResizable(getAttribute(KEY_RESIZABLE));
 			alphaSupported = d.isUndecorated();
+			d.setTitle(getAttribute(KEY_TITLE));
 		} else {
 			alphaSupported = true;
 		}
@@ -543,11 +454,12 @@ class WindowOptionsFormUI {
 	WindowOptionsForm form;
 
 	InspectorRowPanel modalityTypeRow, positionRow, windowClassRow,
-			windowTypeRow, macTitleBarRow;
+			windowTypeRow, macTitleBarRow, titleRow;
 
 	// Swing options
 	JComboBox<String> classComboBox = new JComboBox<>(
 			new String[] { "JFrame", "JDialog", "JWindow" });
+	JTextField titleField = new JTextField();
 	JComboBox<Window.Type> typeComboBox = new JComboBox<>(Window.Type.values());
 	JComboBox<Dialog.ModalExclusionType> modalExclusionComboBox = new JComboBox<>(
 			Dialog.ModalExclusionType.values());
@@ -637,15 +549,16 @@ class WindowOptionsFormUI {
 
 		JPopover.add(windowAlpha, "%");
 
-		shapeComboBox.setToolTipText("setShape(..)");
-		undecoratedCheckbox.setToolTipText("setUndecorated(..)");
-		resizableCheckbox.setToolTipText("setResizable(..)");
-		modalityTypeComboBox.setToolTipText("setModalityType(..)");
-		typeComboBox.setToolTipText("setType(..)");
-		autoRequestFocusCheckbox.setToolTipText("setAutoRequestFocus(..)");
-		alwaysOnTopCheckbox.setToolTipText("setAlwaysOnTop(..)");
-		modalExclusionComboBox.setToolTipText("setModalExclusionType(..)");
-		isTransparentCheckbox.setToolTipText("setBackground(transparent)");
+		shapeComboBox.setToolTipText("setShape(Shape)");
+		undecoratedCheckbox.setToolTipText("setUndecorated(boolean)");
+		resizableCheckbox.setToolTipText("setResizable(boolean)");
+		titleField.setToolTipText("setTitle(String)");
+		modalityTypeComboBox.setToolTipText("setModalityType(ModalityType)");
+		typeComboBox.setToolTipText("setType(Window.Type)");
+		autoRequestFocusCheckbox.setToolTipText("setAutoRequestFocus(boolean)");
+		alwaysOnTopCheckbox.setToolTipText("setAlwaysOnTop(boolean)");
+		modalExclusionComboBox.setToolTipText("setModalExclusionType(ModalExclusionType)");
+		isTransparentCheckbox.setToolTipText("setBackground(Color)");
 		documentModifiedCheckbox
 				.setToolTipText("Client Property \"Window.documentModified\"");
 		transparentTitleBarCheckbox.setToolTipText(
@@ -704,6 +617,21 @@ class WindowOptionsFormUI {
 						(Dialog.ModalExclusionType) modalExclusionComboBox
 								.getSelectedItem());
 			}
+		});
+
+		titleField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				form.setAttribute(WindowOptionsForm.KEY_TITLE, titleField.getText());
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				form.setAttribute(WindowOptionsForm.KEY_TITLE, titleField.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {}
 		});
 
 		modalityTypeComboBox.addActionListener(new ActionListener() {
@@ -789,6 +717,7 @@ class WindowOptionsFormUI {
 				typeComboBox, false);
 		modalityTypeRow = inspector.addRow(new JLabel("Modality Type:"),
 				modalityTypeComboBox, false);
+		titleRow = inspector.addRow(new JLabel("Window Title:"), titleField, true);
 		inspector.addRow(new JLabel("Modal Exclusion Type:"),
 				modalExclusionComboBox, false);
 		ControlGridLayout gridLayout = new ControlGridLayout(3);
@@ -872,6 +801,7 @@ class WindowOptionsFormUI {
 					.getAttribute(WindowOptionsForm.KEY_MODAL_EXCLUSION_TYPE));
 			modalityTypeComboBox.setSelectedItem(
 					form.getAttribute(WindowOptionsForm.KEY_MODALITY_TYPE));
+			titleField.setText(form.getAttribute(WindowOptionsForm.KEY_TITLE));
 
 			WindowOptionsForm.ShapeType shape = form
 					.getAttribute(WindowOptionsForm.KEY_SHAPE);
@@ -939,17 +869,20 @@ class WindowOptionsFormUI {
 			undecoratedCheckbox.setVisible(true);
 			resizableCheckbox.setVisible(true);
 			modalityTypeRow.setVisible(false);
+			titleRow.setVisible(true);
 		} else if (form.getAttribute(
 				WindowOptionsForm.KEY_WINDOW_CLASS) == JDialog.class) {
 			optionsLabel.setText("Dialog Options:");
 			undecoratedCheckbox.setVisible(true);
 			resizableCheckbox.setVisible(true);
 			modalityTypeRow.setVisible(true);
+			titleRow.setVisible(true);
 		} else {
 			optionsLabel.setText("Window Options:");
 			undecoratedCheckbox.setVisible(false);
 			resizableCheckbox.setVisible(false);
 			modalityTypeRow.setVisible(false);
+			titleRow.setVisible(false);
 		}
 		if (macTitleBarRow != null) {
 			macTitleBarRow.setVisible(form.isDecoratable());
