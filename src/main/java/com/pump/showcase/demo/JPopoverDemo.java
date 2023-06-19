@@ -23,13 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.JToolTip;
-import javax.swing.Timer;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -58,6 +52,7 @@ public class JPopoverDemo extends ShowcaseExampleDemo {
 	JPasswordField passwordField = new JPasswordField(15);
 	FontComboBox fontComboBox = new FontComboBox();
 	JTextField currencyField = new JTextField(15);
+	JSlider percent = new JSlider(0, 100,100);
 	JPopover<JToolTip> passwordPopover;
 	JPopover<JToolTip> fontPopover;
 
@@ -84,6 +79,9 @@ public class JPopoverDemo extends ShowcaseExampleDemo {
 		layout.addRow(new JLabel("Password:"), passwordField, false);
 		layout.addRow(new JLabel("Font:"), fontComboBox, false);
 		layout.addRow(new JLabel("Currency Input:"), currencyField, false);
+		layout.addRow(new JLabel("Percent:"), percent, false);
+
+		JPopover.add(percent, "%");
 
 		capsLock.addPropertyChangeListener(new PropertyChangeListener() {
 

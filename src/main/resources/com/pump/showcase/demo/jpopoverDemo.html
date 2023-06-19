@@ -4,19 +4,32 @@
 <title>JPopover Demo</title>
 </head>
 <body>
-I recommend looking over (and reading up on) the <a href="resource:tooltip">tooltip</a> demo before exploring this.
-<p>
-The <code>JPopover</code> is a new class intended to be a more modern remake of the classic <code>JToolTip</code>. It borrows from Apple's <a href="https://developer.apple.com/macos/human-interface-guidelines/windows-and-views/popovers/">popover</a> and Microsoft's <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dn742400(v=vs.85).aspx">balloon</a> components.
-<p>
-My goal was to create a tooltip-like component that:
-<ul><li>Is also visible when the owner component has keyboard focus.
-<li>Can contain components the user interacts with (buttons, text fields, etc.)</ul>
-<p><code>JToolTips</code> are managed by a global <code>ToolTipManager</code>. By contrast each <code>JPopover</code> is in charge of when it should appear and disappear. The default implementation is to show a popover when the owner has either mouse rollover or keyboard focus, but you can override that as needed. Only one popover is showing at a time, though. So if you roll the mouse over one text field and shift keyboard focus to another: the most recent event wins.
+<h1>JPopover Demo</h1>
+<h2>What Is It</h2>
+<p>he <code>JPopover</code> is a new class intended to be a more modern remake of the classic <code>JToolTip</code>. It borrows from Apple's <a href="https://developer.apple.com/macos/human-interface-guidelines/windows-and-views/popovers/">popover</a> and Microsoft's <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dn742400(v=vs.85).aspx">balloon</a> components.</p>
+<p>I highly recommend reading the help page for the <code>JToolTip</code> demo. It quotes Microsoft, Google and Apple commentary on tooltips and related controls.</p>
+<h2>How To Use It</h2>
+<p>The simplest usage might be:</p>
+<pre>new JPopover&lt;JPanel&gt;(triggerComponent, popoverContentPanel, true);</pre>
+<p>This popover will appear when you mouse over a component, or when it receives keyboard focus.</p>
+<h2>How It Works</h2>
+<p>Each <code>JPopover</code> decides when/how to become visible. By default that decision is based on whether the trigger component has keyboard focus OR whether the mouse is over the trigger.</p>
+<p>There can only be one active popover at a time: so if popover A is already showing, then popover B will automatically close A when it becomes visible. (For example: trying moving the mouse over component A and then tabbing so component B has the keyboard focus.)</p>
+<p>This is meant to be an (unfinished) alternative to the <code>ToolTipManager</code>. "Tips" have evolved a lot in the last 20 years. For example: sometimes we want to embed clickable controls in them, or we want them to be part of onboarding tutorials.</p>
+<p>Like the "JToolTip" demo: this relies on the <code>QPopupFactory</code>. This means the popovers are usually embedded in the <code>JLayeredPane</code> of the trigger's window (and not in their own unique <code>Window</code>).</p>
+<h2>Discussion</h2>
 <p>
 In the password demo be sure to press the caps lock key. This is far from a pixel-perfect replica of Windows's default balloon, but it's a great start. Also you can see as you type (if the caps lock is off) a password-strength meter changes its feedback with every keystroke.
 <p>
 The font demo is pretty self-explanatory. This is basically a tooltip that follows different visibility rules.
 <p>
 The currency demo is the only case where the user is expected to interact with the contents of the popover. Observe that for the other two: if the owner doesn't have keyboard focus and you move the mouse from the owner to the popover, then the popover disappears. The currency popover consults both the popover's owner and its contents. (This is controlled with a boolean passed into the JPopover constructor.)
+<p>
+Also in ALL the demos in this app: sliders use a <code>JPopover</code> to show the current value. There's even a static helper method for this use case:
+<pre>
+public static void add(JSlider slider,
+        final Callable<String> textGenerator);
+</pre>
+</p>
 </body>
 </html>
