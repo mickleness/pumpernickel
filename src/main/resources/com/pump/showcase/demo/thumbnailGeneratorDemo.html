@@ -41,7 +41,7 @@ This uses the "qlmanage" command-line tool on Macs to retrieve an image using <a
 This consults the other available generators. This is the "one size fits all" option that you should use 90% of the time.
 <h2>Performance</h2>
 <p>Here is a chart showing how long each generator took to create 10 thumbnails from a 2750x1063 JPG:</p>
-<br><img src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS-vfDBOaOv5aB_EEcxcCR3YhLTPFFYa-1kls3DvAQGWCalZ2bpGHkh2bJtCwYRbrxOjPLwClzJ6Eho/pubchart?oid=1656482439&format=image" alt="JPEGMetaDataThumbnailGenerator took 14 ms, ScalingThumbnailGenerator took 487 ms, MacQuickLookThumbnailGenerator 751 ms."/>
+<br><img src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS-vfDBOaOv5aB_EEcxcCR3YhLTPFFYa-1kls3DvAQGWCalZ2bpGHkh2bJtCwYRbrxOjPLwClzJ6Eho/pubchart?oid=1529071574&format=image">
 <p>It's no surprise the <code>JPEGMetaData</code> beat the <code>ScalingThumbnailGenerator</code>.</p>
 <p>The Quick Look generator was pretty disappointing performance-wise, but the range of file formats it supports suggests you should always keep it in your back pocket.</p>
 <p>I used to include a different generator: the <code>MacCImageThumbnailGenerator</code>. This took about 1/3 the time of the <code>ScalingThumbnailGenerator</code>. I removed it because it relied on reflection to access the <code>sun.lwawt.macosx.CImage</code> class on Mac.</p>
