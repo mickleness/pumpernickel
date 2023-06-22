@@ -19,10 +19,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.HierarchyBoundsListener;
-import java.awt.event.HierarchyEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -56,6 +53,7 @@ import com.pump.plaf.combobox.QComboBoxUI;
 import com.pump.showcase.demo.ShowcaseDemo;
 import com.pump.swing.HelpButton;
 import com.pump.swing.JFancyBox;
+import com.pump.text.WildcardPattern;
 import com.pump.util.list.ObservableList;
 
 public class HeaderRow extends JPanel {
@@ -151,9 +149,9 @@ public class HeaderRow extends JPanel {
 
 	}
 
+	JFancyBox helpBox;
 	ActionListener helpButtonListener = new ActionListener() {
 		JScrollPane scrollPane;
-		JFancyBox box;
 		JEditorPane textPane;
 
 		@Override
@@ -184,7 +182,7 @@ public class HeaderRow extends JPanel {
 						});
 				RootPaneContainer rpc = (RootPaneContainer) SwingUtilities
 						.getWindowAncestor(helpButton);
-				box = new JFancyBox(rpc, scrollPane, JLayeredPane.PALETTE_LAYER,
+				helpBox = new JFancyBox(rpc, scrollPane, JLayeredPane.PALETTE_LAYER,
 						0);
 			}
 
@@ -193,7 +191,7 @@ public class HeaderRow extends JPanel {
 			} catch (IOException e2) {
 				e2.printStackTrace();
 			}
-			box.setVisible(true);
+			helpBox.setVisible(true);
 		}
 
 		private void updatePreferredSize() {
@@ -264,7 +262,46 @@ public class HeaderRow extends JPanel {
 	JComboBox<ShowcaseDemoInfo> demoComboBox = new JComboBox<>();
 	JButton helpButton;
 	QButtonUI buttonUI = new RoundRectButtonUI(4);
-	QComboBoxUI comboBoxUI = buttonUI.createComboBoxUI();
+	QComboBoxUI comboBoxUI = new QComboBoxUI(buttonUI) {
+		@Override
+		protected KeyListener createKeyListener() {
+			return new KeyListener() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					// intentionally empty
+				}
+
+				@Override
+				public void keyPressed(KeyEvent e) {
+					// intentionally empty
+				}
+
+				@Override
+				public void keyReleased(KeyEvent e) {
+					char ch = e.getKeyChar();
+					final String origSearchFieldStr = searchPhraseField.getText();
+					if (Character.isLetter(ch) || ch == ' ') {
+						searchPhraseField.setText(origSearchFieldStr + ch);
+					} else if (e.getKeyCode()==KeyEvent.VK_DELETE || e.getKeyCode()==KeyEvent.VK_BACK_SPACE) {
+						if (origSearchFieldStr.length() > 0) {
+							searchPhraseField.setText(origSearchFieldStr.substring(0, origSearchFieldStr.length() - 1));
+						}
+					}
+
+					if (!searchPhraseField.getText().equals(origSearchFieldStr) && isPopupVisible(comboBox)) {
+						popup.hide();
+						popup.show();
+					}
+				}
+			};
+		}
+
+		@Override
+		protected void installListeners() {
+			super.installListeners();
+//			comboBox.removeKeyListener(popupKeyListener);
+		}
+	};
 	PumpernickelShowcaseApp app;
 	JTextField searchPhraseField = new JTextField(15);
 	ObservableList<ShowcaseDemoInfo> activeDemos = new ObservableList<>();
@@ -310,18 +347,18 @@ public class HeaderRow extends JPanel {
 			} else {
 				Collection<ShowcaseDemoInfo> newList = new LinkedHashSet<>();
 
-				// TODO: use WildcardPattern
-
 				newValue = newValue.toLowerCase();
+				WildcardPattern pattern = new WildcardPattern("*" + newValue + "*");
+
 				for (ShowcaseDemoInfo demo : allDemos) {
-					if (demo.getDemoName().toLowerCase().contains(newValue)) {
+					if (pattern.matches(demo.getDemoName().toLowerCase())) {
 						newList.add(demo);
 					}
 					if (demo.isDemoLoaded()) {
 						ShowcaseDemo d = demo.getDemo();
 						for (String keyword : d.getKeywords()) {
 							keyword = keyword.toLowerCase();
-							if (keyword.contains(newValue)) {
+							if ( pattern.matches(keyword)) {
 								newList.add(demo);
 							}
 						}
@@ -344,6 +381,8 @@ public class HeaderRow extends JPanel {
 				int i = activeDemos.indexOf(selection);
 				if (i >= 0) {
 					demoComboBox.setSelectedIndex(i);
+				} else {
+					demoComboBox.setSelectedIndex(0);
 				}
 			}
 		}
@@ -414,6 +453,9 @@ public class HeaderRow extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (helpBox != null)
+					helpBox.setVisible(false);
+
 				ShowcaseDemoInfo sdi = (ShowcaseDemoInfo) demoComboBox
 						.getSelectedItem();
 				app.setSelectedDemo(sdi);
