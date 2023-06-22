@@ -10,18 +10,7 @@
  */
 package com.pump.showcase.app;
 
-import java.awt.AWTEvent;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,8 +20,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -40,6 +31,10 @@ import javax.swing.Timer;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 
 import com.pump.desktop.AboutControl;
 import com.pump.desktop.DefaultAboutRunnable;
@@ -59,6 +54,7 @@ import com.pump.swing.MagnificationPanel;
 import com.pump.swing.SectionContainer.Section;
 import com.pump.swing.TextFieldPrompt;
 import com.pump.swing.ThrobberManager;
+import com.pump.text.html.QHTMLEditorKit;
 import com.pump.util.JVM;
 import com.pump.util.Property;
 import com.pump.window.WindowDragger;
@@ -529,12 +525,30 @@ public class PumpernickelShowcaseApp extends JFrame {
 			protected JDialog showDialog(JComponent... components) {
 				List<JComponent> z = new ArrayList<>(Arrays.asList(components));
 
-				JTextPane textPane = new JTextPane();
+				JEditorPane textPane = new JEditorPane();
+				textPane.setEditable(false);
+				HTMLEditorKit kit = new QHTMLEditorKit();
+				textPane.setEditorKit(kit);
+				StyleSheet styleSheet = kit.getStyleSheet();
+				styleSheet.addRule("body {  font-family: sans-serif; }");
+
 				textPane.setEditable(false);
 				textPane.setOpaque(false);
-				textPane.setText("This application features many of the UI components in the Pumpernickel codebase.\n\nMany other features are discussed in the codebase's wiki.");
-				textPane.setPreferredSize(new Dimension(200,120));
+				textPane.setText("<html><body>This application features many of the UI components in the Pumpernickel codebase.<p>Many other features are discussed in the codebase's <a href=\"https://github.com/mickleness/pumpernickel/wiki\">wiki</a>.</body></html>");
+				textPane.setPreferredSize(new Dimension(220,140));
 				z.add(textPane);
+				textPane.addHyperlinkListener(new HyperlinkListener() {
+					@Override
+					public void hyperlinkUpdate(HyperlinkEvent e) {
+						if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+							try {
+								Desktop.getDesktop().browse(e.getURL().toURI());
+							} catch (IOException | URISyntaxException ex) {
+								throw new RuntimeException(ex);
+							}
+						}
+					}
+				});
 
 				return super.showDialog(z.toArray(new JComponent[0]));
 			}
