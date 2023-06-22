@@ -61,7 +61,7 @@ import com.pump.plaf.combobox.QComboBoxUI;
  * of separate buttons. (Note one instance of each QButtonUI object can be
  * assigned to several buttons, and each button can be configured differently).
  * 
- * @see com.pump.showcase.QButtonUIDemo
+ * @see com.pump.showcase.demo.JButtonDemo
  * @see <a
  *      href="https://javagraphics.blogspot.com/2009/08/buttons-new-uis.html">Buttons:
  *      New UIs</a>
@@ -767,7 +767,7 @@ public abstract class QButtonUI extends BasicButtonUI implements
 	}
 
 	/**
-	 * Create a {@link com.pump.plaf.QComboBoxUI} modeled after this
+	 * Create a {@link com.pump.plaf.combobox.QComboBoxUI} modeled after this
 	 * <code>QButtonUI</code>.
 	 */
 	public QComboBoxUI createComboBoxUI() {
