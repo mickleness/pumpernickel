@@ -193,8 +193,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 		returnValue.add(new ShowcaseDemoInfo("System Properties",
 				"SystemPropertiesDemo"));
 		returnValue.add(new ShowcaseDemoInfo("FileIcon", "FileIconDemo"));
-		returnValue.add(
-				new ShowcaseDemoInfo("DesktopHelper", "DesktopHelperDemo"));
+//		returnValue.add(
+//				new ShowcaseDemoInfo("DesktopHelper", "DesktopHelperDemo"));
 		returnValue.add(new ShowcaseDemoInfo("VectorImage", "VectorImageDemo"));
 		returnValue.add(new ShowcaseDemoInfo("StarPolygon", "StarPolygonDemo"));
 		returnValue.add(
