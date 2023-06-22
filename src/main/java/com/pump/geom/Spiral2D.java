@@ -155,15 +155,15 @@ public class Spiral2D extends AbstractShape {
 	 * @param coilOffset
 	 *            the space from the center of the spiral to where the path
 	 *            begins painting.
-	 * @param clockwise
+	 * @param isClockwise
 	 *            whether this spiral moves clockwise or counterclockwise from
 	 *            the center.
 	 */
 	public Spiral2D(double centerX, double centerY, double coilGap,
 			double coils, double angularOffset, double coilOffset,
-			boolean clockwise) {
+			boolean isClockwise) {
 		this(centerX, centerY, coilGap, coils, angularOffset, coilOffset,
-				clockwise, true);
+				isClockwise, true);
 	}
 
 	/**
@@ -182,24 +182,24 @@ public class Spiral2D extends AbstractShape {
 	 * @param coilOffset
 	 *            the space from the center of the spiral to where the path
 	 *            begins painting.
-	 * @param clockwise
+	 * @param isClockwise
 	 *            whether this spiral moves clockwise or counterclockwise from
 	 *            the center.
-	 * @param outward
+	 * @param isOutward
 	 *            whether this spiral spins outward from the center, or inward
 	 *            toward the center. This argument only matters if you are going
 	 *            to study the <code>PathIterator</code> this shape produces.
 	 */
 	public Spiral2D(double centerX, double centerY, double coilGap,
 			double coils, double angularOffset, double coilOffset,
-			boolean clockwise, boolean outward) {
+			boolean isClockwise, boolean isOutward) {
 		setCenter(centerX, centerY);
 		setCoilGap(coilGap);
 		setCoils(coils);
-		setClockwise(clockwise);
+		setClockwise(isClockwise);
 		setAngularOffset(angularOffset);
 		setCoilOffset(coilOffset);
-		setOutward(outward);
+		setOutward(isOutward);
 	}
 
 	public void setOutward(boolean b) {
