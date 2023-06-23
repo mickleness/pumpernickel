@@ -124,8 +124,6 @@ public class Inspector {
 	 * 
 	 * @param component
 	 *            the component to add.
-	 * @param alignment
-	 *            one of the SwingConstants values: LEFT, CENTER, RIGHT.
 	 * @param stretchToFill
 	 *            whether to stretch this component to fill the space
 	 *            horizontally or not.

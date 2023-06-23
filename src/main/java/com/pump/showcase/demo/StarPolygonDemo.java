@@ -24,6 +24,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.pump.geom.AbstractShape;
 import com.pump.geom.StarPolygon;
 import com.pump.inspector.Inspector;
 import com.pump.swing.popover.JPopover;
@@ -103,7 +104,7 @@ public class StarPolygonDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { StarPolygon.class };
+		return new Class[] { StarPolygon.class, AbstractShape.class };
 	}
 
 }

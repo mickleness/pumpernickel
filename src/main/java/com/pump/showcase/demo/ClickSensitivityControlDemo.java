@@ -10,9 +10,7 @@
  */
 package com.pump.showcase.demo;
 
-import java.awt.AWTEvent;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -23,7 +21,6 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -36,6 +33,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
 
 import com.pump.awt.ClickSensitivityControl;
@@ -106,17 +105,13 @@ public class ClickSensitivityControlDemo extends ShowcaseDemo {
 				int r = ((Number) spinner.getValue()).intValue();
 				Shape e = new Ellipse2D.Float(clickLoc.x - r, clickLoc.y - r,
 						2 * r, 2 * r);
-				if (csc.isClick(this)) {
-					g.setColor(new Color(0x6655ff55, true));
-				} else {
-					g.setColor(new Color(0x66ff5555, true));
-				}
+				g.setColor(new Color(0x6655ff55, true));
 				g.fill(e);
 			}
 
 			g.dispose();
 		}
-	};
+	}
 
 	MouseListener mouseListener = new MouseAdapter() {
 		@Override
@@ -168,17 +163,6 @@ public class ClickSensitivityControlDemo extends ShowcaseDemo {
 	BasicConsole console = new BasicConsole(false, false);
 	JScrollPane scrollPane = new JScrollPane(console);
 
-	ClickSensitivityControl csc = new ClickSensitivityControl(
-			ClickSensitivityControl.DEFAULT_CLICK_EVENT_TOLERANCE) {
-
-		@Override
-		public int getClickPixelTolerance(Component c) {
-			if (c == widgetA)
-				return 0;
-			return ((Number) spinner.getValue()).intValue();
-		}
-	};
-
 	public ClickSensitivityControlDemo() {
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -187,7 +171,6 @@ public class ClickSensitivityControlDemo extends ShowcaseDemo {
 		c.gridx = 0;
 		c.weightx = 0;
 		c.weighty = 0;
-		c.insets = new Insets(6, 6, 6, 6);
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.NONE;
 		c.insets = new Insets(3, 3, 3, 3);
@@ -219,16 +202,18 @@ public class ClickSensitivityControlDemo extends ShowcaseDemo {
 		targetRow.add(widgetA);
 		targetRow.add(widgetB);
 
-		// Normally you'd just call ClickSensitivityControl#install(), but
-		// since
-		// this demo includes code to disable this feature for widget A
-		// we're on
-		// our own.
-		Toolkit.getDefaultToolkit().addAWTEventListener(csc,
-				AWTEvent.MOUSE_EVENT_MASK + AWTEvent.MOUSE_MOTION_EVENT_MASK);
+		spinner.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				int tolerance = ((Number) spinner.getValue()).intValue();
+				ClickSensitivityControl.get().setClickPixelTolerance(tolerance);
+			}
+		});
 
 		widgetA.addMouseListener(mouseListener);
 		widgetB.addMouseListener(mouseListener);
+
+		widgetA.putClientProperty(ClickSensitivityControl.PROPERTY_ENABLED, Boolean.FALSE);
 	}
 
 	@Override

@@ -26,7 +26,7 @@ public class UpdateSourceCodeHeader {
 		while (iter.hasNext()) {
 			File file = iter.next();
 
-			if (file.getName().contains("package-info"))
+			if (file.getName().contains("package-info") || file.getName().contains("module-info"))
 				continue;
 
 			String str = IOUtils.read(file);

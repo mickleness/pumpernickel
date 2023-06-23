@@ -10,18 +10,7 @@
  */
 package com.pump.showcase.app;
 
-import java.awt.AWTEvent;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,32 +20,24 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.util.*;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JWindow;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 
 import com.pump.desktop.AboutControl;
+import com.pump.desktop.DefaultAboutRunnable;
 import com.pump.desktop.DesktopApplication;
 import com.pump.desktop.edit.EditCommand;
 import com.pump.desktop.edit.EditMenuControls;
@@ -73,6 +54,7 @@ import com.pump.swing.MagnificationPanel;
 import com.pump.swing.SectionContainer.Section;
 import com.pump.swing.TextFieldPrompt;
 import com.pump.swing.ThrobberManager;
+import com.pump.text.html.QHTMLEditorKit;
 import com.pump.util.JVM;
 import com.pump.util.Property;
 import com.pump.window.WindowDragger;
@@ -164,11 +146,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 		returnValue.add(new ShowcaseDemoInfo("DecoratedListUI, DecoratedTreeUI",
 				"DecoratedDemo"));
 		returnValue.add(new ShowcaseDemoInfo("JThrobber", "ThrobberDemo"));
-		returnValue.add(new ShowcaseDemoInfo("JBreadCrumb", "BreadCrumbDemo"));
 		returnValue.add(new ShowcaseDemoInfo("CollapsibleContainer",
 				"CollapsibleContainerDemo"));
-		returnValue.add(new ShowcaseDemoInfo("CustomizedToolbar",
-				"CustomizedToolbarDemo"));
 		returnValue.add(new ShowcaseDemoInfo("JToolTip, QPopupFactory",
 				"JToolTipDemo"));
 		returnValue.add(new ShowcaseDemoInfo("JPopover", "JPopoverDemo"));
@@ -189,8 +168,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 		// TextSearchDemo());
 		// add(new DemoListElement("QuickTime: Writing Movies", new
 		// MovWriterDemo());
-		returnValue.add(new ShowcaseDemoInfo("Highlighters, WildcardPattern",
-				"WildcardPatternHighlighterDemo"));
+		returnValue.add(new ShowcaseDemoInfo("HighlightPainters",
+				"HighlightPainterDemo"));
 		returnValue.add(
 				new ShowcaseDemoInfo("BoxTabbedPaneUI", "BoxTabbedPaneUIDemo"));
 		returnValue.add(new ShowcaseDemoInfo("CircularProgressBarUI",
@@ -210,8 +189,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 		returnValue.add(new ShowcaseDemoInfo("System Properties",
 				"SystemPropertiesDemo"));
 		returnValue.add(new ShowcaseDemoInfo("FileIcon", "FileIconDemo"));
-		returnValue.add(
-				new ShowcaseDemoInfo("DesktopHelper", "DesktopHelperDemo"));
+//		returnValue.add(
+//				new ShowcaseDemoInfo("DesktopHelper", "DesktopHelperDemo"));
 		returnValue.add(new ShowcaseDemoInfo("VectorImage", "VectorImageDemo"));
 		returnValue.add(new ShowcaseDemoInfo("StarPolygon", "StarPolygonDemo"));
 		returnValue.add(
@@ -539,6 +518,41 @@ public class PumpernickelShowcaseApp extends JFrame {
 			}
 
 		}, AWTEvent.KEY_EVENT_MASK);
+
+		DesktopApplication.get().setAboutRunnable(new DefaultAboutRunnable() {
+
+			@Override
+			protected JDialog showDialog(JComponent... components) {
+				List<JComponent> z = new ArrayList<>(Arrays.asList(components));
+
+				JEditorPane textPane = new JEditorPane();
+				textPane.setEditable(false);
+				HTMLEditorKit kit = new QHTMLEditorKit();
+				textPane.setEditorKit(kit);
+				StyleSheet styleSheet = kit.getStyleSheet();
+				styleSheet.addRule("body {  font-family: sans-serif; }");
+
+				textPane.setEditable(false);
+				textPane.setOpaque(false);
+				textPane.setText("<html><body>This application features many of the UI components in the Pumpernickel codebase.<p>Many other features are discussed in the codebase's <a href=\"https://github.com/mickleness/pumpernickel/wiki\">wiki</a>.</body></html>");
+				textPane.setPreferredSize(new Dimension(220,140));
+				z.add(textPane);
+				textPane.addHyperlinkListener(new HyperlinkListener() {
+					@Override
+					public void hyperlinkUpdate(HyperlinkEvent e) {
+						if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+							try {
+								Desktop.getDesktop().browse(e.getURL().toURI());
+							} catch (IOException | URISyntaxException ex) {
+								throw new RuntimeException(ex);
+							}
+						}
+					}
+				});
+
+				return super.showDialog(z.toArray(new JComponent[0]));
+			}
+		});
 	}
 
 	/**

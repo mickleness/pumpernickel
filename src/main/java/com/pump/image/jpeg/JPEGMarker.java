@@ -15,11 +15,19 @@ package com.pump.image.jpeg;
  * it should cover all the markers the adjacent code supports.
  */
 public enum JPEGMarker {
-	START_OF_IMAGE_MARKER("FFD8"), END_OF_IMAGE_MARKER("FFD9"), APP0_MARKER(
-			"FFE0"), APP1_MARKER("FFE1"), APP2_MARKER("FFE2"), APP13_MARKER(
-					"FFED"), COMMENT_MARKER("FFFE"), DEFINE_QUANTIZATION_MARKER(
-							"FFDB"), BASELINE_MARKER(
-									"FFC0"), DEFINE_HUFFMAN_MARKER("FFC4"),
+	START_OF_IMAGE_MARKER("FFD8"),
+	END_OF_IMAGE_MARKER("FFD9"),
+	APP0_MARKER("FFE0"),
+	APP1_MARKER("FFE1"),
+	APP2_MARKER("FFE2"),
+	APP13_MARKER("FFED"),
+	COMMENT_MARKER("FFFE"),
+	DEFINE_QUANTIZATION_MARKER("FFDB"),
+	/**
+	 * Also known as the "start of frame" marker.
+	 */
+	BASELINE_MARKER("FFC0"),
+	DEFINE_HUFFMAN_MARKER("FFC4"),
 
 	/**
 	 * The start of scan marker is tricky. It technically has a small number of

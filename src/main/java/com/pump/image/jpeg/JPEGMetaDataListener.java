@@ -78,4 +78,18 @@ public interface JPEGMetaDataListener {
 	 */
 	void endFile();
 
+	/**
+	 * This is called while reading the "baseline" or "start of frame" block.
+	 *
+	 * @param bitsPerPixel the bits per pixel (usually 8)
+	 * @param width the width of the image
+	 * @param height the height of the image
+	 * @param numberOfComponents the number of components (1 or 3)
+	 */
+	void imageDescription(int bitsPerPixel, int width, int height, int numberOfComponents);
+
+	/**
+	 * This is called when an exception occurs reading from a JPEG input stream.
+	 */
+	void processException(Exception e, String markerCode);
 }

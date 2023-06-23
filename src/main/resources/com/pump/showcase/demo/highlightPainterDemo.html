@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HighlightPainter Demo</title>
+</head>
+<body>
+<h1>HighlightPainter Demo</h1>
+<h2>What Is It</h2>
+<p>This demo features two simple new <code>HighlightPainters</code>: the <code>UnderlineHighlightPainter</code> and the <code>TextBoxHighlightPainter</code>.
+<h2>How To Use It</h2>
+<p>Swing already does all the heavy lifting here for us. We can add these just like any other <code>HighlightPainter</code>:</p>
+<pre>
+UnderlineHighlightPainter painter =
+    new UnderlineHighlightPainter(Color.red, 1, true);
+String word = "the";
+int i1 = textPane.getText().indexOf(word);
+if (i1 != -1) {
+    int i2 = i1 + word.length();
+    textPane.getHighlighter().addHighlight(i1, i2, painter);
+}
+</pre>
+<h2>Discussion</h2>
+<p>The "squiggly" underline has become the ubiquitous marker for cautionary flags in text panes. A decade or two ago it was only used to flag misspellings, but increasingly it's also used to flag grammatical warnings. You could also flag syntactical errors or warnings for a language like XML or Java.</p>
+<p>The <code>TextBoxHighlightPainter</code> is a simpler upgrade to the <code>DefaultHighlightPainter</code> that offers a potential gradient or rounded corners.</p>
+</body>
+</html>

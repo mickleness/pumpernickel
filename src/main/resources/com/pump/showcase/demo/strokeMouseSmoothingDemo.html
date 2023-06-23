@@ -4,33 +4,50 @@
 <title>Stroke, MouseSmoothing Demo</title>
 </head>
 <body>
-
-This demonstrates a few different classes:
-<ul>
-<li>The <code>MouseSmoothing</code> interface models a class that <a href="http://en.wikipedia.org/wiki/Smoothing">smooths out</a> incoming mouse data:
-<br>
-<blockquote><pre>public interface MouseSmoothing {
+<h1>Stroke, MouseSmoothing Demo</h1>
+<h2>What Is It</h2>
+<p>This demo features four new <code>java.awt.Strokes</code>, and it discusses the <code>MouseSmoothing</code> interface to smooth out the jagged edges in mouse paths.</p>
+<h2>How To Use It</h2>
+<p>The strokes are all pretty self-explanatory if you look at their constructors. For example the <code>BristleStroke</code> can be used as follows:</p>
+<pre>
+float width = 3;
+float thickness = .5f;
+long randomSeed = 0;
+Stroke s = new BristleStroke(width, thickness, randomSeed);
+graphics2D.setStroke(s);
+</pre>
+<p>To smooth out jagged user mouse input you can call:</p>
+<pre>MouseSmoothing s = new BasicMouseSmoothing();
+for (Point2D p : mousePoints) {
+  s.add((float)p.getX(), (float)p.getY(), 0);
+}
+Shape smoothedShape = s.getShape();
+</pre>
+<h2>How It Works</h2>
+<h3>Strokes</h3>
+<p>The <code>BristleStroke</code> splatters tiny shapes (like shrapnel) over your path. The frequency of the shapes is a little greater in the middle of the stroke, and it tapers off towards the edges &#8208; depending on the thickness you've designated.</p>
+<p>The <code>BrushStroke</code> uses a <code>MeasuredShape</code> to break up the original path into small sections and paint them in streaks.</p>
+<p>The <code>CalligraphyStroke</code> emulates a fixed-angle nib tracing a shape.</p>
+<p>The <code>CharcoalStroke</code> starts with another Stroke (by default a BasicStroke) and inserts cracks at a fixed angle into that shape.</p>
+<h4>Further Reading</h4>
+Other resources related to custom <code>java.awt.Strokes</code> include:
+<ol>
+  <li>Jerry Huxtable has an <a href="http://www.jhlabs.com/java/java2d/strokes/">excellent page</a> detailing a few specialized strokes.
+  </li>
+  <li>Vincent Hardy's <a href="http://www.amazon.com/Java-API-Graphics-Vincent-Hardy/dp/0130142662">book</a> contains a nice wave stroke.
+  </li>
+  <li>David Flanagan covered the topic in "Java Examples in a Nutshell" (see <a href="http://www.java2s.com/Code/Java/2D-Graphics-GUI/CustomStrokes.htm">this page</a> for details).</li>
+</ol>
+<h3>MouseSmoothing</h3>
+<p>The <code>MouseSmoothing</code> interface models a class that <a href="http://en.wikipedia.org/wiki/Smoothing">smooths out</a> incoming mouse data:</p>
+<pre>public interface MouseSmoothing {
   public void add(float x,float y,long t);
   public void reset();
   public GeneralPath getShape();
   public void getShape(GeneralPath path);
   public boolean isEmpty();
-}</pre></blockquote>
-<p>
-The smoothing toggle in this demo uses the <code>BasicMouseSmoothing</code> class to smooth out your drawings, or (when disabled) it renders the points exactly as the MouseEvents capture them.
-<li>The <code>BristleStroke</code> splatters tiny shapes (like shrapnel) over your path. The frequency of the shapes is a little greater in the middle of the stroke, and it tapers off towards the edges &#8208; depending on the thickness you've designated.
-<li>The <code>BrushStroke</code> uses a <code>MeasuredShape</code> to break up the original path into small sections and paint them in streaks.
-<li>The <code>CalligraphyStroke</code> emulates a fixed-angle nib tracing a shape.
-<li>The <code>CharcoalStroke</code> starts with another Stroke (by default a BasicStroke) and inserts cracks at a fixed angle into that shape.
-</ul>
-<p>
-Other resources related to custom <code>java.awt.Strokes</code> include:
-<ol>
-<li>Jerry Huxtable has an <a href="http://www.jhlabs.com/java/java2d/strokes/">excellent page</a> detailing a few specialized strokes.
-</li>
-<li>Vincent Hardy's <a href="http://www.amazon.com/Java-API-Graphics-Vincent-Hardy/dp/0130142662">book</a> contains a nice wave stroke.
-</li>
-<li>David Flanagan covered the topic in "Java Examples in a Nutshell" (see <a href="http://www.java2s.com/Code/Java/2D-Graphics-GUI/CustomStrokes.htm">this page</a> for details).</li>
-</ol>
+}</pre>
+<p>The smoothing toggle in this demo uses the <code>BasicMouseSmoothing</code> class to smooth out your drawings, or (when disabled) it renders the points exactly as the MouseEvents capture them.</p>
+<p>The <code>BasicMouseSmoothing</code> class tries to simplify the incoming points and, through trial and error, approximate Bézier curves that are a reasonable fit for the incoming user mouse points.</p>
 </body>
 </html>

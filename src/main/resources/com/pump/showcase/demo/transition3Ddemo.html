@@ -6,9 +6,10 @@
 <body>
 <h1>Transition3D Demo</h1>
 <h2>What Is It</h2>
-<p>The <code>Transition3D</code> class helps support transitions modeled with simple 3D transformations. For now (and the foreseeable future) there are only two subclasses:</p>
+<p>The <code>Transition3D</code> class helps support transitions modeled with simple 3D transformations. For now (and the foreseeable future) there are only three subclasses:</p>
 <ul><li><strong>CubeTransition3D</strong> rotates images as if they are on a cube.</li>
-<li><strong>FlipTransition3D</strong> flips images as if they are on opposite sides of a sign.</li></ul>
+<li><strong>FlipTransition3D</strong> flips images as if they are on opposite sides of a sign.</li>
+<li><strong>FoldTransition3D</strong> this unfolds new incoming images and folds outgoing images.</li></ul>
 <h2>How To Use It</h2>
 <p>Like the <code>Transition2D</code> classes the usage is very simple:</p>
 <pre>CubeTransition3D t = new CubeTransition3D(Transition.DOWN, false);

@@ -4,12 +4,44 @@
 <title>DecoratedListUI, DecoratedTreeUI Demo</title>
 </head>
 <body>
-A decoration is a UI component overlayed inside or on top of another component. Muted-color simple buttons/decorations are very common modern UIs. This is great way to add extra functionality for power users without adding too much visual clutter.
-<p>
-This demo shows a <code>JList</code> and a <code>JTree</code> that support several decorations. The decorations are only visible for the selected row, although this is customizable. For example: if you click the refresh decoration the throbber that follows is permanently visible until all other cells are reinserted. I found making all decorations permanently visible leads to a lot of visual clutter, so my preferences is to only show them for selected/indicated rows.
-<p>
-The decorations, like cell renderers themselves, are not components that live in the official tree hierarchy. They are painted (like a stamp) as needed. Because they aren't part of the window hierarchy: they won't interface with AccessibleContexts. That means this is a handy way to build a feature-rich UI, but using decorations shouldn't be the <em>only</em> way users can access any given feature. Always include a menu item (or contextual menu item), or some other way to invoke these features.
-<p>
-The decorations in this demo are some of the more compelling examples I could brainstorm of how you might want to use this feature. But the <a href="resource:audioplayer">AudioPlayer</a> demo includes a completely different approach to a list decoration: a centered play/pause button and a circular progress indicator.
+<h1>DecoratedListUI, DecoratedTreeUI Demo</h1>
+<h2>What Is It</h2>
+<p>The <code>DecoratedListUI</code> and <code>DecoratedTreeUI</code> render clickable/animatable icons on rows in lists/trees.</p>
+<h2>How To Use It</h2>
+<p>The demo in this showcase app offers a few ideas for potential decorations.</p>
+<p>Each decoration is basically an actionable icon that implements this interface:</p>
+<pre>
+public interface ListDecoration {
+
+    Icon getIcon(JList list, Object value, int row,
+        boolean isSelected, boolean cellHasFocus, boolean isRollover,
+        boolean isPressed);
+
+    boolean isVisible(JList list, Object value, int row,
+        boolean isSelected, boolean cellHasFocus);
+
+    ActionListener getActionListener(JList list, Object value,
+        int row, boolean isSelected, boolean cellHasFocus);
+
+    Point getLocation(JList list, Object value, int row,
+        boolean isSelected, boolean cellHasFocus);
+}
+</pre>
+
+<p>And then to integrate it:
+<pre>
+JList list = new JList();
+list.putClientProperty( DecoratedListUI.KEY_DECORATIONS,
+    new ListDecoration[] { decoration1, decoration2, etc. });
+list.setUI(new DecoratedListUI());
+</pre>
+
+<h2>How It Works</h2>
+<p>The decorations are "stamped" on each row, like the <code>CellRendererPane</code>. That is: they don't exist in the component hierarchy, and the <code>ComponentUI</code> is responsible for interpreting mouse clicks and triggering the appropriate <code>ActionListener</code>.
+
+<h2>Discussion</h2>
+<p>This is great way to add extra functionality for power users without adding too much visual clutter.</p>
+<p>However: you need to decide what you want to do about accessibility. This class represents a UI choice that is <em>not</em> accessible. This may be OK <em>if</em> every feature that is part of a decoration is also available somewhere else in your application. For example: if you also have a menu shortcut that activates the same feature.</p>
+<p>The alternative is to try to layer actual <code>JComponents</code> into your UI, and that has its own complex set of challenges for a list or a tree.</p>
 </body>
 </html>

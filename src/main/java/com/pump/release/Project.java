@@ -10,15 +10,13 @@
  */
 package com.pump.release;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.jar.Attributes;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
-import java.util.jar.Manifest;
+import java.util.jar.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import com.pump.io.FileTreeIterator;
 import com.pump.io.FileUtils;
@@ -111,6 +109,9 @@ public class Project {
 		FileTreeIterator iter = new FileTreeIterator(projectDir, "java");
 		while (iter.hasNext()) {
 			File javaFile = iter.next();
+			if (javaFile.getName().equals("module-info.java"))
+				continue;
+
 			try {
 				String z = JavaClassSummary.getClassName(javaFile) + ".java";
 				String x = javaFile.getAbsolutePath();

@@ -105,7 +105,7 @@ public class LoadImagesComparison extends DemoResourceGenerator {
     public void run(DemoResourceContext context) throws Exception {
         long[] samples = new long[20];
 
-        URL url = LoadImagesComparison.class.getResource("pexels-irina-iriser-1408221.jpg");
+        URL url = LoadImagesComparison.class.getResource("IMG-20171107-WA0002.jpg");
 
         for (LoaderModel model : LoaderModel.values()) {
             System.currentTimeMillis();

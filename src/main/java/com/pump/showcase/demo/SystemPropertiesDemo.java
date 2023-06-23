@@ -141,8 +141,7 @@ public class SystemPropertiesDemo extends ShowcaseDemo {
 
 	@Override
 	public URL getHelpURL() {
-		// TODO Auto-generated method stub
-		return null;
+		return getClass().getResource("systemPropertiesDemo.html");
 	}
 
 	@Override

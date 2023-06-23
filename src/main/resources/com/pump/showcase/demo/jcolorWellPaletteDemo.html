@@ -4,46 +4,35 @@
 <title>JColorWell, JPalette Demo</title>
 </head>
 <body>
-
-This demos two components that help users select colors: a <code>com.pump.swing.JPalette</code> and a <code>com.pump.swing.JColorWell</code>.
-
+<h1>JColorWell, JPalette Demo</h1>
+<h2>What Is It</h2>
+<p>This demos two components that help users select colors: a <code>com.pump.swing.JPalette</code> and a <code>com.pump.swing.JColorWell</code>.</p>
+<h2>How To Use It</h2>
+<p>The simplest usage resembles:</p>
+<pre>
+JColorWell colorWell = new JColorWell();
+</pre>
+<p>The <code>JColorWell</code> will present a <code>JPalette</code> in a floating popup window when it is clicked.</p>
+<p>If you want to use a <code>JPalette</code> by itself (with no color well), it's similarly easy to instantiate:</p>
+<pre>
+JPalette palette = new JPalette();
+</pre>
+<h2>How It Works</h2>
+<p>Both internally keep track of their currently selected <code>Color</code> using a <code>javax.swing.colorchooser.ColorSelectionModel</code>. They can also share the same <code>ColorSelectionModel</code> if you want two components to stay in sync.</p>
 <h3>JPalette</h3>
-<h4>Technical Details</h4>
-<p>
-The <code>JPalette</code> is a simple grid of color swatches. You can listen to its <code>javax.swing.colorchooser.ColorSelectionModel</code> to identify when the selected color changes.
-<p>
-The default rendering is as plain as possible, but once it has focus a blue border is applied. (You can also add highlights to cells if you think that complements your UI.)
-<p>
-Internally each color swatch is represented as a <code>JToggleButton</code>, so this should be fully navigable via <code>AccessibleContexts</code>.
-<p>
-The demo offers a slider to control the swatch cell size. As a rule of thumb: I'd recommend not using a cell size below 40-50 pixels. From an accessibility standpoint: some users may have difficulty targeting an area smaller than 40x40. (To my knowledge this isn't a codified standard, though.) Or to put this another way: imagine running your app using a touchscreen monitor. (A finger is not as precise as a mouse.)
-<p>
-<h4>Context</h4>
-<p>
-Well over a decade ago our original implementation of a color palette didn't feature cells. Every pixel was a unique color, so it was a spectrum with thousands of choices. We figured more is better, right? But that's a common rookie mistake. As <a href="https://www.amazon.com/Power-Persuasion-Were-Bought-Sold/dp/0471266345">The Power of Persuasion</a> points out:
+<p>The <code>JPalette</code> is a grid of color swatches. Each cell is a separate <code>JToggleButton</code>, so the palette should be fully accessible/navigable.</p>
+<p>The demo offers a slider to control the swatch cell size. As a rule of thumb: I'd recommend not using a cell size below 40-50 pixels. From an accessibility standpoint: some users may have difficulty targeting an area smaller than 40x40. (To my knowledge this isn't a codified standard, though.)
+<p>The default color palette is currently the <a href="https://flatuicolors.com/">Flat UI Palette v1</a>, but I tossed in the <a href="https://fluentcolors.com/">Fluent</a> and <a href="https://www.materialui.co/metrocolors">Metro</a> sets as well. Additionally there are two custom palettes we used (simply named "small" and "large") that offer basic primary colors, grayscales and flesh tones.</p>
+<h3>JColorWell</h3>
+<p>The <code>JColorWell</code> is a single color swatch. This compactness makes it great for inspectors that need to list several consecutive controls.</p>
+<p>You can define two different behaviors: one for a single click (or down arrow key), and another for a double-click (or enter key). The default single-click behavior is to show a <code>JPalette</code> in a popup. The default double-click behavior is to show a <code>JColorPicker</code>.</p>
+<h2>Discussion</h2>
+<p>Well over a decade ago our original implementation of a color palette didn't feature cells. Every pixel was a unique color, so it was a spectrum with thousands of choices. We figured more is better, right? But that's a common rookie mistake. As <a href="https://www.amazon.com/Power-Persuasion-Were-Bought-Sold/dp/0471266345">The Power of Persuasion</a> points out:
 <blockquote>The greater the number of choices, the happier the consumer - so it's assumed.
 <p>
 In a recent series of experiments ... a group of Columbia University chocolate lovers were given a choice between six different flavors of Godiva chocolates. A second group was asked to select between thirty different flavors. Subjects given the extensive flavor choices rated their selection as less tasty, less satisfying and less enjoyable than did the limited-choice group. The thirty-flavor subjects expressed more regrets about their selection and were less likely to choose chocolate as payment for participating in the experiment.</blockquote>
-<p>
-Our users probably didn't know about this study when they specifically requested we switch to a grid-like model, though.
-<p>
-In hindsight, providing a fixed set of options offers two advantages:
-<ul><li>Users aren't overwhelmed with choices. For example: imagine if we were dealing with fonts instead of colors. We could bundle all 800+ <a href="https://fonts.google.com/">Google fonts</a> in our app, but think how intimidating it would be choose a simple sans-serif font in that context.
-<li>Users can easily re-select the same set of colors. If you're writing professionally-designed webpages you're probably using CSS to unify your color palette, but if you're an amateur composing a flyer in Microsoft Word: you'll just select/create a few different text boxes and manually choose the color each time. If your text is presented as a spectrum: it'll be nearly impossible to choose the same shade of green twice in a row. But if there are only 5 shades of green then it's trivial to do.</ul>
-<p>
-The default color palette is currently the <a href="https://flatuicolors.com/">Flat UI Palette v1</a>, but I tossed in the <a href="https://fluentcolors.com/">Fluent</a> and <a href="https://www.materialui.co/metrocolors">Metro</a> sets as well. Additionally there are two custom palettes we used (simply named "small" and "large") that offer basic primary colors, grayscales and flesh tones.
-<p>
-I don't have a strong preference between these palettes, as long as the app uses the same palette everywhere.
-<p>
-<h3>JColorWell</h3>
-<p>
-The <code>JColorWell</code> is a small component that ties everything together. It basically has 3 functions:
-<ol><li>It shows a selected color. This is what I would refer to as "color well" or "color swatch".
-<li>When clicked once (or when the down arrow key is pressed) it creates a popup with a <code>JPalette</code>. This is sufficient for most users most of the time to choose a color.
-<li>When double-clicked (or when the return key is pressed) it creates a <a href="resource:JColorPicker"><code>JColorPickerDialog</code></a>. This is for power users who don't want to be confined to a palette of pre-made recommendations.</ol>
-<p>
-The behaviors (for single click or double-click) are customizable. You could, for example, turn off either behavior. Or insert a completely different behavior.
-<p>
-There are several <code>JColorWells</code> used in different demos in this app; it's my go-to widget for representing/editing colors.
+<p>Sure enough: it didn't take long for our users to specifically request a grid-like model. In hindsight providing a fixed set of options offers two advantages:
+<ul><li>Users aren't overwhelmed with choices.</li>
+<li>Users can easily re-select the same set of colors.</li></ul>
 </body>
 </html>

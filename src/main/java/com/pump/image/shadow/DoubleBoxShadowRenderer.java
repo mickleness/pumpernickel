@@ -32,7 +32,7 @@ import java.util.TreeMap;
  * dimensions) before applying the second. I think (?) this lets us apply only
  * two iterations to get sufficiently close to a gaussian blur.
  * <p>
- * Warning: the kernel returned by {@link #getKernel(ShadowAttributes)} is an
+ * Warning: the kernel returned by {@link #getKernel(float)} is an
  * approximation. No single kernel will exactly describe the effects of this
  * renderer.
  */

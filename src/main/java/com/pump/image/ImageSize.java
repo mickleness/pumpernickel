@@ -28,6 +28,7 @@ import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.MemoryCacheImageInputStream;
 
 import com.pump.image.bmp.BmpDecoder;
+import com.pump.image.jpeg.JPEGMetaData;
 import com.pump.math.MutableInteger;
 
 /**
@@ -82,7 +83,8 @@ public class ImageSize {
 		if (file == null)
 			throw new NullPointerException();
 		try {
-			if (file.getAbsolutePath().toLowerCase().endsWith(".bmp")) {
+			String filename = file.getName().toLowerCase();
+			if (filename.endsWith(".bmp")) {
 				// our BGRA-encoded BMPs are incompatible with ImageIO's BGRA BMPs and vice versa,
 				// so we can read certain BMP file headers without an error:
 				try {
@@ -90,6 +92,8 @@ public class ImageSize {
 				} catch(Exception e) {
 					// intentionally empty
 				}
+			} else if (filename.endsWith(".jpg") || filename.endsWith(".jpeg")) {
+				return JPEGMetaData.getSize(file);
 			}
 
 			Dimension size = getSizeUsingImageIO(file);

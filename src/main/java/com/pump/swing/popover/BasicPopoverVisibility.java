@@ -142,14 +142,7 @@ public class BasicPopoverVisibility<T extends JComponent>
 	protected boolean isRollover(JComponent jc) {
 		if (!jc.isShowing())
 			return false;
-		Point p = jc.getLocationOnScreen();
-		int w = jc.getWidth();
-		int h = jc.getHeight();
-
-		Point mouse = MouseInfo.getPointerInfo().getLocation();
-
-		return mouse.x >= p.x && mouse.y >= p.y && mouse.x < p.x + w
-				&& mouse.y < p.y + h;
+		return jc.getMousePosition() != null;
 	}
 
 	/**

@@ -526,7 +526,7 @@ public class JPopover<T extends JComponent> {
 	 */
 	protected QPopup createPopup() {
 		PopupFactory pf = PopupFactory.getSharedInstance();
-		QPopupFactory qpf = null;
+		QPopupFactory qpf;
 		if (pf instanceof QPopupFactory) {
 			qpf = (QPopupFactory) pf;
 		} else {

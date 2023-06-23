@@ -63,7 +63,7 @@ public class DecoratedListUI extends BasicListUI {
 		 *            whether the mouse is pressed to arm this icon, similar to
 		 *            how buttons are armed.
 		 */
-		public abstract Icon getIcon(JList list, Object value, int row,
+		Icon getIcon(JList list, Object value, int row,
 				boolean isSelected, boolean cellHasFocus, boolean isRollover,
 				boolean isPressed);
 
@@ -82,7 +82,7 @@ public class DecoratedListUI extends BasicListUI {
 		 *            whether the list cell has focus
 		 * @return whether this decoration is visible.
 		 */
-		public abstract boolean isVisible(JList list, Object value, int row,
+		boolean isVisible(JList list, Object value, int row,
 				boolean isSelected, boolean cellHasFocus);
 
 		/**
@@ -101,7 +101,7 @@ public class DecoratedListUI extends BasicListUI {
 		 * @param cellHasFocus
 		 *            whether the list cell has focus
 		 */
-		public ActionListener getActionListener(JList list, Object value,
+		ActionListener getActionListener(JList list, Object value,
 				int row, boolean isSelected, boolean cellHasFocus);
 
 		/**
@@ -118,8 +118,8 @@ public class DecoratedListUI extends BasicListUI {
 		 * @param cellHasFocus
 		 *            whether the list cell has focus
 		 */
-		public abstract Point getLocation(JList list, Object value, int row,
-				boolean isSelected, boolean cellHasFocus);
+		Point getLocation(JList list, Object value, int row,
+								 boolean isSelected, boolean cellHasFocus);
 	}
 
 	/**

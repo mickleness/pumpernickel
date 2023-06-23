@@ -10,27 +10,7 @@
  */
 package com.pump.swing;
 
-import java.awt.AWTException;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Robot;
-import java.awt.Shape;
-import java.awt.TexturePaint;
-import java.awt.Toolkit;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.HierarchyEvent;
@@ -168,7 +148,10 @@ public class JEyeDropper extends JDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Point p = MouseInfo.getPointerInfo().getLocation();
+				PointerInfo info = MouseInfo.getPointerInfo();
+				if (info == null)
+					return;
+				Point p = info.getLocation();
 				adjustLocation(p);
 			}
 
@@ -465,7 +448,11 @@ public class JEyeDropper extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			robot.setAutoWaitForIdle(false);
-			Point mouseLoc = MouseInfo.getPointerInfo().getLocation();
+			PointerInfo info = MouseInfo.getPointerInfo();
+			if (info == null)
+				return;
+
+			Point mouseLoc = info.getLocation();
 			robot.mouseMove(mouseLoc.x + dx, mouseLoc.y + dy);
 		}
 	}
@@ -626,7 +613,8 @@ public class JEyeDropper extends JDialog {
 					}
 				});
 		pack();
-		Point p = MouseInfo.getPointerInfo().getLocation();
+		PointerInfo info = MouseInfo.getPointerInfo();
+		Point p = info == null ? new Point(0,0) : info.getLocation();
 		setLocation(p.x - getWidth() / 2, p.y - getHeight() / 2);
 	}
 

@@ -191,7 +191,7 @@ public class FileIconDemo extends ShowcaseResourceExampleDemo<File> {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { FileIcon.class };
+		return new Class[] { FileIcon.class, FileViewFileIcon.class, FileSystemViewFileIcon.class };
 	}
 
 }

@@ -436,5 +436,4 @@ public class TextBlock implements Paintable {
 		g.dispose();
 		return bi;
 	}
-
 }

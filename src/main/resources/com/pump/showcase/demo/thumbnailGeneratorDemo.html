@@ -31,17 +31,17 @@ BufferedImage createThumbnail(File file,
 <p>
 There are currently four <code>ThumbnailGenerators</code>:
 <h3>ScalingThumbnailGenerator</h3>
-This uses the <code>Scaling</code> class to read the entire (unscaled) image and produce a thumbnail. The scaling class is designed to keep as little in memory as possible, but even so: churning through a high-resolution image is going to be expensive. This generator works with JPGs, BMPs, PNGs, and GIFs.
+This uses the <a href="https://github.com/mickleness/pumpernickel/wiki/Scaling"><code>Scaling</code></a> class to read the entire (unscaled) image and produce a thumbnail. The scaling class is designed to keep as little in memory as possible, but even so: churning through a high-resolution image is going to be expensive. This generator works with JPGs, BMPs, PNGs, and GIFs.
 <p>Note this can also parse and scale down embedded JPEG thumbnails. The performance comparison below deactivates this feature, though, for the sake of comparison.</p>
 <h3>JPEGMetaDataThumbnailGenerator</h3>
-This uses the <code>JPEGMetaData</code> class to fetch a thumbnail from a JPEG's metadata. This exclusively looks at the metadata; this may return null if the image doesn't have an embedded thumbnail.
+This uses the <a href="resource:jpegmetadata"><code>JPEGMetaData</code></a> class to fetch a thumbnail from a JPEG's metadata. This exclusively looks at the metadata; this may return null if the image doesn't have an embedded thumbnail.
 <h3>MacQuickLookThumbnailGenerator</h3>
 This uses the "qlmanage" command-line tool on Macs to retrieve an image using <a href="https://en.wikipedia.org/wiki/Quick_Look">Quick Look</a>. This supports the widest variety of file formats, but it's also the slowest generator. And in some cases (like PDFs) every invocation can cause a new image to temporarily appear in your dock. The exact file formats this supports will vary from one machine to another, because every application you install can supply its own Quick Look plugin.
 <h3>BasicThumbnailGenerator</h3>
 This consults the other available generators. This is the "one size fits all" option that you should use 90% of the time.
 <h2>Performance</h2>
 <p>Here is a chart showing how long each generator took to create 10 thumbnails from a 2750x1063 JPG:</p>
-<br><img src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS-vfDBOaOv5aB_EEcxcCR3YhLTPFFYa-1kls3DvAQGWCalZ2bpGHkh2bJtCwYRbrxOjPLwClzJ6Eho/pubchart?oid=1656482439&format=image" alt="JPEGMetaDataThumbnailGenerator took 14 ms, ScalingThumbnailGenerator took 487 ms, MacQuickLookThumbnailGenerator 751 ms."/>
+<br><img src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS-vfDBOaOv5aB_EEcxcCR3YhLTPFFYa-1kls3DvAQGWCalZ2bpGHkh2bJtCwYRbrxOjPLwClzJ6Eho/pubchart?oid=1529071574&format=image">
 <p>It's no surprise the <code>JPEGMetaData</code> beat the <code>ScalingThumbnailGenerator</code>.</p>
 <p>The Quick Look generator was pretty disappointing performance-wise, but the range of file formats it supports suggests you should always keep it in your back pocket.</p>
 <p>I used to include a different generator: the <code>MacCImageThumbnailGenerator</code>. This took about 1/3 the time of the <code>ScalingThumbnailGenerator</code>. I removed it because it relied on reflection to access the <code>sun.lwawt.macosx.CImage</code> class on Mac.</p>

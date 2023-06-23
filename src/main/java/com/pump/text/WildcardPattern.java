@@ -936,7 +936,6 @@ public class WildcardPattern implements Serializable {
 	 * elements directly.
 	 * 
 	 * @param set
-	 * @param string
 	 * @return
 	 */
 	public SortedSet<String> getMatches(TreeSet<String> set) {

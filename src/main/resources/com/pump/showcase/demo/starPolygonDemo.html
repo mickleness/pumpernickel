@@ -4,10 +4,16 @@
 <title>StarPolygon Demo</title>
 </head>
 <body>
-The <code>com.pump.geom.StarPolygon</code> is a simple implementation of a star with variable end points and two radii. The first radius always points directly up, so every star is horizontally symmetrical.
-<p>
-You can specify the radii and the center point, but you can't directly set its bounds.
-<p>
-There is a special constructor to create a traditional 5-point star.
+<h1>StarPolygon Demo</h1>
+<h2>What Is It</h2>
+<p>The <code>com.pump.geom.StarPolygon</code> is a simple implementation of a star with a variable number of points and two radii. The first radius always points directly up, so every star is horizontally symmetrical.</p>
+<h2>How To Use It</h2>
+<p>You can create a 5-point star centered at (0,0) by calling:</p>
+<pre>Shape s = new StarPolygon(radius)</pre>
+<p>Or you can create a more complex star with this constructor:</p>
+<pre>Shape s = new StarPolygon(numberOfPoints, radius1, radius2,
+			centerX, centerY)</pre>
+<h2>How It Works</h2>
+<p>The <code>StarPolygon</code> class acts as a simple bean container for its properties, and it creates a <code>Path2D</code> that handles the shape contract.</p>
 </body>
 </html>

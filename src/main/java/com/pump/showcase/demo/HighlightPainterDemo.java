@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -48,20 +47,11 @@ import com.pump.text.UnderlineHighlightPainter;
 import com.pump.text.WildcardPattern;
 
 /**
- * This demonstrates the WildcardPattern, TextBoxHighlightPainter, and
- * UnderlineHighlightPainter.
- * <p>
- * Here is a sample screenshot of this showcase demo:
- * <p>
- * <img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/showcase/WildcardPatternHighlighterDemo.png"
- * alt="A screenshot of the WildcardPatternHighlighterDemo.">
+ * This demonstrates the TextBoxHighlightPainter, and UnderlineHighlightPainter.
  */
-public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
+public class HighlightPainterDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	JTextField underlinePatternField = new JTextField("*pon*");
-	JLabel underlinePatternLabel = new JLabel("Underline Pattern:");
 	JLabel colorWellLabel = new JLabel("Color:");
 	JLabel thicknessLabel = new JLabel("Thickness:");
 	JLabel squiggleLabel = new JLabel("Squiggle:");
@@ -72,19 +62,17 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 	JRadioButton squiggleOffRadioButton = new JRadioButton("Off", false);
 	ButtonGroup squiggleButtonGroup = new ButtonGroup();
 
-	JTextField blockPatternField = new JTextField("????ing");
-	JLabel blockPatternLabel = new JLabel("Block Pattern:");
+	JTextField searchPhraseField = new JTextField("chamber");
+	JLabel searchPhraseLabel = new JLabel("Search Phrase:");
 	JTextPane textPane = new JTextPane();
 	JScrollPane scrollPane = new JScrollPane(textPane);
-	JLabel hueLabel = new JLabel("Hue:");
 	JLabel includeFillLabel = new JLabel("Fill:");
 	JLabel alphaLabel = new JLabel("Alpha:");
-	JSpinner hueSpinner = new JSpinner(new SpinnerNumberModel(180, 1, 360, 5));
 	JRadioButton includeFillOnRadioButton = new JRadioButton("On", true);
 	JRadioButton includeFillOffRadioButton = new JRadioButton("Off", false);
 	ButtonGroup includeFillButtonGroup = new ButtonGroup();
 	JSpinner alphaSpinner = new JSpinner(
-			new SpinnerNumberModel(100, 1, 100, 1));
+			new SpinnerNumberModel(30, 1, 100, 1));
 
 	Collection<InspectorRowPanel> underlineControls = new ArrayList<>();
 	Collection<InspectorRowPanel> blockControls = new ArrayList<>();
@@ -122,10 +110,10 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 		}
 	};
 
-	JComboBox<String> typeComboBox = new JComboBox<>(new String[] {
-			"UnderlineHighlightPainter", "TextBoxHighlightPainter" });
+	JRadioButton painterUnderlineButton = new JRadioButton("UnderlineHighlightPainter", true);
+	JRadioButton painterBoxButton = new JRadioButton("TextBoxHighlightPainter", false);
 
-	public WildcardPatternHighlighterDemo() {
+	public HighlightPainterDemo() {
 		super(true, true, false);
 
 		JPanel animatingInspectorPanel = new AnimatingInspectorPanel();
@@ -133,19 +121,15 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 
 		Inspector layout = new Inspector(animatingInspectorPanel);
 		layout.setConstantHorizontalAlignment(true);
-		layout.addRow(new JLabel("Type:"), typeComboBox);
+		layout.addRow(new JLabel("Type:"), painterUnderlineButton, painterBoxButton);
+		layout.addRow(colorWellLabel, colorWell, false);
+		layout.addRow(searchPhraseLabel, searchPhraseField, true);
 
-		underlineControls.add(layout.addRow(underlinePatternLabel,
-				underlinePatternField, true));
-		underlineControls.add(layout.addRow(colorWellLabel, colorWell, false));
 		underlineControls
 				.add(layout.addRow(thicknessLabel, thicknessSpinner, false));
 		underlineControls.add(layout.addRow(squiggleLabel,
 				squiggleOnRadioButton, squiggleOffRadioButton));
 
-		blockControls
-				.add(layout.addRow(blockPatternLabel, blockPatternField, true));
-		blockControls.add(layout.addRow(hueLabel, hueSpinner, false));
 		blockControls.add(layout.addRow(includeFillLabel,
 				includeFillOnRadioButton, includeFillOffRadioButton));
 		blockControls.add(layout.addRow(alphaLabel, alphaSpinner, false));
@@ -178,28 +162,34 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 						+ "\"Tis some visitor,\" I muttered, \"tapping at my chamber door -\n"
 						+ "Only this, and nothing more.\"");
 
-		underlinePatternField.getDocument().addDocumentListener(docListener);
-		blockPatternField.getDocument().addDocumentListener(docListener);
+		searchPhraseField.getDocument().addDocumentListener(docListener);
 		colorWell.getColorSelectionModel().addChangeListener(changeListener);
 		thicknessSpinner.addChangeListener(changeListener);
 		squiggleOnRadioButton.addActionListener(actionListener);
 		squiggleOffRadioButton.addActionListener(actionListener);
-		hueSpinner.addChangeListener(changeListener);
 		includeFillOnRadioButton.addActionListener(actionListener);
 		includeFillOffRadioButton.addActionListener(actionListener);
 		alphaSpinner.addChangeListener(changeListener);
 
-		typeComboBox.addActionListener(new ActionListener() {
+		ActionListener typeListener = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				refreshControls();
 			}
-		});
+		};
+		painterBoxButton.addActionListener(typeListener);
+		painterUnderlineButton.addActionListener(typeListener);
+
+		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.add(painterBoxButton);
+		buttonGroup.add(painterUnderlineButton);
+
 		refreshControls();
 	}
 
 	protected void refreshControls() {
 		Collection<InspectorRowPanel> visibleComponents, hiddenComponents;
-		if (typeComboBox.getSelectedIndex() == 0) {
+		if (painterUnderlineButton.isSelected()) {
 			visibleComponents = underlineControls;
 			hiddenComponents = blockControls;
 		} else {
@@ -257,24 +247,20 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 		textPane.getHighlighter().removeAllHighlights();
 		List<Word> words = getWords(textPane.getText());
 		try {
-			if (typeComboBox.getSelectedIndex() == 0) {
-				WildcardPattern underlinePattern = new WildcardPattern(
-						underlinePatternField.getText());
+			Color color = colorWell.getColorSelectionModel().getSelectedColor();
+			WildcardPattern pattern = new WildcardPattern(
+					searchPhraseField.getText());
+			if (painterUnderlineButton.isSelected()) {
 				UnderlineHighlightPainter underlinePainter = new UnderlineHighlightPainter(
-						colorWell.getColorSelectionModel().getSelectedColor(),
+						color,
 						((Integer) thicknessSpinner.getValue()).intValue(),
 						squiggleOnRadioButton.isSelected());
-				highlight(words, underlinePattern, underlinePainter);
+				highlight(words, pattern, underlinePainter);
 			} else {
-				WildcardPattern blockPattern = new WildcardPattern(
-						blockPatternField.getText());
-				float hue = ((Number) hueSpinner.getValue()).floatValue()
-						/ 360f;
-				float alpha = ((Number) alphaSpinner.getValue()).floatValue()
-						/ 100f;
+				float alpha = (((Number) alphaSpinner.getValue()).floatValue() / 100f);
 				TextBoxHighlightPainter blockPainter = new TextBoxHighlightPainter(
-						hue, includeFillOnRadioButton.isSelected(), alpha);
-				highlight(words, blockPattern, blockPainter);
+						color, includeFillOnRadioButton.isSelected(), alpha);
+				highlight(words, pattern, blockPainter);
 			}
 		} catch (BadLocationException e) {
 			e.printStackTrace();
@@ -320,18 +306,18 @@ public class WildcardPatternHighlighterDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public String getSummary() {
-		return "This demonstrates two new Highlighters and a simpler regex alternative.";
+		return "This demonstrates two new HighlightPainters.";
 	}
 
 	@Override
 	public URL getHelpURL() {
-		return WildcardPatternHighlighterDemo.class
-				.getResource("wildcardPatternHighlighterDemo.html");
+		return HighlightPainterDemo.class
+				.getResource("highlightPainterDemo.html");
 	}
 
 	@Override
 	public String[] getKeywords() {
-		return new String[] { "Swing", "text", "pattern" };
+		return new String[] { "Swing", "text", "HighlightPainter" };
 	}
 
 	@Override

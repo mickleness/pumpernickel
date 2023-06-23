@@ -4,48 +4,34 @@
 <title>Window Demo</title>
 </head>
 <body>
-This demo lets you see how different configuration options affect new window/dialogs/frames.
-<p>
-This demo does not feature any custom code from the Pumpernickel codebase. It's just here to help sample existing window options.
-<h3>Swing Attributes</h3>
-Most of these attributes are pretty self-explanatory. (Or maybe I'm inclined to think so after working with them for so long?)
-<p>
-The "Transparent" checkbox makes the background of the window a fully transparent color and applies a rounded white background so the window contents can still be seen.
-<p>
-Some of these attributes are incompatible and you may see an exception when you try to generate the window. I think most (all?) of the incompatibilities involve certain properties that don't work on decorated frames/dialogs. (For ex: you can't apply a transparent background to a decorated frame.)
-<p>
-The one attribute I don't appreciate much is the window type (normal, utility, popup). The <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/Window.Type.html">javadoc</a> says:
+<h1>Window Demo</h1>
+<h2>What Is It</h2>
+<p>This demo lets you see how different configuration options affect new window/dialog/frame. This demo does not feature new/novel code.</p>
+<h2>How To Use It</h2>
+<p>Use the options in the "Configuration" panel to design your new window. Then click the "Show Window" button to actually create and show the window.</p>
+<p>This demo lets you see first-hand what certain options actually do. For example:</p>
+<ul><li>What does <code>Window.setType(..)</code> actually mean for the end user?</li>
+<li>If you use the Mac-specific options to paint under the title bar: can you interact with components under the titlebar?</li>
+<li>Which will end up on top: a <code>JDialog</code> configured so <code>isAlwaysOnTop()</code> returns true, OR a <code>JDialog</code> configured with so <code>getType()</code> returns <code>POPUP</code>?</li>
+<li>Which combination of options are incompatible?</li></ul>
+<p>Most of the controls feature tooltips that clearly identify which window attribute they change.</p>
+<p>It is possible to configure a window in a way that you'll get a <code>IllegalComponentStateException</code> when you try to show it. (For example: leave "Undecorated" unselected, and set the "Alpha" to less than 100%.) Any such configuration will throw an exception, and you'll see an error dialog.</p>
+<h3>Window Type</h3>
+<p>Personally I've found the <code>setType(Type)</code> property confusing in the past, so I did a little research. The <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/Window.Type.html">javadoc</a> says:
 <blockquote><ul><li>A utility window is usually a small window such as a toolbar or a palette. The native system may render the window with smaller title-bar if the window is either a Frame or a Dialog object, and if it has its decorations enabled.</li>
 <li>A popup window is a temporary window such as a drop-down menu or a tooltip. On some platforms, windows of that type may be forcibly made undecorated even if they are instances of the Frame or Dialog class, and have decorations enabled.</li></ul></blockquote>
-<p>
-Personally I haven't observed a difference in behavior on Mac or Windows when I change the window type. (Except on Mac with VoiceOver turned on: it may say "system dialog" instead of "java has new window"?)
-
+<p>(Also I've found it subtly affects how VoiceOver on Mac announces the windows; but I haven't found a way to really influence VoiceOver to my satisfaction.)</p>
 <h3>Mac Attributes</h3>
-The lower half of controls (starting with "Window Style") are all attributes supported on Mac.
-<p>
-Most of these were reverse-engineered from studying the <a href="https://github.com/frohoff/jdk8u-dev-jdk/blob/master/src/macosx/classes/sun/lwawt/macosx/CPlatformWindow.java">sun.lwawt.macosx.CPlatformWindow</a> class. There are a few attributes (such as "apple.awt.windowShadow.revalidateNow" and "apple.awt.delayWindowOrdering") I intentionally left out because I found them too obscure.
-<p>
-As far as I can tell the modal sheet property doesn't work anymore. (I included it here just in case it starts working or someone can point out a magical combination of properties that make it work.) I know it requires a dialog that uses modality type DOCUMENT_MODAL, but if it is still supported there must be another additional requirement I don't know about. It looks like Apple still <a href="https://developer.apple.com/design/human-interface-guidelines/macos/windows-and-views/sheets/">supports them</a> in native apps, though.
-<p>
-The "unified" window style also doesn't appear to work. (I'm not sure if it ever did?) I saw one throw-away line in Apple's documentation mentioning, "unifiedTitleAndToolbar: This constant has no effect, because all windows that include a toolbar use the unified style." Or perhaps more importantly: the Aqua L&F in Swing is a lightweight replica of Aqua, but it doesn't actually use the same components. While it may be possible to emulate many things, it may be impossible to create a real native window with certain attributes that works well with Swing components.
-<p>
-The "HUD" window style has the unique distinction of a quick fade out when dismissed. Also using it produces a warning in System.err: "NSPanel requires NSWindowStyleMaskUtilityWindow for a HUD window". I'm not sure what implications that has.
-<p>
-The shadow toggle is invaluable if you ever want a custom/subtle window. The document attributes (modified and file) are great if you want to make a document editor that includes subtle Mac behaviors.
-<p>
-The closeable/minimizable/zoomable attributes are actually the original motivation for this demo. I knew it was possible to disable these controls, but I forgot where to look so I decided to make this demo so (hopefully) I'll never forget again. On Windows if I need to make a decorated dialog uncloseable I call:
+<p>If you are looking at this on a Mac: the lower half of controls (starting with "Window Style") are all attributes supported exclusively on Mac. Most of these controls were reverse-engineered from studying the <a href="https://github.com/frohoff/jdk8u-dev-jdk/blob/master/src/macosx/classes/sun/lwawt/macosx/CPlatformWindow.java">sun.lwawt.macosx.CPlatformWindow</a> class. Several of these I've used over the years to help build more native-feeling apps. There are a few attributes (such as "apple.awt.windowShadow.revalidateNow" and "apple.awt.delayWindowOrdering") I intentionally left out because I found them too obscure.</p>
+<p>As far as I can tell the modal sheet property doesn't work anymore. (I included it here just in case it starts working or someone can point out a magical combination of properties that make it work.) I know it requires a dialog that uses modality type DOCUMENT_MODAL, but if it is still supported there must be another additional requirement I don't know about. It looks like Apple still <a href="https://developer.apple.com/design/human-interface-guidelines/macos/windows-and-views/sheets/">supports them</a> in native apps, though.</p>
+<p>The "unified" window style also doesn't appear to work. (I'm not sure if it ever did?) I saw one throw-away line in Apple's documentation mentioning, "unifiedTitleAndToolbar: This constant has no effect, because all windows that include a toolbar use the unified style." Or perhaps more importantly: the Aqua L&F in Swing is a lightweight replica of Aqua, but it doesn't actually use the same components. While it may be possible to emulate many things, it may be impossible to create a real native window with certain attributes that works well with Swing components.</p>
+<p>The "HUD" window style has the unique distinction of a quick fade out when dismissed. Also using it produces a warning in System.err: "NSPanel requires NSWindowStyleMaskUtilityWindow for a HUD window". I'm not sure what implications that has.</p>
+<p>The shadow toggle is invaluable if you ever want a custom/subtle window. (Also if you ever get stuck with a style window shadow cache, you can call <code>rootPane.putClientProperty("apple.awt.windowShadow.revalidateNow", new Object())</code>.)
+<p>The document attributes ("Window.documentModified" and "Window.documentFile") are great if you want to make a document editor that includes subtle Mac behaviors. If your window represents an unsaved document, then marking it as modified adds a dot in the middle of the close decoration. If your window represents a specific file: the file icon appears in the titlebar, and if you command-click it you can see its file path. (There may be other behaviors I'm unaware of, too.)</p>
+<p>The closeable/minimizable/zoomable attributes are actually the original motivation for this demo. I knew it was possible to disable these controls, but I forgot where to look so I decided to make this demo so (hopefully) I'll never forget again. On Windows if I need to make a decorated dialog uncloseable I call:
 <br><code>setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);</code>
-<p>
-Unfortunately that awkward hack leaves the close decoration visible, but it does nothing.
-<p>
-<p>
-The "Transparent Title Bar" is a relatively new property. (It pairs well with "Full Window" discussed below.) This option is pretty self-explanatory: this turns off the pronounced line below the title bar in most windows. (The "textured" window style already did this, but using that window style forces you to exclusively use that gray background.)
-<p>
-The "Full Window" property allows your component to paint inside (or under) the title bar. (That is: you're painting inside the "full window". It has nothing to do with "full screen" features.) Unfortunately the title bar still consumes all mouse events, so you can't embed any useful buttons or text fields in the title bar and still retain the native close decorations.
-<p>
-As of this writing Safari includes the default close buttons, backward/forward buttons, a bookmarks button, a URL text field, and other controls all within the title bar. The "full window" property is great if you really want granular control of how your window <i>paints</i> while retaining the OS window decorations, but it falls short of letting you write a native-feeling UI like Safari. (If you're willing to forego the OS window decorations (or if you're willing to write your own replicas), then you can avoid all of this by just making an undecorated frame/dialog and creating the title bar using Swing components yourself.)
-<p>
-All of these custom Mac properties are configured using client properties, so they should have no effect on other platforms that do not support them. I looked around for a similar suite of properties for Windows, but so far I haven't found them. (If anyone has any leads: let me know and I'll see if I can add them here.)
-
+<p>Unfortunately that awkward hack leaves the close decoration visible, but it does nothing.</p>
+<p>I'm still getting used to the title bar controls ("Transparent Title Bar", "Full Window"). They're a little tricky because you still don't have <em>complete</em> control over the titlebar area. You can paint anything you want there, but you can't control UI components in that space. If the user clicks and drags in the titlebar area: they'll still drag the window. Even if they clicked on a button. So it's hard to emulate, say, Safari's titlebar (which includes the URL text field and some other controls). You could work around this by making the frame undecorated and just adding your own window decorations, but of course if the OS updates the L&F of those buttons in upgrades you'll be out-of-step.</p>
+<p>All of these custom Mac properties are configured using client properties, so they should have no effect on other platforms that do not support them. I looked around for a similar suite of properties for Windows, but so far I haven't found them. (If anyone has any leads: let me know and I'll see if I can add them here.)</p>
 </body>
 </html>

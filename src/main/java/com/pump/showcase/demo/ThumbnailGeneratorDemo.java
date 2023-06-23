@@ -34,7 +34,8 @@ public class ThumbnailGeneratorDemo extends ShowcaseResourceExampleDemo<File> {
 
 	public final static ThumbnailGenerator[] GENERATORS = new ThumbnailGenerator[] {
 			new BasicThumbnailGenerator(), new JPEGMetaDataThumbnailGenerator(),
-			new ScalingThumbnailGenerator(),
+			new ScalingThumbnailGenerator(), new ImageIOThumbnailGenerator(),
+//			new PythonPillowThumbnailGenerator(),
 			new MacQuickLookThumbnailGenerator() };
 
 	JLabel previewLabel = new JLabel();

@@ -148,7 +148,7 @@ public class JEyeDropperDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { JEyeDropperDemo.class };
+		return new Class[] { JEyeDropper.class };
 	}
 
 }
