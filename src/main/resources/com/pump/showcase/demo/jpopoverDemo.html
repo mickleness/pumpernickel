@@ -6,8 +6,8 @@
 <body>
 <h1>JPopover Demo</h1>
 <h2>What Is It</h2>
-<p>he <code>JPopover</code> is a new class intended to be a more modern remake of the classic <code>JToolTip</code>. It borrows from Apple's <a href="https://developer.apple.com/macos/human-interface-guidelines/windows-and-views/popovers/">popover</a> and Microsoft's <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dn742400(v=vs.85).aspx">balloon</a> components.</p>
-<p>I highly recommend reading the help page for the <code>JToolTip</code> demo. It quotes Microsoft, Google and Apple commentary on tooltips and related controls.</p>
+<p>The <code>JPopover</code> is a new class intended to be a more modern remake of the classic <code>JToolTip</code>. It borrows from Apple's <a href="https://developer.apple.com/macos/human-interface-guidelines/windows-and-views/popovers/">popover</a> and Microsoft's <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dn742400(v=vs.85).aspx">balloon</a> components.</p>
+<p>I highly recommend reading the help page for the <a href="resource:JToolTip"><code>JToolTip</code></a> demo. It cites Microsoft, Google and Apple commentary on tooltips and related controls.</p>
 <h2>How To Use It</h2>
 <p>The simplest usage might be:</p>
 <pre>new JPopover&lt;JPanel&gt;(triggerComponent, popoverContentPanel, true);</pre>
@@ -28,8 +28,7 @@ The currency demo is the only case where the user is expected to interact with t
 Also in ALL the demos in this app: sliders use a <code>JPopover</code> to show the current value. There's even a static helper method for this use case:
 <pre>
 public static void add(JSlider slider,
-        final Callable<String> textGenerator);
+        final Callable&lt;String&gt; textGenerator);
 </pre>
-</p>
 </body>
 </html>

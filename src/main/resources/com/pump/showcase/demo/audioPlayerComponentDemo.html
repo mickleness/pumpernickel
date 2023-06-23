@@ -18,7 +18,7 @@
 <pre>AudioPlayerComponent apc = new AudioPlayerComponent();
 apc.setSource(wavURL);</pre>
 <p>The <code>AquaAudioListUI</code> can be set up via:</p>
-<pre>JList<URL> list = new JList&lt;&gt;(listModel);
+<pre>JList&lt;URL&gt; list = new JList&lt;&gt;(listModel);
 list.setUI(new AquaAudioListUI());</pre>
 
 <h2>How It Works</h2>
@@ -27,7 +27,7 @@ list.setUI(new AquaAudioListUI());</pre>
 <p>The <code>AudioPlayerComponent</code> is a very simple <code>JComponent</code> that maintains a reference to a "source" (a URL) and an <code>AudioPlayerUI</code>. The <code>AudioPlayerUI</code> is an abstract class with a few helper methods, but currently the only subclass is the <code>BasicAudioPlayerUI</code>. This is the UI you see in this demo: it includes a play/pause button that toggles, and a JSlider that uses the <code>WaveformSliderUI</code>.</p>
 <p>The <code>WaveformSliderUI</code> is pretty self-explanatory. It extends <code>BasicSliderUI</code>, but instead of a thumb and a line/track: it renders a hairline cursor and a waveform image.</p>
 <h3>The AquaAudioListUI</h3>
-<p>This is a <code>com.pump.plaf.decorate.DecoratedListUI</code> modeled after a similar UI observed on Mac. When an audio URL is selected you can play it back (or delete it).
+<p>This is a <a href="resource:DecoratedListUI"><code>com.pump.plaf.decorate.DecoratedListUI</code></a> modeled after a similar UI observed on Mac. When an audio URL is selected you can play it back (or delete it).
 
 <h3>Attributions</h3>
 <p>I made all the sounds used in this demo, and they're available <a href="https://freesound.org/people/mickleness/">here</a> under a <a href="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons Zero license.</a></p>

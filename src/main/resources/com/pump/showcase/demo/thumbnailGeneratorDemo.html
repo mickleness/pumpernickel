@@ -31,10 +31,10 @@ BufferedImage createThumbnail(File file,
 <p>
 There are currently four <code>ThumbnailGenerators</code>:
 <h3>ScalingThumbnailGenerator</h3>
-This uses the <code>Scaling</code> class to read the entire (unscaled) image and produce a thumbnail. The scaling class is designed to keep as little in memory as possible, but even so: churning through a high-resolution image is going to be expensive. This generator works with JPGs, BMPs, PNGs, and GIFs.
+This uses the <a href="https://github.com/mickleness/pumpernickel/wiki/Scaling"><code>Scaling</code></a> class to read the entire (unscaled) image and produce a thumbnail. The scaling class is designed to keep as little in memory as possible, but even so: churning through a high-resolution image is going to be expensive. This generator works with JPGs, BMPs, PNGs, and GIFs.
 <p>Note this can also parse and scale down embedded JPEG thumbnails. The performance comparison below deactivates this feature, though, for the sake of comparison.</p>
 <h3>JPEGMetaDataThumbnailGenerator</h3>
-This uses the <code>JPEGMetaData</code> class to fetch a thumbnail from a JPEG's metadata. This exclusively looks at the metadata; this may return null if the image doesn't have an embedded thumbnail.
+This uses the <a href="resource:jpegmetadata"><code>JPEGMetaData</code></a> class to fetch a thumbnail from a JPEG's metadata. This exclusively looks at the metadata; this may return null if the image doesn't have an embedded thumbnail.
 <h3>MacQuickLookThumbnailGenerator</h3>
 This uses the "qlmanage" command-line tool on Macs to retrieve an image using <a href="https://en.wikipedia.org/wiki/Quick_Look">Quick Look</a>. This supports the widest variety of file formats, but it's also the slowest generator. And in some cases (like PDFs) every invocation can cause a new image to temporarily appear in your dock. The exact file formats this supports will vary from one machine to another, because every application you install can supply its own Quick Look plugin.
 <h3>BasicThumbnailGenerator</h3>

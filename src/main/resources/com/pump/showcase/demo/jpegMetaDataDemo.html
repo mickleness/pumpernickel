@@ -35,7 +35,7 @@ try (InputStream in = url.openStream()) {
 <p>This class was originally developed to help the user browse a folder of megapixel images.</p>
 <p>This is not intended to be a fully functional JPEG parser. (I have no intention of recreating that wheel!) But it's pretty light weight solution to the problem.
 <h3>ImageIO</h3>
-<p>When I say this is a "light weight solution": I'm implicitly comparing this approach to an <code>ImageIO</code>-based solution. The <a href="http://java.sun.com/j2se/1.5.0/docs/guide/imageio/spec/apps.fm3.html">documentation</a> for <code>ImageIO</code> says:<p/>
+<p>When I say this is a "light weight solution": I'm implicitly comparing this approach to an <code>ImageIO</code>-based solution. The <a href="http://java.sun.com/j2se/1.5.0/docs/guide/imageio/spec/apps.fm3.html">documentation</a> for <code>ImageIO</code> says:</p>
 <blockquote>
 <b>3.3.4  Reading "Thumbnail" Images</b><br />
 <br />
@@ -63,7 +63,7 @@ I should have remarked that the JAI Image I/O Tools JPEG reader supports via the
 <br />
 I think that the only thumbnails supported by the Java SE Image I/O JPEG reader via the thumbnail method calls are those in the JFIF and JFXX marker segments. If you are unable to use JAI Image I/O Tools for some reason you could however derive the EXIF thumbnail by parsing the contents of the "unknown" node in the image metadata corresponding to the EXIF APP1 marker segment.</blockquote>
 <br />
-<p>To paraphase: we would need to install a separate library/extension (<a href="https://www.oracle.com/java/technologies/advanced-imaging-api.html">JAI - Java Advanced Imaging</a>) for the <code>ImageIO</code> calls to "just work". If I run the following code (without JAI installed), I get an exception:<p/>
+<p>To paraphase: we would need to install a separate library/extension (<a href="https://www.oracle.com/java/technologies/advanced-imaging-api.html">JAI - Java Advanced Imaging</a>) for the <code>ImageIO</code> calls to "just work". If I run the following code (without JAI installed), I get an exception:</p>
 <pre>Iterator iterator = ImageIO.getImageReadersBySuffix("jpeg");
 while(iterator.hasNext()) {
  ImageReader reader = (ImageReader)iterator.next();
@@ -81,6 +81,6 @@ while(iterator.hasNext()) {
 <p>Adding properties and comments to the reader was more of an afterthought. So far I haven't used that information; I've been exclusively interested in thumbnails.</p>
 <p>So overall: this meets the original goals/needs we set out to satisfy, but it is hackish in nature. There's probably a lot of metadata -- and maybe even some thumbnails -- we don't support yet.</p>
 <h3>Performance</h3>
-<p>See the <em>ThumbnailGenerator Demo</em> for details about performance. As of this writing: retrieving the thumbnail from a large megapixel JPG via the <code>JPEGMetaData</code> is about 50x faster than reading and scaling the image.
+<p>See the <a href="resource:ThumbnailGenerator"><em>ThumbnailGenerator Demo</em></a> for details about performance. As of this writing: retrieving the thumbnail from a large megapixel JPG via the <code>JPEGMetaData</code> is about 50x faster than reading and scaling the image.
 </body>
 </html>
