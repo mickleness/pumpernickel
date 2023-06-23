@@ -212,7 +212,8 @@ public class JToolTipDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { JToolTip.class, PopupFactory.class, Popup.class };
+		return new Class[] { JToolTip.class, PopupFactory.class, Popup.class,
+		QPopupFactory.class, QPopup.class, JPopover.class };
 	}
 
 }

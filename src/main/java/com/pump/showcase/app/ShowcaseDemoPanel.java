@@ -10,26 +10,17 @@
  */
 package com.pump.showcase.app;
 
-import java.awt.CardLayout;
-import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.JEditorPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JSeparator;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
@@ -37,6 +28,7 @@ import javax.swing.text.html.StyleSheet;
 
 import com.pump.plaf.CircularProgressBarUI;
 import com.pump.showcase.demo.ShowcaseDemo;
+import com.pump.swing.JLink;
 import com.pump.text.html.QHTMLEditorKit;
 import com.pump.util.Property;
 
@@ -97,6 +89,13 @@ public class ShowcaseDemoPanel extends JPanel {
 		c.fill = GridBagConstraints.BOTH;
 		add(descriptionTextArea, c);
 
+		List<Class<?>> pumpClasses = getPumpClasses(info.getDemo().getClasses());
+		if (!pumpClasses.isEmpty()) {
+			c.gridy++;
+			c.insets = new Insets(0,24,0,28);
+			add(createLinks(pumpClasses), c);
+		}
+
 		c.gridy++;
 		c.weightx = 1;
 		c.insets = new Insets(0, 0, 0, 0);
@@ -108,6 +107,40 @@ public class ShowcaseDemoPanel extends JPanel {
 		add(contentCardPanel, c);
 
 		refreshContentPanel();
+	}
+
+	private JComponent createLinks(List<Class<?>> pumpClasses) {
+		JPanel panel = new JPanel(new FlowLayout(3));
+		JLabel label = new JLabel("See:");
+		Font font = label.getFont();
+		font = font.deriveFont(Math.max(font.getSize2D() - 2, 11));
+		label.setFont(font);
+		panel.add(label);
+		for (Class z : pumpClasses) {
+			String str = z.getName().replace(".", "/");
+			String text = z.getSimpleName();
+			try {
+				URL url = new URL("https://github.com/mickleness/pumpernickel/blob/master/src/main/java/" + str + ".java");
+				JLink link = new JLink(text, url);
+				link.setFont(font);
+				link.setToolTipText(url.toString());
+				panel.add(link);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+		}
+		return panel;
+	}
+
+	private List<Class<?>> getPumpClasses(Class<?>[] classes) {
+		List<Class<?>> returnValue = new ArrayList<>();
+		for (Class z : classes) {
+			if (z.getName().startsWith("com")) {
+				returnValue.add(z);
+			}
+		}
+		returnValue.add(info.getDemo().getClass());
+		return returnValue;
 	}
 
 	private JPanel createLoadingPanel() {

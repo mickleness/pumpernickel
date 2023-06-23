@@ -94,7 +94,7 @@ public class NSImageDemo extends ShowcaseIconDemo {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { Image.class };
+		return new Class[] { NSImage.class, Image.class };
 	}
 
 	@Override

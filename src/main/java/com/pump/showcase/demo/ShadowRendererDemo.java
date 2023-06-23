@@ -349,7 +349,7 @@ public class ShadowRendererDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { ShadowRenderer.class, ShadowAttributes.class,
+		return new Class[] { ShadowRenderer.class, DoubleBoxShadowRenderer.class,
 				BoxShadowRenderer.class, GaussianShadowRenderer.class };
 	}
 

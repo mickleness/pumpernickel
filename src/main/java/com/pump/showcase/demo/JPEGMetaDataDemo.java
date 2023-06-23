@@ -197,7 +197,7 @@ public class JPEGMetaDataDemo extends ShowcaseResourceExampleDemo<URL> {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { JPEGMetaData.class };
+		return new Class[] { JPEGMetaData.class, JPEGMetaDataListener.class };
 	}
 
 	@Override
