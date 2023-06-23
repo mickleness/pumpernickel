@@ -29,7 +29,8 @@ public class ScalingThumbnailGenerator implements ThumbnailGenerator {
 	boolean allowEmbeddedThumbnails;
 
 	/**
-	 * Create a ScalingThumbnailGenerator that consults embedded JPEG thumbnails.
+	 * Create a ScalingThumbnailGenerator that consults embedded JPEG
+	 * thumbnails.
 	 */
 	public ScalingThumbnailGenerator() {
 		this(true);
@@ -38,8 +39,9 @@ public class ScalingThumbnailGenerator implements ThumbnailGenerator {
 	/**
 	 * Create a ScalingThumbnailGenerator.
 	 *
-	 * @param allowEmbeddedThumbnails if true then embedded JPEG thumbnails may
-	 *                                be used. If false then they will be skipped.
+	 * @param allowEmbeddedThumbnails
+	 *            if true then embedded JPEG thumbnails may be used. If false
+	 *            then they will be skipped.
 	 */
 	public ScalingThumbnailGenerator(boolean allowEmbeddedThumbnails) {
 		this.allowEmbeddedThumbnails = allowEmbeddedThumbnails;
@@ -62,14 +64,17 @@ public class ScalingThumbnailGenerator implements ThumbnailGenerator {
 		if (requestedMaxImageSize <= 0)
 			requestedMaxImageSize = 100;
 
-		Dimension maxSize = new Dimension(requestedMaxImageSize, requestedMaxImageSize);
-		BiFunction<Dimension, Boolean, Dimension> sizeFunction = new BiFunction<>() {
+		Dimension maxSize = new Dimension(requestedMaxImageSize,
+				requestedMaxImageSize);
+		BiFunction<Dimension, Boolean, Dimension> sizeFunction = new BiFunction<Dimension, Boolean, Dimension>() {
 			@Override
-			public Dimension apply(Dimension srcImageSize, Boolean isEmbeddedThumbnail) {
+			public Dimension apply(Dimension srcImageSize,
+					Boolean isEmbeddedThumbnail) {
 				if (!allowEmbeddedThumbnails && isEmbeddedThumbnail)
 					return null;
 
-				Dimension scaledImageSize = Dimension2D.scaleProportionally(srcImageSize, maxSize, true);
+				Dimension scaledImageSize = Dimension2D
+						.scaleProportionally(srcImageSize, maxSize, true);
 				if (scaledImageSize == null) {
 					return srcImageSize;
 				}
