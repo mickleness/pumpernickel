@@ -197,7 +197,7 @@ public class BoxTabbedPaneUIDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { BoxTabbedPaneUIDemo.class, JTabbedPane.class,
+		return new Class[] { BoxTabbedPaneUI.class, JTabbedPane.class,
 				SplayedLayout.class };
 	}
 }
