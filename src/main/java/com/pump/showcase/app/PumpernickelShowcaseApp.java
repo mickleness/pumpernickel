@@ -170,8 +170,6 @@ public class PumpernickelShowcaseApp extends JFrame {
 		// MovWriterDemo());
 		returnValue.add(new ShowcaseDemoInfo("HighlightPainters",
 				"HighlightPainterDemo"));
-		returnValue.add(
-				new ShowcaseDemoInfo("BoxTabbedPaneUI", "BoxTabbedPaneUIDemo"));
 		returnValue.add(new ShowcaseDemoInfo("CircularProgressBarUI",
 				"CircularProgressBarUIDemo"));
 		returnValue.add(new ShowcaseDemoInfo("Strokes, MouseSmoothing",
@@ -200,6 +198,8 @@ public class PumpernickelShowcaseApp extends JFrame {
 		returnValue.add(new ShowcaseDemoInfo("ThumbnailGenerator",
 				"ThumbnailGeneratorDemo"));
 		if (JVM.isMac) {
+			returnValue.add(
+					new ShowcaseDemoInfo("BoxTabbedPaneUI", "BoxTabbedPaneUIDemo"));
 			returnValue.add(new ShowcaseDemoInfo("NSImage", "NSImageDemo"));
 		}
 		return returnValue.toArray(new ShowcaseDemoInfo[returnValue.size()]);
