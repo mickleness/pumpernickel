@@ -222,7 +222,7 @@ public class JPEGMetaData {
 				if (largestThumbnailWidth > 0) {
 					removeThumbnail(getThumbnailCount());
 				}
-				addThumbnail(markerName, bi);
+				JPEGMetaData.this.addThumbnail(markerName, bi);
 				largestThumbnailWidth = bi.getWidth();
 				largestThumbnailHeight = bi.getHeight();
 			}
