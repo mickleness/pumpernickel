@@ -191,7 +191,7 @@ class JPEGThumbnailImageReader extends ImageReader {
         validateImageIndex(imageIndex);
 
         initialize(-1);
-        return imageSize.width;
+        return imageSize.height;
     }
 
     @Override
