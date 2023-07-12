@@ -1,104 +1,47 @@
 package com.pump.image.jpeg;
 
-import java.util.*;
 
-import com.pump.UserCancelledException;
-import junit.framework.TestCase;
-
-import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.ImageTypeSpecifier;
 import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.spi.IIORegistry;
 import javax.imageio.spi.ImageReaderSpi;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class JPEGThumbnailImageReaderTest extends TestCase {
-
-    public void testThumbnail() throws Exception {
-        URL jpegFile = UserCancelledException.class.getResource("showcase/resourcegenerator/IMG-20171107-WA0002.jpg");
-        try (InputStream in = jpegFile.openStream()) {
-            BufferedImage thumbnail = JPEGMetaData.getThumbnail(in);
-            Objects.requireNonNull(thumbnail);
-        }
-    }
-
-    public void testThumbnailReader() throws Exception {
-        ImageReader reader = new JPEGThumbnailImageReaderSpi().createReaderInstance(null);
-        URL jpegFile = UserCancelledException.class.getResource("showcase/resourcegenerator/IMG-20171107-WA0002.jpg");
-        reader.setInput( ImageIO.createImageInputStream(jpegFile.openStream()) );
-        BufferedImage thumbnail = reader.readThumbnail(0, 0);
-        Objects.requireNonNull(thumbnail);
-    }
-
-    public void testImageIOFails() {
-        IIORegistry.getDefaultInstance().registerServiceProvider(new JPEGThumbnailImageReaderSpi());
-
-        URL jpegFile = UserCancelledException.class.getResource("showcase/resourcegenerator/IMG-20171107-WA0002.jpg");
-        Iterator iterator = ImageIO.getImageReadersBySuffix("jpeg");
-        while(iterator.hasNext()) {
-            ImageReader reader = (ImageReader)iterator.next();
-
-            if (reader instanceof JPEGThumbnailImageReader)
-                continue;
-
-            try {
-                reader.setInput( ImageIO.createImageInputStream(jpegFile.openStream()) );
-                BufferedImage thumbnail = reader.readThumbnail(0, 0);
-                if (thumbnail != null) {
-                    fail("ImageIO had ImageReaders capable of reading the JPEG thumbnail. This means the pump classes may be obsolete.");
-                }
-            } catch(Exception e) {
-                // we expect this to fail
-            }
-        }
-    }
-}
-
-class JPEGThumbnailImageReaderSpi extends ImageReaderSpi {
-
-    public JPEGThumbnailImageReaderSpi() {
-        inputTypes = new Class<?>[] { ImageInputStream.class };
-        pluginClassName = JPEGThumbnailImageReader.class.getName();
-
-        vendorName = "Pumpernickel";
-        version = "1.0";
-
-        // these are copied from the JPEGImageReaderSpi
-        suffixes = new String[] {"jpg", "jpeg"};
-        MIMETypes = new String[] {"image/jpeg"};
-        names = new String[] {"JPEG", "jpeg", "JPG", "jpg"};
-    }
-
-    @Override
-    public boolean canDecodeInput(Object source) throws IOException {
-        return false;
-    }
-
-    @Override
-    public ImageReader createReaderInstance(Object extension) throws IOException {
-        return new JPEGThumbnailImageReader(this);
-    }
-
-    @Override
-    public String getDescription(Locale locale) {
-        return null;
-    }
-}
-
+/**
+ * This is an ImageReader for JPGs that can identify thumbnails.
+ * <p>
+ * This ImageReader is unorthodox because some crucial methods (like {@link #read(int, ImageReadParam)})
+ * throw an UnsupportedOperationException. Trying to implement an ImageReader for ImageIO that *only*
+ * offers thumbnail support feels kind of like forcing a square peg into a round hole.
+ * </p>
+ */
 class JPEGThumbnailImageReader extends ImageReader {
 
     boolean isInitialized = false;
-    List<Dimension> thumbnailDimensions = new ArrayList<>();
+
+    /**
+     * This is a list of all the thumbnail dimensions we receive (in order).
+     */
+    java.util.List<Dimension> thumbnailDimensions = new ArrayList<>();
+
+    /**
+     * This is optional. It will be non-null if we only have the opportunity to read
+     * our JPG image data once. In that case we have to store all thumbnails as they come in.
+     * But if we're allowed multiple passes, then this remains null while we populate
+     * {@link #thumbnailDimensions}
+     */
     List<BufferedImage> thumbnails = null;
+
     Dimension imageSize = new Dimension(0,0);
 
     protected JPEGThumbnailImageReader(ImageReaderSpi originatingProvider) {
@@ -113,8 +56,8 @@ class JPEGThumbnailImageReader extends ImageReader {
 
     @Override
     public void setInput(Object input,
-                                      boolean seekForwardOnly,
-                                      boolean ignoreMetadata) {
+                         boolean seekForwardOnly,
+                         boolean ignoreMetadata) {
         _reset();
         super.setInput(input, seekForwardOnly, ignoreMetadata);
     }
@@ -191,7 +134,7 @@ class JPEGThumbnailImageReader extends ImageReader {
                     returnValue.set(bi);
                 }
                 if (thumbnails != null)
-                   thumbnails.add(bi);
+                    thumbnails.add(bi);
             }
 
             @Override
@@ -304,7 +247,7 @@ class JPEGThumbnailImageReader extends ImageReader {
 
     @Override
     public synchronized BufferedImage readThumbnail(int imageIndex,
-                                       int thumbnailIndex) throws IOException {
+                                                    int thumbnailIndex) throws IOException {
         validateImageIndex(imageIndex);
         return initialize(thumbnailIndex);
     }
