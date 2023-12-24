@@ -83,7 +83,7 @@ public class TempFileManager {
 			System.err.println(
 					"Warning: TempFileManager previously initialized as \""
 							+ manager.getApplicationName()
-							+ "\", now attmped to initialize as \"" + appName
+							+ "\", now attempted to initialize as \"" + appName
 							+ "\".");
 			return false;
 		}
@@ -208,5 +208,12 @@ public class TempFileManager {
 			ext = "." + ext;
 		String name = prefix + ext;
 		return IOUtils.getUniqueFile(dir, name, true, true);
+	}
+
+	/**
+	 * Return the directory this TempFileManager stores files in.
+	 */
+	public File getDirectory() {
+		return dir;
 	}
 }
