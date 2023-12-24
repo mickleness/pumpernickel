@@ -57,8 +57,11 @@ public class Project {
 		}
 		FileUtils.createNewFile(jarFile);
 
-		File targetDir = new File(projectDir, "target");
-		File classesDir = new File(targetDir, "classes");
+		File classesDir = new File(new File(projectDir, "target"), "classes");
+
+		if (!classesDir.exists())
+			classesDir = new File(new File(new File(projectDir, "classes"), "production"), "pumpernickel");
+
 		if (!classesDir.exists())
 			throw new RuntimeException("\"target\\classes\" did not exist in "
 					+ projectDir.getAbsolutePath());
