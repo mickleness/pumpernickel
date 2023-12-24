@@ -51,11 +51,24 @@ public class QPanelUI extends GradientPanelUI {
 	 */
 	public static QPanelUI createBoxUI() {
 		QPanelUI ui = new QPanelUI();
+		formatBoxUI(ui);
+		return ui;
+	}
+
+	/**
+	 * This formats a QPanelUI to render as a subtly off-white UI with rounded corners and a (even more
+	 * subtle) one-pixel gray border.
+	 * <p>
+	 * This replicates Apple's <a href=
+	 * "https://developer.apple.com/macos/human-interface-guidelines/windows-and-views/boxes/"
+	 * >box</a> UI. Their documentation describes a box as
+	 * "a type of view that’s used to create distinct, logical groupings of controls, text fields, and other interface elements."
+	 */
+	private static void formatBoxUI(QPanelUI ui) {
 		ui.setCornerSize(5);
 		ui.setStrokeColor1(new Color(0, 0, 0, 30));
 		ui.setStrokeColor2(new Color(0, 0, 0, 22));
 		ui.setFillColor(new Color(0, 0, 0, 16));
-		return ui;
 	}
 
 	/**
