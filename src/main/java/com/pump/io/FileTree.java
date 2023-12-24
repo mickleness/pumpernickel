@@ -18,8 +18,8 @@ import java.io.FileFilter;
  */
 public class FileTree implements Iterable<File> {
 
-	File dir;
-	FileFilter filter;
+	protected File dir;
+	protected FileFilter filter;
 
 	/**
 	 * Create a new FileTree.
