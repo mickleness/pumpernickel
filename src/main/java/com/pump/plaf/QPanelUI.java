@@ -64,7 +64,7 @@ public class QPanelUI extends GradientPanelUI {
 	 * >box</a> UI. Their documentation describes a box as
 	 * "a type of view that’s used to create distinct, logical groupings of controls, text fields, and other interface elements."
 	 */
-	private static void formatBoxUI(QPanelUI ui) {
+	public static void formatBoxUI(QPanelUI ui) {
 		ui.setCornerSize(5);
 		ui.setStrokeColor1(new Color(0, 0, 0, 30));
 		ui.setStrokeColor2(new Color(0, 0, 0, 22));
