@@ -16,7 +16,7 @@ import javax.imageio.spi.IIORegistry;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -27,6 +27,13 @@ import java.util.List;
  *      Reading JPEG Thumbnails</a>
  */
 public class JPEGMetaData {
+
+	/**
+	 * This describes which thumbnail(s) (if any) you want to preserve when reading a JPEG file.
+	 */
+	public enum PreserveThumbnails {
+		ALL, ONLY_LARGEST, NONE;
+	}
 
 	/**
 	 * This property is set on QBufferedImages to identify which JPEG block a thumbnail originated from.
@@ -115,6 +122,73 @@ public class JPEGMetaData {
 		}
 	}
 
+	public static class Property implements Serializable {
+
+		private static final long serialVersionUID = 1L;
+
+		private String markerName, propertyName;
+		private Object value;
+
+		public Property(String markerName, String propertyName, Object value) {
+			this.markerName = Objects.requireNonNull(markerName);
+			this.propertyName = Objects.requireNonNull(propertyName);
+			this.value = Objects.requireNonNull(value);
+		}
+
+		private void writeObject(java.io.ObjectOutputStream out)
+				throws IOException {
+			out.writeInt(0);
+			out.writeObject(markerName);
+			out.writeObject(propertyName);
+			out.writeObject(value);
+
+		}
+		private void readObject(java.io.ObjectInputStream in)
+				throws IOException, ClassNotFoundException {
+			int version = in.readInt();
+			if (version == 0) {
+				markerName = (String) in.readObject();
+				propertyName = (String) in.readObject();
+				value = in.readObject();
+			} else {
+				throw new UnsupportedEncodingException("unsupported internal version: " + version);
+			}
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Property)) {
+				Property p = (Property) obj;
+				return Objects.equals(propertyName, p.propertyName) &&
+						Objects.equals(value, p.value) &&
+						Objects.equals(markerName, p.markerName);
+			}
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(markerName, propertyName, value);
+		}
+
+		@Override
+		public String toString() {
+			return "Property[ " + propertyName + " = " + value + "]";
+		}
+
+		public String getName() {
+			return propertyName;
+		}
+
+		public String getMarker() {
+			return markerName;
+		}
+
+		public Object getValue() {
+			return value;
+		}
+	}
+
 	/**
 	 * Return the largest thumbnail available in a JPEG file.
 	 */
@@ -185,33 +259,32 @@ public class JPEGMetaData {
 	private List<QBufferedImage> thumbnailImages = new ArrayList<>();
 	private int width, height, bitsPerPixel, numberOfComponents;
 
+	private java.util.List<Property> properties = new LinkedList<>();
+
 	public JPEGMetaData() {}
 
 	public JPEGMetaData(InputStream in) throws IOException {
-		read(in, true);
+		read(in, PreserveThumbnails.ONLY_LARGEST);
 	}
 
 	/**
 	 * Add the metadata of a JPEG file to this object.
 	 *
 	 * @param in the InputStream containing a JPEG file.
-	 * @param keepOnlyLargestThumbnail if true then this JPEGMetaData will retain
-	 *                                 only the largest thumbnail from the incoming InputStream.
-	 *                                 If false then this will retain *all* incoming thumbnails.
-	 *                                 (Note the InputStream may contain 0 thumbnails, so regardless
-	 *                                 of this boolean this JPEGMetaData may have 0 new thumbnails added
-	 *                                 as a result of this method.)
+	 * @param preserveThumbnail this identifies which thumbnail(s) should be preserved (if any).
 	 * @throws IOException
 	 */
-	public synchronized void read(InputStream in, boolean keepOnlyLargestThumbnail) throws IOException {
+	public synchronized void read(InputStream in, PreserveThumbnails preserveThumbnail) throws IOException {
 		read(in, new JPEGMetaDataListener() {
 			int largestThumbnailWidth = -1;
 			int largestThumbnailHeight = -1;
 
 			@Override
 			public boolean isThumbnailAccepted(String markerName, int width, int height) {
-				if (!keepOnlyLargestThumbnail) {
+				if (preserveThumbnail == PreserveThumbnails.ALL) {
 					return true;
+				} else if (preserveThumbnail == PreserveThumbnails.NONE) {
+					return false;
 				}
 
 				if (width > largestThumbnailWidth || height > largestThumbnailHeight) {
@@ -260,9 +333,13 @@ public class JPEGMetaData {
 
 			@Override
 			public void processException(Exception e, String markerCode) {
-				e.printStackTrace();
+				JPEGMetaData.this.processException(e, markerCode);
 			}
 		});
+	}
+
+	protected void processException(Exception e, String markerCode) {
+		e.printStackTrace();
 	}
 
 	public void removeThumbnail(int thumbnailIndex) {
@@ -279,8 +356,28 @@ public class JPEGMetaData {
 		return thumbnailImages.get(thumbnailIndex);
 	}
 
-	private void addProperty(String markerName, String propertyName, Object value) {
-		// TODO: implement if we ever get a use case, add accompanying getter method(s)
+
+	protected void addProperty(String markerName, String propertyName, Object value) {
+		properties.add(new Property(markerName, propertyName, value));
+	}
+
+	/**
+	 * Return all the Properties of this JPEGMetaData.
+	 */
+	public List<Property> getProperties() {
+		return Collections.unmodifiableList(properties);
+	}
+
+	/**
+	 * Return all the Properties of this JPEGMetaData that share a given property name.
+	 */
+	public List<Property> getProperties(String propertyName) {
+		List<Property> returnValue = new ArrayList<>();
+		for (Property p : properties) {
+			if (p.propertyName.equals(propertyName))
+				returnValue.add(p);
+		}
+		return returnValue;
 	}
 
 	public int getThumbnailCount() {
