@@ -70,7 +70,8 @@ public class ExitControl {
 						WindowEvent.WINDOW_CLOSING);
 				try {
 					window[a].dispatchEvent(windowEvent);
-					window[a].setVisible(false);
+					if (hideWindowOnExit)
+						window[a].setVisible(false);
 				} catch (UserCancelledException e) {
 				}
 			}
@@ -79,7 +80,10 @@ public class ExitControl {
 
 	protected JMenuItem exitItem = new JMenuItem(exitAction);
 
-	public ExitControl() {
+	protected boolean hideWindowOnExit;
+
+	public ExitControl(boolean hideWindowOnExit) {
+		this.hideWindowOnExit = hideWindowOnExit;
 		char exitChar = JVM.isMac ? 'Q' : KeyEvent.VK_F4;
 		exitItem.setAccelerator(KeyStroke.getKeyStroke(exitChar, Toolkit
 				.getDefaultToolkit().getMenuShortcutKeyMask()));
