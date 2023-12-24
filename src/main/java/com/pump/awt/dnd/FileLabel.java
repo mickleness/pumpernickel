@@ -14,7 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 
-import javax.swing.JLabel;
+import javax.swing.*;
 
 import com.pump.io.icon.FileIcon;
 
@@ -47,9 +47,12 @@ public class FileLabel extends JLabel {
 						File file = getFile();
 						if (file == null) {
 							setIcon(null);
+							setDisabledIcon(null);
 							setText("");
 						} else {
-							setIcon(FileIcon.get().getIcon(file));
+							Icon icon = FileIcon.get().getIcon(file);
+							setIcon(icon);
+							setDisabledIcon(icon);
 							setText(file.getName());
 						}
 					}
