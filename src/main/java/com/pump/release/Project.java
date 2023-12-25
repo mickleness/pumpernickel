@@ -10,13 +10,13 @@
  */
 package com.pump.release;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.jar.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.Map;
 
 import com.pump.io.FileTreeIterator;
 import com.pump.io.FileUtils;
@@ -35,7 +35,11 @@ public class Project {
 
 	}
 
-	public File buildJar(boolean includeJavaSource, String... subdirectories)
+	/**
+	 * @param destSubdirectories the path to write this jar in, such as ["release", "jars", "v1.0"]
+	 * @return the newly created jar file
+	 */
+	public File buildJar(boolean includeJavaSource, String... destSubdirectories)
 			throws IOException {
 
 		// TODO: this just dumps the existing compiled code in a jar
@@ -45,8 +49,8 @@ public class Project {
 		// let us abort if we know there are compiler errors.
 
 		File currentDir = projectDir;
-		for (int a = 0; a < subdirectories.length; a++) {
-			File newDir = new File(currentDir, subdirectories[a]);
+		for (int a = 0; a < destSubdirectories.length; a++) {
+			File newDir = new File(currentDir, destSubdirectories[a]);
 			FileUtils.mkdirs(newDir);
 			currentDir = newDir;
 		}
@@ -57,12 +61,9 @@ public class Project {
 		}
 		FileUtils.createNewFile(jarFile);
 
-		File classesDir = new File(new File(projectDir, "target"), "classes");
+		File classesDir = findClassesDir();
 
-		if (!classesDir.exists())
-			classesDir = new File(new File(new File(projectDir, "classes"), "production"), "pumpernickel");
-
-		if (!classesDir.exists())
+		if (classesDir == null || !classesDir.exists())
 			throw new RuntimeException("\"target\\classes\" did not exist in "
 					+ projectDir.getAbsolutePath());
 
@@ -105,6 +106,50 @@ public class Project {
 		}
 
 		return jarFile;
+	}
+
+	/**
+	 * This makes an educated guess what the root of the .class files is in this project
+	 */
+	protected File findClassesDir() {
+		FileTreeIterator iter = new FileTreeIterator(projectDir, "class");
+
+		Map<String, AtomicInteger> candidates = new HashMap<>();
+		while (iter.hasNext()) {
+			File classFile = iter.next();
+			String path = classFile.getAbsolutePath();;
+			if (path.contains(File.separator + "test" + File.separator))
+				continue;
+			int i1 = path.indexOf(File.separator + "com" + File.separator);
+			int i2 = path.indexOf(File.separator + "java" + File.separator);
+			int i3 = path.indexOf(File.separator + "javax" + File.separator);
+			int i4 = path.indexOf(File.separator + "net" + File.separator);
+
+			if (i1 == -1) i1 = Integer.MAX_VALUE;
+			if (i2 == -1) i2 = Integer.MAX_VALUE;
+			if (i3 == -1) i3 = Integer.MAX_VALUE;
+			if (i4 == -1) i4 = Integer.MAX_VALUE;
+			int i = Math.min(Math.min(i1, i2), Math.min(i3, i4));
+			if (i != Integer.MAX_VALUE) {
+				path = path.substring(0, i);
+				AtomicInteger ctr = candidates.get(path);
+				if (ctr == null) {
+					ctr = new AtomicInteger(0);
+					candidates.put(path, ctr);
+				}
+				ctr.incrementAndGet();
+			}
+		}
+
+		String bestCandidate = null;
+		int bestCandidateCtr = -1;
+		for (Map.Entry<String, AtomicInteger> entry : candidates.entrySet()) {
+			if (entry.getValue().get() > bestCandidateCtr) {
+				bestCandidateCtr = entry.getValue().get();
+				bestCandidate = entry.getKey();
+			}
+		}
+		return new File(bestCandidate);
 	}
 
 	private Collection<File> getJavaSourceDirs() {
