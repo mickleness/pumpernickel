@@ -26,8 +26,10 @@ public class UpdateSourceCodeHeader {
 		while (iter.hasNext()) {
 			File file = iter.next();
 
-			if (file.getName().contains("package-info") || file.getName().contains("module-info"))
+			if (file.getName().contains("package-info")
+					|| file.getName().contains("module-info")) {
 				continue;
+			}
 
 			String str = IOUtils.read(file);
 			int i1 = str.indexOf("package ");
@@ -35,8 +37,7 @@ public class UpdateSourceCodeHeader {
 			int i2 = str.indexOf(";", i1);
 			String packageName = str.substring(i1 + "package ".length(), i2);
 			if (packageName.startsWith("com.pump")) {
-				String header = ""
-						+ "/**\n"
+				String header = "" + "/**\n"
 						+ " * This software is released as part of the Pumpernickel project.\n"
 						+ " * \n"
 						+ " * All com.pump resources in the Pumpernickel project are distributed under the\n"
