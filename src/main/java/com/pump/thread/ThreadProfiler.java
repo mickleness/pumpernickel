@@ -95,13 +95,15 @@ public class ThreadProfiler {
 				long timestamp) {
 
 			StackTraceElementNode newNode = new StackTraceElementNode(e);
-			StackTraceElementNode oldNode = children.get(newNode);
-			if (oldNode != null) {
-				oldNode.frequency++;
-				return oldNode;
-			}
+			synchronized (children) {
+				StackTraceElementNode oldNode = children.get(newNode);
+				if (oldNode != null) {
+					oldNode.frequency++;
+					return oldNode;
+				}
 
-			children.put(newNode, newNode);
+				children.put(newNode, newNode);
+			}
 			return newNode;
 		}
 
@@ -131,8 +133,10 @@ public class ThreadProfiler {
 
 		public int getMaxFrequency() {
 			int returnValue = frequency;
-			for (StackTraceElementNode child : children.keySet()) {
-				returnValue = Math.max(returnValue, child.getMaxFrequency());
+			synchronized (children) {
+				for (StackTraceElementNode child : children.keySet()) {
+					returnValue = Math.max(returnValue, child.getMaxFrequency());
+				}
 			}
 			return returnValue;
 		}
@@ -635,7 +639,9 @@ public class ThreadProfiler {
 
 		TreeSet<StackTraceElementNode> children = new TreeSet<>(
 				NODE_FREQUENCY_COMPARATOR);
-		children.addAll(node.children.keySet());
+		synchronized (node.children) {
+			children.addAll(node.children.keySet());
+		}
 		for (StackTraceElementNode child : children) {
 			write(output, child, maxFrequency, indent, activeLeafNode);
 		}
