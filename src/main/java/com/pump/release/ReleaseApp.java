@@ -11,6 +11,7 @@
 package com.pump.release;
 
 import java.io.File;
+import java.util.Collections;
 
 import com.pump.desktop.temp.TempFileManager;
 import com.pump.io.IOUtils;
@@ -41,7 +42,7 @@ public class ReleaseApp {
 		String filename = "Pumpernickel.jar";
 		Project project = new Project(dir, PumpernickelShowcaseApp.class,
 				filename);
-		File versionedJar = project.buildJar(true, "release", "jars",
+		File versionedJar = project.buildJar(true, Collections.emptyList(), "release", "jars",
 				PumpernickelShowcaseApp.VERSION);
 		File currentJar = new File(versionedJar.getParentFile().getParentFile(),
 				filename);

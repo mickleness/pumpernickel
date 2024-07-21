@@ -36,10 +36,12 @@ public class Project {
 	}
 
 	/**
+	 * @param jarsToBundle the new jar will include all the resources in these jars.
 	 * @param destSubdirectories the path to write this jar in, such as ["release", "jars", "v1.0"]
 	 * @return the newly created jar file
 	 */
-	public File buildJar(boolean includeJavaSource, String... destSubdirectories)
+	public File buildJar(boolean includeJavaSource, Collection<File> jarsToBundle,
+						 String... destSubdirectories)
 			throws IOException {
 
 		// TODO: this just dumps the existing compiled code in a jar
@@ -98,6 +100,21 @@ public class Project {
 								entries.add(path);
 								jarOut.putNextEntry(new JarEntry(path));
 								IOUtils.write(f, jarOut);
+							}
+						}
+					}
+				}
+
+				if (jarsToBundle != null) {
+					for (File jarToBundle : jarsToBundle) {
+						try (FileInputStream fileIn = new FileInputStream(jarToBundle)) {
+							try (JarInputStream jarIn = new JarInputStream(fileIn)) {
+								JarEntry entry = jarIn.getNextJarEntry();
+								while (entry != null) {
+									jarOut.putNextEntry(entry);
+									jarIn.transferTo(jarOut);
+									entry = jarIn.getNextJarEntry();
+								}
 							}
 						}
 					}
