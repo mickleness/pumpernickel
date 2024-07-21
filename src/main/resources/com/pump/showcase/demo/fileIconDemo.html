@@ -6,7 +6,7 @@
 <body>
 <h1>FileIcon Demo</h1>
 <h2>What Is It</h2>
-<p>The <code>FileIcon</code> is an abstract class creates a <code>javax.swing.Icon</code> for a <code>File</code>.</p>
+<p>The <code>FileIcon</code> is an abstract class that creates a <code>javax.swing.Icon</code> for a <code>File</code>.</p>
 <p>A file icon is a small (usually about 16x16) icon you can place next to a file name. Usually all files with the same file extension share the same file icon.</p>
 <p>An "icon" is different from a "thumbnail". (A thumbnail is an image that is a rendering of a specific file.) And sometimes the word "preview" also carries special implications of interactivity (for ex: a video). So "icon", "thumbnail" and "preview" are all separate buzzwords.</p>
 <h2>How To Use It</h2>
@@ -16,7 +16,7 @@
 <p>Each subclass is responsible for deciding how to identify the appropriate icon. And the <code>FileIcon</code> class has a static getter/setter method for maintaining the active default <code>FileIcon</code> on a given system.
 <h2>Discussion</h2>
 <h3>Implementations</h3>
-<p>There are currently 2 subclasses of <code>FileIcon</code>. (There used to a 3rd that involved reflection, but in accordance with Java guidelines I'm trying to phase out reflection.)
+<p>There are currently 2 subclasses of <code>FileIcon</code>. (There used to be a 3rd that involved reflection, but in accordance with Java guidelines I'm trying to phase out reflection.)
 <h4>Implementation #1: FileSystemViewFileIcon</h4>
 <p>This implementation uses <code>FileSystemView</code>, and it resembles:</p>
 <pre>public class FileSystemViewFileIcon extends FileIcon {
