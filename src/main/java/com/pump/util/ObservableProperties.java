@@ -96,7 +96,7 @@ public class ObservableProperties implements Serializable {
 	}
 
 	/**
-	 * This reprents a future PropertyChangeEvent.
+	 * This represents a future PropertyChangeEvent.
 	 */
 	private static class QueueElement {
 		PropertyGroup group;
