@@ -12,6 +12,7 @@ package com.pump.image;
 
 import com.pump.geom.StarPolygon;
 import com.pump.image.pixel.ImageType;
+import com.pump.io.IOUtils;
 import org.junit.Test;
 
 import java.awt.*;
@@ -58,27 +59,9 @@ public class QBufferedImageTest {
 		for (ImageType imageType : ImageType.values(true)) {
 			System.out.println("Testing " + imageType);
 			QBufferedImage bi = createSampleQImage(60, 40, imageType.getCode());
-			byte[] bytes = serialize(bi);
-			QBufferedImage bi2 = (QBufferedImage) deserialize(bytes);
+			byte[] bytes = IOUtils.serialize(bi);
+			QBufferedImage bi2 = (QBufferedImage) IOUtils.deserialize(bytes);
 			assertEquals(bi, bi2);
-		}
-	}
-
-	private byte[] serialize(Serializable obj) throws IOException {
-		try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
-			try (ObjectOutputStream objOut = new ObjectOutputStream(byteOut)) {
-				objOut.writeObject(obj);
-			}
-			byteOut.flush();
-			return byteOut.toByteArray();
-		}
-	}
-
-	private Serializable deserialize(byte[] bytes) throws Exception {
-		try (ByteArrayInputStream byteIn = new ByteArrayInputStream(bytes)) {
-			try (ObjectInputStream objIn = new ObjectInputStream(byteIn)) {
-				return (Serializable) objIn.readObject();
-			}
 		}
 	}
 

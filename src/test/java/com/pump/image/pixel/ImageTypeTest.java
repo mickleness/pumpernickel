@@ -10,6 +10,7 @@
  */
 package com.pump.image.pixel;
 
+import com.pump.io.IOUtils;
 import junit.framework.TestCase;
 import org.junit.Test;
 
@@ -168,6 +169,14 @@ public class ImageTypeTest extends TestCase {
             str = str.trim();
 
             assertEquals(str, expectedArray[a], actualArray[a]);
+        }
+    }
+
+    public void testSerialization() {
+        for (ImageType type : ImageType.values()) {
+            byte[] serialized = IOUtils.serialize(type);
+            ImageType type2 = (ImageType) IOUtils.deserialize(serialized);
+            assertEquals(type, type2);
         }
     }
 }
