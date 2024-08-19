@@ -404,12 +404,13 @@ public class ImageType<T> implements Serializable {
 	 * @param srcType
 	 *            the type of the incoming pixel data
 	 * @param srcPixels
-	 *            the incoming pixel data
+	 *            the incoming pixel data, which will be either an int array or a byte array
 	 * @param srcOffset
 	 *            the offset in srcPixels to start reading data at
 	 * @param destPixels
 	 *            an optional destination array to store the converted pixels
-	 *            in. If this is null then a new array is allocated.
+	 *            in. If this is null then a new array is allocated. This may be
+	 *            the same as srcPixels
 	 * @param destOffset
 	 *            the offset in destPixels to store pixels to.
 	 * @param pixelCount

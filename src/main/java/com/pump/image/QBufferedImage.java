@@ -212,6 +212,12 @@ public class QBufferedImage extends BufferedImage
 		extraProperties.putAll(properties);
 	}
 
+	/**
+	 * Return true if the argument is identical to this object.
+	 * <p>
+	 * This method only returns true if two images share the same
+	 * ColorModel. See {@link #equals(BufferedImage, int)} for an alternative.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -250,6 +256,65 @@ public class QBufferedImage extends BufferedImage
 				// I'm not sure if this can ever happen? If it does happen, then we can scale
 				// this method up as needed
 				throw new IllegalStateException(row1.getClass().getName());
+			}
+		}
+
+		if (!getProperties(this).equals(getProperties(other)))
+			return false;
+
+		return true;
+	}
+
+	/**
+	 * Return true if the argument is identical to this object.
+	 * <p>
+	 * This can compare images of different types. For example, if one image
+	 * is INT_ARGB and the other is BYTE_BGR then this may still return true
+	 * if each pixel color is identical.
+	 *
+	 * @param tolerance the amount each color channel (ARGB) can deviate and still
+	 *                  be considered equal. If this is zero then the two images must
+	 *                  be identical. The maximum value is 255, so a value of 1-10 allows
+	 *                  for a small deviation between the two images.
+	 */
+	public boolean equals(BufferedImage other, int tolerance) {
+		if (tolerance < 0 || tolerance > 255)
+			throw new IllegalArgumentException("The tolerance (" + tolerance + ") must be between [0, 255]");
+		int w = getWidth();
+		int h = getHeight();
+
+		if (w != other.getWidth() || h != other.getHeight())
+			return false;
+
+		int[] row1 = new int[w];
+		int[] row2 = new int[w];
+		PixelIterator<int[]> iter1 = ImageType.INT_ARGB.createPixelIterator(this);
+		PixelIterator<int[]> iter2 = ImageType.INT_ARGB.createPixelIterator(other);
+		while (!iter1.isDone()) {
+			iter1.next(row1, 0);
+			iter2.next(row2, 0);
+			for (int a = 0; a < w; a++) {
+				if (row1[a] != row2[a]) {
+					if (tolerance == 0) {
+						return false;
+					} else {
+						int da = ((row1[a] >> 24) & 0xff) - ((row2[a] >> 24) & 0xff);
+						if (Math.abs(da) > tolerance)
+							return false;
+
+						int dr = ((row1[a] >> 16) & 0xff) - ((row2[a] >> 16) & 0xff);
+						if (Math.abs(dr) > tolerance)
+							return false;
+
+						int dg = ((row1[a] >> 8) & 0xff) - ((row2[a] >> 8) & 0xff);
+						if (Math.abs(dg) > tolerance)
+							return false;
+
+						int db = ((row1[a] >> 0) & 0xff) - ((row2[a] >> 0) & 0xff);
+						if (Math.abs(db) > tolerance)
+							return false;
+					}
+				}
 			}
 		}
 
