@@ -12,8 +12,6 @@ package com.pump.geom;
 
 import java.awt.geom.GeneralPath;
 
-import javax.media.jai.PerspectiveTransform;
-
 /**
  * Transform all the points through a perspective transform as they are passed
  * to a path writer. Note this simply transforms bezier control points.

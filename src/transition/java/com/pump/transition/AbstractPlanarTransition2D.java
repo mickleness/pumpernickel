@@ -17,8 +17,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.media.jai.PerspectiveTransform;
-
+import com.pump.geom.PerspectiveTransform;
 import com.pump.geom.RectangularTransform;
 import com.pump.geom.TransformUtils;
 

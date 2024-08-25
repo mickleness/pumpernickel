@@ -14,8 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import javax.media.jai.PerspectiveTransform;
-
+import com.pump.geom.PerspectiveTransform;
 import com.pump.io.GuardedOutputStream;
 
 /**

@@ -10,6 +10,8 @@
  */
 package com.pump.image;
 
+import com.pump.geom.PerspectiveTransform;
+
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -25,8 +27,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-
-import javax.media.jai.PerspectiveTransform;
 
 /**
  * Spatial-Coherence optimized implementation of ImageContext.

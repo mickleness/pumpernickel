@@ -30,7 +30,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
-import javax.media.jai.PerspectiveTransform;
+import com.pump.geom.PerspectiveTransform;
 
 import com.pump.image.BasicImageContext.VariableWidthFunction.LineSegmentIntersectionException;
 
