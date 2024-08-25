@@ -30,9 +30,9 @@ import com.pump.animation.AnimationReader;
 import com.pump.animation.ResettableAnimationReader;
 import com.pump.image.gif.GifWriter;
 import com.pump.image.gif.GifWriter.ColorReduction;
-import com.pump.image.transition.AbstractTransition;
-import com.pump.image.transition.Transition;
-import com.pump.image.transition.Transition3D;
+import com.pump.transition.AbstractTransition;
+import com.pump.transition.Transition;
+import com.pump.transition.Transition3D;
 import com.pump.io.AdjacentFile;
 import com.pump.showcase.demo.Transition2DDemo;
 

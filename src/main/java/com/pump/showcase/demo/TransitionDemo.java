@@ -42,8 +42,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.animation.BufferedAnimationPanel;
-import com.pump.image.transition.AbstractTransition;
-import com.pump.image.transition.Transition;
+import com.pump.transition.AbstractTransition;
+import com.pump.transition.Transition;
 import com.pump.inspector.Inspector;
 import com.pump.plaf.QPanelUI;
 import com.pump.swing.AnimationController;

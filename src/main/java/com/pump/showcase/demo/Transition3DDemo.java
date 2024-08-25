@@ -13,11 +13,11 @@ package com.pump.showcase.demo;
 import java.net.URL;
 
 import com.pump.image.ImageContext;
-import com.pump.image.transition.CubeTransition3D;
-import com.pump.image.transition.FlipTransition3D;
-import com.pump.image.transition.FoldTransition3D;
-import com.pump.image.transition.Transition;
-import com.pump.image.transition.Transition3D;
+import com.pump.transition.CubeTransition3D;
+import com.pump.transition.FlipTransition3D;
+import com.pump.transition.FoldTransition3D;
+import com.pump.transition.Transition;
+import com.pump.transition.Transition3D;
 
 /**
  * A demo of the {@link Transition3D} classes.
