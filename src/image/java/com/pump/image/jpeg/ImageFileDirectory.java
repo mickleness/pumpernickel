@@ -19,96 +19,96 @@ import java.util.Map;
 class ImageFileDirectory {
 	static Map<Integer, String> TYPE_LUT = new HashMap<Integer, String>();
 	static {
-		TYPE_LUT.put(new Integer(256), "Image Width");
-		TYPE_LUT.put(new Integer(257), "Image Length");
-		TYPE_LUT.put(new Integer(258), "BitsPerSample");
-		TYPE_LUT.put(new Integer(259), "Compression");
-		TYPE_LUT.put(new Integer(262), "PhotometricInterpretation");
-		TYPE_LUT.put(new Integer(270), "ImageDescription");
-		TYPE_LUT.put(new Integer(271), "Make");
-		TYPE_LUT.put(new Integer(272), "Model");
-		TYPE_LUT.put(new Integer(273), "StripOffsets");
-		TYPE_LUT.put(new Integer(274), "Orientation");
-		TYPE_LUT.put(new Integer(277), "SamplesPerPixel");
-		TYPE_LUT.put(new Integer(278), "RowsPerStrip");
-		TYPE_LUT.put(new Integer(279), "StripByteCounts");
-		TYPE_LUT.put(new Integer(282), "XResolution");
-		TYPE_LUT.put(new Integer(283), "YResolution");
-		TYPE_LUT.put(new Integer(284), "PlanarConfiguration");
-		TYPE_LUT.put(new Integer(296), "ResolutionUnit");
-		TYPE_LUT.put(new Integer(301), "TranserFunction");
-		TYPE_LUT.put(new Integer(305), "Software");
-		TYPE_LUT.put(new Integer(306), "DateTime");
-		TYPE_LUT.put(new Integer(315), "Artist");
-		TYPE_LUT.put(new Integer(318), "WhitePoint");
-		TYPE_LUT.put(new Integer(319), "PrimaryChromaticities");
-		TYPE_LUT.put(new Integer(513), "JPEGInterchangeFormat");
-		TYPE_LUT.put(new Integer(514), "JPEGInterchangeFormatLength");
-		TYPE_LUT.put(new Integer(529), "YCbCrCoefficients");
-		TYPE_LUT.put(new Integer(530), "YCbCrSubSampling");
-		TYPE_LUT.put(new Integer(531), "YCbCrPositioning");
-		TYPE_LUT.put(new Integer(532), "ReferenceBlackWhite");
-		TYPE_LUT.put(new Integer(33432), "Copyright");
-		TYPE_LUT.put(new Integer(34665), "Exif IFD Pointer");
-		TYPE_LUT.put(new Integer(34853), "GPSInfo IFD Pointer");
-		TYPE_LUT.put(new Integer(33434), "ExposureTime");
-		TYPE_LUT.put(new Integer(33437), "FNumber");
-		TYPE_LUT.put(new Integer(34850), "ExposureProgram");
-		TYPE_LUT.put(new Integer(34852), "SpectralSensitivity");
-		TYPE_LUT.put(new Integer(34855), "ISOSpeedRatings");
-		TYPE_LUT.put(new Integer(34856), "OECF");
-		TYPE_LUT.put(new Integer(36864), "ExifVersion");
-		TYPE_LUT.put(new Integer(36867), "DateTimeOriginal");
-		TYPE_LUT.put(new Integer(36868), "DateTimeDigitized");
-		TYPE_LUT.put(new Integer(37121), "ComponentsConfiguration");
-		TYPE_LUT.put(new Integer(37122), "CompressedBitsPerPixel");
-		TYPE_LUT.put(new Integer(37377), "ShutterSpeedValue");
-		TYPE_LUT.put(new Integer(37378), "ApertureValue");
-		TYPE_LUT.put(new Integer(37379), "BrightnessValue");
-		TYPE_LUT.put(new Integer(37380), "ExposureBiasValue");
-		TYPE_LUT.put(new Integer(37381), "MaxApertureValue");
-		TYPE_LUT.put(new Integer(37382), "SubjectDistance");
-		TYPE_LUT.put(new Integer(37383), "MeteringMode");
-		TYPE_LUT.put(new Integer(37384), "LightSource");
-		TYPE_LUT.put(new Integer(37385), "Flash");
-		TYPE_LUT.put(new Integer(37386), "FocalLength");
-		TYPE_LUT.put(new Integer(37396), "SubjectArea");
-		TYPE_LUT.put(new Integer(37500), "MakerNote");
-		TYPE_LUT.put(new Integer(37510), "UserComment");
-		TYPE_LUT.put(new Integer(37520), "SubSecTime");
-		TYPE_LUT.put(new Integer(37521), "SubSecTimeOriginal");
-		TYPE_LUT.put(new Integer(37522), "SubSecTimeDigitized");
+		TYPE_LUT.put(Integer.valueOf(256), "Image Width");
+		TYPE_LUT.put(Integer.valueOf(257), "Image Length");
+		TYPE_LUT.put(Integer.valueOf(258), "BitsPerSample");
+		TYPE_LUT.put(Integer.valueOf(259), "Compression");
+		TYPE_LUT.put(Integer.valueOf(262), "PhotometricInterpretation");
+		TYPE_LUT.put(Integer.valueOf(270), "ImageDescription");
+		TYPE_LUT.put(Integer.valueOf(271), "Make");
+		TYPE_LUT.put(Integer.valueOf(272), "Model");
+		TYPE_LUT.put(Integer.valueOf(273), "StripOffsets");
+		TYPE_LUT.put(Integer.valueOf(274), "Orientation");
+		TYPE_LUT.put(Integer.valueOf(277), "SamplesPerPixel");
+		TYPE_LUT.put(Integer.valueOf(278), "RowsPerStrip");
+		TYPE_LUT.put(Integer.valueOf(279), "StripByteCounts");
+		TYPE_LUT.put(Integer.valueOf(282), "XResolution");
+		TYPE_LUT.put(Integer.valueOf(283), "YResolution");
+		TYPE_LUT.put(Integer.valueOf(284), "PlanarConfiguration");
+		TYPE_LUT.put(Integer.valueOf(296), "ResolutionUnit");
+		TYPE_LUT.put(Integer.valueOf(301), "TranserFunction");
+		TYPE_LUT.put(Integer.valueOf(305), "Software");
+		TYPE_LUT.put(Integer.valueOf(306), "DateTime");
+		TYPE_LUT.put(Integer.valueOf(315), "Artist");
+		TYPE_LUT.put(Integer.valueOf(318), "WhitePoint");
+		TYPE_LUT.put(Integer.valueOf(319), "PrimaryChromaticities");
+		TYPE_LUT.put(Integer.valueOf(513), "JPEGInterchangeFormat");
+		TYPE_LUT.put(Integer.valueOf(514), "JPEGInterchangeFormatLength");
+		TYPE_LUT.put(Integer.valueOf(529), "YCbCrCoefficients");
+		TYPE_LUT.put(Integer.valueOf(530), "YCbCrSubSampling");
+		TYPE_LUT.put(Integer.valueOf(531), "YCbCrPositioning");
+		TYPE_LUT.put(Integer.valueOf(532), "ReferenceBlackWhite");
+		TYPE_LUT.put(Integer.valueOf(33432), "Copyright");
+		TYPE_LUT.put(Integer.valueOf(34665), "Exif IFD Pointer");
+		TYPE_LUT.put(Integer.valueOf(34853), "GPSInfo IFD Pointer");
+		TYPE_LUT.put(Integer.valueOf(33434), "ExposureTime");
+		TYPE_LUT.put(Integer.valueOf(33437), "FNumber");
+		TYPE_LUT.put(Integer.valueOf(34850), "ExposureProgram");
+		TYPE_LUT.put(Integer.valueOf(34852), "SpectralSensitivity");
+		TYPE_LUT.put(Integer.valueOf(34855), "ISOSpeedRatings");
+		TYPE_LUT.put(Integer.valueOf(34856), "OECF");
+		TYPE_LUT.put(Integer.valueOf(36864), "ExifVersion");
+		TYPE_LUT.put(Integer.valueOf(36867), "DateTimeOriginal");
+		TYPE_LUT.put(Integer.valueOf(36868), "DateTimeDigitized");
+		TYPE_LUT.put(Integer.valueOf(37121), "ComponentsConfiguration");
+		TYPE_LUT.put(Integer.valueOf(37122), "CompressedBitsPerPixel");
+		TYPE_LUT.put(Integer.valueOf(37377), "ShutterSpeedValue");
+		TYPE_LUT.put(Integer.valueOf(37378), "ApertureValue");
+		TYPE_LUT.put(Integer.valueOf(37379), "BrightnessValue");
+		TYPE_LUT.put(Integer.valueOf(37380), "ExposureBiasValue");
+		TYPE_LUT.put(Integer.valueOf(37381), "MaxApertureValue");
+		TYPE_LUT.put(Integer.valueOf(37382), "SubjectDistance");
+		TYPE_LUT.put(Integer.valueOf(37383), "MeteringMode");
+		TYPE_LUT.put(Integer.valueOf(37384), "LightSource");
+		TYPE_LUT.put(Integer.valueOf(37385), "Flash");
+		TYPE_LUT.put(Integer.valueOf(37386), "FocalLength");
+		TYPE_LUT.put(Integer.valueOf(37396), "SubjectArea");
+		TYPE_LUT.put(Integer.valueOf(37500), "MakerNote");
+		TYPE_LUT.put(Integer.valueOf(37510), "UserComment");
+		TYPE_LUT.put(Integer.valueOf(37520), "SubSecTime");
+		TYPE_LUT.put(Integer.valueOf(37521), "SubSecTimeOriginal");
+		TYPE_LUT.put(Integer.valueOf(37522), "SubSecTimeDigitized");
 
-		TYPE_LUT.put(new Integer(40960), "FlashpixVersion");
-		TYPE_LUT.put(new Integer(40961), "ColorSpace");
-		TYPE_LUT.put(new Integer(40962), "PixelXDimension");
-		TYPE_LUT.put(new Integer(40963), "PixelYDimension");
-		TYPE_LUT.put(new Integer(40964), "RelatedSoundFile");
-		TYPE_LUT.put(new Integer(40965), "Interoperability IFD Pointer");
-		TYPE_LUT.put(new Integer(41483), "FlashEnergy");
-		TYPE_LUT.put(new Integer(41484), "SpatialFrequencyResponse");
-		TYPE_LUT.put(new Integer(41486), "FocalPlaneXResolution");
-		TYPE_LUT.put(new Integer(41487), "FocalPlaneYResolution");
-		TYPE_LUT.put(new Integer(41488), "FocalPlaneResolutionUnit");
-		TYPE_LUT.put(new Integer(41492), "SubjectLocation");
-		TYPE_LUT.put(new Integer(41493), "ExposureIndex");
-		TYPE_LUT.put(new Integer(41495), "SensingMethod");
-		TYPE_LUT.put(new Integer(41728), "FileSource");
-		TYPE_LUT.put(new Integer(41729), "SceneType");
-		TYPE_LUT.put(new Integer(41730), "CFAPattern");
-		TYPE_LUT.put(new Integer(41985), "CustomRendered");
-		TYPE_LUT.put(new Integer(41986), "ExposureMode");
-		TYPE_LUT.put(new Integer(41987), "WhiteBalance");
-		TYPE_LUT.put(new Integer(41988), "DigitalZoomRatio");
-		TYPE_LUT.put(new Integer(41989), "FocalLengthIn35mmFilm");
-		TYPE_LUT.put(new Integer(41990), "SceneCaptureType");
-		TYPE_LUT.put(new Integer(41991), "GainControl");
-		TYPE_LUT.put(new Integer(41992), "Contrast");
-		TYPE_LUT.put(new Integer(41993), "Saturation");
-		TYPE_LUT.put(new Integer(41994), "Sharpness");
-		TYPE_LUT.put(new Integer(41995), "DeviceSettingDescription");
-		TYPE_LUT.put(new Integer(41996), "SubjectDistanceRange");
-		TYPE_LUT.put(new Integer(42016), "ImageUniqueID");
+		TYPE_LUT.put(Integer.valueOf(40960), "FlashpixVersion");
+		TYPE_LUT.put(Integer.valueOf(40961), "ColorSpace");
+		TYPE_LUT.put(Integer.valueOf(40962), "PixelXDimension");
+		TYPE_LUT.put(Integer.valueOf(40963), "PixelYDimension");
+		TYPE_LUT.put(Integer.valueOf(40964), "RelatedSoundFile");
+		TYPE_LUT.put(Integer.valueOf(40965), "Interoperability IFD Pointer");
+		TYPE_LUT.put(Integer.valueOf(41483), "FlashEnergy");
+		TYPE_LUT.put(Integer.valueOf(41484), "SpatialFrequencyResponse");
+		TYPE_LUT.put(Integer.valueOf(41486), "FocalPlaneXResolution");
+		TYPE_LUT.put(Integer.valueOf(41487), "FocalPlaneYResolution");
+		TYPE_LUT.put(Integer.valueOf(41488), "FocalPlaneResolutionUnit");
+		TYPE_LUT.put(Integer.valueOf(41492), "SubjectLocation");
+		TYPE_LUT.put(Integer.valueOf(41493), "ExposureIndex");
+		TYPE_LUT.put(Integer.valueOf(41495), "SensingMethod");
+		TYPE_LUT.put(Integer.valueOf(41728), "FileSource");
+		TYPE_LUT.put(Integer.valueOf(41729), "SceneType");
+		TYPE_LUT.put(Integer.valueOf(41730), "CFAPattern");
+		TYPE_LUT.put(Integer.valueOf(41985), "CustomRendered");
+		TYPE_LUT.put(Integer.valueOf(41986), "ExposureMode");
+		TYPE_LUT.put(Integer.valueOf(41987), "WhiteBalance");
+		TYPE_LUT.put(Integer.valueOf(41988), "DigitalZoomRatio");
+		TYPE_LUT.put(Integer.valueOf(41989), "FocalLengthIn35mmFilm");
+		TYPE_LUT.put(Integer.valueOf(41990), "SceneCaptureType");
+		TYPE_LUT.put(Integer.valueOf(41991), "GainControl");
+		TYPE_LUT.put(Integer.valueOf(41992), "Contrast");
+		TYPE_LUT.put(Integer.valueOf(41993), "Saturation");
+		TYPE_LUT.put(Integer.valueOf(41994), "Sharpness");
+		TYPE_LUT.put(Integer.valueOf(41995), "DeviceSettingDescription");
+		TYPE_LUT.put(Integer.valueOf(41996), "SubjectDistanceRange");
+		TYPE_LUT.put(Integer.valueOf(42016), "ImageUniqueID");
 	}
 
 	static class DirectoryEntry {
@@ -149,7 +149,7 @@ class ImageFileDirectory {
 		}
 
 		String getPropertyName() {
-			Integer key = new Integer(tagNumber);
+			Integer key = Integer.valueOf(tagNumber);
 			String propertyName = (String) TYPE_LUT.get(key);
 			if (propertyName != null)
 				return propertyName;
@@ -327,32 +327,32 @@ class ImageFileDirectory {
 			for (int a = 0; a < componentCount; a++) {
 				switch (dataFormat) {
 				case 1: // byte
-					valueArray[a] = new Integer(readByte(data, a * 1));
+					valueArray[a] = Integer.valueOf(readByte(data, a * 1));
 					break;
 				case 6: // signed byte
-					valueArray[a] = new Integer(readSignedByte(data, a * 1));
+					valueArray[a] = Integer.valueOf(readSignedByte(data, a * 1));
 					break;
 				case 3: // short
-					valueArray[a] = new Integer(readShort(data, a * 2));
+					valueArray[a] = Integer.valueOf(readShort(data, a * 2));
 					break;
 				case 8: // signed short
-					valueArray[a] = new Integer(readSignedShort(data, a * 2));
+					valueArray[a] = Integer.valueOf(readSignedShort(data, a * 2));
 					break;
 				case 4: // long
-					valueArray[a] = new Integer(readLong(data, a * 4));
+					valueArray[a] = Integer.valueOf(readLong(data, a * 4));
 					break;
 				case 9: // signed long
-					valueArray[a] = new Integer(readSignedLong(data, a * 4));
+					valueArray[a] = Integer.valueOf(readSignedLong(data, a * 4));
 					break;
 				case 5: // rational
 					double numerator = readLong(data, a * 4);
 					double denominator = readLong(data, a * 4 + 4);
-					valueArray[a] = new Double(numerator / denominator);
+					valueArray[a] = Double.valueOf(numerator / denominator);
 					break;
 				case 10: // signed rational
 					double numerator2 = readSignedLong(data, a * 4);
 					double denominator2 = readSignedLong(data, a * 4 + 4);
-					valueArray[a] = new Double(numerator2 / denominator2);
+					valueArray[a] = Double.valueOf(numerator2 / denominator2);
 					break;
 				default:
 					throw new RuntimeException("Unexpected condition.");
@@ -369,7 +369,7 @@ class ImageFileDirectory {
 		public String toString() {
 			StringBuffer sb = new StringBuffer();
 			sb.append("[ ");
-			String typeName = (String) TYPE_LUT.get(new Integer(tagNumber));
+			String typeName = TYPE_LUT.get(Integer.valueOf(tagNumber));
 			if (typeName == null) {
 				sb.append("UNKNOWN ");
 			} else {
