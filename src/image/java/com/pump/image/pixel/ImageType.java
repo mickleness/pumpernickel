@@ -369,7 +369,7 @@ public class ImageType<T> implements Serializable {
 	}
 
 	/**
-	 * Create a PixelIterator for an incoming image.
+	 * Create a top-down PixelIterator for an incoming image.
 	 * <p>
 	 * If you don't have a preference about which image type you receive, you
 	 * can call {@link BufferedImageIterator#create(BufferedImage)}. This can be

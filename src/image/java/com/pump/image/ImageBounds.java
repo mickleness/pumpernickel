@@ -10,11 +10,15 @@
  */
 package com.pump.image;
 
-import java.awt.Rectangle;
+import com.pump.image.pixel.ImageType;
+import com.pump.image.pixel.PixelIterator;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import com.pump.reflect.Reflection;
-
+/**
+ * This contains static helper methods to get the bounding box of translucent pixels in a BufferedImage.
+ */
 public class ImageBounds {
 
 	static int DEFAULT_THRESHOLD = 125;
@@ -45,75 +49,53 @@ public class ImageBounds {
 	 *            the rectangle. For example: if the alpha component of a pixel
 	 *            is 50 and the threshold is 60 then that pixel is ignored.
 	 * @return the smallest rectangle enclosing the pixels in this image that
-	 *         are non-translucent.
+	 *         are non-translucent, or null if no pixels exceeded the given threshold
 	 */
 	public static Rectangle getBounds(BufferedImage bi, int alphaThreshold) {
-		int type = bi.getType();
-		if (type == BufferedImage.TYPE_INT_ARGB) {
-			return getARGBBounds(bi, alphaThreshold);
-		}
-		throw new IllegalArgumentException("Illegal image type ("
-				+ Reflection.nameStaticField(BufferedImage.class, new Integer(
-						type)));
-	}
+		if (bi.getTransparency() == Transparency.OPAQUE)
+			return new Rectangle(0,0,bi.getWidth(),bi.getHeight());
 
-	private static Rectangle getARGBBounds(BufferedImage bi, int alphaThreshold) {
-		int[] array = new int[bi.getWidth()];
-
-		int h = bi.getHeight();
 		int w = bi.getWidth();
-		int minX = -1;
-		int maxX = -1;
-		int minY = -1;
-		int maxY = -1;
+		int h = bi.getHeight();
+		PixelIterator<int[]> pixelIter = ImageType.INT_ARGB.createPixelIterator(bi);
+		int[] row = new int[w];
 
-		findMinY: for (int y = 0; y < h; y++) {
-			bi.getRaster().getDataElements(0, y, w, 1, array);
+		int x1 = -1;
+		int x2 = -1;
+		int y1 = -1;
+		int y2 = -1;
+
+		int y = 0;
+		while(!pixelIter.isDone()) {
+			pixelIter.next(row, 0);
+			boolean foundPixel = false;
 			for (int x = 0; x < w; x++) {
-				int alpha = (array[x] >> 24) & 0xff;
+				int alpha = (row[x] >> 24) & 0xff;
 				if (alpha > alphaThreshold) {
-					minX = x;
-					maxX = x;
-					minY = y;
-					break findMinY;
+					foundPixel = true;
+					if (x1 == -1) {
+						x1 = x2 = x;
+						y1 = y2 = y;
+					} else {
+						x1 = Math.min(x, x1);
+						y2 = Math.max(y, y2);
+					}
+					break;
 				}
 			}
+			if (foundPixel) {
+				for (int x = w - 1; x >= 0; x--) {
+					int alpha = (row[x] >> 24) & 0xff;
+					if (alpha > alphaThreshold) {
+						x2 = Math.max(x, x2);
+					}
+				}
+			}
+			y++;
 		}
 
-		if (minY == -1)
+		if (x1 == -1)
 			return null;
-
-		findMaxY: for (int y = h - 1; y >= 0; y--) {
-			bi.getRaster().getDataElements(0, y, w, 1, array);
-			for (int x = 0; x < w; x++) {
-				int alpha = (array[x] >> 24) & 0xff;
-				if (alpha > alphaThreshold) {
-					minX = (x < minX) ? x : minX;
-					maxX = (x > maxX) ? x : maxX;
-					maxY = y;
-					break findMaxY;
-				}
-			}
-		}
-
-		for (int y = minY; y <= maxY; y++) {
-			bi.getRaster().getDataElements(0, y, w, 1, array);
-			minSearch: for (int x = 0; x < minX; x++) {
-				int alpha = (array[x] >> 24) & 0xff;
-				if (alpha > alphaThreshold) {
-					minX = x;
-					break minSearch;
-				}
-			}
-			maxSearch: for (int x = w - 1; x > maxX; x--) {
-				int alpha = (array[x] >> 24) & 0xff;
-				if (alpha > alphaThreshold) {
-					maxX = x;
-					break maxSearch;
-				}
-			}
-		}
-
-		return new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
+		return new Rectangle(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
 	}
 }
