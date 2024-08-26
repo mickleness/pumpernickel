@@ -26,7 +26,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.pump.image.thumbnail.generator.*;
 import com.pump.swing.popover.JPopover;
 
 public class ThumbnailGeneratorDemo extends ShowcaseResourceExampleDemo<File> {

@@ -3,8 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pump</groupId>
     <artifactId>pumpernickel</artifactId>
+    <packaging>pom</packaging>
     <name>Pumpernickel</name>
-    <version>1.03-dev</version>
+    <modules>
+        <module>image</module>
+        <module>transitions</module>
+        <module>graphics</module>
+        <module>common</module>
+    </modules>
+    <version>1.1</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.9</maven.compiler.source>
@@ -77,5 +84,15 @@
                 </plugin>                
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>14</source>
+                    <target>14</target>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

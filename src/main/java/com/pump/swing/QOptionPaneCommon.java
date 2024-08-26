@@ -31,7 +31,7 @@ import com.pump.util.JVM;
  */
 public class QOptionPaneCommon {
 	private static final ResourceBundle strings = ResourceBundle
-			.getBundle("com/pump/swing/QOptionPaneCommon");
+			.getBundle("pump/swing/QOptionPaneCommon");
 	private static boolean debugWithScreenshots = false;
 
 	/**

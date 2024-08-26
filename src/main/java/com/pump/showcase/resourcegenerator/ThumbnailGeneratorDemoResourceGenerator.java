@@ -13,7 +13,6 @@ package com.pump.showcase.resourcegenerator;
 import java.io.File;
 import java.util.*;
 
-import com.pump.image.thumbnail.generator.*;
 import com.pump.showcase.demo.ThumbnailGeneratorDemo;
 
 /**
