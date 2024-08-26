@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -29,17 +30,16 @@ import javax.imageio.stream.MemoryCacheImageInputStream;
 
 import com.pump.image.bmp.BmpDecoder;
 import com.pump.image.jpeg.JPEGMetaData;
-import com.pump.math.MutableInteger;
 
 /**
  * A collection of static methods to fetch the dimensions of an image.
  */
 public class ImageSize {
 	private static class Observer implements ImageObserver {
-		MutableInteger w, h;
+		AtomicInteger w, h;
 		boolean error = false;
 
-		Observer(MutableInteger width, MutableInteger height) {
+		Observer(AtomicInteger width, AtomicInteger height) {
 			w = width;
 			h = height;
 		}
@@ -50,11 +50,11 @@ public class ImageSize {
 				if ((infoflags & ImageObserver.ERROR) > 0) {
 					error = true;
 				}
-				w.value = Math.max(w.value, x + width);
-				h.value = Math.max(h.value, y + height);
+				w.set(Math.max(w.get(), x + width));
+				h.set(Math.max(h.get(), y + height));
 				notify();
 			}
-			return w.value <= 0 || h.value <= 0;
+			return w.get() <= 0 || h.get() <= 0;
 		}
 
 		public void load() {
@@ -63,7 +63,7 @@ public class ImageSize {
 					if (error)
 						throw new RuntimeException(
 								"an error occurred while retrieving the width and height");
-					if (w.value > 0 && h.value > 0)
+					if (w.get() > 0 && h.get() > 0)
 						return;
 					try {
 						wait();
@@ -155,8 +155,8 @@ public class ImageSize {
 	 * 
 	 */
 	public static Dimension get(Image image) {
-		MutableInteger width = new MutableInteger(-1);
-		MutableInteger height = new MutableInteger(-1);
+		AtomicInteger width = new AtomicInteger(-1);
+		AtomicInteger height = new AtomicInteger(-1);
 
 		Observer observer = new Observer(width, height);
 
@@ -169,7 +169,7 @@ public class ImageSize {
 
 		observer.load();
 
-		return new Dimension(observer.w.value, observer.h.value);
+		return new Dimension(observer.w.get(), observer.h.get());
 	}
 
 	private static Dimension getSizeUsingImageIO(File file)
