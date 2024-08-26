@@ -110,10 +110,7 @@ public class QBufferedImage extends BufferedImage
 	Map<String, Object> extraProperties = null;
 
 	/**
-	 * This constructor should not be used. It is only available for
-	 * deserialization.
-	 * 
-	 * @deprecated use any other constructor
+	 * This constructor should not be used. It is only available for deserialization.
 	 */
 	public QBufferedImage() {
 		super(1, 1, BufferedImage.TYPE_INT_RGB);
