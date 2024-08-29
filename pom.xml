@@ -6,10 +6,14 @@
     <packaging>pom</packaging>
     <name>Pumpernickel</name>
     <modules>
-        <module>image</module>
+        <module>images</module>
         <module>transitions</module>
         <module>graphics</module>
         <module>common</module>
+        <module>images</module>
+        <module>ui-buttons</module>
+        <module>ui-colors</module>
+        <module>ui-common</module>
     </modules>
     <version>1.1</version>
     <properties>

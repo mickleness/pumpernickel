@@ -9,7 +9,7 @@
         <version>1.1</version>
     </parent>
 
-    <artifactId>pump-transitions</artifactId>
+    <artifactId>pump-images</artifactId>
     <packaging>jar</packaging>
     <version>1.1</version>
 
@@ -38,12 +38,13 @@
         </plugins>
     </build>
 
-    <properties>
-        <maven.compiler.source>19</maven.compiler.source>
-        <maven.compiler.target>19</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
         <dependency>
             <groupId>com.pump</groupId>
             <artifactId>pump-common</artifactId>
@@ -51,20 +52,12 @@
             <scope>system</scope>
             <systemPath>${basedir}/../common/target/pump-common-1.1.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>com.pump</groupId>
-            <artifactId>pump-images</artifactId>
-            <version>1.1</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/../images/target/pump-images-1.1.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.pump</groupId>
-            <artifactId>pump-graphics</artifactId>
-            <version>1.1</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/../graphics/target/pump-graphics-1.1.jar</systemPath>
-        </dependency>
     </dependencies>
+
+    <properties>
+        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.target>19</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
 </project>

@@ -318,7 +318,7 @@ public class PolynomialFunction implements Function {
 				if (delta < 0)
 					delta = -delta;
 				if (delta <= .00000000001) {
-					solutions.add(new Double(t));
+					solutions.add(Double.valueOf(t));
 					return;
 				}
 
