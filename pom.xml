@@ -14,6 +14,7 @@
         <module>ui-buttons</module>
         <module>ui-colors</module>
         <module>ui-common</module>
+        <module>throbber</module>
     </modules>
     <version>1.1</version>
     <properties>
