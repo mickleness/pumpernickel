@@ -30,6 +30,8 @@ import javax.swing.event.ChangeListener;
  *
  */
 public class MeasuredOutputStream extends OutputStream {
+	// TODO: should this extend FilteredOutputStream?
+	// TODO: merge with GuardedOutputStream?
 
 	private class ListenerInfo {
 		final ChangeListener listener;
@@ -57,6 +59,7 @@ public class MeasuredOutputStream extends OutputStream {
 		this.out = out;
 	}
 
+	// TODO: rename this method. Mention closing the parent/underlying stream.
 	/**
 	 * Control whether calling <code>{@link #close()}</code> affects the
 	 * underlying OutputStream. This is useful in cases when you pass an
