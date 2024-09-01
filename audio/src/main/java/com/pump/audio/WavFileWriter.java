@@ -10,14 +10,11 @@
  */
 package com.pump.audio;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 
 import com.pump.io.MeasuredOutputStream;
 
-public class WavFileWriter {
+public class WavFileWriter implements Closeable {
 	protected File file;
 	private MeasuredOutputStream out;
 	private boolean formatWritten = false;
@@ -53,11 +50,6 @@ public class WavFileWriter {
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
-		close();
-		super.finalize();
-	}
-
 	public void close() throws IOException {
 		if (out == null)
 			return; // someone already called .close()
@@ -82,8 +74,7 @@ public class WavFileWriter {
 		}
 	}
 
-	protected static void writeLong(byte[] bytes, long value, int len)
-			throws IOException {
+	protected static void writeLong(byte[] bytes, long value, int len) {
 		if (len > 8)
 			throw new RuntimeException("len (" + len + ") > 8");
 
@@ -92,8 +83,7 @@ public class WavFileWriter {
 		}
 	}
 
-	protected static void writeInt(byte[] bytes, int value, int len)
-			throws IOException {
+	protected static void writeInt(byte[] bytes, int value, int len) {
 		if (len > 4)
 			throw new RuntimeException("len (" + len + ") > 4");
 
