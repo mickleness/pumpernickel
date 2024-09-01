@@ -10,7 +10,15 @@
             <groupId>com.pump</groupId>
             <artifactId>pump-ui-common</artifactId>
             <version>1.1</version>
-            <scope>compile</scope>
+            <scope>system</scope>
+            <systemPath>${basedir}/../ui-common/target/pump-ui-common-1.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.pump</groupId>
+            <artifactId>pump-common</artifactId>
+            <version>1.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../common/target/pump-common-1.1.jar</systemPath>
         </dependency>
     </dependencies>
     <artifactId>pump-audio</artifactId>

@@ -20,7 +20,7 @@ import java.awt.event.ActionListener;
  * it. If the user indicates they want to cancel the operation then Thread A
  * calls <code>cancel()</code>. Thread B should be checking the value of
  * <code>isCanceled()</code> regularly, and abort if it returns
- * <code>true</code> (maybe by throwing a <code>UserCanceledException</code>).
+ * <code>true</code> (maybe by throwing a <code>CancellationException</code>).
  * A lot of projects use {@link Thread#interrupt()} to achieve this basic
  * design goal, but this interface is more explicit regarding exactly what changed.
  * <P>

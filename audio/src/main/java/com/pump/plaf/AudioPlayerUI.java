@@ -17,12 +17,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.concurrent.CancellationException;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.ComponentUI;
 
-import com.pump.swing.UserCancelledException;
 import com.pump.audio.AudioPlayer;
 import com.pump.audio.AudioPlayer.StartTime;
 import com.pump.swing.AudioPlayerComponent;
@@ -109,7 +109,7 @@ public class AudioPlayerUI extends ComponentUI {
 		fd.setVisible(true);
 
 		if (fd.getFile() == null)
-			throw new UserCancelledException();
+			throw new CancellationException();
 		File file = new File(fd.getDirectory() + fd.getFile());
 		try {
 			apc.setSource(file.toURI().toURL());

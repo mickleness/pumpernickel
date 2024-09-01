@@ -19,6 +19,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -35,8 +36,7 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.basic.BasicSliderUI;
 
 import com.pump.audio.WavReader;
-import com.pump.geom.ShapeBounds;
-import com.pump.geom.TransformUtils;
+import com.pump.geom.RectangularTransform;
 import com.pump.math.function.Function;
 import com.pump.math.function.PolynomialFunction;
 
@@ -114,7 +114,7 @@ public class WaveformSliderUI extends BasicSliderUI {
 			r.read();
 
 			Rectangle unitRect = new Rectangle(0, 0, 1, 1);
-			Rectangle2D bounds = ShapeBounds.getBounds(path);
+			Rectangle2D bounds = path.getBounds2D();
 
 			path.lineTo(bounds.getMaxX(), bounds.getMaxY());
 			path.closePath();
@@ -123,8 +123,8 @@ public class WaveformSliderUI extends BasicSliderUI {
 			// sufficient extra padding
 			int h = (maxSampleValue - minSampleValue) / 2;
 			bounds.setFrame(bounds.getX(), -h, bounds.getWidth(), h);
-			path.transform(TransformUtils.createAffineTransform(bounds,
-					unitRect));
+			AffineTransform tx = new RectangularTransform(bounds, unitRect).createAffineTransform();
+			path.transform(tx);
 		}
 		return path;
 	}
@@ -218,7 +218,8 @@ public class WaveformSliderUI extends BasicSliderUI {
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(slider.getForeground());
 		Rectangle unitRect = new Rectangle(0, 0, 1, 1);
-		g.transform(TransformUtils.createAffineTransform(unitRect, trackRect));
+		AffineTransform tx = new RectangularTransform(unitRect, trackRect).createAffineTransform();
+		g.transform(tx);
 		g.fill(waveform);
 		g.dispose();
 	}

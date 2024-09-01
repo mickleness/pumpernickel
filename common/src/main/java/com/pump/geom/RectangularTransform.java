@@ -16,7 +16,7 @@ import java.awt.geom.Rectangle2D;
 
 /**
  * This is a transform that only scales and translates. It is a subset of an
- * <code>AffineTransform</code>, except with no rotation/shearing.
+ * <code>AffineTransform</code> that does not include rotation/shearing.
  */
 public class RectangularTransform {
 	double translateX = 0;
