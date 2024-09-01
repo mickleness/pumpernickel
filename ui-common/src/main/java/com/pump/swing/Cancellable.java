@@ -21,11 +21,12 @@ import java.awt.event.ActionListener;
  * calls <code>cancel()</code>. Thread B should be checking the value of
  * <code>isCanceled()</code> regularly, and abort if it returns
  * <code>true</code> (maybe by throwing a <code>UserCanceledException</code>).
+ * A lot of projects use {@link Thread#interrupt()} to achieve this basic
+ * design goal, but this interface is more explicit regarding exactly what changed.
  * <P>
- * That is the primary use of this class. In some cases the opposite is also
- * useful: when Thread B completes an operation it should call
- * <code>finish()</code>, and Thread A can relay this status by regularly
- * checking <code>isFinished()</code>.
+ * Similarly this tracks a task's "finished" status. Sometimes when Thread B
+ * completes an operation it should call <code>finish()</code>, and Thread A
+ * can relay this status by regularly checking <code>isFinished()</code>.
  */
 public interface Cancellable {
 	public void cancel();

@@ -68,6 +68,8 @@ public class DarkenedIcon implements Icon {
 	 * @return
 	 */
 	private BufferedImage createImage(Component c) {
+		// TODO: this needs to take into account `c.getGraphicsConfiguration().getDefaultTransform()`
+		// to look good on high res monitors
 		Icon i = getIcon();
 		BufferedImage bi = new BufferedImage(i.getIconWidth(),
 				i.getIconHeight(), BufferedImage.TYPE_INT_ARGB);

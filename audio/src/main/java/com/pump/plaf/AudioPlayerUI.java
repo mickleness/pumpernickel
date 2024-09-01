@@ -22,7 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.ComponentUI;
 
-import com.pump.UserCancelledException;
+import com.pump.swing.UserCancelledException;
 import com.pump.audio.AudioPlayer;
 import com.pump.audio.AudioPlayer.StartTime;
 import com.pump.swing.AudioPlayerComponent;

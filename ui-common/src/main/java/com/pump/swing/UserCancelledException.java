@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump;
+package com.pump.swing;
 
 /**
  * An exception that indicates an operation was cancelled, either directly or
