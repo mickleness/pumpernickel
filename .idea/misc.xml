@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/audio/pom.xml" />
+        <option value="$PROJECT_DIR$/throbber/pom.xml" />
+        <option value="$PROJECT_DIR$/transitions/pom.xml" />
+        <option value="$PROJECT_DIR$/common/pom.xml" />
+        <option value="$PROJECT_DIR$/graphics/pom.xml" />
+        <option value="$PROJECT_DIR$/images/pom.xml" />
+        <option value="$PROJECT_DIR$/ui-buttons/pom.xml" />
+        <option value="$PROJECT_DIR$/ui-colors/pom.xml" />
+        <option value="$PROJECT_DIR$/ui-common/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_19" default="true" project-jdk-name="19" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/target" />
+  </component>
+</project>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="pump-ui-common" />
+        <module name="images" />
+        <module name="pump-images" />
+        <module name="pump-ui-buttons" />
+        <module name="pump-audio" />
+        <module name="pump-ui-colors" />
+        <module name="pump-throbber" />
+        <module name="pump-common" />
+        <module name="pump-graphics" />
+        <module name="pump-transitions" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common" target="14" />
+      <module name="graphics" target="14" />
+      <module name="image" target="14" />
+      <module name="images" target="14" />
+      <module name="pump-image" target="14" />
+      <module name="pumpernickel" target="14" />
+      <module name="throbber" target="14" />
+      <module name="transitions" target="14" />
+      <module name="ui-buttons" target="14" />
+      <module name="ui-colors" target="14" />
+      <module name="ui-common" target="14" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

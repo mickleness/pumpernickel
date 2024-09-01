@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/audio/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/audio/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/ui-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/ui-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/graphics/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/graphics/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/image/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/image/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/images/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/images/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/images/ui-buttons/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/images/ui-buttons/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/throbber/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/throbber/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/transitions/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/transitions/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ui-buttons/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ui-buttons/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ui-colors/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ui-colors/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ui-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ui-common/src/main/resources" charset="UTF-8" />
+  </component>
+</project>
