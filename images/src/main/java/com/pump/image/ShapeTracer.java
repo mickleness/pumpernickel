@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.awt;
+package com.pump.image;
 
 import java.awt.Polygon;
 import java.awt.Shape;

@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.awt;
+package com.pump.image;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -25,11 +25,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.pump.geom.RectangularTransform;
 import org.junit.Test;
-
-import com.pump.geom.ShapeBounds;
-import com.pump.geom.TransformUtils;
-import com.pump.io.FileUtils;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
@@ -57,9 +54,8 @@ public class ShapeTracerTest extends TestCase {
 			GlyphVector gv = font.createGlyphVector(g.getFontRenderContext(),
 					new char[] { ch });
 			Shape outline = gv.getGlyphOutline(0);
-			AffineTransform tx = TransformUtils.createAffineTransform(
-					ShapeBounds.getBounds(outline),
-					new Rectangle(1, 1, 200 - 2, 200 - 2));
+			AffineTransform tx = new RectangularTransform(outline.getBounds2D(),
+					new Rectangle(1, 1, 200 - 2, 200 - 2)).createAffineTransform();
 			outline = tx.createTransformedShape(outline);
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -173,8 +169,8 @@ public class ShapeTracerTest extends TestCase {
 		} catch (AssertionFailedError e) {
 			if (writeFiles) {
 				File dir = new File("ShapeTracerTest");
-				if (!dir.exists())
-					FileUtils.mkdir(dir);
+				if (!dir.exists() && !dir.mkdirs())
+					throw new IOException("mkdirs failed for " + dir.getPath());
 
 				File file = new File(dir, id + ".png");
 				ImageIO.write(comparison, "png", file);
