@@ -10,11 +10,11 @@
  */
 package com.pump.image;
 
-import com.pump.geom.StarPolygon;
 import com.pump.image.pixel.ImageType;
 import org.junit.Test;
 
 import java.awt.*;
+import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.*;
 import java.io.*;
@@ -291,9 +291,11 @@ public class QBufferedImageTest {
 						g.draw(new RoundRectangle2D.Double(x, y, 10, 10, 4, 4));
 						break;
 					case 3:
-						StarPolygon star = new StarPolygon(5);
-						star.setCenter(x + 5, y + 5);
-						g.draw(star);
+						Path2D p = new Path2D.Double();
+						p.moveTo(x - 5, y + 5);
+						p.lineTo(x, y - 5);
+						p.lineTo(x + 5, y + 5);
+						g.draw(p);
 						break;
 				}
 			} else {
@@ -308,9 +310,11 @@ public class QBufferedImageTest {
 						g.fill(new RoundRectangle2D.Double(x, y, 10, 10, 4, 4));
 						break;
 					case 3:
-						StarPolygon star = new StarPolygon(5);
-						star.setCenter(x + 5, y + 5);
-						g.fill(star);
+						Path2D p = new Path2D.Double();
+						p.moveTo(x - 5, y + 5);
+						p.lineTo(x, y - 5);
+						p.lineTo(x + 5, y + 5);
+						g.fill(p);
 						break;
 				}
 			}

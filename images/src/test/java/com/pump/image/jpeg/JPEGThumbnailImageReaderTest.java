@@ -12,7 +12,8 @@ package com.pump.image.jpeg;
 
 import java.util.*;
 
-import com.pump.UserCancelledException;
+import com.pump.image.QBufferedImage;
+import com.pump.image.QBufferedImageTest;
 import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
@@ -24,30 +25,18 @@ import java.net.URL;
 public class JPEGThumbnailImageReaderTest extends TestCase {
 
     public void testThumbnail() throws Exception {
-        URL jpegFile = UserCancelledException.class.getResource("showcase/resourcegenerator/IMG-20171107-WA0002.jpg");
+        URL jpegFile = QBufferedImageTest.class.getResource("IMG-20171107-WA0002.jpg");
         try (InputStream in = jpegFile.openStream()) {
             BufferedImage thumbnail = JPEGMetaData.getThumbnail(in);
             Objects.requireNonNull(thumbnail);
         }
     }
 
-    public void testThumbnailReader() throws Exception {
-        ImageReader reader = new JPEGThumbnailImageReaderSpi().createReaderInstance(null);
-        URL jpegFile = UserCancelledException.class.getResource("showcase/resourcegenerator/IMG-20171107-WA0002.jpg");
-        reader.setInput( ImageIO.createImageInputStream(jpegFile.openStream()) );
-        BufferedImage thumbnail = reader.readThumbnail(0, 0);
-        Objects.requireNonNull(thumbnail);
-    }
-
     public void testImageIOFails() {
-        JPEGMetaData.installImageIOReader();
-        URL jpegFile = UserCancelledException.class.getResource("showcase/resourcegenerator/IMG-20171107-WA0002.jpg");
+        URL jpegFile = QBufferedImageTest.class.getResource("IMG-20171107-WA0002.jpg");
         Iterator iterator = ImageIO.getImageReadersBySuffix("jpeg");
         while(iterator.hasNext()) {
             ImageReader reader = (ImageReader)iterator.next();
-
-            if (reader instanceof JPEGThumbnailImageReader)
-                continue;
 
             try {
                 reader.setInput( ImageIO.createImageInputStream(jpegFile.openStream()) );

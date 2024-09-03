@@ -12,6 +12,7 @@ package com.pump.image.jpeg;
 
 import com.pump.image.QBufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.imageio.spi.IIORegistry;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -39,14 +40,6 @@ public class JPEGMetaData {
 	 * This property is set on QBufferedImages to identify which JPEG block a thumbnail originated from.
 	 */
 	public static final String PROPERTY_JPEG_MARKER = "jpeg-marker";
-
-	/**
-	 * This configures ImageIO to provide a new ImageReader for JPGs that is capable of returning
-	 * thumbnails.
-	 */
-	public static void installImageIOReader() {
-		IIORegistry.getDefaultInstance().registerServiceProvider(new JPEGThumbnailImageReaderSpi());
-	}
 
 	/**
 	 * Read the data from a JPEG input stream and notify the listener as data is read (or considered)

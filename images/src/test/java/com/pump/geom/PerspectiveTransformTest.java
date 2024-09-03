@@ -1,15 +1,18 @@
 package com.pump.geom;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.awt.geom.Point2D;
 import java.util.Random;
 
 public class PerspectiveTransformTest extends TestCase {
+
     /**
      * This confirms that getQuadToQuad creates a PerspectiveTransform that transforms
      * points as expected, and then inverts that transform to return to the original points.
      */
+    @Test
     public void testGetQuadToQuad_and_inverse() {
         for (int a = 0; a < 10_000; a++) {
             try {
