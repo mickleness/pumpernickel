@@ -14,7 +14,13 @@
         <option value="$PROJECT_DIR$/ui-buttons/pom.xml" />
         <option value="$PROJECT_DIR$/ui-colors/pom.xml" />
         <option value="$PROJECT_DIR$/ui-common/pom.xml" />
+        <option value="$PROJECT_DIR$/labs/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/ui-common/labs/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_19" default="true" project-jdk-name="19" project-jdk-type="JavaSDK">

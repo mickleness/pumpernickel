@@ -20,6 +20,8 @@ import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import javax.swing.JComponent;
 import javax.swing.plaf.basic.BasicPanelUI;
@@ -28,8 +30,14 @@ import javax.swing.plaf.basic.BasicPanelUI;
  * This is a PanelUI with a two-color vertical gradient.
  */
 public class GradientPanelUI extends BasicPanelUI {
+	public static final String PROPERTY_UPPER_FILL_COLOR = "upper fill color";
+	public static final String PROPERTY_LOWER_FILL_COLOR = "lower fill color";
+	public static final String PROPERTY_UPPER_STROKE_COLOR = "upper stroke color";
+	public static final String PROPERTY_LOWER_STROKE_COLOR = "lower stroke color";
 	protected Color fillColor_top, fillColor_bottom;
 	protected Color strokeColor_top, strokeColor_bottom;
+
+	protected final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
 	public GradientPanelUI(Color fillColor) {
 		this(fillColor, fillColor);
@@ -40,6 +48,19 @@ public class GradientPanelUI extends BasicPanelUI {
 		setLowerFillColor(fillColor2);
 		setUpperStrokeColor(new Color(0, 0, 0, 0));
 		setLowerStrokeColor(new Color(0, 0, 0, 0));
+	}
+
+	public GradientPanelUI(GradientPaint gradient) {
+		setUpperFillColor(gradient.getColor1());
+		setLowerFillColor(gradient.getColor2());
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener pcl) {
+		propertyChangeSupport.addPropertyChangeListener(pcl);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener pcl) {
+		propertyChangeSupport.removePropertyChangeListener(pcl);
 	}
 
 	/**
@@ -53,7 +74,9 @@ public class GradientPanelUI extends BasicPanelUI {
 	 * Set the upper gradient color.
 	 */
 	public void setUpperFillColor(Color c) {
+		Color oldColor = fillColor_top;
 		fillColor_top = c;
+		propertyChangeSupport.firePropertyChange(PROPERTY_UPPER_FILL_COLOR, oldColor, c);
 	}
 
 	/**
@@ -75,7 +98,9 @@ public class GradientPanelUI extends BasicPanelUI {
 	 * Set the lower gradient color.
 	 */
 	public void setLowerFillColor(Color c) {
+		Color oldColor = fillColor_bottom;
 		fillColor_bottom = c;
+		propertyChangeSupport.firePropertyChange(PROPERTY_LOWER_FILL_COLOR, oldColor, c);
 	}
 
 	@Override
@@ -111,7 +136,9 @@ public class GradientPanelUI extends BasicPanelUI {
 	 * Set the upper color of the stroke gradient.
 	 */
 	public void setUpperStrokeColor(Color c) {
+		Color oldColor = strokeColor_top;
 		strokeColor_top = c;
+		propertyChangeSupport.firePropertyChange(PROPERTY_UPPER_STROKE_COLOR, oldColor, c);
 	}
 
 	/**
@@ -125,7 +152,9 @@ public class GradientPanelUI extends BasicPanelUI {
 	 * Set the lower color of the stroke gradient.
 	 */
 	public void setLowerStrokeColor(Color c) {
+		Color oldColor = strokeColor_bottom;
 		strokeColor_bottom = c;
+		propertyChangeSupport.firePropertyChange(PROPERTY_LOWER_STROKE_COLOR, oldColor, c);
 	}
 
 	protected void paintGradient(Graphics2D g0, int y, int h, Shape fillShape) {
