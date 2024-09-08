@@ -11,24 +11,39 @@
 package com.pump.image.shadow;
 
 import java.awt.Color;
-
-import com.pump.data.AbstractAttributeDataImpl;
-import com.pump.data.Key;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * This is an immutable set of attributes used to render a shadow.
  */
-public class ShadowAttributes extends AbstractAttributeDataImpl {
+public class ShadowAttributes implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public static final Key<Float> KEY_SHADOW_X_OFFSET = new Key<>(Float.class,
-			"x", 2f);
-	public static final Key<Float> KEY_SHADOW_Y_OFFSET = new Key<>(Float.class,
-			"y", 2f);
-	public static final Key<Float> KEY_SHADOW_KERNEL_RADIUS = new Key<>(
-			Float.class, "shadowKernelRadius", 1f);
-	public static final Key<Color> KEY_SHADOW_COLOR = new Key<>(Color.class,
-			"shadowColor", Color.BLACK);
+	/**
+	 * This should resolve to a float.
+	 */
+	public static final String PROPERTY_X_OFFSET = "x";
+
+	/**
+	 * This should resolve to a float.
+	 */
+	public static final String PROPERTY_Y_OFFSET = "y";
+
+	/**
+	 * This should resolve to a float.
+	 */
+	public static final String PROPERTY_SHADOW_KERNEL_RADIUS = "shadowKernelRadius";
+
+	/**
+	 * This should resolve to a Color.
+	 */
+	public static final String PROPERTY_SHADOW_COLOR = "shadowColor";
+
+	Color shadowColor;
+	float xOffset, yOffset, shadowKernelRadius;
+
 
 	/**
 	 * 
@@ -60,26 +75,43 @@ public class ShadowAttributes extends AbstractAttributeDataImpl {
 	 */
 	public ShadowAttributes(float xOffset, float yOffset, float kernelRadius,
 			Color color) {
-		setAttribute(KEY_SHADOW_KERNEL_RADIUS, kernelRadius);
-		setAttribute(KEY_SHADOW_COLOR, color);
-		setAttribute(KEY_SHADOW_X_OFFSET, xOffset);
-		setAttribute(KEY_SHADOW_Y_OFFSET, yOffset);
+		setShadowColor(color);
+		setShadowKernelRadius(kernelRadius);
+		setShadowXOffset(xOffset);
+		setShadowYOffset(yOffset);
 	}
 
 	public Color getShadowColor() {
-		return getAttribute(KEY_SHADOW_COLOR);
+		return shadowColor;
 	}
 
 	public float getShadowKernelRadius() {
-		return getAttribute(KEY_SHADOW_KERNEL_RADIUS);
+		return shadowKernelRadius;
 	}
 
 	public float getShadowXOffset() {
-		return getAttribute(KEY_SHADOW_X_OFFSET);
+		return xOffset;
 	}
 
 	public float getShadowYOffset() {
-		return getAttribute(KEY_SHADOW_Y_OFFSET);
+		return yOffset;
+	}
+
+
+	public void setShadowColor(Color shadowColor) {
+		this.shadowColor = Objects.requireNonNull(shadowColor);
+	}
+
+	public void setShadowKernelRadius(float shadowKernelRadius) {
+		this.shadowKernelRadius = shadowKernelRadius;
+	}
+
+	public void setShadowXOffset(float xOffset) {
+		this.xOffset = xOffset;
+	}
+
+	public void setShadowYOffset(float yOffset) {
+		this.yOffset = yOffset;
 	}
 
 	@Override
@@ -105,5 +137,41 @@ public class ShadowAttributes extends AbstractAttributeDataImpl {
 		}
 		return getShadowXOffset() + "px " + getShadowYOffset() + "px "
 				+ getShadowKernelRadius() + "px #" + colorHex;
+	}
+
+	private void writeObject(java.io.ObjectOutputStream out)
+			throws IOException {
+		out.writeInt(0);
+		out.writeFloat(getShadowXOffset());
+		out.writeFloat(getShadowYOffset());
+		out.writeFloat(getShadowKernelRadius());
+		out.writeObject(getShadowColor());
+	}
+
+	private void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		int version = in.readInt();
+		if (version == 0) {
+			setShadowXOffset(in.readFloat());
+			setShadowYOffset(in.readFloat());
+			setShadowKernelRadius(in.readFloat());
+			setShadowColor((Color) in.readObject());
+		} else {
+			throw new IOException(
+					"unsupported internal version " + version);
+		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ShadowAttributes that = (ShadowAttributes) o;
+		return Float.compare(that.xOffset, xOffset) == 0 && Float.compare(that.yOffset, yOffset) == 0 && Float.compare(that.shadowKernelRadius, shadowKernelRadius) == 0 && Objects.equals(shadowColor, that.shadowColor);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(shadowColor, xOffset, yOffset, shadowKernelRadius);
 	}
 }

@@ -50,7 +50,7 @@ public class GaussianKernel
 	/**
 	 * Create a kernel with a default bell-shaped distribution.
 	 * 
-	 * @param kernelRadius
+	 * @param shadowKernelRadius
 	 *            the radius of the kernel. The total length of this kernel will
 	 *            be (2*radius + 1)
 	 */

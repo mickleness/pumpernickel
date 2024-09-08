@@ -20,14 +20,8 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.pump.image.shadow.ARGBPixels;
-import com.pump.image.shadow.BoxShadowRenderer;
-import com.pump.image.shadow.DoubleBoxShadowRenderer;
-import com.pump.image.shadow.GaussianShadowRenderer;
-import com.pump.image.shadow.ShadowAttributes;
-import com.pump.image.shadow.ShadowRenderer;
+import com.pump.image.shadow.*;
 import com.pump.showcase.demo.ShadowRendererDemo;
-import com.pump.showcase.demo.ShadowRendererDemo.OriginalGaussianShadowRenderer;
 
 public class ShadowRendererDemoResourceGenerator extends DemoResourceGenerator {
 
@@ -124,7 +118,7 @@ class ShadowRendererProfiler {
 		private String getName(ShadowRenderer renderer) {
 			if (renderer instanceof GaussianShadowRenderer)
 				return "Optimized Gaussian Shadow Renderer";
-			if (renderer instanceof OriginalGaussianShadowRenderer)
+			if (renderer instanceof SimpleGaussianShadowRenderer)
 				return "Unoptimized Gaussian Shadow Renderer";
 
 			String str = renderer.getClass().getSimpleName();
@@ -142,7 +136,8 @@ class ShadowRendererProfiler {
 
 	// frontload most expensive renderers first:
 	Collection<ShadowRenderer> renderers = Arrays.asList(
-			new OriginalGaussianShadowRenderer(), new GaussianShadowRenderer(),
+			new SimpleGaussianShadowRenderer(),
+			new GaussianShadowRenderer(),
 			new DoubleBoxShadowRenderer(), new BoxShadowRenderer());
 
 	ProfileResults results;

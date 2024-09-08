@@ -16,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.math.BigDecimal;
@@ -24,9 +25,7 @@ import java.util.concurrent.Callable;
 
 import javax.imageio.ImageIO;
 
-import com.pump.desktop.logging.SessionLog;
-import com.pump.geom.StarPolygon;
-import com.pump.geom.TransformUtils;
+import com.pump.geom.RectangularTransform;
 import com.pump.image.shadow.DoubleBoxShadowRenderer.Combo;
 
 /**
@@ -54,8 +53,6 @@ class DoubleBoxShadowRendererGenerator
 	private static final BigDecimal fastMax = BigDecimal.valueOf(20);
 
 	public static void main(String[] args) throws Exception {
-		SessionLog.initialize("DoubleBoxShadowRenderer", 10);
-
 		// I tried multithreading, but that led to memory errors. There's really
 		// no hurry for this one-time cost, so single-thread seems simplest for
 		// now:
@@ -254,21 +251,34 @@ class DoubleBoxShadowRendererGenerator
 		BufferedImage starImage = new BufferedImage(400, 400,
 				BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = starImage.createGraphics();
-		StarPolygon p = new StarPolygon(1);
+
+		Path2D star = new Path2D.Double();
+		star.moveTo(6.123234E-17, -1.0);
+		star.lineTo(0.2233584, -0.30742645);
+		star.lineTo(0.95105654, -0.309017);
+		star.lineTo(0.36140147, 0.117426455);
+		star.lineTo(0.58778524, 0.809017);
+		star.lineTo(2.326829E-17, 0.38);
+		star.lineTo(-0.58778524, 0.809017);
+		star.lineTo(-0.36140147, 0.117426455);
+		star.lineTo(-0.95105654, -0.309017);
+		star.lineTo(-0.2233584, -0.30742645);
+		star.closePath();
+
 		g.setColor(Color.black);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
-		g.setTransform(TransformUtils.createAffineTransform(p.getBounds2D(),
-				new Rectangle(10, 10, 380, 380)));
-		g.fill(p);
+		g.setTransform(new RectangularTransform(star.getBounds2D(),
+				new Rectangle(10, 10, 380, 380)).createAffineTransform());
+		g.fill(star);
 
 		// punch a whole in the center:
 		g.setComposite(AlphaComposite.Clear);
 		AffineTransform tx = AffineTransform.getRotateInstance(.4, 200, 200);
-		tx.concatenate(TransformUtils.createAffineTransform(p.getBounds2D(),
-				new Rectangle(100, 100, 200, 200)));
+		tx.concatenate(new RectangularTransform(star.getBounds2D(),
+				new Rectangle(100, 100, 200, 200)).createAffineTransform());
 		g.setTransform(tx);
-		g.fill(p);
+		g.fill(star);
 
 		g.dispose();
 		return starImage;

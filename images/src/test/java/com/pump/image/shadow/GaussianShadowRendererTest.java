@@ -10,18 +10,75 @@
  */
 package com.pump.image.shadow;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 
 import org.junit.Test;
 
-import com.pump.showcase.demo.ShadowRendererDemo;
-import com.pump.showcase.demo.ShadowRendererDemo.OriginalGaussianShadowRenderer;
-
 import junit.framework.TestCase;
 
 public class GaussianShadowRendererTest extends TestCase {
+
+	public static BufferedImage createTestImage() {
+		BufferedImage bi = new BufferedImage(300, 100,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bi.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+
+		g.setColor(Color.white);
+		g.setStroke(new BasicStroke(4));
+		g.draw(new Ellipse2D.Float(-10, -10, 20, 20));
+		g.draw(new Ellipse2D.Float(bi.getWidth() - 10, bi.getHeight() - 10, 20,
+				20));
+		g.draw(new Ellipse2D.Float(bi.getWidth() - 10, -10, 20, 20));
+		g.draw(new Ellipse2D.Float(-10, bi.getHeight() - 10, 20, 20));
+
+		// our modules don't include access to the StarPolygon class:
+//		StarPolygon star = new StarPolygon(40);
+//		star.setCenter(50, 50);
+
+		Path2D star = new Path2D.Double();
+		star.moveTo(50.0, 10.0);
+		star.lineTo(58.934334, 37.70294);
+		star.lineTo(88.04226, 37.63932);
+		star.lineTo(64.456055, 54.69706);
+		star.lineTo(73.51141, 82.36068);
+		star.lineTo(50.0, 65.2);
+		star.lineTo(26.48859, 82.36068);
+		star.lineTo(35.54394, 54.69706);
+		star.lineTo(11.957741, 37.63932);
+		star.lineTo(41.065666, 37.70294);
+		star.closePath();
+
+		g.setColor(new Color(0x1BE7FF));
+		g.fill(star);
+
+		BufferedImage textureBI = new BufferedImage(20, 60,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = textureBI.createGraphics();
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		for (int z = 0; z < 500; z++) {
+			g2.setStroke(new BasicStroke(8));
+			g2.setColor(new Color(0xFF5714));
+			g2.drawLine(-100 + z * 20, 100, 100 + z * 20, -100);
+			g2.setStroke(new BasicStroke(10));
+			g2.setColor(new Color(0x6EEB83));
+			g2.drawLine(200 - z * 20, 100, 0 - z * 20, -100);
+		}
+		g2.dispose();
+		Rectangle r = new Rectangle(0, 0, textureBI.getWidth(),
+				textureBI.getHeight());
+		g.setPaint(new TexturePaint(textureBI, r));
+		Shape roundRect = new RoundRectangle2D.Float(110, 10, 80, 80, 40, 40);
+		g.fill(roundRect);
+
+		return bi;
+	}
 
 	/**
 	 * This tests the optimized GaussianShadowRenderer against the original
@@ -29,10 +86,10 @@ public class GaussianShadowRendererTest extends TestCase {
 	 */
 	@Test
 	public void testShadowImage() throws Exception {
-		ShadowRenderer renderer1 = new OriginalGaussianShadowRenderer();
+		ShadowRenderer renderer1 = new SimpleGaussianShadowRenderer();
 		ShadowRenderer renderer2 = new GaussianShadowRenderer();
 
-		BufferedImage bi = ShadowRendererDemo.createTestImage();
+		BufferedImage bi = createTestImage();
 
 		ShadowAttributes attr = new ShadowAttributes(0, 0, 15,
 				new Color(0, 0, 0, 128));

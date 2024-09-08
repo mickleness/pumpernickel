@@ -15,9 +15,6 @@ import java.awt.image.BufferedImage;
 
 import org.junit.Test;
 
-import com.pump.showcase.demo.ShadowRendererDemo;
-import com.pump.showcase.demo.ShadowRendererDemo.OriginalGaussianShadowRenderer;
-
 import junit.framework.TestCase;
 
 public class BoxShadowRendererTest extends TestCase {
@@ -1657,7 +1654,7 @@ public class BoxShadowRendererTest extends TestCase {
 		final GaussianKernel kernel = renderer1
 				.getKernel(attr.getShadowKernelRadius());
 
-		ShadowRenderer renderer2 = new OriginalGaussianShadowRenderer() {
+		ShadowRenderer renderer2 = new SimpleGaussianShadowRenderer() {
 
 			@Override
 			public GaussianKernel getKernel(float kernelRadius) {
@@ -1665,7 +1662,7 @@ public class BoxShadowRendererTest extends TestCase {
 			}
 		};
 
-		BufferedImage bi = ShadowRendererDemo.createTestImage();
+		BufferedImage bi = GaussianShadowRendererTest.createTestImage();
 
 		BufferedImage result1 = renderer1.createShadow(bi,
 				attr.getShadowKernelRadius(), attr.getShadowColor());
