@@ -10,8 +10,6 @@
  */
 package com.pump.geom;
 
-import com.pump.image.pixel.ImagePixelIterator;
-import com.pump.image.pixel.ImageType;
 import junit.framework.TestCase;
 import org.junit.Test;
 
@@ -62,14 +60,16 @@ public class ClipperTest extends TestCase {
     }
 
     private int getMaxDifference(BufferedImage imageA, BufferedImage imageB) {
-        ImagePixelIterator iter1 = new ImagePixelIterator(imageA, ImageType.INT_ARGB, false);
-        ImagePixelIterator iter2 = new ImagePixelIterator(imageB, ImageType.INT_ARGB, false);
+        if (imageA.getType() != BufferedImage.TYPE_INT_ARGB)
+            throw new IllegalArgumentException();
+        if (imageB.getType() != BufferedImage.TYPE_INT_ARGB)
+            throw new IllegalArgumentException();
         int[] row1 = new int[imageA.getWidth()];
         int[] row2 = new int[imageB.getWidth()];
         int maxDiff = 0;
-        while (!iter1.isDone()) {
-            iter1.next(row1, 0);
-            iter2.next(row2, 0);
+        for (int y = 0; y < imageA.getHeight(); y++) {
+            imageA.getRaster().getDataElements(0, y, imageA.getWidth(), 1, row1);
+            imageB.getRaster().getDataElements(0, y, imageA.getWidth(), 1, row2);
             for (int x = 0; x < row1.length; x++) {
                 int alpha1 = (row1[x] >> 24) & 0xff;
                 int alpha2 = (row2[x] >> 24) & 0xff;
