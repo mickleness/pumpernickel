@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <version>1.1</version>
     <groupId>com.pump</groupId>
-    <artifactId>pump-throbber</artifactId>
+    <artifactId>pump-ui-throbber</artifactId>
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>

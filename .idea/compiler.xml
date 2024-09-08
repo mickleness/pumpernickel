@@ -10,10 +10,10 @@
         <module name="images" />
         <module name="pump-images" />
         <module name="pump-ui-buttons" />
+        <module name="pump-ui-throbber" />
         <module name="pump-labs" />
         <module name="pump-audio" />
         <module name="pump-ui-colors" />
-        <module name="pump-throbber" />
         <module name="pump-common" />
         <module name="pump-graphics" />
         <module name="pump-transitions" />
@@ -28,6 +28,7 @@
       <module name="pump-image" target="14" />
       <module name="pump-labs (1)" target="19" />
       <module name="pump-labs (2)" target="19" />
+      <module name="pump-throbber" target="19" />
       <module name="pumpernickel" target="14" />
       <module name="throbber" target="14" />
       <module name="transitions" target="14" />

@@ -97,10 +97,10 @@
         </dependency>
         <dependency>
             <groupId>com.pump</groupId>
-            <artifactId>pump-throbber</artifactId>
+            <artifactId>pump-ui-throbber</artifactId>
             <version>1.1</version>
             <scope>system</scope>
-            <systemPath>${basedir}/../throbber/target/pump-throbber-1.1.jar</systemPath>
+            <systemPath>${basedir}/../ui-throbber/target/pump-ui-throbber-1.1.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

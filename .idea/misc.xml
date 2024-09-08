@@ -15,6 +15,7 @@
         <option value="$PROJECT_DIR$/ui-colors/pom.xml" />
         <option value="$PROJECT_DIR$/ui-common/pom.xml" />
         <option value="$PROJECT_DIR$/labs/pom.xml" />
+        <option value="$PROJECT_DIR$/ui-throbber/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
