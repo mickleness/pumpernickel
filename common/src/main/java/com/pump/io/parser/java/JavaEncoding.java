@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -38,7 +38,7 @@ public class JavaEncoding {
 	/**
 	 * Write a character to a StringBuffer. For example a tab character is
 	 * written as "\t". If a character is not a simple recognized character,
-	 * then it is written with unicode encoding ("\u0123").
+	 * then it is written with unicode encoding ("ģ").
 	 * 
 	 * @param ch
 	 *            the character to encode.
@@ -66,17 +66,16 @@ public class JavaEncoding {
 			dest.append("\\'");
 		} else {
 			dest.append("\\u");
-			int k = ch;
-			String s = Integer.toString(k, 16);
+			StringBuilder s = new StringBuilder(Integer.toString(ch, 16));
 			while (s.length() < 4) {
-				s = "0" + s;
+				s.insert(0, "0");
 			}
 			dest.append(s);
 		}
 	}
 
 	/**
-	 * Reads (or decodes) one character, such as "\\t" or "\u1234" or simply "x"
+	 * Reads (or decodes) one character, such as "\\t" or "ሴ" or simply "x"
 	 * 
 	 * @param s
 	 *            the String being read. This should NOT include the
@@ -90,7 +89,7 @@ public class JavaEncoding {
 	 * @return the new index the next character should begin reading from. For
 	 *         example if the initial index is 0 for the String "x", then this
 	 *         returns 1 because the index only increased by 1 character. But if
-	 *         the initial index is 0 for the String "\u0123", then this returns
+	 *         the initial index is 0 for the String "ģ", then this returns
 	 *         6, so the cursor is positioned after the '3'.
 	 */
 	public static int decode(CharSequence s, int index, StringBuffer dest) {
@@ -139,9 +138,8 @@ public class JavaEncoding {
 					index++;
 					c = s.charAt(index);
 					if (Character.isDigit(c)) {
-						char c3 = c;
 						index++;
-						i = Integer.parseInt(c1 + "" + c2 + c3, 8);
+						i = Integer.parseInt(c1 + "" + c2 + c, 8);
 					} else {
 						i = Integer.parseInt(c1 + "" + c2, 8);
 					}
@@ -153,8 +151,8 @@ public class JavaEncoding {
 					dest.append((char) i);
 
 			} else {
-				throw new RuntimeException("Unexpected character \'" + c
-						+ "\' in \"" + s + "\"");
+				throw new RuntimeException("Unexpected character '" + c
+						+ "' in \"" + s + "\"");
 			}
 		} else {
 			if (dest != null)
@@ -165,13 +163,13 @@ public class JavaEncoding {
 
 	/**
 	 * Encode a String using the Java conventions (using a \ character for
-	 * special chars, including unicode identifiers.
+	 * special chars, including unicode identifiers).
 	 * 
 	 * @param str
 	 *            a String to encode.
 	 * @return a String that a Java compiler will accept. For example a tab
 	 *         character becomes "\t", or complex characters might use unicode
-	 *         encoding such as "\u0123".
+	 *         encoding such as "ģ".
 	 */
 	public static String encode(String str) {
 		StringBuffer dest = new StringBuffer();

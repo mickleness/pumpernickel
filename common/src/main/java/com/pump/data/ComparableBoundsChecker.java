@@ -1,15 +1,16 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.data;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -17,6 +18,7 @@ import java.util.Objects;
  */
 public class ComparableBoundsChecker<T extends Comparable>
 		extends BoundsChecker<T> {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	T minValue, maxValue;
@@ -72,9 +74,8 @@ public class ComparableBoundsChecker<T extends Comparable>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof ComparableBoundsChecker))
+		if (!(obj instanceof ComparableBoundsChecker other))
 			return false;
-		ComparableBoundsChecker other = (ComparableBoundsChecker) obj;
 		if (!getMinValue().equals(other.getMinValue()))
 			return false;
 		if (!getMaxValue().equals(other.getMaxValue()))

@@ -234,7 +234,7 @@ public class QOptionPane extends JComponent {
 			footer.reset();
 		String dialogTitle = getDialogTitle();
 		JDialog dialog = new JDialog(owner, dialogTitle, true);
-		if (useSheets && JVM.getMajorJavaVersion() >= 1.6f) {
+		if (useSheets) {
 			dialog.setModalityType(ModalityType.DOCUMENT_MODAL);
 			dialog.getRootPane().putClientProperty(
 					"apple.awt.documentModalSheet", Boolean.valueOf(useSheets));

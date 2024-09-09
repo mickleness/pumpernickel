@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -20,7 +20,7 @@ public interface Function {
 	 * @return the output of this function.
 	 * 
 	 */
-	public double evaluate(double x);
+	double evaluate(double x);
 
 	/**
 	 * Returns all the x-values for the equation f(x) = y.
@@ -30,5 +30,5 @@ public interface Function {
 	 * @return all the possible inputs that would map to the argument.
 	 * 
 	 */
-	public double[] evaluateInverse(double y);
+	double[] evaluateInverse(double y);
 }

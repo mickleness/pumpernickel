@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -25,8 +25,8 @@ import javax.swing.event.ChangeListener;
  * At any point calling <code>getWrittenCount()</code> tells how the amount of
  * data that has been written since this object was constructed.
  * <p>
- * Also you can add a ChangeListener to this stream to be notified every time a
- * specific amount of bytes are written.
+ * You can also add a ChangeListener to this stream to be notified every time a
+ * specific amount of bytes is written.
  *
  */
 public class MeasuredOutputStream extends OutputStream {
@@ -53,7 +53,7 @@ public class MeasuredOutputStream extends OutputStream {
 	OutputStream out;
 	private boolean closed = false;
 	boolean closeable = true;
-	List<ListenerInfo> listeners = new ArrayList<ListenerInfo>();
+	private final List<ListenerInfo> listeners = new ArrayList<>();
 
 	public MeasuredOutputStream(OutputStream out) {
 		this.out = out;
@@ -102,8 +102,7 @@ public class MeasuredOutputStream extends OutputStream {
 			throw new NullPointerException();
 
 		synchronized (listeners) {
-			for (int a = 0; a < listeners.size(); a++) {
-				ListenerInfo i = listeners.get(a);
+			for (ListenerInfo i : listeners) {
 				if (i.listener == l) {
 					throw new IllegalArgumentException(
 							"this listener has already been added");
@@ -126,8 +125,7 @@ public class MeasuredOutputStream extends OutputStream {
 	}
 
 	protected void fireListeners(boolean skipThreshold) {
-		for (int a = 0; a < listeners.size(); a++) {
-			ListenerInfo i = listeners.get(a);
+		for (ListenerInfo i : listeners) {
 			long diff = written - i.lastUpdate;
 			if (diff > i.threshold || skipThreshold) {
 				i.lastUpdate = written;

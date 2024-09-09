@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -39,6 +39,7 @@ public class WeakSet<T> implements Set<T> {
 			while (!complete) {
 				if (!iter.hasNext()) {
 					complete = true;
+					next = null;
 					return;
 				}
 				WeakReference<T> ref = iter.next();
@@ -49,7 +50,6 @@ public class WeakSet<T> implements Set<T> {
 				}
 				iter.remove();
 			}
-			next = null;
 		}
 
 		@Override
@@ -69,11 +69,8 @@ public class WeakSet<T> implements Set<T> {
 				throw new NoSuchElementException();
 
 			T returnValue = next;
-			try {
-				return returnValue;
-			} finally {
-				next = null;
-			}
+			next = null;
+			return returnValue;
 		}
 
 		@Override
@@ -83,13 +80,13 @@ public class WeakSet<T> implements Set<T> {
 
 	}
 
-	Set<WeakReference<T>> internalSet = new HashSet<WeakReference<T>>();
+	private final Set<WeakReference<T>> internalSet = new HashSet<>();
 
 	@Override
 	public boolean add(T e) {
 		if (contains(e))
 			return false;
-		internalSet.add(new WeakReference<T>(e));
+		internalSet.add(new WeakReference<>(e));
 		return true;
 	}
 
@@ -97,9 +94,7 @@ public class WeakSet<T> implements Set<T> {
 	public boolean addAll(Collection<? extends T> c) {
 		boolean returnValue = false;
 		synchronized (c) {
-			Iterator<? extends T> iter = c.iterator();
-			while (iter.hasNext()) {
-				T e = iter.next();
+			for (T e : c) {
 				if (add(e))
 					returnValue = true;
 			}
@@ -114,9 +109,8 @@ public class WeakSet<T> implements Set<T> {
 
 	@Override
 	public boolean contains(Object o) {
-		Iterator<T> iter = iterator();
-		while (iter.hasNext()) {
-			if (iter.next() == o)
+		for (T t : this) {
+			if (t == o)
 				return true;
 		}
 		return false;
@@ -124,9 +118,8 @@ public class WeakSet<T> implements Set<T> {
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
-		Iterator<?> incomingIter = c.iterator();
-		while (incomingIter.hasNext()) {
-			if (contains(incomingIter.next()) == false) {
+		for (Object o : c) {
+			if (!contains(o)) {
 				return false;
 			}
 		}
@@ -141,7 +134,7 @@ public class WeakSet<T> implements Set<T> {
 
 	@Override
 	public Iterator<T> iterator() {
-		return new WeakSetIterator<T>(internalSet.iterator());
+		return new WeakSetIterator<>(internalSet.iterator());
 	}
 
 	@Override
@@ -173,7 +166,7 @@ public class WeakSet<T> implements Set<T> {
 		Iterator<T> iter = iterator();
 		boolean returnValue = false;
 		while (iter.hasNext()) {
-			if (c.contains(iter.next()) == false) {
+			if (!c.contains(iter.next())) {
 				iter.remove();
 				returnValue = true;
 			}
@@ -189,17 +182,16 @@ public class WeakSet<T> implements Set<T> {
 	@Override
 	public int size() {
 		int sum = 0;
-		Iterator<T> iter = iterator();
-		while (iter.hasNext()) {
-			iter.next();
+		for (T t : this) {
 			sum++;
 		}
 		return sum;
 	}
 
 	private List<T> convertToList() {
-		List<T> list = new ArrayList<T>(internalSet.size());
+		List<T> list = new ArrayList<>(internalSet.size());
 		Iterator<T> iter = iterator();
+		// do not use an enhanced for loop here. If you do: you'll get recursion.
 		while (iter.hasNext()) {
 			list.add(iter.next());
 		}

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -22,7 +22,7 @@ import com.pump.io.parser.java.JavaEncoding;
 /**
  * This converts an object to/from a serialized String representation of that
  * object.
- * 
+ * <p>
  * This is similar to the {@link java.text.Format} class.
  */
 public abstract class ValueEncoder<T> {
@@ -30,7 +30,7 @@ public abstract class ValueEncoder<T> {
 	/** The word "null" */
 	protected static final String NULL = "null";
 
-	public static ValueEncoder<File> FILE = new ValueEncoder<File>(File.class) {
+	public static ValueEncoder<File> FILE = new ValueEncoder<>(File.class) {
 
 		@Override
 		public File parse(String str) {
@@ -50,7 +50,7 @@ public abstract class ValueEncoder<T> {
 	/**
 	 * This wraps a String in quotes, and escape-encoded inner quotes.
 	 */
-	public static ValueEncoder<String> STRING = new ValueEncoder<String>(
+	public static ValueEncoder<String> STRING = new ValueEncoder<>(
 			String.class) {
 
 		@Override
@@ -68,34 +68,13 @@ public abstract class ValueEncoder<T> {
 		public String encode(String value) {
 			if (value == null)
 				return NULL;
-			StringBuilder sb = new StringBuilder();
-			sb.append("\"");
-			sb.append(JavaEncoding.encode(value));
-			sb.append("\"");
-			return sb.toString();
+			return "\"" +
+					JavaEncoding.encode(value) +
+					"\"";
 		}
 	};
 
-	/**
-	 * This immediately returns the argument; it doesn't apply quotation marks
-	 * or escape-encode anything.
-	 */
-	public static ValueEncoder<String> STRING_NO_QUOTES = new ValueEncoder<String>(
-			String.class) {
-
-		@Override
-		public String parse(String str) {
-			return str;
-		}
-
-		@Override
-		public String encode(String value) {
-			return value;
-		}
-
-	};
-
-	public static ValueEncoder<Character> CHAR = new ValueEncoder<Character>(
+	public static ValueEncoder<Character> CHAR = new ValueEncoder<>(
 			Character.class) {
 
 		@Override
@@ -119,11 +98,9 @@ public abstract class ValueEncoder<T> {
 		public String encode(Character value) {
 			if (value == null)
 				return NULL;
-			StringBuilder sb = new StringBuilder();
-			sb.append("\'");
-			sb.append(JavaEncoding.encode(value.toString()));
-			sb.append("\'");
-			return sb.toString();
+			return "'" +
+					JavaEncoding.encode(value.toString()) +
+					"'";
 		}
 
 	};
@@ -151,7 +128,7 @@ public abstract class ValueEncoder<T> {
 		}
 	}
 
-	public static ValueEncoder<Integer> INT = new DirectEncoder<Integer>(
+	public static ValueEncoder<Integer> INT = new DirectEncoder<>(
 			Integer.class) {
 
 		@Override
@@ -160,7 +137,7 @@ public abstract class ValueEncoder<T> {
 		}
 	};
 
-	public static ValueEncoder<Short> SHORT = new DirectEncoder<Short>(
+	public static ValueEncoder<Short> SHORT = new DirectEncoder<>(
 			Short.class) {
 
 		@Override
@@ -169,7 +146,7 @@ public abstract class ValueEncoder<T> {
 		}
 	};
 
-	public static ValueEncoder<Long> LONG = new DirectEncoder<Long>(
+	public static ValueEncoder<Long> LONG = new DirectEncoder<>(
 			Long.class) {
 
 		@Override
@@ -178,7 +155,7 @@ public abstract class ValueEncoder<T> {
 		}
 	};
 
-	public static ValueEncoder<Float> FLOAT = new DirectEncoder<Float>(
+	public static ValueEncoder<Float> FLOAT = new DirectEncoder<>(
 			Float.class) {
 
 		@Override
@@ -187,7 +164,7 @@ public abstract class ValueEncoder<T> {
 		}
 	};
 
-	public static ValueEncoder<Double> DOUBLE = new DirectEncoder<Double>(
+	public static ValueEncoder<Double> DOUBLE = new DirectEncoder<>(
 			Double.class) {
 
 		@Override
@@ -196,7 +173,7 @@ public abstract class ValueEncoder<T> {
 		}
 	};
 
-	public static ValueEncoder<Boolean> BOOLEAN = new DirectEncoder<Boolean>(
+	public static ValueEncoder<Boolean> BOOLEAN = new DirectEncoder<>(
 			Boolean.class) {
 
 		@Override
@@ -205,7 +182,7 @@ public abstract class ValueEncoder<T> {
 		}
 	};
 
-	public static ValueEncoder<Byte> BYTE = new DirectEncoder<Byte>(
+	public static ValueEncoder<Byte> BYTE = new DirectEncoder<>(
 			Byte.class) {
 
 		@Override
@@ -214,7 +191,7 @@ public abstract class ValueEncoder<T> {
 		}
 	};
 
-	public static ValueEncoder<Rectangle> RECTANGLE = new ValueEncoder<Rectangle>(
+	public static ValueEncoder<Rectangle> RECTANGLE = new ValueEncoder<>(
 			Rectangle.class) {
 
 		@Override
@@ -233,13 +210,12 @@ public abstract class ValueEncoder<T> {
 
 	};
 
-	public static ValueEncoder<Date> DATE = new ValueEncoder<Date>(Date.class) {
+	public static ValueEncoder<Date> DATE = new ValueEncoder<>(Date.class) {
 
 		@Override
 		public Date parse(String str) {
 			long l = Long.parseLong(str);
-			Date date = new Date(l);
-			return date;
+			return new Date(l);
 		}
 
 		@Override
@@ -257,8 +233,8 @@ public abstract class ValueEncoder<T> {
 	 * @return an array of Numbers reflecting the argument
 	 */
 	public static Number[] parseNumbers(java.lang.String text) {
-		java.util.List<Number> list = new ArrayList<Number>();
-		StringBuffer sb = new StringBuffer();
+		java.util.List<Number> list = new ArrayList<>();
+		StringBuilder sb = new StringBuilder();
 		boolean hex = false;
 		for (int a = 0; a < text.length(); a++) {
 			char ch = text.charAt(a);
@@ -276,7 +252,7 @@ public abstract class ValueEncoder<T> {
 				if (ch == 'x' && sb.toString().equals("0")) {
 					hex = true;
 				} else {
-					sb = sb.append(ch);
+					sb.append(ch);
 				}
 			}
 		}
@@ -292,7 +268,7 @@ public abstract class ValueEncoder<T> {
 		return returnValue;
 	}
 
-	static Map<Class, ValueEncoder> defaultEncoders = new HashMap();
+	static Map<Class, ValueEncoder> defaultEncoders = new HashMap<>();
 
 	static {
 		defaultEncoders.put(File.class, ValueEncoder.FILE);

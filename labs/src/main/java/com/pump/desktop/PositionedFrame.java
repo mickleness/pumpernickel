@@ -73,7 +73,7 @@ public class PositionedFrame extends JFrame {
 	@Override
 	public void pack() {
 		if (saveBoundsInPrefs && (!shownYet)) {
-			Rectangle bounds = KEY_BOUNDS.get(prefs, null);
+			Rectangle bounds = KEY_BOUNDS.get(prefs);
 			if (bounds != null) {
 				setBounds(bounds);
 				return;

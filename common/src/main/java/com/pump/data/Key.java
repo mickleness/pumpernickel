@@ -1,15 +1,16 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ import com.pump.data.encoder.ValueEncoder;
  *            the type of object this Key relates to.
  */
 public class Key<T> implements CharSequence, Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	public static <T extends Number> Key<T> createBoundedKey(String name,
@@ -44,9 +46,9 @@ public class Key<T> implements CharSequence, Serializable {
 		Class<T> type = (Class<T>) minValue.getClass();
 		Key<T> returnValue;
 		if (defaultValue == null) {
-			returnValue = new Key<T>(type, name);
+			returnValue = new Key<>(type, name);
 		} else {
-			returnValue = new Key<T>(type, name, defaultValue);
+			returnValue = new Key<>(type, name, defaultValue);
 		}
 		returnValue.addBoundsChecker(new ComparableBoundsChecker(
 				(Comparable) minValue, (Comparable) maxValue, true, true));
@@ -124,16 +126,13 @@ public class Key<T> implements CharSequence, Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Key))
+		if (!(obj instanceof Key<?> other))
 			return false;
-		Key<?> other = (Key<?>) obj;
 		if (!name.equals(other.name))
 			return false;
 		if (!type.equals(other.type))
 			return false;
-		if (!Objects.equals(defaultValue, other.defaultValue))
-			return false;
-		return true;
+		return Objects.equals(defaultValue, other.defaultValue);
 	}
 
 	@Override
@@ -144,9 +143,7 @@ public class Key<T> implements CharSequence, Serializable {
 	public List<BoundsChecker<T>> getBoundsCheckers() {
 		ArrayList<BoundsChecker<T>> returnValue = new ArrayList<>();
 		if (checkers != null) {
-			for (BoundsChecker<T> b : checkers) {
-				returnValue.add(b);
-			}
+			returnValue.addAll(checkers);
 		}
 		return returnValue;
 	}
@@ -218,8 +215,7 @@ public class Key<T> implements CharSequence, Serializable {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public T get(Map attributes, boolean applyDefaultValue) {
 		Object v = attributes.get(toString());
-		if (v instanceof String && !String.class.equals(getType())) {
-			String str = (String) v;
+		if (v instanceof String str && !String.class.equals(getType())) {
 			ValueEncoder e = getEncoder();
 			v = e.parse(str);
 		}
@@ -326,12 +322,10 @@ public class Key<T> implements CharSequence, Serializable {
 	 * 
 	 * @param prefs
 	 *            the preferences object to consult.
-	 * @param defaultValue
-	 *            the default value if no other value is provided.
 	 * @return either the stored value in the preferences, or the defaultValue
 	 *         if the preferences don't include this key.
 	 */
-	public T get(Preferences prefs, T defaultValue) {
+	public T get(Preferences prefs) {
 		String value = prefs.get(getName(), null);
 		if (value == null) {
 			return getDefaultValue();

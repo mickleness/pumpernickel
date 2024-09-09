@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -152,15 +152,15 @@ public class PolynomialFunction implements Function {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("y = ");
+		StringBuilder sb = new StringBuilder("y = ");
 		for (int a = 0; a < coeffs.length; a++) {
 			int degree = coeffs.length - a - 1;
 			if (degree == 0) {
 				sb.append(coeffs[a]);
 			} else if (degree == 1) {
-				sb.append(coeffs[a] + "*x");
+				sb.append(coeffs[a]).append("*x");
 			} else {
-				sb.append(coeffs[a] + "*(x^" + (degree) + ")");
+				sb.append(coeffs[a]).append("*(x^").append(degree).append(")");
 			}
 			if (a != coeffs.length - 1)
 				sb.append("+");
@@ -213,38 +213,29 @@ public class PolynomialFunction implements Function {
 		boolean seekPos;
 		if (coeffs.length % 2 == 0) {
 			// an odd-degree polynomial
-			if (coeffs[0] < 0) {
-				// with a negative leading coefficient
-
-				// f(-infinity) = +infinity && f(+infinity) = -infinity
-				seekPos = true;
-			} else {
-				seekPos = false;
-			}
+			// with a negative leading coefficient
+			// f(-infinity) = +infinity && f(+infinity) = -infinity
+			seekPos = coeffs[0] < 0;
 		} else {
 			// an even-degree polynomial
-			if (coeffs[0] < 0) {
-				seekPos = false;
-			} else {
-				seekPos = true;
-			}
+			seekPos = !(coeffs[0] < 0);
 		}
 
 		double initialValue = extrema.length == 0 ? 0 : extrema[0];
-		identifyBoundary: for (int power = 1; power < 30; power++) {
+		for (int power = 1; power < 30; power++) {
 			double x = initialValue - Math.pow(10, power);
 			double v = f.evaluate(x);
 			if (seekPos) {
 				if (v > 0) {
 					interest[0] = x;
 					interestYs[0] = v;
-					break identifyBoundary;
+					break;
 				}
 			} else { // we seek negative
 				if (v < 0) {
 					interest[0] = x;
 					interestYs[0] = v;
-					break identifyBoundary;
+					break;
 				}
 			}
 		}
@@ -259,25 +250,25 @@ public class PolynomialFunction implements Function {
 		}
 
 		initialValue = extrema.length == 0 ? 0 : extrema[extrema.length - 1];
-		identifyBoundary: for (int power = 1; power < 30; power++) {
+		for (int power = 1; power < 30; power++) {
 			double x = initialValue + Math.pow(10, power);
 			double v = f.evaluate(x);
 			if (seekPos) {
 				if (v > 0) {
 					interest[interest.length - 1] = x;
 					interestYs[interest.length - 1] = v;
-					break identifyBoundary;
+					break;
 				}
 			} else { // we seek negative
 				if (v < 0) {
 					interest[interest.length - 1] = x;
 					interestYs[interest.length - 1] = v;
-					break identifyBoundary;
+					break;
 				}
 			}
 		}
 
-		List<Double> solutions = new ArrayList<Double>();
+		List<Double> solutions = new ArrayList<>();
 
 		for (int a = 0; a < interest.length - 1; a++) {
 			double y1 = interestYs[a];
@@ -318,7 +309,7 @@ public class PolynomialFunction implements Function {
 				if (delta < 0)
 					delta = -delta;
 				if (delta <= .00000000001) {
-					solutions.add(Double.valueOf(t));
+					solutions.add(t);
 					return;
 				}
 
@@ -326,7 +317,6 @@ public class PolynomialFunction implements Function {
 			}
 			k++;
 		}
-		return;
 	}
 
 	/**

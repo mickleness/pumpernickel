@@ -1,15 +1,16 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.data;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -20,6 +21,7 @@ import java.io.Serializable;
  *            the type of argument this checks.
  */
 public abstract class BoundsChecker<T> implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -28,6 +30,7 @@ public abstract class BoundsChecker<T> implements Serializable {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	public static BoundsChecker NOT_NULL = new BoundsChecker() {
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		@Override

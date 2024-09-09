@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -19,10 +19,10 @@ import java.awt.geom.Rectangle2D;
  * <code>AffineTransform</code> that does not include rotation/shearing.
  */
 public class RectangularTransform {
-	double translateX = 0;
-	double translateY = 0;
-	double scaleX = 1;
-	double scaleY = 1;
+	protected double translateX = 0;
+	protected double translateY = 0;
+	protected double scaleX = 1;
+	protected double scaleY = 1;
 
 	/** Creates an identity transform. */
 	public RectangularTransform() {

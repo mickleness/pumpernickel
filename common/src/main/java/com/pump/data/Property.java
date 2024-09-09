@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -45,16 +45,16 @@ public class Property<T> {
 		if (b == isEnabled)
 			return;
 		isEnabled = b;
-		firePropertyChangeListeners(name + ".enabled", Boolean.valueOf(!b),
-				Boolean.valueOf(b));
+		firePropertyChangeListeners(name + ".enabled", !b,
+				b);
 	}
 
 	public void setUserAdjustable(boolean b) {
 		if (b == isUserAdjustable)
 			return;
 		isUserAdjustable = b;
-		firePropertyChangeListeners(name + ".adjustable", Boolean.valueOf(!b),
-				Boolean.valueOf(b));
+		firePropertyChangeListeners(name + ".adjustable", !b,
+				b);
 	}
 
 	public final T getValue() {
@@ -81,17 +81,17 @@ public class Property<T> {
 	}
 
 	/**
+	 * Confirm that a given value is acceptable for this Property.
+	 * <p>
 	 * Subclasses should override this method to throw an
 	 * IllegalArgumentException if a value is inappropriate for this property.
-	 * 
-	 * @param value
 	 */
 	protected void validateValue(T value) {
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener l) {
 		if (listeners == null) {
-			listeners = new ArrayList<PropertyChangeListener>();
+			listeners = new ArrayList<>();
 		}
 		if (listeners.contains(l))
 			return;
@@ -106,8 +106,7 @@ public class Property<T> {
 			Object oldValue, Object newValue) {
 		if (listeners == null)
 			return;
-		for (int a = 0; a < listeners.size(); a++) {
-			PropertyChangeListener l = listeners.get(a);
+		for (PropertyChangeListener l : listeners) {
 			try {
 				l.propertyChange(new PropertyChangeEvent(this, propertyName,
 						oldValue, newValue));

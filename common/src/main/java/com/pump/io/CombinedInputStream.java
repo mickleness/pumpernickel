@@ -1,16 +1,15 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.io;
 
-import javax.sound.sampled.AudioInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -65,12 +64,12 @@ public class CombinedInputStream extends InputStream {
 	 * @param inputStreams the InputStreams to read, in order.
 	 */
 	public CombinedInputStream(InputStream[] inputStreams) {
-		this(inputStreams, createBooleanArray(inputStreams.length, true));
+		this(inputStreams, createTrueBooleanArray(inputStreams.length));
 	}
 
-	private static boolean[] createBooleanArray(int length, boolean value) {
+	private static boolean[] createTrueBooleanArray(int length) {
 		boolean[] returnValue = new boolean[length];
-		Arrays.fill(returnValue, value);
+		Arrays.fill(returnValue, true);
 		return returnValue;
 	}
 
@@ -106,9 +105,9 @@ public class CombinedInputStream extends InputStream {
 
 	@Override
 	public void close() throws IOException {
-		for (int a = 0; a < inputs.length; a++) {
-			if (inputs[a].closeable) {
-				inputs[a].stream.close();
+		for (Input input : inputs) {
+			if (input.closeable) {
+				input.stream.close();
 			}
 		}
 		inputs = new Input[0];
