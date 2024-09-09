@@ -1,16 +1,17 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.awt.converter;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedCharacterIterator.Attribute;
@@ -34,6 +35,7 @@ import com.pump.data.converter.ConverterUtils;
 public class AttributedStringMapConverter
 		implements BeanMapConverter<AttributedString> {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -54,6 +56,7 @@ public class AttributedStringMapConverter
 	}
 
 	private static class Run implements Serializable {
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		Object value;
@@ -64,6 +67,7 @@ public class AttributedStringMapConverter
 			this.endIndex = endIndex;
 		}
 
+		@Serial
 		private void writeObject(java.io.ObjectOutputStream out)
 				throws IOException {
 			out.writeInt(0);
@@ -71,6 +75,7 @@ public class AttributedStringMapConverter
 			ConverterUtils.writeObject(out, value);
 		}
 
+		@Serial
 		private void readObject(java.io.ObjectInputStream in)
 				throws IOException, ClassNotFoundException {
 			int version = in.readInt();
@@ -95,15 +100,11 @@ public class AttributedStringMapConverter
 
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof Run))
+			if (!(obj instanceof Run other))
 				return false;
-			Run other = (Run) obj;
 			if (other.endIndex != endIndex)
 				return false;
-			if (!ConverterUtils.equals(value, other.value))
-				return false;
-
-			return true;
+			return ConverterUtils.equals(value, other.value);
 		}
 	}
 
@@ -127,9 +128,7 @@ public class AttributedStringMapConverter
 
 			List<Run> runs = new ArrayList<>();
 			int index = 0;
-			while (true) {
-				if (iter2.current() == CharacterIterator.DONE)
-					break;
+			while (iter2.current() != CharacterIterator.DONE) {
 
 				Run lastRun = runs.isEmpty() ? null : runs.get(runs.size() - 1);
 				Object value = iter2.getAttribute(attribute);

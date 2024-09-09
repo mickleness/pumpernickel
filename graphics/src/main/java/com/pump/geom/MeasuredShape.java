@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -15,6 +15,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.List;
  *      Measuring Length</a>
  */
 public class MeasuredShape implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -69,29 +71,15 @@ public class MeasuredShape implements Serializable {
 	 *            a path, possibly containing multiple subpaths
 	 * @return a MeasuredShape object for each subpath in <code>i</code>
 	 */
-	public static MeasuredShape[] getSubpaths(PathIterator i) {
-		return getSubpaths(i, DEFAULT_SPACING);
-	}
-
-	/**
-	 * Because a MeasuredShape must be exactly 1 subpath, this method will
-	 * safely break up a path into separate subpaths and create one
-	 * MeasuredShape for each.
-	 * 
-	 * @param i
-	 *            a path, possibly containing multiple subpaths
-	 * @return a MeasuredShape object for each subpath in <code>i</code>
-	 */
 	public static MeasuredShape[] getSubpaths(PathIterator i, float spacing) {
-		List<MeasuredShape> v = new ArrayList<MeasuredShape>();
+		List<MeasuredShape> v = new ArrayList<>();
 		GeneralPath path = null;
 		float[] coords = new float[6];
-		while (i.isDone() == false) {
+		while (!i.isDone()) {
 			int k = i.currentSegment(coords);
 			if (k == PathIterator.SEG_MOVETO) {
 				if (path != null) {
 					v.add(new MeasuredShape(path, spacing));
-					path = null;
 				}
 				path = new GeneralPath();
 				path.moveTo(coords[0], coords[1]);
@@ -109,12 +97,12 @@ public class MeasuredShape implements Serializable {
 		}
 		if (path != null) {
 			v.add(new MeasuredShape(path, spacing));
-			path = null;
 		}
-		return v.toArray(new MeasuredShape[v.size()]);
+		return v.toArray(new MeasuredShape[0]);
 	}
 
 	static class Segment implements Serializable {
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		int type;
@@ -392,7 +380,7 @@ public class MeasuredShape implements Serializable {
 	 *             if the shape has more than 1 path.
 	 */
 	public MeasuredShape(PathIterator i, float spacing) {
-		List<Segment> v = new ArrayList<Segment>();
+		List<Segment> v = new ArrayList<>();
 		float lastX = 0;
 		float lastY = 0;
 		float moveX = 0;
@@ -401,7 +389,7 @@ public class MeasuredShape implements Serializable {
 		boolean closed = false;
 
 		float[] coords = new float[6];
-		while (i.isDone() == false) {
+		while (!i.isDone()) {
 			int k = i.currentSegment(coords);
 			if (k == PathIterator.SEG_CLOSE) {
 				closed = true;
@@ -447,10 +435,10 @@ public class MeasuredShape implements Serializable {
 			originalDistance = closedDistance;
 		}
 
-		segments = v.toArray(new Segment[v.size()]);
+		segments = v.toArray(new Segment[0]);
 		// normalize everything:
-		for (int a = 0; a < segments.length; a++) {
-			segments[a].normalizedDistance = segments[a].realDistance
+		for (Segment segment : segments) {
+			segment.normalizedDistance = segment.realDistance
 					/ closedDistance;
 		}
 	}
@@ -463,8 +451,8 @@ public class MeasuredShape implements Serializable {
 	 */
 	public void writeShape(PathWriter w) {
 		w.moveTo(segments[0].getX(0), segments[0].getY(0));
-		for (int a = 0; a < segments.length; a++) {
-			segments[a].write(w, 0, 1);
+		for (Segment segment : segments) {
+			segment.write(w, 0, 1);
 		}
 		w.closePath();
 	}
@@ -532,22 +520,6 @@ public class MeasuredShape implements Serializable {
 	public float getMoveToY() {
 		Segment s = segments[0];
 		return s.getY(0);
-	}
-
-	/**
-	 * Trace the shape.
-	 * 
-	 * @param position
-	 *            a fraction from zero to one indicating where to start tracing
-	 * @param length
-	 *            a fraction from negative one to one indicating how much to
-	 *            trace. If this value is negative then the shape will be traced
-	 *            backwards.
-	 * @param w
-	 *            the destination to write to
-	 */
-	public void writeShape(float position, float length, PathWriter w) {
-		writeShape(position, length, w, true);
 	}
 
 	/**
@@ -643,12 +615,12 @@ public class MeasuredShape implements Serializable {
 							+ closedDistance + ")");
 		if (dest == null)
 			dest = new Point2D.Float();
-		for (int a = 0; a < segments.length; a++) {
-			float t = distance / segments[a].realDistance;
+		for (Segment segment : segments) {
+			float t = distance / segment.realDistance;
 			if (t >= 1) {
-				distance = distance - segments[a].realDistance;
+				distance = distance - segment.realDistance;
 			} else {
-				dest.setLocation(segments[a].getX(t), segments[a].getY(t));
+				dest.setLocation(segment.getX(t), segment.getY(t));
 				return dest;
 			}
 		}
@@ -683,61 +655,17 @@ public class MeasuredShape implements Serializable {
 							+ distance
 							+ ") must not be greater than the total distance of this shape ("
 							+ closedDistance + ")");
-		for (int a = 0; a < segments.length; a++) {
-			float t = distance / segments[a].realDistance;
+		for (Segment segment : segments) {
+			float t = distance / segment.realDistance;
 			if (t >= 1) {
-				distance = distance - segments[a].realDistance;
+				distance = distance - segment.realDistance;
 			} else {
-				return segments[a].getTangentSlope(t);
+				return segment.getTangentSlope(t);
 			}
 		}
 		return segments[0].getTangentSlope(0); // a fluke case, where we're
 												// basically at the end of the
 												// shape
-	}
-
-	private static boolean equal(float f1, float f2) {
-		float d = f1 - f2;
-		if (d < 0)
-			d = -d;
-		return d < .0001;
-	}
-
-	/**
-	 * Returns the length that this shape has in common with the argument. This
-	 * assumes the two shapes begin at the same point, and in the same
-	 * direction.
-	 * 
-	 * @param s
-	 */
-	public float getCommonDistance(MeasuredShape s) {
-		float distance = 0;
-		int m = Math.min(segments.length, s.segments.length);
-		for (int a = 0; a < m; a++) {
-			if (segments[a].type != PathIterator.SEG_MOVETO
-					&& s.segments[a].type != PathIterator.SEG_MOVETO) {
-				if (equal(segments[a].data[0], s.segments[a].data[0])
-						&& equal(segments[a].data[1], s.segments[a].data[1])
-						&& equal(
-								segments[a].data[segments[a].data.length - 2],
-								s.segments[a].data[s.segments[a].data.length - 2])
-						&& equal(
-								segments[a].data[segments[a].data.length - 1],
-								s.segments[a].data[s.segments[a].data.length - 1])
-						&& equal(segments[a].realDistance,
-								s.segments[a].realDistance)) {
-					distance += segments[a].realDistance;
-				} else {
-					return distance;
-				}
-			} else if (segments[a].type == PathIterator.SEG_MOVETO
-					&& s.segments[a].type == PathIterator.SEG_MOVETO) {
-				// skip
-			} else {
-				return distance;
-			}
-		}
-		return distance;
 	}
 
 	/**

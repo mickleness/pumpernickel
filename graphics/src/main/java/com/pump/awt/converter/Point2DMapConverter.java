@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -12,6 +12,7 @@ package com.pump.awt.converter;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import com.pump.data.converter.BeanMapConverter;
  */
 public class Point2DMapConverter implements BeanMapConverter<Point2D> {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -54,13 +56,11 @@ public class Point2DMapConverter implements BeanMapConverter<Point2D> {
 	@Override
 	public Map<String, Object> createAtoms(Point2D point) {
 		Map<String, Object> atoms = new HashMap<>(3);
-		if (point instanceof Point) {
-			Point p = (Point) point;
+		if (point instanceof Point p) {
 			PROPERTY_TYPE.put(atoms, Integer.TYPE);
 			PROPERTY_X.put(atoms, p.x);
 			PROPERTY_Y.put(atoms, p.y);
-		} else if (point instanceof Point2D.Float) {
-			Point2D.Float p = (Point2D.Float) point;
+		} else if (point instanceof Point2D.Float p) {
 			PROPERTY_TYPE.put(atoms, Float.TYPE);
 			PROPERTY_X.put(atoms, p.x);
 			PROPERTY_Y.put(atoms, p.y);

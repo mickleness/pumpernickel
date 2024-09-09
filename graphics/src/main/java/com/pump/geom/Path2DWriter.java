@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -27,7 +27,6 @@ public class Path2DWriter extends PathWriter {
 	Path2D p;
 	float lastX, lastY;
 	boolean dataWritten = false;
-	boolean debug = false;
 	boolean eliminateRedundantLines = true;
 
 	public Path2DWriter(Path2D p) {
@@ -50,22 +49,12 @@ public class Path2DWriter extends PathWriter {
 				+ " ]";
 	}
 
-	/**
-	 * If this is activated, output to the console will appear when shape
-	 * instructions are written.
-	 */
-	public void setDebug(boolean b) {
-		debug = b;
-	}
-
 	@Override
 	public void flush() {
 	}
 
 	/** This resets the underlying <code>Path2D</code>. */
 	public void reset() {
-		if (debug)
-			System.out.println("reset()");
 		p.reset();
 		dataWritten = false;
 	}
@@ -73,9 +62,6 @@ public class Path2DWriter extends PathWriter {
 	@Override
 	public void curveTo(float cx1, float cy1, float cx2, float cy2, float x,
 			float y) {
-		if (debug)
-			System.out.println("curveTo( " + cx1 + ", " + cy1 + ", " + cx2
-					+ ", " + cy2 + ", " + x + ", " + y + ")");
 		p.curveTo(cx1, cy1, cx2, cy2, x, y);
 		lastX = x;
 		lastY = y;
@@ -86,8 +72,6 @@ public class Path2DWriter extends PathWriter {
 	public void lineTo(float x, float y) {
 		if (eliminateRedundantLines && equals(lastX, x) && equals(lastY, y))
 			return;
-		if (debug)
-			System.out.println("lineTo( " + x + ", " + y + ")");
 		p.lineTo(x, y);
 		lastX = x;
 		lastY = y;
@@ -97,8 +81,6 @@ public class Path2DWriter extends PathWriter {
 	@Override
 	public void moveTo(float x, float y) {
 		p.moveTo(x, y);
-		if (debug)
-			System.out.println("moveTo( " + x + ", " + y + ")");
 		lastX = x;
 		lastY = y;
 		dataWritten = true;
@@ -107,9 +89,6 @@ public class Path2DWriter extends PathWriter {
 	@Override
 	public void quadTo(float cx, float cy, float x, float y) {
 		p.quadTo(cx, cy, x, y);
-		if (debug)
-			System.out.println("quadTo( " + cx + ", " + cy + ", " + x + ", "
-					+ y + ")");
 		lastX = x;
 		lastY = y;
 		dataWritten = true;
@@ -119,8 +98,6 @@ public class Path2DWriter extends PathWriter {
 	public void closePath() {
 		if (dataWritten) {
 			p.closePath();
-			if (debug)
-				System.out.println("closePath()");
 			dataWritten = false;
 		}
 	}

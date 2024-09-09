@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -57,14 +57,14 @@ public abstract class Clipper {
 	 * collapsed it has a much better chance of return a truly accurate result
 	 * when you call getBounds() on it.
 	 * <P>
-	 * Note that there are still some far fetched examples (involving
-	 * discontinous shapes) where getBounds() may be inaccurate, though. 2. This
+	 * Note that there are still some far-fetched examples (involving
+	 * discontinuous shapes) where getBounds() may be inaccurate, though. 2. This
 	 * can take a Function (either quadratic or cubic) and split it over a
 	 * smaller interval from an arbitrary [t0,t1].
 	 */
 	static class ClippedPath {
 		public final GeneralPath g;
-		private Stack<float[]> uncommittedPoints = new Stack<float[]>();
+		private final Stack<float[]> uncommittedPoints = new Stack<>();
 		private float initialX, initialY;
 
 		public ClippedPath(int windingRule) {
@@ -110,7 +110,7 @@ public abstract class Clipper {
 		/**
 		 * Adds a line to (x,y)
 		 * <P>
-		 * This method doesn't actually commit a line until it's sure that it
+		 * This method doesn't actually commit a line until it's certain that it
 		 * isn't writing heavily redundant lines. That is the points (0,0),
 		 * (5,0) and (2,0) would be consolidated so only the first and last
 		 * point remained.
@@ -143,7 +143,7 @@ public abstract class Clipper {
 		/** Flush out the stack of uncommitted points. */
 		public void flush() {
 			while (uncommittedPoints.size() > 0) {
-				identifyLines: while (uncommittedPoints.size() >= 3) {
+				while (uncommittedPoints.size() >= 3) {
 					float[] first = uncommittedPoints.get(0);
 					float[] middle = uncommittedPoints.get(1);
 					float[] last = uncommittedPoints.get(2);
@@ -151,14 +151,14 @@ public abstract class Clipper {
 					if (Math.abs(first[0] - middle[0]) < TOLERANCE
 							&& Math.abs(first[0] - last[0]) < TOLERANCE) {
 						// everything has the same x, so we have a vertical line
-						float[] array = uncommittedPoints.remove(1);
+						uncommittedPoints.remove(1);
 					} else if (Math.abs(first[1] - middle[1]) < TOLERANCE
 							&& Math.abs(first[1] - last[1]) < TOLERANCE) {
 						// everything has the same y, so we have a horizontal
 						// line
-						float[] array = uncommittedPoints.remove(1);
+						uncommittedPoints.remove(1);
 					} else {
-						break identifyLines;
+						break;
 					}
 				}
 
@@ -172,9 +172,9 @@ public abstract class Clipper {
 	 * A function used to describe one of the 2 parametric equations for a
 	 * segment of a path. This can be thought of is f(t).
 	 */
-	static interface Function {
+	interface Function {
 		/** evaluates this function at a given value */
-		public double evaluate(double t);
+		double evaluate(double t);
 
 		/**
 		 * Calculates all the t-values which will yield the result "f" in this
@@ -188,10 +188,10 @@ public abstract class Clipper {
 		 *            the offset at which data will be added to the array
 		 * @return the number of solutions found.
 		 */
-		public int evaluateInverse(double f, double[] dest, int destOffset);
+		int evaluateInverse(double f, double[] dest, int destOffset);
 
 		/** Return the derivative (df/dt) for a given value of t */
-		public double getDerivative(double t);
+		double getDerivative(double t);
 	}
 
 	/** A linear function */
@@ -283,7 +283,7 @@ public abstract class Clipper {
 			}
 			det = Math.sqrt(det);
 			dest[offset++] = (-b + det) / (2 * a);
-			dest[offset++] = (-b - det) / (2 * a);
+			dest[offset] = (-b - det) / (2 * a);
 			return 2;
 		}
 	}
@@ -325,6 +325,7 @@ public abstract class Clipper {
 		double[] t2;
 		double[] eqn;
 
+		@SuppressWarnings("ManualArrayCopy")
 		public int evaluateInverse(double x, double[] dest, int offset) {
 			if (eqn == null)
 				eqn = new double[4];
@@ -334,9 +335,7 @@ public abstract class Clipper {
 			eqn[3] = a;
 			if (offset == 0) {
 				int k = CubicCurve2D.solveCubic(eqn, dest);
-				if (k < 0)
-					return 0;
-				return k;
+				return Math.max(k, 0);
 			}
 			if (t2 == null)
 				t2 = new double[3];
@@ -446,6 +445,7 @@ public abstract class Clipper {
 	abstract int collectIntersectionTimes(Function xf, Function yf,
 			double[] intersectionTimes);
 
+	@SuppressWarnings("SuspiciousNameCombination")
 	GeneralPath clip(Shape incomingShape, AffineTransform transform) {
 		PathIterator i = incomingShape.getPathIterator(transform);
 		ClippedPath p = new ClippedPath(i.getWindingRule());
@@ -467,13 +467,13 @@ public abstract class Clipper {
 		QFunction qyf = new QFunction();
 		CFunction cxf = new CFunction();
 		CFunction cyf = new CFunction();
-		Function xf = null;
+		Function xf;
 		Function yf = null;
 		Point2D.Float point = new Point2D.Float();
 		double[] intersectionTimes = new double[16];
 		int tCtr;
 
-		while (i.isDone() == false) {
+		while (!i.isDone()) {
 			k = i.currentSegment(f);
 			if (k == PathIterator.SEG_MOVETO) {
 				initialX = f[0];
@@ -576,7 +576,7 @@ public abstract class Clipper {
 	 * to Area objects if either the current clipping and the new clipping are
 	 * not rectangles.
 	 * <P>
-	 * This method with offer a slight improvement over this model: if
+	 * This method offers a slight improvement over this model: if
 	 * <i>either</i> the old clip or the new clip is a rectangle, then this uses
 	 * the <code>Clipper.clipToRect()</code> method. This avoids the
 	 * slow-but-accurate Area class.
@@ -670,10 +670,10 @@ public abstract class Clipper {
 
 		int shapeCtr = 0;
 		Shape lastNonNullShape = null;
-		for (int a = 0; a < shapes.length; a++) {
-			if (shapes[a] != null) {
+		for (Shape shape : shapes) {
+			if (shape != null) {
 				shapeCtr++;
-				lastNonNullShape = shapes[a];
+				lastNonNullShape = shape;
 			}
 		}
 
@@ -685,9 +685,9 @@ public abstract class Clipper {
 			returnValue = lastNonNullShape;
 		} else {
 			Area returnArea = null;
-			for (int a = 0; a < shapes.length; a++) {
-				if (shapes[a] != null) {
-					PathIterator iter1 = shapes[a].getPathIterator(null,
+			for (Shape shape : shapes) {
+				if (shape != null) {
+					PathIterator iter1 = shape.getPathIterator(null,
 							flatness);
 					Path2D p1 = new Path2D.Float(iter1.getWindingRule());
 					p1.append(iter1, false);
@@ -754,10 +754,8 @@ public abstract class Clipper {
 			// the next 30 lines just try to assign returnValue in a way that
 			// creates as few new Areas as possible.
 
-			if (shape1 instanceof Area) {
-				Area a1 = (Area) shape1;
-				if (shape2 instanceof Area) {
-					Area a2 = (Area) shape2;
+			if (shape1 instanceof Area a1) {
+				if (shape2 instanceof Area a2) {
 					if (canChangeShape1) {
 						a1.intersect(a2);
 						returnValue = a1;
@@ -774,9 +772,8 @@ public abstract class Clipper {
 					a2.intersect(a1);
 					returnValue = a2;
 				}
-			} else if (shape2 instanceof Area) {
+			} else if (shape2 instanceof Area a2) {
 				Area a1 = new Area(shape1);
-				Area a2 = (Area) shape2;
 				a1.intersect(a2);
 				returnValue = a2;
 			} else {

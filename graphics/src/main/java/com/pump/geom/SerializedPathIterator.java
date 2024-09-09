@@ -1,16 +1,17 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.geom;
 
 import java.awt.geom.PathIterator;
+import java.io.Serial;
 
 /**
  * A PathIterator that parses serialized shape info.
@@ -43,8 +44,8 @@ class SerializedPathIterator implements PathIterator {
 		}
 
 		char ch = c[ctr];
-		if (Character.isWhitespace(ch) == false) {
-			if (expectingWhiteSpace == false)
+		if (!Character.isWhitespace(ch)) {
+			if (!expectingWhiteSpace)
 				return;
 			throw new ParserException("expected whitespace", ctr, 1);
 		}
@@ -56,7 +57,7 @@ class SerializedPathIterator implements PathIterator {
 			}
 
 			ch = c[ctr];
-			if (Character.isWhitespace(ch) == false) {
+			if (!Character.isWhitespace(ch)) {
 				return;
 			}
 		}
@@ -73,43 +74,36 @@ class SerializedPathIterator implements PathIterator {
 		char k = c[ctr];
 
 		switch (k) {
-		case 'm':
-		case 'M':
-			currentSegment = PathIterator.SEG_MOVETO;
-			terms = 2;
-			break;
-		case 'l':
-		case 'L':
-			currentSegment = PathIterator.SEG_LINETO;
-			terms = 2;
-			break;
-		case 'q':
-		case 'Q':
-			currentSegment = PathIterator.SEG_QUADTO;
-			terms = 4;
-			break;
-		case 'c':
-		case 'C':
-			currentSegment = PathIterator.SEG_CUBICTO;
-			terms = 6;
-			break;
-		case 'z':
-		case 'Z':
-			currentSegment = PathIterator.SEG_CLOSE;
-			terms = 0;
-			break;
-		default:
-			throw new ParserException(
-					"Unrecognized character in shape data: \'" + c[ctr] + "\'",
+			case 'm', 'M' -> {
+				currentSegment = PathIterator.SEG_MOVETO;
+				terms = 2;
+			}
+			case 'l', 'L' -> {
+				currentSegment = PathIterator.SEG_LINETO;
+				terms = 2;
+			}
+			case 'q', 'Q' -> {
+				currentSegment = PathIterator.SEG_QUADTO;
+				terms = 4;
+			}
+			case 'c', 'C' -> {
+				currentSegment = PathIterator.SEG_CUBICTO;
+				terms = 6;
+			}
+			case 'z', 'Z' -> {
+				currentSegment = PathIterator.SEG_CLOSE;
+				terms = 0;
+			}
+			default -> throw new ParserException(
+					"Unrecognized character in shape data: '" + c[ctr] + "'",
 					ctr, 1);
-
 		}
 		ctr++;
 		if (terms > 0) {
 			parseTerms(terms);
 		} else {
 			if (ctr < c.length) {
-				if (Character.isWhitespace(c[ctr]) == false)
+				if (!Character.isWhitespace(c[ctr]))
 					throw new ParserException("expected whitespace after z",
 							ctr, 1);
 			}
@@ -117,18 +111,14 @@ class SerializedPathIterator implements PathIterator {
 	}
 
 	class ParserException extends RuntimeException {
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		ParserException(String msg, int ptr, int length) {
 			super(msg);
 			System.err.println("\"" + (new String(c)) + "\"");
-			StringBuffer sb = new StringBuffer();
-			for (int a = 0; a < ptr + 1; a++) {
-				sb.append(' ');
-			}
-			for (int a = 0; a < length; a++) {
-				sb.append('^');
-			}
+			String sb = " ".repeat(Math.max(0, ptr + 1)) +
+					"^".repeat(Math.max(0, length));
 			System.err.println(sb);
 		}
 	}
@@ -142,7 +132,7 @@ class SerializedPathIterator implements PathIterator {
 	protected double parseTerm() {
 		consumeWhiteSpace(true);
 		int i = ctr;
-		while (i < c.length && (Character.isWhitespace(c[i]) == false)) {
+		while (i < c.length && (!Character.isWhitespace(c[i]))) {
 			i++;
 		}
 		String string = new String(c, ctr, i - ctr);
@@ -150,9 +140,8 @@ class SerializedPathIterator implements PathIterator {
 			return Double.parseDouble(string);
 		} catch (RuntimeException e) {
 			// just constructing this prints data to System.err:
-			ParserException e2 = new ParserException(e.getMessage(), ctr, i
+			throw new ParserException(e.getMessage(), ctr, i
 					- ctr);
-			throw e2;
 		} finally {
 			ctr = i;
 		}

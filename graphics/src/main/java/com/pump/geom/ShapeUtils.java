@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -57,7 +57,7 @@ public class ShapeUtils {
 	 * This assumes every segment is equally important/long, which is not always
 	 * the case.
 	 * 
-	 * @param shape
+	 * @param shape the shape to trace
 	 * @param progress
 	 *            a float from [0,1], indicating what fraction of the shape
 	 *            provided should be traced.
@@ -84,7 +84,7 @@ public class ShapeUtils {
 		PathIterator i = shape.getPathIterator(null);
 		float ctr = 0;
 		int k;
-		while (i.isDone() == false) {
+		while (!i.isDone()) {
 			k = i.currentSegment(f);
 			if (k != PathIterator.SEG_MOVETO && k != PathIterator.SEG_CLOSE)
 				ctr++;
@@ -96,7 +96,7 @@ public class ShapeUtils {
 		float lastX = 0;
 		float lastY = 0;
 		float ctr2 = 0;
-		while (i.isDone() == false) {
+		while (!i.isDone()) {
 			k = i.currentSegment(f);
 
 			float t = (progress - ctr2 / ctr) * ctr;
@@ -222,10 +222,10 @@ public class ShapeUtils {
 	}
 
 	/**
-	 * TSimilar to tracing, this progresses a dot from the beginning to the end
+	 * Similar to tracing: this progresses a dot from the beginning to the end
 	 * of this path.
 	 * 
-	 * @param shape
+	 * @param shape the shape to trace
 	 * @param progress
 	 *            a float from [0,1]
 	 */
@@ -250,7 +250,7 @@ public class ShapeUtils {
 		PathIterator i = shape.getPathIterator(null);
 		float ctr = 0;
 		int k;
-		while (i.isDone() == false) {
+		while (!i.isDone()) {
 			k = i.currentSegment(f);
 			if (k != PathIterator.SEG_MOVETO && k != PathIterator.SEG_CLOSE)
 				ctr++;
@@ -262,7 +262,7 @@ public class ShapeUtils {
 		float lastY = 0;
 		float ctr2 = 0;
 
-		while (i.isDone() == false) {
+		while (!i.isDone()) {
 			k = i.currentSegment(f);
 
 			float t = (progress - ctr2 / ctr) * ctr;
@@ -325,13 +325,13 @@ public class ShapeUtils {
 		PathIterator i = s.getPathIterator(null);
 		int ctr = 0;
 		float[] coords = new float[6];
-		while (i.isDone() == false) {
+		while (!i.isDone()) {
 			if (i.currentSegment(coords) == PathIterator.SEG_MOVETO) {
 				ctr++;
 			}
 			i.next();
 		}
-		return ctr++;
+		return ctr;
 	}
 
 	/** Returns each path in s as a separate Path2D */
@@ -377,7 +377,7 @@ public class ShapeUtils {
 	/** Return true if two shapes are equal. */
 	public static boolean equals(Shape shape, Shape shape2) {
 		PathIterator iter1 = shape.getPathIterator(null);
-		PathIterator iter2 = shape.getPathIterator(null);
+		PathIterator iter2 = shape2.getPathIterator(null);
 		double[] coords1 = new double[6];
 		double[] coords2 = new double[6];
 		while ((!iter1.isDone()) && (!iter2.isDone())) {
@@ -472,7 +472,7 @@ public class ShapeUtils {
 	/**
 	 * Convert the argument to an int-based Rectangle, if possible.
 	 * 
-	 * @param shape
+	 * @param shape the shape to inspect
 	 * @return a Rectangle that exactly matches the argument provided, or null
 	 *         if the argument is not an int-based Rectangle.
 	 */
@@ -499,7 +499,7 @@ public class ShapeUtils {
 	/**
 	 * Convert the argument to a double-based Rectangle2D, if possible.
 	 * 
-	 * @param shape
+	 * @param shape the shape to inspect
 	 * @return a Rectangle2D that exactly matches the argument provided, or null
 	 *         if the argument is not an int-based Rectangle.
 	 */
@@ -652,88 +652,4 @@ public class ShapeUtils {
 		return returnValue;
 	}
 
-	/**
-	 * Reverse the path of a Shape. This should have no immediate effect for the user's perception of the shape.
-	 * For example, if a circle is drawn clockwise this will render the same circle counter-clockwise.
-	 * This can be useful when you need to combine shapes and/or you are interested in specific winding rules.
-	 */
-	public static Path2D reverse(Shape shape) {
-		PathIterator pi = shape.getPathIterator(null);
-		float[] coords = new float[6];
-		float moveX = -1;
-		float moveY = -1;
-		float lastX = -1;
-		float lastY = -1;
-		boolean moved = false;
-		List<Shape> segments = new LinkedList<>();
-		while (!pi.isDone()) {
-			int k = pi.currentSegment(coords);
-			switch (k) {
-				case PathIterator.SEG_MOVETO:
-					if (moved) {
-						// feel free to add support if needed
-						throw new IllegalArgumentException("this method doesn't support shapes with multiple paths");
-					}
-					moved = true;
-					lastX = coords[0];
-					lastY = coords[1];
-					break;
-				case PathIterator.SEG_LINETO:
-					segments.add(0, new Line2D.Float(coords[0], coords[1], lastX, lastY));
-					lastX = coords[0];
-					lastY = coords[1];
-					break;
-				case PathIterator.SEG_QUADTO:
-					segments.add(0, new QuadCurve2D.Float(coords[2], coords[3], coords[0], coords[1], lastX, lastY));
-					lastX = coords[2];
-					lastY = coords[3];
-					break;
-				case PathIterator.SEG_CUBICTO:
-					segments.add(0, new CubicCurve2D.Float(coords[4], coords[5], coords[2], coords[3], coords[0], coords[1], lastX, lastY));
-					lastX = coords[4];
-					lastY = coords[5];
-					break;
-				case PathIterator.SEG_CLOSE:
-					segments.add(0, new Line2D.Float(moveX, moveY, lastX, lastY));
-					lastX = moveX;
-					lastY = moveY;
-					break;
-				default:
-					throw new IllegalStateException("currentSegment = " + k);
-			}
-
-			pi.next();
-		}
-
-		Path2D returnValue = new Path2D.Float();
-		moved = false;
-		for (Shape segment : segments) {
-			if (segment instanceof Line2D) {
-				Line2D line = (Line2D) segment;
-				if (!moved) {
-					moved = true;
-					returnValue.moveTo(line.getX1(), line.getY1());
-				}
-				returnValue.lineTo(line.getX2(), line.getY2());
-			} else if (segment instanceof QuadCurve2D) {
-				QuadCurve2D q = (QuadCurve2D) segment;
-				if (!moved) {
-					moved = true;
-					returnValue.moveTo(q.getX1(), q.getY1());
-				}
-				returnValue.quadTo(q.getCtrlX(), q.getCtrlY(), q.getX2(), q.getY2());
-			} else if (segment instanceof CubicCurve2D) {
-				CubicCurve2D c = (CubicCurve2D) segment;
-				if (!moved) {
-					moved = true;
-					returnValue.moveTo(c.getX1(), c.getY1());
-				}
-				returnValue.curveTo(c.getCtrlX1(), c.getCtrlY1(), c.getCtrlX2(), c.getCtrlY2(), c.getX2(), c.getY2());
-			} else {
-				throw new IllegalStateException(String.valueOf(segment));
-			}
-		}
-
-		return returnValue;
-	}
 }

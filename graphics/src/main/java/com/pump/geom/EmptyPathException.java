@@ -1,14 +1,16 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.geom;
+
+import java.io.Serial;
 
 /**
  * This indicates that a path had no shape data.
@@ -18,6 +20,7 @@ package com.pump.geom;
  *
  */
 public class EmptyPathException extends RuntimeException {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	public EmptyPathException() {

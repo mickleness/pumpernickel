@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -12,6 +12,7 @@ package com.pump.awt.converter;
 
 import java.awt.font.GlyphMetrics;
 import java.awt.geom.Rectangle2D;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import com.pump.data.converter.BeanMapConverter;
 public class GlyphMetricsMapConverter
 		implements BeanMapConverter<GlyphMetrics> {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -67,8 +69,7 @@ public class GlyphMetricsMapConverter
 	public Map<String, Object> createAtoms(GlyphMetrics gm) {
 		Map<String, Object> atoms = new HashMap<>(5);
 
-		boolean horizontal = gm.getAdvanceX() == gm.getAdvanceY() ? true
-				: gm.getAdvanceX() == gm.getAdvance();
+		boolean horizontal = gm.getAdvanceX() == gm.getAdvanceY() || gm.getAdvanceX() == gm.getAdvance();
 		PROPERTY_HORIZONTAL.put(atoms, horizontal);
 		PROPERTY_ADVANCE_X.put(atoms, gm.getAdvanceX());
 		PROPERTY_ADVANCE_Y.put(atoms, gm.getAdvanceY());

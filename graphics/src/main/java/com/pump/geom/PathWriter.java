@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -66,7 +66,7 @@ public abstract class PathWriter {
 
 	/**
 	 * Adds a curved segment, defined by three new points, to the path by
-	 * drawing a Bezier curve that intersects both the current coordinates and
+	 * drawing a Bézier curve that intersects both the current coordinates and
 	 * the coordinates (x3, y3), using the specified points (x1, y1) and (x2,
 	 * y2) as Bezier control points.
 	 * 
@@ -132,7 +132,7 @@ public abstract class PathWriter {
 	public void write(PathIterator i) {
 		float[] coords = new float[6];
 		int k;
-		while (i.isDone() == false) {
+		while (!i.isDone()) {
 			k = i.currentSegment(coords);
 			if (k == PathIterator.SEG_MOVETO) {
 				moveTo(coords[0], coords[1]);
@@ -150,44 +150,6 @@ public abstract class PathWriter {
 			}
 			i.next();
 		}
-	}
-
-	/**
-	 * This appends a cubic curve to the GeneralPath provided that ranges from t
-	 * = t0 to t = t1. This assumes that the path already ends at the point
-	 * (ax*t0*t0*t0+bx*t0*t0+cx*t0+dx, ay*t0*t0*t0+by*t0*t0+cy*t0+dx).
-	 * 
-	 * @param path
-	 *            the path to append data to.
-	 * @param t0
-	 *            the t-value for the beginning of this curve
-	 * @param t1
-	 *            the t-value for the end of this curve
-	 * @param ax
-	 *            the coefficient for the (t^3) term of the x parametric
-	 *            equation
-	 * @param bx
-	 *            the coefficient for the (t^2) term of the x parametric
-	 *            equation
-	 * @param cx
-	 *            the coefficient for the t term of the x parametric equation
-	 * @param dx
-	 *            the constant for the x parametric equation.
-	 * @param ay
-	 *            the coefficient for the (t^3) term of the y parametric
-	 *            equation
-	 * @param by
-	 *            the coefficient for the (t^2) term of the y parametric
-	 *            equation
-	 * @param cy
-	 *            the coefficient for the t term of the y parametric equation
-	 * @param dy
-	 *            the constant for the y parametric equation.
-	 */
-	public static void cubicTo(GeneralPath path, double t0, double t1,
-			double ax, double bx, double cx, double dx, double ay, double by,
-			double cy, double dy) {
-		cubicTo2(path, t0, t1, ax, bx, cx, dx, ay, by, cy, dy);
 	}
 
 	/**
@@ -269,37 +231,6 @@ public abstract class PathWriter {
 			((PathWriter) obj).curveTo((float) cx0, (float) cy0, (float) cx1,
 					(float) cy1, (float) x1, (float) y1);
 		}
-	}
-
-	/**
-	 * This appends a quadratic curve to the GeneralPath provided that ranges
-	 * from t = t0 to t = t1. This assumes that the path already ends at the
-	 * point (ax*t0*t0+bx*t0+cx, ay*t0*t0+by*t0+cy).
-	 * 
-	 * @param path
-	 *            the path to append data to.
-	 * @param t0
-	 *            the t-value for the beginning of this curve
-	 * @param t1
-	 *            the t-value for the end of this curve
-	 * @param ax
-	 *            the coefficient for the (t^2) term of the x parametric
-	 *            equation
-	 * @param bx
-	 *            the coefficient for the t term of the x parametric equation
-	 * @param cx
-	 *            the constant for the x parametric equation.
-	 * @param ay
-	 *            the coefficient for the (t^2) term of the y parametric
-	 *            equation
-	 * @param by
-	 *            the coefficient for the t term of the y parametric equation
-	 * @param cy
-	 *            the constant for the y parametric equation.
-	 */
-	public static void quadTo(GeneralPath path, double t0, double t1,
-			double ax, double bx, double cx, double ay, double by, double cy) {
-		quadTo2(path, t0, t1, ax, bx, cx, ay, by, cy);
 	}
 
 	/**

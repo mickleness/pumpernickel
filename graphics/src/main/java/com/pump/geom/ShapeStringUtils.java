@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -17,7 +17,7 @@ import java.awt.geom.PathIterator;
 /**
  * This is a small set of static methods that translate shape data into
  * <code>java.lang.Strings</code> and vice versa.
- * 
+ * <p>
  *
  */
 public class ShapeStringUtils {
@@ -47,12 +47,10 @@ public class ShapeStringUtils {
 
 	public static String toString(PathIterator i) {
 		float[] f = new float[6];
-		// TODO: didn't you read once that a string buffer
-		// is a little inefficient?
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		int k;
 		int j = 0;
-		while (i.isDone() == false) {
+		while (!i.isDone()) {
 			k = i.currentSegment(f);
 
 			if (k == PathIterator.SEG_MOVETO) {
@@ -74,14 +72,14 @@ public class ShapeStringUtils {
 			if (j != 0) {
 				sb.append(' ');
 				for (int a = 0; a < j; a++) {
-					sb.append(Float.toString(f[a]));
+					sb.append(f[a]);
 					if (a < j - 1)
 						sb.append(' ');
 				}
 			}
 
 			i.next();
-			if (i.isDone() == false)
+			if (!i.isDone())
 				sb.append(' ');
 		}
 		return sb.toString();
@@ -144,15 +142,14 @@ public class ShapeStringUtils {
 	 * @return a <code>PathIterator</code> that will iterate over the data in s.
 	 */
 	public static PathIterator createPathIterator(String s, int windingRule) {
-		/**
-		 * This little bit is added so if the string passed resembles: "Data[ m
-		 * 34 20 l 20 10 z ]" Then we focus only on the part in brackets.
-		 */
+		// if the string passed resembles: "Data[ m 34 20 l 20 10 z ]" then
+		// we focus only on the part in brackets:
 		int i1 = s.indexOf('[');
 		int i2 = s.indexOf(']');
-		if (i1 != -1 && i2 != -2 && i1 < i2) {
+		if (i1 != -1 && i2 != -1 && i1 < i2) {
 			s = s.substring(i1 + 1, i2);
 		}
-		return new SerializedPathIterator(s, PathIterator.WIND_EVEN_ODD);
+
+		return new SerializedPathIterator(s, windingRule);
 	}
 }

@@ -1,17 +1,16 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.data.converter;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,18 +42,18 @@ public interface BeanMapConverter<B> extends Serializable {
 	 * 
 	 * @param object
 	 *            the object to break into atoms.
-	 * @return a list of atoms that {@link #createFromAtoms(List)} can use to
+	 * @return a map of atoms that {@link #createFromAtoms(Map)} can use to
 	 *         rebuild the original object.
 	 */
 	Map<String, Object> createAtoms(B object);
 
 	/**
 	 * Recreate an object from a series of atoms created by
-	 * {@link #getAtoms(Object)}.
+	 * {@link #createAtoms(Object)}.
 	 * 
 	 * @param atoms
 	 *            a list of serializable objects previously created by
-	 *            {@link #getAtoms(Object)}.
+	 *            {@link #createAtoms(Object)}.
 	 * @return a new instance of an Object rebuilt from the atoms.
 	 */
 	B createFromAtoms(Map<String, Object> atoms);

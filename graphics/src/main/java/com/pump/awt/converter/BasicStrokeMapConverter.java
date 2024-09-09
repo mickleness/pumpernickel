@@ -1,16 +1,17 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.awt.converter;
 
 import java.awt.BasicStroke;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import com.pump.data.converter.ConverterUtils.FloatArray;
  */
 public class BasicStrokeMapConverter implements BeanMapConverter<BasicStroke> {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -78,6 +80,7 @@ public class BasicStrokeMapConverter implements BeanMapConverter<BasicStroke> {
 		return atoms;
 	}
 
+	@SuppressWarnings("MagicConstant")
 	@Override
 	public BasicStroke createFromAtoms(Map<String, Object> atoms) {
 		float lineWidth = PROPERTY_LINE_WIDTH.get(atoms);

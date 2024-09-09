@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -21,6 +21,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ public class GlyphVectorMapConverter implements BeanMapConverter<GlyphVector> {
 	 * in a GlyphVector.
 	 */
 	public static class GlyphElementBean implements Serializable {
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		protected int glyphCode;
@@ -86,9 +88,8 @@ public class GlyphVectorMapConverter implements BeanMapConverter<GlyphVector> {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof GlyphElementBean))
+			if (!(obj instanceof GlyphElementBean other))
 				return false;
-			GlyphElementBean other = (GlyphElementBean) obj;
 			if (glyphCode != other.glyphCode)
 				return false;
 			if (!Objects.equals(transform, other.transform))
@@ -104,12 +105,10 @@ public class GlyphVectorMapConverter implements BeanMapConverter<GlyphVector> {
 				return false;
 			if (!ConverterUtils.equals(glyphMetrics, other.glyphMetrics))
 				return false;
-			if (!ConverterUtils.equals(visualBounds, other.visualBounds))
-				return false;
-
-			return true;
+			return ConverterUtils.equals(visualBounds, other.visualBounds);
 		}
 
+		@Serial
 		private void writeObject(java.io.ObjectOutputStream out)
 				throws IOException {
 			out.writeInt(0);
@@ -124,6 +123,7 @@ public class GlyphVectorMapConverter implements BeanMapConverter<GlyphVector> {
 
 		}
 
+		@Serial
 		private void readObject(java.io.ObjectInputStream in)
 				throws IOException, ClassNotFoundException {
 			int internalVersion = in.readInt();
@@ -289,7 +289,7 @@ public class GlyphVectorMapConverter implements BeanMapConverter<GlyphVector> {
 
 		@Override
 		public boolean equals(GlyphVector gv) {
-			if (!(gv instanceof GlyphVector))
+			if (gv == null)
 				return false;
 			if (gv instanceof BasicGlyphVector)
 				return equals((BasicGlyphVector) gv);
@@ -335,7 +335,7 @@ public class GlyphVectorMapConverter implements BeanMapConverter<GlyphVector> {
 				positionReturn = new float[numEntries * 2];
 			for (int a = 0; a < numEntries; a++) {
 				Point2D p = getGlyphPosition(beginGlyphIndex + 1);
-				positionReturn[2 * a + 0] = (float) p.getX();
+				positionReturn[2 * a] = (float) p.getX();
 				positionReturn[2 * a + 1] = (float) p.getY();
 			}
 			return positionReturn;
@@ -343,6 +343,7 @@ public class GlyphVectorMapConverter implements BeanMapConverter<GlyphVector> {
 
 	}
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -398,6 +399,6 @@ public class GlyphVectorMapConverter implements BeanMapConverter<GlyphVector> {
 				.createFromAtoms(PROPERTY_FONTRENDERCONTEXT.get(atoms));
 		List<GlyphElementBean> glyphs = PROPERTY_GLYPHS.get(atoms);
 		return new BasicGlyphVector(font, frc,
-				glyphs.toArray(new GlyphElementBean[glyphs.size()]));
+				glyphs.toArray(new GlyphElementBean[0]));
 	}
 }

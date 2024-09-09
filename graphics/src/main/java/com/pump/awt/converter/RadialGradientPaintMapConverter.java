@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -16,6 +16,7 @@ import java.awt.MultipleGradientPaint.CycleMethod;
 import java.awt.RadialGradientPaint;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import com.pump.data.converter.ConverterUtils.FloatArray;
 public class RadialGradientPaintMapConverter
 		implements BeanMapConverter<RadialGradientPaint> {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -113,7 +115,7 @@ public class RadialGradientPaintMapConverter
 	@Override
 	public RadialGradientPaint createFromAtoms(Map<String, Object> atoms) {
 		List<Color> colorsList = PROPERTY_COLORS.get(atoms);
-		Color[] colors = colorsList.toArray(new Color[colorsList.size()]);
+		Color[] colors = colorsList.toArray(new Color[0]);
 
 		ColorSpaceType colorSpaceType = PROPERTY_COLORSPACE.get(atoms);
 		CycleMethod cycleMethod = PROPERTY_CYCLEMETHOD.get(atoms);

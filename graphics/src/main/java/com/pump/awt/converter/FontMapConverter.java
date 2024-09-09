@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -13,6 +13,7 @@ package com.pump.awt.converter;
 import java.awt.Font;
 import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import com.pump.data.converter.BeanMapConverter;
  * the fill.)
  */
 public class FontMapConverter implements BeanMapConverter<Font> {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**

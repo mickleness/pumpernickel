@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -32,9 +32,9 @@ public class ShapeBounds {
 	/**
 	 * This calculates the precise bounds of a shape.
 	 * 
-	 * @param shape
-	 *            the shape you want the bounds of. This method throws a
-	 *            NullPointerException if this is null.
+	 * @param shapes
+	 *            the shapes you want the bounds of. This method throws a
+	 *            NullPointerException if this array is null.
 	 * @return the bounds of <code>shape</code>.
 	 * 
 	 * @throws EmptyPathException
@@ -42,15 +42,16 @@ public class ShapeBounds {
 	 */
 	public static Rectangle2D getBounds(Shape... shapes) {
 		Rectangle2D r = null;
-		for (int a = 0; a < shapes.length; a++) {
+		for (Shape shape : shapes) {
 			try {
-				Rectangle2D t = getBounds(shapes[a], null);
+				Rectangle2D t = getBounds(shape, null);
 				if (r == null) {
 					r = t;
 				} else {
 					r.add(t);
 				}
 			} catch (EmptyPathException e) {
+				// intentionally empty
 			}
 		}
 		return r;
@@ -93,6 +94,7 @@ public class ShapeBounds {
 	 *         bounding box of the {@code PathIterator}.
 	 * @see Shape#getBounds2D()
 	 */
+	@SuppressWarnings("SuspiciousNameCombination")
 	public static Rectangle2D getBounds(final PathIterator pi) {
 		final double[] coeff = new double[4];
 		final double[] deriv_coeff = new double[3];
@@ -103,8 +105,8 @@ public class ShapeBounds {
 		double[] bounds = null;
 		double lastX = 0.0;
 		double lastY = 0.0;
-		double endX = 0.0;
-		double endY = 0.0;
+		double endX;
+		double endY;
 
 		for (; !pi.isDone(); pi.next()) {
 			final int type = pi.currentSegment(coords);
@@ -261,7 +263,7 @@ public class ShapeBounds {
 	 *            the starting value of the bezier curve where t = 0.0
 	 * @param ctrlX1
 	 *            the first control value of the bezier curve
-	 * @param ctrlX1
+	 * @param ctrlX2
 	 *            the second control value of the bezier curve
 	 * @param x2
 	 *            the ending value of the bezier curve where t = 1.0

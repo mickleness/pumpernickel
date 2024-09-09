@@ -1,19 +1,16 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.data.converter;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -60,6 +57,7 @@ public class ConverterUtils {
 	 */
 	public static class ByteArray implements Serializable {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public static ByteArray get(byte[] array) {
@@ -86,9 +84,8 @@ public class ConverterUtils {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof ByteArray))
+			if (!(obj instanceof ByteArray other))
 				return false;
-			ByteArray other = (ByteArray) obj;
 			return Arrays.equals(data, other.data);
 		}
 
@@ -119,6 +116,7 @@ public class ConverterUtils {
 	 */
 	public static class FloatArray implements Serializable {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public static FloatArray get(float[] array) {
@@ -145,9 +143,8 @@ public class ConverterUtils {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof FloatArray))
+			if (!(obj instanceof FloatArray other))
 				return false;
-			FloatArray other = (FloatArray) obj;
 			return Arrays.equals(data, other.data);
 		}
 
@@ -432,7 +429,7 @@ public class ConverterUtils {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static String toString(Object obj) {
 		if (obj == null)
-			return String.valueOf(null);
+			return "null";
 
 		Class z = obj.getClass();
 		BeanMapConverter converter = getConverter(z);
@@ -452,7 +449,7 @@ public class ConverterUtils {
 		for (String key : alphabetizedKeys) {
 			if (containsData)
 				sb.append(", ");
-			sb.append(key + "=" + atoms.get(key));
+			sb.append(key).append("=").append(atoms.get(key));
 			containsData = true;
 		}
 		sb.append("]");

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -61,7 +61,7 @@ public class GradientStopHelper {
 	 * @param d
 	 *            a fractional value on a scale of [0, 1]. This may be outside
 	 *            of [0,1], but this GradientStopHelper will never store a stop
-	 *            value outside of [0,1].
+	 *            value outside of that range
 	 * @param c
 	 *            the color to add.
 	 */

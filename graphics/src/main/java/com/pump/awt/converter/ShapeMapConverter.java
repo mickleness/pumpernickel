@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -13,6 +13,7 @@ package com.pump.awt.converter;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import com.pump.data.converter.ConverterUtils;
  */
 public class ShapeMapConverter implements BeanMapConverter<Shape> {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -94,13 +96,13 @@ public class ShapeMapConverter implements BeanMapConverter<Shape> {
 		byte[] segmentTypesArray = new byte[segmentTypes.size()];
 		int i = 0;
 		for (Byte segmentType : segmentTypes) {
-			segmentTypesArray[i++] = segmentType.byteValue();
+			segmentTypesArray[i++] = segmentType;
 		}
 
 		float[] segmentCoordinatesArray = new float[segmentCoordinates.size()];
 		i = 0;
 		for (Float segmentCoordinate : segmentCoordinates) {
-			segmentCoordinatesArray[i++] = segmentCoordinate.floatValue();
+			segmentCoordinatesArray[i++] = segmentCoordinate;
 		}
 
 		PROPERTY_SEGMENT_TYPES.put(atoms,
@@ -121,30 +123,30 @@ public class ShapeMapConverter implements BeanMapConverter<Shape> {
 		int segmentCoordIndex = 0;
 
 		Path2D returnValue = new Path2D.Float(windingRule);
-		for (int segmentIndex = 0; segmentIndex < segmentTypes.length; segmentIndex++) {
-			if (segmentTypes[segmentIndex] == PathIterator.SEG_MOVETO) {
+		for (byte segmentType : segmentTypes) {
+			if (segmentType == PathIterator.SEG_MOVETO) {
 				returnValue.moveTo(segmentCoordinates[segmentCoordIndex++],
 						segmentCoordinates[segmentCoordIndex++]);
-			} else if (segmentTypes[segmentIndex] == PathIterator.SEG_LINETO) {
+			} else if (segmentType == PathIterator.SEG_LINETO) {
 				returnValue.lineTo(segmentCoordinates[segmentCoordIndex++],
 						segmentCoordinates[segmentCoordIndex++]);
-			} else if (segmentTypes[segmentIndex] == PathIterator.SEG_QUADTO) {
+			} else if (segmentType == PathIterator.SEG_QUADTO) {
 				returnValue.quadTo(segmentCoordinates[segmentCoordIndex++],
 						segmentCoordinates[segmentCoordIndex++],
 						segmentCoordinates[segmentCoordIndex++],
 						segmentCoordinates[segmentCoordIndex++]);
-			} else if (segmentTypes[segmentIndex] == PathIterator.SEG_CUBICTO) {
+			} else if (segmentType == PathIterator.SEG_CUBICTO) {
 				returnValue.curveTo(segmentCoordinates[segmentCoordIndex++],
 						segmentCoordinates[segmentCoordIndex++],
 						segmentCoordinates[segmentCoordIndex++],
 						segmentCoordinates[segmentCoordIndex++],
 						segmentCoordinates[segmentCoordIndex++],
 						segmentCoordinates[segmentCoordIndex++]);
-			} else if (segmentTypes[segmentIndex] == PathIterator.SEG_CLOSE) {
+			} else if (segmentType == PathIterator.SEG_CLOSE) {
 				returnValue.closePath();
 			} else {
 				throw new RuntimeException(
-						"Illegal segment type: " + segmentTypes[segmentIndex]);
+						"Illegal segment type: " + segmentType);
 			}
 		}
 

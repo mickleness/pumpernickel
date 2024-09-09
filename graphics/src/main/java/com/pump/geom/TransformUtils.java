@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -16,8 +16,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * This is a collection of methods that deal with AffineTransforms. Note the
@@ -26,29 +24,6 @@ import java.util.Comparator;
  * 
  **/
 public class TransformUtils {
-
-	/**
-	 * Compute the rotation angle of an affine transformation. Counter-clockwise
-	 * rotation is considered positive.
-	 *
-	 * @param transform
-	 *            the AffineTransform to analyze.
-	 * @return rotation angle in radians (beween -pi and pi), or NaN if the
-	 *         transformation is bogus.
-	 */
-	public static double getRotationAngle(AffineTransform transform) {
-
-		transform = (AffineTransform) transform.clone();
-
-		// Eliminate any post-translation
-		transform.preConcatenate(AffineTransform.getTranslateInstance(
-				-transform.getTranslateX(), -transform.getTranslateY()));
-
-		Point2D p1 = new Point2D.Double(1, 0);
-		p1 = transform.transform(p1, p1);
-
-		return Math.atan2(p1.getY(), p1.getX());
-	}
 
 	/**
 	 * Given 3 points, this will return the <code>AffineTransform</code> that
@@ -212,20 +187,8 @@ public class TransformUtils {
 	}
 
 	/**
-	 * Create an AffineTransform that flips everything vertically around a given
-	 * y-value.
-	 */
-	public static AffineTransform flipVertical(double y) {
-		AffineTransform tx = new AffineTransform();
-		tx.translate(0, y);
-		tx.scale(1, -1);
-		tx.translate(0, -y);
-		return tx;
-	}
-
-	/**
 	 * Create a simple scaling AffineTransform that transforms a rectangle
-	 * bounded by (0,0,d1.widthd,d2.height) to (0,0,d2.width,d2.height)
+	 * bounded by (0,0,d1.width,d2.height) to (0,0,d2.width,d2.height)
 	 */
 	public static AffineTransform createAffineTransform(Dimension2D d1,
 			Dimension2D d2) {

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -12,6 +12,7 @@ package com.pump.awt.converter;
 
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import com.pump.data.converter.BeanMapConverter;
  */
 public class Rectangle2DMapConverter implements BeanMapConverter<Rectangle2D> {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -68,15 +70,13 @@ public class Rectangle2DMapConverter implements BeanMapConverter<Rectangle2D> {
 	@Override
 	public Map<String, Object> createAtoms(Rectangle2D rect) {
 		Map<String, Object> atoms = new HashMap<>(5);
-		if (rect instanceof Rectangle) {
-			Rectangle r = (Rectangle) rect;
+		if (rect instanceof Rectangle r) {
 			PROPERTY_TYPE.put(atoms, Integer.TYPE);
 			PROPERTY_X.put(atoms, r.x);
 			PROPERTY_Y.put(atoms, r.y);
 			PROPERTY_WIDTH.put(atoms, r.width);
 			PROPERTY_HEIGHT.put(atoms, r.height);
-		} else if (rect instanceof Rectangle2D.Float) {
-			Rectangle2D.Float r = (Rectangle2D.Float) rect;
+		} else if (rect instanceof Rectangle2D.Float r) {
 			PROPERTY_TYPE.put(atoms, Float.TYPE);
 			PROPERTY_X.put(atoms, r.x);
 			PROPERTY_Y.put(atoms, r.y);

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -20,6 +20,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -40,6 +41,7 @@ import com.pump.data.converter.ConverterUtils;
  *      and AffineTransforms</a>
  */
 public class TransformedTexturePaint implements Paint, Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	TexturePaint texturePaint;
@@ -92,6 +94,7 @@ public class TransformedTexturePaint implements Paint, Serializable {
 		return texturePaint.getTransparency();
 	}
 
+	@Serial
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
 		out.writeInt(0);
@@ -100,6 +103,7 @@ public class TransformedTexturePaint implements Paint, Serializable {
 
 	}
 
+	@Serial
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		int internalVersion = in.readInt();
@@ -119,13 +123,10 @@ public class TransformedTexturePaint implements Paint, Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof TransformedTexturePaint))
+		if (!(obj instanceof TransformedTexturePaint ttp))
 			return false;
-		TransformedTexturePaint ttp = (TransformedTexturePaint) obj;
 		if (!ConverterUtils.equals(texturePaint, ttp.texturePaint))
 			return false;
-		if (!transform.equals(transform))
-			return false;
-		return true;
+		return transform.equals(ttp.transform);
 	}
 }

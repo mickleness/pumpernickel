@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -12,6 +12,7 @@ package com.pump.awt.converter;
 
 import java.awt.RenderingHints;
 import java.awt.RenderingHints.Key;
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ import com.pump.data.converter.BeanMapConverter;
 public class RenderingHintsMapConverter
 		implements BeanMapConverter<RenderingHints> {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -101,7 +103,7 @@ public class RenderingHintsMapConverter
 		// If you reach this exception: you may need to adjust
 		// ALL_RENDERING_HINT_VALUES.
 		// It's public & static so you can easily add new keys.
-		// Just make sure you new value has a unique toString() method.
+		// Just make sure your new value has a unique toString() method.
 		throw new IllegalArgumentException(
 				"Unsupported value name: " + valueName);
 	}
@@ -137,9 +139,9 @@ public class RenderingHintsMapConverter
 	@Override
 	public RenderingHints createFromAtoms(Map<String, Object> atoms) {
 		RenderingHints returnValue = new RenderingHints(
-				new HashMap<RenderingHints.Key, Object>());
+				new HashMap<>());
 		for (Entry<String, Object> atomEntry : atoms.entrySet()) {
-			Key key = getKey((String) atomEntry.getKey());
+			Key key = getKey(atomEntry.getKey());
 			Object value = getValue((String) atomEntry.getValue());
 			returnValue.put(key, value);
 		}

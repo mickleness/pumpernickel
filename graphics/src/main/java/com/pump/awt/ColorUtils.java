@@ -16,7 +16,7 @@ public class ColorUtils {
      *          A value of .25 will return a value that is 25% of the way between c1 and c2.
      * @return a Color object that is between c1 and c2.
      */
-    public static final Color tween(Color c1, Color c2, double f) {
+    public static Color tween(Color c1, Color c2, double f) {
         if (f <= 0)
             return c1;
         if (f >= 1)
