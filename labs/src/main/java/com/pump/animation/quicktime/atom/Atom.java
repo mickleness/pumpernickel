@@ -26,7 +26,6 @@ import javax.swing.tree.TreeNode;
 
 import com.pump.geom.PerspectiveTransform;
 import com.pump.io.GuardedOutputStream;
-import com.pump.io.NullOutputStream;
 
 /**
  * An Atom in a QuickTime file.
@@ -457,17 +456,14 @@ public abstract class Atom implements TreeNode {
 	 * @return the complete size of this atom.
 	 */
 	protected long getSize() {
-		GuardedOutputStream out = new GuardedOutputStream(
-				new NullOutputStream(), Long.MAX_VALUE);
-		try {
+		try(GuardedOutputStream out = new GuardedOutputStream(OutputStream.nullOutputStream(), Long.MAX_VALUE)) {
 			writeContents(out);
+			return out.getBytesWritten() + 8;
 		} catch (IOException e) {
 			// very unlikely in a NullOutputStream!
-			RuntimeException e2 = new RuntimeException();
-			e2.initCause(e);
+			RuntimeException e2 = new RuntimeException(e);
 			throw e2;
 		}
-		return out.getBytesWritten() + 8;
 	}
 
 	protected Atom parent;
