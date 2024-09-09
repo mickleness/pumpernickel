@@ -1,31 +1,26 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.plaf;
 
-import java.awt.FileDialog;
-import java.awt.Frame;
-import java.awt.Window;
-import java.beans.PropertyChangeEvent;
+import com.pump.audio.AudioPlayer;
+import com.pump.audio.AudioPlayer.StartTime;
+import com.pump.swing.AudioPlayerComponent;
+
+import javax.swing.*;
+import javax.swing.plaf.ComponentUI;
+import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.concurrent.CancellationException;
-
-import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
-import javax.swing.plaf.ComponentUI;
-
-import com.pump.audio.AudioPlayer;
-import com.pump.audio.AudioPlayer.StartTime;
-import com.pump.swing.AudioPlayerComponent;
 
 public class AudioPlayerUI extends ComponentUI {
 
@@ -52,7 +47,7 @@ public class AudioPlayerUI extends ComponentUI {
 			apc.getUI().notifyPlaybackStopped(apc, t);
 		}
 
-	};
+	}
 
 	protected void notifyPlaybackStarted(AudioPlayerComponent apc) {
 	}
@@ -65,26 +60,22 @@ public class AudioPlayerUI extends ComponentUI {
 			Throwable t) {
 	}
 
-	PropertyChangeListener audioPlayerListener = new PropertyChangeListener() {
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getSource() instanceof AudioPlayerComponent) {
-				AudioPlayerComponent apc = (AudioPlayerComponent) evt
-						.getSource();
-				String key = AudioPlayerUI.class.getName() + ".edtListener";
-				EDTListener edtListener = (EDTListener) apc
-						.getClientProperty(key);
-				if (edtListener == null) {
-					edtListener = new EDTListener(apc);
-					apc.putClientProperty(key, edtListener);
-				}
-
-				AudioPlayer oldPlayer = (AudioPlayer) evt.getOldValue();
-				AudioPlayer newPlayer = (AudioPlayer) evt.getNewValue();
-				if (oldPlayer != null)
-					oldPlayer.removeEDTListener(edtListener);
-				if (newPlayer != null)
-					newPlayer.addEDTListener(edtListener, 10);
+	PropertyChangeListener audioPlayerListener = evt -> {
+		if (evt.getSource() instanceof AudioPlayerComponent apc) {
+			String key = AudioPlayerUI.class.getName() + ".edtListener";
+			EDTListener edtListener = (EDTListener) apc
+					.getClientProperty(key);
+			if (edtListener == null) {
+				edtListener = new EDTListener(apc);
+				apc.putClientProperty(key, edtListener);
 			}
+
+			AudioPlayer oldPlayer = (AudioPlayer) evt.getOldValue();
+			AudioPlayer newPlayer = (AudioPlayer) evt.getNewValue();
+			if (oldPlayer != null)
+				oldPlayer.removeEDTListener(edtListener);
+			if (newPlayer != null)
+				newPlayer.addEDTListener(edtListener, 10);
 		}
 	};
 
@@ -98,11 +89,10 @@ public class AudioPlayerUI extends ComponentUI {
 
 	public void doBrowseForFile(AudioPlayerComponent apc) {
 		Window w = SwingUtilities.getWindowAncestor(apc);
-		if (!(w instanceof Frame))
+		if (!(w instanceof Frame f))
 			throw new RuntimeException(
 					"cannot invoke a FileDialog if the player is not in a java.awt.Frame");
 		// the button shouldn't be enabled if w isn't a Frame...
-		Frame f = (Frame) w;
 		FileDialog fd = new FileDialog(f);
 		fd.pack();
 		fd.setLocationRelativeTo(null);

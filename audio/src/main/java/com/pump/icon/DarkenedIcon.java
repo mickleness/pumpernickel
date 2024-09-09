@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -65,10 +65,10 @@ public class DarkenedIcon implements Icon {
 	 *            UIManager.getIcon("IthisnternalFrame.maximizeIcon")) on
 	 *            Windows: we'll get a NPE if this is null.
 	 * 
-	 * @return
+	 * @return an Image snapshot of this icon.
 	 */
 	private BufferedImage createImage(Component c) {
-		// TODO: this needs to take into account `c.getGraphicsConfiguration().getDefaultTransform()`
+		// TODO: this needs to take into account `c.getGraphicsConfiguration().getDefaultTransform()`.
 		// to look good on high res monitors
 		Icon i = getIcon();
 		BufferedImage bi = new BufferedImage(i.getIconWidth(),
@@ -84,7 +84,7 @@ public class DarkenedIcon implements Icon {
 			for (int x = 0; x < bi.getWidth(); x++) {
 				int red = (row[x] & 0x00ff0000) >> 16;
 				int green = (row[x] & 0x00ff00) >> 8;
-				int blue = (row[x] & 0x00ff) >> 0;
+				int blue = (row[x] & 0x00ff);
 				Color.RGBtoHSB(red, green, blue, hsbvals);
 				hsbvals[2] = hsbvals[2] * (1 - f);
 				int k = Color.HSBtoRGB(hsbvals[0], hsbvals[1], hsbvals[2]);

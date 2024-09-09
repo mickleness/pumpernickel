@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -39,9 +39,9 @@ public class WavFileWriter implements Closeable {
 
 	public void writeSample(byte[] data, int offset, int len)
 			throws IOException {
-		if (formatWritten == false) {
+		if (!formatWritten) {
 			throw new IOException("the format was not yet written");
-		} else if (dataHeaderWritten == false) {
+		} else if (!dataHeaderWritten) {
 			out.write(new byte[] { 0x64, 0x61, 0x74, 0x61 });
 			out.write(new byte[] {});
 			dataHeaderWritten = true;

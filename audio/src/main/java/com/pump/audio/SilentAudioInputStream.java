@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -29,7 +29,7 @@ public class SilentAudioInputStream extends AudioInputStream {
 	/**
 	 * A silent AudioInputStream that lasts a fixed number of samples.
 	 * 
-	 * @param format
+	 * @param format the AudioFormat this AudioInputStream uses
 	 * @param sampleCount
 	 *            the number of samples to read.
 	 */
@@ -85,7 +85,7 @@ public class SilentAudioInputStream extends AudioInputStream {
 		}
 
 		@Override
-		public synchronized void mark(int readlimit) {
+		public synchronized void mark(int readLimit) {
 		}
 
 		@Override

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -66,7 +66,7 @@ public class WaveformSliderUI extends BasicSliderUI {
 				throw new IOException("sampleSizeInBits = " + sampleSizeInBits);
 			if (!(audioFormat.getEncoding().equals(Encoding.PCM_SIGNED) || audioFormat
 					.getEncoding().equals(Encoding.PCM_UNSIGNED)))
-				throw new IOException("sunpported encoding \""
+				throw new IOException("unsupported encoding \""
 						+ audioFormat.getEncoding() + "\"");
 			final int sampleSize = sampleSizeInBits / 8;
 			final boolean isSigned = audioFormat.getEncoding().equals(
@@ -78,8 +78,9 @@ public class WaveformSliderUI extends BasicSliderUI {
 					: (int) (Math.pow(256, sampleSize)) - 1;
 
 			// we're going to assume 1000 pixels of data is plenty
-			final Function sampleIndexToPixel = PolynomialFunction.createFit(0,
-					0, totalDataSize / audioFormat.getChannels(), 1000);
+			final Function sampleIndexToPixel = PolynomialFunction.createFit(
+					0, 0,
+					((float) totalDataSize) / ((float) audioFormat.getChannels()), 1000);
 
 			WavReader r = new WavReader(in) {
 
@@ -89,7 +90,7 @@ public class WaveformSliderUI extends BasicSliderUI {
 
 				@Override
 				protected void processSamples(byte[] sample, int offset,
-						int length, int numberOfSamples) throws IOException {
+						int length, int numberOfSamples) {
 					for (int a = offset; a < offset + length; a += sampleSize) {
 						final int value = com.pump.audio.PCMUtils.decodeSample(
 								sample, a, sampleSize, isSigned,
@@ -298,7 +299,7 @@ public class WaveformSliderUI extends BasicSliderUI {
 
 	@Override
 	public Dimension getMaximumSize(JComponent c) {
-		return getMaximumSize(c);
+		return getPreferredSize(c);
 	}
 
 	@Override

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -71,8 +71,8 @@ public abstract class FrameFilterAudioInputStream extends AudioInputStream {
 		 * 
 		 * @return false if the end of the stream was reached. True if data was
 		 *         read.
-		 * @throws IOException
 		 */
+		@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 		boolean populate() throws IOException {
 			if (!isEmpty())
 				throw new RuntimeException();
@@ -103,7 +103,7 @@ public abstract class FrameFilterAudioInputStream extends AudioInputStream {
 	}
 
 	@Override
-	public void mark(int readlimit) {
+	public void mark(int readLimit) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -115,14 +115,14 @@ public abstract class FrameFilterAudioInputStream extends AudioInputStream {
 	@Override
 	public synchronized int read() throws IOException {
 		if (buffer.isEmpty()) {
-			if (buffer.populate() == false)
+			if (!buffer.populate())
 				return -1;
 		}
 		return buffer.read();
 	}
 
 	/**
-	 * When possible, this will round down the number of bytes to read so we
+	 * When possible, this will round down the number of bytes to read, so we
 	 * process a multiple of this.frameSize.
 	 */
 	@Override
@@ -134,7 +134,7 @@ public abstract class FrameFilterAudioInputStream extends AudioInputStream {
 		int remainder = len % frameSize;
 		int newLength = len - remainder;
 		if (len > 0 && newLength == 0) {
-			if (buffer.populate() == false)
+			if (!buffer.populate())
 				return -1;
 			return buffer.read(b, off, len);
 		}
@@ -145,7 +145,7 @@ public abstract class FrameFilterAudioInputStream extends AudioInputStream {
 
 		/*
 		 * Since our underlying InputStream is buffered: returnValue will always
-		 * be newLength unless the end of the stream is reached and it is an
+		 * be newLength unless the end of the stream is reached AND it is an
 		 * uneven number.
 		 */
 		int framesToFilter = returnValue / frameSize;
@@ -165,7 +165,7 @@ public abstract class FrameFilterAudioInputStream extends AudioInputStream {
 	 *            the offset in this array the frames begin at.
 	 * @param frameCount
 	 *            the number of frames to filter. So the number of bytes
-	 *            filtered should equals (frameCount * this.frameSize).
+	 *            filtered should equal `frameCount * this.frameSize`.
 	 */
 	protected abstract void filterFrames(byte[] data, int off, int frameCount);
 
@@ -180,20 +180,19 @@ public abstract class FrameFilterAudioInputStream extends AudioInputStream {
 	}
 
 	/**
-	 * When possible, this will round down the number of bytes to skip so we
+	 * When possible, this will round down the number of bytes to skip, so we
 	 * process a multiple of this.frameSize.
 	 */
 	@Override
 	public long skip(long n) throws IOException {
 		if (!buffer.isEmpty()) {
-			long skipped = buffer.skip(n);
-			return skipped;
+			return buffer.skip(n);
 		}
 
 		long remainder = n % frameSize;
 		long newLength = n - remainder;
 		if (n > 0 && newLength == 0) {
-			if (buffer.populate() == false)
+			if (!buffer.populate())
 				return -1;
 			return buffer.skip(n);
 		}

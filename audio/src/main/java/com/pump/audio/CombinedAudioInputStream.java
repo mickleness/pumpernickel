@@ -1,26 +1,22 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.audio;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import com.pump.io.CombinedInputStream;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
-
-import com.pump.io.CombinedInputStream;
+import java.io.InputStream;
 
 public class CombinedAudioInputStream extends AudioInputStream {
-	List<AudioInputStream> streams = new ArrayList<AudioInputStream>();
 
 	public CombinedAudioInputStream(AudioInputStream in1, AudioInputStream in2) {
 		this(new AudioInputStream[] { in1, in2 });
@@ -48,24 +44,17 @@ public class CombinedAudioInputStream extends AudioInputStream {
 			return false;
 		if (format1.getSampleSizeInBits() != format2.getSampleSizeInBits())
 			return false;
-		if (!format1.getEncoding().equals(format2.getEncoding()))
-			return false;
-
-		return true;
+		return format1.getEncoding().equals(format2.getEncoding());
 	}
 
 	private static InputStream createInputStream(AudioInputStream[] audioIns) {
-		boolean[] b = new boolean[audioIns.length];
-		for (int a = 0; a < audioIns.length; a++) {
-			b[a] = true;
-		}
-		return new CombinedInputStream(audioIns, b);
+		return new CombinedInputStream(audioIns);
 	}
 
 	private static long getFrameCount(AudioInputStream[] audioIn) {
 		long sum = 0;
-		for (int a = 0; a < audioIn.length; a++) {
-			sum += audioIn[a].getFrameLength();
+		for (AudioInputStream audioInputStream : audioIn) {
+			sum += audioInputStream.getFrameLength();
 		}
 		return sum;
 	}

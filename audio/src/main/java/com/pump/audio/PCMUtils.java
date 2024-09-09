@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -57,13 +57,12 @@ public class PCMUtils {
 				if (value < -128 || value > 127)
 					throw new IllegalArgumentException("value (" + value
 							+ ") must be between [-128, 127]");
-				data[offset] = (byte) value;
 			} else {
 				if (value < 0 || value > 255)
 					throw new IllegalArgumentException("value (" + value
 							+ ") must be between [0, 255]");
-				data[offset] = (byte) (value);
 			}
+			data[offset] = (byte) value;
 			break;
 		case 2:
 			byte mostSigByte;
@@ -73,21 +72,16 @@ public class PCMUtils {
 				if (value < -32768 || value > 32767)
 					throw new IllegalArgumentException("value (" + value
 							+ ") must be between [-32768, 32767]");
-				if (value >= 0) {
-					mostSigByte = (byte) ((value >> 8) & 0xff);
-					leastSigByte = (byte) ((value >> 0) & 0xff);
-				} else {
+				if (value < 0) {
 					value = (value + 1) + 0xffff;
-					mostSigByte = (byte) ((value >> 8) & 0xff);
-					leastSigByte = (byte) ((value >> 0) & 0xff);
 				}
 			} else {
 				if (value < 0 || value > 65535)
 					throw new IllegalArgumentException("value (" + value
 							+ ") must be between [0, 65535]");
-				mostSigByte = (byte) ((value >> 8) & 0xff);
-				leastSigByte = (byte) ((value >> 0) & 0xff);
 			}
+			mostSigByte = (byte) ((value >> 8) & 0xff);
+			leastSigByte = (byte) ((value) & 0xff);
 
 			if (isBigEndian) {
 				data[offset] = mostSigByte;

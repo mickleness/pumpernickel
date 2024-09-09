@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -27,18 +27,21 @@ public class WavFormatChunk {
 	/**
 	 * Any value is acceptable, but COMPRESSION_PCM (0x0001) is the most common.
 	 */
-	public int compressionCode = COMPRESSION_PCM;
+	public int compressionCode;
+
 	/**
-	 * The number of channels specifies how many separate audio signals that are
+	 * The number of channels specifies how many audio signals are
 	 * encoded in the wave data chunk. A value of 1 means a mono signal, a value
 	 * of 2 means a stereo signal, etc.
 	 */
-	public int numChannels = 1;
+	public int numChannels;
+
 	/**
 	 * The number of sample slices per second. This value is unaffected by the
 	 * number of channels.
 	 */
 	public long sampleRate;
+
 	/**
 	 * This value indicates how many bytes of wave data must be streamed to a
 	 * D/A converter per second in order to play the wave file. This information
@@ -47,12 +50,14 @@ public class WavFormatChunk {
 	 * the formula: AvgBytesPerSec = SampleRate * BlockAlign
 	 */
 	public long avgBytesPerSecond;
+
 	/**
 	 * The number of bytes per sample slice. This value is not affected by the
 	 * number of channels and can be calculated with the formula: BlockAlign =
 	 * SignificantBitsPerSample / 8 * NumChannels
 	 */
 	public int blockAlign;
+
 	/**
 	 * This value specifies the number of bits used to define each sample. This
 	 * value is usually 8, 16, 24 or 32. If the number of bits is not byte
@@ -68,7 +73,7 @@ public class WavFormatChunk {
 	 *            Any value is acceptable, but COMPRESSION_PCM (0x0001) is the
 	 *            most common.
 	 * @param numChannels
-	 *            The number of channels specifies how many separate audio
+	 *            The number of channels specifies how many audio
 	 *            signals that are encoded in the wave data chunk. A value of 1
 	 *            means a mono signal, a value of 2 means a stereo signal, etc.
 	 * @param sampleRate
@@ -99,7 +104,7 @@ public class WavFormatChunk {
 	 *            Any value is acceptable, but COMPRESSION_PCM (0x0001) is the
 	 *            most common.
 	 * @param numChannels
-	 *            The number of channels specifies how many separate audio
+	 *            The number of channels specifies how many audio
 	 *            signals that are encoded in the wave data chunk. A value of 1
 	 *            means a mono signal, a value of 2 means a stereo signal, etc.
 	 * @param sampleRate

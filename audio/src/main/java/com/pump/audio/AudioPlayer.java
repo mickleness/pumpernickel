@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -35,7 +35,7 @@ import com.pump.swing.Cancellable;
 
 /**
  * An object that manages playing back a resource.
- * 
+ * <p>
  * This offers the ability to play and pause, and adds listeners (either in
  * real-time or at fixed polling intervals).
  */
@@ -61,11 +61,11 @@ public class AudioPlayer {
 	 */
 	private static class Snapshot {
 		long playAttempt;
-		float fraction = 0;
-		float elapsedTime = 0;
-		boolean complete = false;
-		boolean active = false;
-		Throwable error = null;
+		float fraction;
+		float elapsedTime;
+		boolean complete;
+		boolean active;
+		Throwable error;
 
 		public Snapshot(long playAttempt, float fraction, float elapsedTime,
 				boolean complete, boolean active, Throwable error) {
@@ -89,9 +89,8 @@ public class AudioPlayer {
 		public synchronized boolean equals(Object t) {
 			if (t == this)
 				return true;
-			if (!(t instanceof Snapshot))
+			if (!(t instanceof Snapshot s))
 				return false;
-			Snapshot s = (Snapshot) t;
 			return fraction == s.fraction && elapsedTime == s.elapsedTime
 					&& active == s.active && complete == s.complete
 					&& Objects.equals(error, s.error);
@@ -112,12 +111,12 @@ public class AudioPlayer {
 		}
 	}
 
-	public static interface Listener {
-		public void playbackStarted();
+	public interface Listener {
+		void playbackStarted();
 
-		public void playbackProgress(float timeElapsed, float timeAsFraction);
+		void playbackProgress(float timeElapsed, float timeAsFraction);
 
-		public void playbackStopped(Throwable t);
+		void playbackStopped(Throwable t);
 	}
 
 	private static class NullListener implements Listener {
@@ -183,7 +182,7 @@ public class AudioPlayer {
 							* frameSize;
 					byte[] buffer = new byte[bufferSize];
 
-					long bytesSkipped = 0;
+					long bytesSkipped;
 					float startTimeInSeconds;
 					if (startTime != null && startTime.asFraction) {
 						startTimeInSeconds = startTime.time * totalTime;
@@ -195,8 +194,7 @@ public class AudioPlayer {
 					bytesSkipped = (long) (startTimeInSeconds
 							* audioFormat.getFrameRate() * audioFormat
 							.getFrameSize());
-					float framesSkipped = bytesSkipped
-							/ audioFormat.getFrameSize();
+					float framesSkipped = ((float) bytesSkipped) / audioFormat.getFrameSize();
 					skipFully(stream, bytesSkipped);
 
 					// Move the data until done or there is an error.
@@ -308,12 +306,12 @@ public class AudioPlayer {
 		return dataLine;
 	}
 
-	List<Listener> realTimeListeners = new ArrayList<Listener>();
-	Map<Integer, List<Listener>> edtListeners = new HashMap<Integer, List<Listener>>();
+	List<Listener> realTimeListeners = new ArrayList<>();
+	Map<Integer, List<Listener>> edtListeners = new HashMap<>();
 	private final Snapshot currentSnapshot = new Snapshot(-1, 0, 0, false,
 			false, null);
-	private Map<Integer, Timer> timers = new HashMap<Integer, Timer>();
-	Map<Long, Throwable> playbackErrors = new HashMap<Long, Throwable>();
+	private final Map<Integer, Timer> timers = new HashMap<>();
+	Map<Long, Throwable> playbackErrors = new HashMap<>();
 	final URL source;
 
 	public AudioPlayer(URL source) {
@@ -321,7 +319,7 @@ public class AudioPlayer {
 			throw new NullPointerException();
 		this.source = source;
 
-		/**
+		/*
 		 * Add one listener that updates the currentSnapshot. All timed
 		 * listeners rely on the snapshot.
 		 */
@@ -349,9 +347,7 @@ public class AudioPlayer {
 			}
 
 			public void playbackStopped(Throwable t) {
-				boolean dirty = false;
-				if (t != playbackErrors.put(currentSnapshot.playAttempt, t))
-					dirty = true;
+				boolean dirty = t != playbackErrors.put(currentSnapshot.playAttempt, t);
 				if (currentSnapshot.active) {
 					currentSnapshot.active = false;
 					dirty = true;
@@ -392,7 +388,7 @@ public class AudioPlayer {
 	public synchronized void addEDTListener(Listener l, int updateInterval) {
 		List<Listener> list = edtListeners.get(updateInterval);
 		if (list == null) {
-			list = new ArrayList<Listener>();
+			list = new ArrayList<>();
 			list.add(l);
 			edtListeners.put(updateInterval, list);
 			setTimerActive(updateInterval, true);
@@ -431,12 +427,12 @@ public class AudioPlayer {
 	 */
 	public synchronized boolean removeEDTListener(Listener l) {
 		boolean returnValue = false;
-		for (Integer updateInterval : edtListeners.keySet()) {
-			List<Listener> list = edtListeners.get(updateInterval);
-			if (list.remove(l)) {
+		for (Map.Entry<Integer, List<Listener>> entry : edtListeners.entrySet()) {
+			if (entry.getValue().remove(l)) {
 				returnValue = true;
-				if (list.size() == 0) {
-					setTimerActive(updateInterval, false);
+				if (entry.getValue().size() == 0) {
+					setTimerActive(entry.getKey(), false);
+					break;
 				}
 			}
 		}
@@ -458,7 +454,7 @@ public class AudioPlayer {
 			synchronized (AudioPlayer.this) {
 				currentBroadcast = currentSnapshot.clone();
 				List<Listener> l = edtListeners.get(updateInterval);
-				listenerArray = l.toArray(new Listener[l.size()]);
+				listenerArray = l.toArray(new Listener[0]);
 			}
 
 			for (Listener listener : listenerArray) {
@@ -480,10 +476,8 @@ public class AudioPlayer {
 
 			Throwable lastError = lastBroadcast == null ? null
 					: lastBroadcast.error;
-			boolean lastActive = lastBroadcast == null ? false
-					: lastBroadcast.active;
-			boolean lastComplete = lastBroadcast == null ? false
-					: lastBroadcast.complete;
+			boolean lastActive = lastBroadcast != null && lastBroadcast.active;
+			boolean lastComplete = lastBroadcast != null && lastBroadcast.complete;
 			float lastFraction = lastBroadcast == null ? -1
 					: lastBroadcast.fraction;
 			float lastElapsed = lastBroadcast == null ? -1
@@ -492,7 +486,7 @@ public class AudioPlayer {
 			boolean stopped = false;
 			for (Listener listener : listenerArray) {
 				// always broadcast this first
-				if (lastActive == false && currentBroadcast.active) {
+				if (!lastActive && currentBroadcast.active) {
 					listener.playbackStarted();
 				}
 
@@ -519,7 +513,7 @@ public class AudioPlayer {
 				((Timer) e.getSource()).stop();
 			}
 		}
-	};
+	}
 
 	private void setTimerActive(int updateInterval, boolean activeState) {
 		Timer timer;
@@ -553,7 +547,7 @@ public class AudioPlayer {
 			Listener[] listenerArray;
 			synchronized (AudioPlayer.this) {
 				listenerArray = realTimeListeners
-						.toArray(new Listener[realTimeListeners.size()]);
+						.toArray(new Listener[0]);
 			}
 			for (Listener l : listenerArray) {
 				try {
@@ -569,7 +563,7 @@ public class AudioPlayer {
 			Listener[] listenerArray;
 			synchronized (AudioPlayer.this) {
 				listenerArray = realTimeListeners
-						.toArray(new Listener[realTimeListeners.size()]);
+						.toArray(new Listener[0]);
 			}
 			for (Listener l : listenerArray) {
 				try {
@@ -585,7 +579,7 @@ public class AudioPlayer {
 			Listener[] listenerArray;
 			synchronized (AudioPlayer.this) {
 				listenerArray = realTimeListeners
-						.toArray(new Listener[realTimeListeners.size()]);
+						.toArray(new Listener[0]);
 			}
 			for (Listener l : listenerArray) {
 				try {

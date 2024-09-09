@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -25,82 +25,9 @@ import javax.sound.sampled.AudioInputStream;
 import com.pump.io.MeasuredInputStream;
 
 /**
- * Reads uncompressed waves.
+ * Reads uncompressed WAV audio files.
  */
 public class WavReader {
-
-	/**
-	 * This method fixes a file with corrupt size fields.
-	 * <p>
-	 * A <code>RandomAccessFile</code> is used to redefine the size of the
-	 * "RIFF" and "data" chunks based on the real file size.
-	 * 
-	 * @throws IOException
-	 *             if an IO problem occurs.
-	 */
-	public static void fixCorruptSizeFields(File wavFile) throws IOException {
-		long realFileSize = wavFile.length();
-		RandomAccessFile raf = null;
-		byte[] array = new byte[4];
-		try {
-			raf = new RandomAccessFile(wavFile, "rw");
-			raf.seek(0);
-			WavReader.read(raf, array, 4);
-			String chunkID = readString(array, 0, 4);
-
-			// validate the expected presence of the "RIFF" and "WAVE" strings:
-			if (!"RIFF".equals(chunkID))
-				throw new IOException(
-						"the file did not begin with a RIFF header: "
-								+ wavFile.getAbsolutePath());
-
-			raf.seek(8);
-			WavReader.read(raf, array, 4);
-			chunkID = readString(array, 0, 4);
-
-			if (!"WAVE".equals(chunkID))
-				throw new IOException(
-						"the file did not contain a WAVE identifier: "
-								+ wavFile.getAbsolutePath());
-
-			// we have 2 size fields to fix:
-
-			// First: the size of the wave file (after the "RIFF" identifier)
-
-			raf.seek(4);
-			WavFileWriter.writeLong(array, realFileSize - 8, 4);
-			raf.write(array, 0, 4);
-
-			// Second: the size of the data chunk (after the "data" identifier)
-			// To do this, we have to find where the "data" identifier is:
-
-			raf.seek(12);
-			while (raf.getFilePointer() < realFileSize) {
-				WavReader.read(raf, array, 4);
-				chunkID = readString(array, 0, 4);
-
-				if ("data".equals(chunkID)) {
-					long dataChunkSize = realFileSize - raf.getFilePointer()
-							- 4;
-					WavFileWriter.writeLong(array, dataChunkSize, 4);
-					raf.write(array, 0, 4);
-					return;
-				}
-				WavReader.read(raf, array, 4);
-				long chunkSize = readLong(array, 0, 4);
-
-				raf.seek(raf.getFilePointer() + chunkSize);
-			}
-		} finally {
-			if (raf != null) {
-				try {
-					raf.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 
 	/**
 	 * This validates the first header of a wave file.
@@ -114,19 +41,16 @@ public class WavReader {
 	 * false, the method <code>fixCorruptSizeFields()</code> should fix the
 	 * problem.
 	 * 
-	 * @param wavFile
+	 * @param wavFile the File the inspect
 	 * @return true if the the "RIFF" size header is consistent with the real
 	 *         file size.
 	 */
 	public static boolean isValidSizeHeader(File wavFile) {
 		long realFileSize = wavFile.length();
-		FileInputStream in = null;
 
 		byte[] array = new byte[4];
 
-		try {
-			in = new FileInputStream(wavFile);
-
+		try (FileInputStream in = new FileInputStream(wavFile)) {
 			read(in, array, 4);
 			String chunkID = readString(array, 0, 4);
 			if (!chunkID.equals("RIFF")) {
@@ -142,19 +66,10 @@ public class WavReader {
 
 			read(in, array, 4);
 			chunkID = readString(array, 0, 4);
-			if (!chunkID.equals("WAVE")) {
-				return false;
-			}
-			return true;
+			return chunkID.equals("WAVE");
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
-		} finally {
-			try {
-				in.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -164,12 +79,7 @@ public class WavReader {
 		try {
 			fileIn = new FileInputStream(file);
 			return createAudioInputStream(fileIn);
-		} catch (RuntimeException e) {
-			if (fileIn != null) {
-				fileIn.close();
-			}
-			throw e;
-		} catch (IOException e) {
+		} catch (RuntimeException | IOException e) {
 			if (fileIn != null) {
 				fileIn.close();
 			}
@@ -228,7 +138,7 @@ public class WavReader {
 		}
 
 		AudioFormat format = reader.getAudioFormat();
-		/** the length in sample frames of the data in this stream; */
+		// the length in sample frames of the data in this stream
 		long sampleFrames = reader.dataChunkSize / format.getFrameSize();
 		return new AudioInputStream(pipedIn, format, sampleFrames);
 	}
@@ -280,10 +190,7 @@ public class WavReader {
 			try {
 				chunkID = readString(4);
 			} catch (EmptyReadException e) {
-				/**
-				 * T4L bug 15259: Some encoders must write a byte "0" to signify
-				 * EOF?
-				 */
+				// Some encoders must write a byte "0" to signify EOF?
 				break;
 			}
 			long chunkSize = readLong(4);
@@ -342,8 +249,7 @@ public class WavReader {
 		if (id.equals("fmt ")) {
 			byte[] array = new byte[(int) size];
 			read(array, array.length);
-			WavFormatChunk chunk = new WavFormatChunk(array);
-			lastFormatChunk = chunk;
+			lastFormatChunk = new WavFormatChunk(array);
 		} else if (id.equals("data")) {
 			dataChunkSize = size;
 			if (lastFormatChunk == null) {
@@ -482,12 +388,12 @@ public class WavReader {
 	private void println(byte[] bytes, int len) {
 		StringBuffer sb = new StringBuffer();
 		for (int a = 0; a < len; a++) {
-			sb.append("'" + ((char) bytes[a]) + "' ");
+			sb.append("'").append((char) bytes[a]).append("' ");
 		}
 
 		sb.append("(");
 		for (int a = 0; a < len; a++) {
-			sb.append(Byte.toString(bytes[a]));
+			sb.append(bytes[a]);
 			if (a != len - 1) {
 				sb.append(' ');
 			}
@@ -498,9 +404,6 @@ public class WavReader {
 
 	/**
 	 * Reads a fixed amount of bytes off the input stream.
-	 * 
-	 * @param amt
-	 * @throws IOException
 	 */
 	private synchronized void read(byte[] dest, int amt) throws IOException {
 		read(in, dest, amt);
@@ -511,23 +414,6 @@ public class WavReader {
 		int off = 0;
 		while (off < amt) {
 			int read = in.read(dest, off, amt - off);
-			if (read == -1) {
-				if (off == 1 && dest[0] == 0) // if we read exactly one 0-byte
-					throw new EmptyReadException();
-				if (off == 0) // if we read nothing
-					throw new EmptyReadException();
-				throw new EOFException("expected " + amt + " bytes, but only "
-						+ off + " were read before the stream ended.");
-			}
-			off += read;
-		}
-	}
-
-	private static synchronized void read(RandomAccessFile raf, byte[] dest,
-			int amt) throws IOException {
-		int off = 0;
-		while (off < amt) {
-			int read = raf.read(dest, off, amt - off);
 			if (read == -1) {
 				if (off == 1 && dest[0] == 0) // if we read exactly one 0-byte
 					throw new EmptyReadException();

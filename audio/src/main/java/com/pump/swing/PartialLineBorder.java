@@ -18,7 +18,9 @@ import java.awt.Paint;
 
 import javax.swing.border.Border;
 
-/** A border that only paints some of its edges. */
+/**
+ * This is a border that only paints some of its edges.
+ */
 public class PartialLineBorder implements Border {
 	Paint p;
 	Insets i;
@@ -29,7 +31,7 @@ public class PartialLineBorder implements Border {
 	}
 
 	public PartialLineBorder(Paint p, int top, int left, int bottom, int right) {
-		this(p, new Insets(top, left, right, bottom));
+		this(p, new Insets(top, left, bottom, right));
 	}
 
 	public PartialLineBorder(Paint p, boolean top, boolean left,
@@ -61,5 +63,4 @@ public class PartialLineBorder implements Border {
 			g.drawLine(a, y, a, y + h);
 		}
 	}
-
 }

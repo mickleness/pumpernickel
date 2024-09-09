@@ -95,10 +95,8 @@ public class AudioPlayerComponent extends JComponent {
 
 	@Override
 	public void updateUI() {
-		if (UIManager.getDefaults().get(uiClassID) == null) {
-			UIManager.getDefaults().put(uiClassID,
-					"com.pump.plaf.BasicAudioPlayerUI");
-		}
+		UIManager.getDefaults().putIfAbsent(uiClassID,
+				"com.pump.plaf.BasicAudioPlayerUI");
 		setUI((AudioPlayerUI) UIManager.getUI(this));
 	}
 

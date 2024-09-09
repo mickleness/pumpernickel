@@ -77,7 +77,7 @@ public class MeasuredInputStream extends InputStream {
 	}
 
 	@Override
-	public synchronized void mark(int readlimit) {
+	public synchronized void mark(int readLimit) {
 		throw new RuntimeException();
 	}
 
@@ -129,8 +129,7 @@ public class MeasuredInputStream extends InputStream {
 	 * This skips forward to the requested position. If the requested position
 	 * is less than the current position, then an exception is thrown.
 	 * 
-	 * @param pos
-	 * @throws IOException
+	 * @param pos the requested position to seek to.
 	 */
 	public void seek(long pos) throws IOException {
 		if (pos == read)

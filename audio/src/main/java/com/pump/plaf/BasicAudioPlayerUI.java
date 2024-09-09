@@ -1,40 +1,14 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.plaf;
-
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.net.URL;
-
-import javax.swing.AbstractButton;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.SliderUI;
 
 import com.pump.audio.AudioPlayer;
 import com.pump.audio.AudioPlayer.StartTime;
@@ -44,6 +18,16 @@ import com.pump.icon.TriangleIcon;
 import com.pump.swing.AnimationController;
 import com.pump.swing.AudioPlayerComponent;
 
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.SliderUI;
+import java.awt.*;
+import java.awt.event.HierarchyListener;
+import java.beans.PropertyChangeListener;
+import java.net.URL;
+
 public class BasicAudioPlayerUI extends AudioPlayerUI {
 
 	/**
@@ -51,6 +35,7 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 	 * by calling: <br>
 	 * <code>UIManager.getDefaults().put("ButtonUI", "com.pump.plaf.BevelButtonUI");</code>
 	 */
+	@SuppressWarnings("unused")
 	public static ComponentUI createUI(JComponent c) {
 		return new BasicAudioPlayerUI();
 	}
@@ -105,23 +90,17 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 			AnimationController.format(controller, playButton,
 					new JButton[] {}, playbackProgress);
 
-			playButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (apc.getAudioPlayer() == null
-							|| !apc.getAudioPlayer().isPlaying()) {
-						play();
-					} else {
-						apc.getUI().doPause(apc);
-					}
+			playButton.addActionListener(e -> {
+				if (apc.getAudioPlayer() == null
+						|| !apc.getAudioPlayer().isPlaying()) {
+					play();
+				} else {
+					apc.getUI().doPause(apc);
 				}
 			});
 
 			updateUI();
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					updateUI();
-				}
-			});
+			SwingUtilities.invokeLater(this::updateUI);
 		}
 
 		private void play() {
@@ -137,11 +116,7 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 
 		protected void updateUI() {
 			if (!SwingUtilities.isEventDispatchThread()) {
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						updateUI();
-					}
-				});
+				SwingUtilities.invokeLater(this::updateUI);
 				return;
 			}
 
@@ -151,8 +126,7 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 
 			SliderUI ui = playbackProgress.getUI();
 
-			if (ui instanceof WaveformSliderUI) {
-				WaveformSliderUI wsui = (WaveformSliderUI) ui;
+			if (ui instanceof WaveformSliderUI wsui) {
 				if (wsui.getSource().equals(source)) {
 					return;
 				}
@@ -174,12 +148,7 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 						try {
 							wsui = new WaveformSliderUI(playbackProgress,
 									source);
-							SwingUtilities.invokeLater(new Runnable() {
-								@Override
-								public void run() {
-									playbackProgress.setUI(wsui);
-								}
-							});
+							SwingUtilities.invokeLater(() -> playbackProgress.setUI(wsui));
 						} catch (Throwable t) {
 							t.printStackTrace();
 						}
@@ -193,28 +162,20 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 	private static final String FIELDS_KEY = BasicAudioPlayerUI.class.getName()
 			+ ".fields";
 
-	PropertyChangeListener updateSourceListener = new PropertyChangeListener() {
-		public void propertyChange(PropertyChangeEvent evt) {
-			JComponent src = evt.getSource() instanceof JComponent ? (JComponent) evt
-					.getSource() : null;
-			updateComponents((AudioPlayerComponent) src);
-		}
+	PropertyChangeListener updateSourceListener = evt -> {
+		JComponent src = evt.getSource() instanceof JComponent ? (JComponent) evt
+				.getSource() : null;
+		updateComponents((AudioPlayerComponent) src);
 	};
 
-	HierarchyListener hierarchyListener = new HierarchyListener() {
-
-		@Override
-		public void hierarchyChanged(HierarchyEvent e) {
-			Component c = e.getComponent();
-			if (c instanceof AudioPlayerComponent) {
-				AudioPlayerComponent jc = (AudioPlayerComponent) c;
-				if (jc.getUI() instanceof BasicAudioPlayerUI) {
-					((BasicAudioPlayerUI) jc.getUI())
-							.updateComponents((AudioPlayerComponent) jc);
-				}
+	HierarchyListener hierarchyListener = e -> {
+		Component c = e.getComponent();
+		if (c instanceof AudioPlayerComponent jc) {
+			if (jc.getUI() instanceof BasicAudioPlayerUI) {
+				((BasicAudioPlayerUI) jc.getUI())
+						.updateComponents(jc);
 			}
 		}
-
 	};
 
 	protected void updateComponents(AudioPlayerComponent apc) {
@@ -271,8 +232,7 @@ public class BasicAudioPlayerUI extends AudioPlayerUI {
 		int v = (int) (span * timeAsFraction + fields.playbackProgress
 				.getMinimum());
 		SliderUI ui = fields.playbackProgress.getUI();
-		boolean isDragging = ui instanceof WaveformSliderUI ? ((WaveformSliderUI) ui)
-				.isDragging() : false;
+		boolean isDragging = ui instanceof WaveformSliderUI wsui && wsui.isDragging();
 		if (!isDragging) {
 			fields.playbackProgress.removeChangeListener(fields.sliderListener);
 			fields.playbackProgress.setValue(v);

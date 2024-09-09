@@ -10,14 +10,17 @@
  */
 package com.pump.io;
 
+import javax.sound.sampled.AudioInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * This is a combination of multiple <code>InputStreams</code>. One the first
  * stream is finished, the next stream is read.
  */
 public class CombinedInputStream extends InputStream {
+
 	static class Input {
 		InputStream stream;
 		boolean closeable;
@@ -30,16 +33,45 @@ public class CombinedInputStream extends InputStream {
 
 	Input[] inputs;
 
+	/**
+	 * Create a CombinedInputStream from two InputStreams.
+	 *
+	 * @param in1 the first InputStream to read
+	 * @param in2 the second InputStream to read
+	 * @param close1 if true then the first InputStream is closed when it is finished
+	 * @param close2 if true then the second InputStream is closed when it is finished
+	 */
 	public CombinedInputStream(InputStream in1, InputStream in2,
 			boolean close1, boolean close2) {
 		this(new InputStream[] { in1, in2 }, new boolean[] { close1, close2 });
 	}
 
+	/**
+	 * Create a CombinedInputStream that may close some InputStreams but not others.
+	 *
+	 * @param inputStreams the InputStreams to read, in order.
+	 * @param close whether to close each InputStream after it is finished.
+	 *              This must have as many elements as `inputStreams`.
+	 */
 	public CombinedInputStream(InputStream[] inputStreams, boolean[] close) {
 		inputs = new Input[inputStreams.length];
 		for (int a = 0; a < inputs.length; a++) {
 			inputs[a] = new Input(inputStreams[a], close[a]);
 		}
+	}
+
+	/**
+	 * Create a CombinedInputStream that closes each InputStream as it is finished.
+	 * @param inputStreams the InputStreams to read, in order.
+	 */
+	public CombinedInputStream(InputStream[] inputStreams) {
+		this(inputStreams, createBooleanArray(inputStreams.length, true));
+	}
+
+	private static boolean[] createBooleanArray(int length, boolean value) {
+		boolean[] returnValue = new boolean[length];
+		Arrays.fill(returnValue, value);
+		return returnValue;
 	}
 
 	@Override

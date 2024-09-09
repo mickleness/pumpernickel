@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -52,7 +52,7 @@ public class StretchedAudioInputStream extends AudioInputStream {
 		PipedInputStream pipedIn = new PipedInputStream();
 		PipedOutputStream pipedOut = new PipedOutputStream(pipedIn);
 
-		/**
+		/*
 		 * One flaw with this model is that we always generate ALL the
 		 * transformed data: even if the entity working with pipedIn is trying
 		 * to skip large chunks of data.

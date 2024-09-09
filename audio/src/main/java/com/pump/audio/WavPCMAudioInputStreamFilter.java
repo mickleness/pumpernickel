@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -35,18 +35,19 @@ import javax.sound.sampled.AudioInputStream;
  */
 public class WavPCMAudioInputStreamFilter extends FrameFilterAudioInputStream {
 
-	private static enum Conversion {
+	private enum Conversion {
 		TO_LITTLE_ENDIAN, TO_SIGNED, TO_UNSIGNED
-	};
+	}
 
 	/**
+	 * @param format
+	 * 		   the AudioFormat to inspect
 	 * @return true if this AudioFormat is ready to be output to a wav audio
 	 *         file. This will return false if the format is big-endian, or if
 	 *         the sign doesn't match the sample size. In wav files: 16-bit
 	 *         audio is signed, and 8-bit audio is unsigned. So if this format
 	 *         represents 16-bit unsigned or 8-bit signed: then this method
 	 *         returns false.
-	 * @param format
 	 */
 	public static boolean isWavCompatible(AudioFormat format) {
 		if (!(format.getEncoding().equals(Encoding.PCM_SIGNED) || format
@@ -60,7 +61,7 @@ public class WavPCMAudioInputStreamFilter extends FrameFilterAudioInputStream {
 	}
 
 	private static Set<Conversion> getRequiredConversions(AudioFormat format) {
-		Set<Conversion> set = new HashSet<Conversion>();
+		Set<Conversion> set = new HashSet<>();
 		if (format.isBigEndian())
 			set.add(Conversion.TO_LITTLE_ENDIAN);
 		if (format.getEncoding().equals(Encoding.PCM_SIGNED)
@@ -133,9 +134,7 @@ public class WavPCMAudioInputStreamFilter extends FrameFilterAudioInputStream {
 
 	@Override
 	protected void filterFrames(byte[] data, int off, int frameCount) {
-		if (applyConversions == false) {
-			return;
-		} else {
+		if (applyConversions) {
 			int sampleCount = frameCount * samplesPerFrame;
 			if (valueDelta != 0) {
 				for (int i = 0; i < sampleCount; i++) {
