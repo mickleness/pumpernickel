@@ -85,27 +85,12 @@ public class BmpDecoder {
 	 */
 	public static Dimension getSize(File file) throws IOException {
 		try (FileInputStream fileIn = new FileInputStream(file)) {
-			return getSize(fileIn);
-		}
-	}
-
-	/**
-	 * Returns the dimensions of a BMP.
-	 * 
-	 * @param in
-	 *            a stream containing a BMP. This will be closed when this
-	 *            method returns.
-	 * @return the size of the BMP, or null if this input stream did not appear
-	 *         to be a valid BMP image.
-	 * @throws IOException
-	 *             if an IO problem occurs.
-	 */
-	public static Dimension getSize(InputStream in) throws IOException {
-		try {
-			BmpHeader header = new BmpHeader(in);
-			return new Dimension(header.width, header.height);
-		} catch (BmpHeaderException e) {
-			return null;
+			try {
+				BmpHeader header = new BmpHeader(fileIn);
+				return new Dimension(header.width, header.height);
+			} catch(BmpHeaderException bhe) {
+				return null;
+			}
 		}
 	}
 }

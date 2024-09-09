@@ -10,7 +10,6 @@
  */
 package com.pump.image.bmp;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 import java.io.*;
@@ -81,9 +80,9 @@ public class BmpDecoderIterator implements PixelIterator<byte[]> {
 		private void validateSize() {
 			if (width == -1) {
 				try(InputStream in = src.createInputStream()) {
-					Dimension d = BmpDecoder.getSize(src.createInputStream());
-					width = d.width;
-					height = d.height;
+					BmpHeader header = new BmpHeader(in);
+					width = header.width;
+					height = header.height;
 				} catch(IOException e) {
 					throw new RuntimeException(e);
 				}
