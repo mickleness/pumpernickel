@@ -52,7 +52,7 @@ import javax.swing.plaf.basic.BasicPanelUI;
 
 import com.pump.awt.Dimension2D;
 import com.pump.desktop.temp.TempFileManager;
-import com.pump.geom.TransformUtils;
+import com.pump.geom.RectangularTransform;
 import com.pump.graphics.Graphics2DContext;
 import com.pump.graphics.vector.ImageOperation;
 import com.pump.graphics.vector.Operation;
@@ -226,8 +226,7 @@ public class VectorImageDemo extends ShowcaseExampleDemo {
 						c.getHeight() / 2 - displayBounds.height / 2,
 						displayBounds.width, displayBounds.height);
 
-				AffineTransform tx = TransformUtils
-						.createAffineTransform(bounds, paintBounds);
+				AffineTransform tx = new RectangularTransform(bounds, paintBounds).createAffineTransform();
 				Graphics2D g2 = (Graphics2D) g.create();
 				g2.transform(tx);
 

@@ -13,9 +13,7 @@ package com.pump.geom;
 import com.pump.math.Equations;
 
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 /**
  * This is a collection of methods that deal with AffineTransforms. Note the
@@ -53,27 +51,6 @@ public class TransformUtils {
 				initialP2.getX(), initialP2.getY(), initialP3.getX(),
 				initialP3.getY(), finalP1.getX(), finalP1.getY(),
 				finalP2.getX(), finalP2.getY(), finalP3.getX(), finalP3.getY());
-	}
-
-	/**
-	 * This will return the <code>AffineTransform</code> that maps one rectangle
-	 * onto another.
-	 * <P>
-	 * This uses the <code>solve(matrix,true)</code> method.
-	 * 
-	 * @param r1
-	 *            the rectangle that transforms into r2
-	 * @param r2
-	 *            the rectangle that originated at r1
-	 * @return an AffineTransform that maps from the initial rectangle to the
-	 *         final rectangle.
-	 */
-	public static AffineTransform createAffineTransform(Rectangle2D r1,
-			Rectangle2D r2) {
-		return createAffineTransform(r1.getMinX(), r1.getMinY(), r1.getMaxX(),
-				r1.getMinY(), r1.getMinX(), r1.getMaxY(), r2.getMinX(),
-				r2.getMinY(), r2.getMaxX(), r2.getMinY(), r2.getMinX(),
-				r2.getMaxY());
 	}
 
 	/**
@@ -184,16 +161,5 @@ public class TransformUtils {
 		tx.scale(-1, 1);
 		tx.translate(-x, 0);
 		return tx;
-	}
-
-	/**
-	 * Create a simple scaling AffineTransform that transforms a rectangle
-	 * bounded by (0,0,d1.width,d2.height) to (0,0,d2.width,d2.height)
-	 */
-	public static AffineTransform createAffineTransform(Dimension2D d1,
-			Dimension2D d2) {
-		return createAffineTransform(new Rectangle2D.Double(0, 0,
-				d1.getWidth(), d1.getHeight()),
-				new Rectangle2D.Double(0, 0, d2.getWidth(), d2.getHeight()));
 	}
 }

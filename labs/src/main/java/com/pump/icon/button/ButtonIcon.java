@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
 
-import com.pump.geom.TransformUtils;
+import com.pump.geom.RectangularTransform;
 import com.pump.data.Property;
 
 /**
@@ -116,7 +116,7 @@ public abstract class ButtonIcon implements Icon {
 				getDefaultIconHeight());
 		Rectangle newSize = new Rectangle(0, 0, transformedSize.width,
 				transformedSize.height);
-		return TransformUtils.createAffineTransform(oldSize, newSize);
+		return new RectangularTransform(oldSize, newSize).createAffineTransform();
 	}
 
 	@Override

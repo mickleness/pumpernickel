@@ -26,7 +26,7 @@ import java.util.Objects;
 
 import javax.swing.Icon;
 
-import com.pump.geom.TransformUtils;
+import com.pump.geom.RectangularTransform;
 
 /**
  * This icon is a circle with a diagonal line from the top-left to the
@@ -83,7 +83,7 @@ public class StrikeThroughIcon implements Icon {
 				getIconHeight());
 		Rectangle2D src = outline.getBounds2D();
 		g2.setColor(color);
-		AffineTransform tx = TransformUtils.createAffineTransform(src, dest);
+		AffineTransform tx = new RectangularTransform(src, dest).createAffineTransform();
 		g2.fill(tx.createTransformedShape(outline));
 		g2.dispose();
 

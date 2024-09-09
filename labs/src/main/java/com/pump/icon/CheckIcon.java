@@ -22,9 +22,9 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 
 import com.pump.blog.ResourceSample;
+import com.pump.geom.RectangularTransform;
 import com.pump.geom.ShapeBounds;
 import com.pump.geom.ShapeStringUtils;
-import com.pump.geom.TransformUtils;
 
 /**
  * A checkmark icon.
@@ -111,8 +111,7 @@ public class CheckIcon implements Icon {
 		g2.setColor(color);
 		Rectangle2D abstractBounds = ShapeBounds.getBounds(checkShape);
 		Rectangle2D realBounds = new Rectangle(0, 0, width, height);
-		g2.transform(TransformUtils.createAffineTransform(abstractBounds,
-				realBounds));
+		g2.transform(new RectangularTransform(abstractBounds, realBounds).createAffineTransform());
 		g2.fill(checkShape);
 		g2.dispose();
 	}

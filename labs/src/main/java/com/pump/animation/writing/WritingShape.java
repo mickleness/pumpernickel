@@ -17,7 +17,7 @@ import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.util.StringTokenizer;
 
-import com.pump.geom.TransformUtils;
+import com.pump.geom.RectangularTransform;
 import com.pump.util.ObservableProperties;
 import com.pump.util.ObservableProperties.Key;
 import com.pump.util.list.ObservableList;
@@ -274,8 +274,7 @@ public class WritingShape {
 
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
-			AffineTransform tx = TransformUtils.createAffineTransform(
-					getBounds(), bounds);
+			AffineTransform tx = new RectangularTransform(getBounds(), bounds).createAffineTransform();
 			// if this WritingShape is based on a unit rectangle, the caller
 			// probably configured a
 			// better looking stroke...

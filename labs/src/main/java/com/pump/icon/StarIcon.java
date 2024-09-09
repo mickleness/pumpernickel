@@ -24,8 +24,8 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 
 import com.pump.blog.ResourceSample;
+import com.pump.geom.RectangularTransform;
 import com.pump.geom.StarPolygon;
-import com.pump.geom.TransformUtils;
 
 /**
  * A star icon.
@@ -97,7 +97,7 @@ public class StarIcon implements Icon {
 		Rectangle2D r1 = starShape.getBounds2D();
 		Rectangle2D r2 = new Rectangle(1, 1, getIconWidth() - 2,
 				getIconHeight() - 2);
-		g2.transform(TransformUtils.createAffineTransform(r1, r2));
+		g2.transform(new RectangularTransform(r1, r2).createAffineTransform());
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
