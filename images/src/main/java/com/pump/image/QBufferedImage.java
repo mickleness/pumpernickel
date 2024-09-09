@@ -10,8 +10,7 @@
  */
 package com.pump.image;
 
-import com.pump.image.pixel.ImagePixelIterator;
-import com.pump.image.pixel.Scaling;
+import com.pump.image.pixel.*;
 
 import java.awt.*;
 import java.awt.image.*;
@@ -20,6 +19,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This is a <code>BufferedImage</code> that offers a <code>setProperty()</code>
@@ -29,6 +29,123 @@ import java.util.*;
  */
 public class QBufferedImage extends BufferedImage
 		implements Externalizable {
+
+	/**
+	 * Copy one image to another. Both images must be the same size, but they can be different
+	 * image types. For example this can convert an INT_ARGB to a BYTE_BGR image.
+	 * <p>
+	 * Both arguments could also share the same DataBuffer. For example, you can use
+	 * {@link ImageType#convert(BufferedImage)} to create two BufferedImages that share the
+	 * same DataBuffer. They are still fundamentally different if their pixel encoding is different,
+	 * though.
+	 *
+	 * @param src the image to copy.
+	 * @param dst the image that is overwritten by src. If this image doesn't match the dimensions
+	 *            of the src image then an IllegalArgumentException is thrown.
+	 * @param threadCount the number of threads to use. If this is 1 (or less) then only the
+	 *                    current thread is used.
+	 */
+	public static void copy(BufferedImage src, BufferedImage dst, int threadCount) {
+		if (src.getWidth() != dst.getWidth() || src.getHeight() != dst.getHeight())
+			throw new IllegalArgumentException(src.getWidth() + "x" + src.getHeight() + " must match " + dst.getWidth() + "x" + dst.getHeight());
+
+		try {
+			Raster srcRaster = src.getRaster();
+			Raster dstRaster = dst.getRaster();
+
+			AtomicInteger yRef = new AtomicInteger(0);
+			ImageType srcType = ImageType.get(src.getType());
+			ImageType dstType = ImageType.get(dst.getType());
+
+			int width = srcRaster.getWidth();
+			int height = srcRaster.getHeight();
+
+			int srcScanline, dstScanline;
+			Object srcData, dstData;
+			if (srcRaster.getDataBuffer() instanceof DataBufferByte dbb && dbb.getNumBanks() == 1) {
+				srcData = dbb.getData();
+				srcScanline = ((PixelInterleavedSampleModel)srcRaster.getSampleModel()).getScanlineStride();
+			} else if (srcRaster.getDataBuffer() instanceof DataBufferInt dbi && dbi.getNumBanks() == 1) {
+				srcData = dbi.getData();
+				srcScanline = ((SinglePixelPackedSampleModel)srcRaster.getSampleModel()).getScanlineStride();
+			} else {
+				throw new UnsupportedOperationException("unsupported DataBuffer: " + srcRaster.getDataBuffer());
+			}
+			int srcSampleDY = srcRaster.getSampleModelTranslateY();
+			int srcSampleDX = srcRaster.getSampleModelTranslateX();
+
+			if (dstRaster.getDataBuffer() instanceof DataBufferByte dbb && dbb.getNumBanks() == 1) {
+				dstData = dbb.getData();
+				dstScanline = ((PixelInterleavedSampleModel)dstRaster.getSampleModel()).getScanlineStride();
+			} else if (dstRaster.getDataBuffer() instanceof DataBufferInt dbi && dbi.getNumBanks() == 1) {
+				dstData = dbi.getData();
+				dstScanline = ((SinglePixelPackedSampleModel)dstRaster.getSampleModel()).getScanlineStride();
+			} else {
+				throw new UnsupportedOperationException("unsupported DataBuffer: " + dstRaster.getDataBuffer());
+			}
+			int dstSampleDY = dstRaster.getSampleModelTranslateY();
+			int dstSampleDX = dstRaster.getSampleModelTranslateX();
+			int srcMinY = srcRaster.getMinY();
+			int srcMinX = srcRaster.getMinX();
+			int srcDataOffset = srcRaster.getDataBuffer().getOffset();
+			int dstMinY = dstRaster.getMinY();
+			int dstMinX = dstRaster.getMinX();
+			int dstDataOffset = dstRaster.getDataBuffer().getOffset();
+
+			int srcSampleSize = srcType.getSampleCount();
+			int dstSampleSize = dstType.getSampleCount();
+
+			Runnable runnable = () -> {
+				while (true) {
+					int y = yRef.getAndIncrement();
+					if (y >= height)
+						return;
+					int srcOffset = (y-srcSampleDY-srcMinY)*srcScanline + (-srcSampleDX-srcMinX) * srcSampleSize + srcDataOffset;
+					int dstOffset = (y-dstSampleDY-dstMinY)*dstScanline + (-dstSampleDX-dstMinX) * dstSampleSize + dstDataOffset;
+					dstType.convertFrom(srcType, srcData, srcOffset, dstData, dstOffset, width);
+				}
+			};
+
+			if (threadCount <= 1) {
+				runnable.run();
+			} else {
+				Thread[] threads = new Thread[threadCount - 1];
+				for (int a = 0; a < threads.length; a++) {
+					threads[a] = new Thread(runnable);
+					threads[a].start();
+				}
+
+				runnable.run();
+
+				for (Thread thread : threads) {
+					try {
+						thread.join();
+					} catch(Exception e) {
+						throw new RuntimeException(e);
+					}
+				}
+			}
+		} catch(Exception e) {
+			// Please alert jeremy.wood@mac.com if you see this happen; I don't know of a case where this
+			// actually occurs. But if it does occur: we'll still complete the image operation.
+			e.printStackTrace();
+
+			Graphics2D g = dst.createGraphics();
+			if (src.getTransparency() != Transparency.OPAQUE) {
+				g.setComposite(AlphaComposite.Clear);
+				g.fillRect(0,0,dst.getWidth(),dst.getHeight());
+				g.setComposite(AlphaComposite.SrcOver);
+			}
+			g.drawImage(src, 0, 0, null);
+			g.dispose();
+		}
+	}
+
+	public static QBufferedImage get(BufferedImage bi) {
+		if (bi instanceof QBufferedImage qbi)
+			return qbi;
+		return new QBufferedImage(bi);
+	}
 
 	/**
 	 * This is how we encode null values in {@link #extraProperties}.
@@ -61,7 +178,7 @@ public class QBufferedImage extends BufferedImage
 		return returnValue;
 	}
 
-	private static Hashtable<String, Object> getPropertiesHashtable(
+	public static Hashtable<String, Object> getPropertiesHashtable(
 			BufferedImage bi) {
 		Map<String, Object> map = getProperties(bi);
 		Hashtable<String, Object> returnValue = new Hashtable<>(map.size());
@@ -210,6 +327,12 @@ public class QBufferedImage extends BufferedImage
 		extraProperties.putAll(properties);
 	}
 
+	/**
+	 * Return true if the argument is identical to this object.
+	 * <p>
+	 * This method only returns true if two images share the same
+	 * ColorModel. See {@link #equals(BufferedImage, int)} for an alternative.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -257,6 +380,65 @@ public class QBufferedImage extends BufferedImage
 		return true;
 	}
 
+	/**
+	 * Return true if the argument is identical to this object.
+	 * <p>
+	 * This can compare images of different types. For example, if one image
+	 * is INT_ARGB and the other is BYTE_BGR then this may still return true
+	 * if each pixel color is identical.
+	 *
+	 * @param tolerance the amount each color channel (ARGB) can deviate and still
+	 *                  be considered equal. If this is zero then the two images must
+	 *                  be identical. The maximum value is 255, so a value of 1-10 allows
+	 *                  for a small deviation between the two images.
+	 */
+	public boolean equals(BufferedImage other, int tolerance) {
+		if (tolerance < 0 || tolerance > 255)
+			throw new IllegalArgumentException("The tolerance (" + tolerance + ") must be between [0, 255]");
+		int w = getWidth();
+		int h = getHeight();
+
+		if (w != other.getWidth() || h != other.getHeight())
+			return false;
+
+		int[] row1 = new int[w];
+		int[] row2 = new int[w];
+		PixelIterator<int[]> iter1 = ImageType.INT_ARGB.createPixelIterator(this);
+		PixelIterator<int[]> iter2 = ImageType.INT_ARGB.createPixelIterator(other);
+		while (!iter1.isDone()) {
+			iter1.next(row1, 0);
+			iter2.next(row2, 0);
+			for (int a = 0; a < w; a++) {
+				if (row1[a] != row2[a]) {
+					if (tolerance == 0) {
+						return false;
+					} else {
+						int da = ((row1[a] >> 24) & 0xff) - ((row2[a] >> 24) & 0xff);
+						if (Math.abs(da) > tolerance)
+							return false;
+
+						int dr = ((row1[a] >> 16) & 0xff) - ((row2[a] >> 16) & 0xff);
+						if (Math.abs(dr) > tolerance)
+							return false;
+
+						int dg = ((row1[a] >> 8) & 0xff) - ((row2[a] >> 8) & 0xff);
+						if (Math.abs(dg) > tolerance)
+							return false;
+
+						int db = ((row1[a] >> 0) & 0xff) - ((row2[a] >> 0) & 0xff);
+						if (Math.abs(db) > tolerance)
+							return false;
+					}
+				}
+			}
+		}
+
+		if (!getProperties(this).equals(getProperties(other)))
+			return false;
+
+		return true;
+	}
+
 	@Override
 	public int hashCode() {
 		int w = getWidth();
@@ -294,6 +476,36 @@ public class QBufferedImage extends BufferedImage
 		return ImagePixelIterator.createBufferedImage(super.getScaledInstance(width, height, hints));
 	}
 
+	/**
+	 * Copy this image to another BufferedImage.
+	 *
+	 * @param dst the image that is overwritten by this image. If this image doesn't match the dimensions
+	 *            of this image then an IllegalArgumentException is thrown.
+	 * @param threadCount the number of threads to use. If this is 1 (or less) then only the
+	 *                    current thread is used.
+	 *
+	 * @return this QBufferedImage
+	 */
+	public QBufferedImage copyTo(BufferedImage dst, int threadCount) {
+		copy(this, dst, threadCount);
+		return this;
+	}
+
+	/**
+	 * Copy this image to another BufferedImage.
+	 *
+	 * @param src the image that overwrites this image. If this image doesn't match the dimensions
+	 *            of this image then an IllegalArgumentException is thrown.
+	 * @param threadCount the number of threads to use. If this is 1 (or less) then only the
+	 *                    current thread is used.
+	 *
+	 * @return this QBufferedImage
+	 */
+	public QBufferedImage copyFrom(BufferedImage src, int threadCount) {
+		copy(src, this, threadCount);
+		return this;
+	}
+
 	///////// serialization:
 
 	/**
@@ -313,26 +525,26 @@ public class QBufferedImage extends BufferedImage
 	 */
 	private String getSerializationUnsupportedReason() {
 		switch (getType()) {
-		case BufferedImage.TYPE_3BYTE_BGR:
-		case BufferedImage.TYPE_4BYTE_ABGR:
-		case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-		case BufferedImage.TYPE_BYTE_GRAY:
-		case BufferedImage.TYPE_INT_ARGB:
-		case BufferedImage.TYPE_INT_ARGB_PRE:
-		case BufferedImage.TYPE_INT_BGR:
-		case BufferedImage.TYPE_INT_RGB:
-			return null;
+			case BufferedImage.TYPE_3BYTE_BGR:
+			case BufferedImage.TYPE_4BYTE_ABGR:
+			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
+			case BufferedImage.TYPE_BYTE_GRAY:
+			case BufferedImage.TYPE_INT_ARGB:
+			case BufferedImage.TYPE_INT_ARGB_PRE:
+			case BufferedImage.TYPE_INT_BGR:
+			case BufferedImage.TYPE_INT_RGB:
+				return null;
 
-		case BufferedImage.TYPE_BYTE_BINARY:
-		case BufferedImage.TYPE_BYTE_INDEXED:
-			// IndexColorModels COULD be supported, I just haven't gotten around
-			// to it:
-			return "This QBufferedImage is not serializable. IndexColorModels are not supported.";
+			case BufferedImage.TYPE_BYTE_BINARY:
+			case BufferedImage.TYPE_BYTE_INDEXED:
+				// IndexColorModels COULD be supported, I just haven't gotten around
+				// to it:
+				return "This QBufferedImage is not serializable. IndexColorModels are not supported.";
 
-		case BufferedImage.TYPE_CUSTOM:
-		default:
-			return "This QBufferedImage is not serializable. This image type ("
-					+ getType() + ") is not supported.";
+			case BufferedImage.TYPE_CUSTOM:
+			default:
+				return "This QBufferedImage is not serializable. This image type ("
+						+ getType() + ") is not supported.";
 
 		}
 	}

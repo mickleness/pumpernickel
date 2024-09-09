@@ -10,11 +10,18 @@
  */
 package com.pump.image.pixel;
 
+import com.pump.image.QBufferedImage;
+import com.pump.io.SerializationUtils;
 import junit.framework.TestCase;
 import org.junit.Test;
 
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class ImageTypeTest extends TestCase {
 
@@ -169,5 +176,132 @@ public class ImageTypeTest extends TestCase {
 
             assertEquals(str, expectedArray[a], actualArray[a]);
         }
+    }
+
+    public void testSerialization() {
+        for (ImageType type : ImageType.values()) {
+            byte[] serialized = SerializationUtils.serialize(type);
+            ImageType type2 = (ImageType) SerializationUtils.deserialize(serialized);
+            assertEquals(type, type2);
+        }
+    }
+
+    @Test
+    public void testConvertImage_accuracy() {
+        for (ImageType srcType : ImageType.values(true)) {
+            for (ImageType dstType : ImageType.values(true)) {
+                if (srcType == dstType || srcType == ImageType.BYTE_GRAY || dstType == ImageType.BYTE_GRAY)
+                    continue;
+
+                boolean highAccuracy = srcType.getColorModel().hasAlpha() == dstType.getColorModel().hasAlpha();
+                if (srcType.getColorModel().hasAlpha())
+                    highAccuracy = highAccuracy && srcType.getColorModel().isAlphaPremultiplied() == dstType.getColorModel().isAlphaPremultiplied();
+
+                String msg = "Testing " + srcType + " -> " + dstType + " (" + (highAccuracy ? "high accuracy" : "low accuracy") + ")";
+                System.out.println(msg);
+
+                boolean canAllocateNewImage;
+                if (srcType.isByte() == dstType.isByte() && srcType.getSampleCount() == dstType.getSampleCount()) {
+                    canAllocateNewImage = false;
+                } else {
+                    canAllocateNewImage = true;
+                }
+
+                Color backgroundColor = srcType.getColorModel().hasAlpha() && !dstType.getColorModel().hasAlpha() ? Color.black : null;
+                int scale = highAccuracy ? 40 : 1;
+                BufferedImage orig = createBufferedImage(srcType.getCode(), scale, backgroundColor);
+                BufferedImage in = createBufferedImage(srcType.getCode(), scale, null);
+
+                // include subimages in accuracy test:
+                orig = orig.getSubimage( (int)(orig.getWidth() * .1), (int)(orig.getHeight() * .1), (int)(orig.getWidth() * .8), (int)(orig.getHeight() * .8) );
+                in = in.getSubimage( (int)(in.getWidth() * .1), (int)(in.getHeight() * .1), (int)(in.getWidth() * .8), (int)(in.getHeight() * .8) );
+
+                QBufferedImage out = dstType.convert(in);
+                if (out == null)
+                    out = dstType.create(in.getWidth(), in.getHeight());
+                out.copyFrom(in, 8);
+
+                // 37 is what's required to get this unit test to pass
+                int tolerance = highAccuracy ? 1 : 40;
+                assertTrue(out.equals(orig, tolerance));
+            }
+        }
+    }
+
+    /**
+     * This is not a unit test really, it's more of a performance comparison.
+     */
+    @Test
+    public void testConvertImage_performance() {
+        Collection<Collection<ImageType>> usedPairs = new HashSet<>();
+        for (ImageType type1 : ImageType.values(true)) {
+            for (ImageType type2 : ImageType.values(true)) {
+                if (type1 != type2 &&
+                        (type1.isByte() == type2.isByte() && type1.getSampleCount() == type2.getSampleCount()) ) {
+                    if (!usedPairs.add(new HashSet<>(Arrays.asList(type1, type2))))
+                        continue;
+
+                    long[] samples = new long[10];
+                    for (int sampleIndex = 0; sampleIndex < samples.length; sampleIndex++) {
+                        BufferedImage t = createBufferedImage(type1.getCode(), 40, null);
+                        samples[sampleIndex] = System.currentTimeMillis();
+                        for (int i = 0; i < 50; i++) {
+                            BufferedImage newImage = new BufferedImage(t.getWidth(), t.getHeight(), type2.getCode());
+                            Graphics2D g = newImage.createGraphics();
+                            g.drawImage(t, 0, 0, null);
+                            g.dispose();
+                            t = newImage;
+
+                            newImage = new BufferedImage(t.getWidth(), t.getHeight(), type1.getCode());
+                            g = newImage.createGraphics();
+                            g.drawImage(t, 0, 0, null);
+                            g.dispose();
+                            t = newImage;
+                        }
+                        samples[sampleIndex] = System.currentTimeMillis() - samples[sampleIndex];
+                    }
+                    Arrays.sort(samples);
+                    long time1 = (samples[samples.length / 2]);
+
+                    for (int sampleIndex = 0; sampleIndex < samples.length; sampleIndex++) {
+                        BufferedImage t = createBufferedImage(type1.getCode(), 40, null);
+                        samples[sampleIndex] = System.currentTimeMillis();
+                        for (int i = 0; i < 50; i++) {
+                            t = type2.convert(t).copyFrom(t, 8);
+                            t = type1.convert(t).copyFrom(t, 8);
+                        }
+                        samples[sampleIndex] = System.currentTimeMillis() - samples[sampleIndex];
+                    }
+                    Arrays.sort(samples);
+                    long time2 = (samples[samples.length / 2]);
+
+                    String percent = DecimalFormat.getPercentInstance().format(((double) time2) / ((double) time1));
+                    System.out.println(type1 + " -> " + type2 + "\t" + time1 + "\t" + time2 + "\t" + percent);
+                }
+            }
+        }
+    }
+
+    private BufferedImage createBufferedImage(int imageType, int scale, Color backgroundColor) {
+        BufferedImage bi = new BufferedImage(100 * scale, 100 * scale, imageType);
+        Graphics2D g = bi.createGraphics();
+        if (backgroundColor != null) {
+            g.setColor(backgroundColor);
+            g.fillRect(0,0,bi.getWidth(),bi.getHeight());
+        }
+        g.scale(scale, scale);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(new Color(0xddffbe0b, true));
+        g.fill(new Ellipse2D.Float(5,5,40,40));
+        g.setColor(new Color(0xaafb5607, true));
+        g.fill(new Ellipse2D.Float(55,5,40,40));
+        g.setColor(new Color(0xbbff006e, true));
+        g.fill(new Ellipse2D.Float(5,55,40,40));
+        g.setColor(new Color(0x998338ec, true));
+        g.fill(new Ellipse2D.Float(55,55,40,40));
+        g.setColor(new Color(0x883a86ff, true));
+        g.fill(new Ellipse2D.Float(15, 15, 70, 70));
+        g.dispose();
+        return bi;
     }
 }

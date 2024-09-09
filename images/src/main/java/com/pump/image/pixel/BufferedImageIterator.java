@@ -443,7 +443,7 @@ abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 				srcData = ((DataBufferByte)bi.getRaster().getDataBuffer()).getData();
 			}
 			rowLength = bi.getWidth() * getPixelSize();
-			subimageX = -bi.getRaster().getSampleModelTranslateX();
+			subimageX = -bi.getRaster().getSampleModelTranslateX() * ImageType.get(bi.getType()).getSampleCount();
 			subimageY = -bi.getRaster().getSampleModelTranslateY();
 		}
 

@@ -10,21 +10,7 @@
  */
 package com.pump.io;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.io.Serializable;
+import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -1104,56 +1090,6 @@ public class IOUtils {
 			}
 		} catch (IOException ex) {
 			return false;
-		}
-	}
-
-	/**
-	 * Deserialize a serialized, compressed object at the file path provided.
-	 * 
-	 * See {@link #serialize(Serializable, File)}
-	 * 
-	 * @param file
-	 *            the file to read.
-	 * @return the deserialized data.
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-	public static Serializable deserialize(File file)
-			throws IOException, ClassNotFoundException {
-		try (FileInputStream fileIn = new FileInputStream(file)) {
-			try (GZIPInputStream zipIn = new GZIPInputStream(fileIn)) {
-				try (ObjectInputStream objIn = new ObjectInputStream(zipIn)) {
-					return (Serializable) objIn.readObject();
-				}
-			}
-		}
-	}
-
-	/**
-	 * Serialize and compress an object to the file path provided.
-	 * 
-	 * See {@link #deserialize(File)}.
-	 * 
-	 * @param object
-	 *            the object to serialized.
-	 * @param dest
-	 *            the file to write.
-	 * @throws IOException
-	 */
-	public static void serialize(Serializable object, File dest)
-			throws IOException {
-
-		if (!dest.exists()) {
-			FileUtils.createNewFile(dest);
-		}
-
-		try (FileOutputStream fileOut = new FileOutputStream(dest)) {
-			try (GZIPOutputStream zipOut = new GZIPOutputStream(fileOut)) {
-				try (ObjectOutputStream objOut = new ObjectOutputStream(
-						zipOut)) {
-					objOut.writeObject(object);
-				}
-			}
 		}
 	}
 

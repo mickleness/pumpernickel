@@ -10,17 +10,12 @@
  */
 package com.pump.desktop.cache;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 import com.pump.io.FileUtils;
 import com.pump.io.IOUtils;
+import com.pump.io.SerializationUtils;
 import com.pump.util.JVM;
 
 public class CacheManager {
@@ -205,12 +200,7 @@ public class CacheManager {
 		if (!dest.exists())
 			FileUtils.createNewFile(dest);
 		try (FileOutputStream fileOut = new FileOutputStream(dest)) {
-			try (GZIPOutputStream zipOut = new GZIPOutputStream(fileOut)) {
-				try (ObjectOutputStream objOut = new ObjectOutputStream(
-						zipOut)) {
-					objOut.writeObject(object);
-				}
-			}
+			SerializationUtils.serialize( (Serializable) object, fileOut, true, true);
 		}
 	}
 

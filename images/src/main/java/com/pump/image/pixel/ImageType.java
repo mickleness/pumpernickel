@@ -10,13 +10,9 @@
  */
 package com.pump.image.pixel;
 
-import java.awt.Transparency;
+import java.awt.*;
 import java.awt.color.ColorSpace;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.ComponentColorModel;
-import java.awt.image.DataBuffer;
-import java.awt.image.DirectColorModel;
+import java.awt.image.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -25,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import com.pump.image.QBufferedImage;
 import com.pump.image.pixel.converter.ByteABGRConverter;
 import com.pump.image.pixel.converter.ByteABGRPreConverter;
 import com.pump.image.pixel.converter.ByteARGBConverter;
@@ -214,18 +211,18 @@ public class ImageType<T> implements Serializable {
 			return imageType.name;
 
 		switch (imageTypeCode) {
-		case BufferedImage.TYPE_BYTE_INDEXED:
-			return "BYTE_INDEXED";
-		case BufferedImage.TYPE_USHORT_565_RGB:
-			return "USHORT_565_RGB";
-		case BufferedImage.TYPE_CUSTOM:
-			return "CUSTOM";
-		case BufferedImage.TYPE_USHORT_555_RGB:
-			return "USHORT_555_RGB";
-		case BufferedImage.TYPE_USHORT_GRAY:
-			return "USHORT_GRAY";
-		case BufferedImage.TYPE_BYTE_BINARY:
-			return "BYTE_BINARY";
+			case BufferedImage.TYPE_BYTE_INDEXED:
+				return "BYTE_INDEXED";
+			case BufferedImage.TYPE_USHORT_565_RGB:
+				return "USHORT_565_RGB";
+			case BufferedImage.TYPE_CUSTOM:
+				return "CUSTOM";
+			case BufferedImage.TYPE_USHORT_555_RGB:
+				return "USHORT_555_RGB";
+			case BufferedImage.TYPE_USHORT_GRAY:
+				return "USHORT_GRAY";
+			case BufferedImage.TYPE_BYTE_BINARY:
+				return "BYTE_BINARY";
 		}
 		;
 		throw new IllegalArgumentException(
@@ -404,12 +401,13 @@ public class ImageType<T> implements Serializable {
 	 * @param srcType
 	 *            the type of the incoming pixel data
 	 * @param srcPixels
-	 *            the incoming pixel data
+	 *            the incoming pixel data, which will be either an int array or a byte array
 	 * @param srcOffset
 	 *            the offset in srcPixels to start reading data at
 	 * @param destPixels
 	 *            an optional destination array to store the converted pixels
-	 *            in. If this is null then a new array is allocated.
+	 *            in. If this is null then a new array is allocated. This may be
+	 *            the same as srcPixels
 	 * @param destOffset
 	 *            the offset in destPixels to store pixels to.
 	 * @param pixelCount
@@ -480,6 +478,98 @@ public class ImageType<T> implements Serializable {
 		}
 
 		return destPixels;
+	}
+
+	/**
+	 * Create a new QBufferedImage that uses the same DataBuffer as the argument image but matches this
+	 * ImageType's pixel format. This is useful for recycling large DataBuffers. For example: if you
+	 * have an image that is 8K pixels wide and tall: that takes up over 240 MB (8K * 8K * 4 / 1024 / 1024).
+	 * The source image and the return value of this method use the same DataBuffer, so if you alter one
+	 * then you alter the other.
+	 * <p>
+	 * Note this method *does not alter the pixel data*. This method ONLY recycles the DataBuffer.
+	 * <p>
+	 * If you also want to update the image data to match the new image format, then you can call
+	 * {@link QBufferedImage#copyFrom(BufferedImage, int)}. For example this code produces a new
+	 * QBufferedImage that looks like `src` and uses the same DataBuffer, but will be a different
+	 * image type: `QBufferedImage copy = ImageType.INT_ARGB.convert(src).copyFrom(src, 8);`
+	 * <p>
+	 * If two image types are not compatible then this returns null. For example of you try to convert TYPE_INT_ARGB
+	 * to TYPE_3BYTE_RGB, then this will return null, because the DataBufferInt and DataBufferByte that back each image
+	 * are fundamentally incompatible.
+	 *
+	 * @param img the image to convert
+	 * @return a new QBufferedImage of this ImageType uses the same DataBuffer, or null if that is not possible.
+	 * This always creates a new QBufferedImage object (if possible), even if the source image already matches
+	 * this ImageType.
+	 */
+	public QBufferedImage convert(BufferedImage img) {
+		Objects.requireNonNull(img);
+
+		ImageType srcType = ImageType.get(img.getType());
+
+		WritableRaster imgRasterRoot = img.getRaster();
+		while (imgRasterRoot.getParent() != null)
+			imgRasterRoot = (WritableRaster) imgRasterRoot.getParent();
+
+		WritableRaster newRaster = null;
+		if (srcType.isInt() && isInt()) {
+			DataBufferInt dbi = (DataBufferInt) img.getRaster().getDataBuffer();
+			SinglePixelPackedSampleModel sampleModel = (SinglePixelPackedSampleModel) img.getRaster().getSampleModel();
+			DirectColorModel directColorModel = (DirectColorModel) getColorModel();
+			int[] bandmasks;
+			if (directColorModel.getAlphaMask() != 0) {
+				bandmasks = new int[4];
+				bandmasks[3] = directColorModel.getAlphaMask();
+			} else {
+				bandmasks = new int[3];
+			}
+			bandmasks[0] = directColorModel.getRedMask();
+			bandmasks[1] = directColorModel.getGreenMask();
+			bandmasks[2] = directColorModel.getBlueMask();
+			newRaster = Raster.createPackedRaster(dbi,
+					imgRasterRoot.getWidth(),
+					imgRasterRoot.getHeight(),
+					sampleModel.getScanlineStride(),
+					bandmasks, new Point(0,0));
+		} else if (srcType.isByte() && isByte() && srcType.getSampleCount() == getSampleCount()) {
+			DataBufferByte dbb = (DataBufferByte) img.getRaster().getDataBuffer();
+			PixelInterleavedSampleModel sampleModel = (PixelInterleavedSampleModel) img.getRaster().getSampleModel();
+			newRaster = Raster.createInterleavedRaster(dbb,
+					imgRasterRoot.getWidth(),
+					imgRasterRoot.getHeight(),
+					sampleModel.getScanlineStride(),
+					sampleModel.getPixelStride(),
+					sampleModel.getBandOffsets(),
+					new Point(0, 0));
+		}
+
+		QBufferedImage returnValue;
+		if (newRaster != null) {
+			if (newRaster.getWidth() != img.getWidth() || newRaster.getHeight() != img.getHeight()) {
+				// if `img` was a subimage, then make our new image a similar subimage:
+				newRaster = newRaster.createWritableChild(
+						-img.getRaster().getSampleModelTranslateX(),
+						-img.getRaster().getSampleModelTranslateY(),
+						img.getWidth(),
+						img.getHeight(), 0, 0, null);
+			}
+
+			returnValue = new QBufferedImage(getColorModel(),
+					newRaster,
+					getColorModel().isAlphaPremultiplied(),
+					QBufferedImage.getPropertiesHashtable(img));
+		} else {
+			return null;
+		}
+
+		return returnValue;
+	}
+
+	/** Create a new QBufferedImage that uses that image type. */
+	public QBufferedImage create(int width, int height) {
+		// TODO: implement support for nonstandard image types (see `values(true)`)
+		return new QBufferedImage(width, height, getCode());
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out)
