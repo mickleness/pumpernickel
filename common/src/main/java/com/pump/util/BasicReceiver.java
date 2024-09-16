@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -12,6 +12,7 @@ package com.pump.util;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,9 +22,9 @@ import javax.swing.event.ListDataListener;
 
 public class BasicReceiver<T> implements Receiver<T>, ListModel<T>, Iterable<T> {
 
-	List<T> list = new ArrayList<T>();
-	List<ListDataListener> listeners = new ArrayList<ListDataListener>();
-	List<Receiver<T>> receivers = new ArrayList<Receiver<T>>();
+	List<T> list = new ArrayList<>();
+	List<ListDataListener> listeners = new ArrayList<>();
+	List<Receiver<T>> receivers = new ArrayList<>();
 
 	/**
 	 * Bind another <code>Receiver</code> to this object, so when elements are
@@ -40,10 +41,9 @@ public class BasicReceiver<T> implements Receiver<T>, ListModel<T>, Iterable<T> 
 			if (addExistingElements) {
 				// because we can't create an array of type T: we'll
 				// add these one at a time
-				for (int a = 0; a < list.size(); a++) {
+				for (T element : list) {
 
 					// ugh. Stupid varargs and ClassCastExceptions...
-					T element = list.get(a);
 					T[] array = (T[]) Array.newInstance(element.getClass(), 1);
 					array[0] = element;
 					receiver.add(array);
@@ -71,9 +71,7 @@ public class BasicReceiver<T> implements Receiver<T>, ListModel<T>, Iterable<T> 
 			index1 = list.size();
 			index2 = index1 + elements.length - 1;
 
-			for (T t : elements) {
-				list.add(t);
-			}
+			Collections.addAll(list, elements);
 			for (Receiver<T> receiver : receivers) {
 				receiver.add(elements);
 			}
@@ -86,7 +84,7 @@ public class BasicReceiver<T> implements Receiver<T>, ListModel<T>, Iterable<T> 
 
 	@Override
 	public Iterator<T> iterator() {
-		return new UnmodifiableIterator<T>(list.iterator());
+		return new UnmodifiableIterator<>(list.iterator());
 	}
 
 	@Override

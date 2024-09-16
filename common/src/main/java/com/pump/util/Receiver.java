@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -21,5 +21,5 @@ public interface Receiver<T> {
 	 * @param elements
 	 *            the elements to add to this receiver.
 	 */
-	public void add(T... elements);
+	void add(T... elements);
 }
