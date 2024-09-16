@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -174,7 +174,7 @@ class JPEGMarkerInputStream extends InputStream {
 
 	protected static long skipFully(InputStream in, long amount)
 			throws IOException {
-		/**
+		/*
 		 * The description of InputStream.skip() is unfulfilling. It is
 		 * perfectly OK for InputStream.skip() to return zero, but not
 		 * necessarily mean EOF.
@@ -202,7 +202,7 @@ class JPEGMarkerInputStream extends InputStream {
 	}
 
 	protected static String toString(byte[] array, int length) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int a = 0; a < length; a++) {
 			sb.append((char) array[a]);
 		}

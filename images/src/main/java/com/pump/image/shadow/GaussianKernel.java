@@ -1,16 +1,17 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.image.shadow;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -42,6 +43,7 @@ public class GaussianKernel
 		return returnValue;
 	}
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	private int[] data;
@@ -91,8 +93,8 @@ public class GaussianKernel
 
 	private void updateSum() {
 		sum = 0;
-		for (int a = 0; a < data.length; a++) {
-			sum += data[a];
+		for (int datum : data) {
+			sum += datum;
 		}
 	}
 
@@ -136,9 +138,7 @@ public class GaussianKernel
 		if (zeroCtr == 0)
 			return data;
 		int[] newArray = new int[data.length - zeroCtr * 2];
-		for (int a = 0; a < newArray.length; a++) {
-			newArray[a] = data[a + zeroCtr];
-		}
+		System.arraycopy(data, zeroCtr, newArray, 0, newArray.length);
 
 		return newArray;
 	}
@@ -179,7 +179,7 @@ public class GaussianKernel
 	}
 
 	/**
-	 * Return the kernel radius, which is ({@link #getArrayLength()-1)/2
+	 * Return the kernel radius, which is <code>(getArray().length - 1)/2</code>
 	 */
 	public int getKernelRadius() {
 		return (data.length - 1) / 2;
@@ -187,10 +187,8 @@ public class GaussianKernel
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("GaussianKernel");
-		sb.append(toString(data));
-		return sb.toString();
+		return "GaussianKernel" +
+				toString(data);
 	}
 
 	static String toString(int[] array) {
@@ -226,26 +224,27 @@ public class GaussianKernel
 	@Override
 	public int hashCode() {
 		int j = 0;
-		for (int a = 0; a < data.length; a++) {
-			j = (j << 2) + data[a];
+		for (int datum : data) {
+			j = (j << 2) + datum;
 		}
 		return j;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof GaussianKernel))
+		if (!(obj instanceof GaussianKernel other))
 			return false;
-		GaussianKernel other = (GaussianKernel) obj;
 		return compareTo(other) == 0;
 	}
 
+	@Serial
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
 		out.writeInt(0);
 		out.writeObject(data);
 	}
 
+	@Serial
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		int version = in.readInt();

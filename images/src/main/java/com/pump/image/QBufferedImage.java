@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -14,10 +14,7 @@ import com.pump.image.pixel.*;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -207,8 +204,7 @@ public class QBufferedImage extends BufferedImage
 		if (colorModel instanceof IndexColorModel) {
 			DataBuffer dataBuffer = new DataBufferByte(pixels, width);
 			return Raster.createInterleavedRaster(dataBuffer, width, height, width, 1, new int[] {0}, null);
-		} else if (colorModel instanceof ComponentColorModel) {
-			ComponentColorModel ccm = (ComponentColorModel) colorModel;
+		} else if (colorModel instanceof ComponentColorModel ccm) {
 			DataBuffer dataBuffer = new DataBufferByte(pixels, width * height * ccm.getPixelSize() / 8);
 			int[] bandOffsets = new int[ccm.getPixelSize() / 8];
 			for (int i = 0; i < bandOffsets.length; i++) {
@@ -297,7 +293,7 @@ public class QBufferedImage extends BufferedImage
 
 	@Override
 	public synchronized String[] getPropertyNames() {
-		Collection<String> returnValue = new LinkedHashSet<String>();
+		Collection<String> returnValue = new LinkedHashSet<>();
 		String[] superNames = super.getPropertyNames();
 		if (superNames != null)
 			returnValue.addAll(Arrays.asList(superNames));
@@ -312,7 +308,7 @@ public class QBufferedImage extends BufferedImage
 	 */
 	public synchronized void setProperty(String propertyName, Object value) {
 		if (extraProperties == null)
-			extraProperties = new HashMap<String, Object>();
+			extraProperties = new HashMap<>();
 		if (value == null)
 			value = NULL_PLACEHOLDER;
 		extraProperties.put(propertyName, value);
@@ -323,7 +319,7 @@ public class QBufferedImage extends BufferedImage
 	 */
 	public synchronized void setProperties(Map<String, Object> properties) {
 		if (extraProperties == null)
-			extraProperties = new HashMap<String, Object>();
+			extraProperties = new HashMap<>();
 		extraProperties.putAll(properties);
 	}
 
@@ -337,13 +333,12 @@ public class QBufferedImage extends BufferedImage
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (!(o instanceof BufferedImage))
+		if (!(o instanceof BufferedImage other))
 			return false;
 
 		int w = getWidth();
 		int h = getHeight();
 
-		BufferedImage other = (BufferedImage) o;
 		if (w != other.getWidth() || h != other.getHeight()
 				|| getType() != other.getType())
 			return false;
@@ -374,10 +369,7 @@ public class QBufferedImage extends BufferedImage
 			}
 		}
 
-		if (!getProperties(this).equals(getProperties(other)))
-			return false;
-
-		return true;
+		return getProperties(this).equals(getProperties(other));
 	}
 
 	/**
@@ -403,40 +395,39 @@ public class QBufferedImage extends BufferedImage
 
 		int[] row1 = new int[w];
 		int[] row2 = new int[w];
-		PixelIterator<int[]> iter1 = ImageType.INT_ARGB.createPixelIterator(this);
-		PixelIterator<int[]> iter2 = ImageType.INT_ARGB.createPixelIterator(other);
-		while (!iter1.isDone()) {
-			iter1.next(row1, 0);
-			iter2.next(row2, 0);
-			for (int a = 0; a < w; a++) {
-				if (row1[a] != row2[a]) {
-					if (tolerance == 0) {
-						return false;
-					} else {
-						int da = ((row1[a] >> 24) & 0xff) - ((row2[a] >> 24) & 0xff);
-						if (Math.abs(da) > tolerance)
-							return false;
+		try (PixelIterator<int[]> iter1 = ImageType.INT_ARGB.createPixelIterator(this)) {
+			try (PixelIterator<int[]> iter2 = ImageType.INT_ARGB.createPixelIterator(other)) {
+				while (!iter1.isDone()) {
+					iter1.next(row1, 0);
+					iter2.next(row2, 0);
+					for (int a = 0; a < w; a++) {
+						if (row1[a] != row2[a]) {
+							if (tolerance == 0) {
+								return false;
+							} else {
+								int da = ((row1[a] >> 24) & 0xff) - ((row2[a] >> 24) & 0xff);
+								if (Math.abs(da) > tolerance)
+									return false;
 
-						int dr = ((row1[a] >> 16) & 0xff) - ((row2[a] >> 16) & 0xff);
-						if (Math.abs(dr) > tolerance)
-							return false;
+								int dr = ((row1[a] >> 16) & 0xff) - ((row2[a] >> 16) & 0xff);
+								if (Math.abs(dr) > tolerance)
+									return false;
 
-						int dg = ((row1[a] >> 8) & 0xff) - ((row2[a] >> 8) & 0xff);
-						if (Math.abs(dg) > tolerance)
-							return false;
+								int dg = ((row1[a] >> 8) & 0xff) - ((row2[a] >> 8) & 0xff);
+								if (Math.abs(dg) > tolerance)
+									return false;
 
-						int db = ((row1[a] >> 0) & 0xff) - ((row2[a] >> 0) & 0xff);
-						if (Math.abs(db) > tolerance)
-							return false;
+								int db = ((row1[a]) & 0xff) - ((row2[a]) & 0xff);
+								if (Math.abs(db) > tolerance)
+									return false;
+							}
+						}
 					}
 				}
 			}
 		}
 
-		if (!getProperties(this).equals(getProperties(other)))
-			return false;
-
-		return true;
+		return getProperties(this).equals(getProperties(other));
 	}
 
 	@Override
@@ -507,17 +498,6 @@ public class QBufferedImage extends BufferedImage
 	}
 
 	///////// serialization:
-
-	/**
-	 * Return true if this object can be serialized, or false if attempting to
-	 * serialize this image will throw an IOException.
-	 * <p>
-	 * For example: if {@link #getType()} returns
-	 * {@link BufferedImage#TYPE_CUSTOM} then this method will return false.
-	 */
-	public boolean isSerializationSupported() {
-		return getSerializationUnsupportedReason() != null;
-	}
 
 	/**
 	 * Return a String for an IOException explaining why this image shouldn't be
@@ -598,6 +578,7 @@ public class QBufferedImage extends BufferedImage
 		}
 	}
 
+	@Serial
 	private Object readResolve() {
 		if (replacementImage != null) {
 			return replacementImage;

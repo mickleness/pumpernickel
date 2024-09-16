@@ -5,6 +5,7 @@ import com.pump.math.Equations;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.Serial;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -15,26 +16,26 @@ import java.io.UnsupportedEncodingException;
  * replacement from scratch. (I consulted parts of the java.awt.geom.AffineTransform in some places, though.)
  * </p>
  */
-public class PerspectiveTransform {
+public class PerspectiveTransform implements Serializable {
 
 
     public static PerspectiveTransform getQuadToQuad(double origP1x, double origP1y,
                                                      double origP2x, double origP2y,
                                                      double origP3x, double origP3y,
                                                      double origP4x, double origP4y,
-                                                     double transfomedP1x, double transfomedP1y,
-                                                     double transfomedP2x, double transfomedP2y,
-                                                     double transfomedP3x, double transfomedP3y,
-                                                     double transfomedP4x, double transfomedP4y) {
+                                                     double transformedP1x, double transformedP1y,
+                                                     double transformedP2x, double transformedP2y,
+                                                     double transformedP3x, double transformedP3y,
+                                                     double transformedP4x, double transformedP4y) {
         double[][] matrix = new double[][] {
-                {origP1x, origP1y, 1, 0, 0, 0, -origP1x * transfomedP1x, -origP1y * transfomedP1x, - transfomedP1x},
-                {0, 0, 0, origP1x, origP1y, 1, -origP1x * transfomedP1y, -origP1y * transfomedP1y, - transfomedP1y},
-                {origP2x, origP2y, 1, 0, 0, 0, -origP2x * transfomedP2x, -origP1y * transfomedP2x, - transfomedP2x},
-                {0, 0, 0, origP2x, origP2y, 1, -origP2x * transfomedP2y, -origP2y * transfomedP2y, - transfomedP2y},
-                {origP3x, origP3y, 1, 0, 0, 0, -origP3x * transfomedP3x, -origP3y * transfomedP3x, - transfomedP3x},
-                {0, 0, 0, origP3x, origP3y, 1, -origP3x * transfomedP3y, -origP3y * transfomedP3y, - transfomedP3y},
-                {origP4x, origP4y, 1, 0, 0, 0, -origP4x * transfomedP4x, -origP4y * transfomedP4x, - transfomedP4x},
-                {0, 0, 0, origP4x, origP4y, 1, -origP4x * transfomedP4y, -origP4y * transfomedP4y, - transfomedP4y},
+                {origP1x, origP1y, 1, 0, 0, 0, -origP1x * transformedP1x, -origP1y * transformedP1x, - transformedP1x},
+                {0, 0, 0, origP1x, origP1y, 1, -origP1x * transformedP1y, -origP1y * transformedP1y, - transformedP1y},
+                {origP2x, origP2y, 1, 0, 0, 0, -origP2x * transformedP2x, -origP1y * transformedP2x, - transformedP2x},
+                {0, 0, 0, origP2x, origP2y, 1, -origP2x * transformedP2y, -origP2y * transformedP2y, - transformedP2y},
+                {origP3x, origP3y, 1, 0, 0, 0, -origP3x * transformedP3x, -origP3y * transformedP3x, - transformedP3x},
+                {0, 0, 0, origP3x, origP3y, 1, -origP3x * transformedP3y, -origP3y * transformedP3y, - transformedP3y},
+                {origP4x, origP4y, 1, 0, 0, 0, -origP4x * transformedP4x, -origP4y * transformedP4x, - transformedP4x},
+                {0, 0, 0, origP4x, origP4y, 1, -origP4x * transformedP4y, -origP4y * transformedP4y, - transformedP4y},
         };
         Equations.solve(matrix, true);
         return new PerspectiveTransform(new double[][] {
@@ -252,16 +253,15 @@ public class PerspectiveTransform {
      * @since 1.2
      */
     public boolean equals(Object obj) {
-        if (!(obj instanceof PerspectiveTransform)) {
+        if (!(obj instanceof PerspectiveTransform a)) {
             return false;
         }
-
-        PerspectiveTransform a = (PerspectiveTransform)obj;
 
         return ((m00 == a.m00) && (m01 == a.m01) && (m02 == a.m02) &&
                 (m10 == a.m10) && (m11 == a.m11) && (m12 == a.m12) &&
                 (m10 == a.m20) && (m21 == a.m21) && (m22 == a.m22));
     }
+
     /**
      * Use serialVersionUID from JDK 1.2 for interoperability.
      */

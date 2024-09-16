@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -37,7 +37,7 @@ public interface ShadowRenderer {
 	 * @param attr
 	 *            the attributes used to render and position the shadow
 	 */
-	public default void paint(Graphics2D g, BufferedImage img, int x, int y,
+	default void paint(Graphics2D g, BufferedImage img, int x, int y,
 			ShadowAttributes attr) {
 		GaussianKernel k = getKernel(attr.getShadowKernelRadius());
 		BufferedImage shadow = createShadow(img, attr.getShadowKernelRadius(),
@@ -67,7 +67,7 @@ public interface ShadowRenderer {
 	 * @param shadowColor
 	 *            the shadow color, including the alpha component.
 	 */
-	public default BufferedImage createShadow(BufferedImage srcImage,
+	default BufferedImage createShadow(BufferedImage srcImage,
 			float kernelRadius, Color shadowColor) {
 		int k = getKernel(kernelRadius).getKernelRadius();
 
@@ -95,7 +95,7 @@ public interface ShadowRenderer {
 	 *            the shadow color, including the alpha component.
 	 * @return a set of ARGB pixels representing the shadow.
 	 */
-	public ARGBPixels createShadow(ARGBPixels srcImage, ARGBPixels destImage,
+	ARGBPixels createShadow(ARGBPixels srcImage, ARGBPixels destImage,
 			float kernelRadius, Color shadowColor);
 
 	/**
@@ -106,5 +106,5 @@ public interface ShadowRenderer {
 	 *            the kernel radius. The actual kernel should be [2 * r + 1]
 	 *            elements long.
 	 */
-	public GaussianKernel getKernel(float kernelRadius);
+	GaussianKernel getKernel(float kernelRadius);
 }

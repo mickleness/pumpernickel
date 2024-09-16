@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,11 +45,11 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 		try (InputStream in = DoubleBoxShadowRenderer.class
 				.getResourceAsStream("DoubleBoxShadowRendererTable.csv")) {
 			try (BufferedReader br = new BufferedReader(
-					new InputStreamReader(in, "UTF-8"))) {
+					new InputStreamReader(in, StandardCharsets.UTF_8))) {
 				String s = br.readLine();
 				while (s != null) {
 					String[] terms = s.split(",");
-					Number radius = Float.parseFloat(terms[0]);
+					Float radius = Float.parseFloat(terms[0]);
 					Combo combo = new Combo(Float.parseFloat(terms[2]),
 							Float.parseFloat(terms[3]));
 					lookupTable.put(radius, combo);
@@ -109,9 +110,8 @@ public class DoubleBoxShadowRenderer implements ShadowRenderer {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof Combo))
+			if (!(obj instanceof Combo other))
 				return false;
-			Combo other = (Combo) obj;
 			return compareTo(other) == 0;
 		}
 

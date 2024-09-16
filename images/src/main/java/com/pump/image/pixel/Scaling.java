@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -493,7 +493,6 @@ public class Scaling {
 	 * @return a QBufferedImage that is a scaled copy of the source image. If <code>dest</code>
 	 * was non-null then this QBufferedImage will use the same raster as  <code>dest</code>.
 	 *
-	 * @throws IOException
 	 */
 	public static QBufferedImage scaleProportionally(Image image, Dimension maxDestSize, ImageType destType, BufferedImage dest) {
 		BiFunction<Dimension, Boolean, Dimension> sizeFunction = maxDestSize == null ? null : new ProportionalSizeFunction(maxDestSize);
@@ -544,8 +543,7 @@ public class Scaling {
 		PixelIterator srcIter;
 		Image flushableImage = null;
 		try {
-			if (image instanceof BufferedImage) {
-				BufferedImage bi = (BufferedImage) image;
+			if (image instanceof BufferedImage bi) {
 				srcIter = BufferedImageIterator.create(bi);
 			} else if (image != null) {
 				srcIter = new ImagePixelIterator(image);
@@ -663,7 +661,7 @@ public class Scaling {
 		// TODO: we could also fall back to ImageIO's BMP parser here.
 		// To date I don't have a BMP in my possession that requires it, but maybe (?) one exists?
 
-		InputStreamSource inSrc = null;
+		InputStreamSource inSrc;
 		if (imageFile != null) {
 			inSrc = new FileInputStreamSource(imageFile);
 		} else if (imageURL != null) {

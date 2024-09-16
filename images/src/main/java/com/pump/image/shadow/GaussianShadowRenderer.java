@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -158,7 +158,7 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			int rgb = shadowColor.getRGB() & 0xffffff;
 			int alpha = shadowColor.getAlpha();
 			for (int a = 0; a < opacityLookup.length; a++) {
-				int newAlpha = (int) (a * alpha / 255);
+				int newAlpha = a * alpha / 255;
 				opacityLookup[a] = (newAlpha << 24) + rgb;
 			}
 		}
@@ -219,8 +219,8 @@ public class GaussianShadowRenderer implements ShadowRenderer {
 			Color shadowColor) {
 		if (dst == null)
 			dst = new ARGBPixels(width, height);
-		int srcIndex = 0;
-		int dstIndex = 0;
+		int srcIndex;
+		int dstIndex;
 		int[] srcPixels = src.getPixels();
 		int[] dstPixels = dst.getPixels();
 

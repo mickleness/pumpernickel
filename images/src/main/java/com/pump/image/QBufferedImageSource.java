@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -29,20 +29,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * <li></li></ul>
  */
 public class QBufferedImageSource implements ImageProducer {
-    private BufferedImage image;
-    private Map<?, ?> properties;
-    private List<ImageConsumer> consumers = new CopyOnWriteArrayList<>();
-    private ImageProducer backupImageProducer;
+    private final BufferedImage image;
+    private final Map<?, ?> properties;
+    private final List<ImageConsumer> consumers = new CopyOnWriteArrayList<>();
+    private final ImageProducer backupImageProducer;
 
     QBufferedImageSource(BufferedImage image,
                                 Map<?, ?> properties, ImageProducer backupImageProducer) {
         this.image = Objects.requireNonNull(image);
         this.backupImageProducer = Objects.requireNonNull(backupImageProducer);
-        if (properties != null) {
-            this.properties = properties;
-        } else {
-            this.properties = new Hashtable<String, Object>();
-        }
+        this.properties = Objects.requireNonNullElseGet(properties, Hashtable::new);
     }
 
     @Override
@@ -51,7 +47,7 @@ public class QBufferedImageSource implements ImageProducer {
 
         try (PixelIterator<?> pixelIter = new ImagePixelIterator(image)) {
             ImageType<?> iterType = ImageType.get(pixelIter.getType());
-            if (pixelIter != null && iterType != null) {
+            if (iterType != null) {
                 produce(consumer, pixelIter, iterType);
             } else {
                 backupImageProducer.addConsumer(consumer);

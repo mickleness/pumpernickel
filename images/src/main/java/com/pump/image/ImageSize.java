@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -96,8 +96,7 @@ public class ImageSize {
 				return JPEGMetaData.getSize(file);
 			}
 
-			Dimension size = getSizeUsingImageIO(file);
-			return size;
+			return getSizeUsingImageIO(file);
 		} catch (Exception e) {
 			try {
 				Image image = Toolkit.getDefaultToolkit().createImage(
@@ -110,8 +109,7 @@ public class ImageSize {
 			} catch (Exception e2) {
 				IllegalArgumentException e3 = new IllegalArgumentException(
 						"could not fetch dimensions of "
-								+ file.getAbsolutePath());
-				e3.initCause(e2);
+								+ file.getAbsolutePath(), e2);
 				e2.initCause(e);
 				throw e3;
 			}
@@ -129,8 +127,7 @@ public class ImageSize {
 		if (url == null)
 			throw new NullPointerException();
 		try {
-			Dimension size = getSizeUsingImageIO(url);
-			return size;
+			return getSizeUsingImageIO(url);
 		} catch (Exception e) {
 			try {
 				Image image = Toolkit.getDefaultToolkit().createImage(url);
@@ -141,8 +138,7 @@ public class ImageSize {
 				}
 			} catch (Exception e2) {
 				IllegalArgumentException e3 = new IllegalArgumentException(
-						"could not fetch dimensions of " + url);
-				e3.initCause(e2);
+						"could not fetch dimensions of " + url, e2);
 				e2.initCause(e);
 				throw e3;
 			}
@@ -173,7 +169,7 @@ public class ImageSize {
 	}
 
 	private static Dimension getSizeUsingImageIO(File file)
-			throws FileNotFoundException, IOException {
+			throws IOException {
 		ImageInputStream iis = null;
 		ImageReader reader = null;
 		try {

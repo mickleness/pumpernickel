@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -31,7 +31,7 @@ class BmpHeader {
 
 	BmpHeader(InputStream in) throws IOException {
 
-		/**
+		/*
 		 * Windows 2.x, 3.x, and 4.x BMP files contain four sections: 1. a file
 		 * header 2. a bitmap information header 3. an optional color palette 4.
 		 * the bitmap data.
@@ -78,7 +78,7 @@ class BmpHeader {
 			width = ((block[0] & 0xff) << 0) + ((block[1] & 0xff) << 8);
 			height = ((block[2] & 0xff) << 0) + ((block[3] & 0xff) << 8);
 
-			/**
+			/*
 			 * Planes is the number of color planes used to represent the bitmap
 			 * data. BMP files contain only one color plane, so this value is
 			 * always 1.
@@ -89,7 +89,7 @@ class BmpHeader {
 				System.err.println("warning: unrecognized planes (" + planes
 						+ ")");
 
-			/**
+			/*
 			 * BitsPerPixel is the number of bits per pixel in each plane. This
 			 * value will be in the range 1 to 24; the values 1, 4, 8, and 24
 			 * are the only values considered legal by the Windows 2.x API.
@@ -154,7 +154,7 @@ class BmpHeader {
 			}
 		}
 
-		/**
+		/*
 		 * "Width and Height are the width and height of the image in pixels,
 		 * respectively. If Height is a positive number, then the image is a
 		 * "bottom-up" bitmap with the origin in the lower-left corner. If

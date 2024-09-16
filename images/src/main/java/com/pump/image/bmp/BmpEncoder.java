@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -34,8 +34,6 @@ public class BmpEncoder {
 
 	/**
 	 * Write an image to a file as a BMP.
-	 *
-	 * @throws IOException
 	 */
 	public static void write(BufferedImage image, File dest) throws IOException {
 		try(FileOutputStream fileOut = new FileOutputStream(dest)) {
@@ -45,8 +43,6 @@ public class BmpEncoder {
 
 	/**
 	 * Write an image to an OutputStream as a BMP.
-	 *
-	 * @throws IOException
 	 */
 	public static void write(BufferedImage image, OutputStream out)
 			throws IOException {
@@ -67,7 +63,7 @@ public class BmpEncoder {
 		} else {
 			i = ImageType.BYTE_BGRA.createPixelIterator(image);
 		}
-		try (PixelIterator i2 = i) {
+		try (PixelIterator<byte[]> i2 = i) {
 			write(out, i2, closeStreamOnCompletion);
 		}
 	}
@@ -180,7 +176,7 @@ public class BmpEncoder {
 
 		out.write(scrap, 0, HEADER_SIZE);
 
-		while (i.isDone() == false) {
+		while (!i.isDone()) {
 			// TODO: when we encode the BMP we found were swapping the blue and red channels twice.
 			// Instead if we directly interacted with the DataBufferByte: we could avoid any swapping and
 			// outperform ImageIO classes.

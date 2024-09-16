@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -15,6 +15,7 @@ import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
+import java.io.Serial;
 
 /**
  * This converts a region of pixels into a <code>java.awt.Shape</code>. The
@@ -35,6 +36,7 @@ public class ShapeTracer {
 	 * so that's all it's designed to collapse.)
 	 */
 	static class CollapsedPolygon extends Polygon {
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		@Override

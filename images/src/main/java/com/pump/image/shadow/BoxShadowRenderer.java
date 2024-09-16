@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -59,7 +59,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 
 			public HorizontalRenderer() {
 				int rgb = shadowColor.getRGB() & 0xffffff;
-				int shadowMultiplier = (int) (shadowColor.getAlpha());
+				int shadowMultiplier = shadowColor.getAlpha();
 				int shadowDivisor = (int) (weightedShadowSize * 0xff);
 				for (int i = 0; i < divideByShadowSizeLUT.length; i++) {
 					divideByShadowSizeLUT[i] = (((i * shadowMultiplier
@@ -134,7 +134,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 					xMin_plusHistory--;
 
 					for (int y = y1; y < y2; y++) {
-						int aHistoryIdx = -1;
+						int aHistoryIdx;
 						Arrays.fill(aHistory, 0);
 						int nextAlphaHistoryIndex = 0;
 						int aSum = 0;
@@ -237,7 +237,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 					}
 				} else {
 					for (int y = y1; y < y2; y++) {
-						int aHistoryIdx = -1;
+						var aHistoryIdx = -1;
 						int aSum = 0;
 						Arrays.fill(aHistory, 0);
 						int nextAlphaHistoryIndex = 0;
@@ -359,7 +359,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 					yMin_plusHistory--;
 
 					for (int x = x1; x < x2; x++) {
-						int aHistoryIdx = -1;
+						int aHistoryIdx;
 						Arrays.fill(aHistory, 0);
 						int nextAlphaHistoryIndex = 0;
 						int aSum = 0;
@@ -464,7 +464,7 @@ public class BoxShadowRenderer implements ShadowRenderer {
 					}
 				} else {
 					for (int x = x1; x < x2; x++) {
-						int aHistoryIdx = -1;
+						int aHistoryIdx;
 						int aSum = 0;
 						Arrays.fill(aHistory, 0);
 						int nextAlphaHistoryIndex = 0;
@@ -517,20 +517,9 @@ public class BoxShadowRenderer implements ShadowRenderer {
 		Color shadowColor;
 
 		/**
-		 * 
-		 * @param src
-		 * @param dst
-		 * @param srcX
-		 * @param srcY
-		 * @param dstX
-		 * @param dstY
-		 * @param width
-		 * @param height
-		 * @param kernelSize
 		 * @param edgeWeight
 		 *            a value from [1,255] indicating how much weight the edge
 		 *            pixels in a kernel should receive.
-		 * @param shadowOpacity
 		 */
 		public Renderer(ARGBPixels src, ARGBPixels dst, int srcX, int srcY,
 				int dstX, int dstY, int width, int height, int kernelSize,

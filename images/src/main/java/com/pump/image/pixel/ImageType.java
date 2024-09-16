@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.image.*;
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import com.pump.image.ColorModelUtils;
 import com.pump.image.QBufferedImage;
 import com.pump.image.pixel.converter.ByteABGRConverter;
 import com.pump.image.pixel.converter.ByteABGRPreConverter;
@@ -44,17 +46,14 @@ public class ImageType<T> implements Serializable {
 	private static final Map<Integer, ImageType<?>> TYPES_BY_INT = new TreeMap<>();
 	private static final Map<String, ImageType<?>> TYPES_BY_NAME = new TreeMap<>();
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	public static final ImageType<int[]> INT_RGB = new ImageType<>("INT_RGB",
-			BufferedImage.TYPE_INT_RGB, new DirectColorModel(24, 0x00ff0000, // Red
-					0x0000ff00, // Green
-					0x000000ff, // Blue
-					0x0 // Alpha
-			), new IntRGBConverter(), true);
+			BufferedImage.TYPE_INT_RGB, ColorModelUtils.MODEL_RGB, new IntRGBConverter(), true);
 
 	public static final ImageType<int[]> INT_ARGB = new ImageType<>("INT_ARGB",
-			BufferedImage.TYPE_INT_ARGB, ColorModel.getRGBdefault(),
+			BufferedImage.TYPE_INT_ARGB, ColorModelUtils.MODEL_ARGB,
 			new IntARGBConverter(), true);
 
 	public static final ImageType<int[]> INT_ARGB_PRE = new ImageType<>(
@@ -211,20 +210,25 @@ public class ImageType<T> implements Serializable {
 			return imageType.name;
 
 		switch (imageTypeCode) {
-			case BufferedImage.TYPE_BYTE_INDEXED:
+			case BufferedImage.TYPE_BYTE_INDEXED -> {
 				return "BYTE_INDEXED";
-			case BufferedImage.TYPE_USHORT_565_RGB:
+			}
+			case BufferedImage.TYPE_USHORT_565_RGB -> {
 				return "USHORT_565_RGB";
-			case BufferedImage.TYPE_CUSTOM:
+			}
+			case BufferedImage.TYPE_CUSTOM -> {
 				return "CUSTOM";
-			case BufferedImage.TYPE_USHORT_555_RGB:
+			}
+			case BufferedImage.TYPE_USHORT_555_RGB -> {
 				return "USHORT_555_RGB";
-			case BufferedImage.TYPE_USHORT_GRAY:
+			}
+			case BufferedImage.TYPE_USHORT_GRAY -> {
 				return "USHORT_GRAY";
-			case BufferedImage.TYPE_BYTE_BINARY:
+			}
+			case BufferedImage.TYPE_BYTE_BINARY -> {
 				return "BYTE_BINARY";
+			}
 		}
-		;
 		throw new IllegalArgumentException(
 				"The image type \"" + imageTypeCode + "\" is not recognized.");
 	}
@@ -360,7 +364,7 @@ public class ImageType<T> implements Serializable {
 		if (colorModel instanceof DirectColorModel)
 			return 1;
 		if (colorModel instanceof ComponentColorModel) {
-			return ((ComponentColorModel) colorModel).getNumComponents();
+			return colorModel.getNumComponents();
 		}
 		throw new IllegalStateException();
 	}
@@ -572,6 +576,7 @@ public class ImageType<T> implements Serializable {
 		return new QBufferedImage(width, height, getCode());
 	}
 
+	@Serial
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
 		// we only record our name, and on deserialization we cross-reference
@@ -580,6 +585,7 @@ public class ImageType<T> implements Serializable {
 		out.writeObject(name);
 	}
 
+	@Serial
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		int internalVersion = in.readInt();
@@ -593,12 +599,12 @@ public class ImageType<T> implements Serializable {
 		}
 	}
 
+	@Serial
 	private Object readResolve() {
 		ImageType returnValue = TYPES_BY_NAME.get(name);
 		if (returnValue == null) {
 			// This could indicate data was saved with a newer version that had
-			// additional ImageTypes
-			// we don't support here (yet)?
+			// additional ImageTypes that we don't support here (yet)?
 			throw new RuntimeException(
 					"There is no ImageType named \"" + name + "\".");
 		}

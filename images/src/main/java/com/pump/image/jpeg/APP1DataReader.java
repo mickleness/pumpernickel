@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -22,13 +22,7 @@ import com.pump.io.GuardedInputStream;
  */
 class APP1DataReader {
 
-	static final Comparator<ImageFileDirectory.DirectoryEntry> directoryEntryComparator = new Comparator<ImageFileDirectory.DirectoryEntry>() {
-		public int compare(ImageFileDirectory.DirectoryEntry d1,
-				ImageFileDirectory.DirectoryEntry d2) {
-			return d1.readLong(d1.fieldValue, 0)
-					- d2.readLong(d2.fieldValue, 0);
-		}
-	};
+	static final Comparator<ImageFileDirectory.DirectoryEntry> directoryEntryComparator = Comparator.comparingInt(d -> d.readLong(d.fieldValue, 0));
 
 	public static void read(JPEGMarkerInputStream in,
 			JPEGMetaDataListener listener) throws IOException {
@@ -72,7 +66,7 @@ class APP1DataReader {
 
 	private static void readExif(JPEGMarkerInputStream in,
 			JPEGMetaDataListener listener) throws IOException {
-		/**
+		/*
 		 * Originally I tried parsing this data in a single pass, but my testing
 		 * showed some JPEGs are structured: 1. TIFF header 2. Specific IFD
 		 * entry values 3. IFD definition referred to in #2.
@@ -106,13 +100,11 @@ class APP1DataReader {
 			}
 		}
 
-		if (ifd0 != null) {
-			for (int a = 0; a < ifd0.entries.length; a++) {
-				String name = ifd0.entries[a].getPropertyName();
-				if (name != null) {
-					listener.addProperty(JPEGMarker.APP1_MARKER.getByteCode(),
-							name, ifd0.entries[a].value);
-				}
+		for (int a = 0; a < ifd0.entries.length; a++) {
+			String name = ifd0.entries[a].getPropertyName();
+			if (name != null) {
+				listener.addProperty(JPEGMarker.APP1_MARKER.getByteCode(),
+						name, ifd0.entries[a].value);
 			}
 		}
 
@@ -120,7 +112,7 @@ class APP1DataReader {
 			Number jpegPosition = (Number) ifd1.getProperty(513);
 			Number jpegLength = (Number) ifd1.getProperty(514);
 
-			/**
+			/*
 			 * 2 of my 11,000 JPG's had an IFD for a thumbnail but were missing
 			 * tags 513 and 514. There is a separate unit test to see if we're
 			 * missing embedded JPGs, for now let's just move on if we have null

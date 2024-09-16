@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -17,6 +17,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.Serial;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -115,8 +116,7 @@ public class BasicImageContext extends ImageContext {
 		}
 
 		DataBufferInt buf = (DataBufferInt) bi.getRaster().getDataBuffer();
-		int[] p = buf.getData();
-		return p;
+		return buf.getData();
 	}
 
 	/** This calculates the left and right edges of a horizontal strip. */
@@ -175,42 +175,25 @@ public class BasicImageContext extends ImageContext {
 		final int minX, maxX;
 
 		/** Sort Point2Ds in ascending y value. */
-		static Comparator<Point2D> yComparator = new Comparator<Point2D>() {
-			@Override
-			public int compare(Point2D o1, Point2D o2) {
-				if (o1.getY() < o2.getY()) {
-					return -1;
-				} else if (o1.getY() > o2.getY()) {
-					return 1;
-				} else if (o1.getX() < o2.getX()) {
-					return -1;
-				} else if (o1.getX() > o2.getX()) {
-					return 1;
-				} else {
-					return 0;
-				}
-			}
+		static Comparator<Point2D> yComparator = (o1, o2) -> {
+			if (o1.getY() < o2.getY()) {
+				return -1;
+			} else if (o1.getY() > o2.getY()) {
+				return 1;
+			} else return Double.compare(o1.getX(), o2.getX());
 		};
 
 		/** Sort Point2Ds in ascending y value. */
-		static Comparator<Point2D> xComparator = new Comparator<Point2D>() {
-			@Override
-			public int compare(Point2D o1, Point2D o2) {
-				if (o1.getX() < o2.getX()) {
-					return -1;
-				} else if (o1.getX() > o2.getX()) {
-					return 1;
-				} else if (o1.getY() < o2.getY()) {
-					return -1;
-				} else if (o1.getY() > o2.getY()) {
-					return 1;
-				} else {
-					return 0;
-				}
-			}
+		static Comparator<Point2D> xComparator = (o1, o2) -> {
+			if (o1.getX() < o2.getX()) {
+				return -1;
+			} else if (o1.getX() > o2.getX()) {
+				return 1;
+			} else return Double.compare(o1.getY(), o2.getY());
 		};
 
 		static class LineSegmentIntersectionException extends Exception {
+			@Serial
 			private static final long serialVersionUID = 1L;
 		}
 
@@ -242,7 +225,7 @@ public class BasicImageContext extends ImageContext {
 			if (intersect(topLeft, topRight, bottomLeft, bottomRight))
 				throw new LineSegmentIntersectionException();
 
-			SortedSet<Point2D> horizontalList = new TreeSet<Point2D>(
+			SortedSet<Point2D> horizontalList = new TreeSet<>(
 					xComparator);
 			horizontalList.add(topLeft);
 			horizontalList.add(topRight);
@@ -251,8 +234,8 @@ public class BasicImageContext extends ImageContext {
 			double leftX = horizontalList.first().getX();
 			double rightX = horizontalList.last().getX();
 
-			SortedSet<Point> left = new TreeSet<Point>(yComparator);
-			SortedSet<Point> right = new TreeSet<Point>(yComparator);
+			SortedSet<Point> left = new TreeSet<>(yComparator);
+			SortedSet<Point> right = new TreeSet<>(yComparator);
 
 			Point2D[] path = new Point2D[] { topLeft, topRight, bottomRight,
 					bottomLeft };
@@ -327,10 +310,8 @@ public class BasicImageContext extends ImageContext {
 
 		private SortedSet<Point> removeRedundantYs(Set<Point> points,
 				boolean useGreaterValue) {
-			SortedMap<Integer, Integer> map = new TreeMap<Integer, Integer>();
-			Iterator<Point> iter = points.iterator();
-			while (iter.hasNext()) {
-				Point p = iter.next();
+			SortedMap<Integer, Integer> map = new TreeMap<>();
+			for (Point p : points) {
 				Integer x = map.get(p.y);
 				if (x == null) {
 					map.put(p.y, p.x);
@@ -340,10 +321,8 @@ public class BasicImageContext extends ImageContext {
 					map.put(p.y, Math.min(p.x, x));
 				}
 			}
-			SortedSet<Point> returnValue = new TreeSet<Point>(yComparator);
-			Iterator<Integer> yIter = map.keySet().iterator();
-			while (yIter.hasNext()) {
-				Integer y = yIter.next();
+			SortedSet<Point> returnValue = new TreeSet<>(yComparator);
+			for (Integer y : map.keySet()) {
 				Integer x = map.get(y);
 				returnValue.add(new Point(x, y));
 			}
@@ -528,7 +507,7 @@ public class BasicImageContext extends ImageContext {
 		}
 	}
 
-	class TileInstructions {
+	static class TileInstructions {
 		boolean active = false;
 		int tileX, tileY, tileWidth, tileHeight, oWidth, oHeight, oStride;
 		Object renderingHint;
@@ -564,7 +543,7 @@ public class BasicImageContext extends ImageContext {
 
 	}
 
-	List<TileInstructions> instructionQueue = new LinkedList<TileInstructions>();
+	final List<TileInstructions> instructionQueue = new LinkedList<>();
 
 	class DrawTileRunnable implements Runnable {
 		public void run() {
@@ -601,15 +580,13 @@ public class BasicImageContext extends ImageContext {
 			if (oHasAlpha) {
 				for (int y = minYi; y <= maxYi; y++) {
 					int yw = y * stride;
-					double yd = y;
 					stripFunction.getXEndpoints(y, xEndpoints);
 					for (int x = xEndpoints[0]; x <= xEndpoints[1]; x++) {
-						double xd = x;
 
 						// transform (x,y) to (transformedX, transformedY):
-						w = m20 * xd + m21 * yd + m22;
-						transformedX = (m00 * xd + m01 * yd + m02) / w;
-						transformedY = (m10 * xd + m11 * yd + m12) / w;
+						w = m20 * (double) x + m21 * (double) y + m22;
+						transformedX = (m00 * (double) x + m01 * (double) y + m02) / w;
+						transformedY = (m10 * (double) x + m11 * (double) y + m12) / w;
 
 						int newX = (int) (transformedX + .5);
 						int newY = (int) (transformedY + .5);
@@ -648,15 +625,13 @@ public class BasicImageContext extends ImageContext {
 			} else {
 				for (int y = minYi; y <= maxYi; y++) {
 					int yw = y * stride;
-					double yd = y;
 					stripFunction.getXEndpoints(y, xEndpoints);
 					for (int x = xEndpoints[0]; x <= xEndpoints[1]; x++) {
-						double xd = x;
 
 						// transform (x,y) to (transformedX, transformedY):
-						w = m20 * xd + m21 * yd + m22;
-						transformedX = (m00 * xd + m01 * yd + m02) / w;
-						transformedY = (m10 * xd + m11 * yd + m12) / w;
+						w = m20 * (double) x + m21 * (double) y + m22;
+						transformedX = (m00 * (double) x + m01 * (double) y + m02) / w;
+						transformedY = (m10 * (double) x + m11 * (double) y + m12) / w;
 
 						int newX = (int) (transformedX + .5);
 						int newY = (int) (transformedY + .5);
@@ -682,10 +657,8 @@ public class BasicImageContext extends ImageContext {
 			if (oHasAlpha) {
 				for (int y = minYi; y <= maxYi; y++) {
 					int yw = y * stride;
-					double yd = y;
 					stripFunction.getXEndpoints(y, xEndpoints);
 					for (int x = xEndpoints[0]; x <= xEndpoints[1]; x++) {
-						double xd = x;
 						int samples = windowArea;
 						int srcA = 0;
 						int r = 0;
@@ -693,8 +666,8 @@ public class BasicImageContext extends ImageContext {
 						int b = 0;
 						for (double dx = 0; dx < windowLengthD; dx++) {
 							for (double dy = 0; dy < windowLengthD; dy++) {
-								double x2 = xd + dx * incr;
-								double y2 = yd + dy * incr;
+								double x2 = (double) x + dx * incr;
+								double y2 = (double) y + dy * incr;
 
 								// transform (x,y) to (transformedX,
 								// transformedY):
@@ -750,10 +723,8 @@ public class BasicImageContext extends ImageContext {
 			} else {
 				for (int y = minYi; y <= maxYi; y++) {
 					int yw = y * stride;
-					double yd = y;
 					stripFunction.getXEndpoints(y, xEndpoints);
 					for (int x = xEndpoints[0]; x <= xEndpoints[1]; x++) {
-						double xd = x;
 
 						int samples = windowArea;
 						int srcA = 0;
@@ -762,8 +733,8 @@ public class BasicImageContext extends ImageContext {
 						int b = 0;
 						for (double dx = 0; dx < windowLengthD; dx++) {
 							for (double dy = 0; dy < windowLengthD; dy++) {
-								double x2 = xd + dx * incr;
-								double y2 = yd + dy * incr;
+								double x2 = (double) x + dx * incr;
+								double y2 = (double) y + dy * incr;
 
 								// transform (x,y) to (transformedX,
 								// transformedY):

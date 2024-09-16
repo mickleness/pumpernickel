@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -43,7 +43,7 @@ public abstract class ImageContext implements AutoCloseable {
 	 * 
 	 */
 	protected RenderingHints renderingHints = new RenderingHints(
-			new HashMap<RenderingHints.Key, Object>());
+			new HashMap<>());
 
 	public abstract void drawImage(BufferedImage img, Point2D topLeft,
 			Point2D topRight, Point2D bottomRight, Point2D bottomLeft);
@@ -61,7 +61,7 @@ public abstract class ImageContext implements AutoCloseable {
 	/** Replace all current rendering hints with the argument. */
 	public void setRenderingHints(RenderingHints hints) {
 		renderingHints = new RenderingHints(
-				new HashMap<RenderingHints.Key, Object>());
+				new HashMap<>());
 		renderingHints.putAll(hints);
 	}
 

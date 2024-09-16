@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -38,7 +38,7 @@ import com.pump.image.shadow.DoubleBoxShadowRenderer.Combo;
  */
 class DoubleBoxShadowRendererGenerator
 		implements Callable<DoubleBoxShadowRendererGenerator.Results> {
-	private static GaussianShadowRenderer gaussianRenderer = new GaussianShadowRenderer();
+	private static final GaussianShadowRenderer gaussianRenderer = new GaussianShadowRenderer();
 	private static final Color SHADOW_COLOR = new Color(0, 0, 0, 192);
 
 	private static final BufferedImage star = createStar();
@@ -79,9 +79,9 @@ class DoubleBoxShadowRendererGenerator
 	private static final DecimalFormat format = new DecimalFormat("#.0");
 
 	static class Results implements Comparable<Results> {
-		long error = Long.MAX_VALUE;
-		Combo combo = null;
-		ARGBPixels pixels = null;
+		long error;
+		Combo combo;
+		ARGBPixels pixels;
 		BigDecimal value, incr;
 		BigDecimal gaussianRadius;
 		BufferedImage gaussianShadowImage;
@@ -111,9 +111,9 @@ class DoubleBoxShadowRendererGenerator
 
 			StringBuilder sb = new StringBuilder();
 			sb.append(format.format(gaussianRadius));
-			sb.append("," + error);
+			sb.append(",").append(error);
 			for (int a = 0; a < combo.sortedRadii.size(); a++) {
-				sb.append("," + combo.sortedRadii.get(a));
+				sb.append(",").append(combo.sortedRadii.get(a));
 			}
 
 			return sb.toString();
@@ -145,8 +145,7 @@ class DoubleBoxShadowRendererGenerator
 		}
 	}
 
-	private Results getBestFit(BigDecimal min, BigDecimal max, BigDecimal incr)
-			throws Exception {
+	private Results getBestFit(BigDecimal min, BigDecimal max, BigDecimal incr) {
 		if (min.compareTo(fastIncr) <= 0)
 			min = fastIncr;
 

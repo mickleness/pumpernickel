@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -46,13 +46,15 @@ class GenericDataReader {
 		}
 	}
 
-	protected static final int indexOf(byte[] searchable, byte[] phrase) {
-		boolean match = true;
+	protected static int indexOf(byte[] searchable, byte[] phrase) {
+		boolean match;
 		for (int a = 0; a < searchable.length - phrase.length; a++) {
 			match = true;
-			for (int b = 0; b < phrase.length && match; b++) {
-				if (searchable[a + b] != phrase[b])
+			for (int b = 0; b < phrase.length; b++) {
+				if (searchable[a + b] != phrase[b]) {
 					match = false;
+					break;
+				}
 			}
 			if (match)
 				return a;
@@ -60,14 +62,15 @@ class GenericDataReader {
 		return -1;
 	}
 
-	protected static final int lastIndexOf(byte[] searchable, byte[] phrase) {
-		boolean match = true;
+	protected static int lastIndexOf(byte[] searchable, byte[] phrase) {
+		boolean match;
 		for (int a = searchable.length - phrase.length; a >= 0; a--) {
 			match = true;
-			for (int b = 0; b < phrase.length && match; b++) {
-				if (searchable[a + b] != phrase[b])
+			for (int b = 0; b < phrase.length; b++)
+				if (searchable[a + b] != phrase[b]) {
 					match = false;
-			}
+					break;
+				}
 			if (match)
 				return a;
 		}

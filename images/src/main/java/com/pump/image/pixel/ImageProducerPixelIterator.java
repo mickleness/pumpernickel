@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -112,101 +112,67 @@ class ImageProducerPixelIterator<T> implements PixelIterator<T> {
 	 * This object is the first packet of info passed from the ImageConsumer to
 	 * the PixelIterator
 	 */
-	private static class ImageDescriptor {
-		final int imgWidth, imgHeight;
-		final ImageType imageType;
-		final boolean isOptimized;
-
-		public ImageDescriptor(int imgWidth, int imgHeight, ImageType imageType,
-				boolean isOptimized) {
-			this.imgWidth = imgWidth;
-			this.imgHeight = imgHeight;
-			this.imageType = imageType;
-			this.isOptimized = isOptimized;
-		}
+		private record ImageDescriptor(int imgWidth, int imgHeight, ImageType imageType, boolean isOptimized) {
 	}
 
 	/**
 	 * This object is passed from the ImageConsumer to the PixelIterator as it
 	 * becomes available.
 	 */
-	private static class PixelPackage {
-		final int x, y, w, h, offset, scanSize;
-		final Object pixels;
-		final ImageType imageType;
-
-		PixelPackage(int x, int y, int w, int h, Object pixels, int offset,
-				int scanSize, ImageType imageType) {
-			this.x = x;
-			this.y = y;
-			this.w = w;
-			this.h = h;
-			this.pixels = pixels;
-			this.offset = offset;
-			this.scanSize = scanSize;
-			this.imageType = imageType;
-		}
+		private record PixelPackage(int x, int y, int w, int h, Object pixels, int offset, int scanSize,
+									ImageType imageType) {
 
 		/**
 		 * Create a QBufferedImage of all pixels in this PixelPackage.
 		 */
-		QBufferedImage createBufferedImage(int y) {
-			int arrayOffset = offset + y * scanSize;
+			QBufferedImage createBufferedImage(int y) {
+				int arrayOffset = offset + y * scanSize;
 
-			WritableRaster raster = null;
-			if (imageType.getColorModel() instanceof DirectColorModel) {
-				DirectColorModel dcm = (DirectColorModel) imageType
-						.getColorModel();
-				DataBuffer d = new DataBufferInt((int[]) pixels, h * scanSize,
-						arrayOffset);
+				WritableRaster raster = null;
+				if (imageType.getColorModel() instanceof DirectColorModel dcm) {
+					DataBuffer d = new DataBufferInt((int[]) pixels, h * scanSize,
+							arrayOffset);
 
-				int[] bandmasks;
-				if (dcm.hasAlpha()) {
-					bandmasks = new int[4];
-					bandmasks[3] = dcm.getAlphaMask();
-				} else {
-					bandmasks = new int[3];
-				}
-				bandmasks[0] = dcm.getRedMask();
-				bandmasks[1] = dcm.getGreenMask();
-				bandmasks[2] = dcm.getBlueMask();
+					int[] bandmasks;
+					if (dcm.hasAlpha()) {
+						bandmasks = new int[4];
+						bandmasks[3] = dcm.getAlphaMask();
+					} else {
+						bandmasks = new int[3];
+					}
+					bandmasks[0] = dcm.getRedMask();
+					bandmasks[1] = dcm.getGreenMask();
+					bandmasks[2] = dcm.getBlueMask();
 
-				raster = Raster.createPackedRaster(d, w, h, scanSize, bandmasks,
-						new Point(0, 0));
-			} else if (imageType
-					.getColorModel() instanceof ComponentColorModel) {
-				int[] bandOffsets = null;
-				switch (imageType.getCode()) {
-				case BufferedImage.TYPE_3BYTE_BGR:
-					bandOffsets = new int[] { 2, 1, 0 };
-					break;
-				case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-				case BufferedImage.TYPE_4BYTE_ABGR:
-					bandOffsets = new int[] { 3, 2, 1, 0 };
-					break;
-				case BufferedImage.TYPE_BYTE_GRAY:
-					bandOffsets = new int[] { 0 };
-					break;
-				}
-
-				if (bandOffsets != null) {
-					DataBuffer d = new DataBufferByte((byte[]) pixels,
-							h * scanSize, arrayOffset);
-					raster = Raster.createInterleavedRaster(d, w, h, scanSize,
-							imageType.getSampleCount(), bandOffsets,
+					raster = Raster.createPackedRaster(d, w, h, scanSize, bandmasks,
 							new Point(0, 0));
+				} else if (imageType
+						.getColorModel() instanceof ComponentColorModel) {
+					int[] bandOffsets = switch (imageType.getCode()) {
+						case BufferedImage.TYPE_3BYTE_BGR -> new int[]{2, 1, 0};
+						case BufferedImage.TYPE_4BYTE_ABGR_PRE, BufferedImage.TYPE_4BYTE_ABGR -> new int[]{3, 2, 1, 0};
+						case BufferedImage.TYPE_BYTE_GRAY -> new int[]{0};
+						default -> null;
+					};
+
+					if (bandOffsets != null) {
+						DataBuffer d = new DataBufferByte((byte[]) pixels,
+								h * scanSize, arrayOffset);
+						raster = Raster.createInterleavedRaster(d, w, h, scanSize,
+								imageType.getSampleCount(), bandOffsets,
+								new Point(0, 0));
+					}
 				}
+
+				if (raster == null)
+					throw new NullPointerException(
+							"Unsupported image type: " + imageType);
+
+				return new QBufferedImage(imageType.getColorModel(), raster,
+						imageType.getColorModel().isAlphaPremultiplied(),
+						new Hashtable<>());
 			}
-
-			if (raster == null)
-				throw new NullPointerException(
-						"Unsupported image type: " + imageType);
-
-			return new QBufferedImage(imageType.getColorModel(), raster,
-					imageType.getColorModel().isAlphaPremultiplied(),
-					new Hashtable<>());
 		}
-	}
 
 	/**
 	 * This is the ImageConsumer that listens for updates from the
@@ -247,7 +213,7 @@ class ImageProducerPixelIterator<T> implements PixelIterator<T> {
 
 		private boolean isSinglePassHint, isTopDownLeftRightHint,
 				isCompleteScanLineHint;
-		private long queueTimeoueMillis;
+		private final long queueTimeoueMillis;
 		private boolean isInitialized = false;
 
 		/**
@@ -319,14 +285,13 @@ class ImageProducerPixelIterator<T> implements PixelIterator<T> {
 
 		@Override
 		public void setDimensions(int width, int height) {
-			imgWidth = Integer.valueOf(width);
-			imgHeight = Integer.valueOf(height);
+			imgWidth = width;
+			imgHeight = height;
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public void setProperties(
-				@SuppressWarnings("rawtypes") Hashtable props) {
+				Hashtable props) {
 			// intentionally empty
 		}
 
@@ -444,8 +409,8 @@ class ImageProducerPixelIterator<T> implements PixelIterator<T> {
 					return;
 				}
 
-				int w = imgWidth.intValue();
-				int h = imgHeight.intValue();
+				int w = imgWidth;
+				int h = imgHeight;
 
 				if (pixelType == null) {
 					// we're supposed to assign it from first sample of pixels:
@@ -465,24 +430,14 @@ class ImageProducerPixelIterator<T> implements PixelIterator<T> {
 
 				ImageDescriptor imageDescriptor;
 				switch (pixelType.getCode()) {
-				case BufferedImage.TYPE_3BYTE_BGR:
-				case BufferedImage.TYPE_4BYTE_ABGR:
-				case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-				case ImageType.TYPE_3BYTE_RGB:
-				case ImageType.TYPE_4BYTE_ARGB:
-				case ImageType.TYPE_4BYTE_ARGB_PRE:
-				case BufferedImage.TYPE_BYTE_GRAY:
-				case BufferedImage.TYPE_INT_ARGB:
-				case BufferedImage.TYPE_INT_ARGB_PRE:
-				case BufferedImage.TYPE_INT_BGR:
-				case BufferedImage.TYPE_INT_RGB:
-					imageDescriptor = new ImageDescriptor(w, h, pixelType,
-							optimized);
-					break;
-				default:
-					String error = "unsupported iterator type: " + pixelType;
-					close(error, false);
-					return;
+					case BufferedImage.TYPE_3BYTE_BGR, BufferedImage.TYPE_4BYTE_ABGR, BufferedImage.TYPE_4BYTE_ABGR_PRE, ImageType.TYPE_3BYTE_RGB, ImageType.TYPE_4BYTE_ARGB, ImageType.TYPE_4BYTE_ARGB_PRE, BufferedImage.TYPE_BYTE_GRAY, BufferedImage.TYPE_INT_ARGB, BufferedImage.TYPE_INT_ARGB_PRE, BufferedImage.TYPE_INT_BGR, BufferedImage.TYPE_INT_RGB ->
+							imageDescriptor = new ImageDescriptor(w, h, pixelType,
+									optimized);
+					default -> {
+						String error = "unsupported iterator type: " + pixelType;
+						close(error, false);
+						return;
+					}
 				}
 
 				if (!optimized) {
@@ -516,7 +471,7 @@ class ImageProducerPixelIterator<T> implements PixelIterator<T> {
 				return;
 			}
 
-			if (isInitialized == false) {
+			if (!isInitialized) {
 				String error = "imageComplete( " + status
 						+ " ) was called before setPixels(...)";
 				close(error, false);
@@ -612,8 +567,7 @@ class ImageProducerPixelIterator<T> implements PixelIterator<T> {
 		thread.start();
 
 		Object data = poll(consumer.queue, 100_000, false);
-		if (data instanceof ImageDescriptor) {
-			ImageDescriptor d = (ImageDescriptor) data;
+		if (data instanceof ImageDescriptor d) {
 			width = d.imgWidth;
 			height = d.imgHeight;
 			isOptimized = d.isOptimized;
@@ -651,7 +605,7 @@ class ImageProducerPixelIterator<T> implements PixelIterator<T> {
 					IMAGE_CONSUMER_COMPLETE_VIA_ABORTED);
 		}
 
-		throw new RuntimeException((String) msg);
+		throw new RuntimeException(msg);
 	}
 
 	/**
@@ -758,8 +712,7 @@ class ImageProducerPixelIterator<T> implements PixelIterator<T> {
 	 */
 	private void pollNextPixelPackage(long timeoutMillis) {
 		Object data = poll(consumer.queue, timeoutMillis, timeoutMillis == 0);
-		if (data instanceof String) {
-			String str = (String) data;
+		if (data instanceof String str) {
 			rowCtr = height;
 
 			if (PIXEL_ITERATOR_CLOSED.equals(str)) {

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -70,7 +70,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 	final int srcW, srcH, dstW, dstH;
 	final PixelIterator srcIterator;
 	int dstY;
-	int srcY = 0;
+	int srcY;
 
 	private boolean isClosed = false;
 
@@ -91,7 +91,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 			reds = new int[width];
 			greens = new int[width];
 			blues = new int[width];
-			if (isOpaque == false)
+			if (!isOpaque)
 				alphas = new int[width];
 			sums = new int[width];
 		}
@@ -110,32 +110,30 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 		 */
 		void writeColorComponents(byte[] destArray, int destArrayOffset, int type) {
 			switch (type) {
-			case BufferedImage.TYPE_3BYTE_BGR:
-				for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
-					destArray[k2++] = (byte) (blues[x] / sums[x]);
-					destArray[k2++] = (byte) (greens[x] / sums[x]);
-					destArray[k2++] = (byte) (reds[x] / sums[x]);
+				case BufferedImage.TYPE_3BYTE_BGR -> {
+					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
+						destArray[k2++] = (byte) (blues[x] / sums[x]);
+						destArray[k2++] = (byte) (greens[x] / sums[x]);
+						destArray[k2++] = (byte) (reds[x] / sums[x]);
+					}
 				}
-				break;
-			case ImageType.TYPE_3BYTE_RGB:
-				for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
-					destArray[k2++] = (byte) (reds[x] / sums[x]);
-					destArray[k2++] = (byte) (greens[x] / sums[x]);
-					destArray[k2++] = (byte) (blues[x] / sums[x]);
+				case ImageType.TYPE_3BYTE_RGB -> {
+					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
+						destArray[k2++] = (byte) (reds[x] / sums[x]);
+						destArray[k2++] = (byte) (greens[x] / sums[x]);
+						destArray[k2++] = (byte) (blues[x] / sums[x]);
+					}
 				}
-				break;
-			case BufferedImage.TYPE_4BYTE_ABGR:
-			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-				for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
-					destArray[k2++] = isOpaque ? -127
-							: (byte) (alphas[x] / sums[x]);
-					destArray[k2++] = (byte) (blues[x] / sums[x]);
-					destArray[k2++] = (byte) (greens[x] / sums[x]);
-					destArray[k2++] = (byte) (reds[x] / sums[x]);
+				case BufferedImage.TYPE_4BYTE_ABGR, BufferedImage.TYPE_4BYTE_ABGR_PRE -> {
+					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
+						destArray[k2++] = isOpaque ? -127
+								: (byte) (alphas[x] / sums[x]);
+						destArray[k2++] = (byte) (blues[x] / sums[x]);
+						destArray[k2++] = (byte) (greens[x] / sums[x]);
+						destArray[k2++] = (byte) (reds[x] / sums[x]);
+					}
 				}
-				break;
-			case ImageType.TYPE_4BYTE_RGBA:
-			case ImageType.TYPE_4BYTE_RGBA_PRE:
+				case ImageType.TYPE_4BYTE_RGBA, ImageType.TYPE_4BYTE_RGBA_PRE -> {
 					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
 						destArray[k2++] = (byte) (reds[x] / sums[x]);
 						destArray[k2++] = (byte) (greens[x] / sums[x]);
@@ -143,27 +141,25 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 						destArray[k2++] = isOpaque ? -127
 								: (byte) (alphas[x] / sums[x]);
 					}
-					break;
-			case ImageType.TYPE_4BYTE_ARGB:
-			case ImageType.TYPE_4BYTE_ARGB_PRE:
-				for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
-					destArray[k2++] = isOpaque ? -127
-							: (byte) (alphas[x] / sums[x]);
-					destArray[k2++] = (byte) (reds[x] / sums[x]);
-					destArray[k2++] = (byte) (greens[x] / sums[x]);
-					destArray[k2++] = (byte) (blues[x] / sums[x]);
 				}
-				break;
-			case BufferedImage.TYPE_BYTE_GRAY:
-				for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
-					int r = reds[x];
-					int g = greens[x];
-					int b = blues[x];
-					destArray[k2++] = (byte) ((r + g + b) / (3 * sums[x]));
+				case ImageType.TYPE_4BYTE_ARGB, ImageType.TYPE_4BYTE_ARGB_PRE -> {
+					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
+						destArray[k2++] = isOpaque ? -127
+								: (byte) (alphas[x] / sums[x]);
+						destArray[k2++] = (byte) (reds[x] / sums[x]);
+						destArray[k2++] = (byte) (greens[x] / sums[x]);
+						destArray[k2++] = (byte) (blues[x] / sums[x]);
+					}
 				}
-				break;
-			default:
-				throw new RuntimeException(
+				case BufferedImage.TYPE_BYTE_GRAY -> {
+					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
+						int r = reds[x];
+						int g = greens[x];
+						int b = blues[x];
+						destArray[k2++] = (byte) ((r + g + b) / (3 * sums[x]));
+					}
+				}
+				default -> throw new RuntimeException(
 						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
@@ -175,95 +171,78 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 			int incr = scaleX < .25 ? 2 : 1;
 			int kIncr;
 			switch (type) {
-			case BufferedImage.TYPE_3BYTE_BGR:
-				kIncr = 3 * incr - 3;
-				for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += kIncr) {
-					int k = srcXLUT[x];
-					blues[k] += sourceArray[k2++] & 0xff;
-					greens[k] += sourceArray[k2++] & 0xff;
-					reds[k] += sourceArray[k2++] & 0xff;
-					sums[k]++;
-				}
-				break;
-			case ImageType.TYPE_3BYTE_RGB:
-				kIncr = 3 * incr - 3;
-				for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += kIncr) {
-					int k = srcXLUT[x];
-					reds[k] += sourceArray[k2++] & 0xff;
-					greens[k] += sourceArray[k2++] & 0xff;
-					blues[k] += sourceArray[k2++] & 0xff;
-					sums[k]++;
-				}
-				break;
-			case BufferedImage.TYPE_4BYTE_ABGR:
-			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-				kIncr = 4 * incr - 4;
-				for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += kIncr) {
-					int k = srcXLUT[x];
-					if (alphas != null)
-						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
-					k2++;
-					blues[k] += sourceArray[k2++] & 0xff;
-					greens[k] += sourceArray[k2++] & 0xff;
-					reds[k] += sourceArray[k2++] & 0xff;
-					sums[k]++;
-				}
-				break;
-			case ImageType.TYPE_4BYTE_BGRA:
-				kIncr = 4 * incr - 4;
-				for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += kIncr) {
-					int k = srcXLUT[x];
-					reds[k] += sourceArray[k2++] & 0xff;
-					greens[k] += sourceArray[k2++] & 0xff;
-					blues[k] += sourceArray[k2++] & 0xff;
-					if (alphas != null) {
-						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
+				case BufferedImage.TYPE_3BYTE_BGR -> {
+					kIncr = 3 * incr - 3;
+					for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += kIncr) {
+						int k = srcXLUT[x];
+						blues[k] += sourceArray[k2++] & 0xff;
+						greens[k] += sourceArray[k2++] & 0xff;
+						reds[k] += sourceArray[k2++] & 0xff;
+						sums[k]++;
 					}
-					k2++;
-					sums[k]++;
 				}
-				break;
-			case ImageType.TYPE_4BYTE_RGBA:
-			case ImageType.TYPE_4BYTE_RGBA_PRE:
-				kIncr = 4 * incr - 4;
-				for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += kIncr) {
-					int k = srcXLUT[x];
-					reds[k] += sourceArray[k2++] & 0xff;
-					greens[k] += sourceArray[k2++] & 0xff;
-					blues[k] += sourceArray[k2++] & 0xff;
-					if (alphas != null) {
-						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
+				case ImageType.TYPE_3BYTE_RGB -> {
+					kIncr = 3 * incr - 3;
+					for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += kIncr) {
+						int k = srcXLUT[x];
+						reds[k] += sourceArray[k2++] & 0xff;
+						greens[k] += sourceArray[k2++] & 0xff;
+						blues[k] += sourceArray[k2++] & 0xff;
+						sums[k]++;
 					}
-					k2++;
-					sums[k]++;
 				}
-				break;
-			case ImageType.TYPE_4BYTE_ARGB:
-			case ImageType.TYPE_4BYTE_ARGB_PRE:
-				kIncr = 4 * incr - 4;
-				for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += kIncr) {
-					int k = srcXLUT[x];
-					if (alphas != null)
-						alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
-					k2++;
-					reds[k] += sourceArray[k2++] & 0xff;
-					greens[k] += sourceArray[k2++] & 0xff;
-					blues[k] += sourceArray[k2++] & 0xff;
-					sums[k]++;
+				case BufferedImage.TYPE_4BYTE_ABGR, BufferedImage.TYPE_4BYTE_ABGR_PRE -> {
+					kIncr = 4 * incr - 4;
+					for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += kIncr) {
+						int k = srcXLUT[x];
+						if (alphas != null)
+							alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
+						k2++;
+						blues[k] += sourceArray[k2++] & 0xff;
+						greens[k] += sourceArray[k2++] & 0xff;
+						reds[k] += sourceArray[k2++] & 0xff;
+						sums[k]++;
+					}
 				}
-				break;
-			case BufferedImage.TYPE_BYTE_GRAY:
-				for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += incr) {
-					int k = srcXLUT[x];
-					int v = sourceArray[k2] & 0xff;
-					reds[k] += v;
-					sums[k]++;
+				case ImageType.TYPE_4BYTE_BGRA, ImageType.TYPE_4BYTE_RGBA, ImageType.TYPE_4BYTE_RGBA_PRE -> {
+					kIncr = 4 * incr - 4;
+					for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += kIncr) {
+						int k = srcXLUT[x];
+						reds[k] += sourceArray[k2++] & 0xff;
+						greens[k] += sourceArray[k2++] & 0xff;
+						blues[k] += sourceArray[k2++] & 0xff;
+						if (alphas != null) {
+							alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
+						}
+						k2++;
+						sums[k]++;
+					}
 				}
-				break;
-			default:
-				// types BYTE_ABGR and INT_ARGB_PRE aren't supported yet.
-				throw new RuntimeException(
-						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
+				case ImageType.TYPE_4BYTE_ARGB, ImageType.TYPE_4BYTE_ARGB_PRE -> {
+					kIncr = 4 * incr - 4;
+					for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += kIncr) {
+						int k = srcXLUT[x];
+						if (alphas != null)
+							alphas[k] += isOpaque ? 255 : sourceArray[k2] & 0xff;
+						k2++;
+						reds[k] += sourceArray[k2++] & 0xff;
+						greens[k] += sourceArray[k2++] & 0xff;
+						blues[k] += sourceArray[k2++] & 0xff;
+						sums[k]++;
+					}
+				}
+				case BufferedImage.TYPE_BYTE_GRAY -> {
+					for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += incr) {
+						int k = srcXLUT[x];
+						int v = sourceArray[k2] & 0xff;
+						reds[k] += v;
+						sums[k]++;
+					}
+				}
+				default ->
+					// types BYTE_ABGR and INT_ARGB_PRE aren't supported yet.
+						throw new RuntimeException(
+								"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
 
@@ -273,39 +252,37 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 		void readColorComponents(int[] sourceArray, int sourceOffset, int type) {
 			int incr = scaleX < .25 ? 2 : 1;
 			switch (type) {
-			case BufferedImage.TYPE_INT_RGB:
-				for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += incr) {
-					int k = srcXLUT[x];
-					reds[k] += (sourceArray[k2] >> 16) & 0xff;
-					greens[k] += (sourceArray[k2] >> 8) & 0xff;
-					blues[k] += (sourceArray[k2]) & 0xff;
-					sums[k]++;
+				case BufferedImage.TYPE_INT_RGB -> {
+					for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += incr) {
+						int k = srcXLUT[x];
+						reds[k] += (sourceArray[k2] >> 16) & 0xff;
+						greens[k] += (sourceArray[k2] >> 8) & 0xff;
+						blues[k] += (sourceArray[k2]) & 0xff;
+						sums[k]++;
+					}
 				}
-				break;
-			case BufferedImage.TYPE_INT_BGR:
-				for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += incr) {
-					int k = srcXLUT[x];
-					reds[k] += (sourceArray[k2]) & 0xff;
-					greens[k] += (sourceArray[k2] >> 8) & 0xff;
-					blues[k] += (sourceArray[k2] >> 16) & 0xff;
-					sums[k]++;
+				case BufferedImage.TYPE_INT_BGR -> {
+					for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += incr) {
+						int k = srcXLUT[x];
+						reds[k] += (sourceArray[k2]) & 0xff;
+						greens[k] += (sourceArray[k2] >> 8) & 0xff;
+						blues[k] += (sourceArray[k2] >> 16) & 0xff;
+						sums[k]++;
+					}
 				}
-				break;
-			case BufferedImage.TYPE_INT_ARGB:
-			case BufferedImage.TYPE_INT_ARGB_PRE:
-				for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += incr) {
-					int k = srcXLUT[x];
-					if (alphas != null)
-						alphas[k] += isOpaque ? 255
-								: (sourceArray[k2] >> 24) & 0xff;
-					reds[k] += (sourceArray[k2] >> 16) & 0xff;
-					greens[k] += (sourceArray[k2] >> 8) & 0xff;
-					blues[k] += (sourceArray[k2]) & 0xff;
-					sums[k]++;
+				case BufferedImage.TYPE_INT_ARGB, BufferedImage.TYPE_INT_ARGB_PRE -> {
+					for (int x = 0, k2 = sourceOffset; x < srcW; x += incr, k2 += incr) {
+						int k = srcXLUT[x];
+						if (alphas != null)
+							alphas[k] += isOpaque ? 255
+									: (sourceArray[k2] >> 24) & 0xff;
+						reds[k] += (sourceArray[k2] >> 16) & 0xff;
+						greens[k] += (sourceArray[k2] >> 8) & 0xff;
+						blues[k] += (sourceArray[k2]) & 0xff;
+						sums[k]++;
+					}
 				}
-				break;
-			default:
-				throw new RuntimeException(
+				default -> throw new RuntimeException(
 						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
@@ -315,31 +292,29 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 		 */
 		void writeColorComponents(int[] destArray, int destArrayOffset, int type) {
 			switch (type) {
-			case BufferedImage.TYPE_INT_RGB:
-				for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
-					destArray[k2] = ((reds[x] / sums[x]) << 16)
-							| ((greens[x] / sums[x]) << 8)
-							| ((blues[x] / sums[x]));
+				case BufferedImage.TYPE_INT_RGB -> {
+					for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
+						destArray[k2] = ((reds[x] / sums[x]) << 16)
+								| ((greens[x] / sums[x]) << 8)
+								| ((blues[x] / sums[x]));
+					}
 				}
-				break;
-			case BufferedImage.TYPE_INT_BGR:
-				for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
-					destArray[k2] = ((reds[x] / sums[x]))
-							| ((greens[x] / sums[x]) << 8)
-							| ((blues[x] / sums[x]) << 16);
+				case BufferedImage.TYPE_INT_BGR -> {
+					for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
+						destArray[k2] = ((reds[x] / sums[x]))
+								| ((greens[x] / sums[x]) << 8)
+								| ((blues[x] / sums[x]) << 16);
+					}
 				}
-				break;
-			case BufferedImage.TYPE_INT_ARGB:
-			case BufferedImage.TYPE_INT_ARGB_PRE:
-				for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
-					int alpha = isOpaque ? 255 : alphas[x] / sums[x];
-					destArray[k2] = ((alpha) << 24) | ((reds[x] / sums[x]) << 16)
-							| ((greens[x] / sums[x]) << 8)
-							| ((blues[x] / sums[x]));
+				case BufferedImage.TYPE_INT_ARGB, BufferedImage.TYPE_INT_ARGB_PRE -> {
+					for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
+						int alpha = isOpaque ? 255 : alphas[x] / sums[x];
+						destArray[k2] = ((alpha) << 24) | ((reds[x] / sums[x]) << 16)
+								| ((greens[x] / sums[x]) << 8)
+								| ((blues[x] / sums[x]));
+					}
 				}
-				break;
-			default:
-				throw new RuntimeException(
+				default -> throw new RuntimeException(
 						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
@@ -351,8 +326,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 			int lastAlpha = 0;
 			int newRed, newGreen, newBlue, newAlpha;
 			for (int x = 0; x < width; x++) {
-				switch (sums[x]) {
-				case 0:
+				if (sums[x] == 0) {
 					if (x > 0) {
 						lastRed = reds[x - 1] / sums[x - 1];
 						lastGreen = greens[x - 1] / sums[x - 1];
@@ -393,7 +367,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 						if (alphas != null)
 							alphas[k] = isOpaque ? 255
 									: ((lastAlpha * (span - f) + newAlpha * f)
-											/ span);
+									/ span);
 						reds[k] = ((lastRed * (span - f) + newRed * f) / span);
 						greens[k] = ((lastGreen * (span - f) + newGreen * f)
 								/ span);
@@ -401,7 +375,6 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 								/ span);
 						sums[k] = 1;
 					}
-					break;
 				}
 			}
 		}
@@ -410,9 +383,9 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 		 * Write the color components from this object to the array provided,
 		 * while tweening between this row and the next row.
 		 *
-		 * @nextRow it is assumed this argument will be of the same class as
+		 * @param next it is assumed this argument will be of the same class as
 		 *          this object.
-		 * @fraction the amount of this row vs the argument to use. When zero:
+		 * @param fraction the amount of this row vs the argument to use. When zero:
 		 *           only this object is used, when one: only the argument is
 		 *           used.
 		 */
@@ -425,44 +398,42 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 			int mult1 = (int) ((1 - fraction) * 255);
 			int mult2 = 255 - mult1;
 			switch (type) {
-			case BufferedImage.TYPE_INT_RGB:
-				for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
-					int m1 = mult1 / sums[x];
-					int m2 = mult2 / sums[x];
+				case BufferedImage.TYPE_INT_RGB -> {
+					for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
+						int m1 = mult1 / sums[x];
+						int m2 = mult2 / sums[x];
 
-					int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
-					int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
-					int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
-					destArray[k2] = (r << 16) | (g << 8) | (b);
+						int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
+						int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
+						int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
+						destArray[k2] = (r << 16) | (g << 8) | (b);
+					}
 				}
-				break;
-			case BufferedImage.TYPE_INT_BGR:
-				for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
-					int m1 = mult1 / sums[x];
-					int m2 = mult2 / sums[x];
+				case BufferedImage.TYPE_INT_BGR -> {
+					for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
+						int m1 = mult1 / sums[x];
+						int m2 = mult2 / sums[x];
 
-					int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
-					int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
-					int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
-					destArray[k2] = (b << 16) | (g << 8) | (r);
+						int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
+						int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
+						int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
+						destArray[k2] = (b << 16) | (g << 8) | (r);
+					}
 				}
-				break;
-			case BufferedImage.TYPE_INT_ARGB:
-			case BufferedImage.TYPE_INT_ARGB_PRE:
-				for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
-					int m1 = mult1 / sums[x];
-					int m2 = mult2 / sums[x];
+				case BufferedImage.TYPE_INT_ARGB, BufferedImage.TYPE_INT_ARGB_PRE -> {
+					for (int x = 0, k2 = destArrayOffset; x < width; x++, k2++) {
+						int m1 = mult1 / sums[x];
+						int m2 = mult2 / sums[x];
 
-					int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
-					int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
-					int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
-					int a = isOpaque ? 255
-							: (alphas[x] * m1 + next.alphas[x] * m2) >> 8;
-					destArray[k2] = (a << 24) | (r << 16) | (g << 8) | (b);
+						int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
+						int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
+						int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
+						int a = isOpaque ? 255
+								: (alphas[x] * m1 + next.alphas[x] * m2) >> 8;
+						destArray[k2] = (a << 24) | (r << 16) | (g << 8) | (b);
+					}
 				}
-				break;
-			default:
-				throw new RuntimeException(
+				default -> throw new RuntimeException(
 						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 
@@ -472,9 +443,9 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 		 * Write the color components from this object to the array provided,
 		 * while tweening between this row and the next row.
 		 *
-		 * @nextRow it is assumed this argument will be of the same class as
+		 * @param next it is assumed this argument will be of the same class as
 		 *          this object.
-		 * @fraction the amount of this row vs the argument to use. When zero:
+		 * @param fraction the amount of this row vs the argument to use. When zero:
 		 *           only this object is used, when one: only the argument is
 		 *           used.
 		 */
@@ -488,54 +459,52 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 			int mult2 = 255 - mult1;
 
 			switch (type) {
-			case BufferedImage.TYPE_3BYTE_BGR:
-				for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
-					int m1 = mult1 / sums[x];
-					int m2 = mult2 / sums[x];
+				case BufferedImage.TYPE_3BYTE_BGR -> {
+					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
+						int m1 = mult1 / sums[x];
+						int m2 = mult2 / sums[x];
 
-					int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
-					int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
-					int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
+						int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
+						int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
+						int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
 
-					destArray[k2++] = (byte) (b);
-					destArray[k2++] = (byte) (g);
-					destArray[k2++] = (byte) (r);
+						destArray[k2++] = (byte) (b);
+						destArray[k2++] = (byte) (g);
+						destArray[k2++] = (byte) (r);
+					}
 				}
-				break;
-			case ImageType.TYPE_3BYTE_RGB:
-				for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
-					int m1 = mult1 / sums[x];
-					int m2 = mult2 / sums[x];
+				case ImageType.TYPE_3BYTE_RGB -> {
+					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
+						int m1 = mult1 / sums[x];
+						int m2 = mult2 / sums[x];
 
-					int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
-					int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
-					int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
+						int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
+						int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
+						int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
 
-					destArray[k2++] = (byte) (r);
-					destArray[k2++] = (byte) (g);
-					destArray[k2++] = (byte) (b);
+						destArray[k2++] = (byte) (r);
+						destArray[k2++] = (byte) (g);
+						destArray[k2++] = (byte) (b);
+					}
 				}
-				break;
-			case BufferedImage.TYPE_4BYTE_ABGR:
-			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-				for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
-					int m1 = mult1 / sums[x];
-					int m2 = mult2 / sums[x];
+				case BufferedImage.TYPE_4BYTE_ABGR, BufferedImage.TYPE_4BYTE_ABGR_PRE -> {
+					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
+						int m1 = mult1 / sums[x];
+						int m2 = mult2 / sums[x];
 
-					int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
-					int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
-					int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
+						int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
+						int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
+						int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
 
-					int a = isOpaque ? 255
-							: (alphas[x] * m1 + next.alphas[x] * m2) >> 8;
-					destArray[k2++] = (byte) (a);
-					destArray[k2++] = (byte) (b);
-					destArray[k2++] = (byte) (g);
-					destArray[k2++] = (byte) (r);
+						int a = isOpaque ? 255
+								: (alphas[x] * m1 + next.alphas[x] * m2) >> 8;
+						destArray[k2++] = (byte) (a);
+						destArray[k2++] = (byte) (b);
+						destArray[k2++] = (byte) (g);
+						destArray[k2++] = (byte) (r);
+					}
 				}
-				break;
-			case ImageType.TYPE_4BYTE_RGBA:
-			case ImageType.TYPE_4BYTE_RGBA_PRE:
+				case ImageType.TYPE_4BYTE_RGBA, ImageType.TYPE_4BYTE_RGBA_PRE -> {
 					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
 						int m1 = mult1 / sums[x];
 						int m2 = mult2 / sums[x];
@@ -551,40 +520,38 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 						destArray[k2++] = (byte) (b);
 						destArray[k2++] = (byte) (a);
 					}
-					break;
-			case ImageType.TYPE_4BYTE_ARGB:
-			case ImageType.TYPE_4BYTE_ARGB_PRE:
-				for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
-					int m1 = mult1 / sums[x];
-					int m2 = mult2 / sums[x];
-
-					int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
-					int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
-					int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
-
-					int a = isOpaque ? 255
-							: (alphas[x] * m1 + next.alphas[x] * m2) >> 8;
-
-					destArray[k2++] = (byte) (a);
-					destArray[k2++] = (byte) (r);
-					destArray[k2++] = (byte) (g);
-					destArray[k2++] = (byte) (b);
 				}
-				break;
-			case BufferedImage.TYPE_BYTE_GRAY:
-				for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
-					int m1 = mult1 / sums[x];
-					int m2 = mult2 / sums[x];
+				case ImageType.TYPE_4BYTE_ARGB, ImageType.TYPE_4BYTE_ARGB_PRE -> {
+					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
+						int m1 = mult1 / sums[x];
+						int m2 = mult2 / sums[x];
 
-					int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
-					int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
-					int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
+						int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
+						int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
+						int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
 
-					destArray[k2++] = (byte) ((r + g + b) / 3);
+						int a = isOpaque ? 255
+								: (alphas[x] * m1 + next.alphas[x] * m2) >> 8;
+
+						destArray[k2++] = (byte) (a);
+						destArray[k2++] = (byte) (r);
+						destArray[k2++] = (byte) (g);
+						destArray[k2++] = (byte) (b);
+					}
 				}
-				break;
-			default:
-				throw new RuntimeException(
+				case BufferedImage.TYPE_BYTE_GRAY -> {
+					for (int x = 0, k2 = destArrayOffset; x < dstW; x++) {
+						int m1 = mult1 / sums[x];
+						int m2 = mult2 / sums[x];
+
+						int r = (reds[x] * m1 + next.reds[x] * m2) >> 8;
+						int g = (greens[x] * m1 + next.greens[x] * m2) >> 8;
+						int b = (blues[x] * m1 + next.blues[x] * m2) >> 8;
+
+						destArray[k2++] = (byte) ((r + g + b) / 3);
+					}
+				}
+				default -> throw new RuntimeException(
 						"unexpected condition: the type (" + ImageType.toString(type) + ") should have been converted when this object was constructed");
 			}
 		}
@@ -660,14 +627,12 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 		if (scaleY > 1) // upsampling requires two Rows
 			row2 = new Row(dstW, isOpaque);
 
-		/**
-		 * TODO: improve this calculation. This is a slight oversimplification:
-		 * because in other places when a scale factor (x or y) is less than
-		 * .25, then we start intentionally skipping source pixels. The
-		 * threshold *would* be 0xff if we didn't skip anything. Since we're
-		 * skipping data: we could afford to make this higher. But I don't know
-		 * exactly how high...
-		 */
+		// TODO: improve this calculation. This is a slight oversimplification:
+		// because in other places when a scale factor (x or y) is less than
+		// .25, then we start intentionally skipping source pixels. The
+		// threshold *would* be 0xff if we didn't skip anything. Since we're
+		// skipping data: we could afford to make this higher. But I don't know
+		// exactly how high...
 	}
 
 	@Override
@@ -698,8 +663,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 		if (isClosed)
 			throw new ClosedException();
 
-		boolean returnValue = dstY >= dstH;
-		return returnValue;
+		return dstY >= dstH;
 	}
 
 	@Override
@@ -796,7 +760,7 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 	}
 
 	protected void skipRemainingRows() {
-		while (srcIterator.isDone() == false) {
+		while (!srcIterator.isDone()) {
 			srcIterator.skip();
 		}
 		dstY = dstH;
@@ -841,14 +805,13 @@ public class ScalingIterator<T> implements PixelIterator<T> {
 	 * should be written with ints or bytes.
 	 */
 	void nextUpsample(byte[] destByteArray, int[] destIntArray, int destArrayOffset, byte[] srcByteArray, int[] srcIntArray, int srcArrayOffset) {
-		/**
-		 * I took the path of least resistance in writing this upsampling
-		 * method: We tween ALL rows (except the first row). The result is a
-		 * very smooth upward scaling, but the performance could be slightly
-		 * improved if we introduced rounding. But the rounding would actually
-		 * be a little bit more work, and would result in a lower image
-		 * quality... so I'm not going to implement it for now.
-		 */
+		// I took the path of least resistance in writing this upsampling
+		// method: We tween ALL rows (except the first row). The result is a
+		// very smooth upward scaling, but the performance could be slightly
+		// improved if we introduced rounding. But the rounding would actually
+		// be a little bit more work, and would result in a lower image
+		// quality... so I'm not going to implement it for now.
+
 		double sy = (dstH - 1.0) / (srcH - 1.0);
 		double srcPosition = (dstY) / sy;
 		int srcY0 = (int) Math.floor(srcPosition);

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -17,7 +17,7 @@ public class ColorModelUtils {
 	public static final DirectColorModel MODEL_ARGB = (DirectColorModel) ColorModel
 			.getRGBdefault();
 
-	public static final DirectColorModel MODEL_RGB = new DirectColorModel(32,
+	public static final DirectColorModel MODEL_RGB = new DirectColorModel(24,
 			0xff0000, 0xff00, 0xff, 0);
 
 	/**
@@ -31,6 +31,7 @@ public class ColorModelUtils {
 	 * or return {@link #TYPE_UNRECOGNIZED} if no match was identified.
 	 */
 	public static int getBufferedImageType(ColorModel colorModel) {
+		// TODO: update to align with ImageType
 		if (colorModel instanceof IndexColorModel)
 			return BufferedImage.TYPE_BYTE_INDEXED;
 
@@ -50,8 +51,7 @@ public class ColorModelUtils {
 				return BufferedImage.TYPE_BYTE_GRAY;
 			}
 		} else if (transferType == DataBuffer.TYPE_INT
-				&& colorModel instanceof DirectColorModel) {
-			DirectColorModel dcm = (DirectColorModel) colorModel;
+				&& colorModel instanceof DirectColorModel dcm) {
 			int redMask = dcm.getRedMask();
 			int greenMask = dcm.getGreenMask();
 			int blueMask = dcm.getBlueMask();

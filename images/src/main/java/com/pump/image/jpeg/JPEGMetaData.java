@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -12,13 +12,11 @@ package com.pump.image.jpeg;
 
 import com.pump.image.QBufferedImage;
 
-import javax.imageio.ImageIO;
-import javax.imageio.spi.IIORegistry;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * This class parses JPEG metadata.
@@ -33,7 +31,7 @@ public class JPEGMetaData {
 	 * This describes which thumbnail(s) (if any) you want to preserve when reading a JPEG file.
 	 */
 	public enum PreserveThumbnails {
-		ALL, ONLY_LARGEST, NONE;
+		ALL, ONLY_LARGEST, NONE
 	}
 
 	/**
@@ -72,11 +70,6 @@ public class JPEGMetaData {
 						if (jpegIn.readFully(array, 8) != 8)
 							throw new IOException("Error reading start of frame marker");
 
-						int[] array2 = new int[array.length];
-						for (int a= 0; a < array2.length; a++) {
-							array2[a] = array[a] & 0xff;
-						}
-
 						int bitsPerPixel = array[0] & 0xff;
 						int height = (array[1] & 0xff) * 256 + (array[2] & 0xff);
 						int width = (array[3] & 0xff) * 256 + (array[4] & 0xff);
@@ -89,7 +82,7 @@ public class JPEGMetaData {
 						GenericDataReader.read(jpegIn, markerCode, listener);
 					} else if (marker == JPEGMarker.COMMENT_MARKER) {
 						byte[] b = new byte[64];
-						StringBuffer buffer = new StringBuffer();
+						StringBuilder buffer = new StringBuilder();
 						int t = jpegIn.read(b);
 						while (t > 0) {
 							for (int a = 0; a < t; a++) {
@@ -117,6 +110,7 @@ public class JPEGMetaData {
 
 	public static class Property implements Serializable {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		private String markerName, propertyName;
@@ -128,6 +122,7 @@ public class JPEGMetaData {
 			this.value = Objects.requireNonNull(value);
 		}
 
+		@Serial
 		private void writeObject(java.io.ObjectOutputStream out)
 				throws IOException {
 			out.writeInt(0);
@@ -136,6 +131,7 @@ public class JPEGMetaData {
 			out.writeObject(value);
 
 		}
+		@Serial
 		private void readObject(java.io.ObjectInputStream in)
 				throws IOException, ClassNotFoundException {
 			int version = in.readInt();
@@ -150,8 +146,7 @@ public class JPEGMetaData {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof Property)) {
-				Property p = (Property) obj;
+			if (obj instanceof Property p) {
 				return Objects.equals(propertyName, p.propertyName) &&
 						Objects.equals(value, p.value) &&
 						Objects.equals(markerName, p.markerName);
@@ -171,10 +166,6 @@ public class JPEGMetaData {
 
 		public String getName() {
 			return propertyName;
-		}
-
-		public String getMarker() {
-			return markerName;
 		}
 
 		public Object getValue() {
@@ -249,10 +240,10 @@ public class JPEGMetaData {
 		}
 	}
 
-	private List<QBufferedImage> thumbnailImages = new ArrayList<>();
+	private final List<QBufferedImage> thumbnailImages = new ArrayList<>();
 	private int width, height, bitsPerPixel, numberOfComponents;
 
-	private java.util.List<Property> properties = new LinkedList<>();
+	private final java.util.List<Property> properties = new LinkedList<>();
 
 	public JPEGMetaData() {}
 
@@ -265,7 +256,6 @@ public class JPEGMetaData {
 	 *
 	 * @param in the InputStream containing a JPEG file.
 	 * @param preserveThumbnail this identifies which thumbnail(s) should be preserved (if any).
-	 * @throws IOException
 	 */
 	public synchronized void read(InputStream in, PreserveThumbnails preserveThumbnail) throws IOException {
 		read(in, new JPEGMetaDataListener() {
@@ -280,11 +270,7 @@ public class JPEGMetaData {
 					return false;
 				}
 
-				if (width > largestThumbnailWidth || height > largestThumbnailHeight) {
-					return true;
-				}
-
-				return false;
+				return width > largestThumbnailWidth || height > largestThumbnailHeight;
 			}
 
 			@Override
@@ -361,18 +347,6 @@ public class JPEGMetaData {
 		return Collections.unmodifiableList(properties);
 	}
 
-	/**
-	 * Return all the Properties of this JPEGMetaData that share a given property name.
-	 */
-	public List<Property> getProperties(String propertyName) {
-		List<Property> returnValue = new ArrayList<>();
-		for (Property p : properties) {
-			if (p.propertyName.equals(propertyName))
-				returnValue.add(p);
-		}
-		return returnValue;
-	}
-
 	public int getThumbnailCount() {
 		return thumbnailImages.size();
 	}
@@ -392,14 +366,6 @@ public class JPEGMetaData {
 
 	public void setBitsPerPixel(int bitsPerPixel) {
 		this.bitsPerPixel = bitsPerPixel;
-	}
-
-	public int getBitsPerPixel() {
-		return bitsPerPixel;
-	}
-
-	public int getNumberOfComponents() {
-		return numberOfComponents;
 	}
 
 	public int getWidth() {

@@ -85,7 +85,7 @@ public class DataAtom extends LeafAtom {
 
 	@Override
 	protected long getSize() {
-		return 8 + data.length;
+		return 12 + data.length;
 	}
 
 	public int getVersion() {

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -26,7 +26,7 @@ public class ImageBounds {
 	/**
 	 * Returns the smallest rectangle enclosing the pixels in this image that
 	 * are non-translucent.
-	 * 
+	 * <p>
 	 * 
 	 * @param bi
 	 *            a TYPE_INT_ARGB image.
@@ -40,7 +40,7 @@ public class ImageBounds {
 	/**
 	 * Returns the smallest rectangle enclosing the pixels in this image that
 	 * are non-translucent.
-	 * 
+	 * <p>
 	 * 
 	 * @param bi
 	 *            a TYPE_INT_ARGB image.
@@ -56,46 +56,46 @@ public class ImageBounds {
 			return new Rectangle(0,0,bi.getWidth(),bi.getHeight());
 
 		int w = bi.getWidth();
-		int h = bi.getHeight();
-		PixelIterator<int[]> pixelIter = ImageType.INT_ARGB.createPixelIterator(bi);
-		int[] row = new int[w];
+		try (PixelIterator<int[]> pixelIter = ImageType.INT_ARGB.createPixelIterator(bi)) {
+			int[] row = new int[w];
 
-		int x1 = -1;
-		int x2 = -1;
-		int y1 = -1;
-		int y2 = -1;
+			int x1 = -1;
+			int x2 = -1;
+			int y1 = -1;
+			int y2 = -1;
 
-		int y = 0;
-		while(!pixelIter.isDone()) {
-			pixelIter.next(row, 0);
-			boolean foundPixel = false;
-			for (int x = 0; x < w; x++) {
-				int alpha = (row[x] >> 24) & 0xff;
-				if (alpha > alphaThreshold) {
-					foundPixel = true;
-					if (x1 == -1) {
-						x1 = x2 = x;
-						y1 = y2 = y;
-					} else {
-						x1 = Math.min(x, x1);
-						y2 = Math.max(y, y2);
-					}
-					break;
-				}
-			}
-			if (foundPixel) {
-				for (int x = w - 1; x >= 0; x--) {
+			int y = 0;
+			while (!pixelIter.isDone()) {
+				pixelIter.next(row, 0);
+				boolean foundPixel = false;
+				for (int x = 0; x < w; x++) {
 					int alpha = (row[x] >> 24) & 0xff;
 					if (alpha > alphaThreshold) {
-						x2 = Math.max(x, x2);
+						foundPixel = true;
+						if (x1 == -1) {
+							x1 = x2 = x;
+							y1 = y2 = y;
+						} else {
+							x1 = Math.min(x, x1);
+							y2 = Math.max(y, y2);
+						}
+						break;
 					}
 				}
+				if (foundPixel) {
+					for (int x = w - 1; x >= 0; x--) {
+						int alpha = (row[x] >> 24) & 0xff;
+						if (alpha > alphaThreshold) {
+							x2 = Math.max(x, x2);
+						}
+					}
+				}
+				y++;
 			}
-			y++;
-		}
 
-		if (x1 == -1)
-			return null;
-		return new Rectangle(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
+			if (x1 == -1)
+				return null;
+			return new Rectangle(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
+		}
 	}
 }

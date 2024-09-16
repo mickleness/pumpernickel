@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -12,6 +12,7 @@ package com.pump.image.shadow;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -19,27 +20,8 @@ import java.util.Objects;
  * This is an immutable set of attributes used to render a shadow.
  */
 public class ShadowAttributes implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * This should resolve to a float.
-	 */
-	public static final String PROPERTY_X_OFFSET = "x";
-
-	/**
-	 * This should resolve to a float.
-	 */
-	public static final String PROPERTY_Y_OFFSET = "y";
-
-	/**
-	 * This should resolve to a float.
-	 */
-	public static final String PROPERTY_SHADOW_KERNEL_RADIUS = "shadowKernelRadius";
-
-	/**
-	 * This should resolve to a Color.
-	 */
-	public static final String PROPERTY_SHADOW_COLOR = "shadowColor";
 
 	Color shadowColor;
 	float xOffset, yOffset, shadowKernelRadius;
@@ -125,20 +107,21 @@ public class ShadowAttributes implements Serializable {
 	 */
 	public String toCSSString() {
 		Color c = getShadowColor();
-		String colorHex;
+		StringBuilder colorHex;
 		if (c.getAlpha() == 255) {
-			colorHex = Integer.toHexString(c.getRGB() & 0xFFFFFF);
+			colorHex = new StringBuilder(Integer.toHexString(c.getRGB() & 0xFFFFFF));
 			while (colorHex.length() < 6)
-				colorHex = "0" + colorHex;
+				colorHex.insert(0, "0");
 		} else {
-			colorHex = Integer.toHexString(c.getRGB());
+			colorHex = new StringBuilder(Integer.toHexString(c.getRGB()));
 			while (colorHex.length() < 8)
-				colorHex = "0" + colorHex;
+				colorHex.insert(0, "0");
 		}
 		return getShadowXOffset() + "px " + getShadowYOffset() + "px "
 				+ getShadowKernelRadius() + "px #" + colorHex;
 	}
 
+	@Serial
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
 		out.writeInt(0);
@@ -148,6 +131,7 @@ public class ShadowAttributes implements Serializable {
 		out.writeObject(getShadowColor());
 	}
 
+	@Serial
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		int version = in.readInt();

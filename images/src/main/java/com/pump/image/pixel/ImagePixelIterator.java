@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -29,7 +29,7 @@ import java.util.Objects;
  * <p>
  * This has special optimized behavior for BufferedImages. (Because {@link BufferedImage#getSource()} is
  * inefficient.)
- *
+ * <p>
  * <a href=
  * "https://javagraphics.blogspot.com/2011/05/images-scaling-jpegs-and-pngs.html"
  * >Images: Scaling JPEGs and PNGs</a>
@@ -55,7 +55,7 @@ public class ImagePixelIterator<T> implements PixelIterator<T> {
         }
     }
 
-    private static Cleaner CLEANER_CLOSE_DELEGATE = Cleaner.create();
+    private static final Cleaner CLEANER_CLOSE_DELEGATE = Cleaner.create();
 
     /**
      * This creates ImagePixelIterator based on an Image.
@@ -66,7 +66,7 @@ public class ImagePixelIterator<T> implements PixelIterator<T> {
 
         private Dimension size;
 
-        private String errorDescriptor;
+        private final String errorDescriptor;
 
         /**
          * Create a Source based on a File.
@@ -126,7 +126,7 @@ public class ImagePixelIterator<T> implements PixelIterator<T> {
         }
 
         @Override
-        public ImagePixelIterator createPixelIterator() {
+        public ImagePixelIterator<T> createPixelIterator() {
             ImagePixelIterator returnValue = new ImagePixelIterator(image, type, false, errorDescriptor);
             if (size == null) {
                 size = new Dimension(returnValue.getWidth(), returnValue.getHeight());
@@ -193,6 +193,11 @@ public class ImagePixelIterator<T> implements PixelIterator<T> {
      * </p>
      */
     public static boolean equalPixels(Image image1, Image image2) {
+        // TODO: this is similar to QBufferedImage#equals(BufferedImage, int tolerance)
+        // Remove one of these methods; probably by adding the `int tolerance` support to
+        // this method. maybe other params are necessary to also indicate whether we should
+        // convert int arrays & byte arrays.
+
         if (image1 == null && image2 == null)
             return true;
         if (image1 == null || image2 == null)
@@ -281,9 +286,8 @@ public class ImagePixelIterator<T> implements PixelIterator<T> {
      *                        or file path.
      */
     ImagePixelIterator(Image image, ImageType type, boolean flushImageOnClose, String errorDescriptor) {
-        if (image instanceof BufferedImage &&
+        if (image instanceof BufferedImage bi &&
                 BufferedImageIterator.isSupportedType( ((BufferedImage)image).getType() )) {
-            BufferedImage bi = (BufferedImage) image;
             PixelIterator imgIter = BufferedImageIterator.create(bi);
             delegate = type == null ? imgIter : type.createPixelIterator(imgIter);
         } else {

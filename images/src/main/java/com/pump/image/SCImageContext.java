@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -111,8 +111,7 @@ public class SCImageContext extends ImageContext {
 		}
 
 		DataBufferInt buf = (DataBufferInt) bi.getRaster().getDataBuffer();
-		int[] p = buf.getData();
-		return p;
+		return buf.getData();
 	}
 
 	/**
@@ -601,12 +600,8 @@ public class SCImageContext extends ImageContext {
 	}
 
 	/**
-	 *
-	 * @param p1
-	 * @param p2
 	 * @param a
 	 *            Fixed decimal.
-	 * @param dest
 	 */
 	private void interpolateXWUV(Vertex p1, Vertex p2, float a, Vertex dest) {
 		a = clamp(a);
@@ -663,12 +658,6 @@ public class SCImageContext extends ImageContext {
 
 	/**
 	 * Transforms a point x,y and computes [x/width,y/width,width] coordinates.
-	 * 
-	 * @param pt
-	 * @param x
-	 * @param y
-	 * @param ptDst
-	 * @return
 	 */
 	private static float[] transform(PerspectiveTransform pt, float x, float y,
 			float[] ptDst) {
@@ -676,13 +665,10 @@ public class SCImageContext extends ImageContext {
 		try {
 			m = pt.createInverse().getMatrix(new double[3][3]);
 		} catch (Exception ex) {
-			/**
-			 * This could throw NoninvertibleTransformException, or one compiler
-			 * strangely pointed out a possible CloneNotSupportedException
-			 */
-			InternalError newE = new InternalError();
-			newE.initCause(ex);
-			throw newE;
+			// This could throw NoninvertibleTransformException, or one compiler
+			// strangely pointed out a possible CloneNotSupportedException
+
+			throw new InternalError(ex);
 		}
 
 		double w = (m[2][0] * x + m[2][1] * y + m[2][2]);

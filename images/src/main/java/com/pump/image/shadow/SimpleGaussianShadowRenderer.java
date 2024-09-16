@@ -41,19 +41,18 @@ public class SimpleGaussianShadowRenderer implements ShadowRenderer {
             int rgb = shadowColor.getRGB() & 0xffffff;
             int alpha = shadowColor.getAlpha();
             for (int a = 0; a < opacityLookup.length; a++) {
-                int newAlpha = (int) (a * alpha / 255);
+                int newAlpha = a * alpha / 255;
                 opacityLookup[a] = (newAlpha << 24) + rgb;
             }
         }
 
-        int x1 = k;
         int x2 = k + srcWidth;
 
         int[] kernelArray = kernel.getArray();
         int kernelSum = kernel.getArraySum();
 
         // vertical pass:
-        for (int dstX = x1; dstX < x2; dstX++) {
+        for (int dstX = k; dstX < x2; dstX++) {
             int srcX = dstX - k;
             for (int dstY = 0; dstY < dstHeight; dstY++) {
                 int srcY = dstY - k;

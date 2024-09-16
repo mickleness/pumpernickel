@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -30,19 +30,11 @@ abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 	 * @param type a BufferedImage.TYPE constant
 	 */
 	static boolean isSupportedType(int type) {
-		switch (type) {
-			case BufferedImage.TYPE_INT_ARGB:
-			case BufferedImage.TYPE_INT_ARGB_PRE:
-			case BufferedImage.TYPE_INT_BGR:
-			case BufferedImage.TYPE_INT_RGB:
-			case BufferedImage.TYPE_3BYTE_BGR:
-			case BufferedImage.TYPE_4BYTE_ABGR:
-			case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-			case BufferedImage.TYPE_BYTE_GRAY:
-			case BufferedImage.TYPE_BYTE_INDEXED:
-				return true;
-		}
-		return false;
+		return switch (type) {
+			case BufferedImage.TYPE_INT_ARGB, BufferedImage.TYPE_INT_ARGB_PRE, BufferedImage.TYPE_INT_BGR, BufferedImage.TYPE_INT_RGB, BufferedImage.TYPE_3BYTE_BGR, BufferedImage.TYPE_4BYTE_ABGR, BufferedImage.TYPE_4BYTE_ABGR_PRE, BufferedImage.TYPE_BYTE_GRAY, BufferedImage.TYPE_BYTE_INDEXED ->
+					true;
+			default -> false;
+		};
 	}
 
 	/**
@@ -161,8 +153,8 @@ abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 		boolean writeDirectToDataBuffer = dataBufferScanline != -1;
 		if (writeDirectToDataBuffer) {
-			int xOffset = (x + -returnValue.getRaster().getSampleModelTranslateX()) * srcIter.getPixelSize();
-			y += -returnValue.getRaster().getSampleModelTranslateY();
+			int xOffset = (x - returnValue.getRaster().getSampleModelTranslateX()) * srcIter.getPixelSize();
+			y -= returnValue.getRaster().getSampleModelTranslateY();
 
 			if (srcIter.isInt()) {
 				DataBufferInt dataBuffer = (DataBufferInt) returnValue.getRaster().getDataBuffer();
@@ -324,10 +316,6 @@ abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 	boolean isClosed = false;
 
-	private BufferedImageIterator(BufferedImage bi, boolean topDown) {
-		this(bi, bi.getType(), topDown);
-	}
-
 	/**
 	 * @param type the image type of `bi`, which isn't always {@link BufferedImage#getType()}. If we're
 	 *             relying on the Raster: in some cases we convert one byte type to another to reflect that
@@ -358,16 +346,12 @@ abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 		 */
 		private static int getRasterReturnType(BufferedImage bi) {
 			int type = bi.getType();
-			switch (type) {
-				case BufferedImage.TYPE_3BYTE_BGR:
-					return ImageType.TYPE_3BYTE_RGB;
-				case BufferedImage.TYPE_4BYTE_ABGR:
-					return ImageType.TYPE_4BYTE_RGBA;
-				case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-					return ImageType.TYPE_4BYTE_RGBA_PRE;
-				default:
-					return type;
-			}
+			return switch (type) {
+				case BufferedImage.TYPE_3BYTE_BGR -> ImageType.TYPE_3BYTE_RGB;
+				case BufferedImage.TYPE_4BYTE_ABGR -> ImageType.TYPE_4BYTE_RGBA;
+				case BufferedImage.TYPE_4BYTE_ABGR_PRE -> ImageType.TYPE_4BYTE_RGBA_PRE;
+				default -> type;
+			};
 		}
 
 		final int scanline;
@@ -423,7 +407,7 @@ abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 	/**
 	 * This iterates over pixels by directly accessing the DataBuffer
-	 *
+	 * <p>
 	 * You should only construct this if {@link #getDataBufferScanline(BufferedImage, boolean)} returns a positive value.
 	 */
 	static class BufferedImageIterator_FromDataBuffer<T> extends BufferedImageIterator<T> {

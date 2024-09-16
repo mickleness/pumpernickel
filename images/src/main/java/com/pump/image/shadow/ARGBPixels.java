@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -16,6 +16,7 @@ import java.awt.image.DataBufferInt;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -38,6 +39,7 @@ import com.pump.image.pixel.PixelIterator;
  * performance either. So I'm not convinced it matters one way or the other.
  */
 public class ARGBPixels implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	private int width, height;
@@ -45,9 +47,6 @@ public class ARGBPixels implements Serializable {
 
 	/**
 	 * Create a blank ARGBPixels.
-	 * 
-	 * @param width
-	 * @param height
 	 */
 	public ARGBPixels(int width, int height) {
 		if (width <= 0)
@@ -107,12 +106,13 @@ public class ARGBPixels implements Serializable {
 		if (pixels == null) {
 			pixels = new int[width * height];
 			int[] row = new int[width];
-			PixelIterator<int[]> c = ImageType.INT_ARGB.createPixelIterator(srcImage);
-			int y = 0;
-			while (!c.isDone()) {
-				c.next(row, 0);
-				System.arraycopy(row, 0, pixels, y * width, width);
-				y++;
+			try (PixelIterator<int[]> c = ImageType.INT_ARGB.createPixelIterator(srcImage)) {
+				int y = 0;
+				while (!c.isDone()) {
+					c.next(row, 0);
+					System.arraycopy(row, 0, pixels, y * width, width);
+					y++;
+				}
 			}
 		}
 	}
@@ -198,16 +198,13 @@ public class ARGBPixels implements Serializable {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!(obj instanceof ARGBPixels))
+		if (!(obj instanceof ARGBPixels other))
 			return false;
-		ARGBPixels other = (ARGBPixels) obj;
 		if (other.getWidth() != getWidth())
 			return false;
 		if (other.getHeight() != getHeight())
 			return false;
-		if (!Arrays.equals(getPixels(), other.getPixels()))
-			return false;
-		return true;
+		return Arrays.equals(getPixels(), other.getPixels());
 	}
 
 	@Override
@@ -216,6 +213,7 @@ public class ARGBPixels implements Serializable {
 				+ ", height=" + getHeight() + "]";
 	}
 
+	@Serial
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
 		out.writeInt(0);
@@ -224,6 +222,7 @@ public class ARGBPixels implements Serializable {
 		out.writeObject(getPixels());
 	}
 
+	@Serial
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		int version = in.readInt();
