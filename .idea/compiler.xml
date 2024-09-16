@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="pump-ui-common" />
         <module name="images" />
+        <module name="pump-ui-text-editor" />
         <module name="pump-images" />
         <module name="pump-ui-buttons" />
         <module name="pump-ui-throbber" />
@@ -35,6 +36,7 @@
       <module name="ui-buttons" target="14" />
       <module name="ui-colors" target="14" />
       <module name="ui-common" target="14" />
+      <module name="ui-text-editor" target="19" />
     </bytecodeTargetLevel>
   </component>
 </project>

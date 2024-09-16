@@ -30,7 +30,7 @@ import com.pump.util.Receiver;
 
 /**
  * This helps convert Java source code into Java
- * {@link com.pump.io.parser.Token} objects.
+ * {@link Token} objects.
  */
 public class JavaParser extends Parser {
 

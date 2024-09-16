@@ -324,7 +324,7 @@ public abstract class Parser {
 	 * Parse Java source code.
 	 * 
 	 * @param in
-	 *            the stream to create {@link com.pump.io.parser.Token} objects
+	 *            the stream to create {@link Token} objects
 	 *            from.
 	 * @param includeWhitespaceTokens
 	 *            if false then this will ignore {@link WhitespaceToken}
@@ -348,7 +348,7 @@ public abstract class Parser {
 	 * Parse Java source code.
 	 * 
 	 * @param in
-	 *            the stream to create {@link com.pump.io.parser.Token} objects
+	 *            the stream to create {@link Token} objects
 	 *            from.
 	 * @param includeWhitespaceTokens
 	 *            if false then this will ignore {@link WhitespaceToken}
@@ -367,7 +367,7 @@ public abstract class Parser {
 	 * Parse tokens, and then group them by line
 	 * 
 	 * @param in
-	 *            the stream to create {@link com.pump.io.parser.Token} objects
+	 *            the stream to create {@link Token} objects
 	 *            from.
 	 * @param includeWhitespaceTokens
 	 *            if false then this will ignore {@link WhitespaceToken}
@@ -436,7 +436,7 @@ public abstract class Parser {
 	 * Parse data from an InputStream.
 	 * 
 	 * @param in
-	 *            the stream to create {@link com.pump.io.parser.Token} objects
+	 *            the stream to create {@link Token} objects
 	 *            from.
 	 * @param receiver
 	 *            the receiver in which tokens are placed as they are parsed.

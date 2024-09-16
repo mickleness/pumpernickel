@@ -8,7 +8,7 @@
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
-package com.pump.text;
+package com.pump.swing;
 
 import java.util.ArrayList;
 import java.util.List;

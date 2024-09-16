@@ -27,7 +27,7 @@ import com.pump.io.parser.xml.XMLParser;
 import com.pump.io.parser.xml.XMLParser.CommentToken;
 import com.pump.io.parser.xml.XMLParser.TagDeclarationToken;
 import com.pump.io.parser.xml.XMLParser.WordToken;
-import com.pump.text.TokenTextComponentHighlighter;
+import com.pump.swing.TokenTextComponentHighlighter;
 import com.pump.util.Receiver;
 
 public class XMLFormatter extends TokenTextComponentHighlighter {

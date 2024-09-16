@@ -108,5 +108,12 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>pump-ui-text-editor</artifactId>
+            <version>1.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../ui-text-editor/target/pump-ui-text-editor-1.1.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

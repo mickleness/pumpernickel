@@ -28,7 +28,6 @@ import com.pump.io.parser.Token;
 import com.pump.io.parser.java.JavaParser;
 import com.pump.io.parser.java.JavaParser.CharToken;
 import com.pump.io.parser.java.JavaParser.WordToken;
-import com.pump.text.TokenTextComponentHighlighter;
 import com.pump.util.Receiver;
 
 /**
