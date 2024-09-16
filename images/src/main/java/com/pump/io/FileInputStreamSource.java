@@ -18,6 +18,11 @@ import java.util.Objects;
 
 /**
  * Create an InputStream from a File.
+ * <p>
+ * In theory this could be removed because we could always use
+ * `new URLInputStreamSource(file.toURI().toURL())`, but that requires messy try/catch
+ * clauses for syntax exceptions.
+ * </p>
  */
 public class FileInputStreamSource implements InputStreamSource {
 
