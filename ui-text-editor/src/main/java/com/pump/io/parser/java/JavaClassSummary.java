@@ -16,7 +16,7 @@ import com.pump.io.parser.java.JavaParser.BracketType;
 import com.pump.io.parser.java.JavaParser.DeclarationType;
 import com.pump.io.parser.java.JavaParser.JavaModifier;
 import com.pump.io.parser.java.JavaParser.WordToken;
-import com.pump.util.Receiver;
+import java.util.function.Consumer;
 
 import java.io.*;
 import java.net.URL;
@@ -35,57 +35,55 @@ public class JavaClassSummary {
 	}
 
 	/** This interprets incoming Tokens to populate this JavaClassSummary's data */
-	class MyReceiver implements Receiver<Token> {
+	class MyConsumer implements Consumer<Token> {
 		StringBuffer uncommittedPackageName = null;
 		StringBuffer uncommittedImportStatement = null;
 		Stack<BracketType> brackets = new Stack<>();
 
 		@Override
-		public void add(Token... tokens) {
-			for (Token token : tokens) {
-				if (token.getText().equals(";")) {
-					if (uncommittedPackageName != null) {
-						packageName = uncommittedPackageName.toString().trim();
-						uncommittedPackageName = null;
-					} else if (uncommittedImportStatement != null) {
-						importedClasses.add(uncommittedImportStatement
-								.toString().trim());
-						uncommittedImportStatement = null;
-					}
-				} else if (uncommittedPackageName != null) {
-					uncommittedPackageName.append(token.getText());
+		public void accept(Token token) {
+			if (token.getText().equals(";")) {
+				if (uncommittedPackageName != null) {
+					packageName = uncommittedPackageName.toString().trim();
+					uncommittedPackageName = null;
 				} else if (uncommittedImportStatement != null) {
-					uncommittedImportStatement.append(token.getText());
-				} else if (token.getText().equals("package")) {
-					uncommittedPackageName = new StringBuffer();
-				} else if (token.getText().equals("import")) {
-					uncommittedImportStatement = new StringBuffer();
-				} else if (token instanceof WordToken
-						&& ((WordToken) token).isModifier) {
-					modifiers.add(JavaModifier.valueOf(token.getText()
-							.toUpperCase()));
-				} else if (brackets.size() == 0 && token instanceof WordToken
-						&& ((WordToken) token).isDeclarationType) {
-					declarationType = DeclarationType.valueOf(token.getText()
-							.toUpperCase());
-				} else if (brackets.size() == 0 && declarationType != null
-						&& simpleName == null && token instanceof WordToken) {
-					simpleName = token.getText();
-				} else if (token instanceof BracketCharToken bct) {
-					if (token.getText().equals("{") && brackets.size() == 0) {
-						throw new FinishedException();
-					}
+					importedClasses.add(uncommittedImportStatement
+							.toString().trim());
+					uncommittedImportStatement = null;
+				}
+			} else if (uncommittedPackageName != null) {
+				uncommittedPackageName.append(token.getText());
+			} else if (uncommittedImportStatement != null) {
+				uncommittedImportStatement.append(token.getText());
+			} else if (token.getText().equals("package")) {
+				uncommittedPackageName = new StringBuffer();
+			} else if (token.getText().equals("import")) {
+				uncommittedImportStatement = new StringBuffer();
+			} else if (token instanceof WordToken
+					&& ((WordToken) token).isModifier) {
+				modifiers.add(JavaModifier.valueOf(token.getText()
+						.toUpperCase()));
+			} else if (brackets.size() == 0 && token instanceof WordToken
+					&& ((WordToken) token).isDeclarationType) {
+				declarationType = DeclarationType.valueOf(token.getText()
+						.toUpperCase());
+			} else if (brackets.size() == 0 && declarationType != null
+					&& simpleName == null && token instanceof WordToken) {
+				simpleName = token.getText();
+			} else if (token instanceof BracketCharToken bct) {
+				if (token.getText().equals("{") && brackets.size() == 0) {
+					throw new FinishedException();
+				}
 
-					if (bct.isOpen()) {
-						brackets.push(bct.getBracketType());
+				if (bct.isOpen()) {
+					brackets.push(bct.getBracketType());
+				} else {
+					if (brackets.size() > 0
+							&& brackets.peek() == bct.getBracketType()) {
+						brackets.pop();
 					} else {
-						if (brackets.size() > 0
-								&& brackets.peek() == bct.getBracketType()) {
-							brackets.pop();
-						} else {
-							// unbalanced brackets of some sort:
-							error = true;
-						}
+						// unbalanced brackets of some sort:
+						error = true;
 					}
 				}
 			}
@@ -93,7 +91,7 @@ public class JavaClassSummary {
 
 	}
 
-	protected MyReceiver receiver = new MyReceiver();
+	protected MyConsumer consumer = new MyConsumer();
 	protected String simpleName;
 	protected String packageName;
 	protected Set<String> importedClasses = new LinkedHashSet<>();
@@ -134,8 +132,8 @@ public class JavaClassSummary {
 
 	private void initialize(Reader reader) {
 		try {
-			new JavaParser().parse(reader, receiver);
-			if (receiver.brackets.size() != 0) {
+			new JavaParser().parse(reader, consumer);
+			if (consumer.brackets.size() != 0) {
 				error = true;
 			}
 		} catch (FinishedException e) {

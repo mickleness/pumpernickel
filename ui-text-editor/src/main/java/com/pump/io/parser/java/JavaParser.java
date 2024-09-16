@@ -26,7 +26,7 @@ import com.pump.io.LookAheadReader;
 import com.pump.io.parser.Parser;
 import com.pump.io.parser.ParserException;
 import com.pump.io.parser.Token;
-import com.pump.util.Receiver;
+import java.util.function.Consumer;
 
 /**
  * This helps convert Java source code into Java
@@ -311,14 +311,14 @@ public class JavaParser extends Parser {
 	}
 
 	@Override
-	public void parse(InputStream in, Receiver<Token> receiver)
+	public void parse(InputStream in, Consumer<Token> consumer)
 			throws IOException {
 		try (Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
-			parse(reader, receiver);
+			parse(reader, consumer);
 		}
 	}
 
-	public void parse(Reader reader, Receiver<Token> receiver)
+	public void parse(Reader reader, Consumer<Token> consumer)
 			throws IOException {
 		LinkedList<BracketCharToken> brackets = new LinkedList<>();
 
@@ -359,7 +359,7 @@ public class JavaParser extends Parser {
 					Token token = new CommentToken(comment.toString(), start
 							- lastLineStart, lineNumber, start);
 
-					receiver.add(token);
+					consumer.accept(token);
 					if (!finished)
 						token.setException(new ParserException(token,
 								"this text appeared to have an unclosed javadoc"));
@@ -384,7 +384,7 @@ public class JavaParser extends Parser {
 						}
 					}
 
-					receiver.add(new CommentToken(comment.toString(), start
+					consumer.accept(new CommentToken(comment.toString(), start
 							- lastLineStart, lineNumber, start));
 					continue;
 				} else if (ch == '"' || ch == '\'') {
@@ -452,7 +452,7 @@ public class JavaParser extends Parser {
 					} else {
 						throw new RuntimeException("Unexpected condition");
 					}
-					receiver.add(token);
+					consumer.accept(token);
 					if (ex != null) {
 						token.setException(new ParserException(token, ex));
 					} else if (error != null) {
@@ -485,7 +485,7 @@ public class JavaParser extends Parser {
 						l.peek(1);
 					} while (Character.isWhitespace(l.current()) && l.hasNext());
 
-					receiver.add(new WhitespaceToken(whitespace.toString(),
+					consumer.accept(new WhitespaceToken(whitespace.toString(),
 							start - origLineStart, origLineNumber, start));
 					continue;
 				} else if (Character.isLetter(ch)) {
@@ -498,7 +498,7 @@ public class JavaParser extends Parser {
 						l.next();
 						ch = l.current();
 					}
-					receiver.add(new WordToken(word.toString(), start
+					consumer.accept(new WordToken(word.toString(), start
 							- lastLineStart, lineNumber, start));
 					continue;
 				}
@@ -654,7 +654,7 @@ public class JavaParser extends Parser {
 								error));
 					}
 
-					receiver.add(newToken);
+					consumer.accept(newToken);
 					l.skip(number.length());
 					continue;
 				}
@@ -689,9 +689,9 @@ public class JavaParser extends Parser {
 							}
 						}
 					}
-					receiver.add(bct);
+					consumer.accept(bct);
 				} else {
-					receiver.add(new SymbolCharToken(ch, start - lastLineStart,
+					consumer.accept(new SymbolCharToken(ch, start - lastLineStart,
 							lineNumber, start));
 				}
 				l.next();

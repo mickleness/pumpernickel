@@ -18,8 +18,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.pump.util.Receiver;
+import java.util.function.Consumer;
 
 /**
  * This is simple parser for CSV files.
@@ -88,12 +87,12 @@ public class CsvParser {
 	 *            the stream to parse.
 	 * @param charset
 	 *            the character set to apply to the InputStream.
-	 * @param receiver
-	 *            the Receiver that will be notified as new lines as parsed.
+	 * @param consumer
+	 *            the Consumer that will be notified as new lines are parsed.
 	 */
 	public void parse(InputStream in, Charset charset,
-			Receiver<List<String>> receiver) throws IOException {
-		parse(new InputStreamReader(in, charset), receiver);
+			Consumer<List<String>> consumer) throws IOException {
+		parse(new InputStreamReader(in, charset), consumer);
 	}
 
 	/**
@@ -101,10 +100,10 @@ public class CsvParser {
 	 * 
 	 * @param reader
 	 *            the reader to parse.
-	 * @param receiver
-	 *            the Receiver that will be notified as new lines as parsed.
+	 * @param consumer
+	 *            the Consumer that will be notified as new lines are parsed.
 	 */
-	public void parse(Reader reader, Receiver<List<String>> receiver)
+	public void parse(Reader reader, Consumer<List<String>> consumer)
 			throws IOException {
 		class MeasuredReader {
 			Reader reader;
@@ -154,7 +153,7 @@ public class CsvParser {
 					while (t == '\n' || t == '\r') {
 						t = lineReader.read();
 					}
-					receiver.add(new List[] { currentRow });
+					consumer.accept(currentRow);
 					currentRow = new ArrayList<>(currentRow.size());
 					lineReader = new MeasuredReader(reader,
 							lineReader.lineNumber + 1);
@@ -183,7 +182,7 @@ public class CsvParser {
 						while (t == '\n' || t == '\r') {
 							t = lineReader.read();
 						}
-						receiver.add(new List[] { currentRow });
+						consumer.accept(currentRow);
 						currentRow = new ArrayList<>(currentRow.size());
 						lineReader = new MeasuredReader(reader,
 								lineReader.lineNumber + 1);
@@ -193,7 +192,7 @@ public class CsvParser {
 					}
 					if (t == -1) {
 						if (currentRow.size() > 0)
-							receiver.add(new List[] { currentRow });
+							consumer.accept(currentRow);
 						return;
 					}
 				}

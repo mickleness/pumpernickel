@@ -25,9 +25,9 @@ import com.pump.io.parser.Parser.UnparsedToken;
 import com.pump.io.parser.Parser.WhitespaceToken;
 import com.pump.io.parser.ParserException;
 import com.pump.io.parser.Token;
-import com.pump.util.BasicReceiver;
+import com.pump.util.BasicConsumer;
 import com.pump.util.FixedCapacityMap;
-import com.pump.util.Receiver;
+import java.util.function.Consumer;
 
 /**
  * This TextComponentHighlighter relies on {@link Token Tokens}.
@@ -52,17 +52,17 @@ public abstract class TokenTextComponentHighlighter extends
 
 		ParseResults(String inputText) {
 			try {
-				BasicReceiver<Token> receiver = new BasicReceiver<>();
+				BasicConsumer<Token> consumer = new BasicConsumer<>();
 				try {
-					createTokens(inputText, receiver);
+					createTokens(inputText, consumer);
 				} catch (ParserException e) {
-					Token lastToken = receiver.getSize() == 0 ? null : receiver
-							.getElementAt(receiver.getSize() - 1);
+					Token lastToken = consumer.getSize() == 0 ? null : consumer
+							.getElementAt(consumer.getSize() - 1);
 					int pos = lastToken == null ? 0 : lastToken
 							.getDocumentEndIndex();
-					receiver.add(new UnparsedToken(pos, inputText, e));
+					consumer.accept(new UnparsedToken(pos, inputText, e));
 				}
-				tokens = receiver.toArray(new Token[receiver.getSize()]);
+				tokens = consumer.toArray(new Token[0]);
 			} catch (RuntimeException r) {
 				rEx = r;
 			} catch (Exception e) {
@@ -132,7 +132,7 @@ public abstract class TokenTextComponentHighlighter extends
 	}
 
 	protected abstract void createTokens(String inputText,
-			Receiver<Token> receiver) throws Exception;
+			Consumer<Token> consumer) throws Exception;
 
 	@Override
 	protected void formatTextComponent(String text, StyledDocument doc,

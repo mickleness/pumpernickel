@@ -34,7 +34,7 @@ import com.pump.swing.DialogFooter;
 import com.pump.swing.DialogFooter.EscapeKeyBehavior;
 import com.pump.swing.FileDialogUtils;
 import com.pump.swing.QDialog;
-import com.pump.util.BasicReceiver;
+import com.pump.util.BasicConsumer;
 
 public abstract class SaveDocumentAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
@@ -175,7 +175,7 @@ public abstract class SaveDocumentAction extends AbstractAction {
 				DialogFooter.createDialogFooter(DialogFooter.CANCEL_OPTION,
 						EscapeKeyBehavior.DOES_NOTHING), false); // closeable
 
-		final BasicReceiver<Exception> saveThrowables = new BasicReceiver<Exception>();
+		final BasicConsumer<Exception> saveThrowables = new BasicConsumer<>();
 
 		ActionListener hideListener = new ActionListener() {
 
@@ -206,7 +206,7 @@ public abstract class SaveDocumentAction extends AbstractAction {
 				} catch (Exception t) {
 					pause(time, 1000);
 					cancellable.cancel();
-					saveThrowables.add(t);
+					saveThrowables.accept(t);
 				}
 			}
 

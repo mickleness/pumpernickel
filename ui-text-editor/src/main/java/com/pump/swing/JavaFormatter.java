@@ -28,7 +28,7 @@ import com.pump.io.parser.Token;
 import com.pump.io.parser.java.JavaParser;
 import com.pump.io.parser.java.JavaParser.CharToken;
 import com.pump.io.parser.java.JavaParser.WordToken;
-import com.pump.util.Receiver;
+import java.util.function.Consumer;
 
 /**
  * This formats text using a monospaced formatting scheme similar to the default
@@ -132,10 +132,10 @@ public class JavaFormatter extends TokenTextComponentHighlighter {
 	}
 
 	@Override
-	protected void createTokens(String inputText, Receiver<Token> receiver)
+	protected void createTokens(String inputText, Consumer<Token> consumer)
 			throws Exception {
 		try (Reader reader = new StringReader(inputText)) {
-			new JavaParser().parse(reader, receiver);
+			new JavaParser().parse(reader, consumer);
 		}
 	}
 }

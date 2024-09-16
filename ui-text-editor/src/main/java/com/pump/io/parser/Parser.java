@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Objects;
 
 import com.pump.io.parser.java.JavaParser.BracketType;
-import com.pump.util.BasicReceiver;
-import com.pump.util.Receiver;
+import com.pump.util.BasicConsumer;
+import java.util.function.Consumer;
 
 public abstract class Parser {
 
@@ -292,22 +292,19 @@ public abstract class Parser {
 		}
 	}
 
-	public static class SkipWhiteSpaceReceiver implements Receiver<Token> {
+	public static class SkipWhiteSpaceConsumer implements Consumer<Token> {
 
-		Receiver<Token> receiver;
+		Consumer<Token> consumer;
 
-		public SkipWhiteSpaceReceiver(Receiver<Token> receiver) {
-			Objects.requireNonNull(receiver);
-			this.receiver = receiver;
+		public SkipWhiteSpaceConsumer(Consumer<Token> consumer) {
+			Objects.requireNonNull(consumer);
+			this.consumer = consumer;
 		}
 
 		@Override
-		public void add(Token... elements) {
-			for (Token e : elements) {
-				if (!(e instanceof WhitespaceToken)) {
-					receiver.add(e);
-				}
-
+		public void accept(Token element) {
+			if (!(element instanceof WhitespaceToken)) {
+				consumer.accept(element);
 			}
 		}
 	}
@@ -321,18 +318,18 @@ public abstract class Parser {
 	 * @param includeWhitespaceTokens
 	 *            if false then this will ignore {@link WhitespaceToken}
 	 *            objects.
-	 * @param receiver
-	 *            the object that will receive tokens as they become available.
+	 * @param consumer
+	 *            the object that will consume tokens as they become available.
 	 */
 	public void parse(InputStream in, boolean includeWhitespaceTokens,
-			Receiver<Token> receiver) throws Exception {
+			Consumer<Token> consumer) throws Exception {
 		Objects.requireNonNull(in);
-		Objects.requireNonNull(receiver);
+		Objects.requireNonNull(consumer);
 
 		if (!includeWhitespaceTokens) {
-			receiver = new SkipWhiteSpaceReceiver(receiver);
+			consumer = new SkipWhiteSpaceConsumer(consumer);
 		}
-		parse(in, receiver);
+		parse(in, consumer);
 	}
 
 	/**
@@ -348,9 +345,9 @@ public abstract class Parser {
 	 */
 	public Token[] parse(InputStream in, boolean includeWhitespaceTokens)
 			throws Exception {
-		BasicReceiver<Token> receiver = new BasicReceiver<>();
-		parse(in, includeWhitespaceTokens, receiver);
-		return receiver.toArray(new Token[receiver.getSize()]);
+		BasicConsumer<Token> consumer = new BasicConsumer<>();
+		parse(in, includeWhitespaceTokens, consumer);
+		return consumer.toArray(new Token[0]);
 	}
 
 	/**
@@ -370,27 +367,25 @@ public abstract class Parser {
 		final List<Token[]> allLines = new ArrayList<>();
 		final List<Token> uncommittedLine = new ArrayList<>();
 
-		Receiver<Token> receiver = new Receiver<>() {
+		Consumer<Token> consumer = new Consumer<>() {
 			int lastLineNumber = 0;
 
 			@Override
-			public void add(Token... tokens) {
-				for (Token token : tokens) {
-					int lineNumber = token.getLineNumber();
-					if (lineNumber != lastLineNumber) {
-						Token[] line = uncommittedLine
-								.toArray(new Token[0]);
-						allLines.add(line);
-						uncommittedLine.clear();
-					}
-					uncommittedLine.add(token);
-
-					lastLineNumber = lineNumber;
+			public void accept(Token token) {
+				int lineNumber = token.getLineNumber();
+				if (lineNumber != lastLineNumber) {
+					Token[] line = uncommittedLine
+							.toArray(new Token[0]);
+					allLines.add(line);
+					uncommittedLine.clear();
 				}
+				uncommittedLine.add(token);
+
+				lastLineNumber = lineNumber;
 			}
 
 		};
-		parse(in, includeWhitespaceTokens, receiver);
+		parse(in, includeWhitespaceTokens, consumer);
 
 		Token[] line = uncommittedLine
 				.toArray(new Token[0]);
@@ -411,14 +406,14 @@ public abstract class Parser {
 	 */
 	public Token[] parse(String expr, boolean includeWhitespaceTokens)
 			throws Exception {
-		BasicReceiver<Token> receiver = new BasicReceiver<>();
+		BasicConsumer<Token> consumer = new BasicConsumer<>();
 		try {
-			parse(new ByteArrayInputStream(expr.getBytes(StandardCharsets.UTF_8)), includeWhitespaceTokens, receiver);
+			parse(new ByteArrayInputStream(expr.getBytes(StandardCharsets.UTF_8)), includeWhitespaceTokens, consumer);
 		} catch (IOException e) {
 			// we shouldn't have an IOException for a String
 			throw new RuntimeException(e);
 		}
-		return receiver.toArray(new Token[receiver.getSize()]);
+		return consumer.toArray(new Token[0]);
 	}
 
 	/**
@@ -427,9 +422,9 @@ public abstract class Parser {
 	 * @param in
 	 *            the stream to create {@link Token} objects
 	 *            from.
-	 * @param receiver
-	 *            the receiver in which tokens are placed as they are parsed.
+	 * @param consumer
+	 *            the consumer in which tokens are placed as they are parsed.
 	 */
-	public abstract void parse(InputStream in, Receiver<Token> receiver)
+	public abstract void parse(InputStream in, Consumer<Token> consumer)
 			throws Exception;
 }

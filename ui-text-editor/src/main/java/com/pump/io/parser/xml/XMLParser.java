@@ -23,7 +23,7 @@ import com.pump.io.parser.MatchingToken;
 import com.pump.io.parser.Parser;
 import com.pump.io.parser.ParserException;
 import com.pump.io.parser.Token;
-import com.pump.util.Receiver;
+import java.util.function.Consumer;
 
 public class XMLParser extends Parser {
 
@@ -154,11 +154,11 @@ public class XMLParser extends Parser {
 
 	}
 
-	static class CacheLastTokenReceiver implements Receiver<Token> {
+	static class CacheLastTokenConsumer implements Consumer<Token> {
 		Token lastToken;
-		Receiver<Token> delegate;
+		Consumer<Token> delegate;
 
-		CacheLastTokenReceiver(Receiver<Token> delegate) {
+		CacheLastTokenConsumer(Consumer<Token> delegate) {
 			this.delegate = delegate;
 		}
 
@@ -167,17 +167,17 @@ public class XMLParser extends Parser {
 		}
 
 		@Override
-		public void add(Token... elements) {
-			lastToken = elements[elements.length - 1];
-			delegate.add(elements);
+		public void accept(Token element) {
+			lastToken = element;
+			delegate.accept(element);
 		}
 	}
 
 	private void parseTagAttributes(LookAheadReader l,
-			CacheLastTokenReceiver receiver,
+									CacheLastTokenConsumer consumer,
 			boolean allowBracketsOrParentheses, String... closingTagTokens)
 			throws IOException {
-		TagDeclarationToken startingToken = (TagDeclarationToken) receiver
+		TagDeclarationToken startingToken = (TagDeclarationToken) consumer
 				.getLastToken();
 		while (l.current() != CharacterIterator.DONE) {
 			char ch = l.current();
@@ -185,21 +185,21 @@ public class XMLParser extends Parser {
 			int start = (int) l.getPosition();
 
 			if (ch == '[' && allowBracketsOrParentheses) {
-				receiver.add(new SymbolCharToken(ch, start, 0, start));
+				consumer.accept(new SymbolCharToken(ch, start, 0, start));
 				l.next();
-				parseElements(l, receiver, "]");
+				parseElements(l, consumer, "]");
 			} else if (ch == '(' && allowBracketsOrParentheses) {
-				receiver.add(new SymbolCharToken(ch, start, 0, start));
+				consumer.accept(new SymbolCharToken(ch, start, 0, start));
 				l.next();
-				parseElements(l, receiver, ")");
+				parseElements(l, consumer, ")");
 			} else if (ch == '?' && next == '>') {
-				receiver.add(new EndPrologToken(start, 0, start));
+				consumer.accept(new EndPrologToken(start, 0, start));
 				l.next(2);
 			} else if (ch == '/' && next == '>') {
-				receiver.add(new EndTagToken("/>", start, 0, start, true));
+				consumer.accept(new EndTagToken("/>", start, 0, start, true));
 				l.next(2);
 			} else if (ch == '>') {
-				receiver.add(new EndTagToken(">", start, 0, start, true));
+				consumer.accept(new EndTagToken(">", start, 0, start, true));
 				l.next();
 			} else if (ch == '"' || ch == '\'') {
 				char quote = ch;
@@ -225,7 +225,7 @@ public class XMLParser extends Parser {
 					throw new ParserException(strToken,
 							"This string was not closed.");
 				}
-				receiver.add(strToken);
+				consumer.accept(strToken);
 			} else if (Character.isWhitespace(ch)) {
 				StringBuilder sb = new StringBuilder();
 				while (ch != CharacterIterator.DONE
@@ -234,13 +234,13 @@ public class XMLParser extends Parser {
 					l.next();
 					ch = l.current();
 				}
-				receiver.add(new WhitespaceToken(sb.toString(), start, 0, start));
+				consumer.accept(new WhitespaceToken(sb.toString(), start, 0, start));
 			} else if (ch == '=') {
-				receiver.add(new AssignmentToken(ch, start, 0, start));
+				consumer.accept(new AssignmentToken(ch, start, 0, start));
 				l.next();
 			} else if (ch == '%' || ch == '#' || ch == ';' || ch == ')'
 					|| ch == ']') {
-				receiver.add(new SymbolCharToken(ch, start, 0, start));
+				consumer.accept(new SymbolCharToken(ch, start, 0, start));
 				l.next();
 			} else if (Character.isLetter(ch)) {
 				StringBuilder sb = new StringBuilder();
@@ -251,17 +251,17 @@ public class XMLParser extends Parser {
 					l.next();
 					ch = l.current();
 				}
-				receiver.add(new WordToken(sb.toString(), start, 0, start));
+				consumer.accept(new WordToken(sb.toString(), start, 0, start));
 			} else {
 				Token token = new Token(Character.toString(ch), start, 0, start);
 				throw new ParserException(token, "Unsupported character '"
 						+ ch + "'");
 			}
 
-			String lastTokenText = receiver.getLastToken().getText();
+			String lastTokenText = consumer.getLastToken().getText();
 			for (String closingTag : closingTagTokens) {
 				if (lastTokenText.equals(closingTag)) {
-					TagDeclarationToken endToken = (TagDeclarationToken) receiver
+					TagDeclarationToken endToken = (TagDeclarationToken) consumer
 							.getLastToken();
 					endToken.setMatch(startingToken);
 					startingToken.setMatch(endToken);
@@ -272,7 +272,7 @@ public class XMLParser extends Parser {
 	}
 
 	@Override
-	public void parse(InputStream in, Receiver<Token> receiver)
+	public void parse(InputStream in, Consumer<Token> consumer)
 			throws IOException {
 		Prolog prolog = new Prolog();
 		in = Prolog.parseEncoding(in, prolog);
@@ -281,26 +281,26 @@ public class XMLParser extends Parser {
 			encoding = "utf-8";
 		}
 		try (InputStreamReader reader = new InputStreamReader(in, encoding)) {
-			parse(reader, receiver);
+			parse(reader, consumer);
 		}
 	}
 
-	public void parse(String xml, Receiver<Token> receiver) throws IOException {
+	public void parse(String xml, Consumer<Token> consumer) throws IOException {
 		try (Reader reader = new StringReader(xml)) {
-			parse(reader, receiver);
+			parse(reader, consumer);
 		}
 	}
 
-	public void parse(Reader reader, Receiver<Token> receiver)
+	public void parse(Reader reader, Consumer<Token> consumer)
 			throws IOException {
 		try (LookAheadReader l = new LookAheadReader(reader)) {
-			parseElements(l, receiver);
+			parseElements(l, consumer);
 		}
 	}
 
-	private void parseElements(LookAheadReader l, Receiver<Token> receiver,
+	private void parseElements(LookAheadReader l, Consumer<Token> consumer,
 			String... closingTagTokens) throws IOException {
-		CacheLastTokenReceiver cltr = new CacheLastTokenReceiver(receiver);
+		CacheLastTokenConsumer cltc = new CacheLastTokenConsumer(consumer);
 		while (l.current() != CharacterIterator.DONE) {
 			char ch = l.current();
 			char next = l.peek(1);
@@ -309,7 +309,7 @@ public class XMLParser extends Parser {
 					&& l.peek(3) == '-') {
 				StartCommentToken startComment = new StartCommentToken(start,
 						0, start);
-				cltr.add(startComment);
+				cltc.accept(startComment);
 				l.next(4);
 				start = (int) l.getPosition();
 				ch = l.current();
@@ -322,18 +322,18 @@ public class XMLParser extends Parser {
 
 					if (ch == CharacterIterator.DONE) {
 						if (sb.length() > 0)
-							cltr.add(new CommentToken(sb.toString(), start, 0,
+							cltc.accept(new CommentToken(sb.toString(), start, 0,
 									start));
 						break;
 					} else if (ch == '-' && l.peek(1) == '-'
 							&& l.peek(2) == '>') {
 						if (sb.length() > 0)
-							cltr.add(new CommentToken(sb.toString(), start, 0,
+							cltc.accept(new CommentToken(sb.toString(), start, 0,
 									start));
 
 						EndCommentToken endComment = new EndCommentToken(
 								(int) l.getPosition(), 0, (int) l.getPosition());
-						cltr.add(endComment);
+						cltc.accept(endComment);
 						endComment.setMatch(startComment);
 						startComment.setMatch(endComment);
 						l.next(3);
@@ -341,26 +341,26 @@ public class XMLParser extends Parser {
 					}
 				}
 			} else if (ch == '<' && next == '?') {
-				cltr.add(new StartPrologToken(start, 0, start));
+				cltc.accept(new StartPrologToken(start, 0, start));
 				l.next(2);
-				parseTagAttributes(l, cltr, false, "?>");
+				parseTagAttributes(l, cltc, false, "?>");
 			} else if (ch == '<' && next == '/') {
 				StartTagToken startTag = new StartTagToken(start, 0, start,
 						true);
-				cltr.add(startTag);
+				cltc.accept(startTag);
 				l.next(2);
-				parseTagAttributes(l, cltr, false, ">");
+				parseTagAttributes(l, cltc, false, ">");
 			} else if (ch == '<' && next == '!') {
-				cltr.add(new StartDTDTagToken(start, 0, start));
+				cltc.accept(new StartDTDTagToken(start, 0, start));
 				l.next(2);
-				parseTagAttributes(l, cltr, true, ">", "/>");
+				parseTagAttributes(l, cltc, true, ">", "/>");
 			} else if (ch == '<') {
-				cltr.add(new StartTagToken(start, 0, start, false));
+				cltc.accept(new StartTagToken(start, 0, start, false));
 				l.next();
-				parseTagAttributes(l, cltr, false, ">", "/>");
+				parseTagAttributes(l, cltc, false, ">", "/>");
 			} else if (ch == ']'
 					&& Arrays.asList(closingTagTokens).contains("]")) {
-				cltr.add(new SymbolCharToken(ch, start, 0, start));
+				cltc.accept(new SymbolCharToken(ch, start, 0, start));
 				l.next();
 			} else {
 				StringBuilder sb = new StringBuilder();
@@ -372,29 +372,29 @@ public class XMLParser extends Parser {
 
 				int leadingWhitespace = getLeadingWhitespace(sb);
 				if (leadingWhitespace == sb.length()) {
-					cltr.add(new WhitespaceToken(sb.toString(), start, 0, start));
+					cltc.accept(new WhitespaceToken(sb.toString(), start, 0, start));
 				} else {
 					int trailingWhitespace = getTrailingWhitespace(sb);
 					String leadingWhitespaceStr = sb.substring(0,
 							leadingWhitespace);
 					if (leadingWhitespace > 0) {
-						cltr.add(new WhitespaceToken(leadingWhitespaceStr,
+						cltc.accept(new WhitespaceToken(leadingWhitespaceStr,
 								start, 0, start));
 					}
-					cltr.add(new ContentToken(sb.substring(leadingWhitespace,
+					cltc.accept(new ContentToken(sb.substring(leadingWhitespace,
 							sb.length() - trailingWhitespace), start
 							+ leadingWhitespace, 0, start + leadingWhitespace));
 					if (trailingWhitespace > 0) {
 						String trailingWhitespaceStr = sb.substring(sb.length()
 								- trailingWhitespace, sb.length());
-						cltr.add(new WhitespaceToken(trailingWhitespaceStr,
+						cltc.accept(new WhitespaceToken(trailingWhitespaceStr,
 								start + sb.length() - trailingWhitespace, 0,
 								start + sb.length() - trailingWhitespace));
 					}
 				}
 			}
 
-			String lastTokenText = cltr.getLastToken().getText();
+			String lastTokenText = cltc.getLastToken().getText();
 			for (String closingTag : closingTagTokens) {
 				if (lastTokenText.equals(closingTag)) {
 					return;

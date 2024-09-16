@@ -25,14 +25,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.pump.io.CombinedInputStream;
-import com.pump.io.parser.Parser.SkipWhiteSpaceReceiver;
+import com.pump.io.parser.Parser.SkipWhiteSpaceConsumer;
 import com.pump.io.parser.Parser.StringToken;
 import com.pump.io.parser.Token;
 import com.pump.io.parser.xml.XMLParser.AssignmentToken;
 import com.pump.io.parser.xml.XMLParser.EndPrologToken;
 import com.pump.io.parser.xml.XMLParser.StartPrologToken;
 import com.pump.io.parser.xml.XMLParser.WordToken;
-import com.pump.util.BasicReceiver;
+import com.pump.util.BasicConsumer;
 
 public class Prolog {
 
@@ -64,23 +64,22 @@ public class Prolog {
 
 	public void initialize(String str) {
 		XMLParser parser = new XMLParser();
-		BasicReceiver<Token> receiver = new BasicReceiver<>();
+		BasicConsumer<Token> consumer = new BasicConsumer<>();
 		try (StringReader reader = new StringReader(str)) {
-			parser.parse(reader, new SkipWhiteSpaceReceiver(receiver));
+			parser.parse(reader, new SkipWhiteSpaceConsumer(consumer));
 		} catch (IOException e) {
 			// this shouldn't happen for a StringReader
 			throw new RuntimeException(e);
 		}
 
-		List<Token> tokens = new LinkedList<>(Arrays.asList(receiver
-				.toArray(new Token[receiver.getSize()])));
+		List<Token> tokens = new LinkedList<>(Arrays.asList(consumer.toArray(new Token[0])));
 
-		Token t = receiver.getSize() >= 1 ? tokens.remove(0) : null;
+		Token t = consumer.getSize() >= 1 ? tokens.remove(0) : null;
 		if (!(t instanceof StartPrologToken && t.getText().equals("<?"))) {
 			throw new RuntimeException("The prolog '" + str
 					+ "' did not begin with '<?'.");
 		}
-		t = receiver.getSize() >= 1 ? tokens.remove(0) : null;
+		t = consumer.getSize() >= 1 ? tokens.remove(0) : null;
 		if (!(t instanceof WordToken && t.getText().equals("xml"))) {
 			throw new RuntimeException("The prolog '" + str
 					+ "' did not begin with '<?xml'.");
@@ -90,13 +89,13 @@ public class Prolog {
 			t = tokens.remove(0);
 			if (t instanceof WordToken) {
 				String attribute = t.getText();
-				t = receiver.getSize() >= 1 ? tokens.remove(0) : null;
+				t = consumer.getSize() >= 1 ? tokens.remove(0) : null;
 				if (!(t instanceof AssignmentToken && t.getText().equals("="))) {
 					throw new RuntimeException("Unrecognized token \""
 							+ t.getText() + "\" after attribute \"" + attribute
 							+ "\".");
 				}
-				t = receiver.getSize() >= 1 ? tokens.remove(0) : null;
+				t = consumer.getSize() >= 1 ? tokens.remove(0) : null;
 				if (!(t instanceof StringToken)) {
 					throw new RuntimeException("Unexpected token \""
 							+ t.getText() + "\" after attribute \"" + attribute

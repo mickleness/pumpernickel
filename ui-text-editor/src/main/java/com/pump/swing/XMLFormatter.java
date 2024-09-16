@@ -19,7 +19,7 @@ import com.pump.io.parser.xml.XMLParser;
 import com.pump.io.parser.xml.XMLParser.CommentToken;
 import com.pump.io.parser.xml.XMLParser.TagDeclarationToken;
 import com.pump.io.parser.xml.XMLParser.WordToken;
-import com.pump.util.Receiver;
+import java.util.function.Consumer;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.JTextComponent;
@@ -121,8 +121,8 @@ public class XMLFormatter extends TokenTextComponentHighlighter {
 	}
 
 	@Override
-	protected void createTokens(String inputText, Receiver<Token> receiver)
+	protected void createTokens(String inputText, Consumer<Token> consumer)
 			throws Exception {
-		new XMLParser().parse(inputText, receiver);
+		new XMLParser().parse(inputText, consumer);
 	}
 }
