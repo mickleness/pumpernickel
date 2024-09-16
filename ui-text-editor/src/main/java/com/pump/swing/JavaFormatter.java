@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -53,7 +53,7 @@ public class JavaFormatter extends TokenTextComponentHighlighter {
 	public JavaFormatter(JTextComponent jtc) {
 		super(jtc);
 
-		jtc.putClientProperty("caretWidth", new Integer(3));
+		jtc.putClientProperty("caretWidth", 3);
 		jtc.getCaret().setBlinkRate(500);
 
 		initializeAttributes();
@@ -109,8 +109,7 @@ public class JavaFormatter extends TokenTextComponentHighlighter {
 			return stringAttributes;
 		}
 
-		if (token instanceof WordToken) {
-			WordToken word = (WordToken) token;
+		if (token instanceof WordToken word) {
 			if (word.isKeyword || word.isLiteral)
 				return keywordAttributes;
 		}

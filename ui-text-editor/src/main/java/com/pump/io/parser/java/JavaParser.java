@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Modifier;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.CharacterIterator;
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,7 +35,7 @@ import com.pump.util.Receiver;
 public class JavaParser extends Parser {
 
 	/** An enum representing all possible Java modifiers. */
-	public static enum JavaModifier {
+	public enum JavaModifier {
 		ABSTRACT(Modifier.ABSTRACT), FINAL(Modifier.FINAL), NATIVE(
 				Modifier.NATIVE), PRIVATE(Modifier.PRIVATE), PROTECTED(
 				Modifier.PROTECTED), PUBLIC(Modifier.PUBLIC), STATIC(
@@ -57,39 +57,39 @@ public class JavaParser extends Parser {
 	 * An enum representing all possible Java declaration types (class,
 	 * interface, enum)
 	 */
-	public static enum DeclarationType {
-		CLASS, INTERFACE, ENUM;
+	public enum DeclarationType {
+		CLASS, INTERFACE, ENUM
 	}
 
 	/**
 	 * "true", "false" or "null". This is NOT a subset of any other list; it is
 	 * a unique designation.
 	 */
-	public static final Set<String> JAVA_LITERALS = new HashSet<String>();
+	public static final Set<String> JAVA_LITERALS = new HashSet<>();
 
 	/**
 	 * "boolean", "char", "double", "float", "int", "long", or "short". This is
 	 * a subset of {@link #JAVA_KEYWORDS}.
 	 */
-	public static final Set<String> JAVA_PRIMITIVES = new HashSet<String>();
+	public static final Set<String> JAVA_PRIMITIVES = new HashSet<>();
 
 	/**
 	 * This is a superset containing {@link #JAVA_PRIMITIVES},
 	 * {@link #JAVA_MODIFIERS}, {@link #JAVA_DECLARATION_TYPES}, and other
 	 * reserved keywords used in Java.
 	 */
-	public static final Set<String> JAVA_KEYWORDS = new HashSet<String>();
+	public static final Set<String> JAVA_KEYWORDS = new HashSet<>();
 	/**
 	 * "abstract", "final", "native", "private", "protected", "public",
 	 * "static", "strict", "synchronized", "transient", or "volatile". This is a
 	 * subset of {@link #JAVA_KEYWORDS}.
 	 */
-	public static final Set<String> JAVA_MODIFIERS = new HashSet<String>();
+	public static final Set<String> JAVA_MODIFIERS = new HashSet<>();
 	/**
 	 * "class", "enum", or "interface". This is a subset of
 	 * {@link #JAVA_KEYWORDS}.
 	 */
-	public static final Set<String> JAVA_DECLARATION_TYPES = new HashSet<String>();
+	public static final Set<String> JAVA_DECLARATION_TYPES = new HashSet<>();
 	static {
 		Collections.addAll(JAVA_KEYWORDS, "abstract", "assert", "boolean",
 				"break", "case", "catch", "class", "char", "const", "continue",
@@ -142,24 +142,16 @@ public class JavaParser extends Parser {
 		final char decodedChar;
 
 		/**
-		 * 
-		 * @param tokenText
 		 * @param decodedChar
 		 *            the token this character expresses.
-		 * @param tokenStart
 		 */
 		public CharToken(String tokenText, char decodedChar, int tokenStart) {
 			this(tokenText, decodedChar, tokenStart, 0, tokenStart);
 		}
 
 		/**
-		 * 
-		 * @param tokenText
 		 * @param decodedChar
 		 *            the character this token expresses.
-		 * @param tokenStart
-		 * @param lineNumber
-		 * @param documentStart
 		 */
 		public CharToken(String tokenText, char decodedChar, int tokenStart,
 				int lineNumber, int documentStart) {
@@ -214,7 +206,7 @@ public class JavaParser extends Parser {
 
 		@Override
 		public Number getNumber() {
-			return Double.valueOf(doubleValue());
+			return doubleValue();
 		}
 	}
 
@@ -242,7 +234,7 @@ public class JavaParser extends Parser {
 
 		@Override
 		public Number getNumber() {
-			return Float.valueOf(floatValue());
+			return floatValue();
 		}
 	}
 
@@ -273,7 +265,7 @@ public class JavaParser extends Parser {
 
 		@Override
 		public Number getNumber() {
-			return Long.valueOf(longValue());
+			return longValue();
 		}
 	}
 
@@ -301,14 +293,14 @@ public class JavaParser extends Parser {
 
 		@Override
 		public Number getNumber() {
-			return Integer.valueOf(intValue());
+			return intValue();
 		}
 	}
 
 	/** This represents different types of brackets. */
 	public enum BracketType {
 		PARENTHESES('(', ')'), BRACES('[', ']'), BRACKETS('{', '}'), CHEVRONS(
-				'\u2039', '\u203A');
+				'‹', '›');
 
 		public final char openChar, closeChar;
 
@@ -321,29 +313,29 @@ public class JavaParser extends Parser {
 	@Override
 	public void parse(InputStream in, Receiver<Token> receiver)
 			throws IOException {
-		try (Reader reader = new InputStreamReader(in, Charset.forName("UTF-8"))) {
+		try (Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
 			parse(reader, receiver);
 		}
 	}
 
 	public void parse(Reader reader, Receiver<Token> receiver)
 			throws IOException {
-		LinkedList<BracketCharToken> brackets = new LinkedList<BracketCharToken>();
+		LinkedList<BracketCharToken> brackets = new LinkedList<>();
 
 		StringBuffer scratch = new StringBuffer();
 		try (LookAheadReader l = new LookAheadReader(reader)) {
 			int lineNumber = 0;
 			int lastLineStart = 0;
-			parseTokens: while (l.current() != CharacterIterator.DONE) {
+			while (l.current() != CharacterIterator.DONE) {
 				char ch = l.current();
 				char next = l.peek(1);
 				int start = (int) l.getPosition();
 				if (ch == '/' && next == '*') {
 					// parse a multiline comment:
-					StringBuffer comment = new StringBuffer();
+					StringBuilder comment = new StringBuilder();
 
 					boolean finished = false;
-					searchForCommentEnd: while (l.hasNext()) {
+					while (l.hasNext()) {
 						ch = l.current();
 						next = l.peek(1);
 						comment.append(ch);
@@ -351,7 +343,7 @@ public class JavaParser extends Parser {
 							comment.append(next);
 							l.skip(2);
 							finished = true;
-							break searchForCommentEnd;
+							break;
 						} else if (ch == '\r' && next == '\n') {
 							lineNumber++;
 							l.skip(2);
@@ -372,13 +364,13 @@ public class JavaParser extends Parser {
 						token.setException(new ParserException(token,
 								"this text appeared to have an unclosed javadoc"));
 
-					continue parseTokens;
+					continue;
 				} else if (ch == '/' && next == '/') {
 					// parse a single-line comment that occupies the rest of
 					// this line:
-					StringBuffer comment = new StringBuffer();
+					StringBuilder comment = new StringBuilder();
 
-					searchForCommentEnd: while (l.current() != CharacterIterator.DONE) {
+					while (l.current() != CharacterIterator.DONE) {
 						ch = l.current();
 						comment.append(ch);
 						l.next();
@@ -386,39 +378,36 @@ public class JavaParser extends Parser {
 						ch = l.current();
 						if (ch == '\r' && l.peek(1) == '\n') {
 							l.skip(1);
-							break searchForCommentEnd;
+							break;
 						} else if (ch == '\r' || ch == '\n') {
-							break searchForCommentEnd;
+							break;
 						}
 					}
 
 					receiver.add(new CommentToken(comment.toString(), start
 							- lastLineStart, lineNumber, start));
-					continue parseTokens;
+					continue;
 				} else if (ch == '"' || ch == '\'') {
 					// parse either a String or a char literal:
-					char closingChar = ch;
-					/**
-					 * How the String looks when encoded in Java. This includes
-					 * the enclosing double quotation or single quotation marks.
-					 */
-					StringBuffer encodedString = new StringBuffer(
+
+					// How the String looks when encoded in Java. This includes
+					// the enclosing double quotation or single quotation marks.
+					StringBuilder encodedString = new StringBuilder(
 							Character.toString(ch));
-					/**
-					 * How the String is actually parsed. The encoded String may
-					 * include the two characters \n, but the decoded converts
-					 * this to one new line character.
-					 */
+
+					// How the String is actually parsed. The encoded String may
+					// include the two characters \n, but the decoded converts
+					// this to one new line character.
 					StringBuffer decodedString = new StringBuffer();
 
 					l.next();
 					boolean finished = false;
 					Exception ex = null;
 					String error = null;
-					readLiteral: while (l.current() != CharacterIterator.DONE
+					while (l.current() != CharacterIterator.DONE
 							&& error == null && ex == null) {
 						// store at least 6 chars, because a unicode char is
-						// the longest char we may parse: \u0123
+						// the longest char we may parse: ģ
 						scratch.delete(0, scratch.length());
 						peek(l, scratch, 6);
 						int charsRead = 0;
@@ -433,12 +422,12 @@ public class JavaParser extends Parser {
 						l.skip(charsRead);
 						if (charsRead == 1) {
 							char charRead = scratch.charAt(0);
-							if (charRead == closingChar) {
+							if (charRead == ch) {
 								finished = true;
 								decodedString.deleteCharAt(decodedString
 										.length() - 1);
 
-								break readLiteral;
+								break;
 							} else if (charsRead == 1 && charRead == '\n'
 									|| charRead == '\r') {
 								error = "Line breaks in literals should be encoded as \\n or \\r.";
@@ -447,7 +436,7 @@ public class JavaParser extends Parser {
 					}
 
 					Token token;
-					if (closingChar == '\'') {
+					if (ch == '\'') {
 						char newCh = decodedString.length() > 0 ? decodedString
 								.charAt(0) : '?';
 						token = new CharToken(encodedString.toString(), newCh,
@@ -456,7 +445,7 @@ public class JavaParser extends Parser {
 							token.setException(new ParserException(token,
 									"This char token didn't evaluate to a singular character."));
 						}
-					} else if (closingChar == '\"') {
+					} else if (ch == '\"') {
 						token = new StringToken(encodedString.toString(),
 								decodedString.toString(),
 								start - lastLineStart, lineNumber, start);
@@ -473,10 +462,10 @@ public class JavaParser extends Parser {
 								"This text appeared to have an unclosed literal."));
 					}
 
-					continue parseTokens;
+					continue;
 				} else if (Character.isWhitespace(ch)) {
 					// parse a block of consecutive whitespace
-					StringBuffer whitespace = new StringBuffer();
+					StringBuilder whitespace = new StringBuilder();
 					int origLineStart = lastLineStart;
 					int origLineNumber = lineNumber;
 					do {
@@ -493,17 +482,17 @@ public class JavaParser extends Parser {
 							lastLineStart = (int) l.getPosition() + 1;
 						}
 						l.next();
-						next = l.peek(1);
+						l.peek(1);
 					} while (Character.isWhitespace(l.current()) && l.hasNext());
 
 					receiver.add(new WhitespaceToken(whitespace.toString(),
 							start - origLineStart, origLineNumber, start));
-					continue parseTokens;
+					continue;
 				} else if (Character.isLetter(ch)) {
 					// parse a word (any consecutive string letters/digits
 					// that follow a letter):
 
-					StringBuffer word = new StringBuffer();
+					StringBuilder word = new StringBuilder();
 					while (Character.isLetterOrDigit(ch) || ch == '_') {
 						word.append(ch);
 						l.next();
@@ -511,12 +500,13 @@ public class JavaParser extends Parser {
 					}
 					receiver.add(new WordToken(word.toString(), start
 							- lastLineStart, lineNumber, start));
-					continue parseTokens;
+					continue;
 				}
 
 				// TODO: address hex numbers
 
-				readNumber: if (ch == '+' || ch == '-' || Character.isDigit(ch)
+				readNumber:
+				if (ch == '+' || ch == '-' || Character.isDigit(ch)
 						|| ch == '.') {
 					// now the hardest one to parse: numbers.
 
@@ -528,7 +518,7 @@ public class JavaParser extends Parser {
 					// [-+]?[0-9]*\\.?[0-9]+
 
 					String error = null;
-					StringBuffer number = new StringBuffer();
+					StringBuilder number = new StringBuilder();
 					int pos = 0;
 					if (ch == '+' || ch == '-') {
 						number.append(ch);
@@ -666,7 +656,7 @@ public class JavaParser extends Parser {
 
 					receiver.add(newToken);
 					l.skip(number.length());
-					continue parseTokens;
+					continue;
 				}
 
 				BracketType[] bracketTypes = BracketType.values();
@@ -690,7 +680,7 @@ public class JavaParser extends Parser {
 							if (last != null
 									&& last.isOpen()
 									&& last.getBracketType().equals(
-											bct.getBracketType())) {
+									bct.getBracketType())) {
 								last.setMatch(bct);
 							} else {
 								// signal that bracket matching is broken,
@@ -713,10 +703,6 @@ public class JavaParser extends Parser {
 	 * Store the first {@code maximum} chars (accessed by peeking) into the
 	 * destination buffer. This starts with {@code reader.peek(0)}, which means
 	 * it will include the current queued char.
-	 * 
-	 * @param reader
-	 * @param dest
-	 * @param maximum
 	 */
 	private static void peek(LookAheadReader reader, StringBuffer dest,
 			int maximum) {

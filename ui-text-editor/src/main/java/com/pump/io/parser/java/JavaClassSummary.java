@@ -1,30 +1,14 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.io.parser.java;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.Stack;
 
 import com.pump.io.parser.Parser.BracketCharToken;
 import com.pump.io.parser.Token;
@@ -34,12 +18,19 @@ import com.pump.io.parser.java.JavaParser.JavaModifier;
 import com.pump.io.parser.java.JavaParser.WordToken;
 import com.pump.util.Receiver;
 
+import java.io.*;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+
 /**
  * This identifies basic crucial details about java source code.
  */
 public class JavaClassSummary {
 	/** This is used to abort parsing tokens prematurely. */
 	static class FinishedException extends RuntimeException {
+		@Serial
 		private static final long serialVersionUID = 1L;
 	}
 
@@ -80,12 +71,11 @@ public class JavaClassSummary {
 				} else if (brackets.size() == 0 && declarationType != null
 						&& simpleName == null && token instanceof WordToken) {
 					simpleName = token.getText();
-				} else if (token instanceof BracketCharToken) {
+				} else if (token instanceof BracketCharToken bct) {
 					if (token.getText().equals("{") && brackets.size() == 0) {
 						throw new FinishedException();
 					}
 
-					BracketCharToken bct = (BracketCharToken) token;
 					if (bct.isOpen()) {
 						brackets.push(bct.getBracketType());
 					} else {
@@ -121,14 +111,14 @@ public class JavaClassSummary {
 		this(new StringReader(string));
 	}
 
-	public JavaClassSummary(File javaFile) throws MalformedURLException,
+	public JavaClassSummary(File javaFile) throws
 			IOException {
 		this(javaFile.toURI().toURL());
 	}
 
 	public JavaClassSummary(URL url) throws IOException {
 		try (InputStream in = url.openStream()) {
-			initialize(new InputStreamReader(in, Charset.forName("UTF-8")));
+			initialize(new InputStreamReader(in, StandardCharsets.UTF_8));
 		}
 	}
 
@@ -164,9 +154,8 @@ public class JavaClassSummary {
 	 *            an InputStream to read the source code through.
 	 * @param charset
 	 *            the character set to parse the input stream with.
-	 * @throws IOException
 	 */
-	public JavaClassSummary(InputStream in, Charset charset) throws IOException {
+	public JavaClassSummary(InputStream in, Charset charset) {
 		this(new InputStreamReader(in, charset));
 	}
 
@@ -193,7 +182,6 @@ public class JavaClassSummary {
 	 * Return the fully qualified name of this class/interface/enum. For example
 	 * if type declaration starts with "package org.apache; public class Foo"
 	 * then this will return "org.apache.Foo".
-	 *
 	 * 
 	 * @return the fully qualified name of this class/interface/enum.
 	 */
@@ -214,7 +202,7 @@ public class JavaClassSummary {
 	public static String getPackageName(File sourceCodeFile) throws IOException {
 		try (FileInputStream in = new FileInputStream(sourceCodeFile)) {
 			JavaClassSummary summary = new JavaClassSummary(in,
-					Charset.forName("ISO-8859-1"));
+					StandardCharsets.ISO_8859_1);
 			return summary.getPackageName();
 		}
 	}

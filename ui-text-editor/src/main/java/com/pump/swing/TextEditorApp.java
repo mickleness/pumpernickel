@@ -4,11 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * This is a demo app that features athe JavaFormatter, XMLFormatter, and LineNumberBorder.
+ * This is a demo app that features the JavaFormatter, XMLFormatter, and LineNumberBorder.
  */
 public class TextEditorApp {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TextEditorApp());
+        SwingUtilities.invokeLater(TextEditorApp::new);
     }
 
     public TextEditorApp() {
@@ -40,20 +40,21 @@ public class TextEditorApp {
 
     private JComponent createXMLTextPane() {
         JTextPane textPane = new JTextPane();
-        textPane.setText("<?xml version=\"1.0\"?>\n" +
-                "<mysqldump xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
-                "\t<database name=\"test\">\n" +
-                "\t\t<!--This table needs work -->\n" +
-                "\t\t<table_structure name=\"onerow\">\n" +
-                "\t\t\t<field Field=\"a\" Type=\"int(11)\" Null=\"YES\" Key=\"\" Extra=\"\" />\n" +
-                "\t\t</table_structure>\n" +
-                "\t\t<table_data name=\"onerow\">\n" +
-                "\t\t\t<row>\n" +
-                "\t\t\t\t<field name=\"a\">1</field>\n" +
-                "\t\t\t</row>\n" +
-                "\t\t</table_data>\n" +
-                "\t</database>\n" +
-                "</mysqldump>");
+        textPane.setText("""
+                <?xml version="1.0"?>
+                <mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                \t<database name="test">
+                \t\t<!--This table needs work -->
+                \t\t<table_structure name="onerow">
+                \t\t\t<field Field="a" Type="int(11)" Null="YES" Key="" Extra="" />
+                \t\t</table_structure>
+                \t\t<table_data name="onerow">
+                \t\t\t<row>
+                \t\t\t\t<field name="a">1</field>
+                \t\t\t</row>
+                \t\t</table_data>
+                \t</database>
+                </mysqldump>""");
         JScrollPane scrollPane = new JScrollPane(textPane);
         scrollPane.setPreferredSize(new Dimension(800, 600));
         new JavaFormatter(textPane);

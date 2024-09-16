@@ -1,15 +1,16 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.AbstractSet;
@@ -33,6 +34,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * the efficiency of the map operations is not a significant priority.
  */
 public class FixedCapacityMap<K, V> implements Map<K, V>, Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	LinkedList<Entry<K, V>> entries = new LinkedList<>();
@@ -131,11 +133,11 @@ public class FixedCapacityMap<K, V> implements Map<K, V>, Serializable {
 				Entry<K, V> entry = iter.next();
 				if (Objects.equals(key, entry.getKey())) {
 					iter.remove();
-					entries.add(new SimpleEntry<K, V>(key, value));
+					entries.add(new SimpleEntry<>(key, value));
 					return entry.getValue();
 				}
 			}
-			entries.add(new SimpleEntry<K, V>(key, value));
+			entries.add(new SimpleEntry<>(key, value));
 			while (entries.size() > maxCapacity) {
 				entries.removeFirst();
 			}
@@ -182,12 +184,12 @@ public class FixedCapacityMap<K, V> implements Map<K, V>, Serializable {
 
 	@Override
 	public Set<K> keySet() {
-		return new AbstractSet<K>() {
+		return new AbstractSet<>() {
 
 			@Override
 			public Iterator<K> iterator() {
 				final Iterator<Entry<K, V>> delegate = entries.iterator();
-				return new Iterator<K>() {
+				return new Iterator<>() {
 
 					@Override
 					public boolean hasNext() {
@@ -235,12 +237,12 @@ public class FixedCapacityMap<K, V> implements Map<K, V>, Serializable {
 
 	@Override
 	public Collection<V> values() {
-		return new AbstractSet<V>() {
+		return new AbstractSet<>() {
 
 			@Override
 			public Iterator<V> iterator() {
 				final Iterator<Entry<K, V>> delegate = entries.iterator();
-				return new Iterator<V>() {
+				return new Iterator<>() {
 
 					@Override
 					public boolean hasNext() {
@@ -288,12 +290,12 @@ public class FixedCapacityMap<K, V> implements Map<K, V>, Serializable {
 
 	@Override
 	public Set<java.util.Map.Entry<K, V>> entrySet() {
-		return new AbstractSet<Entry<K, V>>() {
+		return new AbstractSet<>() {
 
 			@Override
 			public Iterator<Entry<K, V>> iterator() {
 				final Iterator<Entry<K, V>> delegate = entries.iterator();
-				return new Iterator<Entry<K, V>>() {
+				return new Iterator<>() {
 
 					@Override
 					public boolean hasNext() {

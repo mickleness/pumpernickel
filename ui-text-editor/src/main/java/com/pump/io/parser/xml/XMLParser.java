@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -33,17 +33,6 @@ public class XMLParser extends Parser {
 				boolean closingElement) {
 			super(closingElement ? "</" : "<", tokenStart, lineNumber,
 					documentStart);
-		}
-
-		/**
-		 * Return true if this token begins "&lt;/". For example the tag
-		 * "&lt;name&gt;" is an opening tag, and the tag "&lt;/name&gt;" is a
-		 * closing tag.
-		 * 
-		 * @return
-		 */
-		public boolean isClosingTag() {
-			return getText().equals("</");
 		}
 	}
 
@@ -265,8 +254,8 @@ public class XMLParser extends Parser {
 				receiver.add(new WordToken(sb.toString(), start, 0, start));
 			} else {
 				Token token = new Token(Character.toString(ch), start, 0, start);
-				throw new ParserException(token, "Unsupported character \'"
-						+ ch + "\'");
+				throw new ParserException(token, "Unsupported character '"
+						+ ch + "'");
 			}
 
 			String lastTokenText = receiver.getLastToken().getText();
@@ -326,7 +315,7 @@ public class XMLParser extends Parser {
 				ch = l.current();
 
 				StringBuilder sb = new StringBuilder();
-				readComment: while (true) {
+				while (true) {
 					sb.append(ch);
 					l.next();
 					ch = l.current();
@@ -335,7 +324,7 @@ public class XMLParser extends Parser {
 						if (sb.length() > 0)
 							cltr.add(new CommentToken(sb.toString(), start, 0,
 									start));
-						break readComment;
+						break;
 					} else if (ch == '-' && l.peek(1) == '-'
 							&& l.peek(2) == '>') {
 						if (sb.length() > 0)
@@ -348,7 +337,7 @@ public class XMLParser extends Parser {
 						endComment.setMatch(startComment);
 						startComment.setMatch(endComment);
 						l.next(3);
-						break readComment;
+						break;
 					}
 				}
 			} else if (ch == '<' && next == '?') {
@@ -436,15 +425,6 @@ public class XMLParser extends Parser {
 			}
 		}
 		return run;
-	}
-
-	private boolean isWhitespace(String str) {
-		for (int a = 0; a < str.length(); a++) {
-			if (!Character.isWhitespace(str.charAt(a))) {
-				return false;
-			}
-		}
-		return str.length() > 0;
 	}
 
 }

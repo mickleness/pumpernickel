@@ -1,22 +1,14 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.swing;
-
-import java.awt.Color;
-import java.awt.Font;
-
-import javax.swing.text.AttributeSet;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 
 import com.pump.io.parser.Parser.StringToken;
 import com.pump.io.parser.Parser.SymbolCharToken;
@@ -27,8 +19,13 @@ import com.pump.io.parser.xml.XMLParser;
 import com.pump.io.parser.xml.XMLParser.CommentToken;
 import com.pump.io.parser.xml.XMLParser.TagDeclarationToken;
 import com.pump.io.parser.xml.XMLParser.WordToken;
-import com.pump.swing.TokenTextComponentHighlighter;
 import com.pump.util.Receiver;
+
+import javax.swing.text.AttributeSet;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import java.awt.*;
 
 public class XMLFormatter extends TokenTextComponentHighlighter {
 
@@ -39,13 +36,13 @@ public class XMLFormatter extends TokenTextComponentHighlighter {
 	/**
 	 * Create a new XMLFormatter.
 	 * 
-	 * @param jtc
+	 * @param textPane
 	 *            the text component to apply formatting to.
 	 */
 	public XMLFormatter(JTextComponent textPane) {
 		super(textPane);
 
-		textPane.putClientProperty("caretWidth", Integer.valueOf(3));
+		textPane.putClientProperty("caretWidth", 3);
 		textPane.getCaret().setBlinkRate(500);
 
 		initializeAttributes();

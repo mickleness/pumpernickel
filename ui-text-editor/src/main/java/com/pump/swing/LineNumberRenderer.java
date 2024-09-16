@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -64,7 +64,7 @@ public abstract class LineNumberRenderer {
 			} else {
 				SwingUtilities.invokeLater(new Runnable() {
 					long lastUpdate = -1;
-					Timer timer = new Timer(50, new ActionListener() {
+					final Timer timer = new Timer(50, new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							long elapsed = System.currentTimeMillis()
 									- lastUpdate;
@@ -115,12 +115,12 @@ public abstract class LineNumberRenderer {
 		} else {
 			String text = jtc.getText();
 			List<Integer> list = new ArrayList<>();
-			StringBuffer line = new StringBuffer();
+			StringBuilder line = new StringBuilder();
 			for (int a = 0; a < text.length(); a++) {
 				char ch = text.charAt(a);
 				if (ch == '\n' || ch == '\r') {
 					list.add(a);
-					line = new StringBuffer();
+					line = new StringBuilder();
 				} else {
 					line.append(ch);
 				}
@@ -132,11 +132,7 @@ public abstract class LineNumberRenderer {
 			}
 
 			String highestLineNumber = (list.size() + 1) + "";
-			String str = "";
-			for (int a = 0; a < highestLineNumber.length(); a++) {
-				str += "X";
-			}
-			Rectangle2D bounds = font.getStringBounds(str,
+			Rectangle2D bounds = font.getStringBounds("X".repeat(highestLineNumber.length()),
 					new FontRenderContext(new AffineTransform(), true, true));
 			// the height will be stretched, so it doesn't matter. Only the
 			// width matters:
@@ -165,7 +161,7 @@ public abstract class LineNumberRenderer {
 			try {
 				int pos = lineNumber < lineBreaks.length ? (lineBreaks[lineNumber])
 						: src.length();
-				Rectangle r = jtc.getUI().modelToView(jtc, pos, Bias.Forward);
+				Rectangle r = jtc.getUI().modelToView2D(jtc, pos, Bias.Forward).getBounds();
 				if (r != null && g.hitClip(2, r.y, 2, r.height)) {
 					g.setColor(rowColors[lineNumber % rowColors.length]);
 					g.fillRect(0, lastY, (int) (getWidth() + .5f), r.y

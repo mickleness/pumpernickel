@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -19,7 +19,7 @@ public interface MatchingToken<T extends Token> {
 	 * 
 	 * @return the opposite matching token for this token.
 	 */
-	public T getMatch();
+	T getMatch();
 
 	/**
 	 * Assign the opposite match of this MatchingToken.
@@ -27,5 +27,5 @@ public interface MatchingToken<T extends Token> {
 	 * @param oppositeMatch
 	 *            the opposite match of this MatchingToken.
 	 */
-	public void setMatch(T oppositeMatch);
+	void setMatch(T oppositeMatch);
 }

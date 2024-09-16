@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -21,8 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.text.JTextComponent;
 
 /**
@@ -74,8 +72,7 @@ public class LineNumberBorder implements Border {
 			private boolean containsThisBorder(Border b) {
 				if (b == LineNumberBorder.this) {
 					return true;
-				} else if (b instanceof CompoundBorder) {
-					CompoundBorder cb = (CompoundBorder) b;
+				} else if (b instanceof CompoundBorder cb) {
 					return containsThisBorder(cb.getInsideBorder())
 							|| containsThisBorder(cb.getOutsideBorder());
 				}
@@ -122,13 +119,7 @@ public class LineNumberBorder implements Border {
 		Border oldBorder = scrollPane.getBorder();
 		scrollPane.setBorder(new CompoundBorder(border, oldBorder));
 		scrollPane.getVerticalScrollBar().getModel()
-				.addChangeListener(new ChangeListener() {
-
-					@Override
-					public void stateChanged(ChangeEvent e) {
-						scrollPane.repaint();
-					}
-				});
+				.addChangeListener(e -> scrollPane.repaint());
 	}
 
 }

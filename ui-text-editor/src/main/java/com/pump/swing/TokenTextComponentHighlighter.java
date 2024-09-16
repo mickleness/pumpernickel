@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -37,7 +37,7 @@ public abstract class TokenTextComponentHighlighter extends
 		TextComponentHighlighter {
 
 	/** This manages cached results. */
-	private Map<String, ParseResults> cachedValues = new FixedCapacityMap<>(5);
+	private final Map<String, ParseResults> cachedValues = new FixedCapacityMap<>(5);
 
 	public TokenTextComponentHighlighter(JTextComponent jtc) {
 		super(jtc);
@@ -94,12 +94,12 @@ public abstract class TokenTextComponentHighlighter extends
 
 		private Token[] stripWhitespace(Token[] tokens) {
 			List<Token> returnValue = new ArrayList<>();
-			for (int a = 0; a < tokens.length; a++) {
-				if (!(tokens[a] instanceof WhitespaceToken)) {
-					returnValue.add(tokens[a]);
+			for (Token token : tokens) {
+				if (!(token instanceof WhitespaceToken)) {
+					returnValue.add(token);
 				}
 			}
-			return returnValue.toArray(new Token[returnValue.size()]);
+			return returnValue.toArray(new Token[0]);
 		}
 	}
 
@@ -139,7 +139,7 @@ public abstract class TokenTextComponentHighlighter extends
 			int selectionStart, int selectionEnd) throws BadLocationException {
 
 		Token[] tokens = getTokens(text, true);
-		final Map<Token, AttributeSet> tokenAttributes = new TreeMap<Token, AttributeSet>();
+		final Map<Token, AttributeSet> tokenAttributes = new TreeMap<>();
 
 		for (int index = 0; index < tokens.length; index++) {
 			HighlightPainter painter = getHighlightPainter(tokens, index,

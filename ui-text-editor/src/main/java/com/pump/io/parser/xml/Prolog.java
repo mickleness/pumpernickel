@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -51,7 +52,7 @@ public class Prolog {
 			}
 
 			if (k == '>') {
-				String prologString = new String(byteOut.toByteArray(), "UTF-8");
+				String prologString = byteOut.toString(StandardCharsets.UTF_8);
 				prolog.initialize(prologString);
 				break;
 			}
@@ -76,13 +77,13 @@ public class Prolog {
 
 		Token t = receiver.getSize() >= 1 ? tokens.remove(0) : null;
 		if (!(t instanceof StartPrologToken && t.getText().equals("<?"))) {
-			throw new RuntimeException("The prolog \'" + str
-					+ "\' did not begin with '<?'.");
+			throw new RuntimeException("The prolog '" + str
+					+ "' did not begin with '<?'.");
 		}
 		t = receiver.getSize() >= 1 ? tokens.remove(0) : null;
 		if (!(t instanceof WordToken && t.getText().equals("xml"))) {
-			throw new RuntimeException("The prolog \'" + str
-					+ "\' did not begin with '<?xml'.");
+			throw new RuntimeException("The prolog '" + str
+					+ "' did not begin with '<?xml'.");
 		}
 
 		while (tokens.size() > 0) {
@@ -135,10 +136,9 @@ public class Prolog {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Prolog))
+		if (!(obj instanceof Prolog other))
 			return false;
 
-		Prolog other = (Prolog) obj;
 		return attributes.equals(other.attributes);
 	}
 
@@ -147,7 +147,7 @@ public class Prolog {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<?xml");
 		for (Entry<String, String> entry : attributes.entrySet()) {
-			sb.append(" " + entry.getKey() + "=\"" + entry.getValue() + "\"");
+			sb.append(" ").append(entry.getKey()).append("=\"").append(entry.getValue()).append("\"");
 		}
 		sb.append("?>");
 		return sb.toString();

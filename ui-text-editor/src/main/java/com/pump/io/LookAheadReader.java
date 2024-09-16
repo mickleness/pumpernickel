@@ -1,16 +1,15 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.io;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
@@ -113,7 +112,6 @@ public class LookAheadReader extends Reader implements AutoCloseable {
 	 * 
 	 * @return true if a new character is available, false if we've reached the
 	 *         end of the stream.
-	 * @throws IOException
 	 */
 	public synchronized boolean next() throws IOException {
 		return next(true);
@@ -126,7 +124,6 @@ public class LookAheadReader extends Reader implements AutoCloseable {
 	 *            the number of characters to read over.
 	 * @return if a new character is available, false if we've reached the end
 	 *         of the stream.
-	 * @throws IOException
 	 */
 	public boolean next(int n) throws IOException {
 		boolean returnValue = true;
@@ -167,7 +164,6 @@ public class LookAheadReader extends Reader implements AutoCloseable {
 	 *            the number of characters to skip.
 	 * @return the number of characters that were skipped (this may be different
 	 *         from the argument if the end of the file is reached).
-	 * @throws IOException
 	 */
 	public synchronized long skip(long charsToSkip) throws IOException {
 		long processed = 0;
@@ -222,93 +218,6 @@ public class LookAheadReader extends Reader implements AutoCloseable {
 	 */
 	public boolean isNewLine(char c) {
 		return c == '\n' || c == '\r';
-	}
-
-	/**
-	 * Read one line of text from this reader.
-	 * 
-	 * @param charLimit
-	 *            the maximum number of characters to read before throwing an
-	 *            exception.
-	 * @return a line of text
-	 * @throws IOException
-	 *             if an IOException occurred reading data, or if the charLimit
-	 *             was exceeded, or an EOFException.
-	 */
-	public synchronized String readLine(int charLimit) throws IOException {
-		int origLimit = charLimit;
-
-		StringBuffer sb = new StringBuffer();
-		while (charLimit > 0) {
-			int toRead = Math.min(charLimit, m_queueLength);
-			for (int a = 0; a < toRead; a++) {
-				char c = current();
-				next();
-				if (isNewLine(c)) {
-					skipLineBreak();
-					return sb.toString();
-				}
-				sb.append(c);
-			}
-			charLimit -= toRead;
-			populateQueue();
-
-			if (m_queueLength == 0) {
-				if (sb.length() == 0) {
-					throw new EOFException();
-				}
-				return sb.toString();
-			}
-		}
-
-		throw new IOException("The limit (" + origLimit
-				+ ") of chars were read without reaching a line break.");
-	}
-
-	/**
-	 * Peek at remaining characters.
-	 * 
-	 * @param includeLetters
-	 *            if true then letters are allowed/included.
-	 * @param includeDigits
-	 *            if true then digits are allowed/included.
-	 * @param includeOtherNonWhitespace
-	 *            if true then other characters (such as punctuation) are
-	 *            allowed/included.
-	 * @return a peek of the next available word.
-	 */
-	public String peekWord(boolean includeLetters, boolean includeDigits,
-			boolean includeOtherNonWhitespace) {
-		StringBuffer sb = new StringBuffer();
-		boolean done = false;
-		while (!done) {
-			char ch = peek(sb.length());
-			if (ch == CharacterIterator.DONE) {
-				done = true;
-			} else if (Character.isLetter(ch)) {
-				if (includeLetters) {
-					sb.append(ch);
-				} else {
-					done = true;
-				}
-			} else if (Character.isDigit(ch)) {
-				if (includeDigits) {
-					sb.append(ch);
-				} else {
-					done = true;
-				}
-			} else if (!Character.isWhitespace(ch)) {
-				if (includeOtherNonWhitespace) {
-					sb.append(ch);
-				} else {
-					done = true;
-				}
-			} else {
-				// it's whitespace:
-				done = true;
-			}
-		}
-		return sb.toString();
 	}
 
 	/**

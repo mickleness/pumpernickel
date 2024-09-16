@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -40,7 +40,7 @@ import javax.swing.text.TabStop;
 public abstract class TextComponentHighlighter {
 	protected JTextComponent jtc;
 
-	private DocumentListener docListener = new DocumentListener() {
+	private final DocumentListener docListener = new DocumentListener() {
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
@@ -68,7 +68,7 @@ public abstract class TextComponentHighlighter {
 		@Override
 		public void run() {
 			synchronized (docListener) {
-				if (dirty == false)
+				if (!dirty)
 					return;
 				dirty = false;
 
@@ -99,13 +99,12 @@ public abstract class TextComponentHighlighter {
 	 */
 	public void refresh(boolean invokeLater) {
 		if (invokeLater) {
-			/**
-			 * Note: when you call textComponent.setText(..) for several lines
-			 * of text, each line is added separately, so a 500-line block of
-			 * text calls this method 500 times as each line is added. So this
-			 * model waits until the EDT is responsive again to call
-			 * documentUpdated().
-			 */
+			// Note: when you call textComponent.setText(..) for several lines
+			// of text, each line is added separately, so a 500-line block of
+			// text calls this method 500 times as each line is added. So this
+			// model waits until the EDT is responsive again to call
+			// documentUpdated().
+
 			synchronized (docListener) {
 				dirty = true;
 				SwingUtilities.invokeLater(new RehighlightRunnable(true));
@@ -117,15 +116,13 @@ public abstract class TextComponentHighlighter {
 
 	CaretListener caretListener = new CaretListener() {
 		boolean dirty = false;
-		Runnable rehighlightRunnable = new Runnable() {
-			public void run() {
-				synchronized (caretListener) {
-					if (dirty == false)
-						return;
-					dirty = false;
+		final Runnable rehighlightRunnable = () -> {
+			synchronized (caretListener) {
+				if (!dirty)
+					return;
+				dirty = false;
 
-					documentTextChanged(true, true);
-				}
+				documentTextChanged(true, true);
 			}
 		};
 
@@ -155,7 +152,7 @@ public abstract class TextComponentHighlighter {
 				TextComponentHighlighter.this.jtc.getSelectionEnd(), true);
 	}
 
-	protected List<Object> allHighlights = new ArrayList<Object>();
+	protected List<Object> allHighlights = new ArrayList<>();
 
 	/**
 	 * This method is called on the EDT after the text of the document is
@@ -217,32 +214,29 @@ public abstract class TextComponentHighlighter {
 		}
 		allHighlights.clear();
 
-		Runnable changeStylesRunnable = new Runnable() {
-			public void run() {
-				removeDocumentListeners();
-				try {
-					Document doc = jtc.getDocument();
-					if (!(doc instanceof StyledDocument)) {
-						printOnce(
-								"TextComponentHighlighter: Attributes were provided but the document does not support styled attributes.");
-						return;
-					}
-					SimpleAttributeSet defaultAttributes = getDefaultAttributes();
-
-					StyledDocument d = (StyledDocument) doc;
-					d.setCharacterAttributes(0, d.getLength(),
-							defaultAttributes, true);
-					if (active) {
-						formatParagraphAttributes(text, d, selectionStart,
-								selectionEnd);
-						formatTextComponent(text, d, selectionStart,
-								selectionEnd);
-					}
-				} catch (BadLocationException e) {
-					throw new RuntimeException(e);
-				} finally {
-					addDocumentListeners();
+		Runnable changeStylesRunnable = () -> {
+			removeDocumentListeners();
+			try {
+				Document doc = jtc.getDocument();
+				if (!(doc instanceof StyledDocument d)) {
+					printOnce(
+							"TextComponentHighlighter: Attributes were provided but the document does not support styled attributes.");
+					return;
 				}
+				SimpleAttributeSet defaultAttributes = getDefaultAttributes();
+
+				d.setCharacterAttributes(0, d.getLength(),
+						defaultAttributes, true);
+				if (active) {
+					formatParagraphAttributes(text, d, selectionStart,
+							selectionEnd);
+					formatTextComponent(text, d, selectionStart,
+							selectionEnd);
+				}
+			} catch (BadLocationException e) {
+				throw new RuntimeException(e);
+			} finally {
+				addDocumentListeners();
 			}
 		};
 		if (invokeLater) {
@@ -312,7 +306,7 @@ public abstract class TextComponentHighlighter {
 		return defaultAttributes;
 	}
 
-	static Set<String> printOnceMessages = new HashSet<String>();
+	static Set<String> printOnceMessages = new HashSet<>();
 
 	/**
 	 * Print a message exactly once to <code>System.err</code>

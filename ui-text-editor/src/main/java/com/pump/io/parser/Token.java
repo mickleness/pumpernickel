@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -28,19 +28,16 @@ public class Token implements Comparable<Token> {
 
 	/** Convert an array of tokens back into a line of text. */
 	public static String toString(Token... line) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		Token lastToken = null;
-		for (int a = 0; a < line.length; a++) {
+		for (Token token : line) {
 			// assume if a token is missing that it's whitespace:
 			if (lastToken != null) {
-				for (int b = lastToken.getDocumentEndIndex(); b < line[a]
-						.getDocumentStartIndex(); b++) {
-					sb.append(' ');
-				}
+				sb.append(" ".repeat(Math.max(0, token
+						.getDocumentStartIndex() - lastToken.getDocumentEndIndex())));
 			}
-			Token t = line[a];
-			sb.append(t.getText());
-			lastToken = line[a];
+			sb.append(token.getText());
+			lastToken = token;
 		}
 		return sb.toString();
 	}
@@ -54,10 +51,8 @@ public class Token implements Comparable<Token> {
 
 	/**
 	 * 
-	 * @param tokenText
 	 * @param tokenStart
 	 *            the starting position of this token relative to this line.
-	 * @param lineNumber
 	 * @param documentStart
 	 *            the starting position of this token relative to the document.
 	 *            This should be equal to tokenStart when lineNumber is zero
@@ -147,9 +142,8 @@ public class Token implements Comparable<Token> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Token))
+		if (!(obj instanceof Token other))
 			return false;
-		Token other = (Token) obj;
 		return other.text.equals(text) && other.docStart == docStart;
 	}
 

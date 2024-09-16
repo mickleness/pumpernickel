@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -13,7 +13,7 @@ package com.pump.io.parser;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,13 +122,14 @@ public abstract class Parser {
 			List<WhitespaceToken> list = new ArrayList<>();
 			int startingPos = 0;
 			int lineOffset = 0;
-			StringBuffer pending = new StringBuffer();
+			StringBuilder pending = new StringBuilder();
 			for (int a = 0; a < getText().length(); a++) {
 				char ch = getText().charAt(a);
 				boolean hit = false;
-				for (int b = 0; b < markers.length && (!hit); b++) {
-					if (ch == markers[b]) {
+				for (char marker : markers) {
+					if (ch == marker) {
 						hit = true;
+						break;
 					}
 				}
 				pending.append(ch);
@@ -139,7 +140,7 @@ public abstract class Parser {
 									+ lineOffset, getDocumentStartIndex()
 									+ startingPos));
 					startingPos = a + 1;
-					pending = new StringBuffer();
+					pending = new StringBuilder();
 				}
 
 				if (ch == '\n') {
@@ -152,7 +153,7 @@ public abstract class Parser {
 								+ lineOffset, getDocumentStartIndex()
 								+ startingPos));
 			}
-			return list.toArray(new WhitespaceToken[list.size()]);
+			return list.toArray(new WhitespaceToken[0]);
 		}
 	}
 
@@ -257,13 +258,10 @@ public abstract class Parser {
 		final String decodedString;
 
 		/**
-		 * 
-		 * @param tokenText
 		 * @param decodedString
 		 *            the decoded String. For example, the encoded String may be
 		 *            "\u1234", but the decoded String will be a single
 		 *            character.
-		 * @param tokenStart
 		 */
 		public StringToken(String tokenText, String decodedString,
 				int tokenStart) {
@@ -271,15 +269,10 @@ public abstract class Parser {
 		}
 
 		/**
-		 * 
-		 * @param tokenText
 		 * @param decodedString
 		 *            the decoded String. For example, the encoded String may be
 		 *            "\u1234", but the decoded String will be a single
 		 *            character.
-		 * @param tokenStart
-		 * @param lineNumber
-		 * @param documentStart
 		 */
 		public StringToken(String tokenText, String decodedString,
 				int tokenStart, int lineNumber, int documentStart) {
@@ -317,8 +310,7 @@ public abstract class Parser {
 
 			}
 		}
-
-	};
+	}
 
 	/**
 	 * Parse Java source code.
@@ -331,7 +323,6 @@ public abstract class Parser {
 	 *            objects.
 	 * @param receiver
 	 *            the object that will receive tokens as they become available.
-	 * @throws IOException
 	 */
 	public void parse(InputStream in, boolean includeWhitespaceTokens,
 			Receiver<Token> receiver) throws Exception {
@@ -354,7 +345,6 @@ public abstract class Parser {
 	 *            if false then this will ignore {@link WhitespaceToken}
 	 *            objects.
 	 * @return an array of Tokens from the String provided.
-	 * @throws IOException
 	 */
 	public Token[] parse(InputStream in, boolean includeWhitespaceTokens)
 			throws Exception {
@@ -380,7 +370,7 @@ public abstract class Parser {
 		final List<Token[]> allLines = new ArrayList<>();
 		final List<Token> uncommittedLine = new ArrayList<>();
 
-		Receiver<Token> receiver = new Receiver<Token>() {
+		Receiver<Token> receiver = new Receiver<>() {
 			int lastLineNumber = 0;
 
 			@Override
@@ -389,7 +379,7 @@ public abstract class Parser {
 					int lineNumber = token.getLineNumber();
 					if (lineNumber != lastLineNumber) {
 						Token[] line = uncommittedLine
-								.toArray(new Token[uncommittedLine.size()]);
+								.toArray(new Token[0]);
 						allLines.add(line);
 						uncommittedLine.clear();
 					}
@@ -403,7 +393,7 @@ public abstract class Parser {
 		parse(in, includeWhitespaceTokens, receiver);
 
 		Token[] line = uncommittedLine
-				.toArray(new Token[uncommittedLine.size()]);
+				.toArray(new Token[0]);
 		allLines.add(line);
 
 		return allLines.toArray(new Token[allLines.size()][]);
@@ -423,8 +413,7 @@ public abstract class Parser {
 			throws Exception {
 		BasicReceiver<Token> receiver = new BasicReceiver<>();
 		try {
-			parse(new ByteArrayInputStream(expr.getBytes(Charset
-					.forName("UTF-8"))), includeWhitespaceTokens, receiver);
+			parse(new ByteArrayInputStream(expr.getBytes(StandardCharsets.UTF_8)), includeWhitespaceTokens, receiver);
 		} catch (IOException e) {
 			// we shouldn't have an IOException for a String
 			throw new RuntimeException(e);
