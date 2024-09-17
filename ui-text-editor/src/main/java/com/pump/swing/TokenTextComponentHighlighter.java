@@ -57,7 +57,7 @@ public abstract class TokenTextComponentHighlighter extends
 					createTokens(inputText, consumer);
 				} catch (ParserException e) {
 					Token lastToken = consumer.getSize() == 0 ? null : consumer
-							.getElementAt(consumer.getSize() - 1);
+							.get(consumer.getSize() - 1);
 					int pos = lastToken == null ? 0 : lastToken
 							.getDocumentEndIndex();
 					consumer.accept(new UnparsedToken(pos, inputText, e));

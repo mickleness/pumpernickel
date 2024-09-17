@@ -242,7 +242,7 @@ public abstract class SaveDocumentAction extends AbstractAction {
 		cancellable.cancel();
 
 		if (saveThrowables.getSize() > 0) {
-			throw saveThrowables.getElementAt(0);
+			throw saveThrowables.get(0);
 		}
 	}
 }

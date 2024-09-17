@@ -16,14 +16,10 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
-import javax.swing.ListModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-
 /**
  * This is a simple Consumer implementation that stores all incoming elements in a list.
  */
-public class BasicConsumer<T> implements Consumer<T>, ListModel<T>, Iterable<T> {
+public class BasicConsumer<T> implements Consumer<T>, Iterable<T> {
 	/**
 	 * This is an Iterator that throws an
 	 * <code>UnsupportedOperationException()</code> when <code>remove()</code> is
@@ -54,7 +50,6 @@ public class BasicConsumer<T> implements Consumer<T>, ListModel<T>, Iterable<T> 
 	}
 
 	private final List<T> list = new ArrayList<>();
-	private final List<ListDataListener> listeners = new CopyOnWriteArrayList<>();
 	private final List<Consumer<T>> consumers = new CopyOnWriteArrayList<>();
 
 	/**
@@ -94,10 +89,6 @@ public class BasicConsumer<T> implements Consumer<T>, ListModel<T>, Iterable<T> 
 				consumer.accept(newElement);
 			}
 		}
-		for (ListDataListener listener : listeners.toArray(new ListDataListener[0])) {
-			listener.intervalAdded(new ListDataEvent(this,
-					ListDataEvent.INTERVAL_ADDED, index, index));
-		}
 	}
 
 	@Override
@@ -105,26 +96,12 @@ public class BasicConsumer<T> implements Consumer<T>, ListModel<T>, Iterable<T> 
 		return new UnmodifiableIterator<>(list.iterator());
 	}
 
-	@Override
 	public synchronized int getSize() {
 		return list.size();
 	}
 
-	@Override
-	public synchronized T getElementAt(int index) {
+	public synchronized T get(int index) {
 		return list.get(index);
-	}
-
-	/**
-	 * Add a ListDataListener. This will only be issued INTERVAL_ADDED events,
-	 * because a consumer object only supports add operations.
-	 */
-	public synchronized void addListDataListener(ListDataListener l) {
-		listeners.add(l);
-	}
-
-	public synchronized void removeListDataListener(ListDataListener l) {
-		listeners.remove(l);
 	}
 
 }
