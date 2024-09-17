@@ -132,6 +132,15 @@ public class VideoSampleDescriptionEntry extends SampleDescriptionEntry {
 	 */
 	protected int colorTableID = 65535;
 
+	/**
+	 * Optional; may be null. This is written after all other data.
+	 *
+	 * TODO: this appears necessary for the AtomReader parser to write
+	 * file identical to what it reads. But does it mean that we're
+	 * failing to parse important info?
+	 */
+	protected byte[] extraBytes;
+
 	public VideoSampleDescriptionEntry(String type, int dataReference, int w,
 			int h) {
 		super(type, dataReference);
@@ -178,11 +187,14 @@ public class VideoSampleDescriptionEntry extends SampleDescriptionEntry {
 		Atom.write32BytePascalString(out, compressorName);
 		Atom.write16Int(out, depth);
 		Atom.write16Int(out, colorTableID);
+
+		if (extraBytes != null)
+			out.write(extraBytes);
 	}
 
 	@Override
 	protected long getSize() {
-		return 86;
+		return 86 + (extraBytes == null ? 0 : extraBytes.length);
 	}
 
 	@Override

@@ -244,4 +244,12 @@ public class TrackHeaderAtom extends LeafAtom {
 	public void setVolume(float newVolume) {
 		volume = newVolume;
 	}
+
+	public void setWidth(float newWidth) {
+		width = newWidth;
+	}
+
+	public void setHeight(float newHeight) {
+		height = newHeight;
+	}
 }

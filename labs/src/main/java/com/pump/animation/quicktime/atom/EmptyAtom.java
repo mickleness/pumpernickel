@@ -17,7 +17,12 @@ import javax.swing.tree.TreeNode;
 import com.pump.io.GuardedOutputStream;
 
 /**
- * This is an empty atom. (I'm not sure why these exist, but they do.)
+ * This is an unusual atom, and maybe an undocumented atom. The file format
+ * specs say all atoms MUST start with 4 bytes indicating their size, and then
+ * 4 bytes (a String) indicating their name. However sometimes when we try
+ * to read an atom's size: we get `0`. So this EmptyAtom class is used in that
+ * peculiar circumstance. Its {@link #getSize()} method technically returns `4`
+ * (because it took 4 bytes just to express the `0`).
  */
 public class EmptyAtom extends Atom {
 
@@ -32,7 +37,7 @@ public class EmptyAtom extends Atom {
 
 	@Override
 	protected long getSize() {
-		return 0;
+		return 4;
 	}
 
 	@Override

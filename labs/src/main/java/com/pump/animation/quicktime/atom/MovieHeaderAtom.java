@@ -119,7 +119,11 @@ public class MovieHeaderAtom extends LeafAtom {
 		write32Int(out, selectionTime);
 		write32Int(out, selectionDuration);
 		write32Int(out, currentTime);
-		write32Int(out, getRoot().getHighestTrackID() + 1);
+		// TODO: this probably be explicitly defined, instead of just letting
+		// it get defined the first time data is written
+		if (nextTrackID == -1)
+			nextTrackID = getRoot().getHighestTrackID() + 1;
+		write32Int(out, nextTrackID);
 	}
 
 	@Override

@@ -80,12 +80,13 @@ public class DataAtom extends LeafAtom {
 	protected void writeContents(GuardedOutputStream out) throws IOException {
 		out.write(version);
 		write24Int(out, flags);
+		write32Int(out, 0);
 		out.write(data);
 	}
 
 	@Override
 	protected long getSize() {
-		return 12 + data.length;
+		return 16 + data.length;
 	}
 
 	public int getVersion() {

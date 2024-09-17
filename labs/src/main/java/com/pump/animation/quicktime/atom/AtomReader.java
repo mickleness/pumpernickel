@@ -124,18 +124,15 @@ public class AtomReader {
 		try {
 			// the normal pattern is: [4-byte size] [4 byte identifier]
 
-			// ... but if the size is 0: we have a weird invalid atom that
-			// we should just skip. (At atom has to *always* be at least 8
-			// bytes, because the size includes those 8 bytes of header...)
-			size = 0;
-			while (size == 0) {
-				try {
-					size = Atom.read32Int(in);
-				} catch (EOFException e) {
-					if (readAtomTypes.isEmpty())
-						throw new UnsupportedFileException(e);
-					return null;
-				}
+			try {
+				size = Atom.read32Int(in);
+			} catch (EOFException e) {
+				if (readAtomTypes.isEmpty())
+					throw new UnsupportedFileException(e);
+				return null;
+			}
+			if (size == 0) {
+				return new EmptyAtom(parent);
 			}
 
 			if (in instanceof GuardedInputStream) {

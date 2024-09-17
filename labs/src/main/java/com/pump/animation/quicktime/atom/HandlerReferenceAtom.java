@@ -40,6 +40,17 @@ public class HandlerReferenceAtom extends LeafAtom {
 	protected long componentFlagsMask = 0;
 	protected String componentName = "";
 
+	private static final int STRING_TYPE_NULL_TERMINATED = 0;
+	private static final int STRING_TYPE_LENGTH_PREFIXED = 1;
+	private static final int STRING_TYPE_NEITHER = 2;
+
+	/**
+	 * The componentName should a counted string, but it often is a null-terminated string instead.
+	 * If this HandlerReferenceAtom is something we read, let's preserve how we read it and reencoded it
+	 * the same way.
+	 */
+	private int stringType = -1;
+
 	public HandlerReferenceAtom(String componentType, String componentSubtype,
 			String componentManufacturer) {
 		super(null);
@@ -69,11 +80,18 @@ public class HandlerReferenceAtom extends LeafAtom {
 			byte[] data = new byte[bytesToRead - 24];
 			data[0] = (byte) stringSize;
 			read(in, data, 1, data.length - 1);
-			componentName = new String(data);
+			if (data[data.length - 1] == 0) {
+				componentName = new String(data, 0, data.length - 1);
+				stringType = STRING_TYPE_NULL_TERMINATED;
+			} else {
+				componentName = new String(data);
+				stringType = STRING_TYPE_NEITHER;
+			}
 		} else {
 			byte[] data = new byte[stringSize];
 			read(in, data);
 			componentName = new String(data);
+			stringType = STRING_TYPE_LENGTH_PREFIXED;
 		}
 	}
 
@@ -109,7 +127,7 @@ public class HandlerReferenceAtom extends LeafAtom {
 	@Override
 	protected long getSize() {
 		byte[] data = componentName.getBytes();
-		return 33 + data.length;
+		return (stringType == STRING_TYPE_NEITHER ? 32 : 33) + data.length;
 	}
 
 	@Override
@@ -122,8 +140,15 @@ public class HandlerReferenceAtom extends LeafAtom {
 		write32Int(out, componentFlags);
 		write32Int(out, componentFlagsMask);
 		byte[] data = componentName.getBytes();
-		out.write(data.length);
-		out.write(data);
+		if (stringType == STRING_TYPE_NULL_TERMINATED) {
+			out.write(data);
+			out.write(0);
+		} else if (stringType == STRING_TYPE_NEITHER) {
+			out.write(data);
+		} else {
+			out.write(data.length);
+			out.write(data);
+		}
 	}
 
 	@Override

@@ -36,8 +36,11 @@ public class VideoSampleDescriptionAtom extends SampleDescriptionAtom {
 		VideoSampleDescriptionEntry returnValue = new VideoSampleDescriptionEntry(
 				measuredIn);
 		long remainingBytes = returnValue.inputSize - measuredIn.getReadBytes();
-		if (remainingBytes > 0)
-			Atom.skip(in, remainingBytes);
+		if (remainingBytes > 0) {
+			byte[] b = new byte[(int)remainingBytes];
+			Atom.read(in, b);
+			returnValue.extraBytes = b;
+		}
 		return returnValue;
 	}
 
