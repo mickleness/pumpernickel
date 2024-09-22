@@ -610,4 +610,11 @@ public class ImageType<T> implements Serializable {
 		}
 		return returnValue;
 	}
+
+	/**
+	 * This is shorthand for `getColorModel().getTransparency() == Transparency.OPAQUE`
+	 */
+	public boolean isOpaque() {
+		return getColorModel().getTransparency() == Transparency.OPAQUE;
+	}
 }

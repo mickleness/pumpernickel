@@ -64,25 +64,28 @@ class APP0DataReader {
 		listener.addProperty(marker, PROPERTY_THUMBNAIL_HEIGHT,
 				thumbnailHeight);
 		if (thumbnailWidth * thumbnailHeight > 0) {
+			// This is probably a rare and old-fashioned way to embed a thumbnail,
+			// but I'm not sure how to prove/quantify this claim.
 			if (listener.isThumbnailAccepted(marker, thumbnailWidth,
 					thumbnailHeight)) {
-				// TODO: test this. I haven't found a single file that uses
-				// an APP0 thumbnail, so this code has never been tested.
-				byte[] dataByte = new byte[thumbnailWidth * 3];
-				int[] dataInt = new int[thumbnailWidth];
-				in.readFully(dataByte, dataByte.length);
-				BufferedImage image = new BufferedImage(thumbnailWidth,
-						thumbnailHeight, BufferedImage.TYPE_INT_RGB);
-				for (int y = 0; y < thumbnailHeight; y++) {
-					for (int x = 0; x < thumbnailWidth; x++) {
-						int r = (dataByte[x * 3] & 0xff);
-						int g = (dataByte[x * 3 + 1] & 0xff);
-						int b = (dataByte[x * 3 + 2] & 0xff);
-						dataInt[x] = (r << 16) + (g << 8) + (b);
-					}
-					image.getRaster().setDataElements(0, y, thumbnailWidth, 1,
-							array);
+				byte[] dataByte;
+				BufferedImage image;
+				if (in.remainingMarkerLength == thumbnailHeight * thumbnailWidth * 4) {
+					// The com.sun.imageio.plugins.jpeg.JPEGImageWriter implementation will write ARGB thumbnails
+					// and include the alpha channels. I'm not sure if this is a common convention, but we should
+					// support that choice since we ought to support Java-written JPEGs:
+					dataByte = new byte[thumbnailHeight * thumbnailWidth * 4];
+					in.readFully(dataByte, dataByte.length);
+					image = new BufferedImage(thumbnailWidth,
+							thumbnailHeight, BufferedImage.TYPE_4BYTE_ABGR);
+				} else {
+					// this is the more traditional/predictable case:
+					dataByte = new byte[thumbnailHeight * thumbnailWidth * 3];
+					in.readFully(dataByte, dataByte.length);
+					image = new BufferedImage(thumbnailWidth,
+							thumbnailHeight, BufferedImage.TYPE_3BYTE_BGR);
 				}
+				image.getRaster().setDataElements(0,0,thumbnailWidth,thumbnailHeight, dataByte);
 				listener.addThumbnail(marker, image);
 			}
 		}
