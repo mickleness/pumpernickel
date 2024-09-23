@@ -53,7 +53,7 @@ class JPEGMarkerInputStream extends InputStream {
 		skip(remainingMarkerLength);
 
 		remainingMarkerLength = 2;
-		if (readFully(scratch, 2, reverse) != 2)
+		if (readFully(scratch, 2, false, reverse) != 2)
 			throw new EOFException("EOF reached");
 		int i = (scratch[0] & 0xff) * 256 + (scratch[1] & 0xff);
 		currentMarker = Integer.toString(i, 16).toUpperCase();
@@ -63,7 +63,7 @@ class JPEGMarkerInputStream extends InputStream {
 			remainingMarkerLength = 0;
 		} else {
 			remainingMarkerLength = 2;
-			if (readFully(scratch, 2, reverse) != 2)
+			if (readFully(scratch, 2, false, reverse) != 2)
 				throw new IOException("EOF reached");
 			i = (scratch[0] & 0xff) * 256 + (scratch[1] & 0xff);
 			remainingMarkerLength = i - 2;
@@ -132,12 +132,29 @@ class JPEGMarkerInputStream extends InputStream {
 	}
 
 	protected int readFully(byte[] dest, int amt) throws IOException {
-		return readFully(dest, amt, false);
+		return readFully(dest, amt, false, false);
 	}
 
-	protected int readFully(byte[] dest, int amt, boolean reverse)
+	/**
+	 * @param overrideExpectedMarkerLength if false then we respect the current anticipated marker length. For
+	 *                                     example: if the current marker is supposed to be 20 bytes, then this
+	 *                                     will stop reading at 20 bytes. If true then this method will continue
+	 *                                     to read past the current marker length.
+	 */
+	protected int readFully(byte[] dest, int amt, boolean overrideExpectedMarkerLength) throws IOException {
+		return readFully(dest, amt, overrideExpectedMarkerLength, false);
+	}
+
+	/**
+	 * @param overrideExpectedMarkerLength if false then we respect the current anticipated marker length. For
+	 *                                     example: if the current marker is supposed to be 20 bytes, then this
+	 *                                     will stop reading at 20 bytes. If true then this method will continue
+	 *                                     to read past the current marker length.
+	 */
+	protected int readFully(byte[] dest, int amt, boolean overrideExpectedMarkerLength, boolean reverse)
 			throws IOException {
-		amt = Math.min(amt, remainingMarkerLength);
+		if (!overrideExpectedMarkerLength)
+			amt = Math.min(amt, remainingMarkerLength);
 		int returnValue = readFully(in, dest, amt, reverse);
 		remainingMarkerLength -= returnValue;
 		return returnValue;

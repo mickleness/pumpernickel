@@ -64,7 +64,7 @@ public class JPEGMetaDataTest extends TestCase {
         Iterator<ImageWriter> iter = ImageIO.getImageWritersBySuffix("jpg");
         ImageWriter w = iter.next();
         try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
-            BufferedImage thumbnail_argb = ImagePixelIterator.createBufferedImage(bi.getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING));
+            BufferedImage thumbnail_argb = ImagePixelIterator.createBufferedImage(bi.getScaledInstance(200, 200, Image.SCALE_AREA_AVERAGING));
             BufferedImage thumbnail = thumbnailImageType.create(thumbnail_argb.getWidth(), thumbnail_argb.getHeight());
             Graphics2D g2 = thumbnail.createGraphics();
             g2.drawImage(thumbnail_argb, 0, 0, null);

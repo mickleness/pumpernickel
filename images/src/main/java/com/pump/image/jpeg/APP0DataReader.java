@@ -70,20 +70,26 @@ class APP0DataReader {
 					thumbnailHeight)) {
 				byte[] dataByte;
 				BufferedImage image;
-				if (in.remainingMarkerLength == thumbnailHeight * thumbnailWidth * 4) {
+
+				// We mod by 65536 because apparently APP0 segments can just keep running as long as they need to
+				// to fill the given RGB table. I don't see this mentioned in the JFIF specs, but I observe it
+				// in my unit tests.
+				if (in.remainingMarkerLength == (thumbnailHeight * thumbnailWidth * 4) % 65536 ) {
 					// The com.sun.imageio.plugins.jpeg.JPEGImageWriter implementation will write ARGB thumbnails
 					// and include the alpha channels. I'm not sure if this is a common convention, but we should
 					// support that choice since we ought to support Java-written JPEGs:
 					dataByte = new byte[thumbnailHeight * thumbnailWidth * 4];
-					in.readFully(dataByte, dataByte.length);
+					in.readFully(dataByte, dataByte.length, true);
 					image = new BufferedImage(thumbnailWidth,
 							thumbnailHeight, BufferedImage.TYPE_4BYTE_ABGR);
-				} else {
+				} else if (in.remainingMarkerLength == (thumbnailHeight * thumbnailWidth * 3) % 65536) {
 					// this is the more traditional/predictable case:
 					dataByte = new byte[thumbnailHeight * thumbnailWidth * 3];
-					in.readFully(dataByte, dataByte.length);
+					in.readFully(dataByte, dataByte.length, true);
 					image = new BufferedImage(thumbnailWidth,
 							thumbnailHeight, BufferedImage.TYPE_3BYTE_BGR);
+				} else {
+					throw new RuntimeException("Unexpected marker length. Thumbnail size: " + thumbnailWidth + "x" + thumbnailHeight + ", remaining bytes: " + in.remainingMarkerLength);
 				}
 				image.getRaster().setDataElements(0,0,thumbnailWidth,thumbnailHeight, dataByte);
 				listener.addThumbnail(marker, image);
