@@ -12,6 +12,10 @@ package com.pump.image.jpeg;
 
 import com.pump.image.QBufferedImage;
 
+import javax.imageio.*;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.metadata.IIOMetadataNode;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -106,6 +110,69 @@ public class JPEGMetaData {
 		} finally {
 			listener.endFile();
 		}
+	}
+
+	/**
+	 * Write an image to an output stream.
+	 * <p>
+	 * Normally ImageIO writes JPEG thumbnails using a JFIF APP0 marker segment, which guarantees
+	 * a lossless thumbnail but it constrains the thumbnail to 255x255. This method will switch to
+	 * a JFIF *extension* APP0 marker segmen for larger thumbnails. This lets us embed a thumbnail
+	 * of arbitrary size as another JPEG. This offers better compression, but it uses the default
+	 * JPEG compression level (see com.sun.imageio.plugins.jpeg.JPEG.DEFAULT_QUALITY).
+	 * </p>
+	 *
+	 * @param out the stream to write the JPEG image to.
+	 * @param bufferedImage the large image to write.
+	 * @param thumbnail the thumbnail to encode with the image.
+	 * @param jpegQuality the JPEG quality from 0-1. Where 1 is lossless.
+	 */
+	public static void writeJPEG(OutputStream out, BufferedImage bufferedImage, BufferedImage thumbnail, float jpegQuality) throws IOException {
+		Iterator<ImageWriter> iter = ImageIO.getImageWritersBySuffix("jpg");
+		ImageWriter jpegWriter = iter.next();
+
+		IIOImage iioImage = new IIOImage(bufferedImage, Arrays.asList(thumbnail), null);
+
+		ImageWriteParam param = jpegWriter.getDefaultWriteParam();
+		param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+		param.setCompressionQuality(jpegQuality);
+
+		if (thumbnail.getWidth() > 255 || thumbnail.getHeight() > 255) {
+			// this complex / cryptic code lets us activate the JFIFthumbJPEG logic that lets us
+			// embed larger thumbnails:
+			ImageTypeSpecifier imageType = ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_INT_RGB);
+			IIOMetadata metadata = jpegWriter.getDefaultImageMetadata(imageType, param);
+
+			// String formatName = com.sun.imageio.plugins.jpeg.JPEG.nativeStreamMetadataFormatName
+			String formatName = "javax_imageio_jpeg_image_1.0";
+
+			IIOMetadataNode rootNode = new IIOMetadataNode(formatName);
+			IIOMetadataNode JPEGvariety = new IIOMetadataNode();
+			IIOMetadataNode markerSequenceNode = new IIOMetadataNode();
+			rootNode.appendChild(JPEGvariety);
+			rootNode.appendChild(markerSequenceNode);
+
+			IIOMetadataNode jfifMarkerSegment = new IIOMetadataNode();
+			JPEGvariety.appendChild(jfifMarkerSegment);
+
+			IIOMetadataNode jfxx = new IIOMetadataNode("JFXX");
+			jfifMarkerSegment.appendChild(jfxx);
+
+			IIOMetadataNode app0JFXX = new IIOMetadataNode();
+			// see https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format#JFIF_extension_APP0_marker_segment
+			app0JFXX.setAttribute("extensionCode", "16");
+			jfxx.appendChild(app0JFXX);
+
+			IIOMetadataNode JFIFthumbJPEG = new IIOMetadataNode("JFIFthumbJPEG");
+			app0JFXX.appendChild(JFIFthumbJPEG);
+
+			metadata.setFromTree(formatName, rootNode);
+			iioImage.setMetadata(metadata);
+		}
+
+		ImageOutputStream stream = ImageIO.createImageOutputStream(out);
+		jpegWriter.setOutput(stream);
+		jpegWriter.write(iioImage);
 	}
 
 	public static class Property implements Serializable {
