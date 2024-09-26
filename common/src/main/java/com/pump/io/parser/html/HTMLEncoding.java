@@ -180,7 +180,7 @@ public class HTMLEncoding {
 		set.add(new EscapeChar('þ', 254, "&thorn;",
 				"small thorn, Icelandic"));
 		set.add(new EscapeChar('ÿ', 255, "&yuml;", "small y, umlaut mark"));
-		set.add(new EscapeChar(' ', 160, "&nbsp;", "non-breaking space"));
+		set.add(new EscapeChar(' ', 160, "&nbsp;", "non-breaking space"));
 		set.add(new EscapeChar('¡', 161, "&iexcl;",
 				"inverted exclamation mark"));
 		set.add(new EscapeChar('¢', 162, "&cent;", "cent"));
@@ -402,7 +402,7 @@ public class HTMLEncoding {
 			if (ec != null) {
 				sb.append("&#").append(ec.entityNumber).append(";");
 			} else if (c >= 255) {
-				sb.append("&x").append(Integer.toHexString(c)).append(";");
+				sb.append("&#x").append(Integer.toHexString(c)).append(";");
 			} else if (sb != null) {
 				sb.append(c);
 			}
