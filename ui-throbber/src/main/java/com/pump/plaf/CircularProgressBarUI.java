@@ -1,31 +1,26 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.plaf;
 
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.plaf.basic.BasicProgressBarUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.plaf.basic.BasicProgressBarUI;
 
 /**
  * This ProgressBarUI renders as a circle. The rendering model used will stretch
@@ -253,7 +248,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	ChangeListener pulseChangeListener = new ChangeListener() {
 		boolean wasComplete = false;
 		long pulseStartTime = -1;
-		Timer pulseCompletionTimer = new Timer(10, new ActionListener() {
+		final Timer pulseCompletionTimer = new Timer(10, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -302,7 +297,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 */
 	ChangeListener sparkChangeListener = new ChangeListener() {
 		long lastValueChangeTime = -1;
-		Timer sparkInitiateTimer = new Timer(2000, new ActionListener() {
+		final Timer sparkInitiateTimer = new Timer(2000, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -315,7 +310,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 
 			int sparkStartValue = -1;
 			long sparkStartTime = -1;
-			Timer moveSparkTimer = new Timer(5, new ActionListener() {
+			final Timer moveSparkTimer = new Timer(5, new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -368,20 +363,9 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		}
 	};
 
-	PropertyChangeListener repaintListener = new PropertyChangeListener() {
+	PropertyChangeListener repaintListener = evt -> progressBar.repaint();
 
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			progressBar.repaint();
-		}
-
-	};
-
-	private Runnable repaintRunnable = new Runnable() {
-		public void run() {
-			progressBar.repaint();
-		}
-	};
+	private final Runnable repaintRunnable = () -> progressBar.repaint();
 
 	@Override
 	public Dimension getPreferredSize(JComponent c) {
