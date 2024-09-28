@@ -131,13 +131,15 @@ public class JPEGMetaData {
 		Iterator<ImageWriter> iter = ImageIO.getImageWritersBySuffix("jpg");
 		ImageWriter jpegWriter = iter.next();
 
-		IIOImage iioImage = new IIOImage(bufferedImage, Arrays.asList(thumbnail), null);
+		IIOImage iioImage = new IIOImage(bufferedImage,
+				thumbnail == null ? Collections.emptyList() : Arrays.asList(thumbnail),
+				null);
 
 		ImageWriteParam param = jpegWriter.getDefaultWriteParam();
 		param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 		param.setCompressionQuality(jpegQuality);
 
-		if (thumbnail.getWidth() > 255 || thumbnail.getHeight() > 255) {
+		if (thumbnail != null && (thumbnail.getWidth() > 255 || thumbnail.getHeight() > 255) ) {
 			// this complex / cryptic code lets us activate the JFIFthumbJPEG logic that lets us
 			// embed larger thumbnails:
 			ImageTypeSpecifier imageType = ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_INT_RGB);

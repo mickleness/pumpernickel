@@ -13,10 +13,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 public class JPEGMetaDataTest extends TestCase {
 
@@ -168,6 +165,15 @@ public class JPEGMetaDataTest extends TestCase {
                 assertTrue("(" + x + "," + y+") g1 = " + g1 + ", g2 = " + g2, Math.abs(g1 - g2) <= allowedRGBDelta);
                 assertTrue("(" + x + "," + y+") b1 = " + b1 + ", b2 = " + b2, Math.abs(b1 - b2) <= allowedRGBDelta);
             }
+        }
+    }
+
+    @Test
+    public void testNullThumbnail() throws IOException {
+        BufferedImage bi = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+        try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
+            JPEGMetaData.writeJPEG(byteOut,bi,null,1f);
+            assertTrue(byteOut.toByteArray().length > 100);
         }
     }
 }
