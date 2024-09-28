@@ -150,16 +150,4 @@ public class TransformUtils {
 						* progress);
 		return dest;
 	}
-
-	/**
-	 * Create an AffineTransform that flips everything horizontally around a
-	 * given x-value.
-	 */
-	public static AffineTransform flipHorizontal(double x) {
-		AffineTransform tx = new AffineTransform();
-		tx.translate(x, 0);
-		tx.scale(-1, 1);
-		tx.translate(-x, 0);
-		return tx;
-	}
 }

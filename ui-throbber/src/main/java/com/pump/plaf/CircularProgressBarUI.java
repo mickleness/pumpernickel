@@ -10,18 +10,12 @@
  */
 package com.pump.plaf;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
+import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -32,9 +26,6 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicProgressBarUI;
-
-import com.pump.geom.TransformUtils;
-import com.pump.util.JVM;
 
 /**
  * This ProgressBarUI renders as a circle. The rendering model used will stretch
@@ -207,9 +198,38 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 */
 	private static final int SPARK_EXTENT = 20;
 
+	/**
+	 * Create an AffineTransform that flips everything horizontally around a
+	 * given x-value.
+	 */
+	private static AffineTransform flipHorizontal(double x) {
+		AffineTransform tx = new AffineTransform();
+		tx.translate(x, 0);
+		tx.scale(-1, 1);
+		tx.translate(-x, 0);
+		return tx;
+	}
+
+	/**
+	 * Paint a String centered at a given (x,y) coordinate.
+	 */
+	private static void paintCenteredString(Graphics2D g, String str, Font font,
+										   int centerX, int centerY) {
+		g.setFont(font);
+		FontMetrics fm = g.getFontMetrics();
+		Rectangle2D r = fm.getStringBounds(str, g);
+		float x = (float) (centerX - r.getWidth() / 2);
+		float y = (float) (centerY - r.getHeight() / 2 - r.getY());
+		g.drawString(str, x, y);
+	}
+
+	private static boolean isAqua() {
+		return "Aqua".equals(UIManager.getLookAndFeel().getID());
+	}
+
 	private static Color getDefaultForegroundColor() {
 		// weird: why is ProgressBar.foreground in Aqua black? That's no good.
-		String propertyName = JVM.isAqua() ? "controlHighlight"
+		String propertyName = isAqua() ? "controlHighlight"
 				: "ProgressBar.foreground";
 		Color c = UIManager.getColor(propertyName);
 		if (c == null)
@@ -218,7 +238,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	}
 
 	private static Color getDefaultBackgroundColor() {
-		String propertyName = JVM.isAqua() ? "TextComponent.selectionBackgroundInactive"
+		String propertyName = isAqua() ? "TextComponent.selectionBackgroundInactive"
 				: "ProgressBar.shadow";
 		Color c = UIManager.getColor(propertyName);
 		if (c == null)
@@ -528,7 +548,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		if (progressBar.isStringPainted()) {
 			Font font = progressBar.getFont();
 			font = font.deriveFont(((float) radius) / 2f);
-			PlafPaintUtils.paintCenteredString(g, progressBar.getString(),
+			paintCenteredString(g, progressBar.getString(),
 					font, centerX, centerY);
 		}
 	}
@@ -606,7 +626,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 			double centerY, double startAngle, double extent, double radius,
 			float strokeWidth) {
 		g = (Graphics2D) g.create();
-		g.transform(TransformUtils.flipHorizontal(centerX));
+		g.transform(flipHorizontal(centerX));
 		g.rotate(-Math.PI / 2, centerX, centerY);
 		g.setPaint(color);
 		Arc2D progressArc = new Arc2D.Double(centerX - radius,
