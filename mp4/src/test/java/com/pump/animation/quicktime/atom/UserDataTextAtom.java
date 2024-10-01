@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -67,7 +67,7 @@ public class UserDataTextAtom extends LeafAtom {
 		}
 	}
 
-	protected List<TextEntry> entries = new ArrayList<TextEntry>();
+	protected List<TextEntry> entries = new ArrayList<>();
 
 	protected String id;
 
@@ -75,7 +75,7 @@ public class UserDataTextAtom extends LeafAtom {
 			throws IOException {
 		super(parent);
 		this.id = id;
-		while (in.isAtLimit() == false) {
+		while (!in.isAtLimit()) {
 			int size = read16Int(in);
 			int language = read16Int(in);
 			byte[] data = new byte[size];
@@ -85,7 +85,7 @@ public class UserDataTextAtom extends LeafAtom {
 	}
 
 	public TextEntry[] getTextEntries() {
-		return entries.toArray(new TextEntry[entries.size()]);
+		return entries.toArray(new TextEntry[0]);
 	}
 
 	@Override
@@ -95,8 +95,7 @@ public class UserDataTextAtom extends LeafAtom {
 
 	@Override
 	protected void writeContents(GuardedOutputStream out) throws IOException {
-		for (int a = 0; a < entries.size(); a++) {
-			TextEntry e = entries.get(a);
+		for (TextEntry e : entries) {
 			write16Int(out, e.data.length);
 			write16Int(out, e.language);
 			out.write(e.data);
@@ -105,11 +104,10 @@ public class UserDataTextAtom extends LeafAtom {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("UserDataTextAtom[ \""
+		StringBuilder sb = new StringBuilder("UserDataTextAtom[ \""
 				+ getIdentifier() + "\" ");
-		for (int a = 0; a < entries.size(); a++) {
-			TextEntry e = entries.get(a);
-			sb.append("\"" + (new String(e.data)) + "\" ");
+		for (TextEntry e : entries) {
+			sb.append("\"").append(new String(e.data)).append("\" ");
 		}
 		sb.append("]");
 		return sb.toString();

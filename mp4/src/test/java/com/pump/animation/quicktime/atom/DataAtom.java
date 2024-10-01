@@ -1,20 +1,20 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.animation.quicktime.atom;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-
 import com.pump.io.GuardedInputStream;
 import com.pump.io.GuardedOutputStream;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This is a "data" atom based on the mp4 specifications.
@@ -57,7 +57,7 @@ public class DataAtom extends LeafAtom {
 	 */
 	public String getText() {
 		if (getFlags() == FLAG_CONTAINS_TEXT) {
-			return new String(data, Charset.forName("UTF-8"));
+			return new String(data, StandardCharsets.UTF_8);
 		}
 		return null;
 	}

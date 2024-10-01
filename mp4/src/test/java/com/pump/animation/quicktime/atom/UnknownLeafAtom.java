@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -21,12 +21,6 @@ import com.pump.io.GuardedOutputStream;
 public class UnknownLeafAtom extends LeafAtom {
 	protected byte[] data;
 	protected String id;
-
-	public UnknownLeafAtom(String id, byte[] data) {
-		super(null);
-		this.id = id;
-		this.data = data;
-	}
 
 	public UnknownLeafAtom(Atom parent, String id, GuardedInputStream in)
 			throws IOException {
@@ -59,14 +53,14 @@ public class UnknownLeafAtom extends LeafAtom {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int a = 0; a < Math.min(data.length, 64); a++) {
 			sb.append((char) data[a]);
 		}
 		if (data.length > 64)
 			sb.append("...");
 		return "UnknownLeafAtom[ \"" + getIdentifier() + "\", \""
-				+ sb.toString() + "\" ]";
+				+ sb + "\" ]";
 	}
 
 	/**

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -115,7 +115,7 @@ public class TimeToSampleAtom extends LeafAtom {
 
 	@Override
 	protected long getSize() {
-		return 16 + table.length * 8;
+		return 16 + table.length * 8L;
 	}
 
 	@Override
@@ -123,14 +123,14 @@ public class TimeToSampleAtom extends LeafAtom {
 		out.write(version);
 		write24Int(out, flags);
 		write32Int(out, table.length);
-		for (int a = 0; a < table.length; a++) {
-			table[a].write(out);
+		for (TimeToSampleEntry timeToSampleEntry : table) {
+			timeToSampleEntry.write(out);
 		}
 	}
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("[ ");
 		for (int a = 0; a < table.length; a++) {
 			if (a != 0) {
@@ -178,11 +178,11 @@ public class TimeToSampleAtom extends LeafAtom {
 	}
 
 	public long getDurationOfSample(long sampleIndex) {
-		for (int a = 0; a < table.length; a++) {
-			if (sampleIndex < table[a].sampleCount) {
-				return table[a].sampleDuration;
+		for (TimeToSampleEntry timeToSampleEntry : table) {
+			if (sampleIndex < timeToSampleEntry.sampleCount) {
+				return timeToSampleEntry.sampleDuration;
 			}
-			sampleIndex = sampleIndex - table[a].sampleCount;
+			sampleIndex = sampleIndex - timeToSampleEntry.sampleCount;
 		}
 		throw new RuntimeException(
 				"Could not find a sample at index " + sampleIndex);

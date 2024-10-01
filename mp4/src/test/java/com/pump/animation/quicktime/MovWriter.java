@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -12,13 +12,7 @@ package com.pump.animation.quicktime;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +72,7 @@ public abstract class MovWriter implements AutoCloseable {
 	 */
 	public static class InvalidDurationException
 			extends IllegalArgumentException {
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public InvalidDurationException(String msg) {
@@ -93,6 +88,7 @@ public abstract class MovWriter implements AutoCloseable {
 	 */
 	public static class InvalidFileLengthException
 			extends IllegalArgumentException {
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public InvalidFileLengthException(String msg) {
@@ -102,27 +98,19 @@ public abstract class MovWriter implements AutoCloseable {
 
 	public static final long DEFAULT_TIME_SCALE = 600;
 
-	private static class VideoSample {
-		final int duration;
-		final long fileLength;
-		final long dataStart;
-
-		public VideoSample(int duration, long dataStart, long fileLength)
-				throws InvalidDurationException, InvalidFileLengthException {
+	private record VideoSample(int duration, long dataStart, long fileLength) {
+		private VideoSample {
 			if (duration <= 0)
 				throw new InvalidDurationException("duration (" + duration
 						+ ") must be greater than zero.");
 			if (fileLength <= 0)
 				throw new InvalidFileLengthException("file length ("
 						+ fileLength + ") must be greater than zero.");
-			this.duration = duration;
-			this.fileLength = fileLength;
-			this.dataStart = dataStart;
 		}
 	}
 
 	class VideoTrack {
-		List<VideoSample> samples = new ArrayList<VideoSample>();
+		List<VideoSample> samples = new ArrayList<>();
 		protected int w = -1, h = -1;
 		long totalDuration;
 		TimeToSampleAtom stts = new TimeToSampleAtom();
@@ -261,7 +249,7 @@ public abstract class MovWriter implements AutoCloseable {
 		long totalDurationInMovieTimeScale;
 
 		// we might need to convert the endian-ness
-		boolean reverseBytePairs = false;
+		boolean reverseBytePairs;
 
 		long myTimeScale;
 		TimeToSampleAtom stts = new TimeToSampleAtom();
@@ -270,8 +258,7 @@ public abstract class MovWriter implements AutoCloseable {
 		ChunkOffsetAtom stco = new ChunkOffsetAtom();
 		int sampleMultiplier;
 
-		AudioTrack(AudioInputStream audio, float audioOffset)
-				throws IOException {
+		AudioTrack(AudioInputStream audio, float audioOffset) {
 			// hmm... I'm not sure that this logic has ever
 			// been tested, but it seems appropriate:
 			AudioFormat audioFormat = audio.getFormat();
@@ -305,7 +292,7 @@ public abstract class MovWriter implements AutoCloseable {
 					&& (!audioIn.getFormat().isBigEndian());
 
 			if (audioOffset > 0) {
-				/**
+				/*
 				 * Previously I tried using an EditAtom to change when an audio
 				 * track began playing, but that only worked for about 1 audio
 				 * track (when other audio tracks were added to the test: QT
@@ -388,7 +375,6 @@ public abstract class MovWriter implements AutoCloseable {
 		 *            is 600: then this should write 2 seconds of audio data.
 		 * @return true if data was written, false if the AudioInputStream has
 		 *         been depleted.
-		 * @throws IOException
 		 */
 		boolean writeAudio(long time) throws IOException {
 			long durationInMyTimeScale = (time * myTimeScale)
@@ -404,7 +390,7 @@ public abstract class MovWriter implements AutoCloseable {
 			return false;
 		}
 
-		void close() throws IOException {
+		void close() {
 			stts.addSampleTime(totalSamples, 1);
 
 			stsz.setSampleSize(1);
@@ -432,7 +418,7 @@ public abstract class MovWriter implements AutoCloseable {
 	}
 
 	/** The output stream we write the movie data to. */
-	private MeasuredOutputStream out;
+	private final MeasuredOutputStream out;
 
 	/** The file we're writing to. */
 	File dest;
@@ -457,7 +443,6 @@ public abstract class MovWriter implements AutoCloseable {
 	 *            the file data is written to. It is strongly recommended that
 	 *            this file name end with ".mov" (or ".MOV"), although this is
 	 *            not required.
-	 * @throws IOException
 	 */
 	public MovWriter(File file) throws IOException {
 		dest = file;
@@ -492,7 +477,6 @@ public abstract class MovWriter implements AutoCloseable {
 	 *            the start time (in seconds) of this audio in the movie. For
 	 *            example: if this is 5, then this audio will begin 5 seconds
 	 *            into the movie.
-	 * @throws IOException
 	 * @throws RuntimeException
 	 *             if you invoke this method after calling
 	 *             <code>addFrame()</code> or <code>close()</code>.
@@ -524,7 +508,6 @@ public abstract class MovWriter implements AutoCloseable {
 	 *            audio would normally last past this time: then it is cut off.
 	 *            (If the audio runs out before this time: then this argument
 	 *            has no effect.)
-	 * @throws IOException
 	 * @throws RuntimeException
 	 *             if you invoke this method after calling
 	 *             <code>addFrame()</code> or <code>close()</code>.
@@ -534,7 +517,7 @@ public abstract class MovWriter implements AutoCloseable {
 		if (closed)
 			throw new RuntimeException("this writer has already been closed");
 
-		if (videoTrack.isEmpty() == false)
+		if (!videoTrack.isEmpty())
 			throw new RuntimeException(
 					"cannot add audio after video data has been started");
 		AudioTrack newTrack;
@@ -542,9 +525,8 @@ public abstract class MovWriter implements AutoCloseable {
 		long sampleMin = (long) ((endTime - startTime)
 				* audio.getFormat().getFrameRate());
 		if (sampleMin < audio.getFrameLength()) {
-			AudioInputStream limitedAudioIn = new AudioInputStream(audio,
+			audio = new AudioInputStream(audio,
 					audio.getFormat(), sampleMin);
-			audio = limitedAudioIn;
 		}
 		newTrack = new AudioTrack(audio, startTime);
 
@@ -553,13 +535,13 @@ public abstract class MovWriter implements AutoCloseable {
 		newTracks[newTracks.length - 1] = newTrack;
 		audioTracks = newTracks;
 
-		/**
+		/*
 		 * The QT File Format says: In order to overcome any latencies in sound
 		 * playback, at least one second of sound data is placed at the
 		 * beginning of the interleaved data. This means that the sound and
 		 * video data are offset from each other in the file by one second.
 		 */
-		newTrack.writeAudio(DEFAULT_TIME_SCALE * 1);
+		newTrack.writeAudio(DEFAULT_TIME_SCALE);
 	}
 
 	@Override
@@ -582,7 +564,6 @@ public abstract class MovWriter implements AutoCloseable {
 	 *            an optional map of settings subclasses may use to encode this
 	 *            data. For example, the JPEGMovWriter may consult this map to
 	 *            determine the image quality of the JPEG it writes.
-	 * @throws IOException
 	 */
 	public synchronized void addFrame(float duration, BufferedImage bi,
 			Map<String, Object> settings) throws IOException {
@@ -620,7 +601,6 @@ public abstract class MovWriter implements AutoCloseable {
 	 *            is converted to a timescale of DEFAULT_TIME_SCALE.)
 	 * @param image
 	 *            the image to add.
-	 * @throws IOException
 	 */
 	public synchronized void addFrame(float duration, File image)
 			throws IOException {
@@ -661,8 +641,7 @@ public abstract class MovWriter implements AutoCloseable {
 	 *            the movie file. If false then the movie ends immediately. If
 	 *            an operation is canceled you should pass false here to speed
 	 *            up the time it takes to close everything out.
-	 * 
-	 * @throws IOException
+	 *
 	 */
 	public void close(boolean writeRemainingAudio) throws IOException {
 		synchronized (this) {
@@ -675,14 +654,14 @@ public abstract class MovWriter implements AutoCloseable {
 		try {
 			videoTrack.close();
 			if (writeRemainingAudio) {
-				writeAudioLoop: while (true) {
+				while (true) {
 					boolean audioRemaining = false;
 					for (AudioTrack audio : audioTracks) {
 						if (audio.writeAudio(DEFAULT_TIME_SCALE))
 							audioRemaining = true;
 					}
 					if (!audioRemaining)
-						break writeAudioLoop;
+						break;
 				}
 			}
 
@@ -716,9 +695,7 @@ public abstract class MovWriter implements AutoCloseable {
 		// 4 bytes of this file now that we can conclusively say
 		// how big the "mdat" atom is:
 
-		RandomAccessFile raf = null;
-		try {
-			raf = new RandomAccessFile(dest, "rw");
+		try (RandomAccessFile raf = new RandomAccessFile(dest, "rw")) {
 			raf.seek(8);
 			byte[] array = new byte[8];
 			array[0] = (byte) ((mdatSize >> 56) & 0xff);
@@ -730,8 +707,6 @@ public abstract class MovWriter implements AutoCloseable {
 			array[6] = (byte) ((mdatSize >> 8) & 0xff);
 			array[7] = (byte) (mdatSize & 0xff);
 			raf.write(array);
-		} finally {
-			raf.close();
 		}
 	}
 
@@ -743,19 +718,11 @@ public abstract class MovWriter implements AutoCloseable {
 	 * @param file
 	 *            the file to write
 	 * @return the number of bytes written.
-	 * @throws IOException
 	 */
 	protected static synchronized long write(OutputStream out, File file)
 			throws IOException {
-		FileInputStream in = null;
-		try {
-			in = new FileInputStream(file);
+		try (FileInputStream in = new FileInputStream(file)) {
 			return write(out, in, false);
-		} finally {
-			try {
-				in.close();
-			} catch (IOException e) {
-			}
 		}
 	}
 
@@ -770,7 +737,6 @@ public abstract class MovWriter implements AutoCloseable {
 	 *            whether every two bytes should be switched (to convert from
 	 *            one endian to another)
 	 * @return the number of bytes written.
-	 * @throws IOException
 	 */
 	protected static synchronized long write(OutputStream out, InputStream in,
 			boolean reverseBytePairs) throws IOException {
@@ -804,7 +770,6 @@ public abstract class MovWriter implements AutoCloseable {
 	 *            whether every two bytes should be switched (to convert from
 	 *            one endian to another)
 	 * @return the number of bytes written.
-	 * @throws IOException
 	 */
 	protected static synchronized long write(OutputStream out, InputStream in,
 			long maxBytes, boolean reverseBytePairs) throws IOException {
@@ -818,7 +783,7 @@ public abstract class MovWriter implements AutoCloseable {
 		int k = read(in, block, Math.min(block.length, (int) maxBytes));
 		if (reverseBytePairs)
 			reverseBytePairs(block, k);
-		loop: while (k != -1) {
+		while (k != -1) {
 			written += k;
 			out.write(block, 0, k);
 			k = read(in, block,
@@ -826,7 +791,7 @@ public abstract class MovWriter implements AutoCloseable {
 			if (reverseBytePairs)
 				reverseBytePairs(block, k);
 			if (written == maxBytes)
-				break loop;
+				break;
 		}
 		return written;
 	}
@@ -834,13 +799,10 @@ public abstract class MovWriter implements AutoCloseable {
 	/**
 	 * Reads bytes from an InputStream. This will always return an even number
 	 * of bytes.
-	 * 
-	 * @param bytesToRead
-	 * @return
 	 */
 	private static int read(InputStream in, byte[] dest, int bytesToRead)
 			throws IOException {
-		int read = 0;
+		int read;
 		if (bytesToRead % 2 == 1)
 			bytesToRead--;
 		read = in.read(dest, 0, bytesToRead);

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -73,8 +73,9 @@ public enum TextTypes {
 	NAME_AND_VERSION_OF_SOFTWARE_CREATOR("swr", true, false);
 	// @formatter:on
 
-	String code;
-	boolean qtff, mp4;
+	final String code;
+	final boolean qtff;
+	final boolean mp4;
 
 	TextTypes(String code, boolean qtff, boolean mp4) {
 		this.code = code;
@@ -95,8 +96,7 @@ public enum TextTypes {
 	 * If true then this property was described in the <a href=
 	 * "https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-SW1"
 	 * >QuickTime file format specification</a>.
-	 * 
-	 * @return
+	 *
 	 */
 	public boolean isQT() {
 		return qtff;

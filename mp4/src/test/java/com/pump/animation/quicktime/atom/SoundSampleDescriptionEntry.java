@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -24,7 +24,7 @@ public class SoundSampleDescriptionEntry extends SampleDescriptionEntry {
 	 * A 16-bit integer that holds the sample description version (currently 0
 	 * or 1)
 	 */
-	protected int version = 0;
+	protected int version;
 
 	/** A 16-bit integer that must be set to 0. */
 	protected int revision = 0;
@@ -107,10 +107,6 @@ public class SoundSampleDescriptionEntry extends SampleDescriptionEntry {
 	 */
 	protected long bytesPerSample;
 
-	/**
-	 * @param in
-	 * @throws IOException
-	 */
 	public SoundSampleDescriptionEntry(InputStream in) throws IOException {
 		super(in);
 		version = Atom.read16Int(in);
@@ -148,7 +144,7 @@ public class SoundSampleDescriptionEntry extends SampleDescriptionEntry {
 
 		this.version = 1;
 		this.samplesPerPacket = 1;
-		this.bytesPerPacket = 1 * bitsPerSample / 8;
+		this.bytesPerPacket = bitsPerSample / 8;
 		this.bytesPerFrame = bytesPerPacket * numberOfChannels;
 		this.bytesPerSample = bytesPerPacket;
 	}
@@ -171,9 +167,7 @@ public class SoundSampleDescriptionEntry extends SampleDescriptionEntry {
 			sampleRate = Atom.read16_16UnsignedFloat(in);
 		} catch (IOException e) {
 			// this should never happen
-			RuntimeException e2 = new RuntimeException();
-			e2.initCause(e);
-			throw e2;
+			throw new RuntimeException(e);
 		}
 	}
 

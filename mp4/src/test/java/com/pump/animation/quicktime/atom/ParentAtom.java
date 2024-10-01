@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -183,7 +183,7 @@ public class ParentAtom extends Atom {
 	 * <p>
 	 * If the track that the sample table atom is contained in does reference
 	 * data, then the following child atoms are required: sample description,
-	 * sample size, sample to chunk, and chunk offset. All of the subtables of
+	 * sample size, sample to chunk, and chunk offset. All the subtables of
 	 * the sample table use the same total sample count.
 	 * <p>
 	 * The sample description atom must contain at least one entry. A sample
@@ -292,7 +292,7 @@ public class ParentAtom extends Atom {
 					ATOM_TYPE_TRACK_APERTURE_MODE_DIMENSIONS, ATOM_TYPE_META,
 					ATOM_TYPE_ILST)));
 
-	protected List<Atom> children = new ArrayList<Atom>();
+	protected List<Atom> children = new ArrayList<>();
 	protected String id;
 
 	public ParentAtom(String id) {
@@ -304,7 +304,7 @@ public class ParentAtom extends Atom {
 			GuardedInputStream in) throws IOException {
 		super(parent);
 		this.id = id;
-		while (in.isAtLimit() == false) {
+		while (!in.isAtLimit()) {
 			Atom next = reader.read(this, in);
 			children.add(next);
 		}
@@ -317,7 +317,7 @@ public class ParentAtom extends Atom {
 
 	@Override
 	public Enumeration<Atom> children() {
-		return new EnumerationIterator<Atom>(children.iterator());
+		return new EnumerationIterator<>(children.iterator());
 	}
 
 	@Override
@@ -337,6 +337,7 @@ public class ParentAtom extends Atom {
 
 	@Override
 	public int getIndex(TreeNode node) {
+		//noinspection SuspiciousMethodCalls
 		return children.indexOf(node);
 	}
 
@@ -348,8 +349,7 @@ public class ParentAtom extends Atom {
 	@Override
 	protected long getSize() {
 		long sum = 8;
-		for (int a = 0; a < children.size(); a++) {
-			Atom atom = children.get(a);
+		for (Atom atom : children) {
 			if (atom != null)
 				sum += atom.getSize();
 		}
@@ -363,8 +363,7 @@ public class ParentAtom extends Atom {
 
 	@Override
 	protected void writeContents(GuardedOutputStream out) throws IOException {
-		for (int a = 0; a < children.size(); a++) {
-			Atom atom = children.get(a);
+		for (Atom atom : children) {
 			atom.write(out);
 		}
 	}

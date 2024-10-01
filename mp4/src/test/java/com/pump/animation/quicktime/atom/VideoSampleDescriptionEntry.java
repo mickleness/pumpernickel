@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -134,7 +134,7 @@ public class VideoSampleDescriptionEntry extends SampleDescriptionEntry {
 
 	/**
 	 * Optional; may be null. This is written after all other data.
-	 *
+	 * <p>
 	 * TODO: this appears necessary for the AtomReader parser to write
 	 * file identical to what it reads. But does it mean that we're
 	 * failing to parse important info?

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -70,13 +70,13 @@ public class UnknownSampleDescriptionEntry extends SampleDescriptionEntry {
 					+ "dataReference=" + dataReference + " ];";
 		}
 
-		String extra = "";
+		StringBuilder extra = new StringBuilder();
 		if (data.length <= 8) {
-			extra = " (";
-			for (int a = 0; a < data.length; a++) {
-				extra = extra + (data[a] & 0xff) + " ";
+			extra.append(" (");
+			for (byte datum : data) {
+				extra.append(datum & 0xff).append(" ");
 			}
-			extra = extra + ") ";
+			extra.append(") ");
 		}
 
 		return "UnknownSampleDescriptionEntry[ type=\"" + type + "\", "

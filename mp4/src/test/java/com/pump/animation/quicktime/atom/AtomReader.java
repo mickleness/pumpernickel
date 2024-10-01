@@ -1,20 +1,16 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
 package com.pump.animation.quicktime.atom;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,6 +31,7 @@ public class AtomReader {
 	 */
 	public static class UnsupportedFileException extends IOException {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public UnsupportedFileException(String msg) {
@@ -54,8 +51,7 @@ public class AtomReader {
 			.unmodifiableCollection(createLeadingAtomTypes());
 
 	private static Collection<String> createLeadingAtomTypes() {
-		Collection<String> c = new HashSet<>();
-		c.addAll(ParentAtom.PARENT_ATOM_TYPES);
+		Collection<String> c = new HashSet<>(ParentAtom.PARENT_ATOM_TYPES);
 		c.add(MovieHeaderAtom.ATOM_TYPE);
 		c.add(MediaHeaderAtom.ATOM_TYPE);
 		c.add(TrackHeaderAtom.ATOM_TYPE);
@@ -70,7 +66,6 @@ public class AtomReader {
 		return c;
 	}
 
-	byte[] sizeArray = new byte[4];
 	byte[] bigSizeArray = new byte[8];
 	List<String> readAtomTypes = new ArrayList<>();
 	FileType fileType = null;
@@ -89,14 +84,14 @@ public class AtomReader {
 	 */
 	public synchronized Atom[] readAll(InputStream in) throws IOException {
 		MeasuredInputStream in2 = new MeasuredInputStream(in);
-		List<Atom> v = new ArrayList<Atom>();
+		List<Atom> v = new ArrayList<>();
 		while (true) {
 			Atom atom = read(null, in2);
 			if (atom == null)
 				break;
 			v.add(atom);
 		}
-		return v.toArray(new Atom[v.size()]);
+		return v.toArray(new Atom[0]);
 	}
 
 	/**
@@ -135,8 +130,7 @@ public class AtomReader {
 				return new EmptyAtom(parent);
 			}
 
-			if (in instanceof GuardedInputStream) {
-				GuardedInputStream gis = (GuardedInputStream) in;
+			if (in instanceof GuardedInputStream gis) {
 				long inputLimit = gis.getRemainingLimit() + 4;
 				if (size > inputLimit) {
 					size = inputLimit;
@@ -177,11 +171,7 @@ public class AtomReader {
 						+ (j4 << 24L) + (j5 << 16L) + (j6 << 8L) + (j7 << 0L);
 				readSoFar += 8;
 			}
-		} catch (IOException e) {
-			if (readAtomTypes.size() < 3)
-				throw new UnsupportedFileException(e);
-			throw e;
-		} catch (RuntimeException e) {
+		} catch (IOException | RuntimeException e) {
 			if (readAtomTypes.size() < 3)
 				throw new UnsupportedFileException(e);
 			throw e;
@@ -207,8 +197,6 @@ public class AtomReader {
 	 * @return the atom read from the input stream. This may return a specific
 	 *         Atom subclass (like "MovieHeaderAtom"), or a generic
 	 *         UnknownLeafAtom.
-	 * 
-	 * @throws IOException
 	 */
 	protected Atom read(Atom parent, GuardedInputStream in, String atomType)
 			throws IOException {
@@ -238,11 +226,11 @@ public class AtomReader {
 							"sample description atoms must have a parent");
 
 				if (parent.getParent() != null
-						&& ((Atom) parent.getParent()).getChild(
+						&& parent.getParent().getChild(
 								VideoMediaInformationHeaderAtom.class) != null) {
 					return new VideoSampleDescriptionAtom(parent, in);
 				} else if (parent.getParent() != null
-						&& ((Atom) parent.getParent()).getChild(
+						&& parent.getParent().getChild(
 								SoundMediaInformationHeaderAtom.class) != null) {
 					return new SoundSampleDescriptionAtom(parent, in);
 				} else {

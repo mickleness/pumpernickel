@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -102,10 +102,9 @@ public class SampleToChunkAtom extends LeafAtom {
 	public void addChunk(long chunkIndex, long samplesPerChunk,
 			long sampleDescriptionID) {
 		if (entries.length == 0) {
-			SampleToChunkEntry[] newArray = new SampleToChunkEntry[] {
+			entries = new SampleToChunkEntry[] {
 					new SampleToChunkEntry(chunkIndex, samplesPerChunk,
 							sampleDescriptionID) };
-			entries = newArray;
 		} else {
 			for (int a = 0; a < entries.length; a++) {
 				if (entries[a].firstChunk <= chunkIndex
@@ -139,7 +138,7 @@ public class SampleToChunkAtom extends LeafAtom {
 
 	@Override
 	protected long getSize() {
-		return 16 + 12 * entries.length;
+		return 16 + 12L * entries.length;
 	}
 
 	@Override
@@ -147,14 +146,14 @@ public class SampleToChunkAtom extends LeafAtom {
 		out.write(version);
 		write24Int(out, flags);
 		write32Int(out, entries.length);
-		for (int a = 0; a < entries.length; a++) {
-			entries[a].write(out);
+		for (SampleToChunkEntry entry : entries) {
+			entry.write(out);
 		}
 	}
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("[ ");
 		for (int a = 0; a < entries.length; a++) {
 			if (a != 0) {

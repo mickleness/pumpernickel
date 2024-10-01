@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -101,7 +101,7 @@ public class EditListAtom extends LeafAtom {
 		version = read8Int(in);
 		flags = read24Int(in);
 
-		/**
+		/*
 		 * A 32-bit integer that specifies the number of entries in the edit
 		 * list atom that follows.
 		 */
@@ -130,7 +130,7 @@ public class EditListAtom extends LeafAtom {
 
 	@Override
 	protected long getSize() {
-		return 16 + 12 * table.length;
+		return 16 + 12L * table.length;
 	}
 
 	@Override
@@ -143,17 +143,17 @@ public class EditListAtom extends LeafAtom {
 		write8Int(out, version);
 		write24Int(out, flags);
 		write32Int(out, table.length);
-		for (int a = 0; a < table.length; a++) {
-			table[a].write(out);
+		for (EditListTableEntry editListTableEntry : table) {
+			editListTableEntry.write(out);
 		}
 	}
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("EditListAtom[ version=" + version
+		StringBuilder sb = new StringBuilder("EditListAtom[ version=" + version
 				+ ", flags=" + flags + ", data=[");
-		for (int a = 0; a < table.length; a++) {
-			sb.append(table[a] + " ");
+		for (EditListTableEntry editListTableEntry : table) {
+			sb.append(editListTableEntry).append(" ");
 		}
 		sb.append("]]");
 		return sb.toString();

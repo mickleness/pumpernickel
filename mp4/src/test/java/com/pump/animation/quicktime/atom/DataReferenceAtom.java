@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -124,8 +124,8 @@ public class DataReferenceAtom extends LeafAtom {
 	@Override
 	protected long getSize() {
 		long sum = 16;
-		for (int a = 0; a < entries.length; a++) {
-			sum += entries[a].getSize();
+		for (DataReferenceEntry entry : entries) {
+			sum += entry.getSize();
 		}
 		return sum;
 	}
@@ -135,14 +135,14 @@ public class DataReferenceAtom extends LeafAtom {
 		out.write(version);
 		write24Int(out, flags);
 		write32Int(out, entries.length);
-		for (int a = 0; a < entries.length; a++) {
-			entries[a].write(out);
+		for (DataReferenceEntry entry : entries) {
+			entry.write(out);
 		}
 	}
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("[ ");
 		for (int a = 0; a < entries.length; a++) {
 			if (a != 0) {

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -57,7 +57,7 @@ public class SampleSizeAtom extends LeafAtom {
 		flags = read24Int(in);
 		sampleSize = read32Int(in);
 		sampleCount = read32Int(in);
-		if (in.isAtLimit() == false) {
+		if (!in.isAtLimit()) {
 			sizeTable = new long[(int) sampleCount];
 			for (int a = 0; a < sizeTable.length; a++) {
 				sizeTable[a] = read32Int(in);
@@ -93,7 +93,7 @@ public class SampleSizeAtom extends LeafAtom {
 	protected long getSize() {
 		if (sizeTable == null)
 			return 20;
-		return 20 + sizeTable.length * 4;
+		return 20 + sizeTable.length * 4L;
 	}
 
 	@Override
@@ -105,8 +105,8 @@ public class SampleSizeAtom extends LeafAtom {
 			write32Int(out, sampleCount);
 		} else {
 			write32Int(out, sizeTable.length);
-			for (int a = 0; a < sizeTable.length; a++) {
-				write32Int(out, sizeTable[a]);
+			for (long l : sizeTable) {
+				write32Int(out, l);
 			}
 		}
 	}
@@ -118,7 +118,7 @@ public class SampleSizeAtom extends LeafAtom {
 			if (sizeTable.length > 50 && ABBREVIATE) {
 				entriesString = "[ ... ]";
 			} else {
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				sb.append("[ ");
 				for (int a = 0; a < sizeTable.length; a++) {
 					if (a != 0) {

@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -55,7 +55,6 @@ public class JPEGMovWriter extends MovWriter {
 	 * @param defaultQuality
 	 *            the default JPEG quality (from [0,1]) to use if a frame is
 	 *            added without otherwise specifying this value.
-	 * @throws IOException
 	 */
 	public JPEGMovWriter(File file, float defaultQuality) throws IOException {
 		super(file);
@@ -87,12 +86,11 @@ public class JPEGMovWriter extends MovWriter {
 	 * @param jpegQuality
 	 *            a value from [0,1] indicating the quality of this image. A
 	 *            value of 1 represents a losslessly encoded image.
-	 * @throws IOException
 	 */
 	public synchronized void addFrame(float duration, BufferedImage bi,
 			float jpegQuality) throws IOException {
-		Map<String, Object> settings = new HashMap<String, Object>(1);
-		settings.put(PROPERTY_QUALITY, Float.valueOf(jpegQuality));
+		Map<String, Object> settings = new HashMap<>(1);
+		settings.put(PROPERTY_QUALITY, jpegQuality);
 		super.addFrame(duration, bi, settings);
 	}
 
@@ -103,7 +101,7 @@ public class JPEGMovWriter extends MovWriter {
 			Map<String, Object> settings) throws IOException {
 		if (image.getType() == BufferedImage.TYPE_INT_ARGB
 				|| image.getType() == BufferedImage.TYPE_INT_ARGB_PRE) {
-			if (printWarning == false) {
+			if (!printWarning) {
 				printWarning = true;
 				System.err
 						.println("JPEGMovWriter Warning: a BufferedImage of type TYPE_INT_ARGB may produce unexpected results. The recommended type is TYPE_INT_RGB.");

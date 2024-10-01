@@ -1,10 +1,10 @@
 /**
  * This software is released as part of the Pumpernickel project.
- * 
+ * <p>
  * All com.pump resources in the Pumpernickel project are distributed under the
  * MIT License:
  * https://github.com/mickleness/pumpernickel/raw/master/License.txt
- * 
+ * <p>
  * More information about the Pumpernickel project is available here:
  * https://mickleness.github.io/pumpernickel/
  */
@@ -119,7 +119,7 @@ public class ChunkOffsetAtom extends LeafAtom {
 
 	@Override
 	protected long getSize() {
-		return 16 + offsetTable.length * 4;
+		return 16 + offsetTable.length * 4L;
 	}
 
 	@Override
@@ -127,8 +127,8 @@ public class ChunkOffsetAtom extends LeafAtom {
 		out.write(version);
 		write24Int(out, flags);
 		write32Int(out, offsetTable.length);
-		for (int a = 0; a < offsetTable.length; a++) {
-			write32Int(out, offsetTable[a]);
+		for (long l : offsetTable) {
+			write32Int(out, l);
 		}
 	}
 
@@ -138,7 +138,7 @@ public class ChunkOffsetAtom extends LeafAtom {
 		if (offsetTable.length > 50 && ABBREVIATE) {
 			entriesString = "[ ... ]";
 		} else {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append("[ ");
 			for (int a = 0; a < offsetTable.length; a++) {
 				if (a != 0) {
