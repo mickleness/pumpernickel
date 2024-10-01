@@ -544,11 +544,6 @@ public abstract class MovWriter implements AutoCloseable {
 		newTrack.writeAudio(DEFAULT_TIME_SCALE);
 	}
 
-	@Override
-	protected void finalize() throws Throwable {
-		close(false);
-	}
-
 	/**
 	 * Adds an image to this animation.
 	 * <P>
