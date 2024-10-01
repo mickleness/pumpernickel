@@ -48,9 +48,9 @@ public class EditListAtom extends LeafAtom {
 		float mediaRate;
 
 		EditListTableEntry(InputStream in) throws IOException {
-			trackDuration = Atom.read32Int(in);
-			mediaTime = Atom.read32Int(in);
-			mediaRate = Atom.read16_16Float(in);
+			trackDuration = read32Int(in);
+			mediaTime = read32Int(in);
+			mediaRate = read16_16Float(in);
 		}
 
 		EditListTableEntry(long trackDuration, long mediaTime,
@@ -73,9 +73,9 @@ public class EditListAtom extends LeafAtom {
 		}
 
 		void write(OutputStream out) throws IOException {
-			Atom.write32Int(out, trackDuration);
-			Atom.write32Int(out, mediaTime);
-			Atom.write16_16Float(out, mediaRate);
+			write32Int(out, trackDuration);
+			write32Int(out, mediaTime);
+			write16_16Float(out, mediaRate);
 		}
 
 		@Override
@@ -98,14 +98,14 @@ public class EditListAtom extends LeafAtom {
 
 	protected EditListAtom(Atom parent, InputStream in) throws IOException {
 		super(parent);
-		version = Atom.read8Int(in);
-		flags = Atom.read24Int(in);
+		version = read8Int(in);
+		flags = read24Int(in);
 
 		/**
 		 * A 32-bit integer that specifies the number of entries in the edit
 		 * list atom that follows.
 		 */
-		int numberOfEntries = (int) Atom.read32Int(in);
+		int numberOfEntries = (int) read32Int(in);
 
 		table = new EditListTableEntry[numberOfEntries];
 		for (int a = 0; a < numberOfEntries; a++) {
@@ -140,9 +140,9 @@ public class EditListAtom extends LeafAtom {
 
 	@Override
 	protected void writeContents(GuardedOutputStream out) throws IOException {
-		Atom.write8Int(out, version);
-		Atom.write24Int(out, flags);
-		Atom.write32Int(out, table.length);
+		write8Int(out, version);
+		write24Int(out, flags);
+		write32Int(out, table.length);
 		for (int a = 0; a < table.length; a++) {
 			table[a].write(out);
 		}

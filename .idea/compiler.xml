@@ -11,11 +11,12 @@
         <module name="pump-ui-text-editor" />
         <module name="pump-images" />
         <module name="pump-ui-buttons" />
-        <module name="pump-ui-throbber" />
         <module name="pump-labs" />
         <module name="pump-audio" />
-        <module name="pump-ui-colors" />
         <module name="pump-common" />
+        <module name="pump-mp4" />
+        <module name="pump-ui-throbber" />
+        <module name="pump-ui-colors" />
         <module name="pump-graphics" />
         <module name="pump-transitions" />
       </profile>
@@ -26,6 +27,7 @@
       <module name="image" target="14" />
       <module name="images" target="14" />
       <module name="labs" target="19" />
+      <module name="mp4" target="19" />
       <module name="pump-image" target="14" />
       <module name="pump-labs (1)" target="19" />
       <module name="pump-labs (2)" target="19" />

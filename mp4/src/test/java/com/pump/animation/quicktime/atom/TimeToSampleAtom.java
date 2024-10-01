@@ -57,8 +57,8 @@ public class TimeToSampleAtom extends LeafAtom {
 		}
 
 		public TimeToSampleEntry(InputStream in) throws IOException {
-			sampleCount = Atom.read32Int(in);
-			sampleDuration = Atom.read32Int(in);
+			sampleCount = read32Int(in);
+			sampleDuration = read32Int(in);
 		}
 
 		public long getSampleCount() {
@@ -75,8 +75,8 @@ public class TimeToSampleAtom extends LeafAtom {
 		}
 
 		protected void write(OutputStream out) throws IOException {
-			Atom.write32Int(out, sampleCount);
-			Atom.write32Int(out, sampleDuration);
+			write32Int(out, sampleCount);
+			write32Int(out, sampleDuration);
 		}
 	}
 

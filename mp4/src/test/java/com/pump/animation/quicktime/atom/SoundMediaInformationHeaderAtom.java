@@ -48,9 +48,9 @@ public class SoundMediaInformationHeaderAtom extends LeafAtom {
 			throws IOException {
 		super(parent);
 		version = in.read();
-		flags = Atom.read24Int(in);
-		balance = Atom.read16Int(in);
-		Atom.read16Int(in); // reserved unused space
+		flags = read24Int(in);
+		balance = read16Int(in);
+		read16Int(in); // reserved unused space
 	}
 
 	@Override
@@ -72,9 +72,9 @@ public class SoundMediaInformationHeaderAtom extends LeafAtom {
 	@Override
 	protected void writeContents(GuardedOutputStream out) throws IOException {
 		out.write(version);
-		Atom.write24Int(out, flags);
-		Atom.write16Int(out, balance);
-		Atom.write16Int(out, 0);
+		write24Int(out, flags);
+		write16Int(out, balance);
+		write16Int(out, 0);
 	}
 
 	/**

@@ -37,12 +37,12 @@ public class DataReferenceAtom extends LeafAtom {
 		}
 
 		public DataReferenceEntry(InputStream in) throws IOException {
-			long size = Atom.read32Int(in);
-			type = Atom.read32String(in);
+			long size = read32Int(in);
+			type = read32String(in);
 			version = in.read();
-			flags = Atom.read24Int(in);
+			flags = read24Int(in);
 			data = new byte[(int) size - 12];
-			Atom.read(in, data);
+			read(in, data);
 		}
 
 		public String getType() {
@@ -62,10 +62,10 @@ public class DataReferenceAtom extends LeafAtom {
 		}
 
 		protected void write(OutputStream out) throws IOException {
-			Atom.write32Int(out, 12 + data.length);
-			Atom.write32String(out, type);
+			write32Int(out, 12 + data.length);
+			write32String(out, type);
 			out.write(version);
-			Atom.write24Int(out, flags);
+			write24Int(out, flags);
 			out.write(data);
 		}
 

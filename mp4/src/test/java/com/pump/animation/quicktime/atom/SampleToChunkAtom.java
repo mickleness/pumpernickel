@@ -41,9 +41,9 @@ public class SampleToChunkAtom extends LeafAtom {
 		}
 
 		public SampleToChunkEntry(InputStream in) throws IOException {
-			firstChunk = Atom.read32Int(in);
-			samplesPerChunk = Atom.read32Int(in);
-			sampleDescriptionID = Atom.read32Int(in);
+			firstChunk = read32Int(in);
+			samplesPerChunk = read32Int(in);
+			sampleDescriptionID = read32Int(in);
 		}
 
 		public long getFirstChunk() {
@@ -65,9 +65,9 @@ public class SampleToChunkAtom extends LeafAtom {
 		}
 
 		protected void write(OutputStream out) throws IOException {
-			Atom.write32Int(out, firstChunk);
-			Atom.write32Int(out, samplesPerChunk);
-			Atom.write32Int(out, sampleDescriptionID);
+			write32Int(out, firstChunk);
+			write32Int(out, samplesPerChunk);
+			write32Int(out, sampleDescriptionID);
 		}
 	}
 

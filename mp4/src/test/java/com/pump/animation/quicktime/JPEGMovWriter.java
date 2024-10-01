@@ -26,7 +26,6 @@ import javax.imageio.stream.MemoryCacheImageOutputStream;
 import javax.swing.ProgressMonitor;
 
 import com.pump.animation.AnimationReader;
-import com.pump.animation.ResettableAnimationReader;
 import com.pump.animation.quicktime.atom.VideoSampleDescriptionEntry;
 
 /**

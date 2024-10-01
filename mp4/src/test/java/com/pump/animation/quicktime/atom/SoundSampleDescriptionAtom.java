@@ -16,38 +16,35 @@ import java.io.InputStream;
 import com.pump.io.MeasuredInputStream;
 
 /**
- * This is a SampleDescriptionAtom for video data.
+ * This is a SampleDescriptionAtom for sounds.
  */
-public class VideoSampleDescriptionAtom extends SampleDescriptionAtom {
+public class SoundSampleDescriptionAtom extends SampleDescriptionAtom {
 
-	public VideoSampleDescriptionAtom() {
+	public SoundSampleDescriptionAtom() {
 		super();
 	}
 
-	public VideoSampleDescriptionAtom(Atom parent, InputStream in)
+	public SoundSampleDescriptionAtom(Atom parent, InputStream in)
 			throws IOException {
 		super(parent, in);
 	}
 
 	@Override
-	protected VideoSampleDescriptionEntry readEntry(InputStream in)
+	protected SoundSampleDescriptionEntry readEntry(InputStream in)
 			throws IOException {
 		MeasuredInputStream measuredIn = new MeasuredInputStream(in);
-		VideoSampleDescriptionEntry returnValue = new VideoSampleDescriptionEntry(
+		SoundSampleDescriptionEntry returnValue = new SoundSampleDescriptionEntry(
 				measuredIn);
 		long remainingBytes = returnValue.inputSize - measuredIn.getReadBytes();
-		if (remainingBytes > 0) {
-			byte[] b = new byte[(int)remainingBytes];
-			Atom.read(in, b);
-			returnValue.extraBytes = b;
-		}
+		if (remainingBytes > 0)
+			skip(in, remainingBytes);
 		return returnValue;
 	}
 
-	public VideoSampleDescriptionEntry[] getSampleDescriptionEntries() {
-		VideoSampleDescriptionEntry[] copy = new VideoSampleDescriptionEntry[entries.length];
+	public SoundSampleDescriptionEntry[] getSampleDescriptionEntries() {
+		SoundSampleDescriptionEntry[] copy = new SoundSampleDescriptionEntry[entries.length];
 		for (int a = 0; a < entries.length; a++) {
-			copy[a] = (VideoSampleDescriptionEntry) entries[a];
+			copy[a] = (SoundSampleDescriptionEntry) entries[a];
 		}
 		return copy;
 	}
