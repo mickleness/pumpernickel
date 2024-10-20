@@ -16,12 +16,12 @@ import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 
 public interface AttributeData extends Serializable {
-	public void addAttributePropertyChangeListener(String propertyName,
+	void addAttributePropertyChangeListener(String propertyName,
 			PropertyChangeListener pcl);
 
-	public void addAttributePropertyChangeListener(PropertyChangeListener pcl);
+	void addAttributePropertyChangeListener(PropertyChangeListener pcl);
 
-	public void clearAttributes();
+	void clearAttributes();
 
 	/**
 	 * Return the value associated with a key.
@@ -31,16 +31,16 @@ public interface AttributeData extends Serializable {
 	 * 
 	 * @return the value associated with the provided key.
 	 */
-	public <T> T getAttribute(Key<T> key);
+	<T> T getAttribute(Key<T> key);
 
-	public String[] getAttributes();
+	String[] getAttributes();
 
-	public ReadWriteLock getAttributeLock();
+	ReadWriteLock getAttributeLock();
 
 	/**
 	 * Return a copy of all the key/value pairs in this object.
 	 */
-	public Map<String, Object> getAttributeMap();
+	Map<String, Object> getAttributeMap();
 
 	/**
 	 * Apply all the values in the incoming map.
@@ -51,10 +51,10 @@ public interface AttributeData extends Serializable {
 	 *            if true then this call also removes other attributes.. If
 	 *            false then this call can only add attributes.
 	 */
-	public void putAllAttributes(Map<String, Object> incomingData,
+	void putAllAttributes(Map<String, Object> incomingData,
 			boolean completeReplace);
 
-	public void removeAttributePropertyChangeListener(PropertyChangeListener pcl);
+	void removeAttributePropertyChangeListener(PropertyChangeListener pcl);
 
 	/**
 	 * Set a key/value pair in this object.
@@ -66,7 +66,7 @@ public interface AttributeData extends Serializable {
 	 * 
 	 * @return the previous value the key mapped to.
 	 */
-	public <T> T setAttribute(Key<T> key, T value);
+	<T> T setAttribute(Key<T> key, T value);
 
-	public int getAttributeCount();
+	int getAttributeCount();
 }
