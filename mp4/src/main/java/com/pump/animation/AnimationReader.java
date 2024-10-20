@@ -59,6 +59,20 @@ public interface AnimationReader {
 	int getFrameCount();
 
 	/**
+	 * Added primarily for GIF files, this returns the number of times an
+	 * animation should loop. If a file format, such as MOV, does not directly
+	 * specify this value, it should be 1 (indicating that this animation should
+	 * play exactly once). Note this may also return <code>LOOP_FOREVER</code>.
+	 * <P>
+	 * This method may return -1 until this reader is completely finished, this
+	 * indicates that this information is not yet known.
+	 *
+	 * @return the number loops, or <code>LOOP_FOREVER</code>, or -1 if it is
+	 *         not yet known.
+	 */
+	int getLoopCount();
+
+	/**
 	 * @return the duration of the last frame provided by
 	 *         <code>getNextFrame()</code> in seconds. In rare cases this may be
 	 *         zero (indicating that a frame should be played as fast as

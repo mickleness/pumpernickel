@@ -63,7 +63,7 @@ public class VideoSampleDescriptionEntry extends SampleDescriptionEntry {
 	 * generated the compressed data. Often this field contains 'appl' to
 	 * indicate Apple Computer, Inc.
 	 */
-	protected String vendor = "pump";
+	protected String vendor = "com/pump";
 
 	/**
 	 * A 32-bit integer containing a value from 0 to 1023 indicating the degree

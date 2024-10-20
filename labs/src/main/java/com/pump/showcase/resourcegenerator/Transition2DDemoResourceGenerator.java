@@ -28,6 +28,7 @@ import java.util.concurrent.Callable;
 
 import com.pump.animation.AnimationReader;
 import com.pump.animation.ResettableAnimationReader;
+import com.pump.image.gif.GifConstants;
 import com.pump.image.gif.GifWriter;
 import com.pump.image.gif.GifWriter.ColorReduction;
 import com.pump.transition.AbstractTransition;
@@ -223,7 +224,7 @@ public class Transition2DDemoResourceGenerator extends DemoResourceGenerator {
 			}
 
 			public int getLoopCount() {
-				return AnimationReader.LOOP_FOREVER;
+				return GifConstants.LOOP_FOREVER;
 			}
 
 			public double getFrameDuration() {
