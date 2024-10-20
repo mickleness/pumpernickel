@@ -57,10 +57,6 @@ public abstract class AbstractAnimation {
 			return frameCount;
 		}
 
-		public int getLoopCount() {
-			return 1;
-		}
-
 		public double getFrameDuration() {
 			return ((double) frames.get(ctr - 1).duration) / 1000.0;
 		}

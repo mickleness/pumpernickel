@@ -30,8 +30,9 @@ public abstract class DemoResourceGenerator {
 					new VectorImageDemoResourceGenerator(),
 					new ThumbnailGeneratorDemoResourceGenerator(),
 					new ShadowRendererDemoResourceGenerator(),
-					new Transition2DDemoResourceGenerator(),
-					new Transition3DDemoResourceGenerator(),
+					// these exist in the pump-apps repo now:
+//					new Transition2DDemoResourceGenerator(),
+//					new Transition3DDemoResourceGenerator(),
 					new BmpComparison(),
 					new ClipperComparison(),
 					new LoadImagesComparison(),

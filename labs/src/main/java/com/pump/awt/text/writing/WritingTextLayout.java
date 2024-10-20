@@ -27,7 +27,6 @@ import com.pump.animation.AnimationReader;
 import com.pump.animation.writing.WritingShape;
 import com.pump.animation.writing.WritingStroke;
 import com.pump.awt.Dimension2D;
-import com.pump.image.gif.GifConstants;
 import com.pump.util.ObservableProperties;
 import com.pump.util.ObservableProperties.Key;
 import com.pump.util.Resettable;
@@ -485,14 +484,6 @@ public class WritingTextLayout {
 		@Override
 		public int getFrameCount() {
 			return (int) Math.ceil(getDuration() * fps);
-		}
-
-		@Override
-		public int getLoopCount() {
-			if (loop) {
-				return GifConstants.LOOP_FOREVER;
-			}
-			return 1;
 		}
 
 		@Override
