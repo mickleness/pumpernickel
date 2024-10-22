@@ -39,6 +39,28 @@ public class JPEGMetaData {
 	}
 
 	/**
+	 * These are possible values of the "Orientation" metadata property.
+	 * These indicate that you should take the incoming pixel data and transform it
+	 * before presenting it to the user.
+	 */
+	public enum Orientation {
+		NONE(1),
+		FLIP_HORIZONTAL(2),
+		ROTATE_180(3),
+		FLIP_VERTICAL(4),
+		ROTATE_COUNTERCLOCKWISE_FLIP_VERTICAL(5),
+		ROTATE_CLOCKWISE(6),
+		ROTATE_CLOCKWISE_FLIP_VERTICAL(7),
+		ROTATE_COUNTERCLOCKWISE(8);
+
+		public final int exifOrientationValue;
+		Orientation(int exifOrientationValue) {
+			this.exifOrientationValue = exifOrientationValue;
+		}
+
+	}
+
+	/**
 	 * This property is set on QBufferedImages to identify which JPEG block a thumbnail originated from.
 	 */
 	public static final String PROPERTY_JPEG_MARKER = "jpeg-marker";
@@ -402,6 +424,15 @@ public class JPEGMetaData {
 
 	public QBufferedImage getThumbnail(int thumbnailIndex) {
 		return thumbnailImages.get(thumbnailIndex);
+	}
+
+	public Orientation getOrientation() {
+		for (Property p : properties) {
+			if (JPEGPropertyConstants.PROPERTY_ORIENTATION.equals(p.propertyName)) {
+				return (Orientation) p.value;
+			}
+		}
+		return Orientation.NONE;
 	}
 
 
