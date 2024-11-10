@@ -276,7 +276,7 @@ class ImageFileDirectory implements JPEGPropertyConstants {
 			}
 
 			if (tagNumber == 274) {
-				for (JPEGMetaData.Orientation t : JPEGMetaData.Orientation.values()) {
+				for (Orientation t : Orientation.values()) {
 					// I had files on my local computer resembles '0 3 0 0' AND '0 0 0 3'
 					// I'm not sure if I'm parsing something wrong or not, but just in
 					// case I'll look for both formats for now:
@@ -285,6 +285,10 @@ class ImageFileDirectory implements JPEGPropertyConstants {
 						value = t;
 						return;
 					}
+				}
+				if (fieldValue[0] == 0 && fieldValue[1] == 0 && fieldValue[2] == 0 && fieldValue[3] == 0) {
+					value = Orientation.NONE;
+					return;
 				}
 			}
 
