@@ -28,7 +28,7 @@ import javax.imageio.stream.FileImageInputStream;
 import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.MemoryCacheImageInputStream;
 
-import com.pump.image.jpeg.JPEGMetaData;
+import com.pump.image.jpeg.JPEG;
 import com.pump.image.bmp.BmpDecoder;
 
 /**
@@ -93,7 +93,7 @@ public class ImageSize {
 					// intentionally empty
 				}
 			} else if (filename.endsWith(".jpg") || filename.endsWith(".jpeg")) {
-				return JPEGMetaData.getSize(file);
+				return JPEG.getSize(file, true);
 			}
 
 			return getSizeUsingImageIO(file);
