@@ -98,18 +98,22 @@ public enum Orientation {
     };
 
     public final int exifOrientationValue;
-    private final boolean transposeSize;
+
+    /**
+     * True if this Orientation switches the width and height.
+     */
+    public final boolean isTransposed;
 
     Orientation(int exifOrientationValue, boolean transposeSize) {
         this.exifOrientationValue = exifOrientationValue;
-        this.transposeSize = transposeSize;
+        this.isTransposed = transposeSize;
     }
 
     /**
      * Return the size an image will become after applying this Orientation.
      */
     public Dimension apply(Dimension imageSize) {
-        if (transposeSize)
+        if (isTransposed)
             return new Dimension(imageSize.height, imageSize.width);
         return new Dimension(imageSize.width, imageSize.height);
     }
@@ -126,17 +130,37 @@ public enum Orientation {
      * @return an image that complies with this Orientation. This may return the incoming argument.
      */
     public BufferedImage apply(BufferedImage src) {
+        return apply(src, null);
+    }
+
+    /**
+     * Apply this Orientation to a given image.
+     *
+     * @param src the image we need to apply this orientation to.
+     * @param dst the optional image we'll store the modified src image in. If this Orientation does not
+     *            require writing a new (dst) image: then this argument is ignored.
+     * @return an image that complies with this Orientation. This may return the incoming argument.
+     */
+    public BufferedImage apply(BufferedImage src, BufferedImage dst) {
         AffineTransform tx = getTransform(new Dimension(src.getWidth(),src.getHeight()));
         if (tx.isIdentity())
             return src;
 
-        BufferedImage dst;
-        if (transposeSize) {
-            dst = new BufferedImage(src.getHeight(), src.getWidth(), src.getType());
+        if (isTransposed) {
+            if (dst == null) {
+                dst = new BufferedImage(src.getHeight(), src.getWidth(), src.getType());
+            } else if (dst.getWidth() < src.getHeight() || dst.getHeight() < src.getWidth()) {
+                throw new IllegalArgumentException("the dst image was " + dst.getWidth() + "x" + dst.getHeight()+", but it needed to be at least " + src.getHeight() + "x"+ src.getWidth());
+            }
         } else {
             // TODO: it would be nice if we didn't always allocate a new image here.
-            // FLIP_HORIZONTAL works if we reuse src, but ROTATE_180 does not
-            dst = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
+            // FLIP_HORIZONTAL works if we reuse src, but ROTATE_180 does not. We could
+            // try a pixel conversion here and see if it's faster. (Maybe multithread, too?)
+            if (dst == null) {
+                dst = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
+            } else if (dst.getWidth() < src.getWidth() || dst.getHeight() < src.getHeight()) {
+                throw new IllegalArgumentException("the dst image was " + dst.getWidth() + "x" + dst.getHeight()+", but it needed to be at least " + src.getWidth() + "x"+ src.getHeight());
+            }
         }
         Graphics2D g = dst.createGraphics();
         g.transform(tx);

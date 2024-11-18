@@ -30,7 +30,9 @@ public interface JPEGMetaDataListener {
 	 * @param height
 	 *            the height of the new thumbnail.
 	 */
-	boolean isThumbnailAccepted(String markerName, int width, int height);
+	default boolean isThumbnailAccepted(String markerName, int width, int height) {
+		return false;
+	}
 
 	/**
 	 * This is called when the reader identifies a new property
@@ -42,7 +44,7 @@ public interface JPEGMetaDataListener {
 	 * @param value
 	 *            the property value
 	 */
-	void addProperty(String markerName, String propertyName, Object value);
+	default void addProperty(String markerName, String propertyName, Object value) {}
 
 	/**
 	 * This is called after {@link #isThumbnailAccepted(String, int, int)}
@@ -53,7 +55,7 @@ public interface JPEGMetaDataListener {
 	 * @param bi
 	 *            the new thumbnail that was just constructed.
 	 */
-	void addThumbnail(String markerName, BufferedImage bi);
+	default void addThumbnail(String markerName, BufferedImage bi) {}
 
 	/**
 	 * This is called when a new comment is parsed.
@@ -63,19 +65,19 @@ public interface JPEGMetaDataListener {
 	 * @param comment
 	 *            the comment that was just parsed.
 	 */
-	void addComment(String markerName, String comment);
+	default void addComment(String markerName, String comment) {}
 
 	/**
 	 * This is called to indicate a new InputStream is being read. (The default
 	 * implementation is single-threaded, so you should see a simple/clear path
 	 * of execution from this start method to the close method.)
 	 */
-	void startFile();
+	default void startFile() {}
 
 	/**
 	 * This is called to indicate an InputStream is finished.
 	 */
-	void endFile();
+	default void endFile() {}
 
 	/**
 	 * This is called while reading the "baseline" or "start of frame" block.
@@ -85,10 +87,10 @@ public interface JPEGMetaDataListener {
 	 * @param height the height of the image
 	 * @param numberOfComponents the number of components (1 or 3)
 	 */
-	void imageDescription(int bitsPerPixel, int width, int height, int numberOfComponents);
+	default void imageDescription(int bitsPerPixel, int width, int height, int numberOfComponents) {}
 
 	/**
 	 * This is called when an exception occurs reading from a JPEG input stream.
 	 */
-	void processException(Exception e, String markerCode);
+	default void processException(Exception e, String markerCode) {}
 }

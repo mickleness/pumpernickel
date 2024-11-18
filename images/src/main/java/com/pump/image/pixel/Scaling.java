@@ -10,9 +10,7 @@
  */
 package com.pump.image.pixel;
 
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
@@ -22,6 +20,7 @@ import java.util.function.BiFunction;
 
 import com.pump.image.jpeg.JPEGMetaData;
 import com.pump.image.jpeg.JPEGMetaDataListener;
+import com.pump.image.jpeg.Orientation;
 import com.pump.io.FileInputStreamSource;
 import com.pump.io.InputStreamSource;
 import com.pump.io.URLInputStreamSource;
@@ -502,7 +501,7 @@ public class Scaling {
 	private final Image image;
 	private final File imageFile;
 	private final URL imageURL;
-	private final boolean isBMP;
+	private final boolean isBMP, isJPEG;
 
 	private BiFunction<Dimension, Boolean, Dimension> sizeFunction;
 	private ImageType destType;
@@ -513,6 +512,7 @@ public class Scaling {
 		imageFile = null;
 		imageURL = null;
 		isBMP = false;
+		isJPEG = false;
 	}
 
 	private void initialize(BiFunction<Dimension, Boolean, Dimension> sizeFunction, ImageType destType, BufferedImage dest) {
@@ -525,14 +525,18 @@ public class Scaling {
 		image = null;
 		imageFile = null;
 		this.imageURL = Objects.requireNonNull(imageURL);
-		isBMP = imageURL.toString().toLowerCase().endsWith(".bmp");
+		String s = imageURL.toString().toLowerCase();
+		isBMP = s.endsWith(".bmp");
+		isJPEG = s.endsWith(".jpg") || s.endsWith(".jpeg");
 	}
 
 	private Scaling(File imageFile) {
 		image = null;
 		this.imageFile = Objects.requireNonNull(imageFile);
 		imageURL = null;
-		isBMP = imageFile.getAbsolutePath().toLowerCase().endsWith(".bmp");
+		String s = imageFile.getAbsolutePath().toLowerCase();
+		isBMP = s.endsWith(".bmp");
+		isJPEG = s.endsWith(".jpg") || s.endsWith(".jpeg");
 	}
 
 	private QBufferedImage scaleImage() throws IOException {
@@ -542,51 +546,61 @@ public class Scaling {
 
 		PixelIterator srcIter;
 		Image flushableImage = null;
+		AtomicReference<Orientation> orientation = new AtomicReference<>();
 		try {
 			if (image instanceof BufferedImage bi) {
 				srcIter = BufferedImageIterator.create(bi);
 			} else if (image != null) {
 				srcIter = new ImagePixelIterator(image);
-			} else if (imageFile != null) {
-				QBufferedImage scaledEmbeddedThumbnail = getScaledEmbeddedThumbnail(imageFile.getName(), new FileInputStreamSource(imageFile));
-				if (scaledEmbeddedThumbnail != null)
-					return scaledEmbeddedThumbnail;
-
-				flushableImage = Toolkit.getDefaultToolkit().createImage(imageFile.getAbsolutePath());
-				srcIter = new ImagePixelIterator(flushableImage);
-			} else if (imageURL != null) {
-				QBufferedImage scaledEmbeddedThumbnail = getScaledEmbeddedThumbnail(imageURL.getPath(), new URLInputStreamSource(imageURL));
-				if (scaledEmbeddedThumbnail != null)
-					return scaledEmbeddedThumbnail;
-
-				flushableImage = Toolkit.getDefaultToolkit().createImage(imageURL);
-				srcIter = new ImagePixelIterator(flushableImage);
 			} else {
-				// our constructors should safeguard us from this ever happening
-				throw new IllegalStateException();
+				InputStreamSource iss;
+				if (imageFile != null) {
+					iss = new FileInputStreamSource(imageFile);
+				} else if (imageURL != null) {
+					iss = new URLInputStreamSource(imageURL);
+				} else {
+					// our constructors should safeguard us from this ever happening
+					throw new IllegalStateException();
+				}
+
+				if (isJPEG) {
+					if (sizeFunction != null) {
+						QBufferedImage scaledEmbeddedThumbnail = getScaledEmbeddedThumbnail(iss, orientation);
+						if (scaledEmbeddedThumbnail != null)
+							return scaledEmbeddedThumbnail;
+					} else {
+						try (InputStream in = iss.createInputStream()) {
+							orientation.set(JPEGMetaData.getOrientation(in));
+						}
+					}
+				}
+
+				if (imageFile != null) {
+					flushableImage = Toolkit.getDefaultToolkit().createImage(imageFile.getAbsolutePath());
+					srcIter = new ImagePixelIterator(flushableImage);
+				} else {
+					flushableImage = Toolkit.getDefaultToolkit().createImage(imageURL);
+					srcIter = new ImagePixelIterator(flushableImage);
+				}
 			}
 
-			return scaleImage(srcIter);
+			return scaleImage(srcIter, orientation.get());
 		} finally {
 			if (flushableImage != null)
 				flushableImage.flush();
 		}
 	}
 
-	private QBufferedImage getScaledEmbeddedThumbnail(String filename, InputStreamSource inputStreamSource) throws IOException {
-		String str = filename.toLowerCase();
-		if (!(str.endsWith(".jpg") || str.endsWith(".jpeg")))
-			return null;
-		if (sizeFunction == null)
-			return null;
-
+	private QBufferedImage getScaledEmbeddedThumbnail(InputStreamSource inputStreamSource, AtomicReference<Orientation> orientation) throws IOException {
 		AtomicReference<BufferedImage> thumbnail = new AtomicReference<>();
 		JPEGMetaDataListener listener = new JPEGMetaDataListener() {
 
 			@Override
 			public boolean isThumbnailAccepted(String markerName, int width,
 											   int height) {
-				Dimension scaledSize = sizeFunction.apply(new Dimension(width, height), true);
+				Dimension size = new Dimension(width, height);
+				size = orientation.get().apply(size);
+				Dimension scaledSize = sizeFunction.apply(size, true);
 				return scaledSize != null;
 			}
 
@@ -598,32 +612,8 @@ public class Scaling {
 			@Override
 			public void addProperty(String markerName, String propertyName,
 									Object value) {
-				// intentionally empty
-			}
-
-			@Override
-			public void addComment(String markerName, String comment) {
-				// intentionally empty
-			}
-
-			@Override
-			public void endFile() {
-				// intentionally empty
-			}
-
-			@Override
-			public void imageDescription(int bitsPerPixel, int width, int height, int numberOfComponents) {
-				// intentionally empty
-			}
-
-			@Override
-			public void processException(Exception e, String markerCode) {
-				// intentionally empty
-			}
-
-			@Override
-			public void startFile() {
-				// intentionally empty
+				if (value instanceof Orientation o)
+					orientation.set(o);
 			}
 		};
 		try (InputStream in = inputStreamSource.createInputStream()) {
@@ -631,18 +621,28 @@ public class Scaling {
 			BufferedImage bi = thumbnail.get();
 			if (bi == null)
 				return null;
+			if (orientation.get() != null)
+				bi = orientation.get().apply(bi);
 			QBufferedImage returnValue = scale(bi, sizeFunction, destType, dest);
 			bi.flush();
 			return returnValue;
 		}
 	}
 
-	private QBufferedImage scaleImage(PixelIterator iter) {
+	/**
+	 * @param orientation optional; may be null
+	 */
+	private QBufferedImage scaleImage(PixelIterator iter, Orientation orientation) {
+		if (orientation == null)
+			orientation = Orientation.NONE;
 		Dimension srcSize = new Dimension(iter.getWidth(), iter.getHeight());
+		srcSize = orientation.apply(srcSize);
 		Dimension destSize = sizeFunction == null ? srcSize : sizeFunction.apply(srcSize, false);
 
 		if (destSize == null)
 			return null;
+
+		destSize = orientation.apply(destSize);
 
 		if (dest != null) {
 			ImageType k = ImageType.get(dest.getType());
@@ -654,7 +654,19 @@ public class Scaling {
 		}
 
 		PixelIterator pi = new ScalingIterator(destType, iter, destSize.width, destSize.height);
-		return BufferedImageIterator.writeToImage(pi, dest);
+		if (orientation == Orientation.NONE) {
+			return BufferedImageIterator.writeToImage(pi, dest);
+		}
+
+		BufferedImage bi = BufferedImageIterator.writeToImage(pi, null);
+		bi = orientation.apply(bi, dest);
+		if (dest != null && bi != null) {
+			Graphics2D g = dest.createGraphics();
+			g.drawImage(bi, 0, 0, null);
+			g.dispose();
+			bi = dest;
+		}
+		return QBufferedImage.get(bi);
 	}
 
 	private QBufferedImage scaleImage_BMP() throws IOException {
@@ -673,7 +685,7 @@ public class Scaling {
 
 		try (InputStream in = inSrc.createInputStream()) {
 			try (PixelIterator iter = BmpDecoderIterator.get(in)) {
-				return scaleImage(iter);
+				return scaleImage(iter, null);
 			}
 		}
 	}

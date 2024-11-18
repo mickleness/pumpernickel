@@ -1,19 +1,20 @@
 package com.pump.image.jpeg;
 
+import com.pump.awt.DimensionUtils;
+import com.pump.image.pixel.Scaling;
+
 import javax.imageio.*;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiFunction;
 
 /**
  * Static helper methods related exclusively to reading & writing JPEGs.
@@ -101,45 +102,15 @@ public class JPEG {
             JPEGMetaData.read(in, new JPEGMetaDataListener() {
 
                 @Override
-                public boolean isThumbnailAccepted(String markerName, int width, int height) {
-                    return false;
-                }
-
-                @Override
                 public void addProperty(String markerName, String propertyName, Object value) {
                     if (value instanceof Orientation orientation)
                         orientationRef.set(orientation);
                 }
 
                 @Override
-                public void addThumbnail(String markerName, BufferedImage bi) {
-                    // intentionally empty
-                }
-
-                @Override
-                public void addComment(String markerName, String comment) {
-                    // intentionally empty
-                }
-
-                @Override
-                public void startFile() {
-                    // intentionally empty
-                }
-
-                @Override
-                public void endFile() {
-                    // intentionally empty
-                }
-
-                @Override
                 public void imageDescription(int bitsPerPixel, int width, int height, int numberOfComponents) {
                     returnValue.width = width;
                     returnValue.height = height;
-                }
-
-                @Override
-                public void processException(Exception e, String markerCode) {
-                    // intentionally empty
                 }
             });
             if (returnValue.width == -1)
@@ -148,5 +119,39 @@ public class JPEG {
                 return orientationRef.get().apply(returnValue);
             return returnValue;
         }
+    }
+
+    /**
+     * Read a JPEG image file. There are 3 main reasons to use this method instead of
+     * {@link ImageIO#read(File)}:
+     * <ul><li>This takes into account a JPEG's orientation. So this may rotate or flip what ImageIO would normally return.</li>
+     * <li>This may use the {@link Scaling} class to avoid loading the entire JPEG image into memory.</li>
+     * <li>This may automatically grab embedded thumbnails (if they match or exceed the `maxSize` argument).</li></ul>
+     *
+     * @param maxSize the optional maximum size to constrain the returned image to.
+     *                For example: if the JPEG image file is 6000x4000, but the
+     *                maximum size is 200x200, then this method will return an
+     *                image that is 200x133. When non-null this uses the {@link Scaling}
+     *                class, which tries (when possible) to scale an image on the fly
+     *                (instead of reading the whole image into memory).
+     */
+    public static BufferedImage read(File file, Dimension maxSize) throws IOException {
+        if (maxSize == null) {
+            BufferedImage bi = ImageIO.read(file);
+            Orientation orientation;
+            try (FileInputStream fileIn = new FileInputStream(file)) {
+                orientation = JPEGMetaData.getOrientation(fileIn);
+            }
+            return orientation.apply(bi);
+        }
+
+        BiFunction<Dimension, Boolean, Dimension> sizeFunction = (imageSize, isThumbnail) -> {
+            Dimension reducedSize = DimensionUtils.scaleProportionally(imageSize, maxSize, true);
+            if (!isThumbnail && reducedSize == null)
+                return imageSize;
+
+            return reducedSize;
+        };
+        return Scaling.scale(file, sizeFunction, null, null);
     }
 }

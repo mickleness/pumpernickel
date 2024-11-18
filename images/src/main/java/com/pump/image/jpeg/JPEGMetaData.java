@@ -40,6 +40,23 @@ public class JPEGMetaData {
 	public static final String PROPERTY_JPEG_MARKER = "jpeg-marker";
 
 	/**
+	 * Return the Orientation embedded in a JPEG file.
+	 */
+	public static Orientation getOrientation(InputStream in) throws IOException {
+		AtomicReference<Orientation> returnValue = new AtomicReference<>(Orientation.NONE);
+		read(in, new JPEGMetaDataListener() {
+			@Override
+			public void addProperty(String markerName, String propertyName, Object value) {
+				if (value instanceof Orientation orientation)
+					returnValue.set(orientation);
+				// TODO: instead of returning `void` this method could return an instruction
+				// to stop reading, similar to FileVisitor / FileVisitResult
+			}
+		});
+		return returnValue.get();
+	}
+
+	/**
 	 * Read the data from a JPEG input stream and notify the listener as data is read (or considered)
 	 *
 	 * @throws IOException
