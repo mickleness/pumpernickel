@@ -34,7 +34,7 @@ import com.pump.swing.JThrobber;
 /**
  * The ComponentUI for {@link com.pump.swing.JThrobber}.
  */
-public abstract class ThrobberUI extends ComponentUI {
+public class ThrobberUI extends ComponentUI {
 
 	/**
 	 * The ThrobberUI may be applied to multiple JThrobbers, but the
@@ -73,14 +73,14 @@ public abstract class ThrobberUI extends ComponentUI {
 		}
 
 		protected void install() {
-			Color foreground = throbber.getUI().getDefaultForeground();
+			Color foreground = throbber.getUI().painter.getPreferredForeground();
 			if (foreground != null) {
 				originalForeground = throbber.getForeground();
 				throbber.setForeground(foreground);
 			}
 			throbber.addPropertyChangeListener(JThrobber.KEY_ACTIVE,
 					activeListener);
-			timer = new Timer(throbber.getUI().repaintInterval,
+			timer = new Timer(25,
 					repaintActionListener);
 			reevaluateTimer();
 			throbber.addHierarchyListener(hierarchyListener);
@@ -128,17 +128,17 @@ public abstract class ThrobberUI extends ComponentUI {
 			.getName() + ".period-multiplier";
 
 	public static ComponentUI createUI(JComponent c) {
-		return new AquaThrobberUI();
+		return new ThrobberUI(new AquaThrobberPainter());
 	}
 
-	protected final int repaintInterval;
+	protected ThrobberPainter painter;
 
-	/**
-	 * @param repaintInterval
-	 *            The number of milliseconds between repaints.
-	 */
-	protected ThrobberUI(int repaintInterval) {
-		this.repaintInterval = repaintInterval;
+	public ThrobberUI(ThrobberPainter painter) {
+		setPainter(painter);
+	}
+
+	public void setPainter(ThrobberPainter painter) {
+		this.painter = Objects.requireNonNull(painter);
 	}
 
 	/**
@@ -185,28 +185,24 @@ public abstract class ThrobberUI extends ComponentUI {
 	protected void paint(Graphics g0, JComponent jc, Float fixedFraction) {
 		Graphics2D g = (Graphics2D) g0.create();
 		try {
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
-			g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
-					RenderingHints.VALUE_STROKE_PURE);
-			g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
-					RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 			paintBackground(g, jc);
 
 			if (jc != null && !((JThrobber) jc).isActive())
 				return;
 
-			Dimension d = getPreferredSize(jc);
-			if (jc != null) {
-				if (d == null)
-					d = new Dimension(16, 16);
-				double sx = ((double) jc.getWidth()) / ((double) d.width);
-				double sy = ((double) jc.getHeight()) / ((double) d.height);
-				double scale = Math.min(sx, sy);
-				g.scale(scale, scale);
+			Color foregroundColor = jc.getForeground();
+
+			float f;
+			if (fixedFraction != null) {
+				f = fixedFraction;
+			} else {
+				int p = getPeriod(jc, painter.getPreferredPeriod());
+				f = System.currentTimeMillis() % p;
+				f = f / ((float) p);
 			}
 
-			paintForeground(g, jc, d, fixedFraction);
+			Dimension d = jc.getSize();
+			painter.paint(g, f, Math.min(d.width, d.height), foregroundColor);
 		} finally {
 			g.dispose();
 		}
@@ -219,28 +215,6 @@ public abstract class ThrobberUI extends ComponentUI {
 			g.fillRect(0, 0, jc.getWidth(), jc.getHeight());
 		}
 	}
-
-	/**
-	 * Paints the foreground. The Graphics2D passed to this object is configured
-	 * as if you were painting <code>size</code> argument (which is the
-	 * preferred size). So if the preferred size of this ThrobberUI is 16x16,
-	 * you always paint as if you're painting to a 16x16 area.
-	 * 
-	 * @param g
-	 *            the graphics to paint to.
-	 * @param jc
-	 *            the component to paint, this may be null if used as an Icon.
-	 * @param size
-	 *            the dimensions to paint to. Assume these are the dimensions of
-	 *            the component you are painting (the Graphics2D has been
-	 *            transformed to work within these dimensions).
-	 * @param fixedFraction
-	 *            an optional fixed fraction from [0, 1] representing the state
-	 *            of this animation. If null: then this should be derived from
-	 *            the current time.
-	 */
-	protected abstract void paintForeground(Graphics2D g, JComponent jc,
-			Dimension size, Float fixedFraction);
 
 	@Override
 	public void installUI(final JComponent c) {
@@ -261,17 +235,8 @@ public abstract class ThrobberUI extends ComponentUI {
 
 	@Override
 	public Dimension getPreferredSize(JComponent c) {
-		return getPreferredSize();
+		return painter.getPreferredSize();
 	}
-
-	/**
-	 * Return the default foreground color for this throbber. If this is not
-	 * null: then during <code>installUI()</code> this will be assigned as the
-	 * new foreground color.
-	 */
-	public abstract Color getDefaultForeground();
-
-	public abstract Dimension getPreferredSize();
 
 	@Override
 	public void uninstallUI(JComponent c) {
@@ -279,80 +244,5 @@ public abstract class ThrobberUI extends ComponentUI {
 		ThrobberData data = getThrobberData((JThrobber) c);
 		data.uninstall();
 		c.putClientProperty(PROPERTY_THROBBER_DATA, null);
-	}
-
-	/**
-	 * Create an Icon representation of this ThrobberUI.
-	 * 
-	 * @param fixedFraction
-	 *            the fraction from [0,1] indicating this icon's animation
-	 *            progress, or null if this icon should update based on
-	 *            <code>System.currentTimeMillis()</code>.
-	 * @param size
-	 *            the dimensions of this icon, or null if the default size
-	 *            should be used.
-	 */
-	public Icon createIcon(Float fixedFraction, Dimension size) {
-		return new ThrobberIcon(this, fixedFraction, size);
-	}
-
-	private static class ThrobberIcon implements Icon {
-		final int width;
-		final int height;
-		final Float fixedFraction;
-		final ThrobberUI ui;
-		final Dimension defaultSize;
-
-		/**
-		 * 
-		 * @param fraction
-		 *            the fraction from [0,1] indicating this icon's animation
-		 *            progress, or null if this icon should update based on
-		 *            <code>System.currentTimeMillis()</code>.
-		 */
-		public ThrobberIcon(ThrobberUI ui, Float fraction, Dimension size) {
-			if (ui == null) {
-				throw new NullPointerException();
-			}
-			if (fraction != null) {
-				if (fraction < 0 || fraction > 1)
-					throw new IllegalArgumentException("fraction (" + fraction
-							+ ") must be null or a float between [0, 1]");
-			}
-
-			defaultSize = ui.getPreferredSize();
-			this.ui = ui;
-			this.fixedFraction = fraction;
-			if (size == null) {
-				size = defaultSize;
-			}
-			width = size.width;
-			height = size.height;
-		}
-
-		@Override
-		public int getIconHeight() {
-			return height;
-		}
-
-		@Override
-		public int getIconWidth() {
-			return width;
-		}
-
-		@Override
-		public void paintIcon(Component c, Graphics g0, int x, int y) {
-			Graphics2D g = (Graphics2D) g0.create();
-			try {
-				g.translate(x, y);
-				double sx = (width) / ((float) defaultSize.width);
-				double sy = (height) / ((float) defaultSize.height);
-				g.scale(sx, sy);
-
-				ui.paint(g, null, fixedFraction);
-			} finally {
-				g.dispose();
-			}
-		}
 	}
 }

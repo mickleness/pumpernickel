@@ -44,12 +44,7 @@ import javax.swing.JComponent;
  * the period client properties {@link ThrobberUI#PERIOD_KEY} or
  * {@link ThrobberUI#PERIOD_MULTIPLIER_KEY}.
  */
-public class ChasingArrowsThrobberUI extends ThrobberUI {
-
-	/**
-	 * The default duration (in ms) it takes to complete a cycle.
-	 */
-	public static final int DEFAULT_PERIOD = 2000;
+public class ChasingArrowsThrobberPainter extends ThrobberPainter {
 
 	private static final float PI = (float) Math.PI;
 	private static final int[] x = new int[] { 8, 8, 11 };
@@ -61,32 +56,15 @@ public class ChasingArrowsThrobberUI extends ThrobberUI {
 	private Arc2D arc = new Arc2D.Float(3, 3, 10, 10, 65, 140, Arc2D.OPEN);
 	private GeneralPath path = new GeneralPath();
 
-	public ChasingArrowsThrobberUI() {
-		super(1000 / 24);
-	}
-
 	@Override
-	protected synchronized void paintForeground(Graphics2D g, JComponent jc,
-			Dimension size, Float fixedFraction) {
-
-		g.setStroke(stroke);
-
-		float f;
-		if (fixedFraction != null) {
-			f = fixedFraction;
-		} else {
-			int p = getPeriod(jc, DEFAULT_PERIOD);
-			f = System.currentTimeMillis() % p;
-			f = f / ((float) p);
-		}
+	public void doPaint(Graphics2D g, float f, Color foreground) {
 		f = f * 2 * PI;
 
-		Color color = jc == null ? getDefaultForeground() : jc.getForeground();
-		g.setColor(color);
+		g.setStroke(stroke);
+		g.setColor(foreground);
 
 		for (int k = 0; k < 2; k++) {
-			transform.setToRotation(f + k * Math.PI, size.width / 2,
-					size.height / 2);
+			transform.setToRotation(f + k * Math.PI, 8, 8);
 
 			path.reset();
 			path.moveTo(x[0], y[0]);
@@ -104,12 +82,22 @@ public class ChasingArrowsThrobberUI extends ThrobberUI {
 	}
 
 	@Override
+	public int getPreferredPeriod() {
+		return 2000;
+	}
+
+	@Override
+	public int getPreferredRepaintInterval() {
+		return 1000/24;
+	}
+
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(16, 16);
 	}
 
 	@Override
-	public Color getDefaultForeground() {
+	public Color getPreferredForeground() {
 		return Color.darkGray;
 	}
 }

@@ -29,11 +29,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.inspector.Inspector;
-import com.pump.plaf.AquaThrobberUI;
-import com.pump.plaf.ChasingArrowsThrobberUI;
-import com.pump.plaf.LabelCellRenderer;
-import com.pump.plaf.PulsingCirclesThrobberUI;
-import com.pump.plaf.ThrobberUI;
+import com.pump.plaf.*;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JThrobber;
 import com.pump.swing.popover.JPopover;
@@ -50,7 +46,7 @@ import com.pump.swing.popover.JPopover;
 public class ThrobberDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
-	JComboBox<Class<? extends ThrobberUI>> typeComboBox = new JComboBox<>();
+	JComboBox<Class<? extends ThrobberPainter>> typeComboBox = new JComboBox<>();
 	JSlider sizeSlider = new ShowcaseSlider(8, 100, 16);
 	JSlider rateSlider = new ShowcaseSlider(50, 200, 100);
 	JThrobber throbber = new JThrobber();
@@ -111,17 +107,18 @@ public class ThrobberDemo extends ShowcaseExampleDemo {
 		colorCheckBox.addActionListener(actionListener);
 		typeComboBox.addActionListener(actionListener);
 
-		typeComboBox.addItem(AquaThrobberUI.class);
-		typeComboBox.addItem(ChasingArrowsThrobberUI.class);
-		typeComboBox.addItem(PulsingCirclesThrobberUI.class);
+		typeComboBox.addItem(AquaThrobberPainter.class);
+		typeComboBox.addItem(ChasingArrowsThrobberPainter.class);
+		typeComboBox.addItem(PulsingCirclesThrobberPainter.class);
+		typeComboBox.addItem(CircularThrobberPainter.class);
 
 		typeComboBox.setRenderer(
-				new LabelCellRenderer<Class<? extends ThrobberUI>>(typeComboBox,
+				new LabelCellRenderer<Class<? extends ThrobberPainter>>(typeComboBox,
 						true) {
 
 					@Override
 					protected void formatLabel(
-							Class<? extends ThrobberUI> value) {
+							Class<? extends ThrobberPainter> value) {
 						label.setText(value.getSimpleName());
 					}
 
@@ -132,7 +129,8 @@ public class ThrobberDemo extends ShowcaseExampleDemo {
 		Class<?> c = (Class<?>) typeComboBox.getSelectedItem();
 		ThrobberUI ui;
 		try {
-			ui = (ThrobberUI) c.newInstance();
+			ThrobberPainter painter = (ThrobberPainter) c.newInstance();
+			ui = new ThrobberUI(painter);
 			throbber.setUI(ui);
 			int size = sizeSlider.getValue();
 			throbber.setPreferredSize(new Dimension(size, size));
@@ -178,7 +176,7 @@ public class ThrobberDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { JThrobber.class, AquaThrobberUI.class,
-				ChasingArrowsThrobberUI.class, PulsingCirclesThrobberUI.class };
+		return new Class[] { JThrobber.class, AquaThrobberPainter.class,
+				ChasingArrowsThrobberPainter.class, PulsingCirclesThrobberPainter.class };
 	}
 }

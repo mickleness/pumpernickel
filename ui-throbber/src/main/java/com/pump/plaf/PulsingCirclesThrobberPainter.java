@@ -42,38 +42,16 @@ import javax.swing.JComponent;
  * {@link ThrobberUI#PERIOD_MULTIPLIER_KEY}.
  *
  */
-public class PulsingCirclesThrobberUI extends ThrobberUI {
-
-	// TODO: the demo gifs are out of date; they should be regenerated.
-
-	/**
-	 * The default duration (in ms) it takes to complete a cycle.
-	 */
-	public static final int DEFAULT_PERIOD = 750;
-
-	public PulsingCirclesThrobberUI() {
-		super(1000 / 24);
-	}
+public class PulsingCirclesThrobberPainter extends ThrobberPainter {
 
 	@Override
-	protected synchronized void paintForeground(Graphics2D g, JComponent jc,
-			Dimension size, Float fixedFraction) {
-		float f;
-		if (fixedFraction != null) {
-			f = fixedFraction;
-		} else {
-			int p = getPeriod(jc, DEFAULT_PERIOD);
-			float t = System.currentTimeMillis() % p;
-			f = t / p;
-		}
-
-		Color color = jc == null ? getDefaultForeground() : jc.getForeground();
-		g.setColor(color);
+	public void doPaint(Graphics2D g, float f, Color foreground) {
+		g.setColor(foreground);
 		for (int a = 0; a < 8; a++) {
 			double z = a / 8.0;
 			double r = 6;
-			double x = size.width / 2 + r * Math.cos(Math.PI * 2 * z);
-			double y = size.width / 2 + r * Math.sin(Math.PI * 2 * z);
+			double x = 8 + r * Math.cos(Math.PI * 2 * z);
+			double y = 8 + r * Math.sin(Math.PI * 2 * z);
 			double k = 2.2f * ((z - f + 1) % 1);
 
 			// this is what makes it accelerate quickly to full size and decelerate slowly:
@@ -87,12 +65,22 @@ public class PulsingCirclesThrobberUI extends ThrobberUI {
 	}
 
 	@Override
+	public int getPreferredPeriod() {
+		return 750;
+	}
+
+	@Override
+	public int getPreferredRepaintInterval() {
+		return 1000/24;
+	}
+
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(16, 16);
 	}
 
 	@Override
-	public Color getDefaultForeground() {
+	public Color getPreferredForeground() {
 		return Color.darkGray;
 	}
 }

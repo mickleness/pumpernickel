@@ -46,8 +46,9 @@ import com.pump.icon.PauseIcon;
 import com.pump.icon.RefreshIcon;
 import com.pump.icon.StarIcon;
 import com.pump.icon.TriangleIcon;
-import com.pump.plaf.AquaThrobberUI;
+import com.pump.plaf.AquaThrobberPainter;
 import com.pump.plaf.LabelCellRenderer;
+import com.pump.plaf.ThrobberIcon;
 import com.pump.plaf.decorate.BasicDecoration;
 import com.pump.plaf.decorate.DecoratedListUI;
 import com.pump.plaf.decorate.DecoratedListUI.ListDecoration;
@@ -462,7 +463,7 @@ public class DecoratedDemo extends ShowcaseDemo {
 		 */
 		RepaintingDecoration progressDecoration = new RepaintingDecoration(
 				new BasicDecoration(IconUtils.createPaddedIcon(
-						(new AquaThrobberUI().createIcon(null, null)),
+						new ThrobberIcon(new AquaThrobberPainter()),
 						ICON_INSETS)) {
 					@Override
 					public boolean isVisible(JTree tree, Object value,

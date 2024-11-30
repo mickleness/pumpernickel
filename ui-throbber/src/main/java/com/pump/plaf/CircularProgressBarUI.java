@@ -25,7 +25,7 @@ import java.beans.PropertyChangeListener;
 /**
  * This ProgressBarUI renders as a circle. The rendering model used will stretch
  * to whatever the largest circle is that can be painted in the bounds provided.
- * You are welcome to call <code>myProgressBar.setPreferredSize(..)</code> to
+ * You can call <code>myProgressBar.setPreferredSize(..)</code> to
  * create either a small or large arc. This UI can function at small sizes (like
  * 12x12), but the text become illegible so it shouldn't be used with
  * {@link javax.swing.JProgressBar#isStringPainted() isStringPainted()}.
@@ -40,7 +40,7 @@ import java.beans.PropertyChangeListener;
  * <p>
  * <h3>Determinate Behavior</h3>
  * <p>
- * For a determinate progress bar, this renders two complementary arcs use the
+ * For a determinate progress bar, this renders two complementary arcs using the
  * JProgressBar's foreground and background colors. For example, if
  * {@link javax.swing.JProgressBar#getPercentComplete()} is .25, then this
  * renders an arc from the 12:00 position clockwise to the 3:00 position using
@@ -50,7 +50,7 @@ import java.beans.PropertyChangeListener;
  * If {@link javax.swing.JProgressBar#isStringPainted() isStringPainted()}
  * returns true then this renders the percent complete inside the circle/arc.
  * The font is based on {@link javax.swing.JProgressBar#getFont()}, but the font
- * size will be automatically selected to fit well within the arc. (That is: the
+ * size will be automatically scaled to fit well within the arc. (That is: the
  * font family and style you assign is respected, but the font size is
  * calculated by the UI.)
  * <p>
@@ -450,26 +450,6 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 */
 	protected void paintIndeterminate(Graphics2D g, int radius,
 			float strokeWidth, int centerX, int centerY) {
-
-		strokeWidth = Math.min(strokeWidth, radius);
-		Color color = progressBar.getForeground();
-
-		// this is not a perfect replica of Material's indeterminate arc...
-		// but it's good enough for now.
-
-		long period = 1500;
-		float k = ((float) (System.currentTimeMillis() % period))
-				/ ((float) period);
-		double startAngle = 360
-				* Math.pow(.5 + Math.sin(k * Math.PI - Math.PI / 2.0) / 2.0, 2)
-				+ 1 * k * 360;
-
-		k = (k + .5f) % 1f;
-		double extent = 30 + 240 * Math.pow(
-				.5 + Math.sin(2 * k * Math.PI - 3 * Math.PI / 2.0) / 2.0, 1);
-
-		paintArc(g, color, centerX, centerY, startAngle, extent, radius
-				- strokeWidth / 2, strokeWidth);
 	}
 
 	/**
@@ -606,7 +586,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 * @param strokeWidth
 	 *            the stroke width
 	 */
-	protected void paintArc(Graphics2D g, Color color, double centerX,
+	static void paintArc(Graphics2D g, Color color, double centerX,
 			double centerY, double startAngle, double extent, double radius,
 			float strokeWidth) {
 		g = (Graphics2D) g.create();
