@@ -44,7 +44,7 @@ import javax.swing.JComponent;
  * the period client properties {@link ThrobberUI#PERIOD_KEY} or
  * {@link ThrobberUI#PERIOD_MULTIPLIER_KEY}.
  */
-public class ChasingArrowsThrobberPainter extends ThrobberPainter {
+public class ChasingArrowsThrobberPainter extends ScaledThrobberPainter {
 
 	private static final float PI = (float) Math.PI;
 	private static final int[] x = new int[] { 8, 8, 11 };
@@ -84,11 +84,6 @@ public class ChasingArrowsThrobberPainter extends ThrobberPainter {
 	@Override
 	public int getPreferredPeriod() {
 		return 2000;
-	}
-
-	@Override
-	public int getPreferredRepaintInterval() {
-		return 1000/24;
 	}
 
 	@Override

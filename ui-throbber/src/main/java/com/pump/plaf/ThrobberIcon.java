@@ -35,16 +35,8 @@ public class ThrobberIcon implements Icon {
     }
 
     @Override
-    public void paintIcon(Component c, Graphics g0, int x, int y) {
-        Graphics2D g = (Graphics2D) g0.create();
-        try {
-            int size = Math.min(getIconWidth(), getIconHeight());
-            int dx = (getIconWidth() - size) / 2;
-            int dy = (getIconHeight() - size) / 2;
-            g.translate(x + dx, y + dy);
-            painter.paint(g, null, size, c.getForeground());
-        } finally {
-            g.dispose();
-        }
+    public void paintIcon(Component c, Graphics g, int x, int y) {
+        Rectangle r = new Rectangle(x, y, getIconWidth(), getIconHeight());
+        painter.paint((Graphics2D)g, r, null, c.getForeground());
     }
 }

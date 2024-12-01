@@ -42,7 +42,7 @@ import java.awt.geom.Line2D;
  * the period client properties {@link ThrobberUI#PERIOD_KEY} or
  * {@link ThrobberUI#PERIOD_MULTIPLIER_KEY}.
  */
-public class AquaThrobberPainter extends ThrobberPainter {
+public class AquaThrobberPainter extends ScaledThrobberPainter {
 	private static final int[] opacities = new int[] {255, 240, 225, 200, 160, 130, 115, 100, 90, 80, 70, 60};
 
 	@Override
@@ -53,8 +53,8 @@ public class AquaThrobberPainter extends ThrobberPainter {
 		for (int a = 0; a < 12; a++) {
 			g.setColor(new Color(
 					foreground.getRed(),
-					foreground.getBlue(),
 					foreground.getGreen(),
+					foreground.getBlue(),
 					opacities[(i + a) % 12]
 			));
 			double theta = -((double) a) / (12.0) * Math.PI * 2;
@@ -68,11 +68,6 @@ public class AquaThrobberPainter extends ThrobberPainter {
 	@Override
 	public int getPreferredPeriod() {
 		return 500;
-	}
-
-	@Override
-	public int getPreferredRepaintInterval() {
-		return 500/12;
 	}
 
 	@Override

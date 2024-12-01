@@ -14,21 +14,17 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.Timer;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.pump.inspector.AnimatingInspectorPanel;
 import com.pump.inspector.Inspector;
-import com.pump.plaf.CircularProgressBarUI;
+import com.pump.inspector.InspectorRowPanel;
+import com.pump.plaf.*;
 import com.pump.swing.JColorWell;
 import com.pump.swing.JThrobber;
 import com.pump.swing.popover.JPopover;
@@ -45,9 +41,10 @@ import com.pump.swing.popover.JPopover;
 public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
+	Collection<InspectorRowPanel> determinateControls = new ArrayList<>();
+
 	JSlider sizeSlider = new ShowcaseSlider(10, 120, 90);
-	JRadioButton indeterminateButton = new JRadioButton("Indeterminate", false);
-	JRadioButton determinateButton = new JRadioButton("Determinate", true);
+	JComboBox<Class<? extends ThrobberPainter>> styleComboBox = new JComboBox<>();
 	JProgressBar progressBar = new JProgressBar(0, 100);
 	JSpinner progressSpinner = new JSpinner(
 			new SpinnerNumberModel(0, 0, 100, 5));
@@ -77,11 +74,25 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 
 	};
 
-	ActionListener determinateListener = new ActionListener() {
+	ActionListener styleListener = new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			progressBar.setIndeterminate(indeterminateButton.isSelected());
+			Class<? extends ThrobberPainter> style = (Class<? extends ThrobberPainter>) styleComboBox.getSelectedItem();
+			if (style == null) {
+				progressBar.setIndeterminate(false);
+			} else {
+				progressBar.setIndeterminate(true);
+				try {
+					ThrobberPainter painter = style.newInstance();
+					progressBar.putClientProperty(CircularProgressBarUI.PROPERTY_THROBBER_PAINTER, painter);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+			for (InspectorRowPanel r : determinateControls) {
+				r.setVisible(!progressBar.isIndeterminate());
+			}
 		}
 
 	};
@@ -210,24 +221,22 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 		JPopover.add(sizeSlider, " pixels");
 		JPopover.add(strokeSlider, " pixels");
 
-		Inspector layout = new Inspector(configurationPanel);
-		layout.addRow(new JLabel("Size:"), sizeSlider, true);
-		layout.addRow(new JLabel("Style:"), indeterminateButton,
-				determinateButton);
-		layout.addRow(new JLabel("Value:"), progressSpinner, false);
-		layout.addRow(new JLabel("String Painted:"), stringOnButton,
-				stringOffButton);
-		layout.addRow(new JLabel("Animate Value:"), animateOnButton,
-				animateOffButton);
-		layout.addRow(new JLabel("Foreground:"), foregroundColor, false);
-		layout.addRow(new JLabel("Background:"), backgroundColor, false);
-		layout.addRow(new JLabel("Effects:"), pulseCheckBox, transitionCheckBox,
-				sparkCheckBox, accelerateCheckBox);
-		layout.addRow(strokeCheckBox, strokeSlider, true);
+		JPanel animatingInspectorPanel = new AnimatingInspectorPanel();
+		configurationPanel.add(animatingInspectorPanel);
 
-		ButtonGroup g1 = new ButtonGroup();
-		g1.add(indeterminateButton);
-		g1.add(determinateButton);
+		Inspector layout = new Inspector(animatingInspectorPanel);
+		layout.addRow(new JLabel("Size:"), sizeSlider, true);
+		layout.addRow(new JLabel("Style:"), styleComboBox);
+		determinateControls.add(layout.addRow(new JLabel("Value:"), progressSpinner, false));
+		determinateControls.add(layout.addRow(new JLabel("String Painted:"), stringOnButton,
+				stringOffButton));
+		determinateControls.add(layout.addRow(new JLabel("Animate Value:"), animateOnButton,
+				animateOffButton));
+		layout.addRow(new JLabel("Foreground:"), foregroundColor, false);
+		determinateControls.add(layout.addRow(new JLabel("Background:"), backgroundColor, false));
+		determinateControls.add(layout.addRow(new JLabel("Effects:"), pulseCheckBox, transitionCheckBox,
+				sparkCheckBox, accelerateCheckBox));
+		determinateControls.add(layout.addRow(strokeCheckBox, strokeSlider, true));
 
 		ButtonGroup g2 = new ButtonGroup();
 		g2.add(animateOnButton);
@@ -245,9 +254,29 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 		sizeSlider.addChangeListener(sizeListener);
 		sizeListener.stateChanged(null);
 
-		indeterminateButton.addActionListener(determinateListener);
-		determinateButton.addActionListener(determinateListener);
-		determinateListener.actionPerformed(null);
+		styleComboBox.addItem(null);
+		styleComboBox.addItem(AquaThrobberPainter.class);
+		styleComboBox.addItem(ChasingArrowsThrobberPainter.class);
+		styleComboBox.addItem(CircularThrobberPainter.class);
+		styleComboBox.addItem(PulsingCirclesThrobberPainter.class);
+
+		styleComboBox.setRenderer(
+				new LabelCellRenderer<>(styleComboBox,
+						true) {
+
+					@Override
+					protected void formatLabel(
+							Class<? extends ThrobberPainter> value) {
+						String str = value == null ? "Determinate" : value.getSimpleName();
+						if (str.endsWith("ThrobberPainter"))
+							str = str.substring(0, str.length() - "ThrobberPainter".length());
+						label.setText(str);
+					}
+
+				});
+
+		styleComboBox.addActionListener(styleListener);
+		styleListener.actionPerformed(null);
 
 		animateOnButton.addActionListener(animateListener);
 		animateOffButton.addActionListener(animateListener);

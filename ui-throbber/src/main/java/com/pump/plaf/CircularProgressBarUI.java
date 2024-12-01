@@ -135,8 +135,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 
 	/*
 	 * Looking for something simpler? Check out:
-	 * https://java-swing-tips.blogspot
-	 * .com/2014/06/how-to-create-circular-progress.html
+	 * https://java-swing-tips.blogspot.com/2014/06/how-to-create-circular-progress.html
 	 */
 
 	public static Color COLOR_DEFAULT_FOREGROUND = getDefaultForegroundColor();
@@ -172,6 +171,13 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 */
 	public static final String PROPERTY_TRANSITION = CircularProgressBarUI.class
 			.getName() + "#transition";
+
+	/**
+	 * This client property maps to a PainterThrobber that is used to paint when
+	 * the JProgressBar is set to indeterminate mode.
+	 */
+	public static final String PROPERTY_THROBBER_PAINTER = CircularProgressBarUI.class
+			.getName() + "#throbberPainter";
 	/**
 	 * This client property maps to a Number indicating the stroke width the
 	 * arcs should use. By default this UI calculates a "reasonable" stroke
@@ -192,6 +198,8 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 * The degrees the spark spans.
 	 */
 	private static final int SPARK_EXTENT = 20;
+
+	private static final ThrobberPainter DEFAULT_THROBBER_PAINTER = new CircularThrobberPainter();
 
 	/**
 	 * Create an AffineTransform that flips everything horizontally around a
@@ -450,6 +458,11 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 */
 	protected void paintIndeterminate(Graphics2D g, int radius,
 			float strokeWidth, int centerX, int centerY) {
+		ThrobberPainter p = (ThrobberPainter) progressBar.getClientProperty(PROPERTY_THROBBER_PAINTER);
+		if (p == null)
+			p = DEFAULT_THROBBER_PAINTER;
+		Rectangle r = new Rectangle(0, 0, progressBar.getWidth(), progressBar.getHeight());
+		p.paint(g, r, null, progressBar.getForeground());
 	}
 
 	/**
@@ -491,9 +504,9 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		}
 		double extent = v * 360;
 		paintArc(g, progressBar.getForeground(), centerX, centerY, 0, extent,
-				radius - strokeWidth / 2, strokeWidth);
+				radius - strokeWidth / 2, strokeWidth, true);
 		paintArc(g, progressBar.getBackground(), centerX, centerY, extent,
-				360 - extent, radius - strokeWidth / 2, strokeWidth);
+				360 - extent, radius - strokeWidth / 2, strokeWidth, true);
 
 		Number sparkAngle = (Number) progressBar
 				.getClientProperty(PROPERTY_SPARK_ANGLE);
@@ -505,7 +518,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 			if (b2 >= 0) {
 				Color sparkColor = new Color(0xddffffff, true);
 				paintArc(g, sparkColor, centerX, centerY, b1, b2 - b1, radius
-						- strokeWidth / 2, strokeWidth);
+						- strokeWidth / 2, strokeWidth, true);
 			}
 		}
 
@@ -588,7 +601,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 */
 	static void paintArc(Graphics2D g, Color color, double centerX,
 			double centerY, double startAngle, double extent, double radius,
-			float strokeWidth) {
+			float strokeWidth, boolean flatEdge) {
 		g = (Graphics2D) g.create();
 		g.transform(flipHorizontal(centerX));
 		g.rotate(-Math.PI / 2, centerX, centerY);
@@ -596,7 +609,8 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		Arc2D progressArc = new Arc2D.Double(centerX - radius,
 				centerY - radius, radius * 2, radius * 2, startAngle, extent,
 				Arc2D.OPEN);
-		g.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT,
+		int cap = flatEdge ? BasicStroke.CAP_BUTT : BasicStroke.CAP_ROUND;
+		g.setStroke(new BasicStroke(strokeWidth, cap,
 				BasicStroke.JOIN_MITER, 10));
 		g.draw(progressArc);
 		g.dispose();

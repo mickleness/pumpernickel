@@ -42,7 +42,7 @@ import javax.swing.JComponent;
  * {@link ThrobberUI#PERIOD_MULTIPLIER_KEY}.
  *
  */
-public class PulsingCirclesThrobberPainter extends ThrobberPainter {
+public class PulsingCirclesThrobberPainter extends ScaledThrobberPainter {
 
 	@Override
 	public void doPaint(Graphics2D g, float f, Color foreground) {
@@ -67,11 +67,6 @@ public class PulsingCirclesThrobberPainter extends ThrobberPainter {
 	@Override
 	public int getPreferredPeriod() {
 		return 750;
-	}
-
-	@Override
-	public int getPreferredRepaintInterval() {
-		return 1000/24;
 	}
 
 	@Override
