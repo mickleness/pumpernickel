@@ -38,9 +38,4 @@ public class CircularThrobberPainter implements ThrobberPainter {
     public Dimension getPreferredSize() {
         return new Dimension(20, 20);
     }
-
-    @Override
-    public Color getPreferredForeground() {
-        return Color.gray;
-    }
 }

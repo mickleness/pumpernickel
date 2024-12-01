@@ -73,9 +73,4 @@ public class PulsingCirclesThrobberPainter extends ScaledThrobberPainter {
 	public Dimension getPreferredSize() {
 		return new Dimension(16, 16);
 	}
-
-	@Override
-	public Color getPreferredForeground() {
-		return Color.darkGray;
-	}
 }

@@ -26,7 +26,6 @@ import com.pump.inspector.Inspector;
 import com.pump.inspector.InspectorRowPanel;
 import com.pump.plaf.*;
 import com.pump.swing.JColorWell;
-import com.pump.swing.JThrobber;
 import com.pump.swing.popover.JPopover;
 
 /**
@@ -340,6 +339,6 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 
 	@Override
 	public Class<?>[] getClasses() {
-		return new Class[] { CircularProgressBarUI.class, JProgressBar.class, JThrobber.class };
+		return new Class[] { CircularProgressBarUI.class, JProgressBar.class, ThrobberPainter.class };
 	}
 }

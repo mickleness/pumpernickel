@@ -52,7 +52,7 @@ import com.pump.desktop.cache.CacheManager;
 import com.pump.desktop.logging.SessionLog;
 import com.pump.io.FileUtils;
 import com.pump.io.IOUtils;
-import com.pump.swing.JThrobber;
+import com.pump.plaf.ThrobberIcon;
 
 public class BugReporter {
 	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
@@ -143,7 +143,7 @@ public class BugReporter {
 		private static final long serialVersionUID = 1L;
 
 		JButton button = new JButton("Report...");
-		JThrobber throbber = new JThrobber();
+		JLabel throbber = new JLabel(new ThrobberIcon());
 		JLabel errorLabel = new JLabel("Error");
 		FileLabel fileLabel = new FileLabel(DnDConstants.ACTION_COPY);
 

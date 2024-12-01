@@ -31,9 +31,9 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
+import com.pump.plaf.ThrobberIcon;
 import com.pump.swing.DialogFooter;
 import com.pump.swing.DialogFooter.EscapeKeyBehavior;
-import com.pump.swing.JThrobber;
 import com.pump.swing.QDialog;
 import com.pump.util.JVM;
 
@@ -267,7 +267,7 @@ public class DesktopHelper {
 			content.add(new JLabel(labelMsg), c);
 			c.gridx++;
 			c.weightx = 0;
-			content.add(new JThrobber(), c);
+			content.add(new JLabel(new ThrobberIcon()), c);
 			c.gridy++;
 			c.gridx = 0;
 			c.gridwidth = 2;

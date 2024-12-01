@@ -199,7 +199,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 */
 	private static final int SPARK_EXTENT = 20;
 
-	private static final ThrobberPainter DEFAULT_THROBBER_PAINTER = new CircularThrobberPainter();
+	private static final ThrobberPainter DEFAULT_THROBBER_PAINTER = ThrobberIcon.getDefaultThrobberPainter();
 
 	/**
 	 * Create an AffineTransform that flips everything horizontally around a
@@ -226,13 +226,9 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		g.drawString(str, x, y);
 	}
 
-	private static boolean isAqua() {
-		return "Aqua".equals(UIManager.getLookAndFeel().getID());
-	}
-
 	private static Color getDefaultForegroundColor() {
 		// weird: why is ProgressBar.foreground in Aqua black? That's no good.
-		String propertyName = isAqua() ? "controlHighlight"
+		String propertyName = ThrobberIcon.isAqua() ? "controlHighlight"
 				: "ProgressBar.foreground";
 		Color c = UIManager.getColor(propertyName);
 		if (c == null)
@@ -241,7 +237,7 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	}
 
 	private static Color getDefaultBackgroundColor() {
-		String propertyName = isAqua() ? "TextComponent.selectionBackgroundInactive"
+		String propertyName = ThrobberIcon.isAqua() ? "TextComponent.selectionBackgroundInactive"
 				: "ProgressBar.shadow";
 		Color c = UIManager.getColor(propertyName);
 		if (c == null)
@@ -444,8 +440,9 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		float strokeWidth = getStrokeWidth(diameter);
 
 		if (progressBar.isIndeterminate()) {
-			paintIndeterminate(g, radius, strokeWidth, centerX, centerY);
+			paintIndeterminate(g);
 		} else {
+			ThrobberIcon.stopRepaints(progressBar);
 			paintDeterminate(g, radius, strokeWidth, centerX, centerY);
 		}
 	}
@@ -456,13 +453,13 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 * This integrates System.currentTimeMillis() into its calculations, so
 	 * every invocation will be slightly different.
 	 */
-	protected void paintIndeterminate(Graphics2D g, int radius,
-			float strokeWidth, int centerX, int centerY) {
+	protected void paintIndeterminate(Graphics2D g) {
 		ThrobberPainter p = (ThrobberPainter) progressBar.getClientProperty(PROPERTY_THROBBER_PAINTER);
 		if (p == null)
 			p = DEFAULT_THROBBER_PAINTER;
 		Rectangle r = new Rectangle(0, 0, progressBar.getWidth(), progressBar.getHeight());
 		p.paint(g, r, null, progressBar.getForeground());
+		ThrobberIcon.setupRepaints(progressBar);
 	}
 
 	/**

@@ -26,6 +26,7 @@ import javax.swing.event.ChangeListener;
 
 import com.pump.job.Job;
 import com.pump.job.JobManager;
+import com.pump.plaf.ThrobberIcon;
 
 /**
  * A panel that contains a label and a spinning progress bar. Both are made
@@ -39,7 +40,7 @@ public class JobStatusBar extends JPanel {
 
 		protected JLabel descriptionLabel = new JLabel(" ");
 		protected JLabel noteLabel = new JLabel(" ");
-		protected JThrobber throbber = new JThrobber();
+		protected JLabel throbber = new JLabel(new ThrobberIcon());
 
 		Job job;
 

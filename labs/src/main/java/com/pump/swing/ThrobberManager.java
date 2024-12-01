@@ -14,10 +14,12 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.pump.job.JobManager;
+import com.pump.plaf.ThrobberIcon;
 
 /**
  * This helps associate any number of throbbers with activity.
@@ -60,17 +62,17 @@ public class ThrobberManager {
 
 	private static class UpdateVisibilityListener implements ChangeListener {
 		WeakReference<ThrobberManager> managerRef;
-		WeakReference<JThrobber> throbberRef;
+		WeakReference<JLabel> throbberRef;
 
 		public UpdateVisibilityListener(ThrobberManager throbberManager,
-				JThrobber throbber) {
+				JLabel throbber) {
 			managerRef = new WeakReference<>(throbberManager);
 			throbberRef = new WeakReference<>(throbber);
 		}
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			JThrobber t = throbberRef.get();
+			JLabel t = throbberRef.get();
 			ThrobberManager m = managerRef.get();
 			if (t != null && m != null) {
 				t.setVisible(m.isActive());
@@ -134,8 +136,8 @@ public class ThrobberManager {
 	 * Create a new JThrobber that will automatically toggle its visibility
 	 * based on whether any entity has borrowed tokens against this manager.
 	 */
-	public JThrobber createThrobber() {
-		JThrobber t = new JThrobber();
+	public JLabel createThrobber() {
+		JLabel t = new JLabel(new ThrobberIcon());
 		UpdateVisibilityListener l = new UpdateVisibilityListener(this, t);
 		addChangeListener(l);
 		l.stateChanged(null);

@@ -74,9 +74,4 @@ public class AquaThrobberPainter extends ScaledThrobberPainter {
 	public Dimension getPreferredSize() {
 		return new Dimension(19, 19);
 	}
-
-	@Override
-	public Color getPreferredForeground() {
-		return Color.gray;
-	}
 }
