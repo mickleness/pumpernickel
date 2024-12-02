@@ -56,7 +56,7 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 	JColorWell foregroundColor = new JColorWell(
 			CircularProgressBarUI.COLOR_DEFAULT_FOREGROUND);
 	JColorWell backgroundColor = new JColorWell(
-			CircularProgressBarUI.COLOR_DEFAULT_BACKGROUND);
+			CircularProgressBarUI.COLOR_DEFAULT_TRACK_BACKGROUND);
 	JRadioButton stringOnButton = new JRadioButton("On", true);
 	JRadioButton stringOffButton = new JRadioButton("Off", false);
 	JCheckBox pulseCheckBox = new JCheckBox("Pulse", true);
@@ -199,8 +199,8 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 		public void stateChanged(ChangeEvent e) {
 			progressBar.setForeground(foregroundColor.getColorSelectionModel()
 					.getSelectedColor());
-			progressBar.setBackground(backgroundColor.getColorSelectionModel()
-					.getSelectedColor());
+			progressBar.putClientProperty(CircularProgressBarUI.PROPERTY_TRACK_BACKGROUND,
+					backgroundColor.getColorSelectionModel().getSelectedColor());
 		}
 
 	};

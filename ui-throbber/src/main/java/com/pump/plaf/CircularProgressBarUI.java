@@ -133,7 +133,6 @@ import java.beans.PropertyChangeListener;
  * the circle/arc.
  */
 public class CircularProgressBarUI extends ProgressBarUI {
-	// TODO: rethink background color (use traditional Swing background color)
 	// TODO: update docs
 	// TODO: update gifs
 
@@ -143,7 +142,7 @@ public class CircularProgressBarUI extends ProgressBarUI {
 	 */
 
 	public static Color COLOR_DEFAULT_FOREGROUND = getDefaultForegroundColor();
-	public static Color COLOR_DEFAULT_BACKGROUND = getDefaultBackgroundColor();
+	public static Color COLOR_DEFAULT_TRACK_BACKGROUND = getDefaultTrackBackgroundColor();
 
 	/**
 	 * This client property maps to a Boolean indicating whether this UI should
@@ -198,8 +197,19 @@ public class CircularProgressBarUI extends ProgressBarUI {
 	 * 10% of its normal speed. If this value is 1f (or undefined) then the
 	 * animation renders at normal speed. At .5f this renders at 50% the normal speed.
 	 */
-	public static final Object PROPERTY_INDETERMINATE_MULTIPLIER = CircularProgressBarUI.class
+	public static final String PROPERTY_INDETERMINATE_MULTIPLIER = CircularProgressBarUI.class
 			.getName() + "#indeterminateMultiplier";
+
+	/**
+	 * This client property maps to a Color used to paint the remainder of
+	 * the circle when the progress bar is painting a determinate value.
+	 * For example: if the progress bar is meant to show 25%, then an arc that
+	 * covers 25% of the circle will be painted (using {@link JComponent#getForeground()},
+	 * and this color will be used to paint the remaining 75%. This is given a default
+	 * value, but if you set this property to null then no background track is painted.
+	 */
+	public static final String PROPERTY_TRACK_BACKGROUND = CircularProgressBarUI.class
+			.getName() + "#trackBackground";
 
 	private static final String PROPERTY_LAST_RENDERED_VALUE = CircularProgressBarUI.class
 			.getName() + "#lastRenderedValue";
@@ -266,7 +276,7 @@ public class CircularProgressBarUI extends ProgressBarUI {
 		return c;
 	}
 
-	private static Color getDefaultBackgroundColor() {
+	private static Color getDefaultTrackBackgroundColor() {
 		String propertyName = ThrobberIcon.isAqua() ? "TextComponent.selectionBackgroundInactive"
 				: "ProgressBar.shadow";
 		Color c = UIManager.getColor(propertyName);
@@ -431,6 +441,8 @@ public class CircularProgressBarUI extends ProgressBarUI {
 		progressBar.addChangeListener(sparkChangeListener);
 		progressBar.addPropertyChangeListener(PROPERTY_STROKE_MULTIPLIER,
 				repaintListener);
+		progressBar.addPropertyChangeListener(PROPERTY_TRACK_BACKGROUND,
+				repaintListener);
 		progressBar.addPropertyChangeListener(PROPERTY_SPARK_ANGLE,
 				repaintListener);
 		progressBar.addPropertyChangeListener(PROPERTY_ACCELERATE,
@@ -445,7 +457,7 @@ public class CircularProgressBarUI extends ProgressBarUI {
 	 */
 	protected void installDefaults() {
 		progressBar.setForeground(COLOR_DEFAULT_FOREGROUND);
-		progressBar.setBackground(COLOR_DEFAULT_BACKGROUND);
+		progressBar.putClientProperty(PROPERTY_TRACK_BACKGROUND, COLOR_DEFAULT_TRACK_BACKGROUND);
 		progressBar.setOpaque(true);
 		LookAndFeel.installProperty(progressBar, "opaque", Boolean.TRUE);
 		LookAndFeel.installBorder(progressBar,"ProgressBar.border");
@@ -471,6 +483,8 @@ public class CircularProgressBarUI extends ProgressBarUI {
 		progressBar.removeChangeListener(pulseChangeListener);
 		progressBar.removeChangeListener(sparkChangeListener);
 		progressBar.removePropertyChangeListener(PROPERTY_STROKE_MULTIPLIER,
+				repaintListener);
+		progressBar.removePropertyChangeListener(PROPERTY_TRACK_BACKGROUND,
 				repaintListener);
 		progressBar.removePropertyChangeListener(PROPERTY_SPARK_ANGLE,
 				repaintListener);
@@ -498,6 +512,12 @@ public class CircularProgressBarUI extends ProgressBarUI {
 	@Override
 	public void paint(Graphics g0, JComponent c) {
 		Graphics2D g = (Graphics2D) g0;
+
+		if (c.isOpaque()) {
+			g.setColor(c.getBackground());
+			g.fillRect(0,0,c.getWidth(),c.getHeight());
+		}
+
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
@@ -591,11 +611,15 @@ public class CircularProgressBarUI extends ProgressBarUI {
 				circleBounds.getCenterY(),
 				0, extent,
 				radius - strokeWidth / 2, strokeWidth, true);
-		paintArc(g, progressBar.getBackground(),
-				circleBounds.getCenterX(),
-				circleBounds.getCenterY(),
-				extent, 360 - extent,
-				radius - strokeWidth / 2, strokeWidth, true);
+
+		Color trackBackground = (Color) progressBar.getClientProperty(PROPERTY_TRACK_BACKGROUND);
+		if (trackBackground != null) {
+			paintArc(g, trackBackground,
+					circleBounds.getCenterX(),
+					circleBounds.getCenterY(),
+					extent, 360 - extent,
+					radius - strokeWidth / 2, strokeWidth, true);
+		}
 
 		Number sparkAngle = (Number) progressBar
 				.getClientProperty(PROPERTY_SPARK_ANGLE);
