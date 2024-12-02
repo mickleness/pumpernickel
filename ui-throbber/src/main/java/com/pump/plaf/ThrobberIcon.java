@@ -98,7 +98,7 @@ public class ThrobberIcon implements Icon {
             return;
         Timer timer = (Timer) jc.getClientProperty(PROPERTY_REPAINT_TIMER);
         if (timer == null) {
-            timer = new Timer(20, null);
+            timer = new Timer(10, null);
             jc.putClientProperty(PROPERTY_REPAINT_TIMER, timer);
             timer.addActionListener(e -> {
                 if (jc.isShowing()) {
