@@ -17,7 +17,7 @@ public class CircularThrobberPainter implements ThrobberPainter {
 
         double startAngle = 360
                 * Math.pow(.5 + Math.sin(k * Math.PI - Math.PI / 2.0) / 2.0, 2)
-                + 1 * k * 360;
+                + 1 * k * 360 + 30;
 
         k = (k + .5f) % 1f;
         double extent = 50 + 220 * Math.pow(
