@@ -249,6 +249,7 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 
 		progressBar.setUI(new CircularProgressBarUI());
 		progressBar.setValue(33);
+		progressBar.setOpaque(false);
 
 		sizeSlider.addChangeListener(sizeListener);
 		sizeListener.stateChanged(null);

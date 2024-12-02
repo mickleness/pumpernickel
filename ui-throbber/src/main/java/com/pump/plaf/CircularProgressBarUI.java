@@ -13,13 +13,14 @@ package com.pump.plaf;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.plaf.basic.BasicProgressBarUI;
+import javax.swing.plaf.ProgressBarUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 
 /**
@@ -131,7 +132,10 @@ import java.beans.PropertyChangeListener;
  * arcs. When this is null a default value is calculated based on the size of
  * the circle/arc.
  */
-public class CircularProgressBarUI extends BasicProgressBarUI {
+public class CircularProgressBarUI extends ProgressBarUI {
+	// TODO: rethink background color (use traditional Swing background color)
+	// TODO: update docs
+	// TODO: update gifs
 
 	/*
 	 * Looking for something simpler? Check out:
@@ -215,15 +219,31 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 
 	/**
 	 * Paint a String centered at a given (x,y) coordinate.
+	 *
+	 * @param g may be null
+	 * @return the baseline of the painted string
 	 */
-	private static void paintCenteredString(Graphics2D g, String str, Font font,
-										   int centerX, int centerY) {
-		g.setFont(font);
-		FontMetrics fm = g.getFontMetrics();
-		Rectangle2D r = fm.getStringBounds(str, g);
-		float x = (float) (centerX - r.getWidth() / 2);
-		float y = (float) (centerY - r.getHeight() / 2 - r.getY());
-		g.drawString(str, x, y);
+	private static float paintCenteredString(Graphics2D g, String str, Font font,
+										   float centerX, float centerY) {
+		BufferedImage disposableImage = null;
+		if (g == null) {
+			disposableImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+			g = disposableImage.createGraphics();
+		}
+		try {
+			g.setFont(font);
+			FontMetrics fm = g.getFontMetrics();
+			Rectangle2D r = fm.getStringBounds(str, g);
+			float x = (float) (centerX - r.getWidth() / 2);
+			float y = (float) (centerY - r.getHeight() / 2 - r.getY());
+			g.drawString(str, x, y);
+			return y;
+		} finally {
+			if (disposableImage != null) {
+				g.dispose();
+				disposableImage.flush();
+			}
+		}
 	}
 
 	private static Color getDefaultForegroundColor() {
@@ -244,6 +264,15 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 			c = new Color(0xdcdcdc);
 		return c;
 	}
+
+	protected JProgressBar progressBar;
+
+	ChangeListener repaintChangeListener = new ChangeListener() {
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			progressBar.repaint();
+		}
+	};
 
 	/**
 	 * When we first reach completion this listener initiates a .5 second
@@ -381,10 +410,13 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 
 	@Override
 	public void installUI(JComponent c) {
-		super.installUI(c);
-		c.setForeground(COLOR_DEFAULT_FOREGROUND);
-		c.setBackground(COLOR_DEFAULT_BACKGROUND);
-		c.setOpaque(false);
+		progressBar = (JProgressBar) c;
+		installDefaults();
+		installListeners();
+	}
+
+	protected void installListeners() {
+		progressBar.addChangeListener(repaintChangeListener);
 		progressBar.addChangeListener(pulseChangeListener);
 		progressBar.addChangeListener(sparkChangeListener);
 		progressBar.addPropertyChangeListener(PROPERTY_STROKE_MULTIPLIER,
@@ -395,11 +427,37 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 				repaintListener);
 		progressBar.addPropertyChangeListener(PROPERTY_STROKE_WIDTH,
 				repaintListener);
-		progressBar.setBorder(null);
+		progressBar.addPropertyChangeListener("indeterminate", repaintListener);
+	}
+
+	/**
+	 * Installs default properties.
+	 */
+	protected void installDefaults() {
+		progressBar.setForeground(COLOR_DEFAULT_FOREGROUND);
+		progressBar.setBackground(COLOR_DEFAULT_BACKGROUND);
+		progressBar.setOpaque(true);
+		LookAndFeel.installProperty(progressBar, "opaque", Boolean.TRUE);
+		LookAndFeel.installBorder(progressBar,"ProgressBar.border");
+		progressBar.setFont(UIManager.getFont("ProgressBar.font"));
+	}
+
+	/**
+	 * Uninstalls default properties.
+	 */
+	protected void uninstallDefaults() {
+		LookAndFeel.uninstallBorder(progressBar);
 	}
 
 	@Override
 	public void uninstallUI(JComponent c) {
+		uninstallDefaults();
+		uninstallListeners();
+		progressBar = null;
+	}
+
+	protected void uninstallListeners() {
+		progressBar.removeChangeListener(repaintChangeListener);
 		progressBar.removeChangeListener(pulseChangeListener);
 		progressBar.removeChangeListener(sparkChangeListener);
 		progressBar.removePropertyChangeListener(PROPERTY_STROKE_MULTIPLIER,
@@ -410,7 +468,21 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 				repaintListener);
 		progressBar.removePropertyChangeListener(PROPERTY_STROKE_WIDTH,
 				repaintListener);
-		super.uninstallUI(c);
+		progressBar.removePropertyChangeListener("indeterminate",
+				repaintListener);
+	}
+
+	@Override
+	public int getBaseline(JComponent c, int width, int height) {
+		super.getBaseline(c, width, height);
+		if (progressBar.isStringPainted() &&
+				!progressBar.isIndeterminate()) {
+			Rectangle circleBounds = getCircleBounds();
+			return (int) paintCenteredString(null, "",
+					progressBar.getFont(),
+					(float) circleBounds.getCenterX(), (float) circleBounds.getCenterY());
+		}
+		return -1;
 	}
 
 	@Override
@@ -421,30 +493,30 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 		g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
 				RenderingHints.VALUE_STROKE_PURE);
 
-		Insets i = progressBar.getInsets();
+		Rectangle circleBounds = getCircleBounds();
+		if (progressBar.isIndeterminate()) {
+			paintIndeterminate(g, circleBounds);
+		} else {
+			ThrobberIcon.stopRepaints(progressBar);
+			float strokeWidth = getStrokeWidth(circleBounds.width);
+			paintDeterminate(g, circleBounds, strokeWidth);
+		}
+	}
 
+	protected Rectangle getCircleBounds() {
+		Insets i = progressBar.getInsets();
 		int x = 0;
 		int y = 0;
-		int width = c.getWidth();
-		int height = c.getHeight();
+		int width = progressBar.getWidth();
+		int height = progressBar.getHeight();
 		x += i.left;
 		y += i.top;
 		width -= i.left + i.right;
 		height -= i.top + i.bottom;
-
-		int diameter = Math.min(width, height);
-		int radius = diameter / 2;
-		int centerX = x + width / 2;
-		int centerY = y + height / 2;
-
-		float strokeWidth = getStrokeWidth(diameter);
-
-		if (progressBar.isIndeterminate()) {
-			paintIndeterminate(g);
-		} else {
-			ThrobberIcon.stopRepaints(progressBar);
-			paintDeterminate(g, radius, strokeWidth, centerX, centerY);
-		}
+		int size = Math.min(width, height);
+		return new Rectangle(x + width/2 - size/2,
+				y + height/2 - size/2,
+				size, size);
 	}
 
 	/**
@@ -453,12 +525,11 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 * This integrates System.currentTimeMillis() into its calculations, so
 	 * every invocation will be slightly different.
 	 */
-	protected void paintIndeterminate(Graphics2D g) {
+	protected void paintIndeterminate(Graphics2D g, Rectangle circleBounds) {
 		ThrobberPainter p = (ThrobberPainter) progressBar.getClientProperty(PROPERTY_THROBBER_PAINTER);
 		if (p == null)
 			p = DEFAULT_THROBBER_PAINTER;
-		Rectangle r = new Rectangle(0, 0, progressBar.getWidth(), progressBar.getHeight());
-		p.paint(g, r, null, progressBar.getForeground());
+		p.paint(g, circleBounds, null, progressBar.getForeground());
 		ThrobberIcon.setupRepaints(progressBar);
 	}
 
@@ -469,13 +540,14 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 	 * <code>progressBar.repaint()</code> if the transition property is active,
 	 * so subsequent invocations may produce different results.
 	 */
-	protected void paintDeterminate(Graphics2D g, int radius,
-			float strokeWidth, int centerX, int centerY) {
+	protected void paintDeterminate(Graphics2D g, Rectangle circleBounds,
+									float strokeWidth) {
 		Number multiplier = (Number) progressBar
 				.getClientProperty(PROPERTY_STROKE_MULTIPLIER);
 		if (multiplier != null)
 			strokeWidth = strokeWidth * multiplier.floatValue();
 
+		float radius = (float)( circleBounds.getWidth() / 2.0 );
 		strokeWidth = Math.min(strokeWidth, radius);
 
 		double v = progressBar.getPercentComplete();
@@ -500,10 +572,16 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 			v = Math.pow(v, 2.5);
 		}
 		double extent = v * 360;
-		paintArc(g, progressBar.getForeground(), centerX, centerY, 0, extent,
+		paintArc(g, progressBar.getForeground(),
+				circleBounds.getCenterX(),
+				circleBounds.getCenterY(),
+				0, extent,
 				radius - strokeWidth / 2, strokeWidth, true);
-		paintArc(g, progressBar.getBackground(), centerX, centerY, extent,
-				360 - extent, radius - strokeWidth / 2, strokeWidth, true);
+		paintArc(g, progressBar.getBackground(),
+				circleBounds.getCenterX(),
+				circleBounds.getCenterY(),
+				extent, 360 - extent,
+				radius - strokeWidth / 2, strokeWidth, true);
 
 		Number sparkAngle = (Number) progressBar
 				.getClientProperty(PROPERTY_SPARK_ANGLE);
@@ -514,16 +592,20 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 			int b2 = (int) Math.max(0, Math.min(extent, a2));
 			if (b2 >= 0) {
 				Color sparkColor = new Color(0xddffffff, true);
-				paintArc(g, sparkColor, centerX, centerY, b1, b2 - b1, radius
+				paintArc(g, sparkColor,
+						circleBounds.getCenterX(),
+						circleBounds.getCenterY(),
+						b1, b2 - b1, radius
 						- strokeWidth / 2, strokeWidth, true);
 			}
 		}
 
 		if (progressBar.isStringPainted()) {
 			Font font = progressBar.getFont();
-			font = font.deriveFont(((float) radius) / 2f);
-			paintCenteredString(g, progressBar.getString(),
-					font, centerX, centerY);
+			font = font.deriveFont(radius / 2f);
+			paintCenteredString(g, progressBar.getString(), font,
+					(float) circleBounds.getCenterX(),
+					(float) circleBounds.getCenterY());
 		}
 	}
 
@@ -560,17 +642,6 @@ public class CircularProgressBarUI extends BasicProgressBarUI {
 			b = defaultValue;
 		return b;
 	}
-
-	@Override
-    protected Rectangle getBox(Rectangle r) {
-    	if(r==null)
-    		r = new Rectangle();
-    	r.x = 0;
-    	r.y = 0;
-    	r.width = progressBar.getWidth();
-    	r.height = progressBar.getHeight();
-    	return r;
-    }
 
 	/**
 	 * This paints a portion of the edge of the circle. Degrees are interpreted
