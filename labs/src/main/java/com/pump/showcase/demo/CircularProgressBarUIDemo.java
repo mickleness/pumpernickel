@@ -16,6 +16,8 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -41,8 +43,10 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 	private static final long serialVersionUID = 1L;
 
 	Collection<InspectorRowPanel> determinateControls = new ArrayList<>();
+	Collection<InspectorRowPanel> indeterminateControls = new ArrayList<>();
 
 	JSlider sizeSlider = new ShowcaseSlider(10, 120, 90);
+	JSlider rateSlider = new ShowcaseSlider(10, 200, 100);
 	JComboBox<Class<? extends ThrobberPainter>> styleComboBox = new JComboBox<>();
 	JProgressBar progressBar = new JProgressBar(0, 100);
 	JSpinner progressSpinner = new JSpinner(
@@ -73,6 +77,14 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 
 	};
 
+	ChangeListener rateListener = new ChangeListener() {
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			Float m = 100f / ((float) rateSlider.getValue());
+			progressBar.putClientProperty(CircularProgressBarUI.PROPERTY_INDETERMINATE_MULTIPLIER, m);
+		}
+	};
+
 	ActionListener styleListener = new ActionListener() {
 
 		@Override
@@ -88,6 +100,9 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}
+			}
+			for (InspectorRowPanel r : indeterminateControls) {
+				r.setVisible(progressBar.isIndeterminate());
 			}
 			for (InspectorRowPanel r : determinateControls) {
 				r.setVisible(!progressBar.isIndeterminate());
@@ -219,6 +234,7 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 	public CircularProgressBarUIDemo() {
 		JPopover.add(sizeSlider, " pixels");
 		JPopover.add(strokeSlider, " pixels");
+		JPopover.add(rateSlider, "%");
 
 		JPanel animatingInspectorPanel = new AnimatingInspectorPanel();
 		configurationPanel.add(animatingInspectorPanel);
@@ -226,6 +242,7 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 		Inspector layout = new Inspector(animatingInspectorPanel);
 		layout.addRow(new JLabel("Size:"), sizeSlider, true);
 		layout.addRow(new JLabel("Style:"), styleComboBox);
+		indeterminateControls.add(layout.addRow(new JLabel("Rate:"), rateSlider));
 		determinateControls.add(layout.addRow(new JLabel("Value:"), progressSpinner, false));
 		determinateControls.add(layout.addRow(new JLabel("String Painted:"), stringOnButton,
 				stringOffButton));
@@ -241,6 +258,18 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 		g2.add(animateOnButton);
 		g2.add(animateOffButton);
 
+		Dictionary<Integer, JLabel> dictionary = new Hashtable<>();
+		dictionary.put(10, new JLabel("10%"));
+		dictionary.put(50, new JLabel("50%"));
+		dictionary.put(100, new JLabel("100%"));
+		dictionary.put(200, new JLabel("200%"));
+
+		rateSlider.setPaintTicks(true);
+		rateSlider.setPaintLabels(true);
+		rateSlider.setMajorTickSpacing(50);
+		rateSlider.setMinorTickSpacing(10);
+		rateSlider.setLabelTable(dictionary);
+
 		ButtonGroup g3 = new ButtonGroup();
 		g3.add(stringOnButton);
 		g3.add(stringOffButton);
@@ -252,6 +281,7 @@ public class CircularProgressBarUIDemo extends ShowcaseExampleDemo {
 		progressBar.setOpaque(false);
 
 		sizeSlider.addChangeListener(sizeListener);
+		rateSlider.addChangeListener(rateListener);
 		sizeListener.stateChanged(null);
 
 		styleComboBox.addItem(null);

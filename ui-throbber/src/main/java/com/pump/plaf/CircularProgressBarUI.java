@@ -191,6 +191,16 @@ public class CircularProgressBarUI extends ProgressBarUI {
 	public static final String PROPERTY_STROKE_WIDTH = CircularProgressBarUI.class
 			.getName() + "#strokeWidth";
 
+	/**
+	 * This client property maps to a Number that is multiplied with the period
+	 * when this UI shows an indeterminate throbber. This is primarily used for
+	 * debugging so you can inspect what the ThrobberPainter looks like at
+	 * 10% of its normal speed. If this value is 1f (or undefined) then the
+	 * animation renders at normal speed. At .5f this renders at 50% the normal speed.
+	 */
+	public static final Object PROPERTY_INDETERMINATE_MULTIPLIER = CircularProgressBarUI.class
+			.getName() + "#indeterminateMultiplier";
+
 	private static final String PROPERTY_LAST_RENDERED_VALUE = CircularProgressBarUI.class
 			.getName() + "#lastRenderedValue";
 	private static final String PROPERTY_SPARK_ANGLE = CircularProgressBarUI.class
@@ -529,7 +539,11 @@ public class CircularProgressBarUI extends ProgressBarUI {
 		ThrobberPainter p = (ThrobberPainter) progressBar.getClientProperty(PROPERTY_THROBBER_PAINTER);
 		if (p == null)
 			p = DEFAULT_THROBBER_PAINTER;
-		p.paint(g, circleBounds, null, progressBar.getForeground());
+		Number periodMultiplier = (Number) progressBar.getClientProperty(PROPERTY_INDETERMINATE_MULTIPLIER);
+		if (periodMultiplier == null) periodMultiplier = Float.valueOf(1);
+		int period = (int)(p.getPreferredPeriod() * periodMultiplier.floatValue());
+		float fraction = ThrobberPainter.getCurrentFraction(period);
+		p.paint(g, circleBounds, fraction, progressBar.getForeground());
 		ThrobberIcon.setupRepaints(progressBar);
 	}
 
