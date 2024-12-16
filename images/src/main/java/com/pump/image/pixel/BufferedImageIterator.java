@@ -22,7 +22,7 @@ import java.util.Objects;
  * You cannot directly instantiate this class: use one of the static
  * <code>get(...)</code> methods to create <code>BufferedImageIterators</code>.
  */
-abstract class BufferedImageIterator<T> implements PixelIterator<T> {
+public abstract class BufferedImageIterator<T> implements PixelIterator<T> {
 
 	/**
 	 * Return true if we a given BufferedImage type is supported.

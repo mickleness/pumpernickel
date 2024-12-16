@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.pump.image.pixel.BufferedImageIterator;
 import com.pump.image.pixel.ImagePixelIterator;
 import com.pump.image.pixel.ImageType;
 import com.pump.image.pixel.PixelIterator;
@@ -58,10 +59,15 @@ public class BmpEncoder {
 	public static void write(BufferedImage image, OutputStream out,
 			boolean closeStreamOnCompletion) throws IOException {
 		PixelIterator<byte[]> i;
+		// TODO: we could call ImageType.X.createPixelIterator(image) and avoid
+		// constructing our own BufferedImageIterator if we made the BmpEncoder
+		// support writing top-down images. This would let us return the
+		// BufferedImageIterator to being a non-public class.
+		BufferedImageIterator imgIter = BufferedImageIterator.create(image,false);
 		if (image.getTransparency() == Transparency.OPAQUE) {
-			i = ImageType.BYTE_BGR.createPixelIterator(image);
+			i = ImageType.BYTE_BGR.createPixelIterator(imgIter);
 		} else {
-			i = ImageType.BYTE_BGRA.createPixelIterator(image);
+			i = ImageType.BYTE_BGRA.createPixelIterator(imgIter);
 		}
 		try (PixelIterator<byte[]> i2 = i) {
 			write(out, i2, closeStreamOnCompletion);
