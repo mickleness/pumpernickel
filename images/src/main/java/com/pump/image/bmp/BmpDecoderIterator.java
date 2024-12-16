@@ -213,7 +213,17 @@ public class BmpDecoderIterator implements PixelIterator<byte[]> {
 	boolean closed;
 	boolean topDown;
 	int rowCtr;
-	int scanline;
+
+	/**
+	 * This is `width * depth / 8`. This represents the array positions that have
+	 * pixel data.
+	 */
+	int scanline_visible;
+
+	/**
+	 * This is `scanline_visible + [padding]`
+	 */
+	int scanline_full;
 
 	private BmpDecoderIterator(InputStream in, int width, int height, int depth,
 			boolean topDown) {
@@ -223,11 +233,10 @@ public class BmpDecoderIterator implements PixelIterator<byte[]> {
 		this.depth = depth;
 		this.topDown = topDown;
 
-		scanline = width * depth / 8;
-		int r = scanline % 4;
-		if (r != 0) {
-			scanline = scanline + (4 - r);
-		}
+		scanline_visible = width * depth / 8;
+		int r = scanline_visible % 4;
+
+		scanline_full = r == 0 ? scanline_visible : scanline_visible + (4 - r);
 
 		rowCtr = 0;
 		validateDepth();
@@ -249,9 +258,10 @@ public class BmpDecoderIterator implements PixelIterator<byte[]> {
 			throw new IllegalStateException("This BmpDecoderIterator is closed.");
 
 		try {
-			int read = in.readNBytes(dest, offset, scanline);
-			if (read != scanline)
-				throw new IOException("requested " + scanline+", but read " + read + " bytes");
+			int read = in.readNBytes(dest, offset, scanline_visible);
+			if (read != scanline_visible)
+				throw new IOException("requested " + scanline_visible+", but read " + read + " bytes");
+			in.skip(scanline_full - scanline_visible);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} finally {
@@ -266,7 +276,7 @@ public class BmpDecoderIterator implements PixelIterator<byte[]> {
 			return;
 
 		try {
-			in.skipNBytes(scanline);
+			in.skipNBytes(scanline_full);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} finally {
