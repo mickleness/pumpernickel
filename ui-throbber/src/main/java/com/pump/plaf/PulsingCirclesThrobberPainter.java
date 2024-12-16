@@ -17,30 +17,22 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.JComponent;
 
 /**
- * A <code>ThrobberUI</code> showing 3 circles pulsing outward that also move in
- * a clockwise rotation.
+ * A <code>ThrobberPainter</code> showing 8 circles pulsing in a clockwise direction.
  * <p>
- * <table summary="Sample Animations of PulsingCirclesThrobberUI" cellpadding="10">
+ * <table summary="Sample Animations of PulsingCirclesThrobberPainter" cellpadding="10">
  * <tr>
  * <td><img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/PulsingCirclesThrobberUI.gif"
- * alt="PulsingCirclesThrobberUI"></td>
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/PulsingCirclesThrobberPainter-16x16.gif"
+ * alt="PulsingCirclesThrobberPainter"></td>
  * <td><img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/PulsingCirclesThrobberUIx2.gif"
- * alt="PulsingCirclesThrobberUI, Magnified 2x"></td>
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/PulsingCirclesThrobberPainter-32x32.gif"
+ * alt="PulsingCirclesThrobberPainter, Magnified 2x"></td>
  * <td><img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/PulsingCirclesThrobberUIx4.gif"
- * alt="PulsingCirclesThrobberUI, Magnified 4x"></td>
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/PulsingCirclesThrobberPainter-64x64.gif"
+ * alt="PulsingCirclesThrobberPainter, Magnified 4x"></td>
  * </tr>
  * </table>
  * <p>
- * On installation: the component's foreground is set to dark gray, but if that
- * is changed then that color is used to render this animation.
- * <P>
- * The default period for this animation is 750, but you can modify this with
- * the period client properties {@link ThrobberUI#PERIOD_KEY} or
- * {@link ThrobberUI#PERIOD_MULTIPLIER_KEY}.
- *
  */
 public class PulsingCirclesThrobberPainter extends ScaledThrobberPainter {
 

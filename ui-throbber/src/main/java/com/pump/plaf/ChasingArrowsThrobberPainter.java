@@ -21,28 +21,23 @@ import java.awt.geom.GeneralPath;
 import javax.swing.JComponent;
 
 /**
- * A <code>ThrobberUI</code> of two arrows that rotate clockwise.
+ * A <code>ThrobberPainter</code> of two arrows that rotate clockwise.
  * <p>
- * <table summary="Sample Animations of ChasingArrowsThrobberUI" cellpadding="10">
+ * <table summary="Sample Animations of ChasingArrowsThrobberPainter" cellpadding="10">
  * <tr>
  * <td><img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/ChasingArrowsThrobberUI.gif"
- * alt="ChassingArrowsThrobberUI"></td>
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/ChasingArrowsThrobberPainter-16x16.gif"
+ * alt="ChasingArrowsThrobberPainter"></td>
  * <td><img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/ChasingArrowsThrobberUIx2.gif"
- * alt="ChassingArrowsThrobberUI Magnified 2x"></td>
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/ChasingArrowsThrobberPainter-32x32.gif"
+ * alt="ChasingArrowsThrobberPainter Magnified 2x"></td>
  * <td><img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/ChasingArrowsThrobberUIx4.gif"
- * alt="ChassingArrowsThrobberUI Magnified 4x"></td>
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/ChasingArrowsThrobberPainter-64x64
+ * .gif"
+ * alt="ChasingArrowsThrobberPainter Magnified 4x"></td>
  * </tr>
  * </table>
  * <p>
- * On installation: the component's foreground is set to dark gray, but if that
- * is changed then that color is used to render this animation.
- * <P>
- * The default period for this animation is 2000, but you can modify this with
- * the period client properties {@link ThrobberUI#PERIOD_KEY} or
- * {@link ThrobberUI#PERIOD_MULTIPLIER_KEY}.
  */
 public class ChasingArrowsThrobberPainter extends ScaledThrobberPainter {
 

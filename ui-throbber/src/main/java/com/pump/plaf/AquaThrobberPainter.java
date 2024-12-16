@@ -21,26 +21,20 @@ import java.awt.geom.Line2D;
  * segments are painted in the component's foreground color, with varying levels
  * of opacity.
  * <p>
- * <table summary="Sample Animations of AquaThrobberUI" cellpadding="10">
+ * <table summary="Sample Animations of AquaThrobberPainter" cellpadding="10">
  * <tr>
  * <td><img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/AquaThrobberUI.gif"
- * alt="AquaThrobberUI"></td>
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/AquaThrobberPainter-19x19.gif"
+ * alt="AquaThrobberPainter"></td>
  * <td><img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/AquaThrobberUIx2.gif"
- * alt="AquaThrobberUI Magnified 2x"></td>
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/AquaThrobberPainter-38x38.gif"
+ * alt="AquaThrobberPainter Magnified 2x"></td>
  * <td><img src=
- * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/AquaThrobberUIx4.gif"
- * alt="AquaThrobberUI Magnified 4x"></td>
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/AquaThrobberPainter-76x76.gif"
+ * alt="AquaThrobberPainter Magnified 4x"></td>
  * </tr>
  * </table>
  * <p>
- * On installation: the component's foreground is set to gray, but if that is
- * changed then that color is used to render this animation.
- * <P>
- * The default period for this animation is 500, but you can modify this with
- * the period client properties {@link ThrobberUI#PERIOD_KEY} or
- * {@link ThrobberUI#PERIOD_MULTIPLIER_KEY}.
  */
 public class AquaThrobberPainter extends ScaledThrobberPainter {
 	private static final int[] opacities = new int[] {255, 240, 225, 200, 160, 130, 115, 100, 90, 80, 70, 60};

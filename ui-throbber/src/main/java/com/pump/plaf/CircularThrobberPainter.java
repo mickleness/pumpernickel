@@ -2,6 +2,25 @@ package com.pump.plaf;
 
 import java.awt.*;
 
+/**
+ * A <code>ThrobberPainter</code> of a circular arc that grows and shrinks as it slides clockwise.
+ * <p>
+ * <table summary="Sample Animations of CircularThrobberPainter" cellpadding="10">
+ * <tr>
+ * <td><img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/CircularThrobberPainter-20x20-16x16.gif"
+ * alt="CircularThrobberPainter"></td>
+ * <td><img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/CircularThrobberPainter-40x40-32x32.gif"
+ * alt="CircularThrobberPainter Magnified 2x"></td>
+ * <td><img src=
+ * "https://github.com/mickleness/pumpernickel/raw/master/resources/throbber/CircularThrobberPainter-80x80-64x64
+ * .gif"
+ * alt="CircularThrobberPainter Magnified 4x"></td>
+ * </tr>
+ * </table>
+ * <p>
+ */
 public class CircularThrobberPainter implements ThrobberPainter {
 
     @Override

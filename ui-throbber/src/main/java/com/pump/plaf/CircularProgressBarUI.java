@@ -134,7 +134,6 @@ import java.beans.PropertyChangeListener;
  */
 public class CircularProgressBarUI extends ProgressBarUI {
 	// TODO: update docs
-	// TODO: update gifs
 
 	/*
 	 * Looking for something simpler? Check out:
