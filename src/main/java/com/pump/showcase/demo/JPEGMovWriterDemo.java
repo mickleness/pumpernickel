@@ -32,6 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Random;
 
 import javax.sound.sampled.AudioInputStream;
@@ -440,7 +441,7 @@ public class JPEGMovWriterDemo extends ShowcaseDemo {
 					throw new RuntimeException("cancelled");
 				}
 				progressBar.setValue(framesWritten);
-				label.setText("Writing Frame " + (framesWritten + 1) + "...");
+				label.setText("Writing Frame " + DecimalFormat.getIntegerInstance().format(framesWritten + 1) + "...");
 
 				MoviePainter p = new MoviePainter();
 				Graphics2D g2 = bi.createGraphics();

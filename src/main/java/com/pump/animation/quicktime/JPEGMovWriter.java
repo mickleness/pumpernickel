@@ -129,7 +129,8 @@ public class JPEGMovWriter implements AutoCloseable {
 		TimeToSampleAtom stts = new TimeToSampleAtom();
 		SampleSizeAtom stsz = new SampleSizeAtom();
 		SampleToChunkAtom stsc = new SampleToChunkAtom();
-		ChunkOffsetAtom stco = new ChunkOffsetAtom();
+
+        AbstractChunkOffsetAtom stco = isLegacyEncoding ? new ChunkOffsetAtom() : new ChunkOffset64Atom();
 
 		void writeToMoovRoot(ParentAtom moovRoot) {
 			ParentAtom trakAtom = new ParentAtom("trak");
@@ -449,6 +450,8 @@ public class JPEGMovWriter implements AutoCloseable {
 
 	/** The audio tracks to include. */
     private AudioTrack[] audioTracks = new AudioTrack[] {};
+
+    private boolean isLegacyEncoding = false;
 
 	/**
 	 * Constructs a new <code>MovWriter</code>.
@@ -854,6 +857,23 @@ public class JPEGMovWriter implements AutoCloseable {
 		}
 	}
 
+    /**
+     * By default this property is false, so this encoder uses a newer file format capable of writing files over 4GB.
+     * If `isLegacyEncoding` is true: then this encoder uses an older file format that will fail to read
+     * movie files that are over 4GB.
+     * <p>
+     * More specifically: this toggles between the atom "co64" (the newer default) and "stco" (the older model).
+     */
+    public void setLegacyEncoding(boolean isLegacyEncoding) {
+        this.isLegacyEncoding = isLegacyEncoding;
+    }
+
+    /**
+     * Return true if this uses the older/original file format, which only supports movies up to 4GB.
+     */
+    public boolean isLegacyEncoding() {
+        return isLegacyEncoding;
+    }
 
     /**
      * Add all the frames from an AnimationReader.

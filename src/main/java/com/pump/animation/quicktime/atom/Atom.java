@@ -164,6 +164,7 @@ public abstract class Atom implements TreeNode {
 	static byte[] array3 = new byte[3];
 	static byte[] array4 = new byte[4];
 	static byte[] array6 = new byte[6];
+    static byte[] array8 = new byte[8];
 
 	protected synchronized static final int read16Int(InputStream in)
 			throws IOException {
@@ -212,6 +213,19 @@ public abstract class Atom implements TreeNode {
 		out.write(array4);
 	}
 
+    public synchronized static final void write64Int(OutputStream out, long i)
+            throws IOException {
+        array8[0] = (byte) ((i >> 56) & 0xff);
+        array8[1] = (byte) ((i >> 48) & 0xff);
+        array8[2] = (byte) ((i >> 40) & 0xff);
+        array8[3] = (byte) ((i >> 32) & 0xff);
+        array8[4] = (byte) ((i >> 24) & 0xff);
+        array8[5] = (byte) ((i >> 16) & 0xff);
+        array8[6] = (byte) ((i >> 8) & 0xff);
+        array8[7] = (byte) (i & 0xff);
+        out.write(array8);
+    }
+
 	public synchronized static final void write32String(OutputStream out,
 			String s) throws IOException {
 		if (s.length() == 0) {
@@ -248,6 +262,12 @@ public abstract class Atom implements TreeNode {
 		return create32Int(array4);
 	}
 
+    protected synchronized static final long read64Int(InputStream in)
+            throws IOException {
+        read(in, array8);
+        return create64Long(array8);
+    }
+
 	protected static final long create32Int(byte[] array) {
 		long value = ((array[0] & 0xff) << 24) + ((array[1] & 0xff) << 16)
 				+ ((array[2] & 0xff) << 8) + (array[3] & 0xff);
@@ -257,6 +277,14 @@ public abstract class Atom implements TreeNode {
 		}
 		return value;
 	}
+
+    protected static final long create64Long(byte[] array) {
+        long value = ((long) (array[0] & 0xff) << 56) + ((long) (array[1] & 0xff) << 48)
+                + ((long) (array[2] & 0xff) << 40) + ((long) (array[3] & 0xff) << 32)
+                + ((long) (array[4] & 0xff) << 24) + ((array[5] & 0xff) << 16)
+                + ((array[2] & 0xff) << 6) + (array[7] & 0xff);
+        return value;
+    }
 
 	protected synchronized static final String read32String(InputStream in)
 			throws IOException {

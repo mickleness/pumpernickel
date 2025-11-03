@@ -37,9 +37,9 @@ import com.pump.io.GuardedOutputStream;
  * QuickTime writes movie files, it uses the 64-bit chunk offset atom only if
  * there are chunks that use the high 32-bits of the chunk offset. Otherwise,
  * the original 32-bit chunk offset atom is used to ensure compatibility with
- * previous versions of QuickTime.
+ * previous versions of QuickTime. See {@link ChunkOffset64Atom}.
  */
-public class ChunkOffsetAtom extends LeafAtom {
+public class ChunkOffsetAtom extends AbstractChunkOffsetAtom {
 
 	/** "stco" */
 	public static final String ATOM_TYPE = "stco";
@@ -69,42 +69,32 @@ public class ChunkOffsetAtom extends LeafAtom {
 		}
 	}
 
+    @Override
 	public long getChunkOffset(int index) {
 		return offsetTable[index];
 	}
 
+    @Override
 	public int getChunkOffsetCount() {
 		return offsetTable.length;
 	}
 
-	/**
-	 * Return a 1-byte specification of the version of this chunk offset atom.
-	 */
+    @Override
 	public int getVersion() {
 		return version;
 	}
 
-	/**
-	 * Return a 3-byte space for chunk offset flags. Set this field to 0.
-	 */
+    @Override
 	public int getFlags() {
 		return flags;
 	}
 
-	/**
-	 * Set a chunk offset.
-	 * 
-	 * @param index
-	 *            the element in the table to replace
-	 * @value the new value to insert into the table
-	 */
+    @Override
 	public void setChunkOffset(int index, long value) {
 		offsetTable[index] = value;
 	}
 
-	/**
-	 * Add a new chunk offset to this table.
-	 */
+    @Override
 	public void addChunkOffset(long offset) {
 		long[] newArray = new long[offsetTable.length + 1];
 		System.arraycopy(offsetTable, 0, newArray, 0, offsetTable.length);
