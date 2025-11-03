@@ -583,15 +583,16 @@ public class JPEGMovWriter implements AutoCloseable {
 		if (closed)
 			throw new IllegalArgumentException(
 					"this writer has already been closed");
-		int relativeDuration = (int) (duration * DEFAULT_TIME_SCALE + .5);
-
-		videoTrack.validateSize(bi.getWidth(), bi.getHeight());
-		long startPosition = out.getBytesWritten();
-		writeFrame(out, bi, jpegQuality);
-		long byteSize = out.getBytesWritten() - startPosition;
-		VideoSample sample = new VideoSample(relativeDuration,
-				out.getBytesWritten() - byteSize, byteSize);
-		videoTrack.addSample(sample);
+        int frameTicks = getNewFrameTicks(duration);
+        if (frameTicks > 0) {
+            videoTrack.validateSize(bi.getWidth(), bi.getHeight());
+            long startPosition = out.getBytesWritten();
+            writeFrame(out, bi, jpegQuality);
+            long byteSize = out.getBytesWritten() - startPosition;
+            VideoSample sample = new VideoSample(frameTicks,
+                    out.getBytesWritten() - byteSize, byteSize);
+            videoTrack.addSample(sample);
+        }
 	}
 
     private static boolean printWarning = false;
@@ -636,19 +637,34 @@ public class JPEGMovWriter implements AutoCloseable {
      *            must match any preexisting frames.
 	 * @throws IOException
 	 */
-	public synchronized void addFrame(float duration, File image)
-			throws IOException {
-		if (closed)
-			throw new IllegalArgumentException(
-					"this writer has already been closed");
+    public synchronized void addFrame(float duration, File image)
+            throws IOException {
+        if (closed)
+            throw new IllegalArgumentException(
+                    "this writer has already been closed");
 
         String filename = image.getName().toLowerCase();
         if (!(filename.endsWith(".jpg") || filename.endsWith(".jpeg")))
             throw new IllegalArgumentException("The incoming file must be a JPEG file (" + image.getPath() + ")");
 
-		int relativeTime = (int) (duration * DEFAULT_TIME_SCALE + .5);
-		videoTrack.addFrame(relativeTime, image);
-	}
+        int frameTicks = getNewFrameTicks(duration);
+        if (frameTicks > 0)
+            videoTrack.addFrame(frameTicks, image);
+    }
+
+
+    private double cumulativeDuration = 0.0;
+    private int cumulativeTicks = 0;
+    /**
+     * Calculate the encoded frame duration safely to allow for rounding error over time.
+     */
+    private int getNewFrameTicks(float frameDuration) {
+        int totalTicks = (int)Math.round( (frameDuration + cumulativeDuration) * DEFAULT_TIME_SCALE);
+        int frameTicks = totalTicks - cumulativeTicks;
+        cumulativeDuration += frameDuration;
+        cumulativeTicks = totalTicks;
+        return Math.max(0, frameTicks);
+    }
 
 	/**
 	 * Write an Animation to this MovWriter with no audio.
