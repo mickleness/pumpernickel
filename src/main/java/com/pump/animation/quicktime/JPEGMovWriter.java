@@ -274,7 +274,7 @@ public class JPEGMovWriter implements AutoCloseable {
 		TimeToSampleAtom stts = new TimeToSampleAtom();
 		SampleSizeAtom stsz = new SampleSizeAtom();
 		SampleToChunkAtom stsc = new SampleToChunkAtom();
-		ChunkOffsetAtom stco = new ChunkOffsetAtom();
+        AbstractChunkOffsetAtom stco = isLegacyEncoding ? new ChunkOffsetAtom() : new ChunkOffset64Atom();
 		int sampleMultiplier;
 
 		AudioTrack(AudioInputStream audio, float audioOffset) {
