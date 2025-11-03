@@ -35,21 +35,6 @@ public class VideoSampleDescriptionEntry extends SampleDescriptionEntry {
 	}
 
 	/**
-	 * Create a VideoSampleDescriptionEntry for PNG-based frames.
-	 */
-	public static VideoSampleDescriptionEntry createPNGDescription(int width,
-			int height) {
-		VideoSampleDescriptionEntry e = new VideoSampleDescriptionEntry("png ",
-				1, width, height);
-		e.compressorName = "Photo - PNG";
-		e.version = 1;
-		e.revision = 1;
-		e.temporalQuality = 0;
-		e.spatialQuality = 512;
-		return e;
-	}
-
-	/**
 	 * A 16-bit integer indicating the version number of the compressed data.
 	 * This is set to 0, unless a compressor has changed its format.
 	 */
