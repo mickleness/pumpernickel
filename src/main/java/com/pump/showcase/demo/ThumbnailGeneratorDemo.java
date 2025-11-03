@@ -92,7 +92,7 @@ public class ThumbnailGeneratorDemo extends ShowcaseResourceExampleDemo<File> {
 	@Override
 	protected void refreshFile(File file, String filePath) {
 		Icon icon;
-		if (!file.exists()) {
+		if (!file.exists() || file.getName().isBlank()) {
 			icon = NO_ICON;
 			previewLabel.setText("File Missing");
 		} else {

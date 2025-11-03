@@ -140,7 +140,7 @@ public class FileIconDemo extends ShowcaseResourceExampleDemo<File> {
 		Icon icon;
 		FileIcon fileIcon = getFileIcon();
 		demoLabel.setText("");
-		if (!file.exists()) {
+		if (!file.exists() || file.getName().isBlank()) {
 			icon = new StrikeThroughIcon(Color.gray, 20);
 			demoLabel.setText("File Missing");
 		} else if (fileIcon != null) {
