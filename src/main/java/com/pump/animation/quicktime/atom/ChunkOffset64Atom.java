@@ -80,7 +80,7 @@ public class ChunkOffset64Atom extends AbstractChunkOffsetAtom {
     @Override
     protected long getSize() {
         // size = header (8) + version/flags (4) + count (4) + entries * 8 bytes
-        return 16 + offsetTable.length * 8;
+        return 16 + offsetTable.length * 8L;
     }
 
     @Override

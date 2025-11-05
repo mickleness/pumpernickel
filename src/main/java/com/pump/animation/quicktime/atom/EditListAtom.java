@@ -27,7 +27,7 @@ public class EditListAtom extends LeafAtom {
 	public static class EditListTableEntry {
 		/**
 		 * A 32-bit integer that specifies the duration of this edit segment in
-		 * units of the movie's time scale.
+		 * units of the movie's timescale.
 		 */
 		long trackDuration;
 
@@ -101,7 +101,7 @@ public class EditListAtom extends LeafAtom {
 		version = Atom.read8Int(in);
 		flags = Atom.read24Int(in);
 
-		/**
+		/*
 		 * A 32-bit integer that specifies the number of entries in the edit
 		 * list atom that follows.
 		 */
@@ -130,7 +130,7 @@ public class EditListAtom extends LeafAtom {
 
 	@Override
 	protected long getSize() {
-		return 16 + 12 * table.length;
+		return 16 + 12L * table.length;
 	}
 
 	@Override
@@ -150,10 +150,10 @@ public class EditListAtom extends LeafAtom {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("EditListAtom[ version=" + version
+		StringBuilder sb = new StringBuilder("EditListAtom[ version=" + version
 				+ ", flags=" + flags + ", data=[");
 		for (int a = 0; a < table.length; a++) {
-			sb.append(table[a] + " ");
+			sb.append(table[a]).append(" ");
 		}
 		sb.append("]]");
 		return sb.toString();

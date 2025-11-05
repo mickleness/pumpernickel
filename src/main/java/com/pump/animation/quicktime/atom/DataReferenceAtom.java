@@ -142,7 +142,7 @@ public class DataReferenceAtom extends LeafAtom {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("[ ");
 		for (int a = 0; a < entries.length; a++) {
 			if (a != 0) {

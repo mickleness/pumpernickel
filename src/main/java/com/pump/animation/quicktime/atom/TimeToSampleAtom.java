@@ -36,7 +36,7 @@ import com.pump.io.GuardedOutputStream;
  * stamps; therefore, the deltas are all nonnegative. The DT axis has a zero
  * origin; <code>DT(i) = SUM</code> (for <code>j=0</code> to <code>i-1</code> of
  * <code>delta(j)</code>), and the sum of all deltas gives the length of the
- * media in the track (not mapped to the overall time scale, and not considering
+ * media in the track (not mapped to the overall timescale, and not considering
  * any edit list). The edit list atom provides the initial DT value if it is
  * nonempty (nonzero).
  */
@@ -46,7 +46,7 @@ public class TimeToSampleAtom extends LeafAtom {
 	 * This represents the duration of a series of samples. This indicates that
 	 * <code>sampleCount</code>-many consecutive samples have a duration of
 	 * <code>sampleDuration</code>. (The duration is relative to an enclosing
-	 * time scale.)
+	 * timescale.)
 	 */
 	public static class TimeToSampleEntry {
 		long sampleCount, sampleDuration;
@@ -115,7 +115,7 @@ public class TimeToSampleAtom extends LeafAtom {
 
 	@Override
 	protected long getSize() {
-		return 16 + table.length * 8;
+		return 16 + table.length * 8L;
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public class TimeToSampleAtom extends LeafAtom {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("[ ");
 		for (int a = 0; a < table.length; a++) {
 			if (a != 0) {
@@ -149,8 +149,7 @@ public class TimeToSampleAtom extends LeafAtom {
 	 * Add a new sample time to this atom.
 	 * 
 	 * @param duration
-	 *            the new duration, relative to the enclosing media's time
-	 *            scale.
+	 *            the new duration, relative to the enclosing media's time	 *            scale.
 	 */
 	public void addSampleTime(long duration) {
 		addSampleTime(1, duration);
@@ -160,8 +159,7 @@ public class TimeToSampleAtom extends LeafAtom {
 	 * Add a new sample time to this atom.
 	 * 
 	 * @param duration
-	 *            the new duration, relative to the enclosing media's time
-	 *            scale.
+	 *            the new duration, relative to the enclosing media's time	 *            scale.
 	 */
 	public void addSampleTime(long sampleCount, long duration) {
 		if (table.length == 0

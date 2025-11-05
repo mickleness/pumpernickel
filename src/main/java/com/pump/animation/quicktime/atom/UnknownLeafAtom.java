@@ -59,14 +59,14 @@ public class UnknownLeafAtom extends LeafAtom {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int a = 0; a < Math.min(data.length, 64); a++) {
 			sb.append((char) data[a]);
 		}
 		if (data.length > 64)
 			sb.append("...");
 		return "UnknownLeafAtom[ \"" + getIdentifier() + "\", \""
-				+ sb.toString() + "\" ]";
+				+ sb + "\" ]";
 	}
 
 	/**

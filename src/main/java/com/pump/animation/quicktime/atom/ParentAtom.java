@@ -183,7 +183,7 @@ public class ParentAtom extends Atom {
 	 * <p>
 	 * If the track that the sample table atom is contained in does reference
 	 * data, then the following child atoms are required: sample description,
-	 * sample size, sample to chunk, and chunk offset. All of the subtables of
+	 * sample size, sample to chunk, and chunk offset. All the subtables of
 	 * the sample table use the same total sample count.
 	 * <p>
 	 * The sample description atom must contain at least one entry. A sample
@@ -200,7 +200,7 @@ public class ParentAtom extends Atom {
 	 * Track reference atoms define relationships between tracks. Track
 	 * reference atoms allow one track to specify how it is related to other
 	 * tracks. For example, if a movie has three video tracks and three sound
-	 * tracks, track references allow you to identify the related sound and
+     * tracks, track references allow you to identify the related sound and
 	 * video tracks. Track reference atoms have an atom type value of 'tref'.
 	 * <p>
 	 * Track references are unidirectional and point from the recipient track to
@@ -210,7 +210,7 @@ public class ParentAtom extends Atom {
 	 * time information for the video track.
 	 * <p>
 	 * A single track may reference multiple tracks. For example, a video track
-	 * could reference a sound track to indicate that the two are synchronized
+	 * could reference a soundtrack to indicate that the two are synchronized
 	 * and a time code track to indicate where its time code is stored.
 	 * <p>
 	 * A single track may also be referenced by multiple tracks. For example,
@@ -292,7 +292,7 @@ public class ParentAtom extends Atom {
 					ATOM_TYPE_TRACK_APERTURE_MODE_DIMENSIONS, ATOM_TYPE_META,
 					ATOM_TYPE_ILST)));
 
-	protected List<Atom> children = new ArrayList<Atom>();
+	protected List<Atom> children = new ArrayList<>();
 	protected String id;
 
 	public ParentAtom(String id) {
@@ -304,7 +304,7 @@ public class ParentAtom extends Atom {
 			GuardedInputStream in) throws IOException {
 		super(parent);
 		this.id = id;
-		while (in.isAtLimit() == false) {
+		while (!in.isAtLimit()) {
 			Atom next = reader.read(this, in);
 			children.add(next);
 		}
@@ -317,7 +317,7 @@ public class ParentAtom extends Atom {
 
 	@Override
 	public Enumeration<Atom> children() {
-		return new EnumerationIterator<Atom>(children.iterator());
+		return new EnumerationIterator<>(children.iterator());
 	}
 
 	@Override
@@ -342,7 +342,7 @@ public class ParentAtom extends Atom {
 
 	@Override
 	public boolean isLeaf() {
-		return children.size() == 0;
+        return children.isEmpty();
 	}
 
 	@Override

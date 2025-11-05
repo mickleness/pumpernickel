@@ -54,8 +54,7 @@ public class AtomReader {
 			.unmodifiableCollection(createLeadingAtomTypes());
 
 	private static Collection<String> createLeadingAtomTypes() {
-		Collection<String> c = new HashSet<>();
-		c.addAll(ParentAtom.PARENT_ATOM_TYPES);
+        Collection<String> c = new HashSet<>(ParentAtom.PARENT_ATOM_TYPES);
 		c.add(MovieHeaderAtom.ATOM_TYPE);
 		c.add(MediaHeaderAtom.ATOM_TYPE);
 		c.add(TrackHeaderAtom.ATOM_TYPE);
@@ -70,8 +69,7 @@ public class AtomReader {
 		return c;
 	}
 
-	byte[] sizeArray = new byte[4];
-	byte[] bigSizeArray = new byte[8];
+    byte[] bigSizeArray = new byte[8];
 	List<String> readAtomTypes = new ArrayList<>();
 	FileType fileType = null;
 
@@ -89,14 +87,14 @@ public class AtomReader {
 	 */
 	public synchronized Atom[] readAll(InputStream in) throws IOException {
 		MeasuredInputStream in2 = new MeasuredInputStream(in);
-		List<Atom> v = new ArrayList<Atom>();
+		List<Atom> v = new ArrayList<>();
 		while (true) {
 			Atom atom = read(null, in2);
 			if (atom == null)
 				break;
 			v.add(atom);
 		}
-		return v.toArray(new Atom[v.size()]);
+		return v.toArray(new Atom[0]);
 	}
 
 	/**
@@ -177,20 +175,16 @@ public class AtomReader {
 				long j6 = (bigSizeArray[6] & 0xff);
 				long j7 = (bigSizeArray[7] & 0xff);
 				size = (j0 << 56L) + (j1 << 48L) + (j2 << 40L) + (j3 << 32L)
-						+ (j4 << 24L) + (j5 << 16L) + (j6 << 8L) + (j7 << 0L);
+						+ (j4 << 24L) + (j5 << 16L) + (j6 << 8L) + (j7);
 				readSoFar += 8;
 			}
-		} catch (IOException e) {
-			if (readAtomTypes.size() < 3)
-				throw new UnsupportedFileException(e);
-			throw e;
-		} catch (RuntimeException e) {
+		} catch (IOException | RuntimeException e) {
 			if (readAtomTypes.size() < 3)
 				throw new UnsupportedFileException(e);
 			throw e;
 		}
 
-		GuardedInputStream atomIn = new GuardedInputStream(in, size - readSoFar,
+        GuardedInputStream atomIn = new GuardedInputStream(in, size - readSoFar,
 				false);
 
 		return read(parent, atomIn, type);
@@ -210,9 +204,8 @@ public class AtomReader {
 	 * @return the atom read from the input stream. This may return a specific
 	 *         Atom subclass (like "MovieHeaderAtom"), or a generic
 	 *         UnknownLeafAtom.
-	 * 
-	 * @throws IOException
-	 */
+	 *
+     */
 	protected Atom read(Atom parent, GuardedInputStream in, String atomType)
 			throws IOException {
 		try {
@@ -241,11 +234,11 @@ public class AtomReader {
 							"sample description atoms must have a parent");
 
 				if (parent.getParent() != null
-						&& ((Atom) parent.getParent()).getChild(
+						&& parent.getParent().getChild(
 								VideoMediaInformationHeaderAtom.class) != null) {
 					return new VideoSampleDescriptionAtom(parent, in);
 				} else if (parent.getParent() != null
-						&& ((Atom) parent.getParent()).getChild(
+						&& parent.getParent().getChild(
 								SoundMediaInformationHeaderAtom.class) != null) {
 					return new SoundSampleDescriptionAtom(parent, in);
 				} else {

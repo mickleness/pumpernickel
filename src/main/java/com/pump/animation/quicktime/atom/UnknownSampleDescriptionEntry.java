@@ -70,13 +70,13 @@ public class UnknownSampleDescriptionEntry extends SampleDescriptionEntry {
 					+ "dataReference=" + dataReference + " ];";
 		}
 
-		String extra = "";
+		StringBuilder extra = new StringBuilder();
 		if (data.length <= 8) {
-			extra = " (";
+			extra = new StringBuilder(" (");
 			for (int a = 0; a < data.length; a++) {
-				extra = extra + (data[a] & 0xff) + " ";
+				extra.append(data[a] & 0xff).append(" ");
 			}
-			extra = extra + ") ";
+			extra.append(") ");
 		}
 
 		return "UnknownSampleDescriptionEntry[ type=\"" + type + "\", "

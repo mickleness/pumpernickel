@@ -11,7 +11,7 @@
 package com.pump.animation.quicktime.atom;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import com.pump.io.GuardedInputStream;
 import com.pump.io.GuardedOutputStream;
@@ -57,7 +57,7 @@ public class DataAtom extends LeafAtom {
 	 */
 	public String getText() {
 		if (getFlags() == FLAG_CONTAINS_TEXT) {
-			return new String(data, Charset.forName("UTF-8"));
+			return new String(data, StandardCharsets.UTF_8);
 		}
 		return null;
 	}

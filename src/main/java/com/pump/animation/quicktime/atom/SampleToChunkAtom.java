@@ -102,10 +102,9 @@ public class SampleToChunkAtom extends LeafAtom {
 	public void addChunk(long chunkIndex, long samplesPerChunk,
 			long sampleDescriptionID) {
 		if (entries.length == 0) {
-			SampleToChunkEntry[] newArray = new SampleToChunkEntry[] {
-					new SampleToChunkEntry(chunkIndex, samplesPerChunk,
-							sampleDescriptionID) };
-			entries = newArray;
+            entries = new SampleToChunkEntry[] {
+                    new SampleToChunkEntry(chunkIndex, samplesPerChunk,
+                            sampleDescriptionID) };
 		} else {
 			for (int a = 0; a < entries.length; a++) {
 				if (entries[a].firstChunk <= chunkIndex
@@ -139,7 +138,7 @@ public class SampleToChunkAtom extends LeafAtom {
 
 	@Override
 	protected long getSize() {
-		return 16 + 12 * entries.length;
+		return 16 + 12L * entries.length;
 	}
 
 	@Override
@@ -154,7 +153,7 @@ public class SampleToChunkAtom extends LeafAtom {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("[ ");
 		for (int a = 0; a < entries.length; a++) {
 			if (a != 0) {

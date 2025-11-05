@@ -109,7 +109,7 @@ public class ChunkOffsetAtom extends AbstractChunkOffsetAtom {
 
 	@Override
 	protected long getSize() {
-		return 16 + offsetTable.length * 4;
+        return 16 + offsetTable.length * 4L;
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public class ChunkOffsetAtom extends AbstractChunkOffsetAtom {
 		if (offsetTable.length > 50 && ABBREVIATE) {
 			entriesString = "[ ... ]";
 		} else {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append("[ ");
 			for (int a = 0; a < offsetTable.length; a++) {
 				if (a != 0) {

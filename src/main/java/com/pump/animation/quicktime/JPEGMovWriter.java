@@ -263,7 +263,7 @@ public class JPEGMovWriter implements AutoCloseable {
 
 		/**
 		 * The duration, relative not to the audio's data but to the movie's
-		 * time scale.
+		 * timescale.
 		 */
 		long totalDurationInMovieTimeScale;
 
@@ -561,7 +561,7 @@ public class JPEGMovWriter implements AutoCloseable {
 		 * beginning of the interleaved data. This means that the sound and
 		 * video data are offset from each other in the file by one second.
 		 */
-		newTrack.writeAudio(DEFAULT_TIME_SCALE * 1);
+		newTrack.writeAudio(DEFAULT_TIME_SCALE);
 	}
 
 	/**
@@ -577,7 +577,6 @@ public class JPEGMovWriter implements AutoCloseable {
 	 *            the image to add as a frame.
      * @param jpegQuality
      *          A float from [0,1], where 1 is a high-quality JPEG image.
-	 * @throws IOException
 	 */
 	public synchronized void addFrame(float duration, BufferedImage bi, float jpegQuality) throws IOException {
 		if (closed)
@@ -601,7 +600,7 @@ public class JPEGMovWriter implements AutoCloseable {
                               float jpegQuality) throws IOException {
         if (image.getType() == BufferedImage.TYPE_INT_ARGB
                 || image.getType() == BufferedImage.TYPE_INT_ARGB_PRE) {
-            if (printWarning == false) {
+            if (!printWarning) {
                 printWarning = true;
                 System.err
                         .println("JPEGMovWriter Warning: a BufferedImage of type TYPE_INT_ARGB may produce unexpected results. The recommended type is TYPE_INT_RGB.");
@@ -635,7 +634,6 @@ public class JPEGMovWriter implements AutoCloseable {
 	 * @param image
 	 *            the image to add. This must a JPEG image, and its dimensions
      *            must match any preexisting frames.
-	 * @throws IOException
 	 */
     public synchronized void addFrame(float duration, File image)
             throws IOException {
@@ -692,8 +690,6 @@ public class JPEGMovWriter implements AutoCloseable {
 	 *            the movie file. If false then the movie ends immediately. If
 	 *            an operation is canceled you should pass false here to speed
 	 *            up the time it takes to close everything out.
-	 * 
-	 * @throws IOException
 	 */
 	public void close(boolean writeRemainingAudio) throws IOException {
 		synchronized (this) {
@@ -706,14 +702,14 @@ public class JPEGMovWriter implements AutoCloseable {
 		try {
 			videoTrack.close();
 			if (writeRemainingAudio) {
-				writeAudioLoop: while (true) {
+				while (true) {
 					boolean audioRemaining = false;
 					for (AudioTrack audio : audioTracks) {
 						if (audio.writeAudio(DEFAULT_TIME_SCALE))
 							audioRemaining = true;
 					}
 					if (!audioRemaining)
-						break writeAudioLoop;
+						break;
 				}
 			}
 
@@ -747,9 +743,7 @@ public class JPEGMovWriter implements AutoCloseable {
 		// 4 bytes of this file now that we can conclusively say
 		// how big the "mdat" atom is:
 
-		RandomAccessFile raf = null;
-		try {
-			raf = new RandomAccessFile(dest, "rw");
+		try (RandomAccessFile raf = new RandomAccessFile(dest, "rw")) {
 			raf.seek(8);
 			byte[] array = new byte[8];
 			array[0] = (byte) ((mdatSize >> 56) & 0xff);
@@ -761,8 +755,6 @@ public class JPEGMovWriter implements AutoCloseable {
 			array[6] = (byte) ((mdatSize >> 8) & 0xff);
 			array[7] = (byte) (mdatSize & 0xff);
 			raf.write(array);
-		} finally {
-			raf.close();
 		}
 	}
 
@@ -777,7 +769,6 @@ public class JPEGMovWriter implements AutoCloseable {
 	 *            whether every two bytes should be switched (to convert from
 	 *            one endian to another)
 	 * @return the number of bytes written.
-	 * @throws IOException
 	 */
 	protected static synchronized long write(OutputStream out, InputStream in,
 			boolean reverseBytePairs) throws IOException {
@@ -811,7 +802,6 @@ public class JPEGMovWriter implements AutoCloseable {
 	 *            whether every two bytes should be switched (to convert from
 	 *            one endian to another)
 	 * @return the number of bytes written.
-	 * @throws IOException
 	 */
 	protected static synchronized long write(OutputStream out, InputStream in,
 			long maxBytes, boolean reverseBytePairs) throws IOException {
@@ -825,7 +815,7 @@ public class JPEGMovWriter implements AutoCloseable {
 		int k = read(in, block, Math.min(block.length, (int) maxBytes));
 		if (reverseBytePairs)
 			reverseBytePairs(block, k);
-		loop: while (k != -1) {
+		while (k != -1) {
 			written += k;
 			out.write(block, 0, k);
 			k = read(in, block,
@@ -833,7 +823,7 @@ public class JPEGMovWriter implements AutoCloseable {
 			if (reverseBytePairs)
 				reverseBytePairs(block, k);
 			if (written == maxBytes)
-				break loop;
+				break;
 		}
 		return written;
 	}
@@ -841,16 +831,12 @@ public class JPEGMovWriter implements AutoCloseable {
 	/**
 	 * Reads bytes from an InputStream. This will always return an even number
 	 * of bytes.
-	 * 
-	 * @param bytesToRead
-	 * @return
 	 */
 	private static int read(InputStream in, byte[] dest, int bytesToRead)
 			throws IOException {
-		int read = 0;
 		if (bytesToRead % 2 == 1)
 			bytesToRead--;
-		read = in.read(dest, 0, bytesToRead);
+		int read = in.read(dest, 0, bytesToRead);
 		if (read == -1)
 			return read;
 		while ((read % 2) == 1) {

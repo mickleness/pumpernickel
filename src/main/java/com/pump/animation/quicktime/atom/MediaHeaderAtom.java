@@ -18,7 +18,7 @@ import com.pump.io.GuardedOutputStream;
 
 /**
  * The media header atom specifies the characteristics of a media, including
- * time scale and duration. The media header atom has an atom type of 'mdhd'.
+ * timescale and duration. The media header atom has an atom type of 'mdhd'.
  */
 public class MediaHeaderAtom extends LeafAtom {
 
@@ -114,7 +114,7 @@ public class MediaHeaderAtom extends LeafAtom {
 	}
 
 	/**
-	 * Return a time value that indicates the time scale for this media—that is,
+	 * Return a time value that indicates the timescale for this media—that is,
 	 * the number of time units that pass per second in its time coordinate
 	 * system.
 	 */
@@ -123,7 +123,7 @@ public class MediaHeaderAtom extends LeafAtom {
 	}
 
 	/**
-	 * Return the duration of this media in units of its time scale.
+	 * Return the duration of this media in units of its timescale.
 	 */
 	public long getDuration() {
 		return duration;

@@ -44,15 +44,15 @@ public abstract class Atom implements TreeNode {
 	 */
 	protected static boolean ABBREVIATE = true;
 
-	protected static Enumeration<Object> EMPTY_ENUMERATION = new Enumeration<Object>() {
-		public boolean hasMoreElements() {
-			return false;
-		}
+	protected static Enumeration<Object> EMPTY_ENUMERATION = new Enumeration<>() {
+        public boolean hasMoreElements() {
+            return false;
+        }
 
-		public Object nextElement() {
-			return null;
-		}
-	};
+        public Object nextElement() {
+            return null;
+        }
+    };
 
 	protected static void read(InputStream in, byte[] array)
 			throws IOException {
@@ -60,7 +60,7 @@ public abstract class Atom implements TreeNode {
 	}
 
 	protected static String getFieldName(Class<?> c, int i) {
-		List<String> answers = new ArrayList<String>();
+		List<String> answers = new ArrayList<>();
 		Field[] f = c.getFields();
 		for (int a = 0; a < f.length; a++) {
 			if (((f[a].getModifiers() & Modifier.STATIC) > 0)
@@ -71,21 +71,22 @@ public abstract class Atom implements TreeNode {
 					if (k == i)
 						answers.add(f[a].getName());
 				} catch (Exception e) {
+                    // intentionally empty
 				}
 			}
 		}
-		if (answers.size() == 0)
+		if (answers.isEmpty())
 			return "unknown";
 		if (answers.size() == 1)
 			return answers.get(0);
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 		for (int a = 0; a < answers.size(); a++) {
 			if (a != 0) {
 				sb.append(", ");
 			}
-			sb.append("\"" + answers.get(a) + "\"");
+			sb.append("\"").append(answers.get(a)).append("\"");
 		}
 		sb.append("]");
 		return sb.toString();
@@ -115,11 +116,10 @@ public abstract class Atom implements TreeNode {
 	}
 
 	static byte[] array32 = new byte[32];
-	static byte[] array36 = new byte[36];
-	static double[][] matrix = new double[3][3];
+    static double[][] matrix = new double[3][3];
 
-	protected synchronized static final PerspectiveTransform readMatrix(
-			InputStream in) throws IOException {
+	protected synchronized static PerspectiveTransform readMatrix(
+            InputStream in) throws IOException {
 		matrix[0][0] = read16_16Float(in);
 		matrix[0][1] = read16_16Float(in);
 		matrix[0][2] = read2_30Float(in);
@@ -133,8 +133,8 @@ public abstract class Atom implements TreeNode {
 		return new PerspectiveTransform(matrix);
 	}
 
-	protected synchronized static final void writeMatrix(OutputStream out,
-			PerspectiveTransform transform) throws IOException {
+	protected synchronized static void writeMatrix(OutputStream out,
+                                                   PerspectiveTransform transform) throws IOException {
 		transform.getMatrix(matrix);
 		write16_16Float(out, (float) matrix[0][0]);
 		write16_16Float(out, (float) matrix[0][1]);
@@ -149,15 +149,11 @@ public abstract class Atom implements TreeNode {
 
 	public static void skip(InputStream in, long skip) throws IOException {
 		long totalSkipped = in.skip(skip);
-		long lastSkipped = totalSkipped;
-		while (totalSkipped < skip && lastSkipped != -1) {
-			lastSkipped = in.skip(skip - totalSkipped);
-			if (lastSkipped != -1)
-				totalSkipped += lastSkipped;
+		while (totalSkipped < skip) {
+			long lastSkipped = in.skip(skip - totalSkipped);
+            totalSkipped += lastSkipped;
 		}
-		if (lastSkipped == -1)
-			throw new EOFException();
-	}
+    }
 
 	static byte[] array1 = new byte[1];
 	static byte[] array2 = new byte[2];
@@ -166,37 +162,37 @@ public abstract class Atom implements TreeNode {
 	static byte[] array6 = new byte[6];
     static byte[] array8 = new byte[8];
 
-	protected synchronized static final int read16Int(InputStream in)
+	protected synchronized static int read16Int(InputStream in)
 			throws IOException {
 		read(in, array2);
 		return ((array2[0] & 0xff) << 8) + (array2[1] & 0xff);
 	}
 
-	protected synchronized static final void write16Int(OutputStream out,
-			long i) throws IOException {
+	protected synchronized static void write16Int(OutputStream out,
+                                                  long i) throws IOException {
 		array2[0] = (byte) ((i >> 8) & 0xff);
 		array2[1] = (byte) (i & 0xff);
 		out.write(array2);
 	}
 
-	protected synchronized static final void write48Int(OutputStream out,
-			long i) throws IOException {
+	protected synchronized static void write48Int(OutputStream out,
+                                                  long i) throws IOException {
 		array6[0] = (byte) ((i >> 40) & 0xff);
 		array6[1] = (byte) ((i >> 32) & 0xff);
 		array6[2] = (byte) ((i >> 24) & 0xff);
 		array6[3] = (byte) ((i >> 16) & 0xff);
 		array6[4] = (byte) ((i >> 8) & 0xff);
-		array6[5] = (byte) ((i >> 0) & 0xff);
+		array6[5] = (byte) ((i) & 0xff);
 		out.write(array6);
 	}
 
-	protected synchronized static final void write8Int(OutputStream out, int i)
+	protected synchronized static void write8Int(OutputStream out, int i)
 			throws IOException {
 		array1[0] = (byte) (i & 0xff);
 		out.write(array1);
 	}
 
-	protected synchronized static final void write24Int(OutputStream out, int i)
+	protected synchronized static void write24Int(OutputStream out, int i)
 			throws IOException {
 		array3[0] = (byte) ((i >> 16) & 0xff);
 		array3[1] = (byte) ((i >> 8) & 0xff);
@@ -204,7 +200,7 @@ public abstract class Atom implements TreeNode {
 		out.write(array3);
 	}
 
-	public synchronized static final void write32Int(OutputStream out, long i)
+	public synchronized static void write32Int(OutputStream out, long i)
 			throws IOException {
 		array4[0] = (byte) ((i >> 24) & 0xff);
 		array4[1] = (byte) ((i >> 16) & 0xff);
@@ -213,7 +209,7 @@ public abstract class Atom implements TreeNode {
 		out.write(array4);
 	}
 
-    public synchronized static final void write64Int(OutputStream out, long i)
+    public synchronized static void write64Int(OutputStream out, long i)
             throws IOException {
         array8[0] = (byte) ((i >> 56) & 0xff);
         array8[1] = (byte) ((i >> 48) & 0xff);
@@ -226,9 +222,9 @@ public abstract class Atom implements TreeNode {
         out.write(array8);
     }
 
-	public synchronized static final void write32String(OutputStream out,
-			String s) throws IOException {
-		if (s.length() == 0) {
+	public synchronized static void write32String(OutputStream out,
+                                                  String s) throws IOException {
+		if (s.isEmpty()) {
 			array4[0] = 0;
 			array4[1] = 0;
 			array4[2] = 0;
@@ -242,7 +238,7 @@ public abstract class Atom implements TreeNode {
 		out.write(array4);
 	}
 
-	protected synchronized static final int read24Int(InputStream in)
+	protected synchronized static int read24Int(InputStream in)
 			throws IOException {
 		read(in, array3);
 		long k = (((long) (array3[0] & 0xff)) << 16)
@@ -250,70 +246,66 @@ public abstract class Atom implements TreeNode {
 		return (int) k;
 	}
 
-	protected synchronized static final int read8Int(InputStream in)
+	protected synchronized static int read8Int(InputStream in)
 			throws IOException {
 		read(in, array1);
 		return (((array1[0] & 0xff)));
 	}
 
-	protected synchronized static final long read32Int(InputStream in)
+	protected synchronized static long read32Int(InputStream in)
 			throws IOException {
 		read(in, array4);
 		return create32Int(array4);
 	}
 
-    protected synchronized static final long read64Int(InputStream in)
+    protected synchronized static long read64Int(InputStream in)
             throws IOException {
         read(in, array8);
         return create64Long(array8);
     }
 
-	protected static final long create32Int(byte[] array) {
-		long value = ((array[0] & 0xff) << 24) + ((array[1] & 0xff) << 16)
+	protected static long create32Int(byte[] array) {
+		long value = ((long) (array[0] & 0xff) << 24) + ((array[1] & 0xff) << 16)
 				+ ((array[2] & 0xff) << 8) + (array[3] & 0xff);
 		if (value > 0x80000000L) { // two's complement:
-			long t = -((~value) & 0xffffffff);
-			value = t;
+            value = -((~value));
 		}
 		return value;
 	}
 
-    protected static final long create64Long(byte[] array) {
-        long value = ((long) (array[0] & 0xff) << 56) + ((long) (array[1] & 0xff) << 48)
+    protected static long create64Long(byte[] array) {
+        return ((long) (array[0] & 0xff) << 56) + ((long) (array[1] & 0xff) << 48)
                 + ((long) (array[2] & 0xff) << 40) + ((long) (array[3] & 0xff) << 32)
                 + ((long) (array[4] & 0xff) << 24) + ((array[5] & 0xff) << 16)
                 + ((array[2] & 0xff) << 6) + (array[7] & 0xff);
-        return value;
     }
 
-	protected synchronized static final String read32String(InputStream in)
+	protected synchronized static String read32String(InputStream in)
 			throws IOException {
 		read(in, array4);
-		StringBuffer sb = new StringBuffer(4);
-		sb.append(((char) (array4[0] & 0xff)));
-		sb.append(((char) (array4[1] & 0xff)));
-		sb.append(((char) (array4[2] & 0xff)));
-		sb.append(((char) (array4[3] & 0xff)));
-		return sb.toString();
+        return String.valueOf((char) (array4[0] & 0xff)) +
+                ((char) (array4[1] & 0xff)) +
+                ((char) (array4[2] & 0xff)) +
+                ((char) (array4[3] & 0xff));
 	}
 
-	protected synchronized static final String read32BytePascalString(
-			InputStream in) throws IOException {
+	protected synchronized static String read32BytePascalString(
+            InputStream in) throws IOException {
 		read(in, array32);
 		int size = array32[0] & 0xff;
 
 		// just in case
 		size = Math.min(size, 31);
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int a = 0; a < size; a++) {
 			sb.append((char) (array32[a + 1] & 0xff));
 		}
 		return sb.toString();
 	}
 
-	protected synchronized static final void write32BytePascalString(
-			OutputStream out, String s) throws IOException {
+	protected synchronized static void write32BytePascalString(
+            OutputStream out, String s) throws IOException {
 		for (int a = 0; a < 32; a++) {
 			if (a == 0) {
 				array32[a] = (byte) s.length();
@@ -326,7 +318,7 @@ public abstract class Atom implements TreeNode {
 		out.write(array32);
 	}
 
-	protected synchronized static final long read48Int(InputStream in)
+	protected synchronized static long read48Int(InputStream in)
 			throws IOException {
 		read(in, array6);
 		return (((long) (array6[0] & 0xff)) << 40)
@@ -334,20 +326,20 @@ public abstract class Atom implements TreeNode {
 				+ (((long) (array6[2] & 0xff)) << 24)
 				+ (((long) (array6[3] & 0xff)) << 16)
 				+ (((long) (array6[4] & 0xff)) << 8)
-				+ (((long) (array6[5] & 0xff)) << 0);
+				+ (((long) (array6[5] & 0xff)));
 	}
 
-	protected synchronized static final float read16_16Float(InputStream in)
+	protected synchronized static float read16_16Float(InputStream in)
 			throws IOException {
 		long value = read32Int(in);
 		float multiplier = 1;
-		if ((value & 0x80000000) > 0) {
+		if ((value & 0x80000000L) > 0) {
 			// we're in two's complement
-			value = (~value) & 0xffffffff;
+			value = (~value);
 			value++;
 			multiplier = -1;
 		}
-		long w = (value & 0xffff0000) >> 16;
+		long w = (value & 0xffff0000L) >> 16;
 		long f = (value & 0xffff);
 
 		float floatValue = (w) + (f) / 65536f;
@@ -355,16 +347,15 @@ public abstract class Atom implements TreeNode {
 		return floatValue * multiplier;
 	}
 
-	protected synchronized static final float read16_16UnsignedFloat(
-			InputStream in) throws IOException {
+	protected synchronized static float read16_16UnsignedFloat(
+            InputStream in) throws IOException {
 		int integerPart = read16Int(in);
 		int fractionPart = read16Int(in);
 
-		float floatValue = (integerPart) + (fractionPart) / 65536f;
-		return floatValue;
+        return (integerPart) + (fractionPart) / 65536f;
 	}
 
-	protected synchronized static final float read2_30Float(InputStream in)
+	protected synchronized static float read2_30Float(InputStream in)
 			throws IOException {
 		long value = read32Int(in);
 		long w = (value >> 30) & 0xff;
@@ -386,7 +377,7 @@ public abstract class Atom implements TreeNode {
 		return floatValue * multiplier;
 	}
 
-	protected synchronized static final float read8_8Float(InputStream in)
+	protected synchronized static float read8_8Float(InputStream in)
 			throws IOException {
 		long value = read16Int(in);
 		float multiplier = 1;
@@ -404,8 +395,8 @@ public abstract class Atom implements TreeNode {
 		return floatValue * multiplier;
 	}
 
-	protected synchronized static final void write16_16Float(OutputStream out,
-			float f) throws IOException {
+	protected synchronized static void write16_16Float(OutputStream out,
+                                                       float f) throws IOException {
 		float v = (f >= 0) ? f : -f;
 
 		long wholePart = (long) v;
@@ -418,18 +409,8 @@ public abstract class Atom implements TreeNode {
 		write32Int(out, t);
 	}
 
-	protected synchronized static final void write16_16UnsignedFloat(
-			OutputStream out, float f) throws IOException {
-		if (f < 0)
-			throw new IllegalArgumentException(f + "<0");
-		long wholePart = (long) f;
-		long fractionPart = (long) ((f - wholePart) * 65536);
-		long t = (wholePart << 16) + fractionPart;
-		write32Int(out, t);
-	}
-
-	protected synchronized static final void write8_8Float(OutputStream out,
-			float f) throws IOException {
+    protected synchronized static void write8_8Float(OutputStream out,
+                                                     float f) throws IOException {
 		float v = (f >= 0) ? f : -f;
 
 		long wholePart = (long) v;
@@ -442,8 +423,8 @@ public abstract class Atom implements TreeNode {
 		write16Int(out, t);
 	}
 
-	protected synchronized static final void write2_30Float(OutputStream out,
-			float f) throws IOException {
+	protected synchronized static void write2_30Float(OutputStream out,
+                                                      float f) throws IOException {
 		float v = (f >= 0) ? f : -f;
 
 		long wholePart = (long) v;
@@ -461,11 +442,11 @@ public abstract class Atom implements TreeNode {
 			- (new GregorianCalendar(1904, GregorianCalendar.JANUARY, 1))
 					.getTimeInMillis();
 
-	protected static final Date readDate(InputStream in) throws IOException {
+	protected static Date readDate(InputStream in) throws IOException {
 		return new Date(read32Int(in) * 1000 + QT_TO_JAVA_MS_CHANGE);
 	}
 
-	protected static final void writeDate(OutputStream out, Date d)
+	protected static void writeDate(OutputStream out, Date d)
 			throws IOException {
 		long millis = d.getTime();
 		long qtMillis = millis - QT_TO_JAVA_MS_CHANGE;
@@ -491,9 +472,7 @@ public abstract class Atom implements TreeNode {
 			writeContents(out);
 		} catch (IOException e) {
 			// very unlikely in a NullOutputStream!
-			RuntimeException e2 = new RuntimeException();
-			e2.initCause(e);
-			throw e2;
+            throw new RuntimeException(e);
 		}
 		return out.getBytesWritten() + 8;
 	}
@@ -514,7 +493,7 @@ public abstract class Atom implements TreeNode {
 	 * defined in the QT file format.
 	 * <P>
 	 * (Although this uses a <code>java.lang.String</code>, serious badness will
-	 * follow if this value is not exactly 4-bytes long.
+	 * follow if this value is not exactly 4-bytes long.)
 	 * 
 	 * @return the 4-byte identifier this atom uses (such as "moov", "trak",
 	 *         etc.)
@@ -531,8 +510,7 @@ public abstract class Atom implements TreeNode {
 	 * @param out
 	 *            a <code>GuardedOutputStream</code> that is restricted to write
 	 *            only a fixed number of bytes.
-	 * @throws IOException
-	 */
+     */
 	protected abstract void writeContents(GuardedOutputStream out)
 			throws IOException;
 
@@ -574,7 +552,7 @@ public abstract class Atom implements TreeNode {
 	/** Returns the first child of the class provided. */
 	public Atom getChild(Class<?> t) {
 		for (int a = 0; a < getChildCount(); a++) {
-			Atom atom = (Atom) getChildAt(a);
+			Atom atom = getChildAt(a);
 			if (t.isInstance(atom))
 				return atom;
 		}
@@ -596,7 +574,7 @@ public abstract class Atom implements TreeNode {
 				maxID = t.trackID;
 		}
 		for (int a = 0; a < getChildCount(); a++) {
-			Atom atom = (Atom) getChildAt(a);
+			Atom atom = getChildAt(a);
 			long k = atom.getHighestTrackID();
 			if (k > maxID)
 				maxID = k;

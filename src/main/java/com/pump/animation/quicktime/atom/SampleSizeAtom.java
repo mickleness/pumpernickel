@@ -57,7 +57,7 @@ public class SampleSizeAtom extends LeafAtom {
 		flags = read24Int(in);
 		sampleSize = read32Int(in);
 		sampleCount = read32Int(in);
-		if (in.isAtLimit() == false) {
+		if (!in.isAtLimit()) {
 			sizeTable = new long[(int) sampleCount];
 			for (int a = 0; a < sizeTable.length; a++) {
 				sizeTable[a] = read32Int(in);
@@ -93,7 +93,7 @@ public class SampleSizeAtom extends LeafAtom {
 	protected long getSize() {
 		if (sizeTable == null)
 			return 20;
-		return 20 + sizeTable.length * 4;
+		return 20 + sizeTable.length * 4L;
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class SampleSizeAtom extends LeafAtom {
 			if (sizeTable.length > 50 && ABBREVIATE) {
 				entriesString = "[ ... ]";
 			} else {
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				sb.append("[ ");
 				for (int a = 0; a < sizeTable.length; a++) {
 					if (a != 0) {
@@ -163,8 +163,7 @@ public class SampleSizeAtom extends LeafAtom {
 	 * Return a 32-bit integer containing the count of entries in the sample
 	 * size table.
 	 * <p>
-	 * Note {@link #getSizeTable()} may return null when this value is well
-	 * defined.
+	 * Note {@link #getSizeTable()} may return null when this value is well-defined.
 	 */
 	public long getSampleCount() {
 		return sampleCount;

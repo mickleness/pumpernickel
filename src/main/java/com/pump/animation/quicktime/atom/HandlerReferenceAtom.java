@@ -62,20 +62,20 @@ public class HandlerReferenceAtom extends LeafAtom {
 		componentFlagsMask = read32Int(in);
 
 		int stringSize = in.read();
-		if (stringSize != bytesToRead - 25) {
+        byte[] data;
+        if (stringSize != bytesToRead - 25) {
 			// this is NOT a counted string, as the API
 			// suggests it is: instead it's a pascal string.
 			// thanks to Chris Adamson for pointing this out.
-			byte[] data = new byte[bytesToRead - 24];
+            data = new byte[bytesToRead - 24];
 			data[0] = (byte) stringSize;
 			read(in, data, 1, data.length - 1);
-			componentName = new String(data);
-		} else {
-			byte[] data = new byte[stringSize];
+        } else {
+            data = new byte[stringSize];
 			read(in, data);
-			componentName = new String(data);
-		}
-	}
+        }
+        componentName = new String(data);
+    }
 
 	public void setComponentFlags(long v) {
 		componentFlags = v;

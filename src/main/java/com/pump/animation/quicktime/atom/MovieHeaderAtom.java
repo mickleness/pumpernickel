@@ -21,7 +21,7 @@ import com.pump.io.GuardedOutputStream;
 /**
  * You use the movie header atom to specify the characteristics of an entire
  * QuickTime movie. The data contained in this atom defines characteristics of
- * the entire QuickTime movie, such as time scale and duration. It has an atom
+ * the entire QuickTime movie, such as timescale and duration. It has an atom
  * type value of 'mvhd'.
  */
 public class MovieHeaderAtom extends LeafAtom {
@@ -168,18 +168,17 @@ public class MovieHeaderAtom extends LeafAtom {
 	}
 
 	/**
-	 * Return time value that indicates the time scale for this movie—that is,
+	 * Return time value that indicates the timescale for this movie—that is,
 	 * the number of time units that pass per second in its time coordinate
 	 * system. A time coordinate system that measures time in sixtieths of a
-	 * second, for example, has a time scale of 60.
+	 * second, for example, has a timescale of 60.
 	 */
 	public long getTimeScale() {
 		return timeScale;
 	}
 
 	/**
-	 * Return a time value that indicates the duration of the movie in time
-	 * scale units. Note that this property is derived from the movie’s tracks.
+	 * Return a time value that indicates the duration of the movie in time	 * scale units. Note that this property is derived from the movie’s tracks.
 	 * The value of this field corresponds to the duration of the longest track
 	 * in the movie.
 	 */
@@ -218,7 +217,7 @@ public class MovieHeaderAtom extends LeafAtom {
 	}
 
 	/**
-	 * Return the duration of the movie preview in movie time scale units.
+	 * Return the duration of the movie preview in movie timescale units.
 	 */
 	public long getPreviewDuration() {
 		return previewDuration;
@@ -239,7 +238,7 @@ public class MovieHeaderAtom extends LeafAtom {
 	}
 
 	/**
-	 * Return the duration of the current selection in movie time scale units.
+	 * Return the duration of the current selection in movie timescale units.
 	 */
 	public long getSelectionDuration() {
 		return selectionDuration;

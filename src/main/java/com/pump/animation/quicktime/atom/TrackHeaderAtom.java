@@ -175,7 +175,7 @@ public class TrackHeaderAtom extends LeafAtom {
 	 * Return a time value that indicates the duration of this track (in the
 	 * movie’s time coordinate system). Note that this property is derived from
 	 * the track’s edits. The value of this field is equal to the sum of the
-	 * durations of all of the track’s edits. If there is no edit list, then the
+	 * durations of all the track’s edits. If there is no edit list, then the
 	 * duration is the sum of the sample durations, converted into the movie
 	 * timescale.
 	 */
