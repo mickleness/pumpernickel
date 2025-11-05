@@ -19,8 +19,8 @@ import javax.swing.tree.TreeNode;
  */
 public abstract class LeafAtom extends Atom {
 
-	protected LeafAtom(Atom parent) {
-		super(parent);
+	protected LeafAtom(String identifier, Atom parent) {
+		super(identifier, parent);
 	}
 
 	@Override

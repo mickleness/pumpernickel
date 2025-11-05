@@ -97,7 +97,7 @@ public class EditListAtom extends LeafAtom {
 	protected EditListTableEntry[] table = new EditListTableEntry[] {};
 
 	protected EditListAtom(Atom parent, InputStream in) throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		version = Atom.read8Int(in);
 		flags = Atom.read24Int(in);
 
@@ -114,7 +114,7 @@ public class EditListAtom extends LeafAtom {
 	}
 
 	public EditListAtom() {
-		super(null);
+		super(ATOM_TYPE, null);
 	}
 
 	public void addEditListTableEntry(long trackDuration, long mediaTime,
@@ -131,11 +131,6 @@ public class EditListAtom extends LeafAtom {
 	@Override
 	protected long getSize() {
 		return 16 + 12L * table.length;
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

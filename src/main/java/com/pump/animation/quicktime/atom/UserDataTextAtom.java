@@ -69,12 +69,9 @@ public class UserDataTextAtom extends LeafAtom {
 
 	protected List<TextEntry> entries = new ArrayList<>();
 
-	protected String id;
-
 	public UserDataTextAtom(Atom parent, String id, GuardedInputStream in)
 			throws IOException {
-		super(parent);
-		this.id = id;
+		super(id, parent);
 		while (!in.isAtLimit()) {
 			int size = read16Int(in);
 			int language = read16Int(in);
@@ -86,11 +83,6 @@ public class UserDataTextAtom extends LeafAtom {
 
 	public TextEntry[] getTextEntries() {
 		return entries.toArray(new TextEntry[0]);
-	}
-
-	@Override
-	public String getIdentifier() {
-		return id;
 	}
 
 	@Override
@@ -106,7 +98,7 @@ public class UserDataTextAtom extends LeafAtom {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("UserDataTextAtom[ \""
-				+ getIdentifier() + "\" ");
+				+ identifier + "\" ");
 		for (int a = 0; a < entries.size(); a++) {
 			TextEntry e = entries.get(a);
 			sb.append("\"").append(new String(e.data)).append("\" ");

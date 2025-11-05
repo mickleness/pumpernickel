@@ -49,17 +49,17 @@ public class ChunkOffsetAtom extends AbstractChunkOffsetAtom {
 	protected long[] offsetTable = new long[0];
 
 	public ChunkOffsetAtom(int version, int flags) {
-		super(null);
+		super(ATOM_TYPE, null);
 		this.version = version;
 		this.flags = flags;
 	}
 
 	public ChunkOffsetAtom() {
-		super(null);
+		super(ATOM_TYPE, null);
 	}
 
 	public ChunkOffsetAtom(Atom parent, InputStream in) throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		version = in.read();
 		flags = read24Int(in);
 		int arraySize = (int) read32Int(in);
@@ -100,11 +100,6 @@ public class ChunkOffsetAtom extends AbstractChunkOffsetAtom {
 		System.arraycopy(offsetTable, 0, newArray, 0, offsetTable.length);
 		newArray[newArray.length - 1] = offset;
 		offsetTable = newArray;
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

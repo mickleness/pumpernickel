@@ -33,7 +33,7 @@ public class DataAtom extends LeafAtom {
 	protected byte[] data;
 
 	public DataAtom(Atom parent, GuardedInputStream in) throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		int size = (int) in.getRemainingLimit();
 
 		version = in.read();
@@ -69,11 +69,6 @@ public class DataAtom extends LeafAtom {
 			return "DataAtom[ \"" + text + "\"]";
 		}
 		return super.toString();
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

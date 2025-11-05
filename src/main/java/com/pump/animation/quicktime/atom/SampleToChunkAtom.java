@@ -79,17 +79,17 @@ public class SampleToChunkAtom extends LeafAtom {
 	protected SampleToChunkEntry[] entries = new SampleToChunkEntry[0];
 
 	public SampleToChunkAtom(int version, int flags) {
-		super(null);
+		super(ATOM_TYPE, null);
 		this.version = version;
 		this.flags = flags;
 	}
 
 	public SampleToChunkAtom() {
-		super(null);
+		super(ATOM_TYPE, null);
 	}
 
 	public SampleToChunkAtom(Atom parent, InputStream in) throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		version = in.read();
 		flags = read24Int(in);
 		int entryCount = (int) read32Int(in);
@@ -129,11 +129,6 @@ public class SampleToChunkAtom extends LeafAtom {
 				}
 			}
 		}
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

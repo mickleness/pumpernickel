@@ -35,7 +35,7 @@ public class MediaHeaderAtom extends LeafAtom {
 	protected int quality = 0;
 
 	public MediaHeaderAtom(long timeScale, long duration) {
-		super(null);
+		super(ATOM_TYPE, null);
 		creationTime = new Date();
 		modificationTime = creationTime;
 		this.timeScale = timeScale;
@@ -43,7 +43,7 @@ public class MediaHeaderAtom extends LeafAtom {
 	}
 
 	public MediaHeaderAtom(Atom parent, InputStream in) throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		version = in.read();
 		flags = read24Int(in);
 		creationTime = readDate(in);
@@ -52,11 +52,6 @@ public class MediaHeaderAtom extends LeafAtom {
 		duration = read32Int(in);
 		language = read16Int(in);
 		quality = read16Int(in);
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

@@ -47,7 +47,7 @@ public class MovieHeaderAtom extends LeafAtom {
 	protected long nextTrackID = -1;
 
 	public MovieHeaderAtom(Atom parent, InputStream in) throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 
 		version = in.read();
 		flags = read24Int(in);
@@ -69,7 +69,7 @@ public class MovieHeaderAtom extends LeafAtom {
 	}
 
 	public MovieHeaderAtom(long timeScale, long duration) {
-		super(null);
+		super(ATOM_TYPE, null);
 		creationTime = new Date();
 		modificationTime = creationTime;
 		this.duration = duration;
@@ -88,11 +88,6 @@ public class MovieHeaderAtom extends LeafAtom {
 	 */
 	public long getNextTrackID() {
 		return nextTrackID;
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

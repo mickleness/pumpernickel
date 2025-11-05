@@ -88,17 +88,17 @@ public class TimeToSampleAtom extends LeafAtom {
 	protected TimeToSampleEntry[] table = new TimeToSampleEntry[0];
 
 	public TimeToSampleAtom(int version, int flags) {
-		super(null);
+		super(ATOM_TYPE, null);
 		this.version = version;
 		this.flags = flags;
 	}
 
 	public TimeToSampleAtom() {
-		super(null);
+		super(ATOM_TYPE, null);
 	}
 
 	public TimeToSampleAtom(Atom parent, InputStream in) throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		version = in.read();
 		flags = read24Int(in);
 		int entryCount = (int) read32Int(in);
@@ -106,11 +106,6 @@ public class TimeToSampleAtom extends LeafAtom {
 		for (int a = 0; a < table.length; a++) {
 			table[a] = new TimeToSampleEntry(in);
 		}
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

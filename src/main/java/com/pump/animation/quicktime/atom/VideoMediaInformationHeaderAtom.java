@@ -37,21 +37,16 @@ public class VideoMediaInformationHeaderAtom extends LeafAtom {
 	protected long opColor = 0x800080008000L;
 
 	public VideoMediaInformationHeaderAtom() {
-		super(null);
+		super(ATOM_TYPE, null);
 	}
 
 	public VideoMediaInformationHeaderAtom(Atom parent, InputStream in)
 			throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		version = in.read();
 		flags = read24Int(in);
 		graphicsMode = read16Int(in);
 		opColor = read48Int(in);
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

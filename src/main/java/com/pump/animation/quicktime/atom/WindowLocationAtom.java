@@ -25,14 +25,9 @@ public class WindowLocationAtom extends LeafAtom {
 	protected int x, y;
 
 	public WindowLocationAtom(Atom parent, InputStream in) throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		x = read16Int(in);
 		y = read16Int(in);
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

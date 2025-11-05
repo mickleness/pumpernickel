@@ -41,21 +41,16 @@ public class SoundMediaInformationHeaderAtom extends LeafAtom {
 	protected int balance = 0;
 
 	public SoundMediaInformationHeaderAtom() {
-		super(null);
+		super(ATOM_TYPE, null);
 	}
 
 	protected SoundMediaInformationHeaderAtom(Atom parent, InputStream in)
 			throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		version = in.read();
 		flags = Atom.read24Int(in);
 		balance = Atom.read16Int(in);
 		Atom.read16Int(in); // reserved unused space
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

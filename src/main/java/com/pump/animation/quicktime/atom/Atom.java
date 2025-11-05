@@ -16,11 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import javax.media.jai.PerspectiveTransform;
 import javax.swing.tree.TreeNode;
@@ -478,9 +474,21 @@ public abstract class Atom implements TreeNode {
 	}
 
 	protected Atom parent;
+    protected final String identifier;
 
-	protected Atom(Atom parent) {
+    /**
+     * @param identifier the 4-byte identifier this atom uses (such as "moov", "trak",
+     *         etc.)
+     */
+	protected Atom(String identifier, Atom parent) {
 		this.parent = parent;
+        if (this instanceof EmptyAtom) {
+            this.identifier = null;
+        } else {
+            this.identifier = Objects.requireNonNull(identifier);
+            if (identifier.length() != 4)
+                throw new IllegalArgumentException("The atom identifier must be 4 characters.");
+        }
 	}
 
 	@Override
@@ -488,17 +496,13 @@ public abstract class Atom implements TreeNode {
 		return parent;
 	}
 
-	/**
-	 * Returns the 4-byte identifier this atom uses. These identifiers are often
-	 * defined in the QT file format.
-	 * <P>
-	 * (Although this uses a <code>java.lang.String</code>, serious badness will
-	 * follow if this value is not exactly 4-bytes long.)
-	 * 
-	 * @return the 4-byte identifier this atom uses (such as "moov", "trak",
-	 *         etc.)
-	 */
-	public abstract String getIdentifier();
+    /**
+     * Returns the 4-byte identifier this atom uses. These identifiers are often
+     * defined in the QT file format.
+     */
+    public final String getIdentifier() {
+        return identifier;
+    }
 
 	/**
 	 * Writes the contents of this atom, minus the first 8 bytes. This is called

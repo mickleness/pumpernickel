@@ -20,18 +20,15 @@ import com.pump.io.GuardedOutputStream;
  */
 public class UnknownLeafAtom extends LeafAtom {
 	protected byte[] data;
-	protected String id;
 
 	public UnknownLeafAtom(String id, byte[] data) {
-		super(null);
-		this.id = id;
+		super(id, null);
 		this.data = data;
 	}
 
 	public UnknownLeafAtom(Atom parent, String id, GuardedInputStream in)
 			throws IOException {
-		super(parent);
-		this.id = id;
+		super(id, parent);
 		int size = (int) in.getRemainingLimit();
 		try {
 			data = new byte[size];
@@ -40,11 +37,6 @@ public class UnknownLeafAtom extends LeafAtom {
 			throw e;
 		}
 		read(in, data);
-	}
-
-	@Override
-	public String getIdentifier() {
-		return id;
 	}
 
 	@Override

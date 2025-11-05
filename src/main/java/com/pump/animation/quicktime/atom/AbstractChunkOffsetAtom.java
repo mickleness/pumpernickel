@@ -5,8 +5,8 @@ package com.pump.animation.quicktime.atom;
  */
 public abstract class AbstractChunkOffsetAtom extends LeafAtom {
 
-    protected AbstractChunkOffsetAtom(Atom parent) {
-        super(parent);
+    protected AbstractChunkOffsetAtom(String identifier, Atom parent) {
+        super(identifier, parent);
     }
 
     /**

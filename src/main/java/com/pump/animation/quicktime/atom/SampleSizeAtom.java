@@ -37,7 +37,7 @@ public class SampleSizeAtom extends LeafAtom {
 
 	public SampleSizeAtom(int version, int flags, long sampleSize,
 			int sampleCount, long[] table) {
-		super(null);
+		super(ATOM_TYPE, null);
 		this.version = version;
 		this.flags = flags;
 		this.sampleSize = sampleSize;
@@ -46,13 +46,13 @@ public class SampleSizeAtom extends LeafAtom {
 	}
 
 	public SampleSizeAtom() {
-		super(null);
+		super(ATOM_TYPE, null);
 		sizeTable = new long[0];
 	}
 
 	public SampleSizeAtom(Atom parent, GuardedInputStream in)
 			throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		version = in.read();
 		flags = read24Int(in);
 		sampleSize = read32Int(in);
@@ -82,11 +82,6 @@ public class SampleSizeAtom extends LeafAtom {
 		System.arraycopy(sizeTable, 0, newArray, 0, sizeTable.length);
 		newArray[newArray.length - 1] = size;
 		sizeTable = newArray;
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

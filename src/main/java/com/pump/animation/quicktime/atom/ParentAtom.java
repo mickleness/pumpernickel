@@ -293,17 +293,14 @@ public class ParentAtom extends Atom {
 					ATOM_TYPE_ILST)));
 
 	protected List<Atom> children = new ArrayList<>();
-	protected String id;
 
 	public ParentAtom(String id) {
-		super(null);
-		this.id = id;
+		super(id, null);
 	}
 
 	public ParentAtom(AtomReader reader, Atom parent, String id,
 			GuardedInputStream in) throws IOException {
-		super(parent);
-		this.id = id;
+		super(id, parent);
 		while (!in.isAtLimit()) {
 			Atom next = reader.read(this, in);
 			children.add(next);
@@ -354,11 +351,6 @@ public class ParentAtom extends Atom {
 				sum += atom.getSize();
 		}
 		return sum;
-	}
-
-	@Override
-	public String getIdentifier() {
-		return id;
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class HandlerReferenceAtom extends LeafAtom {
 
 	public HandlerReferenceAtom(String componentType, String componentSubtype,
 			String componentManufacturer) {
-		super(null);
+		super(ATOM_TYPE, null);
 		this.componentType = componentType;
 		this.componentSubtype = componentSubtype;
 		this.componentManufacturer = componentManufacturer;
@@ -50,7 +50,7 @@ public class HandlerReferenceAtom extends LeafAtom {
 
 	public HandlerReferenceAtom(Atom parent, GuardedInputStream in)
 			throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 
 		int bytesToRead = (int) in.getRemainingLimit();
 		version = in.read();
@@ -99,11 +99,6 @@ public class HandlerReferenceAtom extends LeafAtom {
 
 	public String getComponentName() {
 		return componentName;
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

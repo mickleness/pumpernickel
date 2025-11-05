@@ -22,12 +22,7 @@ import com.pump.io.GuardedOutputStream;
 public class EmptyAtom extends Atom {
 
 	public EmptyAtom(Atom parent) {
-		super(parent);
-	}
-
-	@Override
-	public String getIdentifier() {
-		return null;
+		super(null, parent);
 	}
 
 	@Override

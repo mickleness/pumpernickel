@@ -48,7 +48,7 @@ public class TrackHeaderAtom extends LeafAtom {
 
 	public TrackHeaderAtom(long trackID, long duration, float width,
 			float height) {
-		super(null);
+		super(ATOM_TYPE, null);
 		this.trackID = trackID;
 		this.duration = duration;
 		creationTime = new Date();
@@ -59,7 +59,7 @@ public class TrackHeaderAtom extends LeafAtom {
 	}
 
 	public TrackHeaderAtom(Atom parent, InputStream in) throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		version = in.read();
 		flags = read24Int(in);
 		creationTime = readDate(in);
@@ -99,11 +99,6 @@ public class TrackHeaderAtom extends LeafAtom {
 	 */
 	public int getFlags() {
 		return flags;
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

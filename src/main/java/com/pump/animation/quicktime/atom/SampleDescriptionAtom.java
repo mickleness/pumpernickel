@@ -41,18 +41,18 @@ public class SampleDescriptionAtom extends LeafAtom {
 	protected SampleDescriptionEntry[] entries = new SampleDescriptionEntry[0];
 
 	public SampleDescriptionAtom(int version, int flags) {
-		super(null);
+		super(ATOM_TYPE, null);
 		this.version = version;
 		this.flags = flags;
 	}
 
 	public SampleDescriptionAtom() {
-		super(null);
+		super(ATOM_TYPE, null);
 	}
 
 	public SampleDescriptionAtom(Atom parent, InputStream in)
 			throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 		version = in.read();
 		flags = read24Int(in);
 		int tableSize = (int) read32Int(in);
@@ -74,11 +74,6 @@ public class SampleDescriptionAtom extends LeafAtom {
 		UnknownSampleDescriptionEntry entry = new UnknownSampleDescriptionEntry(
 				in);
 		return entry.convert();
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override

@@ -85,13 +85,13 @@ public class DataReferenceAtom extends LeafAtom {
 	protected DataReferenceEntry[] entries = new DataReferenceEntry[0];
 
 	public DataReferenceAtom(int version, int flags) {
-		super(null);
+		super(ATOM_TYPE, null);
 		this.version = version;
 		this.flags = flags;
 	}
 
 	public DataReferenceAtom() {
-		super(null);
+		super(ATOM_TYPE, null);
 	}
 
 	public void addEntry(String type, int version, int flags, byte[] data) {
@@ -105,7 +105,7 @@ public class DataReferenceAtom extends LeafAtom {
 	}
 
 	public DataReferenceAtom(Atom parent, InputStream in) throws IOException {
-		super(parent);
+		super(ATOM_TYPE, parent);
 
 		version = in.read();
 		flags = read24Int(in);
@@ -114,11 +114,6 @@ public class DataReferenceAtom extends LeafAtom {
 		for (int a = 0; a < entries.length; a++) {
 			entries[a] = new DataReferenceEntry(in);
 		}
-	}
-
-	@Override
-	public String getIdentifier() {
-		return ATOM_TYPE;
 	}
 
 	@Override
