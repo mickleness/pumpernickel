@@ -199,8 +199,8 @@ public class ParentAtom extends Atom {
 	/**
 	 * Track reference atoms define relationships between tracks. Track
 	 * reference atoms allow one track to specify how it is related to other
-	 * tracks. For example, if a movie has three video tracks and three sound
-     * tracks, track references allow you to identify the related sound and
+	 * tracks. For example, if a movie has three video tracks and three
+     * soundtracks, track references allow you to identify the related sound and
 	 * video tracks. Track reference atoms have an atom type value of 'tref'.
 	 * <p>
 	 * Track references are unidirectional and point from the recipient track to
